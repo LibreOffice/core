@@ -59,8 +59,8 @@ public:
     virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
 
     // XStatusListener
-    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent )
-        throw ( css::uno::RuntimeException ) SAL_OVERRIDE;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
@@ -184,8 +184,8 @@ vcl::Window* NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
     return new NumberingPopup( *this, m_xFrame, pParent, mbBulletItem );
 }
 
-void NumberingToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException )
+void SAL_CALL NumberingToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     ToolBox* pToolBox = 0;
     sal_uInt16 nId = 0;
