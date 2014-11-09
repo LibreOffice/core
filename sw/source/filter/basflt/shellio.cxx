@@ -574,7 +574,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
 
 // Users that do not need to open these Streams / Storages,
 // have to overload this method
-int Reader::SetStrmStgPtr()
+bool Reader::SetStrmStgPtr()
 {
     OSL_ENSURE( pMedium, "Where is the Media??" );
 
@@ -583,7 +583,7 @@ int Reader::SetStrmStgPtr()
         if( SW_STORAGE_READER & GetReaderType() )
         {
             xStg = pMedium->GetStorage();
-            return sal_True;
+            return true;
         }
     }
     else
@@ -597,12 +597,12 @@ int Reader::SetStrmStgPtr()
         else if ( !(SW_STREAM_READER & GetReaderType()) )
         {
             pStrm = NULL;
-            return sal_False;
+            return false;
         }
 
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 int Reader::GetReaderType()

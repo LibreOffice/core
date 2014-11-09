@@ -32,7 +32,7 @@ class SwNodeIndex;
 class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
-    virtual int SetStrmStgPtr() SAL_OVERRIDE;
+    virtual bool SetStrmStgPtr() SAL_OVERRIDE;
     virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) SAL_OVERRIDE;
     virtual OUString GetTemplateName() const SAL_OVERRIDE;
 public:

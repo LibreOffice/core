@@ -173,16 +173,16 @@ OUString HTMLReader::GetTemplateName() const
     return OUString();
 }
 
-int HTMLReader::SetStrmStgPtr()
+bool HTMLReader::SetStrmStgPtr()
 {
     OSL_ENSURE( pMedium, "Wo ist das Medium??" );
 
     if( pMedium->IsRemote() || !pMedium->IsStorage() )
     {
         pStrm = pMedium->GetInStream();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 
 }
 

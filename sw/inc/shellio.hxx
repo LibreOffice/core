@@ -264,7 +264,7 @@ private:
 
     // Everyone who does not need the streams / storages open
     // has to overload the method (W4W!!).
-    virtual int SetStrmStgPtr();
+    virtual bool SetStrmStgPtr();
 };
 
 class AsciiReader: public Reader
