@@ -539,7 +539,7 @@ SwDropCapsPage::SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet)
     SetExchangeSupport();
 
     const sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
+    bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
     // In the template dialog the text is not influenceable
     m_pTextText->Enable( !bFormat );

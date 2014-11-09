@@ -1938,7 +1938,7 @@ bool SwContentTree::ToggleToRoot()
         }
     }
     pConfig->SetRootType( nRootType );
-    GetParentWindow()->aContentToolBox.CheckItem(FN_SHOW_ROOT, bIsRoot ? sal_True : sal_False);
+    GetParentWindow()->aContentToolBox.CheckItem(FN_SHOW_ROOT, bIsRoot);
     return bIsRoot;
 }
 

@@ -1328,7 +1328,7 @@ uno::Type SAL_CALL SwXParagraph::getElementType() throw (uno::RuntimeException, 
 sal_Bool SAL_CALL SwXParagraph::hasElements() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return (GetTxtNode()) ? sal_True : sal_False;
+    return static_cast<sal_Bool>(GetTxtNode() != nullptr);
 }
 
 uno::Reference< text::XText > SAL_CALL

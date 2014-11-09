@@ -1136,7 +1136,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
         SwCrsrMoveState aTmpState;
         aTmpState.bFieldInfo = true;
         aTmpState.bExactOnly = !( SwContentAtPos::SW_OUTLINE & rCntntAtPos.eCntntAtPos );
-        aTmpState.bCntntCheck = (SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos) ?  sal_True : sal_False;
+        aTmpState.bCntntCheck = (SwContentAtPos::SW_CONTENT_CHECK & rCntntAtPos.eCntntAtPos) != 0;
         aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
 
         SwSpecialPos aSpecialPos;

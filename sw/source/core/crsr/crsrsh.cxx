@@ -304,7 +304,7 @@ void SwCrsrShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
         if( !m_nCrsrMove ||
             ( 1 == m_nCrsrMove && m_bInCMvVisportChgd ) )
             // display Cursor & Selektions again
-            ShowCrsrs( m_bSVCrsrVis ? sal_True : sal_False );
+            ShowCrsrs( m_bSVCrsrVis );
     }
     // call ChgCall if there is still one
     if( m_bCallChgLnk && m_bChgCallFlag && m_aChgLnk.IsSet() )
@@ -2154,7 +2154,7 @@ void SwCrsrShell::ShGetFcs( bool bUpdate )
         UpdateCrsr( static_cast<sal_uInt16>( bUpdate ?
                     SwCrsrShell::CHKRANGE|SwCrsrShell::SCROLLWIN
                     : SwCrsrShell::CHKRANGE ) );
-        ShowCrsrs( m_bSVCrsrVis ? sal_True : sal_False );
+        ShowCrsrs( m_bSVCrsrVis );
     }
 }
 
@@ -2218,9 +2218,7 @@ void SwCrsrShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 bool SwCrsrShell::HasSelection() const
 {
     const SwPaM* pCrsr = getShellCrsr( true );
-    return( IsTableMode() || ( pCrsr->HasMark() &&
-            *pCrsr->GetPoint() != *pCrsr->GetMark())
-        ? sal_True : sal_False );
+    return IsTableMode() || ( pCrsr->HasMark() && *pCrsr->GetPoint() != *pCrsr->GetMark() );
 }
 
 void SwCrsrShell::CallChgLnk()

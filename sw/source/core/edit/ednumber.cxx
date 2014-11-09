@@ -810,12 +810,9 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
 
 bool SwEditShell::IsNumRuleStart( SwPaM* pPaM ) const
 {
-    bool bResult = false;
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr( );
     const SwTxtNode* pTxtNd = pCrsr->GetNode().GetTxtNode();
-    if( pTxtNd )
-        bResult = pTxtNd->IsListRestart() ? sal_True : sal_False;
-    return bResult;
+    return pTxtNd && pTxtNd->IsListRestart();
 }
 
 void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )

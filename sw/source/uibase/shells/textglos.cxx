@@ -109,7 +109,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
                 if ( fnSetActGroup )
                     (*fnSetActGroup)( aGroup );
                 pGlosHdl->SetCurGroup(aGroup, true);
-                rReq.SetReturnValue(SfxBoolItem(nSlot, pGlosHdl->InsertGlossary( aName ) ? sal_True : sal_False));
+                rReq.SetReturnValue(SfxBoolItem(nSlot, pGlosHdl->InsertGlossary( aName )));
                 rReq.Done();
             }
         }

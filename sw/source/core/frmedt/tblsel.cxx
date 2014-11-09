@@ -643,7 +643,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
 
     OSL_ENSURE( nLoopMax, "table layout is still invalid!" );
 
-    return bValidChartSel ? sal_True : sal_False;
+    return bValidChartSel;
 }
 
 bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
@@ -651,14 +651,14 @@ bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
     OSL_ENSURE( pCell->IsCellFrm(), "Frame without Gazelle" );
 
     if( pCell->FindTabFrm()->IsVertical() )
-        return ( rUnion.Right() >= pCell->Frm().Right() &&
+        return   rUnion.Right() >= pCell->Frm().Right() &&
                  rUnion.Left() <= pCell->Frm().Left() &&
             (( rUnion.Top() <= pCell->Frm().Top()+20 &&
                rUnion.Bottom() > pCell->Frm().Top() ) ||
              ( rUnion.Top() >= pCell->Frm().Top() &&
-               rUnion.Bottom() < pCell->Frm().Bottom() )) ? sal_True : sal_False );
+               rUnion.Bottom() < pCell->Frm().Bottom() ));
 
-    return (
+    return
         rUnion.Top() <= pCell->Frm().Top() &&
         rUnion.Bottom() >= pCell->Frm().Bottom() &&
 
@@ -666,7 +666,7 @@ bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
            rUnion.Right() > pCell->Frm().Left() ) ||
 
          ( rUnion.Left() >= pCell->Frm().Left() &&
-           rUnion.Right() < pCell->Frm().Right() )) ? sal_True : sal_False );
+           rUnion.Right() < pCell->Frm().Right() ));
 }
 
 bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
@@ -823,7 +823,7 @@ bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
         }
     }
 
-    return bFound ? sal_True : sal_False;
+    return bFound;
 }
 
 bool HasProtectedCells( const SwSelBoxes& rBoxes )

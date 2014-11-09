@@ -2863,7 +2863,7 @@ OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
-                                     _bInclPrefixAndSuffixStrings ? sal_True : sal_False,
+                                     _bInclPrefixAndSuffixStrings,
                                      false,
                                      _nRestrictToThisLevel );
         }

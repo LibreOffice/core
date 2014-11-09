@@ -351,7 +351,7 @@ void SwXMLDocStylesContext_Impl::EndElement()
     // are imported and finished.
     SwXMLImport& rSwImport = dynamic_cast<SwXMLImport&>( GetImport());
     GetImport().GetTextImport()->SetOutlineStyles(
-            (rSwImport.GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA ) ? sal_True : sal_False);
+            (rSwImport.GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA ) != 0);
 }
 
 const SvXMLTokenMap& SwXMLImport::GetDocElemTokenMap()

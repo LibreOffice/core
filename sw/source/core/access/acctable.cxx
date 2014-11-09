@@ -495,7 +495,7 @@ bool SwAccessibleTableData_Impl::CompareExtents(
     if( maExtents.size() != rCmp.maExtents.size() )
         return false;
 
-    return ::std::equal(maExtents.begin(), maExtents.end(), rCmp.maExtents.begin()) ? sal_True : sal_False;
+    return ::std::equal(maExtents.begin(), maExtents.end(), rCmp.maExtents.begin());
 }
 
 SwAccessibleTableData_Impl::SwAccessibleTableData_Impl( SwAccessibleMap& rAccMap,

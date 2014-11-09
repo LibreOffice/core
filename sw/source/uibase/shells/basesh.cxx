@@ -684,8 +684,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_GOTO_PREV_OBJ:
         case FN_GOTO_NEXT_OBJ:
         {
-                bool bSuccess = rSh.GotoObj(
-                            nSlot == FN_GOTO_NEXT_OBJ ? sal_True : sal_False);
+                bool bSuccess = rSh.GotoObj( nSlot == FN_GOTO_NEXT_OBJ );
                 rReq.SetReturnValue(SfxBoolItem(nSlot, bSuccess));
                 if (bSuccess && !rSh.IsSelFrmMode())
                 {
@@ -2111,7 +2110,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
 
                     bool bVertical = rSh.IsInVerticalText();
                     aFont.SetOrientation(bVertical ? 2700 : 0);
-                    aFont.SetVertical(bVertical ? sal_True : sal_False);
+                    aFont.SetVertical(bVertical);
                     GetView().GetEditWin().SetInputContext( InputContext( aFont, INPUTCONTEXT_TEXT |
                                                         INPUTCONTEXT_EXTTEXTINPUT ) );
                 }

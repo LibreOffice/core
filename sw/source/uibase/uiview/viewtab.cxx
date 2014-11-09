@@ -1839,9 +1839,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 if ( IsTabColFromDoc() )
                     bColumn = rSh.GetCurMouseColNum( m_aTabColFromDocPos ) != 0;
                 else
-                    bColumn = (nFrmType & (FRMTYPE_COLUMN|FRMTYPE_FLY_ANY|FRMTYPE_COLSECTOUTTAB))
-                              ? sal_True
-                              : sal_False;
+                    bColumn = (nFrmType & (FRMTYPE_COLUMN|FRMTYPE_FLY_ANY|FRMTYPE_COLSECTOUTTAB)) != 0;
 
                 if ( !bColumn )
                 {
@@ -1868,7 +1866,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 }
                 else
                 {   // Here only for table in multi-column pages and borders.
-                    bool bSectOutTbl = (nFrmType & FRMTYPE_TABLE) ? sal_True : sal_False;
+                    bool bSectOutTbl = (nFrmType & FRMTYPE_TABLE) != 0;
                     bool bFrame = (nFrmType & FRMTYPE_FLY_ANY);
                     bool bColSct =  (nFrmType & ( bSectOutTbl
                                                     ? FRMTYPE_COLSECTOUTTAB

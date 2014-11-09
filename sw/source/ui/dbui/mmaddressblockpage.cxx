@@ -702,7 +702,7 @@ void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
     m_pLeftIB->Enable(nMove & MOVE_ITEM_LEFT );
     m_pRightIB->Enable(nMove & MOVE_ITEM_RIGHT );
     m_pDownIB->Enable(nMove & MOVE_ITEM_DOWN);
-    m_pRemoveFieldIB->Enable(m_pDragED->HasCurrentItem() ? sal_True : sal_False);
+    m_pRemoveFieldIB->Enable(m_pDragED->HasCurrentItem());
     SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
     m_pInsertFieldIB->Enable( pEntry &&
             (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || !m_pFieldCB->GetText().isEmpty()));

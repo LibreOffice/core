@@ -170,7 +170,7 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
     }
 
     nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
+    bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     SetMetric(*m_pLeftMarginED, aMetric);

@@ -852,7 +852,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
             getFrmDlgParentShell();
 
     nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
+    bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     m_aWidthED.SetMetric(aMetric);
@@ -2381,7 +2381,7 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
 {
     const SfxPoolItem* pItem;
     const sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
+    bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
         && ((const SfxBoolItem *)pItem)->GetValue() )
@@ -2864,7 +2864,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
 {
     const SfxPoolItem* pItem;
     sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
+    bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
     if (bHtmlMode)
     {
         pProtectFrame->Hide();

@@ -1074,7 +1074,7 @@ IMPL_LINK( SwDocShell, Ole2ModifiedHdl, void *, p )
     //  Bit 1:  -> new state
     sal_IntPtr nStatus = (sal_IntPtr)p;
     if( IsEnableSetModified() )
-        SetModified( (nStatus & 2) ? sal_True : sal_False );
+        SetModified( (nStatus & 2) != 0 );
     return 0;
 }
 

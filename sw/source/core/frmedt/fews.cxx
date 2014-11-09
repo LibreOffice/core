@@ -502,7 +502,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
         }
 
         // call sorting on document
-        bRet = mpDoc->SortTbl(aBoxes, rOpt) ? sal_True : sal_False;
+        bRet = mpDoc->SortTbl(aBoxes, rOpt);
     }
     else
     {
@@ -519,7 +519,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
             const sal_Int32 nCntStt  = pStart->nContent.GetIndex();
 
             // Sorting
-            bRet = mpDoc->SortText(*pPam, rOpt) ? sal_True : sal_False;
+            bRet = mpDoc->SortText(*pPam, rOpt);
 
             // put selection again
             pPam->DeleteMark();

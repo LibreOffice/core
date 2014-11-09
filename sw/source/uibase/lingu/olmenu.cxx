@@ -403,8 +403,8 @@ SwSpellPopup::SwSpellPopup(
             }
         }
     }
-    EnableItem( MN_ADD_TO_DIC, ((nItemId - MN_DICTIONARIES_START) > 1)?sal_True:sal_False );
-    EnableItem( MN_ADD_TO_DIC_SINGLE, ((nItemId - MN_DICTIONARIES_START) == 1)?sal_True:sal_False );
+    EnableItem( MN_ADD_TO_DIC, (nItemId - MN_DICTIONARIES_START) > 1 );
+    EnableItem( MN_ADD_TO_DIC_SINGLE, (nItemId - MN_DICTIONARIES_START) == 1 );
 
     //ADD NEW LANGUAGE MENU ITEM
 

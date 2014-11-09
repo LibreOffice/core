@@ -131,7 +131,7 @@ SwVbaSelection::HomeKey( const uno::Any& _unit, const uno::Any& _extend ) throw 
     sal_Int32 nExtend = word::WdMovementType::wdMove;
     _unit >>= nUnit;
     _extend >>= nExtend;
-    bool bExtend = ( nExtend == word::WdMovementType::wdExtend ) ? sal_True : sal_False;
+    bool bExtend = nExtend == word::WdMovementType::wdExtend;
 
     switch( nUnit )
     {
@@ -166,7 +166,7 @@ SwVbaSelection::EndKey( const uno::Any& _unit, const uno::Any& _extend ) throw (
     sal_Int32 nExtend = word::WdMovementType::wdMove;
     _unit >>= nUnit;
     _extend >>= nExtend;
-    bool bExtend = ( nExtend == word::WdMovementType::wdExtend ) ? sal_True : sal_False;
+    bool bExtend = nExtend == word::WdMovementType::wdExtend;
 
     switch( nUnit )
     {

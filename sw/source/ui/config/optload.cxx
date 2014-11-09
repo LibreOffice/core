@@ -548,7 +548,7 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )
     pModOpt->SetInsWithCaption( bHTMLMode, nCheckCount > 0 );
 
     sal_Int32 nPos = m_pLbCaptionOrder->GetSelectEntryPos();
-    pModOpt->SetCaptionOrderNumberingFirst(nPos == 1 ? sal_True : sal_False );
+    pModOpt->SetCaptionOrderNumberingFirst(nPos == 1);
 
     return bRet;
 }

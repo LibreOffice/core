@@ -198,7 +198,7 @@ void SwInputWindow::ShowWin()
 
         OSL_ENSURE(pWrtShell, "no WrtShell!");
         // Cursor in table
-        bIsTable = pWrtShell->IsCrsrInTbl() ? sal_True : sal_False;
+        bIsTable = pWrtShell->IsCrsrInTbl();
 
         if( bFirst )
             pWrtShell->SelTblCells( LINK( this, SwInputWindow,

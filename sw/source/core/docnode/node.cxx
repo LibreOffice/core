@@ -1580,10 +1580,10 @@ bool SwCntntNode::GetAttr( SfxItemSet& rSet, bool bInParent ) const
 
     const SwAttrSet& rAttrSet = GetSwAttrSet();
     if( bInParent )
-        return rSet.Set( rAttrSet, true ) ? sal_True : sal_False;
+        return rSet.Set( rAttrSet, true );
 
     rSet.Put( rAttrSet );
-    return rSet.Count() ? sal_True : sal_False;
+    return rSet.Count() != 0;
 }
 
 sal_uInt16 SwCntntNode::ClearItemsFromAttrSet( const std::vector<sal_uInt16>& rWhichIds )
