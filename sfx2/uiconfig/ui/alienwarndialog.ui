@@ -11,13 +11,13 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">question</property>
-    <property name="text" translatable="yes">This document may contain formatting or content that cannot be saved in the currently selected file format "%FORMATNAME".</property>
+    <property name="text" translatable="yes">This document may contain formatting or content that cannot be saved in the currently selected file format “%FORMATNAME”.</property>
     <property name="secondary_text" translatable="yes">Use the default ODF file format to be sure that the document is saved correctly.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">24</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
