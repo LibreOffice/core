@@ -498,6 +498,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY )
     if( mnLineColor != SALCOLOR_NONE )
     {
         maContext.makeCurrent();
+        glViewport( 0, 0, GetWidth(), GetHeight() );
         BeginSolid( mnLineColor );
         DrawPoint( nX, nY );
         EndSolid();
@@ -510,6 +511,7 @@ void OpenGLSalGraphicsImpl::drawPixel( long nX, long nY, SalColor nSalColor )
     if( nSalColor != SALCOLOR_NONE )
     {
         maContext.makeCurrent();
+        glViewport( 0, 0, GetWidth(), GetHeight() );
         BeginSolid( nSalColor );
         DrawPoint( nX, nY );
         EndSolid();
@@ -522,6 +524,7 @@ void OpenGLSalGraphicsImpl::drawLine( long nX1, long nY1, long nX2, long nY2 )
     if( mnLineColor != SALCOLOR_NONE )
     {
         maContext.makeCurrent();
+        glViewport( 0, 0, GetWidth(), GetHeight() );
         BeginSolid( mnLineColor );
         DrawLine( nX1, nY1, nX2, nY2 );
         EndSolid();
@@ -560,6 +563,7 @@ void OpenGLSalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const SalPoint* pP
 {
     SAL_INFO( "vcl.opengl", "::drawPolyLine" );
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
 
     if( mnLineColor != SALCOLOR_NONE && nPoints > 1 )
     {
@@ -587,6 +591,7 @@ void OpenGLSalGraphicsImpl::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
     }
 
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
 
     if( mnFillColor != SALCOLOR_NONE )
     {
@@ -610,6 +615,7 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
         return;
 
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
 
     if( mnFillColor != SALCOLOR_NONE )
     {
@@ -767,6 +773,7 @@ void OpenGLSalGraphicsImpl::drawMask(
 
     SAL_INFO( "vcl.opengl", "::drawMask" );
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
     DrawMask( nTexture, nMaskColor, rPosAry );
 }
 
@@ -788,6 +795,7 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
     char pixel[3];
 
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
     glReadPixels( nX, nY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
     return MAKE_SALCOLOR( pixel[0], pixel[1], pixel[2] );
 }
@@ -803,6 +811,7 @@ void OpenGLSalGraphicsImpl::invert(
     //   * SAL_INVERT_TRACKFRAME (dash-line rectangle?)
 
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
 
     if( nFlags & SAL_INVERT_TRACKFRAME )
     {
@@ -823,6 +832,7 @@ void OpenGLSalGraphicsImpl::invert(
 void OpenGLSalGraphicsImpl::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags )
 {
     maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
 
     if( nFlags & SAL_INVERT_TRACKFRAME )
     {
