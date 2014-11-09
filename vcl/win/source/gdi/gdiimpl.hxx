@@ -52,8 +52,6 @@ public:
 
     virtual ~WinSalGraphicsImpl();
 
-    virtual void Init(SalFrame* pFrame) SAL_OVERRIDE;
-
     virtual void freeResources() SAL_OVERRIDE;
 
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
