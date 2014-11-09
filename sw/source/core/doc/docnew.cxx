@@ -196,6 +196,7 @@ SwDoc::SwDoc()
     mpDfltTxtFmtColl( new SwTxtFmtColl( GetAttrPool(), sTxtCollStr ) ),
     mpDfltGrfFmtColl( new SwGrfFmtColl( GetAttrPool(), sGrfCollStr ) ),
     mpFrmFmtTbl( new SwFrmFmts() ),
+    mpFrmFmtAnchorMap( new SwFrmFmtAnchorMap( this ) ),
     mpCharFmtTbl( new SwCharFmts() ),
     mpSpzFrmFmtTbl( new SwFrmFmts() ),
     mpSectionFmtTbl( new SwSectionFmts() ),
@@ -677,6 +678,7 @@ SwDoc::~SwDoc()
     delete mpDfltFrmFmt;
     delete mpLayoutCache;
     delete mpVirDev;
+    delete mpFrmFmtAnchorMap;
 
     SfxItemPool::Free(mpAttrPool);
 }
