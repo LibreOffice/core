@@ -127,7 +127,7 @@ std::string fastTokenToId(sal_uInt32 nToken)
 
     aliases = []
     for alias in sorted(ooxUrlAliases.values()):
-        if not alias in aliases:
+        if alias not in aliases:
             aliases.append(alias)
             print("""    case oox::NMSP_%s:
         sResult += "%s:";
@@ -139,7 +139,7 @@ std::string fastTokenToId(sal_uInt32 nToken)
 
     tokens = [""]
     for token in [t.getAttribute("localname") for t in getElementsByTagNamesNS(model, "http://relaxng.org/ns/structure/1.0", ["element", "attribute"])]:
-        if not token in tokens:
+        if token not in tokens:
             tokens.append(token)
             print("""    case oox::XML_%s:
         sResult += "%s";

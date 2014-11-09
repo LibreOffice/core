@@ -37,10 +37,10 @@ def parseNamespaces(fro):
 def check(model):
     defines = [i.getAttribute("name") for i in model.getElementsByTagName("define")]
     for reference in [i.getAttribute("name") for i in model.getElementsByTagName("ref")]:
-        if not reference in defines:
+        if reference not in defines:
             raise Exception("Unknown define element with name '%s'" % reference)
     for start in [i.getAttribute("name") for i in model.getElementsByTagName("start")]:
-        if not start in defines:
+        if start not in defines:
             raise Exception("Unknown start element with name '%s'" % start)
 
 
