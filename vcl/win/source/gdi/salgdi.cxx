@@ -34,7 +34,7 @@
 
 #include "salgdiimpl.hxx"
 #include "gdiimpl.hxx"
-#include "openglgdiimpl.hxx"
+#include "opengl/win/gdiimpl.hxx"
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
@@ -592,7 +592,7 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
     bool bUseOpenGL = bOpenGLPossible && !mbPrinter ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
     if (bUseOpenGL)
-        mpImpl.reset(new OpenGLSalGraphicsImpl());
+        mpImpl.reset(new WinOpenGLSalGraphicsImpl());
     else
         mpImpl.reset(new WinSalGraphicsImpl(*this));
 
