@@ -1001,6 +1001,7 @@ SwCntntNotify::~SwCntntNotify()
 void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage, SwDoc* doc )
 {
+    (void) pTbl;
 #if OSL_DEBUG_LEVEL > 0
     std::list<SwFrmFmt*> checkFmts;
     for ( sal_uInt16 i = 0; i < pTbl->size(); ++i )
