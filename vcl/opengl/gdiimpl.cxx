@@ -40,6 +40,13 @@
                  ((float) SALCOLOR_BLUE( nColor )) / 255,  \
                  (100 - nTransparency) * (1.0 / 100) )
 
+#define glUniformColorf(nUniform, nColor, fTransparency)   \
+    glUniform4f( nUniform,                                 \
+                 ((float) SALCOLOR_RED( nColor )) / 255,   \
+                 ((float) SALCOLOR_GREEN( nColor )) / 255, \
+                 ((float) SALCOLOR_BLUE( nColor )) / 255,  \
+                 (1.0f - fTransparency) )
+
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
 }
@@ -202,18 +209,41 @@ void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor, sal_uInt8 nTransparency
             return;
     }
 
+    if( nTransparency > 0 )
+    {
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    }
     glUseProgram( mnSolidProgram );
     glUniformColor( mnColorUniform, nColor, nTransparency );
 }
 
+void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor, double fTransparency )
+{
+    if( mnSolidProgram == 0 )
+    {
+        if( !CreateSolidProgram() )
+            return;
+    }
+
+    if( fTransparency > 0.0f )
+    {
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    }
+    glUseProgram( mnSolidProgram );
+    glUniformColorf( mnColorUniform, nColor, fTransparency );
+}
+
 void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor )
 {
-    BeginSolid( nColor, 0 );
+    BeginSolid( nColor, 0.0f );
 }
 
 void OpenGLSalGraphicsImpl::EndSolid( void )
 {
     glUseProgram( 0 );
+    glDisable( GL_BLEND );
 }
 
 void OpenGLSalGraphicsImpl::BeginInvert( void )
@@ -592,9 +622,27 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
     }
 }
 
-bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
+bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency )
 {
-    return false;
+    SAL_INFO( "vcl.opengl", "::drawPolyPolygon trans " << fTransparency );
+    if( rPolyPolygon.count() <= 0 )
+        return true;
+
+    maContext.makeCurrent();
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+
+    if( mnFillColor != SALCOLOR_NONE )
+    {
+        BeginSolid( mnFillColor, fTransparency );
+        for( sal_uInt32 i = 0; i < rPolyPolygon.count(); i++ )
+        {
+            const ::basegfx::B2DPolyPolygon aOnePoly( rPolyPolygon.getB2DPolygon( i ) );
+            DrawPolyPolygon( aOnePoly );
+        }
+        EndSolid();
+    }
+
+    return true;
 }
 
 bool OpenGLSalGraphicsImpl::drawPolyLine(
@@ -843,6 +891,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
                 long nWidth, long nHeight,
                 sal_uInt8 nTransparency )
 {
+    SAL_INFO( "vcl.opengl", "::drawAlphaRect" );
     if( mnFillColor != SALCOLOR_NONE && nTransparency < 100 )
     {
         BeginSolid( mnFillColor, nTransparency );

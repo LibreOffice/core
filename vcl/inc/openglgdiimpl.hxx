@@ -61,6 +61,7 @@ protected:
     bool CreateMaskProgram( void );
 
     void BeginSolid( SalColor nColor, sal_uInt8 nTransparency );
+    void BeginSolid( SalColor nColor, double fTransparency );
     void BeginSolid( SalColor nColor );
     void EndSolid( void );
     void BeginInvert( void );
