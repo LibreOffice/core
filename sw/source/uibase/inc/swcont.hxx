@@ -75,10 +75,10 @@ public:
     virtual bool            IsProtect() const;
     const SwContentType*    GetParent() const {return pParent;}
     const OUString&         GetName()   const {return sContentName;}
-    int                     operator==(const SwContent& /*rCont*/) const
+    bool                    operator==(const SwContent& /*rCont*/) const
                                 {
                                     // they're never equal, otherwise they'd fall out of the array
-                                    return sal_False;
+                                    return false;
                                 }
     bool                    operator<(const SwContent& rCont) const
                                 {
