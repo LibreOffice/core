@@ -42,9 +42,11 @@ OpenGLContext::OpenGLContext():
     mbInitialized(false),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
-    mbRequestVirtualDevice(false),
-    mbPixmap(false)
+    mbRequestVirtualDevice(false)
 {
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    mbPixmap = false;
+#endif
 }
 
 OpenGLContext::~OpenGLContext()
@@ -803,6 +805,8 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
+    RECT clientRect;
+    GetClientRect(WindowFromDC(m_aGLWin.hDC), &clientRect);
     m_aGLWin.Width = clientRect.right - clientRect.left;
     m_aGLWin.Height = clientRect.bottom - clientRect.top;
 
