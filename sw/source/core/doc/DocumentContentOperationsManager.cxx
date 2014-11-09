@@ -3275,7 +3275,8 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         // #i59964#
         // correct determination of new anchor position
         SwFmtAnchor aAnchor( *(*it).GetAnchor() );
-        SwPosition* pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();
+        assert( aAnchor.GetCntntAnchor() != NULL );
+        SwPosition newPos = *aAnchor.GetCntntAnchor();
         // for at-paragraph and at-character anchored objects the new anchor
         // position can *not* be determined by the difference of the current
         // anchor position to the start of the copied range, because not
@@ -3341,25 +3342,26 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 }
             }
             // apply found anchor text node as new anchor position
-            pNewPos->nNode = aAnchorNdIdx;
+            newPos.nNode = aAnchorNdIdx;
         }
         else
         {
-            long nOffset = pNewPos->nNode.GetIndex() - rRg.aStart.GetIndex();
+            long nOffset = newPos.nNode.GetIndex() - rRg.aStart.GetIndex();
             SwNodeIndex aIdx( rStartIdx, nOffset );
-            pNewPos->nNode = aIdx;
+            newPos.nNode = aIdx;
         }
         // Set the character bound Flys back at the original character
         if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
-             pNewPos->nNode.GetNode().IsTxtNode() )
+             newPos.nNode.GetNode().IsTxtNode() )
         {
-            pNewPos->nContent.Assign( (SwTxtNode*)&pNewPos->nNode.GetNode(),
-                                        pNewPos->nContent.GetIndex() );
+            newPos.nContent.Assign( (SwTxtNode*)&newPos.nNode.GetNode(),
+                                        newPos.nContent.GetIndex() );
         }
         else
         {
-            pNewPos->nContent.Assign( 0, 0 );
+            newPos.nContent.Assign( 0, 0 );
         }
+        aAnchor.SetAnchor( &newPos );
 
         // Check recursion: copy content in its own frame, then don't copy it.
         bool bMakeCpy = true;

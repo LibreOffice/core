@@ -1327,21 +1327,21 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     {
         //Set the anchor attribute according to the new Cnt.
         SwFmtAnchor aAnch( pFmt->GetAnchor() );
-        SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+        SwPosition pos = *aAnch.GetCntntAnchor();
         if( IsAutoPos() && pCnt->IsTxtFrm() )
         {
             SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
             Point aPt( rNew );
-            if( pCnt->GetCrsrOfst( pPos, aPt, &eTmpState )
-                && pPos->nNode == *pCnt->GetNode() )
+            if( pCnt->GetCrsrOfst( &pos, aPt, &eTmpState )
+                && pos.nNode == *pCnt->GetNode() )
             {
                 if ( pCnt->GetNode()->GetTxtNode() != NULL )
                 {
                     const SwTxtAttr* pTxtInputFld =
-                        pCnt->GetNode()->GetTxtNode()->GetTxtAttrAt( pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
+                        pCnt->GetNode()->GetTxtNode()->GetTxtAttrAt( pos.nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
                     if ( pTxtInputFld != NULL )
                     {
-                        pPos->nContent = pTxtInputFld->GetStart();
+                        pos.nContent = pTxtInputFld->GetStart();
                     }
                 }
                 ResetLastCharRectHeight();
@@ -1352,15 +1352,16 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             }
             else
             {
-                pPos->nNode = *pCnt->GetNode();
-                pPos->nContent.Assign( pCnt->GetNode(), 0 );
+                pos.nNode = *pCnt->GetNode();
+                pos.nContent.Assign( pCnt->GetNode(), 0 );
             }
         }
         else
         {
-            pPos->nNode = *pCnt->GetNode();
-            pPos->nContent.Assign( pCnt->GetNode(), 0 );
+            pos.nNode = *pCnt->GetNode();
+            pos.nContent.Assign( pCnt->GetNode(), 0 );
         }
+        aAnch.SetAnchor( &pos );
 
         // handle change of anchor node:
         // if count of the anchor frame also change, the fly frames have to be
