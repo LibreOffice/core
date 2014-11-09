@@ -14,7 +14,7 @@
       <object class="GtkLabel" id="label27">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="label" translatable="yes">_Title:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">title</property>
@@ -28,7 +28,7 @@
       <object class="GtkLabel" id="label28">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="label" translatable="yes">_Subject:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">subject</property>
@@ -42,7 +42,7 @@
       <object class="GtkLabel" id="label29">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="label" translatable="yes">_Keywords:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">keywords</property>
@@ -57,10 +57,10 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="valign">start</property>
-        <property name="xalign">0</property>
+        <property name="xalign">1</property>
         <property name="label" translatable="yes">_Comments:</property>
         <property name="use_underline">True</property>
-        <property name="mnemonic_widget">comments</property>
+        <property name="mnemonic_widget">comments:border</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -109,7 +109,6 @@
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
-        <property name="vscrollbar_policy">always</property>
         <property name="shadow_type">in</property>
         <child>
           <object class="GtkTextView" id="comments:border">
