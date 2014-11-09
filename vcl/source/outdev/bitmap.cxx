@@ -457,8 +457,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
 
                 if( pSalBmp )
                 {
-                    ImpBitmap* pImpBmp = new ImpBitmap;
-                    pImpBmp->ImplSetSalBitmap( pSalBmp );
+                    ImpBitmap* pImpBmp = new ImpBitmap(pSalBmp);
                     aBmp.ImplSetImpBitmap( pImpBmp );
                 }
             }

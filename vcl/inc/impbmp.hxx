@@ -38,6 +38,13 @@ private:
 
 public:
                         ImpBitmap();
+                        /**
+                         * takes ownership
+                         * same as Sequence:
+                         * pBmp = new ImpBitmap;
+                         * pBmp->ImplSetSalBitmap(pBitmap);
+                         */
+                        ImpBitmap(SalBitmap* pBitmap);
                         ~ImpBitmap();
 
     void                ImplSetSalBitmap( SalBitmap* pSalBitmap );

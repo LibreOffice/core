@@ -31,6 +31,13 @@ ImpBitmap::ImpBitmap() :
 {
 }
 
+ImpBitmap::ImpBitmap(SalBitmap* pBitmap) :
+            mnRefCount  ( 1 ),
+            mnChecksum  ( 0 ),
+            mpSalBitmap ( pBitmap )
+{
+}
+
 ImpBitmap::~ImpBitmap()
 {
     delete mpSalBitmap;
