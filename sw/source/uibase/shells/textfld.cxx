@@ -633,7 +633,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
     SwWrtShell& rSh = GetShell();
     SfxWhichIter aIter( rSet );
     const SwField* pField = 0;
-    int bGetField = sal_False;
+    bool bGetField = false;
     sal_uInt16 nWhich = aIter.FirstWhich();
 
     while (nWhich)
@@ -664,7 +664,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 if( !bGetField )
                 {
                     pField = rSh.GetCurFld();
-                    bGetField = sal_True;
+                    bGetField = true;
                 }
 
                 sal_uInt16 nTempWhich = pField ? pField->GetTyp()->Which() : USHRT_MAX;
@@ -687,7 +687,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 if(!bGetField)
                 {
                     pField = rSh.GetCurFld();
-                    bGetField = sal_True;
+                    bGetField = true;
                 }
                 if(!pField || pField->GetTyp()->Which() != RES_MACROFLD)
                     rSet.DisableItem(nWhich);

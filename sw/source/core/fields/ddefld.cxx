@@ -102,7 +102,7 @@ public:
 
         // Search for fields. If no valid found, disconnect.
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-        int bCallModify = sal_False;
+        bool bCallModify = false;
         rFldType.LockModify();
 
         SwClientIter aIter( rFldType );     // TODO
@@ -121,7 +121,7 @@ public:
                             pSh->StartAction();
                     }
                     pLast->ModifyNotification( 0, &aUpdateDDE );
-                    bCallModify = sal_True;
+                    bCallModify = true;
                 }
             } while( 0 != ( pLast = ++aIter ));
 

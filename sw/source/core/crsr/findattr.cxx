@@ -691,7 +691,7 @@ bool SwAttrCheckArr::CheckStack()
     return nFound == aCmpSet.Count();
 }
 
-static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
+static bool lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
 {
     sal_Int32 nEndPos;
@@ -699,10 +699,10 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     if( !rTxtNd.HasHints() )
     {
         if( !rCmpArr.Found() )
-            return sal_False;
+            return false;
         nEndPos = rCmpArr.GetNdEnd();
         lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, true );
-        return sal_True;
+        return true;
     }
 
     const SwpHints& rHtArr = rTxtNd.GetSwpHints();
@@ -720,7 +720,7 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                     // found end
                     lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(),
                                 &pAttr->GetStart(), true );
-                    return sal_True;
+                    return true;
                 }
                 // continue search
                 break;
@@ -731,7 +731,7 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
             // found
             nEndPos = rCmpArr.GetNdEnd();
             lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, true );
-            return sal_True;
+            return true;
         }
     }
 
@@ -751,21 +751,21 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 
             // then we have our search area
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-                return sal_False;
+                return false;
 
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, true );
-            return sal_True;
+            return true;
         }
 
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-        return sal_False;
+        return false;
 
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, true );
-    return sal_True;
+    return true;
 }
 
-static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
+static bool lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
 {
     sal_Int32 nEndPos;
@@ -773,10 +773,10 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
     if( !rTxtNd.HasHints() )
     {
         if( !rCmpArr.Found() )
-            return sal_False;
+            return false;
         nEndPos = rCmpArr.GetNdEnd();
         lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, false );
-        return sal_True;
+        return true;
     }
 
     const SwpHints& rHtArr = rTxtNd.GetSwpHints();
@@ -796,7 +796,7 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                     // found end
                     nEndPos = rCmpArr.GetNdEnd();
                     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, false );
-                    return sal_True;
+                    return true;
                 }
 
                 // continue search
@@ -808,7 +808,7 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
             // found
             nEndPos = rCmpArr.GetNdEnd();
             lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(), &nEndPos, false );
-            return sal_True;
+            return true;
         }
     }
 
@@ -829,25 +829,25 @@ static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 
             // then we have our search area
             if( (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-                return sal_False;
+                return false;
 
             lcl_SetAttrPam( rPam, nSttPos, &nEndPos, false );
-            return sal_True;
+            return true;
         }
 
     if( !rCmpArr.CheckStack() ||
         (nSttPos = rCmpArr.Start()) > (nEndPos = rCmpArr.End()) )
-        return sal_False;
+        return false;
 
     lcl_SetAttrPam( rPam, nSttPos, &nEndPos, false );
-    return sal_True;
+    return true;
 }
 
-static int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, bool bNoColls )
+static bool lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, bool bNoColls )
 {
     // search only hard attribution?
     if( bNoColls && !rCNd.HasSwAttrSet() )
-        return sal_False;
+        return false;
 
     const SfxItemSet& rNdSet = rCNd.GetSwAttrSet();
     SfxItemIter aIter( rCmpSet );
@@ -862,21 +862,21 @@ static int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, bool 
             nWhich = rCmpSet.GetWhichByPos( aIter.GetCurPos() );
             if( SfxItemState::SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
                 || CmpAttr( *pNdItem, rNdSet.GetPool()->GetDefaultItem( nWhich ) ))
-                return sal_False;
+                return false;
         }
         else
         {
             nWhich = pItem->Which();
 
             if( !CmpAttr( rNdSet.Get( nWhich, !bNoColls ), *pItem ))
-                return sal_False;
+                return false;
         }
 
         if( aIter.IsAtEnd() )
             break;
         pItem = aIter.NextItem();
     }
-    return sal_True; // found
+    return true; // found
 }
 
 bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
@@ -959,7 +959,7 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
     return bFound;
 }
 
-typedef int (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
+typedef bool (*FnSearchAttr)( const SwTxtNode&, SwAttrCheckArr&, SwPaM& );
 
 bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
                   const SwPaM *pRegion, bool bInReadOnly, bool bMoveFirst )

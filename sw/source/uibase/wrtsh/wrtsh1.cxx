@@ -1746,7 +1746,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
     for( sal_uInt16 nFrom = 0, nTo = GetPageDescCnt();
             nFrom < nTo; ++nFrom )
     {
-        int bChgd = sal_False;
+        bool bChgd = false;
         SwPageDesc aDesc( GetPageDesc( nFrom ));
         OUString sTmp(aDesc.GetName());
         if( rStyleName.isEmpty() || rStyleName == sTmp )
@@ -1771,7 +1771,7 @@ void SwWrtShell::ChangeHeaderOrFooter(
             }
             if( bExecute )
             {
-                bChgd = sal_True;
+                bChgd = true;
                 SwFrmFmt &rMaster = aDesc.GetMaster();
                 if(bHeader)
                     rMaster.SetFmtAttr( SwFmtHeader( bOn ));

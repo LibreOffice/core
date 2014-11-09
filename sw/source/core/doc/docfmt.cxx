@@ -495,7 +495,7 @@ void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
         delete pUndo;
 }
 
-static int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
+static bool lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
                                 SvxTabStopItem& rChgTabStop )
 {
     // Set the default values of all TabStops to the new value.
@@ -505,7 +505,7 @@ static int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
 
     sal_uInt16 nOldCnt = rChgTabStop.Count();
     if( !nOldCnt || nOldWidth == nNewWidth )
-        return sal_False;
+        return false;
 
     // Find the default's beginning
     sal_uInt16 n;
@@ -515,7 +515,7 @@ static int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
     ++n;
     if( n < nOldCnt )   // delete the DefTabStops
         rChgTabStop.Remove( n, nOldCnt - n );
-    return sal_True;
+    return true;
 }
 
 /// Set the attribute as new default attribute in this document.
@@ -614,7 +614,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             SwTwips nNewWidth = (*static_cast<const SvxTabStopItem*>(pTmpItem))[ 0 ].GetTabPos(),
                     nOldWidth = static_cast<const SvxTabStopItem&>(aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
 
-            int bChg = sal_False;
+            bool bChg = false;
             sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_PARATR_TABSTOP );
             for( sal_uInt32 n = 0; n < nMaxItems; ++n )
                 if( 0 != (pTmpItem = GetAttrPool().GetItem2( RES_PARATR_TABSTOP, n ) ))

@@ -440,10 +440,8 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     if( RES_SETEXPFLD == pFldTyp->Which() &&
         (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
     {
-        int bOn = sal_False;
-        if (pFldTyp->GetName() == "HTML_ON")
-            bOn = sal_True;
-        else if (pFldTyp->GetName() != "HTML_OFF")
+        const bool bOn = pFldTyp->GetName() == "HTML_ON";
+        if (!bOn && pFldTyp->GetName() != "HTML_OFF")
             return rWrt;
 
         OUString rTxt(comphelper::string::strip(pFld->GetPar2(), ' '));

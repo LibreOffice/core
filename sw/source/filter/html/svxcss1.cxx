@@ -3132,8 +3132,6 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(so_language)
 };
 
-static int bSortedPropFns = sal_False;
-
 extern "C"
 {
 static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
@@ -3167,13 +3165,15 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
 {
     OSL_ENSURE( pItemSet, "DeclarationParsed() without ItemSet" );
 
+    static bool bSortedPropFns = false;
+
     if( !bSortedPropFns )
     {
         qsort( (void*) aCSS1PropFnTab,
                 sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
                 sizeof( CSS1PropEntry ),
                 CSS1PropEntryCompare );
-        bSortedPropFns = sal_True;
+        bSortedPropFns = true;
     }
 
     OUString aTmp( rProperty.toAsciiLowerCase() );

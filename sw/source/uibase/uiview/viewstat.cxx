@@ -68,7 +68,7 @@ void SwView::GetState(SfxItemSet &rSet)
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
     sal_uInt16 eFrmType = FRMTYPE_NONE;
-    int bGetFrmType = sal_False;
+    bool bGetFrmType = false;
     bool bWeb = 0 != PTR_CAST(SwWebView, this);
 
     while(nWhich)
@@ -96,7 +96,10 @@ void SwView::GetState(SfxItemSet &rSet)
                 {
                     // There are captions for graphics, OLE objects, frames and tables
                     if( !bGetFrmType )
-                        eFrmType = m_pWrtShell->GetFrmType(0,true), bGetFrmType = sal_True;
+                    {
+                        eFrmType = m_pWrtShell->GetFrmType(0, true);
+                        bGetFrmType = true;
+                    }
                     if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
                         m_nSelectionType & nsSelectionType::SEL_TBL ||
                         m_nSelectionType & nsSelectionType::SEL_DRW) )
