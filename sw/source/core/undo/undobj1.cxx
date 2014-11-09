@@ -589,7 +589,7 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 
             if (FLY_AS_CHAR == aNewAnchor.GetAnchorId())
             {
-                SwPosition* pPos = (SwPosition*)aNewAnchor.GetCntntAnchor();
+                const SwPosition* pPos = aNewAnchor.GetCntntAnchor();
                 SwFmtFlyCnt aFmt( pFrmFmt );
                 pPos->nNode.GetNode().GetTxtNode()->InsertItem( aFmt,
                     nOldCntnt, 0 );

@@ -497,9 +497,10 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                 {
                     case FLY_AT_PARA:
                     {
-                        SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
-                        pPos->nNode = *pTxtFrm->GetNode();
-                        pPos->nContent.Assign(0,0);
+                        SwPosition pos = *aAnch.GetCntntAnchor();
+                        pos.nNode = *pTxtFrm->GetNode();
+                        pos.nContent.Assign(0,0);
+                        aAnch.SetAnchor( &pos );
                         break;
                     }
                     case FLY_AT_PAGE:
@@ -517,19 +518,20 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                     }
                     case FLY_AT_CHAR:
                     {
-                        SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+                        SwPosition pos = *aAnch.GetCntntAnchor();
                         Point aTmpPnt( rAbsPos );
-                        if( pTxtFrm->GetCrsrOfst( pPos, aTmpPnt, NULL ) )
+                        if( pTxtFrm->GetCrsrOfst( &pos, aTmpPnt, NULL ) )
                         {
                             SwRect aTmpRect;
-                            pTxtFrm->GetCharRect( aTmpRect, *pPos );
+                            pTxtFrm->GetCharRect( aTmpRect, pos );
                             aRet = aTmpRect.Pos();
                         }
                         else
                         {
-                            pPos->nNode = *pTxtFrm->GetNode();
-                            pPos->nContent.Assign(0,0);
+                            pos.nNode = *pTxtFrm->GetNode();
+                            pos.nContent.Assign(0,0);
                         }
+                        aAnch.SetAnchor( &pos );
                         break;
                     }
                     default:
