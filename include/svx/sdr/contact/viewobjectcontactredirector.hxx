@@ -23,43 +23,32 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
-
-// predeclarations
-
 namespace sdr { namespace contact {
-    class DisplayInfo;
-    class ViewObjectContact;
-}}
 
+class DisplayInfo;
+class ViewObjectContact;
 
-
-namespace sdr
+// This class provides a mechanism to redirect the paint mechanism for all or
+// single ViewObjectContacts. An own derivation may be set at single ViewContacts
+// or at the ObjectContact for redirecting all. If both is used, the one at single
+// objects will have priority.
+class SVX_DLLPUBLIC ViewObjectContactRedirector
 {
-    namespace contact
-    {
-        // This class provides a mechanism to redirect the paint mechanism for all or
-        // single ViewObjectContacts. An own derivation may be set at single ViewContacts
-        // or at the ObjectContact for redirecting all. If both is used, the one at single
-        // objects will have priority.
-        class SVX_DLLPUBLIC ViewObjectContactRedirector
-        {
-        public:
-            // basic constructor.
-            ViewObjectContactRedirector();
+public:
+    // basic constructor.
+    ViewObjectContactRedirector();
 
-            // The destructor.
-            virtual ~ViewObjectContactRedirector();
+    // The destructor.
+    virtual ~ViewObjectContactRedirector();
 
-            // all default implementations just call the same methods at the original. To do something
-            // different, overload the method and at least do what the method does.
-            virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
-                const sdr::contact::ViewObjectContact& rOriginal,
-                const sdr::contact::DisplayInfo& rDisplayInfo);
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+    // all default implementations just call the same methods at the original. To do something
+    // different, overload the method and at least do what the method does.
+    virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
+        const sdr::contact::ViewObjectContact& rOriginal,
+        const sdr::contact::DisplayInfo& rDisplayInfo);
+};
 
-
+}}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 

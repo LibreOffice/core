@@ -21,29 +21,25 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+// basic constructor.
+ViewObjectContactRedirector::ViewObjectContactRedirector()
 {
-    namespace contact
-    {
-        // basic constructor.
-        ViewObjectContactRedirector::ViewObjectContactRedirector()
-        {
-        }
+}
 
-        // The destructor.
-        ViewObjectContactRedirector::~ViewObjectContactRedirector()
-        {
-        }
+// The destructor.
+ViewObjectContactRedirector::~ViewObjectContactRedirector()
+{
+}
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
-            const sdr::contact::ViewObjectContact& rOriginal,
-            const sdr::contact::DisplayInfo& rDisplayInfo)
-        {
-            return rOriginal.createPrimitive2DSequence(rDisplayInfo);
-        }
-    } // end of namespace contact
-} // end of namespace sdr
+drawinglayer::primitive2d::Primitive2DSequence ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(
+    const sdr::contact::ViewObjectContact& rOriginal,
+    const sdr::contact::DisplayInfo& rDisplayInfo)
+{
+    return rOriginal.createPrimitive2DSequence(rDisplayInfo);
+}
+
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

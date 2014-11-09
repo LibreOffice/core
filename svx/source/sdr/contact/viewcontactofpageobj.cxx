@@ -29,60 +29,55 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+ViewObjectContact& ViewContactOfPageObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
-    namespace contact
+    ViewObjectContact* pRetval = new ViewObjectContactOfPageObj(rObjectContact, *this);
+    return *pRetval;
+}
+
+ViewContactOfPageObj::ViewContactOfPageObj(SdrPageObj& rPageObj)
+:   ViewContactOfSdrObj(rPageObj)
+{
+}
+
+ViewContactOfPageObj::~ViewContactOfPageObj()
+{
+}
+
+// #i35972# React on changes of the object of this ViewContact
+void ViewContactOfPageObj::ActionChanged()
+{
+    static bool bIsInActionChange(false);
+
+    if(!bIsInActionChange)
     {
-        ViewObjectContact& ViewContactOfPageObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
-        {
-            ViewObjectContact* pRetval = new ViewObjectContactOfPageObj(rObjectContact, *this);
-            return *pRetval;
-        }
+        // set recursion flag, see description in *.hxx
+        bIsInActionChange = true;
 
-        ViewContactOfPageObj::ViewContactOfPageObj(SdrPageObj& rPageObj)
-        :   ViewContactOfSdrObj(rPageObj)
-        {
-        }
+        // call parent
+        ViewContactOfSdrObj::ActionChanged();
 
-        ViewContactOfPageObj::~ViewContactOfPageObj()
-        {
-        }
+        // reset recursion flag, see description in *.hxx
+        bIsInActionChange = false;
+    }
+}
 
-        // #i35972# React on changes of the object of this ViewContact
-        void ViewContactOfPageObj::ActionChanged()
-        {
-            static bool bIsInActionChange(false);
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
+{
+    // ceate graphical visualisation data. Since this is the view-independent version which should not be used,
+    // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly
+    // which is aOutRect for SdrPageObj.
+    const Rectangle aModelRectangle(GetPageObj().GetLastBoundRect());
+    const basegfx::B2DRange aModelRange(aModelRectangle.Left(), aModelRectangle.Top(), aModelRectangle.Right(), aModelRectangle.Bottom());
+    const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aModelRange));
+    const basegfx::BColor aYellow(1.0, 1.0, 0.0);
+    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
 
-            if(!bIsInActionChange)
-            {
-                // set recursion flag, see description in *.hxx
-                bIsInActionChange = true;
+    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+}
 
-                // call parent
-                ViewContactOfSdrObj::ActionChanged();
-
-                // reset recursion flag, see description in *.hxx
-                bIsInActionChange = false;
-            }
-        }
-
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
-        {
-            // ceate graphical visualisation data. Since this is the view-independent version which should not be used,
-            // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly
-            // which is aOutRect for SdrPageObj.
-            const Rectangle aModelRectangle(GetPageObj().GetLastBoundRect());
-            const basegfx::B2DRange aModelRange(aModelRectangle.Left(), aModelRectangle.Top(), aModelRectangle.Right(), aModelRectangle.Bottom());
-            const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aModelRange));
-            const basegfx::BColor aYellow(1.0, 1.0, 0.0);
-            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aYellow));
-
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-        }
-
-    } // end of namespace contact
-} // end of namespace sdr
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

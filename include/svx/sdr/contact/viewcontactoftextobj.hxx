@@ -21,31 +21,24 @@
 #define INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFTEXTOBJ_HXX
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
-#include <svx/svdotext.hxx>
 
+class SdrTextObj;
 
-namespace sdr
+namespace sdr { namespace contact {
+
+class ViewContactOfTextObj : public ViewContactOfSdrObj
 {
-    namespace contact
-    {
-        class ViewContactOfTextObj : public ViewContactOfSdrObj
-        {
-        protected:
-            // internal access to SdrTextObj
-            const SdrTextObj& GetTextObj() const
-            {
-                return static_cast<const SdrTextObj&>(GetSdrObject());
-            }
+protected:
+    // internal access to SdrTextObj
+    const SdrTextObj& GetTextObj() const;
 
-        public:
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfTextObj(SdrTextObj& rTextObj);
-            virtual ~ViewContactOfTextObj();
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+public:
+    // basic constructor, used from SdrObject.
+    explicit ViewContactOfTextObj(SdrTextObj& rTextObj);
+    virtual ~ViewContactOfTextObj();
+};
 
-
+}}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFTEXTOBJ_HXX
 

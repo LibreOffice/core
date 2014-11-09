@@ -24,42 +24,35 @@
 #include <svx/svxdllapi.h>
 #include <svx/svdopage.hxx>
 
-
-// predeclarations
-
 class SdrPage;
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+class SVX_DLLPUBLIC ViewContactOfPageObj : public ViewContactOfSdrObj
 {
-    namespace contact
+protected:
+    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something.
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+
+    // create graphical visualisation data
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+public:
+    // basic constructor, used from SdrObject.
+    explicit ViewContactOfPageObj(SdrPageObj& rPageObj);
+    virtual ~ViewContactOfPageObj();
+
+    // #WIP# React on changes of the object of this ViewContact
+    virtual void ActionChanged() SAL_OVERRIDE;
+
+    // access to SdrObject
+    const SdrPageObj& GetPageObj() const
     {
-        class SVX_DLLPUBLIC ViewContactOfPageObj : public ViewContactOfSdrObj
-        {
-        protected:
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+        return static_cast<const SdrPageObj&>(GetSdrObject());
+    }
+};
 
-            // create graphical visualisation data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
-        public:
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfPageObj(SdrPageObj& rPageObj);
-            virtual ~ViewContactOfPageObj();
-
-            // #WIP# React on changes of the object of this ViewContact
-            virtual void ActionChanged() SAL_OVERRIDE;
-
-            // access to SdrObject
-            const SdrPageObj& GetPageObj() const
-            {
-                return static_cast<const SdrPageObj&>(GetSdrObject());
-            }
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+}}
 
 
 

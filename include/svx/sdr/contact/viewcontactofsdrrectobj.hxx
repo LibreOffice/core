@@ -23,34 +23,29 @@
 #include <svx/sdr/contact/viewcontactoftextobj.hxx>
 #include <svx/svdorect.hxx>
 
+namespace sdr { namespace contact {
 
-namespace sdr
+class ViewContactOfSdrRectObj : public ViewContactOfTextObj
 {
-    namespace contact
+protected:
+    // internal access to SdrRectObj
+    const SdrRectObj& GetRectObj() const
     {
-        class ViewContactOfSdrRectObj : public ViewContactOfTextObj
-        {
-        protected:
-            // internal access to SdrRectObj
-            const SdrRectObj& GetRectObj() const
-            {
-                return static_cast<const SdrRectObj&>(GetSdrObject());
-            }
+        return static_cast<const SdrRectObj&>(GetSdrObject());
+    }
 
-        public:
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfSdrRectObj(SdrRectObj& rTextObj);
-            virtual ~ViewContactOfSdrRectObj();
+public:
+    // basic constructor, used from SdrObject.
+    explicit ViewContactOfSdrRectObj(SdrRectObj& rTextObj);
+    virtual ~ViewContactOfSdrRectObj();
 
-        protected:
-            // This method is responsible for creating the graphical visualisation data
-            // ONLY based on model data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+protected:
+    // This method is responsible for creating the graphical visualisation data
+    // ONLY based on model data
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+};
 
-
+}}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFSDRRECTOBJ_HXX
 

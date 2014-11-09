@@ -25,81 +25,78 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+ViewContactOfVirtObj::ViewContactOfVirtObj(SdrVirtObj& rObj)
+:   ViewContactOfSdrObj(rObj)
 {
-    namespace contact
+}
+
+ViewContactOfVirtObj::~ViewContactOfVirtObj()
+{
+}
+
+SdrVirtObj& ViewContactOfVirtObj::GetVirtObj() const
+{
+    return static_cast<SdrVirtObj&>(mrObject);
+}
+
+// Access to possible sub-hierarchy
+sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
+{
+    // Here, SdrVirtObj's need to return 0L to show that they have no
+    // sub-hierarchy, even when they are group objects. This is necessary
+    // to avoid that the same VOCs will be added to the draw hierarchy
+    // twice which leads to problems.
+
+    // This solution is only a first solution to get things running. Later
+    // this needs to be replaced with creating real VOCs for the objects
+    // referenced by virtual objects to avoid the 'trick' of setting the
+    // offset for painting at the destination OutputDevive.
+
+    // As can be seen, with primitives, the problem will be solved using
+    // a transformPrimitive, so this solution can stay with primitives.
+    return 0L;
+}
+
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
+{
+    // create displacement transformation if we have content
+    basegfx::B2DHomMatrix aObjectMatrix;
+    Point aAnchor(GetVirtObj().GetAnchorPos());
+
+    if(aAnchor.X() || aAnchor.Y())
     {
-        ViewContactOfVirtObj::ViewContactOfVirtObj(SdrVirtObj& rObj)
-        :   ViewContactOfSdrObj(rObj)
-        {
-        }
+        aObjectMatrix.set(0, 2, aAnchor.X());
+        aObjectMatrix.set(1, 2, aAnchor.Y());
+    }
 
-        ViewContactOfVirtObj::~ViewContactOfVirtObj()
-        {
-        }
+    // use method from referenced object to get the Primitive2DSequence
+    const drawinglayer::primitive2d::Primitive2DSequence xSequenceVirtual(
+        GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DSequence());
 
-        SdrVirtObj& ViewContactOfVirtObj::GetVirtObj() const
-        {
-            return static_cast<SdrVirtObj&>(mrObject);
-        }
+    if(xSequenceVirtual.hasElements())
+    {
+        // create transform primitive
+        const drawinglayer::primitive2d::Primitive2DReference xReference(
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                aObjectMatrix,
+                xSequenceVirtual));
 
-        // Access to possible sub-hierarchy
-        sal_uInt32 ViewContactOfVirtObj::GetObjectCount() const
-        {
-            // Here, SdrVirtObj's need to return 0L to show that they have no
-            // sub-hierarchy, even when they are group objects. This is necessary
-            // to avoid that the same VOCs will be added to the draw hierarchy
-            // twice which leads to problems.
+        return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    }
+    else
+    {
+        // always append an invisible outline for the cases where no visible content exists
+        const drawinglayer::primitive2d::Primitive2DReference xReference(
+            drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                false, aObjectMatrix));
 
-            // This solution is only a first solution to get things running. Later
-            // this needs to be replaced with creating real VOCs for the objects
-            // referenced by virtual objects to avoid the 'trick' of setting the
-            // offset for painting at the destination OutputDevive.
+        return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    }
+}
 
-            // As can be seen, with primitives, the problem will be solved using
-            // a transformPrimitive, so this solution can stay with primitives.
-            return 0L;
-        }
-
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
-        {
-            // create displacement transformation if we have content
-            basegfx::B2DHomMatrix aObjectMatrix;
-            Point aAnchor(GetVirtObj().GetAnchorPos());
-
-            if(aAnchor.X() || aAnchor.Y())
-            {
-                aObjectMatrix.set(0, 2, aAnchor.X());
-                aObjectMatrix.set(1, 2, aAnchor.Y());
-            }
-
-            // use method from referenced object to get the Primitive2DSequence
-            const drawinglayer::primitive2d::Primitive2DSequence xSequenceVirtual(
-                GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DSequence());
-
-            if(xSequenceVirtual.hasElements())
-            {
-                // create transform primitive
-                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                    new drawinglayer::primitive2d::TransformPrimitive2D(
-                        aObjectMatrix,
-                        xSequenceVirtual));
-
-                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-            }
-            else
-            {
-                // always append an invisible outline for the cases where no visible content exists
-                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                    drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
-                        false, aObjectMatrix));
-
-                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-            }
-        }
-    } // end of namespace contact
-} // end of namespace sdr
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+

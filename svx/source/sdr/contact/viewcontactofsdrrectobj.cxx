@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/sdr/contact/viewcontactofsdrrectobj.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
@@ -27,73 +26,69 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+ViewContactOfSdrRectObj::ViewContactOfSdrRectObj(SdrRectObj& rRectObj)
+:   ViewContactOfTextObj(rRectObj)
 {
-    namespace contact
-    {
-        ViewContactOfSdrRectObj::ViewContactOfSdrRectObj(SdrRectObj& rRectObj)
-        :   ViewContactOfTextObj(rRectObj)
-        {
-        }
+}
 
-        ViewContactOfSdrRectObj::~ViewContactOfSdrRectObj()
-        {
-        }
+ViewContactOfSdrRectObj::~ViewContactOfSdrRectObj()
+{
+}
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
-        {
-            const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
-            const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
-                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
-                    rItemSet,
-                    GetRectObj().getText(0),
-                    false));
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrRectObj::createViewIndependentPrimitive2DSequence() const
+{
+    const SfxItemSet& rItemSet = GetRectObj().GetMergedItemSet();
+    const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
+        drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+            rItemSet,
+            GetRectObj().getText(0),
+            false));
 
-            // take unrotated snap rect (direct model data) for position and size
-            Rectangle rRectangle = GetRectObj().GetGeoRect();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            rRectangle += GetRectObj().GetGridOffset();
-            const ::basegfx::B2DRange aObjectRange(
-                rRectangle.Left(), rRectangle.Top(),
-                rRectangle.Right(), rRectangle.Bottom() );
+    // take unrotated snap rect (direct model data) for position and size
+    Rectangle rRectangle = GetRectObj().GetGeoRect();
+    // Hack for calc, transform position of object according
+    // to current zoom so as objects relative position to grid
+    // appears stable
+    rRectangle += GetRectObj().GetGridOffset();
+    const ::basegfx::B2DRange aObjectRange(
+        rRectangle.Left(), rRectangle.Top(),
+        rRectangle.Right(), rRectangle.Bottom() );
 
-            const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
+    const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
 
-            // fill object matrix
-            basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                aObjectRange.getWidth(), aObjectRange.getHeight(),
-                rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0,
-                rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0,
-                aObjectRange.getMinX(), aObjectRange.getMinY()));
+    // fill object matrix
+    basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        aObjectRange.getWidth(), aObjectRange.getHeight(),
+        rGeoStat.nShearAngle ? tan((36000 - rGeoStat.nShearAngle) * F_PI18000) : 0.0,
+        rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0,
+        aObjectRange.getMinX(), aObjectRange.getMinY()));
 
-            // calculate corner radius
-            sal_uInt32 nCornerRadius((static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
-            double fCornerRadiusX;
-            double fCornerRadiusY;
-            drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
+    // calculate corner radius
+    sal_uInt32 nCornerRadius((static_cast<const SdrMetricItem&>(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
+    double fCornerRadiusX;
+    double fCornerRadiusY;
+    drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
 
-            // #i105856# use knowledge about pickthrough from the model
-            const bool bPickThroughTransparentTextFrames(
-                GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
+    // #i105856# use knowledge about pickthrough from the model
+    const bool bPickThroughTransparentTextFrames(
+        GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
 
-            // create primitive. Always create primitives to allow the decomposition of
-            // SdrRectanglePrimitive2D to create needed invisible elements for HitTest and/or BoundRect
-            const drawinglayer::primitive2d::Primitive2DReference xReference(
-                new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
-                    aObjectMatrix,
-                    aAttribute,
-                    fCornerRadiusX,
-                    fCornerRadiusY,
-                    // #i105856# use fill for HitTest when TextFrame and not PickThrough
-                    GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
+    // create primitive. Always create primitives to allow the decomposition of
+    // SdrRectanglePrimitive2D to create needed invisible elements for HitTest and/or BoundRect
+    const drawinglayer::primitive2d::Primitive2DReference xReference(
+        new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
+            aObjectMatrix,
+            aAttribute,
+            fCornerRadiusX,
+            fCornerRadiusY,
+            // #i105856# use fill for HitTest when TextFrame and not PickThrough
+            GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-        }
-    } // end of namespace contact
-} // end of namespace sdr
+    return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+}
+
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

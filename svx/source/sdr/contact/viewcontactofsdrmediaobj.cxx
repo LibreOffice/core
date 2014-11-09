@@ -26,29 +26,19 @@
 
 namespace sdr { namespace contact {
 
-
-// - ViewContactOfSdrMediaObj -
-
-
 ViewContactOfSdrMediaObj::ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj ) :
     ViewContactOfSdrObj( rMediaObj )
 {
 }
 
-
-
 ViewContactOfSdrMediaObj::~ViewContactOfSdrMediaObj()
 {
 }
-
-
 
 ViewObjectContact& ViewContactOfSdrMediaObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
 {
     return *( new ViewObjectContactOfSdrMediaObj( rObjectContact, *this, static_cast< SdrMediaObj& >( GetSdrObject() ).getMediaProperties() ) );
 }
-
-
 
 Size ViewContactOfSdrMediaObj::getPreferredSize() const
 {
@@ -70,8 +60,6 @@ Size ViewContactOfSdrMediaObj::getPreferredSize() const
     return Size();
 }
 
-
-
 void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
 {
     // #i71805# Since we may have a whole bunch of VOCs here, make a loop
@@ -88,8 +76,6 @@ void ViewContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) co
     }
 }
 
-
-
 void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rItem )
 {
     const sal_uInt32 nCount(getViewObjectContactCount());
@@ -105,53 +91,45 @@ void ViewContactOfSdrMediaObj::executeMediaItem( const ::avmedia::MediaItem& rIt
     }
 }
 
-
-
 void ViewContactOfSdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState )
 {
     static_cast< SdrMediaObj& >(GetSdrObject()).mediaPropertiesChanged(rNewState);
 }
 
-}} // end of namespace sdr::contact
-
-namespace sdr
+drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence() const
 {
-    namespace contact
-    {
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrMediaObj::createViewIndependentPrimitive2DSequence() const
-        {
-            // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
-            // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
-            Rectangle aRectangle(GetSdrMediaObj().GetGeoRect());
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
-            aRectangle += GetSdrMediaObj().GetGridOffset();
-            const basegfx::B2DRange aRange(
-                aRectangle.Left(), aRectangle.Top(),
-                aRectangle.Right(), aRectangle.Bottom());
+    // create range using the model data directly. This is in SdrTextObj::aRect which i will access using
+    // GetGeoRect() to not trigger any calculations. It's the unrotated geometry which is okay for MediaObjects ATM.
+    Rectangle aRectangle(GetSdrMediaObj().GetGeoRect());
+    // Hack for calc, transform position of object according
+    // to current zoom so as objects relative position to grid
+    // appears stable
+    aRectangle += GetSdrMediaObj().GetGridOffset();
+    const basegfx::B2DRange aRange(
+        aRectangle.Left(), aRectangle.Top(),
+        aRectangle.Right(), aRectangle.Bottom());
 
-            // create object transform
-            basegfx::B2DHomMatrix aTransform;
-            aTransform.set(0, 0, aRange.getWidth());
-            aTransform.set(1, 1, aRange.getHeight());
-            aTransform.set(0, 2, aRange.getMinX());
-            aTransform.set(1, 2, aRange.getMinY());
+    // create object transform
+    basegfx::B2DHomMatrix aTransform;
+    aTransform.set(0, 0, aRange.getWidth());
+    aTransform.set(1, 1, aRange.getHeight());
+    aTransform.set(0, 2, aRange.getMinX());
+    aTransform.set(1, 2, aRange.getMinY());
 
-            // create media primitive. Always create primitives to allow the
-            // decomposition of MediaPrimitive2D to create needed invisible elements for HitTest
-            // and/or BoundRect
-            const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);
-            const OUString& rURL(GetSdrMediaObj().getURL());
-            const sal_uInt32 nPixelBorder(4L);
-            const drawinglayer::primitive2d::Primitive2DReference xRetval(
-                new drawinglayer::primitive2d::MediaPrimitive2D(
-                    aTransform, rURL, aBackgroundColor, nPixelBorder,
-                    GetSdrMediaObj().getSnapshot()));
+    // create media primitive. Always create primitives to allow the
+    // decomposition of MediaPrimitive2D to create needed invisible elements for HitTest
+    // and/or BoundRect
+    const basegfx::BColor aBackgroundColor(67.0 / 255.0, 67.0 / 255.0, 67.0 / 255.0);
+    const OUString& rURL(GetSdrMediaObj().getURL());
+    const sal_uInt32 nPixelBorder(4L);
+    const drawinglayer::primitive2d::Primitive2DReference xRetval(
+        new drawinglayer::primitive2d::MediaPrimitive2D(
+            aTransform, rURL, aBackgroundColor, nPixelBorder,
+            GetSdrMediaObj().getSnapshot()));
 
-            return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
-        }
-    } // end of namespace contact
-} // end of namespace sdr
+    return drawinglayer::primitive2d::Primitive2DSequence(&xRetval, 1);
+}
+
+}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

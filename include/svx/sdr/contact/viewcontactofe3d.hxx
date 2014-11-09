@@ -24,13 +24,6 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <drawinglayer/primitive3d/baseprimitive3d.hxx>
 
-
-// predeclarations
-
-namespace sdr { namespace contact {
-    class ViewContactOfE3dScene;
-}}
-
 namespace drawinglayer { namespace attribute {
     class SdrLineAttribute;
 }}
@@ -40,66 +33,64 @@ namespace basegfx {
     class B3DHomMatrix;
 }
 
+namespace sdr { namespace contact {
 
+class ViewContactOfE3dScene;
 
-namespace sdr
+class ViewContactOfE3d : public ViewContactOfSdrObj
 {
-    namespace contact
+protected:
+    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something.
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+
+public:
+    // basic constructor, used from E3dObject.
+    explicit ViewContactOfE3d(E3dObject& rObj);
+    virtual ~ViewContactOfE3d();
+
+    // access to E3dObject
+    const E3dObject& GetE3dObject() const
     {
-        class ViewContactOfE3d : public ViewContactOfSdrObj
-        {
-        protected:
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
+        return static_cast<const E3dObject&>(GetSdrObject());
+    }
 
-        public:
-            // basic constructor, used from E3dObject.
-            explicit ViewContactOfE3d(E3dObject& rObj);
-            virtual ~ViewContactOfE3d();
-
-            // access to E3dObject
-            const E3dObject& GetE3dObject() const
-            {
-                return static_cast<const E3dObject&>(GetSdrObject());
-            }
-
-            // public helpers
-            drawinglayer::primitive2d::Primitive2DSequence impCreateWithGivenPrimitive3DSequence(
-                const drawinglayer::primitive3d::Primitive3DSequence& rxContent3D) const;
+    // public helpers
+    drawinglayer::primitive2d::Primitive2DSequence impCreateWithGivenPrimitive3DSequence(
+        const drawinglayer::primitive3d::Primitive3DSequence& rxContent3D) const;
 
 
-            // primitive stuff
+    // primitive stuff
 
-        protected:
-            // Primitive3DSequence of the ViewContact. This contains all necessary information
-            // for the graphical visualisation and needs to be supported by all 3D VCs which
-            // can be visualized. It does NOT contain the object transformation to be able to
-            // buffer for all possible usages
-            drawinglayer::primitive3d::Primitive3DSequence              mxViewIndependentPrimitive3DSequence;
+protected:
+    // Primitive3DSequence of the ViewContact. This contains all necessary information
+    // for the graphical visualisation and needs to be supported by all 3D VCs which
+    // can be visualized. It does NOT contain the object transformation to be able to
+    // buffer for all possible usages
+    drawinglayer::primitive3d::Primitive3DSequence              mxViewIndependentPrimitive3DSequence;
 
-            // This method is responsible for creating the graphical visualisation data which is
-            // stored in mxViewIndependentPrimitive3DSequence, but without object transformation
-            virtual drawinglayer::primitive3d::Primitive3DSequence createViewIndependentPrimitive3DSequence() const = 0;
+    // This method is responsible for creating the graphical visualisation data which is
+    // stored in mxViewIndependentPrimitive3DSequence, but without object transformation
+    virtual drawinglayer::primitive3d::Primitive3DSequence createViewIndependentPrimitive3DSequence() const = 0;
 
-            // This method is responsible for creating the graphical visualisation data derived ONLY from
-            // the model data. The default implementation will try to create a 3D to 2D embedding (will work
-            // when scene is known) which can then be used for 2D processing concerning ranges
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+    // This method is responsible for creating the graphical visualisation data derived ONLY from
+    // the model data. The default implementation will try to create a 3D to 2D embedding (will work
+    // when scene is known) which can then be used for 2D processing concerning ranges
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
 
-        public:
-            // access to the local primitive without the object's local 3D transform. This is e.g. needed
-            // to get the not-yet transformed BoundVolume for e.g. interactions
-            drawinglayer::primitive3d::Primitive3DSequence getVIP3DSWithoutObjectTransform() const;
+public:
+    // access to the local primitive without the object's local 3D transform. This is e.g. needed
+    // to get the not-yet transformed BoundVolume for e.g. interactions
+    drawinglayer::primitive3d::Primitive3DSequence getVIP3DSWithoutObjectTransform() const;
 
-            // access to the local primitive. This will ensure that the list is
-            // current in comparing the local list content with a fresh created incarnation. It will
-            // use getVIP3DSWithoutObjectTransform and embed to 3d transform primitive when object's
-            // local 3d transform is used
-            drawinglayer::primitive3d::Primitive3DSequence getViewIndependentPrimitive3DSequence() const;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+    // access to the local primitive. This will ensure that the list is
+    // current in comparing the local list content with a fresh created incarnation. It will
+    // use getVIP3DSWithoutObjectTransform and embed to 3d transform primitive when object's
+    // local 3d transform is used
+    drawinglayer::primitive3d::Primitive3DSequence getViewIndependentPrimitive3DSequence() const;
+};
+
+}}
 
 
 

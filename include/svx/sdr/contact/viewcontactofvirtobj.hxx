@@ -22,40 +22,32 @@
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 
-
-// predeclarations
 class SdrVirtObj;
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+class SVX_DLLPUBLIC ViewContactOfVirtObj : public ViewContactOfSdrObj
 {
-    namespace contact
-    {
-        class SVX_DLLPUBLIC ViewContactOfVirtObj : public ViewContactOfSdrObj
-        {
-        protected:
-            // internal access to SdrObject. Iplementation in *.cxx to avoid
-            // including SdrVirtObj here.
-            SdrVirtObj& GetVirtObj() const;
+protected:
+    // internal access to SdrObject. Iplementation in *.cxx to avoid
+    // including SdrVirtObj here.
+    SdrVirtObj& GetVirtObj() const;
 
-        public:
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfVirtObj(SdrVirtObj& rObj);
-            virtual ~ViewContactOfVirtObj();
+public:
+    // basic constructor, used from SdrObject.
+    explicit ViewContactOfVirtObj(SdrVirtObj& rObj);
+    virtual ~ViewContactOfVirtObj();
 
-            // Access to possible sub-hierarchy
-            virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
+    // Access to possible sub-hierarchy
+    virtual sal_uInt32 GetObjectCount() const SAL_OVERRIDE;
 
-        protected:
-            // This method is responsible for creating the graphical visualisation data
-            // ONLY based on model data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+protected:
+    // This method is responsible for creating the graphical visualisation data
+    // ONLY based on model data
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+};
 
-
+}}
 
 #endif // INCLUDED_SVX_SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
 

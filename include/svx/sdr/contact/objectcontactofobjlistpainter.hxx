@@ -24,119 +24,96 @@
 #include <svx/svxdllapi.h>
 #include <svx/svdpage.hxx>
 
-
-// predeclarations
-
 class SdrPage;
 class SdrObject;
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+class SVX_DLLPUBLIC ObjectContactPainter : public ObjectContact
 {
-    namespace contact
-    {
-        class SVX_DLLPUBLIC ObjectContactPainter : public ObjectContact
-        {
-        protected:
-            // Hierarchy access methods
-            virtual sal_uInt32 GetPaintObjectCount() const = 0;
-            virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const = 0;
+protected:
+    // Hierarchy access methods
+    virtual sal_uInt32 GetPaintObjectCount() const = 0;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const = 0;
 
-        public:
-            // basic constructor/destructor
-            ObjectContactPainter();
-            virtual ~ObjectContactPainter();
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+public:
+    // basic constructor/destructor
+    ObjectContactPainter();
+    virtual ~ObjectContactPainter();
+};
 
+// typedef for transferring SdrObject
+typedef ::std::vector< SdrObject* > SdrObjectVector;
 
-
-namespace sdr
+class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
 {
-    namespace contact
-    {
-        // typedef for transferring SdrObject
-        typedef ::std::vector< SdrObject* > SdrObjectVector;
+protected:
+    // Target OutputDevice
+    OutputDevice&                                   mrTargetOutputDevice;
 
-        class SVX_DLLPUBLIC ObjectContactOfObjListPainter : public ObjectContactPainter
-        {
-        protected:
-            // Target OutputDevice
-            OutputDevice&                                   mrTargetOutputDevice;
+    // Set StartPoint for next run, also given in constructor
+    SdrObjectVector                                 maStartObjects;
 
-            // Set StartPoint for next run, also given in constructor
-            SdrObjectVector                                 maStartObjects;
+    // the processed page which is the base e.g. for PageNumberFields
+    const SdrPage*                                  mpProcessedPage;
 
-            // the processed page which is the base e.g. for PageNumberFields
-            const SdrPage*                                  mpProcessedPage;
+    // Hierarchy access methods
+    virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
 
-            // Hierarchy access methods
-            virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
-            virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+public:
+    // basic constructor/destructor
+    ObjectContactOfObjListPainter(
+        OutputDevice& rTargetDevice,
+        const SdrObjectVector& rObjects,
+        const SdrPage* pProcessedPage);
+    virtual ~ObjectContactOfObjListPainter();
 
-        public:
-            // basic constructor/destructor
-            ObjectContactOfObjListPainter(
-                OutputDevice& rTargetDevice,
-                const SdrObjectVector& rObjects,
-                const SdrPage* pProcessedPage);
-            virtual ~ObjectContactOfObjListPainter();
+    // Process the whole displaying
+    virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
 
-            // Process the whole displaying
-            virtual void ProcessDisplay(DisplayInfo& rDisplayInfo) SAL_OVERRIDE;
+    // VirtualDevice? Default is false
+    virtual bool isOutputToVirtualDevice() const SAL_OVERRIDE;
 
-            // VirtualDevice? Default is false
-            virtual bool isOutputToVirtualDevice() const SAL_OVERRIDE;
+    // recording MetaFile? Default is false
+    virtual bool isOutputToRecordingMetaFile() const SAL_OVERRIDE;
 
-            // recording MetaFile? Default is false
-            virtual bool isOutputToRecordingMetaFile() const SAL_OVERRIDE;
+    // pdf export? Default is false
+    virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
 
-            // pdf export? Default is false
-            virtual bool isOutputToPDFFile() const SAL_OVERRIDE;
+    // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
+    virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
+};
 
-            // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
-            virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
-
-
-
-namespace sdr
+class ObjectContactOfPagePainter : public ObjectContactPainter
 {
-    namespace contact
-    {
-        class ObjectContactOfPagePainter : public ObjectContactPainter
-        {
-        protected:
-            // the original ObjectContact this painter is working on
-            ObjectContact&                                  mrOriginalObjectContact;
+protected:
+    // the original ObjectContact this painter is working on
+    ObjectContact&                                  mrOriginalObjectContact;
 
-            // Set StartPoint for next run, also given in constructor
-            SdrPageWeakRef                                  mxStartPage;
+    // Set StartPoint for next run, also given in constructor
+    SdrPageWeakRef                                  mxStartPage;
 
-            // Hierarchy access methods
-            virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
-            virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
+    // Hierarchy access methods
+    virtual sal_uInt32 GetPaintObjectCount() const SAL_OVERRIDE;
+    virtual ViewContact& GetPaintObjectViewContact(sal_uInt32 nIndex) const SAL_OVERRIDE;
 
-        public:
-            // basic constructor
-            ObjectContactOfPagePainter(
-                const SdrPage* pPage,
-                ObjectContact& rOriginalObjectContact);
-            virtual ~ObjectContactOfPagePainter();
+public:
+    // basic constructor
+    ObjectContactOfPagePainter(
+        const SdrPage* pPage,
+        ObjectContact& rOriginalObjectContact);
+    virtual ~ObjectContactOfPagePainter();
 
-            // set another page
-            void SetStartPage(const SdrPage* pPage);
-            const SdrPage* GetStartPage() const { return mxStartPage.get(); }
+    // set another page
+    void SetStartPage(const SdrPage* pPage);
+    const SdrPage* GetStartPage() const { return mxStartPage.get(); }
 
-            // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
-            virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+    // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
+    virtual OutputDevice* TryToGetOutputDevice() const SAL_OVERRIDE;
+};
+
+}}
 
 
 

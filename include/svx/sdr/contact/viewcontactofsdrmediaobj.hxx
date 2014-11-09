@@ -25,56 +25,49 @@
 #include <svx/svdomedia.hxx>
 #include <tools/gen.hxx>
 
-
-// predeclarations
-
 namespace avmedia { class MediaItem; }
 
+namespace sdr { namespace contact {
 
-
-namespace sdr
+class SVX_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
 {
-    namespace contact
+    friend class ViewObjectContactOfSdrMediaObj;
+
+public:
+
+    // basic constructor, used from SdrObject.
+    explicit ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj );
+    virtual ~ViewContactOfSdrMediaObj();
+
+public:
+
+    // access to SdrMediaObj
+    const SdrMediaObj& GetSdrMediaObj() const
     {
-        class SVX_DLLPUBLIC ViewContactOfSdrMediaObj : public ViewContactOfSdrObj
-        {
-            friend class ViewObjectContactOfSdrMediaObj;
+        return static_cast<const SdrMediaObj&>(GetSdrObject());
+    }
 
-        public:
+    Size    getPreferredSize() const;
 
-            // basic constructor, used from SdrObject.
-            explicit ViewContactOfSdrMediaObj( SdrMediaObj& rMediaObj );
-            virtual ~ViewContactOfSdrMediaObj();
+    void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
+    void    executeMediaItem( const ::avmedia::MediaItem& rItem );
 
-        public:
+protected:
 
-            // access to SdrMediaObj
-            const SdrMediaObj& GetSdrMediaObj() const
-            {
-                return static_cast<const SdrMediaObj&>(GetSdrObject());
-            }
+    // Create a Object-Specific ViewObjectContact, set ViewContact and
+    // ObjectContact. Always needs to return something.
+    virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
-            Size    getPreferredSize() const;
+    // get notified if some properties have changed
+    virtual void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
 
-            void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
-            void    executeMediaItem( const ::avmedia::MediaItem& rItem );
+protected:
+    // This method is responsible for creating the graphical visualisation data
+    // ONLY based on model data
+    virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
+};
 
-        protected:
-
-            // Create a Object-Specific ViewObjectContact, set ViewContact and
-            // ObjectContact. Always needs to return something.
-            virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
-
-            // get notified if some properties have changed
-            virtual void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
-
-        protected:
-            // This method is responsible for creating the graphical visualisation data
-            // ONLY based on model data
-            virtual drawinglayer::primitive2d::Primitive2DSequence createViewIndependentPrimitive2DSequence() const SAL_OVERRIDE;
-        };
-    } // end of namespace contact
-} // end of namespace sdr
+}}
 
 
 
