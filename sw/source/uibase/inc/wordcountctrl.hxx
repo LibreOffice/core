@@ -26,6 +26,10 @@ public:
 
     SwWordCountStatusBarControl(sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb);
     virtual ~SwWordCountStatusBarControl();
+
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
+                               const SfxPoolItem* pState ) SAL_OVERRIDE;
+
 };
 
 #endif

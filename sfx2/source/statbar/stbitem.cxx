@@ -560,11 +560,11 @@ void SfxStatusBarControl::Click()
 
     This virtual method is called when the user clicks on the
     field in the status row that belongs to this control.
-
-    The default implementation is empty.
 */
 
 {
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
+    execute( aArgs );
 }
 
 
@@ -575,11 +575,11 @@ void SfxStatusBarControl::DoubleClick()
 
     This virtual method is called when the user double-clicks on the
     field in the status row that belongs to this control.
+
+    The default implementation is empty.
 */
 
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
-    execute( aArgs );
 }
 
 

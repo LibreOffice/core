@@ -7588,7 +7588,7 @@ SfxStringItem StateZoom FN_STAT_ZOOM
 ]
 
 SfxStringItem StateWordCount FN_STAT_WORDCOUNT
-()
+
 [
     /* flags: */
     AutoUpdate = FALSE,

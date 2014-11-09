@@ -38,13 +38,9 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
 {
 }
 
-
-
 SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
 {
 }
-
-
 
 void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
                                               const SfxPoolItem* pState )
@@ -66,35 +62,10 @@ void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
     }
 }
 
-
-
-void SvxInsertStatusBarControl::Click()
-{
-    if ( GetStatusBar().GetItemText( GetId() ).isEmpty() )
-        return;
-    bInsert = !bInsert;
-    SfxBoolItem aIns( GetSlotId(), bInsert );
-
-    ::com::sun::star::uno::Any a;
-    bool bHasValue = aIns.QueryValue( a );
-    if (!bHasValue)
-        return;
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "InsertMode";
-    aArgs[0].Value = a;
-
-    execute( aArgs );
-}
-
-
-
 void SvxInsertStatusBarControl::Paint( const UserDrawEvent& )
 {
     DrawItemText_Impl();
 }
-
-
 
 void SvxInsertStatusBarControl::DrawItemText_Impl()
 {

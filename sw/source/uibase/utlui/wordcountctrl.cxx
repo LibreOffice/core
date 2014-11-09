@@ -24,4 +24,10 @@ SwWordCountStatusBarControl::~SwWordCountStatusBarControl()
 {
 }
 
+void SwWordCountStatusBarControl::StateChanged(
+    sal_uInt16 /*nSID*/, SfxItemState /*eState*/, const SfxPoolItem* pState )
+{
+    GetStatusBar().SetItemText( GetId(), ((SfxStringItem*)pState)->GetValue() );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

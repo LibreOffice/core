@@ -165,7 +165,7 @@ void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->DrawImage(aPt, mpImpl->maImages[state]);
 }
 
-void SvxModifyControl::DoubleClick()
+void SvxModifyControl::Click()
 {
     if (mpImpl->mnModState != ImplData::MODIFICATION_STATE_YES)
         // document not modified.  nothing to do here.
