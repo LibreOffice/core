@@ -27,7 +27,7 @@
 #include <sys/file.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
+#include <fcntl.h>
 #include <unistd.h>
 
 const OUString RECENTLY_USED_FILE_NAME(".recently-used");
