@@ -60,8 +60,7 @@ Bitmap::Bitmap( const Bitmap& rBitmap ) :
 
 Bitmap::Bitmap( SalBitmap* pSalBitmap )
 {
-    mpImpBmp = new ImpBitmap();
-    mpImpBmp->ImplSetSalBitmap( pSalBitmap );
+    mpImpBmp = new ImpBitmap(pSalBitmap);
     maPrefMapMode = MapMode( MAP_PIXEL );
     maPrefSize = mpImpBmp->ImplGetSize();
 }
