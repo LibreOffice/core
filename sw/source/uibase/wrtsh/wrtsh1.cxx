@@ -534,9 +534,9 @@ bool SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
                  bDisableDataTableDialog )
             {
                 xProps->setPropertyValue("DisableDataTableDialog",
-                    uno::makeAny( sal_False ) );
+                    uno::makeAny( false ) );
                 xProps->setPropertyValue("DisableComplexChartTypes",
-                    uno::makeAny( sal_False ) );
+                    uno::makeAny( false ) );
                 uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                 if ( xModifiable.is() )
                 {

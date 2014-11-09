@@ -711,7 +711,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
     {
         if (m_bGrammarResults)
         {
-            SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( sal_True ));
+            SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( true ));
         }
         m_pSh->Left(CRSR_SKIP_CHARS, false, 1, false );
         {

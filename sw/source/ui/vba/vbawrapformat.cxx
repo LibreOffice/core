@@ -62,13 +62,13 @@ void SwVbaWrapFormat::makeWrap() throw (uno::RuntimeException)
             case word::WdWrapType::wdWrapSquare:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( sal_False ) );
+                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( false ) );
                 break;
             }
             case word::WdWrapType::wdWrapTight:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( sal_True ) );
+                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( true ) );
                 break;
             }
             default:

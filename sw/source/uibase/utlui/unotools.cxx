@@ -181,7 +181,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
 
     //To reproduce this problem, in edit->autotext and click through
     //the examples and see if the preview gets a horizontal scrollbar
-    uno::Any aFalseSet(uno::makeAny(sal_False));
+    uno::Any aFalseSet(uno::makeAny(false));
     xViewProps->setPropertyValue(UNO_NAME_SHOW_ONLINE_LAYOUT, aFalseSet);
 
     xViewProps->setPropertyValue(UNO_NAME_SHOW_HORI_SCROLL_BAR, aFalseSet);
@@ -189,7 +189,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
 
     if (bEnableOnlineMode)
     {
-        xViewProps->setPropertyValue(UNO_NAME_SHOW_ONLINE_LAYOUT, uno::makeAny(sal_True));
+        xViewProps->setPropertyValue(UNO_NAME_SHOW_ONLINE_LAYOUT, uno::makeAny(true));
     }
 }
 

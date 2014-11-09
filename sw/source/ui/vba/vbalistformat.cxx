@@ -81,7 +81,7 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
         }
         else
         {
-            xProps->setPropertyValue("ParaIsNumberingRestart", uno::makeAny( sal_False ) );
+            xProps->setPropertyValue("ParaIsNumberingRestart", uno::makeAny( false ) );
         }
         rListTemplate.applyListTemplate( xProps );
     }

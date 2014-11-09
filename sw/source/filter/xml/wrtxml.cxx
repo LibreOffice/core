@@ -218,7 +218,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )
     {
-        xInfoSet->setPropertyValue( "OutlineStyleAsNormalListStyle", makeAny( sal_True ) );
+        xInfoSet->setPropertyValue( "OutlineStyleAsNormalListStyle", makeAny( true ) );
     }
 
     // filter arguments

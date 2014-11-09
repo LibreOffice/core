@@ -633,7 +633,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 xRowSetPropSet->setPropertyValue( "Command",           makeAny( aCurDataCommand ) );
                 xRowSetPropSet->setPropertyValue( "CommandType",       makeAny( nCurDataCommandType ) );
                 xRowSetPropSet->setPropertyValue( "EscapeProcessing",  makeAny( bCurEscapeProcessing ) );
-                xRowSetPropSet->setPropertyValue( "ApplyFilter",       makeAny( sal_True ) );
+                xRowSetPropSet->setPropertyValue( "ApplyFilter",       makeAny( true ) );
                 xRowSetPropSet->setPropertyValue( "Filter",            makeAny( aCurFilter ) );
 
                 Reference< sdbc::XRowSet > xRowSet( xInstance, UNO_QUERY );
@@ -830,7 +830,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         return makeAny( Reference< XComponent >( xTextDoc->queryInterface( XComponent::static_type() ), css::uno::UNO_QUERY) );
     }
     else
-        return makeAny( sal_True );
+        return makeAny( true );
 }
 
 void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeException, std::exception)

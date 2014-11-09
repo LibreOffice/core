@@ -61,7 +61,7 @@ double SAL_CALL SwVbaPageSetup::getHeaderDistance() throw (uno::RuntimeException
     bool isHeaderOn = false;
     mxPageProps->getPropertyValue("HeaderIsOn") >>= isHeaderOn;
     if( !isHeaderOn )
-        mxPageProps->setPropertyValue("HeaderIsOn", uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue("HeaderIsOn", uno::makeAny( true ) );
     return VbaPageSetupBase::getHeaderMargin();
 }
 
@@ -84,7 +84,7 @@ void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance ) throw 
 
     mxPageProps->getPropertyValue("HeaderIsOn") >>= isHeaderOn;
     if( !isHeaderOn )
-        mxPageProps->setPropertyValue("HeaderIsOn", uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue("HeaderIsOn", uno::makeAny( true ) );
 
     mxPageProps->getPropertyValue("TopMargin") >>= aktTopMargin;
     mxPageProps->getPropertyValue("HeaderBodyDistance") >>= aktSpacing;
@@ -104,7 +104,7 @@ double SAL_CALL SwVbaPageSetup::getFooterDistance() throw (uno::RuntimeException
     bool isFooterOn = false;
     mxPageProps->getPropertyValue("FooterIsOn") >>= isFooterOn;
     if( !isFooterOn )
-        mxPageProps->setPropertyValue("FooterIsOn", uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue("FooterIsOn", uno::makeAny( true ) );
     return VbaPageSetupBase::getFooterMargin();
 }
 
@@ -118,7 +118,7 @@ void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw 
 
     mxPageProps->getPropertyValue("FooterIsOn") >>= isFooterOn;
     if( !isFooterOn )
-        mxPageProps->setPropertyValue("FooterIsOn", uno::makeAny( sal_True ) );
+        mxPageProps->setPropertyValue("FooterIsOn", uno::makeAny( true ) );
 
     mxPageProps->getPropertyValue("BottomMargin") >>= aktBottomMargin;
     mxPageProps->getPropertyValue("FooterBodyDistance") >>= aktSpacing;
@@ -173,8 +173,8 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
     {
         nTopMargin += nHeaderHeight;
         nBottomMargin += nFooterHeight;
-        xStyleProps->setPropertyValue("HeaderIsOn", uno::makeAny( sal_False ) );
-        xStyleProps->setPropertyValue("FooterIsOn", uno::makeAny( sal_False ) );
+        xStyleProps->setPropertyValue("HeaderIsOn", uno::makeAny( false ) );
+        xStyleProps->setPropertyValue("FooterIsOn", uno::makeAny( false ) );
     }
     uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( mxModel ), uno::UNO_QUERY_THROW );
     if( xPageCursor->getPage() != 1 )

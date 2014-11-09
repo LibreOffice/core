@@ -70,7 +70,7 @@ bool UCB_DeleteFile( const OUString& rURL )
                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
         aTempContent.executeCommand("delete",
-                        ::com::sun::star::uno::makeAny( sal_True ) );
+                        ::com::sun::star::uno::makeAny( true ) );
         bRemoved = true;
     }
     catch( ::com::sun::star::uno::Exception& )

@@ -221,12 +221,12 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::
         case word::WdViewType::wdPrintView:
         case word::WdViewType::wdNormalView:
         {
-            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( sal_False ) );
+            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( false ) );
             break;
         }
         case word::WdViewType::wdWebView:
         {
-            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( sal_True ) );
+            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( true ) );
             break;
         }
         case word::WdViewType::wdPrintPreview:
@@ -334,7 +334,7 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     xPageProps->getPropertyValue( aPropIsShared ) >>= isShared;
     if( !isOn )
     {
-        xPageProps->setPropertyValue( aPropIsOn, uno::makeAny( sal_True ) );
+        xPageProps->setPropertyValue( aPropIsOn, uno::makeAny( true ) );
         xPageProps->setPropertyValue( aPropBodyDistance, uno::makeAny( DEFAULT_BODY_DISTANCE ) );
     }
     if( !isShared )

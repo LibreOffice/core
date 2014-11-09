@@ -695,9 +695,9 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
             uno::Reference< text::XTextTable > xTextTable;
             xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
             if( xTextTable.is() )
-                result = uno::makeAny( sal_True );
+                result = uno::makeAny( true );
             else
-                result = uno::makeAny( sal_False );
+                result = uno::makeAny( false );
             break;
         }
         case word::WdInformation::wdHeaderFooterType:

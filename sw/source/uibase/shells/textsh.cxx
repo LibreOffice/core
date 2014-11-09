@@ -385,7 +385,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                     if ( eScroll == ScrollingAuto )
                         xSet->setPropertyValue("FrameIsAutoScroll",
-                            uno::makeAny( sal_True ) );
+                            uno::makeAny( true ) );
                     else
                         xSet->setPropertyValue("FrameIsScrollingMode",
                             uno::makeAny( eScroll == ScrollingYes ) );
