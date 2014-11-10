@@ -533,9 +533,13 @@ protected:
 
     SAL_DLLPRIVATE void                 PushPaintHelper(PaintHelper *pHelper);
     SAL_DLLPRIVATE void                 PopPaintHelper(PaintHelper *pHelper);
+
 private:
 
     SAL_DLLPRIVATE void                 ImplInitWindowData( WindowType nType );
+
+    SAL_DLLPRIVATE void                 getFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                                         OutputDevice& rOutDev );
 
     SAL_DLLPRIVATE void                 ImplSetFrameParent( const vcl::Window* pParent );
 

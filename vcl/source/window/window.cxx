@@ -1196,6 +1196,14 @@ void Window::ImplInitWindowData( WindowType nType )
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // true: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
 
+void Window::getFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize, OutputDevice& rDev )
+{
+    bool bOldMap = mbMap;
+    mbMap = false;
+    rDev.DrawOutDev( rDevPt, rDevSize, rPt, rDevSize, *this );
+    mbMap = bOldMap;
+}
+
 ImplWinData* Window::ImplGetWinData() const
 {
     if ( !mpWindowImpl->mpWinData )
