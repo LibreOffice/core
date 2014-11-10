@@ -228,7 +228,7 @@ private:
     ScScenarioWindow    aWndScenarios;
     ScDocListBox        aLbDocuments;
 
-    Timer           aContentTimer;
+    Idle            aContentIdle;
 
     OUString        aTitleBase;
     OUString        aStrDragMode;
