@@ -487,8 +487,6 @@ public:
 
 private:
 
-    SAL_DLLPRIVATE void         ImplGetFrameDev     ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                                      OutputDevice& rOutDev );
     SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                                       const OutputDevice& rOutDev, const vcl::Region& rRegion );
     ///@}

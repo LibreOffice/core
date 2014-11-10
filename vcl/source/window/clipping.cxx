@@ -854,10 +854,10 @@ void Window::ImplSaveOverlapBackground()
                     mpWindowImpl->mpFrameData->mnAllSaveBackSize += nSaveBackSize;
                     Point aDevPt;
 
-                    OutputDevice *pOutDev = mpWindowImpl->mpFrameWindow->GetOutDev();
-                    pOutDev->ImplGetFrameDev( Point( mnOutOffX, mnOutOffY ),
-                                              aDevPt, aOutSize,
-                                              *(mpWindowImpl->mpOverlapData->mpSaveBackDev) );
+                    Window* pWin = mpWindowImpl->mpFrameWindow;
+                    pWin->getFrameDev( Point( mnOutOffX, mnOutOffY ),
+                                           aDevPt, aOutSize,
+                                           *(mpWindowImpl->mpOverlapData->mpSaveBackDev) );
                     mpWindowImpl->mpOverlapData->mpNextBackWin = mpWindowImpl->mpFrameData->mpFirstBackWin;
                     mpWindowImpl->mpFrameData->mpFirstBackWin = this;
                 }
