@@ -39,8 +39,6 @@ protected:
     SalColor mnLineColor;
     SalColor mnFillColor;
 
-    std::vector< GLuint > maShaders;
-
     GLuint mnSolidProgram;
     GLuint mnColorUniform;
 
