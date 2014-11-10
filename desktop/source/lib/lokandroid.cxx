@@ -69,6 +69,12 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy(J
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
     pLibreOfficeKit->pClass->destroy(pLibreOfficeKit);
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAndExit(JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    pLibreOfficeKit->pClass->destroy(pLibreOfficeKit);
     // Stopgap fix: _exit() to force the OS to restart the LO activity.
     // Better than to hang.
     _exit(0);

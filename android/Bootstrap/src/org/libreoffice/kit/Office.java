@@ -31,4 +31,5 @@ public class Office {
     }
 
     public native void destroy();
+    public native void destroyAndExit();
 }
