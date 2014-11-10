@@ -540,8 +540,8 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
     {
         const long nX1( nX );
         const long nY1( nY );
-        const long nX2( nX + nWidth - 1 );
-        const long nY2( nY + nHeight - 1 );
+        const long nX2( nX + nWidth );
+        const long nY2( nY + nHeight );
         const SalPoint aPoints[] = { { nX1, nY1 }, { nX2, nY1 },
                                      { nX2, nY2 }, { nX1, nY2 } };
 
