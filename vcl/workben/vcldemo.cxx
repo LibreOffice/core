@@ -281,7 +281,7 @@ public:
 
     void fetchDrawBitmap(OutputDevice &rDev, Rectangle r)
     {
-        Bitmap aBitmap(GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
+        Bitmap aBitmap(rDev.GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
         rDev.DrawBitmap(r.TopLeft(), aBitmap);
     }
