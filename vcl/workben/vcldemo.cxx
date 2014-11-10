@@ -25,10 +25,9 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#  define FIXME_ALPHA_WORKING
-#  define FIXME_ROUNDED_RECT_WORKING
-#  define FIXME_DRAW_TRANSPARENT_WORKING
 #if 0
+#  define FIXME_SELF_INTERSECTING_WORKING
+#  define FIXME_DRAW_BITMAPEX
 #endif
 
 using namespace css;
@@ -99,7 +98,6 @@ public:
         rDev.SetLineColor(Color(COL_BLACK));
         rDev.DrawRect( r );
 
-        // FIXME: notice these appear reflected at the bottom not the top.
         for(int i=0; i<r.GetHeight(); i+=15)
             rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
         for(int i=0; i<r.GetWidth(); i+=15)
@@ -126,8 +124,7 @@ public:
         rDev.DrawText( r, OUString( "Just a simple text" ) );
     }
 
-    void drawPoly(OutputDevice &rDev, Rectangle r)
- // pretty
+    void drawPoly(OutputDevice &rDev, Rectangle r) // pretty
     {
         drawCheckered(rDev, r);
 
@@ -181,14 +178,10 @@ public:
 
         BitmapEx aBitmap(maIntro);
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
-#ifdef FIXME_ALPHA_WORKING
         AlphaMask aSemiTransp(aBitmap.GetSizePixel());
         aSemiTransp.Erase(64);
         rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
-                                           aSemiTransp));
-#else
-        rDev.DrawBitmapEx(r.TopLeft(), aBitmap);
-#endif
+                                                aSemiTransp));
     }
     void drawPolyPolgons(OutputDevice &rDev, Rectangle r)
 
@@ -196,8 +189,13 @@ public:
         struct {
             double nX, nY;
         } aPoints[] = { { 0.1, 0.1 }, { 0.9, 0.9 },
+#ifdef FIXME_SELF_INTERSECTING_WORKING
                         { 0.9, 0.1 }, { 0.1, 0.9 },
                         { 0.1, 0.1 } };
+#else
+                        { 0.1, 0.9 }, { 0.5, 0.5 },
+                        { 0.9, 0.1 }, { 0.1, 0.1 } };
+#endif
 
         tools::PolyPolygon aPolyPoly;
         // Render 4x polygons & aggregate into another PolyPolygon
@@ -228,16 +226,12 @@ public:
         }
         rDev.SetLineColor(Color(COL_LIGHTRED));
         rDev.SetFillColor(Color(COL_GREEN));
-#ifdef FIXME_DRAW_TRANSPARENT_WORKING
         rDev.DrawTransparent(aPolyPoly, 50);
-#else
-        rDev.DrawPolyPolygon(aPolyPoly);
-#endif
     }
     void drawToVirtualDevice(OutputDevice &rDev, Rectangle r)
     {
-        VirtualDevice aNested;
-        aNested.SetOutputSize(r.GetSize());
+        VirtualDevice aNested(rDev);
+        aNested.SetOutputSizePixel(r.GetSize());
         Rectangle aWhole(Point(0,0), r.GetSize());
         // mini me
         drawToDevice(aNested, true);
@@ -246,9 +240,52 @@ public:
         rDev.DrawBitmap(r.TopLeft(), aBitmap);
     }
 
+    std::vector<BitmapEx> maIcons;
+    void initIcons()
+    {
+        if (maIcons.size())
+            return;
+
+        const char *pNames[] = {
+            "cmd/lc_openurl.png",
+            "cmd/lc_newdoc.png",
+            "cmd/lc_save.png",
+            "cmd/lc_saveas.png",
+            "cmd/lc_sendmail.png",
+            "cmd/lc_editdoc.png",
+            "cmd/lc_print.png",
+            "cmd/lc_printpreview.png",
+            "cmd/lc_cut.png",
+            "cmd/lc_copy.png",
+            "cmd/lc_paste.png",
+            "cmd/lc_formatpaintbrush.png",
+            "cmd/lc_undo.png",
+            "cmd/lc_redo.png",
+        };
+        for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
+            maIcons.push_back(BitmapEx(OUString::createFromAscii(pNames[i])));
+    }
+    void drawIcons(OutputDevice &rDev, Rectangle r)
+    {
+        initIcons();
+
+        Rectangle p(r);
+        for (size_t i = 0; i < maIcons.size(); i++)
+        {
+            Size aSize(maIcons[i].GetSizePixel());
+#ifdef FIXME_DRAW_BITMAPEX
+            rDev.DrawBitmapEx(p.TopLeft(), maIcons[i]);
+#else
+            rDev.DrawBitmap(p.TopLeft(), maIcons[i].GetBitmap());
+#endif
+            p.Move(aSize.Width(), 0);
+            if (p.Left() >= r.Right())
+                break;
+        }
+    }
+
     void fetchDrawBitmap(OutputDevice &rDev, Rectangle r)
     {
-        // FIXME: should work ...
         Bitmap aBitmap(GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
         aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
         rDev.DrawBitmap(r.TopLeft(), aBitmap);
@@ -277,15 +314,9 @@ std::vector<Rectangle> DemoWin::partitionAndClear(OutputDevice &rDev, int nX, in
             rDev.SetLineColor(COL_GRAY);
             rDev.SetFillColor(COL_LIGHTGRAY);
             if ((x + y) % 2)
-                rDev.DrawRect(r);
-            else
-            {
-#ifdef FIXME_ROUNDED_RECT_WORKING
                 rDev.DrawRect(r, nBorderSize, nBorderSize);
-#else
+            else
                 rDev.DrawRect(r);
-#endif
-            }
 
             aRegions.push_back(r);
         }
@@ -311,8 +342,9 @@ void DemoWin::drawToDevice(OutputDevice &rDev, bool bVdev)
     drawPolyPolgons(rDev, aRegions[8]);
     if (!bVdev)
         drawToVirtualDevice(rDev, aRegions[9]);
+    drawIcons(rDev, aRegions[10]);
     // last - thumbnail all the above
-    fetchDrawBitmap(rDev, aRegions[10]);
+    fetchDrawBitmap(rDev, aRegions[11]);
 }
 
 class DemoApp : public Application
