@@ -45,7 +45,6 @@
 
 #include <opengl/salbmp.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
-#include <officecfg/Office/Common.hxx>
 
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
@@ -57,9 +56,7 @@
 
 SalBitmap* X11SalInstance::CreateSalBitmap()
 {
-    static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
-    bool bUseOpenGL = bOpenGLPossible ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
-    if (bUseOpenGL)
+    if (OpenGLHelper::isVCLOpenGLEnabled())
         return new OpenGLSalBitmap();
     else
         return new X11SalBitmap();

@@ -589,9 +589,7 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mbFontKernInit(false),
     mnPenWidth(GSL_PEN_WIDTH)
 {
-    static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
-    bool bUseOpenGL = bOpenGLPossible && mbWindow ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
-    if (bUseOpenGL)
+    if (OpenGLHelper::isVCLOpenGLEnabled())
         mpImpl.reset(new WinOpenGLSalGraphicsImpl(*this));
     else
         mpImpl.reset(new WinSalGraphicsImpl(*this));

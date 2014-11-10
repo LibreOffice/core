@@ -62,8 +62,6 @@
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
 
-#include <officecfg/Office/Common.hxx>
-
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 X11SalGraphics::X11SalGraphics():
@@ -84,9 +82,7 @@ X11SalGraphics::X11SalGraphics():
     bPrinter_(false),
     bVirDev_(false)
 {
-    static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
-    bool bUseOpenGL = bOpenGLPossible ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
-    if (bUseOpenGL)
+    if (OpenGLHelper::isVCLOpenGLEnabled())
     {
         mpImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
         mpTextRenderImpl.reset((new OpenGLX11CairoTextRender(false, *this)));

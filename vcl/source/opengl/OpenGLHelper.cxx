@@ -18,6 +18,7 @@
 #include <boost/scoped_array.hpp>
 #include <vcl/pngwrite.hxx>
 #include <vcl/graph.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <vector>
 
@@ -360,8 +361,20 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
 
 bool OpenGLHelper::supportsVCLOpenGL()
 {
-    static bool bDisableGL = !getenv("SAL_DISABLEGL");
-    return bDisableGL;
+    static bool bDisableGL = !!getenv("SAL_DISABLEGL");
+
+    if (bDisableGL)
+        return false;
+    else
+        return true;
+}
+
+bool OpenGLHelper::isVCLOpenGLEnabled()
+{
+    if (!supportsVCLOpenGL())
+        return false;
+    bool bEnable = officecfg::Office::Common::VCL::UseOpenGL::get();
+    return bEnable;
 }
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID

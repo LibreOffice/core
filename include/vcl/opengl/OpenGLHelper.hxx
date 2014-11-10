@@ -58,6 +58,11 @@ public:
      */
     static bool supportsVCLOpenGL();
 
+    /**
+     * Returns true if VCL has OpenGL rendering enabled
+     */
+    static bool isVCLOpenGLEnabled();
+
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
     static bool GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI);
     static GLXFBConfig GetPixmapFBConfig( Display* pDisplay, bool& bInverted );
