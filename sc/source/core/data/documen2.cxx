@@ -331,7 +331,7 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 
 IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 {
-    if ( ScDdeLink::IsInUpdate() )      // do not nest
+    if ( ScDdeLink::IsInUpdate() )      // don't nest it
     {
         aTrackIdle.Start();            // try again later
     }
@@ -364,7 +364,7 @@ void ScDocument::SetExpandRefs( bool bVal )
 
 void ScDocument::StartTrackTimer()
 {
-    if (!aTrackIdle.IsActive())        // do not postpone for forever
+    if (!aTrackIdle.IsActive())        // don't postpone forever
         aTrackIdle.Start();
 }
 
