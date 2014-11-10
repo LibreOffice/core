@@ -1517,7 +1517,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue++;nIndex++;
 
     pValue->Name = "IsSelectedFrame";
-    const sal_Bool bIsSelected = FRMTYPE_NONE == m_pWrtShell->GetSelFrmType() ? sal_False : sal_True;
+    const bool bIsSelected = FRMTYPE_NONE != m_pWrtShell->GetSelFrmType();
     pValue->Value.setValue ( &bIsSelected, ::getBooleanCppuType() );
     nIndex++;
 

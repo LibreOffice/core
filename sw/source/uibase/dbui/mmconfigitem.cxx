@@ -251,11 +251,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
                 case 16: pValues[nProp] >>= bIsMailReplyTo;       break;
                 case 17: pValues[nProp] >>= sMailReplyTo;         break;
                 case 18: pValues[nProp] >>= sMailServer;          break;
-                case 19:
-                    bIsDefaultPort =
-                            (pValues[nProp] >>= nMailPort) ?
-                                                        sal_False : sal_True;
-                break;
+                case 19: bIsDefaultPort = !(pValues[nProp] >>= nMailPort); break;
                 case 20: pValues[nProp] >>= bIsSecureConnection;           break;
                 case 21: pValues[nProp] >>= bIsAuthentication;             break;
                 case 22: pValues[nProp] >>= sMailUserName;                 break;

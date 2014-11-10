@@ -240,7 +240,7 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
     if( nCount == 0 )
         return;
 
-    bool bExpand = ( nExtend == word::WdMovementType::wdMove ) ? sal_False : sal_True;
+    bool bExpand = nExtend != word::WdMovementType::wdMove;
 
     switch( nUnit )
     {
