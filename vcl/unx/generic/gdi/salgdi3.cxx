@@ -90,8 +90,6 @@ X11SalGraphics::GetFontGC()
     return pFontGC_;
 }
 
-ImplFontOptions* GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize);
-
 void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
     mpTextRenderImpl->DrawServerFontLayout(rLayout);
