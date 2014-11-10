@@ -35,10 +35,6 @@
 #include <vector>
 #include <plugin/unx/mediator.hxx>
 
-#if defined SOLARIS
-#    define USE_MOTIF
-#endif
-
 #define Window      XLIB_Window
 #define Font        XLIB_Font
 #define KeyCode     XLIB_KeyCode

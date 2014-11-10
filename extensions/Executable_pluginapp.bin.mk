@@ -33,15 +33,7 @@ $(eval $(call gb_Executable_use_libraries,pluginapp.bin,\
 	sal \
 ))
 
-ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Executable_add_libs,pluginapp.bin,\
-	-lXm \
-	-lXt \
-	-lXext \
-	-lX11 \
-	-ldl \
-))
-else ifeq ($(filter-out FREEBSD NETBSD OPENBSD DRAGONFLY,$(OS)),)
+ifeq ($(filter-out FREEBSD NETBSD OPENBSD DRAGONFLY,$(OS)),)
 $(eval $(call gb_Executable_add_libs,pluginapp.bin,\
 	-lXt \
 	-lXext \
@@ -71,13 +63,6 @@ $(eval $(call gb_Executable_use_externals,pluginapp.bin,\
     gthread \
     gtk \
 ))
-
-# the orignal dmakefile said: don't ask, it's ugly
-ifeq ($(OS),SOLARIS)
-$(eval $(call gb_Executable_set_ldflags,pluginapp.bin,\
-	-z nodefs \
-))
-endif
 
 endif
 
