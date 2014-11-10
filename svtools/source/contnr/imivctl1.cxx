@@ -135,8 +135,8 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nHorSBarHeight = aHorSBar.GetSizePixel().Height();
     nVerSBarWidth = aVerSBar.GetSizePixel().Width();
 
-    aEditTimer.SetTimeout( 800 );
-    aEditTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
+    aEditIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
     aAutoArrangeTimer.SetTimeout( 100 );
     aAutoArrangeTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
     aCallSelectHdlTimer.SetTimeout( 500 );

@@ -164,7 +164,7 @@ class SvxIconChoiceCtrl_Impl
     ScrollBarBox            aScrBarBox;
     Rectangle               aCurSelectionRect;
     std::vector<Rectangle*> aSelectedRectList;
-    Timer                   aEditTimer;                 // for editing in place
+    Idle                    aEditIdle;                 // for editing in place
     Timer                   aAutoArrangeTimer;
     Timer                   aDocRectChangedTimer;
     Timer                   aVisRectChangedTimer;
@@ -251,8 +251,8 @@ class SvxIconChoiceCtrl_Impl
     void                ToggleSelection( SvxIconChoiceCtrlEntry* );
     void                DeselectAllBut( SvxIconChoiceCtrlEntry*, bool bPaintSync = false );
     void                Center( SvxIconChoiceCtrlEntry* pEntry ) const;
-    void                StopEditTimer() { aEditTimer.Stop(); }
-    void                StartEditTimer() { aEditTimer.Start(); }
+    void                StopEditTimer() { aEditIdle.Stop(); }
+    void                StartEditTimer() { aEditIdle.Start(); }
     void                ImpHideDDIcon();
     void                CallSelectHandler( SvxIconChoiceCtrlEntry* );
     void                SelectRect(
