@@ -296,7 +296,7 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
     pPoint[1] = 2 * (GetHeight() - nY) / GetHeight() - 1.0f;
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, pPoint );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pPoint );
     glDrawArrays( GL_POINTS, 0, 1 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
