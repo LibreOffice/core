@@ -138,7 +138,6 @@ public:
 
 private:
     void                    ForceSwapIn() const;
-    void                    ForceSwapOut() const;
 
 public:
     void                    SetGraphicLink(const OUString& rFileName, const OUString& rReferer, const OUString& rFilterName);

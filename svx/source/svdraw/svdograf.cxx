@@ -588,11 +588,6 @@ void SdrGrafObj::ForceSwapIn() const
     }
 }
 
-void SdrGrafObj::ForceSwapOut() const
-{
-    pGraphic->FireSwapOutRequest();
-}
-
 void SdrGrafObj::ImpLinkAnmeldung()
 {
     sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;

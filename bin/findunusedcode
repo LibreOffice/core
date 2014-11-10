@@ -25,7 +25,7 @@ echo "--without-doxygen
 --enable-gtk3
 --enable-kde4
 --enable-dbus
---enable-gstreamer
+--enable-gstreamer-1-0
 --disable-gstreamer-0-10" \
   > autogen.input
 

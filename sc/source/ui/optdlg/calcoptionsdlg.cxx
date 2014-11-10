@@ -812,10 +812,6 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
     }
 }
 
-void ScCalcOptionsDialog::WhiteAndBlackListSelectionChanged()
-{
-}
-
 OUString ScCalcOptionsDialog::toString(formula::FormulaGrammar::AddressConvention eConv) const
 {
     switch (eConv)

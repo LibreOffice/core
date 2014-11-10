@@ -25,11 +25,6 @@
 namespace chart
 {
 using namespace ::com::sun::star;
-uno::Reference< uno::XInterface >
-            SAL_CALL ChartTypeUnoDlg::Create(const uno::Reference< uno::XComponentContext >& _xContext)
-{
-    return *(new ChartTypeUnoDlg(_xContext));
-}
 ChartTypeUnoDlg::ChartTypeUnoDlg( const uno::Reference< uno::XComponentContext >& _xContext )
                     : ChartTypeUnoDlg_BASE( _xContext )
 {

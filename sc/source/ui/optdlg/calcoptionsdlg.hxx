@@ -53,7 +53,6 @@ private:
     void SelectedDeviceChanged();
     void SpinButtonValueChanged();
     void EditFieldValueChanged(Control *pCtrl);
-    void WhiteAndBlackListSelectionChanged();
 #if HAVE_FEATURE_OPENCL
     void fillOpenCLList();
 #endif
