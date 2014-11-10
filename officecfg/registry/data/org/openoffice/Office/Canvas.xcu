@@ -46,10 +46,10 @@
     </node>
     <node oor:name="com.sun.star.rendering.SpriteCanvas" oor:op="replace">
       <prop oor:name="PreferredImplementations" oor:type="oor:string-list">
-        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.OGL<!--,
+        <value oor:separator=",">com.sun.star.comp.rendering.SpriteCanvas.OGL,
                                  com.sun.star.comp.rendering.SpriteCanvas.Cairo,
                                  com.sun.star.comp.rendering.SpriteCanvas.VCL,
-                                 com.sun.star.comp.rendering.SpriteCanvas.DX9 -->
+                                 com.sun.star.comp.rendering.SpriteCanvas.DX9
         </value>
       </prop>
       <prop oor:name="AcceleratedImplementations" oor:type="oor:string-list">

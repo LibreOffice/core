@@ -28,6 +28,7 @@ using namespace ::com::sun::star;
 namespace oglcanvas
 {
     /// triangulates polygon before
+    //move to canvashelper, or take renderHelper as parameter?
     void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
@@ -52,6 +53,7 @@ namespace oglcanvas
 
         better not leave triangulation to OpenGL. also, ignores texturing
     */
+    //move to canvashelper, or take renderHelper as parameter?
     void renderPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
@@ -60,6 +62,7 @@ namespace oglcanvas
 
         for( sal_uInt32 i=0; i<aPolyPoly.count(); i++ )
         {
+
             glBegin(GL_LINE_STRIP);
 
             const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
@@ -75,7 +78,7 @@ namespace oglcanvas
             glEnd();
         }
     }
-
+    //makes it sence to enable evrytime glBlend glBlendfunc...?
     glm::mat4 setupState( const ::basegfx::B2DHomMatrix&   rTransform,
                      GLenum                           eSrcBlend,
                      GLenum                           eDstBlend)
@@ -93,6 +96,7 @@ namespace oglcanvas
         return glm::make_mat4(aGLTransform);
     }
 
+    //What does it make,
     void renderOSD( const std::vector<double>& rNumbers, double scale )
     {
         double y=4.0;
@@ -105,7 +109,7 @@ namespace oglcanvas
         {
             aTmp.identity();
             aTmp.translate(0,y);
-            y += 1.2*scale;
+            y += 1.2*scale; //send to renderHelper
 
             basegfx::B2DPolyPolygon aPoly=
                 basegfx::tools::number2PolyPolygon(rNumbers[i],10,3);

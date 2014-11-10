@@ -109,7 +109,7 @@ namespace oglcanvas
         // init window context
         initContext();
         mRenderHelper.InitOpenGL();
-        mRenderHelper.SetVP(1600, 900);//is this right?
+        mRenderHelper.SetVP(1200, 600);//is this right?
 
         mnLinearMultiColorGradientProgram =
             OpenGLHelper::LoadShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader");

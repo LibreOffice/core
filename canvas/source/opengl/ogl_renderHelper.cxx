@@ -37,7 +37,7 @@ namespace oglcanvas
         m_simplePosAttrb = glGetAttribLocation(m_simpleProgID ,"vPosition");
         m_texPosAttrb = glGetAttribLocation(m_texProgID ,"vPosition");
 
-        glViewport(0, 0, m_iWidth, m_iHeight);
+        //glViewport(0, 0, m_iWidth, m_iHeight);
     }
     //Todo figgure out, which parameters i should use :)
     void RenderHelper::SetVP(int width, int height)
