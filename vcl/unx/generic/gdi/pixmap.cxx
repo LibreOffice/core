@@ -13,6 +13,7 @@ X11Pixmap::X11Pixmap()
 : mpDisplay( NULL )
 , mnScreen( 0 )
 , mpPixmap( 0 )
+, mbDeletePixmap( false )
 , mnWidth( -1 )
 , mnHeight( -1 )
 , mnDepth( 0 )
@@ -22,6 +23,7 @@ X11Pixmap::X11Pixmap()
 X11Pixmap::X11Pixmap( Display* pDisplay, SalX11Screen nScreen, int nWidth, int nHeight, int nDepth )
 : mpDisplay( pDisplay )
 , mnScreen( nScreen )
+, mbDeletePixmap( true )
 , mnWidth( nWidth )
 , mnHeight( nHeight )
 , mnDepth( nDepth )
@@ -33,17 +35,19 @@ X11Pixmap::X11Pixmap( Display* pDisplay, SalX11Screen nScreen, int nWidth, int n
 X11Pixmap::X11Pixmap( X11Pixmap& rOther )
 : mpDisplay( rOther.mpDisplay )
 , mnScreen( rOther.mnScreen )
+, mbDeletePixmap( rOther.mbDeletePixmap )
 , mnWidth( rOther.mnWidth )
 , mnHeight( rOther.mnHeight )
 , mnDepth( rOther.mnDepth )
 {
     mpPixmap = rOther.mpPixmap;
     rOther.mpPixmap = 0;
+    rOther.mbDeletePixmap = false;
 }
 
 X11Pixmap::~X11Pixmap()
 {
-    if( mpPixmap )
+    if (mbDeletePixmap && mpPixmap)
         XFreePixmap( mpDisplay, mpPixmap );
 }
 

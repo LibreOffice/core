@@ -36,6 +36,7 @@ protected:
     Display*        mpDisplay;
     SalX11Screen    mnScreen;
     Pixmap          mpPixmap;
+    bool            mbDeletePixmap;
     int             mnWidth;
     int             mnHeight;
     int             mnDepth;

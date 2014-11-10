@@ -290,7 +290,7 @@ GdkX11Pixmap::GdkX11Pixmap( int nWidth, int nHeight, int nDepth )
 }
 
 GdkX11Pixmap::GdkX11Pixmap( X11Pixmap& rOther, GdkWindow *pWindow )
-: X11Pixmap( rOther )
+    : X11Pixmap(rOther)
 {
     GdkColormap* pColormap;
 
