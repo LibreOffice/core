@@ -12,6 +12,7 @@
 X11Pixmap::X11Pixmap()
 : mpDisplay( NULL )
 , mnScreen( 0 )
+, mpPixmap( 0 )
 , mnWidth( -1 )
 , mnHeight( -1 )
 , mnDepth( 0 )
