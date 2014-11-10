@@ -1769,45 +1769,56 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 break;
             }
         }
+        assert(nMinBreakPos <= nMaxBreakPos);
 
         lang::Locale aLocale = GetLocale( EditPaM( pNode, nMaxBreakPos ) );
 
         Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
-        Reference< XHyphenator > xHyph;
-        if ( bCanHyphenate )
-            xHyph = GetHyphenator();
-        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, Sequence< PropertyValue >(), 1 );
-        i18n::LineBreakUserOptions aUserOptions;
+        const bool bAllowPunctuationOutsideMargin = static_cast<const SfxBoolItem&>(
+                pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
 
-        const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( LanguageTag::convertToLanguageType( aLocale ), true );
-        aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
-        aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
-        aUserOptions.applyForbiddenRules = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
-        aUserOptions.allowPunctuationOutsideMargin = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
-        aUserOptions.allowHyphenateEnglish = sal_False;
-
-        i18n::LineBreakResults aLBR = _xBI->getLineBreak(
-            pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
-        nBreakPos = aLBR.breakIndex;
-
-        // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
-        if ( nBreakPos < nMinBreakPos )
+        if (nMinBreakPos == nMaxBreakPos)
         {
             nBreakPos = nMinBreakPos;
         }
-        else if ( ( nBreakPos > nMaxBreakPos ) && !aUserOptions.allowPunctuationOutsideMargin )
+        else
         {
-            OSL_FAIL( "I18N: XBreakIterator::getLineBreak returns position > Max" );
-            nBreakPos = nMaxBreakPos;
-        }
+            Reference< XHyphenator > xHyph;
+            if ( bCanHyphenate )
+                xHyph = GetHyphenator();
+            i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, Sequence< PropertyValue >(), 1 );
+            i18n::LineBreakUserOptions aUserOptions;
 
-        // nBreakPos can never be outside the portion, even not with hangig punctuation
-        if ( nBreakPos > nMaxBreakPos )
-            nBreakPos = nMaxBreakPos;
+            const i18n::ForbiddenCharacters* pForbidden = GetForbiddenCharsTable()->GetForbiddenCharacters( LanguageTag::convertToLanguageType( aLocale ), true );
+            aUserOptions.forbiddenBeginCharacters = pForbidden->beginLine;
+            aUserOptions.forbiddenEndCharacters = pForbidden->endLine;
+            aUserOptions.applyForbiddenRules = static_cast<const SfxBoolItem&>(pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
+            aUserOptions.allowPunctuationOutsideMargin = bAllowPunctuationOutsideMargin;
+            aUserOptions.allowHyphenateEnglish = sal_False;
+
+            i18n::LineBreakResults aLBR = _xBI->getLineBreak(
+                pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
+            nBreakPos = aLBR.breakIndex;
+
+            // BUG in I18N - under special condition (break behind field, #87327#) breakIndex is < nMinBreakPos
+            if ( nBreakPos < nMinBreakPos )
+            {
+                nBreakPos = nMinBreakPos;
+            }
+            else if ( ( nBreakPos > nMaxBreakPos ) && !aUserOptions.allowPunctuationOutsideMargin )
+            {
+                OSL_FAIL( "I18N: XBreakIterator::getLineBreak returns position > Max" );
+                nBreakPos = nMaxBreakPos;
+            }
+
+            // nBreakPos can never be outside the portion, even not with hangig punctuation
+            if ( nBreakPos > nMaxBreakPos )
+                nBreakPos = nMaxBreakPos;
+        }
 
         // BUG in I18N - the japanese dot is in the next line!
         // !!!  Test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if ( (nBreakPos + ( aUserOptions.allowPunctuationOutsideMargin ? 0 : 1 ) ) <= nMaxBreakPos )
+        if ( (nBreakPos + ( bAllowPunctuationOutsideMargin ? 0 : 1 ) ) <= nMaxBreakPos )
         {
             sal_Unicode cFirstInNextLine = ( (nBreakPos+1) < pNode->Len() ) ? pNode->GetChar( nBreakPos ) : 0;
             if ( cFirstInNextLine == 12290 )
