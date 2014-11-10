@@ -357,7 +357,7 @@ published service Content
                     <td>SearchCommandArgument aSearchCommandArg</td>
                     <td>
                         This command searches for subcontents of a content matching the
-                        given search criteria. The command will return an implemenation
+                        given search criteria. The command will return an implementation
                         of service DynamicResultSet.
                     </td>
                 </tr>

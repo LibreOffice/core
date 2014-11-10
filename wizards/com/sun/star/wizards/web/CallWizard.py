@@ -57,7 +57,7 @@ g_ImplementationHelper = unohelper.ImplementationHelper()
 
 g_ImplementationHelper.addImplementation( \
     CallWizard,                               # UNO object class
-    "com.sun.star.wizards.web.CallWizard",    # implemenation name
+    "com.sun.star.wizards.web.CallWizard",    # implementation name
     ("com.sun.star.task.Job",),)              # list of implemented services
                                               # (the only service)
 

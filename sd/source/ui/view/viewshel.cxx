@@ -1226,7 +1226,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
     }
 }
 
-/** This default implemenation returns only an empty reference.  See derived
+/** This default implementation returns only an empty reference.  See derived
     classes for more interesting examples.
 */
 ::com::sun::star::uno::Reference<

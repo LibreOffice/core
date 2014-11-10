@@ -53,7 +53,7 @@ g_ImplementationHelper = unohelper.ImplementationHelper()
 
 g_ImplementationHelper.addImplementation( \
     HelloWorldJob,                               # UNO object class
-    "org.openoffice.comp.pyuno.demo.HelloWorld", # implemenation name
+    "org.openoffice.comp.pyuno.demo.HelloWorld", # implementation name
     ("com.sun.star.task.Job",),)                 # list of implemented services
                                                  # (the only service)
 

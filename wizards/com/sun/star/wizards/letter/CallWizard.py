@@ -57,8 +57,8 @@ g_ImplementationHelper = unohelper.ImplementationHelper()
 
 g_ImplementationHelper.addImplementation( \
     CallWizard,                               # UNO object class
-    "com.sun.star.wizards.letter.CallWizard", # implemenation name
-    ("com.sun.star.task.Job",),)                 # list of implemented services
-                                                 # (the only service)
+    "com.sun.star.wizards.letter.CallWizard", # implementation name
+    ("com.sun.star.task.Job",),)              # list of implemented services
+                                              # (the only service)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

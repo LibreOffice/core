@@ -105,7 +105,7 @@ def getCurrentContext():
 
 def setCurrentContext( newContext ):
     """Sets newContext as new uno current context. The newContext must
-    implement the XCurrentContext interface. The implemenation should
+    implement the XCurrentContext interface. The implementation should
     handle the desired properties and delegate unknown properties to the
     old context. Ensure to reset the old one when you leave your stack ...
     see http://udk.openoffice.org/common/man/concept/uno_contexts.html#current_context

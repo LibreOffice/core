@@ -91,7 +91,7 @@ static oslMutex        ChildListMutex;
  Deprecated
  Old and buggy implementation of osl_searchPath used only by
  osl_psz_executeProcess.
- A new implemenation is in file_path_helper.cxx
+ A new implementation is in file_path_helper.cxx
  *****************************************************************************/
 
 static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,

@@ -88,7 +88,7 @@ static rtl_arena_type * gp_alloc_arena = 0;
 
 /* ================================================================= *
  *
- * custom allocator implemenation.
+ * custom allocator implementation.
  *
  * ================================================================= */
 
@@ -261,7 +261,7 @@ void rtl_memory_fini()
 
 /* ================================================================= *
  *
- * system allocator implemenation.
+ * system allocator implementation.
  *
  * ================================================================= */
 
@@ -356,7 +356,7 @@ void SAL_CALL rtl_freeMemory (void * p) SAL_THROW_EXTERN_C()
 
 /* ================================================================= *
  *
- * rtl_(allocate|free)ZeroMemory() implemenation.
+ * rtl_(allocate|free)ZeroMemory() implementation.
  *
  * ================================================================= */
 

@@ -40,7 +40,7 @@ namespace textconversiondlgs
 
 It can be created via lang::XMultiComponentFactory::createInstanceWithContext
 with servicename "com.sun.star.linguistic2.ChineseTranslationDialog"
-or implemenation name "com.sun.star.comp.linguistic2.ChineseTranslationDialog"
+or implementation name "com.sun.star.comp.linguistic2.ChineseTranslationDialog"
 
 It can be initialized via the XInitialization interface with the following single parameter:
 PropertyValue-Parameter: Name="ParentWindow" Type="awt::XWindow".

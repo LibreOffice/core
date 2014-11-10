@@ -168,7 +168,7 @@ private:
 
 /** Makes a copy back reference wrapper to be used for inout parameters.
     Only use for syncExecute(), the returned wrapper relies on its
-    implemenation, i.e. the function object is stored in free store.
+    implementation, i.e. the function object is stored in free store.
     Type T needs to be copy constructable assignable.
 
     @see syncExecute()
@@ -183,7 +183,7 @@ inline detail::copy_back_wrapper<T> inout_by_ref( T & r )
 
 /** Makes a copy back ptr wrapper to be used for inout parameters.
     Only use for syncExecute(), the returned wrapper relies on its
-    implemenation, i.e. the function object is stored in free store.
+    implementation, i.e. the function object is stored in free store.
     Type T needs to be copy constructable assignable.
 
     @see syncExecute()
