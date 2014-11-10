@@ -362,7 +362,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
 
 void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
+    if ( rHEvt.GetMode() & HelpEventMode::CONTEXT )
     {
         DbgInfoDialog aInfoDialog( this, true );
         OUString aHelpText;

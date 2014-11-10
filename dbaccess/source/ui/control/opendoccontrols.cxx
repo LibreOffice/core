@@ -289,7 +289,7 @@ namespace dbaui
 
     void  OpenDocumentListBox::RequestHelp( const HelpEvent& _rHEvt )
     {
-        if( !( _rHEvt.GetMode() & HELPMODE_QUICK ) )
+        if( !( _rHEvt.GetMode() & HelpEventMode::QUICK ) )
             return;
         if ( !IsEnabled() )
             return;

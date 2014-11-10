@@ -650,7 +650,7 @@ void ScContentTree::Command( const CommandEvent& rCEvt )
 void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bDone = false;
-    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );

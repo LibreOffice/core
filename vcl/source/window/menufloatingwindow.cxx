@@ -1144,7 +1144,7 @@ void MenuFloatingWindow::RequestHelp( const HelpEvent& rHEvt )
     // #102618# Get item rect before destroying the window in EndExecute() call
     Rectangle aHighlightRect( ImplGetItemRect( nHighlightedItem ) );
 
-    if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
+    if ( rHEvt.GetMode() & (HelpEventMode::CONTEXT | HelpEventMode::EXTENDED) )
     {
         nHighlightedItem = ITEMPOS_INVALID;
         EndExecute();

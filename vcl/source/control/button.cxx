@@ -1815,7 +1815,7 @@ void HelpButton::Click()
         if ( !pFocusWin )
             pFocusWin = this;
 
-        HelpEvent aEvt( pFocusWin->GetPointerPosPixel(), HELPMODE_CONTEXT );
+        HelpEvent aEvt( pFocusWin->GetPointerPosPixel(), HelpEventMode::CONTEXT );
         pFocusWin->RequestHelp( aEvt );
     }
     PushButton::Click();

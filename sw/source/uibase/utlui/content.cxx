@@ -2753,7 +2753,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bCallBase = true;
-    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );

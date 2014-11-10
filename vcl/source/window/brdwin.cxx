@@ -1892,7 +1892,7 @@ void ImplBorderWindow::Deactivate()
 void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     // no keyboard help for border window
-    if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) && !rHEvt.KeyboardActivated() )
+    if ( rHEvt.GetMode() & (HelpEventMode::BALLOON | HelpEventMode::QUICK) && !rHEvt.KeyboardActivated() )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         Rectangle   aHelpRect;
@@ -1902,7 +1902,7 @@ void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
         if ( !aHelpStr.isEmpty() )
         {
             aHelpRect.SetPos( OutputToScreenPixel( aHelpRect.TopLeft() ) );
-            if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+            if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                 Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aHelpStr );
             else
                 Help::ShowQuickHelp( this, aHelpRect, aHelpStr );

@@ -196,7 +196,7 @@ bool FmFormPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
         aPt = pWindow->OutputToScreenPixel( aItemRect.BottomRight() );
         aItemRect.Right()  = aPt.X();
         aItemRect.Bottom() = aPt.Y();
-        if( rEvt.GetMode() == HELPMODE_BALLOON )
+        if( rEvt.GetMode() == HelpEventMode::BALLOON )
             Help::ShowBalloon( pWindow, aItemRect.Center(), aItemRect, aHelpText);
         else
             Help::ShowQuickHelp( pWindow, aItemRect, aHelpText );
