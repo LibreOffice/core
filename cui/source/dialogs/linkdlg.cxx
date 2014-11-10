@@ -123,8 +123,8 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     m_pTbLinks->Resize();  // OS: hack for correct selection
 
     // UpdateTimer for DDE-/Grf-links, which are waited for
-    aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
-    aUpdateTimer.SetTimeout( 1000 );
+    aUpdateIdle.SetIdleHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
+    aUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
 
     m_pPbOpenSource->Hide();
 

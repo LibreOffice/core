@@ -61,7 +61,7 @@ class SvBaseLinksDlg : public ModalDialog
     OUString aStrWaitinglink;
     sfx2::LinkManager*  pLinkMgr;
     bool            bHtmlMode;
-    Timer aUpdateTimer;
+    Idle aUpdateIdle;
 
     DECL_LINK( LinksSelectHdl, SvTabListBox * );
     DECL_LINK( LinksDoubleClickHdl, SvTabListBox * );
@@ -78,7 +78,7 @@ class SvBaseLinksDlg : public ModalDialog
     void SetType( sfx2::SvBaseLink& rLink, sal_uLong nPos, sal_uInt16 nType );
     void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
 
-    void StartUpdateTimer()         { aUpdateTimer.Start(); }
+    void StartUpdateTimer()         { aUpdateIdle.Start(); }
 
     OUString&       Autolink()      { return aStrAutolink; }
     OUString&       Manuallink()    { return aStrManuallink; }
