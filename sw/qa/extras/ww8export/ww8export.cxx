@@ -214,8 +214,6 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("TextFieldEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 }
 
-#endif
-
 DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
 {
     // Import / export of FFData.cch was missing.
@@ -224,6 +222,8 @@ DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
     // This resulted in a container.NoSuchElementException.
     CPPUNIT_ASSERT_EQUAL(OUString("5"), xParameters->getByName("MaxLength").get<OUString>());
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
