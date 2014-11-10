@@ -35,10 +35,6 @@
 #include <vector>
 #include <plugin/unx/mediator.hxx>
 
-#if defined SOLARIS
-#    define USE_MOTIF
-#endif
-
 #include <prex.h>
 
 #include <X11/Xlib.h>
