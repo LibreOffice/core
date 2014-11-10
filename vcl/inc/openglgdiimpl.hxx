@@ -23,6 +23,8 @@
 #include "salgdiimpl.hxx"
 #include <vcl/dllapi.h>
 
+#include "opengl/texture.hxx"
+
 #include <vcl/opengl/OpenGLContext.hxx>
 
 class SalFrame;
@@ -35,6 +37,10 @@ protected:
     OpenGLContext maContext;
     SalFrame* mpFrame;
     SalVirtualDevice* mpVDev;
+
+    bool mbOffscreen;
+    GLuint mnFramebufferId;
+    OpenGLTextureSharedPtr mpOffscreenTex;
 
     SalColor mnLineColor;
     SalColor mnFillColor;
@@ -89,6 +95,9 @@ protected:
 
     // operations to do after painting
     virtual void PostDraw();
+
+    // enable/disable offscreen rendering
+    virtual void SetOffscreen( bool bOffscreen );
 
 
 public:

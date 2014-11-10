@@ -81,7 +81,7 @@ public:
 
 public:
 
-    bool            Create( OpenGLContext& rContext, long nX, long nY, long nWidth, long nHeight );
+    bool            Create( OpenGLContext& rContext, OpenGLTextureSharedPtr pTex, long nX, long nY, long nWidth, long nHeight );
     bool            Draw( OpenGLContext& rContext, const SalTwoRect& rPosAry );
     GLuint          GetTexture( OpenGLContext& rContext ) const;
 

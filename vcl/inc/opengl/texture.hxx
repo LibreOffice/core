@@ -39,6 +39,9 @@ public:
     virtual ~OpenGLTexture();
 
     GLuint Id() const;
+    int GetWidth() const;
+    int GetHeight() const;
+
     void Bind();
     void Unbind();
     bool Draw();

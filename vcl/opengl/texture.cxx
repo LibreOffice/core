@@ -95,6 +95,16 @@ GLuint OpenGLTexture::Id() const
     return mnTexture;
 }
 
+int OpenGLTexture::GetWidth() const
+{
+    return mnWidth;
+}
+
+int OpenGLTexture::GetHeight() const
+{
+    return mnHeight;
+}
+
 GLenum OpenGLTexture::GetFilter() const
 {
     return mnFilter;

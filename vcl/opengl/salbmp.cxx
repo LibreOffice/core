@@ -52,7 +52,7 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
     SAL_INFO( "vcl.opengl", "~OpenGLSalBitmap" );
 }
 
-bool OpenGLSalBitmap::Create( OpenGLContext& rContext, long nX, long nY, long nWidth, long nHeight )
+bool OpenGLSalBitmap::Create( OpenGLContext& rContext, OpenGLTextureSharedPtr pTex, long nX, long nY, long nWidth, long nHeight )
 {
     static const BitmapPalette aEmptyPalette;
 
@@ -60,7 +60,6 @@ bool OpenGLSalBitmap::Create( OpenGLContext& rContext, long nX, long nY, long nW
     SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO" );
 
     mpContext = &rContext;
-    mpContext->makeCurrent();
     mnWidth = nWidth;
     mnHeight = nHeight;
     mnBufWidth = 0;
@@ -70,8 +69,13 @@ bool OpenGLSalBitmap::Create( OpenGLContext& rContext, long nX, long nY, long nW
     mnBits = 32;
     maPalette = aEmptyPalette;
 
-    mpTexture.reset( new OpenGLTexture( nX, nY, nWidth, nHeight ) );
+    // TODO: lfrb: Crop texture if size doesn't match the texture one
+    if( pTex )
+        mpTexture = pTex;
+    else
+        mpTexture.reset( new OpenGLTexture( nX, nY, nWidth, nHeight ) );
     mbDirtyTexture = false;
+    SAL_INFO( "vcl.opengl", "Created texture " << mpTexture->Id() );
 
     return true;
 }
@@ -154,6 +158,7 @@ GLuint OpenGLSalBitmap::GetTexture( OpenGLContext& rContext ) const
         const_cast<OpenGLSalBitmap*>(this)->mpContext = &rContext;
     if( !mpTexture || mbDirtyTexture )
         const_cast<OpenGLSalBitmap*>(this)->CreateTexture();
+    SAL_INFO( "vcl.opengl", "Got texture " << mpTexture->Id() );
     return mpTexture->Id();
 }
 
@@ -388,9 +393,9 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
     }
 
-    SAL_INFO( "vcl.opengl", "::CreateTexture" );
     mpContext->makeCurrent();
     mpTexture.reset( new OpenGLTexture (mnBufWidth, mnBufHeight, nFormat, nType, pData ) );
+    SAL_INFO( "vcl.opengl", "Created texture " << mpTexture->Id() );
 
     if( bAllocated )
         delete pData;
@@ -411,6 +416,8 @@ bool OpenGLSalBitmap::ReadTexture()
     SalTwoRect aPosAry;
     GLuint nFramebufferId, nRenderbufferDepthId, nRenderbufferColorId;
     sal_uInt8* pData = maUserBuffer.get();
+
+    SAL_INFO( "vcl.opengl", "::ReadTexture" );
 
     // TODO Check mnTexWidth and mnTexHeight
 

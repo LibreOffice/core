@@ -64,12 +64,14 @@ void X11OpenGLSalGraphicsImpl::Init()
     {
         Window aWin = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame)->GetX11Window();
         maContext.init( mrParent.GetXDisplay(), aWin, mrParent.m_nXScreen.getXScreen());
+        SetOffscreen( false );
     }
     else if( mrParent.m_pVDev )
     {
         maContext.init( mrParent.GetXDisplay(), mrParent.m_pVDev->GetDrawable(),
                         mrParent.m_pVDev->GetWidth(), mrParent.m_pVDev->GetHeight(),
                         mrParent.m_nXScreen.getXScreen() );
+        SetOffscreen( true );
     }
     else
     {

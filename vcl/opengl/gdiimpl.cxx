@@ -75,16 +75,21 @@ OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 void OpenGLSalGraphicsImpl::PreDraw()
 {
     maContext.makeCurrent();
+    // TODO: lfrb: make sure the render target has the right size
+    if( mbOffscreen )
+        glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
     glViewport( 0, 0, GetWidth(), GetHeight() );
 }
 
 void OpenGLSalGraphicsImpl::PostDraw()
 {
+    if( mbOffscreen )
+        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 }
 
 void OpenGLSalGraphicsImpl::freeResources()
 {
-    // Delete shaders, programs and textures if not shared
+    // TODO Delete shaders, programs and textures if not shared
 }
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
@@ -185,6 +190,38 @@ void OpenGLSalGraphicsImpl::SetROPLineColor( SalROPColor /*nROPColor*/ )
 // set fill color for raster operations
 void OpenGLSalGraphicsImpl::SetROPFillColor( SalROPColor /*nROPColor*/ )
 {
+}
+
+// enable/disbale offscreen rendering
+void OpenGLSalGraphicsImpl::SetOffscreen( bool bOffscreen )
+{
+    if( bOffscreen == mbOffscreen )
+    {
+        // Already disabled
+        if( !mbOffscreen )
+            return;
+
+        // Already enabled and same size
+        if( mpOffscreenTex->GetWidth()  == GetWidth() &&
+            mpOffscreenTex->GetHeight() == GetHeight() )
+            return;
+    }
+    else
+    {
+        mbOffscreen = bOffscreen;
+        if( bOffscreen )
+            glGenFramebuffers( 1, &mnFramebufferId );
+        else
+            glDeleteFramebuffers( 1, &mnFramebufferId );
+    }
+
+    if( mbOffscreen )
+    {
+        glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
+        mpOffscreenTex.reset( new OpenGLTexture( GetWidth(), GetHeight() ) );
+        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mpOffscreenTex->Id(), 0 );
+        CHECK_GL_ERROR();
+    }
 }
 
 bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
@@ -879,7 +916,7 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
     SAL_INFO( "vcl.opengl", "::getBitmap " << nX << "," << nY <<
               " " << nWidth << "x" << nHeight );
     PreDraw();
-    if( !pBitmap->Create( maContext, nX, nY, nWidth, nHeight ) )
+    if( !pBitmap->Create( maContext, mpOffscreenTex, nX, nY, nWidth, nHeight ) )
     {
         delete pBitmap;
         pBitmap = NULL;
