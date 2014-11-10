@@ -86,6 +86,12 @@ protected:
     // get the height of the device
     virtual GLfloat GetHeight() const = 0;
 
+    // operations to do before painting
+    virtual void PreDraw();
+
+    // operations to do after painting
+    virtual void PostDraw();
+
 
 public:
     OpenGLSalGraphicsImpl();

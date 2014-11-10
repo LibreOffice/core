@@ -114,8 +114,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     pGlxPixmap = glXCreatePixmap( pDisplay, pFbConfig, pPixmap->GetPixmap(), aAttribs);
     XSync( pDisplay, 0 );
 
-    maContext.makeCurrent();
-    glViewport( 0, 0, GetWidth(), GetHeight() );
+    PreDraw();
 
     glGenTextures( 1, &nTexture );
     glActiveTexture( GL_TEXTURE0 );
@@ -132,6 +131,8 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     glXReleaseTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT );
     glDeleteTextures( 1, &nTexture );
     glXDestroyPixmap( pDisplay, pGlxPixmap );
+
+    PostDraw();
 
     return true;
 }
