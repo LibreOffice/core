@@ -856,7 +856,7 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
 
 SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
 {
-    char pixel[3];
+    char pixel[3] = { 0, 0, 0 };
 
     maContext.makeCurrent();
     glViewport( 0, 0, GetWidth(), GetHeight() );
