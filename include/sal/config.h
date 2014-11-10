@@ -86,11 +86,6 @@
 #define SAL_CONFIGFILE( name ) name "rc"
 #endif
 
-#ifdef sun
-#undef sun
-#define sun sun
-#endif
-
 #endif // INCLUDED_SAL_CONFIG_H
 
 
