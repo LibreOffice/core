@@ -713,11 +713,11 @@ inline SwTwips SwTxtFrm::GetFtnFrmHeight() const
 
 inline const SwTxtFrm *SwTxtFrm::GetFollow() const
 {
-    return (const SwTxtFrm*)SwCntntFrm::GetFollow();
+    return static_cast<const SwTxtFrm*>(SwCntntFrm::GetFollow());
 }
 inline SwTxtFrm *SwTxtFrm::GetFollow()
 {
-    return (SwTxtFrm*)SwCntntFrm::GetFollow();
+    return static_cast<SwTxtFrm*>(SwCntntFrm::GetFollow());
 }
 
 inline const SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos) const

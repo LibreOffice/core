@@ -1072,7 +1072,7 @@ void SwAccessibleContext::Dispose( bool bRecursive )
     // send child event at parent
     if( xParent.is() )
     {
-        SwAccessibleContext *pAcc = (SwAccessibleContext *)xParent.get();
+        SwAccessibleContext *pAcc = static_cast<SwAccessibleContext *>(xParent.get());
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::CHILD;

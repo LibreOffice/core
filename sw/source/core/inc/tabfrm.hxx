@@ -229,11 +229,11 @@ inline const SwCntntFrm *SwTabFrm::FindLastCntnt() const
 
 inline const SwTabFrm *SwTabFrm::GetFollow() const
 {
-    return (const SwTabFrm*)SwFlowFrm::GetFollow();
+    return static_cast<const SwTabFrm*>(SwFlowFrm::GetFollow());
 }
 inline SwTabFrm *SwTabFrm::GetFollow()
 {
-    return (SwTabFrm*)SwFlowFrm::GetFollow();
+    return static_cast<SwTabFrm*>(SwFlowFrm::GetFollow());
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_TABFRM_HXX
