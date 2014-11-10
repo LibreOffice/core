@@ -43,7 +43,7 @@
 #include <sys/types.h>
 
 /* Make sockets of type AF_UNIX use underlying FS rights */
-#ifdef SOLARIS
+#if defined(SOLARIS) && !defined(_XOPEN_SOURCE)
 #   define _XOPEN_SOURCE 500
 #   include <sys/socket.h>
 #   undef _XOPEN_SOURCE
