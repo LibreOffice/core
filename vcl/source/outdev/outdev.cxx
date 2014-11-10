@@ -398,16 +398,6 @@ bool OutputDevice::SupportsOperation( OutDevSupportType eType ) const
 
 // Frame public functions
 
-void OutputDevice::ImplGetFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                    OutputDevice& rDev )
-{
-
-    bool bOldMap = mbMap;
-    mbMap = false;
-    rDev.DrawOutDev( rDevPt, rDevSize, rPt, rDevSize, *this );
-    mbMap = bOldMap;
-}
-
 void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
                                      const OutputDevice& rOutDev, const vcl::Region& rRegion )
 {
