@@ -178,7 +178,7 @@ X11Pixmap* X11SalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect )
     }
 
     // Copy the background of the screen into a composite pixmap
-    mrParent.CopyScreenArea( mrParent.GetXDisplay(),
+    X11SalGraphics::CopyScreenArea( mrParent.GetXDisplay(),
                              mrParent.GetDrawable(), mrParent.GetScreenNumber(),
                              mrParent.GetVisual().GetDepth(),
                              pPixmap->GetDrawable(), pPixmap->GetScreen(),
@@ -206,7 +206,7 @@ bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int n
     if( !pPixmap )
         return false;
 
-    mrParent.CopyScreenArea( mrParent.GetXDisplay(),
+    X11SalGraphics::CopyScreenArea( mrParent.GetXDisplay(),
                              pPixmap->GetDrawable(), pPixmap->GetScreen(),
                              pPixmap->GetDepth(),
                              mrParent.GetDrawable(), mrParent.m_nXScreen,
