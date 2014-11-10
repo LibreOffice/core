@@ -2505,7 +2505,7 @@ void SwWW8ImplReader::StopApo()
         // function, the extension of the SW-fly has to be set
         // manually as the SW fly has no auto function to adjust the
         // frame´s size.
-        if( pSFlyPara->nNewNetWidth > MINFLY )    // BoxUpWidth ?
+        if(pSFlyPara->nNewNetWidth > MINFLY && pSFlyPara->pFlyFmt)    // BoxUpWidth ?
         {
             long nW = pSFlyPara->nNewNetWidth;
             nW += pSFlyPara->nWidth - pSFlyPara->nNetWidth;   // Rand dazu
