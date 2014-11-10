@@ -107,10 +107,11 @@ void setupMethodStubs( functor_vector_type& res )
     aPoly3.Rotate( aPoly3.GetBoundRect().Center(),
                    900 );
 
-    const OUString    aString("This is a test");
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
 #ifdef FIXME_VDEV
+    const OUString    aString("This is a test");
+
     // unfortunately, VDevs have inaccessible copy constructors
     static VirtualDevice aVDev;
     static VirtualDevice aVDevBW(1);
