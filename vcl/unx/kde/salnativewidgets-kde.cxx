@@ -1383,7 +1383,8 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 
     Display *dpy = GetXDisplay();
     ::Window drawable = GetDrawable();
-    GC gc = SelectPen(); //SelectFont(); // GC with current clipping region set
+    // TODO: moggi: FIX that properly!! It was SelectPen()
+    GC gc = GetFontGC(); //SelectFont(); // GC with current clipping region set
 
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
