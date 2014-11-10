@@ -63,9 +63,9 @@ class FractionPrinter(object):
         self.val = val
 
     def to_string(self):
-        numerator = self.val['nNumerator']
-        denominator = self.val['nDenominator']
-        if denominator > 0:
+        numerator = self.val['value']['num']
+        denominator = self.val['value']['den']
+        if self.val['valid']:
             return "%d/%d" % (numerator, denominator)
         else:
             return "invalid %s %d/%d" % (self.typename, numerator, denominator)
