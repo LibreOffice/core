@@ -1402,9 +1402,9 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     m_pActiveLB->SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
     nMinWidth = ( m_pActiveLB->GetSizePixel().Width() / 2 );
 
-    aTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
-    aTimer.SetTimeout( 200 );
-    aTimer.Start();
+    aIdle.SetIdleHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
+    aIdle.SetPriority( VCL_IDLE_PRIORITY_LOWER );
+    aIdle.Start();
 
     Show();
 }
@@ -1458,7 +1458,7 @@ void SfxHelpIndexWindow_Impl::SetActiveFactory()
     DBG_ASSERT( pIPage, "index page not initialized" );
     if ( !bIsInitDone && !m_pActiveLB->GetEntryCount() )
     {
-        aTimer.Stop();
+        aIdle.Stop();
         InitHdl( NULL );
     }
 
@@ -1518,7 +1518,7 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectHdl)
 {
-    aTimer.Start();
+    aIdle.Start();
 
     return 0;
 }
@@ -1529,8 +1529,8 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
     Initialize();
 
     // now use the timer for selection
-    aTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectFactoryHdl ) );
-    aTimer.SetTimeout( 1000 );
+    aIdle.SetIdleHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectFactoryHdl ) );
+    aIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
 
     return 0;
 }

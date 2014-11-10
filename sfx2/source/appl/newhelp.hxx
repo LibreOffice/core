@@ -274,7 +274,7 @@ private:
     ListBox*            m_pActiveLB;
     TabControl*         m_pTabCtrl;
 
-    Timer               aTimer;
+    Idle                aIdle;
 
     Link                aSelectFactoryLink;
     Link                aPageDoubleClickLink;
