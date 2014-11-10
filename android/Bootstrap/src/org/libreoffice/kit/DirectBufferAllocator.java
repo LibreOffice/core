@@ -11,9 +11,13 @@ package org.libreoffice.kit;
 // https://code.google.com/p/android/issues/detail?id=16941
 //
 
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 
 public class DirectBufferAllocator {
+
+    private static final String LOGTAG = DirectBufferAllocator.class.getSimpleName();
 
     private DirectBufferAllocator() {
     }
@@ -23,13 +27,23 @@ public class DirectBufferAllocator {
     private static native void freeDirectBufferNative(ByteBuffer aBuffer);
 
     public static ByteBuffer allocate(int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("Invalid size " + size);
-        }
+        Log.i(LOGTAG, "Buffer size: " + size);
+        return allocateVM(size);
+    }
 
+    public static ByteBuffer free(ByteBuffer buffer) {
+        return freeVM(buffer);
+    }
+
+    private static ByteBuffer allocateJNI(int size) {
         ByteBuffer directBuffer = allocateDirectBufferNative(size);
+
         if (directBuffer == null) {
-            throw new OutOfMemoryError("allocateDirectBuffer() returned null");
+            if (size <= 0) {
+                throw new IllegalArgumentException("Invalid allocation size: " + size);
+            } else {
+                throw new OutOfMemoryError("allocateDirectBuffer() returned null");
+            }
         } else if (!directBuffer.isDirect()) {
             throw new AssertionError("allocateDirectBuffer() did not return a direct buffer");
         }
@@ -37,7 +51,7 @@ public class DirectBufferAllocator {
         return directBuffer;
     }
 
-    public static ByteBuffer free(ByteBuffer buffer) {
+    private static ByteBuffer freeJNI(ByteBuffer buffer) {
         if (buffer == null) {
             return null;
         }
@@ -47,6 +61,33 @@ public class DirectBufferAllocator {
         }
 
         freeDirectBufferNative(buffer);
+        return null;
+    }
+
+    private static ByteBuffer allocateVM(int size) {
+        ByteBuffer directBuffer = ByteBuffer.allocateDirect(size);
+        if (directBuffer == null) {
+            if (size <= 0) {
+                throw new IllegalArgumentException("Invalid allocation size: " + size);
+            } else {
+                throw new OutOfMemoryError("allocateDirectBuffer() returned null");
+            }
+        } else if (!directBuffer.isDirect()) {
+            throw new AssertionError("allocateDirectBuffer() did not return a direct buffer");
+        }
+
+        return directBuffer;
+    }
+
+    private static ByteBuffer freeVM(ByteBuffer buffer) {
+        if (buffer == null) {
+            return null;
+        }
+
+        if (!buffer.isDirect()) {
+            throw new IllegalArgumentException("buffer must be direct");
+        }
+
         return null;
     }
 }
