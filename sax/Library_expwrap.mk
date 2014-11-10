@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_sdk_api,expwrap))
 
 $(eval $(call gb_Library_use_externals,expwrap,\
 	boost_headers \
+	libxml2 \
 	expat \
 	zlib \
 ))
