@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_a5e67ee6",
+        "filename": "offapi/com/sun/star/ui/ImageManager.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-10T16:19:03Z",
+      "side": 1,
+      "message": "css::embed::ElementModes",
+      "revId": "a35a35153137df1d30f928fa9abda65c7b8613a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
