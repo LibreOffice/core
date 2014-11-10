@@ -41,6 +41,16 @@ class SmartPtrPrinter:
         else:
             return "empty %s" % (self.typename)
 
+class WeakPtrPrinter:
+    """Prints boost::weak_ptr instances"""
+
+    def __init__(self, typename, value):
+        self.typename = typename
+        self.value = value
+
+    def to_string(self):
+        value = self.value['px']
+        return "%s %s" % (self.typename, value)
 
 printer = None
 
@@ -54,7 +64,7 @@ def build_pretty_printers():
 
     printer.add('boost::shared_ptr', SmartPtrPrinter)
     # printer.add('boost::shared_array', SmartPtrPrinter)
-    printer.add('boost::weak_ptr', SmartPtrPrinter)
+    printer.add('boost::weak_ptr', WeakPtrPrinter)
     printer.add('boost::scoped_ptr', SmartPtrPrinter)
     # printer.add('boost::scoped_array', SmartPtrPrinter)
 
