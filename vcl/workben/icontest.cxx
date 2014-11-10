@@ -148,7 +148,6 @@ private:
     int nRet;
 
     void DoItWithVcl(const OUString& sImageFile);
-    void DoItWithOpenGL(const OUString& sImageFile);
 };
 
 void IconTestApp::Init()
