@@ -4813,6 +4813,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     aProp[ 1 ] <<= aPropValue;
 
     m_xImportedImageManager = css::ui::ImageManager::create( xComponentContext );
+    m_xImportedImageManager->initialize(aProp);
 
     ImageInfo mImageInfo;
     uno::Sequence< OUString > names;
