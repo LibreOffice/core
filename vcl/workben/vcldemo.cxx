@@ -27,7 +27,6 @@
 
 #if 0
 #  define FIXME_SELF_INTERSECTING_WORKING
-#  define FIXME_DRAW_BITMAPEX
 #endif
 
 using namespace css;
@@ -273,11 +272,7 @@ public:
         for (size_t i = 0; i < maIcons.size(); i++)
         {
             Size aSize(maIcons[i].GetSizePixel());
-#ifdef FIXME_DRAW_BITMAPEX
             rDev.DrawBitmapEx(p.TopLeft(), maIcons[i]);
-#else
-            rDev.DrawBitmap(p.TopLeft(), maIcons[i].GetBitmap());
-#endif
             p.Move(aSize.Width(), 0);
             if (p.Left() >= r.Right())
                 break;
