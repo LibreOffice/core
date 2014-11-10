@@ -70,7 +70,7 @@ inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
 }
 
 inline const SwFmtSurround &SwAttrSet::GetSurround(bool bInP) const
-    { return (const SwFmtSurround&)Get( RES_SURROUND,bInP); }
+    { return static_cast<const SwFmtSurround&>(Get( RES_SURROUND,bInP)); }
 
 inline const SwFmtSurround &SwFmt::GetSurround(bool bInP) const
     { return aSet.GetSurround(bInP); }

@@ -268,32 +268,32 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == GetItemState( RES_PAGEDESC, false, &pItem ) &&
-        ((SwFmtPageDesc*)pItem)->GetDefinedIn() != pModify  )
+        static_cast<const SwFmtPageDesc*>(pItem)->GetDefinedIn() != pModify  )
     {
-        ((SwFmtPageDesc*)pItem)->ChgDefinedIn( pModify );
+        const_cast<SwFmtPageDesc*>(static_cast<const SwFmtPageDesc*>(pItem))->ChgDefinedIn( pModify );
         bSet = true;
     }
 
     if( SfxItemState::SET == GetItemState( RES_PARATR_DROP, false, &pItem ) &&
-        ((SwFmtDrop*)pItem)->GetDefinedIn() != pModify )
+        static_cast<const SwFmtDrop*>(pItem)->GetDefinedIn() != pModify )
     {
         // If CharFormat is set and it is set in different attribute pools then
         // the CharFormat has to be copied.
         SwCharFmt* pCharFmt;
-        if( 0 != ( pCharFmt = ((SwFmtDrop*)pItem)->GetCharFmt() )
+        if( 0 != ( pCharFmt = const_cast<SwFmtDrop*>(static_cast<const SwFmtDrop*>(pItem))->GetCharFmt() )
             && GetPool() != pCharFmt->GetAttrSet().GetPool() )
         {
            pCharFmt = GetDoc()->CopyCharFmt( *pCharFmt );
-           ((SwFmtDrop*)pItem)->SetCharFmt( pCharFmt );
+           const_cast<SwFmtDrop*>(static_cast<const SwFmtDrop*>(pItem))->SetCharFmt( pCharFmt );
         }
-        ((SwFmtDrop*)pItem)->ChgDefinedIn( pModify );
+        const_cast<SwFmtDrop*>(static_cast<const SwFmtDrop*>(pItem))->ChgDefinedIn( pModify );
         bSet = true;
     }
 
     if( SfxItemState::SET == GetItemState( RES_BOXATR_FORMULA, false, &pItem ) &&
-        ((SwTblBoxFormula*)pItem)->GetDefinedIn() != pModify )
+        static_cast<const SwTblBoxFormula*>(pItem)->GetDefinedIn() != pModify )
     {
-        ((SwTblBoxFormula*)pItem)->ChgDefinedIn( pModify );
+        const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->ChgDefinedIn( pModify );
         bSet = true;
     }
 
@@ -321,7 +321,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             if( pSrcDoc != pDstDoc &&
                 SfxItemState::SET == GetItemState( RES_PARATR_NUMRULE, false, &pItem ) )
             {
-                const OUString& rNm = ((SwNumRuleItem*)pItem)->GetValue();
+                const OUString& rNm = static_cast<const SwNumRuleItem*>(pItem)->GetValue();
                 if( !rNm.isEmpty() )
                 {
                     SwNumRule* pDestRule = pDstDoc->FindNumRulePtr( rNm );
@@ -386,7 +386,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SfxItemState::SET == GetItemState(
                                             RES_PAGEDESC, false, &pItem ) &&
-                0 != ( pPgDesc = ((SwFmtPageDesc*)pItem)->GetPageDesc()) )
+                0 != ( pPgDesc = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc()) )
             {
                 if( !tmpSet )
                     tmpSet.reset( new SfxItemSet( *this ));
@@ -398,7 +398,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     pDstDoc->CopyPageDesc( *pPgDesc, *pDstPgDesc );
                 }
                 SwFmtPageDesc aDesc( pDstPgDesc );
-                aDesc.SetNumOffset( ((SwFmtPageDesc*)pItem)->GetNumOffset() );
+                aDesc.SetNumOffset( static_cast<const SwFmtPageDesc*>(pItem)->GetNumOffset() );
                 tmpSet->Put( aDesc );
             }
 

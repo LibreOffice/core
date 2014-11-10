@@ -56,7 +56,7 @@ public:
 };
 
 inline const SwFmtLineNumber &SwAttrSet::GetLineNumber(bool bInP) const
-    { return (const SwFmtLineNumber&)Get( RES_LINENUMBER,bInP); }
+    { return static_cast<const SwFmtLineNumber&>(Get( RES_LINENUMBER,bInP)); }
 
 #endif
 

@@ -83,7 +83,7 @@ public:
 };
 
 inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(bool bInP) const
-    { return (const SwFmtPageDesc&)Get( RES_PAGEDESC,bInP); }
+    { return static_cast<const SwFmtPageDesc&>(Get( RES_PAGEDESC,bInP)); }
 
 inline const SwFmtPageDesc &SwFmt::GetPageDesc(bool bInP) const
     { return aSet.GetPageDesc(bInP); }

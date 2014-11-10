@@ -22,21 +22,21 @@
 #include <tools/solar.h>
 #include <svl/poolitem.hxx>
 #include <hintids.hxx>
+#include <fmtautofmt.hxx>
+#include <fmtinfmt.hxx>
+#include <fmtrfmrk.hxx>
+#include <fmtruby.hxx>
+#include <fmtfld.hxx>
+#include <fmtflcnt.hxx>
+#include <fmtftn.hxx>
+#include <fmtmeta.hxx>
+#include <fchrfmt.hxx>
+#include <tox.hxx>
 
 #include <boost/utility.hpp>
 
 class SfxItemPool;
 class SvXMLAttrContainerItem;
-class SwFmtRuby;
-class SwFmtCharFmt;
-class SwFmtAutoFmt;
-class SwFmtINetFmt;
-class SwFmtFld;
-class SwFmtFtn;
-class SwFmtFlyCnt;
-class SwTOXMark;
-class SwFmtRefMark;
-class SwFmtMeta;
 
 class SwTxtAttr : private boost::noncopyable
 {
@@ -175,13 +175,13 @@ inline void SwTxtAttr::SetDontExpand( bool bDontExpand )
 inline const SwFmtCharFmt& SwTxtAttr::GetCharFmt() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_CHARFMT );
-    return (const SwFmtCharFmt&)(*m_pAttr);
+    return static_cast<const SwFmtCharFmt&>(*m_pAttr);
 }
 
 inline const SwFmtAutoFmt& SwTxtAttr::GetAutoFmt() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_AUTOFMT );
-    return (const SwFmtAutoFmt&)(*m_pAttr);
+    return static_cast<const SwFmtAutoFmt&>(*m_pAttr);
 }
 
 inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
@@ -190,50 +190,50 @@ inline const SwFmtFld& SwTxtAttr::GetFmtFld() const
             && ( m_pAttr->Which() == RES_TXTATR_FIELD
                  || m_pAttr->Which() == RES_TXTATR_ANNOTATION
                  || m_pAttr->Which() == RES_TXTATR_INPUTFIELD ));
-    return (const SwFmtFld&)(*m_pAttr);
+    return static_cast<const SwFmtFld&>(*m_pAttr);
 }
 
 inline const SwFmtFtn& SwTxtAttr::GetFtn() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FTN );
-    return (const SwFmtFtn&)(*m_pAttr);
+    return static_cast<const SwFmtFtn&>(*m_pAttr);
 }
 
 inline const SwFmtFlyCnt& SwTxtAttr::GetFlyCnt() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FLYCNT );
-    return (const SwFmtFlyCnt&)(*m_pAttr);
+    return static_cast<const SwFmtFlyCnt&>(*m_pAttr);
 }
 
 inline const SwTOXMark& SwTxtAttr::GetTOXMark() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_TOXMARK );
-    return (const SwTOXMark&)(*m_pAttr);
+    return static_cast<const SwTOXMark&>(*m_pAttr);
 }
 
 inline const SwFmtRefMark& SwTxtAttr::GetRefMark() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_REFMARK );
-    return (const SwFmtRefMark&)(*m_pAttr);
+    return static_cast<const SwFmtRefMark&>(*m_pAttr);
 }
 
 inline const SwFmtINetFmt& SwTxtAttr::GetINetFmt() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_INETFMT );
-    return (const SwFmtINetFmt&)(*m_pAttr);
+    return static_cast<const SwFmtINetFmt&>(*m_pAttr);
 }
 
 inline const SwFmtRuby& SwTxtAttr::GetRuby() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_CJK_RUBY );
-    return (const SwFmtRuby&)(*m_pAttr);
+    return static_cast<const SwFmtRuby&>(*m_pAttr);
 }
 
 inline const SwFmtMeta& SwTxtAttr::GetMeta() const
 {
     assert( m_pAttr && (m_pAttr->Which() == RES_TXTATR_META ||
         m_pAttr->Which() == RES_TXTATR_METAFIELD) );
-    return (const SwFmtMeta&)(*m_pAttr);
+    return static_cast<const SwFmtMeta&>(*m_pAttr);
 }
 
 // these should be static_casts but with virtual inheritance it's not possible

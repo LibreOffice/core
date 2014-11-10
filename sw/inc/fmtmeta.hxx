@@ -77,8 +77,10 @@ namespace com { namespace sun { namespace star {
 class SwTxtMeta;
 class SwXMeta;
 class SwXMetaField;
+class SwTxtNode;
 namespace sw {
     class Meta;
+    class MetaFieldManager;
 }
 
 class SwFmtMeta
@@ -117,8 +119,6 @@ public:
 };
 
 namespace sw {
-
-class MetaFieldManager;
 
 class Meta
     : public ::sfx2::Metadatable

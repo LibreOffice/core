@@ -414,13 +414,13 @@ public:
     virtual SwFieldType*    ChgTyp( SwFieldType* ) SAL_OVERRIDE;
     virtual void            SetLanguage(sal_uInt16 nLng) SAL_OVERRIDE;
 
-    inline SwDoc*           GetDoc() const          { return ((SwValueFieldType*)GetTyp())->GetDoc(); }
+    inline SwDoc*           GetDoc() const          { return const_cast<SwValueFieldType*>(static_cast<const SwValueFieldType*>(GetTyp()))->GetDoc(); }
 
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
     inline OUString ExpandValue(const double& rVal, sal_uInt32 nFmt, sal_uInt16 nLng=0) const
-        { return ((SwValueFieldType*)GetTyp())->ExpandValue(rVal, nFmt, nLng); }
+        { return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFmt, nLng); }
 
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt);
 };

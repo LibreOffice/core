@@ -107,9 +107,9 @@ public:
 };
 
 inline const SwFmtFtnAtTxtEnd &SwAttrSet::GetFtnAtTxtEnd(bool bInP) const
-    { return (const SwFmtFtnAtTxtEnd&)Get( RES_FTN_AT_TXTEND, bInP); }
+    { return static_cast<const SwFmtFtnAtTxtEnd&>(Get( RES_FTN_AT_TXTEND, bInP)); }
 inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(bool bInP) const
-    { return (const SwFmtEndAtTxtEnd&)Get( RES_END_AT_TXTEND, bInP); }
+    { return static_cast<const SwFmtEndAtTxtEnd&>(Get( RES_END_AT_TXTEND, bInP)); }
 
 inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(bool bInP) const
     { return aSet.GetFtnAtTxtEnd(bInP); }

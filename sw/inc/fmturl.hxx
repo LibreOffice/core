@@ -74,7 +74,7 @@ public:
 };
 
 inline const SwFmtURL &SwAttrSet::GetURL(bool bInP) const
-    { return (const SwFmtURL&)Get( RES_URL,bInP); }
+    { return static_cast<const SwFmtURL&>(Get( RES_URL,bInP)); }
 
 inline const SwFmtURL &SwFmt::GetURL(bool bInP) const
     { return aSet.GetURL(bInP); }

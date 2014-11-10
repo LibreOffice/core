@@ -34,6 +34,7 @@
 #include <IMark.hxx>
 #include <tox.hxx>
 #include <frmfmt.hxx>
+#include <charfmt.hxx>
 
 #include <vector>
 #include <set>
@@ -360,7 +361,7 @@ public:
     SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId )
         { return static_cast<SwFrmFmt*>(SwEditShell::GetFmtFromPool( nId )); }
     SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId )
-        { return (SwCharFmt*)SwEditShell::GetFmtFromPool( nId ); }
+        { return static_cast<SwCharFmt*>(SwEditShell::GetFmtFromPool( nId )); }
 
     void Insert2(SwField&, const bool bForceExpandHints = false);
 

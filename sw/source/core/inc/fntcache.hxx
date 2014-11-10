@@ -130,7 +130,7 @@ public:
     SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,
                  SwViewShell const *pShell,
                  bool bCheck = false  );
-    inline SwFntObj* Get() { return (SwFntObj*) SwCacheAccess::Get(); };
+    inline SwFntObj* Get() { return static_cast<SwFntObj*>( SwCacheAccess::Get() ); }
 };
 
 #endif

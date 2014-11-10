@@ -41,7 +41,7 @@ public:
 };
 
 inline const SwFmtLayoutSplit &SwAttrSet::GetLayoutSplit(bool bInP) const
-    { return (const SwFmtLayoutSplit&)Get( RES_LAYOUT_SPLIT,bInP); }
+    { return static_cast<const SwFmtLayoutSplit&>(Get( RES_LAYOUT_SPLIT,bInP)); }
 
 inline const SwFmtLayoutSplit &SwFmt::GetLayoutSplit(bool bInP) const
     { return aSet.GetLayoutSplit(bInP); }

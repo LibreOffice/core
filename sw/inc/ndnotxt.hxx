@@ -53,7 +53,7 @@ public:
 
     virtual SwCntntFrm *MakeFrm( SwFrm* ) SAL_OVERRIDE;
 
-    inline SwGrfFmtColl *GetGrfColl() const { return (SwGrfFmtColl*)GetRegisteredIn(); }
+    inline SwGrfFmtColl *GetGrfColl() const { return const_cast<SwGrfFmtColl*>(static_cast<const SwGrfFmtColl*>(GetRegisteredIn())); }
 
     virtual Size GetTwipSize() const = 0;
 
@@ -93,11 +93,11 @@ public:
 // Inline methods from Node.hxx - we know TxtNode only here!!
 inline SwNoTxtNode *SwNode::GetNoTxtNode()
 {
-    return ND_NOTXTNODE & nNodeType ? (SwNoTxtNode*)this : 0;
+    return ND_NOTXTNODE & nNodeType ? static_cast<SwNoTxtNode*>(this) : 0;
 }
 inline const SwNoTxtNode *SwNode::GetNoTxtNode() const
 {
-    return ND_NOTXTNODE & nNodeType ? (const SwNoTxtNode*)this : 0;
+    return ND_NOTXTNODE & nNodeType ? static_cast<const SwNoTxtNode*>(this) : 0;
 }
 
 #endif // INCLUDED_SW_INC_NDNOTXT_HXX

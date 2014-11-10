@@ -88,7 +88,7 @@ void CheckRange( SwCursor* pCurCrsr )
         *pEnd = pCurCrsr->GetPoint() == pStt ? pCurCrsr->GetMark() : pCurCrsr->GetPoint();
 
     SwPaM *pTmpDel = 0,
-          *pTmp = (SwPaM*)pCurCrsr->GetNext();
+          *pTmp = static_cast<SwPaM*>(pCurCrsr->GetNext());
 
     // Search the complete ring
     while( pTmp != pCurCrsr )
@@ -108,7 +108,7 @@ void CheckRange( SwCursor* pCurCrsr )
 
          // If Point or Mark is within the Crsr range, we need to remove the old
         // range. Take note that Point does not belong to the range anymore.
-        pTmp = (SwPaM*)pTmp->GetNext();
+        pTmp = static_cast<SwPaM*>(pTmp->GetNext());
         delete pTmpDel;         // Remove old range
         pTmpDel = 0;
     }
@@ -150,7 +150,7 @@ bool SwCrsrShell::DestroyCrsr()
         return false;
 
     SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCursor* pNextCrsr = (SwCursor*)m_pCurCrsr->GetNext();
+    SwCursor* pNextCrsr = static_cast<SwCursor*>(m_pCurCrsr->GetNext());
     delete m_pCurCrsr;
     m_pCurCrsr = dynamic_cast<SwShellCrsr*>(pNextCrsr);
     UpdateCrsr();
@@ -222,7 +222,7 @@ void SwCrsrShell::StartAction()
         m_nAktNdTyp = rNd.GetNodeType();
         m_bAktSelection = *m_pCurCrsr->GetPoint() != *m_pCurCrsr->GetMark();
         if( rNd.IsTxtNode() )
-            m_nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, m_nAktCntnt, true );
+            m_nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), const_cast<SwTxtNode&>(static_cast<const SwTxtNode&>(rNd)), m_nAktCntnt, true );
         else
             m_nLeftFrmPos = 0;
     }
@@ -663,7 +663,7 @@ bool SwCrsrShell::isInHiddenTxtFrm(SwShellCrsr* pShellCrsr)
     SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
     SwCntntFrm  *pFrm = pCNode ?
         pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), false ) : 0;
-    return !pFrm || (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow());
+    return !pFrm || (pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsHiddenNow());
 }
 
 bool SwCrsrShell::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
@@ -712,7 +712,7 @@ static SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
         SwCntntFrm *pCntFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPt, 0, false );
         pFrm = pCntFrm ? pCntFrm->GetUpper() : NULL;
         while( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
-            pFrm = pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->AnchorFrm()
+            pFrm = pFrm->IsFlyFrm() ? static_cast<SwFlyFrm*>(pFrm)->AnchorFrm()
                                     : pFrm->GetUpper();
     }
     return pFrm;
@@ -793,9 +793,9 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, bool bOnlyText, bool bBlock )
             else if( aPos.nNode.GetNode().IsCntntNode() )
             {
                 // in the same frame?
-                SwFrm* pOld = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
+                SwFrm* pOld = static_cast<SwCntntNode&>(aPos.nNode.GetNode()).getLayoutFrm(
                                 GetLayout(), &m_aCharRect.Pos(), 0, false );
-                SwFrm* pNew = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
+                SwFrm* pNew = static_cast<SwCntntNode&>(aPos.nNode.GetNode()).getLayoutFrm(
                                 GetLayout(), &aPt, 0, false );
                 if( pNew == pOld )
                     return bRet;
@@ -1141,7 +1141,7 @@ void SwCrsrShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
     {
         pPg = Imp()->GetFirstVisPage();
         while( pPg && pPg->IsEmptyPage() )
-            pPg = (const SwPageFrm *)pPg->GetNext();
+            pPg = static_cast<const SwPageFrm *>(pPg->GetNext());
     }
     // pPg has to exist with a default of 1 for the special case "Writerstart"
     rnPhyNum  = pPg? pPg->GetPhyPageNum() : 1;
@@ -1162,24 +1162,24 @@ sal_uInt16 SwCrsrShell::GetNextPrevPageNum( bool bNext )
             // go to next view layout row:
             do
             {
-                pPg = (const SwPageFrm *)pPg->GetNext();
+                pPg = static_cast<const SwPageFrm *>(pPg->GetNext());
             }
             while( pPg && pPg->Frm().Top() == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
-                pPg = (const SwPageFrm *)pPg->GetNext();
+                pPg = static_cast<const SwPageFrm *>(pPg->GetNext());
         }
         else
         {
             // go to previous view layout row:
             do
             {
-                pPg = (const SwPageFrm *)pPg->GetPrev();
+                pPg = static_cast<const SwPageFrm *>(pPg->GetPrev());
             }
             while( pPg && pPg->Frm().Top() == nPageTop );
 
             while( pPg && pPg->IsEmptyPage() )
-                pPg = (const SwPageFrm *)pPg->GetPrev();
+                pPg = static_cast<const SwPageFrm *>(pPg->GetPrev());
         }
     }
     // pPg has to exist with a default of 1 for the special case "Writerstart"
@@ -1352,7 +1352,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
     {
         SwCntntNode* pCntnt = aTmp.GetNodes().GoNext( &aTmp );
         if ( pCntnt && pCntnt->IsTxtNode() )
-            pTxtNd = (SwTxtNode*)pCntnt;
+            pTxtNd = static_cast<SwTxtNode*>(pCntnt);
         else
             pTxtNd = 0;
     }
@@ -1885,11 +1885,11 @@ void SwCrsrShell::RefreshBlockCursor()
 
     if( GetLayout()->FillSelection( aSelList, aRect ) )
     {
-        SwCursor* pNxt = (SwCursor*)m_pCurCrsr->GetNext();
+        SwCursor* pNxt = static_cast<SwCursor*>(m_pCurCrsr->GetNext());
         while( pNxt != m_pCurCrsr )
         {
             delete pNxt;
-            pNxt = (SwCursor*)m_pCurCrsr->GetNext();
+            pNxt = static_cast<SwCursor*>(m_pCurCrsr->GetNext());
         }
 
         std::list<SwPaM*>::iterator pStart = aSelList.getStart();
@@ -2413,8 +2413,8 @@ sal_uInt16 SwCrsrShell::GetCrsrCnt( bool bAll ) const
                     *m_pCurCrsr->GetPoint() != *m_pCurCrsr->GetMark())) ? 1 : 0;
     while( pTmp != m_pCurCrsr )
     {
-        if( bAll || ( ((SwPaM*)pTmp)->HasMark() &&
-                *((SwPaM*)pTmp)->GetPoint() != *((SwPaM*)pTmp)->GetMark()))
+        if( bAll || ( static_cast<SwPaM*>(pTmp)->HasMark() &&
+                *static_cast<SwPaM*>(pTmp)->GetPoint() != *static_cast<SwPaM*>(pTmp)->GetMark()))
             ++n;
         pTmp = pTmp->GetNext();
     }
@@ -2508,7 +2508,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
                     if( ( bDelete = GoNextCrsr() ) )
                     {
                         bGoNext = false;
-                        pTmp = (SwPaM*)pTmp->GetNext();
+                        pTmp = static_cast<SwPaM*>(pTmp->GetNext());
                     }
                 }
                 else
@@ -2524,7 +2524,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
             pTmpDel = 0;
         }
         if( bGoNext && pTmp )
-            pTmp = (SwPaM*)pTmp->GetNext();
+            pTmp = static_cast<SwPaM*>(pTmp->GetNext());
 
     } while( !bGoNext || *ppDelRing != pTmp );
 }
@@ -2566,7 +2566,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     do {
         if( pTmp->IsA( TYPE( SwCrsrShell )))
         {
-            SwCrsrShell* pSh = (SwCrsrShell*)pTmp;
+            SwCrsrShell* pSh = static_cast<SwCrsrShell*>(pTmp);
             if( pSh->m_pCrsrStk )
                 pSh->_ParkPams( pNew, &pSh->m_pCrsrStk );
 
@@ -2584,7 +2584,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
                 }
             }
         }
-    } while ( this != (pTmp = (SwViewShell*)pTmp->GetNext() ));
+    } while ( this != (pTmp = static_cast<SwViewShell*>(pTmp->GetNext()) ));
     delete pNew;
 }
 
@@ -3038,7 +3038,7 @@ bool SwCrsrShell::HasReadonlySel(bool bAnnotationMode) const
                     bRet = true;
                 }
 
-                pCrsr = (SwPaM*)pCrsr->GetNext();
+                pCrsr = static_cast<SwPaM*>(pCrsr->GetNext());
             } while ( !bRet && pCrsr != m_pCurCrsr );
         }
     }
@@ -3189,9 +3189,9 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
         pCrsr->SetMark();
         *pCrsr->GetMark() = *rCrsr.GetMark();
     }
-    if((SwPaM*)rCrsr.GetNext() != &rCrsr)
+    if(static_cast<SwPaM*>(rCrsr.GetNext()) != &rCrsr)
     {
-        const SwPaM *_pStartCrsr = (SwPaM*)rCrsr.GetNext();
+        const SwPaM *_pStartCrsr = static_cast<SwPaM*>(rCrsr.GetNext());
         do
         {
             SwPaM* pCurrentCrsr = CreateCrsr();
@@ -3201,7 +3201,7 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
                 pCurrentCrsr->SetMark();
                 *pCurrentCrsr->GetMark() = *_pStartCrsr->GetMark();
             }
-        } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != &rCrsr );
+        } while( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) != &rCrsr );
     }
     EndAction();
 }
@@ -3246,7 +3246,7 @@ void SwCrsrShell::ClearUpCrsrs()
     // start of the ring
     SwPaM * pStartCrsr = GetCrsr();
     // start loop with second entry of the ring
-    SwPaM * pCrsr = (SwPaM *) pStartCrsr->GetNext();
+    SwPaM * pCrsr = static_cast<SwPaM *>(pStartCrsr->GetNext());
     SwPaM * pTmpCrsr;
     bool bChanged = false;
 
@@ -3254,7 +3254,7 @@ void SwCrsrShell::ClearUpCrsrs()
     // it is invalid.
     while (pCrsr != pStartCrsr)
     {
-        pTmpCrsr = (SwPaM *) pCrsr->GetNext();
+        pTmpCrsr = static_cast<SwPaM *>(pCrsr->GetNext());
         if ( ! lcl_CrsrOk(*pCrsr))
         {
             delete pCrsr;

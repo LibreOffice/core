@@ -31,6 +31,7 @@
 #include <SwNumberTreeTypes.hxx>
 #include <ndarr.hxx>
 #include <vector>
+#include <charfmt.hxx>
 
 class SwTxtFmtColl;
 class IDocumentListsAccess;
@@ -39,7 +40,6 @@ namespace vcl { class Font; }
 class SvxBrushItem;
 class SfxGrabBagItem;
 class SvxNumRule;
-class SwCharFmt;
 class SwDoc;
 class SwFmtVertOrient;
 class SwTxtNode;
@@ -73,7 +73,7 @@ public:
     bool operator==( const SwNumFmt& ) const;
     bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
-    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
+    SwCharFmt* GetCharFmt() const { return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn())); }
     void SetCharFmt( SwCharFmt* );
 
     virtual void            SetCharFmtName(const OUString& rSet);

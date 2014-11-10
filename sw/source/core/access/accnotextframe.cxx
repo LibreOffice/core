@@ -308,7 +308,7 @@ throw (uno::RuntimeException, std::exception)
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
     sal_Int32 nCount = 0;
-    SwFmtURL aURL( ((SwLayoutFrm*)GetFrm())->GetFmt()->GetURL() );
+    SwFmtURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFmt()->GetURL() );
 
     if(aURL.GetMap() || !aURL.GetURL().isEmpty())
         nCount = 1;
@@ -325,7 +325,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
 
     uno::Reference< XAccessibleHyperlink > xRet;
 
-    SwFmtURL aURL( ((SwLayoutFrm*)GetFrm())->GetFmt()->GetURL() );
+    SwFmtURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFmt()->GetURL() );
 
     if( nLinkIndex > 0 )
         throw lang::IndexOutOfBoundsException();

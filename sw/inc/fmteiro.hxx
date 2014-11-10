@@ -42,7 +42,7 @@ public:
 };
 
 inline const SwFmtEditInReadonly &SwAttrSet::GetEditInReadonly(bool bInP) const
-    { return (const SwFmtEditInReadonly&)Get( RES_EDIT_IN_READONLY,bInP); }
+    { return static_cast<const SwFmtEditInReadonly&>(Get( RES_EDIT_IN_READONLY,bInP)); }
 
 inline const SwFmtEditInReadonly &SwFmt::GetEditInReadonly(bool bInP) const
     { return aSet.GetEditInReadonly(bInP); }

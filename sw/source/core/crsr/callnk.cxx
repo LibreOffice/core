@@ -56,7 +56,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
 
     if( rNd.IsTxtNode() )
-        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)rNd, nCntnt,
+        nLeftFrmPos = SwCallLink::getLayoutFrm( rShell.GetLayout(), static_cast<SwTxtNode&>(rNd), nCntnt,
                                             !rShell.ActionPend() );
     else
     {
@@ -151,7 +151,7 @@ SwCallLink::~SwCallLink()
     {
         // If travelling with left/right only and the frame is
         // unchanged (columns!) then check text hints.
-        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), (SwTxtNode&)*pCNd, nAktCntnt,
+        if( nLeftFrmPos == SwCallLink::getLayoutFrm( rShell.GetLayout(), static_cast<SwTxtNode&>(*pCNd), nAktCntnt,
                                                     !rShell.ActionPend() ) &&
             (( nCmp = nCntnt ) + 1 == nAktCntnt ||          // Right
             nCntnt -1 == ( nCmp = nAktCntnt )) )            // Left
@@ -159,9 +159,9 @@ SwCallLink::~SwCallLink()
             if( nCmp == nAktCntnt && pCurCrsr->HasMark() ) // left & select
                 ++nCmp;
 
-            if ( ((SwTxtNode*)pCNd)->HasHints() )
+            if ( static_cast<SwTxtNode*>(pCNd)->HasHints() )
             {
-                const SwpHints &rHts = ((SwTxtNode*)pCNd)->GetSwpHints();
+                const SwpHints &rHts = static_cast<SwTxtNode*>(pCNd)->GetSwpHints();
 
                 for( size_t n = 0; n < rHts.Count(); ++n )
                 {
@@ -193,7 +193,7 @@ SwCallLink::~SwCallLink()
 
             if( g_pBreakIt->GetBreakIter().is() )
             {
-                const OUString rTxt = ((SwTxtNode*)pCNd)->GetTxt();
+                const OUString rTxt = static_cast<SwTxtNode*>(pCNd)->GetTxt();
                 if( !nCmp ||
                     g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp )
                      != g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp - 1 ))
@@ -231,7 +231,7 @@ SwCallLink::~SwCallLink()
 
 long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, sal_Int32 nCntPos, bool bCalcFrm )
 {
-    SwTxtFrm* pFrm = (SwTxtFrm*)rNd.getLayoutFrm(pRoot,0,0,bCalcFrm), *pNext = pFrm;
+    SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(rNd.getLayoutFrm(pRoot,0,0,bCalcFrm)), *pNext = pFrm;
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )

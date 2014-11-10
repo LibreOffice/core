@@ -394,7 +394,7 @@ bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
 
         if( pFrm->IsSctFrm() )
         {
-            const SwSection* pSection = ((SwSectionFrm*)pFrm)->GetSection();
+            const SwSection* pSection = static_cast<const SwSectionFrm*>(pFrm)->GetSection();
             if( pSection && ( TOX_HEADER_SECTION == pSection->GetType() ||
                 TOX_CONTENT_SECTION == pSection->GetType() ) &&
                 !pVOpt->IsReadonly() &&

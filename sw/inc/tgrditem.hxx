@@ -107,9 +107,9 @@ public:
 };
 
 inline const SwTextGridItem &SwAttrSet::GetTextGrid(bool bInP) const
-    {   return (const SwTextGridItem&)Get( RES_TEXTGRID, bInP ); }
+    {   return static_cast<const SwTextGridItem&>(Get( RES_TEXTGRID, bInP )); }
 inline const SwTextGridItem &SwFmt::GetTextGrid(bool bInP) const
-    {   return (const SwTextGridItem&)aSet.Get( RES_TEXTGRID, bInP ); }
+    {   return static_cast<const SwTextGridItem&>(aSet.Get( RES_TEXTGRID, bInP )); }
 
 #endif
 

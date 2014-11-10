@@ -265,7 +265,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         {
             // If the dying object is the parent format of this format so
             // attach this to the parent of the parent
-            SwFmt* pFmt = (SwFmt*) ((SwPtrMsgPoolItem*)pNewValue)->pObject;
+            SwFmt* pFmt = (SwFmt*) static_cast<const SwPtrMsgPoolItem*>(pNewValue)->pObject;
 
             // do not move if this is the topmost format
             if( GetRegisteredIn() && GetRegisteredIn() == pFmt )
@@ -286,11 +286,11 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
         }
         break;
     case RES_ATTRSET_CHG:
-        if (pOldValue && pNewValue && ((SwAttrSetChg*)pOldValue)->GetTheChgdSet() != &aSet)
+        if (pOldValue && pNewValue && static_cast<const SwAttrSetChg*>(pOldValue)->GetTheChgdSet() != &aSet)
         {
             // pass only those that are not set
-            SwAttrSetChg aOld( *(SwAttrSetChg*)pOldValue );
-            SwAttrSetChg aNew( *(SwAttrSetChg*)pNewValue );
+            SwAttrSetChg aOld( *static_cast<const SwAttrSetChg*>(pOldValue) );
+            SwAttrSetChg aNew( *static_cast<const SwAttrSetChg*>(pNewValue) );
 
             aOld.GetChgSet()->Differentiate( aSet );
             aNew.GetChgSet()->Differentiate( aSet );
@@ -306,8 +306,8 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 
         // skip my own Modify
         if ( pOldValue && pNewValue &&
-            ((SwFmtChg*)pOldValue)->pChangedFmt != this &&
-            ((SwFmtChg*)pNewValue)->pChangedFmt == GetRegisteredIn() )
+            static_cast<const SwFmtChg*>(pOldValue)->pChangedFmt != this &&
+            static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt == GetRegisteredIn() )
         {
             // attach Set to new parent
             aSet.SetParent( DerivedFrom() ? &DerivedFrom()->aSet : 0 );
@@ -474,7 +474,7 @@ SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) 
     const SfxPoolItem* pItem = 0;
     SfxItemState eRet = aSet.GetItemState(RES_BACKGROUND, bSrchInParent, &pItem);
     if (pItem)
-        rItem = *(const SvxBrushItem*)pItem;
+        rItem = *static_cast<const SvxBrushItem*>(pItem);
     return eRet;
 }
 

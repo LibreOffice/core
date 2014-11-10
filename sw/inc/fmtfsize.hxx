@@ -100,7 +100,7 @@ public:
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(bool bInP) const
-    { return (const SwFmtFrmSize&)Get( RES_FRM_SIZE,bInP); }
+    { return static_cast<const SwFmtFrmSize&>(Get( RES_FRM_SIZE,bInP)); }
 
 inline const SwFmtFrmSize &SwFmt::GetFrmSize(bool bInP) const
     { return aSet.GetFrmSize(bInP); }

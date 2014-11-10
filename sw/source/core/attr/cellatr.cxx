@@ -39,8 +39,8 @@ SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, bool bFlag )
 bool SwTblBoxNumFormat::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return GetValue() == ( (SwTblBoxNumFormat&) rAttr ).GetValue() &&
-           bAuto == ( (SwTblBoxNumFormat&) rAttr ).bAuto;
+    return GetValue() == static_cast<const SwTblBoxNumFormat&>(rAttr).GetValue() &&
+           bAuto == static_cast<const SwTblBoxNumFormat&>(rAttr).bAuto;
 }
 
 SfxPoolItem* SwTblBoxNumFormat::Clone( SfxItemPool* ) const
@@ -58,8 +58,8 @@ SwTblBoxFormula::SwTblBoxFormula( const OUString& rFormula )
 bool SwTblBoxFormula::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return GetFormula() == ( (SwTblBoxFormula&) rAttr ).GetFormula() &&
-           pDefinedIn == ( (SwTblBoxFormula&) rAttr ).pDefinedIn;
+    return GetFormula() == static_cast<const SwTblBoxFormula&>(rAttr).GetFormula() &&
+           pDefinedIn == static_cast<const SwTblBoxFormula&>(rAttr).pDefinedIn;
 }
 
 SfxPoolItem* SwTblBoxFormula::Clone( SfxItemPool* ) const
@@ -110,7 +110,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         return ;
     }
 
-    pUpdtFld = (SwTableFmlUpdate*)pItem;
+    pUpdtFld = const_cast<SwTableFmlUpdate*>(static_cast<const SwTableFmlUpdate*>(pItem));
 
     // detect table that contains this attribute
     const SwTableNode* pTblNd;

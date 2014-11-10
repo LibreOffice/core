@@ -278,7 +278,7 @@ inline bool SwSetExpField::GetInputFlag() const
     { return bInput; }
 
 inline bool SwSetExpField::IsSequenceFld() const
-    { return 0 != (nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)GetTyp())->GetType()); }
+    { return 0 != (nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(GetTyp())->GetType()); }
 
 class SwInputFieldType : public SwFieldType
 {

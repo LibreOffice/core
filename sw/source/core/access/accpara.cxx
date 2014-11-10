@@ -683,7 +683,7 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
         if( pSectNd )
         {
             const SwSection * pSect = &pSectNd->GetSection();
-            SwTOXBaseSection *pTOXBaseSect = (SwTOXBaseSection *)pSect;
+            const  SwTOXBaseSection *pTOXBaseSect = static_cast<const SwTOXBaseSection *>(pSect);
             if( pSect->GetType() == TOX_CONTENT_SECTION )
             {
                 SwTOXSortTabBase* pSortBase = 0;
@@ -1484,7 +1484,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
             switch (nWhich)
             {
             case RES_DOCSTATFLD:
-                subType = ((SwDocStatField*)pField)->GetSubType();
+                subType = static_cast<const SwDocStatField*>(pField)->GetSubType();
                 break;
             case RES_GETREFFLD:
                 {
@@ -1512,7 +1512,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                         sEntry = OUString(RTL_CONSTASCII_USTRINGPARAM("Insert Reference"));
                         break;
                     case REF_SEQUENCEFLD:
-                        sEntry = ((SwGetRefField*)pField)->GetSetRefName();
+                        sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName();
                         break;
                     }
                     //Get format string
@@ -1530,7 +1530,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 }
                 break;
             case RES_DATETIMEFLD:
-                subType = ((SwDateTimeField*)pField)->GetSubType();
+                subType = static_cast<const SwDateTimeField*>(pField)->GetSubType();
                 break;
             case RES_JUMPEDITFLD:
                 {
@@ -1548,7 +1548,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 }
                 break;
             case RES_EXTUSERFLD:
-                subType = ((SwExtUserField*)pField)->GetSubType();
+                subType = static_cast<const SwExtUserField*>(pField)->GetSubType();
                 break;
             case RES_HIDDENTXTFLD:
             case RES_SETEXPFLD:
@@ -1567,7 +1567,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                 break;
             case RES_REFPAGESETFLD:
                 {
-                    SwRefPageSetField* pRPld = (SwRefPageSetField*)pField;
+                    const SwRefPageSetField* pRPld = static_cast<const SwRefPageSetField*>(pField);
                     bool bOn = pRPld->IsOn();
                     strTypeName += "-";
                     if (bOn)

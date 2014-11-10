@@ -22,8 +22,8 @@
 #include <svl/poolitem.hxx>
 #include <calbck.hxx>
 #include <format.hxx>
+#include <charfmt.hxx>
 
-class SwCharFmt;
 class SwTxtCharFmt;
 class IntlWrapper;
 
@@ -66,7 +66,7 @@ public:
     virtual bool    GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
 
     void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }
-    SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
+    SwCharFmt* GetCharFmt() const { return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn())); }
 };
 #endif
 

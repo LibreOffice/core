@@ -170,7 +170,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
         {
         case RES_OBJECTDYING:
         case RES_REMOVE_UNO_OBJECT:
-            bLockClientList = ((SwPtrMsgPoolItem*)pOldValue)->pObject != this;
+            bLockClientList = static_cast<const SwPtrMsgPoolItem*>(pOldValue)->pObject != this;
             break;
 
         default:

@@ -47,7 +47,7 @@ public:
 };
 
 inline const SwFmtCntnt &SwAttrSet::GetCntnt(bool bInP) const
-    { return (const SwFmtCntnt&)Get( RES_CNTNT,bInP); }
+    { return static_cast<const SwFmtCntnt&>(Get( RES_CNTNT,bInP)); }
 
 inline const SwFmtCntnt &SwFmt::GetCntnt(bool bInP) const
     { return aSet.GetCntnt(bInP); }

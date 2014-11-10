@@ -106,7 +106,7 @@ public:
     void                SetFieldCode(const OUString& rStr) { sFieldCode = rStr; }
 
     /// DBName
-    inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
+    inline const SwDBData&  GetDBData() const { return static_cast<SwDBFieldType*>(GetTyp())->GetDBData(); }
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 

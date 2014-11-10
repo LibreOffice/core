@@ -115,9 +115,9 @@ public:
     virtual SdrObject *GetMaster() = 0;
     virtual void SetMaster( SdrObject* _pNewMaster ) = 0;
 
-          SwFrmFmt  *GetFmt(){ return (SwFrmFmt*)GetRegisteredIn(); }
+          SwFrmFmt  *GetFmt() { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
     const SwFrmFmt  *GetFmt() const
-        { return (const SwFrmFmt*)GetRegisteredIn(); }
+        { return static_cast<const SwFrmFmt*>(GetRegisteredIn()); }
 
     bool IsInDTOR() const { return mbInDTOR;}
 

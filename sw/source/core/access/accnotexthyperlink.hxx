@@ -40,7 +40,7 @@ class SwAccessibleNoTextHyperlink :
 
     SwFrmFmt *GetFmt()
     {
-        return ((SwLayoutFrm*)mpFrm)->GetFmt();
+        return const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(mpFrm))->GetFmt();
     }
 public:
 

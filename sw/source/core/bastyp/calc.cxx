@@ -210,7 +210,7 @@ SwHash* Find( const OUString& rStr, SwHash** ppTable,
 
 inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
 {
-    return ((SvxLanguageItem&)rDoc.GetDefault(
+    return static_cast<const SvxLanguageItem&>(rDoc.GetDefault(
                GetWhichOfScript( RES_CHRATR_LANGUAGE,
                                  GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ))
             )).GetLanguage();
@@ -336,24 +336,24 @@ SwCalc::SwCalc( SwDoc& rD )
         VarTable[ aHashValue[ n ] ] = new SwCalcExp( sTmpStr, nVal, 0 );
     }
 
-    ((SwCalcExp*)VarTable[ aHashValue[ 0 ] ])->nValue.PutBool( false );
-    ((SwCalcExp*)VarTable[ aHashValue[ 1 ] ])->nValue.PutBool( true );
-    ((SwCalcExp*)VarTable[ aHashValue[ 2 ] ])->nValue.PutDouble( F_PI );
-    ((SwCalcExp*)VarTable[ aHashValue[ 3 ] ])->nValue.PutDouble( 2.7182818284590452354 );
+    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 0 ] ])->nValue.PutBool( false );
+    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 1 ] ])->nValue.PutBool( true );
+    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 2 ] ])->nValue.PutDouble( F_PI );
+    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 3 ] ])->nValue.PutDouble( 2.7182818284590452354 );
 
     for( n = 0; n < 3; ++n )
-        ((SwCalcExp*)VarTable[ aHashValue[ n + 4 ] ])->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
+        static_cast<SwCalcExp*>(VarTable[ aHashValue[ n + 4 ] ])->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );
     for( n = 0; n < 4; ++n )
-        ((SwCalcExp*)VarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
+        static_cast<SwCalcExp*>(VarTable[ aHashValue[ n + 7 ] ])->nValue.PutLong( rDocStat.*aDocStat2[ n ]  );
 
     SvtUserOptions& rUserOptions = SW_MOD()->GetUserOptions();
 
-    ((SwCalcExp*)VarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
-    ((SwCalcExp*)VarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
+    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 11 ] ])->nValue.PutString( rUserOptions.GetFirstName() );
+    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 12 ] ])->nValue.PutString( rUserOptions.GetLastName() );
+    static_cast<SwCalcExp*>(VarTable[ aHashValue[ 13 ] ])->nValue.PutString( rUserOptions.GetID() );
 
     for( n = 0; n < 11; ++n )
-        ((SwCalcExp*)VarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
+        static_cast<SwCalcExp*>(VarTable[ aHashValue[ n + 14 ] ])->nValue.PutString(
                                         rUserOptions.GetToken( aAdrToken[ n ] ));
 
     nVal.PutString( rUserOptions.GetToken( aAdrToken[ 11 ] ));
@@ -465,7 +465,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
             {
                 // then insert here
                 pFnd = new SwCalcExp( aStr, SwSbxValue(),
-                                    ((SwCalcFldType*)pEntry)->pFldType );
+                                    static_cast<SwCalcFldType*>(pEntry)->pFldType );
                 pFnd->pNext = *(VarTable+ii);
                 *(VarTable+ii) = pFnd;
                 break;
@@ -475,11 +475,11 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
 
     if( pFnd )
     {
-        SwCalcExp* pFndExp = (SwCalcExp*)pFnd;
+        SwCalcExp* pFndExp = static_cast<SwCalcExp*>(pFnd);
 
         if( pFndExp->pFldType && pFndExp->pFldType->Which() == RES_USERFLD )
         {
-            SwUserFieldType* pUFld = (SwUserFieldType*)pFndExp->pFldType;
+            SwUserFieldType* pUFld = const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFndExp->pFldType));
             if( nsSwGetSetExpType::GSE_STRING & pUFld->GetType() )
             {
                 pFndExp->nValue.PutString( pUFld->GetContent() );
@@ -545,7 +545,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
 
             sal_uLong nTmpRec = 0;
             if( 0 != ( pFnd = Find( sDBNum, VarTable, TBLSZ ) ) )
-                nTmpRec = ((SwCalcExp*)pFnd)->nValue.GetULong();
+                nTmpRec = static_cast<SwCalcExp*>(pFnd)->nValue.GetULong();
 
             OUString sResult;
             double nNumber = DBL_MAX;
@@ -613,7 +613,7 @@ void SwCalc::VarChange( const OUString& rStr, const SwSbxValue& rValue )
     OUString aStr = pCharClass->lowercase( rStr );
 
     sal_uInt16 nPos = 0;
-    SwCalcExp* pFnd = (SwCalcExp*)Find( aStr, VarTable, TBLSZ, &nPos );
+    SwCalcExp* pFnd = static_cast<SwCalcExp*>(Find( aStr, VarTable, TBLSZ, &nPos ));
 
     if( !pFnd )
     {

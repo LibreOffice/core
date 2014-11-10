@@ -658,7 +658,7 @@ public:
     virtual void    SetPar2(const OUString& rStr) SAL_OVERRIDE;
 
     SwCharFmt* GetCharFmt() const
-        { return ((SwJumpEditFieldType*)GetTyp())->GetCharFmt(); }
+        { return static_cast<SwJumpEditFieldType*>(GetTyp())->GetCharFmt(); }
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };

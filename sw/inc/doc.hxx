@@ -43,6 +43,8 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <tox.hxx>
+#include <frmfmt.hxx>
+#include <charfmt.hxx>
 
 #include <boost/unordered_map.hpp>
 
@@ -826,7 +828,7 @@ public:
                           bool bBroadcast = false, bool bAuto = true);
     void       DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast = false );
     SwFrmFmt* FindFrmFmtByName( const OUString& rName ) const
-        {   return (SwFrmFmt*)FindFmtByName( (SwFmtsBase&)*mpFrmFmtTbl, rName ); }
+        {   return static_cast<SwFrmFmt*>(FindFmtByName( (SwFmtsBase&)*mpFrmFmtTbl, rName )); }
 
     SwCharFmt *MakeCharFmt(const OUString &rFmtName, SwCharFmt *pDerivedFrom,
                            bool bBroadcast = false,
@@ -834,7 +836,7 @@ public:
     void       DelCharFmt(sal_uInt16 nFmt, bool bBroadcast = false);
     void       DelCharFmt(SwCharFmt* pFmt, bool bBroadcast = false);
     SwCharFmt* FindCharFmtByName( const OUString& rName ) const
-        {   return (SwCharFmt*)FindFmtByName( (SwFmtsBase&)*mpCharFmtTbl, rName ); }
+        {   return static_cast<SwCharFmt*>(FindFmtByName( (SwFmtsBase&)*mpCharFmtTbl, rName )); }
 
     // Formatcollections (styles)
     // TXT

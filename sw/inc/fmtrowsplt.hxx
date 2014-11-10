@@ -41,7 +41,7 @@ public:
 };
 
 inline const SwFmtRowSplit &SwAttrSet::GetRowSplit(bool bInP) const
-    { return (const SwFmtRowSplit&)Get( RES_ROW_SPLIT,bInP); }
+    { return static_cast<const SwFmtRowSplit&>(Get( RES_ROW_SPLIT,bInP)); }
 
 inline const SwFmtRowSplit &SwFmt::GetRowSplit(bool bInP) const
     { return aSet.GetRowSplit(bInP); }

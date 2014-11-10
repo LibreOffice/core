@@ -76,11 +76,11 @@ sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole (void)
 {
     SolarMutexGuard g;
 
-    SwFmtURL aURL( ((SwLayoutFrm*)GetFrm())->GetFmt()->GetURL() );
+    SwFmtURL aURL( static_cast<const SwLayoutFrm*>(GetFrm())->GetFmt()->GetURL() );
 
     if (aURL.GetMap())
-        return AccessibleRole::IMAGE_MAP ;
-    return AccessibleRole::GRAPHIC ;
+        return AccessibleRole::IMAGE_MAP;
+    return AccessibleRole::GRAPHIC;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -193,7 +193,7 @@ void SwAccessibleTableData_Impl::CollectRowHeaderData( const SwFrm *pFrm )
             if( pLower->IsRowFrm() )
             {
 
-                const SwTableLine* pLine = ((SwRowFrm*)pLower)->GetTabLine();
+                const SwTableLine* pLine = static_cast<const SwRowFrm*>(pLower)->GetTabLine();
                 while( pLine->GetUpper() )
                     pLine = pLine->GetUpper()->GetUpper();
 
@@ -236,7 +236,7 @@ void SwAccessibleTableData_Impl::CollectColumnHeaderData( const SwFrm *pFrm )
             if( pLower->IsRowFrm() )
             {
 
-                const SwTableLine* pLine = ((SwRowFrm*)pLower)->GetTabLine();
+                const SwTableLine* pLine = static_cast<const SwRowFrm*>(pLower)->GetTabLine();
                 while( pLine->GetUpper() )
                     pLine = pLine->GetUpper()->GetUpper();
 

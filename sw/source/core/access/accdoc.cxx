@@ -652,11 +652,11 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             {
                 const SwFrm *pSwFrm = pFlyFrm->GetAnchorFrm();
                 if(pSwFrm->IsTxtFrm())
-                    pCurrTxtFrm = ((SwTxtFrm*)(pSwFrm));
+                    pCurrTxtFrm = const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pSwFrm));
             }
         }
         else
-            pCurrTxtFrm = static_cast< SwTxtFrm* >(pCurrFrm);
+            pCurrTxtFrm = const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm* >(pCurrFrm));
         //check whether the text frame where the Graph/OLE/Frame anchored is in the Header/Footer
         SwFrm* pFrm = pCurrTxtFrm;
         while ( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
@@ -670,7 +670,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
-                SwFrmFmt* pFmt = ((SwDrawContact*)pObj->GetUserCall())->GetFmt();
+                SwFrmFmt* pFmt = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFmt();
                 const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                 if( FLY_AS_CHAR != rAnchor.GetAnchorId() )
                     pCurrTxtFrm = NULL;
@@ -934,7 +934,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
                 }
             }
 
-            while( _pStartCrsr && ( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr) );
+            while( _pStartCrsr && ( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr) );
 
             if ( vFrmList.size() )
             {
