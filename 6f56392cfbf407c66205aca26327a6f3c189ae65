@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_059c3268",
+        "filename": "editeng/source/misc/SvXMLAutoCorrectTokenHandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-11-10T14:03:05Z",
+      "side": 1,
+      "message": "I would axe this whole section; do the cast to const char * and pass it to getTokenDirect (below) \u003d) no point in duplicating that thing.",
+      "revId": "6f56392cfbf407c66205aca26327a6f3c189ae65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_259f2e61",
+        "filename": "solenv/bin/gentoken.pl",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2014-11-10T14:03:05Z",
+      "side": 1,
+      "message": "If you wrote this yourself - you need to axe the license foo below this line - a pure MPL license is the right header \u003d)",
+      "revId": "6f56392cfbf407c66205aca26327a6f3c189ae65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
