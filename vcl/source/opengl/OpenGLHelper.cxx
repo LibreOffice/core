@@ -355,9 +355,37 @@ void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebu
     glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferDepthId);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, nRenderbufferDepthId);
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if (status != GL_FRAMEBUFFER_COMPLETE)
+    if(status  == GL_FRAMEBUFFER_UNDEFINED)
     {
-        SAL_WARN("vcl.opengl", "invalid framebuffer status");
+        SAL_WARN("vcl.opengl", "undefined framebuffer status");
+    }
+    else if (status == GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT)
+    {
+        SAL_WARN("vcl.opengl", "incomplete framebuffer attachment");
+    }
+    else if (status == GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT)
+    {
+        SAL_WARN("vcl.opengl", "incomplete missing framebuffer attachment ");
+    }
+    else if (status == GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER)
+    {
+        SAL_WARN("vcl.opengl", "incomplete drawbuffer framebuffer");
+    }
+    else if (status == GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER)
+    {
+        SAL_WARN("vcl.opengl", "incomplete readbuffer framebuffer");
+    }
+    else if (status == GL_FRAMEBUFFER_UNSUPPORTED)
+    {
+        SAL_WARN("vcl.opengl", "unsupported framebuffer status");
+    }
+    else if (status == GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS )
+    {
+        SAL_WARN("vcl.opengl", "incomplete layer_targets framebuffer");
+    }
+    else if (status == GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE)
+    {
+        SAL_WARN("vcl.opengl", "incomplete multisample framebuffer");
     }
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
