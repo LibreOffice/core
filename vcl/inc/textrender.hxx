@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 #define INCLUDED_VCL_INC_UNX_CAIROFONTIMPL_HXX
 
-#include <tools/rational.hxx>
+#include <sal/types.h>
 #include <vcl/salgtype.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/metric.hxx>
