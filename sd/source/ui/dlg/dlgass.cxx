@@ -188,10 +188,9 @@ public:
 
     // preview
     bool mbUserDataDirty;
-    Timer maPrevTimer;
-    Timer maEffectPrevTimer;
-    Timer maUpdatePageListTimer;
-    Timer maStartScanTimer;
+    Idle maPrevIdle;
+    Idle maEffectPrevIdle;
+    Idle maUpdatePageListIdle;
 
     SfxObjectShellLock xDocShell;
 
@@ -585,14 +584,14 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLin
     maAssistentFunc.GotoPage(1);
     mpLastPageButton->Disable();
 
-    maPrevTimer.SetTimeout( 200 );
-    maPrevTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
+    maPrevIdle.SetPriority( VCL_IDLE_PRIORITY_LOWER );
+    maPrevIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
 
-    maEffectPrevTimer.SetTimeout( 50 );
-    maEffectPrevTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, EffectPreviewHdl ));
+    maEffectPrevIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    maEffectPrevIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, EffectPreviewHdl ));
 
-    maUpdatePageListTimer.SetTimeout( 50 );
-    maUpdatePageListTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
+    maUpdatePageListIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    maUpdatePageListIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
 
     SetStartType( ST_EMPTY );
 
@@ -999,7 +998,7 @@ void AssistentDlgImpl::LeavePage()
     int nPage = maAssistentFunc.GetCurrentPage();
 
     if( nPage == 4 && mbUserDataDirty )
-        maPrevTimer.Start();
+        maPrevIdle.Start();
 }
 
 void AssistentDlgImpl::ChangePage()
@@ -1054,7 +1053,7 @@ void AssistentDlgImpl::UpdatePage()
             if(mbDocPreview || maPageListFile != maDocFile)
                 mpPage5PageListCT->Clear();
 
-            maUpdatePageListTimer.Start();
+            maUpdatePageListIdle.Start();
             break;
         }
 
@@ -1096,7 +1095,7 @@ IMPL_LINK( AssistentDlgImpl, SelectRegionHdl, ListBox *, pLB )
 
 IMPL_LINK_NOARG(AssistentDlgImpl, SelectEffectHdl)
 {
-    maEffectPrevTimer.Start();
+    maEffectPrevIdle.Start();
     return 0;
 }
 
@@ -1144,20 +1143,20 @@ IMPL_LINK_NOARG(AssistentDlgImpl, SelectTemplateHdl)
     SetStartType( ST_TEMPLATE );
     mpPage2Medium5RB->Check();
     mpPage2LayoutLB->SelectEntryPos(0);
-    maPrevTimer.Start();
+    maPrevIdle.Start();
     return 0;
 }
 
 IMPL_LINK_NOARG(AssistentDlgImpl, SelectLayoutHdl)
 {
-    maPrevTimer.Start();
+    maPrevIdle.Start();
     return 0;
 }
 
 IMPL_LINK_NOARG(AssistentDlgImpl, SelectFileHdl)
 {
     SetStartType( ST_OPEN );
-    maPrevTimer.Start();
+    maPrevIdle.Start();
     return 0;
 }
 
@@ -1204,7 +1203,7 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
     else if(eType == ST_OPEN)
         mpPage1OpenLB->SelectEntryPos(0);
 
-    maPrevTimer.Start();
+    maPrevIdle.Start();
     return 0;
 }
 

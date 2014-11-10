@@ -264,11 +264,11 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
 
     Resize();
 
-    aUpdateTimer.SetTimeout( 100 );
-    aUpdateTimer.SetTimeoutHdl( LINK( this, SvxSuperContourDlg, UpdateHdl ) );
+    aUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    aUpdateIdle.SetIdleHdl( LINK( this, SvxSuperContourDlg, UpdateHdl ) );
 
-    aCreateTimer.SetTimeout( 50 );
-    aCreateTimer.SetTimeoutHdl( LINK( this, SvxSuperContourDlg, CreateHdl ) );
+    aCreateIdle.SetPriority( VCL_IDLE_PRIORITY_RESIZE );
+    aCreateIdle.SetIdleHdl( LINK( this, SvxSuperContourDlg, CreateHdl ) );
 }
 
 SvxSuperContourDlg::~SvxSuperContourDlg()
@@ -386,7 +386,7 @@ void SvxSuperContourDlg::UpdateGraphic( const Graphic& rGraphic, bool _bGraphicL
     else
         aUpdatePolyPoly = tools::PolyPolygon();
 
-    aUpdateTimer.Start();
+    aUpdateIdle.Start();
 }
 
 bool SvxSuperContourDlg::IsUndoPossible() const
@@ -480,7 +480,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
     }
     else if (nId == mnAutoContourId)
     {
-        aCreateTimer.Start();
+        aCreateIdle.Start();
     }
     else if (nId == mnPipetteId)
     {
@@ -543,7 +543,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
 
 IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
 {
-    aUpdateTimer.Stop();
+    aUpdateIdle.Stop();
 
     if ( pUpdateEditingObject != pCheckObj )
     {
@@ -569,7 +569,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
 
 IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl)
 {
-    aCreateTimer.Stop();
+    aCreateIdle.Stop();
 
     const Rectangle aWorkRect = m_pContourWnd->LogicToPixel( m_pContourWnd->GetWorkRect(), MapMode( MAP_100TH_MM ) );
     const Graphic&  rGraphic = m_pContourWnd->GetGraphic();
@@ -696,7 +696,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
                 pWnd->SetGraphic( aGraphic, bNewContour );
 
                 if( bNewContour )
-                    aCreateTimer.Start();
+                    aCreateIdle.Start();
             }
         }
 

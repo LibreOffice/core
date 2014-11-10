@@ -35,8 +35,8 @@ class SvxSuperContourDlg : public SvxContourDlg
     Graphic             aRedoGraphic;
     Graphic             aUpdateGraphic;
     tools::PolyPolygon         aUpdatePolyPoly;
-    Timer               aUpdateTimer;
-    Timer               aCreateTimer;
+    Idle                aUpdateIdle;
+    Idle                aCreateIdle;
     Size                aLastSize;
     void*               pUpdateEditingObject;
     void*               pCheckObj;

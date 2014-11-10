@@ -85,8 +85,8 @@ void SystemWindow::Init()
     mpDialogParent      = NULL;
 
     //To-Do, reuse maResizeTimer
-    maLayoutTimer.SetTimeout(50);
-    maLayoutTimer.SetTimeoutHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
+    maLayoutIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    maLayoutIdle.SetIdleHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
 }
 
 SystemWindow::SystemWindow(WindowType nType)
@@ -106,7 +106,7 @@ void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStri
 
 SystemWindow::~SystemWindow()
 {
-    maLayoutTimer.Stop();
+    maLayoutIdle.Stop();
     delete mpImplData;
     mpImplData = NULL;
 }
@@ -997,7 +997,7 @@ void SystemWindow::queue_resize(StateChangedType /*eReason*/)
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     pWindowImpl->mnOptimalWidthCache = -1;
     pWindowImpl->mnOptimalHeightCache = -1;
-    maLayoutTimer.Start();
+    maLayoutIdle.Start();
 }
 
 void SystemWindow::Resize()
@@ -1071,7 +1071,7 @@ void SystemWindow::settingOptimalLayoutSize(VclBox* /*pBox*/)
 
 void SystemWindow::setOptimalLayoutSize()
 {
-    maLayoutTimer.Stop();
+    maLayoutIdle.Stop();
 
     //resize SystemWindow to fit requisition on initial show
     VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));

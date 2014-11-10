@@ -148,8 +148,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aIdleFormatter.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
     aIdleFormatter.SetIdleHdl( LINK( this, ImpEditEngine, IdleFormatHdl ) );
 
-    aOnlineSpellTimer.SetTimeout( 100 );
-    aOnlineSpellTimer.SetTimeoutHdl( LINK( this, ImpEditEngine, OnlineSpellHdl ) );
+    aOnlineSpellIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    aOnlineSpellIdle.SetIdleHdl( LINK( this, ImpEditEngine, OnlineSpellHdl ) );
 
     // Access data already from here on!
     SetRefDevice( NULL );
@@ -163,7 +163,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 ImpEditEngine::~ImpEditEngine()
 {
     aStatusTimer.Stop();
-    aOnlineSpellTimer.Stop();
+    aOnlineSpellIdle.Stop();
     aIdleFormatter.Stop();
 
     // Destroying templates may otherwise cause unnecessary formatting,

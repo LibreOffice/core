@@ -348,7 +348,7 @@ private:
     ScRange             aEmbedRange;
     ScAddress           aCurTextWidthCalcPos;
 
-    Timer               aTrackTimer;
+    Idle                aTrackIdle;
 
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
                         mxVbaEvents;

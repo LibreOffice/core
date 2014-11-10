@@ -44,8 +44,8 @@ SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, vcl::Window* pParent, SwEd
 , maVirDev( *this )
 {
     // Set fading timeout: 5 x 40ms = 200ms
-    maFadeIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
-    maFadeIdle.SetIdleHdl( LINK( this, SwCommentRuler, FadeHandler ) );
+    maFadeTimer.SetTimeout(40);
+    maFadeTimer.SetTimeoutHdl( LINK( this, SwCommentRuler, FadeHandler ) );
 }
 
 // Destructor
@@ -203,7 +203,7 @@ void SwCommentRuler::MouseMove(const MouseEvent& rMEvt)
             SetQuickHelpText( OUString() );
         }
         // Do start fading
-        maFadeIdle.Start();
+        maFadeTimer.Start();
     }
 }
 
@@ -274,7 +274,7 @@ Rectangle SwCommentRuler::GetCommentControlRegion()
 
 Color SwCommentRuler::GetFadedColor(const Color &rHighColor, const Color &rLowColor)
 {
-    if ( ! maFadeIdle.IsActive() )
+    if ( ! maFadeTimer.IsActive() )
         return mbIsHighlighted ? rHighColor : rLowColor;
 
     Color aColor = rHighColor;
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(SwCommentRuler, FadeHandler)
     Invalidate();
 
     if ( mnFadeRate != 0 && mnFadeRate != 100)
-        maFadeIdle.Start();
+        maFadeTimer.Start();
     return 0;
 }
 

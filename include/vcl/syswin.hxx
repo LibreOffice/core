@@ -152,7 +152,7 @@ private:
     sal_uInt16      mnMenuBarMode;
     sal_uInt16      mnIcon;
     ImplData*       mpImplData;
-    Timer           maLayoutTimer;
+    Idle            maLayoutIdle;
 protected:
     bool            mbIsDefferedInit;
     vcl::Window*         mpDialogParent;
@@ -274,7 +274,7 @@ public:
     void SetCloseHdl(const Link& rLink);
     const Link& GetCloseHdl() const;
 
-    SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
+    SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutIdle.IsActive(); }
 
     virtual        void    doDeferredInit(WinBits nBits);
 };

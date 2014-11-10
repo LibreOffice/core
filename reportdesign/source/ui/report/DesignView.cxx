@@ -118,8 +118,8 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     m_aSplitWin.SetAlign(WINDOWALIGN_LEFT);
     m_aSplitWin.Show();
 
-    m_aMarkTimer.SetTimeout( 100 );
-    m_aMarkTimer.SetTimeoutHdl( LINK( this, ODesignView, MarkTimeout ) );
+    m_aMarkIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    m_aMarkIdle.SetIdleHdl( LINK( this, ODesignView, MarkTimeout ) );
 }
 
 
@@ -128,7 +128,7 @@ ODesignView::~ODesignView()
     m_bDeleted = true;
     Hide();
     m_aScrollWindow.Hide();
-    m_aMarkTimer.Stop();
+    m_aMarkIdle.Stop();
     if ( m_pPropWin )
     {
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
@@ -360,7 +360,7 @@ void ODesignView::UpdatePropertyBrowserDelayed(OSectionView& _rView)
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         Broadcast( aHint );
     }
-    m_aMarkTimer.Start();
+    m_aMarkIdle.Start();
 }
 
 
@@ -461,7 +461,7 @@ void ODesignView::togglePropertyBrowser(bool _bToogleOn)
             m_aSplitWin.RemoveItem(TASKPANE_ID);
 
         if ( bWillBeVisible )
-            m_aMarkTimer.Start();
+            m_aMarkIdle.Start();
     }
 }
 
@@ -473,7 +473,7 @@ void ODesignView::showProperties(const uno::Reference< uno::XInterface>& _xRepor
         if ( m_pCurrentView )
             m_aScrollWindow.setMarked(m_pCurrentView,false);
         m_pCurrentView = NULL;
-        m_aMarkTimer.Start();
+        m_aMarkIdle.Start();
     }
 }
 

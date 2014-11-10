@@ -197,7 +197,7 @@ IMPL_LINK( MyWizardDlg, ImplNextHdl, PushButton*, pBtn )
 class SVT_DLLPUBLIC WizardDialog : public ModalDialog
 {
 private:
-    Timer               maWizardLayoutTimer;
+    Idle               maWizardLayoutIdle;
     Size                maPageSize;
     ImplWizPageData*    mpFirstPage;
     ImplWizButtonData*  mpFirstBtn;

@@ -420,8 +420,8 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     m_pLbConflicts->SetSelectionMode( MULTIPLE_SELECTION );
     m_pLbConflicts->SetHighlightRange();
 
-    maSelectionTimer.SetTimeout( 100 );
-    maSelectionTimer.SetTimeoutHdl( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
+    maSelectionIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    maSelectionIdle.SetIdleHdl( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
 
     m_pLbConflicts->SetSelectHdl( LINK( this, ScConflictsDlg, SelectHandle ) );
     m_pLbConflicts->SetDeselectHdl( LINK( this, ScConflictsDlg, DeselectHandle ) );
@@ -534,7 +534,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, SelectHandle)
 
     mbInSelectHdl = true;
     HandleListBoxSelection( true );
-    maSelectionTimer.Start();
+    maSelectionIdle.Start();
     mbInSelectHdl = false;
 
     return 0;

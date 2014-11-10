@@ -136,7 +136,7 @@ private:
     ScConflictsList&    mrConflictsList;
     Size                maDialogSize;
 
-    Timer               maSelectionTimer;
+    Idle                maSelectionIdle;
     bool                mbInSelectHdl;
     bool                mbInDeselectHdl;
 

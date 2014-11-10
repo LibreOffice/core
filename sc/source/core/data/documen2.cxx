@@ -249,8 +249,8 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     // languages for a visible document are set by docshell later (from options)
     SetLanguage( ScGlobal::eLnge, ScGlobal::eLnge, ScGlobal::eLnge );
 
-    aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
-    aTrackTimer.SetTimeout( 100 );
+    aTrackIdle.SetIdleHdl( LINK( this, ScDocument, TrackTimeHdl ) );
+    aTrackIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
 }
 
 sfx2::LinkManager* ScDocument::GetLinkManager()
@@ -333,7 +333,7 @@ IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 {
     if ( ScDdeLink::IsInUpdate() )      // do not nest
     {
-        aTrackTimer.Start();            // try again later
+        aTrackIdle.Start();            // try again later
     }
     else if (pShell)                    // execute
     {
@@ -364,8 +364,8 @@ void ScDocument::SetExpandRefs( bool bVal )
 
 void ScDocument::StartTrackTimer()
 {
-    if (!aTrackTimer.IsActive())        // do not postpone for forever
-        aTrackTimer.Start();
+    if (!aTrackIdle.IsActive())        // don't postpone forever
+        aTrackIdle.Start();
 }
 
 ScDocument::~ScDocument()

@@ -20,14 +20,14 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
 {
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
-    m_aPanelLayoutTimer.SetTimeout(50);
-    m_aPanelLayoutTimer.SetTimeoutHdl( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
+    m_aPanelLayoutIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    m_aPanelLayoutIdle.SetIdleHdl( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
 }
 
 PanelLayout::~PanelLayout()
 {
     m_bInClose = true;
-    m_aPanelLayoutTimer.Stop();
+    m_aPanelLayoutIdle.Stop();
 }
 
 Size PanelLayout::GetOptimalSize() const
@@ -40,7 +40,7 @@ Size PanelLayout::GetOptimalSize() const
 
 bool PanelLayout::hasPanelPendingLayout() const
 {
-    return m_aPanelLayoutTimer.IsActive();
+    return m_aPanelLayoutIdle.IsActive();
 }
 
 void PanelLayout::queue_resize(StateChangedType /*eReason*/)
@@ -51,7 +51,7 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
         return;
     if (!isLayoutEnabled(this))
         return;
-    m_aPanelLayoutTimer.Start();
+    m_aPanelLayoutIdle.Start();
 }
 
 IMPL_LINK( PanelLayout, ImplHandlePanelLayoutTimerHdl, void*, EMPTYARG )

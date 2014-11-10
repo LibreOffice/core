@@ -465,7 +465,7 @@ private:
 
     IdleFormattter      aIdleFormatter;
 
-    Timer               aOnlineSpellTimer;
+    Idle                aOnlineSpellIdle;
 
     // If it is detected at one point that the StatusHdl has to be called, but
     // this should not happen immediately (critical section):
@@ -979,8 +979,8 @@ public:
 
     inline EditEngine*  GetEditEnginePtr() const    { return pEditEngine; }
 
-    void                StartOnlineSpellTimer()     { aOnlineSpellTimer.Start(); }
-    void                StopOnlineSpellTimer()      { aOnlineSpellTimer.Stop(); }
+    void                StartOnlineSpellTimer()     { aOnlineSpellIdle.Start(); }
+    void                StopOnlineSpellTimer()      { aOnlineSpellIdle.Stop(); }
 
     const OUString&     GetAutoCompleteText() const { return aAutoCompleteText; }
     void                SetAutoCompleteText(const OUString& rStr, bool bUpdateTipWindow);

@@ -61,8 +61,8 @@ void WizardDialog::ImplInitData()
     mbEmptyViewMargin =  false;
     mnLeftAlignCount = 0;
 
-    maWizardLayoutTimer.SetTimeout(50);
-    maWizardLayoutTimer.SetTimeoutHdl( LINK( this, WizardDialog, ImplHandleWizardLayoutTimerHdl ) );
+    maWizardLayoutIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    maWizardLayoutIdle.SetIdleHdl( LINK( this, WizardDialog, ImplHandleWizardLayoutTimerHdl ) );
 }
 
 
@@ -113,7 +113,7 @@ void WizardDialog::ImplCalcSize( Size& rSize )
 
 bool WizardDialog::hasWizardPendingLayout() const
 {
-    return maWizardLayoutTimer.IsActive();
+    return maWizardLayoutIdle.IsActive();
 }
 
 void WizardDialog::queue_resize(StateChangedType /*eReason*/)
@@ -122,7 +122,7 @@ void WizardDialog::queue_resize(StateChangedType /*eReason*/)
         return;
     if (IsInClose())
         return;
-    maWizardLayoutTimer.Start();
+    maWizardLayoutIdle.Start();
 }
 
 IMPL_LINK( WizardDialog, ImplHandleWizardLayoutTimerHdl, void*, EMPTYARG )
@@ -263,7 +263,7 @@ void WizardDialog::ImplPosTabPage()
             return;
     }
 
-    // ButtonBar-Hoehe berechnen
+    // calculate height of ButtonBar
     long                nMaxHeight = 0;
     ImplWizButtonData*  pBtnData = mpFirstBtn;
     while ( pBtnData )
@@ -276,7 +276,7 @@ void WizardDialog::ImplPosTabPage()
     if ( nMaxHeight )
         nMaxHeight += WIZARDDIALOG_BUTTON_OFFSET_Y*2;
 
-    // TabPage positionieren
+    // position TabPage
     Size aDlgSize = GetOutputSizePixel();
     aDlgSize.Height() -= nMaxHeight;
     long nOffX = 0;
@@ -363,7 +363,7 @@ WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUS
 
 WizardDialog::~WizardDialog()
 {
-    maWizardLayoutTimer.Stop();
+    maWizardLayoutIdle.Stop();
 
     // Remove all buttons
     while ( mpFirstBtn )

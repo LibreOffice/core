@@ -68,7 +68,7 @@ namespace rptui
         OAddFieldWindow*                    m_pAddField;
         OSectionView*                       m_pCurrentView;
         ONavigator*                         m_pReportExplorer;
-        Timer                               m_aMarkTimer;
+        Idle                                m_aMarkIdle;
         Point                               m_aScrollOffset;
         DlgEdMode                           m_eMode;
         sal_uInt16                              m_nCurrentPosition;

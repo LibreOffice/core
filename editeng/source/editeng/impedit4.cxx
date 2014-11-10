@@ -1478,7 +1478,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
     if ( !xSpeller.is() )
         return EE_SPELL_NOSPELLER;
 
-    aOnlineSpellTimer.Stop();
+    aOnlineSpellIdle.Stop();
 
     // In MultipleDoc always from the front / rear ...
     if ( bMultipleDoc )
@@ -2447,7 +2447,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
             break;
     }
     if ( bRestartTimer )
-        aOnlineSpellTimer.Start();
+        aOnlineSpellIdle.Start();
 }
 
 
