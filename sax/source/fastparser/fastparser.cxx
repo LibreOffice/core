@@ -740,8 +740,8 @@ sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceT
 
 void FastSaxParserImpl::splitName( const XML_Char *pwName, const XML_Char *&rpPrefix, sal_Int32 &rPrefixLen, const XML_Char *&rpName, sal_Int32 &rNameLen )
 {
-    XML_Char *p;
-    for( p = const_cast< XML_Char* >( pwName ), rNameLen = 0, rPrefixLen = 0; *p; p++ )
+    const XML_Char *p;
+    for( p = pwName, rNameLen = 0, rPrefixLen = 0; *p; p++ )
     {
         if( *p == ':' )
         {
