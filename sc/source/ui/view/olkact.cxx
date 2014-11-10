@@ -17,14 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sfx2/childwin.hxx>
-#include <sfx2/objsh.hxx>
 
-#include "document.hxx"
-#include "viewdata.hxx"
-#include "drawview.hxx"
-#include "drawpage.hxx"
-#include "drwlayer.hxx"
 #include "olkact.hxx"
 
 // STATIC DATA -----------------------------------------------------------
