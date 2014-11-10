@@ -20,9 +20,10 @@
 #ifndef INCLUDED_SC_INC_INPUTOPT_HXX
 #define INCLUDED_SC_INC_INPUTOPT_HXX
 
+#include <scdllapi.h>
 #include <unotools/configitem.hxx>
 
-class ScInputOptions
+class SC_DLLPUBLIC ScInputOptions
 {
 private:
     sal_uInt16  nMoveDir;           // enum ScDirection

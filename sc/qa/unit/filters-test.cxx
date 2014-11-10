@@ -23,6 +23,7 @@
 #include "helper/qahelper.hxx"
 
 #include "docsh.hxx"
+#include "inputopt.hxx"
 #include "postit.hxx"
 #include "patattr.hxx"
 #include "scitems.hxx"
@@ -103,6 +104,7 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
+    bool mbUpdateReferenceOnSort; ///< Remember the configuration option so that we can set it back.
 };
 
 bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
@@ -611,6 +613,12 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
 // Document contains cached external references.
 void ScFiltersTest::testSortWithSheetExternalReferencesODS()
 {
+    // this test only works with UpdateReferenceOnSort == true, set it now.
+    // we reset the value back to the original in tearDown()
+    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    aInputOption.SetSortRefUpdate(true);
+    SC_MOD()->SetInputOptions(aInputOption);
+
     ScDocShellRef xDocSh = loadDoc("sort-with-sheet-external-references.", ODS, true);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -698,12 +706,25 @@ void ScFiltersTest::setUp()
     m_xCalcComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Calc.SpreadsheetDocument");
     CPPUNIT_ASSERT_MESSAGE("no calc component!", m_xCalcComponent.is());
+
+    // one test sets this configuration option; make sure we remember the
+    // original value
+    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    mbUpdateReferenceOnSort = aInputOption.GetSortRefUpdate();
 }
 
 void ScFiltersTest::tearDown()
 {
     uno::Reference< lang::XComponent >( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
     test::BootstrapFixture::tearDown();
+
+    // one test sets this configuration option; make sure we return it back
+    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    if (mbUpdateReferenceOnSort != aInputOption.GetSortRefUpdate())
+    {
+        aInputOption.SetSortRefUpdate(mbUpdateReferenceOnSort);
+        SC_MOD()->SetInputOptions(aInputOption);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);
