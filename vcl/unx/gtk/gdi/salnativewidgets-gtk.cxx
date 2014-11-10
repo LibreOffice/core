@@ -294,7 +294,7 @@ GdkX11Pixmap::GdkX11Pixmap( X11Pixmap& rOther, GdkWindow *pWindow )
 {
     GdkColormap* pColormap;
 
-#if GTK_CHECK_VERSION(2,10,0)
+#if GTK_CHECK_VERSION(2,24,0)
     GdkScreen *pScreen = gdk_window_get_screen( pWindow );
     mpGdkPixmap = gdk_pixmap_foreign_new_for_screen( pScreen, mpPixmap,
                                                      mnWidth, mnHeight,
