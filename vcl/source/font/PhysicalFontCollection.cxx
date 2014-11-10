@@ -36,6 +36,10 @@
 
 #include "PhysicalFontCollection.hxx"
 
+#ifdef SOLARIS
+#include <alloca.h>
+#endif
+
 static unsigned lcl_IsCJKFont( const OUString& rFontName )
 {
     // Test, if Fontname includes CJK characters --> In this case we
