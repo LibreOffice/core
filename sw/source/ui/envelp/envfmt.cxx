@@ -207,8 +207,10 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 
     if (pEdit == m_pSizeWidthField || pEdit == m_pSizeHeightField)
     {
+        long nRotatedWidth = lHeight;
+        long nRotatedHeight = lWidth;
         Paper ePaper = SvxPaperInfo::GetSvxPaper(
-            Size(lHeight, lWidth), MAP_TWIP, true);
+            Size(nRotatedWidth, nRotatedHeight), MAP_TWIP, true);
         for (size_t i = 0; i < aIDs.size(); ++i)
             if (aIDs[i] == (sal_uInt16)ePaper)
                 m_pSizeFormatBox->SelectEntryPos(static_cast<sal_Int32>(i));
