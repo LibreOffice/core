@@ -38,7 +38,6 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			--disable-werror \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),\
 				$(if $(COM_GCC_IS_CLANG),-Qunused-arguments) \
-				-I$(BUILDDIR)/config_$(gb_Side) \
 				-I$(call gb_UnpackedTarball_get_dir,boost))" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \

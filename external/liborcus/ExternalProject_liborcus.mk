@@ -53,10 +53,6 @@ endif
 ifeq ($(SYSTEM_ZLIB),)
 liborcus_CPPFLAGS+=$(ZLIB_CFLAGS)
 endif
-# patched boost needs to find config_global.h
-ifeq ($(SYSTEM_BOOST),)
-liborcus_CPPFLAGS += -I$(BUILDDIR)/config_$(gb_Side)
-endif
 #
 # OSes that use the GNU C++ library need to use -D_GLIBCXX_DEBUG in
 # sync with the rest of LibreOffice, i.e. depending on

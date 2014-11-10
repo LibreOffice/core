@@ -28,7 +28,6 @@ libgltf_AdditionalIncludes :=
 
 ifeq ($(SYSTEM_BOOST),)
 libgltf_AdditionalIncludes += "$(call gb_UnpackedTarball_get_dir,boost)"
-libgltf_AdditionalIncludes += "$(BUILDDIR)/config_$(gb_Side)"
 endif
 
 ifeq ($(SYSTEM_GLEW),)
@@ -68,7 +67,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			--with-pic \
 			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
-			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost)) -I$(BUILDDIR)/config_$(gb_Side)" \
+			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost))" \
 			GLEW_CFLAGS="$(if $(SYSTEM_GLEW),$(GLEW_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glew)/include)" \
 			GLM_CFLAGS="$(if $(SYSTEM_GLM),$(GLM_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glm))" \
 			$(if $(libgltf_CPPFLAGS),CPPFLAGS='$(libgltf_CPPFLAGS)') \
