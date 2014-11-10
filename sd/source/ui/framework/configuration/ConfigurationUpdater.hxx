@@ -131,7 +131,7 @@ private:
         This is used to overcome problems with resources that become
         available asynchronously.
     */
-    Timer maUpdateTimer;
+    Idle maUpdateIdle;
 
     /** The number of failed updates (those after which the current
         configuration is not equivalent to the requested configuration) is

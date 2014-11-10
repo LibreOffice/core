@@ -36,9 +36,6 @@ using ::sd::framework::FrameworkHelper;
 using ::std::vector;
 
 namespace {
-static const sal_Int32 snShortTimeout (100);
-static const sal_Int32 snNormalTimeout (1000);
-static const sal_Int32 snLongTimeout (10000);
 static const sal_Int32 snShortTimeoutCountThreshold (1);
 static const sal_Int32 snNormalTimeoutCountThreshold (5);
 }
@@ -70,21 +67,21 @@ ConfigurationUpdater::ConfigurationUpdater (
       mbUpdatePending(false),
       mbUpdateBeingProcessed(false),
       mnLockCount(0),
-      maUpdateTimer(),
+      maUpdateIdle(),
       mnFailedUpdateCount(0),
       mpResourceManager(rpResourceManager)
 {
     // Prepare the timer that is started when after an update the current
     // and the requested configuration differ.  With the timer we try
     // updates until the two configurations are the same.
-    maUpdateTimer.SetTimeout(snNormalTimeout);
-    maUpdateTimer.SetTimeoutHdl(LINK(this,ConfigurationUpdater,TimeoutHandler));
+    maUpdateIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    maUpdateIdle.SetIdleHdl(LINK(this,ConfigurationUpdater,TimeoutHandler));
     SetControllerManager(rxControllerManager);
 }
 
 ConfigurationUpdater::~ConfigurationUpdater (void)
 {
-    maUpdateTimer.Stop();
+    maUpdateIdle.Stop();
 }
 
 void ConfigurationUpdater::SetControllerManager(
@@ -218,13 +215,11 @@ void ConfigurationUpdater::CheckUpdateSuccess (void)
     if ( ! AreConfigurationsEquivalent(mxCurrentConfiguration, mxRequestedConfiguration))
     {
         if (mnFailedUpdateCount <= snShortTimeoutCountThreshold)
-            maUpdateTimer.SetTimeout(snShortTimeout);
-        else if (mnFailedUpdateCount < snNormalTimeoutCountThreshold)
-            maUpdateTimer.SetTimeout(snNormalTimeout);
+            maUpdateIdle.SetPriority(VCL_IDLE_PRIORITY_LOW);
         else
-            maUpdateTimer.SetTimeout(snLongTimeout);
+            maUpdateIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
         ++mnFailedUpdateCount;
-        maUpdateTimer.Start();
+        maUpdateIdle.Start();
     }
     else
     {
