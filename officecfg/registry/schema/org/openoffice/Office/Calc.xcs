@@ -686,7 +686,7 @@
           <desc>Specifies whether references get updated when performing sort on a range of cells.</desc>
           <label>Update references when sorting range of cells</label>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
       <prop oor:name="HighlightSelection" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Calc/Input -->
