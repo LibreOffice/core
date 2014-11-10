@@ -65,10 +65,5 @@
  <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertRows" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteRows" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteColumns" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleSheetGrid" toolbar:visible="true"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleSheetGrid" toolbar:visible="false"/>
 </toolbar:toolbar>

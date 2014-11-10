@@ -44,16 +44,22 @@
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:Navigator"/>
+ <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteRows"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteColumns"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SortAscending"/>
  <toolbar:toolbaritem xlink:href=".uno:SortDescending"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
- <toolbar:toolbaritem xlink:href=".uno:Gallery"/>
+ <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser"/>
+ <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
