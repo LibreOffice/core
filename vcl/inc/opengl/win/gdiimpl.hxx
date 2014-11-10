@@ -13,13 +13,15 @@
 #include <vcl/dllapi.h>
 
 #include "openglgdiimpl.hxx"
+#include "win/salgdi.h"
 
 class WinOpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl
 {
 private:
+    WinSalGraphics& mrParent;
 
 public:
-    WinOpenGLSalGraphicsImpl();
+    WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics);
 
 protected:
     virtual GLfloat GetWidth() const SAL_OVERRIDE;
