@@ -38,8 +38,7 @@ $(librelogo_DIR)/LibreLogo_%.properties : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRP,1)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(if $(filter-out qtz,$(LANG)), \
-			MERGEINPUT=`$(gb_MKTEMP)` && \
-			echo $(POFILE) > $${MERGEINPUT} && \
+			MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILE)) && \
 			$(call gb_Executable_get_command,propex) \
 				-i $(SOURCE) \
 				-o $@ \

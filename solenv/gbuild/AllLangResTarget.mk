@@ -42,8 +42,7 @@ gb_SrsPartMergeTarget_TRANSEXDEPS := $(call gb_Executable_get_runtime_dependenci
 gb_SrsPartMergeTarget_TRANSEXCOMMAND = $(call gb_Executable_get_command,transex3)
 
 define gb_SrsPartMergeTarget__command
-MERGEINPUT=`$(gb_MKTEMP)` && \
-echo $(POFILES) > $${MERGEINPUT} && \
+MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \

@@ -28,8 +28,7 @@ $(call gb_UILocalizeTarget_get_workdir,%).ui :
 
 define gb_UILocalizeTarget__command
 $(call gb_Output_announce,$(2),$(true),UIX,1)
-MERGEINPUT=`$(gb_MKTEMP)` && \
-echo $(POFILES) > $${MERGEINPUT} && \
+MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_UILocalizeTarget_COMMAND) \
 		-i $(UIConfig_FILE) \

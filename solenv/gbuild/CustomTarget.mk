@@ -55,8 +55,7 @@ ifneq ($(WITH_LANG),)
 # $(call gb_CustomTarget_ulfex__command,ulftarget,ulfsource,pofiles)
 define gb_CustomTarget_ulfex__command
 $(call gb_Output_announce,$(1),$(true),ULF,1)
-MERGEINPUT=`$(gb_MKTEMP)` && \
-echo $(3) > $${MERGEINPUT} && \
+MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(3)) && \
 $(call gb_Helper_abbreviate_dirs,\
 	$(call gb_Executable_get_command,ulfex) -i $(2) -o $(1) -m $${MERGEINPUT} -l all) && \
 rm -rf $${MERGEINPUT}

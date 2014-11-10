@@ -79,8 +79,7 @@ $(call gb_Extension_get_workdir,%)/description.xml :
 else
 $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXDEPS)
 	$(call gb_Output_announce,$*/description.xml,$(true),XRM,3)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $(POFILES) > $${MERGEINPUT} && \
+	MERGEINPUT=$(call var2file,$(shell $(gb_MKTEMP)),100,$(POFILES)) && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_workdir,$*) && \
 		$(gb_Extension_XRMEXCOMMAND) \
