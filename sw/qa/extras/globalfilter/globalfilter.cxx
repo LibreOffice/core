@@ -33,7 +33,7 @@ public:
 
 void Test::testSwappedOutImageExport()
 {
-    const OUString aFilterNames[] = {
+    const char* aFilterNames[] = {
         "writer8",
         "Rich Text Format",
         "MS Word 97",
@@ -53,14 +53,11 @@ void Test::testSwappedOutImageExport()
             mxComponent->dispose();
         mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ")
-                                       + OUStringToOString(aFilterNames[nFilter], RTL_TEXTENCODING_ASCII_US);
-
         // Export the document and import again for a check
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
 
         utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= aFilterNames[nFilter];
+        aMediaDescriptor["FilterName"] <<= OUString::createFromAscii(aFilterNames[nFilter]);
 
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
@@ -72,6 +69,8 @@ void Test::testSwappedOutImageExport()
         // Check whether graphic exported well after it was swapped out
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+
+        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
 
         // First image

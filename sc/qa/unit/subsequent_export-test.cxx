@@ -2265,7 +2265,7 @@ void ScExportTest::testFunctionsExcel2010ODS()
 
 void ScExportTest::testSwappedOutImageExport()
 {
-    const OUString aFilterNames[] = {
+    const char* aFilterNames[] = {
         "calc8",
         "MS Excel 97",
         "Calc Office Open XML",
@@ -2282,8 +2282,7 @@ void ScExportTest::testSwappedOutImageExport()
         // Check whether the export code swaps in the image which was swapped out before.
         ScDocShellRef xDocSh = loadDoc("document_with_two_images.", ODS);
 
-        const OString sFailedMessage = OString("Failed on filter: ")
-                                       + OUStringToOString(aFilterNames[nFilter], RTL_TEXTENCODING_ASCII_US);
+        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
         CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.Is());
 
         // Export the document and import again for a check
