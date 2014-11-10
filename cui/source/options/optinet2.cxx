@@ -562,7 +562,7 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
     aPt = OutputToScreenPixel( aItemRect.BottomRight() );
     aItemRect.Right()  = aPt.X();
     aItemRect.Bottom() = aPt.Y();
-    if( rHEvt.GetMode() == HELPMODE_BALLOON )
+    if( rHEvt.GetMode() == HelpEventMode::BALLOON )
         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText);
     else
         Help::ShowQuickHelp( this, aItemRect, aHelpText );

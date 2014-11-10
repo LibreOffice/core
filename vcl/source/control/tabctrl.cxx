@@ -1348,7 +1348,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
 
     if ( nItemId )
     {
-        if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+        if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
         {
             OUString aStr = GetHelpText( nItemId );
             if ( !aStr.isEmpty() )
@@ -1364,7 +1364,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
                 return;
             }
         }
-        else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
+        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
         {
             OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
@@ -1378,7 +1378,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
         }
 
         // for Quick or Ballon Help, we show the text, if it is cut
-        if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
+        if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
         {
             ImplTabItem* pItem = ImplGetItem( nItemId );
             const OUString& rStr = pItem->maText;
@@ -1393,7 +1393,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
                 aItemRect.Bottom() = aPt.Y();
                 if ( !rStr.isEmpty() )
                 {
-                    if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+                    if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, rStr );
                     else
                         Help::ShowQuickHelp( this, aItemRect, rStr );
@@ -1402,7 +1402,7 @@ void TabControl::RequestHelp( const HelpEvent& rHEvt )
             }
         }
 
-        if ( rHEvt.GetMode() & HELPMODE_QUICK )
+        if ( rHEvt.GetMode() & HelpEventMode::QUICK )
         {
             ImplTabItem* pItem = ImplGetItem( nItemId );
             const OUString& rHelpText = pItem->maHelpText;

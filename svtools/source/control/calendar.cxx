@@ -1661,7 +1661,7 @@ void Calendar::Resize()
 
 void Calendar::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
+    if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
     {
         Date aDate = maCurDate;
         if ( GetDate( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ), aDate ) )
@@ -1674,7 +1674,7 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
             aDateRect.Right()  = aPt.X();
             aDateRect.Bottom() = aPt.Y();
 
-            if ( rHEvt.GetMode() & HELPMODE_QUICK )
+            if ( rHEvt.GetMode() & HelpEventMode::QUICK )
             {
                 maCalendarWrapper.setGregorianDateTime( aDate);
                 sal_uInt16      nWeek = (sal_uInt16) maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);

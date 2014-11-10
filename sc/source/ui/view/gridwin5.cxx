@@ -247,7 +247,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     //Global string STR_CLICKHYPERLINK i.e, "click to open hyperlink"
     OUString aClickHlinkStr = ScGlobal::GetRscString( STR_CLICKHYPERLINK );
     bool bDone = false;
-    bool bHelpEnabled = ( rHEvt.GetMode() & ( HELPMODE_BALLOON | HELPMODE_QUICK ) ) != 0;
+    bool bHelpEnabled = bool(rHEvt.GetMode() & ( HelpEventMode::BALLOON | HelpEventMode::QUICK ));
     SdrView* pDrView = pViewData->GetScDrawView();
     bool bDrawTextEdit = false;
     if (pDrView)
@@ -399,9 +399,9 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             Rectangle aScreenRect(OutputToScreenPixel(aPixRect.TopLeft()),
                                     OutputToScreenPixel(aPixRect.BottomRight()));
 
-            if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+            if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                 Help::ShowBalloon(this,rHEvt.GetMousePosPixel(), aScreenRect, aHelpText);
-            else if ( rHEvt.GetMode() & HELPMODE_QUICK )
+            else if ( rHEvt.GetMode() & HelpEventMode::QUICK )
                 Help::ShowQuickHelp(this,aScreenRect, aHelpText);
 
             bDone = true;

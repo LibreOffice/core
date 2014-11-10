@@ -103,7 +103,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
             nId = pItemData->nId;
     }
 
-    if ( ( rHEvt.GetMode() & HELPMODE_BALLOON ) && pMenuWindow )
+    if ( ( rHEvt.GetMode() & HelpEventMode::BALLOON ) && pMenuWindow )
     {
         Point aPos;
         if( rHEvt.KeyboardActivated() )
@@ -124,7 +124,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
         }
         bDone = true;
     }
-    else if ( ( rHEvt.GetMode() & HELPMODE_QUICK ) && pMenuWindow )
+    else if ( ( rHEvt.GetMode() &HelpEventMode::QUICK ) && pMenuWindow )
     {
         Point aPos = rHEvt.GetMousePosPixel();
         Rectangle aRect( aPos, Size() );
@@ -135,7 +135,7 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu* pMenu, sal_
         ImplChangeTipTimeout( oldTimeout, pMenuWindow );
         bDone = true;
     }
-    else if ( rHEvt.GetMode() & (HELPMODE_CONTEXT | HELPMODE_EXTENDED) )
+    else if ( rHEvt.GetMode() & (HelpEventMode::CONTEXT | HelpEventMode::EXTENDED) )
     {
         // is help in the application selected
         Help* pHelp = Application::GetHelp();

@@ -244,44 +244,51 @@ public:
 
 // - HelpEvent -
 
-
-#define HELPMODE_CONTEXT        ((sal_uInt16)0x0001)
-#define HELPMODE_EXTENDED       ((sal_uInt16)0x0002)
-#define HELPMODE_BALLOON        ((sal_uInt16)0x0004)
-#define HELPMODE_QUICK          ((sal_uInt16)0x0008)
+enum class HelpEventMode
+{
+    NONE           = 0x0000,
+    CONTEXT        = 0x0001,
+    EXTENDED       = 0x0002,
+    BALLOON        = 0x0004,
+    QUICK          = 0x0008
+};
+namespace o3tl
+{
+    template<> struct typed_flags<HelpEventMode> : is_typed_flags<HelpEventMode, 0x0f> {};
+}
 
 class VCL_DLLPUBLIC HelpEvent
 {
 private:
     Point           maPos;
-    sal_uInt16      mnMode;
+    HelpEventMode   mnMode;
     bool            mbKeyboardActivated;
 
 public:
     explicit        HelpEvent();
-    explicit        HelpEvent( sal_uInt16 nHelpMode );
-    explicit        HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode );
+    explicit        HelpEvent( HelpEventMode nHelpMode );
+    explicit        HelpEvent( const Point& rMousePos, HelpEventMode nHelpMode );
 
     const Point&    GetMousePosPixel() const { return maPos; }
-    sal_uInt16      GetMode() const { return mnMode; }
+    HelpEventMode   GetMode() const { return mnMode; }
     bool            KeyboardActivated() const { return mbKeyboardActivated; }
     void            SetKeyboardActivated( bool bKeyboard ) { mbKeyboardActivated = bKeyboard; }
 };
 
 inline HelpEvent::HelpEvent()
 {
-    mnMode  = HELPMODE_CONTEXT;
+    mnMode  = HelpEventMode::CONTEXT;
     mbKeyboardActivated = true;
 }
 
-inline HelpEvent::HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode ) :
+inline HelpEvent::HelpEvent( const Point& rMousePos, HelpEventMode nHelpMode ) :
             maPos( rMousePos )
 {
     mnMode  = nHelpMode;
     mbKeyboardActivated = false;
 }
 
-inline HelpEvent::HelpEvent( sal_uInt16 nHelpMode )
+inline HelpEvent::HelpEvent( HelpEventMode nHelpMode )
 {
     mnMode  = nHelpMode;
     mbKeyboardActivated = true;
@@ -296,8 +303,8 @@ class VCL_DLLPUBLIC UserDrawEvent
 private:
     OutputDevice*       mpOutDev;
     Rectangle           maOutRect;
-    sal_uInt16              mnItemId;
-    sal_uInt16              mnStyle;
+    sal_uInt16          mnItemId;
+    sal_uInt16          mnStyle;
 
 public:
                         UserDrawEvent();

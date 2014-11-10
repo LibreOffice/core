@@ -3628,7 +3628,7 @@ sal_uLong SvxIconChoiceCtrl_Impl::GetPredecessorGrid( const Point& rPos) const
 
 bool SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( !(rHEvt.GetMode() & HELPMODE_QUICK ) )
+    if ( !(rHEvt.GetMode() & HelpEventMode::QUICK ) )
         return false;
 
     Point aPos( pView->ScreenToOutputPixel(rHEvt.GetMousePosPixel() ) );

@@ -1176,7 +1176,7 @@ namespace svt
             return;
 
         const OUString sItemText( rItem.pPanel->GetDisplayName() );
-        if ( i_rHelpEvent.GetMode() == HELPMODE_BALLOON )
+        if ( i_rHelpEvent.GetMode() == HelpEventMode::BALLOON )
             Help::ShowBalloon( this, OutputToScreenPixel( rItem.GetCurrentRect().Center() ), rItem.GetCurrentRect(), sItemText );
         else
             Help::ShowQuickHelp( this, rItem.GetCurrentRect(), sItemText );

@@ -1917,7 +1917,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
 {
     // if Balloon-Help is requested, show the balloon
     // with help text set
-    if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+    if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
     {
         OUString rStr = GetHelpText();
         if ( rStr.isEmpty() )
@@ -1927,7 +1927,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
         else
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), rStr );
     }
-    else if ( rHEvt.GetMode() & HELPMODE_QUICK )
+    else if ( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         const OUString& rStr = GetQuickHelpText();
         if ( rStr.isEmpty() && ImplGetParent() && !ImplIsOverlapWindow() )

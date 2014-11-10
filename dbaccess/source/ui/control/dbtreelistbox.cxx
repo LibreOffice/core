@@ -283,7 +283,7 @@ void DBTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         return;
     }
 
-    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );

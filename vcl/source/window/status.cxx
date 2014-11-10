@@ -763,13 +763,13 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
         aItemRect.Right()  = aPt.X();
         aItemRect.Bottom() = aPt.Y();
 
-        if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+        if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
         {
             OUString aStr = GetHelpText( nItemId );
             Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
             return;
         }
-        else if ( rHEvt.GetMode() & HELPMODE_QUICK )
+        else if ( rHEvt.GetMode() & HelpEventMode::QUICK )
         {
             OUString aStr(GetQuickHelpText(nItemId));
             // show quickhelp if available
@@ -786,7 +786,7 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
                 return;
             }
         }
-        else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
+        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
         {
             OUString aCommand = GetItemCommand( nItemId );
             OString aHelpId( GetHelpId( nItemId ) );
