@@ -4801,18 +4801,8 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( vcl::Window *pWindow,
     uno::Reference< com::sun::star::embed::XStorage > xStorage(
         xStorageFactory->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
 
-    uno::Sequence< uno::Any > aProp( 2 );
-    beans::PropertyValue aPropValue;
-
-    aPropValue.Name = "UserConfigStorage";
-    aPropValue.Value <<= xStorage;
-    aProp[ 0 ] <<= aPropValue;
-
-    aPropValue.Name = "OpenMode";
-    aPropValue.Value <<= com::sun::star::embed::ElementModes::READWRITE;
-    aProp[ 1 ] <<= aPropValue;
-
-    m_xImportedImageManager = css::ui::ImageManager::create( xComponentContext );
+    m_xImportedImageManager = css::ui::ImageManager::createWithStorageAndOpenMode( xComponentContext, xStorage,
+                                  com::sun::star::embed::ElementModes::READWRITE );
 
     ImageInfo mImageInfo;
     uno::Sequence< OUString > names;

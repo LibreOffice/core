@@ -709,37 +709,46 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 
     if ( !m_bInitialized )
     {
-        for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
+        long nOpenMode = 0;
+        // check for new-style constructor call
+        if (aArguments.getLength() == 2
+              && (aArguments[0] >>= m_xUserConfigStorage)
+              && (aArguments[1] >>= nOpenMode) )
         {
-            PropertyValue aPropValue;
-            if ( aArguments[n] >>= aPropValue )
+            m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
+        }
+        else
+        {
+            for ( sal_Int32 n = 0; n < aArguments.getLength(); n++ )
             {
-                if ( aPropValue.Name == "UserConfigStorage" )
+                PropertyValue aPropValue;
+                if ( aArguments[n] >>= aPropValue )
                 {
-                    aPropValue.Value >>= m_xUserConfigStorage;
+                    if ( aPropValue.Name == "UserConfigStorage" )
+                    {
+                        aPropValue.Value >>= m_xUserConfigStorage;
+                    }
+                    else if ( aPropValue.Name == "ModuleIdentifier" )
+                    {
+                        aPropValue.Value >>= m_aModuleIdentifier;
+                    }
+                    else if ( aPropValue.Name == "UserRootCommit" )
+                    {
+                        aPropValue.Value >>= m_xUserRootCommit;
+                    }
                 }
-                else if ( aPropValue.Name == "ModuleIdentifier" )
+            }
+
+            if ( m_xUserConfigStorage.is() )
+            {
+                uno::Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
+                if ( xPropSet.is() )
                 {
-                    aPropValue.Value >>= m_aModuleIdentifier;
-                }
-                else if ( aPropValue.Name == "UserRootCommit" )
-                {
-                    aPropValue.Value >>= m_xUserRootCommit;
+                    if ( xPropSet->getPropertyValue("OpenMode") >>= nOpenMode )
+                        m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
                 }
             }
         }
-
-        if ( m_xUserConfigStorage.is() )
-        {
-            uno::Reference< XPropertySet > xPropSet( m_xUserConfigStorage, UNO_QUERY );
-            if ( xPropSet.is() )
-            {
-                long nOpenMode = 0;
-                if ( xPropSet->getPropertyValue("OpenMode") >>= nOpenMode )
-                    m_bReadOnly = !( nOpenMode & ElementModes::WRITE );
-            }
-        }
-
         implts_initialize();
 
         m_bInitialized = true;

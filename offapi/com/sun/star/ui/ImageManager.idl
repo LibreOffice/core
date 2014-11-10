@@ -20,6 +20,7 @@
 #define __com_sun_star_ui_ImageManager_idl__
 
 #include <com/sun/star/ui/XImageManager.idl>
+#include <com/sun/star/embed/XStorage.idl>
 
 module com {  module sun {  module star {  module ui {
 
@@ -28,7 +29,16 @@ module com {  module sun {  module star {  module ui {
 
     @since LibreOffice 4.1
 */
-service ImageManager : XImageManager;
+service ImageManager : XImageManager
+{
+    /**
+        @param nOpenMode
+            a mode the stream should be open in,
+            can be a combination of ElementModes values
+    */
+    createWithStorageAndOpenMode([in] com::sun::star::embed::XStorage UserConfigStorage, [in] long nOpenMode);
+};
+
 
 }; }; }; }; // com.sun.star.ui
 
