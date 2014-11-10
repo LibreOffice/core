@@ -55,8 +55,16 @@ void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScT
 void ScTable::CopyOneCellFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
+    ScRange aSrcRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
+    SCCOL nSrcColSize = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
+
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        aCol[nCol].CopyOneCellFromClip(rCxt, nRow1, nRow2);
+    {
+        SCCOL nColOffset = nCol - nCol1;
+        nColOffset = nColOffset % nSrcColSize;
+        assert(nColOffset >= 0);
+        aCol[nCol].CopyOneCellFromClip(rCxt, nRow1, nRow2, nColOffset);
+    }
 }
 
 void ScTable::SetValues( SCCOL nCol, SCROW nRow, const std::vector<double>& rVals )

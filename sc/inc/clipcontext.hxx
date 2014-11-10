@@ -54,10 +54,12 @@ class CopyFromClipContext : public ClipContextBase
     ScDocument* mpClipDoc;
     InsertDeleteFlags mnInsertFlag;
     InsertDeleteFlags mnDeleteFlag;
-    ScCellValue maSingleCell;
+
+    std::vector<ScCellValue> maSingleCells;
+    std::vector<const ScPatternAttr*> maSinglePatterns;
+    std::vector<const ScPostIt*> maSingleNotes;
+
     ScConditionalFormatList* mpCondFormatList;
-    const ScPatternAttr* mpSinglePattern;
-    const ScPostIt* mpSingleNote;
     bool mbAsLink:1;
     bool mbSkipAttrForEmptyCells:1;
     bool mbCloneNotes:1;
@@ -96,16 +98,23 @@ public:
     void setDeleteFlag( InsertDeleteFlags nFlag );
     InsertDeleteFlags getDeleteFlag() const;
 
-    ScCellValue& getSingleCell();
+    /**
+     * Set the column size of a "single cell" row, which is used when copying
+     * a single row of cells in a clip doc and pasting it into multiple
+     * rows by replicating it.
+     */
+    void setSingleCellColumnSize( size_t nSize );
+
+    ScCellValue& getSingleCell( size_t nColOffset );
+
+    const ScPatternAttr* getSingleCellPattern( size_t nColOffset ) const;
+    void setSingleCellPattern( size_t nColOffset, const ScPatternAttr* pAttr );
+
+    const ScPostIt* getSingleCellNote( size_t nColOffset ) const;
+    void setSingleCellNote( size_t nColOffset, const ScPostIt* pNote );
 
     void setCondFormatList( ScConditionalFormatList* pCondFormatList );
     ScConditionalFormatList* getCondFormatList();
-
-    const ScPatternAttr* getSingleCellPattern() const;
-    void setSingleCellPattern( const ScPatternAttr* pAttr );
-
-    const ScPostIt* getSingleCellNote() const;
-    void setSingleCellNote( const ScPostIt* pNote );
 
     void setTableProtected( bool b );
     bool isTableProtected() const;

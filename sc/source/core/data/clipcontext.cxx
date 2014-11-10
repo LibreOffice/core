@@ -36,7 +36,7 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     mnTabStart(-1), mnTabEnd(-1),
     mpRefUndoDoc(pRefUndoDoc), mpClipDoc(pClipDoc),
     mnInsertFlag(nInsertFlag), mnDeleteFlag(IDF_NONE),
-    mpCondFormatList(NULL), mpSinglePattern(NULL), mpSingleNote(NULL),
+    mpCondFormatList(NULL),
     mbAsLink(bAsLink), mbSkipAttrForEmptyCells(bSkipAttrForEmptyCells),
     mbCloneNotes (mnInsertFlag & (IDF_NOTE|IDF_ADDNOTES)),
     mbTableProtected(false)
@@ -106,9 +106,41 @@ InsertDeleteFlags CopyFromClipContext::getDeleteFlag() const
     return mnDeleteFlag;
 }
 
-ScCellValue& CopyFromClipContext::getSingleCell()
+void CopyFromClipContext::setSingleCellColumnSize( size_t nSize )
 {
-    return maSingleCell;
+    maSingleCells.resize(nSize);
+    maSinglePatterns.resize(nSize, NULL);
+    maSingleNotes.resize(nSize, NULL);
+}
+
+ScCellValue& CopyFromClipContext::getSingleCell( size_t nColOffset )
+{
+    assert(nColOffset < maSingleCells.size());
+    return maSingleCells[nColOffset];
+}
+
+const ScPatternAttr* CopyFromClipContext::getSingleCellPattern( size_t nColOffset ) const
+{
+    assert(nColOffset < maSinglePatterns.size());
+    return maSinglePatterns[nColOffset];
+}
+
+void CopyFromClipContext::setSingleCellPattern( size_t nColOffset, const ScPatternAttr* pAttr )
+{
+    assert(nColOffset < maSinglePatterns.size());
+    maSinglePatterns[nColOffset] = pAttr;
+}
+
+const ScPostIt* CopyFromClipContext::getSingleCellNote( size_t nColOffset ) const
+{
+    assert(nColOffset < maSingleNotes.size());
+    return maSingleNotes[nColOffset];
+}
+
+void CopyFromClipContext::setSingleCellNote( size_t nColOffset, const ScPostIt* pNote )
+{
+    assert(nColOffset < maSingleNotes.size());
+    maSingleNotes[nColOffset] = pNote;
 }
 
 void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondFormatList )
@@ -119,26 +151,6 @@ void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondForma
 ScConditionalFormatList* CopyFromClipContext::getCondFormatList()
 {
     return mpCondFormatList;
-}
-
-const ScPatternAttr* CopyFromClipContext::getSingleCellPattern() const
-{
-    return mpSinglePattern;
-}
-
-void CopyFromClipContext::setSingleCellPattern( const ScPatternAttr* pAttr )
-{
-    mpSinglePattern = pAttr;
-}
-
-const ScPostIt* CopyFromClipContext::getSingleCellNote() const
-{
-    return mpSingleNote;
-}
-
-void CopyFromClipContext::setSingleCellNote( const ScPostIt* pNote )
-{
-    mpSingleNote = pNote;
 }
 
 void CopyFromClipContext::setTableProtected( bool b )
