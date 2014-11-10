@@ -753,7 +753,7 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygonBezier(
             const SalPoint* const* /*pPtAry*/,
             const sal_uInt8* const* /*pFlgAry*/ )
 {
-    return NULL;
+    return false;
 }
 
 // CopyArea --> No RasterOp, but ClipRegion
