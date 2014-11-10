@@ -539,7 +539,11 @@ private:
     SAL_DLLPRIVATE void                 ImplInitWindowData( WindowType nType );
 
     SAL_DLLPRIVATE void                 getFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                                         OutputDevice& rOutDev );
+                                                     OutputDevice& rOutDev );
+
+
+    SAL_DLLPRIVATE void                 drawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
+                                                      const OutputDevice& rOutDev, const vcl::Region& rRegion );
 
     SAL_DLLPRIVATE void                 ImplSetFrameParent( const vcl::Window* pParent );
 
