@@ -3190,10 +3190,6 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([Clang $CLANG_FULL_VERSION, $CLANGVER])
         AC_DEFINE_UNQUOTED(CLANG_FULL_VERSION,$CLANG_FULL_VERSION)
     fi
-
-    # On Windows MSVC only supports C90 so force gnu89 (especially in clang) to
-    # to catch potential gnu89/C90 incompatibilities locally.
-    CFLAGS="$CFLAGS -std=gnu89"
 fi
 AC_SUBST(COM_GCC_IS_CLANG)
 
