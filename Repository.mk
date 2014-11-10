@@ -68,7 +68,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svpclient \
         pixelctl ) \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
-	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest) \
+	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest \
+	    outdevgrind) \
 	vcldemo \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
@@ -146,10 +147,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	ui-previewer \
-	$(if $(filter LINUX MACOSX WNT,$(OS)), \
-		icontest \
-	    outdevgrind) \
-	vcldemo \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
 	) \
