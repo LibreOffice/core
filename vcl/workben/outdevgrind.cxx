@@ -57,8 +57,8 @@ namespace
 class GrindApp : public Application
 {
 public:
-    virtual int Main();
-    virtual sal_uInt16 Exception( sal_uInt16 nError );
+    virtual int Main() SAL_OVERRIDE;
+    virtual sal_uInt16 Exception( sal_uInt16 nError ) SAL_OVERRIDE;
 };
 
 class TestWindow : public Dialog
@@ -73,7 +73,7 @@ class TestWindow : public Dialog
         }
 
         virtual ~TestWindow() {}
-        virtual void Paint( const Rectangle& rRect );
+        virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
 typedef boost::function1<void, OutputDevice*>   functor_type;
