@@ -379,7 +379,7 @@ bool SwCrsrShell::GotoTOXMarkBase()
         for( SwTOXBase* pTOX = aIter.First(); pTOX; pTOX = aIter.Next() )
         {
             if( pTOX->ISA( SwTOXBaseSection ) &&
-                0 != ( pSectFmt = ((SwTOXBaseSection*)pTOX)->GetFmt() ) &&
+                0 != ( pSectFmt = static_cast<SwTOXBaseSection*>(pTOX)->GetFmt() ) &&
                 0 != ( pSectNd = pSectFmt->GetSectionNode() ))
             {
                 SwNodeIndex aIdx( *pSectNd, 1 );
@@ -447,11 +447,11 @@ bool SwCrsrShell::GotoNxtPrvTblFormula( bool bNext, bool bOnlyErrors )
         for( n = 0; n < nMaxItems; ++n )
             if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem2(
                                         RES_BOXATR_FORMULA, n ) ) &&
-                0 != (pTBox = ((SwTblBoxFormula*)pItem)->GetTableBox() ) &&
+                0 != (pTBox = static_cast<const SwTblBoxFormula*>(pItem)->GetTableBox() ) &&
                 pTBox->GetSttNd() &&
                 pTBox->GetSttNd()->GetNodes().IsDocNodes() &&
                 ( !bOnlyErrors ||
-                  !((SwTblBoxFormula*)pItem)->HasValidBoxes() ) )
+                  !static_cast<const SwTblBoxFormula*>(pItem)->HasValidBoxes() ) )
             {
                 const SwCntntFrm* pCFrm;
                 SwNodeIndex aIdx( *pTBox->GetSttNd() );
@@ -519,7 +519,7 @@ bool SwCrsrShell::GotoNxtPrvTOXMark( bool bNext )
         for( n = 0; n < nMaxItems; ++n )
             if( 0 != (pItem = GetDoc()->GetAttrPool().GetItem2(
                                         RES_TXTATR_TOXMARK, n ) ) &&
-                0 != (pTxtTOX = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
+                0 != (pTxtTOX = static_cast<const SwTOXMark*>(pItem)->GetTxtTOXMark() ) &&
                 ( pTxtNd = &pTxtTOX->GetTxtNode())->GetNodes().IsDocNodes() &&
                 0 != ( pCFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, 0, false )) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
@@ -592,7 +592,7 @@ void lcl_MakeFldLst(
         pTxtFld = pFmtFld->GetTxtFld();
         if ( pTxtFld != NULL
              && ( !bChkInpFlag
-                  || ((SwSetExpField*)pTxtFld->GetFmtFld().GetField())->GetInputFlag() ) )
+                  || static_cast<const SwSetExpField*>(pTxtFld->GetFmtFld().GetField())->GetInputFlag() ) )
         {
             const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
             const SwCntntFrm* pCFrm =
@@ -710,7 +710,7 @@ bool SwCrsrShell::MoveFldType(
         {
             // create dummy for the search
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
-                (SwDateTimeFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_DATETIMEFLD ) ) );
+                static_cast<SwDateTimeFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_DATETIMEFLD ) ) ) );
 
             pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
                         mpDoc->IsClipBoard() );
@@ -730,7 +730,7 @@ bool SwCrsrShell::MoveFldType(
 
         if( bDelFld )
         {
-            delete (SwFmtFld*)&pTxtFld->GetAttr();
+            delete static_cast<SwFmtFld*>(&pTxtFld->GetAttr());
             delete pTxtFld;
         }
 
@@ -852,7 +852,7 @@ SwField* SwCrsrShell::GetCurFld( const bool bIncludeInputFldAtStart ) const
     {
         // TabellenFormel ? wandel internen in externen Namen um
         const SwTableNode* pTblNd = IsCrsrInTbl();
-        ((SwTblField*)pCurFld)->PtrToBoxNm( pTblNd ? &pTblNd->GetTable() : 0 );
+        static_cast<SwTblField*>(pCurFld)->PtrToBoxNm( pTblNd ? &pTblNd->GetTable() : 0 );
     }
 
     return pCurFld;
@@ -967,7 +967,7 @@ bool SwCrsrShell::GotoNextOutline()
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *pCrsr );
     pCrsr->GetPoint()->nNode = *pNd;
-    pCrsr->GetPoint()->nContent.Assign( (SwTxtNode*)pNd, 0 );
+    pCrsr->GetPoint()->nContent.Assign( static_cast<SwTxtNode*>(pNd), 0 );
 
     bool bRet = !pCrsr->IsSelOvr();
     if( bRet )
@@ -998,7 +998,7 @@ bool SwCrsrShell::GotoPrevOutline()
         SwCallLink aLk( *this ); // watch Crsr-Moves
         SwCrsrSaveState aSaveState( *pCrsr );
         pCrsr->GetPoint()->nNode = *pNd;
-        pCrsr->GetPoint()->nContent.Assign( (SwTxtNode*)pNd, 0 );
+        pCrsr->GetPoint()->nContent.Assign( static_cast<SwTxtNode*>(pNd), 0 );
 
         bRet = !pCrsr->IsSelOvr();
         if( bRet )
@@ -1022,7 +1022,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
-        if( ((SwTxtNode*)pNd)->GetAttrOutlineLevel()-1 <= nLevel )
+        if( static_cast<SwTxtNode*>(pNd)->GetAttrOutlineLevel()-1 <= nLevel )
             return nPos;
 
     }
@@ -1261,13 +1261,13 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                                 UpdateCrsr();
                         }
                         else if( RES_TABLEFLD == pFld->Which() &&
-                            ((SwTblField*)pFld)->IsIntrnlName() )
+                            static_cast<const SwTblField*>(pFld)->IsIntrnlName() )
                         {
                             // create from internal (for CORE) the external
                             // (for UI) formula
                             const SwTableNode* pTblNd = pTxtNd->FindTableNode();
                             if( pTblNd )        // steht in einer Tabelle
-                                ((SwTblField*)pFld)->PtrToBoxNm( &pTblNd->GetTable() );
+                                const_cast<SwTblField*>(static_cast<const SwTblField*>(pFld))->PtrToBoxNm( &pTblNd->GetTable() );
                         }
                     }
 
@@ -1314,7 +1314,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         {
                             SwCallLink aLk( *this ); // watch Crsr-Moves
                             SwCrsrSaveState aSaveState( *m_pCurCrsr );
-                            m_pCurCrsr->GetPoint()->nNode = *((SwTxtFtn*)pTxtAttr)->GetStartNode();
+                            m_pCurCrsr->GetPoint()->nNode = *static_cast<SwTxtFtn*>(pTxtAttr)->GetStartNode();
                             SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection(
                                 &m_pCurCrsr->GetPoint()->nNode,
                                 true, !IsReadOnlyAvailable() );
@@ -1493,7 +1493,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     if( pF )
                     {
                         // then the CellFrame
-                        pFrm = (SwCntntFrm*)pF;
+                        pFrm = static_cast<SwCntntFrm*>(pF);
                         while( pF && !pF->IsCellFrm() )
                             pF = pF->GetUpper();
                     }
@@ -1516,7 +1516,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXVALUE;
                         else
 #endif
-                            ((SwTblBoxFormula*)pItem)->PtrToBoxNm( &pTblNd->GetTable() );
+                            const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->PtrToBoxNm( &pTblNd->GetTable() );
 
                         bRet = true;
                         if( bSetCrsr )
@@ -1675,7 +1675,7 @@ bool SwContentAtPos::IsInProtectSect() const
             break;
 
         case SW_FTN:
-            pNd = &((SwTxtFtn*)pFndTxtAttr)->GetTxtNode();
+            pNd = &static_cast<const SwTxtFtn*>(pFndTxtAttr)->GetTxtNode();
             break;
 
         case SW_INETATTR:
@@ -1911,14 +1911,14 @@ bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                                     RES_LR_SPACE, RES_LR_SPACE,
                                     RES_PARATR_ADJUST, RES_PARATR_ADJUST,
                                     0 );
-                    SvxLRSpaceItem aLR( (SvxLRSpaceItem&)
-                                        pCNd->GetAttr( RES_LR_SPACE ) );
+                    SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(
+                                        pCNd->GetAttr( RES_LR_SPACE ) ) );
                     aLR.SetTxtLeft( aFPos.nTabCnt );
                     aLR.SetTxtFirstLineOfst( 0 );
                     aSet.Put( aLR );
 
-                    const SvxAdjustItem& rAdj = (SvxAdjustItem&)pCNd->
-                                        GetAttr( RES_PARATR_ADJUST );
+                    const SvxAdjustItem& rAdj = static_cast<const SvxAdjustItem&>(pCNd->
+                                        GetAttr( RES_PARATR_ADJUST ));
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
 
@@ -2101,7 +2101,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
                     // Check for overlaps. These can happen when FmtColl-
                     // Redlines were streched over a whole paragraph
                     SwPaM* pCur = m_pCurCrsr;
-                    SwPaM* pNextPam = (SwPaM*)pCur->GetNext();
+                    SwPaM* pNextPam = static_cast<SwPaM*>(pCur->GetNext());
                     SwPosition* pCStt = pCur->Start(), *pCEnd = pCur->End();
                     while( pCur != pNextPam )
                     {
@@ -2149,11 +2149,11 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
                         if( bDel )
                         {
                             // not needed anymore
-                            SwPaM* pPrevPam = (SwPaM*)pNextPam->GetPrev();
+                            SwPaM* pPrevPam = static_cast<SwPaM*>(pNextPam->GetPrev());
                             delete pNextPam;
                             pNextPam = pPrevPam;
                         }
-                        pNextPam = (SwPaM*)pNextPam->GetNext();
+                        pNextPam = static_cast<SwPaM*>(pNextPam->GetNext());
                     }
                 }
 
@@ -2243,7 +2243,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         const SwFrmFmts* pFmts = GetDoc()->GetSpzFrmFmts();
         for( sal_uInt16 n = 0, nEnd = pFmts->size(); n < nEnd; ++n )
         {
-            SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)(*pFmts)[ n ];
+            SwFlyFrmFmt* pFmt = static_cast<SwFlyFrmFmt*>((*pFmts)[ n ]);
             const SwFmtURL& rURLItem = pFmt->GetURL();
             if( rURLItem.GetMap() || !rURLItem.GetURL().isEmpty() )
             {
@@ -2295,7 +2295,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
             const SdrObject* pSObj = pFndFmt->FindSdrObject();
             if (pSObj)
             {
-                ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
+                static_cast<SwFEShell*>(this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
                 MakeSelVisible();
                 bRet = true;
             }
@@ -2305,7 +2305,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
             SwFlyFrm* pFly = pFndFmt->GetFrm(&aPt, false );
             if( pFly )
             {
-                ((SwFEShell*)this)->SelectFlyFrm( *pFly, true );
+                static_cast<SwFEShell*>(this)->SelectFlyFrm( *pFly, true );
                 MakeSelVisible();
                 bRet = true;
             }

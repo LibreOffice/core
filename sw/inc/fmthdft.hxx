@@ -23,8 +23,8 @@
 #include <format.hxx>
 #include <svl/poolitem.hxx>
 #include <calbck.hxx>
+#include <frmfmt.hxx>
 
-class SwFrmFmt;
 class IntlWrapper;
 class SwFmt;
 

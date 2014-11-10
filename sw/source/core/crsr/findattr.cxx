@@ -57,16 +57,16 @@ bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
     switch( rItem1.Which() )
     {
     case RES_CHRATR_FONT:
-        return ((SvxFontItem&)rItem1).GetFamilyName() ==
-                ((SvxFontItem&)rItem2).GetFamilyName();
+        return static_cast<const SvxFontItem&>(rItem1).GetFamilyName() ==
+                static_cast<const SvxFontItem&>(rItem2).GetFamilyName();
 
     case RES_CHRATR_COLOR:
-        return ((SvxColorItem&)rItem1).GetValue().IsRGBEqual(
-                                ((SvxColorItem&)rItem2).GetValue() );
+        return static_cast<const SvxColorItem&>(rItem1).GetValue().IsRGBEqual(
+                                static_cast<const SvxColorItem&>(rItem2).GetValue() );
     case RES_PAGEDESC:
         bool bNumOffsetEqual = false;
-        ::boost::optional<sal_uInt16> oNumOffset1 = ((SwFmtPageDesc&)rItem1).GetNumOffset();
-        ::boost::optional<sal_uInt16> oNumOffset2 = ((SwFmtPageDesc&)rItem1).GetNumOffset();
+        ::boost::optional<sal_uInt16> oNumOffset1 = static_cast<const SwFmtPageDesc&>(rItem1).GetNumOffset();
+        ::boost::optional<sal_uInt16> oNumOffset2 = static_cast<const SwFmtPageDesc&>(rItem1).GetNumOffset();
         if (!oNumOffset1 && !oNumOffset2)
         {
             bNumOffsetEqual = true;
@@ -83,7 +83,7 @@ bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
         if (bNumOffsetEqual == false)
             return false;
 
-        return ((SwFmtPageDesc&)rItem1).GetPageDesc() == ((SwFmtPageDesc&)rItem2).GetPageDesc();
+        return static_cast<const SwFmtPageDesc&>(rItem1).GetPageDesc() == static_cast<const SwFmtPageDesc&>(rItem2).GetPageDesc();
     }
     return rItem1 == rItem2;
 }
@@ -915,8 +915,8 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
             if( !pNode->IsTxtNode() ) // CharAttr are only in text nodes
                 continue;
 
-            if( ((SwTxtNode*)pNode)->HasHints() &&
-                lcl_Search( *(SwTxtNode*)pNode, *pPam, rAttr, fnMove,  bValue ))
+            if( static_cast<SwTxtNode*>(pNode)->HasHints() &&
+                lcl_Search( *static_cast<SwTxtNode*>(pNode), *pPam, rAttr, fnMove,  bValue ))
             {
                 // set to the values of the attribute
                 SetMark();
@@ -1005,7 +1005,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
 
             if( (!aOtherSet.Count() ||
                 lcl_Search( *pNode, aOtherSet, bNoColls )) &&
-                (*fnSearch)( *(SwTxtNode*)pNode, aCmpArr, *pPam ))
+                (*fnSearch)( *static_cast<SwTxtNode*>(pNode), aCmpArr, *pPam ))
             {
                 // set to the values of the attribute
                 SetMark();

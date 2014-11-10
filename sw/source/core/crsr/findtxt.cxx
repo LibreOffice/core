@@ -253,7 +253,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             // if there are SwPostItFields inside our current node text, we
             // split the text into separate pieces and search for text inside
             // the pieces as well as inside the fields
-            const SwpHints *pHts = ((SwTxtNode*)pNode)->GetpSwpHints();
+            const SwpHints *pHts = static_cast<SwTxtNode*>(pNode)->GetpSwpHints();
 
             // count PostItFields by looping over all fields
             sal_Int32 aNumberPostits = 0;
@@ -446,7 +446,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             if ( nSearchScript == nCurrScript )
             {
                 const LanguageType eCurrLang =
-                        ((SwTxtNode*)pNode)->GetLang( bSrchForward ?
+                        static_cast<SwTxtNode*>(pNode)->GetLang( bSrchForward ?
                                                       nStart :
                                                       nEnd );
 

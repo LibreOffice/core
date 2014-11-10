@@ -82,7 +82,7 @@ public:
     {}
 
     sal_uInt16 GetLanguage() const
-        { return ((SvxLanguageItem&)GetAttr()).GetValue(); }
+        { return static_cast<const SvxLanguageItem&>(GetAttr()).GetValue(); }
 };
 
 #endif

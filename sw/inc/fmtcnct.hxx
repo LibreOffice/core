@@ -23,8 +23,8 @@
 #include <svl/poolitem.hxx>
 #include <format.hxx>
 #include <calbck.hxx>
+#include <frmfmt.hxx>
 
-class SwFlyFrmFmt;
 class IntlWrapper;
 
 /// Connection (text flow) between two FlyFrms.

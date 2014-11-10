@@ -272,14 +272,14 @@ bool CheckNodesRange( const SwNodeIndex& rStt,
 bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsCntntNode() )
-        return ((SwCntntNode*)pNd)->GoNext( pIdx, nMode );
+        return static_cast<SwCntntNode*>(pNd)->GoNext( pIdx, nMode );
     return false;
 }
 
 bool GoPrevious( SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode )
 {
     if( pNd->IsCntntNode() )
-        return ((SwCntntNode*)pNd)->GoPrevious( pIdx, nMode );
+        return static_cast<SwCntntNode*>(pNd)->GoPrevious( pIdx, nMode );
     return false;
 }
 
@@ -760,7 +760,7 @@ SwCntntNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
                     (
                         0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
                         ( !bInReadOnly && pFrm->IsProtected() ) ||
-                        (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow())
+                        (pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsHiddenNow())
                     ) ||
                     ( !bInReadOnly && pNd->FindSectionNode() &&
                         pNd->FindSectionNode()->GetSection().IsProtect()
@@ -794,7 +794,7 @@ SwCntntNode* GetNode( SwPaM & rPam, bool& rbFirst, SwMoveFn fnMove,
                         if( 0 == ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ) ||
                             ( !bInReadOnly && pFrm->IsProtected() ) ||
                             ( pFrm->IsTxtFrm() &&
-                                ((SwTxtFrm*)pFrm)->IsHiddenNow() ) )
+                                static_cast<SwTxtFrm*>(pFrm)->IsHiddenNow() ) )
                         {
                             pNd = 0;
                             continue;
