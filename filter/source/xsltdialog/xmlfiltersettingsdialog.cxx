@@ -1337,23 +1337,36 @@ OUString getApplicationUIName( const OUString& rServiceName )
 }
 
 SvxPathControl::SvxPathControl(vcl::Window* pParent)
-    : VclVBox(pParent)
+    : Window(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL | WB_BORDER)
     , bHasBeenShown(false)
 {
-    m_pHeaderBar = new HeaderBar(this, WB_BOTTOMBORDER);
+    m_pVBox = new VclVBox(this);
+
+    m_pHeaderBar = new HeaderBar(m_pVBox, WB_BOTTOMBORDER);
     m_pHeaderBar->set_height_request(GetTextHeight() + 6);
 
-    m_pFocusCtrl = new XMLFilterListBox(this);
+    m_pFocusCtrl = new XMLFilterListBox(m_pVBox, this);
     m_pFocusCtrl->set_fill(true);
     m_pFocusCtrl->set_expand(true);
+
+    m_pVBox->set_hexpand(true);
+    m_pVBox->set_vexpand(true);
+    m_pVBox->set_expand(true);
+    m_pVBox->set_fill(true);
+    m_pVBox->Show();
 }
 
 #define ITEMID_NAME     1
 #define ITEMID_TYPE     2
 
-void SvxPathControl::setAllocation(const Size &rAllocation)
+void SvxPathControl::Resize()
 {
-    VclVBox::setAllocation(rAllocation);
+    Window::Resize();
+
+    if (!m_pVBox)
+        return;
+
+    m_pVBox->SetSizePixel(GetSizePixel());
 
     if (!bHasBeenShown)
         bHasBeenShown = IsReallyShown();
@@ -1362,12 +1375,22 @@ void SvxPathControl::setAllocation(const Size &rAllocation)
     {
         std::vector<long> aWidths;
         m_pFocusCtrl->getPreferredDimensions(aWidths);
+        if (aWidths.empty())
+        {
+            bHasBeenShown = false;
+            return;
+        }
         long nFirstColumnWidth = aWidths[1];
         m_pHeaderBar->SetItemSize(ITEMID_NAME, nFirstColumnWidth);
         m_pHeaderBar->SetItemSize(ITEMID_TYPE, 0xFFFF);
         long nTabs[] = {2, 0, nFirstColumnWidth};
         m_pFocusCtrl->SetTabs(&nTabs[0], MAP_PIXEL);
     }
+}
+
+Size SvxPathControl::GetOptimalSize() const
+{
+    return m_pVBox->GetOptimalSize();
 }
 
 SvxPathControl::~SvxPathControl()
@@ -1383,7 +1406,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPathControl(vcl::Wi
 
 bool SvxPathControl::Notify(NotifyEvent& rNEvt)
 {
-    bool nRet = VclVBox::Notify(rNEvt);
+    bool nRet = Window::Notify(rNEvt);
 
     if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == EVENT_GETFOCUS )
         m_pFocusCtrl->GrabFocus();
@@ -1391,10 +1414,10 @@ bool SvxPathControl::Notify(NotifyEvent& rNEvt)
     return nRet;
 }
 
-XMLFilterListBox::XMLFilterListBox(SvxPathControl* pParent)
+XMLFilterListBox::XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl)
     : SvTabListBox(pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP)
     , mbFirstPaint(true)
-    , m_pHeaderBar(pParent->getHeaderBar())
+    , m_pHeaderBar(pPathControl->getHeaderBar())
 {
     Size aBoxSize( pParent->GetOutputSizePixel() );
 

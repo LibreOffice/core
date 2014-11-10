@@ -47,7 +47,7 @@ using namespace com::sun::star;
 class AutoFmtPreview : public vcl::Window
 {
 public:
-    AutoFmtPreview(vcl::Window* pParent);
+    AutoFmtPreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~AutoFmtPreview();
 
     void NotifyChange( const SwTableAutoFmt& rNewData );
@@ -486,8 +486,8 @@ IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
-AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent) :
-        Window          ( pParent ),
+AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent, WinBits nStyle) :
+        Window          ( pParent, nStyle ),
         aCurData        ( OUString() ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
@@ -508,9 +508,13 @@ AutoFmtPreview::AutoFmtPreview(vcl::Window* pParent) :
     Init();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAutoFmtPreview(vcl::Window *pParent, VclBuilder::stringmap &)
+extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeAutoFmtPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
 {
-    return new AutoFmtPreview(pParent);
+    WinBits nWinStyle = 0;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new AutoFmtPreview(pParent, nWinStyle);
 }
 
 void AutoFmtPreview::Resize()

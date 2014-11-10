@@ -32,19 +32,19 @@
 
 #include "xmlfiltercommon.hxx"
 
-
-
 class HeaderBar;
 class XMLFilterListBox;
 
-class SvxPathControl : public VclVBox
+class SvxPathControl : public vcl::Window
 {
 private:
     bool bHasBeenShown;
+    VclVBox* m_pVBox;
     HeaderBar* m_pHeaderBar;
     XMLFilterListBox* m_pFocusCtrl;
 protected:
-    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 public:
     SvxPathControl(vcl::Window* pParent);
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
@@ -53,8 +53,6 @@ public:
 
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
-
-
 
 class HeaderBar;
 
@@ -70,7 +68,7 @@ private:
     OUString getEntryString( const filter_info_impl* pInfo ) const;
 
 public:
-    XMLFilterListBox(SvxPathControl* pParent);
+    XMLFilterListBox(Window* pParent, SvxPathControl* pPathControl);
 
     /** adds a new filter info entry to the ui filter list */
     void addFilterEntry( const filter_info_impl* pInfo );
