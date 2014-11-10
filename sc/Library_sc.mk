@@ -88,7 +88,6 @@ $(eval $(call gb_Library_use_libraries,sc,\
     $(call gb_Helper_optional,SCRIPTING, \
         vbahelper) \
     vcl \
-	vclopengl \
     xo \
     $(gb_UWINAPI) \
 ))

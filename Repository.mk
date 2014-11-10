@@ -68,7 +68,8 @@ $(eval $(call gb_Helper_register_executables,NONE, \
         svpclient \
         pixelctl ) \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), tilebench) \
-	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest) \
+	$(if $(filter LINUX MACOSX WNT,$(OS)),icontest \
+	    outdevgrind) \
 	vcldemo \
 	tiledrendering \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
@@ -452,7 +453,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 	vcl \
 	vclcanvas \
-	vclopengl \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		vclplug_gen \
 		$(if $(ENABLE_TDE),vclplug_tde) \

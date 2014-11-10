@@ -2493,6 +2493,9 @@ glm::mat4 OpenGL3DRenderer::GetGlobalScaleMatrix()
 
 void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
 {
+    if (m_BarSurface[0].modelMatrixList.empty())
+        return;
+
     if(bNewScene)
     {
         GetBatchBarsInfo();

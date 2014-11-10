@@ -40,6 +40,7 @@ class FontSelectPattern;
 class ImplWinFontEntry;
 class ImplFontAttrCache;
 class PhysicalFontCollection;
+class SalGraphicsImpl;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
@@ -143,29 +144,28 @@ public:
 
 class WinSalGraphics : public SalGraphics
 {
+    friend class WinSalGraphicsImpl;
+    friend class ScopedFont;
 private:
+    boost::scoped_ptr<SalGraphicsImpl> mpImpl;
+
     HDC                     mhLocalDC;              // HDC
-
-public:
-    HDC getHDC() const { return mhLocalDC; }
-    void setHDC(HDC aNew) { mhLocalDC = aNew; }
-
-public:
+    bool                    mbPrinter : 1;          // is Printer
+    bool                    mbVirDev : 1;           // is VirDev
+    bool                    mbWindow : 1;           // is Window
+    bool                    mbScreen : 1;           // is Screen compatible
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
+
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
     float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
     float                   mfCurrentFontScale;
-    HPEN                    mhPen;              // Pen
-    HBRUSH                  mhBrush;            // Brush
     HRGN                    mhRegion;           // vcl::Region Handle
     HPEN                    mhDefPen;           // DefaultPen
     HBRUSH                  mhDefBrush;         // DefaultBrush
     HFONT                   mhDefFont;          // DefaultFont
     HPALETTE                mhDefPal;           // DefaultPalette
-    COLORREF                mnPenColor;         // PenColor
-    COLORREF                mnBrushColor;       // BrushColor
     COLORREF                mnTextColor;        // TextColor
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
@@ -178,26 +178,42 @@ public:
     sal_uIntPtr                 mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
 
-    /// bitfield
-    bool                    mbStockPen : 1;         // is Pen a stockpen
-    bool                    mbStockBrush : 1;       // is Brush a stcokbrush
-    bool                    mbPen : 1;              // is Pen (FALSE == NULL_PEN)
-    bool                    mbBrush : 1;            // is Brush (FALSE == NULL_BRUSH)
-    bool                    mbPrinter : 1;          // is Printer
-    bool                    mbVirDev : 1;           // is VirDev
-    bool                    mbWindow : 1;           // is Window
-    bool                    mbScreen : 1;           // is Screen compatible
-    bool                    mbXORMode : 1;          // _every_ output with RasterOp XOR
+public:
+    HDC getHDC() const { return mhLocalDC; }
+    void setHDC(HDC aNew) { mhLocalDC = aNew; }
 
-    // remember RGB values for SetLineColor/SetFillColor
-    SalColor                maLineColor;
-    SalColor                maFillColor;
+    HPALETTE getDefPal() const;
+    void setDefPal(HPALETTE hDefPal);
+
+    HRGN getRegion() const;
+
+    void InitGraphics();
+    void DeInitGraphics();
+
+    enum Type
+    {
+        PRINTER,
+        VIRTUAL_DEVICE,
+        WINDOW,
+        SCREEN
+    };
+
+public:
+
+    HWND gethWnd();
 
     HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
-    explicit WinSalGraphics();
+    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd);
     virtual ~WinSalGraphics();
+
+    bool isPrinter() const;
+    bool isVirtualDevice() const;
+    bool isWindow() const;
+    bool isScreen() const;
+
+    void setHWND(HWND hWnd);
 
 protected:
     virtual bool        setClipRegion( const vcl::Region& );
@@ -271,7 +287,6 @@ protected:
 
 private:
     // local helpers
-    bool tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBitmap& rSrcBitmap);
 
     // get kernign pairs of the current font
     sal_uLong               GetKernPairs();
@@ -382,13 +397,13 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const;
     virtual SystemFontData     GetSysFontData( int nFallbacklevel ) const;
 
+    virtual bool               SwapBuffers() SAL_OVERRIDE;
+
     /// Update settings based on the platform values
     static void updateSettingsNative( AllSettings& rSettings );
 };
 
 // Init/Deinit Graphics
-void    ImplSalInitGraphics( WinSalGraphics* );
-void    ImplSalDeInitGraphics( WinSalGraphics* );
 void    ImplUpdateSysColorEntries();
 int     ImplIsSysColorEntry( SalColor nSalColor );
 void    ImplGetLogFontFromFontSelect( HDC, const FontSelectPattern*,

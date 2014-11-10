@@ -43,6 +43,10 @@
 #include <unx/salinst.h>
 #include <unx/x11/xlimits.hxx>
 
+#include <opengl/salbmp.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
+#include <officecfg/Office/Common.hxx>
+
 #if defined HAVE_VALGRIND_HEADERS
 #include <valgrind/memcheck.h>
 #endif
@@ -53,7 +57,12 @@
 
 SalBitmap* X11SalInstance::CreateSalBitmap()
 {
-    return new X11SalBitmap();
+    static bool bOpenGLPossible = OpenGLHelper::supportsVCLOpenGL();
+    bool bUseOpenGL = bOpenGLPossible ? officecfg::Office::Common::VCL::UseOpenGL::get() : false;
+    if (bUseOpenGL)
+        return new OpenGLSalBitmap();
+    else
+        return new X11SalBitmap();
 }
 
 ImplSalBitmapCache* X11SalBitmap::mpCache = NULL;
@@ -851,6 +860,11 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
         return true;
     }
 
+    return false;
+}
+
+bool X11SalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
+{
     return false;
 }
 

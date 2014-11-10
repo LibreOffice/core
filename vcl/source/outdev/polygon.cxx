@@ -231,7 +231,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
 
 // Caution: This method is nearly the same as
 // OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
-// so when changes are made here do not forget to make change sthere, too
+// so when changes are made here do not forget to make changes there, too
 
 void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {

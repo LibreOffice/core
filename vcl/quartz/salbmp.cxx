@@ -963,4 +963,9 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
     return bRet;
 }
 
+bool QuartzSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

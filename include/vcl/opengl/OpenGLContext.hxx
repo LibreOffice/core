@@ -22,8 +22,11 @@
 #  include "GL/glxew.h"
 #  include <postx.h>
 #elif defined( _WIN32 )
+#ifndef INCLUDED_PRE_POST_WIN_H
+#define INCLUDED_PRE_POST_WIN_H
 #  include "prewin.h"
 #  include "postwin.h"
+#endif
 #endif
 
 #if defined( _WIN32 )
@@ -99,14 +102,16 @@ struct GLWindow
 #elif defined( IOS )
 #elif defined( ANDROID )
 #elif defined( UNX )
-    Display*           dpy;
-    int                screen;
-    Window             win;
+    Display*            dpy;
+    int                 screen;
+    Window              win;
+    Pixmap              pix;
 #if defined( GLX_EXT_texture_from_pixmap )
     GLXFBConfig        fbc;
 #endif
     XVisualInfo*       vi;
     GLXContext         ctx;
+    GLXPixmap           glPix;
 
     bool HasGLXExtension( const char* name ) { return checkExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
     const char*             GLXExtensions;
@@ -116,8 +121,6 @@ struct GLWindow
     unsigned int            Height;
     const GLubyte*          GLExtensions;
     bool bMultiSampleSupported;
-
-    bool HasGLExtension( const char* name ) { return checkExtension( (const GLubyte*) name, GLExtensions ); }
 
     GLWindow()
         :
@@ -134,6 +137,7 @@ struct GLWindow
 #endif
         vi(NULL),
         ctx(0),
+        glPix(0),
         GLXExtensions(NULL),
 #endif
         bpp(0),
@@ -154,9 +158,20 @@ public:
     ~OpenGLContext();
 
     void requestLegacyContext();
+    void requestSingleBufferedRendering();
+    void requestVirtualDevice();
 
     bool init(vcl::Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
+
+// these methods are for the deep platform layer, don't use them in normal code
+// only in vcl's platform code
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    bool init(Display* dpy, Window win, int screen);
+    bool init(Display* dpy, Pixmap pix, unsigned int width, unsigned int height, int nScreen);
+#elif defined( _WIN32 )
+    bool init( HDC hDC, HWND hWnd );
+#endif
 
     void makeCurrent();
     void resetCurrent();
@@ -166,7 +181,7 @@ public:
 
     void setWinPosAndSize(const Point &rPos, const Size& rSize);
     void setWinSize(const Size& rSize);
-    GLWindow& getOpenGLWindow() { return m_aGLWin;}
+    const GLWindow& getOpenGLWindow() const { return m_aGLWin;}
 
     SystemChildWindow* getChildWindow();
     const SystemChildWindow* getChildWindow() const;
@@ -183,8 +198,12 @@ public:
     static SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
 
 private:
+    SAL_DLLPRIVATE bool InitGLEW();
     SAL_DLLPRIVATE bool initWindow();
     SAL_DLLPRIVATE bool ImplInit();
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    SAL_DLLPRIVATE void initGLWindow(Visual* pVisual);
+#endif
 
 #if defined(MACOSX)
     NSOpenGLView* getOpenGLView();
@@ -197,6 +216,11 @@ private:
     boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;
     bool mbRequestLegacyContext;
+    bool mbUseDoubleBufferedRendering;
+    bool mbRequestVirtualDevice;
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    bool mbPixmap; // is a pixmap instead of a window
+#endif
 };
 
 #endif

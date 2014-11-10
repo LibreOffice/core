@@ -86,7 +86,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
             SAL_WARN("vcl.opengl", "vertex shader compile for " << rVertexShaderName << " failed : " << &VertexShaderErrorMessage[0]);
         }
         else
-            SAL_WARN("vcl.opengl", "vertex shader compile failed without error log");
+            SAL_WARN("vcl.opengl", "vertex shader: " << rVertexShaderName << " compile failed without error log");
 
         return 0;
     }
@@ -357,5 +357,86 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
         glErr = glGetError();
     }
 }
+
+bool OpenGLHelper::supportsVCLOpenGL()
+{
+    static bool bDisableGL = !getenv("SAL_DISABLEGL");
+    return bDisableGL;
+}
+
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+
+bool OpenGLHelper::GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rVI)
+{
+    XVisualInfo* pVI;
+    int aAttrib[] = { GLX_RGBA,
+                      GLX_RED_SIZE, 8,
+                      GLX_GREEN_SIZE, 8,
+                      GLX_BLUE_SIZE, 8,
+                      GLX_DEPTH_SIZE, 24,
+                      GLX_DOUBLEBUFFER,
+                      None };
+
+    pVI = glXChooseVisual( pDisplay, nScreen, aAttrib );
+    if( !pVI )
+        return false;
+
+    rVI = *pVI;
+    XFree( pVI );
+
+    return true;
+}
+
+GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted )
+{
+    int nScreen = DefaultScreen( pDisplay );
+    GLXFBConfig *aFbConfigs;
+    int i, nFbConfigs, nValue;
+
+    aFbConfigs = glXGetFBConfigs( pDisplay, nScreen, &nFbConfigs );
+    for( i = 0; i < nFbConfigs; i++ )
+    {
+        glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_DRAWABLE_TYPE, &nValue );
+        if( !(nValue & GLX_PIXMAP_BIT) )
+            continue;
+
+        glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_TARGETS_EXT, &nValue );
+        if( !(nValue & GLX_TEXTURE_2D_BIT_EXT) )
+            continue;
+
+        glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_DEPTH_SIZE, &nValue );
+        if( nValue != 24 )
+            continue;
+
+        glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_RED_SIZE, &nValue );
+        if( nValue != 8 )
+            continue;
+        SAL_INFO( "vcl.opengl", "Red is " << nValue );
+
+        // TODO: lfrb: Make it configurable wrt RGB/RGBA
+        glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_RGB_EXT, &nValue );
+        if( nValue == False )
+        {
+            glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_BIND_TO_TEXTURE_RGBA_EXT, &nValue );
+            if( nValue == False )
+                continue;
+        }
+
+        glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_Y_INVERTED_EXT, &nValue );
+        bInverted = (nValue == True) ? true : false;
+
+        break;
+    }
+
+    if( i == nFbConfigs )
+    {
+        SAL_WARN( "vcl.opengl", "Unable to find FBconfig for pixmap texturing" );
+        return 0;
+    }
+
+    return aFbConfigs[i];
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

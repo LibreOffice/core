@@ -394,6 +394,8 @@ public:
                             GetGraphicsData() const SAL_OVERRIDE;
     virtual SystemFontData  GetSysFontData( int /* nFallbacklevel */ ) const SAL_OVERRIDE;
 
+    virtual bool            SwapBuffers() SAL_OVERRIDE { return false; };
+
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
     // make some graphics seem to be vertically-mirrored from a VCL perspective

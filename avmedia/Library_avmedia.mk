@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	tl \
 	utl \
 	vcl \
-	vclopengl \
 	$(gb_UWINAPI) \
 ))
 

@@ -912,12 +912,10 @@
                 <it>/org.openoffice.Office.Common/View/FontAntiAliasing</it>
                 <it>/org.openoffice.Office.Common/View/Localization</it>
                 <it>/org.openoffice.Office.Common/View/Menu</it>
-                <it>/org.openoffice.Office.Common/_3D_Engine</it>
               </value>
             </prop>
             <prop oor:name="ExcludedNodes">
               <value>
-                <it>/org.openoffice.Office.Common/_3D_Engine/OpenGL</it>
                 <it>/org.openoffice.Office.Common/Help/Registration</it>
               </value>
             </prop>

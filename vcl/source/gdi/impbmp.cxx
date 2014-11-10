@@ -31,6 +31,13 @@ ImpBitmap::ImpBitmap() :
 {
 }
 
+ImpBitmap::ImpBitmap(SalBitmap* pBitmap) :
+            mnRefCount  ( 1 ),
+            mnChecksum  ( 0 ),
+            mpSalBitmap ( pBitmap )
+{
+}
+
 ImpBitmap::~ImpBitmap()
 {
     delete mpSalBitmap;
@@ -84,6 +91,11 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 
     if( !bReadOnly )
         mnChecksum = 0;
+}
+
+bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
+{
+    return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

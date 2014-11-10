@@ -24,6 +24,10 @@ $(eval $(call gb_Library_set_include,vclplug_gen,\
     -I$(SRCDIR)/vcl/inc \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,vclplug_gen,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_sdk_api,vclplug_gen))
 
 $(eval $(call gb_Library_use_libraries,vclplug_gen,\
@@ -47,6 +51,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	boost_headers \
 	cairo \
 	graphite \
+	glew \
 	harfbuzz \
 	icuuc \
 	valgrind \
@@ -58,6 +63,8 @@ $(eval $(call gb_Library_add_libs,vclplug_gen,\
 	-lXext \
 	-lSM \
 	-lICE \
+	-lGL \
+	-lGLU \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
@@ -83,7 +90,12 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/dtrans/X11_selection \
     vcl/unx/generic/dtrans/X11_service \
     vcl/unx/generic/dtrans/X11_transferable \
+    vcl/unx/generic/gdi/cairotextrender \
+    vcl/unx/generic/gdi/x11cairotextrender \
     vcl/unx/generic/gdi/gcach_xpeer \
+	vcl/unx/generic/gdi/gdiimpl \
+	vcl/unx/generic/gdi/pixmap \
+	vcl/unx/generic/gdi/openglx11cairotextrender \
     vcl/unx/generic/gdi/salbmp \
     vcl/unx/generic/gdi/salgdi2 \
     vcl/unx/generic/gdi/salgdi3 \
@@ -95,6 +107,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/generic/window/salobj \
     vcl/unx/x11/x11sys \
     vcl/unx/x11/xlimits \
+	vcl/opengl/x11/gdiimpl \
 ))
 
 # ultimately we want to split the x11 dependencies out

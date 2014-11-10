@@ -104,20 +104,15 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     {
         WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice;
         SalData*                pSalData = GetSalData();
-        WinSalGraphics*         pVirGraphics = new WinSalGraphics;
+        WinSalGraphics*         pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE, pGraphics->isScreen(), 0);
         pVirGraphics->SetLayout( 0 );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
         pVirGraphics->setHDC(hDC);
-        pVirGraphics->mhWnd    = 0;
-        pVirGraphics->mbPrinter = FALSE;
-        pVirGraphics->mbVirDev  = TRUE;
-        pVirGraphics->mbWindow  = FALSE;
-        pVirGraphics->mbScreen  = pGraphics->mbScreen;
-        if ( pSalData->mhDitherPal && pVirGraphics->mbScreen )
+        if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
         {
-            pVirGraphics->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+            pVirGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
             RealizePalette( hDC );
         }
-        ImplSalInitGraphics( pVirGraphics );
+        pVirGraphics->InitGraphics();
 
         pVDev->setHDC(hDC);
         pVDev->mhBmp        = hBmp;
@@ -168,9 +163,9 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
         *ppVirDev = mpNext;
 
     // destroy saved DC
-    if( mpGraphics->mhDefPal )
-        SelectPalette( mpGraphics->getHDC(), mpGraphics->mhDefPal, TRUE );
-    ImplSalDeInitGraphics( mpGraphics );
+    if( mpGraphics->getDefPal() )
+        SelectPalette( mpGraphics->getHDC(), mpGraphics->getDefPal(), TRUE );
+    mpGraphics->InitGraphics();
     if( mhDefBmp )
         SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
     if( !mbForeignDC )

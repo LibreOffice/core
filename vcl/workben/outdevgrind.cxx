@@ -17,17 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// bootstrap stuff
-#include <rtl/bootstrap.hxx>
-#include <rtl/ustring.hxx>
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/servicefactory.hxx>
+#include <sal/main.h>
+#include <tools/extendapplicationenvironment.hxx>
+
 #include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
@@ -41,13 +40,14 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 
+#include <rtl/bootstrap.hxx>
+
 #include <osl/time.h>
 
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
 #include <stdio.h>
-#include <unistd.h>
 
 using namespace ::com::sun::star;
 
@@ -110,6 +110,7 @@ void setupMethodStubs( functor_vector_type& res )
     const OUString    aString("This is a test");
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
+#ifdef FIXME_VDEV
     // unfortunately, VDevs have inaccessible copy constructors
     static VirtualDevice aVDev;
     static VirtualDevice aVDevBW(1);
@@ -121,6 +122,18 @@ void setupMethodStubs( functor_vector_type& res )
     const Bitmap      aBitmap( aVDev.GetBitmap(aPt1,aVDevSize) );
     const Bitmap      aBitmapBW( aVDevBW.GetBitmap(aPt1,aVDevSize) );
     const Bitmap      aBitmapAlien( aVDevSize, 8 );
+#else
+    BitmapEx aIntro;
+    rtl::Bootstrap::set("BRAND_BASE_DIR", ".");
+    if (Application::LoadBrandBitmap ("intro", aIntro))
+        Application::Abort( "Failed to load intro image, run inside program/" );
+
+    const Bitmap      aBitmap( aIntro.GetBitmap() );
+    Bitmap            aBitmapBW( aBitmap );
+    aBitmapBW.Filter( BMP_FILTER_EMBOSS_GREY );
+    Bitmap      aBitmapAlien( Size( 100, 100 ), 8 );
+    aBitmapAlien.Erase( COL_RED );
+#endif
 
     const BitmapEx    aBitmapEx( aBitmap, aBitmapBW );
     const BitmapEx    aBitmapExBW( aBitmapBW, aBitmapBW );
@@ -137,12 +150,14 @@ void setupMethodStubs( functor_vector_type& res )
     aMtf.AddAction( new MetaFillColorAction(Color(COL_RED),true) );
     aMtf.AddAction( new MetaRectAction(aRect) );
 
+#ifdef FIXME_NEEDS_LOVE
     add(res,
         "DrawTextArray",
         boost::bind(
             &OutputDevice::DrawTextArray,
             _1,
             aPt1, aString, (const sal_Int32*)0, (sal_uInt16)0, aString.getLength() ));
+#endif
 
     /* void DrawPixel( const Point& rPt, const Color& rColor ); */
     add(res,
@@ -283,6 +298,7 @@ void setupMethodStubs( functor_vector_type& res )
             aRect2.TopLeft(), aRect2.GetSize(),
             aRect.TopLeft(),  aRect.GetSize()));
 
+#ifdef FIXME_VDEV
     /* void DrawOutDev( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPt,  const Size& rSrcSize,
                                     const OutputDevice& rOutDev );
@@ -314,6 +330,7 @@ void setupMethodStubs( functor_vector_type& res )
             aRect2.TopLeft(), aRect2.GetSize(),
             aRect.TopLeft(),  aRect.GetSize(),
             boost::cref(aVDev) ));
+#endif
 
     /* void CopyArea( const Point& rDestPt,
                                   const Point& rSrcPt,  const Size& rSrcSize,
@@ -326,6 +343,7 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aPt1,aPt3,aRect2.GetSize(),(sal_uInt16)0 ));
 
+#ifdef NEEDS_QUALIY_PARAMTER
     /* void DrawBitmap( const Point& rDestPt,
                                     const Bitmap& rBitmap );
     */
@@ -376,6 +394,7 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aPt1,aRect.GetSize(),aBitmap ));
 
+#if 0
     /* void DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
                                     const Bitmap& rBitmap );
@@ -391,6 +410,7 @@ void setupMethodStubs( functor_vector_type& res )
                 &OutputDevice::DrawBitmap),
             _1,
             aPt1,aRect.GetSize(),aPt3,aRect2.GetSize(),aBitmapAlien ));
+#endif
 
     /* void DrawBitmap( const Point& rDestPt, const Size& rDestSize,
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel,
@@ -687,6 +707,8 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aPt1,aRect.GetSize(),aImage,(sal_uInt16)0 ));
 
+#endif // NEEDS_QUALITY_PARAMATER
+
     /* void DrawGradient( const Rectangle& rRect, const Gradient& rGradient ); */
     add(res,
         "DrawGradient",
@@ -721,6 +743,7 @@ void setupMethodStubs( functor_vector_type& res )
             _1,
             aRect2,aWallpaper ));
 
+#ifdef FIXME_HAVE_WAVE_NORMAL
     /* void DrawWaveLine( const Point& rStartPos, const Point& rEndPos, sal_uInt16 nStyle ); */
     add(res,
         "DrawWaveLine",
@@ -728,6 +751,7 @@ void setupMethodStubs( functor_vector_type& res )
             &OutputDevice::DrawWaveLine,
             _1,
             aPt1,aPt2,(sal_uInt16)WAVE_NORMAL ));
+#endif
 
     /* void DrawGrid( const Rectangle& rRect, const Size& rDist, sal_uLong nFlags ); */
     add(res,
@@ -783,7 +807,7 @@ void grindFunc( OutputDevice&                       rTarget,
         iter->second(&rTarget);
 
     if( rTarget.GetOutDevType() == OUTDEV_WINDOW )
-        static_cast<Window&>(rTarget).Sync();
+        static_cast< vcl::Window & >( rTarget ).Sync();
 
     fprintf( stdout,
              "Duration: %d ms (%d repetitions)\tOperation: %s\tSetup: %s\n",
@@ -824,13 +848,13 @@ void outDevGrind( OutputDevice& rTarget, sal_Int32 nTurns=100 )
         rTarget.SetLineColor( Color(COL_BLACK) );
         rTarget.SetFillColor( Color(COL_GREEN) );
         rTarget.SetRasterOp( ROP_OVERPAINT );
-        rTarget.SetClipRegion( aClipRect );
+        rTarget.SetClipRegion( vcl::Region( aClipRect ) );
         grindFunc( rTarget, iter, nTurns, "with rect clip, w/o xor" );
 
         rTarget.SetLineColor( Color(COL_BLACK) );
         rTarget.SetFillColor( Color(COL_GREEN) );
         rTarget.SetRasterOp( ROP_OVERPAINT );
-        rTarget.SetClipRegion( aClipPoly );
+        rTarget.SetClipRegion( vcl::Region( aClipPoly ) );
         grindFunc( rTarget, iter, nTurns, "with complex clip, w/o xor" );
 
         rTarget.SetLineColor( Color(COL_BLACK) );
@@ -842,13 +866,13 @@ void outDevGrind( OutputDevice& rTarget, sal_Int32 nTurns=100 )
         rTarget.SetLineColor( Color(COL_BLACK) );
         rTarget.SetFillColor( Color(COL_GREEN) );
         rTarget.SetRasterOp( ROP_XOR );
-        rTarget.SetClipRegion( aClipRect );
+        rTarget.SetClipRegion( vcl::Region( aClipRect ) );
         grindFunc( rTarget, iter, nTurns, "with rect clip, with xor" );
 
         rTarget.SetLineColor( Color(COL_BLACK) );
         rTarget.SetFillColor( Color(COL_GREEN) );
         rTarget.SetRasterOp( ROP_XOR );
-        rTarget.SetClipRegion( aClipPoly );
+        rTarget.SetClipRegion( vcl::Region( aClipPoly ) );
         grindFunc( rTarget, iter, nTurns, "with complex clip, with xor" );
 
         ++iter;
@@ -874,11 +898,21 @@ sal_uInt16 GrindApp::Exception( sal_uInt16 nError )
 
 int GrindApp::Main()
 {
+    TestWindow aWindow;
+    aWindow.Execute();
+    return 0;
+}
+
+} // namespace
+
+
+SAL_IMPLEMENT_MAIN()
+{
     bool bHelp = false;
 
-    for( sal_uInt16 i = 0; i < GetCommandLineParamCount(); i++ )
+    for( sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++ )
     {
-        OUString aParam = GetCommandLineParam( i );
+        OUString aParam = Application::GetCommandLineParam( i );
 
         if( aParam == "--help" || aParam == "-h" )
                 bHelp = true;
@@ -890,35 +924,24 @@ int GrindApp::Main()
         return EXIT_SUCCESS;
     }
 
-    // create the global service-manager
-    uno::Reference< lang::XMultiServiceFactory > xFactory;
-    try
-    {
-        uno::Reference< uno::XComponentContext > xCtx = ::cppu::defaultBootstrap_InitialComponentContext();
-        xFactory = uno::Reference< lang::XMultiServiceFactory >(  xCtx->getServiceManager(),
-                                                                  uno::UNO_QUERY );
-        if( xFactory.is() )
-            ::comphelper::setProcessServiceFactory( xFactory );
-    }
-    catch( uno::Exception& )
-    {
-    }
+    tools::extendApplicationEnvironment();
 
-    if( !xFactory.is() )
-    {
-        fprintf( stderr,
-                 "Could not bootstrap UNO, installation must be in disorder. Exiting.\n" );
-        exit( 1 );
-    }
+    uno::Reference< uno::XComponentContext > xContext = cppu::defaultBootstrap_InitialComponentContext();
+    uno::Reference< lang::XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), uno::UNO_QUERY );
 
-    TestWindow pWindow;
-    pWindow.Execute();
+    if( !xServiceManager.is() )
+        Application::Abort( "Failed to bootstrap" );
+
+    comphelper::setProcessServiceFactory( xServiceManager );
+
+    InitVCL();
+
+    GrindApp aGrindApp;
+    aGrindApp.Main();
+
+    DeInitVCL();
 
     return EXIT_SUCCESS;
 }
-
-} // namespace
-
-GrindApp aGrindApp;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

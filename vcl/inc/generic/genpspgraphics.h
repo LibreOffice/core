@@ -192,6 +192,8 @@ public:
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
+
+    virtual bool SwapBuffers() SAL_OVERRIDE { return false; };
 };
 
 #endif // INCLUDED_VCL_INC_GENERIC_GENPSPGRAPHICS_H

@@ -932,9 +932,9 @@ WinSalFrame::~WinSalFrame()
     // destroy saved DC
     if ( mpGraphics )
     {
-        if ( mpGraphics->mhDefPal )
-            SelectPalette( mpGraphics->getHDC(), mpGraphics->mhDefPal, TRUE );
-        ImplSalDeInitGraphics( mpGraphics );
+        if ( mpGraphics->getDefPal() )
+            SelectPalette( mpGraphics->getHDC(), mpGraphics->getDefPal(), TRUE );
+        mpGraphics->DeInitGraphics();
         ReleaseDC( mhWnd, mpGraphics->getHDC() );
         delete mpGraphics;
         mpGraphics = NULL;
@@ -983,13 +983,8 @@ SalGraphics* WinSalFrame::AcquireGraphics()
 
         if ( !mpGraphics2 )
         {
-            mpGraphics2 = new WinSalGraphics;
+            mpGraphics2 = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd);
             mpGraphics2->setHDC(0);
-            mpGraphics2->mhWnd       = mhWnd;
-            mpGraphics2->mbPrinter   = FALSE;
-            mpGraphics2->mbVirDev    = FALSE;
-            mpGraphics2->mbWindow    = TRUE;
-            mpGraphics2->mbScreen    = TRUE;
         }
 
         HDC hDC = (HDC)(sal_IntPtr)SendMessageW( pSalData->mpFirstInstance->mhComWnd,
@@ -1000,10 +995,10 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             mpGraphics2->setHDC(hDC);
             if ( pSalData->mhDitherPal )
             {
-                mpGraphics2->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+                mpGraphics2->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
                 RealizePalette( hDC );
             }
-            ImplSalInitGraphics( mpGraphics2 );
+            mpGraphics2->InitGraphics();
             mbGraphics = TRUE;
 
             pSalData->mnCacheDCInUse++;
@@ -1019,19 +1014,14 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             HDC hDC = GetDC( mhWnd );
             if ( hDC )
             {
-                mpGraphics = new WinSalGraphics;
+                mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd);
                 mpGraphics->setHDC(hDC);
-                mpGraphics->mhWnd     = mhWnd;
-                mpGraphics->mbPrinter = FALSE;
-                mpGraphics->mbVirDev  = FALSE;
-                mpGraphics->mbWindow  = TRUE;
-                mpGraphics->mbScreen  = TRUE;
                 if ( pSalData->mhDitherPal )
                 {
-                    mpGraphics->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+                    mpGraphics->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
                     RealizePalette( hDC );
                 }
-                ImplSalInitGraphics( mpGraphics );
+                mpGraphics->InitGraphics();
                 mbGraphics = TRUE;
             }
         }
@@ -1049,9 +1039,9 @@ void WinSalFrame::ReleaseGraphics( SalGraphics* pGraphics )
         if ( mpGraphics2->getHDC() )
         {
             SalData* pSalData = GetSalData();
-            if ( mpGraphics2->mhDefPal )
-                SelectPalette( mpGraphics2->getHDC(), mpGraphics2->mhDefPal, TRUE );
-            ImplSalDeInitGraphics( mpGraphics2 );
+            if ( mpGraphics2->getDefPal() )
+                SelectPalette( mpGraphics2->getHDC(), mpGraphics2->getDefPal(), TRUE );
+            mpGraphics2->InitGraphics();
             SendMessageW( pSalData->mpFirstInstance->mhComWnd,
                              SAL_MSG_RELEASEDC,
                              (WPARAM)mhWnd,
@@ -1499,9 +1489,9 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     // destroy saved DC
     if ( pThis->mpGraphics )
     {
-        if ( pThis->mpGraphics->mhDefPal )
-            SelectPalette( pThis->mpGraphics->getHDC(), pThis->mpGraphics->mhDefPal, TRUE );
-        ImplSalDeInitGraphics( pThis->mpGraphics );
+        if ( pThis->mpGraphics->getDefPal() )
+            SelectPalette( pThis->mpGraphics->getHDC(), pThis->mpGraphics->getDefPal(), TRUE );
+        pThis->mpGraphics->InitGraphics();
         ReleaseDC( pThis->mhWnd, pThis->mpGraphics->getHDC() );
     }
 
@@ -1520,7 +1510,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     {
         if( pThis->mpGraphics2 )
         {
-            pThis->mpGraphics2->mhWnd = hWnd;
+            pThis->mpGraphics2->setHWND(hWnd);
 
             if( bNeedCacheDC )
             {
@@ -1533,10 +1523,10 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
                     pThis->mpGraphics2->setHDC(hDC);
                     if ( pSalData->mhDitherPal )
                     {
-                        pThis->mpGraphics2->mhDefPal = SelectPalette( hDC, pSalData->mhDitherPal, TRUE );
+                        pThis->mpGraphics2->setDefPal(SelectPalette( hDC, pSalData->mhDitherPal, TRUE ));
                         RealizePalette( hDC );
                     }
-                    ImplSalInitGraphics( pThis->mpGraphics2 );
+                    pThis->mpGraphics2->InitGraphics();
 
                     // re-select saved gdi objects
                     if( hFont )
@@ -1558,14 +1548,14 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
         if( pThis->mpGraphics )
         {
             // re-create DC
-            pThis->mpGraphics->mhWnd = hWnd;
+            pThis->mpGraphics->setHWND(hWnd);
             pThis->mpGraphics->setHDC( GetDC( hWnd ) );
             if ( GetSalData()->mhDitherPal )
             {
-                pThis->mpGraphics->mhDefPal = SelectPalette( pThis->mpGraphics->getHDC(), GetSalData()->mhDitherPal, TRUE );
+                pThis->mpGraphics->setDefPal(SelectPalette( pThis->mpGraphics->getHDC(), GetSalData()->mhDitherPal, TRUE ));
                 RealizePalette( pThis->mpGraphics->getHDC() );
             }
-            ImplSalInitGraphics( pThis->mpGraphics );
+            pThis->mpGraphics->InitGraphics();
             pThis->mbGraphics = TRUE;
         }
     }
@@ -3763,7 +3753,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
     {
         // clip-region must be reset, as we do not get a proper
         // bounding-rectangle otherwise
-        if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
+        if ( pFrame->mpGraphics && pFrame->mpGraphics->getRegion() )
             SelectClipRgn( pFrame->mpGraphics->getHDC(), 0 );
 
         // according to Window-Documentation one shall check first if
@@ -3779,10 +3769,10 @@ static bool ImplHandlePaintMsg( HWND hWnd )
 
             // Paint
             // reset ClipRegion
-            if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
+            if ( pFrame->mpGraphics && pFrame->mpGraphics->getRegion() )
             {
                 SelectClipRgn( pFrame->mpGraphics->getHDC(),
-                               pFrame->mpGraphics->mhRegion );
+                               pFrame->mpGraphics->getRegion() );
             }
 
             if ( bMutex )
@@ -3801,10 +3791,10 @@ static bool ImplHandlePaintMsg( HWND hWnd )
         else
         {
             // reset ClipRegion
-            if ( pFrame->mpGraphics && pFrame->mpGraphics->mhRegion )
+            if ( pFrame->mpGraphics && pFrame->mpGraphics->getRegion() )
             {
                 SelectClipRgn( pFrame->mpGraphics->getHDC(),
-                               pFrame->mpGraphics->mhRegion );
+                               pFrame->mpGraphics->getRegion() );
             }
         }
     }
@@ -4157,7 +4147,7 @@ static void ImplHandleForcePalette( HWND hWnd )
         if ( pFrame && pFrame->mpGraphics )
         {
             WinSalGraphics* pGraphics = pFrame->mpGraphics;
-            if ( pGraphics && pGraphics->mhDefPal )
+            if ( pGraphics && pGraphics->getDefPal() )
             {
                 SelectPalette( pGraphics->getHDC(), hPal, FALSE );
                 if ( RealizePalette( pGraphics->getHDC() ) )
@@ -4220,10 +4210,10 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     while ( pTempVD )
     {
         pGraphics = pTempVD->mpGraphics;
-        if ( pGraphics->mhDefPal )
+        if ( pGraphics->getDefPal() )
         {
             SelectPalette( pGraphics->getHDC(),
-                           pGraphics->mhDefPal,
+                           pGraphics->getDefPal(),
                            TRUE );
         }
         pTempVD = pTempVD->mpNext;
@@ -4232,10 +4222,10 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     while ( pTempFrame )
     {
         pGraphics = pTempFrame->mpGraphics;
-        if ( pGraphics && pGraphics->mhDefPal )
+        if ( pGraphics && pGraphics->getDefPal() )
         {
             SelectPalette( pGraphics->getHDC(),
-                           pGraphics->mhDefPal,
+                           pGraphics->getDefPal(),
                            TRUE );
         }
         pTempFrame = pTempFrame->mpNextFrame;
@@ -4270,7 +4260,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
     while ( pTempVD )
     {
         pGraphics = pTempVD->mpGraphics;
-        if ( pGraphics->mhDefPal )
+        if ( pGraphics->getDefPal() )
         {
             SelectPalette( pGraphics->getHDC(), hPal, TRUE );
             RealizePalette( pGraphics->getHDC() );
@@ -4283,7 +4273,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         if ( pTempFrame != pFrame )
         {
             pGraphics = pTempFrame->mpGraphics;
-            if ( pGraphics && pGraphics->mhDefPal )
+            if ( pGraphics && pGraphics->getDefPal() )
             {
                 SelectPalette( pGraphics->getHDC(), hPal, TRUE );
                 if ( RealizePalette( pGraphics->getHDC() ) )
@@ -4300,7 +4290,7 @@ static LRESULT ImplHandlePalette( bool bFrame, HWND hWnd, UINT nMsg,
         while ( pTempFrame )
         {
             pGraphics = pTempFrame->mpGraphics;
-            if ( pGraphics && pGraphics->mhDefPal )
+            if ( pGraphics && pGraphics->getDefPal() )
             {
                 InvalidateRect( pTempFrame->mhWnd, NULL, FALSE );
                 UpdateWindow( pTempFrame->mhWnd );

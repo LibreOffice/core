@@ -5,152 +5,362 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/main.h>
-#include <tools/extendapplicationenvironment.hxx>
-
-#include <cppuhelper/bootstrap.hxx>
+#include <rtl/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
-#include <vcl/event.hxx>
+#include <vcl/vclmain.hxx>
+
+#include <tools/urlobj.hxx>
+#include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/pngread.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/graphicfilter.hxx>
 
-#include <unistd.h>
-#include <stdio.h>
+#  define FIXME_ALPHA_WORKING
+#  define FIXME_ROUNDED_RECT_WORKING
+#  define FIXME_DRAW_TRANSPARENT_WORKING
+#if 0
+#endif
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace cppu;
+using namespace css;
 
-// Forward declaration
-void Main();
-
-SAL_IMPLEMENT_MAIN()
-{
-    try
-    {
-        tools::extendApplicationEnvironment();
-
-        Reference< XComponentContext > xContext = defaultBootstrap_InitialComponentContext();
-        Reference< XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), UNO_QUERY );
-
-        if( !xServiceManager.is() )
-            Application::Abort( "Failed to bootstrap" );
-
-        comphelper::setProcessServiceFactory( xServiceManager );
-
-        InitVCL();
-        ::Main();
-        DeInitVCL();
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
-        return 1;
-    }
-
-    return 0;
-}
-
-class MyWin : public WorkWindow
+class DemoBase :
+        public WorkWindow // hide OutputDevice if necessary
 {
 public:
-                 MyWin( vcl::Window* pParent, WinBits nWinStyle );
-
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void KeyUp( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void Resize() SAL_OVERRIDE;
+    DemoBase() : WorkWindow( NULL, WB_APP | WB_STDWORK)
+    {
+    }
+    OutputDevice &getOutDev() { return *this; }
 };
 
-void Main()
+class DemoWin : public DemoBase
 {
-    MyWin aMainWin( NULL, WB_APP | WB_STDWORK );
-    aMainWin.SetText( OUString( "VCLDemo - VCL Workbench" ) );
-    aMainWin.Show();
+    Bitmap   maIntroBW;
+    BitmapEx maIntro;
 
-    Application::Execute();
+public:
+    DemoWin() : DemoBase()
+    {
+        // Needed to find images
+        OUString aPath;
+        rtl::Bootstrap::get("SYSBINDIR", aPath);
+#ifdef FIXME_THIS_FAILS
+        rtl::Bootstrap::set("BRAND_BASE_DIR", aPath + "/..");
+        if (Application::LoadBrandBitmap("intro", maIntro))
+            Application::Abort("Failed to load intro image");
+#else
+        aPath = aPath + "/intro.png";
+        SvFileStream aFileStream( aPath, STREAM_READ );
+        GraphicFilter aGraphicFilter(false);
+        Graphic aGraphic;
+        if (aGraphicFilter.ImportGraphic(aGraphic, aPath, aFileStream) != 0)
+            Application::Abort("Failed to load intro image: " + aPath);
+        maIntro = aGraphic.GetBitmapEx();
+#endif
+        maIntroBW = maIntro.GetBitmap();
+        maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
+    }
+
+    void drawToDevice(OutputDevice &r, bool bVdev);
+
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE
+    {
+        fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
+        drawToDevice(getOutDev(), false);
+    }
+
+    std::vector<Rectangle> partitionAndClear(OutputDevice &rDev,
+                                             int nX, int nY);
+
+    void drawBackground(OutputDevice &rDev)
+    {
+        Rectangle r(Point(0,0), rDev.GetOutputSizePixel());
+        Gradient aGradient;
+        aGradient.SetStartColor(COL_BLUE);
+        aGradient.SetEndColor(COL_GREEN);
+        aGradient.SetStyle(GradientStyle_LINEAR);
+//        aGradient.SetBorder(r.GetSize().Width()/20);
+        rDev.DrawGradient(r, aGradient);
+    }
+
+    void drawRadialLines(OutputDevice &rDev, Rectangle r)
+    {
+        rDev.SetFillColor(Color(COL_LIGHTRED));
+        rDev.SetLineColor(Color(COL_BLACK));
+        rDev.DrawRect( r );
+
+        // FIXME: notice these appear reflected at the bottom not the top.
+        for(int i=0; i<r.GetHeight(); i+=15)
+            rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
+        for(int i=0; i<r.GetWidth(); i+=15)
+            rDev.DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
+
+        // Should draw a white-line across the middle
+        Color aLastPixel( COL_WHITE );
+        Point aCenter((r.Left() + r.Right())/2 - 4,
+                      (r.Top() + r.Bottom())/2 - 4);
+        for(int i=0; i<8; i++)
+        {
+            rDev.DrawPixel(aCenter, aLastPixel);
+            aLastPixel = rDev.GetPixel(aCenter);
+            aCenter.Move(1,1);
+        }
+    }
+
+    void drawText(OutputDevice &rDev, Rectangle r)
+
+    {
+        rDev.SetTextColor( Color( COL_BLACK ) );
+        vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
+        rDev.SetFont( aFont );
+        rDev.DrawText( r, OUString( "Just a simple text" ) );
+    }
+
+    void drawPoly(OutputDevice &rDev, Rectangle r)
+ // pretty
+    {
+        drawCheckered(rDev, r);
+
+        long nDx = r.GetWidth()/20;
+        long nDy = r.GetHeight()/20;
+        Rectangle aShrunk(r);
+        aShrunk.Move(nDx, nDy);
+        aShrunk.SetSize(Size(r.GetWidth()-nDx*2,
+                             r.GetHeight()-nDy*2));
+        Polygon aPoly(aShrunk);
+        tools::PolyPolygon aPPoly(aPoly);
+        rDev.SetLineColor(Color(COL_RED));
+        rDev.SetFillColor(Color(COL_RED));
+        // This hits the optional 'drawPolyPolygon' code-path
+        rDev.DrawTransparent(aPPoly, 64);
+    }
+    void drawEllipse(OutputDevice &rDev, Rectangle r)
+
+    {
+        rDev.SetLineColor(Color(COL_RED));
+        rDev.SetFillColor(Color(COL_GREEN));
+        rDev.DrawEllipse(r);
+    }
+    void drawCheckered(OutputDevice &rDev, Rectangle r)
+
+    {
+        rDev.DrawCheckered(r.TopLeft(), r.GetSize());
+    }
+    void drawGradient(OutputDevice &rDev, Rectangle r)
+
+    {
+        Gradient aGradient;
+        aGradient.SetStartColor(COL_YELLOW);
+        aGradient.SetEndColor(COL_RED);
+//        aGradient.SetAngle(45);
+        aGradient.SetStyle(GradientStyle_RECT);
+        aGradient.SetBorder(r.GetSize().Width()/20);
+        rDev.DrawGradient(r, aGradient);
+    }
+    void drawBitmap(OutputDevice &rDev, Rectangle r)
+
+    {
+        Bitmap aBitmap(maIntroBW);
+        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+        rDev.DrawBitmap(r.TopLeft(), aBitmap);
+    }
+    void drawBitmapEx(OutputDevice &rDev, Rectangle r)
+
+    {
+        drawCheckered(rDev, r);
+
+        BitmapEx aBitmap(maIntro);
+        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+#ifdef FIXME_ALPHA_WORKING
+        AlphaMask aSemiTransp(aBitmap.GetSizePixel());
+        aSemiTransp.Erase(64);
+        rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
+                                           aSemiTransp));
+#else
+        rDev.DrawBitmapEx(r.TopLeft(), aBitmap);
+#endif
+    }
+    void drawPolyPolgons(OutputDevice &rDev, Rectangle r)
+
+    {
+        struct {
+            double nX, nY;
+        } aPoints[] = { { 0.1, 0.1 }, { 0.9, 0.9 },
+                        { 0.9, 0.1 }, { 0.1, 0.9 },
+                        { 0.1, 0.1 } };
+
+        tools::PolyPolygon aPolyPoly;
+        // Render 4x polygons & aggregate into another PolyPolygon
+        for (int x = 0; x < 2; x++)
+        {
+            for (int y = 0; y < 2; y++)
+            {
+                Rectangle aSubRect(r);
+                aSubRect.Move(x * r.GetWidth()/3, y * r.GetHeight()/3);
+                aSubRect.SetSize(Size(r.GetWidth()/2, r.GetHeight()/4));
+                Polygon aPoly(SAL_N_ELEMENTS(aPoints));
+                for (size_t v = 0; v < SAL_N_ELEMENTS(aPoints); v++)
+                {
+                    aPoly.SetPoint(Point(aSubRect.Left() +
+                                         aSubRect.GetWidth() * aPoints[v].nX,
+                                         aSubRect.Top() +
+                                         aSubRect.GetHeight() * aPoints[v].nY),
+                                   v);
+                }
+                rDev.SetLineColor(Color(COL_YELLOW));
+                rDev.SetFillColor(Color(COL_BLACK));
+                rDev.DrawPolygon(aPoly);
+
+                // now move and add to the polypolygon
+                aPoly.Move(0, r.GetHeight()/2);
+                aPolyPoly.Insert(aPoly);
+            }
+        }
+        rDev.SetLineColor(Color(COL_LIGHTRED));
+        rDev.SetFillColor(Color(COL_GREEN));
+#ifdef FIXME_DRAW_TRANSPARENT_WORKING
+        rDev.DrawTransparent(aPolyPoly, 50);
+#else
+        rDev.DrawPolyPolygon(aPolyPoly);
+#endif
+    }
+    void drawToVirtualDevice(OutputDevice &rDev, Rectangle r)
+    {
+        VirtualDevice aNested;
+        aNested.SetOutputSize(r.GetSize());
+        Rectangle aWhole(Point(0,0), r.GetSize());
+        // mini me
+        drawToDevice(aNested, true);
+
+        Bitmap aBitmap(aNested.GetBitmap(Point(0,0),aWhole.GetSize()));
+        rDev.DrawBitmap(r.TopLeft(), aBitmap);
+    }
+
+    void fetchDrawBitmap(OutputDevice &rDev, Rectangle r)
+    {
+        // FIXME: should work ...
+        Bitmap aBitmap(GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
+        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+        rDev.DrawBitmap(r.TopLeft(), aBitmap);
+    }
+};
+
+std::vector<Rectangle> DemoWin::partitionAndClear(OutputDevice &rDev, int nX, int nY)
+{
+    Rectangle r;
+    std::vector<Rectangle> aRegions;
+
+    // Make small cleared area for these guys
+    Size aSize(rDev.GetOutputSizePixel());
+    long nBorderSize = aSize.Width() / 32;
+    long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
+    long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
+    for (int y = 0; y < nY; y++ )
+    {
+        for (int x = 0; x < nX; x++ )
+        {
+            r.SetPos(Point(nBorderSize + (nBorderSize + nBoxWidth) * x,
+                           nBorderSize + (nBorderSize + nBoxHeight) * y));
+            r.SetSize(Size(nBoxWidth, nBoxHeight));
+
+            // knock up a nice little border
+            rDev.SetLineColor(COL_GRAY);
+            rDev.SetFillColor(COL_LIGHTGRAY);
+            if ((x + y) % 2)
+                rDev.DrawRect(r);
+            else
+            {
+#ifdef FIXME_ROUNDED_RECT_WORKING
+                rDev.DrawRect(r, nBorderSize, nBorderSize);
+#else
+                rDev.DrawRect(r);
+#endif
+            }
+
+            aRegions.push_back(r);
+        }
+    }
+
+    return aRegions;
 }
 
-MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
-    WorkWindow( pParent, nWinStyle )
+void DemoWin::drawToDevice(OutputDevice &rDev, bool bVdev)
 {
+    drawBackground(rDev);
+
+    std::vector<Rectangle> aRegions(partitionAndClear(rDev, 4, 3));
+
+    drawRadialLines(rDev, aRegions[0]);
+    drawText(rDev, aRegions[1]);
+    drawPoly(rDev, aRegions[2]);
+    drawEllipse(rDev, aRegions[3]);
+    drawCheckered(rDev, aRegions[4]);
+    drawBitmapEx(rDev, aRegions[5]);
+    drawBitmap(rDev, aRegions[6]);
+    drawGradient(rDev, aRegions[7]);
+    drawPolyPolgons(rDev, aRegions[8]);
+    if (!bVdev)
+        drawToVirtualDevice(rDev, aRegions[9]);
+    // last - thumbnail all the above
+    fetchDrawBitmap(rDev, aRegions[10]);
 }
 
-void MyWin::MouseMove( const MouseEvent& rMEvt )
+class DemoApp : public Application
 {
-    WorkWindow::MouseMove( rMEvt );
-}
+public:
+    DemoApp() {}
 
-void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
+    virtual int Main() SAL_OVERRIDE
+    {
+        DemoWin aMainWin;
+        aMainWin.SetText( "Interactive VCL demo" );
+        aMainWin.Show();
+        Application::Execute();
+        return 0;
+    }
+
+protected:
+    uno::Reference<lang::XMultiServiceFactory> xMSF;
+    void Init() SAL_OVERRIDE
+    {
+        try
+        {
+            uno::Reference<uno::XComponentContext> xComponentContext
+                = ::cppu::defaultBootstrap_InitialComponentContext();
+            xMSF = uno::Reference<lang::XMultiServiceFactory>
+                ( xComponentContext->getServiceManager(), uno::UNO_QUERY );
+            if( !xMSF.is() )
+                Application::Abort("Bootstrap failure - no service manager");
+
+            ::comphelper::setProcessServiceFactory( xMSF );
+        }
+        catch (const uno::Exception &e)
+        {
+            Application::Abort("Bootstrap exception " + e.Message);
+        }
+    }
+    void DeInit() SAL_OVERRIDE
+    {
+        uno::Reference< lang::XComponent >(
+            comphelper::getProcessComponentContext(),
+        uno::UNO_QUERY_THROW )-> dispose();
+        ::comphelper::setProcessServiceFactory( NULL );
+    }
+};
+
+void vclmain::createApplication()
 {
-    Rectangle aRect(0,0,4,4);
-    aRect.SetPos( rMEvt.GetPosPixel() );
-    SetFillColor(Color(COL_RED));
-    DrawRect( aRect );
-}
-
-void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    WorkWindow::MouseButtonUp( rMEvt );
-}
-
-void MyWin::KeyInput( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyInput( rKEvt );
-}
-
-void MyWin::KeyUp( const KeyEvent& rKEvt )
-{
-    WorkWindow::KeyUp( rKEvt );
-}
-
-void MyWin::Paint( const Rectangle& rRect )
-{
-    fprintf(stderr, "MyWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
-
-    Size aSz(GetSizePixel());
-    Point aPt;
-    Rectangle r(aPt, aSz);
-
-    SetFillColor(Color(COL_BLUE));
-    SetLineColor(Color(COL_YELLOW));
-
-    DrawRect( r );
-
-    for(int i=0; i<aSz.Height(); i+=15)
-        DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
-    for(int i=0; i<aSz.Width(); i+=15)
-        DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
-
-    SetTextColor( Color( COL_WHITE ) );
-    vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
-    SetFont( aFont );
-    DrawText( Point( 20, 30 ), OUString( "Just a simple test text" ) );
-}
-
-void MyWin::Resize()
-{
-    WorkWindow::Resize();
+    static DemoApp aApp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

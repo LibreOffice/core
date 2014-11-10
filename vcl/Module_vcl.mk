@@ -22,17 +22,18 @@ $(eval $(call gb_Module_Module,vcl))
 $(eval $(call gb_Module_add_targets,vcl,\
     CustomTarget_afm_hash \
     Library_vcl \
+	Package_opengl \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         StaticLibrary_vclmain \
         Executable_ui-previewer \
 		$(if $(filter LINUX MACOSX WNT,$(OS)), \
-	        Executable_icontest)) \
+			Executable_icontest \
+			Executable_outdevgrind \
+			Executable_vcldemo )) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
-        Executable_svpclient \
-        Executable_vcldemo) \
-    Library_vclopengl \
+        Executable_svpclient) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\

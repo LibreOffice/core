@@ -688,7 +688,7 @@ namespace basegfx
 
         B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
         {
-            if(rCandidate.count() > 1L)
+            if(rCandidate.count() > 0L)
             {
                 solver aSolver(rCandidate);
                 return aSolver.getB2DPolyPolygon();

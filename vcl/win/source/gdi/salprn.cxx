@@ -1045,15 +1045,10 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
 
 static WinSalGraphics* ImplCreateSalPrnGraphics( HDC hDC )
 {
-    WinSalGraphics* pGraphics = new WinSalGraphics;
+    WinSalGraphics* pGraphics = new WinSalGraphics(WinSalGraphics::PRINTER, false, 0);
     pGraphics->SetLayout( 0 );
     pGraphics->setHDC(hDC);
-    pGraphics->mhWnd    = 0;
-    pGraphics->mbPrinter = TRUE;
-    pGraphics->mbVirDev = FALSE;
-    pGraphics->mbWindow = FALSE;
-    pGraphics->mbScreen = FALSE;
-    ImplSalInitGraphics( pGraphics );
+    pGraphics->InitGraphics();
     return pGraphics;
 }
 
@@ -1065,7 +1060,7 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
     if ( pPrinter->mpGraphics )
     {
-        ImplSalDeInitGraphics( pPrinter->mpGraphics );
+        pPrinter->mpGraphics->DeInitGraphics();
         DeleteDC( pPrinter->mpGraphics->getHDC() );
         delete pPrinter->mpGraphics;
     }
@@ -1129,7 +1124,7 @@ WinSalInfoPrinter::~WinSalInfoPrinter()
 {
     if ( mpGraphics )
     {
-        ImplSalDeInitGraphics( mpGraphics );
+        mpGraphics->DeInitGraphics();
         DeleteDC( mpGraphics->getHDC() );
         delete mpGraphics;
     }
@@ -1412,7 +1407,7 @@ WinSalPrinter::~WinSalPrinter()
     {
         if ( mpGraphics )
         {
-            ImplSalDeInitGraphics( mpGraphics );
+            mpGraphics->DeInitGraphics();
             delete mpGraphics;
         }
 
@@ -1587,7 +1582,7 @@ bool WinSalPrinter::EndJob()
     {
         if ( mpGraphics )
         {
-            ImplSalDeInitGraphics( mpGraphics );
+            mpGraphics->DeInitGraphics();
             delete mpGraphics;
             mpGraphics = NULL;
         }
@@ -1650,7 +1645,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
         {
             if ( pPrinter->mpGraphics )
             {
-                ImplSalDeInitGraphics( pPrinter->mpGraphics );
+                pPrinter->mpGraphics->DeInitGraphics();
                 delete pPrinter->mpGraphics;
                 pPrinter->mpGraphics = NULL;
             }
@@ -1710,7 +1705,7 @@ bool WinSalPrinter::EndPage()
     HDC hDC = mhDC;
     if ( hDC && mpGraphics )
     {
-        ImplSalDeInitGraphics( mpGraphics );
+        mpGraphics->DeInitGraphics();
         delete mpGraphics;
         mpGraphics = NULL;
     }
