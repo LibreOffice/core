@@ -21,6 +21,14 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_SWXMLBLOCKIMPORT_HXX
 
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
+#include <sax/fastattribs.hxx>
+
+using namespace css::xml::sax;
+using namespace xmloff::token;
 
 class SwXMLTextBlocks;
 class SwXMLBlockListImport : public SvXMLImport
@@ -31,10 +39,8 @@ private:
 protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const OUString& rLocalName,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLImportContext* CreateFastContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) SAL_OVERRIDE;
 
 public:
     SwXMLBlockListImport(
@@ -57,10 +63,8 @@ private:
 protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const OUString& rLocalName,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLImportContext* CreateFastContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) SAL_OVERRIDE;
 
 public:
     bool bTextOnly;
@@ -77,6 +81,62 @@ public:
         throw();
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+};
+
+enum SwXMLTextBlockToken : sal_Int32
+{
+    OFFICE_BODY = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_BODY,
+    OFFICE_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_TEXT,
+    OFFICE_DOCUMENT = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_DOCUMENT,
+    OFFICE_DOCUMENT_CONTENT = FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_DOCUMENT_CONTENT,
+    TEXT_P = FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_P
+};
+
+class SwXMLTextBlockTokenHandler : public
+        cppu::WeakImplHelper1< css::xml::sax::XFastTokenHandler >,
+        public sax_fastparser::FastTokenHandlerBase
+{
+public:
+    SwXMLTextBlockTokenHandler();
+    virtual ~SwXMLTextBlockTokenHandler();
+
+    //XFastTokenHandler
+    sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    //Much fast direct C++ shortcut to the method that matters
+    virtual sal_Int32 getTokenDirect( const char *pTag, sal_Int32 nLength ) const SAL_OVERRIDE;
+};
+
+enum SwXMLBlockListToken : sal_Int32
+{
+    ABBREVIATED_NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_ABBREVIATED_NAME,
+    BLOCK = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_BLOCK,
+    BLOCK_LIST = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_BLOCK_LIST,
+    LIST_NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_LIST_NAME,
+    NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_NAME,
+    PACKAGE_NAME = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_PACKAGE_NAME,
+    UNFORMATTED_TEXT = FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST | XML_UNFORMATTED_TEXT
+};
+
+class SwXMLBlockListTokenHandler : public
+        cppu::WeakImplHelper1< css::xml::sax::XFastTokenHandler >,
+        public sax_fastparser::FastTokenHandlerBase
+{
+public:
+    SwXMLBlockListTokenHandler();
+    virtual ~SwXMLBlockListTokenHandler();
+
+    //XFastTokenHandler
+    sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 Token )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    //Much fast direct C++ shortcut to the method that matters
+    virtual sal_Int32 getTokenDirect( const char *pTag, sal_Int32 nLength ) const SAL_OVERRIDE;
 };
 
 #endif
