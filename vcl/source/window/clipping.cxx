@@ -884,22 +884,22 @@ bool Window::ImplRestoreOverlapBackground( vcl::Region& rInvRegion )
             Point   aDestPt( mnOutOffX, mnOutOffY );
             Size    aDevSize = mpWindowImpl->mpOverlapData->mpSaveBackDev->GetOutputSizePixel();
 
-            OutputDevice *pOutDev = mpWindowImpl->mpFrameWindow->GetOutDev();
+            Window *pWin = mpWindowImpl->mpFrameWindow;
 
             if ( mpWindowImpl->mpOverlapData->mpSaveBackRgn )
             {
                 mpWindowImpl->mpOverlapData->mpSaveBackRgn->Intersect( mpWindowImpl->maWinClipRegion );
                 rInvRegion = mpWindowImpl->maWinClipRegion;
                 rInvRegion.Exclude( *mpWindowImpl->mpOverlapData->mpSaveBackRgn );
-                pOutDev->ImplDrawFrameDev( aDestPt, aDevPt, aDevSize,
-                                           *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
-                                           *mpWindowImpl->mpOverlapData->mpSaveBackRgn );
+                pWin->drawFrameDev( aDestPt, aDevPt, aDevSize,
+                                    *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
+                                    *mpWindowImpl->mpOverlapData->mpSaveBackRgn );
             }
             else
             {
-                pOutDev->ImplDrawFrameDev( aDestPt, aDevPt, aDevSize,
-                                           *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
-                                           mpWindowImpl->maWinClipRegion );
+                pWin->drawFrameDev( aDestPt, aDevPt, aDevSize,
+                                    *(mpWindowImpl->mpOverlapData->mpSaveBackDev),
+                                    mpWindowImpl->maWinClipRegion );
             }
             ImplDeleteOverlapBackground();
         }

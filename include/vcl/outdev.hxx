@@ -481,17 +481,6 @@ public:
     ///@}
 
 
-    /** @name Frame functions
-     */
-    ///@{
-
-private:
-
-    SAL_DLLPRIVATE void         ImplDrawFrameDev    ( const Point& rPt, const Point& rDevPt, const Size& rDevSize,
-                                                      const OutputDevice& rOutDev, const vcl::Region& rRegion );
-    ///@}
-
-
     /** @Name Direct OutputDevice drawing functions
      */
     ///@{
