@@ -275,10 +275,10 @@ static const XclFunctionInfo saFuncTable_4[] =
     { ocFInv,               282,    3,  3,  V, { VR }, 0, 0 },
     { ocFisher,             283,    1,  1,  V, { VR }, 0, 0 },
     { ocFisherInv,          284,    1,  1,  V, { VR }, 0, 0 },
-    { ocFloor,              285,    2,  2,  V, { VR, VR, C }, 0, 0 },
+    { ocFloor_MS,           285,    2,  2,  V, { VR, VR, C }, 0, 0 },
     { ocGammaDist,          286,    4,  4,  V, { VR }, 0, 0 },
     { ocGammaInv,           287,    3,  3,  V, { VR }, 0, 0 },
-    { ocCeil,               288,    2,  2,  V, { VR, VR, C }, 0, 0 },
+    { ocCeil_MS,            288,    2,  2,  V, { VR, VR, C }, 0, 0 },
     { ocHypGeomDist,        289,    4,  4,  V, { VR }, 0, 0 },
     { ocLogNormDist,        290,    3,  3,  V, { VR }, 0, 0 },
     { ocLogInv,             291,    3,  3,  V, { VR }, 0, 0 },
@@ -487,8 +487,8 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_RX( ocModalValue_Multi, 1, MX,  0,  "MODE.MULT" ),
     EXC_FUNCENTRY_V_VR( ocNegBinomDist_MS,  4,  4,  0,  "NEGBINOM.DIST" ),
     EXC_FUNCENTRY_V_VR( ocZTest_MS,         2,  3,  0,  "Z.TEST" ),
-    EXC_FUNCENTRY_V_VR( ocCeil_MS,          2,  2,  0,  "CEILING.PRECISE" ),
-    EXC_FUNCENTRY_V_VR( ocFloor_MS,         2,  2,  0,  "FLOOR.PRECISE" ),
+    EXC_FUNCENTRY_V_VR( ocCeil_Precise,     2,  2,  0,  "CEILING.PRECISE" ),
+    EXC_FUNCENTRY_V_VR( ocFloor_Precise,    2,  2,  0,  "FLOOR.PRECISE" ),
     EXC_FUNCENTRY_V_VR( ocErf_MS,           1,  1,  0,  "ERF.PRECISE" ),
     EXC_FUNCENTRY_V_VR( ocErfc_MS,          1,  1,  0,  "ERFC.PRECISE" ),
     EXC_FUNCENTRY_V_RX( ocAggregate,        3, MX,  0,  "AGGREGATE" ),
@@ -523,10 +523,8 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocBitOr,         2,  2,  0,  "BITOR" ),
     EXC_FUNCENTRY_V_VR(         ocBitRshift,     2,  2,  0,  "BITRSHIFT" ),
     EXC_FUNCENTRY_V_VR(         ocBitXor,        2,  2,  0,  "BITXOR" ),
-    /* FIXME: CEILING.MATH is our/ODFF CEILING, but we have special handling
-     * for the weird Excel CEILING behavior, check that and unify or diversify.
-     * */
-    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  3,  0,  "CEILING.MATH" ),
+    EXC_FUNCENTRY_V_VR(         ocCeil,          1,  3,  0,  "CEILING.MATH" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocCeil_Math,     1,  3,  0,  "CEILING.MATH" ),
     EXC_FUNCENTRY_V_VR(         ocKombin2,       2,  2,  0,  "COMBINA" ),
     EXC_FUNCENTRY_V_VR_IMPORT(  ocCot,           1,  1,  0,  "COT" ),
     EXC_FUNCENTRY_V_VR_IMPORT(  ocCotHyp,        1,  1,  0,  "COTH" ),
@@ -540,9 +538,8 @@ static const XclFunctionInfo saFuncTable_2013[] =
     // NOTE: this FINV is not our LEGACY.FINV
     EXC_FUNCENTRY_V_VR(         ocNoName,        3,  3,  0,  "FINV" ),
     EXC_FUNCENTRY_V_VR(         ocFilterXML,     2,  2,  0,  "FILTERXML" ),
-    /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
-     * the weird Excel FLOOR behavior, check that and unify or diversify. */
-    EXC_FUNCENTRY_V_VR(         ocNoName,        1,  3,  0,  "FLOOR.MATH" ),
+    EXC_FUNCENTRY_V_VR(         ocFloor,         1,  3,  0,  "FLOOR.MATH" ),
+    EXC_FUNCENTRY_V_VR_IMPORT(  ocFloor_Math,    1,  3,  0,  "FLOOR.MATH" ),
     EXC_FUNCENTRY_V_RO(         ocFormula,       1,  1,  0,  "FORMULATEXT" ),
     EXC_FUNCENTRY_V_VR(         ocGamma,         1,  1,  0,  "GAMMA" ),
     EXC_FUNCENTRY_V_VR(         ocGauss,         1,  1,  0,  "GAUSS" ),
