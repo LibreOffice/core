@@ -1224,7 +1224,6 @@ void Window::drawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rD
             return;
     }
 
-    // ClipRegion zuruecksetzen
     if ( rRegion.IsNull() )
         mpGraphics->ResetClipRegion();
     else
