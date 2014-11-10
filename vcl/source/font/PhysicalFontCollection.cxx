@@ -36,6 +36,10 @@
 
 #include "PhysicalFontCollection.hxx"
 
+#ifdef SOLARIS
+#include <alloca.h>
+#endif
+
 static OUString lcl_stripCharSetFromName(const OUString& _aName)
 {
     // I worry that someone will have a font which *does* have
