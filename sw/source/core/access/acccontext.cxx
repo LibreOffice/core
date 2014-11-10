@@ -55,7 +55,7 @@ using namespace ::com::sun::star::accessibility;
 
 void SwAccessibleContext::InitStates()
 {
-    bIsShowingState = GetMap() ? IsShowing( *(GetMap()) ) : sal_False;
+    bIsShowingState = GetMap() && IsShowing( *(GetMap()) );
 
     SwViewShell *pVSh = GetMap()->GetShell();
     bIsEditableState = pVSh && IsEditable( pVSh );

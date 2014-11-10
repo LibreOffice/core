@@ -2384,7 +2384,7 @@ bool SwFEShell::IsAlignPossible() const
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pO);
             OSL_ENSURE( pC, "No SwDrawContact!");
             //only as character bound drawings can be aligned
-            bRet = pC ? (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR) : sal_False;
+            bRet = pC && pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR;
         }
         if ( bRet )
             return Imp()->GetDrawView()->IsAlignPossible();

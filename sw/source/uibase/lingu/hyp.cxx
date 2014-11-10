@@ -54,7 +54,7 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
     bInfoBox( false )
 {
     uno::Reference< linguistic2::XLinguProperties >  xProp( GetLinguPropertySet() );
-    bAutomatic = xProp.is() ? xProp->getIsHyphAuto() : sal_False;
+    bAutomatic = xProp.is() && xProp->getIsHyphAuto();
     SetHyphen();
 }
 

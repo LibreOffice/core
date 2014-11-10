@@ -1662,7 +1662,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
 
     // Size: If the only difference is the Landscape-Flag,
     // only export Portrait oder Landscape. Otherwise export size.
-    bool bRefLandscape = pRefPageDesc ? pRefPageDesc->GetLandscape() : sal_False;
+    bool bRefLandscape = pRefPageDesc && pRefPageDesc->GetLandscape();
     Size aRefSz;
     const Size& rSz = rPageDesc.GetMaster().GetFrmSize().GetSize();
     if( pRefPageDesc )

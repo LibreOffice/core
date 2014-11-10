@@ -1326,7 +1326,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
-            bool bSpell = xSpell.is() ? xSpell->hasLanguage( eActLang ) : sal_False;
+            bool bSpell = xSpell.is() && xSpell->hasLanguage( eActLang );
             if( bSpell && !rWord.isEmpty() )
             {
                 // check for: bAlter => xHyphWord.is()

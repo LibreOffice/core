@@ -2342,7 +2342,7 @@ bool SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
     SwFrm *pFrm = (SwFrm *)GetBox( rPt );
     const SwTabFrm*  pTabFrm = pFrm ? pFrm->ImplFindTabFrm() : 0;
     OSL_ENSURE( pTabFrm, "Table not found" );
-    return pTabFrm ? pTabFrm->IsRightToLeft() : sal_False;
+    return pTabFrm && pTabFrm->IsRightToLeft();
 }
 
 bool SwFEShell::IsTableVertical() const

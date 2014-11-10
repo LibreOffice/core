@@ -191,11 +191,11 @@ void SwView::ExecutePrint(SfxRequest& rReq)
         {
             SwWrtShell* pSh = &GetWrtShell();
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, false);
-            bool bSilent = pSilentItem ? pSilentItem->GetValue() : sal_False;
+            bool bSilent = pSilentItem && pSilentItem->GetValue();
             SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, false);
             if(pPrintFromMergeItem)
                 rReq.RemoveItem(FN_QRY_MERGE);
-            bool bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : sal_False;
+            bool bFromMerge = pPrintFromMergeItem && pPrintFromMergeItem->GetValue();
             SwMiscConfig aMiscConfig;
             bool bPrintSelection = false;
             if(!bSilent && !bFromMerge &&

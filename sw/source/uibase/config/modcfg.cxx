@@ -916,7 +916,7 @@ void SwInsertConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE && *(sal_Bool*)pValues[nProp].getValue();
                 switch(nProp)
                 {
                     case INS_PROP_TABLE_HEADER:

@@ -733,9 +733,7 @@ bool SwFldMgr::GoNextPrev( bool bNext, SwFieldType* pTyp )
         return pSh->MoveFldType( 0, bNext, RES_DBFLD );
     }
 
-    return (pTyp && pSh)
-           ? pSh->MoveFldType( pTyp, bNext )
-           : sal_False;
+    return pTyp && pSh && pSh->MoveFldType( pTyp, bNext );
 }
 
 // insert field types

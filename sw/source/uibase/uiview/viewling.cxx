@@ -269,7 +269,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
         SwConversionArgs *pConvArgs )
 {
     Reference< XLinguProperties >  xProp = ::GetLinguPropertySet();
-    bool bIsWrapReverse = (!pConvArgs && xProp.is()) ? xProp->getIsWrapReverse() : sal_False;
+    bool bIsWrapReverse = !pConvArgs && xProp.is() && xProp->getIsWrapReverse();
 
     SwDocPositions eStart = DOCPOS_START;
     SwDocPositions eEnde  = DOCPOS_END;
@@ -449,7 +449,7 @@ void SwView::HyphenateDocument()
 
         m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
 
-        bool bHyphSpecial = xProp.is() ? xProp->getIsHyphSpecial() : sal_False;
+        bool bHyphSpecial = xProp.is() && xProp->getIsHyphSpecial();
         bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
             m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
         bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;

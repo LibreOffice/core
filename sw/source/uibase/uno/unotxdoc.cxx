@@ -3989,7 +3989,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     aRenderViewOptions.SetLineBreak( false );             // breaks (type 1)
     aRenderViewOptions.SetPageBreak( false );             // breaks (type 2)
     aRenderViewOptions.SetColumnBreak( false );           // breaks (type 3)
-    bool bVal = pPrtOptions? pPrtOptions->bPrintHiddenText : sal_False;
+    bool bVal = pPrtOptions && pPrtOptions->bPrintHiddenText;
     if (bContainsHiddenChars)
         aRenderViewOptions.SetShowHiddenChar( bVal );     // hidden text
     if (bContainsHiddenFields)

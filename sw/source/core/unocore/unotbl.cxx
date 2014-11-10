@@ -2114,7 +2114,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         ((SfxPoolItem&)aSz).PutValue(*pWidth, MID_FRMSIZE_WIDTH);
         bPutSize = true;
     }
-    bool bTemp = pSzRel ? *(sal_Bool*)pSzRel->getValue() : sal_False;
+    bool bTemp = pSzRel && *(sal_Bool*)pSzRel->getValue();
     if(pSzRel && bTemp && pRelWidth)
     {
         ((SfxPoolItem&)aSz).PutValue(*pRelWidth, MID_FRMSIZE_REL_WIDTH|CONVERT_TWIPS);

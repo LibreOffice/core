@@ -437,9 +437,7 @@ bool SwNode::IsProtect() const
         if( pFlyFmt->GetProtect().IsCntntProtected() )
             return true;
         const SwFmtAnchor& rAnchor = pFlyFmt->GetAnchor();
-        return rAnchor.GetCntntAnchor()
-                ? rAnchor.GetCntntAnchor()->nNode.GetNode().IsProtect()
-                : sal_False;
+        return rAnchor.GetCntntAnchor() && rAnchor.GetCntntAnchor()->nNode.GetNode().IsProtect();
     }
 
     if( 0 != ( pSttNd = FindFootnoteStartNode() ) )

@@ -393,7 +393,7 @@ bool SwGlossaryHdl::ExpandGlossary()
         if(pWrtShell->IsSelection())
             aShortName = pWrtShell->GetSelTxt();
     }
-    return pGlossary ? Expand( aShortName, &rStatGlossaries, pGlossary ) : sal_False;
+    return pGlossary && Expand( aShortName, &rStatGlossaries, pGlossary );
 }
 
 bool SwGlossaryHdl::Expand( const OUString& rShortName,
@@ -693,7 +693,7 @@ bool SwGlossaryHdl::IsOld() const
 {
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                       : rStatGlossaries.GetGroupDoc(aCurGrp);
-    bool bRet = pGlossary ? pGlossary->IsOld() : sal_False;
+    bool bRet = pGlossary && pGlossary->IsOld();
     if( !pCurGrp )
         delete pGlossary;
     return bRet;

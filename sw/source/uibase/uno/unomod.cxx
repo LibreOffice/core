@@ -608,8 +608,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
            IllegalArgumentException, WrappedTargetException,
            RuntimeException)
 {
-    bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle ?
-        *(sal_Bool*)rValue.getValue() : sal_False;
+    bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle && *(sal_Bool*)rValue.getValue();
     // the API flag should not be set to the application's view settings
     switch( rInfo.mnHandle )
     {
