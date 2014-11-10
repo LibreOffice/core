@@ -1247,12 +1247,15 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     OString aSysPath = rMgr.getFontFileSysPath( aFont );
 
 #if defined( UNX )
-    struct stat aStat;
-    if( stat( aSysPath.getStr(), &aStat ) )
-        return NULL;
     int fd = open( aSysPath.getStr(), O_RDONLY );
     if( fd < 0 )
         return NULL;
+    struct stat aStat;
+    if( fstat( fd, &aStat ) )
+    {
+        close( fd );
+        return NULL;
+    }
     void* pFile = mmap( NULL, aStat.st_size, PROT_READ, MAP_SHARED, fd, 0 );
     close( fd );
     if( pFile == MAP_FAILED )
