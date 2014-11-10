@@ -27,6 +27,8 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <doc.hxx>
@@ -35,6 +37,7 @@
 #include <SwXMLTextBlocks.hxx>
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <swevent.hxx>
 #include <swerror.h>
 
@@ -43,6 +46,8 @@ const char XMLN_BLOCKLIST[] = "BlockList.xml";
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
+using namespace css::xml::sax;
+using namespace xmloff::token;
 
 using ::xmloff::token::XML_BLOCK_LIST;
 using ::xmloff::token::XML_UNFORMATTED_TEXT;
@@ -101,11 +106,45 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             aParserInput.aInputStream = xStream->getInputStream();
 
             // get filter
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, true );
+            // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
+            uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, true );
+            uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
             // connect parser and filter
-            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-            xParser->setDocumentHandler( xFilter );
+            uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+            xParser->setFastDocumentHandler( xFilter );
+            xParser->setTokenHandler( xTokenHandler );
+
+            // all namespaces are mentioned in content.xml but only a few of them are handled
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:office:1.0", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:style:1.0", FastToken::NAMESPACE | XML_NAMESPACE_STYLE );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:table:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TABLE );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0", FastToken::NAMESPACE | XML_NAMESPACE_DRAW );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0", FastToken::NAMESPACE | XML_NAMESPACE_FO );
+            xParser->registerNamespace( "http://www.w3.org/1999/xlink", FastToken::NAMESPACE | XML_NAMESPACE_XLINK );
+            xParser->registerNamespace( "http://purl.org/dc/elements/1.1/", FastToken::NAMESPACE | XML_NAMESPACE_DC );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:meta:1.0", FastToken::NAMESPACE | XML_NAMESPACE_META );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0", FastToken::NAMESPACE | XML_NAMESPACE_NUMBER );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0", FastToken::NAMESPACE | XML_NAMESPACE_SVG );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:chart:1.0", FastToken::NAMESPACE | XML_NAMESPACE_CHART );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0", FastToken::NAMESPACE | XML_NAMESPACE_DR3D );
+            xParser->registerNamespace( "http://www.w3.org/1998/Math/MathML", FastToken::NAMESPACE | XML_NAMESPACE_MATH );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:form:1.0", FastToken::NAMESPACE | XML_NAMESPACE_FORM );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:script:1.0", FastToken::NAMESPACE | XML_NAMESPACE_SCRIPT );
+            xParser->registerNamespace( "http://openoffice.org/2004/office", FastToken::NAMESPACE | XML_NAMESPACE_OOO );
+            xParser->registerNamespace( "http://openoffice.org/2004/writer", FastToken::NAMESPACE | XML_NAMESPACE_OOOW );
+            xParser->registerNamespace( "http://openoffice.org/2004/calc", FastToken::NAMESPACE | XML_NAMESPACE_OOOC );
+            xParser->registerNamespace( "http://www.w3.org/2001/xml-events", FastToken::NAMESPACE | XML_NAMESPACE_DOM );
+            xParser->registerNamespace( "http://openoffice.org/2005/report", FastToken::NAMESPACE | XML_NAMESPACE_REPORT );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:of:1.2", FastToken::NAMESPACE | XML_NAMESPACE_OF );
+            xParser->registerNamespace( "http://www.w3.org/1999/xhtml", FastToken::NAMESPACE | XML_NAMESPACE_XHTML );
+            xParser->registerNamespace( "http://www.w3.org/2003/g/data-view#", FastToken::NAMESPACE | XML_NAMESPACE_GRDDL );
+            xParser->registerNamespace( "http://openoffice.org/2009/office", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE_EXT );
+            xParser->registerNamespace( "http://openoffice.org/2009/table", FastToken::NAMESPACE | XML_NAMESPACE_TABLE_EXT );
+            xParser->registerNamespace( "http://openoffice.org/2009/draw", FastToken::NAMESPACE | XML_NAMESPACE_DRAW_EXT );
+            xParser->registerNamespace( "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0", FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT );
+            xParser->registerNamespace( "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0", FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT );
 
             // parse
             try
@@ -291,11 +330,44 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
         // get filter
         // #110680#
         // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, rText, bTextOnly );
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, rText, bTextOnly );
+        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, rText, bTextOnly );
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-        xParser->setDocumentHandler( xFilter );
+        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+        xParser->setFastDocumentHandler( xFilter );
+        xParser->setTokenHandler( xTokenHandler );
+        // all namespaces are mentioned in content.xml but only a few of them are handled
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:office:1.0", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:style:1.0", FastToken::NAMESPACE | XML_NAMESPACE_STYLE );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:table:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TABLE );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0", FastToken::NAMESPACE | XML_NAMESPACE_DRAW );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0", FastToken::NAMESPACE | XML_NAMESPACE_FO );
+        xParser->registerNamespace( "http://www.w3.org/1999/xlink", FastToken::NAMESPACE | XML_NAMESPACE_XLINK );
+        xParser->registerNamespace( "http://purl.org/dc/elements/1.1/", FastToken::NAMESPACE | XML_NAMESPACE_DC );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:meta:1.0", FastToken::NAMESPACE | XML_NAMESPACE_META );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0", FastToken::NAMESPACE | XML_NAMESPACE_NUMBER );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0", FastToken::NAMESPACE | XML_NAMESPACE_SVG );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:chart:1.0", FastToken::NAMESPACE | XML_NAMESPACE_CHART );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0", FastToken::NAMESPACE | XML_NAMESPACE_DR3D );
+        xParser->registerNamespace( "http://www.w3.org/1998/Math/MathML", FastToken::NAMESPACE | XML_NAMESPACE_MATH );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:form:1.0", FastToken::NAMESPACE | XML_NAMESPACE_FORM );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:script:1.0", FastToken::NAMESPACE | XML_NAMESPACE_SCRIPT );
+        xParser->registerNamespace( "http://openoffice.org/2004/office", FastToken::NAMESPACE | XML_NAMESPACE_OOO );
+        xParser->registerNamespace( "http://openoffice.org/2004/writer", FastToken::NAMESPACE | XML_NAMESPACE_OOOW );
+        xParser->registerNamespace( "http://openoffice.org/2004/calc", FastToken::NAMESPACE | XML_NAMESPACE_OOOC );
+        xParser->registerNamespace( "http://www.w3.org/2001/xml-events", FastToken::NAMESPACE | XML_NAMESPACE_DOM );
+        xParser->registerNamespace( "http://openoffice.org/2005/report", FastToken::NAMESPACE | XML_NAMESPACE_REPORT );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:of:1.2", FastToken::NAMESPACE | XML_NAMESPACE_OF );
+        xParser->registerNamespace( "http://www.w3.org/1999/xhtml", FastToken::NAMESPACE | XML_NAMESPACE_XHTML );
+        xParser->registerNamespace( "http://www.w3.org/2003/g/data-view#", FastToken::NAMESPACE | XML_NAMESPACE_GRDDL );
+        xParser->registerNamespace( "http://openoffice.org/2009/office", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE_EXT );
+        xParser->registerNamespace( "http://openoffice.org/2009/table", FastToken::NAMESPACE | XML_NAMESPACE_TABLE_EXT );
+        xParser->registerNamespace( "http://openoffice.org/2009/draw", FastToken::NAMESPACE | XML_NAMESPACE_DRAW_EXT );
+        xParser->registerNamespace( "urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0", FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT );
+        xParser->registerNamespace( "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0", FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT );
+        xParser->registerNamespace( "http://www.w3.org/TR/css3-text/", FastToken::NAMESPACE | XML_NAMESPACE_CSS3TEXT );
 
         // parse
         try
@@ -418,11 +490,14 @@ void SwXMLTextBlocks::ReadInfo( void )
         aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get filter
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( xContext, *this );
+        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLBlockListImport( xContext, *this );
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLBlockListTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-        xParser->setDocumentHandler( xFilter );
+        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+        xParser->setFastDocumentHandler( xFilter );
+        xParser->registerNamespace( "http://openoffice.org/2001/block-list", FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST );
+        xParser->setTokenHandler( xTokenHandler );
 
         // parse
         try
