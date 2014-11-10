@@ -21,7 +21,6 @@
 #define INCLUDED_SD_INC_HELPER_SIMPLEREFERENCECOMPONENT_HXX
 
 #include "osl/interlck.h"
-#include "sal/types.h"
 
 #include <cstddef>
 #include <new>

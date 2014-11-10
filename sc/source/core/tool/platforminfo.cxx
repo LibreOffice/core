@@ -8,7 +8,6 @@
  */
 
 #include "platforminfo.hxx"
-#include "formulagroup.hxx"
 
 namespace sc {
 

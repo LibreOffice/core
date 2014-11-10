@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJ_HXX
 #define INCLUDED_SW_SOURCE_CORE_ACCESS_ACCFRMOBJ_HXX
 
-#include <sal/types.h>
 
 class SwAccessibleMap;
 class SwFrm;
