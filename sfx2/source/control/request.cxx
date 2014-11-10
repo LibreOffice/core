@@ -375,7 +375,7 @@ void SfxRequest_Impl::Record
 
 void SfxRequest::Record_Impl
 (
-    SfxShell&       rSh,    // the <SfxShell>, which has excecuted the Request
+    SfxShell&       rSh,    // the <SfxShell>, which has executed the Request
     const SfxSlot&  rSlot,  // the <SfxSlot>, which has executed the Request
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,
     SfxViewFrame* pViewFrame
@@ -431,7 +431,7 @@ void SfxRequest::RemoveItem( sal_uInt16 nID )
 const SfxPoolItem* SfxRequest::GetArg
 (
     sal_uInt16  nSlotId,  // Slot-Id or Which-Id of the parameters
-    bool    bDeep,    // sal_False: do not seach in the Parent-ItemSets
+    bool    bDeep,    // sal_False: do not search in the Parent-ItemSets
     TypeId  aType     // != 0:  RTTI check with Assertion
 )   const
 {
@@ -444,7 +444,7 @@ const SfxPoolItem* SfxRequest::GetItem
 (
     const SfxItemSet* pArgs,
     sal_uInt16            nSlotId,  // Slot-Id or Which-Id of the parameters
-    bool              bDeep,    // sal_False: do not seach in the Parent-ItemSets
+    bool              bDeep,    // sal_False: do not search in the Parent-ItemSets
     TypeId            aType     // != 0:  RTTI check with Assertion
 )
 

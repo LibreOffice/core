@@ -1245,7 +1245,7 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
             xAppend->appendByDescriptor(xTable);
 
         //  xTable = NULL;
-        // we need to reget the table because after appending it it is no longer valid
+        // we need to reget the table because after appending it, it is no longer valid
         if(xTables->hasByName(m_sName))
             xTables->getByName(m_sName) >>= xTable;
         else

@@ -838,7 +838,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
         // Another way round: if the section starts outside a table but the end is inside...
         // aInsPos is at the moment the Position where my EndNode will be inserted
         const SwStartNode* pStartNode = aInsPos.GetNode().StartOfSectionNode();
-        // This StartNode should be in front of me, but if not, I wanna survive
+        // This StartNode should be in front of me, but if not, I want to survive
         sal_uLong nMyIndex = pSectNd->GetIndex();
         if( pStartNode->GetIndex() > nMyIndex ) // Suspicious!
         {

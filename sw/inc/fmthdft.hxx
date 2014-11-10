@@ -29,7 +29,7 @@ class IntlWrapper;
 class SwFmt;
 
  /** Header, for PageFormats
- Client of FrmFmt discribing the header. */
+ Client of FrmFmt describing the header. */
 
 class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {

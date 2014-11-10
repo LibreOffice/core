@@ -586,7 +586,7 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
 
     if(op != Py_EQ && op != Py_NE)
     {
-        PyErr_SetString(PyExc_TypeError, "only '==' and '!=' comparisions are defined");
+        PyErr_SetString(PyExc_TypeError, "only '==' and '!=' comparisons are defined");
         return 0;
     }
     if( self == that )

@@ -142,12 +142,12 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     }
 
     /**
-     * Removes one of two listeners added before and and fires event
-     * by mean of object relation. <p>
+     * Removes one of two listeners added before and fires event
+     * by mean of object relation.<p>
      *
-     * Has <b> OK </b> status if the removed listener wasn't called. <p>
+     * Has <b> OK </b> status if the removed listener wasn't called.<p>
      *
-     * The following method tests are to be completed successfully before :
+     * The following method tests are to be completed successfully before:
      * <ul>
      *  <li> <code>addEventListener()</code> : to have added listeners </li>
      * </ul>

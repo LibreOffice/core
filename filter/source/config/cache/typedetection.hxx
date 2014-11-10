@@ -87,7 +87,7 @@ private:
         @descr      It steps over all flat detected types (given by the parameter lFlatTypes),
                     try it and search for most suitable one.
                     The specified MediaDescriptor will be patched, so it contain
-                    the right values everytime. Using of any deep detection service
+                    the right values every time. Using of any deep detection service
                     can be enabled/disabled. And last but not least: If the results
                     wont be really clear (because a flat detected type has no deep
                     detection service), a "sugested" type name will be returned as "rLastChance".

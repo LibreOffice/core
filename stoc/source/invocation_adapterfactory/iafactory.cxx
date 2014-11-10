@@ -779,7 +779,7 @@ static inline AdapterImpl * lookup_adapter(
     while (iEnd != iPos)
     {
         AdapterImpl * that = reinterpret_cast< AdapterImpl * >( *iPos );
-        // iterate thru all types if that is a matching adapter
+        // iterate through all types if that is a matching adapter
         sal_Int32 nPosTypes;
         for ( nPosTypes = nTypes; nPosTypes--; )
         {

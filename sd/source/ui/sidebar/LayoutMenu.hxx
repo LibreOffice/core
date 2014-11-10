@@ -93,7 +93,7 @@ public:
     virtual void MouseButtonDown (const MouseEvent& rEvent) SAL_OVERRIDE;
 
     /** Call this method when the set of displayed layouts is not up-to-date
-        anymore.  It will re-assemple this set according to the current
+        anymore.  It will re-assemble this set according to the current
         settings.
     */
     void InvalidateContent (void);
@@ -159,7 +159,7 @@ private:
     void AssignLayoutToSelectedSlides (AutoLayout aLayout);
 
     /** Insert a new page with the given layout.  The page is inserted via
-        the main view shell, i.e. its SID_INSERTPAGE slot is called.  It it
+        the main view shell, i.e. its SID_INSERTPAGE slot is called. If it
         does not support this slot then inserting a new page does not take
         place.  The new page is inserted after the currently active one (the
         one returned by ViewShell::GetActualPage().)

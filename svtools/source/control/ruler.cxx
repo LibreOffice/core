@@ -2807,7 +2807,7 @@ uno::Reference< XAccessible > Ruler::CreateAccessible()
     if( xAccParent.is() )
     {
         // MT: Fixed compiler issue because the address from a temporary object was used.
-        // BUT: Shoudl it really be a Pointer, instead of const&???
+        // BUT: Should it really be a Pointer, instead of const&???
         OUString aStr;
         if ( mnWinStyle & WB_HORZ )
         {

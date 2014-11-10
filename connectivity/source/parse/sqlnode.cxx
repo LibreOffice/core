@@ -552,7 +552,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
                 {
                     // skip field
                     ++i;
-                    // if the following node is the comparision operator'=',
+                    // if the following node is the comparison operator'=',
                     // we filter it as well
                     if (SQL_ISRULE(this, comparison_predicate))
                     {
@@ -2044,7 +2044,7 @@ void OSQLParseNode::eraseBraces(OSQLParseNode*& pSearchCondition)
     {
         OSQLParseNode* pRight = pSearchCondition->getChild(1);
         absorptions(pRight);
-        // if child is not a or or and tree then delete () around child
+        // if child is not an or and tree then delete () around child
         if(!(SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || SQL_ISRULE(pSearchCondition->getChild(1),search_condition)) ||
             SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || // and can always stand without ()
             (SQL_ISRULE(pSearchCondition->getChild(1),search_condition) && SQL_ISRULE(pSearchCondition->getParent(),search_condition)))
@@ -2178,7 +2178,7 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
     {
         OSQLParseNode* pRight = pSearchCondition->getChild(1);
         compress(pRight);
-        // if child is not a or or and tree then delete () around child
+        // if child is not an or and tree then delete () around child
         if(!(SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) || SQL_ISRULE(pSearchCondition->getChild(1),search_condition)) ||
             (SQL_ISRULE(pSearchCondition->getChild(1),boolean_term) && SQL_ISRULE(pSearchCondition->getParent(),boolean_term)) ||
             (SQL_ISRULE(pSearchCondition->getChild(1),search_condition) && SQL_ISRULE(pSearchCondition->getParent(),search_condition)))

@@ -61,7 +61,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
                    </li>
                    <li>
                        <b>com::sun::star::frame::XModel</b><br>
-                       A model represent a module everytime and can be used for
+                       A model represent a module every time and can be used for
                        identification directly.
                    </li>
                </ul>
@@ -81,7 +81,7 @@ interface XModuleManager : com::sun::star::uno::XInterface
                a document, this exception is thrown too!
 
        @return An identifier for the given module.
-               Note: This value varies everytime. Error will be transported
+               Note: This value varies every time. Error will be transported
                by thrown exceptions!
      */
     string identify( [in] ::com::sun::star::uno::XInterface Module )

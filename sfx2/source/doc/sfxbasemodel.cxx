@@ -1388,7 +1388,7 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
         if (bDeliverOwnership)
             m_pData->m_bSuicide = true;
         throw util::CloseVetoException(
-                "Cant close while saving.",
+                "Can not close while saving.",
                 static_cast< util::XCloseable* >(this));
     }
 
@@ -1587,7 +1587,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             // stored in normal way.
             if ( !hasLocation() || getLocation().startsWith("private:") )
             {
-                // actually in this very rare case only UI parameters have sence
+                // actually in this very rare case only UI parameters have sense
                 // TODO/LATER: should be done later, after integration of sb19
                 bRet = m_pData->m_pObjectShell->DoSave()
                     && m_pData->m_pObjectShell->DoSaveCompleted();
@@ -2994,7 +2994,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 else
                                 {
                                     // if the password is changed a special error should be used in case of shared document
-                                    throw task::ErrorCodeIOException("Cant change password for shared document.", uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
+                                    throw task::ErrorCodeIOException("Can not change password for shared document.", uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                                 }
                             }
 #endif

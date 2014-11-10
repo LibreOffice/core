@@ -143,7 +143,7 @@ void SAL_CALL OleOutputStream::closeOutput() throw( NotConnectedException, Buffe
     mxSeekable.clear();
     // close stream (and let it throw something if needed)
     xOutStrm->closeOutput();
-    // on success, insert the stream into the OLE storage (must be seeked back before)
+    // on success, insert the stream into the OLE storage (must be seek-ed back before)
     xSeekable->seek( 0 );
     if( !ContainerHelper::insertByName( mxStorage, maElementName, Any( mxTempFile ) ) )
         throw IOException();

@@ -218,7 +218,7 @@ void FilterConfigCache::ImplInit()
 
             // bFilterEntryCreated!?
             if (!( aEntry.nFlags & 3 ))
-                continue; //? Entry was already inserted ... but following code will be supressed?!
+                continue; //? Entry was already inserted ... but following code will be suppressed?!
         }
     }
 };

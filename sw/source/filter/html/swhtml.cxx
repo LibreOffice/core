@@ -4601,7 +4601,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
 
                 if( pCollToSet )
                 {
-                    // die Attribute, die die bisherige Vorlage setzt
+                    // die Attribute, die bisherige Vorlage setzt
                     // hart einfuegen
                     if( !pItemSet )
                         pItemSet = new SfxItemSet( pCollToSet->GetAttrSet() );

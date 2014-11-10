@@ -32,7 +32,7 @@ using namespace com::sun::star::uno;
 namespace cppu
 {
 
-// due to static Reflection destruction from usr, ther must be a mutex leak (#73272#)
+// due to static Reflection destruction from usr, there must be a mutex leak (#73272#)
 inline static Mutex & getWeakMutex()
 {
     static Mutex * s_pMutex = 0;

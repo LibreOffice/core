@@ -1376,7 +1376,7 @@ OUString SfxViewShell::GetSelectionText
     is included in the current selection. This is for example used when
     sending emails.
 
-    When called with "CompleteWords == TRUE", it is for example sufficent
+    When called with "CompleteWords == TRUE", it is for example sufficient
     with having the Cursor positioned somewhere within an URL in-order
     to have the entire URL returned.
 */

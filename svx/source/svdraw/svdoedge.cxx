@@ -1172,7 +1172,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                .  .  .  .  .      .  .  .  .  .     only in      .  .  . _|__|_    _|__|_ .  .  .      .  .  .  .  .      .  .  .  .  .
                *  .  *  . _|_    _|_ .  *  .  *      part:       *  .  * _|_ *      * _|_ *  .  *      *  .  *  .  *      *  .  *  .  *
 
-               3.3: The line exits point away from the other object or or miss its back (52+4).
+               3.3: The line exits point away from the other object or miss its back (52+4).
               _|__|__|__|_ *      * _|__|__|__|_     *  .  .  .  *      *  .  *  .  *     these 4      *  .  *  .  *      *  .  *  .  *
               _|__|__|__|_ .      . _|__|__|__|_     T  T  T  .  .      .  .  T  T  T  constellations  .  .  .  T  .      .  T  .  .  .
               _|__|_ |- .  *      *  . -| _|__|_     T  T  |- .  *      *  . -|  T  T    are covered   *  .  |- .  *      *  . -|  .  *
@@ -1520,7 +1520,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
 }
 
 /*
-There could be a maximum of 64 different developments with with 5 lines, a
+There could be a maximum of 64 different developments with 5 lines, a
 maximum of 32 developments with 4 lines, a maximum of 16 developments with
 3 lines, a maximum of 8 developments with 2 lines.
 This gives us a total of 124 possibilities.

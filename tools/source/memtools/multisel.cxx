@@ -190,7 +190,7 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
             // try to merge the previous sub selection
             ImplMergeSubSelections( nSubSelPos-1, nSubSelPos );
         }
-        // is is at the beginning of the found sub selection
+        // is it at the beginning of the found sub selection
         else if (  nSubSelPos < aSels.size()
                 && aSels[ nSubSelPos ]->Min() == (nIndex+1)
         )

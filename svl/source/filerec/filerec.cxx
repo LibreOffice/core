@@ -149,7 +149,7 @@ bool SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
  * that do not recognise the new tag will skip the new record
  * automatically. This does cause a slight run time inefficiency,
  * compared just starting reading, but if the first record
- * is the wanted one the difference is just a comparision of 2 bytes.
+ * is the wanted one the difference is just a comparison of 2 bytes.
  */
 
 SfxMiniRecordReader::SfxMiniRecordReader(SvStream* pStream, sal_uInt8 nTag)

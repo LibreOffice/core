@@ -192,7 +192,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * transferring with <code>endDocument</code> method call. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during
-         * the whole transfering and if the appropriate changes
+         * the whole transferring and if the appropriate changes
          * occurred in the document where XML data was trnsfered to.
          * This check is performed by checker relation.
          */
@@ -227,7 +227,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * <code>'XDocumentHandler.XMLData'</code>. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during XML data
-         * transfering in <code>startDocument</code> and
+         * transferring in <code>startDocument</code> and
          * <code>startElement</code> method tests. <p>
          *
          * Exact checking of XML transfer is made in <code>endDocument</code>
@@ -292,7 +292,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * Does nothing. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during XML data
-         * transfering in <code>startDocument</code> and
+         * transferring in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
     public void _endElement() {
@@ -311,7 +311,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * Does nothing. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during XML data
-         * transfering in <code>startDocument</code> and
+         * transferring in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
     public void _characters() {
@@ -330,7 +330,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * Does nothing. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during XML data
-         * transfering in <code>startDocument</code> and
+         * transferring in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
     public void _ignorableWhitespace() {
@@ -349,7 +349,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * Does nothing. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during XML data
-         * transfering in <code>startDocument</code> and
+         * transferring in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
     public void _processingInstruction() {
@@ -368,7 +368,7 @@ public class _XDocumentHandler extends MultiMethodTest {
          * Does nothing. <p>
          *
          * Has <b>OK</b> status if no exceptions occurred during XML data
-         * transfering in <code>startDocument</code> and
+         * transferring in <code>startDocument</code> and
          * <code>startElement</code> method tests.
          */
     public void _setDocumentLocator() {

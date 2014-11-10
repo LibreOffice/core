@@ -371,10 +371,10 @@ public:
         Index of paragraph to query line length in
 
         @param nIndex[0 .. m-1]
-        Index of of the chara in the paragraph text
+        Index of the char in the paragraph text
 
         @returns [0 .. k-1]
-        The line number of the chara in the paragraph
+        The line number of the char in the paragraph
      */
     virtual sal_Int32          GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) const = 0;
 

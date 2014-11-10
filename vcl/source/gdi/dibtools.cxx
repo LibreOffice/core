@@ -678,7 +678,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
 
             // some clipboard entries have alpha mask on zero to say that there is
             // no alpha; do only use this when the other masks are set. The MS docu
-            // says that that masks are only to be set when bV5Compression is set to
+            // says that masks are only to be set when bV5Compression is set to
             // BI_BITFIELDS, but there seem to exist a wild variety of usages...
             if((bRedSet || bGreenSet || bBlueSet) && (0 == aHeader.nV5AlphaMask))
             {

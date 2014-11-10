@@ -265,7 +265,7 @@ public:
 
     /**
      * Test for pivot table that include field with various non-default field
-     * refrences.
+     * references.
      */
     void testPivotTableFieldReference();
 

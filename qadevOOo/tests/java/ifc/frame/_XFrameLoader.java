@@ -125,17 +125,17 @@ public class _XFrameLoader extends MultiMethodTest {
     private boolean loaded = false ;
 
     /**
-    * Firts <code>cancel</code> method test is called.
+    * First <code>cancel</code> method test is called.
     * If in that test loaing process was interrupted by
     * <code>cancel</code> call then <code>load</code> test
     * executes. It loads a component, waits some moment to
     * listener have a chance to be called  and then checks
-    * if the load listener was called. <p>
+    * if the load listener was called.<p>
     * Has <b>OK</b> status if <code>cancel</code> method test
     * didn't interrupt loading and it was successful, or
     * if in this method it loads successful and listener's
     * <code>finished</code> method was called.
-    * The following method tests are to be executed before :
+    * The following method tests are to be executed before:
     * <ul>
     *  <li> <code> cancel() </code> </li>
     * </ul>

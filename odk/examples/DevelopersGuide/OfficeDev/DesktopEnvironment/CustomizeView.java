@@ -185,7 +185,7 @@ public class CustomizeView extends    JPanel
 
         /**
          * ctor
-         * It initialize an instance of this clas only.
+         * It initialize an instance of this class only.
          */
         private ClickListener( String                    sURL   ,
                        String                    sProp  ,

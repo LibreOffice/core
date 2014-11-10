@@ -1143,7 +1143,7 @@ public class DocumentLoader
             matchParent = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
             // should have document load task publish pageCount before this happens: Shouldn't try to pre-fetch
-            // non-existant pages && need to know how many navigation thumbnails to render.
+            // non-existent pages && need to know how many navigation thumbnails to render.
             // Should put these on another serial executor?
             flipper.addView(new PageViewer(0), 0, matchParent);
             for (int i = 0; i < PAGECACHE_PLUSMINUS; i++)

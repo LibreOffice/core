@@ -1915,7 +1915,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                         // another context that had the focus, then the focus
                         // just moves from the old context to the new one. We
                         // then have to send a focus event and a caret event for
-                        // the old context. We have to to that now,
+                        // the old context. We have to do that now,
                         // because after we have left this method, anyone might
                         // call getStates for the new context and will get a
                         // focused state then. Sending the focus changes event

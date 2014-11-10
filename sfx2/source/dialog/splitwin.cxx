@@ -718,7 +718,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
     InsertItem( pDockWin->GetType(), pDockWin, nWinSize, nPos, nSet, nItemBits );
 
     // SplitWindows are once created in SFX and when inserting the first
-    // DockingWindows is made visable.
+    // DockingWindows is made visible.
     if ( GetItemCount( 0 ) == 1 && GetItemCount( 1 ) == 1 )
     {
         // The Rearranging in WorkWindow and a Show() on the SplitWindow is
@@ -1154,7 +1154,7 @@ void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
         pEmptyWin->nState |= 2;
         if ( IsFloatingMode() )
         {
-            // FloatingWindow is not visable, thus display it
+            // FloatingWindow is not visible, thus display it
             pWorkWin->ArrangeAutoHideWindows( this );
             Show();
         }

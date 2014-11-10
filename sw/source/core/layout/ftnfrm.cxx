@@ -522,7 +522,7 @@ void SwFtnFrm::Cut()
             pUp->Cut();
             delete pUp;
             // If the last footnote container was removed from a column
-            // section without a Follow, then this section can be shrinked.
+            // section without a Follow, then this section can be shrunk.
             if( pSect && !pSect->ToMaximize( false ) && !pSect->IsColLocked() )
                 pSect->_InvalidateSize();
         }
@@ -677,7 +677,7 @@ SwLayoutFrm *SwFrm::GetNextFtnLeaf( MakePageType eMakePage )
     return pCont;
 }
 
-/// Get the preceeding layout leaf in that the frame can be moved.
+/// Get the preceding layout leaf in that the frame can be moved.
 SwLayoutFrm *SwFrm::GetPrevFtnLeaf( MakePageType eMakeFtn )
 {
     // The predecessor of a footnote is (if possible)

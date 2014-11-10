@@ -27,7 +27,7 @@
 
 namespace sd { namespace framework {
 
-/** This module is responsible for showing the slide sorter bar and the the
+/** This module is responsible for showing the slide sorter bar and the
     slide sorter view in the center pane.
 */
 class SlideSorterModule

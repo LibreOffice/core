@@ -242,7 +242,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
     pDescArr = new SwTOXDescription*[nTypeCount];
     pxIndexSectionsArr = new SwIndexSections_Impl*[nTypeCount];
     //the standard user index is on position TOX_USER
-    //all user user indexes follow after position TOX_AUTHORITIES
+    //all user indexes follow after position TOX_AUTHORITIES
     if(pCurTOX)
     {
         bEditTOX = true;

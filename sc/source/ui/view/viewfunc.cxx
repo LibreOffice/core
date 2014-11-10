@@ -129,7 +129,7 @@ bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, bool bAttrC
         return false;
 
     //  Test: treat input with numberformat (bAttrChanged) always as new Attribute
-    //  (discard old Area ). If not not wanted, discard if-statement
+    //  (discard old Area ). If not wanted, discard if-statement
     if ( bAttrChanged )
     {
         StartFormatArea();
@@ -2137,7 +2137,7 @@ void ScViewFunc::SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt
 void ScViewFunc::ModifyCellSize( ScDirection eDir, bool bOptimal )
 {
     //! step size adjustable
-    //  step size is also minumum
+    //  step size is also minimum
     sal_uInt16 nStepX = STD_COL_WIDTH / 5;
     sal_uInt16 nStepY = ScGlobal::nStdRowHeight;
 
@@ -2553,7 +2553,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
             if (nPrecision)
                 --nPrecision;           // decrement
             else
-                bError = true;          // 0 is minumum
+                bError = true;          // 0 is minimum
         }
     }
 

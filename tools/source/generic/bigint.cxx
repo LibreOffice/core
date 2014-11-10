@@ -33,7 +33,7 @@ static const long MY_MAXSHORT = 0x00007fff;
 static const long MY_MINSHORT = -MY_MAXSHORT;
 
 /*
- * The algorithms for Addition, Substraction, Multiplication and Divison
+ * The algorithms for Addition, Subtraction, Multiplication and Division
  * of large numbers originate from SEMINUMERICAL ALGORITHMS by
  * DONALD E. KNUTH in the series The Art of Computer Programming:
  * chapter 4.3.1. The Classical Algorithms.
@@ -196,7 +196,7 @@ void BigInt::AddLong( BigInt& rB, BigInt& rErg )
         rErg.bIsNeg = bIsNeg && rB.bIsNeg;
         rErg.bIsBig = true;
     }
-    // If one of the values is negative, perform substraction instead
+    // If one of the values is negative, perform subtraction instead
     else if (bIsNeg)
     {
         bIsNeg = false;

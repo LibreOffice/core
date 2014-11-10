@@ -736,7 +736,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
         createButton( 58, 63, 13, "reload", "reload", FormFeature.ReloadForm );
 
 
-        // create a sub for for the sales
+        // create a sub form for the sales
 
         // for this, first create a sub form and bind it to the SALES table
         XIndexContainer xSalesForm = m_document.createSubForm( m_xMasterForm, "Sales" );

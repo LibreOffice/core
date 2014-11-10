@@ -228,7 +228,7 @@ protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                                      m_xTableColumns;
 
-            ::std::vector<sal_Int32> m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
+            ::std::vector<sal_Int32> m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
             ::std::vector<sal_Int32> m_aOrderbyColumnNumber;
             ::std::vector<TAscendingOrder>  m_aOrderbyAscending;
             ::com::sun::star::uno::Sequence< OUString> m_aColumnNames;

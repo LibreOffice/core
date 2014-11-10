@@ -279,7 +279,7 @@ JVMFWK_DLLPUBLIC void SAL_CALL jfw_freeJavaInfo(JavaInfo *pInfo);
    <code>rtl_uString</code> members is determined
    by the respective comparison function (see
    <code>OUString::equals</code>).
-   Similiarly the equality of the <code>sal_Sequence</code> is
+   Similarly the equality of the <code>sal_Sequence</code> is
    also determined by a comparison
    function (see <code>rtl::ByteSequence::operator ==</code>). </p>
    <p>
@@ -298,7 +298,7 @@ JVMFWK_DLLPUBLIC sal_Bool SAL_CALL jfw_areEqualJavaInfo(
 /** determines if a Java Virtual Machine is already running.
 
     <p>As long as the office and the JREs only support one
-    Virtual Machine per process the Java settings, particulary the
+    Virtual Machine per process the Java settings, particularly the
     selected Java, are not effective immediately after changing when
     a VM has already been running. That is, if a JRE A was used to start
     a VM and then a JRE B is selected, then JRE B will only be used

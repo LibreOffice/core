@@ -846,7 +846,7 @@ void SAL_CALL ChartController::queryClosing(
     }
     else
     {
-        //@ todo prepare to to closing model -> don't start any further hindering actions
+        //@ todo prepare to closing model -> don't start any further hindering actions
     }
 }
 

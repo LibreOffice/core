@@ -247,7 +247,7 @@ public:
 
 private:
     class WeakSdrObjectContainerType;
-    /// This list, if it exists, defines the navigation order.  It it does
+    /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
     ::boost::scoped_ptr<WeakSdrObjectContainerType> mpNavigationOrder;
 

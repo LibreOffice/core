@@ -198,7 +198,7 @@ bool VbaInputStream::updateChunk()
     }
     // decompression sometimes leaves the stream pos offset 1 place ( at
     // least ) past or before the expected stream pos.
-    // here we make sure we are on the chunk boundry
+    // here we make sure we are on the chunk boundary
     mpInStrm->seek( target );
     mnChunkPos = 0;
     return !mbEof;

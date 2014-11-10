@@ -838,7 +838,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
             // OpenHdl called from URLBox; travelling through the list of URLs should not cause an opening
             return 0;                   // MBA->PB: seems to be called never ?!
 
-        // get the URL from from the edit field ( if not empty )
+        // get the URL from the edit field ( if not empty )
         if ( !pThis->_pImp->_pEdFileName->GetText().isEmpty() )
         {
             OUString aText = pThis->_pImp->_pEdFileName->GetText();

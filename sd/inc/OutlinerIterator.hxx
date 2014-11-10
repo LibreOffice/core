@@ -304,7 +304,7 @@ class IteratorPosition
 public:
     /** Create a new object with all data members set to default values.
         These values should not be accessed.  The only use of the object as
-        it is is as a marker in comparisons.
+        it is as a marker in comparisons.
     */
     IteratorPosition (void);
     /** Create a new object with all data members set from the given

@@ -940,7 +940,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 {
                     if ( nVerb == 0 || nVerb == embed::EmbedVerbs::MS_OLEVERB_OPEN )
                     {
-                        // a workaround for the default verb, usually makes sence for alien objects
+                        // a workaround for the default verb, usually makes sense for alien objects
                         try
                         {
                             m_pImp->m_xObject->doVerb( -9 ); // open own view, a workaround verb that is not visible

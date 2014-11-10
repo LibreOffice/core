@@ -66,7 +66,7 @@ public class StyleInitialization {
 
             String sMyText = "A very short paragraph for illustration only";
 
-            // you can travel with the cursor throught the text document.
+            // you can travel with the cursor through the text document.
             // you travel only at the model, not at the view. The cursor that you can
             // see on the document doesn't change the position
             com.sun.star.text.XTextCursor xTextCursor = null;
@@ -109,7 +109,7 @@ public class StyleInitialization {
 
             // END: 'Style basics' Section from the Tutorial
 
-            // There are two way to travel throught the paragraphs, with a
+            // There are two way to travel through the paragraphs, with a
             // paragraph cursor, or a enumeration.
             // You find both ways in this example
 

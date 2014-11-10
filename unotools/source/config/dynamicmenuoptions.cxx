@@ -77,8 +77,8 @@ class SvtDynMenu
 {
     public:
         // append setup written menu entry
-        // Don't touch name of entry. It was defined by setup and must be the same everytime!
-        // Look for double menu entries here too ... may be some separator items are supeflous ...
+        // Don't touch name of entry. It was defined by setup and must be the same every time!
+        // Look for double menu entries here too... may be some separator items are superflous...
         void AppendSetupEntry( const SvtDynMenuEntry& rEntry )
         {
             if(

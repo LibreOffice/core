@@ -4506,7 +4506,7 @@ void Test::testExternalRef()
     val = 96;
     rExtDoc.SetValue(1, 4, 2, val);
 
-    // Test external refernces on the main document while the external
+    // Test external references on the main document while the external
     // document is still in memory.
     m_pDoc->InsertTab(0, OUString("Test Sheet"));
     m_pDoc->SetString(0, 0, 0, OUString("='file:///extdata.fake'#Data1.A1"));

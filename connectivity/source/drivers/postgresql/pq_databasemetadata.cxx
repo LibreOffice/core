@@ -1321,7 +1321,7 @@ sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype 
 //     sal_Int32 ret = com::sun::star::sdbc::DataType::DISTINCT;
     // map all unknown types to memo (longvarchar). This allows to show them in
     // string representation. Additionally, the edit-table-type-selection-box
-    // is not so unuseable anymore.
+    // is not so unusable anymore.
     sal_Int32 ret = com::sun::star::sdbc::DataType::LONGVARCHAR;
     if( typtype.equalsAscii( "b" ) )
     {
@@ -2400,7 +2400,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
        6. INDEX_NAME string -> index name; NULL when TYPE is tableIndexStatistic
        7. TYPE short -> index type:
               * 0 - this identifies table statistics that are returned
-                    in conjuction with a table's index descriptions
+                    in conjunction with a table's index descriptions
               * CLUSTERED - this is a clustered index
               * HASHED - this is a hashed index
               * OTHER - this is some other style of index

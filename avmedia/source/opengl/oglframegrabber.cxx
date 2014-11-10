@@ -42,7 +42,7 @@ uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( do
     int nRet = gltf_renderer_get_bitmap(&pHandle, 1, (char*)pBuffer.get(), GL_BGRA);
     if( nRet != 0 )
     {
-        SAL_WARN("avmedia.opengl", "Error occured while rendering to bitmap! Error code: " << nRet);
+        SAL_WARN("avmedia.opengl", "Error occurred while rendering to bitmap! Error code: " << nRet);
         return uno::Reference< css::graphic::XGraphic >();
     }
     BitmapEx aBitmap = OpenGLHelper::ConvertBGRABufferToBitmapEx(pBuffer.get(), m_rHandle.viewport.width, m_rHandle.viewport.height);

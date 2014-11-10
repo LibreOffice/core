@@ -128,7 +128,7 @@ void BaseContainer::impl_initFlushMode()
     if (!m_pFlushCache)
         m_pFlushCache = m_rCache->clone();
     if (!m_pFlushCache)
-        throw css::uno::RuntimeException( "Cant create write copy of internal used cache on demand.",
+        throw css::uno::RuntimeException( "Can not create write copy of internal used cache on demand.",
                 static_cast< OWeakObject* >(this));
     // <- SAFE
 }
@@ -484,7 +484,7 @@ void SAL_CALL BaseContainer::flush()
 
     if (!m_pFlushCache)
         throw css::lang::WrappedTargetRuntimeException(
-                "Cant guarantee cache consistency. Special flush container does not exists!",
+                "Can not guarantee cache consistency. Special flush container does not exists!",
                 static_cast< OWeakObject* >(this),
                 css::uno::Any());
 

@@ -917,7 +917,7 @@ sal_Int32 StgDataStrm::Read( void* pBuf, sal_Int32 n )
             }
             else
             {
-                // partial block read thru the cache.
+                // partial block read through the cache.
                 pPg = rIo.Get( nPage, false );
                 if( !pPg.is() )
                     break;
@@ -977,7 +977,7 @@ sal_Int32 StgDataStrm::Write( const void* pBuf, sal_Int32 n )
             }
             else
             {
-                // partial block read thru the cache.
+                // partial block read through the cache.
                 pPg = rIo.Get( nPage, false );
                 if( !pPg.is() )
                     break;
@@ -1051,7 +1051,7 @@ sal_Int32 StgSmallStrm::Read( void* pBuf, sal_Int32 n )
         {
             if( !pData || !pData->Pos2Page( nPage * nPageSize + nOffset ) )
                 break;
-            // all reading thru the stream
+            // all reading through the stream
             short nRes = (short) pData->Read( (sal_uInt8*)pBuf + nDone, nBytes );
             nDone = nDone + nRes;
             nPos += nRes;
@@ -1087,7 +1087,7 @@ sal_Int32 StgSmallStrm::Write( const void* pBuf, sal_Int32 n )
             nBytes = (short) n;
         if( nBytes )
         {
-            // all writing goes thru the stream
+            // all writing goes through the stream
             sal_Int32 nDataPos = nPage * nPageSize + nOffset;
             if ( !pData
               || ( pData->GetSize() < ( nDataPos + nBytes )

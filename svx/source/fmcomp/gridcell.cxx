@@ -232,7 +232,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
 
     impl_toggleScriptManager_nothrow( true );
 
-    // only if we use have a bound field, we use a a controller for displaying the
+    // only if we use have a bound field, we use a controller for displaying the
     // window in the grid
     if (m_xField.is())
         m_xController = pCellControl->CreateController();
@@ -664,7 +664,7 @@ void DbCellControl::implValuePropertyChanged( )
 
 void DbCellControl::implAdjustGenericFieldSetting( const Reference< XPropertySet >& /*_rxModel*/ )
 {
-    // nothing to to here
+    // nothing to do here
 }
 
 

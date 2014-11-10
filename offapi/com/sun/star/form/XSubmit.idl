@@ -45,7 +45,7 @@ published interface XSubmit: com::sun::star::uno::XInterface
     /** submits the component's data to a specified target.
 
         @param aControl
-            the control whose data is to be be submitted
+            the control whose data is to be submitted
 
         @param aMouseEvt
             the event which triggered the submit, if it was a mouse event

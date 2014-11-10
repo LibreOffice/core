@@ -1041,7 +1041,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
                              const Rectangle& rOldBoundRect )
 {
     // #i26791# - no event handling, if existing <SwViewShell>
-    // is in contruction
+    // is in construction
     SwDoc* pDoc = GetFmt()->GetDoc();
     if ( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() &&
          pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->IsInConstructor() )

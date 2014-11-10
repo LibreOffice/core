@@ -54,7 +54,7 @@ published service DocumentIndex
      */
     [optional, property] boolean UsePP;
 
-    /** determines if if following page numbers are displayed using a dash.
+    /** determines if following page numbers are displayed using a dash.
      */
     [optional, property] boolean UseDash;
 

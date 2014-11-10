@@ -142,7 +142,7 @@ public:
     bool                bInNextJob;     // for Assertions
     bool                bFirstRound;    // First round in Update
     sal_uInt16              nFirstShell;    // Shell, the first round is preferred
-    sal_uInt16              nOwnRegLevel;   // Counts the real Locks, exept those of the Super Bindings
+    sal_uInt16              nOwnRegLevel;   // Counts the real Locks, except those of the Super Bindings
     InvalidateSlotMap       m_aInvalidateSlots; // store slots which are invalidated while in update
 };
 
@@ -1115,7 +1115,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
 
     if ( SFX_KIND_ENUM == pSlot->GetKind() )
     {
-        // for Enum-Slots, the Master has to be excecuted with the value
+        // for Enum-Slots, the Master has to be executed with the value
         // of the enums
         const SfxSlot *pRealSlot = pShell->GetInterface()->GetRealSlot(pSlot);
         const sal_uInt16 nSlotId = pRealSlot->GetSlotId();

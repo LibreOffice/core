@@ -190,7 +190,7 @@ public class GLController {
 
         // Only try to create the compositor if we have a valid surface and gecko is up. When these
         // two conditions are satisfied, we can be relatively sure that the compositor creation will
-        // happen without needing to block anyhwere. Do it with a sync gecko event so that the
+        // happen without needing to block anywhere. Do it with a sync gecko event so that the
         // android doesn't have a chance to destroy our surface in between.
         /*if (GeckoThread.checkLaunchState(GeckoThread.LaunchState.GeckoRunning)) {
             GeckoAppShell.sendEventToGeckoSync(GeckoEvent.createCompositorCreateEvent(mWidth, mHeight));

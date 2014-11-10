@@ -348,7 +348,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         if(m_xFrame.is())
             m_xFrame->activate();
         else {
-            // create frame and initialize it with with the created window
+            // create frame and initialize it with the created window
             m_xFrame = frame::Frame::create( comphelper::getComponentContext(m_xFactory) );
             m_xFrame->initialize(m_xEditWindow);
 

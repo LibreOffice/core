@@ -498,7 +498,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, sal_uInt16 nMode)
 /** This handler is called after <SfxDispatcher::Invalidate()> or after
     changes on the stack (<SfxDispatcher::Push()> and <SfxDispatcher::Pop())
 
-    It flushes the Stack, if it is dirty, thus it actually excecutes the
+    It flushes the Stack, if it is dirty, thus it actually executes the
     pending Push and Pop commands.
 */
 IMPL_LINK_INLINE_START( SfxDispatcher, EventHdl_Impl, void *, pvoid )
@@ -935,7 +935,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode nCall,
     return 0;
 }
 
-/** Method to excecute a <SfxSlot>s over the Slot-Id.
+/** Method to execute a <SfxSlot>s over the Slot-Id.
 
     @param nSlot the Id of the executing function
     @param eCall SfxCallMode::SYNCRHON, ..._ASYNCHRON or ..._SLOT
@@ -985,7 +985,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     return 0;
 }
 
-/** Method to excecute a <SfxSlot>s over the Slot-Id.
+/** Method to execute a <SfxSlot>s over the Slot-Id.
 
     @param nSlot the Id of the executing function
     @param eCall SfxCallMode::SYNCRHON, ..._ASYNCHRON or ..._SLOT
@@ -1029,7 +1029,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
     return 0;
 }
 
-/** Method to excecute a <SfxSlot>s over the Slot-Id.
+/** Method to execute a <SfxSlot>s over the Slot-Id.
 
     [Note]
 
@@ -1714,7 +1714,7 @@ bool SfxDispatcher::_TryIntercept_Impl
 
     @param nSlot Slot-Id to search for
     @param rServer <SfxSlotServer>-Instance to fill
-    @param bModal Dispite ModalMode
+    @param bModal Despite ModalMode
 
     @return         true
                     The Slot was found, rServer is valid.
@@ -1818,7 +1818,7 @@ bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
             bool bIsServerShell = !pImp->pFrame || bIsInPlace;
 
             // Of course ShellServer-Slots are also executable even when it is
-            // excecuted on a container dispatcher without a IPClient.
+            // executed on a container dispatcher without a IPClient.
             if ( !bIsServerShell )
             {
                 SfxViewShell *pViewSh = pImp->pFrame->GetViewShell();

@@ -586,7 +586,7 @@ public:
      * Reset column position of formula cells within specified row range.
      * Reference positions are also adjusted to reflect the new position so
      * that the formula cells still reference the same cells or ranges after
-     * the the position change.  The position of a formula cell before the
+     * the position change.  The position of a formula cell before the
      * call is interpreted as the old position of that cell.
      *
      * Caller needs to ensure that no formula groups cross the top and bottom

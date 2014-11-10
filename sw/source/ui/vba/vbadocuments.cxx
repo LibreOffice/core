@@ -89,7 +89,7 @@ SwVbaDocuments::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration >
 SwVbaDocuments::createEnumeration() throw (uno::RuntimeException)
 {
-    // #FIXME its possible the DocumentEnumImpl here doens't reflect
+    // #FIXME its possible the DocumentEnumImpl here doesn't reflect
     // the state of this object ( although it should ) would be
     // safer to create an enumeration based on this objects state
     // rather than one effectively based of the desktop component
