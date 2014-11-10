@@ -137,11 +137,11 @@ sal_uInt32 Decrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
     sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
 
 #if USE_TLS_OPENSSL
-    EVP_DecryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
+    (void)EVP_DecryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-    PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
+    (void)PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
@@ -185,11 +185,11 @@ sal_uInt32 Encrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, 
     sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
 
 #if USE_TLS_OPENSSL
-    EVP_EncryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
+    (void)EVP_EncryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-    PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
+    (void)PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
