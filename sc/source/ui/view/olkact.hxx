@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VIEW_OLKACT_HXX
 #define INCLUDED_SC_SOURCE_UI_VIEW_OLKACT_HXX
 
-#include <sal/config.h>
 
 class ScViewData;
 

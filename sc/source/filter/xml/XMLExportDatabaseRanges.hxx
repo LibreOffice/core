@@ -20,13 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATABASERANGES_HXX
 #define INCLUDED_SC_SOURCE_FILTER_XML_XMLEXPORTDATABASERANGES_HXX
 
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sheet/FilterOperator2.hpp>
-#include <com/sun/star/sheet/TableFilterField2.hpp>
-#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
-#include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 class ScXMLExport;
 class ScDocument;

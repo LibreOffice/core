@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 #include <tools/gen.hxx>
-#include <boost/function.hpp>
 
 namespace sd { namespace slidesorter { namespace model {
 

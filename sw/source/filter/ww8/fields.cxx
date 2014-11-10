@@ -19,7 +19,6 @@
 
 #include "fields.hxx"
 #include <osl/diagnose.h>
-#include <sal/macros.h>
 #include <stddef.h>
 
 namespace ww

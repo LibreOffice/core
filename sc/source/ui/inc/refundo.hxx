@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_REFUNDO_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_REFUNDO_HXX
 
-#include <sal/types.h>
 
 class ScDocument;
 class ScDBCollection;
