@@ -45,11 +45,11 @@ $(solaris_WORKDIR)/%/postinstall: $(solaris_SRCDIR)/postinstall
 $(solaris_WORKDIR)/%/postremove: $(solaris_SRCDIR)/postremove
 	cat $< | tr -d "\015" > $@
 
-$(solaris_WORKDIR)/%/mailcap: $(solaris_SRCDIR)/prototype
+$(solaris_WORKDIR)/%/prototype: $(solaris_SRCDIR)/prototype
 	cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME.$*)/g" -e "s_%SOURCE_$(call gb_CustomTarget_get_workdir,sysui/share)/$*_g" -e "s/%ICONPREFIX/$(UNIXFILENAME.$*)/g" > $@
 
-$(solaris_WORKDIR)/%-desktop-integration.tar.gz: $(solaris_WORKDIR)/copyright $(solaris_WORKDIR)/pkginfo $(solaris_WORKDIR)/depend $(solaris_WORKDIR)/mailcap $(solaris_WORKDIR)/postinstall $(solaris_WORKDIR)/postremove $(solaris_WORKDIR)/prototype $(call gb_CustomTarget_get_workdir,sysui/share)/%/openoffice.org.xml
-	pkgmk -l 1073741824 -r $(solaris_WORKDIR) -f $(solaris_WORKDIR)/$*/prototype -o -d $(solaris_WORKDIR) ARCH=all VERSION=$(PKGVERSION.$*)
+$(solaris_WORKDIR)/%-desktop-integration.tar.gz: $(solaris_WORKDIR)/%/copyright $(solaris_WORKDIR)/%/pkginfo $(solaris_WORKDIR)/%/depend $(solaris_WORKDIR)/%/mailcap $(solaris_WORKDIR)/%/postinstall $(solaris_WORKDIR)/%/postremove $(solaris_WORKDIR)/%/prototype $(call gb_CustomTarget_get_workdir,sysui/share)/%/openoffice.org.xml
+#	pkgmk -l 1073741824 -r $(solaris_WORKDIR) -f $(solaris_WORKDIR)/$*/prototype -o -d $(solaris_WORKDIR) ARCH=all VERSION=$(PKGVERSION.$*)
 	$(GNUTAR) -cf - -C $(solaris_WORKDIR) $*$(LIBO_MAJOR) -desktop-int | gzip > $@
 
 # vim: set noet sw=4 ts=4:
