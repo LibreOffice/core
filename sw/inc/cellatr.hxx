@@ -98,11 +98,11 @@ public:
 };
 
 inline const SwTblBoxNumFormat      &SwAttrSet::GetTblBoxNumFmt(bool bInP) const
-    {   return (const SwTblBoxNumFormat&)Get( RES_BOXATR_FORMAT,bInP); }
+    {   return static_cast<const SwTblBoxNumFormat&>(Get( RES_BOXATR_FORMAT,bInP)); }
 inline const SwTblBoxFormula        &SwAttrSet::GetTblBoxFormula(bool bInP) const
-    {   return (const SwTblBoxFormula&)Get( RES_BOXATR_FORMULA,bInP); }
+    {   return static_cast<const SwTblBoxFormula&>(Get( RES_BOXATR_FORMULA,bInP)); }
 inline const SwTblBoxValue          &SwAttrSet::GetTblBoxValue(bool bInP) const
-    {   return (const SwTblBoxValue&)Get( RES_BOXATR_VALUE, bInP); }
+    {   return static_cast<const SwTblBoxValue&>(Get( RES_BOXATR_VALUE, bInP)); }
 
 inline const SwTblBoxNumFormat      &SwFmt::GetTblBoxNumFmt(bool bInP) const
     {   return aSet.GetTblBoxNumFmt(bInP); }

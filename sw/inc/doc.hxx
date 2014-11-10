@@ -862,7 +862,7 @@ public:
                        const bool bReset = true,
                        const bool bResetListAttrs = false);
     SwTxtFmtColl* FindTxtFmtCollByName( const OUString& rName ) const
-        {   return (SwTxtFmtColl*)FindFmtByName( (SwFmtsBase&)*mpTxtFmtCollTbl, rName ); }
+        {   return static_cast<SwTxtFmtColl*>(FindFmtByName( (SwFmtsBase&)*mpTxtFmtCollTbl, rName )); }
 
     void ChkCondColls();
 
@@ -872,7 +872,7 @@ public:
     SwGrfFmtColl *MakeGrfFmtColl(const OUString &rFmtName,
                                     SwGrfFmtColl *pDerivedFrom);
     SwGrfFmtColl* FindGrfFmtCollByName( const OUString& rName ) const
-        {   return (SwGrfFmtColl*)FindFmtByName( (SwFmtsBase&)*mpGrfFmtCollTbl, rName ); }
+        {   return static_cast<SwGrfFmtColl*>(FindFmtByName( (SwFmtsBase&)*mpGrfFmtCollTbl, rName )); }
 
     // Table formatting
     const SwFrmFmts* GetTblFrmFmts() const  { return mpTblFrmFmtTbl; }

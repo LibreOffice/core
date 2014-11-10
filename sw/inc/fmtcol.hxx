@@ -229,7 +229,7 @@ public:
                                     { return aSubCondition.pFldExpression; }
 
     void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
-    SwTxtFmtColl* GetTxtFmtColl() const     { return (SwTxtFmtColl*)GetRegisteredIn(); }
+    SwTxtFmtColl* GetTxtFmtColl() const     { return const_cast<SwTxtFmtColl*>(static_cast<const SwTxtFmtColl*>(GetRegisteredIn())); }
     void RegisterToFormat( SwFmt& );
 };
 

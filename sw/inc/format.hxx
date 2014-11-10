@@ -108,7 +108,7 @@ public:
         @return count of deleted hints. */
     virtual sal_uInt16 ResetAllFmtAttr();
 
-    inline SwFmt* DerivedFrom() const { return (SwFmt*)GetRegisteredIn(); }
+    inline SwFmt* DerivedFrom() const { return const_cast<SwFmt*>(static_cast<const SwFmt*>(GetRegisteredIn())); }
     inline bool IsDefault() const { return DerivedFrom() == 0; }
 
     inline OUString GetName() const   { return aFmtName; }

@@ -24,6 +24,7 @@
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <swrect.hxx>
+#include <swtblfmt.hxx>
 
 #include <memory>
 #include <boost/noncopyable.hpp>
@@ -183,9 +184,9 @@ public:
           SwTableLines &GetTabLines() { return aLines; }
     const SwTableLines &GetTabLines() const { return aLines; }
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwTableFmt* GetTableFmt() const { return (SwTableFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
+    SwTableFmt* GetTableFmt() const { return const_cast<SwTableFmt*>(static_cast<const SwTableFmt*>(GetRegisteredIn())); }
 
     void GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
                      bool bHidden = false, bool bCurRowOnly = false ) const;
@@ -356,8 +357,8 @@ public:
     const SwTableBox *GetUpper() const { return pUpper; }
     void SetUpper( SwTableBox *pNew ) { pUpper = pNew; }
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 
     // Creates a own FrmFmt if more lines depend on it.
     SwFrmFmt* ClaimFrmFmt();
@@ -412,8 +413,8 @@ public:
     const SwTableLine *GetUpper() const { return pUpper; }
     void SetUpper( SwTableLine *pNew ) { pUpper = pNew; }
 
-    SwFrmFmt* GetFrmFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 
     // Creates its own FrmFmt if more boxes depend on it.
     SwFrmFmt* ClaimFrmFmt();

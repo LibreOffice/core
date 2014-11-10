@@ -869,7 +869,7 @@ inline SwMoveFnCollection* SwCrsrShell::MakeFindRange(
 
 inline SwCursor* SwCrsrShell::GetSwCrsr( bool bMakeTblCrsr ) const
 {
-    return (SwCursor*)GetCrsr( bMakeTblCrsr );
+    return static_cast<SwCursor*>(GetCrsr( bMakeTblCrsr ));
 }
 
 inline SwPaM* SwCrsrShell::GetStkCrsr() const { return m_pCrsrStk; }

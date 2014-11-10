@@ -33,6 +33,7 @@
 #include <tblenum.hxx>
 #include <IMark.hxx>
 #include <tox.hxx>
+#include <frmfmt.hxx>
 
 #include <vector>
 #include <set>
@@ -357,7 +358,7 @@ public:
 
     /// @return required automatic format.
     SwFrmFmt* GetFrmFmtFromPool( sal_uInt16 nId )
-        { return (SwFrmFmt*)SwEditShell::GetFmtFromPool( nId ); }
+        { return static_cast<SwFrmFmt*>(SwEditShell::GetFmtFromPool( nId )); }
     SwCharFmt* GetCharFmtFromPool( sal_uInt16 nId )
         { return (SwCharFmt*)SwEditShell::GetFmtFromPool( nId ); }
 

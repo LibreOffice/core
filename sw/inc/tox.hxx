@@ -547,7 +547,7 @@ inline OUString SwTOXMark::GetEntryTypeName() const
     {   return m_aEntryTypeName;    }
 
 inline const SwTOXType* SwTOXMark::GetTOXType() const
-    { return (SwTOXType*)GetRegisteredIn(); }
+    { return static_cast<const SwTOXType*>(GetRegisteredIn()); }
 
 inline bool SwTOXMark::IsAlternativeText() const
     { return !aAltText.isEmpty(); }
@@ -685,7 +685,7 @@ inline TOXTypes SwTOXType::GetType() const
 // SwTOXBase
 
 inline const SwTOXType* SwTOXBase::GetTOXType() const
-    { return (SwTOXType*)GetRegisteredIn(); }
+    { return static_cast<const SwTOXType*>(GetRegisteredIn()); }
 
 inline sal_uInt16 SwTOXBase::GetCreateType() const
     { return nCreateType; }

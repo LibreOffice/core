@@ -199,7 +199,7 @@ public:
     void GetPresentation( SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, OUString &rText ) const;
 
-    SwAttrPool* GetPool() const { return (SwAttrPool*)SfxItemSet::GetPool(); }
+    SwAttrPool* GetPool() const { return static_cast<SwAttrPool*>(SfxItemSet::GetPool()); }
 
     // Copy attributes, if necessary across documents.
     void CopyToModify( SwModify& rMod ) const;

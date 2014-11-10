@@ -455,7 +455,7 @@ public:
     inline bool  HasSwAttrSet() const { return mpAttrSet ? sal_True : sal_False; }
 
     virtual SwFmtColl* ChgFmtColl( SwFmtColl* );
-    SwFmtColl* GetFmtColl() const { return (SwFmtColl*)GetRegisteredIn(); }
+    SwFmtColl* GetFmtColl() const { return const_cast<SwFmtColl*>(static_cast<const SwFmtColl*>(GetRegisteredIn())); }
 
 //FEATURE::CONDCOLL
     inline SwFmtColl& GetAnyFmtColl() const;
@@ -587,43 +587,43 @@ private:
 
 inline       SwEndNode   *SwNode::GetEndNode()
 {
-     return ND_ENDNODE == nNodeType ? (SwEndNode*)this : 0;
+     return ND_ENDNODE == nNodeType ? static_cast<SwEndNode*>(this) : 0;
 }
 inline const SwEndNode   *SwNode::GetEndNode() const
 {
-     return ND_ENDNODE == nNodeType ? (const SwEndNode*)this : 0;
+     return ND_ENDNODE == nNodeType ? static_cast<const SwEndNode*>(this) : 0;
 }
 inline       SwStartNode *SwNode::GetStartNode()
 {
-     return ND_STARTNODE & nNodeType ? (SwStartNode*)this : 0;
+     return ND_STARTNODE & nNodeType ? static_cast<SwStartNode*>(this) : 0;
 }
 inline const SwStartNode *SwNode::GetStartNode() const
 {
-     return ND_STARTNODE & nNodeType ? (const SwStartNode*)this : 0;
+     return ND_STARTNODE & nNodeType ? static_cast<const SwStartNode*>(this) : 0;
 }
 inline       SwTableNode *SwNode::GetTableNode()
 {
-     return ND_TABLENODE == nNodeType ? (SwTableNode*)this : 0;
+     return ND_TABLENODE == nNodeType ? static_cast<SwTableNode*>(this) : 0;
 }
 inline const SwTableNode *SwNode::GetTableNode() const
 {
-     return ND_TABLENODE == nNodeType ? (const SwTableNode*)this : 0;
+     return ND_TABLENODE == nNodeType ? static_cast<const SwTableNode*>(this) : 0;
 }
 inline       SwSectionNode *SwNode::GetSectionNode()
 {
-     return ND_SECTIONNODE == nNodeType ? (SwSectionNode*)this : 0;
+     return ND_SECTIONNODE == nNodeType ? static_cast<SwSectionNode*>(this) : 0;
 }
 inline const SwSectionNode *SwNode::GetSectionNode() const
 {
-     return ND_SECTIONNODE == nNodeType ? (const SwSectionNode*)this : 0;
+     return ND_SECTIONNODE == nNodeType ? static_cast<const SwSectionNode*>(this) : 0;
 }
 inline       SwCntntNode *SwNode::GetCntntNode()
 {
-     return ND_CONTENTNODE & nNodeType ? (SwCntntNode*)this : 0;
+     return ND_CONTENTNODE & nNodeType ? static_cast<SwCntntNode*>(this) : 0;
 }
 inline const SwCntntNode *SwNode::GetCntntNode() const
 {
-     return ND_CONTENTNODE & nNodeType ? (const SwCntntNode*)this : 0;
+     return ND_CONTENTNODE & nNodeType ? static_cast<const SwCntntNode*>(this) : 0;
 }
 
 inline bool SwNode::IsStartNode() const
@@ -681,27 +681,27 @@ inline sal_uLong SwNode::StartOfSectionIndex() const
 }
 inline sal_uLong SwNode::EndOfSectionIndex() const
 {
-    const SwStartNode* pStNd = IsStartNode() ? (SwStartNode*)this : pStartOfSection;
+    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
     return pStNd->pEndOfSection->GetIndex();
 }
 inline const SwEndNode* SwNode::EndOfSectionNode() const
 {
-    const SwStartNode* pStNd = IsStartNode() ? (SwStartNode*)this : pStartOfSection;
+    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
     return pStNd->pEndOfSection;
 }
 inline SwEndNode* SwNode::EndOfSectionNode()
 {
-    SwStartNode* pStNd = IsStartNode() ? (SwStartNode*)this : pStartOfSection;
+    const SwStartNode* pStNd = IsStartNode() ? static_cast<const SwStartNode*>(this) : pStartOfSection;
     return pStNd->pEndOfSection;
 }
 
 inline SwNodes& SwNode::GetNodes()
 {
-    return (SwNodes&)GetArray();
+    return static_cast<SwNodes&>(GetArray());
 }
 inline const SwNodes& SwNode::GetNodes() const
 {
-    return (SwNodes&)GetArray();
+    return static_cast<SwNodes&>(GetArray());
 }
 
 inline SwDoc* SwNode::GetDoc()
@@ -715,14 +715,14 @@ inline const SwDoc* SwNode::GetDoc() const
 
 inline SwFmtColl* SwCntntNode::GetCondFmtColl() const
 {
-    return pCondColl ? (SwFmtColl*)pCondColl->GetRegisteredIn() : 0;
+    return pCondColl ? static_cast<SwFmtColl*>(pCondColl->GetRegisteredIn()) : 0;
 }
 
 inline SwFmtColl& SwCntntNode::GetAnyFmtColl() const
 {
     return pCondColl && pCondColl->GetRegisteredIn()
-                ? *(SwFmtColl*)pCondColl->GetRegisteredIn()
-                : *(SwFmtColl*)GetRegisteredIn();
+                ? *static_cast<SwFmtColl*>(pCondColl->GetRegisteredIn())
+                : *const_cast<SwFmtColl*>(static_cast<const SwFmtColl*>(GetRegisteredIn()));
 }
 
 inline const SwAttrSet& SwCntntNode::GetSwAttrSet() const
