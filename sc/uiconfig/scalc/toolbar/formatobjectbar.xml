@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:DesignerDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
@@ -29,11 +29,17 @@
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline"/>
  <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio auto"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
@@ -44,31 +50,25 @@
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatIncDecimals"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecDecimals"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:visible="false"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertRows" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteRows" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:DeleteColumns" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleSheetGrid" toolbar:visible="true"/>
 </toolbar:toolbar>
