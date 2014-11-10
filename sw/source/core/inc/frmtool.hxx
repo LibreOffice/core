@@ -26,6 +26,7 @@
 #include "swcache.hxx"
 #include <editeng/lrspitem.hxx>
 #include <swfont.hxx>
+#include <flyfrm.hxx>
 
 class SwPageFrm;
 class SwFlyFrm;
@@ -200,7 +201,7 @@ class SwLayNotify : public SwFrmNotify
 {
     bool bLowersComplete;
 
-    SwLayoutFrm *GetLay() { return (SwLayoutFrm*)pFrm; }
+    SwLayoutFrm *GetLay() { return static_cast<SwLayoutFrm*>(pFrm); }
 
 public:
     SwLayNotify( SwLayoutFrm *pLayFrm );
@@ -214,7 +215,7 @@ class SwFlyNotify : public SwLayNotify
 {
     SwPageFrm *pOldPage;
     const SwRect aFrmAndSpace;
-    SwFlyFrm *GetFly() { return (SwFlyFrm*)pFrm; }
+    SwFlyFrm *GetFly() { return static_cast<SwFlyFrm*>(pFrm); }
 
 public:
     SwFlyNotify( SwFlyFrm *pFlyFrm );

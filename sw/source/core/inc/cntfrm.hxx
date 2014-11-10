@@ -110,7 +110,7 @@ public:
 inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const
 {
     if ( GetNext() && GetNext()->IsCntntFrm() )
-        return (SwCntntFrm*)GetNext();
+        return const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetNext()));
     else
         return (SwCntntFrm*)ImplGetNextCntntFrm( true );
 }
@@ -118,7 +118,7 @@ inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const
 inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const
 {
     if ( GetPrev() && GetPrev()->IsCntntFrm() )
-        return (SwCntntFrm*)GetPrev();
+        return const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetPrev()));
     else
         return (SwCntntFrm*)ImplGetNextCntntFrm( false );
 }
@@ -134,20 +134,20 @@ inline const SwCntntNode *SwCntntFrm::GetNode() const
 
 inline const SwCntntFrm *SwCntntFrm::GetFollow() const
 {
-    return (const SwCntntFrm*)SwFlowFrm::GetFollow();
+    return static_cast<const SwCntntFrm*>(SwFlowFrm::GetFollow());
 }
 inline SwCntntFrm *SwCntntFrm::GetFollow()
 {
-    return (SwCntntFrm*)SwFlowFrm::GetFollow();
+    return static_cast<SwCntntFrm*>(SwFlowFrm::GetFollow());
 }
 
 inline const SwCntntFrm *SwCntntFrm::GetPrecede() const
 {
-    return (const SwCntntFrm*)SwFlowFrm::GetPrecede();
+    return static_cast<const SwCntntFrm*>(SwFlowFrm::GetPrecede());
 }
 inline SwCntntFrm *SwCntntFrm::GetPrecede()
 {
-    return (SwCntntFrm*)SwFlowFrm::GetPrecede();
+    return static_cast<SwCntntFrm*>(SwFlowFrm::GetPrecede());
 }
 
 #endif
