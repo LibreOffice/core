@@ -1,0 +1,7 @@
+abbreviated-name
+block
+block-list
+list-name
+name
+package-name
+unformatted-text

@@ -27,6 +27,8 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <doc.hxx>
@@ -35,6 +37,7 @@
 #include <SwXMLTextBlocks.hxx>
 #include <SwXMLBlockImport.hxx>
 #include <SwXMLBlockExport.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <swevent.hxx>
 #include <swerror.h>
 
@@ -43,6 +46,8 @@ const char XMLN_BLOCKLIST[] = "BlockList.xml";
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
+using namespace css::xml::sax;
+using namespace xmloff::token;
 
 using ::xmloff::token::XML_BLOCK_LIST;
 using ::xmloff::token::XML_UNFORMATTED_TEXT;
@@ -101,11 +106,17 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
             aParserInput.aInputStream = xStream->getInputStream();
 
             // get filter
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, true );
+            // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, aCur, sal_True );
+            uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, aCur, true );
+            uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
             // connect parser and filter
-            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-            xParser->setDocumentHandler( xFilter );
+            uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+            xParser->setFastDocumentHandler( xFilter );
+            xParser->setTokenHandler( xTokenHandler );
+
+            xParser->registerNamespace( "http://openoffice.org/2000/text", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
+            xParser->registerNamespace( "http://openoffice.org/2000/office", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
 
             // parse
             try
@@ -291,11 +302,16 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
         // get filter
         // #110680#
         // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( *this, rText, bTextOnly );
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, rText, bTextOnly );
+        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLTextBlockImport( xContext, *this, rText, bTextOnly );
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLTextBlockTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-        xParser->setDocumentHandler( xFilter );
+        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+        xParser->setFastDocumentHandler( xFilter );
+        xParser->setTokenHandler( xTokenHandler );
+
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:office:1.0", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
+        xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
 
         // parse
         try
@@ -418,11 +434,14 @@ void SwXMLTextBlocks::ReadInfo( void )
         aParserInput.aInputStream = xDocStream->getInputStream();
 
         // get filter
-        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLBlockListImport( xContext, *this );
+        uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLBlockListImport( xContext, *this );
+        uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new SwXMLBlockListTokenHandler();
 
         // connect parser and filter
-        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
-        xParser->setDocumentHandler( xFilter );
+        uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+        xParser->setFastDocumentHandler( xFilter );
+        xParser->registerNamespace( "http://openoffice.org/2001/block-list", FastToken::NAMESPACE | XML_NAMESPACE_BLOCKLIST );
+        xParser->setTokenHandler( xTokenHandler );
 
         // parse
         try
