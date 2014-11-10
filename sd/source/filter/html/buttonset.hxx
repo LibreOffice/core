@@ -23,7 +23,6 @@
 #include <sddllapi.h>
 
 #include <rtl/ustring.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 class Image;

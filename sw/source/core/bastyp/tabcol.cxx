@@ -19,7 +19,6 @@
 
 #include "tabcol.hxx"
 #include <limits.h>
-#include <osl/diagnose.h>
 
 SwTabCols::SwTabCols( sal_uInt16 nSize ) :
     nLeftMin( 0 ),

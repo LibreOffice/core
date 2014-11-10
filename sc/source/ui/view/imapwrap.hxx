@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_UI_VIEW_IMAPWRAP_HXX
 #define INCLUDED_SC_SOURCE_UI_VIEW_IMAPWRAP_HXX
 
-#include <sal/config.h>
 
 #include <sal/types.h>
 #include <sfx2/frame.hxx>
