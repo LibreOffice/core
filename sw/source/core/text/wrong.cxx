@@ -249,7 +249,7 @@ void SwWrongList::_Invalidate( sal_Int32 nBegin, sal_Int32 nEnd )
 {
     if ( nBegin < GetBeginInv() )
         nBeginInvalid = nBegin;
-    if ( nEnd > GetEndInv() )
+    if ( nEnd > GetEndInv() || GetEndInv() == COMPLETE_STRING )
         nEndInvalid = nEnd;
 }
 
