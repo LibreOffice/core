@@ -138,7 +138,7 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
     BroadcastCells(aDeletedRows, SC_HINT_DATACHANGED);
 }
 
-void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2 )
+void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, size_t nColOffset )
 {
     assert(nRow1 <= nRow2);
 
@@ -147,7 +147,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     if (!pBlockPos)
         return;
 
-    ScCellValue& rSrcCell = rCxt.getSingleCell();
+    ScCellValue& rSrcCell = rCxt.getSingleCell(nColOffset);
 
     InsertDeleteFlags nFlags = rCxt.getInsertFlag();
 
@@ -155,7 +155,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     {
         if (!rCxt.isSkipAttrForEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
         {
-            const ScPatternAttr* pAttr = rCxt.getSingleCellPattern();
+            const ScPatternAttr* pAttr = rCxt.getSingleCellPattern(nColOffset);
             pAttrArray->SetPatternArea(nRow1, nRow2, pAttr, true);
         }
     }
@@ -221,7 +221,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         }
     }
 
-    const ScPostIt* pNote = rCxt.getSingleCellNote();
+    const ScPostIt* pNote = rCxt.getSingleCellNote(nColOffset);
     if (pNote && (nFlags & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
     {
         // Duplicate the cell note over the whole pasted range.

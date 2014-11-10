@@ -70,141 +70,158 @@ bool ScDocument::CopyOneCellFromClip(
         return false;
 
     ScRange aClipRange = pClipDoc->GetClipParam().getWholeRange();
-    if (aClipRange.aStart != aClipRange.aEnd)
-        // The source is not really a single cell. Bail out.
+    if (aClipRange.aStart.Row() != aClipRange.aEnd.Row())
+        // The source is not really a single row. Bail out.
+        return false;
+
+    SCCOL nSrcColSize = aClipRange.aEnd.Col() - aClipRange.aStart.Col() + 1;
+    SCCOL nDestColSize = nCol2 - nCol1 + 1;
+    if (nDestColSize < nSrcColSize)
         return false;
 
     ScAddress aSrcPos = aClipRange.aStart;
-    if (pClipDoc->IsMerged(aSrcPos))
-        // We don't handle merged source cell for this.
-        return false;
+
+    for (SCCOL nCol = aClipRange.aStart.Col(); nCol <= aClipRange.aEnd.Col(); ++nCol)
+    {
+        ScAddress aTestPos = aSrcPos;
+        aTestPos.SetCol(nCol);
+        if (pClipDoc->IsMerged(aTestPos))
+            // We don't handle merged source cell for this.
+            return false;
+    }
 
     ScTable* pSrcTab = pClipDoc->FetchTable(aSrcPos.Tab());
     if (!pSrcTab)
         return false;
 
-    ScCellValue& rSrcCell = rCxt.getSingleCell();
-    const ScPatternAttr* pAttr = pClipDoc->GetPattern(aSrcPos);
-    rCxt.setSingleCellPattern(pAttr);
-    if (rCxt.isAsLink())
+    rCxt.setSingleCellColumnSize(nSrcColSize);
+
+    for (SCCOL nColOffset = 0; nColOffset < nSrcColSize; ++nColOffset, aSrcPos.IncCol())
     {
-        ScSingleRefData aRef;
-        aRef.InitAddress(aSrcPos);
-        aRef.SetFlag3D(true);
+        const ScPatternAttr* pAttr = pClipDoc->GetPattern(aSrcPos);
+        rCxt.setSingleCellPattern(nColOffset, pAttr);
 
-        ScTokenArray aArr;
-        aArr.AddSingleReference(aRef);
-        rSrcCell.set(new ScFormulaCell(pClipDoc, aSrcPos, aArr));
-    }
-    else
-    {
-        rSrcCell.set(pClipDoc->GetRefCellValue(aSrcPos));
+        if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
+            rCxt.setSingleCellNote(nColOffset, pClipDoc->GetNote(aSrcPos));
 
-        // Check the paste flag to see whether we want to paste this cell.  If the
-        // flag says we don't want to paste this cell, we'll return with true.
-        InsertDeleteFlags nFlags = rCxt.getInsertFlag();
-        bool bNumeric  = (nFlags & IDF_VALUE) != IDF_NONE;
-        bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
-        bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
-        bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
-        bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
-
-        switch (rSrcCell.meType)
+        ScCellValue& rSrcCell = rCxt.getSingleCell(nColOffset);
+        if (rCxt.isAsLink())
         {
-            case CELLTYPE_VALUE:
-            {
-                bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
-                if (!bPaste)
-                    // Don't paste this.
-                    rSrcCell.clear();
-            }
-            break;
-            case CELLTYPE_STRING:
-            case CELLTYPE_EDIT:
-            {
-                if (!bString)
-                    // Skip pasting.
-                    rSrcCell.clear();
-            }
-            break;
-            case CELLTYPE_FORMULA:
-            {
-                if (bBoolean)
-                {
-                    // Check if this formula cell is a boolean cell, and if so, go ahead and paste it.
-                    ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
-                    if (pCode && pCode->GetLen() == 1)
-                    {
-                        const formula::FormulaToken* p = pCode->First();
-                        if (p->GetOpCode() == ocTrue || p->GetOpCode() == ocFalse)
-                            // This is a boolean formula. Good.
-                            break;
-                    }
-                }
+            ScSingleRefData aRef;
+            aRef.InitAddress(aSrcPos);
+            aRef.SetFlag3D(true);
 
-                if (bFormula)
-                    // Good.
-                    break;
+            ScTokenArray aArr;
+            aArr.AddSingleReference(aRef);
+            rSrcCell.set(new ScFormulaCell(pClipDoc, aSrcPos, aArr));
+        }
+        else
+        {
+            rSrcCell.assign(*pClipDoc, aSrcPos);
 
-                sal_uInt16 nErr = rSrcCell.mpFormula->GetErrCode();
-                if (nErr)
-                {
-                    // error codes are cloned with values
-                    if (!bNumeric)
-                        // Error code is treated as numeric value. Don't paste it.
-                        rSrcCell.clear();
-                }
-                else if (rSrcCell.mpFormula->IsValue())
+            // Check the paste flag to see whether we want to paste this cell.  If the
+            // flag says we don't want to paste this cell, we'll return with true.
+            InsertDeleteFlags nFlags = rCxt.getInsertFlag();
+            bool bNumeric  = (nFlags & IDF_VALUE) != IDF_NONE;
+            bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
+            bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
+            bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
+            bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
+
+            switch (rSrcCell.meType)
+            {
+                case CELLTYPE_VALUE:
                 {
                     bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
                     if (!bPaste)
-                    {
                         // Don't paste this.
                         rSrcCell.clear();
-                        break;
-                    }
-
-                    // Turn this into a numeric cell.
-                    rSrcCell.set(rSrcCell.mpFormula->GetValue());
                 }
-                else if (bString)
+                break;
+                case CELLTYPE_STRING:
+                case CELLTYPE_EDIT:
                 {
-                    svl::SharedString aStr = rSrcCell.mpFormula->GetString();
-                    if (aStr.isEmpty())
-                    {
-                        // do not clone empty string
+                    if (!bString)
+                        // Skip pasting.
                         rSrcCell.clear();
-                        break;
+                }
+                break;
+                case CELLTYPE_FORMULA:
+                {
+                    if (bBoolean)
+                    {
+                        // Check if this formula cell is a boolean cell, and if so, go ahead and paste it.
+                        ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
+                        if (pCode && pCode->GetLen() == 1)
+                        {
+                            const formula::FormulaToken* p = pCode->First();
+                            if (p->GetOpCode() == ocTrue || p->GetOpCode() == ocFalse)
+                                // This is a boolean formula. Good.
+                                break;
+                        }
                     }
 
-                    // Turn this into a string or edit cell.
-                    if (rSrcCell.mpFormula->IsMultilineResult())
+                    if (bFormula)
+                        // Good.
+                        break;
+
+                    sal_uInt16 nErr = rSrcCell.mpFormula->GetErrCode();
+                    if (nErr)
                     {
-                        // TODO : Add shared string support to the edit engine to
-                        // make this process simpler.
-                        ScFieldEditEngine& rEngine = GetEditEngine();
-                        rEngine.SetText(rSrcCell.mpFormula->GetString().getString());
-                        boost::scoped_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
-                        pObj->NormalizeString(GetSharedStringPool());
-                        rSrcCell.set(*pObj);
+                        // error codes are cloned with values
+                        if (!bNumeric)
+                            // Error code is treated as numeric value. Don't paste it.
+                            rSrcCell.clear();
+                    }
+                    else if (rSrcCell.mpFormula->IsValue())
+                    {
+                        bool bPaste = rCxt.isDateCell(pSrcTab->aCol[aSrcPos.Col()], aSrcPos.Row()) ? bDateTime : bNumeric;
+                        if (!bPaste)
+                        {
+                            // Don't paste this.
+                            rSrcCell.clear();
+                            break;
+                        }
+
+                        // Turn this into a numeric cell.
+                        rSrcCell.set(rSrcCell.mpFormula->GetValue());
+                    }
+                    else if (bString)
+                    {
+                        svl::SharedString aStr = rSrcCell.mpFormula->GetString();
+                        if (aStr.isEmpty())
+                        {
+                            // do not clone empty string
+                            rSrcCell.clear();
+                            break;
+                        }
+
+                        // Turn this into a string or edit cell.
+                        if (rSrcCell.mpFormula->IsMultilineResult())
+                        {
+                            // TODO : Add shared string support to the edit engine to
+                            // make this process simpler.
+                            ScFieldEditEngine& rEngine = GetEditEngine();
+                            rEngine.SetText(rSrcCell.mpFormula->GetString().getString());
+                            boost::scoped_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
+                            pObj->NormalizeString(GetSharedStringPool());
+                            rSrcCell.set(*pObj);
+                        }
+                        else
+                            rSrcCell.set(rSrcCell.mpFormula->GetString());
                     }
                     else
-                        rSrcCell.set(rSrcCell.mpFormula->GetString());
+                        // We don't want to paste this.
+                        rSrcCell.clear();
                 }
-                else
-                    // We don't want to paste this.
+                break;
+                case CELLTYPE_NONE:
+                default:
+                    // There is nothing to paste.
                     rSrcCell.clear();
             }
-            break;
-            case CELLTYPE_NONE:
-            default:
-                // There is nothing to paste.
-                rSrcCell.clear();
         }
     }
-
-    if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
-        rCxt.setSingleCellNote(pClipDoc->GetNote(aSrcPos));
 
     // All good. Proceed with the pasting.
 
