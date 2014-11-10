@@ -79,9 +79,9 @@ namespace svt { namespace table
 
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {
-        sal_uInt16 const nHelpMode = rHEvt.GetMode();
-        if  (   ( IsMouseCaptured() )
-            ||  ( ( nHelpMode & HELPMODE_QUICK ) == 0 )
+        HelpEventMode const nHelpMode = rHEvt.GetMode();
+        if  (   IsMouseCaptured()
+            ||  !( nHelpMode & HelpEventMode::QUICK )
             )
         {
             Window::RequestHelp( rHEvt );

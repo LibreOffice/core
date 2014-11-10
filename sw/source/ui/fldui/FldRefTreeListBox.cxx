@@ -40,7 +40,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwFldRefTreeListBox(vc
 void SwFldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bCallBase( true );
-    if ( rHEvt.GetMode() & HELPMODE_QUICK )
+    if ( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );

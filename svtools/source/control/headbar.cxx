@@ -1112,7 +1112,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
     sal_uInt16 nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
     if ( nItemId )
     {
-        if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
+        if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
         {
             Rectangle aItemRect = GetItemRect( nItemId );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -1123,7 +1123,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
             aItemRect.Bottom() = aPt.Y();
 
             OUString aStr = GetHelpText( nItemId );
-            if ( aStr.isEmpty() || !(rHEvt.GetMode() & HELPMODE_BALLOON) )
+            if ( aStr.isEmpty() || !(rHEvt.GetMode() & HelpEventMode::BALLOON) )
             {
                 ImplHeadItem* pItem = (*mpItemList)[ GetItemPos( nItemId ) ];
                 // Quick-help is only displayed if the text is not fully visible.
@@ -1136,14 +1136,14 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
 
             if (!aStr.isEmpty())
             {
-                if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+                if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                     Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
                 else
                     Help::ShowQuickHelp( this, aItemRect, aStr );
                 return;
             }
         }
-        else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
+        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
         {
             OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )

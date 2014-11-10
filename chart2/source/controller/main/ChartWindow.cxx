@@ -227,7 +227,7 @@ void ChartWindow::DataChanged( const DataChangedEvent& rDCEvt )
 void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     bool bHelpHandled = false;
-    if( ( rHEvt.GetMode() & HELPMODE_QUICK ) &&
+    if( ( rHEvt.GetMode() & HelpEventMode::QUICK ) &&
         m_pWindowController )
     {
 //         Point aLogicHitPos = PixelToLogic( rHEvt.GetMousePosPixel()); // old chart: GetPointerPosPixel()

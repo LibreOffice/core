@@ -1307,7 +1307,7 @@ CustomPropertiesDurationField::~CustomPropertiesDurationField()
 
 void CustomPropertiesDurationField::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( rHEvt.GetMode() & HELPMODE_QUICK )
+    if ( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Size aSize( GetSizePixel() );
         Rectangle aItemRect( rHEvt.GetMousePosPixel(), aSize );

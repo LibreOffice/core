@@ -1491,7 +1491,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
     sal_uInt16 nItemId = GetPageId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
     if ( nItemId )
     {
-        if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+        if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
         {
             OUString aStr = GetHelpText( nItemId );
             if (!aStr.isEmpty())
@@ -1507,7 +1507,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
                 return;
             }
         }
-        else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
+        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
         {
             OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
@@ -1522,7 +1522,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
 
         // show text for quick- or balloon-help
         // if this is isolated or not fully visible
-        if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
+        if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
         {
             sal_uInt16 nPos = GetPagePos( nItemId );
             ImplTabBarItem* pItem = (*mpItemList)[ nPos ];
@@ -1538,7 +1538,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
                 OUString aStr = (*mpItemList)[ nPos ]->maText;
                 if (!aStr.isEmpty())
                 {
-                    if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+                    if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aStr );
                     else
                         Help::ShowQuickHelp( this, aItemRect, aStr );

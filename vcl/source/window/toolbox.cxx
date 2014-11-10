@@ -4214,7 +4214,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 
     if ( nItemId )
     {
-        if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
+        if ( rHEvt.GetMode() & (HelpEventMode::BALLOON | HelpEventMode::QUICK) )
         {
             // get rectangle
             Rectangle aTempRect = GetItemRect( nItemId );
@@ -4230,7 +4230,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
             const OUString& rHelpStr = GetHelpText( nItemId );
             if (aStr.isEmpty())
                 aStr = MnemonicGenerator::EraseAllMnemonicChars( GetItemText( nItemId ) );
-            if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+            if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
             {
                 if (!rHelpStr.isEmpty())
                     aStr = rHelpStr;
@@ -4240,7 +4240,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                 Help::ShowQuickHelp( this, aTempRect, aStr, rHelpStr, QUICKHELP_CTRLTEXT );
             return;
         }
-        else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
+        else if ( rHEvt.GetMode() & HelpEventMode::EXTENDED )
         {
             OUString aCommand = GetItemCommand( nItemId );
             OString  aHelpId( GetHelpId( nItemId ) );

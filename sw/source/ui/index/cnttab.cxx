@@ -1685,7 +1685,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwIdxTreeListBox(vcl::
 
 void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
      Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );
@@ -3290,7 +3290,7 @@ bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
             const HelpEvent& rHEvt)
 {
     bool bRet = false;
-    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         bool bBalloon = Help::IsBalloonHelpEnabled();
         OUString sEntry;

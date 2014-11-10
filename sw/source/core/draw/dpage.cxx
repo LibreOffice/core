@@ -124,7 +124,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
 {
     bool bContinue = true;
 
-    if( rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
+    if( rEvt.GetMode() & ( HelpEventMode::QUICK | HelpEventMode::BALLOON ))
     {
         Point aPos( rEvt.GetMousePosPixel() );
         aPos = pWindow->ScreenToOutputPixel( aPos );
@@ -185,7 +185,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                         sTxt = SwViewShell::GetShellRes()->aLinkClick + ": " + sTxt;
                 }
 
-                if( rEvt.GetMode() & HELPMODE_BALLOON )
+                if( rEvt.GetMode() & HelpEventMode::BALLOON )
                 {
                     Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), sTxt );
                 }

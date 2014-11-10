@@ -3181,7 +3181,7 @@ IMPL_LINK_NOARG(SvImpLBox, EditTimerCall)
 
 bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Point aPos( pView->ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         if( !GetVisibleArea().IsInside( aPos ))

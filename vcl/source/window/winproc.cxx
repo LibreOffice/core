@@ -169,12 +169,12 @@ static void ImplHandleMouseHelpRequest( vcl::Window* pChild, const Point& rMouse
          !( pSVData->maHelpData.mpHelpWin->IsWindowOrChild( pChild ) ||
            pChild->IsWindowOrChild( pSVData->maHelpData.mpHelpWin ) ) )
     {
-        sal_uInt16 nHelpMode = 0;
+        HelpEventMode nHelpMode = HelpEventMode::NONE;
         if ( pSVData->maHelpData.mbQuickHelp )
-            nHelpMode = HELPMODE_QUICK;
+            nHelpMode = HelpEventMode::QUICK;
         if ( pSVData->maHelpData.mbBalloonHelp )
-            nHelpMode |= HELPMODE_BALLOON;
-        if ( nHelpMode )
+            nHelpMode |= HelpEventMode::BALLOON;
+        if ( bool(nHelpMode) )
         {
             if ( pChild->IsInputEnabled() && !pChild->IsInModalNonRefMode() )
             {
@@ -1084,7 +1084,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
                 Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
                 aPos = pChild->OutputToScreenPixel( aPos );
 
-                HelpEvent aHelpEvent( aPos, HELPMODE_BALLOON );
+                HelpEvent aHelpEvent( aPos, HelpEventMode::BALLOON );
                 aHelpEvent.SetKeyboardActivated( true );
                 pSVData->maHelpData.mbSetKeyboardHelp = true;
                 pChild->RequestHelp( aHelpEvent );
@@ -1097,7 +1097,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
                     if ( pSVData->maHelpData.mbContextHelp )
                     {
                         Point       aMousePos = pChild->OutputToScreenPixel( pChild->GetPointerPosPixel() );
-                        HelpEvent   aHelpEvent( aMousePos, HELPMODE_CONTEXT );
+                        HelpEvent   aHelpEvent( aMousePos, HelpEventMode::CONTEXT );
                         pChild->RequestHelp( aHelpEvent );
                     }
                     else

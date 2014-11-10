@@ -169,7 +169,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
     sal_uInt16 nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
     if ( nItemId )
     {
-        if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
+        if ( rHEvt.GetMode() & (HelpEventMode::QUICK | HelpEventMode::BALLOON) )
         {
             Rectangle aItemRect = GetItemRect( nItemId );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -190,7 +190,7 @@ void FmGridHeader::RequestHelp( const HelpEvent& rHEvt )
                     xColumn->getPropertyValue(FM_PROP_DESCRIPTION) >>= aHelpText;
                 if ( !aHelpText.isEmpty() )
                 {
-                    if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+                    if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                         Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText );
                     else
                         Help::ShowQuickHelp( this, aItemRect, aHelpText );

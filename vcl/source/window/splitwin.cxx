@@ -2545,7 +2545,7 @@ void SplitWindow::Resize()
 void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     // no keyboard help for splitwin
-    if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) && !rHEvt.KeyboardActivated() )
+    if ( rHEvt.GetMode() & (HelpEventMode::BALLOON | HelpEventMode::QUICK) && !rHEvt.KeyboardActivated() )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         Rectangle   aHelpRect;
@@ -2587,7 +2587,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             ResMgr* pResMgr = ImplGetResMgr();
             if( pResMgr )
                 aStr = ResId( nHelpResId, *pResMgr ).toString();
-            if ( rHEvt.GetMode() & HELPMODE_BALLOON )
+            if ( rHEvt.GetMode() & HelpEventMode::BALLOON )
                 Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aStr );
             else
                 Help::ShowQuickHelp( this, aHelpRect, aStr );

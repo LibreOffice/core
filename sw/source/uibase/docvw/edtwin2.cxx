@@ -108,14 +108,14 @@ OUString SwEditWin::ClipLongToolTip(const OUString& rTxt)
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
-    bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
+    bool bQuickBalloon = bool(rEvt.GetMode() & ( HelpEventMode::QUICK | HelpEventMode::BALLOON ));
     if(bQuickBalloon && !rSh.GetViewOptions()->IsShowContentTips())
         return;
     bool bContinue = true;
     SET_CURR_SHELL(&rSh);
     OUString sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
-    bool bBalloon = static_cast< bool >(rEvt.GetMode() & HELPMODE_BALLOON);
+    bool bBalloon = bool(rEvt.GetMode() & HelpEventMode::BALLOON);
 
     SdrView *pSdrView = rSh.GetDrawView();
 

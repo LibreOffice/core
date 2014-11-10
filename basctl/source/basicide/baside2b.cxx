@@ -335,13 +335,13 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
     // Should have been activated at some point
     if ( pEditEngine )
     {
-        if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
+        if ( rHEvt.GetMode() & HelpEventMode::CONTEXT )
         {
             OUString aKeyword = GetWordAtCursor();
             Application::GetHelp()->SearchKeyword( aKeyword );
             bDone = true;
         }
-        else if ( rHEvt.GetMode() & HELPMODE_QUICK )
+        else if ( rHEvt.GetMode() & HelpEventMode::QUICK )
         {
             OUString aHelpText;
             Point aTopLeft;

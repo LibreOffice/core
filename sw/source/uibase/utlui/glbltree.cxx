@@ -453,7 +453,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
     bool bParent = true;
     Update(true);
     Display(true);
-    if( rHEvt.GetMode() & HELPMODE_QUICK )
+    if( rHEvt.GetMode() & HelpEventMode::QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
         SvTreeListEntry* pEntry = GetEntry( aPos );
