@@ -163,11 +163,14 @@ long SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc) const
 sal_uInt16 SdrGluePoint::EscAngleToDir(long nAngle) const
 {
     nAngle=NormAngle360(nAngle);
-    if (nAngle>=31500 || nAngle<4500) return SDRESC_RIGHT;
-    if (nAngle<13500) return SDRESC_TOP;
-    if (nAngle<22500) return SDRESC_LEFT;
-    if (nAngle<31500) return SDRESC_BOTTOM;
-    return 0;
+    if (nAngle>=31500 || nAngle<4500)
+        return SDRESC_RIGHT;
+    if (nAngle<13500)
+        return SDRESC_TOP;
+    if (nAngle<22500)
+        return SDRESC_LEFT;
+    /* (nAngle<31500)*/
+    return SDRESC_BOTTOM;
 }
 
 void SdrGluePoint::Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj)
