@@ -22,6 +22,14 @@ $(eval $(call gb_Module_add_targets,shell,\
 endif
 endif
 
+ifeq ($(OS),SOLARIS)
+ifeq ($(ENABLE_GIO),TRUE)
+$(eval $(call gb_Module_add_targets,shell,\
+    Library_losessioninstall \
+))
+endif
+endif
+
 ifeq ($(ENABLE_GCONF),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_gconfbe \
