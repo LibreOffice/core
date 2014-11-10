@@ -3801,14 +3801,10 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         }
         if (bOOXML)
         {
-            // Append a parameter for CEILING, FLOOR and WEEKNUM, all 1.0
+            // Append a parameter for WEEKNUM, all 1.0
             // Function is already closed, parameter count is nSep+1
             size_t nFunc = nFunction + 1;
             if (eOp == ocClose && (
-                    (pFunctionStack[ nFunc ].eOp == ocCeil &&   // 3rd Excel mode
-                     pFunctionStack[ nFunc ].nSep == 1) ||
-                    (pFunctionStack[ nFunc ].eOp == ocFloor &&  // 3rd Excel mode
-                     pFunctionStack[ nFunc ].nSep == 1) ||
                     (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
                      pFunctionStack[ nFunc ].nSep == 0)))
             {
