@@ -115,7 +115,7 @@ void BitmapEx::loadFromIconTheme( const OUString& rIconName )
 #ifdef DBG_UTIL
         OStringBuffer aErrorStr(
             "BitmapEx::BitmapEx(): could not load image <");
-        aErrorStr.append(OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append("> via icon theme ");
+        aErrorStr.append(OUStringToOString(rIconName, RTL_TEXTENCODING_ASCII_US)).append("> via icon theme ");
         aErrorStr.append(OUStringToOString(aIconTheme, RTL_TEXTENCODING_ASCII_US)).append('.');
         OSL_FAIL(aErrorStr.getStr());
 #endif
