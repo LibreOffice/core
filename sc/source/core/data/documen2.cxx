@@ -332,7 +332,7 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 {
     if ( ScDdeLink::IsInUpdate() )      // do not nest
-    {s
+    {
         aTrackIdle.Start();            // try again later
     }
     else if (pShell)                    // execute
