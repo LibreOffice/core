@@ -433,7 +433,7 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
     aPosAry.mnDestY      = rPt.Y();
     aPosAry.mnDestWidth  = rDevSize.Width();
     aPosAry.mnDestHeight = rDevSize.Height();
-    ImplDrawOutDevDirect( &rOutDev, aPosAry );
+    drawOutDevDirect( &rOutDev, aPosAry );
 
     // Ensure that ClipRegion is recalculated and set
     mbInitClipRegion = true;
@@ -553,7 +553,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         }
         else
         {
-            ImplDrawOutDevDirect( &rOutDev, aPosAry );
+            drawOutDevDirect( &rOutDev, aPosAry );
 
             // #i32109#: make destination rectangle opaque - source has no alpha
             mpAlphaVDev->ImplFillOpaqueRectangle( Rectangle(rDestPt, rDestSize) );
@@ -569,7 +569,7 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
         else
         {
             // no alpha at all, neither in source nor destination device
-            ImplDrawOutDevDirect( &rOutDev, aPosAry );
+            drawOutDevDirect( &rOutDev, aPosAry );
         }
     }
 }
@@ -638,7 +638,7 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
 
 // Direct OutputDevice drawing private function
 
-void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
+void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
 {
     SalGraphics*        pGraphics2;
 
