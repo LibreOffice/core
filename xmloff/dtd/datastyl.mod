@@ -95,7 +95,7 @@
 <!ATTLIST number:text-style style:name %styleName; #REQUIRED>
 
 <!-- The style:family is redundant and therefore should not exist at all -->
-<!-- Since OOo 1.0/1.1 is exporting this attribute is is an #IMPLIED    -->
+<!-- Since OOo 1.0/1.1 is exporting this attribute it is an #IMPLIED    -->
 <!-- one to avoid validation errors.                                    -->
 <!ATTLIST number:number-style style:family CDATA #IMPLIED>
 <!ATTLIST number:currency-style style:family CDATA #IMPLIED>

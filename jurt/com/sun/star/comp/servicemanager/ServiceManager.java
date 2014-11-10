@@ -515,7 +515,7 @@ public class ServiceManager implements XMultiServiceFactory,
     }
 
     /**
-     * Provides an enumeration of of all factorys for a specified service.
+     * Provides an enumeration of all factories for a specified service.
      *
      * @param   serviceName     name of the requested service.
      * @return  an enumeration for service name.

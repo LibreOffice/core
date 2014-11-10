@@ -385,7 +385,7 @@ class Desktop : private cppu::BaseMutex,
         bool impl_closeFrames(bool bAllowUI);
 
     //  debug methods
-    //  (should be private everytime!)
+    //  (should be private every time!)
 
     private:
 
@@ -396,7 +396,7 @@ class Desktop : private cppu::BaseMutex,
                                     /// see dispose() for further information!
 
     //  variables
-    //  (should be private everytime!)
+    //  (should be private every time!)
 
     private:
 

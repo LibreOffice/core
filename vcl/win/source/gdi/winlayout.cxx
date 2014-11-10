@@ -2127,7 +2127,7 @@ sal_Int32 UniscribeLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoord
         {
             // go back to cluster start
             // we have to find the visual item first since the mpLogClusters[]
-            // needed to find the cluster start is relative to to the visual item
+            // needed to find the cluster start is relative to the visual item
             int nMinGlyphIndex = 0;
             for( int nItem = 0; nItem < mnItemCount; ++nItem )
             {

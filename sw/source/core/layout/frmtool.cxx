@@ -786,7 +786,7 @@ SwCntntNotify::~SwCntntNotify()
             pCell = pCell->GetUpper();
         OSL_ENSURE( pCell->IsCellFrm(), "Where's my cell?" );
         if ( text::VertOrientation::NONE != pCell->GetFmt()->GetVertOrient().GetVertOrient() )
-            pCell->InvalidatePrt(); //for the vertical allign.
+            pCell->InvalidatePrt(); //for the vertical align.
     }
 
     // OD 2004-02-26 #i25029#
@@ -1235,7 +1235,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     //of paragraphs, which must be moved expensively until it reaches a tolarable
     //reduced level.
     //We'd like to think that 20 Paragraphs fit on one page.
-    //So that it does not become in extremly situations so violent we calculate depending
+    //So that it does not become in extreme situations so violent we calculate depending
     //on the node something to it.
     //If in the DocStatistik a usable given pagenumber
     //(Will be cared for while writing), so it will be presumed that this will be
@@ -2018,9 +2018,9 @@ void SwBorderAttrs::_IsLine()
 /* The borders of neighboring paragraphs are condensed by following algorithm:
  *
  * 1. No top border if the predecessor has the same top border and (3) applies.
- *    In addition, the paragraph needs to have a border at at least one side (left/right/bottom).
+ *    In addition, the paragraph needs to have a border at least one side (left/right/bottom).
  * 2. No bottom border if the successor has the same bottom border and (3) applies.
- *    In addition, the paragraph needs to have a border at at least one side (left/right/top).
+ *    In addition, the paragraph needs to have a border at least one side (left/right/top).
  * 3. The borders on the left and right side are identical between the current and the
  *    pre-/succeeding paragraph.
  */

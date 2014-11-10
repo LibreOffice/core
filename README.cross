@@ -392,7 +392,7 @@ NB: If you happen to upgrade to Android SDK Tools 23, and the build (using
 'make verbose=t android') fails for you with:
 
        [dx] UNEXPECTED TOP-LEVEL EXCEPTION:
-       [dx] java.io.FileNotFoundException: /local/libreoffice/android-sdk-linux/tools/support/annotations.jar (Adresář nebo soubor neexistuje)
+       [dx] java.io.FileNotFoundException: /local/libreoffice/android-sdk-linux/tools/support/annotations.jar (no such file or directory)
 
 you need to copy the annotations.jar from an older sdk; like
 

@@ -172,7 +172,7 @@ bool StgDirEntry::Store( StgDirStrm& rStrm )
     void* pEntry = rStrm.GetEntry( nEntry, true );
     if( !pEntry )
         return false;
-    // Do not store the current (maybe not commited) entry
+    // Do not store the current (maybe not committed) entry
     aSave.Store( pEntry );
     if( pLeft )
         if( !static_cast<StgDirEntry*>(pLeft)->Store( rStrm ) )
@@ -614,7 +614,7 @@ bool StgDirEntry::Strm2Tmp()
         sal_uLong n = 0;
         if( pCurStrm )
         {
-            // It was already commited once
+            // It was already committed once
             pTmpStrm = new StgTmpStrm;
             if( pTmpStrm->GetError() == SVSTREAM_OK && pTmpStrm->Copy( *pCurStrm ) )
                 return true;

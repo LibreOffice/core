@@ -33,7 +33,7 @@ namespace dbaccess
 // ODataSettings_Base - a base class which implements the property member
 //                 for an object implementing the sdb::DataSettings
 //                 service
-// the properties have to to be registered when used
+// the properties have to be registered when used
 class ODataSettings_Base
 {
 public:

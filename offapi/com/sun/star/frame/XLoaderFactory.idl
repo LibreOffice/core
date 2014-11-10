@@ -40,7 +40,7 @@ published interface XLoaderFactory
         Returned objects must support the service specification of a FrameLoader
         or SynchronousFrameLoader. (Note: last one will be preferred if both
         are available)
-        They can be created by using of his internal name, which must be unambiguous everytime, only.
+        They can be created by using of his internal name, which must be unambiguous every time, only.
         To get this name use further specified interfaces of this factory for access on
         the flat configuration.
         </p>

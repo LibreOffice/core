@@ -467,7 +467,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
                 aPossibleTypes.push_back(SID_FM_FORMATTEDFIELD);
                 break;
         }
-        // if it's a currency field, a a "currency field" option
+        // if it's a currency field, a "currency field" option
         try
         {
             if  (   ::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField)

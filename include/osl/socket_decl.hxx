@@ -57,7 +57,7 @@ namespace osl
          */
         inline SocketAddr(oslSocketAddr Addr);
 
-        /** tcpip-specif constructor.
+        /** tcpip-specific constructor.
             @param strAddrOrHostName strAddrOrHostName hostname or dotted ip-number of the network
                                      interface, the socket shall be created on.
             @param nPort             tcp-ip port number
@@ -89,7 +89,7 @@ namespace osl
         inline bool SAL_CALL setHostname( const ::rtl::OUString &sDottedIpOrHostname );
 
         /** Returns the port number of the address.
-            @return the port in host-byte order or or OSL_INVALID_PORT on errors.
+            @return the port in host-byte order or OSL_INVALID_PORT on errors.
         */
         inline sal_Int32 SAL_CALL getPort() const;
 

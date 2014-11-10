@@ -204,7 +204,7 @@ public: // TODO: hide members behind accessor methods
     long                mnAboveDUnderlineOffset1;   // Offset from double underline to baseline (for Vertical Right)
     long                mnAboveDUnderlineOffset2;   // Offset from double underline to baseline (for Vertical Right)
     long                mnAboveWUnderlineSize;      // Height of WaveLine-strike-out (for Vertical Right)
-    long                mnAboveWUnderlineOffset;    // Offset from WaveLine-strike-out to baseline, but centrered to to WaveLine (for Vertical Right)
+    long                mnAboveWUnderlineOffset;    // Offset from WaveLine-strike-out to baseline, but centrered to the WaveLine (for Vertical Right)
     long                mnStrikeoutSize;            // Height of single strike-out
     long                mnStrikeoutOffset;          // Offset from single strike-out to baseline
     long                mnBStrikeoutSize;           // Height of bold strike-out

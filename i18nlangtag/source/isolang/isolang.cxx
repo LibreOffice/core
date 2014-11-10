@@ -356,7 +356,7 @@ static IsoLanguageCountryEntry const aImplIsoLangEntries[] =
     { LANGUAGE_PUNJABI_PAKISTAN,           "pnb", "PK", 0     },
     { LANGUAGE_PUNJABI_ARABIC_LSO,         "pnb", ""  , 0     },
     { LANGUAGE_PUNJABI_PAKISTAN,           "lah", "PK", kSAME },    // macrolanguage code, earlier preferred 'lah' over 'pa' for Western Panjabi, now there is 'pnb'
-    { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", kSAME },    // MS maps this to 'pa-Arab-PK', but 'pa'='pan' Eastern Panjabi is not used in PK, only in IN
+    { LANGUAGE_PUNJABI_PAKISTAN,            "pa", "PK", kSAME },    // MS maps this to 'pa-Arab-PK', but 'pa'='pan' Eastern Panjabi is not used in PK, only in
     { LANGUAGE_SINDHI_PAKISTAN,             "sd", "PK", kSAME },    // Arabic script
     { LANGUAGE_SINDHI,                      "sd", "IN", 0     },    // TODO: there's Deva(nagari) and Arab(ic) script, MS maps this to 'sd-Deva-IN'
     { LANGUAGE_BELARUSIAN,                  "be", "BY", 0     },

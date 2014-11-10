@@ -1056,7 +1056,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         switch( nCalendarDisplayCode ) {
             case CalendarDisplayCode::SHORT_MONTH:
                 value += 1;     // month is zero based
-                // fall thru
+                // fall through
             case CalendarDisplayCode::SHORT_DAY:
                 sprintf(aStr, "%d", value);     // #100211# - checked
                 break;

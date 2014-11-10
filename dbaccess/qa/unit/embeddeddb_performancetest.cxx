@@ -65,7 +65,7 @@ OUString getPrintableTimeValue(const TimeValue* pTimeValue)
 }
 
 /*
- * The reccomended way to run this test is:
+ * The recommended way to run this test is:
  * 'SAL_LOG="" DBA_PERFTEST=YES make CppunitTest_dbaccess_embeddeddb_performancetest'
  * This blocks the unnecessary exception output and show only the performance data.
  *

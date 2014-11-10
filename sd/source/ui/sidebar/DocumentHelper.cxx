@@ -411,7 +411,7 @@ void DocumentHelper::AssignMasterPageToPage (
 
     if ( ! pPage->IsMasterPage())
     {
-        // 1. Remove the background object (so that that, if it exists, does
+        // 1. Remove the background object (so that, if it exists, does
         // not override the new master page) and assign the master page to
         // the regular slide.
         pDocument->GetDocSh()->GetUndoManager()->AddUndoAction(

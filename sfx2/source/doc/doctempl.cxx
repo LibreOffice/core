@@ -786,7 +786,7 @@ bool SfxDocumentTemplates::CopyFrom
 
     Import a template from the file system
 
-    [Return value]                 Sucess (sal_True) or serfpTargetDirectory->GetContent());
+    [Return value]                 Success (sal_True) or serfpTargetDirectory->GetContent());
 
     sal_Bool            sal_True,   Action could be performed
                         sal_False,  Action could not be performed

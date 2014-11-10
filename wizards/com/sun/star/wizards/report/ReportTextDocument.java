@@ -363,7 +363,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     public void replaceFieldValueInGroupTable(DBColumn CurDBColumn, int TableIndex)
     {
         String TableName = TBLGROUPSECTION + (TableIndex + 1);
-        // Note: for some reason the table might lose its name and has to be renamed therefor
+        // Note: for some reason the table might lose its name and has to be renamed therefore
         String OldTableName = CurDBColumn.xTableName.getName();
         if (OldTableName.compareTo(TableName) != 0)
         {

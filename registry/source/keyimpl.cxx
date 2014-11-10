@@ -737,7 +737,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     sal_uInt32 len = 0;
     readUINT32(pBuffer, len);
 
-    /* make sure the declared size of the arry is consistant with the amount of data we have read */
+    /* make sure the declared size of the arry is consistent with the amount of data we have read */
     if(len > (valueSize - 4) / 4)
     {
         pValueList = NULL;

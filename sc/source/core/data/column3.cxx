@@ -1078,7 +1078,7 @@ bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunction )
             bOk = SubTotal::SafePlus( rVal1, nVal2 );
             break;
         case PASTE_SUB:
-            nVal2 = -nVal2;     // FIXME: Can we do this alwyas without error?
+            nVal2 = -nVal2;     // FIXME: Can we do this always without error?
             bOk = SubTotal::SafePlus( rVal1, nVal2 );
             break;
         case PASTE_MUL:

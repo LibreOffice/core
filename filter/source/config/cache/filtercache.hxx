@@ -791,7 +791,7 @@ class FilterCache : public BaseLock
 
             @param  eOption
                     regulate, which properties of the requested item should be read.
-                    See defintion of EReadOption for further information.
+                    See definition of EReadOption for further information.
 
             @throw  [css::uno::Exception]
                     if an unrecoverable error occurs inside this operation.

@@ -25,7 +25,7 @@ use installer::remover;
 use installer::ziplist;
 
 #############################################################################
-# Analyzing the laguage list parameter and language list from zip list file
+# Analyzing the language list parameter and language list from zip list file
 #############################################################################
 
 sub analyze_languagelist

@@ -1422,7 +1422,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
     }
 
-    // 7684: We are exactly ended up at ther HyphPortion. It is our task to
+    // 7684: We are exactly ended up at their HyphPortion. It is our task to
     // provide, that we end up in the String.
     // 7993: If length = 0, then we must exit...
     if( !nLength )

@@ -17,12 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -1477,7 +1471,7 @@ void globalTransfer_(
 
                             case UNKNOWN:
                                 // Handled, but not clear, how...
-                                // fall-thru intended.
+                                // fall through intended.
 
                             case ABORT:
                                 throw ucb::CommandFailedException(
@@ -1856,7 +1850,7 @@ void UniversalContentBroker::globalTransfer(
 
                             case UNKNOWN:
                                 // Handled, but not clear, how...
-                                // fall-thru intended.
+                                // fall through intended.
 
                             case ABORT:
                                 throw ucb::CommandFailedException(

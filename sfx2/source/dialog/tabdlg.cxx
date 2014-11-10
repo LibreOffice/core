@@ -1345,7 +1345,7 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
 
 /*  [Description]
 
-    With this method the Input-Set can subsequently be set initally or re-set.
+    With this method the Input-Set can subsequently be set initially or re-set.
 */
 
 {

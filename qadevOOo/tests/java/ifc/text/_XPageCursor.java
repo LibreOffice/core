@@ -115,7 +115,7 @@ public class _XPageCursor extends MultiMethodTest {
     }
 
     /**
-     * Firts jumps to the first page to have at least one
+     * First jumps to the first page to have at least one
      * next page, then call the method. <p>
      * Has <b> OK </b> status if the method returns
      * <code>true</code> value.
@@ -138,7 +138,7 @@ public class _XPageCursor extends MultiMethodTest {
     }
 
     /**
-     * Firts jumps to the last page to have at least one
+     * First jumps to the last page to have at least one
      * previous page, then call the method. <p>
      * Has <b> OK </b> status if the method returns
      * <code>true</code> value.

@@ -1411,7 +1411,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
 
-    // Always aquire the language from the current cursor position.
+    // Always acquire the language from the current cursor position.
     LanguageType eLang = rSh.GetCurLang();
     SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
     sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;

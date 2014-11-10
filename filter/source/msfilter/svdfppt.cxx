@@ -1207,7 +1207,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
         }
     }
-    if ( pRet ) // sj: #i38501#, and and taking care of connections to group objects
+    if ( pRet ) // sj: #i38501#, and taking care of connections to group objects
     {
         if ( rObjData.nSpFlags & SP_FBACKGROUND )
         {
@@ -6379,7 +6379,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         {
             DffRecordHeader aClientTextBoxHd( *rSdrPowerPointImport.maShapeRecords.Current() );
             sal_uInt32  nTextRulerAtomOfs = 0;  // case of zero -> this atom may be found in aClientDataContainerHd;
-                                            // case of -1 -> ther is no atom of this kind
+                                            // case of -1 -> there is no atom of this kind
                                             // else -> this is the fileofs where we can get it
 
             // checkout if this is a referenced

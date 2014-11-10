@@ -1446,7 +1446,7 @@ public:
                         const Link* pCallBack = 0 );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
-     One can either change the margin "by" adding or substracting a given
+     One can either change the margin "by" adding or subtracting a given
      offset or set it "to" this position (bModulus = true). */
     void MoveLeftMargin( const SwPaM& rPam, bool bRight = true,
                         bool bModulus = true );

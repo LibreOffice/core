@@ -202,7 +202,7 @@ endef
 # Run a target command
 #
 # This provides a wrapper that changes to the right directory,
-# touches the 'target' if sucessful and also provides
+# touches the 'target' if successful and also provides
 # the ability to hide the output if there is no failure
 # gb_ExternalProject_run,run_target,command,optional_extra_sub_directory,optional_log_filename)
 # default log_filename is <run_target>.log

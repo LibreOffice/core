@@ -66,7 +66,7 @@ namespace com { namespace sun { namespace star { namespace frame {
 /** A reference to a smart tag action
 
      An action service can support various actions. Therefore an ActionReference
-     consists of a reference to the service and and index.
+     consists of a reference to the service and index.
  */
 struct ActionReference
 {

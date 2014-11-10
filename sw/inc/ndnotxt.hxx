@@ -34,7 +34,7 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
     bool bAutomaticContour : 1; // automatic contour polygon, not manipulated
     bool bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // preferred map mode, but either
-                                      // MM100 or or pixel
+                                      // MM100 or pixel
     bool bPixelContour : 1;     // contour map mode is invalid and pixel.
 
     // Creates for all derivations an AttrSet with ranges for frame- and

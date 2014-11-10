@@ -541,7 +541,7 @@ DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
 {
-    // Check for the Column Separator value.It should be FALSE as the document doesnt contains separator line.
+    // Check for the Column Separator value.It should be FALSE as the document does not contain separator line.
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;

@@ -313,7 +313,7 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 
             // The following line is in fact wrong, since the language is unknown (is part of the
             // field) and, thus, aContent should also belong to the field. Each field can have a
-            // differnt language, but the same content with just different formatting.
+            // different language, but the same content with just different formatting.
             aContent = DoubleToString(nValue, static_cast<sal_uInt32>(LANGUAGE_SYSTEM));
         }
         break;

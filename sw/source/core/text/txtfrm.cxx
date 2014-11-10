@@ -713,7 +713,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
     bool bInv = false;
     if( 0 != nD )
     {
-        // In nDelta the differences betwen old and new
+        // In nDelta the differences between old and new
         // linelengths are being added, that's why it's negative
         // if chars have been added and positive, if chars have
         // deleted

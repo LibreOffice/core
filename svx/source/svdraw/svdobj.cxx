@@ -3220,7 +3220,7 @@ bool SdrObject::HasLineStyle() const
 // #i52224#
 // on import of OLE object from MS documents the BLIP size might be retrieved,
 // the following four methods are used to control it;
-// usually this data makes no sence after the import is finished, since the object
+// usually this data makes no sense after the import is finished, since the object
 // might be resized
 
 

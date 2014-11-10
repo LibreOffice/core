@@ -474,7 +474,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     if (bUseImagesInMenus)
         SetItemImage( MN_SHORT_COMMENT, m_aInfo16 );
 
-    // Add an item to show detailled infos if the FullCommentURL property is defined
+    // Add an item to show detailed infos if the FullCommentURL property is defined
     beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
     {
         sal_Int32 i = 0;

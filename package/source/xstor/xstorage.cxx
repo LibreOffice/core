@@ -128,7 +128,7 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
         }
         else if ( nStorageType == embed::StorageFormats::OFOPXML )
         {
-            // TODO/LATER: in future it might make sence to provide the stream if there is one
+            // TODO/LATER: in future it might make sense to provide the stream if there is one
             uno::Reference< embed::XRelationshipAccess > xRelAccess( xDest, uno::UNO_QUERY_THROW );
             xRelAccess->clearRelationships();
             xRelAccess->insertRelationships( aRelInfo, sal_False );
@@ -438,7 +438,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
 
 void OStorage_Impl::OpenOwnPackage()
 {
-    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "Opening of the package has no sence!" );
+    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "Opening of the package has no sense!" );
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 

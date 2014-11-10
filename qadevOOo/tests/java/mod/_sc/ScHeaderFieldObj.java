@@ -114,7 +114,7 @@ public class ScHeaderFieldObj extends TestCase {
     *      {@link ifc.text._XTextContent}(the interface <code>XTextContent</code>
     *      that was queried from the second created instance) </li>
     *  <li> <code>'TEXT'</code> for
-    *      {@link ifc.text._XTextContent}(the the text which is printed in the
+    *      {@link ifc.text._XTextContent}(the text which is printed in the
     *       right part of the header or footer) </li>
     * </ul>
     * @see com.sun.star.style.XStyleFamiliesSupplier

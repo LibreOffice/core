@@ -938,7 +938,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     long nX=(nWantWdt*100) /nIsWdt; // calculate X stretching
     long nY=(nWantHgt*100) /nIsHgt; // calculate Y stretching
     bool bChkX = true;
-    if (bNoStretching) { // might only be be possible proportionally
+    if (bNoStretching) { // might only be possible proportionally
         if (nX>nY) { nX=nY; bChkX=false; }
         else { nY=nX; }
     }

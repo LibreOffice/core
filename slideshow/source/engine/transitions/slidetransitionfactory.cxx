@@ -566,7 +566,7 @@ class MovingSlideChange : public SlideChangeBase
 
 public:
     /** Create a new SlideChanger, for the given entering slide
-        bitmaps, which performes a moving slide change effect
+        bitmaps, which performs a moving slide change effect
 
         @param rLeavingDirection
         Direction vector. The move is performed along this

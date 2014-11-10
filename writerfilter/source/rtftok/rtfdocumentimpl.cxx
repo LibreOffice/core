@@ -5980,7 +5980,7 @@ int RTFDocumentImpl::popState()
                     Buf_t(BUFFER_ENDSHAPE));
         }
 
-        // It's allowed to declare these inside the the shape text, and they
+        // It's allowed to declare these inside the shape text, and they
         // are expected to have an effect for the whole shape.
         if (aState.aDrawingObject.nLeft)
             m_aStates.top().aDrawingObject.nLeft = aState.aDrawingObject.nLeft;

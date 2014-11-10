@@ -71,7 +71,7 @@ public:
 
                                 // create y-band with boundaries
                                 ImplRegionBand( long nYTop, long nYBottom );
-                                /** copy y-band with with all data
+                                /** copy y-band with all data
                                     @param theSourceBand
                                         The new ImplRegionBand object will
                                         be a copy of this band.

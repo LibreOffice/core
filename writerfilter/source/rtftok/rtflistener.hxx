@@ -34,7 +34,7 @@ enum RTFErrors
 };
 
 /**
- * RTFTokenizer needs a class implementing this this interface. While
+ * RTFTokenizer needs a class implementing this interface. While
  * RTFTokenizer separates control words (and their arguments) from
  * text, the class implementing this interface is expected to map the
  * raw RTF tokens to dmapper tokens.

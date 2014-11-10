@@ -419,7 +419,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
         // A Grow() is always accepted by the Layout, even if the
         // FixSize of the surrounding layout frame should not allow it.
         // We text for this case and correct the values.
-        // The Frm must NOT be shrinked further than its size permits
+        // The Frm must NOT be shrunk further than its size permits
         // even in the case of an emergency.
         SwTwips nRstHeight;
         if ( IsVertical() )
@@ -823,7 +823,7 @@ bool SwTxtFrm::CalcPreps()
             else
             {
                 OSL_ENSURE( nChgHeight < (Prt().*fnRect->fnGetHeight)(),
-                        "+SwTxtFrm::CalcPrep: wanna shrink" );
+                        "+SwTxtFrm::CalcPrep: want to shrink" );
 
                 nChgHeight = (Prt().*fnRect->fnGetHeight)() - nChgHeight;
 

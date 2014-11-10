@@ -95,7 +95,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(const OUString& path);
    first if the path corresponds to one of the VendorBase::getHome path already
    contained in vecInfo. Only if there is no such entry, then the other
    getJREInfoByPath is called. Again the created VendorBase is compared to
-   those contained in vecInfos. If it it not in there then it's added.
+   those contained in vecInfos. If it is not in there then it's added.
 
    @return
    true a VendorBase was created and added to the end of vecInfos.

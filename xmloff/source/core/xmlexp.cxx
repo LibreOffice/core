@@ -1295,7 +1295,7 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 /*nExportMode*/)
 {
     // check version >= 1.2
     switch (rExport.getDefaultVersion()) {
-        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_011: // fall through
         case SvtSaveOptions::ODFVER_010: return;
         default: break;
     }

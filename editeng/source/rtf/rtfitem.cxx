@@ -290,7 +290,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 {
                     nStyleNo = -1 == nTokenValue ? 0 : sal_uInt16(nTokenValue);
                     /* setze am akt. auf dem AttrStack stehenden Style die
-                       I sit on akt. which is on the immiediate sytle AttrStack */
+                       I sit on akt. which is on the immediate style AttrStack */
                     // StyleNummer
                     SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
                     if( !pAkt )

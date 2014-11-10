@@ -70,7 +70,7 @@ namespace drawinglayer
             This is by purpose, this base class shall not be incarnated and be used directly as
             a XPrimitive2D.
 
-            Is is derived from boost::noncopyable to make clear that a primitive is a read-only
+            It is derived from boost::noncopyable to make clear that a primitive is a read-only
             instance and copying or changing values is not intended. The idea is to hold all data
             needed for visualisation of this primitive in unchangeable form.
 

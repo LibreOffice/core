@@ -67,7 +67,7 @@ public:
     */
     SlideSorterController (SlideSorter& rSlideSorter);
 
-    /** Late initialization.  Call this method once a new new object has been
+    /** Late initialization. Call this method once a new new object has been
         created.
     */
     virtual void Init (void);

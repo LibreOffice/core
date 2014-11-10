@@ -232,7 +232,7 @@ interface XConfigurationController
         getRequestedConfiguration() methods this
         allows the saving and restoring of configurations.  However, the
         given configuration can have other origins then these methods.</p>
-        <p>The given configuration is transformed into a list of of change
+        <p>The given configuration is transformed into a list of change
         requests so that the resulting requested configuration equals the
         given configuration.  This has the advantage that not only the
         resource activations and deactivations but all configuration

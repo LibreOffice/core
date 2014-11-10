@@ -92,7 +92,7 @@ void ScMyOLEFixer::CreateChartListener(ScDocument* pDoc,
 
         //for loading binary files e.g.
         //if we have the flat filter we need to set the dirty flag thus the visible charts get repainted
-        //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completely and is incorect therefor
+        //otherwise the charts keep their first visual representation which was created at a moment where the calc itself was not loaded completely and is therefore incorrect
         if( (rImport.getImportFlags() & IMPORT_ALL) == IMPORT_ALL )
             pCL->SetDirty( true );
         else

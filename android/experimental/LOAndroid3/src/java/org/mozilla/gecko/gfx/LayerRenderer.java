@@ -113,7 +113,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         "}\n";
 
     // We use highp because the screenshot textures
-    // we use are large and we stretch them alot
+    // we use are large and we stretch them a lot
     // so we need all the precision we can get.
     // Unfortunately, highp is not required by ES 2.0
     // so on GPU's like Mali we end up getting mediump

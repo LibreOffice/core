@@ -99,7 +99,7 @@ interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
         <p>Changing this attribute while the dialog is running is not supported, the
         result of such an attempt is undefined.</p>
 
-        <p>When a primary key is to be created by the wizard, it will be be an auto-increment
+        <p>When a primary key is to be created by the wizard, it will be an auto-increment
         column, if possible.</p>
 
         @throws ::com::sun::star::lang::IllegalArgumentException

@@ -3260,7 +3260,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
 bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
     bool bRet = false;
-    sal_uLong nFPosMerk = rStCtrl.Tell();   // remember FilePos for conditionally later restauration
+    sal_uLong nFPosMerk = rStCtrl.Tell();   // remember FilePos for conditionally later restoration
     DffRecordHeader aHd;
     do
     {
@@ -5951,7 +5951,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
         nReadSpGrCont += nLength;
     }
     while( nReadSpGrCont < nLenShapeGroupCont );
-    // possition the steam correctly
+    // position the stream correctly
     rSt.Seek( nStartShapeGroupCont + nLenShapeGroupCont );
     return true;
 }
@@ -5970,7 +5970,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     sal_uLong nLenShapePropTbl = 0;
     sal_uLong nReadSpCont = 0;
 
-    // Store file offset of the shape containers or respectivly the group(!).
+    // Store file offset of the shape containers or respectively the group(!).
     sal_uLong nStartOffs = (ULONG_MAX > nPosGroup) ?
                             nPosGroup : nStartShapeCont - DFF_COMMON_RECORD_HEADER_SIZE;
     SvxMSDffShapeInfo aInfo( nStartOffs );
@@ -6983,7 +6983,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
             // needs the correct visarea
 
             // If pName is set this is an own embedded object, it should have the correct size internally
-            // TODO/LATER: it might make sence in future to set the size stored in internal object
+            // TODO/LATER: it might make sense in future to set the size stored in internal object
             if( !pName && ( sStarName == "swriter" || sStarName == "scalc" ) )
             {
                 MapMode aMapMode( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nViewAspect ) ) );

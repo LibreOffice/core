@@ -144,7 +144,7 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     bVisible = bSynchron = bUseCache = true;
     bWasLastEditOK = false;
 
-    // It it going to be a Ole-Link,
+    // It is going to be a Ole-Link,
     pImplData->ClientType.nUpdateMode = nUpdateMode;
     pImplData->ClientType.nCntntType = nContentType;
     pImplData->ClientType.bIntrnlLnk = false;

@@ -102,7 +102,7 @@ private:
 #ifdef UNX
 #include <stdlib.h>
 // Setup an env variable so that temp file (or other) can
-// have a usefull value to identify the source
+// have a useful value to identify the source
 class EyecatcherListener
     : public CppUnit::TestListener
     , private boost::noncopyable

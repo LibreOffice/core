@@ -125,7 +125,7 @@ public:
         between two adjacent rows or columns.
         @param nDistanceIntoGap
             Vertical distance from the bottom of the upper row down into the
-            gap or or horizontal distance from the right edge right into the
+            gap or horizontal distance from the right edge right into the
             gap.
         @param eGapMemberhship
             This value decides what areas in the gap belong to which (or no)

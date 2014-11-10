@@ -879,7 +879,7 @@ private:
 
     std::map< OUString, EmbeddedFontRef > fontFilesMap; // font file url to data
 
-    // Remember first cell (used for for default borders/margins) of each table
+    // Remember first cell (used for default borders/margins) of each table
     std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
 
     boost::optional<css::drawing::FillStyle> m_oFillStyle;

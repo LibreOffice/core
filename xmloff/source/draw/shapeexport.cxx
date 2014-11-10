@@ -1804,7 +1804,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
 
-        // #89764# if export of position is supressed for group shape,
+        // #89764# if export of position is suppressed for group shape,
         // positions of contained objects should be written relative to
         // the upper left edge of the group.
         awt::Point aUpperLeft;
@@ -3426,7 +3426,7 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
             // write 3DSceneLights
             export3DLamps( xPropSet );
 
-            // #89764# if export of position is supressed for group shape,
+            // #89764# if export of position is suppressed for group shape,
             // positions of contained objects should be written relative to
             // the upper left edge of the group.
             awt::Point aUpperLeft;

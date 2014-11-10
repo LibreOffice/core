@@ -715,7 +715,7 @@ uno::Any SwEditShell::SpellContinue(
  * 1) HyphStart
  *    - Revoke all Selections
  *    - Save current Cursor
- *    - if no selections existant:
+ *    - if no selections existent:
  *      - create new selection reaching until document end
  * 2) HyphContinue
  *    - add nLastHyphLen onto SelectionStart
@@ -1464,7 +1464,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
                 SetCurr( new SwPosition( *pCrsr->GetPoint() ));
                 SetCurrX( new SwPosition( *pCrsr->GetMark() ));
 
-                // if an error has been found go back to the text preceeding the error
+                // if an error has been found go back to the text preceding the error
                 if(xSpellRet.is())
                 {
                     *pCrsr->GetPoint() = aSaveStartPos;

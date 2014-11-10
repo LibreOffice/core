@@ -48,7 +48,7 @@ public:
 
     /** @param bDataTypes
             Additionally to the differentiation between string and double allow
-            differentiation between other types such as as boolean. Needed for
+            differentiation between other types such as boolean. Needed for
             implementation of XFormulaParser. If <FALSE/>, boolean values are
             treated as ordinary double values 1 (true) and 0 (false).
      */

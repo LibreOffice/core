@@ -1237,7 +1237,7 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     }
     // compile modules first then RunInit ( otherwise there is
     // can be order dependency, e.g. classmodule A has a member
-    // of of type classmodule B and classmodule B hasn't been compiled yet )
+    // of type classmodule B and classmodule B hasn't been compiled yet )
 
     // Consider required types to init in right order. Class modules
     // that are required by other modules have to be initialized first.

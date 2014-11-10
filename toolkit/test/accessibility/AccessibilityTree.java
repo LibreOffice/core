@@ -110,7 +110,7 @@ public class AccessibilityTree
         ((AccessibilityTreeModel)maTree.getModel()).setCanvas(aCanvas);
     }
 
-    /** Expand the nodes in the subtree rooted in aNode according to the the
+    /** Expand the nodes in the subtree rooted in aNode according to the
         specified expander.  The tree is locked during the expansion.
     */
     protected void expandTree (AccessibleTreeNode aNode, Expander aExpander)

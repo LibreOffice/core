@@ -57,7 +57,7 @@ namespace /* private */
 }
 
 /**
-    Add a prefix to an email address. MAPI requires that that
+    Add a prefix to an email address. MAPI requires that
     email addresses have an 'SMTP:' prefix.
 
     @param  aEmailAddress

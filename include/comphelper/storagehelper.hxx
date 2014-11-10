@@ -179,7 +179,7 @@ public:
 
     static bool PathHasSegment( const OUString& aPath, const OUString& aSegment );
 
-    // Methods to allow easy use of hierachical names inside storages
+    // Methods to allow easy use of hierarchical names inside storages
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorageAtPath(
         const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > &xStorage,

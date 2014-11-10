@@ -1298,7 +1298,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl)
     return 0;
 }
 
-// Sets the Controlls in the dialog to the settings in the design
+// Sets the Controls in the dialog to the settings in the design
 void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
 {
     if(!pDesign)

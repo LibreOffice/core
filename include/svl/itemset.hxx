@@ -145,7 +145,7 @@ inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
 
 class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 
-//  Handles all Ranges. Ranges are automatically modified by puting items.
+//  Handles all Ranges. Ranges are automatically modified by putting items.
 
 {
     SfxVoidItem                 aDefault;

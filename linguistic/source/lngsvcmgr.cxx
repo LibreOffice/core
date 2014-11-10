@@ -408,7 +408,7 @@ void LngSvcMgrListenerHelper::DisposeAndClear( const lang::EventObject &rEvtObj 
             RemoveLngSvcEvtBroadcaster( xRef );
     }
 
-    // remove refernce to this object hold by the dictionary-list
+    // remove reference to this object hold by the dictionary-list
     if (xDicList.is())
     {
         xDicList->removeDictionaryListEventListener(

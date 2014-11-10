@@ -506,7 +506,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                     it != end; ++it)
             {
                 SAL_WARN_IF( (*it).maSecurityDescriptorXML.isEmpty() && !(*it).maSecurityDescriptor.empty(),
-                        "sc.filter", "XclExpSheetProtection::SaveXml: loosing BIFF security descriptor");
+                        "sc.filter", "XclExpSheetProtection::SaveXml: losing BIFF security descriptor");
                 rWorksheet->singleElement( XML_protectedRange,
                         XML_name, (*it).maTitle.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maTitle).getStr(),
                         XML_securityDescriptor, (*it).maSecurityDescriptorXML.isEmpty() ? NULL : XclXmlUtils::ToOString( (*it).maSecurityDescriptorXML).getStr(),

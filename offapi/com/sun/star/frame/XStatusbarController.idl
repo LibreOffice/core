@@ -72,7 +72,7 @@ interface XStatusbarController
                 implementation.
             </li>
             <li><b>StatusbarItem</b><br/>a com::sun::star::ui::XStatusbarItem
-                instance which represents the status bar item asociated with
+                instance which represents the status bar item associated with
                 this controller.
             </li>
             <li><b>ParentWindow</b><br/>a com::sun::star::awt::Window

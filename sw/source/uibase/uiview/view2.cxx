@@ -1637,7 +1637,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     }
 }
 
-/** excecute method for the status line
+/** execute method for the status line
  *
  * @param rReq ???
  */

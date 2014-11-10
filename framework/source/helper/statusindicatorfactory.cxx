@@ -340,8 +340,8 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         }
     }
 
-    // Ok the window should be made visible ... because it isnt currently visible.
-    // BUT ..!
+    // Ok the window should be made visible... because it is not currently visible.
+    // BUT..!
     // We need a Hack for our applications: They get her progress from the frame directly
     // on saving documents. Because there is no progress set on the MediaDescriptor.
     // But that's wrong. In case the document was opened hidden, they should not use any progress .-(

@@ -149,7 +149,7 @@ public:
     /** if this method returns true, its parent styles context
         should not add it to its container.<br>
         Transient styles can't be accessed from its
-        parent SvXMLStylesContext after theyre imported and
+        parent SvXMLStylesContext after they are imported and
         the methods CreateAndInsert(), CreateAndInsertLate()
         and Finish() will not be called.
         The default return value is false

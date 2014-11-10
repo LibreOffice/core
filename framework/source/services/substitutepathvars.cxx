@@ -177,7 +177,7 @@ enum PreDefVariable
     PREDEFVAR_PROGURL,
     PREDEFVAR_USERURL,
     PREDEFVAR_WORKDIRURL,
-    // New variable of hierachy service (#i32656#)
+    // New variable of hierarchy service (#i32656#)
     PREDEFVAR_BASEINSTURL,
     PREDEFVAR_USERDATAURL,
     PREDEFVAR_BRANDBASEURL,
@@ -1260,13 +1260,13 @@ void SubstitutePathVariables::SetPredefinedPathVariables()
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ] = m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL];
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTURL ]    = m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ];
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_INST ]       = m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    // New variable of hierachy service (#i32656#)
+    // New variable of hierarchy service (#i32656#)
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_BASEINSTURL ]= m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ];
 
     // Set $(user), $(userpath), $(userurl)
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERURL ]    = m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ];
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_USER ]       = m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ];
-    // New variable of hierachy service (#i32656#)
+    // New variable of hierarchy service (#i32656#)
     m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERDATAURL ]= m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ];
 
     // Detect the program directory

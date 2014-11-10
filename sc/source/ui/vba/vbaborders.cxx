@@ -43,7 +43,7 @@ static const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, Xl
 
 static const char sTableBorder[] = "TableBorder";
 
-//  Equiv widths in in 1/100 mm
+//  Equiv widths in 1/100 mm
 const static sal_Int32 OOLineThin = 35;
 const static sal_Int32 OOLineMedium = 88;
 const static sal_Int32 OOLineThick = 141;

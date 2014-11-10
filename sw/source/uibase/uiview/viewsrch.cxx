@@ -236,7 +236,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 {
 
                     // 1) Replace selection (Not if only attributes should be replaced)
-//JP 27.04.95: Why ?
+//JP 27.04.95: Why?
 //      what if you only want to assign attributes to the found??
 
                     sal_uInt16 nCmd = SVX_SEARCHCMD_FIND;

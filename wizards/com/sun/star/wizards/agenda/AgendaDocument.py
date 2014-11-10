@@ -175,7 +175,7 @@ class AgendaDocument(TextDocument):
             raise ValueError("No such item")
 
     '''itemsCache is a Map containing all agenda item. These are object which
-    "write themselfs" to the table, given a table cursor.
+    "write themselves" to the table, given a table cursor.
     A cache is used in order to reuse the objects, instead of recreate them.
     This method fills the cache will all items objects (names and headings).
     '''

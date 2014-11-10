@@ -1331,7 +1331,7 @@ bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
         switch( rURI[0] )
         {
         case '/':
-            // no rel path; nothing to to
+            // no rel path; nothing to do
             break;
         case '.':
             // a rel path
