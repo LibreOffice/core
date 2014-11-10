@@ -1167,7 +1167,7 @@ SAL_CALL osl_mapFile (
         // OS simultaneously pages in the rest); on other platforms, it remains
         // to be evaluated whether madvise or equivalent is available and
         // actually useful:
-#if defined MACOSX
+#if defined MACOSX || ( defined(SOLARIS) && ( !defined(__XOPEN_OR_POSIX) || defined(_XPG6) || defined(__EXTENSIONS__) ) )
         int e = posix_madvise(p, nLength, POSIX_MADV_WILLNEED);
         if (e != 0)
         {
