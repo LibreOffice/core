@@ -356,14 +356,14 @@ bool PSDReader::ImplReadBody()
                 }
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
-                    if ( nBitCount == -1 )  // bits left in nDat?
-                    {
-                        m_rPSD.ReadUChar( nDat );
-                        nDat ^= 0xff;
-                        nBitCount = 7;
-                    }
                     for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                     {
+                        if ( nBitCount == -1 )  // bits left in nDat?
+                        {
+                            m_rPSD.ReadUChar( nDat );
+                            nDat ^= 0xff;
+                            nBitCount = 7;
+                        }
                         mpWriteAcc->SetPixelIndex( nY, nX, nDat >> nBitCount-- );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
