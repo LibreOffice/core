@@ -622,7 +622,13 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
 
 bool OpenGLContext::ImplInit()
 {
+    GLXContext pSharedCtx( NULL );
+
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
+
+    if( !vShareList.empty() )
+        pSharedCtx = vShareList.front();
+
 #ifdef DBG_UTIL
     if (!mbPixmap && glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
@@ -639,7 +645,7 @@ bool OpenGLContext::ImplInit()
                 GLX_CONTEXT_MINOR_VERSION_ARB, 2,
                 None
             };
-            m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], 0, GL_TRUE, nContextAttribs);
+            m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], pSharedCtx, GL_TRUE, nContextAttribs);
             SAL_INFO_IF(m_aGLWin.ctx, "vcl.opengl", "created a 3.2 core context");
         }
         else
@@ -650,25 +656,22 @@ bool OpenGLContext::ImplInit()
 
     if (!m_aGLWin.ctx)
     {
-        GLXContext pSharedCtx( NULL );
-
         if (!m_aGLWin.dpy || !m_aGLWin.vi)
            return false;
-
-        if( !vShareList.empty() )
-            pSharedCtx = vShareList.front();
 
         m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
                 m_aGLWin.vi,
                 pSharedCtx,
                 GL_TRUE);
-
-        if( m_aGLWin.ctx )
-            vShareList.push_back( m_aGLWin.ctx );
     }
 
 
-    if( m_aGLWin.ctx == NULL )
+
+    if( m_aGLWin.ctx )
+    {
+        vShareList.push_back( m_aGLWin.ctx );
+    }
+    else
     {
         SAL_WARN("vcl.opengl", "unable to create GLX context");
         return false;
