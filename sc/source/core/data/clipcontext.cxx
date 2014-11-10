@@ -53,6 +53,16 @@ void CopyFromClipContext::setTabRange(SCTAB nStart, SCTAB nEnd)
     mnTabEnd = nEnd;
 }
 
+SCTAB CopyFromClipContext::getTabStart() const
+{
+    return mnTabStart;
+}
+
+SCTAB CopyFromClipContext::getTabEnd() const
+{
+    return mnTabEnd;
+}
+
 void CopyFromClipContext::setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     mnDestCol1 = nCol1;
@@ -71,9 +81,34 @@ CopyFromClipContext::Range CopyFromClipContext::getDestRange() const
     return aRet;
 }
 
+ScDocument* CopyFromClipContext::getUndoDoc()
+{
+    return mpRefUndoDoc;
+}
+
+ScDocument* CopyFromClipContext::getClipDoc()
+{
+    return mpClipDoc;
+}
+
+InsertDeleteFlags CopyFromClipContext::getInsertFlag() const
+{
+    return mnInsertFlag;
+}
+
 void CopyFromClipContext::setDeleteFlag( InsertDeleteFlags nFlag )
 {
     mnDeleteFlag = nFlag;
+}
+
+InsertDeleteFlags CopyFromClipContext::getDeleteFlag() const
+{
+    return mnDeleteFlag;
+}
+
+ScCellValue& CopyFromClipContext::getSingleCell()
+{
+    return maSingleCell;
 }
 
 void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondFormatList )
@@ -81,9 +116,24 @@ void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondForma
     mpCondFormatList = pCondFormatList;
 }
 
+ScConditionalFormatList* CopyFromClipContext::getCondFormatList()
+{
+    return mpCondFormatList;
+}
+
+const ScPatternAttr* CopyFromClipContext::getSingleCellPattern() const
+{
+    return mpSinglePattern;
+}
+
 void CopyFromClipContext::setSingleCellPattern( const ScPatternAttr* pAttr )
 {
     mpSinglePattern = pAttr;
+}
+
+const ScPostIt* CopyFromClipContext::getSingleCellNote() const
+{
+    return mpSingleNote;
 }
 
 void CopyFromClipContext::setSingleCellNote( const ScPostIt* pNote )
@@ -94,6 +144,26 @@ void CopyFromClipContext::setSingleCellNote( const ScPostIt* pNote )
 void CopyFromClipContext::setTableProtected( bool b )
 {
     mbTableProtected = b;
+}
+
+bool CopyFromClipContext::isTableProtected() const
+{
+    return mbTableProtected;
+}
+
+bool CopyFromClipContext::isAsLink() const
+{
+    return mbAsLink;
+}
+
+bool CopyFromClipContext::isSkipAttrForEmptyCells() const
+{
+    return mbSkipAttrForEmptyCells;
+}
+
+bool CopyFromClipContext::isCloneNotes() const
+{
+    return mbCloneNotes;
 }
 
 bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
@@ -108,6 +178,16 @@ CopyToClipContext::CopyToClipContext(
     ClipContextBase(rDoc), mbKeepScenarioFlags(bKeepScenarioFlags), mbCloneNotes(bCloneNotes) {}
 
 CopyToClipContext::~CopyToClipContext() {}
+
+bool CopyToClipContext::isKeepScenarioFlags() const
+{
+    return mbKeepScenarioFlags;
+}
+
+bool CopyToClipContext::isCloneNotes() const
+{
+    return mbCloneNotes;
+}
 
 CopyToDocContext::CopyToDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
 CopyToDocContext::~CopyToDocContext() {}

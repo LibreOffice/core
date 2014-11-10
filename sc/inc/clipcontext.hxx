@@ -83,36 +83,36 @@ public:
 
     void setTabRange(SCTAB nStart, SCTAB nEnd);
 
-    SCTAB getTabStart() const { return mnTabStart;}
-    SCTAB getTabEnd() const { return mnTabEnd;}
+    SCTAB getTabStart() const;
+    SCTAB getTabEnd() const;
 
     void setDestRange( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     Range getDestRange() const;
 
-    ScDocument* getUndoDoc() { return mpRefUndoDoc;}
-    ScDocument* getClipDoc() { return mpClipDoc;}
-    InsertDeleteFlags getInsertFlag() const { return mnInsertFlag;}
+    ScDocument* getUndoDoc();
+    ScDocument* getClipDoc();
+    InsertDeleteFlags getInsertFlag() const;
 
     void setDeleteFlag( InsertDeleteFlags nFlag );
-    InsertDeleteFlags getDeleteFlag() const { return mnDeleteFlag;}
+    InsertDeleteFlags getDeleteFlag() const;
 
-    ScCellValue& getSingleCell() { return maSingleCell;}
+    ScCellValue& getSingleCell();
 
     void setCondFormatList( ScConditionalFormatList* pCondFormatList );
-    ScConditionalFormatList* getCondFormatList() { return mpCondFormatList;}
+    ScConditionalFormatList* getCondFormatList();
 
-    const ScPatternAttr* getSingleCellPattern() const { return mpSinglePattern;}
+    const ScPatternAttr* getSingleCellPattern() const;
     void setSingleCellPattern( const ScPatternAttr* pAttr );
 
-    const ScPostIt* getSingleCellNote() const { return mpSingleNote;}
+    const ScPostIt* getSingleCellNote() const;
     void setSingleCellNote( const ScPostIt* pNote );
 
     void setTableProtected( bool b );
-    bool isTableProtected() const { return mbTableProtected;}
+    bool isTableProtected() const;
 
-    bool isAsLink() const { return mbAsLink;}
-    bool isSkipAttrForEmptyCells() const { return mbSkipAttrForEmptyCells;}
-    bool isCloneNotes() const { return mbCloneNotes;}
+    bool isAsLink() const;
+    bool isSkipAttrForEmptyCells() const;
+    bool isCloneNotes() const;
     bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
 };
 
@@ -127,8 +127,8 @@ public:
     CopyToClipContext(ScDocument& rDoc, bool bKeepScenarioFlags, bool bCloneNotes);
     virtual ~CopyToClipContext();
 
-    bool isKeepScenarioFlags() const { return mbKeepScenarioFlags;}
-    bool isCloneNotes() const { return mbCloneNotes;}
+    bool isKeepScenarioFlags() const;
+    bool isCloneNotes() const;
 };
 
 class CopyToDocContext : public ClipContextBase
