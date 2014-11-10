@@ -215,6 +215,8 @@ bool OpenGLSalBitmap::AllocateUserData()
     return maUserBuffer.get() != 0;
 }
 
+namespace {
+
 class ImplPixelFormat
 {
 protected:
@@ -304,6 +306,8 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     }
 
     return 0;
+}
+
 }
 
 Size OpenGLSalBitmap::GetSize() const

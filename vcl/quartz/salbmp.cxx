@@ -330,6 +330,8 @@ bool QuartzSalBitmap::AllocateUserData()
     return maUserBuffer.get() != 0;
 }
 
+namespace {
+
 class ImplPixelFormat
 {
 protected:
@@ -534,6 +536,8 @@ ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalet
     }
 
     return 0;
+}
+
 }
 
 void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
