@@ -85,11 +85,15 @@ BitmapEx::BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize ) :
     CopyPixel( aDestRect, aSrcRect, &rBitmapEx );
 }
 
+BitmapEx::BitmapEx( const OUString& rIconName )
+{
+    loadFromIconTheme( rIconName );
+}
+
 BitmapEx::BitmapEx( const ResId& rResId ) :
         eTransparent( TRANSPARENT_NONE ),
         bAlpha      ( false )
 {
-    static ImplImageTreeSingletonRef    aImageTree;
     ResMgr*                             pResMgr = NULL;
 
     ResMgr::GetResourceSkipHeader( rResId.SetRT( RSC_BITMAP ), &pResMgr );
@@ -97,13 +101,20 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     pResMgr->ReadLong();
 
     const OUString aFileName( pResMgr->ReadString() );
+    loadFromIconTheme( aFileName );
+}
+
+void BitmapEx::loadFromIconTheme( const OUString& rIconName )
+{
+    static ImplImageTreeSingletonRef aImageTree;
+
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    if( !aImageTree->loadImage( aFileName, aIconTheme, *this, true ) )
+    if( !aImageTree->loadImage( rIconName, aIconTheme, *this, true ) )
     {
 #ifdef DBG_UTIL
         OStringBuffer aErrorStr(
-            "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <");
+            "BitmapEx::BitmapEx(): could not load image <");
         aErrorStr.append(OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append("> via icon theme ");
         aErrorStr.append(OUStringToOString(aIconTheme, RTL_TEXTENCODING_ASCII_US)).append('.');
         OSL_FAIL(aErrorStr.getStr());

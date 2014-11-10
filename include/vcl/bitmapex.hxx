@@ -46,6 +46,7 @@ public:
 
                         BitmapEx();
                         BitmapEx( const ResId& rResId );
+                        BitmapEx( const OUString& rIconName );
                         BitmapEx( const BitmapEx& rBitmapEx );
                         BitmapEx( const BitmapEx& rBitmapEx, Point aSrc, Size aSize );
                         BitmapEx( const Bitmap& rBmp );
@@ -460,6 +461,7 @@ public:
 private:
     friend class ImpGraphic;
     friend bool VCL_DLLPUBLIC WriteDIBBitmapEx(const BitmapEx& rSource, SvStream& rOStm);
+    void  loadFromIconTheme( const OUString& rIconName );
 
     Bitmap              aBitmap;
     Bitmap              aMask;
