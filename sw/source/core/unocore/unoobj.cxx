@@ -19,6 +19,7 @@
 
 #include <com/sun/star/table/TableSortField.hpp>
 #include <comphelper/string.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/endian.h>
 #include <rtl/ustrbuf.hxx>
@@ -2336,7 +2337,17 @@ void SAL_CALL SwXTextCursor::setPropertyValues(
         aPropertyValues[ i ].Name = aPropertyNames[ i ];
         aPropertyValues[ i ].Value = aValues[ i ];
     }
-    SwUnoCursorHelper::SetPropertyValues( rUnoCursor, m_pImpl->m_rPropSet, aPropertyValues );
+    try
+    {
+        SwUnoCursorHelper::SetPropertyValues( rUnoCursor, m_pImpl->m_rPropSet, aPropertyValues );
+    }
+    catch (const css::beans::UnknownPropertyException& e)
+    {
+        uno::Any a(cppu::getCaughtException());
+        throw lang::WrappedTargetException(
+            "wrapped Exception " + e.Message,
+            uno::Reference<uno::XInterface>(), a);
+    }
 }
 
 uno::Sequence< uno::Any > SAL_CALL
