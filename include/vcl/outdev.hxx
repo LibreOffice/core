@@ -518,9 +518,9 @@ protected:
 
     virtual void                CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags);
 
-private:
+    SAL_DLLPRIVATE void         drawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
 
-    SAL_DLLPRIVATE void         ImplDrawOutDevDirect ( const OutputDevice* pSrcDev, SalTwoRect& rPosAry );
+private:
 
     // not implemented; to detect misuses of DrawOutDev(...OutputDevice&);
     SAL_DLLPRIVATE void         DrawOutDev( const Point&, const Size&, const Point&,  const Size&, const Printer&) SAL_DELETED_FUNCTION;
