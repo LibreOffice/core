@@ -2118,10 +2118,28 @@ static void GlyphOffsetsDispose(GlyphOffsets *_this)
 
 static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
+    if (sfntLen < 12)
+    {
+        SAL_WARN( "vcl.fonts", "DumpSfnts sfntLen is too short: "
+            << sfntLen << " legal min is: " << sfntLen);
+        return;
+    }
+
+    const sal_uInt32 nSpaceForTables = sfntLen - 12;
+    const sal_uInt32 nTableSize = 16;
+    const sal_uInt32 nMaxPossibleTables = nSpaceForTables/nTableSize;
+
     HexFmt *h = HexFmtNew(outf);
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4, 1);
     GlyphOffsets *go = GlyphOffsetsNew(sfntP, sfntLen);
     sal_uInt8 pad[] = {0,0,0,0};                     /* zeroes                       */
+
+    if (numTables > nMaxPossibleTables)
+    {
+        SAL_WARN( "vcl.fonts", "DumpSfnts claimed to have "
+            << numTables  << " tables, but only space for " << nMaxPossibleTables);
+        numTables = nMaxPossibleTables;
+    }
 
     assert(numTables <= 9);                                 /* Type42 has 9 required tables */
 
@@ -2132,7 +2150,8 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     HexFmtBlockWrite(h, sfntP, 12);                         /* stream out the Offset Table    */
     HexFmtBlockWrite(h, sfntP+12, 16 * numTables);          /* stream out the Table Directory */
 
-    for (i=0; i<numTables; i++) {
+    for (i=0; i<numTables; i++)
+    {
         sal_uInt32 nLargestFixedOffsetPos = 12 + 16 * i + 12;
         sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
         if (nMinSize > sfntLen)
@@ -2144,16 +2163,33 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
         sal_uInt32 tag = GetUInt32(sfntP, 12 + 16 * i, 1);
         sal_uInt32 off = GetUInt32(sfntP, 12 + 16 * i + 8, 1);
+        if (off > sfntLen)
+        {
+            SAL_WARN( "vcl.fonts", "DumpSfnts claims offset of "
+                << off << " but max possible is " << sfntLen);
+            break;
+        }
+        sal_uInt8 *pRecordStart = sfntP + off;
         sal_uInt32 len = GetUInt32(sfntP, nLargestFixedOffsetPos, 1);
+        sal_uInt32 nMaxLenPossible = sfntLen - off;
+        if (len > nMaxLenPossible)
+        {
+            SAL_WARN( "vcl.fonts", "DumpSfnts claims len of "
+                << len << " but only space for " << nMaxLenPossible);
+            break;
+        }
 
-        if (tag != T_glyf) {
-            HexFmtBlockWrite(h, sfntP + off, len);
-        } else {
-            sal_uInt8 *glyf = sfntP + off;
-            sal_uInt32 o, l, j;
-            for (j = 0; j < go->nGlyphs - 1; j++) {
-                o = go->offs[j];
-                l = go->offs[j + 1] - o;
+        if (tag != T_glyf)
+        {
+            HexFmtBlockWrite(h, pRecordStart, len);
+        }
+        else
+        {
+            sal_uInt8 *glyf = pRecordStart;
+            for (sal_uInt32 j = 0; j < go->nGlyphs - 1; j++)
+            {
+                sal_uInt32 o = go->offs[j];
+                sal_uInt32 l = go->offs[j + 1] - o;
                 HexFmtBlockWrite(h, glyf + o, l);
             }
         }
@@ -2164,7 +2200,6 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     GlyphOffsetsDispose(go);
     HexFmtDispose(h);
     free(offs);
-//    free(lens);
 }
 
 int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
