@@ -856,7 +856,7 @@
            <desc>Specifies if OpenGL rendering should be used in VCL backends
                 supporting it.</desc>
         </info>
-        <value>true</value>
+        <value>false</value>
       </prop>
     </group>
     <group oor:name="InternalMSExport">
