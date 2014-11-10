@@ -320,8 +320,10 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCe
         ScAddress aCellPos( static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab() );
         if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
         {
-            ScAccessiblePreviewHeaderCell* pHeaderCell = new ScAccessiblePreviewHeaderCell( this, mpViewShell, aCellPos,
-                                        rRowInfo.bIsHeader, rColInfo.bIsHeader, nNewIndex );
+            const bool bRotatedColHeader = rRowInfo.bIsHeader;
+            const bool bRotatedRowHeader = rColInfo.bIsHeader;
+            ScAccessiblePreviewHeaderCell* pHeaderCell = new ScAccessiblePreviewHeaderCell(this, mpViewShell, aCellPos,
+                                        bRotatedColHeader, bRotatedRowHeader, nNewIndex);
             xRet = pHeaderCell;
             pHeaderCell->Init();
         }
