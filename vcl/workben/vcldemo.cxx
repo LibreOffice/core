@@ -42,10 +42,31 @@ public:
     OutputDevice &getOutDev() { return *this; }
 };
 
+enum RenderStyle {
+    RENDER_THUMB,    // small view <n> to a page
+    RENDER_EXPANDED, // expanded view of this renderer
+};
+
 class DemoWin : public DemoBase
 {
     Bitmap   maIntroBW;
     BitmapEx maIntro;
+
+    struct RenderContext {
+        RenderStyle meStyle;
+        bool        mbVDev;
+        DemoWin    *mpDemoWin;
+    };
+    struct RegionRenderer {
+    public:
+        virtual ~RegionRenderer() {}
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &rCtx) = 0;
+    };
+
+    std::vector< RegionRenderer * > maRenderers;
+
+    void InitRenderers();
 
 public:
     DemoWin() : DemoBase()
@@ -56,6 +77,8 @@ public:
             Application::Abort("Failed to load intro image");
         maIntroBW = maIntro.GetBitmap();
         maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
+
+        InitRenderers();
     }
 
     // Bouncing windows on click ...
@@ -66,8 +89,6 @@ public:
     DECL_LINK(BounceTimerCb, void *);
 
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-
-    void drawToDevice(OutputDevice &r, bool bVdev);
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE
     {
@@ -89,199 +110,263 @@ public:
         rDev.DrawGradient(r, aGradient);
     }
 
-    void drawRadialLines(OutputDevice &rDev, Rectangle r)
+    struct DrawRadialLines : public RegionRenderer
     {
-        rDev.SetFillColor(Color(COL_LIGHTRED));
-        rDev.SetLineColor(Color(COL_BLACK));
-        rDev.DrawRect( r );
-
-        for(int i=0; i<r.GetHeight(); i+=15)
-            rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
-        for(int i=0; i<r.GetWidth(); i+=15)
-            rDev.DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
-
-        // Should draw a white-line across the middle
-        Color aLastPixel( COL_WHITE );
-        Point aCenter((r.Left() + r.Right())/2 - 4,
-                      (r.Top() + r.Bottom())/2 - 4);
-        for(int i=0; i<8; i++)
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
         {
-            rDev.DrawPixel(aCenter, aLastPixel);
-            aLastPixel = rDev.GetPixel(aCenter);
-            aCenter.Move(1,1);
-        }
-    }
+            rDev.SetFillColor(Color(COL_LIGHTRED));
+            rDev.SetLineColor(Color(COL_BLACK));
+            rDev.DrawRect( r );
 
-    void drawText(OutputDevice &rDev, Rectangle r)
+            for(int i=0; i<r.GetHeight(); i+=15)
+                rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
+            for(int i=0; i<r.GetWidth(); i+=15)
+                rDev.DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
 
-    {
-        rDev.SetTextColor( Color( COL_BLACK ) );
-        vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
-        rDev.SetFont( aFont );
-        rDev.DrawText( r, OUString( "Just a simple text" ) );
-    }
-
-    void drawPoly(OutputDevice &rDev, Rectangle r) // pretty
-    {
-        drawCheckered(rDev, r);
-
-        long nDx = r.GetWidth()/20;
-        long nDy = r.GetHeight()/20;
-        Rectangle aShrunk(r);
-        aShrunk.Move(nDx, nDy);
-        aShrunk.SetSize(Size(r.GetWidth()-nDx*2,
-                             r.GetHeight()-nDy*2));
-        Polygon aPoly(aShrunk);
-        tools::PolyPolygon aPPoly(aPoly);
-        rDev.SetLineColor(Color(COL_RED));
-        rDev.SetFillColor(Color(COL_RED));
-        // This hits the optional 'drawPolyPolygon' code-path
-        rDev.DrawTransparent(aPPoly, 64);
-    }
-    void drawEllipse(OutputDevice &rDev, Rectangle r)
-
-    {
-        rDev.SetLineColor(Color(COL_RED));
-        rDev.SetFillColor(Color(COL_GREEN));
-        rDev.DrawEllipse(r);
-    }
-    void drawCheckered(OutputDevice &rDev, Rectangle r)
-
-    {
-        rDev.DrawCheckered(r.TopLeft(), r.GetSize());
-    }
-    void drawGradient(OutputDevice &rDev, Rectangle r)
-
-    {
-        Gradient aGradient;
-        aGradient.SetStartColor(COL_YELLOW);
-        aGradient.SetEndColor(COL_RED);
-//        aGradient.SetAngle(45);
-        aGradient.SetStyle(GradientStyle_RECT);
-        aGradient.SetBorder(r.GetSize().Width()/20);
-        rDev.DrawGradient(r, aGradient);
-    }
-    void drawBitmap(OutputDevice &rDev, Rectangle r)
-
-    {
-        Bitmap aBitmap(maIntroBW);
-        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
-        rDev.DrawBitmap(r.TopLeft(), aBitmap);
-    }
-    void drawBitmapEx(OutputDevice &rDev, Rectangle r)
-
-    {
-        drawCheckered(rDev, r);
-
-        BitmapEx aBitmap(maIntro);
-        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
-        AlphaMask aSemiTransp(aBitmap.GetSizePixel());
-        aSemiTransp.Erase(64);
-        rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
-                                                aSemiTransp));
-    }
-    void drawPolyPolgons(OutputDevice &rDev, Rectangle r)
-
-    {
-        struct {
-            double nX, nY;
-        } aPoints[] = { { 0.1, 0.1 }, { 0.9, 0.9 },
-#ifdef FIXME_SELF_INTERSECTING_WORKING
-                        { 0.9, 0.1 }, { 0.1, 0.9 },
-                        { 0.1, 0.1 } };
-#else
-                        { 0.1, 0.9 }, { 0.5, 0.5 },
-                        { 0.9, 0.1 }, { 0.1, 0.1 } };
-#endif
-
-        tools::PolyPolygon aPolyPoly;
-        // Render 4x polygons & aggregate into another PolyPolygon
-        for (int x = 0; x < 2; x++)
-        {
-            for (int y = 0; y < 2; y++)
+            // Should draw a white-line across the middle
+            Color aLastPixel( COL_WHITE );
+            Point aCenter((r.Left() + r.Right())/2 - 4,
+                          (r.Top() + r.Bottom())/2 - 4);
+            for(int i=0; i<8; i++)
             {
-                Rectangle aSubRect(r);
-                aSubRect.Move(x * r.GetWidth()/3, y * r.GetHeight()/3);
-                aSubRect.SetSize(Size(r.GetWidth()/2, r.GetHeight()/4));
-                Polygon aPoly(SAL_N_ELEMENTS(aPoints));
-                for (size_t v = 0; v < SAL_N_ELEMENTS(aPoints); v++)
-                {
-                    aPoly.SetPoint(Point(aSubRect.Left() +
-                                         aSubRect.GetWidth() * aPoints[v].nX,
-                                         aSubRect.Top() +
-                                         aSubRect.GetHeight() * aPoints[v].nY),
-                                   v);
-                }
-                rDev.SetLineColor(Color(COL_YELLOW));
-                rDev.SetFillColor(Color(COL_BLACK));
-                rDev.DrawPolygon(aPoly);
-
-                // now move and add to the polypolygon
-                aPoly.Move(0, r.GetHeight()/2);
-                aPolyPoly.Insert(aPoly);
+                rDev.DrawPixel(aCenter, aLastPixel);
+                aLastPixel = rDev.GetPixel(aCenter);
+                aCenter.Move(1,1);
             }
         }
-        rDev.SetLineColor(Color(COL_LIGHTRED));
-        rDev.SetFillColor(Color(COL_GREEN));
-        rDev.DrawTransparent(aPolyPoly, 50);
-    }
-    void drawToVirtualDevice(OutputDevice &rDev, Rectangle r)
+    };
+
+    struct DrawText : public RegionRenderer
     {
-        VirtualDevice aNested(rDev);
-        aNested.SetOutputSizePixel(r.GetSize());
-        Rectangle aWhole(Point(0,0), r.GetSize());
-        // mini me
-        drawToDevice(aNested, true);
-
-        Bitmap aBitmap(aNested.GetBitmap(Point(0,0),aWhole.GetSize()));
-        rDev.DrawBitmap(r.TopLeft(), aBitmap);
-    }
-
-    std::vector<BitmapEx> maIcons;
-    void initIcons()
-    {
-        if (maIcons.size())
-            return;
-
-        const char *pNames[] = {
-            "cmd/lc_openurl.png",
-            "cmd/lc_newdoc.png",
-            "cmd/lc_save.png",
-            "cmd/lc_saveas.png",
-            "cmd/lc_sendmail.png",
-            "cmd/lc_editdoc.png",
-            "cmd/lc_print.png",
-            "cmd/lc_printpreview.png",
-            "cmd/lc_cut.png",
-            "cmd/lc_copy.png",
-            "cmd/lc_paste.png",
-            "cmd/lc_formatpaintbrush.png",
-            "cmd/lc_undo.png",
-            "cmd/lc_redo.png",
-        };
-        for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
-            maIcons.push_back(BitmapEx(OUString::createFromAscii(pNames[i])));
-    }
-    void drawIcons(OutputDevice &rDev, Rectangle r)
-    {
-        initIcons();
-
-        Rectangle p(r);
-        for (size_t i = 0; i < maIcons.size(); i++)
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
         {
-            Size aSize(maIcons[i].GetSizePixel());
-            rDev.DrawBitmapEx(p.TopLeft(), maIcons[i]);
-            p.Move(aSize.Width(), 0);
-            if (p.Left() >= r.Right())
-                break;
+            rDev.SetTextColor( Color( COL_BLACK ) );
+            vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
+            rDev.SetFont( aFont );
+            rDev.DrawText( r, OUString( "Just a simple text" ) );
         }
-    }
+    };
 
-    void fetchDrawBitmap(OutputDevice &rDev, Rectangle r)
+    struct DrawCheckered : public RegionRenderer
     {
-        Bitmap aBitmap(rDev.GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
-        aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
-        rDev.DrawBitmap(r.TopLeft(), aBitmap);
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
+        {
+            rDev.DrawCheckered(r.TopLeft(), r.GetSize());
+        }
+    };
+
+    struct DrawPoly : public RegionRenderer
+    {
+        DrawCheckered maCheckered;
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &rCtx) SAL_OVERRIDE
+        {
+            maCheckered.RenderRegion(rDev, r, rCtx);
+
+            long nDx = r.GetWidth()/20;
+            long nDy = r.GetHeight()/20;
+            Rectangle aShrunk(r);
+            aShrunk.Move(nDx, nDy);
+            aShrunk.SetSize(Size(r.GetWidth()-nDx*2,
+                                 r.GetHeight()-nDy*2));
+            Polygon aPoly(aShrunk);
+            tools::PolyPolygon aPPoly(aPoly);
+            rDev.SetLineColor(Color(COL_RED));
+            rDev.SetFillColor(Color(COL_RED));
+            // This hits the optional 'drawPolyPolygon' code-path
+            rDev.DrawTransparent(aPPoly, 64);
+        }
+    };
+
+    struct DrawEllipse : public RegionRenderer
+    {
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
+        {
+            rDev.SetLineColor(Color(COL_RED));
+            rDev.SetFillColor(Color(COL_GREEN));
+            rDev.DrawEllipse(r);
+        }
+    };
+
+    struct DrawGradient : public RegionRenderer
+    {
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
+        {
+            Gradient aGradient;
+            aGradient.SetStartColor(COL_YELLOW);
+            aGradient.SetEndColor(COL_RED);
+//          aGradient.SetAngle(45);
+            aGradient.SetStyle(GradientStyle_RECT);
+            aGradient.SetBorder(r.GetSize().Width()/20);
+            rDev.DrawGradient(r, aGradient);
+        }
+    };
+
+    struct DrawBitmap : public RegionRenderer
+    {
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &rCtx) SAL_OVERRIDE
+        {
+            Bitmap aBitmap(rCtx.mpDemoWin->maIntroBW);
+            aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+            rDev.DrawBitmap(r.TopLeft(), aBitmap);
+        }
+    };
+
+    struct DrawBitmapEx : public RegionRenderer
+    {
+        DrawCheckered maCheckered;
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &rCtx) SAL_OVERRIDE
+        {
+            maCheckered.RenderRegion(rDev, r, rCtx);
+
+            BitmapEx aBitmap(rCtx.mpDemoWin->maIntro);
+            aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+            AlphaMask aSemiTransp(aBitmap.GetSizePixel());
+            aSemiTransp.Erase(64);
+            rDev.DrawBitmapEx(r.TopLeft(), BitmapEx(aBitmap.GetBitmap(),
+                                                    aSemiTransp));
+        }
+    };
+
+    struct DrawPolyPolygons : public RegionRenderer
+    {
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
+        {
+            struct {
+                double nX, nY;
+            } aPoints[] = { { 0.1, 0.1 }, { 0.9, 0.9 },
+#ifdef FIXME_SELF_INTERSECTING_WORKING
+                            { 0.9, 0.1 }, { 0.1, 0.9 },
+                            { 0.1, 0.1 }
+#else
+                            { 0.1, 0.9 }, { 0.5, 0.5 },
+                            { 0.9, 0.1 }, { 0.1, 0.1 }
+#endif
+            };
+
+            tools::PolyPolygon aPolyPoly;
+            // Render 4x polygons & aggregate into another PolyPolygon
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < 2; y++)
+                {
+                    Rectangle aSubRect(r);
+                    aSubRect.Move(x * r.GetWidth()/3, y * r.GetHeight()/3);
+                    aSubRect.SetSize(Size(r.GetWidth()/2, r.GetHeight()/4));
+                    Polygon aPoly(SAL_N_ELEMENTS(aPoints));
+                    for (size_t v = 0; v < SAL_N_ELEMENTS(aPoints); v++)
+                    {
+                        aPoly.SetPoint(Point(aSubRect.Left() +
+                                             aSubRect.GetWidth() * aPoints[v].nX,
+                                             aSubRect.Top() +
+                                             aSubRect.GetHeight() * aPoints[v].nY),
+                                       v);
+                    }
+                    rDev.SetLineColor(Color(COL_YELLOW));
+                    rDev.SetFillColor(Color(COL_BLACK));
+                    rDev.DrawPolygon(aPoly);
+
+                    // now move and add to the polypolygon
+                    aPoly.Move(0, r.GetHeight()/2);
+                    aPolyPoly.Insert(aPoly);
+                }
+            }
+            rDev.SetLineColor(Color(COL_LIGHTRED));
+            rDev.SetFillColor(Color(COL_GREEN));
+            rDev.DrawTransparent(aPolyPoly, 50);
+        }
+    };
+
+    struct DrawToVirtualDevice : public RegionRenderer
+    {
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &rCtx) SAL_OVERRIDE
+        {
+            // avoid infinite recursion
+            if (rCtx.mbVDev)
+                return;
+            VirtualDevice aNested(rDev);
+            aNested.SetOutputSizePixel(r.GetSize());
+            Rectangle aWhole(Point(0,0), r.GetSize());
+            // mini me
+            rCtx.mpDemoWin->drawToDevice(aNested, true);
+
+            Bitmap aBitmap(aNested.GetBitmap(Point(0,0),aWhole.GetSize()));
+            rDev.DrawBitmap(r.TopLeft(), aBitmap);
+        }
+    };
+
+    struct DrawIcons : public RegionRenderer
+    {
+        std::vector<BitmapEx> maIcons;
+        DrawIcons()
+        {
+            const char *pNames[] = {
+                "cmd/lc_openurl.png",
+                "cmd/lc_newdoc.png",
+                "cmd/lc_save.png",
+                "cmd/lc_saveas.png",
+                "cmd/lc_sendmail.png",
+                "cmd/lc_editdoc.png",
+                "cmd/lc_print.png",
+                "cmd/lc_printpreview.png",
+                "cmd/lc_cut.png",
+                "cmd/lc_copy.png",
+                "cmd/lc_paste.png",
+                "cmd/lc_formatpaintbrush.png",
+                "cmd/lc_undo.png",
+                "cmd/lc_redo.png",
+            };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
+                maIcons.push_back(BitmapEx(OUString::createFromAscii(pNames[i])));
+        }
+
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
+        {
+            Rectangle p(r);
+            for (size_t i = 0; i < maIcons.size(); i++)
+            {
+                Size aSize(maIcons[i].GetSizePixel());
+                rDev.DrawBitmapEx(p.TopLeft(), maIcons[i]);
+                p.Move(aSize.Width(), 0);
+                if (p.Left() >= r.Right())
+                    break;
+            }
+        }
+    };
+
+    struct FetchDrawBitmap : public RegionRenderer
+    {
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &) SAL_OVERRIDE
+        {
+            Bitmap aBitmap(rDev.GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
+            aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
+            rDev.DrawBitmap(r.TopLeft(), aBitmap);
+        }
+    };
+
+    void drawToDevice(OutputDevice &rDev, bool bVdev)
+    {
+        RenderContext aCtx;
+        aCtx.meStyle = RENDER_THUMB;
+        aCtx.mbVDev = bVdev;
+        aCtx.mpDemoWin = this;
+
+        drawBackground(rDev);
+
+        std::vector<Rectangle> aRegions(partitionAndClear(rDev, 4, 3));
+        for (size_t i = 0; i < maRenderers.size(); i++)
+            maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
     }
 };
 
@@ -366,26 +451,20 @@ std::vector<Rectangle> DemoWin::partitionAndClear(OutputDevice &rDev, int nX, in
     return aRegions;
 }
 
-void DemoWin::drawToDevice(OutputDevice &rDev, bool bVdev)
+void DemoWin::InitRenderers()
 {
-    drawBackground(rDev);
-
-    std::vector<Rectangle> aRegions(partitionAndClear(rDev, 4, 3));
-
-    drawRadialLines(rDev, aRegions[0]);
-    drawText(rDev, aRegions[1]);
-    drawPoly(rDev, aRegions[2]);
-    drawEllipse(rDev, aRegions[3]);
-    drawCheckered(rDev, aRegions[4]);
-    drawBitmapEx(rDev, aRegions[5]);
-    drawBitmap(rDev, aRegions[6]);
-    drawGradient(rDev, aRegions[7]);
-    drawPolyPolgons(rDev, aRegions[8]);
-    if (!bVdev)
-        drawToVirtualDevice(rDev, aRegions[9]);
-    drawIcons(rDev, aRegions[10]);
-    // last - thumbnail all the above
-    fetchDrawBitmap(rDev, aRegions[11]);
+    maRenderers.push_back(new DrawRadialLines());
+    maRenderers.push_back(new DrawText());
+    maRenderers.push_back(new DrawPoly());
+    maRenderers.push_back(new DrawEllipse());
+    maRenderers.push_back(new DrawCheckered());
+    maRenderers.push_back(new DrawBitmapEx());
+    maRenderers.push_back(new DrawBitmap());
+    maRenderers.push_back(new DrawGradient());
+    maRenderers.push_back(new DrawPolyPolygons());
+    maRenderers.push_back(new DrawToVirtualDevice());
+    maRenderers.push_back(new DrawIcons());
+    maRenderers.push_back(new DrawBitmap());
 }
 
 class DemoApp : public Application
