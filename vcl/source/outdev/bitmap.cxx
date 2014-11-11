@@ -527,7 +527,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                     // only paint direct when no scaling and no MapMode, else the
                     // more expensive conversions may be done for short-time Bitmap/BitmapEx
                     // used for buffering only
-                    if(!IsMapMode() && aPosAry.mnSrcWidth == aPosAry.mnDestWidth && aPosAry.mnSrcHeight == aPosAry.mnDestHeight)
+                    if (IsMapMode() || aPosAry.mnSrcWidth != aPosAry.mnDestWidth || aPosAry.mnSrcHeight != aPosAry.mnDestHeight)
                     {
                         bTryDirectPaint = false;
                     }
@@ -661,18 +661,16 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         // separate alpha VDev
         bool bTryDirectPaint(!mpAlphaVDev && !pDisableNative && !bHMirr && !bVMirr);
 
-#ifdef WNT
-        if(bTryDirectPaint)
+        if (bTryDirectPaint)
         {
             // only paint direct when no scaling and no MapMode, else the
             // more expensive conversions may be done for short-time Bitmap/BitmapEx
             // used for buffering only
-            if(!IsMapMode() && rSrcSizePixel.Width() == aOutSz.Width() && rSrcSizePixel.Height() == aOutSz.Height())
+            if (IsMapMode() || rSrcSizePixel.Width() != aOutSz.Width() || rSrcSizePixel.Height() != aOutSz.Height())
             {
                 bTryDirectPaint = false;
             }
         }
-#endif
 
         if(bTryDirectPaint)
         {
