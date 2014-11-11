@@ -563,7 +563,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
             pContext = new XMLTableFormulaImportContext( rImport, rHlp,
                                                          nPrefix, rName );
             break;
-        case XML_TOK_TEXT_DROPDOWN:
+        case XML_TOK_TEXT_DROP_DOWN:
             pContext = new XMLDropDownFieldImportContext( rImport, rHlp,
                                                           nPrefix, rName );
             break;

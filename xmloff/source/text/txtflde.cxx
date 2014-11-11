@@ -1820,7 +1820,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessString(XML_HINT,
                       GetStringProperty(sPropertyTooltip, rPropSet), true);
         SvXMLElementExport aElem( GetExport(),
-                                  XML_NAMESPACE_TEXT, XML_DROPDOWN,
+                                  XML_NAMESPACE_TEXT, XML_DROP_DOWN,
                                   false, false );
         ProcessStringSequence
             (GetStringSequenceProperty( sPropertyItems, rPropSet ),

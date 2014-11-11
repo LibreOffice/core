@@ -2220,7 +2220,7 @@ namespace xmloff { namespace token {
         TOKEN( "close-front",                      XML_CLOSE_FRONT ),
         TOKEN( "close-back",                       XML_CLOSE_BACK ),
 
-        TOKEN( "drop-down",                        XML_DROPDOWN ),
+        TOKEN( "drop-down",                        XML_DROP_DOWN ),
         TOKEN( "current-selected",                 XML_CURRENT_SELECTED ),
 
         TOKEN( "join-border",                     XML_JOIN_BORDER ),

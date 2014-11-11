@@ -2209,7 +2209,7 @@ namespace xmloff { namespace token {
         XML_CLOSE_FRONT,
         XML_CLOSE_BACK,
 
-        XML_DROPDOWN,
+        XML_DROP_DOWN,
         XML_CURRENT_SELECTED,
 
         XML_JOIN_BORDER,
