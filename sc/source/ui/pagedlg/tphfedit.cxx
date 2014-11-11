@@ -331,7 +331,7 @@ ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
     : ImageButton(pParent,nBits), pPopupMenu(NULL)
 {
     nSelected=0;
-    aTimer.SetTimeout(600);
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
     SetDropDown(PUSHBUTTON_DROPDOWN_TOOLBOX);
 }
 
@@ -347,10 +347,10 @@ void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)
 
 void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if(!aTimer.IsActive())
+    if(!aIdle.IsActive())
     {
-        aTimer.Start();
-        aTimer.SetTimeoutHdl(LINK( this, ScExtIButton, TimerHdl));
+        aIdle.SetIdleHdl(LINK( this, ScExtIButton, TimerHdl));
+        aIdle.Start();
     }
 
     ImageButton::MouseButtonDown(rMEvt );
@@ -358,15 +358,15 @@ void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScExtIButton::MouseButtonUp( const MouseEvent& rMEvt)
 {
-    aTimer.Stop();
-    aTimer.SetTimeoutHdl(Link());
+    aIdle.Stop();
+    aIdle.SetIdleHdl(Link());
     ImageButton::MouseButtonUp(rMEvt );
 }
 
 void ScExtIButton::Click()
 {
-    aTimer.Stop();
-    aTimer.SetTimeoutHdl(Link());
+    aIdle.Stop();
+    aIdle.SetIdleHdl(Link());
     ImageButton::Click();
 }
 

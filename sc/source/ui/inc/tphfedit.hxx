@@ -100,7 +100,7 @@ class SC_DLLPUBLIC ScExtIButton : public ImageButton
 {
 private:
 
-    Timer           aTimer;
+    Idle            aIdle;
     PopupMenu*      pPopupMenu;
     Link            aMLink;
     sal_uInt16      nSelected;

@@ -42,39 +42,39 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
                                                                 mbStartIdleTimer( false ),
                                                                 mIdleBlockCount( 0 )
 {
-    maIdleTimer.SetTimeout( 600 );
-    maIdleTimer.SetTimeoutHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
+    maIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maIdle.SetIdleHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
 }
 
 void DocumentTimerManager::StartIdling()
 {
     mbStartIdleTimer = true;
     if( !mIdleBlockCount )
-        maIdleTimer.Start();
+        maIdle.Start();
 }
 
 void DocumentTimerManager::StopIdling()
 {
     mbStartIdleTimer = false;
-    maIdleTimer.Stop();
+    maIdle.Stop();
 }
 
 void DocumentTimerManager::BlockIdling()
 {
-    maIdleTimer.Stop();
+    maIdle.Stop();
     ++mIdleBlockCount;
 }
 
 void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !maIdleTimer.IsActive() )
-        maIdleTimer.Start();
+    if( !mIdleBlockCount && mbStartIdleTimer && !maIdle.IsActive() )
+        maIdle.Start();
 }
 
 void DocumentTimerManager::StartBackgroundJobs() {
     // Trigger DoIdleJobs(), asynchronously.
-    maIdleTimer.Start();
+    maIdle.Start();
 }
 
 IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
