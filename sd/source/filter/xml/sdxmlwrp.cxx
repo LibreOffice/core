@@ -55,6 +55,7 @@
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <editeng/eeitem.hxx>
 #include <unotools/saveopt.hxx>
 
 // include necessary for XML progress bar at load time
@@ -444,6 +445,7 @@ void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
         const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
         for (sal_Int32 j = 0; j < nParaCount; ++j)
         {
+            //Make sure the depth of the paragraph matches that of the outline style it previews
             const sal_Int16 nExpectedDepth = j;
             if (nExpectedDepth != pOutliner->GetDepth(j))
             {
@@ -451,10 +453,21 @@ void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
                 pOutliner->SetDepth(p, nExpectedDepth);
                 bInconsistent = true;
             }
+
+            //If the preview has hard-coded bullets/numbering then they must
+            //be stripped to reveal the true underlying styles attributes
+            SfxItemSet aAttrs(pOutliner->GetParaAttribs(j));
+            if (aAttrs.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
+            {
+                aAttrs.ClearItem(EE_PARA_NUMBULLET);
+                pOutliner->SetParaAttribs(j, aAttrs);
+                bInconsistent = true;
+            }
+
         }
         if (bInconsistent)
         {
-            SAL_WARN("sd.filter", "Fixing inconsistent outline numbering placeholder preview depth");
+            SAL_WARN("sd.filter", "Fixing inconsistent outline numbering placeholder preview");
             pMasterOutline->SetOutlinerParaObject(pOutliner->CreateParaObject(0, nParaCount));
         }
         pOutliner->Clear();
