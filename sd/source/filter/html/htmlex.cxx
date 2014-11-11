@@ -832,7 +832,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
         if(rSet.GetItemState(EE_CHAR_COLOR,true) == SfxItemState::SET)
-            maTextColor = ((SvxColorItem*)rSet.GetItem(EE_CHAR_COLOR,true))->GetValue();
+            maTextColor = static_cast<const SvxColorItem*>(rSet.GetItem(EE_CHAR_COLOR,true))->GetValue();
     }
 
     // default background from the background of the master page of the first page
@@ -1044,7 +1044,7 @@ SdrTextObj* HtmlExport::GetLayoutTextObject(SdrPage* pPage)
         if (pObject->GetObjInventor() == SdrInventor &&
             pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
         {
-            pResult = (SdrTextObj*)pObject;
+            pResult = static_cast<SdrTextObj*>(pObject);
             break;
         }
     }
@@ -1187,7 +1187,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
  */
 OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor )
 {
-    SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TITLE);
+    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TITLE));
     if(!pTO)
         pTO = GetLayoutTextObject(pPage);
 
@@ -1222,12 +1222,12 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
             {
                 if (pObject->GetObjIdentifier() == OBJ_GRUP)
                 {
-                    SdrObjGroup* pObjectGroup = (SdrObjGroup*) pObject;
+                    SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject);
                     WriteObjectGroup(aStr, pObjectGroup, pOutliner, rBackgroundColor, false);
                 }
                 else if (pObject->GetObjIdentifier() == OBJ_TABLE)
                 {
-                    SdrTableObj* pTableObject = (SdrTableObj*) pObject;
+                    SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
                     WriteTable(aStr, pTableObject, pOutliner, rBackgroundColor);
                 }
                 else
@@ -1242,7 +1242,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
 
             case PRESOBJ_TABLE:
             {
-                SdrTableObj* pTableObject = (SdrTableObj*) pObject;
+                SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
                 WriteTable(aStr, pTableObject, pOutliner, rBackgroundColor);
             }
             break;
@@ -1250,7 +1250,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
             case PRESOBJ_TEXT:
             case PRESOBJ_OUTLINE:
             {
-                SdrTextObj* pTextObject = (SdrTextObj*) pObject;
+                SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject);
                 if (pTextObject->IsEmptyPresObj())
                     continue;
                 WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject(), rBackgroundColor, bHeadLine);
@@ -1301,7 +1301,7 @@ void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGrou
         SdrObject* pCurrentObject = aGroupIterator.Next();
         if (pCurrentObject->GetObjIdentifier() == OBJ_GRUP)
         {
-            SdrObjGroup* pCurrentGroupObject = (SdrObjGroup*) pCurrentObject;
+            SdrObjGroup* pCurrentGroupObject = static_cast<SdrObjGroup*>(pCurrentObject);
             WriteObjectGroup(aStr, pCurrentGroupObject, pOutliner, rBackgroundColor, bHeadLine);
         }
         else
@@ -1383,7 +1383,7 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
 {
     OUStringBuffer aStr;
 
-    SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_NOTES);
+    SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_NOTES));
 
     if (pTO && !pTO->IsEmptyPresObj())
     {
@@ -1462,7 +1462,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
     OUString aLink, aTarget;
     if ( pSet->GetItemState( EE_FEATURE_FIELD ) == SfxItemState::SET )
     {
-        SvxFieldItem* pItem = (SvxFieldItem*)pSet->GetItem( EE_FEATURE_FIELD );
+        const SvxFieldItem* pItem = static_cast<const SvxFieldItem*>(pSet->GetItem( EE_FEATURE_FIELD ));
         if(pItem)
         {
             const SvxURLField* pURL = PTR_CAST(SvxURLField, pItem->GetField());
@@ -1479,7 +1479,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
 
     if ( pSet->GetItemState( EE_CHAR_WEIGHT ) == SfxItemState::SET )
     {
-        bTemp = ((const SvxWeightItem&)pSet->Get( EE_CHAR_WEIGHT )).GetWeight() == WEIGHT_BOLD;
+        bTemp = static_cast<const SvxWeightItem&>(pSet->Get( EE_CHAR_WEIGHT )).GetWeight() == WEIGHT_BOLD;
         aTemp = pState->SetWeight( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1489,7 +1489,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
 
     if ( pSet->GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
     {
-        bTemp = ((const SvxUnderlineItem&)pSet->Get( EE_CHAR_UNDERLINE )).GetLineStyle() != UNDERLINE_NONE;
+        bTemp = static_cast<const SvxUnderlineItem&>(pSet->Get( EE_CHAR_UNDERLINE )).GetLineStyle() != UNDERLINE_NONE;
         aTemp = pState->SetUnderline( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1499,7 +1499,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
 
     if ( pSet->GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET )
     {
-        bTemp = ((const SvxCrossedOutItem&)pSet->Get( EE_CHAR_STRIKEOUT )).GetStrikeout() != STRIKEOUT_NONE;
+        bTemp = static_cast<const SvxCrossedOutItem&>(pSet->Get( EE_CHAR_STRIKEOUT )).GetStrikeout() != STRIKEOUT_NONE;
         aTemp = pState->SetStrikeout( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1509,7 +1509,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
 
     if ( pSet->GetItemState( EE_CHAR_ITALIC ) == SfxItemState::SET )
     {
-        bTemp = ((const SvxPostureItem&)pSet->Get( EE_CHAR_ITALIC )).GetPosture() != ITALIC_NONE;
+        bTemp = static_cast<const SvxPostureItem&>(pSet->Get( EE_CHAR_ITALIC )).GetPosture() != ITALIC_NONE;
         aTemp = pState->SetItalic( bTemp );
         if( bTemp )
             aStr.insert(0, aTemp);
@@ -1521,7 +1521,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
     {
         if ( pSet->GetItemState( EE_CHAR_COLOR ) == SfxItemState::SET )
         {
-            Color aTextColor = ((const SvxColorItem&) pSet->Get( EE_CHAR_COLOR )).GetValue();
+            Color aTextColor = static_cast<const SvxColorItem&>(pSet->Get( EE_CHAR_COLOR )).GetValue();
             if( aTextColor == COL_AUTO )
             {
                 if( !rBackgroundColor.IsDark() )
@@ -1587,7 +1587,7 @@ bool HtmlExport::CreateHtmlForPresPages()
             }
             // now to the master page or finishing
             if (!pPage->IsMasterPage())
-                pPage = (SdPage*)(&(pPage->TRG_GetMasterPage()));
+                pPage = static_cast<SdPage*>(&(pPage->TRG_GetMasterPage()));
             else
                 bMasterDone = true;
         }
@@ -1743,7 +1743,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         {
                             case IMAP_OBJ_RECTANGLE:
                             {
-                                Rectangle aArea(((IMapRectangleObject*)pArea)->
+                                Rectangle aArea(static_cast<IMapRectangleObject*>(pArea)->
                                                  GetRectangle(false));
 
                                 // conversion into pixel coordinates
@@ -1760,15 +1760,15 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             case IMAP_OBJ_CIRCLE:
                             {
-                                Point aCenter(((IMapCircleObject*)pArea)->
+                                Point aCenter(static_cast<IMapCircleObject*>(pArea)->
                                                  GetCenter(false));
                                 aCenter += Point(aLogPos.X() - pPage->GetLftBorder(),
                                                  aLogPos.Y() - pPage->GetUppBorder());
                                 aCenter.X() = (long)(aCenter.X() * fLogicToPixel);
                                 aCenter.Y() = (long)(aCenter.Y() * fLogicToPixel);
 
-                                sal_uLong nCircleRadius = (((IMapCircleObject*)pArea)->
-                                                 GetRadius(false));
+                                sal_uLong nCircleRadius = static_cast<IMapCircleObject*>(pArea)->
+                                                 GetRadius(false);
                                 nCircleRadius = (sal_uLong)(nCircleRadius * fLogicToPixel);
                                 aStr.append(CreateHTMLCircleArea(nCircleRadius,
                                                             aCenter.X(), aCenter.Y(),
@@ -1778,7 +1778,7 @@ bool HtmlExport::CreateHtmlForPresPages()
 
                             case IMAP_OBJ_POLYGON:
                             {
-                                Polygon aArea(((IMapPolygonObject*)pArea)->GetPolygon(false));
+                                Polygon aArea(static_cast<IMapPolygonObject*>(pArea)->GetPolygon(false));
                                 aStr.append(CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()), Size(aLogPos.X() - pPage->GetLftBorder(), aLogPos.Y() - pPage->GetUppBorder()), fLogicToPixel, aURL));
                             }
                             break;
@@ -1882,7 +1882,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                                   pObject->GetObjIdentifier() == OBJ_PLIN ||
                                   pObject->GetObjIdentifier() == OBJ_POLY))
                         {
-                            aStr.append(CreateHTMLPolygonArea(((SdrPathObj*)pObject)->GetPathPoly(), Size(-pPage->GetLftBorder(), -pPage->GetUppBorder()), fLogicToPixel, aHRef));
+                            aStr.append(CreateHTMLPolygonArea(static_cast<SdrPathObj*>(pObject)->GetPathPoly(), Size(-pPage->GetLftBorder(), -pPage->GetUppBorder()), fLogicToPixel, aHRef));
                         }
                         // something completely different: use the BoundRect
                         else

@@ -80,7 +80,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
 {
     SdrObject* pObj = NULL;
     SdrObject* pObjFound = NULL;
-    SdPage* pPage = NULL;
+    const SdPage* pPage = NULL;
 
     // First search in all pages
     sal_uInt16 nPage = 0;
@@ -88,7 +88,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
 
     while (nPage < nMaxPages && !pObjFound)
     {
-        pPage = (SdPage*) GetPage(nPage);
+        pPage = static_cast<const SdPage*>( GetPage(nPage) );
         SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS);
 
         while (aIter.IsMore() && !pObjFound)
@@ -113,7 +113,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
 
     while (nPage < nMaxMasterPages && !pObjFound)
     {
-        pPage = (SdPage*) GetMasterPage(nPage);
+        pPage = static_cast<const SdPage*>( GetMasterPage(nPage) );
         SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS);
 
         while (aIter.IsMore() && !pObjFound)
@@ -217,7 +217,7 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
 
     for (sal_uInt16 nPage = nStartPos; nPage < nPageCount; nPage++)
     {
-        pPage = (SdPage*)GetPage(nPage);
+        pPage = static_cast<SdPage*>( GetPage(nPage) );
 
         // If this is a notes page, find its page object and correct the page
         // number
@@ -237,7 +237,7 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
                     DBG_ASSERTWARNING(nPage > 1, "Page object must not be a handout.");
 
                     if (nStartPos > 0 && nPage > 1)
-                        ((SdrPageObj*)pObj)->SetReferencedPage(GetPage(nPage - 1));
+                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(GetPage(nPage - 1));
                 }
             }
         }
@@ -368,7 +368,7 @@ void SdDrawDocument::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 
     FmFormModel::InsertPage(pPage, nPos);
 
-    ((SdPage*)pPage)->ConnectLink();
+    static_cast<SdPage*>(pPage)->ConnectLink();
 
     UpdatePageObjectsInNotes(nPos);
 
@@ -392,12 +392,12 @@ SdrPage* SdDrawDocument::RemovePage(sal_uInt16 nPgNum)
 
     bool bLast = ((nPgNum+1)/2 == (GetPageCount()+1)/2);
 
-    ((SdPage*)pPage)->DisconnectLink();
+    static_cast<SdPage*>(pPage)->DisconnectLink();
     ReplacePageInCustomShows( dynamic_cast< SdPage* >( pPage ), 0 );
     UpdatePageObjectsInNotes(nPgNum);
 
     if (!bLast)
-        UpdatePageRelativeURLs((SdPage*)pPage, nPgNum, -1);
+        UpdatePageRelativeURLs(static_cast<SdPage*>(pPage), nPgNum, -1);
 
     return pPage;
 }
@@ -410,7 +410,7 @@ void SdDrawDocument::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos )
     if( pPage->IsMasterPage() && (static_cast<SdPage*>(pPage)->GetPageKind() == PK_STANDARD) )
     {
         // new master page created, add its style family
-        SdStyleSheetPool* pStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
+        SdStyleSheetPool* pStylePool = static_cast<SdStyleSheetPool*>( GetStyleSheetPool() );
         if( pStylePool )
             pStylePool->AddStyleFamily( static_cast<SdPage*>(pPage) );
     }
@@ -422,7 +422,7 @@ SdrPage* SdDrawDocument::RemoveMasterPage(sal_uInt16 nPgNum)
     if( pPage && pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
     {
         // master page removed, remove its style family
-        SdStyleSheetPool* pStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
+        SdStyleSheetPool* pStylePool = static_cast<SdStyleSheetPool*>( GetStyleSheetPool() );
         if( pStylePool )
             pStylePool->RemoveStyleFamily( pPage );
     }
@@ -444,7 +444,7 @@ void SdDrawDocument::SetSelected(SdPage* pPage, bool bSelect)
 
         if(nDestPageNum < GetPageCount())
         {
-            pNotesPage = (SdPage*)GetPage(nDestPageNum);
+            pNotesPage = static_cast<SdPage*>(GetPage(nDestPageNum));
         }
 
         if (pNotesPage && pNotesPage->GetPageKind() == PK_NOTES)
@@ -455,7 +455,7 @@ void SdDrawDocument::SetSelected(SdPage* pPage, bool bSelect)
     else if (ePageKind == PK_NOTES)
     {
         pPage->SetSelected(bSelect);
-        SdPage* pStandardPage = (SdPage*) GetPage( pPage->GetPageNum() - 1 );
+        SdPage* pStandardPage = static_cast<SdPage*>( GetPage( pPage->GetPageNum() - 1 ) );
 
         if (pStandardPage && pStandardPage->GetPageKind() == PK_STANDARD)
             pStandardPage->SetSelected(bSelect);
@@ -568,7 +568,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
         else
         {
             bClipboard = true;
-            pPage = (SdPage*) GetPage(1);
+            pPage = static_cast<SdPage*>( GetPage(1) );
         }
 
         // Insert master page, then register this with the page
@@ -649,16 +649,16 @@ bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
     if (nPageCount != 0)
     {
         // Set PageKind
-        SdPage* pHandoutMPage = (SdPage*) GetMasterPage(0);
+        SdPage* pHandoutMPage = static_cast<SdPage*>( GetMasterPage(0) );
         pHandoutMPage->SetPageKind(PK_HANDOUT);
 
-        SdPage* pHandoutPage = (SdPage*) GetPage(0);
+        SdPage* pHandoutPage = static_cast<SdPage*>( GetPage(0) );
         pHandoutPage->SetPageKind(PK_HANDOUT);
         pHandoutPage->TRG_SetMasterPage( *pHandoutMPage );
 
         for (sal_uInt16 i = 1; i < nPageCount; i = i + 2)
         {
-            SdPage* pPage = (SdPage*) GetPage(i);
+            SdPage* pPage = static_cast<SdPage*>( GetPage(i) );
 
             if(!pPage->TRG_HasMasterPage())
             {
@@ -667,7 +667,7 @@ bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
                 pPage->TRG_SetMasterPage(*GetMasterPage(1));
             }
 
-            SdPage* pNotesPage = (SdPage*) GetPage(i+1);
+            SdPage* pNotesPage = static_cast<SdPage*>( GetPage(i+1) );
             pNotesPage->SetPageKind(PK_NOTES);
 
             // Set notes master page
@@ -960,7 +960,7 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
         pUserData = pObject->GetUserData( i );
 
         if ( ( pUserData->GetInventor() == SdUDInventor ) && ( pUserData->GetId() == SD_IMAPINFO_ID ) )
-            pIMapInfo = (SdIMapInfo*) pUserData;
+            pIMapInfo = static_cast<SdIMapInfo*>(pUserData);
     }
 
     return pIMapInfo;
@@ -985,9 +985,9 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         // execute HitTest
         if ( pObj->ISA( SdrGrafObj )  ) // simple graphics object
         {
-            const SdrGrafObj*   pGrafObj = (const SdrGrafObj*) pObj;
+            const SdrGrafObj*   pGrafObj = static_cast<const SdrGrafObj*>(pObj);
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
-            SdrGrafObjGeoData*  pGeoData = (SdrGrafObjGeoData*) pGrafObj->GetGeoData();
+            SdrGrafObjGeoData*  pGeoData = static_cast<SdrGrafObjGeoData*>( pGrafObj->GetGeoData() );
 
             // Undo rotation
             if ( rGeo.nRotationAngle )
@@ -1012,7 +1012,7 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE object
         {
-            aGraphSize = ( (SdrOle2Obj*) pObj )->GetOrigObjSize();
+            aGraphSize = static_cast<SdrOle2Obj*>( pObj )->GetOrigObjSize();
             bObjSupported = true;
         }
 
@@ -1206,14 +1206,14 @@ sal_uInt16 SdDrawDocument::CreatePage (
     {
         pPreviousNotesPage = pActualPage;
         sal_uInt16 nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
-        pPreviousStandardPage = (SdPage*) GetPage(nNotesPageNum - 3);
+        pPreviousStandardPage = static_cast<SdPage*>( GetPage(nNotesPageNum - 3) );
         eStandardLayout = pPreviousStandardPage->GetAutoLayout();
     }
     else
     {
         pPreviousStandardPage = pActualPage;
         sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
-        pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
+        pPreviousNotesPage = static_cast<SdPage*>( GetPage(nStandardPageNum - 1) );
         eNotesLayout = pPreviousNotesPage->GetAutoLayout();
     }
 
@@ -1312,18 +1312,18 @@ sal_uInt16 SdDrawDocument::DuplicatePage (
     {
         pPreviousNotesPage = pActualPage;
         sal_uInt16 nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
-        pPreviousStandardPage = (SdPage*) GetPage(nNotesPageNum - 3);
+        pPreviousStandardPage = static_cast<SdPage*>( GetPage(nNotesPageNum - 3) );
     }
     else
     {
         pPreviousStandardPage = pActualPage;
         sal_uInt16 nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
-        pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
+        pPreviousNotesPage = static_cast<SdPage*>( GetPage(nStandardPageNum - 1) );
     }
 
     // Create duplicates of a standard page and the associated notes page
-    pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
-    pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
+    pStandardPage = static_cast<SdPage*>( pPreviousStandardPage->Clone() );
+    pNotesPage = static_cast<SdPage*>( pPreviousNotesPage->Clone() );
 
     return InsertPageSet (
         pActualPage,
@@ -1362,14 +1362,14 @@ sal_uInt16 SdDrawDocument::InsertPageSet (
     {
         pPreviousNotesPage = pActualPage;
         nNotesPageNum = pPreviousNotesPage->GetPageNum() + 2;
-        pPreviousStandardPage = (SdPage*) GetPage(nNotesPageNum - 3);
+        pPreviousStandardPage = static_cast<SdPage*>( GetPage(nNotesPageNum - 3) );
         nStandardPageNum = nNotesPageNum - 1;
     }
     else
     {
         pPreviousStandardPage = pActualPage;
         nStandardPageNum = pPreviousStandardPage->GetPageNum() + 2;
-        pPreviousNotesPage = (SdPage*) GetPage(nStandardPageNum - 1);
+        pPreviousNotesPage = static_cast<SdPage*>( GetPage(nStandardPageNum - 1) );
         nNotesPageNum = nStandardPageNum + 1;
         aNotesPageName = aStandardPageName;
     }

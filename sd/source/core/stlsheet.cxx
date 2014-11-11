@@ -367,7 +367,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     OUString aRealStyle;
     OUString aSep( SD_LT_SEPARATOR );
     SdStyleSheet* pRealStyle = NULL;
-    SdDrawDocument* pDoc = ((SdStyleSheetPool*)pPool)->GetDoc();
+    SdDrawDocument* pDoc = static_cast<SdStyleSheetPool*>(pPool)->GetDoc();
 
     ::sd::DrawViewShell* pDrawViewShell = 0;
 
@@ -561,12 +561,12 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
         rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET)
     {
         const SfxItemSet* pCurSet = &GetItemSet();
-        sal_uInt32 nNewHeight = ((SvxFontHeightItem&)rSet.Get(EE_CHAR_FONTHEIGHT)).GetHeight();
-        sal_uInt32 nOldHeight = ((SvxFontHeightItem&)pCurSet->Get(EE_CHAR_FONTHEIGHT)).GetHeight();
+        sal_uInt32 nNewHeight = static_cast<const SvxFontHeightItem&>(rSet.Get(EE_CHAR_FONTHEIGHT)).GetHeight();
+        sal_uInt32 nOldHeight = static_cast<const SvxFontHeightItem&>(pCurSet->Get(EE_CHAR_FONTHEIGHT)).GetHeight();
 
         if (rSet.GetItemState(EE_PARA_BULLET) != SfxItemState::SET || !bOnlyMissingItems)
         {
-            const SvxBulletItem& rBItem = (const SvxBulletItem&)pCurSet->Get(EE_PARA_BULLET);
+            const SvxBulletItem& rBItem = static_cast<const SvxBulletItem&>(pCurSet->Get(EE_PARA_BULLET));
             double fBulletFraction = double(rBItem.GetWidth()) / nOldHeight;
             SvxBulletItem aNewBItem(rBItem);
             aNewBItem.SetWidth((sal_uInt32)(fBulletFraction * nNewHeight));
@@ -575,7 +575,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 
         if (rSet.GetItemState(EE_PARA_LRSPACE) != SfxItemState::SET || !bOnlyMissingItems)
         {
-            const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&)pCurSet->Get(EE_PARA_LRSPACE);
+            const SvxLRSpaceItem& rLRItem = static_cast<const SvxLRSpaceItem&>(pCurSet->Get(EE_PARA_LRSPACE));
             double fIndentFraction = double(rLRItem.GetTxtLeft()) / nOldHeight;
             SvxLRSpaceItem aNewLRItem(rLRItem);
             aNewLRItem.SetTxtLeft(fIndentFraction * nNewHeight);
@@ -586,7 +586,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 
         if (rSet.GetItemState(EE_PARA_ULSPACE) != SfxItemState::SET || !bOnlyMissingItems)
         {
-            const SvxULSpaceItem& rULItem = (const SvxULSpaceItem&)pCurSet->Get(EE_PARA_ULSPACE);
+            const SvxULSpaceItem& rULItem = static_cast<const SvxULSpaceItem&>(pCurSet->Get(EE_PARA_ULSPACE));
             SvxULSpaceItem aNewULItem(rULItem);
             double fLowerFraction = double(rULItem.GetLower()) / nOldHeight;
             aNewULItem.SetLower((sal_uInt16)(fLowerFraction * nNewHeight));
@@ -1086,8 +1086,8 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
         {
             SfxItemSet &rStyleSet = GetItemSet();
 
-            XFillBmpStretchItem* pStretchItem = (XFillBmpStretchItem*)rStyleSet.GetItem(XATTR_FILLBMP_STRETCH);
-            XFillBmpTileItem* pTileItem = (XFillBmpTileItem*)rStyleSet.GetItem(XATTR_FILLBMP_TILE);
+            const XFillBmpStretchItem* pStretchItem = static_cast<const XFillBmpStretchItem*>(rStyleSet.GetItem(XATTR_FILLBMP_STRETCH));
+            const XFillBmpTileItem* pTileItem = static_cast<const XFillBmpTileItem*>(rStyleSet.GetItem(XATTR_FILLBMP_TILE));
 
             if( pStretchItem && pTileItem )
             {
@@ -1215,7 +1215,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
             case XATTR_LINESTART:
             case XATTR_LINEDASH:
                 {
-                    NameOrIndex* pItem = (NameOrIndex*)rStyleSet.GetItem((sal_uInt16)pEntry->nWID);
+                    const NameOrIndex* pItem = static_cast<const NameOrIndex*>(rStyleSet.GetItem((sal_uInt16)pEntry->nWID));
                     if( ( pItem == NULL ) || pItem->GetName().isEmpty() )
                         eState = PropertyState_DEFAULT_VALUE;
                 }
@@ -1312,7 +1312,7 @@ const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUStr
 void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet,
     PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool)
 {
-    SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
+    SdStyleSheet* pRealSheet = static_cast<SdStyleSheet*>(pStyleSheet)->GetRealStyleSheet();
     pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 
     if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )
@@ -1327,7 +1327,7 @@ void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet,
 
             if(pSheet)
             {
-                SdStyleSheet* pRealStyleSheet = ((SdStyleSheet*)pSheet)->GetRealStyleSheet();
+                SdStyleSheet* pRealStyleSheet = static_cast<SdStyleSheet*>(pSheet)->GetRealStyleSheet();
                 pRealStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
             }
         }

@@ -147,7 +147,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
 
     for (size_t nObj = 0; nObj < nObjCount; ++nObj)
     {
-        SdrTextObj* pObj = (SdrTextObj*) GetObj(nObj);
+        SdrTextObj* pObj = static_cast<SdrTextObj*>( GetObj(nObj) );
 
         if (pObj->GetObjInventor() == SdrInventor &&
             pObj->GetObjIdentifier() == OBJ_OUTLINETEXT)
@@ -263,7 +263,7 @@ void SdPage::EndListenOutlineText()
 
     if (pOutlineTextObj)
     {
-        SdStyleSheetPool* pSPool = (SdStyleSheetPool*)pModel->GetStyleSheetPool();
+        SdStyleSheetPool* pSPool = static_cast<SdStyleSheetPool*>(pModel->GetStyleSheetPool());
         DBG_ASSERT(pSPool, "StyleSheetPool missing");
         OUString aTrueLayoutName(maLayoutName);
         sal_Int32 nIndex = aTrueLayoutName.indexOf( SD_LT_SEPARATOR );
@@ -322,13 +322,13 @@ void SdPage::ConnectLink()
 
     if (pLinkManager && !mpPageLink && !maFileName.isEmpty() && !maBookmarkName.isEmpty() &&
         mePageKind==PK_STANDARD && !IsMasterPage() &&
-        ( (SdDrawDocument*) pModel)->IsNewOrLoadCompleted())
+        static_cast<SdDrawDocument*>(pModel)->IsNewOrLoadCompleted())
     {
         /**********************************************************************
         * Connect
         * Only standard pages are allowed to be linked
         **********************************************************************/
-        ::sd::DrawDocShell* pDocSh = ((SdDrawDocument*) pModel)->GetDocSh();
+        ::sd::DrawDocShell* pDocSh = static_cast<SdDrawDocument*>(pModel)->GetDocSh();
 
         if (!pDocSh || !pDocSh->GetMedium()->GetOrigURL().equals(maFileName))
         {
@@ -502,7 +502,7 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
     }
     else
     {
-        ((SvXMLAttrContainerItem*)pItem)->QueryValue( rAttributes, 0 );
+        static_cast<const SvXMLAttrContainerItem*>(pItem)->QueryValue( rAttributes, 0 );
     }
 }
 

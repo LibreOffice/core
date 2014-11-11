@@ -211,7 +211,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // The link to the StyleRequest handler of the document is set later, in
     // NewOrLoadCompleted, because only then do all the templates exist.
     SdrOutliner& rOutliner = GetDrawOutliner();
-    rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
+    rOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     SetCalcFieldValueHdl( &rOutliner );
 
     // set linguistic options
@@ -303,7 +303,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // The link to the StyleRequest handler of the document is set later, in
     // NewOrLoadCompleted, because only then do all the templates exist.
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
-    pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
+    pHitTestOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()) );
 
     SetCalcFieldValueHdl( pHitTestOutliner );
 
@@ -461,8 +461,8 @@ SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
 
         // Only necessary for clipboard -
         // for drag & drop this is handled by DragServer
-        SdStyleSheetPool* pOldStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
-        SdStyleSheetPool* pNewStylePool = (SdStyleSheetPool*) pNewModel->GetStyleSheetPool();
+        SdStyleSheetPool* pOldStylePool = static_cast<SdStyleSheetPool*>( GetStyleSheetPool() );
+        SdStyleSheetPool* pNewStylePool = static_cast<SdStyleSheetPool*>( pNewModel->GetStyleSheetPool() );
 
         pNewStylePool->CopyGraphicSheets(*pOldStylePool);
         pNewStylePool->CopyCellSheets(*pOldStylePool);
@@ -564,11 +564,11 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         for ( sal_uInt16 i = 0; i < GetPageCount(); i++ )
         {
             // Check for correct layout names
-            SdPage* pPage = (SdPage*) GetPage( i );
+            SdPage* pPage = static_cast<SdPage*>( GetPage( i ) );
 
             if(pPage->TRG_HasMasterPage())
             {
-                SdPage& rMaster = (SdPage&)pPage->TRG_GetMasterPage();
+                SdPage& rMaster = static_cast<SdPage&>(pPage->TRG_GetMasterPage() );
 
                 if(rMaster.GetLayoutName() != pPage->GetLayoutName())
                 {
@@ -580,7 +580,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         for ( sal_uInt16 nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
             // LayoutName and PageName must be the same
-            SdPage* pPage = (SdPage*) GetMasterPage( nPage );
+            SdPage* pPage = static_cast<SdPage*>( GetMasterPage( nPage ) );
 
             OUString aName( pPage->GetLayoutName() );
             aName = aName.copy( 0, aName.indexOf( SD_LT_SEPARATOR ) );
@@ -610,7 +610,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // global outliner, as it is not document specific like StyleSheetPool and
     // StyleRequestHandler are.
     ::Outliner& rDrawOutliner = GetDrawOutliner();
-    rDrawOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
+    rDrawOutliner.SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     sal_uLong nCntrl = rDrawOutliner.GetControlWord();
     if (mbOnlineSpell)
         nCntrl |= EE_CNTRL_ONLINESPELLING;
@@ -621,21 +621,21 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     // Initialize HitTestOutliner and DocumentOutliner, but don't initialize the
     // global outliner, as it is not document specific like StyleSheetPool and
     // StyleRequestHandler are.
-    pHitTestOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
+    pHitTestOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
 
     if(mpOutliner)
     {
-        mpOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
+        mpOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
     if(mpInternalOutliner)
     {
-        mpInternalOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
+        mpInternalOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
     if ( eMode == DOC_LOADED )
     {
         // Make presentation objects listeners of the appropriate styles
-        SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
+        SdStyleSheetPool* pSPool = static_cast<SdStyleSheetPool*>( GetStyleSheetPool() );
         sal_uInt16 nPage, nPageCount;
 
         // create missing layout style sheets for broken documents
@@ -650,14 +650,14 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         // Default and notes pages:
         for (nPage = 0; nPage < GetPageCount(); nPage++)
         {
-            SdPage* pPage = (SdPage*)GetPage(nPage);
+            SdPage* pPage = static_cast<SdPage*>(GetPage(nPage));
             NewOrLoadCompleted( pPage, pSPool );
         }
 
         // Master pages:
         for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
-            SdPage* pPage = (SdPage*)GetMasterPage(nPage);
+            SdPage* pPage = static_cast<SdPage*>(GetMasterPage(nPage));
 
             NewOrLoadCompleted( pPage, pSPool );
         }
@@ -713,7 +713,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         std::vector<SfxStyleSheetBase*> aOutlineList;
         pSPool->CreateOutlineSheetList(aName,aOutlineList);
 
-        SfxStyleSheet* pTitleSheet = (SfxStyleSheet*)pSPool->GetTitleSheet(aName);
+        SfxStyleSheet* pTitleSheet = static_cast<SfxStyleSheet*>(pSPool->GetTitleSheet(aName));
 
         SdrObject* pObj = 0;
         rPresentationShapes.seekShape(0);
@@ -765,7 +765,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if (!aString.isEmpty())
                     {
                         sd::Outliner* pInternalOutl = GetInternalOutliner(true);
-                        pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
+                        pPage->SetObjText( static_cast<SdrTextObj*>(pObj), pInternalOutl, ePresObjKind, aString );
                         pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
                         pInternalOutl->Clear();
                     }
@@ -787,7 +787,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
             mpOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
 
         mpOutliner->SetDefTab( nDefaultTabulator );
-        mpOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
+        mpOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
     return(mpOutliner);
@@ -811,7 +811,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
             mpInternalOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
 
         mpInternalOutliner->SetDefTab( nDefaultTabulator );
-        mpInternalOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
+        mpInternalOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
     DBG_ASSERT( !mpInternalOutliner || ( ! mpInternalOutliner->GetUpdateMode() ) , "InternalOutliner: UpdateMode = sal_True !" );

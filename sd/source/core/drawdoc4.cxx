@@ -125,7 +125,7 @@ using namespace ::sd;
 // We can remove this behavior once the pool saves styleheets even without an ItemSet
 void SdDrawDocument::CreateLayoutTemplates()
 {
-    SdStyleSheetPool*       pSSPool = (SdStyleSheetPool*)GetStyleSheetPool();
+    SdStyleSheetPool*       pSSPool = static_cast<SdStyleSheetPool*>(GetStyleSheetPool());
     SfxStyleSheetBase*      pSheet = NULL;
     OUString                aHelpFile;
     OUString                aStdName(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
@@ -762,13 +762,13 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
         for ( nPage = 0; nPage < GetPageCount(); nPage++ )
         {
             // Search in all pages
-            FillOnlineSpellingList((SdPage*) GetPage(nPage));
+            FillOnlineSpellingList(static_cast<SdPage*>(GetPage(nPage)));
         }
 
         for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
             // Search all master pages
-            FillOnlineSpellingList((SdPage*) GetMasterPage(nPage));
+            FillOnlineSpellingList(static_cast<SdPage*>( GetMasterPage(nPage) ));
         }
 
         mpOnlineSpellingList->seekShape(0);
@@ -800,7 +800,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
         else if (pObj->GetObjIdentifier() == OBJ_GRUP)
         {
             // Found a group object
-            SdrObjListIter aGroupIter(*((SdrObjGroup*)pObj)->GetSubList(),
+            SdrObjListIter aGroupIter(*static_cast<SdrObjGroup*>(pObj)->GetSubList(),
                                       IM_DEEPNOGROUPS);
 
             bool bSubTextObjFound = false;
@@ -836,12 +836,12 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
             if (pObj->GetOutlinerParaObject() && pObj->ISA(SdrTextObj))
             {
                 // Spell text object
-                SpellObject((SdrTextObj*) pObj);
+                SpellObject(static_cast<SdrTextObj*>(pObj));
             }
             else if (pObj->GetObjIdentifier() == OBJ_GRUP)
             {
                 // Found a group object
-                SdrObjListIter aGroupIter(*((SdrObjGroup*)pObj)->GetSubList(),
+                SdrObjListIter aGroupIter(*static_cast<SdrObjGroup*>(pObj)->GetSubList(),
                                           IM_DEEPNOGROUPS);
 
                 SdrObject* pSubObj = NULL;
@@ -853,7 +853,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
                     if (pSubObj->GetOutlinerParaObject() && pSubObj->ISA(SdrTextObj))
                     {
                         // Found a text object in a group object
-                        SpellObject((SdrTextObj*) pSubObj);
+                        SpellObject(static_cast<SdrTextObj*>(pSubObj));
                     }
                 }
             }
@@ -983,7 +983,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
         if(pObj && pOutl && pObj->ISA(SdrTextObj))
         {
             bool bModified(IsChanged());
-            ((SdrTextObj*)pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
+            static_cast<SdrTextObj*>(pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
             SetChanged(bModified);
             pObj->BroadcastObjectChange();
         }
@@ -1117,7 +1117,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
     sal_uInt16 nPage;
     for (nPage = 0; nPage < GetPageCount(); nPage++)
     {
-        SdPage* pPage = (SdPage*) GetPage(nPage);
+        SdPage* pPage = static_cast<SdPage*>(GetPage(nPage));
         OUString aTemp(pPage->GetLayoutName());
 
         if (aTemp == rOldLayoutName)
@@ -1136,7 +1136,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                         case OBJ_OUTLINETEXT:
                         case OBJ_TITLETEXT:
                         {
-                            OutlinerParaObject* pOPO = ((SdrTextObj*) pObj)->GetOutlinerParaObject();
+                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
 
                             if (pOPO)
                             {
@@ -1159,7 +1159,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
     // The affected master pages get the name of the layout as their page name.
     for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
     {
-        SdPage* pPage = (SdPage*) GetMasterPage(nPage);
+        SdPage* pPage = static_cast<SdPage*>( GetMasterPage(nPage) );
         OUString aTemp(pPage->GetLayoutName());
 
         if (aTemp == rOldLayoutName)
@@ -1179,7 +1179,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                         case OBJ_OUTLINETEXT:
                         case OBJ_TITLETEXT:
                         {
-                            OutlinerParaObject* pOPO = ((SdrTextObj*)pObj)->GetOutlinerParaObject();
+                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
 
                             if (pOPO)
                             {
@@ -1247,7 +1247,7 @@ void SdDrawDocument::SetTextDefaults() const
 
     if( pItem )
     {
-        switch( ( (SvxFrameDirectionItem&)( *pItem ) ).GetValue() )
+        switch( static_cast<const SvxFrameDirectionItem&>( *pItem ).GetValue() )
         {
             case( FRMDIR_HORI_LEFT_TOP ): eRet = ::com::sun::star::text::WritingMode_LR_TB; break;
             case( FRMDIR_HORI_RIGHT_TOP ): eRet = ::com::sun::star::text::WritingMode_RL_TB; break;

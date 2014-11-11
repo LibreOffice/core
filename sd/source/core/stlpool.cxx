@@ -859,7 +859,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( OUString() );
-        ((SfxStyleSheet*)pSheet)->StartListening(*this);
+        static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_TITLE );
 
@@ -868,7 +868,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( OUString() );
-        ((SfxStyleSheet*)pSheet)->StartListening(*this);
+        static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_SUBTITLE );
 
@@ -877,7 +877,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( OUString() );
-        ((SfxStyleSheet*)pSheet)->StartListening(*this);
+        static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUNDOBJECTS );
 
@@ -886,7 +886,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( OUString() );
-        ((SfxStyleSheet*)pSheet)->StartListening(*this);
+        static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_BACKGROUND );
 
@@ -895,7 +895,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     {
         pSheet = &Make(aName, SD_STYLE_FAMILY_PSEUDO, nUsedMask);
         pSheet->SetParent( OUString() );
-        ((SfxStyleSheet*)pSheet)->StartListening(*this);
+        static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
     }
     pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_NOTES );
 
@@ -915,7 +915,7 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
                 if (pParent)
                     pSheet->SetParent(pParent->GetName());
                 pParent = pSheet;
-                ((SfxStyleSheet*)pSheet)->StartListening(*this);
+                static_cast<SfxStyleSheet*>(pSheet)->StartListening(*this);
             }
         }
         pSheet->SetHelpId( aHelpFile, HID_PSEUDOSHEET_OUTLINE + nLevel );
@@ -1119,7 +1119,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             }
 
             rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
-            ((SfxStyleSheet*)pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+            static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
         }
         break;
 
@@ -1128,7 +1128,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         case HID_PSEUDOSHEET_SUBTITLE :
         {
             // Subtitle template
-            SvxNumRule* pDefaultRule = ((SvxNumBulletItem*) rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
+            SvxNumRule* pDefaultRule = static_cast<const SvxNumBulletItem*>( rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
             DBG_ASSERT( pDefaultRule, "Where is my default template? [CL]" );
 
             if(pDefaultRule)
@@ -1149,7 +1149,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                 }
 
                 rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
-                ((SfxStyleSheet*)pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+                static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
             }
         }
         break;
@@ -1203,7 +1203,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             }
 
             rSet.Put( SvxNumBulletItem( aNumRule, EE_PARA_NUMBULLET ) );
-            ((SfxStyleSheet*)pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+            static_cast<SfxStyleSheet*>(pSheet)->Broadcast(SfxSimpleHint( SFX_HINT_DATACHANGED ) );
         }
         break;
     }

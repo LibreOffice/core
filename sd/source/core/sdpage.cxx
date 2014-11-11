@@ -319,27 +319,27 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
             pSdrObj = new SdrOle2Obj();
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_OBJECT ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
 
         case PRESOBJ_CHART:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( OUString( "StarChart" ) );
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( OUString( "StarChart" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
 
         case PRESOBJ_ORGCHART:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( OUString( "StarOrg" ) );
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( OUString( "StarOrg" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
 
@@ -347,10 +347,10 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         case PRESOBJ_CALC:
         {
             pSdrObj = new SdrOle2Obj();
-            ( (SdrOle2Obj*) pSdrObj)->SetProgName( OUString( "StarCalc" ) );
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetProgName( OUString( "StarCalc" ) );
             BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
             Graphic aGraphic( aBmpEx );
-            ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+            static_cast<SdrOle2Obj*>(pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
 
@@ -413,9 +413,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
             // Tell the object EARLY that it is vertical to have the
             // defaults for AutoGrowWidth/Height reversed
             if(bVertical)
-                ((SdrTextObj*)pSdrObj)->SetVerticalWriting(true);
+                static_cast<SdrTextObj*>(pSdrObj)->SetVerticalWriting(true);
 
-            SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+            SfxItemSet aTempAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
             if( bVertical )
                 aTempAttr.Put( makeSdrTextMinFrameWidthItem( rRect.GetSize().Width() ) );
             else
@@ -457,14 +457,14 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         OUString aString = GetPresObjText(eObjKind);
         if( (!aString.isEmpty() || bForceText) && pSdrObj->ISA(SdrTextObj) )
         {
-            SdrOutliner* pOutliner = ( (SdDrawDocument*) GetModel() )->GetInternalOutliner();
+            SdrOutliner* pOutliner = static_cast<SdDrawDocument*>( GetModel() )->GetInternalOutliner();
 
             sal_uInt16 nOutlMode = pOutliner->GetMode();
             pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
             pOutliner->SetStyleSheet( 0, NULL );
             pOutliner->SetVertical( bVertical );
 
-            SetObjText( (SdrTextObj*) pSdrObj, (SdrOutliner*)pOutliner, eObjKind, aString );
+            SetObjText( static_cast<SdrTextObj*>(pSdrObj), static_cast<SdrOutliner*>(pOutliner), eObjKind, aString );
 
             pOutliner->Init( nOutlMode );
             pOutliner->SetStyleSheet( 0, NULL );
@@ -472,7 +472,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
 
         if( (eObjKind == PRESOBJ_HEADER) || (eObjKind == PRESOBJ_FOOTER) || (eObjKind == PRESOBJ_SLIDENUMBER) || (eObjKind == PRESOBJ_DATETIME) )
         {
-            SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+            SfxItemSet aTempAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT ) );
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CTL ) );
             aTempAttr.Put( SvxFontHeightItem( 493, 100, EE_CHAR_FONTHEIGHT_CJK ) );
@@ -521,7 +521,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
                 OUString aName( maLayoutName + " " + OUString::number( nLevel ) );
-                SfxStyleSheet* pSheet = (SfxStyleSheet*)pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+                SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>(pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE));
                 DBG_ASSERT(pSheet, "StyleSheet for outline object not found");
                 if (pSheet)
                     pSdrObj->StartListening(*pSheet);
@@ -534,7 +534,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
              eObjKind == PRESOBJ_CALC    ||
              eObjKind == PRESOBJ_GRAPHIC )
         {
-            SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool() );
+            SfxItemSet aSet( static_cast<SdDrawDocument*>(pModel)->GetPool() );
             aSet.Put( makeSdrTextContourFrameItem( true ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
 
@@ -584,7 +584,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
-    return (SfxStyleSheet*)pResult;
+    return static_cast<SfxStyleSheet*>(pResult);
 }
 
 SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
@@ -631,7 +631,7 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 
     SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
-    return (SfxStyleSheet*)pResult;
+    return static_cast<SfxStyleSheet*>(pResult);
 }
 
 /** returns the presentation style with the given helpid from this masterpage or this
@@ -720,11 +720,11 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                     {
                         // Object of the master page changed, therefore adjust
                         // object on all pages
-                        sal_uInt16 nPageCount = ((SdDrawDocument*) pModel)->GetSdPageCount(mePageKind);
+                        sal_uInt16 nPageCount = static_cast<SdDrawDocument*>(pModel)->GetSdPageCount(mePageKind);
 
                         for (sal_uInt16 i = 0; i < nPageCount; i++)
                         {
-                            SdPage* pLoopPage = ((SdDrawDocument*) pModel)->GetSdPage(i, mePageKind);
+                            SdPage* pLoopPage = static_cast<SdDrawDocument*>(pModel)->GetSdPage(i, mePageKind);
 
                             if (pLoopPage && this == &(pLoopPage->TRG_GetMasterPage()))
                             {
@@ -761,7 +761,7 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
 
     if (!mbMaster)
     {
-        pMasterPage = (SdPage*)(&(TRG_GetMasterPage()));
+        pMasterPage = static_cast<SdPage*>(&(TRG_GetMasterPage()));
     }
 
     if (!pMasterPage)
@@ -777,7 +777,7 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
         pMasterPage->EnsureMasterPageDefaultBackground();
     }
 
-    if( ( (SdDrawDocument*) GetModel() )->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+    if( static_cast<SdDrawDocument*>( GetModel() )->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
     {
         if( mePageKind == PK_HANDOUT && bInit )
         {
@@ -1648,7 +1648,7 @@ void SdPage::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason
 {
     FmFormPage::NbcInsertObject(pObj, nPos, pReason);
 
-    ((SdDrawDocument*) pModel)->InsertObject(pObj, this);
+    static_cast<SdDrawDocument*>(pModel)->InsertObject(pObj, this);
 
     SdrLayerID nId = pObj->GetLayer();
     if( mbMaster )
@@ -1919,23 +1919,23 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                             {
                                 SfxItemSet& rSet = pTitleSheet->GetItemSet();
 
-                                SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT);
+                                const SvxFontHeightItem& rOldHgt = static_cast<const SvxFontHeightItem&>( rSet.Get(EE_CHAR_FONTHEIGHT) );
                                 sal_uLong nFontHeight = rOldHgt.GetHeight();
                                 nFontHeight = long(nFontHeight * (double) aFractY);
                                 rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                 if( SfxItemState::DEFAULT == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                 {
-                                    rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CJK);
-                                    nFontHeight = rOldHgt.GetHeight();
+                                    const SvxFontHeightItem& rOldHgt2 = static_cast<const SvxFontHeightItem&>( rSet.Get(EE_CHAR_FONTHEIGHT_CJK) );
+                                    nFontHeight = rOldHgt2.GetHeight();
                                     nFontHeight = long(nFontHeight * (double) aFractY);
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                 }
 
                                 if( SfxItemState::DEFAULT == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CTL ) )
                                 {
-                                    rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CTL);
-                                    nFontHeight = rOldHgt.GetHeight();
+                                    const SvxFontHeightItem& rOldHgt2 = static_cast<const SvxFontHeightItem&>( rSet.Get(EE_CHAR_FONTHEIGHT_CTL) );
+                                    nFontHeight = rOldHgt2.GetHeight();
                                     nFontHeight = long(nFontHeight * (double) aFractY);
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                 }
@@ -1951,36 +1951,36 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                             for (sal_Int32 i=1; i<=9; i++)
                             {
                                 OUString sLayoutName( aName + OUString::number( i ) );
-                                SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)((SdDrawDocument*) pModel)->GetStyleSheetPool()->Find(sLayoutName, SD_STYLE_FAMILY_MASTERPAGE);
+                                SfxStyleSheet* pOutlineSheet = static_cast<SfxStyleSheet*>(static_cast<SdDrawDocument*>(pModel)->GetStyleSheetPool()->Find(sLayoutName, SD_STYLE_FAMILY_MASTERPAGE));
 
                                 if (pOutlineSheet)
                                 {
                                     // Calculate new font height
                                     SfxItemSet aTempSet(pOutlineSheet->GetItemSet());
 
-                                    SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT);
+                                    const SvxFontHeightItem& rOldHgt = static_cast<const SvxFontHeightItem&>( aTempSet.Get(EE_CHAR_FONTHEIGHT) );
                                     sal_uLong nFontHeight = rOldHgt.GetHeight();
                                     nFontHeight = long(nFontHeight * (double) aFractY);
                                     aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                     if( SfxItemState::DEFAULT == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                     {
-                                        rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CJK);
-                                        nFontHeight = rOldHgt.GetHeight();
+                                        const SvxFontHeightItem& rOldHgt2 = static_cast<const SvxFontHeightItem&>( aTempSet.Get(EE_CHAR_FONTHEIGHT_CJK) );
+                                        nFontHeight = rOldHgt2.GetHeight();
                                         nFontHeight = long(nFontHeight * (double) aFractY);
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                     }
 
                                     if( SfxItemState::DEFAULT == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CTL ) )
                                     {
-                                        rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CTL);
-                                        nFontHeight = rOldHgt.GetHeight();
+                                        const SvxFontHeightItem& rOldHgt2 = static_cast<const SvxFontHeightItem&>( aTempSet.Get(EE_CHAR_FONTHEIGHT_CTL) );
+                                        nFontHeight = rOldHgt2.GetHeight();
                                         nFontHeight = long(nFontHeight * (double) aFractY);
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                     }
 
                                     // adjust bullet
-                                    ((SdStyleSheet*) pOutlineSheet)->AdjustToFontHeight(aTempSet, false);
+                                    static_cast<SdStyleSheet*>(pOutlineSheet)->AdjustToFontHeight(aTempSet, false);
 
                                     // Special treatment: reset the INVALIDS to
                                     // NULL pointer (otherwise we have INVALID's
@@ -1993,8 +1993,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     // of the BulletItems
                                     if (aTempSet.GetItemState(EE_PARA_BULLET) == SfxItemState::DEFAULT)
                                     {
-                                        SvxBulletItem aOldBulItem((SvxBulletItem&) pOutlineSheet->GetItemSet().Get(EE_PARA_BULLET));
-                                        SvxBulletItem& rNewBulItem = (SvxBulletItem&) aTempSet.Get(EE_PARA_BULLET);
+                                        SvxBulletItem aOldBulItem(static_cast<const SvxBulletItem&>( pOutlineSheet->GetItemSet().Get(EE_PARA_BULLET) ));
+                                        const SvxBulletItem& rNewBulItem = static_cast<const SvxBulletItem&>( aTempSet.Get(EE_PARA_BULLET) );
                                         aOldBulItem.CopyValidProperties(rNewBulItem);
                                         aTempSet.Put(aOldBulItem);
                                     }
@@ -2036,7 +2036,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                             nWhich = EE_CHAR_FONTHEIGHT_CTL;
 
                         // use more modern method to scale the text height
-                        sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetMergedItem(nWhich)).GetHeight();
+                        sal_uInt32 nFontHeight = static_cast<const SvxFontHeightItem&>(pObj->GetMergedItem(nWhich)).GetHeight();
                         sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * (double)aFractY);
 
                         pObj->SetMergedItem(SvxFontHeightItem(nNewFontHeight, 100, nWhich));
@@ -2162,7 +2162,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             aSet.Put(pNewObj->GetMergedItemSet());
 
-            const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
+            const SvxLRSpaceItem& rLRItem = static_cast<const SvxLRSpaceItem&>( aSet.Get(EE_PARA_LRSPACE) );
             SvxLRSpaceItem aNewLRItem(rLRItem);
             aNewLRItem.SetTxtLeft(0);
             aSet.Put(aNewLRItem);
@@ -2257,7 +2257,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 if ( pTextObject->IsAutoGrowHeight() )
                 {
                     // switch off AutoGrowHeight, set new MinHeight
-                    SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    SfxItemSet aTempAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
                     SdrMetricItem aMinHeight( makeSdrTextMinFrameHeightItem(aRect.GetSize().Height()) );
                     aTempAttr.Put( aMinHeight );
                     aTempAttr.Put( makeSdrTextAutoGrowHeightItem(false) );
@@ -2265,7 +2265,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     pTextObject->SetLogicRect(aRect);
 
                     // switch on AutoGrowHeight
-                    SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    SfxItemSet aAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
                     aAttr.Put( makeSdrTextAutoGrowHeightItem(true) );
 
                     pTextObject->SetMergedItemSet(aAttr);
@@ -2274,7 +2274,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                 if ( pTextObject->IsAutoGrowWidth() )
                 {
                     // switch off AutoGrowWidth , set new MinWidth
-                    SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    SfxItemSet aTempAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
                     SdrMetricItem aMinWidth( makeSdrTextMinFrameWidthItem(aRect.GetSize().Width()) );
                     aTempAttr.Put( aMinWidth );
                     aTempAttr.Put( makeSdrTextAutoGrowWidthItem(false) );
@@ -2282,7 +2282,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     pTextObject->SetLogicRect(aRect);
 
                     // switch on AutoGrowWidth
-                    SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
+                    SfxItemSet aAttr( static_cast<SdDrawDocument*>(pModel)->GetPool() );
                     aAttr.Put( makeSdrTextAutoGrowWidthItem(true) );
                     pTextObject->SetMergedItemSet(aAttr);
                 }
@@ -2384,11 +2384,11 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
 
         if (!pOutliner)
         {
-            SfxItemPool* pPool = ((SdDrawDocument*) GetModel())->GetDrawOutliner().GetEmptyItemSet().GetPool();
+            SfxItemPool* pPool = static_cast<SdDrawDocument*>(GetModel())->GetDrawOutliner().GetEmptyItemSet().GetPool();
             pOutl = new ::Outliner( pPool, OUTLINERMODE_OUTLINEOBJECT );
-            pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *( (SdDrawDocument*) GetModel() )->GetDocSh() ) );
+            pOutl->SetRefDevice( SD_MOD()->GetRefDevice( *static_cast<SdDrawDocument*>( GetModel() )->GetDocSh() ) );
             pOutl->SetEditTextObjectPool(pPool);
-            pOutl->SetStyleSheetPool((SfxStyleSheetPool*)GetModel()->GetStyleSheetPool());
+            pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetModel()->GetStyleSheetPool()));
             pOutl->EnableUndo(false);
             pOutl->SetUpdateMode( false );
         }
@@ -2554,7 +2554,7 @@ const OUString& SdPage::GetName() const
             }
             else
             {
-                aCreatedPageName += ((SdDrawDocument*) GetModel())->CreatePageNumValue(nNum);
+                aCreatedPageName += static_cast<SdDrawDocument*>(GetModel())->CreatePageNumValue(nNum);
             }
         }
         else
@@ -2712,7 +2712,7 @@ const HeaderFooterSettings& SdPage::getHeaderFooterSettings() const
 {
     if( mePageKind == PK_HANDOUT && !mbMaster )
     {
-        return (((SdPage&)TRG_GetMasterPage()).maHeaderFooterSettings);
+        return static_cast<SdPage&>(TRG_GetMasterPage()).maHeaderFooterSettings;
     }
     else
     {
@@ -2724,7 +2724,7 @@ void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettin
 {
     if( mePageKind == PK_HANDOUT && !mbMaster )
     {
-        (((SdPage&)TRG_GetMasterPage()).maHeaderFooterSettings) = rNewSettings;
+        static_cast<SdPage&>(TRG_GetMasterPage()).maHeaderFooterSettings = rNewSettings;
     }
     else
     {

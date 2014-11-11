@@ -206,7 +206,7 @@ void UndoObjectSetText::Redo()
 
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
 :   SdrUndoObj(rObject)
-,   mpOldUserCall((SdPage*)rObject.GetUserCall())
+,   mpOldUserCall(static_cast<SdPage*>(rObject.GetUserCall()))
 ,   mpNewUserCall(0)
 ,   mxSdrObject( &rObject )
 {

@@ -182,7 +182,7 @@ sal_uInt32 ImpDrawPageListWatcher::ImpGetPageCount() const
 
 SdPage* ImpDrawPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
 {
-    return (SdPage*)mrModel.GetPage((sal_uInt16)nIndex);
+    return const_cast<SdPage*>(static_cast<const SdPage*>(mrModel.GetPage((sal_uInt16)nIndex)));
 }
 
 ImpDrawPageListWatcher::ImpDrawPageListWatcher(const SdrModel& rModel)
@@ -201,7 +201,7 @@ sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
 
 SdPage* ImpMasterPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
 {
-    return (SdPage*)mrModel.GetMasterPage((sal_uInt16)nIndex);
+    return const_cast<SdPage*>(static_cast<const SdPage*>(mrModel.GetMasterPage((sal_uInt16)nIndex)));
 }
 
 ImpMasterPageListWatcher::ImpMasterPageListWatcher(const SdrModel& rModel)

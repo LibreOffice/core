@@ -121,7 +121,7 @@ SfxPoolItem* DiaTimeItem::Clone( SfxItemPool* ) const
 
 bool DiaTimeItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return( ( (DiaTimeItem&) rItem ).GetValue() == GetValue() );
+    return static_cast<const DiaTimeItem&>( rItem ).GetValue() == GetValue();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
