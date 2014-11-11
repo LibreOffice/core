@@ -24,16 +24,13 @@
  <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SendMail"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:SpellOnline"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut"/>
  <toolbar:toolbaritem xlink:href=".uno:Copy"/>
@@ -43,14 +40,19 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:style="dropdown" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:style="dropdown"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HelpIndex"  />
+ <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>
 </toolbar:toolbar>
