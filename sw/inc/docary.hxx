@@ -25,10 +25,6 @@
 #include <algorithm>
 #include <o3tl/sorted_vector.hxx>
 
-class SwFieldType;
-class SwTOXType;
-class SwUndo;
-class SwNumRule;
 class SwRangeRedline;
 class SwExtraRedline;
 class SwUnoCrsr;
@@ -47,6 +43,9 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <fmtcol.hxx>
 #include <frmfmt.hxx>
 #include <section.hxx>
+#include <fldbas.hxx>
+#include <tox.hxx>
+#include <numrule.hxx>
 
 /** provides some methods for generic operations on lists that contain
 SwFmt* subclasses. */
@@ -54,114 +53,127 @@ class SwFmtsBase
 {
 public:
     virtual size_t GetFmtCount() const = 0;
-    virtual const SwFmt* GetFmt(size_t idx) const = 0;
-    virtual SwFmt* GetFmt(size_t idx) = 0;
-    virtual ~SwFmtsBase() = 0;
+    virtual SwFmt* GetFmt(size_t idx) const = 0;
+    virtual ~SwFmtsBase() {};
 };
 
-class SwGrfFmtColls : public SwFmtsBase
+template<typename Value>
+class SwVectorModifyBase : public std::vector<Value>
 {
+public:
+    typedef typename std::vector<Value>::const_iterator const_iterator;
+
+protected:
+    enum class DestructorPolicy {
+        KeepElements,
+        FreeElements,
+    };
+
 private:
-    std::vector<SwGrfFmtColl*> mvColls;
+    const DestructorPolicy mPolicy;
+
+protected:
+    // default destructor deletes all contained elements
+    SwVectorModifyBase(DestructorPolicy policy = DestructorPolicy::FreeElements)
+        : mPolicy(policy) {}
 
 public:
-    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
-    virtual const SwGrfFmtColl* GetFmt(size_t idx) const SAL_OVERRIDE { return operator[](idx); }
-    virtual SwGrfFmtColl* GetFmt(size_t idx) SAL_OVERRIDE { return operator[](idx); }
-    size_t size() const { return mvColls.size(); }
-    SwGrfFmtColl *operator[](size_t idx) const { return mvColls[idx]; }
-    void push_back(SwGrfFmtColl* pColl) { mvColls.push_back(pColl); }
-    void DeleteAndDestroy(int nStartIdx, int nEndIdx);
-    sal_uInt16 GetPos(const SwGrfFmtColl* pFmt) const;
-    /// free's any remaining child objects
-    virtual ~SwGrfFmtColls() {}
+    using std::vector<Value>::begin;
+    using std::vector<Value>::end;
+
+    // free any remaining child objects based on mPolicy
+    virtual ~SwVectorModifyBase()
+    {
+        if (mPolicy == DestructorPolicy::FreeElements)
+            for(const_iterator it = begin(); it != end(); ++it)
+                delete *it;
+    }
+
+    void DeleteAndDestroy(int aStartIdx, int aEndIdx)
+    {
+        if (aEndIdx < aStartIdx)
+            return;
+        for (const_iterator it = begin() + aStartIdx;
+                            it != begin() + aEndIdx; ++it)
+            delete *it;
+        this->erase( begin() + aStartIdx, begin() + aEndIdx);
+    }
+
+    sal_uInt16 GetPos(Value const& p) const
+    {
+        const_iterator const it = std::find(begin(), end(), p);
+        return it == end() ? USHRT_MAX : it - begin();
+    }
+
+    bool Contains(Value const& p) const
+        { return std::find(begin(), end(), p) != end(); }
+
+    void dumpAsXml(xmlTextWriterPtr) const {};
 };
 
-/// stupid base class to work around MSVC dllexport mess
-class SAL_DLLPUBLIC_TEMPLATE SwFrmFmts_Base : public std::vector<SwFrmFmt*> {};
+template<typename Value>
+class SwFmtsModifyBase : public SwVectorModifyBase<Value>, public SwFmtsBase
+{
+protected:
+    SwFmtsModifyBase(typename SwVectorModifyBase<Value>::DestructorPolicy
+            policy = SwVectorModifyBase<Value>::DestructorPolicy::FreeElements)
+        : SwVectorModifyBase<Value>(policy) {}
+
+public:
+    virtual size_t GetFmtCount() const SAL_OVERRIDE
+        { return std::vector<Value>::size(); }
+
+    virtual Value GetFmt(size_t idx) const SAL_OVERRIDE
+        { return std::vector<Value>::operator[](idx); }
+
+    inline sal_uInt16 GetPos(const SwFmt *p) const
+        { return SwVectorModifyBase<Value>::GetPos( static_cast<Value>( const_cast<SwFmt*>( p ) ) ); }
+    inline bool Contains(const SwFmt *p) const
+        { return SwVectorModifyBase<Value>::Contains( static_cast<Value>( const_cast<SwFmt*>( p ) ) ); }
+};
+
+class SwGrfFmtColls : public SwFmtsModifyBase<SwGrfFmtColl*>
+{
+public:
+    SwGrfFmtColls() : SwFmtsModifyBase( DestructorPolicy::KeepElements ) {}
+};
 
 /// Specific frame formats (frames, DrawObjects).
-class SW_DLLPUBLIC SwFrmFmts : public SwFrmFmts_Base, public SwFmtsBase
+class SW_DLLPUBLIC SwFrmFmts : public SwFmtsModifyBase<SwFrmFmt*>
 {
 public:
-    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
-    virtual const SwFrmFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return operator[](idx); }
-    virtual SwFrmFmt* GetFmt(size_t idx) SAL_OVERRIDE { return operator[](idx); }
-    sal_uInt16 GetPos(const SwFrmFmt* pFmt) const;
-    bool Contains(const SwFrmFmt* pFmt) const;
     void dumpAsXml(xmlTextWriterPtr w, const char* pName) const;
-    /// free's any remaining child objects
-    virtual ~SwFrmFmts();
 };
 
-class SwCharFmts : public std::vector<SwCharFmt*>, public SwFmtsBase
+class SwCharFmts : public SwFmtsModifyBase<SwCharFmt*>
 {
 public:
-    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
-    virtual const SwCharFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return operator[](idx); }
-    virtual SwCharFmt* GetFmt(size_t idx) SAL_OVERRIDE { return operator[](idx); }
-    sal_uInt16 GetPos(const SwCharFmt* pFmt) const;
-    bool Contains(const SwCharFmt* pFmt) const;
     void dumpAsXml(xmlTextWriterPtr w) const;
-    /// free's any remaining child objects
-    virtual ~SwCharFmts();
 };
 
-class SwTxtFmtColls : public std::vector<SwTxtFmtColl*>, public SwFmtsBase
+class SwTxtFmtColls : public SwFmtsModifyBase<SwTxtFmtColl*>
 {
 public:
-    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
-    virtual const SwTxtFmtColl* GetFmt(size_t idx) const SAL_OVERRIDE { return operator[](idx); }
-    virtual SwTxtFmtColl* GetFmt(size_t idx) SAL_OVERRIDE { return operator[](idx); }
-    sal_uInt16 GetPos(const SwTxtFmtColl* pFmt) const;
+    SwTxtFmtColls() : SwFmtsModifyBase( DestructorPolicy::KeepElements ) {}
     void dumpAsXml(xmlTextWriterPtr w) const;
-    virtual ~SwTxtFmtColls() {}
 };
 
 /// Array of Undo-history.
-class SW_DLLPUBLIC SwSectionFmts : public std::vector<SwSectionFmt*>, public SwFmtsBase
+class SW_DLLPUBLIC SwSectionFmts : public SwFmtsModifyBase<SwSectionFmt*>
 {
 public:
-    virtual size_t GetFmtCount() const SAL_OVERRIDE { return size(); }
-    virtual const SwSectionFmt* GetFmt(size_t idx) const SAL_OVERRIDE { return operator[](idx); }
-    virtual SwSectionFmt* GetFmt(size_t idx) SAL_OVERRIDE { return operator[](idx); }
-    sal_uInt16 GetPos(const SwSectionFmt* pFmt) const;
-    bool Contains(const SwSectionFmt* pFmt) const;
-    void dumpAsXml(xmlTextWriterPtr w) const;
-    /// free's any remaining child objects
-    virtual ~SwSectionFmts();
-};
-
-class SwFldTypes : public std::vector<SwFieldType*> {
-public:
-    /// the destructor will free all objects still in the vector
-    ~SwFldTypes();
-    sal_uInt16 GetPos(const SwFieldType* pFieldType) const;
     void dumpAsXml(xmlTextWriterPtr w) const;
 };
 
-class SwTOXTypes {
-private:
-    typedef std::vector<SwTOXType*> _SwTOXTypes;
-    _SwTOXTypes items;
+class SwFldTypes : public SwVectorModifyBase<SwFieldType*> {
 public:
-    /// the destructor will free all objects still in the vector
-    ~SwTOXTypes();
-    sal_uInt16 GetPos(const SwTOXType* pTOXType) const;
-    size_t size() const { return items.size(); };
-    SwTOXType* operator[] (size_t n) { return items[n]; };
-    const SwTOXType* operator[] (size_t n) const { return items[n]; };
-    void push_back ( SwTOXType* value) { items.push_back(value); };
-    void clear() { items.clear(); };
-    _SwTOXTypes::const_iterator begin() const { return items.begin(); };
-    _SwTOXTypes::const_iterator end() const { return items.end(); };
+    void dumpAsXml(xmlTextWriterPtr w) const;
 };
 
-class SW_DLLPUBLIC SwNumRuleTbl : public std::vector<SwNumRule*> {
+class SwTOXTypes : public SwVectorModifyBase<SwTOXType*> {};
+
+class SW_DLLPUBLIC SwNumRuleTbl : public SwVectorModifyBase<SwNumRule*> {
 public:
-    /// the destructor will free all objects still in the vector
-    ~SwNumRuleTbl();
-    sal_uInt16 GetPos(const SwNumRule* pRule) const;
     void dumpAsXml(xmlTextWriterPtr w) const;
 };
 

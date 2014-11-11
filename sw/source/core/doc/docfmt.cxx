@@ -2008,40 +2008,4 @@ namespace docfunc
     }
 }
 
-SwFmtsBase::~SwFmtsBase() {}
-
-sal_uInt16 SwFrmFmts::GetPos(const SwFrmFmt* p) const
-{
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-bool SwFrmFmts::Contains(const SwFrmFmt* p) const
-{
-    return std::find(begin(), end(), p) != end();
-}
-
-SwFrmFmts::~SwFrmFmts()
-{
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
-}
-
-sal_uInt16 SwCharFmts::GetPos(const SwCharFmt* p) const
-{
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-bool SwCharFmts::Contains(const SwCharFmt* p) const
-{
-    return std::find(begin(), end(), p) != end();
-}
-
-SwCharFmts::~SwCharFmts()
-{
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
