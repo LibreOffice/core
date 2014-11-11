@@ -65,6 +65,7 @@ $(eval $(call gb_Library_use_externals,vclplug_gtk,\
 	cairo \
 	dbus \
 	gio \
+	glew \
 	gtk \
 	gthread \
 	icuuc \

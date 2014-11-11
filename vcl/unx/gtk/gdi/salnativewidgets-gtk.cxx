@@ -41,6 +41,8 @@
 #include "fontmanager.hxx"
 #include <vcl/decoview.hxx>
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+
 typedef struct _cairo_font_options cairo_font_options_t;
 const char* const tabPrelitDataName="libreoffice-tab-is-prelit";
 
@@ -531,6 +533,10 @@ void GtkData::initNWF( void )
     }
     static const char* pEnv = getenv( "SAL_GTK_USE_PIXMAPPAINT" );
     if( pEnv && *pEnv )
+        GtkSalGraphics::bNeedPixmapPaint = true;
+
+    // use offscreen rendering when using OpenGL backend
+    if( OpenGLHelper::isVCLOpenGLEnabled() )
         GtkSalGraphics::bNeedPixmapPaint = true;
 
     #if OSL_DEBUG_LEVEL > 1
