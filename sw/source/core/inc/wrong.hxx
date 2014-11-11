@@ -211,7 +211,7 @@ public:
     inline bool InsideInvalid( sal_Int32 nChk ) const
         { return nChk >= nBeginInvalid && nChk <= nEndInvalid; }
     void SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd );
-    inline void Validate(){ nBeginInvalid = COMPLETE_STRING; }
+    inline void Validate(){ nBeginInvalid = nEndInvalid = COMPLETE_STRING; }
     void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
     bool InvalidateWrong();
     bool Fresh( sal_Int32 &rStart, sal_Int32 &rEnd, sal_Int32 nPos,

@@ -313,7 +313,7 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
         {
             if( nBeginInvalid > nPos )
                 nBeginInvalid += nDiff;
-            if( nEndInvalid >= nPos )
+            if( nEndInvalid >= nPos && nEndInvalid != COMPLETE_STRING )
                 nEndInvalid += nDiff;
         }
         // If the pointer is in the middle of a wrong word,
