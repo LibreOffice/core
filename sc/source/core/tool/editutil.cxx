@@ -196,7 +196,7 @@ OUString ScEditUtil::GetCellFieldValue(
 
             switch (rField.GetFormat())
             {
-                case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
+                case SVXURLFORMAT_APPDEFAULT: //TODO: configurable with App???
                 case SVXURLFORMAT_REPR:
                     aRet = rField.GetRepresentation();
                 break;
@@ -369,7 +369,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
 {
     if ( pEngine->GetParagraphCount() > 1 )
     {
-        bNeedsObject = true;            //! Zellatribute finden ?
+        bNeedsObject = true;            //TODO: find cell attributes ?
     }
     else
     {

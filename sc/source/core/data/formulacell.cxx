@@ -803,7 +803,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         pCode->SetCodeError( 0 );
         bCompile = true;
     }
-    //! Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference
+    // Compile ColRowNames on URM_MOVE/URM_COPY _after_ UpdateReference !
     bool bCompileLater = false;
     bool bClipMode = rCell.pDocument->IsClipboard();
 
@@ -1411,7 +1411,7 @@ void ScFormulaCell::Interpret()
     if (!IsDirtyOrInTableOpDirty() || pDocument->GetRecursionHelper().IsInReturn())
         return;     // no double/triple processing
 
-    //! HACK:
+    //FIXME:
     //  If the call originates from a Reschedule in DdeLink update, leave dirty
     //  Better: Do a Dde Link Update without Reschedule or do it completely asynchronously!
     if ( pDocument->IsInDdeLinkUpdate() )

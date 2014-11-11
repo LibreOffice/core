@@ -1808,7 +1808,7 @@ void ScColumn::SetEditText( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, cons
         return;
     }
 
-    //! another "spool"
+    // rats, yet another "spool"
     // Sadly there is no other way to change the Pool than to
     // "spool" the Object through a corresponding Engine
     EditEngine& rEngine = pDocument->GetEditEngine();
@@ -1825,7 +1825,7 @@ void ScColumn::SetEditText( SCROW nRow, const EditTextObject& rEditText, const S
         return;
     }
 
-    //! another "spool"
+    // rats, yet another "spool"
     // Sadly there is no other way to change the Pool than to
     // "spool" the Object through a corresponding Engine
     EditEngine& rEngine = pDocument->GetEditEngine();

@@ -144,7 +144,7 @@ bool ScChangeAction::IsRejecting() const
 
 bool ScChangeAction::IsVisible() const
 {
-    //! sequence order of execution is significant
+    // sequence order of execution is significant!
     if ( IsRejected() || GetType() == SC_CAT_DELETE_TABS || IsDeletedIn() )
         return false;
     if ( GetType() == SC_CAT_CONTENT )
@@ -154,7 +154,7 @@ bool ScChangeAction::IsVisible() const
 
 bool ScChangeAction::IsTouchable() const
 {
-    //! sequence order of execution is significant
+    // sequence order of execution is significant!
     if ( IsRejected() || GetType() == SC_CAT_REJECT || IsDeletedIn() )
         return false;
     // content may reject and be touchable if on top
@@ -167,7 +167,7 @@ bool ScChangeAction::IsTouchable() const
 
 bool ScChangeAction::IsClickable() const
 {
-    //! sequence order of execution is significant
+    // sequence order of execution is significant!
     if ( !IsVirgin() )
         return false;
     if ( IsDeletedIn() )
@@ -198,7 +198,7 @@ bool ScChangeAction::IsClickable() const
 
 bool ScChangeAction::IsRejectable() const
 {
-    //! sequence order of execution is significant
+    // sequence order of execution is significant!
     if ( !IsClickable() )
         return false;
     if ( GetType() == SC_CAT_CONTENT )
@@ -216,7 +216,7 @@ bool ScChangeAction::IsRejectable() const
 
 bool ScChangeAction::IsInternalRejectable() const
 {
-    //! sequence order of execution is significant
+    // sequence order of execution is significant!
     if ( !IsVirgin() )
         return false;
     if ( IsDeletedIn() )
@@ -239,7 +239,7 @@ bool ScChangeAction::IsDialogRoot() const
 
 bool ScChangeAction::IsDialogParent() const
 {
-    //! sequence order of execution is significant
+    // sequence order of execution is significant!
     if ( GetType() == SC_CAT_CONTENT )
     {
         if ( !IsDialogRoot() )
@@ -331,7 +331,7 @@ bool ScChangeAction::IsDeletedIn( const ScChangeAction* p ) const
 
 void ScChangeAction::RemoveAllDeletedIn()
 {
-    //! Not from TopContent, but really this one
+    //TODO: Not from TopContent, but really this one
     while ( pLinkDeletedIn )
         delete pLinkDeletedIn; // Moves up by itself
 }
@@ -1278,7 +1278,7 @@ bool ScChangeActionMove::Reject( ScDocument* pDoc )
             if ( pTrack->IsGenerated( pContent->GetActionNumber() ) &&
                     !pContent->IsDeletedIn() )
             {
-                pLinkDependent->UnLink(); //! Else this one is also deleted
+                pLinkDependent->UnLink(); // Else this one is also deleted!
                 pTrack->DeleteGeneratedDelContent( pContent );
             }
         }
@@ -2008,9 +2008,9 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
             maNewCell.mpFormula->UpdateReference(aRefCxt, NULL);
 
         if ( !aBigRange.aStart.IsValid( pTrack->GetDocument() ) )
-        {   //! HACK!
-            //! UpdateReference cannot handle positions outside of the Document.
-            //! Therefore set everything to #REF!
+        {   //FIXME:
+            // UpdateReference cannot handle positions outside of the Document.
+            // Therefore set everything to #REF!
             //TODO: Remove the need for this hack! This means big changes to ScAddress etc.!
             const ScBigAddress& rPos = aBigRange.aStart;
             if ( bOldFormula )
@@ -2521,7 +2521,7 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
                         AppendOneDeleteRange( aRange, pRefDoc, nCol-nCol1, 0,
                             nTab-nTab1 + nDz, nRejectingInsert );
                     }
-                    //! Still InDeleteTop
+                    // Still InDeleteTop!
                     AppendOneDeleteRange( rRange, pRefDoc, 0, 0,
                         nTab-nTab1 + nDz, nRejectingInsert );
                 }
@@ -2621,8 +2621,8 @@ void ScChangeTrack::LookUpContents( const ScRange& rOrgRange,
             aIter.GetPos().Tab() + nDz );
 
         GenerateDelContent(aPos, aIter.getCellValue(), pRefDoc);
-        //! The Content is _not_ added with AddContent here, but in UpdateReference.
-        //! We do this in order to e.g.  handle intersecting Deletes correctly
+        // The Content is _not_ added with AddContent here, but in UpdateReference.
+        // We do this in order to e.g. handle intersecting Deletes correctly
     }
 }
 
@@ -2774,7 +2774,7 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
         }
         r = aRange;
         Undo( nStartLastCut, nEndLastCut ); // Remember Cuts here
-        //! StartAction only after Undo
+        // StartAction only after Undo!
         nStartAction = GetActionMax() + 1;
         StartBlockModify( SC_CTM_APPEND, nStartAction );
         // Contents to overwrite in ToRange
@@ -2911,7 +2911,7 @@ void ScChangeTrack::DeleteGeneratedDelContent( ScChangeActionContent* pContent )
     delete pContent;
     NotifyModified( SC_CTM_REMOVE, nAct, nAct );
     if ( nAct == nGeneratedMin )
-        ++nGeneratedMin; //! Only after NotifyModified due to IsGenerated
+        ++nGeneratedMin; // Only after NotifyModified due to IsGenerated!
 }
 
 ScChangeActionContent* ScChangeTrack::SearchContentAt(
@@ -3130,7 +3130,7 @@ void ScChangeTrack::Remove( ScChangeAction* pRemove )
     }
 
     if ( IsInPasteCut() && pRemove->GetType() == SC_CAT_CONTENT )
-    {   //! Content is reused
+    {   // Content is reused!
         ScChangeActionContent* pContent = static_cast<ScChangeActionContent*>(pRemove);
         pContent->RemoveAllLinks();
         pContent->ClearTrack();
@@ -3189,7 +3189,7 @@ void ScChangeTrack::Undo( sal_uLong nStartAction, sal_uLong nEndAction, bool bMe
                 sal_uLong nEnd = pMove->GetEndLastCut();
                 if ( nStart && nStart <= nEnd )
                 {   // Recover LastCut
-                    //! Break Links before Cut Append
+                    // Break Links before Cut Append!
                     pMove->RemoveAllLinks();
                     StartBlockModify( SC_CTM_APPEND, nStart );
                     for ( sal_uLong nCut = nStart; nCut <= nEnd; nCut++ )
@@ -3271,7 +3271,7 @@ void ScChangeTrack::MergePrepare( ScChangeAction* pFirstMerge, bool bShared )
             pAct = ( pAct == pFirstMerge ? NULL : pAct->GetPrev() );
         }
     }
-    SetMergeState( SC_CTMS_OTHER ); //! Preceding by default MergeOther
+    SetMergeState( SC_CTMS_OTHER ); // Preceding by default MergeOther!
 }
 
 void ScChangeTrack::MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool bShared )
@@ -3291,7 +3291,7 @@ void ScChangeTrack::MergeOwn( ScChangeAction* pAct, sal_uLong nFirstMerge, bool 
         }
         UpdateReference( pAct, false );
         SetInDeleteTop( false );
-        SetMergeState( SC_CTMS_OTHER ); //! Preceding by default MergeOther
+        SetMergeState( SC_CTMS_OTHER ); // Preceding by default MergeOther!
     }
 }
 
@@ -3301,13 +3301,13 @@ void ScChangeTrack::UpdateReference( ScChangeAction* pAct, bool bUndo )
     if ( eActType == SC_CAT_CONTENT || eActType == SC_CAT_REJECT )
         return ;
 
-    //! Formula cells are not in the Document
+    // Formula cells are not in the Document!
     bool bOldAutoCalc = pDoc->GetAutoCalc();
     pDoc->SetAutoCalc( false );
     bool bOldNoListening = pDoc->GetNoListening();
     pDoc->SetNoListening( true );
 
-    //! Formula cells ExpandRefs synchronized to the ones in the Document
+    // Formula cells ExpandRefs synchronized to the ones in the Document!
     bool bOldExpandRefs = pDoc->IsExpandRefs();
     if ( (!bUndo && pAct->IsInsertType()) || (bUndo && pAct->IsDeleteType()) )
         pDoc->SetExpandRefs( SC_MOD()->GetInputOptions().GetExpandRefs() );
@@ -3325,7 +3325,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction* pAct, bool bUndo )
             SetInDeleteUndo( true );
     }
 
-    //! First the generated ones, as if they were tracked previously
+    // First the generated ones, as if they were tracked previously!
     if ( pFirstGeneratedDelContent )
         UpdateReference( (ScChangeAction**)&pFirstGeneratedDelContent, pAct,
             bUndo );
@@ -3398,8 +3398,8 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
         nDz = -nDz;
     }
     if ( bDel )
-    {   //! For this mechanism we assume:
-        //! There's only a whole, simple deleted row/column
+    {   // For this mechanism we assume:
+        // There's only a whole, simple deleted row/column
         ScChangeActionDel* pActDel = static_cast<ScChangeActionDel*>(pAct);
         if ( !bUndo )
         {   // Delete
@@ -3896,8 +3896,8 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
 void ScChangeTrack::GetDependents( ScChangeAction* pAct,
         ScChangeActionMap& rMap, bool bListMasterDelete, bool bAllFlat ) const
 {
-    //! bAllFlat==TRUE: called internally from Accept or Reject
-    //!                 => Generated will not be added
+    //TODO: bAllFlat==TRUE: called internally from Accept or Reject
+    //TODO:                 => Generated will not be added
     bool bIsDelete = pAct->IsDeleteType();
     bool bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
 
@@ -4196,7 +4196,7 @@ bool ScChangeTrack::RejectAll()
 {
     bool bOk = true;
     for ( ScChangeAction* p = GetLast(); p && bOk; p = p->GetPrev() )
-    {   //! Traverse backwards as dependencies attached to RejectActions
+    {   //TODO: Traverse backwards as dependencies attached to RejectActions
         if ( p->IsInternalRejectable() )
             bOk = Reject( p );
     }
@@ -4246,7 +4246,7 @@ bool ScChangeTrack::Reject(
                 else if ( itChangeAction->second->IsDeleteType() )
                     itChangeAction->second->Accept(); // Deleted to Nirvana
                 else
-                    bOk = Reject( itChangeAction->second, NULL, true ); //! Recursion
+                    bOk = Reject( itChangeAction->second, NULL, true ); // Recursion!
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) )
@@ -4359,7 +4359,7 @@ bool ScChangeTrack::Reject(
 
             for( itChangeAction = pMap->rbegin(); itChangeAction != pMap->rend() && bOk; ++itChangeAction )
             {
-                bOk = Reject( itChangeAction->second, NULL, true );//! Recursion
+                bOk = Reject( itChangeAction->second, NULL, true ); // Recursion!
             }
         }
         if ( bOk && (bRejected = pAct->Reject( pDoc )) )

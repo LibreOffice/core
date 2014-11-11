@@ -52,7 +52,7 @@ ScDPTableData::ScDPTableData(ScDocument* pDoc) :
 {
     nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
 
-    //! reset before new calculation (in case the base date is changed)
+    //TODO: reset before new calculation (in case the base date is changed)
 }
 
 ScDPTableData::~ScDPTableData()
@@ -70,7 +70,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
     if ( nDateVal == nLastDateVal && nHierarchy == nLastHier && nLevel == nLastLevel )
         return nLastRet;
 
-    Date aDate( 30,12,1899 );                   //! get from source data (and cache here)
+    Date aDate( 30,12,1899 );                   //TODO: get from source data (and cache here)
     aDate += nDateVal;
 
     long nRet = 0;
@@ -90,7 +90,7 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
         case SC_DAPI_HIERARCHY_WEEK:
             switch (nLevel)
             {
-                //! use settings for different definitions
+                //TODO: use settings for different definitions
                 case 0: nRet = aDate.GetYear();                 break;      //!...
                 case 1: nRet = aDate.GetWeekOfYear();           break;
                 case 2: nRet = (long)aDate.GetDayOfWeek();      break;
@@ -195,7 +195,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, const CalcRowData& rData, bo
     if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
          ( !rInfo.pRowRoot->GetChildDimension() || rInfo.pRowRoot->GetChildDimension()->IsValidEntry(rData.aRowData) ) )
     {
-        //! single process method with ColMembers, RowMembers and data !!!
+        //TODO: single process method with ColMembers, RowMembers and data !!!
         if (rInfo.pColRoot->GetChildDimension())
         {
             vector<SCROW> aEmptyData;

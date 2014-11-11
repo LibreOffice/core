@@ -131,7 +131,7 @@ OUString ScDPUtil::getDateGroupName(
         }
         case sheet::DataPilotFieldGroupBy::HOURS:
         {
-            //! allow am/pm format?
+            //TODO: allow am/pm format?
             return getTwoDigitString(nValue);
         }
         break;

@@ -275,7 +275,7 @@ void ScCompiler::SetFormulaLanguage( const ScCompiler::OpCodeMapPtr & xMap )
 void ScCompiler::SetGrammarAndRefConvention(
         const FormulaGrammar::Grammar eNewGrammar, const FormulaGrammar::Grammar eOldGrammar )
 {
-    meGrammar = eNewGrammar;    //! SetRefConvention needs the new grammar set!
+    meGrammar = eNewGrammar;    // SetRefConvention needs the new grammar set!
     FormulaGrammar::AddressConvention eConv = FormulaGrammar::extractRefConvention( meGrammar);
     if (eConv == FormulaGrammar::CONV_UNSPECIFIED && eOldGrammar == FormulaGrammar::GRAM_UNSPECIFIED)
     {
@@ -2516,7 +2516,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
              eLastOp == ocArrayColSep || eLastOp == ocArrayRowSep);
         if (bShouldBeNegSub && eOp == ocSub)
             maRawToken.NewOpCode( ocNegSub );
-            //! if ocNegSub had ForceArray we'd have to set it here
+            //TODO: if ocNegSub had ForceArray we'd have to set it here
         else if (!bShouldBeNegSub && eOp == ocNegSub)
             maRawToken.NewOpCode( ocSub );
     }
@@ -4391,7 +4391,7 @@ bool ScCompiler::HandleSingleRef()
         if (!bString && aCell.isEmpty())
             bString = true;     // empty cell is ok
         if ( bString )
-        {   //! coresponds with ScInterpreter::ScColRowNameAuto()
+        {   // coresponds with ScInterpreter::ScColRowNameAuto()
             bValidName = true;
             if ( bColName )
             {   // ColName

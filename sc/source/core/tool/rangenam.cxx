@@ -459,8 +459,8 @@ void ScRangeData::MakeValidName( OUString& rName )
         // #REF! during compile later!
         while (aRange.Parse( rName, NULL, details) || aAddr.Parse( rName, NULL, details))
         {
-            //! Range Parse is partially valid also with invalid sheet name,
-            //! Address Parse dito, during compile name would generate a #REF!
+            // Range Parse is partially valid also with invalid sheet name,
+            // Address Parse dito, during compile name would generate a #REF!
             if ( rName.indexOf( '.' ) == -1 )
                 rName = rName.replaceFirst( ".", "_" );
             else

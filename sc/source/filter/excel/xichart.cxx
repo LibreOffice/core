@@ -1286,7 +1286,7 @@ void XclImpChMarkerFormat::Convert( const XclImpChRoot& rRoot,
     {
         XclChMarkerFormat aMarkerFmt;
         // line and fill color of the symbol are equal to series line color
-        //! TODO: Excel sets no fill color for specific symbols (e.g. cross)
+        //TODO: Excel sets no fill color for specific symbols (e.g. cross)
         aMarkerFmt.maLineColor = aMarkerFmt.maFillColor = rRoot.GetSeriesLineAutoColor( nFormatIdx );
         switch( nLineWeight )
         {
@@ -3023,7 +3023,7 @@ void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleDat
     bool bReverse = ::get_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_REVERSE ) != bMirrorOrient;
     rScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
 
-    //! TODO #i58731# show n-th category
+    //TODO #i58731# show n-th category
 }
 
 void XclImpChLabelRange::ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3dChart ) const

@@ -1129,7 +1129,7 @@ void ScTable::CopyToTable(
                 pDestTab->pColWidth[i] = pColWidth[i];
                 pDestTab->pColFlags[i] = pColFlags[i];
                 pDestTab->SetColHidden(i, i, bThisHidden);
-                //! Aenderungen zusammenfassen?
+                //TODO: collect changes?
                 if (bHiddenChange && pCharts)
                     pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
 
@@ -1957,11 +1957,11 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
                 double nRealOrient = nRotVal * F_PI18000;   // 1/100 Grad
                 double nCos = cos( nRealOrient );
                 double nSin = sin( nRealOrient );
-                //! begrenzen !!!
-                //! zusaetzlich Faktor fuer unterschiedliche PPT X/Y !!!
+                //TODO: limit !!!
+                //TODO: additional factor for varying PPT X/Y !!!
 
-                //  bei SC_ROTDIR_LEFT kommt immer ein negativer Wert heraus,
-                //  wenn der Modus beruecksichtigt wird
+                // for SC_ROTDIR_LEFT this gives a negative value,
+                // if the Modus is considered
                 nFactor = -fabs( nCos / nSin );
             }
 
@@ -3024,7 +3024,7 @@ SCROW ScTable::GetHiddenRowCount( SCROW nRow ) const
     return nLastRow - nRow + 1;
 }
 
-//!     ShowRows / DBShowRows zusammenfassen
+//TODO: combine ShowRows / DBShowRows
 
 void ScTable::ShowCol(SCCOL nCol, bool bShow)
 {
@@ -3478,7 +3478,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             SCCOL nDestCol, SCROW nDestRow, SCTAB nDestTab )
 {
-    //!     wenn fuer mehrere Zeilen benutzt, nach Spalten optimieren!
+    //TODO: if used for multipe rows, optimize after columns!
 
     ScAddress aSrc( nStartCol, nStartRow, nTab );
     ScAddress aDest( nDestCol, nDestRow, nDestTab );

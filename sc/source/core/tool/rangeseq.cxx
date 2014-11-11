@@ -332,7 +332,7 @@ bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
     o_eClass = rAny.getValueTypeClass();
     switch (o_eClass)
     {
-        //! extract integer values
+        //TODO: extract integer values
         case uno::TypeClass_ENUM:
         case uno::TypeClass_BOOLEAN:
         case uno::TypeClass_CHAR:

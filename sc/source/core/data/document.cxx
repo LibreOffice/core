@@ -2283,7 +2283,7 @@ void copyUsedNamesToClip(ScRangeName* pClipRangeName, ScRangeName* pRangeName, c
 {
     pClipRangeName->clear();
     ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
-    for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
+    for (; itr != itrEnd; ++itr)        //TODO: also DB and Pivot regions!!!
     {
         sal_uInt16 nIndex = itr->second->GetIndex();
         bool bInUse = (rUsedNames.count(nIndex) > 0);
@@ -4981,7 +4981,7 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                         const SvxBorderLine** ppLeft, const SvxBorderLine** ppTop,
                         const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const
 {
-    //! Seitengrenzen fuer Druck beruecksichtigen !!!!!
+    //TODO: consider page limits for printing !!!!!
 
     const SvxBoxItem* pThisAttr = static_cast<const SvxBoxItem*>( GetEffItem( nCol, nRow, nTab, ATTR_BORDER ) );
     OSL_ENSURE(pThisAttr,"where is the attribute?");
@@ -5216,7 +5216,7 @@ bool ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                             IsVerOverlapped())
                     --rStartRow;
 
-            //!     weiterreichen ?
+            //TODO: pass on ?
 
             ScAttrArray* pAttrArray = maTabs[nTab]->aCol[nOldCol].pAttrArray;
             SCSIZE nIndex;

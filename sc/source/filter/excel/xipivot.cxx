@@ -44,7 +44,7 @@
 #include "xilink.hxx"
 #include "xiescher.hxx"
 
-//! TODO ExcelToSc usage
+//TODO ExcelToSc usage
 #include "excform.hxx"
 #include "xltable.hxx"
 #include "documentimport.hxx"
@@ -889,7 +889,7 @@ const OUString* XclImpPTItem::GetItemName() const
 {
     if( mpCacheField )
         if( const XclImpPCItem* pCacheItem = mpCacheField->GetItem( maItemInfo.mnCacheIdx ) )
-            //! TODO: use XclImpPCItem::ConvertToText(), if all conversions are available
+            //TODO: use XclImpPCItem::ConvertToText(), if all conversions are available
             return pCacheItem->IsEmpty() ? NULL : pCacheItem->GetText();
     return 0;
 }

@@ -282,7 +282,7 @@ void ScDocument::FillInfo(
             if (!nHeight)
                 nHeight = 1;
 
-            pThisRowInfo->nRowNo        = nY;               //! Fall < 0 ?
+            pThisRowInfo->nRowNo        = nY;               //TODO: case < 0 ?
             pThisRowInfo->nHeight       = nHeight;
             pThisRowInfo->bEmptyBack    = true;
             pThisRowInfo->bEmptyText    = true;
@@ -321,7 +321,7 @@ void ScDocument::FillInfo(
     if ( bAnyItem && HasAttrib( 0,nRow1,nTab, MAXCOL,nRow2+1,nTab,
                                 HASATTR_ROTATE | HASATTR_CONDITIONAL ) )
     {
-        //! Conditionals auch bei HASATTR_ROTATE abfragen ????
+        //TODO: check Conditionals also for HASATTR_ROTATE ????
 
         OSL_ENSURE( nArrCount>2, "nArrCount too small" );
         FindMaxRotCol( nTab, &pRowInfo[1], nArrCount-1, nCol1, nCol2 );
@@ -372,7 +372,7 @@ void ScDocument::FillInfo(
             pInfo->bHideGrid    = false;                    //  view-intern
             pInfo->bEditEngine  = false;                    //  view-intern
 
-            pInfo->pBackground  = NULL;                     //! weglassen?
+            pInfo->pBackground  = NULL;                     //TODO: omit?
             pInfo->pPatternAttr = NULL;
             pInfo->pConditionSet= NULL;
 
@@ -422,7 +422,7 @@ void ScDocument::FillInfo(
                 if (!nThisWidth)
                     nThisWidth = 1;
 
-                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //! dies sollte reichen
+                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //TODO: this should be enough
 
                 ScColumn* pThisCol = &maTabs[nTab]->aCol[nX];                   // Spalten-Daten
 
@@ -555,7 +555,7 @@ void ScDocument::FillInfo(
                                                 pStlPool->Find( aData.aStyleName, SFX_STYLE_FAMILY_PARA );
                                             if ( pStyleSheet )
                                             {
-                                                //! Style-Sets cachen !!!
+                                                //TODO: cache Style-Sets !!!
                                                 pInfo->pConditionSet = &pStyleSheet->GetItemSet();
                                                 bAnyCondition = true;
 
@@ -661,7 +661,7 @@ void ScDocument::FillInfo(
                         RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
                         CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrCol];
 
-                        pInfo->nWidth       = nThisWidth;           //! oder nur 0 abfragen ??
+                        pInfo->nWidth       = nThisWidth;           //TODO: or check only 0 ??
                     }
                 }
             }

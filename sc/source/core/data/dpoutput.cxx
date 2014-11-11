@@ -99,7 +99,7 @@ struct ScDPOutLevelData
     void Swap(ScDPOutLevelData& r)
         { ScDPOutLevelData aTemp; aTemp = r; r = *this; *this = aTemp; }
 
-    //! bug (73840) in uno::Sequence - copy and then assign doesn't work!
+    // bug (73840) in uno::Sequence - copy and then assign doesn't work!
 };
 
 namespace {
@@ -331,7 +331,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
         return;                         // already set
 
     //  xLevRes is from the data layout dimension
-    //! use result sequence from ScDPOutLevelData!
+    //TODO: use result sequence from ScDPOutLevelData!
 
     uno::Sequence<sheet::MemberResult> aResult = xLevRes->getResults();
 
@@ -340,7 +340,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
         return;
 
     //  get names/formats for all data dimensions
-    //! merge this with the loop to collect ScDPOutLevelData?
+    //TODO: merge this with the loop to collect ScDPOutLevelData?
 
     OUString aDataNames[SC_DPOUT_MAXLEVELS];
     sal_uInt32 nDataFormats[SC_DPOUT_MAXLEVELS];
@@ -389,13 +389,13 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
         for (long nPos=0; nPos<nSize; nPos++)
         {
             //  if CONTINUE bit is set, keep previous name
-            //! keep number format instead!
+            //TODO: keep number format instead!
             if ( !(pArray[nPos].Flags & sheet::MemberResultFlags::CONTINUE) )
                 aName = pArray[nPos].Name;
 
             sal_uInt32 nFormat = 0;
             for (long i=0; i<nDataCount; i++)
-                if (aName == aDataNames[i])         //! search more efficiently?
+                if (aName == aDataNames[i])         //TODO: search more efficiently?
                 {
                     nFormat = nDataFormats[i];
                     break;
@@ -806,7 +806,7 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScDPOutputImpl outputimp( pDoc, nTab,
             nTabStartCol, nTabStartRow,
             nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
-        //! limit frames to horizontal or vertical?
+        //TODO: limit frames to horizontal or vertical?
         if (bColHeader)
         {
             outputimp.OutputBlockFrame( nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1 );
@@ -873,7 +873,7 @@ void ScDPOutput::CalcSizes()
     if (!bSizesValid)
     {
         //  get column size of data from first row
-        //! allow different sizes (and clear following areas) ???
+        //TODO: allow different sizes (and clear following areas) ???
 
         nRowCount = aData.getLength();
         const uno::Sequence<sheet::DataResult>* pRowAry = aData.getConstArray();
@@ -886,7 +886,7 @@ void ScDPOutput::CalcSizes()
 
         //  calculate output positions and sizes
 
-        long nPageSize = 0;     //! use page fields!
+        long nPageSize = 0;     // use page fields!
         if ( bDoFilter || nPageFieldCount )
         {
             nPageSize += nPageFieldCount + 1;   // plus one empty row
@@ -977,8 +977,8 @@ void ScDPOutput::Output()
         return;                             // nothing
 
     //  clear whole (new) output area
-    //! when modifying table, clear old area
-    //! include IDF_OBJECTS ???
+    // when modifying table, clear old area !
+    //TODO: include IDF_OBJECTS ???
     pDoc->DeleteAreaTab( aStartPos.Col(), aStartPos.Row(), nTabEndCol, nTabEndRow, nTab, IDF_ALL );
 
     if ( bDoFilter )
@@ -1014,7 +1014,7 @@ void ScDPOutput::Output()
 
     if (aDataDescription.isEmpty())
     {
-        //! use default string ("result") ?
+        //TODO: use default string ("result") ?
     }
     pDoc->SetString(nTabStartCol, nTabStartRow, nTab, aDataDescription);
 
@@ -1032,17 +1032,17 @@ void ScDPOutput::Output()
         nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
     for (nField=0; nField<nColFieldCount; nField++)
     {
-        SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //! check for overflow
+        SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //TODO: check for overflow
         FieldCell(nHdrCol, nTabStartRow, nTab, pColFields[nField], true);
 
-        SCROW nRowPos = nMemberStartRow + (SCROW)nField;                //! check for overflow
+        SCROW nRowPos = nMemberStartRow + (SCROW)nField;                //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisColCount = rSequence.getLength();
-        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //! ???
+        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //TODO: ???
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
-            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
+            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //TODO: check for overflow
             HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
@@ -1050,7 +1050,7 @@ void ScDPOutput::Output()
                 long nEnd = nCol;
                 while ( nEnd+1 < nThisColCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
                     ++nEnd;
-                SCCOL nEndColPos = nDataStartCol + (SCCOL)nEnd;     //! check for overflow
+                SCCOL nEndColPos = nDataStartCol + (SCCOL)nEnd;     //TODO: check for overflow
                 if ( nField+1 < nColFieldCount )
                 {
                     if ( nField == nColFieldCount - 2 )
@@ -1082,18 +1082,18 @@ void ScDPOutput::Output()
     vbSetBorder.resize( nTabEndRow - nDataStartRow + 1, false );
     for (nField=0; nField<nRowFieldCount; nField++)
     {
-        SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //! check for overflow
+        SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //TODO: check for overflow
         SCROW nHdrRow = nDataStartRow - 1;
         FieldCell(nHdrCol, nHdrRow, nTab, pRowFields[nField], true);
 
-        SCCOL nColPos = nMemberStartCol + (SCCOL)nField;                //! check for overflow
+        SCCOL nColPos = nMemberStartCol + (SCCOL)nField;                //TODO: check for overflow
         const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisRowCount = rSequence.getLength();
-        OSL_ENSURE( nThisRowCount == nRowCount, "count mismatch" );     //! ???
+        OSL_ENSURE( nThisRowCount == nRowCount, "count mismatch" );     //TODO: ???
         for (long nRow=0; nRow<nThisRowCount; nRow++)
         {
-            SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //! check for overflow
+            SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //TODO: check for overflow
             HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
             if ( ( pArray[nRow].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
@@ -1103,7 +1103,7 @@ void ScDPOutput::Output()
                     long nEnd = nRow;
                     while ( nEnd+1 < nThisRowCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
                         ++nEnd;
-                    SCROW nEndRowPos = nDataStartRow + (SCROW)nEnd;     //! check for overflow
+                    SCROW nEndRowPos = nDataStartRow + (SCROW)nEnd;     //TODO: check for overflow
                     outputimp.AddRow( nRowPos );
                     if ( vbSetBorder[ nRow ] == false )
                     {
@@ -1141,13 +1141,13 @@ void ScDPOutput::Output()
 
     for (long nRow=0; nRow<nRowCount; nRow++)
     {
-        SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //! check for overflow
+        SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //TODO: check for overflow
         const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
         long nThisColCount = pRowAry[nRow].getLength();
-        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //! ???
+        OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //TODO: ???
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
-            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
+            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //TODO: check for overflow
             DataCell( nColPos, nRowPos, nTab, pColAry[nCol] );
         }
     }
@@ -1584,11 +1584,11 @@ void ScDPOutput::GetDataDimensionNames(
     if ( xDimProp.is() && xDimName.is() )
     {
         // Asterisks are added in ScDPSaveData::WriteToSource to create unique names.
-        //! preserve original name there?
+        //TODO: preserve original name there?
         rSourceName = ScDPUtil::getSourceDimensionName(xDimName->getName());
 
         // Generate "given name" the same way as in dptabres.
-        //! Should use a stored name when available
+        //TODO: Should use a stored name when available
 
         sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
                                 xDimProp, OUString(SC_UNO_DP_FUNCTION),
@@ -1649,7 +1649,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient )
         return pPageFields[nField].nDim;
     }
 
-    //! single data field (?)
+    //TODO: single data field (?)
 
     rOrient = sheet::DataPilotFieldOrientation_HIDDEN;
     return -1;      // invalid
@@ -1682,7 +1682,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
             nField = 0;
             bMouseTop = true;
         }
-        //! find start of dimension
+        //TODO: find start of dimension
 
         rPosRect = Rectangle( nDataStartCol, nMemberStartRow + nField,
                               nTabEndCol, nMemberStartRow + nField -1 );
@@ -1736,7 +1736,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
                         nCol + 1 >= nTabStartCol && nCol < nTabStartCol + nRowFieldCount ) )
     {
         long nField = nCol - nTabStartCol;
-        //! find start of dimension
+        //TODO: find start of dimension
 
         rPosRect = Rectangle( nTabStartCol + nField, nDataStartRow - 1,
                               nTabStartCol + nField - 1, nTabEndRow );
@@ -1792,7 +1792,7 @@ bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMo
             nField = 0;
             bMouseTop = true;
         }
-        //! find start of dimension
+        //TODO: find start of dimension
 
         rPosRect = Rectangle( aStartPos.Col(), nPageStartRow + nField,
                               nTabEndCol, nPageStartRow + nField - 1 );

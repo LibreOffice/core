@@ -513,7 +513,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     bool            bHyphenate;
     SvxFrameDirection eDirection;
 
-    //! additional parameter to control if language is needed?
+    //TODO: additional parameter to control if language is needed?
 
     if ( pCondSet )
     {
@@ -1104,7 +1104,7 @@ bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
             OneEqual( rThisSet, rOtherSet, ATTR_BORDER_BLTR ) &&
             OneEqual( rThisSet, rOtherSet, ATTR_SHADOW );
 
-    //!     auch hier nur wirklich sichtbare Werte testen !!!
+    //TODO: also here only check really visible values !!!
 }
 
 const OUString* ScPatternAttr::GetStyleName() const
@@ -1145,9 +1145,9 @@ void ScPatternAttr::UpdateStyleSheet(ScDocument* pDoc)
     {
         pStyle = static_cast<ScStyleSheet*>(pDoc->GetStyleSheetPool()->Find(*pName, SFX_STYLE_FAMILY_PARA));
 
-        //  wenn Style nicht gefunden, Standard nehmen,
-        //  damit keine leere Anzeige im Toolbox-Controller
-        //! es wird vorausgesetzt, dass "Standard" immer der erste Eintrag ist!
+        //  use Standard if Style is not found,
+        //  to avoid empty display in Toolbox-Controller
+        //  Assumes that "Standard" is always the 1st entry!
         if (!pStyle)
         {
             SfxStyleSheetIteratorPtr pIter = pDoc->GetStyleSheetPool()->CreateIterator( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );

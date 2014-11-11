@@ -511,8 +511,8 @@ ScInputStringType ScStringUtil::parseInputString(
         else if (!rStr.isEmpty())
             aRet.meType = ScInputStringType::Text;
 
-        //  das (englische) Zahlformat wird nicht gesetzt
-        //! passendes lokales Format suchen und setzen???
+        // the (English) number format is not set
+        //TODO: find and replace with matching local format???
     }
 
     return aRet;

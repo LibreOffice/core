@@ -192,7 +192,7 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),nUserIndex(0),
         bHasHeader(rParam.bHasHeader),bByRow(true),bCaseSens(rParam.bCaseSens),
         bNaturalSort(false),
-//! TODO: what about Locale and Algorithm?
+//TODO: what about Locale and Algorithm?
         bUserDef(false),bIncludePattern(false),
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)

@@ -4160,7 +4160,7 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
                     nVal == rMat.GetDouble(rIndex+1))
                 ++rIndex;
     }
-    //! Order of IsEmptyPath, IsEmpty, IsString is significant!
+    // Order of IsEmptyPath, IsEmpty, IsString is significant!
     else if (rMat.IsEmptyPath(rIndex))
     {
         if (bReverse)
@@ -4629,7 +4629,7 @@ double ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
                 break;
             case svMatrix:
                 pSumExtraMatrix = PopMatrix();
-                //! nCol3, nRow3, nTab3 remain 0
+                // nCol3, nRow3, nTab3 remain 0
                 break;
             case svExternalSingleRef:
                 {
@@ -6316,7 +6316,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         if (rItem.meType == ScQueryEntry::ByString)
         {
 //!!!!!!!
-//! TODO: enable regex on matrix strings
+//TODO: enable regex on matrix strings
 //!!!!!!!
             svl::SharedString aParamStr = rItem.maString;
             if ( bSorted )

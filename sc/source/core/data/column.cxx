@@ -66,7 +66,7 @@ namespace {
 
 inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
 {
-    //! move to a header file
+    //TODO: move to a header file
     return ( nScript != SCRIPTTYPE_LATIN &&
              nScript != SCRIPTTYPE_ASIAN &&
              nScript != SCRIPTTYPE_COMPLEX &&
@@ -697,7 +697,7 @@ void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
 void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 {
     //  in order to only create a new SetItem, we don't need SfxItemPoolCache.
-    //! Warning: SfxItemPoolCache seems to create to many Refs for the new SetItem ??
+    //TODO: Warning: SfxItemPoolCache seems to create to many Refs for the new SetItem ??
 
     ScDocumentPool* pDocPool = pDocument->GetPool();
 
@@ -1698,7 +1698,7 @@ void ScColumn::UndoToColumn(
     if (nRow1 > 0)
         CopyToColumn(rCxt, 0, nRow1-1, IDF_FORMULA, false, rColumn);
 
-    CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData);      //! bMarked ????
+    CopyToColumn(rCxt, nRow1, nRow2, nFlags, bMarked, rColumn, pMarkData);      //TODO: bMarked ????
 
     if (nRow2 < MAXROW)
         CopyToColumn(rCxt, nRow2+1, MAXROW, IDF_FORMULA, false, rColumn);
@@ -1753,7 +1753,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
             UpdateCompile();
         }
 
-        //! make CopyToColumn "const" !!! (obsolete comment ?)
+        //TODO: make CopyToColumn "const" !!! (obsolete comment ?)
 
         pPattern = aAttrIter.Next( nStart, nEnd );
     }
@@ -1783,7 +1783,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
             rDestCol.UpdateCompile();
         }
 
-        //! make CopyToColumn "const" !!! (obsolete comment ?)
+        //TODO: make CopyToColumn "const" !!! (obsolete comment ?)
 
         pPattern = aAttrIter.Next( nStart, nEnd );
     }

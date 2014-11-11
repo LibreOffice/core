@@ -199,7 +199,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             case sdbc::DataType::NUMERIC:
             case sdbc::DataType::DECIMAL:
             {
-                //! do the conversion here?
+                //TODO: do the conversion here?
                 fValue = mxRow->getDouble(nCol+1);
                 rData.SetValue(fValue);
                 break;
@@ -275,7 +275,7 @@ sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSup
             {
                 bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                     OUString(SC_UNO_DP_ISDATALAYOUT) );
-                //! error checking -- is "IsDataLayoutDimension" property required??
+                //TODO: error checking -- is "IsDataLayoutDimension" property required??
                 if (bFound)
                     nRet = ScUnoHelpFunctions::GetEnumProperty(
                             xDimProp, OUString(SC_UNO_DP_ORIENTATION),
@@ -559,7 +559,7 @@ void ScDPObject::CreateOutput()
             aStart.SetRow(nNewRow);
             pOutput->SetPosition( aStart );
 
-            //! modify aOutRange?
+            //TODO: modify aOutRange?
 
             bAllowMove = false;     // use only once
         }
@@ -1110,8 +1110,8 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
             ScQueryParam aParam = pSheetDesc->GetQueryParam();
             aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
             aParam.nCol2 = sal::static_int_cast<SCCOL>( aParam.nCol2 + nDiffX );
-            aParam.nRow1 += nDiffY; //! used?
-            aParam.nRow2 += nDiffY; //! used?
+            aParam.nRow1 += nDiffY; //TODO: used?
+            aParam.nRow2 += nDiffY; //TODO: used?
             SCSIZE nEC = aParam.GetEntryCount();
             for (SCSIZE i=0; i<nEC; i++)
                 if (aParam.GetEntry(i).bDoQuery)
@@ -1233,7 +1233,7 @@ OUString ScDPObject::GetDimName( long nDim, bool& rIsDataLayout, sal_Int32* pFla
             {
                 bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                                 OUString(SC_UNO_DP_ISDATALAYOUT) );
-                //! error checking -- is "IsDataLayoutDimension" property required??
+                //TODO: error checking -- is "IsDataLayoutDimension" property required??
 
                 OUString aName;
                 try
@@ -1965,7 +1965,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
             {
                 bShowDetails = ScUnoHelpFunctions::GetBoolProperty( xMbrProp,
                                     OUString(SC_UNO_DP_SHOWDETAILS) );
-                //! don't set bFound if property is unknown?
+                //TODO: don't set bFound if property is unknown?
                 bFound = true;
             }
         }
@@ -1974,7 +1974,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     OSL_ENSURE( bFound, "member not found" );
     (void)bFound;
 
-    //! use Hierarchy and Level in SaveData !!!!
+    //TODO: use Hierarchy and Level in SaveData !!!!
 
     //  modify pDestObj if set, this object otherwise
     ScDPSaveData* pModifyData = pDestObj ? ( pDestObj->pSaveData ) : pSaveData;
@@ -2065,8 +2065,8 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
 
     bool bDataFound = false;
 
-    //! merge multiple occurrences (data field with different functions)
-    //! force data field in one dimension
+    //TODO: merge multiple occurrences (data field with different functions)
+    //TODO: force data field in one dimension
 
     vector<long> aPos;
 
@@ -2100,7 +2100,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
                                             sheet::GeneralFunction_NONE );
                 if ( eFunc == sheet::GeneralFunction_AUTO )
                 {
-                    //! test for numeric data
+                    //TODO: test for numeric data
                     eFunc = sheet::GeneralFunction_SUM;
                 }
                 nMask = ScDataPilotConversion::FunctionBit(eFunc);
@@ -2135,7 +2135,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
                 if ( bDataLayout )
                     nCompCol = PIVOT_DATA_FIELD;
                 else
-                    nCompCol = static_cast<SCsCOL>(nDupSource);     //! seek source column from name
+                    nCompCol = static_cast<SCsCOL>(nDupSource);     //TODO: seek source column from name
 
                 ScPivotFieldVector::iterator it = std::find_if(aFields.begin(), aFields.end(), FindByColumn(nCompCol, nMask));
                 if (it != aFields.end())
@@ -2152,7 +2152,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
             else
             {
                 rField.mnOriginalDim = nDupSource;
-                rField.nCol = static_cast<SCCOL>(nDim);    //! seek source column from name
+                rField.nCol = static_cast<SCCOL>(nDim);    //TODO: seek source column from name
             }
 
             rField.nFuncMask = nMask;
@@ -2302,7 +2302,7 @@ bool ScDPObject::FillLabelDataForDimension(
 
     bool bData = ScUnoHelpFunctions::GetBoolProperty(
         xDimProp, OUString(SC_UNO_DP_ISDATALAYOUT));
-    //! error checking -- is "IsDataLayoutDimension" property required??
+    //TODO: error checking -- is "IsDataLayoutDimension" property required??
 
     sal_Int32 nOrigPos = -1;
     OUString aFieldName;
@@ -2323,7 +2323,7 @@ bool ScDPObject::FillLabelDataForDimension(
     OUString aSubtotalName = ScUnoHelpFunctions::GetStringProperty(
         xDimProp, OUString(SC_UNO_DP_FIELD_SUBTOTALNAME), OUString());
 
-    bool bIsValue = true;                               //! check
+    bool bIsValue = true;                               //TODO: check
 
     // Name from the UNO dimension object may have trailing '*'s in which
     // case it's a duplicate dimension. Convert that to a duplicate index.
@@ -3201,7 +3201,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
     }
     catch ( const sdbc::SQLException& rError )
     {
-        //! store error message
+        //TODO: store error message
         InfoBox aInfoBox( 0, OUString(rError.Message) );
         aInfoBox.Execute();
     }
@@ -3520,7 +3520,7 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
 {
     if ( maTables.size() == r.maTables.size() )
     {
-        //! assert equal names?
+        //TODO: assert equal names?
         TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
         TablesType::iterator itr2 = r.maTables.begin();
         for (; itr != itrEnd; ++itr, ++itr2)

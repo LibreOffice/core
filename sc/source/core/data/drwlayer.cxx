@@ -91,7 +91,7 @@ static sal_uInt16 nInst = 0;
 
 SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = NULL;
 
-bool bDrawIsInUndo = false;         //! Member
+bool bDrawIsInUndo = false;         //TODO: Member
 
 ScUndoObjData::ScUndoObjData( SdrObject* pObjP, const ScAddress& rOS, const ScAddress& rOE,
                                                const ScAddress& rNS, const ScAddress& rNE ) :
@@ -668,7 +668,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         Point aOrigEndPos(pObj->GetPoint(1));
         aCalcPoly.append(basegfx::B2DPoint(aOrigStartPos.X(), aOrigStartPos.Y()));
         aCalcPoly.append(basegfx::B2DPoint(aOrigEndPos.X(), aOrigEndPos.Y()));
-        //! nicht mehrere Undos fuer ein Objekt erzeugen (hinteres kann dann weggelassen werden)
+        //TODO: do not create multiple Undos for one object (last one can be omitted then)
 
         SCCOL nLastCol;
         SCROW nLastRow;
@@ -920,7 +920,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
         SdrObject* pObject = aIter.Next();
         while (pObject)
         {
-                            //! Flags (ausgeblendet?) testen
+                            //TODO: test Flags (hidden?)
 
             Rectangle aObjRect = pObject->GetCurrentBoundRect();
             bool bFit = true;
@@ -972,7 +972,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             rRange.aStart.SetCol( i>0 ? (i-1) : 0 );
 
             nWidth = 0;
-            for (i=0; i<=MAXCOL && nWidth<=nEndX; i++)          //! bei Start anfangen
+            for (i=0; i<=MAXCOL && nWidth<=nEndX; i++)          //TODO: start at Start
                 nWidth += pDoc->GetColWidth(i,nTab);
             rRange.aEnd.SetCol( i>0 ? (i-1) : 0 );
         }
@@ -1047,7 +1047,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
 
     Rectangle aRect = pDoc->GetMMRect( nCol1, nRow1, nCol2, nRow2, nTab );
     lcl_ReverseTwipsToMM( aRect );
-    //! use twips directly?
+    //TODO: use twips directly?
 
     Point aMove;
 
@@ -1123,7 +1123,7 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
     SdrObject* pObject = aIter.Next();
     while ( pObject && !bFound )
     {
-        aObjRect = pObject->GetSnapRect();  //! GetLogicRect ?
+        aObjRect = pObject->GetSnapRect();  //TODO: GetLogicRect ?
         if (aTestRect.IsInside(aObjRect.TopLeft()) || aTestRect.IsInside(aObjRect.BottomLeft()))
             bFound = true;
 
@@ -1274,7 +1274,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
                     {
                         //  allocate drawing layer in clipboard document only if there are objects to copy
 
-                        pClipDoc->InitDrawLayer();                  //! create contiguous pages
+                        pClipDoc->InitDrawLayer();                  //TODO: create contiguous pages
                         pDestModel = pClipDoc->GetDrawLayer();
                     }
                     if (pDestModel)
@@ -1359,7 +1359,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
     if (!pClipModel)
         return;
 
-    if (bDrawIsInUndo)      //! can this happen?
+    if (bDrawIsInUndo)      //TODO: can this happen?
     {
         OSL_FAIL("CopyFromClip, bDrawIsInUndo");
         return;
