@@ -199,7 +199,7 @@
 /*** Functions with more than one parameters ***/
 #define SC_OPCODE_START_2_PAR       201
 #define SC_OPCODE_ARC_TAN_2         201
-#define SC_OPCODE_CEIL              202
+#define SC_OPCODE_CEIL_MATH         202
 #define SC_OPCODE_FLOOR             203
 #define SC_OPCODE_ROUND             204
 #define SC_OPCODE_ROUND_UP          205
@@ -469,8 +469,10 @@
 #define SC_OPCODE_WORKDAY_MS        469
 #define SC_OPCODE_AGGREGATE         470
 #define SC_OPCODE_COLOR             471
+#define SC_OPCODE_CEIL              472
+#define SC_OPCODE_CEIL_PRECISE      473
+#define SC_OPCODE_STOP_2_PAR        474     /* last function with two or more parameters' OpCode + 1 */
 
-#define SC_OPCODE_STOP_2_PAR        472     /* last function with two or more parameters' OpCode + 1 */
 #define SC_OPCODE_STOP_FUNCTION     SC_OPCODE_STOP_2_PAR            /* last function's OpCode + 1 */
 #define SC_OPCODE_LAST_OPCODE_ID    (SC_OPCODE_STOP_FUNCTION - 1)   /* last OpCode */
 

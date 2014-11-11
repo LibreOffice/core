@@ -617,6 +617,7 @@
 #define HID_FUNC_NEGBINOMDIST_MS                                "SC_HID_FUNC_NEGBINOMDIST_MS"
 #define HID_FUNC_Z_TEST_MS                                      "SC_HID_FUNC_Z_TEST_MS"
 #define HID_FUNC_CEIL_MS                                        "SC_HID_FUNC_CEIL_MS"
+#define HID_FUNC_CEIL_PRECISE                                   "SC_HID_FUNC_CEIL_PRECISE"
 #define HID_FUNC_CEIL_ISO                                       "SC_HID_FUNC_CEIL_ISO"
 #define HID_FUNC_FLOOR_MS                                       "SC_HID_FUNC_FLOOR_MS"
 #define HID_FUNC_NETWORKDAYS_MS                                 "SC_HID_FUNC_NETWORKDAYS_MS"
@@ -624,5 +625,6 @@
 #define HID_FUNC_ERF_MS                                         "SC_HID_FUNC_ERF_MS"
 #define HID_FUNC_ERFC_MS                                        "SC_HID_FUNC_ERFC_MS"
 #define HID_FUNC_AGGREGATE                                      "SC_HID_FUNC_AGGREGATE"
+#define HID_FUNC_CEIL_MATH                                      "SC_HID_FUNC_CEILING"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

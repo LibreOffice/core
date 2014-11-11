@@ -794,29 +794,72 @@ void ScInterpreter::ScRoundUp()
     RoundNumber( rtl_math_RoundingMode_Up );
 }
 
-void ScInterpreter::ScCeil()
+/** fdo69552 ODFF1.2 function CEILING and Excel function CEILING.MATH
+    In essence, the difference between the two is that ODFF-CEILING needs to
+    have arguments value and significance of the same sign and with
+    CEILING.MATH the sign of argument significance is irrevelevant.
+    This is why ODFF-CEILING is exported to Excel as CEILING.MATH and
+    CEILING.MATH is imported in Calc as CEILING.MATH
+ */
+void ScInterpreter::ScCeil( bool bODFF )
 {
     sal_uInt8 nParamCount = GetByte();
-    if ( MustHaveParamCount( nParamCount, 2, 3 ) )
+    if ( MustHaveParamCount( nParamCount, 1, 3 ) )
     {
-        bool bAbs = nParamCount == 3 && GetBool();
-        double fDec = GetDouble();
-        double fVal = GetDouble();
-        if ( fDec == 0.0 )
-            PushInt(0);
-        else if (fVal*fDec < 0.0)
-            PushIllegalArgument();
+        bool bAbs = ( nParamCount == 3 ? GetBool() : false );
+        double fDec, fVal;
+        if ( nParamCount == 1 )
+        {
+            fVal = GetDouble();
+            fDec = ( fVal < 0 ? -1 : 1 );
+        }
         else
         {
-            if ( !bAbs && fVal < 0.0 )
-                PushDouble(::rtl::math::approxFloor(fVal/fDec) * fDec);
+            bool bArgumentMissing = IsMissing();
+            fDec = GetDouble();
+            fVal = GetDouble();
+            if ( bArgumentMissing )
+                fDec = ( fVal < 0 ? -1 : 1 );
+        }
+        if ( fVal == 0 || fDec == 0.0 )
+            PushInt( 0 );
+        else
+        {
+            if ( bODFF && fVal * fDec < 0 )
+                PushIllegalArgument();
             else
-                PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
+            {
+                if ( fVal * fDec < 0.0 )
+                    fDec = -fDec;
+
+                if ( !bAbs && fVal < 0.0 )
+                    PushDouble(::rtl::math::approxFloor( fVal / fDec ) * fDec );
+                else
+                    PushDouble(::rtl::math::approxCeil( fVal / fDec ) * fDec );
+            }
         }
     }
 }
 
+// fdo69552 Excel function CEILING
 void ScInterpreter::ScCeil_MS()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 2 ) )
+    {
+        double fDec = GetDouble();
+        double fVal = GetDouble();
+        if ( fVal == 0 || fDec == 0.0 )
+            PushInt(0);
+        else if ( fVal > 0.0 && fDec < 0.0 )
+            PushIllegalArgument();
+        else
+            PushDouble(::rtl::math::approxCeil(fVal/fDec) * fDec);
+    }
+}
+
+// fdo69552 Excel functions CEILING.PRECISE and ISO.CEILING
+void ScInterpreter::ScCeil_Precise()
 {
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 1, 2 ) )
