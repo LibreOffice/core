@@ -57,7 +57,7 @@ inline sal_uInt16 readLE16( const sal_uInt8* pBuffer )
     return (((sal_uInt16)pBuffer[1]) << 8 ) | pBuffer[0];
 }
 
-inline sal_uInt16 readLE32( const sal_uInt8* pBuffer )
+inline sal_uInt32 readLE32( const sal_uInt8* pBuffer )
 {
     return
         (((sal_uInt32)pBuffer[3]) << 24 ) |
