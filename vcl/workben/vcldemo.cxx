@@ -52,6 +52,9 @@ class DemoWin : public DemoBase
     Bitmap   maIntroBW;
     BitmapEx maIntro;
 
+    int mnSegmentsX;
+    int mnSegmentsY;
+
     struct RenderContext {
         RenderStyle meStyle;
         bool        mbVDev;
@@ -65,11 +68,15 @@ class DemoWin : public DemoBase
     };
 
     std::vector< RegionRenderer * > maRenderers;
+    sal_Int32  mnSelectedRenderer;
 
     void InitRenderers();
 
 public:
     DemoWin() : DemoBase()
+              , mnSegmentsX(4)
+              , mnSegmentsY(3)
+              , mnSelectedRenderer(-1)
               , mpButton(NULL)
               , mpButtonWin(NULL)
     {
@@ -99,14 +106,12 @@ public:
     std::vector<Rectangle> partitionAndClear(OutputDevice &rDev,
                                              int nX, int nY);
 
-    void drawBackground(OutputDevice &rDev)
+    void drawBackground(OutputDevice &rDev, Rectangle r)
     {
-        Rectangle r(Point(0,0), rDev.GetOutputSizePixel());
         Gradient aGradient;
         aGradient.SetStartColor(COL_BLUE);
         aGradient.SetEndColor(COL_GREEN);
         aGradient.SetStyle(GradientStyle_LINEAR);
-//        aGradient.SetBorder(r.GetSize().Width()/20);
         rDev.DrawGradient(r, aGradient);
     }
 
@@ -358,15 +363,25 @@ public:
     void drawToDevice(OutputDevice &rDev, bool bVdev)
     {
         RenderContext aCtx;
-        aCtx.meStyle = RENDER_THUMB;
         aCtx.mbVDev = bVdev;
         aCtx.mpDemoWin = this;
 
-        drawBackground(rDev);
+        Rectangle aWholeWin(Point(0,0), rDev.GetOutputSizePixel());
 
-        std::vector<Rectangle> aRegions(partitionAndClear(rDev, 4, 3));
-        for (size_t i = 0; i < maRenderers.size(); i++)
-            maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
+        drawBackground(rDev, aWholeWin);
+
+        if (mnSelectedRenderer >= 0)
+        {
+            aCtx.meStyle = RENDER_EXPANDED;
+            maRenderers[mnSelectedRenderer]->RenderRegion(rDev, aWholeWin, aCtx);
+        }
+        else
+        {
+            aCtx.meStyle = RENDER_THUMB;
+            std::vector<Rectangle> aRegions(partitionAndClear(rDev, mnSegmentsX, mnSegmentsY));
+            for (size_t i = 0; i < maRenderers.size(); i++)
+                maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
+        }
     }
 };
 
@@ -393,7 +408,27 @@ IMPL_LINK_NOARG(DemoWin,BounceTimerCb)
 
 void DemoWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    (void) rMEvt;
+    // click to zoom out
+    if (mnSelectedRenderer >= 0)
+    {
+        mnSelectedRenderer = -1;
+        Invalidate();
+        return;
+    }
+
+    // click on a region to zoom into it
+    std::vector<Rectangle> aRegions(partitionAndClear(*this, mnSegmentsX, mnSegmentsY));
+    for (size_t i = 0; i < aRegions.size(); i++)
+    {
+        if (aRegions[i].IsInside(rMEvt.GetPosPixel()))
+        {
+            mnSelectedRenderer = i;
+            Invalidate();
+            return;
+        }
+    }
+
+    // otherwise bounce floating windows
     if (!mpButton)
     {
         mpButtonWin = new FloatingWindow(this);
