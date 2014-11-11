@@ -989,8 +989,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if ( nRowBytes < 8 || nPackType == 1 )
         {
             const size_t nMaxPixels = pPict->remainingSize() / 4;
-            const size_t nMaxRows = nMaxPixels / nWidth;
-            if (nHeight > nMaxRows)
+            if (static_cast<size_t>(nHeight) * nWidth > nMaxPixels)
                 BITMAPERROR;
 
             for ( ny = 0; ny < nHeight; ny++ )
@@ -1006,8 +1005,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         else if ( nPackType == 2 )
         {
             const size_t nMaxPixels = pPict->remainingSize() / 3;
-            const size_t nMaxRows = nMaxPixels / nWidth;
-            if (nHeight > nMaxRows)
+            if (static_cast<size_t>(nHeight) * nWidth > nMaxPixels)
                 BITMAPERROR;
 
             for ( ny = 0; ny < nHeight; ny++ )
