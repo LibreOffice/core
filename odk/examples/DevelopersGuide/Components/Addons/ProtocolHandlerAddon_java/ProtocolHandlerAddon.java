@@ -201,30 +201,30 @@ public class ProtocolHandlerAddon {
         }
 
         public void showMessageBox(String sTitle, String sMessage) {
-            if ( null != m_xFrame && null != m_xToolkit ) {
+            if ( null == m_xFrame || null == m_xToolkit ) {
+                return;
+            }
+            // describe window properties.
+            WindowDescriptor aDescriptor = new WindowDescriptor();
+            aDescriptor.Type              = WindowClass.MODALTOP;
+            aDescriptor.WindowServiceName = "infobox";
+            aDescriptor.ParentIndex       = -1;
+            aDescriptor.Parent            = UnoRuntime.queryInterface(
+                XWindowPeer.class, m_xFrame.getContainerWindow());
+            aDescriptor.Bounds            = new Rectangle(0,0,300,200);
+            aDescriptor.WindowAttributes  = WindowAttribute.BORDER |
+                WindowAttribute.MOVEABLE |
+                WindowAttribute.CLOSEABLE;
 
-                // describe window properties.
-                WindowDescriptor aDescriptor = new WindowDescriptor();
-                aDescriptor.Type              = WindowClass.MODALTOP;
-                aDescriptor.WindowServiceName = "infobox";
-                aDescriptor.ParentIndex       = -1;
-                aDescriptor.Parent            = UnoRuntime.queryInterface(
-                    XWindowPeer.class, m_xFrame.getContainerWindow());
-                aDescriptor.Bounds            = new Rectangle(0,0,300,200);
-                aDescriptor.WindowAttributes  = WindowAttribute.BORDER |
-                    WindowAttribute.MOVEABLE |
-                    WindowAttribute.CLOSEABLE;
-
-                XWindowPeer xPeer = m_xToolkit.createWindow( aDescriptor );
-                if ( null != xPeer ) {
-                    XMessageBox xMsgBox = UnoRuntime.queryInterface(
-                        XMessageBox.class, xPeer);
-                    if ( null != xMsgBox )
-                    {
-                        xMsgBox.setCaptionText( sTitle );
-                        xMsgBox.setMessageText( sMessage );
-                        xMsgBox.execute();
-                    }
+            XWindowPeer xPeer = m_xToolkit.createWindow( aDescriptor );
+            if ( null != xPeer ) {
+                XMessageBox xMsgBox = UnoRuntime.queryInterface(
+                    XMessageBox.class, xPeer);
+                if ( null != xMsgBox )
+                {
+                    xMsgBox.setCaptionText( sTitle );
+                    xMsgBox.setMessageText( sMessage );
+                    xMsgBox.execute();
                 }
             }
         }

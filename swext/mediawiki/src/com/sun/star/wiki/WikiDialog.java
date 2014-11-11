@@ -125,15 +125,15 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
     private static void SetTitle( XDialog xDialog, String sTitle )
         throws Exception
     {
-        if ( xDialog != null && sTitle != null )
+        if ( xDialog == null || sTitle == null ) {
+            return;
+        }
+        XControl xDialogControl = UnoRuntime.queryInterface( XControl.class, xDialog );
+        if ( xDialogControl != null )
         {
-            XControl xDialogControl = UnoRuntime.queryInterface( XControl.class, xDialog );
-            if ( xDialogControl != null )
-            {
-                XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xDialogControl.getModel() );
-                if ( xPropSet != null )
-                    xPropSet.setPropertyValue( "Title", sTitle );
-            }
+            XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, xDialogControl.getModel() );
+            if ( xPropSet != null )
+                xPropSet.setPropertyValue( "Title", sTitle );
         }
     }
 

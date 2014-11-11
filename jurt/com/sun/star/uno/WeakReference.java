@@ -43,19 +43,18 @@ public class WeakReference
      */
     public WeakReference(WeakReference obj)
     {
-        if (obj != null)
-        {
-            Object weakImpl= obj.get();
-            if (weakImpl != null)
-            {
-                XWeak weak= UnoRuntime.queryInterface(XWeak.class, weakImpl);
-                if (weak != null)
-                {
-                    XAdapter adapter= weak.queryAdapter();
-                    if (adapter != null)
-                        m_listener= new OWeakRefListener(adapter);
-                }
-            }
+        if (obj == null) {
+            return;
+        }
+        Object weakImpl = obj.get();
+        if (weakImpl == null) {
+            return;
+        }
+        XWeak weak = UnoRuntime.queryInterface(XWeak.class, weakImpl);
+        if (weak != null) {
+            XAdapter adapter = weak.queryAdapter();
+            if (adapter != null)
+                m_listener = new OWeakRefListener(adapter);
         }
     }
 

@@ -466,51 +466,51 @@ public class Helper
 
     protected static String GetFilterName( XComponentContext xContext, String aTypeName, String aDocServiceName )
     {
+        if ( xContext == null || aTypeName == null || aTypeName.length() == 0
+                || aDocServiceName == null || aDocServiceName.length() == 0 ) {
+            return "";
+        }
         String aFilterName = "";
-        if ( xContext != null && aTypeName != null && aTypeName.length() != 0
-          && aDocServiceName != null && aDocServiceName.length() != 0 )
+        try
         {
-            try
+            Object oFilterFactory = xContext.getServiceManager().createInstanceWithContext( "com.sun.star.document.FilterFactory", xContext );
+            XContainerQuery xQuery = UnoRuntime.queryInterface( XContainerQuery.class, oFilterFactory );
+            if ( xQuery != null )
             {
-                Object oFilterFactory = xContext.getServiceManager().createInstanceWithContext( "com.sun.star.document.FilterFactory", xContext );
-                XContainerQuery xQuery = UnoRuntime.queryInterface( XContainerQuery.class, oFilterFactory );
-                if ( xQuery != null )
+                NamedValue[] aRequest = new NamedValue[2];
+                aRequest[0] = new NamedValue( "Type", aTypeName );
+                aRequest[1] = new NamedValue( "DocumentService", aDocServiceName );
+
+                XEnumeration xSet = xQuery.createSubSetEnumerationByProperties( aRequest );
+                if ( xSet != null )
                 {
-                    NamedValue[] aRequest = new NamedValue[2];
-                    aRequest[0] = new NamedValue( "Type", aTypeName );
-                    aRequest[1] = new NamedValue( "DocumentService", aDocServiceName );
-
-                    XEnumeration xSet = xQuery.createSubSetEnumerationByProperties( aRequest );
-                    if ( xSet != null )
+                    boolean bAcceptable = false;
+                    while ( xSet.hasMoreElements() && !bAcceptable )
                     {
-                        boolean bAcceptable = false;
-                        while ( xSet.hasMoreElements() && !bAcceptable )
+                        PropertyValue[] pFilterProps = ( PropertyValue[] )AnyConverter.toArray( xSet.nextElement() );
+                        if ( pFilterProps != null )
                         {
-                            PropertyValue[] pFilterProps = ( PropertyValue[] )AnyConverter.toArray( xSet.nextElement() );
-                            if ( pFilterProps != null )
+                            int nLen = pFilterProps.length;
+                            String aTmpFilter = null;
+
+                            for ( int nInd = 0; nInd < nLen; nInd++ )
                             {
-                                int nLen = pFilterProps.length;
-                                String aTmpFilter = null;
-
-                                for ( int nInd = 0; nInd < nLen; nInd++ )
-                                {
-                                    if ( pFilterProps[nInd].Name.equals( "Name" ) )
-                                        aTmpFilter = AnyConverter.toString( pFilterProps[nInd].Value );
-                                    else if ( pFilterProps[nInd].Name.equals( "Flags" ) )
-                                        bAcceptable = ( ( AnyConverter.toInt( pFilterProps[nInd].Value ) & 2 ) == 2 ); // must allow export
-                                }
-
-                                if ( bAcceptable )
-                                    aFilterName = aTmpFilter;
+                                if ( pFilterProps[nInd].Name.equals( "Name" ) )
+                                    aTmpFilter = AnyConverter.toString( pFilterProps[nInd].Value );
+                                else if ( pFilterProps[nInd].Name.equals( "Flags" ) )
+                                    bAcceptable = ( ( AnyConverter.toInt( pFilterProps[nInd].Value ) & 2 ) == 2 ); // must allow export
                             }
+
+                            if ( bAcceptable )
+                                aFilterName = aTmpFilter;
                         }
                     }
                 }
             }
-            catch( java.lang.Exception e )
-            {
-                e.printStackTrace();
-            }
+        }
+        catch( java.lang.Exception e )
+        {
+            e.printStackTrace();
         }
 
         return aFilterName;

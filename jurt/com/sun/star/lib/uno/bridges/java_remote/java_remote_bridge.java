@@ -258,21 +258,22 @@ public class java_remote_bridge
     final void remRefHolder(Type type, String oid) {
         synchronized (refHolders) {
             LinkedList<RefHolder> l = refHolders.get(oid);
-            if (l != null) {
-                for (RefHolder rh : l) {
-                    if (rh.getType().equals(type)) {
-                        try {
-                            if (rh.release()) {
-                                l.remove(rh);
-                                if (l.isEmpty()) {
-                                    refHolders.remove(oid);
-                                }
+            if (l == null) {
+                return;
+            }
+            for (RefHolder rh : l) {
+                if (rh.getType().equals(type)) {
+                    try {
+                        if (rh.release()) {
+                            l.remove(rh);
+                            if (l.isEmpty()) {
+                                refHolders.remove(oid);
                             }
-                        } finally {
-                            release();
                         }
-                        break;
+                    } finally {
+                        release();
                     }
+                    break;
                 }
             }
         }

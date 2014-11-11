@@ -56,22 +56,23 @@ public class _XChartDataArray extends MultiMethodTest {
             mbExcludeSetRowAndSetColumn = true;
             msExcludeMessage = (String)o;
         }
-        if (!mbExcludeSetRowAndSetColumn) {
-            XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oObj);
-            if(xProp != null) {
-                try {
-                    boolean columnAsLabel = ((Boolean)xProp.getPropertyValue("ChartColumnAsLabel")).booleanValue();
-                    boolean rowAsLabel = ((Boolean)xProp.getPropertyValue("ChartRowAsLabel")).booleanValue();
-                    if (!columnAsLabel) {
-                        xProp.setPropertyValue("ChartColumnAsLabel", Boolean.TRUE);
-                    }
-                    if (!rowAsLabel) {
-                        xProp.setPropertyValue("ChartRowAsLabel", Boolean.TRUE);
-                    }
+        if (mbExcludeSetRowAndSetColumn) {
+            return;
+        }
+        XPropertySet xProp = UnoRuntime.queryInterface(XPropertySet.class, oObj);
+        if(xProp != null) {
+            try {
+                boolean columnAsLabel = ((Boolean)xProp.getPropertyValue("ChartColumnAsLabel")).booleanValue();
+                boolean rowAsLabel = ((Boolean)xProp.getPropertyValue("ChartRowAsLabel")).booleanValue();
+                if (!columnAsLabel) {
+                    xProp.setPropertyValue("ChartColumnAsLabel", Boolean.TRUE);
                 }
-                catch(Exception e) {
-                    // ignore
+                if (!rowAsLabel) {
+                    xProp.setPropertyValue("ChartRowAsLabel", Boolean.TRUE);
                 }
+            }
+            catch(Exception e) {
+                // ignore
             }
         }
     }

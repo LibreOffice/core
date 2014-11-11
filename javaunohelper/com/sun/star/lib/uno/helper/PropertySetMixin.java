@@ -563,106 +563,107 @@ public final class PropertySetMixin {
     {
         XInterfaceTypeDescription2 ifc = UnoRuntime.queryInterface(
             XInterfaceTypeDescription2.class, resolveTypedefs(type));
-        if (seen.add(ifc.getName())) {
-            XTypeDescription[] bases = ifc.getBaseTypes();
-            for (int i = 0; i < bases.length; ++i) {
-                initProperties(bases[i], map, handleNames, seen);
-            }
-            XInterfaceMemberTypeDescription[] members = ifc.getMembers();
-            for (int i = 0; i < members.length; ++i) {
-                if (members[i].getTypeClass() == TypeClass.INTERFACE_ATTRIBUTE)
-                {
-                    XInterfaceAttributeTypeDescription2 attr =
-                        UnoRuntime.queryInterface(
-                            XInterfaceAttributeTypeDescription2.class,
-                            members[i]);
-                    short attrAttribs = 0;
-                    if (attr.isBound()) {
-                        attrAttribs |= PropertyAttribute.BOUND;
-                    }
-                    boolean setUnknown = false;
-                    if (attr.isReadOnly()) {
-                        attrAttribs |= PropertyAttribute.READONLY;
-                        setUnknown = true;
-                    }
-                    XCompoundTypeDescription[] excs = attr.getGetExceptions();
-                    boolean getUnknown = false;
-                    //XXX  Special interpretation of getter/setter exceptions
-                    // only works if the specified exceptions are of the exact
-                    // type, not of a supertype:
-                    for (int j = 0; j < excs.length; ++j) {
-                        if (excs[j].getName().equals(
-                                "com.sun.star.beans.UnknownPropertyException"))
-                        {
-                            getUnknown = true;
-                            break;
-                        }
-                    }
-                    excs = attr.getSetExceptions();
-                    for (int j = 0; j < excs.length; ++j) {
-                        if (excs[j].getName().equals(
-                                "com.sun.star.beans.UnknownPropertyException"))
-                        {
-                            setUnknown = true;
-                        } else if (excs[j].getName().equals(
-                                       "com.sun.star.beans."
-                                       + "PropertyVetoException"))
-                        {
-                            attrAttribs |= PropertyAttribute.CONSTRAINED;
-                        }
-                    }
-                    if (getUnknown && setUnknown) {
-                        attrAttribs |= PropertyAttribute.OPTIONAL;
-                    }
-                    XTypeDescription t = attr.getType();
-                    for (;;) {
-                        t = resolveTypedefs(t);
-                        short n;
-                        if (t.getName().startsWith(
-                                "com.sun.star.beans.Ambiguous<"))
-                        {
-                            n = PropertyAttribute.MAYBEAMBIGUOUS;
-                        } else if (t.getName().startsWith(
-                                       "com.sun.star.beans.Defaulted<"))
-                        {
-                            n = PropertyAttribute.MAYBEDEFAULT;
-                        } else if (t.getName().startsWith(
-                                       "com.sun.star.beans.Optional<"))
-                        {
-                            n = PropertyAttribute.MAYBEVOID;
-                        } else {
-                            break;
-                        }
-                        attrAttribs |= n;
-                        t = (UnoRuntime.queryInterface(
-                                 XStructTypeDescription.class, t)).
-                            getTypeArguments()[0];
-                    }
-                    String name = members[i].getMemberName();
-                    boolean present = true;
-                    if (absentOptional != null) {
-                        for (int j = 0; j < absentOptional.length; ++j) {
-                            if (name.equals(absentOptional[j])) {
-                                present = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (map.put(
-                            name,
-                            new PropertyData(
-                                new Property(
-                                    name, handleNames.size(),
-                                    new Type(t.getName(), t.getTypeClass()),
-                                    attrAttribs),
-                                present))
-                        != null)
-                    {
-                        throw new RuntimeException(
-                            "inconsistent UNO type registry");
-                    }
-                    handleNames.add(name);
+        if (!seen.add(ifc.getName())) {
+            return;
+        }
+        XTypeDescription[] bases = ifc.getBaseTypes();
+        for (int i = 0; i < bases.length; ++i) {
+            initProperties(bases[i], map, handleNames, seen);
+        }
+        XInterfaceMemberTypeDescription[] members = ifc.getMembers();
+        for (int i = 0; i < members.length; ++i) {
+            if (members[i].getTypeClass() == TypeClass.INTERFACE_ATTRIBUTE)
+            {
+                XInterfaceAttributeTypeDescription2 attr =
+                    UnoRuntime.queryInterface(
+                        XInterfaceAttributeTypeDescription2.class,
+                        members[i]);
+                short attrAttribs = 0;
+                if (attr.isBound()) {
+                    attrAttribs |= PropertyAttribute.BOUND;
                 }
+                boolean setUnknown = false;
+                if (attr.isReadOnly()) {
+                    attrAttribs |= PropertyAttribute.READONLY;
+                    setUnknown = true;
+                }
+                XCompoundTypeDescription[] excs = attr.getGetExceptions();
+                boolean getUnknown = false;
+                //XXX  Special interpretation of getter/setter exceptions
+                // only works if the specified exceptions are of the exact
+                // type, not of a supertype:
+                for (int j = 0; j < excs.length; ++j) {
+                    if (excs[j].getName().equals(
+                            "com.sun.star.beans.UnknownPropertyException"))
+                    {
+                        getUnknown = true;
+                        break;
+                    }
+                }
+                excs = attr.getSetExceptions();
+                for (int j = 0; j < excs.length; ++j) {
+                    if (excs[j].getName().equals(
+                            "com.sun.star.beans.UnknownPropertyException"))
+                    {
+                        setUnknown = true;
+                    } else if (excs[j].getName().equals(
+                                   "com.sun.star.beans."
+                                   + "PropertyVetoException"))
+                    {
+                        attrAttribs |= PropertyAttribute.CONSTRAINED;
+                    }
+                }
+                if (getUnknown && setUnknown) {
+                    attrAttribs |= PropertyAttribute.OPTIONAL;
+                }
+                XTypeDescription t = attr.getType();
+                for (;;) {
+                    t = resolveTypedefs(t);
+                    short n;
+                    if (t.getName().startsWith(
+                            "com.sun.star.beans.Ambiguous<"))
+                    {
+                        n = PropertyAttribute.MAYBEAMBIGUOUS;
+                    } else if (t.getName().startsWith(
+                                   "com.sun.star.beans.Defaulted<"))
+                    {
+                        n = PropertyAttribute.MAYBEDEFAULT;
+                    } else if (t.getName().startsWith(
+                                   "com.sun.star.beans.Optional<"))
+                    {
+                        n = PropertyAttribute.MAYBEVOID;
+                    } else {
+                        break;
+                    }
+                    attrAttribs |= n;
+                    t = (UnoRuntime.queryInterface(
+                             XStructTypeDescription.class, t)).
+                        getTypeArguments()[0];
+                }
+                String name = members[i].getMemberName();
+                boolean present = true;
+                if (absentOptional != null) {
+                    for (int j = 0; j < absentOptional.length; ++j) {
+                        if (name.equals(absentOptional[j])) {
+                            present = false;
+                            break;
+                        }
+                    }
+                }
+                if (map.put(
+                        name,
+                        new PropertyData(
+                            new Property(
+                                name, handleNames.size(),
+                                new Type(t.getName(), t.getTypeClass()),
+                                attrAttribs),
+                            present))
+                    != null)
+                {
+                    throw new RuntimeException(
+                        "inconsistent UNO type registry");
+                }
+                handleNames.add(name);
             }
         }
     }
