@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <rtl/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -49,22 +48,8 @@ class DemoWin : public DemoBase
 public:
     DemoWin() : DemoBase()
     {
-        // Needed to find images
-        OUString aPath;
-        rtl::Bootstrap::get("SYSBINDIR", aPath);
-#ifdef FIXME_THIS_FAILS
-        rtl::Bootstrap::set("BRAND_BASE_DIR", aPath + "/..");
-        if (Application::LoadBrandBitmap("intro", maIntro))
+        if (!Application::LoadBrandBitmap("intro", maIntro))
             Application::Abort("Failed to load intro image");
-#else
-        aPath = aPath + "/intro.png";
-        SvFileStream aFileStream( aPath, STREAM_READ );
-        GraphicFilter aGraphicFilter(false);
-        Graphic aGraphic;
-        if (aGraphicFilter.ImportGraphic(aGraphic, aPath, aFileStream) != 0)
-            Application::Abort("Failed to load intro image: " + aPath);
-        maIntro = aGraphic.GetBitmapEx();
-#endif
         maIntroBW = maIntro.GetBitmap();
         maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
     }
