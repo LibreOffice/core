@@ -39,20 +39,6 @@ SwTabCols::SwTabCols( const SwTabCols& rCpy ) :
     bLastRowAllowedToChange( rCpy.IsLastRowAllowedToChange() ),
     aData( rCpy.GetData() )
 {
-#if OSL_DEBUG_LEVEL > 0
-    for ( size_t i = 0; i < Count(); ++i )
-    {
-        SwTabColsEntry aEntry1 = aData[i];
-        SwTabColsEntry aEntry2 = rCpy.GetData()[i];
-        (void) aEntry1;
-        (void) aEntry2;
-        OSL_ENSURE( aEntry1.nPos == aEntry2.nPos &&
-                    aEntry1.nMin == aEntry2.nMin &&
-                    aEntry1.nMax == aEntry2.nMax &&
-                    aEntry1.bHidden == aEntry2.bHidden,
-                    "CopyContructor of SwTabColsEntries did not succeed!" );
-    }
-#endif
 }
 
 SwTabCols &SwTabCols::operator=( const SwTabCols& rCpy )
