@@ -150,7 +150,7 @@ void SwUndoFmtAttr::Init()
     else if ( RES_FRMFMT == m_nFmtWhich )
     {
         SwDoc* pDoc = m_pFmt->GetDoc();
-        if ( pDoc->GetTblFrmFmts()->Contains(static_cast<const SwFrmFmt*>(m_pFmt)))
+        if ( pDoc->GetTblFrmFmts()->Contains( m_pFmt ))
         {
             // Table Format: save table position, table formats are volatile!
             SwTable * pTbl = SwIterator<SwTable,SwFmt>::FirstElement( *m_pFmt );
@@ -160,7 +160,7 @@ void SwUndoFmtAttr::Init()
                     ->FindTableNode()->GetIndex();
             }
         }
-        else if ( pDoc->GetSections().Contains(static_cast<const SwSectionFmt*>(m_pFmt)))
+        else if ( pDoc->GetSections().Contains( m_pFmt ))
         {
             m_nNodeIndex = m_pFmt->GetCntnt().GetCntntIdx()->GetIndex();
         }
@@ -237,8 +237,7 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
     switch ( m_nFmtWhich )
     {
         case RES_TXTFMTCOLL:
-            nPos = pDoc->GetTxtFmtColls()->GetPos(
-                    static_cast<const SwTxtFmtColl*>(m_pFmt) );
+            nPos = pDoc->GetTxtFmtColls()->GetPos( m_pFmt );
             break;
 
         case RES_GRFFMTCOLL:
@@ -247,8 +246,7 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
             break;
 
         case RES_CHRFMT:
-            nPos = pDoc->GetCharFmts()->GetPos(
-                    static_cast<SwCharFmt*>(m_pFmt) );
+            nPos = pDoc->GetCharFmts()->GetPos( m_pFmt );
             break;
 
         case RES_FRMFMT:
@@ -289,12 +287,10 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
             // no break!
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
-            nPos = pDoc->GetSpzFrmFmts()->GetPos(
-                    static_cast<const SwFrmFmt*>(m_pFmt) );
+            nPos = pDoc->GetSpzFrmFmts()->GetPos( m_pFmt );
             if ( USHRT_MAX == nPos )
             {
-                nPos = pDoc->GetFrmFmts()->GetPos(
-                    static_cast<const SwFrmFmt*>(m_pFmt) );
+                nPos = pDoc->GetFrmFmts()->GetPos( m_pFmt );
             }
             break;
     }

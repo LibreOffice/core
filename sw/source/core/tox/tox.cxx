@@ -858,16 +858,4 @@ const SwFormTokens& SwForm::GetPattern(sal_uInt16 nLevel) const
     return aPattern[nLevel];
 }
 
-sal_uInt16 SwTOXTypes::GetPos(const SwTOXType* pTOXType) const
-{
-    const_iterator it = std::find(begin(), end(), pTOXType);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-SwTOXTypes::~SwTOXTypes()
-{
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
