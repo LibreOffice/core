@@ -251,7 +251,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     if ( eRet == ERRCODE_BASIC_METHOD_NOT_FOUND && !pCell )
     // Macro not found (only with input)
     {
-        //! different error message, if found, but not bAllowed ??
+        //TODO: different error message, if found, but not bAllowed ??
 
         MessageDialog aBox( pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
         aBox.Execute();
@@ -357,7 +357,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
 #endif
     if ( !bDone && !pCell )         // Macro not found (only with input)
     {
-        //! different error message, if found, but not bAllowed ??
+        //TODO: different error message, if found, but not bAllowed ??
 
         MessageDialog aBox(pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
         aBox.Execute();
@@ -389,8 +389,8 @@ bool ScValidationData::DoError( vcl::Window* pParent, const OUString& rInput,
     if (aMessage.isEmpty())
         aMessage = ScGlobal::GetRscString( STR_VALID_DEFERROR );
 
-    //! ErrorBox / WarningBox / InfoBox ?
-    //! (with InfoBox always OK-Button only)
+    //TODO: ErrorBox / WarningBox / InfoBox ?
+    //TODO: (with InfoBox always OK-Button only)
 
     WinBits nStyle = 0;
     switch (eErrorStyle)
@@ -527,7 +527,7 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
 
         case SC_VALID_CUSTOM:
             //  for Custom, it must be eOp == SC_COND_DIRECT
-            //! the value must be in the document !!!
+            //TODO: the value must be in the document !!!
             bOk = IsCellValid(rCell, rPos);
             break;
 
@@ -916,7 +916,7 @@ ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
         InsertNew( (*it)->Clone() );
     }
 
-    //!      faster insert for sorted entries from rList ???
+    //TODO: faster insert for sorted entries from rList ???
 }
 
 ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
@@ -929,12 +929,12 @@ ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
         InsertNew( (*it)->Clone(pNewDoc) );
     }
 
-    //!      faster insert for sorted entries from rList ???
+    //TODO: faster insert for sorted entries from rList ???
 }
 
 ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 {
-    //! binary search
+    //TODO: binary search
 
     for( iterator it = begin(); it != end(); ++it )
         if( (*it)->GetKey() == nKey )

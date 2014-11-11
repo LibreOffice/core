@@ -82,7 +82,7 @@ sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, bool bAl
 
 bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, SCTAB nTabCount )
 {
-    //! if multiple sheets are copied, update references into the other copied sheets?
+    //TODO: if multiple sheets are copied, update references into the other copied sheets?
 
     bool bChanged = false;
 

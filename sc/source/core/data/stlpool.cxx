@@ -80,7 +80,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const OUString& rName,
     //  files with multiple default styles.
     //  Create new styles in that case:
 
-    //! only when loading?
+    //TODO: only when loading?
 
     if ( rName == STRING_STANDARD && Find( rName, eFam ) != NULL )
     {

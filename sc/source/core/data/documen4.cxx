@@ -608,7 +608,7 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
         if (maTabs[*itr])
             maTabs[*itr]->UpdateSelectionFunction(aData, aMark);
 
-            //TODO: pass rMark to UpdateSelectionFunction !!!!!
+            //TODO: pass rMark to UpdateSelection Function !!!!!
 
     if (!aData.bError)
         switch (eFunc)
@@ -943,7 +943,8 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
                                     ScDocument& rOtherDoc, SCCOL nOtherCol, SCTAB nOtherTab,
                                     SCROW nMaxRow, SCCOLROW* pOtherRows )
 {
-    //TODO: Optimize e.g. with Iterator
+
+    //TODO: optimize e.g. with iterator?
 
     sal_uLong nDif = 0;
     sal_uLong nUsed = 0;
@@ -992,7 +993,9 @@ void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW
     {
         nMaxCont = SC_DOCCOMP_COLUMNS;      // 10 columns
         nMinGood = SC_DOCCOMP_MINGOOD;
+
         //TODO: additional pass with nMinGood = 0 ????
+
     }
     else
     {
@@ -1155,6 +1158,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             sal_uLong n1,n2;    // for AppendDeleteRange
 
             //TODO: one Progress over all tables ???
+
             OUString aTabName;
             GetName( nThisTab, aTabName );
             OUString aTemplate = ScGlobal::GetRscString(STR_PROGRESS_COMPARING);

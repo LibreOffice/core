@@ -1592,7 +1592,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     for (i=0; i<MAXSUBTOTAL; i++)
         pCompString[i] = new OUString;
 
-                                //! sortieren?
+                                //TODO: sort?
 
     ScStyleSheet* pStyle = (ScStyleSheet*) pDocument->GetStyleSheetPool()->Find(
                                 ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA );
@@ -1790,9 +1790,9 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     }
 
-    //!     je nach Einstellung Zwischensummen-Zeilen nach oben verschieben ?
+    //TODO: according to setting, shift intermediate-sum rows up ?
 
-    //!     Outlines direkt erzeugen?
+    //TODO: create Outlines directly?
 
     if (bSpaceLeft)
         DoAutoOutline( nStartCol, nStartRow, nEndCol, nEndRow );
@@ -1800,7 +1800,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     for (i=0; i<MAXSUBTOTAL; i++)
         delete pCompString[i];
 
-    rParam.nRow2 = nEndRow;                 // neues Ende
+    rParam.nRow2 = nEndRow;                 // new end
     return bSpaceLeft;
 }
 

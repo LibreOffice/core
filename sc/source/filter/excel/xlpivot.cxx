@@ -61,7 +61,7 @@ void XclPCItem::SetText( const OUString& rText )
 void XclPCItem::SetDouble( double fValue )
 {
     meType = EXC_PCITEM_DOUBLE;
-    //! TODO convert double to string
+    //TODO convert double to string
     maText = OUString();
     mfValue = fValue;
 }
@@ -69,7 +69,7 @@ void XclPCItem::SetDouble( double fValue )
 void XclPCItem::SetDateTime( const DateTime& rDateTime )
 {
     meType = EXC_PCITEM_DATETIME;
-    //! TODO convert date to string
+    //TODO convert date to string
     maText = OUString();
     maDateTime = rDateTime;
 }
@@ -102,7 +102,7 @@ void XclPCItem::SetError( sal_uInt16 nError )
 void XclPCItem::SetBool( bool bValue )
 {
     meType = EXC_PCITEM_BOOL;
-    //! TODO convert boolean to string
+    //TODO convert boolean to string
     maText = OUString();
     mbValue = bValue;
 }
@@ -485,7 +485,7 @@ void XclPTFieldInfo::AddApiOrient( DataPilotFieldOrientation eOrient )
     }
 }
 
-//! TODO: should be a Sequence<GeneralFunction> in ScDPSaveData
+//TODO: should be a Sequence<GeneralFunction> in ScDPSaveData
 void XclPTFieldInfo::GetSubtotals( XclPTSubtotalVec& rSubtotals ) const
 {
     rSubtotals.clear();

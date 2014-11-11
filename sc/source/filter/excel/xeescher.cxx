@@ -523,7 +523,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
     // meta file
-    //! TODO - needs check
+    //TODO - needs check
     Reference< XPropertySet > xShapePS( xShape, UNO_QUERY );
     if( xShapePS.is() && aPropOpt.CreateGraphicProperties( xShapePS, OUString( "MetaFile" ), false ) )
     {

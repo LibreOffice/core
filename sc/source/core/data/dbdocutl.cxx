@@ -46,7 +46,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
     bool bError = false;
     sal_uLong nFormatIndex = 0;
 
-    //! wasNull calls only if null value was found?
+    // wasNull calls only if null value was found?
 
     try
     {
@@ -54,7 +54,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         {
             case sdbc::DataType::BIT:
             case sdbc::DataType::BOOLEAN:
-                //! use language from doc (here, date/time and currency)?
+                //TODO: use language from doc (here, date/time and currency)?
                 nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
                                     NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
                 nVal = (xRow->getBoolean(nRowPos) ? 1 : 0);
@@ -71,7 +71,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::DOUBLE:
             case sdbc::DataType::NUMERIC:
             case sdbc::DataType::DECIMAL:
-                //! do the conversion here?
+                //TODO: do the conversion here?
                 nVal = xRow->getDouble(nRowPos);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
                 bValue = true;

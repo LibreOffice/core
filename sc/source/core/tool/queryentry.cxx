@@ -161,7 +161,7 @@ bool ScQueryEntry::operator==( const ScQueryEntry& r ) const
         && eConnect         == r.eConnect
         && nField           == r.nField
         && maQueryItems   == r.maQueryItems;
-    //! pSearchParam und pSearchText nicht vergleichen
+    // do not compare pSearchParam and pSearchText!
 }
 
 utl::TextSearch* ScQueryEntry::GetSearchTextPtr( bool bCaseSens ) const

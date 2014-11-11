@@ -632,9 +632,9 @@ void ScGlobal::Clear()
     DELETEZ(pCaseCollator);
     DELETEZ(pCollator);
     DELETEZ(pCalendar);
-    //! do NOT delete pCharClass since it is a pointer to the single SvtSysLocale instance
+    // Do NOT delete pCharClass since it is a pointer to the single SvtSysLocale instance !
     pCharClass = NULL;
-    //! do NOT delete pLocaleData since it is a pointer to the single SvtSysLocale instance
+    // Do NOT delete pLocaleData since it is a pointer to the single SvtSysLocale instance !
     pLocaleData = NULL;
     DELETEZ(pSysLocale);
     DELETEZ(pLocale);

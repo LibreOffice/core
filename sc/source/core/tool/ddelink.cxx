@@ -210,7 +210,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
 
         //  notify Uno objects (for XRefreshListener)
         //  must be after TrackFormulas
-        //! do this asynchronously?
+        //TODO: do this asynchronously?
         ScLinkRefreshedHint aHint;
         aHint.SetDdeLink( aAppl, aTopic, aItem, nMode );
         pDoc->BroadcastUno( aHint );
