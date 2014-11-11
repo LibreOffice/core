@@ -336,8 +336,9 @@ namespace frm
                 ).Height();
             }
 
-            SvxFontHeightItem* pNewItem = new SvxFontHeightItem( nHeight, 100, getWhich() );
-            pNewItem->SetProp( pFontHeightItem->GetProp(), pFontHeightItem->GetPropUnit() );
+            SvxFontHeightItem* pNewItem = new SvxFontHeightItem(
+                getWhich(), nHeight, pFontHeightItem->GetProp(),
+                pFontHeightItem->GetPropUnit() );
             aState.setItem( pNewItem );
         }
 
@@ -364,8 +365,9 @@ namespace frm
                 ).Height();
             }
 
-            SvxFontHeightItem aNewItem( nHeight, 100, getWhich() );
-            aNewItem.SetProp( pFontHeightItem->GetProp(), pFontHeightItem->GetPropUnit() );
+            SvxFontHeightItem aNewItem(
+                getWhich(), nHeight, pFontHeightItem->GetProp(),
+                pFontHeightItem->GetPropUnit() );
 
             if ( ( getAttributeId() == SID_ATTR_CHAR_FONTHEIGHT ) && _nForScriptType )
                 putItemForScript( _rNewAttribs, aNewItem, _nForScriptType );
