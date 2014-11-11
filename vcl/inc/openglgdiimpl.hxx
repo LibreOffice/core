@@ -63,13 +63,18 @@ protected:
     GLuint mnLinearGradientProgram;
     GLuint mnLinearGradientStartColorUniform;
     GLuint mnLinearGradientEndColorUniform;
-    GLuint mnLinearGradientTransformUniform;
+
+    GLuint mnRadialGradientProgram;
+    GLuint mnRadialGradientStartColorUniform;
+    GLuint mnRadialGradientEndColorUniform;
+    GLuint mnRadialGradientCenterUniform;
 
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateMaskedTextureProgram( void );
     bool CreateMaskProgram( void );
     bool CreateLinearGradientProgram( void );
+    bool CreateRadialGradientProgram( void );
 
     void BeginSolid( SalColor nColor, sal_uInt8 nTransparency );
     void BeginSolid( SalColor nColor, double fTransparency );
@@ -84,6 +89,7 @@ protected:
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawConvexPolygon( const Polygon& rPolygon );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
+    void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry, bool bInverted = false );
@@ -91,6 +97,7 @@ protected:
     void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const Size& rSize, const SalTwoRect& rPosAry );
     void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& rPosAry );
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
+    void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
 
 protected:
     // get the width of the device

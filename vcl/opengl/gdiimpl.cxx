@@ -75,6 +75,13 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     , mnMaskProgram(0)
     , mnMaskUniform(0)
     , mnMaskColorUniform(0)
+    , mnLinearGradientProgram(0)
+    , mnLinearGradientStartColorUniform(0)
+    , mnLinearGradientEndColorUniform(0)
+    , mnRadialGradientProgram(0)
+    , mnRadialGradientStartColorUniform(0)
+    , mnRadialGradientEndColorUniform(0)
+    , mnRadialGradientCenterUniform(0)
 {
 }
 
@@ -295,7 +302,20 @@ bool OpenGLSalGraphicsImpl::CreateLinearGradientProgram( void )
     glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnLinearGradientStartColorUniform = glGetUniformLocation( mnLinearGradientProgram, "start_color" );
     mnLinearGradientEndColorUniform = glGetUniformLocation( mnLinearGradientProgram, "end_color" );
-    mnLinearGradientTransformUniform = glGetUniformLocation( mnLinearGradientProgram, "transform" );
+    return true;
+}
+
+bool OpenGLSalGraphicsImpl::CreateRadialGradientProgram( void )
+{
+    mnRadialGradientProgram = OpenGLHelper::LoadShaders( "textureVertexShader", "radialGradientFragmentShader" );
+    if( mnRadialGradientProgram == 0 )
+        return false;
+
+    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    mnRadialGradientStartColorUniform = glGetUniformLocation( mnRadialGradientProgram, "start_color" );
+    mnRadialGradientEndColorUniform = glGetUniformLocation( mnRadialGradientProgram, "end_color" );
+    mnRadialGradientCenterUniform = glGetUniformLocation( mnRadialGradientProgram, "center" );
     return true;
 }
 
@@ -455,6 +475,18 @@ void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeigh
     DrawConvexPolygon( 4, aPoints );
 }
 
+void OpenGLSalGraphicsImpl::DrawRect( const Rectangle& rRect )
+{
+    long nX1( rRect.Left() );
+    long nY1( GetHeight() - rRect.Top() );
+    long nX2( rRect.Right() );
+    long nY2( GetHeight() - rRect.Bottom() );
+    const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
+                                 { nX2, nY1 }, { nX2, nY2 }};
+
+    DrawConvexPolygon( 4, aPoints );
+}
+
 void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     ::basegfx::B2DPolygon aPolygon;
@@ -601,18 +633,6 @@ void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const S
 
 void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect )
 {
-    if( rGradient.GetBorder() >= 100.0 )
-    {
-        // border >= 100%, draw solid rectangle
-        Color aCol = rGradient.GetStartColor();
-        long nF = rGradient.GetStartIntensity();
-        BeginSolid( MAKE_SALCOLOR( aCol.GetRed() * nF / 100,
-                                   aCol.GetGreen() * nF / 100,
-                                   aCol.GetBlue() * nF / 100 ) );
-        DrawRect( rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight() );
-        EndSolid();
-        return;
-    }
 
     if( mnLinearGradientProgram == 0 )
     {
@@ -632,10 +652,6 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     Rectangle aBoundRect;
     Point aCenter;
     rGradient.GetBoundRect( rRect, aBoundRect, aCenter );
-    aBoundRect.Left()--;
-    aBoundRect.Top()--;
-    aBoundRect.Right()++;
-    aBoundRect.Bottom()++;
     Polygon aPoly( aBoundRect );
     aPoly.Rotate( aCenter, rGradient.GetAngle() % 3600 );
 
@@ -650,6 +666,43 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     glDisableVertexAttribArray( GL_ATTRIB_TEX );
     CHECK_GL_ERROR();
 
+    glUseProgram( 0 );
+}
+
+void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect )
+{
+    if( mnRadialGradientProgram == 0 )
+    {
+        if( !CreateRadialGradientProgram() )
+            return;
+    }
+
+    glUseProgram( mnRadialGradientProgram );
+
+    Color aStartCol = rGradient.GetStartColor();
+    Color aEndCol = rGradient.GetEndColor();
+    long nFactor = rGradient.GetStartIntensity();
+    glUniformColorIntensity( mnRadialGradientStartColorUniform, aStartCol, nFactor );
+    nFactor = rGradient.GetEndIntensity();
+    glUniformColorIntensity( mnRadialGradientEndColorUniform, aEndCol, nFactor );
+
+    Rectangle aRect;
+    Point aCenter;
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
+    // adjust coordinates so that radius has distance equals to 1.0
+    double fRadius = aRect.GetWidth() / 2.0f;
+    GLfloat fWidth = rRect.GetWidth() / fRadius;
+    GLfloat fHeight = rRect.GetHeight() / fRadius;
+    glUniform2f( mnRadialGradientCenterUniform, (aCenter.X() -rRect.Left()) / fRadius, (aCenter.Y() - rRect.Top()) / fRadius );
+
+    GLfloat aTexCoord[8] = { 0, 0, 0, fHeight, fWidth, fHeight, fWidth, 0 };
+    glEnableVertexAttribArray( GL_ATTRIB_TEX );
+    glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
+
+    DrawRect( rRect );
+
+    glDisableVertexAttribArray( GL_ATTRIB_TEX );
     glUseProgram( 0 );
 }
 
@@ -1189,16 +1242,45 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
 bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         const Gradient& rGradient)
 {
-    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+    Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
+    SAL_INFO( "vcl.opengl", "::drawGradient" );
 
     if( aBoundRect.IsEmpty() )
         return true;
+
+    aBoundRect.Left()--;
+    aBoundRect.Top()--;
+    aBoundRect.Right()++;
+    aBoundRect.Bottom()++;
+
+    // if border >= 100%, draw solid rectangle with start color
+    if( rGradient.GetBorder() >= 100.0 )
+    {
+        Color aCol = rGradient.GetStartColor();
+        long nF = rGradient.GetStartIntensity();
+        PreDraw();
+        BeginSolid( MAKE_SALCOLOR( aCol.GetRed() * nF / 100,
+                                   aCol.GetGreen() * nF / 100,
+                                   aCol.GetBlue() * nF / 100 ) );
+        DrawRect( aBoundRect );
+        EndSolid();
+        PostDraw();
+        return true;
+    }
 
     //TODO: lfrb: some missing transformation with the polygon in outdev
     if( rGradient.GetStyle() == GradientStyle_LINEAR )
     {
         PreDraw();
         DrawLinearGradient( rGradient, aBoundRect );
+        PostDraw();
+        return true;
+    }
+    else if( rGradient.GetStyle() == GradientStyle_RADIAL )
+    {
+        PreDraw();
+        DrawRadialGradient( rGradient, aBoundRect );
         PostDraw();
         return true;
     }
