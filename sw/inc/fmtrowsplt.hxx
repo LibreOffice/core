@@ -29,7 +29,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtRowSplit : public SfxBoolItem
 {
 public:
-    SwFmtRowSplit( bool bSplit = true ) : SfxBoolItem( RES_ROW_SPLIT, bSplit ) {}
+    SwFmtRowSplit( bool bSplit = false ) : SfxBoolItem( RES_ROW_SPLIT, bSplit ) {}
 
     // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
