@@ -302,7 +302,8 @@ void SwWrongList::Move( sal_Int32 nPos, sal_Int32 nDiff )
         else
         {
             ShiftLeft( nBeginInvalid, nPos, nEnd );
-            ShiftLeft( nEndInvalid, nPos, nEnd );
+            if( nEndInvalid != COMPLETE_STRING )
+                ShiftLeft( nEndInvalid, nPos, nEnd );
             _Invalidate( nPos ? nPos - 1 : nPos, nPos + 1 );
         }
     }
@@ -471,7 +472,8 @@ SwWrongList* SwWrongList::SplitList( sal_Int32 nSplitPos )
     else
     {
         ShiftLeft( nBeginInvalid, 0, nSplitPos );
-        ShiftLeft( nEndInvalid, 0, nSplitPos );
+        if( nEndInvalid != COMPLETE_STRING )
+            ShiftLeft( nEndInvalid, 0, nSplitPos );
         _Invalidate( 0, 1 );
     }
     for (nLst = 0; nLst < Count(); ++nLst )
