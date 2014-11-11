@@ -129,6 +129,8 @@ ScViewPaneBase::ScViewPaneBase(ScTabViewShell* pViewSh, sal_uInt16 nP) :
 
 ScViewPaneBase::~ScViewPaneBase()
 {
+    SolarMutexGuard g;
+
     if (pViewShell)
         EndListening(*pViewShell);
 }
