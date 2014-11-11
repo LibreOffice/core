@@ -1,0 +1,11 @@
+--- src/lcms2_internal.h
++++ src/lcms2_internal.h
+@@ -93,7 +93,7 @@
+ 
+ // A fast way to convert from/to 16 <-> 8 bits
+ #define FROM_8_TO_16(rgb) (cmsUInt16Number) ((((cmsUInt16Number) (rgb)) << 8)|(rgb))
+-#define FROM_16_TO_8(rgb) (cmsUInt8Number) ((((rgb) * 65281 + 8388608) >> 24) & 0xFF)
++#define FROM_16_TO_8(rgb) (cmsUInt8Number) ((((unsigned)(rgb) * 65281 + 8388608) >> 24) & 0xFF)
+ 
+ // Code analysis is broken on asserts
+ #ifdef _MSC_VER
