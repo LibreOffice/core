@@ -5,13 +5,13 @@
   <object class="GtkMessageDialog" id="QuerySaveDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Save document?</property>
+    <property name="title" translatable="yes">Save Document?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">warning</property>
-    <property name="text" translatable="yes">Save changes to document "$(DOC)" before closing?</property>
-    <property name="secondary_text" translatable="yes">Your changes will be lost if you don't save them.</property>
+    <property name="text" translatable="yes">Save changes to document “$(DOC)” before closing?</property>
+    <property name="secondary_text" translatable="yes">Your changes will be lost if you don’t save them.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
