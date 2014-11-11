@@ -1274,7 +1274,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
 
 class PrinterUpdate
 {
-    static Timer* pPrinterUpdateTimer;
+    static Idle*  pPrinterUpdateIdle;
     static int    nActiveJobs;
 
     static void doUpdate();
@@ -1285,7 +1285,7 @@ public:
     static void jobEnded();
 };
 
-Timer* PrinterUpdate::pPrinterUpdateTimer = NULL;
+Idle* PrinterUpdate::pPrinterUpdateIdle = NULL;
 int PrinterUpdate::nActiveJobs = 0;
 
 void PrinterUpdate::doUpdate()
@@ -1301,11 +1301,11 @@ IMPL_STATIC_LINK_NOINSTANCE( PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
     if( nActiveJobs < 1 )
     {
         doUpdate();
-        delete pPrinterUpdateTimer;
-        pPrinterUpdateTimer = NULL;
+        delete pPrinterUpdateIdle;
+        pPrinterUpdateIdle = NULL;
     }
     else
-        pPrinterUpdateTimer->Start();
+        pPrinterUpdateIdle->Start();
 
     return 0;
 }
@@ -1324,12 +1324,12 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
 
     if( nActiveJobs < 1 )
         doUpdate();
-    else if( ! pPrinterUpdateTimer )
+    else if( ! pPrinterUpdateIdle )
     {
-        pPrinterUpdateTimer = new Timer();
-        pPrinterUpdateTimer->SetTimeout( 500 );
-        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, PrinterUpdate, UpdateTimerHdl ) );
-        pPrinterUpdateTimer->Start();
+        pPrinterUpdateIdle = new Idle();
+        pPrinterUpdateIdle->SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+        pPrinterUpdateIdle->SetIdleHdl( STATIC_LINK( NULL, PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateIdle->Start();
     }
 }
 
@@ -1348,11 +1348,11 @@ void PrinterUpdate::jobEnded()
     nActiveJobs--;
     if( nActiveJobs < 1 )
     {
-        if( pPrinterUpdateTimer )
+        if( pPrinterUpdateIdle )
         {
-            pPrinterUpdateTimer->Stop();
-            delete pPrinterUpdateTimer;
-            pPrinterUpdateTimer = NULL;
+            pPrinterUpdateIdle->Stop();
+            delete pPrinterUpdateIdle;
+            pPrinterUpdateIdle = NULL;
             doUpdate();
         }
     }
