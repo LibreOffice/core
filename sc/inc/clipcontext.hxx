@@ -50,6 +50,7 @@ class CopyFromClipContext : public ClipContextBase
     SCROW mnDestRow2;
     SCTAB mnTabStart;
     SCTAB mnTabEnd;
+    ScDocument& mrDestDoc;
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
     InsertDeleteFlags mnInsertFlag;
@@ -106,6 +107,7 @@ public:
     void setSingleCellColumnSize( size_t nSize );
 
     ScCellValue& getSingleCell( size_t nColOffset );
+    void setSingleCell( const ScAddress& rSrcPos, const ScColumn& rSrcCol );
 
     const ScPatternAttr* getSingleCellPattern( size_t nColOffset ) const;
     void setSingleCellPattern( size_t nColOffset, const ScPatternAttr* pAttr );
