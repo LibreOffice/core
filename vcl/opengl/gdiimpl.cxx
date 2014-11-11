@@ -1025,6 +1025,23 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
     return true;
 }
 
+bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
+            const SalTwoRect& rPosAry,
+            const SalBitmap& rSalBitmap )
+{
+    const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
+    const GLuint nTexture( rBitmap.GetTexture( maContext ) );
+
+    SAL_INFO( "vcl.opengl", "::drawAlphaBitmap" );
+    PreDraw();
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    DrawTexture( nTexture, rBitmap.GetSize(), rPosAry );
+    glDisable( GL_BLEND );
+    PostDraw();
+    return true;
+}
+
 /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
 bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
             const basegfx::B2DPoint& /*rNull*/,

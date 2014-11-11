@@ -242,6 +242,10 @@ public:
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
 
+    virtual bool drawAlphaBitmap(
+                const SalTwoRect&,
+                const SalBitmap& rBitmap ) SAL_OVERRIDE;
+
     /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
     virtual bool drawTransformedBitmap(
                 const basegfx::B2DPoint& rNull,

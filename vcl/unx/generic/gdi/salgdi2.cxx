@@ -185,6 +185,12 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     return mpImpl->drawAlphaBitmap( rTR, rSrcBitmap, rAlphaBmp );
 }
 
+bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
+                                      const SalBitmap& rBitmap )
+{
+    return mpImpl->drawAlphaBitmap( rTR, rBitmap );
+}
+
 bool X11SalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull,
     const basegfx::B2DPoint& rX,
