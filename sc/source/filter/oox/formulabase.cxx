@@ -499,10 +499,10 @@ static const FunctionData saFuncTableBiff4[] =
     { "LEGACY.FINV",            "FINV",                 282,    282,    3,  3,  V, { VR }, 0 },
     { "FISHER",                 "FISHER",               283,    283,    1,  1,  V, { VR }, 0 },
     { "FISHERINV",              "FISHERINV",            284,    284,    1,  1,  V, { VR }, 0 },
-    { "FLOOR",                  "FLOOR",                285,    285,    2,  2,  V, { VR, VR, C }, 0 },
+    { "COM.MICROSOFT.FLOOR",    "FLOOR",                285,    285,    2,  2,  V, { VR, VR, C }, 0 },
     { "GAMMADIST",              "GAMMADIST",            286,    286,    4,  4,  V, { VR }, 0 },
     { "GAMMAINV",               "GAMMAINV",             287,    287,    3,  3,  V, { VR }, 0 },
-    { "CEILING",                "CEILING",              288,    288,    2,  2,  V, { VR, VR, C }, 0 },
+    { "COM.MICROSOFT.CEILING",  "CEILING",              288,    288,    2,  2,  V, { VR, VR, C }, 0 },
     { "HYPGEOMDIST",            "HYPGEOMDIST",          289,    289,    4,  4,  V, { VR }, 0 },
     { "LOGNORMDIST",            "LOGNORMDIST",          290,    290,    3,  3,  V, { VR }, 0 },
     { "LOGINV",                 "LOGINV",               291,    291,    3,  3,  V, { VR }, 0 },
@@ -841,10 +841,8 @@ static const FunctionData saFuncTable2013[] =
     { "BITOR",                  "BITOR",                NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "BITRSHIFT",              "BITRSHIFT",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "BITXOR",                 "BITXOR",               NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    /* FIXME: CEILING.MATH is our/ODFF CEILING, but we have special handling
-     * for the weird Excel CEILING behavior, check that and unify or diversify.
-     * */
-    { 0/*"CEILING"*/,           "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "CEILING",                "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "CEILING.MATH",           "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COMBINA",                "COMBINA",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COT",                    "COT",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COTH",                   "COTH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
@@ -854,9 +852,8 @@ static const FunctionData saFuncTable2013[] =
     { "DECIMAL",                "DECIMAL",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { 0,                        "ENCODEURL",            NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.FILTERXML","FILTERXML",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    /* FIXME: FLOOR.MATH is our/ODFF FLOOR, but we have special handling for
-     * the weird Excel FLOOR behavior, check that and unify or diversify. */
-    { 0/*"FLOOR"*/,             "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "FLOOR",                  "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "FLOOR.MATH",             "FLOOR.MATH",           NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     // NOTE: this FDIST is not our LEGACY.FDIST
     { 0/*"FDIST"*/,             "FDIST",                NOID,   NOID,   3,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     // NOTE: this FINV is not our LEGACY.FINV
