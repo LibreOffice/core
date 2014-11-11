@@ -66,8 +66,10 @@ public:
 
     inline SvxFontHeightItem& operator=(const SvxFontHeightItem& rSize)
         {
-            SetHeightValue( rSize.GetHeight() );
-            SetProp( rSize.GetProp(), ePropUnit );
+            DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
+            nHeight = rSize.nHeight;
+            nProp = rSize.nProp;
+            ePropUnit = rSize.ePropUnit;
             return *this;
         }
 
@@ -78,12 +80,6 @@ public:
                      SfxMapUnit eUnit, SfxMapUnit eCoreUnit );
 
     sal_uInt32 GetHeight() const { return nHeight; }
-
-    void SetHeightValue( sal_uInt32 nNewHeight )
-        {
-            DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
-            nHeight = nNewHeight;
-        }
 
     void SetProp( const sal_uInt16 nNewProp,
                     SfxMapUnit eUnit = SFX_MAPUNIT_RELATIVE )
