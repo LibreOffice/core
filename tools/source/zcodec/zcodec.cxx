@@ -281,7 +281,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
             break;
         }
     }
-    while ( (err != Z_STREAM_END) &&
+    while ( (err == Z_OK) &&
             (PZSTREAM->avail_out != 0) &&
             (PZSTREAM->avail_in || mnInToRead) );
     if ( err == Z_STREAM_END )
