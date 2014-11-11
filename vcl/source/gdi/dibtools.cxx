@@ -276,9 +276,10 @@ bool ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, bool bQuad )
     return( rIStm.GetError() == 0UL );
 }
 
-void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, bool bRLE4 )
+bool ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, bool bRLE4 )
 {
-    Scanline    pRLE = pBuffer;
+    Scanline pRLE = pBuffer;
+    Scanline pEndRLE = pBuffer + rHeader.nSizeImage;
     long        nY = rHeader.nHeight - 1L;
     const sal_uLong nWidth = rAcc.Width();
     sal_uLong       nCountByte;
@@ -289,8 +290,12 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
 
     do
     {
+        if (pRLE == pEndRLE)
+            return false;
         if( ( nCountByte = *pRLE++ ) == 0 )
         {
+            if (pRLE == pEndRLE)
+                return false;
             nRunByte = *pRLE++;
 
             if( nRunByte > 2 )
@@ -301,6 +306,9 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
 
                     for( sal_uLong i = 0UL; i < nCountByte; i++ )
                     {
+                        if (pRLE == pEndRLE)
+                            return false;
+
                         cTmp = *pRLE++;
 
                         if( nX < nWidth )
@@ -312,6 +320,9 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
 
                     if( nRunByte & 1 )
                     {
+                        if (pRLE == pEndRLE)
+                            return false;
+
                         if( nX < nWidth )
                             rAcc.SetPixelIndex( nY, nX++, *pRLE >> 4 );
 
@@ -319,12 +330,20 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
                     }
 
                     if( ( ( nRunByte + 1 ) >> 1 ) & 1 )
+                    {
+                        if (pRLE == pEndRLE)
+                            return false;
+
                         pRLE++;
+                    }
                 }
                 else
                 {
                     for( sal_uLong i = 0UL; i < nRunByte; i++ )
                     {
+                        if (pRLE == pEndRLE)
+                            return false;
+
                         if( nX < nWidth )
                             rAcc.SetPixelIndex( nY, nX++, *pRLE );
 
@@ -332,7 +351,12 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
                     }
 
                     if( nRunByte & 1 )
+                    {
+                        if (pRLE == pEndRLE)
+                            return false;
+
                         pRLE++;
+                    }
                 }
             }
             else if( !nRunByte )
@@ -344,12 +368,21 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
                 bEndDecoding = true;
             else
             {
+                if (pRLE == pEndRLE)
+                    return false;
+
                 nX += *pRLE++;
+
+                if (pRLE == pEndRLE)
+                    return false;
+
                 nY -= *pRLE++;
             }
         }
         else
         {
+            if (pRLE == pEndRLE)
+                return false;
             cTmp = *pRLE++;
 
             if( bRLE4 )
@@ -375,7 +408,9 @@ void ImplDecodeRLE( sal_uInt8* pBuffer, DIBV5Header& rHeader, BitmapWriteAccess&
             }
         }
     }
-    while ( !bEndDecoding && ( nY >= 0L ) );
+    while (!bEndDecoding && (nY >= 0L));
+
+    return true;
 }
 
 bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& rAcc, BitmapWriteAccess* pAccAlpha, bool bTopDown, bool& rAlphaUsed)
@@ -444,7 +479,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
             boost::scoped_array<sal_uInt8> pBuffer(
                 new sal_uInt8[rHeader.nSizeImage]);
-            if (rIStm.Read((char*)pBuffer.get(), rHeader.nSizeImage)
+            if (rIStm.Read(pBuffer.get(), rHeader.nSizeImage)
                 != rHeader.nSizeImage)
             {
                 return false;

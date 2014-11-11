@@ -1030,9 +1030,11 @@ void PNGReaderImpl::ImplApplyFilter()
             p1 += mnBPP;
 
             // use left pixels
-            do
+            while (p1 < pScanEnd)
+            {
                 *p1 = static_cast<sal_uInt8>( *p1 + *(p2++) );
-            while( ++p1 < pScanEnd );
+                ++p1;
+            }
         }
         break;
 
