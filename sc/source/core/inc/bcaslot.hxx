@@ -249,24 +249,24 @@ private:
 
     class TableSlots
     {
-        public:
-                                            TableSlots();
-                                            ~TableSlots();
-            inline ScBroadcastAreaSlot**    getSlots() { return ppSlots; }
+    public:
+                                        TableSlots();
+                                        ~TableSlots();
+        inline ScBroadcastAreaSlot**    getSlots() { return ppSlots; }
 
-            /**
-                Obtain slot pointer, no check on validity! It is assumed that
-                all calls are made with the results of ComputeSlotOffset(),
-                ComputeAreaPoints() and ComputeNextSlot()
-              */
-            inline ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return *(ppSlots + nOff); }
+        /**
+            Obtain slot pointer, no check on validity! It is assumed that
+            all calls are made with the results of ComputeSlotOffset(),
+            ComputeAreaPoints() and ComputeNextSlot()
+          */
+        inline ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return *(ppSlots + nOff); }
 
-        private:
-            ScBroadcastAreaSlot**   ppSlots;
+    private:
+        ScBroadcastAreaSlot**   ppSlots;
 
-            // prevent usage
-            TableSlots( const TableSlots& );
-            TableSlots& operator=( const TableSlots& );
+        // prevent usage
+        TableSlots( const TableSlots& );
+        TableSlots& operator=( const TableSlots& );
     };
 
     typedef ::std::map< SCTAB, TableSlots* > TableSlotsMap;
