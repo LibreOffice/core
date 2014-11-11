@@ -4213,7 +4213,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
 
             if (!pEntry)
             {
-                SAL_WARN("sw.core", "SwXAutoStyleFamily::Modify: Unknown property: " << rPropName);
+                SAL_WARN("sw.core", "SwXAutoStyleFamily::insertStyle: Unknown property: " << rPropName);
                 continue;
             }
 
