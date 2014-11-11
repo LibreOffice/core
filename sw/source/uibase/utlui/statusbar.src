@@ -1,0 +1,43 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <utlui.hrc>
+
+String STR_WORDCOUNT_HINT
+{
+    Text [ en-US ] = "Word and character count. Click for more extensive stats";
+};
+String STR_VIEWLAYOUT_ONE
+{
+    Text [ en-US ] = "Single page view";
+};
+
+String STR_VIEWLAYOUT_TWO
+{
+    Text [ en-US ] = "Two page view";
+};
+
+String STR_VIEWLAYOUT_BOOK
+{
+    Text [ en-US ] = "Book view";
+};
+String STR_BOOKCTRL_HINT
+{
+    Text [ en-US ] = "Page number/Total pages. Click to show Navigator";
+};
+String STR_BOOKCTRL_HINT_EXTENDED
+{
+    Text [ en-US ] = "Document page number/Total pages (Print page number). Click to show Navigator";
+};
+String STR_TMPLCTRL_HINT
+{
+    Text [ en-US ] = "Page Style. Right-click to change style and click to modify style";
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

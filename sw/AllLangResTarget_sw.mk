@@ -80,6 +80,7 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/uibase/utlui/attrdesc.src \
     sw/source/uibase/utlui/navipi.src \
     sw/source/uibase/utlui/initui.src \
+    sw/source/uibase/utlui/statusbar.src \
     sw/source/uibase/wrtsh/wrtsh.src \
     sw/source/uibase/utlui/unotools.src \
     sw/source/uibase/dbui/mailmergechildwindow.src \

@@ -1278,8 +1278,15 @@ void SwView::UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUStr
 {
     OUString sTemp(GetPageStr( nPhyNum, nVirtNum, rPgStr ));
     const SfxStringItem aTmp( FN_STAT_PAGE, sTemp );
+    // Used to distinguish which tooltip to show
+    const SfxBoolItem bExtendedTooltip( FN_STAT_PAGE,
+                                        !rPgStr.isEmpty() && OUString::number(nPhyNum) != rPgStr
+                                        && nPhyNum != nVirtNum );
+
     SfxBindings &rBnd = GetViewFrame()->GetBindings();
     rBnd.SetState( aTmp );
+    rBnd.Update( FN_STAT_PAGE );
+    rBnd.SetState( bExtendedTooltip );
     rBnd.Update( FN_STAT_PAGE );
 }
 

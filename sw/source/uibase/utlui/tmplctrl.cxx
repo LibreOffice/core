@@ -23,6 +23,9 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/status.hxx>
 
+#include <swtypes.hxx>
+#include <utlui.hrc>
+
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "swmodule.hxx"
@@ -56,13 +59,12 @@ void SwTemplatePopup_Impl::Select()
     nCurId = GetCurItemId();
 }
 
-// class SvxZoomStatusBarControl
-
 SwTemplateControl::SwTemplateControl( sal_uInt16 _nSlotId,
                                       sal_uInt16 _nId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
+    GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_TMPLCTRL_HINT));
 }
 
 SwTemplateControl::~SwTemplateControl()

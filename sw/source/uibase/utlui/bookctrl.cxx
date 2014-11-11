@@ -18,6 +18,8 @@
  */
 
 #include "hintids.hxx"
+#include <swtypes.hxx>
+#include <utlui.hrc>
 
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -79,6 +81,14 @@ void SwBookmarkControl::StateChanged(
         sPageNumber = ((SfxStringItem*)pState)->GetValue();
         GetStatusBar().SetItemText( GetId(), sPageNumber );
     }
+    else if ( pState->ISA( SfxBoolItem ) )
+    {
+        if (((SfxBoolItem*)pState)->GetValue()) // Indicates whether to show extended tooltip
+            GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT_EXTENDED));
+        else
+            GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT));
+    }
+
 }
 
 void SwBookmarkControl::Paint( const UserDrawEvent&  )

@@ -351,14 +351,13 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
         return true;
 
     const short nButtons = rEvt.GetButtons();
+    const Rectangle aControlRect = getControlRect();
+    const Point aPoint = rEvt.GetPosPixel();
+    const sal_Int32 nXDiff = aPoint.X() - aControlRect.Left();
 
     // check mouse move with button pressed
     if ( 1 == nButtons )
     {
-        const Rectangle aControlRect = getControlRect();
-        const Point aPoint = rEvt.GetPosPixel();
-        const sal_Int32 nXDiff = aPoint.X() - aControlRect.Left();
-
         if ( nXDiff >= nSliderXOffset && nXDiff <= aControlRect.GetWidth() - nSliderXOffset )
         {
             mpImpl->mnCurrentZoom = Offset2Zoom( nXDiff );
@@ -366,6 +365,23 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
             repaintAndExecute();
         }
     }
+
+    // Tooltips
+
+    long nIncDecWidth = mpImpl->maIncreaseButton.GetSizePixel().Width();
+
+    const long nButtonLeftOffset = (nSliderXOffset - nIncDecWidth)/2;
+    const long nButtonRightOffset = (nSliderXOffset + nIncDecWidth)/2;
+
+    // click to - button
+    if ( nXDiff >= nButtonLeftOffset && nXDiff <= nButtonRightOffset )
+        GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOM_OUT));
+    // click to + button
+    else if ( nXDiff >= aControlRect.GetWidth() - nSliderXOffset + nButtonLeftOffset &&
+              nXDiff <= aControlRect.GetWidth() - nSliderXOffset + nButtonRightOffset )
+        GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOM_IN));
+    else
+        GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOM));
 
     return true;
 }

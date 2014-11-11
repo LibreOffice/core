@@ -191,4 +191,32 @@ bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
     return true;
 }
 
+bool SwViewLayoutControl::MouseMove( const MouseEvent & rEvt )
+{
+    const Rectangle aRect = getControlRect();
+    const Point aPoint = rEvt.GetPosPixel();
+    const long nXDiff = aPoint.X() - aRect.Left();
+
+    const long nImageWidthSingle = mpImpl->maImageSingleColumn.GetSizePixel().Width();
+    const long nImageWidthAuto = mpImpl->maImageAutomatic.GetSizePixel().Width();
+    const long nImageWidthBook = mpImpl->maImageBookMode.GetSizePixel().Width();
+    const long nImageWidthSum = nImageWidthSingle + nImageWidthAuto + nImageWidthBook;
+
+    const long nXOffset = (aRect.GetWidth() - nImageWidthSum)/2;
+
+    if ( nXDiff < nXOffset + nImageWidthSingle )
+    {
+        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_ONE));
+    }
+    else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
+    {
+        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_TWO));
+    }
+    else
+    {
+        GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_VIEWLAYOUT_BOOK));
+    }
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
