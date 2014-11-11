@@ -507,7 +507,7 @@ static const FunctionData saFuncTableBiff4[] =
     { "FLOOR",                  "FLOOR",                285,    285,    2,  2,  V, { VR, VR, C }, 0 },
     { "GAMMADIST",              "GAMMADIST",            286,    286,    4,  4,  V, { VR }, 0 },
     { "GAMMAINV",               "GAMMAINV",             287,    287,    3,  3,  V, { VR }, 0 },
-    { "CEILING",                "CEILING",              288,    288,    2,  2,  V, { VR, VR, C }, 0 },
+    { "COM.MICROSOFT.CEILING",  "CEILING",              288,    288,    2,  2,  V, { VR, VR, C }, 0 },
     { "HYPGEOMDIST",            "HYPGEOMDIST",          289,    289,    4,  4,  V, { VR }, 0 },
     { "LOGNORMDIST",            "LOGNORMDIST",          290,    290,    3,  3,  V, { VR }, 0 },
     { "LOGINV",                 "LOGINV",               291,    291,    3,  3,  V, { VR }, 0 },
@@ -846,10 +846,8 @@ static const FunctionData saFuncTable2013[] =
     { "BITOR",                  "BITOR",                NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "BITRSHIFT",              "BITRSHIFT",            NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "BITXOR",                 "BITXOR",               NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    /* FIXME: CEILING.MATH is our/ODFF CEILING, but we have special handling
-     * for the weird Excel CEILING behavior, check that and unify or diversify.
-     * */
-    { 0/*"CEILING"*/,           "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "CEILING",                "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_EXPORTONLY },
+    { "CEILING.MATH",           "CEILING.MATH",         NOID,   NOID,   1,  3,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COMBINA",                "COMBINA",              NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COT",                    "COT",                  NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COTH",                   "COTH",                 NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
