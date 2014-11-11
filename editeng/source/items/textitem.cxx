@@ -723,12 +723,7 @@ SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,
     SetHeight( nSz,nPrp );  // calculate in percentage
 }
 
-SvxFontHeightItem::SvxFontHeightItem(
-    sal_uInt16 wid, sal_uInt32 height, sal_uInt16 prop, SfxMapUnit propUnit):
-    SfxPoolItem(wid)
-{
-    SetHeight(height, prop, propUnit);
-}
+
 
 SfxPoolItem* SvxFontHeightItem::Clone( SfxItemPool * ) const
 {
@@ -776,8 +771,8 @@ SfxPoolItem* SvxFontHeightItem::Create( SvStream& rStrm,
     if( FONTHEIGHT_UNIT_VERSION <= nVersion )
         rStrm.ReadUInt16( nPropUnit );
 
-    SvxFontHeightItem* pItem = new SvxFontHeightItem(
-        Which(), nsize, nprop, (SfxMapUnit)nPropUnit );
+    SvxFontHeightItem* pItem = new SvxFontHeightItem( nsize, 100, Which() );
+    pItem->SetProp( nprop, (SfxMapUnit)nPropUnit );
     return pItem;
 }
 
