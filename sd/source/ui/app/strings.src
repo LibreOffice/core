@@ -397,7 +397,7 @@ String STR_READ_DATA_ERROR
 };
 String STR_SCALE_OBJECTS
 {
-    Text [ en-US ] = "The format of the new pages will be adapted.\nDo you want to adapt the objects, too?" ;
+    Text [ en-US ] = "The page size of the target document is different than the source document.\n\nDo you want to scale the copied objects to fit the new page size?" ;
 };
 String STR_CREATE_PAGES
 {
