@@ -83,9 +83,38 @@ X11Pixmap* X11OpenGLSalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect
 {
     Display* pDisplay = mrParent.GetXDisplay();
     SalX11Screen nScreen = mrParent.GetScreenNumber();
+    XVisualInfo aVisualInfo;
+    X11Pixmap* pPixmap;
+    XImage* pImage;
+    sal_uInt8* pData;
 
     SAL_INFO( "vcl.opengl", "GetPixmapFromScreen" );
-    return new X11Pixmap( pDisplay, nScreen, rRect.GetWidth(), rRect.GetHeight(), 24 );
+    // TODO: lfrb: Use context depth
+    pPixmap = new X11Pixmap( pDisplay, nScreen, rRect.GetWidth(), rRect.GetHeight(), 24 );
+
+    if( !OpenGLHelper::GetVisualInfo( pDisplay, nScreen.getXScreen(), aVisualInfo ) )
+        return pPixmap;
+
+    // make sure everything is synced up before reading back
+    maContext.makeCurrent();
+    glXWaitX();
+
+    // TODO: lfrb: What if offscreen?
+    pData = new sal_uInt8[rRect.GetWidth() * rRect.GetHeight() * 4];
+    glPixelStorei( GL_PACK_ALIGNMENT, 1 );
+    glReadPixels( rRect.Left(), GetHeight() - rRect.Top(), rRect.GetWidth(), rRect.GetHeight(),
+                  GL_RGBA, GL_UNSIGNED_BYTE, pData );
+
+    pImage = XCreateImage( pDisplay, aVisualInfo.visual, 24, ZPixmap, 0, (char*) pData,
+                           rRect.GetWidth(), rRect.GetHeight(), 8, 0 );
+    XInitImage( pImage );
+    GC aGC = XCreateGC( pDisplay, pPixmap->GetPixmap(), 0, NULL );
+    XPutImage( pDisplay, pPixmap->GetDrawable(), aGC, pImage,
+               0, 0, 0, 0, rRect.GetWidth(), rRect.GetHeight() );
+    XFreeGC( pDisplay, aGC );
+    XDestroyImage( pImage );
+
+    return pPixmap;
 }
 
 bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
@@ -128,7 +157,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
-    DrawTexture( nTexture, pPixmap->GetSize(), aPosAry );
+    DrawTexture( nTexture, pPixmap->GetSize(), aPosAry, !bInverted );
 
     glXReleaseTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT );
     glDeleteTextures( 1, &nTexture );

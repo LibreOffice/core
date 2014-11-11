@@ -86,8 +86,8 @@ protected:
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
-    void DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry );
-    void DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& rPosAry );
+    void DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry, bool bInverted = false );
+    void DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const Size& rSize, const SalTwoRect& rPosAry );
     void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& rPosAry );
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );

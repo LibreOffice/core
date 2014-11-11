@@ -503,14 +503,23 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 }
 
-void OpenGLSalGraphicsImpl::DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry )
+void OpenGLSalGraphicsImpl::DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry, bool bInverted )
 {
     GLfloat aTexCoord[8];
 
     aTexCoord[0] = aTexCoord[2] = rPosAry.mnSrcX / (double) rSize.Width();
     aTexCoord[4] = aTexCoord[6] = (rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) rSize.Width();
-    aTexCoord[3] = aTexCoord[5] = (rSize.Height() - rPosAry.mnSrcY) / (double) rSize.Height();
-    aTexCoord[1] = aTexCoord[7] = (rSize.Height() - rPosAry.mnSrcY - rPosAry.mnSrcHeight) / (double) rSize.Height();
+
+    if( !bInverted )
+    {
+        aTexCoord[3] = aTexCoord[5] = (rSize.Height() - rPosAry.mnSrcY) / (double) rSize.Height();
+        aTexCoord[1] = aTexCoord[7] = (rSize.Height() - rPosAry.mnSrcY - rPosAry.mnSrcHeight) / (double) rSize.Height();
+    }
+    else
+    {
+        aTexCoord[1] = aTexCoord[7] = (rSize.Height() - rPosAry.mnSrcY) / (double) rSize.Height();
+        aTexCoord[3] = aTexCoord[5] = (rSize.Height() - rPosAry.mnSrcY - rPosAry.mnSrcHeight) / (double) rSize.Height();
+    }
 
     glEnableVertexAttribArray( GL_ATTRIB_TEX );
     glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
@@ -520,7 +529,7 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( const Size& rSize, const SalTwoRect
     glDisableVertexAttribArray( GL_ATTRIB_TEX );
 }
 
-void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& pPosAry )
+void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& pPosAry, bool bInverted )
 {
     if( mnTextureProgram == 0 )
     {
@@ -534,7 +543,7 @@ void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, con
     CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, nTexture );
 
-    DrawTextureRect( rSize, pPosAry );
+    DrawTextureRect( rSize, pPosAry, bInverted );
     CHECK_GL_ERROR();
 
     glBindTexture( GL_TEXTURE_2D, 0 );
