@@ -126,9 +126,9 @@ ScCellValue& CopyFromClipContext::getSingleCell( size_t nColOffset )
 void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColumn& rSrcCol )
 {
     SCCOL nColOffset = rSrcPos.Col() - mpClipDoc->GetClipParam().getWholeRange().aStart.Col();
-
     ScCellValue& rSrcCell = getSingleCell(nColOffset);
-    if (isAsLink())
+
+    if (mbAsLink)
     {
         ScSingleRefData aRef;
         aRef.InitAddress(rSrcPos);
@@ -137,112 +137,111 @@ void CopyFromClipContext::setSingleCell( const ScAddress& rSrcPos, const ScColum
         ScTokenArray aArr;
         aArr.AddSingleReference(aRef);
         rSrcCell.set(new ScFormulaCell(mpClipDoc, rSrcPos, aArr));
+        return;
     }
-    else
+
+    rSrcCell.assign(*mpClipDoc, rSrcPos);
+
+    // Check the paste flag to see whether we want to paste this cell.  If the
+    // flag says we don't want to paste this cell, we'll return with true.
+    InsertDeleteFlags nFlags = getInsertFlag();
+    bool bNumeric  = (nFlags & IDF_VALUE) != IDF_NONE;
+    bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
+    bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
+    bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
+    bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
+
+    switch (rSrcCell.meType)
     {
-        rSrcCell.assign(*mpClipDoc, rSrcPos);
-
-        // Check the paste flag to see whether we want to paste this cell.  If the
-        // flag says we don't want to paste this cell, we'll return with true.
-        InsertDeleteFlags nFlags = getInsertFlag();
-        bool bNumeric  = (nFlags & IDF_VALUE) != IDF_NONE;
-        bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
-        bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
-        bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
-        bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
-
-        switch (rSrcCell.meType)
+        case CELLTYPE_VALUE:
         {
-            case CELLTYPE_VALUE:
+            bool bPaste = isDateCell(rSrcCol, rSrcPos.Row()) ? bDateTime : bNumeric;
+            if (!bPaste)
+                // Don't paste this.
+                rSrcCell.clear();
+        }
+        break;
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+        {
+            if (!bString)
+                // Skip pasting.
+                rSrcCell.clear();
+        }
+        break;
+        case CELLTYPE_FORMULA:
+        {
+            if (bBoolean)
+            {
+                // Check if this formula cell is a boolean cell, and if so, go ahead and paste it.
+                ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
+                if (pCode && pCode->GetLen() == 1)
+                {
+                    const formula::FormulaToken* p = pCode->First();
+                    if (p->GetOpCode() == ocTrue || p->GetOpCode() == ocFalse)
+                        // This is a boolean formula. Good.
+                        break;
+                }
+            }
+
+            if (bFormula)
+                // Good.
+                break;
+
+            sal_uInt16 nErr = rSrcCell.mpFormula->GetErrCode();
+            if (nErr)
+            {
+                // error codes are cloned with values
+                if (!bNumeric)
+                    // Error code is treated as numeric value. Don't paste it.
+                    rSrcCell.clear();
+            }
+            else if (rSrcCell.mpFormula->IsValue())
             {
                 bool bPaste = isDateCell(rSrcCol, rSrcPos.Row()) ? bDateTime : bNumeric;
                 if (!bPaste)
+                {
                     // Don't paste this.
                     rSrcCell.clear();
-            }
-            break;
-            case CELLTYPE_STRING:
-            case CELLTYPE_EDIT:
-            {
-                if (!bString)
-                    // Skip pasting.
-                    rSrcCell.clear();
-            }
-            break;
-            case CELLTYPE_FORMULA:
-            {
-                if (bBoolean)
-                {
-                    // Check if this formula cell is a boolean cell, and if so, go ahead and paste it.
-                    ScTokenArray* pCode = rSrcCell.mpFormula->GetCode();
-                    if (pCode && pCode->GetLen() == 1)
-                    {
-                        const formula::FormulaToken* p = pCode->First();
-                        if (p->GetOpCode() == ocTrue || p->GetOpCode() == ocFalse)
-                            // This is a boolean formula. Good.
-                            break;
-                    }
-                }
-
-                if (bFormula)
-                    // Good.
                     break;
-
-                sal_uInt16 nErr = rSrcCell.mpFormula->GetErrCode();
-                if (nErr)
-                {
-                    // error codes are cloned with values
-                    if (!bNumeric)
-                        // Error code is treated as numeric value. Don't paste it.
-                        rSrcCell.clear();
                 }
-                else if (rSrcCell.mpFormula->IsValue())
-                {
-                    bool bPaste = isDateCell(rSrcCol, rSrcPos.Row()) ? bDateTime : bNumeric;
-                    if (!bPaste)
-                    {
-                        // Don't paste this.
-                        rSrcCell.clear();
-                        break;
-                    }
 
-                    // Turn this into a numeric cell.
-                    rSrcCell.set(rSrcCell.mpFormula->GetValue());
+                // Turn this into a numeric cell.
+                rSrcCell.set(rSrcCell.mpFormula->GetValue());
+            }
+            else if (bString)
+            {
+                svl::SharedString aStr = rSrcCell.mpFormula->GetString();
+                if (aStr.isEmpty())
+                {
+                    // do not clone empty string
+                    rSrcCell.clear();
+                    break;
                 }
-                else if (bString)
-                {
-                    svl::SharedString aStr = rSrcCell.mpFormula->GetString();
-                    if (aStr.isEmpty())
-                    {
-                        // do not clone empty string
-                        rSrcCell.clear();
-                        break;
-                    }
 
-                    // Turn this into a string or edit cell.
-                    if (rSrcCell.mpFormula->IsMultilineResult())
-                    {
-                        // TODO : Add shared string support to the edit engine to
-                        // make this process simpler.
-                        ScFieldEditEngine& rEngine = mrDestDoc.GetEditEngine();
-                        rEngine.SetText(rSrcCell.mpFormula->GetString().getString());
-                        boost::scoped_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
-                        pObj->NormalizeString(mrDestDoc.GetSharedStringPool());
-                        rSrcCell.set(*pObj);
-                    }
-                    else
-                        rSrcCell.set(rSrcCell.mpFormula->GetString());
+                // Turn this into a string or edit cell.
+                if (rSrcCell.mpFormula->IsMultilineResult())
+                {
+                    // TODO : Add shared string support to the edit engine to
+                    // make this process simpler.
+                    ScFieldEditEngine& rEngine = mrDestDoc.GetEditEngine();
+                    rEngine.SetText(rSrcCell.mpFormula->GetString().getString());
+                    boost::scoped_ptr<EditTextObject> pObj(rEngine.CreateTextObject());
+                    pObj->NormalizeString(mrDestDoc.GetSharedStringPool());
+                    rSrcCell.set(*pObj);
                 }
                 else
-                    // We don't want to paste this.
-                    rSrcCell.clear();
+                    rSrcCell.set(rSrcCell.mpFormula->GetString());
             }
-            break;
-            case CELLTYPE_NONE:
-            default:
-                // There is nothing to paste.
+            else
+                // We don't want to paste this.
                 rSrcCell.clear();
         }
+        break;
+        case CELLTYPE_NONE:
+        default:
+            // There is nothing to paste.
+            rSrcCell.clear();
     }
 }
 
