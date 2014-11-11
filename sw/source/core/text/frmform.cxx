@@ -1370,8 +1370,7 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
         rLine.TruncLines();
 
         // Play it safe
-        bBreak = aFrmBreak.IsBreakNowWidAndOrp(rLine) &&
-                  ( !pPara->IsPrepMustFit() || rLine.GetLineNr() > 1 );
+        aFrmBreak.IsBreakNowWidAndOrp(rLine);
     }
 
  /* Meaning if the following flags are set:
