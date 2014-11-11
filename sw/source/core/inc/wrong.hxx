@@ -187,8 +187,6 @@ class SwWrongList
 
     void ShiftLeft( sal_Int32 &rPos, sal_Int32 nStart, sal_Int32 nEnd )
     { if( rPos > nStart ) rPos = rPos > nEnd ? rPos - nEnd + nStart : nStart; }
-    void ShiftRight( sal_Int32 &rPos, sal_Int32 nStart, sal_Int32 nEnd )
-    { if( rPos >= nStart ) rPos += nStart - nEnd; }
     void _Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );
 
     void Insert(sal_uInt16 nWhere, std::vector<SwWrongArea>::iterator startPos, std::vector<SwWrongArea>::iterator endPos);
