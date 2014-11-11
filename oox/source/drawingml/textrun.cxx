@@ -76,15 +76,16 @@ sal_Int32 TextRun::insertAt(
             }
             else
             {
-                OUString aLatinFontName, aSymbolFontName;
                 sal_Int16 nSymbolFontFamily = 0, nSymbolFontPitch = 0;
 
                 if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
                     xText->insertString( xStart, getText(), sal_False );
                 else if ( !getText().isEmpty() )
-                {   // !!#i113673<<<
+                {
+                    // #i113673
+                    OUString aLatinFontName, aSymbolFontName;
                     sal_Int16 nLatinFontPitch = 0, nLatinFontFamily = 0;
-                    aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
+                    bool bLatinOk = aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
 
                     sal_Int32 nIndex = 0;
                     while ( true )
@@ -109,9 +110,12 @@ sal_Int32 TextRun::insertAt(
                                 nCount++;
                             }
                             while( ( ( nCount + nIndex ) < getText().getLength() ) && ( ( getText()[ nCount + nIndex ] & 0xff00 ) != 0xf000 ) );
-                            aPropSet.setAnyProperty( PROP_CharFontName, Any( aLatinFontName ) );
-                            aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nLatinFontPitch ) );
-                            aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nLatinFontFamily ) );
+                            if (bLatinOk)
+                            {
+                                aPropSet.setAnyProperty( PROP_CharFontName, Any( aLatinFontName ) );
+                                aPropSet.setAnyProperty( PROP_CharFontPitch, Any( nLatinFontPitch ) );
+                                aPropSet.setAnyProperty( PROP_CharFontFamily, Any( nLatinFontFamily ) );
+                            }
                         }
                         OUString aSubString( getText().copy( nIndex, nCount ) );
                         xText->insertString( xStart, aSubString, sal_False );
