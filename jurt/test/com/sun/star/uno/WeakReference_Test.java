@@ -44,8 +44,9 @@ public final class WeakReference_Test {
         }
 
         @Override
-        protected void finalize() {
+        protected void finalize() throws Throwable {
             adapter.dispose();
+            super.finalize();
         }
 
         private static final class Adapter implements XAdapter {

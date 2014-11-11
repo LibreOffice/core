@@ -37,8 +37,8 @@ class MyUnoObject implements com.sun.star.uno.XInterface
 
     @Override
     protected void finalize() throws Throwable {
-        super.finalize();
         System.out.println( "finalizer called" );
+        super.finalize();
     }
 
     public static void main( String args[] ) throws InterruptedException
