@@ -23,6 +23,8 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <vcl/button.hxx>
+#include <vcl/floatwin.hxx>
 
 #if 0
 #  define FIXME_SELF_INTERSECTING_WORKING
@@ -47,12 +49,23 @@ class DemoWin : public DemoBase
 
 public:
     DemoWin() : DemoBase()
+              , mpButton(NULL)
+              , mpButtonWin(NULL)
     {
         if (!Application::LoadBrandBitmap("intro", maIntro))
             Application::Abort("Failed to load intro image");
         maIntroBW = maIntro.GetBitmap();
         maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
     }
+
+    // Bouncing windows on click ...
+    PushButton     *mpButton;
+    FloatingWindow *mpButtonWin;
+    AutoTimer       maBounce;
+    int             mnBounceX, mnBounceY;
+    DECL_LINK(BounceTimerCb, void *);
+
+    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void drawToDevice(OutputDevice &r, bool bVdev);
 
@@ -271,6 +284,54 @@ public:
         rDev.DrawBitmap(r.TopLeft(), aBitmap);
     }
 };
+
+IMPL_LINK_NOARG(DemoWin,BounceTimerCb)
+{
+    mpButton->Check(mnBounceX>0);
+    mpButton->SetPressed(mnBounceY>0);
+
+    Point aCur = mpButtonWin->GetPosPixel();
+    static const int nMovePix = 10;
+    aCur.Move(mnBounceX * nMovePix, mnBounceX * nMovePix);
+    Size aWinSize = GetSizePixel();
+    if (aCur.X() <= 0 || aCur.X() >= aWinSize.Width())
+        mnBounceX *= -1;
+    if (aCur.Y() <= 0 || aCur.Y() >= aWinSize.Height())
+        mnBounceX *= -1;
+    mpButtonWin->SetPosPixel(aCur);
+
+    // All smoke and mirrors to test sub-region invalidation underneath
+    Rectangle aRect(aCur, mpButtonWin->GetSizePixel());
+    Invalidate(aRect);
+    return 0;
+}
+
+void DemoWin::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    (void) rMEvt;
+    if (!mpButton)
+    {
+        mpButtonWin = new FloatingWindow(this);
+        mpButton = new PushButton(mpButtonWin);
+        mpButton->SetSymbol(SymbolType::HELP);
+        mpButton->SetText("PushButton demo");
+        mpButton->SetPosSizePixel(Point(0,0), mpButton->GetOptimalSize());
+        mpButton->Show();
+        mpButtonWin->SetPosSizePixel(Point(0,0), mpButton->GetOptimalSize());
+        mpButtonWin->Show();
+        mnBounceX = 1; mnBounceX = 1;
+        maBounce.SetTimeoutHdl(LINK(this,DemoWin,BounceTimerCb));
+        maBounce.SetTimeout(55);
+        maBounce.Start();
+    }
+    else
+    {
+        maBounce.Stop();
+        delete mpButtonWin;
+        mpButtonWin = NULL;
+        mpButton = NULL;
+    }
+}
 
 std::vector<Rectangle> DemoWin::partitionAndClear(OutputDevice &rDev, int nX, int nY)
 {
