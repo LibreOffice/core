@@ -149,7 +149,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpOSVersion, "osversion");
     get(mpPlatformVendor, "platformvendor");
     get(mpDevice, "opencldevice");
-    get(mpDriverVersion, "opencldriverversion");
+    get(mpDriverVersionMin, "opencldriverversionmin");
+    get(mpDriverVersionMax, "opencldriverversionmax");
     get(mpListEditButton, "listbox-edit");
     get(mpListNewButton, "listbox-new");
     get(mpListDeleteButton, "listbox-delete");
@@ -166,7 +167,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     mpOSVersion->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
     mpPlatformVendor->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
     mpDevice->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
-    mpDriverVersion->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
+    mpDriverVersionMin->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
+    mpDriverVersionMax->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
 
     mpOpenCLWhiteAndBlackListBox->set_height_request(4* mpOpenCLWhiteAndBlackListBox->GetTextHeight());
     mpOpenCLWhiteAndBlackListBox->SetStyle(mpOpenCLWhiteAndBlackListBox->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -314,7 +316,10 @@ OUString format(const ScCalcConfig::OpenCLImplMatcher& rImpl)
             rImpl.maOSVersion + " " +
             rImpl.maPlatformVendor + " " +
             rImpl.maDevice + " " +
-            rImpl.maDriverVersion);
+            (rImpl.maDriverVersionMax != "" ?
+             OUString("[") + rImpl.maDriverVersionMin + "," + rImpl.maDriverVersionMax + "]" :
+             rImpl.maDriverVersionMin)
+             );
 }
 
 void fillListBox(ListBox* pListBox, const ScCalcConfig::OpenCLImplMatcherSet& rSet)
@@ -794,9 +799,13 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
         {
             newImpl.maDevice = sVal;
         }
-        else if (pEdit == mpDriverVersion)
+        else if (pEdit == mpDriverVersionMin)
         {
-            newImpl.maDriverVersion = sVal;
+            newImpl.maDriverVersionMin = sVal;
+        }
+        else if (pEdit == mpDriverVersionMax)
+        {
+            newImpl.maDriverVersionMax = sVal;
         }
         else
             assert(false && "pEdit does not match any of the Edit fields");
@@ -905,7 +914,8 @@ IMPL_LINK(ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl, Control*, )
     mpOSVersion->SetText(impl.maOSVersion);
     mpPlatformVendor->SetText(impl.maPlatformVendor);
     mpDevice->SetText(impl.maDevice);
-    mpDriverVersion->SetText(impl.maDriverVersion);
+    mpDriverVersionMin->SetText(impl.maDriverVersionMin);
+    mpDriverVersionMax->SetText(impl.maDriverVersionMax);
 
     return 0;
 }

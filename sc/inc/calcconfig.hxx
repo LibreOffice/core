@@ -47,7 +47,8 @@ struct SC_DLLPUBLIC ScCalcConfig
         OUString maOSVersion;
         OUString maPlatformVendor;
         OUString maDevice;
-        OUString maDriverVersion;
+        OUString maDriverVersionMin;
+        OUString maDriverVersionMax;
 
         OpenCLImplMatcher()
         {
@@ -57,12 +58,14 @@ struct SC_DLLPUBLIC ScCalcConfig
                           const OUString& rOSVersion,
                           const OUString& rPlatformVendor,
                           const OUString& rDevice,
-                          const OUString& rDriverVersion)
+                          const OUString& rDriverVersionMin,
+                          const OUString& rDriverVersionMax)
             : maOS(rOS),
               maOSVersion(rOSVersion),
               maPlatformVendor(rPlatformVendor),
               maDevice(rDevice),
-              maDriverVersion(rDriverVersion)
+              maDriverVersionMin(rDriverVersionMin),
+              maDriverVersionMax(rDriverVersionMax)
         {
         }
 
@@ -72,7 +75,8 @@ struct SC_DLLPUBLIC ScCalcConfig
                    maOSVersion == r.maOSVersion &&
                    maPlatformVendor == r.maPlatformVendor &&
                    maDevice == r.maDevice &&
-                   maDriverVersion == r.maDriverVersion;
+                   maDriverVersionMin == r.maDriverVersionMin &&
+                   maDriverVersionMax == r.maDriverVersionMax;
         }
         bool operator!=(const OpenCLImplMatcher& r) const
         {
@@ -88,7 +92,9 @@ struct SC_DLLPUBLIC ScCalcConfig
                         (maPlatformVendor == r.maPlatformVendor &&
                          (maDevice < r.maDevice ||
                           (maDevice == r.maDevice &&
-                           (maDriverVersion < r.maDriverVersion)))))))));
+                           (maDriverVersionMin < r.maDriverVersionMin ||
+                            (maDriverVersionMin == r.maDriverVersionMin &&
+                             maDriverVersionMax < r.maDriverVersionMax))))))))));
         }
     };
 

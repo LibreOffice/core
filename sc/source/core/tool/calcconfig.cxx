@@ -44,8 +44,8 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSum);
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
-    maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884"));
-    maOpenCLBlackList.insert(OpenCLImplMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3"));
+    maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884", ""));
+    maOpenCLBlackList.insert(OpenCLImplMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3", "4.4"));
 }
 
 void ScCalcConfig::reset()
@@ -89,7 +89,7 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMa
         "OSVersion=" << rImpl.maOSVersion << ","
         "PlatformVendor=" << rImpl.maPlatformVendor << ","
         "Device=" << rImpl.maDevice << ","
-        "DriverVersion=" << rImpl.maDriverVersion <<
+        "DriverVersion=[" << rImpl.maDriverVersionMin << "," << rImpl.maDriverVersionMax << "]"
         "}";
 
     return rStream;
