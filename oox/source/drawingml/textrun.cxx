@@ -76,6 +76,7 @@ sal_Int32 TextRun::insertAt(
             }
             else
             {
+                OUString aSymbolFontName;
                 sal_Int16 nSymbolFontFamily = 0, nSymbolFontPitch = 0;
 
                 if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
@@ -83,7 +84,7 @@ sal_Int32 TextRun::insertAt(
                 else if ( !getText().isEmpty() )
                 {
                     // #i113673
-                    OUString aLatinFontName, aSymbolFontName;
+                    OUString aLatinFontName;
                     sal_Int16 nLatinFontPitch = 0, nLatinFontFamily = 0;
                     bool bLatinOk = aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
 
