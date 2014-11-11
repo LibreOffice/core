@@ -1569,9 +1569,17 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:NumberFormatMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Number Format</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NumberFormatCurrency" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Currency</value>
+          <value xml:lang="en-US">Currency</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1579,7 +1587,7 @@
       </node>
       <node oor:name=".uno:NumberFormatPercent" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Percent</value>
+          <value xml:lang="en-US">Percent</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1587,7 +1595,7 @@
       </node>
       <node oor:name=".uno:NumberFormatStandard" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Standard</value>
+          <value xml:lang="en-US">General</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1595,7 +1603,7 @@
       </node>
       <node oor:name=".uno:NumberFormatDate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format : Date</value>
+          <value xml:lang="en-US">Date</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1603,7 +1611,7 @@
       </node>
       <node oor:name=".uno:NumberFormatDecimal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Decimal</value>
+          <value xml:lang="en-US">Number</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1611,7 +1619,7 @@
       </node>
       <node oor:name=".uno:NumberFormatScientific" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Exponential</value>
+          <value xml:lang="en-US">Scientific</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1619,12 +1627,12 @@
       </node>
       <node oor:name=".uno:NumberFormatTime" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Time</value>
+          <value xml:lang="en-US">Time</value>
         </prop>
       </node>
       <node oor:name=".uno:NumberFormatIncDecimals" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Add Decimal Place</value>
+          <value xml:lang="en-US">Add Decimal Place</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1632,7 +1640,7 @@
       </node>
       <node oor:name=".uno:NumberFormatDecDecimals" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Number Format: Delete Decimal Place</value>
+          <value xml:lang="en-US">Delete Decimal Place</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

@@ -247,6 +247,17 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:ResetAttributes"/>
             <menu:menuseparator/>
+            <menu:menu menu:id=".uno:NumberFormatMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:NumberFormatStandard"/>
+                    <menu:menuitem menu:id=".uno:NumberFormatDecimal"/>
+                    <menu:menuitem menu:id=".uno:NumberFormatPercent"/>
+                    <menu:menuitem menu:id=".uno:NumberFormatCurrency"/>
+                    <menu:menuitem menu:id=".uno:NumberFormatDate"/>
+                    <menu:menuitem menu:id=".uno:NumberFormatTime"/>
+                    <menu:menuitem menu:id=".uno:NumberFormatScientific"/>
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:FormatCellDialog"/>
             <menu:menu menu:id=".uno:RowMenu">
                 <menu:menupopup>
