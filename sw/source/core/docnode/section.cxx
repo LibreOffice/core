@@ -1589,21 +1589,4 @@ bool SwIntrnlSectRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
             pSttNd->EndOfSectionIndex() < nEndNd;
 }
 
-sal_uInt16 SwSectionFmts::GetPos(const SwSectionFmt* p) const
-{
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-bool SwSectionFmts::Contains(const SwSectionFmt* p) const
-{
-    return std::find(begin(), end(), p) != end();
-}
-
-SwSectionFmts::~SwSectionFmts()
-{
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

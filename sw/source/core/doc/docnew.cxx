@@ -377,36 +377,6 @@ SwDoc::SwDoc()
     getIDocumentState().ResetModified();
 }
 
-static void DeleteAndDestroy(SwFrmFmts& rFmts, int aStartIdx, int aEndIdx)
-{
-    if (aEndIdx < aStartIdx)
-        return;
-    for( SwFrmFmts::const_iterator it = rFmts.begin() + aStartIdx;
-         it != rFmts.begin() + aEndIdx; ++it )
-             delete *it;
-    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
-}
-
-static void DeleteAndDestroy(SwTxtFmtColls& rFmts, int aStartIdx, int aEndIdx)
-{
-    if (aEndIdx < aStartIdx)
-        return;
-    for( SwTxtFmtColls::const_iterator it = rFmts.begin() + aStartIdx;
-         it != rFmts.begin() + aEndIdx; ++it )
-             delete *it;
-    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
-}
-
-static void DeleteAndDestroy(SwCharFmts& rFmts, int aStartIdx, int aEndIdx)
-{
-    if (aEndIdx < aStartIdx)
-        return;
-    for( SwCharFmts::const_iterator it = rFmts.begin() + aStartIdx;
-         it != rFmts.begin() + aEndIdx; ++it )
-             delete *it;
-    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
-}
-
 /**
  * Speciality: a member of the class SwDoc is located at
  * position 0 in the array of the Format and GDI objects.
@@ -539,8 +509,8 @@ SwDoc::~SwDoc()
     // array, we should delete it as the last. With this we avoid
     // reparenting the Formats all the time!
     if( 2 < mpTxtFmtCollTbl->size() )
-        DeleteAndDestroy(*mpTxtFmtCollTbl, 2, mpTxtFmtCollTbl->size());
-    DeleteAndDestroy(*mpTxtFmtCollTbl, 1, mpTxtFmtCollTbl->size());
+        mpTxtFmtCollTbl->DeleteAndDestroy(2, mpTxtFmtCollTbl->size());
+    mpTxtFmtCollTbl->DeleteAndDestroy(1, mpTxtFmtCollTbl->size());
     delete mpTxtFmtCollTbl;
 
     OSL_ENSURE( mpDfltGrfFmtColl == (*mpGrfFmtCollTbl)[0],
@@ -570,7 +540,7 @@ SwDoc::~SwDoc()
     // All Flys need to be destroyed before the Drawing Model,
     // because Flys can still contain DrawContacts, when no
     // Layout could be constructed due to a read error.
-    DeleteAndDestroy( *mpSpzFrmFmtTbl, 0, mpSpzFrmFmtTbl->size() );
+    mpSpzFrmFmtTbl->DeleteAndDestroy( 0, mpSpzFrmFmtTbl->size() );
 
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
@@ -732,20 +702,20 @@ void SwDoc::ClearDoc()
     // array, we should delete it as the last. With this we avoid
     // reparenting the Formats all the time!
     if( 2 < mpTxtFmtCollTbl->size() )
-        DeleteAndDestroy(*mpTxtFmtCollTbl, 2, mpTxtFmtCollTbl->size());
-    DeleteAndDestroy(*mpTxtFmtCollTbl, 1, mpTxtFmtCollTbl->size());
+        mpTxtFmtCollTbl->DeleteAndDestroy(2, mpTxtFmtCollTbl->size());
+    mpTxtFmtCollTbl->DeleteAndDestroy(1, mpTxtFmtCollTbl->size());
     mpGrfFmtCollTbl->DeleteAndDestroy(1, mpGrfFmtCollTbl->size());
-    DeleteAndDestroy(*mpCharFmtTbl, 1, mpCharFmtTbl->size());
+    mpCharFmtTbl->DeleteAndDestroy(1, mpCharFmtTbl->size());
 
     if( getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
         mpFrmFmtTbl->erase( std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout()->GetFmt() ) );
-        DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
+        mpFrmFmtTbl->DeleteAndDestroy(1, mpFrmFmtTbl->size());
         mpFrmFmtTbl->push_back( getIDocumentLayoutAccess().GetCurrentViewShell()->GetLayout()->GetFmt() );
     }
     else
-        DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
+        mpFrmFmtTbl->DeleteAndDestroy(1, mpFrmFmtTbl->size());
 
     mxForbiddenCharsTable.clear();
 
@@ -1154,28 +1124,6 @@ else
         pTargetShell->EndAllAction();
 
     return aStartAppendIndex;
-}
-
-sal_uInt16 SwTxtFmtColls::GetPos(const SwTxtFmtColl* p) const
-{
-    const_iterator it = std::find(begin(), end(), p);
-    return it == end() ? USHRT_MAX : it - begin();
-}
-
-void SwGrfFmtColls::DeleteAndDestroy(int nStartIdx, int nEndIdx)
-{
-    if (nEndIdx < nStartIdx)
-        return;
-    for( std::vector<SwGrfFmtColl*>::const_iterator it = mvColls.begin() + nStartIdx;
-         it != mvColls.begin() + nEndIdx; ++it )
-             delete *it;
-    mvColls.erase( mvColls.begin() + nStartIdx, mvColls.begin() + nEndIdx);
-}
-
-sal_uInt16 SwGrfFmtColls::GetPos(const SwGrfFmtColl* p) const
-{
-    std::vector<SwGrfFmtColl*>::const_iterator it = std::find(mvColls.begin(), mvColls.end(), p);
-    return it == mvColls.end() ? USHRT_MAX : it - mvColls.begin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
