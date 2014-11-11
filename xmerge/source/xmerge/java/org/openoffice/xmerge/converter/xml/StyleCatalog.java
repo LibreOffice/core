@@ -84,39 +84,42 @@ public class StyleCatalog {
      *                              there is a match in the families array.
      */
     public void add(Node node, String families[], Class<?> classes[],
-    Class<?> defaultClass, boolean alwaysCreateDefault) {
+            Class<?> defaultClass, boolean alwaysCreateDefault) {
 
-    if (node == null)
+        if (node == null)
             return;
 
         if (families == null)
             families = new String[0];
         if (classes == null)
             classes = new Class[0];
-        if (node.hasChildNodes()) {
-            NodeList children = node.getChildNodes();
-            int len = children.getLength();
+        if (!node.hasChildNodes()) {
+            return;
+        }
+        NodeList children = node.getChildNodes();
+        int len = children.getLength();
 
-            for (int i = 0; i < len; i++) {
-                boolean found = false;
-                Node child = children.item(i);
-                String name = child.getNodeName();
-                if (name.equals("style:default-style") || name.equals("style:style")) {
-                    String familyName = getFamilyName(child);
-                    if (familyName == null) {
-                        Debug.log(Debug.ERROR, "familyName is null!");
-                        continue;
-                    }
-
-                    for (int j = 0; j < families.length; j++) {
-                        if (families[j].equals(familyName)) {
-                            callConstructor(classes[j], child);
-                            found = true;
-                        }
-                    }
-                    if ((!found || alwaysCreateDefault) && (defaultClass != null))
-                        callConstructor(defaultClass, child);
+        for (int i = 0; i < len; i++) {
+            boolean found = false;
+            Node child = children.item(i);
+            String name = child.getNodeName();
+            if (name.equals("style:default-style")
+                    || name.equals("style:style")) {
+                String familyName = getFamilyName(child);
+                if (familyName == null) {
+                    Debug.log(Debug.ERROR, "familyName is null!");
+                    continue;
                 }
+
+                for (int j = 0; j < families.length; j++) {
+                    if (families[j].equals(familyName)) {
+                        callConstructor(classes[j], child);
+                        found = true;
+                    }
+                }
+                if ((!found || alwaysCreateDefault)
+                        && (defaultClass != null))
+                    callConstructor(defaultClass, child);
             }
         }
     }

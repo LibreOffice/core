@@ -29,34 +29,30 @@ class TextUpdateListener implements TreeModelListener
     public void treeNodesChanged(TreeModelEvent e)
     {
         try {
-        // if the change is to the first child of a DefaultMutableTreeNode
-        // with an XAccessibleText child, then we call updateText
-        int[] aIndices = e.getChildIndices();
-        if( (aIndices != null) &&
-            (aIndices.length > 0) )
-        {
+            // if the change is to the first child of a DefaultMutableTreeNode
+            // with an XAccessibleText child, then we call updateText
+            int[] aIndices = e.getChildIndices();
+            if (aIndices == null || aIndices.length >= 0) {
+                return;
+            }
             // we have a parent... lets check for XAccessibleText then
-            DefaultMutableTreeNode aParent = (DefaultMutableTreeNode)
-                (e.getTreePath().getLastPathComponent());
-            DefaultMutableTreeNode aNode = (DefaultMutableTreeNode)
-                (aParent.getChildAt(aIndices[0]));
-            if( aParent.getUserObject() instanceof XAccessibleText)
-            {
+            DefaultMutableTreeNode aParent = (DefaultMutableTreeNode) (e
+                    .getTreePath().getLastPathComponent());
+            DefaultMutableTreeNode aNode = (DefaultMutableTreeNode) (aParent
+                    .getChildAt(aIndices[0]));
+            if (aParent.getUserObject() instanceof XAccessibleText) {
                 // aha! we have an xText. So we can now check for
                 // the various cases we support
-                XAccessibleText xText =
-                    (XAccessibleText)aParent.getUserObject();
+                XAccessibleText xText = (XAccessibleText) aParent
+                        .getUserObject();
 
-                if( aIndices[0] == 0 )
-                {
+                if (aIndices[0] == 0) {
                     // first child! Then we call updateText
-                    updateText( xText, aNode.toString() );
+                    updateText(xText, aNode.toString());
                 }
             }
+        } catch (com.sun.star.lang.IndexOutOfBoundsException aException) {
         }
-        }
-        catch (com.sun.star.lang.IndexOutOfBoundsException aException)
-        {}
     }
 
     // don't care:

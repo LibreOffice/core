@@ -118,7 +118,6 @@ public class DeployedUnoPackagesDB {
         Element langNode = null;
         int len = 0;
         NodeList langNodes = null;
-        boolean result = false;
 
         if ((langNodes = main.getElementsByTagName("language")) != null &&
             (len = langNodes.getLength()) != 0) {
@@ -132,22 +131,24 @@ public class DeployedUnoPackagesDB {
             }
         }
 
-        if (langNode != null) {
-            len = 0;
-            NodeList packages = null;
+        if (langNode == null) {
+            return false;
+        }
+        len = 0;
+        NodeList packages = null;
+        boolean result = false;
 
-            if ((packages = langNode.getElementsByTagName("package")) != null &&
-                (len = packages.getLength()) != 0) {
-                for (int i = 0; i < len; i++) {
+        if ((packages = langNode.getElementsByTagName("package")) != null &&
+            (len = packages.getLength()) != 0) {
+            for (int i = 0; i < len; i++) {
 
-                    Element e = (Element)packages.item(i);
-                    String value =  e.getAttribute("value");
+                Element e = (Element)packages.item(i);
+                String value =  e.getAttribute("value");
 
-                    if (value.equals(url)) {
-                        langNode.removeChild(e);
-                        result = true;
-                        break;
-                    }
+                if (value.equals(url)) {
+                    langNode.removeChild(e);
+                    result = true;
+                    break;
                 }
             }
         }

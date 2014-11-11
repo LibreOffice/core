@@ -41,67 +41,67 @@ class WikiProtocolSocketFactory implements SecureProtocolSocketFactory
 
     private synchronized SSLContext GetNotSoSecureSSLContext()
     {
-        if ( m_aSSLContext == null )
+        if ( m_aSSLContext != null ) {
+            return m_aSSLContext;
+        }
+        TrustManager[] pTrustUnknownCerts = new TrustManager[]
         {
-            TrustManager[] pTrustUnknownCerts = new TrustManager[]
-            {
-                new X509TrustManager() {
-                    private X509TrustManager m_aOrgTrustManager;
+            new X509TrustManager() {
+                private X509TrustManager m_aOrgTrustManager;
 
-                    private X509TrustManager GetOrgTrustManager()
-                    {
-                        if ( m_aOrgTrustManager == null )
-                        {
-                            try
-                            {
-                                TrustManagerFactory aFactory = TrustManagerFactory.getInstance( TrustManagerFactory.getDefaultAlgorithm() );
-                                aFactory.init( (KeyStore)null );
-                                TrustManager[] pTrustmanagers = aFactory.getTrustManagers();
-                                if ( pTrustmanagers.length != 0 && pTrustmanagers[0] != null )
-                                    m_aOrgTrustManager = (X509TrustManager)pTrustmanagers[0];
-                            }
-                            catch( Exception e )
-                            {
-                                throw new RuntimeException( "No access to the default trust manager!", e );
-                            }
-                        }
-
-                        return m_aOrgTrustManager;
-                    }
-
-                    public X509Certificate[] getAcceptedIssuers()
-                    {
-                        return GetOrgTrustManager().getAcceptedIssuers();
-                    }
-
-                    public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException
-                    {
-                        GetOrgTrustManager().checkClientTrusted( certs, authType );
-                    }
-
-                    public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException
-                    {
-                        if ( certs == null || certs.length == 0 )
-                            GetOrgTrustManager().checkServerTrusted( certs, authType );
-                        else
-                            for ( int nInd = 0; nInd < certs.length; nInd++ )
-                                certs[nInd].checkValidity();
-                    }
-                }
-            };
-
-            try
-            {
-                SSLContext aContext = SSLContext.getInstance("SSL");
-                if ( aContext != null )
+                private X509TrustManager GetOrgTrustManager()
                 {
-                    aContext.init( null, pTrustUnknownCerts, null );
-                    m_aSSLContext = aContext;
+                    if ( m_aOrgTrustManager == null )
+                    {
+                        try
+                        {
+                            TrustManagerFactory aFactory = TrustManagerFactory.getInstance( TrustManagerFactory.getDefaultAlgorithm() );
+                            aFactory.init( (KeyStore)null );
+                            TrustManager[] pTrustmanagers = aFactory.getTrustManagers();
+                            if ( pTrustmanagers.length != 0 && pTrustmanagers[0] != null )
+                                m_aOrgTrustManager = (X509TrustManager)pTrustmanagers[0];
+                        }
+                        catch( Exception e )
+                        {
+                            throw new RuntimeException( "No access to the default trust manager!", e );
+                        }
+                    }
+
+                    return m_aOrgTrustManager;
+                }
+
+                public X509Certificate[] getAcceptedIssuers()
+                {
+                    return GetOrgTrustManager().getAcceptedIssuers();
+                }
+
+                public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException
+                {
+                    GetOrgTrustManager().checkClientTrusted( certs, authType );
+                }
+
+                public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException
+                {
+                    if ( certs == null || certs.length == 0 )
+                        GetOrgTrustManager().checkServerTrusted( certs, authType );
+                    else
+                        for ( int nInd = 0; nInd < certs.length; nInd++ )
+                            certs[nInd].checkValidity();
                 }
             }
-            catch ( Exception e )
+        };
+
+        try
+        {
+            SSLContext aContext = SSLContext.getInstance("SSL");
+            if ( aContext != null )
             {
+                aContext.init( null, pTrustUnknownCerts, null );
+                m_aSSLContext = aContext;
             }
+        }
+        catch ( Exception e )
+        {
         }
 
         if ( m_aSSLContext == null )

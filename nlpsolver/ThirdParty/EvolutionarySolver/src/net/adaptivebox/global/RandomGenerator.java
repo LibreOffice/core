@@ -24,65 +24,67 @@ package net.adaptivebox.global;
 
 public class RandomGenerator {
 
-/**This function returns a random integer number between the lowLimit and upLimit.
- * @param lowLimit lower limits
- *        upLimit The upper limits (between which the random number is to be generated)
- * @return int return value
- * Example: for find [0,1,2]
-*/
-public static int intRangeRandom(int lowLimit,int upLimit){
-  int num = (int)Math.floor(doubleRangeRandom(lowLimit,upLimit+1)-1E-10);
-  return(num);
-}
-
-/**This function returns a random float number between the lowLimit and upLimit.
- * @param lowLimit lower limits
- *        upLimit The upper limits (between which the random number is to be generated)
- * @return double return value
-*/
-public static double doubleRangeRandom(double lowLimit,double upLimit){
-  double num = lowLimit + Math.random()*(upLimit-lowLimit);
-  return(num);
-}
-
-
-
-
-
-
-
-
-
-  public static int[] randomSelection(int maxNum, int times) {
-    if(times<=0) return new int[0];
-    int realTimes = Math.min(maxNum, times);
-    boolean[] flags = new boolean[maxNum];
-    boolean isBelowHalf = times<maxNum*0.5;
-    int virtualTimes = realTimes;
-    if(!isBelowHalf) {
-      virtualTimes = maxNum-realTimes;
+    /**
+     * This function returns a random integer number between the lowLimit and
+     * upLimit.
+     *
+     * @param lowLimit
+     *            lower limits upLimit The upper limits (between which the
+     *            random number is to be generated)
+     * @return int return value Example: for find [0,1,2]
+     */
+    public static int intRangeRandom(int lowLimit, int upLimit) {
+        int num = (int) Math
+                .floor(doubleRangeRandom(lowLimit, upLimit + 1) - 1E-10);
+        return (num);
     }
-    int i = 0;
-    int upper = maxNum-1;
-    int[] indices = new int[realTimes];
 
-    while(i<virtualTimes) {
-      indices[i] = intRangeRandom(0, upper);
-      if(!flags[indices[i]]) {
-        flags[indices[i]] = true;
-        i++;
-      }
+    /**
+     * This function returns a random float number between the lowLimit and
+     * upLimit.
+     *
+     * @param lowLimit
+     *            lower limits upLimit The upper limits (between which the
+     *            random number is to be generated)
+     * @return double return value
+     */
+    public static double doubleRangeRandom(double lowLimit, double upLimit) {
+        double num = lowLimit + Math.random() * (upLimit - lowLimit);
+        return (num);
     }
-    if(!isBelowHalf) {
-      int j=0;
-      for(i=0; i<maxNum; i++) {
-        if(flags[i]==isBelowHalf) {
-          indices[j] = i;
-          j++;
-          if(j==realTimes) break;
+
+    public static int[] randomSelection(int maxNum, int times) {
+        if (times <= 0)
+            return new int[0];
+        int realTimes = Math.min(maxNum, times);
+        boolean[] flags = new boolean[maxNum];
+        boolean isBelowHalf = times < maxNum * 0.5;
+        int virtualTimes = realTimes;
+        if (!isBelowHalf) {
+            virtualTimes = maxNum - realTimes;
         }
-      }
+        int i = 0;
+        int upper = maxNum - 1;
+        int[] indices = new int[realTimes];
+
+        while (i < virtualTimes) {
+            indices[i] = intRangeRandom(0, upper);
+            if (!flags[indices[i]]) {
+                flags[indices[i]] = true;
+                i++;
+            }
+        }
+        if (!isBelowHalf) {
+            int j = 0;
+            for (i = 0; i < maxNum; i++) {
+                if (flags[i] == isBelowHalf) {
+                    indices[j] = i;
+                    j++;
+                    if (j == realTimes)
+                        break;
+                }
+            }
+        }
+        return indices;
     }
-    return indices;
-  }
 }

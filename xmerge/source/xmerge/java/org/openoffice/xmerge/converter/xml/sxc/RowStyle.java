@@ -60,21 +60,22 @@ public class RowStyle extends Style implements Cloneable {
         // Look for children.  Only ones we care about are "style:properties"
         // nodes.  If any are found, recursively traverse them, passing
         // along the style element to add properties to.
-        if (node.hasChildNodes()) {
-            NodeList children = node.getChildNodes();
-            int len = children.getLength();
-            for (int i = 0; i < len; i++) {
-                Node child = children.item(i);
-                String nodeName = child.getNodeName();
-                if (nodeName.equals("style:properties")) {
-                    NamedNodeMap childAttrNodes = child.getAttributes();
-                    if (childAttrNodes != null) {
-                        int nChildAttrNodes = childAttrNodes.getLength();
-                        for (int j = 0; j < nChildAttrNodes; j++) {
-                            Node attr = childAttrNodes.item(j);
-                            handleAttribute(attr.getNodeName(),
-                            attr.getNodeValue());
-                        }
+        if (!node.hasChildNodes()) {
+            return;
+        }
+        NodeList children = node.getChildNodes();
+        int len = children.getLength();
+        for (int i = 0; i < len; i++) {
+            Node child = children.item(i);
+            String nodeName = child.getNodeName();
+            if (nodeName.equals("style:properties")) {
+                NamedNodeMap childAttrNodes = child.getAttributes();
+                if (childAttrNodes != null) {
+                    int nChildAttrNodes = childAttrNodes.getLength();
+                    for (int j = 0; j < nChildAttrNodes; j++) {
+                        Node attr = childAttrNodes.item(j);
+                        handleAttribute(attr.getNodeName(),
+                        attr.getNodeValue());
                     }
                 }
             }
