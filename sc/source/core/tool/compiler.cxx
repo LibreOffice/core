@@ -2507,12 +2507,21 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     if (bFound)
     {
         OpCode eOp = iLook->second;
-        if (bInArray)
+        if ( eOp != ocOpen && eOp != ocClose )
         {
-            if (rName.equals(mxSymbols->getSymbol(ocArrayColSep)))
-                eOp = ocArrayColSep;
-            else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
-                eOp = ocArrayRowSep;
+            if (bInArray)
+            {
+                if (rName.equals(mxSymbols->getSymbol(ocArrayColSep)))
+                    eOp = ocArrayColSep;
+                else if (rName.equals(mxSymbols->getSymbol(ocArrayRowSep)))
+                    eOp = ocArrayRowSep;
+            }
+            else if (mxSymbols->isOOXML())
+            {
+                // OOXML names that need to treated differently on import.
+                if ( rName.equalsIgnoreAsciiCaseAscii( "_XLFN.CEILING.MATH" ) )
+                    eOp = ocCeil_Math;
+            }
         }
         maRawToken.SetOpCode(eOp);
     }
@@ -4082,12 +4091,10 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         }
         if (bOOXML)
         {
-            // Append a parameter for CEILING, FLOOR and WEEKNUM, all 1.0
+            // Append a parameter for FLOOR and WEEKNUM, all 1.0
             // Function is already closed, parameter count is nSep+1
             size_t nFunc = nFunction + 1;
             if (eOp == ocClose && (
-                    (pFunctionStack[ nFunc ].eOp == ocCeil &&   // 3rd Excel mode
-                     pFunctionStack[ nFunc ].nSep == 1) ||
                     (pFunctionStack[ nFunc ].eOp == ocFloor &&  // 3rd Excel mode
                      pFunctionStack[ nFunc ].nSep == 1) ||
                     (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
