@@ -2542,6 +2542,29 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             }
         }
     }
+    else if (mxSymbols->isOOXML())
+    {
+        // OOXML names that are not written in the current mapping but to be
+        // recognized or that need to treated differently on import.
+        struct FunctionName
+        {
+            const sal_Char* pName;
+            OpCode          eOp;
+        };
+        static const FunctionName aOoxmlAliases[] = {
+            { "_xlfn.CEILING.MATH", ocCeil_Math }              // CEILING.MATH is to be imported to CEILING.MATH
+        };
+        static const size_t nOoxmlAliases = sizeof( aOoxmlAliases ) / sizeof( aOoxmlAliases[ 0 ] );
+        for ( size_t i = 0; i < nOoxmlAliases; ++i )
+        {
+            if ( rName.equalsIgnoreAsciiCaseAscii( aOoxmlAliases[i].pName) )
+            {
+                maRawToken.SetOpCode( aOoxmlAliases[ i ].eOp );
+                bFound = true;
+                break;  // for
+            }
+        }
+    }
     if (!bFound)
     {
         OUString aIntName;
@@ -4046,12 +4069,10 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         }
         if (bOOXML)
         {
-            // Append a parameter for CEILING, FLOOR and WEEKNUM, all 1.0
+            // Append a parameter for FLOOR and WEEKNUM, all 1.0
             // Function is already closed, parameter count is nSep+1
             size_t nFunc = nFunction + 1;
             if (eOp == ocClose && (
-                    (pFunctionStack[ nFunc ].eOp == ocCeil &&   // 3rd Excel mode
-                     pFunctionStack[ nFunc ].nSep == 1) ||
                     (pFunctionStack[ nFunc ].eOp == ocFloor &&  // 3rd Excel mode
                      pFunctionStack[ nFunc ].nSep == 1) ||
                     (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
