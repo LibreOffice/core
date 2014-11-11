@@ -81,8 +81,7 @@ public:
 
     sal_uInt32 GetHeight() const { return nHeight; }
 
-    void SetProp( const sal_uInt16 nNewProp,
-                    SfxMapUnit eUnit = SFX_MAPUNIT_RELATIVE )
+    void SetProp( sal_uInt16 nNewProp, SfxMapUnit eUnit )
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nProp = nNewProp;
