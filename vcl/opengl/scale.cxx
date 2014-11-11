@@ -128,6 +128,10 @@ void OpenGLSalBitmap::ImplCreateKernel(
     aNumberOfContributions = (static_cast< sal_uInt32 >(fabs(ceil(fScaledRadius))) * 2) + 1 - 6;
     aKernelSize = aNumberOfContributions / 2 + 1;
 
+    // avoid a crash for now; re-think me.
+    if (aKernelSize > 16)
+        aKernelSize = 16;
+
     pWeights = new GLfloat[16];
     memset( pWeights, 0, 16 * sizeof( GLfloat ) );
 
