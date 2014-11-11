@@ -184,17 +184,20 @@ bool GIFReader::ReadGlobalHeader()
 
 void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 {
-    const sal_uLong nLen = 3UL * nCount;
+    sal_uLong nLen = 3UL * nCount;
+    const sal_uInt64 nMaxPossible = rIStm.remainingSize();
+    if (nLen > nMaxPossible)
+        nLen = nMaxPossible;
     boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nLen ]);
-
-    rIStm.Read( pBuf.get(), nLen );
+    sal_Size nRead = rIStm.Read(pBuf.get(), nLen);
+    nCount = nRead/3UL;
     if( NO_PENDING( rIStm ) )
     {
         sal_uInt8* pTmp = pBuf.get();
 
-        for( sal_uLong i = 0UL; i < nCount; )
+        for (sal_uLong i = 0UL; i < nCount; ++i)
         {
-            BitmapColor& rColor = (*pPal)[ (sal_uInt16) i++ ];
+            BitmapColor& rColor = (*pPal)[i];
 
             rColor.SetRed( *pTmp++ );
             rColor.SetGreen( *pTmp++ );
@@ -214,16 +217,15 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 
 bool GIFReader::ReadExtension()
 {
-    sal_uInt8   cFunction;
-    sal_uInt8   cSize;
-    sal_uInt8   cByte;
     bool    bRet = false;
     bool    bOverreadDataBlocks = false;
 
     // Extension-Label
+    sal_uInt8 cFunction(0);
     rIStm.ReadUChar( cFunction );
     if( NO_PENDING( rIStm ) )
     {
+        sal_uInt8 cSize(0);
         // Block length
         rIStm.ReadUChar( cSize );
 
@@ -232,12 +234,12 @@ bool GIFReader::ReadExtension()
             // 'Graphic Control Extension'
             case( 0xf9 ) :
             {
-                sal_uInt8 cFlags;
-
-                rIStm.ReadUChar( cFlags );
-                rIStm.ReadUInt16( nTimer );
-                rIStm.ReadUChar( nGCTransparentIndex );
-                rIStm.ReadUChar( cByte );
+                sal_uInt8 cFlags(0);
+                rIStm.ReadUChar(cFlags);
+                rIStm.ReadUInt16(nTimer);
+                rIStm.ReadUChar(nGCTransparentIndex);
+                sal_uInt8 cByte(0);
+                rIStm.ReadUChar(cByte);
 
                 if ( NO_PENDING( rIStm ) )
                 {
@@ -267,6 +269,7 @@ bool GIFReader::ReadExtension()
                         // NetScape-Extension
                         if( aAppId == "NETSCAPE" && aAppCode == "2.0" && cSize == 3 )
                         {
+                            sal_uInt8 cByte(0);
                             rIStm.ReadUChar( cByte );
 
                             // Loop-Extension
@@ -293,6 +296,7 @@ bool GIFReader::ReadExtension()
                         }
                         else if ( aAppId == "STARDIV " && aAppCode == "5.0" && cSize == 9 )
                         {
+                            sal_uInt8 cByte(0);
                             rIStm.ReadUChar( cByte );
 
                             // Loop extension
@@ -325,14 +329,17 @@ bool GIFReader::ReadExtension()
             bRet = true;
             while( cSize && bStatus && !rIStm.IsEof() )
             {
-                sal_uInt16  nCount = (sal_uInt16) cSize + 1;
-                boost::scoped_array<char> pBuffer(new char[ nCount ]);
+                sal_uInt16 nCount = (sal_uInt16) cSize + 1;
+                const sal_uInt64 nMaxPossible = rIStm.remainingSize();
+                if (nCount > nMaxPossible)
+                    nCount = nMaxPossible;
+                boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nCount]);
 
                 bRet = false;
-                rIStm.Read( pBuffer.get(), nCount );
-                if( NO_PENDING( rIStm ) )
+                sal_Size nRead = rIStm.Read(pBuffer.get(), nCount);
+                if (NO_PENDING(rIStm) && cSize < nRead)
                 {
-                    cSize = (sal_uInt8) pBuffer[ cSize ];
+                    cSize = pBuffer[cSize];
                     bRet = true;
                 }
                 else
@@ -349,19 +356,19 @@ bool GIFReader::ReadLocalHeader()
     sal_uInt8   pBuf[ 9 ];
     bool    bRet = false;
 
-    rIStm.Read( pBuf, 9 );
-    if( NO_PENDING( rIStm ) )
+    sal_Size nRead = rIStm.Read(pBuf, 9);
+    if (NO_PENDING(rIStm) && nRead == 9)
     {
         SvMemoryStream  aMemStm;
         BitmapPalette*  pPal;
-        sal_uInt8           nFlags;
 
         aMemStm.SetBuffer( (char*) pBuf, 9, false, 9 );
         aMemStm.ReadUInt16( nImagePosX );
         aMemStm.ReadUInt16( nImagePosY );
         aMemStm.ReadUInt16( nImageWidth );
         aMemStm.ReadUInt16( nImageHeight );
-        aMemStm.ReadUChar( nFlags );
+        sal_uInt8 nFlags(0);
+        aMemStm.ReadUChar(nFlags);
 
         // if interlaced, first define startvalue
         bInterlaced = ( ( nFlags & 0x40 ) == 0x40 );
