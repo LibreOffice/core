@@ -1148,24 +1148,19 @@ bool LanguageTagImpl::canonicalize()
         }
         if (mbInitializedLocale)
         {
-            if (maLocale.Variant.isEmpty())
-                meIsLiblangtagNeeded = DECISION_NO;     // per definition ll[l][-CC]
+            if (!mbInitializedLangID)
+            {
+                convertLocaleToLang( false);
+                if (bTemporaryLocale || mnLangID == LANGUAGE_DONTKNOW)
+                    bTemporaryLangID = true;
+            }
+            if (mnLangID != LANGUAGE_DONTKNOW && mnLangID != LANGUAGE_SYSTEM)
+                meIsLiblangtagNeeded = DECISION_NO; // known locale
             else
             {
-                if (!mbInitializedLangID)
-                {
-                    convertLocaleToLang( false);
-                    if (bTemporaryLocale || mnLangID == LANGUAGE_DONTKNOW)
-                        bTemporaryLangID = true;
-                }
-                if (mnLangID != LANGUAGE_DONTKNOW && mnLangID != LANGUAGE_SYSTEM)
-                    meIsLiblangtagNeeded = DECISION_NO; // known locale
-                else
-                {
-                    const KnownTagSet& rKnowns = getKnowns();
-                    if (rKnowns.find( maBcp47) != rKnowns.end())
-                        meIsLiblangtagNeeded = DECISION_NO; // known fallback
-                }
+                const KnownTagSet& rKnowns = getKnowns();
+                if (rKnowns.find( maBcp47) != rKnowns.end())
+                    meIsLiblangtagNeeded = DECISION_NO; // known fallback
             }
             // We may have an internal override "canonicalization".
             lang::Locale aNew( MsLangId::Conversion::getOverride( maLocale));
