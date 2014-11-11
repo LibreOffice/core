@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_085207de",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2014-11-11T10:42:46Z",
+      "side": 0,
+      "message": "toupper of a Unicode character whith 0xFF mask applied seems a verry bad idea, replaced with an ASCII to upper case",
+      "revId": "cee950b53bc8e0e2d8d494376c9f1331f8ce8e45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_a85773c9",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2014-11-11T10:42:46Z",
+      "side": 0,
+      "message": "This is not a variable name reading, no need to allow other characters",
+      "range": {
+        "startLine": 445,
+        "startChar": 102,
+        "endLine": 445,
+        "endChar": 103
+      },
+      "revId": "cee950b53bc8e0e2d8d494376c9f1331f8ce8e45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_e85d6bed",
+        "filename": "basic/source/comp/scanner.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2014-11-11T10:42:46Z",
+      "side": 0,
+      "message": "Same here",
+      "revId": "cee950b53bc8e0e2d8d494376c9f1331f8ce8e45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
