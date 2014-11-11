@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <swtypes.hxx>
+#include <utlui.hrc>
 #include "wordcountctrl.hxx"
 #include <svl/stritem.hxx>
 
@@ -29,6 +31,8 @@ void SwWordCountStatusBarControl::StateChanged(
 {
     if (eState == SfxItemState::DEFAULT) // Can access pState
         GetStatusBar().SetItemText( GetId(), ((SfxStringItem*)pState)->GetValue() );
+
+    GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_WORDCOUNT_HINT));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

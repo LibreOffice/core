@@ -103,6 +103,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
     nZoom( 100 ),
     nValueSet( SVX_ZOOM_ENABLE_ALL )
 {
+    GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(RID_SVXSTR_ZOOMTOOL_HINT));
 }
 
 void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,

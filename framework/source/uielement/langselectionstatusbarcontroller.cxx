@@ -146,6 +146,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
     if ( m_xStatusbarItem.is() )
     {
         m_xStatusbarItem->setText( FWK_RESSTR(STR_LANGSTATUS_MULTIPLE_LANGUAGES) );
+        m_xStatusbarItem->setQuickHelpText(FWK_RESSTR(STR_LANGSTATUS_HINT));
     }
 }
 

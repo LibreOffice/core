@@ -1045,9 +1045,13 @@
 #define RID_SVXSTR_RECOVERY_INPROGRESS   (RID_SVX_START + 1288)
 #define RID_SVXSTR_RECOVERYONLY_FINISH_DESCR (RID_SVX_START + 1289)
 #define RID_SVXSTR_RECOVERYONLY_FINISH   (RID_SVX_START + 1290)
+#define RID_SVXSTR_ZOOMTOOL_HINT         (RID_SVX_START + 1291)
+#define RID_SVXSTR_ZOOM                  (RID_SVX_START + 1292)
+#define RID_SVXSTR_ZOOM_IN               (RID_SVX_START + 1293)
+#define RID_SVXSTR_ZOOM_OUT              (RID_SVX_START + 1294)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1291)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1295)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
