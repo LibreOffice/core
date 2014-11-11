@@ -224,8 +224,8 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                 rINetAttr.SetVisited(false);
                 const SwCharFmt* pTmpFmt = rINetAttr.GetCharFmt();
                 const SfxPoolItem* pItem;
-                pTmpFmt->GetItemState( RES_CHRATR_COLOR, true, &pItem );
-                *pColor = ((SvxColorItem*)pItem)->GetValue();
+                if (SfxItemState::SET == pTmpFmt->GetItemState(RES_CHRATR_COLOR, true, &pItem))
+                    *pColor = ((SvxColorItem*)pItem)->GetValue();
                 rINetAttr.SetVisited(true);
             }
             return true;
