@@ -108,7 +108,8 @@ ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
     aTmpSeekBroadcastArea( ScRange()),
     pDoc( pDocument ),
     pBASM( pBASMa ),
-    mbInBroadcastIteration( false)
+    mbInBroadcastIteration( false),
+    mbHasErasedArea(false)
 {
 }
 
@@ -247,15 +248,20 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 {
     if (aBroadcastAreaTbl.empty())
         return false;
+
     bool bInBroadcast = mbInBroadcastIteration;
     mbInBroadcastIteration = true;
     bool bIsBroadcasted = false;
+
+    mbHasErasedArea = false;
+
     const ScAddress& rAddress = rHint.GetAddress();
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
             aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
     {
-        if (isMarkedErased( aIter))
+        if (mbHasErasedArea && isMarkedErased( aIter))
             continue;
+
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.In( rAddress))
@@ -267,11 +273,14 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
             }
         }
     }
+
     mbInBroadcastIteration = bInBroadcast;
+
     // A Notify() during broadcast may call EndListeningArea() and thus dispose
     // an area if it was the last listener, which would invalidate an iterator
     // pointing to it, hence the real erase is done afterwards.
     FinallyEraseAreas();
+
     return bIsBroadcasted;
 }
 
@@ -418,6 +427,7 @@ void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
     if (mbInBroadcastIteration)
     {
         (*rIter).mbErasure = true;      // mark for erasure
+        mbHasErasedArea = true; // at least one area is marked for erasure.
         pBASM->PushAreaToBeErased( this, rIter);
     }
     else

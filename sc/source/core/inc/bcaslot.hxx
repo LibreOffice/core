@@ -136,6 +136,15 @@ private:
     ScBroadcastAreaSlotMachine* pBASM;
     bool                mbInBroadcastIteration;
 
+    /**
+     * If true, the slot has at least one area broadcaster marked for removal.
+     * This flag is used only during broadcast iteration, to speed up
+     * iteration.  Using this flag is cheaper than dereferencing each iterator
+     * and checking its own flag inside especially when no areas are marked
+     * for removal.
+     */
+    bool mbHasErasedArea;
+
     ScBroadcastAreas::const_iterator  FindBroadcastArea( const ScRange& rRange ) const;
 
     /**
