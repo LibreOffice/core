@@ -53,6 +53,9 @@
 
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     : mpFrame(NULL)
+    , mbOffscreen(false)
+    , mnFramebufferId(0)
+    , mpOffscreenTex(NULL)
     , mnLineColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
     , mnSolidProgram(0)
