@@ -1331,10 +1331,15 @@ sal_uInt16 SfxItemPool::GetNewWhich
             SfxPoolVersion_ImplPtr pVerInfo = pImp->aVersions[nMap];
             if ( pVerInfo->_nVer > pImp->nLoadingVersion )
             {
-                DBG_ASSERT( nFileWhich >= pVerInfo->_nStart &&
-                            nFileWhich <= pVerInfo->_nEnd,
-                            "which-id unknown in version" );
-                nFileWhich = pVerInfo->_pMap[nFileWhich - pVerInfo->_nStart];
+                if (nFileWhich >= pVerInfo->_nStart &&
+                            nFileWhich <= pVerInfo->_nEnd)
+                {
+                    nFileWhich = pVerInfo->_pMap[nFileWhich - pVerInfo->_nStart];
+                }
+                else
+                {
+                    SAL_WARN("svl.items", "which-id unknown in version");
+                }
             }
         }
     }
