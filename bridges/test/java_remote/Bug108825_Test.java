@@ -88,10 +88,11 @@ public final class Bug108825_Test extends ComplexTestCase {
 
         private final class Dummy implements XDummy {
             @Override
-            protected void finalize() {
+            protected void finalize() throws Throwable {
                 synchronized (lock) {
                     ++finalizedCount;
                 }
+                super.finalize();
             }
         }
 
