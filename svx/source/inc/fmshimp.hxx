@@ -155,7 +155,7 @@ class SVX_DLLPUBLIC FmXFormShell   : public FmXFormShell_BASE
     class SuspendPropertyTracking;
     friend class SuspendPropertyTracking;
 
-    // Timer um verzoegerte Markierung vorzunehmen
+    // timer for delayed mark
     Timer               m_aMarkTimer;
     SdrObjArray         m_arrSearchedControls;
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.

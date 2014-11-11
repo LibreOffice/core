@@ -59,7 +59,7 @@ private:
 
                                 DECL_LINK( PlayMusicHdl, void * );
 
-    Timer                       maUpdateTimer;
+    Idle                        maUpdateIdle;
 
                                 DECL_LINK( IsMusicStoppedHdl, void * );
 
@@ -97,7 +97,7 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
 
 IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
 {
-    maUpdateTimer.Stop();
+    maUpdateIdle.Stop();
     mnPlaySoundEvent = 0;
 
     if (mxPlayer.is())
@@ -132,8 +132,8 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
             {
                 mxPlayer.set( avmedia::MediaWindow::createPlayer( aUrl, "" ), css::uno::UNO_QUERY_THROW );
                 mxPlayer->start();
-                maUpdateTimer.SetTimeout( 100 );
-                maUpdateTimer.Start();
+                maUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+                maUpdateIdle.Start();
             }
             catch (const css::uno::Exception&)
             {
@@ -171,7 +171,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
         mxPlayer->getMediaTime() < mxPlayer->getDuration()
        )
     {
-        maUpdateTimer.Start();
+        maUpdateIdle.Start();
         return 0L;
     }
 
@@ -224,7 +224,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
     mbUsableSelection( bUsableSelection ),
     mbLabelPlaying(false)
 {
-    maUpdateTimer.SetTimeoutHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
+    maUpdateIdle.SetIdleHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
 
     css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
 

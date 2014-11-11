@@ -127,7 +127,7 @@ CacheCompactor::CacheCompactor(
       mnMaximalCacheSize(nMaximalCacheSize),
       mbIsCompactionRunning(false)
 {
-    maCompactionTimer.SetTimeout(100 /*ms*/);
+    maCompactionTimer.SetTimeout(100);
     maCompactionTimer.SetTimeoutHdl(LINK(this,CacheCompactor,CompactionCallback));
 
 }
