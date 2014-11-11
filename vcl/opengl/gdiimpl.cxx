@@ -865,6 +865,9 @@ void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* /*
 
 void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
+    // check that carefully only in the debug mode
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
+
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     GLuint nTexture = rBitmap.GetTexture( maContext );
     const Size aSize = rSalBitmap.GetSize();

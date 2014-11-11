@@ -26,9 +26,11 @@
 
 #include <tools/solarmutex.hxx>
 
-#include <vcl/timer.hxx>
 #include <vcl/apptypes.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/timer.hxx>
 
+#include <opengl/salbmp.hxx>
 #include <win/wincomp.hxx>
 #include <win/salids.hrc>
 #include <win/saldata.hxx>
@@ -1007,7 +1009,10 @@ SalTimer* WinSalInstance::CreateSalTimer()
 
 SalBitmap* WinSalInstance::CreateSalBitmap()
 {
-    return new WinSalBitmap();
+    if (OpenGLHelper::isVCLOpenGLEnabled())
+        return new OpenGLSalBitmap();
+    else
+        return new WinSalBitmap();
 }
 
 class WinImeStatus : public SalI18NImeStatus

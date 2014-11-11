@@ -34,6 +34,7 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 
 OpenGLSalBitmap::OpenGLSalBitmap()
 : mpContext(NULL)
+, mpTexture(NULL)
 , mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
@@ -57,7 +58,7 @@ bool OpenGLSalBitmap::Create( OpenGLContext& rContext, OpenGLTextureSharedPtr pT
     static const BitmapPalette aEmptyPalette;
 
     Destroy();
-    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO" );
+    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO: [" << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
 
     mpContext = &rContext;
     mnWidth = nWidth;
@@ -83,7 +84,7 @@ bool OpenGLSalBitmap::Create( OpenGLContext& rContext, OpenGLTextureSharedPtr pT
 bool OpenGLSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
     Destroy();
-    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create with size" );
+    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create with size: " << rSize );
 
     if( !isValidBitCount( nBits ) )
         return false;
@@ -106,9 +107,12 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 
 bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
+    // check that carefully only in the debug mode
+    assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBmp));
+
     const OpenGLSalBitmap& rSourceBitmap = static_cast<const OpenGLSalBitmap&>(rSalBmp);
 
-    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from BMP " << rSourceBitmap.mnHeight );
+    SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from BMP: " << rSourceBitmap.mnWidth << "x" << rSourceBitmap.mnHeight );
 
     if( isValidBitCount( nNewBitCount ) )
     {
@@ -328,6 +332,7 @@ Size OpenGLSalBitmap::GetSize() const
 
 GLuint OpenGLSalBitmap::CreateTexture()
 {
+    SAL_INFO( "vcl.opengl", "::CreateTexture" );
     GLenum nFormat = GL_RGBA;
     GLenum nType = GL_UNSIGNED_BYTE;
     sal_uInt8* pData( NULL );
