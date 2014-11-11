@@ -358,8 +358,14 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         timer kernelTime;
         timerStart(&kernelTime);
 
+        // InterpretTail - the S/W fallback is nothing like as efficient
+        // as any good openCL implementation: no SIMD, tons of branching
+        // in the inner loops etc. Generously characterise it as only 10x
+        // slower than the above.
+        int nInterpretTailFactor = 10;
+
         LibreOfficeDeviceEvaluationIO* testData = (LibreOfficeDeviceEvaluationIO*)evalData;
-        for (unsigned long j = 0; j < testData->outputSize; j++)
+        for (unsigned long j = 0; j < testData->outputSize / nInterpretTailFactor; j++)
         {
             double fAverage = 0.0f;
             double fMin = DBL_MAX;
@@ -374,17 +380,14 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             testData->output[j] = fAverage + (fMin * fSoP);
         }
 
-        // InterpretTail - the S/W fallback is nothing like as efficient
-        // as any good openCL implementation: no SIMD, tons of branching
-        // in the inner loops etc. Generously characterise it as only 10x
-        // slower than the above.
-        float fInterpretTailFactor = 10.0;
-
         device->score = (void*)new LibreOfficeDeviceScore;
         ((LibreOfficeDeviceScore*)device->score)->fTime = timerCurrent(&kernelTime);
         ((LibreOfficeDeviceScore*)device->score)->bNoCLErrors = true;
 
-        ((LibreOfficeDeviceScore*)device->score)->fTime *= fInterpretTailFactor;
+        // Since we the test size by nInterpretTailFactor to save time, and to
+        // accelerate this test, we need to apply the factor twice to
+        // get a realistic idea of the real time taken by InterpretTail.
+        ((LibreOfficeDeviceScore*)device->score)->fTime *= nInterpretTailFactor * nInterpretTailFactor;
     }
     return DS_SUCCESS;
 }
