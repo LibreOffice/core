@@ -40,7 +40,6 @@
 #define RC_FRMDLG                   (RC_BASE + 1000)
 #define RC_FLDDLG                   (RC_BASE + 1100)
 #define RC_UTLUI                    (RC_BASE + 1250)
-#define RC_ATTR                     (RC_BASE + 1350)
 #define RC_TABLE                    (RC_BASE + 1450)
 #define RC_CONFIG                   (RC_BASE + 1550)
 #define RC_MISC                     (RC_BASE + 1650)
@@ -71,6 +70,7 @@
 #define RC_PAGEFRM                  (RC_BASE + 4250)
 #define RC_IDXTXT                   (RC_BASE + 4350)
 #define RC_SIDEBAR                  (RC_BASE + 4450)
+#define RC_ATTR                     (RC_BASE + 4550)
 
 /*--------------------------------------------------------------------
     Description: areas unharness
@@ -149,7 +149,7 @@
 
 // Utilities UI
 #define RC_UTLUI_BEGIN              RC_UTLUI
-#define RC_UTLUI_END                (RC_UTLUI + 99)
+#define RC_UTLUI_END                (RC_UTLUI + 199)
 
 // Utilities UI-Attributes
 #define RC_ATTR_BEGIN               RC_ATTR
@@ -258,6 +258,7 @@
 
 // sidebar (mostly the Page one)
 #define RC_SIDEBAR_BEGIN            RC_SIDEBAR
+#define RC_SIDEBAR_END              (RC_SIDEBAR + 99)
 
 #endif
 

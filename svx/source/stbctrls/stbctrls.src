@@ -121,6 +121,26 @@ String RID_SVXSTR_FIT_SLIDE
     Text [ en-US ] = "Fit slide to current window.";
 };
 
+String RID_SVXSTR_ZOOMTOOL_HINT
+{
+    Text [ en-US ] = "Zoom level. Click for dialog box and right-click for zoom list";
+};
+
+String RID_SVXSTR_ZOOM
+{
+    Text [ en-US ] = "Adjust zoom level";
+};
+
+String RID_SVXSTR_ZOOM_IN
+{
+    Text [ en-US ] = "Zoom in";
+};
+
+String RID_SVXSTR_ZOOM_OUT
+{
+    Text [ en-US ] = "Zoom out";
+};
+
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
 {
