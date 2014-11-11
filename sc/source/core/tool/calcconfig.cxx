@@ -44,8 +44,8 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSum);
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
-    maOpenCLBlackList.insert(OpenCLImpl("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884"));
-    maOpenCLBlackList.insert(OpenCLImpl("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3"));
+    maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884"));
+    maOpenCLBlackList.insert(OpenCLImplMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3"));
 }
 
 void ScCalcConfig::reset()
@@ -82,7 +82,7 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
     return !operator==(r);
 }
 
-std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImpl& rImpl)
+std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcher& rImpl)
 {
     rStream << "{"
         "OS=" << rImpl.maOS << ","
@@ -95,7 +95,7 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImpl& 
     return rStream;
 }
 
-std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplSet& rSet)
+std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcherSet& rSet)
 {
     rStream << "{";
     for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)

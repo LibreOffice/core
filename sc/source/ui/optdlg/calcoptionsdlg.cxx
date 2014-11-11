@@ -308,7 +308,7 @@ void ScCalcOptionsDialog::fillOpenCLList()
 
 namespace {
 
-OUString format(const ScCalcConfig::OpenCLImpl& rImpl)
+OUString format(const ScCalcConfig::OpenCLImplMatcher& rImpl)
 {
     return (rImpl.maOS + " " +
             rImpl.maOSVersion + " " +
@@ -317,7 +317,7 @@ OUString format(const ScCalcConfig::OpenCLImpl& rImpl)
             rImpl.maDriverVersion);
 }
 
-void fillListBox(ListBox* pListBox, const ScCalcConfig::OpenCLImplSet& rSet)
+void fillListBox(ListBox* pListBox, const ScCalcConfig::OpenCLImplMatcherSet& rSet)
 {
     pListBox->SetUpdateMode(false);
     pListBox->Clear();
@@ -736,14 +736,14 @@ void ScCalcOptionsDialog::SpinButtonValueChanged()
     maConfig.mnOpenCLMinimumFormulaGroupSize = nVal;
 }
 
-ScCalcConfig::OpenCLImplSet& ScCalcOptionsDialog::CurrentWhiteOrBlackList()
+ScCalcConfig::OpenCLImplMatcherSet& ScCalcOptionsDialog::CurrentWhiteOrBlackList()
 {
     return (mpLbSettings->GetSelectEntryPos() == CALC_OPTION_OPENCL_WHITELIST ? maConfig.maOpenCLWhiteList : maConfig.maOpenCLBlackList);
 }
 
-const ScCalcConfig::OpenCLImpl& ScCalcOptionsDialog::CurrentWhiteOrBlackListEntry()
+const ScCalcConfig::OpenCLImplMatcher& ScCalcOptionsDialog::CurrentWhiteOrBlackListEntry()
 {
-    ScCalcConfig::OpenCLImplSet& rSet(CurrentWhiteOrBlackList());
+    ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
 
     auto i = rSet.begin();
     int n(mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos());
@@ -775,8 +775,8 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
         // We know that this handler is otherwise currently used only
         // for the OpenCL white/blacklists
 
-        const ScCalcConfig::OpenCLImpl& impl(CurrentWhiteOrBlackListEntry());
-        ScCalcConfig::OpenCLImpl newImpl(impl);
+        const ScCalcConfig::OpenCLImplMatcher& impl(CurrentWhiteOrBlackListEntry());
+        ScCalcConfig::OpenCLImplMatcher newImpl(impl);
 
         if (pEdit == mpOS)
         {
@@ -801,7 +801,7 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
         else
             assert(false && "pEdit does not match any of the Edit fields");
 
-        ScCalcConfig::OpenCLImplSet& rSet(CurrentWhiteOrBlackList());
+        ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
 
         rSet.erase(impl);
         rSet.insert(newImpl);
@@ -899,7 +899,7 @@ IMPL_LINK(ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl, Control*, )
 {
     // We know this handler is used for the mpOpenCLWhiteAndBlackListBox
 
-    const ScCalcConfig::OpenCLImpl& impl(CurrentWhiteOrBlackListEntry());
+    const ScCalcConfig::OpenCLImplMatcher& impl(CurrentWhiteOrBlackListEntry());
 
     mpOS->SetText(impl.maOS);
     mpOSVersion->SetText(impl.maOSVersion);

@@ -41,7 +41,7 @@ struct SC_DLLPUBLIC ScCalcConfig
         STRING_CONVERSION_LOCALE_DEPENDENT  ///<  =1+"1.000" may be 2 or 1001 ... =1+"x" gives #VALUE!
     };
 
-    struct OpenCLImpl
+    struct OpenCLImplMatcher
     {
         OUString maOS;
         OUString maOSVersion;
@@ -49,15 +49,15 @@ struct SC_DLLPUBLIC ScCalcConfig
         OUString maDevice;
         OUString maDriverVersion;
 
-        OpenCLImpl()
+        OpenCLImplMatcher()
         {
         }
 
-        OpenCLImpl(const OUString& rOS,
-                   const OUString& rOSVersion,
-                   const OUString& rPlatformVendor,
-                   const OUString& rDevice,
-                   const OUString& rDriverVersion)
+        OpenCLImplMatcher(const OUString& rOS,
+                          const OUString& rOSVersion,
+                          const OUString& rPlatformVendor,
+                          const OUString& rDevice,
+                          const OUString& rDriverVersion)
             : maOS(rOS),
               maOSVersion(rOSVersion),
               maPlatformVendor(rPlatformVendor),
@@ -66,7 +66,7 @@ struct SC_DLLPUBLIC ScCalcConfig
         {
         }
 
-        bool operator==(const OpenCLImpl& r) const
+        bool operator==(const OpenCLImplMatcher& r) const
         {
             return maOS == r.maOS &&
                    maOSVersion == r.maOSVersion &&
@@ -74,11 +74,11 @@ struct SC_DLLPUBLIC ScCalcConfig
                    maDevice == r.maDevice &&
                    maDriverVersion == r.maDriverVersion;
         }
-        bool operator!=(const OpenCLImpl& r) const
+        bool operator!=(const OpenCLImplMatcher& r) const
         {
             return !operator==(r);
         }
-        bool operator<(const OpenCLImpl& r) const
+        bool operator<(const OpenCLImplMatcher& r) const
         {
             return (maOS < r.maOS ||
                     (maOS == r.maOS &&
@@ -106,10 +106,10 @@ struct SC_DLLPUBLIC ScCalcConfig
 
     OpCodeSet maOpenCLSubsetOpCodes;
 
-    typedef std::set<OpenCLImpl> OpenCLImplSet;
+    typedef std::set<OpenCLImplMatcher> OpenCLImplMatcherSet;
 
-    OpenCLImplSet maOpenCLWhiteList;
-    OpenCLImplSet maOpenCLBlackList;
+    OpenCLImplMatcherSet maOpenCLWhiteList;
+    OpenCLImplMatcherSet maOpenCLBlackList;
 
     ScCalcConfig();
 
@@ -122,8 +122,8 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool operator!= (const ScCalcConfig& r) const;
 };
 
-SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImpl& rImpl);
-SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplSet& rSet);
+SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcher& rImpl);
+SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcherSet& rSet);
 SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig);
 
 SC_DLLPUBLIC OUString ScOpCodeSetToNumberString(const ScCalcConfig::OpCodeSet& rOpCodes);

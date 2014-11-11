@@ -63,8 +63,8 @@ private:
     OUString toString(sal_Int32 nVal) const;
     SvTreeListEntry *createItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
-    std::set<ScCalcConfig::OpenCLImpl>& CurrentWhiteOrBlackList();
-    const ScCalcConfig::OpenCLImpl& CurrentWhiteOrBlackListEntry();
+    std::set<ScCalcConfig::OpenCLImplMatcher>& CurrentWhiteOrBlackList();
+    const ScCalcConfig::OpenCLImplMatcher& CurrentWhiteOrBlackListEntry();
 
 private:
     SvxCheckListBox* mpLbSettings;
