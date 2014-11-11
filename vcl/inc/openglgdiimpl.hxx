@@ -25,6 +25,7 @@
 
 #include "opengl/texture.hxx"
 
+#include <tools/poly.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
 class SalFrame;
@@ -59,10 +60,16 @@ protected:
     GLuint mnMaskUniform;
     GLuint mnMaskColorUniform;
 
+    GLuint mnLinearGradientProgram;
+    GLuint mnLinearGradientStartColorUniform;
+    GLuint mnLinearGradientEndColorUniform;
+    GLuint mnLinearGradientTransformUniform;
+
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateMaskedTextureProgram( void );
     bool CreateMaskProgram( void );
+    bool CreateLinearGradientProgram( void );
 
     void BeginSolid( SalColor nColor, sal_uInt8 nTransparency );
     void BeginSolid( SalColor nColor, double fTransparency );
@@ -75,6 +82,7 @@ protected:
     void DrawLine( long nX1, long nY1, long nX2, long nY2 );
     void DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
     void DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
+    void DrawConvexPolygon( const Polygon& rPolygon );
     void DrawRect( long nX, long nY, long nWidth, long nHeight );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
@@ -82,6 +90,7 @@ protected:
     void DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& rPosAry );
     void DrawTextureWithMask( GLuint nTexture, GLuint nMask, const Size& rSize, const SalTwoRect& rPosAry );
     void DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& rPosAry );
+    void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
 
 protected:
     // get the width of the device

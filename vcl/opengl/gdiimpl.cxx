@@ -51,6 +51,13 @@
                  ((float) SALCOLOR_BLUE( nColor )) / 255,  \
                  (1.0f - fTransparency) )
 
+#define glUniformColorIntensity(nUniform, aColor, nFactor)      \
+    glUniform4f( nUniform,                                      \
+                 ((float) aColor.GetRed()) * nFactor / 25500.0,   \
+                 ((float) aColor.GetGreen()) * nFactor / 25500.0, \
+                 ((float) aColor.GetBlue()) * nFactor / 25500.0,  \
+                 1.0f )
+
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     : mpFrame(NULL)
     , mbOffscreen(false)
@@ -278,6 +285,20 @@ bool OpenGLSalGraphicsImpl::CreateMaskProgram( void )
     return true;
 }
 
+bool OpenGLSalGraphicsImpl::CreateLinearGradientProgram( void )
+{
+    mnLinearGradientProgram = OpenGLHelper::LoadShaders( "textureVertexShader", "linearGradientFragmentShader" );
+    if( mnLinearGradientProgram == 0 )
+        return false;
+
+    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    mnLinearGradientStartColorUniform = glGetUniformLocation( mnLinearGradientProgram, "start_color" );
+    mnLinearGradientEndColorUniform = glGetUniformLocation( mnLinearGradientProgram, "end_color" );
+    mnLinearGradientTransformUniform = glGetUniformLocation( mnLinearGradientProgram, "transform" );
+    return true;
+}
+
 void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor, sal_uInt8 nTransparency )
 {
     if( mnSolidProgram == 0 )
@@ -395,6 +416,25 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     {
         aVertices[j] = (2 * pPtAry[i].mnX) / GetWidth() - 1.0;
         aVertices[j+1] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
+    }
+
+    glEnableVertexAttribArray( GL_ATTRIB_POS );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
+    glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
+    glDisableVertexAttribArray( GL_ATTRIB_POS );
+}
+
+void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
+{
+    sal_uInt16 nPoints = rPolygon.GetSize() - 1;
+    std::vector<GLfloat> aVertices(nPoints * 2);
+    sal_uInt32 i, j;
+
+    for( i = 0, j = 0; i < nPoints; i++, j += 2 )
+    {
+        const Point& rPt = rPolygon.GetPoint( i );
+        aVertices[j] = (2 * rPt.X()) / GetWidth() - 1.0;
+        aVertices[j+1] = (2 * (GetHeight() - rPt.Y())) / GetHeight() - 1.0;
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
@@ -547,6 +587,60 @@ void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const S
 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, 0 );
+    glUseProgram( 0 );
+}
+
+void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect )
+{
+    if( rGradient.GetBorder() >= 100.0 )
+    {
+        // border >= 100%, draw solid rectangle
+        Color aCol = rGradient.GetStartColor();
+        long nF = rGradient.GetStartIntensity();
+        BeginSolid( MAKE_SALCOLOR( aCol.GetRed() * nF / 100,
+                                   aCol.GetGreen() * nF / 100,
+                                   aCol.GetBlue() * nF / 100 ) );
+        DrawRect( rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight() );
+        EndSolid();
+        return;
+    }
+
+    if( mnLinearGradientProgram == 0 )
+    {
+        if( !CreateLinearGradientProgram() )
+            return;
+    }
+
+    glUseProgram( mnLinearGradientProgram );
+
+    Color aStartCol = rGradient.GetStartColor();
+    Color aEndCol = rGradient.GetEndColor();
+    long nFactor = rGradient.GetStartIntensity();
+    glUniformColorIntensity( mnLinearGradientStartColorUniform, aStartCol, nFactor );
+    nFactor = rGradient.GetEndIntensity();
+    glUniformColorIntensity( mnLinearGradientEndColorUniform, aEndCol, nFactor );
+
+    Rectangle aBoundRect;
+    Point aCenter;
+    rGradient.GetBoundRect( rRect, aBoundRect, aCenter );
+    aBoundRect.Left()--;
+    aBoundRect.Top()--;
+    aBoundRect.Right()++;
+    aBoundRect.Bottom()++;
+    Polygon aPoly( aBoundRect );
+    aPoly.Rotate( aCenter, rGradient.GetAngle() % 3600 );
+
+    GLfloat aTexCoord[8] = { 0, 1, 1, 1, 1, 0, 0, 0 };
+    GLfloat fMin = 1.0 - 100.0 / (100.0 - rGradient.GetBorder());
+    aTexCoord[5] = aTexCoord[7] = fMin;
+    glEnableVertexAttribArray( GL_ATTRIB_TEX );
+    glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
+
+    DrawConvexPolygon( aPoly );
+
+    glDisableVertexAttribArray( GL_ATTRIB_TEX );
+    CHECK_GL_ERROR();
+
     glUseProgram( 0 );
 }
 
@@ -1083,9 +1177,22 @@ bool OpenGLSalGraphicsImpl::drawAlphaRect(
     return true;
 }
 
-bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& /*rPolygon*/,
-        const Gradient& /*rGradient*/)
+bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
+        const Gradient& rGradient)
 {
+    const Rectangle aBoundRect( rPolyPoly.GetBoundRect() );
+
+    if( aBoundRect.IsEmpty() )
+        return true;
+
+    //TODO: lfrb: some missing transformation with the polygon in outdev
+    if( rGradient.GetStyle() == GradientStyle_LINEAR )
+    {
+        PreDraw();
+        DrawLinearGradient( rGradient, aBoundRect );
+        PostDraw();
+        return true;
+    }
     return false;
 }
 
