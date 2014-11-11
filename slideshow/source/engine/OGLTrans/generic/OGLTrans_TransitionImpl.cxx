@@ -100,7 +100,11 @@ void OGLTransitionImpl::finish()
 
 static void blendSlide( double depth )
 {
-    CHECK_GL_ERROR();
+GLenum err;
+while ((err = glGetError()) != GL_NO_ERROR) {
+    std::cerr << "OpenGL error: " << err << std::endl;
+}
+
     double showHeight = -1 + depth*2;
     GLfloat reflectionColor[] = {0, 0, 0, 0.25};
 
@@ -115,6 +119,25 @@ static void blendSlide( double depth )
     glVertex3f( 1, -1, 0 );
     glEnd();
 
+/*    // Initialization:
+    glGenBuffers(); // create a buffer object
+    glBindBuffer(); // use the buffer
+    glBufferData(); // allocate memory in the buffer
+
+    <stuff to get memory into the buffer>
+    glVertexPointer(); // tell OpenGL how your data is packed inside the buffer
+
+    GLfloat vertices[] = { -1, -1, 0,
+                           -1,  showHeight, 0,
+                           1,  showHeight, 0,
+                           1, -1, 0 };
+
+    // Draw:
+    glBindBuffer(); // use the buffer
+    glEnableClientState(); // enable the parts of the data you want to draw
+    glDrawArrays(); // the actual draw command*/
+
+
     glBegin( GL_QUADS );
     glColor4f( 0, 0, 0, 1 );
     glVertex3f( -1, showHeight, 0 );
@@ -122,8 +145,33 @@ static void blendSlide( double depth )
     glVertex3f(  1,  1, 0 );
     glVertex3f(  1, showHeight, 0 );
     glEnd();
+
+/*    // Initialization:
+    glGenBuffers(); // create a buffer object
+    glBindBuffer(); // use the buffer
+    glBufferData(); // allocate memory in the buffer
+
+    <stuff to get memory into the buffer>
+    glVertexPointer(); // tell OpenGL how your data is packed inside the buffer
+
+    GLfloat vertices[] = { -1, showHeight, 0,
+                           -1,  1, 0,
+                           1,  1, 0
+                           1, showHeight, 0 };
+
+    // Draw:
+    glBindBuffer(); // use the buffer
+    glEnableClientState(); // enable the parts of the data you want to draw
+    glDrawArrays(); // the actual draw command*/
+
+
     glEnable( GL_DEPTH_TEST );
-    CHECK_GL_ERROR();
+
+
+    while ((err = glGetError()) != GL_NO_ERROR) {
+        std::cerr << "OpenGL error: " << err << std::endl;
+    }
+
 }
 
 static void slideShadow( double nTime, const Primitive& primitive, double sw, double sh )
