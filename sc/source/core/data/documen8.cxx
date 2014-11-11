@@ -1002,7 +1002,7 @@ bool ScDocument::CreateDdeLink( const OUString& rAppl, const OUString& rTopic, c
     /*  Create a DDE link without updating it (i.e. for Excel import), to prevent
         unwanted connections. First try to find existing link. Set result array
         on existing and new links. */
-    //! store DDE links additionally at document (for efficiency)?
+    //TODO: store DDE links additionally at document (for efficiency)?
     OSL_ENSURE( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
 
     sfx2::LinkManager* pMgr = GetDocLinkManager().getLinkManager(bAutoCalc);
@@ -1294,7 +1294,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 
                     if ( bConsiderLanguage )
                     {
-                        sal_uInt8 nScript = GetStringScriptType( aOldStr );        //! cell script type?
+                        sal_uInt8 nScript = GetStringScriptType( aOldStr );        //TODO: cell script type?
                         sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                                         ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE :
                                                                                 ATTR_FONT_LANGUAGE );

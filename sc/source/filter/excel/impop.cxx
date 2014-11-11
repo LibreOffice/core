@@ -605,7 +605,7 @@ void ImportExcel::Colwidth( void )
     nColLast = aIn.ReaduInt8();
     nColWidth = aIn.ReaduInt16();
 
-//! TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
+//TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
 //   if( nColLast > MAXCOL )
 //       nColLast = static_cast<sal_uInt16>(MAXCOL);
 

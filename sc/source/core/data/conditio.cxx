@@ -337,7 +337,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
-                //! merge with lcl_ScDocFunc_CreateTokenArrayXML
+                //TODO: merge with lcl_ScDocFunc_CreateTokenArrayXML
                 pFormula1 = new ScTokenArray;
                 pFormula1->AddStringXML( rExpr1 );
                 // bRelRef1 is set when the formula is compiled again (CompileXML)
@@ -375,7 +375,7 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
             if ( mpDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
-                //! merge with lcl_ScDocFunc_CreateTokenArrayXML
+                //TODO: merge with lcl_ScDocFunc_CreateTokenArrayXML
                 pFormula2 = new ScTokenArray;
                 pFormula2->AddStringXML( rExpr2 );
                 // bRelRef2 is set when the formula is compiled again (CompileXML)
@@ -659,7 +659,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     {
         if (!pEff1->IsRunning()) // Don't create 522
         {
-            //! Query Changed instead of Dirty!
+            //TODO: Query Changed instead of Dirty!
             if (pEff1->GetDirty() && !bRelRef1 && mpDoc->GetAutoCalc())
                 bDirty = true;
             if (pEff1->IsValue())
@@ -1160,7 +1160,7 @@ bool ScConditionEntry::IsValidStr( const OUString& rArg, const ScAddress& rPos )
         if ( !bIsStr2 )
             return false;
 
-    OUString aUpVal1( aStrVal1 ); //! As a member? (Also set in Interpret)
+    OUString aUpVal1( aStrVal1 ); //TODO: As a member? (Also set in Interpret)
     OUString aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )

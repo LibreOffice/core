@@ -183,7 +183,7 @@ void ScConsData::InitData()
         for (SCSIZE i=0; i<nRowCount; i++)
         {
             ppTitlePos[i] = new SCSIZE[nDataCount];
-            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );    //! unnoetig ?
+            memset( ppTitlePos[i], 0, nDataCount * sizeof(SCSIZE) );    //TODO: not necessary ?
         }
     }
 
@@ -619,8 +619,8 @@ SCROW ScConsData::GetInsertCount() const
     return nInsert;
 }
 
-//  fertige Daten ins Dokument schreiben
-//! optimieren nach Spalten?
+// store completed data to document
+//TODO: optimize on columns?
 
 void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
@@ -671,16 +671,16 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                 }
     }
 
-    if ( ppRefs && ppUsed )                             // Referenzen einfuegen
+    if ( ppRefs && ppUsed )     // insert Reference
     {
-                                //! unterscheiden, ob nach Kategorien aufgeteilt
+                                //TODO: differentiate, if split into categories
         OUString aString;
 
-        ScSingleRefData aSRef;      // Daten fuer Referenz-Formelzellen
-        aSRef.InitFlags(); // This reference is absolute at all times.
+        ScSingleRefData aSRef;  // data for Referece formula cells
+        aSRef.InitFlags();      // this reference is absolute at all times
         aSRef.SetFlag3D(true);
 
-        ScComplexRefData aCRef;         // Daten fuer Summen-Zellen
+        ScComplexRefData aCRef; // data for Sum cells
         aCRef.InitFlags();
         aCRef.Ref1.SetColRel(true); aCRef.Ref1.SetRowRel(true); aCRef.Ref1.SetTabRel(true);
         aCRef.Ref2.SetColRel(true); aCRef.Ref2.SetRowRel(true); aCRef.Ref2.SetTabRel(true);

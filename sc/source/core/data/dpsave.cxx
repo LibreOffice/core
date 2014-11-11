@@ -61,7 +61,7 @@ using ::std::unique_ptr;
 static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                             const OUString& rName, bool bValue )
 {
-    //! move to ScUnoHelpFunctions?
+    //TODO: move to ScUnoHelpFunctions?
 
     xProp->setPropertyValue( rName, uno::Any( &bValue, getBooleanCppuType() ) );
 }
@@ -1151,7 +1151,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     if ( xSourceProp.is() )
     {
         // source options are not available for external sources
-        //! use XPropertySetInfo to test for availability?
+        //TODO: use XPropertySetInfo to test for availability?
 
         try
         {
@@ -1176,8 +1176,8 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     try
     {
         // reset all orientations
-        //! "forgetSettings" or similar at source ?????
-        //! reset all duplicated dimensions, or reuse them below !!!
+        //TODO: "forgetSettings" or similar at source ?????
+        //TODO: reset all duplicated dimensions, or reuse them below !!!
         OSL_FAIL( "ScDPSaveData::WriteToSource" );
 
         lcl_ResetOrient( xSource );
@@ -1196,7 +1196,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
             bool bData = iter->IsDataLayout();
 
-            //! getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
+            //TODO: getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
 
             bool bFound = false;
             for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
@@ -1209,7 +1209,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                     {
                         bFound = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                                     OUString(SC_UNO_DP_ISDATALAYOUT) );
-                        //! error checking -- is "IsDataLayoutDimension" property required??
+                        //TODO: error checking -- is "IsDataLayoutDimension" property required??
                     }
                 }
                 else

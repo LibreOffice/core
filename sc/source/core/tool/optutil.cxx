@@ -25,7 +25,7 @@
 
 bool ScOptionsUtil::IsMetricSystem()
 {
-    //! which language should be used here - system language or installed office language?
+    //TODO: which language should be used here - system language or installed office language?
 
     MeasurementSystem eSys = ScGlobal::pLocaleData->getMeasurementSystemEnum();
 
@@ -49,7 +49,7 @@ void ScLinkConfigItem::SetCommitLink( const Link& rLink )
 
 void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<OUString>& /* aPropertyNames */ )
 {
-    //! not implemented yet...
+    //TODO: not implemented yet...
 }
 
 void ScLinkConfigItem::Commit()

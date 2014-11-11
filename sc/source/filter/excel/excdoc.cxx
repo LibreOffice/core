@@ -752,7 +752,7 @@ ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
 
 ExcDocument::~ExcDocument()
 {
-    maTableList.RemoveAllRecords();    //! for the following assertion
+    maTableList.RemoveAllRecords();    // for the following assertion!
     delete pExpChangeTrack;
 }
 

@@ -721,7 +721,7 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         if ( aTmp.getLength() > SAL_MAX_UINT16 - 2 )
                             return false;
                         // Append a 0-pad-byte if string length is odd
-                        //! MUST be sal_uInt16
+                        // MUST be sal_uInt16
                         sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                         sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
 
@@ -843,7 +843,7 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             if ( aTmp.getLength() > SAL_MAX_UINT16 - 2 )
                                 return false;
                             // Append a 0-pad-byte if string length is odd
-                            //! MUST be sal_uInt16
+                            // MUST be sal_uInt16
                             sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                             sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
                             if ( ((sal_uLong)nPos + 2 + nLen) > MAXARRSIZE)
@@ -917,7 +917,7 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
     {
         SetError( errStackOverflow );
         if (!p->GetRef())
-            //! p is a dangling pointer hereafter!
+            // p is a dangling pointer hereafter!
             p->Delete();
     }
     else
@@ -932,7 +932,7 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
             else
             {
                 if (!p->GetRef())
-                    //! p is a dangling pointer hereafter!
+                    // p is a dangling pointer hereafter!
                     p->Delete();
                 PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
             }
@@ -948,7 +948,7 @@ void ScInterpreter::PushTempTokenWithoutError( FormulaToken* p )
     if ( sp >= MAXSTACK )
     {
         SetError( errStackOverflow );
-        //! p may be a dangling pointer hereafter!
+        // p may be a dangling pointer hereafter!
         p->DecRef();
     }
     else
@@ -3603,7 +3603,7 @@ void ScInterpreter::ScColRowNameAuto()
         aAbs.aEnd.SetRow(nDARow2);
     }
 
-    //! corresponds with ScCompiler::GetToken
+    // corresponds with ScCompiler::GetToken
     if ( aRefData.Ref1.IsColRel() )
     {   // ColName
         aAbs.aEnd.SetCol(nStartCol);

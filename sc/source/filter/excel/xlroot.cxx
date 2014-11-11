@@ -94,7 +94,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     mxFontPropSetHlp( new XclFontPropSetHelper ),
     mxChPropSetHlp( new XclChPropSetHelper ),
-    mxRD( new RootData ),//!
+    mxRD( new RootData ),
     mfScreenPixelX( 50.0 ),
     mfScreenPixelY( 50.0 ),
     mnCharWidth( 110 ),

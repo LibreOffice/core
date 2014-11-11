@@ -504,8 +504,8 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
     if ( nStartCol > 0 && !bLeftIsEmpty )
     {
-        //  aehnlich wie in ScPrintFunc::AdjustPrintArea
-        //! ExtendPrintArea erst ab Start-Spalte des Druckbereichs
+        // similar to in ScPrintFunc::AdjustPrintArea
+        // ExtendPrintArea starting only from the start column of the print area
 
         SCCOL nExtendCol = nStartCol - 1;
         SCROW nTmpRow = nEndRow;

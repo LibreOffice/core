@@ -2172,13 +2172,13 @@ void ScInterpreter::ScStyle()
     sal_uInt8 nParamCount = GetByte();
     if (nParamCount >= 1 && nParamCount <= 3)
     {
-        OUString aStyle2;                             // Template after timer
+        OUString aStyle2;                           // Template after timer
         if (nParamCount >= 3)
             aStyle2 = GetString().getString();
         long nTimeOut = 0;                          // timeout
         if (nParamCount >= 2)
             nTimeOut = (long)(GetDouble()*1000.0);
-        OUString aStyle1 = GetString().getString();               // Template for immediate
+        OUString aStyle1 = GetString().getString(); // Template for immediate
 
         if (nTimeOut < 0)
             nTimeOut = 0;
@@ -2189,7 +2189,7 @@ void ScInterpreter::ScStyle()
             SfxObjectShell* pShell = pDok->GetDocumentShell();
             if (pShell)
             {
-                //! notify object shell directly
+                // notify object shell directly!
 
                 ScRange aRange(aPos);
                 ScAutoStyleHint aHint( aRange, aStyle1, nTimeOut, aStyle2 );
@@ -2266,7 +2266,7 @@ void ScInterpreter::ScDde()
 
         ScDdeLink* pLink = lcl_GetDdeLink( pLinkMgr, aAppl, aTopic, aItem, nMode );
 
-        //! Save Dde-links (in addition) more efficient at document !!!!!
+        //TODO: Save Dde-links (in addition) more efficient at document !!!!!
         //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
 
         bool bWasError = ( pMyFormulaCell && pMyFormulaCell->GetRawError() != 0 );
@@ -2282,7 +2282,7 @@ void ScInterpreter::ScDde()
                     pBindings->Invalidate( SID_LINKS );             // Link-Manager enablen
             }
 
-                                    //! evaluate asynchron ???
+                                    //TODO: evaluate asynchron ???
             pLink->TryUpdate();     //  TryUpdate doesn't call Update multiple times
 
             if (pMyFormulaCell)
@@ -2388,7 +2388,7 @@ void ScInterpreter::ScBase()
                 bool bDirt = false;
                 while ( fVal && p > pBuf )
                 {
-//! roundoff error starting with numbers greater than 2**48
+//TODO: roundoff error starting with numbers greater than 2**48
 //                  double fDig = ::rtl::math::approxFloor( fmod( fVal, fBase ) );
 // a little bit better:
                     double fInt = ::rtl::math::approxFloor( fVal / fBase );
@@ -3101,7 +3101,7 @@ void ScInterpreter::ScGetPivotData()
         sal_uInt16 i = nFilterCount;
         while (i-- > 0)
         {
-            //! should allow numeric constraint values
+            //TODO: should allow numeric constraint values
             aFilters[i].MatchValue = GetString().getString();
             aFilters[i].FieldName = GetString().getString();
         }

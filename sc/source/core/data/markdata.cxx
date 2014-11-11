@@ -113,7 +113,7 @@ void ScMarkData::SetMarkArea( const ScRange& rRange )
 
 void ScMarkData::GetMarkArea( ScRange& rRange ) const
 {
-    rRange = aMarkRange;        //! inline ?
+    rRange = aMarkRange;        //TODO: inline ?
 }
 
 void ScMarkData::GetMultiMarkArea( ScRange& rRange ) const
@@ -296,7 +296,7 @@ bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple ) const
 
     if (bMultiMarked)
     {
-        //! hier auf negative Markierung testen ?
+        //TODO: test here for negative Marking ?
 
         OSL_ENSURE(pMultiSel, "bMultiMarked, but pMultiSel == 0");
         return pMultiSel[nCol].GetMark( nRow );
@@ -307,8 +307,8 @@ bool ScMarkData::IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple ) const
 
 bool ScMarkData::IsColumnMarked( SCCOL nCol ) const
 {
-    //  bMarkIsNeg inzwischen auch fuer Spaltenkoepfe
-    //! GetMarkColumnRanges fuer komplett markierte Spalten
+    //  bMarkIsNeg meanwhile also for columns heads
+    //TODO: GetMarkColumnRanges for completely marked column
 
     if ( bMarked && !bMarkIsNeg &&
                     aMarkRange.aStart.Col() <= nCol && aMarkRange.aEnd.Col() >= nCol &&
@@ -323,8 +323,8 @@ bool ScMarkData::IsColumnMarked( SCCOL nCol ) const
 
 bool ScMarkData::IsRowMarked( SCROW nRow ) const
 {
-    //  bMarkIsNeg inzwischen auch fuer Zeilenkoepfe
-    //! GetMarkRowRanges fuer komplett markierte Zeilen
+    //  bMarkIsNeg meanwhile also for row heads
+    //TODO: GetMarkRowRanges for completely marked rows
 
     if ( bMarked && !bMarkIsNeg &&
                     aMarkRange.aStart.Col() == 0    && aMarkRange.aEnd.Col() == MAXCOL &&
@@ -377,7 +377,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, bool bClear ) const
     if (bClear)
         pList->RemoveAll();
 
-    //!     bei mehreren selektierten Tabellen mehrere Ranges eintragen !!!
+    //TODO: for muliple selected tables enter multiple ranges !!!
 
     if ( bMultiMarked )
     {
@@ -427,7 +427,7 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
         return;
 
     ScRangeList aOldList(*pList);
-    pList->RemoveAll();                 //! oder die vorhandenen unten weglassen
+    pList->RemoveAll();                 //TODO: or skip the existing below
 
     std::set<SCTAB>::const_iterator it = maTabMarked.begin();
     for (; it != maTabMarked.end(); ++it)

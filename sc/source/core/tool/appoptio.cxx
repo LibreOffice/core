@@ -174,7 +174,7 @@ static void lcl_SetSortList( const Any& rValue )
         ScUserList aList;
 
         //  if setting is "default", keep default values from ScUserList ctor
-        //! mark "default" in a safe way
+        //TODO: mark "default" in a safe way
         bool bDefault = ( nCount == 1 && pArray[0] == "NULL" );
 
         if (!bDefault)

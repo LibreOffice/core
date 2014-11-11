@@ -293,13 +293,12 @@ const OUString& ScStyleSheet::GetFollow() const
         return rBase;
 }
 
-//  Verhindern, dass ein Style "Standard" angelegt wird, wenn das nicht der
-//  Standard-Name ist, weil sonst beim Speichern zwei Styles denselben Namen haetten
-//  (Beim Laden wird der Style direkt per Make mit dem Namen erzeugt, so dass diese
-//  Abfrage dann nicht gilt)
-//! Wenn irgendwann aus dem Laden SetName aufgerufen wird, muss fuer das Laden ein
-//! Flag gesetzt und abgefragt werden.
-//! Die ganze Abfrage muss raus, wenn fuer eine neue Datei-Version die Namens-Umsetzung wegfaellt.
+// Avoid creating a Style "Standard" if this is not the Standard-Name;
+// otherwise two styles would have the same name when storing.
+// (on loading the style is created directly per Make with the name; making this query
+//  not applicable)
+//TODO: If at any time during loading SetName is called, a flag has to be set/checked for loading
+//TODO: The whole check has to be removed if for a new file version the name transformation is dropped.
 
 bool ScStyleSheet::SetName(const OUString& rNew, bool bReindexNow)
 {

@@ -462,7 +462,7 @@ ScDPNumGroupDimension::~ScDPNumGroupDimension()
 
 void ScDPNumGroupDimension::SetDateDimension()
 {
-    aGroupInfo.mbEnable = true;   //! or query both?
+    aGroupInfo.mbEnable = true;   //TODO: or query both?
     mbDateDimension = true;
 }
 
@@ -514,7 +514,7 @@ void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDi
 long ScDPGroupTableData::GetDimensionIndex( const OUString& rName )
 {
     for (long i = 0; i < nSourceCount; ++i)                         // nSourceCount excludes data layout
-        if (pSourceData->getDimensionName(i).equals(rName))        //! ignore case?
+        if (pSourceData->getDimensionName(i).equals(rName))        //TODO: ignore case?
             return i;
     return -1;  // none
 }

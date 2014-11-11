@@ -634,7 +634,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if ( pSrcPattern != aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) )
                 {
                     // Transfer template too
-                    //! Merge ApplyPattern to AttrArray ??
+                    //TODO: Merge ApplyPattern to AttrArray ??
                     if ( pStyleSheet )
                         aCol[nCol].ApplyStyle( static_cast<SCROW>(nRow), *pStyleSheet );
 
@@ -988,7 +988,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
                 }
                 else
                 {
-                    //! Zahlformat je nach Index holen?
+                    //TODO: get number format according to Index?
                     Color* pColor;
                     sal_uLong nNumFmt = GetNumberFormat( nCol1, nRow1 );
                     pDocument->GetFormatTable()->GetOutputString( nStart, nNumFmt, aValue, &pColor );

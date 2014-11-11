@@ -548,7 +548,7 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
 
 bool ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const
 {
-    bool bRet = true;               //! merken?
+    bool bRet = true;               //TODO: remember?
     if (!bTableAreaValid)
     {
         bRet = GetPrintArea(nTableAreaX, nTableAreaY, true);
@@ -676,7 +676,7 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
 
     for (i=0; i<=MAXCOL; i++)               // Daten testen
     {
-        if (!aCol[i].IsEmptyBlock( nStartRow, nEndRow ))        //! bNotes ??????
+        if (!aCol[i].IsEmptyBlock( nStartRow, nEndRow ))        //TODO: bNotes ??????
         {
             bFound = true;
             if (i>nMaxX)
@@ -1203,11 +1203,11 @@ bool ScTable::ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
                         GetAttr(nCol,nRow,ATTR_PROTECTION))->GetProtection())
         return false;
 
-    if (bMarked || bUnprotected)        //! auch sonst ???
+    if (bMarked || bUnprotected)        //TODO: also in other case ???
     {
-        //  ausgeblendete muessen uebersprungen werden, weil der Cursor sonst
-        //  auf der naechsten Zelle landet, auch wenn die geschuetzt/nicht markiert ist.
-        //! per Extra-Parameter steuern, nur fuer Cursor-Bewegung ???
+        // Hidden cells must be skipped, as the cursor would end up on the next cell
+        // even if it is protected or not marked.
+        //TODO: control per Extra-Parameter, only for Cursor movement ???
 
         if (RowHidden(nRow))
             return false;
@@ -1794,10 +1794,10 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
     if (!aCell.hasString())
         return;
 
-    bool bFormula = false;  //! ueberge
+    bool bFormula = false;  //TODO: pass as parameter
     long nPixel = aCol[rCol].GetTextWidth(nRow);
 
-    // Breite bereits im Idle-Handler berechnet?
+    // Width already calculated in Idle-Handler ?
     if ( TEXTWIDTH_DIRTY == nPixel )
     {
         ScNeededSizeOptions aOptions;

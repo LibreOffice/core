@@ -85,7 +85,7 @@ OUString ScSheetDPData::getDimensionName(long nColumn)
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
     {
-        //! different internal and display names?
+        //TODO: different internal and display names?
         //return "Data";
         return ScGlobal::GetRscString(STR_PIVOT_DATA);
     }

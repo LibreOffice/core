@@ -447,7 +447,7 @@ void ImportExcel8::PostDocLoad( void )
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();
 
-    GetWebQueryBuffer().Apply();    //! test if extant
+    GetWebQueryBuffer().Apply();    //TODO: test if extant
     GetSheetProtectBuffer().Apply();
     GetDocProtectBuffer().Apply();
 

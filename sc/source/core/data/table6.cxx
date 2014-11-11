@@ -601,7 +601,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
     return bFound;
 }
 
-//!     einzelnes Pattern fuer Undo zurueckgeben
+//TODO: return single Pattern for Undo
 
 bool ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                            const ScMarkData& rMark, bool bIsUndo)
