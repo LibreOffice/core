@@ -315,7 +315,10 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                 long nNewHeight;
                 nNewHeight = OutputDevice::LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
 
-                SvxFontHeightItem aFntHeightItem( nNewHeight, static_cast<const SvxFontHeightItem*>(pItem)->GetProp(), aFntHeightIems[i] );
+                SvxFontHeightItem aFntHeightItem( nNewHeight, 100, aFntHeightIems[i] );
+                aFntHeightItem.SetProp(
+                    static_cast<const SvxFontHeightItem*>(pItem)->GetProp(),
+                    static_cast<const SvxFontHeightItem*>(pItem)->GetPropUnit());
                 rSet.GetAttrSet().Put( aFntHeightItem );
             }
         }
