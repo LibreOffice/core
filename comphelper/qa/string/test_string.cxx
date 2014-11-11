@@ -44,6 +44,7 @@ public:
     void testIsdigitAsciiString();
     void testReverseString();
     void testEqualsString();
+    void testCompareVersionStrings();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(testNatural);
@@ -57,6 +58,7 @@ public:
     CPPUNIT_TEST(testIsdigitAsciiString);
     CPPUNIT_TEST(testReverseString);
     CPPUNIT_TEST(testEqualsString);
+    CPPUNIT_TEST(testCompareVersionStrings);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -405,6 +407,44 @@ void TestString::testEqualsString()
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
     aIn = OString();
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
+}
+
+int sign(int n)
+{
+    if (n == 0)
+        return 0;
+    if (n < 0)
+        return -1;
+    else
+        return 1;
+}
+
+void TestString::testCompareVersionStrings()
+{
+#ifdef TEST
+#error TEST already defined
+#endif
+#define TEST(a,b,result) \
+    CPPUNIT_ASSERT(sign(::comphelper::string::compareVersionStrings(a, b)) == result); \
+    if ( result != 0 ) \
+        CPPUNIT_ASSERT(sign(::comphelper::string::compareVersionStrings(b, a)) == -(result))
+
+    TEST("", "", 0);
+    TEST("", "0", -1);
+    TEST("", "a", -1);
+    TEST("0", "1", -1);
+    TEST("1", "2", -1);
+    TEST("2", "10", -1);
+    TEST("01", "1", -1);
+    TEST("01", "001", 1);
+    TEST("1.00", "1", 1);
+    TEST("1.2", "1", 1);
+    TEST("1.01", "1.1", -1);
+    TEST("1.001", "1.1", -1);
+    TEST("1.001", "1.010", -1);
+    TEST("1.2.a", "1.2.b", -1);
+
+#undef TEST
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestString);

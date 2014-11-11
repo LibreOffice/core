@@ -463,6 +463,15 @@ inline bool isalnumAscii(sal_Unicode c)
     return isalphaAscii(c) || isdigitAscii(c);
 }
 
+/** Compare two strings containing software version numbers
+
+    Inspired by the GNU strverscmp(), but there is no guarantee that the exact
+    same semantics are used, or that the semantics are stable between LibreOffice versions.
+
+    @return -1, 0 or 1
+*/
+COMPHELPER_DLLPUBLIC int compareVersionStrings(const OUString& a, const OUString& b);
+
 } }
 
 #endif
