@@ -51,6 +51,26 @@
                  ((float) SALCOLOR_BLUE( nColor )) / 255,  \
                  (1.0f - fTransparency) )
 
+OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
+    : mpFrame(NULL)
+    , mbOffscreen(false)
+    , mnFramebufferId(0)
+    , mpOffscreenTex(NULL)
+    , mnLineColor(SALCOLOR_NONE)
+    , mnFillColor(SALCOLOR_NONE)
+    , mnSolidProgram(0)
+    , mnColorUniform(0)
+    , mnTextureProgram(0)
+    , mnSamplerUniform(0)
+    , mnMaskedTextureProgram(0)
+    , mnMaskedSamplerUniform(0)
+    , mnMaskSamplerUniform(0)
+    , mnMaskProgram(0)
+    , mnMaskUniform(0)
+    , mnMaskColorUniform(0)
+{
+}
+
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
 }
@@ -162,6 +182,7 @@ void OpenGLSalGraphicsImpl::SetROPFillColor( SalROPColor /*nROPColor*/ )
 
 bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
 {
+    SAL_INFO( "vcl.opengl", "::CreateSolidProgram" );
     mnSolidProgram = OpenGLHelper::LoadShaders( "solidVertexShader", "solidFragmentShader" );
     if( mnSolidProgram == 0 )
         return false;
