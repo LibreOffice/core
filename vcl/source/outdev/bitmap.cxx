@@ -20,6 +20,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/image.hxx>
@@ -31,7 +32,6 @@
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <boost/scoped_array.hpp>
-
 
 void OutputDevice::DrawBitmap( const Point& rDestPt, const Bitmap& rBitmap )
 {
@@ -656,7 +656,6 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
     if( !aDstRect.Intersection( Rectangle( aOutPt, aOutSz ) ).IsEmpty() )
     {
-        bool bNativeAlpha = false;
         static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
         // #i83087# Naturally, system alpha blending cannot work with
         // separate alpha VDev
@@ -686,14 +685,18 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             };
             SalBitmap* pSalSrcBmp = rBmp.ImplGetImpBitmap()->ImplGetSalBitmap();
             SalBitmap* pSalAlphaBmp = rAlpha.ImplGetImpBitmap()->ImplGetSalBitmap();
-            bNativeAlpha = mpGraphics->DrawAlphaBitmap( aTR, *pSalSrcBmp, *pSalAlphaBmp, this );
+
+            if (mpGraphics->DrawAlphaBitmap( aTR, *pSalSrcBmp, *pSalAlphaBmp, this ))
+                return;
         }
+
+        // we need to make sure OpenGL never reaches this slow code path
+        assert(!OpenGLHelper::isVCLOpenGLEnabled());
 
         VirtualDevice* pOldVDev = mpAlphaVDev;
 
         Rectangle aBmpRect( Point(), rBmp.GetSizePixel() );
-        if( !bNativeAlpha
-                &&  !aBmpRect.Intersection( Rectangle( rSrcPtPixel, rSrcSizePixel ) ).IsEmpty() )
+        if (!aBmpRect.Intersection(Rectangle(rSrcPtPixel, rSrcSizePixel)).IsEmpty())
         {
             // The scaling in this code path produces really ugly results - it
             // does the most trivial scaling with no smoothing.
