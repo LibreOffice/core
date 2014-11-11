@@ -103,8 +103,46 @@ public:
         drawToDevice(getOutDev(), false);
     }
 
-    std::vector<Rectangle> partitionAndClear(OutputDevice &rDev,
-                                             int nX, int nY);
+    static std::vector<Rectangle> partition(OutputDevice &rDev, int nX, int nY)
+    {
+        Rectangle r;
+        std::vector<Rectangle> aRegions;
+
+        // Make small cleared area for these guys
+        Size aSize(rDev.GetOutputSizePixel());
+        long nBorderSize = aSize.Width() / 32;
+        long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
+        long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
+        for (int y = 0; y < nY; y++ )
+        {
+            for (int x = 0; x < nX; x++ )
+            {
+                r.SetPos(Point(nBorderSize + (nBorderSize + nBoxWidth) * x,
+                               nBorderSize + (nBorderSize + nBoxHeight) * y));
+                r.SetSize(Size(nBoxWidth, nBoxHeight));
+                aRegions.push_back(r);
+            }
+        }
+
+        return aRegions;
+    }
+
+    static void clearRects(OutputDevice &rDev, std::vector<Rectangle> &rRects)
+    {
+        for (size_t i = 0; i < rRects.size(); i++)
+        {
+            // knock up a nice little border
+            rDev.SetLineColor(COL_GRAY);
+            rDev.SetFillColor(COL_LIGHTGRAY);
+            if (i % 2)
+            {
+                int nBorderSize = rRects[i].GetWidth() / 5;
+                rDev.DrawRect(rRects[i], nBorderSize, nBorderSize);
+            }
+            else
+                rDev.DrawRect(rRects[i]);
+        }
+    }
 
     void drawBackground(OutputDevice &rDev, Rectangle r)
     {
@@ -150,7 +188,7 @@ public:
             rDev.SetTextColor( Color( COL_BLACK ) );
             vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
             rDev.SetFont( aFont );
-            rDev.DrawText( r, OUString( "Just a simple text" ) );
+            rDev.DrawText( r, OUString( "Click any rect to zoom" ) );
         }
     };
 
@@ -200,15 +238,70 @@ public:
     struct DrawGradient : public RegionRenderer
     {
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
-                                  const RenderContext &) SAL_OVERRIDE
+                                  const RenderContext &rCtx) SAL_OVERRIDE
         {
-            Gradient aGradient;
-            aGradient.SetStartColor(COL_YELLOW);
-            aGradient.SetEndColor(COL_RED);
-//          aGradient.SetAngle(45);
-            aGradient.SetStyle(GradientStyle_RECT);
-            aGradient.SetBorder(r.GetSize().Width()/20);
-            rDev.DrawGradient(r, aGradient);
+            if (rCtx.meStyle == RENDER_EXPANDED)
+            {
+                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 5, 4));
+                sal_uInt32 nStartCols[] = {
+                    COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
+                    COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN,
+                    COL_GRAY, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTCYAN,
+                    COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK
+                };
+                sal_uInt32 nEndCols[] = {
+                    COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK,
+                    COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
+                    COL_GRAY, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTCYAN,
+                    COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN
+                };
+                GradientStyle eStyles[] = {
+                    GradientStyle_LINEAR, GradientStyle_AXIAL, GradientStyle_RADIAL, GradientStyle_ELLIPTICAL, GradientStyle_SQUARE,
+                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL,
+                    GradientStyle_LINEAR, GradientStyle_AXIAL, GradientStyle_RADIAL, GradientStyle_ELLIPTICAL, GradientStyle_SQUARE,
+                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL
+                };
+                sal_uInt16 nAngles[] = {
+                    0, 0, 0, 0, 0,
+                    15, 30, 45, 60, 75,
+                    90, 120, 135, 160, 180,
+                    0, 0, 0, 0, 0
+                };
+                sal_uInt16 nBorders[] = {
+                    0, 0, 0, 0, 0,
+                    1, 10, 100, 10, 1,
+                    0, 0, 0, 0, 0,
+                    1, 10, 20, 10, 1,
+                    0, 0, 0, 0, 0
+                };
+                DemoWin::clearRects(rDev, aRegions);
+                assert(aRegions.size() <= SAL_N_ELEMENTS(nStartCols));
+                assert(aRegions.size() <= SAL_N_ELEMENTS(nEndCols));
+                assert(aRegions.size() <= SAL_N_ELEMENTS(eStyles));
+                assert(aRegions.size() <= SAL_N_ELEMENTS(nAngles));
+                assert(aRegions.size() <= SAL_N_ELEMENTS(nBorders));
+                for (size_t i = 0; i < aRegions.size(); i++)
+                {
+                    Rectangle aSub = aRegions[i];
+                    Gradient aGradient;
+                    aGradient.SetStartColor(Color(nStartCols[i]));
+                    aGradient.SetEndColor(Color(nEndCols[i]));
+                    aGradient.SetStyle(eStyles[i]);
+                    aGradient.SetAngle(nAngles[i]);
+                    aGradient.SetBorder(nBorders[i]);
+                    rDev.DrawGradient(aSub, aGradient);
+                }
+            }
+            else
+            {
+                Gradient aGradient;
+                aGradient.SetStartColor(COL_YELLOW);
+                aGradient.SetEndColor(COL_RED);
+                //          aGradient.SetAngle(45);
+                aGradient.SetStyle(GradientStyle_RECT);
+                aGradient.SetBorder(r.GetSize().Width()/20);
+                rDev.DrawGradient(r, aGradient);
+            }
         }
     };
 
@@ -378,7 +471,8 @@ public:
         else
         {
             aCtx.meStyle = RENDER_THUMB;
-            std::vector<Rectangle> aRegions(partitionAndClear(rDev, mnSegmentsX, mnSegmentsY));
+            std::vector<Rectangle> aRegions(DemoWin::partition(rDev, mnSegmentsX, mnSegmentsY));
+            DemoWin::clearRects(rDev, aRegions);
             for (size_t i = 0; i < maRenderers.size(); i++)
                 maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
         }
@@ -417,7 +511,7 @@ void DemoWin::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     // click on a region to zoom into it
-    std::vector<Rectangle> aRegions(partitionAndClear(*this, mnSegmentsX, mnSegmentsY));
+    std::vector<Rectangle> aRegions(partition(*this, mnSegmentsX, mnSegmentsY));
     for (size_t i = 0; i < aRegions.size(); i++)
     {
         if (aRegions[i].IsInside(rMEvt.GetPosPixel()))
@@ -451,39 +545,6 @@ void DemoWin::MouseButtonDown( const MouseEvent& rMEvt )
         mpButtonWin = NULL;
         mpButton = NULL;
     }
-}
-
-std::vector<Rectangle> DemoWin::partitionAndClear(OutputDevice &rDev, int nX, int nY)
-{
-    Rectangle r;
-    std::vector<Rectangle> aRegions;
-
-    // Make small cleared area for these guys
-    Size aSize(rDev.GetOutputSizePixel());
-    long nBorderSize = aSize.Width() / 32;
-    long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
-    long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
-    for (int y = 0; y < nY; y++ )
-    {
-        for (int x = 0; x < nX; x++ )
-        {
-            r.SetPos(Point(nBorderSize + (nBorderSize + nBoxWidth) * x,
-                           nBorderSize + (nBorderSize + nBoxHeight) * y));
-            r.SetSize(Size(nBoxWidth, nBoxHeight));
-
-            // knock up a nice little border
-            rDev.SetLineColor(COL_GRAY);
-            rDev.SetFillColor(COL_LIGHTGRAY);
-            if ((x + y) % 2)
-                rDev.DrawRect(r, nBorderSize, nBorderSize);
-            else
-                rDev.DrawRect(r);
-
-            aRegions.push_back(r);
-        }
-    }
-
-    return aRegions;
 }
 
 void DemoWin::InitRenderers()
