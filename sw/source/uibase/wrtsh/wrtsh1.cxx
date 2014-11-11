@@ -1234,7 +1234,6 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                 if(bHtml && nLvl)
                 {
                     // 1/2" for HTML
-                    aFmt.SetLSpace(720);
                     aFmt.SetAbsLSpace(nLvl * 720);
                 }
                 else if ( nWidthOfTabs > 0 )

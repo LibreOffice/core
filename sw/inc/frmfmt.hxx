@@ -319,9 +319,6 @@ public:
     typedef std::multimap< SwNodeIndex, SwFrmFmt* >::const_iterator const_iterator;
     typedef std::pair< const_iterator, const_iterator > const_iterator_pair;
     const_iterator_pair equal_range( const SwNodeIndex& pos ) const;
-    const_iterator lower_bound( const SwNodeIndex& pos ) const;
-    const_iterator upper_bound( const SwNodeIndex& pos ) const;
-    const_iterator end() const;
 private:
     std::multimap< SwNodeIndex, SwFrmFmt* > items;
     const SwDoc* doc;

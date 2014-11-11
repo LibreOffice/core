@@ -408,7 +408,6 @@ SwNumRule::SwNumRule( const OUString& rNm,
             pFmt = new SwNumFmt;
             pFmt->SetIncludeUpperLevels( 1 );
             pFmt->SetStart( 1 );
-            pFmt->SetLSpace( lNumIndent );
             pFmt->SetAbsLSpace( lNumIndent + SwNumRule::GetNumIndent( n ) );
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
             pFmt->SetSuffix( "." );

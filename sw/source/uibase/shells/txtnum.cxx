@@ -161,7 +161,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     if ( n && bHtml )
                     {
                         // 1/2" for HTML
-                        aFmt.SetLSpace(720);
                         aFmt.SetAbsLSpace(n * 720);
                     }
                     // #i38904#  Default alignment for

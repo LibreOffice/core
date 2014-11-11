@@ -6033,7 +6033,6 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet,  boost::optional< sal_Int16 >& 
             {
                 if ( aNumberFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE )
                 {
-                    aNumberFormat.SetLSpace( 0 );
                     aNumberFormat.SetAbsLSpace( 0 );
                     aNumberFormat.SetFirstLineOffset( 0 );
                     aNumberFormat.SetCharTextDistance( 0 );

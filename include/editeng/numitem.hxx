@@ -118,8 +118,8 @@ private:
     Color               nBulletColor;       // Bullet color
 
     // mode indicating, if the position and spacing of the list label is
-    // determined by the former attributes (nFirstLineOffset, nAbsLSpace,
-    // nLSpace and nCharTextDistance) called position and spacing via label
+    // determined by the former attributes (nFirstLineOffset, nAbsLSpace
+    // and nCharTextDistance) called position and spacing via label
     // width and position (LABEL_WIDTH_AND_POSITION) or by the new attributes
     // (meLabelFollowedBy, mnListtabPos, mnFirstLineIndent and mnIndentAt)
     // called position and spacing via label alignment.
@@ -130,7 +130,6 @@ private:
 
     short               nFirstLineOffset;   // First line indent
     short               nAbsLSpace;         // Distance Border<->Number
-    short               nLSpace;            // relative to the previous indentation
     short               nCharTextDistance;  // Distance Number<->Text
 
     // specifies what follows the list label before the text of the first line
@@ -202,8 +201,6 @@ public:
     SvxNumPositionAndSpaceMode GetPositionAndSpaceMode() const { return mePositionAndSpaceMode;}
     void SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode );
 
-    void            SetLSpace(short nSet) {nLSpace = nSet;}
-    short           GetLSpace() const;
     void            SetAbsLSpace(short nSet) {nAbsLSpace = nSet;}
     short           GetAbsLSpace() const;
     void            SetFirstLineOffset(short nSet) { nFirstLineOffset = nSet;}

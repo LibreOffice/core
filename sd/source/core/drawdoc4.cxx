@@ -1224,7 +1224,6 @@ void SdDrawDocument::SetTextDefaults() const
 
     SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, SVX_MAX_NUM, false);
 
-    //aNumberFormat.SetLSpace( 0 );
     //aNumberFormat.SetAbsLSpace( 0 );
     //aNumberFormat.SetFirstLineOffset( 0 );
     //aNumRule.SetLevel( 0, aNumberFormat );
@@ -1232,7 +1231,6 @@ void SdDrawDocument::SetTextDefaults() const
     for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
     {
         const short nLSpace = (i + 1) * 600;
-        aNumberFormat.SetLSpace(nLSpace);
         aNumberFormat.SetAbsLSpace(nLSpace);
         aNumberFormat.SetFirstLineOffset(-600);
         aNumRule.SetLevel( i, aNumberFormat );

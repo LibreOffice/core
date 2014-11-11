@@ -612,7 +612,6 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
     if( rAV.aBits1 & 0x08 )      //fHang
     {
         rNum.SetFirstLineOffset( -nIndent );
-        rNum.SetLSpace( nIndent );
         rNum.SetAbsLSpace( nIndent );
     }
     else

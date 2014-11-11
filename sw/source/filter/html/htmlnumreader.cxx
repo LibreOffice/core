@@ -492,7 +492,6 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFmt.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_BUL_LEVEL) );
-        aNumFmt.SetLSpace( (sal_uInt16)(-HTML_NUMBUL_INDENT) );
         aNumFmt.SetFirstLineOffset( HTML_NUMBUL_INDENT );
         aNumRule.Set( 0, aNumFmt );
 

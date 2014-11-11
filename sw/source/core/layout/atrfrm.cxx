@@ -3369,19 +3369,4 @@ SwFrmFmtAnchorMap::const_iterator_pair SwFrmFmtAnchorMap::equal_range( const SwN
     return items.equal_range( pos );
 }
 
-SwFrmFmtAnchorMap::const_iterator SwFrmFmtAnchorMap::lower_bound( const SwNodeIndex& pos ) const
-{
-    return items.lower_bound( pos );
-}
-
-SwFrmFmtAnchorMap::const_iterator SwFrmFmtAnchorMap::upper_bound( const SwNodeIndex& pos ) const
-{
-    return items.upper_bound( pos );
-}
-
-SwFrmFmtAnchorMap::const_iterator SwFrmFmtAnchorMap::end() const
-{
-    return items.end();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

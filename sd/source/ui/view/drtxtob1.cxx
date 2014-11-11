@@ -371,7 +371,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                                 else
                                 {
                                     aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
-                                    aFmt.SetLSpace(0);
                                     aFmt.SetAbsLSpace(0);
                                     aFmt.SetFirstLineOffset(0);
                                 }

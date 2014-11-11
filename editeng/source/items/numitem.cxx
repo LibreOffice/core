@@ -156,7 +156,6 @@ SvxNumberFormat::SvxNumberFormat( sal_Int16 eType,
       mePositionAndSpaceMode( ePositionAndSpaceMode ),
       nFirstLineOffset(0),
       nAbsLSpace(0),
-      nLSpace(0),
       nCharTextDistance(0),
       meLabelFollowedBy( LISTTAB ),
       mnListtabPos( 0 ),
@@ -182,7 +181,6 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     , nBulletRelSize(100)
     , nFirstLineOffset(0)
     , nAbsLSpace(0)
-    , nLSpace(0)
     , nCharTextDistance(0)
 {
     sal_uInt16 nTmp16(0);
@@ -197,7 +195,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
 
     rStream.ReadInt16( nFirstLineOffset );
     rStream.ReadInt16( nAbsLSpace );
-    rStream.ReadInt16( nLSpace );
+    rStream.SeekRel(2); //skip old now unused nLSpace;
 
     rStream.ReadInt16( nCharTextDistance );
 
@@ -261,7 +259,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
 
     rStream.WriteInt16( nFirstLineOffset );
     rStream.WriteInt16( nAbsLSpace );
-    rStream.WriteInt16( nLSpace );
+    rStream.WriteInt16( 0 ); // write a dummy for old now unused nLSpace
 
     rStream.WriteInt16( nCharTextDistance );
     rtl_TextEncoding eEnc = osl_getThreadTextEncoding();
@@ -323,7 +321,6 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
         mePositionAndSpaceMode = rFormat.mePositionAndSpaceMode;
         nFirstLineOffset    = rFormat.nFirstLineOffset;
         nAbsLSpace          = rFormat.nAbsLSpace ;
-        nLSpace             = rFormat.nLSpace ;
         nCharTextDistance   = rFormat.nCharTextDistance ;
         meLabelFollowedBy = rFormat.meLabelFollowedBy;
         mnListtabPos = rFormat.mnListtabPos;
@@ -359,7 +356,6 @@ bool  SvxNumberFormat::operator==( const SvxNumberFormat& rFormat) const
         mePositionAndSpaceMode != rFormat.mePositionAndSpaceMode ||
         nFirstLineOffset    != rFormat.nFirstLineOffset ||
         nAbsLSpace          != rFormat.nAbsLSpace ||
-        nLSpace             != rFormat.nLSpace ||
         nCharTextDistance   != rFormat.nCharTextDistance ||
         meLabelFollowedBy != rFormat.meLabelFollowedBy ||
         mnListtabPos != rFormat.mnListtabPos ||
@@ -454,10 +450,6 @@ void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePosit
     mePositionAndSpaceMode = ePositionAndSpaceMode;
 }
 
-short SvxNumberFormat::GetLSpace() const
-{
-    return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION ? nLSpace : 0;
-}
 short SvxNumberFormat::GetAbsLSpace() const
 {
     return mePositionAndSpaceMode == LABEL_WIDTH_AND_POSITION
@@ -604,7 +596,6 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
                 if ( eDefaultNumberFormatPositionAndSpaceMode ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
-                    aFmts[i]->SetLSpace( convertMm100ToTwip(DEF_WRITER_LSPACE) );
                     aFmts[i]->SetAbsLSpace( convertMm100ToTwip(DEF_WRITER_LSPACE * (i+1)) );
                     aFmts[i]->SetFirstLineOffset(convertMm100ToTwip(-DEF_WRITER_LSPACE));
                 }
@@ -626,7 +617,6 @@ SvxNumRule::SvxNumRule( sal_uLong nFeatures,
             }
             else
             {
-                aFmts[i]->SetLSpace( DEF_DRAW_LSPACE );
                 aFmts[i]->SetAbsLSpace( DEF_DRAW_LSPACE * (i) );
             }
         }
