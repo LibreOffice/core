@@ -24,16 +24,13 @@
  <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="5505"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false" toolbar:helpid="5502"/>
- <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:helpid="5331"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:visible="false" toolbar:helpid="5331"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="6312" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:helpid="6674"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="20622"/>
- <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:helpid="5710"/>
  <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:helpid="5711"/>
@@ -43,12 +40,17 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="5701"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="20622"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false" toolbar:helpid="12021"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:visible="false" toolbar:helpid="10096"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:helpid="10096"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:HelpIndex"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelpIndex" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>
 </toolbar:toolbar>
