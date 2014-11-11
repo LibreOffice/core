@@ -86,13 +86,13 @@ struct SwSendMailDialog_Impl
     ::rtl::Reference< IMailDispatcherListener>  xMailListener;
     uno::Reference< mail::XMailService >        xConnectedMailService;
     uno::Reference< mail::XMailService >        xConnectedInMailService;
-    Timer                                       aRemoveTimer;
+    Idle                                        aRemoveIdle;
 
     SwSendMailDialog_Impl() :
         nCurrentDescriptor(0),
         nDocumentCount(0)
              {
-                aRemoveTimer.SetTimeout(500);
+                aRemoveIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
              }
 
     ~SwSendMailDialog_Impl()
@@ -513,9 +513,9 @@ void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
     ModelessDialog::StateChanged( nStateChange );
     if(StateChangedType::VISIBLE == nStateChange && !IsVisible())
     {
-        m_pImpl->aRemoveTimer.SetTimeoutHdl( STATIC_LINK( this, SwSendMailDialog,
+        m_pImpl->aRemoveIdle.SetIdleHdl( STATIC_LINK( this, SwSendMailDialog,
                                                     RemoveThis ) );
-        m_pImpl->aRemoveTimer.Start();
+        m_pImpl->aRemoveIdle.Start();
     }
 }
 
