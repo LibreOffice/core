@@ -1,4 +1,3 @@
-cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 res/sx03129.png dbaccess/res/db.png
 dbaccess/res/sc021.png dbaccess/res/queryeditdesign_sc.png
