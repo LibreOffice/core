@@ -593,10 +593,10 @@ void OutputDevice::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 /*nFlags*/)
 
 void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rPosAry )
 {
-    SalGraphics*        pGraphics2;
+    SalGraphics* pSrcGraphics;
 
     if ( this == pSrcDev )
-        pGraphics2 = NULL;
+        pSrcGraphics = NULL;
     else
     {
         if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
@@ -607,12 +607,12 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
                 if ( !((OutputDevice*)pSrcDev)->AcquireGraphics() )
                     return;
             }
-            pGraphics2 = pSrcDev->mpGraphics;
+            pSrcGraphics = pSrcDev->mpGraphics;
         }
         else
         {
             if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpFrameWindow == static_cast<const vcl::Window*>(pSrcDev)->mpWindowImpl->mpFrameWindow )
-                pGraphics2 = NULL;
+                pSrcGraphics = NULL;
             else
             {
                 if ( !pSrcDev->mpGraphics )
@@ -620,7 +620,7 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
                     if ( !((OutputDevice*)pSrcDev)->AcquireGraphics() )
                         return;
                 }
-                pGraphics2 = pSrcDev->mpGraphics;
+                pSrcGraphics = pSrcDev->mpGraphics;
 
                 if ( !mpGraphics )
                 {
@@ -645,14 +645,14 @@ void OutputDevice::drawOutDevDirect( const OutputDevice* pSrcDev, SalTwoRect& rP
         // mirroring may be required
         // because only windows have a SalGraphicsLayout
         // mirroring is performed here
-        if( (GetOutDevType() != OUTDEV_WINDOW) && pGraphics2 && (pGraphics2->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+        if( (GetOutDevType() != OUTDEV_WINDOW) && pSrcGraphics && (pSrcGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
         {
             SalTwoRect aPosAry2 = rPosAry;
-            pGraphics2->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
-            mpGraphics->CopyBits( aPosAry2, pGraphics2, this, pSrcDev );
+            pSrcGraphics->mirror( aPosAry2.mnSrcX, aPosAry2.mnSrcWidth, pSrcDev );
+            mpGraphics->CopyBits( aPosAry2, pSrcGraphics, this, pSrcDev );
         }
         else
-            mpGraphics->CopyBits( rPosAry, pGraphics2, this, pSrcDev );
+            mpGraphics->CopyBits( rPosAry, pSrcGraphics, this, pSrcDev );
     }
 }
 
