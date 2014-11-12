@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_cbd4e948",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-12T13:03:09Z",
+      "side": 1,
+      "message": "This pre-decrement looks odd, it also did before, what is this statement supposed to do exactly?",
+      "revId": "8493add3e60b03ab2ae25f1fc4760a30d623a1c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
