@@ -2207,7 +2207,8 @@ double ScInterpreter::GetDoubleFromMatrix(const ScMatrixRef& pMat)
     SCSIZE nCols, nRows, nC, nR;
     pMat->GetDimensions( nCols, nRows);
     pJumpMatrix->GetPos( nC, nR);
-    if ( nC < nCols && nR < nRows )
+    // Use vector replication for single row/column arrays.
+    if ( (nC < nCols || nCols == 1) && (nR < nRows || nRows == 1) )
         return pMat->GetDouble( nC, nR);
 
     SetError( errNoValue);
