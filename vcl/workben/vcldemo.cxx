@@ -195,9 +195,60 @@ public:
     struct DrawCheckered : public RegionRenderer
     {
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
-                                  const RenderContext &) SAL_OVERRIDE
+                                  const RenderContext &rCtx) SAL_OVERRIDE
         {
-            rDev.DrawCheckered(r.TopLeft(), r.GetSize());
+            if (rCtx.meStyle == RENDER_EXPANDED)
+            {
+                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 2, 2));
+                for (size_t i = 0; i < aRegions.size(); i++)
+                {
+                    vcl::Region aRegion;
+                    Rectangle aSub(aRegions[i]);
+                    Rectangle aSmaller(aSub);
+                    aSmaller.Move(10,10);
+                    aSmaller.setWidth(aSmaller.getWidth()-20);
+                    aSmaller.setHeight(aSmaller.getHeight()-24);
+                    switch (i) {
+                    case 0:
+                        aRegion = vcl::Region(aSub);
+                        break;
+                    case 1:
+                        aRegion = vcl::Region(aSmaller);
+                        aRegion.XOr(aSub);
+                        break;
+                    case 2:
+                    {
+                        Polygon aPoly(aSub);
+                        aPoly.Rotate(aSub.Center(), 450);
+                        aPoly.Clip(aSmaller);
+                        aRegion = vcl::Region(aPoly);
+                        break;
+                    }
+                    case 3:
+                    {
+                        tools::PolyPolygon aPolyPoly;
+                        sal_Int32 nTW = aSub.GetWidth()/6;
+                        sal_Int32 nTH = aSub.GetHeight()/6;
+                        Rectangle aTiny(Point(4, 4), Size(nTW*2, nTH*2));
+                        aPolyPoly.Insert(Polygon(aTiny));
+                        aTiny.Move(nTW*3, nTH*3);
+                        aPolyPoly.Insert(Polygon(aTiny));
+                        aTiny.Move(nTW, nTH);
+                        aPolyPoly.Insert(Polygon(aTiny));
+
+                        aRegion = vcl::Region(aPolyPoly);
+                        break;
+                    }
+                    } // switch
+                    rDev.SetClipRegion(aRegion);
+                    rDev.DrawCheckered(aSub.TopLeft(), aSub.GetSize());
+                    rDev.SetClipRegion();
+                }
+            }
+            else
+            {
+                rDev.DrawCheckered(r.TopLeft(), r.GetSize());
+            }
         }
     };
 
