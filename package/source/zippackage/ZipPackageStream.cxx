@@ -772,6 +772,17 @@ bool ZipPackageStream::saveChild(
             pTempEntry->nCrc = -1;
             pTempEntry->nCompressedSize = pTempEntry->nSize = -1;
         }
+        uno::Reference< io::XSeekable > xSeek(xStream, uno::UNO_QUERY);
+        sal_Int32 nStreamLength = 0;
+        if (xSeek.is())
+           nStreamLength = xSeek->getLength();
+
+        // It's not worth to deflate big jpegs to save ~1% in a slow process
+        if (msMediaType.endsWith("/jpeg") && nStreamLength && nStreamLength > 500000)
+        {
+            ImplSetStoredData(*pTempEntry, xStream);
+            xSeek->seek(0);
+        }
 
         try
         {
@@ -799,8 +810,7 @@ bool ZipPackageStream::saveChild(
             {
                 bParallelDeflate = true;
                 // Do not deflate small streams in a thread
-                uno::Reference< io::XSeekable > xSeek( xStream, uno::UNO_QUERY );
-                if (xSeek.is() && xSeek->getLength() < 100000)
+                if (nStreamLength && nStreamLength < 100000)
                     bParallelDeflate = false;
 
                 if (bParallelDeflate)
