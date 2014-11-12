@@ -589,9 +589,9 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
         const SvGlobalName &rOleId = aObjS[i].GetClassName();
         OUString sClass;
         if (rOleId == SvGlobalName(SO3_OUT_CLASSID))
-            sClass = aObjS[i].GetHumanName();
-        else
             sClass = m_sOLE;
+        else
+            sClass = aObjS[i].GetHumanName();
         // don't show product version
         sClass = sClass.replaceFirst( sComplete, sWithoutVersion );
         m_pCheckLB->InsertEntry( sClass );
