@@ -25,10 +25,6 @@ ifneq ($(origin AR),default)
 gb_AR := $(AR)
 endif
 
-ifeq ($(CPUNAME),SPARC)
-gb_CPUDEFS := -D__sparcv8plus
-endif
-
 gb_OSDEFS := \
 	-D$(OS) \
 	-DSYSV \

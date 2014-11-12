@@ -8,6 +8,8 @@
 #
 #*************************************************************************
 
+gb_CPUDEFS := -D__sparcv8plus
+
 include $(GBUILDDIR)/platform/solaris.mk
 
 
