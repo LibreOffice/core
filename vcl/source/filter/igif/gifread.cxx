@@ -184,17 +184,20 @@ bool GIFReader::ReadGlobalHeader()
 
 void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 {
-    const sal_uLong nLen = 3UL * nCount;
+    sal_uLong nLen = 3UL * nCount;
+    const sal_uInt64 nMaxPossible = rIStm.remainingSize();
+    if (nLen > nMaxPossible)
+        nLen = nMaxPossible;
     boost::scoped_array<sal_uInt8> pBuf(new sal_uInt8[ nLen ]);
-
-    rIStm.Read( pBuf.get(), nLen );
+    sal_Size nRead = rIStm.Read(pBuf.get(), nLen);
+    nCount = nRead/3UL;
     if( NO_PENDING( rIStm ) )
     {
         sal_uInt8* pTmp = pBuf.get();
 
-        for( sal_uLong i = 0UL; i < nCount; )
+        for (sal_uLong i = 0UL; i < nCount; ++i)
         {
-            BitmapColor& rColor = (*pPal)[ (sal_uInt16) i++ ];
+            BitmapColor& rColor = (*pPal)[i];
 
             rColor.SetRed( *pTmp++ );
             rColor.SetGreen( *pTmp++ );
