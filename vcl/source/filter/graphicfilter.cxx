@@ -662,6 +662,8 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             nCheckSize = nDecompressedSize < 256 ? nDecompressedSize : 256;
             aCodec.EndCompression();
             pCheckArray = sExtendedOrDecompressedFirstBytes;
+
+            bIsGZip = true;
         }
 
         bool bIsSvg(false);
@@ -696,7 +698,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
             pCheckArray = sExtendedOrDecompressedFirstBytes;
 
-            if(!bIsGZip)
+            if (bIsGZip)
             {
                 nCheckSize = nDecompressedSize < 2048 ? nDecompressedSize : 2048;
             }
