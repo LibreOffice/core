@@ -403,7 +403,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
     SAL_INFO( "vcl.opengl", "Created texture " << mpTexture->Id() );
 
     if( bAllocated )
-        delete pData;
+        delete[] pData;
 
     while( !maPendingOps.empty() )
     {

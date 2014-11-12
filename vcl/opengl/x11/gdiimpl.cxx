@@ -86,7 +86,7 @@ X11Pixmap* X11OpenGLSalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect
     XVisualInfo aVisualInfo;
     X11Pixmap* pPixmap;
     XImage* pImage;
-    sal_uInt8* pData;
+    char* pData;
 
     SAL_INFO( "vcl.opengl", "GetPixmapFromScreen" );
     // TODO: lfrb: Use context depth
@@ -100,12 +100,12 @@ X11Pixmap* X11OpenGLSalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect
     glXWaitX();
 
     // TODO: lfrb: What if offscreen?
-    pData = new sal_uInt8[rRect.GetWidth() * rRect.GetHeight() * 4];
+    pData = (char*) malloc( rRect.GetWidth() * rRect.GetHeight() * 4 );
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadPixels( rRect.Left(), GetHeight() - rRect.Top(), rRect.GetWidth(), rRect.GetHeight(),
                   GL_RGBA, GL_UNSIGNED_BYTE, pData );
 
-    pImage = XCreateImage( pDisplay, aVisualInfo.visual, 24, ZPixmap, 0, (char*) pData,
+    pImage = XCreateImage( pDisplay, aVisualInfo.visual, 24, ZPixmap, 0, pData,
                            rRect.GetWidth(), rRect.GetHeight(), 8, 0 );
     XInitImage( pImage );
     GC aGC = XCreateGC( pDisplay, pPixmap->GetPixmap(), 0, NULL );
