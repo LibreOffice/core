@@ -474,8 +474,7 @@ void SwLayAction::InternalAction()
     sal_uInt16 nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
     {
-        if ( !pPage && nCheckPageNum != USHRT_MAX &&
-             (!pPage || pPage->GetPhyPageNum() >= nCheckPageNum) )
+        if (!pPage || (nCheckPageNum != USHRT_MAX && pPage->GetPhyPageNum() >= nCheckPageNum))
         {
             if ( !pPage || pPage->GetPhyPageNum() > nCheckPageNum )
             {
