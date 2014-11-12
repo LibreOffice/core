@@ -225,6 +225,10 @@ public:
 
     void GetAllListeners(
         const ScRange& rRange, std::vector<sc::AreaListener>& rListeners, sc::AreaOverlapType eType );
+
+#if DEBUG_AREA_BROADCASTER
+    void Dump() const;
+#endif
 };
 
 /**
@@ -321,6 +325,10 @@ public:
 
     std::vector<sc::AreaListener> GetAllListeners(
         const ScRange& rRange, sc::AreaOverlapType eType );
+
+#if DEBUG_AREA_BROADCASTER
+    void Dump() const;
+#endif
 };
 
 class ScBulkBroadcast

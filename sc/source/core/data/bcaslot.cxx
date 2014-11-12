@@ -28,6 +28,10 @@
 #include "refupdat.hxx"
 #include "table.hxx"
 
+#if DEBUG_AREA_BROADCASTER
+#include <formulacell.hxx>
+#endif
+
 // Number of slots per dimension
 // must be integer divisors of MAXCOLCOUNT respectively MAXROWCOUNT
 #define BCA_SLOTS_COL ((MAXCOLCOUNT_DEFINE) / 16)
@@ -488,6 +492,33 @@ void ScBroadcastAreaSlot::GetAllListeners(
         }
     }
 }
+
+#if DEBUG_AREA_BROADCASTER
+void ScBroadcastAreaSlot::Dump() const
+{
+    ScBroadcastAreas::const_iterator it = aBroadcastAreaTbl.begin(), itEnd = aBroadcastAreaTbl.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScBroadcastAreaEntry& rEntry = *it;
+        const ScBroadcastArea* pArea = rEntry.mpArea;
+        cout << "  * range: " << rtl::OUStringToOString(pArea->GetRange().Format(SCA_VALID|SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr() << endl;
+        const SvtBroadcaster& rBC = pArea->GetBroadcaster();
+        const SvtBroadcaster::ListenersType& rListeners = rBC.GetAllListeners();
+        size_t n = rListeners.size();
+        cout << "    * listener count: " << n << endl;
+        for (size_t i = 0; i < n; ++i)
+        {
+            const ScFormulaCell* pFC = dynamic_cast<const ScFormulaCell*>(rListeners[i]);
+            if (!pFC)
+                continue;
+
+            cout << "      * listener: formula cell: "
+                << rtl::OUStringToOString(pFC->aPos.Format(SCA_VALID|SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
+                << endl;
+        }
+    }
+}
+#endif
 
 void ScBroadcastAreaSlot::FinallyEraseAreas()
 {
@@ -1025,5 +1056,30 @@ std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
 
     return aRet;
 }
+
+#if DEBUG_AREA_BROADCASTER
+void ScBroadcastAreaSlotMachine::Dump() const
+{
+    cout << "slot distribution count: " << nBcaSlots << endl;
+    TableSlotsMap::const_iterator it = aTableSlotsMap.begin(), itEnd = aTableSlotsMap.end();
+    for (; it != itEnd; ++it)
+    {
+        cout << "-- sheet (index: " << it->first << ")" << endl;
+
+        TableSlots* pTabSlots = it->second;
+        assert(pTabSlots);
+        ScBroadcastAreaSlot** ppSlots = pTabSlots->getSlots();
+        for (SCSIZE i = 0; i < nBcaSlots; ++i)
+        {
+            const ScBroadcastAreaSlot* pSlot = ppSlots[i];
+            if (pSlot)
+            {
+                cout << "* slot " << i << endl;
+                pSlot->Dump();
+            }
+        }
+    }
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

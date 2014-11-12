@@ -2352,6 +2352,14 @@ void ScDocument::DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const
 }
 #endif
 
+#if DEBUG_AREA_BROADCASTER
+void ScDocument::DumpAreaBroadcasters() const
+{
+    if (pBASM)
+        pBASM->Dump();
+}
+#endif
+
 bool ScDocument::TableExists( SCTAB nTab ) const
 {
     return ValidTab(nTab) && static_cast<size_t>(nTab) < maTabs.size() && maTabs[nTab];

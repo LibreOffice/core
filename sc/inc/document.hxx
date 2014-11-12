@@ -2106,6 +2106,10 @@ public:
     SC_DLLPUBLIC void DumpFormulaGroups( SCTAB nTab, SCCOL nCol ) const;
 #endif
 
+#if DEBUG_AREA_BROADCASTER
+    SC_DLLPUBLIC void DumpAreaBroadcasters() const;
+#endif
+
     void SetCalcConfig( const ScCalcConfig& rConfig );
     const ScCalcConfig& GetCalcConfig() const { return maCalcConfig; }
 
