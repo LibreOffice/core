@@ -1,7 +1,7 @@
 /**
  * Description: For unconstrained function
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Dec 28, 2001
  * Xiaofeng Xie    Mar 02, 2003
  * Xiaofeng Xie    May 11, 2004

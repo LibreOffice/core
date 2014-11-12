@@ -1,7 +1,7 @@
 /**
  * Description: provide the location and encoded goodness information
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Mar 1, 2003
  * Xiaofeng Xie    May 11, 2004
  *

@@ -1,7 +1,7 @@
 /**
- * Description: provide the inteface for updating according to the cycle number
+ * Description: provide the interface for updating according to the cycle number
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Feb 18, 2004
  *
  * This library is free software; you can redistribute it and/or

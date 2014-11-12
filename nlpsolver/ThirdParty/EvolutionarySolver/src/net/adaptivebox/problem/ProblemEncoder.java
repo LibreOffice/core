@@ -2,7 +2,7 @@
  * Description: Encodes the specified problem into encoded information for
  * forming the goodness landscape.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 31, 2000
  * Xiaofeng Xie    Sep. 19, 2002
  * Xiaofeng Xie    Mar. 01, 2003

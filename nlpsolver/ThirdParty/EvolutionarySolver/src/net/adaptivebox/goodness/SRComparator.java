@@ -1,7 +1,7 @@
 /**
  * Description: For comparison of goodness in landscape with stoch. ranking.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 29, 2004
  *
  * [1] Runarsson T P, Yao X. Stochastic ranking for constrained evolutionary

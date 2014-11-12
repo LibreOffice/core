@@ -2,9 +2,9 @@
  * Description: For comparison of goodness in landscape with penalty method.
  *
  * @Applied domain: efficiently for ridge class feasible space (SF), such as
- *  the problem with eqaulity constraints
+ *  the problem with equality constraints
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 29, 2004
  *
  * @version 1.0

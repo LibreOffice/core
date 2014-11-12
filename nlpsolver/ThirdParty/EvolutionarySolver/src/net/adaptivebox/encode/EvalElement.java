@@ -1,7 +1,7 @@
 /**
  * Description: provide the information for evaluating of a response (target)
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Mar 1, 2003
  * Xiaofeng Xie    May 11, 2004
 *

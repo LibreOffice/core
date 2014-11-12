@@ -9,7 +9,7 @@
   CL       real        [0, 0.1]   0               PSAgent: chaos factor
   //Other choices for c1, c2, w, and CL: (2, 2, 0.4, 0.001)
 
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 11, 2004
  * Xiaofeng Xie    Jul 01, 2008
  *
@@ -28,24 +28,24 @@
  * @version 1.0
  * @Since MAOS1.0
  *
- * @References:
+ * References:
  * [1] Kennedy J, Eberhart R C. Particle swarm optimization. IEEE Int. Conf. on
  * Neural Networks, Perth, Australia, 1995: 1942-1948
- * @ For original particle swarm idea
+ *   For original particle swarm idea
  * [2] Shi Y H, Eberhart R C. A Modified Particle Swarm Optimizer. IEEE Inter. Conf.
  * on Evolutionary Computation, Anchorage, Alaska, 1998: 69-73
- * @ For the inertia weight: adjust the trade-off between exploitation & exploration
+ *   For the inertia weight: adjust the trade-off between exploitation & exploration
  * [3] Clerc M, Kennedy J. The particle swarm - explosion, stability, and
  * convergence in a multidimensional complex space. IEEE Trans. on Evolutionary
  * Computation. 2002, 6 (1): 58-73
- * @ Constriction factor: ensures the convergence
+ *   Constriction factor: ensures the convergence
  * [4] Xie X F, Zhang W J, Yang Z L. A dissipative particle swarm optimization.
  * Congress on Evolutionary Computation, Hawaii, USA, 2002: 1456-1461
- * @ The CL parameter
+ *   The CL parameter
  * [5] Xie X F, Zhang W J, Bi D C. Optimizing semiconductor devices by self-
  * organizing particle swarm. Congress on Evolutionary Computation, Oregon, USA,
  * 2004: 2017-2022
- * @ Further experimental analysis on the convergence of PSO
+ *   Further experimental analysis on the convergence of PSO
  * [6] X F Xie, W J Zhang. SWAF: swarm algorithm framework for numerical
  *     optimization. Genetic and Evolutionary Computation Conference (GECCO),
  *     Seattle, WA, USA, 2004: 238-250

@@ -1,7 +1,7 @@
 /**
  * Description: provide the information for goodness evaluation of a target
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Mar  1, 2003
  * Xiaofeng Xie    May  3, 2004    Add grain value
  * Xiaofeng Xie    May 11, 2004    Add crowd distance

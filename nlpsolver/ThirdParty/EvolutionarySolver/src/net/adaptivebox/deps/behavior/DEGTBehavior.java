@@ -3,17 +3,12 @@
 
   #Supported parameters:
   NAME    VALUE_type   Range      DefaultV        Description
-<<<<<<< HEAD
-  FACTOR   real        (0, 1.2]   0.5           DEAgent: scale constant
-  CR       real        [0, 1]     0.9           DEAgent: crossover constant
-=======
   FACTOR   real        (0, 1.2]   0.5             DEAgent: scale constant
   CR       real        [0, 1]     0.9             DEAgent: crossover constant
->>>>>>> java: add @Override annotation to overriding methods
   //Other choices for FACTOR and CR: (0.5, 0.1)
 
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 11, 2004
  * Xiaofeng Xie    Jul 01, 2008
  *
@@ -24,7 +19,7 @@
  * [1] Storn R, Price K. Differential evolution - a simple and efficient
  *     heuristic for global optimization over continuous spaces. Journal of
  *     Global Optimization, 1997, 11: 341-359
- *     @ The original differential evolution idea
+ *     The original differential evolution idea
  * [2] X F Xie, W J Zhang. SWAF: swarm algorithm framework for numerical
  *     optimization. Genetic and Evolutionary Computation Conference (GECCO),
  *     Seattle, WA, USA, 2004: 238-250

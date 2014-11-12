@@ -1,7 +1,7 @@
 /**
  * Description: provide an bound, and the corresponding operations
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Oct. 9, 2002
  *
  * This library is free software; you can redistribute it and/or

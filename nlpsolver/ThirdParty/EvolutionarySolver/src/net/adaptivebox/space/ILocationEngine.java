@@ -1,7 +1,7 @@
 /**
  * Description: provide the information for location
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 3, 2003
  * Xiaofeng Xie    May 11, 2004
  *

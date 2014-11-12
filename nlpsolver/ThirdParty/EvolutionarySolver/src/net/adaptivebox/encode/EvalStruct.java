@@ -2,7 +2,7 @@
  * Description: provide the information for evaluating a set of targets values
  * into encoded information (For formation the goodness landscape by comparing)
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Mar 1, 2003
  * Xiaofeng Xie    May 11, 2004
  *

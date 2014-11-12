@@ -2,7 +2,7 @@
 /**
  * Description: set the library.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 14, 2004
  *
  * This library is free software; you can redistribute it and/or

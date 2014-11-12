@@ -2,7 +2,7 @@
 /**
  * Description: Contains a set of points.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Mar 7, 2003
  * Xiaofeng Xie    May 3, 2003
  * Xiaofeng Xie    May 11, 2004
