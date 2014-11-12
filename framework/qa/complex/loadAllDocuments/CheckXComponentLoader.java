@@ -87,12 +87,6 @@ public class CheckXComponentLoader
 
     // member
 
-    /** points to the global uno service manager. */
-    private XMultiServiceFactory m_xMSF = null;
-
-    /** provides XComponentLoader interface. */
-    private XFrame m_xDesktop = null;
-
     /** provides XComponentLoader interface too. */
     private XFrame m_xFrame = null;
 
@@ -123,12 +117,13 @@ public class CheckXComponentLoader
     @Before public void before()
     {
         // get uno service manager from global test environment
-        m_xMSF = getMSF();
+        /* points to the global uno service manager. */
+        XMultiServiceFactory xMSF = getMSF();
 
         // create stream provider
         try
         {
-            m_xStreamProvider = UnoRuntime.queryInterface(XSimpleFileAccess.class, m_xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess"));
+            m_xStreamProvider = UnoRuntime.queryInterface(XSimpleFileAccess.class, xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess"));
         }
         catch(java.lang.Throwable ex)
         {
@@ -136,9 +131,11 @@ public class CheckXComponentLoader
         }
 
         // create desktop instance
+        /* provides XComponentLoader interface. */
+        XFrame xDesktop = null;
         try
         {
-            m_xDesktop = UnoRuntime.queryInterface(XFrame.class, m_xMSF.createInstance("com.sun.star.frame.Desktop"));
+            xDesktop = UnoRuntime.queryInterface(XFrame.class, xMSF.createInstance("com.sun.star.frame.Desktop"));
         }
         catch(java.lang.Throwable ex)
         {
@@ -146,13 +143,13 @@ public class CheckXComponentLoader
         }
 
         // create frame instance
-        m_xFrame = m_xDesktop.findFrame("testFrame_componentLoader",
+        m_xFrame = xDesktop.findFrame("testFrame_componentLoader",
                                         FrameSearchFlag.TASKS | FrameSearchFlag.CREATE);
         assertNotNull("Couldn't create test frame.", m_xFrame);
 
         // define default loader for testing
         // TODO think about using of bot loader instances!
-        m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, m_xDesktop);
+        m_xLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
         assertNotNull("Desktop service doesn't support needed component loader interface.", m_xLoader);
 
         // get temp path for this environment

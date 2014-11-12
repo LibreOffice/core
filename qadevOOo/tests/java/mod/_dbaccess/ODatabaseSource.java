@@ -78,8 +78,6 @@ public class ODatabaseSource extends TestCase {
     private static int uniqueSuffixStat = 0 ;
 
     private int uniqueSuffix = 0 ;
-    private XNamingService xDBContextNameServ = null ;
-    private String databaseName = null ;
     private XOfficeDatabaseDocument xDBDoc = null;
 
     /**
@@ -136,7 +134,7 @@ public class ODatabaseSource extends TestCase {
             throw new StatusException("Service not available", e) ;
         }
 
-        xDBContextNameServ = UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
+        XNamingService xDBContextNameServ = UnoRuntime.queryInterface(XNamingService.class, oInterface) ;
 
         // retrieving temp directory for database
         String tmpDatabaseUrl = utils.getOfficeTempDir(Param.getMSF());
@@ -179,7 +177,7 @@ public class ODatabaseSource extends TestCase {
             throw new StatusException("Could not set property 'URL' ", e) ;
         }
 
-        databaseName = "NewDatabaseSource" + uniqueSuffix ;
+        String databaseName = "NewDatabaseSource" + uniqueSuffix ;
 
         // make sure that the DatabaseContext isn't already registered
         try {

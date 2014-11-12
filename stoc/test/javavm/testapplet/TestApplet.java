@@ -16,7 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import java.awt.Graphics;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;

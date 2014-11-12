@@ -44,8 +44,6 @@ public class FieldSelection
     private String[] AllFieldNames;
     private Integer ListBoxWidth;
 
-    private Integer SelListBoxPosX;
-
     private boolean bisModified = false;
 
     private final static int SOCMDMOVESEL = 1;
@@ -180,7 +178,7 @@ public class FieldSelection
             Integer cmdShiftButtonPosX = Integer.valueOf((CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
             Integer ListBoxPosY = Integer.valueOf(CompPosY + lblVertiDist + lblHeight);
             Integer ListBoxHeight = Integer.valueOf(CompHeight - 8 - 2);
-            SelListBoxPosX = Integer.valueOf(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
+            Integer SelListBoxPosX = Integer.valueOf(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
 
             IStep = Integer.valueOf(_iStep);
             if (bshowFourButtons)

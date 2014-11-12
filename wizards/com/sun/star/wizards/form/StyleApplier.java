@@ -43,20 +43,16 @@ import com.sun.star.wizards.ui.*;
 public class StyleApplier
 {
 
-    private WizardDialog CurUnoDialog;
     private XPropertySet xPageStylePropertySet;
     private XMultiServiceFactory xMSF;
-    private short curtabindex;
     private XRadioButton optNoBorder;
     private XRadioButton opt3DLook;
-    private XRadioButton optFlat;
     private XListBox lstStyles;
     private FormDocument curFormDocument;
     private short iOldLayoutPos;
     private static final String SCHANGELAYOUT = "changeLayout";
     private static final String SCHANGEBORDERTYPE = "changeBorderLayouts";
     private String[] StyleNames;
-    private String[] StyleNodeNames;
     private String[] FileNames;
     private final static int SOBACKGROUNDCOLOR = 0;
     private final static int SODBTEXTCOLOR = 1;
@@ -64,15 +60,14 @@ public class StyleApplier
     private final static int SOBORDERCOLOR = 5;
     private Short IBorderValue = Short.valueOf((short) 1);
 
-    public StyleApplier(WizardDialog _CurUnoDialog, FormDocument _curFormDocument)
+    public StyleApplier(WizardDialog CurUnoDialog, FormDocument _curFormDocument)
     {
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;
 
             TextStyleHandler oTextStyleHandler = new TextStyleHandler(xMSF, curFormDocument.xTextDocument);
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
-            this.CurUnoDialog = _CurUnoDialog;
-            curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
+            short curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
             Integer IStyleStep = Integer.valueOf(FormWizard.SOSTYLE_PAGE);
             String sPageStyles = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 86);
             String sNoBorder = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 29);
@@ -126,7 +121,7 @@ public class StyleApplier
                         UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, Short.valueOf((short) 1), IStyleStep, Short.valueOf(curtabindex++), "1", 93
                     });
 
-            optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
+            XRadioButton optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
@@ -153,7 +148,7 @@ public class StyleApplier
         {
             Object oRootNode = Configuration.getConfigurationRoot(xMSF, "org.openoffice.Office.FormWizard/FormWizard/Styles", false);
             XNameAccess xNameAccess = UnoRuntime.queryInterface(XNameAccess.class, oRootNode);
-            StyleNodeNames = xNameAccess.getElementNames();
+            String[] StyleNodeNames = xNameAccess.getElementNames();
             StyleNames = new String[StyleNodeNames.length];
             FileNames = new String[StyleNodeNames.length];
             for (int i = 0; i < StyleNodeNames.length; i++)

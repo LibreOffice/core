@@ -52,7 +52,6 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
      */
     public XCachedDynamicResultSetStubFactory oObj;
     private XDynamicResultSet resSet = null ;
-    private XDynamicResultSet resSetStub = null ;
 
     /**
     * Retrieves object relation.
@@ -77,7 +76,7 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
     public void _createCachedDynamicResultSetStub() {
         boolean result = true ;
 
-        resSetStub = oObj.createCachedDynamicResultSetStub(resSet) ;
+        XDynamicResultSet resSetStub = oObj.createCachedDynamicResultSetStub(resSet) ;
 
         if (resSetStub == null) {
             log.println("!!! Method returned null !!!") ;

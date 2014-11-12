@@ -30,7 +30,6 @@ import com.sun.star.beans.XPropertySet;
  */
 public class FrameDsc extends InstDescr {
 
-    private Size size = null;
     private int height = 2000;
     private int width = 2000;
     private String name = null;
@@ -77,7 +76,7 @@ public class FrameDsc extends InstDescr {
     public XInterface createInstance( XMultiServiceFactory docMSF ) {
         Object SrvObj = null;
 
-        size = new Size();
+        Size size = new Size();
         size.Height = height;
         size.Width = width;
 

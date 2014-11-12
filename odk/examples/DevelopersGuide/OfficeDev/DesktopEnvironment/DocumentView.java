@@ -101,10 +101,8 @@ public class DocumentView extends    JFrame
 
     private String                          msName              ;
 
-    private JButton                         mbtOpen             ;
     private JButton                         mbtSave             ;
     private JButton                         mbtExport           ;
-    private JButton                         mbtExit             ;
 
     private boolean                         mbDead              ;
 
@@ -122,10 +120,10 @@ public class DocumentView extends    JFrame
 
         // create and add command buttons to a panel
         // it will be a sub panel of later layouted UI
-        mbtOpen   = new JButton("Open ..."        );
+        JButton mbtOpen   = new JButton("Open ..."        );
         mbtSave   = new JButton("Save"            );
         mbtExport = new JButton("Save as HTML ...");
-        mbtExit   = new JButton("Exit"            );
+        JButton mbtExit   = new JButton("Exit"            );
 
         mbtOpen.setEnabled  (true );
         mbtSave.setEnabled  (false);

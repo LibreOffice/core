@@ -45,35 +45,30 @@ import com.sun.star.uno.XComponentContext;
 
 public class ResourceManager {
 
-    private final XComponentContext m_context;
-    private final String m_oxtRoot;
-    private final String m_resourceBaseUrl;
     private final String m_resourceBasename;
     private XStringResourceWithLocation m_xStrResource;
-    private Locale m_locale;
 
     public ResourceManager(XComponentContext xContext, String oxtId, String relativeResourceBaseUrl, String resourceBasename) {
-        m_context = xContext;
         m_resourceBasename = resourceBasename;
 
-        XPackageInformationProvider xPkgInfo = PackageInformationProvider.get(m_context);
-        m_oxtRoot = xPkgInfo.getPackageLocation(oxtId);
-        m_resourceBaseUrl = m_oxtRoot + relativeResourceBaseUrl;
+        XPackageInformationProvider xPkgInfo = PackageInformationProvider.get(xContext);
+        final String oxtRoot = xPkgInfo.getPackageLocation(oxtId);
+        final String resourceBaseUrl = oxtRoot + relativeResourceBaseUrl;
 
         try {
-            XMultiServiceFactory xConfig = theDefaultProvider.get(m_context);
+            XMultiServiceFactory xConfig = theDefaultProvider.get(xContext);
 
             Object[] args = new Object[1];
             args[0] = new PropertyValue("nodepath", 0, "/org.openoffice.Setup/L10N", PropertyState.DIRECT_VALUE);
             XPropertySet xConfigProps = UnoRuntime.queryInterface(XPropertySet.class,
                 xConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args));
-            String[] locale = AnyConverter.toString(xConfigProps.getPropertyValue("ooLocale")).split("-");
-            String lang = locale[0];
-            String country = (locale.length >= 2 ? locale[1] : "");
-            String variant = (locale.length >= 3 ? locale[2] : "");
-            m_locale = new Locale(lang, country, variant);
+            String[] localeProp = AnyConverter.toString(xConfigProps.getPropertyValue("ooLocale")).split("-");
+            String lang = localeProp[0];
+            String country = (localeProp.length >= 2 ? localeProp[1] : "");
+            String variant = (localeProp.length >= 3 ? localeProp[2] : "");
+            Locale locale = new Locale(lang, country, variant);
 
-            m_xStrResource = StringResourceWithLocation.create(m_context, m_resourceBaseUrl, true, m_locale, m_resourceBasename, "", null);
+            m_xStrResource = StringResourceWithLocation.create(xContext, resourceBaseUrl, true, locale, m_resourceBasename, "", null);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

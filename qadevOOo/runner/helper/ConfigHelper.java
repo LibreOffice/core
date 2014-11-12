@@ -85,7 +85,6 @@ import com.sun.star.util.*;
  */
 public class ConfigHelper
 {
-    private XMultiServiceFactory m_xSMGR = null;
     private XHierarchicalNameAccess m_xConfig = null;
 
 
@@ -94,12 +93,9 @@ public class ConfigHelper
                         boolean              bReadOnly   )
         throws com.sun.star.uno.Exception
     {
-        m_xSMGR = xSMGR;
-
         XMultiServiceFactory xConfigRoot = UnoRuntime.queryInterface(
-        XMultiServiceFactory.class,
-        m_xSMGR.createInstance(
-        "com.sun.star.configuration.ConfigurationProvider"));
+          XMultiServiceFactory.class,
+          xSMGR.createInstance("com.sun.star.configuration.ConfigurationProvider"));
 
         PropertyValue[] lParams = new PropertyValue[1];
         lParams[0] = new PropertyValue();

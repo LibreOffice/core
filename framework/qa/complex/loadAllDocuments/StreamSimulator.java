@@ -33,21 +33,24 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
 {
 
     /**
-     * @member  m_sFileName     name of the corrsponding file on disk
-     * @member  m_xInStream     the internal input stream for reading
-     * @member  m_xOutStream    the internal input stream for writing
-     * @member  m_xSeek         points at runtime to m_xInStream or m_xOutStream and make it seekable
-     *
-     * @member  m_bInWasUsed    indicates, that the input stream interface was used
-     * @member  m_bOutWasUsed   indicates, that the output stream interface was used
+     * the internal input stream for reading
      */
-
-    private String                          m_sFileName     ;
     private com.sun.star.io.XInputStream    m_xInStream     ;
+    /**
+     * the internal input stream for writing
+     */
     private com.sun.star.io.XOutputStream   m_xOutStream    ;
+    /**
+     * points at runtime to m_xInStream or m_xOutStream and make it seekable
+     */
     private com.sun.star.io.XSeekable       m_xSeek         ;
-
+    /**
+     * indicates, that the input stream interface was used
+     */
     public  boolean                         m_bInWasUsed    ;
+    /**
+      * indicates, that the output stream interface was used
+     */
     public  boolean                         m_bOutWasUsed   ;
 
     /**
@@ -77,7 +80,6 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
                             String  sFileName, boolean bInput)
                             throws com.sun.star.io.NotConnectedException
     {
-        m_sFileName     = sFileName ;
         m_bInWasUsed    = false     ;
         m_bOutWasUsed   = false     ;
 
@@ -92,14 +94,14 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
 
             if (bInput)
             {
-                m_xInStream = xHelper.openFileRead(m_sFileName);
+                m_xInStream = xHelper.openFileRead(sFileName);
                 m_xSeek = UnoRuntime.queryInterface(
                             com.sun.star.io.XSeekable.class,
                             m_xInStream);
             }
             else
             {
-                m_xOutStream = xHelper.openFileWrite(m_sFileName);
+                m_xOutStream = xHelper.openFileWrite(sFileName);
                 m_xSeek = UnoRuntime.queryInterface(
                             com.sun.star.io.XSeekable.class,
                             m_xOutStream);

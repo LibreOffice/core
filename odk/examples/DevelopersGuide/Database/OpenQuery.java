@@ -47,9 +47,6 @@ import com.sun.star.beans.XPropertySet;
 
 public class OpenQuery {
 
-    private XComponentContext xContext = null;
-    private XMultiComponentFactory xMCF = null;
-
     /**
      * @param args the command line arguments
      */
@@ -67,6 +64,8 @@ public class OpenQuery {
     }
 
     protected void openQuery() throws com.sun.star.uno.Exception, java.lang.Exception {
+        XComponentContext xContext = null;
+        XMultiComponentFactory xMCF = null;
         try {
             // get the remote office component context
             xContext = com.sun.star.comp.helper.Bootstrap.bootstrap();

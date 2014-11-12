@@ -69,8 +69,6 @@ public class ParameterHelper
 
     private int m_nResolutionInDPI = 180;
 
-    private boolean m_bIncludeSubdirectories;
-
     private String m_sInputPath = null;
     private String m_sOutputPath = null;
 
@@ -126,7 +124,7 @@ public class ParameterHelper
 
     public boolean isIncludeSubDirectories()
         {
-            m_bIncludeSubdirectories = true;
+            boolean bIncludeSubdirectories = true;
             String sRECURSIVE = (String)getTestParameters().get( PropertyName.DOC_COMPARATOR_INCLUDE_SUBDIRS );
 // TODO: I need to get the boolean value with get("name") because, if it is not given getBool() returns
 //       with a default of 'false' which is not very helpful if the default should be 'true'
@@ -138,9 +136,9 @@ public class ParameterHelper
             if (sRECURSIVE.equalsIgnoreCase("no") ||
                 sRECURSIVE.equalsIgnoreCase("false"))
             {
-                m_bIncludeSubdirectories = false;
+                bIncludeSubdirectories = false;
             }
-            return m_bIncludeSubdirectories;
+            return bIncludeSubdirectories;
         }
 
     public String getReferenceType()

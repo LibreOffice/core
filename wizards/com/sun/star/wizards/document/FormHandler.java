@@ -65,7 +65,6 @@ public class FormHandler
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
     public XDrawPage xDrawPage;
-    private XDrawPageSupplier xDrawPageSupplier;
     public String[] sModelServices = new String[8];
     public static ControlData[] oControlData;
 
@@ -106,7 +105,7 @@ public class FormHandler
     public FormHandler(XMultiServiceFactory _xMSF, XTextDocument xTextDocument)
     {
         this.xMSF = _xMSF;
-        xDrawPageSupplier = UnoRuntime.queryInterface(XDrawPageSupplier.class, xTextDocument);
+        XDrawPageSupplier xDrawPageSupplier = UnoRuntime.queryInterface(XDrawPageSupplier.class, xTextDocument);
         xDrawPage = xDrawPageSupplier.getDrawPage();
         xFormsSupplier = UnoRuntime.queryInterface(XFormsSupplier.class, xDrawPage);
         xShapeGrouper = UnoRuntime.queryInterface(XShapeGrouper.class, xDrawPage);

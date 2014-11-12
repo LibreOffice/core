@@ -51,18 +51,16 @@ public class CheckTable
         connection.tearDown();
     }
 
-    private XMultiServiceFactory m_xMSF = null;
-    private XComponentContext m_xContext = null;
     private XTextDocument m_xDoc = null;
 
     @Before public void before() throws Exception
     {
-        m_xMSF = UnoRuntime.queryInterface(
+        XMultiServiceFactory xMSF = UnoRuntime.queryInterface(
             XMultiServiceFactory.class,
             connection.getComponentContext().getServiceManager());
-        m_xContext = connection.getComponentContext();
-        assertNotNull("could not get component context.", m_xContext);
-        m_xDoc = util.WriterTools.createTextDoc(m_xMSF);
+        XComponentContext xContext = connection.getComponentContext();
+        assertNotNull("could not get component context.", xContext);
+        m_xDoc = util.WriterTools.createTextDoc(xMSF);
     }
 
     @After public void after()

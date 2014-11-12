@@ -126,7 +126,6 @@ import util.utils;
 public class GenericModelTest extends TestCase {
     private XTextDocument m_xTextDoc;
     private Object m_dbSrc = null;
-    private DBTools.DataSourceInfo m_srcInf = null;
     /**
      * This is the name of the Data Base which the test uses: "APITestDatabase"
      */
@@ -403,11 +402,11 @@ public class GenericModelTest extends TestCase {
             m_dbTools = new DBTools( xMSF );
             String tmpDir = utils.getOfficeTemp((xMSF));
 
-            m_srcInf = m_dbTools.newDataSourceInfo();
-            m_srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
-            log.println("data source: " + m_srcInf.URL);
+            DBTools.DataSourceInfo srcInf = m_dbTools.newDataSourceInfo();
+            srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
+            log.println("data source: " + srcInf.URL);
 
-            m_dbSrc = m_srcInf.getDataSourceService();
+            m_dbSrc = srcInf.getDataSourceService();
             m_dbTools.reRegisterDB(m_dbSourceName, m_dbSrc);
 
             m_XFormLoader = FormTools.bindForm(m_xTextDoc, m_dbSourceName,

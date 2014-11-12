@@ -42,19 +42,18 @@ public class RowSet implements XRowSet, XRow
 {
     private XRowSet                 m_rowSet;
     private XRow                    m_row;
-    private XPropertySet            m_rowSetProps;
 
     public RowSet( XMultiServiceFactory _orb, String _dataSource, int _commandType, String _command )
     {
         try
         {
-            m_rowSetProps = UnoRuntime.queryInterface( XPropertySet.class, _orb.createInstance( "com.sun.star.sdb.RowSet" ) );
-            m_rowSetProps.setPropertyValue( "DataSourceName", _dataSource );
-            m_rowSetProps.setPropertyValue( "CommandType", Integer.valueOf( _commandType ) );
-            m_rowSetProps.setPropertyValue( "Command", _command );
+            XPropertySet rowSetProps = UnoRuntime.queryInterface( XPropertySet.class, _orb.createInstance( "com.sun.star.sdb.RowSet" ) );
+            rowSetProps.setPropertyValue( "DataSourceName", _dataSource );
+            rowSetProps.setPropertyValue( "CommandType", Integer.valueOf( _commandType ) );
+            rowSetProps.setPropertyValue( "Command", _command );
 
-            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSetProps );
-            m_row = UnoRuntime.queryInterface( XRow.class, m_rowSetProps );
+            m_rowSet = UnoRuntime.queryInterface( XRowSet.class, rowSetProps );
+            m_row = UnoRuntime.queryInterface( XRow.class, rowSetProps );
         }
         catch ( Exception e )
         {

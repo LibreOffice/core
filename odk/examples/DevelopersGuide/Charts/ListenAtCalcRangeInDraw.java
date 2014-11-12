@@ -73,9 +73,9 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
         Helper aHelper = new Helper( args );
 
         maSheetDoc = aHelper.createSpreadsheetDocument();
-        maDrawDoc  = aHelper.createDrawingDocument();
+        XModel     aDrawDoc  = aHelper.createDrawingDocument();
         CalcHelper aCalcHelper   = new CalcHelper(  maSheetDoc );
-        ChartHelper aChartHelper = new ChartHelper( maDrawDoc );
+        ChartHelper aChartHelper = new ChartHelper( aDrawDoc );
 
         XCellRange aRange = aCalcHelper.insertFormulaRange( 3, 30 );
 
@@ -185,7 +185,6 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
     // __________ private __________
 
     private XSpreadsheetDocument      maSheetDoc;
-    private XModel                    maDrawDoc;
     private XChartDocument            maChartDocument;
     private XChartData                maChartData;
 }

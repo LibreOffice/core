@@ -57,7 +57,6 @@ public class _XDataPilotDescriptor {
 
     private String sTag = "XDataPilotDescriptor_Tag";
     private String fieldsNames[];
-    private int fieldsAmount = 0;
     private int tEnvFieldsAmount = 0;
 
     /**
@@ -179,7 +178,7 @@ public class _XDataPilotDescriptor {
             return false;
         } else {System.out.println("getDataPilotFields returned not Null value -- OK");}
 
-        fieldsAmount = IA.getCount();
+        int fieldsAmount = IA.getCount();
         if (fieldsAmount < tEnvFieldsAmount) {
             System.out.println("Number of fields is less than number goten by relation.");
             return false;

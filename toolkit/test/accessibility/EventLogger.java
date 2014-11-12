@@ -32,18 +32,16 @@ class EventLogger
     {
         try
         {
-            maFrame = new JFrame ();
-            maLogger = new TextLogger ();
-            maFrame.setContentPane (new JScrollPane (maLogger));
+            JFrame aFrame = new JFrame ();
+            TextLogger aLogger = new TextLogger ();
+            aFrame.setContentPane (new JScrollPane (aLogger));
 
-            maFrame.setSize (400,300);
-            maFrame.setVisible (true);
+            aFrame.setSize (400,300);
+            aFrame.setVisible (true);
         }
         catch (Exception e)
         {}
     }
 
     private static EventLogger maInstance = null;
-    private JFrame maFrame;
-    private TextLogger maLogger;
 }
