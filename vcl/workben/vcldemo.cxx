@@ -659,7 +659,7 @@ void DemoWin::InitRenderers()
     maRenderers.push_back(new DrawPolyPolygons());
     maRenderers.push_back(new DrawToVirtualDevice());
     maRenderers.push_back(new DrawIcons());
-    maRenderers.push_back(new DrawBitmap());
+    maRenderers.push_back(new FetchDrawBitmap());
 }
 
 class DemoApp : public Application
