@@ -1434,6 +1434,23 @@ bool vcl::Region::IsOver( const Rectangle& rRect ) const
     return !aRegion.IsEmpty();
 }
 
+bool vcl::Region::IsRectangle() const
+{
+    if( IsEmpty() || IsNull() )
+        return false;
+
+    if( getB2DPolyPolygon() )
+        return basegfx::tools::isRectangle( *getB2DPolyPolygon() );
+
+    if( getPolyPolygon() )
+        return getPolyPolygon()->IsRect();
+
+    if( getRegionBand() )
+        return (getRegionBand()->getRectangleCount() == 1);
+
+    return false;
+}
+
 void vcl::Region::SetNull()
 {
     // reset all content

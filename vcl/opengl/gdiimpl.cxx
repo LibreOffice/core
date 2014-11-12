@@ -61,6 +61,8 @@
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     : mpFrame(NULL)
     , mnPainting(0)
+    , mbUseScissor(false)
+    , mbUseStencil(false)
     , mbOffscreen(false)
     , mnFramebufferId(0)
     , mpOffscreenTex(nullptr)
@@ -97,6 +99,10 @@ void OpenGLSalGraphicsImpl::PreDraw()
     if( mbOffscreen )
         glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
     glViewport( 0, 0, GetWidth(), GetHeight() );
+    if( mbUseScissor )
+        glEnable( GL_SCISSOR_TEST );
+    if( mbUseStencil )
+        glEnable( GL_STENCIL_TEST );
 
     CHECK_GL_ERROR();
 }
@@ -105,8 +111,12 @@ void OpenGLSalGraphicsImpl::PostDraw()
 {
     if( mbOffscreen )
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    if( mnPainting == 0 )
+    else if( mnPainting == 0 )
         glFlush();
+    if( mbUseScissor )
+        glDisable( GL_SCISSOR_TEST );
+    if( mbUseStencil )
+        glDisable( GL_STENCIL_TEST );
     CHECK_GL_ERROR();
 }
 
@@ -117,28 +127,46 @@ void OpenGLSalGraphicsImpl::freeResources()
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
-    const basegfx::B2DPolyPolygon aClip( rClip.GetAsB2DPolyPolygon() );
+    SAL_INFO( "vcl.opengl", "::setClipRegion " << rClip );
 
-    SAL_INFO( "vcl.opengl", "::setClipRegion" );
+    if( rClip.IsEmpty() )
+    {
+        ResetClipRegion();
+        return true;
+    }
 
-    /*maContext.makeCurrent();
-    glViewport( 0, 0, GetWidth(), GetHeight() );
+    if( false ) //rClip.IsRectangle() )
+    {
+        Rectangle aRect( rClip.GetBoundRect() );
 
-    glEnable( GL_STENCIL_TEST );
+        mbUseStencil = false;
+        mbUseScissor = true;
+        maContext.makeCurrent();
+        glScissor( aRect.Left(), GetHeight() - aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
+    }
+    else
+    {
+        mbUseStencil = true;
+        mbUseScissor = false;
+        maContext.makeCurrent();
+        glViewport( 0, 0, GetWidth(), GetHeight() );
 
-    glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-    glStencilMask( 0xFF );
-    glStencilFunc( GL_NEVER, 1, 0xFF );
-    glStencilOp( GL_REPLACE, GL_KEEP, GL_KEEP );
+        glEnable( GL_STENCIL_TEST );
+        glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
+        glStencilMask( 0xFF );
+        glStencilFunc( GL_NEVER, 1, 0xFF );
+        glStencilOp( GL_REPLACE, GL_KEEP, GL_KEEP );
 
-    glClear( GL_STENCIL_BUFFER_BIT );
-    BeginSolid( SALCOLOR_NONE );
-    DrawPolyPolygon( aClip );
-    EndSolid();
+        glClear( GL_STENCIL_BUFFER_BIT );
+        BeginSolid( SALCOLOR_NONE );
+        DrawPolyPolygon( rClip.GetAsB2DPolyPolygon() );
+        EndSolid();
 
-    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-    glStencilMask( 0x00 );
-    glStencilFunc( GL_EQUAL, 1, 0xFF );*/
+        glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
+        glStencilMask( 0x00 );
+        glStencilFunc( GL_EQUAL, 1, 0xFF );
+        glDisable( GL_STENCIL_TEST );
+    }
 
     return true;
 }
@@ -147,10 +175,8 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 void OpenGLSalGraphicsImpl::ResetClipRegion()
 {
     SAL_INFO( "vcl.opengl", "::ResetClipRegion" );
-    maContext.makeCurrent();
-    glDisable(GL_STENCIL_TEST);
-
-    CHECK_GL_ERROR();
+    mbUseScissor = false;
+    mbUseStencil = false;
 }
 
 // get the depth of the device

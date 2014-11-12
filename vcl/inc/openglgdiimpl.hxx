@@ -40,6 +40,10 @@ protected:
     SalVirtualDevice* mpVDev;
     int mnPainting;
 
+    // clipping
+    bool mbUseScissor;
+    bool mbUseStencil;
+
     bool mbOffscreen;
     GLuint mnFramebufferId;
     OpenGLTextureSharedPtr mpOffscreenTex;

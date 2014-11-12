@@ -102,6 +102,8 @@ public:
     void SetEmpty();
     void SetNull();
 
+    bool IsRectangle() const;
+
     Rectangle GetBoundRect() const;
     bool HasPolyPolygonOrB2DPolyPolygon() const { return (getB2DPolyPolygon() || getPolyPolygon()); }
     void GetRegionRectangles(RectangleVector& rTarget) const;
@@ -144,9 +146,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
                       << *rRegion.getB2DPolyPolygon()
                       << ")";
     if (rRegion.getPolyPolygon())
-        return stream << "PolyPolygon("
-                      << *rRegion.getPolyPolygon()
-                      << ")";
+        return stream << "unimplemented";
     if (rRegion.getRegionBand())
     {   // inlined because RegionBand is private to vcl
         stream << "RegionBand(";
