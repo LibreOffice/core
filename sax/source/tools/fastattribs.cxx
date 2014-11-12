@@ -79,8 +79,6 @@ void FastAttributeList::clear()
 void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength )
 {
     maAttributeTokens.push_back( nToken );
-    if (nValueLength == 0)
-        nValueLength = strlen(pValue);
     sal_Int32 nWritePosition = maAttributeValues.back();
     maAttributeValues.push_back( maAttributeValues.back() + nValueLength + 1 );
     if (maAttributeValues.back() > mnChunkLength)
@@ -90,6 +88,11 @@ void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue, size_t nV
     }
     strncpy(mpChunk + nWritePosition, pValue, nValueLength);
     mpChunk[nWritePosition + nValueLength] = '\0';
+}
+
+void FastAttributeList::add( sal_Int32 nToken, const sal_Char* pValue )
+{
+    add( nToken, pValue, strlen( pValue ));
 }
 
 void FastAttributeList::add( sal_Int32 nToken, const OString& rValue )
