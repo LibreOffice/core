@@ -2744,8 +2744,8 @@ namespace svxform
         m_pConditionED->SetModifyHdl( LINK( this, AddConditionDialog, ModifyHdl ) );
         m_pEditNamespacesBtn->SetClickHdl( LINK( this, AddConditionDialog, EditHdl ) );
         m_pOKBtn->SetClickHdl( LINK( this, AddConditionDialog, OKHdl ) );
-        m_aResultTimer.SetTimeout( 500 );
-        m_aResultTimer.SetTimeoutHdl( LINK( this, AddConditionDialog, ResultHdl ) );
+        m_aResultIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+        m_aResultIdle.SetIdleHdl( LINK( this, AddConditionDialog, ResultHdl ) );
 
         if ( !m_sPropertyName.isEmpty() )
         {
@@ -2774,7 +2774,7 @@ namespace svxform
         }
 
         DBG_ASSERT( m_xUIHelper.is(), "AddConditionDialog::Ctor(): no UIHelper" );
-        ResultHdl( &m_aResultTimer );
+        ResultHdl( &m_aResultIdle );
     }
 
 
@@ -2823,7 +2823,7 @@ namespace svxform
 
     IMPL_LINK_NOARG(AddConditionDialog, ModifyHdl)
     {
-        m_aResultTimer.Start();
+        m_aResultIdle.Start();
         return 0;
     }
 

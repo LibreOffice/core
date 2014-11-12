@@ -109,7 +109,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     ColorLB         aShadowColorLB;
 
     SfxBindings&    rBindings;
-    Timer           aInputTimer;
+    Idle            aInputIdle;
 
     sal_uInt16          nLastStyleTbxId;
     sal_uInt16          nLastAdjustTbxId;

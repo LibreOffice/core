@@ -168,7 +168,7 @@ class SvxIconChoiceCtrl_Impl
     Timer                   aAutoArrangeTimer;
     Timer                   aDocRectChangedTimer;
     Timer                   aVisRectChangedTimer;
-    Timer                   aCallSelectHdlTimer;
+    Idle                    aCallSelectHdlIdle;
     Size                    aVirtOutputSize;
     Size                    aImageSize;
     Size                    aDefaultTextSize;
@@ -552,7 +552,7 @@ public:
                             const Rectangle& rBmpRect,
                             bool bHide
                         );
-    void                StopSelectTimer() { aCallSelectHdlTimer.Stop(); }
+    void                StopSelectTimer() { aCallSelectHdlIdle.Stop(); }
 
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 

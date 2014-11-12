@@ -265,8 +265,8 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
 
     aShadowColorLB.SetSelectHdl( LINK(this, SvxFontWorkDialog, ColorSelectHdl_Impl) );
 
-    aInputTimer.SetTimeout(500);
-    aInputTimer.SetTimeoutHdl(LINK(this, SvxFontWorkDialog, InputTimoutHdl_Impl));
+    aInputIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aInputIdle.SetIdleHdl(LINK(this, SvxFontWorkDialog, InputTimoutHdl_Impl));
 }
 
 SvxFontWorkDialog::~SvxFontWorkDialog()
@@ -709,7 +709,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
 
 IMPL_LINK_NOARG_INLINE_START(SvxFontWorkDialog, ModifyInputHdl_Impl)
 {
-    aInputTimer.Start();
+    aInputIdle.Start();
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SvxFontWorkDialog, ModifyInputHdl_Impl)

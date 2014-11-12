@@ -576,8 +576,8 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
     }
     ::comphelper::decrement(m_refCount);
 
-    m_aTabActivationTimer.SetTimeout( 500 );
-    m_aTabActivationTimer.SetTimeoutHdl( LINK( this, FormController, OnActivateTabOrder ) );
+    m_aTabActivationIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    m_aTabActivationIdle.SetIdleHdl( LINK( this, FormController, OnActivateTabOrder ) );
 
     m_aFeatureInvalidationTimer.SetTimeout( 200 );
     m_aFeatureInvalidationTimer.SetTimeoutHdl( LINK( this, FormController, OnInvalidateFeatures ) );
@@ -594,8 +594,8 @@ FormController::~FormController()
         m_aActivationEvent.CancelPendingCall();
         m_aDeactivationEvent.CancelPendingCall();
 
-        if ( m_aTabActivationTimer.IsActive() )
-            m_aTabActivationTimer.Stop();
+        if ( m_aTabActivationIdle.IsActive() )
+            m_aTabActivationIdle.Stop();
     }
 
     if ( m_aFeatureInvalidationTimer.IsActive() )
@@ -2030,8 +2030,8 @@ void FormController::setContainer(const Reference< XControlContainer > & xContai
     {
         xCurrentContainer->removeContainerListener(this);
 
-        if ( m_aTabActivationTimer.IsActive() )
-            m_aTabActivationTimer.Stop();
+        if ( m_aTabActivationIdle.IsActive() )
+            m_aTabActivationIdle.Stop();
 
         // clear the filter map
         ::std::for_each( m_aFilterComponents.begin(), m_aFilterComponents.end(), RemoveComponentTextListener( this ) );
@@ -2835,10 +2835,10 @@ void SAL_CALL FormController::elementInserted(const ContainerEvent& evt) throw( 
     {
         insertControl(xControl);
 
-        if ( m_aTabActivationTimer.IsActive() )
-            m_aTabActivationTimer.Stop();
+        if ( m_aTabActivationIdle.IsActive() )
+            m_aTabActivationIdle.Stop();
 
-        m_aTabActivationTimer.Start();
+        m_aTabActivationIdle.Start();
     }
     // are we in filtermode and a XModeSelector has inserted an element
     else if (m_bFiltering && Reference< XModeSelector > (evt.Source, UNO_QUERY).is())

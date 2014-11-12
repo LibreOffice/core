@@ -38,7 +38,7 @@ class SVX_DLLPUBLIC GraphCtrl : public Control
     friend class GraphCtrlUserCall;
 
     Graphic             aGraphic;
-    Timer               aUpdateTimer;
+    Idle                aUpdateIdle;
     Link                aMousePosLink;
     Link                aGraphSizeLink;
     Link                aMarkObjLink;

@@ -139,8 +139,8 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
     aAutoArrangeTimer.SetTimeout( 100 );
     aAutoArrangeTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
-    aCallSelectHdlTimer.SetTimeout( 500 );
-    aCallSelectHdlTimer.SetTimeoutHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
+    aCallSelectHdlIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    aCallSelectHdlIdle.SetIdleHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
 
     aDocRectChangedTimer.SetTimeout( 50 );
     aDocRectChangedTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
@@ -3778,7 +3778,7 @@ void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )
         //pView->Select();
     }
     else
-        aCallSelectHdlTimer.Start();
+        aCallSelectHdlIdle.Start();
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl)

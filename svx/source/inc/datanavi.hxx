@@ -483,7 +483,7 @@ namespace svxform
         PushButton*             m_pEditNamespacesBtn;
         OKButton*               m_pOKBtn;
 
-        Timer                   m_aResultTimer;
+        Idle                    m_aResultIdle;
         OUString         m_sPropertyName;
 
         XFormsUIHelper1_ref     m_xUIHelper;
@@ -503,7 +503,7 @@ namespace svxform
         void SetCondition(const OUString& _rCondition)
         {
             m_pConditionED->SetText(_rCondition);
-            m_aResultTimer.Start();
+            m_aResultIdle.Start();
         }
     };
 

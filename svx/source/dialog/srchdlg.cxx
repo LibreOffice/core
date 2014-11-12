@@ -110,7 +110,7 @@ struct SearchDlg_Impl
     bool        bSaveToModule  : 1,
                 bFocusOnSearch : 1;
     sal_uInt16* pRanges;
-    Timer       aSelectionTimer;
+    Idle        aSelectionIdle;
 
     uno::Reference< frame::XDispatch > xCommand1Dispatch;
     uno::Reference< frame::XDispatch > xCommand2Dispatch;
@@ -364,8 +364,8 @@ void SvxSearchDialog::Construct_Impl()
 {
     // temporary to avoid incompatibility
     pImpl = new SearchDlg_Impl();
-    pImpl->aSelectionTimer.SetTimeout( 500 );
-    pImpl->aSelectionTimer.SetTimeoutHdl(
+    pImpl->aSelectionIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    pImpl->aSelectionIdle.SetIdleHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
     EnableControls_Impl( 0 );
 
@@ -408,7 +408,7 @@ void SvxSearchDialog::Construct_Impl()
         new SvxSearchController( SID_SEARCH_OPTIONS, rBindings, *this );
     rBindings.LeaveRegistrations();
     rBindings.GetDispatcher()->Execute( FID_SEARCH_ON, SfxCallMode::SLOT, ppArgs );
-    pImpl->aSelectionTimer.Start();
+    pImpl->aSelectionIdle.Start();
 
 
     SvtCJKOptions aCJKOptions;

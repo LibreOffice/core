@@ -164,7 +164,7 @@ namespace svxform
         FilterComponents            m_aFilterComponents;
         FmFilterRows                m_aFilterRows;
 
-        Timer                       m_aTabActivationTimer;
+        Idle                        m_aTabActivationIdle;
         Timer                       m_aFeatureInvalidationTimer;
 
         ::svxform::ControlBorderManager*
