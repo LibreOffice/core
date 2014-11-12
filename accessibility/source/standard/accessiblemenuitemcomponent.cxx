@@ -299,8 +299,8 @@ void SAL_CALL OAccessibleMenuItemComponent::disposing()
     OAccessibleMenuBaseComponent::disposing();
 
     m_pParent = NULL;
-    m_sAccessibleName = OUString();
-    m_sItemText = OUString();
+    m_sAccessibleName.clear();
+    m_sItemText.clear();
 }
 
 

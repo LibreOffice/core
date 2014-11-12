@@ -313,7 +313,7 @@ void ScXMLExportDataPilot::WriteFieldReference(ScDPSaveDimension* pDim)
         }
         else
         {
-            sValueStr = OUString();
+            sValueStr.clear();
             switch(pRef->ReferenceItemType)
             {
                 case sheet::DataPilotFieldReferenceItemType::PREVIOUS :

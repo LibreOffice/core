@@ -1399,7 +1399,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
     if ( !pActEntry->bHasGraphic )
     {   // discard any ALT text in this cell if we have any image
         pActEntry->bHasGraphic = true;
-        pActEntry->aAltText = OUString();
+        (pActEntry->aAltText).clear();
     }
     pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
     pImage->pGraphic = pGraphic;
@@ -1563,7 +1563,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         case HTML_TITLE_ON:
         {
             bInTitle = true;
-            aString = OUString();
+            aString.clear();
         }
         break;
         case HTML_TITLE_OFF:

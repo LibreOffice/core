@@ -3316,7 +3316,7 @@ void SwXStyle::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 void SwXStyle::Invalidate()
 {
-    m_sStyleName = OUString();
+    m_sStyleName.clear();
     pBasePool = 0;
     m_pDoc = 0;
     mxStyleData.clear();

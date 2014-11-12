@@ -242,7 +242,7 @@ namespace DOM
             aPrefix = aName.copy(0, idx);
         }
         else
-            aPrefix = OUString();
+            aPrefix.clear();
 
         NSMap::const_iterator result = aNSMap.find(aPrefix);
         if ( result != aNSMap.end())
@@ -262,8 +262,8 @@ namespace DOM
         m_aNodeStack.push(aElement);
 
         // set non xmlns attributes
-        aPrefix = OUString();
-        aURI = OUString();
+        aPrefix.clear();
+        aURI.clear();
         AttrMap::const_iterator a = aAttrMap.begin();
         while (a != aAttrMap.end())
         {
@@ -273,7 +273,7 @@ namespace DOM
             if (idx != -1)
                 aPrefix = attr_qname.copy(0, idx);
             else
-                aPrefix = OUString();
+                aPrefix.clear();
 
             result = aNSMap.find(aPrefix);
             if (result != aNSMap.end())

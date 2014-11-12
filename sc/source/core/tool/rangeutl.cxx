@@ -398,7 +398,7 @@ void ScRangeStringConverter::GetTokenByOffset(
     sal_Int32 nLength = rString.getLength();
     if( nOffset == -1 || nOffset >= nLength )
     {
-        rToken = OUString();
+        rToken.clear();
         nOffset = -1;
     }
     else

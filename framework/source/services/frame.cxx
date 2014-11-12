@@ -2096,7 +2096,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     // If may be later somewhere change the disposed-behaviour of this implementation
     // and doesn't throw any DisposedExceptions we must guarantee best matching default values ...
     m_eActiveState       = E_INACTIVE;
-    m_sName              = OUString();
+    m_sName.clear();
     m_bIsFrameTop        = false;
     m_bConnected         = false;
     m_nExternalLockCount = 0;

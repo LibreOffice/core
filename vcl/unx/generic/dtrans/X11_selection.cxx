@@ -589,7 +589,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
 #endif
     }
     else
-        aRet = OString();
+        aRet.clear();
 
     return aRet;
 }

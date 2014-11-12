@@ -76,7 +76,7 @@ protected:
     void WriteReset()
     {
         aUsedTypes.clear();
-        aIFaceName = OString();
+        aIFaceName.clear();
     }
 public:
     OUString sSlotMapFile;

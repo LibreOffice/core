@@ -154,7 +154,7 @@ namespace
             }
             while( removeLastSegment( aUrl ) && !aUrl.isEmpty() );
         }
-        aResult = OUString();
+        aResult.clear();
         return false;
     }
 

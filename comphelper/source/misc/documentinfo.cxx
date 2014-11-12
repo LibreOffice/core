@@ -96,7 +96,7 @@ namespace comphelper {
             // private:object as URL
             sDocURL = _rxDocument->getURL();
             if ( sDocURL.matchAsciiL( "private:", 8 ) )
-                sDocURL = OUString();
+                sDocURL.clear();
 
             // 2. if the document is not saved, yet, check the frame title
             if ( sDocURL.isEmpty() )

@@ -131,7 +131,7 @@ namespace oox { namespace ppt {
             if( mbInAttrList )
             {
                 mbIsInAttrName = true;
-                msCurrentAttribute = OUString();
+                msCurrentAttribute.clear();
             }
             else
             {

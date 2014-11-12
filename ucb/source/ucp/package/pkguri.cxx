@@ -69,8 +69,11 @@ void PackageUri::init() const
     if ( !m_aUri.isEmpty() && m_aPath.isEmpty() )
     {
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
-        m_aPackage = m_aParentUri = m_aName = m_aParam = m_aScheme
-            = OUString();
+        m_aPackage.clear();
+        m_aParentUri.clear();
+        m_aName.clear();
+        m_aParam.clear();
+        m_aScheme.clear();
 
         // URI must match at least: <sheme>://<non_empty_url_to_file>
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )

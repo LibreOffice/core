@@ -398,8 +398,8 @@ bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam
     }
     if ( !bRet )
     {
-        aName = OUString();
-        aDesc = OUString();
+        aName.clear();
+        aDesc.clear();
     }
     return bRet;
 #endif

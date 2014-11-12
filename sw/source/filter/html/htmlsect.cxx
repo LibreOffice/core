@@ -234,7 +234,8 @@ void SwHTMLParser::NewDivision( int nToken )
                 SwNodeIndex aTmpSwNodeIndex = SwNodeIndex(*pCNd);
                 SwPosition aNewPos( aTmpSwNodeIndex, SwIndex( pCNd, 0 ) );
                 SaveDocContext( pCntxt, CONTEXT_FLAGS_FTN, &aNewPos );
-                aId = aPropInfo.aId = OUString();
+                aId.clear();
+                aPropInfo.aId.clear();
             }
         }
     }

@@ -2038,7 +2038,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 // Do not set new title!
-                aNewTitle = OUString();
+                aNewTitle.clear();
 
                 // Set error .
                 aRet[ nTitlePos ] <<= uno::Exception(
@@ -2049,7 +2049,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         catch ( DAVException const & e )
         {
             // Do not set new title!
-            aNewTitle = OUString();
+            aNewTitle.clear();
 
             // Set error .
             aRet[ nTitlePos ] <<= MapDAVException( e, true );
@@ -2724,7 +2724,7 @@ void Content::transfer(
         if ( aTitle == "/" )
         {
             // kso: ???
-            aTitle = OUString();
+            aTitle.clear();
         }
 
         targetURI.AppendPath( aTitle );

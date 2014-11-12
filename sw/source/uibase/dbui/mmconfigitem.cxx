@@ -407,7 +407,7 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
     //doesn't use ReplaceAll to prevent expansion of numbers inside of the headers
     OUString sBlock(rBlock.replaceAll("\\n", OUString('\n')));
     SwAddressIterator aGreetingIter(sBlock);
-    sBlock = OUString();
+    sBlock.clear();
     while(aGreetingIter.HasMore())
     {
         SwMergeAddressItem aNext = aGreetingIter.Next();
@@ -1601,7 +1601,7 @@ void SwMailMergeConfigItem::DocumentReloaded()
     m_bMergeDone = false;
     m_bGreetingInserted = false;
     m_bAddressInserted = false;
-    m_rAddressBlockFrame = OUString();
+    m_rAddressBlockFrame.clear();
 }
 
 bool SwMailMergeConfigItem::IsMailAvailable() const

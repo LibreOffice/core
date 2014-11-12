@@ -385,7 +385,7 @@ PrinterJob::StartJob (
             aTitle = rFileName.getToken( 0, '/', nIndex );
         aTitle = WhitespaceToSpace( aTitle, false );
         if( ! isAscii( aTitle ) )
-            aTitle = OUString();
+            aTitle.clear();
     }
 
     maJobTitle = aFilterWS;

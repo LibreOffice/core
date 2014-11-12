@@ -725,7 +725,7 @@ IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
             break;
     }
     for (; i < CSV_PREVIEW_LINES; i++)
-        maPreviewLine[i] = OUString();
+        maPreviewLine[i].clear();
 
     mpTableBox->Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
     bool bMergeSep = pCkbAsOnce->IsChecked();

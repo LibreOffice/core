@@ -524,7 +524,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
                 }
                 else
                 {
-                    sURL = OUString();
+                    sURL.clear();
                 }
             }
         }

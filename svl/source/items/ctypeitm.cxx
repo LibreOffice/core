@@ -115,7 +115,7 @@ void CntContentTypeItem::SetValue( const OUString& rNewVal )
 {
     // De-initialize enum type and presentation.
     _eType = CONTENT_TYPE_NOT_INIT;
-    _aPresentation = OUString();
+    _aPresentation.clear();
 
     CntUnencodedStringItem::SetValue( rNewVal );
 }

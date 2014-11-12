@@ -449,7 +449,7 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
         if( !maShapeName.isEmpty() )
         {
             mpObj->SetName( maShapeName );
-            maShapeName = OUString();
+            maShapeName.clear();
         }
     }
 }

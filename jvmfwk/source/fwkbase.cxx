@@ -134,7 +134,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
                                m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMin->nodesetval))
     {
-        aVersionInfo.sMinVersion = OUString();
+        aVersionInfo.sMinVersion.clear();
     }
     else
     {
@@ -156,7 +156,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
         m_xmlPathContextVendorSettings);
     if (xmlXPathNodeSetIsEmpty(xPathObjectMax->nodesetval))
     {
-        aVersionInfo.sMaxVersion = OUString();
+        aVersionInfo.sMaxVersion.clear();
     }
     else
     {

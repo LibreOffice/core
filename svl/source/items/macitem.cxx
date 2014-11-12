@@ -228,7 +228,7 @@ bool SvxMacroItem::GetPresentation
             rText += cpDelim;
     }
 */
-    rText = OUString();
+    rText.clear();
     return false;
 }
 

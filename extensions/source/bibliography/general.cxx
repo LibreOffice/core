@@ -476,7 +476,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     for(sal_uInt16 j = 0; j < TYPE_COUNT; j++)
                         pValuesArr[j]  = aBibTypeArr[j];
                     // empty string if an invalid value no values is set
-                    pValuesArr[TYPE_COUNT] = OUString();
+                    pValuesArr[TYPE_COUNT].clear();
 
                     aAny.setValue(&aValues, ::getCppuType((uno::Sequence<OUString>*)0));
 

@@ -148,7 +148,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     sal_Int32 nLen = SAL_N_ELEMENTS( header );
     if ( !( ( nLen == xInputStream->readBytes( aData, nLen ) )
                 && ( memcmp( ( void* )header, (void*) aData.getConstArray(), nLen ) == 0 ) ) )
-        sTypeName = OUString();
+        sTypeName.clear();
 
     return sTypeName;
 }

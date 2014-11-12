@@ -106,8 +106,8 @@ int DAVAuthListener_Impl::authenticate(
                     {
                         // This is the (strange) way to tell neon to use
                         // system credentials.
-                        inoutUserName = OUString();
-                        outPassWord   = OUString();
+                        inoutUserName.clear();
+                        outPassWord.clear();
                     }
                     else
                     {
@@ -1052,7 +1052,7 @@ void DAVResourceAccess::setURL( const OUString & rNewURL )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_aURL  = rNewURL;
-    m_aPath = OUString(); // Next initialize() will create new session.
+    m_aPath.clear(); // Next initialize() will create new session.
 }
 
 

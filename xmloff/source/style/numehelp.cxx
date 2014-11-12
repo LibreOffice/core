@@ -526,7 +526,7 @@ void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
         OUString sCurrency;
         sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
         if(!bExportCurrencySymbol)
-            sCurrency = OUString();
+            sCurrency.clear();
 
         WriteAttributes(nTypeKey, rValue, sCurrency, bExportValue, nNamespace);
     }

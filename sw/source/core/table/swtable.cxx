@@ -1376,7 +1376,7 @@ sal_uInt16 SwTable::_GetBoxNum( OUString& rStr, bool bFirstPart,
             {
                 nRet = static_cast<sal_uInt16>(rStr.toInt32());
             }
-            rStr = OUString();
+            rStr.clear();
         }
         else
         {

@@ -102,7 +102,7 @@ void SwDropDownField::SetPar2(const OUString & rName)
 void SwDropDownField::SetItems(const vector<OUString> & rItems)
 {
     aValues = rItems;
-    aSelectedItem = OUString();
+    aSelectedItem.clear();
 }
 
 void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
@@ -113,7 +113,7 @@ void SwDropDownField::SetItems(const uno::Sequence<OUString> & rItems)
     for (int i = 0; i < aCount; i++)
         aValues.push_back(rItems[i]);
 
-    aSelectedItem = OUString();
+    aSelectedItem.clear();
 }
 
 uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
@@ -144,7 +144,7 @@ bool SwDropDownField::SetSelectedItem(const OUString & rItem)
     if (aIt != aValues.end())
         aSelectedItem = *aIt;
     else
-        aSelectedItem = OUString();
+        aSelectedItem.clear();
 
     return (aIt != aValues.end());
 }

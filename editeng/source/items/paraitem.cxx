@@ -233,7 +233,7 @@ bool SvxLineSpacingItem::GetPresentation
 #ifdef DBG_UTIL
     rText = "SvxLineSpacingItem";
 #else
-    rText = OUString();
+    rText.clear();
 #endif
     return false;
 }
@@ -1081,7 +1081,7 @@ bool SvxTabStopItem::GetPresentation
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
-    rText = OUString();
+    rText.clear();
 
     bool bComma = false;
 
@@ -1300,7 +1300,7 @@ bool SvxPageModelItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     bool bSet = !GetValue().isEmpty();
 
     switch ( ePres )

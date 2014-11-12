@@ -58,7 +58,7 @@ public:
     { init(); return m_aUri; }
 
     void setUri( const OUString & rPackageUri )
-    { m_aPath = OUString(); m_aUri = rPackageUri; m_bValid = false; }
+    { m_aPath.clear(); m_aUri = rPackageUri; m_bValid = false; }
 
     const OUString & getParentUri() const
     { init(); return m_aParentUri; }

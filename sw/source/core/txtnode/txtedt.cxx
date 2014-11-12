@@ -1104,7 +1104,7 @@ bool SwTxtNode::Convert( SwConversionArgs &rArgs )
         ?  ::std::min(rArgs.pEndIdx->GetIndex(), m_Text.getLength())
         :  m_Text.getLength();
 
-    rArgs.aConvText = OUString();
+    rArgs.aConvText.clear();
 
     // modify string according to redline information and hidden text
     const OUString aOldTxt( m_Text );

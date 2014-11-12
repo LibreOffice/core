@@ -244,7 +244,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( "Office.Common/Pa
                     case ::com::sun::star::uno::TypeClass_SEQUENCE :
                     {
                         // single paths
-                        aFullPath = OUString();
+                        aFullPath.clear();
                         Sequence < OUString > aList;
                         if ( pValues[nProp] >>= aList )
                         {

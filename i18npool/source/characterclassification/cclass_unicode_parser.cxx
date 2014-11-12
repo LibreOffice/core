@@ -958,7 +958,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
             r = ParseResult();
             pSym = pTextStart;
             pSrc = pSym;
-            aSymbol = OUString();
+            aSymbol.clear();
             c = *pSrc;
             cLast = 0;
             nDecSeps = 0;

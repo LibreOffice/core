@@ -242,7 +242,7 @@ namespace accessibility
     void AccessibleTabBarPage::disposing()
     {
         AccessibleTabBarBase::disposing();
-        m_sPageText = OUString();
+        m_sPageText.clear();
     }
 
 

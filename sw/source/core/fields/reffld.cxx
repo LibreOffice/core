@@ -272,7 +272,7 @@ OUString SwGetRefField::GetFieldName() const
 // #i81002# - parameter <pFldTxtAttr> added
 void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 {
-    sTxt = OUString();
+    sTxt.clear();
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
     // finding the reference target (the number)

@@ -454,7 +454,7 @@ void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArgumen
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
     svt::PopupMenuControllerBase::initialize(aArguments);
-    m_aBaseURL = OUString();
+    m_aBaseURL.clear();
 }
 
 }

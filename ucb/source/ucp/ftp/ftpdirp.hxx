@@ -98,7 +98,8 @@ namespace ftp {
               m_nSize((sal_uInt32)(-1)) { }
 
         void clear() {
-            m_aURL = m_aName = OUString();
+            m_aURL.clear();
+            m_aName.clear();
             m_aDate = DateTime(0,0,0,0,0,0,0);
             m_nMode = INETCOREFTP_FILEMODE_UNKNOWN;
             m_nSize = sal_uInt32(-1);

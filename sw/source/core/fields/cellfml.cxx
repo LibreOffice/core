@@ -736,7 +736,7 @@ static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )
     if ( nPos<0 )
     {
         nRet = rStr.toInt32();
-        rStr = OUString();
+        rStr.clear();
     }
     else
     {

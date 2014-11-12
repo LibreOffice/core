@@ -249,7 +249,7 @@ splitPath(OUString const & i_rPath,
 {
     const sal_Int32 idx(i_rPath.indexOf(static_cast<sal_Unicode>('/')));
     if (idx < 0 || idx >= i_rPath.getLength()) {
-        o_rDir = OUString();
+        o_rDir.clear();
         o_rRest = i_rPath;
         return true;
     } else if (idx == 0 || idx == i_rPath.getLength() - 1) {

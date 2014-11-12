@@ -71,7 +71,7 @@ namespace dbaui
         void        clearModified() { setModified(false); }
 
         bool    isNew() const { return getOriginalName().isEmpty(); }
-        void        flagAsNew(const GrantIndexAccess&) { sOriginalName = OUString(); }
+        void        flagAsNew(const GrantIndexAccess&) { sOriginalName.clear(); }
         void        flagAsCommitted(const GrantIndexAccess&) { sOriginalName = sName; }
 
     private:

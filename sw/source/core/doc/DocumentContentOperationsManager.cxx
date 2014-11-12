@@ -977,7 +977,7 @@ namespace
             }
         }
         rRet = rStr;
-        rStr = OUString();
+        rStr.clear();
         return false;
     }
 }

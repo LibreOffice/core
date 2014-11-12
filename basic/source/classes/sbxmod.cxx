@@ -1833,7 +1833,7 @@ bool SbModule::StoreBinaryData( SvStream& rStrm, sal_uInt16 nVer )
          bRet = SbxObject::StoreData( rStrm );
         if( bRet )
         {
-            pImage->aOUSource = OUString();
+            (pImage->aOUSource).clear();
             pImage->aComment = aComment;
             pImage->aName = GetName();
 

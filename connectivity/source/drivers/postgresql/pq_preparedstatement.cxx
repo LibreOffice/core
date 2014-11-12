@@ -417,7 +417,7 @@ sal_Bool PreparedStatement::execute( )
     m_executedStatement = buf.makeStringAndClear();
 
     m_lastResultset.clear();
-    m_lastTableInserted  = OUString();
+    m_lastTableInserted.clear();
 
     struct CommandData data;
     data.refMutex = m_refMutex;

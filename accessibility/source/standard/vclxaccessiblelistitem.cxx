@@ -183,7 +183,7 @@ void SAL_CALL VCLXAccessibleListItem::disposing()
         ::osl::MutexGuard aGuard( m_aMutex );
 
         VCLXAccessibleListItem_BASE::disposing();
-        m_sEntryText        = OUString();
+        m_sEntryText.clear();
         m_pListBoxHelper    = NULL;
         m_xParent           = NULL;
         m_xParentContext    = NULL;

@@ -453,7 +453,7 @@ OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::
             "filter.config",
             "caught Exception \"" << e.Message
                 << "\" while querying type of <" << sURL << ">");
-        sType = OUString();
+        sType.clear();
     }
 
     // adapt media descriptor, so it contains the right values
@@ -546,7 +546,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
     // - or to any other filter if no preferred filter was set.
     // Note: It's an optimization only!
     // It's not guaranteed, that such preferred filter exists.
-    sFilter = OUString();
+    sFilter.clear();
     try
     {
         // SAFE ->
@@ -569,7 +569,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
 
     // d)
     // Search for any import(!) filter, which is registered for this type.
-    sFilter = OUString();
+    sFilter.clear();
     try
     {
         // SAFE ->
@@ -610,7 +610,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
             aLock.clear();
             // <- SAFE
 
-            sFilter = OUString();
+            sFilter.clear();
         }
 
         if (!sFilter.isEmpty())
@@ -656,7 +656,7 @@ bool TypeDetection::impl_getPreselectionForType(
     }
     catch(const css::container::NoSuchElementException&)
     {
-        sType = OUString();
+        sType.clear();
         bBreakDetection = true;
     }
 
@@ -879,7 +879,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
 {
     // reset it everytimes, so the outside code can distinguish between
     // a set and a not set value.
-    rLastChance = OUString();
+    rLastChance.clear();
     rUsedDetectors.clear();
 
     // step over all possible types for this URL.
@@ -1046,7 +1046,7 @@ OUString TypeDetection::impl_askDetectService(const OUString&               sDet
             // Thrown exceptions mostly will end in crash recovery ...
             // But might be we find another deep detection service which can detect the same
             // document without a problem .-)
-            sDeepType = OUString();
+            sDeepType.clear();
         }
 
     // seek to 0 is an optional feature to be more robust against

@@ -1532,7 +1532,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
         if( rValue >>= aStreamURL )
         {
             if( !aStreamURL.startsWith( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) )
-                aStreamURL = OUString();
+                aStreamURL.clear();
 
             if( mpObj.is() )
             {

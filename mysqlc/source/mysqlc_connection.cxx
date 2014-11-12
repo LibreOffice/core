@@ -104,7 +104,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     OUString aDbName;
 
     m_settings.encoding = m_rDriver.getDefaultEncoding();
-    m_settings.quoteIdentifier = OUString();
+    m_settings.quoteIdentifier.clear();
 
     // parse url. Url has the following format:
     // external server: sdbc:mysqlc:[hostname]:[port]/[dbname]

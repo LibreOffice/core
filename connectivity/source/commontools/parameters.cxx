@@ -108,7 +108,7 @@ namespace dbtools
         m_aParameterInformation.swap( aEmptyInfo );
         m_aMasterFields.realloc( 0 );
         m_aDetailFields.realloc( 0 );
-        m_sIdentifierQuoteString = OUString();
+        m_sIdentifierQuoteString.clear();
         ::std::vector< bool > aEmptyArray;
         m_aParametersVisited.swap( aEmptyArray );
         m_bUpToDate = false;

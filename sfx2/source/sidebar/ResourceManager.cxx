@@ -529,8 +529,8 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         rDeckDescriptor.msId = rsNodeName;
         rDeckDescriptor.msIconURL = ::comphelper::getString(aChildNode.getNodeValue("ImageURL"));
         rDeckDescriptor.msHighContrastIconURL = rDeckDescriptor.msIconURL;
-        rDeckDescriptor.msTitleBarIconURL = OUString();
-        rDeckDescriptor.msHighContrastTitleBarIconURL = OUString();
+        rDeckDescriptor.msTitleBarIconURL.clear();
+        rDeckDescriptor.msHighContrastTitleBarIconURL.clear();
         rDeckDescriptor.msHelpURL = ::comphelper::getString(aChildNode.getNodeValue("HelpURL"));
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mbIsEnabled = true;
@@ -542,8 +542,8 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         rPanelDescriptor.mbIsTitleBarOptional = true;
         rPanelDescriptor.msId = rsNodeName;
         rPanelDescriptor.msDeckId = rsNodeName;
-        rPanelDescriptor.msTitleBarIconURL = OUString();
-        rPanelDescriptor.msHighContrastTitleBarIconURL = OUString();
+        rPanelDescriptor.msTitleBarIconURL.clear();
+        rPanelDescriptor.msHighContrastTitleBarIconURL.clear();
         rPanelDescriptor.msHelpURL = ::comphelper::getString(aChildNode.getNodeValue("HelpURL"));
         rPanelDescriptor.msImplementationURL = rsNodeName;
         rPanelDescriptor.mnOrderIndex = 100000 + nReadIndex;

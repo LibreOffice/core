@@ -448,7 +448,7 @@ void XMLPropStyleContext::Finish( bool bOverwrite )
         if( !sParent.isEmpty() )
             sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
         if( !sParent.isEmpty() && !xFamilies->hasByName( sParent ) )
-            sParent = OUString();
+            sParent.clear();
 
         if( sParent != mxStyle->getParentStyle() )
         {

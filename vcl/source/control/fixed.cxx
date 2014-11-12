@@ -225,7 +225,7 @@ void FixedText::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         nTextStyle |= TEXT_DRAW_MONO;
 
     if( bFillLayout )
-        mpControlData->mpLayoutData->m_aDisplayText = OUString();
+        (mpControlData->mpLayoutData->m_aDisplayText).clear();
 
     Rectangle aRect( Rectangle( aPos, rSize ) );
     DrawControlText( *pDev, aRect, aText, nTextStyle,

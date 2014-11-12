@@ -575,7 +575,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                     rSh.Unchain(*pFlyFmt);
                                 }
                                 else
-                                    sPrevName = OUString();
+                                    sPrevName.clear();
                             }
 
                             if (!sPrevName.isEmpty())
@@ -609,7 +609,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                     rSh.Unchain(*((SwFlyFrmFmt*) pCurrFlyFmt));
                                 }
                                 else
-                                    sNextName = OUString();
+                                    sNextName.clear();
                             }
 
                             if (!sNextName.isEmpty())

@@ -5337,7 +5337,7 @@ static LRESULT ImplHandleIMEReconvertString( HWND hWnd, LPARAM lParam )
     LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
     LRESULT nRet = 0;
     SalSurroundingTextRequestEvent aEvt;
-    aEvt.maText = OUString();
+    aEvt.maText.clear();
     aEvt.mnStart = aEvt.mnEnd = 0;
 
     UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_SETCOMPSTR );
@@ -5389,7 +5389,7 @@ static LRESULT ImplHandleIMEConfirmReconvertString( HWND hWnd, LPARAM lParam )
     WinSalFrame* pFrame = GetWindowPtr( hWnd );
     LPRECONVERTSTRING pReconvertString = (LPRECONVERTSTRING) lParam;
     SalSurroundingTextRequestEvent aEvt;
-    aEvt.maText = OUString();
+    aEvt.maText.clear();
     aEvt.mnStart = aEvt.mnEnd = 0;
 
     pFrame->CallCallback( SALEVENT_SURROUNDINGTEXTREQUEST, (void*)&aEvt );

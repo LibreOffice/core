@@ -207,7 +207,7 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sModuleId = OUString(); }
+        { sModuleId.clear(); }
 
     return sModuleId;
 }
@@ -248,7 +248,7 @@ OUString HelpOnStartup::its_getCurrentHelpURL()
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sCurrentHelpURL = OUString(); }
+        { sCurrentHelpURL.clear(); }
 
     return sCurrentHelpURL;
 }
@@ -331,7 +331,7 @@ OUString HelpOnStartup::its_checkIfHelpEnabledAndGetURL(const OUString& sModule)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sHelpURL = OUString(); }
+        { sHelpURL.clear(); }
 
     return sHelpURL;
 }

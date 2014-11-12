@@ -737,7 +737,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     SearchOptions aSearchOpt( m_pSrchItem->GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
     if( !bDoReplace )
-        aSearchOpt.replaceString = OUString();
+        aSearchOpt.replaceString.clear();
 
     sal_uLong nFound;
     if( aSrchSet.Count() || ( pReplSet && pReplSet->Count() ))

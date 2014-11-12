@@ -345,7 +345,7 @@ SwXParagraph::attachToText(SwXText & rParent, SwTxtNode & rTxtNode)
         {
             try { setString(m_pImpl->m_sText); }
             catch(...){}
-            m_pImpl->m_sText = OUString();
+            (m_pImpl->m_sText).clear();
         }
     }
 }

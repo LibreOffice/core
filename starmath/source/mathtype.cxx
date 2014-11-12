@@ -790,7 +790,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 {
                                     rRet += " nroot";
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             rRet += " {";
@@ -874,7 +874,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ( (nVariation != 0) && (nVariation != 3))
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if (((nVariation == 1) ||
@@ -896,7 +896,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if (((nVariation == 1) ||
@@ -914,7 +914,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ( (nVariation != 0) && (nVariation != 2))
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if (((nVariation == 1) ||
@@ -930,7 +930,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 else
                                     rRet += " Int";
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if (((nVariation == 1) ||
                                     (nVariation == 2)) && (nPart==1))
@@ -949,7 +949,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 else
                                     rRet += " iInt";
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if (nPart==1)
                                 rRet += " cSub";
@@ -963,7 +963,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 else
                                     rRet += " iiInt";
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if (nPart==1)
                                 rRet += " cSub";
@@ -980,7 +980,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -996,7 +996,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " Sum";
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1013,7 +1013,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1029,7 +1029,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " Prod";
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1046,7 +1046,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1062,7 +1062,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " coProd";
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1079,7 +1079,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1095,7 +1095,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " union"; //union
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1112,7 +1112,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             if ((nVariation == 0) && (nPart==1))
@@ -1128,7 +1128,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             {
                                 rRet += " intersect"; //intersect
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if ((nVariation == 0) && (nPart==1))
                                 rRet += " rSub";
@@ -1155,7 +1155,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nPart == 0)
                                 {
                                     sPush = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                             }
                             rRet += " {";
@@ -1176,7 +1176,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if ((nVariation == 0) && (nPart==0))
                                 rRet += " rSup";
@@ -1192,7 +1192,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sPush = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                             }
                             if ((nVariation == 0) && (nPart==0))
                                 rRet += " cSup";
@@ -1351,7 +1351,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 {
                                     newline--;
                                     sMainTerm = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                                 else
                                 {
@@ -1464,7 +1464,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nPart == 0)
                                 {
                                     sMainTerm = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                                 else
                                 {
@@ -1511,7 +1511,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if (nVariation != 2)
                                 {
                                     sMainTerm = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                                 newline--;
                             }
@@ -1540,7 +1540,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ((nVariation != 0) && (nVariation != 3))
                                 {
                                     sMainTerm = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                                 newline--;
                             }
@@ -1571,7 +1571,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                 if ((nVariation != 0) && (nVariation != 2))
                                 {
                                     sMainTerm = rRet;
-                                    rRet = OUString();
+                                    rRet.clear();
                                 }
                                 newline--;
                             }
@@ -1590,7 +1590,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sMainTerm = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                                 newline--;
                             }
                             else if ((nPart == 1) &&
@@ -1618,7 +1618,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             if (nPart == 0)
                             {
                                 sMainTerm = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                                 newline--;
                             }
                             else if (nPart == 1)
@@ -1638,7 +1638,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                                     ((nVariation == 0) || (nVariation == 1)))
                             {
                                 sMainTerm = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                                 newline--;
                             }
                             else if ((nPart == 0) && (nVariation == 2))
@@ -1646,7 +1646,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             else if ((nPart == 1) && (nVariation == 2))
                             {
                                 sMainTerm = rRet;
-                                rRet = OUString();
+                                rRet.clear();
                                 newline--;
                             }
                             else if ((nPart == 2) || ((((nPart == 1) &&
@@ -2898,7 +2898,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
         //follows the char and nPostSup and nPostlSup are the
         //indexes at which this class of emblishment is
         //collated together
-        sPost = OUString();
+        sPost.clear();
         nPostSup = nPostlSup = 0;
         int nOriglen=rRet.getLength()-rTextStart;
         rRet += " {";  // #i24340# make what would be "vec {A}_n" become "{vec {A}}_n"
@@ -2914,7 +2914,7 @@ int MathType::HandleChar(sal_Int32 &rTextStart,int &rSetSize,int nLevel,
                 aStr += "\"";
                 rRet = rRet.replaceAt(rTextStart,0,aStr);
 
-                aStr = OUString();
+                aStr.clear();
                 TypeFaceToString(aStr,nTypeFace);
                 rRet += aStr + "{";
             }

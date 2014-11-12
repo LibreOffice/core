@@ -373,7 +373,7 @@ SwUndoId UndoManager::GetRepeatInfo(OUString *const o_pStr) const
     }
     if (o_pStr) // not repeatable -> clear comment
     {
-        *o_pStr = OUString();
+        o_pStr->clear();
     }
     return UNDO_EMPTY;
 }

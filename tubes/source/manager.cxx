@@ -161,7 +161,7 @@ TeleConference* TeleManager::getConference()
         pConference = it->second;
     SAL_WARN_IF( !pConference, "tubes", "TeleManager::getConference: "
             << pImpl->msCurrentUUID.getStr() << " not found!" );
-    pImpl->msCurrentUUID = OString();
+    (pImpl->msCurrentUUID).clear();
     return pConference;
 }
 

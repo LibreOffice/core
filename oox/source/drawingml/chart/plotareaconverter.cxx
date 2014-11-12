@@ -400,7 +400,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         }
         else
         {
-            maAutoTitle = OUString();
+            maAutoTitle.clear();
         }
     }
 

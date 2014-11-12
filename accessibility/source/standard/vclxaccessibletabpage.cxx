@@ -254,7 +254,7 @@ void VCLXAccessibleTabPage::disposing()
     AccessibleTextHelper_BASE::disposing();
 
     m_pTabControl = NULL;
-    m_sPageText = OUString();
+    m_sPageText.clear();
 }
 
 

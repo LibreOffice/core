@@ -1060,12 +1060,12 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                     {
                         OSL_ASSERT( msRowTrans.isEmpty() );
                         pTableContext->setColumnPermutation( lcl_getNumberSequenceFromString( msColTrans, true ));
-                        msColTrans = OUString();
+                        msColTrans.clear();
                     }
                     else if( !msRowTrans.isEmpty() )
                     {
                         pTableContext->setRowPermutation( lcl_getNumberSequenceFromString( msRowTrans, true ));
-                        msRowTrans = OUString();
+                        msRowTrans.clear();
                     }
                 }
                 pContext = pTableContext;

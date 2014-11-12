@@ -123,7 +123,7 @@ bool SvxNumberInfoItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 

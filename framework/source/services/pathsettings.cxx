@@ -1222,7 +1222,7 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                     if ( !lList.empty() )
                         aChangePath.sWritePath = *(lList.begin());
                     else
-                        aChangePath.sWritePath = OUString();
+                        aChangePath.sWritePath.clear();
                 }
                 else
                 {

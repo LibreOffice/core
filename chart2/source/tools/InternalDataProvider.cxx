@@ -542,7 +542,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
                     aElem = OUString(pElem, p-pElem);
                 aRawElems.push_back(aElem);
                 pElem = NULL;
-                aElem = OUString();
+                aElem.clear();
 
                 ++p; // Skip '"'.
                 if (p == pEnd)
@@ -560,7 +560,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
                 aElem = OUString(pElem, p-pElem);
             aRawElems.push_back(aElem);
             pElem = NULL;
-            aElem = OUString();
+            aElem.clear();
         }
         else if (!pElem)
             pElem = p;

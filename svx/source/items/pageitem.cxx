@@ -89,7 +89,7 @@ bool SvxPageItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     OUString cpDelimTmp = OUString(cpDelim);
 
     switch ( ePres )
@@ -285,7 +285,7 @@ bool SvxSetItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 

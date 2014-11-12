@@ -550,7 +550,7 @@ void OImageControlModel::onDisconnectedDbColumn()
 {
     OBoundControlModel::onDisconnectedDbColumn();
 
-    m_sDocumentURL = OUString();
+    m_sDocumentURL.clear();
 }
 
 

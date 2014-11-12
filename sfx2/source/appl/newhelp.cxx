@@ -647,7 +647,7 @@ void IndexTabPage_Impl::InitializeIndex()
                         }
                     }
                     else
-                        aIndex = OUString();
+                        aIndex.clear();
 
                     // Assume the token is trimed
                     UNIFY_AND_INSERT_TOKEN( aKeywordPair );

@@ -387,9 +387,9 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
     if (nVersion > 0x0006)
     {
         OSL_FAIL("OComboBoxModel::read : invalid (means unknown) version !");
-        m_aListSource = OUString();
+        m_aListSource.clear();
         m_aBoundColumn <<= (sal_Int16)0;
-        m_aDefaultText = OUString();
+        m_aDefaultText.clear();
         m_eListSourceType = ListSourceType_TABLE;
         m_bEmptyIsNull = true;
         defaultCommonProperties();
@@ -407,7 +407,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
     }
     else // nVersion == 4
     {
-        m_aListSource = OUString();
+        m_aListSource.clear();
         StringSequence aListSource;
         _rxInStream >> aListSource;
         const OUString* pToken = aListSource.getConstArray();

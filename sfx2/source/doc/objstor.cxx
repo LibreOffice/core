@@ -288,7 +288,7 @@ OUString SfxObjectShell::CreateTempCopyOfStorage_Impl( const uno::Reference< emb
             SAL_WARN( "sfx.doc", "Creation of a storage copy is failed!" );
             ::utl::UCBContentHelper::Kill( aTempURL );
 
-            aTempURL = OUString();
+            aTempURL.clear();
 
             // TODO/LATER: may need error code setting based on exception
             SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );

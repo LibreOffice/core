@@ -316,6 +316,16 @@ public:
         return *this;
     }
 #endif
+
+    /**
+      Clears the string, i.e, makes a zero-character string
+      @since LibreOffice 4.4
+    */
+    void clear()
+    {
+        rtl_string_new( &pData );
+    }
+
     /**
       Returns the length of this string.
 
@@ -325,20 +335,16 @@ public:
                 object.
     */
     sal_Int32 getLength() const { return pData->length; }
-
     /**
       Checks if a string is empty.
-
       @return   true if the string is empty;
                 false, otherwise.
-
       @since LibreOffice 3.4
     */
     bool isEmpty() const
     {
         return pData->length == 0;
     }
-
     /**
       Returns a pointer to the characters of this string.
 

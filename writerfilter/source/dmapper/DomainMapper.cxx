@@ -227,7 +227,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             //contains the bookmark identifier - has to be added to the bookmark name imported before
             //if it is already available then the bookmark should be inserted
             m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );
-            sLocalBookmarkName = OUString();
+            sLocalBookmarkName.clear();
         break;
         case NS_ooxml::LN_CT_MarkupRange_displacedByCustomXml:
             break;

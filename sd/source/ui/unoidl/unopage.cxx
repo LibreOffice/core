@@ -2297,13 +2297,13 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
             }
 
             if( nPageNumber == ( ( GetPage()->GetPageNum() - 1 ) >> 1 ) + 1 )
-                aName = OUString();
+                aName.clear();
         }
         else
         {
             OUString aDefaultPageName( SD_RESSTR(STR_PAGE) + " " );
             if( aName.startsWith( aDefaultPageName ) )
-                aName = OUString();
+                aName.clear();
         }
 
         GetPage()->SetName( aName );

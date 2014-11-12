@@ -33,7 +33,7 @@ namespace tools {
 
 bool getProcessWorkingDir(OUString &rUrl)
 {
-    rUrl = OUString();
+    rUrl.clear();
     OUString s("$OOO_CWD");
     rtl::Bootstrap::expandMacros(s);
     if (s.isEmpty())

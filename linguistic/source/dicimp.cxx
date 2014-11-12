@@ -1123,7 +1123,7 @@ void DicEntry::splitDicFileWord(const OUString &rDicFileWord,
     else
     {
         rDicWord     = rDicFileWord;
-        rReplacement = OUString();
+        rReplacement.clear();
     }
 }
 

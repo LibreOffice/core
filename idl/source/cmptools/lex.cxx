@@ -161,7 +161,7 @@ int SvTokenStream::GetNextChar()
         }
         else
         {
-            aBufStr = OString();
+            aBufStr.clear();
             nColumn = 0;
             nBufPos = 0;
             return '\0';

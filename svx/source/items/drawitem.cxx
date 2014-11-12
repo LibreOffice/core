@@ -56,7 +56,7 @@ bool SvxColorListItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -119,7 +119,7 @@ bool SvxGradientListItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -167,7 +167,7 @@ bool SvxHatchListItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -210,7 +210,7 @@ bool SvxBitmapListItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -252,7 +252,7 @@ bool SvxDashListItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -293,7 +293,7 @@ bool SvxLineEndListItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 

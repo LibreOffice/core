@@ -241,7 +241,7 @@ const SfxFilter* SfxFrameLoader_Impl::impl_detectFilterForURL( const OUString& s
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
-        sFilter = OUString();
+        sFilter.clear();
     }
 
     const SfxFilter* pFilter = 0;

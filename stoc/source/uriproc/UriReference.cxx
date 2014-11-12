@@ -175,7 +175,7 @@ void UriReference::setFragment(OUString const & fragment)
 void UriReference::clearFragment() throw (css::uno::RuntimeException) {
     osl::MutexGuard g(m_mutex);
     m_hasFragment = false;
-    m_fragment = OUString();
+    m_fragment.clear();
 }
 
 void UriReference::appendSchemeSpecificPart(OUStringBuffer & buffer) const

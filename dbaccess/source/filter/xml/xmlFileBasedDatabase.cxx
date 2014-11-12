@@ -59,7 +59,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
         const OUString sValue = _xAttrList->getValueByIndex( i );
 
-        aProperty.Name = OUString();
+        aProperty.Name.clear();
         aProperty.Value = Any();
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )

@@ -373,7 +373,7 @@ Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDe
             if ( m_aHandler->checkDownloadDestination( aURL.copy( nIndex+1 ) ) )
             {
                 osl_removeFile( aFile.pData );
-                aFile = OUString();
+                aFile.clear();
             }
             else
                 m_aHandler->downloadStarted( aFile, 0 );
@@ -381,7 +381,7 @@ Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDe
         else
         {
             osl_removeFile( aFile.pData );
-            aFile = OUString();
+            aFile.clear();
         }
     }
 
@@ -402,7 +402,7 @@ Download::start(const OUString& rURL, const OUString& rFile, const OUString& rDe
             }
         }
         else if( osl_File_E_NOENT == rc ) // file has been deleted meanwhile ..
-            out.File = OUString();
+            out.File.clear();
     }
 
     OString aProxyHost;

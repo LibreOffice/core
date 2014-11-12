@@ -249,7 +249,7 @@ static void deleteSystrayMenu( HMENU hMenu )
         pMyItem = (MYITEM*) mi.dwItemData;
         if( pMyItem )
         {
-            pMyItem->text = OUString();
+            (pMyItem->text).clear();
             delete pMyItem;
         }
         mi.fMask = MIIM_DATA;

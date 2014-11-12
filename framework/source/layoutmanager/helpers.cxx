@@ -93,7 +93,7 @@ OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow )
             if ( !aToolbarName.isEmpty() && ( i > 0 ) && (( i + 1 ) < aToolbarName.getLength() ))
                 aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name
             else
-              aToolbarName = OUString();
+              aToolbarName.clear();
         }
     }
     return aToolbarName;

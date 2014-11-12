@@ -846,7 +846,7 @@ void DomainMapperTableManager::endOfRowAction()
 void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = m_nLayoutType = 0;
-    m_sTableStyleName = OUString();
+    m_sTableStyleName.clear();
     m_pTableStyleTextProperies.reset();
 }
 

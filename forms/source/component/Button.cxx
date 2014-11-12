@@ -212,8 +212,8 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         default:
             OSL_FAIL("OButtonModel::read : unknown version !");
             m_eButtonType = FormButtonType_PUSH;
-            m_sTargetURL = OUString();
-            m_sTargetFrame = OUString();
+            m_sTargetURL.clear();
+            m_sTargetFrame.clear();
             break;
     }
 }

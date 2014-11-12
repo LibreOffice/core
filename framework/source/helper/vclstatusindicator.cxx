@@ -82,7 +82,7 @@ void SAL_CALL VCLStatusIndicator::end()
 {
     SolarMutexGuard aSolarGuard;
 
-    m_sText  = OUString();
+    m_sText.clear();
     m_nRange = 0;
     m_nValue = 0;
 

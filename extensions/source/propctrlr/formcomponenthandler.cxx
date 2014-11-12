@@ -2616,7 +2616,7 @@ namespace pcr
         OSL_PRECOND( Reference< XRowSet >( m_xComponent, UNO_QUERY ).is(),
             "FormComponentPropertyHandler::impl_dialogFilterOrSort_nothrow: to be called for forms only!" );
 
-        _out_rSelectedClause = OUString();
+        _out_rSelectedClause.clear();
         bool bSuccess = false;
         SQLExceptionInfo aErrorInfo;
         try

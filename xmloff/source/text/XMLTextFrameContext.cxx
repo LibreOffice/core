@@ -1242,7 +1242,7 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
                 {
                     sChars = sBase64CharsLeft;
                     sChars += sTrimmedChars;
-                    sBase64CharsLeft = OUString();
+                    sBase64CharsLeft.clear();
                 }
                 else
                 {

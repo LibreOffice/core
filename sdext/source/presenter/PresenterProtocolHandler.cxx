@@ -412,7 +412,7 @@ void PresenterProtocolHandler::Dispatch::disposing (void)
         mbIsListeningToWindowManager = false;
     }
 
-    msURLPath = OUString();
+    msURLPath.clear();
     mpCommand.reset();
 }
 

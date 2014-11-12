@@ -248,10 +248,10 @@ void Idlc::reset()
     m_lineNumber = 0;
     m_parseState = PS_NoState;
 
-    m_fileName = OString();
-    m_mainFileName = OString();
-    m_realFileName = OString();
-    m_documentation = OString();
+    m_fileName.clear();
+    m_mainFileName.clear();
+    m_realFileName.clear();
+    m_documentation.clear();
 
     m_pScopes->clear();
     if ( m_pRoot)

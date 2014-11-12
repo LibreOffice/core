@@ -335,7 +335,7 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
         maCellData.mbShowPhonetic = rAttribs.getBool( XML_ph, false );
 
         // reset cell value, formula settings, and inline string
-        maCellValue = OUString();
+        maCellValue.clear();
         mxInlineStr.reset();
         mbHasFormula = false;
 
@@ -363,7 +363,7 @@ void SheetDataContext::importFormula( const AttributeList& rAttribs )
         maTableData.mbRef2Deleted = rAttribs.getBool( XML_del2, false );
     }
 
-    maFormulaStr = OUString();
+    maFormulaStr.clear();
 }
 
 void SheetDataContext::importRow( SequenceInputStream& rStrm )

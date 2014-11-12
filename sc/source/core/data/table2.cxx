@@ -1448,7 +1448,7 @@ void ScTable::GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetString( nRow, rString );
     else
-        rString = OUString();
+        rString.clear();
 }
 
 double* ScTable::GetValueCell( SCCOL nCol, SCROW nRow )
@@ -1464,7 +1464,7 @@ void ScTable::GetInputString( SCCOL nCol, SCROW nRow, OUString& rString ) const
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetInputString( nRow, rString );
     else
-        rString = OUString();
+        rString.clear();
 }
 
 double ScTable::GetValue( SCCOL nCol, SCROW nRow ) const
@@ -1495,7 +1495,7 @@ void ScTable::GetFormula( SCCOL nCol, SCROW nRow, OUString& rFormula ) const
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetFormula( nRow, rFormula );
     else
-        rFormula = OUString();
+        rFormula.clear();
 }
 
 const ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow ) const

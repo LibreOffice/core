@@ -87,7 +87,7 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
         }
         else
         {
-            msCurrentHelpText = OUString();
+            msCurrentHelpText.clear();
         }
     }
 }

@@ -97,7 +97,7 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
     ::GraphicDescriptor aDescriptor( rIStm, &aURL );
 
     mpGraphic = NULL;
-    maMimeType = OUString();
+    maMimeType.clear();
     meType = GRAPHIC_NONE;
     mnBitsPerPixel = 0;
     mbTransparent = false;

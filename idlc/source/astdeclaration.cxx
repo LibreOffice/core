@@ -91,7 +91,7 @@ void AstDeclaration::setPredefined(bool bPredefined)
     m_bPredefined = bPredefined;
     if ( m_bPredefined )
     {
-        m_fileName = OString();
+        m_fileName.clear();
         m_bInMainFile = false;
     }
 }
