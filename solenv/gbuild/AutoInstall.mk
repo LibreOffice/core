@@ -21,7 +21,7 @@ $(file >>$@,#define auto_$*_ALL \)
 $(foreach binary,$(filter-out $(lastword $(1)),$(1)),$(file >>$@,\
 	$(subst .,_,$(subst -,_,$(binary))), \))
 $(file >>$@,\
-	$(lastword $(1)))
+	$(subst .,_,$(subst -,_,$(lastword $(1)))))
 
 endef
 
