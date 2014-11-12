@@ -4818,12 +4818,12 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, bool bRecord )
     return true;
 }
 
-bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )
+void ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab )
 {
-    return SetNewRangeNames( new ScRangeName(rNewRanges), true, nTab );
+    SetNewRangeNames( new ScRangeName(rNewRanges), true, nTab );
 }
 
-bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTAB nTab )     // takes ownership of pNewRanges
+void ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTAB nTab )     // takes ownership of pNewRanges
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -4867,8 +4867,6 @@ bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc, SCTA
         aModificator.SetDocumentModified();
         SfxGetpApp()->Broadcast( SfxSimpleHint(SC_HINT_AREAS_CHANGED) );
     }
-
-    return true;
 }
 
 void ScDocFunc::ModifyAllRangeNames( const boost::ptr_map<OUString, ScRangeName>& rRangeMap )
@@ -5037,7 +5035,8 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi
         if ( bBottom && bRight )
             CreateOneName( aNewRanges, nEndCol,nEndRow,nTab, nContX1,nContY1,nContX2,nContY2, bCancel, bApi );
 
-        bDone = ModifyRangeNames( aNewRanges, aTab );
+        ModifyRangeNames( aNewRanges, aTab );
+        bDone = true;
 
         aModificator.SetDocumentModified();
         SfxGetpApp()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
