@@ -983,10 +983,8 @@ bool SwCrsrShell::GotoPrevOutline()
 
     SwNode* pNd = &(pCrsr->GetNode());
     sal_uInt16 nPos;
-    rNds.GetOutLineNds().Seek_Entry( pNd, &nPos );
-
-    bool bRet = false;
-    if( nPos )
+    bool bRet = rNds.GetOutLineNds().Seek_Entry(pNd, &nPos);
+    if (bRet && nPos)
     {
         --nPos; // before
 

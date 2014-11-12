@@ -498,24 +498,22 @@ bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, 
 
                 const SwOutlineNodes& rOutlNds = m_rDoc.GetNodes().GetOutLineNds();
                 sal_uInt16 nTmpPos;
-                if ( rOutlNds.Seek_Entry( pNd, &nTmpPos ) )
-                {
-                    rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
+                (void)rOutlNds.Seek_Entry( pNd, &nTmpPos );
+                rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
 
-                    // look for the section's end, now
-                    for( ++nTmpPos;
-                            nTmpPos < rOutlNds.size() &&
-                            nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
-                                    GetAttrOutlineLevel()-1;
-                        ++nTmpPos )
-                        ;       // there is no block
+                // look for the section's end, now
+                for( ++nTmpPos;
+                        nTmpPos < rOutlNds.size() &&
+                        nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
+                                GetAttrOutlineLevel()-1;
+                    ++nTmpPos )
+                    ;       // there is no block
 
-                    if( nTmpPos < rOutlNds.size() )
-                        rpRange->aEnd = *rOutlNds[ nTmpPos ];
-                    else
-                        rpRange->aEnd = m_rDoc.GetNodes().GetEndOfContent();
-                    return true;
-                }
+                if( nTmpPos < rOutlNds.size() )
+                    rpRange->aEnd = *rOutlNds[ nTmpPos ];
+                else
+                    rpRange->aEnd = m_rDoc.GetNodes().GetEndOfContent();
+                return true;
             }
         }
 
