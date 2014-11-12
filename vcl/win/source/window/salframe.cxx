@@ -2777,13 +2777,9 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
             ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
     }
 
-    // get screen font resolution to calculate toolbox item size
-    long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
-
     ReleaseDC( 0, hDC );
 
-    long nHeightPx = aMenuFont.GetHeight() * nDPIY / 72;
-    aStyleSettings.SetToolbarIconSize( (((nHeightPx-1)*2) >= 28) ? STYLE_TOOLBAR_ICONSIZE_LARGE : STYLE_TOOLBAR_ICONSIZE_SMALL );
+    aStyleSettings.SetToolbarIconSize(STYLE_TOOLBAR_ICONSIZE_LARGE);
 
     aStyleSettings.SetMenuFont( aMenuFont );
     aStyleSettings.SetTitleFont( aTitleFont );
