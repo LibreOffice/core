@@ -447,7 +447,7 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
     GLfloat pPoint[2];
 
     pPoint[0] = 2 * nX / GetWidth() - 1.0f;
-    pPoint[1] = 2 * (GetHeight() - nY) / GetHeight() - 1.0f;
+    pPoint[1] = 1.0f - 2 * nY / GetHeight();
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pPoint );
@@ -462,9 +462,9 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
     GLfloat pPoints[4];
 
     pPoints[0] = (2 * nX1) / GetWidth() - 1.0;
-    pPoints[1] = (2 * (GetHeight() - nY1)) / GetHeight() - 1.0;
+    pPoints[1] = 1.0f - 2 * nY1 / GetHeight();
     pPoints[2] = (2 * nX2) / GetWidth() - 1.0;;
-    pPoints[3] = (2 * (GetHeight() - nY2)) / GetHeight() - 1.0;
+    pPoints[3] = 1.0f - 2 * nY2 / GetHeight();
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pPoints );
@@ -504,7 +504,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
         aVertices[j] = (2 * pPtAry[i].mnX) / GetWidth() - 1.0;
-        aVertices[j+1] = (2 * pPtAry[i].mnY) / GetHeight() - 1.0;
+        aVertices[j+1] = 1.0 - (2 * pPtAry[i].mnY / GetHeight());
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
@@ -525,7 +525,7 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
     {
         const Point& rPt = rPolygon.GetPoint( i );
         aVertices[j] = (2 * rPt.X()) / GetWidth() - 1.0;
-        aVertices[j+1] = (2 * (GetHeight() - rPt.Y())) / GetHeight() - 1.0;
+        aVertices[j+1] = 1.0 - (2 * rPt.Y() / GetHeight());
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
@@ -539,9 +539,9 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
 {
     long nX1( nX );
-    long nY1( GetHeight() - nY );
+    long nY1( nY );
     long nX2( nX + nWidth );
-    long nY2( GetHeight() - nY - nHeight );
+    long nY2( nY + nHeight );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
@@ -551,9 +551,9 @@ void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeigh
 void OpenGLSalGraphicsImpl::DrawRect( const Rectangle& rRect )
 {
     long nX1( rRect.Left() );
-    long nY1( GetHeight() - rRect.Top() );
+    long nY1( rRect.Top() );
     long nX2( rRect.Right() );
-    long nY2( GetHeight() - rRect.Bottom() );
+    long nY2( rRect.Bottom() );
     const SalPoint aPoints[] = { { nX1, nY2 }, { nX1, nY1 },
                                  { nX2, nY1 }, { nX2, nY2 }};
 
