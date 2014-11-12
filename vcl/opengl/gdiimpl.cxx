@@ -341,8 +341,8 @@ bool OpenGLSalGraphicsImpl::CreateLinearGradientProgram( void )
     if( mnLinearGradientProgram == 0 )
         return false;
 
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_POS, "position" );
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    glBindAttribLocation( mnLinearGradientProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnLinearGradientProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnLinearGradientStartColorUniform = glGetUniformLocation( mnLinearGradientProgram, "start_color" );
     mnLinearGradientEndColorUniform = glGetUniformLocation( mnLinearGradientProgram, "end_color" );
 
@@ -356,8 +356,8 @@ bool OpenGLSalGraphicsImpl::CreateRadialGradientProgram( void )
     if( mnRadialGradientProgram == 0 )
         return false;
 
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_POS, "position" );
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    glBindAttribLocation( mnRadialGradientProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnRadialGradientProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnRadialGradientStartColorUniform = glGetUniformLocation( mnRadialGradientProgram, "start_color" );
     mnRadialGradientEndColorUniform = glGetUniformLocation( mnRadialGradientProgram, "end_color" );
     mnRadialGradientCenterUniform = glGetUniformLocation( mnRadialGradientProgram, "center" );
