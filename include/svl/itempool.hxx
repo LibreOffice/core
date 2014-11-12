@@ -77,7 +77,6 @@ private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
     sal_uInt16                      GetSize_Impl() const;
 
-    SVL_DLLPRIVATE SvStream&        Load1_Impl( SvStream &rStream );
     SVL_DLLPRIVATE bool             IsItemFlag_Impl( sal_uInt16 nWhich, sal_uInt16 nFlag ) const;
 
 public:
