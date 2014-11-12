@@ -49,6 +49,7 @@ struct ds_device
 {
     ds_device_type  type;
     cl_device_id    oclDeviceID;
+    char*           oclPlatformVendor;
     char*           oclDeviceName;
     char*           oclDriverVersion;
     void*           score;            // a pointer to the score data, the content/format is application defined
@@ -73,6 +74,7 @@ inline ds_status releaseDSProfile(ds_profile* profile, ds_score_release sr)
             unsigned int i;
             for (i = 0; i < profile->numDevices; i++)
             {
+                free(profile->devices[i].oclPlatformVendor);
                 free(profile->devices[i].oclDeviceName);
                 free(profile->devices[i].oclDriverVersion);
                 status = sr(profile->devices[i].score);
@@ -148,6 +150,9 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
     {
         cl_uint num;
         unsigned j;
+        char vendor[256];
+        if (clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR, sizeof(vendor), vendor, NULL) != CL_SUCCESS)
+            vendor[0] = '\0';
         clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, numDevices, devices, &num);
         for (j = 0; j < num; j++, next++)
         {
@@ -156,6 +161,8 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
 
             profile->devices[next].type = DS_DEVICE_OPENCL_DEVICE;
             profile->devices[next].oclDeviceID = devices[j];
+
+            profile->devices[next].oclPlatformVendor = strdup(vendor);
 
             clGetDeviceInfo(profile->devices[next].oclDeviceID, CL_DEVICE_NAME
                             , DS_DEVICE_NAME_LENGTH, &buffer, NULL);
