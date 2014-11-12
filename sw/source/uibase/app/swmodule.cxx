@@ -227,6 +227,9 @@ SwModule::~SwModule()
 {
     delete pErrorHdl;
     EndListening( *SfxGetpApp() );
+
+    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+    rACfg.SetAutoCorrect(0); // delete SwAutCorrect before exit handlers
 }
 
 void SwModule::CreateLngSvcEvtListener()

@@ -77,11 +77,11 @@ SvxAutoCorrCfg::~SvxAutoCorrCfg()
     delete pAutoCorrect;
 }
 
-void SvxAutoCorrCfg::SetAutoCorrect( SvxAutoCorrect* pNew )
+void SvxAutoCorrCfg::SetAutoCorrect(SvxAutoCorrect *const pNew)
 {
-    if( pNew && pNew != pAutoCorrect )
+    if (pNew != pAutoCorrect)
     {
-        if( pAutoCorrect->GetFlags() != pNew->GetFlags() )
+        if (pNew && (pAutoCorrect->GetFlags() != pNew->GetFlags()))
         {
             aBaseConfig.SetModified();
             aSwConfig.SetModified();
