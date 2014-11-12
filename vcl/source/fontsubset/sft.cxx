@@ -2648,6 +2648,17 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
     *nr = 0;
     if (n == 0) return 0;
 
+    const sal_uInt32 remaining_table_size = nTableSize-6;
+    const sal_uInt32 nMinRecordSize = 12;
+    const sal_uInt32 nMaxRecords = remaining_table_size / nMinRecordSize;
+    if (n > nMaxRecords)
+    {
+        SAL_WARN("vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fname) <<
+                 ": " << nMaxRecords << " max possible entries, but " <<
+                 n << " claimed, truncating");
+        n = nMaxRecords;
+    }
+
     NameRecord* rec = (NameRecord*)calloc(n, sizeof(NameRecord));
 
     for (i = 0; i < n; i++) {
