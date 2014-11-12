@@ -358,14 +358,14 @@ bool GIFReader::ReadLocalHeader()
     {
         SvMemoryStream  aMemStm;
         BitmapPalette*  pPal;
-        sal_uInt8           nFlags;
 
         aMemStm.SetBuffer( (char*) pBuf, 9, false, 9 );
         aMemStm.ReadUInt16( nImagePosX );
         aMemStm.ReadUInt16( nImagePosY );
         aMemStm.ReadUInt16( nImageWidth );
         aMemStm.ReadUInt16( nImageHeight );
-        aMemStm.ReadUChar( nFlags );
+        sal_uInt8 nFlags(0);
+        aMemStm.ReadUChar(nFlags);
 
         // if interlaced, first define startvalue
         bInterlaced = ( ( nFlags & 0x40 ) == 0x40 );
