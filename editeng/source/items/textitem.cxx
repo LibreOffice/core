@@ -884,7 +884,13 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return true;
 }
 
-// Calculate the relative deviation from the expected height.
+// Try to reconstruct the original height input value from the modified height
+// and the prop data; this seems somewhat futile given the various ways how the
+// modified height is calculated (with and without conversion between twips and
+// 100th mm; with an additional eCoreMetric input in one of the SetHeight
+// overloads), and indeed known to occassionally produce nRet values that would
+// be negative, so just guard against negative results here and throw the hands
+// up in despair:
 static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUnit eProp, bool bCoreInTwip)
 {
     sal_uInt32 nRet = nHeight;
@@ -913,7 +919,9 @@ static sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, S
         break;
         default: ;//prevent warning
     }
-    nRet -= nDiff;
+    nRet = (nDiff < 0 || nRet >= static_cast<unsigned short>(nDiff))
+        ? nRet - nDiff : 0;
+        //TODO: overflow in case nDiff < 0 and nRet - nDiff > SAL_MAX_UINT32
 
     return nRet;
 }
