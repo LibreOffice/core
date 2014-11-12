@@ -135,7 +135,7 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
         return true;
     }
 
-    if( false ) //rClip.IsRectangle() )
+    if( rClip.IsRectangle() )
     {
         Rectangle aRect( rClip.GetBoundRect() );
 
