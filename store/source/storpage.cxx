@@ -919,13 +919,13 @@ storeError OStorePageManager::rebuild (
                         continue;
 
                     // Write 'Destination' data page. @@@ READONLY @@@
-                    eErrCode = aDstPage.write (i, aData, *this);
+                    (void) aDstPage.write (i, aData, *this);
                 }
             }
 
             // Update 'Destination' directory page.
             aDstPage.dataLength (nDataLen);
-            eErrCode = base::saveObjectAt (aDstPage, aDstPage.location());
+            (void) base::saveObjectAt (aDstPage, aDstPage.location());
         }
 
         // Save directory scan results.
