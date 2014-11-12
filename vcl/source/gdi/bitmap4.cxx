@@ -787,11 +787,19 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProg
             pWriteAcc = pNewBmp->AcquireWriteAccess();
         }
 
-        if( pReadAcc && pWriteAcc )
+        bool bConditionsMet = false;
+        long nWidth;
+        long nHeight;
+        if (pReadAcc && pWriteAcc)
+        {
+            nWidth = pReadAcc->Width();
+            nHeight = pReadAcc->Height();
+            bConditionsMet = (nWidth > 0 && nHeight > 0);
+        }
+
+        if (bConditionsMet)
         {
             BitmapColor aCol;
-            long        nWidth = pReadAcc->Width();
-            long        nHeight = pReadAcc->Height();
             long        nX, nY, nX1, nX2, nY1, nY2, nSumR, nSumG, nSumB;
             double      fArea_1;
 
