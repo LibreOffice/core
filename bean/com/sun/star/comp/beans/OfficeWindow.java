@@ -26,9 +26,8 @@ import com.sun.star.awt.XWindowPeer;
  * The concrete implementation of the OfficeWindow extends an
  * appropriate type of visual component (java.awt.Canvas for local
  * and java.awt.Container for remote).
-
-    @deprecated
  */
+@Deprecated
 public interface OfficeWindow
 {
     /**

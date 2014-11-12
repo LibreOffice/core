@@ -82,8 +82,8 @@ public class OOoBean
 
     // @requirement FUNC.PER/0.2
     /** @internal
-     *  @deprecated
      */
+    @Deprecated
     public void writeExternal( java.io.ObjectOutput aObjOut )
     {
         // TBD
@@ -91,8 +91,8 @@ public class OOoBean
 
     // @requirement FUNC.PER/0.2
     /** @internal
-     *  @deprecated
      */
+    @Deprecated
     public void readExternal( java.io.ObjectInput aObjIn )
     {
         // TBD
@@ -1312,9 +1312,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         setLayout(new java.awt.BorderLayout());
     }
 
-    /**
-        @deprecated
-     */
+    @Deprecated
     @Override
     public void paint( java.awt.Graphics aGraphics )
     {

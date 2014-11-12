@@ -101,9 +101,7 @@ public class UCB
         executeCommand(ucb, "globalTransfer", copyArg(sourceDir,filename, targetDir,targetName));
     }
 
-    /**
-     * @deprecated
-     */
+    @Deprecated
     public void copy(String sourceDir, String filename, String targetDir) throws Exception
     {
         copy(sourceDir,filename, targetDir, PropertyNames.EMPTY_STRING);

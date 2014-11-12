@@ -20,9 +20,8 @@ package com.sun.star.uno;
 
 /**
  * Deprecated, UNOIDL does not have a union concept.
- *
- * @deprecated
  */
+@Deprecated
 public class Union {
     /**
      * Get the value in the union.
