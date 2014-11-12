@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_4bc11980",
+        "filename": "solenv/gbuild/platform/solaris.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-12T13:17:24Z",
+      "side": 1,
+      "message": "-mimpure-text looks rather questionable to me - it sounds like there is something somewhere that isn\u0027t built as PIC but should be, and this is just a workaround.",
+      "revId": "39fb10ee96b5f81f556e0b27dcc6efc9aa458378",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

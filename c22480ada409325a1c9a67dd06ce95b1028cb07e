@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_2bbeddff",
+        "filename": "solenv/gbuild/platform/solaris.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-12T13:17:24Z",
+      "side": 0,
+      "message": "i guess you don\u0027t need the version script on Solaris - it is used on Linux mostly for ABI compatibility and Solaris/GCC is not compatible with Solaris/SunStudio anyway.",
+      "revId": "c22480ada409325a1c9a67dd06ce95b1028cb07e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
