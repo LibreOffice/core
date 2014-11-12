@@ -508,9 +508,9 @@ struct _PostItFld : public _SetGetExpFld
             const std::set< sal_Int32 > &rPossiblePages,
             sal_uInt16& rVirtPgNo, sal_uInt16& rLineNo );
 
-    SwPostItField* GetPostIt() const
+    const SwPostItField* GetPostIt() const
     {
-        return (SwPostItField*) GetTxtFld()->GetFmtFld().GetField();
+        return static_cast<const SwPostItField*>( GetTxtFld()->GetFmtFld().GetField() );
     }
 };
 
@@ -582,7 +582,7 @@ bool sw_GetPostIts(
 static void lcl_FormatPostIt(
     IDocumentContentOperations* pIDCO,
     SwPaM& aPam,
-    SwPostItField* pField,
+    const SwPostItField* pField,
     bool bNewPage, bool bIsFirstPostIt,
     sal_uInt16 nPageNo, sal_uInt16 nLineNo )
 {
@@ -684,7 +684,7 @@ void SwDoc::CalculatePagesForPrinting(
         }
 
         ++nPageNum;
-        pStPage = (SwPageFrm*)pStPage->GetNext();
+        pStPage = static_cast<const SwPageFrm*>(pStPage->GetNext());
     }
 
     // now that we have identified the valid pages for printing according
@@ -767,7 +767,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         bool bIsFirstPostIt = true;
         for (sal_uInt16 i = 0; i < nPostItCount; ++i)
         {
-            _PostItFld& rPostIt = (_PostItFld&)*(*rData.m_pPostItFields)[ i ];
+            _PostItFld& rPostIt = static_cast<_PostItFld&>(*(*rData.m_pPostItFields)[ i ]);
             nLastPageNum = nPhyPageNum;
             nPhyPageNum = rPostIt.GetPageNo(
                     aRangeEnum, rData.GetValidPagesSet(), nVirtPg, nLineNo );
@@ -811,7 +811,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
             // now we just need to add the post-it pages to be printed to the
             // end of the vector of pages to print
             sal_Int32 nPageNum = 0;
-            const SwPageFrm * pPageFrm = (SwPageFrm*)rData.m_pPostItShell->GetLayout()->Lower();
+            const SwPageFrm * pPageFrm = static_cast<SwPageFrm*>(rData.m_pPostItShell->GetLayout()->Lower());
             while( pPageFrm && nPageNum < nPostItDocPageCount )
             {
                 OSL_ENSURE( pPageFrm, "Empty page frame. How are we going to print this?" );
@@ -819,7 +819,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
                 // negative page number indicates page is from the post-it doc
                 rData.GetPagesToPrint().push_back( -nPageNum );
                 OSL_ENSURE( pPageFrm, "pPageFrm is NULL!" );
-                pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
+                pPageFrm = static_cast<const SwPageFrm*>(pPageFrm->GetNext());
             }
             OSL_ENSURE( nPageNum == nPostItDocPageCount, "unexpected number of pages" );
         }
@@ -897,7 +897,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwPageFrm *pStPage  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
     sal_Int32 i = 0;
     for ( i = 1; pStPage && i < nDocPageCount; ++i )
-        pStPage = (SwPageFrm*)pStPage->GetNext();
+        pStPage = static_cast<const SwPageFrm*>(pStPage->GetNext());
     if ( !pStPage )          // Then it was that
         return;
 
@@ -911,7 +911,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         ++nPageNum;
         rValidPagesSet.insert( nPageNum );
         validStartFrms[ nPageNum ] = pPageFrm;
-        pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
+        pPageFrm = static_cast<const SwPageFrm*>(pPageFrm->GetNext());
 
         rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
     }
@@ -1021,7 +1021,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( const OUString& rName ) const
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
             continue;
 
-        const SwFmtRefMark* pFmtRef = (SwFmtRefMark*)pItem;
+        const SwFmtRefMark* pFmtRef = static_cast<const SwFmtRefMark*>(pItem);
         const SwTxtRefMark* pTxtRef = pFmtRef->GetTxtRefMark();
         if( pTxtRef && &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() &&
             rName == pFmtRef->GetRefName() )
@@ -1041,12 +1041,12 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
     sal_uInt32 nCount = 0;
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
-            0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
+            0 != (pTxtRef = static_cast<const SwFmtRefMark*>(pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
             if(nCount == nIndex)
             {
-                pRet = (SwFmtRefMark*)pItem;
+                pRet = static_cast<const SwFmtRefMark*>(pItem);
                 break;
             }
             nCount++;
@@ -1066,12 +1066,12 @@ sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
     sal_uInt16 nCount = 0;
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
-            0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
+            0 != (pTxtRef = static_cast<const SwFmtRefMark*>(pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
             if( pNames )
             {
-                OUString pTmp(((SwFmtRefMark*)pItem)->GetRefName());
+                OUString pTmp(static_cast<const SwFmtRefMark*>(pItem)->GetRefName());
                 pNames->insert(pNames->begin() + nCount, pTmp);
             }
             ++nCount;
@@ -1171,8 +1171,9 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const OUString& rName ) const
     const SwTxtNode* pTxtNd;
     sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem2(
-            RES_TXTATR_INETFMT, n ) ) &&
+    {
+        pItem = static_cast<const SwFmtINetFmt*>( GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) );
+        if( 0 != pItem &&
             pItem->GetName() == rName &&
             0 != ( pTxtAttr = pItem->GetTxtINetFmt()) &&
             0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
@@ -1180,7 +1181,7 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const OUString& rName ) const
         {
             return pItem;
         }
-
+    }
     return 0;
 }
 
@@ -1197,7 +1198,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             ::SetProgressState( i, GetDocShell() );
             const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
 
-            const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;
+            const int nLvl = static_cast<SwTxtNode*>(GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;
             if( nLvl > nLevel )
                 continue;
             sal_uInt16 nEndOfs = 1;
@@ -1208,7 +1209,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
                    GetNodes()[ nIndex + nEndOfs ]->IsTxtNode() )
             {
-                SwTxtNode* pTxtNode = (SwTxtNode*)GetNodes()[ nIndex+nEndOfs ];
+                SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(GetNodes()[ nIndex+nEndOfs ]);
                 if (pTxtNode->GetTxt().getLength() && nWish)
                     --nWish;
                 bKeep = pTxtNode->GetSwAttrSet().GetKeep().GetValue();
@@ -1229,7 +1230,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             bool bDelete = false;
             if( (pNode = &aIndx.GetNode())->IsTxtNode() )
             {
-                SwTxtNode *pNd = (SwTxtNode*)pNode;
+                SwTxtNode *pNd = static_cast<SwTxtNode*>(pNode);
                 if( pNd->HasSwAttrSet() )
                     pNd->ResetAttr( RES_PAGEDESC, RES_BREAK );
                 if( bImpress )
@@ -1675,7 +1676,7 @@ bool SwDoc::ContainsHiddenChars() const
     {
         SwNode* pNd = GetNodes()[ --n ];
         if ( pNd->IsTxtNode() &&
-             ((SwTxtNode*)pNd)->HasHiddenCharAttribute( false ) )
+             static_cast<SwTxtNode*>(pNd)->HasHiddenCharAttribute( false ) )
             return true;
     }
 

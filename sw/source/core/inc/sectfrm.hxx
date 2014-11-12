@@ -159,15 +159,15 @@ class SwDestroyList : public std::set<SwSectionFrm*> {};
 
 inline const SwSectionFrm *SwSectionFrm::GetFollow() const
 {
-    return (const SwSectionFrm*)SwFlowFrm::GetFollow();
+    return static_cast<const SwSectionFrm*>(SwFlowFrm::GetFollow());
 }
 inline SwSectionFrm *SwSectionFrm::GetFollow()
 {
-    return (SwSectionFrm*)SwFlowFrm::GetFollow();
+    return static_cast<SwSectionFrm*>(SwFlowFrm::GetFollow());
 }
 inline const SwCntntFrm *SwSectionFrm::FindLastCntnt( sal_uInt8 nMode ) const
 {
-    return ((SwSectionFrm*)this)->FindLastCntnt( nMode );
+    return const_cast<SwSectionFrm*>(this)->FindLastCntnt( nMode );
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_SECTFRM_HXX

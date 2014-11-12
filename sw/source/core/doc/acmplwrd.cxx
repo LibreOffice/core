@@ -145,8 +145,8 @@ void SwAutoCompleteClient::Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
     {
     case RES_REMOVE_UNO_OBJECT:
     case RES_OBJECTDYING:
-        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            ((SwModify*)GetRegisteredIn())->Remove(this);
+        if( (void*)GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
+            static_cast<SwModify*>(GetRegisteredIn())->Remove(this);
         pAutoCompleteWord->DocumentDying(*pDoc);
         break;
     }
@@ -283,7 +283,7 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
         {
             delete pNew;
             // then move "up"
-            pNew = (SwAutoCompleteString*)(*aInsPair.first);
+            pNew = static_cast<SwAutoCompleteString*>(*aInsPair.first);
 
             // add the document to the already inserted string
             pNew->AddDocument(rDoc);

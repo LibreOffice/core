@@ -277,7 +277,7 @@ static const OUString lcl_dbg_out(const SfxItemSet & rSet)
         if (!bFirst)
             aStr += ", ";
 
-        if ((sal_uIntPtr)pItem != SAL_MAX_SIZE)
+        if (reinterpret_cast<sal_uIntPtr>(pItem) != SAL_MAX_SIZE)
             aStr += lcl_dbg_out(*pItem);
         else
             aStr += "invalid";
