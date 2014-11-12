@@ -10,6 +10,7 @@
 #ifndef INCLUDED_SC_INC_PLATFORMINFO_HXX
 #define INCLUDED_SC_INC_PLATFORMINFO_HXX
 
+#include <ostream>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -42,5 +43,8 @@ struct SC_DLLPUBLIC OpenCLPlatformInfo
 };
 
 }
+
+SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLPlatformInfo& rPlatform);
+SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLDeviceInfo& rDevice);
 
 #endif

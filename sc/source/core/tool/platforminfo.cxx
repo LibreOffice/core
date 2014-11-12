@@ -26,4 +26,23 @@ OpenCLPlatformInfo::OpenCLPlatformInfo()
 
 }
 
+std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLPlatformInfo& rPlatform)
+{
+    rStream << "{"
+        "Vendor=" << rPlatform.maVendor << ","
+        "Name=" << rPlatform.maName <<
+        "}";
+    return rStream;
+}
+
+std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLDeviceInfo& rDevice)
+{
+    rStream << "{"
+        "Name=" << rDevice.maName << ","
+        "Vendor=" << rDevice.maVendor << ","
+        "Driver=" << rDevice.maDriver <<
+        "}";
+    return rStream;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
