@@ -213,8 +213,9 @@ public:
     void setLocale( const ::com::sun::star::lang::Locale& rLocale ) throw (::com::sun::star::uno::RuntimeException);
 
     // called by the C callbacks of the expat parser
-    void callbackStartElement( const xmlChar* name, const xmlChar** atts );
-    void callbackEndElement( const xmlChar* name );
+    void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
+        int numNamespaces, const xmlChar** namespaces, int numAttributes, int defaultedAttributes, const xmlChar **attributes );
+    void callbackEndElement( const xmlChar* localName, const xmlChar* prefix, const xmlChar* URI );
     void callbackCharacters( const xmlChar* s, int nLen );
 //    bool callbackExternalEntityRef( XML_Parser parser, const xmlChar *openEntityNames, const xmlChar *base, const xmlChar *systemId, const xmlChar *publicId);
 //    void callbackEntityDecl(const xmlChar *entityName, int is_parameter_entity,
@@ -235,15 +236,12 @@ private:
     bool consume(EventList *);
     void deleteUsedEvents();
 
-    sal_Int32 GetToken( const xmlChar* pToken, sal_Int32 nTokenLen = 0 );
-    sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int nPrefixLen, const xmlChar* pName, int nNameLen ) throw (::com::sun::star::xml::sax::SAXException);
+    sal_Int32 GetToken( const xmlChar* pName, sal_Int32 nameLen );
+    sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, sal_Int32 prefixLen, const xmlChar* pName, sal_Int32 nameLen ) throw (::com::sun::star::xml::sax::SAXException);
     OUString GetNamespaceURL( const OString& rPrefix ) throw (::com::sun::star::xml::sax::SAXException);
-    OUString GetNamespaceURL( const xmlChar* pPrefix, int nPrefixLen ) throw (::com::sun::star::xml::sax::SAXException);
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
-    void DefineNamespace( const OString& rPrefix, const xmlChar* pNamespaceURL );
-
-    void splitName( const xmlChar *pwName, const xmlChar *&rpPrefix, sal_Int32 &rPrefixLen, const xmlChar *&rpName, sal_Int32 &rNameLen );
+    void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
 
 private:
     FastSaxParser* mpFront;
@@ -285,16 +283,17 @@ private:
 
 extern "C" {
 
-static void call_callbackStartElement(void *userData, const xmlChar *name , const xmlChar **atts)
+static void call_callbackStartElement(void *userData, const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
+    int numNamespaces, const xmlChar** namespaces, int numAttributes, int defaultedAttributes, const xmlChar **attributes)
 {
     FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
-    pFastParser->callbackStartElement( name, atts );
+    pFastParser->callbackStartElement( localName, prefix, URI, numNamespaces, namespaces, numAttributes, defaultedAttributes, attributes );
 }
 
-static void call_callbackEndElement(void *userData, const xmlChar *name)
+static void call_callbackEndElement(void *userData, const xmlChar* localName, const xmlChar* prefix, const xmlChar* URI)
 {
     FastSaxParserImpl* pFastParser = reinterpret_cast<FastSaxParserImpl*>( userData );
-    pFastParser->callbackEndElement( name );
+    pFastParser->callbackEndElement( localName, prefix, URI );
 }
 
 static void call_callbackCharacters( void *userData , const xmlChar *s , int nLen )
@@ -321,15 +320,6 @@ static int call_callbackExternalEntityRef( XML_Parser parser,
     return pFastParser->callbackExternalEntityRef( parser, openEntityNames, base, systemId, publicId );
 }
 #endif
-}
-
-static void call_callbackError( void *userData , const char *s , ... )
-{
-    va_list va;
-    va_start( va, s );
-    printf( "ERR:\n" );
-    vprintf( s, va );
-    va_end( va );
 }
 
 class FastLocatorImpl : public WeakImplHelper1< XLocator >
@@ -642,7 +632,7 @@ FastSaxParserImpl::~FastSaxParserImpl()
         mxDocumentLocator->dispose();
 }
 
-void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const xmlChar* pNamespaceURL )
+void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString& namespaceURL )
 {
     Entity& rEntity = getEntity();
     assert(!rEntity.maNamespaceCount.empty()); // need a context!
@@ -653,17 +643,15 @@ void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const xmlChar* 
         if( rEntity.maNamespaceDefines.size() <= nOffset )
             rEntity.maNamespaceDefines.resize( rEntity.maNamespaceDefines.size() + 64 );
 
-        const OUString aNamespaceURL( XML_CAST( pNamespaceURL ), strlen( XML_CAST( pNamespaceURL )),
-            RTL_TEXTENCODING_UTF8 );
-        rEntity.maNamespaceDefines[nOffset].reset( new NamespaceDefine( rPrefix, GetNamespaceToken( aNamespaceURL ), aNamespaceURL ) );
+        rEntity.maNamespaceDefines[nOffset].reset( new NamespaceDefine( rPrefix, GetNamespaceToken( namespaceURL ), namespaceURL ) );
     }
 }
 
-sal_Int32 FastSaxParserImpl::GetToken( const xmlChar* pToken, sal_Int32 nLen /* = 0 */ )
+sal_Int32 FastSaxParserImpl::GetToken( const xmlChar* pName, sal_Int32 nameLen /* = 0 */ )
 {
     return FastTokenHandlerBase::getTokenFromChars( getEntity().mxTokenHandler,
                                                     getEntity().mpTokenHandler,
-                                                    XML_CAST( pToken ), nLen ); // uses utf-8
+                                                    XML_CAST( pName ), nameLen ); // uses utf-8
 }
 
 sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPrefixLen, const xmlChar* pName, int nNameLen ) throw (SAXException)
@@ -722,26 +710,6 @@ OUString FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix ) throw (SAX
     throw SAXException(); // prefix that has no defined namespace url
 }
 
-OUString FastSaxParserImpl::GetNamespaceURL( const xmlChar* pPrefix, int nPrefixLen ) throw(SAXException)
-{
-    Entity& rEntity = getEntity();
-    if( pPrefix && !rEntity.maNamespaceCount.empty() )
-    {
-        sal_uInt32 nNamespace = rEntity.maNamespaceCount.top();
-        while( nNamespace-- )
-        {
-            const OString& rPrefix( rEntity.maNamespaceDefines[nNamespace]->maPrefix );
-            if( (rPrefix.getLength() == nPrefixLen) &&
-                (strncmp( rPrefix.getStr(), XML_CAST( pPrefix ), nPrefixLen ) == 0 ) )
-            {
-                return rEntity.maNamespaceDefines[nNamespace]->maNamespaceURL;
-            }
-        }
-    }
-
-    throw SAXException(); // prefix that has no defined namespace url
-}
-
 sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen )
 {
     if( nNamespaceToken != FastToken::DONTKNOW )
@@ -752,33 +720,6 @@ sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceT
     }
 
     return FastToken::DONTKNOW;
-}
-
-void FastSaxParserImpl::splitName( const xmlChar *pwName, const xmlChar *&rpPrefix, sal_Int32 &rPrefixLen, const xmlChar *&rpName, sal_Int32 &rNameLen )
-{
-    const xmlChar *p;
-    for( p = pwName, rNameLen = 0, rPrefixLen = 0; *p; p++ )
-    {
-        if( *p == ':' )
-        {
-            rPrefixLen = p - pwName;
-            rNameLen = 0;
-        }
-        else
-        {
-            rNameLen++;
-        }
-    }
-    if( rPrefixLen )
-    {
-        rpPrefix = pwName;
-        rpName = &pwName[ rPrefixLen + 1 ];
-    }
-    else
-    {
-        rpPrefix = 0;
-        rpName = pwName;
-    }
 }
 
 /***************
@@ -1052,10 +993,10 @@ void FastSaxParserImpl::parse()
 
     // set all necessary C-Callbacks
     static xmlSAXHandler callbacks;
-    callbacks.startElement = call_callbackStartElement;
-    callbacks.endElement = call_callbackEndElement;
+    callbacks.startElementNs = call_callbackStartElement;
+    callbacks.endElementNs = call_callbackEndElement;
     callbacks.characters = call_callbackCharacters;
-    callbacks.error = callbacks.fatalError = call_callbackError;
+    callbacks.initialized = XML_SAX2_MAGIC;
 //    XML_SetEntityDeclHandler(entity.mpParser, call_callbackEntityDecl);
 //    XML_SetExternalEntityRefHandler( entity.mpParser, call_callbackExternalEntityRef );
 
@@ -1098,13 +1039,14 @@ void FastSaxParserImpl::parse()
 }
 
 // The C-Callbacks
-void FastSaxParserImpl::callbackStartElement( const xmlChar* pwName, const xmlChar** awAttributes )
+void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
+    int numNamespaces, const xmlChar** namespaces, int numAttributes, int /*defaultedAttributes*/, const xmlChar **attributes)
 {
     Entity& rEntity = getEntity();
     if( rEntity.maNamespaceCount.empty() )
     {
         rEntity.maNamespaceCount.push(0);
-        DefineNamespace( OString("xml"), BAD_CAST "http://www.w3.org/XML/1998/namespace");
+        DefineNamespace( OString("xml"), OUString( "http://www.w3.org/XML/1998/namespace" ));
     }
     else
     {
@@ -1120,10 +1062,6 @@ void FastSaxParserImpl::callbackStartElement( const xmlChar* pwName, const xmlCh
                 new FastAttributeList( rEntity.mxTokenHandler,
                                        rEntity.mpTokenHandler ) );
 
-    sal_Int32 nNameLen, nPrefixLen;
-    const xmlChar *pName;
-    const xmlChar *pPrefix;
-
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
     if (!rEntity.maNamespaceStack.empty())
     {
@@ -1134,85 +1072,64 @@ void FastSaxParserImpl::callbackStartElement( const xmlChar* pwName, const xmlCh
     try
     {
         /*  #158414# Each element may define new namespaces, also for attribues.
-            First, process all namespace attributes and cache other attributes in a
-            vector. Second, process the attributes after namespaces have been
-            initialized. */
+            First, process all namespaces, second, process the attributes after namespaces
+            have been initialized. */
 
         // #158414# first: get namespaces
-        for (int i = 0; awAttributes && awAttributes[i]; i += 2)
+        for (int i = 0; i < numNamespaces * 2; i += 2)
         {
-            assert(awAttributes[i+1]);
-
-            if( awAttributes[i][0] != 'x' ||
-                strncmp( XML_CAST( awAttributes[i] ), "xmlns", 5) != 0 )
-                continue;
-
-            splitName( awAttributes[i], pPrefix, nPrefixLen, pName, nNameLen );
-            if( nPrefixLen )
+            // namespaces[] is (prefix/URI)
+            if( namespaces[ i ] != NULL )
             {
-                if( (nPrefixLen == 5) && (strncmp( XML_CAST( pPrefix ), "xmlns", 5 ) == 0) )
-                {
-                    DefineNamespace( OString( XML_CAST( pName ), nNameLen ), awAttributes[i+1] );
-                }
+                    DefineNamespace( OString( XML_CAST( namespaces[ i ] )),
+                        OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 ));
             }
             else
             {
-                if( (nNameLen == 5) && (strcmp( XML_CAST( pName ), "xmlns" ) == 0) )
-                {
-                    // default namespace is the attribute value
-                    rEvent.msNamespace = OUString( XML_CAST( awAttributes[i+1] ), strlen( XML_CAST( awAttributes[i+1] )),
-                        RTL_TEXTENCODING_UTF8 );
-                    nNamespaceToken = GetNamespaceToken( rEvent.msNamespace );
-                }
+                // default namespace
+                rEvent.msNamespace = OUString( XML_CAST( namespaces[ i + 1 ] ), strlen( XML_CAST( namespaces[ i + 1 ] )), RTL_TEXTENCODING_UTF8 );
+                nNamespaceToken = GetNamespaceToken( rEvent.msNamespace );
             }
         }
 
         // #158414# second: fill attribute list with other attributes
-        for (int i = 0; awAttributes && awAttributes[i]; i += 2)
+        for (int i = 0; i < numAttributes * 5; i += 5)
         {
-            splitName( awAttributes[i], pPrefix, nPrefixLen, pName, nNameLen );
-            if( nPrefixLen )
+            if( attributes[ i + 1 ] != NULL )
             {
-                if( (nPrefixLen != 5) || (strncmp( XML_CAST( pPrefix ), "xmlns", 5 ) != 0) )
-                {
-                    sal_Int32 nAttributeToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
-                    if( nAttributeToken != FastToken::DONTKNOW )
-                        rEvent.mxAttributes->add( nAttributeToken, XML_CAST( awAttributes[i+1] ));
-                    else
-                        rEvent.mxAttributes->addUnknown( GetNamespaceURL( pPrefix, nPrefixLen ),
-                                OString( XML_CAST( pName ), nNameLen), XML_CAST( awAttributes[i+1] ));
-                }
+                sal_Int32 nAttributeToken = GetTokenWithPrefix( attributes[ i + 1 ], strlen( XML_CAST( attributes[ i + 1 ] )), attributes[ i ], strlen( XML_CAST( attributes[ i ] )));
+                if( nAttributeToken != FastToken::DONTKNOW )
+                    rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
+                else
+                    rEvent.mxAttributes->addUnknown( OUString( XML_CAST( attributes[ i + 2 ] ), strlen( XML_CAST( attributes[ i + 2 ] )), RTL_TEXTENCODING_UTF8 ),
+                            OString( XML_CAST( attributes[ i ] )), OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
             }
             else
             {
-                if( (nNameLen != 5) || (strcmp( XML_CAST( pName ), "xmlns" ) != 0) )
-                {
-                    sal_Int32 nAttributeToken = GetToken( pName, nNameLen );
-                    if( nAttributeToken != FastToken::DONTKNOW )
-                        rEvent.mxAttributes->add( nAttributeToken, XML_CAST( awAttributes[i+1] ));
-                    else
-                        rEvent.mxAttributes->addUnknown( OString( XML_CAST( pName ), nNameLen),
-                            XML_CAST( awAttributes[i+1] ));
-                }
+                sal_Int32 nAttributeToken = GetToken( attributes[ i ], strlen( XML_CAST( attributes[ i ] )));
+                if( nAttributeToken != FastToken::DONTKNOW )
+                    rEvent.mxAttributes->add( nAttributeToken, XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] );
+                else
+                    rEvent.mxAttributes->addUnknown( XML_CAST( attributes[ i ] ),
+                        OString( XML_CAST( attributes[ i + 3 ] ), attributes[ i + 4 ] - attributes[ i + 3 ] ));
             }
         }
 
-        splitName( pwName, pPrefix, nPrefixLen, pName, nNameLen );
-        if( nPrefixLen > 0 )
-            rEvent.mnElementToken = GetTokenWithPrefix( pPrefix, nPrefixLen, pName, nNameLen );
+        if( prefix != NULL )
+            rEvent.mnElementToken = GetTokenWithPrefix( prefix, strlen( XML_CAST( prefix )), localName, strlen( XML_CAST( localName )));
         else if( !rEvent.msNamespace.isEmpty() )
-            rEvent.mnElementToken = GetTokenWithContextNamespace( nNamespaceToken, pName, nNameLen );
+            rEvent.mnElementToken = GetTokenWithContextNamespace( nNamespaceToken, localName, strlen( XML_CAST( localName )));
         else
-            rEvent.mnElementToken = GetToken( pName );
+            rEvent.mnElementToken = GetToken( localName, strlen( XML_CAST( localName )));
 
         if( rEvent.mnElementToken == FastToken::DONTKNOW )
         {
-            if( nPrefixLen > 0 )
+            if( prefix != NULL )
             {
-                rEvent.msNamespace = GetNamespaceURL( pPrefix, nPrefixLen );
+                rEvent.msNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
                 nNamespaceToken = GetNamespaceToken( rEvent.msNamespace );
             }
-            rEvent.msElementName = OUString( XML_CAST( pName ), nNameLen, RTL_TEXTENCODING_UTF8 );
+            rEvent.msElementName = OUString( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
         }
         else // token is always preferred.
             rEvent.msElementName = OUString( "" );
@@ -1229,9 +1146,10 @@ void FastSaxParserImpl::callbackStartElement( const xmlChar* pwName, const xmlCh
     }
 }
 
-void FastSaxParserImpl::callbackEndElement( SAL_UNUSED_PARAMETER const xmlChar* )
+void FastSaxParserImpl::callbackEndElement( const xmlChar*, const xmlChar*, const xmlChar* )
 {
     Entity& rEntity = getEntity();
+    // TODO
     assert( !rEntity.maNamespaceCount.empty() );
     if( !rEntity.maNamespaceCount.empty() )
         rEntity.maNamespaceCount.pop();
