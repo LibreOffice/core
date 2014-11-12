@@ -11,6 +11,7 @@
 
 #include "openclwrapper.hxx"
 
+#include <comphelper/string.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/digest.h>
@@ -19,6 +20,8 @@
 
 #include <sal/config.h>
 #include <osl/file.hxx>
+#include "calcconfig.hxx"
+#include "interpre.hxx"
 #include "opencl_device.hxx"
 
 #include <stdio.h>
@@ -515,23 +518,82 @@ bool OpenCLDevice::initOpenCLRunEnv( GPUEnv *gpuInfo )
 namespace {
 
 // based on crashes and hanging during kernel compilation
-bool checkForKnownBadCompilers(const OpenCLDeviceInfo& rInfo)
+bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
 {
+    // Check blacklist of known bad OpenCL implementations
 
-    struct {
-        const char* pVendorName; const char* pDriverVersion;
-    } aBadOpenCLCompilers[] = {
-        { "Intel(R) Corporation", "9.17.10.2884" }
-    };
-
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aBadOpenCLCompilers); ++i)
+    for (auto i = ScInterpreter::GetGlobalConfig().maOpenCLBlackList.cbegin();
+         i != ScInterpreter::GetGlobalConfig().maOpenCLBlackList.end();
+         ++i)
     {
-        if(rInfo.maVendor == OUString::createFromAscii(aBadOpenCLCompilers[i].pVendorName) &&
-                rInfo.maDriver == OUString::createFromAscii(aBadOpenCLCompilers[i].pDriverVersion))
-            return true;
+#if defined WNT
+        if (i->maOS != "*" && i->maOS != "Windows")
+            continue;
+#elif defined LINUX
+        if (i->maOS != "*" && i->maOS != "Linux")
+            continue;
+#elif defined MACOSX
+        if (i->maOS != "*" && i->maOS != "OS X")
+            continue;
+#endif
+
+        // OS version check not yet implemented
+
+        if (i->maPlatformVendor != "*" && i->maPlatformVendor != rDevice.maVendor)
+            continue;
+
+        if (i->maDevice != "*" && i->maDevice != rDevice.maName)
+            continue;
+
+        if (i->maDriverVersionMin != "*" &&
+            (comphelper::string::compareVersionStrings(i->maDriverVersionMin, rDevice.maDriver) > 0 ||
+             (i->maDriverVersionMax != "" && comphelper::string::compareVersionStrings(i->maDriverVersionMax, rDevice.maDriver) < 0) ||
+             (i->maDriverVersionMax == "" && comphelper::string::compareVersionStrings(i->maDriverVersionMin, rDevice.maDriver) < 0)))
+            continue;
+
+        // It matches; reject it
+        SAL_INFO("sc.opencl", "Match for platform=" << rPlatform << ", device=" << rDevice << " in blacklist=" << *i);
+        return true;
     }
 
-    return false;
+    // Check for whitelist of known good OpenCL implementations
+
+    for (auto i = ScInterpreter::GetGlobalConfig().maOpenCLWhiteList.cbegin();
+         i != ScInterpreter::GetGlobalConfig().maOpenCLWhiteList.end();
+         ++i)
+    {
+#if defined WNT
+        if (i->maOS != "*" && i->maOS != "Windows")
+            continue;
+#elif defined LINUX
+        if (i->maOS != "*" && i->maOS != "Linux")
+            continue;
+#elif defined MACOSX
+        if (i->maOS != "*" && i->maOS != "OS X")
+            continue;
+#endif
+
+        // OS version check not yet implemented
+
+        if (i->maPlatformVendor != "*" && i->maPlatformVendor != rPlatform.maVendor)
+            continue;
+
+        if (i->maDevice != "*" && i->maDevice != rDevice.maName)
+            continue;
+
+        if (i->maDriverVersionMin != "*" &&
+            (comphelper::string::compareVersionStrings(i->maDriverVersionMin, rDevice.maDriver) > 0 ||
+             comphelper::string::compareVersionStrings(i->maDriverVersionMax, rDevice.maDriver) < 0))
+            continue;
+
+        // It matches; approve it
+        SAL_INFO("sc.opencl", "Match for platform=" << rPlatform << ", device=" << rDevice << " in whitelist=" << *i);
+        return false;
+    }
+
+    // Fallback: reject
+    SAL_INFO("sc.opencl", "Fallback: rejecting platform=" << rPlatform << ", device=" << rDevice);
+    return true;
 }
 
 void createDeviceInfo(cl_device_id aDeviceId, OpenCLPlatformInfo& rPlatformInfo)
@@ -590,7 +652,7 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenCLPlatformInfo& rPlatformInfo)
 
     aDeviceInfo.mnComputeUnits = nComputeUnits;
 
-    if(!checkForKnownBadCompilers(aDeviceInfo))
+    if(!checkForKnownBadCompilers(rPlatformInfo, aDeviceInfo))
         rPlatformInfo.maDevices.push_back(aDeviceInfo);
 }
 
