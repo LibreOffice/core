@@ -483,7 +483,7 @@ sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
-    return pFormShell ? pFormShell->IsDesignMode() : sal_True;
+    return static_cast<sal_Bool>(!pFormShell || pFormShell->IsDesignMode());
 }
 
 void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool _DesignMode ) throw (RuntimeException, std::exception)
@@ -632,8 +632,8 @@ void SAL_CALL SwXTextView::setRubyList(
             }
             else if(pProperties[nProp].Name == UNO_NAME_RUBY_IS_ABOVE)
             {
-                bool bValue = pProperties[nProp].Value.hasValue() ?
-                    *(sal_Bool*)pProperties[nProp].Value.getValue() : sal_True;
+                bool bValue = !pProperties[nProp].Value.hasValue() ||
+                    *(sal_Bool*)pProperties[nProp].Value.getValue();
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }

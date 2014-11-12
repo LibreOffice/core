@@ -1600,7 +1600,7 @@ void SwContentTree::Display( bool bActive )
         bIsActive = bActive;
     bIsHidden = !bActive;
     SwWrtShell* pShell = GetWrtShell();
-    bool bReadOnly = pShell ? pShell->GetView().GetDocShell()->IsReadOnly() : sal_True;
+    const bool bReadOnly = !pShell || pShell->GetView().GetDocShell()->IsReadOnly();
     if(bReadOnly != bIsLastReadOnly)
     {
         bIsLastReadOnly = bReadOnly;

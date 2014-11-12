@@ -4000,7 +4000,7 @@ SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
     if (bContainsPlaceHolders)
     {
         // should always be printed in PDF export!
-        bVal = pPrtOptions ? pPrtOptions->bPrintTextPlaceholder : sal_True;
+        bVal = !pPrtOptions || pPrtOptions->bPrintTextPlaceholder;
         aRenderViewOptions.SetShowPlaceHolderFields( bVal );
     }
 

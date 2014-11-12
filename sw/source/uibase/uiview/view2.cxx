@@ -391,7 +391,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
                 {
                     Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
                     OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
-                    bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+                    bAsLink = !aVal.hasValue() || *(sal_Bool*) aVal.getValue();
                     Any aTemplateValue = xCtrlAcc->getValue(
                         ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
                         ListboxControlActions::GET_SELECTED_ITEM );
@@ -426,7 +426,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             {
                 Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
                 OSL_ENSURE(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found");
-                bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
+                bAsLink = !aVal.hasValue() || *(sal_Bool*) aVal.getValue();
                 Any aTemplateValue = xCtrlAcc->getValue(
                     ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE,
                     ListboxControlActions::GET_SELECTED_ITEM );

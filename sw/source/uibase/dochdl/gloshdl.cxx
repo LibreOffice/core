@@ -683,7 +683,7 @@ bool SwGlossaryHdl::IsReadOnly( const OUString* pGrpNm ) const
     else
         pGlossary = rStatGlossaries.GetGroupDoc(aCurGrp);
 
-    bool bRet = pGlossary ? pGlossary->IsReadOnly() : sal_True;
+    const bool bRet = !pGlossary || pGlossary->IsReadOnly();
     if( pGrpNm || !pCurGrp )
         delete pGlossary;
     return bRet;

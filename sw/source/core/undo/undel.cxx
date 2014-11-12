@@ -436,7 +436,7 @@ bool SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
 bool SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
 {
     // Is Undo greater than one Node (that is Start and EndString)?
-    if( pSttStr ? pSttStr->isEmpty() || pEndStr : sal_True )
+    if( !pSttStr || pSttStr->isEmpty() || pEndStr )
         return false;
 
     // only the deletion of single char's can be condensed
