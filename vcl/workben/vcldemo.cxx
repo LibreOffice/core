@@ -493,17 +493,6 @@ public:
         }
     };
 
-    struct FetchDrawBitmap : public RegionRenderer
-    {
-        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
-                                  const RenderContext &) SAL_OVERRIDE
-        {
-            Bitmap aBitmap(rDev.GetBitmap(Point(0,0),rDev.GetOutputSizePixel()));
-            aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
-            rDev.DrawBitmap(r.TopLeft(), aBitmap);
-        }
-    };
-
     void drawToDevice(OutputDevice &rDev, bool bVdev)
     {
         RenderContext aCtx;
