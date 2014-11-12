@@ -904,7 +904,7 @@ void OQueryController::impl_initialize()
         break;
     case CommandType::COMMAND:
         setStatement_fireEvent( sCommand );
-        m_sName = OUString();
+        m_sName.clear();
         break;
     default:
         OSL_FAIL( "OQueryController::impl_initialize: logic error in code!" );
@@ -1771,7 +1771,7 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
             ::dbtools::SQLExceptionInfo aInfo(e);
             showError(aInfo);
             // an error occurred so we clear the statement
-            sTranslatedStmt = OUString();
+            sTranslatedStmt.clear();
         }
     }
     else if(m_sStatement.isEmpty())

@@ -405,7 +405,7 @@ void SwImplProtocol::FileInit()
                 aLine = aLine.trim();
                 if( !aLine.isEmpty() )
                     CheckLine( aLine );     // evaluate line
-                aLine = OString();
+                aLine.clear();
             }
             else
                 aLine = OString(c);

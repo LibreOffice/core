@@ -694,7 +694,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     if (sSectName != pSection->GetSectionName())
         sSectName = GetUniqueSectionName( &sSectName );
     else
-        sSectName = OUString();
+        sSectName.clear();
 
     /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to sal_True.
     /// IMHO this have to be changed, but I can't estimate the consequences:

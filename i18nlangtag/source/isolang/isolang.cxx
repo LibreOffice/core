@@ -961,7 +961,7 @@ Label_Override_Lang_Locale:
             {
                 rLocale.Language = OUString::createFromAscii( pEntry->maLanguage );
                 rLocale.Country  = OUString::createFromAscii( pEntry->maCountry );
-                rLocale.Variant  = OUString();
+                rLocale.Variant.clear();
                 return;
             }
             else if (pEntry->mnOverride && pEntryOverride != pEntry)
@@ -980,7 +980,7 @@ Label_Override_Lang_Locale:
         if (pPrivateEntry->mnLang == nLang)
         {
             rLocale.Language = I18NLANGTAG_QLT;
-            rLocale.Country  = OUString();
+            rLocale.Country.clear();
             rLocale.Variant  = OUString::createFromAscii( pPrivateEntry->mpLanguage );
             return;
         }

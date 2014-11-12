@@ -591,7 +591,7 @@ ContentProvider::queryStorageTitle( const OUString & rUri ) const
     if ( aUri.isRoot() )
     {
         // always empty.
-        aTitle = OUString();
+        aTitle.clear();
     }
     else if ( aUri.isDocument() )
     {

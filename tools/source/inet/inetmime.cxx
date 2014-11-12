@@ -313,7 +313,7 @@ bool parseParameters(ParameterList const & rInput,
             while (pNext && pNext->m_nSection > 0);
             if (bBadEncoding)
             {
-                aValue = OUString();
+                aValue.clear();
                 for (pNext = p;;)
                 {
                     if (pNext->m_bExtended)

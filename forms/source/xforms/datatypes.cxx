@@ -521,7 +521,7 @@ namespace xforms
         if ( !OStringType_Base::checkPropertySanity( _nHandle, _rNewValue, _rErrorMessage ) )
             return false;
 
-        _rErrorMessage = OUString();
+        _rErrorMessage.clear();
         switch ( _nHandle )
         {
             case PROPERTY_ID_XSD_LENGTH:

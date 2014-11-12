@@ -298,7 +298,7 @@ void SmDocShell::ArrangeFormula()
     SetFormulaArranged(true);
 
     // invalidate accessible text
-    aAccText = OUString();
+    aAccText.clear();
 }
 
 

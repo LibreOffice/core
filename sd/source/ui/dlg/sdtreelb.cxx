@@ -390,7 +390,7 @@ void SdPageObjsTLB::Clear()
     //Save the expanded tree item
     if (mbSaveTreeItemState)
     {
-        maSelectionEntryText = OUString();
+        maSelectionEntryText.clear();
         maTreeItem.clear();
         if (GetCurEntry())
             maSelectionEntryText = GetSelectEntry();
@@ -1536,7 +1536,7 @@ void SdPageObjsTLB::AddShapeToTransferable (
     if (pDocShell != NULL)
         aObjectDescriptor.maDisplayName = pDocShell->GetMedium()->GetURLObject().GetURLNoPass();
     else
-        aObjectDescriptor.maDisplayName = OUString();
+        aObjectDescriptor.maDisplayName.clear();
     aObjectDescriptor.mbCanLink = false;
 
     rTransferable.SetStartPos(aDragPos);

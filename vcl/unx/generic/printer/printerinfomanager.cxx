@@ -486,7 +486,7 @@ void PrinterInfoManager::initialize()
             aDefaultPrinter = m_aPrinters.begin()->first;
     }
     else
-        aDefaultPrinter = OUString();
+        aDefaultPrinter.clear();
     m_aDefaultPrinter = aDefaultPrinter;
 
     if( m_eType != Default )

@@ -308,7 +308,7 @@ SpecialType getFieldDescriptor(
         if (needsSig) {
             *signature = sig.makeStringAndClear();
         } else {
-            *signature = OString();
+            signature->clear();
         }
     }
     return specialType;

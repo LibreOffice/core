@@ -3087,7 +3087,7 @@ bool X11SalFrame::endUnicodeSequence()
         }
     }
     bool bWasInput = !rSeq.isEmpty();
-    rSeq = OUString();
+    rSeq.clear();
     if( bWasInput && ! aDeleteWatch.isDeleted() )
         CallCallback(SALEVENT_ENDEXTTEXTINPUT, NULL);
     return bWasInput;

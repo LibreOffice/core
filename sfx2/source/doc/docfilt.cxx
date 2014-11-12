@@ -186,7 +186,7 @@ OUString SfxFilter::GetTypeFromStorage(
     if ( pFilterName )
     {
         aName = *pFilterName;
-        *pFilterName = OUString();
+        pFilterName->clear();
     }
 
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xProps( xStorage, com::sun::star::uno::UNO_QUERY );

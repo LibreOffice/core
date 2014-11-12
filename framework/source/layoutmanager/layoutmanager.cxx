@@ -367,7 +367,7 @@ void LayoutManager::implts_reset( bool bAttached )
             xModuleCfgMgr.clear();
             xDocCfgMgr.clear();
             xPersistentWindowState.clear();
-            aModuleIdentifier = OUString();
+            aModuleIdentifier.clear();
         }
 
         Reference< XUIConfigurationManager > xModCfgMgr( xModuleCfgMgr, UNO_QUERY );
@@ -813,7 +813,7 @@ void LayoutManager::implts_destroyStatusBar()
     Reference< XComponent > xCompStatusBar;
 
     SolarMutexClearableGuard aWriteLock;
-    m_aStatusBarElement.m_aName = OUString();
+    m_aStatusBarElement.m_aName.clear();
     xCompStatusBar = Reference< XComponent >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     m_aStatusBarElement.m_xUIElement.clear();
     aWriteLock.clear();

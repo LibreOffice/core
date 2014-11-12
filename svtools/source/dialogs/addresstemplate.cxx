@@ -882,7 +882,7 @@ void AssignmentPersistentData::Commit()
 
         // set the old table, if the new data source knows a table with this name, too. Else reset the tables edit field.
         if (!bKnowOldTable)
-            sOldTable = OUString();
+            sOldTable.clear();
         m_pTable->SetText(sOldTable);
 
         resetFields();

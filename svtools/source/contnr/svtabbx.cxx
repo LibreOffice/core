@@ -205,7 +205,7 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn(const OUString& rStr,SvTreeLi
         aCurEntry = aStr.copy(++nEnd);
     }
     else
-        aCurEntry = OUString();
+        aCurEntry.clear();
     return SvTreeListBox::InsertEntry( aFirstStr, pParent, false, nPos, pUser );
 }
 
@@ -231,7 +231,7 @@ SvTreeListEntry* SvTabListBox::InsertEntryToColumn( const OUString& rStr,
         aCurEntry = aStr.copy(++nEnd);
     }
     else
-        aCurEntry = OUString();
+        aCurEntry.clear();
 
     return SvTreeListBox::InsertEntry(
         aFirstStr,
@@ -999,7 +999,7 @@ OUString SvHeaderTabListBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBox
         case ::svt::BBTYPE_TABLE:
         case ::svt::BBTYPE_COLUMNHEADERBAR:
             // should be empty now (see #i63983)
-            aRetText = OUString();
+            aRetText.clear();
             break;
 
         case ::svt::BBTYPE_TABLECELL:

@@ -219,7 +219,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
 
     if ( !xResult.is() )
     {
-        o_aStorageName = OUString();
+        o_aStorageName.clear();
         throw uno::RuntimeException();
     }
 

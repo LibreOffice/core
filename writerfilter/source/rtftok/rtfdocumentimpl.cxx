@@ -5226,7 +5226,7 @@ int RTFDocumentImpl::popState()
         if (aStr.getLength() > nLength)
             aStr = aStr.copy(nLength+1); // zero-terminated string
         else
-            aStr = OString();
+            aStr.clear();
         // extract default text
         nLength = aStr.toChar();
         if (!aStr.isEmpty())

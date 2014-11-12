@@ -1040,8 +1040,8 @@ OStoreDirectory ORegKey::getStoreDir()
 
     if ( m_name.equals(m_pRegistry->ROOT) )
     {
-        fullPath = OUString();
-        relativName = OUString();
+        fullPath.clear();
+        relativName.clear();
     } else
     {
         fullPath = m_name.copy(0, m_name.lastIndexOf('/') + 1);

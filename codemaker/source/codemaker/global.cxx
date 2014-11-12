@@ -325,7 +325,7 @@ void FileStream::close()
     {
         osl_closeFile(m_file);
         m_file = NULL;
-        m_name = OString();
+        m_name.clear();
     }
 }
 

@@ -783,21 +783,21 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
         if ( aSettings.get( "Font" ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = OUString(); // hack to
+            aAwtFont.Name.clear(); // hack to
             _rxReportControlFormat->setFontDescriptor( aAwtFont );
             _rxReportControlFormat->setCharFontName( sTemp );
         }
         if ( aSettings.get( "FontAsian" ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = OUString(); // hack to
+            aAwtFont.Name.clear(); // hack to
             _rxReportControlFormat->setFontDescriptorAsian( aAwtFont );
             _rxReportControlFormat->setCharFontNameAsian( sTemp );
         }
         if ( aSettings.get( "FontComplex" ) >>= aAwtFont )
         {
             OUString sTemp = aAwtFont.Name;
-            aAwtFont.Name = OUString(); // hack to
+            aAwtFont.Name.clear(); // hack to
             _rxReportControlFormat->setFontDescriptorComplex( aAwtFont );
             _rxReportControlFormat->setCharFontNameComplex( sTemp );
         }

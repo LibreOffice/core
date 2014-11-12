@@ -2339,7 +2339,7 @@ namespace svxform
             if ( bIsChecked && sTemp.isEmpty() )
                 sTemp = TRUE_VALUE;
             else if ( !bIsChecked && !sTemp.isEmpty() )
-                sTemp = OUString();
+                sTemp.clear();
             m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
         }
 

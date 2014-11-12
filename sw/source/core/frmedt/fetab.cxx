@@ -2294,7 +2294,7 @@ bool SwFEShell::GetAutoSum( OUString& rFml ) const
                         // redo only for values!
 
                         nW = RES_BOXATR_VALUE;
-                        sFields = OUString();
+                        sFields.clear();
                         // restore previous spaces!
                         for( size_t i = aCells.size(); n+1 < i; )
                         {

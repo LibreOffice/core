@@ -2184,7 +2184,7 @@ static void ImplHandleSurroundingTextRequest( vcl::Window *pWindow,
 
     if ( !pChild )
     {
-    rText = OUString();
+    rText.clear();
     rSelRange.setMin( 0 );
     rSelRange.setMax( 0 );
     }

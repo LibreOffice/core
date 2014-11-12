@@ -233,7 +233,7 @@ OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
         }
 
     if ( !bValid )
-        aNewName = OUString();
+        aNewName.clear();
 
     return aNewName;
 }

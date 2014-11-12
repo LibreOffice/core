@@ -210,7 +210,7 @@ OutlineViewShell::OutlineViewShell (
 
     SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_OutlineText));
 
-    m_StrOldPageName = OUString();
+    m_StrOldPageName.clear();
 
     doShow();
 }

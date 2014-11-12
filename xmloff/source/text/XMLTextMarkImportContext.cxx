@@ -161,7 +161,7 @@ void XMLTextMarkImportContext::StartElement(
 {
     if (!FindName(GetImport(), xAttrList))
     {
-        m_sBookmarkName = OUString();
+        m_sBookmarkName.clear();
     }
 
     if (IsXMLToken(GetLocalName(), XML_FIELDMARK_END))

@@ -230,7 +230,7 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, sal_uInt16 p_nPr
 {
     SvXMLImportContext *pContext = 0;
 
-    rProp.Name = OUString();
+    rProp.Name.clear();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -532,7 +532,7 @@ void XMLConfigItemContext::Characters( const OUString& rChars )
             {
                 sChars = msValue;
                 sChars += sTrimmedChars;
-                msValue = OUString();
+                msValue.clear();
             }
             else
             {

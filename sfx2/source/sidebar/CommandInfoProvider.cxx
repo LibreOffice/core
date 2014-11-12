@@ -145,7 +145,7 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
         // Release objects that are tied to the old frame.
         mxCachedDocumentAcceleratorConfiguration = NULL;
         mxCachedModuleAcceleratorConfiguration = NULL;
-        msCachedModuleIdentifier = OUString();
+        msCachedModuleIdentifier.clear();
         mxCachedDataFrame = rxFrame;
 
         // Connect to the new frame.

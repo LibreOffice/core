@@ -615,7 +615,7 @@ void GrammarCheckingIterator::DequeueAndCheck()
             // ---- THREAD SAFE START ----
             {
                 ::osl::Guard< ::osl::Mutex > aGuard( MyMutex::get() );
-                m_aCurCheckedDocId  = OUString();
+                m_aCurCheckedDocId.clear();
             }
             // ---- THREAD SAFE END ----
         }

@@ -873,8 +873,11 @@ bool PspSalPrinter::StartJob(
     OSL_TRACE("PspSalPrinter::StartJob");
     GetSalData()->m_pInstance->jobStartedPrinterUpdate();
     m_bPdf      = false;
-    m_aFileName = pFileName ? *pFileName : OUString();
-    m_aTmpFile  = OUString();
+    if (pFileName)
+        m_aFileName = *pFileName;
+    else
+        m_aFileName.clear();
+    m_aTmpFile.clear();
     m_nCopies   = nCopies;
     m_bCollate  = bCollate;
 

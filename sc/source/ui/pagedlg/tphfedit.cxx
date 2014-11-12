@@ -373,7 +373,7 @@ void ScExtIButton::Click()
 void ScExtIButton::StartPopup()
 {
     nSelected=0;
-    aSelectedIdent = OString();
+    aSelectedIdent.clear();
 
     if(pPopupMenu!=NULL)
     {

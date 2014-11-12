@@ -711,7 +711,7 @@ void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
     bool bProgress = !m_bIsDrawObj && !m_bIsSelection;
-    pConversionArgs->aConvText = OUString();
+    (pConversionArgs->aConvText).clear();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
     m_pView->GetWrtShell().SpellContinue( &m_nPageCount, bProgress ? &m_nPageStart : NULL, pConversionArgs );
     return !pConversionArgs->aConvText.isEmpty();

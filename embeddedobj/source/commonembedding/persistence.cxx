@@ -1447,7 +1447,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     {
         if ( bUseNew )
             m_aEntryName = m_aNewEntryName;
-        m_aNewEntryName = OUString();
+        m_aNewEntryName.clear();
         return;
     }
 
@@ -1489,7 +1489,7 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     m_xNewObjectStorage = uno::Reference< embed::XStorage >();
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
-    m_aNewEntryName = OUString();
+    m_aNewEntryName.clear();
     m_aNewDocMediaDescriptor.realloc( 0 );
     m_bWaitSaveCompleted = false;
 
@@ -1714,12 +1714,12 @@ void SAL_CALL OCommonEmbeddedObject::reload(
             {
                 // the new URL
                 lArguments[nInd].Value >>= m_aLinkURL;
-                m_aLinkFilterName = OUString();
+                m_aLinkFilterName.clear();
             }
             else if ( lArguments[nInd].Name == "FilterName" )
             {
                 lArguments[nInd].Value >>= aNewLinkFilter;
-                m_aLinkFilterName = OUString();
+                m_aLinkFilterName.clear();
             }
         }
 
@@ -1886,8 +1886,8 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
         m_pDocHolder->Show();
 
     m_bIsLink = false;
-    m_aLinkFilterName = OUString();
-    m_aLinkURL = OUString();
+    m_aLinkFilterName.clear();
+    m_aLinkURL.clear();
 }
 
 

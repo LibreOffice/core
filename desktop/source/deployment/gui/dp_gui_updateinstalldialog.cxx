@@ -561,7 +561,7 @@ void UpdateInstallDialog::Thread::removeTempDownloads()
         //remove also the temp file which we have used to create the unique name
         OUString tempFile = m_sDownloadFolder.copy(0, m_sDownloadFolder.getLength() - 1);
         dp_misc::erase_path(tempFile, cssu::Reference<css::ucb::XCommandEnvironment>(),false);
-        m_sDownloadFolder = OUString();
+        m_sDownloadFolder.clear();
     }
 }
 

@@ -101,7 +101,7 @@ struct GetPPDAttribs
         m_pSyncMutex->acquire();
 
         OString aRetval = m_aResult;
-        m_aResult = OString();
+        m_aResult.clear();
         unref();
 
         return aRetval;

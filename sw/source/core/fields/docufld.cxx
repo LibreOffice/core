@@ -2239,7 +2239,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
         return;
 
-    sTxt = OUString();
+    sTxt.clear();
 
     OSL_ENSURE( !pFrm->IsInDocBody(), "Flag incorrect, frame is in DocBody" );
 

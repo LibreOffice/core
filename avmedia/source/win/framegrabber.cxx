@@ -96,7 +96,7 @@ bool FrameGrabber::create( const OUString& rURL )
         pDet = NULL;
     }
     else
-        maURL = OUString();
+        maURL.clear();
 
     return !maURL.isEmpty();
 }

@@ -76,8 +76,8 @@ void SerfRequestProcessor::prepareProcessor()
     delete mpDAVException;
     mpDAVException = 0;
     mnHTTPStatusCode = SC_NONE;
-    mHTTPStatusCodeText = OUString();
-    mRedirectLocation = OUString();
+    mHTTPStatusCodeText.clear();
+    mRedirectLocation.clear();
 
     mnSuccessfulCredentialAttempts = 0;
     mbInputOfCredentialsAborted = false;

@@ -1712,7 +1712,7 @@ bool Printer::EndJob()
 
         mbPrinting      = false;
         mnCurPrintPage  = 0;
-        maJobName = OUString();
+        maJobName.clear();
 
         mbDevOutput = false;
         bRet = mpPrinter->EndJob();

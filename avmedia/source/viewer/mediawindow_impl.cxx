@@ -299,7 +299,7 @@ void MediaWindowImpl::setURL( const OUString& rURL,
         }
 
         mxPlayer.clear();
-        mTempFileURL = OUString();
+        mTempFileURL.clear();
 
         if (!rTempURL.isEmpty())
         {

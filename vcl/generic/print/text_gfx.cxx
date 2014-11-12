@@ -114,7 +114,7 @@ PrinterGfx::SetFont(
     // font and encoding will be set by drawText again immediately
     // before PSShowText
     mnFontID                          = nFontID;
-    maVirtualStatus.maFont            = OString();
+    maVirtualStatus.maFont.clear();
     maVirtualStatus.maEncoding        = RTL_TEXTENCODING_DONTKNOW;
     maVirtualStatus.mnTextHeight      = nHeight;
     maVirtualStatus.mnTextWidth       = nWidth;

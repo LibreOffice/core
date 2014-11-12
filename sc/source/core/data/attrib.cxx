@@ -412,7 +412,7 @@ bool ScRangeItem::GetPresentation
         const IntlWrapper*  /* pIntl */
     ) const
 {
-    rText = OUString();
+    rText.clear();
 
     switch ( ePres )
     {
@@ -530,7 +530,7 @@ bool ScTableListItem::GetPresentation
             return true;
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText = OUString();
+            rText.clear();
             return false;
 
         default:
@@ -847,7 +847,7 @@ bool ScViewObjectModeItem::GetPresentation
 )   const
 {
     OUString aDel(": ");
-    rText = OUString();
+    rText.clear();
 
     switch ( ePres )
     {
@@ -1019,7 +1019,7 @@ void lclAppendScalePageCount( OUString& rText, sal_uInt16 nPages )
 bool ScPageScaleToItem::GetPresentation(
         SfxItemPresentation ePres, SfxMapUnit, SfxMapUnit, OUString& rText, const IntlWrapper* ) const
 {
-    rText = OUString();
+    rText.clear();
     if( !IsValid())
         return false;
 

@@ -390,7 +390,7 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
             // this is for insertion of slides from other files with standard
             // name.  They get a new standard name, if the string is set to an
             // empty one.
-            rInOutPageName = OUString();
+            rInOutPageName.clear();
             bCanUseNewName = true;
         }
         else

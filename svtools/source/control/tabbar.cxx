@@ -2345,7 +2345,7 @@ void TabBar::EndEditMode( bool bCancel )
         }
 
         // reset
-        maEditText = OUString();
+        maEditText.clear();
         mbEditCanceled = false;
     }
 }

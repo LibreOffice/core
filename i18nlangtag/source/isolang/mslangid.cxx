@@ -166,7 +166,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
             // None found but resolve requested, last resort is "en-US".
             aLocale.Language = "en";
             aLocale.Country  = "US";
-            aLocale.Variant  = OUString();
+            aLocale.Variant.clear();
         }
     }
     return aLocale;

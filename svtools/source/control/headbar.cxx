@@ -435,7 +435,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         if ( pItem->maOutText.getLength() == 3 )
         {
             nTxtWidth = 0;
-            pItem->maOutText = OUString();
+            (pItem->maOutText).clear();
         }
     }
 
@@ -1131,7 +1131,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
                 if ( pItem->maOutText != pItem->maText )
                     aStr = pItem->maText;
                 else if (!pItem->maText.isEmpty())
-                    aStr = OUString();
+                    aStr.clear();
             }
 
             if (!aStr.isEmpty())

@@ -125,7 +125,7 @@ void VCLXAccessibleTextComponent::disposing()
 {
     VCLXAccessibleComponent::disposing();
 
-    m_sText = OUString();
+    m_sText.clear();
 }
 
 

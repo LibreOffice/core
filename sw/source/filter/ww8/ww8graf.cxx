@@ -887,7 +887,7 @@ bool SwWW8ImplReader::GetRangeAsDrawingString(OUString& rString, long nStartCp, 
 
     OSL_ENSURE(nStartCp <= nEndCp, "+Wo ist der Grafik-Text (7) ?");
     if (nStartCp == nEndCp)
-        rString = OUString();      // leerer String: durchaus denkbar!
+        rString.clear();      // leerer String: durchaus denkbar!
     else if (nStartCp < nEndCp)
     {
         // den Text einlesen: kann sich ueber mehrere Pieces erstrecken!!!
@@ -1113,7 +1113,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                         MapWrapIntoFlyFmt(pRecord, pFlyFmt);
                     }
                 }
-                aString = OUString();
+                aString.clear();
                 rbEraseTextObj = (0 != pFlyFmt);
             }
         }

@@ -69,7 +69,7 @@ namespace dbaccess
 
     void SettingsImport::split( const OUString& i_rElementName, OUString& o_rNamespace, OUString& o_rLocalName )
     {
-        o_rNamespace = OUString();
+        o_rNamespace.clear();
         o_rLocalName = i_rElementName;
         const sal_Int32 nSeparatorPos = i_rElementName.indexOf( ':' );
         if ( nSeparatorPos > -1 )

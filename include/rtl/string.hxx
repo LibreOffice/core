@@ -316,6 +316,16 @@ public:
         return *this;
     }
 #endif
+
+    /**
+      Clears the string, i.e, makes a zero-character string
+      @since LibreOffice 4.4
+    */
+    void clear()
+    {
+        rtl_string_new( &pData );
+    }
+
     /**
       Returns the length of this string.
 

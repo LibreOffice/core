@@ -1415,7 +1415,10 @@ namespace svgio
 
         void readImageLink(const OUString& rCandidate, OUString& rXLink, OUString& rUrl, OUString& rMimeType, OUString& rData)
         {
-            rXLink = rUrl = rMimeType = rData = OUString();
+            rXLink.clear();
+            rUrl.clear();
+            rMimeType.clear();
+            rData.clear();
 
             if('#' == rCandidate[0])
             {

@@ -2892,7 +2892,7 @@ bool DbFilterField::commitControl()
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
             return true;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
-            aText = OUString();
+            aText.clear();
             if (static_cast<ListBox*>(m_pWindow)->GetSelectEntryCount())
             {
                 sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow)->GetSelectEntryPos();

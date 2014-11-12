@@ -356,7 +356,7 @@ void ScTable::GetName( OUString& rName ) const
 void ScTable::SetName( const OUString& rNewName )
 {
     aName = rNewName;
-    aUpperName = OUString(); // invalidated if the name is changed
+    aUpperName.clear(); // invalidated if the name is changed
 
     // SetStreamValid is handled in ScDocument::RenameTab
 }

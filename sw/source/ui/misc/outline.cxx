@@ -601,14 +601,14 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
         pCollNames[i] = aSaveCollNames[i];
 
     if(aCollName == aNoFmtName)
-        pCollNames[nTmpLevel] = OUString();
+        pCollNames[nTmpLevel].clear();
     else
     {
         pCollNames[nTmpLevel] = aCollName;
                 // template already in use?
         for( i = 0; i < MAXLEVEL; ++i)
             if(i != nTmpLevel && pCollNames[i] == aCollName )
-                pCollNames[i] = OUString();
+                pCollNames[i].clear();
     }
 
     // search the oldname and put it into the current entries

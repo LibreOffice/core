@@ -635,11 +635,11 @@ void ScModule::ResetDragObject()
     mpDragData->pCellTransfer = NULL;
     mpDragData->pDrawTransfer = NULL;
     mpDragData->pJumpLocalDoc = NULL;
-    mpDragData->aLinkDoc = OUString();
-    mpDragData->aLinkTable = OUString();
-    mpDragData->aLinkArea = OUString();
-    mpDragData->aJumpTarget = OUString();
-    mpDragData->aJumpText = OUString();
+    (mpDragData->aLinkDoc).clear();
+    (mpDragData->aLinkTable).clear();
+    (mpDragData->aLinkArea).clear();
+    (mpDragData->aJumpTarget).clear();
+    (mpDragData->aJumpText).clear();
 }
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )

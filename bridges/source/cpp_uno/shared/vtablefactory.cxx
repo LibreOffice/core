@@ -288,7 +288,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 
         freeBlock(block);
 
-        strDirectory = OUString();
+        strDirectory.clear();
     }
     if (!block.start || !block.exec || block.fd == -1)
     {

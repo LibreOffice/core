@@ -198,7 +198,7 @@ void ResourceManager::HandleMainViewSwitch (
     if (bIsActivated)
         msCurrentMainViewURL = rsViewURL;
     else
-        msCurrentMainViewURL = OUString();
+        msCurrentMainViewURL.clear();
     UpdateForMainViewShell();
 }
 

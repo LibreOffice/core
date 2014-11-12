@@ -178,7 +178,7 @@ public:
         void                        SetToolbar(BibToolBar* pSet);
 
         const OUString&             GetIdentifierMapping();
-        void                        ResetIdentifierMapping() {sIdentifierMapping = OUString();}
+        void                        ResetIdentifierMapping() {sIdentifierMapping.clear();}
 
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > GetFormController();
         // #100312# ----------

@@ -552,7 +552,7 @@ void splitConcatenatedIdentifier( const OUString & source, OUString *first, OUSt
     switch (vec.size())
     {
     case 1:
-        *first  = OUString();
+        first->clear();
         *second = OStringToOUString( vec[0], RTL_TEXTENCODING_UTF8 );
         break;
     case 3:
@@ -808,7 +808,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                     RTL_CONSTASCII_STRINGPARAM( "(" ) ) == 0 )
             {
                 // whoops, it is a function
-                ret = OString();
+                ret.clear();
             }
             else
             {
@@ -828,7 +828,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                             RTL_CONSTASCII_STRINGPARAM( "," ) ) == 0 )
                     {
                         // whoops, multiple tables are used
-                        ret = OString();
+                        ret.clear();
                     }
                     else
                     {
@@ -842,7 +842,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                                  strlen(forbiddenKeywords[i]) ) )
                             {
                                 // whoops, it is a join
-                                ret = OString();
+                                ret.clear();
                             }
                         }
                     }

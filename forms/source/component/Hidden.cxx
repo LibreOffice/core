@@ -164,7 +164,7 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
     {
         case 1 : { OUString sDummy; _rxInStream >> sDummy; _rxInStream >> m_sHiddenValue; } break;
         case 2 : _rxInStream >> m_sHiddenValue; break;
-        default : OSL_FAIL("OHiddenModel::read : unknown version !"); m_sHiddenValue = OUString();
+        default : OSL_FAIL("OHiddenModel::read : unknown version !"); m_sHiddenValue.clear();
     }
     OControlModel::read(_rxInStream);
 }

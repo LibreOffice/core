@@ -395,7 +395,7 @@ void ImpGraphic::ImplClear()
 
     mbSwapOut = false;
     mnDocFilePos = 0UL;
-    maDocFileURLStr = OUString();
+    maDocFileURLStr.clear();
 
     // cleanup
     ImplClearGraphics( false );

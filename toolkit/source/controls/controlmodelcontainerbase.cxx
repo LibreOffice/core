@@ -873,7 +873,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
     {
         OSL_TRACE( "ControlModelContainerBase::getGroup: invalid argument and I am not allowed to throw an exception!" );
         _rGroup.realloc( 0 );
-        _rName = OUString();
+        _rName.clear();
     }
     else
     {

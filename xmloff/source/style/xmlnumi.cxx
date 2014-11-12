@@ -446,7 +446,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
                 || ((300 == nUPD) && (nBuildId <= 9573))))
         {
             // #i93908# OOo < 3.4 wrote a bogus suffix for bullet chars
-            sSuffix = OUString(); // clear it
+            sSuffix.clear(); // clear it
         }
     }
 

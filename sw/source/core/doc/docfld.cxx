@@ -941,7 +941,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                     else
                         break;
 
-                    sFormula = OUString();
+                    sFormula.clear();
                     // trigger formatting
                     ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
@@ -958,7 +958,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                     else
                         break;
 
-                    sFormula = OUString();
+                    sFormula.clear();
 
                     // evaluate field
                     ((SwHiddenTxtField*)pFld)->Evaluate(&rDoc);

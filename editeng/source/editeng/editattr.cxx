@@ -363,7 +363,7 @@ void EditCharAttribField::SetFieldValue(const OUString& rVal)
 
 void EditCharAttribField::Reset()
 {
-    aFieldValue = OUString();
+    aFieldValue.clear();
     delete pTxtColor; pTxtColor = NULL;
     delete pFldColor; pFldColor = NULL;
 }

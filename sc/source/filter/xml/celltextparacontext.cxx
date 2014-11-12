@@ -48,7 +48,7 @@ SvXMLImportContext* ScXMLCellTextParaContext::CreateChildContext(
     if (!maContent.isEmpty())
     {
         mrParentCxt.PushParagraphSpan(maContent, OUString());
-        maContent = OUString();
+        maContent.clear();
     }
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextParaElemTokenMap();
@@ -152,7 +152,7 @@ SvXMLImportContext* ScXMLCellTextSpanContext::CreateChildContext(
     if (!maContent.isEmpty())
     {
         mrParentCxt.PushSpan(maContent, maStyleName);
-        maContent = OUString();
+        maContent.clear();
     }
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetCellTextSpanElemTokenMap();

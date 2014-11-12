@@ -170,7 +170,7 @@ OUString SwGlossaryHdl::GetGroupName( size_t nId, OUString* pTitle )
         else
         {
             delete pGroup;
-            sRet = OUString();
+            sRet.clear();
         }
     }
     return sRet;

@@ -252,7 +252,7 @@ void PageMarginControl::FillValueSet(
     }
     else
     {
-        aHelpText = OUString();
+        aHelpText.clear();
     }
     mpMarginValueSet->AddItem(
         Image((bUserCustomValuesAvailable) ? SW_RES(IMG_CUSTOM) : SW_RES(IMG_CUSTOM_DIS)), 0,

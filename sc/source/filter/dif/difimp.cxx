@@ -373,7 +373,7 @@ TOPIC DifParser::GetNextTopic( void )
                 if( aLine.getLength() > 2 )
                     aData = aLine.copy( 1, aLine.getLength() - 2 );
                 else
-                    aData = OUString();
+                    aData.clear();
                 eS = S_END;
                 break;
             case S_END:
@@ -444,7 +444,7 @@ bool DifParser::ReadNextLine( OUString& rStr )
     else
     {
         rStr = aLookAheadLine;
-        aLookAheadLine = OUString();
+        aLookAheadLine.clear();
         return true;
     }
 }

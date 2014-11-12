@@ -128,7 +128,7 @@ bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
 {
     SolarMutexGuard g;
 
-             sEvent = OUString();
+             sEvent.clear();
     bool bSet   = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
         sEvent = m_sEvent;
@@ -156,7 +156,7 @@ bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
 {
     SolarMutexGuard g;
 
-             sAlias = OUString();
+             sAlias.clear();
     bool bSet   = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
         sAlias = m_sAlias;
@@ -184,7 +184,7 @@ bool JobURL::getService( /*OUT*/ OUString& sService ) const
 {
     SolarMutexGuard g;
 
-             sService = OUString();
+             sService.clear();
     bool bSet     = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sService = m_sService;
@@ -541,7 +541,7 @@ sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 {
     SolarMutexGuard g;
 
-             sServiceArgs = OUString();
+             sServiceArgs.clear();
     sal_Bool bSet         = ((m_eRequest & E_SERVICE) == E_SERVICE);
     if (bSet)
         sServiceArgs = m_sServiceArgs;
@@ -553,7 +553,7 @@ sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 {
     SolarMutexGuard g;
 
-             sEventArgs = OUString();
+             sEventArgs.clear();
     sal_Bool bSet       = ((m_eRequest & E_EVENT) == E_EVENT);
     if (bSet)
         sEventArgs = m_sEventArgs;
@@ -565,7 +565,7 @@ sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
 {
     SolarMutexGuard g;
 
-             sAliasArgs = OUString();
+             sAliasArgs.clear();
     sal_Bool bSet       = ((m_eRequest & E_ALIAS) == E_ALIAS);
     if (bSet)
         sAliasArgs = m_sAliasArgs;

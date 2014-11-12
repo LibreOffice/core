@@ -821,7 +821,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             aResult.mbSoundOn = nPos > 1;
             if( aResult.mbStopSound )
             {
-                aResult.maSound = OUString();
+                aResult.maSound.clear();
                 aResult.mbSoundAmbiguous = false;
             }
             else

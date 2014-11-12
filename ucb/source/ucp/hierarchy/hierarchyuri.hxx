@@ -55,7 +55,7 @@ public:
     { init(); return m_aUri; }
 
     void setUri( const OUString & rUri )
-    { m_aPath = OUString(); m_aUri = rUri; m_bValid = false; }
+    { m_aPath.clear(); m_aUri = rUri; m_bValid = false; }
 
     const OUString & getParentUri() const
     { init(); return m_aParentUri; }

@@ -642,7 +642,7 @@ const OUString& SdrMarkList::GetPointMarkDescription(bool bGlue) const
 
     if(!nMarkPtObjAnz)
     {
-        rName = OUString();
+        rName.clear();
         rNameOk = true;
     }
     else if(!rNameOk)

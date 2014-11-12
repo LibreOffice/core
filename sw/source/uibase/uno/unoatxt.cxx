@@ -696,8 +696,8 @@ void SwXAutoTextGroup::removeVetoableChangeListener(
 void SwXAutoTextGroup::Invalidate()
 {
     pGlossaries = 0;
-    sName = OUString();
-    m_sGroupName = OUString();
+    sName.clear();
+    m_sGroupName.clear();
 }
 
 OUString SwXAutoTextGroup::getImplementationName(void) throw( uno::RuntimeException, std::exception )

@@ -574,7 +574,7 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
             {
                 OUString aTempFileURL = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
                 GetMedium()->SwitchDocumentToFile( GetSharedFileURL() );
-                pImp->m_aSharedFileURL = OUString();
+                (pImp->m_aSharedFileURL).clear();
 
                 // now remove the temporary file the document was based on
                 ::utl::UCBContentHelper::Kill( aTempFileURL );
@@ -650,7 +650,7 @@ void SfxObjectShell::FreeSharedFile( const OUString& aTempFileURL )
         // now remove the temporary file the document is based currently on
         ::utl::UCBContentHelper::Kill( aTempFileURL );
 
-        pImp->m_aSharedFileURL = OUString();
+        (pImp->m_aSharedFileURL).clear();
     }
 }
 

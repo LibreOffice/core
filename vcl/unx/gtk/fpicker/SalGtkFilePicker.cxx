@@ -821,7 +821,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno
                     if (filtername)
                         sFilterName = OUString(filtername, strlen( filtername ), RTL_TEXTENCODING_UTF8);
                     else
-                        sFilterName = OUString();
+                        sFilterName.clear();
                 }
                 else
                     sFilterName = m_aInitialFilter;

@@ -607,7 +607,7 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
         catch( Exception& )
         {
             OSL_FAIL( "XclChObjectTable::InsertObject - cannot insert object" );
-            aObjName = OUString();
+            aObjName.clear();
         }
     }
     return aObjName;

@@ -616,7 +616,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, OString& rToken,
                                       OUString *pPseudo )
 {
     sal_uInt16 nDeep = 0;
-    rToken = OString();
+    rToken.clear();
     rClass = "";
     rRefPoolId = 0;
     if( pPseudo )

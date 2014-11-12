@@ -561,7 +561,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
-            sID = OString();
+            sID.clear();
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;

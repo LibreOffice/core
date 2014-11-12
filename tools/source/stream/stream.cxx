@@ -535,7 +535,7 @@ bool SvStream::ReadLine( OString& rStr, sal_Int32 nMaxBytesToRead )
             {
                 // Exit on first block-read error
                 bIsEof = true;
-                rStr = OString();
+                rStr.clear();
                 return false;
             }
             else
@@ -612,7 +612,7 @@ bool SvStream::ReadUniStringLine( OUString& rStr, sal_Int32 nMaxCodepointsToRead
             {
                 // exit on first BlockRead error
                 bIsEof = true;
-                rStr = OUString();
+                rStr.clear();
                 return false;
             }
             else
@@ -2005,7 +2005,7 @@ SvScriptStream::~SvScriptStream()
 
 bool SvScriptStream::ReadLine(OString &rStr, sal_Int32)
 {
-    rStr = OString();
+    rStr.clear();
     if (!good())
         return false;
 

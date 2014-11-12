@@ -534,7 +534,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
     }
     else
     {
-        aString = OUString();
+        aString.clear();
         maLastCell.clear();
         aTextSize = Size(0,0);
         nOriginalWidth = 0;

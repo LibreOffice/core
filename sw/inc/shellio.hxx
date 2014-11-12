@@ -82,7 +82,7 @@ public:
 
     void Reset()
     {
-        sFont = OUString();
+        sFont.clear();
         eCRLF_Flag = GetSystemLineEnd();
         eCharSet = ::osl_getThreadTextEncoding();
         nLanguage = 0;

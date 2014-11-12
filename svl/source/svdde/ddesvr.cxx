@@ -227,7 +227,7 @@ found:
     if ( pItem )
         pTopic->aItem = pItem->GetName();
     else
-        pTopic->aItem = OUString();
+        (pTopic->aItem).clear();
 
     bool bRes = false;
     pInst->hCurConvSvr = (sal_IntPtr)hConv;

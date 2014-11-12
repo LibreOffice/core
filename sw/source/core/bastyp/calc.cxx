@@ -1563,7 +1563,7 @@ bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
             }
         }
         else if( pValidName )
-            *pValidName = OUString();
+            pValidName->clear();
     }
     return bRet;
 }

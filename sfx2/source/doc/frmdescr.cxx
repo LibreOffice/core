@@ -207,7 +207,7 @@ bool SfxFrameDescriptorItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 

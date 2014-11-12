@@ -405,7 +405,7 @@ void TestString::testEqualsString()
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'B'));
     aIn = OString("AA");
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
-    aIn = OString();
+    aIn.clear();
     CPPUNIT_ASSERT(!::comphelper::string::equals(aIn, 'A'));
 }
 

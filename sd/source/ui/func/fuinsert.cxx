@@ -805,7 +805,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
         sURL = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     }
     else if( !sURL.isEmpty() )
-        sURL = OUString();
+        sURL.clear();
 
     if (!sURL.isEmpty())
     {

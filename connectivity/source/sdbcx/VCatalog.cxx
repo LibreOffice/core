@@ -189,13 +189,13 @@ OUString OCatalog::buildName(const Reference< XRow >& _xRow)
 {
     OUString sCatalog = _xRow->getString(1);
     if ( _xRow->wasNull() )
-        sCatalog = OUString();
+        sCatalog.clear();
     OUString sSchema  = _xRow->getString(2);
     if ( _xRow->wasNull() )
-        sSchema = OUString();
+        sSchema.clear();
     OUString sTable   = _xRow->getString(3);
     if ( _xRow->wasNull() )
-        sTable = OUString();
+        sTable.clear();
 
     OUString sComposedName(
         ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, false, ::dbtools::eInDataManipulation ) );

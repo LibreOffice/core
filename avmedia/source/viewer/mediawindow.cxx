@@ -318,7 +318,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
         }
     }
     else if( !rURL.isEmpty() )
-        rURL = OUString();
+        rURL.clear();
 
     return !rURL.isEmpty();
 }

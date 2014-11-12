@@ -323,7 +323,7 @@ bool ScImportExport::ExportString( OUString& rText, sal_uLong nFmt )
         rText = OUString( (const sal_Unicode*) aStrm.GetData() );
         return true;
     }
-    rText = OUString();
+    rText.clear();
     return false;
 
     // ExportStream must handle RTL_TEXTENCODING_UNICODE
@@ -352,7 +352,7 @@ bool ScImportExport::ExportByteString( OString& rText, rtl_TextEncoding eEnc, sa
             return true;
         }
     }
-    rText = OString();
+    rText.clear();
     return false;
 }
 

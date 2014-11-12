@@ -283,7 +283,7 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
     OUString sFldTypeName = m_pCategoryBox->GetText();
     if(sFldTypeName == m_sNone)
-        sFldTypeName = OUString();
+        sFldTypeName.clear();
     SwSequenceOptionDialog  aDlg( pButton, rView, sFldTypeName );
     aDlg.SetApplyBorderAndShadow(bCopyAttributes);
     aDlg.SetCharacterStyle( sCharacterStyle );

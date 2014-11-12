@@ -325,14 +325,14 @@ bool ImplSdPPTImport::Import()
 
                                     OUString aString( aUString );
                                     if ( aString == "No Slide Title" )
-                                        aString = OUString();
+                                        aString.clear();
                                     else
                                     {
                                         std::vector<OUString>::const_iterator pIter =
                                                 std::find(maSlideNameList.begin(),maSlideNameList.end(),aString);
 
                                         if (pIter != maSlideNameList.end())
-                                            aString = OUString();
+                                            aString.clear();
                                     }
                                     maSlideNameList.push_back( aString );
                                 }

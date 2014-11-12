@@ -27,7 +27,7 @@ sal_Int32 SwExpandPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 
 bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
-    rTxt = OUString();
+    rTxt.clear();
     // Nicht etwa: return 0 != rTxt.Len();
     // Weil: leere Felder ersetzen CH_TXTATR gegen einen Leerstring
     return true;
@@ -234,7 +234,7 @@ bool SwPostItsPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) co
     if( rInf.OnWin() && rInf.GetOpt().IsPostIts() )
         rTxt = OUString(' ');
     else
-        rTxt = OUString();
+        rTxt.clear();
     return true;
 }
 

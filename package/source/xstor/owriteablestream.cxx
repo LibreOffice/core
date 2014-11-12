@@ -278,7 +278,7 @@ OWriteStream_Impl::~OWriteStream_Impl()
     if ( !m_aTempURL.isEmpty() )
     {
         KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-        m_aTempURL = OUString();
+        m_aTempURL.clear();
     }
 
     CleanCacheStream();
@@ -606,14 +606,14 @@ OUString OWriteStream_Impl::FillTempGetFileName()
                 catch( const packages::WrongPasswordException& )
                 {
                     KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                    m_aTempURL = OUString();
+                    m_aTempURL.clear();
 
                     throw;
                 }
                 catch( const uno::Exception& )
                 {
                     KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                    m_aTempURL = OUString();
+                    m_aTempURL.clear();
                 }
             }
         }
@@ -835,7 +835,7 @@ void OWriteStream_Impl::Commit()
 
         // TODO/NEW: Let the temporary file be removed after commit
         xNewPackageStream->setDataStream( xInStream );
-        m_aTempURL = OUString();
+        m_aTempURL.clear();
     }
     else // if ( m_bHasInsertedStreamOptimization )
     {
@@ -909,7 +909,7 @@ void OWriteStream_Impl::Revert()
     if ( !m_aTempURL.isEmpty() )
     {
         KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-        m_aTempURL = OUString();
+        m_aTempURL.clear();
     }
 
     m_aProps.realloc( 0 );
@@ -1330,7 +1330,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
             if ( !m_aTempURL.isEmpty() )
             {
                 KillFile( m_aTempURL, comphelper::getProcessComponentContext() );
-                m_aTempURL = OUString();
+                m_aTempURL.clear();
             }
             if ( m_xCacheStream.is() )
                 CleanCacheStream();

@@ -2810,13 +2810,13 @@ void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
 void ScExternalRefManager::switchSrcFile(sal_uInt16 nFileId, const OUString& rNewFile, const OUString& rNewFilter)
 {
     maSrcFiles[nFileId].maFileName = rNewFile;
-    maSrcFiles[nFileId].maRelativeName = OUString();
-    maSrcFiles[nFileId].maRealFileName = OUString();
+    maSrcFiles[nFileId].maRelativeName.clear();
+    maSrcFiles[nFileId].maRealFileName.clear();
     if (!maSrcFiles[nFileId].maFilterName.equals(rNewFilter))
     {
         // Filter type has changed.
         maSrcFiles[nFileId].maFilterName = rNewFilter;
-        maSrcFiles[nFileId].maFilterOptions = OUString();
+        maSrcFiles[nFileId].maFilterOptions.clear();
     }
     refreshSrcDocument(nFileId);
 }

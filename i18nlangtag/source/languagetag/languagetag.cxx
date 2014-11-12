@@ -238,7 +238,7 @@ void LiblantagDataRef::setupDataPath()
 static void handleVendorVariant( com::sun::star::lang::Locale & rLocale )
 {
     if (!rLocale.Variant.isEmpty() && rLocale.Language != I18NLANGTAG_QLT)
-        rLocale.Variant = OUString();
+        rLocale.Variant.clear();
 }
 
 
@@ -1008,7 +1008,7 @@ void LanguageTag::resetVars()
 {
     mpImpl.reset();
     maLocale            = lang::Locale();
-    maBcp47             = OUString();
+    maBcp47.clear();
     mnLangID            = LANGUAGE_SYSTEM;
     mbSystemLocale      = true;
     mbInitializedBcp47  = false;
@@ -1324,7 +1324,7 @@ void LanguageTagImpl::convertLocaleToBcp47()
     }
     if (maLocale.Language.isEmpty())
     {
-        maBcp47 = OUString();   // bad luck
+        maBcp47.clear();   // bad luck
     }
     else if (maLocale.Language == I18NLANGTAG_QLT)
     {
@@ -1394,7 +1394,7 @@ void LanguageTagImpl::convertBcp47ToLocale()
     {
         maLocale.Language = getLanguageFromLangtag();
         maLocale.Country = getRegionFromLangtag();
-        maLocale.Variant = OUString();
+        maLocale.Variant.clear();
     }
     else
     {
@@ -1842,7 +1842,7 @@ OUString LanguageTagImpl::getCountry() const
     {
         maCachedCountry = const_cast<LanguageTagImpl*>(this)->getRegionFromLangtag();
         if (!LanguageTag::isIsoCountry( maCachedCountry))
-            maCachedCountry = OUString();
+            maCachedCountry.clear();
         mbCachedCountry = true;
     }
     return maCachedCountry;
@@ -2340,7 +2340,9 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         if (nHyph1 < 0)
         {
             rLanguage = rBcp47.toAsciiLowerCase();
-            rScript = rCountry = rVariants = OUString();
+            rScript.clear();
+            rCountry.clear();
+            rVariants.clear();
             eRet = EXTRACTED_LSC;
         }
     }
@@ -2351,7 +2353,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         {
             rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
             rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
-            rScript = rVariants = OUString();
+            rScript.clear();
+            rVariants.clear();
             eRet = EXTRACTED_LSC;
         }
     }
@@ -2365,7 +2368,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             {
                 // (DIGIT 3ALNUM) vvvv variant instead of Ssss script
                 rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-                rScript   = rCountry = OUString();
+                rScript.clear();
+                rCountry.clear();
                 rVariants = rBcp47.copy( nHyph1 + 1);
                 eRet = EXTRACTED_LV;
             }
@@ -2374,7 +2378,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
                 rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
                 rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() +
                             rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
-                rCountry  = rVariants = OUString();
+                rCountry.clear();
+                rVariants.clear();
                 eRet = EXTRACTED_LSC;
             }
         }
@@ -2387,7 +2392,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
             rScript   = rBcp47.copy( nHyph1 + 1, 1).toAsciiUpperCase() + rBcp47.copy( nHyph1 + 2, 3).toAsciiLowerCase();
             rCountry  = rBcp47.copy( nHyph2 + 1, 2).toAsciiUpperCase();
-            rVariants = OUString();
+            rVariants.clear();
             eRet = EXTRACTED_LSC;
         }
     }
@@ -2413,7 +2418,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         if (nHyph3 - nHyph2 > 4 && nHyph3 - nHyph2 <= 9)
         {
             rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-            rScript   = OUString();
+            rScript.clear();
             rCountry  = rBcp47.copy( nHyph1 + 1, 2).toAsciiUpperCase();
             rVariants = rBcp47.copy( nHyph2 + 1);
             eRet = EXTRACTED_LV;
@@ -2427,7 +2432,8 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
         if (nHyph2 - nHyph1 > 5 && nHyph2 - nHyph1 <= 9)
         {
             rLanguage = rBcp47.copy( 0, nHyph1).toAsciiLowerCase();
-            rScript   = rCountry = OUString();
+            rScript.clear();
+            rCountry.clear();
             rVariants = rBcp47.copy( nHyph1 + 1);
             eRet = EXTRACTED_LV;
         }
@@ -2439,7 +2445,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             if (rBcp47.equalsIgnoreAsciiCase( "en-GB-oed"))
             {
                 rLanguage = "en";
-                rScript   = OUString();
+                rScript.clear();
                 rCountry  = "GB";
                 rVariants = "oed";
                 eRet = EXTRACTED_LV;
@@ -2449,7 +2455,10 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     if (eRet == EXTRACTED_NONE)
     {
         SAL_INFO( "i18nlangtag", "LanguageTagImpl::simpleExtract: did not extract '" << rBcp47 << "'");
-        rLanguage = rScript = rCountry = rVariants = OUString();
+        rLanguage.clear();
+        rScript.clear();
+        rCountry.clear();
+        rVariants.clear();
     }
     return eRet;
 }

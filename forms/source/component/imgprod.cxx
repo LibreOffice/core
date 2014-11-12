@@ -244,7 +244,7 @@ void ImageProducer::SetImage( const OUString& rPath )
 
 void ImageProducer::SetImage( SvStream& rStm )
 {
-    maURL = OUString();
+    maURL.clear();
     mpGraphic->Clear();
     mbConsInit = false;
 
@@ -256,7 +256,7 @@ void ImageProducer::SetImage( SvStream& rStm )
 
 void ImageProducer::setImage( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rInputStmRef )
 {
-    maURL = OUString();
+    maURL.clear();
     mpGraphic->Clear();
     mbConsInit = false;
     delete mpStm;

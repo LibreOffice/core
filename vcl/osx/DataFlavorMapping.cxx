@@ -497,7 +497,7 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
     if( maOfficeOnlyTypes.find( aTryFlavor ) != maOfficeOnlyTypes.end() )
     {
         oOOFlavor.MimeType = aTryFlavor;
-        oOOFlavor.HumanPresentableName = OUString();
+        oOOFlavor.HumanPresentableName.clear();
         oOOFlavor.DataType = getCppuType((Sequence<sal_Int8>*)0);
     }
 

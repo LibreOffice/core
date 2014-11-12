@@ -330,7 +330,7 @@ void SAL_CALL OSingleSelectQueryComposer::setQuery( const OUString& command ) th
 
     // we have no "elementary" parts anymore (means filter/groupby/having/order clauses)
     for ( SQLPart eLoopParts = Where; eLoopParts != SQLPartCount; incSQLPart( eLoopParts ) )
-        m_aElementaryParts[ eLoopParts ] = OUString();
+        m_aElementaryParts[ eLoopParts ].clear();
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sal_Int32 _nCommandType ) throw(SQLException, RuntimeException, std::exception)
@@ -1754,21 +1754,21 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
 
             pCondition = pWhereNode->getChild(1);
         #if OSL_DEBUG_LEVEL > 0
-            sCondition = OUString();
+            sCondition.clear();
             pCondition->parseNodeToStr( sCondition, m_xConnection );
         #endif
             OSQLParseNode::disjunctiveNormalForm(pCondition);
 
             pCondition = pWhereNode->getChild(1);
         #if OSL_DEBUG_LEVEL > 0
-            sCondition = OUString();
+            sCondition.clear();
             pCondition->parseNodeToStr( sCondition, m_xConnection );
         #endif
             OSQLParseNode::absorptions(pCondition);
 
             pCondition = pWhereNode->getChild(1);
         #if OSL_DEBUG_LEVEL > 0
-            sCondition = OUString();
+            sCondition.clear();
             pCondition->parseNodeToStr( sCondition, m_xConnection );
         #endif
             if ( pCondition )

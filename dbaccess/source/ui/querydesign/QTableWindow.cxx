@@ -61,7 +61,7 @@ OQueryTableWindow::OQueryTableWindow( vcl::Window* pParent, const TTableWindowDa
     // if table name matches alias, do not pass to InitialAlias,
     // as the appending of a possible token could not succeed...
     if (m_strInitialAlias == pTabWinData->GetTableName())
-        m_strInitialAlias = OUString();
+        m_strInitialAlias.clear();
 
     SetHelpId(HID_CTL_QRYDGNTAB);
 }

@@ -573,7 +573,7 @@ void DocumentHandlerImpl::startElement(
             }
             else
             {
-                pPrefixes[ nPos ] = OUString();
+                pPrefixes[ nPos ].clear();
                 pLocalNames[ nPos ] = rQAttributeName;
                 // leave local names unmodified
             }

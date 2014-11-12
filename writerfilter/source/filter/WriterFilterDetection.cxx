@@ -95,7 +95,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
         OSL_FAIL("exception while opening storage");
     }
     if( !bWord )
-        sTypeName = OUString();
+        sTypeName.clear();
    return sTypeName;
 }
 

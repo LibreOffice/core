@@ -218,7 +218,7 @@ static OUString trimTrailingSpaces(const OUString& rString)
         if (nIndex >= 0)
             aResult = rString.copy(0,nIndex+1);
         else
-            aResult = OUString();
+            aResult.clear();
     }
     return aResult;
 }

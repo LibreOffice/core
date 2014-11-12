@@ -202,7 +202,7 @@ bool SvxFontListItem::GetPresentation
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -1790,7 +1790,7 @@ bool SvxPropSizeItem::GetPresentation
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -2015,7 +2015,7 @@ bool SvxCharSetColorItem::GetPresentation
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -2549,7 +2549,7 @@ bool SvxNoLinebreakItem::GetPresentation
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -2594,7 +2594,7 @@ bool SvxNoHyphenItem::GetPresentation
     OUString&           rText, const IntlWrapper * /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 

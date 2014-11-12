@@ -418,7 +418,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     if ( bUpdate )
     {
         DELETEZ( mpImpl->pGraphic );
-        mpImpl->aMediaType = OUString();
+        (mpImpl->aMediaType).clear();
         mpImpl->pGraphic = new Graphic;
         mpImpl->mnGraphicVersion++;
     }

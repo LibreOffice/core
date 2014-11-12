@@ -51,7 +51,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
     {
         if ( aNamespaceName.getLength() == nXMLNamespaceLength )
         {
-            aNamespaceName = OUString();
+            aNamespaceName.clear();
         }
         else if ( aNamespaceName.getLength() >= nXMLNamespaceLength+2 )
         {

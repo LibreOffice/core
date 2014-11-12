@@ -64,7 +64,7 @@ void TextFont::setAttributes( const AttributeList& rAttribs )
 void TextFont::setAttributes( const OUString& sFontName )
 {
     maTypeface = sFontName;
-    maPanose = OUString();
+    maPanose.clear();
     mnPitch = 0;
     mnCharset = WINDOWS_CHARSET_DEFAULT;
 }

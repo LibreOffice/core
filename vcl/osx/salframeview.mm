@@ -1088,7 +1088,7 @@ private:
         {
             SalExtTextInputEvent aEvent;
             aEvent.mnTime           = mpFrame->mnLastEventTime;
-            aEvent.maText           = OUString();
+            aEvent.maText.clear();
             aEvent.mpTextAttr       = NULL;
             aEvent.mnCursorPos      = 0;
             aEvent.mnCursorFlags    = 0;
@@ -1641,7 +1641,7 @@ private:
         aInputEvent.mpTextAttr = &aInputFlags[0];
         mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void *)&aInputEvent );
     } else {
-        aInputEvent.maText = OUString();
+        aInputEvent.maText.clear();
         aInputEvent.mnCursorPos = 0;
         aInputEvent.mnCursorFlags = 0;
         aInputEvent.mpTextAttr = 0;

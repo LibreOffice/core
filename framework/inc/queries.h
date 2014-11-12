@@ -131,7 +131,7 @@ class QueryBuilder
 
         void resetAll()
         {
-            m_sBase = OUString();
+            m_sBase.clear();
             resetParams();
         }
 

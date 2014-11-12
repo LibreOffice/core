@@ -120,10 +120,10 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, bool bSrchNum)
 {
-    sNumber = OUString();
-    sTitle = OUString();
-    sPost = OUString();
-    sPre = OUString();
+    sNumber.clear();
+    sTitle.clear();
+    sPost.clear();
+    sPre.clear();
 
     SwDoc* pDoc = (SwDoc*)rTxtNd.GetDoc();
     const SwTxtNode *pTxtNd = rTxtNd.FindOutlineNodeOfLevel( nLevel );

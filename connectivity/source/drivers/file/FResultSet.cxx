@@ -1574,7 +1574,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
             if (xTableColumn.is())
                 xTableColumn->getPropertyValue(sName) >>= sTableColumnName;
             else
-                sTableColumnName = OUString();
+                sTableColumnName.clear();
 
             // look if we have such a select column
             // TODO: would like to have a O(log n) search here ...
