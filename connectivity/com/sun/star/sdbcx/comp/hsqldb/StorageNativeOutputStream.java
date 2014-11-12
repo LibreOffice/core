@@ -27,14 +27,9 @@ package com.sun.star.sdbcx.comp.hsqldb;
 public class StorageNativeOutputStream {
     static { NativeLibraries.load(); }
 
-    private String name;
-    private Object key;
-
     /** Creates a new instance of StorageNativeOutputStream */
-    public StorageNativeOutputStream(String _name,Object _key) {
-        name = _name;
-        key = _key;
-        openStream(name, (String)key, NativeStorageAccess.WRITE | NativeStorageAccess.TRUNCATE);
+    public StorageNativeOutputStream(String _name, Object key) {
+        openStream(_name, (String)key, NativeStorageAccess.WRITE | NativeStorageAccess.TRUNCATE);
     }
 
     private native void openStream(String name,String key, int mode);

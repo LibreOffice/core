@@ -47,8 +47,6 @@ import com.sun.star.uno.UnoRuntime;
 public class _XObjectInputStream extends MultiMethodTest {
 
     public XObjectInputStream oObj = null;
-    private Object objRead = null ;
-    private Object objWrite = null ;
 
     /**
     * Test reads perisist object from stream and compares properties
@@ -58,7 +56,7 @@ public class _XObjectInputStream extends MultiMethodTest {
     * of objects properties are equal. <p>
     */
     public void _readObject() {
-        objWrite = tEnv.getObjRelation("PersistObject") ;
+        Object objWrite = tEnv.getObjRelation("PersistObject") ;
         if (objWrite == null) {
             log.println("PersistObject not found in relations") ;
             tRes.tested("readObject()", false) ;
@@ -77,6 +75,7 @@ public class _XObjectInputStream extends MultiMethodTest {
             return;
         }
 
+        Object objRead = null ;
         try {
             objRead = oObj.readObject() ;
         } catch(com.sun.star.io.IOException e) {

@@ -33,7 +33,6 @@ public class ConverterInfoList {
 
     private static String     defaultPropsFile = "ConverterInfoList.properties";
     private ArrayList<String> jars;
-    private Properties        props            = null;
 
     /**
      * This constructor loads and reads the default properties file.
@@ -59,7 +58,7 @@ public class ConverterInfoList {
         Class<? extends ConverterInfoList> c = this.getClass();
         InputStream is          = c.getResourceAsStream(propsFile);
         BufferedInputStream bis = new BufferedInputStream(is);
-        props                   = new Properties();
+        Properties        props = new Properties();
         props.load(bis);
         bis.close();
 

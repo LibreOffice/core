@@ -63,9 +63,7 @@ public class LoadSaveTest
     }
 
     private XMultiServiceFactory m_xMSF = null;
-    private XComponentContext m_xContext = null;
     private XGlobalEventBroadcaster m_xGEB = null;
-    private String m_TmpDir = null;
 
     private String m_fileURL = "file://";
     // these should be parameters or something?
@@ -74,13 +72,13 @@ public class LoadSaveTest
 
     @Before public void before() throws Exception
     {
-        m_xContext = connection.getComponentContext();
-        assertNotNull("could not get component context.", m_xContext);
+        XComponentContext xContext = connection.getComponentContext();
+        assertNotNull("could not get component context.", xContext);
         m_xMSF = UnoRuntime.queryInterface(
-            XMultiServiceFactory.class, m_xContext.getServiceManager());
-        m_xGEB = theGlobalEventBroadcaster.get(m_xContext);
-        m_TmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
-        System.out.println("tempdir: " + m_TmpDir);
+            XMultiServiceFactory.class, xContext.getServiceManager());
+        m_xGEB = theGlobalEventBroadcaster.get(xContext);
+        String sTmpDir = util.utils.getOfficeTemp/*Dir*/(m_xMSF);
+        System.out.println("tempdir: " + sTmpDir);
         System.out.println("sourcedir: " + m_SourceDir);
         System.out.println("targetdir: " + m_TargetDir);
     }

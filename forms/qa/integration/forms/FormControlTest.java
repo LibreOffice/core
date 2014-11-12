@@ -54,7 +54,6 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
     private DocumentHelper          m_document;
     private FormLayer               m_formLayer;
     private XPropertySet            m_masterForm;
-    private XFormController         m_masterFormController;
     private String                  m_sImageURL;
     private SQLErrorEvent           m_mostRecentErrorEvent;
 
@@ -548,9 +547,9 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         // switch the forms into data entry mode
         m_document.getCurrentView( ).toggleFormDesignMode( );
 
-        m_masterFormController = m_document.getCurrentView().getFormController( m_masterForm );
+        XFormController  masterFormController = m_document.getCurrentView().getFormController( m_masterForm );
         XSQLErrorBroadcaster errorBroadcaster = UnoRuntime.queryInterface( XSQLErrorBroadcaster.class,
-            m_masterFormController );
+            masterFormController );
         errorBroadcaster.addSQLErrorListener( this );
 
         // set the focus to the ID control

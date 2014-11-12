@@ -55,7 +55,6 @@ import com.sun.star.util.XURLTransformer;
 public class _XSynchronousFrameLoader extends MultiMethodTest {
 
     public XSynchronousFrameLoader oObj = null; // oObj filled by MultiMethodTest
-    private String url = null ;
     private XFrame frame = null ;
     private XComponent frameSup = null ;
     private PropertyValue[] descr = null;
@@ -72,7 +71,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
      */
     @Override
     public void before() {
-        url = (String) tEnv.getObjRelation("FrameLoader.URL") ;
+        String url = (String) tEnv.getObjRelation("FrameLoader.URL") ;
         frame = (XFrame) tEnv.getObjRelation("FrameLoader.Frame") ;
 
         if (url == null) {

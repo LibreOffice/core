@@ -48,7 +48,6 @@ import com.sun.star.lang.Locale;
 public class _XTransliteration extends MultiMethodTest {
 
     public XTransliteration oObj = null;
-    private String[] mod = null ;
     private Locale loc = new Locale("en", "EN", "") ;
 
     /**
@@ -57,7 +56,7 @@ public class _XTransliteration extends MultiMethodTest {
     * one module name.
     */
     public void _getAvailableModules() {
-        mod = oObj.getAvailableModules(loc, TransliterationType.ONE_TO_ONE);
+        String[] mod = oObj.getAvailableModules(loc, TransliterationType.ONE_TO_ONE);
 
         if (mod != null) {
             log.println("Available modules :") ;

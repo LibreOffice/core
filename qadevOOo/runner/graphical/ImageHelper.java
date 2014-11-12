@@ -29,7 +29,6 @@ class ImageHelper
     private Image m_aImage;
     private int[] m_aPixels;
     private int m_w = 0;
-    private int m_h = 0;
 
 
     private ImageHelper(Image _aImage)
@@ -38,11 +37,11 @@ class ImageHelper
 
          // grab all (consume much memory)
          m_w = getWidth();
-         m_h = getHeight();
+         int h = getHeight();
          int x = 0;
          int y = 0;
-         m_aPixels = new int[m_w * m_h];
-         PixelGrabber pg = new PixelGrabber(m_aImage, x, y, m_w, m_h, m_aPixels, 0, m_w);
+         m_aPixels = new int[m_w * h];
+         PixelGrabber pg = new PixelGrabber(m_aImage, x, y, m_w, h, m_aPixels, 0, m_w);
          try
          {
              pg.grabPixels();

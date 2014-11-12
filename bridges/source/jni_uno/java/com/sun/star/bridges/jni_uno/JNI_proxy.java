@@ -57,8 +57,6 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 
     private long m_bridge_handle;
     private IEnvironment m_java_env;
-    private long m_receiver_handle;
-    private long m_td_handle;
     private Type m_type;
     private String m_oid;
     private Class m_class;
@@ -106,12 +104,10 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 
     private JNI_proxy(
         long bridge_handle, IEnvironment java_env,
-        long receiver_handle, long td_handle, Type type, String oid )
+        Type type, String oid )
     {
         m_bridge_handle = bridge_handle;
         m_java_env = java_env;
-        m_receiver_handle = receiver_handle;
-        m_td_handle = td_handle;
         m_type = type;
         m_oid = oid;
         m_class = m_type.getZClass();
@@ -124,7 +120,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         throws Throwable
     {
         JNI_proxy handler = new JNI_proxy(
-            bridge_handle, java_env, receiver_handle, td_handle, type, oid );
+            bridge_handle, java_env, type, oid );
         Object proxy = proxy_ctor.newInstance( new Object [] { handler } );
         return java_env.registerInterface( proxy, new String [] { oid }, type );
     }

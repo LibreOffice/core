@@ -57,12 +57,10 @@ import java.util.logging.Logger;
 public abstract class BaseDialog extends BaseControl {
 
     private XMultiComponentFactory xMCF;
-    private Object toolkit;
     private XMultiServiceFactory xMSF;
     protected XWindow xWindow;
     protected XDialog xDialog;
     private XWindowPeer xWindowPeer;
-    private ModalState modalState;
 
     @Override
     public String getName() {
@@ -92,7 +90,7 @@ public abstract class BaseDialog extends BaseControl {
 
     public BaseDialog(XComponentContext context, String title, int x, int y, int width, int height) {
         super(context);
-        modalState = ModalState.Exit;
+        ModalState modalState = ModalState.Exit;
         try {
             xMCF = context.getServiceManager();
             setUnoModel(xMCF.createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", context));
@@ -107,7 +105,7 @@ public abstract class BaseDialog extends BaseControl {
             XControlModel xControlModel = UnoRuntime.queryInterface(XControlModel.class, getUnoModel());
             xControl.setModel(xControlModel);
 
-            toolkit = xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", context);
+            Object toolkit = xMCF.createInstanceWithContext("com.sun.star.awt.Toolkit", context);
             XToolkit xToolkit = UnoRuntime.queryInterface(XToolkit.class, toolkit);
             xWindow = UnoRuntime.queryInterface(XWindow.class, unoControl);
             xWindow.setVisible(false);

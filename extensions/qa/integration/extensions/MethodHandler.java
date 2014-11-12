@@ -25,22 +25,19 @@ import com.sun.star.inspection.*;
 
 public class MethodHandler implements XPropertyHandler
 {
-    private XComponentContext       m_context;
     private XIntrospection          m_introspection;
-    private XIntrospectionAccess    m_introspectionAccess;
     private XIdlMethod[]            m_methods;
     private java.util.HashMap<String,XIdlMethod>       m_methodsHash;
 
     /** Creates a new instance of MethodHandler */
     public MethodHandler( XComponentContext _context )
     {
-        m_context = _context;
         m_methodsHash = new java.util.HashMap<String,XIdlMethod>();
 
         try
         {
             m_introspection = UnoRuntime.queryInterface( XIntrospection.class,
-                m_context.getServiceManager().createInstanceWithContext( "com.sun.star.beans.Introspection", m_context )
+                _context.getServiceManager().createInstanceWithContext( "com.sun.star.beans.Introspection", _context )
             );
         }
         catch( com.sun.star.uno.Exception e )
@@ -162,15 +159,14 @@ public class MethodHandler implements XPropertyHandler
         if ( m_introspection == null )
             return;
 
-        m_introspectionAccess = null;
         m_methods = null;
         m_methodsHash = new java.util.HashMap<String,XIdlMethod>();
 
-        m_introspectionAccess = m_introspection.inspect( _component );
-        if ( m_introspectionAccess == null )
+        XIntrospectionAccess introspectionAccess = m_introspection.inspect( _component );
+        if ( introspectionAccess == null )
             return;
 
-        m_methods = m_introspectionAccess.getMethods( MethodConcept.ALL );
+        m_methods = introspectionAccess.getMethods( MethodConcept.ALL );
     }
 
     public boolean isComposable(String _propertyName) throws com.sun.star.beans.UnknownPropertyException

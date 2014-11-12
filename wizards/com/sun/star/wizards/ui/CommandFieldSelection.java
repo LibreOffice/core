@@ -35,7 +35,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private XListBox xTableListBox;
     private XFixedText xlblTable;
     private String sTableListBoxName;
-    private String sTableLabelName;
     private String sQueryPrefix;
     private String sTablePrefix;
     private short m_iSelPos = -1;
@@ -99,7 +98,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
             this.bgetQueries = _bgetQueries;
             this.CurDBMetaData = _CurDBMetaData;
             toggleListboxControls(Boolean.FALSE);
-            sTableLabelName = "lblTables_" + super.sIncSuffix;
+            String sTableLabelName = "lblTables_" + super.sIncSuffix;
             sTableListBoxName = "lstTables_" + super.sIncSuffix;
             sTablePrefix = getTablePrefix();
             sQueryPrefix = getQueryPrefix();

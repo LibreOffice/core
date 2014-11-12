@@ -148,7 +148,6 @@ public class Protocol extends JComponent
     private long                m_nWarnings ;
     private long                m_nTestMarks;
     private Timestamp           m_aStartTime;
-    private Timestamp           m_aEndTime  ;
 
 
     /**
@@ -631,8 +630,8 @@ public class Protocol extends JComponent
      */
     public synchronized void logStatistics()
     {
-                  m_aEndTime = new Timestamp(System.currentTimeMillis());
-        Timestamp aDiff      = new Timestamp(m_aEndTime.getTime()-m_aStartTime.getTime());
+        Timestamp aEndTime   = new Timestamp(System.currentTimeMillis());
+        Timestamp aDiff      = new Timestamp(aEndTime.getTime()-m_aStartTime.getTime());
 
         int nLogType = TYPE_STATISTIC;
         if (m_nErrors > 0)

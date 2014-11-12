@@ -64,7 +64,6 @@ public final class SOFormulaParser extends ComponentBase
     public static final int UNARY_OPERATORS = 2;
     public static final int BINARY_OPERATORS = 3;
     public static final int FUNCTIONS = 4;
-    private final XComponentContext m_xContext;
     private final PropertySetMixin m_prophlp;
     private static final String __serviceName = "com.sun.star.report.meta.FormulaParser";
     private static final String OPERATORS = "org.pentaho.reporting.libraries.formula.operators.";
@@ -82,14 +81,13 @@ public final class SOFormulaParser extends ComponentBase
     public SOFormulaParser(final XComponentContext context)
     {
 
-        m_xContext = context;
         final ClassLoader cl = java.lang.Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
         parser = new FormulaParser();
         try
         {
-            final XFormulaOpCodeMapper mapper = UnoRuntime.queryInterface(XFormulaOpCodeMapper.class, m_xContext.getServiceManager().createInstanceWithContext("simple.formula.FormulaOpCodeMapperObj", m_xContext));
+            final XFormulaOpCodeMapper mapper = UnoRuntime.queryInterface(XFormulaOpCodeMapper.class, context.getServiceManager().createInstanceWithContext("simple.formula.FormulaOpCodeMapperObj", context));
             FormulaOpCodeMapEntry[] opCodes = mapper.getAvailableMappings(FormulaLanguage.ODFF, FormulaMapGroup.FUNCTIONS);
             final DefaultFormulaContext defaultContext = new DefaultFormulaContext();
             final FunctionRegistry functionRegistry = defaultContext.getFunctionRegistry();
@@ -136,7 +134,7 @@ public final class SOFormulaParser extends ComponentBase
         // for your optional attributes if necessary. See the documentation
         // of the PropertySetMixin helper for further information.
         // Ensure that your attributes are initialized correctly!
-        m_prophlp = new PropertySetMixin(m_xContext, this,
+        m_prophlp = new PropertySetMixin(context, this,
                 new Type(com.sun.star.report.meta.XFormulaParser.class), null);
     }
 

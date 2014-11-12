@@ -50,11 +50,11 @@ public class ContextView
     public ContextView (ObjectViewContainer aContainer)
     {
         super (aContainer);
-        maNameLabel = new JLabel ("Name: ");
+        JLabel aNameLabel = new JLabel ("Name: ");
         maName = new JLabel ("");
-        maDescriptionLabel = new JLabel ("Description: ");
+        JLabel aDescriptionLabel = new JLabel ("Description: ");
         maDescription = new JLabel ("");
-        maRoleLabel = new JLabel ("Role: ");
+        JLabel maRoleLabel = new JLabel ("Role: ");
         maRole = new JLabel ("");
 
         // Make the background of name and description white and opaque so
@@ -77,9 +77,9 @@ public class ContextView
         constraints.weighty = 1;
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
-        add (maNameLabel, constraints);
+        add (aNameLabel, constraints);
         constraints.gridy = 1;
-        add (maDescriptionLabel, constraints);
+        add (aDescriptionLabel, constraints);
         constraints.gridy = 2;
         add (maRoleLabel, constraints);
         constraints.gridy = 0;
@@ -134,10 +134,7 @@ public class ContextView
 
 
     private JLabel
-        maNameLabel,
         maName,
-        maDescriptionLabel,
         maDescription,
-        maRoleLabel,
         maRole;
 }

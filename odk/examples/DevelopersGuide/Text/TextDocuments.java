@@ -117,7 +117,6 @@ public class TextDocuments {
     private XTextDocument mxDoc = null;
     private XMultiServiceFactory mxDocFactory = null;
     private XMultiServiceFactory mxFactory = null;
-    private XPropertySet  mxDocProps = null;
     private XText mxDocText = null;
     private XTextCursor mxDocCursor = null;
     private XTextContent mxFishSection = null;
@@ -127,18 +126,16 @@ public class TextDocuments {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    TextDocuments textDocuments1 = new TextDocuments();
-    try {
+        TextDocuments textDocuments1 = new TextDocuments();
+        try {
             // output directory for store test;
             sOutputDir = args[0];
 
             textDocuments1.runDemo();
-        }
-        catch (java.lang.Exception e){
+        } catch (java.lang.Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             System.exit(0);
         }
     }
@@ -291,8 +288,7 @@ public class TextDocuments {
 
         // Get a reference to the document's property set. This contains document
         // information like the current word count
-        mxDocProps = UnoRuntime.queryInterface(
-            XPropertySet.class, mxDoc );
+        UnoRuntime.queryInterface(XPropertySet.class, mxDoc );
 
         // Simple text insertion example
         BodyTextExample ();

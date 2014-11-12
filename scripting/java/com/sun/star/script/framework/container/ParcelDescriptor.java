@@ -52,7 +52,6 @@ public class ParcelDescriptor {
          "<parcel xmlns:parcel=\"scripting.dtd\" language=\"Java\">\n" +
          "</parcel>").getBytes();
 
-    private File file = null;
     private Document document = null;
     private String language = null;
     private Map<String, String> languagedepprops = new HashMap<String, String>(3);
@@ -83,8 +82,6 @@ public class ParcelDescriptor {
     }
 
     private ParcelDescriptor(File file, String language) throws IOException {
-        this.file = file;
-
         if (file.exists()) {
             FileInputStream fis = null;
 

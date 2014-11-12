@@ -169,11 +169,11 @@ public class AccessibilityWorkBench
         aViewSplitPane.setDividerLocation (400);
 
         //  Text output area.
-        maMessageArea = MessageArea.Instance ();
+        MessageArea aMessageArea = MessageArea.Instance ();
 
         // Split pane for the two views and the message area.
         JSplitPane aSplitPane = new JSplitPane (JSplitPane.VERTICAL_SPLIT,
-            aViewSplitPane, maMessageArea);
+            aViewSplitPane, aMessageArea);
         aSplitPane.setOneTouchExpandable(true);
         addGridElement (aViewSplitPane, 0,0, 2,1, 3,3,
             GridBagConstraints.CENTER, GridBagConstraints.BOTH);
@@ -253,11 +253,11 @@ public class AccessibilityWorkBench
     JMenuBar CreateMenuBar ()
     {
         // Menu bar.
-        maMenuBar = new JMenuBar ();
+        JMenuBar aMenuBar = new JMenuBar ();
 
         // File menu.
         JMenu aFileMenu = new JMenu ("File");
-        maMenuBar.add (aFileMenu);
+        aMenuBar.add (aFileMenu);
         JMenuItem aItem;
         aItem = new JMenuItem ("Quit");
         aFileMenu.add (aItem);
@@ -265,7 +265,7 @@ public class AccessibilityWorkBench
 
         // View menu.
         JMenu aViewMenu = new JMenu ("View");
-        maMenuBar.add (aViewMenu);
+        aMenuBar.add (aViewMenu);
         ButtonGroup aGroup = new ButtonGroup ();
         JRadioButtonMenuItem aRadioButton = new JRadioButtonMenuItem ("Whole Screen");
         aGroup.add (aRadioButton);
@@ -294,7 +294,7 @@ public class AccessibilityWorkBench
 
         // Options menu.
         JMenu aOptionsMenu = new JMenu ("Options");
-        maMenuBar.add (aOptionsMenu);
+        aMenuBar.add (aOptionsMenu);
         JCheckBoxMenuItem aCBItem;
         aCBItem = new JCheckBoxMenuItem ("Show Descriptions", maCanvas.getShowDescriptions());
         aOptionsMenu.add (aCBItem);
@@ -314,7 +314,7 @@ public class AccessibilityWorkBench
 
         // Help menu.
         JMenu aHelpMenu = new JMenu ("Help");
-        maMenuBar.add (aHelpMenu);
+        aMenuBar.add (aHelpMenu);
 
         aItem = new JMenuItem ("Help");
         aHelpMenu.add (aItem);
@@ -328,7 +328,7 @@ public class AccessibilityWorkBench
         aHelpMenu.add (aItem);
         aItem.addActionListener (this);
 
-        return maMenuBar;
+        return aMenuBar;
     }
 
 
@@ -579,16 +579,12 @@ public class AccessibilityWorkBench
         maAccessibilityTree;
     private ObjectViewContainer
         maObjectViewContainer;
-    private MessageArea
-        maMessageArea;
     private JButton
         aConnectButton,
         aQuitButton,
         aUpdateButton,
         aExpandButton,
         aShapesButton;
-    private JMenuBar
-        maMenuBar;
     private boolean
         mbInitialized;
     private TopWindowListener

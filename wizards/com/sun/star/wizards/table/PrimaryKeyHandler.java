@@ -38,7 +38,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
 {
 
     private TableWizard CurUnoDialog;
-    private short curtabindex;
     private final static String SPRIMEKEYMODE = "togglePrimeKeyFields";
     private XRadioButton optAddAutomatically;
     private XRadioButton optUseExisting;
@@ -59,7 +58,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         this.CurUnoDialog = _CurUnoDialog;
         curTableDescriptor = _curTableDescriptor;
         bAutoPrimaryKeysupportsAutoIncrmentation = isAutoPrimeKeyAutoIncrementationsupported();
-        curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
+        short curtabindex = (short) ((TableWizard.SOPRIMARYKEYPAGE * 100) - 20);
         Integer IPRIMEKEYSTEP = Integer.valueOf(TableWizard.SOPRIMARYKEYPAGE);
         final String sExplanations = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 26);
         final String screatePrimaryKey = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 27);

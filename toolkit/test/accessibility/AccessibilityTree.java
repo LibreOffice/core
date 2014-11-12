@@ -107,8 +107,7 @@ public class AccessibilityTree
 
     public void SetCanvas (Canvas aCanvas)
     {
-        maCanvas = aCanvas;
-        ((AccessibilityTreeModel)maTree.getModel()).setCanvas (maCanvas);
+        ((AccessibilityTreeModel)maTree.getModel()).setCanvas(aCanvas);
     }
 
     /** Expand the nodes in the subtree rooted in aNode according to the the
@@ -383,14 +382,7 @@ public class AccessibilityTree
 
 
 
-    protected AccessibleTreeCellRenderer
-        maCellRenderer;
-
-
-    private JTree
-        maTree;
-    private Canvas
-        maCanvas;
-    private int
-        mnExpandLevel;
+    protected AccessibleTreeCellRenderer  maCellRenderer;
+    private JTree  maTree;
+    private int mnExpandLevel;
 }
