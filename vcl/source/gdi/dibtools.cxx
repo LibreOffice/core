@@ -451,7 +451,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
             boost::scoped_array<sal_uInt8> pBuffer(
                 new sal_uInt8[rHeader.nSizeImage]);
-            if (rIStm.Read((char*)pBuffer.get(), rHeader.nSizeImage)
+            if (rIStm.Read(pBuffer.get(), rHeader.nSizeImage)
                 != rHeader.nSizeImage)
             {
                 return false;

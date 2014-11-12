@@ -356,8 +356,8 @@ bool GIFReader::ReadLocalHeader()
     sal_uInt8   pBuf[ 9 ];
     bool    bRet = false;
 
-    rIStm.Read( pBuf, 9 );
-    if( NO_PENDING( rIStm ) )
+    sal_Size nRead = rIStm.Read(pBuf, 9);
+    if (NO_PENDING(rIStm) && nRead == 9)
     {
         SvMemoryStream  aMemStm;
         BitmapPalette*  pPal;
