@@ -2,6 +2,27 @@
 
 # simple wrapper script to run non-installed executables from workdir
 
+if [ $(uname) = Darwin ]; then
+
+dir=$(pwd)
+
+if [ ! -d "${dir}/instdir/LibreOffice.app" ]; then
+    echo "error: cannot find \"instdir/LibreOffice.app\" dir in \"$(pwd)\""
+    exit 1
+fi
+
+exedir="${dir}"/workdir/LinkTarget/Executable
+export URE_BOOTSTRAP=file://"${dir}"/instdir/LibreOffice.app/Contents/Resources/fundamentalrc
+export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}"${dir}"/instdir/LibreOffice.app/Contents/Frameworks
+
+echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
+echo "setting search path to: ${DYLD_LIBRARY_PATH}"
+echo "execing: ${exedir}/$1"
+
+exec "${exedir}"/$@
+
+else
+
 dir=$(realpath "$(pwd)")
 
 while test ! -d "${dir}/instdir/program" ; do
@@ -22,3 +43,5 @@ echo "execing: ${exedir}/$1"
 
 cd "${dir}"/instdir/program
 exec "${exedir}"/$@
+
+fi
