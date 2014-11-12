@@ -25,11 +25,11 @@ private:
     void CopyFrom( const BitSet& rSet );
     sal_uInt16 nBlocks;
     sal_uInt16 nCount;
-    sal_uIntPtr* pBitmap;
+    sal_uInt32* pBitmap;
 public:
     BitSet operator<<( sal_uInt16 nOffset ) const;
     BitSet operator>>( sal_uInt16 nOffset ) const;
-    static sal_uInt16 CountBits( sal_uIntPtr nBits );
+    static sal_uInt16 CountBits(sal_uInt32 nBits);
     bool operator!() const;
     BitSet();
     BitSet( const BitSet& rOrig );
