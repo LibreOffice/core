@@ -24,6 +24,7 @@ $(eval $(call gb_Executable_set_include,vcldemo,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,vcldemo,\
+	basegfx \
     tl \
     sal \
     vcl \

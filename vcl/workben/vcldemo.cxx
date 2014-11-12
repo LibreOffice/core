@@ -153,29 +153,88 @@ public:
         rDev.DrawGradient(r, aGradient);
     }
 
-    struct DrawRadialLines : public RegionRenderer
+    struct DrawLines : public RegionRenderer
     {
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
-                                  const RenderContext &) SAL_OVERRIDE
+                                  const RenderContext &rCtx) SAL_OVERRIDE
         {
-            rDev.SetFillColor(Color(COL_LIGHTRED));
-            rDev.SetLineColor(Color(COL_BLACK));
-            rDev.DrawRect( r );
-
-            for(int i=0; i<r.GetHeight(); i+=15)
-                rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
-            for(int i=0; i<r.GetWidth(); i+=15)
-                rDev.DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
-
-            // Should draw a white-line across the middle
-            Color aLastPixel( COL_WHITE );
-            Point aCenter((r.Left() + r.Right())/2 - 4,
-                          (r.Top() + r.Bottom())/2 - 4);
-            for(int i=0; i<8; i++)
+            if (rCtx.meStyle == RENDER_EXPANDED)
             {
-                rDev.DrawPixel(aCenter, aLastPixel);
-                aLastPixel = rDev.GetPixel(aCenter);
-                aCenter.Move(1,1);
+                sal_uInt16 nOldAA = rDev.GetAntialiasing();
+                rDev.SetAntialiasing(ANTIALIASING_ENABLE_B2DDRAW);
+
+                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 4, 4));
+                DemoWin::clearRects(rDev, aRegions);
+
+#if 0 // FIXME: get this through to the backend ...
+                double nTransparency[] = {
+                    1.0, 1.0, 1.0, 1.0,
+                    0.8, 0.8, 0.8, 0.8,
+                    0.5, 0.5, 0.5, 0.5,
+                    0.1, 0.1, 0.1, 0.1
+                };
+#endif
+                drawing::LineCap eLineCaps[] = {
+                    drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT,
+                    drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT,
+                    drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT,
+                    drawing::LineCap_BUTT, drawing::LineCap_ROUND, drawing::LineCap_SQUARE, drawing::LineCap_BUTT
+                };
+                ::basegfx::B2DLineJoin eJoins[] = {
+                    basegfx::B2DLINEJOIN_NONE,  basegfx::B2DLINEJOIN_MIDDLE, basegfx::B2DLINEJOIN_BEVEL,  basegfx::B2DLINEJOIN_MITER,
+                    basegfx::B2DLINEJOIN_ROUND, basegfx::B2DLINEJOIN_NONE,   basegfx::B2DLINEJOIN_MIDDLE, basegfx::B2DLINEJOIN_BEVEL,
+                    basegfx::B2DLINEJOIN_MITER, basegfx::B2DLINEJOIN_ROUND,  basegfx::B2DLINEJOIN_NONE,   basegfx::B2DLINEJOIN_MIDDLE,
+                    basegfx::B2DLINEJOIN_BEVEL, basegfx::B2DLINEJOIN_MITER,  basegfx::B2DLINEJOIN_ROUND,  basegfx::B2DLINEJOIN_NONE
+                };
+                double aLineWidths[] = {
+                    10.0, 15.0, 20.0, 10.0,
+                    10.0, 15.0, 20.0, 10.0,
+                    10.0, 15.0, 20.0, 10.0,
+                     0.1,  1.0, 10.0, 50.0
+                };
+                for (size_t i = 0; i < aRegions.size(); i++)
+                {
+                    static const struct {
+                        double nX, nY;
+                    } aPoints[] = {
+                        { 0.2, 0.2 }, { 0.8, 0.3 }, { 0.7, 0.8 }
+                    };
+                    rDev.SetLineColor(Color(COL_BLACK));
+                    basegfx::B2DPolygon aPoly;
+                    Rectangle aSub(aRegions[i]);
+                    for (size_t j = 0; j < SAL_N_ELEMENTS(aPoints); j++)
+                    {
+                        aPoly.append(basegfx::B2DPoint(aSub.Left() + aSub.GetWidth() * aPoints[j].nX,
+                                                       aSub.Top()  + aSub.GetHeight() * aPoints[j].nY));
+                    }
+                    rDev.DrawPolyLine(aPoly, aLineWidths[i], eJoins[i], eLineCaps[i]);
+
+                    // Half of them not-anti-aliased ..
+                    if (i > aRegions.size()/2)
+                        rDev.SetAntialiasing(nOldAA);
+                }
+            }
+            else
+            {
+                rDev.SetFillColor(Color(COL_LIGHTRED));
+                rDev.SetLineColor(Color(COL_BLACK));
+                rDev.DrawRect( r );
+
+                for(int i=0; i<r.GetHeight(); i+=15)
+                    rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
+                for(int i=0; i<r.GetWidth(); i+=15)
+                    rDev.DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
+
+                // Should draw a white-line across the middle
+                Color aLastPixel( COL_WHITE );
+                Point aCenter((r.Left() + r.Right())/2 - 4,
+                              (r.Top() + r.Bottom())/2 - 4);
+                for(int i=0; i<8; i++)
+                {
+                    rDev.DrawPixel(aCenter, aLastPixel);
+                    aLastPixel = rDev.GetPixel(aCenter);
+                    aCenter.Move(1,1);
+                }
             }
         }
     };
@@ -589,7 +648,7 @@ void DemoWin::MouseButtonDown( const MouseEvent& rMEvt )
 
 void DemoWin::InitRenderers()
 {
-    maRenderers.push_back(new DrawRadialLines());
+    maRenderers.push_back(new DrawLines());
     maRenderers.push_back(new DrawText());
     maRenderers.push_back(new DrawPoly());
     maRenderers.push_back(new DrawEllipse());
