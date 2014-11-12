@@ -32,13 +32,13 @@ FastTokenHandlerBase::~FastTokenHandlerBase()
 {
 }
 
-UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue )
-    : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( pValue )
+UnknownAttribute::UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& value )
+    : maNamespaceURL( rNamespaceURL ), maName( rName ), maValue( value )
 {
 }
 
-UnknownAttribute::UnknownAttribute( const OString& rName, const sal_Char* pValue )
-    : maName( rName ), maValue( pValue )
+UnknownAttribute::UnknownAttribute( const OString& rName, const OString& value )
+    : maName( rName ), maValue( value )
 {
 }
 
@@ -106,14 +106,14 @@ void FastAttributeList::addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, cons
     add( nCombinedToken, rValue );
 }
 
-void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue )
+void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& value )
 {
-    maUnknownAttributes.push_back( UnknownAttribute( rNamespaceURL, rName, pValue ) );
+    maUnknownAttributes.push_back( UnknownAttribute( rNamespaceURL, rName, value ) );
 }
 
-void FastAttributeList::addUnknown( const OString& rName, const sal_Char* pValue )
+void FastAttributeList::addUnknown( const OString& rName, const OString& value )
 {
-    maUnknownAttributes.push_back( UnknownAttribute( rName, pValue ) );
+    maUnknownAttributes.push_back( UnknownAttribute( rName, value ) );
 }
 
 // XFastAttributeList

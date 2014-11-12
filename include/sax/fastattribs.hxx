@@ -40,9 +40,8 @@ struct UnknownAttribute
     OString maName;
     OString maValue;
 
-    UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue );
-
-    UnknownAttribute( const OString& rName, const sal_Char* pValue );
+    UnknownAttribute( const OUString& rNamespaceURL, const OString& rName, const OString& value );
+    UnknownAttribute( const OString& rName, const OString& value );
 
     void FillAttribute( ::com::sun::star::xml::Attribute* pAttrib ) const;
 };
@@ -84,8 +83,8 @@ public:
     void add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength );
     void add( sal_Int32 nToken, const OString& rValue );
     void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue );
-    void addUnknown( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue );
-    void addUnknown( const OString& rName, const sal_Char* pValue );
+    void addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& value );
+    void addUnknown( const OString& rName, const OString& value );
     const std::vector< sal_Int32 >&  getFastAttributeTokens() const { return maAttributeTokens; }
     const char* getFastAttributeValue(size_t nIndex) const { return mpChunk + maAttributeValues[nIndex]; }
     sal_Int32 AttributeValueLength(size_t i) const { return maAttributeValues[i + 1] - maAttributeValues[i] - 1; }
