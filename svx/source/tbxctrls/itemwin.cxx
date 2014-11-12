@@ -375,7 +375,7 @@ bool SvxMetricField::Notify( NotifyEvent& rNEvt )
         SfxViewShell* pSh = SfxViewShell::Current();
 
         if ( rKey.GetModifier() && rKey.GetGroup() != KEYGROUP_CURSOR && pSh )
-            pSh->KeyInput( *pKEvt );
+            (void)pSh->KeyInput( *pKEvt );
         else
         {
             bool bHandled = false;
