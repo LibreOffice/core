@@ -986,6 +986,7 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 
 OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
+    nChars = GetMaxRawReadSize(nChars);
     boost::scoped_array<sal_Char> pcBuffer(new sal_Char[ nChars + 1 ]);
     sal_uInt16 nCharsRead = ReadRawData( pcBuffer.get(), nChars );
     pcBuffer[ nCharsRead ] = '\0';
