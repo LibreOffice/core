@@ -197,13 +197,23 @@ struct SwShapeFunc
         return p1 < p2;
     }
 };
-typedef ::std::map < const SdrObject *, uno::WeakReference < XAccessible >, SwShapeFunc > _SwAccessibleShapeMap_Impl;
 typedef ::std::pair < const SdrObject *, ::rtl::Reference < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
 
-class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
-
+class SwAccessibleShapeMap_Impl
 {
-    ::accessibility::AccessibleShapeTreeInfo maInfo;
+public:
+
+    typedef const SdrObject *                                           key_type;
+    typedef uno::WeakReference<XAccessible>                             mapped_type;
+    typedef std::pair<const key_type,mapped_type>                       value_type;
+    typedef SwShapeFunc                                                 key_compare;
+    typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
+    typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
+
+private:
+
+    ::accessibility::AccessibleShapeTreeInfo    maInfo;
+    std::map<key_type,mapped_type,SwShapeFunc>  maMap;
 
 public:
 
@@ -211,8 +221,9 @@ public:
     bool mbLocked;
 #endif
     SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
+        : maMap()
 #if OSL_DEBUG_LEVEL > 0
-        : mbLocked( false )
+        , mbLocked( false )
 #endif
     {
         maInfo.SetSdrView( pMap->GetShell()->GetDrawView() );
@@ -231,6 +242,15 @@ public:
     SwAccessibleObjShape_Impl *Copy( size_t& rSize,
         const SwFEShell *pFESh = 0,
         SwAccessibleObjShape_Impl  **pSelShape = 0 ) const;
+
+    iterator begin() { return maMap.begin(); }
+    iterator end() { return maMap.end(); }
+    const_iterator cbegin() { return maMap.cbegin(); }
+    const_iterator cend() { return maMap.cend(); }
+    bool empty() const { return maMap.empty(); }
+    iterator find(const key_type& key) { return maMap.find(key); }
+    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    iterator erase(const_iterator pos) { return maMap.erase(pos); }
 };
 
 SwAccessibleShapeMap_Impl::~SwAccessibleShapeMap_Impl()
@@ -249,15 +269,15 @@ SwAccessibleObjShape_Impl
     SwAccessibleObjShape_Impl *pSelShape = 0;
 
     sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
-    rSize = size();
+    rSize = maMap.size();
 
     if( rSize > 0 )
     {
         pShapes =
             new SwAccessibleObjShape_Impl[rSize];
 
-        const_iterator aIter = begin();
-        const_iterator aEndIter = end();
+        const_iterator aIter = maMap.cbegin();
+        const_iterator aEndIter = maMap.cend();
 
         SwAccessibleObjShape_Impl *pShape = pShapes;
         pSelShape = &(pShapes[rSize]);
@@ -1087,8 +1107,8 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     if( mpShapeMap )
     {
         //Checked for shapes.
-        _SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->begin();
-        _SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->end();
+        SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
+        SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
 
         if( bIsSelAll)
@@ -1972,8 +1992,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
             mpShapeMap = new SwAccessibleShapeMap_Impl( this );
         if( mpShapeMap )
         {
-            SwAccessibleShapeMap_Impl::iterator aIter =
-                   mpShapeMap->find( pObj );
+            SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->find( pObj );
             if( aIter != mpShapeMap->end() )
                 xAcc = (*aIter).second;
 
@@ -3162,8 +3181,8 @@ bool SwAccessibleMap::ReplaceChild (
         osl::MutexGuard aGuard( maMutex );
         if( mpShapeMap )
         {
-            SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->begin();
-            SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->end();
+            SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
+            SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
             while( aIter != aEndIter && !pObj )
             {
                 uno::Reference < XAccessible > xAcc( (*aIter).second );
@@ -3208,8 +3227,7 @@ bool SwAccessibleMap::ReplaceChild (
         {
             pReplacement->Init();
 
-            SwAccessibleShapeMap_Impl::iterator aIter =
-                mpShapeMap->find( pObj );
+            SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->find( pObj );
             if( aIter != mpShapeMap->end() )
             {
                 (*aIter).second = xAcc;
@@ -3233,8 +3251,8 @@ bool SwAccessibleMap::ReplaceChild (
 {
     if( mpShapeMap )
     {
-        SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->begin();
-        SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->end();
+        SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->cbegin();
+        SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->cend();
         while( aIter != aEndIter)
         {
             uno::Reference < XAccessible > xAcc( (*aIter).second );
