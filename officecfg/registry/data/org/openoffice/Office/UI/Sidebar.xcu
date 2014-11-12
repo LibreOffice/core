@@ -43,7 +43,7 @@
 
       <node oor:name="GalleryDeck" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Clip Art Gallery</value>
+          <value xml:lang="en-US">Gallery</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>GalleryDeck</value>
@@ -373,7 +373,7 @@
 
       <node oor:name="GalleryPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Clip Art Gallery</value>
+          <value xml:lang="en-US">Gallery</value>
         </prop>
         <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
           <value>true</value>
