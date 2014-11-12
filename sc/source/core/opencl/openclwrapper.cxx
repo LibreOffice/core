@@ -136,16 +136,16 @@ std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const 
         return aGeneratedFiles;
 
     // grab the handles to all of the devices in the context.
-    boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
+    boost::scoped_array<cl_device_id> pArryDevsID(new cl_device_id[numDevices]);
     clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
-            sizeof( cl_device_id ) * numDevices, mpArryDevsID.get(), NULL );
+            sizeof( cl_device_id ) * numDevices, pArryDevsID.get(), NULL );
 
     if(clStatus != CL_SUCCESS)
         return aGeneratedFiles;
 
     for ( size_t i = 0; i < numDevices; i++ )
     {
-        if ( mpArryDevsID[i] != 0 )
+        if ( pArryDevsID[i] != 0 )
         {
             OString fileName = createFileName(gpuEnv.mpArryDevsID[i], clFileName);
             osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
@@ -191,10 +191,10 @@ bool OpenCLDevice::generatBinFromKernelSource( cl_program program, const char * 
                    sizeof(numDevices), &numDevices, NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
-    std::vector<cl_device_id> mpArryDevsID(numDevices);
+    std::vector<cl_device_id> pArryDevsID(numDevices);
     /* grab the handles to all of the devices in the program. */
     clStatus = clGetProgramInfo( program, CL_PROGRAM_DEVICES,
-                   sizeof(cl_device_id) * numDevices, &mpArryDevsID[0], NULL );
+                   sizeof(cl_device_id) * numDevices, &pArryDevsID[0], NULL );
     CHECK_OPENCL( clStatus, "clGetProgramInfo" );
 
     /* figure out the sizes of each of the binaries. */
@@ -229,7 +229,7 @@ bool OpenCLDevice::generatBinFromKernelSource( cl_program program, const char * 
 
         if ( binarySizes[i] != 0 )
         {
-            OString fileName = createFileName(mpArryDevsID[i], clFileName);
+            OString fileName = createFileName(pArryDevsID[i], clFileName);
             if ( !writeBinaryToFile( fileName,
                         binaries[i], binarySizes[i] ) )
                 SAL_INFO("sc.opencl.file", "Writing binary file '" << fileName << "': FAIL");
@@ -388,9 +388,9 @@ bool OpenCLDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
         }
 
         // grab the handles to all of the devices in the context.
-        boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
+        boost::scoped_array<cl_device_id> pArryDevsID(new cl_device_id[numDevices]);
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
-                       sizeof( cl_device_id ) * numDevices, mpArryDevsID.get(), NULL );
+                       sizeof( cl_device_id ) * numDevices, pArryDevsID.get(), NULL );
 
         if(clStatus != CL_SUCCESS)
         {
@@ -404,7 +404,7 @@ bool OpenCLDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
         cl_int binary_status;
 
         gpuInfo->mpArryPrograms[idx] = clCreateProgramWithBinary( gpuInfo->mpContext,numDevices,
-                                           mpArryDevsID.get(), length.get(), (const unsigned char**) pBinary.get(),
+                                           pArryDevsID.get(), length.get(), (const unsigned char**) pBinary.get(),
                                            &binary_status, &clStatus );
         if(clStatus != CL_SUCCESS)
         {
