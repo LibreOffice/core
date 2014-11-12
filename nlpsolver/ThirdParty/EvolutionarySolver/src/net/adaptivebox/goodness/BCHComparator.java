@@ -1,7 +1,7 @@
 /**
  * Description: For formation the basic goodness landscape.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Jun 24, 2003     Created
  * Xiaofeng Xie    May 11, 2004
  *

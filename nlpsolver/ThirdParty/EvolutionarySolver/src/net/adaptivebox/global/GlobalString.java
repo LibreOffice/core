@@ -1,7 +1,7 @@
 /**
  * Description: operations for the a text string.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Feb 22, 2001
  * Xiaofeng Xie    May 12, 2004
  *

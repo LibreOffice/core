@@ -2,10 +2,10 @@
  * Description: For comparison of goodness in landscape with loosed constraints
  *  which varied adaptively according to the social information.
  *
- * @Applied domain: efficiently for ridge class feasible space (SF), such as
+ * Applied domain: efficiently for ridge class feasible space (SF), such as
  *  the problem with eqaulity constraints
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Jun 24, 2003     Created
  * Xiaofeng Xie    May 11, 2004
  *

@@ -1,7 +1,7 @@
 /**
  * Description: Global value for comparison.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Jun 15, 2002
  * Xiaofeng Xie    Feb 18, 2004
  *

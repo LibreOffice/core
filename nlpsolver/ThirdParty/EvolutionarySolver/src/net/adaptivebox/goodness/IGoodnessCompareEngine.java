@@ -1,7 +1,7 @@
 /**
  * Description: For comparison of goodness.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Feb 19, 2004
  * Xiaofeng Xie    May 11, 2004
  *

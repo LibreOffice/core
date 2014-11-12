@@ -1,7 +1,7 @@
 /**
  * Description: Output methods for Array
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Feb 22, 2001
  *
  * This library is free software; you can redistribute it and/or

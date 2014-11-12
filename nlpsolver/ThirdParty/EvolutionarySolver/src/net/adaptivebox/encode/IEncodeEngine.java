@@ -1,7 +1,7 @@
 /**
  * Description: provide the encoded information for objectives
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Feb 10, 2004
  *
  * This library is free software; you can redistribute it and/or

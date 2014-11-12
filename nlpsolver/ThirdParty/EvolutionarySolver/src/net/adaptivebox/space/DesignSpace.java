@@ -1,7 +1,7 @@
 /**
  * Description: provide the information for the search space (S)
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Mar 2, 2003
  * Xiaofeng Xie    May 11, 2004
  *
@@ -21,7 +21,7 @@
  * [1] Zhang W J, Xie X F, Bi D C. Handling boundary constraints for numerical
  * optimization by particle swarm flying in periodic search space. Congress
  * on Evolutionary Computation, Oregon, USA, 2004
- * @ especially for particle swarm agent
+ * especially for particle swarm agent
  */
 
 package net.adaptivebox.space;

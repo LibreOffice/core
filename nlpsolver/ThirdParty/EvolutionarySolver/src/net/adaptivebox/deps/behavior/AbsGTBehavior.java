@@ -2,7 +2,7 @@
  * Description: The description of generate-and-test behavior.
  *
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    May 17, 2004
  * Xiaofeng Xie    Jul 01, 2008
  *

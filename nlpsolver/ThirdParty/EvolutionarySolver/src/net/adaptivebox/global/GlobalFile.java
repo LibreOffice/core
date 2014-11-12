@@ -1,7 +1,7 @@
 /**
  * Description: Global package for file operations.
  *
- * @ Author        Create/Modi     Note
+ * Author          Create/Modi     Note
  * Xiaofeng Xie    Jun 15, 2002
  *
  * @version 1.0
