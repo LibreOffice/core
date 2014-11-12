@@ -474,19 +474,16 @@ void SwLayAction::InternalAction()
     sal_uInt16 nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
     {
-        if ( !pPage && nCheckPageNum != USHRT_MAX &&
-             (!pPage || pPage->GetPhyPageNum() >= nCheckPageNum) )
+        if (!pPage && nCheckPageNum != USHRT_MAX)
         {
-            if ( !pPage || pPage->GetPhyPageNum() > nCheckPageNum )
-            {
-                SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
-                while ( pPg && pPg->GetPhyPageNum() < nCheckPageNum )
-                    pPg = (SwPageFrm*)pPg->GetNext();
-                if ( pPg )
-                    pPage = pPg;
-                if ( !pPage )
-                    break;
-            }
+            SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
+            while ( pPg && pPg->GetPhyPageNum() < nCheckPageNum )
+                pPg = (SwPageFrm*)pPg->GetNext();
+            if ( pPg )
+                pPage = pPg;
+            if ( !pPage )
+                break;
+
             SwPageFrm *pTmp = pPage->GetPrev() ?
                                         (SwPageFrm*)pPage->GetPrev() : pPage;
             SetCheckPages( true );
