@@ -1147,16 +1147,23 @@ void completeFunction( EditView* pView, const OUString& rInsert, bool& rParInser
             aSel = pView->GetSelection();
             ESelection aOldSelection = aSel;
             OUString aSelectedText = pView->GetSelected();
-            while(needToExtendSelection(aSelectedText, rInsert))
+            if ( needToExtendSelection( aSelectedText, rInsert ) )
             {
-                assert(aSel.nStartPos > 0);
-                --aSel.nStartPos;
-                --aSel.nEndPos = aSel.nStartPos;
-                pView->SetSelection(aSel);
-                pView->SelectCurrentWord();
-                aSelectedText = pView->GetSelected();
+                while(needToExtendSelection(aSelectedText, rInsert))
+                {
+                    assert(aSel.nStartPos > 0);
+                    --aSel.nStartPos;
+                    aSel.nEndPos = aSel.nStartPos;
+                    pView->SetSelection(aSel);
+                    pView->SelectCurrentWord();
+                    aSelectedText = pView->GetSelected();
+                }
+                aSel.nStartPos = aSel.nEndPos - ( aSelectedText.getLength() - 1 );
             }
-            aSel.nStartPos -= ( aSelectedText.getLength() - 1 );
+            else
+            {
+                aSel.nStartPos = aSel.nEndPos - aSelectedText.getLength();
+            }
             aSel.nEndPos = aOldSelection.nEndPos;
             pView->SetSelection(aSel);
         }
