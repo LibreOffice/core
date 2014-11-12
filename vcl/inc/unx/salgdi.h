@@ -32,6 +32,8 @@
 #include "sallayout.hxx"
 #include "vclpluginapi.h"
 
+#include "opengl/contextprovider.hxx"
+
 #include <boost/scoped_ptr.hpp>
 
 #include <deque>
@@ -60,7 +62,7 @@ namespace basegfx {
     class B2DTrapezoid;
 }
 
-class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
+class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics, public OpenGLContextProvider
 {
     friend class ServerFontLayout;
     friend class X11SalGraphicsImpl;
@@ -297,6 +299,9 @@ public:
                                 unsigned int w, unsigned int h,
                                 int dest_x, int dest_y );
     static void releaseGlyphPeer();
+
+public:
+    virtual OpenGLContext* GetOpenGLContext() const SAL_OVERRIDE;
 };
 
 inline const SalDisplay *X11SalGraphics::GetDisplay() const

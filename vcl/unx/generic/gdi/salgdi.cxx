@@ -167,6 +167,15 @@ void X11SalGraphics::DeInit()
     SetDrawable( None, m_nXScreen );
 }
 
+OpenGLContext* X11SalGraphics::GetOpenGLContext() const
+{
+    OpenGLSalGraphicsImpl *pImpl;
+    pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
+    if( pImpl )
+        return &pImpl->GetOpenGLContext();
+    return NULL;
+}
+
 void X11SalGraphics::SetClipRegion( GC pGC, Region pXReg ) const
 {
     Display *pDisplay = GetXDisplay();

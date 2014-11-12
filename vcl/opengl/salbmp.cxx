@@ -22,9 +22,12 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "vcl/bitmap.hxx"
+#include "vcl/outdev.hxx"
 #include "vcl/salbtype.hxx"
+#include "svdata.hxx"
 #include "salgdi.hxx"
 
+#include "opengl/contextprovider.hxx"
 #include "opengl/salbmp.hxx"
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
@@ -420,31 +423,44 @@ GLuint OpenGLSalBitmap::CreateTexture()
 
 bool OpenGLSalBitmap::ReadTexture()
 {
-    SalTwoRect aPosAry;
-    GLuint nFramebufferId, nRenderbufferDepthId, nRenderbufferColorId;
+    GLuint nFramebufferId;
     sal_uInt8* pData = maUserBuffer.get();
+    GLenum nFormat = GL_RGBA;
+    GLenum nType = GL_UNSIGNED_BYTE;
 
-    SAL_INFO( "vcl.opengl", "::ReadTexture" );
+    SAL_INFO( "vcl.opengl", "::ReadTexture " << mnWidth << "x" << mnHeight );
 
-    // TODO Check mnTexWidth and mnTexHeight
+    if( pData == NULL )
+        return false;
+
+    if( mnBits == 16 || mnBits == 24 || mnBits == 32 )
+    {
+        // no conversion needed for truecolor
+        pData = maUserBuffer.get();
+
+        switch( mnBits )
+        {
+        case 16:    nFormat = GL_RGB;
+                    nType = GL_UNSIGNED_SHORT_5_6_5;
+                    break;
+        case 24:    nFormat = GL_RGB;
+                    nType = GL_UNSIGNED_BYTE;
+                    break;
+        case 32:    nFormat = GL_RGBA;
+                    nType = GL_UNSIGNED_BYTE;
+                    break;
+        }
+    }
 
     mpContext->makeCurrent();
-    OpenGLHelper::createFramebuffer( mnWidth, mnHeight, nFramebufferId,
-        nRenderbufferDepthId, nRenderbufferColorId, true );
+    glGenFramebuffers( 1, &nFramebufferId );
     glBindFramebuffer( GL_FRAMEBUFFER, nFramebufferId );
 
-    aPosAry.mnSrcX = aPosAry.mnDestX = 0;
-    aPosAry.mnSrcY = aPosAry.mnDestY = 0;
-    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = mnWidth;
-    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = mnHeight;
-
-    //DrawTexture( mnTexture, aPosAry );
-    glReadPixels( 0, 0, mnWidth, mnHeight, GL_RGBA, GL_UNSIGNED_BYTE, pData );
+    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mpTexture->Id(), 0 );
+    glReadPixels( 0, 0, mnWidth, mnHeight, nFormat, nType, pData );
 
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     glDeleteFramebuffers( 1, &nFramebufferId );
-    glDeleteRenderbuffers( 1, &nRenderbufferDepthId );
-    glDeleteRenderbuffers( 1, &nRenderbufferColorId );
 
     CHECK_GL_ERROR();
     return true;
@@ -462,6 +478,22 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
         if( !AllocateUserData() )
             return NULL;
         if( mpTexture && !ReadTexture() )
+            return NULL;
+    }
+
+    if( !maPendingOps.empty() )
+    {
+        OpenGLContextProvider *pProvider;
+        pProvider = dynamic_cast< OpenGLContextProvider* >( ImplGetDefaultWindow()->GetGraphics() );
+        if( pProvider == NULL )
+        {
+            SAL_WARN( "vcl.opengl", "Couldn't get default OpenGL context provider" );
+            return NULL;
+        }
+        mpContext = pProvider->GetOpenGLContext();
+        mpContext->makeCurrent();
+        SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediatly" );
+        if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
             return NULL;
     }
 
