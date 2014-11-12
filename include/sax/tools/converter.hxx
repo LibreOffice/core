@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star {
 namespace sax {
 
 /** the Converter converts values of various types from
-    their internal represantation to the textual form used in xml
+    their internal representation to the textual form used in xml
     and back.
 
     All unit types are expressed as com::sun::star::util::MeasureUnit

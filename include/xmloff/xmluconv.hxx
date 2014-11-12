@@ -70,7 +70,7 @@ public:
 };
 
 /** the SvXMLTypeConverter converts values of various types from
-    their internal represantation to the textual form used in xml
+    their internal representation to the textual form used in xml
     and back.
     Most of the methods are static but the SvXMLTypeConverter can
     also store default units for both numerical and textual measures.

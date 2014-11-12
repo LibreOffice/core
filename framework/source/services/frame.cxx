@@ -580,7 +580,7 @@ Frame::~Frame()
     @descr      You can give us some information about the content, which you will load into a frame.
                 We search or create this target for you, make a type detection of given URL and try to load it.
                 As result of this operation we return the new created component or nothing, if loading failed.
-    @param      "sURL"              , URL, which represant the content
+    @param      "sURL"              , URL, which represent the content
     @param      "sTargetFrameName"  , name of target frame or special value like "_self", "_blank" ...
     @param      "nSearchFlags"      , optional arguments for frame search, if target is not a special one
     @param      "lArguments"        , optional arguments for loading
@@ -2898,7 +2898,7 @@ void Frame::implts_resizeComponentWindow()
 
 /*-****************************************************************************************************
     @short      helper to set icon on our container window (if it is a system window!)
-    @descr      We use our internal set controller (if it exist) to specify which factory he represanted.
+    @descr      We use our internal set controller (if it exist) to specify which factory he represented.
                 These information can be used to find right icon. But our controller can say it us directly
                 too ... we should ask his optional property set first ...
 
