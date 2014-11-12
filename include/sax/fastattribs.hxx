@@ -80,7 +80,8 @@ public:
     virtual ~FastAttributeList();
 
     void clear();
-    void add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength = 0 );
+    void add( sal_Int32 nToken, const sal_Char* pValue );
+    void add( sal_Int32 nToken, const sal_Char* pValue, size_t nValueLength );
     void add( sal_Int32 nToken, const OString& rValue );
     void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue );
     void addUnknown( const OUString& rNamespaceURL, const OString& rName, const sal_Char* pValue );
