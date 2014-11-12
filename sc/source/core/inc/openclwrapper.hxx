@@ -75,7 +75,6 @@ public:
     static bool bIsInited;
     static OString maCacheFolder;
 
-    static void registerOpenCLKernel();
     static bool initOpenCLRunEnv( GPUEnv *gpu );
     static void releaseOpenCLEnv( GPUEnv *gpuInfo );
     static bool initOpenCLRunEnv( int argc );

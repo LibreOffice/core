@@ -81,12 +81,6 @@ OString getCacheFolder()
 
 OString OpenCLDevice::maCacheFolder = getCacheFolder();
 
-void OpenCLDevice::registerOpenCLKernel()
-{
-    if ( !gpuEnv.mnIsUserCreated )
-        memset( &gpuEnv, 0, sizeof(gpuEnv) );
-}
-
 void OpenCLDevice::setKernelEnv( KernelEnv *envInfo )
 {
     envInfo->mpkContext = gpuEnv.mpContext;
@@ -437,7 +431,9 @@ bool OpenCLDevice::initOpenCLRunEnv( int argc )
 
     if ( !bIsInited )
     {
-        registerOpenCLKernel();
+        if ( !gpuEnv.mnIsUserCreated )
+            memset( &gpuEnv, 0, sizeof(gpuEnv) );
+
         //initialize devices, context, command_queue
         bool status = initOpenCLRunEnv( &gpuEnv );
         if ( status )
