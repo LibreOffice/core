@@ -193,8 +193,8 @@ public:
     bool            UnmergeCells( const ScRange& rRange, bool bRecord );
     bool            UnmergeCells( const ScCellMergeOption& rOption, bool bRecord );
 
-    bool            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true, SCTAB nTab = -1 );     // takes ownership of pNewRanges //nTab = -1 for local range names
-    bool            ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab = -1 );
+    void            SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc = true, SCTAB nTab = -1 );     // takes ownership of pNewRanges //nTab = -1 for local range names
+    void            ModifyRangeNames( const ScRangeName& rNewRanges, SCTAB nTab = -1 );
     /**
      * Modify all range names, global scope names as well as sheet local ones,
      * in one go.  Note that this method will <b>not</b> destroy the instances
