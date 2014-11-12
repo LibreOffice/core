@@ -9,19 +9,19 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,editeng/generated))
 
-SRC := $(SRCDIR)/editeng/source/misc
-PL := $(SRCDIR)/solenv/bin/gentoken.pl
-INC := $(call gb_CustomTarget_get_workdir,editeng/generated)
+editeng_SRC := $(SRCDIR)/editeng/source/misc
+editeng_PL := $(SRCDIR)/solenv/bin/gentoken.pl
+editeng_INC := $(call gb_CustomTarget_get_workdir,editeng/generated)
 
-$(INC)/tokens.hxx $(INC)/tokens.gperf : $(SRC)/tokens.txt $(PL)
-	mkdir -p $(INC)
-	$(PERL) $(PL) $(SRC)/tokens.txt $(INC)/tokens.gperf
+$(editeng_INC)/tokens.hxx $(editeng_INC)/tokens.gperf : $(editeng_SRC)/tokens.txt $(editeng_PL)
+	mkdir -p $(editeng_INC)
+	$(PERL) $(editeng_PL) $(editeng_SRC)/tokens.txt $(editeng_INC)/tokens.gperf
 
-$(INC)/tokens.cxx : $(INC)/tokens.gperf
-	$(GPERF) --compare-strncmp --readonly-tables --output-file=$(INC)/tokens.cxx $(INC)/tokens.gperf
-	sed -i -e "s/(char\*)0/(char\*)0, XML_TOKEN_INVALID/g" $(INC)/tokens.cxx
-	sed -i -e "/^#line/d" $(INC)/tokens.cxx
+$(editeng_INC)/tokens.cxx : $(editeng_INC)/tokens.gperf
+	$(GPERF) --compare-strncmp --readonly-tables --output-file=$(editeng_INC)/tokens.cxx $(editeng_INC)/tokens.gperf
+	sed -i -e "s/(char\*)0/(char\*)0, XML_TOKEN_INVALID/g" $(editeng_INC)/tokens.cxx
+	sed -i -e "/^#line/d" $(editeng_INC)/tokens.cxx
 
-$(call gb_CustomTarget_get_target,editeng/generated) : $(INC)/tokens.cxx
+$(call gb_CustomTarget_get_target,editeng/generated) : $(editeng_INC)/tokens.cxx
 
 # vim: set noet sw=4 ts=4:
