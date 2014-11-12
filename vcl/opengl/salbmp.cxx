@@ -34,7 +34,7 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 
 OpenGLSalBitmap::OpenGLSalBitmap()
 : mpContext(NULL)
-, mpTexture(NULL)
+, mpTexture()
 , mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
