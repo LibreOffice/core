@@ -35,6 +35,16 @@ $(eval $(call gb_CppunitTest_add_defs,connectivity_commontools,\
 ))
 endif
 
+# In mergedlibs mode we have multiply-defined symbols, which Visual Studio
+# does not like. There is no good solution, so just force it.
+ifeq ($(COM),MSC)
+ifeq ($(MERGELIBS),CORE)
+$(eval $(call gb_CppunitTest_add_ldflags,connectivity_commontools,\
+	 /FORCE:MULTIPLE \
+))
+endif
+endif
+
 $(eval $(call gb_CppunitTest_add_exception_objects,connectivity_commontools, \
 	connectivity/qa/connectivity/commontools/FValue_test \
 ))
