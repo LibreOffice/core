@@ -331,7 +331,7 @@ bool GIFReader::ReadExtension()
             {
                 sal_uInt16 nCount = (sal_uInt16) cSize + 1;
                 const sal_uInt64 nMaxPossible = rIStm.remainingSize();
-                if (nMaxPossible > nCount)
+                if (nCount > nMaxPossible)
                     nCount = nMaxPossible;
                 boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nCount]);
 
