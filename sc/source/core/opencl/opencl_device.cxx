@@ -26,6 +26,8 @@
 #include <boost/scoped_ptr.hpp>
 
 #include "opencl_device.hxx"
+#include "openclwrapper.hxx"
+#include "platforminfo.hxx"
 
 #define INPUTSIZE  15360
 #define OUTPUTSIZE 15360
@@ -399,6 +401,30 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
     {
         ds_device device = profile->devices[d];
         LibreOfficeDeviceScore *pScore = (LibreOfficeDeviceScore*)device.score;
+
+        // Check blacklist and whitelist for actual devices
+        if (device.type == DS_DEVICE_OPENCL_DEVICE)
+        {
+            // There is a silly impedance mismatch here. Why do we
+            // need two different ways to describe an OpenCL platform
+            // and an OpenCL device driver?
+
+            OpenCLPlatformInfo aPlatform;
+            OpenCLDeviceInfo aDevice;
+
+            // We know that only the below fields are used by checkForKnownBadCompilers()
+            aPlatform.maVendor = OUString(device.oclPlatformVendor, strlen(device.oclPlatformVendor), RTL_TEXTENCODING_UTF8);
+            aDevice.maName = OUString(device.oclDeviceName, strlen(device.oclDeviceName), RTL_TEXTENCODING_UTF8);
+            aDevice.maDriver = OUString(device.oclDriverVersion, strlen(device.oclDriverVersion), RTL_TEXTENCODING_UTF8);
+
+            // If blacklisted or not whitelisted, ignore it
+            if (opencl::checkForKnownBadCompilers(aPlatform, aDevice))
+            {
+                SAL_INFO("sc.opencl.device", "Device[" << d << "] " << device.oclDeviceName << " is blacklisted or not whitelisted");
+                pScore->fTime = DBL_MAX;
+                pScore->bNoCLErrors = true;
+            }
+        }
 
         double fScore = DBL_MAX;
         if (pScore)
