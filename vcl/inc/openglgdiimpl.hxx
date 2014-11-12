@@ -74,6 +74,8 @@ protected:
     GLuint mnRadialGradientEndColorUniform;
     GLuint mnRadialGradientCenterUniform;
 
+    void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
+
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateMaskedTextureProgram( void );

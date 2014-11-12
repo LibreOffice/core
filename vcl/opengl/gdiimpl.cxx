@@ -102,7 +102,10 @@ void OpenGLSalGraphicsImpl::PreDraw()
     if( mbUseScissor )
         glEnable( GL_SCISSOR_TEST );
     if( mbUseStencil )
+    {
+        glStencilFunc( GL_EQUAL, 1, 0x1 );
         glEnable( GL_STENCIL_TEST );
+    }
 
     CHECK_GL_ERROR();
 }
@@ -123,6 +126,24 @@ void OpenGLSalGraphicsImpl::PostDraw()
 void OpenGLSalGraphicsImpl::freeResources()
 {
     // TODO Delete shaders, programs and textures if not shared
+}
+
+void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMask )
+{
+    glEnable( GL_STENCIL_TEST );
+    glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
+    glStencilMask( nMask );
+    glStencilFunc( GL_NEVER, nMask, 0xFF );
+    glStencilOp( GL_REPLACE, GL_KEEP, GL_KEEP );
+
+    glClear( GL_STENCIL_BUFFER_BIT );
+    BeginSolid( MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ) );
+    DrawPolyPolygon( rClip.GetAsB2DPolyPolygon() );
+    EndSolid();
+
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
+    glStencilMask( 0x00 );
+    glDisable( GL_STENCIL_TEST );
 }
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
@@ -150,22 +171,7 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
         mbUseScissor = false;
         maContext.makeCurrent();
         glViewport( 0, 0, GetWidth(), GetHeight() );
-
-        glEnable( GL_STENCIL_TEST );
-        glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-        glStencilMask( 0xFF );
-        glStencilFunc( GL_NEVER, 1, 0xFF );
-        glStencilOp( GL_REPLACE, GL_KEEP, GL_KEEP );
-
-        glClear( GL_STENCIL_BUFFER_BIT );
-        BeginSolid( SALCOLOR_NONE );
-        DrawPolyPolygon( rClip.GetAsB2DPolyPolygon() );
-        EndSolid();
-
-        glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-        glStencilMask( 0x00 );
-        glStencilFunc( GL_EQUAL, 1, 0xFF );
-        glDisable( GL_STENCIL_TEST );
+        ImplSetClipBit( rClip, 0x01 );
     }
 
     return true;
@@ -1333,42 +1339,54 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     if( aBoundRect.IsEmpty() )
         return true;
 
+    if( rGradient.GetStyle() != GradientStyle_LINEAR &&
+        rGradient.GetStyle() != GradientStyle_RADIAL )
+        return false;
+
     aBoundRect.Left()--;
     aBoundRect.Top()--;
     aBoundRect.Right()++;
     aBoundRect.Bottom()++;
+    //TODO: lfrb: some missing transformation with the polygon in outdev
+
+    PreDraw();
+
+    ImplSetClipBit( vcl::Region( rPolyPoly ), 0x02 );
+    if( mbUseStencil )
+    {
+        glEnable( GL_STENCIL_TEST );
+        glStencilFunc( GL_EQUAL, 3, 0xFF );
+    }
+    else
+    {
+        glEnable( GL_STENCIL_TEST );
+        glStencilFunc( GL_EQUAL, 2, 0xFF );
+    }
 
     // if border >= 100%, draw solid rectangle with start color
     if( rGradient.GetBorder() >= 100.0 )
     {
         Color aCol = rGradient.GetStartColor();
         long nF = rGradient.GetStartIntensity();
-        PreDraw();
         BeginSolid( MAKE_SALCOLOR( aCol.GetRed() * nF / 100,
                                    aCol.GetGreen() * nF / 100,
                                    aCol.GetBlue() * nF / 100 ) );
         DrawRect( aBoundRect );
-        EndSolid();
-        PostDraw();
-        return true;
     }
-
-    //TODO: lfrb: some missing transformation with the polygon in outdev
-    if( rGradient.GetStyle() == GradientStyle_LINEAR )
+    else if( rGradient.GetStyle() == GradientStyle_LINEAR )
     {
-        PreDraw();
         DrawLinearGradient( rGradient, aBoundRect );
-        PostDraw();
-        return true;
     }
     else if( rGradient.GetStyle() == GradientStyle_RADIAL )
     {
-        PreDraw();
         DrawRadialGradient( rGradient, aBoundRect );
-        PostDraw();
-        return true;
     }
-    return false;
+
+    if( !mbUseStencil )
+        glDisable( GL_STENCIL_TEST );
+    PostDraw();
+
+    return true;
 }
 
 void OpenGLSalGraphicsImpl::beginPaint()
