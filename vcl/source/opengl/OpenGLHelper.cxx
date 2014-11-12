@@ -373,7 +373,9 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
 {
     if (!supportsVCLOpenGL())
         return false;
-    bool bEnable = officecfg::Office::Common::VCL::UseOpenGL::get();
+
+    static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
+    bool bEnable = bEnableGLEnv || officecfg::Office::Common::VCL::UseOpenGL::get();
     return bEnable;
 }
 
