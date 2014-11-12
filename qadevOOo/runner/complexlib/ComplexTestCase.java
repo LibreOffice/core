@@ -39,12 +39,6 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
      * The method name which will be written into f.e. the data base
      **/
     private String mTestMethodName = null;
-    /** Maximal time one method is allowed to execute
-     * Can be set with parameter 'ThreadTimeOut'
-     **/
-    private int m_nThreadTimeOut = 0;
-
-
 
     private boolean m_bBeforeCalled;
 
@@ -90,10 +84,13 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
     private void test_method(DescEntry _entry)
     {
 
-        m_nThreadTimeOut = param.getInt("ThreadTimeOut");
-        if (m_nThreadTimeOut == 0)
+        /* Maximal time one method is allowed to execute
+         * Can be set with parameter 'ThreadTimeOut'
+         **/
+        int nThreadTimeOut = param.getInt("ThreadTimeOut");
+        if (nThreadTimeOut == 0)
         {
-            m_nThreadTimeOut = 300000;
+            nThreadTimeOut = 300000;
         }
 
         for (int i = 0; i < _entry.SubEntries.length; i++)
@@ -153,7 +150,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                     int sleepingStep = 1000;
                     int factor = 0;
 
-                    while (th.isAlive() && (lastPing != newPing || factor * sleepingStep < m_nThreadTimeOut))
+                    while (th.isAlive() && (lastPing != newPing || factor * sleepingStep < nThreadTimeOut))
                     {
                         Thread.sleep(sleepingStep);
                         factor++;
@@ -175,7 +172,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 {
                     log.println("Destroy " + mTestMethodName);
                     th.stopRunning();
-                    subEntry.State = "Test did sleep for " + (m_nThreadTimeOut / 1000) + " seconds and has been killed!";
+                    subEntry.State = "Test did sleep for " + (nThreadTimeOut / 1000) + " seconds and has been killed!";
                     subEntry.hasErrorMsg = true;
                     subEntry.ErrorMsg = subEntry.State;
                     continue;

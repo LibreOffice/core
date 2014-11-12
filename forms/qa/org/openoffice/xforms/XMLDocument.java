@@ -32,7 +32,6 @@ import integration.forms.DocumentType;
 
 public class XMLDocument extends integration.forms.DocumentHelper
 {
-    private XFormsSupplier  m_formsSupplier;
     private XNameContainer  m_forms;
 
     /* ------------------------------------------------------------------ */
@@ -52,13 +51,13 @@ public class XMLDocument extends integration.forms.DocumentHelper
     /* ------------------------------------------------------------------ */
     private void impl_initialize( XComponent _document )
     {
-        m_formsSupplier = UnoRuntime.queryInterface( XFormsSupplier.class,
+        XFormsSupplier  formsSupplier = UnoRuntime.queryInterface( XFormsSupplier.class,
             _document );
 
-        if ( m_formsSupplier == null )
+        if ( formsSupplier == null )
             throw new IllegalArgumentException();
 
-        m_forms = m_formsSupplier.getXForms();
+        m_forms = formsSupplier.getXForms();
     }
 
     /* ------------------------------------------------------------------ */

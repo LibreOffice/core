@@ -43,8 +43,6 @@ public class CellBinding extends complexlib.ComplexTestCase
     private SpreadsheetDocument     m_document;
     /** our form layer */
     private FormLayer               m_formLayer;
-    /** our service factory */
-    private XMultiServiceFactory    m_orb;
 
     @Override
     public String[] getTestMethodNames()
@@ -89,8 +87,9 @@ public class CellBinding extends complexlib.ComplexTestCase
     /* ------------------------------------------------------------------ */
     public void before() throws com.sun.star.uno.Exception, java.lang.Exception
     {
-        m_orb = param.getMSF();
-        m_document = new SpreadsheetDocument( m_orb );
+        /* our service factory */
+        XMultiServiceFactory orb = param.getMSF();
+        m_document = new SpreadsheetDocument( orb );
         m_formLayer = new FormLayer( m_document );
     }
 

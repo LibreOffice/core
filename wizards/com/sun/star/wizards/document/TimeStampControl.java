@@ -37,10 +37,7 @@ public class TimeStampControl extends DatabaseControl
 
     DatabaseControl oDateControl;
     DatabaseControl oTimeControl;
-//  XShape xGroupShape;
     Resource oResource;
-    private String sDateAppendix; // = GetResText(RID_FORM + 4)
-    private String sTimeAppendix; // = GetResText(RID_FORM + 5)
     XShapes xGroupShapes = null;
     double nreldatewidth;
     double nreltimewidth;
@@ -53,7 +50,6 @@ public class TimeStampControl extends DatabaseControl
     {
         super(_oFormHandler, "com.sun.star.drawing.ShapeCollection", _aPoint);
         oResource = _oResource;
-//      xGroupShape = xShape;
         oDateControl = new DatabaseControl(oFormHandler, _xFormName, _curFieldName, DataType.DATE, aPoint);
         int nDBHeight = oDateControl.getControlHeight();
         nDateWidth = oDateControl.getPreferredWidth();
@@ -93,8 +89,8 @@ public class TimeStampControl extends DatabaseControl
     {
         super(_oGridControl, _curfieldcolumn);
         oResource = _oResource;
-        sDateAppendix = oResource.getResText(UIConsts.RID_FORM + 88);
-        sTimeAppendix = oResource.getResText(UIConsts.RID_FORM + 89);
+        String sDateAppendix = oResource.getResText(UIConsts.RID_FORM + 88);
+        String sTimeAppendix = oResource.getResText(UIConsts.RID_FORM + 89);
         oDateControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.DATE, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sDateAppendix);
         oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sTimeAppendix);
     }

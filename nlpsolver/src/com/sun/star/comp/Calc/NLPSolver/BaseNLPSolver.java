@@ -82,9 +82,9 @@ public abstract class BaseNLPSolver extends WeakBase
         m_xContext = xContext;
         m_name = name;
 
-        m_componentFactory = xContext.getServiceManager();
+        XMultiComponentFactory componentFactory = xContext.getServiceManager();
         try {
-            Object toolkit = m_componentFactory.createInstanceWithContext("com.sun.star.awt.Toolkit", xContext);
+            Object toolkit = componentFactory.createInstanceWithContext("com.sun.star.awt.Toolkit", xContext);
             m_xReschedule = UnoRuntime.queryInterface(XReschedule.class, toolkit);
         } catch (Exception ex) {
             Logger.getLogger(BaseNLPSolver.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,7 +115,6 @@ public abstract class BaseNLPSolver extends WeakBase
     // com.sun.star.sheet.XSolver:
 
     private XSpreadsheetDocument m_document;
-    private XMultiComponentFactory m_componentFactory;
     private XModel m_xModel;
     protected XReschedule m_xReschedule;
     private CellAddress m_objective;
@@ -129,7 +128,6 @@ public abstract class BaseNLPSolver extends WeakBase
     protected int m_cellRangeCount;
     protected XCell m_objectiveCell;
     protected XCell[] m_variableCells;
-    private CellRangeAddress[] m_cellRanges;
     protected XChartDataArray[] m_cellRangeData;
     protected CellMap[] m_variableMap;
     protected double[][][] m_variableData;
@@ -280,21 +278,19 @@ public abstract class BaseNLPSolver extends WeakBase
         }
 
         m_cellRangeCount = cellRangeAddresses.size();
-        m_cellRanges = new CellRangeAddress[m_cellRangeCount];
-        m_cellRanges = cellRangeAddresses.toArray(m_cellRanges);
         m_cellRangeData = new XChartDataArray[m_cellRangeCount];
         int varID = 0;
         //get cell range data and map the variables to their new location
         for (int i = 0; i < m_cellRangeCount; i++) {
-            for (int y = 0; y <= m_cellRanges[i].EndRow - m_cellRanges[i].StartRow; y++)
-                for (int x = 0; x <= m_cellRanges[i].EndColumn - m_cellRanges[i].StartColumn; x++) {
+            for (int y = 0; y <= cellRangeAddresses.get(i).EndRow - cellRangeAddresses.get(i).StartRow; y++)
+                for (int x = 0; x <= cellRangeAddresses.get(i).EndColumn - cellRangeAddresses.get(i).StartColumn; x++) {
                     CellMap map = new CellMap();
                     m_variableMap[varID++] = map;
                     map.Range = i;
                     map.Col = x;
                     map.Row = y;
                 }
-            m_cellRangeData[i] = getChartDataArray(m_cellRanges[i]);
+            m_cellRangeData[i] = getChartDataArray(cellRangeAddresses.get(i));
             m_variableData[i] = m_cellRangeData[i].getData();
         }
     }

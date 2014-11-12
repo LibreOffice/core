@@ -32,32 +32,24 @@ import com.sun.star.wizards.common.PropertyNames;
 public class FieldDescription
 {
     private String tablename = PropertyNames.EMPTY_STRING;
-    private String keyname;
-    private XNameAccess xNameAccessTableNode;
     private XPropertySet xPropertySet;
     private ArrayList<PropertyValue> aPropertyValues;
-    private Integer Type;
     private String Name;
-    private XMultiServiceFactory xMSF;
-    private Locale aLocale;
 
-    public FieldDescription(XMultiServiceFactory _xMSF, Locale _aLocale, ScenarioSelector _curscenarioselector, String _fieldname, String _keyname, int _nmaxcharCount)
+    public FieldDescription(XMultiServiceFactory _xMSF, Locale _aLocale, ScenarioSelector _curscenarioselector, String _fieldname, String keyname, int _nmaxcharCount)
     {
-        xMSF = _xMSF;
-        aLocale = _aLocale;
         tablename = _curscenarioselector.getTableName();
         Name = _fieldname;
-        keyname = _keyname;
         aPropertyValues = new ArrayList<PropertyValue>();
-        xNameAccessTableNode = _curscenarioselector.oCGTable.xNameAccessFieldsNode;
+        XNameAccess xNameAccessTableNode = _curscenarioselector.oCGTable.xNameAccessFieldsNode;
         XNameAccess xNameAccessFieldNode;
         if (_curscenarioselector.bcolumnnameislimited)
         {
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, "ShortName", _nmaxcharCount);
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(_xMSF, _aLocale, xNameAccessTableNode, keyname, "ShortName", _nmaxcharCount);
         }
         else
         {
-            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(xMSF, aLocale, xNameAccessTableNode, keyname, PropertyNames.PROPERTY_NAME, _nmaxcharCount);
+            xNameAccessFieldNode = Configuration.getChildNodebyDisplayName(_xMSF, _aLocale, xNameAccessTableNode, keyname, PropertyNames.PROPERTY_NAME, _nmaxcharCount);
         }
         setFieldProperties(xNameAccessFieldNode);
     }
@@ -66,7 +58,7 @@ public class FieldDescription
     {
         Name = _fieldname;
         aPropertyValues = new ArrayList<PropertyValue>();
-        Type = Integer.valueOf(com.sun.star.sdbc.DataType.VARCHAR);
+        Integer Type = Integer.valueOf(com.sun.star.sdbc.DataType.VARCHAR);
         aPropertyValues.add(Properties.createProperty(PropertyNames.PROPERTY_NAME, _fieldname));
         aPropertyValues.add(Properties.createProperty("Type", Type));
     }

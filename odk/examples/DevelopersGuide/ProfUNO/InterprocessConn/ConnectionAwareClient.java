@@ -53,7 +53,7 @@ import com.sun.star.bridge.XBridge;
 public class ConnectionAwareClient extends java.awt.Frame
     implements ActionListener , com.sun.star.lang.XEventListener
 {
-    private Button _btnWriter,_btnCalc;
+    private Button _btnWriter;
     private Label _txtLabel;
     private String _url;
 
@@ -68,7 +68,7 @@ public class ConnectionAwareClient extends java.awt.Frame
 
         Panel p1 = new Panel();
         _btnWriter = new Button("New writer");
-        _btnCalc = new Button("New calc");
+        Button _btnCalc = new Button("New calc");
         _txtLabel = new Label( "disconnected" );
 
         _btnWriter.addActionListener(this);

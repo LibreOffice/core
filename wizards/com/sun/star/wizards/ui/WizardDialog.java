@@ -49,7 +49,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private static final String CANCEL_ACTION_PERFORMED = "cancelWizard_1";
     private static final String HELP_ACTION_PERFORMED = "callHelp";
     public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
-    private String[] sRightPaneHeaders;
     private int iButtonWidth = 50;
     private int nNewStep = 1;
     private int nOldStep = 1;
@@ -81,8 +80,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         hid = hid_;
         oWizardResource = new Resource(xMSF, "Common", "dbw");
         sMsgEndAutopilot = oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
-
-    //new Resource(xMSF,"Common","com");
     }
 
     public Resource getResource()
@@ -694,11 +691,10 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void setRightPaneHeaders(String[] _sRightPaneHeaders)
     {
         this.nMaxStep = _sRightPaneHeaders.length;
-        this.sRightPaneHeaders = _sRightPaneHeaders;
         FontDescriptor oFontDesc = new FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
 
-        for (int i = 0; i < sRightPaneHeaders.length; i++)
+        for (int i = 0; i < _sRightPaneHeaders.length; i++)
         {
             insertLabel("lblQueryTitle" + i,
                     new String[]
@@ -707,7 +703,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        oFontDesc, 16, sRightPaneHeaders[i], Boolean.TRUE, 91, 8, Integer.valueOf(i + 1), Short.valueOf((short) 12), 212
+                        oFontDesc, 16, _sRightPaneHeaders[i], Boolean.TRUE, 91, 8, Integer.valueOf(i + 1), Short.valueOf((short) 12), 212
                     });
         }
     }

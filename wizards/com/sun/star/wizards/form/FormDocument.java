@@ -47,7 +47,6 @@ public class FormDocument extends TextDocument
 
     private FormHandler oFormHandler;
     private ViewHandler oViewHandler;
-    private TextStyleHandler oTextStyleHandler;
     private XPropertySet xPropPageStyle;
     private static final int SOFORMGAP = 2000;
     private boolean bhasSubForm;
@@ -68,7 +67,7 @@ public class FormDocument extends TextDocument
         {
             oFormHandler = new FormHandler(xMSF, xTextDocument);
             oFormHandler.setDrawObjectsCaptureMode(false);
-            oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
+            TextStyleHandler oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
             oViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
             oMainFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);
             oSubFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);

@@ -44,7 +44,6 @@ import com.sun.star.lang.Locale;
 public class _XCollator extends MultiMethodTest {
     public XCollator oObj = null;
     private String[] alg = null ;
-    private int[] opt = null ;
     Locale loc = new Locale("en", "EN", "");
 
     /**
@@ -75,7 +74,7 @@ public class _XCollator extends MultiMethodTest {
     */
     public void _listCollatorOptions() {
         requiredMethod("listCollatorAlgorithms()") ;
-        opt = oObj.listCollatorOptions(alg[0]) ;
+        int[] opt = oObj.listCollatorOptions(alg[0]) ;
         log.println("Collator '" + alg[0] + "' options :");
         if (opt != null) {
             for (int i = 0; i < opt.length; i++) {

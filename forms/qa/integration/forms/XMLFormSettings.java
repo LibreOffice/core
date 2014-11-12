@@ -38,7 +38,6 @@ import org.openoffice.xforms.XMLDocument;
 
 public class XMLFormSettings extends complexlib.ComplexTestCase
 {
-    private XMultiServiceFactory    m_orb;
     private XMLDocument             m_document;
     private Model                   m_defaultModel;
     private FormLayer               m_formLayer;
@@ -66,8 +65,8 @@ public class XMLFormSettings extends complexlib.ComplexTestCase
     public void before() throws java.lang.Exception
     {
         // create the document and assign related members
-        m_orb = param.getMSF();
-        m_document = new XMLDocument( m_orb );
+        XMultiServiceFactory orb = param.getMSF();
+        m_document = new XMLDocument( orb );
         m_formLayer = new FormLayer( m_document );
 
         // create a simple structure in the DOM tree: an element with two attributes

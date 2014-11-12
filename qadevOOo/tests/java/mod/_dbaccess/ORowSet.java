@@ -134,7 +134,6 @@ public class ORowSet extends TestCase {
     private Object m_rowSet = null;
     private DataSource m_dataSource;
     private String m_tableFile;
-    private XMultiServiceFactory m_orb = null;
 
     /**
     * Initializes some class fields. Then creates DataSource, which serves
@@ -160,13 +159,13 @@ public class ORowSet extends TestCase {
     protected void initialize ( TestParameters Param, PrintWriter _log)
         throws StatusException
     {
-        m_orb = Param.getMSF();
+        XMultiServiceFactory orb = Param.getMSF();
 
-        String tmpDir = utils.getOfficeTemp( m_orb );
+        String tmpDir = utils.getOfficeTemp( orb );
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools( m_orb );
+        dbTools = new DBTools( orb );
 
         // creating DataSource and registering it in DatabaseContext
         String dbURL = (String) Param.get("test.db.url");
@@ -174,7 +173,7 @@ public class ORowSet extends TestCase {
         String dbPassword = (String) Param.get("test.db.password");
 
         log.println("Creating and registering DataSource ...");
-        srcInf = new DataSourceDescriptor( m_orb );
+        srcInf = new DataSourceDescriptor( orb );
         if (dbURL != null && dbUser != null && dbPassword != null)
         {
             isMySQLDB = true;

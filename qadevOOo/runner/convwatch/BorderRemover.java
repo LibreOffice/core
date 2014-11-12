@@ -46,8 +46,6 @@ class Rect
 
 class BorderRemover
 {
-    private ImageHelper m_aImage;
-
     // Helper values, filled after find Border
 
     // --------------------------------- test mode ---------------------------------
@@ -121,12 +119,12 @@ class BorderRemover
     public boolean createNewImageWithoutBorder(String _sFilenameFrom, String _sFilenameTo)
         throws java.io.IOException
         {
-            m_aImage = ImageHelper.createImageHelper(_sFilenameFrom);
+            ImageHelper aImageHelper = ImageHelper.createImageHelper(_sFilenameFrom);
 
-            int nBorderColor = m_aImage.getPixel(0,0);
-            Rect aInnerRect = findBorder(m_aImage, nBorderColor);
+            int nBorderColor = aImageHelper.getPixel(0,0);
+            Rect aInnerRect = findBorder(aImageHelper, nBorderColor);
 
-            RenderedImage aImage = createImage(m_aImage, aInnerRect);
+            RenderedImage aImage = createImage(aImageHelper, aInnerRect);
 
             File aWriteFile = new File(_sFilenameTo);
 

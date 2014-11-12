@@ -57,8 +57,9 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 
     private long m_bridge_handle;
     private IEnvironment m_java_env;
-    private long m_receiver_handle;
-    private long m_td_handle;
+    /** these 2 fields are accessed directly from C++ */
+    private long m_receiver_handle; // on the C++ side, this is a "UNO_Interface *"
+    private long m_td_handle; // on the C++ side, this is a "typelib_TypeDescription *"
     private Type m_type;
     private String m_oid;
     private Class m_class;

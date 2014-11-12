@@ -44,7 +44,6 @@ import com.sun.star.uno.UnoRuntime;
 public class _XControlAccess extends MultiMethodTest {
 
     public XControlAccess oObj = null;
-    private XControlInformation xCI = null ;
     private String[] supControls = null ;
     private String[][] supProperties = null ;
 
@@ -58,7 +57,7 @@ public class _XControlAccess extends MultiMethodTest {
      */
     @Override
     protected void before() {
-        xCI = UnoRuntime.queryInterface
+        XControlInformation xCI = UnoRuntime.queryInterface
             (XControlInformation.class, oObj);
 
         if (xCI == null) throw new StatusException

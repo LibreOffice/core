@@ -21,7 +21,6 @@ import helper.CfgParser;
 import helper.ClParser;
 
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;

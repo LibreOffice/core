@@ -34,17 +34,13 @@ public final class StarFunctionDescription extends WeakBase
         implements com.sun.star.report.meta.XFunctionDescription
 {
 
-    private final XComponentContext m_xContext;
     private final PropertySetMixin m_prophlp;
-    // attributes
-//     final private com.sun.star.report.meta.XFunctionCategory m_Category;
     private final FunctionDescription functionDescription;
     private final XFunctionCategory category;
     private final Locale defaultLocale;
 
     public StarFunctionDescription(final DefaultFormulaContext defaultContext, final XComponentContext context, final XFunctionCategory category, final FunctionDescription functionDescription)
     {
-        m_xContext = context;
         this.category = category;
         Locale locale;
         try
@@ -63,7 +59,7 @@ public final class StarFunctionDescription extends WeakBase
         // for your optional attributes if necessary. See the documentation
         // of the PropertySetMixin helper for further information.
         // Ensure that your attributes are initialized correctly!
-        m_prophlp = new PropertySetMixin(m_xContext, this,
+        m_prophlp = new PropertySetMixin(context, this,
                 new Type(com.sun.star.report.meta.XFunctionDescription.class), null);
     }
 

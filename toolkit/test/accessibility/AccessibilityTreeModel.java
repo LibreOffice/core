@@ -39,8 +39,7 @@ public class AccessibilityTreeModel
 
         maNodeMap = new NodeMap();
 
-        maEventListener = new EventListener (this);
-        mxListener = new QueuedListener (maEventListener);
+        mxListener = new QueuedListener(new EventListener (this));
     }
 
     public void clear ()
@@ -501,6 +500,4 @@ public class AccessibilityTreeModel
     private int mnLockCount;
 
     private Canvas maCanvas;
-
-    private EventListener maEventListener;
 }

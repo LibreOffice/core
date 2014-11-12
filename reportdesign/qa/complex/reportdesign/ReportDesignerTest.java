@@ -174,9 +174,6 @@ public class ReportDesignerTest
         }
 
 
-    private String m_sMailAddress = null;
-    private String m_sUPDMinor;
-
     private static final int WRITER = 1;
     private static final int CALC = 2;
 
@@ -189,11 +186,11 @@ public class ReportDesignerTest
 
             String sVCSID = System.getProperty("VCSID");
             System.out.println("VCSID='" + sVCSID + "'");
-            m_sMailAddress = sVCSID + "@openoffice.org";
-            System.out.println("Assumed mail address: " + m_sMailAddress);
+            String sMailAddress = sVCSID + "@openoffice.org";
+            System.out.println("Assumed mail address: " + sMailAddress);
 
-            m_sUPDMinor = System.getProperty("UPDMINOR");
-            System.out.println("Current MWS: " + m_sUPDMinor);
+            String sUPDMinor = System.getProperty("UPDMINOR");
+            System.out.println("Current MWS: " + sUPDMinor);
 
             // --------------------------- Start the given Office ---------------------------
 

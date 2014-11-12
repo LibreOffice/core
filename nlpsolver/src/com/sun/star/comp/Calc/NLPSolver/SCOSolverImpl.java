@@ -87,21 +87,17 @@ public final class SCOSolverImpl extends BaseEvolutionarySolver
         return m_serviceNames;
     }
 
-    // com.sun.star.sheet.XSolver:
-
-    private SCAgent[] m_agents;
-
     public void solve() {
         initializeSolve();
 
         //Init:
         int swarmSize = m_swarmSize.getValue();
-        m_agents = new SCAgent[swarmSize];
+        SCAgent[] agents = new SCAgent[swarmSize];
         for (int i = 0; i < swarmSize; i++) {
-            m_agents[i] = new SCAgent();
-            m_agents[i].setProblemEncoder(m_problemEncoder);
-            m_agents[i].setSpecComparator(m_specCompareEngine);
-            m_agents[i].setExternalLib(m_library);
+            agents[i] = new SCAgent();
+            agents[i].setProblemEncoder(m_problemEncoder);
+            agents[i].setSpecComparator(m_specCompareEngine);
+            agents[i].setExternalLib(m_library);
         }
 
         //Learn:
@@ -127,7 +123,7 @@ public final class SCOSolverImpl extends BaseEvolutionarySolver
                     m_toleratedCount < m_required.getValue() &&
                     m_solverStatusDialog.getUserState() != IEvolutionarySolverStatusDialog.CANCEL; learningCycle++) {
                 for (int i = 0; i < swarmSize; i++) {
-                    SearchPoint point = m_agents[i].generatePoint();
+                    SearchPoint point = agents[i].generatePoint();
                     boolean inRange = (point.getObjectiveValue() >= m_toleratedMin && point.getObjectiveValue() <= m_toleratedMax);
                     if (Library.replace(m_envCompareEngine, point, m_totalBestPoint)) {
                         m_solverStatusDialog.setBestSolution(m_totalBestPoint.getObjectiveValue(), m_totalBestPoint.isFeasible());
@@ -140,7 +136,7 @@ public final class SCOSolverImpl extends BaseEvolutionarySolver
                 }
 
                 for (int i = 0; i < swarmSize; i++)
-                    m_agents[i].updateInfo();
+                    agents[i].updateInfo();
 
                 if (m_specCompareEngine instanceof IUpdateCycleEngine)
                     ((IUpdateCycleEngine)m_specCompareEngine).updateCycle(learningCycle);

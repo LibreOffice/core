@@ -45,9 +45,6 @@ public class EvolutionarySolverStatusUno extends BaseDialog
                XActionListener {
 
     private int userState;
-
-    // <editor-fold defaultstate="collapsed" desc="UNO Controls">
-    private Label lblSolution;
     private Label lblSolutionValue;
     private Label lblIteration;
     private ProgressBar pbIteration;
@@ -55,12 +52,10 @@ public class EvolutionarySolverStatusUno extends BaseDialog
     private Label lblStagnation;
     private ProgressBar pbStagnation;
     private Label lblStagnationValue;
-    private Label lblRuntime;
     private Label lblRuntimeValue;
     private Button btnStop;
     private Button btnOK;
     private Button btnContinue;
-    // </editor-fold>
     private int defaultTextColor;
     private int maxIterations;
     private int maxStagnation;
@@ -81,9 +76,8 @@ public class EvolutionarySolverStatusUno extends BaseDialog
             setProperty("Title", resourceManager.getLocalizedString("Dialog.Caption"));
         } catch (com.sun.star.resource.MissingResourceException ex) {} //leave the title as it is
 
-        // <editor-fold defaultstate="collapsed" desc="Create UNO Controls">
         int y = 5;
-        lblSolution = new Label(this, "lblSolution");
+        Label lblSolution = new Label(this, "lblSolution");
         lblSolution.setPosition(5, y);
         lblSolution.setSize(60, 10);
         lblSolution.setLabel(resourceManager.getLocalizedString("Controls.lblSolution", "Current Solution:"));
@@ -138,7 +132,7 @@ public class EvolutionarySolverStatusUno extends BaseDialog
         lblStagnationValue.setVisible(false);
         y+= 20;
 
-        lblRuntime = new Label(this, "lblRuntime");
+        Label lblRuntime = new Label(this, "lblRuntime");
         lblRuntime.setPosition(5, y);
         lblRuntime.setSize(60, 10);
         lblRuntime.setLabel(resourceManager.getLocalizedString("Controls.lblRuntime", "Runtime:"));
@@ -176,7 +170,6 @@ public class EvolutionarySolverStatusUno extends BaseDialog
         btnContinue.setActionCommand("btnContinueClick");
         btnContinue.setEnabled(false);
         y += 15;
-        // </editor-fold>
     }
 
     public int getUserState() {

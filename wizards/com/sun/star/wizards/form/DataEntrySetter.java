@@ -30,18 +30,14 @@ import com.sun.star.wizards.common.PropertyNames;
 public class DataEntrySetter
 {
 
-    private WizardDialog CurUnoDialog;
-    private short curtabindex;
-    private XRadioButton optNewDataOnly;
     private XRadioButton optDisplayAllData;
     private XCheckBox chknomodification;
     private XCheckBox chknodeletion;
     private XCheckBox chknoaddition;
 
-    public DataEntrySetter(WizardDialog _CurUnoDialog)
+    public DataEntrySetter(WizardDialog CurUnoDialog)
     {
-        this.CurUnoDialog = _CurUnoDialog;
-        curtabindex = (short) (FormWizard.SODATA_PAGE * 100);
+        short curtabindex = (short) (FormWizard.SODATA_PAGE * 100);
         Integer IDataStep = Integer.valueOf(FormWizard.SODATA_PAGE);
         String sNewDataOnly = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 44);
         String sDisplayAllData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 46);
@@ -50,7 +46,7 @@ public class DataEntrySetter
         String sNoAddition = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 49);     // AlowInserts
         String sdontdisplayExistingData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 45);
 
-        optNewDataOnly = CurUnoDialog.insertRadioButton("optNewDataOnly", "toggleCheckBoxes", this,
+        CurUnoDialog.insertRadioButton("optNewDataOnly", "toggleCheckBoxes", this,
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

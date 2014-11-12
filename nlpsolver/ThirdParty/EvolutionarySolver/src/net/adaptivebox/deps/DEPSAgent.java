@@ -51,8 +51,6 @@ public class DEPSAgent implements ILibEngine {
   //temp variable
   private AbsGTBehavior selectGTBehavior;
 
-  //The referred library
-  private Library socialLib;
   //the own memory: store the point that generated in old learning cycle
   private BasicPoint pold_t;
   //the own memory: store the point that generated in last learning cycle
@@ -66,9 +64,8 @@ public class DEPSAgent implements ILibEngine {
   public double switchP = 0.5;
 
   public void setLibrary(Library lib) {
-    socialLib = lib;
-    deGTBehavior.setLibrary(socialLib);
-    psGTBehavior.setLibrary(socialLib);
+    deGTBehavior.setLibrary(lib);
+    psGTBehavior.setLibrary(lib);
   }
 
   public void setProblemEncoder(ProblemEncoder encoder) {

@@ -34,10 +34,6 @@ public class DocumentPreview
 {
 
     /**
-     * The window in which the preview is showed.
-     */
-    private XWindow xWindow;
-    /**
      * The frame service which is used to show the preview
      */
     private XFrame xFrame;
@@ -144,7 +140,10 @@ public class DocumentPreview
         aDescriptor.WindowAttributes = VclWindowPeerAttribute.CLIPCHILDREN | WindowAttribute.SHOW;
 
         XWindowPeer xPeer = xToolkit.createWindow(aDescriptor);
-        xWindow = UnoRuntime.queryInterface(XWindow.class, xPeer);
+        /*
+         * The window in which the preview is showed.
+         */
+        XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xPeer);
         Object frame = xmsf.createInstance("com.sun.star.frame.Frame");
         xFrame = UnoRuntime.queryInterface(XFrame.class, frame);
         xFrame.initialize(xWindow);

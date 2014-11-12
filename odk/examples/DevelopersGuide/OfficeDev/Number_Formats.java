@@ -184,14 +184,14 @@ public class Number_Formats
     {
         // get the remote office context. If necessary a new office
         // process is started
-        maOfficeContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
+        XComponentContext aOfficeContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
         System.out.println("Connected to a running office ...");
-        maServiceManager = maOfficeContext.getServiceManager();
+        XMultiComponentFactory aServiceManager = aOfficeContext.getServiceManager();
 
         // create a new spreadsheet document
         XComponentLoader aLoader = UnoRuntime.queryInterface(
-            XComponentLoader.class, maServiceManager.createInstanceWithContext(
-                "com.sun.star.frame.Desktop", maOfficeContext) );
+            XComponentLoader.class, aServiceManager.createInstanceWithContext(
+                "com.sun.star.frame.Desktop", aOfficeContext) );
 
         maSpreadsheetDoc = UnoRuntime.queryInterface(
             XSpreadsheetDocument.class,
@@ -207,8 +207,6 @@ public class Number_Formats
 
     // __________ private members and methods __________
 
-    private XComponentContext      maOfficeContext;
-    private XMultiComponentFactory maServiceManager;
     private XSpreadsheetDocument   maSpreadsheetDoc;
     private XSpreadsheet           maSheet;  // the first sheet
 

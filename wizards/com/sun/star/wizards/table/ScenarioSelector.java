@@ -48,10 +48,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     final static int PRIVATE = 0;
     final static int BUSINESS = 1;
 
-    private XFixedText lblExplanation;
-    private XFixedText lblCategories;
     private XRadioButton optBusiness;
-    private XRadioButton optPrivate;
     private XListBox xTableListBox;
     private TableWizard CurTableWizardUnoDialog;
     private TableDescriptor curtabledescriptor;
@@ -84,7 +81,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         Integer IMAINSTEP = Integer.valueOf(TableWizard.SOMAINPAGE);
         oCGCategory = new CGCategory(CurUnoDialog.xMSF);
         oCGTable = new CGTable(CurUnoDialog.xMSF);
-        lblExplanation = CurUnoDialog.insertLabel("lblScenarioExplanation",
+        CurUnoDialog.insertLabel("lblScenarioExplanation",
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -94,7 +91,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     32, sExplanation, Boolean.TRUE, 91, 27, IMAINSTEP, Short.valueOf(pretabindex++), 233
                 });
 
-        lblCategories = CurUnoDialog.insertLabel("lblCategories",
+        CurUnoDialog.insertLabel("lblCategories",
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -114,7 +111,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, 98, 70, Short.valueOf((short) 1), IMAINSTEP, Short.valueOf(pretabindex++), 78
                 });
 
-        optPrivate = CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
+        CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
