@@ -46,7 +46,6 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include "idpool.hxx"
 #include "sfxtypes.hxx"
 #include "virtmenu.hxx"
 #include <sfx2/mnuitem.hxx>

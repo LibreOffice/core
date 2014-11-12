@@ -32,7 +32,6 @@
 #include <sfx2/msgpool.hxx>
 #include "statcach.hxx"
 #include <sfx2/msg.hxx>
-#include "idpool.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/bindings.hxx>
