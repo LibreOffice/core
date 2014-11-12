@@ -909,8 +909,17 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     OpenCLDevice::initOpenCLAttr(&env);
 
     // why do we need this at all?
+
+    // (Assuming the above question refers to the mpArryDevsID
+    // initialisation below.) Because otherwise the code crashes in
+    // initOpenCLRunEnv(). Note that the initOpenCLAttr() call above
+    // sets mnIsUserCreated to 1, thus the code in initOpenCLRunEnv()
+    // that would initialise mpArryDevsID is not executed. Confused?
+    // You should be.
+
     OpenCLDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
     OpenCLDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
+
     return !OpenCLDevice::initOpenCLRunEnv(0);
 }
 
