@@ -661,7 +661,7 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenCLPlatformInfo& rPlatfor
     if(nState != CL_SUCCESS)
         return false;
 
-    rPlatformInfo.maVendor = OUString::createFromAscii(pName);
+    rPlatformInfo.maVendor = OUString::createFromAscii(pVendor);
 
     cl_uint nDevices;
     nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, 0, NULL, &nDevices);
