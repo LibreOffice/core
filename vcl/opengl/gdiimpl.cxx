@@ -285,8 +285,8 @@ bool OpenGLSalGraphicsImpl::CreateMaskedTextureProgram( void )
     if( mnMaskedTextureProgram == 0 )
         return false;
 
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_POS, "position" );
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    glBindAttribLocation( mnMaskedTextureProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnMaskedTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnMaskedSamplerUniform = glGetUniformLocation( mnMaskedTextureProgram, "sampler" );
     mnMaskSamplerUniform = glGetUniformLocation( mnMaskedTextureProgram, "mask" );
 
