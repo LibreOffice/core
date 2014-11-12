@@ -22,11 +22,8 @@ import java.awt.Container;
 
 /**
  * This interface represents an AWT container factory.
- *
- * @deprecated
- *
  */
-
+@Deprecated
 public interface ContainerFactory
 {
     /**

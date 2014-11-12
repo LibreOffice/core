@@ -114,8 +114,8 @@ public class MethodThread extends Thread
 
     /**
      * Stop the running method.
-     * @deprecated
      */
+    @Deprecated
     @Override
     public void destroy()
     {

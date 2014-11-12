@@ -26,9 +26,8 @@ import com.sun.star.uno.XComponentContext;
 /**
  * This abstract class represents a connection to the office
  * application.
-
-    @deprecated
  */
+@Deprecated
 public interface OfficeConnection
     extends XComponent
 {

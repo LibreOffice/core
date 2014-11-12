@@ -49,7 +49,6 @@ public class _XTasksSupplier extends MultiMethodTest {
     /**
     * DEPRECATED. <p>
     * Has <b> OK </b> status.
-    * @deprecated
     */
     @Deprecated
     public void _getTasks() {

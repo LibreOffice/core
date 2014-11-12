@@ -19,9 +19,8 @@
 package com.sun.star.comp.beans;
 
 /** indicates an invalid argument in a function call.
- *
- * @deprecated
  */
+@Deprecated
 public class InvalidArgumentException extends Exception
 {
 }
