@@ -16,6 +16,24 @@
       "revId": "8493add3e60b03ab2ae25f1fc4760a30d623a1c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_0b00c1a9",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-11-12T17:07:55Z",
+      "side": 1,
+      "message": "Eike,\nI think only Markus has the exact answer to your question. \n\nI suspect is has to do with selecting the entered partial function name, which is more than one word (pView-\u003eSelectCurrentWord) because of the . or _\nThe traces from needToExtendSelection are (when entering \u003dbeta.d  plus enter)\nd\n.\nbeta\n\nHTH",
+      "parentUuid": "5afe65bd_cbd4e948",
+      "revId": "8493add3e60b03ab2ae25f1fc4760a30d623a1c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
