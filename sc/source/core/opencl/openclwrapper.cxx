@@ -526,6 +526,8 @@ bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCL
          i != ScInterpreter::GetGlobalConfig().maOpenCLBlackList.end();
          ++i)
     {
+        SAL_INFO("sc.opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice << " in blacklist entry=" << *i);
+
 #if defined WNT
         if (i->maOS != "*" && i->maOS != "Windows")
             continue;
@@ -552,7 +554,7 @@ bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCL
             continue;
 
         // It matches; reject it
-        SAL_INFO("sc.opencl", "Match for platform=" << rPlatform << ", device=" << rDevice << " in blacklist=" << *i);
+        SAL_INFO("sc.opencl", "Match! Rejecting");
         return true;
     }
 
@@ -562,6 +564,8 @@ bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCL
          i != ScInterpreter::GetGlobalConfig().maOpenCLWhiteList.end();
          ++i)
     {
+        SAL_INFO("sc.opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice << " in whitelist entry=" << *i);
+
 #if defined WNT
         if (i->maOS != "*" && i->maOS != "Windows")
             continue;
@@ -587,7 +591,7 @@ bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCL
             continue;
 
         // It matches; approve it
-        SAL_INFO("sc.opencl", "Match for platform=" << rPlatform << ", device=" << rDevice << " in whitelist=" << *i);
+        SAL_INFO("sc.opencl", "Match! Approving");
         return false;
     }
 
