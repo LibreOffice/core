@@ -517,81 +517,66 @@ bool OpenCLDevice::initOpenCLRunEnv( GPUEnv *gpuInfo )
 
 namespace {
 
+bool match(const ScCalcConfig::OpenCLImplMatcher& rListEntry, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
+{
+#if defined WNT
+    if (rListEntry.maOS != "*" && rListEntry.maOS != "Windows")
+        return false;
+#elif defined LINUX
+    if (rListEntry.maOS != "*" && rListEntry.maOS != "Linux")
+        return false;
+#elif defined MACOSX
+    if (rListEntry.maOS != "*" && rListEntry.maOS != "OS X")
+        return false;
+#endif
+
+    // OS version check not yet implemented
+
+    if (rListEntry.maPlatformVendor != "*" && rListEntry.maPlatformVendor != rPlatform.maVendor)
+        return false;
+
+    if (rListEntry.maDevice != "*" && rListEntry.maDevice != rDevice.maName)
+        return false;
+
+    if (rListEntry.maDriverVersionMin != "*" &&
+        (comphelper::string::compareVersionStrings(rListEntry.maDriverVersionMin, rDevice.maDriver) > 0 ||
+         (rListEntry.maDriverVersionMax != "" && comphelper::string::compareVersionStrings(rListEntry.maDriverVersionMax, rDevice.maDriver) < 0) ||
+         (rListEntry.maDriverVersionMax == "" && comphelper::string::compareVersionStrings(rListEntry.maDriverVersionMin, rDevice.maDriver) < 0)))
+        return false;
+
+    return true;
+}
+
+bool match(const ScCalcConfig::OpenCLImplMatcherSet& rList, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice, const char* sKindOfList)
+{
+    for (auto i = rList.cbegin(); i != rList.end(); ++i)
+    {
+        SAL_INFO("sc.opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice <<
+                 " in " << sKindOfList << " entry=" << *i);
+
+        if (match(*i, rPlatform, rDevice))
+        {
+            SAL_INFO("sc.opencl", "Match!");
+            return true;
+        }
+    }
+    return false;
+}
+
 // based on crashes and hanging during kernel compilation
 bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
 {
     // Check blacklist of known bad OpenCL implementations
-
-    for (auto i = ScInterpreter::GetGlobalConfig().maOpenCLBlackList.cbegin();
-         i != ScInterpreter::GetGlobalConfig().maOpenCLBlackList.end();
-         ++i)
+    if (match(ScInterpreter::GetGlobalConfig().maOpenCLBlackList, rPlatform, rDevice, "blacklist"))
     {
-        SAL_INFO("sc.opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice << " in blacklist entry=" << *i);
-
-#if defined WNT
-        if (i->maOS != "*" && i->maOS != "Windows")
-            continue;
-#elif defined LINUX
-        if (i->maOS != "*" && i->maOS != "Linux")
-            continue;
-#elif defined MACOSX
-        if (i->maOS != "*" && i->maOS != "OS X")
-            continue;
-#endif
-
-        // OS version check not yet implemented
-
-        if (i->maPlatformVendor != "*" && i->maPlatformVendor != rDevice.maVendor)
-            continue;
-
-        if (i->maDevice != "*" && i->maDevice != rDevice.maName)
-            continue;
-
-        if (i->maDriverVersionMin != "*" &&
-            (comphelper::string::compareVersionStrings(i->maDriverVersionMin, rDevice.maDriver) > 0 ||
-             (i->maDriverVersionMax != "" && comphelper::string::compareVersionStrings(i->maDriverVersionMax, rDevice.maDriver) < 0) ||
-             (i->maDriverVersionMax == "" && comphelper::string::compareVersionStrings(i->maDriverVersionMin, rDevice.maDriver) < 0)))
-            continue;
-
-        // It matches; reject it
-        SAL_INFO("sc.opencl", "Match! Rejecting");
+        SAL_INFO("sc.opencl", "Rejecting");
         return true;
     }
 
     // Check for whitelist of known good OpenCL implementations
-
-    for (auto i = ScInterpreter::GetGlobalConfig().maOpenCLWhiteList.cbegin();
-         i != ScInterpreter::GetGlobalConfig().maOpenCLWhiteList.end();
-         ++i)
+    if (match(ScInterpreter::GetGlobalConfig().maOpenCLWhiteList, rPlatform, rDevice, "whitelist"))
     {
-        SAL_INFO("sc.opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice << " in whitelist entry=" << *i);
-
-#if defined WNT
-        if (i->maOS != "*" && i->maOS != "Windows")
-            continue;
-#elif defined LINUX
-        if (i->maOS != "*" && i->maOS != "Linux")
-            continue;
-#elif defined MACOSX
-        if (i->maOS != "*" && i->maOS != "OS X")
-            continue;
-#endif
-
-        // OS version check not yet implemented
-
-        if (i->maPlatformVendor != "*" && i->maPlatformVendor != rPlatform.maVendor)
-            continue;
-
-        if (i->maDevice != "*" && i->maDevice != rDevice.maName)
-            continue;
-
-        if (i->maDriverVersionMin != "*" &&
-            (comphelper::string::compareVersionStrings(i->maDriverVersionMin, rDevice.maDriver) > 0 ||
-             comphelper::string::compareVersionStrings(i->maDriverVersionMax, rDevice.maDriver) < 0))
-            continue;
-
-        // It matches; approve it
-        SAL_INFO("sc.opencl", "Match! Approving");
+        SAL_INFO("sc.opencl", "Approving");
         return false;
     }
 
