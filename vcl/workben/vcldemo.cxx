@@ -356,20 +356,20 @@ public:
                 sal_uInt32 nStartCols[] = {
                     COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
                     COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN,
-                    COL_GRAY, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTCYAN,
-                    COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK
+                    COL_BLACK, COL_LIGHTGRAY, COL_WHITE, COL_BLUE, COL_CYAN,
+                    COL_WHITE, COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK
                 };
                 sal_uInt32 nEndCols[] = {
-                    COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK,
+                    COL_WHITE, COL_WHITE, COL_WHITE, COL_BLACK, COL_BLACK,
                     COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
                     COL_GRAY, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTCYAN,
                     COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN
                 };
                 GradientStyle eStyles[] = {
                     GradientStyle_LINEAR, GradientStyle_AXIAL, GradientStyle_RADIAL, GradientStyle_ELLIPTICAL, GradientStyle_SQUARE,
-                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL,
+                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL, GradientStyle_LINEAR,
                     GradientStyle_LINEAR, GradientStyle_AXIAL, GradientStyle_RADIAL, GradientStyle_ELLIPTICAL, GradientStyle_SQUARE,
-                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL
+                    GradientStyle_RECT, GradientStyle_FORCE_EQUAL_SIZE, GradientStyle_LINEAR, GradientStyle_RADIAL, GradientStyle_LINEAR
                 };
                 sal_uInt16 nAngles[] = {
                     0, 0, 0, 0, 0,
