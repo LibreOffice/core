@@ -1394,7 +1394,7 @@
           <info>
             <desc>Combinations of (OS, OS version, OpenCL platform vendor, OpenCL device name, OpenCL driver version) that are known to be good. Has higher priority than OpenCLBlackList. Each entry is a string consisting of five parts separated by slashes. In case a slash occurs inside a part, it is prefixed by a backslash. And in case a backslash occurs inside a part, it is also prefixed by another backslash. Any part might contain a single asterisk as a wildcard, matching any value, but there is no more generic regexp support.</desc>
           </info>
-          <value/>
+          <value oor:separator=";">*/*/AMD Accelerated Parallel Processing/*/1445.5 (sse2,avx)/</value>
         </prop>
         <prop oor:name="OpenCLBlackList" oor:type="oor:string-list" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->

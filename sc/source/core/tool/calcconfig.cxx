@@ -44,6 +44,9 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSum);
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
+
+    maOpenCLWhiteList.insert(OpenCLImplMatcher("Linux", "*", "AMD Accelerated Parallel Processing", "*", "1445.5 (sse2,avx)", ""));
+
     maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884", ""));
     maOpenCLBlackList.insert(OpenCLImplMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3", "4.4"));
 }
