@@ -17,6 +17,8 @@
 
 namespace sc {
 
+class StartListeningContext;
+
 class SharedFormulaUtil
 {
 public:
@@ -109,6 +111,18 @@ public:
      * @param rRows row positions at which to unshare formula cells.
      */
     static void unshareFormulaCells(CellStoreType& rCells, std::vector<SCROW>& rRows);
+
+    /**
+     * Have all formula cells belonging to a group start listening to their
+     * references.
+     *
+     * @param rCxt context object.
+     * @param ppSharedTop memory position of the pointer of the topmost
+     *                    formula cell instance in the cell storage.  The
+     *                    caller is responsible for ensuring that it is indeed
+     *                    the topmost cell of a shared formula group.
+     */
+    static void startListeningAsGroup( StartListeningContext& rCxt, ScFormulaCell** ppSharedTop );
 };
 
 }

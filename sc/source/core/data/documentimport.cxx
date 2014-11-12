@@ -21,6 +21,7 @@
 #include "paramisc.hxx"
 #include "listenercontext.hxx"
 #include <attarray.hxx>
+#include <sharedformula.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/languageoptions.hxx>
@@ -558,12 +559,19 @@ public:
         if (node.type == sc::element_type_formula)
         {
             // Have all formula cells start listening to the document.
-            sc::formula_block::iterator it = sc::formula_block::begin(*node.data);
-            sc::formula_block::iterator itEnd = sc::formula_block::end(*node.data);
-            for (; it != itEnd; ++it)
+            ScFormulaCell** pp = &sc::formula_block::at(*node.data, 0);
+            ScFormulaCell** ppEnd = pp + node.size;
+            for (; pp != ppEnd; ++pp)
             {
-                ScFormulaCell& rFC = **it;
-                rFC.StartListeningTo(mrDocImpl.maListenCxt);
+                ScFormulaCell& rFC = **pp;
+                if (rFC.IsSharedTop())
+                {
+                    // Register formula cells as a group.
+                    sc::SharedFormulaUtil::startListeningAsGroup(mrDocImpl.maListenCxt, pp);
+                    pp += rFC.GetSharedLength() - 1; // Move to the last one in the group.
+                }
+                else
+                    rFC.StartListeningTo(mrDocImpl.maListenCxt);
             }
         }
     }
