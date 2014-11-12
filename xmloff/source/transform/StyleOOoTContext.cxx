@@ -984,7 +984,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     if (bMoveProtect || bSizeProtect || !aProtectAttrValue.isEmpty())
     {
         if( (bMoveProtect ||bSizeProtect) && IsXMLToken( aProtectAttrValue, XML_NONE ) )
-            aProtectAttrValue = OUString();
+            aProtectAttrValue.clear();
 
         const OUString& rPosition = GetXMLToken( XML_POSITION );
         if( bMoveProtect && -1 == aProtectAttrValue.indexOf( rPosition ) )

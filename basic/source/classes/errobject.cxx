@@ -137,7 +137,7 @@ ErrObject::setSource( const OUString& _source ) throw (uno::RuntimeException, st
 void SAL_CALL
 ErrObject::Clear(  ) throw (uno::RuntimeException, std::exception)
 {
-    m_sHelpFile = OUString();
+    m_sHelpFile.clear();
     m_sSource = m_sHelpFile;
     m_sDescription = m_sSource;
     m_nNumber = 0;

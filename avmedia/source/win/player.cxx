@@ -189,7 +189,7 @@ bool Player::create( const OUString& rURL )
     if( bRet )
         maURL = rURL;
     else
-        maURL = OUString();
+        maURL.clear();
 
     return bRet;
 }

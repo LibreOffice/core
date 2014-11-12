@@ -185,7 +185,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if (!aFilterName.equals(rNewFilter))
-        aOptions = OUString();
+        aOptions.clear();
     if ( pNewOptions )                  // Optionen hart angegeben?
         aOptions = *pNewOptions;
 

@@ -403,7 +403,7 @@ bool ValueParser::endElement() {
                 }
                 items_.clear();
             }
-            separator_ = OString();
+            separator_.clear();
             node_.clear();
         }
         break;

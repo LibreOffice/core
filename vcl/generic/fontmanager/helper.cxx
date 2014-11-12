@@ -206,7 +206,7 @@ OUString psp::getFontPath()
             struct stat aStat;
             if( 0 != stat( OUStringToOString( aPathBuffer.makeStringAndClear(), osl_getThreadTextEncoding() ).getStr(), &aStat )
                 || ! S_ISDIR( aStat.st_mode ) )
-                aConfigPath = OUString();
+                aConfigPath.clear();
             else
             {
                 aPathBuffer.append(aConfigPath);

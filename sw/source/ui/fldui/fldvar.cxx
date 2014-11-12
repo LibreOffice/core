@@ -706,7 +706,7 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             if (!bSpecialFmt)
             {
                 m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
-                sOldNumSel = OUString();
+                sOldNumSel.clear();
             }
             else if (nTypeId == TYP_GETFLD || nTypeId == TYP_FORMELFLD)
             {

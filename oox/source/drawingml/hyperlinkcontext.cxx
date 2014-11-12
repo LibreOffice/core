@@ -99,7 +99,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper& rParent,
             }
             else if ( aPPAction.match( sHlinksldjump ) )
             {
-                sURL = OUString();
+                sURL.clear();
 
                 sal_Int32 nIndex2 = 0;
                 while ( nIndex2 < sHref.getLength() )

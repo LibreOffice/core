@@ -569,7 +569,7 @@ void CopyTableWizard::impl_dialogToAttributes_nothrow( const OCopyTableWizard& _
     if ( m_aPrimaryKeyName.IsPresent )
         m_aPrimaryKeyName.Value = _rDialog.getPrimaryKeyName();
     else
-        m_aPrimaryKeyName.Value = OUString();
+        m_aPrimaryKeyName.Value.clear();
 
     m_sDestinationTable = _rDialog.getName();
 

@@ -174,7 +174,7 @@ throw ( NoSuchElementException, RuntimeException, std::exception)
         }
         catch( const Exception& )
         {
-            sShort = OUString();
+            sShort.clear();
         }
 
         if (sShort.isEmpty())

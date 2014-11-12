@@ -102,7 +102,7 @@ bool SfxEventNamesItem::GetPresentation( SfxItemPresentation,
                                     OUString &rText,
                                     const IntlWrapper* ) const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 

@@ -155,7 +155,7 @@ void ItemFormat::set( DataType eDataType, FormatType eFmtType, const OUString& r
     meDataType = eDataType;
     meFmtType = eFmtType;
     maItemName = rItemName;
-    maListName = OUString();
+    maListName.clear();
 }
 
 OUStringVector::const_iterator ItemFormat::parse( const OUStringVector& rFormatVec )
@@ -843,7 +843,7 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
             // ignore comments (starting with hash or semicolon)
             sal_Unicode cChar = aLine[ 0 ];
             if( (cChar == '#') || (cChar == ';') )
-                aLine = OUString();
+                aLine.clear();
         }
     }
 

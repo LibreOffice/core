@@ -200,7 +200,7 @@ void XMLTextNumRuleInfo::Set(
             }
         }
 
-        msListLabelString = OUString();
+        msListLabelString.clear();
         if ( bExportTextNumberElement &&
              xPropSetInfo->hasPropertyByName( msListLabelStringProp ) )
         {

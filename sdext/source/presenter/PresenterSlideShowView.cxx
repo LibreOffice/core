@@ -245,9 +245,9 @@ void PresenterSlideShowView::disposing (void)
     mxController = NULL;
     mxCanvas = NULL;
     mpBackground.reset();
-    msClickToExitPresentationText = OUString();
-    msClickToExitPresentationTitle = OUString();
-    msTitleTemplate = OUString();
+    msClickToExitPresentationText.clear();
+    msClickToExitPresentationTitle.clear();
+    msTitleTemplate.clear();
     mxCurrentSlide = NULL;
 }
 
@@ -290,7 +290,7 @@ void SAL_CALL PresenterSlideShowView::setCurrentPage (
         if (pDescriptor.get() != NULL)
         {
             pDescriptor->msTitleTemplate = msTitleTemplate;
-            pDescriptor->msTitle = OUString();
+            (pDescriptor->msTitle).clear();
             mpPresenterController->UpdatePaneTitles();
         }
     }

@@ -291,7 +291,7 @@ namespace
     */
     bool getEnvironmentValue( const sal_Char* _pAsciiEnvName, OUString& _rValue )
     {
-        _rValue = OUString();
+        _rValue.clear();
         OUString sEnvName = OUString::createFromAscii( _pAsciiEnvName );
         osl_getEnvironment( sEnvName.pData, &_rValue.pData );
         return !_rValue.isEmpty();

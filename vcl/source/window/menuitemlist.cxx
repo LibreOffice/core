@@ -115,7 +115,7 @@ void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
     aSalMIData.eType = MenuItemType::SEPARATOR;
     aSalMIData.nBits = MenuItemBits::NONE;
     aSalMIData.pMenu = NULL;
-    aSalMIData.aText = OUString();
+    aSalMIData.aText.clear();
     aSalMIData.aImage = Image();
 
     // Native-support: returns NULL if not supported

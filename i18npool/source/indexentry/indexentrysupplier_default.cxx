@@ -194,7 +194,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                 if (key_count > 0 && i + 1 < len ) {
                     for (curr = keyStr[++i]; key_count < MAX_KEYS && keys[key_count-1].key < curr; key_count++) {
                         keys[key_count].key = keys[key_count-1].key+1;
-                        keys[key_count].desc = OUString();
+                        keys[key_count].desc.clear();
                     }
                 } else
                     throw RuntimeException();
@@ -228,7 +228,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                         mkeys[mkey_count++]=key_count;
                         keys[key_count].key = 0;
                         keys[key_count].mkey = keyStr.copy(i+1, end-i-1);
-                        keys[key_count++].desc=OUString();
+                        keys[key_count++].desc.clear();
                     }
                     i=end+1;
                 } else
@@ -236,7 +236,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                 break;
             default:
                 keys[key_count].key = curr;
-                keys[key_count++].desc = OUString();
+                keys[key_count++].desc.clear();
                 break;
         }
     }

@@ -1380,7 +1380,7 @@ void ScXMLTableRowCellContext::PutFormulaCell( const ScAddress& rCellPos )
 
             OUString aFormulaNmsp = maFormula->second;
             if( eGrammar != formula::FormulaGrammar::GRAM_EXTERNAL )
-                aFormulaNmsp = OUString();
+                aFormulaNmsp.clear();
             pCode->AssignXMLString( aText, aFormulaNmsp );
 
             rDoc.getDoc().IncXMLImportedFormulaCount( aText.getLength() );

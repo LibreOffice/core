@@ -1359,7 +1359,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             {
                 // if the default for the level is existing, but its
                 // level is different, then it cannot be the default.
-                sValue = OUString();
+                sValue.clear();
             }
         }
         SwStyleNameMapper::FillProgName(sValue, aUString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
@@ -1399,7 +1399,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
     //char style name
     OUString CharStyleName(rCharFormatName);
 
-    aUString = OUString();
+    aUString.clear();
     SwStyleNameMapper::FillProgName( CharStyleName, aUString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
     aPropertyValues.push_back(makePropertyValue(aUString, "CharStyleName"));
 
@@ -1507,7 +1507,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFmt(
                 aAny >>= aUString;
             }
             else
-                aUString = OUString();
+                aUString.clear();
             aPropertyValues.push_back(
                     makePropertyValue(aUString, UNO_NAME_GRAPHIC_URL));
 
@@ -1792,7 +1792,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                         // #i51842#
                         // If the character format has been found its name should not be in the
                         // char style names array
-                        rCharStyleName = OUString();
+                        rCharStyleName.clear();
                      }
                     else
                         rCharStyleName = sCharFmtName;

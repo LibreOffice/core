@@ -2048,7 +2048,7 @@ bool SvxBoxItem::GetPresentation
     {
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
-            rText = OUString();
+            rText.clear();
 
             if ( pTop )
             {
@@ -2561,7 +2561,7 @@ bool SvxBoxInfoItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return false;
 }
 
@@ -3184,7 +3184,7 @@ bool SvxLineItem::GetPresentation
     OUString&           rText, const IntlWrapper *pIntl
 )   const
 {
-    rText = OUString();
+    rText.clear();
 
     if ( pLine )
         rText = pLine->GetValueString( eCoreUnit, ePresUnit, pIntl,

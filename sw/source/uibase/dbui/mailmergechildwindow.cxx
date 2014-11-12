@@ -82,7 +82,7 @@ IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)
 void SwMailMergeChildWin::FillInfo(SfxChildWinInfo& rInfo) const
 {
     SfxFloatingWindow::FillInfo(rInfo);
-    rInfo.aWinState = OString();
+    rInfo.aWinState.clear();
     rInfo.bVisible = false;
 }
 

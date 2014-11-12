@@ -917,7 +917,7 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
             case PROPERTY_ID_USER:
                 rValue >>= m_pImpl->m_sUser;
                 // if the user name has changed, reset the password
-                m_pImpl->m_aPassword = OUString();
+                (m_pImpl->m_aPassword).clear();
                 break;
             case PROPERTY_ID_PASSWORD:
                 rValue >>= m_pImpl->m_aPassword;
@@ -1131,7 +1131,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
             m_pImpl->m_aPassword = pAuthenticate->getPassword();
             bNewPasswordGiven = true;
         }
-        m_pImpl->m_sFailedPassword = OUString();
+        (m_pImpl->m_sFailedPassword).clear();
     }
 
     try
@@ -1146,7 +1146,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
             // assume that we had an authentication problem. Without this we may, after an unsuccessful connect, while
             // the user gave us a password an the order to remember it, never allow an password input again (at least
             // not without restarting the session)
-            m_pImpl->m_aPassword = OUString();
+            (m_pImpl->m_aPassword).clear();
         }
         throw;
     }

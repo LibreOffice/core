@@ -100,7 +100,7 @@ void ScFuncDesc::Clear()
 
     nFIndex = 0;
     nCategory = 0;
-    sHelpId = OString();
+    sHelpId.clear();
     bIncomplete = false;
     bHasSuppressedArgs = false;
 }

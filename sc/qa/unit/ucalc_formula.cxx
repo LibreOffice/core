@@ -2270,7 +2270,7 @@ void Test::testFormulaRefUpdateName()
     // Delete the inserted sheet, which will shift the 'Formula' sheet to the left.
     m_pDoc->DeleteTab(0);
 
-    aName = OUString();
+    aName.clear();
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Formula"), aName);
 

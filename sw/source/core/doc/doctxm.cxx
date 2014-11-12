@@ -758,7 +758,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     if ( !mbKeepExpression )
     {
-        maMSTOCExpression = OUString();
+        maMSTOCExpression.clear();
     }
 
     SwDoc* pDoc = (SwDoc*)pSectNd->GetDoc();

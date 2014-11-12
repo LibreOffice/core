@@ -216,7 +216,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "lg" ) )
             {
-                m_aOutputFiles.back().aLangName = OString();
+                m_aOutputFiles.back().aLangName.clear();
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lg", 2 ) )
             {

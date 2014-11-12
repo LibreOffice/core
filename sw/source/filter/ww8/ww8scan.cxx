@@ -1927,7 +1927,7 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
     WW8_CP nAktStartCp, long nTotalLen, rtl_TextEncoding eEnc ) const
 {
     // Read in plain text, which can extend over several pieces
-    rStr = OUString();
+    rStr.clear();
 
     long nTotalRead = 0;
     WW8_CP nBehindTextCp = nAktStartCp + nTotalLen;
@@ -6175,7 +6175,7 @@ WW8_STD* WW8Style::Read1Style( short& rSkip, OUString* pString, short* pcbStd )
             }
         }
         else
-            *pString = OUString();   // Kann keinen Namen liefern
+            pString->clear();   // Kann keinen Namen liefern
     }
     return pStd;
 }

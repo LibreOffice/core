@@ -279,7 +279,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
         if( aName == sValue )
         {
             eNewState = e_Value;
-            maValue = OUString();
+            maValue.clear();
         }
     }
 

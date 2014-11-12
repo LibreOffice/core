@@ -533,7 +533,7 @@ void ControlConverter::convertToAxState( PropertySet& rPropSet,
     // control is awt or not )
     rPropSet.getProperty( nState, PROP_State );
 
-    rValue = OUString(); // empty e.g. 'don't know'
+    rValue.clear(); // empty e.g. 'don't know'
     if ( nState == API_STATE_UNCHECKED )
         rValue = OUString('0');
     else if ( nState == API_STATE_CHECKED )

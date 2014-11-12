@@ -776,7 +776,7 @@ void ScInputHandler::HideTip()
         nTipVisible = 0;
         pTipVisibleParent = NULL;
     }
-    aManualTip = OUString();
+    aManualTip.clear();
 }
 void ScInputHandler::HideTipBelow()
 {
@@ -788,7 +788,7 @@ void ScInputHandler::HideTipBelow()
         nTipVisibleSec = 0;
         pTipVisibleSecParent = NULL;
     }
-    aManualTip = OUString();
+    aManualTip.clear();
 }
 
 void ScInputHandler::ShowArgumentsTip( const OUString& rParagraph, OUString& rSelText, const ESelection& rSel,
@@ -1948,7 +1948,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 pEngine->SetText(aCurrentText);
                 aStr = aCurrentText;
                 bTextValid = false;
-                aCurrentText = OUString();
+                aCurrentText.clear();
             }
             else
                 aStr = GetEditText(pEngine);
@@ -2717,7 +2717,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
     HideTipBelow();
 
     nFormSelStart = nFormSelEnd = 0;
-    aFormText = OUString();
+    aFormText.clear();
 
     bInOwnChange = false;
     bInEnterHandler = false;
@@ -2769,7 +2769,7 @@ void ScInputHandler::CancelHandler()
         NotifyChange( pLastState, true );
 
     nFormSelStart = nFormSelEnd = 0;
-    aFormText = OUString();
+    aFormText.clear();
 
     bInOwnChange = false;
 }
@@ -3435,7 +3435,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                 aString = GetEditText(pEngine);
                             lcl_RemoveTabs(aString);
                             bTextValid = false;
-                            aCurrentText = OUString();
+                            aCurrentText.clear();
                         }
                         else
                         {

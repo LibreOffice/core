@@ -1278,7 +1278,7 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder)
 
 void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aTrackText,bool &bLeftEdge)
 {
-    aTrackText = OUString();
+    aTrackText.clear();
     //  Change-Tracking
     ScChangeTrack* pTrack = GetChangeTrack();
     ScChangeViewSettings* pSettings = GetChangeViewSettings();

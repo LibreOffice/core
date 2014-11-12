@@ -777,7 +777,7 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     if (xLocalePath.is())
         sPath = sLocalizedPath;
     else
-        sPath = OUString();
+        sPath.clear();
 
     return xLocalePath;
 }

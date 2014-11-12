@@ -129,7 +129,7 @@ bool SvxGrfCrop::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit eCoreUnit, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* pIntl ) const
 {
-    rText = OUString();
+    rText.clear();
     switch( ePres )
     {
     case SFX_ITEM_PRESENTATION_NAMELESS:

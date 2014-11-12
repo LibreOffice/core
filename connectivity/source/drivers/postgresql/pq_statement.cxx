@@ -464,7 +464,7 @@ bool executePostgresCommand( const OString & cmd, struct CommandData *data )
 
     ExecStatusType state = PQresultStatus( result );
     *(data->pLastOidInserted) = 0;
-    *(data->pLastTableInserted) = OUString();
+    (data->pLastTableInserted)->clear();
     *(data->pLastQuery) = cmd;
 
     bool ret = false;
@@ -858,7 +858,7 @@ sal_Bool Statement::execute( const OUString& sql )
     OString cmd = OUStringToOString( sql, m_pSettings );
 
     m_lastResultset.clear();
-    m_lastTableInserted  = OUString();
+    m_lastTableInserted.clear();
 
     struct CommandData data;
     data.refMutex = m_refMutex;

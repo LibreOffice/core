@@ -568,7 +568,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
             OUString aName = itr->first;
             if (aName.equals(ScGlobal::GetRscString(STR_EMPTYDATA)))
                 // Translate the special empty name into an empty string.
-                aName = OUString();
+                aName.clear();
 
             aResult.insert(
                 ScCheckListMenuWindow::ResultType::value_type(

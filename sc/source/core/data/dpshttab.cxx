@@ -214,7 +214,7 @@ ScSheetSourceDesc::ScSheetSourceDesc(ScDocument* pDoc) :
 void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
 {
     maSourceRange = rRange;
-    maRangeName = OUString(); // overwrite existing range name if any.
+    maRangeName.clear(); // overwrite existing range name if any.
 }
 
 const ScRange& ScSheetSourceDesc::GetSourceRange() const

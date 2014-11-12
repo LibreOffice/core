@@ -421,7 +421,7 @@ static void Plugin_ImplFillCommandSequence( const OUString& aCommands, uno::Sequ
 short SvInsertPlugInDialog::Execute()
 {
     short nRet = RET_OK;
-    m_aCommands = OUString();
+    m_aCommands.clear();
     DBG_ASSERT( m_xStorage.is(), "No storage!");
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {

@@ -266,7 +266,7 @@ void ServiceImpl::startExecuteModal(
         myExtMgr->createDialog( false );
         if (!m_initialTitle.isEmpty()) {
             myExtMgr->SetText( m_initialTitle );
-            m_initialTitle = OUString();
+            m_initialTitle.clear();
         }
         if ( m_bShowUpdateOnly )
         {

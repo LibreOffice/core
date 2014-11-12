@@ -1457,7 +1457,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             xPropSet->setPropertyValue( rPropName, makeAny(sStyleName) );
         }
         else
-            sStyleName = OUString();
+            sStyleName.clear();
     }
 
     /* The outline level needs to be only applied as list level, if the heading

@@ -267,7 +267,7 @@ namespace dbtools
                 getSeparatorChars( rParseContext.getPreferredLocale(), nDecSeparator, nThousandSeparator );
 
                 // translate it back into a string
-                sTransformedText = OUString();
+                sTransformedText.clear();
                 pParseNode->parseNodeToPredicateStr(
                     sTransformedText, m_xConnection, m_xFormatter, _rxField, OUString(),
                     rParseContext.getPreferredLocale(), (sal_Char)nDecSeparator, &rParseContext

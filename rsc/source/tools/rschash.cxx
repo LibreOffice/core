@@ -23,7 +23,7 @@
 AtomContainer::AtomContainer()
 {
     m_aStringToID[ OString() ] = 0;
-    m_aIDToString[ 0 ] = OString();
+    m_aIDToString[ 0 ].clear();
     m_nNextID = 1;
 }
 

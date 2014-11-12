@@ -141,22 +141,22 @@ void SAL_CALL XSecParser::startElement(
             }
             else if (aName == TAG_X509ISSUERNAME)
             {
-            m_ouX509IssuerName = OUString();
+            m_ouX509IssuerName.clear();
             m_bInX509IssuerName = true;
             }
             else if (aName == TAG_X509SERIALNUMBER)
             {
-            m_ouX509SerialNumber = OUString();
+            m_ouX509SerialNumber.clear();
             m_bInX509SerialNumber = true;
             }
             else if (aName == TAG_X509CERTIFICATE)
             {
-            m_ouX509Certificate = OUString();
+            m_ouX509Certificate.clear();
             m_bInX509Certificate = true;
             }
             else if (aName == TAG_SIGNATUREVALUE)
             {
-            m_ouSignatureValue = OUString();
+            m_ouSignatureValue.clear();
                 m_bInSignatureValue = true;
             }
             else if (aName == TAG_DIGESTVALUE)
@@ -173,7 +173,7 @@ void SAL_CALL XSecParser::startElement(
         }
             else if (aName == NSTAG_DC ":" TAG_DATE)
             {
-            m_ouDate = OUString();
+            m_ouDate.clear();
                 m_bInDate = true;
             }
 

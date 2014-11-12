@@ -69,7 +69,7 @@ void SwAttrSet::GetPresentation(
 {
     static sal_Char const sComma[] = ", ";
 
-    rText = OUString();
+    rText.clear();
     OUString aStr;
     if( Count() )
     {
@@ -122,7 +122,7 @@ bool SwFmtAutoFmt::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    rText = OUString(); //TODO
+    rText.clear(); //TODO
     return true;
 }
 
@@ -143,7 +143,7 @@ bool SwFmtRuby::GetPresentation( SfxItemPresentation /*ePres*/,
                             SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,
                             OUString &rText, const IntlWrapper* /*pIntl*/ ) const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -156,7 +156,7 @@ bool SwFmtDrop::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     if ( GetLines() > 1 )
     {
         if ( GetChars() > 1 )
@@ -500,7 +500,7 @@ bool SwFmtCol::GetPresentation
         }
     }
     else
-        rText = OUString();
+        rText.clear();
     return true;
 }
 
@@ -515,7 +515,7 @@ bool SwFmtURL::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     if ( pMap )
         rText += "Client-Map";
     if ( !sURL.isEmpty() )
@@ -542,7 +542,7 @@ bool SwFmtEditInReadonly::GetPresentation
     const IntlWrapper*        /*pIntl*/
 )   const
 {
-    rText = OUString();
+    rText.clear();
     if ( GetValue() )
         rText = SW_RESSTR(STR_EDIT_IN_READONLY);
     return true;
@@ -702,7 +702,7 @@ bool SwRotationGrf::GetPresentation(
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         rText = SW_RESSTR( STR_ROTATION );
     else if( rText.getLength() )
-        rText = OUString();
+        rText.clear();
     rText = rText + OUString::number( GetValue() ) + "\xB0";
     return true;
 }
@@ -714,7 +714,7 @@ bool SwLuminanceGrf::GetPresentation(
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         rText = SW_RESSTR( STR_LUMINANCE );
     else if( rText.getLength() )
-        rText = OUString();
+        rText.clear();
     rText = rText + unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag());
     return true;
@@ -727,7 +727,7 @@ bool SwContrastGrf::GetPresentation(
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         rText = SW_RESSTR( STR_CONTRAST );
     else if( rText.getLength() )
-        rText = OUString();
+        rText.clear();
     rText = rText + unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag());
     return true;
@@ -750,10 +750,10 @@ bool SwChannelGrf::GetPresentation(
         if( nId )
             rText = SW_RESSTR( nId );
         else if( rText.getLength() )
-            rText = OUString();
+            rText.clear();
     }
     else if( rText.getLength() )
-        rText = OUString();
+        rText.clear();
     rText = rText + unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag());
     return true;
@@ -776,7 +776,7 @@ bool SwInvertGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    rText = OUString();
+    rText.clear();
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
     {
         const sal_uInt16 nId = GetValue() ? STR_INVERT : STR_INVERT_NOT;
@@ -792,7 +792,7 @@ bool SwTransparencyGrf::GetPresentation(
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         rText = SW_RESSTR( STR_TRANSPARENCY );
     else if( rText.getLength() )
-        rText = OUString();
+        rText.clear();
     rText = rText + unicode::formatPercent(GetValue(),
         Application::GetSettings().GetUILanguageTag());
     return true;
@@ -802,7 +802,7 @@ bool SwDrawModeGrf::GetPresentation(
     SfxItemPresentation ePres, SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
     OUString &rText, const IntlWrapper* /*pIntl*/) const
 {
-    rText = OUString();
+    rText.clear();
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
     {
         sal_uInt16 nId;
@@ -825,7 +825,7 @@ bool SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation ePres,
                                     OUString &rText,
                                     const IntlWrapper*    /*pIntl*/ ) const
 {
-    rText = OUString();
+    rText.clear();
     if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
     {
         const sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;

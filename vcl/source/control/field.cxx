@@ -1533,7 +1533,7 @@ void MetricFormatter::Reformat()
     }
     else
         SetValue( mnLastValue );
-    maCurUnitText = OUString();
+    maCurUnitText.clear();
 }
 
 sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const

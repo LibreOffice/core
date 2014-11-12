@@ -62,7 +62,7 @@ bool XLineTransparenceItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
 
     switch ( ePres )
     {
@@ -112,7 +112,7 @@ SfxPoolItem* XLineJointItem::Clone(SfxItemPool* /*pPool*/) const
 bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, SfxMapUnit /*eCoreUnit*/,
     SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
-    rText = OUString();
+    rText.clear();
 
     sal_uInt16 nId = 0;
 
@@ -316,7 +316,7 @@ SfxPoolItem* XLineCapItem::Clone(SfxItemPool* /*pPool*/) const
 bool XLineCapItem::GetPresentation( SfxItemPresentation /*ePres*/, SfxMapUnit /*eCoreUnit*/,
                                                      SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
-    rText = OUString();
+    rText.clear();
 
     sal_uInt16 nId = 0;
 
@@ -420,7 +420,7 @@ bool XFillTransparenceItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
 
     switch ( ePres )
     {
@@ -489,7 +489,7 @@ bool XGradientStepCountItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
 
     rText += OUString::number(GetValue());
     return true;
@@ -525,7 +525,7 @@ bool XFillBmpTileItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -561,7 +561,7 @@ bool XFillBmpPosItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -602,7 +602,7 @@ bool XFillBmpSizeXItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -643,7 +643,7 @@ bool XFillBmpSizeYItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -684,7 +684,7 @@ bool XFillBmpSizeLogItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -720,7 +720,7 @@ bool XFillBmpTileOffsetXItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -756,7 +756,7 @@ bool XFillBmpTileOffsetYItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -790,7 +790,7 @@ bool XFillBmpStretchItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -826,7 +826,7 @@ bool XFillBmpPosOffsetXItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -862,7 +862,7 @@ bool XFillBmpPosOffsetYItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 
@@ -891,7 +891,7 @@ SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
 bool XFillBackgroundItem::GetPresentation( SfxItemPresentation /*ePres*/, SfxMapUnit /*eCoreUnit*/,
                                                           SfxMapUnit /*ePresUnit*/, OUString& rText, const IntlWrapper*) const
 {
-    rText = OUString();
+    rText.clear();
     return true;
 }
 

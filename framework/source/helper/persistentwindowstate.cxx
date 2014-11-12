@@ -158,7 +158,7 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sModuleName = OUString(); }
+        { sModuleName.clear(); }
 
     return sModuleName;
 }
@@ -188,7 +188,7 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { sWindowState = OUString(); }
+        { sWindowState.clear(); }
 
     return sWindowState;
 }

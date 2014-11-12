@@ -650,7 +650,7 @@ void XclImpPivotCache::ReadDConName( XclImpStream& rStrm )
 
     if (!mbSelfRef)
         // External name is not supported yet.
-        maSrcRangeName = OUString();
+        maSrcRangeName.clear();
 }
 
 void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )

@@ -144,8 +144,8 @@ namespace psp
                 if( nLen >=5 && aStr[2] == '_' )
                     aLoc.Country = OStringToOUString( aStr.copy( 3, 2 ), RTL_TEXTENCODING_MS_1252 );
                 else
-                    aLoc.Country = OUString();
-                aLoc.Variant = OUString();
+                    aLoc.Country.clear();
+                aLoc.Variant.clear();
             }
             #endif
         }
@@ -230,9 +230,9 @@ namespace psp
                     }
                     switch( nTry )
                     {
-                    case 0: aLoc.Variant  = OUString();break;
-                    case 1: aLoc.Country  = OUString();break;
-                    case 2: aLoc.Language = OUString();break;
+                    case 0: aLoc.Variant.clear();break;
+                    case 1: aLoc.Country.clear();break;
+                    case 2: aLoc.Language.clear();break;
                     }
                 }
             }

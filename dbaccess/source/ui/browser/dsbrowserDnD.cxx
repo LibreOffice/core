@@ -138,7 +138,7 @@ namespace dbaui
         m_aAsyncDrop.bError         = false;
         m_aAsyncDrop.bHtml          = false;
         m_aAsyncDrop.pDroppedAt     = NULL;
-        m_aAsyncDrop.aUrl           = OUString();
+        m_aAsyncDrop.aUrl.clear();
 
         // loop through the available formats and see what we can do ...
         // first we have to check if it is our own format, if not we have to copy the stream :-(

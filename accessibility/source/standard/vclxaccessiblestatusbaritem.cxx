@@ -221,8 +221,8 @@ void VCLXAccessibleStatusBarItem::disposing()
     AccessibleTextHelper_BASE::disposing();
 
     m_pStatusBar = NULL;
-    m_sItemName = OUString();
-    m_sItemText = OUString();
+    m_sItemName.clear();
+    m_sItemText.clear();
 }
 
 

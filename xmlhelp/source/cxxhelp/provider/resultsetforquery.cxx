@@ -116,7 +116,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
 
             int nCpy = 1 + idx;
             if( nCpy >= query.getLength() )
-                query = OUString();
+                query.clear();
             else
                 query = query.copy( 1 + idx );
         }

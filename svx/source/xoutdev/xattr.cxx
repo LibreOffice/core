@@ -378,7 +378,7 @@ bool XLineStyleItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
 
     sal_uInt16 nId = 0;
 
@@ -2130,7 +2130,7 @@ bool XFillStyleItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
 
     sal_uInt16 nId = 0;
 

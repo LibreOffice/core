@@ -108,7 +108,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                             rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
                         }
                         else
-                            rString = OUString();
+                            rString.clear();
                         bRetValue = true;
                     }
                     else
@@ -119,7 +119,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                             if ( nItemSize > 1 )
                                 rString = OUString(pString, rtl_str_getLength(pString), mnTextEnc);
                             else
-                                rString = OUString();
+                                rString.clear();
                             bRetValue = true;
                         }
                     }
@@ -149,7 +149,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                         if ( (sal_uInt16)nItemSize > 1 )
                             rString = OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
                         else
-                            rString = OUString();
+                            rString.clear();
                         bRetValue = true;
                     }
                     delete[] pString;

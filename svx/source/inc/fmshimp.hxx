@@ -567,7 +567,7 @@ public:
 
     virtual bool ShouldHandleElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& rElement) SAL_OVERRIDE;
     virtual bool ShouldStepInto(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xContainer) const SAL_OVERRIDE;
-    virtual void Invalidate() SAL_OVERRIDE { IndexAccessIterator::Invalidate(); m_sCurrentValue = OUString(); }
+    virtual void Invalidate() SAL_OVERRIDE { IndexAccessIterator::Invalidate(); m_sCurrentValue.clear(); }
 };
 
 

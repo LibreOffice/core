@@ -460,7 +460,7 @@ void ScConditionEntry::CompileXML()
         if ( aNew.Parse( aSrcString, mpDoc ) & SCA_VALID )
             aSrcPos = aNew;
         // if the position is invalid, there isn't much we can do at this time
-        aSrcString = OUString();
+        aSrcString.clear();
     }
 
     //  Convert the text tokens that were created during XML import into real tokens.
@@ -667,7 +667,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             {
                 bIsStr1 = false;
                 nVal1 = pEff1->GetValue();
-                aStrVal1 = OUString();
+                aStrVal1.clear();
             }
             else
             {
@@ -696,7 +696,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
             {
                 bIsStr2 = false;
                 nVal2 = pEff2->GetValue();
-                aStrVal2 = OUString();
+                aStrVal2.clear();
             }
             else
             {

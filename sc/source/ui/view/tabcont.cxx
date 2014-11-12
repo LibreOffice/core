@@ -344,7 +344,7 @@ void ScTabControl::UpdateStatus()
         }
         else
         {
-            aString = OUString();
+            aString.clear();
         }
 
         if ( !aString.equals(GetPageText(static_cast<sal_uInt16>(i)+1)) || (GetTabBgColor(static_cast<sal_uInt16>(i)+1) != aTabBgColor) )

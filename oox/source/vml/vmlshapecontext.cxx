@@ -168,7 +168,7 @@ ContextHandlerRef ClientDataContext::onCreateContext( sal_Int32 /*nElement*/, co
 {
     if( isRootElement() )
     {
-        maElementText = OUString();
+        maElementText.clear();
         return this;
     }
     return 0;

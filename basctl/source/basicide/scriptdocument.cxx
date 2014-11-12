@@ -681,7 +681,7 @@ namespace basctl
 
     bool ScriptDocument::Impl::createModule( const OUString& _rLibName, const OUString& _rModName, bool _bCreateMain, OUString& _out_rNewModuleCode ) const
     {
-        _out_rNewModuleCode = OUString();
+        _out_rNewModuleCode.clear();
         try
         {
             Reference< XNameContainer > xLib( getLibrary( E_SCRIPTS, _rLibName, true ) );

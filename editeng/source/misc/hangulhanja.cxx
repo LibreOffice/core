@@ -471,7 +471,7 @@ namespace editeng
     {
         const bool bAllowImplicitChanges = m_eConvType == HHC::eConvSimplifiedTraditional;
 
-        m_sCurrentPortion = OUString();
+        m_sCurrentPortion.clear();
         m_nCurrentPortionLang = LANGUAGE_NONE;
         m_pAntiImpl->GetNextPortion( m_sCurrentPortion, m_nCurrentPortionLang, bAllowImplicitChanges );
         m_nReplacementBaseIndex = 0;

@@ -264,7 +264,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 pMarkAccess->getBookmarksBegin(),
                 pMarkAccess->getBookmarksEnd(),
                 &lcl_IsUiVisibleBookmark));
-            sTypeToken = OUString();
+            sTypeToken.clear();
             bEdit = true;
         }
         break;
@@ -406,14 +406,14 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                     }
                 }
             }
-            sTypeToken = OUString();
+            sTypeToken.clear();
             bEdit = true;
             nOldMemberCount = nMemberCount;
         }
         break;
         case CONTENT_TYPE_DRAWOBJECT:
         {
-            sTypeToken = OUString();
+            sTypeToken.clear();
             nMemberCount = 0;
             SwDrawModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
             if(pModel)

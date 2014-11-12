@@ -59,7 +59,7 @@ bool SfxFlagItem::GetPresentation
     const IntlWrapper *
 )   const
 {
-    rText = OUString();
+    rText.clear();
     for ( sal_uInt8 nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
         rText += GetFlag(nFlag) ? OUString("true") : OUString("false");
     return true;

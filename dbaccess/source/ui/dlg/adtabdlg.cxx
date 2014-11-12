@@ -118,7 +118,7 @@ OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
             && !xMeta->supportsSchemasInDataManipulation() )
         {
             aCatalog = aSchema;
-            aSchema = OUString();
+            aSchema.clear();
         }
 
         aComposedName = ::dbtools::composeTableName(

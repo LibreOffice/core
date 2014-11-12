@@ -1317,7 +1317,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     {
                         MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,pSubMenu, true, false );
                         AddMenu(pSubMenuManager,aItemCommand,nItemId);
-                        pSubMenuManager->m_aMenuItemCommand = OUString();
+                        (pSubMenuManager->m_aMenuItemCommand).clear();
 
                         // Set image for the addon popup menu item
                         if ( bItemShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))

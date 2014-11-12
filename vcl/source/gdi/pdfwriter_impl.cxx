@@ -729,7 +729,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
                 // workaround: put the second terminal field as much up in the hierarchy as
                 // necessary to have a non-terminal field as parent (or none at all)
                 // since it->second already is terminal, we just need to use its parent
-                aDomain = OString();
+                aDomain.clear();
                 aPartialName = aFullName.copy( aFullName.lastIndexOf( '.' )+1 );
                 if( nLastTokenIndex > 0 )
                 {

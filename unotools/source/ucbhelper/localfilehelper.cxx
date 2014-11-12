@@ -75,7 +75,7 @@ bool LocalFileHelper::ConvertURLToSystemPath( const OUString& rName, OUString& r
 
 bool LocalFileHelper::ConvertPhysicalNameToURL(const OUString& rName, OUString& rReturn)
 {
-    rReturn = OUString();
+    rReturn.clear();
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create(
             comphelper::getProcessComponentContext() ) );

@@ -447,7 +447,7 @@ void SAL_CALL ODummyEmbeddedObject::saveCompleted( sal_Bool bUseNew )
     }
 
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
-    m_aNewEntryName = OUString();
+    m_aNewEntryName.clear();
     m_bWaitSaveCompleted = false;
 }
 

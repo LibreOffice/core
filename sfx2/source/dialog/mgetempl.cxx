@@ -570,7 +570,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
         OUString aParentEntry( m_pBaseLb->GetSelectEntry() );
 
         if ( SfxResId(STR_NONE).toString().equals(aParentEntry) || aParentEntry == pStyle->GetName() )
-            aParentEntry = OUString();
+            aParentEntry.clear();
 
         if ( pStyle->GetParent() != aParentEntry )
         {

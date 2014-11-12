@@ -1578,7 +1578,7 @@ void PresenterSlideSorter::MouseOverManager::SetSlide (
     {
         if (mxSlides.get() != NULL)
         {
-            msText = OUString();
+            msText.clear();
 
             Reference<beans::XPropertySet> xSlideProperties(mxSlides->getByIndex(nSlideIndex), UNO_QUERY);
             if (xSlideProperties.is())
@@ -1590,7 +1590,7 @@ void PresenterSlideSorter::MouseOverManager::SetSlide (
     }
     else
     {
-        msText = OUString();
+        msText.clear();
     }
     mxBitmap = NULL;
 

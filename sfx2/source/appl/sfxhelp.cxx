@@ -463,7 +463,7 @@ OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* p
         }
 
         if (bIsDebug && sHelpText.isEmpty())
-            aNewHelpId = OString();
+            aNewHelpId.clear();
     }
 
     // add some debug information?

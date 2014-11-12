@@ -642,7 +642,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     {
         // nur einen Zeilen-Umbruch (ohne Einrueckung) am Absatz-Anfang
         // ausgeben
-        rInfo.aToken = OString();   // kein End-Tag ausgeben
+        rInfo.aToken.clear();   // kein End-Tag ausgeben
         rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
 
         return;
@@ -962,7 +962,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         // wenn kein End-Tag geschrieben werden soll, es loeschen
         if( bNoEndTag )
-            rInfo.aToken = OString();
+            rInfo.aToken.clear();
     }
 
     if( nBulletGrfLvl != 255 )

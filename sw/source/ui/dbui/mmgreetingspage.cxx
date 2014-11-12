@@ -499,7 +499,7 @@ IMPL_LINK_NOARG(SwMailBodyDialog, OKHdl)
         if( nPos > 0 )
             aAssignment[MM_PART_GENDER] = m_pFemaleColumnLB->GetSelectEntry();
         else
-            aAssignment[MM_PART_GENDER] = OUString();
+            aAssignment[MM_PART_GENDER].clear();
         rConfigItem.SetColumnAssignment( rDBData, aAssignment );
     }
     if(m_pFemaleFieldCB->IsValueChangedFromSaved())

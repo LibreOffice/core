@@ -369,7 +369,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
             // this must be outsid the "if" because we have to call in a right order
             sCatalog    = xRow->getString(1);
             if ( xRow->wasNull() )
-                sCatalog = OUString();
+                sCatalog.clear();
             aSchema     = xRow->getString(2);
             aName       = xRow->getString(3);
 

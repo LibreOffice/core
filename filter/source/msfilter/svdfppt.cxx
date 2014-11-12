@@ -5227,7 +5227,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                         if ( nLen )
                             aCharPropSet.maString = aString.copy( nCharAnzRead, nLen );
                         else if ( bEmptyParaPossible )
-                            aCharPropSet.maString = OUString();
+                            aCharPropSet.maString.clear();
                         if ( nLen || bEmptyParaPossible )
                             aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                         nCurrentPara++;
@@ -5270,7 +5270,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
         if ( !aCharPropList.empty() && ( aCharPropList.back()->mnParagraph != nCurrentPara ) )
         {
             PPTCharPropSet* pCharPropSet = new PPTCharPropSet( *aCharPropList.back(), nCurrentPara );
-            pCharPropSet->maString = OUString();
+            (pCharPropSet->maString).clear();
             pCharPropSet->mnOriginalTextPos = nStringLen - 1;
             aCharPropList.push_back( pCharPropSet );
         }
@@ -6808,7 +6808,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             if ( aString[nCount] == 0x2a )
                                             {
                                                 sal_uInt32 nBehind = aString.getLength() - ( nCount + 1 );
-                                                pSet->maString = OUString();
+                                                (pSet->maString).clear();
                                                 if ( nBehind )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
@@ -6907,7 +6907,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                     pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                                     nHyperLenLeft = 0;
                                                                 }
-                                                                pCurrent->maString = OUString();
+                                                                (pCurrent->maString).clear();
                                                                 pCurrent->SetColor( PPT_COLSCHEME_A_UND_HYPERLINK );
                                                             }
                                                             nIdx++;

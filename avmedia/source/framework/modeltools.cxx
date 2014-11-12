@@ -48,7 +48,7 @@ namespace avmedia {
 
 static void lcl_UnzipKmz(const OUString& rSourceURL, const OUString& rOutputFolderURL, OUString& o_rDaeFileURL)
 {
-    o_rDaeFileURL = OUString();
+    o_rDaeFileURL.clear();
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess =
         packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rSourceURL);
     uno::Sequence< OUString > aNames = xNameAccess->getElementNames();
@@ -70,7 +70,7 @@ static void lcl_UnzipKmz(const OUString& rSourceURL, const OUString& rOutputFold
 
 bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
 {
-    o_rOutput = OUString();
+    o_rOutput.clear();
     const bool bIsDAE = rSourceURL.endsWithIgnoreAsciiCase(".dae");
     const bool bIsKMZ = rSourceURL.endsWithIgnoreAsciiCase(".kmz");
     if( !bIsDAE && !bIsKMZ )

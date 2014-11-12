@@ -105,7 +105,7 @@ SwXMLImportTableItemMapper_Impl::~SwXMLImportTableItemMapper_Impl()
 
 void SwXMLImportTableItemMapper_Impl::Reset()
 {
-    m_FoMarginValue = OUString();
+    m_FoMarginValue.clear();
     for (int i = 0; i < 3; ++i)
     {
         m_bHaveMargin[i] = false;

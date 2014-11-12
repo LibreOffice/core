@@ -170,7 +170,7 @@ namespace svx
         const sal_Unicode       cSeparator = sal_Unicode(11);
         const OUString   sSeparator(&cSeparator, 1);
 
-        m_sCompatibleFormat = OUString();
+        m_sCompatibleFormat.clear();
         m_sCompatibleFormat += _rDatasource;
         m_sCompatibleFormat += sSeparator;
         m_sCompatibleFormat += _rCommand;

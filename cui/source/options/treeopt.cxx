@@ -226,7 +226,7 @@ static void deleteGroupNames()
 {
     sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
-        ModuleMap[ nIndex++ ].m_sGroupName = OUString();
+        ModuleMap[ nIndex++ ].m_sGroupName.clear();
 }
 
 static sal_uInt16 getGroupNodeId( const OUString& rModule )

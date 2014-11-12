@@ -88,7 +88,7 @@ short generateNamespace(std::ostream & o,
             o << "namespace comp_" << implname << " {\n\n";
             count=1;
         } else {
-            nm = OString();
+            nm.clear();
         }
     } else {
         sal_Int32 nPos=0;

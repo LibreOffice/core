@@ -1933,7 +1933,7 @@ void VbaDirStreamObject::implDumpRecordBody()
         break;
         case 0x0019:
             dumpByteString( "name" );
-            maCurrStream = OUString();
+            maCurrStream.clear();
             mnCurrOffset = 0;
         break;
         case 0x001A:
@@ -1945,7 +1945,7 @@ void VbaDirStreamObject::implDumpRecordBody()
         case 0x002B:
             if( !maCurrStream.isEmpty() )
                 mrVbaData.maStrmOffsets[ maCurrStream ] = mnCurrOffset;
-            maCurrStream = OUString();
+            maCurrStream.clear();
             mnCurrOffset = 0;
         break;
         case 0x002F:

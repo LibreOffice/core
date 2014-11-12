@@ -405,7 +405,7 @@ void ODbaseIndex::createINFEntry()
             aKeyName = aInfFile.GetKeyName(i);
             if (bCase ? aKeyName.equals(aNewEntry) : aKeyName.equalsIgnoreAsciiCase(aNewEntry))
             {
-                aNewEntry = OString();
+                aNewEntry.clear();
                 break;
             }
         }

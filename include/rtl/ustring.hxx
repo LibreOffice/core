@@ -374,7 +374,14 @@ public:
         return *this;
     }
 #endif
-
+    /**
+      Clears the string, i.e, makes a zero-character string
+      @return void
+    */
+    void clear()
+    {
+        rtl_uString_new( &pData );
+    }
     /**
       Returns the length of this string.
 

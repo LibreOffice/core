@@ -107,7 +107,7 @@ SwList* DocumentListsManager::createListForListStyle( const OUString& sListStyle
     OUString sListId( pNumRule->GetDefaultListId() ); // can be empty String
     if ( getListByName( sListId ) )
     {
-        sListId = OUString();
+        sListId.clear();
     }
     SwList* pNewList = createList( sListId, sListStyleName );
     maListStyleLists[sListStyleName] = pNewList;

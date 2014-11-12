@@ -1030,7 +1030,7 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, OUString& rStr)
         case FUNIT_NONE     :
         case FUNIT_CUSTOM   :
         {
-            rStr = OUString();
+            rStr.clear();
             break;
         }
 

@@ -103,8 +103,8 @@ bool SfxStylesInfo_Impl::parseStyleCommand(SfxStyleInfo_Impl& aStyle)
     if (!aStyle.sCommand.startsWith(CMDURL_STYLEPROT_ONLY))
         return false;
 
-    aStyle.sFamily = OUString();
-    aStyle.sStyle  = OUString();
+    aStyle.sFamily.clear();
+    aStyle.sStyle.clear();
 
     sal_Int32       nCmdLen  = aStyle.sCommand.getLength();
     OUString sCmdArgs = aStyle.sCommand.copy(LEN_STYLEPROT, nCmdLen-LEN_STYLEPROT);
@@ -148,14 +148,14 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
         if (xStyleSet.is())
             xStyleSet->getByName(aStyle.sStyle) >>= xStyle;
 
-        aStyle.sLabel = OUString();
+        aStyle.sLabel.clear();
         if (xStyle.is())
             xStyle->getPropertyValue(STYLEPROP_UINAME) >>= aStyle.sLabel;
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { aStyle.sLabel = OUString(); }
+        { aStyle.sLabel.clear(); }
 
     if (aStyle.sLabel.isEmpty())
     {
@@ -839,7 +839,7 @@ OUString SfxConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(css::uno::Exception&)
-        { sUIName = OUString(); }
+        { sUIName.clear(); }
 
     // fallback for missing UINames !?
     if (sUIName.isEmpty())

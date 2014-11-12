@@ -281,7 +281,7 @@ OUString SvtViewOptionsBase_Impl::GetWindowState( const OUString& sName )
     }
     catch(const css::uno::Exception& ex)
         {
-            sWindowState = OUString();
+            sWindowState.clear();
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 

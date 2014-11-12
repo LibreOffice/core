@@ -87,8 +87,8 @@ void MIP::resetRequired()         { mbHasRequired = false; mbRequired = false; }
 void MIP::setRelevant( bool b )   { mbHasRelevant = true; mbRelevant = b; }
 void MIP::resetRelevant()         { mbHasRelevant = false; mbRelevant = true; }
 
-void MIP::setConstraint( bool b ) { mbHasConstraint = true; mbConstraint = b; msConstraintExplanation = OUString(); }
-void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true; msConstraintExplanation = OUString(); }
+void MIP::setConstraint( bool b ) { mbHasConstraint = true; mbConstraint = b; msConstraintExplanation.clear(); }
+void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true; msConstraintExplanation.clear(); }
 
 void MIP::setConstraintExplanation( const OUString& s ) { msConstraintExplanation = s; }
 
@@ -97,7 +97,7 @@ void MIP::setHasCalculate( bool b ) { mbHasCalculate = b; }
 void MIP::resetCalculate()        { mbHasCalculate = false; }
 
 void MIP::setTypeName( const OUString& s ) { msTypeName = s; mbHasTypeName = true; }
-void MIP::resetTypeName()         { msTypeName = OUString(); mbHasTypeName = false; }
+void MIP::resetTypeName()         { msTypeName.clear(); mbHasTypeName = false; }
 
 
 

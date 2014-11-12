@@ -755,11 +755,11 @@ static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
             if( nNo < 4000 )
                 aTmpStr = SvxNumberFormat::CreateRomanString( nNo, ( eType == SVX_ROMAN_UPPER ) );
             else
-                aTmpStr = OUString();
+                aTmpStr.clear();
             break;
 
         case SVX_NUMBER_NONE:
-            aTmpStr = OUString();
+            aTmpStr.clear();
             break;
 
 //      CHAR_SPECIAL:

@@ -284,7 +284,7 @@ private:
         SdrUnoObj*& _rpControl,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource >& _rxDataSource = NULL,
         const OUString& _rDataSourceName = OUString(),
-        const OUString& _rCommand= OUString(),
+        const OUString& _rCommand = OUString(),
         const sal_Int32 _nCommandType = -1
     );
 

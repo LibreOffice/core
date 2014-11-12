@@ -282,7 +282,7 @@ OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const ScMy
         }
         else
             if (aValidation.aValidationType == sheet::ValidationType_TEXT_LEN)
-                sCondition = OUString();
+                sCondition.clear();
     }
     if (!sCondition.isEmpty())
     {

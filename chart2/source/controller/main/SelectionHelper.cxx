@@ -409,7 +409,7 @@ OUString SelectionHelper::getHitObjectCID(
     //accept only named objects while searching for the object to select
     if( !findNamedParent( pNewObj, aRet, true ) )
     {
-        aRet = OUString();
+        aRet.clear();
     }
 
     OUString aPageCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );//@todo read CID from model

@@ -234,7 +234,7 @@ bool TextConvWrapper::ConvContinue_impl()
     // modified version of EditSpellWrapper::SpellContinue
 
     // get next convertible text portion and its language
-    m_aConvText = OUString();
+    m_aConvText.clear();
     m_nConvTextLang = LANGUAGE_NONE;
     m_pEditView->GetImpEditEngine()->ImpConvert( m_aConvText, m_nConvTextLang,
             m_pEditView, GetSourceLanguage(), m_aConvSel,

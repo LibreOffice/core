@@ -738,7 +738,7 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
                 aLine = aLine.copy(0, nLineLen);
             }
             WriteLines(*pStrm, aLine);
-            aLine = OString();
+            aLine.clear();
         }
     }
     else
@@ -857,7 +857,7 @@ void SbiIoSystem::Shutdown()
         MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOut ).Execute();
 #endif
     }
-    aOut = OUString();
+    aOut.clear();
 }
 
 
@@ -965,7 +965,7 @@ void SbiIoSystem::ReadCon(OString& rIn)
     {
         nError = SbERR_USER_ABORT;
     }
-    aPrompt = OString();
+    aPrompt.clear();
 }
 
 // output of a MessageBox, if theres a CR in the console-buffer

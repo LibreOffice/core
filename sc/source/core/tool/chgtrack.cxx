@@ -1720,7 +1720,7 @@ void ScChangeActionContent::SetValue(
     OUString& rStr, ScCellValue& rCell, sal_uLong nFormat, const ScCellValue& rOrgCell,
     const ScDocument* pFromDoc, ScDocument* pToDoc )
 {
-    rStr = OUString();
+    rStr.clear();
 
     if (GetContentCellType(rOrgCell))
     {
@@ -1748,7 +1748,7 @@ void ScChangeActionContent::SetValue(
 
 void ScChangeActionContent::SetCell( OUString& rStr, ScCellValue& rCell, sal_uLong nFormat, const ScDocument* pDoc )
 {
-    rStr = OUString();
+    rStr.clear();
     if (rCell.isEmpty())
         return;
 
@@ -1794,7 +1794,7 @@ void ScChangeActionContent::GetValueString(
         break;
         case CELLTYPE_NONE:
         default:
-            rStr = OUString();
+            rStr.clear();
     }
 }
 
@@ -2199,7 +2199,7 @@ void ScChangeTrack::Clear()
     aGeneratedMap.clear();
     aPasteCutMap.clear();
     maUserCollection.clear();
-    maUser = OUString();
+    maUser.clear();
     Init();
 }
 

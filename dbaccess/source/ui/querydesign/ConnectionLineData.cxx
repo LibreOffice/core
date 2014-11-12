@@ -61,7 +61,8 @@ OConnectionLineData& OConnectionLineData::operator=( const OConnectionLineData& 
 
 bool OConnectionLineData::Reset()
 {
-    m_aDestFieldName = m_aSourceFieldName = OUString();
+    m_aDestFieldName.clear();
+    m_aSourceFieldName.clear();
     return true;
 }
 

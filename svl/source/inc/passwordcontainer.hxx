@@ -118,7 +118,7 @@ public:
         m_aName = aRecord.m_aName;
 
         m_aMemPass.clear();
-        m_aPersPass = OUString();
+        m_aPersPass.clear();
         InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
 
         return *this;
@@ -177,7 +177,7 @@ public:
         else if ( nStatus == PERSISTENT_RECORD )
         {
             m_bHasPersPass = false;
-            m_aPersPass = OUString();
+            m_aPersPass.clear();
         }
     }
 

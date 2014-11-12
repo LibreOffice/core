@@ -286,7 +286,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
     {
         AddText( sCurrentText, sCurrentIsoLang, sCurrentResTyp );
         Output( sCurrentText );
-        sCurrentText = OString();
+        sCurrentText.clear();
         pStackData->sEndTextTag = sToken;
     }
 
@@ -441,7 +441,7 @@ void CfgMerge::WorkOnText(OString &, const OString& rLangIndex)
             OString sGroupId;
             if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
-                sLocalId = OString();
+                sLocalId.clear();
             }
             else {
                 sGroupId = aStack.GetAccessPath( aStack.size() - 2 );

@@ -1177,7 +1177,7 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
     if (pBox->GetSelectEntry().isEmpty())
     {
         for(int i = 0; i < AUTH_FIELD_END; i++)
-            m_sFields[i] = OUString();
+            m_sFields[i].clear();
     }
     m_pAuthorFI->SetText(m_sFields[AUTH_FIELD_AUTHOR]);
     m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);

@@ -497,7 +497,7 @@ void VDiagram::createShapes_3d()
 
         OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
         if( !bAddFloorAndWall )
-            aWallCID = OUString();
+            aWallCID.clear();
         uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, aWallCID ) );
 
         CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );

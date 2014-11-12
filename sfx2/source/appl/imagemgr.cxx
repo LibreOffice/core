@@ -101,7 +101,7 @@ Image SAL_CALL GetImage(
             aCommandURL += OUString::createFromAscii( pSlot->GetUnoName() );
         }
         else
-            aCommandURL = OUString();
+            aCommandURL.clear();
     }
 
     Reference< XImageManager > xDocImgMgr;

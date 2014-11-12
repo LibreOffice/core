@@ -54,7 +54,7 @@ void ScSortParam::Clear()
     bHasHeader=bCaseSens=bUserDef=bNaturalSort = false;
     bByRow=bIncludePattern=bInplace = true;
     aCollatorLocale = ::com::sun::star::lang::Locale();
-    aCollatorAlgorithm = OUString();
+    aCollatorAlgorithm.clear();
 
     aKeyState.bDoSort = false;
     aKeyState.nField = 0;

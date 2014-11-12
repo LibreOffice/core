@@ -186,7 +186,7 @@ bool ImplImageTree::doLoadImage(
 }
 
 void ImplImageTree::shutDown() {
-    m_style = OUString();
+    m_style.clear();
         // for safety; empty m_style means "not initialized"
     m_iconCache.clear();
     m_linkHash.clear();

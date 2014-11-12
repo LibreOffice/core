@@ -126,8 +126,8 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
         if ( ! ::utl::splitLastFromConfigurationPath(sOrgPath, sTempPath, sProperty))
         {
             sNode     = sLocale;
-            sProperty = OUString();
-            sLocale   = OUString();
+            sProperty.clear();
+            sLocale.clear();
         }
         else
         {
@@ -136,7 +136,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
             {
                 sNode     = sProperty;
                 sProperty = sLocale;
-                sLocale   = OUString();
+                sLocale.clear();
             }
         }
 

@@ -232,7 +232,7 @@ void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxIn
             break;
         default:
             OSL_FAIL("OFileControlModel::read : unknown version !");
-            m_sDefaultValue = OUString();
+            m_sDefaultValue.clear();
     }
 
     // Display default values after read

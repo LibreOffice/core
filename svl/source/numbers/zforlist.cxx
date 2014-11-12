@@ -1349,7 +1349,7 @@ void SvNumberFormatter::GetOutputString(const double& fOutNumber,
 {
     if (bNoZero && fOutNumber == 0.0)
     {
-        sOutString = OUString();
+        sOutString.clear();
         return;
     }
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );

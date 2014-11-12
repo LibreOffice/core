@@ -68,7 +68,7 @@ namespace DOM
             InputSource is;
             is.sPublicId = sPublicId;
             is.sSystemId = sSystemId;
-            is.sEncoding = OUString();
+            is.sEncoding.clear();
 
             try {
                 Reference< XCommandEnvironment > aEnvironment(

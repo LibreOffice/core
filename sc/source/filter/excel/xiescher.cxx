@@ -550,7 +550,7 @@ void XclImpDrawObjBase::PostProcessSdrObject( XclImpDffConverter& rDffConv, SdrO
 
 void XclImpDrawObjBase::ReadName5( XclImpStream& rStrm, sal_uInt16 nNameLen )
 {
-    maObjName = OUString();
+    maObjName.clear();
     if( nNameLen > 0 )
     {
         // name length field is repeated before the name
@@ -562,7 +562,7 @@ void XclImpDrawObjBase::ReadName5( XclImpStream& rStrm, sal_uInt16 nNameLen )
 
 void XclImpDrawObjBase::ReadMacro3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName = OUString();
+    maMacroName.clear();
     rStrm.Ignore( nMacroSize );
     // skip padding byte for word boundaries, not contained in nMacroSize
     if( rStrm.GetRecPos() & 1 ) rStrm.Ignore( 1 );
@@ -570,19 +570,19 @@ void XclImpDrawObjBase::ReadMacro3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 
 void XclImpDrawObjBase::ReadMacro4( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName = OUString();
+    maMacroName.clear();
     rStrm.Ignore( nMacroSize );
 }
 
 void XclImpDrawObjBase::ReadMacro5( XclImpStream& rStrm, sal_uInt16 nMacroSize )
 {
-    maMacroName = OUString();
+    maMacroName.clear();
     rStrm.Ignore( nMacroSize );
 }
 
 void XclImpDrawObjBase::ReadMacro8( XclImpStream& rStrm )
 {
-    maMacroName = OUString();
+    maMacroName.clear();
     if( rStrm.GetRecLeft() > 6 )
     {
         // macro is stored in a tNameXR token containing a link to a defined name

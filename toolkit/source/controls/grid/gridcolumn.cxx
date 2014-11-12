@@ -229,7 +229,8 @@ namespace toolkit
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aIdentifier.clear();
-        m_sTitle = m_sHelpText = OUString();
+        m_sTitle.clear();
+        m_sHelpText.clear();
     }
 
 

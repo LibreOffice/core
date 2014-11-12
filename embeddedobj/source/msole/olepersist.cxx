@@ -147,7 +147,7 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
         catch( const uno::Exception& )
         {
                KillFile_Impl( aResult, xFactory );
-            aResult = OUString();
+            aResult.clear();
         }
     }
 
@@ -726,7 +726,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                                     {
                                         // this is the own stream, so the temporary URL must be cleaned if it exists
                                         KillFile_Impl( m_aTempURL, m_xFactory );
-                                        m_aTempURL = OUString();
+                                        m_aTempURL.clear();
                                     }
 
 #ifdef WNT
@@ -1613,7 +1613,7 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
     m_xNewObjectStream = uno::Reference< io::XStream >();
     m_xNewParentStorage = uno::Reference< embed::XStorage >();
-    m_aNewEntryName = OUString();
+    m_aNewEntryName.clear();
     m_bWaitSaveCompleted = false;
     m_bNewVisReplInStream = false;
     m_xNewCachedVisRepl = uno::Reference< io::XStream >();
@@ -1964,7 +1964,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
 
         // disconnect the old temporary URL
         OUString aOldTempURL = m_aTempURL;
-        m_aTempURL = OUString();
+        m_aTempURL.clear();
 
         OleComponent* pNewOleComponent = new OleComponent( m_xFactory, this );
         try {
@@ -2017,7 +2017,7 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
         }
 
         m_bIsLink = sal_False;
-        m_aLinkURL = OUString();
+        m_aLinkURL.clear();
     }
     else
 #endif

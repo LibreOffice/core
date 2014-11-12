@@ -847,7 +847,7 @@ bool lcl_maybeReplaceCellString(
             !rSearchItem.GetReplaceString().isEmpty())
         {
             rColObj.SetRawString(nRow, rSearchItem.GetReplaceString());
-            rUndoStr = OUString();
+            rUndoStr.clear();
         }
         return true;
     }
@@ -1003,7 +1003,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                                 pUndoDoc->SetString(ScAddress(nCol, i, nTab), EMPTY_OUSTRING);
                             }
                         }
-                        rUndoStr = OUString();
+                        rUndoStr.clear();
                     }
                 }
 

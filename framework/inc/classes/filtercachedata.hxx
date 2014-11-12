@@ -88,9 +88,9 @@ struct FileType
         inline void impl_clear()
         {
             bPreferred          = false;
-            sName               = OUString();
-            sMediaType          = OUString();
-            sClipboardFormat    = OUString();
+            sName.clear();
+            sMediaType.clear();
+            sClipboardFormat.clear();
             nDocumentIconID     = 0;
             lUINames.free   ();
             lURLPattern.free();
@@ -148,14 +148,14 @@ struct Filter
         inline void impl_clear()
         {
             nOrder              = 0;
-            sName               = OUString();
-            sType               = OUString();
-            sDocumentService    = OUString();
-            sFilterService      = OUString();
-            sUIComponent        = OUString();
+            sName.clear();
+            sType.clear();
+            sDocumentService.clear();
+            sFilterService.clear();
+            sUIComponent.clear();
             nFlags              = 0;
             nFileFormatVersion  = 0;
-            sTemplateName       = OUString();
+            sTemplateName.clear();
             lUINames.free   ();
             lUserData.free  ();
         }
@@ -215,7 +215,7 @@ struct Detector
 
         inline void impl_clear()
         {
-            sName = OUString();
+            sName.clear();
             lTypes.free();
         }
 
@@ -256,7 +256,7 @@ struct Loader
 
         inline void impl_clear()
         {
-            sName = OUString();
+            sName.clear();
             lUINames.free   ();
             lTypes.free     ();
         }
@@ -299,7 +299,7 @@ struct ContentHandler
 
         inline void impl_clear()
         {
-            sName = OUString();
+            sName.clear();
             lTypes.free();
         }
 

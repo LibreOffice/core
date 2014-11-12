@@ -3348,18 +3348,18 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
         const OUString& rAttrValue, bool bRestrictToExternalNmsp ) const
 {
     // parse the attribute value, extract namespace ID, literal namespace, and formula string
-    rFormulaNmsp = OUString();
+    rFormulaNmsp.clear();
     sal_uInt16 nNsId = GetNamespaceMap()._GetKeyByAttrName( rAttrValue, 0, &rFormula, &rFormulaNmsp, false );
 
     // check if we have an ODF formula namespace
     if( !bRestrictToExternalNmsp ) switch( nNsId )
     {
         case XML_NAMESPACE_OOOC:
-            rFormulaNmsp = OUString();  // remove namespace string for built-in grammar
+            rFormulaNmsp.clear();  // remove namespace string for built-in grammar
             reGrammar = FormulaGrammar::GRAM_PODF;
             return;
         case XML_NAMESPACE_OF:
-            rFormulaNmsp = OUString();  // remove namespace string for built-in grammar
+            rFormulaNmsp.clear();  // remove namespace string for built-in grammar
             reGrammar = FormulaGrammar::GRAM_ODFF;
             return;
     }
@@ -3398,7 +3398,7 @@ void ScXMLImport::ExtractFormulaNamespaceGrammar(
     /*  All attempts failed (e.g. no namespace and no leading equality sign, or
         an invalid namespace prefix), continue with the entire attribute value. */
     rFormula = rAttrValue;
-    rFormulaNmsp = OUString();  // remove any namespace string
+    rFormulaNmsp.clear();  // remove any namespace string
     reGrammar = eDefaultGrammar;
 }
 

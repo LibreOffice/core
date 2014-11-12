@@ -692,7 +692,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
     // If not own Pool, then no name
     if ( aExternName != pImp->aName )
-        pImp->aName = OUString();
+        (pImp->aName).clear();
 
     pImp->bStreaming = false;
     return rStream;
@@ -973,7 +973,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     }
 
     if ( aExternName != pImp->aName )
-        pImp->aName = OUString();
+        pImp->aName.clear();
 
     pImp->bStreaming = false;
     return rStream;

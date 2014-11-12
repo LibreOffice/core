@@ -211,7 +211,7 @@ bool ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, OUString& rName
         }
     }
 
-    rName = OUString();
+    rName.clear();
     return false;                   // nothing found
 }
 

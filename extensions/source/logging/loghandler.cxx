@@ -110,7 +110,7 @@ namespace logging
             _out_rEncoding = OUString::createFromAscii( pMimeCharset );
             return true;
         }
-        _out_rEncoding = OUString();
+        _out_rEncoding.clear();
         return false;
     }
 

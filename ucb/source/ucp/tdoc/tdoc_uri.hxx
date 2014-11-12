@@ -95,8 +95,12 @@ inline void Uri::setUri( const OUString & rUri )
 {
     m_eState = UNKNOWN;
     m_aUri = rUri;
-    m_aParentUri = m_aDocId = m_aInternalPath = m_aPath = m_aName
-        = m_aDecodedName = OUString();
+    m_aParentUri.clear();
+    m_aDocId.clear();
+    m_aInternalPath.clear();
+    m_aPath.clear();
+    m_aName.clear();
+    m_aDecodedName.clear();
 }
 
 inline bool Uri::isRoot() const

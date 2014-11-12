@@ -153,7 +153,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
                     {
                         if ( !aFontWorkShapeType.equals( aType ) )  // different FontWorkShapeTypes selected ?
                         {
-                            aFontWorkShapeType = OUString();
+                            aFontWorkShapeType.clear();
                             break;
                         }
                     }

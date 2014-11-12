@@ -251,7 +251,8 @@ OUString Ppt97Animation::GetPresetSubType() const
 
 void Ppt97Animation::ClearCacheData() const
 {
-    m_aPresetId = m_aSubType = OUString();
+    m_aPresetId.clear();
+    m_aSubType.clear();
     m_bHasSpecialDuration = false;
     m_fDurationInSeconds = 0.001;
 }

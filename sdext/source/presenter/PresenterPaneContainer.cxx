@@ -77,12 +77,12 @@ void PresenterPaneContainer::PreparePane (
         if (rsTitle.indexOf('%') < 0)
         {
             pDescriptor->msTitle = rsTitle;
-            pDescriptor->msTitleTemplate = OUString();
+            (pDescriptor->msTitleTemplate).clear();
         }
         else
         {
             pDescriptor->msTitleTemplate = rsTitle;
-            pDescriptor->msTitle = OUString();
+            (pDescriptor->msTitle).clear();
         }
         pDescriptor->msAccessibleTitleTemplate = rsAccessibleTitle;
         pDescriptor->maViewInitialization = rViewInitialization;

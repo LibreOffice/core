@@ -100,7 +100,7 @@ namespace svxform
             BorderDescriptor::clear();
             UnderlineDescriptor::clear();
             xControl.clear();
-            sOriginalHelpText = OUString();
+            sOriginalHelpText.clear();
         }
     };
 

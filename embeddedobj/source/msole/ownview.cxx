@@ -442,7 +442,7 @@ void OwnView_Impl::CreateNative()
                     if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
                         KillFile_Impl( m_aNativeTempURL, m_xFactory );
-                        m_aNativeTempURL = OUString();
+                        m_aNativeTempURL.clear();
                     }
                 }
 
@@ -453,7 +453,7 @@ void OwnView_Impl::CreateNative()
                     if ( !bOk && !m_aNativeTempURL.isEmpty() )
                     {
                         KillFile_Impl( m_aNativeTempURL, m_xFactory );
-                        m_aNativeTempURL = OUString();
+                        m_aNativeTempURL.clear();
                     }
                 }
             }

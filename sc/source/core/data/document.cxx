@@ -197,7 +197,7 @@ bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
             maTabs[nTab]->GetName( rName );
             return true;
         }
-    rName = OUString();
+    rName.clear();
     return false;
 }
 
@@ -231,7 +231,7 @@ bool ScDocument::GetCodeName( SCTAB nTab, OUString& rName ) const
             maTabs[nTab]->GetCodeName( rName );
             return true;
         }
-    rName = OUString();
+    rName.clear();
     return false;
 }
 
@@ -3256,7 +3256,7 @@ void ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& r
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         maTabs[nTab]->GetInputString( nCol, nRow, rString );
     else
-        rString = OUString();
+        rString.clear();
 }
 
 sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rString )
@@ -3429,7 +3429,7 @@ void ScDocument::GetFormula( SCCOL nCol, SCROW nRow, SCTAB nTab, OUString& rForm
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
             maTabs[nTab]->GetFormula( nCol, nRow, rFormula );
     else
-        rFormula = OUString();
+        rFormula.clear();
 }
 
 const ScFormulaCell* ScDocument::GetFormulaCell( const ScAddress& rPos ) const

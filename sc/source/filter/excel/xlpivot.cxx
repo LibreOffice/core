@@ -49,7 +49,7 @@ XclPCItem::~XclPCItem()
 void XclPCItem::SetEmpty()
 {
     meType = EXC_PCITEM_EMPTY;
-    maText = OUString();
+    maText.clear();
 }
 
 void XclPCItem::SetText( const OUString& rText )
@@ -62,7 +62,7 @@ void XclPCItem::SetDouble( double fValue )
 {
     meType = EXC_PCITEM_DOUBLE;
     //! TODO convert double to string
-    maText = OUString();
+    maText.clear();
     mfValue = fValue;
 }
 
@@ -70,7 +70,7 @@ void XclPCItem::SetDateTime( const DateTime& rDateTime )
 {
     meType = EXC_PCITEM_DATETIME;
     //! TODO convert date to string
-    maText = OUString();
+    maText.clear();
     maDateTime = rDateTime;
 }
 
@@ -84,7 +84,7 @@ void XclPCItem::SetInteger( sal_Int16 nValue )
 void XclPCItem::SetError( sal_uInt16 nError )
 {
     meType = EXC_PCITEM_ERROR;
-    maText = OUString();
+    maText.clear();
     mnError = nError;
     switch( nError )
     {
@@ -103,7 +103,7 @@ void XclPCItem::SetBool( bool bValue )
 {
     meType = EXC_PCITEM_BOOL;
     //! TODO convert boolean to string
-    maText = OUString();
+    maText.clear();
     mbValue = bValue;
 }
 
@@ -184,7 +184,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPCFieldInfo& rInfo )
     if( rStrm.GetRecLeft() >= 3 )
         rInfo.maName = rStrm.ReadUniString();
     else
-        rInfo.maName = OUString();
+        rInfo.maName.clear();
     return rStrm;
 }
 
@@ -392,7 +392,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName )
     rStrm >> nStrLen;
     rCachedName.mbUseCache = nStrLen == EXC_PT_NOSTRING;
     if( rCachedName.mbUseCache )
-        rCachedName.maName = OUString();
+        rCachedName.maName.clear();
     else
         rCachedName.maName = rStrm.ReadUniString( nStrLen );
     return rStrm;

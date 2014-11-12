@@ -1466,7 +1466,7 @@ SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevic
     get(m_pSymbolSetDisplay, "symbolsetdisplay");
     get(m_pSymbolDisplay, "preview");
 
-    aSymbolSetName = OUString();
+    aSymbolSetName.clear();
     aSymbolSet.clear();
     FillSymbolSets();
     if (m_pSymbolSets->GetEntryCount() > 0)
@@ -1516,7 +1516,7 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
     bool    bRet = false;
     sal_Int32  nPos = m_pSymbolSets->GetEntryPos(rSymbolSetName);
 
-    aSymbolSetName = OUString();
+    aSymbolSetName.clear();
     aSymbolSet.clear();
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
     {
