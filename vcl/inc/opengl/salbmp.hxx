@@ -106,7 +106,7 @@ private:
     GLuint          mnConvKernelSizeUniform;
     GLuint          mnConvOffsetsUniform;
 
-    bool ImplScaleFilter( GLenum nFilter );
+    bool ImplScaleFilter( const double& rScaleX, const double& rScaleY, GLenum nFilter );
     void ImplCreateKernel( const double& fScale, const Kernel& rKernel, GLfloat*& pWeights, sal_uInt32& aKernelSize );
     bool ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel );
 

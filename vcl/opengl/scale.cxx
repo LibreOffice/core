@@ -81,12 +81,17 @@ GLuint OpenGLSalBitmap::ImplGetConvolutionProgram()
     return mnConvProgram;
 }
 
-bool OpenGLSalBitmap::ImplScaleFilter( GLenum nFilter )
+bool OpenGLSalBitmap::ImplScaleFilter(
+    const double& rScaleX,
+    const double& rScaleY,
+    GLenum        nFilter )
 {
     OpenGLTexture* pNewTex;
     GLuint nProgram;
     GLuint nFramebufferId;
     GLenum nOldFilter;
+    int nNewWidth( mnWidth * rScaleX );
+    int nNewHeight( mnHeight * rScaleY );
 
     nProgram = ImplGetTextureProgram();
     if( nProgram == 0 )
@@ -97,7 +102,7 @@ bool OpenGLSalBitmap::ImplScaleFilter( GLenum nFilter )
     glUseProgram( nProgram );
     glUniform1i( mnTexSamplerUniform, 0 );
 
-    pNewTex = new OpenGLTexture( mnWidth, mnHeight );
+    pNewTex = new OpenGLTexture( nNewWidth, nNewHeight );
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pNewTex->Id(), 0 );
 
     mpTexture->Bind();
@@ -111,6 +116,8 @@ bool OpenGLSalBitmap::ImplScaleFilter( GLenum nFilter )
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     glDeleteFramebuffers( 1, &nFramebufferId );
 
+    mnWidth = nNewWidth;
+    mnHeight = nNewHeight;
     mpTexture.reset( pNewTex );
 
     CHECK_GL_ERROR();
@@ -241,11 +248,11 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, s
 
     if( nScaleFlag == BMP_SCALE_FAST )
     {
-        return ImplScaleFilter( GL_NEAREST );
+        return ImplScaleFilter( rScaleX, rScaleY, GL_NEAREST );
     }
     if( nScaleFlag == BMP_SCALE_BILINEAR )
     {
-        return ImplScaleFilter( GL_LINEAR );
+        return ImplScaleFilter( rScaleX, rScaleY, GL_LINEAR );
     }
     else if( nScaleFlag == BMP_SCALE_SUPER )
     {
