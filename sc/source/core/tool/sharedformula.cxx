@@ -326,6 +326,19 @@ void SharedFormulaUtil::unshareFormulaCells(CellStoreType& rCells, std::vector<S
     splitFormulaCellGroups(rCells, aRows2);
 }
 
+void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, ScFormulaCell** ppSharedTop )
+{
+    assert((**ppSharedTop).IsSharedTop());
+
+    ScFormulaCell** pp = ppSharedTop;
+    ScFormulaCell** ppEnd = ppSharedTop + (**ppSharedTop).GetSharedLength();
+    for (; pp != ppEnd; ++pp)
+    {
+        ScFormulaCell& rFC = **pp;
+        rFC.StartListeningTo(rCxt);
+    }
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
