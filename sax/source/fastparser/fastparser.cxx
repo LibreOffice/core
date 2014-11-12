@@ -654,7 +654,7 @@ sal_Int32 FastSaxParserImpl::GetToken( const xmlChar* pName, sal_Int32 nameLen /
                                                     XML_CAST( pName ), nameLen ); // uses utf-8
 }
 
-sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPrefixLen, const xmlChar* pName, int nNameLen ) throw (SAXException)
+sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, sal_Int32 nPrefixLen, const xmlChar* pName, sal_Int32 nNameLen ) throw (SAXException)
 {
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
 
