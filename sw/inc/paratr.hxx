@@ -25,8 +25,20 @@
 #include <calbck.hxx>
 #include <swatrset.hxx>
 #include <format.hxx>
+#include <charfmt.hxx>
 #include <swtypes.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/hyphenzoneitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
 
 class SwCharFmt;
 class IntlWrapper;
@@ -86,8 +98,8 @@ public:
     inline sal_uInt16 GetDistance() const { return nDistance; }
     inline sal_uInt16 &GetDistance() { return nDistance; }
 
-   inline const SwCharFmt *GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }
-    inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)GetRegisteredIn(); }
+    inline const SwCharFmt *GetCharFmt() const { return static_cast<const SwCharFmt*>(GetRegisteredIn()); }
+    inline SwCharFmt *GetCharFmt()       { return static_cast<SwCharFmt*>(GetRegisteredIn()); }
     void SetCharFmt( SwCharFmt *pNew );
     /// Get information from Client.
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
@@ -190,37 +202,37 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
 
 //  Implementation of paragraph-attributes methods of SwAttrSet
 inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(bool bInP) const
-    {   return (const SvxLineSpacingItem&)Get( RES_PARATR_LINESPACING,bInP); }
+    {   return static_cast<const SvxLineSpacingItem&>(Get( RES_PARATR_LINESPACING,bInP)); }
 inline const SvxAdjustItem &SwAttrSet::GetAdjust(bool bInP) const
-    {   return (const SvxAdjustItem&)Get( RES_PARATR_ADJUST,bInP); }
+    {   return static_cast<const SvxAdjustItem&>(Get( RES_PARATR_ADJUST,bInP)); }
 inline const SvxFmtSplitItem &SwAttrSet::GetSplit(bool bInP) const
-    {   return (const SvxFmtSplitItem&)Get( RES_PARATR_SPLIT,bInP); }
+    {   return static_cast<const SvxFmtSplitItem&>(Get( RES_PARATR_SPLIT,bInP)); }
 inline const SwRegisterItem &SwAttrSet::GetRegister(bool bInP) const
-    {   return (const SwRegisterItem&)Get( RES_PARATR_REGISTER,bInP); }
+    {   return static_cast<const SwRegisterItem&>(Get( RES_PARATR_REGISTER,bInP)); }
 inline const SvxWidowsItem &SwAttrSet::GetWidows(bool bInP) const
-    {   return (const SvxWidowsItem&)Get( RES_PARATR_WIDOWS,bInP); }
+    {   return static_cast<const SvxWidowsItem&>(Get( RES_PARATR_WIDOWS,bInP)); }
 inline const SvxOrphansItem &SwAttrSet::GetOrphans(bool bInP) const
-    {   return (const SvxOrphansItem&)Get( RES_PARATR_ORPHANS,bInP); }
+    {   return static_cast<const SvxOrphansItem&>(Get( RES_PARATR_ORPHANS,bInP)); }
 inline const SvxTabStopItem &SwAttrSet::GetTabStops(bool bInP) const
-    {   return (const SvxTabStopItem&)Get( RES_PARATR_TABSTOP,bInP); }
+    {   return static_cast<const SvxTabStopItem&>(Get( RES_PARATR_TABSTOP,bInP)); }
 inline const SvxHyphenZoneItem &SwAttrSet::GetHyphenZone(bool bInP) const
-    {   return (const SvxHyphenZoneItem&)Get(RES_PARATR_HYPHENZONE,bInP); }
+    {   return static_cast<const SvxHyphenZoneItem&>(Get(RES_PARATR_HYPHENZONE,bInP)); }
 inline const SwFmtDrop &SwAttrSet::GetDrop(bool bInP) const
-    {   return (const SwFmtDrop&)Get(RES_PARATR_DROP,bInP); }
+    {   return static_cast<const SwFmtDrop&>(Get(RES_PARATR_DROP,bInP)); }
 inline const SwNumRuleItem &SwAttrSet::GetNumRule(bool bInP) const
-    {   return (const SwNumRuleItem&)Get(RES_PARATR_NUMRULE,bInP); }
+    {   return static_cast<const SwNumRuleItem&>(Get(RES_PARATR_NUMRULE,bInP)); }
 inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(bool bInP) const
-    {   return (const SvxScriptSpaceItem&)Get(RES_PARATR_SCRIPTSPACE,bInP); }
+    {   return static_cast<const SvxScriptSpaceItem&>(Get(RES_PARATR_SCRIPTSPACE,bInP)); }
 inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(bool bInP) const
-    {   return (const SvxHangingPunctuationItem&)Get(RES_PARATR_HANGINGPUNCTUATION,bInP); }
+    {   return static_cast<const SvxHangingPunctuationItem&>(Get(RES_PARATR_HANGINGPUNCTUATION,bInP)); }
 inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(bool bInP) const
-    {   return (const SvxForbiddenRuleItem&)Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
+    {   return static_cast<const SvxForbiddenRuleItem&>(Get(RES_PARATR_FORBIDDEN_RULES, bInP)); }
 inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(bool bInP) const
-    {   return (const SvxParaVertAlignItem&)Get( RES_PARATR_VERTALIGN, bInP ); }
+    {   return static_cast<const SvxParaVertAlignItem&>(Get( RES_PARATR_VERTALIGN, bInP )); }
 inline const SvxParaGridItem &SwAttrSet::GetParaGrid(bool bInP) const
-    {   return (const SvxParaGridItem&)Get( RES_PARATR_SNAPTOGRID, bInP ); }
+    {   return static_cast<const SvxParaGridItem&>(Get( RES_PARATR_SNAPTOGRID, bInP )); }
 inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(bool bInP) const
-    {   return (const SwParaConnectBorderItem&)Get( RES_PARATR_CONNECT_BORDER, bInP ); }
+    {   return static_cast<const SwParaConnectBorderItem&>(Get( RES_PARATR_CONNECT_BORDER, bInP )); }
 
 // Implementation of paragraph-attributes methods of SwFmt
 inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(bool bInP) const
@@ -248,13 +260,13 @@ inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(bool bInP) const
 inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(bool bInP) const
     {   return aSet.GetHangingPunctuation(bInP) ; }
 inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(bool bInP) const
-    {   return (const SvxForbiddenRuleItem&)aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
+    {   return static_cast<const SvxForbiddenRuleItem&>(aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP)); }
 inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(bool bInP) const
-    {   return (const SvxParaVertAlignItem&)aSet.Get( RES_PARATR_VERTALIGN, bInP ); }
+    {   return static_cast<const SvxParaVertAlignItem&>(aSet.Get( RES_PARATR_VERTALIGN, bInP )); }
 inline const SvxParaGridItem &SwFmt::GetParaGrid(bool bInP) const
-    {   return (const SvxParaGridItem&)aSet.Get( RES_PARATR_SNAPTOGRID, bInP ); }
+    {   return static_cast<const SvxParaGridItem&>(aSet.Get( RES_PARATR_SNAPTOGRID, bInP )); }
 inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(bool bInP) const
-    {   return (const SwParaConnectBorderItem&)aSet.Get( RES_PARATR_CONNECT_BORDER, bInP ); }
+    {   return static_cast<const SwParaConnectBorderItem&>(aSet.Get( RES_PARATR_CONNECT_BORDER, bInP )); }
 
 #endif
 

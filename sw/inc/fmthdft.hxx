@@ -53,8 +53,8 @@ public:
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 
-    const SwFrmFmt *GetHeaderFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-          SwFrmFmt *GetHeaderFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
+    const SwFrmFmt *GetHeaderFmt() const { return static_cast<const SwFrmFmt*>(GetRegisteredIn()); }
+          SwFrmFmt *GetHeaderFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
 
     void RegisterToFormat( SwFmt& rFmt );
     bool IsActive() const { return bActive; }
@@ -86,8 +86,8 @@ public:
                                     OUString &rText,
                                     const IntlWrapper*    pIntl = 0 ) const SAL_OVERRIDE;
 
-    const SwFrmFmt *GetFooterFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
-          SwFrmFmt *GetFooterFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
+    const SwFrmFmt *GetFooterFmt() const { return static_cast<const SwFrmFmt*>(GetRegisteredIn()); }
+          SwFrmFmt *GetFooterFmt()       { return static_cast<SwFrmFmt*>(GetRegisteredIn()); }
 
     void RegisterToFormat( SwFmt& rFmt );
     bool IsActive() const { return bActive; }
@@ -95,9 +95,9 @@ public:
 };
 
 inline const SwFmtHeader &SwAttrSet::GetHeader(bool bInP) const
-    { return (const SwFmtHeader&)Get( RES_HEADER,bInP); }
+    { return static_cast<const SwFmtHeader&>(Get( RES_HEADER,bInP)); }
 inline const SwFmtFooter &SwAttrSet::GetFooter(bool bInP) const
-    { return (const SwFmtFooter&)Get( RES_FOOTER,bInP); }
+    { return static_cast<const SwFmtFooter&>(Get( RES_FOOTER,bInP)); }
 
 inline const SwFmtHeader &SwFmt::GetHeader(bool bInP) const
     { return aSet.GetHeader(bInP); }

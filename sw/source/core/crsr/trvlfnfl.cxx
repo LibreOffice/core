@@ -59,7 +59,7 @@ bool SwCursor::GotoFtnTxt()
     if (pFtn)
     {
         SwCrsrSaveState aSaveState( *this );
-        GetPoint()->nNode = *((SwTxtFtn*)pFtn)->GetStartNode();
+        GetPoint()->nNode = *static_cast<SwTxtFtn*>(pFtn)->GetStartNode();
 
         SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection(
                                             &GetPoint()->nNode,

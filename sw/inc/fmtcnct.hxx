@@ -50,8 +50,8 @@ public:
 
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
 
-    SwFlyFrmFmt* GetPrev() const { return (SwFlyFrmFmt*)aPrev.GetRegisteredIn(); }
-    SwFlyFrmFmt* GetNext() const { return (SwFlyFrmFmt*)aNext.GetRegisteredIn(); }
+    SwFlyFrmFmt* GetPrev() const { return const_cast<SwFlyFrmFmt*>(static_cast<const SwFlyFrmFmt*>(aPrev.GetRegisteredIn())); }
+    SwFlyFrmFmt* GetNext() const { return const_cast<SwFlyFrmFmt*>(static_cast<const SwFlyFrmFmt*>(aNext.GetRegisteredIn())); }
 
     void SetPrev( SwFlyFrmFmt *pFmt );
     void SetNext( SwFlyFrmFmt *pFmt );
@@ -65,7 +65,7 @@ SwFmtChain &SwFmtChain::operator=( const SwFmtChain &rCpy )
 }
 
 inline const SwFmtChain &SwAttrSet::GetChain(bool bInP) const
-    { return (const SwFmtChain&)Get( RES_CHAIN,bInP); }
+    { return static_cast<const SwFmtChain&>(Get( RES_CHAIN,bInP)); }
 
 inline const SwFmtChain &SwFmt::GetChain(bool bInP) const
     { return aSet.GetChain(bInP); }

@@ -35,13 +35,13 @@ SwLayoutFrm* GetCurrColumn( const SwLayoutFrm* pLayFrm )
 SwLayoutFrm* GetNextColumn( const SwLayoutFrm* pLayFrm )
 {
     SwLayoutFrm* pActCol = GetCurrColumn( pLayFrm );
-    return pActCol ? (SwLayoutFrm*)pActCol->GetNext() : 0;
+    return pActCol ? static_cast<SwLayoutFrm*>(pActCol->GetNext()) : 0;
 }
 
 SwLayoutFrm* GetPrevColumn( const SwLayoutFrm* pLayFrm )
 {
     SwLayoutFrm* pActCol = GetCurrColumn( pLayFrm );
-    return pActCol ? (SwLayoutFrm*)pActCol->GetPrev() : 0;
+    return pActCol ? static_cast<SwLayoutFrm*>(pActCol->GetPrev()) : 0;
 }
 
 SwCntntFrm* GetColumnStt( const SwLayoutFrm* pColFrm )

@@ -93,10 +93,10 @@ bool SwCrsrShell::GoNextCell( bool bAppendLine )
                 SwSelBoxes aBoxes;
 
                 // the document might change; w/o Action views would not be notified
-                ((SwEditShell*)this)->StartAllAction();
+                static_cast<SwEditShell*>(this)->StartAllAction();
                 bRet = mpDoc->InsertRow( pTblNd->GetTable().
                                     SelLineFromBox( pTableBox, aBoxes, false ));
-                ((SwEditShell*)this)->EndAllAction();
+                static_cast<SwEditShell*>(this)->EndAllAction();
             }
         }
         if( bRet && ( bRet = pCrsr->GoNextCell() ) )
@@ -731,7 +731,7 @@ OUString SwCrsrShell::GetBoxNms() const
         if( !pFrm )
             return sNm;
 
-        sNm = ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
+        sNm = static_cast<SwCellFrm*>(pFrm)->GetTabBox()->GetName();
         sNm += ":";
         pPos = m_pTblCrsr->End();
     }
@@ -753,7 +753,7 @@ OUString SwCrsrShell::GetBoxNms() const
         } while ( pFrm && !pFrm->IsCellFrm() );
 
         if( pFrm )
-            sNm += ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
+            sNm += static_cast<SwCellFrm*>(pFrm)->GetTabBox()->GetName();
     }
     return sNm;
 }
@@ -885,10 +885,10 @@ bool SwCrsrShell::EndAllTblBoxEdit()
     SwViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-            bRet |= ((SwCrsrShell*)pSh)->CheckTblBoxCntnt(
-                        ((SwCrsrShell*)pSh)->m_pCurCrsr->GetPoint() );
+            bRet |= static_cast<SwCrsrShell*>(pSh)->CheckTblBoxCntnt(
+                        static_cast<SwCrsrShell*>(pSh)->m_pCurCrsr->GetPoint() );
 
-    } while( this != (pSh = (SwViewShell *)pSh->GetNext()) );
+    } while( this != (pSh = static_cast<SwViewShell *>(pSh->GetNext())) );
     return bRet;
 }
 

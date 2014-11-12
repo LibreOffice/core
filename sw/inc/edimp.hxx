@@ -35,7 +35,7 @@ class SwNodeIndex;
         do {
 
 #define FOREACHPAM_END() \
-        } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr ); \
+        } while( (_pStartCrsr=static_cast<SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr ); \
     }
 
 struct SwPamRange

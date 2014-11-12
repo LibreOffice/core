@@ -45,6 +45,7 @@
 #include <tox.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
+#include <docary.hxx>
 
 #include <boost/unordered_map.hpp>
 
@@ -828,7 +829,7 @@ public:
                           bool bBroadcast = false, bool bAuto = true);
     void       DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast = false );
     SwFrmFmt* FindFrmFmtByName( const OUString& rName ) const
-        {   return static_cast<SwFrmFmt*>(FindFmtByName( (SwFmtsBase&)*mpFrmFmtTbl, rName )); }
+        {   return static_cast<SwFrmFmt*>(FindFmtByName( static_cast<SwFmtsBase&>(*mpFrmFmtTbl), rName )); }
 
     SwCharFmt *MakeCharFmt(const OUString &rFmtName, SwCharFmt *pDerivedFrom,
                            bool bBroadcast = false,

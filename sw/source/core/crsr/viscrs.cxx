@@ -138,7 +138,7 @@ void SwVisCrsr::_SetPosAndShow()
             const SwFrm* pFrm = rTNd.getLayoutFrm( m_pCrsrShell->GetLayout(), 0, 0, false );
             if ( pFrm )
             {
-                const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
+                const SwScriptInfo* pSI = static_cast<const SwTxtFrm*>(pFrm)->GetScriptInfo();
                  // cursor level has to be shown
                 if ( pSI && pSI->CountDirChg() > 1 )
                 {
@@ -177,7 +177,7 @@ void SwVisCrsr::_SetPosAndShow()
     if ( !m_pCrsrShell->IsCrsrReadonly()  || m_pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
     {
         if ( m_pCrsrShell->GetDrawView() )
-            ((SwDrawView*)m_pCrsrShell->GetDrawView())->SetAnimationEnabled(
+            const_cast<SwDrawView*>(static_cast<const SwDrawView*>(m_pCrsrShell->GetDrawView()))->SetAnimationEnabled(
                     !m_pCrsrShell->IsSelection() );
 
         sal_uInt16 nStyle = m_bIsDragCrsr ? CURSOR_SHADOW : 0;
@@ -598,7 +598,7 @@ short SwShellCrsr::MaxReplaceArived()
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
                 pSh->EndAction();
             aArr.push_back( nActCnt );
-        } while( pShell != ( pSh = (SwViewShell*)pSh->GetNext() ) );
+        } while( pShell != ( pSh = static_cast<SwViewShell*>(pSh->GetNext()) ) );
 
         {
             nRet = MessageDialog(pDlg, "AskSearchDialog",
@@ -609,7 +609,7 @@ short SwShellCrsr::MaxReplaceArived()
         {
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
-            pSh = (SwViewShell*)pSh->GetNext();
+            pSh = static_cast<SwViewShell*>(pSh->GetNext());
         }
     }
     else

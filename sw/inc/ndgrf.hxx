@@ -217,12 +217,12 @@ public:
 // Inline methods from Node.hxx - it is only now that we know TxtNode!!
 inline       SwGrfNode   *SwNode::GetGrfNode()
 {
-     return ND_GRFNODE == nNodeType ? (SwGrfNode*)this : 0;
+     return ND_GRFNODE == nNodeType ? static_cast<SwGrfNode*>(this) : 0;
 }
 
 inline const SwGrfNode   *SwNode::GetGrfNode() const
 {
-     return ND_GRFNODE == nNodeType ? (const SwGrfNode*)this : 0;
+     return ND_GRFNODE == nNodeType ? static_cast<const SwGrfNode*>(this) : 0;
 }
 
 inline bool SwGrfNode::IsLinkedFile() const
