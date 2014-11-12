@@ -60,6 +60,7 @@
 
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     : mpFrame(NULL)
+    , mnPainting(0)
     , mbOffscreen(false)
     , mnFramebufferId(0)
     , mpOffscreenTex(nullptr)
@@ -104,7 +105,8 @@ void OpenGLSalGraphicsImpl::PostDraw()
 {
     if( mbOffscreen )
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-
+    if( mnPainting == 0 )
+        glFlush();
     CHECK_GL_ERROR();
 }
 
@@ -1343,10 +1345,21 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     return false;
 }
 
-bool OpenGLSalGraphicsImpl::swapBuffers()
+void OpenGLSalGraphicsImpl::beginPaint()
 {
-    maContext.swapBuffers();
-    return true;
+    mnPainting++;
+    SAL_INFO( "vcl.opengl", "BEGIN PAINT " << this );
+}
+
+void OpenGLSalGraphicsImpl::endPaint()
+{
+    mnPainting--;
+    SAL_INFO( "vcl.opengl", "END PAINT " << this );
+    if( mnPainting == 0 )
+    {
+        maContext.makeCurrent();
+        glFlush();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

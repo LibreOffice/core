@@ -412,7 +412,8 @@ public:
                                     sal_uInt8 nTransparency,
                                     const OutputDevice *pOutDev );
 
-    virtual bool                SwapBuffers() = 0;
+    virtual void                BeginPaint() = 0;
+    virtual void                EndPaint() = 0;
 
     virtual SystemGraphicsData  GetGraphicsData() const = 0;
 

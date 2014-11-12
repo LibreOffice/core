@@ -38,6 +38,7 @@ protected:
     OpenGLContext maContext;
     SalFrame* mpFrame;
     SalVirtualDevice* mpVDev;
+    int mnPainting;
 
     bool mbOffscreen;
     GLuint mnFramebufferId;
@@ -285,7 +286,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) SAL_OVERRIDE;
 
-    virtual bool swapBuffers() SAL_OVERRIDE;
+    virtual void beginPaint() SAL_OVERRIDE;
+    virtual void endPaint() SAL_OVERRIDE;
 private:
 };
 

@@ -782,11 +782,16 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     return bDrawn;
 }
 
-bool OutputDevice::SwapBuffers()
+void OutputDevice::BeginPaint()
 {
-    if( !mpGraphics && !AcquireGraphics() )
-        return false;
-    return mpGraphics->SwapBuffers();
+    if( mpGraphics || AcquireGraphics() )
+        mpGraphics->BeginPaint();
+}
+
+void OutputDevice::EndPaint()
+{
+    if( mpGraphics || AcquireGraphics() )
+        mpGraphics->EndPaint();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

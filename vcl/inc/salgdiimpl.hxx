@@ -207,7 +207,8 @@ public:
 
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) = 0;
 
-    virtual bool swapBuffers() = 0;
+    virtual void beginPaint() = 0;
+    virtual void endPaint() = 0;
 };
 
 #endif

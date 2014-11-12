@@ -268,7 +268,8 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
     virtual SystemFontData     GetSysFontData( int nFallbackLevel ) const SAL_OVERRIDE;
 
-    virtual bool               SwapBuffers() SAL_OVERRIDE;
+    virtual void               BeginPaint() SAL_OVERRIDE;
+    virtual void               EndPaint() SAL_OVERRIDE;
 
     // create a pixmap from a screen region
     X11Pixmap* GetPixmapFromScreen( const Rectangle& rRect );

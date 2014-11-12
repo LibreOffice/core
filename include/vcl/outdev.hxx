@@ -501,7 +501,9 @@ public:
                                     const Point& rSrcPt,  const Size& rSrcSize,
                                     sal_uInt16 nFlags = 0 );
 
-    virtual bool                SwapBuffers();
+    // Call before and after a paint operation to reduce flushing
+    virtual void                BeginPaint();
+    virtual void                EndPaint();
 
 protected:
 

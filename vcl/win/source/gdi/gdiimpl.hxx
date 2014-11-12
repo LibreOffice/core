@@ -217,7 +217,8 @@ public:
     virtual bool drawGradient(const tools::PolyPolygon& rPolygon,
             const Gradient& rGradient) SAL_OVERRIDE;
 
-    virtual bool swapBuffers() SAL_OVERRIDE { return false; }
+    virtual void beginPaint() SAL_OVERRIDE { }
+    virtual void endPaint() SAL_OVERRIDE { }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

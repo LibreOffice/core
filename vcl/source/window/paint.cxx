@@ -120,8 +120,10 @@ void PaintHelper::DoPaint(const vcl::Region* pRegion)
     pWindowImpl->mnPaintFlags = 0;
     if ( !pWindowImpl->maInvalidateRegion.IsEmpty() )
     {
+        m_pWindow->BeginPaint();
         m_pWindow->PushPaintHelper(this);
         m_pWindow->Paint(m_aPaintRect);
+        m_pWindow->EndPaint();
     }
 }
 
@@ -277,9 +279,10 @@ void Window::ImplCallOverlapPaint()
     {
         // - RTL - notify ImplCallPaint to check for re-mirroring (CHECKRTL)
         //         because we were called from the Sal layer
-        ImplCallPaint( NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
         OutputDevice *pOutDev = GetOutDev();
-        pOutDev->SwapBuffers();
+        pOutDev->BeginPaint();
+        ImplCallPaint( NULL, mpWindowImpl->mnPaintFlags /*| IMPL_PAINT_CHECKRTL */);
+        pOutDev->EndPaint();
     }
 }
 

@@ -243,7 +243,8 @@ public:
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
-    virtual bool            SwapBuffers() SAL_OVERRIDE { return false; };
+    virtual void            BeginPaint() SAL_OVERRIDE { };
+    virtual void            EndPaint() SAL_OVERRIDE { };
 
 #ifdef IOS
     void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 );
