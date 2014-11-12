@@ -329,14 +329,17 @@ bool GIFReader::ReadExtension()
             bRet = true;
             while( cSize && bStatus && !rIStm.IsEof() )
             {
-                sal_uInt16  nCount = (sal_uInt16) cSize + 1;
-                boost::scoped_array<char> pBuffer(new char[ nCount ]);
+                sal_uInt16 nCount = (sal_uInt16) cSize + 1;
+                const sal_uInt64 nMaxPossible = rIStm.remainingSize();
+                if (nMaxPossible > nCount)
+                    nCount = nMaxPossible;
+                boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[nCount]);
 
                 bRet = false;
-                rIStm.Read( pBuffer.get(), nCount );
-                if( NO_PENDING( rIStm ) )
+                sal_Size nRead = rIStm.Read(pBuffer.get(), nCount);
+                if (NO_PENDING(rIStm) && cSize < nRead)
                 {
-                    cSize = (sal_uInt8) pBuffer[ cSize ];
+                    cSize = pBuffer[cSize];
                     bRet = true;
                 }
                 else
