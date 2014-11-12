@@ -413,6 +413,8 @@ GLuint OpenGLSalBitmap::CreateTexture()
     }
 
     mbDirtyTexture = false;
+
+    CHECK_GL_ERROR();
     return mpTexture->Id();
 }
 
@@ -444,6 +446,7 @@ bool OpenGLSalBitmap::ReadTexture()
     glDeleteRenderbuffers( 1, &nRenderbufferDepthId );
     glDeleteRenderbuffers( 1, &nRenderbufferColorId );
 
+    CHECK_GL_ERROR();
     return true;
 }
 

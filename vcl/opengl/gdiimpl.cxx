@@ -96,12 +96,16 @@ void OpenGLSalGraphicsImpl::PreDraw()
     if( mbOffscreen )
         glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
     glViewport( 0, 0, GetWidth(), GetHeight() );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::PostDraw()
 {
     if( mbOffscreen )
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::freeResources()
@@ -143,6 +147,8 @@ void OpenGLSalGraphicsImpl::ResetClipRegion()
     SAL_INFO( "vcl.opengl", "::ResetClipRegion" );
     maContext.makeCurrent();
     glDisable(GL_STENCIL_TEST);
+
+    CHECK_GL_ERROR();
 }
 
 // get the depth of the device
@@ -237,8 +243,9 @@ void OpenGLSalGraphicsImpl::SetOffscreen( bool bOffscreen )
         glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
         mpOffscreenTex.reset( new OpenGLTexture( GetWidth(), GetHeight() ) );
         glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mpOffscreenTex->Id(), 0 );
-        CHECK_GL_ERROR();
     }
+
+    CHECK_GL_ERROR();
 }
 
 bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
@@ -251,6 +258,8 @@ bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )
     SAL_INFO( "vcl.opengl", "Solid Program Created" );
     glBindAttribLocation( mnSolidProgram, GL_ATTRIB_POS, "position" );
     mnColorUniform = glGetUniformLocation( mnSolidProgram, "color" );
+
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -263,6 +272,8 @@ bool OpenGLSalGraphicsImpl::CreateTextureProgram( void )
     glBindAttribLocation( mnTextureProgram, GL_ATTRIB_POS, "position" );
     glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnSamplerUniform = glGetUniformLocation( mnTextureProgram, "sampler" );
+
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -276,6 +287,8 @@ bool OpenGLSalGraphicsImpl::CreateMaskedTextureProgram( void )
     glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnMaskedSamplerUniform = glGetUniformLocation( mnMaskedTextureProgram, "sampler" );
     mnMaskSamplerUniform = glGetUniformLocation( mnMaskedTextureProgram, "mask" );
+
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -289,6 +302,8 @@ bool OpenGLSalGraphicsImpl::CreateMaskProgram( void )
     glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnMaskUniform = glGetUniformLocation( mnMaskProgram, "sampler" );
     mnMaskColorUniform = glGetUniformLocation( mnMaskProgram, "mask" );
+
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -302,6 +317,8 @@ bool OpenGLSalGraphicsImpl::CreateLinearGradientProgram( void )
     glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnLinearGradientStartColorUniform = glGetUniformLocation( mnLinearGradientProgram, "start_color" );
     mnLinearGradientEndColorUniform = glGetUniformLocation( mnLinearGradientProgram, "end_color" );
+
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -316,6 +333,8 @@ bool OpenGLSalGraphicsImpl::CreateRadialGradientProgram( void )
     mnRadialGradientStartColorUniform = glGetUniformLocation( mnRadialGradientProgram, "start_color" );
     mnRadialGradientEndColorUniform = glGetUniformLocation( mnRadialGradientProgram, "end_color" );
     mnRadialGradientCenterUniform = glGetUniformLocation( mnRadialGradientProgram, "center" );
+
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -336,6 +355,8 @@ void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor, sal_uInt8 nTransparency
     }
     glUseProgram( mnSolidProgram );
     glUniformColor( mnColorUniform, nColor, nTransparency );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor, double fTransparency )
@@ -353,6 +374,8 @@ void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor, double fTransparency )
     }
     glUseProgram( mnSolidProgram );
     glUniformColorf( mnColorUniform, nColor, fTransparency );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::BeginSolid( SalColor nColor )
@@ -364,6 +387,8 @@ void OpenGLSalGraphicsImpl::EndSolid( void )
 {
     glUseProgram( 0 );
     glDisable( GL_BLEND );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::BeginInvert( void )
@@ -371,12 +396,16 @@ void OpenGLSalGraphicsImpl::BeginInvert( void )
     glEnable( GL_BLEND );
     glBlendFunc( GL_ONE_MINUS_DST_COLOR, GL_ZERO );
     BeginSolid( MAKE_SALCOLOR( 255, 255, 255 ) );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::EndInvert( void )
 {
     EndSolid();
     glDisable( GL_BLEND );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
@@ -390,6 +419,8 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pPoint );
     glDrawArrays( GL_POINTS, 0, 1 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
@@ -405,6 +436,8 @@ void OpenGLSalGraphicsImpl::DrawLine( long nX1, long nY1, long nX2, long nY2 )
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pPoints );
     glDrawArrays( GL_LINES, 0, 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
@@ -425,6 +458,8 @@ void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAr
     else
         glDrawArrays( GL_LINE_STRIP, 0, nPoints );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
@@ -442,6 +477,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
@@ -461,6 +498,8 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon )
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawRect( long nX, long nY, long nWidth, long nHeight )
@@ -533,6 +572,8 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pVertices.data() );
     glDrawArrays( GL_TRIANGLES, 0, pVertices.size() / 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTextureRect( const Size& rSize, const SalTwoRect& rPosAry, bool bInverted )
@@ -559,6 +600,8 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( const Size& rSize, const SalTwoRect
     DrawRect( rPosAry.mnDestX, rPosAry.mnDestY, rPosAry.mnDestWidth, rPosAry.mnDestHeight );
 
     glDisableVertexAttribArray( GL_ATTRIB_TEX );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, const SalTwoRect& pPosAry, bool bInverted )
@@ -580,6 +623,8 @@ void OpenGLSalGraphicsImpl::DrawTexture( GLuint nTexture, const Size& rSize, con
 
     glBindTexture( GL_TEXTURE_2D, 0 );
     glUseProgram( 0 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, const Size& rSize, const SalTwoRect& pPosAry )
@@ -608,6 +653,8 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( GLuint nTexture, GLuint nMask, 
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, 0 );
     glUseProgram( 0 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const SalTwoRect& /*pPosAry*/ )
@@ -629,11 +676,12 @@ void OpenGLSalGraphicsImpl::DrawMask( GLuint nMask, SalColor nMaskColor, const S
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, 0 );
     glUseProgram( 0 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect )
 {
-
     if( mnLinearGradientProgram == 0 )
     {
         if( !CreateLinearGradientProgram() )
@@ -667,6 +715,8 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     CHECK_GL_ERROR();
 
     glUseProgram( 0 );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect )
@@ -704,6 +754,8 @@ void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const
 
     glDisableVertexAttribArray( GL_ATTRIB_TEX );
     glUseProgram( 0 );
+
+    CHECK_GL_ERROR();
 }
 
 
@@ -1094,6 +1146,8 @@ SalColor OpenGLSalGraphicsImpl::getPixel( long nX, long nY )
     PreDraw();
     glReadPixels( nX, nY, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, pixel);
     PostDraw();
+
+    CHECK_GL_ERROR();
     return MAKE_SALCOLOR( pixel[0], pixel[1], pixel[2] );
 }
 
@@ -1201,6 +1255,8 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
     DrawTexture( nTexture, rBitmap.GetSize(), rPosAry );
     glDisable( GL_BLEND );
     PostDraw();
+
+    CHECK_GL_ERROR();
     return true;
 }
 

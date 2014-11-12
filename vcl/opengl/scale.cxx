@@ -57,6 +57,7 @@ GLuint OpenGLSalBitmap::ImplGetTextureProgram()
         mnTexSamplerUniform = glGetUniformLocation( mnTexProgram, "sampler" );
     }
 
+    CHECK_GL_ERROR();
     return mnTexProgram;
 }
 
@@ -76,6 +77,7 @@ GLuint OpenGLSalBitmap::ImplGetConvolutionProgram()
         mnConvOffsetsUniform = glGetUniformLocation( mnConvProgram, "offsets" );
     }
 
+    CHECK_GL_ERROR();
     return mnConvProgram;
 }
 
@@ -110,6 +112,8 @@ bool OpenGLSalBitmap::ImplScaleFilter( GLenum nFilter )
     glDeleteFramebuffers( 1, &nFramebufferId );
 
     mpTexture.reset( pNewTex );
+
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -227,6 +231,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
 
+    CHECK_GL_ERROR();
     return true;
 }
 
