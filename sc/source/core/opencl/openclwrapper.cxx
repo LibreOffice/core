@@ -564,27 +564,6 @@ bool match(const ScCalcConfig::OpenCLImplMatcherSet& rList, const OpenCLPlatform
 }
 
 // based on crashes and hanging during kernel compilation
-bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
-{
-    // Check blacklist of known bad OpenCL implementations
-    if (match(ScInterpreter::GetGlobalConfig().maOpenCLBlackList, rPlatform, rDevice, "blacklist"))
-    {
-        SAL_INFO("sc.opencl", "Rejecting");
-        return true;
-    }
-
-    // Check for whitelist of known good OpenCL implementations
-    if (match(ScInterpreter::GetGlobalConfig().maOpenCLWhiteList, rPlatform, rDevice, "whitelist"))
-    {
-        SAL_INFO("sc.opencl", "Approving");
-        return false;
-    }
-
-    // Fallback: reject
-    SAL_INFO("sc.opencl", "Fallback: rejecting platform=" << rPlatform << ", device=" << rDevice);
-    return true;
-}
-
 void createDeviceInfo(cl_device_id aDeviceId, OpenCLPlatformInfo& rPlatformInfo)
 {
     OpenCLDeviceInfo aDeviceInfo;
@@ -683,6 +662,27 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenCLPlatformInfo& rPlatfor
     return true;
 }
 
+}
+
+bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
+{
+    // Check blacklist of known bad OpenCL implementations
+    if (match(ScInterpreter::GetGlobalConfig().maOpenCLBlackList, rPlatform, rDevice, "blacklist"))
+    {
+        SAL_INFO("sc.opencl", "Rejecting");
+        return true;
+    }
+
+    // Check for whitelist of known good OpenCL implementations
+    if (match(ScInterpreter::GetGlobalConfig().maOpenCLWhiteList, rPlatform, rDevice, "whitelist"))
+    {
+        SAL_INFO("sc.opencl", "Approving");
+        return false;
+    }
+
+    // Fallback: reject
+    SAL_INFO("sc.opencl", "Fallback: rejecting platform=" << rPlatform << ", device=" << rDevice);
+    return true;
 }
 
 const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo()

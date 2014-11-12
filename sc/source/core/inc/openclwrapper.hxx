@@ -102,6 +102,8 @@ bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSelect,
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
 
+bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice);
+
 }}
 
 #endif
