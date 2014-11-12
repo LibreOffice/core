@@ -501,122 +501,6 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
 
 bool OpenCLDevice::initOpenCLRunEnv( GPUEnv *gpuInfo )
 {
-    size_t length;
-    cl_int clStatus;
-    cl_uint numPlatforms, numDevices;
-    cl_platform_id *platforms;
-
-    // Have a look at the available platforms.
-
-    if ( !gpuInfo->mnIsUserCreated )
-    {
-        clStatus = clGetPlatformIDs( 0, NULL, &numPlatforms );
-        CHECK_OPENCL(clStatus, "clGetPlatformIDs");
-        gpuInfo->mpPlatformID = NULL;
-
-        if ( 0 < numPlatforms )
-        {
-            char platformName[256];
-            platforms = (cl_platform_id*) malloc( numPlatforms * sizeof( cl_platform_id ) );
-            if (!platforms)
-            {
-                return true;
-            }
-            clStatus = clGetPlatformIDs( numPlatforms, platforms, NULL );
-            CHECK_OPENCL(clStatus, "clGetPlatformIDs");
-
-            for ( unsigned int i = 0; i < numPlatforms; i++ )
-            {
-                clStatus = clGetPlatformInfo( platforms[i], CL_PLATFORM_VENDOR,
-                    sizeof( platformName ), platformName, NULL );
-
-                if ( clStatus != CL_SUCCESS )
-                {
-                    break;
-                }
-                gpuInfo->mpPlatformID = platforms[i];
-
-                //if (!strcmp(platformName, "Intel(R) Coporation"))
-                //if( !strcmp( platformName, "Advanced Micro Devices, Inc." ))
-                {
-                    gpuInfo->mpPlatformID = platforms[i];
-                    if ( getenv("SC_OPENCLCPU") )
-                    {
-                        clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
-                                                  CL_DEVICE_TYPE_CPU,    // device_type for CPU device
-                                                  0,                     // num_entries
-                                                  NULL,                  // devices
-                                                  &numDevices);
-                    }
-                    else
-                    {
-                          clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
-                                                  CL_DEVICE_TYPE_GPU,      // device_type for GPU device
-                                                  0,                       // num_entries
-                                                  NULL,                    // devices
-                                                  &numDevices);
-                    }
-                    if ( clStatus != CL_SUCCESS )
-                        continue;
-
-                    if ( numDevices )
-                        break;
-                }
-            }
-            free( platforms );
-            if ( clStatus != CL_SUCCESS )
-                return true;
-        }
-        if ( NULL == gpuInfo->mpPlatformID )
-            return true;
-
-        // Use available platform.
-        cl_context_properties cps[3];
-        cps[0] = CL_CONTEXT_PLATFORM;
-        cps[1] = reinterpret_cast<cl_context_properties>(gpuInfo->mpPlatformID);
-        cps[2] = 0;
-        // Set device type for OpenCL
-        if ( getenv("SC_OPENCLCPU") )
-        {
-            gpuInfo->mDevType = CL_DEVICE_TYPE_CPU;
-        }
-        else
-        {
-            gpuInfo->mDevType = CL_DEVICE_TYPE_GPU;
-        }
-        gpuInfo->mpContext = clCreateContextFromType( cps, gpuInfo->mDevType, NULL, NULL, &clStatus );
-
-        if ( ( gpuInfo->mpContext == (cl_context) NULL) || ( clStatus != CL_SUCCESS ) )
-        {
-            gpuInfo->mDevType = CL_DEVICE_TYPE_CPU;
-            gpuInfo->mpContext = clCreateContextFromType( cps, gpuInfo->mDevType, NULL, NULL, &clStatus );
-        }
-        if ( ( gpuInfo->mpContext == (cl_context) NULL) || ( clStatus != CL_SUCCESS ) )
-        {
-            gpuInfo->mDevType = CL_DEVICE_TYPE_DEFAULT;
-            gpuInfo->mpContext = clCreateContextFromType( cps, gpuInfo->mDevType, NULL, NULL, &clStatus );
-        }
-        if ( ( gpuInfo->mpContext == (cl_context) NULL) || ( clStatus != CL_SUCCESS ) )
-            return true;
-        // Detect OpenCL devices.
-        // First, get the size of device list data
-        clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES, 0, NULL, &length );
-        if ( ( clStatus != CL_SUCCESS ) || ( length == 0 ) )
-            return true;
-        // Now allocate memory for device list based on the size we got earlier
-        gpuInfo->mpArryDevsID = (cl_device_id*) malloc( length );
-        if ( gpuInfo->mpArryDevsID == (cl_device_id*) NULL )
-            return true;
-        // Now, get the device list data
-        clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES, length,
-                       gpuInfo->mpArryDevsID, NULL );
-        CHECK_OPENCL(clStatus, "clGetContextInfo");
-
-        // Create OpenCL command queue.
-        gpuInfo->mpCmdQueue = clCreateCommandQueue( gpuInfo->mpContext, gpuInfo->mpArryDevsID[0], 0, &clStatus );
-
-        CHECK_OPENCL(clStatus, "clCreateCommandQueue");
-    }
     bool bKhrFp64 = false;
     bool bAmdFp64 = false;
 
@@ -912,10 +796,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
 
     // (Assuming the above question refers to the mpArryDevsID
     // initialisation below.) Because otherwise the code crashes in
-    // initOpenCLRunEnv(). Note that the initOpenCLAttr() call above
-    // sets mnIsUserCreated to 1, thus the code in initOpenCLRunEnv()
-    // that would initialise mpArryDevsID is not executed. Confused?
-    // You should be.
+    // initOpenCLRunEnv(). Confused? You should be.
 
     OpenCLDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
     OpenCLDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
