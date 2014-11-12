@@ -283,23 +283,18 @@ bool BitSet::operator==( const BitSet& rSet ) const
     return true;
 }
 
-
-
 // counts the number of 1-bits in the parameter
-
-sal_uInt16 BitSet::CountBits( sal_uInt32 nBits )
+// Wegner/Kernighan/Ritchie method
+sal_uInt16 BitSet::CountBits(sal_uInt32 nBits)
 {
-    sal_uInt16 nCount = 0;
-    int nBit = 32;
-    while ( nBit-- && nBits )
-    {   if ( ( (long)nBits ) < 0 )
-            ++nCount;
-        nBits = nBits << 1;
+    sal_uInt32 nCount = 0;
+    while (nBits)
+    {
+        nBits &= nBits - 1; // clear the least significant bit set
+        ++nCount;
     }
     return nCount;
 }
-
-
 
 sal_uInt16 IndexBitSet::GetFreeIndex()
 {
