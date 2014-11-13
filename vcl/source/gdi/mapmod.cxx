@@ -19,6 +19,7 @@
 
 #include <vcl/mapmod.hxx>
 
+#include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>

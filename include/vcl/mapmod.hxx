@@ -20,12 +20,10 @@
 #ifndef INCLUDED_VCL_MAPMOD_HXX
 #define INCLUDED_VCL_MAPMOD_HXX
 
-#include <tools/gen.hxx>
-#include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <tools/resid.hxx>
 #include <tools/mapunit.hxx>
 
+class Point;
 class Fraction;
 class SvStream;
 class OutputDevice;
