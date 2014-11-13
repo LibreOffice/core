@@ -451,10 +451,10 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,jpeg) \
 	$$(INCLUDE) \
 )
-
-$(call gb_LinkTarget_use_static_libraries,$(1),\
-	jpeg \
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,jpeg)/.libs/libjpeg.a \
 )
+$(call gb_LinkTarget_use_external_project,$(1),jpeg)
 
 endef
 

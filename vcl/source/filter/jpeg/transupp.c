@@ -14,8 +14,9 @@
  * interfaces.
  */
 
-#include "jerror.h"
+#include <sal/config.h>
 #include "jinclude.h"
+#include "jerror.h"
 #include "jpeglib.h"
 #include "transupp.h"       /* My own external interface */
 #include "jpegcomp.h"
