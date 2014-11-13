@@ -12,8 +12,8 @@ $(eval $(call gb_Module_Module,jpeg))
 ifeq ($(SYSTEM_JPEG),)
 
 $(eval $(call gb_Module_add_targets,jpeg,\
-    UnpackedTarball_jpeg \
-    StaticLibrary_jpeg \
+	ExternalProject_jpeg \
+	UnpackedTarball_jpeg \
 ))
 
 endif
