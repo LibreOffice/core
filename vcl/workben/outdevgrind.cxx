@@ -909,38 +909,51 @@ int GrindApp::Main()
 
 SAL_IMPLEMENT_MAIN()
 {
-    bool bHelp = false;
-
-    for( sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++ )
+    try
     {
-        OUString aParam = Application::GetCommandLineParam( i );
+        bool bHelp = false;
 
-        if( aParam == "--help" || aParam == "-h" )
-                bHelp = true;
+        for( sal_uInt16 i = 0; i < Application::GetCommandLineParamCount(); i++ )
+        {
+            OUString aParam = Application::GetCommandLineParam( i );
+
+            if( aParam == "--help" || aParam == "-h" )
+                    bHelp = true;
+        }
+
+        if( bHelp )
+        {
+            printf( "outdevgrind - Profile OutputDevice\n" );
+            return EXIT_SUCCESS;
+        }
+
+        tools::extendApplicationEnvironment();
+
+        uno::Reference< uno::XComponentContext > xContext = cppu::defaultBootstrap_InitialComponentContext();
+        uno::Reference< lang::XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), uno::UNO_QUERY );
+
+        if( !xServiceManager.is() )
+            Application::Abort( "Failed to bootstrap" );
+
+        comphelper::setProcessServiceFactory( xServiceManager );
+
+        InitVCL();
+
+        GrindApp aGrindApp;
+        aGrindApp.Main();
+
+        DeInitVCL();
     }
-
-    if( bHelp )
+    catch (const css::uno::Exception& e)
     {
-        printf( "outdevgrind - Profile OutputDevice\n" );
-        return EXIT_SUCCESS;
+        SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+        return EXIT_FAILURE;
     }
-
-    tools::extendApplicationEnvironment();
-
-    uno::Reference< uno::XComponentContext > xContext = cppu::defaultBootstrap_InitialComponentContext();
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager( xContext->getServiceManager(), uno::UNO_QUERY );
-
-    if( !xServiceManager.is() )
-        Application::Abort( "Failed to bootstrap" );
-
-    comphelper::setProcessServiceFactory( xServiceManager );
-
-    InitVCL();
-
-    GrindApp aGrindApp;
-    aGrindApp.Main();
-
-    DeInitVCL();
+    catch (const std::exception& e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }
