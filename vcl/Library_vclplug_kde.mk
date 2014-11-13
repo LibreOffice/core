@@ -52,6 +52,7 @@ $(eval $(call gb_Library_use_externals,vclplug_kde,\
 	boost_headers \
 	icuuc \
 	kde \
+	glew \
 ))
 
 $(eval $(call gb_Library_add_libs,vclplug_kde,\
