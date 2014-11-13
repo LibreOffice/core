@@ -1,0 +1,58 @@
+diff -ur jpeg.org/configure jpeg/configure
+--- jpeg.org/configure	2014-11-14 12:05:43.345386578 +0100
++++ jpeg/configure	2014-11-14 12:08:59.077388882 +0100
+@@ -22977,10 +22977,6 @@
+ else
+   rm -rf conftest*
+   echo "$as_me:$LINENO: result: no" >&5
+-echo "${ECHO_T}no" >&6
+-  { { echo "$as_me:$LINENO: error: configuration problem: maybe object file format mismatch." >&5
+-echo "$as_me: error: configuration problem: maybe object file format mismatch." >&2;}
+-   { (exit 1); exit 1; }; }
+ fi
+ 
+ 
+@@ -23179,10 +23175,6 @@
+ else
+   rm -rf conftest*
+   echo "$as_me:$LINENO: result: no" >&5
+-echo "${ECHO_T}no" >&6
+-  { { echo "$as_me:$LINENO: error: configuration problem: maybe object file format mismatch." >&5
+-echo "$as_me: error: configuration problem: maybe object file format mismatch." >&2;}
+-   { (exit 1); exit 1; }; }
+ fi
+ 
+ 
+diff -ur jpeg.org/Makefile.am jpeg/Makefile.am
+--- jpeg.org/Makefile.am	2014-11-14 12:05:43.349386578 +0100
++++ jpeg/Makefile.am	2014-11-14 12:06:21.005387021 +0100
+@@ -160,8 +160,6 @@
+ 	rm -rf `find $(distdir) -name .svn`
+ 
+ 
+-SUBDIRS += md5
+-
+ MD5_JPEG_INT = 9a68f56bc76e466aa7e52f415d0f4a5f
+ MD5_JPEG_FAST = 0e1502e7fa421835e376a314fac2a39f
+ MD5_JPEG_FAST_100 = 7bf72a8e741d64eecb960c97323af77c
+diff -ur jpeg.org/Makefile.in jpeg/Makefile.in
+--- jpeg.org/Makefile.in	2014-11-14 12:05:43.333386578 +0100
++++ jpeg/Makefile.in	2014-11-14 12:20:00.689396668 +0100
+@@ -264,7 +264,7 @@
+ HEADERS = $(include_HEADERS) $(nodist_include_HEADERS)
+ ETAGS = etags
+ CTAGS = ctags
+-DIST_SUBDIRS = java simd md5
++DIST_SUBDIRS = java simd
+ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+ distdir = $(PACKAGE)-$(VERSION)
+ top_distdir = $(distdir)
+@@ -442,7 +442,7 @@
+ 	jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
+ 	jquant2.c jutils.c jmemmgr.c jmemnobs.c $(am__append_3) \
+ 	$(am__append_4) $(am__append_5) $(am__append_10)
+-SUBDIRS = java $(am__append_9) md5
++SUBDIRS = java $(am__append_9)
+ @WITH_TURBOJPEG_TRUE@libturbojpeg_la_SOURCES = $(libjpeg_la_SOURCES) \
+ @WITH_TURBOJPEG_TRUE@	turbojpeg.c turbojpeg.h transupp.c \
+ @WITH_TURBOJPEG_TRUE@	transupp.h jdatadst-tj.c jdatasrc-tj.c \
