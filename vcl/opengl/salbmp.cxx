@@ -46,7 +46,12 @@ OpenGLSalBitmap::OpenGLSalBitmap()
 , mnBufWidth(0)
 , mnBufHeight(0)
 , mnTexProgram(0)
+, mnTexSamplerUniform(0)
 , mnConvProgram(0)
+, mnConvSamplerUniform(0)
+, mnConvKernelUniform(0)
+, mnConvKernelSizeUniform(0)
+, mnConvOffsetsUniform(0)
 {
 }
 
