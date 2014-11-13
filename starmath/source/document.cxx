@@ -94,6 +94,7 @@
 #include <tools/diagnose_ex.h>
 #include "visitors.hxx"
 #include "accessibility.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -996,7 +997,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
             OSL_ENSURE (pDev, "device for font list missing" );
 
-            SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog( NULL, pDev );
+            boost::scoped_ptr<SmFontTypeDialog> pFontTypeDialog(new SmFontTypeDialog( NULL, pDev ));
 
             SmFormat aOldFormat  = GetFormat();
             pFontTypeDialog->ReadFrom( aOldFormat );
@@ -1013,13 +1014,12 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SetFormat( aNewFormat );
                 Repaint();
             }
-            delete pFontTypeDialog;
         }
         break;
 
         case SID_FONTSIZE:
         {
-            SmFontSizeDialog *pFontSizeDialog = new SmFontSizeDialog(NULL);
+            boost::scoped_ptr<SmFontSizeDialog> pFontSizeDialog(new SmFontSizeDialog(NULL));
 
             SmFormat aOldFormat  = GetFormat();
             pFontSizeDialog->ReadFrom( aOldFormat );
@@ -1037,13 +1037,12 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SetFormat( aNewFormat );
                 Repaint();
             }
-            delete pFontSizeDialog;
         }
         break;
 
         case SID_DISTANCE:
         {
-            SmDistanceDialog *pDistanceDialog = new SmDistanceDialog(NULL);
+            boost::scoped_ptr<SmDistanceDialog> pDistanceDialog(new SmDistanceDialog(NULL));
 
             SmFormat aOldFormat  = GetFormat();
             pDistanceDialog->ReadFrom( aOldFormat );
@@ -1061,13 +1060,12 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SetFormat( aNewFormat );
                 Repaint();
             }
-            delete pDistanceDialog;
         }
         break;
 
         case SID_ALIGN:
         {
-            SmAlignDialog *pAlignDialog = new SmAlignDialog(NULL);
+            boost::scoped_ptr<SmAlignDialog> pAlignDialog(new SmAlignDialog(NULL));
 
             SmFormat aOldFormat  = GetFormat();
             pAlignDialog->ReadFrom( aOldFormat );
@@ -1090,7 +1088,6 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SetFormat( aNewFormat );
                 Repaint();
             }
-            delete pAlignDialog;
         }
         break;
 
