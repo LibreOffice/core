@@ -905,9 +905,10 @@ void ImageManagerImpl::replaceImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
-throw ( ::com::sun::star::lang::IllegalArgumentException,
-        ::com::sun::star::lang::IllegalAccessException,
-        ::com::sun::star::uno::RuntimeException)
+throw (css::lang::IllegalArgumentException,
+       css::lang::IllegalAccessException,
+       css::uno::RuntimeException,
+       std::exception)
 {
     CmdToXGraphicNameAccess* pInsertedImages( 0 );
     CmdToXGraphicNameAccess* pReplacedImages( 0 );
