@@ -27,6 +27,7 @@
 #include "docoptio.hxx"
 #include "refupdat.hxx"
 #include "table.hxx"
+#include <bulkdatahint.hxx>
 
 #if DEBUG_AREA_BROADCASTER
 #include <formulacell.hxx>
@@ -107,6 +108,13 @@ static SCSIZE nBcaSlots = initSlotDistribution( aSlotDistribution, nBcaSlotsRow)
 // Ensure that all static variables are initialized with this one call.
 #endif
 
+ScBroadcastArea::ScBroadcastArea( const ScRange& rRange ) :
+    pUpdateChainNext(NULL),
+    aRange(rRange),
+    nRefCount(0),
+    mbInUpdateChain(false),
+    mbGroupListening(false) {}
+
 ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
         ScBroadcastAreaSlotMachine* pBASMa ) :
     aTmpSeekBroadcastArea( ScRange()),
@@ -155,8 +163,8 @@ bool ScBroadcastAreaSlot::CheckHardRecalcStateCondition() const
     return false;
 }
 
-bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
-        SvtListener* pListener, ScBroadcastArea*& rpArea )
+bool ScBroadcastAreaSlot::StartListeningArea(
+    const ScRange& rRange, bool bGroupListening, SvtListener* pListener, ScBroadcastArea*& rpArea )
 {
     bool bNewArea = false;
     OSL_ENSURE(pListener, "StartListeningArea: pListener Null");
@@ -168,12 +176,13 @@ bool ScBroadcastAreaSlot::StartListeningArea( const ScRange& rRange,
         // to new and insert it would save an attempt to find it, on mass
         // operations like identical large [HV]LOOKUP() areas the new/delete
         // would add quite some penalty for all but the first formula cell.
-        ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
+        ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange, bGroupListening));
         if (aIter != aBroadcastAreaTbl.end())
             rpArea = (*aIter).mpArea;
         else
         {
             rpArea = new ScBroadcastArea( rRange);
+            rpArea->SetGroupListening(bGroupListening);
             if (aBroadcastAreaTbl.insert( rpArea).second)
             {
                 rpArea->IncRef();
@@ -208,13 +217,13 @@ void ScBroadcastAreaSlot::InsertListeningArea( ScBroadcastArea* pArea )
 
 // If rpArea != NULL then no listeners are stopped, only the area is removed
 // and the reference count decremented.
-void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
-        SvtListener* pListener, ScBroadcastArea*& rpArea )
+void ScBroadcastAreaSlot::EndListeningArea(
+    const ScRange& rRange, bool bGroupListening, SvtListener* pListener, ScBroadcastArea*& rpArea )
 {
     OSL_ENSURE(pListener, "EndListeningArea: pListener Null");
     if ( !rpArea )
     {
-        ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
+        ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange, bGroupListening));
         if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
             return;
         rpArea = (*aIter).mpArea;
@@ -230,7 +239,7 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
     {
         if (rpArea && !rpArea->GetBroadcaster().HasListeners())
         {
-            ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange));
+            ScBroadcastAreas::const_iterator aIter( FindBroadcastArea( rRange, bGroupListening));
             if (aIter == aBroadcastAreaTbl.end() || isMarkedErased( aIter))
                 return;
             OSL_ENSURE( (*aIter).mpArea == rpArea, "EndListeningArea: area pointer mismatch");
@@ -242,9 +251,10 @@ void ScBroadcastAreaSlot::EndListeningArea( const ScRange& rRange,
 }
 
 ScBroadcastAreas::const_iterator ScBroadcastAreaSlot::FindBroadcastArea(
-        const ScRange& rRange ) const
+        const ScRange& rRange, bool bGroupListening ) const
 {
     aTmpSeekBroadcastArea.UpdateRange( rRange);
+    aTmpSeekBroadcastArea.SetGroupListening(bGroupListening);
     return aBroadcastAreaTbl.find( &aTmpSeekBroadcastArea);
 }
 
@@ -270,7 +280,19 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
         const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.In( rAddress))
         {
-            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
+            if (pArea->IsGroupListening())
+            {
+                if (pBASM->IsInBulkBroadcast())
+                {
+                    pBASM->InsertBulkGroupArea(pArea, rAddress);
+                }
+                else
+                {
+                    pArea->GetBroadcaster().Broadcast( rHint);
+                    bIsBroadcasted = true;
+                }
+            }
+            else if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
             {
                 pArea->GetBroadcaster().Broadcast( rHint);
                 bIsBroadcasted = true;
@@ -296,27 +318,46 @@ bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
     bool bInBroadcast = mbInBroadcastIteration;
     mbInBroadcastIteration = true;
     bool bIsBroadcasted = false;
+
+    mbHasErasedArea = false;
+
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
             aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
     {
-        if (isMarkedErased( aIter))
+        if (mbHasErasedArea && isMarkedErased( aIter))
             continue;
+
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.Intersects( rRange ))
         {
-            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
+            if (pArea->IsGroupListening())
+            {
+                if (pBASM->IsInBulkBroadcast())
+                {
+                    pBASM->InsertBulkGroupArea(pArea, rRange);
+                }
+                else
+                {
+                    pArea->GetBroadcaster().Broadcast( rHint);
+                    bIsBroadcasted = true;
+                }
+            }
+            else if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
             {
                 pArea->GetBroadcaster().Broadcast( rHint);
                 bIsBroadcasted = true;
             }
         }
     }
+
     mbInBroadcastIteration = bInBroadcast;
+
     // A Notify() during broadcast may call EndListeningArea() and thus dispose
     // an area if it was the last listener, which would invalidate an iterator
     // pointing to it, hence the real erase is done afterwards.
     FinallyEraseAreas();
+
     return bIsBroadcasted;
 }
 
@@ -487,6 +528,7 @@ void ScBroadcastAreaSlot::GetAllListeners(
         {
             sc::AreaListener aEntry;
             aEntry.maArea = rAreaRange;
+            aEntry.mbGroupListening = pArea->IsGroupListening();
             aEntry.mpListener = *itLst;
             rListeners.push_back(aEntry);
         }
@@ -617,8 +659,8 @@ inline void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot
     }
 }
 
-void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
-        SvtListener* pListener )
+void ScBroadcastAreaSlotMachine::StartListeningArea(
+    const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
@@ -653,7 +695,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
                     // ScBroadcastArea, listeners were added to an already
                     // existing identical area that doesn't need to be inserted
                     // to slots again.
-                    if (!(*pp)->StartListeningArea( rRange, pListener, pArea))
+                    if (!(*pp)->StartListeningArea( rRange, bGroupListening, pListener, pArea))
                         bDone = true;
                 }
                 else
@@ -664,8 +706,8 @@ void ScBroadcastAreaSlotMachine::StartListeningArea( const ScRange& rRange,
     }
 }
 
-void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
-        SvtListener* pListener )
+void ScBroadcastAreaSlotMachine::EndListeningArea(
+    const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {
     if ( rRange == BCA_LISTEN_ALWAYS  )
     {
@@ -700,7 +742,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
                 do
                 {
                     if ( *pp )
-                        (*pp)->EndListeningArea( rRange, pListener, pArea );
+                        (*pp)->EndListeningArea( rRange, bGroupListening, pListener, pArea);
                 } while (++pp < pStop);
             }
             else
@@ -708,7 +750,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea( const ScRange& rRange,
                 while ( nOff <= nEnd )
                 {
                     if ( *pp )
-                        (*pp)->EndListeningArea( rRange, pListener, pArea );
+                        (*pp)->EndListeningArea( rRange, bGroupListening, pListener, pArea);
                     ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
                 }
             }
@@ -988,13 +1030,51 @@ void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast()
     if (nInBulkBroadcast > 0)
     {
         if (--nInBulkBroadcast == 0)
+        {
             ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
+            BulkBroadcastGroupAreas();
+        }
     }
 }
 
 bool ScBroadcastAreaSlotMachine::InsertBulkArea( const ScBroadcastArea* pArea )
 {
     return aBulkBroadcastAreas.insert( pArea ).second;
+}
+
+void ScBroadcastAreaSlotMachine::InsertBulkGroupArea( ScBroadcastArea* pArea, const ScRange& rRange )
+{
+    BulkGroupAreasType::iterator it = maBulkGroupAreas.lower_bound(pArea);
+    if (it == maBulkGroupAreas.end() || maBulkGroupAreas.key_comp()(pArea, it->first))
+    {
+        // Insert a new one.
+        it = maBulkGroupAreas.insert(it, pArea, new sc::ColumnSpanSet(false));
+    }
+
+    sc::ColumnSpanSet* pSet = it->second;
+    assert(pSet);
+    pSet->set(rRange, true);
+}
+
+void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
+{
+    if (maBulkGroupAreas.empty())
+        return;
+
+    sc::BulkDataHint aHint(*pDoc, NULL);
+
+    BulkGroupAreasType::iterator it = maBulkGroupAreas.begin(), itEnd = maBulkGroupAreas.end();
+    for (; it != itEnd; ++it)
+    {
+        ScBroadcastArea* pArea = it->first;
+        const sc::ColumnSpanSet* pSpans = it->second;
+        assert(pArea);
+        assert(pSpans);
+        aHint.setSpans(pSpans);
+        pArea->GetBroadcaster().Broadcast(aHint);
+    }
+
+    maBulkGroupAreas.clear();
 }
 
 size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea )

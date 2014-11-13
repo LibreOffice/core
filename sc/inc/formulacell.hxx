@@ -23,6 +23,7 @@
 #include <set>
 
 #include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <formula/tokenarray.hxx>
 #include <osl/conditn.hxx>
@@ -47,16 +48,18 @@ struct RefUpdateInsertTabContext;
 struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 class CompileFormulaContext;
+class FormulaGroupAreaListener;
 
 }
 
 class ScFormulaCell;
 class ScProgress;
 class ScTokenArray;
-struct ScSimilarFormulaDelta;
 
 struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 {
+    typedef boost::ptr_vector<sc::FormulaGroupAreaListener> AreaListenersType;
+
     mutable size_t mnRefCount;
 
     ScTokenArray* mpCode;
@@ -70,6 +73,8 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     sal_uInt8 meCalcState;
     sal_uInt8 meKernelState;
 
+    AreaListenersType maAreaListeners;
+
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
 
@@ -80,6 +85,11 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
     void compileCode(
         ScDocument& rDoc, const ScAddress& rPos, formula::FormulaGrammar::Grammar eGram );
     void compileOpenCLKernel();
+
+    sc::FormulaGroupAreaListener* getAreaListener(
+        ScFormulaCell** ppTopCell, const ScRange& rRange, bool bStartFixed, bool bEndFixed );
+
+    void endAllGroupListening( ScDocument& rDoc );
 
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     static int snCount;

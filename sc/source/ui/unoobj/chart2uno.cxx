@@ -2548,7 +2548,7 @@ void ScChart2DataSequence::RefChanged()
                 if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
                     continue;
 
-                m_pDocument->StartListeningArea(aRange, m_pValueListener);
+                m_pDocument->StartListeningArea(aRange, false, m_pValueListener);
                 if (pCLC)
                     pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
             }
@@ -3400,7 +3400,7 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
                 if (!ScRefTokenHelper::getRangeFromToken(aRange, *itr, ScAddress()))
                     continue;
 
-                m_pDocument->StartListeningArea( aRange, m_pValueListener );
+                m_pDocument->StartListeningArea( aRange, false, m_pValueListener );
                 if (pCLC)
                     pCLC->StartListeningHiddenRange(aRange, m_pHiddenListener.get());
             }

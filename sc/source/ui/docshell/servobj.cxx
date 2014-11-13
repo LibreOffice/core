@@ -100,7 +100,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
     }
 
     pDocSh->GetDocument().GetLinkManager()->InsertServer( this );
-    pDocSh->GetDocument().StartListeningArea( aRange, &aForwarder );
+    pDocSh->GetDocument().StartListeningArea( aRange, false, &aForwarder );
 
     StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
     StartListening(*SfxGetpApp());     // for SC_HINT_AREAS_CHANGED
@@ -118,7 +118,7 @@ void ScServerObject::Clear()
         ScDocShell* pTemp = pDocSh;
         pDocSh = NULL;
 
-        pTemp->GetDocument().EndListeningArea( aRange, &aForwarder );
+        pTemp->GetDocument().EndListeningArea(aRange, false, &aForwarder);
         pTemp->GetDocument().GetLinkManager()->RemoveServer( this );
         EndListening(*pTemp);
         EndListening(*SfxGetpApp());
@@ -154,7 +154,7 @@ bool ScServerObject::GetData(
         //  refresh the listeners now (this is called from a timer)
 
         EndListeningAll();
-        pDocSh->GetDocument().StartListeningArea( aRange, &aForwarder );
+        pDocSh->GetDocument().StartListeningArea( aRange, false, &aForwarder );
         StartListening(*pDocSh);
         StartListening(*SfxGetpApp());
         bRefreshListener = false;

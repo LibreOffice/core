@@ -58,6 +58,7 @@
 #include <refhint.hxx>
 #include <listenerquery.hxx>
 #include <listenerqueryids.hxx>
+#include <grouparealistener.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -506,6 +507,29 @@ void ScFormulaCellGroup::compileOpenCLKernel()
         *mpTopCell->GetDocument(), mpTopCell->aPos, *this, *mpCode);
 
     meKernelState = sc::OpenCLKernelBinaryCreated;
+}
+
+sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
+    ScFormulaCell** ppTopCell, const ScRange& rRange, bool bStartFixed, bool bEndFixed )
+{
+    // TODO : Find existing one with the same criteria.
+    maAreaListeners.push_back(new sc::FormulaGroupAreaListener(rRange, ppTopCell, mnLength, bStartFixed, bEndFixed));
+    return &maAreaListeners.back();
+}
+
+void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
+{
+    AreaListenersType::iterator it = maAreaListeners.begin(), itEnd = maAreaListeners.end();
+    for (; it != itEnd; ++it)
+    {
+        sc::FormulaGroupAreaListener* pListener = &(*it);
+        ScRange aListenRange = pListener->getListeningRange();
+        // This "always listen" special range is never grouped.
+        bool bGroupListening = (aListenRange != BCA_LISTEN_ALWAYS);
+        rDoc.EndListeningArea(aListenRange, bGroupListening, pListener);
+    }
+
+    maAreaListeners.clear();
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
@@ -1854,14 +1878,14 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 if (pCode->IsRecalcModeAlways())
                 {
                     // The formula was previously volatile, but no more.
-                    pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, this);
+                    pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
                     pCode->SetExclusiveRecalcModeNormal();
                 }
                 else
                 {
                     // non-volatile formula.  End listening to the area in case
                     // it's listening due to macro module change.
-                    pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, this);
+                    pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
                 }
                 pDocument->RemoveFromFormulaTree(this);
             break;
@@ -3799,7 +3823,7 @@ void startListeningArea(
                 aCell2.SetCol(MAXCOL);
             }
         }
-        rDoc.StartListeningArea(ScRange(aCell1, aCell2), pCell);
+        rDoc.StartListeningArea(ScRange(aCell1, aCell2), false, pCell);
     }
 }
 
@@ -3807,6 +3831,9 @@ void startListeningArea(
 
 void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
 {
+    if (mxGroup)
+        mxGroup->endAllGroupListening(*pDoc);
+
     if (pDoc->IsClipOrUndo() || pDoc->GetNoListening() || IsInChangeTrack())
         return;
 
@@ -3815,7 +3842,7 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
     ScTokenArray* pArr = GetCode();
     if( pArr->IsRecalcModeAlways() )
     {
-        pDoc->StartListeningArea(BCA_LISTEN_ALWAYS, this);
+        pDoc->StartListeningArea(BCA_LISTEN_ALWAYS, false, this);
     }
 
     pArr->Reset();
@@ -3845,6 +3872,9 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
 {
     ScDocument& rDoc = rCxt.getDoc();
 
+    if (mxGroup)
+        mxGroup->endAllGroupListening(rDoc);
+
     if (rDoc.IsClipOrUndo() || rDoc.GetNoListening() || IsInChangeTrack())
         return;
 
@@ -3853,7 +3883,7 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
     ScTokenArray* pArr = GetCode();
     if( pArr->IsRecalcModeAlways() )
     {
-        rDoc.StartListeningArea(BCA_LISTEN_ALWAYS, this);
+        rDoc.StartListeningArea(BCA_LISTEN_ALWAYS, false, this);
     }
 
     pArr->Reset();
@@ -3902,7 +3932,7 @@ void endListeningArea(
             }
         }
 
-        rDoc.EndListeningArea(ScRange(aCell1, aCell2), pCell);
+        rDoc.EndListeningArea(ScRange(aCell1, aCell2), false, pCell);
     }
 }
 
@@ -3911,6 +3941,9 @@ void endListeningArea(
 void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
         ScAddress aCellPos )
 {
+    if (mxGroup)
+        mxGroup->endAllGroupListening(*pDoc);
+
     if (pDoc->IsClipOrUndo() || IsInChangeTrack())
         return;
 
@@ -3918,7 +3951,7 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
 
     if ( GetCode()->IsRecalcModeAlways() )
     {
-        pDoc->EndListeningArea( BCA_LISTEN_ALWAYS, this );
+        pDoc->EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
     }
 
     if (!pArr)
@@ -3950,6 +3983,9 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
 
 void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
 {
+    if (mxGroup)
+        mxGroup->endAllGroupListening(rCxt.getDoc());
+
     if (rCxt.getDoc().IsClipOrUndo() || IsInChangeTrack())
         return;
 
@@ -3963,7 +3999,7 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
 
     if (pArr->IsRecalcModeAlways())
     {
-        rDoc.EndListeningArea(BCA_LISTEN_ALWAYS, this);
+        rDoc.EndListeningArea(BCA_LISTEN_ALWAYS, false, this);
     }
 
     pArr->Reset();

@@ -193,7 +193,7 @@ void ScMacroManager::BroadcastModuleUpdate(const OUString& aModuleName)
 
         // for recalc on cell value change.  If the cell is not volatile, the
         // cell stops listening right away after it gets re-interpreted.
-        mpDoc->StartListeningArea(BCA_LISTEN_ALWAYS, pCell);
+        mpDoc->StartListeningArea(BCA_LISTEN_ALWAYS, false, pCell);
     }
 }
 

@@ -81,7 +81,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
                             aCell2.SetCol(MAXCOL);
                         }
                     }
-                    mpDoc->StartListeningArea(ScRange(aCell1, aCell2), this);
+                    mpDoc->StartListeningArea(ScRange(aCell1, aCell2), false, this);
                     maCells.push_back(ScRange(aCell1, aCell2));
                 }
             }
