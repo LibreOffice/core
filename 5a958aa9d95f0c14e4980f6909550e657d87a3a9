@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_2ebeebff",
+        "filename": "svx/source/table/svdotable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-13T16:25:23Z",
+      "side": 1,
+      "message": "shall the last one be IsAutoGrowWidth rather?",
+      "revId": "5a958aa9d95f0c14e4980f6909550e657d87a3a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
