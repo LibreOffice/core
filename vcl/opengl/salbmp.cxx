@@ -271,7 +271,9 @@ private:
 
 public:
     ImplPixelFormat4( const BitmapPalette& rPalette )
-    : mrPalette( rPalette )
+        : mrPalette( rPalette )
+        , mnX(0)
+        , mnShift(4)
     {
     }
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
