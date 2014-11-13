@@ -37,7 +37,6 @@ protected:
 
     OpenGLContext maContext;
     SalFrame* mpFrame;
-    SalVirtualDevice* mpVDev;
     int mnPainting;
 
     // clipping
