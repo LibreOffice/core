@@ -30,7 +30,6 @@
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Apply changes and close dialog</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -45,7 +44,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Apply changes</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -88,7 +86,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Reset changes</property>
               </object>
               <packing>
                 <property name="expand">False</property>
