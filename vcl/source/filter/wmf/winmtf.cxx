@@ -25,6 +25,7 @@
 #include <vcl/canvastools.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/fract.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <vcl/virdev.hxx>

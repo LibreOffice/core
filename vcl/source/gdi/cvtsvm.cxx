@@ -21,6 +21,7 @@
 #include <string.h>
 #include <osl/thread.h>
 #include <tools/debug.hxx>
+#include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/dibtools.hxx>

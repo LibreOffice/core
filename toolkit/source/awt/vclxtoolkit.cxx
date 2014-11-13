@@ -55,6 +55,7 @@
 #include <rtl/uuid.h>
 #include <rtl/process.h>
 #include <tools/link.hxx>
+#include <tools/fract.hxx>
 #include <tools/wintypes.hxx>
 
 #ifdef MACOSX

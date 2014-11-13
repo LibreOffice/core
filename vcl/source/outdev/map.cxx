@@ -1890,8 +1890,7 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
     verifyUnitSourceDest( eUnitSource, eUnitDest );
 
-    if ( rMapModeSource.mpImplMapMode->mbSimple &&
-         rMapModeDest.mpImplMapMode->mbSimple )
+    if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
         ENTER3( eUnitSource, eUnitDest );
 
@@ -1924,8 +1923,7 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
     verifyUnitSourceDest( eUnitSource, eUnitDest );
 
-    if ( rMapModeSource.mpImplMapMode->mbSimple &&
-         rMapModeDest.mpImplMapMode->mbSimple )
+    if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
         ENTER3( eUnitSource, eUnitDest );
 
@@ -1990,7 +1988,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
     verifyUnitSourceDest(eUnitSource, eUnitDest);
 
-    if(rMapModeSource.mpImplMapMode->mbSimple && rMapModeDest.mpImplMapMode->mbSimple)
+    if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
         ENTER3(eUnitSource, eUnitDest);
 
@@ -2027,8 +2025,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
     verifyUnitSourceDest( eUnitSource, eUnitDest );
 
-    if ( rMapModeSource.mpImplMapMode->mbSimple &&
-         rMapModeDest.mpImplMapMode->mbSimple )
+    if (rMapModeSource.IsSimple() && rMapModeDest.IsSimple())
     {
         ENTER3( eUnitSource, eUnitDest );
 

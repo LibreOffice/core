@@ -25,6 +25,7 @@
 #include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
+#include <tools/fract.hxx>
 #include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star {

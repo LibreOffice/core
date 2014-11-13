@@ -52,6 +52,7 @@
 #include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <tools/fract.hxx>
 #include <numeric>
 
 

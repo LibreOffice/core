@@ -30,6 +30,7 @@
 #include <vcl/mapmod.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <tools/datetime.hxx>
+#include <tools/fract.hxx>
 #include <svl/hint.hxx>
 
 #include <svl/style.hxx>

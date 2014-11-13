@@ -21,6 +21,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>
+#include <tools/fract.hxx>
 #include <boost/scoped_array.hpp>
 
 class FilterConfigItem;

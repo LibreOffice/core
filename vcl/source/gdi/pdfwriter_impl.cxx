@@ -44,6 +44,7 @@
 #include <rtl/digest.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
+#include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>

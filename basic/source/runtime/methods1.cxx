@@ -34,6 +34,7 @@
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/fract.hxx>
 #include <osl/file.hxx>
 #include <vcl/jobset.hxx>
 #include "sbobjmod.hxx"

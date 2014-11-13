@@ -30,6 +30,8 @@
 
 #include "unotools/streamwrap.hxx"
 
+#include <tools/fract.hxx>
+
 #include "comphelper/processfactory.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"

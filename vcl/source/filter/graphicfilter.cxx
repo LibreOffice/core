@@ -26,6 +26,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/zcodec.hxx>
+#include <tools/fract.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>

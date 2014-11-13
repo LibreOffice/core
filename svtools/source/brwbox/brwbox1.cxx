@@ -23,6 +23,7 @@
 #include "datwin.hxx"
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 
 #include <functional>
 #include <algorithm>

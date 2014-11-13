@@ -21,6 +21,7 @@
 #include "hintids.hxx"
 #include <algorithm>
 #include <svl/eitem.hxx>
+#include <tools/fract.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/sizeitem.hxx>

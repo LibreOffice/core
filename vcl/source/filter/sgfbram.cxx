@@ -20,6 +20,7 @@
 #include <string.h>
 #include <osl/endian.h>
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/color.hxx>
 #include <vcl/virdev.hxx>

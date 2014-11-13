@@ -34,6 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <svtools/embedtransfer.hxx>
+#include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/gdimtf.hxx>
 

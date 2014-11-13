@@ -17,12 +17,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/mapmod.hxx>
+
+#include <tools/fract.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/debug.hxx>
-#include <vcl/mapmod.hxx>
 
-ImplMapMode::ImplMapMode() :
+
+// - ImplMapMode -
+
+struct MapMode::ImplMapMode
+{
+    sal_uLong       mnRefCount;
+    MapUnit         meUnit;
+    Point           maOrigin;
+    Fraction        maScaleX;
+    Fraction        maScaleY;
+    bool            mbSimple;
+
+    friend SvStream& ReadImplMapMode(SvStream& rIStm, ImplMapMode& rMapMode);
+    friend SvStream& WriteImplMapMode(SvStream& rOStm, const ImplMapMode& rMapMode);
+
+    static ImplMapMode* ImplGetStaticMapMode( MapUnit eUnit );
+
+    ImplMapMode();
+    ImplMapMode(const ImplMapMode& rImpMapMode);
+};
+
+MapMode::ImplMapMode::ImplMapMode() :
     maOrigin( 0, 0 ),
     maScaleX( 1, 1 ),
     maScaleY( 1, 1 )
@@ -32,7 +55,7 @@ ImplMapMode::ImplMapMode() :
     mbSimple    = false;
 }
 
-ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
+MapMode::ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
     maOrigin( rImplMapMode.maOrigin ),
     maScaleX( rImplMapMode.maScaleX ),
     maScaleY( rImplMapMode.maScaleY )
@@ -42,7 +65,7 @@ ImplMapMode::ImplMapMode( const ImplMapMode& rImplMapMode ) :
     mbSimple        = false;
 }
 
-SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rImplMapMode )
+SvStream& ReadImplMapMode(SvStream& rIStm, MapMode::ImplMapMode& rImplMapMode)
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
     sal_uInt16          nTmp16;
@@ -56,7 +79,7 @@ SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rImplMapMode )
     return rIStm;
 }
 
-SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rImplMapMode )
+SvStream& WriteImplMapMode(SvStream& rOStm, const MapMode::ImplMapMode& rImplMapMode)
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
@@ -69,7 +92,8 @@ SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rImplMapMode )
     return rOStm;
 }
 
-ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
+MapMode::ImplMapMode *
+MapMode::ImplMapMode::ImplGetStaticMapMode(MapUnit eUnit)
 {
     static long aStaticImplMapModeAry[(MAP_LASTENUMDUMMY)*sizeof(ImplMapMode)/sizeof(long)];
 
@@ -242,5 +266,21 @@ SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
     return WriteImplMapMode( rOStm, *rMapMode.mpImplMapMode );
 }
+
+
+MapUnit MapMode::GetMapUnit() const { return mpImplMapMode->meUnit; }
+
+const Point& MapMode::GetOrigin() const { return mpImplMapMode->maOrigin; }
+
+const Fraction& MapMode::GetScaleX() const { return mpImplMapMode->maScaleX; }
+
+const Fraction& MapMode::GetScaleY() const { return mpImplMapMode->maScaleY; }
+
+bool MapMode::IsSameInstance( const MapMode& rMapMode ) const
+{
+    return (mpImplMapMode == rMapMode.mpImplMapMode);
+}
+
+bool MapMode::IsSimple() const { return mpImplMapMode->mbSimple; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

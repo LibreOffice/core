@@ -19,6 +19,7 @@
 
 
 #include <tools/urlobj.hxx>
+#include <tools/fract.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/window.hxx>

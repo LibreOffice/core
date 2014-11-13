@@ -22,6 +22,7 @@
 
 #include <svtools/svtdllapi.h>
 #include <tools/link.hxx>
+#include <tools/fract.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/field.hxx>

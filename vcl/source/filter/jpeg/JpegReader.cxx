@@ -28,6 +28,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <tools/fract.hxx>
 #include <boost/scoped_array.hpp>
 
 #define JPEG_MIN_READ 512

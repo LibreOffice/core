@@ -27,6 +27,7 @@
 #include <txtfrm.hxx>
 #include <vector>
 #include <svx/svdogrp.hxx>
+#include <tools/fract.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentState.hxx>
 #include <txtfly.hxx>

@@ -39,6 +39,7 @@
 
 #include <vcl/svapp.hxx>
 #include <tools/resmgr.hxx>
+#include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>

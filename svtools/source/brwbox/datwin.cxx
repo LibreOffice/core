@@ -26,6 +26,7 @@
 #include <vcl/settings.hxx>
 #include <rtl/string.hxx>
 #include <tools/debug.hxx>
+#include <tools/fract.hxx>
 
 
 void ButtonFrame::Draw( OutputDevice& rDev )

@@ -21,41 +21,14 @@
 #define INCLUDED_VCL_MAPMOD_HXX
 
 #include <tools/gen.hxx>
-#include <tools/fract.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <tools/resid.hxx>
 #include <tools/mapunit.hxx>
 
+class Fraction;
 class SvStream;
-
-
-// - ImplMapMode -
-
-
-class   OutputDevice;
-
-class ImplMapMode
-{
-    friend class    MapMode;
-    friend class    OutputDevice;
-
-private:
-    sal_uLong           mnRefCount;
-    MapUnit         meUnit;
-    Point           maOrigin;
-    Fraction        maScaleX;
-    Fraction        maScaleY;
-    bool            mbSimple;
-
-    friend SvStream& ReadImplMapMode( SvStream& rIStm, ImplMapMode& rMapMode );
-    friend SvStream& WriteImplMapMode( SvStream& rOStm, const ImplMapMode& rMapMode );
-
-    static ImplMapMode* ImplGetStaticMapMode( MapUnit eUnit );
-public:
-                    ImplMapMode();
-                    ImplMapMode( const ImplMapMode& rImpMapMode );
-};
+class OutputDevice;
 
 
 // - MapMode -
@@ -65,10 +38,14 @@ class VCL_DLLPUBLIC MapMode
 {
     friend class        OutputDevice;
 
+public:
+    struct ImplMapMode;
+
 private:
     ImplMapMode*        mpImplMapMode;
 
     SAL_DLLPRIVATE void ImplMakeUnique();
+    SAL_DLLPRIVATE bool IsSimple() const;
 
 public:
                     MapMode();
@@ -79,27 +56,22 @@ public:
                     ~MapMode();
 
     void            SetMapUnit( MapUnit eUnit );
-    MapUnit         GetMapUnit() const
-                        { return mpImplMapMode->meUnit; }
+    MapUnit         GetMapUnit() const;
 
     void            SetOrigin( const Point& rOrigin );
-    const Point&    GetOrigin() const
-                        { return mpImplMapMode->maOrigin; }
+    const Point&    GetOrigin() const;
 
     void            SetScaleX( const Fraction& rScaleX );
-    const Fraction& GetScaleX() const
-                        { return mpImplMapMode->maScaleX; }
+    const Fraction& GetScaleX() const;
     void            SetScaleY( const Fraction& rScaleY );
-    const Fraction& GetScaleY() const
-                        { return mpImplMapMode->maScaleY; }
+    const Fraction& GetScaleY() const;
 
     MapMode&        operator=( const MapMode& rMapMode );
     bool            operator==( const MapMode& rMapMode ) const;
     bool            operator!=( const MapMode& rMapMode ) const
                         { return !(MapMode::operator==( rMapMode )); }
     bool            IsDefault() const;
-    bool            IsSameInstance( const MapMode& rMapMode ) const
-                        { return (mpImplMapMode == rMapMode.mpImplMapMode); }
+    bool            IsSameInstance( const MapMode& rMapMode ) const;
 
     friend VCL_DLLPUBLIC SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
     friend VCL_DLLPUBLIC SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );

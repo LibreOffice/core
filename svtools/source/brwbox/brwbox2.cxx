@@ -25,6 +25,7 @@
 #include <vcl/settings.hxx>
 
 #include <tools/multisel.hxx>
+#include <tools/fract.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star::datatransfer;

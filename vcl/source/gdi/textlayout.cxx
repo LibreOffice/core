@@ -26,6 +26,7 @@
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 
 #include <tools/diagnose_ex.h>
+#include <tools/fract.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <rtl/strbuf.hxx>

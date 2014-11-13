@@ -23,6 +23,7 @@
 #include <prevwpage.hxx>
 
 #include <algorithm>
+#include <tools/fract.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 

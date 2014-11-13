@@ -26,6 +26,7 @@
 #include <boost/function.hpp>
 
 #include <tools/gen.hxx>
+#include <tools/fract.hxx>
 
 namespace sd { namespace slidesorter { namespace view {
 

@@ -27,6 +27,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <list>
 #include <tools/wintypes.hxx>
+#include <tools/fract.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/outdev.hxx>

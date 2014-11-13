@@ -26,6 +26,7 @@
 #include "JoinDesignView.hxx"
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
+#include <tools/fract.hxx>
 #include <memory>
 
 namespace comphelper

@@ -44,6 +44,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fract.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 

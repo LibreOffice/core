@@ -34,6 +34,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/bigint.hxx>
+#include <tools/fract.hxx>
 #include <o3tl/numeric.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

@@ -20,6 +20,7 @@
 #include "sal/config.h"
 
 #include <comphelper/processfactory.hxx>
+#include <tools/fract.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>

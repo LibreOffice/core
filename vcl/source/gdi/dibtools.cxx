@@ -25,6 +25,7 @@
 #include <vcl/dibtools.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/outdev.hxx>

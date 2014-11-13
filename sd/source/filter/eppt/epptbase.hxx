@@ -25,6 +25,7 @@
 
 #include <vcl/mapmod.hxx>
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

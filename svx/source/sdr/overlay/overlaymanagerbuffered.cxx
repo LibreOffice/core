@@ -25,6 +25,7 @@
 #include <vcl/window.hxx>
 #include <vcl/bitmap.hxx>
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/dibtools.hxx>

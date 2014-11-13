@@ -22,6 +22,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
+#include <tools/fract.hxx>
 #include <vcl/virdev.hxx>
 #include <math.h>
 

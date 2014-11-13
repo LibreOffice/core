@@ -24,6 +24,7 @@
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/shl.hxx>
+#include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 
 

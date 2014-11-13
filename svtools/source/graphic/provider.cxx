@@ -26,6 +26,7 @@
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
+#include <tools/fract.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/wmf.hxx>

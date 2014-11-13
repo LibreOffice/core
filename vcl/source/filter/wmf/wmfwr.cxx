@@ -29,6 +29,7 @@
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
 #include <tools/tenccvt.hxx>
+#include <tools/fract.hxx>
 #include <osl/endian.h>
 #include <vcl/dibtools.hxx>
 #include <vcl/metric.hxx>

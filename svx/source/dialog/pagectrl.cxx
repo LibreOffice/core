@@ -20,6 +20,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
+#include <tools/fract.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/pagectrl.hxx>

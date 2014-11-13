@@ -24,6 +24,7 @@
 #include <rtl/math.h>
 #include <comphelper/string.hxx>
 #include <tools/config.hxx>
+#include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"

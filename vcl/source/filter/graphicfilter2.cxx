@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>

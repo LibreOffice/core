@@ -23,6 +23,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <tools/vcompat.hxx>
+#include <tools/fract.hxx>
 #include <tools/helpers.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>

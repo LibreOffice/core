@@ -30,6 +30,7 @@
 #include <svx/grfcrop.hxx>
 #include <rtl/ustring.hxx>
 #include <cuires.hrc>
+#include <tools/fract.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>

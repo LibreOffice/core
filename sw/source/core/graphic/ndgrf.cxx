@@ -21,6 +21,7 @@
 #include <mdiexp.hxx>
 #include <tools/helpers.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/fract.hxx>
 #include <svl/undo.hxx>
 #include <svl/fstathelper.hxx>
 #include <svtools/imap.hxx>

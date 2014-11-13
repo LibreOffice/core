@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <tools/poly.hxx>
+#include <tools/fract.hxx>
 #include <svl/stritem.hxx>
 #include <svx/contdlg.hxx>
 #include <vcl/svapp.hxx>

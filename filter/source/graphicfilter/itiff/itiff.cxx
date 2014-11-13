@@ -23,6 +23,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/animate.hxx>
+#include <tools/fract.hxx>
 #include "lzwdecom.hxx"
 #include "ccidecom.hxx"
 

@@ -28,6 +28,7 @@
 #include <osl/endian.h>
 #include <vcl/svapp.hxx>
 #include <vcl/dibtools.hxx>
+#include <tools/fract.hxx>
 
 // MS Windows defines
 

@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_SOURCE_SVDRAW_SVDFMTF_HXX
 
 #include <tools/contnr.hxx>
+#include <tools/fract.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/svdobj.hxx>

@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <sfx2/basedlgs.hxx>
+#include <tools/fract.hxx>
 
 namespace sd {
 

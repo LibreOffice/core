@@ -20,6 +20,7 @@
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/poly.hxx>
+#include <tools/fract.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>

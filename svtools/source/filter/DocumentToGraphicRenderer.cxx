@@ -23,6 +23,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
+#include <tools/fract.hxx>
+
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>

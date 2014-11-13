@@ -23,6 +23,7 @@
 #endif
 
 #include <tools/stream.hxx>
+#include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/FilterConfigItem.hxx>
 #include <svtools/svtools.hrc>

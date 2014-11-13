@@ -23,6 +23,7 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/stdctrl.hxx>
+#include <tools/fract.hxx>
 #include <vcl/group.hxx>
 #include <sfx2/ctrlitem.hxx>
 

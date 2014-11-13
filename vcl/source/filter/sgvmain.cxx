@@ -21,6 +21,7 @@
 #include <osl/endian.h>
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
+#include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
 #include "sgffilt.hxx"
 #include "sgfbram.hxx"

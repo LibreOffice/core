@@ -28,6 +28,7 @@
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
+#include <tools/fract.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
 
 class DialControl;
