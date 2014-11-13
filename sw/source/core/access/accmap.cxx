@@ -86,10 +86,17 @@ struct SwFrmFunc
     }
 };
 
-typedef ::std::map < const SwFrm *, uno::WeakReference < XAccessible >, SwFrmFunc > _SwAccessibleContextMap_Impl;
-
-class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
+class SwAccessibleContextMap_Impl
 {
+public:
+    typedef const SwFrm *                                               key_type;
+    typedef uno::WeakReference < XAccessible >                          mapped_type;
+    typedef std::pair<const key_type,mapped_type>                       value_type;
+    typedef SwFrmFunc                                                   key_compare;
+    typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
+    typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
+private:
+    std::map <key_type,mapped_type,key_compare> maMap;
 public:
 
 #if OSL_DEBUG_LEVEL > 0
@@ -102,6 +109,13 @@ public:
 #endif
     {}
 
+    iterator begin() { return maMap.begin(); }
+    iterator end() { return maMap.end(); }
+    bool empty() const { return maMap.empty(); }
+    void clear() { maMap.clear(); }
+    iterator find(const key_type& key) { return maMap.find(key); }
+    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    iterator erase(const_iterator pos) { return maMap.erase(pos); }
 };
 
 class SwDrawModellListener_Impl : public SfxListener,
@@ -562,8 +576,23 @@ struct SwAccessibleChildFunc
 typedef ::std::map < SwAccessibleChild, SwAccessibleEventList_Impl::iterator,
                      SwAccessibleChildFunc > _SwAccessibleEventMap_Impl;
 
-class SwAccessibleEventMap_Impl: public _SwAccessibleEventMap_Impl
+class SwAccessibleEventMap_Impl
 {
+public:
+    typedef SwAccessibleChild                                           key_type;
+    typedef SwAccessibleEventList_Impl::iterator                        mapped_type;
+    typedef std::pair<const key_type,mapped_type>                       value_type;
+    typedef SwAccessibleChildFunc                                       key_compare;
+    typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
+    typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
+private:
+    std::map <key_type,mapped_type,key_compare> maMap;
+public:
+    iterator begin() { return maMap.begin(); }
+    iterator end() { return maMap.end(); }
+    iterator find(const key_type& key) { return maMap.find(key); }
+    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    iterator erase(const_iterator pos) { return maMap.erase(pos); }
 };
 
 struct SwAccessibleParaSelection
@@ -587,12 +616,24 @@ struct SwXAccWeakRefComp
     }
 };
 
-typedef ::std::map< uno::WeakReference < XAccessible >,
-                    SwAccessibleParaSelection,
-                    SwXAccWeakRefComp > _SwAccessibleSelectedParas_Impl;
-
-class SwAccessibleSelectedParas_Impl: public _SwAccessibleSelectedParas_Impl
-{};
+class SwAccessibleSelectedParas_Impl
+{
+public:
+    typedef uno::WeakReference < XAccessible >                          key_type;
+    typedef SwAccessibleParaSelection                                   mapped_type;
+    typedef std::pair<const key_type,mapped_type>                       value_type;
+    typedef SwXAccWeakRefComp                                           key_compare;
+    typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
+    typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
+private:
+    std::map<key_type,mapped_type,key_compare> maMap;
+public:
+    iterator begin() { return maMap.begin(); }
+    iterator end() { return maMap.end(); }
+    iterator find(const key_type& key) { return maMap.find(key); }
+    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
+    iterator erase(const_iterator pos) { return maMap.erase(pos); }
+};
 
 // helper class that stores preview data
 class SwAccPreviewData
