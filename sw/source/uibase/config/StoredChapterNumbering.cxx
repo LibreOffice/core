@@ -371,7 +371,7 @@ public:
         }
         else if (XML_NAMESPACE_STYLE == nPrefix && IsXMLToken(rLocalName, XML_STYLE))
         {
-            new StoredChapterNumberingDummyStyleContext(
+            return new StoredChapterNumberingDummyStyleContext(
                     GetImport(), nPrefix, rLocalName, xAttrList);
         }
 
