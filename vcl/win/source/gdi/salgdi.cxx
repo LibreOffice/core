@@ -487,6 +487,7 @@ void WinSalGraphics::InitGraphics()
     {
         if (mbVirDev)
             pImpl->GetOpenGLContext().requestVirtualDevice();
+        pImpl->GetOpenGLContext().requestSingleBufferedRendering();
         pImpl->GetOpenGLContext().init(mhLocalDC, mhWnd);
     }
 }
