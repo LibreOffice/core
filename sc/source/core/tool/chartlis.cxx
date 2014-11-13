@@ -285,7 +285,7 @@ private:
         if (rRange.aStart == rRange.aEnd)
             mpDoc->StartListeningCell(rRange.aStart, &mrParent);
         else
-            mpDoc->StartListeningArea(rRange, &mrParent);
+            mpDoc->StartListeningArea(rRange, false, &mrParent);
     }
 
     void endListening(const ScRange& rRange)
@@ -293,7 +293,7 @@ private:
         if (rRange.aStart == rRange.aEnd)
             mpDoc->EndListeningCell(rRange.aStart, &mrParent);
         else
-            mpDoc->EndListeningArea(rRange, &mrParent);
+            mpDoc->EndListeningArea(rRange, false, &mrParent);
     }
 private:
     ScDocument* mpDoc;

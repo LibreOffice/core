@@ -45,20 +45,17 @@ extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkA
 
 // STATIC DATA -----------------------------------------------------------
 
-void ScDocument::StartListeningArea( const ScRange& rRange,
-        SvtListener* pListener
-    )
+void ScDocument::StartListeningArea(
+    const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {
     if ( pBASM )
-        pBASM->StartListeningArea( rRange, pListener );
+        pBASM->StartListeningArea(rRange, bGroupListening, pListener);
 }
 
-void ScDocument::EndListeningArea( const ScRange& rRange,
-        SvtListener* pListener
-    )
+void ScDocument::EndListeningArea( const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
 {
     if ( pBASM )
-        pBASM->EndListeningArea( rRange, pListener );
+        pBASM->EndListeningArea(rRange, bGroupListening, pListener);
 }
 
 void ScDocument::Broadcast( const ScHint& rHint )
@@ -155,7 +152,7 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
         std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
         for (; it != itEnd; ++it)
         {
-            pBASM->EndListeningArea(it->maArea, it->mpListener);
+            pBASM->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
             it->mpListener->Notify(rHint); // Adjust the references.
         }
     }
@@ -206,7 +203,7 @@ void ScDocument::BroadcastRefMoved( const sc::RefMovedHint& rHint )
         {
             ScRange aNewRange = it->maArea;
             aNewRange.Move(rDelta.Col(), rDelta.Row(), rDelta.Tab());
-            pBASM->StartListeningArea(aNewRange, it->mpListener);
+            pBASM->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
         }
     }
 }

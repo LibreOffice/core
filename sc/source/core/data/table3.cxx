@@ -739,7 +739,7 @@ void ScTable::SortReorderByColumn(
         std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
         for (; it != itEnd; ++it)
         {
-            pDocument->EndListeningArea(it->maArea, it->mpListener);
+            pDocument->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
             aListeners.push_back( it->mpListener);
         }
     }
@@ -770,7 +770,7 @@ void ScTable::SortReorderByColumn(
                 aNewRange.aStart.SetCol( itCol->second);
                 aNewRange.aEnd.SetCol( itCol->second);
             }
-            pDocument->StartListeningArea(aNewRange, it->mpListener);
+            pDocument->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
         }
     }
 
@@ -1020,7 +1020,7 @@ void ScTable::SortReorderByRow(
         std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
         for (; it != itEnd; ++it)
         {
-            pDocument->EndListeningArea(it->maArea, it->mpListener);
+            pDocument->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
             aListeners.push_back( it->mpListener);
         }
     }
@@ -1082,7 +1082,7 @@ void ScTable::SortReorderByRow(
                 aNewRange.aStart.SetRow( itRow->second);
                 aNewRange.aEnd.SetRow( itRow->second);
             }
-            pDocument->StartListeningArea(aNewRange, it->mpListener);
+            pDocument->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
         }
     }
 

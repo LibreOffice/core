@@ -10,6 +10,11 @@
 #include "sharedformula.hxx"
 #include "calcmacros.hxx"
 #include "tokenarray.hxx"
+#include <listenercontext.hxx>
+#include <document.hxx>
+#include <grouparealistener.hxx>
+
+#define USE_FORMULA_GROUP_LISTENER 1
 
 namespace sc {
 
@@ -328,8 +333,78 @@ void SharedFormulaUtil::unshareFormulaCells(CellStoreType& rCells, std::vector<S
 
 void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, ScFormulaCell** ppSharedTop )
 {
-    assert((**ppSharedTop).IsSharedTop());
+    ScFormulaCell& rTopCell = **ppSharedTop;
+    assert(rTopCell.IsSharedTop());
 
+#if USE_FORMULA_GROUP_LISTENER
+    ScDocument& rDoc = rCxt.getDoc();
+    rDoc.SetDetectiveDirty(true);
+
+    ScFormulaCellGroupRef xGroup = rTopCell.GetCellGroup();
+    const ScTokenArray* pCode = xGroup->mpCode;
+    assert(pCode == rTopCell.GetCode());
+    if (pCode->IsRecalcModeAlways())
+    {
+        rDoc.StartListeningArea(
+            BCA_LISTEN_ALWAYS, false,
+            xGroup->getAreaListener(ppSharedTop, BCA_LISTEN_ALWAYS, true, true));
+    }
+
+    formula::FormulaToken** p = pCode->GetCode();
+    formula::FormulaToken** pEnd = p + pCode->GetCodeLen();
+    for (; p != pEnd; ++p)
+    {
+        const formula::FormulaToken* t = *p;
+        switch (t->GetType())
+        {
+            case formula::svSingleRef:
+            {
+                ScAddress aPos = t->GetSingleRef()->toAbs(rTopCell.aPos);
+                ScFormulaCell** pp = ppSharedTop;
+                ScFormulaCell** ppEnd = ppSharedTop + xGroup->mnLength;
+                for (; pp != ppEnd; ++pp, aPos.IncRow())
+                {
+                    if (!aPos.IsValid())
+                        break;
+
+                    rDoc.StartListeningCell(rCxt, aPos, **pp);
+                }
+            }
+            break;
+            case formula::svDoubleRef:
+            {
+                const ScSingleRefData& rRef1 = *t->GetSingleRef();
+                const ScSingleRefData& rRef2 = *t->GetSingleRef2();
+                ScAddress aPos1 = rRef1.toAbs(rTopCell.aPos);
+                ScAddress aPos2 = rRef2.toAbs(rTopCell.aPos);
+
+                ScRange aOrigRange = ScRange(aPos1, aPos2);
+                ScRange aListenedRange = aOrigRange;
+                if (rRef2.IsRowRel())
+                    aListenedRange.aEnd.IncRow(xGroup->mnLength-1);
+
+                if (aPos1.IsValid() && aPos2.IsValid())
+                {
+                    rDoc.StartListeningArea(
+                        aListenedRange, true,
+                        xGroup->getAreaListener(ppSharedTop, aOrigRange, !rRef1.IsRowRel(), !rRef2.IsRowRel()));
+                }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+
+    ScFormulaCell** pp = ppSharedTop;
+    ScFormulaCell** ppEnd = ppSharedTop + xGroup->mnLength;
+    for (; pp != ppEnd; ++pp)
+    {
+        ScFormulaCell& rCell = **pp;
+        rCell.SetNeedsListening(false);
+    }
+
+#else
     ScFormulaCell** pp = ppSharedTop;
     ScFormulaCell** ppEnd = ppSharedTop + (**ppSharedTop).GetSharedLength();
     for (; pp != ppEnd; ++pp)
@@ -337,6 +412,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
         ScFormulaCell& rFC = **pp;
         rFC.StartListeningTo(rCxt);
     }
+#endif
 }
 
 }

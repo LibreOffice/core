@@ -22,17 +22,23 @@
 
 #include <set>
 #include <boost/unordered_set.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <functional>
+
 #include <svl/broadcast.hxx>
 
 #include "global.hxx"
 #include "brdcst.hxx"
+#include <columnspanset.hxx>
+
+class ScBroadcastArea;
 
 namespace sc {
 
 struct AreaListener
 {
     ScRange maArea;
+    bool mbGroupListening;
     SvtListener* mpListener;
 };
 
@@ -42,19 +48,20 @@ struct AreaListener
     Used in a Unique Associative Container.
  */
 
-class ScBroadcastArea
+class ScBroadcastArea : boost::noncopyable
 {
 private:
     ScBroadcastArea*    pUpdateChainNext;
     SvtBroadcaster      aBroadcaster;
     ScRange             aRange;
     sal_uLong               nRefCount;
-    bool                bInUpdateChain;
+
+    bool mbInUpdateChain:1;
+    bool mbGroupListening:1;
 
 public:
-            ScBroadcastArea( const ScRange& rRange )
-                : pUpdateChainNext( NULL ), aRange( rRange ),
-                nRefCount( 0 ), bInUpdateChain( false ) {}
+    ScBroadcastArea( const ScRange& rRange );
+
     inline SvtBroadcaster&       GetBroadcaster()       { return aBroadcaster; }
     inline const SvtBroadcaster& GetBroadcaster() const { return aBroadcaster; }
     inline void         UpdateRange( const ScRange& rNewRange )
@@ -67,8 +74,11 @@ public:
     inline sal_uLong        GetRef() { return nRefCount; }
     inline ScBroadcastArea* GetUpdateChainNext() const { return pUpdateChainNext; }
     inline void         SetUpdateChainNext( ScBroadcastArea* p ) { pUpdateChainNext = p; }
-    inline bool         IsInUpdateChain() const { return bInUpdateChain; }
-    inline void         SetInUpdateChain( bool b ) { bInUpdateChain = b; }
+    inline bool         IsInUpdateChain() const { return mbInUpdateChain; }
+    inline void         SetInUpdateChain( bool b ) { mbInUpdateChain = b; }
+
+    inline bool IsGroupListening() const { return mbGroupListening; }
+    void SetGroupListening( bool b ) { mbGroupListening = b; }
 
     /** Equalness of this or range. */
     inline  bool        operator==( const ScBroadcastArea & rArea ) const;
@@ -76,7 +86,7 @@ public:
 
 inline bool ScBroadcastArea::operator==( const ScBroadcastArea & rArea ) const
 {
-    return aRange == rArea.aRange;
+    return aRange == rArea.aRange && mbGroupListening == rArea.mbGroupListening;
 }
 
 struct ScBroadcastAreaEntry
@@ -91,7 +101,7 @@ struct ScBroadcastAreaHash
 {
     size_t operator()( const ScBroadcastAreaEntry& rEntry ) const
     {
-        return rEntry.mpArea->GetRange().hashArea();
+        return rEntry.mpArea->GetRange().hashArea() + rEntry.mpArea->IsGroupListening();
     }
 };
 
@@ -145,7 +155,7 @@ private:
      */
     bool mbHasErasedArea;
 
-    ScBroadcastAreas::const_iterator  FindBroadcastArea( const ScRange& rRange ) const;
+    ScBroadcastAreas::const_iterator FindBroadcastArea( const ScRange& rRange, bool bGroupListening ) const;
 
     /**
         More hypothetical (memory would probably be doomed anyway) check
@@ -189,9 +199,8 @@ public:
             true if rpArea passed was NULL and ScBroadcastArea is newly
             created.
      */
-    bool                StartListeningArea( const ScRange& rRange,
-                                            SvtListener* pListener,
-                                            ScBroadcastArea*& rpArea );
+    bool StartListeningArea(
+        const ScRange& rRange, bool bGroupListening, SvtListener* pListener, ScBroadcastArea*& rpArea );
 
     /**
         Insert a ScBroadcastArea obtained via StartListeningArea() to
@@ -199,9 +208,9 @@ public:
      */
     void                InsertListeningArea( ScBroadcastArea* pArea );
 
-    void                EndListeningArea( const ScRange& rRange,
-                                            SvtListener* pListener,
-                                            ScBroadcastArea*& rpArea );
+    void EndListeningArea(
+        const ScRange& rRange, bool bGroupListening, SvtListener* pListener, ScBroadcastArea*& rpArea );
+
     bool                AreaBroadcast( const ScHint& rHint );
     /// @return true if at least one broadcast occurred.
     bool                AreaBroadcastInRange( const ScRange& rRange,
@@ -238,6 +247,7 @@ public:
 class  ScBroadcastAreaSlotMachine
 {
 private:
+    typedef boost::ptr_map<ScBroadcastArea*, sc::ColumnSpanSet> BulkGroupAreasType;
 
     /**
         Slot offset arrangement of columns and rows, once per sheet.
@@ -279,6 +289,7 @@ private:
 
 private:
     ScBroadcastAreasBulk  aBulkBroadcastAreas;
+    BulkGroupAreasType maBulkGroupAreas;
     TableSlotsMap         aTableSlotsMap;
     AreasToBeErased       maAreasToBeErased;
     SvtBroadcaster       *pBCAlways;             // for the RC_ALWAYS special range
@@ -295,10 +306,12 @@ private:
 public:
                         ScBroadcastAreaSlotMachine( ScDocument* pDoc );
                         ~ScBroadcastAreaSlotMachine();
-    void                StartListeningArea( const ScRange& rRange,
-                                            SvtListener* pListener );
-    void                EndListeningArea( const ScRange& rRange,
-                                            SvtListener* pListener );
+    void StartListeningArea(
+        const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
+
+    void EndListeningArea(
+        const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
+
     bool                AreaBroadcast( const ScHint& rHint ) const;
         // return: at least one broadcast occurred
     bool                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
@@ -309,6 +322,10 @@ public:
     void                EnterBulkBroadcast();
     void                LeaveBulkBroadcast();
     bool                InsertBulkArea( const ScBroadcastArea* p );
+
+    void InsertBulkGroupArea( ScBroadcastArea* pArea, const ScRange& rRange );
+    void BulkBroadcastGroupAreas();
+
     /// @return: how many removed
     size_t              RemoveBulkArea( const ScBroadcastArea* p );
     inline ScBroadcastArea* GetUpdateChain() const { return pUpdateChain; }

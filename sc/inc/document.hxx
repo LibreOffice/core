@@ -1852,10 +1852,9 @@ private:
     static ScRecursionHelper*   CreateRecursionHelperInstance();
 
 public:
-    void                StartListeningArea( const ScRange& rRange,
-                                            SvtListener* pListener );
-    void                EndListeningArea( const ScRange& rRange,
-                                            SvtListener* pListener );
+    void StartListeningArea( const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
+
+    void EndListeningArea( const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
                         /** Broadcast wrapper, calls
                             rHint.GetCell()->Broadcast() and AreaBroadcast()
                             and TrackFormulas() and conditional format list

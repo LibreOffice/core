@@ -197,6 +197,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/adiasync \
     sc/source/core/tool/appoptio \
     sc/source/core/tool/autoform \
+    sc/source/core/tool/bulkdatahint \
     sc/source/core/tool/brdcst \
     sc/source/core/tool/calcconfig \
     sc/source/core/tool/callform \
@@ -227,6 +228,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/formulaopt \
     sc/source/core/tool/formulaparserpool \
     sc/source/core/tool/formularesult \
+    sc/source/core/tool/grouparealistener \
     sc/source/core/tool/hints \
     sc/source/core/tool/inputopt \
     sc/source/core/tool/interpr1 \

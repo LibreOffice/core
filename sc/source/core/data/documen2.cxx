@@ -1187,7 +1187,7 @@ void ScDocument::AddLookupCache( ScLookupCache & rCache )
         OSL_FAIL( "ScDocument::AddLookupCache: couldn't add to hash map");
     }
     else
-        StartListeningArea( rCache.getRange(), &rCache);
+        StartListeningArea( rCache.getRange(), false, &rCache);
 }
 
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
@@ -1202,7 +1202,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
     {
         ScLookupCache* pCache = (*it).second;
         pLookupCacheMapImpl->aCacheMap.erase( it);
-        EndListeningArea( pCache->getRange(), &rCache);
+        EndListeningArea( pCache->getRange(), false, &rCache);
     }
 }
 
