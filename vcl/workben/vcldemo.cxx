@@ -79,6 +79,8 @@ public:
               , mnSelectedRenderer(-1)
               , mpButton(NULL)
               , mpButtonWin(NULL)
+              , mnBounceX(1)
+              , mnBounceY(1)
     {
         if (!Application::LoadBrandBitmap("intro", maIntro))
             Application::Abort("Failed to load intro image");
