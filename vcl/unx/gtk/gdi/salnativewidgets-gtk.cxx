@@ -870,7 +870,7 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
 
     clipList aClip;
     GdkDrawable* gdkDrawable = GDK_DRAWABLE( GetGdkWindow() );
-    GdkX11Pixmap* pixmap = NULL;
+    std::unique_ptr<GdkX11Pixmap> xPixmap;
     Rectangle aPixmapRect;
     if( ( bNeedPixmapPaint )
         && nType != CTRL_SCROLLBAR
@@ -885,10 +885,10 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         // outside the rectangle, see e.g. checkbox
         aPixmapRect = Rectangle( Point( aCtrlRect.Left()-1, aCtrlRect.Top()-1 ),
                                  Size( aCtrlRect.GetWidth()+2, aCtrlRect.GetHeight()+2) );
-        pixmap = NWGetPixmapFromScreen( aPixmapRect );
-        if( ! pixmap )
+        xPixmap.reset(NWGetPixmapFromScreen(aPixmapRect));
+        if (!xPixmap)
             return false;
-        gdkDrawable = pixmap->GetGdkDrawable();
+        gdkDrawable = xPixmap->GetGdkDrawable();
         aCtrlRect = Rectangle( Point(1,1), aCtrlRect.GetSize() );
         aClip.push_back( aCtrlRect );
     }
@@ -1022,10 +1022,9 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
             returnVal = NWPaintGTKArrow( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
 
-    if( pixmap )
+    if( xPixmap )
     {
-        returnVal = NWRenderPixmapToScreen( pixmap, aPixmapRect ) && returnVal;
-        delete pixmap;
+        returnVal = NWRenderPixmapToScreen(xPixmap.get(), aPixmapRect) && returnVal;
     }
 
     return( returnVal );
