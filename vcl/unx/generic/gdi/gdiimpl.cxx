@@ -167,13 +167,10 @@ X11Pixmap* X11SalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect )
                                         rRect.GetWidth(), rRect.GetHeight(), 24 );
     GC aTmpGC = XCreateGC( pDpy, pPixmap->GetPixmap(), 0, NULL );
 
-    if( !pPixmap || !aTmpGC )
+    if (!aTmpGC)
     {
-        if ( pPixmap )
-            delete pPixmap;
-        if ( aTmpGC )
-            XFreeGC( pDpy, aTmpGC );
-        SAL_WARN( "vcl", "Could not get valid pixmap from screen" );
+        delete pPixmap;
+        SAL_WARN( "vcl", "Could not get valid GC from screen" );
         return NULL;
     }
 
