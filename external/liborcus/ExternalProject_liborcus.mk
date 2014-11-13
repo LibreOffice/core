@@ -88,7 +88,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		$(if $(liborcus_LDFLAGS),LDFLAGS='$(liborcus_LDFLAGS)') \
 		MDDS_CFLAGS='$(MDDS_CFLAGS)' \
 		MDDS_LIBS=' ' \
-		./configure \
+		MAKE=$(MAKE) ./configure \
 			--with-pic \
 			--enable-static \
 			--disable-shared \

@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalProject_use_externals,libwpd,\
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& ./configure \
+		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
 			--enable-static \
 			--disable-shared \

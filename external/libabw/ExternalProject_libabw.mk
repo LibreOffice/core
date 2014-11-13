@@ -25,7 +25,7 @@ $(eval $(call gb_ExternalProject_use_externals,libabw,\
 $(call gb_ExternalProject_get_state_target,libabw,build) :
 	$(call gb_ExternalProject_run,build,\
 		export PKG_CONFIG="" \
-		&& ./configure \
+		&& MAKE=$(MAKE) ./configure \
 			--with-pic \
 			--enable-static \
 			--disable-shared \

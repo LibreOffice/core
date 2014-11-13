@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 				-L$(call gb_UnpackedTarball_get_dir,icu)/source/lib \
 			) \
 			" \
-		&& ./configure \
+		&& MAKE=$(MAKE) ./configure \
 			--without-editline \
 			--disable-superserver \
 			--with-system-icu --without-fbsample --without-fbsample-db \
