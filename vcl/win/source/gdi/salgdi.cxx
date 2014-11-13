@@ -39,8 +39,6 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include <officecfg/Office/Common.hxx>
-
 #define DITHER_PAL_DELTA                51
 #define DITHER_PAL_STEPS                6
 #define DITHER_PAL_COUNT                (DITHER_PAL_STEPS*DITHER_PAL_STEPS*DITHER_PAL_STEPS)
