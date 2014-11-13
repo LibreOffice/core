@@ -7354,7 +7354,45 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_JPEG=
     BUILD_TYPE="$BUILD_TYPE JPEG"
+    AC_CHECK_PROGS(NASM, [nasm nasmw yasm])
+    if test -z "$NASM" -a "$build_os" = "cygwin" -a -x "/opt/lo/bin/nasm"; then
+        NASM="/opt/lo/bin/nasm"
+    fi
+    if test -z "$NASM"; then
+cat << _EOS
+****************************************************************************
+You need nasm (Netwide Assembler) to build internal jpeg library.
+To get one please do:
+
+_EOS
+        if test "$build_os" = "cygwin"; then
+cat << _EOS
+install a pre-compiled binary for Win32
+
+ mkdir -p /opt/lo/bin
+ cd /opt/lo/bin
+ wget http://dev-www.libreoffice.org/bin/cygwin/nasm.exe
+ chmod +x nasm
+_EOS
+        else
+cat << _EOS
+consult http://svn.code.sf.net/p/libjpeg-turbo/code/trunk/BUILDING.txt
+_EOS
+        fi
+cat << _EOS
+
+or get and install one from http://www.nasm.us/
+
+Then re-run autogen.sh
+
+Note: autogen.sh will try to use /opt/lo/bin/nasm if the environment variable NASM is not already defined.
+Alternatively, you can install the 'new' nasm where ever you want and make sure that \`which nasm\` finds it.
+
+_EOS
+    AC_MSG_ERROR([no nasm (Netwide Assembler) found])
+    fi
 fi
+AC_SUBST(NASM)
 AC_SUBST(SYSTEM_JPEG)
 
 

@@ -11,10 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,jpeg))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,jpeg,$(JPEG_TARBALL)))
 
-$(eval $(call gb_UnpackedTarball_add_file,jpeg,jconfig.h,external/jpeg/configs/jconfig.h))
-
 $(eval $(call gb_UnpackedTarball_add_patches,jpeg,\
-    external/jpeg/patches/jpeg-8c-jmorecfg.patch \
+	external/jpeg/jpeg.build.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
