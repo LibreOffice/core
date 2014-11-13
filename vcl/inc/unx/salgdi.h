@@ -273,8 +273,8 @@ public:
     virtual void               BeginPaint() SAL_OVERRIDE;
     virtual void               EndPaint() SAL_OVERRIDE;
 
-    // create a pixmap from a screen region
-    X11Pixmap* GetPixmapFromScreen( const Rectangle& rRect );
+    // fill a pixmap from a screen region
+    bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY );
 
     // render a pixmap to the screen
     bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY );

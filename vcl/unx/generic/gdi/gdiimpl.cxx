@@ -159,19 +159,16 @@ void X11SalGraphicsImpl::Init()
     mnBrushPixel = mrParent.GetPixel( mnBrushColor );
 }
 
-X11Pixmap* X11SalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect )
+bool X11SalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
     //TODO lfrb: don't hardcode the depth
     Display* pDpy = mrParent.GetXDisplay();
-    X11Pixmap* pPixmap = new X11Pixmap( pDpy, mrParent.GetScreenNumber(),
-                                        rRect.GetWidth(), rRect.GetHeight(), 24 );
     GC aTmpGC = XCreateGC( pDpy, pPixmap->GetPixmap(), 0, NULL );
 
-    if (!aTmpGC)
+    if( !aTmpGC )
     {
-        delete pPixmap;
-        SAL_WARN( "vcl", "Could not get valid GC from screen" );
-        return NULL;
+        SAL_WARN( "vcl", "Could not create GC from screen" );
+        return false;
     }
 
     // Copy the background of the screen into a composite pixmap
@@ -181,12 +178,11 @@ X11Pixmap* X11SalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect )
                              pPixmap->GetDrawable(), pPixmap->GetScreen(),
                              pPixmap->GetDepth(),
                              aTmpGC,
-                             rRect.Left(), rRect.Top(),
-                             rRect.GetWidth(), rRect.GetHeight(),
+                             nX, nY, pPixmap->GetWidth(), pPixmap->GetHeight(),
                              0, 0 );
 
     XFreeGC( pDpy, aTmpGC );
-    return pPixmap;
+    return true;
 }
 
 bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )

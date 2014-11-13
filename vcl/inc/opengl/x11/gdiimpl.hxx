@@ -33,7 +33,7 @@ public:
     // implementation of X11GraphicsImpl
 
     void Init() SAL_OVERRIDE;
-    X11Pixmap* GetPixmapFromScreen( const Rectangle& rRect ) SAL_OVERRIDE;
+    bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
     bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
 };
 

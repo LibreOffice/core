@@ -269,49 +269,44 @@ class GdkX11Pixmap : public X11Pixmap
 {
 public:
     GdkX11Pixmap( int nWidth, int nHeight, int nDepth );
-    GdkX11Pixmap( X11Pixmap& rOther, GdkWindow *pWindow );
     virtual ~GdkX11Pixmap();
 
-    GdkPixmap*   GetGdkPixmap() const;
-    GdkDrawable* GetGdkDrawable() const;
+    virtual int          GetDepth() const SAL_OVERRIDE;
+    virtual SalX11Screen GetScreen() const SAL_OVERRIDE;
+    virtual Pixmap       GetPixmap() const SAL_OVERRIDE;
+    GdkPixmap*           GetGdkPixmap() const;
+    GdkDrawable*         GetGdkDrawable() const;
 
 protected:
     GdkPixmap* mpGdkPixmap;
+    int        mnDepth;
 };
 
 GdkX11Pixmap::GdkX11Pixmap( int nWidth, int nHeight, int nDepth )
+: X11Pixmap( nWidth, nHeight )
+, mnDepth( nDepth )
 {
     mpGdkPixmap = gdk_pixmap_new( NULL, nWidth, nHeight, nDepth );
-
-    //mpDisplay = ?
-    mnScreen = SalX11Screen( gdk_screen_get_number( gdk_drawable_get_screen( GDK_DRAWABLE(mpGdkPixmap) ) ) );
-    mnWidth = nWidth;
-    mnHeight = nHeight;
-    mnDepth = nDepth;
-    mpPixmap = GDK_PIXMAP_XID( mpGdkPixmap );
-}
-
-GdkX11Pixmap::GdkX11Pixmap( X11Pixmap& rOther, GdkWindow *pWindow )
-    : X11Pixmap(rOther)
-{
-    GdkColormap* pColormap;
-
-#if GTK_CHECK_VERSION(2,24,0)
-    GdkScreen *pScreen = gdk_window_get_screen( pWindow );
-    mpGdkPixmap = gdk_pixmap_foreign_new_for_screen( pScreen, mpPixmap,
-                                                     mnWidth, mnHeight,
-                                                     mnDepth );
-#else
-    mpGdkPixmap = gdk_pixmap_foreign_new( mpPixmap );
-#endif
-
-    pColormap = gdk_drawable_get_colormap( pWindow );
-    gdk_drawable_set_colormap( GDK_DRAWABLE (mpGdkPixmap), pColormap );
 }
 
 GdkX11Pixmap::~GdkX11Pixmap()
 {
     g_object_unref( mpGdkPixmap );
+}
+
+int GdkX11Pixmap::GetDepth() const
+{
+    return mnDepth;
+}
+
+SalX11Screen GdkX11Pixmap::GetScreen() const
+{
+    return SalX11Screen( gdk_screen_get_number( gdk_drawable_get_screen( GDK_DRAWABLE(mpGdkPixmap) ) ) );
+}
+
+Pixmap GdkX11Pixmap::GetPixmap() const
+{
+    return GDK_PIXMAP_XID( mpGdkPixmap );
 }
 
 GdkPixmap* GdkX11Pixmap::GetGdkPixmap() const
@@ -4135,17 +4130,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
 GdkX11Pixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
 {
-    X11Pixmap* pPixmap;
-    GdkX11Pixmap* pResult;
+    GdkX11Pixmap* pPixmap;
 
-    pPixmap = GetPixmapFromScreen( srcRect );
-    if( pPixmap == NULL )
-        return NULL;
-
-    pResult = new GdkX11Pixmap( *pPixmap, GetGdkWindow() );
-    delete pPixmap;
-
-    return pResult;
+    pPixmap = new GdkX11Pixmap( srcRect.GetWidth(), srcRect.GetHeight(), 24 );
+    FillPixmapFromScreen( pPixmap, srcRect.Left(), srcRect.Top() );
+    return pPixmap;
 }
 
 /************************************************************************
