@@ -2739,8 +2739,6 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         }
 
         BYTE eCharSet = ANSI_CHARSET;
-        if( mpLogFont )
-            eCharSet = mpLogFont->lfCharSet;
 #if ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
             pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);

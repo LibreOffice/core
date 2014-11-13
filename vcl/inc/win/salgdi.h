@@ -170,7 +170,6 @@ private:
     COLORREF                mnTextColor;        // TextColor
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
-    LOGFONTA*               mpLogFont;          // LOG-Font which is currently selected (only W9x)
     ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
     BYTE*                   mpFontCharSets;     // All Charsets for the current font
     BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
