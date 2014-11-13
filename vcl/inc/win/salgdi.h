@@ -25,9 +25,7 @@
 #include "outfont.hxx"
 #include "PhysicalFontFace.hxx"
 #include "impfont.hxx"
-#include <textrender.hxx>
 #include <vcl/fontcapabilities.hxx>
-#include <win/svsys.h>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_set.hpp>
@@ -150,7 +148,6 @@ class WinSalGraphics : public SalGraphics
     friend class ScopedFont;
 private:
     boost::scoped_ptr<SalGraphicsImpl> mpImpl;
-    boost::scoped_ptr<TextRenderImpl> mpTextRenderImpl;
 
     HDC                     mhLocalDC;              // HDC
     bool                    mbPrinter : 1;          // is Printer
@@ -159,13 +156,26 @@ private:
     bool                    mbScreen : 1;           // is Screen compatible
     HWND                    mhWnd;              // Window-Handle, when Window-Graphics
 
+    HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
+    const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
+    ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
+    float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
+    float                   mfCurrentFontScale;
     HRGN                    mhRegion;           // vcl::Region Handle
     HPEN                    mhDefPen;           // DefaultPen
     HBRUSH                  mhDefBrush;         // DefaultBrush
+    HFONT                   mhDefFont;          // DefaultFont
     HPALETTE                mhDefPal;           // DefaultPalette
     COLORREF                mnTextColor;        // TextColor
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
+    LOGFONTA*               mpLogFont;          // LOG-Font which is currently selected (only W9x)
+    ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
+    BYTE*                   mpFontCharSets;     // All Charsets for the current font
+    BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
+    bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
+    KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
+    sal_uIntPtr                 mnFontKernPairCount;// Number of Kerning Pairs of the current Font
     int                     mnPenWidth;         // Linienbreite
 
 public:
@@ -275,6 +285,12 @@ protected:
         const SalBitmap* pAlphaBitmap);
     virtual bool        drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency );
 
+private:
+    // local helpers
+
+    // get kernign pairs of the current font
+    sal_uLong               GetKernPairs();
+
 public:
     // public SalGraphics methods, the interface to the independent vcl part
 
@@ -366,6 +382,7 @@ public:
                                             bool bVertical,
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
+    virtual int             GetMinKashidaWidth();
 
     virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& );
     virtual bool            GetGlyphOutline( sal_GlyphId, ::basegfx::B2DPolyPolygon& );

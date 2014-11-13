@@ -35,7 +35,6 @@
 #include "salgdiimpl.hxx"
 #include "gdiimpl.hxx"
 #include "opengl/win/gdiimpl.hxx"
-#include <wintextrender.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
@@ -501,6 +500,8 @@ void WinSalGraphics::DeInitGraphics()
         SelectPen( getHDC(), mhDefPen );
     if ( mhDefBrush )
         SelectBrush( getHDC(), mhDefBrush );
+    if ( mhDefFont )
+        SelectFont( getHDC(), mhDefFont );
 }
 
 HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp )
@@ -570,22 +571,33 @@ WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hW
     mbWindow(eType == WinSalGraphics::WINDOW),
     mhWnd(hWnd),
     mbScreen(bScreen),
+    mfCurrentFontScale(1.0),
     mhRegion(0),
     mhDefPen(0),
     mhDefBrush(0),
+    mhDefFont(0),
     mhDefPal(0),
     mpStdClipRgnData(NULL),
+    mpLogFont(NULL),
+    mpFontCharSets(NULL),
+    mpFontAttrCache(NULL),
+    mnFontCharSetCount(0),
+    mpFontKernPairs(NULL),
+    mnFontKernPairCount(0),
+    mbFontKernInit(false),
     mnPenWidth(GSL_PEN_WIDTH)
 {
     if (OpenGLHelper::isVCLOpenGLEnabled() && !mbPrinter)
-    {
         mpImpl.reset(new WinOpenGLSalGraphicsImpl(*this));
-        mpTextRenderImpl.reset((new WinTextRender(mbPrinter, *this)));
-    }
     else
-    {
         mpImpl.reset(new WinSalGraphicsImpl(*this));
-        mpTextRenderImpl.reset((new WinTextRender(mbPrinter, *this)));
+
+    for( int i = 0; i < MAX_FALLBACK; ++i )
+    {
+        mhFonts[ i ] = 0;
+        mpWinFontData[ i ]  = NULL;
+        mpWinFontEntry[ i ] = NULL;
+        mfFontScale[ i ] = 1.0;
     }
 }
 
@@ -602,6 +614,12 @@ WinSalGraphics::~WinSalGraphics()
 
     // delete cache data
     delete [] mpStdClipRgnData;
+
+    delete mpLogFont;
+
+    delete mpFontCharSets;
+
+    delete mpFontKernPairs;
 }
 
 bool WinSalGraphics::isPrinter() const
