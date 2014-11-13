@@ -146,6 +146,7 @@ class WinSalGraphics : public SalGraphics
 {
     friend class WinSalGraphicsImpl;
     friend class ScopedFont;
+    friend class WinLayout;
 private:
     boost::scoped_ptr<SalGraphicsImpl> mpImpl;
 

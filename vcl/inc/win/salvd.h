@@ -51,7 +51,10 @@ public:
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
     virtual bool                    SetSize( long nNewDX, long nNewDY );
     virtual void                    GetSize( long& rWidth, long& rHeight );
+
+    static HBITMAP ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppDummy);
 };
+
 
 #endif // INCLUDED_VCL_INC_WIN_SALVD_H
 

@@ -27,14 +27,14 @@
 #include <win/salgdi.h>
 #include <win/salvd.h>
 
-static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
-                                       sal_uInt16 nBitCount )
+HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)
 {
     HBITMAP hBitmap;
 
      if ( nBitCount == 1 )
      {
          hBitmap = CreateBitmap( (int)nDX, (int)nDY, 1, 1, NULL );
+         ppData = NULL;
      }
      else
      {
@@ -55,9 +55,8 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
          aBitmapInfo.bmiHeader.biClrUsed = 0;
          aBitmapInfo.bmiHeader.biClrImportant = 0;
 
-         void* pDummy;
          hBitmap = CreateDIBSection( hDC, &aBitmapInfo,
-                                     DIB_RGB_COLORS, &pDummy, NULL,
+                                     DIB_RGB_COLORS, ppData, NULL,
                                      0 );
      }
 
@@ -87,8 +86,8 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         if( !hDC )
             ImplWriteLastError( GetLastError(), "CreateCompatibleDC in CreateVirtualDevice" );
 
-        hBmp    = ImplCreateVirDevBitmap( pGraphics->getHDC(),
-                                        nDX, nDY, nBitCount );
+        void *pDummy;
+        hBmp = WinSalVirtualDevice::ImplCreateVirDevBitmap(pGraphics->getHDC(), nDX, nDY, nBitCount, &pDummy);
         if( !hBmp )
             ImplWriteLastError( GetLastError(), "ImplCreateVirDevBitmap in CreateVirtualDevice" );
         // #124826# continue even if hBmp could not be created
@@ -198,8 +197,8 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
         return TRUE;    // ???
     else
     {
-        HBITMAP hNewBmp = ImplCreateVirDevBitmap( getHDC(), nDX, nDY,
-                                              mnBitCount );
+        void *pDummy;
+        HBITMAP hNewBmp = ImplCreateVirDevBitmap(getHDC(), nDX, nDY, mnBitCount, &pDummy);
         if ( hNewBmp )
         {
             SelectBitmap( getHDC(), hNewBmp );

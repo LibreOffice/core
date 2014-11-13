@@ -17,6 +17,7 @@
 
 class WinOpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl
 {
+    friend class WinLayout;
 private:
     WinSalGraphics& mrParent;
 

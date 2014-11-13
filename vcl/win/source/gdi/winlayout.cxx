@@ -22,10 +22,12 @@
 #include "osl/module.h"
 #include "osl/file.h"
 
+#include <opengl/texture.hxx>
+#include <opengl/win/gdiimpl.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
-
-#include "win/salgdi.h"
-#include "win/saldata.hxx"
+#include <win/salgdi.h>
+#include <win/saldata.hxx>
+#include <win/salvd.h>
 
 #include "sft.hxx"
 #include "sallayout.hxx"
@@ -151,14 +153,62 @@ SCRIPT_CACHE& WinLayout::GetScriptCache() const
 
 void WinLayout::DrawText(SalGraphics& rGraphics) const
 {
-    if (mbUseOpenGL)
+    WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
+    HDC hDC = rWinGraphics.getHDC();
+
+    if (!mbUseOpenGL)
     {
-        // TODO draw to a texture instead
-        DrawTextImpl(static_cast<WinSalGraphics&>(rGraphics).getHDC());
+        // no OpenGL, just classic rendering
+        DrawTextImpl(hDC);
     }
     else
     {
-        DrawTextImpl(static_cast<WinSalGraphics&>(rGraphics).getHDC());
+        // we have to render the text to a hidden texture, and draw it
+
+        // FIXME so that we don't have to use enormous bitmap, move the text
+        // to 0,0, size the width / height accordingly, and move it back via
+        // SalTwoRects later
+        const int width = 1024;
+        const int height = 1024;
+        const int bpp = 32;
+
+        HDC compatibleDC = CreateCompatibleDC(hDC);
+
+        sal_uInt8 *data;
+        HBITMAP hBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(compatibleDC, width, height, bpp, reinterpret_cast<void **>(&data));
+        // FIXME fill transparent instead of 128
+        memset(data, 128, width*height*4);
+
+        // draw the text to the hidden DC
+        HGDIOBJ hBitmapOld = SelectObject(compatibleDC, hBitmap);
+        SelectFont(compatibleDC, mhFont);
+        DrawTextImpl(compatibleDC);
+        SelectObject(compatibleDC, hBitmapOld);
+
+        // and turn it into a texture
+        OpenGLTexture aTexture(width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        CHECK_GL_ERROR();
+
+        WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
+        if (pImpl)
+        {
+            SalTwoRect aRects;
+            aRects.mnSrcX = 0;
+            aRects.mnSrcY = 0;
+            aRects.mnSrcWidth = width;
+            aRects.mnSrcHeight = height;
+            aRects.mnDestX = 0;
+            aRects.mnDestY = 0;
+            aRects.mnDestWidth = width;
+            aRects.mnDestHeight = height;
+
+            // FIXME We don't have a method that could paint a texture with
+            // transparency yet, use it when we have it
+            pImpl->DrawTexture(aTexture.Id(), Size(width, height), aRects);
+        }
+
+        DeleteObject(hBitmap);
+        DeleteDC(compatibleDC);
     }
 }
 
