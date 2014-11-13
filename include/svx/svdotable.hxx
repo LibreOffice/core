@@ -178,7 +178,7 @@ public:
     bool IsTextEditActive( const sdr::table::CellPos& rPos );
 
     /** returns true only if we are in edit mode and the user actually changed anything */
-    virtual bool IsRealyEdited() const SAL_OVERRIDE;
+    virtual bool IsReallyEdited() const SAL_OVERRIDE;
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.

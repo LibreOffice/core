@@ -363,7 +363,7 @@ public:
     virtual sal_Int32 getTextCount() const SAL_OVERRIDE;
 
     /** returns true only if we are in edit mode and the user actually changed anything */
-    virtual bool IsRealyEdited() const;
+    virtual bool IsReallyEdited() const;
 
     /** changes the current active text */
     virtual void setActiveText( sal_Int32 nIndex );

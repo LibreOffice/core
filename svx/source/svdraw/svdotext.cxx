@@ -1759,11 +1759,10 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 }
 
-bool SdrTextObj::IsRealyEdited() const
+bool SdrTextObj::IsReallyEdited() const
 {
     return pEdtOutl && pEdtOutl->IsModified();
 }
-
 
 // moved inlines here form hxx
 

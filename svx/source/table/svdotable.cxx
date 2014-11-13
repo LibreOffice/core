@@ -693,7 +693,7 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
         // Optimization: SdrTableObj::SetChanged() can call this very often, repeatedly
         // with the same settings, noticeably increasing load time. Skip if already done.
         bool bInteractiveMightGrowBecauseTextChanged =
-            mpTableObj->IsRealyEdited() && (mpTableObj->IsAutoGrowHeight() || mpTableObj->IsAutoGrowHeight());
+            mpTableObj->IsReallyEdited() && (mpTableObj->IsAutoGrowHeight() || mpTableObj->IsAutoGrowHeight());
         WritingMode writingMode = mpTableObj->GetWritingMode();
         if( bInteractiveMightGrowBecauseTextChanged
             || lastLayoutTable != this || lastLayoutInputRectangle != rArea
@@ -2097,8 +2097,6 @@ bool SdrTableObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2D
     return SdrTextObj::TRGetBaseGeometry( rMatrix, rPolyPolygon );
 }
 
-
-
 // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
 // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
 // to use (0,0) as upper left and will be scaled to the given size in the matrix.
@@ -2107,21 +2105,15 @@ void SdrTableObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const 
     SdrTextObj::TRSetBaseGeometry( rMatrix, rPolyPolygon );
 }
 
-
-
-bool SdrTableObj::IsRealyEdited() const
+bool SdrTableObj::IsReallyEdited() const
 {
     return pEdtOutl && pEdtOutl->IsModified();
 }
-
-
 
 bool SdrTableObj::IsFontwork() const
 {
     return false;
 }
-
-
 
 sal_uInt32 SdrTableObj::GetHdlCount() const
 {
@@ -2134,8 +2126,6 @@ sal_uInt32 SdrTableObj::GetHdlCount() const
 
     return nCount;
 }
-
-
 
 void SdrTableObj::AddToHdlList(SdrHdlList& rHdlList) const
 {
