@@ -82,8 +82,8 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 {
     SvxGridTabPage::Reset(rAttrs);
 
-    SdOptionsSnapItem aOptsItem( (const SdOptionsSnapItem&) rAttrs->
-                        Get( ATTR_OPTIONS_SNAP ) );
+    SdOptionsSnapItem aOptsItem( static_cast<const SdOptionsSnapItem&>( rAttrs->
+                        Get( ATTR_OPTIONS_SNAP ) ) );
 
     pCbxSnapHelplines->Check( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
     pCbxSnapBorder->Check( aOptsItem.GetOptionsSnap().IsSnapBorder() );
@@ -148,11 +148,11 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 
 void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
 {
-    SdOptionsContentsItem aOptsItem( (const SdOptionsContentsItem&) rAttrs->
-                        Get( ATTR_OPTIONS_CONTENTS ) );
+    SdOptionsContentsItem aOptsItem( static_cast<const SdOptionsContentsItem&>( rAttrs->
+                        Get( ATTR_OPTIONS_CONTENTS ) ) );
 
-    SdOptionsLayoutItem aLayoutItem( (const SdOptionsLayoutItem&) rAttrs->
-                        Get( ATTR_OPTIONS_LAYOUT ) );
+    SdOptionsLayoutItem aLayoutItem( static_cast<const SdOptionsLayoutItem&>( rAttrs->
+                        Get( ATTR_OPTIONS_LAYOUT ) ) );
 
     m_pCbxRuler->Check( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
     m_pCbxMoveOutline->Check( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
@@ -219,7 +219,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
     if ( rInAttrs.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rInAttrs.Get( nWhich );
+        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rInAttrs.Get( nWhich ));
         eFUnit = (FieldUnit)rItem.GetValue();
     }
     else
@@ -240,7 +240,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(vcl::Window* pParent, const SfxItemSet& rInAttr
         OUString sMetric = aMetricArr.GetStringByPos( i );
         sal_IntPtr nFieldUnit = aMetricArr.GetValue( i );
         sal_Int32 nPos = m_pLbMetric->InsertEntry( sMetric );
-        m_pLbMetric->SetEntryData( nPos, (void*)nFieldUnit );
+        m_pLbMetric->SetEntryData( nPos, reinterpret_cast<void*>(nFieldUnit) );
     }
     m_pLbMetric->SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
 
@@ -289,7 +289,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
-        const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
+        const SfxUInt16Item* pItem = static_cast<const SfxUInt16Item*>(pAttr);
 
         FieldUnit eFUnit = (FieldUnit)(long)pItem->GetValue();
 
@@ -382,7 +382,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
     const sal_Int32 nMPos = m_pLbMetric->GetSelectEntryPos();
     if ( m_pLbMetric->IsValueChangedFromSaved() )
     {
-        sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbMetric->GetEntryData( nMPos );
+        sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nMPos ));
         rAttrs->Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
                                      (sal_uInt16)nFieldUnit ) );
         bModified = true;
@@ -412,8 +412,8 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
 
 void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 {
-    SdOptionsMiscItem aOptsItem( (const SdOptionsMiscItem&) rAttrs->
-                        Get( ATTR_OPTIONS_MISC ) );
+    SdOptionsMiscItem aOptsItem( static_cast<const SdOptionsMiscItem&>( rAttrs->
+                        Get( ATTR_OPTIONS_MISC ) ) );
 
     m_pCbxStartWithTemplate->Check( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
     m_pCbxMarkedHitMovesAlways->Check( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
@@ -443,12 +443,12 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 
     if ( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs->Get( nWhich );
+        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich ));
         long nFieldUnit = (long)rItem.GetValue();
 
         for ( sal_Int32 i = 0; i < m_pLbMetric->GetEntryCount(); ++i )
         {
-            if ( (sal_IntPtr)m_pLbMetric->GetEntryData( i ) == nFieldUnit )
+            if ( reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( i )) == nFieldUnit )
             {
                 m_pLbMetric->SelectEntryPos( i );
                 break;
@@ -461,19 +461,19 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     if( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         SfxMapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich );
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs->Get( nWhich );
+        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich ));
         SetMetricValue( *m_pMtrFldTabstop, rItem.GetValue(), eUnit );
     }
     m_pLbMetric->SaveValue();
     m_pMtrFldTabstop->SaveValue();
     //Scale
-    sal_Int32 nX = ( (const SfxInt32Item&) rAttrs->
+    sal_Int32 nX = static_cast<const SfxInt32Item&>( rAttrs->
                  Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
-    sal_Int32 nY = ( (const SfxInt32Item&) rAttrs->
+    sal_Int32 nY = static_cast<const SfxInt32Item&>( rAttrs->
                  Get( ATTR_OPTIONS_SCALE_Y ) ).GetValue();
-    nWidth = ( (const SfxUInt32Item&) rAttrs->
+    nWidth = static_cast<const SfxUInt32Item&>( rAttrs->
                     Get( ATTR_OPTIONS_SCALE_WIDTH ) ).GetValue();
-    nHeight = ( (const SfxUInt32Item&) rAttrs->
+    nHeight = static_cast<const SfxUInt32Item&>( rAttrs->
                     Get( ATTR_OPTIONS_SCALE_HEIGHT ) ).GetValue();
 
     m_pCbScale->SetText( GetScale( nX, nY ) );
@@ -500,7 +500,7 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        FieldUnit eUnit = (FieldUnit)(sal_IntPtr)m_pLbMetric->GetEntryData( nPos );
+        FieldUnit eUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pLbMetric->GetEntryData( nPos ));
         sal_Int64 nVal =
             m_pMtrFldTabstop->Denormalize( m_pMtrFldTabstop->GetValue( FUNIT_TWIP ) );
         SetFieldUnit( *m_pMtrFldTabstop, eUnit );

@@ -246,7 +246,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
 
 IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
 {
-    m_pPrgs->SetValue( (sal_uInt16)(sal_uLong) pData );
+    m_pPrgs->SetValue( (sal_uInt16)reinterpret_cast<sal_uLong>(pData) );
     return 0L;
 }
 

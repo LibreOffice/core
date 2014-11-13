@@ -102,7 +102,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         }
 
         if( pItem == NULL )
-            pItem = (SvxNumBulletItem*) aInputSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+            pItem = static_cast<const SvxNumBulletItem*>( aInputSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET) );
 
         DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in Pool! [CL]" );
 
@@ -111,7 +111,7 @@ OutlineBulletDlg::OutlineBulletDlg(
 
     if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
     {
-        SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,true);
+        const SvxNumBulletItem* pItem = static_cast<const SvxNumBulletItem*>( aInputSet.GetItem(EE_PARA_NUMBULLET,true) );
         SvxNumRule* pRule = pItem->GetNumRule();
         if(pRule)
         {
@@ -173,14 +173,14 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
     const SfxPoolItem *pItem = NULL;
     if( SfxItemState::SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
     {
-        SdBulletMapper::MapFontsInNumRule( *((SvxNumBulletItem*)pItem)->GetNumRule(), *pOutputSet );
+        SdBulletMapper::MapFontsInNumRule( *static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule(), *pOutputSet );
 
 // #i35937 - removed EE_PARA_BULLETSTATE setting
     }
 
     if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
     {
-        SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,true);
+        const SvxNumBulletItem* pBulletItem = static_cast<const SvxNumBulletItem*>(pOutputSet->GetItem(EE_PARA_NUMBULLET,true));
         SvxNumRule* pRule = pBulletItem->GetNumRule();
         if(pRule)
             pRule->SetFeatureFlag( NUM_NO_NUMBERS, false );

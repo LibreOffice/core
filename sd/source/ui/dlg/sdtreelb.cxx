@@ -148,7 +148,7 @@ sal_Int64 SAL_CALL SdPageObjsTLB::SdPageObjsTransferable::getSomething( const ::
     if( ( rId.getLength() == 16 ) &&
         ( 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
     {
-        nRet = (sal_Int64)(sal_IntPtr)this;
+        nRet = (sal_Int64)reinterpret_cast<sal_IntPtr>(this);
     }
     else
         nRet = SdTransferable::getSomething(rId);
@@ -268,13 +268,12 @@ OUString SdPageObjsTLB::getAltLongDescText(SvTreeListEntry* pEntry , bool isAltT
     sal_uInt16 maxPages = mpDoc->GetPageCount();
     sal_uInt16 pageNo;
     SdrObject*   pObj = NULL;
-    SdPage* pPage = NULL;
 
     OUString ParentName = GetEntryText( GetRootLevelParent( pEntry ) );
 
     for( pageNo = 0;  pageNo < maxPages; pageNo++ )
     {
-        pPage = (SdPage*) mpDoc->GetPage( pageNo );
+        const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( pageNo ) );
         if( pPage->GetPageKind() != PK_STANDARD ) continue;
         if( pPage->GetName() !=  ParentName ) continue;
         SdrObjListIter aIter( *pPage, IM_FLAT );
@@ -363,7 +362,7 @@ void SdPageObjsTLB::InitEntry(SvTreeListEntry* pEntry,
 {
     sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
-    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nColToHilite ));
     SvLBoxString* pStr = new SvLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
@@ -499,8 +498,6 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages,
     mbShowAllPages = bAllPages;
     mpMedium = NULL;
 
-    SdPage*      pPage = NULL;
-
     IconProvider aIconProvider;
 
     // first insert all pages including objects
@@ -509,7 +506,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages,
 
     while( nPage < nMaxPages )
     {
-        pPage = (SdPage*) mpDoc->GetPage( nPage );
+        const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( nPage ) );
         if(  (mbShowAllPages || pPage->GetPageKind() == PK_STANDARD)
              && !(pPage->GetPageKind()==PK_HANDOUT)   ) //#94954# never list the normal handout page ( handout-masterpage is used instead )
         {
@@ -531,7 +528,7 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, bool bAllPages,
 
         while( nPage < nMaxMasterPages )
         {
-            pPage = (SdPage*) mpDoc->GetMasterPage( nPage );
+            const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetMasterPage( nPage ) );
             AddShapeList(*pPage, NULL, pPage->GetName(), false, NULL, aIconProvider);
             nPage++;
         }
@@ -607,7 +604,7 @@ void SdPageObjsTLB::AddShapeList (
         if(pEntry)
             pWindow=(vcl::Window*)GetParent(pEntry);
         if(pWindow)
-            pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+            pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
         if( pSdNavigatorWin )
             pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
         if(pSdDrawDocShell)
@@ -650,7 +647,7 @@ void SdPageObjsTLB::AddShapeList (
                     if(pNewEntry)
                         pWindow=(vcl::Window*)GetParent(pNewEntry);
                     if(pWindow)
-                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                        pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
                         pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
@@ -684,7 +681,7 @@ void SdPageObjsTLB::AddShapeList (
                     if(pNewEntry)
                         pWindow=(vcl::Window*)GetParent(pNewEntry);
                     if(pWindow)
-                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                        pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
                         pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
@@ -733,7 +730,7 @@ void SdPageObjsTLB::AddShapeList (
                     if(pNewEntry)
                         pWindow=(vcl::Window*)GetParent(pNewEntry);
                     if(pWindow)
-                        pSdNavigatorWin = (SdNavigatorWin*)pWindow;
+                        pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
                         pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
                     if(pSdDrawDocShell)
@@ -810,7 +807,6 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
         return false;
 
     SdrObject*   pObj = NULL;
-    SdPage*      pPage = NULL;
     SvTreeListEntry* pEntry = First();
     OUString     aName;
 
@@ -820,7 +816,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
 
     while( nPage < nMaxPages )
     {
-        pPage = (SdPage*) mpDoc->GetPage( nPage );
+        const SdPage* pPage = static_cast<const SdPage*>( mpDoc->GetPage( nPage ) );
         if( pPage->GetPageKind() == PK_STANDARD )
         {
             if( !pEntry )
@@ -915,7 +911,7 @@ void SdPageObjsTLB::RequestingChildren( SvTreeListEntry* pFileEntry )
 
             while( nPage < nMaxPages )
             {
-                pPage = (SdPage*) mpBookmarkDoc->GetPage( nPage );
+                pPage = static_cast<SdPage*>( mpBookmarkDoc->GetPage( nPage ) );
                 if( pPage->GetPageKind() == PK_STANDARD )
                 {
                     pPageEntry = InsertEntry( pPage->GetName(),
@@ -1126,7 +1122,7 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
     SvTreeListEntry* pEntry = GetEntry(rPosPixel);
 
     if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
-        pNavWin = (SdNavigatorWin*) ( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
+        pNavWin = static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
 
     if (pEntry != NULL
         && pNavWin !=NULL
@@ -1173,7 +1169,7 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
 void SdPageObjsTLB::DoDrag()
 {
     mpDropNavWin = ( mpFrame->HasChildWindow( SID_NAVIGATOR ) ) ?
-                  (SdNavigatorWin*)( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) ) :
+                  static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) ) :
                   NULL;
 
     if( mpDropNavWin )
@@ -1228,7 +1224,7 @@ void SdPageObjsTLB::DoDrag()
 
         SdrObject* pObject = NULL;
         void* pUserData = GetCurEntry()->GetUserData();
-        if (pUserData != NULL && pUserData != (void*)1)
+        if (pUserData != NULL && pUserData != reinterpret_cast<void*>(1))
             pObject = reinterpret_cast<SdrObject*>(pUserData);
         if (pObject != NULL)
         {
@@ -1264,7 +1260,7 @@ void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
 {
     if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
     {
-        SdNavigatorWin* pNewNavWin = (SdNavigatorWin*) ( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
+        SdNavigatorWin* pNewNavWin = static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
 
         if( mpDropNavWin == pNewNavWin)
         {
@@ -1335,7 +1331,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
             sal_uInt16          nId = SID_NAVIGATOR;
 
             if( mpFrame->HasChildWindow( nId ) )
-                pNavWin = (SdNavigatorWin*)( mpFrame->GetChildWindow( nId )->GetContextWindow( SD_MOD() ) );
+                pNavWin = static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( nId )->GetContextWindow( SD_MOD() ) );
 
             if( pNavWin && ( pNavWin == mpParent ) )
             {
@@ -1343,7 +1339,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
                 OUString                aFile;
 
                 if( aDataHelper.GetString( FORMAT_FILE, aFile ) &&
-                    ( (SdNavigatorWin*) mpParent)->InsertFile( aFile ) )
+                    static_cast<SdNavigatorWin*>(mpParent)->InsertFile( aFile ) )
                 {
                     nRet = rEvt.mnAction;
                 }

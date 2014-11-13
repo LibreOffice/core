@@ -86,8 +86,8 @@ SdActionDlg::SdActionDlg (
     assert(pNewPage); //Unable to create page
 
     // formerly in PageCreated
-    ( (SdTPAction*) pNewPage )->SetView( pView );
-    ( (SdTPAction*) pNewPage )->Construct();
+    static_cast<SdTPAction*>( pNewPage )->SetView( pView );
+    static_cast<SdTPAction*>( pNewPage )->Construct();
 
     SetTabPage( pNewPage );
 }
@@ -156,7 +156,7 @@ void SdTPAction::SetView( const ::sd::View* pSdView )
         m_pLbTree->SetViewFrame( pFrame );
         m_pLbTreeDocument->SetViewFrame( pFrame );
 
-        SvxColorListItem aItem( *(const SvxColorListItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
+        SvxColorListItem aItem( *static_cast<const SvxColorListItem*>( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
         pColList = aItem.GetColorList();
         DBG_ASSERT( pColList.is(), "No color table available!" );
     }
@@ -188,7 +188,7 @@ void SdTPAction::Construct()
 
             if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
             {
-                pOleObj = (SdrOle2Obj*) pObj;
+                pOleObj = static_cast<SdrOle2Obj*>(pObj);
             }
             else if (nInv == SdrInventor && nSdrObjKind == OBJ_GRAF)
             {
@@ -307,7 +307,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
     // m_pLbAction
     if( rAttrs->GetItemState( ATTR_ACTION ) != SfxItemState::DONTCARE )
     {
-        eCA = (presentation::ClickAction) ( ( const SfxAllEnumItem& ) rAttrs->
+        eCA = (presentation::ClickAction) static_cast<const SfxAllEnumItem&>( rAttrs->
                     Get( ATTR_ACTION ) ).GetValue();
         SetActualClickAction( eCA );
     }
@@ -317,7 +317,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
     // m_pEdtSound
     if( rAttrs->GetItemState( ATTR_ACTION_FILENAME ) != SfxItemState::DONTCARE )
     {
-            aFileName = ( ( const SfxStringItem& ) rAttrs->Get( ATTR_ACTION_FILENAME ) ).GetValue();
+            aFileName = static_cast<const SfxStringItem&>( rAttrs->Get( ATTR_ACTION_FILENAME ) ).GetValue();
             SetEditText( aFileName );
     }
 

@@ -638,7 +638,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
         for (size_t i=0; i < rMarkList.GetMarkCount(); ++i)
         {
             SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-            SdPage* pPage = (SdPage*)pObj->GetPage();
+            SdPage* pPage = static_cast<SdPage*>(pObj->GetPage());
             PresObjKind eKind = pPage->GetPresObjKind(pObj);
             if (eKind == PRESOBJ_FOOTER || eKind == PRESOBJ_HEADER ||
                 eKind == PRESOBJ_DATETIME || eKind == PRESOBJ_SLIDENUMBER)
@@ -651,7 +651,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
         {
             //Unmark object
             mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView(), true);
-            SdPage* pPage = (SdPage*)pObj->GetPage();
+            SdPage* pPage = static_cast<SdPage*>(pObj->GetPage());
             //remove placeholder from master page
             pPage->DestroyDefaultPresObj(pPage->GetPresObjKind(pObj));
         }

@@ -40,13 +40,13 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, const SfxIte
                       , pAttr ),
         mpDocShell  ( pDocSh )
 {
-    SvxColorListItem aColorListItem(*( (const SvxColorListItem*)
+    SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>(
         ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
-    SvxGradientListItem aGradientListItem(*( (const SvxGradientListItem*)
+    SvxGradientListItem aGradientListItem(*static_cast<const SvxGradientListItem*>(
         ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
-    SvxBitmapListItem aBitmapListItem(*( (const SvxBitmapListItem*)
+    SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>(
         ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
-    SvxHatchListItem aHatchListItem(*( (const SvxHatchListItem*)
+    SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>(
         ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
 
     mpColorList = aColorListItem.GetColorList();

@@ -39,13 +39,13 @@ SdInsertLayerDlg::SdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInA
     get(m_pCbxPrintable, "printable");
     get(m_pCbxLocked, "locked");
 
-    m_pEdtName->SetText( ( ( const SdAttrLayerName& ) mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
-    m_pEdtTitle->SetText( ( ( const SdAttrLayerTitle& ) mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
-    m_pEdtDesc->SetText( ( ( const SdAttrLayerDesc& ) mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
+    m_pEdtName->SetText( static_cast<const SdAttrLayerName&>( mrOutAttrs.Get( ATTR_LAYER_NAME ) ).GetValue() );
+    m_pEdtTitle->SetText( static_cast<const SdAttrLayerTitle&>( mrOutAttrs.Get( ATTR_LAYER_TITLE ) ).GetValue() );
+    m_pEdtDesc->SetText( static_cast<const SdAttrLayerDesc&>( mrOutAttrs.Get( ATTR_LAYER_DESC ) ).GetValue() );
     m_pEdtDesc->set_height_request(4 * m_pEdtDesc->GetTextHeight());
-    m_pCbxVisible->Check( ( ( const SdAttrLayerVisible& ) mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
-    m_pCbxPrintable->Check( ( ( const SdAttrLayerPrintable& ) mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
-    m_pCbxLocked->Check( ( ( const SdAttrLayerLocked& ) mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
+    m_pCbxVisible->Check( static_cast<const SdAttrLayerVisible&>( mrOutAttrs.Get( ATTR_LAYER_VISIBLE ) ).GetValue() );
+    m_pCbxPrintable->Check( static_cast<const SdAttrLayerPrintable&>( mrOutAttrs.Get( ATTR_LAYER_PRINTABLE ) ).GetValue() );
+    m_pCbxLocked->Check( static_cast<const SdAttrLayerLocked&>( mrOutAttrs.Get( ATTR_LAYER_LOCKED ) ).GetValue() );
 
     get<VclContainer>("nameframe")->Enable(bDeletable);
 }

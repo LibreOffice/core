@@ -41,7 +41,7 @@ MasterLayoutDialog::MasterLayoutDialog( vcl::Window* pParent, SdDrawDocument* pD
 
     if( mpCurrentPage && !mpCurrentPage->IsMasterPage() )
     {
-        mpCurrentPage = (SdPage*)(&(mpCurrentPage->TRG_GetMasterPage()));
+        mpCurrentPage = static_cast<SdPage*>(&(mpCurrentPage->TRG_GetMasterPage()));
     }
 
     if( mpCurrentPage == 0 )

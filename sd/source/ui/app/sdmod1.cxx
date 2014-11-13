@@ -110,7 +110,7 @@ void SdModule::Execute(SfxRequest& rReq)
             if( pSet && SfxItemState::SET == pSet->GetItemState(
                         SID_AUTOSPELL_CHECK, false, &pItem ) )
             {
-                bool bOnlineSpelling = ( (const SfxBoolItem*) pItem )->GetValue();
+                bool bOnlineSpelling = static_cast<const SfxBoolItem*>( pItem )->GetValue();
                 // save at document:
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if( pDocSh )
@@ -127,7 +127,7 @@ void SdModule::Execute(SfxRequest& rReq)
             const SfxPoolItem* pItem;
             if ( pSet && SfxItemState::SET == pSet->GetItemState( SID_ATTR_METRIC, true, &pItem ) )
             {
-                FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
+                FieldUnit eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 switch( eUnit )
                 {
                     case FUNIT_MM:      // only the units which are also in the dialog
@@ -174,7 +174,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if ( pDocSh )
                 {
-                    LanguageType eLanguage = ( (SvxLanguageItem*)pItem )->GetValue();
+                    LanguageType eLanguage = static_cast<const SvxLanguageItem*>(pItem)->GetValue();
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
 
                     if( nSlotId == SID_ATTR_CHAR_CJK_LANGUAGE )
@@ -258,7 +258,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 
     if (pSet)
     {
-        SvLockBytes* pBytes = ((SfxLockBytesItem&) pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
+        SvLockBytes* pBytes = static_cast<const SfxLockBytesItem&>(pSet->Get(SID_OUTLINE_TO_IMPRESS)).GetValue();
 
         if (pBytes)
         {

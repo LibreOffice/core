@@ -814,9 +814,9 @@ void AnimationWindow::AddObj (::sd::View& rView )
             sal_uInt16              nId = pObject->GetObjIdentifier();
 
             // Animated Bitmap (GIF)
-            if( nInv == SdrInventor && nId == OBJ_GRAF && ( (SdrGrafObj*) pObject )->IsAnimated() )
+            if( nInv == SdrInventor && nId == OBJ_GRAF && static_cast<SdrGrafObj*>( pObject )->IsAnimated() )
             {
-                const SdrGrafObj*   pGrafObj = (SdrGrafObj*) pObject;
+                const SdrGrafObj*   pGrafObj = static_cast<SdrGrafObj*>(pObject);
                 Graphic             aGraphic( pGrafObj->GetTransformedGraphic() );
                 sal_uInt16              nCount = 0;
 
@@ -863,7 +863,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
             else if( bAllObjects || ( pAnimInfo && pAnimInfo->mbIsMovie ) )
             {
                 // several objects
-                SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
+                SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObject)->GetSubList();
 
                 for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
                 {

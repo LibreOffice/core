@@ -115,12 +115,12 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
     else
         SetInputSet( pOrgSet );
 
-    SvxColorListItem aColorListItem(*( (const SvxColorListItem*) ( mpDocShell->GetItem( SID_COLOR_TABLE ) ) ) );
-    SvxGradientListItem aGradientListItem(*( (const SvxGradientListItem*) ( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) ) );
-    SvxBitmapListItem aBitmapListItem(*( (const SvxBitmapListItem*) ( mpDocShell->GetItem( SID_BITMAP_LIST ) ) ) );
-    SvxHatchListItem aHatchListItem(*( (const SvxHatchListItem*) ( mpDocShell->GetItem( SID_HATCH_LIST ) ) ) );
-    SvxDashListItem aDashListItem(*( (const SvxDashListItem*) ( mpDocShell->GetItem( SID_DASH_LIST ) ) ) );
-    SvxLineEndListItem aLineEndListItem(*( (const SvxLineEndListItem*)  ( mpDocShell->GetItem( SID_LINEEND_LIST ) ) ) );
+    SvxColorListItem aColorListItem(*static_cast<const SvxColorListItem*>( mpDocShell->GetItem( SID_COLOR_TABLE ) ) );
+    SvxGradientListItem aGradientListItem(*static_cast<const SvxGradientListItem*>( mpDocShell->GetItem( SID_GRADIENT_LIST ) ) );
+    SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>( mpDocShell->GetItem( SID_BITMAP_LIST ) ) );
+    SvxHatchListItem aHatchListItem(*static_cast<const SvxHatchListItem*>( mpDocShell->GetItem( SID_HATCH_LIST ) ) );
+    SvxDashListItem aDashListItem(*static_cast<const SvxDashListItem*>( mpDocShell->GetItem( SID_DASH_LIST ) ) );
+    SvxLineEndListItem aLineEndListItem(*static_cast<const SvxLineEndListItem*>( mpDocShell->GetItem( SID_LINEEND_LIST ) ) );
 
     pColorTab = aColorListItem.GetColorList();
     pDashList = aDashListItem.GetDashList();
@@ -268,7 +268,7 @@ void SdPresLayoutTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 
     else if (nId == mnFont)
         {
-            SvxFontListItem aItem(*( (const SvxFontListItem*)( mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
+            SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(mpDocShell->GetItem( SID_ATTR_CHAR_FONTLIST) ) );
             aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
             rPage.PageCreated(aSet);
         }

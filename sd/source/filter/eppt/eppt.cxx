@@ -1272,7 +1272,7 @@ void PPTWriter::ImplWriteOLE( )
                 SdrObject* pSdrObj = GetSdrObjectFromXShape( pPtr->xShape );
                 if ( pSdrObj && pSdrObj->ISA( SdrOle2Obj ) )
                 {
-                    ::uno::Reference < embed::XEmbeddedObject > xObj( ( (SdrOle2Obj*) pSdrObj )->GetObjRef() );
+                    ::uno::Reference < embed::XEmbeddedObject > xObj( static_cast<SdrOle2Obj*>(pSdrObj)->GetObjRef() );
                     if( xObj.is() )
                     {
                         SvStorageRef xTempStorage( new SvStorage( new SvMemoryStream(), true ) );

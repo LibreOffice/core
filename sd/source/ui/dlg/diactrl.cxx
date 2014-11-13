@@ -109,7 +109,7 @@ SdTbxCtlDiaPages::~SdTbxCtlDiaPages()
 void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
                 SfxItemState eState, const SfxPoolItem* pState )
 {
-    SdPagesField* pFld = (SdPagesField*) GetToolBox().GetItemWindow( GetId() );
+    SdPagesField* pFld = static_cast<SdPagesField*>( GetToolBox().GetItemWindow( GetId() ) );
     DBG_ASSERT( pFld, "Window not found" );
 
     if ( eState == SfxItemState::DISABLED )

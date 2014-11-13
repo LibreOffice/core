@@ -132,7 +132,7 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
 {
     if( eState == SfxItemState::DEFAULT )
     {
-        GlueEscDirLB* pGlueEscDirLB = (GlueEscDirLB*) ( GetToolBox().
+        GlueEscDirLB* pGlueEscDirLB = static_cast<GlueEscDirLB*> ( GetToolBox().
                                             GetItemWindow( GetId() ) );
         if( pGlueEscDirLB )
         {
@@ -145,7 +145,7 @@ void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
                 }
                 else
                 {
-                    sal_uInt16 nEscDir = ( (const SfxUInt16Item*) pState )->GetValue();
+                    sal_uInt16 nEscDir = static_cast<const SfxUInt16Item*>( pState )->GetValue();
                     pGlueEscDirLB->SelectEntryPos( GetEscDirPos( nEscDir ) );
                 }
             }

@@ -200,7 +200,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh && ( ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0) )
-        pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+        pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
 
     if ( !pColorList.is() )
         pColorList = XColorList::CreateStdColorList();
@@ -230,7 +230,7 @@ void ColorPropertyBox::setValue( const Any& rValue, const OUString& )
         rValue >>= nColor;
 
         mpControl->SetNoSelection();
-        mpControl->SelectEntryPos( mpControl->GetEntryPos( (Color)nColor ) );
+        mpControl->SelectEntryPos( mpControl->GetEntryPos( static_cast<Color>(nColor) ) );
     }
 }
 
@@ -274,7 +274,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, 
     bool bMustDelete = false;
 
     if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST ) ) != 0) )
-        pFontList = ( (SvxFontListItem*)pItem )->GetFontList();
+        pFontList = static_cast<const SvxFontListItem*>(pItem)->GetFontList();
 
     if(!pFontList)
     {
@@ -1060,7 +1060,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( vcl::Window* pParent
     const SfxPoolItem* pItem = NULL;
 
     if ( pDocSh && ( (pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) != 0 ) )
-        pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+        pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
 
     if ( !pColorList.is() )
         pColorList = XColorList::CreateStdColorList();
@@ -1745,7 +1745,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(vcl::Window* pPar
             OUString aDescription( getShapeDescription( xShape, true ) );
             sal_Int32 nPos = mpLBTrigger->InsertEntry( aDescription );
 
-            mpLBTrigger->SetEntryData( nPos, (void*)(sal_IntPtr)nShape );
+            mpLBTrigger->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nShape) );
             if( xShape == xTrigger )
                 mpLBTrigger->SelectEntryPos( nPos );
         }
@@ -1895,7 +1895,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
         nPos = mpLBTrigger->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            sal_Int32 nShape = (sal_Int32)(sal_IntPtr)mpLBTrigger->GetEntryData( nPos );
+            sal_Int32 nShape = (sal_Int32)reinterpret_cast<sal_IntPtr>(mpLBTrigger->GetEntryData( nPos ));
 
             Reference< XDrawPage > xCurrentPage;
             mpSet->getPropertyValue( nHandleCurrentPage ) >>= xCurrentPage;

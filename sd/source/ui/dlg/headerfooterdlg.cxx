@@ -178,12 +178,12 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
     if( pCurrentPage->GetPageKind() == PK_STANDARD )
     {
         pSlide = pCurrentPage;
-        pNotes = (SdPage*)pDoc->GetPage( pCurrentPage->GetPageNum() + 1 );
+        pNotes = static_cast<SdPage*>(pDoc->GetPage( pCurrentPage->GetPageNum() + 1 ));
     }
     else if( pCurrentPage->GetPageKind() == PK_NOTES )
     {
         pNotes = pCurrentPage;
-        pSlide = (SdPage*)pDoc->GetPage( pCurrentPage->GetPageNum() -1 );
+        pSlide = static_cast<SdPage*>(pDoc->GetPage( pCurrentPage->GetPageNum() -1 ));
         mpCurrentPage = pSlide;
     }
     else
@@ -416,7 +416,7 @@ HeaderFooterTabPage::HeaderFooterTabPage( vcl::Window* pWindow, SdDrawDocument* 
 
     get(mpCTPreview, "preview");
     mpCTPreview->init( pActualPage ?
-            (pActualPage->IsMasterPage() ? pActualPage : (SdPage*)(&(pActualPage->TRG_GetMasterPage()))) :
+            (pActualPage->IsMasterPage() ? pActualPage : static_cast<SdPage*>(&(pActualPage->TRG_GetMasterPage()))) :
             (pDoc->GetMasterSdPage( 0, bHandoutMode ? PK_NOTES : PK_STANDARD )) );
 
     if( mbHandoutMode )
@@ -455,7 +455,7 @@ HeaderFooterTabPage::~HeaderFooterTabPage()
 
 IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
 {
-    FillFormatList( (int)(sal_IntPtr)mpCBDateTimeFormat->GetEntryData( mpCBDateTimeFormat->GetSelectEntryPos() ) );
+    FillFormatList( (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetEntryData( mpCBDateTimeFormat->GetSelectEntryPos() )) );
 
     return 0L;
 }
@@ -476,7 +476,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
                 aDate, aTime, nDateTimeFormats[nFormat],
                 *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
         sal_uInt16 nEntry = mpCBDateTimeFormat->InsertEntry( aStr );
-        mpCBDateTimeFormat->SetEntryData( nEntry, (void*)(sal_IntPtr)nDateTimeFormats[nFormat] );
+        mpCBDateTimeFormat->SetEntryData( nEntry, reinterpret_cast<void*>((sal_IntPtr)nDateTimeFormats[nFormat] ));
         if( nDateTimeFormats[nFormat] == eFormat )
         {
             mpCBDateTimeFormat->SelectEntryPos( nEntry );
@@ -507,7 +507,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
     sal_uInt16 nPos;
     for( nPos = 0; nPos < mpCBDateTimeFormat->GetEntryCount(); nPos++ )
     {
-        int nFormat = (int)(sal_IntPtr)mpCBDateTimeFormat->GetEntryData( nPos );
+        int nFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetEntryData( nPos ));
         if( nFormat == rSettings.meDateTimeFormat )
         {
             mpCBDateTimeFormat->SelectEntryPos( nPos );
@@ -531,7 +531,7 @@ void HeaderFooterTabPage::getData( HeaderFooterSettings& rSettings, bool& rNotOn
     rSettings.maHeaderText = mpTBHeader->GetText();
 
     if( mpCBDateTimeFormat->GetSelectEntryCount() == 1 )
-        rSettings.meDateTimeFormat = (int)(sal_IntPtr)mpCBDateTimeFormat->GetEntryData( mpCBDateTimeFormat->GetSelectEntryPos() );
+        rSettings.meDateTimeFormat = (int)reinterpret_cast<sal_IntPtr>(mpCBDateTimeFormat->GetEntryData( mpCBDateTimeFormat->GetSelectEntryPos() ));
 
     LanguageType eLanguage = mpCBDateTimeLanguage->GetSelectLanguage();
     if( eLanguage != meOldLanguage )
@@ -601,7 +601,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
 {
     if( pPage )
     {
-        SdrTextObj* pObj = (SdrTextObj*)pPage->GetPresObj( PRESOBJ_DATETIME );
+        SdrTextObj* pObj = static_cast<SdrTextObj*>(pPage->GetPresObj( PRESOBJ_DATETIME ));
         if( pObj )
         {
             Outliner* pOutl = mpDoc->GetInternalOutliner();
@@ -781,12 +781,12 @@ void PresLayoutPreview::Paint( const Rectangle& )
     DrawRect( maOutRect );
 
     // paint presentation objects from masterpage
-    SdrTextObj* pMasterTitle = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_TITLE );
-    SdrTextObj* pMasterOutline = (SdrTextObj*)mpMaster->GetPresObj( mpMaster->GetPageKind()==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE );
-    SdrTextObj* pHeader = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_HEADER );
-    SdrTextObj* pFooter = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_FOOTER );
-    SdrTextObj* pDate   = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_DATETIME );
-    SdrTextObj* pNumber = (SdrTextObj*)mpMaster->GetPresObj( PRESOBJ_SLIDENUMBER );
+    SdrTextObj* pMasterTitle = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_TITLE ));
+    SdrTextObj* pMasterOutline = static_cast<SdrTextObj*>(mpMaster->GetPresObj( mpMaster->GetPageKind()==PK_NOTES ? PRESOBJ_NOTES : PRESOBJ_OUTLINE ));
+    SdrTextObj* pHeader = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_HEADER ));
+    SdrTextObj* pFooter = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_FOOTER ));
+    SdrTextObj* pDate   = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_DATETIME ));
+    SdrTextObj* pNumber = static_cast<SdrTextObj*>(mpMaster->GetPresObj( PRESOBJ_SLIDENUMBER ));
 
     if( pMasterTitle )
         Paint( *this, pMasterTitle, true, true );

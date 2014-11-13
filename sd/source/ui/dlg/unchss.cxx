@@ -21,6 +21,7 @@
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdpool.hxx>
 
 #include "unchss.hxx"
 
@@ -43,10 +44,10 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
     // Create ItemSets; Attention, it is possible that the new one is from a,
     // different pool. Therefore we clone it with its items.
-    pNewSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(), pTheNewItemSet->GetRanges());
+    pNewSet = new SfxItemSet(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pTheNewItemSet->GetRanges());
     SdrModel::MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
 
-    pOldSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(),pStyleSheet->GetItemSet().GetRanges());
+    pOldSet = new SfxItemSet(static_cast<SfxItemPool&>(SdrObject::GetGlobalDrawObjectItemPool()), pStyleSheet->GetItemSet().GetRanges());
     SdrModel::MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
 
     aComment = SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT);
@@ -99,7 +100,7 @@ void StyleSheetUndoAction::Undo()
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+        static_cast<SdStyleSheet*>(pStyleSheet)->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
@@ -111,7 +112,7 @@ void StyleSheetUndoAction::Redo()
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
-        ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+        static_cast<SdStyleSheet*>(pStyleSheet)->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else
         pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }

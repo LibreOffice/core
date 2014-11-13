@@ -901,7 +901,7 @@ bool DrawDocShell::GetObjectIsmarked(const OUString& rBookmark)
                   GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
 
                 // The current ViewShell changed
-                pDrViewSh = (DrawViewShell*) mpViewShell;
+                pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
             }
 
             setEditMode(pDrViewSh, bIsMasterPage);
@@ -994,7 +994,7 @@ bool DrawDocShell::GotoTreeBookmark(const OUString& rBookmark)
                   GetDispatcher()->Execute( SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD );
 
                 // The current ViewShell changed
-                pDrViewSh = (DrawViewShell*) mpViewShell;
+                pDrViewSh = static_cast<DrawViewShell*>( mpViewShell );
             }
 
             setEditMode(pDrViewSh, bIsMasterPage);

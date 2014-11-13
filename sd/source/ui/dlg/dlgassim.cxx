@@ -117,13 +117,13 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
     const sal_uInt16 nMaxPages = pDoc->GetPageCount();
     while( nPage < nMaxPages )
     {
-        SdPage* pPage = (SdPage*) pDoc->GetPage( nPage );
+        SdPage* pPage = static_cast<SdPage*>( pDoc->GetPage( nPage ) );
         if( pPage->GetPageKind() == PK_STANDARD )
         {
             SvTreeListEntry* pEntry = InsertPage( pPage->GetName() );
             SetCheckButtonState(pEntry, SvButtonState( SV_BUTTON_CHECKED ) );
 
-            SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TEXT);
+            SdrTextObj* pTO = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TEXT));
             if(!pTO)
             {
                 // determines the SdrTextObject with the layout text of this page
@@ -133,7 +133,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
                     SdrObject* pObject = pPage->GetObj(nObject);
                     if (pObject->GetObjInventor() == SdrInventor && pObject->GetObjIdentifier() == OBJ_OUTLINETEXT)
                     {
-                        pTO = (SdrTextObj*)pObject;
+                        pTO = static_cast<SdrTextObj*>(pObject);
                         break;
                     }
                 }

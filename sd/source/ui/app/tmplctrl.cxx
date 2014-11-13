@@ -77,7 +77,7 @@ void SdTemplateControl::StateChanged(
         GetStatusBar().SetItemText( GetId(), OUString() );
     else if ( pState->ISA( SfxStringItem ) )
     {
-        msTemplate = ((SfxStringItem*)pState)->GetValue();
+        msTemplate = static_cast<const SfxStringItem*>(pState)->GetValue();
         GetStatusBar().SetItemText( GetId(), msTemplate );
     }
 }

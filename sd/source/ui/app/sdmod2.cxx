@@ -554,7 +554,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
                             false, (const SfxPoolItem**) &pItem ))
     {
-        const SdOptionsGridItem* pGridItem = (SdOptionsGridItem*) pItem;
+        const SdOptionsGridItem* pGridItem = static_cast<const SdOptionsGridItem*>(pItem);
         pGridItem->SetOptions( pOptions );
     }
 
@@ -571,13 +571,13 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     {
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             PutItem( *pItem );
-        pOptions->SetMetric( ( (SfxUInt16Item*) pItem )->GetValue() );
+        pOptions->SetMetric( static_cast<const SfxUInt16Item*>( pItem )->GetValue() );
     }
     sal_uInt16 nDefTab = pOptions->GetDefTab();
     // Default-Tabulator
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_DEFTABSTOP, false, &pItem ) )
     {
-        nDefTab = ( (SfxUInt16Item*) pItem )->GetValue();
+        nDefTab = static_cast<const SfxUInt16Item*>( pItem )->GetValue();
         pOptions->SetDefTab( nDefTab );
 
         bNewDefTab = true;
@@ -586,10 +586,10 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Scale
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_X, false, &pItem ) )
     {
-        sal_Int32 nX = ( (SfxInt32Item*) pItem )->GetValue();
+        sal_Int32 nX = static_cast<const SfxInt32Item*>( pItem )->GetValue();
         if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_Y, false, &pItem ) )
         {
-            sal_Int32 nY = ( (SfxInt32Item*) pItem )->GetValue();
+            sal_Int32 nY = static_cast<const SfxInt32Item*>( pItem )->GetValue();
             pOptions->SetScale( nX, nY );
 
             // Apply to document only if doc type match

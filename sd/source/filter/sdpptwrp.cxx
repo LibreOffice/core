@@ -19,6 +19,7 @@
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <sfx2/objsh.hxx>
 #include <osl/module.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
@@ -28,6 +29,7 @@
 #include "sdpptwrp.hxx"
 #include "ppt/pptin.hxx"
 #include "drawdoc.hxx"
+#include "DrawDocShell.hxx"
 #include <tools/urlobj.hxx>
 
 // - Namespaces -
@@ -192,7 +194,7 @@ void SdPPTFilter::PreSaveBasic()
             SaveVBAPointer pSaveVBA= reinterpret_cast<SaveVBAPointer>(pLibrary->getFunctionSymbol( "SaveVBA" ));
             if( pSaveVBA )
             {
-                pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );
+                pSaveVBA( static_cast<SfxObjectShell&>(mrDocShell), pBas );
             }
             delete pLibrary;
         }

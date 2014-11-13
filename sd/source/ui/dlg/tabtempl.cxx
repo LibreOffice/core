@@ -144,8 +144,8 @@ void SdTabTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nFontId)
     {
-        SvxFontListItem aItem(*( (const SvxFontListItem*)
-            ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
+        SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(
+            rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) );
 
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);

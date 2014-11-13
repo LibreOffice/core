@@ -225,7 +225,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
                     if( pData && pData->ISA( SvxURLField ) )
                     {
-                        const SvxURLField* pURL = (SvxURLField*) pData;
+                        const SvxURLField* pURL = static_cast<const SvxURLField*>(pData);
 
                         // #i63399# This special code identifies TextFrames which have just an URL
                         // as content and directly add this to the clipboard, probably to avoid adding
@@ -279,7 +279,7 @@ void SdTransferable::CreateData()
 
         if( mpSourceDoc )
             mpSourceDoc->CreatingDataObj(this);
-        mpSdDrawDocumentIntern = (SdDrawDocument*) mpSdView->GetMarkedObjModel();
+        mpSdDrawDocumentIntern = static_cast<SdDrawDocument*>( mpSdView->GetMarkedObjModel() );
         if( mpSourceDoc )
             mpSourceDoc->CreatingDataObj(0);
 
@@ -294,10 +294,10 @@ void SdTransferable::CreateData()
 
         // Use dimension of source page
         SdrPageView*        pPgView = mpSdView->GetSdrPageView();
-        SdPage*             pOldPage = (SdPage*) pPgView->GetPage();
+        SdPage*             pOldPage = static_cast<SdPage*>( pPgView->GetPage() );
         SdrModel*           pOldModel = mpSdView->GetModel();
-        SdStyleSheetPool*   pOldStylePool = (SdStyleSheetPool*) pOldModel->GetStyleSheetPool();
-        SdStyleSheetPool*   pNewStylePool = (SdStyleSheetPool*) mpSdDrawDocumentIntern->GetStyleSheetPool();
+        SdStyleSheetPool*   pOldStylePool = static_cast<SdStyleSheetPool*>( pOldModel->GetStyleSheetPool() );
+        SdStyleSheetPool*   pNewStylePool = static_cast<SdStyleSheetPool*>( mpSdDrawDocumentIntern->GetStyleSheetPool() );
         SdPage*             pPage = mpSdDrawDocumentIntern->GetSdPage( 0, PK_STANDARD );
         OUString            aOldLayoutName( pOldPage->GetLayoutName() );
 

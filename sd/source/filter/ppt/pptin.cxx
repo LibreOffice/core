@@ -549,7 +549,7 @@ bool ImplSdPPTImport::Import()
         for ( sal_uInt16 nMasterNum = 0; nMasterNum < nMasterAnz; nMasterNum++ )
         {
             SetPageNum( nMasterNum, PPT_MASTERPAGE );
-            SdPage* pPage = (SdPage*)MakeBlancPage( true );
+            SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( true ));
             if ( pPage )
             {
                 bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ].bNotesMaster;
@@ -571,7 +571,7 @@ bool ImplSdPPTImport::Import()
                     if ( nMasterNum == 1 )
                     {
                         // standardsheet
-                        pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS );
+                        pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS ));
                         if ( pSheet )
                         {
                             SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -584,7 +584,7 @@ bool ImplSdPPTImport::Import()
                     }
 
                     // PSEUDO
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO );
+                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO ));
                     if ( pSheet )
                     {
                         SfxItemSet& rItemSet = pSheet->GetItemSet();
@@ -605,10 +605,10 @@ bool ImplSdPPTImport::Import()
                         {   // standard page: create new presentation layout
                             aLayoutName = SD_RESSTR( STR_LAYOUT_DEFAULT_TITLE_NAME );
                             aLayoutName += OUString::number( (sal_Int32)( ( nMasterNum + 1 ) / 2 - 1 ) );
-                            ( (SdStyleSheetPool*)mpDoc->GetStyleSheetPool() )->CreateLayoutStyleSheets( aLayoutName );
+                            static_cast<SdStyleSheetPool*>( mpDoc->GetStyleSheetPool() )->CreateLayoutStyleSheets( aLayoutName );
                         }
                         else    // note page: use presentation layout of standard page
-                            aLayoutName = ( (SdPage*)mpDoc->GetMasterPage( nMasterNum - 1 ) )->GetName();
+                            aLayoutName = static_cast<SdPage*>( mpDoc->GetMasterPage( nMasterNum - 1 ) )->GetName();
                     }
                     pPage->SetName( aLayoutName );
                     aLayoutName += SD_LT_SEPARATOR;
@@ -650,7 +650,7 @@ bool ImplSdPPTImport::Import()
                             OUString aName( pPage->GetLayoutName() );
                             aName += " ";
                             aName += OUString::number( nLevel + 1 );
-                            SfxStyleSheet* pOutlineSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
+                            SfxStyleSheet* pOutlineSheet = static_cast<SfxStyleSheet*>( mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE ) );
                             DBG_ASSERT( pOutlineSheet, "Template for outline object not found" );
                             if ( pOutlineSheet )
                             {
@@ -698,7 +698,7 @@ bool ImplSdPPTImport::Import()
     }
     SdPage* pMPage;
     sal_uInt16 i;
-    for ( i = 0; i < mpDoc->GetMasterPageCount() && ( (pMPage = (SdPage*)mpDoc->GetMasterPage( i )) != 0 ); i++ )
+    for ( i = 0; i < mpDoc->GetMasterPageCount() && ( (pMPage = static_cast<SdPage*>(mpDoc->GetMasterPage( i ))) != 0 ); i++ )
     {
         SetPageNum( i, PPT_MASTERPAGE );
 
@@ -711,13 +711,13 @@ bool ImplSdPPTImport::Import()
             if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nAktPageNum > 2 ) && ( ( nAktPageNum & 1 ) == 0 ) )
             {
                 pSdrModel->DeleteMasterPage( nAktPageNum );
-                SdrPage* pNotesClone = ((SdPage*)pSdrModel->GetMasterPage( 2 ))->Clone();
+                SdrPage* pNotesClone = static_cast<SdPage*>(pSdrModel->GetMasterPage( 2 ))->Clone();
                 pSdrModel->InsertMasterPage( pNotesClone, nAktPageNum );
                 if ( pNotesClone )
                 {
-                    OUString aLayoutName( ((SdPage*)pSdrModel->GetMasterPage( nAktPageNum - 1 ))->GetLayoutName() );
-                    ((SdPage*)pNotesClone)->SetPresentationLayout( aLayoutName, false, false, false );
-                    ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
+                    OUString aLayoutName( static_cast<SdPage*>(pSdrModel->GetMasterPage( nAktPageNum - 1 ))->GetLayoutName() );
+                    static_cast<SdPage*>(pNotesClone)->SetPresentationLayout( aLayoutName, false, false, false );
+                    static_cast<SdPage*>(pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
             else if ( pPersist->bStarDrawFiller == false )
@@ -862,7 +862,7 @@ bool ImplSdPPTImport::Import()
         PptPageKind     ePageKind = eAktPageKind;
         sal_uInt16          nPageNum = nAktPageNum;
 
-        SdPage* pHandoutPage = (SdPage*)MakeBlancPage( false );
+        SdPage* pHandoutPage = static_cast<SdPage*>(MakeBlancPage( false ));
         pHandoutPage->SetPageKind( PK_HANDOUT );
         pSdrModel->InsertPage( pHandoutPage );
 
@@ -875,7 +875,7 @@ bool ImplSdPPTImport::Import()
 
                 mePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPage, PPT_SLIDEPAGE );
-                SdPage* pPage = (SdPage*)MakeBlancPage( false );
+                SdPage* pPage = static_cast<SdPage*>(MakeBlancPage( false ));
                 PptSlidePersistEntry* pMasterPersist = NULL;
                 if ( HasMasterPage( nPage, PPT_SLIDEPAGE ) )     // try to get the LayoutName from the masterpage
                 {
@@ -884,7 +884,7 @@ bool ImplSdPPTImport::Import()
                     PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                     if ( pPageList && nMasterNum < pPageList->size() )
                         pMasterPersist = &(*pPageList)[ nMasterNum ];
-                    pPage->SetLayoutName(((SdPage&)pPage->TRG_GetMasterPage()).GetLayoutName());
+                    pPage->SetLayoutName(static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
                 pPage->SetPageKind( PK_STANDARD );
                 pSdrModel->InsertPage( pPage );         // SJ: #i29625# because of form controls, the
@@ -946,7 +946,7 @@ bool ImplSdPPTImport::Import()
 
                 // creating the corresponding note page
                 eAktPageKind = PPT_NOTEPAGE;
-                SdPage* pNotesPage = (SdPage*)MakeBlancPage( false );
+                SdPage* pNotesPage = static_cast<SdPage*>(MakeBlancPage( false ));
                 sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage, PPT_SLIDEPAGE ) + 1;
                 sal_uInt32 nNotesPageId = GetNotesPageId( nPage );
                 if ( nNotesPageId )
@@ -963,7 +963,7 @@ bool ImplSdPPTImport::Import()
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                         if ( pPageList && nNotesMasterNum < pPageList->size() )
                             pMasterPersist2 = &(*pPageList)[ nNotesMasterNum ];
-                        pNotesPage->SetLayoutName( ((SdPage&)pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
+                        pNotesPage->SetLayoutName( static_cast<SdPage&>(pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
                     }
                     pNotesPage->SetPageKind( PK_NOTES );
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
@@ -980,7 +980,7 @@ bool ImplSdPPTImport::Import()
                     pSdrModel->InsertPage( pNotesPage );
                     SdrObject* pPageObj = pNotesPage->GetPresObj( PRESOBJ_PAGE, 1 );
                     if ( pPageObj )
-                        ((SdrPageObj*)pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPage << 1 ) + 1));
+                        static_cast<SdrPageObj*>(pPageObj)->SetReferencedPage(pSdrModel->GetPage(( nPage << 1 ) + 1));
                 }
 
                 if( pStbMgr )
@@ -1013,10 +1013,10 @@ bool ImplSdPPTImport::Import()
             }
             if ( pFoundMaster )
             {
-                ((SdPage*)pPage)->TRG_SetMasterPage( *((SdPage*)pFoundMaster) );
-                ((SdPage*)pPage)->SetLayoutName( ((SdPage*)pFoundMaster)->GetLayoutName() );
+                static_cast<SdPage*>(pPage)->TRG_SetMasterPage( *((SdPage*)pFoundMaster) );
+                static_cast<SdPage*>(pPage)->SetLayoutName( ((SdPage*)pFoundMaster)->GetLayoutName() );
             }
-            ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
+            static_cast<SdPage*>(pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
             eAktPageKind = PPT_NOTEPAGE;
             SdrPage* pNPage = MakeBlancPage( false );
@@ -2179,7 +2179,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 OUString aName( pPage->GetLayoutName() );
                 aName += " ";
                 aName += OUString::number( nLevel );
-                pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE );
+                pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find( aName, SD_STYLE_FAMILY_MASTERPAGE ));
                 if ( pSheet )
                     pText->StartListening( *pSheet );
                 pStyleSheetAry[ nLevel - 1 ] = pSheet;
@@ -2218,15 +2218,15 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 case PRESOBJ_SLIDENUMBER :
                 case PRESOBJ_FOOTER :
                 case PRESOBJ_HEADER :
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO );
+                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_PSEUDOSHEET_BACKGROUNDOBJECTS), SD_STYLE_FAMILY_PSEUDO ));
                 break;
                 default :
-                    pSheet = (SfxStyleSheet*)mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS );
+                    pSheet = static_cast<SfxStyleSheet*>(mpDoc->GetStyleSheetPool()->Find(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME), SD_STYLE_FAMILY_GRAPHICS ));
             }
         }
         break;
     }
-    pText = (SdrTextObj*)SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPage, pSheet, ppStyleSheetAry );
+    pText = static_cast<SdrTextObj*>(SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPage, pSheet, ppStyleSheetAry ));
     if ( pPlaceHolder && pPlaceHolder->nPlaceholderId )
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
@@ -2257,12 +2257,12 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                     if ( pSheet2 )
                     {
                         SfxItemSet& rItemSet = pSheet2->GetItemSet();
-                        rItemSet.Put( (SdrMetricItem&)pText->GetMergedItem( SDRATTR_TEXT_LEFTDIST ) );
-                        rItemSet.Put( (SdrMetricItem&)pText->GetMergedItem( SDRATTR_TEXT_RIGHTDIST ) );
-                        rItemSet.Put( (SdrMetricItem&)pText->GetMergedItem( SDRATTR_TEXT_UPPERDIST ) );
-                        rItemSet.Put( (SdrMetricItem&)pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST ) );
-                        rItemSet.Put( (SdrTextVertAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST ) );
-                        rItemSet.Put( (SdrTextHorzAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST ) );
+                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_LEFTDIST ) ) );
+                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_RIGHTDIST )) );
+                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_UPPERDIST )) );
+                        rItemSet.Put( static_cast<const SdrMetricItem&>(pText->GetMergedItem( SDRATTR_TEXT_LOWERDIST )) );
+                        rItemSet.Put( static_cast<const SdrTextVertAdjustItem&>(pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST )) );
+                        rItemSet.Put( static_cast<const SdrTextHorzAdjustItem&>(pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST )) );
                         if (  pTextObj->GetInstance() ==  TSS_TYPE_TITLE
                             || pTextObj->GetInstance() == TSS_TYPE_SUBTITLE)
                         {
@@ -2376,8 +2376,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                             if ((eAktPageKind != PPT_NOTEPAGE) && (nPlacementId != 0xffffffff) && pPage->TRG_HasMasterPage())
                             {
-                                SdrObject* pTitleObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
-                                SdrObject* pOutlineObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
+                                SdrObject* pTitleObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
+                                SdrObject* pOutlineObj = static_cast<SdPage&>(pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
 
                                 Rectangle aTitleRect;
                                 Rectangle aOutlineRect;
@@ -2563,8 +2563,8 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                         {
                                             const SfxItemSet& rObjItemSet = pObj->GetMergedItemSet();
 
-                                            drawing::FillStyle eFillStyle = ((XFillStyleItem&)(rObjItemSet.Get(XATTR_FILLSTYLE))).GetValue();
-                                            XLineStyle eLineStyle = ((XLineStyleItem&)(rObjItemSet.Get(XATTR_LINESTYLE))).GetValue();
+                                            drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(rObjItemSet.Get(XATTR_FILLSTYLE)).GetValue();
+                                            XLineStyle eLineStyle = static_cast<const XLineStyleItem&>(rObjItemSet.Get(XATTR_LINESTYLE)).GetValue();
 
                                             if ( ( eFillStyle == drawing::FillStyle_NONE ) && ( eLineStyle == XLINE_NONE ) )
                                                 bDontAnimateInvisibleShape = true;

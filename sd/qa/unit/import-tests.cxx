@@ -449,7 +449,7 @@ void SdImportTest::testFdo72998()
     {
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>(pPage->GetObj(2));
         CPPUNIT_ASSERT( pObj );
-        const SdrCustomShapeGeometryItem& rGeometryItem = (const SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
+        const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
         const ::com::sun::star::uno::Any* pViewBox = ((SdrCustomShapeGeometryItem&)rGeometryItem).GetPropertyValueByName( OUString( "ViewBox" ) );
         CPPUNIT_ASSERT_MESSAGE( "Missing ViewBox", pViewBox );
         com::sun::star::awt::Rectangle aViewBox;

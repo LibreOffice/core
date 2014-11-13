@@ -68,7 +68,7 @@ void SdPresLayoutDlg::Reset()
     // replace master page
     if( mrOutAttrs.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE, false, &pPoolItem ) == SfxItemState::SET )
     {
-        bool bMasterPage = ( (const SfxBoolItem*) pPoolItem)->GetValue();
+        bool bMasterPage = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
         m_pCbxMasterPage->Enable( !bMasterPage );
         m_pCbxMasterPage->Check( bMasterPage );
     }
@@ -77,7 +77,7 @@ void SdPresLayoutDlg::Reset()
     m_pCbxCheckMasters->Check(false);
 
     if(mrOutAttrs.GetItemState(ATTR_PRESLAYOUT_NAME, true, &pPoolItem) == SfxItemState::SET)
-        maName = ((const SfxStringItem*)pPoolItem)->GetValue();
+        maName = static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
     else
         maName = "";
 
@@ -140,7 +140,7 @@ void SdPresLayoutDlg::FillValueSet()
 
     for (sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++)
     {
-        SdPage* pMaster = (SdPage*)pDoc->GetMasterPage(nLayout);
+        SdPage* pMaster = static_cast<SdPage*>(pDoc->GetMasterPage(nLayout));
         if (pMaster->GetPageKind() == PK_STANDARD)
         {
             OUString aLayoutName(pMaster->GetLayoutName());
@@ -239,7 +239,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 
                     for (sal_uInt16 nLayout = 0; nLayout < nCount; nLayout++)
                     {
-                        SdPage* pMaster = (SdPage*) pTemplDoc->GetMasterPage(nLayout);
+                        SdPage* pMaster = static_cast<SdPage*>( pTemplDoc->GetMasterPage(nLayout) );
                         if (pMaster->GetPageKind() == PK_STANDARD)
                         {
                             OUString aLayoutName(pMaster->GetLayoutName());

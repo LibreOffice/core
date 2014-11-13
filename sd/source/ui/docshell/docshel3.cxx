@@ -144,13 +144,12 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
             if (pReqArgs)
             {
-                const SvxSearchItem* pSearchItem =
-                (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
+                const SvxSearchItem* pSearchItem = static_cast<const SvxSearchItem*>( &pReqArgs->Get(SID_SEARCH_ITEM) );
 
                 // would be nice to have an assign operation at SearchItem
                 SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                 delete pAppSearchItem;
-                pAppSearchItem = (SvxSearchItem*) pSearchItem->Clone();
+                pAppSearchItem = static_cast<SvxSearchItem*>( pSearchItem->Clone() );
                 SD_MOD()->SetSearchItem(pAppSearchItem);
             }
 
@@ -177,7 +176,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 {
                     if (pShell->ISA(DrawDocShell))
                     {
-                        ( (DrawDocShell*) pShell)->CancelSearching();
+                        static_cast<DrawDocShell*>(pShell)->CancelSearching();
                     }
 
                     pShell = SfxObjectShell::GetNext(*pShell);
@@ -213,12 +212,12 @@ void DrawDocShell::Execute( SfxRequest& rReq )
                 if( xFuSearch.is() )
                 {
                     const SvxSearchItem* pSearchItem =
-                    (const SvxSearchItem*) &pReqArgs->Get(SID_SEARCH_ITEM);
+                        static_cast<const SvxSearchItem*>( &pReqArgs->Get(SID_SEARCH_ITEM) );
 
                     // would be nice to have an assign operation at SearchItem
                     SvxSearchItem* pAppSearchItem = SD_MOD()->GetSearchItem();
                     delete pAppSearchItem;
-                    pAppSearchItem = (SvxSearchItem*)pSearchItem->Clone();
+                    pAppSearchItem = static_cast<SvxSearchItem*>( pSearchItem->Clone() );
                     SD_MOD()->SetSearchItem(pAppSearchItem);
                     xFuSearch->SearchAndReplace(pSearchItem);
                 }
@@ -236,7 +235,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_GET_COLORLIST:
         {
-            SvxColorListItem* pColItem = (SvxColorListItem*) GetItem( SID_COLOR_TABLE );
+            const SvxColorListItem* pColItem = static_cast<const SvxColorListItem*>( GetItem( SID_COLOR_TABLE ) );
             XColorListRef pList = pColItem->GetColorList();
             rReq.SetReturnValue( OfaRefItem<XColorList>( SID_GET_COLORLIST, pList ) );
         }

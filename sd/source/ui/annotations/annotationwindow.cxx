@@ -770,25 +770,25 @@ void AnnotationWindow::ExecuteSlot( sal_uInt16 nSID )
         {
         case SID_ATTR_CHAR_WEIGHT:
         {
-            FontWeight eFW = ( (const SvxWeightItem&) aEditAttr.Get( EE_CHAR_WEIGHT ) ).GetWeight();
+            FontWeight eFW = static_cast<const SvxWeightItem&>( aEditAttr.Get( EE_CHAR_WEIGHT ) ).GetWeight();
             aNewAttr.Put( SvxWeightItem( eFW == WEIGHT_NORMAL ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
         }
         break;
         case SID_ATTR_CHAR_POSTURE:
         {
-            FontItalic eFI = ( (const SvxPostureItem&) aEditAttr.Get( EE_CHAR_ITALIC ) ).GetPosture();
+            FontItalic eFI = static_cast<const SvxPostureItem&>( aEditAttr.Get( EE_CHAR_ITALIC ) ).GetPosture();
             aNewAttr.Put( SvxPostureItem( eFI == ITALIC_NORMAL ? ITALIC_NONE : ITALIC_NORMAL, EE_CHAR_ITALIC ) );
         }
         break;
         case SID_ATTR_CHAR_UNDERLINE:
         {
-            FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr. Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
+            FontUnderline eFU = static_cast<const SvxUnderlineItem&>( aEditAttr. Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
             aNewAttr.Put( SvxUnderlineItem( eFU == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_UNDERLINE ) );
         }
         break;
         case SID_ATTR_CHAR_STRIKEOUT:
         {
-            FontStrikeout eFSO = ( ( (const SvxCrossedOutItem&) aEditAttr.Get( EE_CHAR_STRIKEOUT ) ).GetStrikeout() );
+            FontStrikeout eFSO = static_cast<const SvxCrossedOutItem&>( aEditAttr.Get( EE_CHAR_STRIKEOUT ) ).GetStrikeout();
             aNewAttr.Put( SvxCrossedOutItem( eFSO == STRIKEOUT_SINGLE ? STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
         }
         break;
