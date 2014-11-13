@@ -46,7 +46,7 @@ class ScFunctionDockWin : public SfxDockingWindow, public SfxListener
 {
 
 private:
-    Timer               aTimer;
+    Idle                aIdle;
     ScPrivatSplit       aPrivatSplit;
     ListBox             aCatBox;
     ListBox             aFuncList;

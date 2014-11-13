@@ -83,7 +83,7 @@ private:
     long            nCurTextWidth;
 
     SyntaxHighlighter   aHighlighter;
-    Timer           aSyntaxIdleTimer;
+    Idle            aSyntaxIdle;
     typedef std::set<sal_uInt16> SyntaxLineSet;
     SyntaxLineSet   aSyntaxLineTable;
     DECL_LINK(SyntaxTimerHdl, void *);

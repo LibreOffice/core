@@ -103,8 +103,8 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     InitLRUList();
     SetStyle(GetStyle()|WB_CLIPCHILDREN);
 
-    aTimer.SetTimeout(200);
-    aTimer.SetTimeoutHdl(LINK( this, ScFunctionDockWin, TimerHdl));
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
+    aIdle.SetIdleHdl(LINK( this, ScFunctionDockWin, TimerHdl));
 
     if (pCW != NULL)
         eSfxNewAlignment=GetAlignment();
@@ -1026,7 +1026,7 @@ void ScFunctionDockWin::ToggleFloatingMode()
 
     aOldSize.Height()=0;
     aOldSize.Width()=0;
-    aTimer.Start();
+    aIdle.Start();
 }
 
 IMPL_LINK_NOARG(ScFunctionDockWin, TimerHdl)

@@ -130,7 +130,7 @@ class SoundHandler  :   // interfaces
         css::uno::Reference< css::media::XPlayer >                 m_xPlayer           ;   // uses avmedia player to play sounds...
 
         css::uno::Reference< css::frame::XDispatchResultListener > m_xListener         ;
-        Timer m_aUpdateTimer;
+        Idle m_aUpdateIdle;
 
 };      //  class SoundHandler
 

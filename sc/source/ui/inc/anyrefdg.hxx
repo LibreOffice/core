@@ -121,7 +121,7 @@ private:
     SfxBindings*        pMyBindings;
 
     vcl::Window*        pActiveWin;
-    Timer               aTimer;
+    Idle                aIdle;
     OUString            aDocName;               // document on which the dialog was opened
 
     DECL_LINK( UpdateFocusHdl, void* );

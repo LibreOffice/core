@@ -189,7 +189,7 @@ SoundHandler::SoundHandler( const css::uno::Reference< css::lang::XMultiServiceF
     ,   m_bError        ( false    )
         ,   m_xFactory          ( xFactory )
 {
-    m_aUpdateTimer.SetTimeoutHdl(LINK(this, SoundHandler, implts_PlayerNotify));
+    m_aUpdateIdle.SetIdleHdl(LINK(this, SoundHandler, implts_PlayerNotify));
 }
 
 /*-************************************************************************************************************
@@ -246,7 +246,7 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
 
     // If player currently used for other dispatch() requests ...
     // cancel it by calling stop()!
-    m_aUpdateTimer.Stop();
+    m_aUpdateIdle.Stop();
     if (m_xPlayer.is())
     {
         if (m_xPlayer->isPlaying())
@@ -264,8 +264,8 @@ void SAL_CALL SoundHandler::dispatchWithNotification(const css::util::URL&      
         // Count this request and initialize self-holder against dying by uno ref count ...
         m_xSelfHold = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         m_xPlayer->start();
-        m_aUpdateTimer.SetTimeout( 200 );
-        m_aUpdateTimer.Start();
+        m_aUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOWER );
+        m_aUpdateIdle.Start();
     }
     catch( css::uno::Exception& e )
     {
@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
 
     if (m_xPlayer.is() && m_xPlayer->isPlaying() && m_xPlayer->getMediaTime() < m_xPlayer->getDuration())
     {
-        m_aUpdateTimer.Start();
+        m_aUpdateIdle.Start();
         return 0L;
     }
     m_xPlayer.clear();

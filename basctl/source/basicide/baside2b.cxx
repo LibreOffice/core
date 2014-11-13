@@ -259,7 +259,7 @@ EditorWindow::~EditorWindow()
         n->removePropertiesChangeListener(listener_.get());
     }
 
-    aSyntaxIdleTimer.Stop();
+    aSyntaxIdle.Stop();
 
     if ( pEditEngine )
     {
@@ -950,8 +950,8 @@ void EditorWindow::CreateEditEngine()
 
     ImplSetFont();
 
-    aSyntaxIdleTimer.SetTimeout( 200 );
-    aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
+    aSyntaxIdle.SetPriority( VCL_IDLE_PRIORITY_LOWER );
+    aSyntaxIdle.SetIdleHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = false; // too slow for large texts...
@@ -986,7 +986,7 @@ void EditorWindow::CreateEditEngine()
 
     StartListening( *pEditEngine );
 
-    aSyntaxIdleTimer.Stop();
+    aSyntaxIdle.Stop();
     bDoSyntaxHighlight = bWasDoSyntaxHighlight;
 
 
@@ -1253,7 +1253,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
         if ( bDelayHighlight )
         {
             aSyntaxLineTable.insert( nPara );
-            aSyntaxIdleTimer.Start();
+            aSyntaxIdle.Start();
         }
         else
             DoSyntaxHighlight( nPara );
@@ -1333,8 +1333,8 @@ void EditorWindow::DestroyProgress()
 
 void EditorWindow::ForceSyntaxTimeout()
 {
-    aSyntaxIdleTimer.Stop();
-    aSyntaxIdleTimer.GetTimeoutHdl().Call(&aSyntaxIdleTimer);
+    aSyntaxIdle.Stop();
+    aSyntaxIdle.GetTimeoutHdl().Call(&aSyntaxIdle);
 }
 
 

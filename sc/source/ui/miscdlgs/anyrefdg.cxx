@@ -767,8 +767,8 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
 {
     m_aHelper.SetWindow(&m_rWindow);
     reverseUniqueHelpIdHack(m_rWindow);
-    aTimer.SetTimeout(200);
-    aTimer.SetTimeoutHdl(LINK( this, ScRefHandler, UpdateFocusHdl));
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
+    aIdle.SetIdleHdl(LINK( this, ScRefHandler, UpdateFocusHdl));
 
     if( bBindRef ) EnterRefMode();
 }
@@ -956,7 +956,7 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
             ScFormulaReferenceHelper::enableInput( false );
             m_aHelper.EnableSpreadsheets();
             m_aHelper.SetDispatcherLock( true );
-            aTimer.Start();
+            aIdle.Start();
         }
         else
         {
