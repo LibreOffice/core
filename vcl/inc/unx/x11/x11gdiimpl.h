@@ -18,7 +18,7 @@ public:
     virtual ~X11GraphicsImpl() {};
 
     virtual void Init() = 0;
-    virtual X11Pixmap* GetPixmapFromScreen( const Rectangle& rRect ) = 0;
+    virtual bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
     virtual bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
 };
 

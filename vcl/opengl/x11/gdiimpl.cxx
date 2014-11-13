@@ -80,42 +80,39 @@ void X11OpenGLSalGraphicsImpl::Init()
     }
 }
 
-X11Pixmap* X11OpenGLSalGraphicsImpl::GetPixmapFromScreen( const Rectangle& rRect )
+bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
     Display* pDisplay = mrParent.GetXDisplay();
     SalX11Screen nScreen = mrParent.GetScreenNumber();
     XVisualInfo aVisualInfo;
-    X11Pixmap* pPixmap;
     XImage* pImage;
     char* pData;
 
-    SAL_INFO( "vcl.opengl", "GetPixmapFromScreen" );
-    // TODO: lfrb: Use context depth
-    pPixmap = new X11Pixmap( pDisplay, nScreen, rRect.GetWidth(), rRect.GetHeight(), 24 );
+    SAL_INFO( "vcl.opengl", "FillPixmapFromScreen" );
 
     if( !OpenGLHelper::GetVisualInfo( pDisplay, nScreen.getXScreen(), aVisualInfo ) )
-        return pPixmap;
+        return false;
 
     // make sure everything is synced up before reading back
     maContext.makeCurrent();
     glXWaitX();
 
     // TODO: lfrb: What if offscreen?
-    pData = (char*) malloc( rRect.GetWidth() * rRect.GetHeight() * 4 );
+    pData = (char*) malloc( pPixmap->GetWidth() * pPixmap->GetHeight() * 4 );
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-    glReadPixels( rRect.Left(), GetHeight() - rRect.Top(), rRect.GetWidth(), rRect.GetHeight(),
+    glReadPixels( nX, GetHeight() - nY, pPixmap->GetWidth(), pPixmap->GetHeight(),
                   GL_RGBA, GL_UNSIGNED_BYTE, pData );
 
     pImage = XCreateImage( pDisplay, aVisualInfo.visual, 24, ZPixmap, 0, pData,
-                           rRect.GetWidth(), rRect.GetHeight(), 8, 0 );
+                           pPixmap->GetWidth(), pPixmap->GetHeight(), 8, 0 );
     XInitImage( pImage );
     GC aGC = XCreateGC( pDisplay, pPixmap->GetPixmap(), 0, NULL );
     XPutImage( pDisplay, pPixmap->GetDrawable(), aGC, pImage,
-               0, 0, 0, 0, rRect.GetWidth(), rRect.GetHeight() );
+               0, 0, 0, 0, pPixmap->GetWidth(), pPixmap->GetHeight() );
     XFreeGC( pDisplay, aGC );
     XDestroyImage( pImage );
 
-    return pPixmap;
+    return true;
 }
 
 bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )

@@ -19,27 +19,25 @@
 class VCLPLUG_GEN_PUBLIC X11Pixmap
 {
 public:
-    X11Pixmap();
-    X11Pixmap( Display *pDisplay, SalX11Screen nScreen, int nWidth, int nHeight, int nDepth );
-    X11Pixmap( X11Pixmap& rOther );
-    virtual ~X11Pixmap();
+    X11Pixmap( int nWidth, int nHeight )
+    {
+        mnWidth = nWidth;
+        mnHeight = nHeight;
+    }
 
-    Pixmap GetPixmap() const { return mpPixmap; };
-    Drawable GetDrawable() const { return mpPixmap; };
+    virtual ~X11Pixmap() {};
+
+    virtual int GetDepth() const = 0;
+    virtual SalX11Screen GetScreen() const = 0;
+    virtual Pixmap GetPixmap() const = 0;
+    Drawable GetDrawable() const { return GetPixmap(); };
     int GetWidth() const { return mnWidth; };
     int GetHeight() const { return mnHeight; };
     Size GetSize() const { return Size( mnWidth, mnHeight ); };
-    int GetDepth() const { return mnDepth; };
-    SalX11Screen GetScreen() const { return mnScreen; }
 
 protected:
-    Display*        mpDisplay;
-    SalX11Screen    mnScreen;
-    Pixmap          mpPixmap;
-    bool            mbDeletePixmap;
     int             mnWidth;
     int             mnHeight;
-    int             mnDepth;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_PIXMAP_HXX
