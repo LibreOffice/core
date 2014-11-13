@@ -244,7 +244,8 @@ public:
     virtual bool isInUse() SAL_OVERRIDE;
 private:
     static SdrTableObjImpl* lastLayoutTable;
-    static Rectangle lastLayoutRectangle;
+    static Rectangle lastLayoutInputRectangle;
+    static Rectangle lastLayoutResultRectangle;
     static bool lastLayoutFitWidth;
     static bool lastLayoutFitHeight;
     static WritingMode lastLayoutMode;
@@ -253,7 +254,8 @@ private:
 };
 
 SdrTableObjImpl* SdrTableObjImpl::lastLayoutTable = NULL;
-Rectangle SdrTableObjImpl::lastLayoutRectangle;
+Rectangle SdrTableObjImpl::lastLayoutInputRectangle;
+Rectangle SdrTableObjImpl::lastLayoutResultRectangle;
 bool SdrTableObjImpl::lastLayoutFitWidth;
 bool SdrTableObjImpl::lastLayoutFitHeight;
 WritingMode SdrTableObjImpl::lastLayoutMode;
@@ -696,14 +698,14 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
         // Optimization: SdrTableObj::SetChanged() can call this very often, repeatedly
         // with the same settings, noticeably increasing load time. Skip if already done.
         WritingMode writingMode = mpTableObj->GetWritingMode();
-        if( lastLayoutTable != this || lastLayoutRectangle != rArea
+        if( lastLayoutTable != this || lastLayoutInputRectangle != rArea
             || lastLayoutFitWidth != bFitWidth || lastLayoutFitHeight != bFitHeight
             || lastLayoutMode != writingMode
             || lastRowCount != getRowCount()
             || lastColCount != getColumnCount() )
         {
             lastLayoutTable = this;
-            lastLayoutRectangle = rArea;
+            lastLayoutInputRectangle = rArea;
             lastLayoutFitWidth = bFitWidth;
             lastLayoutFitHeight = bFitHeight;
             lastLayoutMode = writingMode;
@@ -711,6 +713,11 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
             lastColCount = getColumnCount();
             TableModelNotifyGuard aGuard( mxTable.get() );
             mpLayouter->LayoutTable( rArea, bFitWidth, bFitHeight );
+            lastLayoutResultRectangle = rArea;
+        }
+        else
+        {
+            rArea = lastLayoutResultRectangle;
         }
     }
 }
