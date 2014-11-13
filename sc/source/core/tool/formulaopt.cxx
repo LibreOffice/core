@@ -205,8 +205,8 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_OPENCL_SUBSET_ONLY  13
 #define SCFORMULAOPT_OPENCL_MIN_SIZE     14
 #define SCFORMULAOPT_OPENCL_SUBSET_OPS   15
-#define SCFORMULAOPT_OPENCL_WHITELIST    16
-#define SCFORMULAOPT_OPENCL_BLACKLIST    17
+#define SCFORMULAOPT_OPENCL_BLACKLIST    16
+#define SCFORMULAOPT_OPENCL_WHITELIST    17
 #define SCFORMULAOPT_COUNT               18
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
@@ -229,8 +229,8 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Calculation/OpenCLSubsetOnly",  // SCFORMULAOPT_OPENCL_SUBSET_ONLY
         "Calculation/OpenCLMinimumDataSize",  // SCFORMULAOPT_OPENCL_MIN_SIZE
         "Calculation/OpenCLSubsetOpCodes",    // SCFORMULAOPT_OPENCL_SUBSET_OPS
-        "Calculation/OpenCLWhiteList",    // SCFORMULAOPT_OPENCL_WHITELIST
         "Calculation/OpenCLBlackList",    // SCFORMULAOPT_OPENCL_BLACKLIST
+        "Calculation/OpenCLWhiteList",    // SCFORMULAOPT_OPENCL_WHITELIST
     };
     Sequence<OUString> aNames(SCFORMULAOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -260,8 +260,8 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
         SCFORMULAOPT_OPENCL_SUBSET_ONLY,
         SCFORMULAOPT_OPENCL_MIN_SIZE,
         SCFORMULAOPT_OPENCL_SUBSET_OPS,
-        SCFORMULAOPT_OPENCL_WHITELIST,
         SCFORMULAOPT_OPENCL_BLACKLIST,
+        SCFORMULAOPT_OPENCL_WHITELIST,
     };
     OSL_ENSURE( SAL_N_ELEMENTS(aVals) == aPropNames.getLength(), "Properties and ids are out of Sync");
     PropsToIds aPropIdMap;
@@ -589,18 +589,18 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     GetCalcConfig().maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
                 }
                 break;
-                case SCFORMULAOPT_OPENCL_WHITELIST:
-                {
-                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
-                    pValues[nProp] >>= sVal;
-                    GetCalcConfig().maOpenCLWhiteList = StringSequenceToSetOfOpenCLImplMatcher(sVal);
-                }
-                break;
                 case SCFORMULAOPT_OPENCL_BLACKLIST:
                 {
                     css::uno::Sequence<OUString> sVal = SetOfOpenCLImplMatcherToStringSequence(GetCalcConfig().maOpenCLBlackList);
                     pValues[nProp] >>= sVal;
                     GetCalcConfig().maOpenCLBlackList = StringSequenceToSetOfOpenCLImplMatcher(sVal);
+                }
+                break;
+                case SCFORMULAOPT_OPENCL_WHITELIST:
+                {
+                    css::uno::Sequence<OUString> sVal = SetOfOpenCLImplMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
+                    pValues[nProp] >>= sVal;
+                    GetCalcConfig().maOpenCLWhiteList = StringSequenceToSetOfOpenCLImplMatcher(sVal);
                 }
                 break;
                 }
@@ -756,15 +756,15 @@ void ScFormulaCfg::Commit()
                 pValues[nProp] <<= sVal;
             }
             break;
-            case SCFORMULAOPT_OPENCL_WHITELIST:
-            {
-                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
-                pValues[nProp] <<= sVal;
-            }
-            break;
             case SCFORMULAOPT_OPENCL_BLACKLIST:
             {
                 css::uno::Sequence<OUString> sVal = SetOfOpenCLImplMatcherToStringSequence(GetCalcConfig().maOpenCLBlackList);
+                pValues[nProp] <<= sVal;
+            }
+            break;
+            case SCFORMULAOPT_OPENCL_WHITELIST:
+            {
+                css::uno::Sequence<OUString> sVal = SetOfOpenCLImplMatcherToStringSequence(GetCalcConfig().maOpenCLWhiteList);
                 pValues[nProp] <<= sVal;
             }
             break;

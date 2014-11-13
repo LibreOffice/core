@@ -114,8 +114,8 @@ struct SC_DLLPUBLIC ScCalcConfig
 
     typedef std::set<OpenCLImplMatcher> OpenCLImplMatcherSet;
 
-    OpenCLImplMatcherSet maOpenCLWhiteList;
     OpenCLImplMatcherSet maOpenCLBlackList;
+    OpenCLImplMatcherSet maOpenCLWhiteList;
 
     ScCalcConfig();
 

@@ -30,8 +30,8 @@ typedef enum {
     CALC_OPTION_ENABLE_OPENCL_SUBSET,
     CALC_OPTION_OPENCL_MIN_SIZE,
     CALC_OPTION_OPENCL_SUBSET_OPS,
-    CALC_OPTION_OPENCL_WHITELIST,
     CALC_OPTION_OPENCL_BLACKLIST,
+    CALC_OPTION_OPENCL_WHITELIST,
 } CalcOptionOrder;
 
 class OptionString : public SvLBoxString
@@ -207,11 +207,11 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     maCaptionOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes")->GetText();
     maDescOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes_desc")->GetText();
 
-    maCaptionOpenCLWhiteList = get<vcl::Window>("opencl_whitelist")->GetText();
-    maDescOpenCLWhiteList = get<vcl::Window>("opencl_whitelist_desc")->GetText();
-
     maCaptionOpenCLBlackList = get<vcl::Window>("opencl_blacklist")->GetText();
     maDescOpenCLBlackList = get<vcl::Window>("opencl_blacklist_desc")->GetText();
+
+    maCaptionOpenCLWhiteList = get<vcl::Window>("opencl_whitelist")->GetText();
+    maDescOpenCLWhiteList = get<vcl::Window>("opencl_whitelist_desc")->GetText();
 
     maSoftware = get<vcl::Window>("software")->GetText();
 
@@ -378,8 +378,8 @@ void ScCalcOptionsDialog::FillOptionsList()
     pModel->Insert(createItem(maCaptionOpenCLSubsetEnabled,toString(maConfig.mbOpenCLSubsetOnly)));
     pModel->Insert(createItem(maCaptionOpenCLMinimumFormulaSize,toString(maConfig.mnOpenCLMinimumFormulaGroupSize)));
     pModel->Insert(createItem(maCaptionOpenCLSubsetOpCodes,ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes)));
-    pModel->Insert(createItem(maCaptionOpenCLWhiteList,""));
     pModel->Insert(createItem(maCaptionOpenCLBlackList,""));
+    pModel->Insert(createItem(maCaptionOpenCLWhiteList,""));
 
     fillOpenCLList();
 
@@ -577,8 +577,8 @@ void ScCalcOptionsDialog::SelectionChanged()
         break;
 
         // string lists
-        case CALC_OPTION_OPENCL_WHITELIST:
         case CALC_OPTION_OPENCL_BLACKLIST:
+        case CALC_OPTION_OPENCL_WHITELIST:
         {
             mpLbOptionEdit->Hide();
             mpBtnTrue->Hide();
@@ -654,8 +654,8 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
         case CALC_OPTION_ENABLE_OPENCL_SUBSET:
         case CALC_OPTION_OPENCL_MIN_SIZE:
         case CALC_OPTION_OPENCL_SUBSET_OPS:
-        case CALC_OPTION_OPENCL_WHITELIST:
         case CALC_OPTION_OPENCL_BLACKLIST:
+        case CALC_OPTION_OPENCL_WHITELIST:
         break;
     }
 }

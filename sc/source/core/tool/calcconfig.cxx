@@ -45,10 +45,10 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocAverage);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
 
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("Linux", "*", "Advanced Micro Devices, Inc.", "*", "1445.5 (sse2,avx)", ""));
-
     maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884", ""));
     maOpenCLBlackList.insert(OpenCLImplMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3", "4.4"));
+
+    maOpenCLWhiteList.insert(OpenCLImplMatcher("Linux", "*", "Advanced Micro Devices, Inc.", "*", "1445.5 (sse2,avx)", ""));
 }
 
 void ScCalcConfig::reset()
@@ -76,8 +76,9 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            maOpenCLDevice == r.maOpenCLDevice &&
            mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
            maOpenCLSubsetOpCodes == r.maOpenCLSubsetOpCodes &&
+           maOpenCLBlackList == r.maOpenCLBlackList &&
            maOpenCLWhiteList == r.maOpenCLWhiteList &&
-           maOpenCLBlackList == r.maOpenCLBlackList;
+           true;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
@@ -123,8 +124,8 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"
         "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
         "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "},"
-        "OpenCLWhiteList=" << rConfig.maOpenCLWhiteList << ","
-        "OpenCLBlackList=" << rConfig.maOpenCLBlackList <<
+        "OpenCLBlackList=" << rConfig.maOpenCLBlackList << ","
+        "OpenCLWhiteList=" << rConfig.maOpenCLWhiteList <<
         "}";
     return rStream;
 }
