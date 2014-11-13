@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_WINTEXTRENDER_HXX
 #define INCLUDED_VCL_INC_WINTEXTRENDER_HXX
 
-#include <tools/rational.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/vclenum.hxx>
