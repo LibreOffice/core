@@ -1735,6 +1735,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
     get(mpRBClickSequence, "rb_click_sequence" );
     get(mpRBInteractive, "rb_interactive" );
     get(mpLBTrigger, "trigger_list");
+    mpLBTrigger->set_width_request(approximate_char_width() * 40);
 
     fillRepeatComboBox( mpCBRepeat );
     fillDurationComboBox( mpCBDuration );
