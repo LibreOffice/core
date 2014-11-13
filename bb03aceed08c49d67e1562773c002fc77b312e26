@@ -33,6 +33,24 @@
       "revId": "bb03aceed08c49d67e1562773c002fc77b312e26",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_eb9445e9",
+        "filename": "svx/source/svdraw/svdtrans.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-11-13T09:38:32Z",
+      "side": 1,
+      "message": "I still think it is much better to make this no-op (i.e., Fraction(1,1)) in case the fraction is invalid. Otherwise you are making the rectangle zero width (height), no matter what dimensions it did have.",
+      "parentUuid": "9a0c5dc1_f049d68f",
+      "revId": "bb03aceed08c49d67e1562773c002fc77b312e26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
