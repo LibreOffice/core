@@ -22,7 +22,7 @@
 #include "osl/module.h"
 #include "osl/file.h"
 
-#include "vcl/svapp.hxx"
+#include <vcl/opengl/OpenGLHelper.hxx>
 
 #include "win/salgdi.h"
 #include "win/saldata.hxx"
@@ -107,13 +107,14 @@ inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
     return it->second;
 }
 
-WinLayout::WinLayout( HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
+WinLayout::WinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL)
 :   mhDC( hDC ),
     mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) ),
     mnBaseAdv( 0 ),
     mfFontScale( 1.0 ),
     mrWinFontData( rWFD ),
-    mrWinFontEntry( rWFE )
+    mrWinFontEntry(rWFE),
+    mbUseOpenGL(bUseOpenGL)
 {}
 
 void WinLayout::InitFont() const
@@ -148,9 +149,22 @@ SCRIPT_CACHE& WinLayout::GetScriptCache() const
     return mrWinFontEntry.GetScriptCache();
 }
 
-SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
-    const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
-:   WinLayout( hDC, rWinFontData, rWinFontEntry ),
+void WinLayout::DrawText(SalGraphics& rGraphics) const
+{
+    if (mbUseOpenGL)
+    {
+        // TODO draw to a texture instead
+        DrawTextImpl(static_cast<WinSalGraphics&>(rGraphics).getHDC());
+    }
+    else
+    {
+        DrawTextImpl(static_cast<WinSalGraphics&>(rGraphics).getHDC());
+    }
+}
+
+SimpleWinLayout::SimpleWinLayout(HDC hDC, BYTE nCharSet, const ImplWinFontData& rWinFontData,
+        ImplWinFontEntry& rWinFontEntry, bool bUseOpenGL)
+:   WinLayout(hDC, rWinFontData, rWinFontEntry, bUseOpenGL),
     mnGlyphCount( 0 ),
     mnCharCount( 0 ),
     mpOutGlyphs( NULL ),
@@ -517,13 +531,10 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIds, Point& rPo
     return nCount;
 }
 
-void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
+void SimpleWinLayout::DrawTextImpl(HDC hDC) const
 {
     if( mnGlyphCount <= 0 )
         return;
-
-    WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
-    HDC aHDC = rWinGraphics.getHDC();
 
     HFONT hOrigFont = DisableFontScaling();
 
@@ -543,24 +554,23 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
         // #108267#,#109387# break up string into smaller chunks
         // the output positions will be updated by windows (SetTextAlign)
         POINT oldPos;
-        UINT oldTa = ::GetTextAlign( aHDC );
-        ::SetTextAlign( aHDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP );
-        ::MoveToEx( aHDC, aPos.X(), aPos.Y(), &oldPos );
+        UINT oldTa = ::GetTextAlign(hDC);
+        ::SetTextAlign(hDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP);
+        ::MoveToEx(hDC, aPos.X(), aPos.Y(), &oldPos);
         unsigned int i = 0;
         for( unsigned int n = 0; n < numGlyphPortions; ++n, i+=maxGlyphCount )
-            ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
-                mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i );
-        ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
-            mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i );
-        ::MoveToEx( aHDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
-        ::SetTextAlign( aHDC, oldTa );
+        {
+            ::ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i);
+        }
+        ::ExtTextOutW(hDC, 0, 0, mnDrawOptions, NULL, mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i);
+        ::MoveToEx(hDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
+        ::SetTextAlign(hDC, oldTa);
     }
     else
-        ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-            mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
+        ::ExtTextOutW(hDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL, mpOutGlyphs, mnGlyphCount, mpGlyphAdvances);
 
     if( hOrigFont )
-        DeleteFont( SelectFont( aHDC, hOrigFont ) );
+        DeleteFont(SelectFont(hDC, hOrigFont));
 }
 
 DeviceCoordinate SimpleWinLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
@@ -933,9 +943,9 @@ static bool InitUSP()
     return true;
 }
 
-UniscribeLayout::UniscribeLayout( HDC hDC,
-    const ImplWinFontData& rWinFontData, ImplWinFontEntry& rWinFontEntry )
-:   WinLayout( hDC, rWinFontData, rWinFontEntry ),
+UniscribeLayout::UniscribeLayout(HDC hDC, const ImplWinFontData& rWinFontData,
+        ImplWinFontEntry& rWinFontEntry, bool bUseOpenGL)
+:   WinLayout(hDC, rWinFontData, rWinFontEntry, bUseOpenGL),
     mpScriptItems( NULL ),
     mpVisualItems( NULL ),
     mnItemCount( 0 ),
@@ -1907,7 +1917,7 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
     }
 }
 
-void UniscribeLayout::DrawText( SalGraphics& ) const
+void UniscribeLayout::DrawTextImpl(HDC hDC) const
 {
     HFONT hOrigFont = DisableFontScaling();
 
@@ -1943,18 +1953,18 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         Point aRelPos( rVisualItem.mnXOffset + nBaseClusterOffset, 0 );
         Point aPos = GetDrawPosition( aRelPos );
         SCRIPT_CACHE& rScriptCache = GetScriptCache();
-        ScriptTextOut( mhDC, &rScriptCache,
+        ScriptTextOut(hDC, &rScriptCache,
             aPos.X(), aPos.Y(), 0, NULL,
             &rVisualItem.mpScriptItem->a, NULL, 0,
             mpOutGlyphs + nMinGlyphPos,
             nEndGlyphPos - nMinGlyphPos,
             mpGlyphAdvances + nMinGlyphPos,
             mpJustifications ? mpJustifications + nMinGlyphPos : NULL,
-            mpGlyphOffsets + nMinGlyphPos );
+            mpGlyphOffsets + nMinGlyphPos);
     }
 
     if( hOrigFont )
-        DeleteFont( SelectFont( mhDC, hOrigFont ) );
+        DeleteFont(SelectFont(hDC, hOrigFont));
 }
 
 DeviceCoordinate UniscribeLayout::FillDXArray( DeviceCoordinate* pDXArray ) const
@@ -2494,8 +2504,8 @@ float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
     return gm.gmCellIncX;
 }
 
-GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE) throw()
-  : WinLayout(hDC, rWFD, rWFE), mpFont(NULL),
+GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL) throw()
+  : WinLayout(hDC, rWFD, rWFE, bUseOpenGL), mpFont(NULL),
     maImpl(rWFD.GraphiteFace(), rWFE)
 {
     // the log font size may differ from the font entry size if scaling is used for large fonts
@@ -2577,10 +2587,9 @@ void  GraphiteWinLayout::AdjustLayout(ImplLayoutArgs& rArgs)
     maImpl.AdjustLayout(rArgs);
 }
 
-void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
+void GraphiteWinLayout::DrawTextImpl(HDC hDC) const
 {
     HFONT hOrigFont = DisableFontScaling();
-    const HDC aHDC = static_cast<WinSalGraphics&>(sal_graphics).getHDC();
     maImpl.DrawBase() = WinLayout::maDrawBase;
     maImpl.DrawOffset() = WinLayout::maDrawOffset;
     const int MAX_GLYPHS = 2;
@@ -2595,11 +2604,10 @@ void GraphiteWinLayout::DrawText(SalGraphics &sal_graphics) const
         if (nGlyphs < 1)
           break;
         std::copy(glyphIntStr, glyphIntStr + nGlyphs, glyphWStr);
-        ::ExtTextOutW(aHDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX,
-                      NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
+        ::ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, NULL, (LPCWSTR)&(glyphWStr), nGlyphs, NULL);
     } while (nGlyphs);
     if( hOrigFont )
-          DeleteFont( SelectFont( aHDC, hOrigFont ) );
+          DeleteFont(SelectFont(hDC, hOrigFont));
 }
 
 sal_Int32 GraphiteWinLayout::GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const
@@ -2652,18 +2660,20 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     const ImplWinFontData& rFontFace = *mpWinFontData[ nFallbackLevel ];
     ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
+    bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
+
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
     &&   (bUspInited || InitUSP()) )   // CTL layout engine
     {
 #if ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
         {
-            pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance);
+            pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
         }
         else
 #endif // ENABLE_GRAPHITE
         // script complexity is determined in upper layers
-        pWinLayout = new UniscribeLayout( getHDC(), rFontFace, rFontInstance );
+        pWinLayout = new UniscribeLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
         // NOTE: it must be guaranteed that the WinSalGraphics lives longer than
         // the created UniscribeLayout, otherwise the data passed into the
         // constructor might become invalid too early
@@ -2683,10 +2693,10 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
             eCharSet = mpLogFont->lfCharSet;
 #if ENABLE_GRAPHITE
         if (rFontFace.SupportsGraphite())
-            pWinLayout = new GraphiteWinLayout( getHDC(), rFontFace, rFontInstance);
+            pWinLayout = new GraphiteWinLayout(getHDC(), rFontFace, rFontInstance, bUseOpenGL);
         else
 #endif // ENABLE_GRAPHITE
-            pWinLayout = new SimpleWinLayout( getHDC(), eCharSet, rFontFace, rFontInstance );
+            pWinLayout = new SimpleWinLayout(getHDC(), eCharSet, rFontFace, rFontInstance, bUseOpenGL);
     }
 
     if( mfFontScale[nFallbackLevel] != 1.0 )

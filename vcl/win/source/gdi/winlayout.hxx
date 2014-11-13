@@ -40,18 +40,26 @@ struct VisualItem;
 class WinLayout : public SalLayout
 {
 public:
-                        WinLayout( HDC, const ImplWinFontData&, ImplWinFontEntry& );
+                        WinLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
     virtual void        InitFont() const;
     void                SetFontScale( float f ) { mfFontScale = f; }
     HFONT               DisableFontScaling( void) const;
 
     SCRIPT_CACHE&       GetScriptCache() const;
 
+    /// In the non-OpenGL case, call the DrawTextImpl directly, otherwise make
+    /// sure we draw to an interim texture.
+    virtual void        DrawText(SalGraphics&) const SAL_OVERRIDE;
+
+    /// Draw to the provided HDC.
+    virtual void        DrawTextImpl(HDC hDC) const = 0;
+
 protected:
     HDC                 mhDC;               // WIN32 device handle
     HFONT               mhFont;             // WIN32 font handle
     int                 mnBaseAdv;          // x-offset relative to Layout origin
     float               mfFontScale;        // allows metrics emulation of huge font sizes
+    bool                mbUseOpenGL;        ///< We need to render via OpenGL
 
     const ImplWinFontData& mrWinFontData;
     ImplWinFontEntry&   mrWinFontEntry;
@@ -60,12 +68,12 @@ protected:
 class SimpleWinLayout : public WinLayout
 {
 public:
-                    SimpleWinLayout( HDC, BYTE nCharSet, const ImplWinFontData&, ImplWinFontEntry& );
+                    SimpleWinLayout(HDC, BYTE nCharSet, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
     virtual         ~SimpleWinLayout();
 
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
-    virtual void    DrawText( SalGraphics& ) const;
+    virtual void    DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
 
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
@@ -104,11 +112,11 @@ private:
 class UniscribeLayout : public WinLayout
 {
 public:
-                    UniscribeLayout( HDC, const ImplWinFontData&, ImplWinFontEntry& );
+                    UniscribeLayout(HDC, const ImplWinFontData&, ImplWinFontEntry&, bool bUseOpenGL);
 
     virtual bool    LayoutText( ImplLayoutArgs& );
     virtual void    AdjustLayout( ImplLayoutArgs& );
-    virtual void    DrawText( SalGraphics& ) const;
+    virtual void    DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvances, int* pCharPosAry,
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const;
@@ -189,13 +197,13 @@ private:
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
-    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE) throw();
+    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE, bool bUseOpenGL) throw();
     virtual ~GraphiteWinLayout();
 
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
     virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting after fallback etc.
-    virtual void  DrawText( SalGraphics& ) const;
+    virtual void  DrawTextImpl(HDC hDC) const SAL_OVERRIDE;
 
     // methods using string indexing
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
