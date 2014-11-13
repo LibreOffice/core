@@ -159,7 +159,7 @@ protected:
 
     vcl::Window*                     pWindow;
     SfxModule*                  pModule;
-    Timer*                      pTimer;
+    Idle*                       pIdle;
 
     ResId*                      m_pStyleFamiliesId;
     SfxStyleFamilies*           pStyleFamilies;

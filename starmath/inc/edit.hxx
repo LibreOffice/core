@@ -56,8 +56,8 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     ScrollBar      *pHScrollBar,
                    *pVScrollBar;
     ScrollBarBox   *pScrollBox;
-    Timer           aModifyTimer,
-                    aCursorMoveTimer;
+    Idle            aModifyIdle,
+                    aCursorMoveIdle;
     ESelection      aOldSelection;
 
     virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;

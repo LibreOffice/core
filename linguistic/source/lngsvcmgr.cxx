@@ -476,8 +476,8 @@ LngSvcMgr::LngSvcMgr()
 
     UpdateAll();
 
-    aUpdateTimer.SetTimeout(500);
-    aUpdateTimer.SetTimeoutHdl(LINK(this, LngSvcMgr, updateAndBroadcast));
+    aUpdateIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aUpdateIdle.SetIdleHdl(LINK(this, LngSvcMgr, updateAndBroadcast));
 
     // request to be notified if an extension has been added/removed
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
@@ -513,7 +513,7 @@ void LngSvcMgr::modified(const lang::EventObject&)
     clearSvcInfoArray(pAvailThesSvcs);
 
     //schedule in an update to execute in the main thread
-    aUpdateTimer.Start();
+    aUpdateIdle.Start();
 }
 
 //run update, and inform everyone that dictionaries (may) have changed, this

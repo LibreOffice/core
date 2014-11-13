@@ -1789,8 +1789,8 @@ namespace frm
 
         doSetDelegator();
 
-        m_aChangeTimer.SetTimeout(500);
-        m_aChangeTimer.SetTimeoutHdl(LINK(this,OListBoxControl,OnTimeout));
+        m_aChangeIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+        m_aChangeIdle.SetIdleHdl(LINK(this,OListBoxControl,OnTimeout));
     }
 
 
@@ -1866,13 +1866,13 @@ namespace frm
 
         // and do the handling for the ChangeListeners
         ::osl::ClearableMutexGuard aGuard(m_aMutex);
-        if ( m_aChangeTimer.IsActive() )
+        if ( m_aChangeIdle.IsActive() )
         {
             Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
             m_aCurrentSelection = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
-            m_aChangeTimer.Stop();
-            m_aChangeTimer.Start();
+            m_aChangeIdle.Stop();
+            m_aChangeIdle.Start();
         }
         else
         {
@@ -1902,7 +1902,7 @@ namespace frm
                     if (bModified)
                     {
                         m_aCurrentSelection = aValue;
-                        m_aChangeTimer.Start();
+                        m_aChangeIdle.Start();
                     }
                 }
             }
@@ -1935,8 +1935,8 @@ namespace frm
 
     void OListBoxControl::disposing()
     {
-        if (m_aChangeTimer.IsActive())
-            m_aChangeTimer.Stop();
+        if (m_aChangeIdle.IsActive())
+            m_aChangeIdle.Stop();
 
         EventObject aEvent( *this );
         m_aChangeListeners.disposeAndClear( aEvent );

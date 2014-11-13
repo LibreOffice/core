@@ -106,13 +106,13 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
-    aModifyTimer.SetTimeoutHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
-    aModifyTimer.SetTimeout(500);
+    aModifyIdle.SetIdleHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
+    aModifyIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 
     if (!IsInlineEditEnabled())
     {
-        aCursorMoveTimer.SetTimeoutHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
-        aCursorMoveTimer.SetTimeout(500);
+        aCursorMoveIdle.SetIdleHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
+        aCursorMoveIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
     }
 
     // if not called explicitly the this edit window within the
@@ -123,7 +123,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
 
 SmEditWindow::~SmEditWindow()
 {
-    aModifyTimer.Stop();
+    aModifyIdle.Stop();
 
     StartCursorMove();
 
@@ -153,7 +153,7 @@ SmEditWindow::~SmEditWindow()
 void SmEditWindow::StartCursorMove()
 {
     if (!IsInlineEditEnabled())
-        aCursorMoveTimer.Stop();
+        aCursorMoveIdle.Stop();
 }
 
 void SmEditWindow::InvalidateSlots()
@@ -247,7 +247,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
     UpdateStatus();
-    aModifyTimer.Stop();
+    aModifyIdle.Stop();
     return 0;
 }
 
@@ -276,7 +276,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
             aOldSelection = aNewSelection;
         }
     }
-    aCursorMoveTimer.Stop();
+    aCursorMoveIdle.Stop();
 
     return 0;
 }
@@ -315,7 +315,7 @@ void SmEditWindow::MouseButtonUp(const MouseEvent &rEvt)
         Window::MouseButtonUp (rEvt);
 
     if (!IsInlineEditEnabled())
-        CursorMoveTimerHdl(&aCursorMoveTimer);
+        CursorMoveTimerHdl(&aCursorMoveIdle);
     InvalidateSlots();
 }
 
@@ -467,8 +467,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             {
                 // F1 (help) leads to the destruction of this
                 Flush();
-                if ( aModifyTimer.IsActive() )
-                    aModifyTimer.Stop();
+                if ( aModifyIdle.IsActive() )
+                    aModifyIdle.Stop();
                 Window::KeyInput(rKEvt);
             }
             else
@@ -491,7 +491,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             EditEngine *pEditEngine = GetEditEngine();
             if (pDocShell && pEditEngine)
                 pDocShell->SetModified(pEditEngine->IsModified());
-            aModifyTimer.Start();
+            aModifyIdle.Start();
         }
 
         // get the current char of the key event
@@ -679,7 +679,7 @@ void SmEditWindow::SetText(const OUString& rText)
 
         // Restarting the timer here, prevents calling the handlers for other (currently inactive)
         // math tasks
-        aModifyTimer.Start();
+        aModifyIdle.Start();
 
         pEditView->SetSelection(eSelection);
     }
@@ -813,7 +813,7 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
             pEditView->SetSelection(aSelection);
         }
 
-        aModifyTimer.Start();
+        aModifyIdle.Start();
         StartCursorMove();
         GrabFocus();
     }
@@ -1061,7 +1061,7 @@ void SmEditWindow::InsertText(const OUString& rText)
             pEditView->SetSelection(aSelection);
         }
 
-        aModifyTimer.Start();
+        aModifyIdle.Start();
         StartCursorMove();
         GrabFocus();
     }
@@ -1081,10 +1081,10 @@ void SmEditWindow::Flush()
                     new SfxStringItem(SID_TEXT, GetText()), 0L);
         }
     }
-    if (aCursorMoveTimer.IsActive())
+    if (aCursorMoveIdle.IsActive())
     {
-        aCursorMoveTimer.Stop();
-        CursorMoveTimerHdl(&aCursorMoveTimer);
+        aCursorMoveIdle.Stop();
+        CursorMoveTimerHdl(&aCursorMoveIdle);
     }
 }
 

@@ -135,7 +135,7 @@ class SfxNewFileDialog_Impl
     PushButton* m_pLoadFilePB;
 
     VclExpander* m_pMoreBt;
-    Timer aPrevTimer;
+    Idle aPrevIdle;
     OUString aNone;
     OUString sLoadTemplate;
 
@@ -285,7 +285,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
         // Dialog is not opened
         return 0;
 
-    aPrevTimer.Start();
+    aPrevIdle.Start();
     return 0;
 }
 
@@ -431,8 +431,8 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         m_pRegionLb->SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, RegionSelect));
     }
 
-    aPrevTimer.SetTimeout( 500 );
-    aPrevTimer.SetTimeoutHdl( LINK( this, SfxNewFileDialog_Impl, Update));
+    aPrevIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    aPrevIdle.SetIdleHdl( LINK( this, SfxNewFileDialog_Impl, Update));
 
     m_pRegionLb->SelectEntryPos(0);
     RegionSelect(m_pRegionLb);

@@ -645,7 +645,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, vcl
     pBindings               ( pB ),
     pWindow                 ( pW ),
     pModule                 ( NULL ),
-    pTimer                  ( NULL ),
+    pIdle                   ( NULL ),
     m_pStyleFamiliesId      ( NULL ),
     pStyleFamilies          ( NULL ),
     pStyleSheetPool         ( NULL ),
@@ -870,7 +870,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         EndListening(*pStyleSheetPool);
     pStyleSheetPool = NULL;
     delete pTreeBox;
-    delete pTimer;
+    delete pIdle;
     if ( m_pDeletionWatcher )
         m_pDeletionWatcher->signal();
 }
@@ -1432,10 +1432,10 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, pTim )
             }
         }
         bDontUpdate=false;
-        DELETEZ(pTimer);
+        DELETEZ(pIdle);
     }
     else
-        pTimer->Start();
+        pIdle->Start();
     return 0;
 }
 
@@ -1524,13 +1524,13 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
         dynamic_cast<const SfxStyleSheetHint*>(&rHint) ||
         dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint)))
     {
-        if(!pTimer)
+        if(!pIdle)
         {
-            pTimer=new Timer;
-            pTimer->SetTimeout(500);
-            pTimer->SetTimeoutHdl(LINK(this,SfxCommonTemplateDialog_Impl,TimeOut));
+            pIdle=new Idle;
+            pIdle->SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+            pIdle->SetIdleHdl(LINK(this,SfxCommonTemplateDialog_Impl,TimeOut));
         }
-        pTimer->Start();
+        pIdle->Start();
 
     }
 }

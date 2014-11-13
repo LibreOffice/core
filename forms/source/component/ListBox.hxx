@@ -255,7 +255,7 @@ private:
     ::cppu::OInterfaceContainerHelper       m_aItemListeners;
 
     ::com::sun::star::uno::Any              m_aCurrentSelection;
-    Timer                                   m_aChangeTimer;
+    Idle                                    m_aChangeIdle;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox >
                                             m_xAggregateListBox;

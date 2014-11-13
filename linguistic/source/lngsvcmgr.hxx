@@ -81,7 +81,7 @@ class LngSvcMgr :
     com::sun::star::uno::Reference<
         ::com::sun::star::util::XModifyBroadcaster>     xMB;
 
-    Timer                                               aUpdateTimer;
+    Idle                                                aUpdateIdle;
 
 
     com::sun::star::uno::Sequence<

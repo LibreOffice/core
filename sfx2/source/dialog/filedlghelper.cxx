@@ -200,7 +200,7 @@ void FileDialogHelper_Impl::handleFileSelectionChanged( const FilePickerEvent& )
         updateVersions();
 
     if ( mbShowPreview )
-        maPreviewTimer.Start();
+        maPreviewIdle.Start();
 }
 
 void FileDialogHelper_Impl::handleDirectoryChanged( const FilePickerEvent& )
@@ -983,8 +983,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 mbHasPreview = true;
 
                 // aPreviewTimer
-                maPreviewTimer.SetTimeout( 500 );
-                maPreviewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                maPreviewIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+                maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             case FILEOPEN_PLAY:
@@ -1000,8 +1000,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
                 mbHasPreview = true;
                 // aPreviewTimer
-                maPreviewTimer.SetTimeout( 500 );
-                maPreviewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                maPreviewIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+                maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             case FILESAVE_AUTOEXTENSION:
@@ -1122,7 +1122,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     if ( mbDeleteMatcher )
         delete mpMatcher;
 
-    maPreviewTimer.SetTimeoutHdl( Link() );
+    maPreviewIdle.SetIdleHdl( Link() );
 
     ::comphelper::disposeComponent( mxFileDlg );
 }
