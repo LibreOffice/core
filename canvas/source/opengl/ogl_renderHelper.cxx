@@ -61,7 +61,7 @@ namespace oglcanvas
 
         glUseProgram(m_texProgID);
 
-        glUniform4fv(m_texColorUnf, 4, glm::value_ptr(color));
+        glUniform4fv(m_texColorUnf, 1, glm::value_ptr(color));
         glEnableVertexAttribArray(m_texPosAttrb); //vertices
 
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
@@ -93,7 +93,7 @@ namespace oglcanvas
         glUseProgram(m_simpleProgID);
 
         glUniform1i(m_simpleTexUnf, 0); //Use texture Unit 0
-        glUniform4fv(m_simpleColorUnf, 4, glm::value_ptr(color));
+        glUniform4fv(m_simpleColorUnf, 1, glm::value_ptr(color));
         glUniformMatrix4fv(m_simpleMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_simplePosAttrb);
@@ -147,7 +147,7 @@ namespace oglcanvas
         //Set Uniforms
         glUniform1i(m_manTexUnf, 0);
         glUniform2f(m_manCordUnf,fWidth,fHeight);
-        glUniform4fv(m_manColorUnf, 4,  glm::value_ptr(color));
+        glUniform4fv(m_manColorUnf, 1,  glm::value_ptr(color));
         glUniformMatrix4fv(m_manMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_manPosAttrb);
