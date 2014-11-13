@@ -7,63 +7,39 @@
 
 import sys
 import os
+import getopt
+import csv
 
-parseTrigger = "desc: Trigger: Client Request: "
-parseTotal = "totals: "
-
-separator = os.path.sep
-
-lastCommitId = ""
-lastCommitDate = ""
-needsCsvHeader = True # needs header in csv file ? yes if new
 
 colsResult = {}
 allTests = []
 
-def processDirectory(rootDir):
+def parseFile(dirname, filename, lastCommit):
 
-  if needsCsvHeader:
-    intermediateResult = "lastCommit\tlastCommitDate\ttest filename\tdump comment\tcount\n"
-  else:
-   intermediateResult = ""
+  curTestComment, total = None, None
 
-  for dirName, subdirList, fileList in os.walk(rootDir):
+  path = os.path.join(dirname, filename)
 
-    files = [ fi for fi in fileList if fi.startswith("callgrind.out.") ]
-    for fname in files:
-        found = parseFile(dirName, fname)
-        if found != "":
-          intermediateResult += found
+  trigger = "desc: Trigger: Client Request: "
+  trigger_len = len(trigger)
+  totals = "totals: "
+  totals_len = len(totals)
 
-  return intermediateResult
+  with open(path,'r') as callgrindFile:
+     lines = callgrindFile.readlines()
 
-def parseFile(dirname, filename):
+     for line in lines:
+         if line.startswith(trigger):
+             curTestComment = line[trigger_len:].replace("\n","")
+         elif line.startswith(totals):
+             total = line[totals_len:].replace("\n","")
 
-  path = dirname + separator + filename
-  callgrindFile = open(path,'r')
-  lines = callgrindFile.readlines()
+  if curTestComment is None or total is None:
+    return None
 
-  curTestComment = ""
-  total = "0"
+  testName = os.path.basename(dirname).replace(".test.core","")
 
-  for line in lines:
-    if line.startswith(parseTrigger):
-      curTestComment = line[len(parseTrigger):].replace("\n","")
-    elif line.startswith(parseTotal):
-      total = line[len(parseTotal):].replace("\n","")
-
-  callgrindFile.close()
-
-  if curTestComment == "":
-    return ""
-
-  if total == "0": # should not occur, btw
-    return ""
-
-  dirs = dirname.split(separator)
-  currentTest = dirs[-1:]
-  testName = currentTest[0].replace(".test.core","")
-
+  lastCommitId, lastCommitDate = lastCommit
   if lastCommitId not in colsResult:
     colsResult[lastCommitId] = {}
     colsResult[lastCommitId]['date'] = lastCommitDate
@@ -71,9 +47,22 @@ def parseFile(dirname, filename):
 
   colsResult[lastCommitId]['values'][curTestComment] = total
 
-  result = lastCommitId + "\t" + lastCommitDate + "\t" + testName + "\t" + curTestComment + "\t" + total + "\n"
+  return [lastCommitId, lastCommitDate, testName, curTestComment, total]
 
-  return result
+def processDirectory(rootDir, needsCsvHeader, lastCommit):
+
+    results = []
+
+    if needsCsvHeader:
+        results.append(["lastCommit", "lastCommitDate", "test filename", "dump comment", "count"])
+
+    for dirName, subdirList, fileList in os.walk(rootDir):
+        files = [f for f in fileList if f.startswith("callgrind.out.")]
+        for fname in files:
+            found = parseFile(dirName, fname, lastCommit)
+            if found is not None:
+                results.append(found)
+    return results
 
 def getLastCommitInfo():
 
@@ -90,7 +79,7 @@ def displayUsage():
 
   usage = """
 
-Parses the callgrind results of make percheck
+Parses the callgrind results of make perfcheck
 
 Arguments :
 
@@ -108,91 +97,71 @@ Alerts, if any, are displayed in standard output
 """
   print(usage)
 
+class WrongArguments(Exception):
+    pass
+
 def analyzeArgs(args):
 
-    isValid = True
+    try:
+        opts, args = getopt.getopt(args, 'x', [
+            'csv-file=', 'source-directory=', 'alert-type=', 'alert-value=', 'help'])
+    except getopt.GetoptError:
+        raise WrongArguments
 
     targetFileName = "perfcheckResult.csv"
     sourceDirectory = "./workdir/CppunitTest"
     alertType = ""
     alertValue = 10
 
-    if "--help" in args:
-      isValid = False
+    for o, a in opts:
+        if o == '--help':
+            displayUsage()
+            sys.exit()
+        elif o == "--csv-file":
+            targetFileName = a
+        elif o == "--source-directory":
+            sourceDirectory = a
+        elif o == "--alert-type":
+            alertType = a
+        elif o == "--alert-value":
+            alertValue = float(a)
+        else:
+            raise WrongArguments
 
-    if isValid:
+    return targetFileName, sourceDirectory, alertType, alertValue
 
-      for arg in args[1:]:
+def readCsvFile(targetFilename):
 
-        found = False
+    with open(targetFilename, 'r') as csvfile:
+        reader = csv.reader(csvfile, delimiter="\t")
+        # skip header
+        next(reader)
+        for line in reader:
 
-        if arg.startswith("--csv-file"):
-          spliter = arg.split("=")
-          if spliter[1] != "":
-            targetFileName = spliter[1]
-            found = True
+            # do not process empty lines
+            if not line:
+                continue
 
-        elif arg.startswith("--source-directory"):
-          spliter = arg.split("=")
-          if spliter[1] != "":
-            sourceDirectory = spliter[1]
-            found = True
+            curId, curDate, curTestName, curTestComment, curValue = line
 
-        elif arg.startswith("--alert-type"):
-          spliter = arg.split("=")
-          if spliter[1] in ['previous','first']:
-            alertType = spliter[1]
-            found = True
-          else:
-            isValid = False
+            if curTestComment not in allTests:
+                allTests.append(curTestComment)
 
-        elif arg.startswith("--alert-value"):
-          spliter = arg.split("=")
-          if spliter[1] != "":
-            alertValue = float(spliter[1])
-            found = True
+            if curId not in colsResult:
+                colsResult[curId] = {}
+                colsResult[curId]['date'] = curDate
+                colsResult[curId]['values'] = {}
 
-        isValid = isValid and found
-
-    return isValid, targetFileName, sourceDirectory, alertType, alertValue
-
-def readCsvFile():
-
-    fileResult = open(targetFileName,'r')
-    lines = fileResult.readlines()
-    fileResult.close
-
-    lines = lines[1:] #skip header
-
-    for line in lines:
-
-      if line.strip() != "": # do not process empty lines
-
-        spliter = line.replace('\n','').split('\t')
-        curId = spliter[0]
-        curDate = spliter[1]
-        curTestName = spliter[2]
-        curTestComment = spliter[3]
-        curValue = spliter[4]
-
-        if curTestComment not in allTests:
-          allTests.append(curTestComment)
-
-        if curId not in colsResult:
-          colsResult[curId] = {}
-          colsResult[curId]['date'] = curDate
-          colsResult[curId]['values'] = {}
-
-        colsResult[curId]['values'][curTestComment] = curValue
+            colsResult[curId]['values'][curTestComment] = curValue
 
 if __name__ == '__main__':
 
   #check args
-  isOk, targetFileName, sourceDirectory, alertType, alertValue = analyzeArgs(sys.argv)
-
-  if not isOk:
-    displayUsage()
-    sys.exit(1)
+  try:
+      targetFileName, sourceDirectory, alertType, alertValue = analyzeArgs(sys.argv[1:])
+  except WrongArguments:
+      displayUsage()
+      sys.exit(1)
 
   # check if sourceDirectorty exists
   if not os.path.isdir(sourceDirectory):
@@ -201,27 +170,31 @@ if __name__ == '__main__':
 
   # read the complete CSV file
   if os.path.isfile(targetFileName):
-    readCsvFile()
+    readCsvFile(targetFileName)
     needsCsvHeader = False
+  else:
+    needsCsvHeader = True
 
   # last commit Id
   lastCommitId, lastCommitDate = getLastCommitInfo()
 
   # walker through directory
-  if not lastCommitId in colsResult:
+  if lastCommitId not in colsResult:
 
-    newResult = processDirectory(sourceDirectory)
+    lastCommit = (lastCommitId, lastCommitDate)
+    results = processDirectory(sourceDirectory, needsCsvHeader, lastCommit)
+    ppResults = "\n".join(["\t".join(row) for row in results])
 
-    print('\nNew results\n' + newResult)
+    print('\nNew results\n' + ppResults)
 
     # append raw result
-    with open(targetFileName,'a') as fileResult:
-      fileResult.write(newResult)
-
-    print("\nCSV file written at " + targetFileName + '\n')
+    with open(targetFileName,'a') as csvfile:
+        writer = csv.writer(csvfile, delimiter='\t')
+        writer.writerows(results)
+        print("\nCSV file written at " + targetFileName + '\n')
 
   else:
-    print("\nCSV file up to date " + targetFileName + '\n')
+      print("\nCSV file up to date " + targetFileName + '\n')
 
 
   # build columned output
@@ -231,28 +204,21 @@ if __name__ == '__main__':
 
   alertTest = {}
 
-  for k in colsResult:
+  with open(targetFileName + '.col','w') as fileResult:
+      for k in colsResult:
+          mLine += k + "\t" + colsResult[k]['date'] + "\t"
+          for t in allTests:
+              if t in colsResult[k]['values']:
+                  mValue= colsResult[k]['values'][t]
+                  if t not in alertTest:
+                      alertTest[t] = {}
+                  alertTest[t][colsResult[k]['date']] = mValue
+              else:
+                  mValue = ""
+              mLine += mValue + "\t"
+          mLine += "\n"
 
-    mLine += k + "\t" + colsResult[k]['date'] + "\t"
-
-    for t in allTests:
-
-      if t in colsResult[k]['values']:
-        mValue= colsResult[k]['values'][t]
-
-        if not t in alertTest:
-          alertTest[t] = {}
-        alertTest[t][colsResult[k]['date']] = mValue
-
-      else:
-        mValue = ""
-
-      mLine += mValue + "\t"
-
-    mLine += "\n"
-
-  # write columned result
-    with open(targetFileName + '.col','w') as fileResult:
+      # write columned result
       fileResult.write(mLine)
 
   print("Columned file written at " + targetFileName + '.col\n')
@@ -276,7 +242,6 @@ if __name__ == '__main__':
     if alertType == "previous":
       if len(keylist) > 1:
         minVal = float(testDict[keylist[-2]])
-
     else:
       minVal = float(testDict[keylist[0]])
 
