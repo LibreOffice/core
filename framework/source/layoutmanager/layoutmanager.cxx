@@ -144,8 +144,8 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
 
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
 
-    m_aAsyncLayoutIdle.SetPriority( VCL_IDLE_PRIORITY_RESIZE );
-    m_aAsyncLayoutIdle.SetIdleHdl( LINK( this, LayoutManager, AsyncLayoutHdl ) );
+    m_aAsyncLayoutTimer.SetTimeout( 50 );
+    m_aAsyncLayoutTimer.SetTimeoutHdl( LINK( this, LayoutManager, AsyncLayoutHdl ) );
 
     registerProperty( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, css::beans::PropertyAttribute::TRANSIENT, &m_bAutomaticToolbars, ::getCppuType( &m_bAutomaticToolbars ) );
     registerProperty( LAYOUTMANAGER_PROPNAME_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, ::getCppuType( &m_bHideCurrentUI ) );
@@ -158,7 +158,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
 LayoutManager::~LayoutManager()
 {
     Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
-    m_aAsyncLayoutIdle.Stop();
+    m_aAsyncLayoutTimer.Stop();
     setDockingAreaAcceptor(NULL);
     delete m_pGlobalSettings;
 }
@@ -1256,7 +1256,7 @@ throw ( RuntimeException, std::exception )
 
     // IMPORTANT: Be sure to stop layout timer if don't have a docking area acceptor!
     if ( !xDockingAreaAcceptor.is() )
-        m_aAsyncLayoutIdle.Stop();
+        m_aAsyncLayoutTimer.Stop();
 
     bool bAutomaticToolbars( m_bAutomaticToolbars );
     std::vector< Reference< awt::XWindow > > oldDockingAreaWindows;
@@ -1264,7 +1264,7 @@ throw ( RuntimeException, std::exception )
     ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
 
     if ( !xDockingAreaAcceptor.is() )
-        m_aAsyncLayoutIdle.Stop();
+        m_aAsyncLayoutTimer.Stop();
 
     // Remove listener from old docking area acceptor
     if ( m_xDockingAreaAcceptor.is() )
@@ -2265,7 +2265,7 @@ throw (RuntimeException, std::exception)
 
     SolarMutexClearableGuard aWriteLock;
         if ( bDoLayout )
-                m_aAsyncLayoutIdle.Stop();
+                m_aAsyncLayoutTimer.Stop();
         aWriteLock.clear();
 
     Any a( nLockCount );
@@ -2664,14 +2664,14 @@ throw( uno::RuntimeException, std::exception )
         // application modules need this. So we have to check if this is the first
         // call after the async layout time expired.
         m_bMustDoLayout = true;
-        if ( !m_aAsyncLayoutIdle.IsActive() )
+        if ( !m_aAsyncLayoutTimer.IsActive() )
         {
-            const Link& aLink = m_aAsyncLayoutIdle.GetTimeoutHdl();
+            const Link& aLink = m_aAsyncLayoutTimer.GetTimeoutHdl();
             if ( aLink.IsSet() )
-                aLink.Call( &m_aAsyncLayoutIdle );
+                aLink.Call( &m_aAsyncLayoutTimer );
         }
         if ( m_nLockCount == 0 )
-            m_aAsyncLayoutIdle.Start();
+            m_aAsyncLayoutTimer.Start();
     }
     else if ( m_xFrame.is() && aEvent.Source == m_xFrame->getContainerWindow() )
     {
@@ -2741,7 +2741,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
 IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
 {
     SolarMutexClearableGuard aReadLock;
-    m_aAsyncLayoutIdle.Stop();
+    m_aAsyncLayoutTimer.Stop();
 
     if( !m_xContainerWindow.is() )
         return 0;
