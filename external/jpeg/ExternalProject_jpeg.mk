@@ -7,15 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,jpeg))
+$(eval $(call gb_ExternalProject_ExternalProject,jpeg))
 
-ifeq ($(SYSTEM_JPEG),)
-
-$(eval $(call gb_Module_add_targets,jpeg,\
-	ExternalProject_jpeg \
-	UnpackedTarball_jpeg \
+$(eval $(call gb_ExternalProject_register_targets,jpeg,\
+	build \
 ))
 
-endif
+$(call gb_ExternalProject_get_state_target,jpeg,build) :
+	+$(call gb_ExternalProject_run,build,\
+		./configure --with-jpeg8 \
+		&& $(MAKE) \
+	)
 
 # vim: set noet sw=4 ts=4:
