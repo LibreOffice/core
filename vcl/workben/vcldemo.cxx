@@ -495,20 +495,67 @@ public:
 
     struct DrawToVirtualDevice : public RegionRenderer
     {
+        enum RenderType {
+            RENDER_AS_BITMAP,
+            RENDER_AS_OUTDEV,
+            RENDER_AS_BITMAPEX,
+            RENDER_AS_ALPHA_OUTDEV
+        };
+
+        void SizeAndRender(OutputDevice &rDev, Rectangle r, RenderType eType,
+                           const RenderContext &rCtx)
+        {
+            VirtualDevice *pNested;
+
+            if ((int)eType < RENDER_AS_BITMAPEX)
+                pNested = new VirtualDevice(rDev);
+            else
+                pNested = new VirtualDevice(rDev,0,0);
+
+            pNested->SetOutputSizePixel(r.GetSize());
+            Rectangle aWhole(Point(0,0), r.GetSize());
+
+            // mini me
+            rCtx.mpDemoWin->drawToDevice(*pNested, true);
+
+            if (eType == RENDER_AS_BITMAP)
+            {
+                Bitmap aBitmap(pNested->GetBitmap(Point(0,0),aWhole.GetSize()));
+                rDev.DrawBitmap(r.TopLeft(), aBitmap);
+            }
+            else if (eType == RENDER_AS_BITMAPEX)
+            {
+                BitmapEx aBitmapEx(pNested->GetBitmapEx(Point(0,0),aWhole.GetSize()));
+                rDev.DrawBitmapEx(r.TopLeft(), aBitmapEx);
+            }
+            else if (eType == RENDER_AS_OUTDEV ||
+                     eType == RENDER_AS_ALPHA_OUTDEV)
+            {
+                rDev.DrawOutDev(r.TopLeft(), r.GetSize(),
+                                aWhole.TopLeft(), aWhole.GetSize(),
+                                *pNested);
+            }
+            delete pNested;
+        }
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
             // avoid infinite recursion
             if (rCtx.mbVDev)
                 return;
-            VirtualDevice aNested(rDev);
-            aNested.SetOutputSizePixel(r.GetSize());
-            Rectangle aWhole(Point(0,0), r.GetSize());
-            // mini me
-            rCtx.mpDemoWin->drawToDevice(aNested, true);
 
-            Bitmap aBitmap(aNested.GetBitmap(Point(0,0),aWhole.GetSize()));
-            rDev.DrawBitmap(r.TopLeft(), aBitmap);
+            if (rCtx.meStyle == RENDER_EXPANDED)
+            {
+                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 2, 2));
+                DemoWin::clearRects(rDev, aRegions);
+
+                RenderType eRenderTypes[] = { RENDER_AS_BITMAP, RENDER_AS_OUTDEV,
+                                              RENDER_AS_BITMAPEX, RENDER_AS_ALPHA_OUTDEV };
+                for (size_t i = 0; i < aRegions.size(); i++)
+                    SizeAndRender(rDev, aRegions[i], eRenderTypes[i], rCtx);
+            }
+            else
+                SizeAndRender(rDev, r, RENDER_AS_BITMAP, rCtx);
         }
     };
 
@@ -563,17 +610,18 @@ public:
         }
     };
 
-    void drawToDevice(OutputDevice &rDev, bool bVdev)
+    void drawToDevice(OutputDevice &rDev, bool bVDev)
     {
         RenderContext aCtx;
-        aCtx.mbVDev = bVdev;
+        aCtx.mbVDev = bVDev;
         aCtx.mpDemoWin = this;
 
         Rectangle aWholeWin(Point(0,0), rDev.GetOutputSizePixel());
 
         drawBackground(rDev, aWholeWin);
 
-        if (mnSelectedRenderer >= 0)
+        if (!bVDev /* want everything in the vdev */ &&
+            mnSelectedRenderer >= 0)
         {
             aCtx.meStyle = RENDER_EXPANDED;
             maRenderers[mnSelectedRenderer]->RenderRegion(rDev, aWholeWin, aCtx);
