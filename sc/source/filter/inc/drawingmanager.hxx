@@ -62,89 +62,6 @@ struct BiffObjFillModel
 // BIFF drawing objects
 
 class BiffDrawingBase;
-class BiffDrawingObjectBase;
-typedef ::boost::shared_ptr< BiffDrawingObjectBase > BiffDrawingObjectRef;
-
-class BiffDrawingObjectContainer
-{
-public:
-    explicit            BiffDrawingObjectContainer();
-
-    /** Returns true, if the object list is empty. */
-    inline bool         empty() const { return maObjects.empty(); }
-
-    /** Creates and inserts all UNO shapes into the passed shape container. */
-    void                convertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle* pParentRect = 0 ) const;
-
-private:
-    typedef RefVector< BiffDrawingObjectBase > BiffDrawingObjectVector;
-    BiffDrawingObjectVector maObjects;
-};
-
-/** Base class for all BIFF drawing objects (OBJ records). */
-class BiffDrawingObjectBase : public WorksheetHelper
-{
-public:
-    explicit            BiffDrawingObjectBase( const WorksheetHelper& rHelper );
-    virtual             ~BiffDrawingObjectBase();
-
-    /** Sets whether this is an area object (then its width and height must be greater than 0). */
-    inline void         setAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
-    /** If set to true, the object supports a simple on-click macro and/or hyperlink. */
-    inline void         setSimpleMacro( bool bMacro ) { mbSimpleMacro = bMacro; }
-
-    /** If set to false, the UNO shape will not be created, processed, or inserted into the draw page. */
-    inline void         setProcessShape( bool bProcess ) { mbProcessShape = bProcess; }
-    /** If set to false, the UNO shape will be created or processed, but not be inserted into the draw page. */
-    inline void         setInsertShape( bool bInsert ) { mbInsertShape = bInsert; }
-    /** If set to true, a new custom UNO shape will be created while in DFF import (BIFF8 only). */
-    inline void         setCustomDffObj( bool bCustom ) { mbCustomDff = bCustom; }
-
-    /** Returns the object identifier from the OBJ record. */
-    inline sal_uInt16   getObjId() const { return mnObjId; }
-    /** Returns the object type from the OBJ record. */
-    inline sal_uInt16   getObjType() const { return mnObjType; }
-
-    /** Returns true, if the object is hidden. */
-    inline bool         isHidden() const { return mbHidden; }
-    /** Returns true, if the object is visible. */
-    inline bool         isVisible() const { return mbVisible; }
-    /** Returns true, if the object is printable. */
-    inline bool         isPrintable() const { return mbPrintable; }
-
-    /** Creates the UNO shape and inserts it into the passed shape container. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        convertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle* pParentRect = 0 ) const;
-
-protected:
-    /** Converts the passed line formatting to the passed property map. */
-    void                convertLineProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows = 0 ) const;
-    /** Converts the passed fill formatting to the passed property map. */
-    void                convertFillProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjFillModel& rFillModel ) const;
-
-    /** Derived classes create the corresponding XShape and insert it into the passed container. */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                        implConvertAndInsert( BiffDrawingBase& rDrawing,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const = 0;
-
-private:
-    ShapeAnchor         maAnchor;       /// Position of the drawing object.
-    sal_uInt16          mnObjId;        /// The object identifier (unique per drawing).
-    sal_uInt16          mnObjType;      /// The object type from OBJ record.
-    bool                mbHidden;       /// True = object is hidden.
-    bool                mbVisible;      /// True = object is visible (form controls).
-    bool                mbPrintable;    /// True = object is printable.
-    bool                mbAreaObj;      /// True = width and height must be greater than 0.
-    bool                mbSimpleMacro;  /// True = create simple macro link and hyperlink.
-    bool                mbProcessShape; /// True = object is valid, do processing and insertion.
-    bool                mbInsertShape;  /// True = insert the UNO shape into the draw page.
-    bool                mbCustomDff;    /// True = recreate UNO shape in DFF import (BIFF8 only).
-};
 
 // BIFF drawing page
 
@@ -181,14 +98,8 @@ public:
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) = 0;
 
 private:
-    typedef RefMap< sal_uInt16, BiffDrawingObjectBase > BiffDrawingObjectMapById;
-    typedef ::std::vector< sal_uInt16 >                 BiffObjIdVector;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                         mxDrawPage;         /// UNO draw page used to insert the shapes.
-    BiffDrawingObjectContainer maRawObjs;   /// Drawing objects without DFF data.
-    BiffDrawingObjectMapById maObjMapId;    /// Maps drawing objects by their object identifiers.
-    BiffObjIdVector     maSkipObjs;         /// Identifiers of all objects to be skipped.
 };
 
 /** Drawing manager of a single sheet. */
