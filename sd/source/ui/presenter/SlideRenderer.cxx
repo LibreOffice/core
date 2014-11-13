@@ -144,7 +144,8 @@ BitmapEx SlideRenderer::CreatePreview (
     const Reference<drawing::XDrawPage>& rxSlide,
     const awt::Size& rMaximalSize,
     sal_Int16 nSuperSampleFactor)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException,
+           std::exception)
 {
     const SdPage* pPage = SdPage::getImplementation(rxSlide);
     if (pPage == NULL)

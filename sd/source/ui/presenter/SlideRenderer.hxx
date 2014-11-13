@@ -84,7 +84,7 @@ private:
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     /** This method throws a DisposedException when the object has already been
         disposed.
