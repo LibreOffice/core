@@ -18,6 +18,7 @@
 #include <formula/opcode.hxx>
 #include <svl/sharedstringpool.hxx>
 
+#include <set>
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
