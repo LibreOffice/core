@@ -161,6 +161,10 @@ die "Failed to generate the configure script" if (! -f "configure");
 # Handle help arguments first, so we don't clobber autogen.lastrun
 for my $arg (@ARGV) {
     if ($arg =~ /^(--help|-h|-\?)$/) {
+        print STDERR "autogen.sh - libreoffice configuration helper\n";
+        print STDERR "   --clean        forcibly re-generate configuration\n";
+        print STDERR "   --best-effort  don't fail on un-known configure with/enable options\n";
+        print STDERR "\nOther arguments passed directly to configure:\n\n";
         system ("./configure --help");
         exit;
     }
@@ -203,6 +207,8 @@ WARNING
 
 my @args;
 my $default_config = "$src_path/distro-configs/default.conf";
+my $option_checking = 'fatal';
+
 if (-f $default_config) {
     print STDERR "Reading default config file: $default_config.\n";
     push @args, read_args ($default_config);
@@ -217,6 +223,8 @@ for my $arg (@cmdline_args) {
         } else {
             push @args, read_args ($config);
         }
+    } elsif ($arg =~ m/--best-effort$/) {
+        $option_checking = 'warn';
     } else {
         push @args, $arg;
     }
@@ -252,7 +260,7 @@ if (defined $ENV{NOCONFIGURE}) {
         }
     }
     push @args, "--srcdir=$src_path";
-    push @args, "--enable-option-checking=fatal";
+    push @args, "--enable-option-checking=$option_checking";
 
     print "Running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args) && die "Error running configure";
