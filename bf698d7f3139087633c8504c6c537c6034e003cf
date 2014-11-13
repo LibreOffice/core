@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_ab9e4d05",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-13T09:45:36Z",
+      "side": 1,
+      "message": "* \"@return void\" is redundant, leave it out\n\n* but do add a line \"@since LibreOffice 4.4\"",
+      "revId": "bf698d7f3139087633c8504c6c537c6034e003cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_6b8975ca",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-13T09:45:36Z",
+      "side": 1,
+      "message": "please remove the whitespace from the otherwise empty line",
+      "revId": "bf698d7f3139087633c8504c6c537c6034e003cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_2b937dfc",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-13T09:45:36Z",
+      "side": 1,
+      "message": "better for readability to leave empty lines above and below this newly introduced function declaration (even if existing code might be sparse on empty lines)",
+      "revId": "bf698d7f3139087633c8504c6c537c6034e003cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_4b86b9ba",
+        "filename": "include/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-13T09:45:36Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "bf698d7f3139087633c8504c6c537c6034e003cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
