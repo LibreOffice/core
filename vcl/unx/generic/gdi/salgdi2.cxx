@@ -85,8 +85,8 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
 
 X11Pixmap* X11SalGraphics::GetPixmapFromScreen( const Rectangle& rRect )
 {
-    X11GraphicsImpl* pImpl = dynamic_cast<X11GraphicsImpl*>(mpImpl.get());
-    return pImpl->GetPixmapFromScreen( rRect );
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mpImpl.get());
+    return rImpl.GetPixmapFromScreen( rRect );
 }
 
 bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
