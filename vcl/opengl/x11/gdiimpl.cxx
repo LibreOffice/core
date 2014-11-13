@@ -60,9 +60,10 @@ GLfloat X11OpenGLSalGraphicsImpl::GetHeight() const
 
 void X11OpenGLSalGraphicsImpl::Init()
 {
-    if( mrParent.m_pFrame && dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame) )
+    X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
+    if (pProvider)
     {
-        Window aWin = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame)->GetX11Window();
+        Window aWin = pProvider->GetX11Window();
         maContext.init( mrParent.GetXDisplay(), aWin, mrParent.m_nXScreen.getXScreen());
         SetOffscreen( false );
     }
