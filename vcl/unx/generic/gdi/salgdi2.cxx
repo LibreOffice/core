@@ -92,8 +92,8 @@ X11Pixmap* X11SalGraphics::GetPixmapFromScreen( const Rectangle& rRect )
 bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
     SAL_INFO( "vcl", "RenderPixmapToScreen" );
-    X11GraphicsImpl* pImpl = dynamic_cast<X11GraphicsImpl*>(mpImpl.get());
-    return pImpl->RenderPixmapToScreen( pPixmap, nX, nY );
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mpImpl.get());
+    return rImpl.RenderPixmapToScreen( pPixmap, nX, nY );
 }
 
 extern "C"
