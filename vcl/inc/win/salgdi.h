@@ -121,9 +121,6 @@ private:
     mutable const Ucs2SIntMap*      mpEncodingVector;
     mutable vcl::FontCapabilities   maFontCapabilities;
 
-    // TODO: get rid of the members below needed to work with the Win9x non-unicode API
-    BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)
-    BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
     BYTE                meWinCharSet;
     BYTE                mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
@@ -171,8 +168,6 @@ private:
     RGNDATA*                mpClipRgnData;      // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;   // Cache Standard-ClipRegion-Data
     ImplFontAttrCache*      mpFontAttrCache;    // Cache font attributes from files in so/share/fonts
-    BYTE*                   mpFontCharSets;     // All Charsets for the current font
-    BYTE                    mnFontCharSetCount; // Number of Charsets of the current font; 0 - if not queried
     bool                    mbFontKernInit;     // FALSE: FontKerns must be queried
     KERNINGPAIR*            mpFontKernPairs;    // Kerning Pairs of the current Font
     sal_uIntPtr                 mnFontKernPairCount;// Number of Kerning Pairs of the current Font

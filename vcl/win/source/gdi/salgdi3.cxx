@@ -1098,8 +1098,6 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbFontCapabilitiesRead( false ),
     mpUnicodeMap( NULL ),
     mpEncodingVector( NULL ),
-    mpFontCharSets( NULL ),
-    mnFontCharSetCount( 0 ),
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
     mbAliasSymbolsHigh( false ),
@@ -1135,8 +1133,6 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
 
 ImplWinFontData::~ImplWinFontData()
 {
-    delete[] mpFontCharSets;
-
     if( mpUnicodeMap )
         mpUnicodeMap = 0;
 #if ENABLE_GRAPHITE
@@ -1585,8 +1581,6 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
         }
         mnFontKernPairCount = 0;
     }
-
-    mnFontCharSetCount = 0;
 
     // some printers have higher internal resolution, so their
     // text output would be different from what we calculated
