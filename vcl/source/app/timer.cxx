@@ -385,12 +385,14 @@ AutoTimer& AutoTimer::operator=( const AutoTimer& rTimer )
 Idle::Idle()
     : Timer()
 {
+    mbIdle = true;
     SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 }
 
 Idle::Idle( IdlePriority ePriority )
     : Timer()
 {
+    mbIdle = true;
     SetPriority( ePriority );
 }
 
@@ -433,6 +435,7 @@ void Idle::DoIdle()
 {
     maTimeoutHdl.Call( this );
 }
+
 
 Idle::~Idle()
 {

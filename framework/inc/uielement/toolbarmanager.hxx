@@ -208,7 +208,7 @@ class ToolBarManager : public ToolbarManager_Base
 
         CommandToInfoMap                                                                       m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                                                    m_aSubToolBarControllerMap;
-        Idle                                                                                   m_aAsyncUpdateControllersIdle;
+        Timer                                                                                  m_aAsyncUpdateControllersTimer;
         OUString                                                                               m_sIconTheme;
         MenuDescriptionMap m_aMenuMap;
         bool                                                                               m_bAcceleratorCfg;

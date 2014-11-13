@@ -235,15 +235,15 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     aHelpIdAsString += OUStringToOString( aToolbarName, RTL_TEXTENCODING_UTF8 );;
     m_pToolBar->SetHelpId( aHelpIdAsString );
 
-    m_aAsyncUpdateControllersIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
-    m_aAsyncUpdateControllersIdle.SetIdleHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
+    m_aAsyncUpdateControllersTimer.SetTimeout( 50 );
+    m_aAsyncUpdateControllersTimer.SetTimeoutHdl( LINK( this, ToolBarManager, AsyncUpdateControllersHdl ) );
 
     SvtMiscOptions().AddListenerLink( LINK( this, ToolBarManager, MiscOptionsChanged ) );
 }
 
 ToolBarManager::~ToolBarManager()
 {
-    assert(!m_aAsyncUpdateControllersIdle.IsActive());
+    assert(!m_aAsyncUpdateControllersTimer.IsActive());
     OSL_ASSERT( m_pToolBar == 0 );
     OSL_ASSERT( !m_bAddedToTaskPaneList );
 }
@@ -477,7 +477,7 @@ throw ( RuntimeException, std::exception )
     SolarMutexGuard g;
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
     {
-        m_aAsyncUpdateControllersIdle.Start();
+        m_aAsyncUpdateControllersTimer.Start();
     }
 }
 
@@ -631,7 +631,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
 
         // stop timer to prevent timer events after dispose
         // do it last because other calls could restart timer in StateChanged()
-        m_aAsyncUpdateControllersIdle.Stop();
+        m_aAsyncUpdateControllersTimer.Stop();
 
         m_bDisposed = true;
     }
@@ -1417,7 +1417,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         UpdateControllers();
     else if ( m_pToolBar->IsReallyVisible() )
     {
-        m_aAsyncUpdateControllersIdle.Start();
+        m_aAsyncUpdateControllersTimer.Start();
     }
 
     // Try to retrieve UIName from the container property set and set it as the title
@@ -2053,12 +2053,12 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
     {
         if ( m_pToolBar->IsReallyVisible() )
         {
-            m_aAsyncUpdateControllersIdle.Start();
+            m_aAsyncUpdateControllersTimer.Start();
         }
     }
     else if ( *pStateChangedType == StateChangedType::INITSHOW )
     {
-        m_aAsyncUpdateControllersIdle.Start();
+        m_aAsyncUpdateControllersTimer.Start();
     }
     return 1;
 }
@@ -2113,7 +2113,7 @@ IMPL_LINK_NOARG(ToolBarManager, AsyncUpdateControllersHdl)
         return 1;
 
     // Request to update our controllers
-    m_aAsyncUpdateControllersIdle.Stop();
+    m_aAsyncUpdateControllersTimer.Stop();
     UpdateControllers();
 
     return 0;
