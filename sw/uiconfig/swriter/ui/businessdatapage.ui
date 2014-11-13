@@ -24,7 +24,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Company:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">company</property>
@@ -38,7 +38,7 @@
               <object class="GtkLabel" id="streetft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Slogan:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">slogan</property>
@@ -52,7 +52,7 @@
               <object class="GtkLabel" id="countryft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Co_untry/state:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">country</property>
@@ -66,7 +66,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Position:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">position</property>
@@ -80,7 +80,7 @@
               <object class="GtkLabel" id="phoneft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Fa_x:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">fax</property>
@@ -99,7 +99,7 @@
               <object class="GtkLabel" id="faxft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Homepage/e-mail:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">url</property>
@@ -250,7 +250,7 @@
               <object class="GtkLabel" id="eastnameft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Company 2nd line:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">company2</property>
@@ -293,7 +293,7 @@
               <object class="GtkLabel" id="icityft">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">_Zip/city:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">izip</property>
@@ -416,7 +416,7 @@
               <object class="GtkLabel" id="titleft1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Phone/mobile:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">position</property>
@@ -478,7 +478,7 @@
               <object class="GtkLabel" id="streetft1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Street:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">street</property>
