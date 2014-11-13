@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+.uno:EditDoc<?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of the LibreOffice project.
  *
@@ -46,6 +46,12 @@
         </prop>
       </node>
       <node oor:name="E_SHIFT_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:TrackChanges</value>
+        </prop>
+      </node>
+      <node oor:name="M_SHIFT_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
           <value xml:lang="en-US">.uno:EditDoc</value>
