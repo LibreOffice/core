@@ -730,10 +730,23 @@ public:
 
     virtual int Main() SAL_OVERRIDE
     {
-        DemoWin aMainWin;
-        aMainWin.SetText( "Interactive VCL demo" );
-        aMainWin.Show();
-        Application::Execute();
+        try
+        {
+            DemoWin aMainWin;
+            aMainWin.SetText( "Interactive VCL demo" );
+            aMainWin.Show();
+            Application::Execute();
+        }
+        catch (const css::uno::Exception& e)
+        {
+            SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
+            return 1;
+        }
+        catch (const std::exception& e)
+        {
+            SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+            return 1;
+        }
         return 0;
     }
 
