@@ -788,8 +788,8 @@ bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*pProg
         }
 
         bool bConditionsMet = false;
-        long nWidth;
-        long nHeight;
+        long nWidth(0);
+        long nHeight(0);
         if (pReadAcc && pWriteAcc)
         {
             nWidth = pReadAcc->Width();
