@@ -686,16 +686,17 @@ sal_Int32 SdrTableObjImpl::getRowCount() const
     return mxTable.is() ? mxTable->getRowCount() : 0;
 }
 
-
-
 void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHeight )
 {
     if( mpLayouter && mpTableObj->GetModel() )
     {
         // Optimization: SdrTableObj::SetChanged() can call this very often, repeatedly
         // with the same settings, noticeably increasing load time. Skip if already done.
+        bool bInteractiveMightGrowBecauseTextChanged =
+            mpTableObj->IsRealyEdited() && (mpTableObj->IsAutoGrowHeight() || mpTableObj->IsAutoGrowHeight());
         WritingMode writingMode = mpTableObj->GetWritingMode();
-        if( lastLayoutTable != this || lastLayoutInputRectangle != rArea
+        if( bInteractiveMightGrowBecauseTextChanged
+            || lastLayoutTable != this || lastLayoutInputRectangle != rArea
             || lastLayoutFitWidth != bFitWidth || lastLayoutFitHeight != bFitHeight
             || lastLayoutMode != writingMode
             || lastRowCount != getRowCount()
@@ -718,8 +719,6 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
         }
     }
 }
-
-
 
 void SdrTableObjImpl::UpdateCells( Rectangle& rArea )
 {
