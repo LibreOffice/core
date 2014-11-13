@@ -2148,7 +2148,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     if (sfntLen < 12)
     {
         SAL_WARN( "vcl.fonts", "DumpSfnts sfntLen is too short: "
-            << sfntLen << " legal min is: " << sfntLen);
+            << sfntLen << " legal min is: " << 12);
         return;
     }
 
