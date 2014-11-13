@@ -199,15 +199,15 @@ bool OpenGLSalBitmap::AllocateUserData()
     }
 
     bool alloc = false;
-    if (mnBytesPerRow != 0
-        && mnBytesPerRow <= std::numeric_limits<sal_uInt32>::max() / mnHeight)
+    if (mnBytesPerRow != 0 && mnHeight &&
+        mnBytesPerRow <= std::numeric_limits<sal_uInt32>::max() / mnHeight)
     {
         try
         {
             maUserBuffer.reset( new sal_uInt8[mnBytesPerRow * mnHeight] );
             alloc = true;
         }
-        catch (std::bad_alloc &) {}
+        catch (const std::bad_alloc &) {}
     }
     if (!alloc)
     {
