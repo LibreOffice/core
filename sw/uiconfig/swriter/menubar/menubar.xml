@@ -110,9 +110,10 @@
           <menu:menuitem menu:id=".uno:CommentChangeTracking"/>
           <menu:menuitem menu:id=".uno:NextTrackedChange"/>
           <menu:menuitem menu:id=".uno:PreviousTrackedChange"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:MergeDocuments"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:MergeDocuments"/>
       <menu:menuitem menu:id=".uno:CompareDocuments"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ChangeDatabaseField"/>
