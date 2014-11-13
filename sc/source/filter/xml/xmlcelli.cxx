@@ -935,14 +935,16 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
     if( pNote )
     {
         double fDate;
-        rXMLImport.GetMM100UnitConverter().convertDateTime( fDate, mxAnnotationData->maCreateDate );
-        SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-        sal_uInt32 nfIndex = pNumForm->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM );
-        OUString aDate;
-        Color* pColor = 0;
-        Color** ppColor = &pColor;
-        pNumForm->GetOutputString( fDate, nfIndex, aDate, ppColor );
-        pNote->SetDate( aDate );
+        if (rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, mxAnnotationData->maCreateDate))
+        {
+            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+            sal_uInt32 nfIndex = pNumForm->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM );
+            OUString aDate;
+            Color* pColor = 0;
+            Color** ppColor = &pColor;
+            pNumForm->GetOutputString( fDate, nfIndex, aDate, ppColor );
+            pNote->SetDate( aDate );
+        }
         pNote->SetAuthor( mxAnnotationData->maAuthor );
     }
 
