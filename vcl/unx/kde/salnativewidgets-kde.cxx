@@ -78,6 +78,54 @@
 
 using namespace ::com::sun::star;
 
+
+/** Qt implementation of X11Pixmap
+
+    Wrapper around a QPixmap.
+ */
+
+class KDEX11Pixmap : public X11Pixmap
+{
+public:
+    KDEX11Pixmap( int nWidth, int nHeight );
+    virtual ~KDEX11Pixmap() {};
+
+    virtual int          GetDepth() const SAL_OVERRIDE;
+    virtual SalX11Screen GetScreen() const SAL_OVERRIDE;
+    virtual Pixmap       GetPixmap() const SAL_OVERRIDE;
+    QPixmap              GetQPixmap() const;
+
+protected:
+    QPixmap mqPixmap;
+};
+
+KDEX11Pixmap::KDEX11Pixmap( int nWidth, int nHeight )
+: X11Pixmap( nWidth, nHeight )
+, mqPixmap( nWidth, nHeight )
+{
+}
+
+int KDEX11Pixmap::GetDepth() const
+{
+    return mqPixmap.x11Depth();
+}
+
+SalX11Screen KDEX11Pixmap::GetScreen() const
+{
+    return SalX11Screen( mqPixmap.x11Screen() );
+}
+
+Pixmap KDEX11Pixmap::GetPixmap() const
+{
+    return mqPixmap.handle();
+}
+
+QPixmap KDEX11Pixmap::GetQPixmap() const
+{
+    return mqPixmap;
+}
+
+
 /** Cached native widgets.
 
     A class which caches and paints the native widgets.
@@ -260,19 +308,12 @@ class WidgetPainter
         @param aValue
         The value (true/false, ...)
 
-        @param dpy
-        The display to be used by the X calls.
-
-        @param drawable
-        The destination X window.
-
-        @param gc
-        The graphics context.
+        @param pGraphics
+        The SalGraphics instance to read/write screen.
     */
         bool drawStyledWidget( QWidget *pWidget,
                 ControlState nState, const ImplControlValue& aValue,
-                Display *dpy, ::Window drawable, SalX11Screen nXScreen,
-                int nDepth, GC gc,
+                KDESalGraphics* pGraphics,
                 ControlPart nPart = PART_ENTIRE_CONTROL );
 
     /** 'Get' method for push button.
@@ -464,8 +505,7 @@ WidgetPainter::~WidgetPainter( void )
 
 bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     ControlState nState, const ImplControlValue& aValue,
-    Display *dpy, ::Window drawable, SalX11Screen nXScreen,
-    int nDepth, GC gc, ControlPart nPart )
+    KDESalGraphics* pGraphics, ControlPart nPart )
 {
     if ( !pWidget )
         return false;
@@ -478,9 +518,10 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     pWidget->setEnabled( nState & CTRL_STATE_ENABLED );
 
     // Create pixmap to paint to
-    QPixmap  qPixmap( pWidget->width(), pWidget->height() );
-    QPainter qPainter( &qPixmap );
-    QRect    qRect( 0, 0, pWidget->width(), pWidget->height() );
+    KDEX11Pixmap xPixmap( pWidget->width(), pWidget->height() );
+    QPixmap      qPixmap( xPixmap.GetQPixmap() );
+    QPainter     qPainter( &qPixmap );
+    QRect        qRect( 0, 0, pWidget->width(), pWidget->height() );
 
     // Use the background of the widget
     qPixmap.fill( pWidget, QPoint(0, 0) );
@@ -512,15 +553,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     {
         // Bitblt from the screen, because the radio buttons are usually not
         // rectangular, and there could be a bitmap under them
-        GC aTmpGC = XCreateGC( dpy, qPixmap.handle(), 0, NULL );
-        X11SalGraphics::CopyScreenArea(
-            dpy,
-            drawable, nXScreen, nDepth,
-            qPixmap.handle(), SalX11Screen( qPixmap.x11Screen() ), qPixmap.x11Depth(),
-            aTmpGC,
-            qWidgetPos.x(), qWidgetPos.y(), qRect.width(), qRect.height(),
-            0, 0 );
-        XFreeGC( dpy, aTmpGC );
+        pGraphics->FillPixmapFromScreen( &xPixmap, qWidgetPos.x(), qWidgetPos.y() );
 
         QApplication::style().drawControl( QStyle::CE_RadioButton,
             &qPainter, pWidget, qRect,
@@ -819,12 +852,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         return false;
 
     // Bitblt it to the screen
-    X11SalGraphics::CopyScreenArea(
-        dpy, qPixmap.handle(), SalX11Screen( qPixmap.x11Screen() ), qPixmap.x11Depth(),
-        drawable, nXScreen, nDepth,
-        gc,
-        0, 0, qRect.width(), qRect.height(),
-        qWidgetPos.x(), qWidgetPos.y() );
+    pGraphics->RenderPixmapToScreen( xPixmap, qWidgetPos.x(), qWidgetPos.y() );
 
     // Restore widget's position
     pWidget->move( qWidgetPos );
@@ -1381,122 +1409,101 @@ bool KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
 {
     bool bReturn = false;
 
-    Display *dpy = GetXDisplay();
-    ::Window drawable = GetDrawable();
-    // TODO: moggi: FIX that properly!! It was SelectPen()
-    GC gc = GetFontGC(); //SelectFont(); // GC with current clipping region set
-
     if ( (nType == CTRL_PUSHBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->pushButton( rControlRegion, (nState & CTRL_STATE_DEFAULT) ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_RADIOBUTTON) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->radioButton( rControlRegion ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_CHECKBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->checkBox( rControlRegion ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_COMBOBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, true ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_EDITBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->lineEdit( rControlRegion ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_LISTBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->comboBox( rControlRegion, false ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_LISTBOX) && (nPart == PART_WINDOW) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->listView( rControlRegion ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_SPINBOX) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->spinWidget( rControlRegion ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType==CTRL_TAB_ITEM) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabBar( rControlRegion ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType==CTRL_TAB_PANE) && (nPart == PART_ENTIRE_CONTROL) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->tabWidget( rControlRegion ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_SCROLLBAR) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT) )
     {
     bReturn = pWidgetPainter->drawStyledWidget(
         pWidgetPainter->scrollBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ, aValue ),
-        nState, aValue,
-        dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+        nState, aValue, this );
     }
     else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT || nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->toolBar( rControlRegion, nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_THUMB_VERT ),
-                nState, aValue,
-                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc, nPart );
+                nState, aValue, this, nPart );
     }
     else if ( (nType == CTRL_TOOLBAR) && (nPart == PART_BUTTON) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->toolButton( rControlRegion ),
-                nState, aValue,
-                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc, nPart );
+                nState, aValue, this, nPart );
     }
     else if ( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->menuBar( rControlRegion ),
-                nState, aValue,
-                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc, nPart );
+                nState, aValue, this, nPart );
     }
     else if ( (nType == CTRL_MENU_POPUP) && (nPart == PART_ENTIRE_CONTROL || nPart == PART_MENU_ITEM) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->popupMenu( rControlRegion ),
-                nState, aValue,
-                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+                nState, aValue, this );
     }
     else if ( (nType == CTRL_PROGRESS) && (nPart == PART_ENTIRE_CONTROL) )
     {
         bReturn = pWidgetPainter->drawStyledWidget(
                 pWidgetPainter->progressBar( rControlRegion ),
-                nState, aValue,
-                dpy, drawable, GetScreenNumber(), GetVisual().GetDepth(), gc );
+                nState, aValue, this );
     }
 
     return bReturn;
