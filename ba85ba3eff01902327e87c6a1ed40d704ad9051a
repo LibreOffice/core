@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_cb086994",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2014-11-13T01:06:05Z",
+      "side": 1,
+      "message": "It seems unnecessary to move #includes to the top.",
+      "revId": "ba85ba3eff01902327e87c6a1ed40d704ad9051a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_abfd2d70",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2014-11-13T01:06:05Z",
+      "side": 1,
+      "message": "cbegin()/cend() can have a const modifier.",
+      "revId": "ba85ba3eff01902327e87c6a1ed40d704ad9051a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_8b02716e",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2014-11-13T01:06:05Z",
+      "side": 1,
+      "message": "Please refrain from auto, which is a C++11 feature.",
+      "revId": "ba85ba3eff01902327e87c6a1ed40d704ad9051a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
