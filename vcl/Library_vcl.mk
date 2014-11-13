@@ -660,6 +660,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/gdi/salprn \
     vcl/win/source/gdi/salvd \
     vcl/win/source/gdi/winlayout \
+    vcl/win/source/gdi/wintextrender \
     vcl/win/source/gdi/wntgdi \
     vcl/win/source/window/salframe \
     vcl/win/source/window/keynames \

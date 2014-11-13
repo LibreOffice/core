@@ -49,6 +49,7 @@
 #include "sft.hxx"
 #include "win/saldata.hxx"
 #include "win/salgdi.h"
+#include <wintextrender.hxx>
 
 using namespace vcl;
 
@@ -1357,6 +1358,11 @@ void ImplWinFontData::GetFontCapabilities( HDC hDC ) const
 
 void WinSalGraphics::SetTextColor( SalColor nSalColor )
 {
+    mpTextRenderImpl->SetTextColor(nSalColor);
+}
+
+void WinTextRender::SetTextColor(SalColor nSalColor)
+{
     COLORREF aCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                 SALCOLOR_GREEN( nSalColor ),
                                 SALCOLOR_BLUE( nSalColor ) );
@@ -1525,6 +1531,11 @@ HFONT WinSalGraphics::ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontS
 
 sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel )
 {
+    return mpTextRenderImpl->SetFont(pFont, nFallbackLevel);
+}
+
+sal_uInt16 WinTextRender::SetFont(FontSelectPattern* pFont, int nFallbackLevel)
+{
     // return early if there is no new font
     if( !pFont )
     {
@@ -1548,7 +1559,7 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
     mpWinFontData[ nFallbackLevel ] = static_cast<const ImplWinFontData*>( pFont->mpFontData );
 
     HFONT hOldFont = 0;
-    HFONT hNewFont = ImplDoSetFont( pFont, mfFontScale[ nFallbackLevel ], hOldFont );
+    HFONT hNewFont = mrGraphics.ImplDoSetFont( pFont, mfFontScale[ nFallbackLevel ], hOldFont );
     mfCurrentFontScale = mfFontScale[nFallbackLevel];
 
     if( !mhDefFont )
@@ -1598,6 +1609,11 @@ sal_uInt16 WinSalGraphics::SetFont( FontSelectPattern* pFont, int nFallbackLevel
 }
 
 void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
+{
+    mpTextRenderImpl->GetFontMetric(pMetric, nFallbackLevel);
+}
+
+void WinTextRender::GetFontMetric(ImplFontMetricData* pMetric, int nFallbackLevel)
 {
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( getHDC(), mhFonts[nFallbackLevel] );
@@ -1673,7 +1689,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     pMetric->mnMinKashida = GetMinKashidaWidth();
 }
 
-sal_uLong WinSalGraphics::GetKernPairs()
+sal_uLong WinTextRender::GetKernPairs()
 {
     if ( mbFontKernInit )
     {
@@ -1704,6 +1720,11 @@ sal_uLong WinSalGraphics::GetKernPairs()
 
 const FontCharMapPtr WinSalGraphics::GetFontCharMap() const
 {
+    return mpTextRenderImpl->GetFontCharMap();
+}
+
+const FontCharMapPtr WinTextRender::GetFontCharMap() const
+{
     if( !mpWinFontData[0] )
     {
         FontCharMapPtr pDefFontCharMap( new FontCharMap() );
@@ -1713,6 +1734,11 @@ const FontCharMapPtr WinSalGraphics::GetFontCharMap() const
 }
 
 bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+{
+    return mpTextRenderImpl->GetFontCapabilities(rFontCapabilities);
+}
+
+bool WinTextRender::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if( !mpWinFontData[0] )
         return false;
@@ -2024,6 +2050,11 @@ static bool ImplGetFontAttrFromFile( const OUString& rFontFileURL,
 bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     const OUString& rFontFileURL, const OUString& rFontName )
 {
+    return mpTextRenderImpl->AddTempDevFont(pFontCollection, rFontFileURL, rFontName);
+}
+
+bool WinTextRender::AddTempDevFont(PhysicalFontCollection* pFontCollection, const OUString& rFontFileURL, const OUString& rFontName)
+{
     SAL_INFO( "vcl.gdi", "WinSalGraphics::AddTempDevFont(): " << OUStringToOString( rFontFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     ImplDevFontAttributes aDFA;
@@ -2078,6 +2109,11 @@ bool WinSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
 }
 
 void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
+{
+    mpTextRenderImpl->GetDevFontList(pFontCollection);
+}
+
+void WinTextRender::GetDevFontList(PhysicalFontCollection* pFontCollection)
 {
     // make sure all fonts are registered at least temporarily
     static bool bOnce = true;
@@ -2174,10 +2210,20 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 
 void WinSalGraphics::ClearDevFontCache()
 {
+    mpTextRenderImpl->ClearDevFontCache();
+}
+
+void WinTextRender::ClearDevFontCache()
+{
     //anything to do here ?
 }
 
 bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+{
+    return mpTextRenderImpl->GetGlyphBoundRect(aGlyphId, rRect);
+}
+
+bool WinTextRender::GetGlyphBoundRect(sal_GlyphId aGlyphId, Rectangle& rRect)
 {
     HDC hDC = getHDC();
 
@@ -2209,6 +2255,11 @@ bool WinSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 
 bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
+{
+    return mpTextRenderImpl->GetGlyphOutline(aGlyphId, rB2DPolyPoly);
+}
+
+bool WinTextRender::GetGlyphOutline(sal_GlyphId aGlyphId, ::basegfx::B2DPolyPolygon& rB2DPolyPoly)
 {
     rB2DPolyPoly.clear();
 
@@ -2389,25 +2440,13 @@ bool WinSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     return true;
 }
 
-class ScopedFont
-{
-public:
-    explicit ScopedFont(WinSalGraphics & rData);
-
-    ~ScopedFont();
-
-private:
-    WinSalGraphics & m_rData;
-    HFONT m_hOrigFont;
-};
-
-ScopedFont::ScopedFont(WinSalGraphics & rData): m_rData(rData)
+WinTextRender::ScopedFont::ScopedFont(WinTextRender & rData): m_rData(rData)
 {
     m_hOrigFont = m_rData.mhFonts[0];
     m_rData.mhFonts[0] = 0; // avoid deletion of current font
 }
 
-ScopedFont::~ScopedFont()
+WinTextRender::ScopedFont::~ScopedFont()
 {
     if( m_hOrigFont )
     {
@@ -2451,6 +2490,13 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     const PhysicalFontFace* pFont, sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
+    return mpTextRenderImpl->CreateFontSubset(rToFile, pFont, pGlyphIds, pEncoding, pGlyphWidths, nGlyphCount, rInfo);
+}
+
+bool WinTextRender::CreateFontSubset(const OUString& rToFile,
+    const PhysicalFontFace* pFont, sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
+    sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo)
+{
     // TODO: use more of the central font-subsetting code, move stuff there if needed
 
     // create matching FontSelectPattern
@@ -2462,7 +2508,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
     ScopedFont aOldFont(*this);
     float fScale = 1.0;
     HFONT hOldFont = 0;
-    ImplDoSetFont( &aIFSD, fScale, hOldFont );
+    mrGraphics.ImplDoSetFont( &aIFSD, fScale, hOldFont );
 
     ImplWinFontData* pWinFontData = (ImplWinFontData*)aIFSD.mpFontData;
 
@@ -2605,6 +2651,13 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     const sal_Unicode* pUnicodes, sal_Int32* pCharWidths,
     FontSubsetInfo& rInfo, long* pDataLen )
 {
+    return mpTextRenderImpl->GetEmbedFontData(pFont, pUnicodes, pCharWidths, rInfo, pDataLen);
+}
+
+const void* WinTextRender::GetEmbedFontData(const PhysicalFontFace* pFont,
+    const sal_Unicode* pUnicodes, sal_Int32* pCharWidths,
+    FontSubsetInfo& rInfo, long* pDataLen)
+{
     // create matching FontSelectPattern
     // we need just enough to get to the font file data
     FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
@@ -2656,12 +2709,22 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     return (void*)pData;
 }
 
-void WinSalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
+void WinSalGraphics::FreeEmbedFontData(const void* pData, long nLen)
+{
+    mpTextRenderImpl->FreeEmbedFontData(pData, nLen);
+}
+
+void WinTextRender::FreeEmbedFontData(const void* pData, long /*nLen*/)
 {
     delete[] reinterpret_cast<char*>(const_cast<void*>(pData));
 }
 
 const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
+{
+    return mpTextRenderImpl->GetFontEncodingVector(pFont, pNonEncoded);
+}
+
+const Ucs2SIntMap* WinTextRender::GetFontEncodingVector(const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded)
 {
     // TODO: even for builtin fonts we get here... why?
     if( !pFont->IsEmbeddable() )
@@ -2691,6 +2754,12 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                      Int32Vector& rWidths,
                                      Ucs2UIntMap& rUnicodeEnc )
 {
+    mpTextRenderImpl->GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
+}
+
+void WinTextRender::GetGlyphWidths(const PhysicalFontFace* pFont, bool bVertical,
+        Int32Vector& rWidths, Ucs2UIntMap& rUnicodeEnc)
+{
     // create matching FontSelectPattern
     // we need just enough to get to the font file data
     FontSelectPattern aIFSD( *pFont, Size(0,1000), 1000.0, 0, false );
@@ -2700,7 +2769,7 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
 
     float fScale = 0.0;
     HFONT hOldFont = 0;
-    ImplDoSetFont( &aIFSD, fScale, hOldFont );
+    mrGraphics.ImplDoSetFont( &aIFSD, fScale, hOldFont );
 
     if( pFont->IsSubsettable() )
     {
@@ -2777,20 +2846,32 @@ void WinSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     }
 }
 
-void WinSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
+void WinSalGraphics::DrawServerFontLayout(const ServerFontLayout& rLayout)
+{
+    mpTextRenderImpl->DrawServerFontLayout(rLayout);
+}
+
+void WinTextRender::DrawServerFontLayout(const ServerFontLayout&)
 {}
 
-SystemFontData WinSalGraphics::GetSysFontData( int nFallbacklevel ) const
+SystemFontData WinSalGraphics::GetSysFontData(int nFallbackLevel) const
+{
+    return mpTextRenderImpl->GetSysFontData(nFallbackLevel);
+}
+
+SystemFontData WinTextRender::GetSysFontData(int nFallbackLevel) const
 {
     SystemFontData aSysFontData;
 
-    if (nFallbacklevel >= MAX_FALLBACK) nFallbacklevel = MAX_FALLBACK - 1;
-    if (nFallbacklevel < 0 ) nFallbacklevel = 0;
+    if (nFallbackLevel >= MAX_FALLBACK)
+        nFallbackLevel = MAX_FALLBACK - 1;
+    if (nFallbackLevel < 0)
+        nFallbackLevel = 0;
 
-    aSysFontData.hFont = mhFonts[nFallbacklevel];
+    aSysFontData.hFont = mhFonts[nFallbackLevel];
 
     OSL_TRACE("\r\n:WinSalGraphics::GetSysFontData(): FontID: %p, Fallback level: %d",
-              aSysFontData.hFont, nFallbacklevel);
+              aSysFontData.hFont, nFallbackLevel);
 
     return aSysFontData;
 }

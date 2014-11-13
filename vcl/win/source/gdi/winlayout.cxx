@@ -27,6 +27,7 @@
 
 #include "win/salgdi.h"
 #include "win/saldata.hxx"
+#include <wintextrender.hxx>
 
 #include "sft.hxx"
 #include "sallayout.hxx"
@@ -2819,6 +2820,11 @@ void GraphiteWinLayout::Simplify( bool is_base )
 
 SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
+    return mpTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);
+}
+
+SalLayout* WinTextRender::GetTextLayout(ImplLayoutArgs& rArgs, int nFallbackLevel)
+{
     DBG_ASSERT( mpWinFontEntry[nFallbackLevel], "WinSalGraphics mpWinFontEntry==NULL");
 
     WinLayout* pWinLayout = NULL;
@@ -2869,7 +2875,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     return pWinLayout;
 }
 
-int    WinSalGraphics::GetMinKashidaWidth()
+int WinTextRender::GetMinKashidaWidth()
 {
     if( !mpWinFontEntry[0] )
         return 0;

@@ -79,7 +79,7 @@ protected:
     virtual cairo_surface_t* getCairoSurface() = 0;
     virtual void drawSurface(cairo_t* cr) = 0;
 
-bool setFont( const FontSelectPattern *pEntry, int nFallbackLevel );
+    bool setFont(const FontSelectPattern *pEntry, int nFallbackLevel);
 
     virtual void clipRegion(cairo_t* cr) = 0;
 
