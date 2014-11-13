@@ -682,7 +682,7 @@ void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
 const Graphic& GraphicObject::GetGraphic() const
 {
     GraphicObject *pThis = const_cast<GraphicObject*>(this);
-    pThis->SwapIn();
+    (void)pThis->SwapIn();
 
     //fdo#50697 If we've been asked to provide the graphic, then reset
     //the cache timeout to start from now and not remain at the
