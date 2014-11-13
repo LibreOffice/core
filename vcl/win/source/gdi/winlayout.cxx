@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <svsys.h>
-#include "rtl/ustring.hxx"
+#include "winlayout.hxx"
 
 #include "osl/module.h"
 #include "osl/file.h"
@@ -39,7 +38,6 @@
 
 #include <algorithm>
 
-#include <usp10.h>
 #include <shlwapi.h>
 #include <winver.h>
 
@@ -51,7 +49,6 @@ typedef boost::unordered_map<int,int> IntMap;
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
 #include <i18nlangtag/languagetag.hxx>
-#include <graphite_layout.hxx>
 #include <graphite_features.hxx>
 #endif
 
@@ -110,71 +107,6 @@ inline int ImplWinFontEntry::GetCachedGlyphWidth( int nCharCode ) const
     return it->second;
 }
 
-class WinLayout : public SalLayout
-{
-public:
-                        WinLayout( HDC, const ImplWinFontData&, ImplWinFontEntry& );
-    virtual void        InitFont() const;
-    void                SetFontScale( float f ) { mfFontScale = f; }
-    HFONT               DisableFontScaling( void) const;
-
-    SCRIPT_CACHE&       GetScriptCache() const
-                            { return mrWinFontEntry.GetScriptCache(); }
-
-protected:
-    HDC                 mhDC;               // WIN32 device handle
-    HFONT               mhFont;             // WIN32 font handle
-    int                 mnBaseAdv;          // x-offset relative to Layout origin
-    float               mfFontScale;        // allows metrics emulation of huge font sizes
-
-    const ImplWinFontData& mrWinFontData;
-    ImplWinFontEntry&   mrWinFontEntry;
-};
-
-class SimpleWinLayout : public WinLayout
-{
-public:
-                    SimpleWinLayout( HDC, BYTE nCharSet, const ImplWinFontData&, ImplWinFontEntry& );
-    virtual         ~SimpleWinLayout();
-
-    virtual bool    LayoutText( ImplLayoutArgs& );
-    virtual void    AdjustLayout( ImplLayoutArgs& );
-    virtual void    DrawText( SalGraphics& ) const;
-
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances, int* pCharIndexes,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const;
-
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
-
-    // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
-
-protected:
-    void            Justify( DeviceCoordinate nNewWidth );
-    void            ApplyDXArray( const ImplLayoutArgs& );
-
-private:
-    int             mnGlyphCount;
-    int             mnCharCount;
-    WCHAR*          mpOutGlyphs;
-    int*            mpGlyphAdvances;    // if possible this is shared with mpGlyphAdvances[]
-    int*            mpGlyphOrigAdvs;
-    int*            mpCharWidths;       // map rel char pos to char width
-    int*            mpChars2Glyphs;     // map rel char pos to abs glyph pos
-    int*            mpGlyphs2Chars;     // map abs glyph pos to abs char pos
-    bool*           mpGlyphRTLFlags;    // BiDi status for glyphs: true=>RTL
-    mutable long    mnWidth;
-    bool            mbDisableGlyphs;
-
-    int             mnNotdefWidth;
-    BYTE            mnCharSet;
-};
-
 WinLayout::WinLayout( HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE )
 :   mhDC( hDC ),
     mhFont( (HFONT)::GetCurrentObject(hDC,OBJ_FONT) ),
@@ -209,6 +141,11 @@ HFONT WinLayout::DisableFontScaling() const
         return 0;
 
     return SelectFont( mhDC, hHugeFont );
+}
+
+SCRIPT_CACHE& WinLayout::GetScriptCache() const
+{
+    return mrWinFontEntry.GetScriptCache();
 }
 
 SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet,
@@ -952,72 +889,6 @@ public:
     bool            IsEmpty() const { return (mnEndGlyphPos <= 0); }
     bool            IsRTL() const { return mpScriptItem->a.fRTL; }
     bool            HasKashidas() const { return mbHasKashidas; }
-};
-
-class UniscribeLayout : public WinLayout
-{
-public:
-                    UniscribeLayout( HDC, const ImplWinFontData&, ImplWinFontEntry& );
-
-    virtual bool    LayoutText( ImplLayoutArgs& );
-    virtual void    AdjustLayout( ImplLayoutArgs& );
-    virtual void    DrawText( SalGraphics& ) const;
-    virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos, int&,
-                                   DeviceCoordinate* pGlyphAdvances, int* pCharPosAry,
-                                   const PhysicalFontFace** pFallbackFonts = NULL ) const;
-
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
-    virtual bool    IsKashidaPosValid ( int nCharPos ) const;
-
-    // for glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
-    virtual void    DisableGlyphInjection( bool bDisable ) { mbDisableGlyphInjection = bDisable; }
-
-protected:
-    virtual         ~UniscribeLayout();
-
-    void            Justify( DeviceCoordinate nNewWidth );
-    void            ApplyDXArray( const ImplLayoutArgs& );
-
-    bool            GetItemSubrange( const VisualItem&,
-                        int& rMinIndex, int& rEndIndex ) const;
-
-private:
-    // item specific info
-    SCRIPT_ITEM*    mpScriptItems;      // in logical order
-    VisualItem*     mpVisualItems;      // in visual order
-    int             mnItemCount;        // number of visual items
-
-    // string specific info
-    // everything is in logical order
-    int             mnCharCapacity;
-    WORD*           mpLogClusters;      // map from absolute_char_pos to relative_glyph_pos
-    int*            mpCharWidths;       // map from absolute_char_pos to char_width
-    int             mnSubStringMin;     // char_pos of first char in context
-
-    // glyph specific info
-    // everything is in visual order
-    int             mnGlyphCount;
-    int             mnGlyphCapacity;
-    int*            mpGlyphAdvances;    // glyph advance width before justification
-    int*            mpJustifications;   // glyph advance width after justification
-    WORD*           mpOutGlyphs;        // glyphids in visual order
-    GOFFSET*        mpGlyphOffsets;     // glyph offsets to the "naive" layout
-    SCRIPT_VISATTR* mpVisualAttrs;      // glyph visual attributes
-    mutable int*    mpGlyphs2Chars;     // map from absolute_glyph_pos to absolute_char_pos
-
-    // kashida stuff
-    void InitKashidaHandling();
-    void KashidaItemFix( int nMinGlyphPos, int nEndGlyphPos );
-    bool KashidaWordFix( int nMinGlyphPos, int nEndGlyphPos, int* pnCurrentPos );
-
-    int            mnMinKashidaWidth;
-    int            mnMinKashidaGlyph;
-    bool           mbDisableGlyphInjection;
 };
 
 static bool bUspInited = false;
@@ -2604,62 +2475,11 @@ bool UniscribeLayout::IsKashidaPosValid ( int nCharPos ) const
 
 #if ENABLE_GRAPHITE
 
-class GraphiteLayoutWinImpl : public GraphiteLayout
-{
-public:
-    GraphiteLayoutWinImpl(const gr_face * pFace, ImplWinFontEntry & rFont)
-        throw()
-    : GraphiteLayout(pFace), mrFont(rFont) {};
-    virtual ~GraphiteLayoutWinImpl() throw() {};
-    virtual sal_GlyphId getKashidaGlyph(int & rWidth);
-private:
-    ImplWinFontEntry & mrFont;
-};
-
 sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
 {
     rWidth = mrFont.GetMinKashidaWidth();
     return mrFont.GetMinKashidaGlyph();
 }
-
-// This class uses the SIL Graphite engine to provide complex text layout services to the VCL
-// @author tse
-
-class GraphiteWinLayout : public WinLayout
-{
-private:
-    gr_font * mpFont;
-    grutils::GrFeatureParser * mpFeatures;
-    mutable GraphiteLayoutWinImpl maImpl;
-public:
-    GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplWinFontEntry& rWFE) throw();
-
-    // used by upper layers
-    virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
-    virtual void  AdjustLayout( ImplLayoutArgs& );  // adjusting after fallback etc.
-    virtual void  DrawText( SalGraphics& ) const;
-
-    // methods using string indexing
-    virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
-    virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
-
-    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
-
-    // methods using glyph indexing
-    virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
-                                DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
-                                const PhysicalFontFace** pFallbackFonts = NULL ) const;
-
-    // used by glyph+font+script fallback
-    virtual void    MoveGlyph( int nStart, long nNewXPos );
-    virtual void    DropGlyph( int nStart );
-    virtual void    Simplify( bool bIsBase );
-    ~GraphiteWinLayout()
-    {
-        delete mpFeatures;
-        gr_font_destroy(maImpl.GetFont());
-    }
-};
 
 float gr_fontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
@@ -2699,6 +2519,12 @@ GraphiteWinLayout::GraphiteWinLayout(HDC hDC, const ImplWinFontData& rWFD, ImplW
         mpFeatures = new grutils::GrFeatureParser(rWFD.GraphiteFace(), aLang.getStr());
     }
     maImpl.SetFeatures(mpFeatures);
+}
+
+GraphiteWinLayout::~GraphiteWinLayout()
+{
+    delete mpFeatures;
+    gr_font_destroy(maImpl.GetFont());
 }
 
 bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
