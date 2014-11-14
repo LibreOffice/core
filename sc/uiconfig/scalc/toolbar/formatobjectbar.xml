@@ -41,7 +41,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:WrapText"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
