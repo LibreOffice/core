@@ -100,10 +100,24 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
 {
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         rStrm.ReadUInt16( nVersion );
-    short nMacro;
-    rStrm.ReadInt16( nMacro );
 
-    for( short i = 0; i < nMacro; ++i )
+    short nMacro(0);
+    rStrm.ReadInt16(nMacro);
+
+    const size_t nMinStringSize = rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE ? 4 : 2;
+    size_t nMinRecordSize = 2 + 2*nMinStringSize;
+    if( SVX_MACROTBL_VERSION40 <= nVersion )
+        nMinRecordSize+=2;
+
+    const size_t nMaxRecords = rStrm.remainingSize() / nMinRecordSize;
+    if (nMacro > 0 && static_cast<size_t>(nMacro) > nMaxRecords)
+    {
+        SAL_WARN("editeng", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nMacro<< " claimed, truncating");
+        nMacro = nMaxRecords;
+    }
+
+    for (short i = 0; i < nMacro; ++i)
     {
         sal_uInt16 nCurKey, eType = STARBASIC;
         OUString aLibName, aMacName;
