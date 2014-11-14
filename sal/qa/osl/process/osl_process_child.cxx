@@ -29,11 +29,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>
 #include <fstream>
 #include <string.h>
 
-#include <rtl/ustring.hxx>
 
 #ifdef UNX
 #if defined( MACOSX )

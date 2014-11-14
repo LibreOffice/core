@@ -22,7 +22,6 @@
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 
-#include "context.hxx"
 #include "converter.hxx"
 #include "convertiso2022kr.hxx"
 #include "tenchelp.hxx"
