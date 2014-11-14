@@ -101,19 +101,12 @@
       <menu:menuitem menu:id=".uno:PageMode" menu:style="radio"/>
       <menu:menuitem menu:id=".uno:MasterPage" menu:style="radio"/>
       <menu:menuseparator/>
-      <menu:menu menu:id=".uno:DisplayQualityMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
-          <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:style="radio"/>
-          <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
-        </menu:menupopup>
-      </menu:menu>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:LeftPaneDraw"/>
       <menu:menuitem menu:id=".uno:AvailableToolbars"/>
       <menu:menuitem menu:id=".uno:StatusBarVisible"/>
       <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menuitem menu:id=".uno:ShowRuler"/>
+      <menu:menuitem menu:id=".uno:LeftPaneDraw"/>
+      <menu:menuseparator/>
       <menu:menu menu:id=".uno:GridMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:GridVisible"/>
@@ -128,11 +121,18 @@
           <menu:menuitem menu:id=".uno:HelplinesFront"/>
         </menu:menupopup>
       </menu:menu>
+      <menu:menu menu:id=".uno:DisplayQualityMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:style="radio"/>
+          <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Navigator"/>
-      <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:Sidebar"/>
+      <menu:menuitem menu:id=".uno:Gallery"/>
+      <menu:menuitem menu:id=".uno:Navigator"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:ZoomMenu">
         <menu:menupopup>
