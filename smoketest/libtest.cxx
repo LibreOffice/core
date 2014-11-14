@@ -12,19 +12,55 @@
 #include <malloc.h>
 #include <assert.h>
 #include <math.h>
-#include <sys/time.h>
-#include <sal/types.h>
+
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
 
+
+
+#ifdef _WIN32
+//#include <Windows.h>   // come from LibreOfficeKitInit.h
+    long getTimeMS()
+    {
+        return GetTickCount();
+    }
+
+    bool IsAbsolutePath(char *pPath)
+    {
+        if (pPath[1] != ':')
+        {
+            fprintf( stderr, "Absolute path required to libreoffice install\n" );
+            return false;
+        }
+
+        return true;
+    }
+
+#else
+#include <sys/time.h>
+#include <sal/types.h>
+    long getTimeMS()
+    {
+        struct timeval t;
+        gettimeofday(&t, NULL);
+        return t.tv_sec*1000 + t.tv_usec/1000;
+    }
+
+    bool IsAbsolutePath(char *pPath)
+    {
+        if (pPath[0] != '/')
+        {
+            fprintf( stderr, "Absolute path required to libreoffice install\n" );
+            return false;
+        }
+
+        return true;
+    }
+#endif
+
+
 using namespace ::lok;
 
-long getTimeMS()
-{
-    struct timeval t;
-    gettimeofday(&t, NULL);
-    return t.tv_sec*1000 + t.tv_usec/1000;
-}
 
 static int help()
 {
@@ -42,11 +78,9 @@ int main (int argc, char **argv)
         ( argc > 1 && ( !strcmp( argv[1], "--help" ) || !strcmp( argv[1], "-h" ) ) ) )
         return help();
 
-    if (argv[1][0] != '/')
-    {
-        fprintf( stderr, "Absolute path required to libreoffice install\n" );
+
+    if( !IsAbsolutePath(argv[1]) )
         return 1;
-    }
 
     // coverity[tainted_string] - build time test tool
     Office *pOffice = lok_cpp_init( argv[1] );
