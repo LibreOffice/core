@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_2e770b04",
+        "filename": "basic/source/uno/sbservices.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-14T15:09:11Z",
+      "side": 0,
+      "message": "including sal/config.h first thing is by design; there\u0027s at least some WIN32-specific stuff in there (_USE_MATH_DEFINES, snprintf.h) that would need clarification before abandoning that design",
+      "revId": "8fd0f1b26c0bce1ad622ad9c4678557c4749d031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_0e744ffb",
+        "filename": "codemaker/source/codemaker/codemaker.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-14T15:09:11Z",
+      "side": 0,
+      "message": "that\u0027s detrimental to loplugin:unreffun",
+      "revId": "8fd0f1b26c0bce1ad622ad9c4678557c4749d031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
