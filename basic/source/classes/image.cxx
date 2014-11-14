@@ -202,7 +202,17 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             case B_LINERANGES:
                 break;
             case B_STRINGPOOL:
+            {
                 if( bBadVer ) break;
+                //assuming an empty string with just the lead 32bit len indicator
+                const size_t nMinStringSize = 4;
+                const size_t nMaxStrings = r.remainingSize() / nMinStringSize;
+                if (nCount > nMaxStrings)
+                {
+                    SAL_WARN("basic", "Parsing error: " << nMaxStrings <<
+                             " max possible entries, but " << nCount << " claimed, truncating");
+                    nCount = nMaxStrings;
+                }
                 MakeStrings( nCount );
                 short i;
                 for( i = 0; i < nStrings && SbiGood( r ); i++ )
@@ -227,6 +237,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     }
                 }
                 break;
+            }
             case B_MODEND:
                 goto done;
             default:
