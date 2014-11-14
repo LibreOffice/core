@@ -643,7 +643,19 @@ void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent)
 OUString SAL_CALL OControlModel::getName() throw(RuntimeException, std::exception)
 {
     OUString aReturn;
-    OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= aReturn;
+    try
+    {
+        OPropertySetHelper::getFastPropertyValue(PROPERTY_ID_NAME) >>= aReturn;
+    }
+    catch (const css::beans::UnknownPropertyException&)
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw WrappedTargetRuntimeException(
+            "OControlModel::getName",
+            *const_cast< OControlModel* >( this ),
+            a
+        );
+    }
     return aReturn;
 }
 
