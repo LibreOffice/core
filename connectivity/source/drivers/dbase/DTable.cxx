@@ -2576,11 +2576,11 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
                     }
                 }
                 bOk = _pNewTable->InsertRow(*aInsertRow,true,_pNewTable->m_pColumns);
-                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!");
+                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be inserted!"); (void)bOk;
             }
             else
             {
-                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be fetched!");
+                SAL_WARN_IF(!bOk, "connectivity.drivers", "Row could not be fetched!"); (void)bOk;
             }
         }
         else
