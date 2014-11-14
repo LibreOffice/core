@@ -24,6 +24,7 @@
 #include <com/sun/star/mail/XMailMessage.hpp>
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
+#include <rtl/ref.hxx>
 #include <salhelper/refobj.hxx>
 
 #include <list>
