@@ -559,6 +559,7 @@ class EmptyCells
 {
     ScColumn& mrColumn;
     sc::ColumnBlockPosition& mrPos;
+    sc::ColumnSpanSet* mpCellSpans;
 
     void splitFormulaGrouping(const sc::CellStoreType::position_type& rPos)
     {
@@ -570,8 +571,8 @@ class EmptyCells
     }
 
 public:
-    EmptyCells(sc::ColumnBlockPosition& rPos, ScColumn& rColumn) :
-        mrColumn(rColumn), mrPos(rPos) {}
+    EmptyCells( sc::ColumnBlockPosition& rPos, ScColumn& rColumn, sc::ColumnSpanSet* pCellSpans ) :
+        mrColumn(rColumn), mrPos(rPos), mpCellSpans(pCellSpans) {}
 
     void operator() (const sc::RowSpan& rSpan)
     {
@@ -586,6 +587,9 @@ public:
 
         mrPos.miCellPos = rCells.set_empty(mrPos.miCellPos, rSpan.mnRow1, rSpan.mnRow2);
         mrPos.miCellTextAttrPos = mrColumn.GetCellAttrStore().set_empty(mrPos.miCellTextAttrPos, rSpan.mnRow1, rSpan.mnRow2);
+
+        if (mpCellSpans)
+            mpCellSpans->set(mrColumn.GetTab(), mrColumn.GetCol(), rSpan.mnRow1, rSpan.mnRow2, true);
     }
 };
 
@@ -593,7 +597,7 @@ public:
 
 void ScColumn::DeleteCells(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag,
-    std::vector<SCROW>& rDeleted )
+    std::vector<SCROW>& rDeleted, sc::ColumnSpanSet* pDeletedSpans )
 {
     // Determine which cells to delete based on the deletion flags.
     DeleteAreaHandler aFunc(*pDocument, nDelFlag);
@@ -610,12 +614,13 @@ void ScColumn::DeleteCells(
     aFunc.getSpans().getSpans(aSpans);
 
     // Delete the cells for real.
-    std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(rBlockPos, *this));
+    std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(rBlockPos, *this, pDeletedSpans));
     CellStorageModified();
 }
 
 void ScColumn::DeleteArea(
-    SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag, bool bBroadcast )
+    SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag, bool bBroadcast,
+    sc::ColumnSpanSet* pBroadcastSpans )
 {
     InsertDeleteFlags nContMask = IDF_CONTENTS;
     // IDF_NOCAPTIONS needs to be passed too, if IDF_NOTE is set
@@ -629,7 +634,7 @@ void ScColumn::DeleteArea(
     InitBlockPosition(aBlockPos);
 
     if (!IsEmptyData() && nContFlag)
-        DeleteCells(aBlockPos, nStartRow, nEndRow, nDelFlag, aDeletedRows);
+        DeleteCells(aBlockPos, nStartRow, nEndRow, nDelFlag, aDeletedRows, pBroadcastSpans);
 
     if (nDelFlag & IDF_NOTE)
         DeleteCellNotes(aBlockPos, nStartRow, nEndRow);

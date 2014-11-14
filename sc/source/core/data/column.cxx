@@ -2634,6 +2634,18 @@ public:
         maValueRanges.getRows(aRows);
         mrColumn.BroadcastCells(aRows, SC_HINT_DATACHANGED);
     }
+
+    void fillBroadcastSpans( sc::ColumnSpanSet& rBroadcastSpans ) const
+    {
+        SCCOL nCol = mrColumn.GetCol();
+        SCTAB nTab = mrColumn.GetTab();
+        sc::SingleColumnSpanSet::SpansType aSpans;
+        maValueRanges.getSpans(aSpans);
+
+        sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+        for (; it != itEnd; ++it)
+            rBroadcastSpans.set(nTab, nCol, it->mnRow1, it->mnRow2, true);
+    }
 };
 
 class SetTableOpDirtyOnRangeHandler
@@ -3004,6 +3016,17 @@ void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
     SetDirtyHandler aFunc(*pDocument, rCxt);
     sc::ProcessFormula(maCells, aFunc);
+}
+
+void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
+{
+    // Set all formula cells in the range dirty, and pick up all non-formula
+    // cells for later broadcasting.  We don't broadcast here.
+    sc::AutoCalcSwitch aSwitch(*pDocument, false);
+
+    SetDirtyOnRangeHandler aHdl(*this);
+    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl, aHdl);
+    aHdl.fillBroadcastSpans(rBroadcastSpans);
 }
 
 void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2 )

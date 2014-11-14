@@ -1761,19 +1761,19 @@ void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear
     }
 }
 
-void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
-                            SCCOL nCol2, SCROW nRow2,
-                            const ScMarkData& rMark, InsertDeleteFlags nDelFlag)
+void ScDocument::DeleteArea(
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+    InsertDeleteFlags nDelFlag, bool bBroadcast, sc::ColumnSpanSet* pBroadcastSpans )
 {
+    sc::AutoCalcSwitch aACSwitch(*this, false);
+
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
-    bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // avoid multiple calculations
     for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
             if ( rMark.GetTableSelect(i) || bIsUndo )
-                maTabs[i]->DeleteArea(nCol1, nRow1, nCol2, nRow2, nDelFlag);
-    SetAutoCalc( bOldAutoCalc );
+                maTabs[i]->DeleteArea(nCol1, nRow1, nCol2, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
+
 }
 
 void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
@@ -2429,9 +2429,9 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
     }
 }
 
-void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
-                                    SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark, InsertDeleteFlags nInsFlag )
+void ScDocument::BroadcastFromClip(
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+    InsertDeleteFlags nInsFlag, sc::ColumnSpanSet& rBroadcastSpans )
 {
     if (nInsFlag & IDF_CONTENTS)
     {
@@ -2440,7 +2440,7 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nMax; ++itr)
             if (maTabs[*itr])
-                maTabs[*itr]->BroadcastInArea( nCol1, nRow1, nCol2, nRow2 );
+                maTabs[*itr]->BroadcastInArea(nCol1, nRow1, nCol2, nRow2, rBroadcastSpans);
     }
 }
 
@@ -2584,6 +2584,39 @@ void ScDocument::CopyNonFilteredFromClip(
     rClipStartRow = nSourceRow;
 }
 
+namespace {
+
+class BroadcastAction : public sc::ColumnSpanSet::ColumnAction
+{
+    ScDocument& mrDoc;
+    ScColumn* mpCol;
+    std::vector<SCROW> maRows;
+
+public:
+    BroadcastAction( ScDocument& rDoc ) : mrDoc(rDoc), mpCol(NULL) {}
+
+    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    {
+        mpCol = pCol;
+    }
+
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    {
+        if (!bVal)
+            return;
+
+        assert(mpCol);
+        maRows.clear();
+        maRows.reserve(nRow2-nRow1+1);
+        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+            maRows.push_back(nRow);
+
+        mpCol->BroadcastCells(maRows, SC_HINT_DATACHANGED);
+    };
+};
+
+}
+
 void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
                                 InsertDeleteFlags nInsFlag,
                                 ScDocument* pRefUndoDoc, ScDocument* pClipDoc, bool bResetCut,
@@ -2667,6 +2700,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
     bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
 
+    sc::ColumnSpanSet aBroadcastSpans(false);
+
     SCCOL nClipStartCol = aClipRange.aStart.Col();
     SCROW nClipStartRow = aClipRange.aStart.Row();
     SCROW nClipEndRow = aClipRange.aEnd.Row();
@@ -2685,7 +2720,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             DeleteBeforeCopyFromClip(aCxt, rMark);
         }
         else
-            DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag);
+            DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag, false, &aBroadcastSpans);
 
         if (CopyOneCellFromClip(aCxt, nCol1, nRow1, nCol2, nRow2))
             continue;
@@ -2785,7 +2820,14 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     // Listener aufbauen nachdem alles inserted wurde
     StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
     // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
-    BroadcastFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
+    BroadcastFromClip(nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag, aBroadcastSpans);
+
+    {
+        ScBulkBroadcast aBulkBroadcast( GetBASM());
+        BroadcastAction aAction(*this);
+        aBroadcastSpans.executeColumnAction(*this, aAction);
+    }
+
     if (bResetCut)
         pClipDoc->GetClipParam().mbCutMode = false;
 }
@@ -2815,6 +2857,8 @@ void ScDocument::CopyMultiRangeFromClip(
     SCROW nRow1 = rDestPos.Row();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
 
+    sc::ColumnSpanSet aBroadcastSpans(false);
+
     if (!bSkipAttrForEmpty)
     {
         // Do the deletion first.
@@ -2822,7 +2866,7 @@ void ScDocument::CopyMultiRangeFromClip(
         SCCOL nColSize = rClipParam.getPasteColSize();
         SCROW nRowSize = rClipParam.getPasteRowSize();
 
-        DeleteArea(nCol1, nRow1, nCol1+nColSize-1, nRow1+nRowSize-1, rMark, nDelFlag);
+        DeleteArea(nCol1, nRow1, nCol1+nColSize-1, nRow1+nRowSize-1, rMark, nDelFlag, false, &aBroadcastSpans);
     }
 
     sc::CopyFromClipContext aCxt(*this, NULL, pClipDoc, nInsFlag, bAsLink, bSkipAttrForEmpty);
@@ -2861,8 +2905,9 @@ void ScDocument::CopyMultiRangeFromClip(
     StartListeningFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),
                            aDestRange.aEnd.Col(), aDestRange.aEnd.Row(), rMark, nInsFlag );
     // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
-    BroadcastFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),
-                      aDestRange.aEnd.Col(), aDestRange.aEnd.Row(), rMark, nInsFlag );
+    BroadcastFromClip(
+        aDestRange.aStart.Col(), aDestRange.aStart.Row(), aDestRange.aEnd.Col(), aDestRange.aEnd.Row(),
+        rMark, nInsFlag, aBroadcastSpans);
 
     if (bResetCut)
         pClipDoc->GetClipParam().mbCutMode = false;
