@@ -25,6 +25,7 @@ $(call gb_ExternalProject_get_state_target,jpeg,build) : $(call gb_ExternalProje
 $(call gb_ExternalProject_get_state_target,jpeg,configure) :
 	$(call gb_ExternalProject_run,configure,\
 		MAKE=$(MAKE) ./configure \
+			--build=$(if $(filter WNT,$(OS)),i686-pc-cygwin,$(BUILD_PLATFORM)) \
 			--with-pic \
 			--enable-static \
 			--disable-shared \
