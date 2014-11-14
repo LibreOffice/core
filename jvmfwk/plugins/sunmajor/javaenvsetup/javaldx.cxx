@@ -44,69 +44,67 @@ static bool findAndSelect(JavaInfo**);
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    if( hasOption("--help",argc, argv) || hasOption("-h", argc, argv))
-    {
-        fprintf(stdout, HELP_TEXT);// default
-        return 0;
-    }
-    javaFrameworkError errcode = JFW_E_NONE;
-    sal_Bool bEnabled = sal_False;
-    errcode = jfw_getEnabled( & bEnabled);
-    if (errcode == JFW_E_NONE && bEnabled == sal_False)
-    {
-            //Do not do any preparation because that may only slow startup time.
-        return 0;
-    }
-    else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
-    {
-        fprintf(stderr,"javaldx failed!\n");
-        return -1;
-    }
-
-
-    JavaInfo * pInfo = NULL;
-
     try
     {
+        if( hasOption("--help",argc, argv) || hasOption("-h", argc, argv))
+        {
+            fprintf(stdout, HELP_TEXT);// default
+            return 0;
+        }
+        javaFrameworkError errcode = JFW_E_NONE;
+        sal_Bool bEnabled = sal_False;
+        errcode = jfw_getEnabled( & bEnabled);
+        if (errcode == JFW_E_NONE && bEnabled == sal_False)
+        {
+                //Do not do any preparation because that may only slow startup time.
+            return 0;
+        }
+        else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
+        {
+            fprintf(stderr,"javaldx failed!\n");
+            return -1;
+        }
+
+        JavaInfo * pInfo = NULL;
         errcode = jfw_getSelectedJRE( & pInfo);
+
+        if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
+        {
+            fprintf(stderr,"javaldx failed!\n");
+            return -1;
+        }
+
+        if (pInfo == NULL)
+        {
+            if (false == findAndSelect(&pInfo))
+                return -1;
+        }
+        else
+        {
+            //check if the JRE was not uninstalled
+            sal_Bool bExist = sal_False;
+            errcode = jfw_existJRE(pInfo, &bExist);
+            if (errcode == JFW_E_NONE)
+            {
+                if (!bExist && !findAndSelect(&pInfo))
+                    return -1;
+            }
+            else
+            {
+                fprintf(stderr, "javaldx: Could not determine if JRE still exist\n");
+                return -1;
+            }
+        }
+
+        OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
+        fprintf(stdout, "%s\n", sPaths.getStr());
+        jfw_freeJavaInfo(pInfo);
     }
     catch (const std::exception&)
     {
         fprintf(stderr,"javaldx failed!\n");
         return -1;
     }
-
-    if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
-    {
-        fprintf(stderr,"javaldx failed!\n");
-        return -1;
-    }
-
-    if (pInfo == NULL)
-    {
-        if (false == findAndSelect(&pInfo))
-            return -1;
-    }
-    else
-    {
-        //check if the JRE was not uninstalled
-        sal_Bool bExist = sal_False;
-        errcode = jfw_existJRE(pInfo, &bExist);
-        if (errcode == JFW_E_NONE)
-        {
-            if (!bExist && !findAndSelect(&pInfo))
-                return -1;
-        }
-        else
-        {
-            fprintf(stderr, "javaldx: Could not determine if JRE still exist\n");
-            return -1;
-        }
-    }
-
-    OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
-    fprintf(stdout, "%s\n", sPaths.getStr());
-    jfw_freeJavaInfo(pInfo);
 
     return 0;
 }
