@@ -21,7 +21,6 @@
 #define INCLUDED_SALHELPER_SIMPLEREFERENCEOBJECT_HXX
 
 #include <osl/interlck.h>
-#include <sal/types.h>
 #include <salhelper/salhelperdllapi.h>
 
 #include <cstddef>

@@ -14,7 +14,6 @@
 
 #include "sal/config.h"
 
-#include <iostream>
 #include <rtl/string.hxx>
 #include "po.hxx"
 

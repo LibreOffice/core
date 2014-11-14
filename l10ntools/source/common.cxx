@@ -8,6 +8,7 @@
  */
 
 #include "common.hxx"
+#include <iostream>
 
 //flags for handleArguments()
 #define STATE_NON       0x0001

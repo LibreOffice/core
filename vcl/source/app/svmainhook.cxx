@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
-
-#include <vcl/svmain.hxx>
+#include "sal/config.h"
 
 #ifndef MACOSX
 // MacOSX implementation of ImplSVMainHook is in osx/salinst.cxx

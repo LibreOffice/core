@@ -21,7 +21,6 @@
 #define INCLUDED_STORE_SOURCE_OBJECT_HXX
 
 #include "sal/types.h"
-#include "rtl/ref.hxx"
 #include "osl/interlck.h"
 #include "salhelper/simplereferenceobject.hxx"
 
