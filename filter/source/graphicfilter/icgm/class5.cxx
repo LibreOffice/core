@@ -461,10 +461,18 @@ void CGM::ImplDoClass5()
             sal_uInt32  i, nColorFrom = 0;
             sal_uInt32  nColorTo = 0xffffff;
 
-            //FIXME,  does this loop actually do anything?
+            const size_t nRemainingSize = mpEndValidSource - (mpSource + mnParaSize);
+            const size_t nMaxPossibleRecords = nRemainingSize/pElement->nRealSize;
+
+            if (nNumberOfStages > nMaxPossibleRecords)
+            {
+                mbStatus = false;
+                break;
+            }
+
             for ( i = 0; i < nNumberOfStages; i++ )
             {
-                ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ); // -Wall is this needed
+                ImplGetFloat(pElement->eRealPrecision, pElement->nRealSize);
             }
 
             for ( i = 0; i <= nNumberOfStages; i++ )
