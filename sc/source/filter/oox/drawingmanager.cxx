@@ -46,41 +46,20 @@ namespace {
 
 // OBJ record -----------------------------------------------------------------
 
-const sal_uInt16 BIFF_OBJTYPE_UNKNOWN       = 0xFFFF;   // for internal use only
-
 // line formatting ------------------------------------------------------------
 
 const sal_uInt8 BIFF_OBJ_LINE_AUTOCOLOR     = 64;
 
 const sal_uInt8 BIFF_OBJ_LINE_SOLID         = 0;
-const sal_uInt8 BIFF_OBJ_LINE_DASH          = 1;
-const sal_uInt8 BIFF_OBJ_LINE_DOT           = 2;
-const sal_uInt8 BIFF_OBJ_LINE_DASHDOT       = 3;
-const sal_uInt8 BIFF_OBJ_LINE_DASHDOTDOT    = 4;
-const sal_uInt8 BIFF_OBJ_LINE_MEDTRANS      = 5;
-const sal_uInt8 BIFF_OBJ_LINE_DARKTRANS     = 6;
-const sal_uInt8 BIFF_OBJ_LINE_LIGHTTRANS    = 7;
-const sal_uInt8 BIFF_OBJ_LINE_NONE          = 255;
 
 const sal_uInt8 BIFF_OBJ_LINE_HAIR          = 0;
-const sal_uInt8 BIFF_OBJ_LINE_THIN          = 1;
-const sal_uInt8 BIFF_OBJ_LINE_MEDIUM        = 2;
-const sal_uInt8 BIFF_OBJ_LINE_THICK         = 3;
 
-const sal_uInt8 BIFF_OBJ_ARROW_OPEN         = 1;
-const sal_uInt8 BIFF_OBJ_ARROW_FILLED       = 2;
-const sal_uInt8 BIFF_OBJ_ARROW_OPENBOTH     = 3;
-const sal_uInt8 BIFF_OBJ_ARROW_FILLEDBOTH   = 4;
 
-const sal_uInt8 BIFF_OBJ_ARROW_NARROW       = 0;
-const sal_uInt8 BIFF_OBJ_ARROW_MEDIUM       = 1;
-const sal_uInt8 BIFF_OBJ_ARROW_WIDE         = 2;
 
 // fill formatting ------------------------------------------------------------
 
 const sal_uInt8 BIFF_OBJ_FILL_AUTOCOLOR     = 65;
 
-const sal_uInt8 BIFF_OBJ_PATT_NONE          = 0;
 const sal_uInt8 BIFF_OBJ_PATT_SOLID         = 1;
 
 } // namespace
