@@ -25,6 +25,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #if 0
 #  define FIXME_SELF_INTERSECTING_WORKING
@@ -610,30 +611,60 @@ public:
             bHasLoadedAll = true;
 
             css::uno::Sequence< OUString > aAllIcons = ImageTree_getAllImageNames();
-            for (sal_Int32 i = 0; i < aAllIcons.getLength() && i < 1024; i++)
+            for (sal_Int32 i = 0; i < aAllIcons.getLength(); i++)
             {
                 maIconNames.push_back(aAllIcons[i]);
                 maIcons.push_back(BitmapEx(aAllIcons[i]));
             }
         }
 
-        void doDrawIcons(OutputDevice &rDev, Rectangle r)
+        void doDrawIcons(OutputDevice &rDev, Rectangle r, bool bExpanded)
         {
             long nMaxH = 0, nVPos = 0;
             Point p(r.TopLeft());
-            for (size_t i = 0; i < maIcons.size(); i++)
+            size_t nToRender = maIcons.size();
+
+            if (!bExpanded && maIcons.size() > 64)
+                nToRender = 64;
+            for (size_t i = 0; i < nToRender; i++)
             {
                 Size aSize(maIcons[i].GetSizePixel());
 //              sAL_DEBUG("Draw icon '" << maIconNames[i] << "'");
-                rDev.DrawBitmapEx(p, maIcons[i]);
+
+                basegfx::B2DHomMatrix aTransform;
+                aTransform.scale(aSize.Width(), aSize.Height());
+                aTransform.translate(p.X(), p.Y());
+                switch (1)
+                {
+                case 0:
+                    rDev.DrawBitmapEx(p, maIcons[i]);
+                    break;
+                case 1:
+                    rDev.DrawTransformedBitmapEx(aTransform, maIcons[i]);
+                    break;
+                case 2:
+                    aTransform.shearX(10);
+                    rDev.DrawTransformedBitmapEx(aTransform, maIcons[i]);
+                    break;
+                case 3:
+                    aTransform.rotate(i);
+                    rDev.DrawTransformedBitmapEx(aTransform, maIcons[i]);
+                    break;
+                }
+
                 p.Move(aSize.Width(), 0);
                 if (aSize.Height() > nMaxH)
                     nMaxH = aSize.Height();
-                if (p.X() >= r.Right())
+                if (p.X() >= r.Right()) // wrap to next line
                 {
                     nVPos += nMaxH;
                     nMaxH = 0;
                     p = Point(r.Left(), r.Top() + nVPos);
+                }
+                if (p.Y() >= r.Bottom()) // re-start at top
+                {
+                    p = r.TopLeft();
+                    nVPos = 0;
                 }
             }
         }
@@ -644,11 +675,11 @@ public:
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
                 LoadAllImages();
-                doDrawIcons(rDev, r);
+                doDrawIcons(rDev, r, true);
             }
             else
             {
-                doDrawIcons(rDev, r);
+                doDrawIcons(rDev, r, false);
             }
         }
     };
