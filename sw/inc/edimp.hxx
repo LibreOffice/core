@@ -38,6 +38,15 @@ class SwNodeIndex;
         } while( (_pStartCrsr=static_cast<SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr ); \
     }
 
+#define FOREACHPAM_START_CONST(pCURSH) \
+    {\
+        const SwPaM *_pStartCrsr = (pCURSH), *__pStartCrsr = _pStartCrsr; \
+        do {
+
+#define FOREACHPAM_END_CONST() \
+        } while( (_pStartCrsr=static_cast<const SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr ); \
+    }
+
 struct SwPamRange
 {
     sal_uLong nStart, nEnd;

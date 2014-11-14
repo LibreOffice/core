@@ -87,7 +87,7 @@ sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) c
     const sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_TOXMARK );
     for( sal_uInt32 i = 0; i < nMaxItems; ++i )
     {
-        const SwTOXMark* pItem = (SwTOXMark*)GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i );
+        const SwTOXMark* pItem = static_cast<const SwTOXMark*>(GetAttrPool().GetItem2( RES_TXTATR_TOXMARK, i ));
         if( !pItem )
             continue;
         const SwTOXType* pTOXType = pItem->GetTOXType();
@@ -428,8 +428,8 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
         {
             OSL_ENSURE( pSectNd->GetSection().ISA( SwTOXBaseSection ),
                     "no TOXBaseSection!" );
-            SwTOXBaseSection& rTOXSect = (SwTOXBaseSection&)
-                                                pSectNd->GetSection();
+            const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(
+                                                pSectNd->GetSection());
             return &rTOXSect;
         }
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
@@ -440,7 +440,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
 const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
-    const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
+    const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
     OSL_ENSURE( pFmt, "invalid TOXBaseSection!" );
     return pFmt->GetAttrSet();
@@ -500,7 +500,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
     bool bRet = false;
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
 
-    const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
+    const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
     if( pFmt )
     {
@@ -681,7 +681,7 @@ bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ),
                     "no TOXBaseSection!" );
-    SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
+    SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOXBase));
 
     OUString sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName);
     bool bRet = sTmp == rName;
@@ -1039,7 +1039,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
     for ( std::set<SwRootFrm*>::iterator pLayoutIter = aAllLayouts.begin(); pLayoutIter != aAllLayouts.end(); ++pLayoutIter)
     {
-        SwFrm::CheckPageDescs( (SwPageFrm*)(*pLayoutIter)->Lower() );
+        SwFrm::CheckPageDescs( static_cast<SwPageFrm*>((*pLayoutIter)->Lower()) );
     }
 
     SetProtect( SwTOXBase::IsProtected() );
@@ -1139,7 +1139,7 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( sal_uInt16 nLevel )
 void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
-    const SwTOXType* pType = (SwTOXType*) SwTOXBase::GetRegisteredIn();
+    const SwTOXType* pType = static_cast<SwTOXType*>( SwTOXBase::GetRegisteredIn() );
     if( !pType->GetDepends() )
         return;
 
@@ -1430,7 +1430,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
             break;
         case nsSwTOXElement::TOX_GRAPHIC:
             if( pNd->IsGrfNode() )
-                pCNd = (SwCntntNode*)pNd;
+                pCNd = static_cast<SwCntntNode*>(pNd);
             break;
         case nsSwTOXElement::TOX_OLE:
             if( pNd->IsOLENode() )
@@ -1457,7 +1457,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                 }
 
                 if(bInclude)
-                    pCNd = (SwCntntNode*)pNd;
+                    pCNd = static_cast<SwCntntNode*>(pNd);
             }
             break;
         default: break;
@@ -1605,11 +1605,11 @@ void SwTOXBaseSection::UpdatePageNum()
                     OSL_ENSURE( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
                     if( !pFrm )
                         continue;
-                    if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->HasFollow() )
+                    if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->HasFollow() )
                     {
                         // find the right one
-                        SwTxtFrm* pNext = (SwTxtFrm*)pFrm;
-                        while( 0 != ( pNext = (SwTxtFrm*)pFrm->GetFollow() )
+                        SwTxtFrm* pNext = static_cast<SwTxtFrm*>(pFrm);
+                        while( 0 != ( pNext = static_cast<SwTxtFrm*>(pFrm->GetFollow()) )
                                 && rTOXSource.nPos >= pNext->GetOfst() )
                             pFrm = pNext;
                     }

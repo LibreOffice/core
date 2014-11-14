@@ -127,7 +127,7 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
         pDesc->Add( &((SwClient&)aPageDescDep) );
     }
 
-    return (SwPageDesc*)( aPageDescDep.GetRegisteredIn() );
+    return const_cast<SwPageDesc*>(static_cast<const SwPageDesc*>( aPageDescDep.GetRegisteredIn() ));
 }
 
 bool SwEndNoteInfo::KnowsPageDesc() const
@@ -158,7 +158,7 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
             m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
         pFmt->Add( &((SwClient&)aCharFmtDep) );
     }
-    return (SwCharFmt*)aCharFmtDep.GetRegisteredIn();
+    return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(aCharFmtDep.GetRegisteredIn()));
 }
 
 void SwEndNoteInfo::SetCharFmt( SwCharFmt* pChFmt )
@@ -175,7 +175,7 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
             m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
         pFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
     }
-    return (SwCharFmt*)aAnchorCharFmtDep.GetRegisteredIn();
+    return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(aAnchorCharFmtDep.GetRegisteredIn()));
 }
 
 void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
@@ -193,9 +193,9 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {
         SwDoc* pDoc;
         if( aCharFmtDep.GetRegisteredIn() )
-            pDoc = ((SwCharFmt*)aCharFmtDep.GetRegisteredIn())->GetDoc();
+            pDoc = static_cast<SwCharFmt*>(aCharFmtDep.GetRegisteredIn())->GetDoc();
         else
-            pDoc = ((SwCharFmt*)aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
+            pDoc = static_cast<SwCharFmt*>(aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
         SwFtnIdxs& rFtnIdxs = pDoc->GetFtnIdxs();
         for( size_t nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
         {

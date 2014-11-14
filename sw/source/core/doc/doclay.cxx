@@ -131,7 +131,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     if( bMoveWithinDoc && FmFormInventor == pObj->GetObjInventor() )
     {
         // We need to preserve the Name for Controls
-        uno::Reference< awt::XControlModel >  xModel = ((SdrUnoObj*)pObj)->GetUnoControlModel();
+        uno::Reference< awt::XControlModel >  xModel = static_cast<SdrUnoObj*>(pObj)->GetUnoControlModel();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
         OUString sName("Name");
@@ -355,7 +355,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                                     const SwSelBoxes* pSelBoxes,
                                     SwFrmFmt *pParent )
 {
-    SwFmtAnchor& rAnch = (SwFmtAnchor&)rSet.Get( RES_ANCHOR );
+    const SwFmtAnchor& rAnch = static_cast<const SwFmtAnchor&>(rSet.Get( RES_ANCHOR ));
 
     GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, NULL );
 
@@ -507,7 +507,7 @@ static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                      (nPamEndContentIndex > nFlyContentIndex )));
         }
 
-    } while( !bOk && pPam != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
+    } while( !bOk && pPam != ( pTmp = static_cast<const SwPaM*>(pTmp->GetNext()) ));
     return bOk;
 }
 
@@ -548,12 +548,12 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
         return aRetval;
     }
 
-    SwPageFrm *pPage = (SwPageFrm*)getIDocumentLayoutAccess().GetCurrentLayout()->GetLower();
+    const SwPageFrm *pPage = static_cast<const SwPageFrm*>(getIDocumentLayoutAccess().GetCurrentLayout()->GetLower());
     while( pPage )
     {
         if( pPage->GetSortedObjs() )
         {
-            SwSortedObjs &rObjs = *pPage->GetSortedObjs();
+            const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for( size_t i = 0; i < rObjs.size(); ++i)
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
@@ -575,11 +575,11 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
                         // Oops! An empty page.
                         // In order not to lose the whole frame (RTF) we
                         // look for the last Cntnt before the page.
-                        SwPageFrm *pPrv = (SwPageFrm*)pPage->GetPrev();
+                        const SwPageFrm *pPrv = static_cast<const SwPageFrm*>(pPage->GetPrev());
                         while ( !pCntntFrm && pPrv )
                         {
                             pCntntFrm = pPrv->FindFirstBodyCntnt();
-                            pPrv = (SwPageFrm*)pPrv->GetPrev();
+                            pPrv = static_cast<const SwPageFrm*>(pPrv->GetPrev());
                         }
                     }
                     if ( pCntntFrm )
@@ -590,7 +590,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
                 }
             }
         }
-        pPage = (SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
     }
 
     return aRetval;
@@ -907,7 +907,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         // Insert field
         if(pType)
         {
-            SwSetExpField aFld( (SwSetExpFieldType*)pType, OUString(), SVX_NUM_ARABIC);
+            SwSetExpField aFld( static_cast<SwSetExpFieldType*>(pType), OUString(), SVX_NUM_ARABIC);
             if( bOrderNumberingFirst )
                 nIdx = 0;
             SwFmtFld aFmt( aFld );
@@ -1199,7 +1199,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         // insert field
         if ( pType )
         {
-            SwSetExpField aFld( (SwSetExpFieldType*)pType, OUString(), SVX_NUM_ARABIC );
+            SwSetExpField aFld( static_cast<SwSetExpFieldType*>(pType), OUString(), SVX_NUM_ARABIC );
             if( bOrderNumberingFirst )
                 nIdx = 0;
             SwFmtFld aFmt( aFld );
@@ -1240,7 +1240,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
     if (!pContact)
         return 0;
 
-    SwDrawFrmFmt* pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
+    SwDrawFrmFmt* pOldFmt = static_cast<SwDrawFrmFmt *>(pContact->GetFmt());
     if (!pOldFmt)
         return 0;
 
@@ -1281,7 +1281,7 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
                 pSh->LockPaint();
                 pSh->UnlockPaint( true );
             }
-            pSh = (SwViewShell*)pSh->GetNext();
+            pSh = static_cast<SwViewShell*>(pSh->GetNext());
         } while( pSh != pStartSh );
     return 0;
 }
@@ -1370,10 +1370,10 @@ const SwFlyFrmFmt* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nNdTyp 
                 if( nNdTyp == ND_TEXTNODE
                         ? !pNd->IsNoTxtNode()
                         : nNdTyp == pNd->GetNodeType() )
-                    return (SwFlyFrmFmt*)pFlyFmt;
+                    return static_cast<const SwFlyFrmFmt*>(pFlyFmt);
             }
             else
-                return (SwFlyFrmFmt*)pFlyFmt;
+                return static_cast<const SwFlyFrmFmt*>(pFlyFmt);
         }
     }
     return 0;
@@ -1621,8 +1621,8 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
             }
         }
         if( !pItem )
-            pItem = (SvxFrameDirectionItem*)&GetAttrPool().GetDefaultItem(
-                                                            RES_FRAMEDIR );
+            pItem = static_cast<const SvxFrameDirectionItem*>(&GetAttrPool().GetDefaultItem(
+                                                            RES_FRAMEDIR ));
         nRet = pItem->GetValue();
     }
     return nRet;
@@ -1646,7 +1646,7 @@ std::set<SwRootFrm*> SwDoc::GetAllLayouts()
             if (pTemp->GetLayout())
             {
                 aAllLayouts.insert(pTemp->GetLayout());
-                pTemp = (SwViewShell*)pTemp->GetNext();
+                pTemp = static_cast<SwViewShell*>(pTemp->GetNext());
             }
         } while(pTemp!=pStart);
     }

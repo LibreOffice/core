@@ -91,10 +91,10 @@ namespace
         {
             SwSbxValue aValue;
             if( nsSwGetSetExpType::GSE_EXPR & pFld->GetSubType() )
-                aValue.PutDouble( ((SwSetExpField*)pFld)->GetValue() );
+                aValue.PutDouble( static_cast<const SwSetExpField*>(pFld)->GetValue() );
             else
                 // Extension to calculate with Strings
-                aValue.PutString( ((SwSetExpField*)pFld)->GetExpStr() );
+                aValue.PutString( static_cast<const SwSetExpField*>(pFld)->GetExpStr() );
 
             // set the new value in Calculator
             rCalc.VarChange( pFld->GetTyp()->GetName(), aValue );
@@ -108,7 +108,7 @@ namespace
             {
             case RES_DBNUMSETFLD:
                 {
-                    SwDBNumSetField* pDBFld = (SwDBNumSetField*)pFld;
+                    SwDBNumSetField* pDBFld = const_cast<SwDBNumSetField*>(static_cast<const SwDBNumSetField*>(pFld));
 
                     SwDBData aDBData(pDBFld->GetDBData(&rDoc));
 
@@ -120,7 +120,7 @@ namespace
                 break;
             case RES_DBNEXTSETFLD:
                 {
-                    SwDBNextSetField* pDBFld = (SwDBNextSetField*)pFld;
+                    SwDBNextSetField* pDBFld = const_cast<SwDBNextSetField*>(static_cast<const SwDBNextSetField*>(pFld));
                     SwDBData aDBData(pDBFld->GetDBData(&rDoc));
                     if( !pDBFld->IsCondValid() ||
                         !pMgr->OpenDataSource( aDBData.sDataSource, aDBData.sCommand ))
@@ -174,7 +174,7 @@ SwFieldType* DocumentFieldsManager::InsertFldType(const SwFieldType &rFldTyp)
             //             Or we get doubble number circles!!
             //MIB 14.03.95: From now on also the SW3-Reader relies on &m_rDoc, when
             //constructing string pools and when reading SetExp fields
-            if( nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType&)rFldTyp).GetType() )
+            if( nsSwGetSetExpType::GSE_SEQ & static_cast<const SwSetExpFieldType&>(rFldTyp).GetType() )
                 i -= INIT_SEQ_FLDTYPES;
         // no break;
     case RES_DBFLD:
@@ -206,24 +206,24 @@ SwFieldType* DocumentFieldsManager::InsertFldType(const SwFieldType &rFldTyp)
     switch( nFldWhich )
     {
     case RES_DDEFLD:
-        ((SwDDEFieldType*)pNew)->SetDoc( &m_rDoc );
+        static_cast<SwDDEFieldType*>(pNew)->SetDoc( &m_rDoc );
         break;
 
     case RES_DBFLD:
     case RES_TABLEFLD:
     case RES_DATETIMEFLD:
     case RES_GETEXPFLD:
-        ((SwValueFieldType*)pNew)->SetDoc( &m_rDoc );
+        static_cast<SwValueFieldType*>(pNew)->SetDoc( &m_rDoc );
         break;
 
     case RES_USERFLD:
     case RES_SETEXPFLD:
-        ((SwValueFieldType*)pNew)->SetDoc( &m_rDoc );
+        static_cast<SwValueFieldType*>(pNew)->SetDoc( &m_rDoc );
         // JP 29.07.96: Optionally prepare FieldList for Calculator:
         mpUpdtFlds->InsertFldType( *pNew );
         break;
     case RES_AUTHORITY :
-        ((SwAuthorityFieldType*)pNew)->SetDoc( &m_rDoc );
+        static_cast<SwAuthorityFieldType*>(pNew)->SetDoc( &m_rDoc );
         break;
     }
 
@@ -313,11 +313,11 @@ void DocumentFieldsManager::RemoveFldType(sal_uInt16 nFld)
             if( pTmp->GetDepends() && !m_rDoc.IsUsed( *pTmp ) )
             {
                 if( RES_SETEXPFLD == nWhich )
-                    ((SwSetExpFieldType*)pTmp)->SetDeleted( true );
+                    static_cast<SwSetExpFieldType*>(pTmp)->SetDeleted( true );
                 else if( RES_USERFLD == nWhich )
-                    ((SwUserFieldType*)pTmp)->SetDeleted( true );
+                    static_cast<SwUserFieldType*>(pTmp)->SetDeleted( true );
                 else
-                    ((SwDDEFieldType*)pTmp)->SetDeleted( true );
+                    static_cast<SwDDEFieldType*>(pTmp)->SetDeleted( true );
                 nWhich = 0;
             }
             break;
@@ -440,13 +440,13 @@ void DocumentFieldsManager::InsDeletedFldType( SwFieldType& rFldTyp )
     switch( nFldWhich )
     {
     case RES_SETEXPFLD:
-        ((SwSetExpFieldType&)rFldTyp).SetDeleted( false );
+        static_cast<SwSetExpFieldType&>(rFldTyp).SetDeleted( false );
         break;
     case RES_USERFLD:
-        ((SwUserFieldType&)rFldTyp).SetDeleted( false );
+        static_cast<SwUserFieldType&>(rFldTyp).SetDeleted( false );
         break;
     case RES_DDEFLD:
-        ((SwDDEFieldType&)rFldTyp).SetDeleted( false );
+        static_cast<SwDDEFieldType&>(rFldTyp).SetDeleted( false );
         break;
     }
 }
@@ -533,7 +533,7 @@ bool DocumentFieldsManager::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
         case RES_DBNEXTSETFLD:
         case RES_DBNUMSETFLD:
         case RES_DBSETNUMBERFLD:
-            m_rDoc.ChgDBData(((SwDBNameInfField*) pNewFld)->GetRealDBData());
+            m_rDoc.ChgDBData(static_cast<SwDBNameInfField*>( pNewFld)->GetRealDBData());
             pNewFld->GetTyp()->UpdateFlds();
 
             break;
@@ -543,7 +543,7 @@ bool DocumentFieldsManager::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             {
                 // JP 10.02.96: call ChgValue, so that the style change sets the
                 // ContentString correctly
-                SwDBField* pDBFld = (SwDBField*)pNewFld;
+                SwDBField* pDBFld = static_cast<SwDBField*>(pNewFld);
                 if (pDBFld->IsInitialized())
                     pDBFld->ChgValue( pDBFld->GetValue(), true );
 
@@ -588,14 +588,14 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
         {
             SwTableFmlUpdate* pUpdtFld = 0;
             if( pHt && RES_TABLEFML_UPDATE == pHt->Which() )
-                pUpdtFld = (SwTableFmlUpdate*)pHt;
+                pUpdtFld = static_cast<SwTableFmlUpdate*>(pHt);
 
             SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
             for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
             {
                 if( pFmtFld->GetTxtFld() )
                 {
-                    SwTblField* pFld = (SwTblField*)pFmtFld->GetField();
+                    SwTblField* pFld = static_cast<SwTblField*>(pFmtFld->GetField());
 
                     if( pUpdtFld )
                     {
@@ -656,15 +656,15 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
     for (sal_uInt32 i = 0; i < nMaxItems; ++i)
     {
         if( 0 != (pItem = m_rDoc.GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
-            ((SwTblBoxFormula*)pItem)->GetDefinedIn() )
+            static_cast<const SwTblBoxFormula*>(pItem)->GetDefinedIn() )
         {
-            ((SwTblBoxFormula*)pItem)->ChangeState( pHt );
+            const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->ChangeState( pHt );
         }
     }
 
     // all fields/boxes are now invalid, so we can start to calculate
     if( pHt && ( RES_TABLEFML_UPDATE != pHt->Which() ||
-                TBL_CALC != ((SwTableFmlUpdate*)pHt)->eFlags ))
+                TBL_CALC != static_cast<SwTableFmlUpdate*>(pHt)->eFlags ))
         return ;
 
     SwCalc* pCalc = 0;
@@ -680,7 +680,7 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
                 // mba: do we really need &m_rDoc "optimization"? Is it still valid?
                 SwTblField* pFld;
                 if( !pFmtFld->GetTxtFld() || (nsSwExtendedSubType::SUB_CMD &
-                    (pFld = (SwTblField*)pFmtFld->GetField())->GetSubType() ))
+                    (pFld = static_cast<SwTblField*>(pFmtFld->GetField()))->GetSubType() ))
                     continue;
 
                 // needs to be recalculated
@@ -696,7 +696,7 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
 
                     // if &m_rDoc field is not in the to-be-updated table, skip it
                     if( pHt && &pTblNd->GetTable() !=
-                                            ((SwTableFmlUpdate*)pHt)->pTbl )
+                                            static_cast<SwTableFmlUpdate*>(pHt)->pTbl )
                         continue;
 
                     if( !pCalc )
@@ -751,17 +751,17 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
     for (sal_uInt32 i = 0; i < nMaxItems; ++i )
     {
         if( 0 != (pItem = m_rDoc.GetAttrPool().GetItem2( RES_BOXATR_FORMULA, i ) ) &&
-            ((SwTblBoxFormula*)pItem)->GetDefinedIn() &&
-            !((SwTblBoxFormula*)pItem)->IsValid() )
+            static_cast<const SwTblBoxFormula*>(pItem)->GetDefinedIn() &&
+            !static_cast<const SwTblBoxFormula*>(pItem)->IsValid() )
         {
-            SwTblBoxFormula* pFml = (SwTblBoxFormula*)pItem;
+            SwTblBoxFormula* pFml = const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem));
             SwTableBox* pBox = pFml->GetTableBox();
             if( pBox && pBox->GetSttNd() &&
                 pBox->GetSttNd()->GetNodes().IsDocNodes() )
             {
                 const SwTableNode* pTblNd = pBox->GetSttNd()->FindTableNode();
                 if( !pHt || &pTblNd->GetTable() ==
-                                            ((SwTableFmlUpdate*)pHt)->pTbl )
+                                            static_cast<SwTableFmlUpdate*>(pHt)->pTbl )
                 {
                     double nValue;
                     if( !pCalc )
@@ -869,19 +869,19 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
                     // Entry present?
                     sal_uInt16 nPos;
                     const OUString& rNm = pFldType->GetName();
-                    OUString sExpand(((SwUserFieldType*)pFldType)->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
+                    OUString sExpand(const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFldType))->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
                     SwHash* pFnd = Find( rNm, pHashStrTbl, nStrFmtCnt, &nPos );
                     if( pFnd )
                         // modify entry in the hash table
-                        ((_HashStr*)pFnd)->aSetStr = sExpand;
+                        static_cast<_HashStr*>(pFnd)->aSetStr = sExpand;
                     else
                         // insert the new entry
                         *(pHashStrTbl + nPos ) = new _HashStr( rNm, sExpand,
-                                                (_HashStr*)*(pHashStrTbl + nPos) );
+                                                static_cast<_HashStr*>(*(pHashStrTbl + nPos)) );
                 }
                 break;
             case RES_SETEXPFLD:
-                ((SwSetExpFieldType*)pFldType)->SetOutlineChgNd( 0 );
+                const_cast<SwSetExpFieldType*>(static_cast<const SwSetExpFieldType*>(pFldType))->SetOutlineChgNd( 0 );
                 break;
             }
     }
@@ -961,7 +961,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
         {
         case RES_HIDDENTXTFLD:
         {
-            SwHiddenTxtField* pHFld = (SwHiddenTxtField*)pFld;
+            SwHiddenTxtField* pHFld = const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld));
             SwSbxValue aValue = aCalc.Calculate( pHFld->GetPar1() );
             bool bValue = !aValue.GetBool();
             if(!aValue.IsVoidValue())
@@ -974,7 +974,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
         break;
         case RES_HIDDENPARAFLD:
         {
-            SwHiddenParaField* pHPFld = (SwHiddenParaField*)pFld;
+            SwHiddenParaField* pHPFld = const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pFld));
             SwSbxValue aValue = aCalc.Calculate( pHPFld->GetPar1() );
             bool bValue = aValue.GetBool();
             if(!aValue.IsVoidValue())
@@ -984,8 +984,8 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
         case RES_DBSETNUMBERFLD:
 #if HAVE_FEATURE_DBCONNECTIVITY
         {
-            ((SwDBSetNumberField*)pFld)->Evaluate(&m_rDoc);
-            aCalc.VarChange( sDBNumNm, ((SwDBSetNumberField*)pFld)->GetSetNumber());
+            const_cast<SwDBSetNumberField*>(static_cast<const SwDBSetNumberField*>(pFld))->Evaluate(&m_rDoc);
+            aCalc.VarChange( sDBNumNm, static_cast<const SwDBSetNumberField*>(pFld)->GetSetNumber());
         }
 #endif
         break;
@@ -993,7 +993,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
         case RES_DBNUMSETFLD:
 #if HAVE_FEATURE_DBCONNECTIVITY
         {
-            UpdateDBNumFlds( *(SwDBNameInfField*)pFld, aCalc );
+            UpdateDBNumFlds( *const_cast<SwDBNameInfField*>(static_cast<const SwDBNameInfField*>(pFld)), aCalc );
             if( bCanFill )
                 bCanFill = pMgr->FillCalcWithMergeData( m_rDoc.GetNumberFormatter(), nLang, true, aCalc );
         }
@@ -1003,9 +1003,9 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
         {
 #if HAVE_FEATURE_DBCONNECTIVITY
             // evaluate field
-            ((SwDBField*)pFld)->Evaluate();
+            const_cast<SwDBField*>(static_cast<const SwDBField*>(pFld))->Evaluate();
 
-            SwDBData aTmpDBData(((SwDBField*)pFld)->GetDBData());
+            SwDBData aTmpDBData(static_cast<const SwDBField*>(pFld)->GetDBData());
 
             if( pMgr->IsDataSourceOpen(aTmpDBData.sDataSource, aTmpDBData.sCommand, false))
                 aCalc.VarChange( sDBNumNm, pMgr->GetSelectedRecordId(aTmpDBData.sDataSource, aTmpDBData.sCommand, aTmpDBData.nCommandType));
@@ -1038,7 +1038,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
             {
                 if( RES_GETEXPFLD == nWhich )
                 {
-                    SwGetExpField* pGFld = (SwGetExpField*)pFld;
+                    SwGetExpField* pGFld = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pFld));
 
                     if( (!pUpdtFld || pUpdtFld == pTxtFld )
                         && pGFld->IsInBodyTxt() )
@@ -1050,7 +1050,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
                 }
                 else
                 {
-                    SwSetExpField* pSFld = (SwSetExpField*)pFld;
+                    SwSetExpField* pSFld = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pFld));
                     // is the "formula" a field?
                     aNew = LookString( pHashStrTbl, nStrFmtCnt,
                                 pSFld->GetFormula() );
@@ -1063,22 +1063,22 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
                         pSFld->ChgExpStr( aNew );
 
                     // lookup the field's name
-                    aNew = ((SwSetExpFieldType*)pSFld->GetTyp())->GetSetRefName();
+                    aNew = static_cast<SwSetExpFieldType*>(pSFld->GetTyp())->GetSetRefName();
                     // Entry present?
                     sal_uInt16 nPos;
                     SwHash* pFnd = Find( aNew, pHashStrTbl, nStrFmtCnt, &nPos );
                     if( pFnd )
                         // Modify entry in the hash table
-                        ((_HashStr*)pFnd)->aSetStr = pSFld->GetExpStr();
+                        static_cast<_HashStr*>(pFnd)->aSetStr = pSFld->GetExpStr();
                     else
                         // insert new entry
                         *(pHashStrTbl + nPos ) = pFnd = new _HashStr( aNew,
                                         pSFld->GetExpStr(),
-                                        (_HashStr*)*(pHashStrTbl + nPos) );
+                                        static_cast<_HashStr*>(*(pHashStrTbl + nPos) ));
 
                     // Extension for calculation with Strings
                     SwSbxValue aValue;
-                    aValue.PutString( ((_HashStr*)pFnd)->aSetStr );
+                    aValue.PutString( static_cast<_HashStr*>(pFnd)->aSetStr );
                     aCalc.VarChange( aNew, aValue );
                 }
             }
@@ -1086,7 +1086,7 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
             {
                 if( RES_GETEXPFLD == nWhich )
                 {
-                    SwGetExpField* pGFld = (SwGetExpField*)pFld;
+                    SwGetExpField* pGFld = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(pFld));
 
                     if( (!pUpdtFld || pUpdtFld == pTxtFld )
                         && pGFld->IsInBodyTxt() )
@@ -1099,8 +1099,8 @@ void DocumentFieldsManager::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds 
                 }
                 else
                 {
-                    SwSetExpField* pSFld = (SwSetExpField*)pFld;
-                    SwSetExpFieldType* pSFldTyp = (SwSetExpFieldType*)pFld->GetTyp();
+                    SwSetExpField* pSFld = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pFld));
+                    SwSetExpFieldType* pSFldTyp = static_cast<SwSetExpFieldType*>(pFld->GetTyp());
                     aNew = pSFldTyp->GetName();
 
                     SwNode* pSeqNd = 0;
@@ -1177,7 +1177,7 @@ void DocumentFieldsManager::UpdateUsrFlds()
         {
             if( !pCalc )
                 pCalc = new SwCalc( m_rDoc );
-            ((SwUserFieldType*)pFldType)->GetValue( *pCalc );
+            const_cast<SwUserFieldType*>(static_cast<const SwUserFieldType*>(pFldType))->GetValue( *pCalc );
         }
 
     if( pCalc )
@@ -1312,11 +1312,11 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
                 switch( aTypes[ nStt ] )
                 {
                 case RES_DOCINFOFLD:
-                    if( ((SwDocInfoField*)pFmtFld->GetField())->IsFixed() )
+                    if( static_cast<SwDocInfoField*>(pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = true;
-                        SwDocInfoField* pDocInfFld = (SwDocInfoField*)pFmtFld->GetField();
-                        pDocInfFld->SetExpansion( ((SwDocInfoFieldType*)
+                        SwDocInfoField* pDocInfFld = static_cast<SwDocInfoField*>(pFmtFld->GetField());
+                        pDocInfFld->SetExpansion( static_cast<SwDocInfoFieldType*>(
                                     pDocInfFld->GetTyp())->Expand(
                                         pDocInfFld->GetSubType(),
                                         pDocInfFld->GetFormat(),
@@ -1326,22 +1326,22 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
                     break;
 
                 case RES_AUTHORFLD:
-                    if( ((SwAuthorField*)pFmtFld->GetField())->IsFixed() )
+                    if( static_cast<SwAuthorField*>(pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = true;
-                        SwAuthorField* pAuthorFld = (SwAuthorField*)pFmtFld->GetField();
-                        pAuthorFld->SetExpansion( ((SwAuthorFieldType*)
+                        SwAuthorField* pAuthorFld = static_cast<SwAuthorField*>(pFmtFld->GetField());
+                        pAuthorFld->SetExpansion( static_cast<SwAuthorFieldType*>(
                                     pAuthorFld->GetTyp())->Expand(
                                                 pAuthorFld->GetFormat() ) );
                     }
                     break;
 
                 case RES_EXTUSERFLD:
-                    if( ((SwExtUserField*)pFmtFld->GetField())->IsFixed() )
+                    if( static_cast<SwExtUserField*>(pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = true;
-                        SwExtUserField* pExtUserFld = (SwExtUserField*)pFmtFld->GetField();
-                        pExtUserFld->SetExpansion( ((SwExtUserFieldType*)
+                        SwExtUserField* pExtUserFld = static_cast<SwExtUserField*>(pFmtFld->GetField());
+                        pExtUserFld->SetExpansion( static_cast<SwExtUserFieldType*>(
                                     pExtUserFld->GetTyp())->Expand(
                                             pExtUserFld->GetSubType(),
                                             pExtUserFld->GetFormat()));
@@ -1349,21 +1349,21 @@ void DocumentFieldsManager::SetFixFields( bool bOnlyTimeDate, const DateTime* pN
                     break;
 
                 case RES_DATETIMEFLD:
-                    if( ((SwDateTimeField*)pFmtFld->GetField())->IsFixed() )
+                    if( static_cast<SwDateTimeField*>(pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = true;
-                        ((SwDateTimeField*)pFmtFld->GetField())->SetDateTime(
+                        static_cast<SwDateTimeField*>(pFmtFld->GetField())->SetDateTime(
                                                     DateTime(Date(nDate), tools::Time(nTime)) );
                     }
                     break;
 
                 case RES_FILENAMEFLD:
-                    if( ((SwFileNameField*)pFmtFld->GetField())->IsFixed() )
+                    if( static_cast<SwFileNameField*>(pFmtFld->GetField())->IsFixed() )
                     {
                         bChgd = true;
                         SwFileNameField* pFileNameFld =
-                            (SwFileNameField*)pFmtFld->GetField();
-                        pFileNameFld->SetExpansion( ((SwFileNameFieldType*)
+                            static_cast<SwFileNameField*>(pFmtFld->GetField());
+                        pFileNameFld->SetExpansion( static_cast<SwFileNameFieldType*>(
                                     pFileNameFld->GetTyp())->Expand(
                                             pFileNameFld->GetFormat() ) );
                     }
@@ -1466,7 +1466,7 @@ void DocumentFieldsManager::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblS
             {
                 // set the new value in the hash table
                 // is the formula a field?
-                SwSetExpField* pSFld = (SwSetExpField*)pFld;
+                SwSetExpField* pSFld = const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pFld));
                 OUString aNew = LookString( ppHashTbl, rTblSize, pSFld->GetFormula() );
 
                 if( aNew.isEmpty() )               // nothing found, then the formula is
@@ -1477,17 +1477,17 @@ void DocumentFieldsManager::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblS
                 pSFld->ChgExpStr( aNew );
 
                 // look up the field's name
-                aNew = ((SwSetExpFieldType*)pSFld->GetTyp())->GetSetRefName();
+                aNew = static_cast<SwSetExpFieldType*>(pSFld->GetTyp())->GetSetRefName();
                 // Entry present?
                 sal_uInt16 nPos;
                 SwHash* pFnd = Find( aNew, ppHashTbl, rTblSize, &nPos );
                 if( pFnd )
                     // modify entry in the hash table
-                    ((_HashStr*)pFnd)->aSetStr = pSFld->GetExpStr();
+                    static_cast<_HashStr*>(pFnd)->aSetStr = pSFld->GetExpStr();
                 else
                     // insert the new entry
                     *(ppHashTbl + nPos ) = new _HashStr( aNew,
-                            pSFld->GetExpStr(), (_HashStr*)*(ppHashTbl + nPos) );
+                            pSFld->GetExpStr(), static_cast<_HashStr*>(*(ppHashTbl + nPos)) );
             }
             break;
         case RES_DBFLD:
@@ -1640,17 +1640,17 @@ void DocumentFieldsManager::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& r
     bool bPar1 = rCalc.Calculate( rDBFld.GetPar1() ).GetBool();
 
     if( RES_DBNEXTSETFLD == nFldType )
-        ((SwDBNextSetField&)rDBFld).SetCondValid( bPar1 );
+        static_cast<SwDBNextSetField&>(rDBFld).SetCondValid( bPar1 );
     else
-        ((SwDBNumSetField&)rDBFld).SetCondValid( bPar1 );
+        static_cast<SwDBNumSetField&>(rDBFld).SetCondValid( bPar1 );
 
     if( !rDBFld.GetRealDBData().sDataSource.isEmpty() )
     {
         // Edit a certain database
         if( RES_DBNEXTSETFLD == nFldType )
-            ((SwDBNextSetField&)rDBFld).Evaluate(&m_rDoc);
+            static_cast<SwDBNextSetField&>(rDBFld).Evaluate(&m_rDoc);
         else
-            ((SwDBNumSetField&)rDBFld).Evaluate(&m_rDoc);
+            static_cast<SwDBNumSetField&>(rDBFld).Evaluate(&m_rDoc);
 
         SwDBData aTmpDBData( rDBFld.GetDBData(&m_rDoc) );
 

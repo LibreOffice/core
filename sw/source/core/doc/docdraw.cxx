@@ -206,7 +206,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     if( bNoGroup )
     {
         // Revoke anchor attribute.
-        SwDrawContact *pMyContact = (SwDrawContact*)GetUserCall(pObj);
+        SwDrawContact *pMyContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
         const SwFmtAnchor aAnch( pMyContact->GetFmt()->GetAnchor() );
 
         SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
@@ -224,7 +224,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         for( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
+            SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
             // #i53320#
 #if OSL_DEBUG_LEVEL > 0
@@ -234,7 +234,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                     "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
 #endif
 
-            pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
+            pFmt = static_cast<SwDrawFrmFmt*>(pContact->GetFmt());
             // Deletes itself!
             pContact->Changed(*pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
             pObj->SetUserCall( 0 );
@@ -322,14 +322,14 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                 if ( pObj->IsA( TYPE(SdrObjGroup) ) )
                 {
-                    SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
+                    SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
                     SwFmtAnchor aAnch( pContact->GetFmt()->GetAnchor() );
-                    SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
+                    SdrObjList *pLst = static_cast<SdrObjGroup*>(pObj)->GetSubList();
 
                     SwUndoDrawUnGroup* pUndo = 0;
                     if( bUndo )
                     {
-                        pUndo = new SwUndoDrawUnGroup( (SdrObjGroup*)pObj );
+                        pUndo = new SwUndoDrawUnGroup( static_cast<SdrObjGroup*>(pObj) );
                         GetIDocumentUndoRedo().AppendUndo(pUndo);
                     }
 
@@ -398,7 +398,7 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             if( pObj->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrmFmt* pFrmFmt = (SwFlyFrmFmt*)
-                    ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetFmt();
+                    static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFmt();
                 if( pFrmFmt )
                 {
                     getIDocumentLayoutAccess().DelLayoutFmt( pFrmFmt );
@@ -412,8 +412,8 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             if( !pObj->ISA(SwVirtFlyDrawObj) )
             {
-                SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
-                SwDrawFrmFmt *pFrmFmt = (SwDrawFrmFmt*)pC->GetFmt();
+                SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pObj));
+                SwDrawFrmFmt *pFrmFmt = static_cast<SwDrawFrmFmt*>(pC->GetFmt());
                 if( pFrmFmt &&
                     FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
@@ -439,10 +439,10 @@ bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 {
                     const SdrMark& rMark = *rMrkList.GetMark( i );
                     pObj = rMark.GetMarkedSdrObj();
-                    SwDrawContact *pContact = (SwDrawContact*)pObj->GetUserCall();
+                    SwDrawContact *pContact = static_cast<SwDrawContact*>(pObj->GetUserCall());
                     if( pContact ) // of course not for grouped objects
                     {
-                        SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
+                        SwDrawFrmFmt *pFmt = static_cast<SwDrawFrmFmt*>(pContact->GetFmt());
                         // before delete of selection is performed, marked
                         // <SwDrawVirtObj>-objects have to be replaced by its
                         // reference objects.  Thus, assert, if a
@@ -531,33 +531,33 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         {
             // Date field
             pInfo->SetRepresentation(
-                ((const SvxDateField*) pField)->GetFormatted(
+                static_cast<const SvxDateField*>( pField)->GetFormatted(
                         *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
         }
         else if (pField && pField->ISA(SvxURLField))
         {
             // URL field
-            switch ( ((const SvxURLField*) pField)->GetFormat() )
+            switch ( static_cast<const SvxURLField*>( pField)->GetFormat() )
             {
                 case SVXURLFORMAT_APPDEFAULT: //!!! Can be set in App???
                 case SVXURLFORMAT_REPR:
                 {
                     pInfo->SetRepresentation(
-                        ((const SvxURLField*)pField)->GetRepresentation());
+                        static_cast<const SvxURLField*>(pField)->GetRepresentation());
                 }
                 break;
 
                 case SVXURLFORMAT_URL:
                 {
                     pInfo->SetRepresentation(
-                        ((const SvxURLField*)pField)->GetURL());
+                        static_cast<const SvxURLField*>(pField)->GetURL());
                 }
                 break;
             }
 
             sal_uInt16 nChrFmt;
 
-            if (IsVisitedURL(((const SvxURLField*)pField)->GetURL()))
+            if (IsVisitedURL(static_cast<const SvxURLField*>(pField)->GetURL()))
                 nChrFmt = RES_POOLCHR_INET_VISIT;
             else
                 nChrFmt = RES_POOLCHR_INET_NORMAL;
@@ -579,7 +579,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         {
             // Time field
             pInfo->SetRepresentation(
-                ((const SvxExtTimeField*) pField)->GetFormatted(
+                static_cast<const SvxExtTimeField*>( pField)->GetFormatted(
                         *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
         }
         else

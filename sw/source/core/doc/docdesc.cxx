@@ -704,12 +704,12 @@ void SwDoc::PrtOLENotify( bool bAll )
         SwViewShell *pSh = getIDocumentLayoutAccess().GetCurrentViewShell();
         if ( !pSh->ISA(SwFEShell) )
             do
-            {   pSh = (SwViewShell*)pSh->GetNext();
+            {   pSh = static_cast<SwViewShell*>(pSh->GetNext());
             } while ( !pSh->ISA(SwFEShell) &&
                       pSh != getIDocumentLayoutAccess().GetCurrentViewShell() );
 
         if ( pSh->ISA(SwFEShell) )
-            pShell = (SwFEShell*)pSh;
+            pShell = static_cast<SwFEShell*>(pSh);
     }
     if ( !pShell )
     {
@@ -781,7 +781,7 @@ void SwDoc::PrtOLENotify( bool bAll )
 
 IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
 {
-    SwFEShell* pSh = (SwFEShell*)GetEditShell();
+    SwFEShell* pSh = static_cast<SwFEShell*>(GetEditShell());
     if( pSh )
     {
         mbOLEPrtNotifyPending = mbAllOLENotify = false;
@@ -870,7 +870,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
         return;
 
     const SwTextGridItem& rGrid =
-                    (const SwTextGridItem&)GetDefault( RES_TEXTGRID );
+                    static_cast<const SwTextGridItem&>(GetDefault( RES_TEXTGRID ));
     SwTextGridItem aNewGrid = rGrid;
     aNewGrid.SetSquaredMode(bSquaredPageMode);
     aNewGrid.Init();
@@ -883,7 +883,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
         SwFrmFmt& rMaster = rDesc.GetMaster();
         SwFrmFmt& rLeft = rDesc.GetLeft();
 
-        SwTextGridItem aGrid((SwTextGridItem&)rMaster.GetFmtAttr(RES_TEXTGRID));
+        SwTextGridItem aGrid(static_cast<const SwTextGridItem&>(rMaster.GetFmtAttr(RES_TEXTGRID)));
         aGrid.SwitchPaperMode( bSquaredPageMode );
         rMaster.SetFmtAttr(aGrid);
         rLeft.SetFmtAttr(aGrid);
@@ -893,7 +893,7 @@ void SwDoc::SetDefaultPageMode(bool bSquaredPageMode)
 bool SwDoc::IsSquaredPageMode() const
 {
     const SwTextGridItem& rGrid =
-                        (const SwTextGridItem&)GetDefault( RES_TEXTGRID );
+                        static_cast<const SwTextGridItem&>(GetDefault( RES_TEXTGRID ));
     return rGrid.IsSquaredMode();
 }
 

@@ -97,7 +97,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
                 pTimer->Start();
                 return 0;
             }
-            pSh = (SwViewShell*)pSh->GetNext();
+            pSh = static_cast<SwViewShell*>(pSh->GetNext());
         } while( pSh != pStartSh );
 
         if( pTmpRoot->IsNeedGrammarCheck() )

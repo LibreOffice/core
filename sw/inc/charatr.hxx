@@ -21,89 +21,116 @@
 
 #include <format.hxx>
 #include <hintids.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/autokernitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/contouritem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crossedoutitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/prszitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/charsetcoloritem.hxx>
+#include <editeng/escapementitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/nhypitem.hxx>
+#include <editeng/blinkitem.hxx>
+#include <editeng/brushitem.hxx>
+#include <editeng/emphasismarkitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/charhiddenitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/langitem.hxx>
 
 // implementation of the character attribute methods of SwAttrSet
 
 inline const SvxPostureItem      &SwAttrSet::GetPosture(bool bInP) const
-    {   return (const SvxPostureItem&)Get( RES_CHRATR_POSTURE,bInP); }
+    {   return static_cast<const SvxPostureItem&>(Get( RES_CHRATR_POSTURE,bInP)); }
 inline const SvxPostureItem      &SwAttrSet::GetCJKPosture(bool bInP) const
-    {   return (const SvxPostureItem&)Get( RES_CHRATR_CJK_POSTURE,bInP); }
+    {   return static_cast<const SvxPostureItem&>(Get( RES_CHRATR_CJK_POSTURE,bInP)); }
 inline const SvxPostureItem      &SwAttrSet::GetCTLPosture(bool bInP) const
-    {   return (const SvxPostureItem&)Get( RES_CHRATR_CTL_POSTURE,bInP); }
+    {   return static_cast<const SvxPostureItem&>(Get( RES_CHRATR_CTL_POSTURE,bInP)); }
 inline const SvxWeightItem       &SwAttrSet::GetWeight(bool bInP) const
-    {   return (const SvxWeightItem&)Get( RES_CHRATR_WEIGHT,bInP); }
+    {   return static_cast<const SvxWeightItem&>(Get( RES_CHRATR_WEIGHT,bInP)); }
 inline const SvxWeightItem       &SwAttrSet::GetCJKWeight(bool bInP) const
-    {   return (const SvxWeightItem&)Get( RES_CHRATR_CJK_WEIGHT,bInP); }
+    {   return static_cast<const SvxWeightItem&>(Get( RES_CHRATR_CJK_WEIGHT,bInP)); }
 inline const SvxWeightItem       &SwAttrSet::GetCTLWeight(bool bInP) const
-    {   return (const SvxWeightItem&)Get( RES_CHRATR_CTL_WEIGHT,bInP); }
+    {   return static_cast<const SvxWeightItem&>(Get( RES_CHRATR_CTL_WEIGHT,bInP)); }
 inline const SvxShadowedItem     &SwAttrSet::GetShadowed(bool bInP) const
-    {   return (const SvxShadowedItem&)Get( RES_CHRATR_SHADOWED,bInP); }
+    {   return static_cast<const SvxShadowedItem&>(Get( RES_CHRATR_SHADOWED,bInP)); }
 inline const SvxAutoKernItem     &SwAttrSet::GetAutoKern(bool bInP) const
-    {   return (const SvxAutoKernItem&)Get( RES_CHRATR_AUTOKERN,bInP); }
-inline const SvxWordLineModeItem     &SwAttrSet::GetWordLineMode(bool bInP) const
-    {   return (const SvxWordLineModeItem&)Get( RES_CHRATR_WORDLINEMODE,bInP); }
+    {   return static_cast<const SvxAutoKernItem&>(Get( RES_CHRATR_AUTOKERN,bInP)); }
+inline const SvxWordLineModeItem &SwAttrSet::GetWordLineMode(bool bInP) const
+    {   return static_cast<const SvxWordLineModeItem&>(Get( RES_CHRATR_WORDLINEMODE,bInP)); }
 inline const SvxContourItem      &SwAttrSet::GetContour(bool bInP) const
-    {   return (const SvxContourItem&)Get( RES_CHRATR_CONTOUR,bInP); }
+    {   return static_cast<const SvxContourItem&>(Get( RES_CHRATR_CONTOUR,bInP)); }
 inline const SvxKerningItem      &SwAttrSet::GetKerning(bool bInP) const
-    {   return (const SvxKerningItem&)Get( RES_CHRATR_KERNING,bInP); }
+    {   return static_cast<const SvxKerningItem&>(Get( RES_CHRATR_KERNING,bInP)); }
 inline const SvxUnderlineItem    &SwAttrSet::GetUnderline(bool bInP) const
-    {   return (const SvxUnderlineItem&)Get( RES_CHRATR_UNDERLINE,bInP); }
+    {   return static_cast<const SvxUnderlineItem&>(Get( RES_CHRATR_UNDERLINE,bInP)); }
 inline const SvxOverlineItem     &SwAttrSet::GetOverline(bool bInP) const
-    {   return (const SvxOverlineItem&)Get( RES_CHRATR_OVERLINE,bInP); }
+    {   return static_cast<const SvxOverlineItem&>(Get( RES_CHRATR_OVERLINE,bInP)); }
 inline const SvxCrossedOutItem   &SwAttrSet::GetCrossedOut(bool bInP) const
-    {   return (const SvxCrossedOutItem&)Get( RES_CHRATR_CROSSEDOUT,bInP); }
-inline const SvxFontHeightItem         &SwAttrSet::GetSize(bool bInP) const
-    {   return (const SvxFontHeightItem&)Get( RES_CHRATR_FONTSIZE,bInP); }
-inline const SvxFontHeightItem         &SwAttrSet::GetCJKSize(bool bInP) const
-    {   return (const SvxFontHeightItem&)Get( RES_CHRATR_CJK_FONTSIZE,bInP); }
-inline const SvxFontHeightItem         &SwAttrSet::GetCTLSize(bool bInP) const
-    {   return (const SvxFontHeightItem&)Get( RES_CHRATR_CTL_FONTSIZE,bInP); }
+    {   return static_cast<const SvxCrossedOutItem&>(Get( RES_CHRATR_CROSSEDOUT,bInP)); }
+inline const SvxFontHeightItem   &SwAttrSet::GetSize(bool bInP) const
+    {   return static_cast<const SvxFontHeightItem&>(Get( RES_CHRATR_FONTSIZE,bInP)); }
+inline const SvxFontHeightItem   &SwAttrSet::GetCJKSize(bool bInP) const
+    {   return static_cast<const SvxFontHeightItem&>(Get( RES_CHRATR_CJK_FONTSIZE,bInP)); }
+inline const SvxFontHeightItem   &SwAttrSet::GetCTLSize(bool bInP) const
+    {   return static_cast<const SvxFontHeightItem&>(Get( RES_CHRATR_CTL_FONTSIZE,bInP)); }
 inline const SvxPropSizeItem     &SwAttrSet::GetPropSize(bool bInP) const
-    {   return (const SvxPropSizeItem&)Get( RES_CHRATR_PROPORTIONALFONTSIZE,bInP); }
+    {   return static_cast<const SvxPropSizeItem&>(Get( RES_CHRATR_PROPORTIONALFONTSIZE,bInP)); }
 inline const SvxFontItem         &SwAttrSet::GetFont(bool bInP) const
-    {   return (const SvxFontItem&)Get( RES_CHRATR_FONT,bInP); }
+    {   return static_cast<const SvxFontItem&>(Get( RES_CHRATR_FONT,bInP)); }
 inline const SvxFontItem         &SwAttrSet::GetCJKFont(bool bInP) const
-    {   return (const SvxFontItem&)Get( RES_CHRATR_CJK_FONT,bInP); }
+    {   return static_cast<const SvxFontItem&>(Get( RES_CHRATR_CJK_FONT,bInP)); }
 inline const SvxFontItem         &SwAttrSet::GetCTLFont(bool bInP) const
-    {   return (const SvxFontItem&)Get( RES_CHRATR_CTL_FONT,bInP); }
+    {   return static_cast<const SvxFontItem&>(Get( RES_CHRATR_CTL_FONT,bInP)); }
 inline const SvxColorItem        &SwAttrSet::GetColor(bool bInP) const
-    {   return (const SvxColorItem&)Get( RES_CHRATR_COLOR,bInP); }
+    {   return static_cast<const SvxColorItem&>(Get( RES_CHRATR_COLOR,bInP)); }
 inline const SvxCharSetColorItem &SwAttrSet::GetCharSetColor(bool bInP) const
-    {   return (const SvxCharSetColorItem&)Get( RES_CHRATR_CHARSETCOLOR,bInP); }
+    {   return static_cast<const SvxCharSetColorItem&>(Get( RES_CHRATR_CHARSETCOLOR,bInP)); }
 inline const SvxLanguageItem     &SwAttrSet::GetLanguage(bool bInP) const
-    {   return (const SvxLanguageItem&)Get( RES_CHRATR_LANGUAGE,bInP); }
+    {   return static_cast<const SvxLanguageItem&>(Get( RES_CHRATR_LANGUAGE,bInP)); }
 inline const SvxLanguageItem     &SwAttrSet::GetCJKLanguage(bool bInP) const
-    {   return (const SvxLanguageItem&)Get( RES_CHRATR_CJK_LANGUAGE,bInP); }
+    {   return static_cast<const SvxLanguageItem&>(Get( RES_CHRATR_CJK_LANGUAGE,bInP)); }
 inline const SvxLanguageItem     &SwAttrSet::GetCTLLanguage(bool bInP) const
-    {   return (const SvxLanguageItem&)Get( RES_CHRATR_CTL_LANGUAGE,bInP); }
+    {   return static_cast<const SvxLanguageItem&>(Get( RES_CHRATR_CTL_LANGUAGE,bInP)); }
 inline const SvxEscapementItem   &SwAttrSet::GetEscapement(bool bInP) const
-    {   return (const SvxEscapementItem&)Get( RES_CHRATR_ESCAPEMENT,bInP); }
-inline const SvxCaseMapItem     &SwAttrSet::GetCaseMap(bool bInP) const
-    {   return (const SvxCaseMapItem&)Get( RES_CHRATR_CASEMAP,bInP); }
-inline const SvxNoHyphenItem    &SwAttrSet::GetNoHyphenHere(bool bInP) const
-    {   return (const SvxNoHyphenItem&)Get( RES_CHRATR_NOHYPHEN,bInP); }
-inline const SvxBlinkItem  &SwAttrSet::GetBlink(bool bInP) const
-    {   return (const SvxBlinkItem&)Get( RES_CHRATR_BLINK,bInP); }
-inline const SvxBrushItem &SwAttrSet::GetChrBackground( bool bInP ) const
-    {   return (const SvxBrushItem&)Get( RES_CHRATR_BACKGROUND, bInP ); }
-inline const SvxBrushItem &SwAttrSet::GetChrHighlight( bool bInP ) const
-    {   return (const SvxBrushItem&)Get( RES_CHRATR_HIGHLIGHT, bInP ); }
+    {   return static_cast<const SvxEscapementItem&>(Get( RES_CHRATR_ESCAPEMENT,bInP)); }
+inline const SvxCaseMapItem      &SwAttrSet::GetCaseMap(bool bInP) const
+    {   return static_cast<const SvxCaseMapItem&>(Get( RES_CHRATR_CASEMAP,bInP)); }
+inline const SvxNoHyphenItem     &SwAttrSet::GetNoHyphenHere(bool bInP) const
+    {   return static_cast<const SvxNoHyphenItem&>(Get( RES_CHRATR_NOHYPHEN,bInP)); }
+inline const SvxBlinkItem        &SwAttrSet::GetBlink(bool bInP) const
+    {   return static_cast<const SvxBlinkItem&>(Get( RES_CHRATR_BLINK,bInP)); }
+inline const SvxBrushItem        &SwAttrSet::GetChrBackground( bool bInP ) const
+    {   return static_cast<const SvxBrushItem&>(Get( RES_CHRATR_BACKGROUND, bInP )); }
+inline const SvxBrushItem        &SwAttrSet::GetChrHighlight( bool bInP ) const
+    {   return static_cast<const SvxBrushItem&>(Get( RES_CHRATR_HIGHLIGHT, bInP )); }
 inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( bool bInP ) const
-    {   return (const SvxEmphasisMarkItem&)Get( RES_CHRATR_EMPHASIS_MARK, bInP ); }
-inline const SvxTwoLinesItem    &SwAttrSet::Get2Lines( bool bInP ) const
-    {   return (const SvxTwoLinesItem&)Get( RES_CHRATR_TWO_LINES, bInP ); }
+    {   return static_cast<const SvxEmphasisMarkItem&>(Get( RES_CHRATR_EMPHASIS_MARK, bInP )); }
+inline const SvxTwoLinesItem     &SwAttrSet::Get2Lines( bool bInP ) const
+    {   return static_cast<const SvxTwoLinesItem&>(Get( RES_CHRATR_TWO_LINES, bInP )); }
 inline const SvxCharScaleWidthItem  &SwAttrSet::GetCharScaleW( bool bInP ) const
-    {   return (const SvxCharScaleWidthItem&)Get( RES_CHRATR_SCALEW, bInP ); }
-inline const SvxCharRotateItem  &SwAttrSet::GetCharRotate( bool bInP ) const
-    {   return (const SvxCharRotateItem&)Get( RES_CHRATR_ROTATE, bInP ); }
-inline const SvxCharReliefItem  &SwAttrSet::GetCharRelief( bool bInP ) const
-    {   return (const SvxCharReliefItem&)Get( RES_CHRATR_RELIEF, bInP ); }
-inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( bool bInP ) const
-    {   return (const SvxCharHiddenItem&)Get( RES_CHRATR_HIDDEN, bInP ); }
-inline const SvxBoxItem  &SwAttrSet::GetCharBorder( bool bInP ) const
-    {   return (const SvxBoxItem&)Get( RES_CHRATR_BOX, bInP ); }
-inline const SvxShadowItem  &SwAttrSet::GetCharShadow( bool bInP ) const
-    {   return (const SvxShadowItem&)Get( RES_CHRATR_SHADOW, bInP ); }
+    {   return static_cast<const SvxCharScaleWidthItem&>(Get( RES_CHRATR_SCALEW, bInP )); }
+inline const SvxCharRotateItem   &SwAttrSet::GetCharRotate( bool bInP ) const
+    {   return static_cast<const SvxCharRotateItem&>(Get( RES_CHRATR_ROTATE, bInP )); }
+inline const SvxCharReliefItem   &SwAttrSet::GetCharRelief( bool bInP ) const
+    {   return static_cast<const SvxCharReliefItem&>(Get( RES_CHRATR_RELIEF, bInP )); }
+inline const SvxCharHiddenItem   &SwAttrSet::GetCharHidden( bool bInP ) const
+    {   return static_cast<const SvxCharHiddenItem&>(Get( RES_CHRATR_HIDDEN, bInP )); }
+inline const SvxBoxItem          &SwAttrSet::GetCharBorder( bool bInP ) const
+    {   return static_cast<const SvxBoxItem&>(Get( RES_CHRATR_BOX, bInP )); }
+inline const SvxShadowItem       &SwAttrSet::GetCharShadow( bool bInP ) const
+    {   return static_cast<const SvxShadowItem&>(Get( RES_CHRATR_SHADOW, bInP )); }
 
 // implementation of the character attribute methods of SwFmt
 

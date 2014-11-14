@@ -138,13 +138,13 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 switch( aSavIds[ n ] )
                 {
                     case RES_PAGEDESC:
-                        bSave = 0 != ((SwFmtPageDesc*)pItem)->GetPageDesc();
+                        bSave = 0 != static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc();
                     break;
                     case RES_BREAK:
-                        bSave = SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak();
+                        bSave = SVX_BREAK_NONE != static_cast<const SvxFmtBreakItem*>(pItem)->GetBreak();
                     break;
                     case RES_PARATR_NUMRULE:
-                        bSave = !((SwNumRuleItem*)pItem)->GetValue().isEmpty();
+                        bSave = !static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty();
                     break;
                 }
                 if( bSave )
@@ -605,21 +605,21 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         const SfxPoolItem* pTmpItem;
         if( ( SfxItemState::SET ==
                 aNew.GetItemState( RES_PARATR_TABSTOP, false, &pTmpItem ) ) &&
-            ((SvxTabStopItem*)pTmpItem)->Count() )
+            static_cast<const SvxTabStopItem*>(pTmpItem)->Count() )
         {
             // Set the default values of all TabStops to the new value.
             // Attention: we always work with the PoolAttribut here, so that
             // we don't calculate the same value on the same TabStop (pooled!) for all sets.
             // We send a FmtChg to modify.
-            SwTwips nNewWidth = (*(SvxTabStopItem*)pTmpItem)[ 0 ].GetTabPos(),
-                    nOldWidth = ((SvxTabStopItem&)aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
+            SwTwips nNewWidth = (*static_cast<const SvxTabStopItem*>(pTmpItem))[ 0 ].GetTabPos(),
+                    nOldWidth = static_cast<const SvxTabStopItem&>(aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
 
             int bChg = sal_False;
             sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_PARATR_TABSTOP );
             for( sal_uInt32 n = 0; n < nMaxItems; ++n )
                 if( 0 != (pTmpItem = GetAttrPool().GetItem2( RES_PARATR_TABSTOP, n ) ))
                     bChg |= lcl_SetNewDefTabStops( nOldWidth, nNewWidth,
-                                                *(SvxTabStopItem*)pTmpItem );
+                                                   *const_cast<SvxTabStopItem*>(static_cast<const SvxTabStopItem*>(pTmpItem)) );
 
             aNew.ClearItem( RES_PARATR_TABSTOP );
             aOld.ClearItem( RES_PARATR_TABSTOP );
@@ -1129,17 +1129,16 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
 /// copy the frame format
 SwFrmFmt* SwDoc::CopyFrmFmt( const SwFrmFmt& rFmt )
 {
-
-    return (SwFrmFmt*)CopyFmt( rFmt, *GetFrmFmts(), &SwDoc::_MakeFrmFmt,
-                                *GetDfltFrmFmt() );
+    return static_cast<SwFrmFmt*>(CopyFmt( rFmt, *GetFrmFmts(), &SwDoc::_MakeFrmFmt,
+                                *GetDfltFrmFmt() ));
 }
 
 /// copy the char format
 SwCharFmt* SwDoc::CopyCharFmt( const SwCharFmt& rFmt )
 {
-    return (SwCharFmt*)CopyFmt( rFmt, *GetCharFmts(),
-                                &SwDoc::_MakeCharFmt,
-                                *GetDfltCharFmt() );
+    return static_cast<SwCharFmt*>(CopyFmt( rFmt, *GetCharFmts(),
+                                            &SwDoc::_MakeCharFmt,
+                                            *GetDfltCharFmt() ));
 }
 
 /// copy TextNodes
@@ -1152,7 +1151,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     // search for the "parent" first
     SwTxtFmtColl* pParent = mpDfltTxtFmtColl;
     if( pParent != rColl.DerivedFrom() )
-        pParent = CopyTxtColl( *(SwTxtFmtColl*)rColl.DerivedFrom() );
+        pParent = CopyTxtColl( *static_cast<SwTxtFmtColl*>(rColl.DerivedFrom()) );
 
 //FEATURE::CONDCOLL
     if( RES_CONDTXTFMTCOLL == rColl.Which() )
@@ -1164,8 +1163,8 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
         getIDocumentState().SetModified();
 
         // copy the conditions
-        ((SwConditionTxtFmtColl*)pNewColl)->SetConditions(
-                            ((SwConditionTxtFmtColl&)rColl).GetCondColls() );
+        static_cast<SwConditionTxtFmtColl*>(pNewColl)->SetConditions(
+                            static_cast<const SwConditionTxtFmtColl&>(rColl).GetCondColls() );
     }
     else
 //FEATURE::CONDCOLL
@@ -1193,7 +1192,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
             false, &pItem ))
         {
             const SwNumRule* pRule;
-            const OUString& rName = ((SwNumRuleItem*)pItem)->GetValue();
+            const OUString& rName = static_cast<const SwNumRuleItem*>(pItem)->GetValue();
             if( !rName.isEmpty() &&
                 0 != ( pRule = rColl.GetDoc()->FindNumRulePtr( rName )) &&
                 !pRule->IsAutoRule() )
@@ -1219,7 +1218,7 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
      // Search for the "parent" first
     SwGrfFmtColl* pParent = mpDfltGrfFmtColl;
     if( pParent != rColl.DerivedFrom() )
-        pParent = CopyGrfColl( *(SwGrfFmtColl*)rColl.DerivedFrom() );
+        pParent = CopyGrfColl( *static_cast<SwGrfFmtColl*>(rColl.DerivedFrom()) );
 
     // if not, copy them
     pNewColl = MakeGrfFmtColl( rColl.GetName(), pParent );
@@ -1265,7 +1264,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         if( 0 == FindFmtByName( rDestArr, pSrc->GetName() ) )
         {
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
-                MakeCondTxtFmtColl( pSrc->GetName(), (SwTxtFmtColl*)&rDfltFmt );
+                MakeCondTxtFmtColl( pSrc->GetName(), static_cast<SwTxtFmtColl*>(&rDfltFmt) );
             else
                 // #i40550#
                 (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt, false, true );
@@ -1288,9 +1287,9 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
             SfxItemState::SET == pSrc->GetAttrSet().GetItemState(
             RES_PAGEDESC, false, &pItem ) &&
-            ((SwFmtPageDesc*)pItem)->GetPageDesc() )
+            static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc() )
         {
-            SwFmtPageDesc aPageDesc( *(SwFmtPageDesc*)pItem );
+            SwFmtPageDesc aPageDesc( *static_cast<const SwFmtPageDesc*>(pItem) );
             const OUString& rNm = aPageDesc.GetPageDesc()->GetName();
             SwPageDesc* pPageDesc = ::lcl_FindPageDesc( maPageDescs, rNm );
             if( !pPageDesc )
@@ -1319,11 +1318,11 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         if( RES_TXTFMTCOLL == pSrc->Which() ||
             RES_CONDTXTFMTCOLL == pSrc->Which() )
         {
-            SwTxtFmtColl* pSrcColl = (SwTxtFmtColl*)pSrc,
-                        * pDstColl = (SwTxtFmtColl*)pDest;
+            SwTxtFmtColl* pSrcColl = static_cast<SwTxtFmtColl*>(pSrc),
+                        * pDstColl = static_cast<SwTxtFmtColl*>(pDest);
             if( &pSrcColl->GetNextTxtFmtColl() != pSrcColl )
-                pDstColl->SetNextTxtFmtColl( *(SwTxtFmtColl*)FindFmtByName(
-                    rDestArr, pSrcColl->GetNextTxtFmtColl().GetName() ) );
+                pDstColl->SetNextTxtFmtColl( *static_cast<SwTxtFmtColl*>(FindFmtByName(
+                    rDestArr, pSrcColl->GetNextTxtFmtColl().GetName() ) ) );
 
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
                 pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());
@@ -1331,8 +1330,8 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
 //FEATURE::CONDCOLL
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
                 // Copy the conditions, but delete the old ones first!
-                ((SwConditionTxtFmtColl*)pDstColl)->SetConditions(
-                            ((SwConditionTxtFmtColl*)pSrc)->GetCondColls() );
+                static_cast<SwConditionTxtFmtColl*>(pDstColl)->SetConditions(
+                            static_cast<SwConditionTxtFmtColl*>(pSrc)->GetCondColls() );
 //FEATURE::CONDCOLL
         }
     }
@@ -1353,9 +1352,9 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
 
     SwFrmFmt* pOldFmt;
     if( bCpyHeader )
-         pOldFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+         pOldFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
     else
-         pOldFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+         pOldFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
 
     if( pOldFmt )
     {
@@ -1366,7 +1365,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
         if( SfxItemState::SET == pNewFmt->GetAttrSet().GetItemState(
             RES_CNTNT, false, &pItem ))
         {
-            SwFmtCntnt* pCntnt = (SwFmtCntnt*)pItem;
+            const SwFmtCntnt* pCntnt = static_cast<const SwFmtCntnt*>(pItem);
             if( pCntnt->GetCntntIdx() )
             {
                 SwNodeIndex aTmpIdx( GetNodes().GetEndOfAutotext() );
@@ -1387,9 +1386,9 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                 pNewFmt->ResetFmtAttr( RES_CNTNT );
         }
         if( bCpyHeader )
-            ((SwFmtHeader*)pNewItem)->RegisterToFormat(*pNewFmt);
+            static_cast<SwFmtHeader*>(pNewItem)->RegisterToFormat(*pNewFmt);
         else
-            ((SwFmtFooter*)pNewItem)->RegisterToFormat(*pNewFmt);
+            static_cast<SwFmtFooter*>(pNewItem)->RegisterToFormat(*pNewFmt);
         rDestFmt.SetFmtAttr( *pNewItem );
     }
     delete pNewItem;
@@ -1633,7 +1632,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
         GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
 
-    const SvxTabStopItem& rTabItem = (SvxTabStopItem&)GetDefault( RES_PARATR_TABSTOP );
+    const SvxTabStopItem& rTabItem = static_cast<const SvxTabStopItem&>(GetDefault( RES_PARATR_TABSTOP ));
     sal_uInt16 nDefDist = rTabItem.Count() ?
         static_cast<sal_uInt16>(rTabItem[0].GetTabPos()) : 1134;
     const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
@@ -1643,7 +1642,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
         SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();
         if( pTNd )
         {
-            SvxLRSpaceItem aLS( (SvxLRSpaceItem&)pTNd->SwCntntNode::GetAttr( RES_LR_SPACE ) );
+            SvxLRSpaceItem aLS( static_cast<const SvxLRSpaceItem&>(pTNd->SwCntntNode::GetAttr( RES_LR_SPACE )) );
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
             if ( pTNd->AreListLevelIndentsApplicable() )
@@ -1735,7 +1734,7 @@ SwTblNumFmtMerge::SwTblNumFmtMerge( const SwDoc& rSrc, SwDoc& rDest )
         ( pNFmt = rDest.GetNumberFormatter( true ))->MergeFormatter( *pN );
 
     if( &rSrc != &rDest )
-        ((SwGetRefFieldType*)rSrc.getIDocumentFieldsAccess().GetSysFldType( RES_GETREFFLD ))->
+        static_cast<SwGetRefFieldType*>(rSrc.getIDocumentFieldsAccess().GetSysFldType( RES_GETREFFLD ))->
             MergeWithOtherDoc( rDest );
 }
 
@@ -1950,7 +1949,7 @@ std::vector<Color> SwDoc::GetDocColors()
                     case RES_CHRATR_HIGHLIGHT:
                     case RES_BACKGROUND:
                         {
-                            Color aColor( ((SvxColorItem*)pItem)->GetValue() );
+                            Color aColor( static_cast<const SvxColorItem*>(pItem)->GetValue() );
                             if( COL_AUTO != aColor.GetColor() &&
                                     std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
                             {

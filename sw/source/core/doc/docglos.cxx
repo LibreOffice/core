@@ -192,7 +192,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                 aACD.RestoreDontExpandItems( rInsPos );
                 if( pShell )
                     pShell->SaveTblBoxCntnt( &rInsPos );
-            } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) !=
+            } while( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) !=
                         __pStartCrsr );
             GetIDocumentUndoRedo().EndUndo( UNDO_INSGLOSSARY, NULL );
 

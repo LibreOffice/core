@@ -358,7 +358,7 @@ class SwXOLEListener : public cppu::WeakImplHelper1
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLEModel;
 
-    SwFmt*       GetFmt() const    {  return (SwFmt*)GetRegisteredIn(); }
+    SwFmt*       GetFmt() const    {  return const_cast<SwFmt*>(static_cast<const SwFmt*>(GetRegisteredIn())); }
 public:
     SwXOLEListener(SwFmt& rOLEFmt, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xOLE);
     virtual ~SwXOLEListener();

@@ -189,7 +189,7 @@ void _SetGetExpFld::GetPosOfContent( SwPosition& rPos ) const
     if( pNd )
     {
         rPos.nNode = *pNd;
-        rPos.nContent.Assign( (SwCntntNode*)pNd,GetCntPosFromCntnt() );
+        rPos.nContent.Assign( const_cast<SwCntntNode*>(static_cast<const SwCntntNode*>(pNd)), GetCntPosFromCntnt() );
     }
     else
     {
@@ -257,8 +257,8 @@ bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
             if( pFirst->IsTxtNode() && pNext->IsTxtNode() &&
                 ( pFirst->FindFlyStartNode() || pNext->FindFlyStartNode() ))
             {
-                return ::IsFrameBehind( *(SwTxtNode*)pNext, nCntnt,
-                                        *(SwTxtNode*)pFirst, nCntnt );
+                return ::IsFrameBehind( *static_cast<const SwTxtNode*>(pNext), nCntnt,
+                                        *static_cast<const SwTxtNode*>(pFirst), nCntnt );
             }
             return pFirstStt->GetIndex() < pNextStt->GetIndex();
         }
@@ -349,7 +349,7 @@ OUString LookString( SwHash** ppTbl, sal_uInt16 nSize, const OUString& rName,
 {
     SwHash* pFnd = Find( comphelper::string::strip(rName, ' '), ppTbl, nSize, pPos );
     if( pFnd )
-        return ((_HashStr*)pFnd)->aSetStr;
+        return static_cast<_HashStr*>(pFnd)->aSetStr;
 
     return OUString();
 }
@@ -463,7 +463,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
 
-        const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
+        const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
@@ -473,19 +473,19 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
         {
             case RES_DBFLD:
                 AddUsedDBToList( rDBNameList,
-                                lcl_DBDataToString(((SwDBField*)pFld)->GetDBData() ));
+                                lcl_DBDataToString(static_cast<const SwDBField*>(pFld)->GetDBData() ));
                 break;
 
             case RES_DBSETNUMBERFLD:
             case RES_DBNAMEFLD:
                 AddUsedDBToList( rDBNameList,
-                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData() ));
+                                lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pFld)->GetRealDBData() ));
                 break;
 
             case RES_DBNUMSETFLD:
             case RES_DBNEXTSETFLD:
                 AddUsedDBToList( rDBNameList,
-                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData() ));
+                                lcl_DBDataToString(static_cast<const SwDBNameInfField*>(pFld)->GetRealDBData() ));
                 // no break  // JP: is that right like that?
 
             case RES_HIDDENTXTFLD:
@@ -623,7 +623,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
             continue;
 
-        SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
+        SwFmtFld* pFmtFld = const_cast<SwFmtFld*>(static_cast<const SwFmtFld*>(pItem));
         SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
@@ -635,18 +635,18 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         {
             case RES_DBFLD:
 #if HAVE_FEATURE_DBCONNECTIVITY
-                if( IsNameInArray( rOldNames, lcl_DBDataToString(((SwDBField*)pFld)->GetDBData())))
+                if( IsNameInArray( rOldNames, lcl_DBDataToString(static_cast<SwDBField*>(pFld)->GetDBData())))
                 {
-                    SwDBFieldType* pOldTyp = (SwDBFieldType*)pFld->GetTyp();
+                    SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pFld->GetTyp());
 
-                    SwDBFieldType* pTyp = (SwDBFieldType*)getIDocumentFieldsAccess().InsertFldType(
-                            SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData));
+                    SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(getIDocumentFieldsAccess().InsertFldType(
+                            SwDBFieldType(this, pOldTyp->GetColumnName(), aNewDBData)));
 
                     pFmtFld->RegisterToFieldType( *pTyp );
                     pFld->ChgTyp(pTyp);
 
-                    ((SwDBField*)pFld)->ClearInitialized();
-                    ((SwDBField*)pFld)->InitContent();
+                    static_cast<SwDBField*>(pFld)->ClearInitialized();
+                    static_cast<SwDBField*>(pFld)->InitContent();
 
                     bExpand = true;
                 }
@@ -656,9 +656,9 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
             case RES_DBSETNUMBERFLD:
             case RES_DBNAMEFLD:
                 if( IsNameInArray( rOldNames,
-                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
+                                lcl_DBDataToString(static_cast<SwDBNameInfField*>(pFld)->GetRealDBData())))
                 {
-                    ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
+                    static_cast<SwDBNameInfField*>(pFld)->SetDBData(aNewDBData);
                     bExpand = true;
                 }
                 break;
@@ -666,9 +666,9 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
             case RES_DBNUMSETFLD:
             case RES_DBNEXTSETFLD:
                 if( IsNameInArray( rOldNames,
-                                lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
+                                lcl_DBDataToString(static_cast<SwDBNameInfField*>(pFld)->GetRealDBData())))
                 {
-                    ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
+                    static_cast<SwDBNameInfField*>(pFld)->SetDBData(aNewDBData);
                     bExpand = true;
                 }
                 // no break;
@@ -764,7 +764,7 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
         SwFieldType* pFldType = (*getIDocumentFieldsAccess().GetFldTypes())[i];
         if( RES_AUTHORITY  == pFldType->Which() )
         {
-            SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)pFldType;
+            SwAuthorityFieldType* pAuthType = static_cast<SwAuthorityFieldType*>(pFldType);
             pAuthType->ChangeEntryContent(pNewData);
             break;
         }
@@ -902,7 +902,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         if( 0 == (pItem = rDoc.GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )) )
             continue;
 
-        const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
+        const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         if( !pTxtFld || !pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             continue;
@@ -935,9 +935,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 {
                     sFormula = pFld->GetPar1();
                     if (sFormula.isEmpty() || sFormula==sFalse)
-                        ((SwHiddenParaField*)pFld)->SetHidden( false );
+                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pFld))->SetHidden( false );
                     else if (sFormula==sTrue)
-                        ((SwHiddenParaField*)pFld)->SetHidden( true );
+                        const_cast<SwHiddenParaField*>(static_cast<const SwHiddenParaField*>(pFld))->SetHidden( true );
                     else
                         break;
 
@@ -952,16 +952,16 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 {
                     sFormula = pFld->GetPar1();
                     if (sFormula.isEmpty() || sFormula==sFalse)
-                        ((SwHiddenTxtField*)pFld)->SetValue( true );
+                        const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld))->SetValue( true );
                     else if (sFormula==sTrue)
-                        ((SwHiddenTxtField*)pFld)->SetValue( false );
+                        const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld))->SetValue( false );
                     else
                         break;
 
                     sFormula.clear();
 
                     // evaluate field
-                    ((SwHiddenTxtField*)pFld)->Evaluate(&rDoc);
+                    const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld))->Evaluate(&rDoc);
                     // trigger formatting
                     ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
                 }
@@ -970,11 +970,11 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 #if HAVE_FEATURE_DBCONNECTIVITY
             case RES_DBNUMSETFLD:
             {
-                SwDBData aDBData(((SwDBNumSetField*)pFld)->GetDBData(&rDoc));
+                SwDBData aDBData(const_cast<SwDBNumSetField*>(static_cast<const SwDBNumSetField*>(pFld))->GetDBData(&rDoc));
 
                 if (
                      (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
-                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNumSetField*)pFld)->IsCondValid()))
+                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNumSetField*>(pFld)->IsCondValid()))
                    )
                 {
                     sFormula = pFld->GetPar1();
@@ -983,11 +983,11 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             break;
             case RES_DBNEXTSETFLD:
             {
-                SwDBData aDBData(((SwDBNextSetField*)pFld)->GetDBData(&rDoc));
+                SwDBData aDBData(const_cast<SwDBNextSetField*>(static_cast<const SwDBNextSetField*>(pFld))->GetDBData(&rDoc));
 
                 if (
                      (bIsDBManager && rDoc.GetDBManager()->OpenDataSource(aDBData.sDataSource, aDBData.sCommand)) &&
-                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && ((SwDBNextSetField*)pFld)->IsCondValid()))
+                     (GETFLD_ALL == eGetMode || (GETFLD_CALC & eGetMode && static_cast<const SwDBNextSetField*>(pFld)->IsCondValid()))
                    )
                 {
                     sFormula = pFld->GetPar1();
@@ -1044,13 +1044,13 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
     // always set the BodyTxtFlag in GetExp or DB fields
     if( RES_GETEXPFLD == nFldWhich )
     {
-        SwGetExpField* pGetFld = (SwGetExpField*)rTFld.GetFmtFld().GetField();
+        SwGetExpField* pGetFld = const_cast<SwGetExpField*>(static_cast<const SwGetExpField*>(rTFld.GetFmtFld().GetField()));
         pGetFld->ChgBodyTxtFlag( bIsInBody );
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
     else if( RES_DBFLD == nFldWhich )
     {
-        SwDBField* pDBFld = (SwDBField*)rTFld.GetFmtFld().GetField();
+        SwDBField* pDBFld = const_cast<SwDBField*>(static_cast<const SwDBField*>(rTFld.GetFmtFld().GetField()));
         pDBFld->ChgBodyTxtFlag( bIsInBody );
     }
 #endif
@@ -1103,10 +1103,10 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
     switch( rType.Which() )
     {
     case RES_USERFLD :
-        sFldName = ((SwUserFieldType&)rType).GetName();
+        sFldName = static_cast<const SwUserFieldType&>(rType).GetName();
         break;
     case RES_SETEXPFLD:
-        sFldName = ((SwSetExpFieldType&)rType).GetName();
+        sFldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
         break;
     default:
         OSL_ENSURE( false, "kein gueltiger FeldTyp" );
@@ -1136,10 +1136,10 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
     switch( rType.Which() )
     {
     case RES_USERFLD :
-        sFldName = ((SwUserFieldType&)rType).GetName();
+        sFldName = static_cast<const SwUserFieldType&>(rType).GetName();
         break;
     case RES_SETEXPFLD:
-        sFldName = ((SwSetExpFieldType&)rType).GetName();
+        sFldName = static_cast<const SwSetExpFieldType&>(rType).GetName();
         break;
     }
 
@@ -1154,7 +1154,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
         if( pFnd )
         {
             if( aFldTypeTable[ n ] == pFnd )
-                aFldTypeTable[ n ] = (SwCalcFldType*)pFnd->pNext;
+                aFldTypeTable[ n ] = static_cast<SwCalcFldType*>(pFnd->pNext);
             else
             {
                 SwHash* pPrev = aFldTypeTable[ n ];

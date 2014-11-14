@@ -36,7 +36,9 @@
 /*
  * Macros to iterate over all CrsrShells
  */
-#define PCURSH ((SwCrsrShell*)_pStartShell)
+
+#define PCURSH_CONST static_cast<const SwCrsrShell*>(_pStartShell)
+
 #define FOREACHSHELL_START( pEShell ) \
     {\
         SwViewShell const *_pStartShell = pEShell; \
@@ -46,7 +48,12 @@
 
 #define FOREACHSHELL_END( pEShell ) \
             } \
-        } while((_pStartShell=(SwViewShell const*)_pStartShell->GetNext())!= pEShell ); \
+        } while((_pStartShell = static_cast<SwViewShell const*>(_pStartShell->GetNext()))!= pEShell ); \
+    }
+
+#define FOREACHSHELL_END_CONST( pEShell ) \
+            } \
+        } while((_pStartShell = static_cast<SwViewShell const*>(_pStartShell->GetNext()))!= pEShell ); \
     }
 
 namespace
@@ -116,21 +123,21 @@ void PaMCorrAbs( const SwPaM& rRange,
     if( pShell )
     {
         FOREACHSHELL_START( pShell )
-            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+            SwPaM *_pStkCrsr = PCURSH_CONST->GetStkCrsr();
             if( _pStkCrsr )
                 do {
                     lcl_PaMCorrAbs( *_pStkCrsr, aStart, aEnd, aNewPos );
                 } while ( (_pStkCrsr != 0 ) &&
-                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+                    ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != PCURSH_CONST->GetStkCrsr()) );
 
-            FOREACHPAM_START( PCURSH->_GetCrsr() )
-                lcl_PaMCorrAbs( *PCURCRSR, aStart, aEnd, aNewPos );
-            FOREACHPAM_END()
+            FOREACHPAM_START_CONST( PCURSH_CONST->_GetCrsr() )
+                lcl_PaMCorrAbs( const_cast<SwPaM &>(*PCURCRSR), aStart, aEnd, aNewPos );
+            FOREACHPAM_END_CONST()
 
-            if( PCURSH->IsTableMode() )
-                lcl_PaMCorrAbs( *PCURSH->GetTblCrs(), aStart, aEnd, aNewPos );
+            if( PCURSH_CONST->IsTableMode() )
+                lcl_PaMCorrAbs( const_cast<SwPaM &>(*PCURSH_CONST->GetTblCrs()), aStart, aEnd, aNewPos );
 
-        FOREACHSHELL_END( pShell )
+        FOREACHSHELL_END_CONST( pShell )
     }
     {
         SwUnoCrsrTbl& rTbl = const_cast<SwUnoCrsrTbl&>(pDoc->GetUnoCrsrTbl());
@@ -263,19 +270,19 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     if( pShell )
     {
         FOREACHSHELL_START( pShell )
-            SwPaM *_pStkCrsr = PCURSH->GetStkCrsr();
+            SwPaM *_pStkCrsr = PCURSH_CONST->GetStkCrsr();
             if( _pStkCrsr )
                 do {
                     lcl_PaMCorrRel1( _pStkCrsr, pOldNode, aNewPos, nCntIdx );
                 } while ( (_pStkCrsr != 0 ) &&
-                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
+                    ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != PCURSH_CONST->GetStkCrsr()) );
 
-            FOREACHPAM_START( PCURSH->_GetCrsr() )
-                lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx);
+            FOREACHPAM_START_CONST( PCURSH_CONST->_GetCrsr() )
+                lcl_PaMCorrRel1( const_cast<SwPaM *>(PCURCRSR), pOldNode, aNewPos, nCntIdx);
             FOREACHPAM_END()
 
-            if( PCURSH->IsTableMode() )
-                lcl_PaMCorrRel1( PCURSH->GetTblCrs(), pOldNode, aNewPos, nCntIdx );
+            if( PCURSH_CONST->IsTableMode() )
+                lcl_PaMCorrRel1( const_cast<SwPaM *>(PCURSH_CONST->GetTblCrs()), pOldNode, aNewPos, nCntIdx );
 
         FOREACHSHELL_END( pShell )
     }
@@ -334,9 +341,9 @@ SwEditShell const * SwDoc::GetEditShell() const
         do {
             if( pCurrentVSh->IsA( TYPE( SwEditShell ) ) )
             {
-                return (SwEditShell*)pCurrentVSh;
+                return static_cast<const SwEditShell*>(pCurrentVSh);
             }
-        } while( pFirstVSh != ( pCurrentVSh = (SwViewShell*)pCurrentVSh->GetNext() ));
+        } while( pFirstVSh != ( pCurrentVSh = static_cast<SwViewShell*>(pCurrentVSh->GetNext()) ));
     }
     return 0;
 }

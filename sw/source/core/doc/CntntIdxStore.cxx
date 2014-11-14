@@ -412,18 +412,18 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
     do {
         if( _pStartShell->IsA( TYPE( SwCrsrShell )) )
         {
-            SwPaM *_pStkCrsr = ((SwCrsrShell*)_pStartShell)->GetStkCrsr();
+            SwPaM *_pStkCrsr = static_cast<SwCrsrShell*>(_pStartShell)->GetStkCrsr();
             if( _pStkCrsr )
                 do {
                     lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr);
                 } while ( (_pStkCrsr != 0 ) &&
-                    ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != ((SwCrsrShell*)_pStartShell)->GetStkCrsr()) );
+                    ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != static_cast<SwCrsrShell*>(_pStartShell)->GetStkCrsr()) );
 
-            FOREACHPAM_START( ((SwCrsrShell*)_pStartShell)->_GetCrsr() )
+            FOREACHPAM_START( static_cast<SwCrsrShell*>(_pStartShell)->_GetCrsr() )
                 lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR);
             FOREACHPAM_END()
         }
-    } while((_pStartShell=(SwViewShell*)_pStartShell->GetNext())!= pShell );
+    } while((_pStartShell = static_cast<SwViewShell*>(_pStartShell->GetNext()))!= pShell );
 }
 
 void CntntIdxStoreImpl::RestoreShellCrsrs(updater_t& rUpdater)

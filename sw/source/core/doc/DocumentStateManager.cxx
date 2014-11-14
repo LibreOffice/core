@@ -50,7 +50,7 @@ void DocumentStateManager::SetModified()
     if( m_rDoc.GetOle2Link().IsSet() )
     {
         mbInCallModified = true;
-        m_rDoc.GetOle2Link().Call( (void*)nCall );
+        m_rDoc.GetOle2Link().Call( reinterpret_cast<void*>(nCall) );
         mbInCallModified = false;
     }
 
@@ -69,7 +69,7 @@ void DocumentStateManager::ResetModified()
     if( nCall && m_rDoc.GetOle2Link().IsSet() )
     {
         mbInCallModified = true;
-        m_rDoc.GetOle2Link().Call( (void*)nCall );
+        m_rDoc.GetOle2Link().Call( reinterpret_cast<void*>(nCall) );
         mbInCallModified = false;
     }
 }

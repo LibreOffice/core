@@ -354,7 +354,7 @@ namespace
                 ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
 
                 do {
-                    pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *(SwPaM*)pDelPam->GetNext() );
+                    pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *static_cast<SwPaM*>(pDelPam->GetNext()) );
                     if( pDelPam->GetNext() == pDelPam )
                         break;
                     delete pDelPam->GetNext();
@@ -1559,7 +1559,7 @@ namespace //local functions originally from docfmt.cxx
                 SwNode* pNd = pDoc->GetNodes()[ nStart ];
                 if (!pNd || !pNd->IsTxtNode())
                     continue;
-                SwTxtNode *pCurrentNd = (SwTxtNode*)pNd;
+                SwTxtNode *pCurrentNd = static_cast<SwTxtNode*>(pNd);
                 pCurrentNd->TryCharSetExpandToNum(*pCharSet);
             }
         }
@@ -1600,7 +1600,7 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos, cons
         if( pNd->IsCntntNode() && pStt->nContent.GetIndex() )
             ++nStt, --nDiff;
         if( (pNd = m_rDoc.GetNodes()[ nEnd ])->IsCntntNode() &&
-            ((SwCntntNode*)pNd)->Len() != pEnd->nContent.GetIndex() )
+            static_cast<SwCntntNode*>(pNd)->Len() != pEnd->nContent.GetIndex() )
             --nEnd, --nDiff;
         if( nDiff &&
             lcl_ChkFlyFly( pDoc, nStt, nEnd, rPos.nNode.GetIndex() ) )
@@ -1717,7 +1717,7 @@ void DocumentContentOperationsManager::DeleteSection( SwNode *pNode )
 {
     assert(pNode && "Didn't pass a Node.");
 
-    SwStartNode* pSttNd = pNode->IsStartNode() ? (SwStartNode*)pNode
+    SwStartNode* pSttNd = pNode->IsStartNode() ? static_cast<SwStartNode*>(pNode)
                                                : pNode->StartOfSectionNode();
     SwNodeIndex aSttIdx( *pSttNd ), aEndIdx( *pNode->EndOfSectionNode() );
 
@@ -1768,7 +1768,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
 
         {
             const SfxPoolItem *pItem;
-            const SfxItemSet* pSet = ((SwCntntNode*)pNd)->GetpSwAttrSet();
+            const SfxItemSet* pSet = static_cast<const SwCntntNode*>(pNd)->GetpSwAttrSet();
             if( pSet && SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC,
                 false, &pItem ) )
             {
@@ -2817,10 +2817,10 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
         const SwTableNode* pTblNd;
         const SwNode* pNd = m_rDoc.GetNodes()[ nPrevPos ];
         if( pNd->IsStartNode() &&
-            SwTableBoxStartNode == ((SwStartNode*)pNd)->GetStartNodeType() &&
+            SwTableBoxStartNode == static_cast<const SwStartNode*>(pNd)->GetStartNodeType() &&
             0 != ( pTblNd = m_rDoc.GetNodes()[ --nPrevPos ]->GetTableNode() ) &&
             ((( pNd = m_rDoc.GetNodes()[ --nPrevPos ])->IsStartNode() &&
-               SwTableBoxStartNode != ((SwStartNode*)pNd)->GetStartNodeType() )
+               SwTableBoxStartNode != static_cast<const SwStartNode*>(pNd)->GetStartNodeType() )
                || ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsTableNode() )
                || pNd->IsCntntNode() ))
         {
@@ -2919,7 +2919,7 @@ bool DocumentContentOperationsManager::AppendTxtNode( SwPosition& rPos )
                         m_rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
     }
     else
-        pCurNode = (SwTxtNode*)pCurNode->AppendNode( rPos );
+        pCurNode = static_cast<SwTxtNode*>(pCurNode->AppendNode( rPos ));
 
     rPos.nNode++;
     rPos.nContent.Assign( pCurNode, 0 );
@@ -3354,7 +3354,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
              newPos.nNode.GetNode().IsTxtNode() )
         {
-            newPos.nContent.Assign( (SwTxtNode*)&newPos.nNode.GetNode(),
+            newPos.nContent.Assign( static_cast<SwTxtNode*>(&newPos.nNode.GetNode()),
                                         newPos.nContent.GetIndex() );
         }
         else
@@ -4024,7 +4024,7 @@ static void lcl_PushNumruleState( SfxItemState &aNumRuleState, SwNumRuleItem &aN
         const SfxPoolItem * pItem = NULL;
         aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
         if (SfxItemState::SET == aNumRuleState)
-            aNumRuleItem = *((SwNumRuleItem *) pItem);
+            aNumRuleItem = *static_cast<const SwNumRuleItem *>( pItem);
 
         aListIdState =
             pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);

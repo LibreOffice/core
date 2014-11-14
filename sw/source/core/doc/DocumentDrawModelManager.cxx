@@ -166,7 +166,7 @@ void DocumentDrawModelManager::InitDrawModel()
                 pRoot->SetDrawPage( pDrawPage );
                 pDrawPage->SetSize( pRoot->Frm().SSize() );
             }
-            pViewSh = (SwViewShell*)pViewSh->GetNext();
+            pViewSh = static_cast<SwViewShell*>(pViewSh->GetNext());
         }while( pViewSh != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
     }
 }
@@ -218,7 +218,7 @@ SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
         do
         {
             pTmp->MakeDrawView();
-            pTmp = (SwViewShell*) pTmp->GetNext();
+            pTmp = static_cast<SwViewShell*>( pTmp->GetNext());
         } while ( pTmp != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
 
         // Broadcast, so that the FormShell can be connected to the DrawView

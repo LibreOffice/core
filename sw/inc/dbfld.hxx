@@ -124,7 +124,7 @@ inline void SwDBField::ChgBodyTxtFlag( bool bIsInBody )
 // Base class for all other database fields.
 class SW_DLLPUBLIC SwDBNameInfField : public SwField
 {
-    SwDBData    aDBData;
+    SwDBData        aDBData;
     sal_uInt16      nSubType;
 
 protected:
@@ -135,7 +135,8 @@ protected:
 
 public:
     /// DBName
-    inline const SwDBData&  GetRealDBData() { return aDBData; }
+    inline const SwDBData&  GetRealDBData() const { return aDBData; }
+    inline SwDBData&        GetRealDBData() { return aDBData; }
 
     SwDBData                GetDBData(SwDoc* pDoc);
     void                    SetDBData(const SwDBData& rDBData);
@@ -144,7 +145,7 @@ public:
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
-    virtual sal_uInt16          GetSubType() const SAL_OVERRIDE;
+    virtual sal_uInt16      GetSubType() const SAL_OVERRIDE;
     virtual void            SetSubType(sal_uInt16 nType) SAL_OVERRIDE;
 };
 

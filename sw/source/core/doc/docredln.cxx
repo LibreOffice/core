@@ -638,7 +638,7 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
 
 bool SwRedlineExtraData_FmtColl::operator == ( const SwRedlineExtraData& r) const
 {
-    const SwRedlineExtraData_FmtColl& rCmp = (SwRedlineExtraData_FmtColl&)r;
+    const SwRedlineExtraData_FmtColl& rCmp = static_cast<const SwRedlineExtraData_FmtColl&>(r);
     return sFmtNm == rCmp.sFmtNm && nPoolId == rCmp.nPoolId &&
             ( ( !pSet && !rCmp.pSet ) ||
                ( pSet && rCmp.pSet && *pSet == *rCmp.pSet ) );
@@ -704,11 +704,11 @@ bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) c
 {
     bool nRet = true;
     size_t nEnd = aWhichIds.size();
-    if( nEnd != ((SwRedlineExtraData_Format&)rCmp).aWhichIds.size() )
+    if( nEnd != static_cast<const SwRedlineExtraData_Format&>(rCmp).aWhichIds.size() )
         nRet = false;
     else
         for( size_t n = 0; n < nEnd; ++n )
-            if( ((SwRedlineExtraData_Format&)rCmp).aWhichIds[n] != aWhichIds[n])
+            if( static_cast<const SwRedlineExtraData_Format&>(rCmp).aWhichIds[n] != aWhichIds[n])
             {
                 nRet = false;
                 break;
@@ -756,7 +756,7 @@ void SwRedlineExtraData_FormattingChanges::Reject( SwPaM& rPam ) const
 
 bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraData& rExtraData ) const
 {
-    const SwRedlineExtraData_FormattingChanges& rCmp = (SwRedlineExtraData_FormattingChanges&)rExtraData;
+    const SwRedlineExtraData_FormattingChanges& rCmp = static_cast<const SwRedlineExtraData_FormattingChanges&>(rExtraData);
 
     if ( !pSet && !rCmp.pSet )
     {
@@ -1123,9 +1123,9 @@ void SwRangeRedline::MoveToSection()
         if( pCSttNd || pCEndNd )
         {
             SwTxtFmtColl* pColl = (pCSttNd && pCSttNd->IsTxtNode() )
-                                    ? ((SwTxtNode*)pCSttNd)->GetTxtColl()
+                                    ? static_cast<SwTxtNode*>(pCSttNd)->GetTxtColl()
                                     : (pCEndNd && pCEndNd->IsTxtNode() )
-                                        ? ((SwTxtNode*)pCEndNd)->GetTxtColl()
+                                        ? static_cast<SwTxtNode*>(pCEndNd)->GetTxtColl()
                                         : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(
                                                 RES_POOLCOLL_STANDARD );
 
@@ -1193,7 +1193,7 @@ void SwRangeRedline::CopyToSection()
         if( pCSttNd )
         {
             SwTxtFmtColl* pColl = (pCSttNd && pCSttNd->IsTxtNode() )
-                                    ? ((SwTxtNode*)pCSttNd)->GetTxtColl()
+                                    ? static_cast<SwTxtNode*>(pCSttNd)->GetTxtColl()
                                     : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(
                                                 RES_POOLCOLL_STANDARD );
 
@@ -1213,8 +1213,8 @@ void SwRangeRedline::CopyToSection()
                 if( pDestNd )
                 {
                     if( pDestNd->IsTxtNode() && pCEndNd->IsTxtNode() )
-                        ((SwTxtNode*)pCEndNd)->CopyCollFmt(
-                                            *(SwTxtNode*)pDestNd );
+                        static_cast<SwTxtNode*>(pCEndNd)->CopyCollFmt(
+                                            *static_cast<SwTxtNode*>(pDestNd) );
                     else
                         pDestNd->ChgFmtColl( pCEndNd->GetFmtColl() );
                 }

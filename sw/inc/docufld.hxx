@@ -340,9 +340,9 @@ public:
 
     /// True/False - String
     virtual void        SetPar2(const OUString& rStr) SAL_OVERRIDE;
-    virtual OUString GetPar2() const SAL_OVERRIDE;
+    virtual OUString    GetPar2() const SAL_OVERRIDE;
 
-    virtual sal_uInt16      GetSubType() const SAL_OVERRIDE;
+    virtual sal_uInt16  GetSubType() const SAL_OVERRIDE;
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;

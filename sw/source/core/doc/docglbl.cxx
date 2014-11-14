@@ -272,10 +272,10 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                 SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
                 {
-                    SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
+                    SwDoc* pDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
 
                     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                        ((SwDocShell*)(&xDocSh))->GetModel(),
+                        static_cast<SwDocShell*>(&xDocSh)->GetModel(),
                         uno::UNO_QUERY_THROW);
                     uno::Reference<document::XDocumentProperties> xDocProps(
                         xDPS->getDocumentProperties());
@@ -294,7 +294,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     OUString sTitle( xDocProps->getTitle() );
                     if (!sTitle.isEmpty())
                         sTitle += ": ";
-                    sTitle += ((SwTxtNode*)pStartNd)->GetExpandTxt();
+                    sTitle += static_cast<SwTxtNode*>(pStartNd)->GetExpandTxt();
                     xDocProps->setTitle( sTitle );
 
                     // Replace template
@@ -398,7 +398,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                         // set the link in the StartNode
                         SwFmtINetFmt aINet( sFileName , OUString() );
-                        SwTxtNode* pTNd = (SwTxtNode*)pStartNd;
+                        SwTxtNode* pTNd = static_cast<SwTxtNode*>(pStartNd);
                         pTNd->InsertItem(aINet, 0, pTNd->GetTxt().getLength());
 
                         // If the link cannot be found anymore,
@@ -514,7 +514,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
     if(pFilter)
         aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-    const SfxBoolItem *pRet = (const SfxBoolItem*)mpDocShell->ExecuteSlot( aReq );
+    const SfxBoolItem *pRet = static_cast<const SfxBoolItem*>(mpDocShell->ExecuteSlot( aReq ));
 
     return pRet && pRet->GetValue();
 }

@@ -56,7 +56,7 @@ namespace
                     m_aViewWasUnLocked.push_back(pSh);
                     pSh->LockView(true);
                 }
-                pSh = (SwViewShell*)pSh->GetNext();
+                pSh = static_cast<SwViewShell*>(pSh->GetNext());
             } while (pSh != m_pViewShell);
         }
         ~LockAllViews()

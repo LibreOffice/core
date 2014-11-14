@@ -23,6 +23,7 @@
 #include "swdllapi.h"
 #include <calbck.hxx>
 #include <editeng/numitem.hxx>
+#include <fmtcol.hxx>
 
 class SwTxtFmtColl;
 class SwPageDesc;
@@ -49,7 +50,7 @@ public:
     bool        DependsOn( const SwPageDesc* ) const;
 
     void SetFtnTxtColl(SwTxtFmtColl& rColl);
-    SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // can be 0.
+    SwTxtFmtColl* GetFtnTxtColl() const { return const_cast<SwTxtFmtColl*>(static_cast<const SwTxtFmtColl*>(GetRegisteredIn())); } // can be 0.
 
     SwCharFmt* GetCharFmt(SwDoc &rDoc) const;
     void SetCharFmt( SwCharFmt* );

@@ -338,7 +338,7 @@ void DocumentDeviceManager::PrtDataChanged()
             do
             {
                 pSh->InitPrt( getPrinter(false) );
-                pSh = (SwViewShell*)pSh->GetNext();
+                pSh = static_cast<SwViewShell*>(pSh->GetNext());
             }
             while ( pSh != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
         }
