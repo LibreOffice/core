@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_0e17afee",
+        "filename": "sw/source/core/access/accmap.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2014-11-14T01:57:13Z",
+      "side": 1,
+      "message": "You can remove _SwAccessibleEventMap_Impl now.",
+      "revId": "1c3e9f38886e6f1c35bc865c43841c44df85a17f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
