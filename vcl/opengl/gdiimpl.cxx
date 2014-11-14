@@ -30,6 +30,7 @@
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include "salgdi.hxx"
 #include "opengl/salbmp.hxx"
 
 #include <vector>
@@ -1082,13 +1083,13 @@ void OpenGLSalGraphicsImpl::copyArea(
 
 // CopyBits and DrawBitmap --> RasterOp and ClipRegion
 // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* /*pSrcGraphics*/ )
+void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
-    // TODO Check if SalGraphicsImpl is the same
-    const bool bSameGraphics( false );
+    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? dynamic_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : NULL;
 
     SAL_INFO( "vcl.opengl", "::copyBits" );
-    if( bSameGraphics &&
+
+    if( pImpl == this &&
         (rPosAry.mnSrcWidth == rPosAry.mnDestWidth) &&
         (rPosAry.mnSrcHeight == rPosAry.mnDestHeight))
     {
@@ -1102,6 +1103,16 @@ void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* /*
         return;
     }
 
+    if( pImpl->mbOffscreen )
+    {
+        Size aSize( pImpl->GetWidth(), pImpl->GetHeight() );
+        PreDraw();
+        DrawTexture( pImpl->maOffscreenTex, rPosAry );
+        PostDraw();
+        return;
+    }
+
+    SAL_WARN( "vcl.opengl", "*** NOT IMPLEMENTED *** copyBits" );
     // TODO Copy from one FBO to the other (glBlitFramebuffer)
 }
 

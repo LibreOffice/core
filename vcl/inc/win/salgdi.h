@@ -203,6 +203,7 @@ public:
     explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd);
     virtual ~WinSalGraphics();
 
+    SalGraphicsImpl* GetImpl() const SAL_OVERRIDE;
     bool isPrinter() const;
     bool isVirtualDevice() const;
     bool isWindow() const;

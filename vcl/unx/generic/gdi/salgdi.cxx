@@ -121,6 +121,11 @@ void X11SalGraphics::freeResources()
     bFontGC_ = false;
 }
 
+SalGraphicsImpl* X11SalGraphics::GetImpl() const
+{
+    return mpImpl.get();
+}
+
 void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
 {
     // shortcut if nothing changed

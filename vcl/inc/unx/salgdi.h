@@ -128,6 +128,7 @@ public:
             void            Init( class ImplSalPrinterData *pPrinter );
             void            DeInit();
 
+    SalGraphicsImpl*            GetImpl() const SAL_OVERRIDE;
     inline  const SalDisplay*   GetDisplay() const;
     inline  Display*            GetXDisplay() const;
     inline  const SalVisual&    GetVisual() const;

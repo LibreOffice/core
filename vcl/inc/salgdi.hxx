@@ -29,6 +29,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/metric.hxx>
 
+#include "salgdiimpl.hxx"
 #include "salglyphid.hxx"
 #include "sallayout.hxx"
 
@@ -81,6 +82,8 @@ class VCL_PLUGIN_PUBLIC SalGraphics
 public:
                                 SalGraphics();
     virtual                     ~SalGraphics();
+
+    virtual SalGraphicsImpl*    GetImpl() const = 0;
 
     void                        setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
     bool                        getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
