@@ -20,37 +20,62 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 #define INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 
-#include <boost/shared_ptr.hpp>
 #include <GL/glew.h>
+#include <vcl/dllapi.h>
 
-class OpenGLTexture
+class ImplOpenGLTexture
 {
-private:
+public:
+    int    mnRefCount;
     GLuint mnTexture;
     int    mnWidth;
     int    mnHeight;
     GLenum mnFilter;
 
-public:
-    OpenGLTexture();
-    OpenGLTexture( int nWidth, int nHeight );
-    OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
-    OpenGLTexture( int nX, int nY, int nWidth, int nHeight );
-    virtual ~OpenGLTexture();
-
-    GLuint Id() const;
-    int GetWidth() const;
-    int GetHeight() const;
-
-    void Bind();
-    void Unbind();
-    bool Draw();
-
-    GLenum GetFilter() const;
-    void SetFilter( GLenum nFilter );
+    ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate );
+    ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
+    ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight );
+    ~ImplOpenGLTexture();
 };
 
-typedef boost::shared_ptr< OpenGLTexture > OpenGLTextureSharedPtr;
+class VCL_PLUGIN_PUBLIC OpenGLTexture
+{
+private:
+    // if the rect size doesn't match the mpImpl one, this instance
+    // is a sub-area from the real OpenGL texture
+    Rectangle          maRect;
+
+    ImplOpenGLTexture* mpImpl;
+
+public:
+                    OpenGLTexture();
+                    OpenGLTexture( int nWidth, int nHeight, bool bAllocate = true );
+                    OpenGLTexture( int nWidth, int nHeight, int nFormat, int nType, sal_uInt8* pData );
+                    OpenGLTexture( int nX, int nY, int nWidth, int nHeight );
+                    OpenGLTexture( const OpenGLTexture& rTexture );
+                    OpenGLTexture( const OpenGLTexture& rTexture, int nX, int nY, int nWidth, int nHeight );
+    virtual         ~OpenGLTexture();
+
+    bool            IsUnique() const;
+
+    GLuint          Id() const;
+    int             GetWidth() const;
+    int             GetHeight() const;
+    void            GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted=false ) const;
+
+    void            Bind();
+    void            Unbind();
+    bool            Draw();
+    void            Read( GLenum nFormat, GLenum nType, sal_uInt8* pData );
+
+    GLenum          GetFilter() const;
+    void            SetFilter( GLenum nFilter );
+
+                    operator bool() const;
+    OpenGLTexture&  operator=( const OpenGLTexture& rTexture );
+    bool            operator==( const OpenGLTexture& rTexture ) const;
+    bool            operator!=( const OpenGLTexture& rTexture ) const;
+};
 
 #endif // INCLUDED_VCL_INC_OPENGL_TEXTURE_H
 

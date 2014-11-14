@@ -86,7 +86,6 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     const double& rScaleY,
     GLenum        nFilter )
 {
-    OpenGLTexture* pNewTex;
     GLuint nProgram;
     GLuint nFramebufferId;
     GLenum nOldFilter;
@@ -102,15 +101,15 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     glUseProgram( nProgram );
     glUniform1i( mnTexSamplerUniform, 0 );
 
-    pNewTex = new OpenGLTexture( nNewWidth, nNewHeight );
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pNewTex->Id(), 0 );
+    OpenGLTexture aNewTex = OpenGLTexture( nNewWidth, nNewHeight );
+    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aNewTex.Id(), 0 );
 
-    mpTexture->Bind();
-    nOldFilter = mpTexture->GetFilter();
-    mpTexture->SetFilter( nFilter );
-    mpTexture->Draw();
-    mpTexture->SetFilter( nOldFilter );
-    mpTexture->Unbind();
+    maTexture.Bind();
+    nOldFilter = maTexture.GetFilter();
+    maTexture.SetFilter( nFilter );
+    maTexture.Draw();
+    maTexture.SetFilter( nOldFilter );
+    maTexture.Unbind();
 
     glUseProgram( 0 );
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
@@ -118,7 +117,7 @@ bool OpenGLSalBitmap::ImplScaleFilter(
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
-    mpTexture.reset( pNewTex );
+    maTexture = aNewTex;
 
     CHECK_GL_ERROR();
     return true;
@@ -167,8 +166,6 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     const double& rScaleY,
     const Kernel& aKernel )
 {
-    OpenGLTexture* pScratchTex;
-    OpenGLTexture* pNewTex;
     GLfloat* pWeights( 0 );
     GLuint nFramebufferId;
     GLuint nProgram;
@@ -190,51 +187,59 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     CHECK_GL_ERROR();
 
     // horizontal scaling in scratch texture
-    pScratchTex = new OpenGLTexture( nNewWidth, mnHeight );
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pScratchTex->Id(), 0 );
-    CHECK_GL_ERROR();
-
-    for( sal_uInt32 i = 0; i < 16; i++ )
+    if( mnWidth != nNewWidth )
     {
-        aOffsets[i * 2] = i / (double) mnWidth;
-        aOffsets[i * 2 + 1] = 0;
-    }
-    ImplCreateKernel( rScaleX, aKernel, pWeights, nKernelSize );
-    glUniform1fv( mnConvKernelUniform, 16, pWeights );
-    CHECK_GL_ERROR();
-    glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
-    CHECK_GL_ERROR();
+        OpenGLTexture aScratchTex = OpenGLTexture( nNewWidth, mnHeight );
+        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aScratchTex.Id(), 0 );
+        CHECK_GL_ERROR();
 
-    glViewport( 0, 0, nNewWidth, mnHeight );
-    mpTexture->Bind();
-    mpTexture->Draw();
-    mpTexture->Unbind();
+        for( sal_uInt32 i = 0; i < 16; i++ )
+        {
+            aOffsets[i * 2] = i / (double) mnWidth;
+            aOffsets[i * 2 + 1] = 0;
+        }
+        ImplCreateKernel( rScaleX, aKernel, pWeights, nKernelSize );
+        glUniform1fv( mnConvKernelUniform, 16, pWeights );
+        CHECK_GL_ERROR();
+        glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
+        CHECK_GL_ERROR();
+
+        glViewport( 0, 0, nNewWidth, mnHeight );
+        maTexture.Bind();
+        maTexture.Draw();
+        maTexture.Unbind();
+
+        maTexture = aScratchTex;
+    }
 
     // vertical scaling in final texture
-    pNewTex = new OpenGLTexture( nNewWidth, nNewHeight );
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pNewTex->Id(), 0 );
-
-    for( sal_uInt32 i = 0; i < 16; i++ )
+    if( mnHeight != nNewHeight )
     {
-        aOffsets[i * 2] = 0;
-        aOffsets[i * 2 + 1] = i / (double) mnHeight;
-    }
-    ImplCreateKernel( rScaleY, aKernel, pWeights, nKernelSize );
-    glUniform1fv( mnConvKernelUniform, 16, pWeights );
-    glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
-    CHECK_GL_ERROR();
+        OpenGLTexture aScratchTex = OpenGLTexture( nNewWidth, nNewHeight );
+        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aScratchTex.Id(), 0 );
 
-    glViewport( 0, 0, nNewWidth, nNewHeight );
-    pScratchTex->Bind();
-    pScratchTex->Draw();
-    pScratchTex->Unbind();
+        for( sal_uInt32 i = 0; i < 16; i++ )
+        {
+            aOffsets[i * 2] = 0;
+            aOffsets[i * 2 + 1] = i / (double) mnHeight;
+        }
+        ImplCreateKernel( rScaleY, aKernel, pWeights, nKernelSize );
+        glUniform1fv( mnConvKernelUniform, 16, pWeights );
+        glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
+        CHECK_GL_ERROR();
+
+        glViewport( 0, 0, nNewWidth, nNewHeight );
+        maTexture.Bind();
+        maTexture.Draw();
+        maTexture.Unbind();
+
+        maTexture = aScratchTex;
+    }
 
     glUseProgram( 0 );
     glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     glDeleteFramebuffers( 1, &nFramebufferId );
 
-    delete pScratchTex;
-    mpTexture.reset( pNewTex );
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
 
