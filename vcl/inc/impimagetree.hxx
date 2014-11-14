@@ -89,6 +89,7 @@ private:
     void loadImageLinks();
     void parseLinkFile(boost::shared_ptr< SvStream > stream);
     OUString const & getRealImageName(OUString const & name);
+    std::vector<OUString> getAllPaths();
 };
 
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;

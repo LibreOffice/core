@@ -30,6 +30,9 @@
 #  define FIXME_SELF_INTERSECTING_WORKING
 #endif
 
+// debugging hook just for us
+SAL_DLLPUBLIC std::vector<OUString> ImageTree_getAllImageNames();
+
 using namespace css;
 
 class DemoBase :
@@ -564,39 +567,79 @@ public:
     struct DrawIcons : public RegionRenderer
     {
         std::vector<BitmapEx> maIcons;
-        DrawIcons()
+        bool bHasLoadedAll;
+        DrawIcons() : bHasLoadedAll(false)
         {
+            // a few icons to start with
             const char *pNames[] = {
                 "cmd/lc_openurl.png",
                 "cmd/lc_newdoc.png",
+                "cmd/lc_choosemacro.png",
                 "cmd/lc_save.png",
                 "cmd/lc_saveas.png",
+                "cmd/lc_importdialog.png",
                 "cmd/lc_sendmail.png",
                 "cmd/lc_editdoc.png",
                 "cmd/lc_print.png",
+                "cmd/lc_combobox.png",
+                "cmd/lc_insertformcombo.png",
                 "cmd/lc_printpreview.png",
                 "cmd/lc_cut.png",
                 "cmd/lc_copy.png",
                 "cmd/lc_paste.png",
+                "cmd/sc_autopilotmenu.png",
                 "cmd/lc_formatpaintbrush.png",
                 "cmd/lc_undo.png",
                 "cmd/lc_redo.png",
-            };
+                "cmd/lc_marks.png",
+                "cmd/lc_fieldnames.png",
+                "cmd/lc_hyperlinkdialog.png",
+              };
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
                 maIcons.push_back(BitmapEx(OUString::createFromAscii(pNames[i])));
         }
 
-        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
-                                  const RenderContext &) SAL_OVERRIDE
+        void LoadAllIcons()
         {
-            Rectangle p(r);
+            if (bHasLoadedAll)
+                return;
+            bHasLoadedAll = true;
+
+            std::vector<OUString> aAllIcons = ImageTree_getAllImageNames();
+            for (size_t i = 0; i < aAllIcons.size(); i++)
+                maIcons.push_back(BitmapEx(aAllIcons[i]));
+        }
+
+        void doDrawIcons(OutputDevice &rDev, Rectangle r)
+        {
+            long nMaxH = 0, nVPos = 0;
+            Point p(r.TopLeft());
             for (size_t i = 0; i < maIcons.size(); i++)
             {
                 Size aSize(maIcons[i].GetSizePixel());
-                rDev.DrawBitmapEx(p.TopLeft(), maIcons[i]);
+                rDev.DrawBitmapEx(p, maIcons[i]);
                 p.Move(aSize.Width(), 0);
-                if (p.Left() >= r.Right())
-                    break;
+                if (aSize.Height() > nMaxH)
+                    nMaxH = aSize.Height();
+                if (p.X() >= r.Right())
+                {
+                    nVPos += nMaxH;
+                    nMaxH = 0;
+                    p = Point(r.Left(), r.Top() + nVPos);
+                }
+            }
+        }
+
+        virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
+                                  const RenderContext &rCtx) SAL_OVERRIDE
+        {
+            if (rCtx.meStyle == RENDER_EXPANDED)
+            {
+                doDrawIcons(rDev, r);
+            }
+            else
+            {
+                doDrawIcons(rDev, r);
             }
         }
     };

@@ -349,4 +349,21 @@ OUString const & ImplImageTree::getRealImageName(OUString const & name)
     return it->second;
 }
 
+std::vector<OUString> ImplImageTree::getAllPaths()
+{
+    std::vector<OUString> aNames;
+
+    return aNames;
+}
+
+// For vcldemo / debugging
+SAL_DLLPUBLIC std::vector<OUString> ImageTree_getAllImageNames();
+
+/// Recursively dump all names ...
+std::vector<OUString> ImageTree_getAllImageNames()
+{
+    static ImplImageTreeSingletonRef aImageTree;
+    return aImageTree.getAllPaths();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
