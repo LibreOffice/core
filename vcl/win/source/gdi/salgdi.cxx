@@ -615,6 +615,11 @@ WinSalGraphics::~WinSalGraphics()
     delete [] mpFontKernPairs;
 }
 
+SalGraphicsImpl* WinSalGraphics::GetImpl() const
+{
+    return mpImpl.get();
+}
+
 bool WinSalGraphics::isPrinter() const
 {
     return mbPrinter;
