@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_0e732f4f",
+        "filename": "include/basegfx/tools/canvastools.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-14T09:12:59Z",
+      "side": 1,
+      "message": "doesn\u0027t this unfortunately require every link target that happens to include basegfx/tools/canvastools.hxx to gb_*_use_externals,*,glm_headers?",
+      "revId": "0ba9d699f74708bb83c6e0316d14ff43cee719af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
