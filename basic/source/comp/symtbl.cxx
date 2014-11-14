@@ -318,6 +318,8 @@ void SbiSymDef::SetType( SbxDataType t )
 {
     if( t == SbxVARIANT && pIn )
     {
+        //See if there have been any deftype statements to set the default type
+        //of a variable based on its starting letter
         sal_Unicode cu = aName[0];
         if( cu < 256 )
         {
@@ -327,14 +329,9 @@ void SbiSymDef::SetType( SbxDataType t )
                 ch = 'Z';
             }
             int ch2 = toupper( ch );
-            unsigned char c = (unsigned char)ch2;
-            if( c > 0 && c < 128 )
-            {
-                int nIndex = ch2 - 'A';
-                assert(nIndex >= 0 && nIndex < N_DEF_TYPES);
-                if (nIndex >= 0 && nIndex < N_DEF_TYPES)
-                    t = pIn->pParser->eDefTypes[nIndex];
-            }
+            int nIndex = ch2 - 'A';
+            if (nIndex >= 0 && nIndex < N_DEF_TYPES)
+                t = pIn->pParser->eDefTypes[nIndex];
         }
     }
     eType = t;
