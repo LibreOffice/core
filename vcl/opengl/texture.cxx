@@ -40,6 +40,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     if( bAllocate )
         glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nWidth, nHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL );
     glBindTexture( GL_TEXTURE_2D, 0 );
+
+    CHECK_GL_ERROR();
 }
 
 // texture with content retrieved from FBO
@@ -59,6 +61,7 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     glCopyTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, nX, nY, nWidth, nHeight, 0 );
     CHECK_GL_ERROR();
     glBindTexture( GL_TEXTURE_2D, 0 );
+
     CHECK_GL_ERROR();
 }
 
@@ -80,6 +83,8 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, mnWidth, mnHeight, 0, nFormat, nType, pData );
     glBindTexture( GL_TEXTURE_2D, 0 );
+
+    CHECK_GL_ERROR();
 }
 
 ImplOpenGLTexture::~ImplOpenGLTexture()
@@ -87,6 +92,8 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
     SAL_INFO( "vcl.opengl", "~OpenGLTexture " << mnTexture );
     if( mnTexture != 0 )
         glDeleteTextures( 1, &mnTexture );
+
+    CHECK_GL_ERROR();
 }
 
 OpenGLTexture::OpenGLTexture() :
@@ -198,18 +205,24 @@ void OpenGLTexture::SetFilter( GLenum nFilter )
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, nFilter );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, nFilter );
     }
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Bind()
 {
     if( mpImpl )
         glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLTexture::Unbind()
 {
     if( mpImpl )
         glBindTexture( GL_TEXTURE_2D, 0 );
+
+    CHECK_GL_ERROR();
 }
 
 bool OpenGLTexture::Draw()
@@ -243,6 +256,7 @@ bool OpenGLTexture::Draw()
     glDisableVertexAttribArray( 1 );
     glBindTexture( GL_TEXTURE_2D, 0 );
 
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -269,12 +283,12 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
         GLuint nFramebufferId;
         glGenFramebuffers( 1, &nFramebufferId );
         glBindFramebuffer( GL_FRAMEBUFFER, nFramebufferId );
-    CHECK_GL_ERROR();
+        CHECK_GL_ERROR();
 
         glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Id(), 0 );
-    CHECK_GL_ERROR();
+        CHECK_GL_ERROR();
         glReadPixels( maRect.Left(), mpImpl->mnHeight - maRect.Top(), GetWidth(), GetHeight(), nFormat, nType, pData );
-    CHECK_GL_ERROR();
+        CHECK_GL_ERROR();
 
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
         glDeleteFramebuffers( 1, &nFramebufferId );

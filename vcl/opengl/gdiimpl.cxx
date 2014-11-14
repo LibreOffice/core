@@ -120,6 +120,7 @@ void OpenGLSalGraphicsImpl::PostDraw()
         glDisable( GL_SCISSOR_TEST );
     if( mbUseStencil )
         glDisable( GL_STENCIL_TEST );
+
     CHECK_GL_ERROR();
 }
 
@@ -144,6 +145,8 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
     glStencilMask( 0x00 );
     glDisable( GL_STENCIL_TEST );
+
+    CHECK_GL_ERROR();
 }
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
@@ -174,6 +177,7 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
         ImplSetClipBit( rClip, 0x01 );
     }
 
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -301,6 +305,7 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     glViewport( 0, 0, GetWidth(), GetHeight() );
     DrawTexture( maOffscreenTex, aPosAry );
 
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -679,6 +684,8 @@ void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const Sal
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     DrawTexture( rTexture, rPosAry, bInverted );
     glDisable( GL_BLEND );
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& pPosAry )
@@ -831,6 +838,7 @@ void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const 
 
     glDisableVertexAttribArray( GL_ATTRIB_TEX );
     glUseProgram( 0 );
+
     CHECK_GL_ERROR();
 }
 

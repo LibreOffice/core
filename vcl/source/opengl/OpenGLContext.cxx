@@ -78,6 +78,8 @@ OpenGLContext::~OpenGLContext()
             glXDestroyGLXPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
     }
 #endif
+
+    CHECK_GL_ERROR();
 }
 
 void OpenGLContext::requestLegacyContext()
@@ -160,6 +162,8 @@ int InitTempWindow(HWND *hwnd, int width, int height, PIXELFORMATDESCRIPTOR inPf
     {
         return -1;
     }
+
+    CHECK_GL_ERROR();
     return 0;
 }
 
@@ -198,6 +202,8 @@ bool WGLisExtensionSupported(const char *extension)
         if ((p==supported || p[-1]==' ') && (p[extlen]=='\0' || p[extlen]==' '))
             return 1; // Match
     }
+
+    CHECK_GL_ERROR();
 }
 
 bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat,
@@ -293,6 +299,7 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat,
     ReleaseDC(hWnd, glWin.hDC);
     DestroyWindow(hWnd);
 
+    CHECK_GL_ERROR();
     return  bArbMultisampleSupported;
 }
 #endif
@@ -448,6 +455,7 @@ GLXFBConfig* getFBConfigForPixmap(Display* dpy, int& nBestFBC, bool bUseDoubleBu
         }
     }
 
+    CHECK_GL_ERROR();
     return pFBC;
 }
 

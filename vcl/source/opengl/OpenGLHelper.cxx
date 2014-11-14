@@ -144,6 +144,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
         return 0;
     }
 
+    CHECK_GL_ERROR();
     return ProgramID;
 }
 
@@ -184,6 +185,8 @@ void OpenGLHelper::renderToFile(long nWidth, long nHeight, const OUString& rFile
     } catch (...) {
         SAL_WARN("vcl.opengl", "Error writing png to " << rFileName);
     }
+
+    CHECK_GL_ERROR();
 }
 
 BitmapEx OpenGLHelper::ConvertBGRABufferToBitmapEx(const sal_uInt8* const pBuffer, long nWidth, long nHeight)
@@ -326,6 +329,8 @@ void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebu
     }
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    CHECK_GL_ERROR();
 }
 
 float OpenGLHelper::getGLVersion()
@@ -340,6 +345,8 @@ float OpenGLHelper::getGLVersion()
             fVersion += (aVersion[2] - '0')/10.0;
         }
     }
+
+    CHECK_GL_ERROR();
     return fVersion;
 }
 
@@ -398,6 +405,7 @@ bool OpenGLHelper::GetVisualInfo(Display* pDisplay, int nScreen, XVisualInfo& rV
     rVI = *pVI;
     XFree( pVI );
 
+    CHECK_GL_ERROR();
     return true;
 }
 
@@ -448,6 +456,7 @@ GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted 
         return 0;
     }
 
+    CHECK_GL_ERROR();
     return aFbConfigs[i];
 }
 
