@@ -39,16 +39,6 @@ public:
     virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
 
     /**
-     * Given the position of a changed cell, collect all formula cells that
-     * need to be notified of the change.
-     *
-     * @param rPos position of changed cell.
-     * @param rCells all formula cells that need to be notified are put into
-     *               this container.
-     */
-    void collectFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells ) const;
-
-    /**
      * Given the row span of changed cells within a single column, collect all
      * formula cells that need to be notified of the change.
      *

@@ -125,95 +125,6 @@ void FormulaGroupAreaListener::notifyBulkChange( const BulkDataHint& rHint )
     std::for_each(aCells.begin(), aCells.end(), Notifier(aHint));
 }
 
-void FormulaGroupAreaListener::collectFormulaCells( const ScAddress& rPos, std::vector<ScFormulaCell*>& rCells ) const
-{
-    if (rPos.Tab() < maRange.aStart.Tab() || maRange.aEnd.Tab() < rPos.Tab())
-        // Wrong sheet.
-        return;
-
-    if (rPos.Col() < maRange.aStart.Col() || maRange.aEnd.Col() < rPos.Col())
-        // Outside the column range.
-        return;
-
-    ScFormulaCell** pp = mppTopCell;
-    ScFormulaCell** ppEnd = pp + mnGroupLen;
-
-    if (mbStartFixed)
-    {
-        if (mbEndFixed)
-        {
-            // Both top and bottom row positions are absolute.  Use the original range as-is.
-            SCROW nRow1 = maRange.aStart.Row();
-            SCROW nRow2 = maRange.aEnd.Row();
-            if (rPos.Row() < nRow1 || nRow2 < rPos.Row())
-                return;
-
-            for (; pp != ppEnd; ++pp)
-                rCells.push_back(*pp);
-        }
-        else
-        {
-            // Only the end row is relative.
-            SCROW nRow1 = maRange.aStart.Row();
-            SCROW nRow2 = maRange.aEnd.Row();
-            SCROW nMaxRow = nRow2 + mnGroupLen - 1;
-            if (rPos.Row() < nRow1 || nMaxRow < rPos.Row())
-                return;
-
-            if (nRow2 < rPos.Row())
-            {
-                // Skip ahead to the first hit.
-                SCROW nSkip = rPos.Row() - nRow2;
-                pp += nSkip;
-                nRow2 += nSkip;
-            }
-
-            // Notify the first hit cell and all subsequent ones.
-            for (; pp != ppEnd; ++pp)
-                rCells.push_back(*pp);
-        }
-    }
-    else if (mbEndFixed)
-    {
-        // Only the start row is relative.
-        SCROW nRow1 = maRange.aStart.Row();
-        SCROW nRow2 = maRange.aEnd.Row();
-
-        if (rPos.Row() < nRow1 || nRow2 < rPos.Row())
-            return;
-
-        for (; pp != ppEnd && nRow1 <= nRow2; ++pp, ++nRow1)
-            rCells.push_back(*pp);
-    }
-    else
-    {
-        // Both top and bottom row positions are relative.
-        SCROW nRow1 = maRange.aStart.Row();
-        SCROW nRow2 = maRange.aEnd.Row();
-        SCROW nMaxRow = nRow2 + mnGroupLen - 1;
-        if (nMaxRow < rPos.Row())
-            return;
-
-        if (nRow2 < rPos.Row())
-        {
-            // Skip ahead.
-            SCROW nSkip = rPos.Row() - nRow2;
-            pp += nSkip;
-            nRow1 += nSkip;
-            nRow2 += nSkip;
-        }
-
-        for (; pp != ppEnd; ++pp, ++nRow1, ++nRow2)
-        {
-            if (rPos.Row() < nRow1 || nRow2 < rPos.Row())
-                // Changed cell is outside the range.
-                continue;
-
-            rCells.push_back(*pp);
-        }
-    }
-}
-
 void FormulaGroupAreaListener::collectFormulaCells(
     SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const
 {
@@ -312,7 +223,7 @@ void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScA
 {
     // Determine which formula cells within the group need to be notified of this change.
     std::vector<ScFormulaCell*> aCells;
-    collectFormulaCells(rPos, aCells);
+    collectFormulaCells(rPos.Tab(), rPos.Col(), rPos.Row(), rPos.Row(), aCells);
     std::for_each(aCells.begin(), aCells.end(), Notifier(rHint));
 }
 
