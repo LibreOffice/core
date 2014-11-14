@@ -277,7 +277,6 @@ CPPU_DLLPUBLIC typelib_TypeDescriptionReference ** SAL_CALL typelib_static_type_
     return &s_aTypes[eTypeClass];
 }
 
-
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_type_init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName )
@@ -291,12 +290,11 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_static_type_init(
             OUString aTypeName( OUString::createFromAscii( pTypeName ) );
             ::typelib_typedescriptionreference_new( ppRef, eTypeClass, aTypeName.pData );
 
-            // another static ref:
+            // coverity[var_deref_op] - another static ref
             ++((*ppRef)->nStaticRefCount);
         }
     }
 }
-
 
 CPPU_DLLPUBLIC void SAL_CALL typelib_static_sequence_type_init(
     typelib_TypeDescriptionReference ** ppRef,
