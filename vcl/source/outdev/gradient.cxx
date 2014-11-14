@@ -41,6 +41,8 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
+    bool bDrawn = false;
+
     if ( mnDrawMode & DRAWMODE_NOGRADIENT )
         return;     // nothing to draw!
 
@@ -52,11 +54,10 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
 
     if ( mpGraphics || AcquireGraphics() )
     {
-        if ( mpGraphics->DrawGradient( rPolyPoly, rGradient, this ) )
-            return;
+        bDrawn = mpGraphics->DrawGradient( rPolyPoly, rGradient, this );
     }
 
-    if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
+    if ( !bDrawn && rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
         {
