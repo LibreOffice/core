@@ -112,24 +112,21 @@ class FileInputStream
     }
 };
 
-FileInputStream::FileInputStream( const char* pFilename ) :
-    m_pMemory( NULL ),
-    m_nPos( 0 ),
-    m_nLen( 0 )
+FileInputStream::FileInputStream(const char* pFilename)
+    : m_pMemory(NULL)
+    , m_nPos(0)
+    , m_nLen(0)
 {
-    struct stat aStat;
-    if( ! stat( pFilename, &aStat ) &&
-        S_ISREG( aStat.st_mode )    &&
-        aStat.st_size > 0
-      )
+    FILE* fp = fopen( pFilename, "r" );
+    if( fp )
     {
-        FILE* fp = fopen( pFilename, "r" );
-        if( fp )
+        struct stat aStat;
+        if (!fstat(fileno(fp), &aStat) && S_ISREG(aStat.st_mode) && aStat.st_size > 0)
         {
             m_pMemory = (char*)rtl_allocateMemory( aStat.st_size );
             m_nLen = (unsigned int)fread( m_pMemory, 1, aStat.st_size, fp );
-            fclose( fp );
         }
+        fclose( fp );
     }
 }
 
