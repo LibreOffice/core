@@ -30,6 +30,7 @@
 #include <com/sun/star/rendering/PanoseWeight.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/util/Color.hpp>
+#include <osl/diagnose.h>
 #include <boost/bind.hpp>
 #include <map>
 

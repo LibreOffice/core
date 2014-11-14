@@ -25,6 +25,7 @@
 #include "DeepTContext.hxx"
 #include "ActionMapTypesOOo.hxx"
 #include "MutableAttrList.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;

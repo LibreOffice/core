@@ -27,6 +27,7 @@
 #include "dputil.hxx"
 
 #include <sal/types.h>
+#include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>

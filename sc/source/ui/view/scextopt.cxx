@@ -19,6 +19,8 @@
 
 #include "scextopt.hxx"
 
+#include <osl/diagnose.h>
+
 #include <vector>
 #include <map>
 #include <boost/shared_ptr.hpp>

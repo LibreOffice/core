@@ -44,6 +44,7 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 
 
 using namespace ::com::sun::star::uno;

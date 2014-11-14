@@ -64,6 +64,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 
 

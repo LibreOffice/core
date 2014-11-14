@@ -52,6 +52,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/basemutex.hxx>

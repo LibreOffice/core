@@ -42,6 +42,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.hxx>
 
 #include <closepreventer.hxx>

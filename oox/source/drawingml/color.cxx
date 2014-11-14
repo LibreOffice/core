@@ -20,6 +20,7 @@
 #include "oox/drawingml/color.hxx"
 #include <algorithm>
 #include <math.h>
+#include <osl/diagnose.h>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"

@@ -19,6 +19,7 @@
 
 #include "TransformerActions.hxx"
 
+#include <osl/diagnose.h>
 
 
 using namespace ::osl;

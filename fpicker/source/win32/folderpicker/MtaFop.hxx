@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
 #include <utility>

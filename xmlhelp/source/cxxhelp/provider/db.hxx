@@ -22,6 +22,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
 #include <boost/unordered_map.hpp>
+#include <osl/diagnose.h>
 #include <rtl/string.hxx>
 
 namespace helpdatafileproxy {

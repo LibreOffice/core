@@ -25,7 +25,6 @@
 #include <cassert>
 
 #include <sal/types.h>
-#include <osl/interlck.h>
 
 namespace rtl
 {

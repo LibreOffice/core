@@ -20,6 +20,7 @@
 #include <PropertyMap.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include <osl/diagnose.h>
 
 #include "dmapperLoggers.hxx"
 

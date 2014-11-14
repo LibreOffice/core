@@ -21,6 +21,8 @@
 
 #include <string.h>
 
+#include <osl/diagnose.h>
+
 #include <element.hxx>
 #include <document.hxx>
 

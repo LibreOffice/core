@@ -31,6 +31,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/digest.h>
+#include <osl/diagnose.h>
 
 #include <vector>
 

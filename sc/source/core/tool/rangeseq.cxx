@@ -19,6 +19,7 @@
 
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

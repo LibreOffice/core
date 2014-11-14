@@ -34,6 +34,7 @@
 #include <com/sun/star/xml/dom/XNode.hpp>
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <ucbhelper/content.hxx>
 

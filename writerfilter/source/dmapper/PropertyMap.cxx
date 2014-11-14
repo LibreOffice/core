@@ -21,6 +21,7 @@
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
 #include <i18nutil/paper.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

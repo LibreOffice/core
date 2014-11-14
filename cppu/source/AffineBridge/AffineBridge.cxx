@@ -21,6 +21,7 @@
 #include "osl/thread.hxx"
 #include "osl/conditn.hxx"
 #include "osl/mutex.hxx"
+#include <osl/diagnose.h>
 
 #include "cppu/helper/purpenv/Environment.hxx"
 #include "cppu/helper/purpenv/Mapping.hxx"

@@ -22,6 +22,7 @@
 #include <functional>
 #include <boost/bind.hpp>
 
+#include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
 
 #include "oox/helper/attributelist.hxx"

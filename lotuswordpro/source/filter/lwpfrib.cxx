@@ -85,6 +85,9 @@
 #include "lwpdocdata.hxx"
 #include "lwpglobalmgr.hxx"
 
+#include <osl/diagnose.h>
+
+
 LwpFrib::LwpFrib(LwpPara* pPara)
     : m_pPara(pPara)
     , m_pNext(NULL)

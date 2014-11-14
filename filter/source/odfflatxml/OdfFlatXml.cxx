@@ -11,6 +11,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <osl/diagnose.h>
 
 #include <sax/tools/documenthandleradapter.hxx>
 

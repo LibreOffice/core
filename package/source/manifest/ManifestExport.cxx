@@ -29,6 +29,7 @@
 #include <ManifestExport.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/attributelist.hxx>

@@ -19,6 +19,7 @@
 
 #include <xmloff/xmlerror.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/uno/Any.hxx>

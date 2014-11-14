@@ -21,6 +21,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <slot.hxx>
 #include <globals.hxx>

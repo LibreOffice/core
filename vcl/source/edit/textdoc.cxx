@@ -20,6 +20,7 @@
 #include <textdoc.hxx>
 #include <stdlib.h>
 #include <boost/mem_fn.hpp>
+#include <osl/diagnose.h>
 
 // compare function called by QuickSort
 static bool CompareStart( const TextCharAttrib& pFirst, const TextCharAttrib& pSecond )

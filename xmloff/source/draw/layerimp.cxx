@@ -19,6 +19,7 @@
 
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>

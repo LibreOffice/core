@@ -25,6 +25,8 @@
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/vml/vmltextboxcontext.hxx"
 
+#include <osl/diagnose.h>
+
 namespace oox {
 namespace vml {
 

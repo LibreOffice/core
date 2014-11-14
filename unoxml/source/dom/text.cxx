@@ -19,6 +19,8 @@
 
 #include <text.hxx>
 
+#include <osl/diagnose.h>
+
 using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::sax;

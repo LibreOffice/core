@@ -29,6 +29,7 @@
 #include <config_lgpl.h>
 #include <string.h>
 #include <ne_xml.h>
+#include <osl/diagnose.h>
 #include "LockSequence.hxx"
 
 using namespace webdav_ucp;

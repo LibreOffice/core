@@ -61,6 +61,7 @@
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <tdoc_content.hxx>
 

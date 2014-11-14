@@ -22,6 +22,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <osl/thread.h>
+#include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/fillproperties.hxx"

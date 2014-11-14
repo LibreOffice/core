@@ -20,6 +20,8 @@
 #include <utility>
 #include <vector>
 #include <list>
+
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <osl/socket.hxx>

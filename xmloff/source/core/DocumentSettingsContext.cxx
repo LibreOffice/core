@@ -44,6 +44,7 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <xmlenums.hxx>
 
 using namespace com::sun::star;

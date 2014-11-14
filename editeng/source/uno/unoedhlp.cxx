@@ -22,6 +22,7 @@
 #include <editeng/editeng.hxx>
 #include <svl/itemset.hxx>
 
+#include <osl/diagnose.h>
 
 
 SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId ) :

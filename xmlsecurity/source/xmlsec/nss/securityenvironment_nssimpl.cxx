@@ -24,6 +24,7 @@
 
 #include <sal/config.h>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
 #include <comphelper/servicehelper.hxx>

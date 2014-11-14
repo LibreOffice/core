@@ -38,6 +38,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 

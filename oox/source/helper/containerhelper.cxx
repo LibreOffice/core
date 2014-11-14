@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 

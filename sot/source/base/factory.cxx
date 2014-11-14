@@ -22,6 +22,7 @@
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
 #include <comphelper/classids.hxx>
+#include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 

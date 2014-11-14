@@ -26,6 +26,8 @@
 #include "oox/ole/olehelper.hxx"
 #include "oox/ole/olestorage.hxx"
 
+#include <osl/diagnose.h>
+
 namespace oox {
 namespace ole {
 

@@ -26,6 +26,7 @@
 #include "hsqldb/StorageNativeInputStream.h"
 #include "accesslog.hxx"
 #include "diagnose_ex.h"
+#include <osl/diagnose.h>
 
 #include <string.h>
 

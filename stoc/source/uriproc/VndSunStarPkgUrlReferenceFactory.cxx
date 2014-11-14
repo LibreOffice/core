@@ -41,6 +41,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <sal/types.h>
 
 namespace {

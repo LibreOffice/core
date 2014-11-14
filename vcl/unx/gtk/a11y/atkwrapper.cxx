@@ -54,6 +54,7 @@
 #include <com/sun/star/beans/Property.hpp>
 
 #include <rtl/ref.hxx>
+#include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 

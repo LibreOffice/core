@@ -22,6 +22,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
+#include <osl/diagnose.h>
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>

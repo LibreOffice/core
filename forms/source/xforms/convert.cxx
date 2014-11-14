@@ -26,6 +26,7 @@
 #include <o3tl/compat_functional.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>

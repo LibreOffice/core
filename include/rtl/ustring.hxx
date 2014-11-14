@@ -27,7 +27,6 @@
 #include <ostream>
 #include <string.h>
 
-#include <osl/diagnose.h>
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
 #include <rtl/stringutils.hxx>

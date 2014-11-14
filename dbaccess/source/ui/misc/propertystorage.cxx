@@ -23,6 +23,8 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 
+#include <osl/diagnose.h>
+
 #include <cassert>
 #include <boost/scoped_ptr.hpp>
 

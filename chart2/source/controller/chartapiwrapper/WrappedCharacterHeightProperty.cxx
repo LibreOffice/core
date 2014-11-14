@@ -21,6 +21,7 @@
 #include "macros.hxx"
 #include "RelativeSizeHelper.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

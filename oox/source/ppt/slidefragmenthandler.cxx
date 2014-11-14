@@ -22,6 +22,7 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <osl/diagnose.h>
 
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"

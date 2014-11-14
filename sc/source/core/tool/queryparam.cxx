@@ -22,6 +22,7 @@
 #include "scmatrix.hxx"
 
 #include <svl/sharedstringpool.hxx>
+#include <osl/diagnose.h>
 
 namespace {
 

@@ -21,6 +21,7 @@
 
 #include <txatbase.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 
 #include <boost/shared_ptr.hpp>
 

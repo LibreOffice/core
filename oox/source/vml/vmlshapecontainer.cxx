@@ -22,6 +22,8 @@
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshape.hxx"
 
+#include <osl/diagnose.h>
+
 namespace oox {
 namespace vml {
 

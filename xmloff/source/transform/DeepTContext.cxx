@@ -24,6 +24,7 @@
 #include "ElemTransformerAction.hxx"
 #include "PersMixedContentTContext.hxx"
 #include "TransformerBase.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

@@ -22,6 +22,7 @@
 #include <WriterFilterDetection.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <osl/diagnose.h>
 #include <sot/storage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 

@@ -19,6 +19,7 @@
 
 #include "RelativePositionHelper.hxx"
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

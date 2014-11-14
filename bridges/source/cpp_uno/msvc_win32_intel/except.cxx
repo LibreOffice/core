@@ -28,6 +28,7 @@
 #include "rtl/alloc.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+#include <osl/diagnose.h>
 
 #include "com/sun/star/uno/Any.hxx"
 

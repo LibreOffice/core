@@ -20,6 +20,7 @@
 #include <idlc/astdeclaration.hxx>
 #include <idlc/astscope.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 static OString sGlobal("::");
 

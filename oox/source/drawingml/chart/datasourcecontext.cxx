@@ -21,6 +21,8 @@
 
 #include "oox/drawingml/chart/datasourcemodel.hxx"
 
+#include <osl/diagnose.h>
+
 namespace oox {
 namespace drawingml {
 namespace chart {

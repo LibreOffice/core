@@ -19,6 +19,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <osl/diagnose.h>
 
 #include "printopt.hxx"
 #include "miscuno.hxx"

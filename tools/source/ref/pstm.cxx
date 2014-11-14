@@ -20,6 +20,7 @@
 #include <tools/debug.hxx>
 #include <tools/pstm.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 #define STOR_NO_OPTIMIZE
 

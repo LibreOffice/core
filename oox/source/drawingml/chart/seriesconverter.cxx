@@ -27,6 +27,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
+#include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
 #include "drawingml/chart/datasourceconverter.hxx"
 #include "drawingml/chart/seriesmodel.hxx"

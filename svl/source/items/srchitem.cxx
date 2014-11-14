@@ -19,6 +19,7 @@
 
 #include <svl/srchitem.hxx>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/util/XReplaceable.hpp>

@@ -46,6 +46,7 @@ using ::com::sun::star::text::WritingMode;
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include "oox/token/propertynames.hxx"
 using ::com::sun::star::uno::Any;

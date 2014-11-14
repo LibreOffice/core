@@ -23,6 +23,8 @@
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
 
+#include <osl/diagnose.h>
+
 #include <mdds/flat_segment_tree.hpp>
 
 // STATIC DATA -----------------------------------------------------------

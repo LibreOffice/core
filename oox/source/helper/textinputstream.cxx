@@ -22,6 +22,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include "oox/helper/binaryinputstream.hxx"
 

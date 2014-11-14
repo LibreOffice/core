@@ -21,6 +21,8 @@
 
 #include "oox/ole/olehelper.hxx"
 
+#include <osl/diagnose.h>
+
 namespace oox {
 namespace ole {
 

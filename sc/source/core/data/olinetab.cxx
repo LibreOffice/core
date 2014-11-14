@@ -25,6 +25,8 @@
 #include "address.hxx"
 #include "table.hxx"
 
+#include <osl/diagnose.h>
+
 ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden ) :
     nStart  ( nNewStart ),
     nSize   ( nNewSize ),

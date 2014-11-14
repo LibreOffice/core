@@ -18,6 +18,7 @@
  */
 
 #include "cppuhelper/implementationentry.hxx"
+#include <osl/diagnose.h>
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 

@@ -20,6 +20,7 @@
 #include "excelfilter.hxx"
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <osl/diagnose.h>
 
 #include <oox/helper/binaryinputstream.hxx>
 #include "biffinputstream.hxx"

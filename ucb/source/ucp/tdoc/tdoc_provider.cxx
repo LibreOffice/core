@@ -25,6 +25,7 @@
  *************************************************************************/
 
 #include "rtl/ustrbuf.hxx"
+#include <osl/diagnose.h>
 
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/embed/XStorage.hpp"

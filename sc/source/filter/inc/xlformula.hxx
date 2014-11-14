@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLFORMULA_HXX
 
 #include <map>
+#include <osl/diagnose.h>
 #include <formula/opcode.hxx>
 #include "address.hxx"
 #include "ftools.hxx"

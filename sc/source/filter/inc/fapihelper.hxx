@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <osl/diagnose.h>
 #include <tools/color.hxx>
 #include <comphelper/types.hxx>
 #include "ftools.hxx"

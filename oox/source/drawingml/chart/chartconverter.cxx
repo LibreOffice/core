@@ -26,6 +26,7 @@
 #include "drawingml/chart/chartspacemodel.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include <osl/diagnose.h>
 
 using ::oox::drawingml::chart::DataSequenceModel;
 using ::com::sun::star::uno::Any;

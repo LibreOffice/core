@@ -26,6 +26,8 @@
 #include <limits.h>
 #include <unistd.h>
 
+#include <osl/diagnose.h>
+
 #include "file_impl.hxx"
 #include "file_error_transl.h"
 #include "file_path_helper.hxx"

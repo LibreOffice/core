@@ -20,6 +20,7 @@
 #include "swtypes.hxx"
 
 #include "SwGrammarMarkUp.hxx"
+#include <osl/diagnose.h>
 
 SwWrongArea::SwWrongArea( const rtl::OUString& rType, WrongListType listType,
         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,

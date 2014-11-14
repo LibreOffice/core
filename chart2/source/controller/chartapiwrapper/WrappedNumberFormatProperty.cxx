@@ -20,6 +20,7 @@
 #include "WrappedNumberFormatProperty.hxx"
 #include "macros.hxx"
 #include <unonames.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

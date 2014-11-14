@@ -22,6 +22,9 @@
 
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/color/bcolor.hxx>
+
+#include <osl/diagnose.h>
+
 #include <boost/shared_ptr.hpp>
 #include <boost/utility.hpp>
 #include <vector>

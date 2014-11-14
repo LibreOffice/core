@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <osl/interlck.h>
+#include <osl/diagnose.h>
 
 #include <rtl/ustrbuf.hxx>
 #include <strimp.hxx>

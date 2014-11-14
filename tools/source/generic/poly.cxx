@@ -18,6 +18,7 @@
  */
 
 #include <osl/endian.h>
+#include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>

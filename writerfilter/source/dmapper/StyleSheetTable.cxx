@@ -40,6 +40,7 @@
 #include <map>
 #include <set>
 #include <stdio.h>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceasvector.hxx>

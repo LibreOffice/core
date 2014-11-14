@@ -31,6 +31,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
+#include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>

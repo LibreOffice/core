@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include "xmldocumentwrapper_xmlsecimpl.hxx"

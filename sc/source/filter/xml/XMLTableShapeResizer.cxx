@@ -27,6 +27,8 @@
 #include "compiler.hxx"
 #include "reftokenhelper.hxx"
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

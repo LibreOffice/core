@@ -20,6 +20,7 @@
 #include <math.h>
 
 #include <svl/zforlist.hxx>
+#include <osl/diagnose.h>
 #include "attrib.hxx"
 #include "dif.hxx"
 #include "docpool.hxx"

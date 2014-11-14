@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupInfo.hpp>
 #include <com/sun/star/sheet/XDataPilotFieldGrouping.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>

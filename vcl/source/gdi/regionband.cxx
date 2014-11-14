@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <regionband.hxx>
+#include <osl/diagnose.h>
 
 RegionBand::RegionBand()
 :   mpFirstBand(0),

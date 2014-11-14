@@ -19,6 +19,7 @@
 
 #include "Splines.hxx"
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 #include <vector>
 #include <algorithm>

@@ -27,6 +27,7 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
+#include <osl/diagnose.h>
 #include <unotools/mediadescriptor.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>

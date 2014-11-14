@@ -18,6 +18,7 @@
  */
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sax/tools/converter.hxx>

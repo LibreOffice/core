@@ -38,6 +38,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <sal/macros.h>
 
 static const int nDateFormatInvalid = -1;

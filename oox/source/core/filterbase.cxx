@@ -30,6 +30,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
 #include <set>

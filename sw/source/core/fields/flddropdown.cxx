@@ -20,6 +20,8 @@
 #include <flddropdown.hxx>
 
 #include <algorithm>
+
+#include <osl/diagnose.h>
 #include <svl/poolitem.hxx>
 
 #include <unofldmid.h>

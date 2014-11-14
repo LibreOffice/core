@@ -32,6 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>

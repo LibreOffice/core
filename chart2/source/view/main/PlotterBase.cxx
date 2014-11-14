@@ -21,6 +21,7 @@
 #include "PlottingPositionHelper.hxx"
 #include "AbstractShapeFactory.hxx"
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 
 namespace chart

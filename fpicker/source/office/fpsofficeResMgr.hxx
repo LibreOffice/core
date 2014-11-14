@@ -10,6 +10,7 @@
 #define INCLUDED_FPICKER_SOURCE_OFFICE_FPSOFFICERESMGR_HXX
 
 #include <rtl/instance.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <tools/resmgr.hxx>
 
 namespace

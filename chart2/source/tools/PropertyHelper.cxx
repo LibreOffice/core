@@ -22,6 +22,7 @@
 #include "macros.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <osl/diagnose.h>
 
 #include <vector>
 #include <algorithm>

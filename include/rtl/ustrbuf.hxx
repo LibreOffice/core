@@ -25,7 +25,6 @@
 #include <cassert>
 #include <string.h>
 
-#include <osl/diagnose.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
 #include <rtl/stringutils.hxx>

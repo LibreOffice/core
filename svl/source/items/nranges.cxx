@@ -22,6 +22,8 @@
 // compiled via include from itemset.cxx only!
 #include <boost/scoped_array.hpp>
 
+#include <osl/diagnose.h>
+
 #ifdef DBG_UTIL
 
 #define DBG_CHECK_RANGES(sal_uInt16, pArr)                                 \

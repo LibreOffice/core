@@ -24,6 +24,8 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <comphelper/solarmutex.hxx>
 
+#include <osl/diagnose.h>
+
 #include <boost/scoped_ptr.hpp>
 
 

@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 namespace oox {
 namespace xls {

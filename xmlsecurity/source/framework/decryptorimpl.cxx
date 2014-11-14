@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star::uno;
 namespace cssu = com::sun::star::uno;

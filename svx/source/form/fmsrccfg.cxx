@@ -18,6 +18,8 @@
  */
 
 #include "svx/fmsrccfg.hxx"
+
+#include <osl/diagnose.h>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
 

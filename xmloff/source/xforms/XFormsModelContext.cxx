@@ -32,6 +32,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>

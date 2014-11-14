@@ -25,6 +25,7 @@
 #include "GraphicPropertyItemConverter.hxx"
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
+#include <osl/diagnose.h>
 
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

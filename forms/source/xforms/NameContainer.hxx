@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Type.hxx>
+#include <osl/diagnose.h>
 
 typedef cppu::WeakImplHelper1<
     com::sun::star::container::XNameContainer

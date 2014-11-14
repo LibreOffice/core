@@ -27,6 +27,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <osl/diagnose.h>
 #include "oox/helper/propertymap.hxx"
 
 namespace oox {

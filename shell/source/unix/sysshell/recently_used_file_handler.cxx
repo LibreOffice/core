@@ -26,6 +26,7 @@
 #include "rtl/strbuf.hxx"
 
 #include "osl/thread.h"
+#include <osl/diagnose.h>
 #include "recently_used_file.hxx"
 
 #include "internal/xml_parser.hxx"

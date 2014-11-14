@@ -30,6 +30,7 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
+#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

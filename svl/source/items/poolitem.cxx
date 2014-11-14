@@ -20,6 +20,7 @@
 
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
+#include <osl/diagnose.h>
 
 TYPEINIT0(SfxPoolItem);
 TYPEINIT1(SfxVoidItem, SfxPoolItem);

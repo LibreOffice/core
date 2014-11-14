@@ -24,6 +24,7 @@
 #include <com/sun/star/xsd/XDataType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 
 namespace pcr

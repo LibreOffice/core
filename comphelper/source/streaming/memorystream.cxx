@@ -27,6 +27,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase4.hxx>
+#include <osl/diagnose.h>
 
 #include <string.h>
 #include <vector>

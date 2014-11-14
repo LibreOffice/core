@@ -20,6 +20,7 @@
 #include "XMLStylesImportHelper.hxx"
 #include "xmlimprt.hxx"
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 using ::std::list;

@@ -19,6 +19,7 @@
 
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <tools/fract.hxx>
 
 // Makes parser a static resource,

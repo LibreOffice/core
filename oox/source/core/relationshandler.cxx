@@ -20,6 +20,7 @@
 #include "oox/core/relationshandler.hxx"
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include "oox/helper/attributelist.hxx"
 
 namespace oox {

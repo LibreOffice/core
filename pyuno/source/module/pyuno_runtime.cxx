@@ -22,6 +22,7 @@
 
 #include "pyuno_impl.hxx"
 
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/module.h>
 #include <osl/process.h>

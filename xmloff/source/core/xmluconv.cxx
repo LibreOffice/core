@@ -24,6 +24,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/math.hxx>

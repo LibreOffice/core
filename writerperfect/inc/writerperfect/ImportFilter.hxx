@@ -27,6 +27,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
+#include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 

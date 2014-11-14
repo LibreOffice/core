@@ -25,6 +25,7 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <osl/diagnose.h>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>

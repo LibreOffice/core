@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <basegfx/numeric/ftools.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

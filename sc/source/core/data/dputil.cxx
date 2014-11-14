@@ -18,6 +18,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>

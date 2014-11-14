@@ -20,10 +20,10 @@
 #include "documentfocuslistener.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;

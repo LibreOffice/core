@@ -23,6 +23,8 @@
 #include <idlc/astscope.hxx>
 #include <idlc/errorhandler.hxx>
 
+#include <osl/diagnose.h>
+
 #include <limits.h>
 #include <float.h>
 #include <memory>

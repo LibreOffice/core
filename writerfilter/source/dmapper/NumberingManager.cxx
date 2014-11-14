@@ -31,6 +31,7 @@
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
 #include "dmapperLoggers.hxx"

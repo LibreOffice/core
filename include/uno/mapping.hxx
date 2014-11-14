@@ -22,6 +22,7 @@
 #include <cppu/macros.hxx>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <uno/mapping.h>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/Reference.hxx>

@@ -20,6 +20,7 @@
 #include <propread.hxx>
 #include "rtl/tencinfo.h"
 #include "rtl/textenc.h"
+#include <osl/diagnose.h>
 
 PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize, sal_uInt16 nTextEnc ) :
     mnId        ( nId ),

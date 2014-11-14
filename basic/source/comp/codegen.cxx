@@ -23,6 +23,7 @@
 #include "image.hxx"
 #include <limits>
 #include <algorithm>
+#include <osl/diagnose.h>
 #include <com/sun/star/script/ModuleType.hpp>
 
 // nInc is the increment size of the buffers

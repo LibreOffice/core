@@ -18,6 +18,7 @@
  */
 
 #include <rsc/rscsfx.hxx>
+#include <osl/diagnose.h>
 
 #include "stylehelper.hxx"
 #include "global.hxx"

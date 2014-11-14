@@ -21,6 +21,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 
 namespace pcr

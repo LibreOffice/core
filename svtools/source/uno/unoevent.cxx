@@ -19,6 +19,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/rtti.hxx>
 #include <svtools/unoevent.hxx>

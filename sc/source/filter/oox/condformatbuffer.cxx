@@ -34,6 +34,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <svl/intitem.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <oox/helper/attributelist.hxx>

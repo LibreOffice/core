@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
+#include <osl/diagnose.h>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 

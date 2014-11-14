@@ -22,6 +22,7 @@
 #include <tools/rtti.hxx>
 #include <sot/exchange.hxx>
 #include <sot/filelist.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 
 TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );

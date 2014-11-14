@@ -29,6 +29,7 @@
 
 #include <comphelper/documentconstants.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 
 using namespace ::com::sun::star::uno;

@@ -19,6 +19,8 @@
 
 #include <tools/b3dtrans.hxx>
 
+#include <osl/diagnose.h>
+
 // B3dTransformationSet --------------------------------------------------------
 // Transformations for all 3D output
 

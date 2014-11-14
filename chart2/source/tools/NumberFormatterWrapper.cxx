@@ -25,6 +25,7 @@
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/util/Date.hpp>
+#include <osl/diagnose.h>
 
 namespace chart
 {

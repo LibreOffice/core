@@ -23,9 +23,11 @@
  **************************************************************************
 
  *************************************************************************/
-#include <osl/mutex.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <ucbhelper/interactionrequest.hxx>
+
+#include <osl/mutex.hxx>
+#include <osl/diagnose.h>
+#include <cppuhelper/typeprovider.hxx>
 
 using namespace com::sun::star;
 using namespace ucbhelper;

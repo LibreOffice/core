@@ -65,6 +65,7 @@
 #include <rtl/random.h>
 #include <rtl/instance.hxx>
 #include <osl/time.h>
+#include <osl/diagnose.h>
 #include "com/sun/star/io/XAsyncOutputMonitor.hpp"
 
 #include <cstring>

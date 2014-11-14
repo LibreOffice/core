@@ -22,6 +22,8 @@
 #include "xltracer.hxx"
 #include "xistream.hxx"
 
+#include <osl/diagnose.h>
+
 void XclAddress::Read( XclImpStream& rStrm, bool bCol16Bit )
 {
     mnRow = rStrm.ReaduInt16();

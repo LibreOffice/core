@@ -20,6 +20,8 @@
 #include "screenupdater.hxx"
 #include "listenercontainer.hxx"
 
+#include <osl/diagnose.h>
+
 #include <boost/shared_ptr.hpp>
 #include <boost/mem_fn.hpp>
 #include <vector>

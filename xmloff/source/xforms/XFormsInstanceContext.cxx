@@ -30,6 +30,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

@@ -27,6 +27,7 @@
 #include <com/sun/star/embed/XStorageRawAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <osl/diagnose.h>
 #include <rtl/uri.hxx>
 
 using namespace com::sun::star;

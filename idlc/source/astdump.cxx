@@ -29,6 +29,8 @@
 #include <idlc/astsequence.hxx>
 #include "idlc/astoperation.hxx"
 
+#include <osl/diagnose.h>
+
 #include <registry/version.h>
 #include <registry/writer.hxx>
 

@@ -34,6 +34,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
+#include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 #include "oox/core/fastparser.hxx"
 #include "oox/core/fragmenthandler.hxx"

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <osl/diagnose.h>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>

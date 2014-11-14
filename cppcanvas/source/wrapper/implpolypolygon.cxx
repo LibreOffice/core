@@ -19,6 +19,7 @@
 
 
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>

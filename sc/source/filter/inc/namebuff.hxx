@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_NAMEBUFF_HXX
 
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include "compiler.hxx"
 #include "root.hxx"
 #include "xiroot.hxx"

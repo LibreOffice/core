@@ -19,6 +19,8 @@
 
 #include <tools/debug.hxx>
 
+#include <osl/diagnose.h>
+
 #include <fontsubset.hxx>
 #include <sft.hxx>
 

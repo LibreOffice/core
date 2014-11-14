@@ -29,6 +29,8 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 
+#include <osl/diagnose.h>
+
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"

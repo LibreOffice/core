@@ -23,6 +23,8 @@
 
 #include <functional>
 #include <vector>
+
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <com/sun/star/uno/Sequence.hxx>

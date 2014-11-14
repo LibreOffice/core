@@ -20,6 +20,8 @@
 #include "rechead.hxx"
 #include "scerrors.hxx"
 
+#include <osl/diagnose.h>
+
 // STATIC DATA
 
 ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :

@@ -29,6 +29,7 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 // forward declarations
 namespace com

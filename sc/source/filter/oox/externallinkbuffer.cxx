@@ -30,6 +30,7 @@
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
 #include <com/sun/star/sheet/XExternalDocLink.hpp>
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
+#include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>

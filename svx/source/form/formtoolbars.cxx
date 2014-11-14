@@ -20,6 +20,7 @@
 #include "formtoolbars.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <osl/diagnose.h>
 
 #include <svx/svxids.hrc>
 

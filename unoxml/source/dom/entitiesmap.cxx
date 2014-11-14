@@ -19,6 +19,8 @@
 
 #include <entitiesmap.hxx>
 
+#include <osl/diagnose.h>
+
 #include <documenttype.hxx>
 
 using namespace css::uno;

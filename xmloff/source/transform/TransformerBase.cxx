@@ -19,6 +19,7 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>

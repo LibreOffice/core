@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
+#include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include "addressconverter.hxx"

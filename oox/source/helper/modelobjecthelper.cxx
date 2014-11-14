@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/helper.hxx"
+#include <osl/diagnose.h>
 
 namespace oox {
 

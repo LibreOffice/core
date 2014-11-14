@@ -19,6 +19,7 @@
 
 #include "oox/helper/progressbar.hxx"
 
+#include <osl/diagnose.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include "oox/helper/helper.hxx"
 

@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <comphelper/string.hxx>
 #include <unotools/collatorwrapper.hxx>
+#include <osl/diagnose.h>
 
 #include "rangelst.hxx"
 #include "document.hxx"

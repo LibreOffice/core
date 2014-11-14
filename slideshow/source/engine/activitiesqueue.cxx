@@ -24,6 +24,7 @@
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <osl/diagnose.h>
 
 #include "slideshowexceptions.hxx"
 #include "activity.hxx"

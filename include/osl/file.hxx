@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 
 #include <osl/file.h>
+#include <osl/diagnose.h>
 #include <rtl/byteseq.hxx>
 
 #include <stdio.h>

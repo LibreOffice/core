@@ -20,6 +20,8 @@
 #include "TransformerBase.hxx"
 #include "PersMixedContentTContext.hxx"
 
+#include <osl/diagnose.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 

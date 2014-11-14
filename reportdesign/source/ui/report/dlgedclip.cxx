@@ -18,6 +18,7 @@
  */
 #include "dlgedclip.hxx"
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 

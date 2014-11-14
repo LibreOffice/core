@@ -20,6 +20,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/salbtype.hxx>
 #include <bmpfast.hxx>
+#include <osl/diagnose.h>
 #include <boost/scoped_array.hpp>
 
 #define IMPL_CASE_GET_FORMAT( Format )                          \

@@ -23,6 +23,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/events/XMutationEvent.hpp>
 

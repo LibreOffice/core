@@ -22,6 +22,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>

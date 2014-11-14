@@ -21,6 +21,7 @@
 #include "sbcomp.hxx"
 #include "sbunoobj.hxx"
 #include <svtools/miscopt.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>

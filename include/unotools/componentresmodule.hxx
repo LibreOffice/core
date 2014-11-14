@@ -24,6 +24,8 @@
 
 #include <tools/resid.hxx>
 
+#include <osl/getglobalmutex.hxx>
+
 #include <memory>
 
 class ResMgr;

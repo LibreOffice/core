@@ -21,6 +21,7 @@
 #include <drawingml/customshapeproperties.hxx>
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
+#include <osl/diagnose.h>
 #include <boost/unordered_map.hpp>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/attributelist.hxx"

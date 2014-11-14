@@ -21,6 +21,8 @@
 #include "ldapaccess.hxx"
 
 #include <boost/noncopyable.hpp>
+
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 

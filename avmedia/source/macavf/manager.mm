@@ -20,6 +20,7 @@
 #include "manager.hxx"
 #include "player.hxx"
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

@@ -25,7 +25,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include "hsqldb/StorageFileAccess.h"
 #include "hsqldb/HStorageMap.hxx"
-
+#include <osl/diagnose.h>
 
 
 using namespace ::com::sun::star::container;

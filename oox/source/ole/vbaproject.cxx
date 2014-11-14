@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/string.hxx>
+#include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.h>
 #include "oox/helper/binaryinputstream.hxx"

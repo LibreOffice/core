@@ -11,6 +11,7 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/tokens.hxx>
+#include <osl/diagnose.h>
 #include "dmapperLoggers.hxx"
 
 namespace writerfilter {

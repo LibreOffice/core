@@ -19,6 +19,7 @@
 
 #include "constraintlistcontext.hxx"
 #include "oox/helper/attributelist.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

@@ -20,6 +20,7 @@
 #include "tabprotection.hxx"
 #include <svl/PasswordHelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <osl/diagnose.h>
 #include "document.hxx"
 
 #include <vector>

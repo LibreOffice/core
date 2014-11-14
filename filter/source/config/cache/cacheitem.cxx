@@ -26,6 +26,8 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <osl/diagnose.h>
+
 
 namespace filter{
     namespace config{

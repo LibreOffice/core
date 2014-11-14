@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <osl/diagnose.h>
 #include "basegfx/numeric/ftools.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"

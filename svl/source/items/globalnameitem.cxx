@@ -23,6 +23,8 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <osl/diagnose.h>
+
 #include <comphelper/processfactory.hxx>
 
 #include <svl/globalnameitem.hxx>

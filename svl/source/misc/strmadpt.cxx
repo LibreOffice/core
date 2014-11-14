@@ -25,6 +25,7 @@
 #include <set>
 #include <string.h>
 
+#include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <svl/instrm.hxx>
 #include <svl/outstrm.hxx>

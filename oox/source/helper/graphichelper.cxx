@@ -31,6 +31,7 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <osl/diagnose.h>
 #include <comphelper/seqstream.hxx>
 #include <vcl/wmf.hxx>
 #include "oox/helper/containerhelper.hxx"

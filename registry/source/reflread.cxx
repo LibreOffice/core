@@ -24,6 +24,7 @@
 #include <string.h>
 #include <sal/types.h>
 #include <osl/endian.h>
+#include <osl/diagnose.h>
 #include <registry/reflread.hxx>
 
 #include "registry/reader.h"

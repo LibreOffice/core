@@ -20,6 +20,7 @@
 #include <cassert>
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>

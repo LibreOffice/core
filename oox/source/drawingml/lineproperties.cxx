@@ -20,6 +20,7 @@
 #include "oox/drawingml/lineproperties.hxx"
 #include <vector>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>

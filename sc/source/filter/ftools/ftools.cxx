@@ -18,6 +18,7 @@
  */
 
 #include "ftools.hxx"
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 #include <tools/color.hxx>

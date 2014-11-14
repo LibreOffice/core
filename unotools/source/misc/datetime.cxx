@@ -23,6 +23,7 @@
 #include <tools/datetime.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 namespace
 {

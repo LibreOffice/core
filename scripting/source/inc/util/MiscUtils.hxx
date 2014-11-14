@@ -21,6 +21,7 @@
 #define INCLUDED_SCRIPTING_SOURCE_INC_UTIL_MISCUTILS_HXX
 
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 
 #include <ucbhelper/content.hxx>

@@ -21,6 +21,7 @@
 #include <idlc/astbasetype.hxx>
 #include <idlc/astinterface.hxx>
 #include <idlc/errorhandler.hxx>
+#include <osl/diagnose.h>
 
 
 bool isGlobal(const OString& scopedName)

@@ -40,6 +40,7 @@
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 
 using com::sun::star::uno::Reference;

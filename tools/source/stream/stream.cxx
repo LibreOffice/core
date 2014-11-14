@@ -29,6 +29,7 @@
 #include <boost/static_assert.hpp>
 
 #include <osl/endian.h>
+#include <osl/diagnose.h>
 
 #include <comphelper/string.hxx>
 

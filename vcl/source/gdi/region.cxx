@@ -21,6 +21,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
+#include <osl/diagnose.h>
 #include <vcl/region.hxx>
 #include <regionband.hxx>
 

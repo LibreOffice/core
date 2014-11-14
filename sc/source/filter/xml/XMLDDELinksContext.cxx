@@ -26,6 +26,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <sax/tools/converter.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 using namespace xmloff::token;

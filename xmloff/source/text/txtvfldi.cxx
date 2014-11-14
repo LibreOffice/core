@@ -44,6 +44,7 @@
 #include <sax/tools/converter.hxx>
 
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 
 #include <tools/debug.hxx>
 

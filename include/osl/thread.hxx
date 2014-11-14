@@ -25,9 +25,6 @@
 #include <cassert>
 
 #include <osl/time.h>
-
-
-#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/alloc.h>
 

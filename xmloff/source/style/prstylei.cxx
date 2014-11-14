@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <set>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

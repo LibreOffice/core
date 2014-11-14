@@ -26,6 +26,7 @@
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#include <osl/diagnose.h>
 #include "drawingml/textbody.hxx"
 #include "drawingml/textparagraph.hxx"
 #include "drawingml/chart/datasourceconverter.hxx"

@@ -24,6 +24,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "ximpnote.hxx"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

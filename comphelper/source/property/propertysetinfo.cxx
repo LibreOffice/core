@@ -20,6 +20,8 @@
 
 #include <comphelper/propertysetinfo.hxx>
 
+#include <osl/diagnose.h>
+
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

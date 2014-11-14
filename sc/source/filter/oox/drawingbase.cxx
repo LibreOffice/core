@@ -20,6 +20,7 @@
 #include "drawingbase.hxx"
 
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include "unitconverter.hxx"

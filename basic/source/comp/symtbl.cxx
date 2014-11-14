@@ -19,6 +19,9 @@
 
 
 #include "sbcomp.hxx"
+
+#include <osl/diagnose.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>

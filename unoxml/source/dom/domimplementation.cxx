@@ -20,6 +20,7 @@
 #include <domimplementation.hxx>
 
 #include <rtl/instance.hxx>
+#include <osl/diagnose.h>
 
 using namespace css::uno;
 using namespace css::xml::dom;

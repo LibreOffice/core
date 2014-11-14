@@ -26,6 +26,7 @@
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include "oox/helper/attributelist.hxx"

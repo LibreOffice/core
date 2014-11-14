@@ -54,6 +54,8 @@
 
 #include "abi.hxx"
 
+#include <osl/diagnose.h>
+
 using namespace x86_64;
 
 /* Register class used for passing given 64bit part of the argument.

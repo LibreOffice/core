@@ -20,6 +20,8 @@
 
 #include <sfx2/sfxsids.hrc>
 #include "sorgitm.hxx"
+#include <osl/diagnose.h>
+
 // STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1_AUTOFACTORY(SfxScriptOrganizerItem, SfxStringItem);

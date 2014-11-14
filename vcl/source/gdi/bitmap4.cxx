@@ -18,6 +18,7 @@
  */
 
 #include <stdlib.h>
+#include <osl/diagnose.h>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmap.hxx>
 

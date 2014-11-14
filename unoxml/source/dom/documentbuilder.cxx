@@ -30,6 +30,7 @@
 
 #include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>

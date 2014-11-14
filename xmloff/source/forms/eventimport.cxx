@@ -20,6 +20,7 @@
 #include "eventimport.hxx"
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <osl/diagnose.h>
 #include "strings.hxx"
 
 namespace xmloff

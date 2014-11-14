@@ -20,6 +20,7 @@
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
 #include <sax/tools/converter.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>

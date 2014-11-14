@@ -27,6 +27,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

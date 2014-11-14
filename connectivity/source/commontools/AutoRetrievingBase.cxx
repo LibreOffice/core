@@ -19,6 +19,8 @@
 
 #include "AutoRetrievingBase.hxx"
 
+#include <osl/diagnose.h>
+
 namespace connectivity
 {
     OUString OAutoRetrievingBase::getTransformedGeneratedStatement(const OUString& _sInsertStatement) const

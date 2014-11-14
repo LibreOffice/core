@@ -35,6 +35,7 @@
 #include <dmapperLoggers.hxx>
 #include <TablePositionHandler.hxx>
 #include <ConversionHelper.hxx>
+#include <osl/diagnose.h>
 
 #ifdef DEBUG_WRITERFILTER
 #include <PropertyMapHelper.hxx>

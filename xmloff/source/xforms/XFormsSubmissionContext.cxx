@@ -35,6 +35,7 @@
 #include <com/sun/star/xforms/XModel2.hpp>
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::container::XNameContainer;

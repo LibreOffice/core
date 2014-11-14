@@ -30,6 +30,7 @@
 #   include <curl/curl.h>
 #endif
 
+#include <osl/diagnose.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

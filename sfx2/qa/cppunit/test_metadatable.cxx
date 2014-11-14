@@ -94,7 +94,6 @@ static bool operator==(beans::StringPair p1, beans::StringPair p2)
 
 void MetadatableTest::test()
 {
-    OSL_TRACE("SwMetadatable test(): start");
     boost::scoped_ptr< ::sfx2::IXmlIdRegistry > const pReg(
         ::sfx2::createXmlIdRegistry(false) );
     boost::scoped_ptr< ::sfx2::IXmlIdRegistry > const pRegClip(
@@ -260,8 +259,6 @@ void MetadatableTest::test()
     m5.SetMetadataReference(id4e);
     CPPUNIT_ASSERT_MESSAGE("auto-detect (styles)",
             m5.GetMetadataReference() == id4);
-
-    OSL_TRACE("sfx2::Metadatable test(): finished");
 }
 
 

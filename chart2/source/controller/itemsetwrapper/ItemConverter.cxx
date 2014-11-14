@@ -20,6 +20,7 @@
 #include "ItemConverter.hxx"
 #include "macros.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
+#include <osl/diagnose.h>
 #include <svl/itemprop.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>

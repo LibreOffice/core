@@ -22,6 +22,7 @@
 #include "controller/SlideSorterController.hxx"
 
 #include <sfx2/app.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace ::sd::slidesorter;

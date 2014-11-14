@@ -22,6 +22,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/task/XInteractionAbort.hpp>
+#include <osl/diagnose.h>
 
 
 using namespace ::com::sun::star;

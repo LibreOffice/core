@@ -25,6 +25,7 @@
 #include "FlatTContext.hxx"
 #include "AttrTransformerAction.hxx"
 #include <xmloff/nmspmap.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

@@ -23,6 +23,7 @@
 #include <string.h>
 #include "oox/helper/attributelist.hxx"
 
+#include <osl/diagnose.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 

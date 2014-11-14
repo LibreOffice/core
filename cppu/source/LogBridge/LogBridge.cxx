@@ -21,6 +21,7 @@
 #include "osl/mutex.hxx"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
+#include <osl/diagnose.h>
 #include "uno/dispatcher.h"
 #include "typelib/typedescription.hxx"
 #include "cppu/helper/purpenv/Environment.hxx"

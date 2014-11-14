@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 #include <sax/tools/converter.hxx>
+#include <osl/diagnose.h>
 
 #include <list>
 #include <xmloff/xmltoken.hxx>

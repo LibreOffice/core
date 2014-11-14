@@ -20,6 +20,8 @@
 #include "xerecord.hxx"
 #include "xeroot.hxx"
 
+#include <osl/diagnose.h>
+
 using namespace ::oox;
 
 // Base classes to export Excel records =======================================

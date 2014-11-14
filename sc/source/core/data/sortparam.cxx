@@ -23,6 +23,8 @@
 #include "queryparam.hxx"
 #include "subtotalparam.hxx"
 
+#include <osl/diagnose.h>
+
 ScSortParam::ScSortParam()
 {
     Clear();

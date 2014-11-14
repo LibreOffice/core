@@ -23,6 +23,8 @@
 #include "bigrange.hxx"
 #include "chgtrack.hxx"
 
+#include <osl/diagnose.h>
+
 template< typename R, typename S, typename U >
 static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
 {

@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <osl/diagnose.h>
 
 #include <boost/noncopyable.hpp>
 #include <unotools/sharedunocomponent.hxx>

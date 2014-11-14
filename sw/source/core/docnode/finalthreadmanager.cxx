@@ -19,6 +19,7 @@
 
 #include <finalthreadmanager.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/thread.hxx>
 #include <pausethreadstarting.hxx>
 #include <swthreadjoiner.hxx>

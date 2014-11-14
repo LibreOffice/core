@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/NameToken.hpp>
 #include <com/sun/star/sheet/ReferenceFlags.hpp>
 #include <com/sun/star/sheet/SingleReference.hpp>
+#include <osl/diagnose.h>
 #include <oox/core/filterbase.hxx>
 #include <oox/token/properties.hxx>
 #include "addressconverter.hxx"

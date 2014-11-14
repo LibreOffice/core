@@ -19,6 +19,8 @@
 
 #include <ucbhelper/simpleinteractionrequest.hxx>
 
+#include <osl/diagnose.h>
+
 using namespace com::sun::star;
 using namespace ucbhelper;
 

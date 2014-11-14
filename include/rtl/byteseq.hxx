@@ -19,9 +19,7 @@
 #ifndef INCLUDED_RTL_BYTESEQ_HXX
 #define INCLUDED_RTL_BYTESEQ_HXX
 
-#include <osl/interlck.h>
 #include <rtl/byteseq.h>
-#include <rtl/alloc.h>
 
 #include <new>
 

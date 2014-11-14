@@ -31,6 +31,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <tools/debug.hxx>
 #include <tools/fontenum.hxx>

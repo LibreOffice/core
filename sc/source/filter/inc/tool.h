@@ -22,6 +22,7 @@
 
 #include <attrib.hxx>
 #include <document.hxx>
+#include <osl/diagnose.h>
 
 // Defaultwerte
 const sal_uInt8 nDezStd = 0;        // Dezimalstellen fuer Standard-Zellen

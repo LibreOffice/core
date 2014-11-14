@@ -21,6 +21,7 @@
 #include <com/sun/star/ui/ContextChangeEventObject.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 
 

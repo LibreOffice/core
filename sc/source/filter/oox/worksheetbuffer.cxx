@@ -25,6 +25,7 @@
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/attributelist.hxx>

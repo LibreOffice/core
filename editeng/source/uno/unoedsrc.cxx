@@ -21,7 +21,7 @@
 
 #include <editeng/unoedsrc.hxx>
 
-
+#include <osl/diagnose.h>
 
 
 void SvxEditSource::addRange( SvxUnoTextRangeBase* )

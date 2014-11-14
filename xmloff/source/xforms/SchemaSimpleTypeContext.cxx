@@ -27,6 +27,8 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 

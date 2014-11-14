@@ -36,6 +36,7 @@
 #include "rtl/textenc.h"
 #include "sal/types.h"
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 namespace {
 

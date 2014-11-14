@@ -12,6 +12,8 @@
 #include "document.hxx"
 #include "table.hxx"
 
+#include <osl/diagnose.h>
+
 ScColumnTextWidthIterator::ScColumnTextWidthIterator(ScColumn& rCol, SCROW nStartRow, SCROW nEndRow) :
     mrCellTextAttrs(rCol.maCellTextAttrs),
     mnEnd(static_cast<size_t>(nEndRow)),

@@ -20,6 +20,7 @@
 #include "MeanValueRegressionCurveCalculator.hxx"
 #include "macros.hxx"
 
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 

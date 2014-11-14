@@ -21,6 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <functional>
 

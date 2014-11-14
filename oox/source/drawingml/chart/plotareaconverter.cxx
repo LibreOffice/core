@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <osl/diagnose.h>
 #include "drawingml/chart/axisconverter.hxx"
 #include "drawingml/chart/plotareamodel.hxx"
 #include "drawingml/chart/typegroupconverter.hxx"

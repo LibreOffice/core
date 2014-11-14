@@ -21,6 +21,7 @@
 
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"

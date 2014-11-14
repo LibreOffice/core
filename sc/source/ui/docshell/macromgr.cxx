@@ -22,6 +22,7 @@
 
 #include <basic/basmgr.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <osl/diagnose.h>
 #include <sfx2/objsh.hxx>
 #include "formulacell.hxx"
 #include <com/sun/star/container/XContainer.hpp>

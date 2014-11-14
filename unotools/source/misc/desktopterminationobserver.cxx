@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 #include <list>
 

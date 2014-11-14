@@ -21,6 +21,7 @@
 
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
+#include <osl/diagnose.h>
 #include "biffinputstream.hxx"
 #include "worksheethelper.hxx"
 #include <oox/helper/binaryoutputstream.hxx>

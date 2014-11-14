@@ -22,6 +22,8 @@
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 
+#include <osl/diagnose.h>
+
 #include <comphelper/fileformat.h>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>

@@ -39,6 +39,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include "table.hxx"
 
+#include <osl/diagnose.h>
+
 #include <boost/shared_ptr.hpp>
 
 using namespace ::xmloff::token;

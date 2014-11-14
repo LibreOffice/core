@@ -9,6 +9,8 @@
 
 #include "subtotalparam.hxx"
 
+#include <osl/diagnose.h>
+
 ScSubTotalParam::ScSubTotalParam()
 {
     for ( sal_uInt16 i=0; i<MAXSUBTOTAL; i++ )

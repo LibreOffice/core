@@ -21,6 +21,8 @@
 #include "CommonConverters.hxx"
 #include "BaseGFXHelper.hxx"
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 

@@ -43,6 +43,7 @@
 #include <stdio.h>
 
 #include <osl/thread.hxx>
+#include <osl/diagnose.h>
 
 #define SERVICE_NAME "com.sun.star.migration.Java"
 #define IMPL_NAME "com.sun.star.comp.desktop.migration.Java"

@@ -22,6 +22,7 @@
 #include <stdio.h>
 
 #include <svl/itempool.hxx>
+#include <osl/diagnose.h>
 #include "whassert.hxx"
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/smplhint.hxx>

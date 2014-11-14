@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <osl/diagnose.h>
 
 #include "listenercalls.hxx"
 

@@ -19,6 +19,8 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/propertysethelper.hxx>
+#include <osl/diagnose.h>
+
 #include <boost/scoped_array.hpp>
 
 using namespace ::comphelper;

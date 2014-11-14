@@ -19,6 +19,7 @@
 
 #include "pivotcachefragment.hxx"
 
+#include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"

@@ -21,6 +21,8 @@
 #include "global.hxx"
 #include "address.hxx"
 
+#include <osl/diagnose.h>
+
 // STATIC DATA -----------------------------------------------------------
 
 ScMarkArray::ScMarkArray() :

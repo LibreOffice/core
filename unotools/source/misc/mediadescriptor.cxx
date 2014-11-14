@@ -46,6 +46,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 namespace utl {
 

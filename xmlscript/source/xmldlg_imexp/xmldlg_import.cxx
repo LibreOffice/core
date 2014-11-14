@@ -38,6 +38,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>

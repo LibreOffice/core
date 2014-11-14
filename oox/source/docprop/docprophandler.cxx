@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 
 #include <osl/time.h>
+#include <osl/diagnose.h>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <vector>

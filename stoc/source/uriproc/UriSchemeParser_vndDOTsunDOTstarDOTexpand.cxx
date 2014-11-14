@@ -39,6 +39,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <osl/diagnose.h>
 #include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>

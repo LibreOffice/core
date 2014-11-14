@@ -31,6 +31,7 @@
 #include <com/sun/star/task/MasterPasswordRequest.hpp>
 #include <com/sun/star/task/NoMasterException.hpp>
 
+#include <osl/diagnose.h>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
 #include <rtl/byteseq.hxx>

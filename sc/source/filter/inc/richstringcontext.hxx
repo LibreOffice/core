@@ -22,6 +22,7 @@
 
 #include "excelhandlers.hxx"
 #include "richstring.hxx"
+#include <osl/diagnose.h>
 
 namespace oox {
 namespace xls {

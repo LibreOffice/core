@@ -19,6 +19,7 @@
 
 #include <com/sun/star/uno/Any.hxx>
 
+#include <osl/diagnose.h>
 #include <unotools/intlwrapper.hxx>
 #include <tools/stream.hxx>
 #include <svl/custritm.hxx>

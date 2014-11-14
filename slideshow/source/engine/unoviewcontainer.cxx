@@ -18,8 +18,10 @@
  */
 
 
-#include <canvas/debug.hxx>
 #include <unoviewcontainer.hxx>
+
+#include <canvas/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <boost/bind.hpp>
 

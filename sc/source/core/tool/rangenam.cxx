@@ -22,6 +22,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
+#include <osl/diagnose.h>
 
 #include "token.hxx"
 #include "tokenarray.hxx"

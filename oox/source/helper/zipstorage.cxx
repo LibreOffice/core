@@ -26,6 +26,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <osl/diagnose.h>
 #include <comphelper/storagehelper.hxx>
 #include "oox/helper/helper.hxx"
 

@@ -20,6 +20,7 @@
 #include "HtmlFmtFlt.hxx"
 
 #include <rtl/string.h>
+#include <osl/diagnose.h>
 
 #include <string>
 #include <sstream>

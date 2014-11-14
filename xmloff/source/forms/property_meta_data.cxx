@@ -25,6 +25,7 @@
 #include <xmloff/xmlnmspe.hxx>
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <boost/unordered_map.hpp>
 

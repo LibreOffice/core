@@ -20,6 +20,7 @@
 #include <string.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
+#include <osl/diagnose.h>
 
 #include <XMLFilterRegistration.hxx>
 

@@ -22,6 +22,7 @@
 
 #include <registry/registry.hxx>
 #include <rtl/alloc.h>
+#include <osl/diagnose.h>
 #include "regimpl.hxx"
 #include "keyimpl.hxx"
 

@@ -23,6 +23,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <osl/diagnose.h>
 
 
 TYPEINIT1_FACTORY(SvxViewLayoutItem,SfxUInt16Item, new SvxViewLayoutItem);

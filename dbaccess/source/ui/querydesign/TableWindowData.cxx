@@ -18,6 +18,7 @@
  */
 
 #include "TableWindowData.hxx"
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>

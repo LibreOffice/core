@@ -19,6 +19,7 @@
 
 #include "dbptools.hxx"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 
 namespace dbp

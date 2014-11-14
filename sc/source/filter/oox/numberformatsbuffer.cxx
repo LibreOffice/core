@@ -29,6 +29,7 @@
 #include <officecfg/System.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
 #include <svl/intitem.hxx>

@@ -26,6 +26,7 @@
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <boost/unordered_map.hpp>
 

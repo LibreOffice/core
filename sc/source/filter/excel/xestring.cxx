@@ -19,6 +19,8 @@
 
 #include <algorithm>
 #include <stdio.h>
+
+#include <osl/diagnose.h>
 #include "xlstyle.hxx"
 #include "xestyle.hxx"
 #include "xestream.hxx"

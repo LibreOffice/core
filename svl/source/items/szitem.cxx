@@ -21,6 +21,7 @@
 #include <svl/szitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/Size.hpp>
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
 #include <svl/poolitem.hxx>

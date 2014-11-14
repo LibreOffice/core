@@ -23,6 +23,7 @@
 #include "xistream.hxx"
 #include "xestring.hxx"
 #include "xlpivot.hxx"
+#include <osl/diagnose.h>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 using ::com::sun::star::sheet::GeneralFunction;

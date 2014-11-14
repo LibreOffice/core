@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <osl/diagnose.h>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>

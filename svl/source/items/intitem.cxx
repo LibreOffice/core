@@ -20,6 +20,7 @@
 
 #include <svl/intitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
+#include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 #include <tools/stream.hxx>
 #include <svl/metitem.hxx>

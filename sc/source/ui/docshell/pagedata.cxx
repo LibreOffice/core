@@ -21,6 +21,8 @@
 
 #include "pagedata.hxx"
 
+#include <osl/diagnose.h>
+
 ScPrintRangeData::ScPrintRangeData()
 {
     nPagesX = nPagesY = 0;

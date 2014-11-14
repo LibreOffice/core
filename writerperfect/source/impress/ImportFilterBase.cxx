@@ -20,6 +20,8 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 
+#include <osl/diagnose.h>
+
 #include <writerperfect/DirectoryStream.hxx>
 #include <writerperfect/DocumentHandler.hxx>
 #include <writerperfect/WPXSvInputStream.hxx>

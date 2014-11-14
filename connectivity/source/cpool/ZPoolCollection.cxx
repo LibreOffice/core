@@ -30,6 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <osl/diagnose.h>
 #include "diagnose_ex.h"
 
 using namespace ::com::sun::star::uno;

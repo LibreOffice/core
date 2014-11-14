@@ -41,6 +41,7 @@
 #include <comphelper/documentinfo.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 
+#include <osl/getglobalmutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 

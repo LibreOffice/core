@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 
 #include "xfactory.hxx"
 #include "xstorage.hxx"

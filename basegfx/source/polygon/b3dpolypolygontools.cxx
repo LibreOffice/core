@@ -18,6 +18,7 @@
  */
 
 #include <rtl/instance.hxx>
+#include <osl/diagnose.h>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <basegfx/range/b3drange.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>

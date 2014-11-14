@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <ucbhelper/content.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/time.hxx>

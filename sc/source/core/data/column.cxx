@@ -51,6 +51,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fieldupdater.hxx>
+#include <osl/diagnose.h>
 
 #include <cstring>
 #include <map>

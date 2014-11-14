@@ -29,6 +29,7 @@
 #include <unicode/uchar.h>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

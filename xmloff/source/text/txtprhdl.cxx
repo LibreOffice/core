@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Any.hxx>

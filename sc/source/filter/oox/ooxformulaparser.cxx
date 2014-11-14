@@ -20,6 +20,7 @@
 #include "ooxformulaparser.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <osl/diagnose.h>
 #include <cppuhelper/supportsservice.hxx>
 #include "formulaparser.hxx"
 

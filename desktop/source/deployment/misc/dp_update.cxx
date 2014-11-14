@@ -24,6 +24,7 @@
 #include "dp_identifier.hxx"
 #include "dp_descriptioninfoset.hxx"
 
+#include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
 
 using namespace ::com::sun::star;

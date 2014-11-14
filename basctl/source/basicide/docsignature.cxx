@@ -23,6 +23,9 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
 
+#include <osl/diagnose.h>
+
+
 namespace basctl
 {
     using ::com::sun::star::uno::Reference;

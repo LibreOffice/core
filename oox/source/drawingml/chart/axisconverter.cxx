@@ -37,6 +37,7 @@
 #include "drawingml/chart/typegroupconverter.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "comphelper/processfactory.hxx"
+#include <osl/diagnose.h>
 
 namespace oox {
 namespace drawingml {

@@ -27,6 +27,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <osl/diagnose.h>
+
 #include <algorithm>
 #include <functional>
 

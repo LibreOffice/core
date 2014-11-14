@@ -21,6 +21,7 @@
 #include <svl/rectitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 
 #include <svl/poolitem.hxx>

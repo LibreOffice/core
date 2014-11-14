@@ -29,6 +29,7 @@
 #include "dputil.hxx"
 #include "globalnames.hxx"
 
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>

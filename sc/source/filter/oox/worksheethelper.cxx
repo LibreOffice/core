@@ -41,6 +41,7 @@
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/propertyset.hxx>

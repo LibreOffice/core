@@ -22,6 +22,7 @@
 #include <stdio.h>
 
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <object.hxx>
 #include <globals.hxx>

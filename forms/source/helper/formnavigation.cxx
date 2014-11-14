@@ -25,7 +25,7 @@
 #include <com/sun/star/form/runtime/FormFeature.hpp>
 
 #include <tools/debug.hxx>
-
+#include <osl/diagnose.h>
 
 
 namespace frm

@@ -48,6 +48,7 @@
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <comphelper/string.hxx>
 #include <rtl/tencinfo.h>
+#include <osl/diagnose.h>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/containerhelper.hxx"

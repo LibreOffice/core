@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <tools/bigint.hxx>
 
 

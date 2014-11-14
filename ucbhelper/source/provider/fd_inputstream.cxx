@@ -20,6 +20,7 @@
 #include "ucbhelper/fd_inputstream.hxx"
 
 #include <rtl/alloc.h>
+#include <osl/diagnose.h>
 #include <algorithm>
 
 using namespace com::sun::star::uno;

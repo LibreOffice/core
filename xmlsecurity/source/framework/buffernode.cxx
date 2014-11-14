@@ -22,6 +22,7 @@
 #include "elementcollector.hxx"
 #include "buffernode.hxx"
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
+#include <osl/diagnose.h>
 
 namespace cssu = com::sun::star::uno;
 namespace cssxw = com::sun::star::xml::wrapper;

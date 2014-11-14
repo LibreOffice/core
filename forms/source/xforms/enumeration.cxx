@@ -20,6 +20,8 @@
 
 #include "enumeration.hxx"
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>

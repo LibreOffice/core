@@ -21,6 +21,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/uno/Any.hxx>

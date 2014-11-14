@@ -20,6 +20,8 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmltoken.hxx>
 
+#include <osl/diagnose.h>
+
 using namespace ::com::sun::star;
 
 static const sal_Int32 nDefaultProgressBarRange = 1000000;

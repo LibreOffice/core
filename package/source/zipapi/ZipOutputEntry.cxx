@@ -23,6 +23,7 @@
 #include <comphelper/storagehelper.hxx>
 
 #include <osl/time.h>
+#include <osl/diagnose.h>
 
 #include <PackageConstants.hxx>
 #include <ZipEntry.hxx>

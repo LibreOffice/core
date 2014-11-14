@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <osl/diagnose.h>
 
 class FSStorageFactory : public ::cppu::WeakImplHelper2< ::com::sun::star::lang::XSingleServiceFactory,
                                                 ::com::sun::star::lang::XServiceInfo >

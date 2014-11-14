@@ -19,6 +19,8 @@
 
 #include <entity.hxx>
 
+#include <osl/diagnose.h>
+
 #include <string.h>
 
 using namespace css::uno;

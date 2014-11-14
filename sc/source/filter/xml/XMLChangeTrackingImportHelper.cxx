@@ -24,6 +24,7 @@
 #include "chgviset.hxx"
 #include "rangeutl.hxx"
 #include <tools/datetime.hxx>
+#include <osl/diagnose.h>
 #include <svl/zforlist.hxx>
 #include <sax/tools/converter.hxx>
 

@@ -29,6 +29,7 @@
 #include "DAVSessionFactory.hxx"
 #include "NeonSession.hxx"
 #include "NeonUri.hxx"
+#include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace webdav_ucp;

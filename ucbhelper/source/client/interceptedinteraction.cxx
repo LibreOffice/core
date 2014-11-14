@@ -19,6 +19,7 @@
 
 #include <ucbhelper/interceptedinteraction.hxx>
 
+#include <osl/diagnose.h>
 
 namespace ucbhelper{
 

@@ -37,6 +37,7 @@
 #include <unotools/localfilehelper.hxx>
 #include "unotools/useroptions.hxx"
 #include "rtl/instance.hxx"
+#include <osl/getglobalmutex.hxx>
 #include <svl/svl.hrc>
 
 using namespace ::com::sun::star::uno;

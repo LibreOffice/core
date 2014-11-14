@@ -20,6 +20,7 @@
 
 #include <implcolor.hxx>
 #include <tools.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 

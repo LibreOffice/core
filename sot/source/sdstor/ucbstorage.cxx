@@ -46,6 +46,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <rtl/digest.h>
+#include <osl/diagnose.h>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <unotools/streamhelper.hxx>

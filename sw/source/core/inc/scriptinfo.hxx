@@ -24,6 +24,7 @@
 #include <deque>
 #include "swscanner.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 class SwTxtNode;
 class Point;

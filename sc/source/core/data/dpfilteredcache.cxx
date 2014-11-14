@@ -28,6 +28,7 @@
 #include "queryentry.hxx"
 #include "dpitemdata.hxx"
 
+#include <osl/diagnose.h>
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

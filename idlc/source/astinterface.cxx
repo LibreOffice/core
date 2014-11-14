@@ -25,6 +25,8 @@
 #include <registry/version.h>
 #include <registry/writer.hxx>
 
+#include <osl/diagnose.h>
+
 AstInterface::AstInterface(const OString& name,
                            AstInterface const * pInherits,
                            AstScope* pScope)

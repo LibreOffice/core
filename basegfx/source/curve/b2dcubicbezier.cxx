@@ -22,6 +22,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
+#include <osl/diagnose.h>
+
 #include <limits>
 
 // #i37443#

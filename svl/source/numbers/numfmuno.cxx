@@ -20,6 +20,7 @@
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/util/Date.hpp>

@@ -24,6 +24,7 @@
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;

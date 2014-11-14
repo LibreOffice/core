@@ -29,6 +29,8 @@
 #include "drawingml/textliststyle.hxx"
 #include "drawingml/textparagraphproperties.hxx"
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>

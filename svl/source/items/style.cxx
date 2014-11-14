@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <tools/tenccvt.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <svl/smplhint.hxx>

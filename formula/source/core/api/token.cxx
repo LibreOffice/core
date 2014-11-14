@@ -24,6 +24,7 @@
 #include <string.h>
 #include <limits.h>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include "formula/token.hxx"
 #include "formula/tokenarray.hxx"

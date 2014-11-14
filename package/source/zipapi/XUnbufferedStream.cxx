@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <string.h>
 
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;

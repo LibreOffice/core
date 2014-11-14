@@ -18,6 +18,8 @@
  */
 
 #include <drawinglayer/primitive3d/sdrextrudelathetools3d.hxx>
+
+#include <osl/diagnose.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

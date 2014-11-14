@@ -21,6 +21,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
 
 #include <algorithm>

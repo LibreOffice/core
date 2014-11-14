@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
+#include <osl/diagnose.h>
 #include <filter/msfilter/msocximex.hxx>
 
 using namespace ::com::sun::star;

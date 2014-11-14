@@ -40,6 +40,7 @@
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/token/tokens.hxx"
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

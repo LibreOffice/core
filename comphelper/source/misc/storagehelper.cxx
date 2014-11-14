@@ -35,7 +35,9 @@
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 
 #include <vector>
+
 #include <rtl/digest.h>
+#include <osl/diagnose.h>
 
 #include <ucbhelper/content.hxx>
 

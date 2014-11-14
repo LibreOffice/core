@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
 #include "itemholder1.hxx"

@@ -18,6 +18,8 @@
  */
 #include <threadmanager.hxx>
 
+#include <osl/diagnose.h>
+
 #include <algorithm>
 
 using namespace ::com::sun::star;

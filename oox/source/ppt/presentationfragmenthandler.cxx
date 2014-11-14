@@ -19,6 +19,7 @@
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include <osl/diagnose.h>
 #include <tools/multisel.hxx>
 
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>

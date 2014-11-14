@@ -20,6 +20,7 @@
 #include <package/Deflater.hxx>
 #include <zlib.h>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
+#include <osl/diagnose.h>
 #include <string.h>
 
 using namespace com::sun::star::packages::zip::ZipConstants;

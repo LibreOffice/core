@@ -23,6 +23,8 @@
 #error "do not include this file directly!"
 #endif
 
+#include <osl/diagnose.h>
+
 // no namespace. Same as above: this file is included from elementimport.hxx only,
 // and this is done inside the namespace
 

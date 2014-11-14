@@ -34,6 +34,7 @@
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <xmloff/maptype.hxx>
 
 #include "txtparai.hxx"

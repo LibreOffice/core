@@ -21,6 +21,8 @@
 
 #include <string.h>
 
+#include <osl/diagnose.h>
+
 #include <entitiesmap.hxx>
 #include <notationsmap.hxx>
 

@@ -21,6 +21,7 @@
 #include "submission.hxx"
 #include "serialization_app_xml.hxx"
 
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
 

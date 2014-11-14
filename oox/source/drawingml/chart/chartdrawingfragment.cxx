@@ -19,6 +19,8 @@
 
 #include "drawingml/chart/chartdrawingfragment.hxx"
 
+#include <osl/diagnose.h>
+
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"

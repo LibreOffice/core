@@ -19,6 +19,8 @@
 
 #include <framework/preventduplicateinteraction.hxx>
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>

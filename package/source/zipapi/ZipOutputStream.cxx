@@ -22,6 +22,7 @@
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <comphelper/storagehelper.hxx>
+#include <osl/diagnose.h>
 
 #include <osl/time.h>
 

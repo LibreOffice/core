@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <sal/macros.h>
+#include <osl/diagnose.h>
 
 using namespace utl;
 using namespace com::sun::star::uno;

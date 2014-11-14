@@ -29,6 +29,7 @@
 #include <unotools/syslocale.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
+#include <osl/diagnose.h>
 #include <sal/macros.h>
 
 #if OSL_DEBUG_LEVEL > 1

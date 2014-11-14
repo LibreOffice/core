@@ -19,6 +19,7 @@
 
 #include "unotypewrapper.hxx"
 #include "rtl/ustring.hxx"
+#include <osl/diagnose.h>
 
 
 bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)

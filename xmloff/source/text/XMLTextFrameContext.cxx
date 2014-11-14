@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -19,6 +19,7 @@
 
 #include "XMLExportSharedData.hxx"
 #include "XMLExportIterator.hxx"
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

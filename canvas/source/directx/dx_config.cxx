@@ -25,6 +25,7 @@
 #include <comphelper/anytostring.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star;
 

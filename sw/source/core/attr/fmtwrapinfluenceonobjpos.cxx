@@ -19,6 +19,7 @@
 
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <unomid.h>
+#include <osl/diagnose.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

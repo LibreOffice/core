@@ -22,8 +22,7 @@
 #include "controlcommandresult.hxx"
 #include "filepickerstate.hxx"
 
-
-
+#include <osl/diagnose.h>
 
 
 CControlCommand::CControlCommand( sal_Int16 aControlId ) :

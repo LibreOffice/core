@@ -17,16 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
+#include <osl/diagnose.h>
+
 #include <command.hxx>
 #include <globals.hxx>
 #include <database.hxx>
-#include "sal/config.h"
 
 char const * SyntaxStrings[] = {
 "basic-type:",

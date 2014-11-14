@@ -60,6 +60,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include "anim.hxx"

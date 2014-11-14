@@ -20,6 +20,8 @@
 #include "jumpmatrix.hxx"
 #include "scmatrix.hxx"
 
+#include <osl/diagnose.h>
+
 namespace {
 // Don't bother with buffer overhead for less than y rows.
 const SCSIZE kBufferThreshhold = 128;

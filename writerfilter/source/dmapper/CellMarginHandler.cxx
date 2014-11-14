@@ -21,6 +21,7 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
+#include <osl/diagnose.h>
 
 namespace writerfilter {
 namespace dmapper {

@@ -26,6 +26,9 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
+
+#include <osl/diagnose.h>
+
 #include <boost/scoped_array.hpp>
 
 //////////////////////////// class StgDirEntry

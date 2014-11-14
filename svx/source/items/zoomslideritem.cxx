@@ -19,6 +19,8 @@
 
 #include <tools/stream.hxx>
 
+#include <osl/diagnose.h>
+
 #include <svx/zoomslideritem.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 

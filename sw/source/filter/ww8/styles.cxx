@@ -22,6 +22,7 @@
 #include <functional>
 #include <algorithm>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include "staticassert.hxx"
 
 namespace

@@ -21,6 +21,7 @@
 
 
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>

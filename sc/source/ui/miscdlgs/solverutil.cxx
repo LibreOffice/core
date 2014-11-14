@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/XSolver.hpp>
 #include <com/sun/star/sheet/XSolverDescription.hpp>
 
+#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;

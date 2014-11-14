@@ -25,6 +25,7 @@
 #include <tools/wldcrd.hxx>
 #include <tools/inetmime.hxx>
 #include <rtl/instance.hxx>
+#include <osl/diagnose.h>
 #include <svl/inettype.hxx>
 #include <svl/svl.hrc>
 

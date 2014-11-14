@@ -23,6 +23,7 @@
 #include <string.h>
 #include "compiler.hxx"
 #include "tokenarray.hxx"
+#include <osl/diagnose.h>
 
 #include <vector>
 

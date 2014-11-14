@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <osl/diagnose.h>
 #include "oox/ppt/pptimport.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/dump/pptxdumper.hxx"

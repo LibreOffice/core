@@ -22,6 +22,7 @@
 #include <tools/debug.hxx>
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 
 class ErrorHandler;
 

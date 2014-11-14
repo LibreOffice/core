@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <osl/diagnose.h>
 #include <sax/tools/converter.hxx>
 #include "oox/token/tokens.hxx"
 

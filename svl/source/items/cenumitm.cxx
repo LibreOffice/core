@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/uno/Any.hxx>
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>

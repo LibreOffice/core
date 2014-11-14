@@ -24,6 +24,7 @@
 #include <editeng/unoprnms.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <unotools/mediadescriptor.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>

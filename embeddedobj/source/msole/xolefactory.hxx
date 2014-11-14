@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase2.hxx>
+#include <osl/diagnose.h>
 
 
 class OleEmbeddedObjectFactory : public ::cppu::WeakImplHelper2<

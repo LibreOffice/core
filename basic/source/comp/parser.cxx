@@ -19,6 +19,7 @@
 
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
+#include <osl/diagnose.h>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <svtools/miscopt.hxx>
 

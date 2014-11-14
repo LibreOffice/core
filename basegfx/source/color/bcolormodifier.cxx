@@ -19,6 +19,8 @@
 
 #include <basegfx/color/bcolormodifier.hxx>
 
+#include <osl/diagnose.h>
+
 namespace basegfx
 {
     BColorModifier::~BColorModifier()

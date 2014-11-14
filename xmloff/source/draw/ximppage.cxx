@@ -34,6 +34,7 @@
 #include "ximpstyl.hxx"
 #include <xmloff/prstylei.hxx>
 #include "PropertySetMerger.hxx"
+#include <osl/diagnose.h>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/xmluconv.hxx>

@@ -19,6 +19,8 @@
 
 #include "attriblistmerge.hxx"
 
+#include <osl/diagnose.h>
+
 namespace xmloff
 {
 

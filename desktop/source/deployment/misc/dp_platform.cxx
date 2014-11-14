@@ -24,6 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
+#include <osl/diagnose.h>
 
 #define PLATFORM_ALL                "all"
 #define PLATFORM_WIN_X86            "windows_x86"

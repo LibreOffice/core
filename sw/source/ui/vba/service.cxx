@@ -19,6 +19,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <osl/diagnose.h>
 #include <comphelper/servicedecl.hxx>
 
 // component exports

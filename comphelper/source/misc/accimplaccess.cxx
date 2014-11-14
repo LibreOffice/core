@@ -21,6 +21,7 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <osl/diagnose.h>
 
 #include <set>
 #include <string.h>

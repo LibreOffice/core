@@ -21,6 +21,7 @@
 #include <txtlists.hxx>
 #include <comphelper/random.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 

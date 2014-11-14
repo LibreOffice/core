@@ -22,6 +22,7 @@
 
 #include <tools/solar.h>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 class SwTxtFrm;
 class OutputDevice;

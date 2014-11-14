@@ -24,6 +24,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <svl/strmadpt.hxx>
 #include <svl/instrm.hxx>

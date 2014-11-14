@@ -20,6 +20,7 @@
 
 #include <malloc.h>
 
+#include <osl/diagnose.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>

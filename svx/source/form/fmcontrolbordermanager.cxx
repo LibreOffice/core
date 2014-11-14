@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 
 namespace svxform

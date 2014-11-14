@@ -19,6 +19,7 @@
 
 #include "controlfeatureinterception.hxx"
 #include "urltransformer.hxx"
+#include <osl/diagnose.h>
 
 
 namespace frm

@@ -19,6 +19,8 @@
 
 #include <comphelper/seqstream.hxx>
 
+#include <osl/diagnose.h>
+
 #include <memory.h>
 
 namespace comphelper

@@ -23,6 +23,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/xml/sax/FastToken.hpp>

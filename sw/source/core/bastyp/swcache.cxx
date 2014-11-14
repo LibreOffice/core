@@ -17,8 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <rtl/strbuf.hxx>
 #include <swcache.hxx>
+
+#include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
+
 #include <limits.h>
 
 #ifdef DBG_UTIL

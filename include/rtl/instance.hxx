@@ -23,7 +23,9 @@
 #include <sal/config.h>
 
 #include <osl/doublecheckedlocking.h>
+#if ! HAVE_THREADSAFE_STATICS
 #include <osl/getglobalmutex.hxx>
+#endif
 
 namespace {
 

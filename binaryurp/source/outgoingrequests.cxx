@@ -22,6 +22,7 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "rtl/byteseq.hxx"
 #include "osl/mutex.hxx"
+#include <osl/diagnose.h>
 
 #include "lessoperators.hxx"
 #include "outgoingrequest.hxx"

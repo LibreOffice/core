@@ -74,6 +74,9 @@
 #include "lwpcharacterstyle.hxx"
 #include "lwpglobalmgr.hxx"
 
+#include <osl/diagnose.h>
+
+
 LwpFoundry::LwpFoundry(LwpObjectStream *pStrm, LwpDocument* pDoc)
     : m_pDoc(pDoc)
     , m_bRegisteredAll(false)

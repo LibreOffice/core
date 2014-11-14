@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 
 #include "exporter.hxx"

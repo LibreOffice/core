@@ -19,6 +19,7 @@
 
 #include "sheetevents.hxx"
 #include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <osl/diagnose.h>
 
 OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {

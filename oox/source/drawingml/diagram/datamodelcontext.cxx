@@ -22,6 +22,7 @@
 #include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "drawingml/shapepropertiescontext.hxx"
 #include "drawingml/textbodycontext.hxx"
+#include <osl/diagnose.h>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;

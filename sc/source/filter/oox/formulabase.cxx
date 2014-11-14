@@ -33,6 +33,7 @@
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/containerhelper.hxx>

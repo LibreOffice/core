@@ -33,6 +33,7 @@
 
 #include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <osl/diagnose.h>
 #include "accesslog.hxx"
 
 #include <limits>

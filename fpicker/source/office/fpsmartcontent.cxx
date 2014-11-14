@@ -29,6 +29,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 
 namespace svt

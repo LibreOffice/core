@@ -33,6 +33,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <osl/diagnose.h>
 #include <osl/process.h>
 
 #include <cppuhelper/implbase1.hxx>

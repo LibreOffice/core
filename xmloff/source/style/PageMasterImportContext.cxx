@@ -27,6 +27,7 @@
 #include "PageMasterImportPropMapper.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <osl/diagnose.h>
 
 //UUUU
 #include <xmlsdtypes.hxx>

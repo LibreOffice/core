@@ -19,6 +19,7 @@
 
 #include "fmtextcontrolfeature.hxx"
 
+#include <osl/diagnose.h>
 
 namespace svx
 {

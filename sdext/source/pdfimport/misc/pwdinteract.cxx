@@ -34,6 +34,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <tools/errcode.hxx>
 

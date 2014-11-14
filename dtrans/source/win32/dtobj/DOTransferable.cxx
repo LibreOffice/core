@@ -19,6 +19,7 @@
 
 #include <sal/types.h>
 #include <rtl/process.h>
+#include <osl/diagnose.h>
 
 #include "DOTransferable.hxx"
 #include "../misc/ImplHelper.hxx"

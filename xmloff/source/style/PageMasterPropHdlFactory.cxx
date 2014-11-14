@@ -30,6 +30,7 @@
 
 //UUUU
 #include <xmloff/EnumPropertyHdl.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include "XMLFillBitmapSizePropertyHandler.hxx"
 #include "XMLBitmapLogicalSizePropertyHandler.hxx"

@@ -19,6 +19,7 @@
 
 #include "MNSINIParser.hxx"
 #include <rtl/byteseq.hxx>
+#include <osl/diagnose.h>
 
 IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException )
 {

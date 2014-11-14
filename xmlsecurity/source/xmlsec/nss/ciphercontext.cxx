@@ -18,6 +18,7 @@
  */
 
 
+#include <osl/diagnose.h>
 #include <osl/time.h>
 #include <rtl/random.h>
 #include <rtl/ref.hxx>

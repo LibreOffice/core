@@ -35,6 +35,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/SearchAlgorithms.hpp>
 
+#include <osl/diagnose.h>
+
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
 

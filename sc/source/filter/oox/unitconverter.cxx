@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/propertyset.hxx>

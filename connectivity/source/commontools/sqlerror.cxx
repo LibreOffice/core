@@ -25,6 +25,7 @@
 #include <comphelper/officeresourcebundle.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 #include <string.h>
 

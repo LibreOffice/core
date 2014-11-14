@@ -23,6 +23,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 #include <cstdarg>

@@ -19,6 +19,7 @@
 
 #include "oox/core/contexthandler2.hxx"
 #include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
 
 namespace oox {
 namespace core {

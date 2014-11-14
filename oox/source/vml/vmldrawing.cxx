@@ -27,6 +27,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/containerhelper.hxx"

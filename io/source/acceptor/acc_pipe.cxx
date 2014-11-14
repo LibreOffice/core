@@ -21,6 +21,7 @@
 #include "acceptor.hxx"
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 
+#include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 
 using namespace ::osl;

@@ -19,6 +19,7 @@
 
 #include "connectionsbuffer.hxx"
 
+#include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include "biffinputstream.hxx"
 

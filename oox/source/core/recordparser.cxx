@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <osl/diagnose.h>
 #include "oox/core/fragmenthandler.hxx"
 
 namespace oox {

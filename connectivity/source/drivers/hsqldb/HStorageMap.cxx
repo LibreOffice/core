@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "diagnose_ex.h"
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 
 #include <o3tl/compat_functional.hxx>

@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <tools/urlobj.hxx>
+#include <osl/diagnose.h>
 
 #include <sax/tools/converter.hxx>
 

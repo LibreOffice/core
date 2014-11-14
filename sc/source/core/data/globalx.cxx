@@ -19,6 +19,7 @@
 
 #include "callform.hxx"
 #include "global.hxx"
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>

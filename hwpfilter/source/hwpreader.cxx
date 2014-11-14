@@ -25,6 +25,7 @@
 #include "hwpreader.hxx"
 #include <math.h>
 
+#include <osl/diagnose.h>
 #include <comphelper/newarray.hxx>
 
 #include "fontmap.hxx"

@@ -20,6 +20,7 @@
 #include "fprogressbar.hxx"
 #include "global.hxx"
 #include "progress.hxx"
+#include <osl/diagnose.h>
 
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( sal_Size nSize ) :
     mnSize( nSize ),

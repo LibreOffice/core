@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <osl/diagnose.h>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 

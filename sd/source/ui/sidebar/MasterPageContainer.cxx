@@ -53,6 +53,7 @@
 #include "tools/TimerBasedTaskExecution.hxx"
 #include "pres.hxx"
 #include <osl/mutex.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 

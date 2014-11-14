@@ -9,6 +9,7 @@
 
 #include <filter/msfilter/rtfutil.hxx>
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 #include <svtools/rtfkeywd.hxx>
 
 namespace msfilter

@@ -18,6 +18,8 @@
  */
 #include <sfx2/sidebar/EnumContext.hxx>
 
+#include <osl/diagnose.h>
+
 #include <map>
 
 namespace sfx2 { namespace sidebar {

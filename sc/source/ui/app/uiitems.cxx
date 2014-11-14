@@ -23,6 +23,7 @@
 #include "dpsave.hxx"
 #include "queryparam.hxx"
 
+#include <osl/diagnose.h>
 #include <editeng/editobj.hxx>
 
 // STATIC DATA -----------------------------------------------------------

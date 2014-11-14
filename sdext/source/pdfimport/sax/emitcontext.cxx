@@ -23,6 +23,7 @@
 #include "saxattrlist.hxx"
 
 #include <rtl/strbuf.hxx>
+#include <osl/diagnose.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 

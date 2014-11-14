@@ -22,6 +22,7 @@
 #include <unotools/textsearch.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/editobj.hxx>
+#include <osl/diagnose.h>
 
 #include "table.hxx"
 #include "formulacell.hxx"

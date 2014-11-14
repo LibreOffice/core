@@ -18,6 +18,7 @@
  */
 
 #include <rtl/math.hxx>
+#include <osl/diagnose.h>
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/range/b2drange.hxx>

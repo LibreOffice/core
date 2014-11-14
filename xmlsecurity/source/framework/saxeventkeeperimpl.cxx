@@ -23,6 +23,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/crypto/sax/ConstOfSecurityId.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 
 namespace cssu = com::sun::star::uno;
 namespace cssl = com::sun::star::lang;

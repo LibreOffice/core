@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <osl/diagnose.h>
 
 #include "OSXTransferable.hxx"
 

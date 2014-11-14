@@ -21,6 +21,8 @@
 #include "atktextattributes.hxx"
 #include <algorithm>
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>

@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>
+#include <osl/diagnose.h>
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
 #include "bridges/cpp_uno/shared/types.hxx"

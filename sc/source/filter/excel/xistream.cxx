@@ -20,6 +20,7 @@
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <osl/thread.h>
+#include <osl/diagnose.h>
 #include "xistream.hxx"
 #include "xlstring.hxx"
 #include "xiroot.hxx"

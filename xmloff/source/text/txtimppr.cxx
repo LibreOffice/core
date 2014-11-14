@@ -18,6 +18,7 @@
  */
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>

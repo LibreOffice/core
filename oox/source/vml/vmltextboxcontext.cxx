@@ -21,6 +21,7 @@
 #include "oox/vml/vmltextboxcontext.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include <com/sun/star/drawing/XShape.hpp>
+#include <osl/diagnose.h>
 
 namespace oox {
 namespace vml {
