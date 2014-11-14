@@ -235,7 +235,7 @@ void SvxCharBasePage::SetPrevFontEscapement( sal_uInt8 nProp, sal_uInt8 nEscProp
 
 struct SvxCharNamePage_Impl
 {
-    Timer           m_aUpdateTimer;
+    Idle            m_aUpdateIdle;
     OUString        m_aNoStyleText;
     const FontList* m_pFontList;
     sal_Int32           m_nExtraEntryPos;
@@ -250,7 +250,7 @@ struct SvxCharNamePage_Impl
         m_bInSearchMode ( false )
 
     {
-        m_aUpdateTimer.SetTimeout( 350 );
+        m_aUpdateIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
     }
 
     ~SvxCharNamePage_Impl()
@@ -398,7 +398,7 @@ void SvxCharNamePage::Initialize()
     m_pCTLFontSizeLB->SetModifyHdl( aLink );
     m_pCTLFontLanguageLB->SetSelectHdl( aLink );
 
-    m_pImpl->m_aUpdateTimer.SetTimeoutHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
+    m_pImpl->m_aUpdateIdle.SetIdleHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
 }
 
 
@@ -1149,7 +1149,7 @@ IMPL_LINK_NOARG(SvxCharNamePage, UpdateHdl_Impl)
 
 IMPL_LINK( SvxCharNamePage, FontModifyHdl_Impl, void*, pNameBox )
 {
-    m_pImpl->m_aUpdateTimer.Start();
+    m_pImpl->m_aUpdateIdle.Start();
 
     if ( m_pWestFontNameLB == pNameBox || m_pEastFontNameLB == pNameBox || m_pCTLFontNameLB == pNameBox )
     {

@@ -4777,12 +4777,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                     m_pApplyTempl->bUndo = true;
                     bCallBase = false;
-                    m_aTemplateTimer.Stop();
+                    m_aTemplateIdle.Stop();
                 }
                 else if(rMEvt.GetClicks() == 1)
                 {
                     // no selection -> so turn off watering can
-                    m_aTemplateTimer.Start();
+                    m_aTemplateIdle.Start();
                 }
             }
         }
@@ -5002,8 +5002,8 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
     // TemplatePointer for colors should be resetted without
     // selection after single click
-    m_aTemplateTimer.SetTimeout(400);
-    m_aTemplateTimer.SetTimeoutHdl(LINK(this, SwEditWin, TemplateTimerHdl));
+    m_aTemplateIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    m_aTemplateIdle.SetIdleHdl(LINK(this, SwEditWin, TemplateTimerHdl));
 
     // temporary solution!!! Should set the font of the current
     // insert position at every curor movement!

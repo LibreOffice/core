@@ -132,7 +132,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
     MenuBar*            mpIconMBar;
     ResMgr*             mpUpdResMgr;
     ResMgr*             mpSfxResMgr;
-    Timer               maWaitTimer;
+    Idle                maWaitIdle;
     Timer               maTimeoutTimer;
     Link                maWindowEventHdl;
     Link                maApplicationEventHdl;
@@ -212,8 +212,8 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
 
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
-    maWaitTimer.SetTimeout( 400 );
-    maWaitTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, WaitTimeOutHdl ) );
+    maWaitIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    maWaitIdle.SetIdleHdl( LINK( this, UpdateCheckUI, WaitTimeOutHdl ) );
 
     maTimeoutTimer.SetTimeout( 10000 );
     maTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, TimeOutHdl ) );
@@ -551,7 +551,7 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 {
     SolarMutexGuard aGuard;
 
-    maWaitTimer.Stop();
+    maWaitIdle.Stop();
     maTimeoutTimer.Stop();
 
     if ( mpBubbleWin )
@@ -584,7 +584,7 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
 {
     SolarMutexGuard aGuard;
 
-    maWaitTimer.Stop();
+    maWaitIdle.Stop();
     if ( mpBubbleWin )
         mpBubbleWin->Show( false );
 
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
 IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pData )
 {
     if ( pData->bHighlight )
-        maWaitTimer.Start();
+        maWaitIdle.Start();
     else
         RemoveBubbleWindow( false );
 

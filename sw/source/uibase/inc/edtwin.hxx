@@ -90,7 +90,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     Point           m_aStartPos;
     Point           m_aMovePos;
     Point           m_aRszMvHdlPt;
-    Timer           m_aTemplateTimer;
+    Idle            m_aTemplateIdle;
 
     // type/object where the mouse pointer is
     SwCallMouseEvent m_aSaveCallEvent;

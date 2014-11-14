@@ -106,11 +106,11 @@ struct SvxBackgroundPara_Impl
 
 struct SvxBackgroundPage_Impl
 {
-    Timer*          pLoadTimer;
+    Idle*          pLoadIdle;
     bool        bIsImportDlgInExecute;
 
     SvxBackgroundPage_Impl()
-        : pLoadTimer(NULL)
+        : pLoadIdle(NULL)
         , bIsImportDlgInExecute(false)
     {}
 };
@@ -421,7 +421,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(vcl::Window* pParent, const SfxItemSe
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
-    delete pPageImpl->pLoadTimer;
+    delete pPageImpl->pLoadIdle;
     delete pPageImpl;
     delete pImportDlg;
 
@@ -719,10 +719,10 @@ void SvxBackgroundTabPage::FillUserData()
 
 bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
-    if ( pPageImpl->pLoadTimer && pPageImpl->pLoadTimer->IsActive() )
+    if ( pPageImpl->pLoadIdle && pPageImpl->pLoadIdle->IsActive() )
     {
-        pPageImpl->pLoadTimer->Stop();
-        LoadTimerHdl_Impl( pPageImpl->pLoadTimer );
+        pPageImpl->pLoadIdle->Stop();
+        LoadTimerHdl_Impl( pPageImpl->pLoadIdle );
     }
 // os: Such a nonsense! One will always find such an item somewhere,
 //     but it must be existing in the rSet!
@@ -1091,9 +1091,9 @@ void SvxBackgroundTabPage::ShowSelector()
         m_pBtnPosition->SetClickHdl( HDL(RadioClickHdl_Impl) );
 
         // delayed loading via timer (because of UI-Update)
-        pPageImpl->pLoadTimer = new Timer;
-        pPageImpl->pLoadTimer->SetTimeout( 500 );
-        pPageImpl->pLoadTimer->SetTimeoutHdl(
+        pPageImpl->pLoadIdle = new Idle;
+        pPageImpl->pLoadIdle->SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+        pPageImpl->pLoadIdle->SetIdleHdl(
             LINK( this, SvxBackgroundTabPage, LoadTimerHdl_Impl ) );
 
         bAllowShowSelector = false;
@@ -1419,7 +1419,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 */
 
 {
-    if ( pPageImpl->pLoadTimer->IsActive() )
+    if ( pPageImpl->pLoadIdle->IsActive() )
         return 0;
     bool bHtml = 0 != ( nHtmlMode & HTMLMODE_ON );
 
@@ -1443,7 +1443,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
         if ( !m_pBtnLink->IsChecked() && !m_pBtnPreview->IsChecked() )
             m_pBtnPreview->Check( true );
         // timer-delayed loading of the graphic
-        pPageImpl->pLoadTimer->Start();
+        pPageImpl->pLoadIdle->Start();
     }
     else
         DELETEZ( pImportDlg );
@@ -1462,9 +1462,9 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 */
 
 {
-    if ( pTimer == pPageImpl->pLoadTimer )
+    if ( pTimer == pPageImpl->pLoadIdle )
     {
-        pPageImpl->pLoadTimer->Stop();
+        pPageImpl->pLoadIdle->Stop();
 
         if ( pImportDlg )
         {

@@ -206,8 +206,8 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle):
     SvtMiscOptions().AddListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
 
-    aTimer.SetTimeoutHdl(LINK( this, BibToolBar, SendSelHdl));
-    aTimer.SetTimeout(400);
+    aIdle.SetIdleHdl(LINK( this, BibToolBar, SendSelHdl));
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 
     SetDropdownClickHdl( LINK( this, BibToolBar, MenuHdl));
 
@@ -453,7 +453,7 @@ bool BibToolBar::PreNotify( NotifyEvent& rNEvt )
 
 IMPL_LINK( BibToolBar, SelHdl, ListBox*, /*pLb*/ )
 {
-    aTimer.Start();
+    aIdle.Start();
     return 0;
 }
 

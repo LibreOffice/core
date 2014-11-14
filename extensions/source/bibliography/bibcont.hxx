@@ -71,7 +71,7 @@ class BibBookContainer: public BibSplitWindow
         BibWindowContainer*     pTopWin;
         BibWindowContainer*     pBottomWin;
         HdlBibModul             pBibMod;
-        Timer                   aTimer;
+        Idle                    aIdle;
 
         DECL_LINK( SplitHdl, Timer*);
 

@@ -33,7 +33,7 @@ class SvxThesaurusDialog;
 
 class LookUpComboBox : public ComboBox
 {
-    Timer                       m_aModifyTimer;
+    Idle                        m_aModifyIdle;
     Selection                   m_aSelection;
     SvxThesaurusDialog*         m_pDialog;
 

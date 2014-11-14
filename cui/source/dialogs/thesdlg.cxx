@@ -60,8 +60,8 @@ LookUpComboBox::LookUpComboBox(vcl::Window *pParent)
 {
     EnableAutoSize(true);
 
-    m_aModifyTimer.SetTimeoutHdl( LINK( this, LookUpComboBox, ModifyTimer_Hdl ) );
-    m_aModifyTimer.SetTimeout( 500 );
+    m_aModifyIdle.SetIdleHdl( LINK( this, LookUpComboBox, ModifyTimer_Hdl ) );
+    m_aModifyIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
 
     EnableAutocomplete( false );
 }
@@ -82,13 +82,13 @@ LookUpComboBox::~LookUpComboBox()
 
 void LookUpComboBox::Modify()
 {
-    m_aModifyTimer.Start();
+    m_aModifyIdle.Start();
 }
 
 IMPL_LINK( LookUpComboBox, ModifyTimer_Hdl, Timer *, EMPTYARG /*pTimer*/ )
 {
     m_pDialog->LookUp( GetText() );
-    m_aModifyTimer.Stop();
+    m_aModifyIdle.Stop();
     return 0;
 }
 

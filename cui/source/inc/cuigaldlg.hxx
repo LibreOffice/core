@@ -150,7 +150,7 @@ class ActualizeProgress : public ModalDialog
 private:
     FixedText*          m_pFtActualizeFile;
     CancelButton*       m_pBtnCancel;
-    Timer*              pTimer;
+    Idle*               pIdle;
     GalleryTheme*       pTheme;
     GalleryProgress     aStatusProgress;
 

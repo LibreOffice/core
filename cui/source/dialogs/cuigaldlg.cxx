@@ -435,7 +435,7 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 ActualizeProgress::ActualizeProgress(vcl::Window* pWindow, GalleryTheme* pThm)
     : ModalDialog(pWindow, "GalleryUpdateProgress",
         "cui/ui/galleryupdateprogress.ui")
-    , pTimer(NULL)
+    , pIdle(NULL)
     , pTheme(pThm)
 {
     get(m_pFtActualizeFile, "file");
@@ -447,13 +447,13 @@ short ActualizeProgress::Execute()
 {
     short nRet;
 
-    pTimer = new Timer;
+    pIdle = new Idle;
 
-    if ( pTimer )
+    if ( pIdle )
     {
-        pTimer->SetTimeoutHdl( LINK( this, ActualizeProgress, TimeoutHdl ) );
-        pTimer->SetTimeout( 500 );
-        pTimer->Start();
+        pIdle->SetIdleHdl( LINK( this, ActualizeProgress, TimeoutHdl ) );
+        pIdle->SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+        pIdle->Start();
     }
 
     nRet = ModalDialog::Execute();

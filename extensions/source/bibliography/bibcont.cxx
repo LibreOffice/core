@@ -126,8 +126,8 @@ BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
     pBottomWin(NULL)
 {
     pBibMod = OpenBibModul();
-    aTimer.SetTimeoutHdl(LINK( this, BibBookContainer, SplitHdl));
-    aTimer.SetTimeout(400);
+    aIdle.SetIdleHdl(LINK( this, BibBookContainer, SplitHdl));
+    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 }
 
 BibBookContainer::~BibBookContainer()
@@ -156,7 +156,7 @@ BibBookContainer::~BibBookContainer()
 
 void BibBookContainer::Split()
 {
-    aTimer.Start();
+    aIdle.Start();
 }
 IMPL_LINK( BibBookContainer, SplitHdl, Timer*,/*pT*/)
 {
