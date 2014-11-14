@@ -763,13 +763,11 @@ const ScCalcConfig::OpenCLImplMatcher& ScCalcOptionsDialog::CurrentWhiteOrBlackL
 
 void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
 {
-    Edit* pEdit(dynamic_cast<Edit*>(pCtrl));
+    Edit& rEdit(dynamic_cast<Edit&>(*pCtrl));
 
-    assert(pEdit);
+    OUString sVal = rEdit.GetText();
 
-    OUString sVal = pEdit->GetText();
-
-    if (pEdit == mpEditField)
+    if (&rEdit == mpEditField)
     {
         // We know that the mpEditField is used for only one thing at the moment,
         // the OpenCL subset list of opcodes
@@ -783,32 +781,32 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
         const ScCalcConfig::OpenCLImplMatcher& impl(CurrentWhiteOrBlackListEntry());
         ScCalcConfig::OpenCLImplMatcher newImpl(impl);
 
-        if (pEdit == mpOS)
+        if (&rEdit == mpOS)
         {
             newImpl.maOS = sVal;
         }
-        else if (pEdit == mpOSVersion)
+        else if (&rEdit == mpOSVersion)
         {
             newImpl.maOSVersion = sVal;
         }
-        else if (pEdit == mpPlatformVendor)
+        else if (&rEdit == mpPlatformVendor)
         {
             newImpl.maPlatformVendor = sVal;
         }
-        else if (pEdit == mpDevice)
+        else if (&rEdit == mpDevice)
         {
             newImpl.maDevice = sVal;
         }
-        else if (pEdit == mpDriverVersionMin)
+        else if (&rEdit == mpDriverVersionMin)
         {
             newImpl.maDriverVersionMin = sVal;
         }
-        else if (pEdit == mpDriverVersionMax)
+        else if (&rEdit == mpDriverVersionMax)
         {
             newImpl.maDriverVersionMax = sVal;
         }
         else
-            assert(false && "pEdit does not match any of the Edit fields");
+            assert(false && "rEdit does not match any of the Edit fields");
 
         ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
 
