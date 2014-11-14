@@ -17,12 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
 
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 
-#include "context.hxx"
 #include "converter.hxx"
 #include "convertiso2022jp.hxx"
 #include "tenchelp.hxx"

@@ -21,7 +21,6 @@
 #include "dumputils.hxx"
 
 #include "codemaker/global.hxx"
-#include "codemaker/commoncpp.hxx"
 
 #include "rtl/ustring.hxx"
 #include "sal/types.h"

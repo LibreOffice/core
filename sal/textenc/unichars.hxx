@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SAL_TEXTENC_UNICHARS_HXX
 #define INCLUDED_SAL_TEXTENC_UNICHARS_HXX
 
-#include "sal/config.h"
 #include <cassert>
 #include "sal/types.h"
 

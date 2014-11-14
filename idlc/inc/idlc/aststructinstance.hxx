@@ -23,7 +23,6 @@
 #include "idlc/asttype.hxx"
 #include "idlc/idlctypes.hxx"
 
-class AstDeclaration;
 class AstScope;
 
 class AstStructInstance: public AstType {

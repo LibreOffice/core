@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SAL_OSL_UNX_FILE_PATH_HELPER_HXX
 #define INCLUDED_SAL_OSL_UNX_FILE_PATH_HELPER_HXX
 
-#include "file_path_helper.h"
 
 #include <rtl/ustring.hxx>
 
