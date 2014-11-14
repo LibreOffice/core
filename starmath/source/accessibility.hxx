@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifdef _MSC_VER
-#pragma hdrstop
-#endif
-
 #ifndef INCLUDED_STARMATH_SOURCE_ACCESSIBILITY_HXX
 #define INCLUDED_STARMATH_SOURCE_ACCESSIBILITY_HXX
 

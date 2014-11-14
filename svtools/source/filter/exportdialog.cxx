@@ -18,10 +18,6 @@
  */
 
 
-#ifndef __GNUC__
-#   pragma hdrstop
-#endif
-
 #include <tools/stream.hxx>
 #include <tools/fract.hxx>
 #include <vcl/graphicfilter.hxx>
