@@ -703,13 +703,14 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLo
 
 void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocation, const OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException, std::exception )
 {
-    DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
-
-    if ( i_SourceLocation.isEmpty() )
-        throw IllegalArgumentException( OUString(), *this, 1 );
-
     try
     {
+        DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
+
+        if ( i_SourceLocation.isEmpty() )
+            throw IllegalArgumentException( OUString(), *this, 1 );
+
+
         // load the document itself, by simply delegating to our "load" method
 
         // our load implementation expects the SalvagedFile and URL to be in the media descriptor
