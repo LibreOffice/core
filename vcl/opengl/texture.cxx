@@ -92,8 +92,6 @@ ImplOpenGLTexture::~ImplOpenGLTexture()
     SAL_INFO( "vcl.opengl", "~OpenGLTexture " << mnTexture );
     if( mnTexture != 0 )
         glDeleteTextures( 1, &mnTexture );
-
-    CHECK_GL_ERROR();
 }
 
 OpenGLTexture::OpenGLTexture() :

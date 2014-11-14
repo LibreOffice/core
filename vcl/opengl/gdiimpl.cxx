@@ -1505,8 +1505,6 @@ void OpenGLSalGraphicsImpl::endPaint()
         maContext.makeCurrent();
         glFlush();
     }
-
-    CHECK_GL_ERROR();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
