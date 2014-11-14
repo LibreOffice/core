@@ -33,8 +33,6 @@
 #include <rtl/stringconcat.hxx>
 #endif
 
-#ifdef __cplusplus
-
 // The unittest uses slightly different code to help check that the proper
 // calls are made. The class is put into a different namespace to make
 // sure the compiler generates a different (if generating also non-inline)
@@ -974,7 +972,6 @@ typedef rtlunittest::OStringBuffer OStringBuffer;
 using ::rtl::OStringBuffer;
 #endif
 
-#endif  /* __cplusplus */
 #endif // INCLUDED_RTL_STRBUF_HXX
 
 

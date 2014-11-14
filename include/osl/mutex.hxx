@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OSL_MUTEX_HXX
 #define INCLUDED_OSL_MUTEX_HXX
 
-#ifdef __cplusplus
-
 #include <osl/mutex.h>
 
 
@@ -240,7 +238,6 @@ namespace osl
     typedef ResettableGuard< Mutex > ResettableMutexGuard;
 }
 
-#endif  /* __cplusplus */
 #endif // INCLUDED_OSL_MUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

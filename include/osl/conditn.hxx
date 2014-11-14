@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OSL_CONDITN_HXX
 #define INCLUDED_OSL_CONDITN_HXX
 
-#ifdef __cplusplus
-
 #include <osl/time.h>
 
 #include <osl/conditn.h>
@@ -122,7 +120,6 @@ namespace osl
 
 }
 
-#endif  /* __cplusplus */
 #endif // INCLUDED_OSL_CONDITN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
