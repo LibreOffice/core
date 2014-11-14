@@ -245,8 +245,8 @@ public:
 
     iterator begin() { return maMap.begin(); }
     iterator end() { return maMap.end(); }
-    const_iterator cbegin() { return maMap.cbegin(); }
-    const_iterator cend() { return maMap.cend(); }
+    const_iterator cbegin() const { return maMap.cbegin(); }
+    const_iterator cend() const { return maMap.cend(); }
     bool empty() const { return maMap.empty(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
