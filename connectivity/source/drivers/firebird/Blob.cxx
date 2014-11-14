@@ -191,8 +191,35 @@ sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
-    checkDisposed(Blob_BASE::rBHelper.bDisposed);
-    ensureBlobIsOpened();
+
+    try
+    {
+        checkDisposed(Blob_BASE::rBHelper.bDisposed);
+        ensureBlobIsOpened();
+    }
+    catch (const NotConnectedException&)
+    {
+        throw;
+    }
+    catch (const BufferSizeExceededException&)
+    {
+        throw;
+    }
+    catch (const IOException&)
+    {
+        throw;
+    }
+    catch (const RuntimeException&)
+    {
+        throw;
+    }
+    catch (const Exception& e)
+    {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::lang::WrappedTargetRuntimeException(
+            "wrapped Exception " + e.Message,
+            css::uno::Reference<css::uno::XInterface>(), a);
+    }
 
     // Ensure we have enough space for the amount of data we can actually read.
     const sal_Int64 nBytesAvailable = m_nBlobLength - m_nBlobPosition;
