@@ -852,9 +852,9 @@ void ViewResizePixel( const vcl::Window &rRef,
     const long nVLinSzWidth = bVRuler ?
                         pVRuler->GetSizePixel().Width() : 0;
 
-    long nScrollBarSize = rRef.GetSettings().GetStyleSettings().GetScrollBarSize();
-    long nHBSzHeight = rHScrollbar.IsVisible(true) ? nScrollBarSize : 0;
-    long nVBSzWidth = rVScrollbar.IsVisible(true) ? nScrollBarSize : 0;
+    const long nScrollBarSize = rRef.GetSettings().GetStyleSettings().GetScrollBarSize();
+    const long nHBSzHeight = rHScrollbar.IsVisible(true) ? nScrollBarSize : 0;
+    const long nVBSzWidth = rVScrollbar.IsVisible(true) ? nScrollBarSize : 0;
 
     if(pVRuler)
     {
@@ -927,7 +927,7 @@ void ViewResizePixel( const vcl::Window &rRef,
         aScrollFillPos.X() = aPos.X();
     }
 
-    rScrollBarBox.SetPosSizePixel( aScrollFillPos, Size( nHBSzHeight, nVBSzWidth) );
+    rScrollBarBox.SetPosSizePixel(aScrollFillPos, Size(nVBSzWidth, nHBSzHeight));
 }
 
 void SwView::ShowAtResize()
