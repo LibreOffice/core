@@ -331,10 +331,9 @@ pOutDev
     if( !mpDisplayBmp && !maBmpEx.IsEmpty() )
     {
 #if defined WNT
-        if( maBmpEx.IsAlpha() )
-            mpDisplayBmp = new BitmapEx( maBmpEx );
-        else
+        if( !maBmpEx.IsAlpha() )
         {
+            // FIXME: this looks like rather an obsolete code-path to me.
             const Bitmap aBmp( maBmpEx.GetBitmap().CreateDisplayBitmap( pOutDev ) );
 
             if( maBmpEx.IsTransparent() )
@@ -342,9 +341,9 @@ pOutDev
             else
                 mpDisplayBmp = new BitmapEx( aBmp );
         }
-#else
-        mpDisplayBmp = new BitmapEx( maBmpEx );
+        else
 #endif
+            mpDisplayBmp = new BitmapEx( maBmpEx );
     }
 }
 
