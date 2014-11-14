@@ -151,7 +151,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpDevice, "opencldevice");
     get(mpDriverVersionMin, "opencldriverversionmin");
     get(mpDriverVersionMax, "opencldriverversionmax");
-    get(mpListEditButton, "listbox-edit");
     get(mpListNewButton, "listbox-new");
     get(mpListDeleteButton, "listbox-delete");
     get(mpOpenclInfoList, "opencl_list");
