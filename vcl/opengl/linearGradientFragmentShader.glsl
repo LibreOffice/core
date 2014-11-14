@@ -16,7 +16,7 @@ varying vec2   tex_coord;
 
 void main(void)
 {
-    gl_FragColor = mix(start_color, end_color,
+    gl_FragColor = mix(end_color, start_color,
             clamp(tex_coord.t, 0.0, 1.0));
 }
 
