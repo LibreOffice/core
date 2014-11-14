@@ -527,6 +527,12 @@ void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
     // The palette is modified on read during the BitmapWriteAccess,
     // but of course, often it is not modified; interesting.
     maPalette = pBuffer->maPalette;
+
+    // Are there any more ground movements underneath us ?
+    assert( pBuffer->mnWidth == mnWidth );
+    assert( pBuffer->mnHeight == mnHeight );
+    assert( pBuffer->mnBitCount == mnBits );
+
     delete pBuffer;
 }
 
