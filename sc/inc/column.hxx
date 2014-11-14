@@ -230,8 +230,11 @@ public:
     bool TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
+
     void DeleteArea(
-        SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag, bool bBroadcast = true );
+        SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag,
+        bool bBroadcast = true, sc::ColumnSpanSet* pBroadcastSpans = NULL );
+
     void DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag, bool bBroadcast );
 
     void CopyToClip(
@@ -347,7 +350,8 @@ public:
     bool IsFormulaDirty( SCROW nRow ) const;
 
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
-    void        SetDirty( SCROW nRow1, SCROW nRow2 );
+    void BroadcastInArea( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
+    void SetDirty( SCROW nRow1, SCROW nRow2 );
     void        SetDirtyVar();
     void        SetDirtyAfterLoad();
     void        SetTableOpDirty( const ScRange& );
@@ -644,7 +648,7 @@ private:
 
     void DeleteCells(
         sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag,
-        std::vector<SCROW>& rDeleted );
+        std::vector<SCROW>& rDeleted, sc::ColumnSpanSet* pDeletedSpans = NULL );
 
     /**
      * Get all non-grouped formula cells and formula cell groups in the whole

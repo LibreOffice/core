@@ -1204,8 +1204,11 @@ public:
                                         const ScMarkData& rMark );
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
 
-    void            DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            const ScMarkData& rMark, InsertDeleteFlags nDelFlag);
+    void DeleteArea(
+        SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+        InsertDeleteFlags nDelFlag, bool bBroadcast = true,
+        sc::ColumnSpanSet* pBroadcastSpans = NULL );
+
     SC_DLLPUBLIC void DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 SCTAB nTab, InsertDeleteFlags nDelFlag);
     void            DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
@@ -1253,9 +1256,11 @@ public:
     void            StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark, InsertDeleteFlags nInsFlag );
-    void            BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
-                                    SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark, InsertDeleteFlags nInsFlag );
+
+    void BroadcastFromClip(
+        SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
+        InsertDeleteFlags nInsFlag, sc::ColumnSpanSet& rBroadcastSpans );
+
     /** If pDestRanges is given it overrides rDestRange, rDestRange in this
         case is the overall encompassing range. */
     void            CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,

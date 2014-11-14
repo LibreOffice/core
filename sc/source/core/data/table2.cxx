@@ -410,7 +410,9 @@ void ScTable::DeleteCol(
         SetStreamValid(false);
 }
 
-void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, InsertDeleteFlags nDelFlag)
+void ScTable::DeleteArea(
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, InsertDeleteFlags nDelFlag,
+    bool bBroadcast, sc::ColumnSpanSet* pBroadcastSpans )
 {
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
@@ -419,7 +421,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, Ins
         {   // scope for bulk broadcast
             ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
             for (SCCOL i = nCol1; i <= nCol2; i++)
-                aCol[i].DeleteArea(nRow1, nRow2, nDelFlag);
+                aCol[i].DeleteArea(nRow1, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
         }
 
             // Zellschutz auf geschuetzter Tabelle nicht setzen
@@ -1047,14 +1049,14 @@ void ScTable::StartNeededListeners()
         aCol[i].StartNeededListeners();
 }
 
-void ScTable::BroadcastInArea( SCCOL nCol1, SCROW nRow1,
-        SCCOL nCol2, SCROW nRow2 )
+void ScTable::BroadcastInArea(
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
 {
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].SetDirty(nRow1, nRow2);
+            aCol[i].BroadcastInArea(nRow1, nRow2, rBroadcastSpans);
 }
 
 void ScTable::StartListeningInArea(
