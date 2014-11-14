@@ -192,27 +192,38 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
         // TODO: check the performance of this 2nd approach at some stage and
         // switch to that if it performs well.
 
-        // FIXME so that we don't have to use enormous bitmap, move the text
-        // to 0,0, size the width / height accordingly, and move it back via
-        // SalTwoRects later
-        const int width = 1024;
-        const int height = 1024;
+        Rectangle aRect;
+        GetBoundRect(rGraphics, aRect);
+
+        const int origin_x = aRect.Left();
+        const int origin_y = aRect.Top();
+        const int width = aRect.GetWidth();
+        const int height = aRect.GetHeight();
         const int bpp = 32;
 
         HDC compatibleDC = CreateCompatibleDC(hDC);
 
+        // move the origin so that we always paint at 0,0 - to keep the bitmap
+        // small
+        OffsetViewportOrgEx(compatibleDC, -origin_x, -origin_y, NULL);
+
         sal_uInt8 *data;
         HBITMAP hBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(compatibleDC, width, height, bpp, reinterpret_cast<void **>(&data));
-        // FIXME fill transparent instead of 128, this is for testing
-        memset(data, 128, width*height*4);
 
-        // draw the text to the hidden DC with black color and white
-        // background, we will use the result later as a mask only
+        // setup the hidden DC with black color and white background, we will
+        // use the result of the text drawing later as a mask only
         HGDIOBJ hBitmapOld = SelectObject(compatibleDC, hBitmap);
         SelectFont(compatibleDC, mhFont);
+
         SetTextColor(compatibleDC, RGB(0, 0, 0));
         SetBkColor(compatibleDC, RGB(255, 255, 255));
+
+        UINT nTextAlign = GetTextAlign(hDC);
+        SetTextAlign(compatibleDC, nTextAlign);
+
+        // the actual drawing
         DrawTextImpl(compatibleDC);
+
         SelectObject(compatibleDC, hBitmapOld);
 
         // and turn it into a texture
@@ -227,8 +238,8 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
             aRects.mnSrcY = 0;
             aRects.mnSrcWidth = width;
             aRects.mnSrcHeight = height;
-            aRects.mnDestX = 0;
-            aRects.mnDestY = 0;
+            aRects.mnDestX = origin_x;
+            aRects.mnDestY = origin_y;
             aRects.mnDestWidth = width;
             aRects.mnDestHeight = height;
 
