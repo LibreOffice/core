@@ -1266,8 +1266,17 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet );
 
     // The number of paragraphs ...
-    sal_uInt16 nParagraphs;
+    sal_uInt16 nParagraphs(0);
     rIStream.ReadUInt16( nParagraphs );
+
+    const size_t nMinParaRecordSize = 6 + eSrcEncoding == RTL_TEXTENCODING_UNICODE ? 4 : 2;
+    const size_t nMaxParaRecords = rIStream.remainingSize() / nMinParaRecordSize;
+    if (nParagraphs > nMaxParaRecords)
+    {
+        SAL_WARN("editeng", "Parsing error: " << nMaxParaRecords <<
+                 " max possible entries, but " << nParagraphs<< " claimed, truncating");
+        nParagraphs = nMaxParaRecords;
+    }
 
     // The individual paragraphs ...
     for ( sal_uLong nPara = 0; nPara < nParagraphs; nPara++ )
@@ -1280,7 +1289,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
         // StyleName and Family...
         pC->GetStyle() = rIStream.ReadUniOrByteString(eSrcEncoding);
-        sal_uInt16 nStyleFamily;
+        sal_uInt16 nStyleFamily(0);
         rIStream.ReadUInt16( nStyleFamily );
         pC->GetFamily() = (SfxStyleFamily)nStyleFamily;
 
