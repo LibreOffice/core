@@ -225,6 +225,9 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     aLink = LINK(this, ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl);
     mpOpenCLWhiteAndBlackListBox->SetSelectHdl(aLink);
 
+    mpListNewButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, ListNewClickHdl));
+    mpListDeleteButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, ListDeleteClickHdl));
+
     aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
     mpBtnTrue->SetToggleHdl(aLink); // Set handler only to the 'True' button.
 
@@ -910,6 +913,41 @@ IMPL_LINK(ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl, Control*, )
     mpDriverVersionMin->SetText(impl.maDriverVersionMin);
     mpDriverVersionMax->SetText(impl.maDriverVersionMax);
 
+    return 0;
+}
+
+IMPL_LINK( ScCalcOptionsDialog, ListNewClickHdl, PushButton*, )
+{
+    ScCalcConfig::OpenCLImplMatcher aEmpty;
+    ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
+
+    mpOS->SetText("");
+    mpOSVersion->SetText("");
+    mpPlatformVendor->SetText("");
+    mpDevice->SetText("");
+    mpDriverVersionMin->SetText("");
+    mpDriverVersionMax->SetText("");
+
+    rSet.insert(aEmpty);
+#if HAVE_FEATURE_OPENCL
+    fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
+    mpOpenCLWhiteAndBlackListBox->SelectEntry(format(aEmpty));
+#endif
+    return 0;
+}
+
+IMPL_LINK( ScCalcOptionsDialog, ListDeleteClickHdl, PushButton*, )
+{
+    if (mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
+        return 0;
+
+    ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
+    const ScCalcConfig::OpenCLImplMatcher& rImpl(CurrentWhiteOrBlackListEntry());
+
+#if HAVE_FEATURE_OPENCL
+    rSet.erase(rImpl);
+    fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
+#endif
     return 0;
 }
 

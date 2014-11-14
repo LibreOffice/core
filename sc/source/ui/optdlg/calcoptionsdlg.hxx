@@ -41,6 +41,8 @@ public:
     DECL_LINK( NumModifiedHdl, void * );
     DECL_LINK( EditModifiedHdl, Control * );
     DECL_LINK( OpenCLWhiteAndBlackListSelHdl, Control* );
+    DECL_LINK( ListNewClickHdl, PushButton* );
+    DECL_LINK( ListDeleteClickHdl, PushButton* );
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 
