@@ -726,7 +726,7 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
         else
             aTip += OUString::number(GetRangeMax());
 
-        Rectangle aRect( GetPointerPosPixel(), Size( GetTextHeight(), GetTextWidth( aTip ) ) );
+        Rectangle aRect(GetPointerPosPixel(), Size(GetTextWidth(aTip), GetTextHeight()));
         if ( _nTip )
             Help::UpdateTip( _nTip, this, aRect, aTip );
         else
