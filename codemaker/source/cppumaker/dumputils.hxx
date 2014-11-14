@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
 #define INCLUDED_CODEMAKER_SOURCE_CPPUMAKER_DUMPUTILS_HXX
 
-#include "sal/config.h"
 
 namespace rtl { class OUString; }
 class FileStream;

@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
 #define INCLUDED_SAL_TEXTENC_TCVTUTF8_HXX
 
-#include "sal/config.h"
 
 #include "sal/types.h"
 

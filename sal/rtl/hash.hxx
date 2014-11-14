@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SAL_RTL_HASH_HXX
 #define INCLUDED_SAL_RTL_HASH_HXX
 
-#include <sal/types.h>
 #include <rtl/ustring.h>
 
 /* These functions are not multi-thread safe: */

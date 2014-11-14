@@ -20,7 +20,6 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_REGKEY_HXX
 #define INCLUDED_REGISTRY_SOURCE_REGKEY_HXX
 
-#include "sal/config.h"
 #include "registry/regtype.h"
 #include "rtl/ustring.h"
 #include "sal/types.h"

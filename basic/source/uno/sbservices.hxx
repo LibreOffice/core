@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASIC_SOURCE_UNO_SBSERVICES_HXX
 #define INCLUDED_BASIC_SOURCE_UNO_SBSERVICES_HXX
 
-#include <sal/config.h>
 
 namespace basic {
 

@@ -24,7 +24,6 @@
 #include "rtl/string.hxx"
 #include "sal/types.h"
 
-#include <vector>
 
 OString codemaker::UnoType::decompose(
     OString const & type, sal_Int32 * rank,

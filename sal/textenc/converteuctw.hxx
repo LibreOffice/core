@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SAL_TEXTENC_CONVERTEUCTW_HXX
 #define INCLUDED_SAL_TEXTENC_CONVERTEUCTW_HXX
 
-#include "sal/config.h"
 
 #include "sal/types.h"
 

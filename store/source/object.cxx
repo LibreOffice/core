@@ -20,10 +20,6 @@
 #include "object.hxx"
 
 #include "sal/types.h"
-#include "rtl/alloc.h"
-#include "rtl/ref.hxx"
-#include "osl/diagnose.h"
-#include "osl/interlck.h"
 
 namespace store
 {

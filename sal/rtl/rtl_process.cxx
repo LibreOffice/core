@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
 
 #include <cstring>
 
 #include "boost/noncopyable.hpp"
 #include "rtl/instance.hxx"
-#include "rtl/process.h"
 #include "rtl/uuid.h"
 #include "sal/types.h"
 
