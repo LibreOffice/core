@@ -443,6 +443,10 @@ void TestString::testCompareVersionStrings()
     TEST("1.001", "1.1", -1);
     TEST("1.001", "1.010", -1);
     TEST("1.2.a", "1.2.b", -1);
+    TEST("1.2.3 (foo,bar)", "1.2.9", -1);
+    TEST("1.2.3 (foo,bar)", "1.2.4 (foo,bar)", -1);
+    TEST("1.2.3 (foo,bar)", "1.2.3 (foo)", 1); // Neither ordering makes any more sense than the other here, as long as they compare unequal
+    TEST("1.2.3 (foo,bar)", "1.2.2 (foo,bar)", 1);
 
 #undef TEST
 }
