@@ -204,7 +204,7 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
 
             // FIXME We don't have a method that could paint a texture with
             // transparency yet, use it when we have it
-            pImpl->DrawTexture(aTexture.Id(), Size(width, height), aRects);
+            pImpl->DrawTexture(aTexture, aRects);
         }
 
         DeleteObject(hBitmap);

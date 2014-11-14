@@ -40,7 +40,7 @@ class VCL_PLUGIN_PUBLIC OpenGLSalBitmap : public SalBitmap
 {
 private:
     OpenGLContext*                      mpContext;
-    OpenGLTextureSharedPtr              mpTexture;
+    OpenGLTexture                       maTexture;
     bool                                mbDirtyTexture;
     BitmapPalette                       maPalette;
     basebmp::RawMemorySharedArray       maUserBuffer;
@@ -81,9 +81,8 @@ public:
 
 public:
 
-    bool            Create( OpenGLContext& rContext, OpenGLTextureSharedPtr pTex, long nX, long nY, long nWidth, long nHeight );
-    bool            Draw( OpenGLContext& rContext, const SalTwoRect& rPosAry );
-    GLuint          GetTexture( OpenGLContext& rContext ) const;
+    bool            Create( OpenGLContext& rContext, const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight );
+    OpenGLTexture&  GetTexture( OpenGLContext& rContext ) const;
 
 private:
 
