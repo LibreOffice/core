@@ -68,14 +68,21 @@ class DemoWin : public DemoBase
     struct RegionRenderer {
     public:
         virtual ~RegionRenderer() {}
+        virtual OUString getName() = 0;
+        virtual sal_uInt16 getAccelerator() = 0;
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) = 0;
+#define RENDER_DETAILS(name,key) \
+        virtual OUString getName() SAL_OVERRIDE \
+            { return OUString(SAL_STRINGIFY(name)); } \
+        virtual sal_uInt16 getAccelerator() SAL_OVERRIDE \
+            { return key; }
     };
 
     std::vector< RegionRenderer * > maRenderers;
     sal_Int32  mnSelectedRenderer;
 
-    void InitRenderers();
+    void     InitRenderers();
 
 public:
     DemoWin() : DemoBase()
@@ -96,6 +103,9 @@ public:
         InitRenderers();
     }
 
+    OUString getRendererList();
+    void     selectRenderer(const OUString &rName);
+
     // Bouncing windows on click ...
     PushButton     *mpButton;
     FloatingWindow *mpButtonWin;
@@ -104,6 +114,7 @@ public:
     DECL_LINK(BounceTimerCb, void *);
 
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
+    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE
     {
@@ -163,6 +174,7 @@ public:
 
     struct DrawLines : public RegionRenderer
     {
+        RENDER_DETAILS(lines,KEY_L)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
@@ -249,6 +261,7 @@ public:
 
     struct DrawText : public RegionRenderer
     {
+        RENDER_DETAILS(text,KEY_T)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -261,6 +274,7 @@ public:
 
     struct DrawCheckered : public RegionRenderer
     {
+        RENDER_DETAILS(checks,KEY_C)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
@@ -321,6 +335,7 @@ public:
 
     struct DrawPoly : public RegionRenderer
     {
+        RENDER_DETAILS(poly,KEY_P)
         DrawCheckered maCheckered;
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
@@ -344,6 +359,7 @@ public:
 
     struct DrawEllipse : public RegionRenderer
     {
+        RENDER_DETAILS(ellipse,KEY_E)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -355,6 +371,7 @@ public:
 
     struct DrawGradient : public RegionRenderer
     {
+        RENDER_DETAILS(gradient,KEY_G)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
@@ -425,6 +442,7 @@ public:
 
     struct DrawBitmap : public RegionRenderer
     {
+        RENDER_DETAILS(bitmap,KEY_B)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
@@ -436,6 +454,7 @@ public:
 
     struct DrawBitmapEx : public RegionRenderer
     {
+        RENDER_DETAILS(bitmapex,KEY_X)
         DrawCheckered maCheckered;
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
@@ -453,6 +472,7 @@ public:
 
     struct DrawPolyPolygons : public RegionRenderer
     {
+        RENDER_DETAILS(polypoly,KEY_N)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -503,6 +523,7 @@ public:
 
     struct DrawToVirtualDevice : public RegionRenderer
     {
+        RENDER_DETAILS(vdev,KEY_V)
         enum RenderType {
             RENDER_AS_BITMAP,
             RENDER_AS_OUTDEV,
@@ -569,6 +590,8 @@ public:
 
     struct DrawIcons : public RegionRenderer
     {
+        RENDER_DETAILS(icons,KEY_I)
+
         std::vector<OUString> maIconNames;
         std::vector<BitmapEx> maIcons;
         bool bHasLoadedAll;
@@ -700,6 +723,7 @@ public:
 
     struct FetchDrawBitmap : public RegionRenderer
     {
+        RENDER_DETAILS(fetchdraw,KEY_F)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -755,6 +779,34 @@ IMPL_LINK_NOARG(DemoWin,BounceTimerCb)
     Rectangle aRect(aCur, mpButtonWin->GetSizePixel());
     Invalidate(aRect);
     return 0;
+}
+
+void DemoWin::KeyInput(const KeyEvent &rKEvt)
+{
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+
+    // click to zoom out
+    if (mnSelectedRenderer >= 0)
+    {
+        if (nCode == KEY_ESCAPE || nCode == KEY_BACKSPACE)
+        {
+            mnSelectedRenderer = -1;
+            Invalidate();
+            return;
+        }
+    }
+    else
+    {
+        for (size_t i = 0; i < maRenderers.size(); i++)
+        {
+            if (nCode == maRenderers[i]->getAccelerator())
+            {
+                mnSelectedRenderer = i;
+                Invalidate();
+                return;
+            }
+        }
+    }
 }
 
 void DemoWin::MouseButtonDown(const MouseEvent& rMEvt)
@@ -820,8 +872,43 @@ void DemoWin::InitRenderers()
     maRenderers.push_back(new FetchDrawBitmap());
 }
 
+OUString DemoWin::getRendererList()
+{
+    OUStringBuffer aBuf;
+    for (size_t i = 0; i < maRenderers.size(); i++)
+    {
+        aBuf.append(maRenderers[i]->getName());
+        aBuf.append(' ');
+    }
+    return aBuf.makeStringAndClear();
+}
+
+void DemoWin::selectRenderer(const OUString &rName)
+{
+    for (size_t i = 0; i < maRenderers.size(); i++)
+    {
+        if (maRenderers[i]->getName() == rName)
+        {
+            mnSelectedRenderer = i;
+            Invalidate();
+            return;
+        }
+    }
+}
+
 class DemoApp : public Application
 {
+    int showHelp(DemoWin &rWin)
+    {
+        fprintf(stderr,"vcldemo - a VCL test app\n");
+        fprintf(stderr,"  --help            - print this text\n");
+        fprintf(stderr,"  --show <renderer> - start with a given renderer, options are:\n");
+        OUString aRenderers(rWin.getRendererList());
+        fprintf(stderr,"         %s\n\n",
+                rtl::OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
+        return 0;
+    }
+
 public:
     DemoApp() {}
 
@@ -830,6 +917,22 @@ public:
         try
         {
             DemoWin aMainWin;
+
+            for (sal_Int32 i = 0; i < GetCommandLineParamCount(); i++)
+            {
+                bool bLast = i == GetCommandLineParamCount() - 1;
+                OUString aArg = GetCommandLineParam(i);
+                if (aArg == "--help" || aArg == "-h")
+                    return showHelp(aMainWin);
+                if (aArg == "--show")
+                {
+                    if (bLast)
+                        return showHelp(aMainWin);
+                    else
+                        aMainWin.selectRenderer(GetCommandLineParam(++i));
+                }
+            }
+
             aMainWin.SetText("Interactive VCL demo");
             aMainWin.Show();
             Application::Execute();
