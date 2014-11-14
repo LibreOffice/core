@@ -46,7 +46,6 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
 
     maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884", ""));
-    maOpenCLBlackList.insert(OpenCLImplMatcher("SuperOS", "*", "Big Corp, Inc.", "Whizz\\Grafix", "4.2/beta;3", "4.4"));
 
     maOpenCLWhiteList.insert(OpenCLImplMatcher("Linux", "*", "Advanced Micro Devices, Inc.", "*", "1445.5 (sse2,avx)", ""));
 }

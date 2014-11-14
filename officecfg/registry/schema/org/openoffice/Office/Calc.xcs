@@ -1394,7 +1394,7 @@
           <info>
             <desc>Combinations of (OS, OS version, OpenCL platform vendor, OpenCL device name, OpenCL driver version) that are known to be bad. Each entry is a string consisting of six parts separated by slashes. In case a slash, percent or semicolon occurs inside a part, it is replaced by a percent followed by the corresponding number as two hex digits. Any part might contain a single asterisk as a wildcard, matching any value, but there is no more generic regexp support. Has higher priority than OpenCLWhiteList.</desc>
           </info>
-          <value oor:separator=";">Windows/*/Intel(R) Corporation/*/9.17.10.2884/;SuperOS/*/Big Corp, Inc./Whizz\Grafix/4.2%2Fbeta%3B3/4.4</value>
+          <value oor:separator=";">Windows/*/Intel(R) Corporation/*/9.17.10.2884/</value>
         </prop>
         <prop oor:name="OpenCLWhiteList" oor:type="oor:string-list" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
