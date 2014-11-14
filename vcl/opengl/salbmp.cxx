@@ -239,9 +239,12 @@ public:
     ImplPixelFormat8( const BitmapPalette& rPalette )
     : mrPalette( rPalette )
     {
+        if ( mrPalette.GetEntryCount() < 256 )
+            SAL_WARN( "vcl.opengl", "Bad sign, if we get an OOB pixel we die" );
     }
     virtual const BitmapColor& ReadPixel() SAL_OVERRIDE
     {
+        assert( mrPalette.GetEntryCount() > *mpData );
         return mrPalette[ *mpData++ ];
     }
 };
@@ -259,6 +262,8 @@ public:
         , mnX(0)
         , mnShift(4)
     {
+        if ( mrPalette.GetEntryCount() < 16 )
+            SAL_WARN( "vcl.opengl", "Bad sign, if we get an OOB pixel we die" );
     }
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
     {
@@ -268,7 +273,9 @@ public:
     }
     virtual const BitmapColor& ReadPixel() SAL_OVERRIDE
     {
-        const BitmapColor& rColor = mrPalette[( mpData[mnX >> 1] >> mnShift) & 0x0f];
+        sal_uInt32 nIdx = ( mpData[mnX >> 1] >> mnShift) & 0x0f;
+        assert( mrPalette.GetEntryCount() > nIdx );
+        const BitmapColor& rColor = mrPalette[nIdx];
         mnX++;
         mnShift ^= 4;
         return rColor;
@@ -517,6 +524,9 @@ void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
         maTexture = OpenGLTexture();
         mbDirtyTexture = true;
     }
+    // The palette is modified on read during the BitmapWriteAccess,
+    // but of course, often it is not modified; interesting.
+    maPalette = pBuffer->maPalette;
     delete pBuffer;
 }
 
