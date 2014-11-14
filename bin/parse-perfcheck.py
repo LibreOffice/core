@@ -47,14 +47,14 @@ def parseFile(dirname, filename, lastCommit):
 
   colsResult[lastCommitId]['values'][curTestComment] = total
 
-  return [lastCommitId, lastCommitDate, testName, curTestComment, total]
+  return [lastCommitId, lastCommitDate, testName, curTestComment, total, filename]
 
 def processDirectory(rootDir, needsCsvHeader, lastCommit):
 
     results = []
 
     if needsCsvHeader:
-        results.append(["lastCommit", "lastCommitDate", "test filename", "dump comment", "count"])
+        results.append(["lastCommit", "lastCommitDate", "test filename", "dump comment", "count", "filename"])
 
     for dirName, subdirList, fileList in os.walk(rootDir):
         files = [f for f in fileList if f.startswith("callgrind.out.")]
