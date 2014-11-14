@@ -25,7 +25,6 @@
 #include <sys/sdt.h>
 #endif
 
-#include <osl/interlck.h>
 
 #include "sal/types.h"
 

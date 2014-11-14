@@ -26,7 +26,6 @@
 
 #include "sal/types.h"
 
-#include "tenchelp.hxx"
 
 /// @HTML
 

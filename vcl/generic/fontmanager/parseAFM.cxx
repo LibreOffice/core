@@ -75,10 +75,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <sys/file.h>
 #include <sys/stat.h>
-#include <math.h>
 
 #include "parseAFM.hxx"
 #include "vcl/strhelper.hxx"
