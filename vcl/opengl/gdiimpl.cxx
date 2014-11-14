@@ -772,6 +772,68 @@ void OpenGLSalGraphicsImpl::DrawLinearGradient( const Gradient& rGradient, const
     CHECK_GL_ERROR();
 }
 
+void OpenGLSalGraphicsImpl::DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect )
+{
+    if( mnLinearGradientProgram == 0 )
+    {
+        if( !CreateLinearGradientProgram() )
+            return;
+    }
+
+    glUseProgram( mnLinearGradientProgram );
+
+    Color aStartCol = rGradient.GetStartColor();
+    Color aEndCol = rGradient.GetEndColor();
+    long nFactor = rGradient.GetStartIntensity();
+    glUniformColorIntensity( mnLinearGradientStartColorUniform, aStartCol, nFactor );
+    nFactor = rGradient.GetEndIntensity();
+    glUniformColorIntensity( mnLinearGradientEndColorUniform, aEndCol, nFactor );
+
+    /**
+     * Draw two rectangles with linear gradient.
+     *
+     *  1 *---* 2
+     *    |  /|
+     *    | / |     Points 0 and 3 have start color
+     *  0 |/__| 3   Points 1, 2, 4 and 5 have end color
+     *    |\  |
+     *    | \ |
+     *    |  \|
+     *  5 *---* 4
+     *
+     */
+
+    Rectangle aRect;
+    Point aCenter;
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
+    // determine points 0 and 3
+    Point aPt0( aRect.Left(), (aRect.Top() + aRect.Bottom() + 1) / 2 );
+    Point aPt3( aRect.Right(), (aRect.Top() + aRect.Bottom() + 1) / 2 );
+
+    Polygon aPoly( 7 );
+    aPoly.SetPoint( aPt0,                0 );
+    aPoly.SetPoint( aRect.TopLeft(),     1 );
+    aPoly.SetPoint( aRect.TopRight(),    2 );
+    aPoly.SetPoint( aPt3,                3 );
+    aPoly.SetPoint( aRect.BottomRight(), 4 );
+    aPoly.SetPoint( aRect.BottomLeft(),  5 );
+    aPoly.SetPoint( aPt0,                6 );
+    aPoly.Rotate( aCenter, rGradient.GetAngle() % 3600 );
+
+    GLfloat aTexCoord[12] = { 0, 1, 1, 0, 2, 0, 3, 1, 4, 0, 5, 0 };
+    GLfloat fMin = 1.0 - 100.0 / (100.0 - rGradient.GetBorder());
+    aTexCoord[3] = aTexCoord[5] = aTexCoord[9] = aTexCoord[11] = fMin;
+    glEnableVertexAttribArray( GL_ATTRIB_TEX );
+    glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
+
+    DrawConvexPolygon( aPoly );
+
+    glDisableVertexAttribArray( GL_ATTRIB_TEX );
+    glUseProgram( 0 );
+    CHECK_GL_ERROR();
+}
+
 void OpenGLSalGraphicsImpl::DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect )
 {
     if( mnRadialGradientProgram == 0 )
@@ -1365,6 +1427,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         return true;
 
     if( rGradient.GetStyle() != GradientStyle_LINEAR &&
+        rGradient.GetStyle() != GradientStyle_AXIAL &&
         rGradient.GetStyle() != GradientStyle_RADIAL )
         return false;
 
@@ -1401,6 +1464,10 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     else if( rGradient.GetStyle() == GradientStyle_LINEAR )
     {
         DrawLinearGradient( rGradient, aBoundRect );
+    }
+    else if( rGradient.GetStyle() == GradientStyle_AXIAL )
+    {
+        DrawAxialGradient( rGradient, aBoundRect );
     }
     else if( rGradient.GetStyle() == GradientStyle_RADIAL )
     {

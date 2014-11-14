@@ -107,6 +107,7 @@ public:
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
+    void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
 
 public:
