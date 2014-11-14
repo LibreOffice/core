@@ -62,6 +62,10 @@ PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
 
 IWYU_OPTION := $(if $(IWYU_PATH),-k CXX=$(IWYU_PATH),)
 
+iwyudummy: bootstrap fetch
+	# $(SRCDIR)/bin/gen-iwyu-dummy-lib
+	cd $(BUILDDIR)/iwyudummy && $(MAKE) $(IWYU_OPTION) $(GMAKE_OPTIONS)
+
 #
 # Partial Build
 #
