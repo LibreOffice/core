@@ -174,14 +174,12 @@ void ScRawToken::SetOpCode( OpCode e )
             sbyte.cByte = 0;
             sbyte.bHasForceArray = ScParameterClassification::HasForceArray( eOp);
     }
-    nRefCnt = 0;
 }
 
 void ScRawToken::SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase )
 {
     eOp   = ocPush;
     eType = svString;
-    nRefCnt = 0;
 
     sharedstring.mpData = pData;
     sharedstring.mpDataIgnoreCase = pDataIgoreCase;
@@ -193,7 +191,6 @@ void ScRawToken::SetSingleReference( const ScSingleRefData& rRef )
     eType     = svSingleRef;
     aRef.Ref1 =
     aRef.Ref2 = rRef;
-    nRefCnt   = 0;
 }
 
 void ScRawToken::SetDoubleReference( const ScComplexRefData& rRef )
@@ -201,7 +198,6 @@ void ScRawToken::SetDoubleReference( const ScComplexRefData& rRef )
     eOp   = ocPush;
     eType = svDoubleRef;
     aRef  = rRef;
-    nRefCnt = 0;
 }
 
 void ScRawToken::SetDouble(double rVal)
@@ -209,7 +205,6 @@ void ScRawToken::SetDouble(double rVal)
     eOp   = ocPush;
     eType = svDouble;
     nValue = rVal;
-    nRefCnt = 0;
 }
 
 void ScRawToken::SetErrorConstant( sal_uInt16 nErr )
@@ -217,14 +212,12 @@ void ScRawToken::SetErrorConstant( sal_uInt16 nErr )
     eOp   = ocPush;
     eType = svError;
     nError = nErr;
-    nRefCnt = 0;
 }
 
 void ScRawToken::SetName(bool bGlobal, sal_uInt16 nIndex)
 {
     eOp = ocName;
     eType = svIndex;
-    nRefCnt = 0;
 
     name.bGlobal = bGlobal;
     name.nIndex = nIndex;
@@ -234,7 +227,6 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabN
 {
     eOp = ocPush;
     eType = svExternalSingleRef;
-    nRefCnt = 0;
 
     extref.nFileId = nFileId;
     extref.aRef.Ref1 =
@@ -249,7 +241,6 @@ void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabN
 {
     eOp = ocPush;
     eType = svExternalDoubleRef;
-    nRefCnt = 0;
 
     extref.nFileId = nFileId;
     extref.aRef = rRef;
@@ -263,7 +254,6 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
 {
     eOp = ocPush;
     eType = svExternalName;
-    nRefCnt = 0;
 
     extname.nFileId = nFileId;
 
@@ -282,7 +272,6 @@ void ScRawToken::SetExternal( const sal_Unicode* pStr )
     // Platz fuer Byte-Parameter lassen!
     memcpy( cStr+1, pStr, GetStrLenBytes( nLen ) );
     cStr[ nLen+1 ] = 0;
-    nRefCnt = 0;
 }
 
 bool ScRawToken::IsValidReference() const
@@ -309,52 +298,6 @@ sal_uInt16 ScRawToken::sbyteOffset()
 
     ScRawToken aToken;
     return static_cast<sal_uInt16>( reinterpret_cast<char*>(&aToken.sbyte) - reinterpret_cast<char*>(&aToken) );
-}
-
-ScRawToken* ScRawToken::Clone() const
-{
-    ScRawToken* p;
-    if ( eType == svDouble )
-    {
-        p = (ScRawToken*) new ScDoubleRawToken;
-        p->eOp = eOp;
-        p->eType = eType;
-        p->nValue = nValue;
-    }
-    else
-    {
-        static sal_uInt16 nOffset = sbyteOffset();     // offset of sbyte
-        sal_uInt16 n = nOffset;
-
-        switch( eType )
-        {
-            case svSep:         break;
-            case svByte:        n += sizeof(ScRawToken::sbyte); break;
-            case svDouble:      n += sizeof(double); break;
-            case svError:       n += sizeof(nError); break;
-            case svString:      n += sizeof(sharedstring); break;
-            case svSingleRef:
-            case svDoubleRef:   n += sizeof(aRef); break;
-            case svMatrix:      n += sizeof(ScMatrix*); break;
-            case svIndex:       n += sizeof(name); break;
-            case svJump:        n += nJump[ 0 ] * 2 + 2; break;
-            case svExternal:    n = sal::static_int_cast<sal_uInt16>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
-
-            // external references
-            case svExternalSingleRef:
-            case svExternalDoubleRef: n += sizeof(extref); break;
-            case svExternalName:      n += sizeof(extname); break;
-            default:
-            {
-                OSL_TRACE( "unknown ScRawToken::Clone() type %d", int(eType));
-            }
-        }
-        p = (ScRawToken*) new sal_uInt8[ n ];
-        memcpy( p, this, n * sizeof(sal_uInt8) );
-    }
-    p->nRefCnt = 0;
-    p->bRaw = false;
-    return p;
 }
 
 FormulaToken* ScRawToken::CreateToken() const
@@ -431,23 +374,6 @@ FormulaToken* ScRawToken::CreateToken() const
             }
     }
 #undef IF_NOT_OPCODE_ERROR
-}
-
-void ScRawToken::Delete()
-{
-    if ( bRaw )
-        delete this;                            // FixedMemPool ScRawToken
-    else
-    {   // created per Clone
-        switch ( eType )
-        {
-            case svDouble :
-                delete (ScDoubleRawToken*) this;    // FixedMemPool ScDoubleRawToken
-            break;
-            default:
-                delete [] (sal_uInt8*) this;
-        }
-    }
 }
 
 namespace {

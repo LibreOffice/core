@@ -35,9 +35,6 @@
 
 #include <formula/FormulaCompiler.hxx>
 
-#include <boost/intrusive_ptr.hpp>
-#include <boost/unordered_map.hpp>
-
 // constants and data types also for external modules (ScInterpreter et al)
 
 #define MAXSTRLEN    1024   /* maximum length of input string of one symbol */
@@ -89,8 +86,6 @@ class CompileFormulaContext;
 /*
     OpCode              eOp;        // OpCode
     formula::StackVar   eType;      // type of data
-    sal_uInt16          nRefCnt;    // reference count
-    bool                bRaw;       // not cloned yet and trimmed to real size
  */
 
 struct ScRawTokenBase
@@ -98,8 +93,6 @@ struct ScRawTokenBase
 protected:
     OpCode   eOp;
     formula::StackVar eType;
-    mutable sal_uInt16   nRefCnt;
-    bool     bRaw;
 };
 
 struct ScDoubleRawToken: private ScRawTokenBase
@@ -154,19 +147,15 @@ public:
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
 
-                //! other members not initialized
-                ScRawToken() { bRaw = true; }
+                //! members not initialized
+                ScRawToken() {}
 private:
                 ~ScRawToken() {}                //! only delete via Delete()
 public:
                 DECL_FIXEDMEMPOOL_NEWDEL( ScRawToken );
-    formula::StackVar    GetType()   const       { return (formula::StackVar) eType; }
-    OpCode      GetOpCode() const       { return (OpCode)   eOp;   }
+    formula::StackVar    GetType()   const       { return eType; }
+    OpCode      GetOpCode() const       { return eOp; }
     void        NewOpCode( OpCode e )   { eOp = e; }
-    void        IncRef()                { nRefCnt++;       }
-    void        DecRef()                { if( !--nRefCnt ) Delete(); }
-    sal_uInt16      GetRef() const          { return nRefCnt; }
-    SC_DLLPUBLIC void       Delete();
 
     // Use these methods only on tokens that are not part of a token array,
     // since the reference count is cleared!
@@ -192,7 +181,6 @@ public:
      */
     bool IsValidReference() const;
 
-    ScRawToken* Clone() const;      // real copy!
     formula::FormulaToken* CreateToken() const;   // create typified token
     void Load( SvStream&, sal_uInt16 nVer );
 
@@ -202,18 +190,6 @@ public:
     static size_t GetStrLenBytes( const sal_Unicode* pStr )
         { return GetStrLenBytes( GetStrLen( pStr ) ); }
 };
-
-inline void intrusive_ptr_add_ref(ScRawToken* p)
-{
-    p->IncRef();
-}
-
-inline void intrusive_ptr_release(ScRawToken* p)
-{
-    p->DecRef();
-}
-
-typedef ::boost::intrusive_ptr<ScRawToken> ScRawTokenRef;
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
 {
