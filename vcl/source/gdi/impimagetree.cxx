@@ -248,17 +248,9 @@ bool ImplImageTree::find(
         }
     }
 
-    if (!m_path.second.is()) {
-        try {
-            m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
-        } catch (const css::uno::RuntimeException &) {
-            throw;
-        } catch (const css::uno::Exception & e) {
-            SAL_INFO("vcl", "ImplImageTree::find exception "
-                << e.Message << " for " << m_path.first);
-            return false;
-        }
-    }
+    if (!checkPathAccess())
+        return false;
+
     for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
          j != paths.rend(); ++j)
     {
@@ -288,21 +280,9 @@ void ImplImageTree::loadImageLinks()
         }
     }
 
-    if ( !m_path.second.is() )
-    {
-        try
-        {
-            m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
-        } catch (const css::uno::RuntimeException &) {
-            throw;
-        }
-        catch (const css::uno::Exception & e)
-        {
-            SAL_INFO("vcl", "ImplImageTree::find exception "
-                << e.Message << " for " << m_path.first);
-            return;
-        }
-    }
+    if (!checkPathAccess())
+        return;
+
     if ( m_path.second->hasByName(aLinkFilename) )
     {
         css::uno::Reference< css::io::XInputStream > s;
@@ -349,21 +329,41 @@ OUString const & ImplImageTree::getRealImageName(OUString const & name)
     return it->second;
 }
 
-std::vector<OUString> ImplImageTree::getAllPaths()
+bool ImplImageTree::checkPathAccess()
 {
-    std::vector<OUString> aNames;
+    if (m_path.second.is())
+        return true;
 
-    return aNames;
+    try {
+        m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
+    } catch (const css::uno::RuntimeException &) {
+        throw;
+    } catch (const css::uno::Exception & e) {
+        SAL_INFO("vcl", "ImplImageTree::zip file location exception "
+                 << e.Message << " for " << m_path.first);
+        return false;
+    }
+    return m_path.second.is();
+}
+
+css::uno::Reference< css::container::XNameAccess > ImplImageTree::getNameAccess()
+{
+    checkPathAccess();
+    return m_path.second;
 }
 
 // For vcldemo / debugging
-SAL_DLLPUBLIC std::vector<OUString> ImageTree_getAllImageNames();
+SAL_DLLPUBLIC css::uno::Sequence< OUString > ImageTree_getAllImageNames();
 
 /// Recursively dump all names ...
-std::vector<OUString> ImageTree_getAllImageNames()
+css::uno::Sequence< OUString > ImageTree_getAllImageNames()
 {
     static ImplImageTreeSingletonRef aImageTree;
-    return aImageTree.getAllPaths();
+
+    css::uno::Reference< css::container::XNameAccess > xRef(
+        aImageTree->getNameAccess() );
+
+    return xRef->getElementNames();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

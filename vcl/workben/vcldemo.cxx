@@ -31,7 +31,7 @@
 #endif
 
 // debugging hook just for us
-SAL_DLLPUBLIC std::vector<OUString> ImageTree_getAllImageNames();
+SAL_DLLPUBLIC css::uno::Sequence< OUString > ImageTree_getAllImageNames();
 
 using namespace css;
 
@@ -566,6 +566,7 @@ public:
 
     struct DrawIcons : public RegionRenderer
     {
+        std::vector<OUString> maIconNames;
         std::vector<BitmapEx> maIcons;
         bool bHasLoadedAll;
         DrawIcons() : bHasLoadedAll(false)
@@ -596,18 +597,24 @@ public:
                 "cmd/lc_hyperlinkdialog.png",
               };
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
-                maIcons.push_back(BitmapEx(OUString::createFromAscii(pNames[i])));
+            {
+                maIconNames.push_back(OUString::createFromAscii(pNames[i]));
+                maIcons.push_back(BitmapEx(maIconNames[i]));
+            }
         }
 
-        void LoadAllIcons()
+        void LoadAllImages()
         {
             if (bHasLoadedAll)
                 return;
             bHasLoadedAll = true;
 
-            std::vector<OUString> aAllIcons = ImageTree_getAllImageNames();
-            for (size_t i = 0; i < aAllIcons.size(); i++)
+            css::uno::Sequence< OUString > aAllIcons = ImageTree_getAllImageNames();
+            for (sal_Int32 i = 0; i < aAllIcons.getLength() && i < 1024; i++)
+            {
+                maIconNames.push_back(aAllIcons[i]);
                 maIcons.push_back(BitmapEx(aAllIcons[i]));
+            }
         }
 
         void doDrawIcons(OutputDevice &rDev, Rectangle r)
@@ -617,6 +624,7 @@ public:
             for (size_t i = 0; i < maIcons.size(); i++)
             {
                 Size aSize(maIcons[i].GetSizePixel());
+//              sAL_DEBUG("Draw icon '" << maIconNames[i] << "'");
                 rDev.DrawBitmapEx(p, maIcons[i]);
                 p.Move(aSize.Width(), 0);
                 if (aSize.Height() > nMaxH)
@@ -635,6 +643,7 @@ public:
         {
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
+                LoadAllImages();
                 doDrawIcons(rDev, r);
             }
             else

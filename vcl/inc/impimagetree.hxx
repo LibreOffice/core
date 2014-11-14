@@ -55,6 +55,8 @@ public:
  *  be too late for the destructors of the bitmaps in m_iconCache)*/
     void shutDown();
 
+    css::uno::Reference< css::container::XNameAccess > getNameAccess();
+
 private:
     bool doLoadImage(
         OUString const & name, OUString const & style,
@@ -62,8 +64,7 @@ private:
 
     typedef std::pair<
         OUString,
-        com::sun::star::uno::Reference<
-            com::sun::star::container::XNameAccess > > Path;
+        css::uno::Reference< css::container::XNameAccess > > Path;
 
     typedef boost::unordered_map<
         OUString, bool, OUStringHash > CheckStyleCache;
@@ -78,6 +79,8 @@ private:
     bool m_cacheIcons;
     IconLinkHash m_linkHash;
 
+    bool checkPathAccess();
+
     void setStyle(OUString const & style );
 
     void resetPaths();
@@ -89,7 +92,6 @@ private:
     void loadImageLinks();
     void parseLinkFile(boost::shared_ptr< SvStream > stream);
     OUString const & getRealImageName(OUString const & name);
-    std::vector<OUString> getAllPaths();
 };
 
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;
