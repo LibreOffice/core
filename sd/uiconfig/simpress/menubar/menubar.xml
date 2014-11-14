@@ -101,11 +101,10 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:NormalMultiPaneGUI" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:OutlineMode" menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:DiaMode" menu:style="radio"/>
-            <menu:menuitem menu:id=".uno:Presentation" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:NotesMode" menu:style="radio"/>
             <menu:menuitem menu:id=".uno:HandoutMode" menu:style="radio"/>
-               <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:DiaMode" menu:style="radio"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:MasterPageMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:SlideMasterPage" menu:style="radio"/>
@@ -114,20 +113,13 @@
                        <menu:menuitem menu:id=".uno:MasterLayouts"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:DisplayQualityMenu">
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:style="radio"/>
-                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
-                </menu:menupopup>
-            </menu:menu>
             <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:Sidebar"/>
-      <menu:menuitem menu:id=".uno:LeftPaneImpress"/>
             <menu:menuitem menu:id=".uno:AvailableToolbars"/>
             <menu:menuitem menu:id=".uno:StatusBarVisible"/>
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuitem menu:id=".uno:ShowRuler"/>
+            <menu:menuitem menu:id=".uno:LeftPaneImpress"/>
+            <menu:menuseparator/>
             <menu:menu menu:id=".uno:GridMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:GridVisible"/>
@@ -142,10 +134,18 @@
                     <menu:menuitem menu:id=".uno:HelplinesFront"/>
                 </menu:menupopup>
             </menu:menu>
-      <menu:menuitem menu:id=".uno:ShowAnnotations"/>
-      <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:Navigator"/>
+            <menu:menu menu:id=".uno:DisplayQualityMenu">
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:OutputQualityColor" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityGrayscale" menu:style="radio"/>
+                    <menu:menuitem menu:id=".uno:OutputQualityBlackWhite" menu:style="radio"/>
+                </menu:menupopup>
+            </menu:menu>
+            <menu:menuitem menu:id=".uno:ShowAnnotations"/>
+            <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:Sidebar"/>
             <menu:menuitem menu:id=".uno:Gallery"/>
+            <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
             <menu:menu menu:id=".uno:ZoomMenu">
