@@ -38,7 +38,7 @@ public:
 
     inline bool saveAs(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
-        return mpDoc->pClass->saveAs(mpDoc, pUrl, pFormat, pFilterOptions);
+        return mpDoc->pClass->saveAs(mpDoc, pUrl, pFormat, pFilterOptions) != 0;
     }
 
     inline LibreOfficeKitDocument *get() { return mpDoc; }
