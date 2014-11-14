@@ -163,7 +163,34 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
     }
     else
     {
-        // we have to render the text to a hidden texture, and draw it
+        // We have to render the text to a hidden texture, and draw it.
+        //
+        // Note that Windows GDI does not really support the alpha correctly
+        // when drawing - ie. it draws nothing to the alpha channel when
+        // rendering the text, even the antialiasing is done as 'real' pixels,
+        // not alpha...
+        //
+        // Luckily, this does not really limit us:
+        //
+        // To blend properly, we draw the texture, but then use it as an alpha
+        // channel for solid color (that will define the text color).  This
+        // destroys the subpixel antialiasing - turns it into 'classic'
+        // antialiasing - but that is the best we can do, because the subpixel
+        // antialiasing needs to know what is in the background: When the
+        // background is white, or white-ish, it does the subpixel, but when
+        // there is a color, it just darkens the color (and does this even
+        // when part of the character is on a colored background, and part on
+        // white).  It has to work this way, the results would look strange
+        // otherwise.
+        //
+        // For the GL rendering to work even with the subpixel antialiasing,
+        // we would need to get the current texture from the screen, let GDI
+        // draw the text to it (so that it can decide well where to use the
+        // subpixel and where not), and draw the result - but in that case we
+        // don't need alpha anyway.
+        //
+        // TODO: check the performance of this 2nd approach at some stage and
+        // switch to that if it performs well.
 
         // FIXME so that we don't have to use enormous bitmap, move the text
         // to 0,0, size the width / height accordingly, and move it back via
@@ -176,12 +203,15 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
 
         sal_uInt8 *data;
         HBITMAP hBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(compatibleDC, width, height, bpp, reinterpret_cast<void **>(&data));
-        // FIXME fill transparent instead of 128
+        // FIXME fill transparent instead of 128, this is for testing
         memset(data, 128, width*height*4);
 
-        // draw the text to the hidden DC
+        // draw the text to the hidden DC with black color and white
+        // background, we will use the result later as a mask only
         HGDIOBJ hBitmapOld = SelectObject(compatibleDC, hBitmap);
         SelectFont(compatibleDC, mhFont);
+        SetTextColor(compatibleDC, RGB(0, 0, 0));
+        SetBkColor(compatibleDC, RGB(255, 255, 255));
         DrawTextImpl(compatibleDC);
         SelectObject(compatibleDC, hBitmapOld);
 
@@ -203,7 +233,12 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
             aRects.mnDestHeight = height;
 
             pImpl->PreDraw();
-            pImpl->DrawAlphaTexture(aTexture, aRects);
+            COLORREF color = GetTextColor(hDC);
+            SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
+            // TODO when we have it:
+            // pImpl->DrawSolidColorWithMask(salColor, aTexture, aRects);
+            // and kill the following interim thing:
+            pImpl->DrawTexture(aTexture, aRects);
             pImpl->PostDraw();
         }
 
