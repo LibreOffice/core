@@ -568,6 +568,12 @@ bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 {
     DBG_DRAW_OPERATION("drawAlphaBitmap", true);
 
+    if (rTR.mnSrcWidth != rTR.mnDestWidth || rTR.mnSrcHeight != rTR.mnDestHeight)
+    {
+        // TODO - would be better to scale it by the native code
+        return false;
+    }
+
     // An image mask can't have a depth > 8 bits (should be 1 to 8 bits)
     if( rAlphaBmp.GetBitCount() > 8 )
     {

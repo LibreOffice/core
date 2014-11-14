@@ -774,17 +774,6 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
     bool bTryDirectPaint(!mrParent.isPrinter() && !mbXORMode);
 
-    if(bTryDirectPaint)
-    {
-        // only paint direct when no scaling and no MapMode, else the
-        // more expensive conversions may be done for short-time Bitmap/BitmapEx
-        // used for buffering only
-        if(rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
-        {
-            bTryDirectPaint = false;
-        }
-    }
-
     // try to draw using GdiPlus directly
     if(bTryDirectPaint && drawAlphaBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap))
     {
