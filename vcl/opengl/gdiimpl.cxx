@@ -97,7 +97,7 @@ void OpenGLSalGraphicsImpl::PreDraw()
     maContext.makeCurrent();
     // TODO: lfrb: make sure the render target has the right size
     if( mbOffscreen )
-        glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
+        CheckOffscreenTexture();
     glViewport( 0, 0, GetWidth(), GetHeight() );
     if( mbUseScissor )
         glEnable( GL_SCISSOR_TEST );
@@ -280,6 +280,28 @@ void OpenGLSalGraphicsImpl::SetOffscreen( bool bOffscreen )
     }
 
     CHECK_GL_ERROR();
+}
+
+bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
+{
+    glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
+
+    if( maOffscreenTex.IsUnique() )
+        return true;
+
+    SalTwoRect aPosAry;
+    aPosAry.mnSrcX = aPosAry.mnDestX = 0;
+    aPosAry.mnSrcY = aPosAry.mnDestY = 0;
+    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = GetWidth();
+    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = GetHeight();
+
+    // TODO: lfrb: User GL_ARB_copy_image?
+    OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
+    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aNewTex.Id(), 0 );
+    glViewport( 0, 0, GetWidth(), GetHeight() );
+    DrawTexture( maOffscreenTex, aPosAry );
+
+    return true;
 }
 
 bool OpenGLSalGraphicsImpl::CreateSolidProgram( void )

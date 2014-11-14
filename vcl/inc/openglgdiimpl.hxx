@@ -75,6 +75,8 @@ protected:
 
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
 
+    bool CheckOffscreenTexture();
+
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateMaskedTextureProgram( void );
