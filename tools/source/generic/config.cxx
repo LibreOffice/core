@@ -285,10 +285,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                     pGroup->mpNext      = NULL;
                     pGroup->mpFirstKey  = NULL;
                     pGroup->mnEmptyLines = 0;
-                    if ( pPrevGroup )
-                        pPrevGroup->mpNext = pGroup;
-                    else
-                        pData->mpFirstGroup = pGroup;
+                    pData->mpFirstGroup = pGroup;
                     pPrevGroup  = pGroup;
                     pPrevKey    = NULL;
                 }
