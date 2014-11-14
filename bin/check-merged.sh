@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-# check that master contains all the patches from a brach
+# check that master contains all the patches from a branch
 # and list those that are missing
 #
 
