@@ -78,8 +78,6 @@ OpenGLContext::~OpenGLContext()
             glXDestroyGLXPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
     }
 #endif
-
-    CHECK_GL_ERROR();
 }
 
 void OpenGLContext::requestLegacyContext()
@@ -299,8 +297,7 @@ bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat,
     ReleaseDC(hWnd, glWin.hDC);
     DestroyWindow(hWnd);
 
-    CHECK_GL_ERROR();
-    return  bArbMultisampleSupported;
+    return bArbMultisampleSupported;
 }
 #endif
 
