@@ -1093,11 +1093,15 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     if(k == 0) {
         firstCode = Int16FromMOTA(subHeader2s[k].firstCode);
         if(theLowByte >= firstCode && theLowByte < (firstCode + Int16FromMOTA(subHeader2s[k].entryCount))) {
-            return *((&(subHeader2s[0].idRangeOffset))
+            sal_uInt16* const pGlyph = (&(subHeader2s[0].idRangeOffset))
                      + (Int16FromMOTA(subHeader2s[0].idRangeOffset)/2)             /* + offset        */
                      + theLowByte                                                  /* + to_look       */
                      - Int16FromMOTA(subHeader2s[0].firstCode)
-                     );
+                     ;
+            if (reinterpret_cast<sal_uInt8*>(pGlyph) - cmap < int(nMaxCmapSize) - 4)
+                return *pGlyph;
+            else
+                return MISSING_GLYPH_INDEX;
         } else {
             return MISSING_GLYPH_INDEX;
         }
