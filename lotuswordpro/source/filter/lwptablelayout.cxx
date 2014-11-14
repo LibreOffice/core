@@ -618,7 +618,7 @@ void LwpTableLayout::RegisterColumns()
     pColStyle->SetWidth(static_cast<float>(dDefaultColumn));
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_DefaultColumnStyleName =  pXFStyleManager->AddStyle(pColStyle)->GetStyleName();
+    m_DefaultColumnStyleName =  pXFStyleManager->AddStyle(pColStyle).m_pStyle->GetStyleName();
 
     // register existed column style
     sal_uInt16 i=0;
@@ -665,7 +665,7 @@ void LwpTableLayout::RegisterRows()
         pRowStyle->SetRowHeight((float)pTable->GetHeight());
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_DefaultRowStyleName =  pXFStyleManager->AddStyle(pRowStyle)->GetStyleName();
+    m_DefaultRowStyleName =  pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName();
 
     // register style of rows
     LwpObjectID& rRowID = GetChildHead();
@@ -736,7 +736,7 @@ void LwpTableLayout::RegisterStyle()
         pTableStyle->SetWidth(pSuper->GetTableWidth());
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pTableStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pTableStyle).m_pStyle->GetStyleName();
 
     //convert to OO table now and register row stle
     // traverse
@@ -915,7 +915,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable,XFTable* pXFTable,
     {
         pRowStyle->SetRowHeight((float)fHeight);
     }
-    pXFRow->SetStyleName(pXFStyleManager->AddStyle(pRowStyle)->GetStyleName());
+    pXFRow->SetStyleName(pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName());
 
     //construct headong row
     XFCell* pXFCell1 = new XFCell;
@@ -1224,7 +1224,7 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
                 }
 
                 pOverStyle->SetStyleName("");
-                OUString StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+                OUString StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
 
                 pXFPara->SetStyleName(StyleName);
             }
@@ -1432,7 +1432,7 @@ void LwpColumnLayout::RegisterStyle(double dCalculatedWidth)
     XFColStyle * pColStyle = new XFColStyle();
     pColStyle->SetWidth(static_cast<float>(dCalculatedWidth));
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pColStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pColStyle).m_pStyle->GetStyleName();
 }
 
 LwpTableHeadingLayout::LwpTableHeadingLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)

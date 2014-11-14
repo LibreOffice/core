@@ -259,9 +259,10 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             pStyle->SetStyleName("");
             pFont = pFoundry->GetFontManger().CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
             pStyle->SetFont(pFont);
-            IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
+            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(pStyle);
+            IXFStyle *pNewStyle = aNewStyle.m_pStyle;
             m_StyleName = pNewStyle->GetStyleName();
-            if (pNewStyle != pStyle)
+            if (aNewStyle.m_bOrigDeleted)
                 pStyle = NULL;
         }
         else
@@ -274,9 +275,10 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             pStyle = new XFTextStyle();
             pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
             pStyle->SetFont(pFont);
-            IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
+            IXFStyleRet aNewStyle = pXFStyleManager->AddStyle(pStyle);
+            IXFStyle *pNewStyle = aNewStyle.m_pStyle;
             m_StyleName = pNewStyle->GetStyleName();
-            if (pNewStyle != pStyle)
+            if (aNewStyle.m_bOrigDeleted)
                 pStyle = NULL;
         }
     }
@@ -302,7 +304,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
                 pFont->SetBackColor(aColor);
                 pStyle->SetFont(pFont);
             }
-            m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
         }
     }
 }

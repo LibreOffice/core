@@ -310,7 +310,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     m_pPara->RegisterTabStyle(pOverStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
     //register section style here
     if(m_bNewSection)
     {
@@ -335,7 +335,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
                 pSectStyle->SetColumns(pColumns);
             }
         //}
-        m_SectionStyleName = pXFStyleManager->AddStyle(pSectStyle)->GetStyleName();
+        m_SectionStyleName = pXFStyleManager->AddStyle(pSectStyle).m_pStyle->GetStyleName();
     }
     return false;
 }
@@ -447,7 +447,7 @@ void LwpMasterPage::RegisterFillerPageStyle()
             pPagebreakStyle->SetStyleName("");
             pPagebreakStyle->SetBreaks(enumXFBreakAftPage);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_FillerPageStyleName= pXFStyleManager->AddStyle(pPagebreakStyle)->GetStyleName();
+            m_FillerPageStyleName= pXFStyleManager->AddStyle(pPagebreakStyle).m_pStyle->GetStyleName();
         }
     }
 }

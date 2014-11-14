@@ -102,7 +102,7 @@ void LwpFribColumnBreak::RegisterBreakStyle(LwpPara * pPara)
             pOverStyle->SetBreaks(enumXFBreakBefColumn);
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
 }
 
 LwpFribPageBreak::LwpFribPageBreak( LwpPara* pPara )
@@ -153,7 +153,7 @@ void LwpFribPageBreak::RegisterBreakStyle(LwpPara* pPara)
         pOverStyle->SetBreaks(enumXFBreakBefPage);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
 }
 
 void LwpFribPageBreak::ParseLayout()

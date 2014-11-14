@@ -89,7 +89,7 @@ void LwpFribTable::RegisterNewStyle()
             XFParaStyle* pParaStyle = new XFParaStyle;
             *pParaStyle = *(pOldStyle);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
         }
     }
 }

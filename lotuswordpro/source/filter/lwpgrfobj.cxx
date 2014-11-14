@@ -284,7 +284,7 @@ void LwpGraphicObject::RegisterStyle()
             pXFFrameStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
             pXFFrameStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelPara);
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_strStyleName = pXFStyleManager->AddStyle(pXFFrameStyle)->GetStyleName();
+            m_strStyleName = pXFStyleManager->AddStyle(pXFFrameStyle).m_pStyle->GetStyleName();
         }
     }
 
@@ -647,7 +647,7 @@ void LwpGraphicObject::CreateGrafObject()
 
     // set style for the image
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pImage->SetStyleName(pXFStyleManager->AddStyle(pImageStyle)->GetStyleName());
+    pImage->SetStyleName(pXFStyleManager->AddStyle(pImageStyle).m_pStyle->GetStyleName());
 
     // set archor to frame
     pImage->SetAnchorType(enumXFAnchorFrame);

@@ -205,7 +205,7 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
     pDateStyle->AddSecond(true,0);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle)->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle).m_pStyle->GetStyleName();
 }
 void LwpFribDocVar::RegisterTotalTimeStyle()
 {
@@ -213,7 +213,7 @@ void LwpFribDocVar::RegisterTotalTimeStyle()
     pTimeStyle->SetTruncate(false);
     pTimeStyle->AddMinute();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle).m_pStyle->GetStyleName();
 }
 
 /**

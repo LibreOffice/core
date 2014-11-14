@@ -283,7 +283,7 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
         if (pStyle)
         {
             XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-            m_NumfmtName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+            m_NumfmtName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
             pCellStyle->SetDataStyle(m_NumfmtName);
         }
     }
@@ -559,7 +559,7 @@ void LwpCellLayout::RegisterDefaultCell()
             }
             pCellStyle->SetBorders(pBorders);
         }
-        m_CellStyleNames[eLoop] = pXFStyleManager->AddStyle(pCellStyle)->GetStyleName();
+        m_CellStyleNames[eLoop] = (pXFStyleManager->AddStyle(pCellStyle)).m_pStyle->GetStyleName();
     }
 }
 /**
@@ -583,7 +583,6 @@ void LwpCellLayout::RegisterStyle()
     XFCellStyle *pCellStyle = new XFCellStyle();
 
     ApplyPadding(pCellStyle);
-//  ApplyBackColor(pCellStyle);
     ApplyBackGround(pCellStyle);
     ApplyWatermark(pCellStyle);
     ApplyFmtStyle(pCellStyle);
@@ -592,7 +591,7 @@ void LwpCellLayout::RegisterStyle()
     pCellStyle->SetAlignType(enumXFAlignNone, GetVerticalAlignmentType());
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pCellStyle)->GetStyleName();
+    m_StyleName = (pXFStyleManager->AddStyle(pCellStyle)).m_pStyle->GetStyleName();
 
     // content object register styles
     rtl::Reference<LwpObject> pObj = m_Content.obj();

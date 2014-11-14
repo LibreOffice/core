@@ -134,7 +134,7 @@ void LwpTocSuperLayout::RegisterStyle()
     XFTextStyle*pTextStyle = new XFTextStyle;
     pTextStyle->SetFont(pBaseStyle->GetFont()); // who delete this font?????
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TabStyleName = pXFStyleManager->AddStyle(pTextStyle)->GetStyleName();
+    m_TabStyleName = pXFStyleManager->AddStyle(pTextStyle).m_pStyle->GetStyleName();
 
 }
 /**

@@ -127,7 +127,7 @@ void LwpRowLayout::RegisterStyle()
         pRowStyle->SetRowHeight((float)LwpTools::ConvertFromUnitsToMetric(cheight));
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pRowStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName();
 
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     if (pTableLayout)
@@ -293,7 +293,7 @@ void LwpRowLayout::RegisterCurRowStyle(XFRow* pXFRow,sal_uInt16 nRowMark)
         pNewStyle->SetRowHeight((float)fHeight);
     }
 
-    pXFRow->SetStyleName(pXFStyleManager->AddStyle(pNewStyle)->GetStyleName());
+    pXFRow->SetStyleName(pXFStyleManager->AddStyle(pNewStyle).m_pStyle->GetStyleName());
 }
 
 /**

@@ -408,7 +408,7 @@ void LwpFribField::RegisterTotalTimeStyle()
     pTimeStyle->SetTruncate(false);
     pTimeStyle->AddMinute();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();
+    m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle).m_pStyle->GetStyleName();
 }
 
 void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
@@ -1179,9 +1179,9 @@ void LwpFribField::RegisterDateTimeStyle(const OUString& sFormula)
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     if (pDateStyle)
-        m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle)->GetStyleName();
+        m_TimeStyle = pXFStyleManager->AddStyle(pDateStyle).m_pStyle->GetStyleName();
     if (pTimeStyle)
-        m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle)->GetStyleName();
+        m_TimeStyle = pXFStyleManager->AddStyle(pTimeStyle).m_pStyle->GetStyleName();
 }
 
 void LwpFribField::CheckFieldType(LwpFieldMark* pFieldMark)

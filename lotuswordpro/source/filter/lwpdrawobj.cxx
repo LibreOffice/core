@@ -446,7 +446,7 @@ OUString LwpDrawLine::RegisterStyle()
     this->SetArrowHead(pStyle, m_aLineRec.nLineEnd, m_aLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return (pXFStyleManager->AddStyle(pStyle)).m_pStyle->GetStyleName();
 
 }
 
@@ -529,7 +529,7 @@ OUString LwpDrawPolyLine::RegisterStyle()
     this->SetArrowHead(pStyle, m_aPolyLineRec.nLineEnd, m_aPolyLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawPolyLine::CreateDrawObj(const OUString& rStyleName )
@@ -615,7 +615,7 @@ OUString LwpDrawPolygon::RegisterStyle()
     this->SetFillStyle(pStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawPolygon::CreateDrawObj(const OUString& rStyleName)
@@ -695,7 +695,7 @@ OUString LwpDrawRectangle::RegisterStyle()
     this->SetFillStyle(pStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawRectangle::CreateDrawObj(const OUString& rStyleName)
@@ -854,7 +854,7 @@ OUString LwpDrawEllipse::RegisterStyle()
     this->SetFillStyle(pStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawEllipse::CreateDrawObj(const OUString& rStyleName )
@@ -933,7 +933,7 @@ OUString LwpDrawArc::RegisterStyle()
     this->SetArrowHead(pStyle, m_aArcRec.nLineEnd, m_aArcRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawArc::CreateDrawObj(const OUString& rStyleName )
@@ -1083,7 +1083,7 @@ OUString LwpDrawTextBox::RegisterStyle()
     pStyle->SetFont(pFont);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
@@ -1112,7 +1112,7 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
     XFTextBoxStyle* pBoxStyle = new XFTextBoxStyle();
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    OUString sName = pXFStyleManager->AddStyle(pBoxStyle)->GetStyleName();
+    OUString sName = pXFStyleManager->AddStyle(pBoxStyle).m_pStyle->GetStyleName();
     pTextBox->SetStyleName(sName);
 
     //todo: add the interface for rotating textbox
@@ -1288,7 +1288,7 @@ OUString LwpDrawTextArt::RegisterStyle()
     pStyle->SetFont(pFont);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
@@ -1320,7 +1320,7 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
     pRetObj->Add(pXFPara);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    pRetObj->SetStyleName(pXFStyleManager->AddStyle(pStyle)->GetStyleName());
+    pRetObj->SetStyleName(pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName());
 
     return pRetObj;
 }
@@ -1486,7 +1486,7 @@ OUString LwpDrawBitmap::RegisterStyle()
     pBmpStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    return pXFStyleManager->AddStyle(pBmpStyle)->GetStyleName();
+    return pXFStyleManager->AddStyle(pBmpStyle).m_pStyle->GetStyleName();
 }
 
 XFFrame* LwpDrawBitmap::CreateDrawObj(const OUString& rStyleName)

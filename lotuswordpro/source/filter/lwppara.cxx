@@ -338,7 +338,7 @@ bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
         if (!m_ParentStyleName.isEmpty())
                     pOverStyle->SetParentStyleName(m_ParentStyleName);
         XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-        m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
     }
     return bSuccess;
 }
@@ -514,7 +514,7 @@ void LwpPara::RegisterStyle()
         }
         if (!m_ParentStyleName.isEmpty())
             pOverStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
 
     }
     else //use named style
@@ -528,7 +528,7 @@ void LwpPara::RegisterStyle()
                     OverrideIndent(NULL,m_pIndentOverride,pOverStyle);
                     if (!m_ParentStyleName.isEmpty())
                         pOverStyle->SetParentStyleName(m_ParentStyleName);
-                    m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+                    m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
                 }
             }
     }
@@ -543,7 +543,7 @@ void LwpPara::RegisterStyle()
             pOverStyle->SetAlignType(enumXFAlignStart);
             if (!m_ParentStyleName.isEmpty())
                 pOverStyle->SetParentStyleName(m_ParentStyleName);
-            m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
         }
     }
 
@@ -720,7 +720,7 @@ void LwpPara::RegisterStyle()
                             if (pOldStyle)
                             {
                                 XFListStyle* pNewStyle = new XFListStyle(*pOldStyle);
-                                m_aBulletStyleName = pXFStyleManager->AddStyle(pNewStyle)->GetStyleName();
+                                m_aBulletStyleName = pXFStyleManager->AddStyle(pNewStyle).m_pStyle->GetStyleName();
                             }
                         }
                     }
@@ -756,7 +756,7 @@ void LwpPara::RegisterStyle()
             pMargin->SetTop(pMargin->GetTop()+pPrePara->GetBelowSpacing());
             if (!m_ParentStyleName.isEmpty())
                     pOverStyle->SetParentStyleName(m_ParentStyleName);
-            m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
+            m_StyleName = pXFStyleManager->AddStyle(pOverStyle).m_pStyle->GetStyleName();
         }
     }
 
@@ -769,7 +769,7 @@ void LwpPara::RegisterStyle()
         this->RegisterTabStyle(pParaStyle);
         if (!m_ParentStyleName.isEmpty())
                     pParaStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(pParaStyle).m_pStyle->GetStyleName();
     }
 
     //register master page;
@@ -787,7 +787,7 @@ void LwpPara::RegisterStyle()
         pStyle->SetDropCap(m_nChars-1,m_nLines);
         if (!m_ParentStyleName.isEmpty())
                     pStyle->SetParentStyleName(m_ParentStyleName);
-        m_StyleName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_StyleName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
     // maybe useful for futer version
     // deleted because Leader of Table is not supported in this version
@@ -806,7 +806,7 @@ void LwpPara::RegisterNewSectionStyle(LwpPageLayout *pLayout)
         pSectStyle->SetColumns(pColumns);
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_SectionStyleName = pXFStyleManager->AddStyle(pSectStyle)->GetStyleName();
+    m_SectionStyleName = pXFStyleManager->AddStyle(pSectStyle).m_pStyle->GetStyleName();
 }
 
 XFSection* LwpPara::CreateXFSection()

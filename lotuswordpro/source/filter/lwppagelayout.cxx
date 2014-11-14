@@ -338,14 +338,14 @@ void LwpPageLayout::RegisterStyle()
 
     //Add the page master to stylemanager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_pXFPageMaster = pm1 = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(pm1));
+    m_pXFPageMaster = pm1 = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(pm1).m_pStyle);
     OUString pmname = pm1->GetStyleName();
 
     //Add master page
     XFMasterPage* mp1 = new XFMasterPage();
     mp1->SetStyleName(GetName().str());
     mp1->SetPageMaster(pmname);
-    mp1 = static_cast<XFMasterPage*>(pXFStyleManager->AddStyle(mp1));
+    mp1 = static_cast<XFMasterPage*>(pXFStyleManager->AddStyle(mp1).m_pStyle);
     m_StyleName = mp1->GetStyleName();
 
     //Set footer style
@@ -397,7 +397,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
 
     //Add the page master to stylemanager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_pXFPageMaster = pm1 = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(pm1));
+    m_pXFPageMaster = pm1 = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(pm1).m_pStyle);
     OUString pmname = pm1->GetStyleName();
 
     //Add master page
@@ -423,7 +423,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
         pLayoutHeader->RegisterStyle(mp1);
     }
 
-    return pXFStyleManager->AddStyle(mp1)->GetStyleName();
+    return pXFStyleManager->AddStyle(mp1).m_pStyle->GetStyleName();
 }
 /**
 * @descr:   Whether current page layout has columns

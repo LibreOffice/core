@@ -106,13 +106,15 @@ void    XFStyleContainer::Reset()
     m_aStyles.clear();
 }
 
-IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
+IXFStyleRet XFStyleContainer::AddStyle(IXFStyle *pStyle)
 {
+    IXFStyleRet aRet;
+
     IXFStyle    *pConStyle = NULL;
     OUString   name;
 
     if( !pStyle )
-        return NULL;
+        return aRet;
     //no matter we want to delete the style or not,XFFont object should be saved first.
     ManageStyleFont(pStyle);
 
@@ -122,7 +124,9 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
     if( pConStyle )//such a style has exist:
     {
         delete pStyle;
-        return pConStyle;
+        aRet.m_pStyle = pConStyle;
+        aRet.m_bOrigDeleted = true;
+        return aRet;;
     }
     else
     {
@@ -144,8 +148,8 @@ IXFStyle*   XFStyleContainer::AddStyle(IXFStyle *pStyle)
 
         m_aStyles.push_back(pStyle);
         //transform the font object to XFFontFactory
-
-        return pStyle;
+        aRet.m_pStyle = pStyle;
+        return aRet;
     }
 }
 

@@ -414,25 +414,25 @@ void LwpPara::OverrideParaBreaks(LwpParaProperty* pProps, XFParaStyle* pOverStyl
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftPage);
-        m_BefPageBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_BefPageBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
     if (m_pBreaks->IsPageBreakAfter())
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftPage);
-        m_AftPageBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_AftPageBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
     if (m_pBreaks->IsColumnBreakBefore())
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftColumn);//tmp after, should change when layout read
-        m_BefColumnBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_BefColumnBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
     if (m_pBreaks->IsColumnBreakAfter())
     {
         XFParaStyle* pStyle = new XFParaStyle();
         pStyle->SetBreaks(enumXFBreakAftColumn);
-        m_AftColumnBreakName = pXFStyleManager->AddStyle(pStyle)->GetStyleName();
+        m_AftColumnBreakName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
 
 //  pParaStyle->ApplyBreaks(pOverStyle, &aFinalBreaks);

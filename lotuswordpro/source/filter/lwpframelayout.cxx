@@ -103,7 +103,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
 
     pFrameStyle->SetStyleName(m_pLayout->GetName().str());
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pFrameStyle)->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(pFrameStyle).m_pStyle->GetStyleName();
     m_pLayout->SetStyleName(m_StyleName);
 }
 /**
@@ -1270,7 +1270,7 @@ void LwpRubyLayout::RegisterStyle()
     pRubyStyle->SetPosition(eType);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    OUString rubyStyle = pXFStyleManager->AddStyle(pRubyStyle)->GetStyleName();
+    OUString rubyStyle = pXFStyleManager->AddStyle(pRubyStyle).m_pStyle->GetStyleName();
     pMarker->SetRubyStyleName(rubyStyle);
 
     LwpStory* pStory = GetContentStory();
