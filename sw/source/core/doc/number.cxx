@@ -312,8 +312,8 @@ void SwNumFmt::SetCharFmtName(const OUString& rSet)
 
 OUString SwNumFmt::GetCharFmtName() const
 {
-    if((SwCharFmt*)GetRegisteredIn())
-        return ((SwCharFmt*)GetRegisteredIn())->GetName();
+    if(static_cast<const SwCharFmt*>(GetRegisteredIn()))
+        return static_cast<const SwCharFmt*>(GetRegisteredIn())->GetName();
 
     return OUString();
 }

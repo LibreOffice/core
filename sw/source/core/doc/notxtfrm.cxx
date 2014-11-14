@@ -227,7 +227,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
             OUString aTxt( pNd->GetTitle() );
             if ( aTxt.isEmpty() && pNd->IsGrfNode() )
-                GetRealURL( *(SwGrfNode*)pNd, aTxt );
+                GetRealURL( *static_cast<const SwGrfNode*>(pNd), aTxt );
             if( aTxt.isEmpty() )
                 aTxt = FindFlyFrm()->GetFmt()->GetName();
             lcl_PaintReplacement( Frm(), aTxt, *pSh, this, false );
@@ -247,7 +247,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     bool bClip = true;
     tools::PolyPolygon aPoly;
 
-    SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
+    SwNoTxtNode& rNoTNd = const_cast<SwNoTxtNode&>(*static_cast<const SwNoTxtNode*>(GetNode()));
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( true );
@@ -364,7 +364,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     // We read graphic from the Node, if needed.
     // It may fail, however.
     long nLeftCrop, nRightCrop, nTopCrop, nBottomCrop;
-    Size aOrigSz( ((SwNoTxtNode*)GetNode())->GetTwipSize() );
+    Size aOrigSz( static_cast<const SwNoTxtNode*>(GetNode())->GetTwipSize() );
     if ( !aOrigSz.Width() )
     {
         aOrigSz.Width() = Prt().Width();
@@ -578,7 +578,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         if( ND_GRFNODE == GetNode()->GetNodeType() )
         {
             bComplete = false;
-            SwGrfNode* pNd = (SwGrfNode*) GetNode();
+            SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
 
             SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
             if( pVSh )
@@ -597,7 +597,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                             else
                                 pSh->GetWin()->Invalidate( Frm().SVRect() );
                         }
-                    } while( pVSh != (pSh = (SwViewShell*)pSh->GetNext() ));
+                    } while( pVSh != (pSh = static_cast<SwViewShell*>(pSh->GetNext()) ));
                 }
             }
         }
@@ -609,17 +609,17 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
         // fall through
     case RES_FMT_CHG:
-        CLEARCACHE( (SwGrfNode*) GetNode() )
+        CLEARCACHE( static_cast<SwGrfNode*>( GetNode()) )
         break;
 
     case RES_ATTRSET_CHG:
         {
             sal_uInt16 n;
             for( n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
-                if( SfxItemState::SET == ((SwAttrSetChg*)pOld)->GetChgSet()->
+                if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->
                                 GetItemState( n, false ))
                 {
-                    CLEARCACHE( (SwGrfNode*) GetNode() )
+                    CLEARCACHE( static_cast<SwGrfNode*>( GetNode()) )
                     break;
                 }
             if( RES_GRFATR_END == n )           // not found
@@ -634,7 +634,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
             bComplete = false;
-            SwGrfNode* pNd = (SwGrfNode*) GetNode();
+            SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
 
             CLEARCACHE( pNd )
 
@@ -659,7 +659,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     pSh->GetWin()->Invalidate( aRect.SVRect() );
                 }
 
-                pSh = (SwViewShell *)pSh->GetNext();
+                pSh = static_cast<SwViewShell *>(pSh->GetNext());
             } while( pSh != pVSh );
         }
         break;
@@ -836,7 +836,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 {
     SwViewShell* pShell = getRootFrm()->GetCurrShell();
 
-    SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
+    SwNoTxtNode& rNoTNd = const_cast<SwNoTxtNode&>(*static_cast<const SwNoTxtNode*>(GetNode()));
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     SwOLENode* pOLENd = rNoTNd.GetOLENode();
 
@@ -1049,7 +1049,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             {
                 const SwFlyFrm *pFly = FindFlyFrm();
                 assert( pFly != NULL );
-                ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
+                static_cast<SwFEShell*>(pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
             }
         }
 

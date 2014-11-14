@@ -119,21 +119,21 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 
     bool bNewParent( false ); // #i66431# - adjust type of <bNewParent>
-    SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
-    SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
-    SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
+    const SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
+    const SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
+    const SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
     // #i70223#
     const bool bAssignedToListLevelOfOutlineStyle(IsAssignedToListLevelOfOutlineStyle());
     const SwNumRuleItem* pNewNumRuleItem( 0L );
 
-    SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
+    const SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
 
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
     case RES_ATTRSET_CHG:
         // Only recalculate if we're not the sender!
-        pNewChgSet = (SwAttrSetChg*)pNew;
-        pOldChgSet = (SwAttrSetChg*)pOld;
+        pNewChgSet = static_cast<const SwAttrSetChg*>(pNew);
+        pOldChgSet = static_cast<const SwAttrSetChg*>(pOld);
         pNewChgSet->GetChgSet()->GetItemState(
             RES_LR_SPACE, false, (const SfxPoolItem**)&pNewLRSpace );
         pNewChgSet->GetChgSet()->GetItemState(
@@ -159,36 +159,36 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         if( GetAttrSet().GetParent() )
         {
             const SfxItemSet* pParent = GetAttrSet().GetParent();
-            pNewLRSpace = (SvxLRSpaceItem*)&pParent->Get( RES_LR_SPACE );
-            pNewULSpace = (SvxULSpaceItem*)&pParent->Get( RES_UL_SPACE );
-            aFontSizeArr[0] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_FONTSIZE );
-            aFontSizeArr[1] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CJK_FONTSIZE );
-            aFontSizeArr[2] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CTL_FONTSIZE );
+            pNewLRSpace = static_cast<const SvxLRSpaceItem*>(&pParent->Get( RES_LR_SPACE ));
+            pNewULSpace = static_cast<const SvxULSpaceItem*>(&pParent->Get( RES_UL_SPACE ));
+            aFontSizeArr[0] = static_cast<const SvxFontHeightItem*>(&pParent->Get( RES_CHRATR_FONTSIZE ));
+            aFontSizeArr[1] = static_cast<const SvxFontHeightItem*>(&pParent->Get( RES_CHRATR_CJK_FONTSIZE ));
+            aFontSizeArr[2] = static_cast<const SvxFontHeightItem*>(&pParent->Get( RES_CHRATR_CTL_FONTSIZE ));
             // #i66431# - modify has to be propagated, because of new parent format.
             bNewParent = true;
         }
         break;
 
     case RES_LR_SPACE:
-        pNewLRSpace = (SvxLRSpaceItem*)pNew;
+        pNewLRSpace = static_cast<const SvxLRSpaceItem*>(pNew);
         break;
     case RES_UL_SPACE:
-        pNewULSpace = (SvxULSpaceItem*)pNew;
+        pNewULSpace = static_cast<const SvxULSpaceItem*>(pNew);
         break;
     case RES_CHRATR_FONTSIZE:
-        aFontSizeArr[0] = (SvxFontHeightItem*)pNew;
+        aFontSizeArr[0] = static_cast<const SvxFontHeightItem*>(pNew);
         break;
     case RES_CHRATR_CJK_FONTSIZE:
-        aFontSizeArr[1] = (SvxFontHeightItem*)pNew;
+        aFontSizeArr[1] = static_cast<const SvxFontHeightItem*>(pNew);
         break;
     case RES_CHRATR_CTL_FONTSIZE:
-        aFontSizeArr[2] = (SvxFontHeightItem*)pNew;
+        aFontSizeArr[2] = static_cast<const SvxFontHeightItem*>(pNew);
         break;
     // #i70223#
     case RES_PARATR_NUMRULE:
         if (bAssignedToListLevelOfOutlineStyle)
         {
-            pNewNumRuleItem = (SwNumRuleItem*)pNew;
+            pNewNumRuleItem = static_cast<const SwNumRuleItem*>(pNew);
         }
         break;
     default:
@@ -280,7 +280,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     for( int nC = 0, nArrLen = sizeof(aFontSizeArr) / sizeof( aFontSizeArr[0]);
             nC < nArrLen; ++nC )
     {
-        SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
+        const SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SfxItemState::SET == GetItemState(
             pFSize->Which(), false, (const SfxPoolItem**)&pOldFSize ) &&
             // Avoid recursion (SetAttr!)
@@ -616,7 +616,7 @@ void SwTxtFmtColl::SetAttrOutlineLevel( int nLevel)
 
 int SwTxtFmtColl::GetAttrOutlineLevel() const
 {
-    return ((const SfxUInt16Item &)GetFmtAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
+    return static_cast<const SfxUInt16Item &>(GetFmtAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
 }
 
 int SwTxtFmtColl::GetAssignedOutlineStyleLevel() const

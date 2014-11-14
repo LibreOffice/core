@@ -139,7 +139,7 @@ static bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                 rBoxes.insert( pBox );
             }
         } while( bAllCrsr &&
-                pSttPam != ( pCurPam = (SwPaM*)pCurPam->GetNext()) );
+                pSttPam != ( pCurPam = static_cast<SwPaM*>(pCurPam->GetNext())) );
     }
     return !rBoxes.empty();
 }
@@ -259,7 +259,7 @@ static void lcl_ProcessRowAttr( std::vector<SwTblFmtCmp*>& rFmtCmp, SwTableLine*
 {
     SwFrmFmt *pNewFmt;
     if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( rFmtCmp, pLine->GetFrmFmt(), 0 )))
-        pLine->ChgFrmFmt( (SwTableLineFmt*)pNewFmt );
+        pLine->ChgFrmFmt( static_cast<SwTableLineFmt*>(pNewFmt) );
     else
     {
         SwFrmFmt *pOld = pLine->GetFrmFmt();
@@ -527,7 +527,7 @@ static void lcl_CollectCells( std::vector<SwCellFrm*> &rArr, const SwRect &rUnio
             pCell = pCell->GetUpper();
         OSL_ENSURE( pCell, "Frame is not a Cell" );
         if ( rUnion.IsOver( pCell->Frm() ) )
-            ::InsertCell( rArr, (SwCellFrm*)pCell );
+            ::InsertCell( rArr, static_cast<SwCellFrm*>(pCell) );
 
         // Make sure the Cell is left (Areas)
         SwLayoutFrm *pTmp = pCell;
@@ -779,7 +779,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 SwTableBox *pBox = (SwTableBox*)pCell->GetTabBox();
                 SwFrmFmt *pNewFmt;
                 if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( aFmtCmp, pBox->GetFrmFmt(), nType )))
-                    pBox->ChgFrmFmt( (SwTableBoxFmt*)pNewFmt );
+                    pBox->ChgFrmFmt( static_cast<SwTableBoxFmt*>(pNewFmt) );
                 else
                 {
                     SwFrmFmt *pOld = pBox->GetFrmFmt();
@@ -869,7 +869,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                 SvxBoxItem aBox( pFmt->GetBox() );
 
                 if ( !pBorderLine && bSetLine )
-                    aBox = *(SvxBoxItem*)::GetDfltAttr( RES_BOX );
+                    aBox = *static_cast<const SvxBoxItem*>(::GetDfltAttr( RES_BOX ));
                 else
                 {
                     if ( aBox.GetTop() )
@@ -918,8 +918,8 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
 
     if( !aUnions.empty() )
     {
-        SvxBoxItem     aSetBox    ((const SvxBoxItem    &) rSet.Get(RES_BOX    ));
-        SvxBoxInfoItem aSetBoxInfo((const SvxBoxInfoItem&) rSet.Get(SID_ATTR_BORDER_INNER));
+        SvxBoxItem     aSetBox    (static_cast<const SvxBoxItem    &>( rSet.Get(RES_BOX    )));
+        SvxBoxInfoItem aSetBoxInfo(static_cast<const SvxBoxInfoItem&>( rSet.Get(SID_ATTR_BORDER_INNER)));
 
         bool bTopSet      = false,
              bBottomSet   = false,
@@ -1113,8 +1113,8 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
         // fdo#62470 fix the reading for table format.
         if ( bRTLTab )
         {
-            SvxBoxItem     aTempBox    ((const SvxBoxItem    &) rSet.Get(RES_BOX    ));
-            SvxBoxInfoItem aTempBoxInfo((const SvxBoxInfoItem&) rSet.Get(SID_ATTR_BORDER_INNER));
+            SvxBoxItem     aTempBox    (static_cast<const SvxBoxItem    &>( rSet.Get(RES_BOX    )));
+            SvxBoxInfoItem aTempBoxInfo(static_cast<const SvxBoxInfoItem&>( rSet.Get(SID_ATTR_BORDER_INNER)));
 
             aTempBox.SetLine( aSetBox.GetRight(), BOX_LINE_RIGHT);
             aSetBox.SetLine( aSetBox.GetLeft(), BOX_LINE_RIGHT);
@@ -1150,7 +1150,7 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
 
             SwFrmFmt *pNewFmt;
             if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( aFmtCmp, pBox->GetFrmFmt(), 0 )))
-                pBox->ChgFrmFmt( (SwTableBoxFmt*)pNewFmt );
+                pBox->ChgFrmFmt( static_cast<SwTableBoxFmt*>(pNewFmt) );
             else
             {
                 SwFrmFmt *pOld = pBox->GetFrmFmt();
@@ -1194,7 +1194,7 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
                         aBoxes[i]->GetFrmFmt()->makeBackgroundBrushItem();
                     if( !bOneFound )
                     {
-                        (SvxBrushItem&)rToFill = aBack;
+                        static_cast<SvxBrushItem&>(rToFill) = aBack;
                         bOneFound = true;
                     }
                     else if( rToFill != aBack )
@@ -1208,7 +1208,7 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
                                     aBoxes[i]->GetFrmFmt()->GetFrmDir();
                     if( !bOneFound )
                     {
-                        (SvxFrameDirectionItem&)rToFill = rDir;
+                        static_cast<SvxFrameDirectionItem&>(rToFill) = rDir;
                         bOneFound = true;
                     }
                     else if( rToFill != rDir )
@@ -1267,7 +1267,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
 
         // pFrm does not necessarily have to be a SwTxtFrm!
         const SwTwips nCalcFitToContent = pFrm->IsTxtFrm() ?
-                                          ((SwTxtFrm*)pFrm)->CalcFitToContent() :
+                                          const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pFrm))->CalcFitToContent() :
                                           (pFrm->Prt().*fnRect->fnGetWidth)();
 
         nRet = std::max( nRet, nCalcFitToContent + nAdd );
@@ -1462,7 +1462,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
         return; // Robust
 
     SwTabCols aTabCols;
-    GetTabCols( aTabCols, 0, (SwCellFrm*)pBoxFrm );
+    GetTabCols( aTabCols, 0, static_cast<SwCellFrm*>(pBoxFrm) );
 
     if ( ! aTabCols.Count() )
         return;
@@ -1561,7 +1561,7 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, bool bBalance )
     const sal_Int16 nOriHori = pFmt->GetHoriOrient().GetHoriOrient();
 
     // We can leave the "real" work to the SwTable now
-    SetTabCols( aTabCols, false, 0, (SwCellFrm*)pBoxFrm );
+    SetTabCols( aTabCols, false, 0, static_cast<SwCellFrm*>(pBoxFrm) );
 
     // Alignment might have been changed in SetTabCols; restore old value
     const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();

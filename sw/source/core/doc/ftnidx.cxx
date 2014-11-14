@@ -287,7 +287,7 @@ const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
     sal_uInt16 nVal;
     const SwSectionNode* pNd = rTxtFtn.GetTxtNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
-            ((const SwFmtFtnEndAtTxtEnd&)pNd->GetSection().GetFmt()->
+            static_cast<const SwFmtFtnEndAtTxtEnd&>(pNd->GetSection().GetFmt()->
             GetFmtAttr( nWh, true )).GetValue() ) &&
             FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
         pNd = pNd->StartOfSectionNode()->FindSectionNode();
@@ -324,7 +324,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     if( !nRet )
     {
         pArr->push_back( &rNd );
-        nRet = ((SwFmtFtnEndAtTxtEnd&)rNd.GetSection().GetFmt()->
+        nRet = static_cast<const SwFmtFtnEndAtTxtEnd&>(rNd.GetSection().GetFmt()->
                                 GetFmtAttr( nWh )).GetOffset();
         ++nRet;
         pNum->push_back( nRet );

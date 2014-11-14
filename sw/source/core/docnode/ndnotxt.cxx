@@ -252,12 +252,12 @@ Graphic SwNoTxtNode::GetGraphic() const
     Graphic aRet;
     if ( GetGrfNode() )
     {
-        aRet = ((SwGrfNode*)this)->GetGrf(true);
+        aRet = static_cast<const SwGrfNode*>(this)->GetGrf(true);
     }
     else
     {
         OSL_ENSURE( GetOLENode(), "new type of Node?" );
-        aRet = *((SwOLENode*)this)->SwOLENode::GetGraphic();
+        aRet = *const_cast<SwOLENode*>(static_cast<const SwOLENode*>(this))->SwOLENode::GetGraphic();
     }
     return aRet;
 }

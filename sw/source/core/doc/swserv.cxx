@@ -234,24 +234,24 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
         SwServerObject::ServerModes eSave = eType;
         if( !pChkLnk )
             ((SwServerObject*)this)->eType = NONE_SERVER;
-                for( sal_uInt16 n = rLnks.size(); n; )
+        for( sal_uInt16 n = rLnks.size(); n; )
+        {
+            const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
+            if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
+                pLnk->ISA( SwBaseLink ) &&
+                !static_cast<const SwBaseLink*>(pLnk)->IsNoDataFlag() &&
+                static_cast<const SwBaseLink*>(pLnk)->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
+            {
+                if( pChkLnk )
                 {
-                    const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
-                    if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
-                        pLnk->ISA( SwBaseLink ) &&
-                        !((SwBaseLink*)pLnk)->IsNoDataFlag() &&
-                        ((SwBaseLink*)pLnk)->IsInRange( nSttNd, nEndNd, nStt, nEnd ))
-                    {
-                        if( pChkLnk )
-                        {
-                            if( pLnk == pChkLnk ||
-                                ((SwBaseLink*)pLnk)->IsRecursion( pChkLnk ) )
-                                return true;
-                        }
-                        else if( ((SwBaseLink*)pLnk)->IsRecursion( (SwBaseLink*)pLnk ) )
-                            ((SwBaseLink*)pLnk)->SetNoDataFlag();
-                    }
+                    if( pLnk == pChkLnk ||
+                        static_cast<const SwBaseLink*>(pLnk)->IsRecursion( pChkLnk ) )
+                        return true;
                 }
+                else if( static_cast<const SwBaseLink*>(pLnk)->IsRecursion( static_cast<const SwBaseLink*>(pLnk) ) )
+                    const_cast<SwBaseLink*>(static_cast<const SwBaseLink*>(pLnk))->SetNoDataFlag();
+            }
+        }
         if( !pChkLnk )
             ((SwServerObject*)this)->eType = eSave;
     }
@@ -314,7 +314,7 @@ SwDataChanged::~SwDataChanged()
             // Any one else interested in the Object?
             if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
             {
-                SwServerObject& rObj = *(SwServerObject*)&refObj;
+                SwServerObject& rObj = *static_cast<SwServerObject*>(&refObj);
                 if( pPos )
                     rObj.SendDataChanged( *pPos );
                 else

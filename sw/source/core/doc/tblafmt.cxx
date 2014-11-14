@@ -257,17 +257,17 @@ void SwAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
 }
 
 SwBoxAutoFmt::SwBoxAutoFmt()
-    : aFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_FONT ) ),
+    : aFont( *static_cast<const SvxFontItem*>(GetDfltAttr( RES_CHRATR_FONT )) ),
     aHeight( 240, 100, RES_CHRATR_FONTSIZE ),
     aWeight( WEIGHT_NORMAL, RES_CHRATR_WEIGHT ),
     aPosture( ITALIC_NONE, RES_CHRATR_POSTURE ),
 
-    aCJKFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CJK_FONT ) ),
+    aCJKFont( *static_cast<const SvxFontItem*>(GetDfltAttr( RES_CHRATR_CJK_FONT )) ),
     aCJKHeight( 240, 100, RES_CHRATR_CJK_FONTSIZE ),
     aCJKWeight( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT ),
     aCJKPosture( ITALIC_NONE, RES_CHRATR_CJK_POSTURE ),
 
-    aCTLFont( *(SvxFontItem*)GetDfltAttr( RES_CHRATR_CTL_FONT ) ),
+    aCTLFont( *static_cast<const SvxFontItem*>(GetDfltAttr( RES_CHRATR_CTL_FONT )) ),
     aCTLHeight( 240, 100, RES_CHRATR_CTL_FONTSIZE ),
     aCTLWeight( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT ),
     aCTLPosture( ITALIC_NONE, RES_CHRATR_CTL_POSTURE ),
@@ -389,7 +389,7 @@ SwBoxAutoFmt& SwBoxAutoFmt::operator=( const SwBoxAutoFmt& rNew )
 
 #define READ( aItem, aItemType, nVers )\
     pNew = aItem.Create(rStream, nVers ); \
-    aItem = *(aItemType*)pNew; \
+    aItem = *static_cast<aItemType*>(pNew); \
     delete pNew;
 
 bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_uInt16 nVer )
@@ -439,7 +439,7 @@ bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_u
     READ( aBackground,  SvxBrushItem        , rVersions.nBrushVersion)
 
     pNew = aAdjust.Create(rStream, rVersions.nAdjustVersion );
-    SetAdjust( *(SvxAdjustItem*)pNew );
+    SetAdjust( *static_cast<SvxAdjustItem*>(pNew) );
     delete pNew;
 
     if (nVer >= AUTOFORMAT_DATA_ID_31005 && WriterSpecificBlockExists(rStream))
@@ -455,16 +455,16 @@ bool SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, sal_u
     READ( aMargin, SvxMarginItem       , rVersions.nMarginVersion)
 
     pNew = aLinebreak.Create(rStream, rVersions.nBoolVersion );
-    aLinebreak.SetValue( ((SfxBoolItem*)pNew)->GetValue() );
+    aLinebreak.SetValue( static_cast<SfxBoolItem*>(pNew)->GetValue() );
     delete pNew;
 
     if ( nVer >= AUTOFORMAT_DATA_ID_504 )
     {
         pNew = aRotateAngle.Create( rStream, rVersions.nInt32Version );
-        aRotateAngle.SetValue( ((SfxInt32Item*)pNew)->GetValue() );
+        aRotateAngle.SetValue( static_cast<SfxInt32Item*>(pNew)->GetValue() );
         delete pNew;
         pNew = aRotateMode.Create( rStream, rVersions.nRotateModeVersion );
-        aRotateMode.SetValue( ((SvxRotateModeItem*)pNew)->GetValue() );
+        aRotateMode.SetValue( static_cast<SvxRotateModeItem*>(pNew)->GetValue() );
         delete pNew;
     }
 
@@ -699,33 +699,33 @@ void SwTableAutoFmt::UpdateFromSet( sal_uInt8 nPos,
 
     if( UPDATE_CHAR & eFlags )
     {
-        pFmt->SetFont( (SvxFontItem&)rSet.Get( RES_CHRATR_FONT ) );
-        pFmt->SetHeight( (SvxFontHeightItem&)rSet.Get( RES_CHRATR_FONTSIZE ) );
-        pFmt->SetWeight( (SvxWeightItem&)rSet.Get( RES_CHRATR_WEIGHT ) );
-        pFmt->SetPosture( (SvxPostureItem&)rSet.Get( RES_CHRATR_POSTURE ) );
-        pFmt->SetCJKFont( (SvxFontItem&)rSet.Get( RES_CHRATR_CJK_FONT ) );
-        pFmt->SetCJKHeight( (SvxFontHeightItem&)rSet.Get( RES_CHRATR_CJK_FONTSIZE ) );
-        pFmt->SetCJKWeight( (SvxWeightItem&)rSet.Get( RES_CHRATR_CJK_WEIGHT ) );
-        pFmt->SetCJKPosture( (SvxPostureItem&)rSet.Get( RES_CHRATR_CJK_POSTURE ) );
-        pFmt->SetCTLFont( (SvxFontItem&)rSet.Get( RES_CHRATR_CTL_FONT ) );
-        pFmt->SetCTLHeight( (SvxFontHeightItem&)rSet.Get( RES_CHRATR_CTL_FONTSIZE ) );
-        pFmt->SetCTLWeight( (SvxWeightItem&)rSet.Get( RES_CHRATR_CTL_WEIGHT ) );
-        pFmt->SetCTLPosture( (SvxPostureItem&)rSet.Get( RES_CHRATR_CTL_POSTURE ) );
-        pFmt->SetUnderline( (SvxUnderlineItem&)rSet.Get( RES_CHRATR_UNDERLINE ) );
-        pFmt->SetOverline( (SvxOverlineItem&)rSet.Get( RES_CHRATR_OVERLINE ) );
-        pFmt->SetCrossedOut( (SvxCrossedOutItem&)rSet.Get( RES_CHRATR_CROSSEDOUT ) );
-        pFmt->SetContour( (SvxContourItem&)rSet.Get( RES_CHRATR_CONTOUR ) );
-        pFmt->SetShadowed( (SvxShadowedItem&)rSet.Get( RES_CHRATR_SHADOWED ) );
-        pFmt->SetColor( (SvxColorItem&)rSet.Get( RES_CHRATR_COLOR ) );
-        pFmt->SetAdjust( (SvxAdjustItem&)rSet.Get( RES_PARATR_ADJUST ) );
+        pFmt->SetFont( static_cast<const SvxFontItem&>(rSet.Get( RES_CHRATR_FONT )) );
+        pFmt->SetHeight( static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_FONTSIZE )) );
+        pFmt->SetWeight( static_cast<const SvxWeightItem&>(rSet.Get( RES_CHRATR_WEIGHT )) );
+        pFmt->SetPosture( static_cast<const SvxPostureItem&>(rSet.Get( RES_CHRATR_POSTURE )) );
+        pFmt->SetCJKFont( static_cast<const SvxFontItem&>(rSet.Get( RES_CHRATR_CJK_FONT )) );
+        pFmt->SetCJKHeight( static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_CJK_FONTSIZE )) );
+        pFmt->SetCJKWeight( static_cast<const SvxWeightItem&>(rSet.Get( RES_CHRATR_CJK_WEIGHT )) );
+        pFmt->SetCJKPosture( static_cast<const SvxPostureItem&>(rSet.Get( RES_CHRATR_CJK_POSTURE )) );
+        pFmt->SetCTLFont( static_cast<const SvxFontItem&>(rSet.Get( RES_CHRATR_CTL_FONT )) );
+        pFmt->SetCTLHeight( static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_CTL_FONTSIZE )) );
+        pFmt->SetCTLWeight( static_cast<const SvxWeightItem&>(rSet.Get( RES_CHRATR_CTL_WEIGHT )) );
+        pFmt->SetCTLPosture( static_cast<const SvxPostureItem&>(rSet.Get( RES_CHRATR_CTL_POSTURE )) );
+        pFmt->SetUnderline( static_cast<const SvxUnderlineItem&>(rSet.Get( RES_CHRATR_UNDERLINE )) );
+        pFmt->SetOverline( static_cast<const SvxOverlineItem&>(rSet.Get( RES_CHRATR_OVERLINE )) );
+        pFmt->SetCrossedOut( static_cast<const SvxCrossedOutItem&>(rSet.Get( RES_CHRATR_CROSSEDOUT )) );
+        pFmt->SetContour( static_cast<const SvxContourItem&>(rSet.Get( RES_CHRATR_CONTOUR )) );
+        pFmt->SetShadowed( static_cast<const SvxShadowedItem&>(rSet.Get( RES_CHRATR_SHADOWED )) );
+        pFmt->SetColor( static_cast<const SvxColorItem&>(rSet.Get( RES_CHRATR_COLOR )) );
+        pFmt->SetAdjust( static_cast<const SvxAdjustItem&>(rSet.Get( RES_PARATR_ADJUST )) );
     }
     if( UPDATE_BOX & eFlags )
     {
-        pFmt->SetBox( (SvxBoxItem&)rSet.Get( RES_BOX ) );
+        pFmt->SetBox( static_cast<const SvxBoxItem&>(rSet.Get( RES_BOX )) );
 // FIXME - add attribute IDs for the diagonal line items
 //        pFmt->SetTLBR( (SvxLineItem&)rSet.Get( RES_... ) );
 //        pFmt->SetBLTR( (SvxLineItem&)rSet.Get( RES_... ) );
-        pFmt->SetBackground( (SvxBrushItem&)rSet.Get( RES_BACKGROUND ) );
+        pFmt->SetBackground( static_cast<const SvxBrushItem&>(rSet.Get( RES_BACKGROUND )) );
         pFmt->SetTextOrientation(static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR)));
         pFmt->SetVerticalAlignment(static_cast<const SwFmtVertOrient&>(rSet.Get(RES_VERT_ORIENT)));
 

@@ -123,7 +123,7 @@ SwCharFmt* SwLineNumberInfo::GetCharFmt( IDocumentStylePoolAccess& rIDSPA ) cons
         SwCharFmt* pFmt = rIDSPA.GetCharFmtFromPool( RES_POOLCHR_LINENUM );
         pFmt->Add( (SwClient*)this );
     }
-    return (SwCharFmt*)GetRegisteredIn();
+    return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn()));
 }
 
 void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
@@ -135,7 +135,7 @@ void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
 void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     CheckRegistration( pOld, pNew );
-    SwDoc *pDoc = ((SwCharFmt*)GetRegisteredIn())->GetDoc();
+    SwDoc *pDoc = static_cast<SwCharFmt*>(GetRegisteredIn())->GetDoc();
     SwRootFrm* pRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if( pRoot )
     {

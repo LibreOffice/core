@@ -92,7 +92,7 @@ void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
     rpAttrSet = rSA.getAutomaticStyle( rNewAttrSet, rNode.IsTxtNode() ?
                                                      IStyleAccess::AUTO_STYLE_PARA :
                                                      IStyleAccess::AUTO_STYLE_NOTXT );
-    const bool bSetModifyAtAttr = ((SwAttrSet*)rpAttrSet.get())->SetModifyAtAttr( &rNode );
+    const bool bSetModifyAtAttr = const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(rpAttrSet.get()))->SetModifyAtAttr( &rNode );
     rNode.SetModifyAtAttr( bSetModifyAtAttr );
 }
 
@@ -136,7 +136,7 @@ const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                         const SwCntntNode& rNode,
                         const SfxPoolItem& rAttr )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
+    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
     const SfxPoolItem* pRet = aNewSet.Put( rAttr );
     if ( pRet )
         GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
@@ -146,7 +146,7 @@ const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
 bool Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet, const SwCntntNode& rNode,
          const SfxItemSet& rSet )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
+    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
 
     // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
@@ -175,7 +175,7 @@ bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwCntntNode& rNode, const SfxPoolItem& rAttr,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
+    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
 
     // for a correct broadcast, we need to do a SetModifyAtAttr with the items
     // from aNewSet. The 'regular' SetModifyAtAttr is done in GetNewAutoStyle
@@ -194,7 +194,7 @@ bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwCntntNode& rNode, const SfxItemSet& rSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
+    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
 
     // #i76273# Robust
     SfxItemSet* pStyleNames = 0;
@@ -228,7 +228,7 @@ sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwCntntNode& rNode, sal_uInt16 nWhich,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
+    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
     const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich, pOld, pNew );
@@ -242,7 +242,7 @@ sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
                      sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( (SwAttrSet&)*rpAttrSet );
+    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
     const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich1, nWhich2, pOld, pNew );
@@ -415,13 +415,13 @@ bool SwNode::IsProtect() const
 {
     const SwNode* pNd = ND_SECTIONNODE == nNodeType ? pStartOfSection : this;
     const SwStartNode* pSttNd = pNd->FindSectionNode();
-    if( pSttNd && ((SwSectionNode*)pSttNd)->GetSection().IsProtectFlag() )
+    if( pSttNd && static_cast<const SwSectionNode*>(pSttNd)->GetSection().IsProtectFlag() )
         return true;
 
     if( 0 != ( pSttNd = FindTableBoxStartNode() ) )
     {
         SwCntntFrm* pCFrm;
-        if( IsCntntNode() && 0 != (pCFrm = ((SwCntntNode*)this)->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ))
+        if( IsCntntNode() && 0 != (pCFrm = static_cast<const SwCntntNode*>(this)->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) ))
             return pCFrm->IsProtected();
 
         const SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
@@ -478,7 +478,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
     {
         pNode = GetCntntNode();
         if( pNode )
-            pPgDesc = ((SwFmtPageDesc&)pNode->GetAttr( RES_PAGEDESC )).GetPageDesc();
+            pPgDesc = static_cast<const SwFmtPageDesc&>(pNode->GetAttr( RES_PAGEDESC )).GetPageDesc();
     }
 
     // Are we going through the layout?
@@ -665,19 +665,19 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
             sal_uInt32 i, nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_PAGEDESC );
             for( i = 0; i < nMaxItems; ++i )
                 if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_PAGEDESC, i ) ) &&
-                    ((SwFmtPageDesc*)pItem)->GetDefinedIn() )
+                    static_cast<const SwFmtPageDesc*>(pItem)->GetDefinedIn() )
                 {
-                    const SwModify* pMod = ((SwFmtPageDesc*)pItem)->GetDefinedIn();
+                    const SwModify* pMod = static_cast<const SwFmtPageDesc*>(pItem)->GetDefinedIn();
                     if( pMod->ISA( SwCntntNode ) )
-                        aInfo.CheckNode( *(SwCntntNode*)pMod );
+                        aInfo.CheckNode( *static_cast<const SwCntntNode*>(pMod) );
                     else if( pMod->ISA( SwFmt ))
-                        ((SwFmt*)pMod)->GetInfo( aInfo );
+                        static_cast<const SwFmt*>(pMod)->GetInfo( aInfo );
                 }
 
             if( 0 != ( pNd = aInfo.GetFoundNode() ))
             {
                 if( pNd->IsCntntNode() )
-                    pPgDesc = ((SwFmtPageDesc&)pNd->GetCntntNode()->
+                    pPgDesc = static_cast<const SwFmtPageDesc&>(pNd->GetCntntNode()->
                                 GetAttr( RES_PAGEDESC )).GetPageDesc();
                 else if( pNd->IsTableNode() )
                     pPgDesc = pNd->GetTableNode()->GetTable().
@@ -706,7 +706,7 @@ SwFrmFmt* SwNode::GetFlyFmt() const
     {
         if( IsCntntNode() )
         {
-            SwCntntFrm* pFrm = SwIterator<SwCntntFrm,SwCntntNode>::FirstElement( *(SwCntntNode*)this );
+            SwCntntFrm* pFrm = SwIterator<SwCntntFrm,SwCntntNode>::FirstElement( *static_cast<const SwCntntNode*>(this) );
             if( pFrm )
                 pRet = pFrm->FindFlyFrm()->GetFmt();
         }
@@ -742,7 +742,7 @@ SwTableBox* SwNode::GetTblBox() const
 
 SwStartNode* SwNode::FindSttNodeByType( SwStartNodeType eTyp )
 {
-    SwStartNode* pTmp = IsStartNode() ? (SwStartNode*)this : pStartOfSection;
+    SwStartNode* pTmp = IsStartNode() ? static_cast<SwStartNode*>(this) : pStartOfSection;
 
     while( eTyp != pTmp->GetStartNodeType() && pTmp->GetIndex() )
         pTmp = pTmp->pStartOfSection;
@@ -919,7 +919,7 @@ SwCntntNode::~SwCntntNode()
     delete pCondColl;
 
     if ( mpAttrSet.get() && mbSetModifyAtAttr )
-        ((SwAttrSet*)mpAttrSet.get())->SetModifyAtAttr( 0 );
+        const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( 0 );
 }
 
 void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
@@ -932,7 +932,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     case RES_OBJECTDYING :
         if (pNewValue)
         {
-            SwFmt * pFmt = (SwFmt *) ((SwPtrMsgPoolItem *)pNewValue)->pObject;
+            SwFmt * pFmt = static_cast<SwFmt *>( static_cast<const SwPtrMsgPoolItem *>(pNewValue)->pObject );
 
             // Do not mangle pointers if it is the upper-most format!
             if( GetRegisteredIn() == pFmt )
@@ -959,7 +959,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
         // If the Format parent was switched, register the Attrset at the new one
         // Skip own Modify!
         if( GetpSwAttrSet() && pNewValue &&
-            ((SwFmtChg*)pNewValue)->pChangedFmt == GetRegisteredIn() )
+            static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt == GetRegisteredIn() )
         {
             // Attach Set to the new parent
             AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFmtColl(), GetFmtColl() );
@@ -968,7 +968,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
 
 //FEATURE::CONDCOLL
     case RES_CONDCOLL_CONDCHG:
-        if( pNewValue && ((SwCondCollCondChg*)pNewValue)->pChangedFmt == GetRegisteredIn() &&
+        if( pNewValue && static_cast<const SwCondCollCondChg*>(pNewValue)->pChangedFmt == GetRegisteredIn() &&
             &GetNodes() == &GetDoc()->GetNodes() )
         {
             ChkCondColl();
@@ -979,10 +979,10 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     case RES_ATTRSET_CHG:
         if (GetNodes().IsDocNodes() && IsTxtNode() && pOldValue)
         {
-            if( SfxItemState::SET == ((SwAttrSetChg*)pOldValue)->GetChgSet()->GetItemState(
+            if( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState(
                 RES_CHRATR_HIDDEN, false ) )
             {
-                ((SwTxtNode*)this)->SetCalcHiddenCharFlags();
+                static_cast<SwTxtNode*>(this)->SetCalcHiddenCharFlags();
             }
         }
         break;
@@ -990,11 +990,11 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     case RES_UPDATE_ATTR:
         if (GetNodes().IsDocNodes() && IsTxtNode() && pNewValue)
         {
-            const sal_uInt16 nTmp = ((SwUpdateAttr*)pNewValue)->getWhichAttr();
+            const sal_uInt16 nTmp = static_cast<const SwUpdateAttr*>(pNewValue)->getWhichAttr();
             if ( RES_ATTRSET_CHG == nTmp )
             {
                 // TODO: anybody wants to do some optimization here?
-                ((SwTxtNode*)this)->SetCalcHiddenCharFlags();
+                static_cast<SwTxtNode*>(this)->SetCalcHiddenCharFlags();
             }
         }
         break;
@@ -1009,9 +1009,9 @@ bool SwCntntNode::InvalidateNumRule()
     const SfxPoolItem* pItem;
     if( GetNodes().IsDocNodes() &&
         0 != ( pItem = GetNoCondAttr( RES_PARATR_NUMRULE, true )) &&
-        !((SwNumRuleItem*)pItem)->GetValue().isEmpty() &&
+        !static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty() &&
         0 != (pRule = GetDoc()->FindNumRulePtr(
-                                ((SwNumRuleItem*)pItem)->GetValue() ) ) )
+                                static_cast<const SwNumRuleItem*>(pItem)->GetValue() ) ) )
     {
         pRule->SetInvalidRule( true );
     }
@@ -1021,16 +1021,16 @@ bool SwCntntNode::InvalidateNumRule()
 SwCntntFrm *SwCntntNode::getLayoutFrm( const SwRootFrm* _pRoot,
     const Point* pPoint, const SwPosition *pPos, const bool bCalcFrm ) const
 {
-    return (SwCntntFrm*) ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
-                                            pPoint, pPos, bCalcFrm );
+    return static_cast<SwCntntFrm*>( ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
+                                            pPoint, pPos, bCalcFrm ));
 }
 
 SwRect SwCntntNode::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
                                     const bool bCalcFrm ) const
 {
     SwRect aRet;
-    SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( 0, *(SwModify*)this,
-                                            FRM_CNTNT, pPoint, 0, bCalcFrm );
+    SwCntntFrm* pFrm = static_cast<SwCntntFrm*>( ::GetFrmOfModify( 0, *(SwModify*)this,
+                                            FRM_CNTNT, pPoint, 0, bCalcFrm ) );
     if( pFrm )
         aRet = bPrtArea ? pFrm->Prt() : pFrm->Frm();
     return aRet;
@@ -1308,21 +1308,21 @@ bool SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
     switch( rInfo.Which() )
     {
     case RES_AUTOFMT_DOCNODE:
-        if( &GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+        if( &GetNodes() == static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
         {
-            ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = this;
+            static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = this;
             return false;
         }
         break;
 
     case RES_FINDNEARESTNODE:
-        if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
-            ((SwFindNearestNode&)rInfo).CheckNode( *this );
+        if( static_cast<const SwFmtPageDesc&>(GetAttr( RES_PAGEDESC )).GetPageDesc() )
+            static_cast<SwFindNearestNode&>(rInfo).CheckNode( *this );
         return true;
 
     case RES_CONTENT_VISIBLE:
         {
-            ((SwPtrMsgPoolItem&)rInfo).pObject =
+            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject =
                 SwIterator<SwFrm,SwCntntNode>::FirstElement(*this);
         }
         return false;
@@ -1613,7 +1613,7 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( sal_uInt16 nWhich,
         if( !GetpSwAttrSet() || ( SfxItemState::SET != GetpSwAttrSet()->GetItemState(
                     nWhich, false, &pFnd ) && bInParents ))
         {
-            (void)((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
+            (void)static_cast<const SwFmt*>(GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
         }
     }
     // undo change of issue #i51029#
@@ -1832,12 +1832,12 @@ void SwCntntNode::ChkCondColl()
 
         if (!bDone)
         {
-            if( IsTxtNode() && ((SwTxtNode*)this)->GetNumRule())
+            if( IsTxtNode() && static_cast<SwTxtNode*>(this)->GetNumRule())
             {
                 // Is at which Level in a list?
                 aTmp.SetCondition( PARA_IN_LIST,
-                                ((SwTxtNode*)this)->GetActualListLevel() );
-                pCColl = ((SwConditionTxtFmtColl*)GetFmtColl())->
+                                static_cast<SwTxtNode*>(this)->GetActualListLevel() );
+                pCColl = static_cast<SwConditionTxtFmtColl*>(GetFmtColl())->
                                 HasCondition( aTmp );
             }
             else

@@ -380,12 +380,12 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(
 
     const SwFrm *pUpper = rTabFrm.GetUpper();
     if( MayBeInFlyFrame() && pUpper->IsFlyFrm() &&
-        ((const SwFlyFrm *)pUpper)->GetAnchorFrm() )
+        static_cast<const SwFlyFrm *>(pUpper)->GetAnchorFrm() )
     {
         // If the table is located within a self-created frame, the anchor's
         // width is relevant not the frame's width.
         // For paragraph-bound frames we don't respect paragraph indents.
-        const SwFrm *pAnchor = ((const SwFlyFrm *)pUpper)->GetAnchorFrm();
+        const SwFrm *pAnchor = static_cast<const SwFlyFrm *>(pUpper)->GetAnchorFrm();
         if( pAnchor->IsTxtFrm() )
             nWidth = pAnchor->Frm().Width();
         else
@@ -461,7 +461,7 @@ static void lcl_GetMinMaxSize( sal_uLong& rMinNoAlignCnts, sal_uLong& rMaxNoAlig
     while( pColl && !pColl->IsDefault() &&
             (USER_FMT & pColl->GetPoolFmtId()) )
     {
-        pColl = (const SwFmtColl *)pColl->DerivedFrom();
+        pColl = static_cast<const SwFmtColl *>(pColl->DerivedFrom());
     }
 
     // <NOBR> in the whole cell apply to text but not to tables.

@@ -45,7 +45,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
     if( dynamic_cast<const INetURLHistoryHint*>(&rHint) && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // This URL has been changed:
-        const INetURLObject* pIURL = ((INetURLHistoryHint&)rHint).GetObject();
+        const INetURLObject* pIURL = static_cast<const INetURLHistoryHint&>(rHint).GetObject();
         OUString sURL( pIURL->GetMainURL( INetURLObject::NO_DECODE ) ), sBkmk;
 
         SwEditShell* pESh = pDoc->GetEditShell();
@@ -59,7 +59,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
         sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
         {
-            const SwFmtINetFmt* pItem = (SwFmtINetFmt*)pDoc->GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n );
+            const SwFmtINetFmt* pItem = static_cast<const SwFmtINetFmt*>(pDoc->GetAttrPool().GetItem2(RES_TXTATR_INETFMT, n ));
             if( pItem != 0 &&
                 ( pItem->GetValue() == sURL || ( !sBkmk.isEmpty() && pItem->GetValue() == sBkmk )))
             {

@@ -25,6 +25,7 @@
 #include <format.hxx>
 #include <calbck.hxx>
 #include <boost/optional.hpp>
+#include <pagedesc.hxx>
 
 class SwPageDesc;
 class SwHistory;
@@ -68,8 +69,8 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-          SwPageDesc *GetPageDesc() { return (SwPageDesc*)GetRegisteredIn(); }
-    const SwPageDesc *GetPageDesc() const { return (SwPageDesc*)GetRegisteredIn(); }
+          SwPageDesc *GetPageDesc() { return static_cast<SwPageDesc*>(GetRegisteredIn()); }
+    const SwPageDesc *GetPageDesc() const { return static_cast<const SwPageDesc*>(GetRegisteredIn()); }
 
     ::boost::optional<sal_uInt16>  GetNumOffset() const        { return oNumOffset; }
     void    SetNumOffset( ::boost::optional<sal_uInt16> oNum ) { oNumOffset = oNum; }

@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 
 SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
-    : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ),
+    : SwPaM( *rPam.GetPoint(), static_cast<SwPaM*>(pRing) ),
     eInputLanguage(LANGUAGE_DONTKNOW)
 {
     bIsOverwriteCursor = false;
@@ -249,7 +249,7 @@ void SwDoc::DeleteExtTextInput( SwExtTextInput* pDel )
     if( pDel == mpExtInputRing )
     {
         if( pDel->GetNext() != mpExtInputRing )
-            mpExtInputRing = (SwPaM*)pDel->GetNext();
+            mpExtInputRing = static_cast<SwPaM*>(pDel->GetNext());
         else
             mpExtInputRing = 0;
     }
@@ -263,7 +263,7 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
     if( mpExtInputRing )
     {
         sal_uLong nNdIdx = rNd.GetIndex();
-        SwExtTextInput* pTmp = (SwExtTextInput*)mpExtInputRing;
+        SwExtTextInput* pTmp = static_cast<SwExtTextInput*>(mpExtInputRing);
         do {
             sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
@@ -293,7 +293,7 @@ SwExtTextInput* SwDoc::GetExtTextInput() const
 {
     OSL_ENSURE( !mpExtInputRing || mpExtInputRing == mpExtInputRing->GetNext(),
             "more than one InputEngine available" );
-    return (SwExtTextInput*)mpExtInputRing;
+    return static_cast<SwExtTextInput*>(mpExtInputRing);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

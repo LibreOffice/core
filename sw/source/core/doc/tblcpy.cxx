@@ -649,7 +649,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                 if( pN && pN->HasMergeFmtTbl() && SfxItemState::SET == aBoxAttrSet.
                     GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                 {
-                    sal_uLong nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
+                    sal_uLong nOldIdx = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
                     sal_uLong nNewIdx = pN->GetMergeFmtIndex( nOldIdx );
                     if( nNewIdx != nOldIdx )
                         aBoxAttrSet.Put( SwTblBoxNumFormat( nNewIdx ));

@@ -114,7 +114,7 @@ namespace
         };
         for( sal_uInt16 n = 0; n < 3; ++n )
         {
-            sal_uInt16 nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
+            sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
                                 aArr[n].nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                     nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
@@ -143,7 +143,7 @@ namespace
 
         for( sal_uInt16 n = 0; n < 3; ++n )
         {
-            sal_uInt16 nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
+            sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(rSet.GetPool()->GetDefaultItem(
                                 aArr[n].nResLngId )).GetLanguage();
             vcl::Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
                                     nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
@@ -190,7 +190,7 @@ namespace
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION &&
                          ( rNFmt.GetAbsLSpace() || rNFmt.GetFirstLineOffset() ) )
                     {
-                        SvxLRSpaceItem aLR( (SvxLRSpaceItem&)pColl->GetFmtAttr( RES_LR_SPACE ) );
+                        SvxLRSpaceItem aLR( static_cast<const SvxLRSpaceItem&>(pColl->GetFmtAttr( RES_LR_SPACE )) );
                         aLR.SetTxtFirstLineOfstValue( rNFmt.GetFirstLineOffset() );
                         aLR.SetTxtLeft( rNFmt.GetAbsLSpace() );
                         pColl->SetFmtAttr( aLR );
@@ -436,7 +436,7 @@ SwTxtFmtColl* DocumentStylePoolManager::GetTxtCollFromPool( sal_uInt16 nId, bool
 
                 for( const sal_uInt16* pArr = aFntInit; *pArr; pArr += 4 )
                 {
-                    sal_uInt16 nLng = ((SvxLanguageItem&)m_rDoc.GetDefault( *(pArr+2) )).GetLanguage();
+                    sal_uInt16 nLng = static_cast<const SvxLanguageItem&>(m_rDoc.GetDefault( *(pArr+2) )).GetLanguage();
                     if( LANGUAGE_DONTKNOW == nLng )
                         nLng = *(pArr+3);
 
@@ -1209,7 +1209,7 @@ SwFmt* DocumentStylePoolManager::GetFmtFromPool( sal_uInt16 nId )
 
     case RES_POOLCHR_RUBYTEXT:
         {
-            long nH = ((SvxFontHeightItem*)GetDfltAttr(
+            long nH = static_cast<const SvxFontHeightItem*>(GetDfltAttr(
                                 RES_CHRATR_CJK_FONTSIZE ))->GetHeight() / 2;
             SetAllScriptItem( aSet, SvxFontHeightItem( nH, 100, RES_CHRATR_FONTSIZE));
             aSet.Put(SvxUnderlineItem( UNDERLINE_NONE, RES_CHRATR_UNDERLINE ));
@@ -1338,12 +1338,12 @@ SwFmt* DocumentStylePoolManager::GetFmtFromPool( sal_uInt16 nId )
 
 SwFrmFmt* DocumentStylePoolManager::GetFrmFmtFromPool( sal_uInt16 nId )
 {
-    return (SwFrmFmt*)GetFmtFromPool( nId );
+    return static_cast<SwFrmFmt*>(GetFmtFromPool( nId ));
 }
 
 SwCharFmt* DocumentStylePoolManager::GetCharFmtFromPool( sal_uInt16 nId )
 {
-    return (SwCharFmt*)GetFmtFromPool( nId );
+    return static_cast<SwCharFmt*>(GetFmtFromPool( nId ));
 }
 
 SwPageDesc* DocumentStylePoolManager::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )

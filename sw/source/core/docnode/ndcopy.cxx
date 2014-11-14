@@ -139,7 +139,7 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT );
 
 static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 {
-    SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
+    SwTableBoxFmt* pBoxFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
     for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
         if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pBoxFmt ) )
             break;
@@ -147,9 +147,9 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
     {
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, false,
-            &pItem ) && ((SwTblBoxFormula*)pItem)->IsIntrnlName() )
+            &pItem ) && static_cast<const SwTblBoxFormula*>(pItem)->IsIntrnlName() )
         {
-            ((SwTblBoxFormula*)pItem)->PtrToBoxNm( pCT->pOldTable );
+            const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->PtrToBoxNm( pCT->pOldTable );
         }
 
         pBoxFmt = pCT->pDoc->MakeTableBoxFmt();
@@ -161,7 +161,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
             if( pN && pN->HasMergeFmtTbl() && SfxItemState::SET == pBoxFmt->
                 GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
             {
-                sal_uLong nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
+                sal_uLong nOldIdx = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
                 sal_uLong nNewIdx = pN->GetMergeFmtIndex( nOldIdx );
                 if( nNewIdx != nOldIdx )
                     pBoxFmt->SetFmtAttr( SwTblBoxNumFormat( nNewIdx ));
@@ -201,7 +201,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 
 static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
 {
-    SwTableLineFmt* pLineFmt = (SwTableLineFmt*)pLine->GetFrmFmt();
+    SwTableLineFmt* pLineFmt = static_cast<SwTableLineFmt*>(pLine->GetFrmFmt());
     for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
         if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pLineFmt ) )
             break;
@@ -270,11 +270,11 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         // We're copying a DDE table
         // Is the field type available in the new document?
-        pDDEType = ((SwDDETable&)GetTable()).GetDDEFldType();
+        pDDEType = const_cast<SwDDETable&>(static_cast<const SwDDETable&>(GetTable())).GetDDEFldType();
         if( pDDEType->IsDeleted() )
             pDoc->getIDocumentFieldsAccess().InsDeletedFldType( *pDDEType );
         else
-            pDDEType = (SwDDEFieldType*)pDoc->getIDocumentFieldsAccess().InsertFldType( *pDDEType );
+            pDDEType = static_cast<SwDDEFieldType*>(pDoc->getIDocumentFieldsAccess().InsertFldType( *pDDEType ));
         OSL_ENSURE( pDDEType, "unknown FieldType" );
 
         // Swap the table pointers in the node

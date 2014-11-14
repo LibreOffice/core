@@ -69,9 +69,9 @@ SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
         pNd = &aTmp.GetNode();
         bool bFound = false;
         if ( pNd->IsCntntNode() )
-            bFound = ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*(SwCntntNode*)pNd) != 0);
+            bFound = ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*static_cast<SwCntntNode*>(pNd)) != 0);
         else if ( pNd->IsTableNode() )
-            bFound = ( SwIterator<SwFrm,SwFmt>::FirstElement(*((SwTableNode*)pNd)->GetTable().GetFrmFmt()) != 0 );
+            bFound = ( SwIterator<SwFrm,SwFmt>::FirstElement(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()) != 0 );
         else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
         {
             pNd = 0;
@@ -101,9 +101,9 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
         pNd = &aTmp.GetNode();
         bool bFound = false;
         if ( pNd->IsCntntNode() )
-            bFound = ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*(SwCntntNode*)pNd) != 0);
+            bFound = ( SwIterator<SwFrm,SwCntntNode>::FirstElement(*static_cast<SwCntntNode*>(pNd)) != 0);
         else if ( pNd->IsTableNode() )
-            bFound = ( SwIterator<SwFrm,SwFmt>::FirstElement(*((SwTableNode*)pNd)->GetTable().GetFrmFmt()) != 0 );
+            bFound = ( SwIterator<SwFrm,SwFmt>::FirstElement(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt()) != 0 );
         else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
         {
             pNd = 0;
@@ -262,11 +262,11 @@ void SwNode2LayImpl::SaveUpperFrms()
         if( pFrm )
         {
             if( pFrm->IsFtnFrm() )
-                ((SwFtnFrm*)pFrm)->ColLock();
+                static_cast<SwFtnFrm*>(pFrm)->ColLock();
             else if( pFrm->IsInSct() )
                 pFrm->FindSctFrm()->ColLock();
             if( pPrv && pPrv->IsSctFrm() )
-                ((SwSectionFrm*)pPrv)->LockJoin();
+                static_cast<SwSectionFrm*>(pPrv)->LockJoin();
             pUpperFrms->push_back( pPrv );
             pUpperFrms->push_back( pFrm );
         }
@@ -291,9 +291,9 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
             if( pFrm && pFrm->IsSctFrm() )
             {
                 // pFrm could be a "dummy"-section
-                if( ((SwSectionFrm*)pFrm)->GetSection() &&
-                    (&((SwSectionNode*)pNode)->GetSection() ==
-                     ((SwSectionFrm*)pFrm)->GetSection()) )
+                if( static_cast<SwSectionFrm*>(pFrm)->GetSection() &&
+                    (&static_cast<const SwSectionNode*>(pNode)->GetSection() ==
+                     static_cast<SwSectionFrm*>(pFrm)->GetSection()) )
                 {
                     // #i22922# - consider columned sections
                     // 'Go down' the section frame as long as the layout frame
@@ -314,7 +314,7 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                     return static_cast<SwLayoutFrm*>(pFrm);
                 }
 
-                pUpper = new SwSectionFrm(((SwSectionNode*)pNode)->GetSection(), rpFrm);
+                pUpper = new SwSectionFrm(const_cast<SwSectionNode*>(static_cast<const SwSectionNode*>(pNode))->GetSection(), rpFrm);
                 pUpper->Paste( rpFrm->GetUpper(),
                                bMaster ? rpFrm : rpFrm->GetNext() );
                 static_cast<SwSectionFrm*>(pUpper)->Init();
@@ -352,13 +352,13 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
             {
                 pNxt = (*pUpperFrms)[n++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
-                    ((SwSectionFrm*)pNxt)->UnlockJoin();
-                pUp = (SwLayoutFrm*)(*pUpperFrms)[n++];
+                    static_cast<SwSectionFrm*>(pNxt)->UnlockJoin();
+                pUp = static_cast<SwLayoutFrm*>((*pUpperFrms)[n++]);
                 if( pNxt )
                     pNxt = pNxt->GetNext();
                 else
                     pNxt = pUp->Lower();
-                pNew = ((SwCntntNode*)pNd)->MakeFrm( pUp );
+                pNew = static_cast<SwCntntNode*>(pNd)->MakeFrm( pUp );
                 pNew->Paste( pUp, pNxt );
                 (*pUpperFrms)[n-2] = pNew;
             }
@@ -367,16 +367,16 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
             {
                 pNxt = (*pUpperFrms)[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
-                    ((SwSectionFrm*)pNxt)->UnlockJoin();
-                pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
+                    static_cast<SwSectionFrm*>(pNxt)->UnlockJoin();
+                pUp = static_cast<SwLayoutFrm*>((*pUpperFrms)[x++]);
                 if( pNxt )
                     pNxt = pNxt->GetNext();
                 else
                     pNxt = pUp->Lower();
-                pNew = ((SwTableNode*)pNd)->MakeFrm( pUp );
+                pNew = static_cast<SwTableNode*>(pNd)->MakeFrm( pUp );
                 OSL_ENSURE( pNew->IsTabFrm(), "Table expected" );
                 pNew->Paste( pUp, pNxt );
-                ((SwTabFrm*)pNew)->RegistFlys();
+                static_cast<SwTabFrm*>(pNew)->RegistFlys();
                 (*pUpperFrms)[x-2] = pNew;
             }
         else if( pNd->IsSectionNode() )
@@ -386,8 +386,8 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
             {
                 pNxt = (*pUpperFrms)[x++];
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
-                    ((SwSectionFrm*)pNxt)->UnlockJoin();
-                pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
+                    static_cast<SwSectionFrm*>(pNxt)->UnlockJoin();
+                pUp = static_cast<SwLayoutFrm*>((*pUpperFrms)[x++]);
                 OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrm(), "Lost Upper" );
                 ::_InsertCnt( pUp, pDoc, pNd->GetIndex(), false, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
@@ -400,7 +400,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
     {
         SwFrm* pTmp = (*pUpperFrms)[++x];
         if( pTmp->IsFtnFrm() )
-            ((SwFtnFrm*)pTmp)->ColUnlock();
+            static_cast<SwFtnFrm*>(pTmp)->ColUnlock();
         else if ( pTmp->IsInSct() )
         {
             SwSectionFrm* pSctFrm = pTmp->FindSctFrm();

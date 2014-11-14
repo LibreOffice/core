@@ -292,7 +292,7 @@ void DocumentLayoutManager::DelLayoutFmt( SwFrmFmt *pFmt )
         if( pCntIdx )
         {
             SwNode *pNode = &pCntIdx->GetNode();
-            ((SwFmtCntnt&)pFmt->GetFmtAttr( RES_CNTNT )).SetNewCntntIdx( 0 );
+            const_cast<SwFmtCntnt&>(static_cast<const SwFmtCntnt&>(pFmt->GetFmtAttr( RES_CNTNT ))).SetNewCntntIdx( 0 );
             m_rDoc.getIDocumentContentOperations().DeleteSection( pNode );
         }
 
@@ -369,7 +369,7 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
 
     SwFrmFmt* pDest = m_rDoc.GetDfltFrmFmt();
     if( rSource.GetRegisteredIn() != pSrcDoc->GetDfltFrmFmt() )
-        pDest = m_rDoc.CopyFrmFmt( *(SwFrmFmt*)rSource.GetRegisteredIn() );
+        pDest = m_rDoc.CopyFrmFmt( *static_cast<const SwFrmFmt*>(rSource.GetRegisteredIn()) );
     if( bFly )
     {
         // #i11176#
@@ -450,9 +450,9 @@ SwFrmFmt *DocumentLayoutManager::CopyLayoutFmt(
     {
         OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Neither Fly nor Draw." );
         // #i52780# - Note: moving object to visible layer not needed.
-        SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
+        const SwDrawContact* pSourceContact = static_cast<const SwDrawContact *>(rSource.FindContactObj());
 
-        SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
+        SwDrawContact* pContact = new SwDrawContact( static_cast<SwDrawFrmFmt*>(pDest),
                                 m_rDoc.CloneSdrObj( *pSourceContact->GetMaster(),
                                         m_rDoc.IsCopyIsMove() && &m_rDoc == pSrcDoc ) );
         // #i49730# - notify draw frame format that position attributes are

@@ -1024,7 +1024,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             cCh = 0x09;
 
             // Get the separator's position from the first Node, in order for the Boxes to be set accordingly
-            SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->getLayoutFrm( pTxtNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) );
+            SwTxtFrmInfo aFInfo( static_cast<SwTxtFrm*>(pTxtNd->getLayoutFrm( pTxtNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )) );
             if( aFInfo.IsOneLine() ) // only makes sense in this case
             {
                 OUString const& rTxt(pTxtNd->GetTxt());
@@ -1622,11 +1622,11 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
             if( 0 != ( pCNd = aDelRg.aStart.GetNode().GetCntntNode()))
             {
                 if( pFrmNd->IsCntntNode() )
-                    ((SwCntntNode*)pFrmNd)->MakeFrms( *pCNd );
+                    static_cast<SwCntntNode*>(pFrmNd)->MakeFrms( *pCNd );
                 else if( pFrmNd->IsTableNode() )
-                    ((SwTableNode*)pFrmNd)->MakeFrms( aDelRg.aStart );
+                    static_cast<SwTableNode*>(pFrmNd)->MakeFrms( aDelRg.aStart );
                 else if( pFrmNd->IsSectionNode() )
-                    ((SwSectionNode*)pFrmNd)->MakeFrms( aDelRg.aStart );
+                    static_cast<SwSectionNode*>(pFrmNd)->MakeFrms( aDelRg.aStart );
                 pFrmNd = pCNd;
             }
             else if( 0 != ( pSNd = aDelRg.aStart.GetNode().GetSectionNode()))
@@ -2274,7 +2274,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
             rPam.DeleteMark();
 
             SwPaM* pTmp = &rPam;
-            while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ))
+            while( &rPam != ( pTmp = static_cast<SwPaM*>(pTmp->GetNext()) ))
                 for( int i = 0; i < 2; ++i )
                     pTmp->GetBound( (bool)i ) = *rPam.GetPoint();
         }
@@ -2488,7 +2488,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );
 
-        pBoxFrm = (SwCellFrm*)pTmpFrm;
+        pBoxFrm = static_cast<const SwCellFrm*>(pTmpFrm);
         pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
         pBox = pBoxFrm->GetTabBox();
     }
@@ -2557,7 +2557,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     const SwCntntFrm* pCntnt = ::GetCellCntnt( *pBoxFrm );
     if ( pCntnt && pCntnt->IsTxtFrm() )
     {
-        const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
+        const SwPosition aPos( *static_cast<const SwTxtFrm*>(pCntnt)->GetTxtNode() );
         const SwCursor aTmpCrsr( aPos, 0, false );
         ::GetTblSel( aTmpCrsr, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
     }
@@ -2637,11 +2637,11 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
             {
                 aHiddenIter = aHidden.find( nTmpVal );
                 if ( aHiddenIter == aHidden.end() )
-                    aHidden[ nTmpVal ] = !lcl_IsFrmInColumn( *((SwCellFrm*)pFrm), aBoxes );
+                    aHidden[ nTmpVal ] = !lcl_IsFrmInColumn( *static_cast<const SwCellFrm*>(pFrm), aBoxes );
                 else
                 {
                     if ( aHidden[ nTmpVal ] &&
-                         lcl_IsFrmInColumn( *((SwCellFrm*)pFrm), aBoxes ) )
+                         lcl_IsFrmInColumn( *static_cast<const SwCellFrm*>(pFrm), aBoxes ) )
                         aHidden[ nTmpVal ] = false;
                 }
                 nTmpVal = nLowerBorder;
@@ -2702,7 +2702,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly,
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );
 
-        pBoxFrm = (SwCellFrm*)pTmpFrm;
+        pBoxFrm = static_cast<const SwCellFrm*>(pTmpFrm);
         pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
         pBox = pBoxFrm->GetTabBox();
     }
@@ -2815,7 +2815,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
             // but the pLine will be set if the box is not an overlapping box
             // In the new table model the row height can be adjusted,
             // when both variables are set.
-            SwTxtFrm* pTxtFrm = 0;
+            const SwTxtFrm* pTxtFrm = 0;
             const SwTableLine* pLine = 0;
 
             // Iterate over all SwCellFrms with Bottom = nOldPos
@@ -2834,10 +2834,10 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
 
                             if ( pCntnt && pCntnt->IsTxtFrm() )
                             {
-                                const SwTableBox* pBox = ((SwCellFrm*)pFrm)->GetTabBox();
+                                const SwTableBox* pBox = static_cast<const SwCellFrm*>(pFrm)->GetTabBox();
                                 const long nRowSpan = pBox->getRowSpan();
                                 if( nRowSpan > 0 ) // Not overlapped
-                                    pTxtFrm = (SwTxtFrm*)pCntnt;
+                                    pTxtFrm = static_cast<const SwTxtFrm*>(pCntnt);
                                 if( nRowSpan < 2 ) // Not overlapping for row height
                                     pLine = pBox->GetUpper();
                                 if( pLine && pTxtFrm ) // always for old table model
@@ -2851,7 +2851,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, bool bCurColOnly, const SwCursor*
                                         if ( ATT_VAR_SIZE == aNew.GetHeightSizeType() )
                                             aNew.SetHeightSizeType( ATT_MIN_SIZE );
                                         // This position must not be in an overlapped box
-                                        const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
+                                        const SwPosition aPos( *static_cast<const SwTxtFrm*>(pCntnt)->GetTxtNode() );
                                         const SwCursor aTmpCrsr( aPos, 0, false );
                                         SetRowHeight( aTmpCrsr, aNew );
                                         // For the new table model we're done, for the old one
@@ -3305,7 +3305,7 @@ static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara );
 static void lcl_SplitTable_CpyLine( SwTableLine* pLn, _SplitTable_Para* pPara )
 {
     SwFrmFmt *pSrcFmt = pLn->GetFrmFmt();
-    SwTableLineFmt* pDestFmt = (SwTableLineFmt*) pPara->GetDestFmt( pSrcFmt );
+    SwTableLineFmt* pDestFmt = static_cast<SwTableLineFmt*>( pPara->GetDestFmt( pSrcFmt ) );
     if( pDestFmt == NULL )
     {
         pPara->InsertSrcDest( pSrcFmt, pLn->ClaimFrmFmt() );
@@ -3321,7 +3321,7 @@ static void lcl_SplitTable_CpyLine( SwTableLine* pLn, _SplitTable_Para* pPara )
 static void lcl_SplitTable_CpyBox( SwTableBox* pBox, _SplitTable_Para* pPara )
 {
     SwFrmFmt *pSrcFmt = pBox->GetFrmFmt();
-    SwTableBoxFmt* pDestFmt = (SwTableBoxFmt*)pPara->GetDestFmt( pSrcFmt );
+    SwTableBoxFmt* pDestFmt = static_cast<SwTableBoxFmt*>(pPara->GetDestFmt( pSrcFmt ));
     if( pDestFmt == NULL )
     {
         pPara->InsertSrcDest( pSrcFmt, pBox->ClaimFrmFmt() );
@@ -3928,7 +3928,7 @@ SwTableFmt* SwDoc::FindTblFmtByName( const OUString& rName, bool bAll ) const
             }
         }
     }
-    return (SwTableFmt*)pRet;
+    return const_cast<SwTableFmt*>(static_cast<const SwTableFmt*>(pRet));
 }
 
 bool SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
@@ -3989,7 +3989,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
     const SfxPoolItem* pNumFmtItem = 0;
     if( SfxItemState::SET == rBox.GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
         false, &pNumFmtItem ) && GetNumberFormatter()->IsTextFormat(
-            ((SwTblBoxNumFormat*)pNumFmtItem)->GetValue() ))
+            static_cast<const SwTblBoxNumFormat*>(pNumFmtItem)->GetValue() ))
         return ;
 
     SwUndoTblNumFmt* pUndo = 0;
@@ -4011,7 +4011,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
                 pUndo->SetNumFmt( nFmtIdx, fNumber );
             }
 
-            SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rBox.GetFrmFmt();
+            SwTableBoxFmt* pBoxFmt = static_cast<SwTableBoxFmt*>(rBox.GetFrmFmt());
             SfxItemSet aBoxSet( GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
 
             bool bLockModify = true;
@@ -4023,7 +4023,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
             // format recognition
             if( pNumFmtItem && !bForceNumberFormat )
             {
-                sal_uLong nOldNumFmt = ((SwTblBoxNumFormat*)pNumFmtItem)->GetValue();
+                sal_uLong nOldNumFmt = static_cast<const SwTblBoxNumFormat*>(pNumFmtItem)->GetValue();
                 SvNumberFormatter* pNumFmtr = GetNumberFormatter();
 
                 short nFmtType = pNumFmtr->GetType( nFmtIdx );
@@ -4044,7 +4044,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
 
             if( bSetNumberFormat || bForceNumberFormat )
             {
-                pBoxFmt = (SwTableBoxFmt*)rBox.ClaimFrmFmt();
+                pBoxFmt = static_cast<SwTableBoxFmt*>(rBox.ClaimFrmFmt());
 
                 aBoxSet.Put( SwTblBoxValue( fNumber ));
                 aBoxSet.Put( SwTblBoxNumFormat( nFmtIdx ));
@@ -4071,7 +4071,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
     {
         // It's not a number
         const SfxPoolItem* pValueItem = 0, *pFmtItem = 0;
-        SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rBox.GetFrmFmt();
+        SwTableBoxFmt* pBoxFmt = static_cast<SwTableBoxFmt*>(rBox.GetFrmFmt());
         if( SfxItemState::SET == pBoxFmt->GetItemState( RES_BOXATR_FORMAT,
                 false, &pFmtItem ) ||
             SfxItemState::SET == pBoxFmt->GetItemState( RES_BOXATR_VALUE,
@@ -4083,7 +4083,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
                 pUndo = new SwUndoTblNumFmt( rBox );
             }
 
-            pBoxFmt = (SwTableBoxFmt*)rBox.ClaimFrmFmt();
+            pBoxFmt = static_cast<SwTableBoxFmt*>(rBox.ClaimFrmFmt());
 
             // Remove all number formats
             sal_uInt16 nWhich1 = RES_BOXATR_FORMULA;
@@ -4181,7 +4181,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
                 aRegH.RegisterInModify( pTxtNode , *pTxtNode );
                 if ( pUndo )
                     pUndo->AddNode( *pTxtNode , false );
-                SfxStringItem * pNewItem = (SfxStringItem*)pFmtItem->Clone();
+                SfxStringItem * pNewItem = static_cast<SfxStringItem*>(pFmtItem->Clone());
                 pNewItem->SetValue(OUString());
                 rSet.Put( *pNewItem );
                 pTxtNode->SetAttr( rSet );
@@ -4217,7 +4217,7 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
             // Keep TextFormats!
             sal_uInt16 nWhich1 = RES_BOXATR_FORMAT;
             if( pFmtItem && GetNumberFormatter()->IsTextFormat(
-                    ((SwTblBoxNumFormat*)pFmtItem)->GetValue() ))
+                    static_cast<const SwTblBoxNumFormat*>(pFmtItem)->GetValue() ))
                 nWhich1 = RES_BOXATR_FORMULA;
             else
                 // Just resetting Attributes is not enough
@@ -4506,7 +4506,7 @@ bool SwDoc::UnProtectTbls( const SwPaM& rPam )
                     bFound = pStt->nNode.GetIndex() < nTblIdx &&
                             nTblIdx < pEnd->nNode.GetIndex();
 
-                } while( !bFound && &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
+                } while( !bFound && &rPam != ( pTmp = static_cast<SwPaM*>(pTmp->GetNext()) ) );
                 if( !bFound )
                     continue; // Continue searching
             }

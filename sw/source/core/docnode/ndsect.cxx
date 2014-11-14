@@ -308,7 +308,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         {
             if( pUndoInsSect && pCNd->IsTxtNode() )
             {
-                pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, true );
+                pUndoInsSect->SaveSplitNode( const_cast<SwTxtNode*>(static_cast<const SwTxtNode*>(pCNd)), true );
             }
             getIDocumentContentOperations().SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
@@ -352,11 +352,11 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     bool bUpdateFtn = false;
     if( GetFtnIdxs().size() && pAttr )
     {
-        sal_uInt16 nVal = ((SwFmtFtnAtTxtEnd&)pAttr->Get(
+        sal_uInt16 nVal = static_cast<const SwFmtFtnAtTxtEnd&>(pAttr->Get(
                                             RES_FTN_AT_TXTEND )).GetValue();
            if( ( FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ) ||
-            ( FTNEND_ATTXTEND_OWNNUMSEQ == ( nVal = ((SwFmtEndAtTxtEnd&)
+            ( FTNEND_ATTXTEND_OWNNUMSEQ == ( nVal = static_cast<const SwFmtEndAtTxtEnd&>(
                             pAttr->Get( RES_END_AT_TXTEND )).GetValue() ) ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ))
         {
@@ -419,7 +419,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                     aIdx--;
                 }
                 if( !pPrvNd )
-                    pPrvNd = pNd->IsStartNode() ? (SwStartNode*)pNd
+                    pPrvNd = pNd->IsStartNode() ? static_cast<const SwStartNode*>(pNd)
                                                 : pNd->StartOfSectionNode();
 
                 aIdx = pEnd->nNode.GetIndex() + 1;
@@ -924,22 +924,22 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             // Make up the Format's nesting
             if( pNd->IsSectionNode() )
             {
-                ((SwSectionNode*)pNd)->GetSection().GetFmt()->
+                static_cast<SwSectionNode*>(pNd)->GetSection().GetFmt()->
                                     SetDerivedFrom( pSectFmt );
-                ((SwSectionNode*)pNd)->DelFrms();
+                static_cast<SwSectionNode*>(pNd)->DelFrms();
                 n = pNd->EndOfSectionIndex();
             }
             else
             {
                 if( pNd->IsTableNode() )
-                    ((SwTableNode*)pNd)->DelFrms();
+                    static_cast<SwTableNode*>(pNd)->DelFrms();
 
                 if( ULONG_MAX == nSkipIdx )
                     nSkipIdx = pNd->EndOfSectionIndex();
             }
         }
         else if( pNd->IsCntntNode() )
-            ((SwCntntNode*)pNd)->DelFrms();
+            static_cast<SwCntntNode*>(pNd)->DelFrms();
     }
 
     sw_DeleteFtn( pSectNd, nStart, nEnde );
@@ -1010,7 +1010,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
         OSL_ENSURE( !pTmp->GetUpper(), "SwClearDummies: No Upper allowed!" );
         if( pTmp->IsSctFrm() )
         {
-            SwSectionFrm* pSectFrm = (SwSectionFrm*)pFrm;
+            SwSectionFrm* pSectFrm = static_cast<SwSectionFrm*>(pFrm);
             pTmp = pTmp->GetNext();
             if( !pSectFrm->GetLower() )
             {
@@ -1072,7 +1072,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                     return;
             }
             pCNd = aIdx.GetNode().GetCntntNode();
-            pCNd->MakeFrms( (SwCntntNode&)rIdx.GetNode() );
+            pCNd->MakeFrms( static_cast<SwCntntNode&>(rIdx.GetNode()) );
         }
         else
         {
@@ -1110,7 +1110,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                     while( pUp->Lower() )  // for columned sections
                     {
                         OSL_ENSURE( pUp->Lower()->IsLayoutFrm(),"Who's in there?" );
-                        pUp = (SwLayoutFrm*)pUp->Lower();
+                        pUp = static_cast<SwLayoutFrm*>(pUp->Lower());
                     }
                     pNew->Paste( pUp, NULL );
                     // #i27138#
@@ -1306,7 +1306,7 @@ bool SwSectionNode::IsCntntHidden() const
     {
         if( aTmp.GetNode().IsSectionNode() )
         {
-            const SwSection& rSect = ((SwSectionNode&)aTmp.GetNode()).GetSection();
+            const SwSection& rSect = static_cast<SwSectionNode&>(aTmp.GetNode()).GetSection();
             if( rSect.IsHiddenFlag() )
                 // Skip this Section
                 aTmp = *aTmp.GetNode().EndOfSectionNode();
