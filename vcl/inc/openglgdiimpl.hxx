@@ -84,6 +84,7 @@ protected:
     bool CreateLinearGradientProgram( void );
     bool CreateRadialGradientProgram( void );
 
+public:
     void BeginSolid( SalColor nColor, sal_uInt8 nTransparency );
     void BeginSolid( SalColor nColor, double fTransparency );
     void BeginSolid( SalColor nColor );
@@ -102,12 +103,13 @@ protected:
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
+    void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false, bool pPremultiplied = false );
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawRadialGradient( const Gradient& rGradient, const Rectangle& rRect );
 
-protected:
+public:
     // get the width of the device
     virtual GLfloat GetWidth() const = 0;
 

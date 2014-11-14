@@ -202,9 +202,9 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
             aRects.mnDestWidth = width;
             aRects.mnDestHeight = height;
 
-            // FIXME We don't have a method that could paint a texture with
-            // transparency yet, use it when we have it
-            pImpl->DrawTexture(aTexture, aRects);
+            pImpl->PreDraw();
+            pImpl->DrawAlphaTexture(aTexture, aRects);
+            pImpl->PostDraw();
         }
 
         DeleteObject(hBitmap);
