@@ -101,6 +101,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
 $(eval $(call gb_Library_use_externals,sd,\
 	bluez_bluetooth_headers \
 	boost_headers \
+        glm_headers \
 	libxml2 \
 	dbus \
 	$(if $(ENABLE_AVAHI), \

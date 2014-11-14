@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_sdk_api,drawinglayer))
 
 $(eval $(call gb_Library_use_externals,drawinglayer,\
 	boost_headers \
+        glm_headers \
 	libxml2 \
 ))
 

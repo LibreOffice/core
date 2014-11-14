@@ -87,6 +87,7 @@ $(eval $(call gb_Library_use_externals,svxcore,\
 	icu_headers \
 	mesa_headers \
 	glew \
+        glm_headers \
 ))
 
 ifeq ($(OS),MACOSX)

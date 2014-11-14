@@ -14,6 +14,7 @@ $(eval $(call gb_Library_use_sdk_api,basebmp))
 $(eval $(call gb_Library_use_externals,basebmp,\
 	boost_headers \
 	vigra_headers \
+        glm_headers \
 ))
 
 $(eval $(call gb_Library_use_libraries,basebmp,\
