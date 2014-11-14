@@ -9,6 +9,7 @@
 
 #include "openglx11cairotextrender.hxx"
 
+#include "openglgdiimpl.hxx"
 #include "salbmp.hxx"
 #include <vcl/salbtype.hxx>
 
@@ -33,40 +34,8 @@ void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
     cairo_surface_t* pSurface = cairo_get_target(cr);
     int nWidth = cairo_image_surface_get_width( pSurface );
     int nHeight = cairo_image_surface_get_height( pSurface );
-    SalBitmap* pBitmap = ImplGetSVData()->mpDefInst->CreateSalBitmap();
-    pBitmap->Create(Size(nWidth, nHeight), 32, BitmapPalette());
-
     cairo_surface_flush( pSurface );
-    BitmapBuffer* pBuffer = pBitmap->AcquireBuffer(false);
     unsigned char *pSrc = cairo_image_surface_get_data( pSurface );
-    unsigned int nSrcStride = cairo_image_surface_get_stride( pSurface );
-    unsigned int nDestStride = pBuffer->mnScanlineSize;
-    for( unsigned long y = 0; y < (unsigned long) nHeight; y++ )
-    {
-        // Cairo surface is y-inverse
-        sal_uInt32 *pSrcPix = (sal_uInt32 *)(pSrc + nSrcStride * (nHeight - y - 1));
-        sal_uInt32 *pDestPix = (sal_uInt32 *)(pBuffer->mpBits + nDestStride * y);
-        for( unsigned long x = 0; x < (unsigned long) nWidth; x++ )
-        {
-            sal_uInt8 nAlpha = (*pSrcPix >> 24);
-            sal_uInt8 nR = (*pSrcPix >> 16) & 0xff;
-            sal_uInt8 nG = (*pSrcPix >> 8) & 0xff;
-            sal_uInt8 nB = *pSrcPix & 0xff;
-            if( nAlpha != 0 && nAlpha != 255 )
-            {
-                // Cairo uses pre-multiplied alpha - we do not => re-multiply
-                nR = (sal_uInt8) MinMax( ((sal_uInt32)nR * 255) / nAlpha, 0, 255 );
-                nG = (sal_uInt8) MinMax( ((sal_uInt32)nG * 255) / nAlpha, 0, 255 );
-                nB = (sal_uInt8) MinMax( ((sal_uInt32)nB * 255) / nAlpha, 0, 255 );
-            }
-
-            // FIXME: lfrb: depends on endianness (use BitmapWriteAccess)
-            *pDestPix = (nAlpha << 24) + (nB << 16) + (nG << 8) + nR;
-            pSrcPix++;
-            pDestPix++;
-        }
-    }
-    pBitmap->ReleaseBuffer(pBuffer, false);
 
     SalTwoRect aRect;
     aRect.mnSrcX = 0;
@@ -78,8 +47,16 @@ void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
     aRect.mnDestWidth = nWidth;
     aRect.mnDestHeight = nHeight;
 
-    mrParent.drawAlphaBitmap(aRect, *pBitmap);
-    delete pBitmap;
+    // XXX: lfrb: GLES 2.0 doesn't support GL_UNSIGNED_INT_8_8_8_8_REV
+    OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
+    if( pImpl )
+    {
+        // Cairo surface data is ARGB with premultiplied alpha and is Y-inverted
+        OpenGLTexture aTexture( nWidth, nHeight, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, pSrc );
+        pImpl->PreDraw();
+        pImpl->DrawAlphaTexture( aTexture, aRect, true, true );
+        pImpl->PostDraw();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -670,6 +670,17 @@ void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRe
     CHECK_GL_ERROR();
 }
 
+void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted, bool bPremultiplied )
+{
+    glEnable( GL_BLEND );
+    if( bPremultiplied )
+        glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    else
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    DrawTexture( rTexture, rPosAry, bInverted );
+    glDisable( GL_BLEND );
+}
+
 void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& pPosAry )
 {
     if( mnMaskedTextureProgram == 0 )
@@ -1301,10 +1312,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
 
     SAL_INFO( "vcl.opengl", "::drawAlphaBitmap" );
     PreDraw();
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    DrawTexture( rTexture, rPosAry );
-    glDisable( GL_BLEND );
+    DrawAlphaTexture( rTexture, rPosAry );
     PostDraw();
 
     CHECK_GL_ERROR();
