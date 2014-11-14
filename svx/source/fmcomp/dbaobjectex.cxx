@@ -80,7 +80,7 @@ namespace svx
             if ( xProp.is() )
                 xProp->getPropertyValue("IsForm") >>= bForm;
         }
-        catch(Exception)
+        catch(const Exception&)
         {}
         AddFormat(getDescriptorFormatId(bForm));
     }

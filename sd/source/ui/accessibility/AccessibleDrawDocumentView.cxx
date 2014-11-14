@@ -979,12 +979,12 @@ uno::Reference<XAccessible> AccessibleDrawDocumentView::GetSelAccContextInTable(
                     }
                 }
             }
-            catch ( lang::IndexOutOfBoundsException )
+            catch (const lang::IndexOutOfBoundsException&)
             {
                 uno::Reference<XAccessible> xEmpty;
                 return xEmpty;
             }
-            catch ( uno::RuntimeException )
+            catch (const uno::RuntimeException&)
             {
                 uno::Reference<XAccessible> xEmpty;
                 return xEmpty;
@@ -1014,7 +1014,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
                     sNewName += OUString::number(nPageNumber);
                 }
             }
-            catch (beans::UnknownPropertyException&)
+            catch (const beans::UnknownPropertyException&)
             {
             }
     }

@@ -3765,7 +3765,7 @@ void XMLAnnotationImportContext::EndElement()
                 {
                     GetImportHelper().InsertTextContent( xTextContent );
                 }
-                catch (lang::IllegalArgumentException)
+                catch (const lang::IllegalArgumentException&)
                 {
                     // ignore
                 }
