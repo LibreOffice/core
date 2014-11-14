@@ -27,6 +27,7 @@
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/instance.hxx>
+#include <sal/log.hxx>
 
 #include <uno/threadpool.h>
 
@@ -190,11 +191,10 @@ namespace cppu_threadpool
         m_aThreadAdmin.join();
     }
 
-    void ThreadPool::createThread( JobQueue *pQueue ,
+    bool ThreadPool::createThread( JobQueue *pQueue ,
                                    const ByteSequence &aThreadId,
                                    bool bAsynchron )
     {
-        bool bCreate = true;
         {
             // Can a thread be reused ?
             MutexGuard guard( m_mutexWaitingThreadList );
@@ -210,16 +210,13 @@ namespace cppu_threadpool
 
                 // let the thread go
                 osl_setCondition( pWaitingThread->condition );
-                bCreate = false;
+                return true;
             }
         }
 
-        if( bCreate )
-        {
-            rtl::Reference< ORequestThread > pThread(
-                new ORequestThread( this, pQueue , aThreadId, bAsynchron) );
-            pThread->launch();
-        }
+        rtl::Reference< ORequestThread > pThread(
+            new ORequestThread( this, pQueue , aThreadId, bAsynchron) );
+        return pThread->launch();
     }
 
     bool ThreadPool::revokeQueue( const ByteSequence &aThreadId, bool bAsynchron )
@@ -264,7 +261,7 @@ namespace cppu_threadpool
     }
 
 
-    void ThreadPool::addJob(
+    bool ThreadPool::addJob(
         const ByteSequence &aThreadId ,
         bool bAsynchron,
         void *pThreadSpecificData,
@@ -310,10 +307,7 @@ namespace cppu_threadpool
             pQueue->add( pThreadSpecificData , doRequest );
         }
 
-        if( bCreateThread )
-        {
-            createThread( pQueue , aThreadId , bAsynchron);
-        }
+        return !bCreateThread || createThread( pQueue , aThreadId , bAsynchron);
     }
 
     void ThreadPool::prepare( const ByteSequence &aThreadId )
@@ -470,7 +464,12 @@ uno_threadpool_putJob(
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
     sal_Bool bIsOneway ) SAL_THROW_EXTERN_C()
 {
-    getThreadPool(hPool)->addJob( pThreadId, bIsOneway, pJob ,doRequest );
+    if (!getThreadPool(hPool)->addJob( pThreadId, bIsOneway, pJob ,doRequest ))
+    {
+        SAL_WARN(
+            "cppu",
+            "uno_threadpool_putJob in parallel with uno_threadpool_destroy");
+    }
 }
 
 extern "C" void SAL_CALL

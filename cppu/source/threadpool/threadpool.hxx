@@ -102,7 +102,7 @@ namespace cppu_threadpool {
         ThreadAdmin();
         ~ThreadAdmin ();
 
-        void add( rtl::Reference< ORequestThread > const & );
+        bool add( rtl::Reference< ORequestThread > const & );
         void remove( rtl::Reference< ORequestThread > const & );
         void join();
 
@@ -126,7 +126,7 @@ namespace cppu_threadpool {
         void dispose( sal_Int64 nDisposeId );
         void destroy( sal_Int64 nDisposeId );
 
-        void addJob( const ::rtl::ByteSequence &aThreadId,
+        bool addJob( const ::rtl::ByteSequence &aThreadId,
                      bool bAsynchron,
                      void *pThreadSpecificData,
                      RequestFun * doRequest );
@@ -146,7 +146,7 @@ namespace cppu_threadpool {
         ThreadAdmin & getThreadAdmin() { return m_aThreadAdmin; }
 
     private:
-        void createThread( JobQueue *pQueue, const ::rtl::ByteSequence &aThreadId, bool bAsynchron);
+        bool createThread( JobQueue *pQueue, const ::rtl::ByteSequence &aThreadId, bool bAsynchron);
 
 
         ThreadIdHashMap m_mapQueue;

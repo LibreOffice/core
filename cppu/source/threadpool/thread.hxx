@@ -45,7 +45,7 @@ namespace cppu_threadpool {
 
         void setTask( JobQueue * , const ::rtl::ByteSequence & aThreadId , bool bAsynchron );
 
-        void launch();
+        bool launch();
 
         static inline void * operator new(std::size_t size)
         { return SimpleReferenceObject::operator new(size); }

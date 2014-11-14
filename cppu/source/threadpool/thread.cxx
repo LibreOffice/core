@@ -21,12 +21,6 @@
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>
 
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
-#include <rtl/ustring.h>
-#include <rtl/ustring.hxx>
-
 #include "thread.hxx"
 #include "jobqueue.hxx"
 #include "threadpool.hxx"
@@ -49,16 +43,15 @@ namespace cppu_threadpool {
 #endif
     }
 
-    void ThreadAdmin::add( rtl::Reference< ORequestThread > const & p )
+    bool ThreadAdmin::add( rtl::Reference< ORequestThread > const & p )
     {
         MutexGuard aGuard( m_mutex );
         if( m_disposed )
         {
-            throw css::lang::DisposedException(
-                        "cppu_threadpool::ORequestThread created after"
-                        " cppu_threadpool::ThreadAdmin has been disposed");
+            return false;
         }
         m_lst.push_back( p );
+        return true;
     }
 
     void ThreadAdmin::remove_locked( rtl::Reference< ORequestThread > const & p )
@@ -120,14 +113,16 @@ namespace cppu_threadpool {
         m_bAsynchron = bAsynchron;
     }
 
-    void ORequestThread::launch()
+    bool ORequestThread::launch()
     {
         // Assumption is that osl::Thread::create returns normally with a true
         // return value iff it causes osl::Thread::run to start executing:
         acquire();
         ThreadAdmin & rThreadAdmin = m_aThreadPool->getThreadAdmin();
         osl::ClearableMutexGuard g(rThreadAdmin.m_mutex);
-        rThreadAdmin.add( this );
+        if (!rThreadAdmin.add( this )) {
+            return false;
+        }
         try {
             if (!create()) {
                 throw std::runtime_error("osl::Thread::create failed");
@@ -138,6 +133,7 @@ namespace cppu_threadpool {
             release();
             throw;
         }
+        return true;
     }
 
     void ORequestThread::onTerminated()
