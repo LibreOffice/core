@@ -73,6 +73,7 @@
 #include <poll.h>
 #include <boost/scoped_array.hpp>
 
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <officecfg/Office/Common.hxx>
 
 using namespace vcl_sal;
@@ -191,9 +192,15 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
     if( nVID && sal_GetVisualInfo( pDisplay, nVID, rVI ) )
         return rVI.visualid == nDefVID;
 
-    bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
-    if( bUseOpenGL && OpenGLHelper::GetVisualInfo( pDisplay, nScreen, rVI ) )
-        return rVI.visualid == nDefVID;
+    try {
+        bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
+        if( bUseOpenGL && OpenGLHelper::GetVisualInfo( pDisplay, nScreen, rVI ) )
+            return rVI.visualid == nDefVID;
+    }
+    catch (const css::uno::DeploymentException&)
+    {
+        // too early to try to access configmgr
+    }
 
     XVisualInfo aVI;
     aVI.screen = nScreen;
