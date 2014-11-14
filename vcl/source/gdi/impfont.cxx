@@ -110,6 +110,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     if( (nSubTables <= 0) || (nLength < (24 + 8*nSubTables)) )
         return false;
 
+    const unsigned char* pEndValidArea = pCmap + nLength;
+
     // find the most interesting subtable in the CMAP
     rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
     int nOffset = 0;
@@ -198,8 +200,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 SAL_WARN("vcl.gdi", "Format 4 char should not be 0xFFFF");
                 break;
             }
-            *(pCP++) = cMinChar;
-            *(pCP++) = cMaxChar + 1;
             if( !nRangeOffset ) {
                 // glyphid can be calculated directly
                 pStartGlyphs[i] = (cMinChar + nGlyphDelta) & 0xFFFF;
@@ -207,11 +207,20 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 // update the glyphid-array with the glyphs in this range
                 pStartGlyphs[i] = -(int)aGlyphIdArray.size();
                 const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
+                const size_t nRemainingSize = pEndValidArea - pGlyphIdPtr;
+                const size_t nMaxPossibleRecords = nRemainingSize/2;
+                const size_t nRequestedRecords = cMaxChar - cMinChar + 1;
+                if (nRequestedRecords > nMaxPossibleRecords) {  // no sane font should trigger this
+                    SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
+                    break;
+                }
                 for( sal_UCS4 c = cMinChar; c <= cMaxChar; ++c, pGlyphIdPtr+=2 ) {
                     const int nGlyphIndex = Getsal_uInt16( pGlyphIdPtr ) + nGlyphDelta;
                     aGlyphIdArray.push_back( static_cast<sal_uInt16>(nGlyphIndex) );
                 }
             }
+            *(pCP++) = cMinChar;
+            *(pCP++) = cMaxChar + 1;
         }
         nRangeCount = (pCP - pCodePairs) / 2;
     }
