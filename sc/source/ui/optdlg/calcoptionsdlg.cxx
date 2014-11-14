@@ -752,11 +752,7 @@ const ScCalcConfig::OpenCLImplMatcher& ScCalcOptionsDialog::CurrentWhiteOrBlackL
 
     auto i = rSet.begin();
     int n(mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos());
-    while (n && i != rSet.end())
-    {
-        ++i;
-        --n;
-    }
+    std::advance(i, n);
 
     return *i;
 }
