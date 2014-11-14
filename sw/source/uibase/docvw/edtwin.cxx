@@ -3999,7 +3999,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 if ( m_bIsInMove || IsMinMove( m_aStartPos, aPixPt ) )
                 {
                     // event processing for resizing
-                    if( pSdrView->AreObjectsMarked() )
+                    if (pSdrView && pSdrView->AreObjectsMarked())
                     {
                         const SwFrmFmt* pFlyFmt;
                         const SvxMacro* pMacro;
