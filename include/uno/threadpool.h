@@ -152,7 +152,7 @@ uno_threadpool_putJob(
     sal_Sequence *pThreadId,
     void *pJob,
     void ( SAL_CALL * doRequest ) ( void *pThreadSpecificData ),
-    sal_Bool bIsOneway ) SAL_THROW_EXTERN_C();
+    sal_Bool bIsOneway );
 
 /**
   All threads, that are waiting on the hPool handle, are forced out of the pool.
