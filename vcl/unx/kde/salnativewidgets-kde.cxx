@@ -26,6 +26,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/kde/kdedata.hxx>
+#include "unx/pixmap.hxx"
 
 #include <vcl/settings.hxx>
 #include "fontmanager.hxx"
@@ -313,7 +314,7 @@ class WidgetPainter
     */
         bool drawStyledWidget( QWidget *pWidget,
                 ControlState nState, const ImplControlValue& aValue,
-                KDESalGraphics* pGraphics,
+                X11SalGraphics* pGraphics,
                 ControlPart nPart = PART_ENTIRE_CONTROL );
 
     /** 'Get' method for push button.
@@ -505,7 +506,7 @@ WidgetPainter::~WidgetPainter( void )
 
 bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     ControlState nState, const ImplControlValue& aValue,
-    KDESalGraphics* pGraphics, ControlPart nPart )
+    X11SalGraphics* pGraphics, ControlPart nPart )
 {
     if ( !pWidget )
         return false;
@@ -852,7 +853,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         return false;
 
     // Bitblt it to the screen
-    pGraphics->RenderPixmapToScreen( xPixmap, qWidgetPos.x(), qWidgetPos.y() );
+    pGraphics->RenderPixmapToScreen( &xPixmap, qWidgetPos.x(), qWidgetPos.y() );
 
     // Restore widget's position
     pWidget->move( qWidgetPos );
