@@ -26,6 +26,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <sal/config.h>
+
+#if defined _WIN32
+#define _WINSOCK_DEPRECATED_NO_WARNINGS // warnings about inet_addr
+#endif
+
 #include <errno.h>
 #include <stdlib.h>
 
