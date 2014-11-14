@@ -40,3 +40,14 @@ End
 
 #endif
 
+#if defined(WITH_VC120_REDIST)
+
+MergeModule gid_MergeModule_Microsoft_VC120_CRT_x86
+    Feature = gm_Root;
+    Name = "Microsoft_VC120_CRT_x86.msm";
+    RootDir = "TARGETDIR";
+    ComponentCondition = "VC_REDIST=1";
+End
+
+#endif
+

@@ -65,4 +65,24 @@ End
 
 #endif
 
+#if defined(WITH_VC120_REDIST)
+
+File gid_File_Lib_Msvcr120
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "msvcr120.dll";
+    ComponentCondition = "VersionNT64";
+End
+
+File gid_File_Lib_Msvcp120
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "msvcp120.dll";
+    ComponentCondition = "VersionNT64";
+End
+
+#endif
+
 #endif
