@@ -21,7 +21,6 @@
 
 #include <cstddef>
 
-#include "osl/diagnose.h"
 #include "rtl/textcvt.h"
 #include "sal/types.h"
 

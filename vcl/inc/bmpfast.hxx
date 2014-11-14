@@ -24,8 +24,6 @@ class BitmapWriteAccess;
 class BitmapReadAccess;
 struct BitmapBuffer;
 class BitmapColor;
-class Size;
-class Point;
 struct SalTwoRect;
 
 // the bmpfast functions have signatures with good compatibility to

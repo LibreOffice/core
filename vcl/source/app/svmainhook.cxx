@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/svmain.hxx>
-
 #ifndef MACOSX
 // MacOSX implementation of ImplSVMainHook is in osx/salinst.cxx
 
