@@ -24,6 +24,7 @@ $(eval $(call gb_Library_use_libraries,scn,\
 	svt \
 	vcl \
 	tl \
+	utl \
 	comphelper \
 	cppuhelper \
 	cppu \

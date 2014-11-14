@@ -21,6 +21,7 @@
 #include <math.h>
 #include <osl/file.h>
 #include <tools/stream.hxx>
+#include <unotools/tempfile.hxx>
 #include <sane.hxx>
 #include <dlfcn.h>
 #include <stdio.h>
@@ -694,7 +695,9 @@ bool Sane::Start( BitmapTransporter& rBitmap )
                 if( nStatus != SANE_STATUS_GOOD )
                     bSynchronousRead = true;
             }
-            FILE* pFrame = tmpfile();
+            utl::TempFile aFrame;
+            aFrame.EnableKillingFile();
+            FILE* pFrame = fopen(OUStringToOString(aFrame.GetFileName(), osl_getThreadTextEncoding()).getStr(), "wb");
             if( ! pFrame )
             {
                 bSuccess = false;

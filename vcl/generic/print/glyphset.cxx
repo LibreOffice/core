@@ -35,6 +35,8 @@
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.hxx"
 
+#include <unotools/tempfile.hxx>
+
 #include <set>
 #include <map>
 #include <algorithm>
@@ -58,9 +60,6 @@ GlyphSet::~GlyphSet ()
 {
     /* FIXME delete the glyphlist ??? */
 }
-
-
-
 
 bool
 GlyphSet::GetCharID (
@@ -742,7 +741,10 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
     sal_Int32 nSuccess = OpenTTFontFile(aTTFileName.getStr(), nFace, &pTTFont);
     if (nSuccess != SF_OK)
         return false;
-    FILE* pTmpFile = tmpfile();
+
+    utl::TempFile aTmpFile;
+    aTmpFile.EnableKillingFile();
+    FILE* pTmpFile = fopen(OUStringToOString(aTmpFile.GetFileName(), osl_getThreadTextEncoding()).getStr(), "wb");
     if (pTmpFile == NULL)
         return false;
 
