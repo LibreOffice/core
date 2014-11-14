@@ -673,7 +673,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         for ( i = 0; i < nSize; ++i )
             pParamArr[i] = pList[i].pData;
         eErr = jfw_setVMParameters( pParamArrIter, nSize );
-        SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters");
+        SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setVMParameters"); (void)eErr;
         pParamArrIter = pParamArr;
         rtl_freeMemory( pParamArr );
         bModified = true;
@@ -685,7 +685,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
         if ( m_pPathDlg->GetOldPath() != sPath )
         {
             eErr = jfw_setUserClassPath( sPath.pData );
-            SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath");
+            SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setUserClassPath"); (void)eErr;
             bModified = true;
         }
     }
@@ -720,7 +720,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
                     }
 
                     eErr = jfw_setSelectedJRE( pInfo );
-                    SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE");
+                    SAL_WARN_IF(JFW_E_NONE != eErr, "cui.options", "SvxJavaOptionsPage::FillItemSet(): error in jfw_setSelectedJRE"); (void)eErr;
                     bModified = true;
                 }
             }
