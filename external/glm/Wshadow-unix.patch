@@ -52,9 +52,9 @@ diff -ur glm.org/glm/core/type_vec1.hpp glm/glm/core/type_vec1.hpp
 +		GLM_FUNC_DECL tvec1(tref1<T> const & r_);
  
  		//////////////////////////////////////
- 		// Conversion scalar constructors
+ 		// Convertion scalar constructors
  
- 		//! Explicit conversions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
+ 		//! Explicit converions (From section 5.4.1 Conversion and scalar constructors of GLSL 1.30.08 specification)
  		template <typename U> 
 -		GLM_FUNC_DECL explicit tvec1(U const & s);
 +		GLM_FUNC_DECL explicit tvec1(U const & s_);
