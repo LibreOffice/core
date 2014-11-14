@@ -25,6 +25,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/button.hxx>
 #include <vcl/floatwin.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #if 0
@@ -40,7 +41,7 @@ class DemoBase :
         public WorkWindow // hide OutputDevice if necessary
 {
 public:
-    DemoBase() : WorkWindow( NULL, WB_APP | WB_STDWORK)
+    DemoBase() : WorkWindow(NULL, WB_APP | WB_STDWORK)
     {
     }
     OutputDevice &getOutDev() { return *this; }
@@ -88,8 +89,9 @@ public:
     {
         if (!Application::LoadBrandBitmap("intro", maIntro))
             Application::Abort("Failed to load intro image");
+
         maIntroBW = maIntro.GetBitmap();
-        maIntroBW.Filter( BMP_FILTER_EMBOSS_GREY );
+        maIntroBW.Filter(BMP_FILTER_EMBOSS_GREY);
 
         InitRenderers();
     }
@@ -101,9 +103,9 @@ public:
     int             mnBounceX, mnBounceY;
     DECL_LINK(BounceTimerCb, void *);
 
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE
     {
         fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
         drawToDevice(getOutDev(), false);
@@ -119,9 +121,9 @@ public:
         long nBorderSize = aSize.Width() / 32;
         long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
         long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
-        for (int y = 0; y < nY; y++ )
+        for (int y = 0; y < nY; y++)
         {
-            for (int x = 0; x < nX; x++ )
+            for (int x = 0; x < nX; x++)
             {
                 r.SetPos(Point(nBorderSize + (nBorderSize + nBoxWidth) * x,
                                nBorderSize + (nBorderSize + nBoxHeight) * y));
@@ -224,15 +226,15 @@ public:
             {
                 rDev.SetFillColor(Color(COL_LIGHTRED));
                 rDev.SetLineColor(Color(COL_BLACK));
-                rDev.DrawRect( r );
+                rDev.DrawRect(r);
 
                 for(int i=0; i<r.GetHeight(); i+=15)
-                    rDev.DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
+                    rDev.DrawLine(Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i));
                 for(int i=0; i<r.GetWidth(); i+=15)
-                    rDev.DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
+                    rDev.DrawLine(Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()));
 
                 // Should draw a white-line across the middle
-                Color aLastPixel( COL_WHITE );
+                Color aLastPixel(COL_WHITE);
                 Point aCenter((r.Left() + r.Right())/2 - 4,
                               (r.Top() + r.Bottom())/2 - 4);
                 for(int i=0; i<8; i++)
@@ -250,10 +252,10 @@ public:
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
-            rDev.SetTextColor( Color( COL_BLACK ) );
-            vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
-            rDev.SetFont( aFont );
-            rDev.DrawText( r, OUString( "Click any rect to zoom" ) );
+            rDev.SetTextColor(Color(COL_BLACK));
+            vcl::Font aFont(OUString("Times"), Size(0, 25));
+            rDev.SetFont(aFont);
+            rDev.DrawText(r, OUString("Click any rect to zoom"));
         }
     };
 
@@ -631,27 +633,39 @@ public:
                 Size aSize(maIcons[i].GetSizePixel());
 //              sAL_DEBUG("Draw icon '" << maIconNames[i] << "'");
 
-                basegfx::B2DHomMatrix aTransform;
-                aTransform.scale(aSize.Width(), aSize.Height());
-                aTransform.translate(p.X(), p.Y());
-                switch (1)
-                {
-                case 0:
+                if (!i % 4)
                     rDev.DrawBitmapEx(p, maIcons[i]);
-                    break;
-                case 1:
+                else
+                {
+                    basegfx::B2DHomMatrix aTransform;
+                    aTransform.scale(aSize.Width(), aSize.Height());
+                    switch (i % 4)
+                    {
+                    case 2:
+                        aTransform.shearX((double)((i >> 2) % 8) / 8);
+                        aTransform.shearY((double)((i >> 4) % 8) / 8);
+                        break;
+                    case 3:
+                        aTransform.translate(-aSize.Width()/2, -aSize.Height()/2);
+                        aTransform.rotate(i);
+                        if (i & 0x100)
+                        {
+                            aTransform.shearX((double)((i >> 2) % 8) / 8);
+                            aTransform.shearY((double)((i >> 4) % 8) / 8);
+                        }
+                        aTransform.translate(aSize.Width()/2,  aSize.Height()/2);
+                        break;
+                    default:
+                        aTransform.translate(-aSize.Width()/2, -aSize.Height()/2);
+                        aTransform.rotate(2 * F_2PI * i / nToRender);
+                        aTransform.translate(aSize.Width()/2,  aSize.Height()/2);
+                        break;
+                    }
+                    aTransform.translate(p.X(), p.Y());
                     rDev.DrawTransformedBitmapEx(aTransform, maIcons[i]);
-                    break;
-                case 2:
-                    aTransform.shearX(10);
-                    rDev.DrawTransformedBitmapEx(aTransform, maIcons[i]);
-                    break;
-                case 3:
-                    aTransform.rotate(i);
-                    rDev.DrawTransformedBitmapEx(aTransform, maIcons[i]);
-                    break;
                 }
 
+                // next position
                 p.Move(aSize.Width(), 0);
                 if (aSize.Height() > nMaxH)
                     nMaxH = aSize.Height();
@@ -743,7 +757,7 @@ IMPL_LINK_NOARG(DemoWin,BounceTimerCb)
     return 0;
 }
 
-void DemoWin::MouseButtonDown( const MouseEvent& rMEvt )
+void DemoWin::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // click to zoom out
     if (mnSelectedRenderer >= 0)
@@ -816,7 +830,7 @@ public:
         try
         {
             DemoWin aMainWin;
-            aMainWin.SetText( "Interactive VCL demo" );
+            aMainWin.SetText("Interactive VCL demo");
             aMainWin.Show();
             Application::Execute();
         }
@@ -842,11 +856,11 @@ protected:
             uno::Reference<uno::XComponentContext> xComponentContext
                 = ::cppu::defaultBootstrap_InitialComponentContext();
             xMSF = uno::Reference<lang::XMultiServiceFactory>
-                ( xComponentContext->getServiceManager(), uno::UNO_QUERY );
-            if( !xMSF.is() )
+                (xComponentContext->getServiceManager(), uno::UNO_QUERY);
+            if(!xMSF.is())
                 Application::Abort("Bootstrap failure - no service manager");
 
-            ::comphelper::setProcessServiceFactory( xMSF );
+            ::comphelper::setProcessServiceFactory(xMSF);
         }
         catch (const uno::Exception &e)
         {
@@ -857,8 +871,8 @@ protected:
     {
         uno::Reference< lang::XComponent >(
             comphelper::getProcessComponentContext(),
-        uno::UNO_QUERY_THROW )-> dispose();
-        ::comphelper::setProcessServiceFactory( NULL );
+        uno::UNO_QUERY_THROW)-> dispose();
+        ::comphelper::setProcessServiceFactory(NULL);
     }
 };
 
