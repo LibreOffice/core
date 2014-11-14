@@ -18,11 +18,7 @@
  */
 
 
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
-#include <stdlib.h>
-#else
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"

@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include <sal/types.h>
+#include <sal/alloca.h>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -50,9 +51,6 @@
 #include "graphite_features.hxx"
 #endif
 
-#ifdef SOLARIS
-#include <alloca.h>
-#endif
 
 #define TEXT_DRAW_ELLIPSIS  (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS)
 

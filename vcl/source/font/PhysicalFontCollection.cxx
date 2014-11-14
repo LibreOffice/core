@@ -18,6 +18,7 @@
  */
 
 #include <sal/types.h>
+#include <sal/alloca.h>
 
 #include <vector>
 
@@ -36,9 +37,6 @@
 
 #include "PhysicalFontCollection.hxx"
 
-#ifdef SOLARIS
-#include <alloca.h>
-#endif
 
 static unsigned lcl_IsCJKFont( const OUString& rFontName )
 {

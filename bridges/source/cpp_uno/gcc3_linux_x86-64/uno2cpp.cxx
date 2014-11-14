@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
-#include <stdlib.h>
-#else
-#include <alloca.h>
-#endif
+#include <sal/alloca.h>
+
 #include <exception>
 #include <typeinfo>
 
