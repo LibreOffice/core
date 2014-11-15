@@ -316,7 +316,7 @@ SfxTabDialog::SfxTabDialog
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
 )
-    : TabDialog(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription)
+    : TabDialog(pParent, rID, rUIXMLDescription)
     , pFrame(pViewFrame)
     , pSet(pItemSet)
     , pOutSet(0)
@@ -345,7 +345,7 @@ SfxTabDialog::SfxTabDialog
                                   // can be NULL, when Pages are onDemand
     bool bEditFmt                 // when yes -> additional Button for standard
 )
-    : TabDialog(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription)
+    : TabDialog(pParent, rID, rUIXMLDescription)
     , pFrame(0)
     , pSet(pItemSet)
     , pOutSet(0)
