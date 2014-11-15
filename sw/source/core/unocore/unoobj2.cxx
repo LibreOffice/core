@@ -538,7 +538,7 @@ SwXParagraphEnumeration::hasMoreElements() throw (uno::RuntimeException, std::ex
 {
     SolarMutexGuard aGuard;
 
-    return (m_pImpl->m_bFirstParagraph) ? sal_True : m_pImpl->m_xNextPara.is();
+    return static_cast<sal_Bool>(m_pImpl->m_bFirstParagraph || m_pImpl->m_xNextPara.is());
 }
 
 //!! compare to SwShellTableCrsr::FillRects() in viscrs.cxx
@@ -1861,10 +1861,8 @@ SwXParaFrameEnumeration::hasMoreElements() throw (uno::RuntimeException, std::ex
     if (!m_pImpl->GetCursor())
         throw uno::RuntimeException();
 
-    return (m_pImpl->m_xNextObject.is())
-        ? sal_True
-        : lcl_CreateNextObject(*m_pImpl->GetCursor(),
-            m_pImpl->m_xNextObject, m_pImpl->m_Frames);
+    return static_cast<sal_Bool>(m_pImpl->m_xNextObject.is() ||
+        lcl_CreateNextObject(*m_pImpl->GetCursor(),m_pImpl->m_xNextObject, m_pImpl->m_Frames));
 }
 
 uno::Any SAL_CALL SwXParaFrameEnumeration::nextElement()
