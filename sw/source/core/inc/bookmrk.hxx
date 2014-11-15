@@ -80,7 +80,7 @@ namespace sw {
             virtual bool IsExpanded() const SAL_OVERRIDE
                 { return static_cast< bool >(m_pPos2); }
 
-            virtual void SetName(const OUString& rName)
+            void SetName(const OUString& rName)
                 { m_aName = rName; }
             virtual void SetMarkPos(const SwPosition& rNewPos);
             virtual void SetOtherMarkPos(const SwPosition& rNewPos);
@@ -152,7 +152,7 @@ namespace sw {
 
             void SetRefObject( SwServerObject* pObj );
 
-            void DeregisterFromDoc(SwDoc* const pDoc);
+            virtual void DeregisterFromDoc(SwDoc* const pDoc);
             virtual ~DdeBookmark();
 
         private:
@@ -171,6 +171,8 @@ namespace sw {
                 const OUString& rShortName);
             virtual void InitDoc(SwDoc* const io_Doc) SAL_OVERRIDE;
 
+            virtual void DeregisterFromDoc(SwDoc* const io_pDoc) SAL_OVERRIDE;
+
             virtual const OUString& GetShortName() const SAL_OVERRIDE
                 { return m_sShortName; }
             virtual const vcl::KeyCode& GetKeyCode() const SAL_OVERRIDE
@@ -179,6 +181,8 @@ namespace sw {
                 { m_sShortName = rShortName; }
             virtual void SetKeyCode(const vcl::KeyCode& rCode) SAL_OVERRIDE
                 { m_aCode = rCode; }
+
+            virtual void SetName(const OUString& rName, SwDoc* const io_Doc);
 
             // ::sfx2::Metadatable
             virtual ::sfx2::IXmlIdRegistry& GetRegistry() SAL_OVERRIDE;

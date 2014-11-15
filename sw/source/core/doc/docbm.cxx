@@ -548,7 +548,16 @@ namespace sw { namespace mark
         {
             m_aMarkNamesSet.erase(pMarkBase->GetName());
             m_aMarkNamesSet.insert(rNewName);
-            pMarkBase->SetName(rNewName);
+
+            // fdo#51741 Bookmark should mark document as modified when renamed
+            if (::sw::mark::Bookmark* pBookmark = dynamic_cast< ::sw::mark::Bookmark* >(io_pMark))
+            {
+                pBookmark->SetName(rNewName, m_pDoc);
+            }
+            else
+            {
+                pMarkBase->SetName(rNewName);
+            }
         }
         return true;
     }
