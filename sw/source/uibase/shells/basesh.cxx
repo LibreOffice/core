@@ -1697,7 +1697,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                         GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
                                 }
                             }
-                            bSet = bDisable ? sal_False : rWrap.IsContour();
+                            bSet = !bDisable && rWrap.IsContour();
 
                         break;
                         case FN_WRAP_ANCHOR_ONLY:
