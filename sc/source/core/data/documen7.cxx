@@ -100,22 +100,70 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
 {
     ClearFormulaContext();
 
-    ScBulkBroadcast aBulkBroadcast(pBASM);
+    if (!pBASM)
+        return;    // Clipboard or Undo
+
+    SCTAB nTab1 = rRange.aStart.Tab();
+    SCTAB nTab2 = rRange.aEnd.Tab();
+    SCROW nRow1 = rRange.aStart.Row();
+    SCROW nRow2 = rRange.aEnd.Row();
+    SCCOL nCol1 = rRange.aStart.Col();
+    SCCOL nCol2 = rRange.aEnd.Col();
 
     ScHint aHint(nHint, ScAddress());
     ScAddress& rPos = aHint.GetAddress();
-    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+
+    if (!bHardRecalcState)
     {
-        rPos.SetTab(nTab);
-        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
+        bool bIsBroadcasted = false;
+
+        for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
         {
-            rPos.SetCol(nCol);
-            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            rPos.SetTab(nTab);
+            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
                 rPos.SetRow(nRow);
-                Broadcast(aHint);
+                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                {
+                    rPos.SetCol(nCol);
+                    SvtBroadcaster* pBC = GetBroadcaster(rPos);
+                    if (pBC)
+                    {
+                        pBC->Broadcast(aHint);
+                        bIsBroadcasted = true;
+                    }
+                }
             }
         }
+
+        if (pBASM->AreaBroadcast(rRange, nHint) || bIsBroadcasted)
+            TrackFormulas(nHint);
+    }
+
+    //  Repaint fuer bedingte Formate mit relativen Referenzen:
+    for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
+        if (pCondFormList)
+        {
+            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+            {
+                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+                    pCondFormList->SourceChanged(ScAddress(nCol,nRow,nTab));
+            }
+        }
+    }
+
+    for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (pTab)
+            pTab->SetStreamValid(false);
     }
 
     BroadcastUno(SfxSimpleHint(SC_HINT_DATACHANGED));
