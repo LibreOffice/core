@@ -1373,6 +1373,21 @@ bool ScRange::Intersects( const ScRange& rRange ) const
         );
 }
 
+ScRange ScRange::Union( const ScRange& rOther ) const
+{
+    SCCOL nCol1 = std::max(aStart.Col(), rOther.aStart.Col());
+    SCCOL nCol2 = std::min(aEnd.Col(), rOther.aEnd.Col());
+    SCROW nRow1 = std::max(aStart.Row(), rOther.aStart.Row());
+    SCROW nRow2 = std::min(aEnd.Row(), rOther.aEnd.Row());
+    SCTAB nTab1 = std::max(aStart.Tab(), rOther.aStart.Tab());
+    SCTAB nTab2 = std::min(aEnd.Tab(), rOther.aEnd.Tab());
+
+    if (nCol1 > nCol2 || nRow1 > nRow2 || nTab1 > nTab2)
+        return ScRange(ScAddress::INITIALIZE_INVALID);
+
+    return ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
+}
+
 void ScRange::PutInOrder()
 {
     SCCOL nCol1 = aStart.Col(), nCol2 = aEnd.Col();

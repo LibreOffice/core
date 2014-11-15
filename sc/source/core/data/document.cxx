@@ -2590,7 +2590,6 @@ class BroadcastAction : public sc::ColumnSpanSet::ColumnAction
 {
     ScDocument& mrDoc;
     ScColumn* mpCol;
-    std::vector<SCROW> maRows;
 
 public:
     BroadcastAction( ScDocument& rDoc ) : mrDoc(rDoc), mpCol(NULL) {}
@@ -2606,12 +2605,9 @@ public:
             return;
 
         assert(mpCol);
-        maRows.clear();
-        maRows.reserve(nRow2-nRow1+1);
-        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-            maRows.push_back(nRow);
-
-        mpCol->BroadcastCells(maRows, SC_HINT_DATACHANGED);
+        ScRange aRange(mpCol->GetCol(), nRow1, mpCol->GetTab());
+        aRange.aEnd.SetRow(nRow2);
+        mrDoc.BroadcastCells(aRange, SC_HINT_DATACHANGED);
     };
 };
 

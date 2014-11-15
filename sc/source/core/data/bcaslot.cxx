@@ -258,6 +258,83 @@ ScBroadcastAreas::const_iterator ScBroadcastAreaSlot::FindBroadcastArea(
     return aBroadcastAreaTbl.find( &aTmpSeekBroadcastArea);
 }
 
+namespace {
+
+void broadcastRangeByCell( SvtBroadcaster& rBC, const ScRange& rRange, sal_uLong nHint )
+{
+    ScHint aHint(nHint, ScAddress());
+    ScAddress& rPos = aHint.GetAddress();
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        rPos.SetTab(nTab);
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        {
+            rPos.SetCol(nCol);
+            for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            {
+                rPos.SetRow(nRow);
+                rBC.Broadcast(aHint);
+            }
+        }
+    }
+}
+
+}
+
+bool ScBroadcastAreaSlot::AreaBroadcast( const ScRange& rRange, sal_uLong nHint )
+{
+    if (aBroadcastAreaTbl.empty())
+        return false;
+
+    bool bInBroadcast = mbInBroadcastIteration;
+    mbInBroadcastIteration = true;
+    bool bIsBroadcasted = false;
+
+    mbHasErasedArea = false;
+
+    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
+            aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
+    {
+        if (mbHasErasedArea && isMarkedErased( aIter))
+            continue;
+
+        ScBroadcastArea* pArea = (*aIter).mpArea;
+        const ScRange& rAreaRange = pArea->GetRange();
+
+        // Take the union of the area range and the broadcast range.
+        ScRange aUnion = rAreaRange.Union(rRange);
+        if (!aUnion.IsValid())
+            continue;
+
+        if (pArea->IsGroupListening())
+        {
+            if (pBASM->IsInBulkBroadcast())
+            {
+                pBASM->InsertBulkGroupArea(pArea, aUnion);
+            }
+            else
+            {
+                broadcastRangeByCell(pArea->GetBroadcaster(), aUnion, nHint);
+                bIsBroadcasted = true;
+            }
+        }
+        else if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
+        {
+            broadcastRangeByCell(pArea->GetBroadcaster(), aUnion, nHint);
+            bIsBroadcasted = true;
+        }
+    }
+
+    mbInBroadcastIteration = bInBroadcast;
+
+    // A Notify() during broadcast may call EndListeningArea() and thus dispose
+    // an area if it was the last listener, which would invalidate an iterator
+    // pointing to it, hence the real erase is done afterwards.
+    FinallyEraseAreas();
+
+    return bIsBroadcasted;
+}
+
 bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 {
     if (aBroadcastAreaTbl.empty())
@@ -756,6 +833,29 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
             }
         }
     }
+}
+
+bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, sal_uLong nHint )
+{
+    bool bBroadcasted = false;
+    SCTAB nEndTab = rRange.aEnd.Tab();
+    for (TableSlotsMap::iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
+            iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
+    {
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        SCSIZE nStart, nEnd, nRowBreak;
+        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
+        ScBroadcastAreaSlot** pp = ppSlots + nOff;
+        while ( nOff <= nEnd )
+        {
+            if ( *pp )
+                bBroadcasted |= (*pp)->AreaBroadcast( rRange, nHint );
+            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
+        }
+    }
+    return bBroadcasted;
 }
 
 bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const

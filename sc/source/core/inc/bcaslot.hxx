@@ -211,6 +211,7 @@ public:
     void EndListeningArea(
         const ScRange& rRange, bool bGroupListening, SvtListener* pListener, ScBroadcastArea*& rpArea );
 
+    bool AreaBroadcast( const ScRange& rRange, sal_uLong nHint );
     bool                AreaBroadcast( const ScHint& rHint );
     /// @return true if at least one broadcast occurred.
     bool                AreaBroadcastInRange( const ScRange& rRange,
@@ -312,6 +313,7 @@ public:
     void EndListeningArea(
         const ScRange& rRange, bool bGroupListening, SvtListener* pListener );
 
+    bool AreaBroadcast( const ScRange& rRange, sal_uLong nHint );
     bool                AreaBroadcast( const ScHint& rHint ) const;
         // return: at least one broadcast occurred
     bool                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
