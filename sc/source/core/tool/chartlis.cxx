@@ -619,8 +619,8 @@ void ScChartListenerCollection::UpdateDirtyCharts()
 
         if (meModifiedDuringUpdate == SC_CLCUPDATE_MODIFIED)
             break;      // iterator is invalid
-        
-	if (aIdle.IsActive() && !pDoc->IsImportingXML())
+
+        if (aIdle.IsActive() && !pDoc->IsImportingXML())
             break;                      // one interfered
     }
     meModifiedDuringUpdate = SC_CLCUPDATE_NONE;
