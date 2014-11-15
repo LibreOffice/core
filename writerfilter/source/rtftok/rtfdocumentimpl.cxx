@@ -1005,8 +1005,6 @@ int RTFDocumentImpl::resolveChars(char ch)
         return 0;
     }
 
-    if (m_aStates.top().nInternalState != INTERNAL_HEX)
-        checkUnicode(/*bUnicode =*/ false, /*bHex =*/ true);
 
     OStringBuffer aBuf;
 
@@ -1096,9 +1094,10 @@ int RTFDocumentImpl::resolveChars(char ch)
         // set components back to zero
         m_aStates.top().aCurrentColor = RTFColorTableEntry();
     }
-    else if (!aOUStr.isEmpty())
-        text(aOUStr);
+    else if (!aStr.isEmpty())
+        m_aHexBuffer.append(aStr);
 
+    checkUnicode(/*bUnicode =*/ false, /*bHex =*/ true);
     return 0;
 }
 
