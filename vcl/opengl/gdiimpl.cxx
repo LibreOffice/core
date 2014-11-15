@@ -1592,6 +1592,8 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
     PreDraw();
 
+#define FIXME_BROKEN_STENCIL_FOR_GRADIENTS 0
+#if FIXME_BROKEN_STENCIL_FOR_GRADIENTS
     ImplSetClipBit( vcl::Region( rPolyPoly ), 0x02 );
     if( mbUseStencil )
     {
@@ -1603,6 +1605,7 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         glEnable( GL_STENCIL_TEST );
         glStencilFunc( GL_EQUAL, 2, 0xFF );
     }
+#endif
 
     // if border >= 100%, draw solid rectangle with start color
     if( rGradient.GetBorder() >= 100.0 )
@@ -1627,8 +1630,10 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
         DrawRadialGradient( rGradient, aBoundRect );
     }
 
+#if FIXME_BROKEN_STENCIL_FOR_GRADIENTS
     if( !mbUseStencil )
         glDisable( GL_STENCIL_TEST );
+#endif
     PostDraw();
 
     CHECK_GL_ERROR();

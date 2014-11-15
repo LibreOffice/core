@@ -199,6 +199,7 @@ public:
 
     void drawBackground(OutputDevice &rDev, Rectangle r)
     {
+        rDev.Erase();
         Gradient aGradient;
         aGradient.SetStartColor(COL_BLUE);
         aGradient.SetEndColor(COL_GREEN);
