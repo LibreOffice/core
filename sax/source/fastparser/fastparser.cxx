@@ -877,7 +877,7 @@ void FastSaxParserImpl::setEntityResolver(const Reference < XEntityResolver > & 
     maData.mxEntityResolver = Resolver;
 }
 
-void FastSaxParserImpl::setLocale( const Locale & Locale ) throw (RuntimeException)
+void FastSaxParserImpl::setLocale( const lang::Locale & Locale ) throw (RuntimeException)
 {
     maData.maLocale = Locale;
 }
