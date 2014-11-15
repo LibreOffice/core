@@ -30,7 +30,7 @@
 #include "IMark.hxx"
 #include "globals.hrc"
 
-const OUString BookmarkCombo::aForbiddenChars("/\\@:*?\";,.#");
+const OUString BookmarkCombo::aForbiddenChars("/\\@*?\";,#");
 
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {
