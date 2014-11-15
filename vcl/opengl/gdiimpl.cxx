@@ -1503,7 +1503,7 @@ void OpenGLSalGraphicsImpl::endPaint()
     if( mnPainting == 0 )
     {
         maContext.makeCurrent();
-        glFlush();
+        maContext.swapBuffers();
     }
 }
 
