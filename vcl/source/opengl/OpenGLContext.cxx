@@ -857,10 +857,18 @@ bool OpenGLContext::InitGLEW()
     // only enable debug output in dbgutil build
     // somehow there are implementations where the feature is present and the function
     // pointer is still NULL
-    if( GLEW_ARB_debug_output && glDebugMessageCallback )
+    if( GLEW_ARB_debug_output)
     {
-        glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(&debug_callback, NULL);
+        if (glDebugMessageCallbackARB)
+        {
+            glEnable(GL_DEBUG_OUTPUT);
+            glDebugMessageCallbackARB(&debug_callback, NULL);
+        }
+        else if ( glDebugMessageCallback )
+        {
+            glEnable(GL_DEBUG_OUTPUT);
+            glDebugMessageCallback(&debug_callback, NULL);
+        }
     }
 
 #endif
