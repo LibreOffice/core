@@ -693,7 +693,7 @@ void SdrTableObjImpl::LayoutTable( Rectangle& rArea, bool bFitWidth, bool bFitHe
         // Optimization: SdrTableObj::SetChanged() can call this very often, repeatedly
         // with the same settings, noticeably increasing load time. Skip if already done.
         bool bInteractiveMightGrowBecauseTextChanged =
-            mpTableObj->IsReallyEdited() && (mpTableObj->IsAutoGrowHeight() || mpTableObj->IsAutoGrowHeight());
+            mpTableObj->IsReallyEdited() && (mpTableObj->IsAutoGrowHeight() || mpTableObj->IsAutoGrowWidth());
         WritingMode writingMode = mpTableObj->GetWritingMode();
         if( bInteractiveMightGrowBecauseTextChanged
             || lastLayoutTable != this || lastLayoutInputRectangle != rArea
