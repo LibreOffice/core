@@ -49,6 +49,7 @@
 #include "document.hxx"
 #include "config.hxx"
 #include "accessibility.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #define SCROLL_LINE         24
 
@@ -336,7 +337,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         GetParent()->ToTop();
 
         Point aPoint = rCEvt.GetMousePosPixel();
-        PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_COMMANDMENU));
+        boost::scoped_ptr<PopupMenu> pPopupMenu(new PopupMenu(SmResId(RID_COMMANDMENU)));
 
         // added for replaceability of context menus
         Menu* pMenu = NULL;
@@ -349,15 +350,13 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         {
             if ( pMenu )
             {
-                delete pPopupMenu;
-                pPopupMenu = (PopupMenu*) pMenu;
+                pPopupMenu.reset((PopupMenu*) pMenu);
             }
         }
 
         pPopupMenu->SetSelectHdl(LINK(this, SmEditWindow, MenuSelectHdl));
 
         pPopupMenu->Execute( this, aPoint );
-        delete pPopupMenu;
         bForwardEvt = false;
     }
     else if (rCEvt.GetCommand() == COMMAND_WHEEL)
@@ -1094,13 +1093,12 @@ void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
 {
     if (pEditView)
     {
-        EditEngine *pEditEngine = pEditView->GetEditEngine();
+        boost::scoped_ptr<EditEngine> pEditEngine(pEditView->GetEditEngine());
         if (pEditEngine)
         {
             pEditEngine->SetStatusEventHdl( Link() );
             pEditEngine->RemoveView( pEditView );
         }
-        delete pEditView;
         pEditView = 0;
     }
 }
