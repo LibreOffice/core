@@ -46,6 +46,8 @@
 #define STRID_CALC_MAX                              50
 #define STRID_CALC_SUM                              51
 #define STRID_CALC_COUNT                            52
+#define STRID_CALC_FIRST_QUARTILE                   53
+#define STRID_CALC_THIRD_QUARTILE                   54
 
 #define STR_DESCRIPTIVE_STATISTICS_UNDO_NAME        60
 #define STR_ANALYSIS_OF_VARIANCE_UNDO_NAME          61

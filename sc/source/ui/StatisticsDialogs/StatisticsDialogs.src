@@ -181,6 +181,14 @@ Resource RID_STATISTICS_DLGS
     {
         Text [ en-US ] = "Count";
     };
+    String STRID_CALC_FIRST_QUARTILE
+    {
+        Text [ en-US ] = "First Quartile ";
+    };
+    String STRID_CALC_THIRD_QUARTILE
+    {
+        Text [ en-US ] = "Third Quartile";
+    };
 
     /* RandomNumberGeneratorDialog */
 
