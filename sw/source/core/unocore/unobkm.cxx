@@ -357,7 +357,6 @@ throw (uno::RuntimeException, std::exception)
             m_pImpl->m_pDoc->GetIDocumentUndoRedo().AppendUndo(
                     new SwUndoRenameBookmark(*m_pImpl->m_pRegisteredBookmark, sOldName));
         }
-        m_pImpl->m_pDoc->getIDocumentState().SetModified();
     }
 }
 
