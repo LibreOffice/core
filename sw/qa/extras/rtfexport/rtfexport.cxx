@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 
 #include <vcl/svapp.hxx>
@@ -824,6 +825,15 @@ DECLARE_RTFEXPORT_TEST(testCjklist38, "cjklist38.rtf")
     sal_Int16   numFormat;
     CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_UPPER_ZH, numFormat);
+}
+
+DECLARE_RTFEXPORT_TEST(testTableRtl, "table-rtl.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    // This was text::WritingMode2::LR_TB, i.e. direction of the table was ignored.
+    CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
