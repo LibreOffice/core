@@ -134,6 +134,19 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="locale">
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="label" translatable="yes">Locale: $LOCALE</property>
+                        <property name="justify">center</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkTextView" id="version">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>

@@ -77,6 +77,7 @@ AboutDialog::AboutDialog(vcl::Window* pParent)
     m_aVersionTextStr = m_pVersion->GetText();
     m_aBasedTextStr = get<FixedText>("libreoffice")->GetText();
     m_aBasedDerivedTextStr = get<FixedText>("derived")->GetText();
+    m_pLocaleStr = get<FixedText>("locale")->GetText();;
 
     m_pVersion->SetText(GetVersionString());
 
@@ -232,11 +233,28 @@ OUString AboutDialog::GetBuildId()
     return sBuildId;
 }
 
+OUString AboutDialog::GetLocaleString()
+{
+    OUString pLocaleStr;
+    rtl_Locale * pLocale;
+
+    osl_getProcessLocale( &pLocale );
+
+    if ( pLocale && pLocale->Language && pLocale->Country )
+    {
+        pLocaleStr = OUString(pLocale->Language) + "_" + OUString(pLocale->Country);
+    }
+
+    return pLocaleStr;
+}
+
 OUString AboutDialog::GetVersionString()
 {
     OUString sVersion = m_aVersionTextStr;
 
     OUString sBuildId = GetBuildId();
+
+    OUString pLocaleStr = GetLocaleString();
 
     if (!sBuildId.trim().isEmpty())
     {
@@ -253,6 +271,17 @@ OUString AboutDialog::GetVersionString()
     {
         sVersion += "\n";
         sVersion += EXTRA_BUILDID;
+    }
+
+    if (!pLocaleStr.trim().isEmpty())
+    {
+        sVersion += "\n";
+        if (m_pLocaleStr.indexOf("$LOCALE") == -1)
+        {
+            SAL_WARN( "cui.dialogs", "translated locale string in translations doesn't contain $LOCALE placeholder" );
+            m_pLocaleStr += " $LOCALE";
+        }
+        sVersion += m_pLocaleStr.replaceAll("$LOCALE", pLocaleStr);
     }
 
     return sVersion;
