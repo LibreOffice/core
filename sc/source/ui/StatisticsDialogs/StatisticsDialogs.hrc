@@ -59,6 +59,8 @@
 #define STR_TTEST_UNDO_NAME                         67
 #define STR_FTEST                                   68
 #define STR_FTEST_UNDO_NAME                         69
+#define STR_ZTEST                                   70
+#define STR_ZTEST_UNDO_NAME                         71
 
 #define STR_COLUMN_LABEL_TEMPLATE                   100
 #define STR_ROW_LABEL_TEMPLATE                      101
@@ -84,6 +86,7 @@
 #define STR_VARIABLE_2_LABEL                       134
 #define STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL     135
 #define STR_OBSERVATIONS_LABEL                     136
+#define STR_OBSERVED_MEAN_DIFFERENCE_LABEL         137
 
 #define STR_FTEST_P_RIGHT_TAIL                     140
 #define STR_FTEST_F_CRITICAL_RIGHT_TAIL            141
@@ -93,12 +96,18 @@
 #define STR_FTEST_F_CRITICAL_TWO_TAIL              145
 
 #define STR_TTEST_PEARSON_CORRELATION              150
-#define STR_TTEST_OBSERVED_MEAN_DIFFERENCE         151
 #define STR_TTEST_VARIANCE_OF_THE_DIFFERENCES      152
 #define STR_TTEST_T_STAT                           153
 #define STR_TTEST_P_ONE_TAIL                       154
 #define STR_TTEST_T_CRITICAL_ONE_TAIL              155
 #define STR_TTEST_P_TWO_TAIL                       156
 #define STR_TTEST_T_CRITICAL_TWO_TAIL              157
+
+#define STR_ZTEST_KNOWN_VARIANCE                   160
+#define STR_ZTEST_Z_VALUE                          161
+#define STR_ZTEST_P_ONE_TAIL                       162
+#define STR_ZTEST_Z_CRITICAL_ONE_TAIL              163
+#define STR_ZTEST_P_TWO_TAIL                       164
+#define STR_ZTEST_Z_CRITICAL_TWO_TAIL              165
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

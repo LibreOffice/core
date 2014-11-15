@@ -292,6 +292,14 @@ Resource RID_STATISTICS_DLGS
     {
         Text [ en-US ] = "t-test";
     };
+    String STR_ZTEST
+    {
+        Text [ en-US ] = "z-test";
+    };
+    String STR_ZTEST_UNDO_NAME
+    {
+        Text [ en-US ] = "z-test";
+    };
 
     /* Common */
     String STR_COLUMN_LABEL_TEMPLATE
@@ -321,6 +329,10 @@ Resource RID_STATISTICS_DLGS
     String STR_OBSERVATIONS_LABEL
     {
         Text [ en-US ] = "Observations";
+    };
+    String STR_OBSERVED_MEAN_DIFFERENCE_LABEL
+    {
+        Text [ en-US ] = "Observed Mean Difference";
     };
 
     /*F Test */
@@ -354,10 +366,6 @@ Resource RID_STATISTICS_DLGS
     {
         Text [ en-US ] = "Pearson Correlation";
     };
-    String STR_TTEST_OBSERVED_MEAN_DIFFERENCE
-    {
-        Text [ en-US ] = "Observed Mean Difference";
-    };
     String STR_TTEST_VARIANCE_OF_THE_DIFFERENCES
     {
         Text [ en-US ] = "Variance of the Differences";
@@ -381,6 +389,32 @@ Resource RID_STATISTICS_DLGS
     String STR_TTEST_T_CRITICAL_TWO_TAIL
     {
         Text [ en-US ] = "t Critical two-tail";
+    };
+
+    /*Z Test*/
+    String STR_ZTEST_Z_VALUE
+    {
+        Text [ en-US ] = "z";
+    };
+    String STR_ZTEST_KNOWN_VARIANCE
+    {
+        Text [ en-US ] = "Known Variance";
+    };
+    String STR_ZTEST_P_ONE_TAIL
+    {
+        Text [ en-US ] = "P (Z<=z) one-tail";
+    };
+    String STR_ZTEST_Z_CRITICAL_ONE_TAIL
+    {
+        Text [ en-US ] = "z Critical one-tail";
+    };
+    String STR_ZTEST_P_TWO_TAIL
+    {
+        Text [ en-US ] = "P (Z<=z) two-tail";
+    };
+    String STR_ZTEST_Z_CRITICAL_TWO_TAIL
+    {
+        Text [ en-US ] = "z Critical two-tail";
     };
 };
 

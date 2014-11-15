@@ -992,6 +992,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
             }
             break;
+        case SID_ZTEST_DIALOG:
+            {
+                sal_uInt16 nId  = ScZTestDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+
+            }
+            break;
 
         case SID_SEARCH_RESULTS_DIALOG:
         {

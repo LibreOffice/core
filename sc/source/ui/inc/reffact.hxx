@@ -121,6 +121,13 @@ private:
     ScFTestDialogWrapper() SAL_DELETED_FUNCTION;
 };
 
+class ScZTestDialogWrapper :
+    public ChildWindowWrapper<SID_ZTEST_DIALOG>
+{
+private:
+    ScZTestDialogWrapper() SAL_DELETED_FUNCTION;
+};
+
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:

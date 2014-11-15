@@ -68,6 +68,7 @@
 #include "MovingAverageDialog.hxx"
 #include "TTestDialog.hxx"
 #include "FTestDialog.hxx"
+#include "ZTestDialog.hxx"
 
 #include "PivotLayoutDialog.hxx"
 
@@ -378,6 +379,12 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_FTEST_DIALOG:
         {
             pResult = new ScFTestDialog( pB, pCW, pParent, &GetViewData() );
+        }
+        break;
+
+        case SID_ZTEST_DIALOG:
+        {
+            pResult = new ScZTestDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 

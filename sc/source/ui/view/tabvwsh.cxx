@@ -95,6 +95,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScMovingAverageDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScTTestDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScFTestDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(ScZTestDialogWrapper::GetChildWindowId());
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )

@@ -259,6 +259,7 @@ void ScDLL::Init()
     ScMovingAverageDialogWrapper        ::RegisterChildWindow(false, pMod);
     ScTTestDialogWrapper                ::RegisterChildWindow(false, pMod);
     ScFTestDialogWrapper                ::RegisterChildWindow(false, pMod);
+    ScZTestDialogWrapper                ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);
