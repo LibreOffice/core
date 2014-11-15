@@ -735,7 +735,7 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
                     aCurSel = mpImpl->mpTextEngine->ImpInsertParaBreak( aCurSel );
                     if ( mpImpl->mbAutoIndent )
                     {
-                        TextNode* pPrev = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aCurSel.GetEnd().GetPara() - 1 );
+                        TextNode* pPrev = mpImpl->mpTextEngine->mpDoc->GetNode( aCurSel.GetEnd().GetPara() - 1 );
                         sal_uInt16 n = 0;
                         while ( ( n < pPrev->GetText().getLength() ) && (
                                     ( pPrev->GetText()[ n ] == ' ' ) ||
@@ -858,7 +858,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
             if ( mpImpl->maSelection.GetEnd().GetIndex() < mpImpl->mpTextEngine->GetTextLen( mpImpl->maSelection.GetEnd().GetPara() ) )
             {
                 HideSelection();
-                TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject(  mpImpl->maSelection.GetEnd().GetPara() );
+                TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode(  mpImpl->maSelection.GetEnd().GetPara() );
                 uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
                 i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
                 TextSelection aNewSel( mpImpl->maSelection );
@@ -897,7 +897,7 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
                 HideSelection();
                 TextSelection aNewSel( mpImpl->maSelection );
                 aNewSel.GetStart().GetIndex() = 0;
-                aNewSel.GetEnd().GetIndex() = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( mpImpl->maSelection.GetEnd().GetPara() )->GetText().getLength();
+                aNewSel.GetEnd().GetIndex() = mpImpl->mpTextEngine->mpDoc->GetNode( mpImpl->maSelection.GetEnd().GetPara() )->GetText().getLength();
                 ImpSetSelection( aNewSel );
                 ShowSelection();
                 ShowCursor( true, true );
@@ -921,7 +921,7 @@ void TextView::Command( const CommandEvent& rCEvt )
     {
         DeleteSelected();
         delete mpImpl->mpTextEngine->mpIMEInfos;
-        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( GetSelection().GetEnd().GetPara() );
+        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( GetSelection().GetEnd().GetPara() );
         mpImpl->mpTextEngine->mpIMEInfos = new TEIMEInfos( GetSelection().GetEnd(), pNode->GetText().copy( GetSelection().GetEnd().GetIndex() ) );
         mpImpl->mpTextEngine->mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
@@ -1375,7 +1375,7 @@ TextPaM TextView::CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIterator
 
     if ( aPaM.GetIndex() )
     {
-        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aPaM.GetPara() );
         uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
         sal_Int32 nCount = 1;
         aPaM.GetIndex() = (sal_uInt16)xBI->previousCharacters( pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), nCharacterIteratorMode, nCount, nCount );
@@ -1383,7 +1383,7 @@ TextPaM TextView::CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIterator
     else if ( aPaM.GetPara() )
     {
         aPaM.GetPara()--;
-        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aPaM.GetPara() );
         aPaM.GetIndex() = pNode->GetText().getLength();
     }
     return aPaM;
@@ -1393,14 +1393,14 @@ TextPaM TextView::CursorRight( const TextPaM& rPaM, sal_uInt16 nCharacterIterato
 {
     TextPaM aPaM( rPaM );
 
-    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aPaM.GetPara() );
     if ( aPaM.GetIndex() < pNode->GetText().getLength() )
     {
         uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
         sal_Int32 nCount = 1;
         aPaM.GetIndex() = (sal_uInt16)xBI->nextCharacters( pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), nCharacterIteratorMode, nCount, nCount );
     }
-    else if ( aPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->GetNodes().Count()-1) )
+    else if ( aPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->CountNodes()-1) )
     {
         aPaM.GetPara()++;
         aPaM.GetIndex() = 0;
@@ -1415,7 +1415,7 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
 
     if ( aPaM.GetIndex() )
     {
-        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aPaM.GetPara() );
         uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
         i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
         if ( aBoundary.startPos >= rPaM.GetIndex() )
@@ -1425,7 +1425,7 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
     else if ( aPaM.GetPara() )
     {
         aPaM.GetPara()--;
-        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aPaM.GetPara() );
         aPaM.GetIndex() = pNode->GetText().getLength();
     }
     return aPaM;
@@ -1435,14 +1435,14 @@ TextPaM TextView::CursorWordRight( const TextPaM& rPaM )
 {
     TextPaM aPaM( rPaM );
 
-    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aPaM.GetPara() );
     if ( aPaM.GetIndex() < pNode->GetText().getLength() )
     {
         uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
         i18n::Boundary aBoundary = xBI->nextWord(  pNode->GetText(), aPaM.GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
         aPaM.GetIndex() = (sal_uInt16)aBoundary.startPos;
     }
-    else if ( aPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->GetNodes().Count()-1) )
+    else if ( aPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->CountNodes()-1) )
     {
         aPaM.GetPara()++;
         aPaM.GetIndex() = 0;
@@ -1466,7 +1466,7 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
-            TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject(  aEndPaM.GetPara() );
+            TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aEndPaM.GetPara() );
             uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
             i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
             if ( aBoundary.startPos == mpImpl->maSelection.GetEnd().GetIndex() )
@@ -1494,21 +1494,21 @@ TextPaM TextView::ImpDelete( sal_uInt8 nMode, sal_uInt8 nDelMode )
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
-            TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject(  aEndPaM.GetPara() );
+            TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode(  aEndPaM.GetPara() );
             uno::Reference < i18n::XBreakIterator > xBI = mpImpl->mpTextEngine->GetBreakIterator();
             i18n::Boundary aBoundary = xBI->nextWord( pNode->GetText(), mpImpl->maSelection.GetEnd().GetIndex(), mpImpl->mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
             aEndPaM.GetIndex() = (sal_uInt16)aBoundary.startPos;
         }
         else    // DELMODE_RESTOFCONTENT
         {
-            TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aEndPaM.GetPara() );
+            TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aEndPaM.GetPara() );
             if ( aEndPaM.GetIndex() < pNode->GetText().getLength() )
                 aEndPaM.GetIndex() = pNode->GetText().getLength();
-            else if ( aEndPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->GetNodes().Count() - 1 ) )
+            else if ( aEndPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->CountNodes() - 1 ) )
             {
                 // next paragraph
                 aEndPaM.GetPara()++;
-                TextNode* pNextNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aEndPaM.GetPara() );
+                TextNode* pNextNode = mpImpl->mpTextEngine->mpDoc->GetNode( aEndPaM.GetPara() );
                 aEndPaM.GetIndex() = pNextNode->GetText().getLength();
             }
         }
@@ -1580,7 +1580,7 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
         if ( ( aPaM.GetIndex() == pLine.GetEnd() ) && ( aPaM.GetIndex() > pLine.GetStart() ) && aPaM.GetIndex() < pPPortion->GetNode()->GetText().getLength() )
             aPaM.GetIndex()--;
     }
-    else if ( rPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->GetNodes().Count() - 1 ) )   // next paragraph
+    else if ( rPaM.GetPara() < ( mpImpl->mpTextEngine->mpDoc->CountNodes() - 1 ) )   // next paragraph
     {
         aPaM.GetPara()++;
         pPPortion = mpImpl->mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
@@ -1638,7 +1638,7 @@ TextPaM TextView::CursorStartOfParagraph( const TextPaM& rPaM )
 
 TextPaM TextView::CursorEndOfParagraph( const TextPaM& rPaM )
 {
-    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( rPaM.GetPara() );
+    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( rPaM.GetPara() );
     TextPaM aPaM( rPaM );
     aPaM.GetIndex() = pNode->GetText().getLength();
     return aPaM;
@@ -1652,8 +1652,8 @@ TextPaM TextView::CursorStartOfDoc()
 
 TextPaM TextView::CursorEndOfDoc()
 {
-    sal_uLong nNode = mpImpl->mpTextEngine->mpDoc->GetNodes().Count() - 1;
-    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( nNode );
+    sal_uLong nNode = mpImpl->mpTextEngine->mpDoc->CountNodes() - 1;
+    TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( nNode );
     TextPaM aPaM( nNode, pNode->GetText().getLength() );
     return aPaM;
 }
@@ -1712,7 +1712,7 @@ void TextView::ImpShowCursor( bool bGotoCursor, bool bForceVisCursor, bool bSpec
 
     if ( !IsInsertMode() && !mpImpl->maSelection.HasRange() )
     {
-        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+        TextNode* pNode = mpImpl->mpTextEngine->mpDoc->GetNode( aPaM.GetPara() );
         if ( !pNode->GetText().isEmpty() && ( aPaM.GetIndex() < pNode->GetText().getLength() ) )
         {
             // If we are behind a portion, and the next portion has other direction, we must change position...
