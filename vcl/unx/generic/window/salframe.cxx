@@ -276,8 +276,11 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
     aRect.mnDestX = 0; aRect.mnDestY = 0;
     aRect.mnDestWidth = iconSize; aRect.mnDestHeight = iconSize;
 
-    X11SalBitmap *pBitmap = static_cast < X11SalBitmap * >
+    X11SalBitmap *pBitmap = dynamic_cast < X11SalBitmap * >
         (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
+
+    if (!pBitmap) // FIXME: opengl
+        return false;
 
     icon_pixmap = XCreatePixmap( pDisplay->GetDisplay(),
                                  pDisplay->GetRootWindow( nXScreen ),
