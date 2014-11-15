@@ -28,9 +28,6 @@
 
 #include "TTestDialog.hxx"
 
-static const char strWildcardVariable1Range[] = "%VAR1_RANGE%";
-static const char strWildcardVariable2Range[] = "%VAR2_RANGE%";
-
 ScTTestDialog::ScTTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     vcl::Window* pParent, ScViewData* pViewData ) :
@@ -72,8 +69,8 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     else
         pVariable2Iterator.reset(new DataRangeByRowIterator(mVariable2Range));
 
-    aTemplate.autoReplaceRange(strWildcardVariable1Range, pVariable1Iterator->get());
-    aTemplate.autoReplaceRange(strWildcardVariable2Range, pVariable2Iterator->get());
+    aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
+    aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
 
     aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_UNDO_NAME));
     aOutput.newLine();
@@ -100,43 +97,43 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_MEAN));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=AVERAGE(%VAR1_RANGE%)");
+    aTemplate.setTemplate("=AVERAGE(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=AVERAGE(%VAR2_RANGE%)");
+    aTemplate.setTemplate("=AVERAGE(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_VARIANCE));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=VAR(%VAR1_RANGE%)");
+    aTemplate.setTemplate("=VAR(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=VAR(%VAR2_RANGE%)");
+    aTemplate.setTemplate("=VAR(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     // Observations
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_OBSERVATIONS_LABEL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=COUNT(%VAR1_RANGE%)");
+    aTemplate.setTemplate("=COUNT(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=COUNT(%VAR2_RANGE%)");
+    aTemplate.setTemplate("=COUNT(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     // Pearson Correlation
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_PEARSON_CORRELATION));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=CORREL(%VAR1_RANGE%;%VAR2_RANGE%)");
+    aTemplate.setTemplate("=CORREL(%VARIABLE1_RANGE%;%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     // Observed mean difference
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_OBSERVED_MEAN_DIFFERENCE));
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_OBSERVED_MEAN_DIFFERENCE_LABEL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=AVERAGE(IF(ISODD(IF(ISNUMBER(%VAR1_RANGE%); 1; 0) * IF(ISNUMBER(%VAR2_RANGE%); 1; 0)); %VAR1_RANGE% - %VAR2_RANGE%; \"NA\"))");
+    aTemplate.setTemplate("=AVERAGE(IF(ISODD(IF(ISNUMBER(%VARIABLE1_RANGE%); 1; 0) * IF(ISNUMBER(%VARIABLE2_RANGE%); 1; 0)); %VARIABLE1_RANGE% - %VARIABLE2_RANGE%; \"NA\"))");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%OBSERVED_MEAN_DIFFERENCE%", aOutput.current());
     aOutput.newLine();
@@ -144,7 +141,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     // Variance of the Differences
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_VARIANCE_OF_THE_DIFFERENCES));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=VAR(IF(ISODD(IF(ISNUMBER(%VAR1_RANGE%); 1; 0) * IF(ISNUMBER(%VAR2_RANGE%); 1; 0)); %VAR1_RANGE% - %VAR2_RANGE%; \"NA\"))");
+    aTemplate.setTemplate("=VAR(IF(ISODD(IF(ISNUMBER(%VARIABLE1_RANGE%); 1; 0) * IF(ISNUMBER(%VARIABLE2_RANGE%); 1; 0)); %VARIABLE1_RANGE% - %VARIABLE2_RANGE%; \"NA\"))");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%VARIANCE_OF_DIFFERENCES%", aOutput.current());
     aOutput.newLine();
@@ -152,7 +149,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     // df
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_DF));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=SUM(IF(ISNUMBER(%VAR1_RANGE%); 1; 0) * IF(ISNUMBER(%VAR2_RANGE%); 1; 0)) - 1");
+    aTemplate.setTemplate("=SUM(IF(ISNUMBER(%VARIABLE1_RANGE%); 1; 0) * IF(ISNUMBER(%VARIABLE2_RANGE%); 1; 0)) - 1");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%DEGREE_OF_FREEDOM%", aOutput.current());
     aOutput.newLine();

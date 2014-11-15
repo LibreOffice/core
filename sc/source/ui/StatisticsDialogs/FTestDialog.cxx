@@ -28,9 +28,6 @@
 
 #include "FTestDialog.hxx"
 
-static const char strWildcardVariable1Range[] = "%VAR1_RANGE%";
-static const char strWildcardVariable2Range[] = "%VAR2_RANGE%";
-
 ScFTestDialog::ScFTestDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
                     vcl::Window* pParent, ScViewData* pViewData ) :
@@ -72,8 +69,8 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     else
         pVariable2Iterator.reset(new DataRangeByRowIterator(mVariable2Range));
 
-    aTemplate.autoReplaceRange(strWildcardVariable1Range, pVariable1Iterator->get());
-    aTemplate.autoReplaceRange(strWildcardVariable2Range, pVariable2Iterator->get());
+    aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
+    aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
 
     aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_UNDO_NAME));
     aOutput.newLine();
@@ -93,63 +90,63 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_MEAN));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=AVERAGE(%VAR1_RANGE%)");
+    aTemplate.setTemplate("=AVERAGE(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=AVERAGE(%VAR2_RANGE%)");
+    aTemplate.setTemplate("=AVERAGE(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_VARIANCE));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=VAR(%VAR1_RANGE%)");
+    aTemplate.setTemplate("=VAR(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VAR1_VARIANCE%", aOutput.current());
+    aTemplate.autoReplaceAddress("%VARIABLE1_VARIANCE%", aOutput.current());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=VAR(%VAR2_RANGE%)");
+    aTemplate.setTemplate("=VAR(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VAR2_VARIANCE%", aOutput.current());
+    aTemplate.autoReplaceAddress("%VARIABLE2_VARIANCE%", aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_OBSERVATIONS_LABEL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=COUNT(%VAR1_RANGE%)");
+    aTemplate.setTemplate("=COUNT(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VAR1_OBSERVATIONS%", aOutput.current());
+    aTemplate.autoReplaceAddress("%VARIABLE1_OBSERVATIONS%", aOutput.current());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=COUNT(%VAR2_RANGE%)");
+    aTemplate.setTemplate("=COUNT(%VARIABLE2_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VAR2_OBSERVATIONS%", aOutput.current());
+    aTemplate.autoReplaceAddress("%VARIABLE2_OBSERVATIONS%", aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_DF));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=%VAR1_OBSERVATIONS% - 1");
+    aTemplate.setTemplate("=%VARIABLE1_OBSERVATIONS% - 1");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VAR1_DEGREE_OF_FREEDOM%", aOutput.current());
+    aTemplate.autoReplaceAddress("%VARIABLE1_DEGREE_OF_FREEDOM%", aOutput.current());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=%VAR2_OBSERVATIONS% - 1");
+    aTemplate.setTemplate("=%VARIABLE2_OBSERVATIONS% - 1");
     aOutput.writeFormula(aTemplate.getTemplate());
-    aTemplate.autoReplaceAddress("%VAR2_DEGREE_OF_FREEDOM%", aOutput.current());
+    aTemplate.autoReplaceAddress("%VARIABLE2_DEGREE_OF_FREEDOM%", aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_LABEL_F));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=%VAR1_VARIANCE% / %VAR2_VARIANCE%");
+    aTemplate.setTemplate("=%VARIABLE1_VARIANCE% / %VARIABLE2_VARIANCE%");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%F_VALUE%", aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_P_RIGHT_TAIL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=FDIST(%F_VALUE%; %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
+    aTemplate.setTemplate("=FDIST(%F_VALUE%; %VARIABLE1_DEGREE_OF_FREEDOM%; %VARIABLE2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aTemplate.autoReplaceAddress("%P_RIGHT_TAIL_VALUE%", aOutput.current());
     aOutput.newLine();
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_F_CRITICAL_RIGHT_TAIL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=FINV(%ALPHA%; %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
+    aTemplate.setTemplate("=FINV(%ALPHA%; %VARIABLE1_DEGREE_OF_FREEDOM%; %VARIABLE2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
@@ -162,7 +159,7 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_F_CRITICAL_LEFT_TAIL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=FINV(1-%ALPHA%; %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
+    aTemplate.setTemplate("=FINV(1-%ALPHA%; %VARIABLE1_DEGREE_OF_FREEDOM%; %VARIABLE2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
@@ -174,10 +171,10 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
 
     aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_F_CRITICAL_TWO_TAIL));
     aOutput.nextColumn();
-    aTemplate.setTemplate("=FINV(1-(%ALPHA%/2); %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
+    aTemplate.setTemplate("=FINV(1-(%ALPHA%/2); %VARIABLE1_DEGREE_OF_FREEDOM%; %VARIABLE2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.nextColumn();
-    aTemplate.setTemplate("=FINV(%ALPHA%/2; %VAR1_DEGREE_OF_FREEDOM%; %VAR2_DEGREE_OF_FREEDOM%)");
+    aTemplate.setTemplate("=FINV(%ALPHA%/2; %VARIABLE1_DEGREE_OF_FREEDOM%; %VARIABLE2_DEGREE_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
 
     return ScRange(aOutput.mMinimumAddress, aOutput.mMaximumAddress);
