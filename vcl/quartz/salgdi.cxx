@@ -315,6 +315,11 @@ AquaSalGraphics::~AquaSalGraphics()
     }
 }
 
+SalGraphicsImpl* AquaSalGraphics::GetImpl() const
+{
+    return NULL;
+}
+
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
     maTextColor = RGBAColor( nSalColor );
