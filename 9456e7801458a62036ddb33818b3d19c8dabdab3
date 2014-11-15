@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5afe65bd_39e75742",
+        "filename": "svx/source/stbctrls/stbctrls.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2014-11-15T12:21:55Z",
+      "side": 1,
+      "message": "\"dialog box\" is the correct and more well known usage of the word ( https://en.wikipedia.org/wiki/Dialog_box ) and we use box in our help ( https://help.libreoffice.org/Common/Open_1 ).",
+      "parentUuid": "5afe65bd_eebb3374",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5afe65bd_cec077e3",
         "filename": "sw/source/uibase/utlui/statusbar.src",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5afe65bd_19e49b39",
+        "filename": "sw/source/uibase/utlui/statusbar.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2014-11-15T12:21:55Z",
+      "side": 1,
+      "message": "\u0027single\u0027 for this one and \u0027two\u0027 for the next one isnt consistent.",
+      "parentUuid": "5afe65bd_cec077e3",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5afe65bd_aeb53b7f",
         "filename": "sw/source/uibase/utlui/statusbar.src",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2014-11-15T01:40:19Z",
       "side": 1,
       "message": "The word “window” isn’t precise here as Navigator isn’t a window. Drop it.",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_f9cf7fb1",
+        "filename": "sw/source/uibase/utlui/statusbar.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000796
+      },
+      "writtenOn": "2014-11-15T12:21:55Z",
+      "side": 1,
+      "message": "We use \"window\" in our help ( https://help.libreoffice.org/Writer/Navigator ), users call it window ( http://listarchives.libreoffice.org/global/users/msg22064.html, http://ask.libreoffice.org/en/question/8452/how-to-drag-drop-headings-in-navigator-window/ ) and users and we call it floating window ( https://bugs.freedesktop.org/show_bug.cgi?id\u003d81902, https://bugs.freedesktop.org/show_bug.cgi?id\u003d73151 ). If you have a more suitable term to describe it, then we can put that in.",
+      "parentUuid": "5afe65bd_aeb53b7f",
       "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
