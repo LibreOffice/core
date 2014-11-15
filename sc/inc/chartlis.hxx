@@ -141,6 +141,12 @@ public:
     typedef boost::unordered_set<OUString, OUStringHash> StringSetType;
 private:
     ListenersType maListeners;
+    enum UpdateStatus
+    {
+        SC_CLCUPDATE_NONE,
+        SC_CLCUPDATE_RUNNING,
+        SC_CLCUPDATE_MODIFIED
+    } meModifiedDuringUpdate;
     ::std::list<RangeListenerItem> maHiddenListeners;
     StringSetType maNonOleObjectNames;
 
