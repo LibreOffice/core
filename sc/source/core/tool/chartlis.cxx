@@ -421,6 +421,7 @@ ScChartListenerCollection::RangeListenerItem::RangeListenerItem(const ScRange& r
 }
 
 ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
+    meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
     pDoc( pDocP )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
@@ -428,6 +429,7 @@ ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
 
 ScChartListenerCollection::ScChartListenerCollection(
         const ScChartListenerCollection& rColl ) :
+    meModifiedDuringUpdate( SC_CLCUPDATE_NONE ),
     pDoc( rColl.pDoc )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
@@ -451,12 +453,16 @@ void ScChartListenerCollection::StartAllListeners()
 
 void ScChartListenerCollection::insert(ScChartListener* pListener)
 {
+    if (meModifiedDuringUpdate == SC_CLCUPDATE_RUNNING)
+        meModifiedDuringUpdate =  SC_CLCUPDATE_MODIFIED;
     OUString aName = pListener->GetName();
     maListeners.insert(aName, pListener);
 }
 
 void ScChartListenerCollection::removeByName(const OUString& rName)
 {
+    if (meModifiedDuringUpdate == SC_CLCUPDATE_RUNNING)
+        meModifiedDuringUpdate =  SC_CLCUPDATE_MODIFIED;
     maListeners.erase(rName);
 }
 
@@ -544,6 +550,9 @@ public:
 
 void ScChartListenerCollection::FreeUnused()
 {
+    if (meModifiedDuringUpdate == SC_CLCUPDATE_RUNNING)
+        meModifiedDuringUpdate =  SC_CLCUPDATE_MODIFIED;
+
     ListenersType aUsed, aUnused;
 
     // First, filter each listener into 'used' and 'unused' categories.
@@ -575,6 +584,9 @@ void ScChartListenerCollection::FreeUnused()
 void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
                                          const uno::Reference< chart::XChartData >& rSource )
 {
+    if (meModifiedDuringUpdate == SC_CLCUPDATE_RUNNING)
+        meModifiedDuringUpdate =  SC_CLCUPDATE_MODIFIED;
+
     std::vector<ScChartListener*> aUsed, aUnused;
 
     // First, filter each listener into 'used' and 'unused' categories.
@@ -619,6 +631,11 @@ IMPL_LINK_NOARG(ScChartListenerCollection, TimerHdl)
 
 void ScChartListenerCollection::UpdateDirtyCharts()
 {
+    // During ScChartListener::Update() the most nasty things can happen due to
+    // UNO listeners, e.g. reentrant calls via BASIC to insert() and FreeUno()
+    // and similar that modify maListeners and invalidate iterators.
+    meModifiedDuringUpdate = SC_CLCUPDATE_RUNNING;
+
     ListenersType::iterator it = maListeners.begin(), itEnd = maListeners.end();
     for (; it != itEnd; ++it)
     {
@@ -626,9 +643,13 @@ void ScChartListenerCollection::UpdateDirtyCharts()
         if (p->IsDirty())
             p->Update();
 
+        if (meModifiedDuringUpdate == SC_CLCUPDATE_MODIFIED)
+            break;      // iterator is invalid
+
         if (aTimer.IsActive() && !pDoc->IsImportingXML())
             break;                      // one interfered
     }
+    meModifiedDuringUpdate = SC_CLCUPDATE_NONE;
 }
 
 void ScChartListenerCollection::SetDirty()
