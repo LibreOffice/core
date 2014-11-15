@@ -24,6 +24,7 @@
 #include <crossrefbookmark.hxx>
 #include <dcontact.hxx>
 #include <doc.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
 #include <editsh.hxx>
@@ -463,9 +464,17 @@ namespace sw { namespace mark
             return true;
         if(hasMark(rNewName))
             return false;
-        m_aMarkNamesSet.erase(dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->GetName());
-        m_aMarkNamesSet.insert(rNewName);
-        dynamic_cast< ::sw::mark::MarkBase* >(io_pMark)->SetName(rNewName);
+        if (::sw::mark::MarkBase* pMarkBase = dynamic_cast< ::sw::mark::MarkBase* >(io_pMark))
+        {
+            m_aMarkNamesSet.erase(pMarkBase->GetName());
+            m_aMarkNamesSet.insert(rNewName);
+            pMarkBase->SetName(rNewName);
+
+            // fdo#51741 Bookmark should mark document as modified when renamed
+            if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark)) {
+                m_pDoc->SetModified();
+            }
+        }
         return true;
     }
 

@@ -265,6 +265,14 @@ namespace sw { namespace mark
         io_pDoc->SetModified();
     }
 
+    void Bookmark::DeregisterFromDoc(SwDoc* const io_pDoc)
+    {
+        DdeBookmark::DeregisterFromDoc(io_pDoc);
+
+        // fdo#51741 Bookmark should mark document as modified when deleted
+        io_pDoc->SetModified();
+    }
+
     ::sfx2::IXmlIdRegistry& Bookmark::GetRegistry()
     {
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
