@@ -163,8 +163,7 @@ const sal_uInt16 SmElementsControl::aAttributes[][2] =
     {RID_COLORX_BLACK, RID_COLORX_BLACK_HELP}, {RID_COLORX_BLUE, RID_COLORX_BLUE_HELP},
     {RID_COLORX_GREEN, RID_COLORX_GREEN_HELP}, {RID_COLORX_RED, RID_COLORX_RED_HELP},
     {RID_COLORX_CYAN, RID_COLORX_CYAN_HELP}, {RID_COLORX_MAGENTA, RID_COLORX_MAGENTA_HELP},
-    {RID_COLORX_YELLOW, RID_COLORX_YELLOW_HELP}, {RID_COLORX_AQUA, RID_COLORX_AQUA_HELP},
-    {RID_COLORX_FUCHSIA, RID_COLORX_FUCHSIA_HELP}, {RID_COLORX_GRAY, RID_COLORX_GRAY_HELP},
+    {RID_COLORX_YELLOW, RID_COLORX_YELLOW_HELP}, {RID_COLORX_GRAY, RID_COLORX_GRAY_HELP},
     {RID_COLORX_LIME, RID_COLORX_LIME_HELP}, {RID_COLORX_MAROON, RID_COLORX_MAROON_HELP},
     {RID_COLORX_NAVY, RID_COLORX_NAVY_HELP}, {RID_COLORX_OLIVE, RID_COLORX_OLIVE_HELP},
     {RID_COLORX_PURPLE, RID_COLORX_PURPLE_HELP}, {RID_COLORX_SILVER, RID_COLORX_SILVER_HELP},
@@ -516,10 +515,6 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
                 addElement("color magenta { \"" + SM_RESSTR(STR_MAGENTA) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_YELLOW)
                 addElement("color yellow { \"" + SM_RESSTR(STR_YELLOW) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
-            else if (aElementId == RID_COLORX_AQUA)
-                addElement("color aqua { \"" + SM_RESSTR(STR_AQUA) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
-            else if (aElementId == RID_COLORX_FUCHSIA)
-                addElement("color fuchsia { \"" + SM_RESSTR(STR_FUCHSIA) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_GRAY)
                 addElement("color gray { \"" + SM_RESSTR(STR_GRAY) + "\" }", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_COLORX_LIME)
