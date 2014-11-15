@@ -24,11 +24,11 @@
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_INSERT_HELPTEXT
 {
-    Text [ en-US ] = "Insert mode." ;
+    Text [ en-US ] = "Insert mode. Click to change to overwrite mode." ;
 };
 String RID_SVXSTR_OVERWRITE_HELPTEXT
 {
-    Text [ en-US ] = "Overwrite mode, text will be overwritten when typing." ;
+    Text [ en-US ] = "Overwrite mode. Click to change to insert mode." ;
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
@@ -123,7 +123,7 @@ String RID_SVXSTR_FIT_SLIDE
 
 String RID_SVXSTR_ZOOMTOOL_HINT
 {
-    Text [ en-US ] = "Zoom level. Click for dialog box and right-click for zoom list";
+    Text [ en-US ] = "Zoom level. Right-click to change zoom level or click to open Zoom dialog.";
 };
 
 String RID_SVXSTR_ZOOM
@@ -133,12 +133,12 @@ String RID_SVXSTR_ZOOM
 
 String RID_SVXSTR_ZOOM_IN
 {
-    Text [ en-US ] = "Zoom in";
+    Text [ en-US ] = "Zoom In";
 };
 
 String RID_SVXSTR_ZOOM_OUT
 {
-    Text [ en-US ] = "Zoom out";
+    Text [ en-US ] = "Zoom Out";
 };
 
  // PopupMenu -------------------------------------------------------------
@@ -162,7 +162,7 @@ Menu RID_SVXMNU_ZOOM
         {
             Identifier = ZOOM_OPTIMAL ;
             HelpId = HID_MNU_ZOOM_OPTIMAL ;
-            Text [ en-US ] = "Optimal" ;
+            Text [ en-US ] = "Optimal View" ;
         };
         MenuItem
         {
