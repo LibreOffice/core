@@ -670,8 +670,6 @@ bool OpenGLContext::ImplInit()
                 GL_TRUE);
     }
 
-
-
     if( m_aGLWin.ctx )
     {
         vShareList.push_back( m_aGLWin.ctx );
