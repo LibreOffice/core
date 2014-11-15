@@ -48,6 +48,7 @@
 #include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/fract.hxx>
 
 #include "patattr.hxx"
 #include "docpool.hxx"

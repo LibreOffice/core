@@ -37,7 +37,6 @@
 #include "compressedarray.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
-#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <svl/zforlist.hxx>
 
@@ -84,6 +83,7 @@ struct ReorderParam;
 
 }
 
+class Fraction;
 class SvxFontItem;
 
 class KeyEvent;
