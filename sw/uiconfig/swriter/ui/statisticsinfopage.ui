@@ -14,8 +14,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Pages:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">nopages</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -28,8 +26,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Tables:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">notables</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -42,8 +38,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Images:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">nogrfs</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -56,8 +50,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">OLE objects:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">nooles</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -70,8 +62,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Paragraphs:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">noparas</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -84,8 +74,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Words:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">nowords</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -98,8 +86,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Characters:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">nochars</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -114,8 +100,6 @@
         <property name="valign">center</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Characters excluding spaces:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">nocharsexspaces</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -128,8 +112,6 @@
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Lines:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">nolines</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
