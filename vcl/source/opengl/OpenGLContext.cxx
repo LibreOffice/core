@@ -65,7 +65,7 @@ OpenGLContext::~OpenGLContext()
 #elif defined( UNX )
     if(m_aGLWin.ctx)
     {
-        std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx );
+        vShareList.erase(std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx ));
 
         glXMakeCurrent(m_aGLWin.dpy, None, NULL);
         if( glGetError() != GL_NO_ERROR )
