@@ -69,7 +69,7 @@ public:
 
 protected:
     explicit        Dialog( WindowType nType );
-    explicit        Dialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
+    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
     virtual void    settingOptimalLayoutSize(VclBox *pBox) SAL_OVERRIDE;
 
@@ -80,7 +80,7 @@ protected:
 
 public:
     explicit        Dialog( vcl::Window* pParent, WinBits nStyle = WB_STDDIALOG );
-    explicit        Dialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual         ~Dialog();
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

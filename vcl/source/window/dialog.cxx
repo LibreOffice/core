@@ -485,18 +485,18 @@ void Dialog::doDeferredInit(WinBits nBits)
     mbIsDefferedInit = false;
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
     : SystemWindow(WINDOW_DIALOG)
 {
     ImplInitDialogData();
-    loadUI(pParent, rID, rUIXMLDescription);
+    loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
 
-Dialog::Dialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType)
+Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType)
     : SystemWindow(nType)
 {
     ImplInitDialogData();
-    loadUI(pParent, rID, rUIXMLDescription);
+    loadUI(pParent, OUStringToOString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription);
 }
 
 Dialog::Dialog(vcl::Window* pParent, WinBits nStyle)
@@ -1153,7 +1153,7 @@ VclBuilderContainer::~VclBuilderContainer()
 }
 
 ModelessDialog::ModelessDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
+    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MODELESSDIALOG)
 {
 }
 
@@ -1164,7 +1164,7 @@ ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
 }
 
 ModalDialog::ModalDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
-    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
+    Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MODALDIALOG)
 {
 }
 

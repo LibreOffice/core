@@ -1980,7 +1980,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
 }
 
 MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MESSBOX)
+    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MESSBOX)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
     , m_pOwnedContentArea(NULL)
