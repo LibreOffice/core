@@ -1556,6 +1556,7 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
                 else if( !pTDR->pType->bOnDemand && (*ppNewDescription)->bOnDemand )
                 {
                     // switch from !OnDemand to OnDemand, so the description must be relesed
+                    // coverity[freed_arg] - pType's nRefCount is > 1 here
                     typelib_typedescription_release( pTDR->pType );
                 }
 
