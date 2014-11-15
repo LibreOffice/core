@@ -49,6 +49,7 @@ private:
     OUString m_aBasedDerivedTextStr;
     OUString m_aCreditsLinkStr;
     OUString m_sBuildStr;
+    OUString m_pLocaleStr;
 
     void StyleControls();
     void SetLogo();
@@ -56,6 +57,7 @@ private:
     OUString GetBuildId();
     OUString GetVersionString();
     OUString GetCopyrightString();
+    OUString GetLocaleString();
 
 protected:
     virtual bool Close() SAL_OVERRIDE;
