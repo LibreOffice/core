@@ -11,11 +11,11 @@
 
 String STR_WORDCOUNT_HINT
 {
-    Text [ en-US ] = "Word and character count. Click for more extensive stats";
+    Text [ en-US ] = "Word and character count. Click to open Word Count dialog.";
 };
 String STR_VIEWLAYOUT_ONE
 {
-    Text [ en-US ] = "Single page view";
+    Text [ en-US ] = "Single-page view";
 };
 
 String STR_VIEWLAYOUT_TWO
@@ -29,15 +29,15 @@ String STR_VIEWLAYOUT_BOOK
 };
 String STR_BOOKCTRL_HINT
 {
-    Text [ en-US ] = "Page number/Total pages. Click to show Navigator";
+    Text [ en-US ] = "Page number in document. Click to open Navigator window.";
 };
 String STR_BOOKCTRL_HINT_EXTENDED
 {
-    Text [ en-US ] = "Document page number/Total pages (Print page number). Click to show Navigator";
+    Text [ en-US ] = "Page number in document (Page number on printed document). Click to open Navigator window.";
 };
 String STR_TMPLCTRL_HINT
 {
-    Text [ en-US ] = "Page Style. Right-click to change style and click to modify style";
+    Text [ en-US ] = "Page Style. Right-click to change style or click to open Style dialog.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
