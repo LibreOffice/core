@@ -192,7 +192,7 @@ String STR_SET_LANGUAGE_FOR_ALL_TEXT
 
 String STR_LANGSTATUS_HINT
 {
-    Text [ en-US ] = "Text Language. Right-click to set selection or paragraph language" ;
+    Text [ en-US ] = "Text Language. Right-click to set character or paragraph language" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
