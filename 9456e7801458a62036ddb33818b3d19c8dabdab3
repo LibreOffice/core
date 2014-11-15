@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_eebb3374",
+        "filename": "svx/source/stbctrls/stbctrls.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-11-15T01:40:19Z",
+      "side": 1,
+      "message": "Remove the word “box”.",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_cec077e3",
+        "filename": "sw/source/uibase/utlui/statusbar.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-11-15T01:40:19Z",
+      "side": 1,
+      "message": "Revert this.",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_aeb53b7f",
+        "filename": "sw/source/uibase/utlui/statusbar.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-11-15T01:40:19Z",
+      "side": 1,
+      "message": "The word “window” isn’t precise here as Navigator isn’t a window. Drop it.",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_8eba7f6d",
+        "filename": "sw/source/uibase/utlui/statusbar.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-11-15T01:40:19Z",
+      "side": 1,
+      "message": "Same here",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_6eb0638c",
+        "filename": "sw/source/uibase/utlui/statusbar.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-11-15T01:40:19Z",
+      "side": 1,
+      "message": "Drop the word “box”.",
+      "revId": "9456e7801458a62036ddb33818b3d19c8dabdab3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
