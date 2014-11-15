@@ -78,7 +78,8 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_UNDO_NAME));
     aOutput.newLine();
 
-    aOutput.writeString("Alpha");
+    // Alpha
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
     aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
@@ -110,7 +111,7 @@ ScRange ScFTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.autoReplaceAddress("%VAR2_VARIANCE%", aOutput.current());
     aOutput.newLine();
 
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_OBSERVATIONS_LABEL));
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_OBSERVATIONS_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VAR1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());

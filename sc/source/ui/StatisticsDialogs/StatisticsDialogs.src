@@ -276,24 +276,21 @@ Resource RID_STATISTICS_DLGS
         Text [ en-US ] = "Sampling";
     };
 
-    String STR_TTEST
-    {
-        Text [ en-US ] = "t-test";
-    };
-
     String STR_FTEST
     {
         Text [ en-US ] = "F-test";
     };
-
-    String STR_TTEST_UNDO_NAME
-    {
-        Text [ en-US ] = "t-test";
-    };
-
     String STR_FTEST_UNDO_NAME
     {
         Text [ en-US ] = "F-test";
+    };
+    String STR_TTEST
+    {
+        Text [ en-US ] = "t-test";
+    };
+    String STR_TTEST_UNDO_NAME
+    {
+        Text [ en-US ] = "t-test";
     };
 
     /* Common */
@@ -317,12 +314,16 @@ Resource RID_STATISTICS_DLGS
     {
         Text [ en-US ] = "Variable 2";
     };
-
-    /*F Test */
-    String STR_FTEST_OBSERVATIONS_LABEL
+    String STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL
+    {
+        Text [ en-US ] = "Hypothesized Mean Difference";
+    };
+    String STR_OBSERVATIONS_LABEL
     {
         Text [ en-US ] = "Observations";
     };
+
+    /*F Test */
     String STR_FTEST_P_RIGHT_TAIL
     {
         Text [ en-US ] = "P (F<=f) right-tail";
@@ -352,10 +353,6 @@ Resource RID_STATISTICS_DLGS
     String STR_TTEST_PEARSON_CORRELATION
     {
         Text [ en-US ] = "Pearson Correlation";
-    };
-    String STR_TTEST_HYPOTHESIZED_MEAN_DIFFERENCE
-    {
-        Text [ en-US ] = "Hypothesized Mean Difference";
     };
     String STR_TTEST_OBSERVED_MEAN_DIFFERENCE
     {

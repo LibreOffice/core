@@ -79,14 +79,14 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // Alpha
-    aOutput.writeString("Alpha");
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
     aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
     aOutput.newLine();
 
     // Hypothesized mean difference
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TTEST_HYPOTHESIZED_MEAN_DIFFERENCE));
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL));
     aOutput.nextColumn();
     aOutput.writeValue(0);
     aTemplate.autoReplaceAddress("%HYPOTHESIZED_MEAN_DIFFERENCE%", aOutput.current());
@@ -117,7 +117,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // Observations
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_FTEST_OBSERVATIONS_LABEL));
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_OBSERVATIONS_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VAR1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
