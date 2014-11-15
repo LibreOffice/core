@@ -374,6 +374,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="spacing">6</property>
+                        <property name="homogeneous">True</property>
                         <child>
                           <object class="GtkBox" id="boxORIGINAL">
                             <property name="visible">True</property>
@@ -542,38 +543,11 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkBox" id="box3">
+                          <object class="svxlo-SvxRectCtl" id="CTL_POSITION">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="homogeneous">True</property>
-                            <child>
-                              <object class="svxlo-SvxRectCtl" id="CTL_POSITION">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="hexpand">True</property>
-                                <property name="vexpand">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="box5">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
+                            <property name="halign">start</property>
+                            <property name="valign">start</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -585,32 +559,45 @@
                           <object class="GtkGrid" id="gridOFFSET">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="row_spacing">6</property>
                             <property name="column_spacing">12</property>
+                            <property name="column_homogeneous">True</property>
                             <child>
-                              <object class="GtkLabel" id="FT_Y_OFFSET">
+                              <object class="GtkGrid" id="grid1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_Y Offset</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">MTR_FLD_Y_SIZE:0.00cm</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="FT_X_OFFSET">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">_X Offset</property>
-                                <property name="use_underline">True</property>
-                                <property name="mnemonic_widget">MTR_FLD_X_SIZE:0.00cm</property>
+                                <property name="row_spacing">6</property>
+                                <property name="column_spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="FT_X_OFFSET">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">_X Offset</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">MTR_FLD_X_SIZE:0.00cm</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="MTR_FLD_X_OFFSET:0%">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="invisible_char">•</property>
+                                    <property name="adjustment">adjustment2</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -620,31 +607,47 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="MTR_FLD_X_OFFSET:0%">
+                              <object class="GtkGrid" id="grid2">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="invisible_char">•</property>
-                                <property name="adjustment">adjustment2</property>
+                                <property name="row_spacing">6</property>
+                                <property name="column_spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="FT_Y_OFFSET">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">_Y Offset</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="mnemonic_widget">MTR_FLD_Y_SIZE:0.00cm</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">0</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkSpinButton" id="MTR_FLD_Y_OFFSET:0%">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="halign">start</property>
+                                    <property name="invisible_char">•</property>
+                                    <property name="text" translatable="yes">0</property>
+                                    <property name="adjustment">adjustment2</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="top_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="MTR_FLD_Y_OFFSET:0%">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="invisible_char">•</property>
-                                <property name="adjustment">adjustment2</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>
@@ -742,8 +745,9 @@
                       <object class="GtkGrid" id="gridOFFSET2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="row_spacing">6</property>
+                        <property name="row_spacing">1</property>
                         <property name="column_spacing">12</property>
+                        <property name="column_homogeneous">True</property>
                         <child>
                           <object class="GtkRadioButton" id="RBT_ROW">
                             <property name="label" translatable="yes">Ro_w</property>
@@ -754,7 +758,6 @@
                             <property name="xalign">0</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">RBT_COLUMN</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -764,41 +767,38 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkSpinButton" id="MTR_FLD_OFFSET:0%">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="halign">start</property>
+                            <property name="invisible_char">•</property>
+                            <property name="text" translatable="yes">0</property>
+                            <property name="adjustment">adjustment2</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkRadioButton" id="RBT_COLUMN">
                             <property name="label" translatable="yes">Colu_mn</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
+                            <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="use_underline">True</property>
                             <property name="xalign">0</property>
-                            <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">RBT_ROW</property>
                           </object>
                           <packing>
-                            <property name="left_attach">0</property>
-                            <property name="top_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinButton" id="MTR_FLD_OFFSET:0%">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="invisible_char">•</property>
-                            <property name="adjustment">adjustment2</property>
-                          </object>
-                          <packing>
                             <property name="left_attach">1</property>
-                            <property name="top_attach">1</property>
+                            <property name="top_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                       </object>
                     </child>
@@ -881,14 +881,6 @@
     <widgets>
       <widget name="boxORIGINAL"/>
       <widget name="gridX_Y"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup" id="sizegroup3">
-    <widgets>
-      <widget name="FT_Y_OFFSET"/>
-      <widget name="FT_X_OFFSET"/>
-      <widget name="RBT_ROW"/>
-      <widget name="RBT_COLUMN"/>
     </widgets>
   </object>
 </interface>
