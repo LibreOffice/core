@@ -28,6 +28,7 @@
 #include <dcontact.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <IDocumentState.hxx>
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
 #include <editsh.hxx>
@@ -550,6 +551,11 @@ namespace sw { namespace mark
             m_aMarkNamesSet.erase(pMarkBase->GetName());
             m_aMarkNamesSet.insert(rNewName);
             pMarkBase->SetName(rNewName);
+
+            // fdo#51741 Bookmark should mark document as modified when renamed
+            if (dynamic_cast< ::sw::mark::Bookmark* >(io_pMark)) {
+                m_pDoc->getIDocumentState().SetModified();
+            }
         }
         return true;
     }
