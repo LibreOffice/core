@@ -37,6 +37,7 @@
 
 #include <symbol.hxx>
 #include <types.hxx>
+#include <boost/noncopyable.hpp>
 
 class SmSym;
 class SmFormat;
@@ -67,14 +68,10 @@ struct SmFntFmtListEntry
     SmFntFmtListEntry( const OUString &rId, const SmFontFormat &rFntFmt );
 };
 
-class SmFontFormatList
+class SmFontFormatList : private boost::noncopyable
 {
     std::deque<SmFntFmtListEntry> aEntries;
     bool                    bModified;
-
-    // disallow copy-constructor and assignment-operator for now
-    SmFontFormatList( const SmFontFormatList & );
-    SmFontFormatList & operator = ( const SmFontFormatList & );
 
 public:
     SmFontFormatList();
@@ -95,7 +92,7 @@ public:
     void    SetModified( bool bVal )    { bModified = bVal; }
 };
 
-class SmMathConfig : public utl::ConfigItem
+class SmMathConfig : public utl::ConfigItem, private boost::noncopyable
 {
     SmFormat *          pFormat;
     SmCfgOther *        pOther;
@@ -103,11 +100,6 @@ class SmMathConfig : public utl::ConfigItem
     SmSymbolManager *   pSymbolMgr;
     bool                bIsOtherModified;
     bool                bIsFormatModified;
-
-    // disallow copy-constructor and assignment-operator for now
-    SmMathConfig( const SmMathConfig & );
-    SmMathConfig & operator = ( const SmMathConfig & );
-
 
     void    StripFontFormatList( const std::vector< SmSym > &rSymbols );
 
