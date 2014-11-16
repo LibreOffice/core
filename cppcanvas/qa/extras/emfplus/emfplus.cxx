@@ -15,18 +15,17 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <unotest/macros_test.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/pngwrite.hxx>
 
 using namespace com::sun::star;
 
-class Test : public test::BootstrapFixture, public unotest::MacrosTest
+class Test : public UnoApiTest
 {
 public:
-    Test()
-        : mpTestDocumentPath("/cppcanvas/qa/extras/emfplus/data/")
+    Test() : UnoApiTest("/cppcanvas/qa/extras/emfplus/data/")
     {
     }
 
@@ -36,20 +35,25 @@ public:
 
     virtual void setUp() SAL_OVERRIDE
     {
-        test::BootstrapFixture::setUp();
+        UnoApiTest::setUp();
         mxDesktop.set(frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
     };
 
     virtual void tearDown() SAL_OVERRIDE
     {
         if (mxComponent.is())
+        {
+            closeDocument(mxComponent);
             mxComponent->dispose();
-        test::BootstrapFixture::tearDown();
+        }
+        UnoApiTest::tearDown();
     };
 
     Bitmap load(const char* pName)
     {
-        mxComponent = loadFromDesktop(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(pName), "com.sun.star.drawing.DrawingDocument");
+        OUString aFileURL;
+        createFileURL(OUString::createFromAscii(pName), aFileURL);
+        mxComponent = loadFromDesktop(aFileURL, "com.sun.star.drawing.DrawingDocument");
         SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
         CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();
@@ -75,7 +79,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
-    const char* mpTestDocumentPath;
 };
 
 void Test::testFdo77229()
