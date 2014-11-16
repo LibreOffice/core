@@ -228,15 +228,7 @@ public:
 const static double aMinDistScale = 0.73;
 const static double aEdgeScale = 0.5;
 
-// The borders will be collected in pLines during the Paint and later
-// possibly merge them.
-// The help lines will be collected and merged in pSubsLines. These will
-// be compared with pLines before the work in order to avoid help lines
-// to hide borders.
-// bTablines is true during the Paint of a table.
-static BorderLines *g_pBorderLines = 0;
-static SwLineRects *pLines = 0;
-static SwSubsRects *pSubsLines = 0;
+//static SwSubsRects *gProp.pSSubsLines = 0;
 
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
@@ -245,23 +237,27 @@ Color aGlobalRetoucheColor;
  * Container for static properties
  */
 struct SwPaintProperties {
-    //Only repaint the Fly content as well as the background of the Fly content if
-    //a metafile is taken of the Fly.
+    // Only repaint the Fly content as well as the background of the Fly content if
+    // a metafile is taken of the Fly.
     bool                bSFlyMetafile = false;
     OutputDevice       *pSFlyMetafileOut = 0;
-
     SwViewShell        *pSGlobalShell = 0;
 
-    //Retouch for transparent Flys is done by the background of the Flys.
-    //The Fly itself should certainly not be spared out. See PaintBackground and
-    //lcl_SubtractFlys()
+    // Retouch for transparent Flys is done by the background of the Flys.
+    // The Fly itself should certainly not be spared out. See PaintBackground and
+    // lcl_SubtractFlys()
     SwFlyFrm           *pSRetoucheFly = 0;
     SwFlyFrm           *pSRetoucheFly2 = 0;
-
     SwFlyFrm           *pSFlyOnlyDraw = 0;
-    BorderLines        *pBLines;
-    SwLineRects        *pSLines;
-    SwSubsRects        *pSSubsLines;
+
+    // The borders will be collected in pSLines during the Paint and later
+    // possibly merge them.
+    // The help lines will be collected and merged in gProp.pSSubsLines. These will
+    // be compared with pSLines before the work in order to avoid help lines
+    // to hide borders.
+    BorderLines        *pBLines = 0;
+    SwLineRects        *pSLines = 0;
+    SwSubsRects        *pSSubsLines = 0;
 
     // global variable for sub-lines of body, header, footer, section and footnote frames.
     SwSubsRects        *pSSpecSubsLines = 0;
@@ -384,9 +380,9 @@ SwSavePaintStatics::SwSavePaintStatics()
     pSRetoucheFly = gProp.pSRetoucheFly;
     pSRetoucheFly2 = gProp.pSRetoucheFly2;
     pSFlyOnlyDraw = gProp.pSFlyOnlyDraw;
-    pBLines = g_pBorderLines;
-    pSLines = pLines;
-    pSSubsLines = pSubsLines;
+    pBLines = gProp.pBLines;
+    pSLines = gProp.pSLines;
+    pSSubsLines = gProp.pSSubsLines;
     pSSpecSubsLines = gProp.pSSpecSubsLines;
     pSProgress = gProp.pSProgress;
     nSPixelSzW = gProp.nSPixelSzW;
@@ -408,9 +404,9 @@ SwSavePaintStatics::SwSavePaintStatics()
     gProp.nSHalfPixelSzW = gProp.nSHalfPixelSzH =
     gProp.nSMinDistPixelW = gProp.nSMinDistPixelH = 0;
     gProp.aSScaleX = gProp.aSScaleY = 1.0;
-    g_pBorderLines = 0;
-    pLines = 0;
-    pSubsLines = 0;
+    gProp.pBLines = 0;
+    gProp.pSLines = 0;
+    gProp.pSSubsLines = 0;
     gProp.pSSpecSubsLines = 0L;
     gProp.pSProgress = 0;
 }
@@ -424,9 +420,9 @@ SwSavePaintStatics::~SwSavePaintStatics()
     gProp.pSRetoucheFly       = pSRetoucheFly;
     gProp.pSRetoucheFly2      = pSRetoucheFly2;
     gProp.pSFlyOnlyDraw = pSFlyOnlyDraw;
-    g_pBorderLines     = pBLines;
-    pLines             = pSLines;
-    pSubsLines         = pSSubsLines;
+    gProp.pBLines     = pBLines;
+    gProp.pSLines             = pSLines;
+    gProp.pSSubsLines         = pSSubsLines;
     gProp.pSSpecSubsLines     = pSSpecSubsLines;
     gProp.pSProgress          = pSProgress;
     gProp.nSPixelSzW          = nSPixelSzW;
@@ -3199,7 +3195,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
     const bool bExtraData = ::IsExtraData( GetFmt()->GetDoc() );
 
-    pLines = new SwLineRects;   //Container for borders.
+    gProp.pSLines = new SwLineRects;   //Container for borders.
 
     // #104289#. During painting, something (OLE) can
     // load the linguistic, which in turn can cause a reformat
@@ -3252,10 +3248,10 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
             {
                 if ( pSh->GetWin() )
                 {
-                    pSubsLines = new SwSubsRects;
+                    gProp.pSSubsLines = new SwSubsRects;
                     gProp.pSSpecSubsLines = new SwSubsRects;
                 }
-                g_pBorderLines = new BorderLines;
+                gProp.pBLines = new BorderLines;
 
                 aPaintRect._Intersection( aRect );
 
@@ -3316,7 +3312,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
-                    pLines->LockLines( true );
+                    gProp.pSLines->LockLines( true );
                     const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
                     pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
                                             pPrintData,
@@ -3324,8 +3320,8 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
                                             &aSwRedirector );
-                    pLines->PaintLines( pSh->GetOut() );
-                    pLines->LockLines( false );
+                    gProp.pSLines->PaintLines( pSh->GetOut() );
+                    gProp.pSLines->LockLines( false );
                 }
 
                 if ( pSh->GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::BACKGROUND_PARA_OVER_DRAWINGS ) )
@@ -3349,17 +3345,17 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     SwPageFrm::PaintNotesSidebar( pPage->Frm(), pSh, pPage->GetPhyPageNum(), bRightSidebar);
                 }
 
-                pLines->PaintLines( pSh->GetOut() );
+                gProp.pSLines->PaintLines( pSh->GetOut() );
                 if ( pSh->GetWin() )
                 {
-                    pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
-                    DELETEZ( pSubsLines );
+                    gProp.pSSubsLines->PaintSubsidiary( pSh->GetOut(), gProp.pSLines );
+                    DELETEZ( gProp.pSSubsLines );
                     DELETEZ( gProp.pSSpecSubsLines );
                 }
                 // fdo#42750: delay painting these until after subsidiary lines
                 // fdo#45562: delay painting these until after hell layer
                 // fdo#47717: but do it before heaven layer
-                ProcessPrimitives(g_pBorderLines->GetBorderLines_Clear());
+                ProcessPrimitives(gProp.pBLines->GetBorderLines_Clear());
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
@@ -3376,7 +3372,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 if ( bExtraData )
                     pPage->RefreshExtraData( aPaintRect );
 
-                DELETEZ(g_pBorderLines);
+                DELETEZ(gProp.pBLines);
                 pVout->Leave();
 
                 // #i68597#
@@ -3463,7 +3459,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
         pPage = (SwPageFrm*)pPage->GetNext();
     }
 
-    DELETEZ( pLines );
+    DELETEZ( gProp.pSLines );
 
     if ( bResetRootPaint )
         SwRootFrm::bInPaint = false;
@@ -4063,14 +4059,14 @@ void SwCellFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
 struct BorderLinesGuard
 {
-    explicit BorderLinesGuard() : m_pBorderLines(g_pBorderLines)
+    explicit BorderLinesGuard() : m_pBorderLines(gProp.pBLines)
     {
-        g_pBorderLines = new BorderLines;
+        gProp.pBLines = new BorderLines;
     }
     ~BorderLinesGuard()
     {
-        delete g_pBorderLines;
-        g_pBorderLines = m_pBorderLines;
+        delete gProp.pBLines;
+        gProp.pBLines = m_pBorderLines;
     }
 private:
     BorderLines *const m_pBorderLines;
@@ -4094,7 +4090,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     //because of the overlapping of frames and drawing objects the flys have to
     //paint their borders (and those of the internal ones) directly.
     //e.g. #33066#
-    pLines->LockLines(true);
+    gProp.pSLines->LockLines(true);
     BorderLinesGuard blg; // this should not paint borders added from PaintBaBo
 
     SwRect aRect( rRect );
@@ -4266,16 +4262,16 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         && !bIsChart ) //#i102950# don't paint additional borders for charts
     {
         bool bSubsLineRectsCreated;
-        if ( pSubsLines )
+        if ( gProp.pSSubsLines )
         {
             // Lock already existing subsidiary lines
-            pSubsLines->LockLines( true );
+            gProp.pSSubsLines->LockLines( true );
             bSubsLineRectsCreated = false;
         }
         else
         {
             // create new subsidiardy lines
-            pSubsLines = new SwSubsRects;
+            gProp.pSSubsLines = new SwSubsRects;
             bSubsLineRectsCreated = true;
         }
 
@@ -4296,13 +4292,13 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         RefreshLaySubsidiary( pPage, aRect );
         // paint subsidiary lines of fly frame and its lowers
         gProp.pSSpecSubsLines->PaintSubsidiary( pOut, NULL );
-        pSubsLines->PaintSubsidiary( pOut, pLines );
+        gProp.pSSubsLines->PaintSubsidiary( pOut, gProp.pSLines );
         if ( !bSubsLineRectsCreated )
             // unlock subsidiary lines
-            pSubsLines->LockLines( false );
+            gProp.pSSubsLines->LockLines( false );
         else
             // delete created subsidiary lines container
-            DELETEZ( pSubsLines );
+            DELETEZ( gProp.pSSubsLines );
 
         if ( !bSpecSubsLineRectsCreated )
             // unlock special subsidiary lines
@@ -4320,10 +4316,10 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     // OD 19.12.2002 #106318# - first paint lines added by fly frame paint
     // and then unlock other lines.
-    pLines->PaintLines( pOut );
-    pLines->LockLines( false );
+    gProp.pSLines->PaintLines( pOut );
+    gProp.pSLines->LockLines( false );
     // have to paint frame borders added in heaven layer here...
-    ProcessPrimitives(g_pBorderLines->GetBorderLines_Clear());
+    ProcessPrimitives(gProp.pBLines->GetBorderLines_Clear());
 
     pOut->Pop();
 
@@ -4656,10 +4652,10 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     //    SwRegionRects aRegion( aOut, 4 );
     //    ::lcl_SubtractFlys( this, pPage, aOut, aRegion );
     //    for ( size_t i = 0; i < aRegion.size(); ++i )
-    //        pLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
+    //        gProp.pSLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
     //}
     //else
-        pLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol );
+        gProp.pSLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol );
 }
 
 /**
@@ -4881,7 +4877,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
             aLeftColor.getBColor(), aRightColor.getBColor(),
             rBorder.GetColorGap().getBColor(), rBorder.HasGapColor(),
             rBorder.GetBorderLineStyle() );
-    g_pBorderLines->AddBorderLine(xLine);
+    gProp.pBLines->AddBorderLine(xLine);
 }
 
 /**
@@ -6662,9 +6658,9 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
             //During paint using the root, the array is controlled from there.
             //Otherwise we'll handle it for our self.
             bool bDelSubs = false;
-            if ( !pSubsLines )
+            if ( !gProp.pSSubsLines )
             {
-                pSubsLines = new SwSubsRects;
+                gProp.pSSubsLines = new SwSubsRects;
                 // OD 20.12.2002 #106318# - create container for special subsidiary lines
                 gProp.pSSpecSubsLines = new SwSubsRects;
                 bDelSubs = true;
@@ -6679,8 +6675,8 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
                 gProp.pSSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), NULL );
                 DELETEZ( gProp.pSSpecSubsLines );
 
-                pSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), pLines );
-                DELETEZ( pSubsLines );
+                gProp.pSSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), gProp.pSLines );
+                DELETEZ( gProp.pSSubsLines );
             }
         }
     }
@@ -6739,7 +6735,7 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   const Point &rP1,
                                   const Point &rP2,
                                   const sal_uInt8 nSubColor,
-                                  SwLineRects* _pSubsLines )
+                                  SwLineRects* pSubsLines )
 {
     //In which direction do we loop? Can only be horizontal or vertical.
     OSL_ENSURE( ((rP1.X() == rP2.X()) || (rP1.Y() == rP2.Y())),
@@ -6831,9 +6827,9 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
         if ( (aP1.*pDirPt)() < (aP2.*pDirPt)() )
         {
             SwRect aRect( aP1, aP2 );
-            // OD 18.11.2002 #99672# - use parameter <_pSubsLines> instead of
-            // global variable <pSubsLines>.
-            _pSubsLines->AddLineRect( aRect, 0, table::BorderLineStyle::SOLID,
+            // OD 18.11.2002 #99672# - use parameter <pSubsLines> instead of
+            // global variable <gProp.pSSubsLines>.
+            pSubsLines->AddLineRect( aRect, 0, table::BorderLineStyle::SOLID,
                     0, nSubColor );
         }
         aP1 = aP2;
@@ -7103,7 +7099,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     // sub-lines in <pSpecSubsLine> array.
     const bool bSpecialSublines = IsBodyFrm() || IsHeaderFrm() || IsFooterFrm() ||
                                   IsFtnFrm() || IsSctFrm();
-    SwLineRects* pUsedSubsLines = bSpecialSublines ? gProp.pSSpecSubsLines : pSubsLines;
+    SwLineRects* pUsedSubsLines = bSpecialSublines ? gProp.pSSpecSubsLines : gProp.pSSubsLines;
 
     // NOTE: for cell frames only left and right (horizontal layout) respectively
     //      top and bottom (vertical layout) lines painted.
@@ -7641,7 +7637,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         SwViewImp *pImp = pSh->Imp();
         gProp.pSFlyOnlyDraw = pFly;
-        pLines = new SwLineRects;
+        gProp.pSLines = new SwLineRects;
 
         // OD 09.12.2002 #103045# - determine page, fly frame is on
         const SwPageFrm* pFlyPage = pFly->FindPageFrm();
@@ -7653,16 +7649,16 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        pLines->PaintLines( &aDev );
+        gProp.pSLines->PaintLines( &aDev );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
-        pLines->PaintLines( &aDev );
+        gProp.pSLines->PaintLines( &aDev );
         // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        pLines->PaintLines( &aDev );
-        DELETEZ( pLines );
+        gProp.pSLines->PaintLines( &aDev );
+        DELETEZ( gProp.pSLines );
         gProp.pSFlyOnlyDraw = 0;
 
         gProp.pSFlyMetafileOut = 0;
