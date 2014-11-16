@@ -133,9 +133,9 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     SAL_INFO( "vcl.opengl", "RenderPixmapToScreen (" << nX << " " << nY << ")" );
 
     aPosAry.mnSrcX = 0;
-    aPosAry.mnSrcY = nY;
+    aPosAry.mnSrcY = 0;
     aPosAry.mnDestX = nX;
-    aPosAry.mnDestY = 0;
+    aPosAry.mnDestY = nY;
     aPosAry.mnSrcWidth = aPosAry.mnDestWidth = pPixmap->GetWidth();
     aPosAry.mnSrcHeight = aPosAry.mnDestHeight = pPixmap->GetHeight();
 
@@ -153,7 +153,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     //TODO: lfrb: glXGetProc to get the functions
     glXBindTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT, NULL );
 
-    DrawTexture( aTexture, aPosAry, !bInverted );
+    DrawTexture( aTexture, aPosAry, bInverted );
 
     glXReleaseTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT );
     glXDestroyPixmap( pDisplay, pGlxPixmap );
