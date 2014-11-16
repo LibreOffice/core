@@ -224,11 +224,6 @@ public:
     }
 };
 
-//Only repaint the Fly content as well as the background of the Fly content if
-//a metafile is taken of the Fly.
-static bool bFlyMetafile = false;
-static OutputDevice *pFlyMetafileOut = 0;
-
 //Retouch for transparent Flys is done by the background of the Flys.
 //The Fly itself should certainly not be spared out. See PaintBackground and
 //lcl_SubtractFlys()
@@ -266,9 +261,12 @@ Color aGlobalRetoucheColor;
  * Container for static properties
  */
 struct SwPaintProperties {
-    bool                bSFlyMetafile;
+    //Only repaint the Fly content as well as the background of the Fly content if
+    //a metafile is taken of the Fly.
+    bool                bSFlyMetafile = false;
+    OutputDevice       *pSFlyMetafileOut = 0;
+
     SwViewShell        *pSGlobalShell = 0;
-    OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,
                        *pSRetoucheFly2;
     SwFlyFrm           *pSFlyOnlyDraw = 0;
@@ -385,9 +383,9 @@ public:
 SwSavePaintStatics::SwSavePaintStatics()
 {
     // Saving globales
-    bSFlyMetafile = bFlyMetafile;
+    bSFlyMetafile = gProp.bSFlyMetafile;
     pSGlobalShell = gProp.pSGlobalShell;
-    pSFlyMetafileOut = pFlyMetafileOut;
+    pSFlyMetafileOut = gProp.pSFlyMetafileOut;
     pSRetoucheFly = pRetoucheFly;
     pSRetoucheFly2 = pRetoucheFly2;
     pSFlyOnlyDraw = gProp.pSFlyOnlyDraw;
@@ -407,8 +405,8 @@ SwSavePaintStatics::SwSavePaintStatics()
     aSScaleY = gProp.aSScaleY;
 
     // Restoring globales to default
-    bFlyMetafile = false;
-    pFlyMetafileOut = 0;
+    gProp.bSFlyMetafile = false;
+    gProp.pSFlyMetafileOut = 0;
     pRetoucheFly  = 0;
     pRetoucheFly2 = 0;
     nPixelSzW = nPixelSzH =
@@ -426,8 +424,8 @@ SwSavePaintStatics::~SwSavePaintStatics()
 {
     // Restoring globales to saved one
     gProp.pSGlobalShell       = pSGlobalShell;
-    bFlyMetafile       = bSFlyMetafile;
-    pFlyMetafileOut    = pSFlyMetafileOut;
+    gProp.bSFlyMetafile       = bSFlyMetafile;
+    gProp.pSFlyMetafileOut    = pSFlyMetafileOut;
     pRetoucheFly       = pSRetoucheFly;
     pRetoucheFly2      = pSRetoucheFly2;
     gProp.pSFlyOnlyDraw = pSFlyOnlyDraw;
@@ -1222,14 +1220,14 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
 
     // Make sure that view shell (parameter <pSh>) exists, if the output device
     // is taken from this view shell --> no output device, no alignment
-    // Output device taken from view shell <pSh>, if <bFlyMetafile> not set
-    if ( !bFlyMetafile && !pSh )
+    // Output device taken from view shell <pSh>, if <gProp.bSFlyMetafile> not set
+    if ( !gProp.bSFlyMetafile && !pSh )
     {
         return;
     }
 
-    const OutputDevice *pOut = bFlyMetafile ?
-                        pFlyMetafileOut : pSh->GetOut();
+    const OutputDevice *pOut = gProp.bSFlyMetafile ?
+                        gProp.pSFlyMetafileOut : pSh->GetOut();
 
     // Hold original rectangle in pixel
     const Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
@@ -1687,9 +1685,9 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
 {
     /// determine color of background
     ///     If color of background brush is not "no fill"/"auto fill" or
-    ///     <bFlyMetafile> is set, use color of background brush, otherwise
+    ///     <gProp.bSFlyMetafile> is set, use color of background brush, otherwise
     ///     use global retouche color.
-    const Color aColor( ( (_rBackgrdBrush.GetColor() != COL_TRANSPARENT) || bFlyMetafile )
+    const Color aColor( ( (_rBackgrdBrush.GetColor() != COL_TRANSPARENT) || gProp.bSFlyMetafile )
                         ? _rBackgrdBrush.GetColor()
                         : aGlobalRetoucheColor );
 
@@ -2140,7 +2138,7 @@ void DrawGraphic(
         // instead of checking, if transparency is not set.
         const Color aColor( pBrush &&
                             ( !(pBrush->GetColor() == COL_TRANSPARENT) ||
-                              bFlyMetafile )
+                              gProp.bSFlyMetafile )
                     ? pBrush->GetColor()
                     : aGlobalRetoucheColor );
 
@@ -6463,7 +6461,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
 
     bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode );
     //- Output if a separate background is used.
-    bool bNoFlyBackground = !bFlyMetafile && !bBack && IsFlyFrm();
+    bool bNoFlyBackground = !gProp.bSFlyMetafile && !bBack && IsFlyFrm();
     if ( bNoFlyBackground )
     {
         // OD 05.09.2002 #102912# - Fly frame has no background.
@@ -7331,7 +7329,7 @@ const vcl::Font& SwPageFrm::GetEmptyPageFont()
  */
 void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 {
-    if ( bFlyMetafile )
+    if ( gProp.bSFlyMetafile )
         return;
 
     OSL_ENSURE( GetUpper(), "Retouche try without Upper." );
@@ -7643,8 +7641,8 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         vcl::Window *pWin = pSh->GetWin();
         sal_uInt16 nZoom = pSh->GetViewOptions()->GetZoom();
         ::SetOutDevAndWin( pSh, &aDev, 0, 100 );
-        bFlyMetafile = true;
-        pFlyMetafileOut = pWin;
+        gProp.bSFlyMetafile = true;
+        gProp.pSFlyMetafileOut = pWin;
 
         SwViewImp *pImp = pSh->Imp();
         gProp.pSFlyOnlyDraw = pFly;
@@ -7672,8 +7670,8 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         DELETEZ( pLines );
         gProp.pSFlyOnlyDraw = 0;
 
-        pFlyMetafileOut = 0;
-        bFlyMetafile = false;
+        gProp.pSFlyMetafileOut = 0;
+        gProp.bSFlyMetafile = false;
         ::SetOutDevAndWin( pSh, pOld, pWin, nZoom );
 
         // #i92711# end Pre/PostPaint encapsulation when pOut is back and content is painted
