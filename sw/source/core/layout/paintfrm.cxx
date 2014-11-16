@@ -244,8 +244,6 @@ static long nHalfPixelSzW = 0, nHalfPixelSzH = 0;
 static long nMinDistPixelW = 0, nMinDistPixelH = 0;
 
 // Current zoom factor
-static double aScaleX = 1.0;
-static double aScaleY = 1.0;
 const static double aMinDistScale = 0.73;
 const static double aEdgeScale = 0.5;
 
@@ -288,6 +286,36 @@ bool isTableBoundariesEnabled()
 }
 
 }
+
+/**
+ * Container for static properties
+ */
+struct SwPaintProperties {
+    bool                bSFlyMetafile;
+    SwViewShell        *pSGlobalShell;
+    OutputDevice       *pSFlyMetafileOut;
+    SwFlyFrm           *pSRetoucheFly,
+                       *pSRetoucheFly2,
+                       *pSFlyOnlyDraw;
+    BorderLines        *pBLines;
+    SwLineRects        *pSLines;
+    SwSubsRects        *pSSubsLines;
+    SwSubsRects*        pSSpecSubsLines;
+    SfxProgress        *pSProgress;
+    long                nSPixelSzW,
+                        nSPixelSzH,
+                        nSHalfPixelSzW,
+                        nSHalfPixelSzH,
+                        nSMinDistPixelW,
+                        nSMinDistPixelH;
+    Color               aSGlobalRetoucheColor;
+
+    // Current zoom factor
+    double              aSScaleX = 1;
+    double              aSScaleY = 1;
+};
+
+static SwPaintProperties gProp;
 
 /**
  * Set borders alignment statics
@@ -344,35 +372,9 @@ void SwCalcPixStatics( OutputDevice *pOut )
     nMinDistPixelH = nPixelSzH * 2 + 1;
 
     const MapMode &rMap = pOut->GetMapMode();
-    aScaleX = rMap.GetScaleX();
-    aScaleY = rMap.GetScaleY();
+    gProp.aSScaleX = rMap.GetScaleX();
+    gProp.aSScaleY = rMap.GetScaleY();
 }
-
-/**
- *
- */
-struct SwPaintProperties {
-    bool                bSFlyMetafile;
-    SwViewShell        *pSGlobalShell;
-    OutputDevice       *pSFlyMetafileOut;
-    SwFlyFrm           *pSRetoucheFly,
-                       *pSRetoucheFly2,
-                       *pSFlyOnlyDraw;
-    BorderLines        *pBLines;
-    SwLineRects        *pSLines;
-    SwSubsRects        *pSSubsLines;
-    SwSubsRects*        pSSpecSubsLines;
-    SfxProgress        *pSProgress;
-    long                nSPixelSzW,
-                        nSPixelSzH,
-                        nSHalfPixelSzW,
-                        nSHalfPixelSzH,
-                        nSMinDistPixelW,
-                        nSMinDistPixelH;
-    Color               aSGlobalRetoucheColor;
-    double              aSScaleX,
-                        aSScaleY;
-};
 
 /**
  * To be able to save the statics so the paint is more or lees reentrant
@@ -405,8 +407,8 @@ SwSavePaintStatics::SwSavePaintStatics()
     nSMinDistPixelW = nMinDistPixelW;
     nSMinDistPixelH = nMinDistPixelH ;
     aSGlobalRetoucheColor = aGlobalRetoucheColor;
-    aSScaleX = aScaleX;
-    aSScaleY = aScaleY;
+    aSScaleX = gProp.aSScaleX;
+    aSScaleY = gProp.aSScaleY;
 
     // Restoring globales to default
     bFlyMetafile = false;
@@ -416,7 +418,7 @@ SwSavePaintStatics::SwSavePaintStatics()
     nPixelSzW = nPixelSzH =
     nHalfPixelSzW = nHalfPixelSzH =
     nMinDistPixelW = nMinDistPixelH = 0;
-    aScaleX = aScaleY = 1.0;
+    gProp.aSScaleX = gProp.aSScaleY = 1.0;
     g_pBorderLines = 0;
     pLines = 0;
     pSubsLines = 0;
@@ -445,8 +447,8 @@ SwSavePaintStatics::~SwSavePaintStatics()
     nMinDistPixelW     = nSMinDistPixelW;
     nMinDistPixelH     = nSMinDistPixelH;
     aGlobalRetoucheColor = aSGlobalRetoucheColor;
-    aScaleX            = aSScaleX;
-    aScaleY            = aSScaleY;
+    gProp.aSScaleX = aSScaleX;
+    gProp.aSScaleY = aSScaleY;
 }
 
 /**
@@ -677,7 +679,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
     if ( pOut->GetOutDevType() != OUTDEV_PRINTER )
     {
         // I'm not doing anything for a too small zoom
-        if ( aScaleX < aEdgeScale || aScaleY < aEdgeScale )
+        if ( gProp.aSScaleX < aEdgeScale || gProp.aSScaleY < aEdgeScale )
             return;
     }
 
@@ -1392,7 +1394,7 @@ static long lcl_AlignHeight( const long nHeight )
 
 static long lcl_MinHeightDist( const long nDist )
 {
-    if ( aScaleX < aMinDistScale || aScaleY < aMinDistScale )
+    if ( gProp.aSScaleX < aMinDistScale || gProp.aSScaleY < aMinDistScale )
         return nDist;
     return ::lcl_AlignHeight( std::max( nDist, nMinDistPixelH ));
 }
