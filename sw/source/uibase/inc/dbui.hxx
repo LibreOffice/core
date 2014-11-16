@@ -28,7 +28,7 @@ class SW_DLLPUBLIC CancelableModelessDialog : public ModelessDialog
 {
 protected:
     CancelButton* m_pCancelButton;
-    CancelableModelessDialog( vcl::Window *pParent, const OString& rID,
+    CancelableModelessDialog( vcl::Window *pParent, const OUString& rID,
                               const OUString& rUIXMLDescription );
 
 public:

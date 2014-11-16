@@ -131,7 +131,7 @@ class VCL_DLLPUBLIC ModelessDialog : public Dialog
     SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
 
 public:
-    explicit        ModelessDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
 };
 
 // - ModalDialog -

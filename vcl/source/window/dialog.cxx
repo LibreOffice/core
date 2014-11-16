@@ -1152,8 +1152,8 @@ VclBuilderContainer::~VclBuilderContainer()
     delete m_pUIBuilder;
 }
 
-ModelessDialog::ModelessDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MODELESSDIALOG)
+ModelessDialog::ModelessDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
+    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG)
 {
 }
 

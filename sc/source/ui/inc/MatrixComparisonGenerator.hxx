@@ -27,7 +27,7 @@ public:
     ScMatrixComparisonGenerator(
         SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
         vcl::Window* pParent, ScViewData* pViewData,
-        const OString& rID, const OUString& rUiXmlDescription );
+        const OUString& rID, const OUString& rUiXmlDescription );
 
     virtual ~ScMatrixComparisonGenerator();
 

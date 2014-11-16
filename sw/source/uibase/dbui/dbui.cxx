@@ -78,7 +78,7 @@ void CreateMonitor::SetCurrentPosition( sal_Int32 nCurrent )
 }
 
 CancelableModelessDialog::CancelableModelessDialog( vcl::Window *pParent,
-        const OString& rID, const OUString& rUIXMLDescription )
+        const OUString& rID, const OUString& rUIXMLDescription )
     : ModelessDialog( pParent , rID, rUIXMLDescription )
 {
     get(m_pCancelButton, "cancel");

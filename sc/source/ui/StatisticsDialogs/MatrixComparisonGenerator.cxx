@@ -53,7 +53,7 @@ namespace
 
 ScMatrixComparisonGenerator::ScMatrixComparisonGenerator(
                                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                                    vcl::Window* pParent, ScViewData* pViewData, const OString& rID,
+                                    vcl::Window* pParent, ScViewData* pViewData, const OUString& rID,
                                     const OUString& rUiXmlDescription) :
     ScStatisticsInputOutputDialog(pSfxBindings, pChildWindow, pParent, pViewData, rID, rUiXmlDescription)
 {}

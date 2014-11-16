@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
 }
 
 SfxModelessDialog::SfxModelessDialog(SfxBindings* pBindinx,
-    SfxChildWindow *pCW, vcl::Window *pParent, const OString& rID,
+    SfxChildWindow *pCW, vcl::Window *pParent, const OUString& rID,
     const OUString& rUIXMLDescription)
     : ModelessDialog(pParent, rID, rUIXMLDescription)
 {

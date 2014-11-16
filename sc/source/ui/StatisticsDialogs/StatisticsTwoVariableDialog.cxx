@@ -27,7 +27,7 @@
 
 ScStatisticsTwoVariableDialog::ScStatisticsTwoVariableDialog(
                     SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow,
-                    vcl::Window* pParent, ScViewData* pViewData, const OString& rID, const OUString& rUIXMLDescription ) :
+                    vcl::Window* pParent, ScViewData* pViewData, const OUString& rID, const OUString& rUIXMLDescription ) :
     ScAnyRefDlg     ( pSfxBindings, pChildWindow, pParent, rID, rUIXMLDescription ),
     mViewData       ( pViewData ),
     mDocument       ( pViewData->GetDocument() ),

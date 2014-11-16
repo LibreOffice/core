@@ -30,7 +30,7 @@ public:
     ScStatisticsInputOutputDialog(
         SfxBindings* pB, SfxChildWindow* pCW,
         vcl::Window* pParent, ScViewData* pViewData,
-        const OString& rID, const OUString& rUIXMLDescription );
+        const OUString& rID, const OUString& rUIXMLDescription );
 
     virtual ~ScStatisticsInputOutputDialog();
 

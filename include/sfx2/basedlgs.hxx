@@ -100,7 +100,7 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
 
 protected:
     SfxModelessDialog( SfxBindings*, SfxChildWindow*,
-        vcl::Window*, const OString& rID, const OUString& rUIXMLDescription );
+        vcl::Window*, const OUString& rID, const OUString& rUIXMLDescription );
     virtual ~SfxModelessDialog();
     virtual bool            Close() SAL_OVERRIDE;
     virtual void            Resize() SAL_OVERRIDE;
