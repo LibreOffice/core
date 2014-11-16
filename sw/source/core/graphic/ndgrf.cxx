@@ -223,20 +223,12 @@ bool SwGrfNode::ReRead(
     }
     else if( pGraphic && rGrfName.isEmpty() )
     {
-        // Old stream must be deleted before the new one is set.
-        if( HasEmbeddedStreamName() )
-            DelStreamName();
-
         maGrfObj.SetGraphic( *pGraphic );
         onGraphicChanged();
         bReadGrf = true;
     }
     else if( pGrfObj && rGrfName.isEmpty() )
     {
-        // Old stream must be deleted before the new one is set.
-        if( HasEmbeddedStreamName() )
-            DelStreamName();
-
         maGrfObj = *pGrfObj;
         onGraphicChanged();
         bReadGrf = true;
@@ -246,9 +238,6 @@ bool SwGrfNode::ReRead(
         return true;
     else
     {
-        if( HasEmbeddedStreamName() )
-            DelStreamName();
-
         // create new link for the graphic object
         InsertLink( rGrfName, rFltName );
 
@@ -856,36 +845,6 @@ void SwGrfNode::ScaleImageMap()
     {
         aURL.GetMap()->Scale( aScaleX, aScaleY );
         pFmt->SetFmtAttr( aURL );
-    }
-}
-
-void SwGrfNode::DelStreamName()
-{
-    if( HasEmbeddedStreamName() )
-    {
-        // then remove graphic from storage
-        uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
-        if( xDocStg.is() )
-        {
-            try
-            {
-                const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
-                uno::Reference < embed::XStorage > refPics = xDocStg;
-                if ( !aNames.sStorage.isEmpty() )
-                    refPics = xDocStg->openStorageElement( aNames.sStorage, embed::ElementModes::READWRITE );
-                refPics->removeElement( aNames.sStream );
-                uno::Reference < embed::XTransactedObject > xTrans( refPics, uno::UNO_QUERY );
-                if ( xTrans.is() )
-                    xTrans->commit();
-            }
-            catch (const uno::Exception&)
-            {
-                // #i48434#
-                OSL_FAIL( "<SwGrfNode::DelStreamName()> - unhandled exception!" );
-            }
-        }
-
-        maGrfObj.SetUserData();
     }
 }
 
