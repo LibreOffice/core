@@ -240,8 +240,6 @@ static SwSubsRects *pSubsLines = 0;
 // global variable for sub-lines of body, header, footer, section and footnote frames.
 static SwSubsRects *pSpecSubsLines = 0;
 
-static SfxProgress *pProgress = 0;
-
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
 
@@ -267,7 +265,7 @@ struct SwPaintProperties {
     SwLineRects        *pSLines;
     SwSubsRects        *pSSubsLines;
     SwSubsRects*        pSSpecSubsLines;
-    SfxProgress        *pSProgress;
+    SfxProgress        *pSProgress = 0;
 
     // Sizes of a pixel and the corresponding halves. Will be reset when
     // entering SwRootFrm::Paint
@@ -390,7 +388,7 @@ SwSavePaintStatics::SwSavePaintStatics()
     pSLines = pLines;
     pSSubsLines = pSubsLines;
     pSSpecSubsLines = pSpecSubsLines;
-    pSProgress = pProgress;
+    pSProgress = gProp.pSProgress;
     nSPixelSzW = gProp.nSPixelSzW;
     nSPixelSzH = gProp.nSPixelSzH;
     nSHalfPixelSzW = gProp.nSHalfPixelSzW;
@@ -414,7 +412,7 @@ SwSavePaintStatics::SwSavePaintStatics()
     pLines = 0;
     pSubsLines = 0;
     pSpecSubsLines = 0L;
-    pProgress = 0;
+    gProp.pSProgress = 0;
 }
 
 SwSavePaintStatics::~SwSavePaintStatics()
@@ -430,7 +428,7 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pLines             = pSLines;
     pSubsLines         = pSSubsLines;
     pSpecSubsLines     = pSSpecSubsLines;
-    pProgress          = pSProgress;
+    gProp.pSProgress          = pSProgress;
     gProp.nSPixelSzW          = nSPixelSzW;
     gProp.nSPixelSzH          = nSPixelSzH;
     gProp.nSHalfPixelSzW      = nSHalfPixelSzW;
@@ -3157,7 +3155,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     gProp.pSGlobalShell = pSh;
 
     if( !pSh->GetWin() )
-        pProgress = SfxProgress::GetActiveProgress( (SfxObjectShell*) pSh->GetDoc()->GetDocShell() );
+        gProp.pSProgress = SfxProgress::GetActiveProgress( (SfxObjectShell*) pSh->GetDoc()->GetDocShell() );
 
     ::SwCalcPixStatics( pSh->GetOut() );
     aGlobalRetoucheColor = pSh->Imp()->GetRetoucheColor();
@@ -3189,7 +3187,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
         SwLayAction aAction( (SwRootFrm*)this, pSh->Imp() );
         aAction.SetPaint( false );
         aAction.SetComplete( false );
-        aAction.SetReschedule( pProgress != nullptr );
+        aAction.SetReschedule( gProp.pSProgress != nullptr );
         aAction.Action();
         ((SwRootFrm*)this)->ResetTurboFlag();
         if ( !pSh->ActionPend() )
@@ -3473,7 +3471,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
         delete pStatics;
     else
     {
-        pProgress = 0;
+        gProp.pSProgress = 0;
         gProp.pSGlobalShell = 0;
     }
 
@@ -3569,8 +3567,8 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         SwRect aPaintRect( pFrm->PaintArea() );
         if( aShortCut.Stop( aPaintRect ) )
             break;
-        if ( bCnt && pProgress )
-            pProgress->Reschedule();
+        if ( bCnt && gProp.pSProgress )
+            gProp.pSProgress->Reschedule();
 
         //We need to retouch if a frame explicitly requests it.
         //First do the retouch, because this could flatten the borders.
@@ -4329,8 +4327,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     pOut->Pop();
 
-    if ( pProgress && pNoTxt )
-        pProgress->Reschedule();
+    if ( gProp.pSProgress && pNoTxt )
+        gProp.pSProgress->Reschedule();
 }
 
 void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
@@ -6632,8 +6630,8 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
         SwRect aBorderRect( aRect );
         SwShortCut aShortCut( *pFrm, aBorderRect );
         do
-        {   if ( pProgress )
-                pProgress->Reschedule();
+        {   if ( gProp.pSProgress )
+                gProp.pSProgress->Reschedule();
 
             aFrmRect = pFrm->PaintArea();
             if ( aFrmRect.IsOver( aBorderRect ) )
