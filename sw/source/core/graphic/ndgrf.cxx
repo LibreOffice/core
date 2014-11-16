@@ -575,6 +575,10 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
                     if ( ImportGraphic( *pStrm ) )
                         nRet = 1;
                     delete pStrm;
+                    if( nRet )
+                    {
+                        maGrfObj.SetUserData();
+                    }
                 }
             }
             catch (const uno::Exception&)
