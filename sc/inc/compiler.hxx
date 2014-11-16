@@ -115,7 +115,6 @@ struct ScRawToken: private ScRawTokenBase
     // Friends that use a temporary ScRawToken on the stack (and therefore need
     // the private dtor) and know what they're doing..
     friend class ScTokenArray;
-    static sal_uInt16 sbyteOffset();
 public:
     union {
         double       nValue;

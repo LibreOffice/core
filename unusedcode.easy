@@ -10,8 +10,6 @@ OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()
 OpenGLContext::requestVirtualDevice()
 OpenGLRender::CreateTextTexture(rtl::OUString const&, vcl::Font, long, com::sun::star::awt::Point, com::sun::star::awt::Size, long)
-OpenGLSalBitmap::Draw(OpenGLContext&, SalTwoRect const&)
-OpenGLTexture::OpenGLTexture()
 OutputDevice::GetCanvas() const
 OutputDevice::HasAlpha()
 OutputDevice::LogicHeightToDeviceCoordinate(long) const

@@ -277,11 +277,6 @@ const Fraction& MapMode::GetScaleX() const { return mpImplMapMode->maScaleX; }
 
 const Fraction& MapMode::GetScaleY() const { return mpImplMapMode->maScaleY; }
 
-bool MapMode::IsSameInstance( const MapMode& rMapMode ) const
-{
-    return (mpImplMapMode == rMapMode.mpImplMapMode);
-}
-
 bool MapMode::IsSimple() const { return mpImplMapMode->mbSimple; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

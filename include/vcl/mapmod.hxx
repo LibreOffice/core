@@ -69,7 +69,6 @@ public:
     bool            operator!=( const MapMode& rMapMode ) const
                         { return !(MapMode::operator==( rMapMode )); }
     bool            IsDefault() const;
-    bool            IsSameInstance( const MapMode& rMapMode ) const;
 
     friend VCL_DLLPUBLIC SvStream& ReadMapMode( SvStream& rIStm, MapMode& rMapMode );
     friend VCL_DLLPUBLIC SvStream& WriteMapMode( SvStream& rOStm, const MapMode& rMapMode );

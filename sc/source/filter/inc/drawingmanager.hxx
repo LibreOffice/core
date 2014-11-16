@@ -35,32 +35,7 @@ namespace xls {
 
 const sal_uInt16 BIFF_OBJ_INVALID_ID        = 0;
 
-// Model structures for BIFF OBJ record data
-
-/** This structure contains line formatting attributes from an OBJ record. */
-struct BiffObjLineModel
-{
-    sal_uInt8           mnColorIdx;         /// Index into color palette.
-    sal_uInt8           mnStyle;            /// Line dash style.
-    sal_uInt8           mnWidth;            /// Line width.
-    bool                mbAuto;             /// True = automatic line format.
-
-    explicit            BiffObjLineModel();
-};
-
-/** This structure contains fill formatting attributes from an OBJ record. */
-struct BiffObjFillModel
-{
-    sal_uInt8           mnBackColorIdx;     /// Index to color palette for background color.
-    sal_uInt8           mnPattColorIdx;     /// Index to color palette for pattern foreground color.
-    sal_uInt8           mnPattern;          /// Fill pattern.
-    bool                mbAuto;             /// True = automatic fill format.
-
-    explicit            BiffObjFillModel();
-};
-
 // BIFF drawing objects
-
 class BiffDrawingBase;
 
 // BIFF drawing page

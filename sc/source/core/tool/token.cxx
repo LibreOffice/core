@@ -291,15 +291,6 @@ bool ScRawToken::IsValidReference() const
     return false;
 }
 
-sal_uInt16 ScRawToken::sbyteOffset()
-{
-    // offset of sbyte in ScRawToken
-    // offsetof(ScRawToken, sbyte) gives a warning with gcc, because ScRawToken is no POD
-
-    ScRawToken aToken;
-    return static_cast<sal_uInt16>( reinterpret_cast<char*>(&aToken.sbyte) - reinterpret_cast<char*>(&aToken) );
-}
-
 FormulaToken* ScRawToken::CreateToken() const
 {
 #if OSL_DEBUG_LEVEL > 1

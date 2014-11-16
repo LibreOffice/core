@@ -64,24 +64,6 @@ const sal_uInt8 BIFF_OBJ_PATT_SOLID         = 1;
 
 } // namespace
 
-// Model structures for BIFF OBJ record data
-
-BiffObjLineModel::BiffObjLineModel() :
-    mnColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
-    mnStyle( BIFF_OBJ_LINE_SOLID ),
-    mnWidth( BIFF_OBJ_LINE_HAIR ),
-    mbAuto( true )
-{
-}
-
-BiffObjFillModel::BiffObjFillModel() :
-    mnBackColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
-    mnPattColorIdx( BIFF_OBJ_FILL_AUTOCOLOR ),
-    mnPattern( BIFF_OBJ_PATT_SOLID ),
-    mbAuto( true )
-{
-}
-
 // BIFF drawing page
 BiffDrawingBase::BiffDrawingBase( const WorksheetHelper& rHelper, const Reference< XDrawPage >& rxDrawPage ) :
     WorksheetHelper( rHelper ),
