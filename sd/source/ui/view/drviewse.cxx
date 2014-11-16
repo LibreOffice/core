@@ -626,6 +626,9 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
 void DrawViewShell::FuDeleteSelectedObjects()
 {
+    if( !mpDrawView )
+        return;
+
     bool bConsumed = false;
 
     //if any placeholders are selected
@@ -667,7 +670,7 @@ void DrawViewShell::FuDeleteSelectedObjects()
         bConsumed = true;
     }
 
-    if (!bConsumed && mpDrawView)
+    if (!bConsumed)
     {
         ::vcl::KeyCode aKCode(KEY_DELETE);
         KeyEvent aKEvt( 0, aKCode);
