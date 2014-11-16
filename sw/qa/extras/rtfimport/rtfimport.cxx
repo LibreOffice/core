@@ -2017,6 +2017,12 @@ DECLARE_RTFIMPORT_TEST(testUnbalancedColumns, "unbalanced-columns.rtf")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo83204, "fdo83204.rtf")
+{
+    // This was Standard, \sN was ignored after \bkmkstart and \pard.
+    CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
