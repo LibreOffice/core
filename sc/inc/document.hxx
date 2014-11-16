@@ -33,7 +33,6 @@
 #include <formula/types.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "typedstrdata.hxx"
-#include "compressedarray.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
 #include <simplehintids.hxx>
