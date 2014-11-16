@@ -26,12 +26,13 @@
 // class LineStyleItem
 
 #include <svx/svxdllapi.h>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 class SVX_DLLPUBLIC XLineStyleItem : public SfxEnumItem
 {
 public:
                             TYPEINFO_OVERRIDE();
-                            XLineStyleItem(XLineStyle = XLINE_SOLID);
+                            XLineStyleItem(com::sun::star::drawing::LineStyle = com::sun::star::drawing::LineStyle_SOLID);
                             XLineStyleItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
@@ -44,7 +45,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
-    XLineStyle              GetValue() const { return (XLineStyle) SfxEnumItem::GetValue(); }
+    css::drawing::LineStyle     GetValue() const { return (com::sun::star::drawing::LineStyle) SfxEnumItem::GetValue(); }
 };
 
 #endif

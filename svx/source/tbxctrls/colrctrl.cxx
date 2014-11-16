@@ -389,7 +389,7 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
         {
             if( nPos == 1 )     // unsichtbar
             {
-                XLineStyleItem aXLineStyleItem( XLINE_NONE );
+                XLineStyleItem aXLineStyleItem( drawing::LineStyle_NONE );
                 pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineStyleItem, 0L );
             }
             else
@@ -405,11 +405,11 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
                         pView->GetAttributes( aAttrSet );
                         if ( aAttrSet.GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
                         {
-                            XLineStyle eXLS = (XLineStyle)
+                            drawing::LineStyle eXLS = (drawing::LineStyle)
                                 static_cast<const XLineStyleItem&>(aAttrSet.Get( XATTR_LINESTYLE ) ).GetValue();
-                            if ( eXLS == XLINE_NONE )
+                            if ( eXLS == drawing::LineStyle_NONE )
                             {
-                                XLineStyleItem aXLineStyleItem( XLINE_SOLID );
+                                XLineStyleItem aXLineStyleItem( drawing::LineStyle_SOLID );
                                 pDispatcher->Execute( nRightSlot, SfxCallMode::RECORD, &aXLineStyleItem, 0L );
                             }
                         }

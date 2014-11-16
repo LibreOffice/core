@@ -41,6 +41,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star;
 
 // For End Line Controlleer
 #define MAX_LINES 12
@@ -129,24 +130,24 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
         if( pBox->GetEntryCount() == 0 )
             pBox->FillControl();
 
-        XLineStyle eXLS;
+        drawing::LineStyle eXLS;
 
         if ( pStyleItem )
-            eXLS = ( XLineStyle )pStyleItem->GetValue();
+            eXLS = ( drawing::LineStyle )pStyleItem->GetValue();
         else
-            eXLS = XLINE_NONE;
+            eXLS = drawing::LineStyle_NONE;
 
         switch( eXLS )
         {
-            case XLINE_NONE:
+            case drawing::LineStyle_NONE:
                 pBox->SelectEntryPos( 0 );
                 break;
 
-            case XLINE_SOLID:
+            case drawing::LineStyle_SOLID:
                 pBox->SelectEntryPos( 1 );
                 break;
 
-            case XLINE_DASH:
+            case drawing::LineStyle_DASH:
             {
                 if( pDashItem )
                 {

@@ -2517,9 +2517,9 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     if (SbxObject* pObj = dynamic_cast<SbxObject*>(pVar->GetObject()))
                     {
                         // Check if member list has changed
-                        bool bObjChanged = false;
                         if (pItem->mpObject && !pItem->maMemberList.empty())
                         {
+                            bool bObjChanged = false;
                             SbxArray* pProps = pObj->GetProperties();
                             sal_uInt16 nPropCount = pProps->Count();
                             for( sal_uInt16 i = 0 ; i < nPropCount - 3 ; i++ )

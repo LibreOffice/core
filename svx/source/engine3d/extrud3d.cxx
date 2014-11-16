@@ -203,7 +203,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
         if(pPathObj)
         {
             SfxItemSet aSet(GetObjectItemSet());
-            aSet.Put(XLineStyleItem(XLINE_SOLID));
+            aSet.Put(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
             pPathObj->SetMergedItemSet(aSet);
         }
 
