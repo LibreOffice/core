@@ -608,7 +608,7 @@ bool SwGrfNode::SwapOut()
         maGrfObj.GetType() != GRAPHIC_NONE &&
         !maGrfObj.IsSwappedOut() && !bInSwapIn )
     {
-        if( refLink.Is() || HasEmbeddedStreamName() )
+        if( refLink.Is() )
         {
             // written graphics and links are removed here
             return maGrfObj.SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
@@ -931,32 +931,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     // copy formats into the other document
     SwGrfFmtColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );
 
-    Graphic aTmpGrf;
-    SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
-    if( !pLink && HasEmbeddedStreamName() )
-    {
-        try
-        {
-            const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
-            uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
-            SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
-            if ( pStrm )
-            {
-                const OUString aURL(maGrfObj.GetUserData());
-                GraphicFilter::GetGraphicFilter().ImportGraphic(aTmpGrf, aURL, *pStrm);
-                delete pStrm;
-            }
-        }
-        catch (const uno::Exception& e)
-        {
-            // #i48434#
-            SAL_WARN("sw.core", "<SwGrfNode::MakeCopy(..)> - unhandled exception!" << e.Message);
-        }
-    }
-    else
-    {
-        aTmpGrf = GetGrf();
-    }
+    Graphic aTmpGrf = GetGrf();
 
     const sfx2::LinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
     OUString sFile, sFilter;
@@ -1009,34 +984,6 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     else
     {
         pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
-
-        if( HasEmbeddedStreamName() )
-        {
-            try
-            {
-                const StreamAndStorageNames aNames = lcl_GetStreamStorageNames( maGrfObj.GetUserData() );
-                uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aNames.sStorage );
-                SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aNames.sStream );
-                if ( pStrm )
-                {
-                    if( pGrfObj->IsInSwapOut() )
-                    {
-                        pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
-                    }
-                    else
-                    {
-                        ImportGraphic( *pStrm );
-                        pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
-                    }
-                    delete pStrm;
-                }
-            }
-            catch (const uno::Exception&)
-            {
-                // #i48434#
-                OSL_FAIL( "<SwapGraphic> - unhandled exception!" );
-            }
-        }
     }
 
     return (sal_IntPtr)pRet;
