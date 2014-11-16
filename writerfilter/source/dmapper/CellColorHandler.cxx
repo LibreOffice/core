@@ -272,8 +272,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
                         : m_OutputFormat == Paragraph ? PROP_PARA_BACK_COLOR
                         : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
 
-    createGrabBag("originalColor", uno::makeAny( OStringToOUString(
-            msfilter::util::ConvertColor( nApplyColor, true ), RTL_TEXTENCODING_UTF8 )));
+    createGrabBag("originalColor", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nApplyColor, true))));
 
     return pPropertyMap;
 }
