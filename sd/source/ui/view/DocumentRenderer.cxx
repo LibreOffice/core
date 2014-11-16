@@ -1002,7 +1002,7 @@ namespace {
                         if (nSkip > 0)
                             --nSkip;
                         else
-                            pPathObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
+                            pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                     }
                 }
             }
@@ -1049,7 +1049,7 @@ namespace {
                 {
                     SdrPathObj* pPathObj = dynamic_cast<SdrPathObj*>(aShapeIter.Next());
                     if (pPathObj != NULL)
-                        pPathObj->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+                        pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
                 }
             }
 
@@ -1567,7 +1567,7 @@ private:
                 }
 
                 SdrPathObj* pPathObj = new SdrPathObj(OBJ_PATHLINE, aPathPoly );
-                pPathObj->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+                pPathObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
                 pPathObj->SetMergedItem(XLineColorItem(OUString(), Color(COL_BLACK)));
 
                 pHandout->NbcInsertObject( pPathObj );

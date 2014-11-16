@@ -124,6 +124,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <algorithm>
 
@@ -7683,7 +7684,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                     AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), 2,
                             XML_strokecolor, sColor.getStr(),
                             XML_strokeweight, sWidth.getStr() );
-                    if( LineStyle_DASH == pTop->GetBorderLineStyle() ) // Line Style is Dash type
+                    if( drawing::LineStyle_DASH == pTop->GetBorderLineStyle() ) // Line Style is Dash type
                         AddToAttrList( m_rExport.SdrExporter().getDashLineStyle(),
                             XML_dashstyle, "dash" );
                 }
@@ -7698,7 +7699,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                             XML_val, sColor,
                             FSEND);
                     m_pSerializer->endElementNS(XML_a, XML_solidFill);
-                    if( LineStyle_DASH == pTop->GetBorderLineStyle() ) // Line Style is Dash type
+                    if( drawing::LineStyle_DASH == pTop->GetBorderLineStyle() ) // Line Style is Dash type
                         m_pSerializer->singleElementNS(XML_a, XML_prstDash, XML_val, "dash", FSEND);
                     m_pSerializer->endElementNS(XML_a, XML_ln);
                 }

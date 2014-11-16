@@ -1049,7 +1049,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     pTObj->SetMergedItemSet( aSet );
                     if ( pRet )
                     {
-                        pTObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
+                        pTObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_NONE ) );
                         pTObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
                     }
                     if ( bVerticalText )
@@ -2975,7 +2975,7 @@ SdrObject* SdrPowerPointImport::ImportPageBackgroundObject( const SdrPage& rPage
             pSet.reset(new SfxItemSet( pSdrModel->GetItemPool() ));
             pSet->Put( XFillStyleItem( drawing::FillStyle_NONE ) );
         }
-        pSet->Put( XLineStyleItem( XLINE_NONE ) );
+        pSet->Put( XLineStyleItem( drawing::LineStyle_NONE ) );
         Rectangle aRect( rPage.GetLftBorder(), rPage.GetUppBorder(), rPage.GetWdt()-rPage.GetRgtBorder(), rPage.GetHgt()-rPage.GetLwrBorder() );
         pRet = new SdrRectObj( aRect );
         pRet->SetModel( pSdrModel );
@@ -7368,22 +7368,22 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
     try
     {
         SfxItemSet aSet( pLine->GetMergedItemSet() );
-        XLineStyle eLineStyle(static_cast<const XLineStyleItem&>(pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
+        drawing::LineStyle eLineStyle(static_cast<const XLineStyleItem&>(pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
         com::sun::star::table::BorderLine2 aBorderLine;
         switch( eLineStyle )
         {
-            case XLINE_DASH :
-            case XLINE_SOLID :
+            case drawing::LineStyle_DASH :
+            case drawing::LineStyle_SOLID :
                 {
                     Color aLineColor( static_cast<const XLineColorItem&>(pLine->GetMergedItem( XATTR_LINECOLOR )).GetColorValue() );
                     aBorderLine.Color = aLineColor.GetColor();
                     // Avoid width = 0, the min value should be 1.
                     sal_Int32 nLineWidth = std::max(sal_Int32(1), static_cast<const XLineWidthItem&>(pLine->GetMergedItem(XATTR_LINEWIDTH)) .GetValue() / 4);
                     aBorderLine.LineWidth = static_cast< sal_Int16 >( nLineWidth );
-                    aBorderLine.LineStyle = eLineStyle == XLINE_SOLID ? table::BorderLineStyle::SOLID : table::BorderLineStyle::DASHED;
+                    aBorderLine.LineStyle = eLineStyle == drawing::LineStyle_SOLID ? table::BorderLineStyle::SOLID : table::BorderLineStyle::DASHED;
                 }
                 break;
-            case XLINE_NONE :
+            case drawing::LineStyle_NONE :
                 {
                     aBorderLine.LineWidth = 0;
                     aBorderLine.LineStyle = table::BorderLineStyle::NONE;

@@ -63,7 +63,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     bObjSelected        ( false ),
 
     pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
-    aXLStyle            ( XLINE_SOLID ),
+    aXLStyle            ( com::sun::star::drawing::LineStyle_SOLID ),
     aXWidth             ( XOUT_WIDTH ),
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( pXPool ),

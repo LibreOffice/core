@@ -51,6 +51,7 @@
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
@@ -2107,7 +2108,7 @@ SvxXRectPreview::~SvxXRectPreview()
 void SvxXRectPreview::SetAttributes(const SfxItemSet& rItemSet)
 {
     mpRectangleObject->SetMergedItemSet(rItemSet, true);
-    mpRectangleObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+    mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
 void SvxXRectPreview::Paint( const Rectangle& )
@@ -2163,13 +2164,13 @@ SvxXShadowPreview::~SvxXShadowPreview()
 void SvxXShadowPreview::SetRectangleAttributes(const SfxItemSet& rItemSet)
 {
     mpRectangleObject->SetMergedItemSet(rItemSet, true);
-    mpRectangleObject->SetMergedItem(XLineStyleItem(XLINE_NONE));
+    mpRectangleObject->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
 void SvxXShadowPreview::SetShadowAttributes(const SfxItemSet& rItemSet)
 {
     mpRectangleShadow->SetMergedItemSet(rItemSet, true);
-    mpRectangleShadow->SetMergedItem(XLineStyleItem(XLINE_NONE));
+    mpRectangleShadow->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
 }
 
 void SvxXShadowPreview::SetShadowPosition(const Point& rPos)
