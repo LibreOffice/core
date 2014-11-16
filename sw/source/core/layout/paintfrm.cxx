@@ -261,8 +261,6 @@ static SwSubsRects *pSpecSubsLines = 0;
 
 static SfxProgress *pProgress = 0;
 
-static SwFlyFrm *pFlyOnlyDraw = 0;
-
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
 
@@ -295,8 +293,8 @@ struct SwPaintProperties {
     SwViewShell        *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,
-                       *pSRetoucheFly2,
-                       *pSFlyOnlyDraw;
+                       *pSRetoucheFly2;
+    SwFlyFrm           *pSFlyOnlyDraw = 0;
     BorderLines        *pBLines;
     SwLineRects        *pSLines;
     SwSubsRects        *pSSubsLines;
@@ -394,7 +392,7 @@ SwSavePaintStatics::SwSavePaintStatics()
     pSFlyMetafileOut = pFlyMetafileOut;
     pSRetoucheFly = pRetoucheFly;
     pSRetoucheFly2 = pRetoucheFly2;
-    pSFlyOnlyDraw = pFlyOnlyDraw;
+    pSFlyOnlyDraw = gProp.pSFlyOnlyDraw;
     pBLines = g_pBorderLines;
     pSLines = pLines;
     pSSubsLines = pSubsLines;
@@ -434,7 +432,7 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pFlyMetafileOut    = pSFlyMetafileOut;
     pRetoucheFly       = pSRetoucheFly;
     pRetoucheFly2      = pSRetoucheFly2;
-    pFlyOnlyDraw       = pSFlyOnlyDraw;
+    gProp.pSFlyOnlyDraw = pSFlyOnlyDraw;
     g_pBorderLines     = pBLines;
     pLines             = pSLines;
     pSubsLines         = pSSubsLines;
@@ -3990,7 +3988,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
         return true;
 
     //Attribute dependent, don't paint for printer or Preview
-    bool bPaint =  pFlyOnlyDraw ||
+    bool bPaint =  gProp.pSFlyOnlyDraw ||
                        ((SwContact*)pUserCall)->GetFmt()->GetPrint().GetValue();
     if ( !bPaint )
         bPaint = pSh->GetWin() && !pSh->IsPreview();
@@ -4006,7 +4004,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-            if ( pFlyOnlyDraw && pFlyOnlyDraw == pFly )
+            if ( gProp.pSFlyOnlyDraw && gProp.pSFlyOnlyDraw == pFly )
                 return true;
 
             //Try to avoid displaying the intermediate stage, Flys which don't
@@ -4057,7 +4055,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             if ( pAnch->IsInFly() )
                 bPaint = SwFlyFrm::IsPaint( pAnch->FindFlyFrm()->GetVirtDrawObj(),
                                             pSh );
-            else if ( pFlyOnlyDraw )
+            else if ( gProp.pSFlyOnlyDraw )
                 bPaint = false;
         }
         else
@@ -7651,7 +7649,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pFlyMetafileOut = pWin;
 
         SwViewImp *pImp = pSh->Imp();
-        pFlyOnlyDraw = pFly;
+        gProp.pSFlyOnlyDraw = pFly;
         pLines = new SwLineRects;
 
         // OD 09.12.2002 #103045# - determine page, fly frame is on
@@ -7674,7 +7672,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
                           &aSwRedirector );
         pLines->PaintLines( &aDev );
         DELETEZ( pLines );
-        pFlyOnlyDraw = 0;
+        gProp.pSFlyOnlyDraw = 0;
 
         pFlyMetafileOut = 0;
         bFlyMetafile = false;
