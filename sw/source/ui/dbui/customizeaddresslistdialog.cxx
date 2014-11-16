@@ -173,7 +173,7 @@ void SwCustomizeAddressListDialog::UpdateButtons()
 
 
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
-        vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+        vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
         const std::vector< OUString >& rCSVHeader)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , m_rCSVHeader(rCSVHeader)

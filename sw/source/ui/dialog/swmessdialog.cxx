@@ -15,7 +15,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/vclmedit.hxx>
 
-SwMessageAndEditDialog::SwMessageAndEditDialog(vcl::Window* pParent, const OString& rID,
+SwMessageAndEditDialog::SwMessageAndEditDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription)
     : ModalDialog(pParent, rID, rUIXMLDescription)
 {

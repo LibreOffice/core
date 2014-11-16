@@ -84,7 +84,7 @@ protected:
 
 public:
 
-    GraphicFilterDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
+    GraphicFilterDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, const Graphic& rGraphic);
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) = 0;
 };

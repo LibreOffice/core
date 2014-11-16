@@ -46,8 +46,8 @@ SchAxisDlg::SchAxisDlg(vcl::Window* pWindow,
     const InsertAxisOrGridDialogData& rInput, bool bAxisDlg)
     : ModalDialog(pWindow,
           bAxisDlg ?
-              OString("InsertAxisDialog") :
-              OString("InsertGridDialog"),
+              OUString("InsertAxisDialog") :
+              OUString("InsertGridDialog"),
           bAxisDlg ?
               OUString("modules/schart/ui/insertaxisdlg.ui") :
               OUString("modules/schart/ui/insertgriddlg.ui"))

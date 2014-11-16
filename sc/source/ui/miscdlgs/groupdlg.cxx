@@ -25,8 +25,8 @@
 ScGroupDlg::ScGroupDlg(vcl::Window* pParent, bool bUngroup, bool bRows)
     : ModalDialog(pParent,
         bUngroup ?
-            OString("UngroupDialog") :
-            OString("GroupDialog"),
+            OUString("UngroupDialog") :
+            OUString("GroupDialog"),
         bUngroup ?
             OUString("modules/scalc/ui/ungroupdialog.ui") :
             OUString("modules/scalc/ui/groupdialog.ui"))

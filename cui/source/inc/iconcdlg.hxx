@@ -182,7 +182,7 @@ protected :
 public :
 
     // the IconChoiceCtrl's could also be set in the Ctor
-    IconChoiceDialog ( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+    IconChoiceDialog ( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,
                        const SfxItemSet * pItemSet = 0 );
     virtual ~IconChoiceDialog ();
 

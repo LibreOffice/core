@@ -177,7 +177,7 @@ public:
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 protected:
-    ScRefHdlModalImpl(vcl::Window* pParent, const OString& rID,
+    ScRefHdlModalImpl(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
 
 private:
@@ -264,7 +264,7 @@ void ScRefHdlrImplBase<TWindow, bBindRef>::StateChanged( StateChangedType nState
 class ScAnyRefModalDlg : public ScRefHdlModalImpl
 {
 public:
-    ScAnyRefModalDlg(vcl::Window* pParent, const OString& rID,
+    ScAnyRefModalDlg(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
 };
 

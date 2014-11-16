@@ -1000,7 +1000,7 @@ void ScRefHandler::RefInputDone( bool bForced )
     m_aHelper.RefInputDone( bForced );
 }
 
-ScRefHdlModalImpl::ScRefHdlModalImpl(vcl::Window* pParent, const OString& rID,
+ScRefHdlModalImpl::ScRefHdlModalImpl(vcl::Window* pParent, const OUString& rID,
     const OUString& rUIXMLDescription)
     : ModalDialog( pParent, rID, rUIXMLDescription)
     , ScRefHandler(dynamic_cast<Window&>(*this), NULL, true)
@@ -1019,7 +1019,7 @@ void ScRefHdlModalImpl::StateChanged( StateChangedType nStateChange )
     ScRefHandler::stateChanged( nStateChange, true );
 }
 
-ScAnyRefModalDlg::ScAnyRefModalDlg(vcl::Window* pParent, const OString& rID,
+ScAnyRefModalDlg::ScAnyRefModalDlg(vcl::Window* pParent, const OUString& rID,
     const OUString& rUIXMLDescription)
     : ScRefHdlModalImpl(pParent, rID, rUIXMLDescription)
 {

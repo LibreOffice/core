@@ -239,7 +239,7 @@ private:
 
 public:
     WizardDialog( vcl::Window* pParent, WinBits nStyle = WB_STDTABDIALOG );
-    WizardDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
     virtual ~WizardDialog();
 
     virtual void        Resize() SAL_OVERRIDE;

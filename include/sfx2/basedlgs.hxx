@@ -68,7 +68,7 @@ private:
     SAL_DLLPRIVATE void init();
 
 protected:
-    SfxModalDialog(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription);
+    SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription);
 
     OUString&           GetExtraData()      { return aExtraData; }
     sal_uInt32          GetUniqId() const   { return nUniqId; }
@@ -179,11 +179,11 @@ class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
 {
 public:
     SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rOptionsSet,
-        const OString& rID = OString("SingleTabDialog"),
+        const OUString& rID = OUString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
     SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet* pInSet = 0,
-        const OString& rID = OString("SingleTabDialog"),
+        const OUString& rID = OUString("SingleTabDialog"),
         const OUString& rUIXMLDescription = OUString("sfx/ui/singletabdialog.ui"));
 
     virtual             ~SfxSingleTabDialog();

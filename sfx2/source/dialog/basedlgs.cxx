@@ -152,7 +152,7 @@ void SfxModalDialog::init()
     GetDialogData_Impl();
 }
 
-SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription )
+SfxModalDialog::SfxModalDialog(vcl::Window *pParent, const OUString& rID, const OUString& rUIXMLDescription )
 :   ModalDialog(pParent, rID, rUIXMLDescription),
     nUniqId(0), //todo: remove this member when the ResId using ctor is removed
     pInputSet(0),
@@ -674,7 +674,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
 
 
 SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& rSet,
-    const OString& rID, const OUString& rUIXMLDescription)
+    const OUString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , fnGetRanges(NULL)
     , pImpl(new SingleTabDlgImpl)
@@ -687,7 +687,7 @@ SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window *pParent, const SfxItemSet& r
 }
 
 SfxSingleTabDialog::SfxSingleTabDialog(vcl::Window* pParent, const SfxItemSet* pInSet,
-    const OString& rID, const OUString& rUIXMLDescription)
+    const OUString& rID, const OUString& rUIXMLDescription)
     : SfxModalDialog(pParent, rID, rUIXMLDescription)
     , fnGetRanges(NULL)
     , pImpl(new SingleTabDlgImpl)

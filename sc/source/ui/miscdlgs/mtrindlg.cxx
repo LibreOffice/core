@@ -34,7 +34,7 @@ ScMetricInputDlg::ScMetricInputDlg( vcl::Window*         pParent,
                                     long            nFirst,
                                     long            nLast )
 
-    :   ModalDialog(pParent, sDialogName,
+    :   ModalDialog(pParent, OStringToOUString(sDialogName, RTL_TEXTENCODING_UTF8),
             OStringToOUString("modules/scalc/ui/" +
                 sDialogName.toAsciiLowerCase() + ".ui", RTL_TEXTENCODING_UTF8))
 {

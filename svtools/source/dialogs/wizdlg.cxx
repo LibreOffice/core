@@ -355,7 +355,7 @@ WizardDialog::WizardDialog( vcl::Window* pParent, WinBits nStyle ) :
 
 
 
-WizardDialog::WizardDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
+WizardDialog::WizardDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
     ModalDialog( pParent, rID, rUIXMLDescription )
 {
     ImplInitData();

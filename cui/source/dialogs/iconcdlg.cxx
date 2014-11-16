@@ -173,7 +173,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvtIconChoiceCtrl(vcl:
                             WB_NODRAGSELECTION | WB_TABSTOP);
 }
 
-IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OString& rID,
+IconChoiceDialog::IconChoiceDialog ( vcl::Window* pParent, const OUString& rID,
                                      const OUString& rUIXMLDescription,
                                      const SfxItemSet *pItemSet )
 :   ModalDialog         ( pParent, rID, rUIXMLDescription ),

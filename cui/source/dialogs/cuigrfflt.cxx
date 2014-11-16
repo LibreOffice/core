@@ -137,7 +137,7 @@ void GraphicPreviewWindow::Resize()
 }
 
 GraphicFilterDialog::GraphicFilterDialog(vcl::Window* pParent,
-    const OString& rID, const OUString& rUIXMLDescription,
+    const OUString& rID, const OUString& rUIXMLDescription,
     const Graphic& rGraphic)
     : ModalDialog(pParent, rID, rUIXMLDescription)
     , maModifyHdl(LINK( this, GraphicFilterDialog, ImplModifyHdl))

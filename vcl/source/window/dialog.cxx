@@ -1163,8 +1163,8 @@ ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-ModalDialog::ModalDialog( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
-    Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MODALDIALOG)
+ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
+    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
 {
 }
 

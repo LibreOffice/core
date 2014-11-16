@@ -135,7 +135,7 @@ class SwSendQueryBox_Impl : public SwMessageAndEditDialog
     bool            bIsEmptyAllowed;
     DECL_LINK( ModifyHdl, Edit*);
 public:
-    SwSendQueryBox_Impl(vcl::Window* pParent, const OString& rID,
+    SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription);
 
     void SetValue(const OUString& rSet)
@@ -176,7 +176,7 @@ IMPL_LINK( SwSaveWarningBox_Impl, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-SwSendQueryBox_Impl::SwSendQueryBox_Impl(vcl::Window* pParent, const OString& rID,
+SwSendQueryBox_Impl::SwSendQueryBox_Impl(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription)
     : SwMessageAndEditDialog(pParent, rID, rUIXMLDescription)
     , bIsEmptyAllowed(true)

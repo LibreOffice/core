@@ -61,7 +61,7 @@ class SwAddRenameEntryDialog : public SfxModalDialog
 
     DECL_LINK(ModifyHdl_Impl, Edit*);
 protected:
-    SwAddRenameEntryDialog(vcl::Window* pParent, const OString& rID,
+    SwAddRenameEntryDialog(vcl::Window* pParent, const OUString& rID,
         const OUString& rUIXMLDescription, const std::vector< OUString >& rCSVHeader);
 public:
     void                SetFieldName(const OUString& rName) {m_pFieldNameED->SetText(rName);}
