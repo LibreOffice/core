@@ -132,6 +132,7 @@ struct GLWindow
         dpy(NULL),
         screen(0),
         win(0),
+        pix(0),
 #if defined( GLX_EXT_texture_from_pixmap )
         fbc(0),
 #endif
