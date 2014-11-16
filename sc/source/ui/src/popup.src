@@ -306,7 +306,7 @@ Menu RID_POPUP_PIVOT
 
 String RID_POPUP_PREVIEW
 {
-    Text [ en-US ] = "Page Preview pop-up menu" ;
+    Text [ en-US ] = "Print Preview pop-up menu" ;
 };
 
 Menu RID_POPUP_PREVIEW
