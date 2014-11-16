@@ -1359,7 +1359,7 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
         pClone->SetModel(GetModel());
 
         // gray outline
-        pClone->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+        pClone->SetMergedItem(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
         const svtools::ColorConfig aColorConfig;
         const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
         pClone->SetMergedItem(XLineColorItem(OUString(), aColor.nColor));
@@ -1495,7 +1495,7 @@ void SdrOle2Obj::SetPage(SdrPage* pNewPage)
         else
         {
             SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
-            SetMergedItem(XLineStyleItem(XLINE_NONE));
+            SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
         }
     }
 

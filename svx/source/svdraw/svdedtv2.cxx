@@ -1308,16 +1308,16 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
         // attributes of the lowest object
         ImpCopyAttributes(pAttrObj, pPath);
 
-        // If LineStyle of pAttrObj is XLINE_NONE force to XLINE_SOLID to make visible.
-        const XLineStyle eLineStyle = static_cast<const XLineStyleItem&>(pAttrObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
+        // If LineStyle of pAttrObj is drawing::LineStyle_NONE force to drawing::LineStyle_SOLID to make visible.
+        const drawing::LineStyle eLineStyle = static_cast<const XLineStyleItem&>(pAttrObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
         const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pAttrObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
         // Take fill style/closed state of pAttrObj in account when deciding to change the line style
         bool bIsClosedPathObj(pAttrObj->ISA(SdrPathObj) && static_cast<const SdrPathObj*>(pAttrObj)->IsClosed());
 
-        if(XLINE_NONE == eLineStyle && (drawing::FillStyle_NONE == eFillStyle || !bIsClosedPathObj))
+        if(drawing::LineStyle_NONE == eLineStyle && (drawing::FillStyle_NONE == eFillStyle || !bIsClosedPathObj))
         {
-            pPath->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+            pPath->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
         }
 
         SdrInsertReason aReason(SDRREASON_VIEWCALL,pAttrObj);
@@ -1568,7 +1568,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     SfxItemSet aTargetItemSet(pCustomShape->GetMergedItemSet());
 
                     // clear fill and line style
-                    aTargetItemSet.Put(XLineStyleItem(XLINE_NONE));
+                    aTargetItemSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                     aTargetItemSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
                     // get the text bounds and set at text object

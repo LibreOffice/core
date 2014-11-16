@@ -342,13 +342,13 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
         if ( eShadeMode == drawing::ShadeMode_DRAFT )
         {
-            aSet.Put( XLineStyleItem( XLINE_SOLID ) );
+            aSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
             aSet.Put( XFillStyleItem ( drawing::FillStyle_NONE ) );
             aSet.Put( makeSvx3DDoubleSidedItem( true ) );
         }
         else
         {
-            aSet.Put( XLineStyleItem( XLINE_NONE ) );
+            aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
             if ( eFillStyle == drawing::FillStyle_NONE )
                 aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
             else if ( ( eFillStyle == drawing::FillStyle_BITMAP ) || ( eFillStyle == drawing::FillStyle_GRADIENT ) || bUseExtrusionColor )
@@ -376,7 +376,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         {
             const SdrObject* pNext = aIter.Next();
             bool bIsPlaceholderObject = (static_cast<const XFillStyleItem&>(pNext->GetMergedItem( XATTR_FILLSTYLE )).GetValue() == drawing::FillStyle_NONE )
-                                        && (static_cast<const XLineStyleItem&>(pNext->GetMergedItem( XATTR_LINESTYLE )).GetValue() == XLINE_NONE );
+                                        && (static_cast<const XLineStyleItem&>(pNext->GetMergedItem( XATTR_LINESTYLE )).GetValue() == drawing::LineStyle_NONE );
             basegfx::B2DPolyPolygon aPolyPoly;
             SfxItemSet aLocalSet(aSet);
             drawing::FillStyle aLocalFillStyle(eFillStyle);
@@ -430,7 +430,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                             if(eShadeMode == drawing::ShadeMode_DRAFT)
                             {
                                 // for draft, create wireframe with fixed line width
-                                aLocalSet.Put(XLineStyleItem(XLINE_SOLID));
+                                aLocalSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
                                 aLocalSet.Put(XLineWidthItem(40));
                                 aLocalFillStyle = drawing::FillStyle_NONE;
                             }
@@ -438,7 +438,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                             {
                                 // switch from line to fill, copy line attr to fill attr (color, transparence)
                                 aLocalSet.Put(XLineWidthItem(0));
-                                aLocalSet.Put(XLineStyleItem(XLINE_NONE));
+                                aLocalSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                                 aLocalSet.Put(XFillColorItem(OUString(), static_cast<const XLineColorItem&>(aLocalSet.Get(XATTR_LINECOLOR)).GetColorValue()));
                                 aLocalSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
                                 aLocalSet.Put(XFillTransparenceItem(static_cast<const XLineTransparenceItem&>(aLocalSet.Get(XATTR_LINETRANSPARENCE)).GetValue()));
@@ -449,7 +449,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                         {
                             // correct item properties to hairlines
                             aLocalSet.Put(XLineWidthItem(0));
-                            aLocalSet.Put(XLineStyleItem(XLINE_SOLID));
+                            aLocalSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
                         }
                     }
 

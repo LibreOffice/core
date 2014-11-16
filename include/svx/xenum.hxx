@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_XENUM_HXX
 #define INCLUDED_SVX_XENUM_HXX
 
-enum XLineStyle         { XLINE_NONE, XLINE_SOLID, XLINE_DASH };
 enum XDashStyle         { XDASH_RECT, XDASH_ROUND, XDASH_RECTRELATIVE,
                           XDASH_ROUNDRELATIVE };
 enum XGradientStyle     { XGRAD_LINEAR, XGRAD_AXIAL, XGRAD_RADIAL,
