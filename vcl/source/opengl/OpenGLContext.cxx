@@ -865,7 +865,7 @@ bool OpenGLContext::InitGLEW()
     {
         if (glDebugMessageCallbackARB)
         {
-            glEnable(GL_DEBUG_OUTPUT);
+            glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
             glDebugMessageCallbackARB(&debug_callback, NULL);
         }
         else if ( glDebugMessageCallback )
