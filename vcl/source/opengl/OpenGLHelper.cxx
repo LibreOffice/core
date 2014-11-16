@@ -353,7 +353,7 @@ float OpenGLHelper::getGLVersion()
 void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
 {
     GLenum glErr = glGetError();
-    while (glErr != GL_NO_ERROR)
+    if (glErr != GL_NO_ERROR)
     {
         const char* sError = OpenGLHelper::GLErrorString(glErr);
 
