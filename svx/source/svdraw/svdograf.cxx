@@ -1351,7 +1351,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         const OUString aNewUserData( pGraphic->GetUserData() );
 
                         pGraphic->SetGraphic( aGraphic );
-                        pGraphic->SetUserData( aNewUserData );
+                        pGraphic->SetUserData();
 
                         // Graphic successfully swapped in.
                         pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
