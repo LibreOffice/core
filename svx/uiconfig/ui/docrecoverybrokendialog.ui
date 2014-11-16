@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="DocRecoveryBrokenDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">%PRODUCTNAME %PRODUCTVERSION</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -88,7 +89,9 @@ The documents listed below will be saved in the folder noted below if you click 
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">Documents</property>
+                <property name="label" translatable="yes">Documents:</property>
+                <property name="use_underline">True</property>
+                <property name="mnemonic_widget">filelist:border</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -119,8 +122,9 @@ The documents listed below will be saved in the folder noted below if you click 
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Save to</property>
+                <property name="label" translatable="yes">_Save to:</property>
                 <property name="use_underline">True</property>
+                <property name="mnemonic_widget">savedir</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -133,7 +137,7 @@ The documents listed below will be saved in the folder noted below if you click 
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkEntry" id="savedir">
                     <property name="visible">True</property>

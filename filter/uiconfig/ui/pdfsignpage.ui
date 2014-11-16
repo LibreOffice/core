@@ -154,7 +154,7 @@
                   <object class="GtkLabel" id="label7">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                     <property name="label" translatable="yes">Certificate password:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">password</property>
@@ -168,7 +168,7 @@
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                     <property name="label" translatable="yes">Location:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">location</property>
@@ -182,7 +182,7 @@
                   <object class="GtkLabel" id="label13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                     <property name="label" translatable="yes">Contact information:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">contact</property>
@@ -196,7 +196,7 @@
                   <object class="GtkLabel" id="label14">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
+                    <property name="xalign">1</property>
                     <property name="label" translatable="yes">Reason:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">reason</property>
