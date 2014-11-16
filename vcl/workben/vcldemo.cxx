@@ -24,6 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/button.hxx>
+#include <vcl/pngwrite.hxx>
 #include <vcl/floatwin.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -441,12 +442,54 @@ public:
     struct DrawBitmap : public RegionRenderer
     {
         RENDER_DETAILS(bitmap,KEY_B)
+
+        // Simulate Page Borders rendering - which ultimately should
+        // be done with a shader / gradient
+        void SimulateBorderStretch(OutputDevice &rDev, Rectangle r)
+        {
+            static BitmapEx aPageShadowMask("sw/res/page-shadow-mask.png");
+
+            BitmapEx aRight(aPageShadowMask);
+            sal_Int32 nSlice = (aPageShadowMask.GetSizePixel().Width() - 3) / 4;
+            // a width x 1 slice
+            aRight.Crop(Rectangle(Point((nSlice * 3) + 3, (nSlice * 2) + 1),
+                                  Size(nSlice, 1)));
+            AlphaMask aAlphaMask(aRight.GetBitmap());
+            Bitmap aBlockColor = Bitmap(aAlphaMask.GetSizePixel(), 24);
+            aBlockColor.Erase(COL_RED);
+            BitmapEx aShadowStretch = BitmapEx(aBlockColor, aAlphaMask);
+
+#ifdef DEBUG
+            { // before - the pristine <n>x1 image
+                SvFileStream aStream("/tmp/myshadow.png", STREAM_WRITE);
+                vcl::PNGWriter aWriter(aShadowStretch);
+                aWriter.Write(aStream);
+            }
+#endif
+            // and yes - we really do this in the page border rendering code ...
+            aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), 50),
+                                   BMP_SCALE_FAST);
+            aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), 800),
+                                   BMP_SCALE_FAST);
+#ifdef DEBUG
+            { // after the corrupted image full of fluff ...
+                SvFileStream aStream("/tmp/myshadow-50.png", STREAM_WRITE);
+                vcl::PNGWriter aWriter(aShadowStretch);
+                aWriter.Write(aStream);
+            }
+#endif
+
+            rDev.DrawBitmapEx(r.Center(), aShadowStretch);
+        }
+
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
             Bitmap aBitmap(rCtx.mpDemoRenderer->maIntroBW);
             aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
             rDev.DrawBitmap(r.TopLeft(), aBitmap);
+
+            SimulateBorderStretch(rDev, r);
         }
     };
 
