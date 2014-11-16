@@ -106,13 +106,13 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
-            createGrabBag("fill", uno::makeAny(OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8)));
+            createGrabBag("fill", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true))));
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0xffffff; //fill color auto means white
             m_nFillColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_color:
-            createGrabBag("color", uno::makeAny(OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8)));
+            createGrabBag("color", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true))));
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
