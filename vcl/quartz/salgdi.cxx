@@ -315,10 +315,14 @@ AquaSalGraphics::~AquaSalGraphics()
     }
 }
 
+#ifndef IOS
+
 SalGraphicsImpl* AquaSalGraphics::GetImpl() const
 {
     return NULL;
 }
+
+#endif
 
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
