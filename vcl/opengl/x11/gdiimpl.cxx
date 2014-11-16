@@ -153,7 +153,7 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     //TODO: lfrb: glXGetProc to get the functions
     glXBindTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT, NULL );
 
-    DrawTexture( aTexture, aPosAry, !bInverted );
+    DrawTexture( aTexture, aPosAry, bInverted );
 
     glXReleaseTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT );
     glXDestroyPixmap( pDisplay, pGlxPixmap );
