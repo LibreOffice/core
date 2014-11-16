@@ -58,112 +58,29 @@ public:
 
     void            ReduceInaccurate( unsigned nSignificantBits );
 
-    friend inline   Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
 
-    TOOLS_DLLPUBLIC friend          bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   bool operator!=( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend          bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend          bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
-    friend inline   bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend bool operator!=( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
+    TOOLS_DLLPUBLIC friend bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
 
     TOOLS_DLLPUBLIC friend SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract );
     TOOLS_DLLPUBLIC friend SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract );
 };
 
-inline Fraction::Fraction( const Fraction& rFrac )
-{
-    valid = rFrac.valid;
-    if ( valid )
-        value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
-}
-
-inline long Fraction::GetNumerator() const
-{
-    if ( !valid ) {
-        SAL_WARN( "tools.fraction", "'GetNumerator()' on invalid fraction" );
-        return 0;
-    }
-    return value.numerator();
-}
-
-inline long Fraction::GetDenominator() const {
-    if ( !valid ) {
-        SAL_WARN( "tools.fraction", "'GetDenominator()' on invalid fraction" );
-        return -1;
-    }
-    return value.denominator();
-}
-
-inline Fraction& Fraction::operator=( const Fraction& rFrac )
-{
-    if ( this != &rFrac ) {
-        valid = rFrac.valid;
-        if ( valid )
-            value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
-    }
-    return *this;
-}
-
-inline bool Fraction::IsValid() const
-{
-    return valid;
-}
-
-inline Fraction::operator long() const
-{
-    if ( !valid ) {
-        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
-        return 0;
-    }
-    return boost::rational_cast<long>(value);
-}
-
-inline Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    Fraction aErg( rVal1 );
-    aErg += rVal2;
-    return aErg;
-}
-
-inline Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    Fraction aErg( rVal1 );
-    aErg -= rVal2;
-    return aErg;
-}
-
-inline Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    Fraction aErg( rVal1 );
-    aErg *= rVal2;
-    return aErg;
-}
-
-inline Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    Fraction aErg( rVal1 );
-    aErg /= rVal2;
-    return aErg;
-}
-
-inline bool operator !=( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    return !(rVal1 == rVal2);
-}
-
-inline bool operator <=( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    return !(rVal1 > rVal2);
-}
-
-inline bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
-{
-    return !(rVal1 < rVal2);
-}
+TOOLS_DLLPUBLIC Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
+TOOLS_DLLPUBLIC Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
+TOOLS_DLLPUBLIC Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
+TOOLS_DLLPUBLIC Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
+TOOLS_DLLPUBLIC bool operator !=( const Fraction& rVal1, const Fraction& rVal2 );
+TOOLS_DLLPUBLIC bool operator <=( const Fraction& rVal1, const Fraction& rVal2 );
+TOOLS_DLLPUBLIC bool operator >=( const Fraction& rVal1, const Fraction& rVal2 );
 
 #endif
 

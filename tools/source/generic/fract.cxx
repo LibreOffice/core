@@ -191,6 +191,97 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     rational_ReduceInaccurate(value, nSignificantBits);
 }
 
+Fraction::Fraction( const Fraction& rFrac )
+{
+    valid = rFrac.valid;
+    if ( valid )
+        value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
+}
+
+long Fraction::GetNumerator() const
+{
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'GetNumerator()' on invalid fraction" );
+        return 0;
+    }
+    return value.numerator();
+}
+
+long Fraction::GetDenominator() const {
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'GetDenominator()' on invalid fraction" );
+        return -1;
+    }
+    return value.denominator();
+}
+
+Fraction& Fraction::operator=( const Fraction& rFrac )
+{
+    if ( this != &rFrac ) {
+        valid = rFrac.valid;
+        if ( valid )
+            value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
+    }
+    return *this;
+}
+
+bool Fraction::IsValid() const
+{
+    return valid;
+}
+
+Fraction::operator long() const
+{
+    if ( !valid ) {
+        SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
+        return 0;
+    }
+    return boost::rational_cast<long>(value);
+}
+
+Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    Fraction aErg( rVal1 );
+    aErg += rVal2;
+    return aErg;
+}
+
+Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    Fraction aErg( rVal1 );
+    aErg -= rVal2;
+    return aErg;
+}
+
+Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    Fraction aErg( rVal1 );
+    aErg *= rVal2;
+    return aErg;
+}
+
+Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    Fraction aErg( rVal1 );
+    aErg /= rVal2;
+    return aErg;
+}
+
+bool operator !=( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    return !(rVal1 == rVal2);
+}
+
+bool operator <=( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    return !(rVal1 > rVal2);
+}
+
+bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
+{
+    return !(rVal1 < rVal2);
+}
+
 bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.valid || !rVal2.valid ) {
