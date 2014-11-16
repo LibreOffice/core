@@ -200,8 +200,7 @@ bool OpenGLSalBitmap::AllocateUserData()
     }
     if (!alloc)
     {
-        SAL_WARN(
-            "vcl.opengl", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
+        SAL_WARN("vcl.opengl", "bad alloc " << mnBytesPerRow << "x" << mnHeight);
         maUserBuffer.reset( static_cast<sal_uInt8*>(NULL) );
         mnBytesPerRow = 0;
     }
@@ -239,8 +238,6 @@ public:
     ImplPixelFormat8( const BitmapPalette& rPalette )
     : mrPalette( rPalette )
     {
-        if ( mrPalette.GetEntryCount() < 256 )
-            SAL_WARN( "vcl.opengl", "Bad sign, if we get an OOB pixel we die" );
     }
     virtual const BitmapColor& ReadPixel() SAL_OVERRIDE
     {
@@ -262,8 +259,6 @@ public:
         , mnX(0)
         , mnShift(4)
     {
-        if ( mrPalette.GetEntryCount() < 16 )
-            SAL_WARN( "vcl.opengl", "Bad sign, if we get an OOB pixel we die" );
     }
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
     {
