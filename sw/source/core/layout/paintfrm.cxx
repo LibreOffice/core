@@ -265,9 +265,6 @@ static SfxProgress *pProgress = 0;
 
 static SwFlyFrm *pFlyOnlyDraw = 0;
 
-//So the flys can also be painted right for the hack.
-static bool bTableHack = false;
-
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
 
@@ -4016,18 +4013,9 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             //HACK: exception: printing of frames in tables, those can overlap
             //a page once in a while when dealing with oversized tables (HTML).
             SwPageFrm *pPage = pFly->FindPageFrm();
-            if ( pPage )
+            if ( pPage && pPage->Frm().IsOver( pFly->Frm() ) )
             {
-                if ( pPage->Frm().IsOver( pFly->Frm() ) )
                     pAnch = pFly->AnchorFrm();
-                else if ( bTableHack &&
-                          pFly->Frm().Top() >= pFly->GetAnchorFrm()->Frm().Top() &&
-                          pFly->Frm().Top() < pFly->GetAnchorFrm()->Frm().Bottom() &&
-                          sal_IntPtr(pSh->GetOut()) ==
-                          sal_IntPtr(pSh->getIDocumentDeviceAccess()->getPrinter( false ) ) )
-                {
-                    pAnch = pFly->AnchorFrm();
-                }
             }
 
         }
@@ -4049,8 +4037,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
                     //right now. Afterwards they must not be printed if the
                     //page over which they float position wise gets printed.
                     const SwPageFrm *pPage = pAnch->FindPageFrm();
-                    if ( !bTableHack &&
-                         !pPage->Frm().IsOver( pObj->GetCurrentBoundRect() ) )
+                    if ( !pPage->Frm().IsOver( pObj->GetCurrentBoundRect() ) )
                         pAnch = 0;
                 }
             }
