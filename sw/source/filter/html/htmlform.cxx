@@ -2359,7 +2359,7 @@ void SwHTMLParser::NewSelect()
     if( SVX_CSS1_LTYPE_TWIP== aCSS1PropInfo.eHeightType )
     {
         aSz.Height() = convertTwipToMm100( aCSS1PropInfo.nHeight );
-        aTextSz.Height() = sal_False;
+        aTextSz.Height() = 0;
         bMinHeight = false;
     }
     if( aSz.Width() < MINFLY )

@@ -2025,7 +2025,7 @@ sal_uInt32  SwDBManager::GetSelectedRecordId()
     sal_uInt32  nRet = 0;
     OSL_ENSURE(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge");
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is())
-        return sal_False;
+        return 0;
     try
     {
         nRet = pImpl->pMergeData->xResultSet->getRow();

@@ -959,7 +959,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
                  AddFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR );
                  AddFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR );
                 eBufferType = (TransferBufferType)( TRNSFR_INETFLD | eBufferType );
-                nRet = sal_True;
+                nRet = 1;
             }
         }
 
@@ -2740,7 +2740,7 @@ bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
             TransferableDataHelper aData( pHlp );
 
             if( SwTransferable::_PasteFileName( aData, rSh, SOT_FORMAT_FILE, nAct,
-                                            pPt, sal_False, bMsg, 0 ))
+                                            pPt, 0, bMsg, 0 ))
             {
                 if( bLink )
                 {
