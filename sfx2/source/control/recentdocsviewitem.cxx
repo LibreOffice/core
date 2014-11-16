@@ -30,31 +30,13 @@ using namespace com::sun::star::uno;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
 
-/// Icon that the user can click to remove the document from the recent documents.
-struct theRemoveRecentBitmap : public rtl::StaticWithInit<BitmapEx, theRemoveRecentBitmap>
-{
-    BitmapEx operator()()
-    {
-        return SfxResId(IMG_RECENTDOC_REMOVE);
-    }
-
-};
-
-/// Highlighted version of icon that the user can click to remove the document from the recent documents.
-struct theRemoveRecentBitmapHighlighted : public rtl::StaticWithInit<BitmapEx, theRemoveRecentBitmapHighlighted>
-{
-    BitmapEx operator()()
-    {
-        return SfxResId(IMG_RECENTDOC_REMOVE_HIGHLIGHTED);
-    }
-
-};
-
 RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rURL,
     const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId)
     : ThumbnailViewItem(rView, nId),
       maURL(rURL),
-      m_bRemoveIconHighlighted(false)
+      m_bRemoveIconHighlighted(false),
+      m_theRemoveRecentBitmap(SfxResId(IMG_RECENTDOC_REMOVE)),
+      m_theRemoveRecentBitmapHighlighted(SfxResId(IMG_RECENTDOC_REMOVE_HIGHLIGHTED))
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);
@@ -151,7 +133,7 @@ Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint
 Rectangle RecentDocsViewItem::getRemoveIconArea() const
 {
     Rectangle aArea(getDrawArea());
-    Size aSize(theRemoveRecentBitmap::get().GetSizePixel());
+    Size aSize(m_theRemoveRecentBitmap.GetSizePixel());
 
     return Rectangle(
             Point(aArea.Right() - aSize.Width() - THUMBNAILVIEW_ITEM_CORNER, aArea.Top() + THUMBNAILVIEW_ITEM_CORNER),
@@ -175,7 +157,7 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
         Point aIconPos(getRemoveIconArea().TopLeft());
 
         aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
-                    m_bRemoveIconHighlighted? theRemoveRecentBitmapHighlighted::get(): theRemoveRecentBitmap::get(),
+                    m_bRemoveIconHighlighted? m_theRemoveRecentBitmapHighlighted: m_theRemoveRecentBitmap,
                     B2DPoint(aIconPos.X(), aIconPos.Y())));
 
         pProcessor->process(aSeq);
