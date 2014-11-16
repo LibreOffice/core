@@ -24,7 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>
 
-#include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class TextNode;
 class TextView;
@@ -162,15 +162,6 @@ public:
     inline bool operator != ( const TextLine& rLine ) const;
 };
 
-class TextLines : public std::vector<TextLine*> {
-public:
-    ~TextLines()
-    {
-        for( iterator it = begin(); it != end(); ++it )
-            delete *it;
-    }
-};
-
 inline bool TextLine::operator == ( const TextLine& rLine ) const
 {
     return (    ( mnStart == rLine.mnStart ) &&
@@ -189,15 +180,15 @@ class TEParaPortion
 private:
     TextNode*               mpNode;
 
-    TextLines               maLines;
+    boost::ptr_vector<TextLine> maLines;
     TETextPortionList       maTextPortions;
     std::vector<TEWritingDirectionInfo> maWritingDirectionInfos;
 
-    sal_uInt16              mnInvalidPosStart;
+    sal_uInt16          mnInvalidPosStart;
     short               mnInvalidDiff;
 
     bool                mbInvalid;
-    bool                mbSimple;   // nur lineares Tippen
+    bool                mbSimple;   // only type linearly
 
                         TEParaPortion( const TEParaPortion& ) {;}
 
@@ -217,7 +208,7 @@ public:
     short               GetInvalidDiff() const      { return mnInvalidDiff; }
 
     TextNode*           GetNode() const             { return mpNode; }
-    TextLines&          GetLines()                  { return maLines; }
+    boost::ptr_vector<TextLine>& GetLines()         { return maLines; }
     TETextPortionList&  GetTextPortions()           { return maTextPortions; }
     std::vector<TEWritingDirectionInfo>& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
 
