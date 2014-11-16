@@ -382,7 +382,16 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
         return false;
 
     static bool bEnableGLEnv = !!getenv("SAL_ENABLEGL");
-    bool bEnable = bEnableGLEnv || officecfg::Office::Common::VCL::UseOpenGL::get();
+
+    bool bEnable = bEnableGLEnv;
+
+    static bool bDuringBuild = getenv("VCL_HIDE_WINDOWS");
+    if (bDuringBuild && !bEnable /* env. enable overrides */)
+        bEnable = false;
+
+    else if (officecfg::Office::Common::VCL::UseOpenGL::get())
+        bEnable = true;
+
     return bEnable;
 }
 
