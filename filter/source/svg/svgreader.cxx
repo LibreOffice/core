@@ -1033,6 +1033,9 @@ struct AnnotatingVisitor
                               maGradientStopVector[
                                   maGradientVector.back().maStops.back()].maStopColor );
                 break;
+            case XML_TOKEN_INVALID:
+                SAL_INFO("svg", "unhandled token");
+                break;
             default:
                 SAL_INFO("svg", "unhandled token " << getTokenName(nTokenId));
                 break;
