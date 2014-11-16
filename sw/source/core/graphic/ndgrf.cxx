@@ -578,6 +578,10 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
                 {
                     bRet = ImportGraphic( *pStrm );
                     delete pStrm;
+                    if( bRet )
+                    {
+                        maGrfObj.SetUserData();
+                    }
                 }
             }
             catch (const uno::Exception&)
