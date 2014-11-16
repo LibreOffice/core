@@ -112,7 +112,7 @@ String MN_SRCVIEW_POPUPMENU
 };
 String RID_PVIEW_TOOLBOX
 {
-    Text [ en-US ] = "Page Preview" ;
+    Text [ en-US ] = "Print Preview" ;
 };
 
 Menu MN_SRCVIEW_POPUPMENU
