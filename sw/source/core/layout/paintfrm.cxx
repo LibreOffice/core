@@ -224,12 +224,6 @@ public:
     }
 };
 
-// Sizes of a pixel and the corresponding halves. Will be reset when
-// entering SwRootFrm::Paint
-static long nPixelSzW = 0, nPixelSzH = 0;
-static long nHalfPixelSzW = 0, nHalfPixelSzH = 0;
-static long nMinDistPixelW = 0, nMinDistPixelH = 0;
-
 // Current zoom factor
 const static double aMinDistScale = 0.73;
 const static double aEdgeScale = 0.5;
@@ -274,12 +268,16 @@ struct SwPaintProperties {
     SwSubsRects        *pSSubsLines;
     SwSubsRects*        pSSpecSubsLines;
     SfxProgress        *pSProgress;
-    long                nSPixelSzW,
-                        nSPixelSzH,
-                        nSHalfPixelSzW,
-                        nSHalfPixelSzH,
-                        nSMinDistPixelW,
-                        nSMinDistPixelH;
+
+    // Sizes of a pixel and the corresponding halves. Will be reset when
+    // entering SwRootFrm::Paint
+    long                nSPixelSzW = 0;
+    long                nSPixelSzH = 0;
+    long                nSHalfPixelSzW = 0;
+    long                nSHalfPixelSzH = 0;
+    long                nSMinDistPixelW = 0;
+    long                nSMinDistPixelH = 0;
+
     Color               aSGlobalRetoucheColor;
 
     // Current zoom factor
@@ -314,7 +312,7 @@ bool isTableBoundariesEnabled()
  * Set borders alignment statics
  * Adjustment for 'small' twip-to-pixel relations:
  * For 'small' twip-to-pixel relations (less then 2:1)
- * values of <nHalfPixelSzW> and <nHalfPixelSzH> are set to ZERO
+ * values of <gProp.nSHalfPixelSzW> and <gProp.nSHalfPixelSzH> are set to ZERO
  */
 void SwCalcPixStatics( OutputDevice *pOut )
 {
@@ -335,34 +333,34 @@ void SwCalcPixStatics( OutputDevice *pOut )
 
     Size aSz( pOut->PixelToLogic( Size( 1,1 )) );
 
-    nPixelSzW = aSz.Width();
-    if( !nPixelSzW )
-        nPixelSzW = 1;
-    nPixelSzH = aSz.Height();
-    if( !nPixelSzH )
-        nPixelSzH = 1;
+    gProp.nSPixelSzW = aSz.Width();
+    if( !gProp.nSPixelSzW )
+        gProp.nSPixelSzW = 1;
+    gProp.nSPixelSzH = aSz.Height();
+    if( !gProp.nSPixelSzH )
+        gProp.nSPixelSzH = 1;
 
     // consider 'small' twip-to-pixel relations
     if ( !bSmallTwipToPxRelW )
     {
-        nHalfPixelSzW = nPixelSzW / 2 + 1;
+        gProp.nSHalfPixelSzW = gProp.nSPixelSzW / 2 + 1;
     }
     else
     {
-        nHalfPixelSzW = 0;
+        gProp.nSHalfPixelSzW = 0;
     }
     // consider 'small' twip-to-pixel relations
     if ( !bSmallTwipToPxRelH )
     {
-        nHalfPixelSzH = nPixelSzH / 2 + 1;
+        gProp.nSHalfPixelSzH = gProp.nSPixelSzH / 2 + 1;
     }
     else
     {
-        nHalfPixelSzH = 0;
+        gProp.nSHalfPixelSzH = 0;
     }
 
-    nMinDistPixelW = nPixelSzW * 2 + 1;
-    nMinDistPixelH = nPixelSzH * 2 + 1;
+    gProp.nSMinDistPixelW = gProp.nSPixelSzW * 2 + 1;
+    gProp.nSMinDistPixelH = gProp.nSPixelSzH * 2 + 1;
 
     const MapMode &rMap = pOut->GetMapMode();
     gProp.aSScaleX = rMap.GetScaleX();
@@ -393,12 +391,12 @@ SwSavePaintStatics::SwSavePaintStatics()
     pSSubsLines = pSubsLines;
     pSSpecSubsLines = pSpecSubsLines;
     pSProgress = pProgress;
-    nSPixelSzW = nPixelSzW;
-    nSPixelSzH = nPixelSzH;
-    nSHalfPixelSzW = nHalfPixelSzW;
-    nSHalfPixelSzH = nHalfPixelSzH;
-    nSMinDistPixelW = nMinDistPixelW;
-    nSMinDistPixelH = nMinDistPixelH ;
+    nSPixelSzW = gProp.nSPixelSzW;
+    nSPixelSzH = gProp.nSPixelSzH;
+    nSHalfPixelSzW = gProp.nSHalfPixelSzW;
+    nSHalfPixelSzH = gProp.nSHalfPixelSzH;
+    nSMinDistPixelW = gProp.nSMinDistPixelW;
+    nSMinDistPixelH = gProp.nSMinDistPixelH ;
     aSGlobalRetoucheColor = aGlobalRetoucheColor;
     aSScaleX = gProp.aSScaleX;
     aSScaleY = gProp.aSScaleY;
@@ -408,9 +406,9 @@ SwSavePaintStatics::SwSavePaintStatics()
     gProp.pSFlyMetafileOut = 0;
     gProp.pSRetoucheFly  = 0;
     gProp.pSRetoucheFly2 = 0;
-    nPixelSzW = nPixelSzH =
-    nHalfPixelSzW = nHalfPixelSzH =
-    nMinDistPixelW = nMinDistPixelH = 0;
+    gProp.nSPixelSzW = gProp.nSPixelSzH =
+    gProp.nSHalfPixelSzW = gProp.nSHalfPixelSzH =
+    gProp.nSMinDistPixelW = gProp.nSMinDistPixelH = 0;
     gProp.aSScaleX = gProp.aSScaleY = 1.0;
     g_pBorderLines = 0;
     pLines = 0;
@@ -433,12 +431,12 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pSubsLines         = pSSubsLines;
     pSpecSubsLines     = pSSpecSubsLines;
     pProgress          = pSProgress;
-    nPixelSzW          = nSPixelSzW;
-    nPixelSzH          = nSPixelSzH;
-    nHalfPixelSzW      = nSHalfPixelSzW;
-    nHalfPixelSzH      = nSHalfPixelSzH;
-    nMinDistPixelW     = nSMinDistPixelW;
-    nMinDistPixelH     = nSMinDistPixelH;
+    gProp.nSPixelSzW          = nSPixelSzW;
+    gProp.nSPixelSzH          = nSPixelSzH;
+    gProp.nSHalfPixelSzW      = nSHalfPixelSzW;
+    gProp.nSHalfPixelSzH      = nSHalfPixelSzH;
+    gProp.nSMinDistPixelW     = nSMinDistPixelW;
+    gProp.nSMinDistPixelH     = nSMinDistPixelH;
     aGlobalRetoucheColor = aSGlobalRetoucheColor;
     gProp.aSScaleX = aSScaleX;
     gProp.aSScaleY = aSScaleY;
@@ -457,7 +455,7 @@ static sal_uInt8 lcl_TryMergeLines(
     pair<double, double> const mergeA,
     pair<double, double> const mergeB)
 {
-    double const fMergeGap(nPixelSzW + nHalfPixelSzW); // NOT static!
+    double const fMergeGap(gProp.nSPixelSzW + gProp.nSHalfPixelSzW); // NOT static!
     // A is above/before B
     if( mergeA.second <= mergeB.second &&
         mergeA.second + fMergeGap >= mergeB.first )
@@ -617,7 +615,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
         if ( Left()  == rRect.Left() && Width() == rRect.Width() )
         {
             // Merge when there is no gap between the lines
-            const long nAdd = nPixelSzW + nHalfPixelSzW;
+            const long nAdd = gProp.nSPixelSzW + gProp.nSHalfPixelSzW;
             if ( Bottom() + nAdd >= rRect.Top() &&
                  Top()    - nAdd <= rRect.Bottom()  )
             {
@@ -632,7 +630,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
         if ( Top()  == rRect.Top() && Height() == rRect.Height() )
         {
             // Merge when there is no gap between the lines
-            const long nAdd = nPixelSzW + nHalfPixelSzW;
+            const long nAdd = gProp.nSPixelSzW + gProp.nSHalfPixelSzW;
             if ( Right() + nAdd >= rRect.Left() &&
                  Left()  - nAdd <= rRect.Right() )
             {
@@ -855,13 +853,13 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
         SwRect aSubsRect( aSubsLineRect );
         if ( bVerticalSubs )
         {
-            aSubsRect.Left  ( aSubsRect.Left()  - (nPixelSzW+nHalfPixelSzW) );
-            aSubsRect.Right ( aSubsRect.Right() + (nPixelSzW+nHalfPixelSzW) );
+            aSubsRect.Left  ( aSubsRect.Left()  - (gProp.nSPixelSzW+gProp.nSHalfPixelSzW) );
+            aSubsRect.Right ( aSubsRect.Right() + (gProp.nSPixelSzW+gProp.nSHalfPixelSzW) );
         }
         else
         {
-            aSubsRect.Top   ( aSubsRect.Top()    - (nPixelSzH+nHalfPixelSzH) );
-            aSubsRect.Bottom( aSubsRect.Bottom() + (nPixelSzH+nHalfPixelSzH) );
+            aSubsRect.Top   ( aSubsRect.Top()    - (gProp.nSPixelSzH+gProp.nSHalfPixelSzH) );
+            aSubsRect.Bottom( aSubsRect.Bottom() + (gProp.nSPixelSzH+gProp.nSHalfPixelSzH) );
         }
         for (const_iterator itK = rRects.aLineRects.begin(); itK != rRects.aLineRects.end(); ++itK)
         {
@@ -882,7 +880,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                     if ( aSubsRect.Left()  <= rLine.Right() &&
                          aSubsRect.Right() >= rLine.Left() )
                     {
-                        long nTmp = rLine.Top()-(nPixelSzH+1);
+                        long nTmp = rLine.Top()-(gProp.nSPixelSzH+1);
                         if ( aSubsLineRect.Top() < nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -890,7 +888,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                             aLineRects.push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        nTmp = rLine.Bottom()+nPixelSzH+1;
+                        nTmp = rLine.Bottom()+gProp.nSPixelSzH+1;
                         if ( aSubsLineRect.Bottom() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -908,7 +906,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                     if ( aSubsRect.Top() <= rLine.Bottom() &&
                          aSubsRect.Bottom() >= rLine.Top() )
                     {
-                        long nTmp = rLine.Left()-(nPixelSzW+1);
+                        long nTmp = rLine.Left()-(gProp.nSPixelSzW+1);
                         if ( aSubsLineRect.Left() < nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -916,7 +914,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                             aLineRects.push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        nTmp = rLine.Right()+nPixelSzW+1;
+                        nTmp = rLine.Right()+gProp.nSPixelSzW+1;
                         if ( aSubsLineRect.Right() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -1365,10 +1363,10 @@ static long lcl_AlignWidth( const long nWidth )
 {
     if ( nWidth )
     {
-        const long nW = nWidth % nPixelSzW;
+        const long nW = nWidth % gProp.nSPixelSzW;
 
-        if ( !nW || nW > nHalfPixelSzW )
-            return std::max(1L, nWidth - nHalfPixelSzW);
+        if ( !nW || nW > gProp.nSHalfPixelSzW )
+            return std::max(1L, nWidth - gProp.nSHalfPixelSzW);
     }
     return nWidth;
 }
@@ -1377,10 +1375,10 @@ static long lcl_AlignHeight( const long nHeight )
 {
     if ( nHeight )
     {
-        const long nH = nHeight % nPixelSzH;
+        const long nH = nHeight % gProp.nSPixelSzH;
 
-        if ( !nH || nH > nHalfPixelSzH )
-            return std::max(1L, nHeight - nHalfPixelSzH);
+        if ( !nH || nH > gProp.nSHalfPixelSzH )
+            return std::max(1L, nHeight - gProp.nSHalfPixelSzH);
     }
     return nHeight;
 }
@@ -1389,7 +1387,7 @@ static long lcl_MinHeightDist( const long nDist )
 {
     if ( gProp.aSScaleX < aMinDistScale || gProp.aSScaleY < aMinDistScale )
         return nDist;
-    return ::lcl_AlignHeight( std::max( nDist, nMinDistPixelH ));
+    return ::lcl_AlignHeight( std::max( nDist, gProp.nSMinDistPixelH ));
 }
 
 /**
@@ -5609,8 +5607,8 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
 
     //We need to be a bit generous here, to not lose something.
     SwRect aRect( rRect );
-    (aRect.*fnRect->fnSubLeft)( nPenHalf + nPixelSzW );
-    (aRect.*fnRect->fnAddRight)( nPenHalf + nPixelSzW );
+    (aRect.*fnRect->fnSubLeft)( nPenHalf + gProp.nSPixelSzW );
+    (aRect.*fnRect->fnAddRight)( nPenHalf + gProp.nSPixelSzW );
     SwRectGet fnGetX = IsRightToLeft() ? fnRect->fnGetLeft : fnRect->fnGetRight;
     while ( pCol->GetNext() )
     {
@@ -7629,9 +7627,9 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFly );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         if ( rAttrs.CalcRightLine() )
-            aOut.SSize().Width() += 2*nPixelSzW;
+            aOut.SSize().Width() += 2*gProp.nSPixelSzW;
         if ( rAttrs.CalcBottomLine() )
-            aOut.SSize().Height()+= 2*nPixelSzH;
+            aOut.SSize().Height()+= 2*gProp.nSPixelSzH;
 
         // #i92711# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
         const vcl::Region aRepaintRegion(aOut.SVRect());
