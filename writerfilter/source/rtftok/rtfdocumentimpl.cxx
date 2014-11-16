@@ -2958,6 +2958,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().nCurrentStyleIndex = -1;
             }
         }
+        // Need to send paragraph properties again, if there will be any.
+        m_bNeedPap = true;
         break;
     case RTF_SECTD:
     {
