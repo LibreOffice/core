@@ -496,12 +496,6 @@ namespace svgio
                 return;
             }
 
-            const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
-            if(pStyles && (Visibility_hidden == pStyles->getVisibility() || Visibility_collapse == pStyles->getVisibility()))
-            {
-                return;
-            }
-
             if(!bReferenced)
             {
                 if(SVGTokenDefs == getType() ||
@@ -540,11 +534,14 @@ namespace svgio
 
                     if(pCandidate && Display_none != pCandidate->getDisplay())
                     {
+                        const SvgNodeVector& rGrandChildren = pCandidate->getChildren();
                         const SvgStyleAttributes* pChildStyles = pCandidate->getSvgStyleAttributes();
-                        if(pChildStyles && Visibility_hidden != pChildStyles->getVisibility())
+                        // decompose:
+                        // - visible terminal nodes
+                        // - all non-terminal nodes (might contain visible nodes down the hierarchy)
+                        if( !rGrandChildren.empty() || ( pChildStyles && (Visibility_visible == pChildStyles->getVisibility())) )
                         {
                             drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
-
                             pCandidate->decomposeSvgNode(aNewTarget, bReferenced);
 
                             if(aNewTarget.hasElements())
@@ -552,15 +549,16 @@ namespace svgio
                                 drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
                             }
                         }
-                    }
-                    else if(!pCandidate)
-                    {
+                     }
+                     else if(!pCandidate)
+                     {
                         OSL_ENSURE(false, "Null-Pointer in child node list (!)");
-                    }
+                     }
                 }
 
                 if(rTarget.hasElements())
                 {
+                    const SvgStyleAttributes* pStyles = getSvgStyleAttributes();
                     if(pStyles)
                     {
                         // check if we have Title or Desc
