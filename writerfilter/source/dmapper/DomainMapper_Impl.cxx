@@ -4341,8 +4341,19 @@ void DomainMapper_Impl::PopFieldContext()
 }
 
 
-void DomainMapper_Impl::AddBookmark( const OUString& rBookmarkName, const OUString& rId )
+void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
 {
+    // SAL_DEBUG("DomainMapper_Impl::SetBookmarkName for id " << m_sCurrentBkmkId << " to " << rBookmarkName);
+    BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( m_sCurrentBkmkId );
+    if( aBookmarkIter != m_aBookmarkMap.end() )
+        aBookmarkIter->second.m_sBookmarkName = rBookmarkName;
+    else
+        m_sCurrentBkmkName = rBookmarkName;
+}
+
+void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
+{
+    // SAL_DEBUG("DomainMapper_Impl::AddBookmark " << rId);
     /*
      * Add the dummy paragraph to handle section properties
      * iff the first element in the section is a table. If the dummy para is not added yet, then add it;
@@ -4388,14 +4399,13 @@ void DomainMapper_Impl::AddBookmark( const OUString& rBookmarkName, const OUStri
                     xCursor->goLeft( 1, false );
                 }
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
+                assert(!aBookmarkIter->second.m_sBookmarkName.isEmpty());
                 //todo: make sure the name is not used already!
-                if ( !aBookmarkIter->second.m_sBookmarkName.isEmpty() )
-                    xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
-                else
-                    xBkmNamed->setName( rBookmarkName );
+                xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
                 xTextAppend->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
             }
             m_aBookmarkMap.erase( aBookmarkIter );
+            m_sCurrentBkmkId.clear();
         }
         else
         {
@@ -4410,7 +4420,9 @@ void DomainMapper_Impl::AddBookmark( const OUString& rBookmarkName, const OUStri
                     bIsStart = !xCursor->goLeft(1, false);
                 xCurrent = xCursor->getStart();
             }
-            m_aBookmarkMap.insert(BookmarkMap_t::value_type( rId, BookmarkInsertPosition( bIsStart, rBookmarkName, xCurrent ) ));
+            m_sCurrentBkmkId = rId;
+            m_aBookmarkMap.insert(BookmarkMap_t::value_type( rId, BookmarkInsertPosition( bIsStart, m_sCurrentBkmkName, xCurrent ) ));
+            m_sCurrentBkmkName.clear();
         }
     }
     catch( const uno::Exception& )
