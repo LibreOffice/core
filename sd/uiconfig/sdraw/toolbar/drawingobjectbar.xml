@@ -41,4 +41,5 @@
  <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:DistributeSelection"/>
 </toolbar:toolbar>
