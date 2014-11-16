@@ -601,7 +601,7 @@ void SwAccSingleTableSelHander_Impl::Unselect( sal_Int32, sal_Int32 )
 class SwAccAllTableSelHander_Impl : public SwAccTableSelHander_Impl
 
 {
-    ::std::vector< sal_Bool > aSelected;
+    ::std::vector< bool > aSelected;
     sal_Int32 nCount;
 
 public:
@@ -618,7 +618,7 @@ SwAccAllTableSelHander_Impl::~SwAccAllTableSelHander_Impl()
 }
 
 inline SwAccAllTableSelHander_Impl::SwAccAllTableSelHander_Impl( sal_Int32 nSize ) :
-    aSelected( nSize, sal_True ),
+    aSelected( nSize, true ),
     nCount( nSize )
 {
 }
@@ -655,7 +655,7 @@ void SwAccAllTableSelHander_Impl::Unselect( sal_Int32 nRowOrCol,
     {
         if( aSelected[static_cast< size_t >( nRowOrCol )] )
         {
-            aSelected[static_cast< size_t >( nRowOrCol )] = sal_False;
+            aSelected[static_cast< size_t >( nRowOrCol )] = false;
             nCount--;
         }
         nExt--;

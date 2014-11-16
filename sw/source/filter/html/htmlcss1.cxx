@@ -661,17 +661,17 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
             RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT }
     };
 
-    sal_uInt16 aClearItems[3] = { sal_False, sal_False, sal_False };
+    bool aClearItems[3] = { false, false, false };
     switch( nScript )
     {
     case CSS1_SCRIPT_WESTERN:
-        aClearItems[1] = aClearItems[2] =  sal_True;
+        aClearItems[1] = aClearItems[2] =  true;
         break;
     case CSS1_SCRIPT_CJK:
-        aClearItems[0] = aClearItems[2] =  sal_True;
+        aClearItems[0] = aClearItems[2] =  true;
         break;
     case CSS1_SCRIPT_CTL:
-        aClearItems[0] = aClearItems[1] =  sal_True;
+        aClearItems[0] = aClearItems[1] =  true;
         break;
     case CSS1_SCRIPT_ALL:
         break;

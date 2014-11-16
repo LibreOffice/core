@@ -194,9 +194,9 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     return bRet;
 }
 
-static bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, sal_Bool *pBorders );
+static bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, bool *pBorders );
 
-static bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, sal_Bool *pBorders )
+static bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, bool *pBorders )
 {
     if( *pBorders )
         return false;
@@ -222,7 +222,7 @@ static bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, sal_Bool *pBorde
     return !*pBorders;
 }
 
-static bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, sal_Bool *pBorders )
+static bool lcl_TableLine_HasTabBorders( const SwTableLine* pLine, bool *pBorders )
 {
     if( *pBorders )
         return false;
@@ -245,7 +245,7 @@ bool SwHTMLWrtTable::ShouldExpandSub( const SwTableBox *pBox,
     {
         // MIB 30.6.97: Wenn schon eine Box expandiert wurde, wird eine
         // weitere nur expandiert, wenn sie Umrandungen besitzt.
-        sal_Bool bBorders = sal_False;
+        bool bBorders = false;
         lcl_TableBox_HasTabBorders( pBox, &bBorders );
         if( !bBorders )
             bBorders = HasTabBackground( *pBox, true, true, true, true );

@@ -284,7 +284,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             {
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
                 if ( bFtnDesc )
-                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));
+                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), false));
                 if ( bExtra )
                 {
                     // For messages regarding ErgoSum etc. we save the extra code and use the
@@ -352,7 +352,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             if ( bFtnDesc )
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_True));
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), true));
             }
             if ( bExtra )
             {
