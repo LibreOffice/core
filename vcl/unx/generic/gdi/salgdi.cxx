@@ -80,7 +80,8 @@ X11SalGraphics::X11SalGraphics():
     hBrush_(None),
     bWindow_(false),
     bPrinter_(false),
-    bVirDev_(false)
+    bVirDev_(false),
+    bFontGC_(false)
 {
     if (OpenGLHelper::isVCLOpenGLEnabled())
     {
