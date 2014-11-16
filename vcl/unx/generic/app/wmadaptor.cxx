@@ -997,41 +997,6 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
     }
 
     static bool bTrustXmb = true;
-    #ifdef SOLARIS
-    /* #i64273# there are some weird cases when using IIIMP on Solaris
-    *  where for unknown reasons XmbTextListToTextProperty results in
-    *  garbage. Test one string once to ensure safety.
-    *
-    *  FIXME: This must be a bug in xiiimp.so.2 somewhere. However
-    *  it was not possible to recreate this in a small sample program.
-    *  This reeks of memory corruption somehow.
-    */
-    static bool bOnce = true;
-    if( bOnce )
-    {
-        bOnce = false;
-        XTextProperty aTestProp = { NULL, None, 0, 0 };
-        const char *pText = "trustme";
-        char* pT = const_cast<char*>(pText);
-        XmbTextListToTextProperty( m_pDisplay,
-                                   &pT,
-                                   1,
-                                   XStdICCTextStyle,
-                                   &aTestProp );
-        bTrustXmb = (aTestProp.nitems == 7)                     &&
-                    (aTestProp.value != NULL )                  &&
-                    (strncmp( (char*)aTestProp.value, pText, 7 ) == 0) &&
-                    (aTestProp.encoding == XA_STRING);
-        if( aTestProp.value )
-            XFree( aTestProp.value );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "%s\n",
-                 bTrustXmb ?
-                 "XmbTextListToTextProperty seems to work" :
-                 "XmbTextListToTextProperty does not seem to work" );
-        #endif
-    }
-    #endif
 
     char* pT = const_cast<char*>(aTitle.getStr());
     XTextProperty aProp = { NULL, None, 0, 0 };
