@@ -246,8 +246,8 @@ static long nMinDistPixelW = 0, nMinDistPixelH = 0;
 // Current zoom factor
 static double aScaleX = 1.0;
 static double aScaleY = 1.0;
-static double aMinDistScale = 0.73;
-static double aEdgeScale = 0.5;
+const static double aMinDistScale = 0.73;
+const static double aEdgeScale = 0.5;
 
 // The borders will be collected in pLines during the Paint and later
 // possibly merge them.
@@ -420,8 +420,6 @@ SwSavePaintStatics::SwSavePaintStatics()
     nHalfPixelSzW = nHalfPixelSzH =
     nMinDistPixelW = nMinDistPixelH = 0;
     aScaleX = aScaleY = 1.0;
-    aMinDistScale = 0.73;
-    aEdgeScale = 0.5;
     g_pBorderLines = 0;
     pLines = 0;
     pSubsLines = 0;
