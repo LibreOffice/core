@@ -4064,21 +4064,24 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     bool bIsSelectionGfx = rSh.GetSelectionType() & nsSelectionType::SEL_GRF;
                     bool bisResize = eSdrMoveHdl != HDL_MOVE;
 
-                    if ( rMEvt.IsShift() )
+                    if (pSdrView)
                     {
-                        pSdrView->SetAngleSnapEnabled(!bIsSelectionGfx);
-                        if (bisResize)
-                            pSdrView->SetOrtho(!bIsSelectionGfx);
+                        if (rMEvt.IsShift())
+                        {
+                            pSdrView->SetAngleSnapEnabled(!bIsSelectionGfx);
+                            if (bisResize)
+                                pSdrView->SetOrtho(!bIsSelectionGfx);
+                            else
+                                pSdrView->SetOrtho(true);
+                        }
                         else
-                            pSdrView->SetOrtho(true);
-                    }
-                    else
-                    {
-                        pSdrView->SetAngleSnapEnabled(bIsSelectionGfx);
-                        if (bisResize)
-                            pSdrView->SetOrtho(bIsSelectionGfx);
-                        else
-                            pSdrView->SetOrtho(false);
+                        {
+                            pSdrView->SetAngleSnapEnabled(bIsSelectionGfx);
+                            if (bisResize)
+                                pSdrView->SetOrtho(bIsSelectionGfx);
+                            else
+                                pSdrView->SetOrtho(false);
+                        }
                     }
 
                     rSh.Drag( &aDocPt, rMEvt.IsShift() );
