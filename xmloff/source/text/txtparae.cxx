@@ -3084,7 +3084,6 @@ void XMLTextParagraphExport::_exportTextGraphic(
     OUString sOrigURL;
     rPropSet->getPropertyValue( sGraphicURL ) >>= sOrigURL;
     OUString sURL(GetExport().AddEmbeddedGraphicObject( sOrigURL ));
-    setTextEmbeddedGraphicURL( rPropSet, sURL );
 
     // If there still is no url, then then graphic is empty
     if( !sURL.isEmpty() )
@@ -3203,12 +3202,6 @@ void XMLTextParagraphExport::exportTitleAndDescription(
             GetExport().Characters( sObjDesc );
         }
     }
-}
-
-void XMLTextParagraphExport::setTextEmbeddedGraphicURL(
-    const Reference < XPropertySet >&,
-    OUString& /*rStreamName*/ ) const
-{
 }
 
 bool XMLTextParagraphExport::addHyperlinkAttributes(

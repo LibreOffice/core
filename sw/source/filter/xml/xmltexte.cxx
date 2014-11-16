@@ -188,28 +188,6 @@ SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
 {
 }
 
-void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
-    const Reference < XPropertySet >& rPropSet,
-    OUString& rURL) const
-{
-    if( rURL.isEmpty() )
-        return;
-
-    SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
-    if (pGrfNd && !pGrfNd->IsGrfLink())
-    {
-        // Apply new embedded stream name, only if graphic node already has one.
-        // - The saving of recovery information triggers this method, but for a newly created
-        //   document the new embedded stream name shall not be applied.
-        // - The saving of a newly created document to own format (ODF) triggers this method,
-        //   but the embedded stream name is not needed as its original inserted data is still in use.
-        if (pGrfNd->HasEmbeddedStreamName())
-        {
-            pGrfNd->ApplyNewEmbeddedStreamName("vnd.sun.star.Package:" + rURL);
-        }
-    }
-}
-
 static void lcl_addURL ( SvXMLExport &rExport, const OUString &rURL,
                          bool bToRel = true )
 {
