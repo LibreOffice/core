@@ -23,7 +23,7 @@
     <property name="column_spacing">12</property>
     <child>
       <object class="GtkCheckButton" id="date">
-        <property name="label" translatable="yes">_Date</property>
+        <property name="label" translatable="yes">_Date:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -41,7 +41,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="author">
-        <property name="label" translatable="yes">_Author</property>
+        <property name="label" translatable="yes">_Author:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -59,7 +59,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="action">
-        <property name="label" translatable="yes">A_ction</property>
+        <property name="label" translatable="yes">A_ction:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -77,7 +77,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="comment">
-        <property name="label" translatable="yes">C_omment</property>
+        <property name="label" translatable="yes">C_omment:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
@@ -289,7 +289,7 @@
     </child>
     <child>
       <object class="GtkCheckButton" id="range">
-        <property name="label" translatable="yes">_Range</property>
+        <property name="label" translatable="yes">_Range:</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>

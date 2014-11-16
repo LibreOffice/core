@@ -11,7 +11,7 @@
   <object class="GtkDialog" id="ImpSWFDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Macromedia Flash (SWF) Options</property>
+    <property name="title" translatable="yes">Flash (SWF) Options</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -129,7 +129,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="exportall">
-                <property name="label" translatable="yes">Export _all slides (unchecking exports current slide)</property>
+                <property name="label" translatable="yes">Export _all slides (uncheck to export current slide)</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>

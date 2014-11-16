@@ -21,7 +21,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">_DocType:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">doc</property>
@@ -48,7 +48,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">_XSLT for export:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltexport</property>
@@ -75,7 +75,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">XSLT _for import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">xsltimport</property>
@@ -102,7 +102,7 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="xalign">0</property>
+            <property name="xalign">1</property>
             <property name="label" translatable="yes">Template for _import:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">tempimport</property>
