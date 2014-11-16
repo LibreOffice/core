@@ -351,6 +351,8 @@ private:
     LineNumberSettings                                                              m_aLineNumberSettings;
 
     BookmarkMap_t                                                                   m_aBookmarkMap;
+    OUString                                                                        m_sCurrentBkmkId;
+    OUString                                                                        m_sCurrentBkmkName;
 
     _PageMar                                                                        m_aPageMargins;
     sal_Int32                                                                       m_nSymboldata;
@@ -667,7 +669,8 @@ public:
     //the end of field is reached (0x15 appeared) - the command might still be open
     void PopFieldContext();
 
-    void AddBookmark( const OUString& rBookmarkName, const OUString& rId );
+    void SetBookmarkName( const OUString& rBookmarkName );
+    void StartOrEndBookmark( const OUString& rId );
 
     void AddAnnotationPosition(
         const bool bStart,

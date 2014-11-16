@@ -32,6 +32,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -2501,6 +2502,36 @@ DECLARE_OOXMLIMPORT_TEST(testBnc821804, "bnc821804.docx")
     CPPUNIT_ASSERT_EQUAL(false,getProperty<bool>(getRun(getParagraph(10), 3), "IsStart"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo85542, "fdo85542.docx")
+{
+    //CPPUNIT_ASSERT_EQUAL(false,true);
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), 3);
+    uno::Reference<container::XNameAccess> xBookmarksByName(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("B1"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("B2"));
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("B3"));
+    // B1
+    uno::Reference<text::XTextContent> xContent1(xBookmarksByName->getByName("B1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange1(xContent1->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xRange1->getString(), OUString("ABB"));
+    // B2
+    uno::Reference<text::XTextContent> xContent2(xBookmarksByName->getByName("B2"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange2(xContent2->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xRange2->getString(), OUString("BBC"));
+    // B3 -- testing a collapsed bookmark
+    uno::Reference<text::XTextContent> xContent3(xBookmarksByName->getByName("B3"), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xRange3(xContent3->getAnchor(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xRange3->getString(), OUString(""));
+    uno::Reference<text::XText> xText(xRange3->getText( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xNeighborhoodCursor(xText->createTextCursor( ), uno::UNO_QUERY);
+    xNeighborhoodCursor->gotoRange(xRange3, false);
+    xNeighborhoodCursor->goLeft(1, false);
+    xNeighborhoodCursor->goRight(2, true);
+    uno::Reference<text::XTextRange> xTextNeighborhood(xNeighborhoodCursor, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(xTextNeighborhood->getString(), OUString("AB"));
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

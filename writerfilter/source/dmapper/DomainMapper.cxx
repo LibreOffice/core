@@ -183,7 +183,6 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
     if (m_pImpl->getTableManager().attribute(nName, val))
         return;
 
-    static OUString sLocalBookmarkName;
     static const int nSingleLineSpacing = 240;
     sal_Int32 nIntValue = val.getInt();
     OUString sStringValue = val.getString();
@@ -220,14 +219,15 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_endnote:
             break;
         case NS_ooxml::LN_CT_Bookmark_name:
-            // sStringValue contains the bookmark name
-            sLocalBookmarkName = sStringValue;
+            // SAL_DEBUG("LN_CT_Bookmark_name " << sStringValue);
+            m_pImpl->SetBookmarkName( sStringValue );
         break;
         case NS_ooxml::LN_CT_MarkupRangeBookmark_id:
-            //contains the bookmark identifier - has to be added to the bookmark name imported before
-            //if it is already available then the bookmark should be inserted
-            m_pImpl->AddBookmark( sLocalBookmarkName, sStringValue );
-            sLocalBookmarkName.clear();
+            // SAL_DEBUG("LN_CT_MarkupRangeBookmark_id " << sStringValue);
+            // add a bookmark range -- this remembers a bookmark starting here
+            // or, if the bookmark was already started or, if the bookmark was
+            // already started before, writes out the bookmark
+            m_pImpl->StartOrEndBookmark( sStringValue );
         break;
         case NS_ooxml::LN_CT_MarkupRange_displacedByCustomXml:
             break;
