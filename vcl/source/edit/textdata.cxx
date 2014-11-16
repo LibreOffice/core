@@ -163,16 +163,16 @@ sal_uInt16 TEParaPortion::GetLineNumber( sal_uInt16 nChar, bool bInclEnd )
 {
     for ( sal_uInt16 nLine = 0; nLine < maLines.size(); nLine++ )
     {
-        TextLine* pLine = maLines[ nLine ];
-        if ( ( bInclEnd && ( pLine->GetEnd() >= nChar ) ) ||
-             ( pLine->GetEnd() > nChar ) )
+        TextLine& pLine = maLines[ nLine ];
+        if ( ( bInclEnd && ( pLine.GetEnd() >= nChar ) ) ||
+             ( pLine.GetEnd() > nChar ) )
         {
             return nLine;
         }
     }
 
     // Then it should be at the end of the last line
-    OSL_ENSURE(nChar == maLines[maLines.size() - 1]->GetEnd(), "wrong Index");
+    OSL_ENSURE(nChar == maLines.back().GetEnd(), "wrong Index");
     OSL_ENSURE(!bInclEnd, "Line not found: FindLine");
     return ( maLines.size() - 1 );
 }
@@ -183,11 +183,11 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
     DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Leere Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
-        const TextLine* pLastFormatted = maLines[ nLastFormattedLine ];
-        const TextLine* pUnformatted = maLines[ nLastFormattedLine+1 ];
-        short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
-        short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() was inclusive => subtracted one too much!
+        const TextLine& pLastFormatted = maLines[ nLastFormattedLine ];
+        const TextLine& pUnformatted = maLines[ nLastFormattedLine+1 ];
+        short nPortionDiff = pUnformatted.GetStartPortion() - pLastFormatted.GetEndPortion();
+        short nTextDiff = pUnformatted.GetStart() - pLastFormatted.GetEnd();
+        nTextDiff++;    // LastFormatted.GetEnd() was inclusive => subtracted one too much!
 
         // The first unformated one has to start exactly one portion past the last
         // formated one.
@@ -198,15 +198,15 @@ void TEParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormat
         {
             for ( sal_uInt16 nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
-                TextLine* pLine = maLines[ nL ];
+                TextLine& pLine = maLines[ nL ];
 
-                pLine->GetStartPortion() = pLine->GetStartPortion() + nPDiff;
-                pLine->GetEndPortion() = pLine->GetEndPortion() + nPDiff;
+                pLine.GetStartPortion() = pLine.GetStartPortion() + nPDiff;
+                pLine.GetEndPortion() = pLine.GetEndPortion() + nPDiff;
 
-                pLine->GetStart() = pLine->GetStart() + nTDiff;
-                pLine->GetEnd() = pLine->GetEnd() + nTDiff;
+                pLine.GetStart() = pLine.GetStart() + nTDiff;
+                pLine.GetEnd() = pLine.GetEnd() + nTDiff;
 
-                pLine->SetValid();
+                pLine.SetValid();
             }
         }
     }
