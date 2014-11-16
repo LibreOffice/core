@@ -28,31 +28,20 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#if 0
-#  define FIXME_SELF_INTERSECTING_WORKING
-#endif
+#define FIXME_SELF_INTERSECTING_WORKING 0
+#define FIXME_BOUNCE_BUTTON 0
 
 // debugging hook just for us
 SAL_DLLPUBLIC css::uno::Sequence< OUString > ImageTree_getAllImageNames();
 
 using namespace css;
 
-class DemoBase :
-        public WorkWindow // hide OutputDevice if necessary
-{
-public:
-    DemoBase() : WorkWindow(NULL, WB_APP | WB_STDWORK)
-    {
-    }
-    OutputDevice &getOutDev() { return *this; }
-};
-
 enum RenderStyle {
     RENDER_THUMB,    // small view <n> to a page
     RENDER_EXPANDED, // expanded view of this renderer
 };
 
-class DemoWin : public DemoBase
+class DemoRenderer
 {
     Bitmap   maIntroBW;
     BitmapEx maIntro;
@@ -61,9 +50,9 @@ class DemoWin : public DemoBase
     int mnSegmentsY;
 
     struct RenderContext {
-        RenderStyle meStyle;
-        bool        mbVDev;
-        DemoWin    *mpDemoWin;
+        RenderStyle   meStyle;
+        bool          mbVDev;
+        DemoRenderer *mpDemoRenderer;
     };
     struct RegionRenderer {
     public:
@@ -85,14 +74,15 @@ class DemoWin : public DemoBase
     void     InitRenderers();
 
 public:
-    DemoWin() : DemoBase()
-              , mnSegmentsX(4)
-              , mnSegmentsY(3)
-              , mnSelectedRenderer(-1)
-              , mpButton(NULL)
-              , mpButtonWin(NULL)
-              , mnBounceX(1)
-              , mnBounceY(1)
+    DemoRenderer() : mnSegmentsX(4)
+                   , mnSegmentsY(3)
+                   , mnSelectedRenderer(-1)
+#if FIXME_BOUNCE_BUTTON
+                   , mpButton(NULL)
+                   , mpButtonWin(NULL)
+                   , mnBounceX(1)
+                   , mnBounceY(1)
+#endif
     {
         if (!Application::LoadBrandBitmap("intro", maIntro))
             Application::Abort("Failed to load intro image");
@@ -106,29 +96,36 @@ public:
     OUString getRendererList();
     void     selectRenderer(const OUString &rName);
 
+    Size maSize;
+    void SetSizePixel(const Size &rSize) { maSize = rSize; }
+    Size GetSizePixel() const            { return maSize;  }
+
+
+// more of a 'Window' concept - push upwards ?
+#if FIXME_BOUNCE_BUTTON
     // Bouncing windows on click ...
     PushButton     *mpButton;
     FloatingWindow *mpButtonWin;
     AutoTimer       maBounce;
     int             mnBounceX, mnBounceY;
     DECL_LINK(BounceTimerCb, void *);
+#endif
 
-    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
-    virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
+    bool MouseButtonDown(const MouseEvent& rMEvt);
+    void KeyInput(const KeyEvent& rKEvt);
 
-    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE
+    static std::vector<Rectangle> partition(const RenderContext &rCtx, int nX, int nY)
     {
-        fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
-        drawToDevice(getOutDev(), false);
+        return rCtx.mpDemoRenderer->partition(nX, nY);
     }
 
-    static std::vector<Rectangle> partition(OutputDevice &rDev, int nX, int nY)
+    std::vector<Rectangle> partition(int nX, int nY)
     {
         Rectangle r;
         std::vector<Rectangle> aRegions;
 
         // Make small cleared area for these guys
-        Size aSize(rDev.GetOutputSizePixel());
+        Size aSize(GetSizePixel());
         long nBorderSize = aSize.Width() / 32;
         long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
         long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
@@ -183,8 +180,8 @@ public:
                 sal_uInt16 nOldAA = rDev.GetAntialiasing();
                 rDev.SetAntialiasing(ANTIALIASING_ENABLE_B2DDRAW);
 
-                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 4, 4));
-                DemoWin::clearRects(rDev, aRegions);
+                std::vector<Rectangle> aRegions(DemoRenderer::partition(rCtx, 4, 4));
+                DemoRenderer::clearRects(rDev, aRegions);
 
 #if 0 // FIXME: get this through to the backend ...
                 double nTransparency[] = {
@@ -280,7 +277,7 @@ public:
         {
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
-                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 2, 2));
+                std::vector<Rectangle> aRegions(DemoRenderer::partition(rCtx, 2, 2));
                 for (size_t i = 0; i < aRegions.size(); i++)
                 {
                     vcl::Region aRegion;
@@ -377,7 +374,7 @@ public:
         {
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
-                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 5, 4));
+                std::vector<Rectangle> aRegions(DemoRenderer::partition(rCtx,5, 4));
                 sal_uInt32 nStartCols[] = {
                     COL_RED, COL_RED, COL_RED, COL_GREEN, COL_GREEN,
                     COL_BLUE, COL_BLUE, COL_BLUE, COL_CYAN, COL_CYAN,
@@ -409,7 +406,7 @@ public:
                     1, 10, 20, 10, 1,
                     0, 0, 0, 0, 0
                 };
-                DemoWin::clearRects(rDev, aRegions);
+                DemoRenderer::clearRects(rDev, aRegions);
                 assert(aRegions.size() <= SAL_N_ELEMENTS(nStartCols));
                 assert(aRegions.size() <= SAL_N_ELEMENTS(nEndCols));
                 assert(aRegions.size() <= SAL_N_ELEMENTS(eStyles));
@@ -446,7 +443,7 @@ public:
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
-            Bitmap aBitmap(rCtx.mpDemoWin->maIntroBW);
+            Bitmap aBitmap(rCtx.mpDemoRenderer->maIntroBW);
             aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
             rDev.DrawBitmap(r.TopLeft(), aBitmap);
         }
@@ -461,7 +458,7 @@ public:
         {
             maCheckered.RenderRegion(rDev, r, rCtx);
 
-            BitmapEx aBitmap(rCtx.mpDemoWin->maIntro);
+            BitmapEx aBitmap(rCtx.mpDemoRenderer->maIntro);
             aBitmap.Scale(r.GetSize(), BMP_SCALE_BESTQUALITY);
             AlphaMask aSemiTransp(aBitmap.GetSizePixel());
             aSemiTransp.Erase(64);
@@ -479,7 +476,7 @@ public:
             struct {
                 double nX, nY;
             } aPoints[] = { { 0.1, 0.1 }, { 0.9, 0.9 },
-#ifdef FIXME_SELF_INTERSECTING_WORKING
+#if FIXME_SELF_INTERSECTING_WORKING
                             { 0.9, 0.1 }, { 0.1, 0.9 },
                             { 0.1, 0.1 }
 #else
@@ -545,7 +542,7 @@ public:
             Rectangle aWhole(Point(0,0), r.GetSize());
 
             // mini me
-            rCtx.mpDemoWin->drawToDevice(*pNested, true);
+            rCtx.mpDemoRenderer->drawToDevice(*pNested, true);
 
             if (eType == RENDER_AS_BITMAP)
             {
@@ -575,8 +572,8 @@ public:
 
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
-                std::vector<Rectangle> aRegions(DemoWin::partition(rDev, 2, 2));
-                DemoWin::clearRects(rDev, aRegions);
+                std::vector<Rectangle> aRegions(DemoRenderer::partition(rCtx,2, 2));
+                DemoRenderer::clearRects(rDev, aRegions);
 
                 RenderType eRenderTypes[] = { RENDER_AS_BITMAP, RENDER_AS_OUTDEV,
                                               RENDER_AS_BITMAPEX, RENDER_AS_ALPHA_OUTDEV };
@@ -737,7 +734,7 @@ public:
     {
         RenderContext aCtx;
         aCtx.mbVDev = bVDev;
-        aCtx.mpDemoWin = this;
+        aCtx.mpDemoRenderer = this;
 
         Rectangle aWholeWin(Point(0,0), rDev.GetOutputSizePixel());
 
@@ -752,15 +749,35 @@ public:
         else
         {
             aCtx.meStyle = RENDER_THUMB;
-            std::vector<Rectangle> aRegions(DemoWin::partition(rDev, mnSegmentsX, mnSegmentsY));
-            DemoWin::clearRects(rDev, aRegions);
+            std::vector<Rectangle> aRegions(partition(mnSegmentsX, mnSegmentsY));
+            DemoRenderer::clearRects(rDev, aRegions);
             for (size_t i = 0; i < maRenderers.size(); i++)
                 maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
         }
     }
+    std::vector<vcl::Window *> maInvalidates;
+    void addInvalidate(vcl::Window *pWindow) { maInvalidates.push_back(pWindow); };
+    void removeInvalidate(vcl::Window *pWindow)
+    {
+        std::vector<vcl::Window *>::iterator aIt;
+        for (aIt = maInvalidates.begin(); aIt != maInvalidates.end(); ++aIt)
+        {
+            if (*aIt == pWindow)
+            {
+                maInvalidates.erase(aIt);
+                return;
+            }
+        }
+    }
+    void Invalidate()
+    {
+        for (size_t i = 0; i < maInvalidates.size(); ++i)
+            maInvalidates[i]->Invalidate();
+    }
 };
 
-IMPL_LINK_NOARG(DemoWin,BounceTimerCb)
+#if FIXME_BOUNCE_BUTTON
+IMPL_LINK_NOARG(DemoRenderer,BounceTimerCb)
 {
     mpButton->Check(mnBounceX>0);
     mpButton->SetPressed(mnBounceY>0);
@@ -780,8 +797,9 @@ IMPL_LINK_NOARG(DemoWin,BounceTimerCb)
     Invalidate(aRect);
     return 0;
 }
+#endif
 
-void DemoWin::KeyInput(const KeyEvent &rKEvt)
+void DemoRenderer::KeyInput(const KeyEvent &rKEvt)
 {
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
@@ -809,28 +827,29 @@ void DemoWin::KeyInput(const KeyEvent &rKEvt)
     }
 }
 
-void DemoWin::MouseButtonDown(const MouseEvent& rMEvt)
+bool DemoRenderer::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // click to zoom out
     if (mnSelectedRenderer >= 0)
     {
         mnSelectedRenderer = -1;
         Invalidate();
-        return;
+        return true;
     }
 
     // click on a region to zoom into it
-    std::vector<Rectangle> aRegions(partition(*this, mnSegmentsX, mnSegmentsY));
+    std::vector<Rectangle> aRegions(partition(mnSegmentsX, mnSegmentsY));
     for (size_t i = 0; i < aRegions.size(); i++)
     {
         if (aRegions[i].IsInside(rMEvt.GetPosPixel()))
         {
             mnSelectedRenderer = i;
             Invalidate();
-            return;
+            return true;
         }
     }
 
+#if FIXME_BOUNCE_BUTTON
     // otherwise bounce floating windows
     if (!mpButton)
     {
@@ -843,7 +862,7 @@ void DemoWin::MouseButtonDown(const MouseEvent& rMEvt)
         mpButtonWin->SetPosSizePixel(Point(0,0), mpButton->GetOptimalSize());
         mpButtonWin->Show();
         mnBounceX = 1; mnBounceX = 1;
-        maBounce.SetTimeoutHdl(LINK(this,DemoWin,BounceTimerCb));
+        maBounce.SetTimeoutHdl(LINK(this,DemoRenderer,BounceTimerCb));
         maBounce.SetTimeout(55);
         maBounce.Start();
     }
@@ -854,9 +873,11 @@ void DemoWin::MouseButtonDown(const MouseEvent& rMEvt)
         mpButtonWin = NULL;
         mpButton = NULL;
     }
+#endif
+    return false;
 }
 
-void DemoWin::InitRenderers()
+void DemoRenderer::InitRenderers()
 {
     maRenderers.push_back(new DrawLines());
     maRenderers.push_back(new DrawText());
@@ -872,7 +893,7 @@ void DemoWin::InitRenderers()
     maRenderers.push_back(new FetchDrawBitmap());
 }
 
-OUString DemoWin::getRendererList()
+OUString DemoRenderer::getRendererList()
 {
     OUStringBuffer aBuf;
     for (size_t i = 0; i < maRenderers.size(); i++)
@@ -883,7 +904,7 @@ OUString DemoWin::getRendererList()
     return aBuf.makeStringAndClear();
 }
 
-void DemoWin::selectRenderer(const OUString &rName)
+void DemoRenderer::selectRenderer(const OUString &rName)
 {
     for (size_t i = 0; i < maRenderers.size(); i++)
     {
@@ -896,14 +917,52 @@ void DemoWin::selectRenderer(const OUString &rName)
     }
 }
 
+class DemoWin : public WorkWindow
+{
+    DemoRenderer &mrRenderer;
+public:
+    DemoWin(DemoRenderer &rRenderer) :
+        WorkWindow(NULL, WB_APP | WB_STDWORK),
+        mrRenderer(rRenderer)
+    {
+        mrRenderer.addInvalidate(this);
+    }
+    virtual ~DemoWin()
+    {
+        mrRenderer.removeInvalidate(this);
+    }
+    virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE
+    {
+        mrRenderer.SetSizePixel(GetSizePixel());
+        if (!mrRenderer.MouseButtonDown(rMEvt))
+        {
+            DemoWin *pNewWin = new DemoWin(mrRenderer);
+            pNewWin->SetText("Another interactive VCL demo window");
+            pNewWin->Show();
+        }
+    }
+    virtual void KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE
+    {
+        mrRenderer.SetSizePixel(GetSizePixel());
+        mrRenderer.KeyInput(rKEvt);
+    }
+    virtual void Paint(const Rectangle& rRect) SAL_OVERRIDE
+    {
+        mrRenderer.SetSizePixel(GetSizePixel());
+        fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
+        mrRenderer.drawToDevice(*this, false);
+    }
+};
+
+
 class DemoApp : public Application
 {
-    int showHelp(DemoWin &rWin)
+    int showHelp(DemoRenderer &rRenderer)
     {
         fprintf(stderr,"vcldemo - a VCL test app\n");
         fprintf(stderr,"  --help            - print this text\n");
         fprintf(stderr,"  --show <renderer> - start with a given renderer, options are:\n");
-        OUString aRenderers(rWin.getRendererList());
+        OUString aRenderers(rRenderer.getRendererList());
         fprintf(stderr,"         %s\n\n",
                 rtl::OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
         return 0;
@@ -916,25 +975,28 @@ public:
     {
         try
         {
-            DemoWin aMainWin;
+            DemoRenderer aRenderer;
 
             for (sal_Int32 i = 0; i < GetCommandLineParamCount(); i++)
             {
                 bool bLast = i == GetCommandLineParamCount() - 1;
                 OUString aArg = GetCommandLineParam(i);
                 if (aArg == "--help" || aArg == "-h")
-                    return showHelp(aMainWin);
+                    return showHelp(aRenderer);
                 if (aArg == "--show")
                 {
                     if (bLast)
-                        return showHelp(aMainWin);
+                        return showHelp(aRenderer);
                     else
-                        aMainWin.selectRenderer(GetCommandLineParam(++i));
+                        aRenderer.selectRenderer(GetCommandLineParam(++i));
                 }
             }
 
-            aMainWin.SetText("Interactive VCL demo");
+            DemoWin aMainWin(aRenderer);
+
+            aMainWin.SetText("Interactive VCL demo #1");
             aMainWin.Show();
+
             Application::Execute();
         }
         catch (const css::uno::Exception& e)
