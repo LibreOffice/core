@@ -79,6 +79,10 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfexport,\
     xmloff/util/xo \
 ))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,sw_odfexport,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_configuration,sw_odfexport))
 
 $(eval $(call gb_CppunitTest_use_unittest_configuration,sw_odfexport))
