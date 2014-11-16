@@ -43,11 +43,15 @@
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="20622"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false" toolbar:helpid="12021"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomObjects"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:visible="false" toolbar:helpid="10096"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
