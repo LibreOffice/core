@@ -352,10 +352,9 @@ void SwCalcPixStatics( OutputDevice *pOut )
 }
 
 /**
- * To be able to save the statics so the paint is more or lees reentrant
+ *
  */
-class SwSavePaintStatics
-{
+struct SwPaintProperties {
     bool                bSFlyMetafile;
     SwViewShell        *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
@@ -376,33 +375,43 @@ class SwSavePaintStatics
     Color               aSGlobalRetoucheColor;
     double              aSScaleX,
                         aSScaleY;
+};
+
+/**
+ * To be able to save the statics so the paint is more or lees reentrant
+ */
+class SwSavePaintStatics : public SwPaintProperties
+{
 public:
     SwSavePaintStatics();
     ~SwSavePaintStatics();
 };
 
-SwSavePaintStatics::SwSavePaintStatics() :
-    bSFlyMetafile       ( bFlyMetafile      ),
-    pSGlobalShell       ( pGlobalShell      ),
-    pSFlyMetafileOut    ( pFlyMetafileOut   ),
-    pSRetoucheFly       ( pRetoucheFly      ),
-    pSRetoucheFly2      ( pRetoucheFly2     ),
-    pSFlyOnlyDraw       ( pFlyOnlyDraw      ),
-    pBLines             ( g_pBorderLines    ),
-    pSLines             ( pLines            ),
-    pSSubsLines         ( pSubsLines        ),
-    pSSpecSubsLines     ( pSpecSubsLines    ),
-    pSProgress          ( pProgress         ),
-    nSPixelSzW          ( nPixelSzW         ),
-    nSPixelSzH          ( nPixelSzH         ),
-    nSHalfPixelSzW      ( nHalfPixelSzW     ),
-    nSHalfPixelSzH      ( nHalfPixelSzH     ),
-    nSMinDistPixelW     ( nMinDistPixelW    ),
-    nSMinDistPixelH     ( nMinDistPixelH    ),
-    aSGlobalRetoucheColor( aGlobalRetoucheColor ),
-    aSScaleX            ( aScaleX           ),
-    aSScaleY            ( aScaleY           )
+SwSavePaintStatics::SwSavePaintStatics()
 {
+    // Saving globales
+    bSFlyMetafile = bFlyMetafile;
+    pSGlobalShell = pGlobalShell;
+    pSFlyMetafileOut = pFlyMetafileOut;
+    pSRetoucheFly = pRetoucheFly;
+    pSRetoucheFly2 = pRetoucheFly2;
+    pSFlyOnlyDraw = pFlyOnlyDraw;
+    pBLines = g_pBorderLines;
+    pSLines = pLines;
+    pSSubsLines = pSubsLines;
+    pSSpecSubsLines = pSpecSubsLines;
+    pSProgress = pProgress;
+    nSPixelSzW = nPixelSzW;
+    nSPixelSzH = nPixelSzH;
+    nSHalfPixelSzW = nHalfPixelSzW;
+    nSHalfPixelSzH = nHalfPixelSzH;
+    nSMinDistPixelW = nMinDistPixelW;
+    nSMinDistPixelH = nMinDistPixelH ;
+    aSGlobalRetoucheColor = aGlobalRetoucheColor;
+    aSScaleX = aScaleX;
+    aSScaleY = aScaleY;
+
+    // Restoring globales to default
     bFlyMetafile = false;
     pFlyMetafileOut = 0;
     pRetoucheFly  = 0;
@@ -422,6 +431,7 @@ SwSavePaintStatics::SwSavePaintStatics() :
 
 SwSavePaintStatics::~SwSavePaintStatics()
 {
+    // Restoring globales to saved one
     pGlobalShell       = pSGlobalShell;
     bFlyMetafile       = bSFlyMetafile;
     pFlyMetafileOut    = pSFlyMetafileOut;
