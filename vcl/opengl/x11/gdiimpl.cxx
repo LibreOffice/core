@@ -142,9 +142,9 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     SAL_INFO( "vcl.opengl", "RenderPixmapToScreen (" << nX << " " << nY << ")" );
 
     aPosAry.mnSrcX = 0;
-    aPosAry.mnSrcY = nY;
+    aPosAry.mnSrcY = 0;
     aPosAry.mnDestX = nX;
-    aPosAry.mnDestY = 0;
+    aPosAry.mnDestY = nY;
     aPosAry.mnSrcWidth = aPosAry.mnDestWidth = pPixmap->GetWidth();
     aPosAry.mnSrcHeight = aPosAry.mnDestHeight = pPixmap->GetHeight();
 
