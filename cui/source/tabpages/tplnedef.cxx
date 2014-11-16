@@ -46,6 +46,9 @@
 
 #define XOUT_WIDTH    150
 
+using namespace com::sun::star;
+
+
 SvxLineDefTabPage::SvxLineDefTabPage
 (
     vcl::Window* pParent,
@@ -60,7 +63,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     bObjSelected    ( false ),
 
     pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
-    aXLStyle            ( XLINE_DASH ),
+    aXLStyle            ( drawing::LineStyle_DASH ),
     aXWidth             ( XOUT_WIDTH ),
     aXDash              ( OUString(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
     aXColor             ( OUString(), COL_BLACK ),
@@ -267,7 +270,7 @@ bool SvxLineDefTabPage::FillItemSet( SfxItemSet* rAttrs )
             FillDash_Impl();
 
             OUString aString( m_pLbLineStyles->GetSelectEntry() );
-            rAttrs->Put( XLineStyleItem( XLINE_DASH ) );
+            rAttrs->Put( XLineStyleItem( drawing::LineStyle_DASH ) );
             rAttrs->Put( XLineDashItem( aString, aDash ) );
         }
     }
@@ -280,16 +283,16 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 {
     if( rAttrs->GetItemState( GetWhich( XATTR_LINESTYLE ) ) != SfxItemState::DONTCARE )
     {
-        XLineStyle eXLS = (XLineStyle) static_cast<const XLineStyleItem&>( rAttrs->Get( GetWhich( XATTR_LINESTYLE ) ) ).GetValue();
+        drawing::LineStyle eXLS = (drawing::LineStyle) static_cast<const XLineStyleItem&>( rAttrs->Get( GetWhich( XATTR_LINESTYLE ) ) ).GetValue();
 
         switch( eXLS )
         {
-            case XLINE_NONE:
-            case XLINE_SOLID:
+            case drawing::LineStyle_NONE:
+            case drawing::LineStyle_SOLID:
                 m_pLbLineStyles->SelectEntryPos( 0 );
                 break;
 
-            case XLINE_DASH:
+            case drawing::LineStyle_DASH:
             {
                 const XLineDashItem& rDashItem = static_cast<const XLineDashItem&>( rAttrs->Get( XATTR_LINEDASH ) );
                 aDash = rDashItem.GetDashValue();

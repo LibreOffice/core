@@ -40,6 +40,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 void E3dView::ConvertMarkedToPolyObj(bool bLineToArea)
 {
@@ -139,7 +140,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
         aSet.Put(aDefaultSet);
 
         // ... but no lines for 3D
-        aSet.Put(XLineStyleItem (XLINE_NONE));
+        aSet.Put(XLineStyleItem (com::sun::star::drawing::LineStyle_NONE));
 
         // new defaults for distance and focal length
         aSet.Put(makeSvx3DDistanceItem(100));

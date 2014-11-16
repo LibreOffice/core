@@ -972,7 +972,7 @@ void SdrGrafObj::SetPage( SdrPage* pNewPage )
         else
         {
             SetMergedItem(XFillStyleItem(drawing::FillStyle_NONE));
-            SetMergedItem(XLineStyleItem(XLINE_NONE));
+            SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
         }
     }
 

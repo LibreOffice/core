@@ -204,7 +204,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             SfxItemSet aTargetItemSet( pCustoObj->GetMergedItemSet() );
 
             // clear fill and line style
-            aTargetItemSet.Put(XLineStyleItem(XLINE_NONE));
+            aTargetItemSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
             aTargetItemSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
             // get the text bounds and set at text object

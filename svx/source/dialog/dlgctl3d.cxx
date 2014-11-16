@@ -137,7 +137,7 @@ void Svx3DPreviewControl::Construct()
         XATTR_LINESTYLE, XATTR_LINESTYLE,
         XATTR_FILL_FIRST, XATTR_FILLBITMAP,
         0, 0 );
-    aSet.Put( XLineStyleItem( XLINE_NONE ) );
+    aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
     aSet.Put( XFillColorItem( "", Color( COL_WHITE ) ) );
 
@@ -303,7 +303,7 @@ void Svx3DLightControl::Construct2()
             basegfx::B3DVector(2.0 * fMaxExpansion, 2.0 * fMaxExpansion, 2.0 * fMaxExpansion));
         mpScene->Insert3DObj( mpExpansionObject );
         SfxItemSet aSet(mpModel->GetItemPool());
-        aSet.Put( XLineStyleItem( XLINE_NONE ) );
+        aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
         aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
         mpExpansionObject->SetMergedItemSet(aSet);
     }
@@ -343,7 +343,7 @@ void Svx3DLightControl::Construct2()
 
         // initially invisible
         SfxItemSet aSet(mpModel->GetItemPool());
-        aSet.Put( XLineStyleItem( XLINE_NONE ) );
+        aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
         aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
         mpLampBottomObject->SetMergedItemSet(aSet);
@@ -409,7 +409,7 @@ void Svx3DLightControl::ConstructLightObjects()
             pNewLight->SetTransform(aTransform);
 
             SfxItemSet aSet(mpModel->GetItemPool());
-            aSet.Put( XLineStyleItem( XLINE_NONE ) );
+            aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
             aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
             aSet.Put( XFillColorItem(OUString(), GetLightColor(a)));
             pNewLight->SetMergedItemSet(aSet);
@@ -425,7 +425,7 @@ void Svx3DLightControl::AdaptToSelectedLight()
     {
         // make mpLampBottomObject/mpLampShaftObject invisible
         SfxItemSet aSet(mpModel->GetItemPool());
-        aSet.Put( XLineStyleItem( XLINE_NONE ) );
+        aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
         aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
         mpLampBottomObject->SetMergedItemSet(aSet);
         mpLampShaftObject->SetMergedItemSet(aSet);
@@ -437,7 +437,7 @@ void Svx3DLightControl::AdaptToSelectedLight()
 
         // make mpLampBottomObject/mpLampShaftObject visible (yellow hairline)
         SfxItemSet aSet(mpModel->GetItemPool());
-        aSet.Put( XLineStyleItem( XLINE_SOLID ) );
+        aSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
         aSet.Put( XLineColorItem(OUString(), COL_YELLOW));
         aSet.Put( XLineWidthItem(0));
         aSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );

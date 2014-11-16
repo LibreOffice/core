@@ -350,7 +350,7 @@ bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 
 TYPEINIT1_AUTOFACTORY(XLineStyleItem, SfxEnumItem);
 
-XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle) :
+XLineStyleItem::XLineStyleItem(com::sun::star::drawing::LineStyle eTheLineStyle) :
     SfxEnumItem(XATTR_LINESTYLE, sal::static_int_cast< sal_uInt16 >(eTheLineStyle))
 {
 }
@@ -384,10 +384,10 @@ bool XLineStyleItem::GetPresentation
 
     switch( (sal_uInt16)GetValue() )
     {
-        case XLINE_NONE:
+        case com::sun::star::drawing::LineStyle_NONE:
             nId = RID_SVXSTR_INVISIBLE;
             break;
-        case XLINE_SOLID:
+        case com::sun::star::drawing::LineStyle_SOLID:
             nId = RID_SVXSTR_SOLID;
             break;
     }

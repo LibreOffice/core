@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/docfile.hxx>
@@ -150,7 +151,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     XHatch    aNullHatch(aNullCol);
 
                     // Line attributes (Extended OutputDevice)
-    rISet.Put(XLineStyleItem(XLINE_SOLID));
+    rISet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
     rISet.Put(XLineColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_STROKE)));
     rISet.Put(XLineWidthItem(0));
     rISet.Put(XLineDashItem(pPool,aNullDash));
@@ -261,7 +262,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_OBJWITHARROW );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_SOLID));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_SOLID));
     pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
     pISet->Put(XLineWidthItem(150));
 
@@ -307,7 +308,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet = &pSheet->GetItemSet();
 
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
 
     // Text
 
@@ -317,7 +318,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXT );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     // Text body
@@ -327,7 +328,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pISet->Put(SvxFontHeightItem(564, 100, EE_CHAR_FONTHEIGHT));        // 16 pt
@@ -339,7 +340,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_JUSTIFY );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pISet->Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST ));
@@ -351,7 +352,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TEXTBODY_INDENT );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
@@ -366,7 +367,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pISet->Put(SvxFontHeightItem(1551, 100, EE_CHAR_FONTHEIGHT ));      // 44 pt
@@ -378,7 +379,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_TITLE1 );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_SOLID));
     pISet->Put(XFillColorItem(OUString(), RGB_Color(COL_CYAN)));
 
@@ -428,7 +429,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));        // 24 pt
@@ -443,7 +444,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE1 );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pISet->Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT ));
@@ -460,7 +461,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pSheet->SetHelpId( aHelpFile, HID_POOLSHEET_HEADLINE2 );
     pISet = &pSheet->GetItemSet();
 
-    pISet->Put(XLineStyleItem(XLINE_NONE));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_NONE));
     pISet->Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pISet->Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC ));
@@ -487,7 +488,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStartWidthItem(200));
     pISet->Put(XLineEndItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineEndWidthItem(200));
-    pISet->Put(XLineStyleItem(XLINE_SOLID));
+    pISet->Put(XLineStyleItem(drawing::LineStyle_SOLID));
     pISet->Put(makeSdrMeasureShowUnitItem(true));
 
     // Generate presentation templates for default layout.
