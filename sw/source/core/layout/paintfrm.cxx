@@ -224,12 +224,6 @@ public:
     }
 };
 
-//Retouch for transparent Flys is done by the background of the Flys.
-//The Fly itself should certainly not be spared out. See PaintBackground and
-//lcl_SubtractFlys()
-static SwFlyFrm *pRetoucheFly  = 0;
-static SwFlyFrm *pRetoucheFly2 = 0;
-
 // Sizes of a pixel and the corresponding halves. Will be reset when
 // entering SwRootFrm::Paint
 static long nPixelSzW = 0, nPixelSzH = 0;
@@ -267,8 +261,13 @@ struct SwPaintProperties {
     OutputDevice       *pSFlyMetafileOut = 0;
 
     SwViewShell        *pSGlobalShell = 0;
-    SwFlyFrm           *pSRetoucheFly,
-                       *pSRetoucheFly2;
+
+    //Retouch for transparent Flys is done by the background of the Flys.
+    //The Fly itself should certainly not be spared out. See PaintBackground and
+    //lcl_SubtractFlys()
+    SwFlyFrm           *pSRetoucheFly = 0;
+    SwFlyFrm           *pSRetoucheFly2 = 0;
+
     SwFlyFrm           *pSFlyOnlyDraw = 0;
     BorderLines        *pBLines;
     SwLineRects        *pSLines;
@@ -386,8 +385,8 @@ SwSavePaintStatics::SwSavePaintStatics()
     bSFlyMetafile = gProp.bSFlyMetafile;
     pSGlobalShell = gProp.pSGlobalShell;
     pSFlyMetafileOut = gProp.pSFlyMetafileOut;
-    pSRetoucheFly = pRetoucheFly;
-    pSRetoucheFly2 = pRetoucheFly2;
+    pSRetoucheFly = gProp.pSRetoucheFly;
+    pSRetoucheFly2 = gProp.pSRetoucheFly2;
     pSFlyOnlyDraw = gProp.pSFlyOnlyDraw;
     pBLines = g_pBorderLines;
     pSLines = pLines;
@@ -407,8 +406,8 @@ SwSavePaintStatics::SwSavePaintStatics()
     // Restoring globales to default
     gProp.bSFlyMetafile = false;
     gProp.pSFlyMetafileOut = 0;
-    pRetoucheFly  = 0;
-    pRetoucheFly2 = 0;
+    gProp.pSRetoucheFly  = 0;
+    gProp.pSRetoucheFly2 = 0;
     nPixelSzW = nPixelSzH =
     nHalfPixelSzW = nHalfPixelSzH =
     nMinDistPixelW = nMinDistPixelH = 0;
@@ -426,8 +425,8 @@ SwSavePaintStatics::~SwSavePaintStatics()
     gProp.pSGlobalShell       = pSGlobalShell;
     gProp.bSFlyMetafile       = bSFlyMetafile;
     gProp.pSFlyMetafileOut    = pSFlyMetafileOut;
-    pRetoucheFly       = pSRetoucheFly;
-    pRetoucheFly2      = pSRetoucheFly2;
+    gProp.pSRetoucheFly       = pSRetoucheFly;
+    gProp.pSRetoucheFly2      = pSRetoucheFly2;
     gProp.pSFlyOnlyDraw = pSFlyOnlyDraw;
     g_pBorderLines     = pBLines;
     pLines             = pSLines;
@@ -1515,9 +1514,9 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //                           const SwRect &rRect, SwRegionRects &rRegion )
 //{
 //    const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
-//    const SwFlyFrm* pSelfFly = pFrm->IsInFly() ? pFrm->FindFlyFrm() : pRetoucheFly2;
-//    if ( !pRetoucheFly )
-//        pRetoucheFly = pRetoucheFly2;
+//    const SwFlyFrm* pSelfFly = pFrm->IsInFly() ? pFrm->FindFlyFrm() : gProp.pSRetoucheFly2;
+//    if ( !gProp.pSRetoucheFly )
+//        gProp.pSRetoucheFly = gProp.pSRetoucheFly2;
 //
 //    for ( sal_uInt16 j = 0; (j < rObjs.Count()) && !rRegion.empty(); ++j )
 //    {
@@ -1533,7 +1532,7 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //
 //        const SwFlyFrm *pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
 //
-//        if ( pSelfFly == pFly || pRetoucheFly == pFly || !rRect.IsOver( pFly->Frm() ) )
+//        if ( pSelfFly == pFly || gProp.pSRetoucheFly == pFly || !rRect.IsOver( pFly->Frm() ) )
 //            continue;
 //
 //        if ( !pFly->GetFmt()->GetPrint().GetValue() &&
@@ -1551,7 +1550,7 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //            continue;
 //
 //        //Any why does it not apply for the RetoucheFly too?
-//        if ( pRetoucheFly && pRetoucheFly->IsLowerOf( pFly ) )
+//        if ( gProp.pSRetoucheFly && gProp.pSRetoucheFly->IsLowerOf( pFly ) )
 //            continue;
 //
 //#if OSL_DEBUG_LEVEL > 0
@@ -1584,9 +1583,9 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //                bStopOnHell = false;
 //            }
 //        }
-//        if ( pRetoucheFly )
+//        if ( gProp.pSRetoucheFly )
 //        {
-//            const SdrObject *pTmp = pRetoucheFly->GetVirtDrawObj();
+//            const SdrObject *pTmp = gProp.pSRetoucheFly->GetVirtDrawObj();
 //            if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
 //            {
 //                if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
@@ -1595,7 +1594,7 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //            }
 //            else
 //            {
-//                if ( !pFly->IsLowerOf( pRetoucheFly ) && !pFly->GetFmt()->GetOpaque().GetValue() )
+//                if ( !pFly->IsLowerOf( gProp.pSRetoucheFly ) && !pFly->GetFmt()->GetOpaque().GetValue() )
 //                    //From other layers we are only interested in non
 //                    //transparent ones or those that are internal
 //                    continue;
@@ -1674,8 +1673,8 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //            rRegion -= aRect;
 //        }
 //    }
-//    if ( pRetoucheFly == pRetoucheFly2 )
-//        pRetoucheFly = 0;
+//    if ( gProp.pSRetoucheFly == gProp.pSRetoucheFly2 )
+//        gProp.pSRetoucheFly = 0;
 //}
 
 static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
@@ -4189,8 +4188,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             if ( pParentFlyFrm->GetDrawObj()->GetLayer() !=
                                             pIDDMA->GetHellId() )
             {
-                SwFlyFrm* pOldRet = pRetoucheFly2;
-                pRetoucheFly2 = const_cast<SwFlyFrm*>(this);
+                SwFlyFrm* pOldRet = gProp.pSRetoucheFly2;
+                gProp.pSRetoucheFly2 = const_cast<SwFlyFrm*>(this);
 
                 SwBorderAttrAccess aAccess( SwFrm::GetCache(), pParentFlyFrm );
                 const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -4198,7 +4197,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 aPaintRect._Intersection( pParentFlyFrm->Frm() );
                 pParentFlyFrm->PaintBackground( aPaintRect, pPage, rAttrs, false, false );
 
-                pRetoucheFly2 = pOldRet;
+                gProp.pSRetoucheFly2 = pOldRet;
             }
         }
 
@@ -5626,7 +5625,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
 
 void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 {
-    if( !bHasGrid || pRetoucheFly || pRetoucheFly2 )
+    if( !bHasGrid || gProp.pSRetoucheFly || gProp.pSRetoucheFly2 )
         return;
     SwTextGridItem const*const pGrid(GetGridItem(this));
     if( pGrid && ( OUTDEV_PRINTER != pOut->GetOutDevType() ?
