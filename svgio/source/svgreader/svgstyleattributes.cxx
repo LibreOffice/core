@@ -1230,14 +1230,17 @@ namespace svgio
             mbIsClipPathContent(SVGTokenClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
+            const SvgStyleAttributes* pParentStyle = getParentStyle();
             if(!mbIsClipPathContent)
             {
-                const SvgStyleAttributes* pParentStyle = getParentStyle();
-
                 if(pParentStyle)
                 {
                     mbIsClipPathContent = pParentStyle->mbIsClipPathContent;
                 }
+            }
+            if(pParentStyle)
+            {
+                maVisibility = pParentStyle->maVisibility;
             }
         }
 
