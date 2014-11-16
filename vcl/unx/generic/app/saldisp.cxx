@@ -193,7 +193,7 @@ bool SalDisplay::BestVisual( Display     *pDisplay,
         return rVI.visualid == nDefVID;
 
     try {
-        bool bUseOpenGL = officecfg::Office::Common::VCL::UseOpenGL::get();
+        bool bUseOpenGL = OpenGLHelper::isVCLOpenGLEnabled();
         if( bUseOpenGL && OpenGLHelper::GetVisualInfo( pDisplay, nScreen, rVI ) )
             return rVI.visualid == nDefVID;
     }
