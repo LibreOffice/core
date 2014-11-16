@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_emfplus, \
 	cppuhelper \
 	sal \
 	sfx \
+	subsequenttest \
 	test \
 	tl \
 	unotest \
