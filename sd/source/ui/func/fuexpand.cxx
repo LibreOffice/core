@@ -239,7 +239,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                         // remove hard attributes (Flag to sal_True)
                         SfxItemSet aAttr(mpDoc->GetPool());
-                        aAttr.Put(XLineStyleItem(XLINE_NONE));
+                        aAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
                         aAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
                         pOutlineObj->SetMergedItemSet(aAttr);
                     }

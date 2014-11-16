@@ -116,7 +116,7 @@ namespace sdr
                 // Create own ItemSet and modify as needed
                 // Always hide lines for special calc shadow
                 SfxItemSet aSet(rItemSet);
-                aSet.Put(XLineStyleItem(XLINE_NONE));
+                aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
 
                 if(drawing::FillStyle_HATCH == eShadowStyle)
                 {

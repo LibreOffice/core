@@ -152,7 +152,7 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     pObj->SetMergedItemSet(aDefaultAttr);
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
-    aTempAttr.Put(XLineStyleItem(XLINE_NONE));
+    aTempAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
     aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pObj->SetMergedItemSet(aTempAttr);
@@ -188,7 +188,7 @@ bool SdrExchangeView::Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     pObj->SetMergedItemSet(aDefaultAttr);
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // no fill, no line
-    aTempAttr.Put(XLineStyleItem(XLINE_NONE));
+    aTempAttr.Put(XLineStyleItem(drawing::LineStyle_NONE));
     aTempAttr.Put(XFillStyleItem(drawing::FillStyle_NONE));
 
     pObj->SetMergedItemSet(aTempAttr);

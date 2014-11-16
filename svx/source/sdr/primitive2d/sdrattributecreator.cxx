@@ -218,9 +218,9 @@ namespace drawinglayer
     {
         attribute::SdrLineAttribute createNewSdrLineAttribute(const SfxItemSet& rSet)
         {
-            const XLineStyle eStyle(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
+            const com::sun::star::drawing::LineStyle eStyle(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
 
-            if(XLINE_NONE != eStyle)
+            if(drawing::LineStyle_NONE != eStyle)
             {
                 sal_uInt16 nTransparence(static_cast<const XLineTransparenceItem&>(rSet.Get(XATTR_LINETRANSPARENCE)).GetValue());
 
@@ -238,7 +238,7 @@ namespace drawinglayer
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
-                    if(XLINE_DASH == eStyle)
+                    if(drawing::LineStyle_DASH == eStyle)
                     {
                         const XDash& rDash = static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH)).GetDashValue();
 

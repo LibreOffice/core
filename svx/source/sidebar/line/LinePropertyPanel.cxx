@@ -631,22 +631,22 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
     {
         if(0 == nPos)
         {
-            // XLINE_NONE
-            const XLineStyleItem aItem(XLINE_NONE);
+            // drawing::LineStyle_NONE
+            const XLineStyleItem aItem(drawing::LineStyle_NONE);
 
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &aItem, 0L);
         }
         else if(1 == nPos)
         {
-            // XLINE_SOLID
-            const XLineStyleItem aItem(XLINE_SOLID);
+            // drawing::LineStyle_SOLID
+            const XLineStyleItem aItem(drawing::LineStyle_SOLID);
 
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &aItem, 0L);
         }
         else if (mxLineStyleList.is() && mxLineStyleList->Count() > (long)(nPos - 2))
         {
-            // XLINE_DASH
-            const XLineStyleItem aItemA(XLINE_DASH);
+            // drawing::LineStyle_DASH
+            const XLineStyleItem aItemA(drawing::LineStyle_DASH);
             const XDashEntry* pDashEntry = mxLineStyleList->GetDash(nPos - 2);
             OSL_ENSURE(pDashEntry, "OOps, got empty XDash from XDashList (!)");
             const XLineDashItem aItemB(
@@ -926,14 +926,14 @@ void LinePropertyPanel::SelectLineStyle()
         return;
     }
 
-    const XLineStyle eXLS(mpStyleItem ? (XLineStyle)mpStyleItem->GetValue() : XLINE_NONE);
+    const drawing::LineStyle eXLS(mpStyleItem ? (drawing::LineStyle)mpStyleItem->GetValue() : drawing::LineStyle_NONE);
     bool bSelected(false);
 
     switch(eXLS)
     {
-        case XLINE_NONE:
+        case drawing::LineStyle_NONE:
             break;
-        case XLINE_SOLID:
+        case drawing::LineStyle_SOLID:
             mpLBStyle->SelectEntryPos(1);
             bSelected = true;
             break;

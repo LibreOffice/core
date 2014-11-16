@@ -48,6 +48,8 @@
 #include <svx/polysc3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
+using namespace com::sun::star;
+
 namespace sd {
 
 TYPEINIT1( FuConstruct3dObject, FuConstruct );
@@ -326,7 +328,7 @@ bool FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
             SetStyleSheet(aAttr, pObj);
 
             // extract LineStyle
-            aAttr.Put(XLineStyleItem (XLINE_NONE));
+            aAttr.Put(XLineStyleItem (drawing::LineStyle_NONE));
 
             pObj->SetMergedItemSet(aAttr);
         }
@@ -415,7 +417,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
 
     SfxItemSet aAttr(mpDoc->GetPool());
     SetStyleSheet(aAttr, p3DObj);
-    aAttr.Put(XLineStyleItem (XLINE_NONE));
+    aAttr.Put(XLineStyleItem (drawing::LineStyle_NONE));
     p3DObj->SetMergedItemSet(aAttr);
 
     // make object interactive at once

@@ -96,22 +96,22 @@ void SvxLineBox::Select()
 
     if ( !IsTravelSelect() )
     {
-        XLineStyle eXLS;
+        drawing::LineStyle eXLS;
         sal_Int32 nPos = GetSelectEntryPos();
 
         switch ( nPos )
         {
             case 0:
-                eXLS = XLINE_NONE;
+                eXLS = drawing::LineStyle_NONE;
                 break;
 
             case 1:
-                eXLS = XLINE_SOLID;
+                eXLS = drawing::LineStyle_SOLID;
                 break;
 
             default:
             {
-                eXLS = XLINE_DASH;
+                eXLS = drawing::LineStyle_DASH;
 
                 if ( nPos != LISTBOX_ENTRY_NOTFOUND &&
                      SfxObjectShell::Current()  &&

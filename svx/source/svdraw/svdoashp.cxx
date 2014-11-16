@@ -234,9 +234,9 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
             if(!bLineUsed)
             {
-                XLineStyle eLineStyle = static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
+                drawing::LineStyle eLineStyle = static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
 
-                if(XLINE_NONE != eLineStyle)
+                if(drawing::LineStyle_NONE != eLineStyle)
                 {
                     bLineUsed = true;
                 }

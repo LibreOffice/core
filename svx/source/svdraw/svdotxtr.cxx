@@ -368,7 +368,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     {
                         // set needed items
                         aAttributeSet.Put(XFillColorItem(OUString(), Color(rCandidate.getBColor())));
-                        aAttributeSet.Put(XLineStyleItem(XLINE_NONE));
+                        aAttributeSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                         aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
 
                         // create filled SdrPathObj
@@ -378,7 +378,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
                     {
                         // set needed items
                         aAttributeSet.Put(XLineColorItem(OUString(), Color(rCandidate.getBColor())));
-                        aAttributeSet.Put(XLineStyleItem(XLINE_SOLID));
+                        aAttributeSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
                         aAttributeSet.Put(XLineWidthItem(0));
                         aAttributeSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
 

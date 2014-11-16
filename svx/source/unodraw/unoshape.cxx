@@ -3103,7 +3103,7 @@ void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException, std::ex
     {
         // defaults for graphic objects have changed:
         mpObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
-        mpObj->SetMergedItem( XLineStyleItem( XLINE_NONE ) );
+        mpObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_NONE ) );
     }
 
     // #i68523# special handling for Svx3DCharacterModeItem, this is not saved

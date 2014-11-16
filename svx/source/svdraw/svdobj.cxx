@@ -1035,8 +1035,8 @@ bool SdrObject::SingleObjectPainter(OutputDevice& rOut) const
 
 bool SdrObject::LineGeometryUsageIsNecessary() const
 {
-    XLineStyle eXLS = (XLineStyle)static_cast<const XLineStyleItem&>(GetMergedItem(XATTR_LINESTYLE)).GetValue();
-    return (eXLS != XLINE_NONE);
+    drawing::LineStyle eXLS = (drawing::LineStyle)static_cast<const XLineStyleItem&>(GetMergedItem(XATTR_LINESTYLE)).GetValue();
+    return (eXLS != drawing::LineStyle_NONE);
 }
 
 SdrObject* SdrObject::Clone() const
@@ -1181,7 +1181,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
 {
     basegfx::B2DPolyPolygon aRetval;
 
-    // create cloned object without text, but with XLINE_SOLID,
+    // create cloned object without text, but with drawing::LineStyle_SOLID,
     // COL_BLACK as line color and drawing::FillStyle_NONE
     SdrObject* pClone = Clone();
 
@@ -1224,7 +1224,7 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
         aNewSet.Put(XLineWidthItem(0));
 
         // solid black lines and no fill
-        aNewSet.Put(XLineStyleItem(XLINE_SOLID));
+        aNewSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
         aNewSet.Put(XLineColorItem(OUString(), Color(COL_BLACK)));
         aNewSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
         pClone->SetMergedItemSet(aNewSet);
@@ -2549,7 +2549,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
                 // correct item properties
                 aSet.Put(XLineWidthItem(0L));
-                aSet.Put(XLineStyleItem(XLINE_NONE));
+                aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                 Color aColorLine = static_cast<const XLineColorItem&>(aSet.Get(XATTR_LINECOLOR)).GetColorValue();
                 sal_uInt16 nTransLine = static_cast<const XLineTransparenceItem&>(aSet.Get(XATTR_LINETRANSPARENCE)).GetValue();
                 aSet.Put(XFillColorItem(OUString(), aColorLine));
@@ -2570,7 +2570,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
 
                 aSet.Put(XLineWidthItem(0L));
                 aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
-                aSet.Put(XLineStyleItem(XLINE_SOLID));
+                aSet.Put(XLineStyleItem(drawing::LineStyle_SOLID));
 
                 // it is also necessary to switch off line start and ends here
                 aSet.Put(XLineStartWidthItem(0));
@@ -2607,7 +2607,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                     // Add a clone of the original geometry.
                     aSet.ClearItem();
                     aSet.Put(pRet->GetMergedItemSet());
-                    aSet.Put(XLineStyleItem(XLINE_NONE));
+                    aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                     aSet.Put(XLineWidthItem(0L));
 
                     SdrObject* pClone = pRet->Clone();
@@ -3213,7 +3213,7 @@ bool SdrObject::HasFillStyle() const
 
 bool SdrObject::HasLineStyle() const
 {
-    return static_cast<const XLineStyleItem&>(GetObjectItem(XATTR_LINESTYLE)).GetValue() != XLINE_NONE;
+    return static_cast<const XLineStyleItem&>(GetObjectItem(XATTR_LINESTYLE)).GetValue() != drawing::LineStyle_NONE;
 }
 
 
