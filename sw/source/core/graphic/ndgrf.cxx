@@ -663,6 +663,10 @@ bool SwGrfNode::SavePersistentData()
         return true;
     }
 
+    // swap in first if in storage
+    if( HasEmbeddedStreamName() && !SwapIn() )
+        return false;
+
     // #i44367#
     // Do not delete graphic file in storage, because the graphic file could
     // be referenced by other graphic nodes.
