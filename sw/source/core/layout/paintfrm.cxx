@@ -108,18 +108,18 @@ using ::std::pair;
 using ::std::make_pair;
 
 //other subsidiary lines enabled?
-#define IS_SUBS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
-        !pGlobalShell->GetViewOptions()->IsReadonly() && \
-        !pGlobalShell->GetViewOptions()->IsFormView() &&\
+#define IS_SUBS (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
+        !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() && \
+        !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&\
          SwViewOption::IsDocBoundaries())
 //subsidiary lines for sections
-#define IS_SUBS_SECTION (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
-                         !pGlobalShell->GetViewOptions()->IsReadonly()&&\
-                         !pGlobalShell->GetViewOptions()->IsFormView() &&\
+#define IS_SUBS_SECTION (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
+                         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly()&&\
+                         !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&\
                           SwViewOption::IsSectionBoundaries())
-#define IS_SUBS_FLYS (!pGlobalShell->GetViewOptions()->IsPagePreview() && \
-                      !pGlobalShell->GetViewOptions()->IsReadonly()&&\
-                      !pGlobalShell->GetViewOptions()->IsFormView() &&\
+#define IS_SUBS_FLYS (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
+                      !gProp.pSGlobalShell->GetViewOptions()->IsReadonly()&&\
+                      !gProp.pSGlobalShell->GetViewOptions()->IsFormView() &&\
                        SwViewOption::IsObjectBoundaries())
 
 //Class declaration; here because they are only used in this file
@@ -224,8 +224,6 @@ public:
     }
 };
 
-static SwViewShell *pGlobalShell = 0;
-
 //Only repaint the Fly content as well as the background of the Fly content if
 //a metafile is taken of the Fly.
 static bool bFlyMetafile = false;
@@ -264,33 +262,12 @@ static SfxProgress *pProgress = 0;
 //To optimize the expensive RetouchColor determination
 Color aGlobalRetoucheColor;
 
-namespace {
-
-bool isTableBoundariesEnabled()
-{
-    if (!pGlobalShell->GetViewOptions()->IsTable())
-        return false;
-
-    if (pGlobalShell->GetViewOptions()->IsPagePreview())
-        return false;
-
-    if (pGlobalShell->GetViewOptions()->IsReadonly())
-        return false;
-
-    if (pGlobalShell->GetViewOptions()->IsFormView())
-        return false;
-
-    return SwViewOption::IsTableBoundaries();
-}
-
-}
-
 /**
  * Container for static properties
  */
 struct SwPaintProperties {
     bool                bSFlyMetafile;
-    SwViewShell        *pSGlobalShell;
+    SwViewShell        *pSGlobalShell = 0;
     OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,
                        *pSRetoucheFly2;
@@ -314,6 +291,27 @@ struct SwPaintProperties {
 };
 
 static SwPaintProperties gProp;
+
+namespace {
+
+bool isTableBoundariesEnabled()
+{
+    if (!gProp.pSGlobalShell->GetViewOptions()->IsTable())
+        return false;
+
+    if (gProp.pSGlobalShell->GetViewOptions()->IsPagePreview())
+        return false;
+
+    if (gProp.pSGlobalShell->GetViewOptions()->IsReadonly())
+        return false;
+
+    if (gProp.pSGlobalShell->GetViewOptions()->IsFormView())
+        return false;
+
+    return SwViewOption::IsTableBoundaries();
+}
+
+}
 
 /**
  * Set borders alignment statics
@@ -388,7 +386,7 @@ SwSavePaintStatics::SwSavePaintStatics()
 {
     // Saving globales
     bSFlyMetafile = bFlyMetafile;
-    pSGlobalShell = pGlobalShell;
+    pSGlobalShell = gProp.pSGlobalShell;
     pSFlyMetafileOut = pFlyMetafileOut;
     pSRetoucheFly = pRetoucheFly;
     pSRetoucheFly2 = pRetoucheFly2;
@@ -427,7 +425,7 @@ SwSavePaintStatics::SwSavePaintStatics()
 SwSavePaintStatics::~SwSavePaintStatics()
 {
     // Restoring globales to saved one
-    pGlobalShell       = pSGlobalShell;
+    gProp.pSGlobalShell       = pSGlobalShell;
     bFlyMetafile       = bSFlyMetafile;
     pFlyMetafileOut    = pSFlyMetafileOut;
     pRetoucheFly       = pSRetoucheFly;
@@ -1048,7 +1046,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     pLast = &rLRect.GetColor();
 
                     sal_uLong nOldDrawMode = pOut->GetDrawMode();
-                    if( pGlobalShell->GetWin() &&
+                    if( gProp.pSGlobalShell->GetWin() &&
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                         pOut->SetDrawMode( 0 );
 
@@ -1083,7 +1081,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     pLast = &rLRect.GetColor();
 
                     sal_uLong nOldDrawMode = pOut->GetDrawMode();
-                    if( pGlobalShell->GetWin() &&
+                    if( gProp.pSGlobalShell->GetWin() &&
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     {
                         pOut->SetDrawMode( 0 );
@@ -1170,7 +1168,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
             // set at output device. Recover draw mode after draw of lines.
             // Necessary for the subsidiary lines painted by the fly frames.
             sal_uLong nOldDrawMode = pOut->GetDrawMode();
-            if( pGlobalShell->GetWin() &&
+            if( gProp.pSGlobalShell->GetWin() &&
                 Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
             {
                 pOut->SetDrawMode( 0 );
@@ -1491,7 +1489,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
         }
     }
 
-    ::SwAlignRect( rRect, pGlobalShell );
+    ::SwAlignRect( rRect, gProp.pSGlobalShell );
 }
 
 /**
@@ -1541,8 +1539,8 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //            continue;
 //
 //        if ( !pFly->GetFmt()->GetPrint().GetValue() &&
-//                (OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() ||
-//                pGlobalShell->IsPreview()))
+//                (OUTDEV_PRINTER == gProp.pSGlobalShell->GetOut()->GetOutDevType() ||
+//                gProp.pSGlobalShell->IsPreview()))
 //            continue;
 //
 //        const bool bLowerOfSelf = pSelfFly && pFly->IsLowerOf( pSelfFly );
@@ -1931,7 +1929,7 @@ void DrawGraphic(
     // Add 6th parameter to indicate that method should
     // consider background transparency, saved in the color of the brush item
 {
-    SwViewShell &rSh = *pGlobalShell;
+    SwViewShell &rSh = *gProp.pSGlobalShell;
     bool bReplaceGrfNum = GRFNUM_REPLACE == nGrfNum;
     bool bGrfNum = GRFNUM_NO != nGrfNum;
     Size aGrfSize;
@@ -2169,7 +2167,7 @@ void DrawGraphic(
 
         // #i75614# reset draw mode in high contrast mode in order to get fill color set
         const sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
-        if ( pGlobalShell->GetWin() &&
+        if ( gProp.pSGlobalShell->GetWin() &&
              Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         {
             pOutDev->SetDrawMode( 0 );
@@ -2537,7 +2535,7 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     // overrides the color of non-subsidiary lines.
     const Color* pHCColor = 0;
     sal_uLong nOldDrawMode = rDev.GetDrawMode();
-    if( pGlobalShell->GetWin() &&
+    if( gProp.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pHCColor = &SwViewOption::GetFontColor();
@@ -2548,7 +2546,7 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     SwRect aUpper( pUpper->Prt() );
     aUpper.Pos() += pUpper->Frm().Pos();
     SwRect aUpperAligned( aUpper );
-    ::SwAlignRect( aUpperAligned, pGlobalShell );
+    ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell );
 
     while ( true )
     {
@@ -2647,7 +2645,7 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             const Color* pTmpColor = 0;
             if (0 == aStyles[ 0 ].GetWidth())
             {
-                if (isTableBoundariesEnabled() && pGlobalShell->GetWin())
+                if (isTableBoundariesEnabled() && gProp.pSGlobalShell->GetWin())
                     aStyles[ 0 ].Set( rCol, rCol, rCol, false, 1, 0, 0 );
                 else
                     aStyles[0].SetType(table::BorderLineStyle::NONE);
@@ -2666,7 +2664,7 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
             Point aPaintStart = rDev.PixelToLogic( rDev.LogicToPixel(aStart) );
             Point aPaintEnd = rDev.PixelToLogic( rDev.LogicToPixel(aEnd) );
 
-            if (pGlobalShell->GetWin())
+            if (gProp.pSGlobalShell->GetWin())
             {
                 // The table borders do not use SwAlignRect, but all the other frames do.
                 // Therefore we tweak the outer borders a bit to achieve that the outer
@@ -3159,9 +3157,9 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
         SwRootFrm::bInPaint = bResetRootPaint = true;
 
     SwSavePaintStatics *pStatics = 0;
-    if ( pGlobalShell )
+    if ( gProp.pSGlobalShell )
         pStatics = new SwSavePaintStatics();
-    pGlobalShell = pSh;
+    gProp.pSGlobalShell = pSh;
 
     if( !pSh->GetWin() )
         pProgress = SfxProgress::GetActiveProgress( (SfxObjectShell*) pSh->GetDoc()->GetDocShell() );
@@ -3219,7 +3217,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
     const SwPageFrm *pPage = pSh->Imp()->GetFirstVisPage();
 
-    const bool bBookMode = pGlobalShell->GetViewOptions()->IsViewLayoutBookMode();
+    const bool bBookMode = gProp.pSGlobalShell->GetViewOptions()->IsViewLayoutBookMode();
     if ( bBookMode && pPage->GetPrev() && static_cast<const SwPageFrm*>(pPage->GetPrev())->IsEmptyPage() )
         pPage = static_cast<const SwPageFrm*>(pPage->GetPrev());
 
@@ -3227,7 +3225,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     const bool bGridPainting(pSh->GetWin() && pSh->Imp()->HasDrawView() && pSh->Imp()->GetDrawView()->IsGridVisible());
 
     // Hide all page break controls before showing them again
-    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( gProp.pSGlobalShell );
     if ( pWrtSh )
     {
         SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
@@ -3299,7 +3297,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     pSh->DLPrePaint2(aDLRegion);
                 }
 
-                if(OUTDEV_WINDOW == pGlobalShell->GetOut()->GetOutDevType())
+                if(OUTDEV_WINDOW == gProp.pSGlobalShell->GetOut()->GetOutDevType())
                 {
                     // OD 27.09.2002 #103636# - changed method SwLayVout::Enter(..)
                     // 2nd parameter is no longer <const> and will be set to the
@@ -3481,7 +3479,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     else
     {
         pProgress = 0;
-        pGlobalShell = 0;
+        gProp.pSGlobalShell = 0;
     }
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
@@ -3569,7 +3567,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 
     const SwPageFrm *pPage = 0;
-    const bool bWin   = pGlobalShell->GetWin() ? true : false;
+    const bool bWin   = gProp.pSGlobalShell->GetWin() ? true : false;
 
     while ( IsAnLower( pFrm ) )
     {
@@ -3609,17 +3607,17 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 {
                     aPaintRect.Bottom( rRect.Top() - 1 );
                     if ( aPaintRect.Height() > 0 )
-                        pGlobalShell->InvalidateWindows(aPaintRect);
+                        gProp.pSGlobalShell->InvalidateWindows(aPaintRect);
                     aPaintRect.Top( rRect.Bottom() + 1 );
                     aPaintRect.Bottom( pFrm->Frm().Bottom() );
                     if ( aPaintRect.Height() > 0 )
-                        pGlobalShell->InvalidateWindows(aPaintRect);
+                        gProp.pSGlobalShell->InvalidateWindows(aPaintRect);
                     aPaintRect.Top( pFrm->Frm().Top() );
                     aPaintRect.Bottom( pFrm->Frm().Bottom() );
                 }
                 else
                 {
-                    pGlobalShell->InvalidateWindows( aPaintRect );
+                    gProp.pSGlobalShell->InvalidateWindows( aPaintRect );
                     pFrm = pFrm->GetNext();
                     if ( pFrm && (bCnt = pFrm->IsCntntFrm()) )
                         pFrm->Calc();
@@ -3715,10 +3713,10 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorP
 
 void SwPageFrm::PaintBreak( ) const
 {
-    if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
-         !pGlobalShell->GetViewOptions()->IsPDFExport() &&
-         !pGlobalShell->GetViewOptions()->IsReadonly() &&
-         !pGlobalShell->IsPreview() )
+    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
+         !gProp.pSGlobalShell->IsPreview() )
     {
         const SwFrm* pBodyFrm = Lower();
         while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
@@ -3734,7 +3732,7 @@ void SwPageFrm::PaintBreak( ) const
             if ( pFirstFrm && pFirstFrm->IsTabFrm() )
                 pFlowFrm = static_cast< const SwTabFrm* >( pFirstFrm );
 
-            SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
+            SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( gProp.pSGlobalShell );
             if ( pWrtSh )
             {
                 SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
@@ -3752,10 +3750,10 @@ void SwPageFrm::PaintBreak( ) const
 
 void SwColumnFrm::PaintBreak( ) const
 {
-    if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
-         !pGlobalShell->GetViewOptions()->IsPDFExport() &&
-         !pGlobalShell->GetViewOptions()->IsReadonly() &&
-         !pGlobalShell->IsPreview() )
+    if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER  &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
+         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
+         !gProp.pSGlobalShell->IsPreview() )
     {
         const SwFrm* pBodyFrm = Lower();
         while ( pBodyFrm && !pBodyFrm->IsBodyFrm() )
@@ -3771,8 +3769,8 @@ void SwColumnFrm::PaintBreak( ) const
                 //      header/footer marker
                 //    * Non-printing characters are shown, as this is more consistent
                 //      with other formatting marks
-                if ( !pGlobalShell->IsShowHeaderFooterSeparator( Header ) &&
-                     !pGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
+                if ( !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) &&
+                     !gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
                 {
                     SwRect aRect( pCnt->Prt() );
                     aRect.Pos() += pCnt->Frm().Pos();
@@ -3798,7 +3796,7 @@ void SwColumnFrm::PaintBreak( ) const
                     OUString aBreakText = SW_RESSTR(STR_COLUMN_BREAK);
 
                     basegfx::B2DVector aFontSize;
-                    OutputDevice* pOut = pGlobalShell->GetOut();
+                    OutputDevice* pOut = gProp.pSGlobalShell->GetOut();
                     vcl::Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
                     aFont.SetHeight( 8 * 20 );
                     pOut->SetFont( aFont );
@@ -3849,7 +3847,7 @@ void SwLayoutFrm::PaintBreak( ) const
 
 void SwPageFrm::PaintDecorators( ) const
 {
-    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( pGlobalShell );
+    SwWrtShell* pWrtSh = dynamic_cast< SwWrtShell* >( gProp.pSGlobalShell );
     if ( pWrtSh )
     {
         SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
@@ -3859,22 +3857,22 @@ void SwPageFrm::PaintDecorators( ) const
         {
             SwRect aBodyRect( pBody->Frm() );
 
-            if ( pGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
-                 !pGlobalShell->GetViewOptions()->IsPDFExport() &&
-                 !pGlobalShell->IsPreview() &&
-                 !pGlobalShell->GetViewOptions()->IsReadonly() &&
-                 !pGlobalShell->GetViewOptions()->getBrowseMode() &&
-                 ( pGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
-                   pGlobalShell->IsShowHeaderFooterSeparator( Footer ) ) )
+            if ( gProp.pSGlobalShell->GetOut()->GetOutDevType() != OUTDEV_PRINTER &&
+                 !gProp.pSGlobalShell->GetViewOptions()->IsPDFExport() &&
+                 !gProp.pSGlobalShell->IsPreview() &&
+                 !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() &&
+                 !gProp.pSGlobalShell->GetViewOptions()->getBrowseMode() &&
+                 ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) ||
+                   gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) ) )
             {
                 bool bRtl = Application::GetSettings().GetLayoutRTL();
-                const SwRect& rVisArea = pGlobalShell->VisArea();
+                const SwRect& rVisArea = gProp.pSGlobalShell->VisArea();
                 long nXOff = std::min( aBodyRect.Right(), rVisArea.Right() );
                 if ( bRtl )
                     nXOff = std::max( aBodyRect.Left(), rVisArea.Left() );
 
                 // Header
-                if ( pGlobalShell->IsShowHeaderFooterSeparator( Header ) )
+                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Header ) )
                 {
                     const SwFrm* pHeaderFrm = Lower();
                     if ( !pHeaderFrm->IsHeaderFrm() )
@@ -3886,7 +3884,7 @@ void SwPageFrm::PaintDecorators( ) const
                 }
 
                 // Footer
-                if ( pGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
+                if ( gProp.pSGlobalShell->IsShowHeaderFooterSeparator( Footer ) )
                 {
                     const SwFrm* pFtnContFrm = Lower();
                     while ( pFtnContFrm )
@@ -4109,7 +4107,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     SwRect aRect( rRect );
     aRect._Intersection( Frm() );
 
-    OutputDevice* pOut = pGlobalShell->GetOut();
+    OutputDevice* pOut = gProp.pSGlobalShell->GetOut();
     pOut->Push( PushFlags::CLIPREGION );
     pOut->SetClipRegion();
     const SwPageFrm* pPage = FindPageFrm();
@@ -4271,7 +4269,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     // OD 19.12.2002 #106318# - fly frame will paint it's subsidiary lines and
     // the subsidiary lines of its lowers on its own, due to overlapping with
     // other fly frames or other objects.
-    if( pGlobalShell->GetWin()
+    if( gProp.pSGlobalShell->GetWin()
         && !bIsChart ) //#i102950# don't paint additional borders for charts
     {
         bool bSubsLineRectsCreated;
@@ -4342,7 +4340,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
 void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
-    const SwViewOption* pViewOption = pGlobalShell->GetViewOptions();
+    const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
     {
         // #i29550#
@@ -4360,20 +4358,20 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
 
             SwTabFrmPainter aHelper(*this);
-            aHelper.PaintLines(*pGlobalShell->GetOut(), rRect);
+            aHelper.PaintLines(*gProp.pSGlobalShell->GetOut(), rRect);
         }
 
         SwLayoutFrm::Paint( rRect );
     }
     // OD 10.01.2003 #i6467# - no light grey rectangle for page preview
-    else if ( pGlobalShell->GetWin() && !pGlobalShell->IsPreview() )
+    else if ( gProp.pSGlobalShell->GetWin() && !gProp.pSGlobalShell->IsPreview() )
     {
         // OD 10.01.2003 #i6467# - intersect output rectangle with table frame
         SwRect aTabRect( Prt() );
         aTabRect.Pos() += Frm().Pos();
         SwRect aTabOutRect( rRect );
         aTabOutRect.Intersection( aTabRect );
-        pViewOption->DrawRect( pGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
+        pViewOption->DrawRect( gProp.pSGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
     }
     ((SwTabFrm*)this)->ResetComplete();
 }
@@ -4557,11 +4555,11 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
     }
 
-    OutputDevice *pOut = pGlobalShell->GetOut();
+    OutputDevice *pOut = gProp.pSGlobalShell->GetOut();
 
     sal_uLong nOldDrawMode = pOut->GetDrawMode();
     Color aShadowColor( rShadow.GetColor().GetRGBColor() );
-    if( !aRegion.empty() && pGlobalShell->GetWin() &&
+    if( !aRegion.empty() && gProp.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         // In high contrast mode, the output device has already set the
@@ -4654,7 +4652,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     sal_uInt8 nSubCol = ( IsCellFrm() || IsRowFrm() ) ? SUBCOL_TAB :
                    ( IsInSct() ? SUBCOL_SECT :
                    ( IsInFly() ? SUBCOL_FLY : SUBCOL_PAGE ) );
-    if( pColor && pGlobalShell->GetWin() &&
+    if( pColor && gProp.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pColor = &SwViewOption::GetFontColor();
@@ -4721,7 +4719,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // right of border rectangle has to be checked and adjusted
                 Point aCompPt( _iorRect.Right(), 0 );
                 Point aRefPt( aCompPt.X() + 1, aCompPt.Y() );
-                lcl_CompPxPosAndAdjustPos( *(pGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(gProp.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           true, -1 );
                 _iorRect.Right( aCompPt.X() );
@@ -4731,7 +4729,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // top of border rectangle has to be checked and adjusted
                 Point aCompPt( 0, _iorRect.Top() );
                 Point aRefPt( aCompPt.X(), aCompPt.Y() - 1 );
-                lcl_CompPxPosAndAdjustPos( *(pGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(gProp.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           false, +1 );
                 _iorRect.Top( aCompPt.Y() );
@@ -4771,7 +4769,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // left of border rectangle has to be checked and adjusted
                 Point aCompPt( _iorRect.Left(), 0 );
                 Point aRefPt( aCompPt.X() - 1, aCompPt.Y() );
-                lcl_CompPxPosAndAdjustPos( *(pGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(gProp.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           true, +1 );
                 _iorRect.Left( aCompPt.X() );
@@ -4781,7 +4779,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // bottom of border rectangle has to be checked and adjusted
                 Point aCompPt( 0, _iorRect.Bottom() );
                 Point aRefPt( aCompPt.X(), aCompPt.Y() + 1 );
-                lcl_CompPxPosAndAdjustPos( *(pGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(gProp.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           false, -1 );
                 _iorRect.Bottom( aCompPt.Y() );
@@ -4960,7 +4958,7 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
     {
         // OD 06.05.2003 #107169# - init boolean indicating printer output device.
         const bool bPrtOutputDev =
-                ( OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() );
+                ( OUTDEV_PRINTER == gProp.pSGlobalShell->GetOut()->GetOutDevType() );
 
         // OD 06.05.2003 #107169# - add 6th parameter
         ::lcl_SubTopBottom( aRect, rBox, _rAttrs, _rFrm, _rRectFn, bPrtOutputDev );
@@ -5041,7 +5039,7 @@ void PaintCharacterBorder(
     const bool bJoinWithNext )
 {
     SwRect aAlignedRect(rPaintArea);
-    SwAlignRect(aAlignedRect, pGlobalShell);
+    SwAlignRect(aAlignedRect, gProp.pSGlobalShell);
 
     bool bTop = true;
     bool bBottom = true;
@@ -5389,7 +5387,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         return;
 
     if ( (GetType() & 0x2000) &&    //Cell
-         !pGlobalShell->GetViewOptions()->IsTable() )
+         !gProp.pSGlobalShell->GetViewOptions()->IsTable() )
         return;
 
     // #i29550#
@@ -5433,7 +5431,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         //happen, that some parts won't be processed.
         SwRect aRect( Prt() );
         aRect += Frm().Pos();
-        ::SwAlignRect( aRect, pGlobalShell );
+        ::SwAlignRect( aRect, gProp.pSGlobalShell );
         // OD 27.09.2002 #103636# - new local boolean variable in order to
         // suspend border paint under special cases - see below.
         // NOTE: This is a fix for the implementation of feature #99657#.
@@ -6387,7 +6385,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     if ( !pPage )
         pPage = FindPageFrm();
 
-    OutputDevice *pOut = pGlobalShell->GetOut();
+    OutputDevice *pOut = gProp.pSGlobalShell->GetOut();
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
@@ -6404,7 +6402,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     // <SwPageFrm::Paintmargin(..)>.
     if ( IsPageFrm() && !bOnlyTxtBackground)
     {
-        static_cast<const SwPageFrm*>(this)->PaintMarginArea( rRect, pGlobalShell );
+        static_cast<const SwPageFrm*>(this)->PaintMarginArea( rRect, gProp.pSGlobalShell );
     }
 
     // paint background
@@ -6437,7 +6435,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     // OD 20.01.2003 #i1837# - no paint of table background, if corresponding
     // option is *not* set.
     if( IsTabFrm() &&
-        !pGlobalShell->GetViewOptions()->IsTable() )
+        !gProp.pSGlobalShell->GetViewOptions()->IsTable() )
     {
         return;
     }
@@ -6446,7 +6444,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     if( IsCellFrm() && IsCoveredCell() )
         return;
 
-    SwViewShell *pSh = pGlobalShell;
+    SwViewShell *pSh = gProp.pSGlobalShell;
 
     // #i16816# tagged pdf support
     SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
@@ -6522,7 +6520,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                  (IsTxtFrm() && Prt().SSize() == Frm().SSize()) )
             {
                 aRect = Frm();
-                ::SwAlignRect( aRect, pGlobalShell );
+                ::SwAlignRect( aRect, gProp.pSGlobalShell );
             }
             else
             {
@@ -6597,7 +6595,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     //{
                     //    if ( 1 < aRegion.Count() )
                     //    {
-                    //        ::SwAlignRect( aRegion[i], pGlobalShell );
+                    //        ::SwAlignRect( aRegion[i], gProp.pSGlobalShell );
                     //        if( !aRegion[i].HasArea() )
                     //          continue;
                     //    }
@@ -6685,10 +6683,10 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
             {
                 // OD 20.12.2002 #106318# - paint special subsidiary lines
                 // and delete its container
-                pSpecSubsLines->PaintSubsidiary( pGlobalShell->GetOut(), NULL );
+                pSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), NULL );
                 DELETEZ( pSpecSubsLines );
 
-                pSubsLines->PaintSubsidiary( pGlobalShell->GetOut(), pLines );
+                pSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), pLines );
                 DELETEZ( pSubsLines );
             }
         }
@@ -6943,7 +6941,7 @@ static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateColumnAreaDelimi
 void SwPageFrm::PaintSubsidiaryLines( const SwPageFrm *,
                                         const SwRect & ) const
 {
-    if ( !pGlobalShell->IsHeaderFooterEdit() )
+    if ( !gProp.pSGlobalShell->IsHeaderFooterEdit() )
     {
         const SwFrm* pLay = Lower();
         const SwFrm* pFtnCont = NULL;
@@ -6961,7 +6959,7 @@ void SwPageFrm::PaintSubsidiaryLines( const SwPageFrm *,
         if ( pFtnCont )
             aArea.AddBottom( pFtnCont->Frm().Bottom() - aArea.Bottom() );
 
-        if ( !pGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+        if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
             ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
         else
             ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
@@ -6999,9 +6997,9 @@ void SwColumnFrm::PaintSubsidiaryLines( const SwPageFrm *,
     if ( pFtnCont )
         aArea.AddBottom( pFtnCont->Frm().Bottom() - aArea.Bottom() );
 
-    ::SwAlignRect( aArea, pGlobalShell );
+    ::SwAlignRect( aArea, gProp.pSGlobalShell );
 
-    if ( !pGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+    if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
         ProcessPrimitives( lcl_CreateColumnAreaDelimiterPrimitives( aArea ) );
     else
         ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
@@ -7028,11 +7026,11 @@ void SwBodyFrm::PaintSubsidiaryLines( const SwPageFrm *,
 
 void SwHeadFootFrm::PaintSubsidiaryLines( const SwPageFrm *, const SwRect & ) const
 {
-    if ( pGlobalShell->IsHeaderFooterEdit() )
+    if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
     {
         SwRect aArea( Prt() );
         aArea.Pos() += Frm().Pos();
-        if ( !pGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
+        if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
             ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
         else
             ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
@@ -7089,7 +7087,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     if ( !bUseFrmArea )
         aOriginal.Pos() += Frm().Pos();
 
-    ::SwAlignRect( aOriginal, pGlobalShell );
+    ::SwAlignRect( aOriginal, gProp.pSGlobalShell );
 
     if ( !aOriginal.IsOver( rRect ) )
         return;
@@ -7191,7 +7189,7 @@ void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
         || (sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE;
 
     SwRect aRect( rRect );
-    ::SwAlignRect( aRect, pGlobalShell );
+    ::SwAlignRect( aRect, gProp.pSGlobalShell );
     if ( aRect.HasArea() )
     {
         SwLayoutFrm::RefreshExtraData( aRect );
@@ -7337,11 +7335,11 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         return;
 
     OSL_ENSURE( GetUpper(), "Retouche try without Upper." );
-    OSL_ENSURE( getRootFrm()->GetCurrShell() && pGlobalShell->GetWin(), "Retouche on a printer?" );
+    OSL_ENSURE( getRootFrm()->GetCurrShell() && gProp.pSGlobalShell->GetWin(), "Retouche on a printer?" );
 
     SwRect aRetouche( GetUpper()->PaintArea() );
     aRetouche.Top( Frm().Top() + Frm().Height() );
-    aRetouche.Intersection( pGlobalShell->VisArea() );
+    aRetouche.Intersection( gProp.pSGlobalShell->VisArea() );
 
     if ( aRetouche.HasArea() )
     {
@@ -7600,8 +7598,8 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
     SwViewShell *pSh;
     if ( pFirst && 0 != ( pSh = pFirst->getRootFrm()->GetCurrShell()) )
     {
-        SwViewShell *pOldGlobal = pGlobalShell;
-        pGlobalShell = pSh;
+        SwViewShell *pOldGlobal = gProp.pSGlobalShell;
+        gProp.pSGlobalShell = pSh;
 
         bool bNoteURL = pMap &&
             SfxItemState::SET != GetAttrSet().GetItemState( RES_URL, true );
@@ -7692,7 +7690,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
             delete pNoteURL;
             pNoteURL = NULL;
         }
-        pGlobalShell = pOldGlobal;
+        gProp.pSGlobalShell = pOldGlobal;
     }
     return aRet;
 }
