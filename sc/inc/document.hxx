@@ -27,7 +27,6 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
-#include "brdcst.hxx"
 #include "tabopparams.hxx"
 #include "types.hxx"
 #include <formula/grammar.hxx>
@@ -37,6 +36,7 @@
 #include "compressedarray.hxx"
 #include "calcmacros.hxx"
 #include "calcconfig.hxx"
+#include <simplehintids.hxx>
 #include <tools/gen.hxx>
 #include <svl/zforlist.hxx>
 
@@ -185,6 +185,8 @@ class ScDocumentImport;
 class ScPostIt;
 struct ScSubTotalParam;
 struct ScQueryParam;
+class ScHint;
+class SvtBroadcaster;
 
 namespace com { namespace sun { namespace star {
     namespace lang {

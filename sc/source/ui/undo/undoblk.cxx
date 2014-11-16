@@ -46,6 +46,7 @@
 #include "refundo.hxx"
 #include "undoolk.hxx"
 #include "clipparam.hxx"
+#include <brdcst.hxx>
 #include "sc.hrc"
 #include <rowheightcontext.hxx>
 #include <refhint.hxx>

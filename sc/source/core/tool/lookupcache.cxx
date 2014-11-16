@@ -20,6 +20,7 @@
 #include "lookupcache.hxx"
 #include "document.hxx"
 #include "queryentry.hxx"
+#include <brdcst.hxx>
 
 ScLookupCache::QueryCriteria::QueryCriteria( const ScQueryEntry& rEntry ) :
     mfVal(0.0), mbAlloc(false), mbString(false)

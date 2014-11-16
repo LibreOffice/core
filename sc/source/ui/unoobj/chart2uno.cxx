@@ -40,6 +40,7 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 #include "scmatrix.hxx"
+#include <brdcst.hxx>
 
 #include <formula/opcode.hxx>
 #include <svl/sharedstring.hxx>
