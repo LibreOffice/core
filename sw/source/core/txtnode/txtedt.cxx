@@ -681,7 +681,7 @@ OUString SwTxtNode::GetCurWord( sal_Int32 nPos ) const
         (void)bEnd;
 #endif
         aBndry =
-            rxBreak->getWordBoundary( m_Text, nPos, aLocale, nWordType, sal_True );
+            rxBreak->getWordBoundary( m_Text, nPos, aLocale, nWordType, true );
 
         // if no word was found use previous word (if any)
         if (aBndry.startPos == aBndry.endPos)
@@ -836,7 +836,7 @@ bool SwScanner::NextWord()
 
         // get the word boundaries
         aBound = g_pBreakIt->GetBreakIter()->getWordBoundary( aText, nBegin,
-                g_pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
+                g_pBreakIt->GetLocale( aCurrLang ), nWordType, true );
         OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
         // we don't want to include preceding text
@@ -1286,7 +1286,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             Boundary aBound =
                 g_pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetTxt(), nBegin,
                     g_pBreakIt->GetLocale( eActLang ),
-                    WordType::DICTIONARY_WORD, sal_True );
+                    WordType::DICTIONARY_WORD, true );
             nBegin = aBound.startPos;
         }
 
@@ -1678,12 +1678,12 @@ void SwTxtNode::TransliterateText(
                         GetTxt(), nStt,
                         g_pBreakIt->GetLocale( GetLang( nStt ) ),
                         nWordType,
-                        sal_True /*prefer forward direction*/);
+                        true /*prefer forward direction*/);
             aEndBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
                         GetTxt(), nEnd,
                         g_pBreakIt->GetLocale( GetLang( nEnd ) ),
                         nWordType,
-                        sal_False /*prefer backward direction*/);
+                        false /*prefer backward direction*/);
 
             // prevent backtracking to the previous word if selection is at word boundary
             if (aSttBndry.endPos <= nStt)

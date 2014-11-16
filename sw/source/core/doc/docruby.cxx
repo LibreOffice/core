@@ -236,7 +236,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
                             rTxt, nStart,
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
-                            sal_True ).startPos;
+                            true ).startPos;
         if (nWordStt < nStart && nWordStt >= 0)
         {
             nStart = nWordStt;
@@ -306,7 +306,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
                             rTxt, nStart,
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
-                            sal_True ).endPos;
+                            true ).endPos;
                 if( 0 > nWordEnd || nWordEnd > nEnd || nWordEnd == nStart )
                     nWordEnd = nEnd;
             }

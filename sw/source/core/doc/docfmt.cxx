@@ -267,7 +267,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                            sal_True );
+                            true );
 
             if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
             {

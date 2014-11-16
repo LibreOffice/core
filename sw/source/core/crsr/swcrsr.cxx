@@ -1200,7 +1200,7 @@ bool SwCursor::IsInWordWT( sal_Int16 nWordType ) const
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
-                            sal_True );
+                            true );
 
         bRet = aBoundary.startPos != aBoundary.endPos &&
                 aBoundary.startPos <= nPtPos &&
@@ -1242,7 +1242,7 @@ bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
-                            sal_False ).startPos;
+                            false ).startPos;
 
         if (nPtPos < pTxtNd->GetTxt().getLength() && nPtPos >= 0)
         {
@@ -1266,7 +1266,7 @@ bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
                             pTxtNd->GetTxt(), nPtPos,
                             g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                             nWordType,
-                            sal_True ).endPos;
+                            true ).endPos;
 
         if (nPtPos <= pTxtNd->GetTxt().getLength() && nPtPos >= 0 &&
             GetPoint()->nContent.GetIndex() != nPtPos )

@@ -597,7 +597,7 @@ void SwHHCWrapper::Convert()
                 const sal_Int32 nPos = m_pConvArgs->pStartIdx->GetIndex();
                 Boundary aBoundary( g_pBreakIt->GetBreakIter()->
                         getWordBoundary( aText, nPos, g_pBreakIt->GetLocale( m_pConvArgs->nConvSrcLang ),
-                                WordType::DICTIONARY_WORD, sal_True ) );
+                                WordType::DICTIONARY_WORD, true ) );
 
                 // valid result found?
                 if (aBoundary.startPos < aText.getLength() &&

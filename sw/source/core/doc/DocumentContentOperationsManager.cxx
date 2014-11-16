@@ -1315,7 +1315,7 @@ namespace //local functions originally from docfmt.cxx
                                     pTxtNd->GetTxt(), nPtPos,
                                     g_pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
                                     WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                                    sal_True );
+                                    true );
 
                     if( aBndry.startPos < nPtPos && nPtPos < aBndry.endPos )
                     {
@@ -2513,7 +2513,7 @@ void DocumentContentOperationsManager::TransliterateText(
                         pTNd->GetTxt(), nSttCnt,
                         g_pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
                         WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                        sal_True );
+                        true );
 
         if( aBndry.startPos < nSttCnt && nSttCnt < aBndry.endPos )
         {
