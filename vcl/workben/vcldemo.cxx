@@ -712,7 +712,7 @@ public:
                 Size aSize(maIcons[i].GetSizePixel());
 //              sAL_DEBUG("Draw icon '" << maIconNames[i] << "'");
 
-                if (!i % 4)
+                if (!(i % 4))
                     rDev.DrawBitmapEx(p, maIcons[i]);
                 else
                 {
