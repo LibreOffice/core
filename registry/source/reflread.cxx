@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <cstring>
 #include <memory>
 #include <new>
 
@@ -52,6 +54,8 @@ const sal_uInt16 majorVersion = 0x0001;
 class BlopObject
 {
 public:
+    struct BoundsError {};
+
     const sal_uInt8* m_pBuffer;
     sal_uInt32      m_bufferLen;
     bool            m_isCopied;
@@ -63,27 +67,33 @@ public:
 
     inline sal_uInt8 readBYTE(sal_uInt32 index) const
     {
+        if (index >= m_bufferLen) {
+            throw BoundsError();
+        }
         return m_pBuffer[index];
     }
 
     inline sal_Int16 readINT16(sal_uInt32 index) const
     {
+        if (m_bufferLen < 2 || index >= m_bufferLen - 1) {
+            throw BoundsError();
+        }
         return ((m_pBuffer[index] << 8) | (m_pBuffer[index+1] << 0));
     }
 
     inline sal_uInt16 readUINT16(sal_uInt32 index) const
     {
-        //This is untainted data which comes from a controlled source
-        //so, using a byte-swapping pattern which coverity doesn't
-        //detect as such
-        //http://security.coverity.com/blog/2014/Apr/on-detecting-heartbleed-with-static-analysis.html
-        sal_uInt32 v = m_pBuffer[index]; v <<= 8;
-        v |= m_pBuffer[index+1];
-        return v;
+        if (m_bufferLen < 2 || index >= m_bufferLen - 1) {
+            throw BoundsError();
+        }
+        return ((m_pBuffer[index] << 8) | (m_pBuffer[index+1] << 0));
     }
 
     inline sal_Int32 readINT32(sal_uInt32 index) const
     {
+        if (m_bufferLen < 4 || index >= m_bufferLen - 3) {
+            throw BoundsError();
+        }
         return (
             (m_pBuffer[index]   << 24) |
             (m_pBuffer[index+1] << 16) |
@@ -94,19 +104,22 @@ public:
 
     inline sal_uInt32 readUINT32(sal_uInt32 index) const
     {
-        //This is untainted data which comes from a controlled source
-        //so, using a byte-swapping pattern which coverity doesn't
-        //detect as such
-        //http://security.coverity.com/blog/2014/Apr/on-detecting-heartbleed-with-static-analysis.html
-        sal_uInt32 v = m_pBuffer[index]; v <<= 8;
-        v |= m_pBuffer[index+1]; v <<= 8;
-        v |= m_pBuffer[index+2]; v <<= 8;
-        v |= m_pBuffer[index+3];
-        return v;
+        if (m_bufferLen < 4 || index >= m_bufferLen - 3) {
+            throw BoundsError();
+        }
+        return (
+            (m_pBuffer[index]   << 24) |
+            (m_pBuffer[index+1] << 16) |
+            (m_pBuffer[index+2] << 8)  |
+            (m_pBuffer[index+3] << 0)
+        );
     }
 
     inline sal_Int64 readINT64(sal_uInt32 index) const
     {
+        if (m_bufferLen < 8 || index >= m_bufferLen - 7) {
+            throw BoundsError();
+        }
         return (
             ((sal_Int64)m_pBuffer[index]   << 56) |
             ((sal_Int64)m_pBuffer[index+1] << 48) |
@@ -121,6 +134,9 @@ public:
 
     inline sal_uInt64 readUINT64(sal_uInt32 index) const
     {
+        if (m_bufferLen < 8 || index >= m_bufferLen - 7) {
+            throw BoundsError();
+        }
         return (
             ((sal_uInt64)m_pBuffer[index]   << 56) |
             ((sal_uInt64)m_pBuffer[index+1] << 48) |
@@ -244,8 +260,8 @@ public:
 
     StringCache* m_pStringCache;
 
-    ConstantPool(const sal_uInt8* buffer, sal_uInt16 numEntries)
-        : BlopObject(buffer, 0, false)
+    ConstantPool(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries)
+        : BlopObject(buffer, len, false)
         , m_numOfEntries(numEntries)
         , m_pIndex(NULL)
         , m_pStringCache(NULL)
@@ -346,7 +362,11 @@ const sal_Char* ConstantPool::readUTF8NameConstant(sal_uInt16 index)
     {
         if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_UTF8_NAME)
         {
-            aName = (const sal_Char*) (m_pBuffer + m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA);
+            sal_uInt32 n = m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA;
+            if (n < m_bufferLen && std::memchr(m_pBuffer, 0, n) != nullptr)
+            {
+                aName = (const sal_Char*) (m_pBuffer + n);
+            }
         }
     }
 
@@ -543,7 +563,12 @@ const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index)
 
             if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_CONST_STRING)
             {
-                m_pIndex[index - 1] = -1 * m_pStringCache->createString(m_pBuffer + m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA);
+                sal_uInt32 n = m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA;
+                if (n >= m_bufferLen || std::memchr(m_pBuffer, 0, n) == nullptr)
+                {
+                    throw BoundsError();
+                }
+                m_pIndex[index - 1] = -1 * m_pStringCache->createString(m_pBuffer + n);
             }
         }
 
@@ -591,8 +616,8 @@ public:
     size_t          m_FIELD_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
-    FieldList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
-        : BlopObject(buffer, 0, false)
+    FieldList(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries, ConstantPool* pCP)
+        : BlopObject(buffer, len, false)
         , m_numOfEntries(numEntries)
         , m_pCP(pCP)
     {
@@ -625,7 +650,11 @@ const sal_Char* FieldList::getFieldName(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_NAME));
+        try {
+            aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_NAME));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aName;
@@ -637,7 +666,11 @@ const sal_Char* FieldList::getFieldType(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_TYPE));
+        try {
+            aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_TYPE));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aName;
@@ -649,7 +682,11 @@ RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aAccess = (RTFieldAccess) readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_ACCESS);
+        try {
+            aAccess = (RTFieldAccess) readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_ACCESS);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aAccess;
@@ -658,13 +695,12 @@ RTFieldAccess FieldList::getFieldAccess(sal_uInt16 index)
 RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* value)
 {
     RTValueType ret = RT_TYPE_NONE;
-
-    if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
-    {
-        sal_uInt16 cpIndex = readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_VALUE);
-
-        switch (m_pCP->readTag(cpIndex))
+    try {
+        if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
         {
+            sal_uInt16 cpIndex = readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_VALUE);
+            switch (m_pCP->readTag(cpIndex))
+            {
             case CP_TAG_CONST_BOOL:
                 value->aBool = m_pCP->readBOOLConstant(cpIndex);
                 ret = RT_TYPE_BOOL;
@@ -711,9 +747,11 @@ RTValueType FieldList::getFieldConstValue(sal_uInt16 index, RTConstValueUnion* v
                 break;
             default:
                 break;
+            }
         }
+    } catch (BlopObject::BoundsError &) {
+        SAL_WARN("registry", "bad data");
     }
-
     return ret;
 }
 
@@ -723,7 +761,11 @@ const sal_Char* FieldList::getFieldDoku(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aDoku = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_DOKU));
+        try {
+            aDoku = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_DOKU));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aDoku;
@@ -735,7 +777,11 @@ const sal_Char* FieldList::getFieldFileName(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aFileName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_FILENAME));
+        try {
+            aFileName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_FIELD_ENTRY_SIZE) + FIELD_OFFSET_FILENAME));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aFileName;
@@ -756,8 +802,8 @@ public:
     size_t          m_REFERENCE_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
-    ReferenceList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
-        : BlopObject(buffer, 0, false)
+    ReferenceList(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries, ConstantPool* pCP)
+        : BlopObject(buffer, len, false)
         , m_numOfEntries(numEntries)
         , m_pCP(pCP)
     {
@@ -787,7 +833,11 @@ const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_NAME));
+        try {
+            aName = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_NAME));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aName;
@@ -799,7 +849,11 @@ RTReferenceType ReferenceList::getReferenceType(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        refType = (RTReferenceType) readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_TYPE);
+        try {
+            refType = (RTReferenceType) readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_TYPE);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return refType;
@@ -811,7 +865,11 @@ const sal_Char* ReferenceList::getReferenceDoku(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aDoku = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_DOKU));
+        try {
+            aDoku = m_pCP->readUTF8NameConstant(readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_DOKU));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aDoku;
@@ -823,7 +881,11 @@ RTFieldAccess ReferenceList::getReferenceAccess(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aAccess = (RTFieldAccess) readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_ACCESS);
+        try {
+            aAccess = (RTFieldAccess) readUINT16(sizeof(sal_uInt16) + (index * m_REFERENCE_ENTRY_SIZE) + REFERENCE_OFFSET_ACCESS);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aAccess;
@@ -846,8 +908,8 @@ public:
     sal_uInt32*     m_pIndex;
     ConstantPool*   m_pCP;
 
-    MethodList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
-        : BlopObject(buffer, 0, false)
+    MethodList(const sal_uInt8* buffer, sal_uInt32 len, sal_uInt16 numEntries, ConstantPool* pCP)
+        : BlopObject(buffer, len, false)
         , m_numOfEntries(numEntries)
         , m_pIndex(NULL)
         , m_pCP(pCP)
@@ -926,7 +988,11 @@ const sal_Char* MethodList::getMethodName(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_NAME));
+        try {
+            aName = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_NAME));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aName;
@@ -938,7 +1004,11 @@ sal_uInt16 MethodList::getMethodParamCount(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aCount = readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT);
+        try {
+            aCount = readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aCount;
@@ -947,53 +1017,59 @@ sal_uInt16 MethodList::getMethodParamCount(sal_uInt16 index)
 const sal_Char* MethodList::getMethodParamType(sal_uInt16 index, sal_uInt16 paramIndex)
 {
     const sal_Char* aName = NULL;
-
-    if ((m_numOfEntries > 0) &&
-        (index <= m_numOfEntries) &&
-        (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
-    {
-        aName = m_pCP->readUTF8NameConstant(
-            readUINT16(
-                m_pIndex[index] +
-                calcMethodParamIndex(paramIndex) +
-                PARAM_OFFSET_TYPE));
+    try {
+        if ((m_numOfEntries > 0) &&
+            (index <= m_numOfEntries) &&
+            (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
+        {
+            aName = m_pCP->readUTF8NameConstant(
+                readUINT16(
+                    m_pIndex[index] +
+                    calcMethodParamIndex(paramIndex) +
+                    PARAM_OFFSET_TYPE));
+        }
+    } catch (BlopObject::BoundsError &) {
+        SAL_WARN("registry", "bad data");
     }
-
     return aName;
 }
 
 const sal_Char* MethodList::getMethodParamName(sal_uInt16 index, sal_uInt16 paramIndex)
 {
     const sal_Char* aName = NULL;
-
-    if ((m_numOfEntries > 0) &&
-        (index <= m_numOfEntries) &&
-        (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
-    {
-        aName = m_pCP->readUTF8NameConstant(
-            readUINT16(
-                m_pIndex[index] +
-                calcMethodParamIndex(paramIndex) +
-                PARAM_OFFSET_NAME));
+    try {
+        if ((m_numOfEntries > 0) &&
+            (index <= m_numOfEntries) &&
+            (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
+        {
+            aName = m_pCP->readUTF8NameConstant(
+                readUINT16(
+                    m_pIndex[index] +
+                    calcMethodParamIndex(paramIndex) +
+                    PARAM_OFFSET_NAME));
+        }
+    } catch (BlopObject::BoundsError &) {
+        SAL_WARN("registry", "bad data");
     }
-
     return aName;
 }
 
 RTParamMode MethodList::getMethodParamMode(sal_uInt16 index, sal_uInt16 paramIndex)
 {
     RTParamMode aMode = RT_PARAM_INVALID;
-
-    if ((m_numOfEntries > 0) &&
-        (index <= m_numOfEntries) &&
-        (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
-    {
-        aMode = (RTParamMode) readUINT16(
+    try {
+        if ((m_numOfEntries > 0) &&
+            (index <= m_numOfEntries) &&
+            (paramIndex <= readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)))
+        {
+            aMode = (RTParamMode) readUINT16(
                 m_pIndex[index] +
                 calcMethodParamIndex(paramIndex) +
                 PARAM_OFFSET_MODE);
+        }
+    } catch (BlopObject::BoundsError &) {
+        SAL_WARN("registry", "bad data");
     }
-
     return aMode;
 }
 
@@ -1003,7 +1079,11 @@ sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aCount = readUINT16(m_pIndex[index] + calcMethodParamIndex(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)));
+        try {
+            aCount = readUINT16(m_pIndex[index] + calcMethodParamIndex(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aCount;
@@ -1015,15 +1095,18 @@ const sal_Char* MethodList::getMethodExcType(sal_uInt16 index, sal_uInt16 excInd
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        sal_uInt32 excOffset = m_pIndex[index] + calcMethodParamIndex(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT));
-
-        if (excIndex <= readUINT16(excOffset))
-        {
-            aName = m_pCP->readUTF8NameConstant(
-                readUINT16(
-                    excOffset +
-                    sizeof(sal_uInt16) +
-                    (excIndex * sizeof(sal_uInt16))));
+        try {
+            sal_uInt32 excOffset = m_pIndex[index] + calcMethodParamIndex(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT));
+            if (excIndex <= readUINT16(excOffset))
+            {
+                aName = m_pCP->readUTF8NameConstant(
+                    readUINT16(
+                        excOffset +
+                        sizeof(sal_uInt16) +
+                        (excIndex * sizeof(sal_uInt16))));
+            }
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
         }
     }
 
@@ -1036,7 +1119,11 @@ const sal_Char* MethodList::getMethodReturnType(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aName = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_RETURN));
+        try {
+            aName = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_RETURN));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aName;
@@ -1048,7 +1135,11 @@ RTMethodMode MethodList::getMethodMode(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aMode = (RTMethodMode) readUINT16(m_pIndex[index] + METHOD_OFFSET_MODE);
+        try {
+            aMode = (RTMethodMode) readUINT16(m_pIndex[index] + METHOD_OFFSET_MODE);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aMode;
@@ -1060,7 +1151,11 @@ const sal_Char* MethodList::getMethodDoku(sal_uInt16 index)
 
     if ((m_numOfEntries > 0) && (index <= m_numOfEntries))
     {
-        aDoku = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_DOKU));
+        try {
+            aDoku = m_pCP->readUTF8NameConstant(readUINT16(m_pIndex[index] + METHOD_OFFSET_DOKU));
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 
     return aDoku;
@@ -1074,64 +1169,77 @@ const sal_Char* MethodList::getMethodDoku(sal_uInt16 index)
 
 class TypeRegistryEntry: public BlopObject {
 public:
-    ConstantPool*   m_pCP;
-    FieldList*      m_pFields;
-    MethodList*     m_pMethods;
-    ReferenceList*  m_pReferences;
+    std::unique_ptr<ConstantPool> m_pCP;
+    std::unique_ptr<FieldList> m_pFields;
+    std::unique_ptr<MethodList> m_pMethods;
+    std::unique_ptr<ReferenceList> m_pReferences;
     sal_uInt32      m_refCount;
     sal_uInt16      m_nSuperTypes;
-    sal_uInt16      m_offset_SUPERTYPES;
+    sal_uInt32      m_offset_SUPERTYPES;
 
     TypeRegistryEntry(
         const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer);
         // throws std::bad_alloc
-
-    ~TypeRegistryEntry();
 
     typereg_Version getVersion() const;
 };
 
 TypeRegistryEntry::TypeRegistryEntry(
     const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer):
-    BlopObject(buffer, len, copyBuffer), m_pCP(NULL), m_pFields(NULL),
-    m_pMethods(NULL), m_pReferences(NULL), m_refCount(1), m_nSuperTypes(0),
+    BlopObject(buffer, len, copyBuffer), m_refCount(1), m_nSuperTypes(0),
     m_offset_SUPERTYPES(0)
 {
     std::size_t const entrySize = sizeof(sal_uInt16);
     sal_uInt16 nHeaderEntries = readUINT16(OFFSET_N_ENTRIES);
-    sal_uInt16 offset_N_SUPERTYPES = OFFSET_N_ENTRIES + entrySize + (nHeaderEntries * entrySize);
-    m_offset_SUPERTYPES = offset_N_SUPERTYPES + entrySize;
+    sal_uInt32 offset_N_SUPERTYPES = OFFSET_N_ENTRIES + entrySize + (nHeaderEntries * entrySize); // cannot overflow
+    m_offset_SUPERTYPES = offset_N_SUPERTYPES + entrySize; // cannot overflow
     m_nSuperTypes = readUINT16(offset_N_SUPERTYPES);
 
-    sal_uInt16 offset_CP_SIZE = m_offset_SUPERTYPES + (m_nSuperTypes * entrySize);
-    sal_uInt16 offset_CP = offset_CP_SIZE + entrySize;
+    sal_uInt32 offset_CP_SIZE = m_offset_SUPERTYPES + (m_nSuperTypes * entrySize); // cannot overflow
+    sal_uInt32 offset_CP = offset_CP_SIZE + entrySize; // cannot overflow
 
-    m_pCP = new ConstantPool(m_pBuffer + offset_CP, readUINT16(offset_CP_SIZE));
+    if (offset_CP > m_bufferLen) {
+        throw BoundsError();
+    }
+    m_pCP.reset(
+        new ConstantPool(
+            m_pBuffer + offset_CP, m_bufferLen - offset_CP,
+            readUINT16(offset_CP_SIZE)));
 
-    sal_uInt32 offset = offset_CP + m_pCP->parseIndex();
+    sal_uInt32 offset = offset_CP + m_pCP->parseIndex(); //TODO: overflow
 
-    m_pFields = new FieldList(
-        m_pBuffer + offset + entrySize, readUINT16(offset), m_pCP);
+    assert(m_bufferLen >= entrySize);
+    if (offset > m_bufferLen - entrySize) {
+        throw BoundsError();
+    }
+    m_pFields.reset(
+        new FieldList(
+            m_pBuffer + offset + entrySize, m_bufferLen - (offset + entrySize),
+            readUINT16(offset), m_pCP.get()));
 
-    offset += sizeof(sal_uInt16) + m_pFields->parseIndex();
+    offset += sizeof(sal_uInt16) + m_pFields->parseIndex(); //TODO: overflow
 
-    m_pMethods = new MethodList(
-        m_pBuffer + offset + entrySize, readUINT16(offset), m_pCP);
+    assert(m_bufferLen >= entrySize);
+    if (offset > m_bufferLen - entrySize) {
+        throw BoundsError();
+    }
+    m_pMethods.reset(
+        new MethodList(
+            m_pBuffer + offset + entrySize, m_bufferLen - (offset + entrySize),
+            readUINT16(offset), m_pCP.get()));
 
-    offset += sizeof(sal_uInt16) + m_pMethods->parseIndex();
+    offset += sizeof(sal_uInt16) + m_pMethods->parseIndex(); //TODO: overflow
 
-    m_pReferences = new ReferenceList(
-        m_pBuffer + offset + entrySize, readUINT16(offset), m_pCP);
+    assert(m_bufferLen >= entrySize);
+    if (offset > m_bufferLen - entrySize) {
+        throw BoundsError();
+    }
+    m_pReferences.reset(
+        new ReferenceList(
+            m_pBuffer + offset + entrySize, m_bufferLen - (offset + entrySize),
+            readUINT16(offset), m_pCP.get()));
 
     m_pReferences->parseIndex();
-}
-
-TypeRegistryEntry::~TypeRegistryEntry()
-{
-    delete m_pCP;
-    delete m_pFields;
-    delete m_pMethods;
-    delete m_pReferences;
 }
 
 typereg_Version TypeRegistryEntry::getVersion() const {
@@ -1158,24 +1266,29 @@ REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_create(
     }
     std::unique_ptr< TypeRegistryEntry > entry;
     try {
-        entry.reset(
-            new TypeRegistryEntry(
-                static_cast< sal_uInt8 const * >(buffer),
-                static_cast< sal_uInt32 >(length), copy));
-    } catch (std::bad_alloc &) {
+        try {
+            entry.reset(
+                new TypeRegistryEntry(
+                    static_cast< sal_uInt8 const * >(buffer),
+                    static_cast< sal_uInt32 >(length), copy));
+        } catch (std::bad_alloc &) {
+            return false;
+        }
+        if (entry->readUINT32(OFFSET_SIZE) != length) {
+            *result = 0;
+            return true;
+        }
+        typereg_Version version = entry->getVersion();;
+        if (version < TYPEREG_VERSION_0 || version > maxVersion) {
+            *result = 0;
+            return true;
+        }
+        *result = entry.release();
+        return true;
+    } catch (BlopObject::BoundsError &) {
+        SAL_WARN("registry", "bad data");
         return false;
     }
-    if (entry->readUINT32(OFFSET_SIZE) != length) {
-        *result = 0;
-        return true;
-    }
-    typereg_Version version = entry->getVersion();
-    if (version < TYPEREG_VERSION_0 || version > maxVersion) {
-        *result = 0;
-        return true;
-    }
-    *result = entry.release();
-    return true;
 }
 
 static TypeReaderImpl TYPEREG_CALLTYPE createEntry(const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer)
@@ -1205,84 +1318,103 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_release(void * hEntry) SAL_TH
 }
 
 REG_DLLPUBLIC typereg_Version TYPEREG_CALLTYPE typereg_reader_getVersion(void * handle) SAL_THROW_EXTERN_C() {
-    return handle == 0
-        ? TYPEREG_VERSION_0
-        : static_cast< TypeRegistryEntry * >(handle)->getVersion();
+    if (handle != nullptr) {
+        try {
+            return static_cast< TypeRegistryEntry * >(handle)->getVersion();
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
+    }
+    return TYPEREG_VERSION_0;
 }
 
 static sal_uInt16 TYPEREG_CALLTYPE getMinorVersion(TypeReaderImpl hEntry)
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL) return 0;
-
-    return pEntry->readUINT16(OFFSET_MINOR_VERSION);
+    if (pEntry != nullptr) {
+        try {
+            return pEntry->readUINT16(OFFSET_MINOR_VERSION);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
+    }
+    return 0;
 }
 
 static sal_uInt16 TYPEREG_CALLTYPE getMajorVersion(TypeReaderImpl hEntry)
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL) return 0;
-
-    return pEntry->readUINT16(OFFSET_MAJOR_VERSION);
+    if (pEntry != nullptr) {
+        try {
+            return pEntry->readUINT16(OFFSET_MAJOR_VERSION);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
+    }
+    return 0;
 }
 
 REG_DLLPUBLIC RTTypeClass TYPEREG_CALLTYPE typereg_reader_getTypeClass(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL) return RT_TYPE_INVALID;
-
-    return (RTTypeClass)
-        (pEntry->readUINT16(OFFSET_TYPE_CLASS) & ~RT_TYPE_PUBLISHED);
+    if (pEntry != nullptr) {
+        try {
+            return (RTTypeClass)
+                (pEntry->readUINT16(OFFSET_TYPE_CLASS) & ~RT_TYPE_PUBLISHED);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
+    }
+    return RT_TYPE_INVALID;
 }
 
 REG_DLLPUBLIC sal_Bool TYPEREG_CALLTYPE typereg_reader_isPublished(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry * entry = static_cast< TypeRegistryEntry * >(hEntry);
-    return entry != 0
-        && (entry->readUINT16(OFFSET_TYPE_CLASS) & RT_TYPE_PUBLISHED) != 0;
+    if (entry != nullptr) {
+        try {
+            return (entry->readUINT16(OFFSET_TYPE_CLASS) & RT_TYPE_PUBLISHED) != 0;
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
+    }
+    return false;
 }
 
 REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getTypeName(void * hEntry, rtl_uString** pTypeName)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL)
-    {
-        rtl_uString_new(pTypeName);
-        return;
+    if (pEntry != nullptr) {
+        try {
+            const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_THIS_TYPE));
+            rtl_string2UString(
+                pTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+            return;
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
-
-    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_THIS_TYPE));
-    rtl_string2UString(
-        pTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
-        RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+    rtl_uString_new(pTypeName);
 }
 
 
 static void TYPEREG_CALLTYPE getSuperTypeName(TypeReaderImpl hEntry, rtl_uString** pSuperTypeName)
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL)
-    {
-        rtl_uString_new(pSuperTypeName);
-        return;
+    if (pEntry != nullptr && pEntry->m_nSuperTypes != 0) {
+        try {
+            const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES )); //+ (index * sizeof(sal_uInt16))));
+            rtl_string2UString(
+                pSuperTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+            return;
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
-
-    if (pEntry->m_nSuperTypes == 0)
-    {
-        rtl_uString_new(pSuperTypeName);
-        return;
-    }
-
-    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES )); //+ (index * sizeof(sal_uInt16))));
-    rtl_string2UString(
-        pSuperTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
-        RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+    rtl_uString_new(pSuperTypeName);
 }
 
 static void TYPEREG_CALLTYPE getUik(TypeReaderImpl hEntry, RTUik* uik)
@@ -1291,7 +1423,11 @@ static void TYPEREG_CALLTYPE getUik(TypeReaderImpl hEntry, RTUik* uik)
 
     if (pEntry != NULL)
     {
-        pEntry->m_pCP->readUIK(pEntry->readUINT16(OFFSET_UIK), uik);
+        try {
+            pEntry->m_pCP->readUIK(pEntry->readUINT16(OFFSET_UIK), uik);
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
 }
 
@@ -1299,34 +1435,36 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getDocumentation(void * hEntr
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL)
-    {
-        rtl_uString_new(pDoku);
-        return;
+    if (pEntry != nullptr) {
+        try {
+            const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_DOKU));
+            rtl_string2UString(
+                pDoku, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+            return;
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
-
-    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_DOKU));
-    rtl_string2UString(
-        pDoku, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
-        RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+    rtl_uString_new(pDoku);
 }
 
 REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getFileName(void * hEntry, rtl_uString** pFileName)
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL)
-    {
-        rtl_uString_new(pFileName);
-        return;
+    if (pEntry != nullptr) {
+        try {
+            const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_FILENAME));
+            rtl_string2UString(
+                pFileName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+            return;
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
-
-    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(OFFSET_FILENAME));
-    rtl_string2UString(
-        pFileName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
-        RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+    rtl_uString_new(pFileName);
 }
 
 
@@ -1698,18 +1836,19 @@ REG_DLLPUBLIC void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
     SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
-
-    if (pEntry == NULL)
-    {
-        rtl_uString_new(pSuperTypeName);
-        return;
+    if (pEntry != nullptr) {
+        try {
+            OSL_ASSERT(index < pEntry->m_nSuperTypes);
+            const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES + (index * sizeof(sal_uInt16))));
+            rtl_string2UString(
+                pSuperTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
+                RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+            return;
+        } catch (BlopObject::BoundsError &) {
+            SAL_WARN("registry", "bad data");
+        }
     }
-
-    OSL_ASSERT(index < pEntry->m_nSuperTypes);
-    const sal_Char* pTmp = pEntry->m_pCP->readUTF8NameConstant(pEntry->readUINT16(pEntry->m_offset_SUPERTYPES + (index * sizeof(sal_uInt16))));
-    rtl_string2UString(
-        pSuperTypeName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
-        RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
+    rtl_uString_new(pSuperTypeName);
 }
 
 REG_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api(void)
