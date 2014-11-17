@@ -1071,10 +1071,6 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
                 {
                     bBracket = true;
                     delete pExpr;
-                    if( bByVal )
-                    {
-                        pParser->Error( SbERR_LVALUE_EXPECTED );
-                    }
                     return;
                 }
             }
