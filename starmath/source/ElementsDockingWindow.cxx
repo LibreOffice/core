@@ -415,7 +415,7 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
             Rectangle rect(element->mBoxLocation, element->mBoxSize);
             if (rect.IsInside(rMouseEvent.GetPosPixel()))
             {
-                aSelectHdlLink.Call(element);
+                selectedSignal(element);
                 return;
             }
         }
@@ -650,13 +650,12 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     }
 
     maElementListBox.SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
+    maElementListBox.SelectEntry(SM_RESSTR(RID_CATEGORY_UNARY_BINARY_OPERATORS));
 
     maElementsControl.SetBackground( Color( COL_WHITE ) );
     maElementsControl.SetTextColor( Color( COL_BLACK ) );
-    maElementsControl.SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHdl));
-
-    maElementListBox.SelectEntry(SM_RESSTR(RID_CATEGORY_UNARY_BINARY_OPERATORS));
     maElementsControl.setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
+    maElementsControl.selectedSignal.connect( boost::bind( &SmElementsDockingWindow::SelectClickHandler, this, _1 ) );
 
     FreeResource();
 }
@@ -682,7 +681,7 @@ void SmElementsDockingWindow::EndDocking( const Rectangle& rReactangle, bool bFl
     maElementsControl.setVerticalMode(bVertical);
 }
 
-IMPL_LINK( SmElementsDockingWindow, SelectClickHdl, SmElement*, pElement)
+void SmElementsDockingWindow::SelectClickHandler( SmElement* pElement )
 {
     SmViewShell* pViewSh = GetView();
 
@@ -692,7 +691,6 @@ IMPL_LINK( SmElementsDockingWindow, SelectClickHdl, SmElement*, pElement)
             SID_INSERTCOMMANDTEXT, SfxCallMode::RECORD,
             new SfxStringItem(SID_INSERTCOMMANDTEXT, pElement->getText()), 0L);
     }
-    return 0;
 }
 
 IMPL_LINK( SmElementsDockingWindow, ElementSelectedHandle, ListBox*, pList)

@@ -21,6 +21,7 @@
 #define INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/signals2/signal.hpp>
 #include <sfx2/dockwin.hxx>
 #include <svx/dlgctrl.hxx>
 #include <vcl/scrbar.hxx>
@@ -80,8 +81,6 @@ class SmElementsControl : public Control
     static const sal_uInt16 aFormats[][2];
     static const sal_uInt16 aOthers[][2];
 
-    Link aSelectHdlLink;
-
     virtual void Paint(const Rectangle&) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -115,10 +114,10 @@ public:
 
     void setVerticalMode(bool bVertical);
 
-    void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
-
     DECL_LINK( ScrollHdl, void* );
     void DoScroll(long nDelta);
+
+    boost::signals2::signal< void ( SmElement* ) > selectedSignal;
 };
 
 class SmElementsDockingWindow : public SfxDockingWindow
@@ -131,7 +130,7 @@ class SmElementsDockingWindow : public SfxDockingWindow
     virtual void Resize() SAL_OVERRIDE;
     SmViewShell* GetView();
 
-    DECL_LINK(SelectClickHdl, SmElement*);
+    void SelectClickHandler(SmElement* pElement);
     DECL_LINK(ElementSelectedHandle, ListBox*);
 
 public:
