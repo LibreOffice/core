@@ -1655,11 +1655,6 @@ void SmParser::Oper()
             }
             break;
 
-        case TOVERBRACE :
-        case TUNDERBRACE :
-                pNode = new SmMathSymbolNode(m_aCurToken);
-            break;
-
         case TOPER :
             NextToken();
 
@@ -1668,7 +1663,7 @@ void SmParser::Oper()
             break;
 
         default :
-            SAL_WARN("starmath", "unknown case");
+            assert(false && "unknown case");
     }
     m_aNodeStack.push(pNode);
 
