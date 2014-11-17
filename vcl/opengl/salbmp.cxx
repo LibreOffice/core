@@ -472,14 +472,17 @@ sal_uInt16 OpenGLSalBitmap::GetBitCount() const
 
 bool OpenGLSalBitmap::makeCurrent()
 {
-    OpenGLContextProvider *pProvider;
-    pProvider = dynamic_cast< OpenGLContextProvider* >( ImplGetDefaultWindow()->GetGraphics() );
-    if( pProvider == NULL )
+    if (!mpContext || !mpContext->isInitialized())
     {
-        SAL_WARN( "vcl.opengl", "Couldn't get default OpenGL context provider" );
-        return false;
+        OpenGLContextProvider *pProvider;
+        pProvider = dynamic_cast< OpenGLContextProvider* >( ImplGetDefaultWindow()->GetGraphics() );
+        if( pProvider == NULL )
+        {
+            SAL_WARN( "vcl.opengl", "Couldn't get default OpenGL context provider" );
+            return false;
+        }
+        mpContext = pProvider->GetOpenGLContext();
     }
-    mpContext = pProvider->GetOpenGLContext();
     mpContext->makeCurrent();
     return true;
 }
