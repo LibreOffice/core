@@ -124,9 +124,11 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dtrapezoid.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -184,8 +186,11 @@
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/frame/XSessionManagerClient.hpp>
@@ -272,6 +277,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/string.hxx>
@@ -298,8 +304,6 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <iomanip>
 #include <iostream>
-#include <jerror.h>
-#include <jpeglib.h>
 #include <lcms2.h>
 #include <limits.h>
 #include <limits>
@@ -308,6 +312,7 @@
 #include <math.h>
 #include <memory>
 #include <numeric>
+#include <o3tl/numeric.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
@@ -364,6 +369,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fontenum.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 #include <tools/line.hxx>

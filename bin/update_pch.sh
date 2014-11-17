@@ -150,8 +150,8 @@ function filter_ignore()
     grep -v -F -e '#include <oledb.h>' | \
     grep -v -F -e '#include <cert.h>' | \
     grep -v -F -e '#include <xmlreader/xmlreader.hxx>' | \
-    grep -v -F -e '#include "jerror.h"' | \
-    grep -v -F -e '#include "jpeglib.h"'
+    grep -v -e '#include [<"]jerror.h[">]' | \
+    grep -v -e '#include [<"]jpeglib.h[">]'
 )
 
     # " in #include "foo" breaks echo down below, so " -> @
