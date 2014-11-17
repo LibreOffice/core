@@ -221,6 +221,7 @@ int main( int argc, char *argv[] )
      * create the application process;
      * if successful, execvp doesn't return to the calling process
      */
+    /* coverity[tainted_string] - createCommandName creates a safe string */
     execvp( cmdname, argv );
     fprintf( stderr, "Error: execvp failed!\n" );
     fflush( stderr );
