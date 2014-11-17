@@ -156,7 +156,6 @@
 #include "futxtatt.hxx"
 #include "fuvect.hxx"
 #include "futext.hxx"
-#include "fuzoom.hxx"
 #include "helpids.h"
 #include "optsitem.hxx"
 #include "sdabstdlg.hxx"
@@ -1219,16 +1218,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore (); // we generate independent macros !!
-        }
-        break;
-
-        case SID_ZOOM_MODE:
-        case SID_ZOOM_PANNING:
-        {
-            mbZoomOnPage = false;
-            SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
-            Invalidate( SID_ZOOM_TOOLBOX );
-            rReq.Ignore ();
         }
         break;
 

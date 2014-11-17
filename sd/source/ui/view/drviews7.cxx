@@ -289,7 +289,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         // map images of the toolboxes
         UpdateToolboxImages( rSet );
 
-        if( nId != SID_ZOOM_TOOLBOX &&
+        if( nSId != SID_ZOOM_TOOLBOX &&
             nSId != SID_DRAWTBX_INSERT &&
             nSId != SID_POSITION &&
             nSId != SID_OBJECT_ALIGN )

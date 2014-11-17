@@ -94,6 +94,7 @@
 #include "optsitem.hxx"
 #include "Window.hxx"
 #include "fuformatpaintbrush.hxx"
+#include "fuzoom.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -532,6 +533,15 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             rBind.Update( nSId );
             break;
         }
+
+        case SID_ZOOM_MODE:
+        case SID_ZOOM_PANNING:
+        {
+            mbZoomOnPage = false;
+            SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            rReq.Done();
+        }
+        break;
 
         default:
            break;
