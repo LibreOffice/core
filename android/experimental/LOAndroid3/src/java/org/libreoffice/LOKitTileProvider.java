@@ -49,7 +49,7 @@ public class LOKitTileProvider implements TileProvider {
             Log.i(LOGTAG, "====> mOffice.documentLoad() returned null, trying to restart 'Office' and loading again");
             mOffice.destroy();
             Log.i(LOGTAG, "====> mOffice.destroy() done");
-            long handle = LibreOfficeKit.getLibreOfficeKitHandle();
+            ByteBuffer handle = LibreOfficeKit.getLibreOfficeKitHandle();
             Log.i(LOGTAG, "====> getLibreOfficeKitHandle() = " + handle);
             mOffice = new Office(handle);
             Log.i(LOGTAG, "====> new Office created");
