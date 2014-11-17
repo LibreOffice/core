@@ -150,8 +150,15 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;
     rStrm >> nCount;
-    OSL_ENSURE( rStrm.GetRecLeft() == static_cast< sal_Size >( 4 * nCount ),
-        "XclImpPalette::ReadPalette - size mismatch" );
+
+    const size_t nMinRecordSize = 4;
+    const size_t nMaxRecords = rStrm.GetRecLeft() / nMinRecordSize;
+    if (nCount > nMaxRecords)
+    {
+        SAL_WARN("sc", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nCount << " claimed, truncating");
+        nCount = nMaxRecords;
+    }
 
     maColorTable.resize( nCount );
     Color aColor;
@@ -164,7 +171,6 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 }
 
 // FONT record - font information =============================================
-
 XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mbHasCharSet( false ),
