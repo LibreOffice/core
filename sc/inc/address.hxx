@@ -110,22 +110,22 @@ const SCROW W16MAXROW = W16MAXROWCOUNT - 1;
 //  old stuff defines end
 inline bool ValidCol( SCCOL nCol )
 {
-    return static_cast<SCCOL>(0) <= nCol && nCol <= MAXCOL;
+    return nCol >= static_cast<SCCOL>(0) && nCol <= MAXCOL;
 }
 
 inline bool ValidRow( SCROW nRow )
 {
-    return static_cast<SCROW>(0) <= nRow && nRow <= MAXROW;
+    return nRow >= static_cast<SCROW>(0) && nRow <= MAXROW;
 }
 
 inline bool ValidTab( SCTAB nTab )
 {
-    return static_cast<SCTAB>(0) <= nTab && nTab <= MAXTAB;
+    return nTab >= static_cast<SCTAB>(0) && nTab <= MAXTAB;
 }
 
 inline bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
 {
-    return static_cast<SCTAB>(0) <= nTab && nTab <= nMaxTab;
+    return nTab >= static_cast<SCTAB>(0) && nTab <= nMaxTab;
 }
 
 inline bool ValidColRow( SCCOL nCol, SCROW nRow )
