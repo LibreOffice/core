@@ -23,6 +23,10 @@
 #include <postmac.h>
 #endif
 
+#if defined( WNT )
+#include <win/saldata.hxx>
+#endif
+
 using namespace com::sun::star;
 
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
@@ -200,8 +204,6 @@ bool WGLisExtensionSupported(const char *extension)
         if ((p==supported || p[-1]==' ') && (p[extlen]=='\0' || p[extlen]==' '))
             return 1; // Match
     }
-
-    CHECK_GL_ERROR();
 }
 
 bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat,
@@ -767,7 +769,8 @@ bool OpenGLContext::init(HDC hDC, HWND hWnd)
 bool OpenGLContext::ImplInit()
 {
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
-    PIXELFORMATDESCRIPTOR PixelFormatFront = // PixelFormat Tells Windows How We Want Things To Be
+    // PixelFormat tells Windows how we want things to be
+    PIXELFORMATDESCRIPTOR PixelFormatFront =
     {
         sizeof(PIXELFORMATDESCRIPTOR),
         1,                              // Version Number
@@ -815,17 +818,25 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-    SetPixelFormat(m_aGLWin.hDC, WindowPix, &PixelFormatFront);
+    if (!SetPixelFormat(m_aGLWin.hDC, WindowPix, &PixelFormatFront))
+    {
+        ImplWriteLastError(GetLastError(), "SetPixelFormat in OpenGLContext::ImplInit");
+        SAL_WARN("vcl.opengl", "SetPixelFormat failed");
+        return false;
+    }
+
     m_aGLWin.hRC = wglCreateContext(m_aGLWin.hDC);
     if (m_aGLWin.hRC == NULL)
     {
+        ImplWriteLastError(GetLastError(), "wglCreateContext in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglCreateContext failed");
         return false;
     }
 
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
-        SAL_WARN("vcl.opengl", "wglMakeCurrent failed: " << GetLastError());
+        ImplWriteLastError(GetLastError(), "wglMakeCurrent in OpenGLContext::ImplInit");
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
         return false;
     }
 

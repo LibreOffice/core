@@ -5974,64 +5974,27 @@ bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LR
     return bResult;
 }
 
-bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
+void ImplWriteLastError(DWORD lastError, const char *szApiCall)
 {
-    static int first=1;
-    // if VCL_LOGFILE_ENABLED is set, Win32 API error messages can be written
-    // to %TMP%/vcl.log or %TEMP%/vcl.log
-    static char *logEnabled = getenv("VCL_LOGFILE_ENABLED");
-    if( logEnabled )
+#if OSL_DEBUG_LEVEL > 0
+    LPVOID lpMsgBuf;
+    if (FormatMessageA(
+                FORMAT_MESSAGE_ALLOCATE_BUFFER |
+                FORMAT_MESSAGE_FROM_SYSTEM |
+                FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL,
+                lastError & 0xffff,
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                (LPTSTR) &lpMsgBuf,
+                0,
+                NULL ))
     {
-        bool bSuccess = FALSE;
-        static char *szTmp = getenv("TMP");
-        if( !szTmp || !*szTmp )
-            szTmp = getenv("TEMP");
-        if( szTmp && *szTmp )
-        {
-            char fname[5000];
-            strcpy( fname, szTmp );
-            if( fname[strlen(fname) - 1] != '\\' )
-                strcat( fname, "\\");
-            strcat( fname, "vcl.log" );
-            FILE *fp = fopen( fname, "a" ); // always append
-            if( fp )
-            {
-                if( first )
-                {
-                    first = 0;
-                    fprintf( fp, "Process ID: %ld (0x%lx)\n", GetCurrentProcessId(), GetCurrentProcessId() );
-                }
-                time_t aclock;
-                time( &aclock );                           // Get time in seconds
-                struct tm *newtime = localtime( &aclock ); // Convert time to struct tm form
-                fprintf( fp, asctime( newtime ) );         // print time stamp
-
-                fprintf( fp, "%s returned %lu (0x%lx)\n", szApiCall, lastError, lastError );
-                bSuccess = TRUE;    // may be FormatMessage fails but we wrote at least the error code
-
-                LPVOID lpMsgBuf;
-                if (FormatMessageA(
-                    FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                    FORMAT_MESSAGE_FROM_SYSTEM |
-                    FORMAT_MESSAGE_IGNORE_INSERTS,
-                    NULL,
-                    lastError,
-                    MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-                    (LPSTR) &lpMsgBuf,
-                    0,
-                    NULL ))
-                {
-                    fprintf( fp, " %s\n", (LPSTR)lpMsgBuf );
-                    LocalFree( lpMsgBuf );
-                }
-
-                fclose( fp );
-            }
-        }
-        return bSuccess;
+        SAL_WARN("vcl", "API call: " << szApiCall << " returned " << lastError << " (0x" << std::hex << lastError << "): " << (LPTSTR) lpMsgBuf);
+        LocalFree(lpMsgBuf);
     }
     else
-        return TRUE;
+        SAL_WARN("vcl", "API call: " << szApiCall << " returned " << lastError << " (0x" << std::hex << lastError << ")");
+#endif
 }
 
 #ifdef _WIN32

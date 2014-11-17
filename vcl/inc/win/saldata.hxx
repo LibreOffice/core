@@ -183,7 +183,7 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 void EmitTimerCallback();
 
 void SalTestMouseLeave();
-bool ImplWriteLastError( DWORD lastError, const char *szApiCall );
+void ImplWriteLastError(DWORD lastError, const char *szApiCall);
 
 long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
