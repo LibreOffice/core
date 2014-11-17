@@ -351,7 +351,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
         done
 
         # Put gtk/gnome stuff into gnome package
-        mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/program/gnome-open-url.bin
         mv_file_between_flists gnome_list.txt core_list.txt $INSTALLDIR/program/ucpgvfs1lo.so
 
         # Ship ooqstart for gnome in gnome package

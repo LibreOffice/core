@@ -123,7 +123,6 @@ ifneq ($(filter-out MACOSX WNT,$(OS)),)
 ifneq ($(ENABLE_HEADLESS),TRUE)
 
 $(eval $(call gb_Module_add_targets,shell,\
-	Executable_gnome_open_url \
 	Library_recentfile \
 	Package_scripts \
 	Package_scripts_gnome \

@@ -173,7 +173,6 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,python, \
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Helper_register_executables_for_install,OOO,gnome, \
-	gnome-open-url.bin \
 	$(if $(ENABLE_GTK),\
 		xid-fullscreen-on-all-monitors \
 	) \
