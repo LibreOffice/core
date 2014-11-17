@@ -146,11 +146,11 @@ void ListLevel::SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle )
     // AFAICT .docx spec does not identify which numberings or paragraph
     // styles are actually the ones to be used for outlines (chapter numbering),
     // it only kind of says somewhere that they should be named Heading1 to Heading9.
-    const OUString styleId = pStyle->sStyleIdentifierD;
-    m_outline = ( styleId.getLength() == RTL_CONSTASCII_LENGTH( "Heading1" )
-        && styleId.match( "Heading", 0 )
-        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] >= '1'
-        && styleId[ RTL_CONSTASCII_LENGTH( "Heading" ) ] <= '9' );
+    const OUString styleId= pStyle->sConvertedStyleName;
+    m_outline = ( styleId.getLength() == RTL_CONSTASCII_LENGTH( "Heading 1" )
+        && styleId.match( "Heading ", 0 )
+        && styleId[ RTL_CONSTASCII_LENGTH( "Heading " ) ] >= '1'
+        && styleId[ RTL_CONSTASCII_LENGTH( "Heading " ) ] <= '9' );
 }
 
 sal_Int16 ListLevel::GetParentNumbering( const OUString& sText, sal_Int16 nLevel,
