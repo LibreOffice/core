@@ -584,18 +584,20 @@ public:
 
     /**
      * Reset column position of formula cells within specified row range.
-     * Reference positions are also adjusted to reflect the new position so
-     * that the formula cells still reference the same cells or ranges after
-     * the the position change.  The position of a formula cell before the
-     * call is interpreted as the old position of that cell.
+     * If bUpdateRefs==true then reference positions are also adjusted to
+     * reflect the new position so that the formula cells still reference the
+     * same cells or ranges after the the position change.
+     * The position of a formula cell before the call is interpreted as the old
+     * position of that cell.
      *
      * Caller needs to ensure that no formula groups cross the top and bottom
      * row boundaries.
      *
      * @param nRow1 top row boundary
      * @param nRow2 bottom row boundary
+     * @param bUpdateRefs whether to adjust references
      */
-    void ResetFormulaCellPositions( SCROW nRow1, SCROW nRow2 );
+    void ResetFormulaCellPositions( SCROW nRow1, SCROW nRow2, bool bUpdateRefs );
 
     void SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange );
 

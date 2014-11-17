@@ -718,8 +718,9 @@ void ScTable::SortReorderByColumn(
     }
 
     // Reset formula cell positions which became out-of-sync after column reordering.
+    bool bUpdateRefs = pArray->IsUpdateRefs();
     for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
-        aCol[nCol].ResetFormulaCellPositions(nRow1, nRow2);
+        aCol[nCol].ResetFormulaCellPositions(nRow1, nRow2, bUpdateRefs);
 
     // Set up column reorder map (for later broadcasting of reference updates).
     sc::ColRowReorderMapType aColMap;
