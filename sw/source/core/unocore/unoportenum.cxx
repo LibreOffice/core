@@ -399,7 +399,7 @@ throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
-    return static_cast<sal_Bool>(m_Portions.size() > 0);
+    return m_Portions.size() > 0;
 }
 
 uno::Any SwXTextPortionEnumeration::nextElement()

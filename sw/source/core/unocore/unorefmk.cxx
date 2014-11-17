@@ -1234,7 +1234,7 @@ SwXMeta::hasElements() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
-    return static_cast<sal_Bool>(m_pImpl->GetRegisteredIn() != nullptr);
+    return m_pImpl->GetRegisteredIn() != nullptr;
 }
 
 // XEnumerationAccess

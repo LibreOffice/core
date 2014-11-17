@@ -483,7 +483,7 @@ sal_Bool SAL_CALL SwXTextView::isFormDesignMode(  ) throw (uno::RuntimeException
     SolarMutexGuard aGuard;
     SwView* pView2 = GetView();
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
-    return static_cast<sal_Bool>(!pFormShell || pFormShell->IsDesignMode());
+    return !pFormShell || pFormShell->IsDesignMode();
 }
 
 void SAL_CALL SwXTextView::setFormDesignMode( sal_Bool _DesignMode ) throw (RuntimeException, std::exception)
