@@ -430,7 +430,7 @@ namespace sdr
         {
             // Init timer
             maBufferIdle.SetPriority( VCL_IDLE_PRIORITY_HIGH );
-            maBufferIdle.SetTimeoutHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
+            maBufferIdle.SetIdleHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
         }
 
         rtl::Reference<OverlayManager> OverlayManagerBuffered::create(
