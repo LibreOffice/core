@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/keycod.hxx>

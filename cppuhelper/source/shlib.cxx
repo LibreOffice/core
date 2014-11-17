@@ -23,6 +23,7 @@
 #include <cstdlib>
 
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/shlib.hxx>
 #include <osl/module.hxx>

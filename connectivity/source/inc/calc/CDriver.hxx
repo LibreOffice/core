@@ -22,6 +22,8 @@
 
 #include "file/FDriver.hxx"
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 namespace connectivity
 {
     namespace calc

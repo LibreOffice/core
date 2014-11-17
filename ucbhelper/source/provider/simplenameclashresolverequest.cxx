@@ -20,6 +20,7 @@
 #include <com/sun/star/ucb/NameClashResolveRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/simplenameclashresolverequest.hxx>
 
 using namespace com::sun::star;

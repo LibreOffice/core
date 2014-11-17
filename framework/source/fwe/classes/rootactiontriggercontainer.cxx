@@ -22,6 +22,7 @@
 #include <classes/actiontriggerpropertyset.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <osl/mutex.hxx>

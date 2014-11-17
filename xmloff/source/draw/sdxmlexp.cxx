@@ -24,6 +24,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetae.hxx>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/presentation/XPresentationSupplier.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/geometry/RealPoint2D.hpp>

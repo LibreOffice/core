@@ -25,6 +25,7 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <toolkit/helper/property.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
 
 #include <tools/debug.hxx>

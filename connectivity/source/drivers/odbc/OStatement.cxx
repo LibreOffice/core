@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include "diagnose_ex.h"

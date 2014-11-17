@@ -24,6 +24,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <vcl/svapp.hxx>
@@ -62,6 +63,7 @@
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <basic/sbmod.hxx>
 #include <boost/scoped_ptr.hpp>

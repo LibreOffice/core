@@ -26,6 +26,7 @@
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 #ifdef MACOSX
 #include "premac.h"

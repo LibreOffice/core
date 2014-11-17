@@ -21,6 +21,7 @@
 
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <boost/noncopyable.hpp>
 

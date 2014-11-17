@@ -27,6 +27,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <preparedstatement.hxx>
 #include <resultcolumn.hxx>

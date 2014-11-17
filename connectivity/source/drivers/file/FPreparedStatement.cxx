@@ -24,6 +24,7 @@
 #include "file/FPreparedStatement.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "file/FResultSetMetaData.hxx"
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>

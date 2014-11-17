@@ -23,6 +23,7 @@
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase1.hxx>

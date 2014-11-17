@@ -20,6 +20,7 @@
 #define INCLUDED_CPPUHELPER_WEAKAGG_HXX
 
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <cppuhelper/cppuhelperdllapi.h>
 

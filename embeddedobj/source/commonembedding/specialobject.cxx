@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 #include "specialobject.hxx"

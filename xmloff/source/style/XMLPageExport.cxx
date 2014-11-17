@@ -26,6 +26,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "PageMasterPropHdlFactory.hxx"

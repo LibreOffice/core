@@ -20,6 +20,7 @@
 
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/exc_hlp.hxx>

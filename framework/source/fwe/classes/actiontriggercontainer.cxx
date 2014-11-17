@@ -20,6 +20,7 @@
 #include <classes/actiontriggercontainer.hxx>
 #include <classes/actiontriggerpropertyset.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 

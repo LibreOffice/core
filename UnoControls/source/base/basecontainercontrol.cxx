@@ -19,6 +19,7 @@
 
 #include "basecontainercontrol.hxx"
 
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 //  namespaces

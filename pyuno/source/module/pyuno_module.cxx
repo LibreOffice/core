@@ -41,6 +41,7 @@
 #include <uno/current_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/reflection/XConstantTypeDescription.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>

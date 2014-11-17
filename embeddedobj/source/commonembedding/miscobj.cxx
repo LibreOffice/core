@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/processfactory.hxx>

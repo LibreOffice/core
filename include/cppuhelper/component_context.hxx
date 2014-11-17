@@ -20,7 +20,6 @@
 #define INCLUDED_CPPUHELPER_COMPONENT_CONTEXT_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/cppuhelperdllapi.h>
 
 

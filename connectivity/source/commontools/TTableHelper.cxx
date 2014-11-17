@@ -27,6 +27,7 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>

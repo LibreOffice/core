@@ -64,6 +64,7 @@
 #include "XMLBase64Export.hxx"
 #include <xmloff/xmlerror.hxx>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <xmloff/XMLFilterServiceNames.h>
 #include <xmloff/XMLEmbeddedObjectExportFilter.hxx>

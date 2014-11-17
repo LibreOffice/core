@@ -26,6 +26,7 @@
 #include "java/sql/Ref.hxx"
 #include "java/sql/Timestamp.hxx"
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <string.h>

@@ -53,7 +53,8 @@ extern "C"
 // returns a factory to create XFilePicker-Services
 
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL smplmail_component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL smplmail_component_getFactory(
+        const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = 0;
 

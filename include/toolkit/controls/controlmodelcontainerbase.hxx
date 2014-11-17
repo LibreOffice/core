@@ -22,6 +22,7 @@
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>

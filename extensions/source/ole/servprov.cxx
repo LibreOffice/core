@@ -29,6 +29,7 @@
 #include "servprov.hxx"
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace cppu;
 using namespace osl;

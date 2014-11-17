@@ -37,6 +37,7 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 
 #include "vector"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>

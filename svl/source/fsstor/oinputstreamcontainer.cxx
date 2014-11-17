@@ -20,6 +20,7 @@
 
 #include "oinputstreamcontainer.hxx"
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace ::com::sun::star;
 

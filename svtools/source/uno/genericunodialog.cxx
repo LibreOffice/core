@@ -25,6 +25,7 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <osl/diagnose.h>

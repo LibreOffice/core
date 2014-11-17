@@ -19,6 +19,8 @@
 
 #include <vcl/dndhelp.hxx>
 
+#include <cppuhelper/queryinterface.hxx>
+
 using namespace ::com::sun::star;
 
 vcl::unohelper::DragAndDropClient::~DragAndDropClient() {}

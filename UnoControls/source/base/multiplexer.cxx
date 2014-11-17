@@ -20,6 +20,7 @@
 #include "multiplexer.hxx"
 
 #include <osl/diagnose.h>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;

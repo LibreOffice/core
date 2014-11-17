@@ -46,6 +46,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>

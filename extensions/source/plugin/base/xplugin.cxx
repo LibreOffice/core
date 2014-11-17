@@ -42,6 +42,7 @@
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/plugin/PluginManager.hpp>
 
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <plugin/impl.hxx>
 #include <ucbhelper/content.hxx>

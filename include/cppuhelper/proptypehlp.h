@@ -19,8 +19,7 @@
 #ifndef INCLUDED_CPPUHELPER_PROPTYPEHLP_H
 #define INCLUDED_CPPUHELPER_PROPTYPEHLP_H
 
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/uno/TypeClass.hpp>
+#include <com/sun/star/uno/Any.h>
 
 
 namespace cppu {

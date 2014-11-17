@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <toolkit/helper/property.hxx>

@@ -21,6 +21,7 @@
 #include "toolkit/helper/property.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
 

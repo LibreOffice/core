@@ -22,6 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

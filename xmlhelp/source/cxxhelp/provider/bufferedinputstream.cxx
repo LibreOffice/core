@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include "bufferedinputstream.hxx"
 
+#include <cppuhelper/queryinterface.hxx>
+
+#include <string.h>
 
 using namespace cppu;
 using namespace com::sun::star::uno;

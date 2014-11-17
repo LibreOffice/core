@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
 #define INCLUDED_SVX_SOURCE_INC_XFM_ADDCONDITION_HXX
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xforms/XModel.hpp>
 #include <svtools/genericunodialog.hxx>
 #include <comphelper/proparrhlp.hxx>

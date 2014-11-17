@@ -72,6 +72,7 @@
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <svtools/miscopt.hxx>
 #include <uielement/menubarmerger.hxx>

@@ -20,6 +20,7 @@
 #include <scanner.hxx>
 #include <sanedlg.hxx>
 #include <osl/thread.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <boost/shared_ptr.hpp>
 
 #if OSL_DEBUG_LEVEL > 1

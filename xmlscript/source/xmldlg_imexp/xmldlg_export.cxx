@@ -47,6 +47,7 @@
 
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

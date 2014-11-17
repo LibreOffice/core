@@ -32,6 +32,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>

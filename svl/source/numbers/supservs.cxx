@@ -21,6 +21,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/sharedmutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>

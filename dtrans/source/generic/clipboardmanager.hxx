@@ -24,6 +24,7 @@
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <map>
 

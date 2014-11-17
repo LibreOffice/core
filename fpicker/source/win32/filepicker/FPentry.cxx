@@ -88,7 +88,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_win32_component_getFactory(
-    const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )
+    const sal_Char* pImplName, void* pSrvManager, void* )
 {
     void* pRet = 0;
 

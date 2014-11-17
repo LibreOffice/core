@@ -25,6 +25,7 @@
 #include "java/math/BigDecimal.hxx"
 #include "java/tools.hxx"
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/FValue.hxx>

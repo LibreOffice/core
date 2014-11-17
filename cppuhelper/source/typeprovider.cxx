@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <cppuhelper/typeprovider.hxx>
+
+#include <rtl/uuid.h>
 #include <osl/mutex.hxx>
 
 using namespace osl;

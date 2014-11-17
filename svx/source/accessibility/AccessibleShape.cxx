@@ -51,6 +51,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/svdview.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/servicehelper.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 

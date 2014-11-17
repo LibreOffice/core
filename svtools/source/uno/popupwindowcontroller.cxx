@@ -18,6 +18,7 @@
  */
 
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/toolbox.hxx>

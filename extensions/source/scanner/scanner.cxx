@@ -19,6 +19,7 @@
 
 #include <scanner.hxx>
 
+#include <cppuhelper/queryinterface.hxx>
 
 // - ScannerManager -
 

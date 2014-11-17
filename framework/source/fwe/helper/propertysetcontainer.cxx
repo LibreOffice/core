@@ -19,6 +19,7 @@
 
 #include <helper/propertysetcontainer.hxx>
 
+#include <cppuhelper/queryinterface.hxx>
 #include <vcl/svapp.hxx>
 
 #define WRONG_TYPE_EXCEPTION    "Only XPropertSet allowed!"

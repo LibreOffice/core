@@ -53,6 +53,7 @@
 #include <com/sun/star/chart2/data/LabeledDataSequence.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XStringMapping.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>

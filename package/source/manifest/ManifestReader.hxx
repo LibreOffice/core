@@ -22,6 +22,7 @@
 
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace com { namespace sun { namespace star {

@@ -25,6 +25,7 @@
 #include <vcl/dialog.hxx>
 #include <svl/solar.hrc>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>

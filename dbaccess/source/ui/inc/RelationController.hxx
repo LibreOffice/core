@@ -21,6 +21,7 @@
 
 #include "JoinController.hxx"
 #include "RelationDesignView.hxx"
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 class WaitObject;
 namespace dbaui

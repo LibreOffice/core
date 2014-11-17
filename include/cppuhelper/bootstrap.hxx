@@ -20,7 +20,6 @@
 #define INCLUDED_CPPUHELPER_BOOTSTRAP_HXX
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

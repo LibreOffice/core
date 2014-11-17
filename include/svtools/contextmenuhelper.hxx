@@ -28,6 +28,7 @@
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <vcl/menu.hxx>
 #include <svtools/svtdllapi.h>
 

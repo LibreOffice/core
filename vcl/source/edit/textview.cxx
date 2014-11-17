@@ -39,6 +39,7 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

@@ -32,6 +32,7 @@
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 using namespace css::lang;

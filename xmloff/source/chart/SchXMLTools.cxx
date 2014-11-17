@@ -43,6 +43,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 
 #include <comphelper/processfactory.hxx>

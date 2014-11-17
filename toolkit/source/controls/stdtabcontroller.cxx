@@ -26,6 +26,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
 
 #include <tools/debug.hxx>

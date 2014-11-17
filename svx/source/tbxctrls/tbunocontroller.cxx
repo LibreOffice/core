@@ -33,6 +33,7 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <boost/scoped_ptr.hpp>

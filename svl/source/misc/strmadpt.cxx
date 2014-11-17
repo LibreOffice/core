@@ -27,6 +27,7 @@
 
 #include <osl/diagnose.h>
 #include <rtl/alloc.h>
+#include <cppuhelper/queryinterface.hxx>
 #include <svl/instrm.hxx>
 #include <svl/outstrm.hxx>
 #include <svl/strmadpt.hxx>

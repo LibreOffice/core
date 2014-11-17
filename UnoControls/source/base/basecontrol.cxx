@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
 //  namespaces

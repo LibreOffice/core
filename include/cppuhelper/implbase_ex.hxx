@@ -23,10 +23,6 @@
 #include <cppuhelper/weakagg.hxx>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
-// Despite the fact that the following include is not used in this header, it has to remain,
-// because it is expected by files including cppuhelper/implbaseN.hxx.
-// So maybe we can omit it some time in the future...
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 /* If you need to define implementation helper classes that deal with more than
    12 interfaces, then use macros as follows, e.g. for 3 interfaces:

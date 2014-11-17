@@ -21,7 +21,9 @@
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_UNOSQLMESSAGE_HXX
 
 #include <svtools/genericunodialog.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "moduledbu.hxx"
+
 namespace dbaui
 {
 

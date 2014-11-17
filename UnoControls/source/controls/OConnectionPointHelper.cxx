@@ -21,6 +21,8 @@
 
 #include "OConnectionPointContainerHelper.hxx"
 
+#include <cppuhelper/queryinterface.hxx>
+
 //  namespaces
 
 using namespace ::osl;

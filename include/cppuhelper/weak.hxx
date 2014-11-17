@@ -21,8 +21,6 @@
 
 #include <osl/interlck.h>
 #include <rtl/alloc.h>
-#include <cppuhelper/weakref.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cppuhelper/cppuhelperdllapi.h>
 

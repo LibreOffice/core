@@ -22,6 +22,7 @@
 #include "basecontainer.hxx"
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/implbase1.hxx>
 

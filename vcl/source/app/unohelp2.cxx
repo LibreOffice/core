@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace ::com::sun::star;
 

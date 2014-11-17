@@ -20,7 +20,6 @@
 #define INCLUDED_CPPUHELPER_TYPEPROVIDER_HXX
 
 #include <rtl/alloc.h>
-#include <rtl/uuid.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
 

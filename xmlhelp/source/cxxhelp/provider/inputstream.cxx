@@ -20,6 +20,8 @@
 
 #include "inputstream.hxx"
 
+#include <cppuhelper/queryinterface.hxx>
+
 
 using namespace chelp;
 using namespace com::sun::star;

@@ -28,6 +28,7 @@
 
 #include <plugin/model.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::uno;
 

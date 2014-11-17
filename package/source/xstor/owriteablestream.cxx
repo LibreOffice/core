@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <osl/diagnose.h>
 

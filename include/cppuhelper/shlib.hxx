@@ -21,8 +21,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
-#include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
 #include <cppuhelper/cppuhelperdllapi.h>
 
 

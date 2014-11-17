@@ -21,6 +21,7 @@
 #define INCLUDED_EMBEDDEDOBJ_SOURCE_MSOLE_XOLEFACTORY_HXX
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/implbase2.hxx>

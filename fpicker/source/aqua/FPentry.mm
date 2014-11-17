@@ -50,7 +50,7 @@ extern "C"
 {
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_aqua_component_getFactory(
-    const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
+    const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = 0;
 

@@ -19,6 +19,8 @@
 
 #include "base.hxx"
 
+#include <cppuhelper/queryinterface.hxx>
+
 using namespace css::lang;
 using namespace css::reflection;
 using namespace css::uno;

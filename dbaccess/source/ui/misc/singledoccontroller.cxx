@@ -25,6 +25,7 @@
 #include "moduledbu.hxx"
 
 #include <svl/undo.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <osl/diagnose.h>
 
 #include <boost/scoped_ptr.hpp>

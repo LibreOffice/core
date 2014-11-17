@@ -31,6 +31,7 @@
 
 #include <rtl/uri.hxx>
 #include <osl/mutex.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>

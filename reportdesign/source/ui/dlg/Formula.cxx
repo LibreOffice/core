@@ -25,6 +25,7 @@
 #include <formula/formdata.hxx>
 #include <formula/funcutl.hxx>
 #include <formula/tokenarray.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <boost/scoped_ptr.hpp>
 

@@ -23,6 +23,7 @@
 #include <boost/scoped_array.hpp>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>

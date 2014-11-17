@@ -24,6 +24,7 @@
 #include <comphelper/uno3.hxx>
 #include <osl/thread.h>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>

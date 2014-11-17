@@ -20,7 +20,6 @@
 #define INCLUDED_CPPUHELPER_FACTORY_HXX
 
 #include <rtl/ustring.hxx>
-#include <uno/dispatcher.h>
 #include <rtl/unload.h>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

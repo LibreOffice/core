@@ -23,6 +23,7 @@
 #include <com/sun/star/lang/XConnectionPointContainer.hpp>
 #include <com/sun/star/lang/XConnectionPoint.hpp>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include "OConnectionPointContainerHelper.hxx"

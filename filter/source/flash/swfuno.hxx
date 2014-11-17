@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

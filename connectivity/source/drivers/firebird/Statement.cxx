@@ -24,6 +24,7 @@
 #include "Util.hxx"
 
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>

@@ -35,6 +35,7 @@
 #include <svtools/simptabl.hxx>
 #include <svtools/treelistentry.hxx>
 #include <com/sun/star/sdbc/XCloseable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>

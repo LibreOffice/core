@@ -21,6 +21,7 @@
 
 #include "cacheitem.hxx"
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase2.hxx>

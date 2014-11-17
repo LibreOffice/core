@@ -22,6 +22,7 @@
 #include <vector>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::sax;

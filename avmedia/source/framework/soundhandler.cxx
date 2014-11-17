@@ -27,6 +27,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>

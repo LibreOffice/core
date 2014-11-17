@@ -20,6 +20,7 @@
 #include <toolkit/awt/vclxbitmap.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <tools/stream.hxx>
 #include <rtl/uuid.h>
 #include <vcl/dibtools.hxx>

@@ -25,6 +25,7 @@
 
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>

@@ -27,6 +27,7 @@
 #include <comphelper/property.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/sequence.hxx>
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>

@@ -24,6 +24,7 @@
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/instance.hxx>

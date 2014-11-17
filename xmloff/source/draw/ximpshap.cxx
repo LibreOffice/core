@@ -48,6 +48,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include "xexptran.hxx"

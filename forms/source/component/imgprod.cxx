@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 

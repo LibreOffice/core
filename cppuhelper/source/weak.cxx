@@ -24,6 +24,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace osl;
 using namespace com::sun::star::uno;

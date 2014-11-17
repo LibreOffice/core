@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 
 #include "oseekinstream.hxx"

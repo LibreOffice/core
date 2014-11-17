@@ -19,6 +19,7 @@
 
 #include <typelib/typedescription.h>
 #include <uno/data.h>
+#include <cppuhelper/queryinterface.hxx>
 
 #include "base.hxx"
 

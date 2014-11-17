@@ -16,6 +16,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <rtl/bootstrap.hxx>

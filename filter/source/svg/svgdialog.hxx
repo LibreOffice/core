@@ -22,6 +22,7 @@
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <svtools/genericunodialog.hxx>
 #include <memory>

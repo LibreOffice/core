@@ -23,6 +23,8 @@
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/svdoole2.hxx>
 
+#include <cppuhelper/queryinterface.hxx>
+
 using namespace accessibility;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

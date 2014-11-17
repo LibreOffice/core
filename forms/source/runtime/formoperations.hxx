@@ -22,6 +22,7 @@
 
 #include <com/sun/star/form/runtime/XFormOperations.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/XLoadable.hpp>

@@ -26,9 +26,11 @@
  *
  ************************************************************************/
 
-#include <string.h>
-
 #include "NeonInputStream.hxx"
+
+#include <cppuhelper/queryinterface.hxx>
+
+#include <string.h>
 
 using namespace cppu;
 using namespace com::sun::star::io;

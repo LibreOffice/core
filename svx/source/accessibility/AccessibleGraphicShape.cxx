@@ -24,6 +24,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>
 
+#include <cppuhelper/queryinterface.hxx>
+
 using namespace ::accessibility;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

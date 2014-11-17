@@ -52,6 +52,7 @@
 #include <vcl/timer.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <framework/addonsoptions.hxx>
 

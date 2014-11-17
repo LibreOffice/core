@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/dialog.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/view/XRenderable.hpp>
 #include <com/sun/star/frame/XController.hpp>

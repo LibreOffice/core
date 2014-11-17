@@ -22,6 +22,7 @@
 
 #include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XRecentFunctions.hpp>
 #include <com/sun/star/sheet/XFunctionDescriptions.hpp>

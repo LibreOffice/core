@@ -20,6 +20,8 @@
 #include "EventThread.hxx"
 #include <comphelper/guarding.hxx>
 #include <tools/debug.hxx>
+#include <cppuhelper/queryinterface.hxx>
+
 #include <boost/scoped_ptr.hpp>
 
 namespace frm

@@ -29,6 +29,7 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>

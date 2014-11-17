@@ -25,6 +25,7 @@
 #include "embeddoc.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>

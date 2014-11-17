@@ -39,6 +39,7 @@
 
 #include <osl/conditn.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>

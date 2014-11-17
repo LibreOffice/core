@@ -19,7 +19,7 @@
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-
+#include <cppuhelper/queryinterface.hxx>
 
 //  class ListenerMultiplexerBase
 

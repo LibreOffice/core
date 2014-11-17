@@ -44,6 +44,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <cppuhelper/weak.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 //  "namespaces"

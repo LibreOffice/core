@@ -19,6 +19,7 @@
 
 #include "ooxformulaparser.hxx"
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/supportsservice.hxx>

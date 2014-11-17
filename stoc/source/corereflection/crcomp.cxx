@@ -18,6 +18,7 @@
  */
 
 #include <rtl/strbuf.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/reflection/XIdlField.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>

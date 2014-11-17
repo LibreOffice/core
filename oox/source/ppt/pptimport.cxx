@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
 #include "oox/ppt/pptimport.hxx"

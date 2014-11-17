@@ -28,6 +28,7 @@
 #include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <osl/thread.h>
 

@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 

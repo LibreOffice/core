@@ -28,6 +28,7 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star;
 using namespace ucbhelper;

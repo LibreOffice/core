@@ -11,6 +11,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLMANAGER_HXX
 
 #include <cppuhelper/compbase2.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XManager.hpp>
 

@@ -23,6 +23,7 @@
 #include "ipwin.hxx"
 
 #include <toolkit/helper/convert.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 

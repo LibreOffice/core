@@ -23,6 +23,7 @@
 
 #include "property.hrc"
 #include "services.hxx"
+#include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/basicio.hxx>

@@ -25,6 +25,7 @@
 #include "ado/ADriver.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>

@@ -19,6 +19,7 @@
 
 #include "ado/ACallableStatement.hxx"
 #include <connectivity/dbexception.hxx>
+#include <cppuhelper/queryinterface.hxx>
 
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;

@@ -37,6 +37,7 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlprmap.hxx>

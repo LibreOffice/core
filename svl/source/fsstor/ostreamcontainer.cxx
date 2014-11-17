@@ -17,8 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "ostreamcontainer.hxx"
+
+#include <cppuhelper/queryinterface.hxx>
 
 
 using namespace ::com::sun::star;

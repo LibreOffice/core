@@ -45,7 +45,8 @@ Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServic
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL dnd_component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL
+dnd_component_getFactory( const sal_Char* pImplName, void* pSrvManager, void* /*pRegistryKey*/ )
 {
     void* pRet = 0;
     Reference< XSingleServiceFactory > xFactory;

@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/mutex.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 
