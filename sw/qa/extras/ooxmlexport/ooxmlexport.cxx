@@ -565,6 +565,12 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist35, "cjklist35.docx")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
+{
+    // This was "Outline", i.e. <w:numId> was not imported from the Heading 2 paragraph style.
+    CPPUNIT_ASSERT(getProperty<OUString>(getParagraph(4), "NumberingStyleName").startsWith("WWNum"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

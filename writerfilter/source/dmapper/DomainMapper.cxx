@@ -1099,6 +1099,30 @@ static bool ExchangeLeftRight( const PropertyMapPtr rContext, DomainMapper_Impl*
     return bExchangeLeftRight;
 }
 
+/// Check if the style or its parent has a list id, recursively.
+static sal_Int32 lcl_getListId(const StyleSheetEntryPtr pEntry, const StyleSheetTablePtr pStyleTable)
+{
+    const StyleSheetPropertyMap* pEntryProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry->pProperties.get());
+    if (!pEntryProperties)
+        return -1;
+
+    sal_Int32 nListId = pEntryProperties->GetListId();
+    // The style itself has a list id.
+    if (nListId >= 0)
+        return nListId;
+
+    // The style has no parent.
+    if (pEntry->sBaseStyleIdentifier.isEmpty())
+        return -1;
+
+    const StyleSheetEntryPtr pParent = pStyleTable->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+    // No such parent style or loop in the style hierarchy.
+    if (!pParent || pParent == pEntry)
+        return -1;
+
+    return lcl_getListId(pParent, pStyleTable);
+}
+
 void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 {
     // These SPRM's are not specific to any section, so it's expected that there is no context yet.
@@ -1976,10 +2000,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             OSL_ENSURE( pEntry.get(), "no style sheet found" );
             const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
 
-            if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
+            sal_Int32 nListId = pEntry ? lcl_getListId(pEntry, pStyleTable) : -1;
+            if( pStyleSheetProperties && nListId >= 0 )
             {
                 rContext->Insert( PROP_NUMBERING_STYLE_NAME, uno::makeAny(
-                            ListDef::GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
+                            ListDef::GetStyleName( nListId ) ), false);
 
                 // We're inheriting properties from a numbering style. Make sure a possible right margin is inherited from the base style.
                 sal_Int32 nParaRightMargin = 0;
