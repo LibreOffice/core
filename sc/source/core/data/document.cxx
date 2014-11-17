@@ -2430,7 +2430,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nMax; ++itr)
             if (maTabs[*itr])
-                maTabs[*itr]->StartListeningInArea(aStartCxt, aEndCxt, nCol1, nRow1, nCol2, nRow2);
+                maTabs[*itr]->StartListeningFromClip(aStartCxt, aEndCxt, nCol1, nRow1, nCol2, nRow2);
     }
 }
 

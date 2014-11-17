@@ -1137,13 +1137,13 @@ bool ScColumn::HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const
 
 namespace {
 
-class StartListeningInAreaHandler
+class StartListeningFromClipHandler
 {
     sc::StartListeningContext& mrStartCxt;
     sc::EndListeningContext& mrEndCxt;
 
 public:
-    StartListeningInAreaHandler( sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt ) :
+    StartListeningFromClipHandler( sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt ) :
         mrStartCxt(rStartCxt), mrEndCxt(rEndCxt) {}
 
     void operator() ( const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize )
@@ -1221,10 +1221,10 @@ private:
 
 }
 
-void ScColumn::StartListeningInArea(
+void ScColumn::StartListeningFromClip(
     sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2 )
 {
-    StartListeningInAreaHandler aFunc(rStartCxt, rEndCxt);
+    StartListeningFromClipHandler aFunc(rStartCxt, rEndCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
 }
 
