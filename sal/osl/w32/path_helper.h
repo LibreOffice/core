@@ -23,6 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.h>
 #include <osl/file.h>
+#include <osl/diagnose.h>
 
 #ifdef __cplusplus
 extern "C"
