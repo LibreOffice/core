@@ -2504,7 +2504,6 @@ DECLARE_OOXMLIMPORT_TEST(testBnc821804, "bnc821804.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testFdo85542, "fdo85542.docx")
 {
-    //CPPUNIT_ASSERT_EQUAL(false,true);
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(xBookmarksByIdx->getCount(), static_cast<sal_Int32>(3));
