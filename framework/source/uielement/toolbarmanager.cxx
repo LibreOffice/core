@@ -1913,6 +1913,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 pExecuteInfo->xWindow         = VCLUnoHelper::GetInterface( m_pToolBar );
 
                 Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
+                break;
             }
 
             default:
