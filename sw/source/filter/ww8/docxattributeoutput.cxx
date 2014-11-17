@@ -2296,7 +2296,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
     OString aId( OString::number( pRedlineData->GetSeqNo() ) );
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
-    OString aAuthor( OUStringToOString( rAuthor, RTL_TEXTENCODING_UTF8 ) );
+    OString aAuthor( rAuthor.toUtf8() );
     OString aDate( DateTimeToOString( pRedlineData->GetTimeStamp() ) );
 
     switch( pRedlineData->GetType() )

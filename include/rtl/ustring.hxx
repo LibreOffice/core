@@ -2106,6 +2106,29 @@ public:
     }
 
     /**
+     * Convert this string to an OString, assuming that the string can be
+     * UTF-8-encoded successfully.
+     *
+     * In other words, you must not use this method on a random sequence of
+     * UTF-16 code units, but only at places where it is assumed that the
+     * content is a proper string.
+     *
+     * @since LibreOffice 4.4
+     */
+    inline OString toUtf8() const
+    {
+        OString aTarget;
+        bool bSuccess = rtl_convertUStringToString(&aTarget.pData,
+                                                   getStr(),
+                                                   getLength(),
+                                                   RTL_TEXTENCODING_UTF8,
+                                                   RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR);
+        (void) bSuccess;
+        assert(bSuccess);
+        return aTarget;
+    }
+
+    /**
       Returns the string representation of the integer argument.
 
       This function can't be used for language specific conversion.

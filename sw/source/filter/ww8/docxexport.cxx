@@ -207,7 +207,7 @@ OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget 
     OUString sId = m_pFilter->addRelation( m_pDocumentFS->getOutputStream(),
            rType, rTarget, true );
 
-    return OUStringToOString( sId, RTL_TEXTENCODING_UTF8 );
+    return sId.toUtf8();
 }
 
 bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
@@ -750,7 +750,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     // and write the reference
     m_pDocumentFS->singleElementNS( XML_w, nReference,
             FSNS( XML_w, XML_type ), pType,
-            FSNS( XML_r, XML_id ), OUStringToOString( aRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_r, XML_id ), aRelId.toUtf8().getStr(),
             FSEND );
 }
 
