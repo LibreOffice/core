@@ -15,27 +15,23 @@ import android.util.Log;
 
 import java.io.InputStream;
 
-// final because subclassing would be meaningless.
+// Native methods in this class are all implemented in
+// sal/android/lo-bootstrap.c as the lo-bootstrap library is loaded with
+// System.loadLibrary() and Android's JNI works only to such libraries, it
+// seems.
 public final class LibreOfficeKit
 {
-    private long handle;
-
-    public static void loadStatic() {
-
-    }
+    private static String LOGTAG = LibreOfficeKit.class.getSimpleName();
 
     // private constructor because instantiating would be meaningless
-    private LibreOfficeKit()
-    {
+    private LibreOfficeKit() {
     }
 
-    private static String TAG = "LibreOfficeKit";
+    // Trigger library initialization - as this is done automatically by executing the "static" block, this method remains empty. However we need this to manually (at the right time) can force library initialization.
+    public static void initializeLibrary() {
+    }
 
-    // Native methods in this class are all implemented in
-    // sal/android/lo-bootstrap.c as the lo-bootstrap library is loaded with
-    // System.loadLibrary() and Android's JNI works only to such libraries, it
-    // seems.
-
+    // Trigger initialization on the JNI - LOKit side.
     private static native boolean initializeNative(String dataDir, String cacheDir, String apkFile);
 
     public static native long getLibreOfficeKitHandle();
@@ -53,14 +49,15 @@ public final class LibreOfficeKit
     // LO-based apps.
     public static synchronized void init(Activity activity)
     {
-        if (initializeDone)
+        if (initializeDone) {
             return;
+        }
 
         String dataDir = null;
 
         ApplicationInfo applicationInfo = activity.getApplicationInfo();
         dataDir = applicationInfo.dataDir;
-        Log.i(TAG, String.format("Initializing LibreOfficeKit, dataDir=%s\n", dataDir));
+        Log.i(LOGTAG, String.format("Initializing LibreOfficeKit, dataDir=%s\n", dataDir));
 
         redirectStdio(true);
 
@@ -85,6 +82,7 @@ public final class LibreOfficeKit
         putenv("TMPDIR=" + activity.getCacheDir().getAbsolutePath());
 
         if (!initializeNative(dataDir, cacheDir, apkFile)) {
+            Log.i(LOGTAG, "Initialize native failed!");
             return;
         }
 
