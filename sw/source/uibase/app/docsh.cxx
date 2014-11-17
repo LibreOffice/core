@@ -71,6 +71,7 @@
 #include <shellio.hxx>
 #include <docstyle.hxx>
 #include <doc.hxx>
+#include <docfunc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>

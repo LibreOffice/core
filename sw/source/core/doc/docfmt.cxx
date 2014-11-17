@@ -37,6 +37,7 @@
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
+#include <docfunc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>

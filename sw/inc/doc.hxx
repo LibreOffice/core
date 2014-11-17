@@ -1713,48 +1713,6 @@ inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
         mbAllOLENotify = false;
 }
 
-// namespace <docfunc> for functions and procedures working on a Writer document.
-namespace docfunc
-{
-    /** method to check, if given Writer document contains at least one drawing object
-
-        @author OD
-
-        @param p_rDoc
-        input parameter - reference to the Writer document, which is investigated.
-    */
-    bool ExistsDrawObjs( SwDoc& p_rDoc );
-
-    /** method to check, if given Writer document contains only drawing objects,
-        which are completely on its page.
-
-        @author OD
-
-        @param p_rDoc
-        input parameter - reference to the Writer document, which is investigated.
-    */
-    bool AllDrawObjsOnPage( SwDoc& p_rDoc );
-
-    /** method to check, if the outline style has to written as a normal list style
-
-        #i69627#
-        The outline style has to written as a normal list style, if a parent
-        paragraph style of one of the paragraph styles, which are assigned to
-        the list levels of the outline style, has a list style set or inherits
-        a list style from its parent paragraphs style.
-        This information is needed for the OpenDocument file format export.
-
-        @author OD
-
-        @param rDoc
-        input parameter - reference to the text document, which is investigated.
-
-        @return boolean
-        indicating, if the outline style has to written as a normal list style
-    */
-    bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc );
-}
-
 bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
 
 #endif  //_DOC_HXX

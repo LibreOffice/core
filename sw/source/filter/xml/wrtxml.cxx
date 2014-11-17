@@ -38,6 +38,7 @@
 #include <sfx2/docfile.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <docfunc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentLayoutAccess.hxx>

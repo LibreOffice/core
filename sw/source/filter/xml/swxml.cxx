@@ -50,6 +50,7 @@
 #include <fltini.hxx>
 #include <drawdoc.hxx>
 #include <doc.hxx>
+#include <docfunc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>

@@ -38,6 +38,7 @@
 #include <viewimp.hxx>
 #include <swhints.hxx>
 #include <doc.hxx>
+#include <docfunc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
