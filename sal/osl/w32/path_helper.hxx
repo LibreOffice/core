@@ -21,6 +21,7 @@
 #define INCLUDED_SAL_OSL_W32_PATH_HELPER_HXX
 
 #include "path_helper.h"
+#include <osl/diagnose.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 
