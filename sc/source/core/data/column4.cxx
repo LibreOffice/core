@@ -856,8 +856,9 @@ namespace {
 class FormulaColPosSetter
 {
     SCCOL mnCol;
+    bool  mbUpdateRefs;
 public:
-    FormulaColPosSetter( SCCOL nCol ) : mnCol(nCol) {}
+    FormulaColPosSetter( SCCOL nCol, bool bUpdateRefs ) : mnCol(nCol), mbUpdateRefs(bUpdateRefs) {}
 
     void operator() ( size_t nRow, ScFormulaCell* pCell )
     {
@@ -868,7 +869,8 @@ public:
             ScAddress aOldPos = pCell->aPos;
             pCell->aPos.SetCol(mnCol);
             pCell->aPos.SetRow(nRow);
-            pCell->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, pCell->aPos);
+            if (mbUpdateRefs)
+                pCell->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, pCell->aPos);
         }
         else
         {
@@ -880,9 +882,9 @@ public:
 
 }
 
-void ScColumn::ResetFormulaCellPositions( SCROW nRow1, SCROW nRow2 )
+void ScColumn::ResetFormulaCellPositions( SCROW nRow1, SCROW nRow2, bool bUpdateRefs )
 {
-    FormulaColPosSetter aFunc(nCol);
+    FormulaColPosSetter aFunc(nCol, bUpdateRefs);
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
