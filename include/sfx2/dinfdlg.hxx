@@ -422,8 +422,8 @@ private:
     std::vector< CustomPropertyLine* >  m_aCustomPropertiesLines;
     CustomPropertyLine*                 m_pCurrentLine;
     SvNumberFormatter                   m_aNumberFormatter;
-    Timer                               m_aEditLoseFocusTimer;
-    Timer                               m_aBoxLoseFocusTimer;
+    Idle                                m_aEditLoseFocusIdle;
+    Idle                                m_aBoxLoseFocusIdle;
     Link                                m_aRemovedHdl;
 
     DECL_LINK(  TypeHdl, CustomPropertiesTypeBox* );

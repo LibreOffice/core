@@ -1426,10 +1426,10 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
                         Application::GetSettings().GetLanguageTag().getLanguageType() )
 
 {
-    m_aEditLoseFocusTimer.SetTimeout( 300 );
-    m_aEditLoseFocusTimer.SetTimeoutHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
-    m_aBoxLoseFocusTimer.SetTimeout( 300 );
-    m_aBoxLoseFocusTimer.SetTimeoutHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
+    m_aEditLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
+    m_aBoxLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
+    m_aBoxLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
 
     m_aNameBox.add_mnemonic_label(m_pHeaderAccName);
     m_aNameBox.SetAccessibleName(m_pHeaderAccName->GetText());
@@ -1454,8 +1454,8 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
 
 CustomPropertiesWindow::~CustomPropertiesWindow()
 {
-    m_aEditLoseFocusTimer.Stop();
-    m_aBoxLoseFocusTimer.Stop();
+    m_aEditLoseFocusIdle.Stop();
+    m_aBoxLoseFocusIdle.Stop();
     ClearAllLines();
 }
 
@@ -1531,7 +1531,7 @@ IMPL_LINK( CustomPropertiesWindow, EditLoseFocusHdl, CustomPropertiesEdit*, pEdi
         if ( !pLine->m_bTypeLostFocus )
         {
             m_pCurrentLine = pLine;
-            m_aEditLoseFocusTimer.Start();
+            m_aEditLoseFocusIdle.Start();
         }
         else
             pLine->m_bTypeLostFocus = false;
@@ -1544,7 +1544,7 @@ IMPL_LINK( CustomPropertiesWindow, BoxLoseFocusHdl, CustomPropertiesTypeBox*, pB
     if ( pBox )
     {
         m_pCurrentLine = pBox->GetLine();
-        m_aBoxLoseFocusTimer.Start();
+        m_aBoxLoseFocusIdle.Start();
     }
 
     return 0;

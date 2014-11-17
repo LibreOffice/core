@@ -480,15 +480,15 @@ void SvxBmpNumValueSet::init()
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
-    aFormatTimer.SetTimeout(300);
-    aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
+    aFormatIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    aFormatIdle.SetIdleHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
 
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
     GalleryExplorer::EndLocking(GALLERY_THEME_BULLETS);
-    aFormatTimer.Stop();
+    aFormatIdle.Stop();
 }
 
 void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )

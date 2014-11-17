@@ -90,7 +90,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 
 class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 {
-    Timer       aFormatTimer;
+    Idle        aFormatIdle;
     bool        bGrfNotFound;
 
     void init();
@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     void            SetGrfNotFound(bool bSet) {bGrfNotFound = bSet;}
     bool            IsGrfNotFound()const {return bGrfNotFound;}
 
-    Timer&          GetFormatTimer() {return aFormatTimer;}
+    Idle&          GetFormatIdle() {return aFormatIdle;}
 
     public:
     SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
