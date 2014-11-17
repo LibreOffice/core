@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-precision mediump float;
 varying vec2 tex_coord;
 uniform sampler2D sampler;
-uniform vec4 color;"
+uniform vec4 color;
 
 void main() {
-   vec4 texel0;
-   texel0 = texture2D(sampler, tex_coord);
-   gl_FragColor = color * texel0.a;
+    vec4 texel0;
+    texel0 = texture2D(sampler, tex_coord);
+    gl_FragColor = color;
+    gl_FragColor.a = 1.0 - texel0.r;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

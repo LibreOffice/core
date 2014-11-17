@@ -406,7 +406,7 @@ bool OpenGLSalGraphicsImpl::CreateMaskProgram( void )
     glBindAttribLocation( mnMaskProgram, GL_ATTRIB_POS, "position" );
     glBindAttribLocation( mnMaskProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnMaskUniform = glGetUniformLocation( mnMaskProgram, "sampler" );
-    mnMaskColorUniform = glGetUniformLocation( mnMaskProgram, "mask" );
+    mnMaskColorUniform = glGetUniformLocation( mnMaskProgram, "color" );
 
     CHECK_GL_ERROR();
     return true;
@@ -844,7 +844,7 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGL
     CHECK_GL_ERROR();
 }
 
-void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor, const SalTwoRect& /*pPosAry*/ )
+void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor, const SalTwoRect& pPosAry )
 {
     if( mnMaskProgram == 0 )
     {
@@ -858,7 +858,10 @@ void OpenGLSalGraphicsImpl::DrawMask( OpenGLTexture& rMask, SalColor nMaskColor,
     glActiveTexture( GL_TEXTURE0 );
     rMask.Bind();
 
-    //DrawTextureRect( rMask, pPosAry );
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    DrawTextureRect( rMask, pPosAry );
+    glDisable( GL_BLEND );
 
     rMask.Unbind();
     glUseProgram( 0 );
