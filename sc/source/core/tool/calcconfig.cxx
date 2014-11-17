@@ -39,10 +39,25 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 20;
+
+    maOpenCLSubsetOpCodes.insert(ocRandom);
+    maOpenCLSubsetOpCodes.insert(ocSin);
+    maOpenCLSubsetOpCodes.insert(ocCos);
+    maOpenCLSubsetOpCodes.insert(ocTan);
+    maOpenCLSubsetOpCodes.insert(ocArcTan);
+    maOpenCLSubsetOpCodes.insert(ocExp);
+    maOpenCLSubsetOpCodes.insert(ocLn);
+    maOpenCLSubsetOpCodes.insert(ocSqrt);
+    maOpenCLSubsetOpCodes.insert(ocSNormInv);
+    maOpenCLSubsetOpCodes.insert(ocRound);
+    maOpenCLSubsetOpCodes.insert(ocPower);
+    maOpenCLSubsetOpCodes.insert(ocSumProduct);
     maOpenCLSubsetOpCodes.insert(ocMin);
     maOpenCLSubsetOpCodes.insert(ocMax);
     maOpenCLSubsetOpCodes.insert(ocSum);
+    maOpenCLSubsetOpCodes.insert(ocProduct);
     maOpenCLSubsetOpCodes.insert(ocAverage);
+    maOpenCLSubsetOpCodes.insert(ocNormDist);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
 
     // This entry we have had for some time (when blacklisting was
