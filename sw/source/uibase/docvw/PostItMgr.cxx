@@ -988,14 +988,15 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     long            lTopBorder      = rBorder.Top() + 5;
     long            lBottomBorder   = rBorder.Bottom() - 5;
     const long      lVisibleHeight  = lBottomBorder - lTopBorder; //rBorder.GetHeight() ;
+    const size_t    nPostItListSize = aVisiblePostItList.size();
     long            lTranslatePos   = 0;
     bool            bScrollbars     = false;
 
     // do all necessary resizings
-    if (!aVisiblePostItList.empty() && lVisibleHeight < lNeededHeight)
+    if (nPostItListSize > 0 && lVisibleHeight < lNeededHeight)
     {
         // ok, now we have to really resize and adding scrollbars
-        const long lAverageHeight = (lVisibleHeight - aVisiblePostItList.size()*GetSpaceBetween()) / aVisiblePostItList.size();
+        const long lAverageHeight = (lVisibleHeight - nPostItListSize*GetSpaceBetween()) / nPostItListSize;
         if (lAverageHeight<GetMinimumSizeWithMeta())
         {
             bScrollbars = true;
