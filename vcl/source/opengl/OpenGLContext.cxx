@@ -200,8 +200,6 @@ bool WGLisExtensionSupported(const char *extension)
         if ((p==supported || p[-1]==' ') && (p[extlen]=='\0' || p[extlen]==' '))
             return 1; // Match
     }
-
-    CHECK_GL_ERROR();
 }
 
 bool InitMultisample(PIXELFORMATDESCRIPTOR pfd, int& rPixelFormat,
