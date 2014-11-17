@@ -43,28 +43,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::drawingml;
 
-namespace {
-
-// OBJ record -----------------------------------------------------------------
-
-// line formatting ------------------------------------------------------------
-
-const sal_uInt8 BIFF_OBJ_LINE_AUTOCOLOR     = 64;
-
-const sal_uInt8 BIFF_OBJ_LINE_SOLID         = 0;
-
-const sal_uInt8 BIFF_OBJ_LINE_HAIR          = 0;
-
-
-
-// fill formatting ------------------------------------------------------------
-
-const sal_uInt8 BIFF_OBJ_FILL_AUTOCOLOR     = 65;
-
-const sal_uInt8 BIFF_OBJ_PATT_SOLID         = 1;
-
-} // namespace
-
 // BIFF drawing page
 BiffDrawingBase::BiffDrawingBase( const WorksheetHelper& rHelper, const Reference< XDrawPage >& rxDrawPage ) :
     WorksheetHelper( rHelper ),
