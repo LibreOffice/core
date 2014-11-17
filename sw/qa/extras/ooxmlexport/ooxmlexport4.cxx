@@ -582,7 +582,7 @@ DECLARE_OOXMLEXPORT_TEST(testTableCurruption, "tableCurrupt.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
 {
-return;
+if (true) return;
     // check XML
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
