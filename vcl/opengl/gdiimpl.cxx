@@ -33,6 +33,8 @@
 #include "salgdi.hxx"
 #include "opengl/salbmp.hxx"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
 #define GL_ATTRIB_POS 0
@@ -72,6 +74,15 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     , mnColorUniform(0)
     , mnTextureProgram(0)
     , mnSamplerUniform(0)
+    , mnTransformedTextureProgram(0)
+    , mnTransformedViewportUniform(0)
+    , mnTransformedTransformUniform(0)
+    , mnTransformedSamplerUniform(0)
+    , mnTransformedMaskedTextureProgram(0)
+    , mnTransformedMaskedViewportUniform(0)
+    , mnTransformedMaskedTransformUniform(0)
+    , mnTransformedMaskedSamplerUniform(0)
+    , mnTransformedMaskedMaskUniform(0)
     , mnMaskedTextureProgram(0)
     , mnMaskedSamplerUniform(0)
     , mnMaskSamplerUniform(0)
@@ -338,6 +349,22 @@ bool OpenGLSalGraphicsImpl::CreateTextureProgram( void )
     return true;
 }
 
+bool OpenGLSalGraphicsImpl::CreateTransformedTextureProgram( void )
+{
+    mnTransformedTextureProgram = OpenGLHelper::LoadShaders( "transformedTextureVertexShader", "textureFragmentShader" );
+    if( mnTransformedTextureProgram == 0 )
+        return false;
+
+    glBindAttribLocation( mnTransformedTextureProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnTransformedTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    mnTransformedViewportUniform = glGetUniformLocation( mnTransformedTextureProgram, "viewport" );
+    mnTransformedTransformUniform = glGetUniformLocation( mnTransformedTextureProgram, "transform" );
+    mnTransformedSamplerUniform = glGetUniformLocation( mnTransformedTextureProgram, "sampler" );
+
+    CHECK_GL_ERROR();
+    return true;
+}
+
 bool OpenGLSalGraphicsImpl::CreateMaskedTextureProgram( void )
 {
     mnMaskedTextureProgram = OpenGLHelper::LoadShaders( "maskedTextureVertexShader", "maskedTextureFragmentShader" );
@@ -353,14 +380,31 @@ bool OpenGLSalGraphicsImpl::CreateMaskedTextureProgram( void )
     return true;
 }
 
-bool OpenGLSalGraphicsImpl::CreateMaskProgram( void )
+bool OpenGLSalGraphicsImpl::CreateTransformedMaskedTextureProgram( void )
 {
-    mnMaskedTextureProgram = OpenGLHelper::LoadShaders( "maskVertexShader", "maskFragmentShader" );
-    if( mnMaskedTextureProgram == 0 )
+    mnTransformedMaskedTextureProgram = OpenGLHelper::LoadShaders( "transformedTextureVertexShader", "maskedTextureFragmentShader" );
+    if( mnTransformedMaskedTextureProgram == 0 )
         return false;
 
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_POS, "position" );
-    glBindAttribLocation( mnTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    glBindAttribLocation( mnTransformedMaskedTextureProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnTransformedMaskedTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    mnTransformedMaskedViewportUniform = glGetUniformLocation( mnTransformedMaskedTextureProgram, "viewport" );
+    mnTransformedMaskedTransformUniform = glGetUniformLocation( mnTransformedMaskedTextureProgram, "transform" );
+    mnTransformedMaskedSamplerUniform = glGetUniformLocation( mnTransformedMaskedTextureProgram, "sampler" );
+    mnTransformedMaskedMaskUniform = glGetUniformLocation( mnTransformedMaskedTextureProgram, "mask" );
+
+    CHECK_GL_ERROR();
+    return true;
+}
+
+bool OpenGLSalGraphicsImpl::CreateMaskProgram( void )
+{
+    mnMaskProgram = OpenGLHelper::LoadShaders( "maskVertexShader", "maskFragmentShader" );
+    if( mnMaskProgram == 0 )
+        return false;
+
+    glBindAttribLocation( mnMaskProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnMaskProgram, GL_ATTRIB_TEX, "tex_coord_in" );
     mnMaskUniform = glGetUniformLocation( mnMaskProgram, "sampler" );
     mnMaskColorUniform = glGetUniformLocation( mnMaskProgram, "mask" );
 
@@ -672,6 +716,88 @@ void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRe
 
     glUseProgram( 0 );
 
+    CHECK_GL_ERROR();
+}
+
+void OpenGLSalGraphicsImpl::DrawTransformedTexture(
+    OpenGLTexture& rTexture,
+    OpenGLTexture& rMask,
+    const basegfx::B2DPoint& rNull,
+    const basegfx::B2DPoint& rX,
+    const basegfx::B2DPoint& rY )
+{
+    const basegfx::B2DVector aXRel = rX - rNull;
+    const basegfx::B2DVector aYRel = rY - rNull;
+    const float aValues[] = {
+        (float) aXRel.getX()/rTexture.GetWidth(),  (float) aXRel.getY()/rTexture.GetWidth(),  0, 0,
+        (float) aYRel.getX()/rTexture.GetHeight(), (float) aYRel.getY()/rTexture.GetHeight(), 0, 0,
+        0,                                         0,                                         1, 0,
+        (float) rNull.getX(),                      (float) rNull.getY(),                      0, 1 };
+    glm::mat4 mMatrix = glm::make_mat4( aValues );
+    GLfloat aVertices[8] = {
+        0, (float) rTexture.GetHeight(), 0, 0,
+        (float) rTexture.GetWidth(), 0, (float) rTexture.GetWidth(), (float) rTexture.GetHeight() };
+    GLfloat aTexCoord[8];
+    SalTwoRect aPosAry;
+
+    if( rMask )
+    {
+        if( mnTransformedMaskedTextureProgram == 0 )
+        {
+            if( !CreateTransformedMaskedTextureProgram() )
+                return;
+        }
+        glUseProgram( mnTransformedMaskedTextureProgram );
+        glUniform2f( mnTransformedMaskedViewportUniform, GetWidth(), GetHeight() );
+        glUniformMatrix4fv( mnTransformedMaskedTransformUniform, 1, GL_FALSE, glm::value_ptr( mMatrix ) );
+        glUniform1i( mnTransformedMaskedSamplerUniform, 0 );
+        glUniform1i( mnTransformedMaskedMaskUniform, 1 );
+        glActiveTexture( GL_TEXTURE1 );
+        rMask.Bind();
+        rMask.SetFilter( GL_LINEAR );
+        glEnable( GL_BLEND );
+        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    }
+    else
+    {
+        if( mnTransformedTextureProgram == 0 )
+        {
+            if( !CreateTransformedTextureProgram() )
+                return;
+        }
+        glUseProgram( mnTransformedTextureProgram );
+        glUniform2f( mnTransformedViewportUniform, GetWidth(), GetHeight() );
+        glUniformMatrix4fv( mnTransformedTransformUniform, 1, GL_FALSE, glm::value_ptr( mMatrix ) );
+        glUniform1i( mnTransformedSamplerUniform, 0 );
+    }
+
+    glActiveTexture( GL_TEXTURE0 );
+    rTexture.Bind();
+    rTexture.SetFilter( GL_LINEAR );
+    CHECK_GL_ERROR();
+
+    aPosAry.mnSrcX = aPosAry.mnSrcY = 0;
+    aPosAry.mnSrcWidth = rTexture.GetWidth();
+    aPosAry.mnSrcHeight = rTexture.GetHeight();
+    rTexture.GetCoord( aTexCoord, aPosAry );
+    glEnableVertexAttribArray( GL_ATTRIB_TEX );
+    glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
+    glEnableVertexAttribArray( GL_ATTRIB_POS );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
+    glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
+    glDisableVertexAttribArray( GL_ATTRIB_POS );
+    glDisableVertexAttribArray( GL_ATTRIB_TEX );
+
+    if( rMask )
+    {
+        glDisable( GL_BLEND );
+        glActiveTexture( GL_TEXTURE1 );
+        rMask.Unbind();
+    }
+
+    glActiveTexture( GL_TEXTURE0 );
+    rTexture.Unbind();
+    glUseProgram( 0 );
     CHECK_GL_ERROR();
 }
 
@@ -1390,13 +1516,26 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
 
 /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system */
 bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
-            const basegfx::B2DPoint& /*rNull*/,
-            const basegfx::B2DPoint& /*rX*/,
-            const basegfx::B2DPoint& /*rY*/,
-            const SalBitmap& /*rSourceBitmap*/,
-            const SalBitmap* /*pAlphaBitmap*/)
+            const basegfx::B2DPoint& rNull,
+            const basegfx::B2DPoint& rX,
+            const basegfx::B2DPoint& rY,
+            const SalBitmap& rSrcBitmap,
+            const SalBitmap* pAlphaBitmap)
 {
-    return false;
+    const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSrcBitmap);
+    const OpenGLSalBitmap* pMaskBitmap = static_cast<const OpenGLSalBitmap*>(pAlphaBitmap);
+    OpenGLTexture& rTexture( rBitmap.GetTexture( maContext ) );
+    OpenGLTexture aMask; // no texture
+
+    if( pMaskBitmap != NULL )
+        aMask = pMaskBitmap->GetTexture( maContext );
+
+    SAL_INFO( "vcl.opengl", "::drawTransformedBitmap" );
+    PreDraw();
+    DrawTransformedTexture( rTexture, aMask, rNull, rX, rY );
+    PostDraw();
+
+    return true;
 }
 
 /** Render solid rectangle with given transparency

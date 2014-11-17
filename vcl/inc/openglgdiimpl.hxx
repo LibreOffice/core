@@ -56,6 +56,17 @@ protected:
     GLuint mnTextureProgram;
     GLuint mnSamplerUniform;
 
+    GLuint mnTransformedTextureProgram;
+    GLuint mnTransformedViewportUniform;
+    GLuint mnTransformedTransformUniform;
+    GLuint mnTransformedSamplerUniform;
+
+    GLuint mnTransformedMaskedTextureProgram;
+    GLuint mnTransformedMaskedViewportUniform;
+    GLuint mnTransformedMaskedTransformUniform;
+    GLuint mnTransformedMaskedSamplerUniform;
+    GLuint mnTransformedMaskedMaskUniform;
+
     GLuint mnMaskedTextureProgram;
     GLuint mnMaskedSamplerUniform;
     GLuint mnMaskSamplerUniform;
@@ -79,7 +90,9 @@ protected:
 
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
+    bool CreateTransformedTextureProgram( void );
     bool CreateMaskedTextureProgram( void );
+    bool CreateTransformedMaskedTextureProgram( void );
     bool CreateMaskProgram( void );
     bool CreateLinearGradientProgram( void );
     bool CreateRadialGradientProgram( void );
@@ -103,6 +116,7 @@ public:
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
+    void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
     void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false, bool pPremultiplied = false );
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
