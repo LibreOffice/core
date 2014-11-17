@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
 #include <stdio.h>
 #include <osl/diagnose.h>
 #include <uno/threadpool.h>
@@ -125,7 +128,7 @@ namespace cppu_threadpool {
         }
         try {
             if (!create()) {
-                throw std::runtime_error("osl::Thread::create failed");
+                std::abort();
             }
         } catch (...) {
             rThreadAdmin.remove_locked( this );
