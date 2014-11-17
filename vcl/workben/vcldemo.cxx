@@ -26,6 +26,8 @@
 #include <vcl/button.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/floatwin.hxx>
+#include <vcl/salbtype.hxx>
+#include <vcl/bmpacc.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -700,8 +702,8 @@ public:
 
         void doDrawIcons(OutputDevice &rDev, Rectangle r, bool bExpanded)
         {
-            long nMaxH = 0, nVPos = 0;
-            Point p(r.TopLeft());
+            long nMaxH = 0;
+            Point p(r.LeftCenter());
             size_t nToRender = maIcons.size();
 
             if (!bExpanded && maIcons.size() > 64)
@@ -749,16 +751,78 @@ public:
                     nMaxH = aSize.Height();
                 if (p.X() >= r.Right()) // wrap to next line
                 {
-                    nVPos += nMaxH;
+                    p = Point(r.Left(), p.Y() + nMaxH);
                     nMaxH = 0;
-                    p = Point(r.Left(), r.Top() + nVPos);
                 }
-                if (p.Y() >= r.Bottom()) // re-start at top
+                if (p.Y() >= r.Bottom()) // re-start at middle
+                    p = r.LeftCenter();
+            }
+        }
+
+        BitmapEx AlphaRecovery(OutputDevice &rDev, Point aPt, BitmapEx &aSrc)
+        {
+            // Compositing onto 2x colors beyond our control
+            VirtualDevice aWhite, aBlack;
+            aWhite.SetOutputSizePixel(aSrc.GetSizePixel());
+            aWhite.SetBackground(Wallpaper(COL_WHITE));
+            aWhite.Erase();
+            aBlack.SetOutputSizePixel(aSrc.GetSizePixel());
+            aBlack.SetBackground(Wallpaper(COL_BLACK));
+            aBlack.Erase();
+            aWhite.DrawBitmapEx(Point(), aSrc);
+            aBlack.DrawBitmapEx(Point(), aSrc);
+
+            // Now recover that alpha...
+            Bitmap aWhiteBmp = aWhite.GetBitmap(Point(),aSrc.GetSizePixel());
+            Bitmap aBlackBmp = aBlack.GetBitmap(Point(),aSrc.GetSizePixel());
+            AlphaMask aMask(aSrc.GetSizePixel());
+            Bitmap aRecovered(aSrc.GetSizePixel(), 24);
+            {
+                AlphaMask::ScopedWriteAccess pMaskAcc(aMask);
+                Bitmap::ScopedWriteAccess pRecAcc(aRecovered);
+                Bitmap::ScopedReadAccess pAccW(aWhiteBmp); // a * pix + (1-a)
+                Bitmap::ScopedReadAccess pAccB(aBlackBmp); // a * pix + 0
+                int nSizeX = aSrc.GetSizePixel().Width();
+                int nSizeY = aSrc.GetSizePixel().Height();
+                for (int y = 0; y < nSizeY; y++)
                 {
-                    p = r.TopLeft();
-                    nVPos = 0;
+                    for (int x = 0; x < nSizeX; x++)
+                    {
+                        BitmapColor aColW = pAccW->GetPixel(y,x);
+                        BitmapColor aColB = pAccB->GetPixel(y,x);
+                        long nAR = (long)(aColW.GetRed() - aColB.GetRed()); // (1-a)
+                        long nAG = (long)(aColW.GetGreen() - aColB.GetGreen()); // (1-a)
+                        long nAB = (long)(aColW.GetBlue() - aColB.GetBlue()); // (1-a)
+
+#define CLAMP(a,b,c) (((a)<=(b))?(b):(((a)>=(c))?(c):(a)))
+
+                        // we get the most precision from the largest delta
+                        long nInverseAlpha = std::max(nAR, std::max(nAG, nAB)); // (1-a)
+                        nInverseAlpha = CLAMP(nInverseAlpha, 0, 255);
+
+                        pMaskAcc->SetPixel(y,x,BitmapColor((sal_Int8)CLAMP(nInverseAlpha,0,255)));
+                        // now recover the pixels
+                        long n2R = aColW.GetRed() + aColB.GetRed();
+                        long n2G = aColW.GetGreen() + aColB.GetGreen();
+                        long n2B = aColW.GetBlue() + aColB.GetBlue();
+                        pRecAcc->SetPixel(y,x,BitmapColor(
+                                                (sal_uInt8)CLAMP((n2R+1)/2-nInverseAlpha,0,255),
+                                                (sal_uInt8)CLAMP((n2G+1)/2-nInverseAlpha,0,255),
+                                                (sal_uInt8)CLAMP((n2B+1)/2-nInverseAlpha,0,255)));
+#undef CLAMP
+                    }
                 }
             }
+            rDev.DrawBitmap(aPt, aWhiteBmp);
+            aPt.Move(aSrc.GetSizePixel().Width(), 0);
+            rDev.DrawBitmap(aPt, aBlackBmp);
+            aPt.Move(aSrc.GetSizePixel().Width(), 0);
+            rDev.DrawBitmap(aPt, aRecovered);
+            aPt.Move(aSrc.GetSizePixel().Width(), 0);
+            rDev.DrawBitmap(aPt, aMask.GetBitmap());
+            aPt.Move(aSrc.GetSizePixel().Width(), 0);
+
+            return BitmapEx(aRecovered, aMask);
         }
 
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
@@ -767,6 +831,36 @@ public:
             if (rCtx.meStyle == RENDER_EXPANDED)
             {
                 LoadAllImages();
+
+                Point aLocation(0,maIcons[0].GetSizePixel().Height() + 8);
+                for (size_t i = 0; i < 100; i++)
+                {
+                    BitmapEx aSrc = maIcons[i];
+
+                    // original above
+                    Point aAbove(aLocation);
+                    aAbove.Move(0,-aSrc.GetSizePixel().Height() - 4);
+                    rDev.DrawBitmapEx(aAbove, aSrc);
+                    aAbove.Move(aSrc.GetSizePixel().Width(),0);
+                    aAbove.Move(aSrc.GetSizePixel().Width(),0);
+                    rDev.DrawBitmap(aAbove, aSrc.GetBitmap());
+                    aAbove.Move(aSrc.GetSizePixel().Width(),0);
+                    rDev.DrawBitmap(aAbove, aSrc.GetMask());
+
+                    // intermediates middle
+                    BitmapEx aResult = AlphaRecovery(rDev, aLocation, aSrc);
+
+                    // result below
+                    Point aBelow(aLocation);
+                    aBelow.Move(0,aResult.GetSizePixel().Height());
+                    rDev.DrawBitmapEx(aBelow, aResult);
+
+                    aLocation.Move(aSrc.GetSizePixel().Width()*6,0);
+                    if (aLocation.X() > r.Right())
+                        aLocation = Point(0,aLocation.Y()+aSrc.GetSizePixel().Height()*3+4);
+                }
+
+                // now go crazy with random foo
                 doDrawIcons(rDev, r, true);
             }
             else
