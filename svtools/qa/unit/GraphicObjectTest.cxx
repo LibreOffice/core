@@ -52,7 +52,9 @@ public:
     }
 
 private:
+#if 0
     DECL_LINK(getLinkStream, GraphicObject*);
+#endif
 
 private:
     CPPUNIT_TEST_SUITE(GraphicObjectTest);
@@ -71,14 +73,10 @@ const Graphic lcl_loadGraphic(const rtl::OUString &rUrl)
     return Graphic(aImage.GetBitmapEx());
 }
 
-#endif
-
 IMPL_LINK(GraphicObjectTest, getLinkStream, GraphicObject*, /*pGraphObj*/)
 {
     return reinterpret_cast<sal_IntPtr>(GRFMGR_AUTOSWAPSTREAM_LINK);
 }
-
-#if 0
 
 void GraphicObjectTest::testSwap()
 {
