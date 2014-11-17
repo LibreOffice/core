@@ -202,6 +202,105 @@ extern "C" void JNICALL abort_handler()
     }
 }
 
+/** helper function to check Java version requirements
+
+    This function checks if the Java version of the given VendorBase
+    meets the given Java version requirements.
+
+    @param aVendorInfo
+        [in]  the object to be inspected whether it meets the version requirements
+    @param sMinVersion
+        [in] represents the minimum version of a JRE. The string can be empty but
+        a null pointer is not allowed.
+    @param sMaxVersion
+        [in] represents the maximum version of a JRE. The string can be empty but
+        a null pointer is not allowed.
+    @param arExcludeList
+        [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
+        versions must not be returned by this function. It can be NULL.
+    @param nLenList
+        [in] the number of version strings contained in <code>arExcludeList</code>.
+
+   @return
+    JFW_PLUGIN_E_NONE the function ran successfully and the version requirements are met
+    JFW_PLUGIN_E_FAILED_VERSION at least one of the version requirements (minVersion,
+    maxVersion, excludeVersions) was violated
+    JFW_PLUGIN_E_WRONG_VERSION_FORMAT the version strings in
+    <code>sMinVersion,sMaxVersion,arExcludeList</code> are not recognized as valid
+    version strings.
+
+     */
+javaPluginError checkJavaVersionRequirements(
+    rtl::Reference<VendorBase> aVendorInfo,
+    rtl_uString *sMinVersion,
+    rtl_uString *sMaxVersion,
+    rtl_uString * * arExcludeList,
+    sal_Int32  nLenList)
+{
+    OUString ouMinVer(sMinVersion);
+    OUString ouMaxVer(sMaxVersion);
+
+    if (!ouMinVer.isEmpty())
+    {
+        try
+        {
+            if (aVendorInfo->compareVersions(ouMinVer) < 0)
+                return JFW_PLUGIN_E_FAILED_VERSION;
+        }
+        catch (MalformedVersionException&)
+        {
+            //The minVersion was not recognized as valid for this vendor.
+            JFW_ENSURE(
+                false,
+                "[Java framework]sunjavaplugin does not know version: "
+                + ouMinVer + " for vendor: " + aVendorInfo->getVendor()
+                + " .Check minimum Version." );
+            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        }
+    }
+
+    if (!ouMaxVer.isEmpty())
+    {
+        try
+        {
+            if (aVendorInfo->compareVersions(ouMaxVer) > 0)
+                return JFW_PLUGIN_E_FAILED_VERSION;
+        }
+        catch (MalformedVersionException&)
+        {
+            //The maxVersion was not recognized as valid for this vendor.
+            JFW_ENSURE(
+                false,
+                "[Java framework]sunjavaplugin does not know version: "
+                + ouMaxVer + " for vendor: " + aVendorInfo->getVendor()
+                + " .Check maximum Version." );
+            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        }
+    }
+
+    for (int i = 0; i < nLenList; i++)
+    {
+        OUString sExVer(arExcludeList[i]);
+        try
+        {
+            if (aVendorInfo->compareVersions(sExVer) == 0)
+                return JFW_PLUGIN_E_FAILED_VERSION;
+        }
+        catch (MalformedVersionException&)
+        {
+            //The excluded version was not recognized as valid for this vendor.
+            JFW_ENSURE(
+                false,
+                "[Java framework]sunjavaplugin does not know version: "
+                + sExVer + " for vendor: " + aVendorInfo->getVendor()
+                + " .Check excluded versions." );
+            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
+        }
+    }
+
+    return JFW_PLUGIN_E_NONE;
+}
+
 }
 
 javaPluginError jfw_plugin_getAllJavaInfos(
@@ -221,15 +320,13 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     if (!sVendor || !sMinVersion || !sMaxVersion || !parJavaInfo || !nLenInfoList)
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    //nLenlist contains the number of element in arExcludeList.
+    //nLenlist contains the number of elements in arExcludeList.
     //If no exclude list is provided then nLenList must be 0
     OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
     if (arExcludeList == NULL && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
 
     OUString ouVendor(sVendor);
-    OUString ouMinVer(sMinVersion);
-    OUString ouMaxVer(sMaxVersion);
 
     OSL_ASSERT(!ouVendor.isEmpty());
     if (ouVendor.isEmpty())
@@ -250,69 +347,13 @@ javaPluginError jfw_plugin_getAllJavaInfos(
         if (!ouVendor.equals(cur->getVendor()))
             continue;
 
-        if (!ouMinVer.isEmpty())
-        {
-            try
-            {
-                if (cur->compareVersions(sMinVersion) == -1)
-                    continue;
-            }
-            catch (MalformedVersionException&)
-            {
-                //The minVersion was not recognized as valid for this vendor.
-                JFW_ENSURE(
-                    false,
-                    "[Java framework]sunjavaplugin does not know version: "
-                    + ouMinVer + " for vendor: " + cur->getVendor()
-                    + " .Check minimum Version." );
-                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
-            }
-        }
+        javaPluginError err = checkJavaVersionRequirements(
+            cur, sMinVersion, sMaxVersion, arExcludeList, nLenList);
 
-        if (!ouMaxVer.isEmpty())
-        {
-            try
-            {
-                if (cur->compareVersions(sMaxVersion) == 1)
-                    continue;
-            }
-            catch (MalformedVersionException&)
-            {
-                //The maxVersion was not recognized as valid for this vendor.
-                JFW_ENSURE(
-                    false,
-                    "[Java framework]sunjavaplugin does not know version: "
-                    + ouMaxVer + " for vendor: " + cur->getVendor()
-                    + " .Check maximum Version." );
-                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
-            }
-        }
-
-        bool bExclude = false;
-        for (int j = 0; j < nLenList; j++)
-        {
-            OUString sExVer(arExcludeList[j]);
-            try
-            {
-                if (cur->compareVersions(sExVer) == 0)
-                {
-                    bExclude = true;
-                    break;
-                }
-            }
-            catch (MalformedVersionException&)
-            {
-                //The excluded version was not recognized as valid for this vendor.
-                JFW_ENSURE(
-                    false,
-                    "[Java framework]sunjavaplugin does not know version: "
-                    + sExVer + " for vendor: " + cur->getVendor()
-                    + " .Check excluded versions." );
-                return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
-            }
-        }
-        if (bExclude == true)
+        if (err == JFW_PLUGIN_E_FAILED_VERSION)
             continue;
+        else if (err == JFW_PLUGIN_E_WRONG_VERSION_FORMAT)
+            return err;
 
         vecVerifiedInfos.push_back(*i);
     }
@@ -341,8 +382,6 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     sal_Int32  nLenList,
     JavaInfo ** ppInfo)
 {
-    javaPluginError errorcode = JFW_PLUGIN_E_NONE;
-
     OSL_ASSERT(path);
     OSL_ASSERT(sVendor);
     OSL_ASSERT(sMinVersion);
@@ -354,15 +393,13 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     if (ouPath.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    //nLenlist contains the number of element in arExcludeList.
+    //nLenlist contains the number of elements in arExcludeList.
     //If no exclude list is provided then nLenList must be 0
     OSL_ASSERT( ! (arExcludeList == NULL && nLenList > 0));
     if (arExcludeList == NULL && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
 
     OUString ouVendor(sVendor);
-    OUString ouMinVer(sMinVersion);
-    OUString ouMaxVer(sMaxVersion);
 
     OSL_ASSERT(!ouVendor.isEmpty());
     if (ouVendor.isEmpty())
@@ -375,71 +412,11 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     //Check if the detected JRE matches the version requirements
     if (!ouVendor.equals(aVendorInfo->getVendor()))
         return JFW_PLUGIN_E_NO_JRE;
+    javaPluginError errorcode = checkJavaVersionRequirements(
+            aVendorInfo, sMinVersion, sMaxVersion, arExcludeList, nLenList);
 
-    if (!ouMinVer.isEmpty())
-    {
-        int nRes = 0;
-        try
-        {
-            nRes = aVendorInfo->compareVersions(ouMinVer);
-        }
-        catch (MalformedVersionException&)
-        {
-            //The minVersion was not recognized as valid for this vendor.
-            JFW_ENSURE(
-                false,
-                "[Java framework]sunjavaplugin does not know version: "
-                + ouMinVer + " for vendor: " + aVendorInfo->getVendor()
-                + " .Check minimum Version." );
-            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
-        }
-        if (nRes < 0)
-            return JFW_PLUGIN_E_FAILED_VERSION;
-    }
-
-    if (!ouMaxVer.isEmpty())
-    {
-        int nRes = 0;
-        try
-        {
-            nRes = aVendorInfo->compareVersions(ouMaxVer);
-        }
-        catch (MalformedVersionException&)
-        {
-            //The maxVersion was not recognized as valid for this vendor.
-            JFW_ENSURE(
-                false,
-                "[Java framework]sunjavaplugin does not know version: "
-                + ouMaxVer + " for vendor: " + aVendorInfo->getVendor()
-                + " .Check maximum Version." );
-            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
-        }
-        if (nRes > 0)
-            return JFW_PLUGIN_E_FAILED_VERSION;
-    }
-
-    for (int i = 0; i < nLenList; i++)
-    {
-        OUString sExVer(arExcludeList[i]);
-        int nRes = 0;
-        try
-        {
-            nRes = aVendorInfo->compareVersions(sExVer);
-        }
-        catch (MalformedVersionException&)
-        {
-            //The excluded version was not recognized as valid for this vendor.
-            JFW_ENSURE(
-                false,
-                "[Java framework]sunjavaplugin does not know version: "
-                + sExVer + " for vendor: " + aVendorInfo->getVendor()
-                + " .Check excluded versions." );
-            return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
-        }
-        if (nRes == 0)
-            return JFW_PLUGIN_E_FAILED_VERSION;
-    }
-    *ppInfo = createJavaInfo(aVendorInfo);
+    if (errorcode == JFW_PLUGIN_E_NONE)
+        *ppInfo = createJavaInfo(aVendorInfo);
 
     return errorcode;
 }
