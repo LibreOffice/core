@@ -251,8 +251,8 @@ if options.java:
     extern void Java_org_libreoffice_kit_LibreOfficeKit_initializeNative();
     p = (void *) Java_org_libreoffice_kit_LibreOfficeKit_initializeNative;
 
-    extern void Java_org_libreoffice_kit_Office_initialize();
-    p = (void *) Java_org_libreoffice_kit_Office_initialize;
+    extern void Java_org_libreoffice_kit_Office_getError();
+    p = (void *) Java_org_libreoffice_kit_Office_getError;
 
     """)
 
