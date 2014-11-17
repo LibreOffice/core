@@ -1049,14 +1049,14 @@ void ScTable::StartNeededListeners()
         aCol[i].StartNeededListeners();
 }
 
-void ScTable::BroadcastInArea(
+void ScTable::SetDirtyFromClip(
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
 {
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].BroadcastInArea(nRow1, nRow2, rBroadcastSpans);
+            aCol[i].SetDirtyFromClip(nRow1, nRow2, rBroadcastSpans);
 }
 
 void ScTable::StartListeningInArea(

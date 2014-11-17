@@ -1258,7 +1258,7 @@ public:
                                         SCCOL nCol2, SCROW nRow2,
                                         const ScMarkData& rMark, InsertDeleteFlags nInsFlag );
 
-    void BroadcastFromClip(
+    void SetDirtyFromClip(
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
         InsertDeleteFlags nInsFlag, sc::ColumnSpanSet& rBroadcastSpans );
 

@@ -349,7 +349,7 @@ public:
     bool IsFormulaDirty( SCROW nRow ) const;
 
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
-    void BroadcastInArea( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
+    void SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
     void SetDirty( SCROW nRow1, SCROW nRow2 );
     void        SetDirtyVar();
     void        SetDirtyAfterLoad();

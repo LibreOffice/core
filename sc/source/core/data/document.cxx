@@ -2429,18 +2429,17 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
     }
 }
 
-void ScDocument::BroadcastFromClip(
+void ScDocument::SetDirtyFromClip(
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const ScMarkData& rMark,
     InsertDeleteFlags nInsFlag, sc::ColumnSpanSet& rBroadcastSpans )
 {
     if (nInsFlag & IDF_CONTENTS)
     {
-        ScBulkBroadcast aBulkBroadcast( GetBASM());
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nMax; ++itr)
             if (maTabs[*itr])
-                maTabs[*itr]->BroadcastInArea(nCol1, nRow1, nCol2, nRow2, rBroadcastSpans);
+                maTabs[*itr]->SetDirtyFromClip(nCol1, nRow1, nCol2, nRow2, rBroadcastSpans);
     }
 }
 
@@ -2815,8 +2814,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
     // Listener aufbauen nachdem alles inserted wurde
     StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
-    // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
-    BroadcastFromClip(nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag, aBroadcastSpans);
+
+    // Set all formula cells dirty, and collect non-empty non-formula cell
+    // positions so that we can broadcast on them below.
+    SetDirtyFromClip(nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag, aBroadcastSpans);
 
     {
         ScBulkBroadcast aBulkBroadcast( GetBASM());
@@ -2901,7 +2902,7 @@ void ScDocument::CopyMultiRangeFromClip(
     StartListeningFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),
                            aDestRange.aEnd.Col(), aDestRange.aEnd.Row(), rMark, nInsFlag );
     // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
-    BroadcastFromClip(
+    SetDirtyFromClip(
         aDestRange.aStart.Col(), aDestRange.aStart.Row(), aDestRange.aEnd.Col(), aDestRange.aEnd.Row(),
         rMark, nInsFlag, aBroadcastSpans);
 
