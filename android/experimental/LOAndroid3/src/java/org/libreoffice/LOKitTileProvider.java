@@ -60,36 +60,39 @@ public class LOKitTileProvider implements TileProvider {
         Log.i(LOGTAG, "====> mDocument = " + mDocument);
 
         if (checkDocument()) {
-            int parts = mDocument.getParts();
-            Log.i(LOGTAG, "Document parts: " + parts);
-
-            LibreOfficeMainActivity.mAppContext.getDocumentPartView().clear();
-
-            if (parts > 1) {
-                for (int i = 0; i < parts; i++) {
-                    String partName = mDocument.getPartName(i);
-                    if (partName.isEmpty()) {
-                        partName = getGenericPartName(i);
-                    }
-                    Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
-
-                    mDocument.setPart(i);
-                    final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
-                    LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
-                }
-            }
-
-            mDocument.setPart(0);
-
-            LOKitShell.getMainHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().notifyDataSetChanged();
-                }
-            });
-
+            postLoad();
             mIsReady = true;
         }
+    }
+
+    public void postLoad() {
+        int parts = mDocument.getParts();
+        Log.i(LOGTAG, "Document parts: " + parts);
+
+        LibreOfficeMainActivity.mAppContext.getDocumentPartView().clear();
+
+        if (parts > 1) {
+            for (int i = 0; i < parts; i++) {
+                String partName = mDocument.getPartName(i);
+                if (partName.isEmpty()) {
+                    partName = getGenericPartName(i);
+                }
+                Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
+
+                mDocument.setPart(i);
+                final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
+                LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
+            }
+        }
+
+        mDocument.setPart(0);
+
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdpater().notifyDataSetChanged();
+            }
+        });
     }
 
     private String getGenericPartName(int i) {
