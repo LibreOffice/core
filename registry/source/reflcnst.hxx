@@ -106,24 +106,10 @@ inline sal_uInt32 writeBYTE(sal_uInt8* buffer, sal_uInt8 v)
     return sizeof(sal_uInt8);
 }
 
-inline sal_uInt16 readBYTE(const sal_uInt8* buffer, sal_uInt8& v)
-{
-    v = buffer[0];
-
-    return sizeof(sal_uInt8);
-}
-
 inline sal_uInt32 writeINT16(sal_uInt8* buffer, sal_Int16 v)
 {
     buffer[0] = (sal_uInt8)((v >> 8) & 0xFF);
     buffer[1] = (sal_uInt8)((v >> 0) & 0xFF);
-
-    return sizeof(sal_Int16);
-}
-
-inline sal_uInt32 readINT16(const sal_uInt8* buffer, sal_Int16& v)
-{
-    v = ((buffer[0] << 8) | (buffer[1] << 0));
 
     return sizeof(sal_Int16);
 }
@@ -206,22 +192,6 @@ inline sal_uInt32 writeINT64(sal_uInt8* buffer, sal_Int64 v)
     return sizeof(sal_Int64);
 }
 
-inline sal_uInt32 readINT64(const sal_uInt8* buffer, sal_Int64& v)
-{
-    v = (
-            ((sal_Int64)buffer[0] << 56) |
-            ((sal_Int64)buffer[1] << 48) |
-            ((sal_Int64)buffer[2] << 40) |
-            ((sal_Int64)buffer[3] << 32) |
-            ((sal_Int64)buffer[4] << 24) |
-            ((sal_Int64)buffer[5] << 16) |
-            ((sal_Int64)buffer[6] << 8)  |
-            ((sal_Int64)buffer[7] << 0)
-        );
-
-    return sizeof(sal_Int64);
-}
-
 inline sal_uInt32 writeUINT64(sal_uInt8* buffer, sal_uInt64 v)
 {
     buffer[0] = (sal_uInt8)((v >> 56) & 0xFF);
@@ -232,22 +202,6 @@ inline sal_uInt32 writeUINT64(sal_uInt8* buffer, sal_uInt64 v)
     buffer[5] = (sal_uInt8)((v >> 16) & 0xFF);
     buffer[6] = (sal_uInt8)((v >> 8) & 0xFF);
     buffer[7] = (sal_uInt8)((v >> 0) & 0xFF);
-
-    return sizeof(sal_uInt64);
-}
-
-inline sal_uInt32 readUINT64(const sal_uInt8* buffer, sal_uInt64& v)
-{
-    v = (
-            ((sal_uInt64)buffer[0] << 56) |
-            ((sal_uInt64)buffer[1] << 48) |
-            ((sal_uInt64)buffer[2] << 40) |
-            ((sal_uInt64)buffer[3] << 32) |
-            ((sal_uInt64)buffer[4] << 24) |
-            ((sal_uInt64)buffer[5] << 16) |
-            ((sal_uInt64)buffer[6] << 8)  |
-            ((sal_uInt64)buffer[7] << 0)
-        );
 
     return sizeof(sal_uInt64);
 }
