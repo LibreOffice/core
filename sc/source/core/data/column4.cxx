@@ -41,7 +41,8 @@ bool ScColumn::IsMerged( SCROW nRow ) const
     return pAttrArray->IsMerged(nRow);
 }
 
-void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol )
+void ScColumn::DeleteBeforeCopyFromClip(
+    sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol, sc::ColumnSpanSet& rBroadcastSpans )
 {
     sc::CopyFromClipContext::Range aRange = rCxt.getDestRange();
     if (!ValidRow(aRange.mnRow1) || !ValidRow(aRange.mnRow2))
@@ -107,7 +108,7 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
         SCROW nRow2 = it->mnRow2;
 
         if (nDelFlag & IDF_CONTENTS)
-            DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
+            DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows, &rBroadcastSpans);
 
         if (nDelFlag & IDF_NOTE)
             DeleteCellNotes(aBlockPos, nRow1, nRow2);
@@ -134,8 +135,6 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
         else if ((nDelFlag & IDF_HARDATTR) == IDF_HARDATTR)
             pAttrArray->DeleteHardAttr(nRow1, nRow2);
     }
-
-    BroadcastCells(aDeletedRows, SC_HINT_DATACHANGED);
 }
 
 void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, size_t nColOffset )
