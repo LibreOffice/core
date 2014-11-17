@@ -61,6 +61,7 @@
 #include "conditio.hxx"
 #include "editutil.hxx"
 #include <columnspanset.hxx>
+#include <listenercontext.hxx>
 
 #include <math.h>
 #include <boost/scoped_ptr.hpp>
@@ -1163,7 +1164,8 @@ void ScTable::FillFormulaVertical(
     }
 
     aCol[nCol].DeleteRanges(aSpans, IDF_CONTENTS, false);
-    aCol[nCol].CloneFormulaCell(rSrcCell, aSpans);
+    sc::StartListeningContext aCxt(*pDocument);
+    aCol[nCol].CloneFormulaCell(rSrcCell, aSpans, &aCxt);
 
     rProgress += nRow2 - nRow1 + 1;
     if (pProgress)
