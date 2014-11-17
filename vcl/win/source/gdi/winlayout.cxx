@@ -244,9 +244,9 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
             aRects.mnDestHeight = height;
 
             pImpl->PreDraw();
-            COLORREF color = GetTextColor(hDC);
-            SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
             // TODO when we have it:
+            // COLORREF color = GetTextColor(hDC);
+            // SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
             // pImpl->DrawSolidColorWithMask(salColor, aTexture, aRects);
             // and kill the following interim thing:
             pImpl->DrawTexture(aTexture, aRects);
