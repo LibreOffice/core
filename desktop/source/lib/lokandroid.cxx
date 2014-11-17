@@ -25,21 +25,14 @@
 jfieldID getHandleField(JNIEnv* pEnv, jobject aObject)
 {
     jclass clazz = pEnv->GetObjectClass(aObject);
-    return pEnv->GetFieldID(clazz, "handle", "J");
+    return pEnv->GetFieldID(clazz, "handle", "Ljava/nio/ByteBuffer;");
 }
 
 template <typename T>
 T* getHandle(JNIEnv* pEnv, jobject aObject)
 {
-    jlong aHandle = pEnv->GetLongField(aObject, getHandleField(pEnv, aObject));
-    return reinterpret_cast<T*>(aHandle);
-}
-
-template <typename T>
-void setHandle(JNIEnv* pEnv, jobject aObject, T* aType)
-{
-    jlong aHandle = reinterpret_cast<jlong>(aType);
-    pEnv->SetLongField(aObject, getHandleField(pEnv, aObject), aHandle);
+    jobject aHandle = pEnv->GetObjectField(aObject, getHandleField(pEnv, aObject));
+    return reinterpret_cast<T*>(pEnv->GetDirectBufferAddress(aHandle));
 }
 
 const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
@@ -60,11 +53,6 @@ extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getErr
     return pEnv->NewStringUTF(pError);
 }
 
-extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_initialize(JNIEnv* pEnv, jobject aObject, jlong aLokHandle)
-{
-    pEnv->SetLongField(aObject, getHandleField(pEnv, aObject), aLokHandle);
-}
-
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy(JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
@@ -80,13 +68,15 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAn
     _exit(0);
 }
 
-extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Office_documentLoadNative(JNIEnv* pEnv, jobject aObject, jstring documentPath)
+extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_Office_documentLoadNative(JNIEnv* pEnv, jobject aObject, jstring documentPath)
 {
     const char* aCloneDocumentPath = copyJavaString(pEnv, documentPath);
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
 
     LibreOfficeKitDocument* pDocument = pLibreOfficeKit->pClass->documentLoad(pLibreOfficeKit, aCloneDocumentPath);
-    return (jlong) pDocument;
+    jobject aHandle = pEnv->NewDirectByteBuffer((void*) pDocument, sizeof(LibreOfficeKitDocument));
+
+    return aHandle;
 }
 
 /* Document */

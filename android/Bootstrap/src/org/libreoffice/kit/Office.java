@@ -9,22 +9,24 @@
 
 package org.libreoffice.kit;
 
+import java.nio.ByteBuffer;
+
 public class Office {
 
-    private long handle;
+    private ByteBuffer handle;
 
-    public Office(long handle) {
+    public Office(ByteBuffer handle) {
         this.handle = handle;
     }
 
     public native String getError();
 
-    private native long documentLoadNative(String url);
+    private native ByteBuffer documentLoadNative(String url);
 
     public Document documentLoad(String url) {
-        long documentHandle = documentLoadNative(url);
+        ByteBuffer documentHandle = documentLoadNative(url);
         Document document = null;
-        if (documentHandle > 0) {
+        if (documentHandle != null) {
             document = new Document(documentHandle);
         }
         return document;
