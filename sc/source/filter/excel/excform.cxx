@@ -1791,6 +1791,16 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
         OSL_FAIL( "ExcelToSc::ReadExtensionArray - missing matrix" );
     }
 
+    //assuming worse case scenario of unknown types
+    const size_t nMinRecordSize = 1;
+    const size_t nMaxRows = aIn.GetRecLeft() / (nMinRecordSize * nCols);
+    if (nRows > nMaxRows)
+    {
+        SAL_WARN("sc", "Parsing error: " << nMaxRows <<
+                 " max possible rows, but " << nRows << " claimed, truncating");
+        nRows = nMaxRows;
+    }
+
     svl::SharedStringPool& rPool = GetDoc().GetSharedStringPool();
     for( nR = 0 ; nR < nRows; nR++ )
     {
