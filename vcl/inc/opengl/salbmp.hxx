@@ -84,10 +84,11 @@ public:
 public:
 
     bool            Create( OpenGLContext& rContext, const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight );
-    OpenGLTexture&  GetTexture( OpenGLContext& rContext ) const;
+    OpenGLTexture&  GetTexture() const;
 
 private:
 
+    void            ExecuteOperations();
     GLuint          CreateTexture();
     void            DeleteTexture();
     void            DrawTexture( GLuint nTexture, const SalTwoRect& rPosAry );
