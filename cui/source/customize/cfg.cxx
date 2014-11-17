@@ -4907,17 +4907,20 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
         if ( graphics.getLength() > 0 )
         {
             Image img = Image( graphics[ 0 ] );
-            aTbSymbol.InsertItem( nId, img, pConstIter->first );
+            if ( !img.GetBitmapEx().IsEmpty() )
+            {
+                aTbSymbol.InsertItem( nId, img, pConstIter->first );
 
-            uno::Reference< graphic::XGraphic > xGraphic = graphics[ 0 ];
+                uno::Reference< graphic::XGraphic > xGraphic = graphics[ 0 ];
 
-            if ( xGraphic.is() )
-                xGraphic->acquire();
+                if ( xGraphic.is() )
+                    xGraphic->acquire();
 
-            aTbSymbol.SetItemData(
-                nId, static_cast< void * > ( xGraphic.get() ) );
+                aTbSymbol.SetItemData(
+                    nId, static_cast< void * > ( xGraphic.get() ) );
 
-            ++nId;
+                ++nId;
+            }
         }
 
         ++pConstIter;
