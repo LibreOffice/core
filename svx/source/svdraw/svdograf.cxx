@@ -1347,8 +1347,6 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         aGraphic, aUserData, *pStream,
                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData.get()))
                     {
-                        const OUString aNewUserData( pGraphic->GetUserData() );
-
                         pGraphic->SetGraphic( aGraphic );
                         pGraphic->SetUserData();
 
