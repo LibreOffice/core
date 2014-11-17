@@ -1135,4 +1135,97 @@ bool ScColumn::HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const
     return aRet.first != maCells.end();
 }
 
+namespace {
+
+class StartListeningInAreaHandler
+{
+    sc::StartListeningContext& mrStartCxt;
+    sc::EndListeningContext& mrEndCxt;
+
+public:
+    StartListeningInAreaHandler( sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt ) :
+        mrStartCxt(rStartCxt), mrEndCxt(rEndCxt) {}
+
+    void operator() ( const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize )
+    {
+        if (node.type != sc::element_type_formula)
+            // We are only interested in formulas.
+            return;
+
+        ScFormulaCell** ppBeg = &sc::formula_block::at(*node.data, nOffset);
+        ScFormulaCell** ppEnd = ppBeg + nDataSize;
+
+        ScFormulaCell** pp = ppBeg;
+
+        // If the first formula cell belongs to a group and it's not the top
+        // cell, move up to the top cell of the group, and have all the extra
+        // formula cells stop listening.
+
+        ScFormulaCell* pFC = *pp;
+        if (pFC->IsShared() && !pFC->IsSharedTop())
+        {
+            SCROW nBackTrackSize = pFC->aPos.Row() - pFC->GetSharedTopRow();
+            if (nBackTrackSize > 0)
+            {
+                assert(static_cast<size_t>(nBackTrackSize) <= nOffset);
+                for (SCROW i = 0; i < nBackTrackSize; ++i)
+                    --pp;
+                endListening(pp, ppBeg);
+            }
+        }
+
+        for (; pp != ppEnd; ++pp)
+        {
+            pFC = *pp;
+
+            if (!pFC->IsSharedTop())
+            {
+                pFC->StartListeningTo(mrStartCxt);
+                continue;
+            }
+
+            // If This is the last group in the range, see if the group
+            // extends beyond the range, in which case have the excess
+            // formula cells stop listening.
+            size_t nEndGroupPos = (pp - ppBeg) + pFC->GetSharedLength();
+            if (nEndGroupPos > nDataSize)
+            {
+                size_t nExcessSize = nEndGroupPos - nDataSize;
+                ScFormulaCell** ppGrpEnd = pp + pFC->GetSharedLength();
+                ScFormulaCell** ppGrp = ppGrpEnd - nExcessSize;
+                endListening(ppGrp, ppGrpEnd);
+
+                // Register formula cells as a group.
+                sc::SharedFormulaUtil::startListeningAsGroup(mrStartCxt, pp);
+                pp = ppEnd - 1; // Move to the one before the end position.
+            }
+            else
+            {
+                // Register formula cells as a group.
+                sc::SharedFormulaUtil::startListeningAsGroup(mrStartCxt, pp);
+                pp += pFC->GetSharedLength() - 1; // Move to the last one in the group.
+            }
+        }
+    }
+
+private:
+    void endListening( ScFormulaCell** pp, ScFormulaCell** ppEnd )
+    {
+        for (; pp != ppEnd; ++pp)
+        {
+            ScFormulaCell& rFC = **pp;
+            rFC.EndListeningTo(mrEndCxt);
+        }
+    }
+};
+
+}
+
+void ScColumn::StartListeningInArea(
+    sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2 )
+{
+    StartListeningInAreaHandler aFunc(rStartCxt, rEndCxt);
+    sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

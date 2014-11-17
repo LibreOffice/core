@@ -1535,28 +1535,6 @@ void ScColumn::StartNeededListeners()
 
 namespace {
 
-class StartListeningInAreaHandler
-{
-    sc::StartListeningContext& mrCxt;
-public:
-    StartListeningInAreaHandler(sc::StartListeningContext& rCxt) : mrCxt(rCxt) {}
-
-    void operator() (size_t /*nRow*/, ScFormulaCell* p)
-    {
-        p->StartListeningTo(mrCxt);
-    }
-};
-
-}
-
-void ScColumn::StartListeningInArea( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 )
-{
-    StartListeningInAreaHandler aFunc(rCxt);
-    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
-}
-
-namespace {
-
 void applyTextNumFormat( ScColumn& rCol, SCROW nRow, SvNumberFormatter* pFormatter )
 {
     sal_uInt32 nFormat = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);

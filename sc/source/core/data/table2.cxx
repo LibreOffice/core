@@ -1060,13 +1060,14 @@ void ScTable::SetDirtyFromClip(
 }
 
 void ScTable::StartListeningInArea(
-    sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+    sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].StartListeningInArea(rCxt, nRow1, nRow2);
+            aCol[i].StartListeningInArea(rStartCxt, rEndCxt, nRow1, nRow2);
 }
 
 void ScTable::CopyToTable(

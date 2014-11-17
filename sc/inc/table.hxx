@@ -437,7 +437,8 @@ public:
         SCsCOL nDx, SCsROW nDy, ScTable* pTable );
 
     void StartListeningInArea(
-        sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
+        sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
+        SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
     void SetDirtyFromClip(
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
