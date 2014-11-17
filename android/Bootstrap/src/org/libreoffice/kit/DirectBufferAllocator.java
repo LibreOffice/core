@@ -15,7 +15,7 @@ import android.util.Log;
 
 import java.nio.ByteBuffer;
 
-public class DirectBufferAllocator {
+public final class DirectBufferAllocator {
 
     private static final String LOGTAG = DirectBufferAllocator.class.getSimpleName();
 
@@ -27,7 +27,7 @@ public class DirectBufferAllocator {
     private static native void freeDirectBufferNative(ByteBuffer aBuffer);
 
     public static ByteBuffer allocate(int size) {
-        Log.i(LOGTAG, "Buffer size: " + size);
+        Log.i(LOGTAG, "Allocating size: " + size);
         return allocateVM(size);
     }
 
@@ -37,7 +37,6 @@ public class DirectBufferAllocator {
 
     private static ByteBuffer allocateJNI(int size) {
         ByteBuffer directBuffer = allocateDirectBufferNative(size);
-
         if (directBuffer == null) {
             if (size <= 0) {
                 throw new IllegalArgumentException("Invalid allocation size: " + size);
@@ -47,17 +46,17 @@ public class DirectBufferAllocator {
         } else if (!directBuffer.isDirect()) {
             throw new AssertionError("allocateDirectBuffer() did not return a direct buffer");
         }
-
         return directBuffer;
     }
 
     private static ByteBuffer freeJNI(ByteBuffer buffer) {
         if (buffer == null) {
+            Log.i(LOGTAG, "ByteBuffer is null");
             return null;
         }
 
         if (!buffer.isDirect()) {
-            throw new IllegalArgumentException("buffer must be direct");
+            throw new IllegalArgumentException("ByteBuffer must be direct");
         }
 
         freeDirectBufferNative(buffer);
@@ -81,13 +80,14 @@ public class DirectBufferAllocator {
 
     private static ByteBuffer freeVM(ByteBuffer buffer) {
         if (buffer == null) {
+            Log.i(LOGTAG, "ByteBuffer is null");
             return null;
         }
 
         if (!buffer.isDirect()) {
-            throw new IllegalArgumentException("buffer must be direct");
+            throw new IllegalArgumentException("ByteBuffer must be direct");
         }
-
+        // can't free buffer - leave this to the VM
         return null;
     }
 }
