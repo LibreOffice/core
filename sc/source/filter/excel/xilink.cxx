@@ -634,6 +634,17 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     else if( nSBTabCnt )
     {
         meType = EXC_SBTYPE_EXTERN;
+
+        //assuming all empty strings with just len header of 0
+        const size_t nMinRecordSize = sizeof(sal_Int16);
+        const size_t nMaxRecords = rStrm.GetRecLeft() / nMinRecordSize;
+        if (nSBTabCnt > nMaxRecords)
+        {
+            SAL_WARN("sc", "Parsing error: " << nMaxRecords <<
+                     " max possible entries, but " << nSBTabCnt << " claimed, truncating");
+            nSBTabCnt = nMaxRecords;
+        }
+
         for( sal_uInt16 nSBTab = 0; nSBTab < nSBTabCnt; ++nSBTab )
         {
             OUString aTabName( rStrm.ReadUniString() );
