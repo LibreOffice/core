@@ -21,6 +21,7 @@ $(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
 	solidVertexShader.glsl \
 	textureFragmentShader.glsl \
 	textureVertexShader.glsl \
+	transformedTextureVertexShader.glsl \
 ))
 
 # vim: set noet sw=4 ts=4:
