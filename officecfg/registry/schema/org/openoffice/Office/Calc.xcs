@@ -1401,7 +1401,7 @@
           <info>
             <desc>Like OpenCLWhiteList, but for combinations known to be good.</desc>
           </info>
-          <value oor:separator=";">Linux/*/Advanced Micro Devices, Inc./*/1445.5 (sse2,avx)/</value>
+          <value oor:separator=";">Linux/*/Advanced Micro Devices, Inc./*/1445.5 (sse2,avx)/;*/*/Advanced Micro Devices, Inc./*/*/;*/*/Intel(R) Corporation/*/*/;*/*/NVIDIA Corporation/*/*/</value>
         </prop>
       </group>
       <group oor:name="Syntax">
