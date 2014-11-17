@@ -31,11 +31,10 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
+#include <vcldemo-debug.hxx>
+
 #define FIXME_SELF_INTERSECTING_WORKING 0
 #define FIXME_BOUNCE_BUTTON 0
-
-// debugging hook just for us
-SAL_DLLPUBLIC css::uno::Sequence< OUString > ImageTree_getAllImageNames();
 
 using namespace css;
 

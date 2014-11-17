@@ -45,6 +45,7 @@
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
 #include "impimagetree.hxx"
+#include <vcldemo-debug.hxx>
 
 namespace {
 
@@ -351,9 +352,6 @@ css::uno::Reference< css::container::XNameAccess > ImplImageTree::getNameAccess(
     checkPathAccess();
     return m_path.second;
 }
-
-// For vcldemo / debugging
-SAL_DLLPUBLIC css::uno::Sequence< OUString > ImageTree_getAllImageNames();
 
 /// Recursively dump all names ...
 css::uno::Sequence< OUString > ImageTree_getAllImageNames()
