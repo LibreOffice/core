@@ -3008,7 +3008,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     break;
     case RTF_LTRROW:
     case RTF_RTLROW:
-        m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblPrBase_bidiVisual, RTFValue::Pointer_t(new RTFValue(nKeyword == RTF_RTLROW)));
+        m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblPrBase_bidiVisual, RTFValue::Pointer_t(new RTFValue(int(nKeyword == RTF_RTLROW))));
         break;
     case RTF_LTRCH:
         // dmapper does not support this.
