@@ -85,7 +85,7 @@ namespace dbaui
         OTableWindowMap     m_aTableMap;
         ::std::vector<OTableConnection*>    m_vTableConnection;
 
-        Idle                m_aDragScrollIdle;
+        Timer               m_aDragScrollTimer;
         Rectangle           m_aDragRect;
         Rectangle           m_aSizingRect;
         Point               m_aDragOffset;

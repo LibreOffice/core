@@ -169,7 +169,7 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
 
     InitColors();
 
-    m_aDragScrollIdle.SetIdleHdl(LINK(this, OJoinTableView, OnDragScrollTimer));
+    m_aDragScrollTimer.SetTimeoutHdl(LINK(this, OJoinTableView, OnDragScrollTimer));
 }
 
 OJoinTableView::~OJoinTableView()
@@ -716,8 +716,8 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
     {
         if( m_pDragWin )
         {
-            if (m_aDragScrollIdle.IsActive())
-                m_aDragScrollIdle.Stop();
+            if (m_aDragScrollTimer.IsActive())
+                m_aDragScrollTimer.Stop();
 
             // adjust position of child after moving
             // windows are not allowed to leave display range
@@ -776,8 +776,8 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
     }
     else if (rTEvt.IsTrackingCanceled())
     {
-        if (m_aDragScrollIdle.IsActive())
-            m_aDragScrollIdle.Stop();
+        if (m_aDragScrollTimer.IsActive())
+            m_aDragScrollTimer.Stop();
         EndTracking();
     }
     else
@@ -989,8 +989,8 @@ bool OJoinTableView::ScrollWhileDragging()
     OSL_ENSURE(m_pDragWin != NULL, "OJoinTableView::ScrollWhileDragging must not be called when a window is being dragged !");
 
     // kill the timer
-    if (m_aDragScrollIdle.IsActive())
-        m_aDragScrollIdle.Stop();
+    if (m_aDragScrollTimer.IsActive())
+        m_aDragScrollTimer.Stop();
 
     Point aDragWinPos = m_ptPrevDraggingPos - m_aDragOffset;
     Size aDragWinSize = m_pDragWin->GetSizePixel();
@@ -1048,8 +1048,8 @@ bool OJoinTableView::ScrollWhileDragging()
     // resetting timer, if still necessary
     if (bNeedScrollTimer)
     {
-        m_aDragScrollIdle.SetPriority(VCL_IDLE_PRIORITY_LOW);
-        m_aDragScrollIdle.Start();
+        m_aDragScrollTimer.SetTimeout(100);
+        m_aDragScrollTimer.Start();
     }
 
     // redraw DraggingRect
