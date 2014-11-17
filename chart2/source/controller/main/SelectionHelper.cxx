@@ -172,13 +172,12 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
         //bAllowMultiClickSelectionChange==true -> a second click on the same object can lead to a changed selection (e.g. series -> single data point)
 
         //get object to select:
-        SdrObject* pNewObj = 0;
         {
             m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = ObjectIdentifier();
 
             //the search for the object to select starts with the hit object deepest in the grouping hierarchy (a leaf in the tree)
             //further we travel along the grouping hierarchy from child to parent
-            pNewObj = pDrawViewWrapper->getHitObject(rMousePos);
+            SdrObject* pNewObj = pDrawViewWrapper->getHitObject(rMousePos);
             m_aSelectedOID = ObjectIdentifier( lcl_getObjectName( pNewObj ) );//name of pNewObj
 
             //ignore handle only objects for hit test
@@ -207,7 +206,6 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                         //if a sibling of the last selected object is clicked don't go up further
                         break;
                     }
-                    SdrObject*    pLastChild     = pNewObj;
                     ObjectIdentifier aLastChild = m_aSelectedOID;
                     if ( !SelectionHelper::findNamedParent( pNewObj, m_aSelectedOID, false ) )
                     {
@@ -220,17 +218,15 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                     {
                         if( bAllowMultiClickSelectionChange )
                         {
-                            pNewObj  = pLastChild;
                             m_aSelectedOID = aLastChild;
                         }
                         else
                             m_aSelectedOID_selectOnlyIfNoDoubleClickIsFollowing = aLastChild;
-
                         break;
                     }
                 }
 
-                OSL_ENSURE( pNewObj && m_aSelectedOID.isValid(), "somehow lost selected object" );
+                OSL_ENSURE(m_aSelectedOID.isValid(), "somehow lost selected object");
             }
             else
             {
@@ -281,7 +277,6 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
                         if( pDrawViewWrapper->IsObjectHit( pLegend, rMousePos ) )
                         {
                             m_aSelectedOID = ObjectIdentifier( aLegendCID );
-                            pNewObj = pLegend;
                         }
                     }
                 }
