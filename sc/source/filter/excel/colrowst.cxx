@@ -132,9 +132,6 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
     ::set_flag(nFlagVal, EXC_COLROW_USED);
     ::set_flag(nFlagVal, EXC_COLROW_DEFAULT, bDefHeight);
 
-    if (!bDefHeight && nRawHeight == 0)
-        maHiddenRows.insert_back(nScRow, nScRow+1, true);
-
     maRowFlags.insert_back(nScRow, nScRow+1, nFlagVal);
 
     if (nScRow > mnLastScRow)
