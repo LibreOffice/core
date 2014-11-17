@@ -2712,7 +2712,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         {
             // Delete cells in the destination only if their corresponding clip cells are not empty.
             aCxt.setDestRange(nCol1, nRow1, nCol2, nRow2);
-            DeleteBeforeCopyFromClip(aCxt, rMark);
+            DeleteBeforeCopyFromClip(aCxt, rMark, aBroadcastSpans);
         }
         else
             DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag, false, &aBroadcastSpans);

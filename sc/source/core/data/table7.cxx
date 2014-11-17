@@ -24,7 +24,8 @@ bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
     return aCol[nCol].IsMerged(nRow);
 }
 
-void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScTable& rClipTab )
+void ScTable::DeleteBeforeCopyFromClip(
+    sc::CopyFromClipContext& rCxt, const ScTable& rClipTab, sc::ColumnSpanSet& rBroadcastSpans )
 {
     sc::CopyFromClipContext::Range aRange = rCxt.getDestRange();
     if (!ValidCol(aRange.mnCol1) || !ValidCol(aRange.mnCol2))
@@ -37,15 +38,13 @@ void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScT
     ScRange aClipRange = rCxt.getClipDoc()->GetClipParam().getWholeRange();
     SCCOL nClipCol = aClipRange.aStart.Col();
     {
-        ScBulkBroadcast aBulkBroadcast(pDocument->GetBASM());
-
         for (SCCOL nCol = aRange.mnCol1; nCol <= aRange.mnCol2; ++nCol, ++nClipCol)
         {
             if (nClipCol > aClipRange.aEnd.Col())
                 nClipCol = aClipRange.aStart.Col(); // loop through columns.
 
             const ScColumn& rClipCol = rClipTab.aCol[nClipCol];
-            aCol[nCol].DeleteBeforeCopyFromClip(rCxt, rClipCol);
+            aCol[nCol].DeleteBeforeCopyFromClip(rCxt, rClipCol, rBroadcastSpans);
         }
     }
 

@@ -247,7 +247,9 @@ public:
     bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
     bool InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;
 
-    void DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol );
+    void DeleteBeforeCopyFromClip(
+        sc::CopyFromClipContext& rCxt, const ScColumn& rClipCol, sc::ColumnSpanSet& rBroadcastSpans );
+
     void CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, size_t nColOffset );
 
     void CopyFromClip(

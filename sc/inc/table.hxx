@@ -426,7 +426,8 @@ public:
 
     bool InitColumnBlockPosition( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol );
 
-    void DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScTable& rClipTab );
+    void DeleteBeforeCopyFromClip(
+        sc::CopyFromClipContext& rCxt, const ScTable& rClipTab, sc::ColumnSpanSet& rBroadcastSpans );
 
     void CopyOneCellFromClip(
         sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
