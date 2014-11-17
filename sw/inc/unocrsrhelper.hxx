@@ -66,15 +66,26 @@ enum SwGetPropertyStatesCaller
 
 namespace SwUnoCursorHelper
 {
-    //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
-    typedef std::map< sal_uInt32, com::sun::star::uno::Any *> AnyMapHelper_t;
-    class SwAnyMapHelper : public AnyMapHelper_t
+    class SwAnyMapHelper
     {
+        public:
+            typedef sal_uInt32                                  key_type;
+            typedef com::sun::star::uno::Any *                  mapped_type;
+            typedef std::pair<const key_type,mapped_type>       value_type;
+            typedef std::map<key_type,mapped_type>::iterator    iterator;
+        private:
+            //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
+            std::map<key_type,mapped_type> maMap;
         public:
             ~SwAnyMapHelper();
 
             void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any& rAny );
             bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any*& pAny );
+
+            iterator begin() { return maMap.begin(); }
+            iterator end() { return maMap.end(); }
+            iterator find(const key_type& key) { return maMap.find(key); }
+            std::pair<iterator,bool> insert(const value_type& value) { return maMap.insert(value); }
     };
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >

@@ -1401,7 +1401,7 @@ void makeTableCellRedline( SwTableBox& rTableBox,
 
 SwAnyMapHelper::~SwAnyMapHelper()
 {
-    AnyMapHelper_t::iterator aIt = begin();
+    iterator aIt = begin();
     while( aIt != end() )
     {
         delete ( aIt->second );
@@ -1412,7 +1412,7 @@ SwAnyMapHelper::~SwAnyMapHelper()
 void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
-    AnyMapHelper_t::iterator aIt = find( nKey );
+    iterator aIt = find( nKey );
     if( aIt != end() )
     {
         *(aIt->second) = rAny;
@@ -1425,7 +1425,7 @@ bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, co
 {
     bool bRet = false;
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
-    AnyMapHelper_t::iterator aIt = find( nKey );
+    iterator aIt = find( nKey );
     if( aIt != end() )
     {
         pAny = aIt->second;

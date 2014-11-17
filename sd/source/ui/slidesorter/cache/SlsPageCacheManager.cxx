@@ -135,10 +135,21 @@ public:
 /** The recently used caches are stored in one queue for each document.
 */
 class PageCacheManager::RecentlyUsedPageCaches
-    : public ::std::map<DocumentKey,RecentlyUsedQueue>
 {
 public:
-    RecentlyUsedPageCaches (void) {};
+    typedef DocumentKey                                 key_type;
+    typedef RecentlyUsedQueue                           mapped_type;
+    typedef std::pair<const key_type,mapped_type>       value_type;
+    typedef std::map<key_type,mapped_type>::iterator    iterator;
+private:
+    std::map<key_type,mapped_type> maMap;
+public:
+    RecentlyUsedPageCaches () {};
+
+    iterator end() { return maMap.end(); }
+    void clear() { maMap.clear(); }
+    iterator find(const key_type& key) { return maMap.find(key); }
+    std::pair<iterator,bool> insert(const value_type& value) { return maMap.insert(value); }
 };
 
 class PageCacheManager::Deleter
