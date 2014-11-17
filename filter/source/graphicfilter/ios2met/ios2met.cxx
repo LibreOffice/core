@@ -770,20 +770,18 @@ Color OS2METReader::GetPaletteColor(sal_uInt32 nIndex)
                  sal::static_int_cast< sal_uInt8 >(nIndex&0xff));
 }
 
-
 sal_uInt16 OS2METReader::ReadBigEndianWord()
 {
-    sal_uInt8 nLo,nHi;
+    sal_uInt8 nLo(0), nHi(0);
     pOS2MET->ReadUChar( nHi ).ReadUChar( nLo );
     return (((sal_uInt16)nHi)<<8)|(((sal_uInt16)nLo)&0x00ff);
 }
 
 sal_uLong OS2METReader::ReadBigEndian3BytesLong()
 {
-    sal_uInt16 nLo;
-    sal_uInt8 nHi;
+    sal_uInt8 nHi(0);
     pOS2MET->ReadUChar( nHi );
-    nLo=ReadBigEndianWord();
+    sal_uInt16 nLo = ReadBigEndianWord();
     return ((((sal_uLong)nHi)<<16)&0x00ff0000)|((sal_uLong)nLo);
 }
 
@@ -2354,7 +2352,14 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                     pOS2MET->SeekRel(4);
                     nStartIndex=ReadBigEndianWord();
                     pOS2MET->SeekRel(3);
-                    pOS2MET->ReadUChar( nbyte ); nBytesPerCol=((sal_uInt16)nbyte) & 0x00ff;
+                    pOS2MET->ReadUChar( nbyte );
+                    nBytesPerCol=((sal_uInt16)nbyte) & 0x00ff;
+                    if (nBytesPerCol == 0)
+                    {
+                        pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
+                        ErrorCode=4;
+                        break;
+                    }
                     nEndIndex=nStartIndex+(nElemLen-11)/nBytesPerCol;
                     for (i=nStartIndex; i<nEndIndex; i++) {
                         if (nBytesPerCol > 3) pOS2MET->SeekRel(nBytesPerCol-3);
@@ -2553,10 +2558,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
 
 void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile )
 {
-    sal_uInt16 nFieldSize;
-    sal_uInt16 nFieldType;
     sal_uLong nPercent, nLastPercent;
-    sal_uInt8 nMagicByte;
 
     ErrorCode=0;
 
@@ -2622,6 +2624,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
 
     sal_uInt64 const nStartPos = pOS2MET->Tell();
     sal_uInt64 const nRemaining = pOS2MET->remainingSize();
+
     Callback(0); nLastPercent=0;
 
     sal_uInt64 nPos = pOS2MET->Tell();
@@ -2634,15 +2637,17 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
             nLastPercent=nPercent;
         }
 
-        nFieldSize=ReadBigEndianWord();
-
+        sal_uInt16 nFieldSize = ReadBigEndianWord();
+        sal_uInt8 nMagicByte(0);
         pOS2MET->ReadUChar( nMagicByte );
         if (nMagicByte!=0xd3) {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             ErrorCode=7;
             break;
         }
-        pOS2MET->ReadUInt16( nFieldType );
+
+        sal_uInt16 nFieldType(0);
+        pOS2MET->ReadUInt16(nFieldType);
 
         pOS2MET->SeekRel(3);
         nPos+=8; nFieldSize-=8;
