@@ -22,6 +22,7 @@
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 
 #include <limits.h>
 #include <algorithm>
