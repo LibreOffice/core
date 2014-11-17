@@ -473,8 +473,6 @@ void CppuType::addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes)
     const
 {
     //TODO: Only include what is really needed
-    includes.addRtlInstanceHxx();
-    includes.addOslMutexHxx();
     includes.addType();
     if (m_typeMgr->getSort(name_)
         == codemaker::UnoType::SORT_INTERFACE_TYPE)
@@ -1383,6 +1381,8 @@ void InterfaceType::addComprehensiveGetCppuTypeIncludes(
     // The comprehensive getCppuType method always includes a line
     // "getCppuType( (const ::css::uno::RuntimeException*)0 );":
     includes.addCppuUnotypeHxx();
+    includes.addRtlInstanceHxx(); // using rtl::StaticWithInit
+    includes.addOslMutexHxx();
     includes.add("com.sun.star.uno.RuntimeException");
 }
 
@@ -2131,7 +2131,6 @@ void PlainStructType::addComprehensiveGetCppuTypeIncludes(
     includes.addType();
     includes.addCppuUnotypeHxx();
     includes.addRtlInstanceHxx();
-    includes.addOslMutexHxx();
     includes.addRtlUstringH();
     includes.addRtlUstringHxx();
     includes.addSalTypesH();
@@ -2602,7 +2601,6 @@ void PolyStructType::addComprehensiveGetCppuTypeIncludes(
     includes.addType();
     includes.addCppuUnotypeHxx();
     includes.addRtlInstanceHxx();
-    includes.addOslMutexHxx();
     includes.addRtlUstringH();
     includes.addRtlUstringHxx();
     includes.addSalTypesH();
@@ -2669,6 +2667,9 @@ private:
     virtual void dumpHxxFile(
         FileStream & out, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
 
+    virtual void addComprehensiveGetCppuTypeIncludes(
+        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+
     virtual void dumpLightGetCppuType(FileStream & out) SAL_OVERRIDE;
 
     virtual void dumpNormalGetCppuType(FileStream & out) SAL_OVERRIDE;
@@ -2688,6 +2689,13 @@ private:
 
     rtl::Reference< unoidl::ExceptionTypeEntity > entity_;
 };
+
+void ExceptionType::addComprehensiveGetCppuTypeIncludes(
+    codemaker::cppumaker::Includes & includes) const
+{
+    includes.addCppuUnotypeHxx();
+    includes.addRtlInstanceHxx(); // using rtl::StaticWithInit
+}
 
 void ExceptionType::dumpHxxFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
@@ -3101,6 +3109,9 @@ public:
 private:
     virtual void dumpDeclaration(FileStream& o) SAL_OVERRIDE;
 
+    virtual void addComprehensiveGetCppuTypeIncludes(
+        codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
+
     void dumpHxxFile(FileStream& o, codemaker::cppumaker::Includes & includes) SAL_OVERRIDE;
 
     void        dumpNormalGetCppuType(FileStream& o) SAL_OVERRIDE;
@@ -3108,6 +3119,13 @@ private:
 
     rtl::Reference< unoidl::EnumTypeEntity > entity_;
 };
+
+void EnumType::addComprehensiveGetCppuTypeIncludes(
+    codemaker::cppumaker::Includes & includes) const
+{
+    includes.addCppuUnotypeHxx();
+    includes.addRtlInstanceHxx(); // using rtl::StaticWithInit
+}
 
 void EnumType::dumpDeclaration(FileStream& o)
 {
