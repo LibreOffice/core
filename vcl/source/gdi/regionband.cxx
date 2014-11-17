@@ -199,10 +199,21 @@ void RegionBand::load(SvStream& rIStrm)
     ImplRegionBand* pCurrBand = 0;
 
     // get header from first element
-    sal_uInt16 nTmp16(0);
-    rIStrm.ReadUInt16( nTmp16 );
+    sal_uInt16 nTmp16(STREAMENTRY_END);
+    rIStrm.ReadUInt16(nTmp16);
 
-    while(STREAMENTRY_END != (StreamEntryType)nTmp16)
+    if (STREAMENTRY_END == (StreamEntryType)nTmp16)
+        return;
+
+    size_t nRecordsPossible = rIStrm.remainingSize() / (2*sizeof(sal_Int32));
+    if (!nRecordsPossible)
+    {
+        OSL_ENSURE(false, "premature end of region stream" );
+        implReset();
+        return;
+    }
+
+    do
     {
         // insert new band or new separation?
         if(STREAMENTRY_BANDHEADER == (StreamEntryType)nTmp16)
@@ -254,6 +265,7 @@ void RegionBand::load(SvStream& rIStrm)
         // get next header
         rIStrm.ReadUInt16( nTmp16 );
     }
+    while(STREAMENTRY_END != (StreamEntryType)nTmp16);
 
 }
 
