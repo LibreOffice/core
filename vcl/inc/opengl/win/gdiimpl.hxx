@@ -29,6 +29,7 @@ protected:
     virtual GLfloat GetHeight() const SAL_OVERRIDE;
 
 public:
+    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
 
 };
 
