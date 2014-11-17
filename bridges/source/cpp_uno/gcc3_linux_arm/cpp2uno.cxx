@@ -22,6 +22,7 @@
 
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
