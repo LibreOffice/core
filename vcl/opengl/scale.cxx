@@ -104,6 +104,7 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     OpenGLTexture aNewTex = OpenGLTexture( nNewWidth, nNewHeight );
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aNewTex.Id(), 0 );
 
+    glViewport( 0, 0, nNewWidth, nNewHeight );
     maTexture.Bind();
     nOldFilter = maTexture.GetFilter();
     maTexture.SetFilter( nFilter );

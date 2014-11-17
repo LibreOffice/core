@@ -130,8 +130,9 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
         mnBufWidth = rSourceBitmap.mnBufWidth;
         mnBufHeight = rSourceBitmap.mnBufHeight;
         maPalette = rSourceBitmap.maPalette;
+        // execute any pending operations on the source bitmap
+        maTexture = rSourceBitmap.GetTexture();
         mpContext = rSourceBitmap.mpContext;
-        maTexture = rSourceBitmap.maTexture;
         mbDirtyTexture = false;
         maUserBuffer = rSourceBitmap.maUserBuffer;
 
@@ -147,13 +148,13 @@ bool OpenGLSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun
     return false;
 }
 
-OpenGLTexture& OpenGLSalBitmap::GetTexture( OpenGLContext& rContext ) const
+OpenGLTexture& OpenGLSalBitmap::GetTexture() const
 {
     OpenGLSalBitmap* pThis = const_cast<OpenGLSalBitmap*>(this);
-    if( !mpContext )
-        pThis->mpContext = &rContext;
     if( !maTexture || mbDirtyTexture )
         pThis->CreateTexture();
+    else if( !maPendingOps.empty() )
+        pThis->ExecuteOperations();
     SAL_INFO( "vcl.opengl", "Got texture " << maTexture.Id() );
     return pThis->maTexture;
 }
@@ -327,6 +328,17 @@ Size OpenGLSalBitmap::GetSize() const
     return aSize;
 }
 
+void OpenGLSalBitmap::ExecuteOperations()
+{
+    makeCurrent();
+    while( !maPendingOps.empty() )
+    {
+        OpenGLSalBitmapOp* pOp = maPendingOps.front();
+        pOp->Execute();
+        maPendingOps.pop_front();
+    }
+}
+
 GLuint OpenGLSalBitmap::CreateTexture()
 {
     SAL_INFO( "vcl.opengl", "::CreateTexture" );
@@ -395,20 +407,16 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
     }
 
-    makeCurrent();
+    if( !makeCurrent() )
+        return 0;
+
     maTexture = OpenGLTexture (mnBufWidth, mnBufHeight, nFormat, nType, pData );
     SAL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
 
     if( bAllocated )
         delete[] pData;
 
-    while( !maPendingOps.empty() )
-    {
-        OpenGLSalBitmapOp* pOp = maPendingOps.front();
-        pOp->Execute();
-        maPendingOps.pop_front();
-    }
-
+    ExecuteOperations();
     mbDirtyTexture = false;
 
     CHECK_GL_ERROR();

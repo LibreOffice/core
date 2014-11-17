@@ -1339,7 +1339,7 @@ void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitm
     assert(dynamic_cast<const OpenGLSalBitmap*>(&rSalBitmap));
 
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
-    OpenGLTexture& rTexture = rBitmap.GetTexture( maContext );
+    OpenGLTexture& rTexture = rBitmap.GetTexture();
 
     SAL_INFO( "vcl.opengl", "::drawBitmap" );
     PreDraw();
@@ -1362,8 +1362,8 @@ void OpenGLSalGraphicsImpl::drawBitmap(
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const OpenGLSalBitmap& rMask = static_cast<const OpenGLSalBitmap&>(rMaskBitmap);
-    OpenGLTexture& rTexture( rBitmap.GetTexture( maContext ) );
-    OpenGLTexture& rMaskTex( rMask.GetTexture( maContext ) );
+    OpenGLTexture& rTexture( rBitmap.GetTexture() );
+    OpenGLTexture& rMaskTex( rMask.GetTexture() );
 
     SAL_INFO( "vcl.opengl", "::drawBitmap with MASK" );
     PreDraw();
@@ -1377,7 +1377,7 @@ void OpenGLSalGraphicsImpl::drawMask(
             SalColor nMaskColor )
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
-    OpenGLTexture& rTexture( rBitmap.GetTexture( maContext ) );
+    OpenGLTexture& rTexture( rBitmap.GetTexture() );
 
     SAL_INFO( "vcl.opengl", "::drawMask" );
     PreDraw();
@@ -1492,8 +1492,8 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
     const OpenGLSalBitmap& rAlpha = static_cast<const OpenGLSalBitmap&>(rAlphaBitmap);
-    OpenGLTexture& rTexture( rBitmap.GetTexture( maContext ) );
-    OpenGLTexture& rAlphaTex( rAlpha.GetTexture( maContext ) );
+    OpenGLTexture& rTexture( rBitmap.GetTexture() );
+    OpenGLTexture& rAlphaTex( rAlpha.GetTexture() );
 
     SAL_INFO( "vcl.opengl", "::drawAlphaBitmap" );
     PreDraw();
@@ -1507,7 +1507,7 @@ bool OpenGLSalGraphicsImpl::drawAlphaBitmap(
             const SalBitmap& rSalBitmap )
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
-    OpenGLTexture& rTexture( rBitmap.GetTexture( maContext ) );
+    OpenGLTexture& rTexture( rBitmap.GetTexture() );
 
     SAL_INFO( "vcl.opengl", "::drawAlphaBitmap" );
     PreDraw();
@@ -1528,11 +1528,11 @@ bool OpenGLSalGraphicsImpl::drawTransformedBitmap(
 {
     const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSrcBitmap);
     const OpenGLSalBitmap* pMaskBitmap = static_cast<const OpenGLSalBitmap*>(pAlphaBitmap);
-    OpenGLTexture& rTexture( rBitmap.GetTexture( maContext ) );
+    OpenGLTexture& rTexture( rBitmap.GetTexture() );
     OpenGLTexture aMask; // no texture
 
     if( pMaskBitmap != NULL )
-        aMask = pMaskBitmap->GetTexture( maContext );
+        aMask = pMaskBitmap->GetTexture();
 
     SAL_INFO( "vcl.opengl", "::drawTransformedBitmap" );
     PreDraw();
