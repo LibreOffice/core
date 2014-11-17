@@ -25,7 +25,7 @@
 #include <tools/link.hxx>
 #include <osl/mutex.hxx>
 
-class Timer;
+class Idle;
 struct ImplSVEvent;
 
 namespace svtools {
@@ -34,7 +34,7 @@ class SVT_DLLPUBLIC AsynchronLink
 {
     Link   _aLink;
     ImplSVEvent * _nEventId;
-    Timer* _pTimer;
+    Idle*  _pIdle;
     bool   _bInCall;
     bool*  _pDeleted;
     void*  _pArg;
@@ -47,7 +47,7 @@ public:
     AsynchronLink( const Link& rLink )
         : _aLink( rLink )
         , _nEventId( 0 )
-        , _pTimer( 0 )
+        , _pIdle( 0 )
         , _bInCall( false )
         , _pDeleted( 0 )
         , _pArg( 0 )
@@ -55,7 +55,7 @@ public:
     {}
     AsynchronLink()
         : _nEventId( 0 )
-        , _pTimer( 0 )
+        , _pIdle( 0 )
         , _bInCall( false )
         , _pDeleted( 0 )
         , _pArg( 0 )

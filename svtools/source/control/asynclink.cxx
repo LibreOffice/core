@@ -46,7 +46,7 @@ bAllowDoubles
     {
         _pArg = pObj;
         DBG_ASSERT( bAllowDoubles ||
-                    ( !_nEventId && ( !_pTimer || !_pTimer->IsActive() ) ),
+                    ( !_nEventId && ( !_pIdle || !_pIdle->IsActive() ) ),
                     "Schon ein Call unterwegs" );
         if( _nEventId )
         {
@@ -54,17 +54,17 @@ bAllowDoubles
             Application::RemoveUserEvent( _nEventId );
             if( _pMutex ) _pMutex->release();
         }
-        if( _pTimer )_pTimer->Stop();
+        if( _pIdle )_pIdle->Stop();
         if( bUseTimer )
         {
-            if( !_pTimer )
+            if( !_pIdle )
             {
-                _pTimer = new Timer;
-                _pTimer->SetTimeout( 0 );
-                _pTimer->SetTimeoutHdl( STATIC_LINK(
+                _pIdle = new Idle;
+                _pIdle->SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+                _pIdle->SetIdleHdl( STATIC_LINK(
                     this, AsynchronLink, HandleCall) );
             }
-            _pTimer->Start();
+            _pIdle->Start();
         }
         else
         {
@@ -81,7 +81,7 @@ AsynchronLink::~AsynchronLink()
     {
         Application::RemoveUserEvent( _nEventId );
     }
-    delete _pTimer;
+    delete _pIdle;
     if( _pDeleted ) *_pDeleted = true;
     delete _pMutex;
 }
@@ -104,7 +104,7 @@ void AsynchronLink::ClearPendingCall()
         _nEventId = 0;
     }
     if( _pMutex ) _pMutex->release();
-    if( _pTimer ) _pTimer->Stop();
+    if( _pIdle ) _pIdle->Stop();
 }
 
 void AsynchronLink::Call_Impl( void* pArg )
