@@ -19,8 +19,7 @@
 #ifndef INCLUDED_TOOLS_FRACT_HXX
 #define INCLUDED_TOOLS_FRACT_HXX
 
-#include <boost/rational.hpp>
-#include <sal/log.hxx>
+#include <sal/types.h>
 #include <tools/toolsdllapi.h>
 
 class SvStream;
@@ -29,17 +28,18 @@ class SvStream;
 // calculations using sal_Int64 with checks for 'long' overflows.
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
 {
-private:
-    bool                        valid;
-    boost::rational<sal_Int64>  value;
+    struct Impl;
+
+    Impl* mpImpl;
 
     bool            HasOverflowValue();
 
 public:
-                    Fraction() { valid = true; }
+                    Fraction();
                     Fraction( const Fraction & rFrac );
                     Fraction( long nNum, long nDen=1 );
                     Fraction( double dVal );
+                    ~Fraction();
 
     bool            IsValid() const;
 

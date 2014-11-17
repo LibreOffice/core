@@ -17,16 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <tools/fract.hxx>
+#include <tools/debug.hxx>
+#include <tools/lineend.hxx>
+#include <tools/stream.hxx>
+#include <rtl/ustring.hxx>
+
+#include <limits.h>
 #include <algorithm>
 #include <cmath>
 
-#include <limits.h>
-#include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
-#include <tools/debug.hxx>
-#include <tools/fract.hxx>
-#include <tools/lineend.hxx>
-#include <tools/stream.hxx>
+#include <boost/rational.hpp>
+#include <boost/noncopyable.hpp>
 
 template<typename T>
 static boost::rational<T> rational_FromDouble(double dVal);
@@ -34,51 +36,79 @@ static boost::rational<T> rational_FromDouble(double dVal);
 template<typename T>
 static void rational_ReduceInaccurate(boost::rational<T>& rRational, unsigned nSignificantBits);
 
+struct Fraction::Impl : boost::noncopyable
+{
+    bool                        valid;
+    boost::rational<sal_Int64>  value;
+};
+
+Fraction::Fraction() : mpImpl(new Impl)
+{
+    mpImpl->valid = true;
+}
+
+Fraction::Fraction( const Fraction& rFrac ) : mpImpl(new Impl)
+{
+    mpImpl->valid = rFrac.mpImpl->valid;
+    if (mpImpl->valid)
+        mpImpl->value.assign( rFrac.mpImpl->value.numerator(), rFrac.mpImpl->value.denominator() );
+}
+
 // Initialized by setting nNum as nominator and nDen as denominator
 // Negative values in the denominator are invalid and cause the
 // inversion of both nominator and denominator signs
 // in order to return the correct value.
-Fraction::Fraction( long nNum, long nDen )
+Fraction::Fraction( long nNum, long nDen ) : mpImpl(new Impl)
 {
-    if ( nDen == 0 ) {
-        valid = false;
+    if ( nDen == 0 )
+    {
+        mpImpl->valid = false;
         SAL_WARN( "tools.fraction", "'Fraction(" << nNum << ",0)' invalid fraction created" );
         return;
     }
-    value.assign( nNum, nDen);
-    valid = true;
+    mpImpl->value.assign( nNum, nDen);
+    mpImpl->valid = true;
 }
 
-Fraction::Fraction( double dVal )
+Fraction::Fraction( double dVal ) : mpImpl(new Impl)
 {
-    try {
-        value = rational_FromDouble<sal_Int64>( dVal );
+    try
+    {
+        mpImpl->value = rational_FromDouble<sal_Int64>( dVal );
         if ( HasOverflowValue() )
             throw boost::bad_rational();
-        valid = true;
-    } catch(const boost::bad_rational&) {
-        valid = false;
+        mpImpl->valid = true;
+    }
+    catch (const boost::bad_rational&)
+    {
+        mpImpl->valid = false;
         SAL_WARN( "tools.fraction", "'Fraction(" << dVal << ")' invalid fraction created" );
     }
+}
+
+Fraction::~Fraction()
+{
+    delete mpImpl;
 }
 
 bool Fraction::HasOverflowValue()
 {
     //coverity[result_independent_of_operands]
-    return value.numerator() < std::numeric_limits<long>::min() ||
-        value.numerator() > std::numeric_limits<long>::max() ||
-        value.denominator() < std::numeric_limits<long>::min() ||
-        value.denominator() > std::numeric_limits<long>::max();
+    return mpImpl->value.numerator() < std::numeric_limits<long>::min() ||
+        mpImpl->value.numerator() > std::numeric_limits<long>::max() ||
+        mpImpl->value.denominator() < std::numeric_limits<long>::min() ||
+        mpImpl->value.denominator() > std::numeric_limits<long>::max();
 }
 
 Fraction::operator double() const
 {
-    if ( !valid ) {
+    if (!mpImpl->valid)
+    {
         SAL_WARN( "tools.fraction", "'double()' on invalid fraction" );
         return 0.0;
     }
 
-    return boost::rational_cast<double>(value);
+    return boost::rational_cast<double>(mpImpl->value);
 }
 
 // This methods first validates both values.
@@ -87,17 +117,20 @@ Fraction::operator double() const
 // which cause the operation to be marked as invalid
 Fraction& Fraction::operator += ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
-        valid = false;
-    if ( !valid ) {
+    if ( !rVal.mpImpl->valid )
+        mpImpl->valid = false;
+
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator +=' with invalid fraction" );
         return *this;
     }
 
-    value += rVal.value;
+    mpImpl->value += rVal.mpImpl->value;
 
-    if ( HasOverflowValue() ) {
-        valid = false;
+    if ( HasOverflowValue() )
+    {
+        mpImpl->valid = false;
         SAL_WARN( "tools.fraction", "'operator +=' detected overflow" );
     }
 
@@ -106,17 +139,20 @@ Fraction& Fraction::operator += ( const Fraction& rVal )
 
 Fraction& Fraction::operator -= ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
-        valid = false;
-    if ( !valid ) {
+    if ( !rVal.mpImpl->valid )
+        mpImpl->valid = false;
+
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator -=' with invalid fraction" );
         return *this;
     }
 
-    value -= rVal.value;
+    mpImpl->value -= rVal.mpImpl->value;
 
-    if ( HasOverflowValue() ) {
-        valid = false;
+    if ( HasOverflowValue() )
+    {
+        mpImpl->valid = false;
         SAL_WARN( "tools.fraction", "'operator -=' detected overflow" );
     }
 
@@ -125,17 +161,20 @@ Fraction& Fraction::operator -= ( const Fraction& rVal )
 
 Fraction& Fraction::operator *= ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
-        valid = false;
-    if ( !valid ) {
+    if ( !rVal.mpImpl->valid )
+        mpImpl->valid = false;
+
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator *=' with invalid fraction" );
         return *this;
     }
 
-    value *= rVal.value;
+    mpImpl->value *= rVal.mpImpl->value;
 
-    if ( HasOverflowValue() ) {
-        valid = false;
+    if ( HasOverflowValue() )
+    {
+        mpImpl->valid = false;
         SAL_WARN( "tools.fraction", "'operator *=' detected overflow" );
     }
 
@@ -144,17 +183,20 @@ Fraction& Fraction::operator *= ( const Fraction& rVal )
 
 Fraction& Fraction::operator /= ( const Fraction& rVal )
 {
-    if ( !rVal.valid )
-        valid = false;
-    if ( !valid ) {
+    if ( !rVal.mpImpl->valid )
+        mpImpl->valid = false;
+
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator /=' with invalid fraction" );
         return *this;
     }
 
-    value /= rVal.value;
+    mpImpl->value /= rVal.mpImpl->value;
 
-    if ( HasOverflowValue() ) {
-        valid = false;
+    if ( HasOverflowValue() )
+    {
+        mpImpl->valid = false;
         SAL_WARN( "tools.fraction", "'operator /=' detected overflow" );
     }
 
@@ -181,62 +223,61 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
 */
 void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 {
-    if ( !valid ) {
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'ReduceInaccurate' on invalid fraction" );
         return;
     }
-    if ( !value.numerator() )
+
+    if ( !mpImpl->value.numerator() )
         return;
 
-    rational_ReduceInaccurate(value, nSignificantBits);
-}
-
-Fraction::Fraction( const Fraction& rFrac )
-{
-    valid = rFrac.valid;
-    if ( valid )
-        value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
+    rational_ReduceInaccurate(mpImpl->value, nSignificantBits);
 }
 
 long Fraction::GetNumerator() const
 {
-    if ( !valid ) {
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'GetNumerator()' on invalid fraction" );
         return 0;
     }
-    return value.numerator();
+    return mpImpl->value.numerator();
 }
 
-long Fraction::GetDenominator() const {
-    if ( !valid ) {
+long Fraction::GetDenominator() const
+{
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'GetDenominator()' on invalid fraction" );
         return -1;
     }
-    return value.denominator();
+    return mpImpl->value.denominator();
 }
 
 Fraction& Fraction::operator=( const Fraction& rFrac )
 {
-    if ( this != &rFrac ) {
-        valid = rFrac.valid;
-        if ( valid )
-            value.assign( rFrac.value.numerator(), rFrac.value.denominator() );
-    }
+    if (this == &rFrac)
+        return *this;
+
+    Fraction tmp(rFrac);
+    std::swap(mpImpl, tmp.mpImpl);
     return *this;
 }
 
 bool Fraction::IsValid() const
 {
-    return valid;
+    return mpImpl->valid;
 }
 
 Fraction::operator long() const
 {
-    if ( !valid ) {
+    if ( !mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator long()' on invalid fraction" );
         return 0;
     }
-    return boost::rational_cast<long>(value);
+    return boost::rational_cast<long>(mpImpl->value);
 }
 
 Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 )
@@ -284,32 +325,35 @@ bool operator >=( const Fraction& rVal1, const Fraction& rVal2 )
 
 bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.valid || !rVal2.valid ) {
+    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator ==' with an invalid fraction" );
         return false;
     }
 
-    return rVal1.value == rVal2.value;
+    return rVal1.mpImpl->value == rVal2.mpImpl->value;
 }
 
 bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.valid || !rVal2.valid ) {
+    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator <' with an invalid fraction" );
         return false;
     }
 
-    return rVal1.value < rVal2.value;
+    return rVal1.mpImpl->value < rVal2.mpImpl->value;
 }
 
 bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
-    if ( !rVal1.valid || !rVal2.valid ) {
+    if ( !rVal1.mpImpl->valid || !rVal2.mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'operator >' with an invalid fraction" );
         return false;
     }
 
-    return rVal1.value > rVal2.value;
+    return rVal1.mpImpl->value > rVal2.mpImpl->value;
 }
 
 SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
@@ -317,25 +361,29 @@ SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract )
     sal_Int32 num(0), den(0);
     rIStream.ReadInt32( num );
     rIStream.ReadInt32( den );
-    if ( den <= 0 ) {
+    if ( den <= 0 )
+    {
         SAL_WARN( "tools.fraction", "'ReadFraction()' read an invalid fraction" );
-        rFract.valid = false;
-    } else {
-        rFract.value.assign( num, den );
-        rFract.valid = true;
+        rFract.mpImpl->valid = false;
+    }
+    else
+    {
+        rFract.mpImpl->value.assign( num, den );
+        rFract.mpImpl->valid = true;
     }
     return rIStream;
 }
 
 SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract )
 {
-    if ( !rFract.valid ) {
+    if ( !rFract.mpImpl->valid )
+    {
         SAL_WARN( "tools.fraction", "'WriteFraction()' write an invalid fraction" );
         rOStream.WriteInt32( 0 );
         rOStream.WriteInt32( -1 );
     } else {
-        rOStream.WriteInt32( rFract.value.numerator() );
-        rOStream.WriteInt32( rFract.value.denominator() );
+        rOStream.WriteInt32( rFract.mpImpl->value.numerator() );
+        rOStream.WriteInt32( rFract.mpImpl->value.denominator() );
     }
     return rOStream;
 }
