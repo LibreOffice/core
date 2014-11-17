@@ -60,10 +60,10 @@ private:
     CPPUNIT_TEST_SUITE_END();
 };
 
+#if 0
+
 static const char aGraphicFile[] = "/svtools/qa/unit/data/graphic.png";
 static const sal_uLong nGraphicSizeBytes = 4800;
-
-#if 0
 
 const Graphic lcl_loadGraphic(const rtl::OUString &rUrl)
 {
