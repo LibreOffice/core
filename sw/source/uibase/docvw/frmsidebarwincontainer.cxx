@@ -72,14 +72,24 @@ namespace {
             return rFrmKeyA < rFrmKeyB;
         }
     };
-
-    typedef ::std::map < FrmKey, SidebarWinContainer, FrmOrder > _FrmSidebarWinContainer;
 }
 
 namespace sw { namespace sidebarwindows {
 
-class FrmSidebarWinContainer : public _FrmSidebarWinContainer
+class FrmSidebarWinContainer
 {
+    public:
+        typedef FrmKey                                                  key_type;
+        typedef SidebarWinContainer                                     mapped_type;
+        typedef FrmOrder                                                key_compare;
+        typedef std::map<key_type,mapped_type,key_compare>::iterator    iterator;
+    private:
+        std::map<key_type,mapped_type,key_compare> maMap;
+    public:
+        mapped_type& operator[](const key_type& key) { return maMap[key]; }
+        iterator end() noexcept { return maMap.end(); }
+        void clear() noexcept { maMap.clear(); }
+        iterator find(const key_type& key) { return maMap.find(key); }
 };
 
 SwFrmSidebarWinContainer::SwFrmSidebarWinContainer()
