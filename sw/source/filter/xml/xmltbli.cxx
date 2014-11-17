@@ -688,10 +688,10 @@ void SwXMLTableCellContext_Impl::EndElement()
 
                 // Until we have an API for copying we have to use the core.
                 Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTxtCursor, UNO_QUERY);
-                OSL_ENSURE( xSrcCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+                assert(xSrcCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
                 OTextCursorHelper *pSrcTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                         sal::static_int_cast< sal_IntPtr >( xSrcCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-                OSL_ENSURE( pSrcTxtCrsr, "SwXTextCursor missing" );
+                assert(pSrcTxtCrsr && "SwXTextCursor missing");
                 SwDoc *pDoc = pSrcTxtCrsr->GetDoc();
                 const SwPaM *pSrcPaM = pSrcTxtCrsr->GetPaM();
 
@@ -701,8 +701,7 @@ void SwXMLTableCellContext_Impl::EndElement()
 
                     Reference<XUnoTunnel> xDstCrsrTunnel(
                         GetImport().GetTextImport()->GetCursor(), UNO_QUERY);
-                    OSL_ENSURE( xDstCrsrTunnel.is(),
-                            "missing XUnoTunnel for Cursor" );
+                    assert(xDstCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
                     OTextCursorHelper *pDstTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                             sal::static_int_cast< sal_IntPtr >( xDstCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )) );
                     assert(pDstTxtCrsr && "SwXTextCursor missing");
