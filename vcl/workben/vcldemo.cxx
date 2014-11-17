@@ -54,6 +54,7 @@ class DemoRenderer
         RenderStyle   meStyle;
         bool          mbVDev;
         DemoRenderer *mpDemoRenderer;
+        Size          maSize;
     };
     struct RegionRenderer {
     public:
@@ -117,16 +118,15 @@ public:
 
     static std::vector<Rectangle> partition(const RenderContext &rCtx, int nX, int nY)
     {
-        return rCtx.mpDemoRenderer->partition(nX, nY);
+        return rCtx.mpDemoRenderer->partition(rCtx.maSize, nX, nY);
     }
 
-    std::vector<Rectangle> partition(int nX, int nY)
+    std::vector<Rectangle> partition(Size aSize, int nX, int nY)
     {
         Rectangle r;
         std::vector<Rectangle> aRegions;
 
         // Make small cleared area for these guys
-        Size aSize(GetSizePixel());
         long nBorderSize = aSize.Width() / 32;
         long nBoxWidth = (aSize.Width() - nBorderSize*(nX+1)) / nX;
         long nBoxHeight = (aSize.Height() - nBorderSize*(nY+1)) / nY;
@@ -430,7 +430,6 @@ public:
                 Gradient aGradient;
                 aGradient.SetStartColor(COL_YELLOW);
                 aGradient.SetEndColor(COL_RED);
-                //          aGradient.SetAngle(45);
                 aGradient.SetStyle(GradientStyle_RECT);
                 aGradient.SetBorder(r.GetSize().Width()/20);
                 rDev.DrawGradient(r, aGradient);
@@ -477,8 +476,23 @@ public:
                 aWriter.Write(aStream);
             }
 #endif
+            Point aRenderPt(r.Center());
+            aRenderPt.Move(-nSlice-1, 0);
+            rDev.DrawBitmapEx(aRenderPt, aShadowStretch);
 
-            rDev.DrawBitmapEx(r.Center(), aShadowStretch);
+            AlphaMask aWholeMask(aPageShadowMask.GetBitmap());
+            aBlockColor = Bitmap(aPageShadowMask.GetSizePixel(), 24);
+            aBlockColor.Erase(COL_GREEN);
+            BitmapEx aWhole(aBlockColor, aWholeMask);
+
+            aRenderPt = Point(r.Center());
+            aRenderPt.Move(nSlice+1, 0);
+
+            // An offset background for alpha rendering
+            rDev.SetFillColor(COL_BLUE);
+            Rectangle aSurround(r.Center(), Size(aPageShadowMask.GetSizePixel()));
+            rDev.DrawRect(aSurround);
+            rDev.DrawBitmapEx(aRenderPt, aWhole);
         }
 
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
@@ -585,7 +599,7 @@ public:
             Rectangle aWhole(Point(0,0), r.GetSize());
 
             // mini me
-            rCtx.mpDemoRenderer->drawToDevice(*pNested, true);
+            rCtx.mpDemoRenderer->drawToDevice(*pNested, r.GetSize(), true);
 
             if (eType == RENDER_AS_BITMAP)
             {
@@ -773,11 +787,12 @@ public:
         }
     };
 
-    void drawToDevice(OutputDevice &rDev, bool bVDev)
+    void drawToDevice(OutputDevice &rDev, Size aSize, bool bVDev)
     {
         RenderContext aCtx;
         aCtx.mbVDev = bVDev;
         aCtx.mpDemoRenderer = this;
+        aCtx.maSize = aSize;
 
         Rectangle aWholeWin(Point(0,0), rDev.GetOutputSizePixel());
 
@@ -792,7 +807,7 @@ public:
         else
         {
             aCtx.meStyle = RENDER_THUMB;
-            std::vector<Rectangle> aRegions(partition(mnSegmentsX, mnSegmentsY));
+            std::vector<Rectangle> aRegions(partition(aSize, mnSegmentsX, mnSegmentsY));
             DemoRenderer::clearRects(rDev, aRegions);
             for (size_t i = 0; i < maRenderers.size(); i++)
                 maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
@@ -881,7 +896,7 @@ bool DemoRenderer::MouseButtonDown(const MouseEvent& rMEvt)
     }
 
     // click on a region to zoom into it
-    std::vector<Rectangle> aRegions(partition(mnSegmentsX, mnSegmentsY));
+    std::vector<Rectangle> aRegions(partition(GetSizePixel(), mnSegmentsX, mnSegmentsY));
     for (size_t i = 0; i < aRegions.size(); i++)
     {
         if (aRegions[i].IsInside(rMEvt.GetPosPixel()))
@@ -993,7 +1008,7 @@ public:
     {
         mrRenderer.SetSizePixel(GetSizePixel());
         fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
-        mrRenderer.drawToDevice(*this, false);
+        mrRenderer.drawToDevice(*this, GetSizePixel(), false);
     }
 };
 
