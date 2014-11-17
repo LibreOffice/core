@@ -287,13 +287,28 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
+    SolarMutexGuard aGuard;
+
     OUString aURL = getAbsoluteURL(pURL);
 
-    SolarMutexGuard aGuard;
+    pLib->maLastExceptionMsg = "";
+
+    if (!xContext.is())
+    {
+        pLib->maLastExceptionMsg = "ComponentContext is not available!";
+        SAL_INFO("lok", "ComponentContext is not available!");
+        return NULL;
+    }
 
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
 
-    pLib->maLastExceptionMsg = "";
+    if (!xComponentLoader.is())
+    {
+        pLib->maLastExceptionMsg = "ComponentLoader is not available!";
+        SAL_INFO("lok", "ComponentLoader is not available!");
+        return NULL;
+    }
+
 
     try
     {
@@ -302,15 +317,19 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
                                             aURL, OUString("_blank"), 0,
                                             uno::Sequence<css::beans::PropertyValue>());
 
-        if (xComponent.is())
-            return new LibLODocument_Impl(xComponent);
-        else
+        if (!xComponent.is())
+        {
             pLib->maLastExceptionMsg = "unknown load failure";
+            SAL_INFO("lok", "Document can't be loaded - unknown load failure");
+        }
+
+        return new LibLODocument_Impl(xComponent);
 
     }
     catch (const uno::Exception& exception)
     {
         pLib->maLastExceptionMsg = exception.Message;
+        SAL_INFO("lok", "Document can't be loaded - exception: " << exception.Message);
     }
 
     return NULL;
@@ -628,20 +647,43 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
     fprintf(stderr, "Unexpected basic error dialog '%s'\n", aBuffer.getStr());
 }
 
-static void initialize_uno(const OUString &aAppProgramURL)
+static bool initialize_uno(const OUString& aAppProgramURL)
 {
     rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("soffice"));
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
-    fprintf(stderr, "Uno initialized %d\n", xContext.is());
+    if (!xContext.is())
+    {
+        gImpl->maLastExceptionMsg = "XComponentContext could not be created";
+        SAL_INFO("lok", "XComponentContext could not be created");
+        return false;
+    }
+
     xFactory = xContext->getServiceManager();
+    if (!xFactory.is())
+    {
+        gImpl->maLastExceptionMsg = "XMultiComponentFactory could not be created";
+        SAL_INFO("lok", "XMultiComponentFactory could not be created");
+        return false;
+    }
+
     xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
+    if (!xSFactory.is())
+    {
+        gImpl->maLastExceptionMsg = "XMultiServiceFactory could not be created";
+        SAL_INFO("lok", "XMultiServiceFactory could not be created");
+        return false;
+    }
     comphelper::setProcessServiceFactory(xSFactory);
+
+    SAL_INFO("lok", "Uno initialized  - " <<  xContext.is());
 
     // set UserInstallation to user profile dir in test/user-template
 //    rtl::Bootstrap aDefaultVars;
 //    aDefaultVars.set(OUString("UserInstallation"), aAppProgramURL + "../registry" );
     // configmgr setup ?
+
+    return true;
 }
 
 static void* lo_startmain(void*)
@@ -695,9 +737,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         // for unit tests (and possibly if UNO is being used in addition
         // to LOK in an external program).
         osl_setCommandArgs(2, pArgs);
-        SAL_INFO("lok", "attempting to initalize UNO");
-        initialize_uno(aAppURL);
-        SAL_INFO("lok", "uno successfully initalized");
+        SAL_INFO("lok", "Attempting to initalize UNO");
+        if (!initialize_uno(aAppURL))
+        {
+            return false;
+        }
+        SAL_INFO("lok", "UNO successfully initalized");
         force_c_locale();
 
         // Force headless -- this is only for bitmap rendering.
@@ -719,11 +764,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         // the Thread from wherever (it's done again in Desktop::Main), and can
         // then use it to wait until we're definitely ready to continue.
 
-        SAL_INFO("lok", "enabling OfficeIPCThread");
+        SAL_INFO("lok", "Enabling OfficeIPCThread");
         OfficeIPCThread::EnableOfficeIPCThread();
-        SAL_INFO("lok", "starting soffice_main");
+        SAL_INFO("lok", "Starting soffice_main");
         pthread_create(&(pLib->maThread), 0, lo_startmain, NULL);
-        SAL_INFO("lok", "waiting for OfficeIPCThread");
+        SAL_INFO("lok", "Waiting for OfficeIPCThread");
         OfficeIPCThread::WaitForReady();
         SAL_INFO("lok", "OfficeIPCThread ready -- continuing");
 
@@ -740,12 +785,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 
         ErrorHandler::RegisterDisplay(aBasicErrorFunc);
 
-        fprintf(stderr, "initialized\n");
+        SAL_INFO("lok", "LOK Initialized");
         bInitialized = true;
     }
     catch (css::uno::Exception& exception)
     {
-        fprintf(stderr, "bootstrapping exception '%s'\n",
+        fprintf(stderr, "Bootstrapping exception '%s'\n",
                  OUStringToOString(exception.Message, RTL_TEXTENCODING_UTF8).getStr());
     }
     return bInitialized;
@@ -755,7 +800,8 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKit *libreofficekit_hook(const char* install_pat
 {
     if (!gImpl)
     {
-        fprintf(stderr, "create libreoffice object\n");
+        SAL_INFO("lok", "Create libreoffice object");
+
         gImpl = new LibLibreOffice_Impl();
         if (!lo_initialize(gImpl, install_path))
         {
@@ -765,19 +811,19 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKit *libreofficekit_hook(const char* install_pat
     return static_cast<LibreOfficeKit*>(gImpl);
 }
 
-static void lo_destroy(LibreOfficeKit *pThis)
+static void lo_destroy(LibreOfficeKit* pThis)
 {
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
     gImpl = NULL;
 
-    SAL_INFO("lok", "lo_destroy");
+    SAL_INFO("lok", "LO Destroy");
 
     Application::Quit();
     pthread_join(pLib->maThread, NULL);
 
     delete pLib;
     bInitialized = false;
-    SAL_INFO("lok", "lo_destroy done");
+    SAL_INFO("lok", "LO Destroy Done");
 }
 
 }
