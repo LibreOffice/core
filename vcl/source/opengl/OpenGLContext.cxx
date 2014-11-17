@@ -465,7 +465,12 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     SAL_INFO("vcl.opengl", "window: " << win);
 
     XWindowAttributes xattr;
-    XGetWindowAttributes( dpy, win, &xattr );
+    if( !XGetWindowAttributes( dpy, win, &xattr ) )
+    {
+        SAL_WARN("vcl.opengl", "Failed to get window attributes for fbconfig " << win);
+        xattr.screen = 0;
+        xattr.visual = NULL;
+    }
 
     int screen = XScreenNumberOfScreen( xattr.screen );
 
@@ -537,7 +542,11 @@ Visual* getVisual(Display* dpy, Window win)
     initOpenGLFunctionPointers();
 
     XWindowAttributes xattr;
-    XGetWindowAttributes( dpy, win, &xattr );
+    if( !XGetWindowAttributes( dpy, win, &xattr ) )
+    {
+        SAL_WARN("vcl.opengl", "Failed to get window attributes for getVisual " << win);
+        xattr.visual = NULL;
+    }
     SAL_INFO("vcl.opengl", "using VisualID " << xattr.visual);
     return xattr.visual;
 }
@@ -696,9 +705,17 @@ bool OpenGLContext::ImplInit()
     SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
 
     XWindowAttributes xWinAttr;
-    XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr );
-    m_aGLWin.Width = xWinAttr.width;
-    m_aGLWin.Height = xWinAttr.height;
+    if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr ) )
+    {
+        SAL_WARN("vcl.opengl", "Failed to get window attributes on " << m_aGLWin.win);
+        m_aGLWin.Width = 0;
+        m_aGLWin.Height = 0;
+    }
+    else
+    {
+        m_aGLWin.Width = xWinAttr.width;
+        m_aGLWin.Height = xWinAttr.height;
+    }
 
     if( m_aGLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
     {
