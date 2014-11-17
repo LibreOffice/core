@@ -395,7 +395,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
     }
 
-    mpContext->makeCurrent();
+    makeCurrent();
     maTexture = OpenGLTexture (mnBufWidth, mnBufHeight, nFormat, nType, pData );
     SAL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
 
@@ -449,7 +449,7 @@ bool OpenGLSalBitmap::ReadTexture()
         return false;
     }
 
-    mpContext->makeCurrent();
+    makeCurrent();
     maTexture.Read( nFormat, nType, pData );
     mnBufWidth = mnWidth;
     mnBufHeight = mnHeight;
@@ -460,6 +460,20 @@ bool OpenGLSalBitmap::ReadTexture()
 sal_uInt16 OpenGLSalBitmap::GetBitCount() const
 {
     return mnBits;
+}
+
+bool OpenGLSalBitmap::makeCurrent()
+{
+    OpenGLContextProvider *pProvider;
+    pProvider = dynamic_cast< OpenGLContextProvider* >( ImplGetDefaultWindow()->GetGraphics() );
+    if( pProvider == NULL )
+    {
+        SAL_WARN( "vcl.opengl", "Couldn't get default OpenGL context provider" );
+        return false;
+    }
+    mpContext = pProvider->GetOpenGLContext();
+    mpContext->makeCurrent();
+    return true;
 }
 
 BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
@@ -474,15 +488,9 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 
     if( !maPendingOps.empty() )
     {
-        OpenGLContextProvider *pProvider;
-        pProvider = dynamic_cast< OpenGLContextProvider* >( ImplGetDefaultWindow()->GetGraphics() );
-        if( pProvider == NULL )
-        {
-            SAL_WARN( "vcl.opengl", "Couldn't get default OpenGL context provider" );
+        if (!makeCurrent())
             return NULL;
-        }
-        mpContext = pProvider->GetOpenGLContext();
-        mpContext->makeCurrent();
+
         SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediatly" );
         if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
             return NULL;
