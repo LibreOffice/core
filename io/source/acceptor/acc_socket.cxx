@@ -22,6 +22,7 @@
 #include <boost/unordered_set.hpp>
 #include <algorithm>
 
+#include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>

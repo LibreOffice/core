@@ -26,6 +26,7 @@
 #include <toolkit/helper/accessiblefactory.hxx>
 #include <osl/module.h>
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <tools/solar.h>
 
 #include "helper/accessibilityclient.hxx"

@@ -23,6 +23,8 @@
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/drawing/framework/XResource.hpp>
 #include <com/sun/star/drawing/framework/XResourceFactory.hpp>
+#include <osl/mutex.hxx>
+
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>

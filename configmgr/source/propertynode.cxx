@@ -23,6 +23,7 @@
 
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>

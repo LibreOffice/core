@@ -20,7 +20,6 @@
 #define INCLUDED_UNO_DISPATCHER_H
 
 #include <sal/types.h>
-#include <rtl/ustring.h>
 #include <uno/any2.h>
 
 #ifdef __cplusplus

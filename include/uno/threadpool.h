@@ -21,7 +21,7 @@
 #define INCLUDED_UNO_THREADPOOL_H
 
 #include <cppu/cppudllapi.h>
-#include <rtl/byteseq.h>
+#include <sal/types.h>
 
 #ifdef __cplusplus
 extern "C" {

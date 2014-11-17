@@ -21,7 +21,6 @@
 #define INCLUDED_CPPU_ENVGUARDS_HXX
 
 #include <uno/environment.hxx>
-#include <uno/mapping.hxx>
 
 
 namespace cppu

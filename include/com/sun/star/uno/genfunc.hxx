@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/genfunc.h>
 #include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
 
 
 namespace com

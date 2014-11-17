@@ -21,12 +21,12 @@
 #define INCLUDED_CPPU_UNOTYPE_HXX
 
 #include <sal/config.h>
-#include <com/sun/star/uno/Type.h>
 #include <sal/types.h>
 #include <typelib/typeclass.h>
 #include <typelib/typedescription.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
+    class Type;
     class Any;
     class Exception;
     template< typename > class Reference;

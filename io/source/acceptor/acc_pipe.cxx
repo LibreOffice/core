@@ -22,6 +22,7 @@
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 using namespace ::osl;

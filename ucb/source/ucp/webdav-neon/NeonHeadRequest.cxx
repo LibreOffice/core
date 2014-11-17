@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <osl/diagnose.h>
+#include <osl/mutex.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include "NeonHeadRequest.hxx"

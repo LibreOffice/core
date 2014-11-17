@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CPPU_HELPER_PURPENV_MAPPING_HXX
 #define INCLUDED_CPPU_HELPER_PURPENV_MAPPING_HXX
 
-#include <com/sun/star/uno/Any.h>
-
 #include <cppu/cppudllapi.h>
+#include <typelib/typedescription.h>
+#include <uno/any2.h>
 #include <uno/environment.h>
 #include <uno/mapping.h>
 

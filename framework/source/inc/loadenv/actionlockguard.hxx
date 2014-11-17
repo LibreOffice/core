@@ -21,6 +21,7 @@
 #define INCLUDED_FRAMEWORK_SOURCE_INC_LOADENV_ACTIONLOCKGUARD_HXX
 
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <osl/mutex.hxx>
 
 namespace framework{
 

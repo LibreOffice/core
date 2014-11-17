@@ -23,6 +23,7 @@
 #include "osl/mutex.hxx"
 #include <osl/diagnose.h>
 
+#include <cppu/Enterable.hxx>
 #include "cppu/helper/purpenv/Environment.hxx"
 #include "cppu/helper/purpenv/Mapping.hxx"
 

@@ -20,6 +20,7 @@
 
 #include <com/sun/star/uno/Exception.hpp>
 
+#include <osl/mutex.hxx>
 #include <comphelper/flagguard.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>

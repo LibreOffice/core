@@ -21,7 +21,6 @@
 
 #include <typelib/typedescription.h>
 #include <com/sun/star/uno/TypeClass.hdl>
-#include <cppu/macros.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/alloc.h>
 

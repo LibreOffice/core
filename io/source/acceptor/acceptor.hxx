@@ -22,6 +22,7 @@
 
 #include <osl/pipe.hxx>
 #include <osl/socket.hxx>
+#include <osl/mutex.hxx>
 
 #include <com/sun/star/connection/XConnection.hpp>
 

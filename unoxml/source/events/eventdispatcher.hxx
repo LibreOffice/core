@@ -33,6 +33,8 @@
 #include <com/sun/star/xml/dom/events/PhaseType.hpp>
 #include <com/sun/star/xml/dom/events/XEvent.hpp>
 
+namespace osl { class Mutex; }
+
 namespace DOM {
 
 class CDocument;

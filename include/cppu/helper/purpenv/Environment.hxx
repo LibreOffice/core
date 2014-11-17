@@ -22,8 +22,8 @@
 
 #include <cppu/cppudllapi.h>
 #include <uno/environment.h>
-#include <cppu/Enterable.hxx>
 
+namespace cppu { class Enterable; }
 
 namespace cppu { namespace helper { namespace purpenv {
 

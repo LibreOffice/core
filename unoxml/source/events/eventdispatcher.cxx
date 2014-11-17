@@ -26,6 +26,8 @@
 
 #include "../dom/document.hxx"
 
+#include <osl/mutex.hxx>
+
 using namespace css::uno;
 using namespace css::xml::dom;
 using namespace css::xml::dom::events;

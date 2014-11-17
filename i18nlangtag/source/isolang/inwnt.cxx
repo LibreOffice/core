@@ -29,6 +29,7 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
+#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include "i18nlangtag/mslangid.hxx"
 

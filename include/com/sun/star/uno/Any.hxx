@@ -29,8 +29,9 @@
 #include <uno/data.h>
 #include <uno/sequence2.h>
 #include <com/sun/star/uno/Type.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/genfunc.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppu/unotype.hxx>
 
 namespace com

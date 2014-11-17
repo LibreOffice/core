@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include "uno/dispatcher.h"
 #include "typelib/typedescription.hxx"
+#include <cppu/Enterable.hxx>
 #include "cppu/helper/purpenv/Environment.hxx"
 #include "cppu/helper/purpenv/Mapping.hxx"
 #include "cppu/EnvDcp.hxx"

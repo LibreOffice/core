@@ -19,7 +19,7 @@
 #ifndef INCLUDED_UNO_MAPPING_HXX
 #define INCLUDED_UNO_MAPPING_HXX
 
-#include <cppu/macros.hxx>
+#include <uno/lbnames.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>

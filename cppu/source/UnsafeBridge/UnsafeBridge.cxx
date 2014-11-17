@@ -22,6 +22,7 @@
 #include "osl/thread.h"
 #include "osl/thread.hxx"
 
+#include <cppu/Enterable.hxx>
 #include "cppu/helper/purpenv/Environment.hxx"
 #include "cppu/helper/purpenv/Mapping.hxx"
 

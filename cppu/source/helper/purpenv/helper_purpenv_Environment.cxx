@@ -22,6 +22,7 @@
 
 #include "osl/diagnose.h"
 #include "uno/lbnames.h"
+#include <cppu/Enterable.hxx>
 
 #include "typelib/typedescription.h"
 #include "osl/interlck.h"

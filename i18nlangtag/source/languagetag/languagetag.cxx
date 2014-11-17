@@ -15,6 +15,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
+#include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/locale.h>
 #include <boost/unordered_set.hpp>

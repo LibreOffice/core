@@ -21,10 +21,11 @@
 
 #include <uno/any2.h>
 #include <typelib/typedescription.h>
-#include <com/sun/star/uno/Type.h>
 #include <cppu/unotype.hxx>
+#include <com/sun/star/uno/TypeClass.hdl>
 #include <rtl/alloc.h>
 
+namespace rtl { class OUString; }
 
 namespace com
 {
@@ -34,6 +35,8 @@ namespace star
 {
 namespace uno
 {
+
+class Type;
 
 /** C++ class representing an IDL any.
     This class is used to transport any type defined in IDL. The class inherits from the
@@ -258,7 +261,6 @@ template<>
 inline Any SAL_CALL makeAny( bool const & value );
 
 class BaseReference;
-class Type;
 
 /** Template binary <<= operator to set the value of an any.
 
