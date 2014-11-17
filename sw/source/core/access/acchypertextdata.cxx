@@ -24,7 +24,7 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
 SwAccessibleHyperTextData::SwAccessibleHyperTextData() :
-    _SwAccessibleHyperlinkMap_Impl()
+    maMap()
 {
 }
 

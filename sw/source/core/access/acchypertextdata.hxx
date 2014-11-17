@@ -29,13 +29,26 @@ namespace com { namespace sun { namespace star {
 } } }
 
 typedef ::std::less< const SwTxtAttr * > SwTxtAttrPtrLess;
-typedef ::std::map < const SwTxtAttr *, ::com::sun::star::uno::WeakReference < com::sun::star::accessibility::XAccessibleHyperlink >, SwTxtAttrPtrLess > _SwAccessibleHyperlinkMap_Impl;
 
-class SwAccessibleHyperTextData : public _SwAccessibleHyperlinkMap_Impl
+class SwAccessibleHyperTextData
 {
+public:
+    typedef const SwTxtAttr *                                           key_type;
+    typedef ::com::sun::star::uno::WeakReference<
+        com::sun::star::accessibility::XAccessibleHyperlink >           mapped_type;
+    typedef std::pair<const key_type,mapped_type>                       value_type;
+    typedef SwTxtAttrPtrLess                                            key_compare;
+    typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
+private:
+    std::map<key_type,mapped_type,key_compare> maMap;
 public:
     SwAccessibleHyperTextData();
     ~SwAccessibleHyperTextData();
+
+    iterator begin() { return maMap.begin(); }
+    iterator end() { return maMap.end(); }
+    iterator find(const key_type& key) { return maMap.find(key); }
+    std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
 };
 
 #endif
