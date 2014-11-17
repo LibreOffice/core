@@ -55,7 +55,7 @@ public:
     SfxConfigFunctionListBox*       pMacroLB;
 
     bool                            bReadOnly;
-    Timer                           maFillGroupTimer;
+    Idle                            maFillGroupIdle;
     bool                            bGotEvents;
     bool m_bDummyActivated; ///< has this tab page already been activated
 };
@@ -188,11 +188,11 @@ bool _SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
 
 void _SfxMacroTabPage::LaunchFillGroup()
 {
-    if (!mpImpl->maFillGroupTimer.GetTimeoutHdl().IsSet())
+    if (!mpImpl->maFillGroupIdle.GetTimeoutHdl().IsSet())
     {
-        mpImpl->maFillGroupTimer.SetTimeoutHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
-        mpImpl->maFillGroupTimer.SetTimeout( 0 );
-        mpImpl->maFillGroupTimer.Start();
+        mpImpl->maFillGroupIdle.SetIdleHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
+        mpImpl->maFillGroupIdle.SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+        mpImpl->maFillGroupIdle.Start();
     }
 }
 

@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >     _xCursor;
 
     SwFrmCtrlWindow aTopWindow;
-    Timer           aLoadedTimer;
+    Idle            aLoadedIdle;
     Link            aInitializedLink;
 
     MenuResource    aMenuRes;

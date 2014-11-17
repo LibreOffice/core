@@ -93,7 +93,7 @@ public:
 
 private:
     SlideSorter& mrSlideSorter;
-    Timer maTimer;
+    Idle maIdle;
     bool mbIsDisposed;
     class Animation;
     typedef ::std::vector<boost::shared_ptr<Animation> > AnimationList;

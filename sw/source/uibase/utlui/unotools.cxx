@@ -82,8 +82,8 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
         aInitializedLink = *pInitializedLink;
 
     // the controller is asynchronously set
-    aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
-    aLoadedTimer.SetTimeout(200);
+    aLoadedIdle.SetIdleHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
+    aLoadedIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
 
     CreateControl();
 
@@ -153,7 +153,7 @@ void SwOneExampleFrame::CreateControl()
 
         xPrSet->setPropertyValue("ComponentURL", aURL);
 
-        aLoadedTimer.Start();
+        aLoadedIdle.Start();
         bServiceAvailable = true;
     }
 }
@@ -421,13 +421,13 @@ void SwOneExampleFrame::ClearDocument( bool bStartUpdateTimer )
             pDoc->ClearDoc();
             pSh->ClearUpCrsrs();
 
-            if( aLoadedTimer.IsActive() || !bStartUpdateTimer )
+            if( aLoadedIdle.IsActive() || !bStartUpdateTimer )
             {
                 pSh->EndAllAction();
                 pSh->UnlockPaint();
             }
             if( bStartUpdateTimer )
-                aLoadedTimer.Start();
+                aLoadedIdle.Start();
         }
         else
         {

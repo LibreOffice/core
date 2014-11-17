@@ -245,7 +245,7 @@ void ImplTabSizer::Paint( const Rectangle& )
 class TabBarEdit : public Edit
 {
 private:
-    Timer           maLoseFocusTimer;
+    Idle            maLoseFocusIdle;
     bool            mbPostEvt;
 
                     DECL_LINK( ImplEndEditHdl, void* );
@@ -322,15 +322,15 @@ void TabBarEdit::LoseFocus()
 IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
 {
     ResetPostEvent();
-    maLoseFocusTimer.Stop();
+    maLoseFocusIdle.Stop();
 
     // We need this query, because the edit gets a losefocus event,
     // when it shows the context menu or the insert symbol dialog
     if ( !HasFocus() && HasChildPathFocus( true ) )
     {
-        maLoseFocusTimer.SetTimeout( 30 );
-        maLoseFocusTimer.SetTimeoutHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
-        maLoseFocusTimer.Start();
+        maLoseFocusIdle.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
+        maLoseFocusIdle.SetIdleHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
+        maLoseFocusIdle.Start();
     }
     else
         GetParent()->EndEditMode( pCancel != 0 );
@@ -348,7 +348,7 @@ IMPL_LINK_NOARG(TabBarEdit, ImplEndTimerHdl)
     // We need this query, because the edit gets a losefocus event,
     // when it shows the context menu or the insert symbol dialog
     if ( HasChildPathFocus( true ) )
-        maLoseFocusTimer.Start();
+        maLoseFocusIdle.Start();
     else
         GetParent()->EndEditMode( true );
 

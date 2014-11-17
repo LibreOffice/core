@@ -538,10 +538,9 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
 
     m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
     Link aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
-    aFactoryTimer.SetTimeoutHdl( aTimeoutLink );
-    aFactoryTimer.SetTimeout( 300 );
+    aFactoryIdle.SetIdleHdl( aTimeoutLink );
+    aFactoryIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
     aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
-    aFactoryTimer.SetTimeout( 300 );
 }
 
 IndexTabPage_Impl::~IndexTabPage_Impl()
@@ -711,7 +710,7 @@ IMPL_LINK_NOARG(IndexTabPage_Impl, OpenHdl)
 
 IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
 {
-    if ( &aFactoryTimer == pTimer )
+    if ( &aFactoryIdle == pTimer )
         InitializeIndex();
     else if ( &aKeywordTimer == pTimer && !sKeyword.isEmpty() )
         aKeywordLink.Call( this );
@@ -723,7 +722,7 @@ void IndexTabPage_Impl::ActivatePage()
     if ( !bIsActivated )
     {
         bIsActivated = true;
-        aFactoryTimer.Start();
+        aFactoryIdle.Start();
     }
 
     if ( !m_pIdxWin->WasCursorLeftOrRight() )
@@ -757,7 +756,7 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
         sFactory = sNewFactory;
         ClearIndex();
         if ( bIsActivated )
-            aFactoryTimer.Start();
+            aFactoryIdle.Start();
     }
 }
 
@@ -781,7 +780,7 @@ void IndexTabPage_Impl::SetKeyword( const OUString& rKeyword )
     if ( m_pIndexCB->GetEntryCount() > 0 )
         aKeywordTimer.Start();
     else if ( !bIsActivated )
-        aFactoryTimer.Start();
+        aFactoryIdle.Start();
 }
 
 

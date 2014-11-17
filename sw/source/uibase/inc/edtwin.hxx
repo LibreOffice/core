@@ -82,7 +82,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     AutoTimer       m_aTimer;
     // timer for overlapping KeyInputs (e.g. for tables)
     Timer           m_aKeyInputTimer;
-    // timer for ANY-KeyInut question without a following KeyInputEvent
+    // timer for ANY-KeyInput question without a following KeyInputEvent
     Timer           m_aKeyInputFlushTimer;
 
     OUString        m_aInBuffer;

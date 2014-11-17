@@ -233,9 +233,9 @@ void SvInplaceEdit2::LoseFocus()
     )
     {
         bCanceled = false;
-        aTimer.SetTimeout(10);
-        aTimer.SetTimeoutHdl(LINK(this,SvInplaceEdit2,Timeout_Impl));
-        aTimer.Start();
+        aIdle.SetPriority(VCL_IDLE_PRIORITY_REPAINT);
+        aIdle.SetIdleHdl(LINK(this,SvInplaceEdit2,Timeout_Impl));
+        aIdle.Start();
     }
 }
 
@@ -248,7 +248,7 @@ IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, Timeout_Impl)
 
 void SvInplaceEdit2::CallCallBackHdl_Impl()
 {
-    aTimer.Stop();
+    aIdle.Stop();
     if ( !bAlreadyInCallBack )
     {
         bAlreadyInCallBack = true;

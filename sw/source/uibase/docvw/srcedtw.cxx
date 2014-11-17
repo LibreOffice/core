@@ -278,7 +278,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
     if (n.is()) {
         n->removePropertiesChangeListener(listener_.get());
     }
-    aSyntaxIdleTimer.Stop();
+    aSyntaxIdle.Stop();
     if ( pTextEngine )
     {
         EndListening( *pTextEngine );
@@ -514,8 +514,8 @@ void SwSrcEditWindow::CreateTextEngine()
     pOutWin->SetFont( aFont );
     pTextEngine->SetFont( aFont );
 
-    aSyntaxIdleTimer.SetTimeout( SYNTAX_HIGHLIGHT_TIMEOUT );
-    aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
+    aSyntaxIdle.SetPriority( VCL_IDLE_PRIORITY_LOWER );
+    aSyntaxIdle.SetIdleHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
     pTextEngine->EnableUndo( true );
     pTextEngine->SetUpdateMode( true );
@@ -660,7 +660,7 @@ void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
     if ( !bHighlighting && bDoSyntaxHighlight )
     {
         aSyntaxLineTable.insert( nPara );
-        aSyntaxIdleTimer.Start();
+        aSyntaxIdle.Start();
     }
 }
 

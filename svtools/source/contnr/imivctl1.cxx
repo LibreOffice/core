@@ -57,7 +57,7 @@ class IcnViewEdit_Impl : public MultiLineEdit
     Link            aCallBackHdl;
     Accelerator     aAccReturn;
     Accelerator     aAccEscape;
-    Timer           aTimer;
+    Idle            aIdle;
     bool            bCanceled;
     bool            bAlreadyInCallback;
     bool            bGrabFocus;
@@ -3328,7 +3328,7 @@ IcnViewEdit_Impl::~IcnViewEdit_Impl()
 
 void IcnViewEdit_Impl::CallCallBackHdl_Impl()
 {
-    aTimer.Stop();
+    aIdle.Stop();
     if ( !bAlreadyInCallback )
     {
         bAlreadyInCallback = true;
@@ -3393,9 +3393,9 @@ bool IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
             ((!Application::GetFocusWindow()) || !IsChild(Application::GetFocusWindow())))
         {
             bCanceled = false;
-            aTimer.SetTimeout(10);
-            aTimer.SetTimeoutHdl(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
-            aTimer.Start();
+            aIdle.SetPriority(VCL_IDLE_PRIORITY_REPAINT);
+            aIdle.SetIdleHdl(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
+            aIdle.Start();
         }
     }
     return false;

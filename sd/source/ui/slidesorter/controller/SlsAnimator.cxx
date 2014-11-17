@@ -64,15 +64,15 @@ public:
 
 Animator::Animator (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
-      maTimer(),
+      maIdle(),
       mbIsDisposed(false),
       maAnimations(),
       maElapsedTime(),
       mpDrawLock(),
       mnNextAnimationId(0)
 {
-    maTimer.SetTimeout(gnResolution);
-    maTimer.SetTimeoutHdl(LINK(this,Animator,TimeoutHandler));
+    maIdle.SetPriority(VCL_IDLE_PRIORITY_REPAINT);
+    maIdle.SetIdleHdl(LINK(this,Animator,TimeoutHandler));
 }
 
 Animator::~Animator (void)
@@ -93,7 +93,7 @@ void Animator::Dispose (void)
     for (iAnimation=aCopy.begin(); iAnimation!=aCopy.end(); ++iAnimation)
         (*iAnimation)->Expire();
 
-    maTimer.Stop();
+    maIdle.Stop();
     if (mpDrawLock)
     {
         mpDrawLock->Dispose();
@@ -212,13 +212,13 @@ void Animator::CleanUpAnimationList (void)
 void Animator::RequestNextFrame (const double nFrameStart)
 {
     (void)nFrameStart;
-    if ( ! maTimer.IsActive())
+    if ( ! maIdle.IsActive())
     {
         // Prevent redraws except for the ones in TimeoutHandler.  While the
         // Animator is active it will schedule repaints regularly.  Repaints
         // in between would only lead to visual artifacts.
         mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
-        maTimer.Start();
+        maIdle.Start();
     }
 }
 

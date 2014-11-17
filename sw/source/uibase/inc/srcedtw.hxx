@@ -86,7 +86,7 @@ private:
     bool            bDoSyntaxHighlight;
     bool            bHighlighting;
 
-    Timer           aSyntaxIdleTimer;
+    Idle            aSyntaxIdle;
     SyntaxLineSet   aSyntaxLineTable;
 
     void            ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff );

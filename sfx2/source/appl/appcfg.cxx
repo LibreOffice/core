@@ -83,7 +83,7 @@ using namespace ::com::sun::star::beans;
 class SfxEventAsyncer_Impl : public SfxListener
 {
     SfxEventHint        aHint;
-    Timer*              pTimer;
+    Idle*               pIdle;
 
 public:
 
@@ -98,9 +98,9 @@ public:
 void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
-    if( pHint && pHint->GetId() == SFX_HINT_DYING && pTimer->IsActive() )
+    if( pHint && pHint->GetId() == SFX_HINT_DYING && pIdle->IsActive() )
     {
-        pTimer->Stop();
+        pIdle->Stop();
         delete this;
     }
 }
@@ -112,24 +112,23 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
 {
     if( rHint.GetObjShell() )
         StartListening( *rHint.GetObjShell() );
-    pTimer = new Timer;
-    pTimer->SetTimeoutHdl( LINK(this, SfxEventAsyncer_Impl, TimerHdl) );
-    pTimer->SetTimeout( 0 );
-    pTimer->Start();
+    pIdle = new Idle;
+    pIdle->SetIdleHdl( LINK(this, SfxEventAsyncer_Impl, TimerHdl) );
+    pIdle->SetPriority( VCL_IDLE_PRIORITY_HIGHEST );
+    pIdle->Start();
 }
 
 
 
 SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 {
-    delete pTimer;
+    delete pIdle;
 }
 
 
 
 IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 {
-    (void)pAsyncTimer; // unused variable
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncTimer->Stop();
 #ifdef DBG_UTIL

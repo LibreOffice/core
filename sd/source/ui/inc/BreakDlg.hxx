@@ -65,7 +65,7 @@ private:
 
     bool            bCancel;
 
-    Timer           aTimer;
+    Idle            aIdle;
     SvdProgressInfo *pProgrInfo;
     Link            aLink;
     SfxProgress     *mpProgress;

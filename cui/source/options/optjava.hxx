@@ -72,7 +72,7 @@ private:
     OUString                m_sInstallText;
     OUString                m_sAccessibilityText;
     OUString                m_sAddDialogText;
-    Timer                   m_aResetTimer;
+    Idle                    m_aResetIdle;
 
     CheckBox*               m_pExperimentalCB;
     CheckBox*               m_pMacroCB;

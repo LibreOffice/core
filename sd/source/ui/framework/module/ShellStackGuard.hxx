@@ -84,7 +84,7 @@ private:
         mxConfigurationController;
     ViewShellBase* mpBase;
     ::boost::scoped_ptr<ConfigurationController::Lock> mpUpdateLock;
-    Timer maPrinterPollingTimer;
+    Idle maPrinterPollingIdle;
 
     DECL_LINK(TimeoutHandler, Timer*);
 

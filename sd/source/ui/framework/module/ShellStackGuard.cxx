@@ -43,7 +43,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
       mxConfigurationController(),
       mpBase(NULL),
       mpUpdateLock(),
-      maPrinterPollingTimer()
+      maPrinterPollingIdle()
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
     if (xControllerManager.is())
@@ -71,8 +71,8 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
             Any());
 
         // Prepare the printer polling.
-        maPrinterPollingTimer.SetTimeoutHdl(LINK(this,ShellStackGuard,TimeoutHandler));
-        maPrinterPollingTimer.SetTimeout(300);
+        maPrinterPollingIdle.SetIdleHdl(LINK(this,ShellStackGuard,TimeoutHandler));
+        maPrinterPollingIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
     }
 }
 
@@ -101,7 +101,7 @@ void SAL_CALL ShellStackGuard::notifyConfigurationChange (
             mpUpdateLock.reset(new ConfigurationController::Lock(mxConfigurationController));
 
             // Start polling for the printer having finished printing.
-            maPrinterPollingTimer.Start();
+            maPrinterPollingIdle.Start();
         }
     }
 }
@@ -121,7 +121,7 @@ void SAL_CALL ShellStackGuard::disposing (
 IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pTimer)
 {
 #ifdef DEBUG
-    OSL_ASSERT(pTimer==&maPrinterPollingTimer);
+    OSL_ASSERT(pTimer==&maPrinterPollingIdle);
 #else
     (void)pTimer;
 #endif
@@ -135,7 +135,7 @@ IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pTimer)
         else
         {
             // Wait long for the printing to finish.
-            maPrinterPollingTimer.Start();
+            maPrinterPollingIdle.Start();
         }
     }
 

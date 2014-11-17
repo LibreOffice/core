@@ -800,7 +800,7 @@ class SvInplaceEdit2
     Link        aCallBackHdl;
     Accelerator aAccReturn;
     Accelerator aAccEscape;
-    Timer       aTimer;
+    Idle        aIdle;
     Edit*       pEdit;
     bool        bCanceled;
     bool        bAlreadyInCallBack;

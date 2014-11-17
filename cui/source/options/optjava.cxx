@@ -182,8 +182,8 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( vcl::Window* pParent, const SfxItemSet& 
     m_pAddBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, AddHdl_Impl ) );
     m_pParameterBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
     m_pClassPathBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
-    m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
-    m_aResetTimer.SetTimeout( RESET_TIMEOUT );
+    m_aResetIdle.SetIdleHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
+    m_aResetIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
 
     m_pExpertConfigBtn->SetClickHdl( LINK( this, SvxJavaOptionsPage, ExpertConfigHdl_Impl) );
     if (!officecfg::Office::Common::Security::EnableExpertConfiguration::get())
@@ -771,7 +771,7 @@ void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     m_pMacroCB->Check( aMiscOpt.IsMacroRecorderMode() );
     m_pMacroCB->SaveValue();
 
-    m_aResetTimer.Start();
+    m_aResetIdle.Start();
 }
 
 

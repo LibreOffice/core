@@ -144,9 +144,9 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
  */
 short BreakDlg::Execute()
 {
-  aTimer.SetTimeout( 10 );
-  aTimer.SetTimeoutHdl( LINK( this, BreakDlg, InitialUpdate ) );
-  aTimer.Start();
+  aIdle.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
+  aIdle.SetIdleHdl( LINK( this, BreakDlg, InitialUpdate ) );
+  aIdle.Start();
 
   return SfxModalDialog::Execute();
 }

@@ -121,7 +121,7 @@ private:
     IndexBox_Impl*      m_pIndexCB;
     PushButton*         m_pOpenBtn;
 
-    Timer               aFactoryTimer;
+    Idle                aFactoryIdle;
     Timer               aKeywordTimer;
     Link                aKeywordLink;
 
