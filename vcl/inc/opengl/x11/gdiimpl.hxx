@@ -32,6 +32,7 @@ protected:
 public:
     // implementation of X11GraphicsImpl
 
+    virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
     void Init() SAL_OVERRIDE;
     bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
     bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;

@@ -1171,9 +1171,9 @@ void OpenGLSalGraphicsImpl::copyArea(
 
 // CopyBits and DrawBitmap --> RasterOp and ClipRegion
 // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-void OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
+void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGraphicsImpl* pSrcImpl )
 {
-    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? dynamic_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : NULL;
+    OpenGLSalGraphicsImpl *pImpl = pSrcImpl;
 
     SAL_INFO( "vcl.opengl", "::copyBits" );
 
