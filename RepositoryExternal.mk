@@ -444,6 +444,20 @@ $(call gb_LinkTarget_set_ldflags,$(1),\
 
 endef
 
+else ifeq ($(WITH_JPEG_TURBO),TRUE)
+
+define gb_LinkTarget__use_jpeg
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,jpeg-turbo) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,jpeg-turbo)/.libs/libjpeg$(gb_StaticLibrary_PLAINEXT) \
+)
+$(call gb_LinkTarget_use_external_project,$(1),jpeg-turbo)
+
+endef
+
 else # !SYSTEM_JPEG
 
 define gb_LinkTarget__use_jpeg
