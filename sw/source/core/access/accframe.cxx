@@ -89,8 +89,8 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
         {
             // We need a sorted list here
             const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
-            SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
-            while( aIter != aVisMap.end() && !aRet.IsValid() )
+            SwAccessibleChildMap::const_iterator aIter( aVisMap.cbegin() );
+            while( aIter != aVisMap.cend() && !aRet.IsValid() )
             {
                 const SwAccessibleChild& rLower = (*aIter).second;
                 if( rLower.IsAccessible( bInPagePreview ) )
@@ -155,8 +155,8 @@ bool SwAccessibleFrame::GetChildIndex(
     {
         // We need a sorted list here
         const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
-        SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
-        while( aIter != aVisMap.end() && !bFound )
+        SwAccessibleChildMap::const_iterator aIter( aVisMap.cbegin() );
+        while( aIter != aVisMap.cend() && !bFound )
         {
             const SwAccessibleChild& rLower = (*aIter).second;
             if( rLower.IsAccessible( bInPagePreview ) )
@@ -220,8 +220,8 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
         // We need a sorted list here, and we have to reverse iterate,
         // because objects in front should be returned.
         const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
-        SwAccessibleChildMap::const_reverse_iterator aRIter( aVisMap.rbegin() );
-        while( aRIter != aVisMap.rend() && !aRet.IsValid() )
+        SwAccessibleChildMap::const_reverse_iterator aRIter( aVisMap.crbegin() );
+        while( aRIter != aVisMap.crend() && !aRet.IsValid() )
         {
             const SwAccessibleChild& rLower = (*aRIter).second;
             // A frame is returned if it's frame size is inside the visarea
@@ -290,8 +290,8 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
     {
         // We need a sorted list here
         const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
-        SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
-        while( aIter != aVisMap.end() )
+        SwAccessibleChildMap::const_iterator aIter( aVisMap.cbegin() );
+        while( aIter != aVisMap.cend() )
         {
             const SwAccessibleChild& rLower = (*aIter).second;
             if( rLower.IsAccessible( bInPagePreview ) )

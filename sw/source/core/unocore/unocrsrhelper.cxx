@@ -1399,34 +1399,22 @@ void makeTableCellRedline( SwTableBox& rTableBox,
         throw lang::IllegalArgumentException();
 }
 
-SwAnyMapHelper::~SwAnyMapHelper()
-{
-    AnyMapHelper_t::iterator aIt = begin();
-    while( aIt != end() )
-    {
-        delete ( aIt->second );
-        ++aIt;
-    }
-}
-
 void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
-    AnyMapHelper_t::iterator aIt = find( nKey );
-    if( aIt != end() )
-    {
+    auto aIt = maMap.find( nKey );
+    if( aIt != maMap.end() )
         *(aIt->second) = rAny;
-    }
     else
-        insert( value_type(nKey, new uno::Any( rAny )) );
+        maMap.insert( nKey, new uno::Any(rAny) );
 }
 
 bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )
 {
     bool bRet = false;
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
-    AnyMapHelper_t::iterator aIt = find( nKey );
-    if( aIt != end() )
+    auto aIt = maMap.find( nKey );
+    if( aIt != maMap.end() )
     {
         pAny = aIt->second;
         bRet = true;

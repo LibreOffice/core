@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_INC_UNOCRSRHELPER_HXX
 #define INCLUDED_SW_INC_UNOCRSRHELPER_HXX
 
-#include <map>
+#include <boost/ptr_container/ptr_map.hpp>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -66,13 +66,11 @@ enum SwGetPropertyStatesCaller
 
 namespace SwUnoCursorHelper
 {
-    //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
-    typedef std::map< sal_uInt32, com::sun::star::uno::Any *> AnyMapHelper_t;
-    class SwAnyMapHelper : public AnyMapHelper_t
+    class SwAnyMapHelper
     {
+            //  keep Any's mapped by (WhichId << 16 ) + (MemberId)
+            boost::ptr_map<sal_uInt32,com::sun::star::uno::Any> maMap;
         public:
-            ~SwAnyMapHelper();
-
             void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any& rAny );
             bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any*& pAny );
     };

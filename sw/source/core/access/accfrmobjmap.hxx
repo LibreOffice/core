@@ -79,13 +79,22 @@ private:
     Point nPosNum;
 };
 
-typedef ::std::map < SwAccessibleChildMapKey, sw::access::SwAccessibleChild, SwAccessibleChildMapKey >
-    _SwAccessibleChildMap;
 
-class SwAccessibleChildMap : public _SwAccessibleChildMap
+class SwAccessibleChildMap
 {
+public:
+    typedef SwAccessibleChildMapKey                                             key_type;
+    typedef sw::access::SwAccessibleChild                                       mapped_type;
+    typedef std::pair<const key_type,mapped_type>                               value_type;
+    typedef SwAccessibleChildMapKey                                             key_compare;
+    typedef std::map<key_type,mapped_type,key_compare>::iterator                iterator;
+    typedef std::map<key_type,mapped_type,key_compare>::const_iterator          const_iterator;
+    typedef std::map<key_type,mapped_type,key_compare>::const_reverse_iterator  const_reverse_iterator;
+
+private:
     const SdrLayerID nHellId;
     const SdrLayerID nControlsId;
+    std::map<key_type,mapped_type,key_compare> maMap;
 
     ::std::pair< iterator, bool > insert( const sal_uInt32 nPos,
                                           const SwAccessibleChildMapKey::LayerId eLayerId,
@@ -99,6 +108,15 @@ public:
                           SwAccessibleMap& rAccMap );
 
     static bool IsSortingRequired( const SwFrm& rFrm );
+
+    iterator begin() { return maMap.begin(); }
+    const_iterator cbegin() const noexcept { return maMap.cbegin(); }
+    iterator end() { return maMap.end(); }
+    const_iterator cend() const noexcept { return maMap.cend(); }
+    const_reverse_iterator crbegin() const noexcept { return maMap.crbegin(); }
+    const_reverse_iterator crend() const noexcept { return maMap.crend(); }
+
+    std::pair<iterator,bool> insert(const value_type& value) { return maMap.insert(value); }
 };
 
 #endif
