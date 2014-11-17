@@ -3941,6 +3941,9 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
     if (pDoc->IsClipOrUndo() || IsInChangeTrack())
         return;
 
+    if (!HasBroadcaster())
+        return;
+
     pDoc->SetDetectiveDirty(true);  // It has changed something
 
     if ( GetCode()->IsRecalcModeAlways() )
@@ -3981,6 +3984,9 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
         mxGroup->endAllGroupListening(rCxt.getDoc());
 
     if (rCxt.getDoc().IsClipOrUndo() || IsInChangeTrack())
+        return;
+
+    if (!HasBroadcaster())
         return;
 
     ScDocument& rDoc = rCxt.getDoc();

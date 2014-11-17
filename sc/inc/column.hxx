@@ -255,7 +255,8 @@ public:
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
 
-    void StartListeningInArea( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
+    void StartListeningInArea(
+        sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2 );
 
     void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
 

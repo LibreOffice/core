@@ -2420,12 +2420,17 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
 {
     if (nInsFlag & IDF_CONTENTS)
     {
-        sc::StartListeningContext aCxt(*this);
+        boost::shared_ptr<sc::ColumnBlockPositionSet> pSet(
+            new sc::ColumnBlockPositionSet(*this));
+
+        sc::StartListeningContext aStartCxt(*this, pSet);
+        sc::EndListeningContext aEndCxt(*this, pSet, NULL);
+
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nMax; ++itr)
             if (maTabs[*itr])
-                maTabs[*itr]->StartListeningInArea(aCxt, nCol1, nRow1, nCol2, nRow2);
+                maTabs[*itr]->StartListeningInArea(aStartCxt, aEndCxt, nCol1, nRow1, nCol2, nRow2);
     }
 }
 
