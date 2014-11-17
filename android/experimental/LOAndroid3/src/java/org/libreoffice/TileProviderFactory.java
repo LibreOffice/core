@@ -13,7 +13,7 @@ public class TileProviderFactory {
 
     public static void initialize() {
         if (currentTileProvider == TileProviderID.LOKIT) {
-            LibreOfficeKit.loadStatic();
+            LibreOfficeKit.initializeLibrary();
         }
     }
 
