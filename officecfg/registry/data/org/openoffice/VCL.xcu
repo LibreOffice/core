@@ -51,7 +51,7 @@
     </node>
     <node oor:name="WM" oor:op="replace">
       <prop oor:name="ShouldSwitchWorkspace" oor:op="replace" oor:type="xs:string">
-        <value/>
+        <value>false</value>
       </prop>
     </node>
   </node>
