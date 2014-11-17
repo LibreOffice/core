@@ -706,8 +706,7 @@ void SwXMLTableCellContext_Impl::EndElement()
                     OTextCursorHelper *pDstTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                             sal::static_int_cast< sal_IntPtr >( xDstCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )) );
                     assert(pDstTxtCrsr && "SwXTextCursor missing");
-                    SwPaM aSrcPaM( *pSrcPaM->GetPoint(),
-                                   *pSrcPaM->GetMark() );
+                    SwPaM aSrcPaM(*pSrcPaM->GetMark(), *pSrcPaM->GetPoint());
                     SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
                     pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, false );
 
