@@ -213,7 +213,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
                 aRanges.push_back(sc::RowSpan(nRow1, nRow2));
-                CloneFormulaCell(*rSrcCell.mpFormula, aRanges);
+                CloneFormulaCell(*rSrcCell.mpFormula, aRanges, NULL);
             }
             break;
             default:
@@ -473,11 +473,11 @@ void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDele
         DeleteArea(itSpan->mnRow1, itSpan->mnRow2, nDelFlag, bBroadcast);
 }
 
-void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges )
+void ScColumn::CloneFormulaCell(
+    const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt )
 {
     sc::CellStoreType::iterator itPos = maCells.begin();
     sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
-    sc::StartListeningContext aCxt(*pDocument);
 
     std::vector<ScFormulaCell*> aFormulas;
     std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
@@ -495,8 +495,11 @@ void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc
         {
             // Single, ungrouped formula cell.
             ScFormulaCell* pCell = new ScFormulaCell(rSrc, *pDocument, aPos);
-            pCell->StartListeningTo(aCxt);
-            pCell->SetDirty();
+            if (pCxt)
+            {
+                pCell->StartListeningTo(*pCxt);
+                pCell->SetDirty();
+            }
             aFormulas.push_back(pCell);
         }
         else
@@ -513,8 +516,11 @@ void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc
                     xGroup->mpTopCell = pCell;
                     xGroup->mnLength = nLen;
                 }
-                pCell->StartListeningTo(aCxt);
-                pCell->SetDirty();
+                if (pCxt)
+                {
+                    pCell->StartListeningTo(*pCxt);
+                    pCell->SetDirty();
+                }
                 aFormulas.push_back(pCell);
             }
         }

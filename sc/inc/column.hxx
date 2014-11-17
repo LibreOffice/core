@@ -314,7 +314,8 @@ public:
 
     bool HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const;
 
-    void CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges );
+    void CloneFormulaCell(
+        const ScFormulaCell& rSrc, const std::vector<sc::RowSpan>& rRanges, sc::StartListeningContext* pCxt );
 
     svl::SharedString GetSharedString( SCROW nRow ) const;
 
