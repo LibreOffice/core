@@ -63,7 +63,7 @@ struct UnoVoidType;
 struct UnoUnsignedShortType;
 
 /**
-   A unique C++ type representing the UNO type UNSIGNED SHORT in cppu::UnoType.
+   A unique C++ type representing the UNO type CHAR in cppu::UnoType.
 
    The UNO types UNSIGNED SHORT and CHAR map to the same C++ type, so this C++
    type is needed to unambiguously specify UNO types in cppu::UnoType.
