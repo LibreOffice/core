@@ -2132,7 +2132,7 @@ long SwView::InsertDoc( sal_uInt16 nSlotId, const OUString& rFileName, const OUS
             pMed = new SfxMedium(rFileName, STREAM_READ, 0, 0 );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
             pMed->UseInteractionHandler( true );
-            ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, sal_False );
+            ErrCode nErr = aMatcher.GuessFilter(*pMed, &pFilter, SFX_FILTER_VERSION_NONE);
             if ( nErr )
                 DELETEZ(pMed);
             else
