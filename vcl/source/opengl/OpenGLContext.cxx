@@ -1073,7 +1073,11 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 void OpenGLContext::makeCurrent()
 {
 #if defined( WNT )
-    if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
+    if (wglGetCurrentContext() == m_aGLWin.hRC)
+    {
+        SAL_INFO("vcl.opengl", "OpenGLContext::makeCurrent(): Avoid setting the same context");
+    }
+    else if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
     }
@@ -1083,7 +1087,11 @@ void OpenGLContext::makeCurrent()
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
-    if (!glXMakeCurrent( m_aGLWin.dpy, mbPixmap ? m_aGLWin.glPix : m_aGLWin.win, m_aGLWin.ctx ))
+    if (glXGetCurrentContext() == m_aGLWin.ctx)
+    {
+        SAL_INFO("vcl.opengl", "OpenGLContext::makeCurrent(): Avoid setting the same context");
+    }
+    else if (!glXMakeCurrent( m_aGLWin.dpy, mbPixmap ? m_aGLWin.glPix : m_aGLWin.win, m_aGLWin.ctx ))
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed");
 #endif
 }
