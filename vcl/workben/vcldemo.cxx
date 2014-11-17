@@ -798,16 +798,25 @@ public:
                         // we get the most precision from the largest delta
                         long nInverseAlpha = std::max(nAR, std::max(nAG, nAB)); // (1-a)
                         nInverseAlpha = CLAMP(nInverseAlpha, 0, 255);
+                        long nAlpha = 255 - nInverseAlpha;
 
                         pMaskAcc->SetPixel(y,x,BitmapColor((sal_Int8)CLAMP(nInverseAlpha,0,255)));
                         // now recover the pixels
-                        long n2R = aColW.GetRed() + aColB.GetRed();
-                        long n2G = aColW.GetGreen() + aColB.GetGreen();
-                        long n2B = aColW.GetBlue() + aColB.GetBlue();
+                        long nR = (aColW.GetRed() + aColB.GetRed() - nInverseAlpha) * 128;
+                        long nG = (aColW.GetGreen() + aColB.GetGreen() - nInverseAlpha) * 128;
+                        long nB = (aColW.GetBlue() + aColB.GetBlue() - nInverseAlpha) * 128;
+                        if (nAlpha == 0)
+                        { // doesn't matter what's behind transparency
+                            nR = nG = nB = 0;
+                        }
+                        else
+                        {
+                            nR /= nAlpha; nG /= nAlpha; nB /= nAlpha;
+                        }
                         pRecAcc->SetPixel(y,x,BitmapColor(
-                                                (sal_uInt8)CLAMP((n2R+1)/2-nInverseAlpha,0,255),
-                                                (sal_uInt8)CLAMP((n2G+1)/2-nInverseAlpha,0,255),
-                                                (sal_uInt8)CLAMP((n2B+1)/2-nInverseAlpha,0,255)));
+                                                (sal_uInt8)CLAMP(nR,0,255),
+                                                (sal_uInt8)CLAMP(nG,0,255),
+                                                (sal_uInt8)CLAMP(nB,0,255)));
 #undef CLAMP
                     }
                 }
