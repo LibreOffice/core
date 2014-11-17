@@ -438,7 +438,7 @@ public:
     void StartListeningInArea(
         sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
 
-    void BroadcastInArea(
+    void SetDirtyFromClip(
         SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
 
     void CopyToTable(

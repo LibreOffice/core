@@ -3044,7 +3044,7 @@ void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     sc::ProcessFormula(maCells, aFunc);
 }
 
-void ScColumn::BroadcastInArea( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
+void ScColumn::SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
 {
     // Set all formula cells in the range dirty, and pick up all non-formula
     // cells for later broadcasting.  We don't broadcast here.
