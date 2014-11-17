@@ -14,6 +14,7 @@ import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 // Native methods in this class are all implemented in
 // sal/android/lo-bootstrap.c as the lo-bootstrap library is loaded with
@@ -34,7 +35,7 @@ public final class LibreOfficeKit
     // Trigger initialization on the JNI - LOKit side.
     private static native boolean initializeNative(String dataDir, String cacheDir, String apkFile);
 
-    public static native long getLibreOfficeKitHandle();
+    public static native ByteBuffer getLibreOfficeKitHandle();
 
     // Wrapper for putenv()
     public static native void putenv(String string);

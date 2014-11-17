@@ -24,9 +24,9 @@ public class Document {
     public static final int DOCTYPE_DRAWING = 3;
     public static final int DOCTYPE_OTHER = 4;
 
-    private final long handle;
+    private final ByteBuffer handle;
 
-    public Document(long handle) {
+    public Document(ByteBuffer handle) {
         this.handle = handle;
     }
 

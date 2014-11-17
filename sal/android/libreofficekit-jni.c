@@ -147,13 +147,17 @@ jboolean Java_org_libreoffice_kit_LibreOfficeKit_initializeNative
 }
 
 __attribute__ ((visibility("default")))
-jlong Java_org_libreoffice_kit_LibreOfficeKit_getLibreOfficeKitHandle
+jobject Java_org_libreoffice_kit_LibreOfficeKit_getLibreOfficeKitHandle
     (JNIEnv* env, jobject clazz)
 {
+    LibreOfficeKit* aOffice;
+
     (void) env;
     (void) clazz;
 
-    return (jlong) (intptr_t) libreofficekit_hook(full_program_dir);
+    aOffice = libreofficekit_hook(full_program_dir);
+
+    return (*env)->NewDirectByteBuffer(env, (void*) aOffice, sizeof(LibreOfficeKit));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
