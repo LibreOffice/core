@@ -838,6 +838,16 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
         ++mnScRows;
     }
 
+    //assuming worse case scenario of unknown types
+    const size_t nMinRecordSize = 1;
+    const size_t nMaxRows = rStrm.GetRecLeft() / (nMinRecordSize * mnScCols);
+    if (mnScRows > nMaxRows)
+    {
+        SAL_WARN("sc", "Parsing error: " << nMaxRows <<
+                 " max possible rows, but " << mnScRows << " claimed, truncating");
+        mnScRows = nMaxRows;
+    }
+
     for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
             maValueList.push_back( new XclImpCachedValue( rStrm ) );
