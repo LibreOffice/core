@@ -1487,6 +1487,16 @@ SvStream &SfxItemSet::Load
     // Load Item count and as many Items
     sal_uInt16 nCount = 0;
     rStream.ReadUInt16( nCount );
+
+    const size_t nMinRecordSize = sizeof(sal_uInt16) * 2;
+    const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
+    if (nCount > nMaxRecords)
+    {
+        SAL_WARN("svl", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nCount << " claimed, truncating");
+        nCount = nMaxRecords;
+    }
+
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         // Load Surrogate/Item and resolve Surrogate
