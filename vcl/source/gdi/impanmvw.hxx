@@ -42,10 +42,10 @@ private:
     Size            maDispSz;
     Size            maRestSz;
     MapMode         maMap;
-    vcl::Region          maClip;
+    vcl::Region     maClip;
     VirtualDevice*  mpBackground;
     VirtualDevice*  mpRestore;
-    sal_uLong           mnActPos;
+    sal_uLong       mnActPos;
     Disposal        meLastDisposal;
     bool            mbPause;
     bool            mbMarked;
