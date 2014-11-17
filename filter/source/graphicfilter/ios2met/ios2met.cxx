@@ -2357,7 +2357,14 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                     pOS2MET->SeekRel(4);
                     nStartIndex=ReadBigEndianWord();
                     pOS2MET->SeekRel(3);
-                    pOS2MET->ReadUChar( nbyte ); nBytesPerCol=((sal_uInt16)nbyte) & 0x00ff;
+                    pOS2MET->ReadUChar( nbyte );
+                    nBytesPerCol=((sal_uInt16)nbyte) & 0x00ff;
+                    if (nBytesPerCol == 0)
+                    {
+                        pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
+                        ErrorCode=4;
+                        break;
+                    }
                     nEndIndex=nStartIndex+(nElemLen-11)/nBytesPerCol;
                     for (i=nStartIndex; i<nEndIndex; i++) {
                         if (nBytesPerCol > 3) pOS2MET->SeekRel(nBytesPerCol-3);
