@@ -931,7 +931,7 @@ OUString DrawingML::WriteBlip( Reference< XPropertySet > rXPropSet, const OUStri
     GET( nContrast, AdjustContrast );
 
     mpFS->startElementNS( XML_a, XML_blip,
-            FSNS( XML_r, XML_embed), OUStringToOString( sRelId, RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSNS( XML_r, XML_embed), sRelId.toUtf8().getStr(),
             FSEND );
     if( nBright || nContrast )
     {
@@ -1693,7 +1693,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                                    XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
         if( bHasFontDesc )
             mpFS->singleElementNS( XML_a, XML_buFont,
-                                   XML_typeface, OUStringToOString( aFontDesc.Name, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                   XML_typeface, aFontDesc.Name.toUtf8().getStr(),
                                    XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
                                    FSEND );
 
@@ -1934,7 +1934,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
                                FSEND );
         if( presetWarp != NULL  && !presetWarp.isEmpty())
         {
-            mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst,OUStringToOString(presetWarp, RTL_TEXTENCODING_UTF8 ).getStr(),
+            mpFS->singleElementNS(XML_a, XML_prstTxWarp, XML_prst, presetWarp.toUtf8().getStr(),
                 FSEND );
         }
         if (GetDocumentType() == DOCUMENT_DOCX)
