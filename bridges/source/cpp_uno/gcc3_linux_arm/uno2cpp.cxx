@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <osl/diagnose.h>
 #include <uno/data.h>
 
 #include <bridges/cpp_uno/shared/bridge.hxx>
