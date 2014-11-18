@@ -19,7 +19,7 @@ EOF
 }
 
 function collect_change_ids {
-    git log `git merge-base origin/master origin/feature/opengl-vcl`.."$1" | \
+    git log `git merge-base origin/master "$1"`.."$1" | \
         sed 's/^commit /XXXcommitXXX/g' | \
         tr '\n' ';' | \
         sed 's/XXXcommitXXX/\n/g' | \
