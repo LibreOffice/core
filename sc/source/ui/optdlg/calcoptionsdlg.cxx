@@ -9,9 +9,15 @@
 
 #include "calcconfig.hxx"
 #include "calcoptionsdlg.hxx"
+#include "docsh.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
+#include "scopetools.hxx"
 
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+
+#include <comphelper/random.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 
@@ -958,6 +964,115 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 {
     // Automatically test the current implementation of OpenCL. If it
     // seems good, whitelist it. If it seems bad, blacklist it.
+
+    const double nEpsilon = 0.0000000003;
+    OUString sEpsilon(OUString::number(nEpsilon));
+
+    const int N = 1000;
+    OUString sN(OUString::number(N));
+
+    css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    css::uno::Reference< css::frame::XDesktop2 > xComponentLoader = css::frame::Desktop::create(xContext);
+    css::uno::Reference< css::lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL( "private:factory/scalc",
+                                                                                                     "_blank", 0,
+                                                                                                     css::uno::Sequence < css::beans::PropertyValue >() ) );
+    ScDocShell* pDocShell( dynamic_cast<ScDocShell*>(SfxObjectShell::GetShellFromComponent(xComponent)) );
+
+    auto pDoc = &pDocShell->GetDocument();
+
+    sc::AutoCalcSwitch aACSwitch(*pDoc, true);
+
+    pDoc->SetString(ScAddress(0,0,0), "=IF(SUM(A2:A4)=0,\"PASS\",\"FAIL\")");
+
+    // RAND sheet
+    pDoc->InsertTab(1, "RAND");
+
+    for (int i = 0; i < N; ++i)
+    {
+        pDoc->SetString(ScAddress(0,i,1), "=RAND()");
+        pDoc->SetValue(ScAddress(1,i,1), comphelper::rng::uniform_real_distribution(0, 1000));
+        pDoc->SetString(ScAddress(10,i,1), OUString("=IF(AND(A") + OUString::number(i+1) + ">= 0,A" + OUString::number(i+1) + "<= 1),0,1)");
+    }
+
+    pDoc->SetString(ScAddress(0,1,0), OUString("=SUM(RAND.K1:RAND.K") + sN + ")");
+
+    for (int i = 0; i < N/10; ++i)
+    {
+        pDoc->SetString(ScAddress(2,i,1), OUString("=SUM(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
+        pDoc->SetString(ScAddress(3,i,1), OUString("=AVERAGE(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
+
+        double sum(0);
+        for (int j = 0; j < N/2; ++j)
+            sum += pDoc->GetValue(ScAddress(1,i+j,1));
+
+        pDoc->SetString(ScAddress(12,i,1),
+                        OUString("=IF(C") + OUString::number(i+1) + "-" + OUString::number(sum) + "<" + sEpsilon + ",0,1");
+        pDoc->SetString(ScAddress(13,i,1),
+                        OUString("=IF(D") + OUString::number(i+1) + "-" + OUString::number(sum/(N/2)) + "<" + sEpsilon + ",0,1");
+    }
+
+    pDoc->SetString(ScAddress(0,2,0), OUString("=SUM(RAND.M1:RAND.N") + OUString::number(N/10) + ")");
+
+    // MISCMATH sheet
+    pDoc->InsertTab(2, "MISCMATH");
+
+    for (int i = 0; i < 1000; ++i)
+    {
+        OUString is(OUString::number(i+1));
+        double d;
+        if (i <= 16)
+            d = M_PI*(i/4.0);
+        else
+            d = comphelper::rng::uniform_real_distribution(0, 10);
+        pDoc->SetValue(ScAddress(0,i,2), d);
+        pDoc->SetValue(ScAddress(1,i,2), sin(d));
+        pDoc->SetValue(ScAddress(2,i,2), cos(d));
+        pDoc->SetValue(ScAddress(3,i,2), tan(d));
+        pDoc->SetValue(ScAddress(4,i,2), sqrt(d));
+        pDoc->SetValue(ScAddress(5,i,2), exp(d));
+        pDoc->SetValue(ScAddress(6,i,2), log(d));
+        pDoc->SetValue(ScAddress(7,i,2), atan(tan(d)));
+
+        pDoc->SetString(ScAddress(11,i,2), OUString("=SIN(A") + is + ")");
+        pDoc->SetString(ScAddress(12,i,2), OUString("=COS(A") + is + ")");
+        pDoc->SetString(ScAddress(13,i,2), OUString("=TAN(A") + is + ")");
+        pDoc->SetString(ScAddress(14,i,2), OUString("=SQRT(A") + is + ")");
+        pDoc->SetString(ScAddress(15,i,2), OUString("=EXP(A") + is + ")");
+        pDoc->SetString(ScAddress(16,i,2), OUString("=LN(A") + is + ")");
+        pDoc->SetString(ScAddress(17,i,2), OUString("=ATAN(D") + is + ")");
+
+        pDoc->SetString(ScAddress(21,i,2),
+                        OUString("=IF(ABS(B") + is + "-L" + is + ")<" + sEpsilon + ",0,1)");
+        pDoc->SetString(ScAddress(22,i,2),
+                        OUString("=IF(ABS(C") + is + "-M" + is + ")<" + sEpsilon + ",0,1)");
+
+        // Handle TAN undefinedness. Use a relative epsilon for larger TAN values
+        if (i <= 16 && i % 4 == 2)
+            pDoc->SetValue(ScAddress(23,i,2), 0);
+        else if (abs(tan(d)) < 10)
+            pDoc->SetString(ScAddress(23,i,2),
+                            OUString("=IF(ABS(D") + is + "-N" + is + ")<" + sEpsilon + ",0,1)");
+        else
+            pDoc->SetString(ScAddress(23,i,2),
+                            OUString("=IF(ABS((D") + is + "-N" + is + ")/D" + is + ")<" + sEpsilon + ",0,1)");
+
+        pDoc->SetString(ScAddress(24,i,2),
+                        OUString("=IF(ABS(E") + is + "-O" + is + ")<" + sEpsilon + ",0,1)");
+        pDoc->SetString(ScAddress(25,i,2),
+                        OUString("=IF(ABS(F") + is + "-P" + is + ")<" + sEpsilon + ",0,1)");
+
+        // Handle LN undefinedness
+        if (i == 0)
+            pDoc->SetValue(ScAddress(26,i,2), 0);
+        else
+            pDoc->SetString(ScAddress(26,i,2),
+                            OUString("=IF(ABS(G") + is + "-Q" + is + ")<" + sEpsilon + ",0,1)");
+
+        pDoc->SetString(ScAddress(27,i,2),
+                        OUString("=IF(ABS(H") + is + "-r" + is + ")<" + sEpsilon + ",0,1)");
+    }
+
+    pDoc->SetString(ScAddress(0,3,0), "=SUM(MISCMATH.V1:MISCMATH.AB1000)");
 
     return 0;
 }
