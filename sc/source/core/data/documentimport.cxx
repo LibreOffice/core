@@ -604,10 +604,12 @@ void ScDocumentImport::finalize()
 
 void ScDocumentImport::initColumn(ScColumn& rCol)
 {
+    rCol.RegroupFormulaCells();
+
     CellStoreInitializer aFunc(*mpImpl, rCol.nTab, rCol.nCol);
     std::for_each(rCol.maCells.begin(), rCol.maCells.end(), aFunc);
     aFunc.swap(rCol.maCellTextAttrs);
-    rCol.RegroupFormulaCells();
+
     rCol.CellStorageModified();
 }
 
