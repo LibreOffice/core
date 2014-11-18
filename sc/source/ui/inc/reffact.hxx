@@ -128,6 +128,13 @@ private:
     ScZTestDialogWrapper() SAL_DELETED_FUNCTION;
 };
 
+class ScChiSquareTestDialogWrapper :
+    public ChildWindowWrapper<SID_CHI_SQUARE_TEST_DIALOG>
+{
+private:
+    ScChiSquareTestDialogWrapper() SAL_DELETED_FUNCTION;
+};
+
 class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:

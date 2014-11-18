@@ -260,6 +260,7 @@ void ScDLL::Init()
     ScTTestDialogWrapper                ::RegisterChildWindow(false, pMod);
     ScFTestDialogWrapper                ::RegisterChildWindow(false, pMod);
     ScZTestDialogWrapper                ::RegisterChildWindow(false, pMod);
+    ScChiSquareTestDialogWrapper        ::RegisterChildWindow(false, pMod);
 
     // First docking Window for Calc
     ScFunctionChildWindow       ::RegisterChildWindow(false, pMod);

@@ -69,6 +69,7 @@
 #include "TTestDialog.hxx"
 #include "FTestDialog.hxx"
 #include "ZTestDialog.hxx"
+#include "ChiSquareTestDialog.hxx"
 
 #include "PivotLayoutDialog.hxx"
 
@@ -385,6 +386,12 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_ZTEST_DIALOG:
         {
             pResult = new ScZTestDialog( pB, pCW, pParent, &GetViewData() );
+        }
+        break;
+
+        case SID_CHI_SQUARE_TEST_DIALOG:
+        {
+            pResult = new ScChiSquareTestDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 

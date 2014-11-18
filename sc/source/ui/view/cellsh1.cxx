@@ -1002,6 +1002,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
             }
             break;
+        case SID_CHI_SQUARE_TEST_DIALOG:
+            {
+                sal_uInt16 nId  = ScChiSquareTestDialogWrapper::GetChildWindowId();
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+
+            }
+            break;
 
         case SID_SEARCH_RESULTS_DIALOG:
         {
