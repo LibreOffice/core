@@ -234,8 +234,6 @@ public class GraphicalTestArguments
                 // m_tWithBorderMove = TriState.UNSET;
             }
 
-            String sLeaveOutNames = (String)param.get(PropertyName.DOC_COMPARATOR_LEAVE_OUT_FILES);
-
             String sDBInfoString = (String)param.get(PropertyName.DOC_COMPARATOR_DB_INFO_STRING);
             if (sDBInfoString != null)
             {

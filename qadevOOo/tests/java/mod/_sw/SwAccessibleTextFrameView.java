@@ -79,7 +79,7 @@ public class SwAccessibleTextFrameView extends TestCase {
         XTextCursor oCursor = null;
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory.getFactory( Param.getMSF() );
         // creating Frames
         log.println( "creating Frames" );
         try {

@@ -55,14 +55,12 @@ public class _XInteractionHandler extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XInteractionHandler oObj = null ;
 
-    private XInteractionRequest request = null ;
-
     /**
     * Retrieves an object relation. <p>
     */
     @Override
     public void before() {
-        request = (XInteractionRequest)
+        XInteractionRequest request = (XInteractionRequest)
             tEnv.getObjRelation("XInteractionHandler.Request") ;
     }
 

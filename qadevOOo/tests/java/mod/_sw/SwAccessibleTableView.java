@@ -71,7 +71,7 @@ public class SwAccessibleTableView extends TestCase {
         XInterface oObj = null;
         XTextTable oTable = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
+        SOfficeFactory.getFactory(Param.getMSF());
         oTable = SOfficeFactory.createTextTable( xTextDoc );
 
         try {

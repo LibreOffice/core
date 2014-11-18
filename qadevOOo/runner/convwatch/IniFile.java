@@ -34,7 +34,6 @@ class IniFile
      */
     private final String m_sFilename;
     private final ArrayList<String> m_aList;
-    private final boolean m_bListContainUnsavedChanges = false;
 
     /**
        open a ini file by its name

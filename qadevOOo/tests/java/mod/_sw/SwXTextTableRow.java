@@ -75,7 +75,7 @@ public class SwXTextTableRow extends TestCase {
         log.println( "Creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory.getFactory( Param.getMSF() );
 
         try {
          log.println("creating a texttable");

@@ -97,7 +97,7 @@ public class SwXDocumentIndex extends TestCase {
         XTextContent xTC = null;
         Object instance = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF());
+        SOfficeFactory.getFactory(tParam.getMSF());
         log.println( "creating a test environment" );
         try {
             xTC = SOfficeFactory.createIndex(xTextDoc, "com.sun.star.text.DocumentIndex");

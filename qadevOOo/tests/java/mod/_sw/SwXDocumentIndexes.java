@@ -91,7 +91,7 @@ public class SwXDocumentIndexes extends TestCase {
     public TestEnvironment createTestEnvironment(
             TestParameters tParam, PrintWriter log ) throws StatusException {
         XInterface oObj = null;
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory.getFactory( tParam.getMSF() );
 
         log.println( "creating a test environment" );
         XTextContent xTC = null;

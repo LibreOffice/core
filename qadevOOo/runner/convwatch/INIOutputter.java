@@ -28,11 +28,11 @@ public class INIOutputter
 
 
     /**
-     * ls is the current line separator (carridge return)
+     * ls is the current line separator (carriage return)
      */
     private String ls;
 
-    public static INIOutputter create( String _sOutputPath, String _sHTMLFilename, String _sNamePrefix )
+    public static INIOutputter create( String _sOutputPath, String _sHTMLFilename )
         {
             FileHelper.makeDirectories("", _sOutputPath);
             INIOutputter a = new INIOutputter();

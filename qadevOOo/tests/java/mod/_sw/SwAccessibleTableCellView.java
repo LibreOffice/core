@@ -68,7 +68,7 @@ public class SwAccessibleTableCellView extends TestCase {
         XAccessibleContext oObj = null;
         XTextTable oTable = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory.getFactory( Param.getMSF());
 
         oTable = SOfficeFactory.createTextTable(xTextDoc);
 

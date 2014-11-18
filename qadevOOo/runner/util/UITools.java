@@ -28,12 +28,7 @@ import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleEditableText;
 import com.sun.star.accessibility.XAccessibleText;
 import com.sun.star.accessibility.XAccessibleValue;
-
 import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XTextDocument;
-
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
@@ -43,31 +38,10 @@ import com.sun.star.uno.XInterface;
 public class UITools {
 
     private final XAccessible mXRoot;
-    private final XMultiServiceFactory mMSF;
 
-    public UITools(XMultiServiceFactory msf, XModel xModel)
+    public UITools(XWindow xWindow)
     {
-        mMSF = msf;
-        mXRoot = makeRoot(xModel);
-    }
-
-    public UITools(XMultiServiceFactory msf, XTextDocument xTextDoc)
-    {
-        mMSF = msf;
-        XModel xModel = UnoRuntime.queryInterface(XModel.class, xTextDoc);
-        mXRoot = makeRoot(xModel);
-    }
-
-    public UITools(XMultiServiceFactory msf, XWindow xWindow)
-    {
-        mMSF = msf;
         mXRoot = makeRoot(xWindow);
-    }
-
-    private static XAccessible makeRoot(XModel aModel)
-    {
-        XWindow xWindow = AccessibilityTools.getCurrentWindow(aModel);
-        return AccessibilityTools.getAccessibleObject(xWindow);
     }
 
     private static String getString(XInterface xInt)

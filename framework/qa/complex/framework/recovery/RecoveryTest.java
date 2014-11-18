@@ -236,7 +236,7 @@ public class RecoveryTest extends ComplexTestCase {
 
             XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, oDialog);
 
-            UITools oUITools = new UITools(xMSF, xWindow);
+            UITools oUITools = new UITools(xWindow);
 
             oUITools.printAccessibleTree((PrintWriter) log, param.getBool(PropertyName.DEBUG_IS_ACTIVE));
 
@@ -275,7 +275,7 @@ public class RecoveryTest extends ComplexTestCase {
 
             log.println(oDialog.getTitle());
 
-            UITools oUITools = new UITools(xMSF, xWindow);
+            UITools oUITools = new UITools(xWindow);
 
             if (cancel) {
                 log.println("clicking 'Cancel' button...");
@@ -328,7 +328,7 @@ public class RecoveryTest extends ComplexTestCase {
             XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, oDialog);
             log.println("got the following dialog: '" +oDialog.getTitle() + "'");
 
-            UITools oUITools = new UITools(xMSF, xWindow);
+            UITools oUITools = new UITools(xWindow);
 
             String listBoxName = "Status of recovered documents";
             String[] documents = oUITools.getListBoxItems(listBoxName);
@@ -429,7 +429,7 @@ public class RecoveryTest extends ComplexTestCase {
 
                 assure("could not get 'Save Documents' Dialog: ", (oDialog != null), CONTINUE);
 
-                UITools oUITools = new UITools(xMSF, oDialog);
+                UITools oUITools = new UITools(oDialog);
 
                 oUITools.printAccessibleTree((PrintWriter) log, param.getBool(PropertyName.DEBUG_IS_ACTIVE));
 

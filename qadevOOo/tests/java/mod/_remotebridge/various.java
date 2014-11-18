@@ -210,7 +210,7 @@ public class various extends TestCase {
             xBrdgFctr = UnoRuntime.queryInterface(XBridgeFactory.class, oBrdg);
 
             // create own implementation of XInstanceProvider
-            XInstanceProvider xInstProv = new MyInstanceProvider(xMSF);
+            new MyInstanceProvider(xMSF);
             // create waiting acceptor thread
             accThread = new AcceptorThread(xAcctr);
             accThread.start();
