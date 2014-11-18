@@ -19,7 +19,6 @@ package com.sun.star.wizards.ui;
 
 import java.beans.*;
 
-import com.sun.star.wizards.ui.event.CommonListener;
 import com.sun.star.wizards.ui.event.EventNames;
 import com.sun.star.wizards.ui.event.MethodInvocation;
 import com.sun.star.uno.UnoRuntime;
@@ -246,7 +245,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             guiEventListener.add("rdmNavi", EventNames.EVENT_ITEM_CHANGED, mi);
             xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
-            xRoadmapBroadcaster.addItemListener((XItemListener) guiEventListener);
+            xRoadmapBroadcaster.addItemListener(guiEventListener);
 
             Helper.setUnoPropertyValue(oRoadmap, "Text", oWizardResource.getResText(UIConsts.RID_COMMON + 16));
         }
@@ -483,7 +482,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             // if the user used "escape" key to
             // close the dialog.
             MethodInvocation windowHidden = new MethodInvocation("windowHidden", this);
-            xWindow.addWindowListener((CommonListener) guiEventListener);
+            xWindow.addWindowListener(guiEventListener);
             String dialogName = (String) Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_NAME);
             guiEventListener.add(dialogName, EVENT_ACTION_PERFORMED, windowHidden);
 

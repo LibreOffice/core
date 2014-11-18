@@ -17,11 +17,104 @@
  */
 package com.sun.star.wizards.ui.event;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+
 import com.sun.star.awt.*;
 import com.sun.star.lang.EventObject;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 
-public class CommonListener extends AbstractListener implements XActionListener, XItemListener, XTextListener, EventNames, XWindowListener, XMouseListener, XFocusListener, XKeyListener
+/**
+ * <p>It uses a hashtable to map between a ComponentName, EventName and a MethodInvokation Object.
+ * To use this class do the following:</p>
+ * <ul>
+ * <li>Write a subclass which implements the needed Listener(s).</li>
+ * <li>In the even methods, use invoke(...).</li>
+ * <li>When instantiating the component, register the subclass as the event listener.</li>
+ * <li>Write the methods which should be performed when the event occurs.</li>
+ * <li>call the "add" method, to define a component-event-action mapping.</li>
+ * </ul>
+ */
+public class CommonListener implements XActionListener, XItemListener, XTextListener, EventNames, XWindowListener, XMouseListener, XFocusListener, XKeyListener
 {
+
+    private final HashMap<String,MethodInvocation> mHashtable = new HashMap<String,MethodInvocation>();
+
+    public void add(String componentName, String eventName, String methodName, Object target)
+    {
+        try
+        {
+            add(componentName, eventName, new MethodInvocation(methodName, target));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void add(String componentName, String eventName, MethodInvocation mi)
+    {
+        mHashtable.put(componentName + eventName, mi);
+    }
+
+    private MethodInvocation get(String componentName, String eventName)
+    {
+        return mHashtable.get(componentName + eventName);
+    }
+
+    private Object invoke(String componentName, String eventName, Object param)
+    {
+        try
+        {
+            MethodInvocation mi = get(componentName, eventName);
+            if (mi != null)
+            {
+                return mi.invoke(param);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (InvocationTargetException ite)
+        {
+
+            System.out.println("=======================================================");
+            System.out.println("=== Note: An Exception was thrown which should have ===");
+            System.out.println("=== caused a crash. I caught it. Please report this ===");
+            System.out.println("=== to https://www.libreoffice.org/get-help/bug/    ===");
+            System.out.println("=======================================================");
+
+            ite.printStackTrace();
+
+        }
+        catch (IllegalAccessException iae)
+        {
+            iae.printStackTrace();
+        }
+        catch (Exception ex)
+        {
+            System.out.println("=======================================================");
+            System.out.println("=== Note: An Exception was thrown which should have ===");
+            System.out.println("=== caused a crash. I caught it. Please report this ===");
+            System.out.println("=== to https://www.libreoffice.org/get-help/bug/    ===");
+            System.out.println("=======================================================");
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the property "name" of the Object which is the source of the event.
+     */
+    private static String getEventSourceName(EventObject eventObject)
+    {
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, eventObject.Source);
+        return (String) Helper.getUnoPropertyValue(xControl.getModel(), PropertyNames.PROPERTY_NAME, String.class);
+    }
 
     /**
      * Implementation of com.sun.star.awt.XActionListener

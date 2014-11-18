@@ -55,7 +55,7 @@ public class UnoDialog implements EventNames
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
-    protected final AbstractListener guiEventListener = new CommonListener();
+    protected final CommonListener guiEventListener = new CommonListener();
 
     public UnoDialog(XMultiServiceFactory xMSF)
     {
