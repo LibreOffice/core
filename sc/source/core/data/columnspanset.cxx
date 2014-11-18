@@ -120,6 +120,15 @@ void ColumnSpanSet::set(const ScRange& rRange, bool bVal)
     }
 }
 
+void ColumnSpanSet::set( SCTAB nTab, SCCOL nCol, const SingleColumnSpanSet& rSingleSet, bool bVal )
+{
+    SingleColumnSpanSet::SpansType aSpans;
+    rSingleSet.getSpans(aSpans);
+    SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+    for (; it != itEnd; ++it)
+        set(nTab, nCol, it->mnRow1, it->mnRow2, bVal);
+}
+
 void ColumnSpanSet::scan(
     const ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal)
 {

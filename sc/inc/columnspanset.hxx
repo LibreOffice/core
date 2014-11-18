@@ -25,6 +25,7 @@ class ScRangeList;
 namespace sc {
 
 struct ColumnBlockConstPosition;
+class SingleColumnSpanSet;
 
 struct RowSpan
 {
@@ -91,6 +92,8 @@ public:
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow, bool bVal);
     void set(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, bool bVal);
     void set(const ScRange& rRange, bool bVal);
+
+    void set( SCTAB nTab, SCCOL nCol, const SingleColumnSpanSet& rSingleSet, bool bVal );
 
     /**
      * Scan specified range in a specified sheet and mark all non-empty cells

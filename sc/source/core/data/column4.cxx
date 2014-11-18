@@ -110,11 +110,7 @@ void ScColumn::DeleteBeforeCopyFromClip(
         {
             sc::SingleColumnSpanSet aDeletedRows;
             DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
-            aDeletedRows.getSpans(aSpans);
-            it = aSpans.begin();
-            itEnd = aSpans.end();
-            for (; it != itEnd; ++it)
-                rBroadcastSpans.set(nTab, nCol, it->mnRow1, it->mnRow2, true);
+            rBroadcastSpans.set(nTab, nCol, aDeletedRows, true);
         }
 
         if (nDelFlag & IDF_NOTE)
