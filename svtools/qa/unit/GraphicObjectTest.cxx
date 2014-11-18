@@ -221,7 +221,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
     // Use bigger cache
     {
         GraphicManager& rGrfMgr = pGrafObj1->GetGraphicManager();
-        rGrfMgr.SetMaxCacheSize(pGrafObj1->GetSizeBytes()+pGrafObj2->GetSizeBytes());
+        rGrfMgr.SetMaxCacheSize(pGrafObj1->GetSizeBytes()+pGrafObj2->GetSizeBytes()*10);
     }
     // Swap in both images -> both should be swapped in
     {
