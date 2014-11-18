@@ -37,12 +37,12 @@ import com.sun.star.wizards.common.PropertyNames;
  * <li>call the "add" method, to define a component-event-action mapping.</li>
  * </ul>
  */
-public class CommonListener implements XActionListener, XItemListener, XTextListener, EventNames, XWindowListener, XMouseListener, XFocusListener, XKeyListener
+public class CommonListener implements XActionListener, XItemListener, XTextListener, XWindowListener, XMouseListener, XFocusListener, XKeyListener
 {
 
     private final HashMap<String,MethodInvocation> mHashtable = new HashMap<String,MethodInvocation>();
 
-    public void add(String componentName, String eventName, String methodName, Object target)
+    public void add(String componentName, EventNames eventName, String methodName, Object target)
     {
         try
         {
@@ -54,17 +54,17 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
         }
     }
 
-    public void add(String componentName, String eventName, MethodInvocation mi)
+    public void add(String componentName, EventNames eventName, MethodInvocation mi)
     {
         mHashtable.put(componentName + eventName, mi);
     }
 
-    private MethodInvocation get(String componentName, String eventName)
+    private MethodInvocation get(String componentName, EventNames eventName)
     {
         return mHashtable.get(componentName + eventName);
     }
 
-    private Object invoke(String componentName, String eventName, Object param)
+    private Object invoke(String componentName, EventNames eventName, Object param)
     {
         try
         {
@@ -121,7 +121,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
     {
-        invoke(getEventSourceName(actionEvent), EVENT_ACTION_PERFORMED, actionEvent);
+        invoke(getEventSourceName(actionEvent), EventNames.ACTION_PERFORMED, actionEvent);
     }
 
     public void disposing(com.sun.star.lang.EventObject eventObject)
@@ -133,7 +133,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void itemStateChanged(ItemEvent itemEvent)
     {
-        invoke(getEventSourceName(itemEvent), EVENT_ITEM_CHANGED, itemEvent);
+        invoke(getEventSourceName(itemEvent), EventNames.ITEM_CHANGED, itemEvent);
     }
 
     /**
@@ -141,7 +141,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void textChanged(TextEvent textEvent)
     {
-        invoke(getEventSourceName(textEvent), EVENT_TEXT_CHANGED, textEvent);
+        invoke(getEventSourceName(textEvent), EventNames.TEXT_CHANGED, textEvent);
     }
 
     /**
@@ -149,7 +149,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void windowResized(WindowEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_WINDOW_RESIZED, event);
+        invoke(getEventSourceName(event), EventNames.WINDOW_RESIZED, event);
     }
 
     /**
@@ -157,7 +157,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void windowMoved(WindowEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_WINDOW_MOVED, event);
+        invoke(getEventSourceName(event), EventNames.WINDOW_MOVED, event);
     }
 
     /**
@@ -165,7 +165,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void windowShown(EventObject event)
     {
-        invoke(getEventSourceName(event), EVENT_WINDOW_SHOWN, event);
+        invoke(getEventSourceName(event), EventNames.WINDOW_SHOWN, event);
     }
 
     /**
@@ -173,7 +173,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void windowHidden(EventObject event)
     {
-        invoke(getEventSourceName(event), EVENT_WINDOW_HIDDEN, event);
+        invoke(getEventSourceName(event), EventNames.WINDOW_HIDDEN, event);
     }
 
     /**
@@ -181,7 +181,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void mousePressed(MouseEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_MOUSE_PRESSED, event);
+        invoke(getEventSourceName(event), EventNames.MOUSE_PRESSED, event);
     }
 
     /**
@@ -189,7 +189,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void mouseReleased(MouseEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_KEY_RELEASED, event);
+        invoke(getEventSourceName(event), EventNames.KEY_RELEASED, event);
     }
 
     /**
@@ -197,7 +197,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void mouseEntered(MouseEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_MOUSE_ENTERED, event);
+        invoke(getEventSourceName(event), EventNames.MOUSE_ENTERED, event);
     }
 
     /**
@@ -205,7 +205,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void mouseExited(MouseEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_MOUSE_EXITED, event);
+        invoke(getEventSourceName(event), EventNames.MOUSE_EXITED, event);
     }
 
     /**
@@ -213,7 +213,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void focusGained(FocusEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_FOCUS_GAINED, event);
+        invoke(getEventSourceName(event), EventNames.FOCUS_GAINED, event);
     }
 
     /**
@@ -221,7 +221,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void focusLost(FocusEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_FOCUS_LOST, event);
+        invoke(getEventSourceName(event), EventNames.FOCUS_LOST, event);
     }
 
     /**
@@ -229,7 +229,7 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void keyPressed(KeyEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_KEY_PRESSED, event);
+        invoke(getEventSourceName(event), EventNames.KEY_PRESSED, event);
     }
 
     /**
@@ -237,6 +237,6 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
      */
     public void keyReleased(KeyEvent event)
     {
-        invoke(getEventSourceName(event), EVENT_KEY_RELEASED, event);
+        invoke(getEventSourceName(event), EventNames.KEY_RELEASED, event);
     }
 }

@@ -337,7 +337,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         XWindow win = UnoRuntime.queryInterface(XWindow.class, image);
         win.addMouseListener(uiEventListener);
         win.addKeyListener(imageKeyListener);
-        uiEventListener.add(imageName, EventNames.EVENT_MOUSE_PRESSED, METHOD_MOUSE_PRESSED);
+        uiEventListener.add(imageName, EventNames.MOUSE_PRESSED, METHOD_MOUSE_PRESSED);
 
         return image;
     }

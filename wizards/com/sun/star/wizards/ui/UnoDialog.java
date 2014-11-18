@@ -34,7 +34,7 @@ import com.sun.star.wizards.ui.event.*;
 
 import java.util.HashMap;
 
-public class UnoDialog implements EventNames
+public class UnoDialog
 {
 
     public XMultiServiceFactory xMSF;
