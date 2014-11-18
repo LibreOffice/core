@@ -42,7 +42,7 @@ SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet,
     nFlags = SELENG_EXPANDONMOVE;
     nLockedMods = 0;
 
-    aWTimer.SetTimeoutHdl( LINK( this, SelectionEngine, ImpWatchDog ) );
+    aWTimer.timeoutSignal.connect( &SelectionEngine::ImpWatchDog );
     aWTimer.SetTimeout( nUpdateInterval );
 }
 
@@ -51,11 +51,10 @@ SelectionEngine::~SelectionEngine()
     aWTimer.Stop();
 }
 
-IMPL_LINK_NOARG(SelectionEngine, ImpWatchDog)
+void SelectionEngine::ImpWatchDog()
 {
     if ( !aArea.IsInside( aLastMove.GetPosPixel() ) )
         SelMouseMove( aLastMove );
-    return 0;
 }
 
 void SelectionEngine::SetSelectionMode( SelectionMode eMode )

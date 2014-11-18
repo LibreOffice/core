@@ -409,11 +409,11 @@ private:
 
 public:
 
-    DECL_DLLPRIVATE_LINK(      ImplHandlePaintHdl, void* );
+    SAL_DLLPRIVATE void        ImplHandlePaintHdl();
     DECL_DLLPRIVATE_LINK(      ImplGenerateMouseMoveHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplTrackTimerHdl, Timer* );
+    SAL_DLLPRIVATE void        ImplTrackTimerHdl( Timer* );
     DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
-    DECL_DLLPRIVATE_LINK(      ImplHandleResizeTimerHdl, void* );
+    SAL_DLLPRIVATE void        ImplHandleResizeTimerHdl();
     DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
 
 

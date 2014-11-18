@@ -40,7 +40,7 @@ class VCL_DLLPUBLIC Cursor
 {
 private:
     ImplCursorData* mpData;
-    vcl::Window*         mpWindow;           // only for shadow cursor
+    vcl::Window*    mpWindow;           // only for shadow cursor
     long            mnSlant;
     Size            maSize;
     Point           maPos;
@@ -52,7 +52,7 @@ private:
 public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
-    DECL_DLLPRIVATE_LINK(       ImplTimerHdl, void* );
+    SAL_DLLPRIVATE void         ImplTimerHdl();
     SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true );
     SAL_DLLPRIVATE void         ImplHide( bool bStopTimer );
     SAL_DLLPRIVATE void         ImplResume( bool bRestore = false );

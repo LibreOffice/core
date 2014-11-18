@@ -42,7 +42,7 @@ private:
     sal_uInt16              mnStyle;
 
 protected:
-                        DECL_LINK( TimerHdl, Timer* );
+    void                TimerHdl();
     virtual void        Paint( const Rectangle& ) SAL_OVERRIDE;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
     virtual OUString    GetText() const SAL_OVERRIDE;

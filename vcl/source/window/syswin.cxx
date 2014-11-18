@@ -86,7 +86,7 @@ void SystemWindow::Init()
 
     //To-Do, reuse maResizeTimer
     maLayoutTimer.SetTimeout(50);
-    maLayoutTimer.SetTimeoutHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
+    maLayoutTimer.timeoutSignal.connect( &SystemWindow::ImplHandleLayoutTimerHdl );
 }
 
 SystemWindow::SystemWindow(WindowType nType)
@@ -1039,18 +1039,17 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
     VclContainer::setLayoutAllocation(rBox, aPos, aSize);
 }
 
-IMPL_LINK( SystemWindow, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
+void SystemWindow::ImplHandleLayoutTimerHdl()
 {
     if (!isLayoutEnabled())
     {
         SAL_WARN("vcl.layout", "SystemWindow has become non-layout because extra children have been added directly to it.");
-        return 0;
+        return;
     }
 
     VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
     assert(pBox);
     setPosSizeOnContainee(GetSizePixel(), *pBox);
-    return 0;
 }
 
 void SystemWindow::SetText(const OUString& rStr)

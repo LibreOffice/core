@@ -322,7 +322,7 @@ void SpinField::ImplInit( vcl::Window* pParent, WinBits nWinStyle )
         mpEdit->Show();
         SetSubEdit( mpEdit );
 
-        maRepeatTimer.SetTimeoutHdl( LINK( this, SpinField, ImplTimeout ) );
+        maRepeatTimer.timeoutSignal.connect(boost::bind( &SpinField::ImplTimeout, this, _1 ));
         maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
         if ( nWinStyle & WB_REPEAT )
             mbRepeat = true;
@@ -963,7 +963,7 @@ Size SpinField::CalcSize(sal_Int32 nChars) const
     return aSz;
 }
 
-IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
+void SpinField::ImplTimeout( Timer* pTimer )
 {
     if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
     {
@@ -977,7 +977,6 @@ IMPL_LINK( SpinField, ImplTimeout, Timer*, pTimer )
         else
             Down();
     }
-    return 0;
 }
 
 void SpinField::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )

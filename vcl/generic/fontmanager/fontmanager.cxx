@@ -659,7 +659,7 @@ PrintFontManager::PrintFontManager()
         }
     }
 
-    m_aFontInstallerTimer.SetTimeoutHdl(LINK(this, PrintFontManager, autoInstallFontLangSupport));
+    m_aFontInstallerTimer.timeoutSignal.connect(&PrintFontManager::autoInstallFontLangSupport);
     m_aFontInstallerTimer.SetTimeout(5000);
 }
 

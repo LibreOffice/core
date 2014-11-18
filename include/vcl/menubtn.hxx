@@ -45,7 +45,7 @@ private:
     Link            maSelectHdl;
 
     SAL_DLLPRIVATE void    ImplInitMenuButtonData();
-    DECL_DLLPRIVATE_LINK(  ImplMenuTimeoutHdl, void* );
+    SAL_DLLPRIVATE void    ImplMenuTimeoutHdl();
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         MenuButton( const MenuButton & );
