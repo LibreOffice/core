@@ -324,6 +324,11 @@ void SingleColumnSpanSet::getSpans(SpansType& rSpans) const
     rSpans.swap(aSpans);
 }
 
+void SingleColumnSpanSet::swap( SingleColumnSpanSet& r )
+{
+    maSpans.swap(r.maSpans);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

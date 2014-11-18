@@ -141,6 +141,8 @@ public:
 
     void getSpans(SpansType& rSpans) const;
 
+    void swap( SingleColumnSpanSet& r );
+
 private:
     ColumnSpansType maSpans;
 };

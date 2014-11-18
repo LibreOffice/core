@@ -96,7 +96,6 @@ void ScColumn::DeleteBeforeCopyFromClip(
         nDestOffset += nClipRowLen;
     }
 
-    std::vector<SCROW> aDeletedRows;
     InsertDeleteFlags nDelFlag = rCxt.getDeleteFlag();
     sc::ColumnBlockPosition aBlockPos;
     InitBlockPosition(aBlockPos);
@@ -108,7 +107,15 @@ void ScColumn::DeleteBeforeCopyFromClip(
         SCROW nRow2 = it->mnRow2;
 
         if (nDelFlag & IDF_CONTENTS)
-            DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows, &rBroadcastSpans);
+        {
+            sc::SingleColumnSpanSet aDeletedRows;
+            DeleteCells(aBlockPos, nRow1, nRow2, nDelFlag, aDeletedRows);
+            aDeletedRows.getSpans(aSpans);
+            it = aSpans.begin();
+            itEnd = aSpans.end();
+            for (; it != itEnd; ++it)
+                rBroadcastSpans.set(nTab, nCol, it->mnRow1, it->mnRow2, true);
+        }
 
         if (nDelFlag & IDF_NOTE)
             DeleteCellNotes(aBlockPos, nRow1, nRow2);
