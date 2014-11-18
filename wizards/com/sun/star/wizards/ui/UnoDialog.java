@@ -57,11 +57,6 @@ public class UnoDialog implements EventNames
     private PeerConfig m_oPeerConfig;
     protected final AbstractListener guiEventListener = new CommonListener();
 
-    public AbstractListener getGuiEventListener()
-    {
-        return guiEventListener;
-    }
-
     public UnoDialog(XMultiServiceFactory xMSF)
     {
         try
