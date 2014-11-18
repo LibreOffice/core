@@ -36,7 +36,7 @@ ImplIdleMgr::ImplIdleMgr():
     mpIdleList  = new ImplIdleList();
 
     maTimer.SetTimeout( IMPL_IDLETIMEOUT );
-    maTimer.SetTimeoutHdl( LINK( this, ImplIdleMgr, TimeoutHdl ) );
+    maTimer.timeoutSignal.connect( boost::bind( &ImplIdleMgr::TimeoutHdl, this, _1 ));
 }
 
 ImplIdleMgr::~ImplIdleMgr()
@@ -104,7 +104,7 @@ void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
         maTimer.Stop();
 }
 
-IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
+void ImplIdleMgr::TimeoutHdl( Timer* )
 {
     for ( size_t i = 0; i < mpIdleList->size(); ++i ) {
         ImplIdleData* pIdleData = (*mpIdleList)[ i ];
@@ -120,8 +120,6 @@ IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
             }
         }
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -50,11 +50,11 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
 
     SetPopupModeEndHdl( LINK( this, MenuFloatingWindow, PopupEnd ) );
 
-    aHighlightChangedTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, HighlightChanged ) );
+    aHighlightChangedTimer.timeoutSignal.connect(boost::bind( &MenuFloatingWindow::HighlightChanged, this, _1 ));
     aHighlightChangedTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
     aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
-    aSubmenuCloseTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, SubmenuClose ) );
-    aScrollTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, AutoScroll ) );
+    aSubmenuCloseTimer.timeoutSignal.connect(boost::bind( &MenuFloatingWindow::SubmenuClose, this, _1 ));
+    aScrollTimer.timeoutSignal.connect(boost::bind( &MenuFloatingWindow::AutoScroll, this, _1 ));
 
     AddEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
 }
@@ -261,16 +261,15 @@ IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
     return 0;
 }
 
-IMPL_LINK_NOARG(MenuFloatingWindow, AutoScroll)
+void MenuFloatingWindow::AutoScroll( Timer* )
 {
     ImplScroll( GetPointerPosPixel() );
-    return 1;
 }
 
-IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
+void MenuFloatingWindow::HighlightChanged( Timer* pTimer )
 {
     if( ! pMenu )
-        return 0;
+        return;
 
     MenuItemData* pItemData = pMenu->pItemList->GetDataFromPos( nHighlightedItem );
     if ( pItemData )
@@ -326,11 +325,9 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
                 pActivePopup->ImplGetFloatingWindow()->AddPopupModeWindow( this );
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose)
+void MenuFloatingWindow::SubmenuClose( Timer * )
 {
     if( pMenu && pMenu->pStartedFrom )
     {
@@ -338,7 +335,6 @@ IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose)
         if( pWin )
             pWin->KillActivePopup();
     }
-    return 0;
 }
 
 IMPL_LINK( MenuFloatingWindow, ShowHideListener, VclWindowEvent*, pEvent )

@@ -75,7 +75,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
 
     // init timer
     mpTimer = new Timer;
-    mpTimer->SetTimeoutHdl( LINK( this, ImplWheelWindow, ImplScrollHdl ) );
+    mpTimer->timeoutSignal.connect(boost::bind( &ImplWheelWindow::ImplScrollHdl, this, _1 ));
     mpTimer->SetTimeout( mnTimeout );
     mpTimer->Start();
 
@@ -337,7 +337,7 @@ void ImplWheelWindow::MouseButtonUp( const MouseEvent& rMEvt )
         FloatingWindow::MouseButtonUp( rMEvt );
 }
 
-IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
+void ImplWheelWindow::ImplScrollHdl( Timer* )
 {
     if ( mnActDeltaX || mnActDeltaY )
     {
@@ -354,7 +354,7 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
             ImplDelData aDel( this );
             pWindow->Command( aCEvt );
             if( aDel.IsDead() )
-                return 0;
+                return;
             mnRepaintTime = std::max( tools::Time::GetSystemTicks() - nTime, (sal_uLong)1 );
             ImplRecalcScrollValues();
         }
@@ -363,8 +363,6 @@ IMPL_LINK_NOARG(ImplWheelWindow, ImplScrollHdl)
     if ( mnTimeout != mpTimer->GetTimeout() )
         mpTimer->SetTimeout( mnTimeout );
     mpTimer->Start();
-
-    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
