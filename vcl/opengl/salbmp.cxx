@@ -573,4 +573,9 @@ bool OpenGLSalBitmap::GetSystemData( BitmapSystemData& /*rData*/ )
 #endif
 }
 
+bool OpenGLSalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

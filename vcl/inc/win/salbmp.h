@@ -97,6 +97,7 @@ public:
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
     virtual bool                GetSystemData( BitmapSystemData& rData );
 
+    virtual bool                Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
     virtual bool                Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
 };
 

@@ -93,6 +93,11 @@ void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
         mnChecksum = 0;
 }
 
+bool ImpBitmap::ImplCrop( const Rectangle& rRectPixel )
+{
+    return mpSalBitmap->Crop( rRectPixel );
+}
+
 bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
     return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );

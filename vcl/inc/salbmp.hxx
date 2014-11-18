@@ -55,6 +55,7 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
+    virtual bool            Crop( const Rectangle& rRectPixel ) = 0;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) = 0;
 };
 
