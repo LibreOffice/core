@@ -316,6 +316,7 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aNewTex.Id(), 0 );
     glViewport( 0, 0, GetWidth(), GetHeight() );
     DrawTexture( maOffscreenTex, aPosAry );
+    maOffscreenTex = aNewTex;
 
     CHECK_GL_ERROR();
     return true;
