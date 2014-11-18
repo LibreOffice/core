@@ -171,7 +171,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             {
                 mpData = new ImplCursorData;
                 mpData->mbCurVisible = false;
-                mpData->maTimer.SetTimeoutHdl( LINK( this, Cursor, ImplTimerHdl ) );
+                mpData->maTimer.timeoutSignal.connect(boost::bind( &vcl::Cursor::ImplTimerHdl, this, _1 ));
             }
 
             mpData->mpWindow    = pWindow;
@@ -246,13 +246,12 @@ void vcl::Cursor::ImplNew()
     }
 }
 
-IMPL_LINK_NOARG(vcl::Cursor, ImplTimerHdl)
+void vcl::Cursor::ImplTimerHdl( Timer* )
 {
     if ( mpData->mbCurVisible )
         ImplRestore();
     else
         ImplDraw();
-    return 0;
 }
 
 vcl::Cursor::Cursor()

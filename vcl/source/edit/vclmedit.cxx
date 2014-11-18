@@ -1031,10 +1031,9 @@ void VclMultiLineEdit::CaretChanged()
     CallEventListeners(VCLEVENT_EDIT_CARETCHANGED);
 }
 
-IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl)
+void VclMultiLineEdit::ImpUpdateDataHdl(Timer*)
 {
     UpdateData();
-    return 0;
 }
 
 void VclMultiLineEdit::UpdateData()
@@ -1066,7 +1065,7 @@ void VclMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
         if ( !pUpdateDataTimer )
         {
             pUpdateDataTimer = new Timer;
-            pUpdateDataTimer->SetTimeoutHdl( LINK( this, VclMultiLineEdit, ImpUpdateDataHdl ) );
+            pUpdateDataTimer->timeoutSignal.connect(boost::bind( &VclMultiLineEdit::ImpUpdateDataHdl, this, _1 ));
         }
         pUpdateDataTimer->SetTimeout( nTimeout );
     }
