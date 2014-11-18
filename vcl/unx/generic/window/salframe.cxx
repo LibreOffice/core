@@ -810,7 +810,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
     mpInputContext              = NULL;
     mbInputFocus                = False;
 
-    maAlwaysOnTopRaiseTimer.SetTimeoutHdl( LINK( this, X11SalFrame, HandleAlwaysOnTopRaise ) );
+    maAlwaysOnTopRaiseTimer.timeoutSignal.connect(boost::bind( &X11SalFrame::HandleAlwaysOnTopRaise, this, _1 ));
     maAlwaysOnTopRaiseTimer.SetTimeout( 100 );
 
     meWindowType                = WMAdaptor::windowType_Normal;
@@ -3657,11 +3657,10 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     return 1;
 }
 
-IMPL_LINK_NOARG(X11SalFrame, HandleAlwaysOnTopRaise)
+void X11SalFrame::HandleAlwaysOnTopRaise( Timer* )
 {
     if( bMapped_ )
         ToTop( 0 );
-    return 0;
 }
 
 long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
