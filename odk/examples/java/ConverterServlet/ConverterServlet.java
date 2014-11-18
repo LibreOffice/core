@@ -72,11 +72,11 @@ public class ConverterServlet extends HttpServlet {
 
     /** Specifies the host for the office server.
      */
-    private final String stringHost = "localhost";
+    private static final String stringHost = "localhost";
 
     /** Specifies the port for the office server.
      */
-    private final String stringPort = "2083";
+    private static final String stringPort = "2083";
 
     /** Called by the server (via the service method) to allow a servlet to handle
      * a POST request. The file from the client will be uploaded to the web server

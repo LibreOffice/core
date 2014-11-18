@@ -67,7 +67,7 @@ public class ParameterHelper
 
     private String m_sPrinterName = null;
 
-    private final int m_nResolutionInDPI = 180;
+    private static final int m_nResolutionInDPI = 180;
 
     private String m_sInputPath = null;
     private String m_sOutputPath = null;

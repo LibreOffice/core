@@ -31,7 +31,7 @@ public final class XOutputStreamToByteArrayAdapter
     extends ComponentBase
     implements XOutputStream
 {
-    private final int initialSize = 100240; // 10 kb
+    private static final int initialSize = 100240; // 10 kb
     private int size = 0;
     private int position = 0;
     private boolean externalBuffer = false;

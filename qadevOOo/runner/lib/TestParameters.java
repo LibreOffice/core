@@ -51,7 +51,7 @@ public class TestParameters extends HashMap<String,Object> {
      * Debug information will always be written on standard out.<br>
      * default is true
      */
-    private final boolean DebugIsActive = false;
+    private static final boolean DebugIsActive = false;
 
     /**
      * Wrapper around "get()" with some debug output

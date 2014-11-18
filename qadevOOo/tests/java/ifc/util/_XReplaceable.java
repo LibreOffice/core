@@ -45,7 +45,7 @@ public class _XReplaceable extends MultiMethodTest {
     public XReplaceable oObj = null;
     public XReplaceDescriptor Rdesc = null;
     private String mSearchString = "xTextDoc";
-    private final String mReplaceString = "** xTextDoc";
+    private static final String mReplaceString = "** xTextDoc";
     private boolean mDispose = false;
 
     /**

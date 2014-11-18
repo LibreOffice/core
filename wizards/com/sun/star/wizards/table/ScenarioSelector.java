@@ -53,7 +53,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     private final TableDescriptor curtabledescriptor;
     private final CGCategory oCGCategory;
     protected CGTable oCGTable;
-    private final String SELECTCATEGORY = "selectCategory";
+    private static final String SELECTCATEGORY = "selectCategory";
     protected boolean bcolumnnameislimited;
     private final int imaxcolumnchars;
     private final String smytable;

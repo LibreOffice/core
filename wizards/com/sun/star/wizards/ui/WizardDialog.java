@@ -48,7 +48,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private static final String CANCEL_ACTION_PERFORMED = "cancelWizard_1";
     private static final String HELP_ACTION_PERFORMED = "callHelp";
     public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
-    private final int iButtonWidth = 50;
+    private static final int iButtonWidth = 50;
     private int nNewStep = 1;
     private int nOldStep = 1;
     private int nMaxStep = 1;

@@ -60,7 +60,7 @@ public class FilterComponent
     private final String slblOperators;
     private final String slblValue;
     WizardDialog CurUnoDialog;
-    private final int BaseID = 2300;
+    private static final int BaseID = 2300;
     private final String sIncSuffix;
     private final ControlRow[] oControlRows;
     private final String sDuplicateCondition;

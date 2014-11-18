@@ -66,7 +66,7 @@ public class various extends TestCase {
     * which is free.
     */
     protected static final int basePort = 50000;
-    private final int curPort = 50000;
+    private static final int curPort = 50000;
 
     private XAcceptor xAcctr;
     private XConnector xCntr;
