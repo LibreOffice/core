@@ -133,9 +133,9 @@ class EventQueue
     }
 
     private static EventQueue maInstance = null;
-    private Object maMonitor;
-    private LinkedList<Runnable> maRegularQueue;
-    private LinkedList<Runnable> maDisposingQueue;
+    private final Object maMonitor;
+    private final LinkedList<Runnable> maRegularQueue;
+    private final LinkedList<Runnable> maDisposingQueue;
 }
 
 

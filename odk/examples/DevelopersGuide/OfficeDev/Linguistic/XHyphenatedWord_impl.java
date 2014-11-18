@@ -39,10 +39,10 @@ public class XHyphenatedWord_impl implements
 {
     private String     aWord;
     private String     aHyphenatedWord;
-    private short      nHyphenPos;
-    private short      nHyphenationPos;
+    private final short      nHyphenPos;
+    private final short      nHyphenationPos;
     private Locale     aLang;
-    private boolean    bIsAltSpelling;
+    private final boolean  bIsAltSpelling;
 
     public XHyphenatedWord_impl(
             String      aWord,

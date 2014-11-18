@@ -117,7 +117,7 @@ public class CallReportWizard
         private static final String __serviceName = "com.sun.star.wizards.report.CallReportWizard";
         /** The service manager, that gives access to all registered services.
          */
-        private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
+        private final com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
 
         /** This method is a member of the interface for initializing an object
          * directly after its creation.

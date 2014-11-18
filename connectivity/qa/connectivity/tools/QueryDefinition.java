@@ -26,7 +26,7 @@ import com.sun.star.lang.IllegalArgumentException;
 
 public class QueryDefinition
 {
-    private XPropertySet    m_queryDef;
+    private final XPropertySet    m_queryDef;
 
     public QueryDefinition( XPropertySet _queryDef )
     {

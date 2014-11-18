@@ -258,7 +258,7 @@ public static class StateSetSetView
         }
     }
 
-    private JLabel maStates;
+    private final JLabel maStates;
 }
 
 }

@@ -59,7 +59,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     private org.w3c.dom.Document doc = null;
 
     /** A {@code ConvertData} object assigned to this object. */
-    private ConvertData cd = null;
+    private final ConvertData cd ;
 
     /** A {@code StyleCatalog} for the workbook. */
     private StyleCatalog styleCat = null;

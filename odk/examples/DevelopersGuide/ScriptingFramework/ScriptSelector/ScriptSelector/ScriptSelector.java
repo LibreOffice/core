@@ -196,7 +196,7 @@ public class ScriptSelector {
 
 class ScriptSelectorPanel extends JPanel {
 
-    private XBrowseNode myrootnode = null;
+    private final XBrowseNode myrootnode;
     public JTextField textField;
     public JTree tree;
 
@@ -308,9 +308,9 @@ class ScriptSelectorPanel extends JPanel {
 
 class ScriptTreeRenderer extends DefaultTreeCellRenderer {
 
-    private ImageIcon sofficeIcon;
-    private ImageIcon scriptIcon;
-    private ImageIcon containerIcon;
+    private final ImageIcon sofficeIcon;
+    private final ImageIcon scriptIcon;
+    private final ImageIcon containerIcon;
 
     public ScriptTreeRenderer() {
         sofficeIcon = new ImageIcon(getClass().getResource("soffice.gif"));

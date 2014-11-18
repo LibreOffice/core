@@ -34,11 +34,11 @@ import java.util.logging.Logger;
 
 public class Finalizer
 {
-    private QueryWizard m_queryWizard;
-    private String resQuery;
-    private XTextComponent m_aTxtTitle;
-    private XRadioButton xRadioDisplayQuery;
-    private QuerySummary CurDBMetaData;
+    private final QueryWizard m_queryWizard;
+    private final String resQuery;
+    private final XTextComponent m_aTxtTitle;
+    private final XRadioButton xRadioDisplayQuery;
+    private final QuerySummary CurDBMetaData;
 
     public Finalizer( QueryWizard i_queryWizard, QuerySummary _CurDBMetaData )
     {

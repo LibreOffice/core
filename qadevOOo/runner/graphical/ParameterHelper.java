@@ -67,12 +67,12 @@ public class ParameterHelper
 
     private String m_sPrinterName = null;
 
-    private int m_nResolutionInDPI = 180;
+    private final int m_nResolutionInDPI = 180;
 
     private String m_sInputPath = null;
     private String m_sOutputPath = null;
 
-    private TestParameters m_aCurrentParams;
+    private final TestParameters m_aCurrentParams;
 
     public ParameterHelper(TestParameters param)
         {

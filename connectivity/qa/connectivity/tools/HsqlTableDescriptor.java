@@ -31,8 +31,8 @@ import connectivity.tools.sdb.Connection;
  */
 public class HsqlTableDescriptor
 {
-    private String                  m_name;
-    private HsqlColumnDescriptor[]  m_columns;
+    private final String                  m_name;
+    private final HsqlColumnDescriptor[]  m_columns;
 
     /** Creates a new instance of HsqlTableDescriptor */
     public HsqlTableDescriptor( String _name, HsqlColumnDescriptor[] _columns )

@@ -27,7 +27,7 @@ import com.sun.star.util.*;
 
 class ConfigHelper
 {
-    private XHierarchicalNameAccess m_xConfig = null;
+    private final XHierarchicalNameAccess m_xConfig;
 
 
     public ConfigHelper(XComponentContext context,

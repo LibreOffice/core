@@ -53,12 +53,12 @@ import java.util.HashMap;
 public class ScriptBrowseNode extends PropertySet implements
     XBrowseNode, XInvocation {
 
-    private ScriptProvider provider;
+    private final ScriptProvider provider;
 
     private Parcel parent;
     private String name;
 
-    private boolean editable  = false;
+    private boolean editable;
     private boolean deletable = false;
     private boolean renamable = false;
 

@@ -24,7 +24,7 @@ import java.io.InputStream;
 
 public class XInputStreamWrapper extends InputStream {
 
-    private XInputStream m_xInputStream;
+    private final XInputStream m_xInputStream;
 
     public XInputStreamWrapper(XInputStream xInputStream) {
         m_xInputStream = xInputStream;

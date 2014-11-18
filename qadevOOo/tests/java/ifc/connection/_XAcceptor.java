@@ -56,7 +56,7 @@ public class _XAcceptor extends MultiMethodTest {
         * stored in this field.
         */
         public Exception ex = null ;
-        private XAcceptor acc = null ;
+        private final XAcceptor acc;
         /**
         * If method call returns some value it stores in this field.
         */

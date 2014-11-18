@@ -27,9 +27,9 @@ package integration.forms;
 public final class ImageComparison implements com.sun.star.awt.XImageConsumer
 {
 
-    private byte[] m_referenceBytes;
+    private final byte[] m_referenceBytes;
     private int m_referencePosition;
-    private Object m_notifyDone;
+    private final Object m_notifyDone;
 
     public boolean imagesEqual( )
     {

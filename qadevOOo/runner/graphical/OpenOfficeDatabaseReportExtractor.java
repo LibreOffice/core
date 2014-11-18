@@ -81,7 +81,7 @@ class PropertySetHelper
 
 public class OpenOfficeDatabaseReportExtractor extends Assurance
 {
-    private ParameterHelper m_aParameterHelper;
+    private final ParameterHelper m_aParameterHelper;
 
     public OpenOfficeDatabaseReportExtractor(ParameterHelper _aParameter)
     {

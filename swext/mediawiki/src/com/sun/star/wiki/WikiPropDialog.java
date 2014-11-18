@@ -34,7 +34,7 @@ public class WikiPropDialog extends WikiDialog{
     private static final String sArticleTextMethod = "ArticleTextChange";
     private static final String sAddWikiMethod = "AddWiki";
 
-    private String[] m_pMethods = {sSendMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
+    private final String[] m_pMethods = {sSendMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 
     private String m_sWikiTitle = "";
     private String m_sWikiEngineURL = "";

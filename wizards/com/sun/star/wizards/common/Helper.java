@@ -291,10 +291,10 @@ public class Helper
     public static class DateUtils
     {
 
-        private long docNullTime;
-        private XNumberFormatter formatter;
-        private XNumberFormatsSupplier formatSupplier;
-        private Calendar calendar;
+        private final long docNullTime;
+        private final XNumberFormatter formatter;
+        private final XNumberFormatsSupplier formatSupplier;
+        private final Calendar calendar;
 
         public DateUtils(XMultiServiceFactory xmsf, Object document) throws Exception
         {

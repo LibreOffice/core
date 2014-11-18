@@ -56,13 +56,13 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         new Class [] { java.lang.reflect.InvocationHandler.class };
 
     private long m_bridge_handle;
-    private IEnvironment m_java_env;
+    private final IEnvironment m_java_env;
     /** these 2 fields are accessed directly from C++ */
     private long m_receiver_handle; // on the C++ side, this is a "UNO_Interface *"
     private long m_td_handle; // on the C++ side, this is a "typelib_TypeDescription *"
-    private Type m_type;
-    private String m_oid;
-    private Class m_class;
+    private final Type m_type;
+    private final String m_oid;
+    private final Class m_class;
 
 
     public static String get_stack_trace( Throwable throwable )

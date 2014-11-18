@@ -293,13 +293,13 @@ public class AccessibilityTree
             return bIsPopup;
         }
 
-        private AccessibilityTree maTree;
+        private final AccessibilityTree maTree;
     }
 
     class NodeAction extends AbstractAction
     {
-        private int mnIndex;
-        private AccessibleTreeNode maNode;
+        private final int mnIndex;
+        private final AccessibleTreeNode maNode;
 
         public NodeAction( String aName, AccessibleTreeNode aNode, int nIndex )
         {
@@ -317,8 +317,8 @@ public class AccessibilityTree
     // This action expands all shapes in the subtree rooted in the specified node.
     class ShapeExpandAction extends AbstractAction
     {
-        private AccessibilityTree maTree;
-        private AccTreeNode maNode;
+        private final AccessibilityTree maTree;
+        private final AccTreeNode maNode;
         public ShapeExpandAction (AccessibilityTree aTree, AccTreeNode aNode)
         {
             super ("Expand Shapes");
@@ -334,8 +334,8 @@ public class AccessibilityTree
     // This action expands all nodes in the subtree rooted in the specified node.
     class SubtreeExpandAction extends AbstractAction
     {
-        private AccessibilityTree maTree;
-        private AccTreeNode maNode;
+        private final AccessibilityTree maTree;
+        private final AccTreeNode maNode;
         public SubtreeExpandAction (AccessibilityTree aTree, AccTreeNode aNode)
         {
             super ("Expand Subtree");
@@ -383,6 +383,6 @@ public class AccessibilityTree
 
 
     protected AccessibleTreeCellRenderer  maCellRenderer;
-    private JTree  maTree;
+    private final JTree  maTree;
     private int mnExpandLevel;
 }

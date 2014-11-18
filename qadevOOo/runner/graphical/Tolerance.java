@@ -20,7 +20,7 @@ package graphical;
 
 public class Tolerance
 {
-    private int m_nTolerance;
+    private final int m_nTolerance;
     public Tolerance(int _nAccept)
     {
         m_nTolerance = _nAccept;

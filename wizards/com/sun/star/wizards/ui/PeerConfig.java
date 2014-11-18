@@ -32,7 +32,7 @@ import com.sun.star.wizards.common.PropertyNames;
 public class PeerConfig implements XWindowListener
 {
 
-    private ArrayList<PeerTask> m_aPeerTasks = new ArrayList<PeerTask>();
+    private final ArrayList<PeerTask> m_aPeerTasks = new ArrayList<PeerTask>();
     ArrayList<ControlTask> aControlTasks = new ArrayList<ControlTask>();
     ArrayList<ImageUrlTask> aImageUrlTasks = new ArrayList<ImageUrlTask>();
     UnoDialog oUnoDialog = null;

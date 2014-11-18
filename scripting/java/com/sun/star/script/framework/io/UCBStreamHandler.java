@@ -46,9 +46,8 @@ public class UCBStreamHandler extends URLStreamHandler {
 
     public final static String separator = "/ucb/";
 
-    private XSimpleFileAccess m_xSimpleFileAccess = null;
-    private HashMap<String, InputStream> m_jarStreamMap = new
-    HashMap<String, InputStream>(12);
+    private final XSimpleFileAccess m_xSimpleFileAccess;
+    private final HashMap<String, InputStream> m_jarStreamMap = new HashMap<String, InputStream>(12);
     private static String m_ucbscheme;
 
     public UCBStreamHandler(String scheme, XSimpleFileAccess xSFA) {

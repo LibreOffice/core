@@ -132,7 +132,7 @@ public class TextDocument
     public static class ModuleIdentifier
     {
 
-        private String m_identifier;
+        private final String m_identifier;
 
         protected final String getIdentifier()
         {

@@ -88,7 +88,7 @@ class NameDPIPage
 class CountNotXXXPixelsFromImage extends Thread
 {
 
-    private String m_sFilename;
+    private final String m_sFilename;
     protected int m_nValue;
 
     CountNotXXXPixelsFromImage(String _sFilename)

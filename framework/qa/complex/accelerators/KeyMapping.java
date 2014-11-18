@@ -42,8 +42,8 @@ class CodeHashMap extends HashMap<Short,String>
 
 public class KeyMapping
 {
-    private IdentifierHashMap aIdentifierHashMap;
-    private CodeHashMap aCodeHashMap;
+    private final IdentifierHashMap aIdentifierHashMap;
+    private final CodeHashMap aCodeHashMap;
 
     public KeyMapping()
     {

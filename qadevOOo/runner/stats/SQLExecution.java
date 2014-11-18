@@ -35,10 +35,10 @@ public class SQLExecution {
 
     private Connection mConnection = null;
     private Statement mStatement = null;
-    private String mJdbcClass = null;
-    private String mDbURL = null;
-    private String mUser = null;
-    private String mPassword = null;
+    private final String mJdbcClass;
+    private final String mDbURL;
+    private final String mUser;
+    private final String mPassword;
     private boolean m_bConnectionOpen = false;
     private boolean m_bDebug = false;
 

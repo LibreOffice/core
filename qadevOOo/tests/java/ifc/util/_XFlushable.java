@@ -52,7 +52,7 @@ public class _XFlushable extends MultiMethodTest {
         public boolean wasFlushed() { return called; }
     }
 
-    private MyFlushListener listener1 = new MyFlushListener(),
+    private final MyFlushListener listener1 = new MyFlushListener(),
                             listener2 = new MyFlushListener() ;
 
     /**

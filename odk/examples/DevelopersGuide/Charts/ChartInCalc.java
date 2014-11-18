@@ -409,6 +409,6 @@ public class ChartInCalc
     // private members
 
 
-    private XChartDocument maChartDocument;
-    private XDiagram       maDiagram;
+    private final XChartDocument maChartDocument;
+    private final XDiagram       maDiagram;
 }

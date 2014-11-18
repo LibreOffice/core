@@ -37,10 +37,10 @@ public class OfficeDocument extends Wrapper
         com.sun.star.frame.XStorable,
         com.sun.star.view.XPrintable
 {
-    private com.sun.star.frame.XModel xModel;
-    private com.sun.star.util.XModifiable xModifiable;
-    private com.sun.star.view.XPrintable xPrintable;
-    private com.sun.star.frame.XStorable xStorable;
+    private final com.sun.star.frame.XModel xModel;
+    private final com.sun.star.util.XModifiable xModifiable;
+    private final com.sun.star.view.XPrintable xPrintable;
+    private final com.sun.star.frame.XStorable xStorable;
 
     public OfficeDocument( com.sun.star.frame.XModel xModel )
     {

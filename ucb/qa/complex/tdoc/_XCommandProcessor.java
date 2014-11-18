@@ -71,7 +71,7 @@ public class _XCommandProcessor {
      * Conatins the tested object.
      */
     public XCommandProcessor oObj;
-    private LogWriter log = null;
+    private final LogWriter log = null;
     private XMultiServiceFactory xMSF = null;
 
     /**

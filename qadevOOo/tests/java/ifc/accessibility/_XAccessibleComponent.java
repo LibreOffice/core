@@ -49,7 +49,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
 
     public XAccessibleComponent oObj = null;
     private Rectangle bounds = null;
-    private ArrayList<Rectangle> KnownBounds = new ArrayList<Rectangle>();
+    private final ArrayList<Rectangle> KnownBounds = new ArrayList<Rectangle>();
 
 
     /**

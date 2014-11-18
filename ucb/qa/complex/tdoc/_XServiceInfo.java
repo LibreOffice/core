@@ -35,7 +35,7 @@ import share.LogWriter;
 public class _XServiceInfo {
     public static XServiceInfo oObj = null;
     private static String[] names = null;
-    private LogWriter log = null;
+    private final LogWriter log = null;
 
     /**
     * Just calls the method.<p>

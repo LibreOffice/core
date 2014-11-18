@@ -49,7 +49,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     private static final String sOk = "ok";
     private static final String sBack = "back";
 
-    private XComponentContext m_xContext;
+    private final XComponentContext m_xContext;
     private XDialog m_xDialog;
     private XControlContainer m_xControlContainer;
 

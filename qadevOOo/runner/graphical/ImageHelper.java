@@ -26,9 +26,9 @@ import java.lang.reflect.Method;
 
 class ImageHelper
 {
-    private Image m_aImage;
-    private int[] m_aPixels;
-    private int m_w = 0;
+    private final Image m_aImage;
+    private final int[] m_aPixels;
+    private final int m_w;
 
 
     private ImageHelper(Image _aImage)

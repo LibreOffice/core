@@ -165,7 +165,7 @@ public class ObjectViewContainer
         }
     }
 
-    private Border maViewBorder;
+    private final Border maViewBorder;
     /// List of view templates which are instantiated when new object is set.
-    private ArrayList<Class> maViewTemplates;
+    private final ArrayList<Class> maViewTemplates;
 }

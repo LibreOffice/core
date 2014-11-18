@@ -131,8 +131,8 @@ public class OfficeConnect
     private static OfficeConnect maConnection;
 
     // reference to remote office context
-    private com.sun.star.uno.XComponentContext  mxOfficeContext;
+    private final com.sun.star.uno.XComponentContext  mxOfficeContext;
     // reference to remote service manager
-    private com.sun.star.lang.XMultiComponentFactory  mxServiceManager;
+    private final com.sun.star.lang.XMultiComponentFactory  mxServiceManager;
 }
 

@@ -86,7 +86,7 @@ public class CallFormWizard
         private static final String __serviceName = "com.sun.star.wizards.form.CallFormWizard";
         /** The service manager, that gives access to all registered services.
          */
-        private com.sun.star.lang.XMultiServiceFactory m_serviceFactory;
+        private final com.sun.star.lang.XMultiServiceFactory m_serviceFactory;
 
         /** This method is a member of the interface for initializing an object
          * directly after its creation.

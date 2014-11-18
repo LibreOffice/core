@@ -36,9 +36,9 @@ import com.sun.star.sheet.XResultListener;
 
 class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
 {
-    private String aName;
+    private final String aName;
     private int nValue;
-    private java.util.ArrayList<XResultListener> aListeners = new java.util.ArrayList<XResultListener>();
+    private final java.util.ArrayList<XResultListener> aListeners = new java.util.ArrayList<XResultListener>();
 
     public ExampleAddInResult( String aNewName )
     {
@@ -79,7 +79,7 @@ class ExampleAddInResult implements com.sun.star.sheet.XVolatileResult
 
 class ExampleAddInThread extends Thread
 {
-    private java.util.HashMap<String, ExampleAddInResult> aCounters;
+    private final java.util.HashMap<String, ExampleAddInResult> aCounters;
 
     public ExampleAddInThread( java.util.HashMap<String, ExampleAddInResult> aResults )
     {

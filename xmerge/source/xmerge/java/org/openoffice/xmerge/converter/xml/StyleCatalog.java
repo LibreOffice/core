@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
  */
 public class StyleCatalog {
 
-    private ArrayList<Style> styles;  // The actual styles
+    private final ArrayList<Style> styles;  // The actual styles
 
     /**
      * Constructor.

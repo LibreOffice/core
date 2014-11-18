@@ -38,9 +38,9 @@ import java.util.StringTokenizer;
 public class ScriptMetaData extends ScriptEntry {
 
     private boolean hasSource = false;
-    private String locationPlaceHolder = "";
+    private final String locationPlaceHolder = "";
     private String source;
-    private Parcel parent;
+    private final Parcel parent;
 
 
     public ScriptMetaData(Parcel parent, ScriptEntry entry,

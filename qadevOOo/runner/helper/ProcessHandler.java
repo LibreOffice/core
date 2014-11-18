@@ -43,11 +43,11 @@ import util.utils;
 class Pump extends Thread
 {
 
-    private LineNumberReader reader;
-    private String pref;
-    private StringBuffer buf = new StringBuffer(256);
-    private PrintWriter log;
-    private boolean bOutput;
+    private final LineNumberReader reader;
+    private final String pref;
+    private final StringBuffer buf = new StringBuffer(256);
+    private final PrintWriter log;
+    private final boolean bOutput;
 
     /**
      * Creates Pump for specified <code>InputStream</code>.
@@ -782,8 +782,8 @@ public class ProcessHandler
     {
 
         private int m_nTimeoutInSec;
-        private String m_sProcessToStart;
-        private boolean m_bInterrupt;
+        private final String m_sProcessToStart;
+        private final boolean m_bInterrupt;
 
         private ProcessWatcher(int _nTimeOut, String _sProcess)
         {

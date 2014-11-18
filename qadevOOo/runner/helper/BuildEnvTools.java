@@ -35,7 +35,7 @@ public class BuildEnvTools {
     private final boolean mDebug;
     private final String mPlatform;
     private final String mShell;
-    private boolean mCygwin;
+    private final boolean mCygwin;
 
     /**
      * This constructor creates an instance of BuildEncTools. It is verifying for all neccesarry

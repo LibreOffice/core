@@ -41,20 +41,20 @@ public class ConverterInfo {
         "staroffice/sxc"
     };
 
-    private String             piJarName;
-    private String             piOfficeMime;
-    private ArrayList<String>  piDeviceMime;
-    private String             piDisplayName;
-    private String             piDescription;
-    private String             piVersion;
-    private String             piVendor;
-    private String             piClassImpl;
+    private final String             piJarName;
+    private final String             piOfficeMime;
+    private final ArrayList<String>  piDeviceMime;
+    private final String             piDisplayName;
+    private final String             piDescription;
+    private final String             piVersion;
+    private final String             piVendor;
+    private final String             piClassImpl;
     private String             piXsltSerial;
     private String             piXsltDeserial;
     private boolean            piCanSerialize    = false;
     private boolean            piCanDeserialize  = false;
     private boolean            piCanMerge        = false;
-    private ClassLoader        piClassLoader     = null;
+    private final ClassLoader        piClassLoader;
     private PluginFactory      piPluginFactory;
 
 

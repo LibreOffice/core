@@ -22,12 +22,12 @@ package connectivity.tools;
  */
 public class HsqlColumnDescriptor
 {
-    private String Name;
-    private String TypeName;
-    private boolean Required;
-    private boolean PrimaryKey;
-    private String ForeignTable;
-    private String ForeignColumn;
+    private final String Name;
+    private final String TypeName;
+    private final boolean Required;
+    private final boolean PrimaryKey;
+    private final String ForeignTable;
+    private final String ForeignColumn;
 
     public final String getName() { return Name; }
     public final String getTypeName() { return TypeName; }

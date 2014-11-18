@@ -70,7 +70,7 @@ import com.sun.star.util.XCloseable;
 class TempDir
 {
 
-    private String m_sTempDir;
+    private final String m_sTempDir;
 
     public TempDir(String _sTempDir)
     {
@@ -99,7 +99,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
     TempDir m_aTempDir;
     private String[][] sDocTypeExportFilter;
     private String[][] sDocuments;
-    private int iAllowMemoryIncrease = 10;
+    private final int iAllowMemoryIncrease = 10;
     private int iExportDocCount = 25;
     /**
      * The test parameters
@@ -512,7 +512,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
     private class FileFilter implements FilenameFilter
     {
 
-        private String suffix = null;
+        private final String suffix;
 
         /**
          * C'tor.

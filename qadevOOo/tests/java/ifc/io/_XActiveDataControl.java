@@ -88,7 +88,7 @@ public class _XActiveDataControl extends MultiMethodTest {
     /**
      * The listener is used to verify results of the methods.
      */
-    private TestStreamListener listener = new TestStreamListener();
+    private final TestStreamListener listener = new TestStreamListener();
 
     /**
      * XStreamListener implementation. Sets variables

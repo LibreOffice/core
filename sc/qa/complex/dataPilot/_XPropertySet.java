@@ -51,12 +51,12 @@ public class _XPropertySet {
     /**
      * The object that is testsed.
      */
-    private XPropertySet oObj = null;
+    private final XPropertySet oObj;
 
     /**
      * The test parameters
      */
-    private TestParameters param = null;
+    private final TestParameters param;
 
     /**
     * Flag that indicates change listener was called.
@@ -67,7 +67,7 @@ public class _XPropertySet {
     /**
      * The own property change listener
      */
-    private XPropertyChangeListener PClistener = new MyChangeListener();
+    private final XPropertyChangeListener PClistener = new MyChangeListener();
 
     /**
     * Listener that must be called on bound property changing.
@@ -91,7 +91,7 @@ public class _XPropertySet {
     /**
      * The own vetoable change listener
      */
-    private XVetoableChangeListener VClistener = new MyVetoListener();
+    private final XVetoableChangeListener VClistener = new MyVetoListener();
 
     /**
     * Listener that must be called on constrained property changing.
@@ -110,7 +110,7 @@ public class _XPropertySet {
     /**
      * Properties to test
      */
-    private PropsToTest PTT = new PropsToTest();
+    private final PropsToTest PTT = new PropsToTest();
 
     /**
     * Structure that collects three properties of each type to test :

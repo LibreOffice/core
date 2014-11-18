@@ -27,7 +27,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class StyleFamilyDsc extends InstDescr {
 
-    private String name = null;
+    private String name;
     static final String ifcName = "com.sun.star.style.XStyle";
     String service = "com.sun.star.style.CharacterStyle";
 

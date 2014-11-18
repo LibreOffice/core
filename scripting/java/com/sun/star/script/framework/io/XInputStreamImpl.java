@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 public class XInputStreamImpl implements XInputStream {
 
-    private InputStream is;
+    private final InputStream is;
 
     public XInputStreamImpl(InputStream is) {
         this.is = is;

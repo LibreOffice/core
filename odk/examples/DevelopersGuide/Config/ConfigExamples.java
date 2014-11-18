@@ -82,10 +82,10 @@ import com.sun.star.util.ChangesEvent;
 public class ConfigExamples
 {
     // The ComponentContext interface of the remote component context
-    private XComponentContext mxContext = null;
+    private final XComponentContext mxContext;
 
     // The MultiComponentFactory interface of the ServiceManager
-    private XMultiComponentFactory mxServiceManager = null;
+    private final XMultiComponentFactory mxServiceManager;
 
     // The MultiServiceFactory interface of the ConfigurationProvider
     private XMultiServiceFactory mxProvider = null;

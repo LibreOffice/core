@@ -48,7 +48,7 @@ public class _XRadioButton extends MultiMethodTest {
     protected class TestItemListener implements com.sun.star.awt.XItemListener {
         public boolean disposingCalled = false ;
         public boolean itemStateChangedCalled = false ;
-        private java.io.PrintWriter log = null ;
+        private final java.io.PrintWriter log;
 
         public TestItemListener(java.io.PrintWriter log) {
             this.log = log ;

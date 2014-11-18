@@ -36,18 +36,18 @@ import net.adaptivebox.global.*;
 
 
 public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine {
-  private Library socialPool;
+  private final Library socialPool;
   private double epsilon_t = 0;
 
-  private double RU = 0.75;
-  private double RL = 0.25;
-  private double BETAF = 0.618;
-  private double BETAL = 0.618;
-  private double BETAU = 1.382;
+  private final double RU = 0.75;
+  private final double RL = 0.25;
+  private final double BETAF = 0.618;
+  private final double BETAL = 0.618;
+  private final double BETAU = 1.382;
 
-  private double T = -1;
+  private final double T;
 
-  private double TthR = 0.5;
+  private final double TthR = 0.5;
 
   public ACRComparator(Library lib, int T) {
     socialPool = lib;

@@ -60,7 +60,7 @@ class ExampleSettings
 
 class ExamplePropertySetInfo implements com.sun.star.beans.XPropertySetInfo
 {
-    private com.sun.star.beans.Property[] aProperties;
+    private final com.sun.star.beans.Property[] aProperties;
 
     public ExamplePropertySetInfo( com.sun.star.beans.Property[] aProps )
     {
@@ -95,7 +95,7 @@ class ExamplePropertySetInfo implements com.sun.star.beans.XPropertySetInfo
 class ExampleMember implements com.sun.star.container.XNamed,
       com.sun.star.beans.XPropertySet
 {
-    private int nMember;
+    private final int nMember;
 
     public ExampleMember( int nMbr )
     {
@@ -171,7 +171,7 @@ class ExampleMember implements com.sun.star.container.XNamed,
 
 class ExampleMembers implements com.sun.star.container.XNameAccess
 {
-    private ExampleSettings aSettings;
+    private final ExampleSettings aSettings;
     private ExampleMember[] aMembers;
 
     public ExampleMembers( ExampleSettings aSet )
@@ -233,8 +233,8 @@ class ExampleLevel implements
                     com.sun.star.sheet.XDataPilotMemberResults,
                     com.sun.star.beans.XPropertySet
 {
-    private ExampleSettings aSettings;
-    private int nDimension;
+    private final ExampleSettings aSettings;
+    private final int nDimension;
     private ExampleMembers aMembers;
 
     public ExampleLevel( ExampleSettings aSet, int nDim )
@@ -379,8 +379,8 @@ class ExampleLevel implements
 
 class ExampleLevels implements com.sun.star.container.XNameAccess
 {
-    private ExampleSettings aSettings;
-    private int nDimension;
+    private final ExampleSettings aSettings;
+    private final int nDimension;
     private ExampleLevel aLevel;
 
     public ExampleLevels( ExampleSettings aSet, int nDim )
@@ -432,8 +432,8 @@ class ExampleLevels implements com.sun.star.container.XNameAccess
 class ExampleHierarchy implements com.sun.star.container.XNamed,
       com.sun.star.sheet.XLevelsSupplier
 {
-    private ExampleSettings aSettings;
-    private int nDimension;
+    private final ExampleSettings aSettings;
+    private final int nDimension;
     private ExampleLevels aLevels;
 
     public ExampleHierarchy( ExampleSettings aSet, int nDim )
@@ -468,8 +468,8 @@ class ExampleHierarchy implements com.sun.star.container.XNamed,
 
 class ExampleHierarchies implements com.sun.star.container.XNameAccess
 {
-    private ExampleSettings aSettings;
-    private int nDimension;
+    private final ExampleSettings aSettings;
+    private final int nDimension;
     private ExampleHierarchy aHierarchy;
 
     public ExampleHierarchies( ExampleSettings aSet, int nDim )
@@ -524,8 +524,8 @@ class ExampleDimension implements
                     com.sun.star.util.XCloneable,
                     com.sun.star.beans.XPropertySet
 {
-    private ExampleSettings aSettings;
-    private int nDimension;
+    private final ExampleSettings aSettings;
+    private final int nDimension;
     private ExampleHierarchies aHierarchies;
     private com.sun.star.sheet.DataPilotFieldOrientation eOrientation;
 
@@ -694,7 +694,7 @@ class ExampleDimension implements
 
 class ExampleDimensions implements com.sun.star.container.XNameAccess
 {
-    private ExampleSettings aSettings;
+    private final ExampleSettings aSettings;
     private ExampleDimension[] aDimensions;
 
     public ExampleDimensions( ExampleSettings aSet )
@@ -763,7 +763,7 @@ public class ExampleDataPilotSource
         static private final String aServiceName = "com.sun.star.sheet.DataPilotSource";
         static private final String aImplName =  _ExampleDataPilotSource.class.getName();
 
-        private ExampleSettings aSettings = new ExampleSettings();
+        private final ExampleSettings aSettings = new ExampleSettings();
         private ExampleDimensions aDimensions;
 
         public _ExampleDataPilotSource( com.sun.star.lang.XMultiServiceFactory xFactory )

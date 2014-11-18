@@ -64,18 +64,18 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class _XAccessibleText {
 
-    private XAccessibleText oObj = null;
-    private XMultiServiceFactory xMSF;
+    private final XAccessibleText oObj;
+    private final XMultiServiceFactory xMSF;
 
     private Rectangle chBounds = null;
     private int chCount = 0;
 
     private String text = null;
-    private String editOnly = null;
+    private final String editOnly;
 
 
     public _XAccessibleText(XInterface object, XMultiServiceFactory xMSF, String editOnly) {
-        oObj = UnoRuntime.queryInterface(XAccessibleText.class, object);
+        this.oObj = UnoRuntime.queryInterface(XAccessibleText.class, object);
         this.xMSF = xMSF;
         this.editOnly = editOnly;
     }

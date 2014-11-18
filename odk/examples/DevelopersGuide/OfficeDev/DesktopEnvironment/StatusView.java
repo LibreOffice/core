@@ -105,11 +105,11 @@ public class StatusView extends    JPanel
      * @member  maUnderlineListener     threadsafe(!) helper to listen for status event which describe font style underline
      * @member  maItalicListener        threadsafe(!) helper to listen for status event which describe font style italic
      */
-    private JLabel              m_laFontValue            ;
-    private JLabel              m_laSizeValue            ;
-    private JLabel              m_laBoldValue            ;
-    private JLabel              m_laUnderlineValue       ;
-    private JLabel              m_laItalicValue          ;
+    private final JLabel              m_laFontValue            ;
+    private final JLabel              m_laSizeValue            ;
+    private final JLabel              m_laBoldValue            ;
+    private final JLabel              m_laUnderlineValue       ;
+    private final JLabel              m_laItalicValue          ;
 
     private StatusListener      m_aFontListener          ;
     private StatusListener      m_aSizeListener          ;

@@ -66,7 +66,7 @@ public class various extends TestCase {
     * which is free.
     */
     protected static final int basePort = 50000;
-    private int curPort = 50000;
+    private final int curPort = 50000;
 
     private XAcceptor xAcctr;
     private XConnector xCntr;
@@ -86,7 +86,7 @@ public class various extends TestCase {
          *
          * @see com.sun.star.lang.MultiServiceFactory
          */
-        private XMultiServiceFactory xMSF = null;
+        private final XMultiServiceFactory xMSF;
 
         /**
          * Construct object with a MultiServiceFactory
@@ -124,9 +124,9 @@ public class various extends TestCase {
         * stored in this field.
         */
         public Exception ex = null ;
-        private XAcceptor acc = null ;
-        private XInstanceProvider xInstProv = null ;
-        private XBridgeFactory xBrdgFctr = null;
+        private final XAcceptor acc;
+        private final XInstanceProvider xInstProv;
+        private final XBridgeFactory xBrdgFctr;
         /**
         * If method call returns some value it stores in this field.
         */

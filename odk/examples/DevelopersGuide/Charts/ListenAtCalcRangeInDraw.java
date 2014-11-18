@@ -184,7 +184,7 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
 
     // __________ private __________
 
-    private XSpreadsheetDocument      maSheetDoc;
-    private XChartDocument            maChartDocument;
-    private XChartData                maChartData;
+    private final XSpreadsheetDocument      maSheetDoc;
+    private final XChartDocument            maChartDocument;
+    private final XChartData                maChartData;
 }

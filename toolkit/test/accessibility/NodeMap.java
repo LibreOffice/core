@@ -126,5 +126,5 @@ class NodeMap
 
 
 
-    private HashMap<XAccessibleContext, AccessibleTreeNode> maXAccessibleToNode;
+    private final HashMap<XAccessibleContext, AccessibleTreeNode> maXAccessibleToNode;
 }

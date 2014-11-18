@@ -138,8 +138,8 @@ public class DataSource
         }
     }
 
-    private XMultiServiceFactory    m_orb = null;
-    private XDataSource             m_dataSource = null;
-    private XPropertySet            m_properties = null;
+    private final XMultiServiceFactory    m_orb;
+    private final XDataSource             m_dataSource;
+    private final XPropertySet            m_properties;
     private DatabaseDocument        m_document = null;
 }

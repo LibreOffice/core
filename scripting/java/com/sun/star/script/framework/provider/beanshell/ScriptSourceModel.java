@@ -27,7 +27,7 @@ import java.net.URL;
 public class ScriptSourceModel {
 
     private int currentPosition = -1;
-    private URL file = null;
+    private final URL file;
     private ScriptSourceView view = null;
 
     public ScriptSourceModel(URL file) {

@@ -69,7 +69,7 @@ public class _XSpinField extends MultiMethodTest {
         public void disposing(EventObject e) {}
     }
 
-    private TestListener listener = new TestListener() ;
+    private final TestListener listener = new TestListener() ;
 
     /**
     * Just adds a listener. <p>

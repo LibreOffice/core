@@ -169,8 +169,8 @@ class TopWindowListener
 
 
 
-    private AccessibilityTreeModel
+    private final AccessibilityTreeModel
         maModel;
-    private SimpleOffice
+    private final SimpleOffice
         maOffice;
 }

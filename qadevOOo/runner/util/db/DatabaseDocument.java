@@ -72,8 +72,8 @@ public class DatabaseDocument
         m_storeDoc.storeAsURL( _url, new PropertyValue[] { } );
     }
 
-    private DataSource              m_dataSource;
-    private XOfficeDatabaseDocument m_databaseDocument;
-    private XModel                  m_model;
-    private XStorable               m_storeDoc;
+    private final DataSource              m_dataSource;
+    private final XOfficeDatabaseDocument m_databaseDocument;
+    private final XModel                  m_model;
+    private final XStorable               m_storeDoc;
 }

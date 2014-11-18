@@ -61,8 +61,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private boolean showButtons = true;
     private Short step;
     private final static Short NO_BORDER = Short.valueOf((short) 0);
-    private boolean refreshOverNull = true;
-    private int imageTextLines = 1;
+    private final boolean refreshOverNull = true;
+    private final int imageTextLines = 1;
     private boolean rowSelect = false;
     public int tabIndex;
     public Boolean scaleImages = Boolean.TRUE;
@@ -70,7 +70,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private int selected = -1;
     private int pageStart = 0;
     public int helpURL = 0;
-    private CommonListener uiEventListener = new CommonListener();
+    private final CommonListener uiEventListener = new CommonListener();
     private IImageRenderer renderer;
     private ListModel listModel;
     public IRenderer counterRenderer = new SimpleCounterRenderer();

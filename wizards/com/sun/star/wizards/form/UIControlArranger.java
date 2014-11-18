@@ -36,15 +36,15 @@ import javax.swing.ListModel;
 public class UIControlArranger
 {
 
-    private FormWizard CurUnoDialog;
-    private FormDocument curFormDocument;
+    private final FormWizard CurUnoDialog;
+    private final FormDocument curFormDocument;
     private short curtabindex;
-    private XRadioButton optAlignLeft;
-    private XRadioButton optAlignRight;
-    private XControl flnLabelPlacement;
-    private String[] HelpTexts = new String[4];
-    private ArrangeButtonList[] m_aArrangeList = new ArrangeButtonList[2];
-    private Integer IControlStep;
+    private final XRadioButton optAlignLeft;
+    private final XRadioButton optAlignRight;
+    private final XControl flnLabelPlacement;
+    private final String[] HelpTexts = new String[4];
+    private final ArrangeButtonList[] m_aArrangeList = new ArrangeButtonList[2];
+    private final Integer IControlStep;
     private static final int SOBASEIMAGEYPOSITION = 66;
     private static final int SOIMAGELISTHEIGHT = 60;
     private static final String SOALIGNMETHOD = "alignLabelControls";
@@ -182,8 +182,8 @@ public class UIControlArranger
     private class ArrangeButtonList implements XItemListener
     {
 
-        private int formindex;
-        private ButtonList m_aButtonList = null; // new ImageList();
+        private final int formindex;
+        private final ButtonList m_aButtonList;
 
         public ArrangeButtonList(int _formindex, ListModel model, String _sArrangementHeader)
         {

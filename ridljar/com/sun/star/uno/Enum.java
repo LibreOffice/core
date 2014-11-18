@@ -29,7 +29,7 @@ package com.sun.star.uno;
  * </p>
  */
 public abstract class Enum {
-    private int m_value;
+    private final int m_value;
 
     /**
      * Constructs a enum value.

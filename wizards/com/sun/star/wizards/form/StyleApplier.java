@@ -43,12 +43,12 @@ import com.sun.star.wizards.ui.*;
 public class StyleApplier
 {
 
-    private XPropertySet xPageStylePropertySet;
-    private XMultiServiceFactory xMSF;
-    private XRadioButton optNoBorder;
-    private XRadioButton opt3DLook;
-    private XListBox lstStyles;
-    private FormDocument curFormDocument;
+    private final XPropertySet xPageStylePropertySet;
+    private final XMultiServiceFactory xMSF;
+    private final XRadioButton optNoBorder;
+    private final XRadioButton opt3DLook;
+    private final XListBox lstStyles;
+    private final FormDocument curFormDocument;
     private short iOldLayoutPos;
     private static final String SCHANGELAYOUT = "changeLayout";
     private static final String SCHANGEBORDERTYPE = "changeBorderLayouts";

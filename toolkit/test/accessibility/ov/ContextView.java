@@ -133,7 +133,7 @@ public class ContextView
     }
 
 
-    private JLabel
+    private final JLabel
         maName,
         maDescription,
         maRole;

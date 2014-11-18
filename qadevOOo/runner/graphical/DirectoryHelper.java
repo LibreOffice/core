@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class DirectoryHelper
 {
-    private ArrayList<String> m_aFileList = new ArrayList<String>();
+    private final ArrayList<String> m_aFileList = new ArrayList<String>();
     private boolean m_bRecursiveIsAllowed = true;
 
     private void setRecursiveIsAllowed(boolean _bValue)

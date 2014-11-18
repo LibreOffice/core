@@ -132,7 +132,7 @@ public class TextView
         }
     }
 
-    private JLabel
+    private final JLabel
         maTextLabel,
         maCaretPositionLabel;
     private XAccessibleText mxText;

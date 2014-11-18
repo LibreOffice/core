@@ -54,8 +54,8 @@ public final class DocumentDeserializerImpl
     implements  DocumentDeserializer,URIResolver {
 
     /** A {@code ConvertData} object assigned to this object. */
-    private ConvertData cd = null;
-    private PluginFactoryImpl pluginFactory = null;
+    private final ConvertData cd;
+    private final PluginFactoryImpl pluginFactory;
 
     /**
      * Constructor that assigns the given {@code ConvertData} to this object.

@@ -47,8 +47,8 @@ public class NumberFormatter
     public XNumberFormats xNumberFormats;
     public XNumberFormatTypes xNumberFormatTypes;
     public XPropertySet xNumberFormatSettings;
-    private boolean bNullDateCorrectionIsDefined = false;
-    private Locale aLocale;
+    private final boolean bNullDateCorrectionIsDefined = false;
+    private final Locale aLocale;
 
 
     public NumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier, Locale _aLocale) throws Exception

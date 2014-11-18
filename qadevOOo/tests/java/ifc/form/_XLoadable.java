@@ -51,7 +51,7 @@ public class _XLoadable extends MultiMethodTest {
         public boolean reloadingCalled = false ;
         public boolean unloadedCalled = false ;
         public boolean unloadingCalled = false ;
-        private java.io.PrintWriter log = null ;
+        private final java.io.PrintWriter log;
 
         public TestLoadListener(java.io.PrintWriter log) {
             this.log = log ;

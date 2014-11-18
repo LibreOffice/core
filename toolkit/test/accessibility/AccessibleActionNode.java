@@ -63,5 +63,5 @@ class AccessibleActionNode
             JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private int mnActionIndex;
+    private final int mnActionIndex;
 }

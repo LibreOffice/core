@@ -43,12 +43,12 @@ public class TableCellTextBinding
                 implements  com.sun.star.form.binding.XValueBinding,
                             com.sun.star.util.XModifyBroadcaster
 {
-    private XTextRange  m_cellText;
+    private final XTextRange  m_cellText;
     private Object      m_writeSignal;
     private String      m_newCellText;
     private String      m_lastKnownCellText;
     private boolean     m_haveNewCellText;
-    private java.util.List<com.sun.star.util.XModifyListener>  m_listeners;
+    private final java.util.List<com.sun.star.util.XModifyListener>  m_listeners;
 
     /** Creates a new instance of TableCellTextBinding */
     public TableCellTextBinding( XCell cell )

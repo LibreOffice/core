@@ -45,18 +45,18 @@ public class EvolutionarySolverStatusUno extends BaseDialog
                XActionListener {
 
     private int userState;
-    private Label lblSolutionValue;
-    private Label lblIteration;
-    private ProgressBar pbIteration;
-    private Label lblIterationValue;
-    private Label lblStagnation;
-    private ProgressBar pbStagnation;
-    private Label lblStagnationValue;
-    private Label lblRuntimeValue;
-    private Button btnStop;
-    private Button btnOK;
-    private Button btnContinue;
-    private int defaultTextColor;
+    private final Label lblSolutionValue;
+    private final Label lblIteration;
+    private final ProgressBar pbIteration;
+    private final Label lblIterationValue;
+    private final Label lblStagnation;
+    private final ProgressBar pbStagnation;
+    private final Label lblStagnationValue;
+    private final Label lblRuntimeValue;
+    private final Button btnStop;
+    private final Button btnOK;
+    private final Button btnContinue;
+    private final int defaultTextColor;
     private int maxIterations;
     private int maxStagnation;
 

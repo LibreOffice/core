@@ -36,7 +36,7 @@ public class _XTypeProvider {
 
     public static XTypeProvider oObj = null;
     private static Type[] types = null;
-    private LogWriter log = null;
+    private final LogWriter log = null;
 
     /**
     * Just calls the method.<p>

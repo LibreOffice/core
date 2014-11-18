@@ -54,7 +54,7 @@ public class XMLParserFactory {
 
     private static class DefaultParser implements XMLParser {
 
-        private DocumentBuilderFactory factory;
+        private final DocumentBuilderFactory factory;
 
         public DefaultParser() {
             factory = DocumentBuilderFactory.newInstance();

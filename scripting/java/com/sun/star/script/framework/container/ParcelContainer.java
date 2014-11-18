@@ -64,7 +64,7 @@ public class ParcelContainer implements XNameAccess {
     static protected XSimpleFileAccess m_xSFA;
     protected XComponentContext m_xCtx;
     private ParcelContainer parent = null;
-    private Collection<ParcelContainer> childContainers = new
+    private final Collection<ParcelContainer> childContainers = new
     ArrayList<ParcelContainer>(10);
     private boolean isPkgContainer = false;
 

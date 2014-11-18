@@ -38,16 +38,16 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
 public class Convert implements Cloneable {
 
     /** ConvertInfo that corresponds to the from-mime/to-mime conversion. */
-    private ConverterInfo ci;
+    private final ConverterInfo ci;
 
     /**
      * {@code true} if converting to the Office format, {@code false} if
      * converting to the device format.
      */
-    private boolean toOffice;
+    private final boolean toOffice;
 
     /** Holds the convert input data. */
-    private ConvertData inputCD = new ConvertData();
+    private final ConvertData inputCD = new ConvertData();
 
     /**
      * Construct a Convert class with specified {@code ConvertInfo} registry

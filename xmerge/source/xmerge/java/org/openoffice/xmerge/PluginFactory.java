@@ -69,7 +69,7 @@ public abstract class PluginFactory {
    /**
     * Cached {@code ConvertInfo} object.
     */
-    private ConverterInfo ciCache;
+    private final ConverterInfo ciCache;
 
    /**
     * Constructor that caches the {@code ConvertInfo} that corresponds to the

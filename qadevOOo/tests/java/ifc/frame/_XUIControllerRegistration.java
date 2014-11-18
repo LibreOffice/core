@@ -24,7 +24,7 @@ import lib.MultiMethodTest;
 public class _XUIControllerRegistration extends MultiMethodTest {
     public XUIControllerRegistration oObj = null;
     private String aRegisteredController = null;
-    private String aController = ".uno:MySecondController";
+    private final String aController = ".uno:MySecondController";
 
     @Override
     public void before() {

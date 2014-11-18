@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class IntArrayList {
 
     /** The list to hold our integers. */
-    private ArrayList<Integer> list;
+    private final ArrayList<Integer> list;
 
     /**
      * Constructor.

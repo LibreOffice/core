@@ -95,7 +95,7 @@ public class OfficeConnection
         }
     }
 
-    private int mnDefaultPort = 5678;
+    private final int mnDefaultPort;
     private static final String msDefaultHost = "localhost";
     private XMultiServiceFactory  maServiceManager = null;
 

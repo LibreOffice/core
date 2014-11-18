@@ -61,9 +61,9 @@ public final class DocumentSerializerImpl
     implements DocumentSerializer,OfficeConstants,URIResolver {
 
     /** SXW {@code Document} object that this converter processes. */
-    private GenericOfficeDocument sxwDoc = null;
+    private final GenericOfficeDocument sxwDoc;
 
-    private PluginFactoryImpl pluginFactory = null;
+    private final PluginFactoryImpl pluginFactory;
 
     /**
      * Constructor.
@@ -72,7 +72,7 @@ public final class DocumentSerializerImpl
      * @param  doc  A SXW {@code Document} to be converted.
      */
     public DocumentSerializerImpl(PluginFactoryImpl pf,Document doc) {
-    pluginFactory=pf;
+        pluginFactory=pf;
         sxwDoc = (GenericOfficeDocument) doc;
     }
 

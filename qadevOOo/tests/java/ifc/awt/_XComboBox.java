@@ -82,8 +82,8 @@ public class _XComboBox extends MultiMethodTest {
         }
 
     }
-    private TestActionListener actionListener = new TestActionListener();
-    private TestItemListener itemListener = new TestItemListener();
+    private final TestActionListener actionListener = new TestActionListener();
+    private final TestItemListener itemListener = new TestItemListener();
     short lineCount = 0;
     short itemCount = 0;
 

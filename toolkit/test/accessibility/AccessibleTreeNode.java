@@ -29,7 +29,7 @@ class AccessibleTreeNode
     protected AccessibleTreeNode maParent;
 
     /// The object to be displayed.
-    private Object maDisplayObject;
+    private final Object maDisplayObject;
 
     public AccessibleTreeNode (Object aDisplayObject, AccessibleTreeNode aParent)
     {

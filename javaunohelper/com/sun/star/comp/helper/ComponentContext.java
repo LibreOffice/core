@@ -36,7 +36,7 @@ import java.util.Map;
 
 class Disposer implements XEventListener
 {
-    private XComponent m_xComp;
+    private final XComponent m_xComp;
 
 
     Disposer( XComponent xComp )

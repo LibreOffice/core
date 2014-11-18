@@ -69,7 +69,7 @@ public class RecoveryTest extends ComplexTestCase {
      * and the values are com sun.star.awt.Rectangle.
      * @see com.sun.star.awt.Rectangle
      */
-    private HashMap<String, Rectangle> windowsPosSize = new HashMap<String, Rectangle>();
+    private final HashMap<String, Rectangle> windowsPosSize = new HashMap<String, Rectangle>();
 
     /**
      * A function to tell the framework, which test functions are available.

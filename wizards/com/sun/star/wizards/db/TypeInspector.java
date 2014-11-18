@@ -42,7 +42,7 @@ public class TypeInspector
     private boolean[] bisAutoIncrementableInfos;
     private int[] nMinScaleInfos;
     private int[] nMaxScaleInfos;
-    private int[] nNumericFallBackList = new int[]
+    private final int[] nNumericFallBackList = new int[]
     {
         DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL
     };

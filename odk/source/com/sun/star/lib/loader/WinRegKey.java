@@ -31,8 +31,8 @@ import java.io.InputStream;
  */
 final class WinRegKey {
 
-    private String m_rootKeyName;
-    private String m_subKeyName;
+    private final String m_rootKeyName;
+    private final String m_subKeyName;
 
     // native methods to access the windows registry
     private static native boolean winreg_RegOpenClassesRoot( long[] hkresult );

@@ -23,14 +23,14 @@ import com.sun.star.lang.XComponent;
 
 public class ConsoleWait implements com.sun.star.lang.XEventListener
 {
-    private Object  m_disposable;
+    private final Object  m_disposable;
 
     /** a helper class which waits for a console ENTER key event in a dedicated thread,
         and notifies a ConsoleWait object if this event happened
      */
     private class WaitForEnter extends java.lang.Thread
     {
-        private ConsoleWait m_toNotify;
+        private final ConsoleWait m_toNotify;
         private boolean     m_done;
 
         public WaitForEnter( ConsoleWait _toNotify )

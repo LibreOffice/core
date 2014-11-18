@@ -85,7 +85,7 @@ import com.sun.star.util.*;
  */
 public class ConfigHelper
 {
-    private XHierarchicalNameAccess m_xConfig = null;
+    private final XHierarchicalNameAccess m_xConfig;
 
 
     public ConfigHelper(XMultiServiceFactory xSMGR       ,

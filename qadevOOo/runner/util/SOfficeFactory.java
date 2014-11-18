@@ -42,7 +42,7 @@ import com.sun.star.drawing.*;
 public class SOfficeFactory {
 
     private static HashMap<String, SOfficeFactory> lookup = new HashMap<String, SOfficeFactory>(10);
-    private XComponentLoader oCLoader;
+    private final XComponentLoader oCLoader;
 
     private SOfficeFactory(XMultiServiceFactory xMSF) {
         // get XInterface of Desktop service

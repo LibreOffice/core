@@ -57,15 +57,15 @@ public class UnoUrl {
     private static final String VALUE_CHAR_SET = "!$&'()*+-./:?@_~";
     private static final String OID_CHAR_SET = VALUE_CHAR_SET + ",=";
 
-    private UnoUrlPart connection;
-    private UnoUrlPart protocol;
-    private String rootOid;
+    private final UnoUrlPart connection;
+    private final UnoUrlPart protocol;
+    private final String rootOid;
 
     static private class UnoUrlPart {
 
-        private String partTypeName;
-        private HashMap<String,String> partParameters;
-        private String uninterpretedParameterString;
+        private final String partTypeName;
+        private final HashMap<String,String> partParameters;
+        private final String uninterpretedParameterString;
 
         public UnoUrlPart(
             String uninterpretedParameterString,

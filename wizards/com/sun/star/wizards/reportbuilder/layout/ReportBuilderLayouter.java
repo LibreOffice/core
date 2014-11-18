@@ -74,7 +74,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 {
 
     private IReportDefinitionReadAccess m_xReportDefinitionReadAccess;
-    private Resource m_aResource;
+    private final Resource m_aResource;
     private String[][] m_aSortNames;
 
     /**

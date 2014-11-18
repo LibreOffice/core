@@ -79,11 +79,11 @@ public class ChartTypeChange {
 
     /** Service factory
      */
-    private XMultiComponentFactory xMCF = null;
+    private final XMultiComponentFactory xMCF;
 
     /** Component context
      */
-    private XComponentContext xCompContext = null;
+    private final XComponentContext xCompContext;
 
     /** Beginning of the program.
      * @param args No arguments will be passed to the class.

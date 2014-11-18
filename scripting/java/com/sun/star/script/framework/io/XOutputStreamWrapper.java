@@ -24,7 +24,7 @@ import java.io.OutputStream;
 
 public class XOutputStreamWrapper extends OutputStream {
 
-    private XOutputStream m_xOutputStream;
+    private final XOutputStream m_xOutputStream;
 
     public XOutputStreamWrapper(XOutputStream xOs) {
         this.m_xOutputStream = xOs;

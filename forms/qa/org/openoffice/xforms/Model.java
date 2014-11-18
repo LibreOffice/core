@@ -26,9 +26,9 @@ import com.sun.star.xml.dom.XNode;
 
 public class Model
 {
-    private XModel          m_model;
-    private XPropertySet    m_modelProps;
-    private XFormsUIHelper1 m_helper;
+    private final XModel          m_model;
+    private final XPropertySet    m_modelProps;
+    private final XFormsUIHelper1 m_helper;
 
     protected Model( Object _model )
     {

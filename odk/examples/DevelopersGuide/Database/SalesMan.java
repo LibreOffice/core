@@ -38,7 +38,7 @@ import com.sun.star.sdbc.*;
 
 public class SalesMan
 {
-    private XConnection con;
+    private final XConnection con;
 
     public SalesMan(XConnection connection )
     {

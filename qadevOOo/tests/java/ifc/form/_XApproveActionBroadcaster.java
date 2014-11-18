@@ -56,7 +56,7 @@ public class _XApproveActionBroadcaster extends MultiMethodTest {
 
     }
 
-    private TestListener listener = new TestListener();
+    private final TestListener listener = new TestListener();
 
     /**
     * Test calls the method. <p>

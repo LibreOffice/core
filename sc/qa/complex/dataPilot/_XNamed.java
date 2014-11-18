@@ -43,7 +43,7 @@ public class _XNamed {
     /**
      * The object that is testsed.
      */
-    private XNamed oObj = null;
+    private final XNamed oObj;
 
     /**
      * Constructor: gets the object to test, a logger and the test parameters

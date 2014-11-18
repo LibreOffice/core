@@ -39,7 +39,7 @@ import org.openoffice.xmerge.util.XmlUtil;
 public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
 
     /** The capabilities of this converter. */
-    private ConverterCapabilities cc_;
+    private final ConverterCapabilities cc_;
 
     /**
      * Constructor.

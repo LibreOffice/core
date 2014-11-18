@@ -93,5 +93,5 @@ class QueuedTopWindowListener
             );
     }
 
-    private TopWindowListener maListener;
+    private final TopWindowListener maListener;
 }

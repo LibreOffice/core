@@ -135,7 +135,7 @@ public class FocusView
             Update ();
     }
 
-    private JLabel maFocused;
-    private JButton maGrabFocus;
+    private final JLabel maFocused;
+    private final JButton maGrabFocus;
     private XAccessibleComponent mxComponent;
 }

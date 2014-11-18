@@ -38,10 +38,9 @@ import java.util.Map;
 
 public class UnoPkgContainer extends ParcelContainer {
 
-    private Map<String, ParcelContainer> registeredPackages = new
-    HashMap<String, ParcelContainer>();
-    private String extensionDb;
-    private String extensionRepository;
+    private final Map<String, ParcelContainer> registeredPackages = new HashMap<String, ParcelContainer>();
+    private final String extensionDb;
+    private final String extensionRepository;
 
     public UnoPkgContainer(XComponentContext xCtx, String locationURL,
                            String _extensionDb, String _extensionRepository,

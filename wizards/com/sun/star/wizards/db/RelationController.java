@@ -33,14 +33,14 @@ import com.sun.star.wizards.common.PropertyNames;
 public class RelationController extends CommandName
 {
 
-    private int PKTABLE_CAT = 1;
-    private int PKTABLE_SCHEM = 2;
-    private int PKTABLE_NAME = 3;
-    private int PKCOLUMN_NAME = 4;
-    private int FKTABLE_CAT = 5;
-    private int FKTABLE_SCHEM = 6;
-    private int FKTABLE_NAME = 7;
-    private int FKCOLUMN_NAME = 8;
+    private final int PKTABLE_CAT = 1;
+    private final int PKTABLE_SCHEM = 2;
+    private final int PKTABLE_NAME = 3;
+    private final int PKCOLUMN_NAME = 4;
+    private final int FKTABLE_CAT = 5;
+    private final int FKTABLE_SCHEM = 6;
+    private final int FKTABLE_NAME = 7;
+    private final int FKCOLUMN_NAME = 8;
 
     public RelationController(CommandMetaData _CommandMetaData, String _CatalogName, String _SchemaName, String _TableName, boolean _baddQuotation)
     {

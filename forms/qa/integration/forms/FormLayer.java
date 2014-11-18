@@ -36,7 +36,7 @@ import com.sun.star.drawing.XDrawPage;
 
 public class FormLayer
 {
-    private DocumentHelper  m_document;
+    private final DocumentHelper  m_document;
     private XDrawPage       m_page;
 
     /* ------------------------------------------------------------------ */

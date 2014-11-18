@@ -139,9 +139,9 @@ public class Protocol extends JComponent
      * @member  m_nWarnings     count warnings in protocol
      * @member  m_nTestMarks    count test marker in protocol
      */
-    private int                 m_nMode     ;
-    private int                 m_nFilter   ;
-    private String              m_sFileName ;
+    private final int                 m_nMode     ;
+    private final int                 m_nFilter   ;
+    private final String              m_sFileName ;
     private long                m_nLine     ;
     private long                m_nScope    ;
     private long                m_nErrors   ;
@@ -158,15 +158,15 @@ public class Protocol extends JComponent
     private class ProtocolLine
     {
         /// the line number of this protocol line (size of the vector of all protocol lines cn be used to count such lines!)
-        private long m_nLine;
+        private final long m_nLine;
         /// deepness of the current scope
-        private long m_nScope;
+        private final long m_nScope;
         /// mark line as an error, warning, data entry ... (see const definitions before)
-        private int m_nType;
+        private final int m_nType;
         /// of course, we have to know the logged message too :-)
-        private String m_sMessage;
+        private final String m_sMessage;
         /// and it can be useful to know the current time, when this line was created
-        private Timestamp m_aStamp;
+        private final Timestamp m_aStamp;
 
         /** ctor for fast initializing of such line */
         private ProtocolLine( long   nLine    ,

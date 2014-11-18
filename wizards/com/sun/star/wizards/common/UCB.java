@@ -48,8 +48,8 @@ import com.sun.star.uno.UnoRuntime;
 public class UCB
 {
 
-    private Object ucb;
-    private FileAccess fa;
+    private final Object ucb;
+    private final FileAccess fa;
 
     public UCB(XMultiServiceFactory xmsf) throws Exception
     {

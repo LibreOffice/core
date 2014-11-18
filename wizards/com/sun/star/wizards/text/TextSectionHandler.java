@@ -40,8 +40,8 @@ public class TextSectionHandler
 {
 
     public XTextSectionsSupplier xTextSectionsSupplier;
-    private XMultiServiceFactory xMSFDoc;
-    private XText xText;
+    private final XMultiServiceFactory xMSFDoc;
+    private final XText xText;
 
     /** Creates a new instance of TextSectionHandler */
     public TextSectionHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)

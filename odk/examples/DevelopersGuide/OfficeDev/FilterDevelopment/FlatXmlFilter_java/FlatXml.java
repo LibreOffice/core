@@ -55,9 +55,9 @@ public class FlatXml implements XImportFilter, XExportFilter, XServiceName,
     /*
      * private data members
      */
-    private XMultiServiceFactory m_xServiceFactory;
+    private final XMultiServiceFactory m_xServiceFactory;
     private XExtendedDocumentHandler m_xHandler;
-    private boolean m_bPrettyPrint = true;
+    private final boolean m_bPrettyPrint = true;
 
     static private final String __serviceName = "devguide.officedev.samples.filter.FlatXmlJava";
     static private final String __implName = "FlatXml";

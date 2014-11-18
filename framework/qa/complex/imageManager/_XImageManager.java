@@ -31,7 +31,7 @@ public class _XImageManager {
 
     private String[]imageNames = null;
     private XGraphic[] xGraphicArray = null;
-    private XImageManager oObj;
+    private final XImageManager oObj;
 
     public _XImageManager( TestParameters tEnv, XImageManager oObj) {
         this.oObj = oObj;

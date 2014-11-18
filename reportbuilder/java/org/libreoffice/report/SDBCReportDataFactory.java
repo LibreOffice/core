@@ -135,7 +135,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
     private class ParameterDefinition
     {
         private int parameterCount = 0;
-        private ArrayList<Integer> parameterIndex = new ArrayList<Integer>();
+        private final ArrayList<Integer> parameterIndex = new ArrayList<Integer>();
     }
     private static final Log LOGGER = LogFactory.getLog(SDBCReportDataFactory.class);
     public static final String COMMAND_TYPE = "command-type";

@@ -49,7 +49,7 @@ class OfficeZip {
 
     private final static int BUFFERSIZE = 1024;
 
-    private List<Entry> entryList = null;
+    private final List<Entry> entryList;
 
     private int contentIndex = -1;
     private int styleIndex = -1;

@@ -81,15 +81,15 @@ public class GraphicalTestArguments
 
     private boolean m_bIncludeSubdirectories;
 
-    private TestParameters m_aCurrentParams;
+    private final TestParameters m_aCurrentParams;
 
-    private int m_nMaxPages = 0;                           // default is 0 (print all pages)
-    private String m_sOnlyPage = "";                       // default is "", there is no page which we want to print only.
+    private final int m_nMaxPages;                           // default is 0 (print all pages)
+    private final String m_sOnlyPage;                       // default is "", there is no page which we want to print only.
 
     private int m_nResolutionInDPI = 0;
 
     private boolean m_bStoreFile = true;
-    private boolean m_bResuseOffice = false;
+    private final boolean m_bResuseOffice;
 
 
 

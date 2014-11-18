@@ -52,17 +52,17 @@ import lib.TestParameters;
 */
 public class _XDataPilotDescriptor {
 
-    private XDataPilotDescriptor oObj = null;
-    private CellRangeAddress CRA = new CellRangeAddress((short)1, 0, 0, 5, 5);
+    private final XDataPilotDescriptor oObj;
+    private final CellRangeAddress CRA = new CellRangeAddress((short)1, 0, 0, 5, 5);
 
-    private String sTag = "XDataPilotDescriptor_Tag";
+    private final String sTag = "XDataPilotDescriptor_Tag";
     private String fieldsNames[];
     private int tEnvFieldsAmount = 0;
 
     /**
      * The test parameters
      */
-    private TestParameters param = null;
+    private final TestParameters param;
 
     /**
      * Constructor: gets the object to test, a logger and the test parameters

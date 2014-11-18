@@ -28,9 +28,9 @@ import org.w3c.dom.*;
 public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 {
 
-    private Class<?> childClass;
-    private Map<String, Object> childrenMap = new HashMap<String, Object>();
-    private List<Object> childrenList = new ArrayList<Object>();
+    private final Class<?> childClass;
+    private final Map<String, Object> childrenMap = new HashMap<String, Object>();
+    private final List<Object> childrenList = new ArrayList<Object>();
     public Object root;
     /**
      * After reading the configuration set items,

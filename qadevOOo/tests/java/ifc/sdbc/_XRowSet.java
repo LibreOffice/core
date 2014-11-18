@@ -53,7 +53,7 @@ public class _XRowSet extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XRowSet oObj = null ;
     private _XRowSetApproveBroadcaster.RowSetApproveChecker checker = null ;
-    private TestListener listener = new TestListener() ;
+    private final TestListener listener = new TestListener() ;
 
     private class TestListener implements XRowSetListener {
         public boolean cursorMoved = false ;

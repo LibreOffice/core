@@ -41,8 +41,8 @@ import java.sql.DriverManager;
 */
 public class DBTools {
 
-    private XMultiServiceFactory xMSF = null ;
-    private XNamingService dbContext = null ;
+    private final XMultiServiceFactory xMSF;
+    private XNamingService dbContext;
     //JDBC driver
     public final static String TST_JDBC_DRIVER = "org.gjt.mm.mysql.Driver";
 
@@ -122,7 +122,7 @@ public class DBTools {
         /**
         * Representation of <code>'SuppressVersionColumns'</code> property.
         */
-        private Boolean SuppressVersionColumns = null ;
+        private Boolean SuppressVersionColumns;
         /**
         * Representation of <code>'IsReadOnly'</code> property.
         */
