@@ -1186,7 +1186,7 @@ UnoidlProvider::UnoidlProvider(OUString const & uri): file_(new MappedFile(uri))
     }
     sal_uInt32 off = file_->read32(8);
     mapSize_ = file_->read32(12);
-    if (off + 8 * mapSize_ > file_->size) { //TODO: overflow
+    if (off + 8 * sal_uInt64(mapSize_) > file_->size) { // cannot overflow
         throw FileFormatException(
             file_->uri, "UNOIDL format: root map offset + size too large");
     }
