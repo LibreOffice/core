@@ -1407,7 +1407,7 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     FixedText *pHeaderAccName,
     FixedText *pHeaderAccType,
     FixedText *pHeaderAccValue) :
-    Window(pParent),
+    Window(pParent, WB_HIDE | WB_CLIPCHILDREN | WB_TABSTOP | WB_DIALOGCONTROL),
     m_pHeaderAccName(pHeaderAccName),
     m_pHeaderAccType(pHeaderAccType),
     m_pHeaderAccValue(pHeaderAccValue),
