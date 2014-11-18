@@ -1011,6 +1011,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
         case SDREVENT_BEGCREATEOBJ:
             return aAktCreatePointer;
         case SDREVENT_MARKOBJ:
+            return Pointer(POINTER_MOVE);
         case SDREVENT_BEGMARK:
             return Pointer(POINTER_ARROW);
         case SDREVENT_MARKPOINT:
