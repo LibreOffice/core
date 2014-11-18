@@ -37,6 +37,7 @@
 #include <cppconn/exception.h>
 #include <cppconn/statement.h>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 

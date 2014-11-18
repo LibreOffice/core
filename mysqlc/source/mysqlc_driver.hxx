@@ -33,6 +33,7 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <cppuhelper/compbase2.hxx>
 #include <cppconn/driver.h>
