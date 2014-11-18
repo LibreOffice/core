@@ -32,8 +32,6 @@
 #include "sallayout.hxx"
 #include "vclpluginapi.h"
 
-#include "opengl/contextprovider.hxx"
-
 #include <boost/scoped_ptr.hpp>
 
 #include <deque>
@@ -300,9 +298,6 @@ public:
                                 unsigned int w, unsigned int h,
                                 int dest_x, int dest_y );
     static void releaseGlyphPeer();
-
-public:
-    virtual OpenGLContext* GetOpenGLContext() const SAL_OVERRIDE;
 };
 
 inline const SalDisplay *X11SalGraphics::GetDisplay() const
