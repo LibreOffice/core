@@ -30,9 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include <vcl/window.hxx>
 #include <vcl/button.hxx>
 
 

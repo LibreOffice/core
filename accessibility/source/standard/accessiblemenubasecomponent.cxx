@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <accessibility/standard/accessiblemenubasecomponent.hxx>
 #include <accessibility/standard/vclxaccessiblemenu.hxx>
-#include <accessibility/standard/vclxaccessiblemenuitem.hxx>
 #include <accessibility/standard/vclxaccessiblemenuseparator.hxx>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -29,8 +27,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/menu.hxx>
 
 using namespace ::com::sun::star;

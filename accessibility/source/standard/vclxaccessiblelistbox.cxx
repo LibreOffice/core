@@ -18,24 +18,11 @@
  */
 
 #include <accessibility/standard/vclxaccessiblelistbox.hxx>
-#include <accessibility/standard/vclxaccessiblelistitem.hxx>
-#include <accessibility/helper/listboxhelper.hxx>
 
-#include <algorithm>
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <vcl/svapp.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/unohelp.hxx>
 
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/helper/convert.hxx>
 
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

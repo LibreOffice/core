@@ -27,7 +27,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 
-#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

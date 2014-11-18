@@ -20,8 +20,6 @@
 #include "accessibility/extended/AccessibleGridControlHeader.hxx"
 #include "accessibility/extended/AccessibleGridControlHeaderCell.hxx"
 #include "accessibility/extended/AccessibleGridControlTableCell.hxx"
-#include <svtools/accessibletable.hxx>
-#include <comphelper/servicehelper.hxx>
 
 
 

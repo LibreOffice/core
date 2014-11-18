@@ -30,7 +30,6 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>

@@ -18,13 +18,8 @@
  */
 
 #include "accessibility/extended/accessiblelistboxentry.hxx"
-#include <svtools/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svtools/svlbitm.hxx>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -36,13 +31,9 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <accessibility/helper/accresmgr.hxx>
 #include <accessibility/helper/accessiblestrings.hrc>
-#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #define ACCESSIBLE_ACTION_COUNT 1
 
 namespace

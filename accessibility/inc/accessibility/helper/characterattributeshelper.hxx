@@ -20,7 +20,6 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vcl/font.hxx>
 

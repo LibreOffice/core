@@ -22,18 +22,14 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/unohelp2.hxx>
 #include <vcl/settings.hxx>
 
 using namespace ::com::sun::star::accessibility;

@@ -20,10 +20,8 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLESTATUSBARITEM_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLESTATUSBARITEM_HXX
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 
 class StatusBar;

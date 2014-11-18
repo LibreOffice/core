@@ -20,8 +20,6 @@
 #include <accessibility/standard/vclxaccessiblelistitem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <accessibility/helper/listboxhelper.hxx>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -31,14 +29,10 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/controllayout.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/settings.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 
 namespace

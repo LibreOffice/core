@@ -19,14 +19,8 @@
 
 #include <accessibility/standard/vclxaccessibletextfield.hxx>
 #include <vcl/lstbox.hxx>
-#include <accessibility/helper/listboxhelper.hxx>
 
-#include <unotools/accessiblestatesethelper.hxx>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <vcl/svapp.hxx>
-#include <vcl/combobox.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -24,9 +24,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/typeprovider.hxx>
 
 
 namespace accessibility

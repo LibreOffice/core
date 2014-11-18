@@ -19,7 +19,6 @@
 
 #include <accessibility/standard/vclxaccessiblebox.hxx>
 #include <accessibility/standard/vclxaccessibletextfield.hxx>
-#include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <accessibility/standard/vclxaccessiblelist.hxx>
 #include <accessibility/helper/listboxhelper.hxx>
 
@@ -28,7 +27,6 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/svapp.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <accessibility/helper/accresmgr.hxx>
 #include <accessibility/helper/accessiblestrings.hrc>

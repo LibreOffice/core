@@ -18,10 +18,6 @@
  */
 
 #include <accessibility/standard/vclxaccessiblecombobox.hxx>
-#include <accessibility/standard/vclxaccessiblelist.hxx>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
 
 using namespace ::com::sun::star;

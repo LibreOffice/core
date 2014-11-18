@@ -22,7 +22,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/toolpanel/paneltabbar.hxx>
@@ -31,7 +30,6 @@
 #include <toolkit/helper/externallock.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <osl/mutex.hxx>
 
 namespace accessibility
 {

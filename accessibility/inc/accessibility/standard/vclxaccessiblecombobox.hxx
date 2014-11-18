@@ -20,10 +20,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLECOMBOBOX_HXX
 
-#include <map>
 #include <accessibility/standard/vclxaccessiblebox.hxx>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <cppuhelper/implbase1.hxx>
 
 
 /** The accessible combobox has two children.  The first is the text field
