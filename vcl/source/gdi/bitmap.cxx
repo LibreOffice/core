@@ -785,7 +785,7 @@ bool Bitmap::Crop( const Rectangle& rRectPixel )
 
     aRect.Intersection( Rectangle( Point(), aSizePix ) );
 
-    if( !aRect.IsEmpty() )
+    if( !aRect.IsEmpty() && aSizePix != aRect.GetSize())
     {
         BitmapReadAccess* pReadAcc = AcquireReadAccess();
 
