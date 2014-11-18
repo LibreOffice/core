@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_2e69468c",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitInit.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-18T23:04:18Z",
+      "side": 1,
+      "message": "better avoid starting names with an underscore in C/C++ as that is reserved for the implementation (unfortunately that is already ignored on a large scale in existing code...)",
+      "revId": "725a52c55e91d3629dfbfb9ba4758048d8bf1a77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5afe65bd_4e6c829c",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitInit.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-18T23:04:18Z",
+      "side": 1,
+      "message": "typo: -\u003e SEPARATOR",
+      "revId": "725a52c55e91d3629dfbfb9ba4758048d8bf1a77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
