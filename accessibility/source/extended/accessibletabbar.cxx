@@ -31,7 +31,6 @@
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <vector>
 
 
 

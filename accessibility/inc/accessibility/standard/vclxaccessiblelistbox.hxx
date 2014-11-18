@@ -21,9 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_VCLXACCESSIBLELISTBOX_HXX
 
 #include <accessibility/standard/vclxaccessiblebox.hxx>
-#include <com/sun/star/accessibility/XAccessibleAction.hpp>
-#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
-#include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 
 /** The accessible drop down combobox has one children.  It is the list

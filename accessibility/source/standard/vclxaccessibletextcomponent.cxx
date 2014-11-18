@@ -18,22 +18,17 @@
  */
 
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <accessibility/helper/characterattributeshelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <comphelper/sequence.hxx>
-#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/settings.hxx>
 
-#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -20,14 +20,10 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX
 
-#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/Point.hpp>
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <tools/link.hxx>
 
-#include <vector>
 
 class Menu;
 class VclSimpleEvent;

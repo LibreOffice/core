@@ -21,12 +21,8 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <vcl/window.hxx>
 #include <toolkit/helper/convert.hxx>
 
-#include <algorithm>
-#include <vector>
-#include <boost/unordered_map.hpp>
 
 namespace accessibility
 {

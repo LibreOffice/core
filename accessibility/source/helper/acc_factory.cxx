@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
 
 #include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/helper/accessiblefactory.hxx>
@@ -27,23 +26,18 @@
 #include <accessibility/standard/vclxaccessibledropdowncombobox.hxx>
 #include <accessibility/standard/vclxaccessiblecombobox.hxx>
 #include <accessibility/standard/vclxaccessibledropdownlistbox.hxx>
-#include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <accessibility/standard/vclxaccessiblefixedhyperlink.hxx>
 #include <accessibility/standard/vclxaccessiblefixedtext.hxx>
 #include <accessibility/standard/vclxaccessiblelistbox.hxx>
-#include <accessibility/standard/vclxaccessiblemenu.hxx>
 #include <accessibility/standard/vclxaccessibleradiobutton.hxx>
 #include <accessibility/standard/vclxaccessiblescrollbar.hxx>
-#include <accessibility/standard/vclxaccessibletextcomponent.hxx>
 #include <accessibility/standard/vclxaccessibletoolbox.hxx>
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <accessibility/standard/vclxaccessiblestatusbar.hxx>
 #include <accessibility/standard/vclxaccessibletabcontrol.hxx>
 #include <accessibility/standard/vclxaccessibletabpagewindow.hxx>
 #include <accessibility/standard/vclxaccessiblemenubar.hxx>
 #include <accessibility/standard/vclxaccessiblepopupmenu.hxx>
 #include <accessibility/extended/accessibletablistbox.hxx>
-#include <accessibility/extended/AccessibleBrowseBox.hxx>
 #include <accessibility/extended/accessibleiconchoicectrl.hxx>
 #include <accessibility/extended/accessibletabbar.hxx>
 #include <accessibility/extended/accessiblelistbox.hxx>
@@ -55,13 +49,10 @@
 #include <accessibility/extended/accessibleeditbrowseboxcell.hxx>
 #include <accessibility/extended/AccessibleToolPanelDeck.hxx>
 #include <accessibility/extended/AccessibleToolPanelDeckTabBar.hxx>
-#include <accessibility/extended/AccessibleToolPanelDeckTabBarItem.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <accessibility/extended/AccessibleGridControl.hxx>
-#include <svtools/accessibletable.hxx>
 #include <vcl/popupmenuwindow.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include "floatingwindowaccessible.hxx"
 

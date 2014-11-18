@@ -18,25 +18,11 @@
  */
 
 #include <accessibility/standard/vclxaccessibledropdowncombobox.hxx>
-#include <accessibility/standard/vclxaccessiblecombobox.hxx>
 #include <accessibility/standard/vclxaccessibletextfield.hxx>
-#include <accessibility/standard/vclxaccessiblelist.hxx>
-#include <accessibility/helper/accresmgr.hxx>
-#include <accessibility/helper/accessiblestrings.hrc>
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <vcl/svapp.hxx>
 #include <vcl/combobox.hxx>
-#include <vcl/unohelp.hxx>
 
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/helper/convert.hxx>
 
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <unotools/accessiblestatesethelper.hxx>
 
 
 using namespace ::com::sun::star;

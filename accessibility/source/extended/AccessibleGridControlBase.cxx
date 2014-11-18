@@ -18,12 +18,8 @@
  */
 
 #include "accessibility/extended/AccessibleGridControlBase.hxx"
-#include <svtools/accessibletable.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
 

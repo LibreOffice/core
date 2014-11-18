@@ -21,7 +21,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <rtl/ustring.hxx>
 #include <tools/wintypes.hxx>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {

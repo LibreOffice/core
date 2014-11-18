@@ -23,7 +23,6 @@
 #include <accessibility/standard/vclxaccessiblemenuitem.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#include <cppuhelper/implbase1.hxx>
 
 
 

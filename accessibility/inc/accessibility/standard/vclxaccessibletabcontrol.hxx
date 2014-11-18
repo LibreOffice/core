@@ -23,7 +23,6 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
-#include <vector>
 
 class TabControl;
 

@@ -19,18 +19,10 @@
 
 #include <accessibility/extended/accessiblelistbox.hxx>
 #include <accessibility/extended/accessiblelistboxentry.hxx>
-#include <svtools/treelistbox.hxx>
-#include <svtools/treelistentry.hxx>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <vcl/svapp.hxx>
-#include <toolkit/awt/vclxwindow.hxx>
-#include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 
 

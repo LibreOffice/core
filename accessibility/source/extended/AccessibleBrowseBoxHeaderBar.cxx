@@ -19,7 +19,6 @@
 
 #include "accessibility/extended/AccessibleBrowseBoxHeaderBar.hxx"
 #include <svtools/accessibletableprovider.hxx>
-#include <comphelper/servicehelper.hxx>
 
 
 

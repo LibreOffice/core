@@ -24,7 +24,6 @@
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
-#include <cppuhelper/implbase2.hxx>
 
 
 

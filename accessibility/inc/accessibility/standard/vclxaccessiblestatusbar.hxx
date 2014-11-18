@@ -22,7 +22,6 @@
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-#include <vector>
 
 class StatusBar;
 

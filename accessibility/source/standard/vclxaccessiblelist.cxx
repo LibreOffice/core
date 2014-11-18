@@ -28,7 +28,6 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <vcl/svapp.hxx>
-#include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
 #include <toolkit/helper/convert.hxx>
 

@@ -22,7 +22,6 @@
 
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
 
-#include <cppuhelper/implbase1.hxx>
 
 typedef ::cppu::ImplHelper1<
     ::com::sun::star::accessibility::XAccessible

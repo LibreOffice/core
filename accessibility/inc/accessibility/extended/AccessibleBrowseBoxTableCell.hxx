@@ -21,7 +21,6 @@
 
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
 #include <comphelper/accessibletexthelper.hxx>
-#include <cppuhelper/implbase2.hxx>
 
 namespace accessibility
 {

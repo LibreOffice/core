@@ -21,27 +21,18 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXBASE_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOXBASE_HXX
 
-#include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
-#include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/awt/XFocusListener.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/uno3.hxx>
 

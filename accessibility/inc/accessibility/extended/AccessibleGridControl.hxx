@@ -20,11 +20,7 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROL_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEGRIDCONTROL_HXX
 
-#include <accessibility/extended/AccessibleGridControlBase.hxx>
 #include <accessibility/extended/AccessibleGridControlTable.hxx>
-#include <boost/scoped_ptr.hpp>
-#include <cppuhelper/weakref.hxx>
-#include <svtools/accessibletable.hxx>
 
 
 
