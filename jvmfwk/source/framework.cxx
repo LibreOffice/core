@@ -88,9 +88,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             sal_Int32 cInfos = 0;
             JavaInfo** arInfos = NULL;
             javaPluginError plerr = jfw_plugin_getAllJavaInfos(
-                vendor.pData,
-                versionInfo.sMinVersion.pData,
-                versionInfo.sMaxVersion.pData,
+                vendor,
+                versionInfo.sMinVersion,
+                versionInfo.sMaxVersion,
                 versionInfo.getExcludeVersions(),
                 versionInfo.getExcludeVersionSize(),
                 & arInfos,
@@ -114,10 +114,10 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             {
                 jfw::CJavaInfo aInfo;
                 plerr = jfw_plugin_getJavaInfoByPath(
-                    ii->pData,
-                    vendor.pData,
-                    versionInfo.sMinVersion.pData,
-                    versionInfo.sMaxVersion.pData,
+                    *ii,
+                    vendor,
+                    versionInfo.sMinVersion,
+                    versionInfo.sMaxVersion,
                     versionInfo.getExcludeVersions(),
                     versionInfo.getExcludeVersionSize(),
                     & aInfo.pInfo);
@@ -405,9 +405,9 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             sal_Int32 cInfos = 0;
             JavaInfo** arInfos = NULL;
             javaPluginError plerr = jfw_plugin_getAllJavaInfos(
-                vendor.pData,
-                versionInfo.sMinVersion.pData,
-                versionInfo.sMaxVersion.pData,
+                vendor,
+                versionInfo.sMinVersion,
+                versionInfo.sMaxVersion,
                 versionInfo.getExcludeVersions(),
                 versionInfo.getExcludeVersionSize(),
                 & arInfos,
@@ -475,10 +475,10 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 {
                     jfw::CJavaInfo aInfo;
                     javaPluginError err = jfw_plugin_getJavaInfoByPath(
-                        it->pData,
-                        vendor.pData,
-                        versionInfo.sMinVersion.pData,
-                        versionInfo.sMaxVersion.pData,
+                        *it,
+                        vendor,
+                        versionInfo.sMinVersion,
+                        versionInfo.sMaxVersion,
                         versionInfo.getExcludeVersions(),
                         versionInfo.getExcludeVersionSize(),
                         & aInfo.pInfo);
@@ -651,6 +651,8 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         if (pPath == NULL || ppInfo == NULL)
             return JFW_E_INVALID_ARG;
 
+        OUString ouPath(pPath);
+
         jfw::VendorSettings aVendorSettings;
         std::vector<OUString> vecVendors =
             aVendorSettings.getSupportedVendors();
@@ -671,10 +673,10 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
             //Only if it does return a JavaInfo
             JavaInfo* pInfo = NULL;
             javaPluginError plerr = jfw_plugin_getJavaInfoByPath(
-                pPath,
-                vendor.pData,
-                versionInfo.sMinVersion.pData,
-                versionInfo.sMaxVersion.pData,
+                ouPath,
+                vendor,
+                versionInfo.sMinVersion,
+                versionInfo.sMaxVersion,
                 versionInfo.getExcludeVersions(),
                 versionInfo.getExcludeVersionSize(),
                 & pInfo);
