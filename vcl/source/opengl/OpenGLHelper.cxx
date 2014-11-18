@@ -59,6 +59,39 @@ OString loadShader(const OUString& rFilename)
 
 }
 
+namespace {
+    int LogCompilerError(GLuint nId, const rtl::OUString &rDetail,
+                         const rtl::OUString &rName, bool bShaderNotProgram)
+    {
+        int InfoLogLength = 0;
+
+        CHECK_GL_ERROR();
+
+        if (bShaderNotProgram)
+            glGetShaderiv (nId, GL_INFO_LOG_LENGTH, &InfoLogLength);
+        else
+            glGetProgramiv(nId, GL_INFO_LOG_LENGTH, &InfoLogLength);
+
+        CHECK_GL_ERROR();
+
+        if ( InfoLogLength > 0 )
+        {
+            std::vector<char> ErrorMessage(InfoLogLength+1);
+            if (bShaderNotProgram)
+                glGetShaderInfoLog (nId, InfoLogLength, NULL, &ErrorMessage[0]);
+            else
+                glGetProgramInfoLog(nId, InfoLogLength, NULL, &ErrorMessage[0]);
+            CHECK_GL_ERROR();
+
+            ErrorMessage.push_back('\0');
+            SAL_WARN("vcl.opengl", rDetail << " shader " << nId << " compile for " << rName << " failed : " << &ErrorMessage[0]);
+        }
+        else
+            SAL_WARN("vcl.opengl", rDetail << " shader: " << rName << " compile " << nId << "failed without error log");
+        return 0;
+    }
+}
+
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName)
 {
     // Create the shaders
@@ -66,7 +99,6 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 
     GLint Result = GL_FALSE;
-    int InfoLogLength;
 
     // Compile Vertex Shader
     OString aVertexShaderSource = loadShader(rVertexShaderName);
@@ -76,21 +108,9 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 
     // Check Vertex Shader
     glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
-    if ( !Result )
-    {
-        glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if ( InfoLogLength > 0 )
-        {
-            std::vector<char> VertexShaderErrorMessage(InfoLogLength+1);
-            glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-            VertexShaderErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "vertex shader compile for " << rVertexShaderName << " failed : " << &VertexShaderErrorMessage[0]);
-        }
-        else
-            SAL_WARN("vcl.opengl", "vertex shader: " << rVertexShaderName << " compile failed without error log");
-
-        return 0;
-    }
+    if (!Result)
+        return LogCompilerError(VertexShaderID, "vertex",
+                                rVertexShaderName, true);
 
     // Compile Fragment Shader
     OString aFragmentShaderSource = loadShader(rFragmentShaderName);
@@ -100,22 +120,9 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 
     // Check Fragment Shader
     glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
-    if ( !Result )
-    {
-        glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if ( InfoLogLength > 0 )
-        {
-            std::vector<char> FragmentShaderErrorMessage(InfoLogLength+1);
-            glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-            FragmentShaderErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "fragment shader compile for " << rFragmentShaderName << " failed : " << &FragmentShaderErrorMessage[0]);
-        }
-        else
-            SAL_WARN("vcl.opengl", "fragment shader compile failed without error log");
-
-
-        return 0;
-    }
+    if (!Result)
+        return LogCompilerError(FragmentShaderID, "fragment",
+                                rFragmentShaderName, true);
 
     // Link the program
     GLint ProgramID = glCreateProgram();
@@ -128,21 +135,8 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 
     // Check the program
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-    if ( !Result )
-    {
-        glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-        if ( InfoLogLength > 0 )
-        {
-            std::vector<char> ProgramErrorMessage(InfoLogLength+1);
-            glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-            ProgramErrorMessage.push_back('\0');
-            SAL_WARN("vcl.opengl", "Shader Program failed : " << &ProgramErrorMessage[0]);
-        }
-        else
-            SAL_WARN("vcl.opengl", "shader program link failed without error log");
-
-        return 0;
-    }
+    if (!Result)
+        return LogCompilerError(ProgramID, "program", "<both>", false);
 
     CHECK_GL_ERROR();
     return ProgramID;
