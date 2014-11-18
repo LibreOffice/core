@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstring>
+#include <set>
 #include <vector>
 
 #include "osl/endian.h"
@@ -364,6 +365,11 @@ struct MapEntry {
     Memory32 data;
 };
 
+bool operator <(Map const map1, Map const map2) {
+    return map1.begin < map2.begin
+        || (map1.begin == map2.begin && map1.size < map2.size);
+}
+
 namespace {
 
 enum Compare { COMPARE_LESS, COMPARE_GREATER, COMPARE_EQUAL };
@@ -543,14 +549,20 @@ ConstantValue readConstant(
 }
 
 rtl::Reference< Entity > readEntity(
-    rtl::Reference< MappedFile > const & file, sal_uInt32 offset);
+    rtl::Reference< MappedFile > const & file, sal_uInt32 offset,
+    std::set<Map> const & trace);
+
+class UnoidlModuleEntity;
 
 class UnoidlCursor: public MapCursor {
 public:
     UnoidlCursor(
-        rtl::Reference< MappedFile > file, MapEntry const * mapBegin,
-        sal_uInt32 mapSize):
-        file_(file), mapIndex_(mapBegin), mapEnd_(mapBegin + mapSize)
+        rtl::Reference< MappedFile > file,
+        rtl::Reference<UnoidlProvider> const & reference1,
+        rtl::Reference<UnoidlModuleEntity> const & reference2,
+        NestedMap const & map):
+        file_(file), reference1_(reference1), reference2_(reference2),
+        map_(map), index_(0)
     {}
 
 private:
@@ -559,17 +571,20 @@ private:
     virtual rtl::Reference< Entity > getNext(OUString * name) SAL_OVERRIDE;
 
     rtl::Reference< MappedFile > file_;
-    MapEntry const * mapIndex_;
-    MapEntry const * mapEnd_;
+    rtl::Reference<UnoidlProvider> reference1_; // HACK to keep alive whatever
+    rtl::Reference<UnoidlModuleEntity> reference2_;           // owner of map_
+    NestedMap const & map_;
+    sal_uInt32 index_;
 };
 
 rtl::Reference< Entity > UnoidlCursor::getNext(OUString * name) {
     assert(name != 0);
     rtl::Reference< Entity > ent;
-    if (mapIndex_ != mapEnd_) {
-        *name = file_->readNulName(mapIndex_->name.getUnsigned32());
-        ent = readEntity(file_, mapIndex_->data.getUnsigned32());
-        ++mapIndex_;
+    if (index_ != map_.map.size) {
+        *name = file_->readNulName(map_.map.begin[index_].name.getUnsigned32());
+        ent = readEntity(
+            file_, map_.map.begin[index_].data.getUnsigned32(), map_.trace);
+        ++index_;
     }
     return ent;
 }
@@ -578,37 +593,47 @@ class UnoidlModuleEntity: public ModuleEntity {
 public:
     UnoidlModuleEntity(
         rtl::Reference< MappedFile > const & file, sal_uInt32 mapOffset,
-        sal_uInt32 mapSize):
-        file_(file),
-        mapBegin_(
-            reinterpret_cast< MapEntry const * >(
-                static_cast< char const * >(file_->address) + mapOffset)),
-        mapSize_(mapSize)
-    { assert(file.is()); }
+        sal_uInt32 mapSize, std::set<Map> const & trace):
+        file_(file)
+    {
+        assert(file.is());
+        map_.map.begin = reinterpret_cast<MapEntry const *>(
+            static_cast<char const *>(file_->address) + mapOffset);
+        map_.map.size = mapSize;
+        map_.trace = trace;
+        if (!map_.trace.insert(map_.map).second) {
+            throw FileFormatException(
+                file_->uri, "UNOIDL format: recursive map");
+        }
+    }
 
 private:
     virtual ~UnoidlModuleEntity() throw () {}
 
     virtual std::vector< OUString > getMemberNames() const SAL_OVERRIDE;
 
-    virtual rtl::Reference< MapCursor > createCursor() const SAL_OVERRIDE
-    { return new UnoidlCursor(file_, mapBegin_, mapSize_); }
+    virtual rtl::Reference< MapCursor > createCursor() const SAL_OVERRIDE {
+        return new UnoidlCursor(
+            file_, rtl::Reference<UnoidlProvider>(),
+            const_cast<UnoidlModuleEntity *>(this), map_);
+    }
 
     rtl::Reference< MappedFile > file_;
-    MapEntry const * mapBegin_;
-    sal_uInt32 mapSize_;
+    NestedMap map_;
 };
 
 std::vector< OUString > UnoidlModuleEntity::getMemberNames() const {
     std::vector< OUString > names;
-    for (sal_uInt32 i = 0; i != mapSize_; ++i) {
-        names.push_back(file_->readNulName(mapBegin_[i].name.getUnsigned32()));
+    for (sal_uInt32 i = 0; i != map_.map.size; ++i) {
+        names.push_back(
+            file_->readNulName(map_.map.begin[i].name.getUnsigned32()));
     }
     return names;
 }
 
 rtl::Reference< Entity > readEntity(
-    rtl::Reference< MappedFile > const & file, sal_uInt32 offset)
+    rtl::Reference< MappedFile > const & file, sal_uInt32 offset,
+    std::set<Map> const & trace)
 {
     assert(file.is());
     int v = file->read8(offset);
@@ -637,7 +662,7 @@ rtl::Reference< Entity > readEntity(
                     file->uri,
                     "UNOIDL format: module map offset + size too large");
             }
-            return new UnoidlModuleEntity(file, offset + 5, n);
+            return new UnoidlModuleEntity(file, offset + 5, n, trace);
         }
     case 1: // enum type
         {
@@ -1193,35 +1218,40 @@ UnoidlProvider::UnoidlProvider(OUString const & uri): file_(new MappedFile(uri))
             " 0");
     }
     sal_uInt32 off = file_->read32(8);
-    mapSize_ = file_->read32(12);
-    if (off + 8 * sal_uInt64(mapSize_) > file_->size) { // cannot overflow
+    map_.map.size = file_->read32(12);
+    if (off + 8 * sal_uInt64(map_.map.size) > file_->size) { // cannot overflow
         throw FileFormatException(
             file_->uri, "UNOIDL format: root map offset + size too large");
     }
-    mapBegin_ = reinterpret_cast< MapEntry const * >(
+    map_.map.begin = reinterpret_cast< MapEntry const * >(
         static_cast< char const * >(file_->address) + off);
+    map_.trace.insert(map_.map);
 }
 
 rtl::Reference< MapCursor > UnoidlProvider::createRootCursor() const {
-    return new UnoidlCursor(file_, mapBegin_, mapSize_);
+    return new UnoidlCursor(
+        file_, const_cast<UnoidlProvider *>(this),
+        rtl::Reference<UnoidlModuleEntity>(), map_);
 }
 
 rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
 {
-    MapEntry const * mapBegin = mapBegin_;
-    sal_uInt32 mapSize = mapSize_;
+    NestedMap map(map_);
     bool cgroup = false;
     for (sal_Int32 i = 0;;) {
         sal_Int32 j = name.indexOf('.', i);
         if (j == -1) {
             j = name.getLength();
         }
-        sal_Int32 off = findInMap(file_, mapBegin, mapSize, name, i, j - i);
+        sal_Int32 off = findInMap(
+            file_, map.map.begin, map.map.size, name, i, j - i);
         if (off == 0) {
             return rtl::Reference< Entity >();
         }
         if (j == name.getLength()) {
-            return cgroup ? rtl::Reference< Entity >() : readEntity(file_, off);
+            return cgroup
+                ? rtl::Reference< Entity >()
+                : readEntity(file_, off, map.trace);
         }
         if (cgroup) {
             return rtl::Reference< Entity >();
@@ -1240,15 +1270,19 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
                     // prefix of the requested name's segments?
             }
         }
-        mapSize = file_->read32(off + 1);
-        if (sal_uInt64(off) + 5 + 8 * sal_uInt64(mapSize) > file_->size)
+        map.map.size = file_->read32(off + 1);
+        if (sal_uInt64(off) + 5 + 8 * sal_uInt64(map.map.size) > file_->size)
             // cannot overflow
         {
             throw FileFormatException(
                 file_->uri, "UNOIDL format: map offset + size too large");
         }
-        mapBegin = reinterpret_cast< MapEntry const * >(
+        map.map.begin = reinterpret_cast< MapEntry const * >(
             static_cast< char const * >(file_->address) + off + 5);
+        if (!map.trace.insert(map.map).second) {
+            throw FileFormatException(
+                file_->uri, "UNOIDL format: recursive map");
+        }
         i = j + 1;
     }
 }

@@ -12,6 +12,8 @@
 
 #include "sal/config.h"
 
+#include <set>
+
 #include "rtl/ref.hxx"
 #include "sal/types.h"
 #include "unoidl/unoidl.hxx"
@@ -20,6 +22,16 @@ namespace unoidl { namespace detail {
 
 class MappedFile;
 struct MapEntry;
+
+struct Map {
+    MapEntry const * begin;
+    sal_uInt32 size;
+};
+
+struct NestedMap {
+    Map map;
+    std::set<Map> trace;
+};
 
 class UnoidlProvider: public Provider {
 public:
@@ -37,8 +49,7 @@ private:
     virtual ~UnoidlProvider() throw ();
 
     rtl::Reference< detail::MappedFile > file_;
-    detail::MapEntry const * mapBegin_;
-    sal_uInt32 mapSize_;
+    NestedMap map_;
 };
 
 } }
