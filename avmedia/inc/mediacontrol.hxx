@@ -86,7 +86,7 @@ private:
                         DECL_LINK(implTimeoutHdl, void *);
 
     ImageList           maImageList;
-    Timer               maTimer;
+    Idle                maIdle;
     MediaItem           maItem;
     ToolBox             maPlayToolBox;
     Slider              maTimeSlider;

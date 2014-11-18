@@ -366,7 +366,7 @@ void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
         {
             Invalidate( Rectangle( mnLeftBorder, mnTopBorder,
                                    mnDX-mnRightBorder-1, mnDY-mnBottomBorder-1 ) );
-            maTimer.Stop();
+            maIdle.Stop();
         }
     }
     else
@@ -377,7 +377,7 @@ void ToolBox::ImplInvalidate( bool bNewCalc, bool bFullPaint )
 
             // do we need to redraw?
             if ( IsReallyVisible() && IsUpdateMode() )
-                maTimer.Start();
+                maIdle.Start();
         }
     }
 

@@ -137,8 +137,8 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
 
     aEditIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
     aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
-    aAutoArrangeTimer.SetTimeout( 100 );
-    aAutoArrangeTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
+    aAutoArrangeIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    aAutoArrangeIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
     aCallSelectHdlIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
     aCallSelectHdlIdle.SetIdleHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
 
@@ -583,7 +583,7 @@ void SvxIconChoiceCtrl_Impl::ImpArrange( bool bKeepPredecessors )
     Rectangle aCurOutputArea( GetOutputRect() );
     if( (nWinBits & WB_SMART_ARRANGE) && aCurOutputArea.TopLeft() != aEmptyPoint )
         bUpdateMode = false;
-    aAutoArrangeTimer.Stop();
+    aAutoArrangeIdle.Stop();
     nFlags &= ~F_MOVED_ENTRIES;
     nFlags |= F_ARRANGING;
     StopEditTimer();
@@ -1901,7 +1901,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryPos( SvxIconChoiceCtrlEntry* pEntry, const 
     {
         SvxIconChoiceCtrlEntry* pPrev = FindEntryPredecessor( pEntry, rPos );
         SetEntryPredecessor( pEntry, pPrev );
-        aAutoArrangeTimer.Start();
+        aAutoArrangeIdle.Start();
     }
     ShowCursor( true );
 }
@@ -2888,7 +2888,7 @@ void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl)
 {
-    aAutoArrangeTimer.Stop();
+    aAutoArrangeIdle.Stop();
     Arrange( IsAutoArrange() );
     return 0;
 }
@@ -3506,7 +3506,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         // unwanted overlaps, as these entries aren't taken into account in
         // Arrange.
         if( aEntries.size() )
-            aAutoArrangeTimer.Start();
+            aAutoArrangeIdle.Start();
         return;
     }
 
@@ -3520,7 +3520,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         }
 
         if( aEntries.size() )
-            aAutoArrangeTimer.Start();
+            aAutoArrangeIdle.Start();
     }
     else if( ePositionMode == IcnViewPositionModeAutoAdjust )
     {
@@ -3575,7 +3575,7 @@ void SvxIconChoiceCtrl_Impl::SetEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry
     if( bSetHead )
         pHead = pEntry;
     pEntry->SetFlags( ICNVIEW_FLAG_PRED_SET );
-    aAutoArrangeTimer.Start();
+    aAutoArrangeIdle.Start();
 }
 
 SvxIconChoiceCtrlEntry* SvxIconChoiceCtrl_Impl::FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry,

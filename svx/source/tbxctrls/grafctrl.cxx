@@ -86,7 +86,7 @@ class ImplGrafMetricField : public MetricField
     using Window::Update;
 
 private:
-    Timer               maTimer;
+    Idle                maIdle;
     OUString            maCommand;
     Reference< XFrame > mxFrame;
 
@@ -138,8 +138,8 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
         SetSpinSize( 1 );
     }
 
-    maTimer.SetTimeout( 100 );
-    maTimer.SetTimeoutHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
+    maIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    maIdle.SetIdleHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
 }
 
 ImplGrafMetricField::~ImplGrafMetricField()
@@ -148,7 +148,7 @@ ImplGrafMetricField::~ImplGrafMetricField()
 
 void ImplGrafMetricField::Modify()
 {
-    maTimer.Start();
+    maIdle.Start();
 }
 
 IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)

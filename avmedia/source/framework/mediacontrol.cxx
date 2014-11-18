@@ -188,9 +188,9 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
         maMinSize.Height() = ( maMinSize.Height() << 1 ) + AVMEDIA_CONTROLOFFSET;
     }
 
-    maTimer.SetTimeout( AVMEDIA_TIMEOUT );
-    maTimer.SetTimeoutHdl( LINK( this, MediaControl, implTimeoutHdl ) );
-    maTimer.Start();
+    maIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    maIdle.SetIdleHdl( LINK( this, MediaControl, implTimeoutHdl ) );
+    maIdle.Start();
 }
 
 
@@ -432,7 +432,7 @@ Image MediaControl::implGetImage( sal_Int32 nImageId ) const
 IMPL_LINK( MediaControl, implTimeHdl, Slider*, p )
 {
     mbLocked = true;
-    maTimer.Stop();
+    maIdle.Stop();
     implUpdateTimeField( p->GetThumbPos() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
 
     return 0;
@@ -447,7 +447,7 @@ IMPL_LINK( MediaControl, implTimeEndHdl, Slider*, p )
     aExecItem.setTime( p->GetThumbPos() * maItem.getDuration() / AVMEDIA_TIME_RANGE );
     execute( aExecItem );
     update();
-    maTimer.Start();
+    maIdle.Start();
     mbLocked = false;
 
     return 0;
@@ -596,7 +596,7 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
 IMPL_LINK_NOARG(MediaControl, implTimeoutHdl)
 {
     update();
-    maTimer.Start();
+    maIdle.Start();
 
     return 0;
 }

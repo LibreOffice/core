@@ -110,7 +110,7 @@ struct SfxDispatcher_Impl
     const SfxSlotServer* pCachedServ1;  // last called message
     const SfxSlotServer* pCachedServ2;  // penultimate called Message
     SfxShellStack_Impl   aStack;        // active functionality
-    Timer                aTimer;        // for Flush
+    Idle                 aIdle;        // for Flush
     std::deque<SfxToDo_Impl> aToDoStack;    // not processed Push/Pop
     SfxViewFrame*        pFrame;        // NULL or associated Frame
     SfxDispatcher*       pParent;       // AppDispatcher, NULL if possible
@@ -338,8 +338,8 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
 
     pImp->xPoster = new SfxHintPoster(aGenLink);
 
-    pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
-    pImp->aTimer.SetTimeoutHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+    pImp->aIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+    pImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
 }
 
 SfxDispatcher::SfxDispatcher( SfxDispatcher* pParent )
@@ -380,7 +380,7 @@ SfxDispatcher::~SfxDispatcher()
 #endif
 
     // So that no timer by Reschedule in PlugComm strikes the LeaveRegistrations
-    pImp->aTimer.Stop();
+    pImp->aIdle.Stop();
     pImp->xPoster->SetEventHdl( Link() );
 
     // Notify the stack varialbles in Call_Impl
@@ -474,14 +474,14 @@ void SfxDispatcher::Pop(SfxShell& rShell, sal_uInt16 nMode)
     if(!pSfxApp->IsDowning() && !pImp->aToDoStack.empty())
     {
         // No immediate update is requested
-        pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
-        pImp->aTimer.SetTimeoutHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
-        pImp->aTimer.Start();
+        pImp->aIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+        pImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+        pImp->aIdle.Start();
     }
     else
     {
         // but to do nothing
-        pImp->aTimer.Stop();
+        pImp->aIdle.Stop();
 
         // Bindings may wake up again
         if(pImp->aToDoStack.empty())
@@ -685,9 +685,9 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI, SfxViewFrame* /* pOld */)
     if(!pImp->aToDoStack.empty())
     {
         // No immediate update is requested
-        pImp->aTimer.SetTimeout(SFX_FLUSH_TIMEOUT);
-        pImp->aTimer.SetTimeoutHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
-        pImp->aTimer.Start();
+        pImp->aIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+        pImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+        pImp->aIdle.Start();
     }
 }
 
@@ -1429,7 +1429,7 @@ void SfxDispatcher::FlushImpl()
 
     OSL_TRACE("Flushing dispatcher!");
 
-    pImp->aTimer.Stop();
+    pImp->aIdle.Stop();
 
     if ( pImp->pParent )
         pImp->pParent->Flush();

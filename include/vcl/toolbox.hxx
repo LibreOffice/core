@@ -129,7 +129,7 @@ private:
     ImplToolBoxPrivateData*     mpData;
     std::vector<ImplToolSize> maFloatSizes;
     ImageList           maImageList;
-    Timer               maTimer;
+    Idle                maIdle;
     Rectangle           maUpperRect;
     Rectangle           maLowerRect;
     Rectangle           maOutDockRect;

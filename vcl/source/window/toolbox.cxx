@@ -1407,8 +1407,8 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnKeyModifier     = 0;
     mnActivateCount   = 0;
 
-    maTimer.SetTimeout( 50 );
-    maTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
+    maIdle.SetPriority( VCL_IDLE_PRIORITY_RESIZE );
+    maIdle.SetIdleHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
 
     // set timeout and handler for dropdown items
     mpData->maDropdownTimer.SetTimeout( 250 );

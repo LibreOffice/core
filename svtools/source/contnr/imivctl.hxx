@@ -165,7 +165,7 @@ class SvxIconChoiceCtrl_Impl
     Rectangle               aCurSelectionRect;
     std::vector<Rectangle*> aSelectedRectList;
     Idle                    aEditIdle;                 // for editing in place
-    Timer                   aAutoArrangeTimer;
+    Idle                    aAutoArrangeIdle;
     Timer                   aDocRectChangedTimer;
     Timer                   aVisRectChangedTimer;
     Idle                    aCallSelectHdlIdle;
