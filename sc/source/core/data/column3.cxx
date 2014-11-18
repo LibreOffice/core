@@ -374,13 +374,13 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
     return itRet;
 }
 
-void ScColumn::ActivateNewFormulaCell(
+void ScColumn::AttachNewFormulaCell(
     const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin )
 {
-    ActivateNewFormulaCell(maCells.position(itPos, nRow), rCell, bJoin);
+    AttachNewFormulaCell(maCells.position(itPos, nRow), rCell, bJoin);
 }
 
-void ScColumn::ActivateNewFormulaCell(
+void ScColumn::AttachNewFormulaCell(
     const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin )
 {
     if (bJoin)
@@ -1817,7 +1817,7 @@ void ScColumn::SetFormula( SCROW nRow, const ScTokenArray& rArray, formula::Form
 
     CellStorageModified();
 
-    ActivateNewFormulaCell(it, nRow, *pCell);
+    AttachNewFormulaCell(it, nRow, *pCell);
 }
 
 void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
@@ -1834,7 +1834,7 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
 
     CellStorageModified();
 
-    ActivateNewFormulaCell(it, nRow, *pCell);
+    AttachNewFormulaCell(it, nRow, *pCell);
 }
 
 ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
@@ -1848,7 +1848,7 @@ ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
 
     CellStorageModified();
 
-    ActivateNewFormulaCell(it, nRow, *pCell);
+    AttachNewFormulaCell(it, nRow, *pCell);
     return pCell;
 }
 
@@ -1864,7 +1864,7 @@ ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCR
 
     CellStorageModified();
 
-    ActivateNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell);
+    AttachNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell);
     return pCell;
 }
 
@@ -2324,7 +2324,7 @@ void ScColumn::SetError( SCROW nRow, const sal_uInt16 nError)
 
     CellStorageModified();
 
-    ActivateNewFormulaCell(it, nRow, *pCell);
+    AttachNewFormulaCell(it, nRow, *pCell);
 }
 
 void ScColumn::SetRawString( SCROW nRow, const OUString& rStr, bool bBroadcast )

@@ -626,8 +626,8 @@ private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
-    void ActivateNewFormulaCell( const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin = true );
-    void ActivateNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin = true );
+    void AttachNewFormulaCell( const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin = true );
+    void AttachNewFormulaCell( const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin = true );
     void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::CellStoreType::iterator& itr );
