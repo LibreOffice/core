@@ -44,6 +44,7 @@ class SalLayout;
 class ImplLayoutArgs;
 class Rectangle;
 class FontSubsetInfo;
+class OpenGLContext;
 class OutputDevice;
 class ServerFontLayout;
 struct SystemGraphicsData;
@@ -84,6 +85,9 @@ public:
     virtual                     ~SalGraphics();
 
     virtual SalGraphicsImpl*    GetImpl() const = 0;
+
+    /// Check that our mpImpl is OpenGL and return the context, otherwise NULL.
+    virtual OpenGLContext*      GetOpenGLContext() const;
 
     void                        setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
     bool                        getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }
