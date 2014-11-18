@@ -61,10 +61,13 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:DataDataPilotRun" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDraw"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataDataPilotRun" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FreezePanes" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>

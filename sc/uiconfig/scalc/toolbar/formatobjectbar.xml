@@ -58,13 +58,13 @@
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency" toolbar:tooltip="Format as Currency"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent" toolbar:tooltip="Format as Percent"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal" toolbar:tooltip="Format as Number"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:tooltip="Format as Date"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:tooltip="Format as Date" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:tooltip="Format as Scientific" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatIncDecimals"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecDecimals"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
