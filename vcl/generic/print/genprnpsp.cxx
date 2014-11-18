@@ -1278,7 +1278,7 @@ class PrinterUpdate
     static int    nActiveJobs;
 
     static void doUpdate();
-    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
+    static void UpdateTimerHdl( Timer* );
 public:
     static void update(SalGenericInstance &rInstance);
     static void jobStarted() { nActiveJobs++; }
@@ -1328,7 +1328,7 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
     {
         pPrinterUpdateTimer = new Timer();
         pPrinterUpdateTimer->SetTimeout( 500 );
-        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateTimer->timeoutSignal.connect(boost::bind( &PrinterUpdate::UpdateTimerHdl, this, _1 ));
         pPrinterUpdateTimer->Start();
     }
 }

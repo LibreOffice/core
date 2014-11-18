@@ -345,7 +345,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 }
 
-IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
+void Window::ImplTrackTimerHdl( Timer* pTimer )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -367,8 +367,6 @@ IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer )
                            mpWindowImpl->mpFrameData->mnMouseCode );
     TrackingEvent   aTEvt( aMEvt, TRACKING_REPEAT );
     Tracking( aTEvt );
-
-    return 0;
 }
 
 void Window::StartTracking( sal_uInt16 nFlags )
@@ -389,7 +387,7 @@ void Window::StartTracking( sal_uInt16 nFlags )
             pSVData->maWinData.mpTrackTimer->SetTimeout( GetSettings().GetMouseSettings().GetScrollRepeat() );
         else
             pSVData->maWinData.mpTrackTimer->SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
-        pSVData->maWinData.mpTrackTimer->SetTimeoutHdl( LINK( this, Window, ImplTrackTimerHdl ) );
+        pSVData->maWinData.mpTrackTimer->timeoutSignal.connect(boost::bind( &Window::ImplTrackTimerHdl, this, _1 ));
         pSVData->maWinData.mpTrackTimer->Start();
     }
 

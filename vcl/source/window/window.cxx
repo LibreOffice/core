@@ -1030,10 +1030,10 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         if (!ImplDoTiledRendering())
         {
             mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
-            mpWindowImpl->mpFrameData->maPaintIdle.SetIdleHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+            mpWindowImpl->mpFrameData->maPaintIdle.idleSignal.connect(boost::bind( &Window::ImplHandlePaintHdl, this, _1 ));
         }
         mpWindowImpl->mpFrameData->maResizeIdle.SetPriority( VCL_IDLE_PRIORITY_RESIZE );
-        mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
+        mpWindowImpl->mpFrameData->maResizeIdle.idleSignal.connect(boost::bind( &Window::ImplHandleResizeTimerHdl, this, _1 ));
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
 
         if ( pRealParent && IsTopWindow() )

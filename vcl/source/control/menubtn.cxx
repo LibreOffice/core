@@ -86,7 +86,7 @@ MenuButton::~MenuButton()
     delete mpOwnMenu;
 }
 
-IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
+void MenuButton::ImplMenuTimeoutHdl( Timer* )
 {
     // See if Button Tracking is still active, as it could've been cancelled earler
     if ( IsTracking() )
@@ -95,8 +95,6 @@ IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
             GrabFocus();
         ExecuteMenu();
     }
-
-    return 0;
 }
 
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
@@ -111,7 +109,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
             if ( !mpMenuTimer )
             {
                 mpMenuTimer = new Timer;
-                mpMenuTimer->SetTimeoutHdl( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
+                mpMenuTimer->timeoutSignal.connect( boost::bind( &MenuButton::ImplMenuTimeoutHdl, this, _1 ));
             }
 
             mpMenuTimer->SetTimeout( GetSettings().GetMouseSettings().GetActionDelay() );
