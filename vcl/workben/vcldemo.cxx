@@ -460,28 +460,19 @@ public:
             aBlockColor.Erase(COL_RED);
             BitmapEx aShadowStretch = BitmapEx(aBlockColor, aAlphaMask);
 
-#ifdef DEBUG
-            { // before - the pristine <n>x1 image
-                SvFileStream aStream("/tmp/myshadow.png", STREAM_WRITE);
-                vcl::PNGWriter aWriter(aShadowStretch);
-                aWriter.Write(aStream);
-            }
-#endif
+            Point aRenderPt(r.TopLeft());
+
+            long aSizes[] = { 200, 100, 200, 100, 50, 5, 2 };
+
             // and yes - we really do this in the page border rendering code ...
-            aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), 50),
-                                   BMP_SCALE_FAST);
-            aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), 800),
-                                   BMP_SCALE_FAST);
-#ifdef DEBUG
-            { // after the corrupted image full of fluff ...
-                SvFileStream aStream("/tmp/myshadow-50.png", STREAM_WRITE);
-                vcl::PNGWriter aWriter(aShadowStretch);
-                aWriter.Write(aStream);
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aSizes); i++)
+            {
+                aShadowStretch.Scale(Size(aShadowStretch.GetSizePixel().Width(), aSizes[i]),
+                                     BMP_SCALE_FAST);
+
+                rDev.DrawBitmapEx(aRenderPt, aShadowStretch);
+                aRenderPt.Move(aShadowStretch.GetSizePixel().Width() + 4, 0);
             }
-#endif
-            Point aRenderPt(r.Center());
-            aRenderPt.Move(-nSlice-1, 0);
-            rDev.DrawBitmapEx(aRenderPt, aShadowStretch);
 
             AlphaMask aWholeMask(aPageShadowMask.GetBitmap());
             aBlockColor = Bitmap(aPageShadowMask.GetSizePixel(), 24);
