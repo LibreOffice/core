@@ -153,6 +153,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpDriverVersionMax, "opencldriverversionmax");
     get(mpListNewButton, "listbox-new");
     get(mpListDeleteButton, "listbox-delete");
+    get(mpTestButton, "test");
     get(mpOpenclInfoList, "opencl_list");
     get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
     get(mpBtnAutomaticSelectionFalse, "automatic_select_false");
@@ -227,6 +228,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
     mpListNewButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, ListNewClickHdl));
     mpListDeleteButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, ListDeleteClickHdl));
+
+    mpTestButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, TestClickHdl));
 
     aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
     mpBtnTrue->SetToggleHdl(aLink); // Set handler only to the 'True' button.
@@ -948,6 +951,14 @@ IMPL_LINK( ScCalcOptionsDialog, ListDeleteClickHdl, PushButton*, )
     rSet.erase(rImpl);
     fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
 #endif
+    return 0;
+}
+
+IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
+{
+    // Automatically test the current implementation of OpenCL. If it
+    // seems good, whitelist it. If it seems bad, blacklist it.
+
     return 0;
 }
 

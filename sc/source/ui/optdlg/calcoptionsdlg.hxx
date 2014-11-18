@@ -43,6 +43,7 @@ public:
     DECL_LINK( OpenCLWhiteAndBlackListSelHdl, Control* );
     DECL_LINK( ListNewClickHdl, PushButton* );
     DECL_LINK( ListDeleteClickHdl, PushButton* );
+    DECL_LINK( TestClickHdl, PushButton* );
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 
@@ -86,6 +87,7 @@ private:
     Edit* mpDriverVersionMax;
     PushButton* mpListNewButton;
     PushButton* mpListDeleteButton;
+    PushButton* mpTestButton;
 
     FixedText* mpFtAnnotation;
     FixedText* mpFtFrequency;
