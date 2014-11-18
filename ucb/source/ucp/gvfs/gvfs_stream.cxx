@@ -19,6 +19,7 @@
 
 #include "gvfs_stream.hxx"
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <cppuhelper/queryinterface.hxx>
 
 #include <libgnomevfs/gnome-vfs-ops.h>
 
