@@ -156,26 +156,21 @@ static char* platformSpecific(void)
         strcpy( file, dir );
         strcat( file, APPENDIX );
 
-        /* check existence of soffice file */
-        if ( !access( file, F_OK ) )
+        /* resolve symbolic link */
+        resolved = realpath( file, buffer );
+        if ( resolved != NULL )
         {
-            /* resolve symbolic link */
-            resolved = realpath( file, buffer );
+            /* get path to program directory */
+            sep = strrchr( resolved, SEPARATOR );
 
-            if ( resolved != NULL )
+            if ( sep != NULL )
             {
-                /* get path to program directory */
-                sep = strrchr( resolved, SEPARATOR );
-
-                if ( sep != NULL )
-                {
-                    pos = sep - resolved;
-                    path = (char*) malloc( pos + 1 );
-                    strncpy( path, resolved, pos );
-                    path[ pos ] = '\0';
-                    free( file );
-                    break;
-                }
+                pos = sep - resolved;
+                path = (char*) malloc( pos + 1 );
+                strncpy( path, resolved, pos );
+                path[ pos ] = '\0';
+                free( file );
+                break;
             }
         }
 
