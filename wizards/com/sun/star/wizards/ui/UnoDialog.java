@@ -62,7 +62,7 @@ public class UnoDialog implements EventNames
         return guiEventListener;
     }
 
-    public UnoDialog(XMultiServiceFactory xMSF, String[] PropertyNames, Object[] PropertyValues)
+    public UnoDialog(XMultiServiceFactory xMSF)
     {
         try
         {
@@ -70,7 +70,7 @@ public class UnoDialog implements EventNames
             ControlList = new HashMap<String, Integer>();
             xDialogModel = (XInterface) xMSF.createInstance("com.sun.star.awt.UnoControlDialogModel");
             XMultiPropertySet xMultiPSetDlg = UnoRuntime.queryInterface(XMultiPropertySet.class, xDialogModel);
-            xMultiPSetDlg.setPropertyValues(PropertyNames, PropertyValues);
+            xMultiPSetDlg.setPropertyValues(new String[0], new Object[0]);
             MSFDialogModel = UnoRuntime.queryInterface(XMultiServiceFactory.class, xDialogModel);
             xUnoDialog = (XInterface) xMSF.createInstance("com.sun.star.awt.UnoControlDialog");
             xControl = UnoRuntime.queryInterface(XControl.class, xUnoDialog);

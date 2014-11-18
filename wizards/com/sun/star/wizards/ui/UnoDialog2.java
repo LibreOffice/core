@@ -40,11 +40,7 @@ public class UnoDialog2 extends UnoDialog
 
     public UnoDialog2(XMultiServiceFactory xmsf)
     {
-        super(xmsf, new String[]
-                {
-                }, new Object[]
-                {
-                });
+        super(xmsf);
     }
 
     public XButton insertButton(String sName, String actionPerformed, Object eventTarget, String[] sPropNames, Object[] oPropValues)
