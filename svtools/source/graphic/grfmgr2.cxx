@@ -210,7 +210,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
     // calc max allowed cache size
     const sal_uLong nMaxCacheSize(::std::min(GetMaxCacheSize(), aMaxSize32Bit));
 
-    if(mnUsedSize >= nMaxCacheSize)
+    if(mnUsedSize > nMaxCacheSize)
     {
         // Copy the object list for now, because maObjList can change in the meantime unexpectedly.
         std::vector< GraphicObject* > aCandidates(maObjList.begin(), maObjList.end());
