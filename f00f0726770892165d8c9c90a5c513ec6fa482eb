@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5afe65bd_94d5f2ba",
+        "filename": "sw/inc/unocrsrhelper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2014-11-18T01:26:54Z",
+      "side": 1,
+      "message": "boost::ptr_map is better for SwAnyMapHelper\u0027s nature.",
+      "revId": "f00f0726770892165d8c9c90a5c513ec6fa482eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
