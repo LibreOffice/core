@@ -38,9 +38,7 @@ class GraphicObjectTest: public test::BootstrapFixture, public unotest::MacrosTe
 {
 
 public:
-#if 0
     void testSwap();
-#endif
     void testSizeBasedAutoSwap();
 
 
@@ -52,17 +50,14 @@ public:
     }
 
 private:
-#if 0
     DECL_LINK(getLinkStream, GraphicObject*);
-#endif
 
 private:
     CPPUNIT_TEST_SUITE(GraphicObjectTest);
+    CPPUNIT_TEST(testSwap);
     CPPUNIT_TEST(testSizeBasedAutoSwap);
     CPPUNIT_TEST_SUITE_END();
 };
-
-#if 0
 
 static const char aGraphicFile[] = "/svtools/qa/unit/data/graphic.png";
 static const sal_uLong nGraphicSizeBytes = 4800;
@@ -146,8 +141,6 @@ void GraphicObjectTest::testSwap()
         CPPUNIT_ASSERT_EQUAL(nGraphicSizeBytes, aGraphObj2.GetGraphic().GetSizeBytes());
     }
 }
-
-#endif
 
 void GraphicObjectTest::testSizeBasedAutoSwap()
 {
