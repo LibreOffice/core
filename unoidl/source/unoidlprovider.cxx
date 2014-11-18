@@ -630,7 +630,9 @@ rtl::Reference< Entity > readEntity(
                 throw FileFormatException(
                     file->uri, "UNOIDL format: too many items in module");
             }
-            if (offset + 5 + 8 * n > file->size) { //TODO: overflow
+            if (sal_uInt64(offset) + 5 + 8 * sal_uInt64(n) > file->size)
+                // cannot overflow
+            {
                 throw FileFormatException(
                     file->uri,
                     "UNOIDL format: module map offset + size too large");
@@ -954,7 +956,9 @@ rtl::Reference< Entity > readEntity(
                     file->uri,
                     "UNOIDL format: too many constants in constant group");
             }
-            if (offset + 5 + 8 * n > file->size) { //TODO: overflow
+            if (sal_uInt64(offset) + 5 + 8 * sal_uInt64(n) > file->size)
+                // cannot overflow
+            {
                 throw FileFormatException(
                     file->uri,
                     ("UNOIDL format: constant group map offset + size too"
@@ -1237,7 +1241,9 @@ rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
             }
         }
         mapSize = file_->read32(off + 1);
-        if (8 * mapSize > file_->size - off - 5) { //TODO: overflow
+        if (sal_uInt64(off) + 5 + 8 * sal_uInt64(mapSize) > file_->size)
+            // cannot overflow
+        {
             throw FileFormatException(
                 file_->uri, "UNOIDL format: map offset + size too large");
         }
