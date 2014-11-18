@@ -2404,10 +2404,9 @@ void Edit::UpdateData()
     maUpdateDataHdl.Call( this );
 }
 
-IMPL_LINK_NOARG(Edit, ImplUpdateDataHdl)
+void Edit::ImplUpdateDataHdl( Timer* )
 {
     UpdateData();
-    return 0;
 }
 
 void Edit::EnableUpdateData( sal_uLong nTimeout )
@@ -2419,7 +2418,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
         if ( !mpUpdateDataTimer )
         {
             mpUpdateDataTimer = new Timer;
-            mpUpdateDataTimer->SetTimeoutHdl( LINK( this, Edit, ImplUpdateDataHdl ) );
+            mpUpdateDataTimer->timeoutSignal.connect(boost::bind( &Edit::ImplUpdateDataHdl, this, _1 ));
         }
 
         mpUpdateDataTimer->SetTimeout( nTimeout );

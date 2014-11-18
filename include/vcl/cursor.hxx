@@ -36,6 +36,8 @@ namespace vcl { class Window; }
 namespace vcl
 {
 
+class Timer;
+
 class VCL_DLLPUBLIC Cursor
 {
 private:
@@ -52,7 +54,7 @@ private:
 public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
-    DECL_DLLPRIVATE_LINK(       ImplTimerHdl, void* );
+    SAL_DLLPRIVATE void         ImplTimerHdl( Timer* );
     SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true );
     SAL_DLLPRIVATE void         ImplHide( bool bStopTimer );
     SAL_DLLPRIVATE void         ImplResume( bool bRestore = false );

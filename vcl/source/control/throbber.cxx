@@ -51,7 +51,7 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style, const ImageSet
     ,meImageSet( i_imageSet )
 {
     maWaitTimer.SetTimeout( mnStepTime );
-    maWaitTimer.SetTimeoutHdl( LINK( this, Throbber, TimeOutHdl ) );
+    maWaitTimer.timeoutSignal( boost::bind( &Throbber::TimeOutHdl, this, _1 ));
 
     SetScaleMode( ImageScaleMode::NONE );
     initImages();
@@ -233,7 +233,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     return aImageURLs;
 }
 
-IMPL_LINK_NOARG(Throbber, TimeOutHdl)
+void Throbber::TimeOutHdl( Timer* )
 {
     SolarMutexGuard aGuard;
     if ( maImageList.empty() )
@@ -255,8 +255,6 @@ IMPL_LINK_NOARG(Throbber, TimeOutHdl)
     }
 
     SetImage( maImageList[ mnCurStep ] );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,16 +58,18 @@ class ImplDockFloatWin : public FloatingWindow
 {
 private:
     DockingWindow*  mpDockWin;
-    sal_uLong           mnLastTicks;
+    sal_uLong       mnLastTicks;
     Timer           maDockTimer;
     Point           maDockPos;
     Rectangle       maDockRect;
     bool            mbInMove;
     ImplSVEvent *   mnLastUserEvent;
 
-    DECL_LINK(DockingHdl, void *);
-    DECL_LINK(DockTimerHdl, void *);
+                    DECL_LINK(DockingHdl, void *);
+    void            DockTimerHdl( Timer* );
+
 public:
+
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
     virtual ~ImplDockFloatWin();
@@ -103,7 +105,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
 
     SetBackground();
 
-    maDockTimer.SetTimeoutHdl( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
+    maDockTimer.timeoutSignal.connect(boost::bind( &ImplDockFloatWin::DockTimerHdl, this, _1 ));
     maDockTimer.SetTimeout( 50 );
 }
 
@@ -113,7 +115,7 @@ ImplDockFloatWin::~ImplDockFloatWin()
         Application::RemoveUserEvent( mnLastUserEvent );
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
+void ImplDockFloatWin::DockTimerHdl( Timer* )
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -138,8 +140,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
         mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
         maDockTimer.Start();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
@@ -166,7 +166,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
         if( ! bFloatMode )
         {
             mpDockWin->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_OBJECT | SHOWTRACK_WINDOW );
-            DockTimerHdl( this );
+            DockTimerHdl( NULL );
         }
         else
         {

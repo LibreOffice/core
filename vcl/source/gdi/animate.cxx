@@ -69,7 +69,7 @@ Animation::Animation() :
     mbLoopTerminated    ( false ),
     mbIsWaiting         ( false )
 {
-    maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
+    maTimer.timeoutSignal.connect(boost::bind( &Animation::ImplTimeoutHdl, this, _1 ));
 }
 
 Animation::Animation( const Animation& rAnimation ) :
@@ -86,7 +86,7 @@ Animation::Animation( const Animation& rAnimation ) :
     for( size_t i = 0, nCount = rAnimation.maList.size(); i < nCount; i++ )
         maList.push_back( new AnimationBitmap( *rAnimation.maList[ i ] ) );
 
-    maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
+    maTimer.timeoutSignal.connect(boost::bind( &Animation::ImplTimeoutHdl, this, _1 ));
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
 }
 
@@ -353,7 +353,7 @@ void Animation::ImplRestartTimer( sal_uLong nTimeout )
 
 typedef ::std::vector< AInfo* > AInfoList_impl;
 
-IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
+void Animation::ImplTimeoutHdl( Timer* )
 {
     const size_t nAnimCount = maList.size();
     AInfoList_impl aAInfoList;

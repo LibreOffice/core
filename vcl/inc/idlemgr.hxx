@@ -43,8 +43,7 @@ public:
     void            RestartIdler()
                         { if ( maTimer.IsActive() ) maTimer.Start(); }
 
-                    // Timer* kann auch NULL sein
-                    DECL_LINK(TimeoutHdl, void *);
+    void            TimeoutHdl( ImplIdleMgr* );
 };
 
 #endif // INCLUDED_VCL_INC_IDLEMGR_HXX

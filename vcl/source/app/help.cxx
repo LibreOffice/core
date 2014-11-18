@@ -283,8 +283,8 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
         pSVData->maHelpData.mbKeyboardHelp = true;
 
     const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
-    maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
-    maHideTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
+    maShowTimer.timeoutSignal.connect( boost::bind( &HelpTextWindow::TimerHdl, this, _1 ));
+    maHideTimer.timeoutSignal.connect( boost::bind( &HelpTextWindow::TimerHdl, this, _1 ));
     maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
 }
 
@@ -418,7 +418,7 @@ void HelpTextWindow::ShowHelp( sal_uInt16 nDelayMode )
     maShowTimer.Start();
 }
 
-IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
+void HelpTextWindow::TimerHdl(Timer* pTimer)
 {
     if ( pTimer == &maShowTimer )
     {
@@ -436,8 +436,6 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
         DBG_ASSERT( pTimer == &maHideTimer, "HelpTextWindow::TimerHdl with bad Timer" );
           ImplDestroyHelpWindow( true );
     }
-
-    return 1;
 }
 
 Size HelpTextWindow::CalcOutSize() const
