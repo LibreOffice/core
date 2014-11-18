@@ -58,6 +58,7 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) SAL_OVERRIDE;
     virtual bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
+    virtual bool            Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) SAL_OVERRIDE;
 
     static sal_uInt32 getBitCountFromScanlineFormat( basebmp::Format nFormat );

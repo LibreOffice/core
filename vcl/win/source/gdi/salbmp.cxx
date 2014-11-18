@@ -1076,6 +1076,11 @@ bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
     return bRet;
 }
 
+bool WinSalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
+{
+    return false;
+}
+
 bool WinSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
 {
     return false;
