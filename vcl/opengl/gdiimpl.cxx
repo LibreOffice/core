@@ -37,8 +37,9 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-#define GL_ATTRIB_POS 0
-#define GL_ATTRIB_TEX 1
+#define GL_ATTRIB_POS  0
+#define GL_ATTRIB_TEX  1
+#define GL_ATTRIB_TEX2 2
 
 #define glUniformColor(nUniform, nColor, nTransparency)    \
     glUniform4f( nUniform,                                 \
@@ -86,6 +87,10 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     , mnMaskedTextureProgram(0)
     , mnMaskedSamplerUniform(0)
     , mnMaskSamplerUniform(0)
+    , mnBlendedTextureProgram(0)
+    , mnBlendedTextureUniform(0)
+    , mnBlendedMaskUniform(0)
+    , mnBlendedAlphaUniform(0)
     , mnMaskProgram(0)
     , mnMaskUniform(0)
     , mnMaskColorUniform(0)
@@ -394,6 +399,23 @@ bool OpenGLSalGraphicsImpl::CreateTransformedMaskedTextureProgram( void )
     mnTransformedMaskedTransformUniform = glGetUniformLocation( mnTransformedMaskedTextureProgram, "transform" );
     mnTransformedMaskedSamplerUniform = glGetUniformLocation( mnTransformedMaskedTextureProgram, "sampler" );
     mnTransformedMaskedMaskUniform = glGetUniformLocation( mnTransformedMaskedTextureProgram, "mask" );
+
+    CHECK_GL_ERROR();
+    return true;
+}
+
+bool OpenGLSalGraphicsImpl::CreateBlendedTextureProgram( void )
+{
+    mnBlendedTextureProgram = OpenGLHelper::LoadShaders( "blendedTextureVertexShader", "blendedTextureFragmentShader" );
+    if( mnBlendedTextureProgram == 0 )
+        return false;
+
+    glBindAttribLocation( mnBlendedTextureProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnBlendedTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    glBindAttribLocation( mnBlendedTextureProgram, GL_ATTRIB_TEX2, "alpha_coord_in" );
+    mnBlendedTextureUniform = glGetUniformLocation( mnBlendedTextureProgram, "sampler" );
+    mnBlendedMaskUniform = glGetUniformLocation( mnBlendedTextureProgram, "mask" );
+    mnBlendedAlphaUniform = glGetUniformLocation( mnBlendedTextureProgram, "alpha" );
 
     CHECK_GL_ERROR();
     return true;
@@ -844,6 +866,50 @@ void OpenGLSalGraphicsImpl::DrawTextureWithMask( OpenGLTexture& rTexture, OpenGL
     rMask.Unbind();
     glActiveTexture( GL_TEXTURE0 );
     rTexture.Unbind();
+    glUseProgram( 0 );
+
+    CHECK_GL_ERROR();
+}
+
+void OpenGLSalGraphicsImpl::DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry )
+{
+    GLfloat aTexCoord[8];
+
+    if( mnBlendedTextureProgram == 0 )
+    {
+        if( !CreateBlendedTextureProgram() )
+            return;
+    }
+
+    glUseProgram( mnBlendedTextureProgram );
+    glUniform1i( mnBlendedTextureUniform, 0 );
+    glUniform1i( mnBlendedMaskUniform, 1 );
+    glUniform1i( mnBlendedAlphaUniform, 2 );
+    glActiveTexture( GL_TEXTURE0 );
+    rTexture.Bind();
+    glActiveTexture( GL_TEXTURE1 );
+    rMask.Bind();
+    glActiveTexture( GL_TEXTURE2 );
+    rAlpha.Bind();
+
+    rAlpha.GetCoord( aTexCoord, rPosAry );
+    glEnableVertexAttribArray( GL_ATTRIB_TEX2 );
+    glVertexAttribPointer( GL_ATTRIB_TEX2, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
+
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    DrawTextureRect( rTexture, rPosAry );
+    glDisable( GL_BLEND );
+
+    glDisableVertexAttribArray( GL_ATTRIB_TEX2 );
+
+    glActiveTexture( GL_TEXTURE0 );
+    rTexture.Unbind();
+    glActiveTexture( GL_TEXTURE1 );
+    rMask.Unbind();
+    glActiveTexture( GL_TEXTURE2 );
+    rAlpha.Unbind();
+    glActiveTexture( GL_TEXTURE0 );
     glUseProgram( 0 );
 
     CHECK_GL_ERROR();
@@ -1473,6 +1539,43 @@ bool OpenGLSalGraphicsImpl::drawEPS(
             sal_uLong /*nSize*/ )
 {
     return false;
+}
+
+bool OpenGLSalGraphicsImpl::blendBitmap(
+            const SalTwoRect& rPosAry,
+            const SalBitmap& rSalBitmap )
+{
+    const OpenGLSalBitmap& rBitmap = static_cast<const OpenGLSalBitmap&>(rSalBitmap);
+    OpenGLTexture& rTexture( rBitmap.GetTexture() );
+
+    SAL_INFO( "vcl.opengl", "::blendBitmap" );
+    PreDraw();
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_ZERO, GL_SRC_COLOR );
+    DrawTexture( rTexture, rPosAry );
+    glDisable( GL_BLEND );
+    PostDraw();
+    return true;
+}
+
+bool OpenGLSalGraphicsImpl::blendAlphaBitmap(
+            const SalTwoRect& rPosAry,
+            const SalBitmap& rSalSrcBitmap,
+            const SalBitmap& rSalMaskBitmap,
+            const SalBitmap& rSalAlphaBitmap )
+{
+    const OpenGLSalBitmap& rSrcBitmap = static_cast<const OpenGLSalBitmap&>(rSalSrcBitmap);
+    const OpenGLSalBitmap& rMaskBitmap = static_cast<const OpenGLSalBitmap&>(rSalMaskBitmap);
+    const OpenGLSalBitmap& rAlphaBitmap = static_cast<const OpenGLSalBitmap&>(rSalAlphaBitmap);
+    OpenGLTexture& rTexture( rSrcBitmap.GetTexture() );
+    OpenGLTexture& rMask( rMaskBitmap.GetTexture() );
+    OpenGLTexture& rAlpha( rAlphaBitmap.GetTexture() );
+
+    SAL_INFO( "vcl.opengl", "::blendAlphaBitmap" );
+    PreDraw();
+    DrawBlendedTexture( rTexture, rMask, rAlpha, rPosAry );
+    PostDraw();
+    return true;
 }
 
 /** Render bitmap with alpha channel

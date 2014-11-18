@@ -225,6 +225,18 @@ public:
                 void* pPtr,
                 sal_uLong nSize ) SAL_OVERRIDE;
 
+    /** Blend bitmap with color channels */
+    virtual bool blendBitmap(
+                const SalTwoRect&,
+                const SalBitmap& rBitmap ) SAL_OVERRIDE;
+
+    /** Render bitmap by blending using the mask and alpha channel */
+    virtual bool blendAlphaBitmap(
+                const SalTwoRect&,
+                const SalBitmap& rSrcBitmap,
+                const SalBitmap& rMaskBitmap,
+                const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
+
     /** Render bitmap with alpha channel
 
         @param rSourceBitmap

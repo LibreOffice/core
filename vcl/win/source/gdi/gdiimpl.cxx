@@ -2252,6 +2252,22 @@ bool WinSalGraphicsImpl::tryDrawBitmapGdiPlus(const SalTwoRect& rTR, const SalBi
     return false;
 }
 
+bool WinSalGraphicsImpl::blendBitmap(
+    const SalTwoRect&,
+    const SalBitmap&)
+{
+    return false;
+}
+
+bool WinSalGraphicsImpl::blendAlphaBitmap(
+    const SalTwoRect&,
+    const SalBitmap&,
+    const SalBitmap&,
+    const SalBitmap&)
+{
+    return false;
+}
+
 bool WinSalGraphicsImpl::drawAlphaBitmap(
     const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap,
