@@ -549,7 +549,7 @@ public:
         mrDoc.EndListeningFormulaCells(maFormulaCells);
     }
 
-    const sc::SingleColumnSpanSet& getSpans() const
+    sc::SingleColumnSpanSet& getSpans()
     {
         return maDeleteRanges;
     }
@@ -559,7 +559,6 @@ class EmptyCells
 {
     ScColumn& mrColumn;
     sc::ColumnBlockPosition& mrPos;
-    sc::ColumnSpanSet* mpCellSpans;
 
     void splitFormulaGrouping(const sc::CellStoreType::position_type& rPos)
     {
@@ -571,8 +570,8 @@ class EmptyCells
     }
 
 public:
-    EmptyCells( sc::ColumnBlockPosition& rPos, ScColumn& rColumn, sc::ColumnSpanSet* pCellSpans ) :
-        mrColumn(rColumn), mrPos(rPos), mpCellSpans(pCellSpans) {}
+    EmptyCells( sc::ColumnBlockPosition& rPos, ScColumn& rColumn ) :
+        mrColumn(rColumn), mrPos(rPos) {}
 
     void operator() (const sc::RowSpan& rSpan)
     {
@@ -587,9 +586,6 @@ public:
 
         mrPos.miCellPos = rCells.set_empty(mrPos.miCellPos, rSpan.mnRow1, rSpan.mnRow2);
         mrPos.miCellTextAttrPos = mrColumn.GetCellAttrStore().set_empty(mrPos.miCellTextAttrPos, rSpan.mnRow1, rSpan.mnRow2);
-
-        if (mpCellSpans)
-            mpCellSpans->set(mrColumn.GetTab(), mrColumn.GetCol(), rSpan.mnRow1, rSpan.mnRow2, true);
     }
 };
 
@@ -597,7 +593,7 @@ public:
 
 void ScColumn::DeleteCells(
     sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag,
-    std::vector<SCROW>& rDeleted, sc::ColumnSpanSet* pDeletedSpans )
+    sc::SingleColumnSpanSet& rDeleted )
 {
     // Determine which cells to delete based on the deletion flags.
     DeleteAreaHandler aFunc(*pDocument, nDelFlag);
@@ -605,17 +601,15 @@ void ScColumn::DeleteCells(
     sc::ProcessBlock(itPos, maCells, aFunc, nRow1, nRow2);
     aFunc.endFormulas(); // Have the formula cells stop listening.
 
-    std::vector<SCROW> aDeletedRows;
-    aFunc.getSpans().getRows(aDeletedRows);
-    std::copy(aDeletedRows.begin(), aDeletedRows.end(), std::back_inserter(rDeleted));
-
     // Get the deletion spans.
     sc::SingleColumnSpanSet::SpansType aSpans;
     aFunc.getSpans().getSpans(aSpans);
 
     // Delete the cells for real.
-    std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(rBlockPos, *this, pDeletedSpans));
+    std::for_each(aSpans.begin(), aSpans.end(), EmptyCells(rBlockPos, *this));
     CellStorageModified();
+
+    aFunc.getSpans().swap(rDeleted);
 }
 
 void ScColumn::DeleteArea(
@@ -628,13 +622,23 @@ void ScColumn::DeleteArea(
         nContMask |= IDF_NOCAPTIONS;
     InsertDeleteFlags nContFlag = nDelFlag & nContMask;
 
-    std::vector<SCROW> aDeletedRows;
+    sc::SingleColumnSpanSet aDeletedRows;
 
     sc::ColumnBlockPosition aBlockPos;
     InitBlockPosition(aBlockPos);
 
     if (!IsEmptyData() && nContFlag)
-        DeleteCells(aBlockPos, nStartRow, nEndRow, nDelFlag, aDeletedRows, pBroadcastSpans);
+    {
+        DeleteCells(aBlockPos, nStartRow, nEndRow, nDelFlag, aDeletedRows);
+        if (pBroadcastSpans)
+        {
+            sc::SingleColumnSpanSet::SpansType aSpans;
+            aDeletedRows.getSpans(aSpans);
+            sc::SingleColumnSpanSet::SpansType::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+            for (; it != itEnd; ++it)
+                pBroadcastSpans->set(nTab, nCol, it->mnRow1, it->mnRow2, true);
+        }
+    }
 
     if (nDelFlag & IDF_NOTE)
         DeleteCellNotes(aBlockPos, nStartRow, nEndRow);
@@ -655,7 +659,9 @@ void ScColumn::DeleteArea(
     {
         // Broadcast on only cells that were deleted; no point broadcasting on
         // cells that were already empty before the deletion.
-        BroadcastCells(aDeletedRows, SC_HINT_DATACHANGED);
+        std::vector<SCROW> aRows;
+        aDeletedRows.getRows(aRows);
+        BroadcastCells(aRows, SC_HINT_DATACHANGED);
     }
 }
 

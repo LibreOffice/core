@@ -652,7 +652,7 @@ private:
 
     void DeleteCells(
         sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag,
-        std::vector<SCROW>& rDeleted, sc::ColumnSpanSet* pDeletedSpans = NULL );
+        sc::SingleColumnSpanSet& rDeleted );
 
     /**
      * Get all non-grouped formula cells and formula cell groups in the whole
