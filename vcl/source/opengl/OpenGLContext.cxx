@@ -29,8 +29,11 @@
 
 using namespace com::sun::star;
 
+// TODO use rtl::Static instead of 'static'
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
-static std::vector< GLXContext > vShareList;
+static std::vector<GLXContext> vShareList;
+#elif defined(WNT)
+static std::vector<HGLRC> vShareList;
 #endif
 
 GLWindow::~GLWindow()
@@ -58,6 +61,8 @@ OpenGLContext::~OpenGLContext()
 #if defined( WNT )
     if (m_aGLWin.hRC)
     {
+        vShareList.erase(std::remove(vShareList.begin(), vShareList.end(), m_aGLWin.hRC));
+
         wglMakeCurrent( m_aGLWin.hDC, 0 );
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
@@ -655,13 +660,13 @@ bool OpenGLContext::ImplInit()
 
         if (best_fbc != -1)
         {
-            int nContextAttribs[] =
+            int pContextAttribs[] =
             {
                 GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
                 GLX_CONTEXT_MINOR_VERSION_ARB, 2,
                 None
             };
-            m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], pSharedCtx, GL_TRUE, nContextAttribs);
+            m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], pSharedCtx, GL_TRUE, pContextAttribs);
             SAL_INFO_IF(m_aGLWin.ctx, "vcl.opengl", "created a 3.2 core context");
         }
         else
@@ -825,7 +830,7 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-    m_aGLWin.hRC = wglCreateContext(m_aGLWin.hDC);
+    HGLRC hTempRC = wglCreateContext(m_aGLWin.hDC);
     if (m_aGLWin.hRC == NULL)
     {
         ImplWriteLastError(GetLastError(), "wglCreateContext in OpenGLContext::ImplInit");
@@ -833,19 +838,48 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-    if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
+    if (!wglMakeCurrent(m_aGLWin.hDC, hTempRC))
     {
         ImplWriteLastError(GetLastError(), "wglMakeCurrent in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
         return false;
     }
 
+    if (!InitGLEW())
+        return false;
+
+    HGLRC hSharedCtx = 0;
+    if (!vShareList.empty())
+        hSharedCtx = vShareList.front();
+
+    // now setup the shared context; this needs a temporary context already
+    // set up in order to work
+    m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, NULL);
+    if (m_aGLWin.hRC == 0)
+    {
+        ImplWriteLastError(GetLastError(), "wglCreateContextAttribsARB in OpenGLContext::ImplInit");
+        SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed");
+        return false;
+    }
+
+    wglMakeCurrent(NULL, NULL);
+    wglDeleteContext(hTempRC);
+
+    if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
+    {
+        ImplWriteLastError(GetLastError(), "wglMakeCurrent (with shared context) in OpenGLContext::ImplInit");
+        SAL_WARN("vcl.opengl", "wglMakeCurrent failed");
+        return false;
+    }
+
+    vShareList.push_back(m_aGLWin.hRC);
+
     RECT clientRect;
     GetClientRect(WindowFromDC(m_aGLWin.hDC), &clientRect);
     m_aGLWin.Width = clientRect.right - clientRect.left;
     m_aGLWin.Height = clientRect.bottom - clientRect.top;
 
-    return InitGLEW();
+    return true;
 }
 
 #elif defined( MACOSX )
