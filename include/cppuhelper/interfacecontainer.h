@@ -23,6 +23,7 @@
 
 #include <functional>
 #include <vector>
+#include <utility>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

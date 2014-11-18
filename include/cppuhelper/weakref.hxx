@@ -19,6 +19,7 @@
 #ifndef INCLUDED_CPPUHELPER_WEAKREF_HXX
 #define INCLUDED_CPPUHELPER_WEAKREF_HXX
 
+#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <cppuhelper/cppuhelperdllapi.h>
 

@@ -22,7 +22,9 @@
 
 #include <osl/profile.h>
 #include <rtl/ustring.hxx>
+
 #include <string.h>
+#include <exception>
 #include <list>
 
 namespace osl {

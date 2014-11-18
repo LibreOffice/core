@@ -26,6 +26,7 @@
 
 #include <cassert>
 
+#include <sal/log.hxx>
 #include <osl/time.h>
 #include <rtl/ustring.hxx>
 

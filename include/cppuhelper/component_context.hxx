@@ -20,7 +20,11 @@
 #define INCLUDED_CPPUHELPER_COMPONENT_CONTEXT_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/cppuhelperdllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 
 namespace cppu
