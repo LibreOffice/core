@@ -821,6 +821,18 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
         XFreePixmap( pXDisp, aBG );
 }
 
+bool X11SalGraphicsImpl::blendBitmap( const SalTwoRect&,
+    const SalBitmap& )
+{
+    return false;
+}
+
+bool X11SalGraphicsImpl::blendAlphaBitmap( const SalTwoRect&,
+    const SalBitmap&, const SalBitmap&, const SalBitmap& )
+{
+    return false;
+}
+
 bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
 {

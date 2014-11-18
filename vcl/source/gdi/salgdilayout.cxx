@@ -762,6 +762,36 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
                                                 rNativeBoundingRegion, rNativeContentRegion );
 }
 
+bool SalGraphics::BlendBitmap( const SalTwoRect& rPosAry,
+                               const SalBitmap& rBitmap,
+                               const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
+    {
+        SalTwoRect aPosAry2 = rPosAry;
+        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
+        return blendBitmap( aPosAry2, rBitmap );
+    }
+    else
+        return blendBitmap( rPosAry, rBitmap );
+}
+
+bool SalGraphics::BlendAlphaBitmap( const SalTwoRect& rPosAry,
+                                    const SalBitmap& rSrcBitmap,
+                                    const SalBitmap& rMaskBitmap,
+                                    const SalBitmap& rAlphaBitmap,
+                                    const OutputDevice *pOutDev )
+{
+    if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) || (pOutDev && pOutDev->IsRTLEnabled()) )
+    {
+        SalTwoRect aPosAry2 = rPosAry;
+        mirror( aPosAry2.mnDestX, aPosAry2.mnDestWidth, pOutDev );
+        return blendAlphaBitmap( aPosAry2, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
+    }
+    else
+        return blendAlphaBitmap( rPosAry, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
+}
+
 bool SalGraphics::DrawAlphaBitmap( const SalTwoRect& rPosAry,
                                    const SalBitmap& rSourceBitmap,
                                    const SalBitmap& rAlphaBitmap,

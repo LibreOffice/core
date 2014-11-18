@@ -167,6 +167,20 @@ void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
     mpImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, n );
 }
 
+bool X11SalGraphics::blendBitmap( const SalTwoRect& rTR,
+                                  const SalBitmap& rBitmap )
+{
+    return mpImpl->blendBitmap( rTR, rBitmap );
+}
+
+bool X11SalGraphics::blendAlphaBitmap( const SalTwoRect& rTR,
+                                       const SalBitmap& rSrcBitmap,
+                                       const SalBitmap& rMaskBitmap,
+                                       const SalBitmap& rAlphaBitmap )
+{
+    return mpImpl->blendAlphaBitmap( rTR, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
+}
+
 void X11SalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
     mpImpl->drawBitmap( rPosAry, rSalBitmap );

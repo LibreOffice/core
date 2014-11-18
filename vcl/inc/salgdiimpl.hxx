@@ -164,6 +164,16 @@ public:
                 void* pPtr,
                 sal_uLong nSize ) = 0;
 
+    virtual bool blendBitmap(
+                const SalTwoRect&,
+                const SalBitmap& rBitmap ) = 0;
+
+    virtual bool blendAlphaBitmap(
+                const SalTwoRect&,
+                const SalBitmap& rSrcBitmap,
+                const SalBitmap& rMaskBitmap,
+                const SalBitmap& rAlphaBitmap ) = 0;
+
     /** Render bitmap with alpha channel
 
         @param rSourceBitmap

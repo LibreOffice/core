@@ -1410,6 +1410,10 @@ private:
                                     const Point& rSrcPtPixel,
                                     const Size& rSrcSizePixel );
 
+    SAL_DLLPRIVATE bool         BlendBitmap(
+                                    const SalTwoRect&   rPosAry,
+                                    const Bitmap&       rBmp );
+
     SAL_DLLPRIVATE Bitmap       BlendBitmap(
                                     Bitmap&             aBmp,
                                     BitmapReadAccess*   pP,
