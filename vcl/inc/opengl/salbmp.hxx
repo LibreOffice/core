@@ -52,7 +52,7 @@ private:
     int                                 mnBufHeight;
     std::deque< OpenGLSalBitmapOp* >    maPendingOps;
 
-    bool makeCurrent();
+    void makeCurrent();
 
 public:
     OpenGLSalBitmap();

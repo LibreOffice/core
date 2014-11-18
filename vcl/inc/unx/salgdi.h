@@ -62,7 +62,7 @@ namespace basegfx {
     class B2DTrapezoid;
 }
 
-class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics, public OpenGLContextProvider
+class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 {
     friend class ServerFontLayout;
     friend class X11SalGraphicsImpl;

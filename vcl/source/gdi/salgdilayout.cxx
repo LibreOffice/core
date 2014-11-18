@@ -27,11 +27,13 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/print.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
 #include <vcl/settings.hxx>
 
 #include <window.h>
+#include <openglgdiimpl.hxx>
 #include <outdev.h>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -43,7 +45,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include "basegfx/polygon/b2dpolygon.hxx"
+#include <basegfx/polygon/b2dpolygon.hxx>
 
 // The only common SalFrame method
 
@@ -73,6 +75,15 @@ SalGraphics::SalGraphics()
 
 SalGraphics::~SalGraphics()
 {
+}
+
+OpenGLContext* SalGraphics::GetOpenGLContext() const
+{
+    OpenGLSalGraphicsImpl *pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(GetImpl());
+    if (pImpl)
+        return &pImpl->GetOpenGLContext();
+
+    return NULL;
 }
 
 bool SalGraphics::drawTransformedBitmap(

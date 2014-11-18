@@ -27,7 +27,6 @@
 #include "svdata.hxx"
 #include "salgdi.hxx"
 
-#include "opengl/contextprovider.hxx"
 #include "opengl/salbmp.hxx"
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
@@ -407,8 +406,7 @@ GLuint OpenGLSalBitmap::CreateTexture()
         }
     }
 
-    if( !makeCurrent() )
-        return 0;
+    makeCurrent();
 
     maTexture = OpenGLTexture (mnBufWidth, mnBufHeight, nFormat, nType, pData );
     SAL_INFO( "vcl.opengl", "Created texture " << maTexture.Id() );
@@ -470,21 +468,13 @@ sal_uInt16 OpenGLSalBitmap::GetBitCount() const
     return mnBits;
 }
 
-bool OpenGLSalBitmap::makeCurrent()
+void OpenGLSalBitmap::makeCurrent()
 {
     if (!mpContext || !mpContext->isInitialized())
-    {
-        OpenGLContextProvider *pProvider;
-        pProvider = dynamic_cast< OpenGLContextProvider* >( ImplGetDefaultWindow()->GetGraphics() );
-        if( pProvider == NULL )
-        {
-            SAL_WARN( "vcl.opengl", "Couldn't get default OpenGL context provider" );
-            return false;
-        }
-        mpContext = pProvider->GetOpenGLContext();
-    }
+        mpContext = ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
+
+    assert(mpContext && "Couldn't get default OpenGL context provider");
     mpContext->makeCurrent();
-    return true;
 }
 
 BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
@@ -499,8 +489,7 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 
     if( !maPendingOps.empty() )
     {
-        if (!makeCurrent())
-            return NULL;
+        makeCurrent();
 
         SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediatly" );
         if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
