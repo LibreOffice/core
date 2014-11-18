@@ -170,8 +170,8 @@ public class ScAccessibleCsvCell extends TestCase {
 
     public class loadThread extends Thread {
 
-        private SOfficeFactory SOF = null ;
-        private PropertyValue[] args = null;
+        private final SOfficeFactory SOF;
+        private final PropertyValue[] args;
         public XComponent xSpreadSheedDoc = null;
 
         public loadThread(SOfficeFactory SOF, PropertyValue[] Args) {

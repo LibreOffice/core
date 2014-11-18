@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 
 public class ComponentFactory implements XSingleComponentFactory
 {
-    private Class       m_handlerClass;
+    private final Class       m_handlerClass;
     private Constructor m_defaultConstructor;
     private Constructor m_initConstructor;
 

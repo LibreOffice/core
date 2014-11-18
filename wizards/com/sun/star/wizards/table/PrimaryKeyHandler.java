@@ -37,20 +37,20 @@ import com.sun.star.wizards.ui.XFieldSelectionListener;
 public class PrimaryKeyHandler implements XFieldSelectionListener
 {
 
-    private TableWizard CurUnoDialog;
+    private final TableWizard CurUnoDialog;
     private final static String SPRIMEKEYMODE = "togglePrimeKeyFields";
-    private XRadioButton optAddAutomatically;
-    private XRadioButton optUseExisting;
-    private XRadioButton optUseSeveral;
-    private XCheckBox chkcreatePrimaryKey;
-    private XCheckBox chkApplyAutoValueExisting;
-    private XCheckBox chkApplyAutoValueAutomatic;
-    private XListBox lstSinglePrimeKey;
-    private XFixedText lblPrimeFieldName;
-    private FieldSelection curPrimaryKeySelection;
+    private final XRadioButton optAddAutomatically;
+    private final XRadioButton optUseExisting;
+    private final XRadioButton optUseSeveral;
+    private final XCheckBox chkcreatePrimaryKey;
+    private final XCheckBox chkApplyAutoValueExisting;
+    private final XCheckBox chkApplyAutoValueAutomatic;
+    private final XListBox lstSinglePrimeKey;
+    private final XFixedText lblPrimeFieldName;
+    private final FieldSelection curPrimaryKeySelection;
     private String[] fieldnames;
-    private TableDescriptor curTableDescriptor;
-    private boolean bAutoPrimaryKeysupportsAutoIncrmentation;
+    private final TableDescriptor curTableDescriptor;
+    private final boolean bAutoPrimaryKeysupportsAutoIncrmentation;
     private final static String SAUTOMATICKEYFIELDNAME = "ID";
 
     public PrimaryKeyHandler(TableWizard _CurUnoDialog, TableDescriptor _curTableDescriptor)

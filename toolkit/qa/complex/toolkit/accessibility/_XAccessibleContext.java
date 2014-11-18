@@ -48,7 +48,7 @@ import util.AccessibilityTools;
  */
 public class _XAccessibleContext {
 
-    private XAccessibleContext oObj = null;
+    private final XAccessibleContext oObj;
 
     private int childCount = 0;
     private XAccessible parent = null ;

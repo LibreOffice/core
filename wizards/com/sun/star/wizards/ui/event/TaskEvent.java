@@ -27,7 +27,7 @@ public class TaskEvent extends EventObject
     public static final int TASK_STATUS_CHANGED = 3;
     public static final int SUBTASK_NAME_CHANGED = 4;
     public static final int TASK_FAILED = 5;
-    private int type;
+    private final int type;
 
     public TaskEvent(Task source, int type_)
     {

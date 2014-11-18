@@ -99,8 +99,8 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
     }
 
     private final class ResourceCopier {
-        private XCommandProcessor  m_cmdProc = null;
-        private CommandEnvironment m_env = new CommandEnvironment();
+        private final XCommandProcessor  m_cmdProc;
+        private final CommandEnvironment m_env = new CommandEnvironment();
 
         ResourceCopier( XCommandProcessor oCmdProc )
         {

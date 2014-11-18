@@ -36,7 +36,7 @@ public class DataSource
 {
     // the service factory
 
-    private XDataSource m_dataSource;
+    private final XDataSource m_dataSource;
 
     public DataSource(final XMultiServiceFactory _orb, final String _registeredName) throws Exception
     {

@@ -101,10 +101,9 @@ public final class ThreadId {
         return id;
     }
 
-    private static final String PREFIX
-    = "java:" + UnoRuntime.getUniqueKey() + ":";
+    private static final String PREFIX = "java:" + UnoRuntime.getUniqueKey() + ":";
     private static BigInteger count = BigInteger.ZERO;
 
-    private byte[] id;
+    private final byte[] id;
     private int hash = 0;
 }

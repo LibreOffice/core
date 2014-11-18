@@ -26,7 +26,7 @@ import com.sun.star.ucb.XCommandInfoChangeNotifier;
 public class _XCommandInfoChangeNotifier {
     public XCommandInfoChangeNotifier oObj = null;
 
-    private CommandInfoChangeListener listener = new CommandInfoChangeListener();
+    private final CommandInfoChangeListener listener = new CommandInfoChangeListener();
 
     public boolean _addCommandInfoChangeListener() {
         oObj.addCommandInfoChangeListener(listener);

@@ -23,14 +23,13 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 
 /**
- * Defaultdescriptor:
  * This descriptor is useful for instances in default values.
  */
 public class DefaultDsc extends InstDescr {
 
-    private String name = null;
-        private String ifcName = null;
-        private String service = null;
+    private final String name = null;
+    private final String ifcName;
+    private final String service;
 
     public DefaultDsc( String Interface, String kind ) {
         service = kind;

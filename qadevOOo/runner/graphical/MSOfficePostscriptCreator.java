@@ -32,12 +32,6 @@ import helper.OSHelper;
  * *.xls as excel
  * *.ppt as powerpoint
  */
-
-//class ProcessHelper
-//{
-//    ArrayList m_aArray;
-//}
-
 public class MSOfficePostscriptCreator implements IOffice
 {
     private String m_sPrinterName;               // within Windows the tools need a printer name;
@@ -47,11 +41,10 @@ public class MSOfficePostscriptCreator implements IOffice
         m_sPrinterName = _s;
     }
 
-    private ParameterHelper m_aParameterHelper;
+    private final ParameterHelper m_aParameterHelper;
     private String m_sDocumentName;
-    private String m_sResult;
+    private final String m_sResult;
 
-    // CTor
     public MSOfficePostscriptCreator(ParameterHelper _aParam, String _sResult)
     {
         m_aParameterHelper = _aParam;

@@ -74,7 +74,7 @@ import java.util.Stack;
 
 class TreeNodeEnum
 {
-    private Object[] m_Elements;
+    private final Object[] m_Elements;
     private int m_Pos;
     TreeNodeEnum(Object[] Elements) { m_Elements = Elements; m_Pos = 0; }
     boolean hasNext() { return m_Pos < m_Elements.length; }
@@ -84,7 +84,7 @@ class TreeNodeEnum
 /** base class for tree nodes. only instance: root of tree. */
 class TreeNode
 {
-    private List<TreeNode> m_Children;
+    private final List<TreeNode> m_Children;
     String getType() { return "__ROOT__"; }
     boolean hasContent() { return false; }
     boolean isNesting() { return false; }
@@ -105,7 +105,7 @@ abstract class MarkNode extends TreeNode
 {
     boolean m_isPoint;
     boolean m_isStart = false;
-    private String m_Name;
+    private final String m_Name;
     boolean isPoint() { return m_isPoint; }
     boolean isStart() { return m_isStart; }
     String getName() { return m_Name; }
@@ -237,7 +237,7 @@ class DocumentIndexMarkEndNode extends DocumentIndexMarkNode
 
 abstract class ContentNode extends TreeNode
 {
-    private String m_Content;
+    private final String m_Content;
     String getContent() { return m_Content; }
     @Override
     boolean hasContent() { return true; }
@@ -286,8 +286,8 @@ class TextFieldNode extends ContentNode
 
 class FrameNode extends TreeNode
 {
-    private String m_Name;
-    private TextContentAnchorType m_Anchor;
+    private final String m_Name;
+    private final TextContentAnchorType m_Anchor;
     String getName() { return m_Name; }
     TextContentAnchorType getAnchor() { return m_Anchor; }
     @Override
@@ -322,7 +322,7 @@ class FrameNode extends TreeNode
 
 class FootnoteNode extends TreeNode
 {
-    private String m_Label;
+    private final String m_Label;
     String getLabel() { return m_Label; }
     @Override
     FootnoteNode dup() { return new FootnoteNode(getLabel()); }
@@ -342,7 +342,7 @@ class FootnoteNode extends TreeNode
 
 class ControlCharacterNode extends TreeNode
 {
-    private short m_Char;
+    private final short m_Char;
     short getChar() { return m_Char; }
     @Override
     ControlCharacterNode dup() { return new ControlCharacterNode(getChar()); }
@@ -372,7 +372,7 @@ class SoftPageBreakNode extends TreeNode
 
 class HyperlinkNode extends TreeNode
 {
-    private String m_URL;
+    private final String m_URL;
     String getURL() { return m_URL; }
     @Override
     HyperlinkNode dup() { return new HyperlinkNode(getURL()); }
@@ -397,7 +397,7 @@ class HyperlinkNode extends TreeNode
 
 class RubyNode extends TreeNode
 {
-    private String m_Ruby;
+    private final String m_Ruby;
     String getRubyText() { return m_Ruby; }
     @Override
     RubyNode dup() { return new RubyNode(getRubyText()); }
@@ -422,7 +422,7 @@ class RubyNode extends TreeNode
 
 class MetaNode extends TreeNode
 {
-    private StringPair m_XmlId;
+    private final StringPair m_XmlId;
     StringPair getXmlId() { return m_XmlId; }
     @Override
     MetaNode dup() { return new MetaNode(getXmlId()); }
@@ -459,9 +459,9 @@ class MetaFieldNode extends MetaNode
 
 class Range
 {
-    private short m_Start;
-    private short m_End;
-    private TreeNode m_Node;
+    private final short m_Start;
+    private final short m_End;
+    private final TreeNode m_Node;
     short getStart()    { return m_Start; }
     short getExtent()   { return (short) (m_End - m_Start); }
     TreeNode getNode()  { return m_Node; }
@@ -477,10 +477,10 @@ class FuzzyTester
     private long m_DiffNesting = 0;
     private long m_DiffSpuriousEmptyText = 0;
     private long m_DiffSequence = 0; // ignored?
-    private Stack<Pair<TreeNode, TreeNodeEnum>> m_StackExpected;
-    private Stack<Pair<TreeNode, TreeNodeEnum>> m_StackActual;
-    private List<TreeNode> m_BufferExpected;
-    private List<TreeNode> m_BufferActual;
+    private final Stack<Pair<TreeNode, TreeNodeEnum>> m_StackExpected;
+    private final Stack<Pair<TreeNode, TreeNodeEnum>> m_StackActual;
+    private final List<TreeNode> m_BufferExpected;
+    private final List<TreeNode> m_BufferActual;
 
     FuzzyTester() {
         m_BufferExpected = new ArrayList<TreeNode>();
@@ -659,7 +659,7 @@ class FuzzyTester
 
 class EnumConverter
 {
-    private Stack<TreeNode> m_Stack;
+    private final Stack<TreeNode> m_Stack;
 
     EnumConverter() {
         m_Stack = new Stack<TreeNode>();
@@ -832,7 +832,7 @@ class EnumConverter
 
 abstract class Inserter
 {
-    private XMultiServiceFactory m_xDocFactory;
+    private final XMultiServiceFactory m_xDocFactory;
     XText m_xText;
     XParagraphCursor m_xCursor;
 
@@ -1025,10 +1025,10 @@ abstract class Inserter
 
 class TreeInserter extends Inserter
 {
-    private Map<String, XTextRange> m_BookmarkStarts;
-    private Map<String, XTextRange> m_ReferenceMarkStarts;
-    private Map<String, XTextRange> m_DocumentIndexMarkStarts;
-    private List<Pair<XTextRange, FrameNode>> m_FrameHints;
+    private final Map<String, XTextRange> m_BookmarkStarts;
+    private final Map<String, XTextRange> m_ReferenceMarkStarts;
+    private final Map<String, XTextRange> m_DocumentIndexMarkStarts;
+    private final List<Pair<XTextRange, FrameNode>> m_FrameHints;
 
     TreeInserter(XTextDocument xDoc)
     {

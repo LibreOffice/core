@@ -24,7 +24,7 @@ import share.LogWriter;
 
 public class _XContent {
     public XContent oObj = null;
-    private LogWriter log = null;
+    private final LogWriter log = null;
     private ContentListener listener = null;
 
     public boolean _addContentEventListener() {

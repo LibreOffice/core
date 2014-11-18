@@ -15,13 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * HelpTextProvider.java
- *
- * Created on 16. November 2006, 09:44
- */
-
 package integration.extensions;
 
 import com.sun.star.inspection.XObjectInspectorUI;
@@ -33,7 +26,7 @@ import com.sun.star.lang.NoSupportException;
  */
 public class HelpTextProvider implements XPropertyControlObserver
 {
-    private XObjectInspectorUI  m_inspectorUI;
+    private final XObjectInspectorUI  m_inspectorUI;
 
     /**
      * Creates a new instance of HelpTextProvider

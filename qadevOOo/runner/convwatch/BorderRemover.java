@@ -26,10 +26,10 @@ import java.lang.reflect.Method;
 
 class Rect
 {
-    private int x;
-    private int y;
-    private int w;
-    private int h;
+    private final int x;
+    private final int y;
+    private final int w;
+    private final int h;
 
     public Rect(int _x, int _y, int _w, int _h)
         {

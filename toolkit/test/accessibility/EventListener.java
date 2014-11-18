@@ -104,5 +104,5 @@ public class EventListener
     }
 
 
-    private AccessibilityTreeModel maTreeModel;
+    private final AccessibilityTreeModel maTreeModel;
 }

@@ -342,7 +342,7 @@ public class CalcHelper
     private static final String  msDataSheetName  = "Data";
     private static final String  msChartSheetName = "Chart";
 
-    private XSpreadsheetDocument   maSpreadSheetDoc;
+    private final XSpreadsheetDocument   maSpreadSheetDoc;
 
 
 

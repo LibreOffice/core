@@ -70,7 +70,7 @@ public class ScDataPilotItemObj extends TestCase {
      * A field is filled some values. This integer determines the size of the
      * field in x and y direction.
      */
-    private int mMaxFieldIndex = 6;
+    private final int mMaxFieldIndex = 6;
 
     /**
     * Creates Spreadsheet document.

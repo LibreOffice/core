@@ -27,8 +27,8 @@ public class _XPropertiesChangeNotifier {
     public XPropertiesChangeNotifier oObj = null;
 
 
-    private PropertiesChangeListener listener = new PropertiesChangeListener();
-    private String[] args = null;
+    private final PropertiesChangeListener listener = new PropertiesChangeListener();
+    private String[] args;
 
 
     public boolean _addPropertiesChangeListener() {

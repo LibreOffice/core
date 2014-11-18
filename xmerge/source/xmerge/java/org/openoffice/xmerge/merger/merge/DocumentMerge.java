@@ -39,7 +39,7 @@ import org.openoffice.xmerge.util.XmlUtil;
  */
 public class DocumentMerge implements MergeAlgorithm {
 
-    private NodeMergeAlgorithm subDocumentMerge = null;
+    private final NodeMergeAlgorithm subDocumentMerge;
 
     /**  The capabilities of this converter. */
     protected ConverterCapabilities cc_;

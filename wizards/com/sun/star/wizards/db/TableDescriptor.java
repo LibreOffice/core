@@ -64,8 +64,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private XAppend xKeyAppend;
     private XDrop xKeyDrop;
     private String[] sTableFilters = null;
-    private ArrayList<ColumnDescriptor> columncontainer;
-    private ArrayList<XPropertySet> keycolumncontainer;
+    private final ArrayList<ColumnDescriptor> columncontainer;
+    private final ArrayList<XPropertySet> keycolumncontainer;
     public XHierarchicalNameAccess xTableHierarchicalNameAccess;
     private CommandName ComposedTableName;
     private XAppend xKeyColAppend;
@@ -73,8 +73,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private XPropertySet xKey;
     private boolean bIDFieldisInserted = false;
     private String IDFieldName = PropertyNames.EMPTY_STRING;
-    private String sColumnAlreadyExistsMessage = PropertyNames.EMPTY_STRING;
-    private XWindow xWindow;
+    private final String sColumnAlreadyExistsMessage;
+    private final XWindow xWindow;
 
     public TableDescriptor(XMultiServiceFactory xMSF, XWindow _xWindow, String _sColumnAlreadyExistsMessage)
     {

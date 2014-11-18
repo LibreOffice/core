@@ -28,7 +28,7 @@ package base;
  */
 public class java_cmp implements TestBase {
 
-    private TestBase mWrappedTestBase = new java_fat();
+    private final TestBase mWrappedTestBase = new java_fat();
 
     public boolean executeTest(lib.TestParameters param) {
         param.put("OfficeProvider", "helper.UnoProvider");

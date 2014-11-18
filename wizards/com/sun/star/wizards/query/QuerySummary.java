@@ -33,10 +33,10 @@ public class QuerySummary extends QueryMetaData
     static final protected int RID_REPORT = 2400;
     String sSummary;
     Resource oResource;
-    private String sSeparator;
-    private String sReturnChar;
-    private String sAnd;
-    private String sOr;
+    private final String sSeparator;
+    private final String sReturnChar;
+    private final String sAnd;
+    private final String sOr;
 
     public QuerySummary(XMultiServiceFactory _xMSF, Resource _oResource)
     {

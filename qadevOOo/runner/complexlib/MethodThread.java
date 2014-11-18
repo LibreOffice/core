@@ -29,11 +29,11 @@ public class MethodThread extends Thread
 {
 
     /** The method that should be executed **/
-    private Method mTestMethod = null;
+    private final Method mTestMethod;
     /** The object that implements the method **/
-    private Object mInvokeClass = null;
+    private final Object mInvokeClass;
     /** A PrintWriter for debug Output **/
-    private PrintWriter mLog = null;
+    private final PrintWriter mLog;
     /** An Error String **/
     private String mErrMessage = null;
     /** Did an Exception happen? **/

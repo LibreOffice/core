@@ -15,18 +15,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
- /*
- * NativeInputStreamHelper.java
- *
- * Created on 9. September 2004, 11:51
- */
 
 package com.sun.star.sdbcx.comp.hsqldb;
 
 public class NativeInputStreamHelper extends java.io.InputStream{
-    private String key;
-    private String file;
-    private StorageNativeInputStream in;
+    private final String key;
+    private final String file;
+    private final StorageNativeInputStream in;
     /** Creates a new instance of NativeInputStreamHelper */
     public NativeInputStreamHelper(String key,String _file) {
         file = _file;

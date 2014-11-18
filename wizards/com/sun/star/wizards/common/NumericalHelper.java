@@ -1188,7 +1188,7 @@ public class NumericalHelper
     private static class TransformNumToHex
     {
 
-        private StringBuffer val;
+        private final StringBuffer val;
 
         public TransformNumToHex(long number)
         {

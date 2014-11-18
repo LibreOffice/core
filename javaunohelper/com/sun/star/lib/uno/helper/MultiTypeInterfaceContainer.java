@@ -26,7 +26,7 @@ import java.util.Iterator;
 public class MultiTypeInterfaceContainer
 {
 
-    private Map<Object,InterfaceContainer> map= new HashMap<Object,InterfaceContainer>();
+    private final Map<Object,InterfaceContainer> map= new HashMap<Object,InterfaceContainer>();
 
     /** only returns types which have at least one value in InterfaceContainer
      *  return value can contain an element null, if someone called

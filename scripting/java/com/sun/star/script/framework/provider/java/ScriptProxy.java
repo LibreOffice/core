@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 public class ScriptProxy {
 
     private Object m_targetObject;
-    private Method m_method;
+    private final Method m_method;
 
     /**
      * Constructs a <code>ScriptProxy</code> object for the given

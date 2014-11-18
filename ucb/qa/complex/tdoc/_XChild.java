@@ -36,7 +36,7 @@ public class _XChild {
 
     public XChild oObj = null;
     private Object gotten = null;
-    private LogWriter log = null;
+    private final LogWriter log = null;
 
 
     /**

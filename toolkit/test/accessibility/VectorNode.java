@@ -26,7 +26,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 class VectorNode
     extends StringNode
 {
-    private ArrayList<AccessibleTreeNode> maChildren;
+    private final ArrayList<AccessibleTreeNode> maChildren;
 
     public VectorNode (String sDisplayObject, AccessibleTreeNode aParent)
     {

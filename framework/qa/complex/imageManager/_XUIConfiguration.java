@@ -28,8 +28,8 @@ import lib.TestParameters;
 public class _XUIConfiguration {
 
 
-    private TestParameters tEnv = null;
-    private XUIConfiguration oObj;
+    private final TestParameters tEnv;
+    private final XUIConfiguration oObj;
     private XUIConfigurationListenerImpl xListener = null;
 
     public interface XUIConfigurationListenerImpl

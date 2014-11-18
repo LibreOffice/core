@@ -29,8 +29,8 @@ public class Controller
     implements
         com.sun.star.frame.XController
 {
-    private com.sun.star.frame.XController xController;
-    private com.sun.star.frame.XDispatchProvider xDispatchProvider;
+    private final com.sun.star.frame.XController xController;
+    private final com.sun.star.frame.XDispatchProvider xDispatchProvider;
 
     Controller( com.sun.star.frame.XController xController )
     {

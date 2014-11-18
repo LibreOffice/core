@@ -57,10 +57,10 @@ public final class WikiEditorImpl extends WeakBase
     private static final String protocolName = "vnd.com.sun.star.wiki:";
 
     private final XComponentContext m_xContext;
-    private Map<String, com.sun.star.frame.XStatusListener> m_statusListeners = new HashMap<String, com.sun.star.frame.XStatusListener>();
+    private final Map<String, com.sun.star.frame.XStatusListener> m_statusListeners = new HashMap<String, com.sun.star.frame.XStatusListener>();
     private XFrame m_xFrame;
     private XModel m_xModel;
-    private Settings m_aSettings;
+    private final Settings m_aSettings;
     private String m_aFilterName;
 
     public WikiEditorImpl( XComponentContext xContext )

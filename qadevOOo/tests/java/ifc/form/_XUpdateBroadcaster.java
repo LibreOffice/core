@@ -118,7 +118,7 @@ public class _XUpdateBroadcaster extends MultiMethodTest {
         }
     }
 
-    private TestListener listener = new TestListener();
+    private final TestListener listener = new TestListener();
 
     /**
     * The listener methods calls are checked twice with approving

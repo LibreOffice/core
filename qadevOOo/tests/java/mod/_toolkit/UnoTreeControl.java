@@ -256,7 +256,7 @@ public class UnoTreeControl extends TestCase {
     }
 
     private class execurteDialog extends Thread{
-        private XDialog mXDialog;
+        private final XDialog mXDialog;
 
         public execurteDialog(XDialog xDialog){
             mXDialog = xDialog;

@@ -34,21 +34,6 @@ class NodeFactory
 
     private NodeFactory ()
     {
-        maContextHandler = new AccessibleContextHandler();
-        maTextHandler = new AccessibleTextHandler();
-        maEditableTextHandler = new AccessibleEditableTextHandler();
-        maComponentHandler = new AccessibleComponentHandler();
-        maExtendedComponentHandler = new AccessibleExtendedComponentHandler();
-        maActionHandler = new AccessibleActionHandler();
-        maImageHandler = new AccessibleImageHandler();
-        maTableHandler = new AccessibleTableHandler();
-        maCellHandler = new AccessibleCellHandler();
-        maHypertextHandler = new AccessibleHypertextHandler();
-        maHyperlinkHandler = new AccessibleHyperlinkHandler();
-        maSelectionHandler = new AccessibleSelectionHandler();
-        maRelationHandler = new AccessibleRelationHandler();
-        maTreeHandler = new AccessibleTreeHandler();
-        maUNOHandler = new AccessibleUNOHandler();
     }
 
 
@@ -139,19 +124,19 @@ class NodeFactory
     private static NodeFactory maInstance = null;
 
     // default handlers
-    private NodeHandler maContextHandler = new AccessibleContextHandler();
-    private NodeHandler maTextHandler = new AccessibleTextHandler();
-    private NodeHandler maEditableTextHandler = new AccessibleEditableTextHandler();
-    private NodeHandler maComponentHandler = new AccessibleComponentHandler();
-    private NodeHandler maExtendedComponentHandler = new AccessibleExtendedComponentHandler();
-    private NodeHandler maActionHandler = new AccessibleActionHandler();
-    private NodeHandler maImageHandler = new AccessibleImageHandler();
-    private NodeHandler maTableHandler = new AccessibleTableHandler();
-    private NodeHandler maCellHandler = new AccessibleCellHandler();
-    private NodeHandler maHypertextHandler = new AccessibleHypertextHandler();
-    private NodeHandler maHyperlinkHandler = new AccessibleHyperlinkHandler();
-    private NodeHandler maSelectionHandler = new AccessibleSelectionHandler();
-    private NodeHandler maRelationHandler = new AccessibleRelationHandler();
-    private NodeHandler maTreeHandler = new AccessibleTreeHandler();
-    private NodeHandler maUNOHandler = new AccessibleUNOHandler();
+    private final NodeHandler maContextHandler = new AccessibleContextHandler();
+    private final NodeHandler maTextHandler = new AccessibleTextHandler();
+    private final NodeHandler maEditableTextHandler = new AccessibleEditableTextHandler();
+    private final NodeHandler maComponentHandler = new AccessibleComponentHandler();
+    private final NodeHandler maExtendedComponentHandler = new AccessibleExtendedComponentHandler();
+    private final NodeHandler maActionHandler = new AccessibleActionHandler();
+    private final NodeHandler maImageHandler = new AccessibleImageHandler();
+    private final NodeHandler maTableHandler = new AccessibleTableHandler();
+    private final NodeHandler maCellHandler = new AccessibleCellHandler();
+    private final NodeHandler maHypertextHandler = new AccessibleHypertextHandler();
+    private final NodeHandler maHyperlinkHandler = new AccessibleHyperlinkHandler();
+    private final NodeHandler maSelectionHandler = new AccessibleSelectionHandler();
+    private final NodeHandler maRelationHandler = new AccessibleRelationHandler();
+    private final NodeHandler maTreeHandler = new AccessibleTreeHandler();
+    private final NodeHandler maUNOHandler = new AccessibleUNOHandler();
 }

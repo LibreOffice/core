@@ -27,9 +27,9 @@ import util.UITools;
  * is nopt longer available.
  */
 public class KlickButtonThread extends Thread {
-    private XWindow xWindow = null;
-    private XMultiServiceFactory xMSF = null;
-    private String buttonName = null;
+    private final XWindow xWindow;
+    private final XMultiServiceFactory xMSF;
+    private final String buttonName;
 
     public KlickButtonThread(XMultiServiceFactory xMSF, XWindow xWindow, String buttonName) {
         this.xWindow = xWindow;

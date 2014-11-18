@@ -26,13 +26,13 @@ import com.sun.star.lang.XServiceInfo;
 
 public class ServicesHandler implements XPropertyHandler
 {
-    private XComponentContext   m_context;
+    private final XComponentContext   m_context;
     private String[]            m_supportedServices;
 
     private class ClickHandler implements com.sun.star.awt.XActionListener
     {
         XComponentContext   m_context;
-        private String      m_serviceName;
+        private final String      m_serviceName;
 
         public ClickHandler( XComponentContext _context, String _serviceName )
         {

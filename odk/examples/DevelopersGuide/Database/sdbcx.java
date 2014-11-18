@@ -44,11 +44,12 @@ import com.sun.star.lang.XMultiServiceFactory;
 
 public class sdbcx
 {
-    private XMultiServiceFactory xORB;
+    private final XMultiServiceFactory xORB;
     private static XConnection con;
     private XTablesSupplier xTabSup;
 
-        public static XMultiServiceFactory rSmgr;
+    public static XMultiServiceFactory rSmgr;
+
     public static void main(String argv[]) throws java.lang.Exception
     {
         try{

@@ -52,18 +52,18 @@ import java.util.logging.Logger;
 public class FilterComponent
 {
 
-    private Integer IStep;
-    private int RowCount;
+    private final Integer IStep;
+    private final int RowCount;
     private static String[] sLogicOperators;
-    private XRadioButton optMatchAny;
-    private String slblFieldNames;
-    private String slblOperators;
-    private String slblValue;
+    private final XRadioButton optMatchAny;
+    private final String slblFieldNames;
+    private final String slblOperators;
+    private final String slblValue;
     WizardDialog CurUnoDialog;
-    private int BaseID = 2300;
-    private String sIncSuffix;
-    private ControlRow[] oControlRows;
-    private String sDuplicateCondition;
+    private final int BaseID = 2300;
+    private final String sIncSuffix;
+    private final ControlRow[] oControlRows;
+    private final String sDuplicateCondition;
     static final int SOOPTORMODE = 100;
     static final int SOOPTANDMODE = 101;
     QueryMetaData oQueryMetaData;

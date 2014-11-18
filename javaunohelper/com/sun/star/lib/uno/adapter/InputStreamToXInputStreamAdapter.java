@@ -34,7 +34,7 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
     /**
      *  Internal store to the InputStream
      */
-    private InputStream iIn;
+    private final InputStream iIn;
 
     /**
      *  Constructor.

@@ -299,24 +299,14 @@ class CanvasShape
             +"x"+maSize.width+"x"+maSize.height+"<";
     }
 
-    private AccTreeNode
-        maNode;
-    private XAccessibleContext
-        mxContext;
-    private XAccessibleComponent
-        mxComponent;
-    private String
-        msDescription,
-        msName;
-    private Rectangle2D.Double
-        maShape;
-    private Point
-        maPosition;
-    private Dimension
-        maSize;
-    private Color
-        maFgColor,
-        maBgColor;
+    private final AccTreeNode maNode;
+    private final XAccessibleContext mxContext;
+    private final XAccessibleComponent mxComponent;
+    private String msDescription, msName;
+    private Rectangle2D.Double maShape;
+    private Point maPosition;
+    private Dimension maSize;
+    private Color maFgColor, maBgColor;
     private boolean
         // Highlighting objects is an internal concept.  Corresponds to selection in the tree view.
         mbHighlighted,
@@ -324,6 +314,5 @@ class CanvasShape
         mbSelected,
         // Set when the accessible object is focused.
         mbFocused;
-    private int
-        mnRole;
+    private int mnRole;
 }

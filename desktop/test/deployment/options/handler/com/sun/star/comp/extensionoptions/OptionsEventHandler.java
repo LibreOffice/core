@@ -49,13 +49,13 @@ public class OptionsEventHandler {
         static private final String __serviceName =
         "com.sun.star.comp.extensionoptions.OptionsEventHandler";
 
-        private XComponentContext m_cmpCtx;
+        private final XComponentContext m_cmpCtx;
 
         private XNameAccess m_xAccessLeaves;
 
         /**Names of supported options pages.
          */
-        private String[] m_arWindowNames = {
+        private final String[] m_arWindowNames = {
             "Writer1", "Writer2", "Writer3", "Calc1", "Calc2", "Calc3",
             "Draw1", "Draw2", "Draw3", "Node1_1", "Node1_2", "Node1_3",
             "Node2_1", "Node2_2", "Node2_3", "Node3_1", "Node3_2", "Node3_3"};
@@ -63,7 +63,7 @@ public class OptionsEventHandler {
         /**Names of the controls which are supported by this handler. All these
          *controls must have a "Text" property.
          */
-        private String[] m_arStringControls = {
+        private final String[] m_arStringControls = {
             "String0", "String1", "String2", "String3", "String4"};
 
         public _OptionsEventHandler(XComponentContext xCompContext) {

@@ -27,11 +27,11 @@ import java.util.StringTokenizer;
  */
 public class ScriptDescriptor {
 
-    private String m_name;
-    private String m_methodName;
-    private String m_className;
+    private final String m_name;
+    private final String m_methodName;
+    private final String m_className;
     private List<String> m_classpath;
-    private ArrayList<Class<?>> m_argumentTypes = new ArrayList<Class<?>>(11);
+    private final ArrayList<Class<?>> m_argumentTypes = new ArrayList<Class<?>>(11);
 
     /**
      * Constructs a ScriptDescriptor for the given name

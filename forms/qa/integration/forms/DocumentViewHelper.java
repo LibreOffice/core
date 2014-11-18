@@ -41,9 +41,9 @@ import org.openoffice.xforms.XMLDocument;
 */
 public class DocumentViewHelper
 {
-    private     XMultiServiceFactory    m_orb;
-    private     XController             m_controller;
-    private     DocumentHelper          m_document;
+    private final     XMultiServiceFactory    m_orb;
+    private final     XController             m_controller;
+    private final     DocumentHelper          m_document;
 
     /* ------------------------------------------------------------------ */
     final protected XController getController()

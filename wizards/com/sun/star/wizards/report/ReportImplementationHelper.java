@@ -24,7 +24,7 @@ public class ReportImplementationHelper
 {
 
     private RecordParser m_aCurDBMetaData;
-    private XMultiServiceFactory m_xMSF;
+    private final XMultiServiceFactory m_xMSF;
     protected int m_nDefaultPageOrientation;
 
     public ReportImplementationHelper(XMultiServiceFactory _aMSF, int _nOrientation)

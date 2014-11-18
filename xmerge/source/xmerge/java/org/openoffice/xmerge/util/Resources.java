@@ -36,7 +36,7 @@ import java.util.ResourceBundle;
  */
 public final class Resources
 {
-    private ResourceBundle rb = null;
+    private final ResourceBundle rb;
     private static Resources instance = null;
 
     /**

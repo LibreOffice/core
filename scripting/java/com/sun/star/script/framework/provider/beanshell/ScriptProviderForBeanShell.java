@@ -126,11 +126,11 @@ public class ScriptProviderForBeanShell {
 
 class ScriptImpl implements XScript {
 
-    private ScriptMetaData metaData;
-    private XComponentContext m_xContext;
+    private final ScriptMetaData metaData;
+    private final XComponentContext m_xContext;
     private XMultiComponentFactory m_xMultiComponentFactory;
-    private XModel m_xModel;
-    private XScriptInvocationContext m_xInvocContext;
+    private final XModel m_xModel;
+    private final XScriptInvocationContext m_xInvocContext;
 
     ScriptImpl(XComponentContext ctx, ScriptMetaData metaData, XModel xModel,
                XScriptInvocationContext xContext) throws

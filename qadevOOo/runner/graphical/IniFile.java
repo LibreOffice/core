@@ -35,8 +35,8 @@ public class IniFile implements Enumeration<String>
      * internal representation of the ini file content.
      * Problem, if ini file changed why other write something difference, we don't realise this.
      */
-    private String m_sFilename;
-    private ArrayList<String> m_aList;
+    private final String m_sFilename;
+    private final ArrayList<String> m_aList;
     private boolean m_bListContainUnsavedChanges = false;
     private int m_aEnumerationPos = 0;
 

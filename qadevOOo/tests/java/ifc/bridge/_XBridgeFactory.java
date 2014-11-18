@@ -66,7 +66,7 @@ public class _XBridgeFactory extends MultiMethodTest {
         /**
          * the acceptor
          */
-        private XAcceptor acc = null ;
+        private final XAcceptor acc;
         /**
         * If exception occurred during method call it is
         * stored in this field.

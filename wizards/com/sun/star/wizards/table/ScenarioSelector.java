@@ -48,18 +48,18 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     final static int PRIVATE = 0;
     final static int BUSINESS = 1;
 
-    private XRadioButton optBusiness;
+    private final XRadioButton optBusiness;
     private XListBox xTableListBox;
-    private TableWizard CurTableWizardUnoDialog;
-    private TableDescriptor curtabledescriptor;
-    private CGCategory oCGCategory;
+    private final TableWizard CurTableWizardUnoDialog;
+    private final TableDescriptor curtabledescriptor;
+    private final CGCategory oCGCategory;
     protected CGTable oCGTable;
-    private String SELECTCATEGORY = "selectCategory";
+    private final String SELECTCATEGORY = "selectCategory";
     protected boolean bcolumnnameislimited;
-    private int imaxcolumnchars;
-    private String smytable;
-    private Locale aLocale;
-    private XMultiServiceFactory xMSF;
+    private final int imaxcolumnchars;
+    private final String smytable;
+    private final Locale aLocale;
+    private final XMultiServiceFactory xMSF;
 
     public ScenarioSelector(TableWizard _CurUnoDialog, TableDescriptor _curtabledescriptor, String _reslblFields, String _reslblSelFields)
     {

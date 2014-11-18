@@ -49,7 +49,7 @@ public class _XDispatchProviderInterception extends MultiMethodTest {
      * provider.
      */
     public class TestInterceptor implements XDispatchProviderInterceptor {
-        private PrintWriter log = null ;
+        private final PrintWriter log;
         public XDispatchProvider master = null, slave = null ;
 
         public TestInterceptor(PrintWriter log) {

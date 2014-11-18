@@ -80,9 +80,9 @@ public class CustomizeView extends    JPanel
      * @member  m_aToolBarListener      listener for status events of the tool bar
      * @member  m_aObjectBarListener    listener for status events of the object bar
      */
-    private JCheckBox           m_cbMenuBar         ;
-    private JCheckBox           m_cbToolBar         ;
-    private JCheckBox           m_cbObjectBar       ;
+    private final JCheckBox           m_cbMenuBar         ;
+    private final JCheckBox           m_cbToolBar         ;
+    private final JCheckBox           m_cbObjectBar       ;
 
     private StatusListener      m_aMenuBarListener  ;
     private StatusListener      m_aToolBarListener  ;
@@ -175,9 +175,9 @@ public class CustomizeView extends    JPanel
                                    com.sun.star.lang.XEventListener
     {
         /// URL, to toogle the requested UI item
-        private String m_sURL;
+        private final String m_sURL;
         /// name of the property which must be used in combination with the URL
-        private String m_sProp;
+        private final String m_sProp;
         /// we must use this frame to dispatch a request
         private com.sun.star.frame.XFrame m_xFrame;
 

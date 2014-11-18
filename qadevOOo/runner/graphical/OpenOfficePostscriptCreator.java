@@ -50,8 +50,8 @@ import java.io.File;
  */
 public class OpenOfficePostscriptCreator implements IOffice
 {
-    private ParameterHelper m_aParameterHelper;
-    private String m_sOutputURL;
+    private final ParameterHelper m_aParameterHelper;
+    private final String m_sOutputURL;
     private String m_sBasename;
     private String m_sDocumentName;
     private XComponent m_aDocument;

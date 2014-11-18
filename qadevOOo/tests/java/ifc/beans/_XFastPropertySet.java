@@ -55,7 +55,7 @@ import com.sun.star.uno.UnoRuntime;
 public class _XFastPropertySet extends MultiMethodTest {
 
     public XFastPropertySet oObj = null;
-    private List<Integer> handles = new ArrayList<Integer>();
+    private final List<Integer> handles = new ArrayList<Integer>();
     private int handle = -1;
     private Set<String> exclude = null ;
 

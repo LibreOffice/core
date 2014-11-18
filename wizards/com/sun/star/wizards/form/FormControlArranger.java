@@ -40,11 +40,11 @@ public class FormControlArranger
 
     public static final String LABELCONTROL = "LabelControl";
     protected DatabaseControl[] DBControlList = null;
-    private XNameContainer xFormName;
-    private XMultiServiceFactory xMSF;
+    private final XNameContainer xFormName;
+    private final XMultiServiceFactory xMSF;
     private Control[] LabelControlList = null;
-    private XStatusIndicator xProgressBar;
-    private FieldColumn[] FieldColumns;
+    private final XStatusIndicator xProgressBar;
+    private final FieldColumn[] FieldColumns;
     // Control curLabelControl;
     private int icurArrangement;
     private boolean bIsFirstRun;
@@ -56,7 +56,7 @@ public class FormControlArranger
     private static final int cHoriDistance = 300;
     private static final int cLabelGap = 100;
     private static final double CMAXREDUCTION = 0.7;
-    private FormHandler oFormHandler;
+    private final FormHandler oFormHandler;
     private int iReduceWidth;
     private int m_currentLabelPosX;
     private int m_currentLabelPosY;

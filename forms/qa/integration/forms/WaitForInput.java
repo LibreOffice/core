@@ -19,7 +19,7 @@ package integration.forms;
 
 class WaitForInput extends java.lang.Thread
 {
-    private Object      m_aToNotify;
+    private final Object      m_aToNotify;
     private boolean     m_bDone;
 
     public WaitForInput( Object aToNotify )

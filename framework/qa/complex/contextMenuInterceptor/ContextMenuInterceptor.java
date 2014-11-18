@@ -25,7 +25,7 @@ import com.sun.star.uno.UnoRuntime;
 public class ContextMenuInterceptor implements XContextMenuInterceptor
 {
 
-    private com.sun.star.awt.XBitmap myBitmap;
+    private final com.sun.star.awt.XBitmap myBitmap;
 
     public ContextMenuInterceptor(com.sun.star.awt.XBitmap aBitmap)
     {

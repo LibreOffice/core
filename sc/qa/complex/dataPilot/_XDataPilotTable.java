@@ -45,7 +45,7 @@ import lib.TestParameters;
 */
 public class _XDataPilotTable {
 
-    private XDataPilotTable oObj = null;
+    private final XDataPilotTable oObj;
     private XCell xCellForChange = null;
     private XCell xCellForCheck = null;
     private CellAddress OutputRange = null;
@@ -54,7 +54,7 @@ public class _XDataPilotTable {
     /**
      * The test parameters
      */
-    private TestParameters param = null;
+    private final TestParameters param;
 
     /**
      * Constructor: gets the object to test, a logger and the test parameters

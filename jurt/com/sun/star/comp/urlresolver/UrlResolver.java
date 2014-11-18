@@ -50,7 +50,7 @@ public class UrlResolver {
     static public class _UrlResolver implements XUnoUrlResolver {
         static private final String __serviceName = "com.sun.star.bridge.UnoUrlResolver";
 
-        private XMultiServiceFactory _xMultiServiceFactory;
+        private final XMultiServiceFactory _xMultiServiceFactory;
 
         public _UrlResolver(XMultiServiceFactory xMultiServiceFactory) {
             _xMultiServiceFactory = xMultiServiceFactory;

@@ -237,5 +237,5 @@ public class ChartHelper
 
     private static final String  msChartClassID   = "12dcae26-281f-416f-a234-c3086127382e";
 
-    private XModel maContainerDocument;
+    private final XModel maContainerDocument;
 }

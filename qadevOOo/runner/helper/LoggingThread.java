@@ -36,10 +36,10 @@ import util.utils;
  */
 public class LoggingThread extends Thread {
 
-    private TestParameters param;
-    private LogWriter log = null;
+    private final TestParameters param;
+    private final LogWriter log;
     private boolean finished = false;
-    private boolean debug = false;
+    private final boolean debug;
 
     public LoggingThread(LogWriter log, TestParameters tParam) {
         this.log = log;

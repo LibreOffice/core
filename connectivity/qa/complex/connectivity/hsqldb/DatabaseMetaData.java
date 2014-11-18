@@ -30,8 +30,8 @@ import java.lang.reflect.Method;
 
 public class DatabaseMetaData {
 
-    private java.sql.DatabaseMetaData m_xMD;
-    private HsqlDriverTest m_TestCase;
+    private final java.sql.DatabaseMetaData m_xMD;
+    private final HsqlDriverTest m_TestCase;
 
     /** Creates a new instance of DatabaseMetaData */
     public DatabaseMetaData(HsqlDriverTest _testCase,java.sql.DatabaseMetaData _xmd) {

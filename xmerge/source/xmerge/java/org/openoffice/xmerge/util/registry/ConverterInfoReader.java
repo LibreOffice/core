@@ -45,9 +45,9 @@ public class ConverterInfoReader {
     private final static String ATTRIB_DEVICE_TYPE = "type";
     private final static String TAG_XSLT_DESERIAL  = "converter-xslt-deserialize";
     private final static String TAG_XSLT_SERIAL    = "converter-xslt-serialize";
-    private String   jarfilename;
-    private Document document;
-    private ArrayList<ConverterInfo>   converterInfoList;
+    private final String   jarfilename;
+    private final Document document;
+    private final ArrayList<ConverterInfo> converterInfoList;
 
     /**
      * Constructor.

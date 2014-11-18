@@ -41,7 +41,7 @@ import java.util.HashMap;
 public class AbstractListener
 {
 
-    private HashMap<String,MethodInvocation> mHashtable = new HashMap<String,MethodInvocation>();
+    private final HashMap<String,MethodInvocation> mHashtable = new HashMap<String,MethodInvocation>();
 
     public void add(String componentName, String eventName, String methodName, Object target)
     {

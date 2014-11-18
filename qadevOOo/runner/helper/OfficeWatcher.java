@@ -24,14 +24,14 @@ import util.utils;
 public class OfficeWatcher extends Thread implements share.Watcher {
 
     public boolean finish;
-    private TestParameters params;
+    private final TestParameters params;
     private int StoredPing = 0;
-    private boolean debug = false;
+    private final boolean debug;
 
     public OfficeWatcher(TestParameters param) {
-        finish = false;
+        this.finish = false;
         this.params = param;
-        debug = params.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
+        this.debug = params.getBool(util.PropertyName.DEBUG_IS_ACTIVE);
     }
 
     /**

@@ -38,7 +38,7 @@ import com.sun.star.text.XDefaultNumberingProvider;
 public class _XDefaultNumberingProvider extends MultiMethodTest {
 
     public static XDefaultNumberingProvider oObj = null;
-    private Locale loc = new Locale("en", "EN", "") ;
+    private final Locale loc = new Locale("en", "EN", "") ;
 
     /**
     * Just gets numberings for "en" locale. <p>

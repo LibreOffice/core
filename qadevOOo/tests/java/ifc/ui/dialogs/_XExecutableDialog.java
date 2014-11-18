@@ -97,8 +97,8 @@ public class _XExecutableDialog extends MultiMethodTest {
      */
     protected class ExecThread extends Thread {
 
-        public short execRes = (short) 17 ;
-        private XExecutableDialog Diag = null ;
+        public short execRes = (short) 17;
+        private final XExecutableDialog Diag;
 
         public ExecThread(XExecutableDialog Diag) {
             this.Diag = Diag ;

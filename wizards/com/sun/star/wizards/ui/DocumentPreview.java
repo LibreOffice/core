@@ -41,7 +41,7 @@ public class DocumentPreview
      * The content component of the frame.
      */
     private XComponent xComponent;
-    private XControl xControl;
+    private final XControl xControl;
     private PropertyValue[] loadArgs;
     private String url;
     public static final int PREVIEW_MODE = 1;

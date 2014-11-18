@@ -46,7 +46,7 @@ public class TextFieldHandler
 {
 
     public XTextFieldsSupplier xTextFieldsSupplier;
-    private XMultiServiceFactory xMSFDoc;
+    private final XMultiServiceFactory xMSFDoc;
 
     /**
      * Creates a new instance of TextFieldHandler

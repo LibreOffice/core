@@ -46,7 +46,7 @@ import com.sun.star.util.XModifiable;
 */
 public class DocumentHelper
 {
-    private XMultiServiceFactory    m_orb;
+    private final XMultiServiceFactory    m_orb;
     private XComponent              m_documentComponent;
 
     /* ================================================================== */

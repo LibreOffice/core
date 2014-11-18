@@ -35,7 +35,7 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
     /**
      *  Internal handle to the XInputStream
      */
-    private XInputStream xin;
+    private final XInputStream xin;
 
     /**
      *  Constructor.

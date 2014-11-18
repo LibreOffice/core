@@ -45,8 +45,8 @@ public abstract class NodeIterator implements Iterator {
 
     private List<Node> nodeList = null;
     private int currentPosition = 0;
-    private Node root;
-    private ConverterCapabilities cc_ = null;
+    private final Node root;
+    private final ConverterCapabilities cc_;
 
     /**
      * Standard constructor.

@@ -68,16 +68,15 @@ import com.sun.star.lang.XMultiComponentFactory;
 public class ConverterServlet extends HttpServlet {
     /** Specifies the temporary directory on the web server.
      */
-    private String stringWorkingDirectory =
-    System.getProperty( "java.io.tmpdir" ).replace( '\\', '/' );
+    private String stringWorkingDirectory = System.getProperty( "java.io.tmpdir" ).replace( '\\', '/' );
 
     /** Specifies the host for the office server.
      */
-    private String stringHost = "localhost";
+    private final String stringHost = "localhost";
 
     /** Specifies the port for the office server.
      */
-    private String stringPort = "2083";
+    private final String stringPort = "2083";
 
     /** Called by the server (via the service method) to allow a servlet to handle
      * a POST request. The file from the client will be uploaded to the web server

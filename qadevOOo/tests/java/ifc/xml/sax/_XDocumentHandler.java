@@ -76,7 +76,7 @@ import com.sun.star.xml.sax.XLocator;
 public class _XDocumentHandler extends MultiMethodTest {
 
     private static class DocumentLocator implements XLocator {
-        private PrintWriter log = null ;
+        private final PrintWriter log;
         public DocumentLocator(PrintWriter log) {
             this.log = log ;
         }

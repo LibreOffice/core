@@ -35,9 +35,9 @@ import com.sun.star.util.XURLTransformer;
 */
 public class OfficeDocumentView
 {
-    private     XMultiServiceFactory    m_orb;
-    private     XController             m_controller;
-    private     OfficeDocument          m_document;
+    private final     XMultiServiceFactory    m_orb;
+    private final     XController             m_controller;
+    private final     OfficeDocument          m_document;
 
     /* ------------------------------------------------------------------ */
     final public XController getController()

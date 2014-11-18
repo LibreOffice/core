@@ -41,7 +41,7 @@ import com.sun.star.uno.XComponentContext;
 public class DialogFactory {
 
     private static DialogFactory factory;
-    private XComponentContext xComponentContext;
+    private final XComponentContext xComponentContext;
 
     // singleton
     private DialogFactory(XComponentContext xComponentContext) {

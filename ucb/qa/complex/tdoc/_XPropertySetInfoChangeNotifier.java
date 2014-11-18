@@ -27,7 +27,7 @@ public class _XPropertySetInfoChangeNotifier {
     public XPropertySetInfoChangeNotifier oObj = null;
 
 
-    private PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
+    private final PropertySetInfoChangeListener listener = new PropertySetInfoChangeListener();
 
 
 

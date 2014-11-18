@@ -61,6 +61,6 @@ class ChildEventHandler
     }
 
 
-    private XAccessible mxOldChild;
-    private XAccessible mxNewChild;
+    private final XAccessible mxOldChild;
+    private final XAccessible mxNewChild;
 }

@@ -48,7 +48,7 @@ import com.sun.star.lang.Locale;
 public class _XTransliteration extends MultiMethodTest {
 
     public XTransliteration oObj = null;
-    private Locale loc = new Locale("en", "EN", "") ;
+    private final Locale loc = new Locale("en", "EN", "") ;
 
     /**
     * Gets all available transliteration modules. <p>

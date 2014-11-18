@@ -313,7 +313,7 @@ public class OfficeDocument
         return (XInterface) xORB.createInstanceWithArguments( serviceSpecifier, arguments );
     }
 
-    private XMultiServiceFactory    m_orb;
+    private final XMultiServiceFactory    m_orb;
     private XComponent              m_documentComponent;
 }
 

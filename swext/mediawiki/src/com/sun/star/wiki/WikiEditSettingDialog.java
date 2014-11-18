@@ -37,9 +37,9 @@ public class WikiEditSettingDialog extends WikiDialog
 
     private static final String sOKMethod = "OK";
 
-    private String[] Methods = {sOKMethod };
-    private Map<String,String> setting;
-    private boolean addMode;
+    private final String[] Methods = {sOKMethod };
+    private final Map<String,String> setting;
+    private final boolean addMode;
     private boolean m_bAllowURLChange = true;
 
     public WikiEditSettingDialog( XComponentContext xContext, String DialogURL )

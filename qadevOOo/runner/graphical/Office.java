@@ -22,9 +22,9 @@ import java.util.ArrayList;
 
 public class Office implements IOffice
 {
-    private ParameterHelper m_aParameterHelper;
+    private final ParameterHelper m_aParameterHelper;
     private String m_sDocumentName;
-    private String m_sResult;
+    private final String m_sResult;
     private IOffice m_aOffice = null;
 
     public Office(ParameterHelper _aParam, String _sResult)

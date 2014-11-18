@@ -69,8 +69,8 @@ public class FilterOptions
 
 
     // private members for internal things
-    private XMultiComponentFactory m_xMCF         ;
-    private XComponentContext m_Ctx                ;
+    private final XMultiComponentFactory m_xMCF;
+    private final XComponentContext m_Ctx;
 
 
     // interface

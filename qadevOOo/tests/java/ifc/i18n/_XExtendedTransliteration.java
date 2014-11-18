@@ -27,7 +27,7 @@ import lib.MultiMethodTest;
  */
 public class _XExtendedTransliteration extends MultiMethodTest {
     public XExtendedTransliteration oObj = null;
-    private Locale loc = new Locale("en", "US", "") ;
+    private final Locale loc = new Locale("en", "US", "") ;
 
     @Override
     public void before() {

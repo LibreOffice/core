@@ -95,7 +95,7 @@ public class MultiMethodTest
     /**
      * Contains names of the methods have been already called
      */
-    private ArrayList<String> methCalled = new ArrayList<String>(10);
+    private final ArrayList<String> methCalled = new ArrayList<String>(10);
 
     /**
      * Disposes the test environment, which was corrupted by the test.

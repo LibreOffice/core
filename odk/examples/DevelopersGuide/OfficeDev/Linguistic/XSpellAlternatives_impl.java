@@ -41,7 +41,7 @@ public class XSpellAlternatives_impl implements
     private String      aWord;
     private Locale      aLanguage;
     private String[]    aAlt;           // list of alternatives, may be empty.
-    private short       nType;          // type of failure
+    private final short       nType;          // type of failure
 
     public XSpellAlternatives_impl(
             String      aWord,

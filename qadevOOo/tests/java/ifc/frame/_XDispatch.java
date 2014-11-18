@@ -59,7 +59,7 @@ public class _XDispatch extends MultiMethodTest {
             com.sun.star.frame.XStatusListener {
         public boolean disposingCalled = false ;
         public boolean statusChangedCalled = false ;
-        private java.io.PrintWriter log = null ;
+        private final java.io.PrintWriter log;
 
         public TestStatusListener(java.io.PrintWriter log) {
             this.log = log ;
@@ -89,7 +89,7 @@ public class _XDispatch extends MultiMethodTest {
             com.sun.star.frame.XDispatchResultListener {
         public boolean disposingCalled = false ;
         public boolean finishedDispatch = false ;
-        private java.io.PrintWriter log = null ;
+        private final java.io.PrintWriter log;
 
         public TestNotificationListener(java.io.PrintWriter log) {
             this.log = log ;

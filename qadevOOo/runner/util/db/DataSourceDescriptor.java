@@ -60,5 +60,5 @@ public class DataSourceDescriptor
         return new DataSource( m_orb, this );
     }
 
-    private XMultiServiceFactory m_orb = null;
+    private final XMultiServiceFactory m_orb;
 }

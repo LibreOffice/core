@@ -66,7 +66,7 @@ public class AutoSave
     {
         private XDispatch m_xAutoSave;
         private URL m_aRegistration;
-        private Protocol m_aLog;
+        private final Protocol m_aLog;
 
         private AutoSaveListener(XMultiServiceFactory xSMGR    ,
                                 XDispatch            xAutoSave,

@@ -451,11 +451,11 @@ class Canvas
         mnScale;
     private CanvasShape
         maActiveObject;
-    private java.util.HashMap<AccTreeNode, CanvasShape>
+    private final java.util.HashMap<AccTreeNode, CanvasShape>
         maObjects;
-    private List<CanvasShape>
+    private final List<CanvasShape>
         maObjectList;
-    private List<AccTreeNode>
+    private final List<AccTreeNode>
         maNodes;
     private Rectangle
         maBoundingBox;

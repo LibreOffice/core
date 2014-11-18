@@ -54,7 +54,7 @@ public class ParcelDescriptor {
 
     private Document document = null;
     private String language = null;
-    private Map<String, String> languagedepprops = new HashMap<String, String>(3);
+    private final Map<String, String> languagedepprops = new HashMap<String, String>(3);
 
     public ParcelDescriptor() throws IOException {
         ByteArrayInputStream bis = null;

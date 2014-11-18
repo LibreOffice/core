@@ -199,5 +199,5 @@ class SelectionDialog extends JDialog
 
     private JList maChildrenSelector;
     private XAccessibleSelection mxSelection;
-    private AccTreeNode maNode;
+    private final AccTreeNode maNode;
 }

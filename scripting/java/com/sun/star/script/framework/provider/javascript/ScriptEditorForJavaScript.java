@@ -296,7 +296,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor {
 
     private class closeHandler implements Runnable {
 
-        private URL url;
+        private final URL url;
 
         private closeHandler(URL url) {
             this.url = url;

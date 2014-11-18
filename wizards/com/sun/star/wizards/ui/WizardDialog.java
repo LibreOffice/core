@@ -49,7 +49,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private static final String CANCEL_ACTION_PERFORMED = "cancelWizard_1";
     private static final String HELP_ACTION_PERFORMED = "callHelp";
     public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
-    private int iButtonWidth = 50;
+    private final int iButtonWidth = 50;
     private int nNewStep = 1;
     private int nOldStep = 1;
     private int nMaxStep = 1;
@@ -60,9 +60,9 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private Object oRoadmap;
     private XSingleServiceFactory xSSFRoadmap;
     public XIndexContainer xIndexContRoadmap;
-    private Resource oWizardResource;
+    private final Resource oWizardResource;
     public String sMsgEndAutopilot;
-    private int hid;
+    private final int hid;
     private boolean bTerminateListenermustberemoved = true;
 
     /** Creates a new instance of WizardDialog

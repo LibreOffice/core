@@ -39,7 +39,7 @@ public final class Difference {
     public static final int UNCHANGE = 4;
 
     /** The action of the diff - either {@link #ADD} or {@link #DELETE} */
-    private int operation;
+    private final int operation;
 
     /**
      * The position of the content that should be operated on (original
@@ -99,14 +99,14 @@ public final class Difference {
      * <diff orgPos=4 modPos=2 operation=DELETE>  <--  element E
      * <diff orgPos=5 modPos=2 operation=DELETE>  <--  element F}</pre></blockquote>
      */
-    private int orgPosition;
+    private final int orgPosition;
 
     /**
      * The position of the content that should be operated (modified iterator).
      *
      * <p>For explanation and examples, see {@link #orgPosition}</p>.
      */
-    private int modPosition;
+    private final int modPosition;
 
     /**
      * Constructor.

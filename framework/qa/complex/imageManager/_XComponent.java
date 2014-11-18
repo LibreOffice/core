@@ -40,7 +40,7 @@ public class _XComponent {
 
     private static XComponent oObj = null;
     private XComponent altDispose = null;
-    private TestParameters tEnv = null;
+    private final TestParameters tEnv;
     private boolean listenerDisposed[] = new boolean[2];
     private String[] Loutput = new String[2];
 
@@ -49,8 +49,8 @@ public class _XComponent {
     * on <code>dispose</code> call.
     */
     private class MyEventListener implements XEventListener {
-        private int number = 0;
-        private String message = null;
+        private final int number;
+        private final String message;
         private MyEventListener(int number, String message) {
             this.message = message;
             this.number = number;
@@ -61,8 +61,8 @@ public class _XComponent {
         }
     }
 
-    private XEventListener listener1 = new MyEventListener(0, "EV1");
-    private XEventListener listener2 = new MyEventListener(1, "EV2");
+    private final XEventListener listener1 = new MyEventListener(0, "EV1");
+    private final XEventListener listener2 = new MyEventListener(1, "EV2");
 
     public _XComponent(TestParameters tEnv, XComponent oObj) {
         this.tEnv = tEnv;

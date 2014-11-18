@@ -28,22 +28,23 @@ import com.sun.star.awt.*;
  */
 public class ShapeDsc extends InstDescr {
 
-    private int x = 0;
-    private int y = 0;
-    private int height = 0;
-    private int width = 0;
-    private String name = null;
+    private final int x;
+    private final int y;
+    private final int height;
+    private final int width;
+    private final String name = null;
     private static final String ifcName = "com.sun.star.drawing.XShape";
-    private String service = "com.sun.star.drawing.RectangleShape";
+    private final String service;
 
-    public ShapeDsc( int nheight, int nwidth, int nx, int ny, String kind ) {
-        x=nx;
-                y=ny;
-                height=nheight;
-                width=nwidth;
-        service="com.sun.star.drawing."+kind+"Shape";
+    public ShapeDsc(int nheight, int nwidth, int nx, int ny, String kind) {
+        x = nx;
+        y = ny;
+        height = nheight;
+        width = nwidth;
+        service = "com.sun.star.drawing." + kind + "Shape";
         initShape();
     }
+
     @Override
     public String getName() {
         return name;

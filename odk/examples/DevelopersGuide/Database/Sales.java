@@ -38,7 +38,7 @@ import com.sun.star.sdbc.*;
 
 public class Sales
 {
-    private XConnection con;
+    private final XConnection con;
 
     public Sales(XConnection connection )
     {

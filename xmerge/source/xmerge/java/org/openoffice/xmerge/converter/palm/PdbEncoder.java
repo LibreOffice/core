@@ -44,10 +44,10 @@ import java.util.Date;
 public final class PdbEncoder {
 
     /** PDB header. */
-    private PdbHeader header = null;
+    private final PdbHeader header;
 
     /** the PalmDB object. */
-    private PalmDB db = null;
+    private final PalmDB db;
 
     /** The pattern for unique_id=0x00BABE(start). */
     private final static int START_UNIQUE_ID = 0x00BABE;

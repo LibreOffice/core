@@ -95,7 +95,7 @@ public class _XRow extends MultiMethodTest {
     // oObj filled by MultiMethodTest
     public XRow oObj = null ;
     private List<Object> data = null ;
-    private boolean notNullRes = true ;
+    private final boolean notNullRes = true;
 
     /**
     * Retrieves object relation first.

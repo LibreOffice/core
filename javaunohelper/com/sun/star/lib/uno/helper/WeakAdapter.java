@@ -33,9 +33,9 @@ import java.util.LinkedList;
 public class WeakAdapter implements XAdapter
 {
     // references the XWeak implementation
-    private WeakReference<Object> m_weakRef;
+    private final WeakReference<Object> m_weakRef;
     // contains XReference objects registered by addReference
-    private List<XReference> m_xreferenceList;
+    private final List<XReference> m_xreferenceList;
 
     /**
      *@param component the object that is to be held weak

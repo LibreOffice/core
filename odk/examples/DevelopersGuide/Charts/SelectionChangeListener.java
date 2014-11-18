@@ -177,7 +177,7 @@ public class SelectionChangeListener implements XSelectionChangeListener {
     // __________ private __________
 
     private class MyMessageBox extends Thread{
-        private XMultiComponentFactory mMCF;
+        private final XMultiComponentFactory mMCF;
 
         public MyMessageBox(XMultiComponentFactory xMCF){
             mMCF = xMCF;
@@ -212,6 +212,6 @@ public class SelectionChangeListener implements XSelectionChangeListener {
         }
     }
 
-    private XChartDocument            maChartDocument;
-    private XComponentContext         maContext;
+    private final XChartDocument            maChartDocument;
+    private final XComponentContext         maContext;
 }

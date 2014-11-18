@@ -40,10 +40,10 @@ public class Settings
     private static Settings m_instance;
 
 
-    private XComponentContext m_xContext;
+    private final XComponentContext m_xContext;
     private int lastUsedWikiServer = 0;
-    private List<Map<String, String>> m_WikiConnections = new ArrayList<Map<String, String>>();
-    private List<Map<String, Object>> m_aWikiDocs = new ArrayList<Map<String, Object>>();
+    private final List<Map<String, String>> m_WikiConnections = new ArrayList<Map<String, String>>();
+    private final List<Map<String, Object>> m_aWikiDocs = new ArrayList<Map<String, Object>>();
 
     private Settings( XComponentContext ctx )
     {

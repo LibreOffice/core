@@ -51,9 +51,9 @@ import javax.swing.JOptionPane;
 public class ParcelBrowseNode extends PropertySet implements
     XBrowseNode, XInvocation {
 
-    private ScriptProvider provider;
+    private final ScriptProvider provider;
     private Collection<XBrowseNode> browsenodes;
-    private ParcelContainer container;
+    private final ParcelContainer container;
     private Parcel parcel;
 
     public ParcelBrowseNode(ScriptProvider provider, ParcelContainer container,

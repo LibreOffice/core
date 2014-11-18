@@ -41,7 +41,7 @@ public class _XAccessibleExtendedComponent {
     private static final String className =
         "com.sun.star.accessibility.XAccessibleExtendedComponent" ;
 
-    private XAccessibleExtendedComponent oObj = null;
+    private final XAccessibleExtendedComponent oObj;
 
     // temporary while accessibility package is in com.sun.star
     protected String getTestedClassName() {

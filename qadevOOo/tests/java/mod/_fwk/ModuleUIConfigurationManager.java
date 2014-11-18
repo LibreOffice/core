@@ -124,9 +124,9 @@ public class ModuleUIConfigurationManager extends TestCase {
      */
     public static class ConfigurationListener implements _XUIConfiguration.XUIConfigurationListenerImpl {
         private boolean triggered = false;
-        private PrintWriter log = null;
-        private XUIConfigurationManager xUIManager = null;
-        private XMultiServiceFactory xMSF = null;
+        private final PrintWriter log;
+        private final XUIConfigurationManager xUIManager;
+        private final XMultiServiceFactory xMSF;
 
         public ConfigurationListener(PrintWriter _log, XUIConfigurationManager xUIManager, XMultiServiceFactory xMSF) {
             log = _log;

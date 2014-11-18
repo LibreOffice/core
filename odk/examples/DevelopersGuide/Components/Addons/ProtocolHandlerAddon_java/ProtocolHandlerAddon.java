@@ -68,7 +68,7 @@ public class ProtocolHandlerAddon {
 
         /** The component context, that gives access to the service manager and all registered services.
          */
-        private XComponentContext m_xCmpCtx;
+        private final XComponentContext m_xCmpCtx;
 
         /** The toolkit, that we can create UNO dialogs.
          */

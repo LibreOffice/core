@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class PRNCompare
 {
-    private String fs;
+    private final String fs;
 
     public PRNCompare()
         {

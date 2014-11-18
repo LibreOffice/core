@@ -39,8 +39,8 @@ import org.openoffice.xmerge.util.Debug;
  */
 public class DocumentMergerImpl implements DocumentMerger {
 
-    private ConverterCapabilities cc_;
-    private org.openoffice.xmerge.Document orig = null;
+    private final ConverterCapabilities cc_;
+    private final org.openoffice.xmerge.Document orig;
 
     public DocumentMergerImpl(org.openoffice.xmerge.Document doc, ConverterCapabilities cc) {
         cc_ = cc;

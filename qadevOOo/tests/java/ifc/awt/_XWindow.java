@@ -191,7 +191,7 @@ public class _XWindow extends MultiMethodTest {
 
     }
 
-    private TestWindowListener wListener = new TestWindowListener() ;
+    private final TestWindowListener wListener = new TestWindowListener() ;
 
 
     /**
@@ -341,7 +341,7 @@ public class _XWindow extends MultiMethodTest {
 
     }
 
-    private TestFocusListener fListener = new TestFocusListener();
+    private final TestFocusListener fListener = new TestFocusListener();
 
     /**
     * Test calls the method. Then we change focus and check that listener's
@@ -414,7 +414,7 @@ public class _XWindow extends MultiMethodTest {
         public void init() { pressed = false; released = false; }
     }
 
-    private TestKeyListener kListener = new TestKeyListener();
+    private final TestKeyListener kListener = new TestKeyListener();
 
     /**
     * Test calls the method. <p>
@@ -477,7 +477,7 @@ public class _XWindow extends MultiMethodTest {
 
     }
 
-    private TestMouseListener mListener = new TestMouseListener();
+    private final TestMouseListener mListener = new TestMouseListener();
 
     /**
     * Test calls the method. <p>
@@ -528,7 +528,7 @@ public class _XWindow extends MultiMethodTest {
 
     }
 
-    private TestMouseMotionListener mmListener = new TestMouseMotionListener();
+    private final TestMouseMotionListener mmListener = new TestMouseMotionListener();
 
     /**
     * Test calls the method. <p>
@@ -573,7 +573,7 @@ public class _XWindow extends MultiMethodTest {
 
     }
 
-    private TestPaintListener pListener = new TestPaintListener();
+    private final TestPaintListener pListener = new TestPaintListener();
 
     /**
     * Test calls the method. <p>

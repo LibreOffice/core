@@ -99,10 +99,10 @@ public class DocumentView extends    JFrame
     private CustomizeView                   maCustomizeView     ;
     private Interceptor                     maInterceptor       ;
 
-    private String                          msName              ;
+    private final String                    msName;
 
-    private JButton                         mbtSave             ;
-    private JButton                         mbtExport           ;
+    private final JButton                   mbtSave;
+    private final JButton                   mbtExport;
 
     private boolean                         mbDead              ;
 

@@ -51,10 +51,10 @@ public final class Driver {
     private String mergeFile = null;
 
     /** Command-line parmeter. */
-    private ArrayList<String> deviceFiles = new ArrayList<String>();
+    private final ArrayList<String> deviceFiles = new ArrayList<String>();
 
     /** Command-line parmeter shortcuts. */
-    private String mimeTypes[] = {
+    private final String mimeTypes[] = {
                                     "sxc", "staroffice/sxc",
                                     "sxw","staroffice/sxw"
     };

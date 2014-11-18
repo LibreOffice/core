@@ -52,7 +52,7 @@ public class ScriptProviderForJava {
 
     public static class _ScriptProviderForJava extends ScriptProvider {
 
-        private Resolver m_resolutionPolicy = new StrictResolver();
+        private final Resolver m_resolutionPolicy = new StrictResolver();
 
         public _ScriptProviderForJava(XComponentContext ctx) {
             super(ctx, "Java");
@@ -126,12 +126,12 @@ public class ScriptProviderForJava {
 
 class ScriptImpl implements XScript {
 
-    private ScriptMetaData metaData;
-    private XComponentContext m_xContext;
-    private XModel m_xModel;
-    private XScriptInvocationContext m_xInvocContext;
+    private final ScriptMetaData metaData;
+    private final XComponentContext m_xContext;
+    private final XModel m_xModel;
+    private final XScriptInvocationContext m_xInvocContext;
     private XMultiComponentFactory m_xMultiComponentFactory;
-    private Resolver m_resolutionPolicy;
+    private final Resolver m_resolutionPolicy;
 
     ScriptImpl(XComponentContext ctx, Resolver resolver, ScriptMetaData metaData,
                XModel xModel, XScriptInvocationContext xInvocContext) throws

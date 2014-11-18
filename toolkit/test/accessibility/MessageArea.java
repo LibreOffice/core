@@ -138,5 +138,5 @@ public class MessageArea
 
 
     private static MessageArea saInstance = null;
-    private JTextArea maText;
+    private final JTextArea maText;
 }

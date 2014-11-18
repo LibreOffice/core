@@ -100,15 +100,15 @@ public final class DEPSSolverImpl extends BaseEvolutionarySolver
         return m_serviceNames;
     }
 
-    private PropertyInfo<Double> m_agentSwitchRate = new PropertyInfo<Double>("AgentSwitchRate", 0.5, "Agent Switch Rate (DE Probability)");
+    private final PropertyInfo<Double> m_agentSwitchRate = new PropertyInfo<Double>("AgentSwitchRate", 0.5, "Agent Switch Rate (DE Probability)");
     // --DE
-    private PropertyInfo<Double> m_factor = new PropertyInfo<Double>("DEFactor", 0.5, "DE: Scaling Factor (0-1.2)");
-    private PropertyInfo<Double> m_CR = new PropertyInfo<Double>("DECR", 0.9, "DE: Crossover Probability (0-1)");
+    private final PropertyInfo<Double> m_factor = new PropertyInfo<Double>("DEFactor", 0.5, "DE: Scaling Factor (0-1.2)");
+    private final PropertyInfo<Double> m_CR = new PropertyInfo<Double>("DECR", 0.9, "DE: Crossover Probability (0-1)");
     // --PS
-    private PropertyInfo<Double> m_c1 = new PropertyInfo<Double>("PSC1", 1.494, "PS: Cognitive Constant");
-    private PropertyInfo<Double> m_c2 = new PropertyInfo<Double>("PSC2", 1.494, "PS: Social Constant");
-    private PropertyInfo<Double> m_weight = new PropertyInfo<Double>("PSWeight", 0.729, "PS: Constriction Coefficient");
-    private PropertyInfo<Double> m_CL = new PropertyInfo<Double>("PSCL", 0.0, "PS: Mutation Probability (0-0.005)");
+    private final PropertyInfo<Double> m_c1 = new PropertyInfo<Double>("PSC1", 1.494, "PS: Cognitive Constant");
+    private final PropertyInfo<Double> m_c2 = new PropertyInfo<Double>("PSC2", 1.494, "PS: Social Constant");
+    private final PropertyInfo<Double> m_weight = new PropertyInfo<Double>("PSWeight", 0.729, "PS: Constriction Coefficient");
+    private final PropertyInfo<Double> m_CL = new PropertyInfo<Double>("PSCL", 0.0, "PS: Mutation Probability (0-0.005)");
 
     public void solve() {
         try {

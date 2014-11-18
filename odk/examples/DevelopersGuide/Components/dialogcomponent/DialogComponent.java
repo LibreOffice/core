@@ -71,7 +71,7 @@ public class DialogComponent {
         private static final String __serviceName= "com.sun.star.test.TestDialogHandler";
 
 
-        private XComponentContext m_xCmpCtx;
+        private final XComponentContext m_xCmpCtx;
 
         private XFrame m_xFrame;
         private XToolkit m_xToolkit;

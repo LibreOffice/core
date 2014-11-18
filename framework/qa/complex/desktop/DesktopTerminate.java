@@ -38,7 +38,7 @@ public class DesktopTerminate
 {
 
     private XMultiServiceFactory xMSF;
-    private int iOfficeCloseTime = 1000;
+    private final int iOfficeCloseTime = 1000;
 
     /**
      * Test if all available document types change the

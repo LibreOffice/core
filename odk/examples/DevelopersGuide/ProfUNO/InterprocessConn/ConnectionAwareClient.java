@@ -53,11 +53,11 @@ import com.sun.star.bridge.XBridge;
 public class ConnectionAwareClient extends java.awt.Frame
     implements ActionListener , com.sun.star.lang.XEventListener
 {
-    private Button _btnWriter;
-    private Label _txtLabel;
-    private String _url;
+    private final Button _btnWriter;
+    private final Label _txtLabel;
+    private final String _url;
 
-    private XComponentContext _ctx;
+    private final XComponentContext _ctx;
 
     private com.sun.star.frame.XComponentLoader _officeComponentLoader;
 

@@ -30,10 +30,10 @@ import com.sun.star.wizards.common.PropertyNames;
 public class DataEntrySetter
 {
 
-    private XRadioButton optDisplayAllData;
-    private XCheckBox chknomodification;
-    private XCheckBox chknodeletion;
-    private XCheckBox chknoaddition;
+    private final XRadioButton optDisplayAllData;
+    private final XCheckBox chknomodification;
+    private final XCheckBox chknodeletion;
+    private final XCheckBox chknoaddition;
 
     public DataEntrySetter(WizardDialog CurUnoDialog)
     {

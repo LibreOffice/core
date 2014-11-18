@@ -252,11 +252,11 @@ public abstract class DataAware {
         /**
          * the get method of the JavaBean-style property
          */
-        private Method getMethod;
+        private final Method getMethod;
         /**
          * the set method of the JavaBean-style property
          */
-        private Method setMethod;
+        private final Method setMethod;
 
         /**
          * creates a PropertyValue for the property with

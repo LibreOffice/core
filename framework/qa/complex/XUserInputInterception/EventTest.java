@@ -406,11 +406,11 @@ public class EventTest {
          * represents an <CODE>EventType</CODE>
          * @see EventTest.EventTriggerType
          */
-        private int eventType = 0;
+        private final int eventType;
         /**
          * represents a <CODE>XModel</CODE> of a document
          */
-        private XModel xModel = null;
+        private final XModel xModel;
 
         /**
          * Creates an instacne of this class. The parameter <CODE>eType</CODE> represents

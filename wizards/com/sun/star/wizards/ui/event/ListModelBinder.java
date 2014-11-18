@@ -30,10 +30,10 @@ import com.sun.star.wizards.common.PropertyNames;
 public class ListModelBinder implements ListDataListener
 {
 
-    private XListBox unoList;
-    private Object unoListModel;
+    private final XListBox unoList;
+    private final Object unoListModel;
     private ListModel listModel;
-    private Renderer renderer = new Renderer()
+    private final Renderer renderer = new Renderer()
     {
 
         public String render(Object item)

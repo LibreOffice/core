@@ -31,7 +31,7 @@ public class GroupFieldHandler extends FieldSelection
 {
 
     private IReportDocument CurReportDocument;
-    private ArrayList<String> GroupFieldVector = new ArrayList<String>();
+    private final ArrayList<String> GroupFieldVector = new ArrayList<String>();
     private QueryMetaData CurDBMetaData;
     private static final short MAXSELFIELDS = 4;
 

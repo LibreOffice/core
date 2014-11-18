@@ -15,20 +15,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * BooleanValidator.java
- *
- * Created on 10. Maerz 2004, 16:27
- */
-
 package integration.forms;
 
 import com.sun.star.uno.AnyConverter;
 
 public class BooleanValidator extends integration.forms.ControlValidator
 {
-    private boolean                         m_preventChecked;
+    private final boolean                         m_preventChecked;
 
     /** Creates a new instance of BooleanValidator */
     public BooleanValidator( boolean preventChecked )

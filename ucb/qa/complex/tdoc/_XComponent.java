@@ -38,7 +38,7 @@ import share.LogWriter;
 public class _XComponent {
 
     public static XComponent oObj = null;
-    private LogWriter log = null;
+    private final LogWriter log = null;
 
     private boolean listenerDisposed[] = new boolean[2];
     private String[] Loutput = new String[2];
@@ -65,8 +65,8 @@ public class _XComponent {
         }
     }
 
-    private XEventListener listener1 = new MyEventListener();
-    private XEventListener listener2 = new MyEventListener2();
+    private final XEventListener listener1 = new MyEventListener();
+    private final XEventListener listener2 = new MyEventListener2();
 
     /**
      * For the cfgmgr2.OSetElement tests: dispose the owner element.

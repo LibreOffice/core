@@ -98,7 +98,7 @@ public class DataAwareFields
     private static class BooleanFieldValue extends FieldValue
     {
 
-        private Class<?> convertTo;
+        private final Class<?> convertTo;
 
         public BooleanFieldValue(Field f, Class<?> convertTo_)
         {
@@ -158,7 +158,7 @@ public class DataAwareFields
     private static class IntFieldValue extends FieldValue
     {
 
-        private Class<?> convertTo;
+        private final Class<?> convertTo;
 
         public IntFieldValue(Field f, Class<?> convertTo_)
         {
@@ -218,7 +218,7 @@ public class DataAwareFields
     private static class DoubleFieldValue extends FieldValue
     {
 
-        private Class<?> convertTo;
+        private final Class<?> convertTo;
 
         public DoubleFieldValue(Field f, Class<?> convertTo_)
         {
@@ -278,7 +278,7 @@ public class DataAwareFields
     private static class ConvertedStringValue extends FieldValue
     {
 
-        private Class<?> convertTo;
+        private final Class<?> convertTo;
 
         public ConvertedStringValue(Field f, Class<?> convertTo_)
         {

@@ -33,7 +33,7 @@ public class ConvertData {
     /**
      * Vector of {@code Document} objects.
      */
-    private ArrayList<Object> v = new ArrayList<Object>();
+    private final ArrayList<Object> v = new ArrayList<Object>();
 
     /**
      * Name of the {@code ConvertData} object.

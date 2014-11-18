@@ -62,7 +62,7 @@ public class LocalOfficeConnection
     private String                  mProtocol;
     private String                  mInitialObject;
 
-    private List<XEventListener> mComponents = new ArrayList<XEventListener>();
+    private final List<XEventListener> mComponents = new ArrayList<XEventListener>();
 
     private static long m_nBridgeCounter = 0;
 
@@ -742,8 +742,8 @@ public class LocalOfficeConnection
 
     private class StreamProcessor extends Thread
     {
-        private java.io.InputStream m_in;
-        private java.io.PrintStream m_print;
+        private final java.io.InputStream m_in;
+        private final java.io.PrintStream m_print;
 
         public StreamProcessor(final java.io.InputStream in, final java.io.PrintStream out)
         {

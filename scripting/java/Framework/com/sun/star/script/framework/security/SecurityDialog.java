@@ -145,7 +145,7 @@ public class SecurityDialog extends WeakBase implements
     private static final int lineWrapH = 12;
     private String _pushed = _doNotRunButtonName;
 
-    private XComponentContext _xComponentContext;
+    private final XComponentContext _xComponentContext;
     private XDialog _xDialog;
 
     public SecurityDialog(XComponentContext xComponentContext) {
@@ -539,7 +539,7 @@ public class SecurityDialog extends WeakBase implements
 
     private class ActionListenerImpl implements com.sun.star.awt.XActionListener {
 
-        private String _buttonName;
+        private final String _buttonName;
 
         private ActionListenerImpl(String buttonName) {
             _buttonName = buttonName;

@@ -61,7 +61,7 @@ public class _XUnoUrlResolver extends MultiMethodTest {
          *
          * @see com.sun.star.lang.MultiServiceFactory
          */
-        private XMultiServiceFactory xMSF = null;
+        private final XMultiServiceFactory xMSF;
 
         /**
          * Construct object with a MultiServiceFactory
@@ -91,16 +91,15 @@ public class _XUnoUrlResolver extends MultiMethodTest {
      * Thread for creating a bridge so the resolver can access it
      */
     class BridgeThread extends Thread {
-        private XBridgeFactory xBrdgFctr = null;
-        private XInstanceProvider xInstProv = null;
-        private XAcceptor xAcc = null;
-        private String connectString = null;
+        private final XBridgeFactory xBrdgFctr;
+        private final XInstanceProvider xInstProv;
+        private final XAcceptor xAcc;
+        private final String connectString;
 
         public XBridge xBridge = null;
 
         public BridgeThread(XAcceptor xAcc, XBridgeFactory xBrdgFctr,
-            XInstanceProvider xInstProv, String connectString
-                ) {
+            XInstanceProvider xInstProv, String connectString) {
             this.xInstProv = xInstProv;
             this.xBrdgFctr = xBrdgFctr;
             this.xAcc = xAcc;

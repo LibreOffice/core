@@ -26,8 +26,8 @@ import java.util.NoSuchElementException;
 
 public class Instance
 {
-    private Model           m_model;
-    private XDocument       m_domInstance;
+    private final Model           m_model;
+    private final XDocument       m_domInstance;
 
     protected Instance( Model _model, XDocument _domInstance )
     {

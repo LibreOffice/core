@@ -80,9 +80,9 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
      * @member m_bIsStatusListener  indicates if we are currently registered as a listener for status events or not
      * @member m_bDead              there exist more than one way to finish an object of this class - we must know it sometimes
      */
-    private Component                    m_rControl         ;
-    private String                       m_sTrueText        ;
-    private String                       m_sFalseText       ;
+    private final Component                    m_rControl         ;
+    private final String                       m_sTrueText        ;
+    private final String                       m_sFalseText       ;
     private com.sun.star.frame.XDispatch m_xDispatch        ;
     private com.sun.star.frame.XFrame    m_xFrame           ;
     private com.sun.star.util.URL        m_aURL             ;

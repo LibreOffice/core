@@ -39,9 +39,9 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private String sTablePrefix;
     private short m_iSelPos = -1;
     private short iOldSelPos = -1;
-    private boolean bpreselectCommand = true;
+    private final boolean bpreselectCommand = true;
     private boolean bgetQueries;
-    private WizardDialog oWizardDialog;
+    private final WizardDialog oWizardDialog;
     private Collator aCollator = null;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener

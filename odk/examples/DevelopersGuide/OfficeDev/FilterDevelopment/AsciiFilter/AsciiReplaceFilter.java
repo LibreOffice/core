@@ -112,7 +112,7 @@ public class AsciiReplaceFilter
         * To see the output inside an office environment
         * use "soffice ...params... >output.txt"
         */
-        private long m_nStart;
+        private final long m_nStart;
         private long m_nLast ;
 
         private void measure( String sText )

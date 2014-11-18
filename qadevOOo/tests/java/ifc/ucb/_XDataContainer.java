@@ -39,7 +39,7 @@ import com.sun.star.ucb.XDataContainer;
 public class _XDataContainer extends MultiMethodTest {
 
     public static XDataContainer oObj = null;        // oObj filled by MultiMethodTest
-    private byte[] data = new byte[] {34, 35, 36} ;
+    private final byte[] data = new byte[] {34, 35, 36} ;
     private String dataURL = null;
 
     /**

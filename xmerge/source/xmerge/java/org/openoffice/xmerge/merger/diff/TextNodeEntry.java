@@ -29,9 +29,9 @@ import org.w3c.dom.Node;
  */
 public class TextNodeEntry {
 
-    private int startChar_;
-    private int endChar_;
-    private Node node_;
+    private final int startChar_;
+    private final int endChar_;
+    private final Node node_;
 
     /**
      * Constructor

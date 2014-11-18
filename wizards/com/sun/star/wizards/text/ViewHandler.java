@@ -39,9 +39,9 @@ import com.sun.star.wizards.common.Helper;
 public class ViewHandler
 {
 
-    private XTextViewCursorSupplier xTextViewCursorSupplier;
-    private XStyleFamiliesSupplier xStyleFamiliesSupplier;
-    private XViewSettingsSupplier xViewSettingsSupplier;
+    private final XTextViewCursorSupplier xTextViewCursorSupplier;
+    private final XStyleFamiliesSupplier xStyleFamiliesSupplier;
+    private final XViewSettingsSupplier xViewSettingsSupplier;
 
     /** Creates a new instance of View */
     public ViewHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)

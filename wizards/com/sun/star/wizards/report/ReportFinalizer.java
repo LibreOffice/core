@@ -44,7 +44,7 @@ public class ReportFinalizer
     public static final int SOCREATEDOCUMENT = 1;
     public static final int SOCREATETEMPLATE = 2;
     public static final int SOUSETEMPLATE = 3;
-    private XMultiServiceFactory m_xMSF;
+    private final XMultiServiceFactory m_xMSF;
     public ReportFinalizer(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, WizardDialog _CurUnoDialog)
     {
         m_xMSF = _xMSF;

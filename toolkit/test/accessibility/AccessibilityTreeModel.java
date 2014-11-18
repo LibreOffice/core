@@ -494,7 +494,7 @@ public class AccessibilityTreeModel
     private final XAccessibleEventListener mxListener;
 
     // Map to translate from accessible object to corresponding tree node.
-    private NodeMap maNodeMap;
+    private final NodeMap maNodeMap;
 
     // If the lock count is higher then zero, then no events are processed.
     private int mnLockCount;

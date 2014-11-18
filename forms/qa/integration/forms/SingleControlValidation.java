@@ -24,14 +24,14 @@ import com.sun.star.form.validation.*;
 
 public class SingleControlValidation implements XFormComponentValidityListener
 {
-    private DocumentHelper          m_document;         /// our current test document
-    private FormLayer               m_formLayer;        /// quick access to the form layer
+    private final DocumentHelper          m_document;         /// our current test document
+    private final FormLayer               m_formLayer;        /// quick access to the form layer
 
     private XPropertySet            m_inputField;
     private XPropertySet            m_inputLabel;
     private XPropertySet            m_statusField;
     private XPropertySet            m_explanationField;
-    private XValidator              m_validator;
+    private final XValidator              m_validator;
 
     /* ------------------------------------------------------------------ */
     public SingleControlValidation( DocumentHelper document, int columnPos, int rowPos, String formComponentService, XValidator validator )

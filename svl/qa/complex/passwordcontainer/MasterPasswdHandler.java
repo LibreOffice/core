@@ -28,7 +28,7 @@ import com.sun.star.uno.UnoRuntime;
 
 public class MasterPasswdHandler extends WeakBase
         implements XInteractionHandler {
-    private XInteractionHandler m_xHandler;
+    private final XInteractionHandler m_xHandler;
 
     public MasterPasswdHandler( XInteractionHandler xHandler ) {
         m_xHandler = xHandler;

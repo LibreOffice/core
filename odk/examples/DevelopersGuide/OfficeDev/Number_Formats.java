@@ -207,7 +207,7 @@ public class Number_Formats
 
     // __________ private members and methods __________
 
-    private XSpreadsheetDocument   maSpreadsheetDoc;
+    private final XSpreadsheetDocument   maSpreadsheetDoc;
     private XSpreadsheet           maSheet;  // the first sheet
 
 

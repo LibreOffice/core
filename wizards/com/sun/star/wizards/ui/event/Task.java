@@ -26,8 +26,8 @@ public class Task
     private int successful = 0;
     private int failed = 0;
     private int max = 0;
-    private String taskName;
-    private List<TaskListener> listeners = new ArrayList<TaskListener>();
+    private final String taskName;
+    private final List<TaskListener> listeners = new ArrayList<TaskListener>();
     private String subtaskName;
 
     public Task(String taskName_, String subtaskName_, int max_)

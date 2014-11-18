@@ -35,12 +35,12 @@ import helper.WindowListener;
  */
 public class DocumentHandle {
     // the component loader to load a document
-    private XComponentLoader xCompLoader = null;
+    private final XComponentLoader xCompLoader;
 
     // the current window
     private XWindow xWin = null;
     // a own window listener
-    private WindowListener wl = null;
+    private final WindowListener wl;
 
     /**
      * Constructor

@@ -42,9 +42,9 @@ import java.util.List;
  */
 public class CharacterParser {
 
-    private TextNodeIterator textNodes;
+    private final TextNodeIterator textNodes;
     private int currentPosition = 0;
-    private List<TextNodeEntry> nodeList_ = null;
+    private final List<TextNodeEntry> nodeList_;
     private char[] charArray;
 
     /**

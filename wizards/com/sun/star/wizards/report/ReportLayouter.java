@@ -50,11 +50,11 @@ public class ReportLayouter
     public String[][] LayoutFiles;
     public String[][] ContentFiles;
     Object aOrientationImage;
-    private XMultiServiceFactory m_xMSF;
+    private final XMultiServiceFactory m_xMSF;
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
     private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;
     private List<XTextRange>    constRangeList = new ArrayList<XTextRange>();
-    private boolean isBuilderInstalled;
+    private final boolean isBuilderInstalled;
 
     public ReportLayouter(XMultiServiceFactory _xMSF, IReportDocument _CurReportDocument, UnoDialog _CurUnoDialog, boolean _isBuilderInstalled)
     {

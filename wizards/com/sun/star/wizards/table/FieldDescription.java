@@ -33,7 +33,7 @@ public class FieldDescription
 {
     private String tablename = PropertyNames.EMPTY_STRING;
     private XPropertySet xPropertySet;
-    private ArrayList<PropertyValue> aPropertyValues;
+    private final ArrayList<PropertyValue> aPropertyValues;
     private String Name;
 
     public FieldDescription(XMultiServiceFactory _xMSF, Locale _aLocale, ScenarioSelector _curscenarioselector, String _fieldname, String keyname, int _nmaxcharCount)

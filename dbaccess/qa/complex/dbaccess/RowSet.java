@@ -73,9 +73,9 @@ public class RowSet extends TestCase
     private class ResultSetMovementStress implements Runnable
     {
 
-        private XResultSet m_resultSet;
-        private XRow m_row;
-        private int m_id;
+        private final XResultSet m_resultSet;
+        private final XRow m_row;
+        private final int m_id;
 
         private ResultSetMovementStress(XResultSet _resultSet, int _id) throws java.lang.Exception
         {

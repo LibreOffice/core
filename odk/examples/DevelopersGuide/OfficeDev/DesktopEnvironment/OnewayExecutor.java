@@ -74,9 +74,9 @@ class OnewayExecutor extends Thread
      *                      called oneyway method)
      * @member  m_lParams   list of parameters of the original request
      */
-    private IOnewayLink m_rLink     ;
-    private int         m_nRequest  ;
-    private ArrayList<Object>      m_lParams   ;
+    private final IOnewayLink m_rLink     ;
+    private final int         m_nRequest  ;
+    private final ArrayList<Object>      m_lParams   ;
 
 
 

@@ -157,8 +157,8 @@ public class _XFilter extends MultiMethodTest {
     */
     protected class FilterThread extends Thread {
 
-        public boolean filterRes = true ;
-        private XFilter Filter = null ;
+        public boolean filterRes = true;
+        private final XFilter Filter;
         public PropertyValue[] mdesc = null;
 
         public FilterThread(XFilter Filter) {

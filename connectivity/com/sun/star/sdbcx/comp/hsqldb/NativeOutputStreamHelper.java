@@ -15,20 +15,13 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * NativeOutputStreamHelper.java
- *
- * Created on 1. September 2004, 10:39
- */
-
 package com.sun.star.sdbcx.comp.hsqldb;
 
 public class NativeOutputStreamHelper extends java.io.OutputStream{
 
-    private String key;
-    private String file;
-    private StorageNativeOutputStream out;
+    private final String key;
+    private final String file;
+    private final StorageNativeOutputStream out;
     /** Creates a new instance of NativeOutputStreamHelper */
     public NativeOutputStreamHelper(String key,String _file) {
         file = _file;

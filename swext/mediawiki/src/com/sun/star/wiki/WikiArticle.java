@@ -33,7 +33,7 @@ import com.sun.star.uno.XComponentContext;
 
 public class WikiArticle
 {
-    private XComponentContext m_xContext;
+    private final XComponentContext m_xContext;
 
     private String m_sEditTime = "";
     private String m_sEditToken = "";
@@ -44,9 +44,9 @@ public class WikiArticle
     private String m_sWikiUser;
     private String m_sWikiPass;
 
-    private String m_sTitle = "";
+    private final String m_sTitle;
 
-    private URI m_aMainURI;
+    private final URI m_aMainURI;
     private HostConfiguration m_aHostConfig;
 
 

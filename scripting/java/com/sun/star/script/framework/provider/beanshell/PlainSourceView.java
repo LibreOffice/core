@@ -34,7 +34,7 @@ import javax.swing.event.DocumentListener;
 public class PlainSourceView extends JScrollPane implements
     ScriptSourceView, DocumentListener {
 
-    private ScriptSourceModel model;
+    private final ScriptSourceModel model;
     private JTextArea ta;
     private GlyphGutter gg;
     private int linecount;
@@ -144,7 +144,7 @@ public class PlainSourceView extends JScrollPane implements
 
 class GlyphGutter extends JComponent {
 
-    private PlainSourceView view;
+    private final PlainSourceView view;
     private static final String DUMMY_STRING = "99";
 
     GlyphGutter(PlainSourceView view) {

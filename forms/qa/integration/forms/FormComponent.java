@@ -28,11 +28,11 @@ import com.sun.star.lang.XServiceInfo;
 
 public class FormComponent
 {
-    private Object          m_component;
-    private XNameAccess     m_nameAccess;
-    private XIndexAccess    m_indexAccess;
-    private XChild          m_child;
-    private XNamed          m_named;
+    private final Object          m_component;
+    private final XNameAccess     m_nameAccess;
+    private final XIndexAccess    m_indexAccess;
+    private final XChild          m_child;
+    private final XNamed          m_named;
 
     /* ------------------------------------------------------------------ */
     private FormComponent()

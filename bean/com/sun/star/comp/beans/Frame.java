@@ -31,9 +31,9 @@ public class Frame
         com.sun.star.frame.XDispatchProvider,
         com.sun.star.frame.XDispatchProviderInterception
 {
-    private com.sun.star.frame.XFrame xFrame;
-    private com.sun.star.frame.XDispatchProvider xDispatchProvider;
-    private com.sun.star.frame.XDispatchProviderInterception xDispatchProviderInterception;
+    private final com.sun.star.frame.XFrame xFrame;
+    private final com.sun.star.frame.XDispatchProvider xDispatchProvider;
+    private final com.sun.star.frame.XDispatchProviderInterception xDispatchProviderInterception;
 
     public Frame( com.sun.star.frame.XFrame xFrame )
     {

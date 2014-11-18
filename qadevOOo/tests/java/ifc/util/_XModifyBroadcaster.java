@@ -51,7 +51,7 @@ public class _XModifyBroadcaster extends MultiMethodTest {
         }
     }
 
-    private TestModifyListener listener = new TestModifyListener();
+    private final TestModifyListener listener = new TestModifyListener();
 
     /**
     * Just calls the method. <p>
