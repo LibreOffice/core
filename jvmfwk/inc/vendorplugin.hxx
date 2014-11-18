@@ -36,7 +36,7 @@
    what version a JRE must have then it relies on certain features and bug
    fixes of that version. Because a version 1.4.2_1 from vendor X may contain
    different fixes as the same version from vendor Y it is important to see
-   version an vendor as one entity. One without the other does not guarantee
+   version and vendor as one entity. One without the other does not guarantee
    the existence of a particular set of features or bug fixes. An implementation
    of this API may support multiple vendors. </p>
    <p>
@@ -83,11 +83,9 @@ typedef enum
         [in] only JREs from this vendor are examined. This parameter always contains
         a vendor string. That is, the string it is not empty.
     @param sMinVersion
-        [in] represents the minimum version of a JRE. The string can be empty but
-        a null pointer is not allowed.
+        [in] represents the minimum version of a JRE. The string can be empty.
     @param sMaxVersion
-        [in] represents the maximum version of a JRE. The string can be empty but
-        a null pointer is not allowed.
+        [in] represents the maximum version of a JRE. The string can be empty.
     @param arExcludeList
         [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
         versions must not be returned by this function. It can be NULL.
@@ -111,9 +109,9 @@ typedef enum
     version strings.
  */
 javaPluginError jfw_plugin_getAllJavaInfos(
-    rtl_uString *sVendor,
-    rtl_uString *sMinVersion,
-    rtl_uString *sMaxVersion,
+    OUString const& sVendor,
+    OUString const& sMinVersion,
+    OUString const& sMaxVersion,
     rtl_uString * * arExcludeList,
     sal_Int32  nSizeExcludeList,
     JavaInfo*** parJavaInfo,
@@ -162,10 +160,10 @@ javaPluginError jfw_plugin_getAllJavaInfos(
    a vendor which is not supported by this API implementation.
  */
 javaPluginError jfw_plugin_getJavaInfoByPath(
-    rtl_uString *sLocation,
-    rtl_uString *sVendor,
-    rtl_uString *sMinVersion,
-    rtl_uString *sMaxVersion,
+    OUString const& sLocation,
+    OUString const& sVendor,
+    OUString const& sMinVersion,
+    OUString const& sMaxVersion,
     rtl_uString * *arExcludeList,
     sal_Int32  nSizeExcludeList,
     JavaInfo ** ppInfo);

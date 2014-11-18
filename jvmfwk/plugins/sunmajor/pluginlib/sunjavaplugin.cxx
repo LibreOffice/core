@@ -210,11 +210,9 @@ extern "C" void JNICALL abort_handler()
     @param aVendorInfo
         [in]  the object to be inspected whether it meets the version requirements
     @param sMinVersion
-        [in] represents the minimum version of a JRE. The string can be empty but
-        a null pointer is not allowed.
+        [in] represents the minimum version of a JRE. The string can be empty.
     @param sMaxVersion
-        [in] represents the maximum version of a JRE. The string can be empty but
-        a null pointer is not allowed.
+        [in] represents the maximum version of a JRE. The string can be empty.
     @param arExcludeList
         [in] contains a list of &quot;bad&quot; versions. JREs which have one of these
         versions must not be returned by this function. It can be NULL.
@@ -232,19 +230,16 @@ extern "C" void JNICALL abort_handler()
      */
 javaPluginError checkJavaVersionRequirements(
     rtl::Reference<VendorBase> const & aVendorInfo,
-    rtl_uString *sMinVersion,
-    rtl_uString *sMaxVersion,
+    OUString const& sMinVersion,
+    OUString const& sMaxVersion,
     rtl_uString * * arExcludeList,
     sal_Int32  nLenList)
 {
-    OUString ouMinVer(sMinVersion);
-    OUString ouMaxVer(sMaxVersion);
-
-    if (!ouMinVer.isEmpty())
+    if (!sMinVersion.isEmpty())
     {
         try
         {
-            if (aVendorInfo->compareVersions(ouMinVer) < 0)
+            if (aVendorInfo->compareVersions(sMinVersion) < 0)
                 return JFW_PLUGIN_E_FAILED_VERSION;
         }
         catch (MalformedVersionException&)
@@ -253,17 +248,17 @@ javaPluginError checkJavaVersionRequirements(
             JFW_ENSURE(
                 false,
                 "[Java framework]sunjavaplugin does not know version: "
-                + ouMinVer + " for vendor: " + aVendorInfo->getVendor()
+                + sMinVersion + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check minimum Version." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
         }
     }
 
-    if (!ouMaxVer.isEmpty())
+    if (!sMaxVersion.isEmpty())
     {
         try
         {
-            if (aVendorInfo->compareVersions(ouMaxVer) > 0)
+            if (aVendorInfo->compareVersions(sMaxVersion) > 0)
                 return JFW_PLUGIN_E_FAILED_VERSION;
         }
         catch (MalformedVersionException&)
@@ -272,7 +267,7 @@ javaPluginError checkJavaVersionRequirements(
             JFW_ENSURE(
                 false,
                 "[Java framework]sunjavaplugin does not know version: "
-                + ouMaxVer + " for vendor: " + aVendorInfo->getVendor()
+                + sMaxVersion + " for vendor: " + aVendorInfo->getVendor()
                 + " .Check maximum Version." );
             return JFW_PLUGIN_E_WRONG_VERSION_FORMAT;
         }
@@ -304,20 +299,17 @@ javaPluginError checkJavaVersionRequirements(
 }
 
 javaPluginError jfw_plugin_getAllJavaInfos(
-    rtl_uString *sVendor,
-    rtl_uString *sMinVersion,
-    rtl_uString *sMaxVersion,
+    OUString const& sVendor,
+    OUString const& sMinVersion,
+    OUString const& sMaxVersion,
     rtl_uString  * *arExcludeList,
     sal_Int32  nLenList,
     JavaInfo*** parJavaInfo,
     sal_Int32 *nLenInfoList)
 {
-    OSL_ASSERT(sVendor);
-    OSL_ASSERT(sMinVersion);
-    OSL_ASSERT(sMaxVersion);
     OSL_ASSERT(parJavaInfo);
     OSL_ASSERT(nLenInfoList);
-    if (!sVendor || !sMinVersion || !sMaxVersion || !parJavaInfo || !nLenInfoList)
+    if (!parJavaInfo || !nLenInfoList)
         return JFW_PLUGIN_E_INVALID_ARG;
 
     //nLenlist contains the number of elements in arExcludeList.
@@ -326,10 +318,8 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     if (arExcludeList == NULL && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    OUString ouVendor(sVendor);
-
-    OSL_ASSERT(!ouVendor.isEmpty());
-    if (ouVendor.isEmpty())
+    OSL_ASSERT(!sVendor.isEmpty());
+    if (sVendor.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
     JavaInfo** arInfo = NULL;
@@ -344,7 +334,7 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     {
         const rtl::Reference<VendorBase>& cur = *i;
 
-        if (!ouVendor.equals(cur->getVendor()))
+        if (!sVendor.equals(cur->getVendor()))
             continue;
 
         javaPluginError err = checkJavaVersionRequirements(
@@ -374,23 +364,18 @@ javaPluginError jfw_plugin_getAllJavaInfos(
 }
 
 javaPluginError jfw_plugin_getJavaInfoByPath(
-    rtl_uString *path,
-    rtl_uString *sVendor,
-    rtl_uString *sMinVersion,
-    rtl_uString *sMaxVersion,
+    OUString const& sPath,
+    OUString const& sVendor,
+    OUString const& sMinVersion,
+    OUString const& sMaxVersion,
     rtl_uString  *  *arExcludeList,
     sal_Int32  nLenList,
     JavaInfo ** ppInfo)
 {
-    OSL_ASSERT(path);
-    OSL_ASSERT(sVendor);
-    OSL_ASSERT(sMinVersion);
-    OSL_ASSERT(sMaxVersion);
-    if (!path || !sVendor || !sMinVersion || !sMaxVersion || !ppInfo)
+    if (!ppInfo)
         return JFW_PLUGIN_E_INVALID_ARG;
-    OUString ouPath(path);
-    OSL_ASSERT(!ouPath.isEmpty());
-    if (ouPath.isEmpty())
+    OSL_ASSERT(!sPath.isEmpty());
+    if (sPath.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
     //nLenlist contains the number of elements in arExcludeList.
@@ -399,18 +384,16 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     if (arExcludeList == NULL && nLenList > 0)
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    OUString ouVendor(sVendor);
-
-    OSL_ASSERT(!ouVendor.isEmpty());
-    if (ouVendor.isEmpty())
+    OSL_ASSERT(!sVendor.isEmpty());
+    if (sVendor.isEmpty())
         return JFW_PLUGIN_E_INVALID_ARG;
 
-    rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath(ouPath);
+    rtl::Reference<VendorBase> aVendorInfo = getJREInfoByPath(sPath);
     if (!aVendorInfo.is())
         return JFW_PLUGIN_E_NO_JRE;
 
     //Check if the detected JRE matches the version requirements
-    if (!ouVendor.equals(aVendorInfo->getVendor()))
+    if (!sVendor.equals(aVendorInfo->getVendor()))
         return JFW_PLUGIN_E_NO_JRE;
     javaPluginError errorcode = checkJavaVersionRequirements(
             aVendorInfo, sMinVersion, sMaxVersion, arExcludeList, nLenList);
