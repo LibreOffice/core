@@ -272,6 +272,17 @@ XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
 {
     SCSIZE nLastCol = rStrm.ReaduInt8();
     SCSIZE nLastRow = rStrm.ReaduInt16();
+
+    //assuming worse case scenario of nOp + one byte unistring len
+    const size_t nMinRecordSize = 2;
+    const size_t nMaxRows = rStrm.GetRecLeft() / (nMinRecordSize * (nLastCol+1));
+    if (nLastRow >= nMaxRows)
+    {
+        SAL_WARN("sc", "Parsing error: " << nMaxRows <<
+                 " max possible rows, but " << nLastRow << " index claimed, truncating");
+        nLastRow = nMaxRows-1;
+    }
+
     mxCached->Resize(nLastCol+1, nLastRow+1);
     for (SCSIZE nRow = 0; nRow <= nLastRow; ++nRow)
     {
