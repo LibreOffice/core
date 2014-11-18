@@ -25,7 +25,6 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.ui.event.*;
 
 /**
  * This class contains convenience methods for inserting components to a dialog.
@@ -33,7 +32,7 @@ import com.sun.star.wizards.ui.event.*;
  * description files to a Java class which builds the same dialog through the UNO API.</p>
  * <p>It uses an Event-Listener method, which calls a method through reflection
  * when an event on a component is triggered.
- * see the classes AbstractListener, CommonListener, MethodInvocation for details.</p>
+ * see the classes CommonListener, MethodInvocation for details.</p>
  */
 public class UnoDialog2 extends UnoDialog
 {
@@ -50,7 +49,7 @@ public class UnoDialog2 extends UnoDialog
 
         if (actionPerformed != null)
         {
-            xButton.addActionListener((XActionListener) guiEventListener);
+            xButton.addActionListener(guiEventListener);
             guiEventListener.add(sName, EVENT_ACTION_PERFORMED, actionPerformed, eventTarget);
         }
         return xButton;
@@ -85,7 +84,7 @@ public class UnoDialog2 extends UnoDialog
 
         if (itemChanged != null)
         {
-            xCheckBox.addItemListener((XItemListener) guiEventListener);
+            xCheckBox.addItemListener(guiEventListener);
             guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget);
         }
         return xCheckBox;
@@ -101,18 +100,18 @@ public class UnoDialog2 extends UnoDialog
         XComboBox xComboBox = (XComboBox) insertControlModel2("com.sun.star.awt.UnoControlComboBoxModel", sName, sPropNames, oPropValues, XComboBox.class);
         if (actionPerformed != null)
         {
-            xComboBox.addActionListener((XActionListener) guiEventListener);
+            xComboBox.addActionListener(guiEventListener);
             guiEventListener.add(sName, EVENT_ACTION_PERFORMED, actionPerformed, eventTarget);
         }
         if (itemChanged != null)
         {
-            xComboBox.addItemListener((XItemListener) guiEventListener);
+            xComboBox.addItemListener(guiEventListener);
             guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget);
         }
         if (textChanged != null)
         {
             XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, xComboBox);
-            xTextComponent.addTextListener((XTextListener) guiEventListener);
+            xTextComponent.addTextListener(guiEventListener);
             guiEventListener.add(sName, EVENT_TEXT_CHANGED, textChanged, eventTarget);
         }
         return xComboBox;
@@ -128,12 +127,12 @@ public class UnoDialog2 extends UnoDialog
         XListBox xListBox = (XListBox) insertControlModel2("com.sun.star.awt.UnoControlListBoxModel", sName, sPropNames, oPropValues, XListBox.class);
         if (actionPerformed != null)
         {
-            xListBox.addActionListener((XActionListener) guiEventListener);
+            xListBox.addActionListener(guiEventListener);
             guiEventListener.add(sName, EVENT_ACTION_PERFORMED, actionPerformed, eventTarget);
         }
         if (itemChanged != null)
         {
-            xListBox.addItemListener((XItemListener) guiEventListener);
+            xListBox.addItemListener(guiEventListener);
             guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget);
         }
         return xListBox;
@@ -149,7 +148,7 @@ public class UnoDialog2 extends UnoDialog
         XRadioButton xRadioButton = (XRadioButton) insertControlModel2("com.sun.star.awt.UnoControlRadioButtonModel", sName, sPropNames, oPropValues, XRadioButton.class);
         if (itemChanged != null)
         {
-            xRadioButton.addItemListener((XItemListener) guiEventListener);
+            xRadioButton.addItemListener(guiEventListener);
             guiEventListener.add(sName, EVENT_ITEM_CHANGED, itemChanged, eventTarget);
         }
         return xRadioButton;
@@ -205,7 +204,7 @@ public class UnoDialog2 extends UnoDialog
         XTextComponent xField = (XTextComponent) insertControlModel2(sModelClass, sName, sPropNames, oPropValues, XTextComponent.class);
         if (sTextChanged != null)
         {
-            xField.addTextListener((XTextListener) guiEventListener);
+            xField.addTextListener(guiEventListener);
             guiEventListener.add(sName, EVENT_TEXT_CHANGED, sTextChanged, eventTarget);
         }
         return UnoRuntime.queryInterface(type, xField);
