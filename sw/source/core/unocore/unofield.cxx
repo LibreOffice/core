@@ -2036,6 +2036,20 @@ SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
     if (pPamForTxtFld.get() == NULL)
         return 0;
 
+    // If this is a postit field, then return the range of its annotation mark if it has one.
+    if (const SwPostItField* pPostItField = dynamic_cast<const SwPostItField*>(pField))
+    {
+        IDocumentMarkAccess* pMarkAccess = m_pImpl->m_pDoc->getIDocumentMarkAccess();
+        for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAnnotationMarksBegin(); ppMark != pMarkAccess->getAnnotationMarksEnd(); ++ppMark)
+        {
+            if (ppMark->get()->GetName() == pPostItField->GetName())
+            {
+                pPamForTxtFld.reset(new SwPaM(ppMark->get()->GetMarkStart(), ppMark->get()->GetMarkEnd()));
+                break;
+            }
+        }
+    }
+
     uno::Reference<text::XTextRange> xRange = SwXTextRange::CreateXTextRange(
             *m_pImpl->m_pDoc, *(pPamForTxtFld->GetPoint()), pPamForTxtFld->GetMark());
     return xRange;
