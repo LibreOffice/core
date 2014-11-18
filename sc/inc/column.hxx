@@ -490,7 +490,7 @@ public:
     void StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void        StartAllListeners();
-    void        StartNeededListeners(); // only for cells where NeedsListening()==true
+    void StartNeededListeners( sc::StartListeningContext& rCxt ); // only for cells where NeedsListening()==true
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
     void TransferListeners( ScColumn& rDestCol, SCROW nRow1, SCROW nRow2, SCROW nRowDelta );

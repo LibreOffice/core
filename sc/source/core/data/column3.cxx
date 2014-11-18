@@ -1506,16 +1506,34 @@ public:
     }
 };
 
-class StartNeededListenerHandler
+class StartNeededListenersHandler
 {
-    ScDocument* mpDoc;
+    sc::StartListeningContext* mpCxt;
 public:
-    StartNeededListenerHandler(ScDocument* pDoc) : mpDoc(pDoc) {}
+    StartNeededListenersHandler( sc::StartListeningContext& rCxt ) : mpCxt(&rCxt) {}
 
-    void operator() (size_t, ScFormulaCell* p)
+    void operator() ( sc::CellStoreType::value_type& aBlk )
     {
-        if (p->NeedsListening())
-            p->StartListeningTo(mpDoc);
+        if (aBlk.type != sc::element_type_formula)
+            return;
+
+        ScFormulaCell** pp = &sc::formula_block::at(*aBlk.data, 0);
+        ScFormulaCell** ppEnd = pp + aBlk.size;
+
+        for (; pp != ppEnd; ++pp)
+        {
+            ScFormulaCell& rFC = **pp;
+            if (!rFC.NeedsListening())
+                continue;
+
+            if (rFC.IsSharedTop())
+            {
+                sc::SharedFormulaUtil::startListeningAsGroup(*mpCxt, pp);
+                pp += rFC.GetSharedLength() - 1; // Move to the last cell in the group.
+            }
+            else
+                rFC.StartListeningTo(*mpCxt);
+        }
     }
 };
 
@@ -1527,10 +1545,9 @@ void ScColumn::StartAllListeners()
     sc::ProcessFormula(maCells, aFunc);
 }
 
-void ScColumn::StartNeededListeners()
+void ScColumn::StartNeededListeners( sc::StartListeningContext& rCxt )
 {
-    StartNeededListenerHandler aFunc(pDocument);
-    sc::ProcessFormula(maCells, aFunc);
+    std::for_each(maCells.begin(), maCells.end(), StartNeededListenersHandler(rCxt));
 }
 
 namespace {

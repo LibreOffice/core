@@ -1164,12 +1164,16 @@ bool ScDocument::CanInsertRow( const ScRange& rRange ) const
 
 namespace {
 
-struct StartNeededListenersHandler : std::unary_function<ScTable*, void>
+class StartNeededListenersHandler : std::unary_function<ScTable*, void>
 {
+    boost::shared_ptr<sc::StartListeningContext> mpCxt;
+public:
+    StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
+
     void operator() (ScTable* p)
     {
         if (p)
-            p->StartNeededListeners();
+            p->StartNeededListeners(*mpCxt);
     }
 };
 
@@ -1264,14 +1268,12 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         }
         else
         {   // Listeners have been removed in UpdateReference
-            TableContainer::iterator it = maTabs.begin();
-            for (; it != maTabs.end(); ++it)
-                if (*it)
-                    (*it)->StartNeededListeners();
+            std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+
             // At least all cells using range names pointing relative to the
             // moved range must be recalculated, and all cells marked postponed
             // dirty.
-            it = maTabs.begin();
+            TableContainer::iterator it = maTabs.begin();
             for (; it != maTabs.end(); ++it)
                 if (*it)
                     (*it)->SetDirtyIfPostponed();
@@ -1357,14 +1359,13 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
             maTabs[i]->DeleteRow(aCxt.maRegroupCols, nStartCol, nEndCol, nStartRow, nSize, pUndoOutline);
 
     if ( ValidRow(nStartRow+nSize) )
-    {   // Listeners have been removed in UpdateReference
-        TableContainer::iterator it = maTabs.begin();
-        for (; it != maTabs.end(); ++it)
-            if (*it)
-                (*it)->StartNeededListeners();
+    {
+        // Listeners have been removed in UpdateReference
+        std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+
         // At least all cells using range names pointing relative to the moved
         // range must be recalculated, and all cells marked postponed dirty.
-        it = maTabs.begin();
+        TableContainer::iterator it = maTabs.begin();
         for (; it != maTabs.end(); ++it)
             if (*it)
                 (*it)->SetDirtyIfPostponed();
@@ -1466,7 +1467,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         else
         {
             // Listeners have been removed in UpdateReference
-            std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler());
+            std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
             // At least all cells using range names pointing relative to the
             // moved range must be recalculated, and all cells marked postponed
             // dirty.
@@ -1553,14 +1554,13 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     }
 
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
-    {// Listeners have been removed in UpdateReference
-        TableContainer::iterator it = maTabs.begin();
-        for (; it != maTabs.end(); ++it)
-            if (*it)
-                (*it)->StartNeededListeners();
+    {
+        // Listeners have been removed in UpdateReference
+        std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+
         // At least all cells using range names pointing relative to the moved
         // range must be recalculated, and all cells marked postponed dirty.
-        it = maTabs.begin();
+        TableContainer::iterator it = maTabs.begin();
         for (; it != maTabs.end(); ++it)
             if (*it)
                 (*it)->SetDirtyIfPostponed();
