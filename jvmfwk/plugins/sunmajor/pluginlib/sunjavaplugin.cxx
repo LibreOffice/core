@@ -231,7 +231,7 @@ extern "C" void JNICALL abort_handler()
 
      */
 javaPluginError checkJavaVersionRequirements(
-    rtl::Reference<VendorBase> aVendorInfo,
+    rtl::Reference<VendorBase> const & aVendorInfo,
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
     rtl_uString * * arExcludeList,
