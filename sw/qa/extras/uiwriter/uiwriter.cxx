@@ -37,6 +37,7 @@ public:
     void testFdo75898();
     void testFdo74981();
     void testCp1000071();
+    void testCommentedWord();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -49,6 +50,7 @@ public:
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
     CPPUNIT_TEST(testCp1000071);
+    CPPUNIT_TEST(testCommentedWord);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -304,6 +306,19 @@ void SwUiWriterTest::testCp1000071()
     CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTbl[ 1 ]->Start()->nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTbl[ 1 ]->End()->nNode.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTbl[ 1 ]->End()->nContent.GetIndex());
+}
+
+void SwUiWriterTest::testCommentedWord()
+{
+    // This word is commented. <- string in document
+    createDoc("commented-word.odt");
+
+    // Test that getAnchor() points to "word", not to an empty string.
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("word"), xField->getAnchor()->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
