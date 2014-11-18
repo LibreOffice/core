@@ -18,6 +18,9 @@
  */
 
 #include "SerfInputStream.hxx"
+
+#include <cppuhelper/queryinterface.hxx>
+
 #include <string.h>
 
 using namespace cppu;
