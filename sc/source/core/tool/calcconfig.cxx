@@ -38,7 +38,7 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLEnabled = true;
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
-    mnOpenCLMinimumFormulaGroupSize = 20;
+    mnOpenCLMinimumFormulaGroupSize = 100;
 
     maOpenCLSubsetOpCodes.insert(ocRandom);
     maOpenCLSubsetOpCodes.insert(ocSin);
