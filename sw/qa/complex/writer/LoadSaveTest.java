@@ -65,10 +65,10 @@ public class LoadSaveTest
     private XMultiServiceFactory m_xMSF = null;
     private XGlobalEventBroadcaster m_xGEB = null;
 
-    private final String m_fileURL = "file://";
+    private static final String m_fileURL = "file://";
     // these should be parameters or something?
-    private final String m_SourceDir = "FIXME";
-    private final String m_TargetDir = "/tmp/out";
+    private static final String m_SourceDir = "FIXME";
+    private static final String m_TargetDir = "/tmp/out";
 
     @Before public void before() throws Exception
     {

@@ -72,7 +72,7 @@ public class ScIndexEnumeration_DataPilotItemsEnumeration
      * A field is filled some values. This integer determines the size of the
      * field in x and y direction.
      */
-    private final int mMaxFieldIndex = 6;
+    private static final int mMaxFieldIndex = 6;
 
     /**
     * Creates Spreadsheet document.

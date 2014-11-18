@@ -61,8 +61,8 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private boolean showButtons = true;
     private Short step;
     private final static Short NO_BORDER = Short.valueOf((short) 0);
-    private final boolean refreshOverNull = true;
-    private final int imageTextLines = 1;
+    private static final boolean refreshOverNull = true;
+    private static final int imageTextLines = 1;
     private boolean rowSelect = false;
     public int tabIndex;
     public Boolean scaleImages = Boolean.TRUE;

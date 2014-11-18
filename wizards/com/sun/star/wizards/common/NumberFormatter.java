@@ -47,7 +47,7 @@ public class NumberFormatter
     public XNumberFormats xNumberFormats;
     public XNumberFormatTypes xNumberFormatTypes;
     public XPropertySet xNumberFormatSettings;
-    private final boolean bNullDateCorrectionIsDefined = false;
+    private static final boolean bNullDateCorrectionIsDefined = false;
     private final Locale aLocale;
 
 

@@ -99,7 +99,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
     TempDir m_aTempDir;
     private String[][] sDocTypeExportFilter;
     private String[][] sDocuments;
-    private final int iAllowMemoryIncrease = 10;
+    private static final int iAllowMemoryIncrease = 10;
     private int iExportDocCount = 25;
     /**
      * The test parameters

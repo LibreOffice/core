@@ -43,7 +43,7 @@ public class _XFilePicker extends MultiMethodTest {
 
     public XFilePicker oObj = null;
     private String dir = null ;
-    private final String fname = "space-metal.jpg" ;
+    private static final String fname = "space-metal.jpg" ;
 
     /**
     * Sets the current directory to the test document directory. <p>

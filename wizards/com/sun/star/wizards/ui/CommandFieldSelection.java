@@ -39,7 +39,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private String sTablePrefix;
     private short m_iSelPos = -1;
     private short iOldSelPos = -1;
-    private final boolean bpreselectCommand = true;
+    private static final boolean bpreselectCommand = true;
     private boolean bgetQueries;
     private final WizardDialog oWizardDialog;
     private Collator aCollator = null;

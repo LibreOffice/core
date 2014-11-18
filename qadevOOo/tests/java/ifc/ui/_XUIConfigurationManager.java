@@ -35,8 +35,8 @@ import lib.MultiMethodTest;
 public class _XUIConfigurationManager extends MultiMethodTest {
 
     public XUIConfigurationManager oObj;
-    private final String msResourceUrl = "private:resource/menubar/menubar";
-    private final String msMyResourceUrl = "private:resource/menubar/mymenubar";
+    private static final String msResourceUrl = "private:resource/menubar/menubar";
+    private static final String msMyResourceUrl = "private:resource/menubar/mymenubar";
     private XIndexContainer mxSettings = null;
     private XIndexAccess mxMenuBarSettings = null;
     private XMultiServiceFactory mxMSF = null;

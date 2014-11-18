@@ -32,7 +32,7 @@ public class ShapeDsc extends InstDescr {
     private final int y;
     private final int height;
     private final int width;
-    private final String name = null;
+    private static final String name = null;
     private static final String ifcName = "com.sun.star.drawing.XShape";
     private final String service;
 

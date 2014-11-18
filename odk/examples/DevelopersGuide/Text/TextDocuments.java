@@ -110,7 +110,7 @@ public class TextDocuments {
     // adjust these constant to your local printer!
     private static String sOutputDir;
 
-    private final String aPrinterName = "\\\\so-print\\xml3sof";
+    private static final String aPrinterName = "\\\\so-print\\xml3sof";
 
     private XComponentContext mxRemoteContext = null;
     private XMultiComponentFactory mxRemoteServiceManager = null;

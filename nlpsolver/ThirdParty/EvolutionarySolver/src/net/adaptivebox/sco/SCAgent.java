@@ -48,9 +48,9 @@ public class SCAgent {
   private IGoodnessCompareEngine specComparator;
 
   //the coefficients of SCAgent
-  private final int TaoB = 2;
+  private static final int TaoB = 2;
   //The early version set TaoW as the size of external library (NL), but 4 is often enough
-  private final int TaoW = 4;
+  private static final int TaoW = 4;
 
   //The referred external library
   private Library externalLib;

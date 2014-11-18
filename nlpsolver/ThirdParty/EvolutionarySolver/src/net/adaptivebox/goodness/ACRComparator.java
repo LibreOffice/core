@@ -39,15 +39,15 @@ public class ACRComparator implements IGoodnessCompareEngine, IUpdateCycleEngine
   private final Library socialPool;
   private double epsilon_t = 0;
 
-  private final double RU = 0.75;
-  private final double RL = 0.25;
-  private final double BETAF = 0.618;
-  private final double BETAL = 0.618;
-  private final double BETAU = 1.382;
+  private static final double RU = 0.75;
+  private static final double RL = 0.25;
+  private static final double BETAF = 0.618;
+  private static final double BETAL = 0.618;
+  private static final double BETAU = 1.382;
 
   private final double T;
 
-  private final double TthR = 0.5;
+  private static final double TthR = 0.5;
 
   public ACRComparator(Library lib, int T) {
     socialPool = lib;

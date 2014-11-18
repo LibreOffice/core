@@ -56,8 +56,8 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private Size selectionGap = new Size(2, 2);
     private boolean showButtons = true;
     private Short step;
-    private final boolean refreshOverNull = true;
-    private final int imageTextLines = 1;
+    private static final boolean refreshOverNull = true;
+    private static final int imageTextLines = 1;
     private boolean rowSelect = false;
     public int tabIndex;
     public Boolean scaleImages = Boolean.TRUE;

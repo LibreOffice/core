@@ -32,7 +32,7 @@ public class _XLayoutManager extends MultiMethodTest {
     public XLayoutManager oObj = null;
 
     private XFrame xFrame = null;
-    private final String sElementName = "private:resource/menubar/myMenu";
+    private static final String sElementName = "private:resource/menubar/myMenu";
 
     @Override
     public void before() {

@@ -49,7 +49,7 @@ public class _XAccessibleValue extends MultiMethodTest {
 
     private double minVal = 0;
     private double maxVal = 0;
-    private final double curVal = 0;
+    private static final double curVal = 0;
     private Object val = null;
     XAccessibleValue anotherFromGroup = null;
 
