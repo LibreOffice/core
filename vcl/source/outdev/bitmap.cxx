@@ -648,7 +648,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
         // #i83087# Naturally, system alpha blending cannot work with
         // separate alpha VDev
-        bool bTryDirectPaint(!mpAlphaVDev && !pDisableNative && !bHMirr && !bVMirr);
+        bool bTryDirectPaint(!pDisableNative && !bHMirr && !bVMirr);
 
         if(bTryDirectPaint)
         {
@@ -662,8 +662,22 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             SalBitmap* pSalSrcBmp = rBmp.ImplGetImpBitmap()->ImplGetSalBitmap();
             SalBitmap* pSalAlphaBmp = rAlpha.ImplGetImpBitmap()->ImplGetSalBitmap();
 
-            if (mpGraphics->DrawAlphaBitmap( aTR, *pSalSrcBmp, *pSalAlphaBmp, this ))
-                return;
+            // try the blen the alpha bitmap with the alpha virtual device
+            if( mpAlphaVDev )
+            {
+                Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
+                SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
+                if( mpGraphics->BlendAlphaBitmap( aTR, *pSalSrcBmp, *pSalAlphaBmp, *pSalAlphaBmp2, this ) )
+                {
+                    mpAlphaVDev->BlendBitmap( aTR, rAlpha );
+                    return;
+                }
+            }
+            else
+            {
+                if (mpGraphics->DrawAlphaBitmap( aTR, *pSalSrcBmp, *pSalAlphaBmp, this ))
+                    return;
+            }
         }
 
         // we need to make sure OpenGL never reaches this slow code path
@@ -1192,6 +1206,13 @@ namespace
 
         return aDstCol;
     }
+}
+
+bool OutputDevice::BlendBitmap(
+            const SalTwoRect&   rPosAry,
+            const Bitmap&       rBmp )
+{
+    return mpGraphics->BlendBitmap( rPosAry, *rBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
 }
 
 Bitmap OutputDevice::BlendBitmapWithAlpha(

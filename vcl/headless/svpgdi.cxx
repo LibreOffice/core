@@ -61,6 +61,16 @@ rDevice
 
 #ifndef IOS
 
+bool SvpSalGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& /*rBitmap*/ )
+{
+    return false;
+}
+
+bool SvpSalGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, const SalBitmap&, const SalBitmap& )
+{
+    return false;
+}
+
 bool SvpSalGraphics::drawAlphaBitmap( const SalTwoRect&, const SalBitmap& /*rSourceBitmap*/, const SalBitmap& /*rAlphaBitmap*/ )
 {
     // TODO(P3) implement alpha blending

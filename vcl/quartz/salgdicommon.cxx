@@ -562,6 +562,20 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 
 #endif
 
+bool AquaSalGraphics::blendBitmap( const SalTwoRect&,
+                                   const SalBitmap& )
+{
+    return false;
+}
+
+bool AquaSalGraphics::blendAlphaBitmap( const SalTwoRect&,
+                                        const SalBitmap&,
+                                        const SalBitmap&,
+                                        const SalBitmap& )
+{
+    return false;
+}
+
 bool AquaSalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                        const SalBitmap& rSrcBitmap,
                                        const SalBitmap& rAlphaBmp )

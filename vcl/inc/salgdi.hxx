@@ -399,6 +399,18 @@ public:
                                     Rectangle &rNativeContentRegion,
                                     const OutputDevice *pOutDev );
 
+    bool                        BlendBitmap(
+                                    const SalTwoRect& rPosAry,
+                                    const SalBitmap& rSalBitmap,
+                                    const OutputDevice *pOutDev );
+
+    bool                        BlendAlphaBitmap(
+                                    const SalTwoRect& rPosAry,
+                                    const SalBitmap& rSalSrcBitmap,
+                                    const SalBitmap& rSalMaskBitmap,
+                                    const SalBitmap& rSalAlphaBitmap,
+                                    const OutputDevice *pOutDev );
+
     bool                        DrawAlphaBitmap(
                                     const SalTwoRect&,
                                     const SalBitmap& rSourceBitmap,
@@ -540,6 +552,18 @@ protected:
                                     const OUString& aCaption,
                                     Rectangle &rNativeBoundingRegion,
                                     Rectangle &rNativeContentRegion );
+
+    /** Blend the bitmap with the current buffer */
+    virtual bool                blendBitmap(
+                                    const SalTwoRect&,
+                                    const SalBitmap& rBitmap ) = 0;
+
+    /** Draw the bitmap by blending using the mask and alpha channel */
+    virtual bool                blendAlphaBitmap(
+                                    const SalTwoRect&,
+                                    const SalBitmap& rSrcBitmap,
+                                    const SalBitmap& rMaskBitmap,
+                                    const SalBitmap& rAlphaBitmap ) = 0;
 
     /** Render bitmap with alpha channel
 

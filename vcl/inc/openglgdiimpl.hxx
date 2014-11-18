@@ -71,6 +71,11 @@ protected:
     GLuint mnMaskedSamplerUniform;
     GLuint mnMaskSamplerUniform;
 
+    GLuint mnBlendedTextureProgram;
+    GLuint mnBlendedTextureUniform;
+    GLuint mnBlendedMaskUniform;
+    GLuint mnBlendedAlphaUniform;
+
     GLuint mnMaskProgram;
     GLuint mnMaskUniform;
     GLuint mnMaskColorUniform;
@@ -92,6 +97,7 @@ protected:
     bool CreateTextureProgram( void );
     bool CreateTransformedTextureProgram( void );
     bool CreateMaskedTextureProgram( void );
+    bool CreateBlendedTextureProgram( void );
     bool CreateTransformedMaskedTextureProgram( void );
     bool CreateMaskProgram( void );
     bool CreateLinearGradientProgram( void );
@@ -119,6 +125,7 @@ public:
     void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
     void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false, bool pPremultiplied = false );
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
+    void DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry );
     void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
     void DrawLinearGradient( const Gradient& rGradient, const Rectangle& rRect );
     void DrawAxialGradient( const Gradient& rGradient, const Rectangle& rRect );
@@ -231,6 +238,16 @@ public:
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
     void DoCopyBits(const SalTwoRect& rPosAry, OpenGLSalGraphicsImpl &rSrcImpl);
+
+    virtual bool blendBitmap(
+                const SalTwoRect&,
+                const SalBitmap& rBitmap ) SAL_OVERRIDE;
+
+    virtual bool blendAlphaBitmap(
+                const SalTwoRect&,
+                const SalBitmap& rSrcBitmap,
+                const SalBitmap& rMaskBitmap,
+                const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) SAL_OVERRIDE;
 

@@ -312,6 +312,14 @@ protected:
                                                 const ImplControlValue& aValue, const OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
+    virtual bool        blendBitmap( const SalTwoRect&,
+                                     const SalBitmap& rBitmap ) SAL_OVERRIDE;
+
+    virtual bool        blendAlphaBitmap( const SalTwoRect&,
+                                          const SalBitmap& rSrcBitmap,
+                                          const SalBitmap& rMaskBitmap,
+                                          const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
+
     virtual bool        drawAlphaBitmap( const SalTwoRect&,
                                          const SalBitmap& rSourceBitmap,
                                          const SalBitmap& rAlphaBitmap );

@@ -124,6 +124,11 @@ protected:
     vcl::Region                               m_aClipRegion;
 
 protected:
+    virtual bool blendBitmap( const SalTwoRect&, const SalBitmap& rBitmap ) SAL_OVERRIDE;
+    virtual bool blendAlphaBitmap( const SalTwoRect&,
+                                   const SalBitmap& rSrcBitmap,
+                                   const SalBitmap& rMaskBitmap,
+                                   const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
     virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
     virtual bool drawTransformedBitmap(
         const basegfx::B2DPoint& rNull,

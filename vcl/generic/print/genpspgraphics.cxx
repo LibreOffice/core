@@ -1166,6 +1166,16 @@ void GenPspGraphics::AnnounceFonts( PhysicalFontCollection* pFontCollection, con
     pFontCollection->Add( pFD );
 }
 
+bool GenPspGraphics::blendBitmap( const SalTwoRect&, const SalBitmap& )
+{
+    return false;
+}
+
+bool GenPspGraphics::blendAlphaBitmap( const SalTwoRect&, const SalBitmap&, const SalBitmap&, const SalBitmap& )
+{
+    return false;
+}
+
 bool GenPspGraphics::drawAlphaBitmap( const SalTwoRect&,
                                    const SalBitmap&,
                                    const SalBitmap& )
