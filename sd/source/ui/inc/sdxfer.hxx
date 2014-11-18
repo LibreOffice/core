@@ -50,8 +50,8 @@ public:
     void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { mpSdDrawDocument = mpSdDrawDocumentIntern = (SdDrawDocument*) pWorkDoc; }
     const SdDrawDocument*           GetWorkDocument() const { return mpSdDrawDocument; }
 
-    void                            SetView( const ::sd::View* pView ) { mpSdView = pView; }
-    const ::sd::View*                   GetView() const { return mpSdView; }
+    void                            SetView(const ::sd::View* pView);
+    const ::sd::View*               GetView() const { return mpSdView; }
 
     void                            SetObjectDescriptor( const TransferableObjectDescriptor& rObjDesc );
 

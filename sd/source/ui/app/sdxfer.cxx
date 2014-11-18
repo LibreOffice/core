@@ -806,6 +806,15 @@ void SdTransferable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
+void SdTransferable::SetView(const ::sd::View* pView)
+{
+    if (mpSdView)
+        EndListening(*const_cast<sd::View*>(mpSdView));
+    mpSdView = pView;
+    if (mpSdView)
+        StartListening(*const_cast<sd::View*>(mpSdView));
+}
+
 bool SdTransferable::SetTableRTF( SdDrawDocument* pModel, const DataFlavor& rFlavor)
 {
     if ( pModel )
