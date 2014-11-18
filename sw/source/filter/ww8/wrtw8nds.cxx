@@ -2705,7 +2705,16 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         }
     }
 
+    // The formatting of the paragraph marker has two sources:
+    // 1) If there are hints at the end of the paragraph, then use that.
+    // 2) Else use the RES_CHRATR_BEGIN..RES_TXTATR_END range of the paragraph
+    // properties.
+    //
+    // Exception: if there is a character style hint at the end of the
+    // paragraph only, then still go with 2), as RES_TXTATR_CHARFMT is always
+    // set as a hint.
     SfxItemSet aParagraphMarkerProperties(pDoc->GetAttrPool(), RES_CHRATR_BEGIN, RES_TXTATR_END);
+    bool bCharFormatOnly = true;
     if(const SwpHints* pTxtAttrs = rNode.GetpSwpHints())
     {
         for( size_t i = 0; i < pTxtAttrs->Count(); ++i )
@@ -2723,10 +2732,12 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 SAL_INFO( "sw.ww8", "nWhich" << nWhich);
                 if (nWhich == RES_TXTATR_AUTOFMT || nWhich == RES_TXTATR_CHARFMT)
                     aParagraphMarkerProperties.Put(pHt->GetAttr());
+                if (nWhich != RES_TXTATR_CHARFMT)
+                    bCharFormatOnly = false;
             }
         }
     }
-    if (rNode.GetpSwAttrSet())
+    if (rNode.GetpSwAttrSet() && bCharFormatOnly)
     {
         aParagraphMarkerProperties.Put(*rNode.GetpSwAttrSet());
     }

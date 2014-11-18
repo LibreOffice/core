@@ -8457,7 +8457,7 @@ void DocxAttributeOutput::AddToAttrList( ::sax_fastparser::FastAttributeList* &p
     {
         sal_Int32 nName = va_arg( args, sal_Int32 );
         const char* pValue = va_arg( args, const char* );
-        if( pValue && !pAttrList->hasAttribute(nName) )
+        if( pValue )
             pAttrList->add( nName, pValue );
     }
     va_end( args );

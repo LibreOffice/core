@@ -41,6 +41,19 @@ protected:
         // If the testcase is stored in some other format, it's pointless to test.
         return (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
+
+    /**
+     * Validation handling
+     */
+    bool mustValidate(const char* filename) const SAL_OVERRIDE
+    {
+        const char* aWhitelist[] = {
+            "paragraph-mark-nonempty.odt"
+        };
+        std::vector<const char*> vWhitelist(aWhitelist, aWhitelist + SAL_N_ELEMENTS(aWhitelist));
+
+        return std::find(vWhitelist.begin(), vWhitelist.end(), filename) != vWhitelist.end();
+    }
 protected:
     bool CjkNumberedListTestHelper(sal_Int16 &nValue)
     {
@@ -520,6 +533,13 @@ DECLARE_OOXMLEXPORT_TEST(testParagraphMark, "paragraph-mark.docx")
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getParagraph(1), "CharHeight"));
     // This was empty.
     CPPUNIT_ASSERT_EQUAL(OUString("Emphasis"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharStyleName"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testParagraphMarkNonempty, "paragraph-mark-nonempty.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        // There were two <w:sz> elements, make sure the 40 one is is dropped and the 20 one is kept.
+        assertXPath(pXmlDoc, "//w:p/w:pPr/w:rPr/w:sz", "val", "20");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageBreakBefore, "page-break-before.docx")
