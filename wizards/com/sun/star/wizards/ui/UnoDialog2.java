@@ -38,15 +38,6 @@ import com.sun.star.wizards.ui.event.*;
 public class UnoDialog2 extends UnoDialog
 {
 
-    /**
-     * Override this method to return another listener.
-     * @return
-     */
-    protected AbstractListener createListener()
-    {
-        return new CommonListener();
-    }
-
     public UnoDialog2(XMultiServiceFactory xmsf)
     {
         super(xmsf, new String[]
@@ -54,7 +45,6 @@ public class UnoDialog2 extends UnoDialog
                 }, new Object[]
                 {
                 });
-        guiEventListener = createListener();
     }
 
     public XButton insertButton(String sName, String actionPerformed, Object eventTarget, String[] sPropNames, Object[] oPropValues)
