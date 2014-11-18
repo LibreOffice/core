@@ -17,6 +17,7 @@
 
 #include "osl/endian.h"
 #include "osl/file.h"
+#include "rtl/character.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/textenc.h"
 #include "rtl/textcvt.h"
@@ -29,6 +30,54 @@
 #include "unoidlprovider.hxx"
 
 namespace unoidl { namespace detail {
+
+class MappedFile: public salhelper::SimpleReferenceObject {
+public:
+    explicit MappedFile(OUString const & fileUrl);
+
+    sal_uInt8 read8(sal_uInt32 offset) const;
+
+    sal_uInt16 read16(sal_uInt32 offset) const;
+
+    sal_uInt32 read32(sal_uInt32 offset) const;
+
+    sal_uInt64 read64(sal_uInt32 offset) const;
+
+    float readIso60599Binary32(sal_uInt32 offset) const;
+
+    double readIso60599Binary64(sal_uInt32 offset) const;
+
+    OUString readNulName(sal_uInt32 offset) /*const*/;
+
+    OUString readIdxName(sal_uInt32 * offset) const
+    { return readIdxString(offset, RTL_TEXTENCODING_ASCII_US); }
+
+    OUString readIdxString(sal_uInt32 * offset) const
+    { return readIdxString(offset, RTL_TEXTENCODING_UTF8); }
+
+    OUString uri;
+    oslFileHandle handle;
+    sal_uInt64 size;
+    void * address;
+
+private:
+    virtual ~MappedFile();
+
+    sal_uInt8 get8(sal_uInt32 offset) const;
+
+    sal_uInt16 get16(sal_uInt32 offset) const;
+
+    sal_uInt32 get32(sal_uInt32 offset) const;
+
+    sal_uInt64 get64(sal_uInt32 offset) const;
+
+    float getIso60599Binary32(sal_uInt32 offset) const;
+
+    double getIso60599Binary64(sal_uInt32 offset) const;
+
+    OUString readIdxString(sal_uInt32 * offset, rtl_TextEncoding encoding)
+        const;
+};
 
 namespace {
 
@@ -116,55 +165,96 @@ struct Memory64 {
     }
 };
 
+bool isSimpleType(OUString const & type) {
+    return type == "void" || type == "boolean" || type == "byte"
+        || type == "short" || type == "unsigned short" || type == "long"
+        || type == "unsigned long" || type == "hyper"
+        || type == "unsigned hyper" || type == "float" || type == "double"
+        || type == "char" || type == "string" || type == "type"
+        || type == "any";
 }
 
-class MappedFile: public salhelper::SimpleReferenceObject {
-public:
-    explicit MappedFile(OUString const & fileUrl);
+// For backwards compatibility, does not strictly check segments to match
+//
+//  <segment> ::= <blocks> | <block>
+//  <blocks> ::= <capital> <other>* ("_" <block>)*
+//  <block> ::= <other>+
+//  <other> ::= <capital> | "a"--"z" | "0"--"9"
+//  <capital> ::= "A"--"Z"
+//
+bool isIdentifier(OUString const & type, bool scoped) {
+    if (type.isEmpty()) {
+        return false;
+    }
+    for (sal_Int32 i = 0; i != type.getLength(); ++i) {
+        sal_Unicode c = type[i];
+        if (c == '.') {
+            if (!scoped || i == 0 || i == type.getLength() - 1
+                || type[i - 1] == '.')
+            {
+                return false;
+            }
+        } else if (!rtl::isAsciiAlphanumeric(c) && c != '_') {
+            return false;
+        }
+    }
+    return true;
+}
 
-    sal_uInt8 read8(sal_uInt32 offset) const;
+void checkTypeName(
+    rtl::Reference< MappedFile > const & file, OUString const & type)
+{
+    OUString nucl(type);
+    bool args = false;
+    while (nucl.startsWith("[]", &nucl)) {}
+    sal_Int32 i = nucl.indexOf('<');
+    if (i != -1) {
+        OUString tmpl(nucl.copy(0, i));
+        do {
+            ++i; // skip '<' or ','
+            sal_Int32 j = i;
+            for (sal_Int32 level = 0; j != nucl.getLength(); ++j) {
+                sal_Unicode c = nucl[j];
+                if (c == ',') {
+                    if (level == 0) {
+                        break;
+                    }
+                } else if (c == '<') {
+                    ++level;
+                } else if (c == '>') {
+                    if (level == 0) {
+                        break;
+                    }
+                    --level;
+                }
+            }
+            if (j != nucl.getLength()) {
+                checkTypeName(file, nucl.copy(i, j - i));
+                args = true;
+            }
+            i = j;
+        } while (i != nucl.getLength() && nucl[i] != '>');
+        if (i != nucl.getLength() - 1 || nucl[i] != '>' || !args) {
+            tmpl.clear(); // bad input
+        }
+        nucl = tmpl;
+    }
+    if (isSimpleType(nucl) ? args : !isIdentifier(nucl, true)) {
+        throw FileFormatException(
+            file->uri, "UNOIDL format: bad type \"" + type + "\"");
+    }
+}
 
-    sal_uInt16 read16(sal_uInt32 offset) const;
+void checkEntityName(
+    rtl::Reference< MappedFile > const & file, OUString const & name)
+{
+    if (isSimpleType(name) || !isIdentifier(name, false)) {
+        throw FileFormatException(
+            file->uri, "UNOIDL format: bad entity name \"" + name + "\"");
+    }
+}
 
-    sal_uInt32 read32(sal_uInt32 offset) const;
-
-    sal_uInt64 read64(sal_uInt32 offset) const;
-
-    float readIso60599Binary32(sal_uInt32 offset) const;
-
-    double readIso60599Binary64(sal_uInt32 offset) const;
-
-    OUString readNulName(sal_uInt32 offset) const;
-
-    OUString readIdxName(sal_uInt32 * offset) const
-    { return readIdxString(offset, RTL_TEXTENCODING_ASCII_US); }
-
-    OUString readIdxString(sal_uInt32 * offset) const
-    { return readIdxString(offset, RTL_TEXTENCODING_UTF8); }
-
-    OUString uri;
-    oslFileHandle handle;
-    sal_uInt64 size;
-    void * address;
-
-private:
-    virtual ~MappedFile();
-
-    sal_uInt8 get8(sal_uInt32 offset) const;
-
-    sal_uInt16 get16(sal_uInt32 offset) const;
-
-    sal_uInt32 get32(sal_uInt32 offset) const;
-
-    sal_uInt64 get64(sal_uInt32 offset) const;
-
-    float getIso60599Binary32(sal_uInt32 offset) const;
-
-    double getIso60599Binary64(sal_uInt32 offset) const;
-
-    OUString readIdxString(sal_uInt32 * offset, rtl_TextEncoding encoding)
-        const;
-};
+}
 
 MappedFile::MappedFile(OUString const & fileUrl): uri(fileUrl), handle(0) {
     oslFileError e = osl_openFile(uri.pData, &handle, osl_File_OpenFlag_Read);
@@ -244,7 +334,7 @@ double MappedFile::readIso60599Binary64(sal_uInt32 offset) const {
     return getIso60599Binary64(offset);
 }
 
-OUString MappedFile::readNulName(sal_uInt32 offset) const {
+OUString MappedFile::readNulName(sal_uInt32 offset) {
     if (offset > size) {
         throw FileFormatException(
             uri, "UNOIDL format: offset for string too large");
@@ -272,6 +362,7 @@ OUString MappedFile::readNulName(sal_uInt32 offset) const {
     {
         throw FileFormatException(uri, "UNOIDL format: name is not ASCII");
     }
+    checkEntityName(this, name);
     return name;
 }
 
@@ -679,6 +770,7 @@ rtl::Reference< Entity > readEntity(
             std::vector< EnumTypeEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString memName(file->readIdxName(&offset));
+                checkEntityName(file, memName);
                 sal_Int32 memValue = static_cast< sal_Int32 >(
                     file->read32(offset));
                     //TODO: implementation-defined behavior of conversion from
@@ -706,6 +798,7 @@ rtl::Reference< Entity > readEntity(
                         ("UNOIDL format: empty base type name of plain struct"
                          " type"));
                 }
+                checkTypeName(file, base);
             }
             sal_uInt32 n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
@@ -718,7 +811,9 @@ rtl::Reference< Entity > readEntity(
             std::vector< PlainStructTypeEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString memName(file->readIdxName(&offset));
+                checkEntityName(file, memName);
                 OUString memType(file->readIdxName(&offset));
+                checkTypeName(file, memType);
                 mems.push_back(
                     PlainStructTypeEntity::Member(
                         memName, memType,
@@ -740,7 +835,9 @@ rtl::Reference< Entity > readEntity(
             offset += 5;
             std::vector< OUString > params;
             for (sal_uInt32 i = 0; i != n; ++i) {
-                params.push_back(file->readIdxName(&offset));
+                OUString param(file->readIdxName(&offset));
+                checkEntityName(file, param);
+                params.push_back(param);
             }
             n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
@@ -755,7 +852,9 @@ rtl::Reference< Entity > readEntity(
                 v = file->read8(offset);
                 ++offset;
                 OUString memName(file->readIdxName(&offset));
+                checkEntityName(file, memName);
                 OUString memType(file->readIdxName(&offset));
+                checkTypeName(file, memType);
                 if (v > 1) {
                     throw FileFormatException(
                         file->uri,
@@ -785,6 +884,7 @@ rtl::Reference< Entity > readEntity(
                         ("UNOIDL format: empty base type name of exception"
                          " type"));
                 }
+                checkTypeName(file, base);
             }
             sal_uInt32 n = file->read32(offset);
             if (n > SAL_MAX_INT32) {
@@ -796,7 +896,9 @@ rtl::Reference< Entity > readEntity(
             std::vector< ExceptionTypeEntity::Member > mems;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString memName(file->readIdxName(&offset));
+                checkEntityName(file, memName);
                 OUString memType(file->readIdxName(&offset));
+                checkTypeName(file, memType);
                 mems.push_back(
                     ExceptionTypeEntity::Member(
                         memName, memType,
@@ -819,6 +921,7 @@ rtl::Reference< Entity > readEntity(
             std::vector< AnnotatedReference > mandBases;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
+                checkTypeName(file, base);
                 mandBases.push_back(
                     AnnotatedReference(
                         base,
@@ -835,6 +938,7 @@ rtl::Reference< Entity > readEntity(
             std::vector< AnnotatedReference > optBases;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
+                checkTypeName(file, base);
                 optBases.push_back(
                     AnnotatedReference(
                         base,
@@ -853,7 +957,9 @@ rtl::Reference< Entity > readEntity(
                 v = file->read8(offset);
                 ++offset;
                 OUString attrName(file->readIdxName(&offset));
+                checkEntityName(file, attrName);
                 OUString attrType(file->readIdxName(&offset));
+                checkTypeName(file, attrType);
                 if (v > 0x03) {
                     throw FileFormatException(
                         file->uri,
@@ -870,7 +976,9 @@ rtl::Reference< Entity > readEntity(
                 }
                 offset += 4;
                 for (sal_uInt32 j = 0; j != m; ++j) {
-                    getExcs.push_back(file->readIdxName(&offset));
+                    OUString exc(file->readIdxName(&offset));
+                    checkTypeName(file, exc);
+                    getExcs.push_back(exc);
                 }
                 std::vector< OUString > setExcs;
                 if ((v & 0x02) == 0) {
@@ -884,7 +992,9 @@ rtl::Reference< Entity > readEntity(
                     }
                     offset += 4;
                     for (sal_uInt32 j = 0; j != m; ++j) {
-                        setExcs.push_back(file->readIdxName(&offset));
+                        OUString exc(file->readIdxName(&offset));
+                        checkTypeName(file, exc);
+                        setExcs.push_back(exc);
                     }
                 }
                 attrs.push_back(
@@ -904,7 +1014,9 @@ rtl::Reference< Entity > readEntity(
             std::vector< InterfaceTypeEntity::Method > meths;
             for (sal_uInt32 i = 0; i != nMeths; ++i) {
                 OUString methName(file->readIdxName(&offset));
+                checkEntityName(file, methName);
                 OUString methType(file->readIdxName(&offset));
+                checkTypeName(file, methType);
                 sal_uInt32 m = file->read32(offset);
                 if (m > SAL_MAX_INT32) {
                     throw FileFormatException(
@@ -918,7 +1030,9 @@ rtl::Reference< Entity > readEntity(
                     v = file->read8(offset);
                     ++offset;
                     OUString paramName(file->readIdxName(&offset));
+                    checkEntityName(file, paramName);
                     OUString paramType(file->readIdxName(&offset));
+                    checkTypeName(file, paramType);
                     InterfaceTypeEntity::Method::Parameter::Direction dir;
                     switch (v) {
                     case 0:
@@ -955,7 +1069,9 @@ rtl::Reference< Entity > readEntity(
                 }
                 offset += 4;
                 for (sal_uInt32 j = 0; j != m; ++j) {
-                    excs.push_back(file->readIdxName(&offset));
+                    OUString exc(file->readIdxName(&offset));
+                    checkTypeName(file, exc);
+                    excs.push_back(exc);
                 }
                 meths.push_back(
                     InterfaceTypeEntity::Method(
@@ -970,6 +1086,7 @@ rtl::Reference< Entity > readEntity(
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
+            checkTypeName(file, base);
             return new TypedefEntity(
                 published, base, readAnnotations(annotated, file, offset));
         }
@@ -1010,6 +1127,7 @@ rtl::Reference< Entity > readEntity(
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
+            checkTypeName(file, base);
             std::vector< SingleInterfaceBasedServiceEntity::Constructor > ctors;
             if (flag) {
                 ctors.push_back(
@@ -1025,6 +1143,7 @@ rtl::Reference< Entity > readEntity(
                 offset += 4;
                 for (sal_uInt32 i = 0; i != n; ++i) {
                     OUString ctorName(file->readIdxName(&offset));
+                    checkEntityName(file, ctorName);
                     sal_uInt32 m = file->read32(offset);
                     if (m > SAL_MAX_INT32) {
                         throw FileFormatException(
@@ -1041,7 +1160,9 @@ rtl::Reference< Entity > readEntity(
                         v = file->read8(offset);
                         ++offset;
                         OUString paramName(file->readIdxName(&offset));
+                        checkEntityName(file, paramName);
                         OUString paramType(file->readIdxName(&offset));
+                        checkTypeName(file, paramType);
                         bool rest;
                         switch (v) {
                         case 0:
@@ -1074,7 +1195,9 @@ rtl::Reference< Entity > readEntity(
                     }
                     offset += 4;
                     for (sal_uInt32 j = 0; j != m; ++j) {
-                        excs.push_back(file->readIdxName(&offset));
+                        OUString exc(file->readIdxName(&offset));
+                        checkTypeName(file, exc);
+                        excs.push_back(exc);
                     }
                     ctors.push_back(
                         SingleInterfaceBasedServiceEntity::Constructor(
@@ -1099,6 +1222,7 @@ rtl::Reference< Entity > readEntity(
             std::vector< AnnotatedReference > mandServs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
+                checkTypeName(file, base);
                 mandServs.push_back(
                     AnnotatedReference(
                         base,
@@ -1115,6 +1239,7 @@ rtl::Reference< Entity > readEntity(
             std::vector< AnnotatedReference > optServs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
+                checkTypeName(file, base);
                 optServs.push_back(
                     AnnotatedReference(
                         base,
@@ -1131,6 +1256,7 @@ rtl::Reference< Entity > readEntity(
             std::vector< AnnotatedReference > mandIfcs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
+                checkTypeName(file, base);
                 mandIfcs.push_back(
                     AnnotatedReference(
                         base,
@@ -1147,6 +1273,7 @@ rtl::Reference< Entity > readEntity(
             std::vector< AnnotatedReference > optIfcs;
             for (sal_uInt32 i = 0; i != n; ++i) {
                 OUString base(file->readIdxName(&offset));
+                checkTypeName(file, base);
                 optIfcs.push_back(
                     AnnotatedReference(
                         base,
@@ -1165,7 +1292,9 @@ rtl::Reference< Entity > readEntity(
                 sal_uInt16 attrs = file->read16(offset);
                 offset += 2;
                 OUString propName(file->readIdxName(&offset));
+                checkEntityName(file, propName);
                 OUString propType(file->readIdxName(&offset));
+                checkTypeName(file, propType);
                 if (attrs > 0x01FF) { // see css.beans.PropertyAttribute
                     throw FileFormatException(
                         file->uri,
@@ -1190,6 +1319,7 @@ rtl::Reference< Entity > readEntity(
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
+            checkTypeName(file, base);
             return new InterfaceBasedSingletonEntity(
                 published, base, readAnnotations(annotated, file, offset));
         }
@@ -1197,6 +1327,7 @@ rtl::Reference< Entity > readEntity(
         {
             ++offset;
             OUString base(file->readIdxName(&offset));
+            checkTypeName(file, base);
             return new ServiceBasedSingletonEntity(
                 published, base, readAnnotations(annotated, file, offset));
         }
