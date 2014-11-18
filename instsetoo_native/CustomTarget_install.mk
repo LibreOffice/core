@@ -74,6 +74,7 @@ endif
 
 define instsetoo_native_install_command
 $(call instsetoo_native_msitemplates,$(1))
+$(call gb_Helper_print_on_error, \
 cd $(dir $@) \
 $(foreach pkgformat,$(5),\
 && $(PERL) -w $< \
@@ -89,7 +90,7 @@ $(foreach pkgformat,$(5),\
 	$(4) \
 	-format $(pkgformat) \
 	$(if $(VERBOSE)$(verbose),-verbose,-quiet) \
-)
+),$@.log)
 endef
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
