@@ -239,44 +239,68 @@ Color aGlobalRetoucheColor;
 struct SwPaintProperties {
     // Only repaint the Fly content as well as the background of the Fly content if
     // a metafile is taken of the Fly.
-    bool                bSFlyMetafile = false;
-    OutputDevice       *pSFlyMetafileOut = 0;
-    SwViewShell        *pSGlobalShell = 0;
+    bool                bSFlyMetafile;
+    OutputDevice       *pSFlyMetafileOut;
+    SwViewShell        *pSGlobalShell;
 
     // Retouch for transparent Flys is done by the background of the Flys.
     // The Fly itself should certainly not be spared out. See PaintBackground and
     // lcl_SubtractFlys()
-    SwFlyFrm           *pSRetoucheFly = 0;
-    SwFlyFrm           *pSRetoucheFly2 = 0;
-    SwFlyFrm           *pSFlyOnlyDraw = 0;
+    SwFlyFrm           *pSRetoucheFly;
+    SwFlyFrm           *pSRetoucheFly2;
+    SwFlyFrm           *pSFlyOnlyDraw;
 
     // The borders will be collected in pSLines during the Paint and later
     // possibly merge them.
     // The help lines will be collected and merged in gProp.pSSubsLines. These will
     // be compared with pSLines before the work in order to avoid help lines
     // to hide borders.
-    BorderLines        *pBLines = 0;
-    SwLineRects        *pSLines = 0;
-    SwSubsRects        *pSSubsLines = 0;
+    BorderLines        *pBLines;
+    SwLineRects        *pSLines;
+    SwSubsRects        *pSSubsLines;
 
     // global variable for sub-lines of body, header, footer, section and footnote frames.
-    SwSubsRects        *pSSpecSubsLines = 0;
-    SfxProgress        *pSProgress = 0;
+    SwSubsRects        *pSSpecSubsLines;
+    SfxProgress        *pSProgress;
 
     // Sizes of a pixel and the corresponding halves. Will be reset when
     // entering SwRootFrm::Paint
-    long                nSPixelSzW = 0;
-    long                nSPixelSzH = 0;
-    long                nSHalfPixelSzW = 0;
-    long                nSHalfPixelSzH = 0;
-    long                nSMinDistPixelW = 0;
-    long                nSMinDistPixelH = 0;
+    long                nSPixelSzW;
+    long                nSPixelSzH;
+    long                nSHalfPixelSzW;
+    long                nSHalfPixelSzH;
+    long                nSMinDistPixelW;
+    long                nSMinDistPixelH;
 
     Color               aSGlobalRetoucheColor;
 
     // Current zoom factor
-    double              aSScaleX = 1;
-    double              aSScaleY = 1;
+    double              aSScaleX;
+    double              aSScaleY;
+
+    SwPaintProperties()
+      : bSFlyMetafile(false)
+      , pSFlyMetafileOut(0)
+      , pSGlobalShell(0)
+      , pSRetoucheFly(0)
+      , pSRetoucheFly2(0)
+      , pSFlyOnlyDraw(0)
+      , pBLines(0)
+      , pSLines(0)
+      , pSSubsLines(0)
+      , pSSpecSubsLines(0)
+      , pSProgress(0)
+      , nSPixelSzW(0)
+      , nSPixelSzH(0)
+      , nSHalfPixelSzW(0)
+      , nSHalfPixelSzH(0)
+      , nSMinDistPixelW(0)
+      , nSMinDistPixelH(0)
+      , aSScaleX(1)
+      , aSScaleY(1)
+    {
+    }
+
 };
 
 static SwPaintProperties gProp;
