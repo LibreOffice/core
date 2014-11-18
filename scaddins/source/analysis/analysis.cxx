@@ -702,7 +702,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) throw(
     if( fMin > fMax )
         throw lang::IllegalArgumentException();
 
-    double fRet = comphelper::rng::uniform_real_distribution(fMin, boost::math::nextafter(fMax, DBL_MAX));
+    double fRet = floor(comphelper::rng::uniform_real_distribution(fMin, boost::math::nextafter(fMax+1, -DBL_MAX)));
     RETURN_FINITE( fRet );
 }
 
