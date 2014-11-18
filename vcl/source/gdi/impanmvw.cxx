@@ -85,7 +85,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
 
     // Initialize drawing to actual position
-    ImplDrawToPos( mpParent->ImplGetCurPos() );
+    drawToPos( mpParent->ImplGetCurPos() );
 
     // If first frame OutputDevice is set, update variables now for real OutputDevice
     if( pFirstFrameOutDev )
@@ -100,7 +100,7 @@ ImplAnimView::~ImplAnimView()
     Animation::ImplDecAnimCount();
 }
 
-bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
+bool ImplAnimView::matches( OutputDevice* pOut, long nExtraData ) const
 {
     bool bRet = false;
 
@@ -115,7 +115,7 @@ bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
     return bRet;
 }
 
-void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix )
+void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix )
 {
     const Size& rAnmSize = mpParent->GetDisplaySizePixel();
     Point       aPt2( rAnm.aPosPix.X() + rAnm.aSizePix.Width() - 1L,
@@ -152,7 +152,7 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
         rPosPix.Y() = maSzPix.Height() - 1L - aPt2.Y();
 }
 
-void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
+void ImplAnimView::drawToPos( sal_uLong nPos )
 {
     VirtualDevice   aVDev;
     boost::scoped_ptr<vcl::Region> pOldClip(!maClip.IsNull() ? new vcl::Region( mpOut->GetClipRegion() ) : NULL);
@@ -161,7 +161,7 @@ void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
     nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1UL );
 
     for( sal_uLong i = 0UL; i <= nPos; i++ )
-        ImplDraw( i, &aVDev );
+        draw( i, &aVDev );
 
     if( pOldClip )
         mpOut->SetClipRegion( maClip );
@@ -172,18 +172,13 @@ void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
         mpOut->SetClipRegion( *pOldClip );
 }
 
-void ImplAnimView::ImplDraw( sal_uLong nPos )
-{
-    ImplDraw( nPos, NULL );
-}
-
-void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
+void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 {
     Rectangle aOutRect( mpOut->PixelToLogic( Point() ), mpOut->GetOutputSize() );
 
     // check, if output lies out of display
     if( aOutRect.Intersection( Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
-        ImplSetMarked( true );
+        setMarked( true );
     else if( !mbPause )
     {
         VirtualDevice*          pDev;
@@ -194,7 +189,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
         const sal_uLong             nLastPos = mpParent->Count() - 1;
         const AnimationBitmap&  rAnm = mpParent->Get( (sal_uInt16) ( mnActPos = std::min( nPos, nLastPos ) ) );
 
-        ImplGetPosSize( rAnm, aPosPix, aSizePix );
+        getPosSize( rAnm, aPosPix, aSizePix );
 
         // Mirrored horizontally?
         if( mbHMirr )
@@ -287,7 +282,7 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
     }
 }
 
-void ImplAnimView::ImplRepaint()
+void ImplAnimView::repaint()
 {
     const bool bOldPause = mbPause;
 
@@ -303,11 +298,11 @@ void ImplAnimView::ImplRepaint()
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
 
     mbPause = false;
-    ImplDrawToPos( mnActPos );
+    drawToPos( mnActPos );
     mbPause = bOldPause;
 }
 
-AInfo* ImplAnimView::ImplCreateAInfo() const
+AInfo* ImplAnimView::createAInfo() const
 {
     AInfo* pAInfo = new AInfo;
 

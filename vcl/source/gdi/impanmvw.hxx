@@ -54,32 +54,30 @@ private:
     bool            mbHMirr;
     bool            mbVMirr;
 
-    void            ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
-    void            ImplDraw( sal_uLong nPos, VirtualDevice* pVDev );
-
-
 private:
                     ImplAnimView( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = NULL );
                     ~ImplAnimView();
 
-    bool            ImplMatches( OutputDevice* pOut, long nExtraData ) const;
-    void            ImplDrawToPos( sal_uLong nPos );
-    void            ImplDraw( sal_uLong nPos );
-    void            ImplRepaint();
-    AInfo*          ImplCreateAInfo() const;
+    bool            matches( OutputDevice* pOut, long nExtraData ) const;
+    void            drawToPos( sal_uLong nPos );
+    void            draw( sal_uLong nPos, VirtualDevice* pVDev=NULL );
+    void            repaint();
+    AInfo*          createAInfo() const;
 
-    const Point&    ImplGetOutPos() const { return maPt; }
+    void            getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
 
-    const Size&     ImplGetOutSize() const { return maSz; }
-    const Size&     ImplGetOutSizePix() const { return maSzPix; }
+    const Point&    getOutPos() const { return maPt; }
 
-    void            ImplPause( bool bPause ) { mbPause = bPause; }
-    bool            ImplIsPause() const { return mbPause; }
+    const Size&     getOutSize() const { return maSz; }
+    const Size&     getOutSizePix() const { return maSzPix; }
 
-    void            ImplSetMarked( bool bMarked ) { mbMarked = bMarked; }
-    bool            ImplIsMarked() const { return mbMarked; }
+    void            pause( bool bPause ) { mbPause = bPause; }
+    bool            isPause() const { return mbPause; }
+
+    void            setMarked( bool bMarked ) { mbMarked = bMarked; }
+    bool            isMarked() const { return mbMarked; }
 };
 
 #endif

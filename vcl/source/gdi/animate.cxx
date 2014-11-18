@@ -250,12 +250,12 @@ bool Animation::Start( OutputDevice* pOut, const Point& rDestPt, const Size& rDe
             for( size_t i = 0; i < maViewList.size(); ++i )
             {
                 pView = maViewList[ i ];
-                if( pView->ImplMatches( pOut, nExtraData ) )
+                if( pView->matches( pOut, nExtraData ) )
                 {
-                    if( pView->ImplGetOutPos() == rDestPt &&
-                        pView->ImplGetOutSizePix() == pOut->LogicToPixel( rDestSz ) )
+                    if( pView->getOutPos() == rDestPt &&
+                        pView->getOutSizePix() == pOut->LogicToPixel( rDestSz ) )
                     {
-                        pView->ImplRepaint();
+                        pView->repaint();
                         pMatch = pView;
                     }
                     else
@@ -300,7 +300,7 @@ void Animation::Stop( OutputDevice* pOut, long nExtraData )
     {
 
         ImplAnimView* pView = maViewList[ i ];
-        if( pView->ImplMatches( pOut, nExtraData ) )
+        if( pView->matches( pOut, nExtraData ) )
         {
             delete pView;
             maViewList.erase( maViewList.begin() + i );
@@ -369,7 +369,7 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
 
             // create AInfo-List
             for( size_t i = 0, n = maViewList.size(); i < n; ++i )
-                aAInfoList.push_back( maViewList[ i ]->ImplCreateAInfo() );
+                aAInfoList.push_back( maViewList[ i ]->createAInfo() );
 
             maNotifyLink.Call( this );
 
@@ -387,8 +387,8 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
                 else
                     pView = (ImplAnimView*) pAInfo->pViewData;
 
-                pView->ImplPause( pAInfo->bPause );
-                pView->ImplSetMarked( true );
+                pView->pause( pAInfo->bPause );
+                pView->setMarked( true );
             }
 
             // delete AInfo structures
@@ -400,17 +400,17 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
             for( size_t i = 0; i < maViewList.size(); )
             {
                 pView = maViewList[ i ];
-                if( !pView->ImplIsMarked() )
+                if( !pView->isMarked() )
                 {
                     delete pView;
                     maViewList.erase( maViewList.begin() + i );
                 }
                 else
                 {
-                    if( !pView->ImplIsPause() )
+                    if( !pView->isPause() )
                         bGlobalPause = false;
 
-                    pView->ImplSetMarked( false );
+                    pView->setMarked( false );
                     i++;
                 }
             }
@@ -453,9 +453,9 @@ IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
             for( size_t i = 0; i < maViewList.size(); )
             {
                 pView = maViewList[ i ];
-                pView->ImplDraw( mnPos );
+                pView->draw( mnPos );
 
-                if( pView->ImplIsMarked() )
+                if( pView->isMarked() )
                 {
                     delete pView;
                     maViewList.erase( maViewList.begin() + i );
