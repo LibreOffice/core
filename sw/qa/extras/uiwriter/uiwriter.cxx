@@ -443,6 +443,13 @@ void SwUiWriterTest::testCommentedWord()
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
     // This was 9, only "word", not "word<anchor character>" was selected.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pShellCrsr->End()->nContent.GetIndex());
+
+    // Test that getAnchor() points to "word", not to an empty string.
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("word"), xField->getAnchor()->getString());
 }
 
 
