@@ -1500,23 +1500,14 @@ ScAttrIterator* ScColumn::CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) c
 
 namespace {
 
-class StartAllListenersHandler
-{
-    ScDocument* mpDoc;
-public:
-    StartAllListenersHandler(ScDocument* pDoc) : mpDoc(pDoc) {}
-
-    void operator() (size_t, ScFormulaCell* p)
-    {
-        p->StartListeningTo(mpDoc);
-    }
-};
-
-class StartNeededListenersHandler
+class StartListenersHandler
 {
     sc::StartListeningContext* mpCxt;
+    bool mbAllListeners;
+
 public:
-    StartNeededListenersHandler( sc::StartListeningContext& rCxt ) : mpCxt(&rCxt) {}
+    StartListenersHandler( sc::StartListeningContext& rCxt, bool bAllListeners ) :
+        mpCxt(&rCxt), mbAllListeners(bAllListeners) {}
 
     void operator() ( sc::CellStoreType::value_type& aBlk )
     {
@@ -1529,7 +1520,7 @@ public:
         for (; pp != ppEnd; ++pp)
         {
             ScFormulaCell& rFC = **pp;
-            if (!rFC.NeedsListening())
+            if (!mbAllListeners && !rFC.NeedsListening())
                 continue;
 
             if (rFC.IsSharedTop())
@@ -1545,15 +1536,9 @@ public:
 
 }
 
-void ScColumn::StartAllListeners()
+void ScColumn::StartListeners( sc::StartListeningContext& rCxt, bool bAll )
 {
-    StartAllListenersHandler aFunc(pDocument);
-    sc::ProcessFormula(maCells, aFunc);
-}
-
-void ScColumn::StartNeededListeners( sc::StartListeningContext& rCxt )
-{
-    std::for_each(maCells.begin(), maCells.end(), StartNeededListenersHandler(rCxt));
+    std::for_each(maCells.begin(), maCells.end(), StartListenersHandler(rCxt, bAll));
 }
 
 namespace {

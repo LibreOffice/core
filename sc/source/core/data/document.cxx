@@ -530,10 +530,8 @@ bool ScDocument::InsertTab(
                 for (; it != maTabs.end(); ++it)
                     if ( *it )
                         (*it)->UpdateCompile();
-                it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->StartAllListeners();
+
+                StartAllListeners();
 
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
@@ -622,10 +620,8 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
                     if ( *it )
                         (*it)->UpdateCompile();
                 }
-                it = maTabs.begin();
-                for (; it != maTabs.end(); ++it)
-                    if ( *it )
-                        (*it)->StartAllListeners();
+
+                StartAllListeners();
 
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
@@ -717,10 +713,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
                 // only be triggered after the loading is done.
                 if ( !bInsertingFromOtherDoc )
                 {
-                    it = maTabs.begin();
-                    for (; it != maTabs.end(); ++it)
-                        if ( *it )
-                            (*it)->StartAllListeners();
+                    StartAllListeners();
 
                     sc::SetFormulaDirtyContext aFormulaDirtyCxt;
                     SetAllFormulasDirty(aFormulaDirtyCxt);
@@ -807,10 +800,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
                 // only be triggered after the loading is done.
                 if ( !bInsertingFromOtherDoc )
                 {
-                    it = maTabs.begin();
-                    for (; it != maTabs.end(); ++it)
-                        if ( *it )
-                            (*it)->StartAllListeners();
+                    StartAllListeners();
 
                     sc::SetFormulaDirtyContext aFormulaDirtyCxt;
                     SetAllFormulasDirty(aFormulaDirtyCxt);
@@ -1173,7 +1163,7 @@ public:
     void operator() (ScTable* p)
     {
         if (p)
-            p->StartNeededListeners(*mpCxt);
+            p->StartListeners(*mpCxt, false);
     }
 };
 

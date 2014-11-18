@@ -1023,10 +1023,10 @@ const ScColumn* ScTable::FetchColumn( SCCOL nCol ) const
     return &aCol[nCol];
 }
 
-void ScTable::StartAllListeners()
+void ScTable::StartListeners( sc::StartListeningContext& rCxt, bool bAll )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].StartAllListeners();
+        aCol[i].StartListeners(rCxt, bAll);
 }
 
 void ScTable::AttachFormulaCells(
@@ -1041,12 +1041,6 @@ void ScTable::DetachFormulaCells(
 {
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         aCol[nCol].DetachFormulaCells(rCxt, nRow1, nRow2);
-}
-
-void ScTable::StartNeededListeners( sc::StartListeningContext& rCxt )
-{
-    for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].StartNeededListeners(rCxt);
 }
 
 void ScTable::SetDirtyFromClip(
