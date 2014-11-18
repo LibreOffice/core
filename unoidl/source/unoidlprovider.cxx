@@ -640,6 +640,10 @@ rtl::Reference< Entity > readEntity(
     case 1: // enum type
         {
             sal_uInt32 n = file->read32(offset + 1);
+            if (n == 0) {
+                throw FileFormatException(
+                    file->uri, "UNOIDL format: enum type with no members");
+            }
             if (n > SAL_MAX_INT32) {
                 throw FileFormatException(
                     file->uri, "UNOIDL format: too many members of enum type");
