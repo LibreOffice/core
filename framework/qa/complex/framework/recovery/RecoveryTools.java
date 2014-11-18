@@ -273,9 +273,9 @@ public class RecoveryTools {
         pause();
     }
 
-    public void clickThreadButton(XMultiServiceFactory xMSF, XWindow xWindow, String buttonName)
+    public void clickThreadButton(XWindow xWindow, String buttonName)
     {
-        KlickButtonThread kbt = new KlickButtonThread(xMSF, xWindow, buttonName);
+        KlickButtonThread kbt = new KlickButtonThread(xWindow, buttonName);
         kbt.start();
         pause(param.getInt(PropertyName.SHORT_WAIT) * 10);
     }

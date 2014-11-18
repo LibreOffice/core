@@ -275,8 +275,7 @@ public class CheckContextMenuInterceptor
         try
         {
             System.out.println("try to get first children of Help context...");
-            XAccessible xHelpChild = xHelpCont.getAccessibleChild(0);
-
+            xHelpCont.getAccessibleChild(0);
         }
         catch (IndexOutOfBoundsException e)
         {

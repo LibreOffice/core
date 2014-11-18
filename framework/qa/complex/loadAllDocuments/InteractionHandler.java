@@ -39,13 +39,10 @@ public class InteractionHandler implements XInteractionHandler
 
 
     /**
-     * @member  m_aRequest      the original interaction request
-     *                          saved for later analyzing
-     * @member  m_bWasUsed      true if the interaction handler was used
-     * @member  m_nTry          count using of RETRY continuations
+     * count using of RETRY continuations
      */
-    private Object          m_aRequest  ;
     private int             m_nTry      ;
+    /** true if the interaction handler was used */
     private boolean         m_bWasUsed  ;
 
 
@@ -57,7 +54,6 @@ public class InteractionHandler implements XInteractionHandler
      */
     public InteractionHandler()
     {
-        m_aRequest  = null     ;
         m_nTry      = 0        ;
         m_bWasUsed = false;
     }
@@ -75,14 +71,6 @@ public class InteractionHandler implements XInteractionHandler
     public void handle(com.sun.star.task.XInteractionRequest xRequest)
     {
         m_bWasUsed = true;
-
-        // first sav thje original request
-        // Our user can use this information later for some debug analyzing
-        Object aRequest = xRequest.getRequest();
-        synchronized(this)
-        {
-            m_aRequest = aRequest;
-        }
 
         // analyze the possible continuations.
         // We can abort all incoming interactions only.
