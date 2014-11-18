@@ -55,7 +55,7 @@ public class UnoDialog implements EventNames
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
-    protected AbstractListener guiEventListener;
+    protected final AbstractListener guiEventListener = new CommonListener();
 
     public AbstractListener getGuiEventListener()
     {
