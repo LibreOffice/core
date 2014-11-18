@@ -790,7 +790,7 @@ void DbgDialogTest( vcl::Window* pWindow )
 
 void ImplDbgTestSolarMutex()
 {
-    assert(ImplGetSVData()->mpDefInst->CheckYieldMutex());
+    assert(ImplGetSVData()->mpDefInst->CheckYieldMutex() && "SolarMutex not locked");
 }
 
 void DbgGUIInitSolarMutexCheck()
