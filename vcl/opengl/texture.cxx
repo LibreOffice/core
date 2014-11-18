@@ -244,6 +244,7 @@ bool OpenGLTexture::Draw()
         aTexCoord[3] = aTexCoord[5] = maRect.Bottom() / (double) mpImpl->mnHeight;
     }
 
+    glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
     glEnableVertexAttribArray( 0 );
     glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, aPosition );
