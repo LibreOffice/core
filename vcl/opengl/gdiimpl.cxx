@@ -1459,7 +1459,7 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
     SAL_INFO( "vcl.opengl", "::getBitmap " << nX << "," << nY <<
               " " << nWidth << "x" << nHeight );
     PreDraw();
-    if( !pBitmap->Create( maContext, maOffscreenTex, nX, nY, nWidth, nHeight ) )
+    if( !pBitmap->Create( maOffscreenTex, nX, nY, nWidth, nHeight ) )
     {
         delete pBitmap;
         pBitmap = NULL;
