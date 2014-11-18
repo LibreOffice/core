@@ -299,7 +299,7 @@ public final class Loader {
         }
 
         @Override
-        protected Class findClass( String name ) throws ClassNotFoundException {
+        protected Class<?> findClass( String name ) throws ClassNotFoundException {
             // This is only called via this.loadClass -> super.loadClass ->
             // this.findClass, after this.loadClass has already called
             // super.findClass, so no need to call super.findClass again:
@@ -307,7 +307,7 @@ public final class Loader {
         }
 
         @Override
-        protected Class loadClass( String name, boolean resolve )
+        protected Class<?> loadClass( String name, boolean resolve )
             throws ClassNotFoundException
         {
             Class c = findLoadedClass( name );

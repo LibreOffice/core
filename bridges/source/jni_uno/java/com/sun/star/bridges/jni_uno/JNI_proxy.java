@@ -150,7 +150,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         Object proxy, java.lang.reflect.Method method, Object args [] )
         throws Throwable
     {
-        Class decl_class = method.getDeclaringClass();
+        Class<?> decl_class = method.getDeclaringClass();
         String method_name = method.getName();
 
         if (Object.class.equals( decl_class ))
