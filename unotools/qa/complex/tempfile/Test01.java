@@ -39,7 +39,6 @@ public class Test01 implements TempFileTest {
 
     public boolean test() {
         XTempFile xTempFile = null;
-        XTruncate xTruncate = null;
         String sFileURL = null;
         String sFileName = null;
         //create a temporary file.
@@ -47,7 +46,7 @@ public class Test01 implements TempFileTest {
             Object oTempFile = m_xMSF.createInstance( "com.sun.star.io.TempFile" );
             xTempFile = UnoRuntime.queryInterface(XTempFile.class, oTempFile);
             m_aTestHelper.Message( "Tempfile created." );
-            xTruncate = UnoRuntime.queryInterface(XTruncate.class, oTempFile);
+            UnoRuntime.queryInterface(XTruncate.class, oTempFile);
         } catch( Exception e ) {
             m_aTestHelper.Error( "Cannot create TempFile. exception: " + e );
             return false;
