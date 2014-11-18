@@ -101,7 +101,7 @@ struct ScBroadcastAreaHash
 {
     size_t operator()( const ScBroadcastAreaEntry& rEntry ) const
     {
-        return rEntry.mpArea->GetRange().hashArea() + rEntry.mpArea->IsGroupListening();
+        return rEntry.mpArea->GetRange().hashArea() + static_cast<size_t>(rEntry.mpArea->IsGroupListening());
     }
 };
 
