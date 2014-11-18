@@ -57,9 +57,9 @@ private:
     bool            bKeyInput;
 
                     DECL_LINK(PopupEnd, void *);
-                    DECL_LINK( HighlightChanged, Timer* );
-                    DECL_LINK(SubmenuClose, void *);
-                    DECL_LINK(AutoScroll, void *);
+    void            HighlightChanged( Timer* );
+    void            SubmenuClose( Timer* );
+    void            AutoScroll( Timer* );
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;

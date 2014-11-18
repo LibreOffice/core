@@ -1408,11 +1408,11 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnActivateCount   = 0;
 
     maTimer.SetTimeout( 50 );
-    maTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
+    maTimer.timeoutSignal.connect(boost::bind( &ToolBox::ImplUpdateHdl, this, _1 ));
 
     // set timeout and handler for dropdown items
     mpData->maDropdownTimer.SetTimeout( 250 );
-    mpData->maDropdownTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
+    mpData->maDropdownTimer.timeoutSignal.connect(boost::bind( &ToolBox::ImplDropdownLongClickHdl, this, _1 ));
 
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
 
@@ -2616,7 +2616,7 @@ void ToolBox::ImplFormat( bool bResize )
     mbFormat = false;
 }
 
-IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
+void ToolBox::ImplDropdownLongClickHdl( Timer* )
 {
     if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
         (mpData->m_aItems[ mnCurPos ].mnBits & ToolBoxItemBits::DROPDOWN)
@@ -2641,17 +2641,12 @@ IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
             mnHighItemId     = 0;
         }
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
+void ToolBox::ImplUpdateHdl( Timer* )
 {
-
     if( mbFormat )
         ImplFormat();
-
-    return 0;
 }
 
 static void ImplDrawMoreIndicator( ToolBox *pBox, const Rectangle& rRect, bool bSetColor, bool bRotate )

@@ -43,7 +43,7 @@ namespace vcl
             ,aSearchTimeout()
         {
             aSearchTimeout.SetTimeout( 2500 );
-            aSearchTimeout.SetTimeoutHdl( LINK( this, QuickSelectionEngine_Data, SearchStringTimeout ) );
+            aSearchTimeout.timeoutSignal.connect( boost::bind( &QuickSelectionEngine_Data::SearchStringTimeout, this, _1 ));
         }
 
         ~QuickSelectionEngine_Data()
@@ -51,7 +51,7 @@ namespace vcl
             aSearchTimeout.Stop();
         }
 
-        DECL_LINK( SearchStringTimeout, Timer* );
+        void SearchStringTimeout( Timer* );
     };
 
     namespace
@@ -64,10 +64,9 @@ namespace vcl
         }
     }
 
-    IMPL_LINK( QuickSelectionEngine_Data, SearchStringTimeout, Timer*, /*EMPTYARG*/ )
+    void QuickSelectionEngine_Data::SearchStringTimeout (Timer* /*EMPTYARG*/)
     {
         lcl_reset( *this );
-        return 1;
     }
 
     static StringEntryIdentifier findMatchingEntry( const OUString& _searchString, QuickSelectionEngine_Data& _engineData )
