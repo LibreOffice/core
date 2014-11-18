@@ -186,6 +186,14 @@ int OpenGLTexture::GetHeight() const
 void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted ) const
 {
     SAL_INFO( "vcl.opengl", "Getting coord " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
+
+    if( mpImpl == NULL )
+    {
+        pCoord[0] = pCoord[1] = pCoord[2] = pCoord[3] = 0.0f;
+        pCoord[4] = pCoord[5] = pCoord[6] = pCoord[7] = 0.0f;
+        return;
+    }
+
     pCoord[0] = pCoord[2] = (maRect.Left() + rPosAry.mnSrcX) / (double) mpImpl->mnWidth;
     pCoord[4] = pCoord[6] = (maRect.Left() + rPosAry.mnSrcX + rPosAry.mnSrcWidth) / (double) mpImpl->mnWidth;
 
