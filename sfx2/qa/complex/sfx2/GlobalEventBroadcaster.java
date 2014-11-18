@@ -163,7 +163,7 @@ public class GlobalEventBroadcaster {
             XTextDocument xTextDoc = wHelper.openFromDialog("private:factory/swriter?slot=21051", "", false);
             shortWait();
             XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, wHelper.getToolkit().getActiveTopWindow());
-            UITools ut = new UITools(m_xMSF,xWindow);
+            UITools ut = new UITools(xWindow);
             notifyEvents.clear();
             System.out.println("pressing button 'New Document'");
             try{

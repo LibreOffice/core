@@ -89,7 +89,7 @@ public class SwXTableRows extends TestCase {
         XTextTable oTable = null;
 
         log.println( "creating a test environment" );
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory.getFactory( tParam.getMSF() );
         oTable = SOfficeFactory.createTextTable( xTextDoc );
 
         try {

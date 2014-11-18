@@ -111,7 +111,7 @@ public class ScTableSheetsObj extends TestCase {
     @Override
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory.getFactory( Param.getMSF());
 
         log.println("getting sheets");
         XSpreadsheets xSpreadsheets = xSpreadsheetDoc.getSheets();

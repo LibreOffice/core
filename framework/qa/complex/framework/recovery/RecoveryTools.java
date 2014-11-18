@@ -261,7 +261,7 @@ public class RecoveryTools {
         if (oDialog == null) throw new com.sun.star.accessibility.IllegalAccessibleComponentStateException("could not get modal Dialog");
 
 
-        UITools oUITools = new UITools(xMSF, oDialog);
+        UITools oUITools = new UITools(oDialog);
         oUITools.printAccessibleTree((PrintWriter) log, param.getBool(PropertyName.DEBUG_IS_ACTIVE));
 
         try{

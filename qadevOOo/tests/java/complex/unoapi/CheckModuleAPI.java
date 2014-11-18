@@ -289,8 +289,6 @@ public class CheckModuleAPI extends ComplexTestCase
         {
             try
             {
-                // cws version: all added modules must be tested
-                final String cws = version.substring(4, version.length());
                 final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
                 final ArrayList<String> addedModules = cde.getModules();
 
@@ -543,8 +541,6 @@ public class CheckModuleAPI extends ComplexTestCase
                 try
                 {
 
-                    // cws version: all added modules must be tested
-                    final String cws = version.substring(4, version.length());
                     final CwsDataExchangeImpl cde = new CwsDataExchangeImpl(param, log);
                     cde.setUnoApiCwsStatus(status);
                 }

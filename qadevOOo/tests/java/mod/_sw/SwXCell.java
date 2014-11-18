@@ -92,7 +92,7 @@ public class SwXCell extends TestCase {
         XInterface oObj = null;
         XTextContent oTable = null;
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory.getFactory( tParam.getMSF() );
         log.println( "creating a test environment" );
         oTable = SOfficeFactory.createTextTable(xTextDoc, 3, 4);
         try {

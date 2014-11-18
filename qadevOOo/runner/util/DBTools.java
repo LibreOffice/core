@@ -80,12 +80,6 @@ public class DBTools {
     } ;
 
     /**
-    * Array of lengths of streams for each row in of the
-    * <code>TST_TABLE_VALUES</code> constants.
-    */
-    private final static int[] TST_STREAM_LENGTHS = {0, 0, 0} ;
-
-    /**
     * It's just a structure with some useful methods for representing
     * <code>com.sun.star.sdb.DataSource</code> service. All this
     * service's properties are stored in appropriate class fields.
@@ -141,35 +135,6 @@ public class DBTools {
         */
         public DataSourceInfo()
         {
-        }
-
-        /**
-        * Creates an instance laying upon specified DataSource.
-        * @param dataSource All source properties are copied into
-        * class fields.
-        */
-        private DataSourceInfo(Object dataSource) {
-            XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, dataSource) ;
-
-            try {
-                Name = (String)xProps.getPropertyValue("Name") ;
-                URL = (String)xProps.getPropertyValue("URL") ;
-                Info = (PropertyValue[])xProps.getPropertyValue("Info") ;
-                User = (String)xProps.getPropertyValue("User") ;
-                Password = (String)xProps.getPropertyValue("Password") ;
-                IsPasswordRequired = (Boolean)xProps.getPropertyValue("IsPasswordRequired") ;
-                SuppressVersionColumns = (Boolean)
-                    xProps.getPropertyValue("SuppressVersionColumns") ;
-                IsReadOnly = (Boolean)xProps.getPropertyValue("IsReadOnly") ;
-                TableFilter = (String[])xProps.getPropertyValue("TableFilter") ;
-                TableTypeFilter = (String[])xProps.getPropertyValue("TableTypeFilter") ;
-            } catch (com.sun.star.beans.UnknownPropertyException e) {
-                System.err.println("util.DBTools.DataSourceInfo: Error retrieving property") ;
-                e.printStackTrace(System.err) ;
-            } catch (com.sun.star.lang.WrappedTargetException e) {
-                System.err.println("util.DBTools.DataSourceInfo: Error retrieving property") ;
-                e.printStackTrace(System.err) ;
-            }
         }
 
         /**

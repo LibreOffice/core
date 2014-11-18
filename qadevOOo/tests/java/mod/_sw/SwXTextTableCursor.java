@@ -84,7 +84,7 @@ public class SwXTextTableCursor extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory.getFactory( tParam.getMSF() );
 
         // create testobject here
 

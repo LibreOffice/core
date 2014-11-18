@@ -40,7 +40,7 @@ public class KlickButtonThread extends Thread {
     @Override
     public void run() {
         try{
-            UITools oUITools = new UITools(xMSF, xWindow);
+            UITools oUITools = new UITools(xWindow);
 
             oUITools.clickButton(buttonName);
 

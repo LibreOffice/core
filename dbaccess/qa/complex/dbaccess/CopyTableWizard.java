@@ -172,7 +172,7 @@ public class CopyTableWizard extends CRMBasedTestCase
         try
         {
             final XWindow dialog = getActiveWindow();
-            final UITools uiTools = new UITools(getMSF(), dialog);
+            final UITools uiTools = new UITools(dialog);
             final XAccessible root = uiTools.getRoot();
             final XAccessibleContext accContext = root.getAccessibleContext();
             final int count = accContext.getAccessibleChildCount();

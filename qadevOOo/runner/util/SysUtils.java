@@ -18,24 +18,12 @@
 
 package util;
 
-import java.util.ArrayList;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.datatransfer.clipboard.*;
 import com.sun.star.datatransfer.*;
 
 public class SysUtils {
-
-
-
-  private static ArrayList<String> files = new ArrayList<String>();
-
-
-
-
-
-
 
   /**
    * Tries to obtain text data from cliboard if such one exists.
