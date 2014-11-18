@@ -165,7 +165,7 @@ private:
     SAL_DLLPRIVATE void Init();
     SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, vcl::Window* i_pConfigureWin );
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, VclContainer &rBox);
-    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
+    SAL_DLLPRIVATE void ImplHandleLayoutTimerHdl( Timer* );
 
 protected:
     // Single argument ctors shall be explicit.

@@ -216,12 +216,12 @@ private:
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( bool bNewCalc = false, bool bFullPaint = false );
     SAL_DLLPRIVATE void            ImplUpdateItem( sal_uInt16 nIndex = 0xFFFF );
-    SAL_DLLPRIVATE const OUString ImplConvertMenuString( const OUString& rStr );
+    SAL_DLLPRIVATE const OUString  ImplConvertMenuString( const OUString& rStr );
     SAL_DLLPRIVATE bool            ImplHandleMouseMove( const MouseEvent& rMEvt, bool bRepeat = false );
     SAL_DLLPRIVATE bool            ImplHandleMouseButtonUp( const MouseEvent& rMEvt, bool bCancel = false );
     SAL_DLLPRIVATE void            ImplChangeHighlight( ImplToolItem* pItem, bool bNoGrabFocus = false );
     SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
-    SAL_DLLPRIVATE sal_uInt16          ImplGetItemLine( ImplToolItem* pCurrentItem );
+    SAL_DLLPRIVATE sal_uInt16      ImplGetItemLine( ImplToolItem* pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( sal_uInt16 nLine );
     SAL_DLLPRIVATE bool            ImplOpenItem( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE bool            ImplActivateItem( vcl::KeyCode aKeyCode );
@@ -240,10 +240,10 @@ private:
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder( ImplToolItem* pItem );
 
     DECL_DLLPRIVATE_LINK(          ImplCallExecuteCustomMenu, void* );
-    DECL_DLLPRIVATE_LINK(          ImplUpdateHdl, void* );
+    SAL_DLLPRIVATE void            ImplUpdateHdl( Timer* );
     DECL_DLLPRIVATE_LINK(          ImplResetAutoSizeTriesHdl, void* );
     DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
-    DECL_DLLPRIVATE_LINK(          ImplDropdownLongClickHdl, void* );
+    SAL_DLLPRIVATE void            ImplDropdownLongClickHdl( Timer* );
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE                 ToolBox (const ToolBox &);

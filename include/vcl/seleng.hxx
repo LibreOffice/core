@@ -77,15 +77,16 @@ class VCL_DLLPUBLIC SelectionEngine
 {
 private:
     FunctionSet*        pFunctionSet;
-    vcl::Window*             pWin;
+    vcl::Window*        pWin;
     Rectangle           aArea;
     Timer               aWTimer; // generate fake mouse moves
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
-    sal_uLong               nUpdateInterval;
-    sal_uInt16              nLockedMods;
-    sal_uInt16              nFlags;
-    DECL_DLLPRIVATE_LINK( ImpWatchDog, void* );
+    sal_uLong           nUpdateInterval;
+    sal_uInt16          nLockedMods;
+    sal_uInt16          nFlags;
+
+    SAL_DLLPRIVATE void ImpWatchDog ( Timer* );
 
     inline bool         ShouldDeselect( bool bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
