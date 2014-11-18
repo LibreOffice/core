@@ -242,7 +242,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             xIndexContRoadmap = UnoRuntime.queryInterface(XIndexContainer.class, oRoadmap);
 
             MethodInvocation mi = new MethodInvocation("itemStateChanged", this, com.sun.star.awt.ItemEvent.class);
-            guiEventListener.add("rdmNavi", EventNames.EVENT_ITEM_CHANGED, mi);
+            guiEventListener.add("rdmNavi", EventNames.ITEM_CHANGED, mi);
             xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
             xRoadmapBroadcaster.addItemListener(guiEventListener);
@@ -484,7 +484,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             MethodInvocation windowHidden = new MethodInvocation("windowHidden", this);
             xWindow.addWindowListener(guiEventListener);
             String dialogName = (String) Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_NAME);
-            guiEventListener.add(dialogName, EVENT_ACTION_PERFORMED, windowHidden);
+            guiEventListener.add(dialogName, EventNames.ACTION_PERFORMED, windowHidden);
 
         }
         catch (java.lang.Exception jexception)

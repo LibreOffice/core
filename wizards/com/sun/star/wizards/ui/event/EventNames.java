@@ -17,22 +17,22 @@
  */
 package com.sun.star.wizards.ui.event;
 
-public interface EventNames
+public enum EventNames
 {
     //common listener events
-    String EVENT_ACTION_PERFORMED = "APR";
-    String EVENT_ITEM_CHANGED = "ICH";
-    String EVENT_TEXT_CHANGED = "TCH";    //window events (XWindow)
-    String EVENT_WINDOW_RESIZED = "WRE";
-    String EVENT_WINDOW_MOVED = "WMO";
-    String EVENT_WINDOW_SHOWN = "WSH";
-    String EVENT_WINDOW_HIDDEN = "WHI";    //focus events (XWindow)
-    String EVENT_FOCUS_GAINED = "FGA";
-    String EVENT_FOCUS_LOST = "FLO";    //keyboard events
-    String EVENT_KEY_PRESSED = "KPR";
-    String EVENT_KEY_RELEASED = "KRE";    //mouse events
-    String EVENT_MOUSE_PRESSED = "MPR";
-    String EVENT_MOUSE_RELEASED = "MRE";
-    String EVENT_MOUSE_ENTERED = "MEN";
-    String EVENT_MOUSE_EXITED = "MEX";    //other events
+    ACTION_PERFORMED,
+    ITEM_CHANGED,
+    TEXT_CHANGED,    //window events (XWindow)
+    WINDOW_RESIZED,
+    WINDOW_MOVED,
+    WINDOW_SHOWN,
+    WINDOW_HIDDEN,    //focus events (XWindow)
+    FOCUS_GAINED,
+    FOCUS_LOST,    //keyboard events
+    KEY_PRESSED,
+    KEY_RELEASED,    //mouse events
+    MOUSE_PRESSED,
+    MOUSE_RELEASED,
+    MOUSE_ENTERED,
+    MOUSE_EXITED    //other events
 }
