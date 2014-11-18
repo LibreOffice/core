@@ -74,47 +74,47 @@ public class PropertySet_Test
 
         value= Boolean.TRUE;
         cl.setPropertyValue("PropBoolA", value);
-        assertEquals((Boolean) cl.getPropertyValue("PropBoolA"), value);
+        assertEquals(cl.getPropertyValue("PropBoolA"), value);
 
         value= new Character('A');
         cl.setPropertyValue("PropCharA",value);
-        assertEquals((Character) cl.getPropertyValue("PropCharA"), value);
+        assertEquals(cl.getPropertyValue("PropCharA"), value);
 
         value= Byte.valueOf((byte) 111);
         cl.setPropertyValue("PropByteA",value);
-        assertEquals((Byte) cl.getPropertyValue("PropByteA"), value);
+        assertEquals(cl.getPropertyValue("PropByteA"), value);
 
         value= Short.valueOf((short)112);
         cl.setPropertyValue("PropShortA", value);
-        assertEquals((Short) cl.getPropertyValue("PropShortA"), value);
+        assertEquals(cl.getPropertyValue("PropShortA"), value);
 
         value= Integer.valueOf(113);
         cl.setPropertyValue("PropIntA", value);
-        assertEquals((Integer) cl.getPropertyValue("PropIntA"), value);
+        assertEquals(cl.getPropertyValue("PropIntA"), value);
 
         value= Long.valueOf(115);
         cl.setPropertyValue("PropLongA", value);
-        assertEquals((Long) cl.getPropertyValue("PropLongA"), value);
+        assertEquals(cl.getPropertyValue("PropLongA"), value);
 
         value= new Float(3.14);
         cl.setPropertyValue("PropFloatA", value);
-        assertEquals((Float) cl.getPropertyValue("PropFloatA"), value);
+        assertEquals(cl.getPropertyValue("PropFloatA"), value);
 
         value= new Double(3.145);
         cl.setPropertyValue("PropDoubleA",value);
-        assertEquals((Double) cl.getPropertyValue("PropDoubleA"), value);
+        assertEquals(cl.getPropertyValue("PropDoubleA"), value);
 
         value= "string";
         cl.setPropertyValue("PropStringA",value);
-        assertEquals((String) cl.getPropertyValue("PropStringA"), value);
+        assertEquals(cl.getPropertyValue("PropStringA"), value);
 
         value= new ComponentBase();
         cl.setPropertyValue("PropXInterfaceA",value);
-        assertEquals((XInterface) cl.getPropertyValue("PropXInterfaceA"), value);
+        assertEquals(cl.getPropertyValue("PropXInterfaceA"), value);
 
         value= new ComponentBase();
         cl.setPropertyValue("PropXWeakA",value);
-        assertEquals((XWeak) cl.getPropertyValue("PropXWeakA"), value);
+        assertEquals(cl.getPropertyValue("PropXWeakA"), value);
 
         value = com.sun.star.beans.PropertyState.AMBIGUOUS_VALUE;
         cl.setPropertyValue("PropEnum",value);
@@ -122,19 +122,19 @@ public class PropertySet_Test
 
         value= new byte[]{1,2,3};
         cl.setPropertyValue("PropArrayByteA", value);
-        assertEquals((byte[]) cl.getPropertyValue("PropArrayByteA"), value);
+        assertEquals(cl.getPropertyValue("PropArrayByteA"), value);
 
         value= new Type(String.class);
         cl.setPropertyValue("PropTypeA", value);
-        assertEquals((Type) cl.getPropertyValue("PropTypeA"), value);
+        assertEquals(cl.getPropertyValue("PropTypeA"), value);
 
         // test protected,package,private members
         value= Boolean.TRUE;
         cl.setPropertyValue("PropBoolB", value);
-        assertEquals((Boolean) cl.getPropertyValue("PropBoolB"), value);
+        assertEquals(cl.getPropertyValue("PropBoolB"), value);
 
         cl.setPropertyValue("PropBoolC", value);
-        assertEquals((Boolean) cl.getPropertyValue("PropBoolC"), value);
+        assertEquals(cl.getPropertyValue("PropBoolC"), value);
 
         try {
             cl.setPropertyValue("PropBoolD", value);
@@ -147,55 +147,55 @@ public class PropertySet_Test
 
         value= Boolean.TRUE;
         cl.setPropertyValue("PropObjectA", value);
-        assertEquals((Boolean) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= new Character('A');
         cl.setPropertyValue("PropObjectA",value);
-        assertEquals((Character) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= Byte.valueOf((byte) 111);
         cl.setPropertyValue("PropObjectA",value);
-        assertEquals((Byte) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= Short.valueOf((short)112);
         cl.setPropertyValue("PropObjectA", value);
-        assertEquals((Short) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= Integer.valueOf(113);
         cl.setPropertyValue("PropObjectA", value);
-        assertEquals((Integer) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= Long.valueOf(115);
         cl.setPropertyValue("PropObjectA", value);
-        assertEquals((Long) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= new Float(3.14);
         cl.setPropertyValue("PropObjectA", value);
-        assertEquals((Float) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= new Double(3.145);
         cl.setPropertyValue("PropObjectA",value);
-        assertEquals((Double) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= "string";
         cl.setPropertyValue("PropObjectA",value);
-        assertEquals((String) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= new ComponentBase();
         cl.setPropertyValue("PropObjectA",value);
-        assertEquals((XInterface) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= new ComponentBase();
         cl.setPropertyValue("PropObjectA",value);
-        assertEquals((XWeak) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= new byte[]{1,2,3};
         cl.setPropertyValue("PropObjectA", value);
-        assertEquals((byte[]) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         value= new Type(String.class);
         cl.setPropertyValue("PropObjectA", value);
-        assertEquals((Type) cl.getPropertyValue("PropObjectA"), value);
+        assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
         cl.setPropertyValue("PropObjectA", new Any( new Type(byte.class), Byte.valueOf((byte)1)));
         assertEquals(((Byte) cl.getPropertyValue("PropObjectA")).byteValue(), 1);
@@ -444,35 +444,35 @@ public class PropertySet_Test
 
         value= Boolean.TRUE;
         cl.setPropertyValue("PropBoolClass", value);
-        assertEquals((Boolean) cl.getPropertyValue("PropBoolClass"), value);
+        assertEquals(cl.getPropertyValue("PropBoolClass"), value);
 
         value= new Character('A');
         cl.setPropertyValue("PropCharClass",value);
-        assertEquals((Character) cl.getPropertyValue("PropCharClass"), value);
+        assertEquals(cl.getPropertyValue("PropCharClass"), value);
 
         value= Byte.valueOf((byte) 111);
         cl.setPropertyValue("PropByteClass",value);
-        assertEquals((Byte) cl.getPropertyValue("PropByteClass"), value);
+        assertEquals(cl.getPropertyValue("PropByteClass"), value);
 
         value= Short.valueOf((short)112);
         cl.setPropertyValue("PropShortClass", value);
-        assertEquals((Short) cl.getPropertyValue("PropShortClass"), value);
+        assertEquals(cl.getPropertyValue("PropShortClass"), value);
 
         value= Integer.valueOf(113);
         cl.setPropertyValue("PropIntClass", value);
-        assertEquals((Integer) cl.getPropertyValue("PropIntClass"), value);
+        assertEquals(cl.getPropertyValue("PropIntClass"), value);
 
         value= Long.valueOf(115);
         cl.setPropertyValue("PropLongClass", value);
-        assertEquals((Long) cl.getPropertyValue("PropLongClass"), value);
+        assertEquals(cl.getPropertyValue("PropLongClass"), value);
 
         value= new Float(3.14);
         cl.setPropertyValue("PropFloatClass", value);
-        assertEquals((Float) cl.getPropertyValue("PropFloatClass"), value);
+        assertEquals(cl.getPropertyValue("PropFloatClass"), value);
 
         value= new Double(3.145);
         cl.setPropertyValue("PropDoubleClass",value);
-        assertEquals((Double) cl.getPropertyValue("PropDoubleClass"), value);
+        assertEquals(cl.getPropertyValue("PropDoubleClass"), value);
 
         cl.resetPropertyMembers();
 
@@ -1270,12 +1270,12 @@ class TestClass extends PropertySet
         value= new Any( new Type(Integer.class),Integer.valueOf(111));
         assertTrue(convertPropertyValue(propIntA, outNewVal, outOldVal, value));
         assertTrue(outNewVal[0] instanceof Integer);
-        assertEquals((Integer) outNewVal[0], ((Any) value).getObject());
+        assertEquals(outNewVal[0], ((Any) value).getObject());
 
         value= new Any(new Type(Boolean.class), Boolean.TRUE);
         assertTrue(convertPropertyValue(propBoolA, outNewVal, outOldVal, value));
         assertTrue(outNewVal[0] instanceof Boolean);
-        assertEquals((Boolean) outNewVal[0], ((Any) value).getObject());
+        assertEquals(outNewVal[0], ((Any) value).getObject());
 
         //Character, Byte, Short, Long
         // must fail
