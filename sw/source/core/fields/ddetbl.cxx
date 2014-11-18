@@ -64,7 +64,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, bool bUpdate 
 
 SwDDETable::~SwDDETable()
 {
-    SwDDEFieldType* pFldTyp = (SwDDEFieldType*)aDepend.GetRegisteredIn();
+    SwDDEFieldType* pFldTyp = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
     if( !pDoc->IsInDtor() && !aLines.empty() &&
         GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
@@ -106,7 +106,7 @@ void SwDDETable::ChangeContent()
         return;
 
     // access to DDEFldType
-    SwDDEFieldType* pDDEType = (SwDDEFieldType*)aDepend.GetRegisteredIn();
+    SwDDEFieldType* pDDEType = static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
 
     OUString aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
 
@@ -125,7 +125,7 @@ void SwDDETable::ChangeContent()
             pTxtNode->EraseText( aCntIdx );
             pTxtNode->InsertText( aLine.getToken( i, '\t' ), aCntIdx );
 
-            SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
+            SwTableBoxFmt* pBoxFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
             pBoxFmt->LockModify();
             pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
             pBoxFmt->UnlockModify();
@@ -140,7 +140,7 @@ void SwDDETable::ChangeContent()
 
 SwDDEFieldType* SwDDETable::GetDDEFldType()
 {
-    return (SwDDEFieldType*)aDepend.GetRegisteredIn();
+    return static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn());
 }
 
 bool SwDDETable::NoDDETable()
@@ -171,7 +171,7 @@ bool SwDDETable::NoDDETable()
     GetTabLines().clear();
 
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
-        ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
+        static_cast<SwDDEFieldType*>(aDepend.GetRegisteredIn())->DecRefCnt();
 
     pTblNd->SetNewTable( pNewTbl );       // replace table
 

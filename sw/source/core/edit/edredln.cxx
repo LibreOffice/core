@@ -64,7 +64,7 @@ static void lcl_InvalidateAll( SwViewShell* pSh )
     {
         if ( pSh->GetWin() )
             pSh->GetWin()->Invalidate();
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
 
     } while ( pSh != pStop );
 }

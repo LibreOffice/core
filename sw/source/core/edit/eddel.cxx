@@ -272,7 +272,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                     == pCmp->GetCntntNode(false), "Mark in wrong Node" );
         bool bTst = *pCmp->GetPoint() == *pCmp->GetMark();
         (void) bTst;
-    } while( pDestShell->GetCrsr() != ( pCmp = (SwPaM*)pCmp->GetNext() ) );
+    } while( pDestShell->GetCrsr() != ( pCmp = static_cast<SwPaM*>(pCmp->GetNext()) ) );
 }
 #endif
 

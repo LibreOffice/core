@@ -78,7 +78,7 @@ OUString SwDateTimeField::Expand() const
 SwField* SwDateTimeField::Copy() const
 {
     SwDateTimeField *pTmp =
-        new SwDateTimeField((SwDateTimeFieldType*)GetTyp(), nSubType,
+        new SwDateTimeField(static_cast<SwDateTimeFieldType*>(GetTyp()), nSubType,
                                             GetFormat(), GetLanguage());
 
     pTmp->SetValue(GetValue());
@@ -156,7 +156,7 @@ tools::Time SwDateTimeField::GetTime(bool bUseOffset) const
     aDT += fFract;
     if (bUseOffset)
          aDT += tools::Time(0, nOffset);
-    return (tools::Time)aDT;
+    return static_cast<tools::Time>(aDT);
 }
 
 bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const

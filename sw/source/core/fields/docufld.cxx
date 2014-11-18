@@ -152,7 +152,7 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
         const SwFmtPageDesc *pDesc;
         sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
         for( sal_uInt32 n = 0; n < nMaxItems; ++n )
-            if( 0 != (pDesc = (SwFmtPageDesc*)rPool.GetItem2( RES_PAGEDESC, n ) )
+            if( 0 != (pDesc = static_cast<const SwFmtPageDesc*>(rPool.GetItem2( RES_PAGEDESC, n )) )
                 && pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
             {
                 const SwCntntNode* pNd = PTR_CAST( SwCntntNode, pDesc->GetDefinedIn() );
@@ -190,7 +190,7 @@ void SwPageNumberField::ChangeExpansion(sal_uInt16 const nPageNumber,
 OUString SwPageNumberField::Expand() const
 {
     OUString sRet;
-    SwPageNumberFieldType* pFldType = (SwPageNumberFieldType*)GetTyp();
+    SwPageNumberFieldType* pFldType = static_cast<SwPageNumberFieldType*>(GetTyp());
 
     if( PG_NEXT == nSubType && 1 != nOffset )
     {
@@ -336,21 +336,21 @@ SwFieldType* SwAuthorFieldType::Copy() const
 SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
 {
-    aContent = ((SwAuthorFieldType*)GetTyp())->Expand(GetFormat());
+    aContent = static_cast<SwAuthorFieldType*>(GetTyp())->Expand(GetFormat());
 }
 
 OUString SwAuthorField::Expand() const
 {
     if (!IsFixed())
-        ((SwAuthorField*)this)->aContent =
-                    ((SwAuthorFieldType*)GetTyp())->Expand(GetFormat());
+        const_cast<SwAuthorField*>(this)->aContent =
+                    static_cast<SwAuthorFieldType*>(GetTyp())->Expand(GetFormat());
 
     return aContent;
 }
 
 SwField* SwAuthorField::Copy() const
 {
-    SwAuthorField *pTmp = new SwAuthorField( (SwAuthorFieldType*)GetTyp(),
+    SwAuthorField *pTmp = new SwAuthorField( static_cast<SwAuthorFieldType*>(GetTyp()),
                                                 GetFormat());
     pTmp->SetExpansion(aContent);
     return pTmp;
@@ -473,13 +473,13 @@ SwFieldType* SwFileNameFieldType::Copy() const
 SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
 {
-    aContent = ((SwFileNameFieldType*)GetTyp())->Expand(GetFormat());
+    aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
 }
 
 OUString SwFileNameField::Expand() const
 {
     if (!IsFixed())
-        ((SwFileNameField*)this)->aContent = ((SwFileNameFieldType*)GetTyp())->Expand(GetFormat());
+        const_cast<SwFileNameField*>(this)->aContent = static_cast<SwFileNameFieldType*>(GetTyp())->Expand(GetFormat());
 
     return aContent;
 }
@@ -487,7 +487,7 @@ OUString SwFileNameField::Expand() const
 SwField* SwFileNameField::Copy() const
 {
     SwFileNameField *pTmp =
-        new SwFileNameField((SwFileNameFieldType*)GetTyp(), GetFormat());
+        new SwFileNameField(static_cast<SwFileNameFieldType*>(GetTyp()), GetFormat());
     pTmp->SetExpansion(aContent);
 
     return pTmp;
@@ -650,13 +650,13 @@ SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFmt)
 
 OUString SwTemplNameField::Expand() const
 {
-    return((SwTemplNameFieldType*)GetTyp())->Expand(GetFormat());
+    return static_cast<SwTemplNameFieldType*>(GetTyp())->Expand(GetFormat());
 }
 
 SwField* SwTemplNameField::Copy() const
 {
     SwTemplNameField *pTmp =
-        new SwTemplNameField((SwTemplNameFieldType*)GetTyp(), GetFormat());
+        new SwTemplNameField(static_cast<SwTemplNameFieldType*>(GetTyp()), GetFormat());
     return pTmp;
 }
 
@@ -777,13 +777,13 @@ SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uI
 
 OUString SwDocStatField::Expand() const
 {
-    return((SwDocStatFieldType*)GetTyp())->Expand(nSubType, GetFormat());
+    return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(nSubType, GetFormat());
 }
 
 SwField* SwDocStatField::Copy() const
 {
     SwDocStatField *pTmp = new SwDocStatField(
-                    (SwDocStatFieldType*)GetTyp(), nSubType, GetFormat() );
+                    static_cast<SwDocStatFieldType*>(GetTyp()), nSubType, GetFormat() );
     return pTmp;
 }
 
@@ -800,7 +800,7 @@ void SwDocStatField::SetSubType(sal_uInt16 nSub)
 void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
 {
     if( DS_PAGE == nSubType && SVX_NUM_PAGEDESC == GetFormat() )
-        ((SwDocStatFieldType*)GetTyp())->SetNumFormat(
+        static_cast<SwDocStatFieldType*>(GetTyp())->SetNumFormat(
                 pFrm->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
 
@@ -1021,7 +1021,7 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
     SwValueField(pTyp, nFmt), nSubType(nSub)
 {
     aName = rName;
-    aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, nFmt, GetLanguage(), aName);
+    aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(nSubType, nFmt, GetLanguage(), aName);
 }
 
 SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const OUString& rName, const OUString& rValue, sal_uInt32 nFmt) :
@@ -1118,7 +1118,7 @@ OUString SwDocInfoField::Expand() const
         catch (uno::Exception&) {}
     }
     else if ( !IsFixed() )
-        ((SwDocInfoField*)this)->aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, GetFormat(), GetLanguage(), aName);
+        const_cast<SwDocInfoField*>(this)->aContent = static_cast<SwDocInfoFieldType*>(GetTyp())->Expand(nSubType, GetFormat(), GetLanguage(), aName);
 
     return aContent;
 }
@@ -1149,7 +1149,7 @@ OUString SwDocInfoField::GetFieldName() const
 
 SwField* SwDocInfoField::Copy() const
 {
-    SwDocInfoField* pFld = new SwDocInfoField((SwDocInfoFieldType*)GetTyp(), nSubType, aName, GetFormat());
+    SwDocInfoField* pFld = new SwDocInfoField(static_cast<SwDocInfoFieldType*>(GetTyp()), nSubType, aName, GetFormat());
     pFld->SetAutomaticLanguage(IsAutomaticLanguage());
     pFld->aContent = aContent;
 
@@ -1341,7 +1341,7 @@ OUString SwHiddenTxtField::Expand() const
         if( bCanToggle && !bIsHidden )
             return aTRUETxt;
     }
-    else if( !((SwHiddenTxtFieldType*)GetTyp())->GetHiddenFlag() ||
+    else if( !static_cast<SwHiddenTxtFieldType*>(GetTyp())->GetHiddenFlag() ||
         ( bCanToggle && bIsHidden ))
         return aTRUETxt;
 
@@ -1421,7 +1421,7 @@ OUString SwHiddenTxtField::GetFieldName() const
 SwField* SwHiddenTxtField::Copy() const
 {
     SwHiddenTxtField* pFld =
-        new SwHiddenTxtField((SwHiddenTxtFieldType*)GetTyp(), aCond,
+        new SwHiddenTxtField(static_cast<SwHiddenTxtFieldType*>(GetTyp()), aCond,
                               aTRUETxt, aFALSETxt);
     pFld->bIsHidden = bIsHidden;
     pFld->bValid    = bValid;
@@ -1590,7 +1590,7 @@ OUString SwHiddenParaField::Expand() const
 
 SwField* SwHiddenParaField::Copy() const
 {
-    SwHiddenParaField* pFld = new SwHiddenParaField((SwHiddenParaFieldType*)GetTyp(), aCond);
+    SwHiddenParaField* pFld = new SwHiddenParaField(static_cast<SwHiddenParaFieldType*>(GetTyp()), aCond);
     pFld->bIsHidden = bIsHidden;
 
     return pFld;
@@ -1698,7 +1698,7 @@ OUString SwPostItField::GetDescription() const
 
 SwField* SwPostItField::Copy() const
 {
-    SwPostItField* pRet = new SwPostItField( (SwPostItFieldType*)GetTyp(), sAuthor, sTxt, sInitials, sName,
+    SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), sAuthor, sTxt, sInitials, sName,
                                 aDateTime);
     if (mpText)
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
@@ -1773,7 +1773,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         {
             if ( !m_pTextObject )
             {
-                SwPostItFieldType* pGetType = (SwPostItFieldType*)GetTyp();
+                SwPostItFieldType* pGetType = static_cast<SwPostItFieldType*>(GetTyp());
                 SwDoc* pDoc = pGetType->GetDoc();
                 SwTextAPIEditSource* pObj = new SwTextAPIEditSource( pDoc );
                 const_cast <SwPostItField*> (this)->m_pTextObject = new SwTextAPIObject( pObj );
@@ -1920,20 +1920,20 @@ OUString SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
 SwExtUserField::SwExtUserField(SwExtUserFieldType* pTyp, sal_uInt16 nSubTyp, sal_uInt32 nFmt) :
     SwField(pTyp, nFmt), nType(nSubTyp)
 {
-    aContent = ((SwExtUserFieldType*)GetTyp())->Expand(nType, GetFormat());
+    aContent = static_cast<SwExtUserFieldType*>(GetTyp())->Expand(nType, GetFormat());
 }
 
 OUString SwExtUserField::Expand() const
 {
     if (!IsFixed())
-        ((SwExtUserField*)this)->aContent = ((SwExtUserFieldType*)GetTyp())->Expand(nType, GetFormat());
+        const_cast<SwExtUserField*>(this)->aContent = static_cast<SwExtUserFieldType*>(GetTyp())->Expand(nType, GetFormat());
 
     return aContent;
 }
 
 SwField* SwExtUserField::Copy() const
 {
-    SwExtUserField* pFld = new SwExtUserField((SwExtUserFieldType*)GetTyp(), nType, GetFormat());
+    SwExtUserField* pFld = new SwExtUserField(static_cast<SwExtUserFieldType*>(GetTyp()), nType, GetFormat());
     pFld->SetExpansion(aContent);
 
     return pFld;
@@ -2034,7 +2034,7 @@ OUString SwRefPageSetField::Expand() const
 
 SwField* SwRefPageSetField::Copy() const
 {
-    return new SwRefPageSetField( (SwRefPageSetFieldType*)GetTyp(), nOffset, bOn );
+    return new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(GetTyp()), nOffset, bOn );
 }
 
 OUString SwRefPageSetField::GetPar2() const
@@ -2163,7 +2163,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
 void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                                         _SetGetExpFlds& rSetList )
 {
-    SwRefPageGetField* pGetFld = (SwRefPageGetField*)pTxtFld->GetFmtFld().GetField();
+    SwRefPageGetField* pGetFld = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pTxtFld->GetFmtFld().GetField()));
     pGetFld->SetText( OUString() );
 
     // then search the correct RefPageSet field
@@ -2181,7 +2181,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
             --itLast;
             const SwTxtFld* pRefTxtFld = (*itLast)->GetTxtFld();
             const SwRefPageSetField* pSetFld =
-                        (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
+                        static_cast<const SwRefPageSetField*>(pRefTxtFld->GetFmtFld().GetField());
             if( pSetFld->IsOn() )
             {
                 // determine the correct offset
@@ -2224,7 +2224,7 @@ OUString SwRefPageGetField::Expand() const
 SwField* SwRefPageGetField::Copy() const
 {
     SwRefPageGetField* pCpy = new SwRefPageGetField(
-                        (SwRefPageGetFieldType*)GetTyp(), GetFormat() );
+                        static_cast<SwRefPageGetFieldType*>(GetTyp()), GetFormat() );
     pCpy->SetText( sTxt );
     return pCpy;
 }
@@ -2233,7 +2233,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
                                         const SwTxtFld* pFld )
 {
     // only fields in Footer, Header, FootNote, Flys
-    SwRefPageGetFieldType* pGetType = (SwRefPageGetFieldType*)GetTyp();
+    SwRefPageGetFieldType* pGetType = static_cast<SwRefPageGetFieldType*>(GetTyp());
     SwDoc* pDoc = pGetType->GetDoc();
     if( pFld->GetTxtNode().StartOfSectionIndex() >
         pDoc->GetNodes().GetEndOfExtras().GetIndex() )
@@ -2267,7 +2267,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     const SwTxtFld* pRefTxtFld = (*itLast)->GetTxtFld();
     const SwRefPageSetField* pSetFld =
-                        (SwRefPageSetField*)pRefTxtFld->GetFmtFld().GetField();
+                        static_cast<const SwRefPageSetField*>(pRefTxtFld->GetFmtFld().GetField());
     Point aPt;
     const SwCntntFrm* pRefFrm = pRefTxtFld->GetTxtNode().getLayoutFrm( pFrm->getRootFrm(), &aPt, 0, false );
     if( pSetFld->IsOn() && pRefFrm )
@@ -2277,7 +2277,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         sal_uInt16 nDiff = pPgFrm->GetPhyPageNum() -
                             pRefFrm->FindPageFrm()->GetPhyPageNum() + 1;
 
-        SwRefPageGetField* pGetFld = (SwRefPageGetField*)pFld->GetFmtFld().GetField();
+        SwRefPageGetField* pGetFld = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pFld->GetFmtFld().GetField()));
         sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                             ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
                             : pGetFld->GetFormat();
@@ -2361,7 +2361,7 @@ OUString SwJumpEditField::Expand() const
 
 SwField* SwJumpEditField::Copy() const
 {
-    return new SwJumpEditField( (SwJumpEditFieldType*)GetTyp(), GetFormat(),
+    return new SwJumpEditField( static_cast<SwJumpEditFieldType*>(GetTyp()), GetFormat(),
                                 sTxt, sHelp );
 }
 
@@ -2481,7 +2481,7 @@ OUString SwCombinedCharField::Expand() const
 
 SwField* SwCombinedCharField::Copy() const
 {
-    return new SwCombinedCharField( (SwCombinedCharFieldType*)GetTyp(),
+    return new SwCombinedCharField( static_cast<SwCombinedCharFieldType*>(GetTyp()),
                                         sCharacters );
 }
 

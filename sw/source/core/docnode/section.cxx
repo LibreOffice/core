@@ -421,8 +421,8 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_ATTRSET_CHG:
         if (pNew && pOld)
         {
-            SfxItemSet* pNewSet = ((SwAttrSetChg*)pNew)->GetChgSet();
-            SfxItemSet* pOldSet = ((SwAttrSetChg*)pOld)->GetChgSet();
+            SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pNew))->GetChgSet();
+            SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet();
             const SfxPoolItem* pItem;
 
             if( SfxItemState::SET == pNewSet->GetItemState(
@@ -606,7 +606,7 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
         ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
             pBLnk->ISA( SwBaseLink ) &&
-            0 != ( pNd = ((SwBaseLink*)pBLnk)->GetAnchor() ) )
+            0 != ( pNd = static_cast<SwBaseLink*>(pBLnk)->GetAnchor() ) )
         {
             pNd = pNd->StartOfSectionNode(); // If it's a SectionNode
             const SwSectionNode* pParent;
@@ -746,8 +746,8 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_ATTRSET_CHG:
         if (GetDepends() && pOld && pNew)
         {
-            SfxItemSet* pNewSet = ((SwAttrSetChg*)pNew)->GetChgSet();
-            SfxItemSet* pOldSet = ((SwAttrSetChg*)pOld)->GetChgSet();
+            SfxItemSet* pNewSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pNew))->GetChgSet();
+            SfxItemSet* pOldSet = const_cast<SwAttrSetChg*>(static_cast<const SwAttrSetChg*>(pOld))->GetChgSet();
             const SfxPoolItem *pItem;
             if( SfxItemState::SET == pNewSet->GetItemState(
                                         RES_PROTECT, false, &pItem ))
@@ -780,7 +780,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 pNewSet->ClearItem( RES_END_AT_TXTEND );
                 pOldSet->ClearItem( RES_END_AT_TXTEND );
             }
-            if( !((SwAttrSetChg*)pOld)->GetChgSet()->Count() )
+            if( !static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->Count() )
                 return;
         }
         break;
@@ -812,7 +812,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     case RES_OBJECTDYING:
         if( !GetDoc()->IsInDtor() && pOld &&
-            ((SwPtrMsgPoolItem *)pOld)->pObject == (void*)GetRegisteredIn() )
+            static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == (void*)GetRegisteredIn() )
         {
             // My Parents will be destroyed, so get the Parent's Parent
             // and update
@@ -824,8 +824,8 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     case RES_FMT_CHG:
         if( !GetDoc()->IsInDtor() &&
-            ((SwFmtChg*)pNew)->pChangedFmt == (void*)GetRegisteredIn() &&
-            ((SwFmtChg*)pNew)->pChangedFmt->IsA( TYPE( SwSectionFmt )) )
+            static_cast<const SwFmtChg*>(pNew)->pChangedFmt == (void*)GetRegisteredIn() &&
+            static_cast<const SwFmtChg*>(pNew)->pChangedFmt->IsA( TYPE( SwSectionFmt )) )
         {
             // My Parent will be changed, thus I need to update
             SwFrmFmt::Modify( pOld, pNew ); // Rewire first!
@@ -848,11 +848,11 @@ bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
     switch( rInfo.Which() )
     {
     case RES_FINDNEARESTNODE:
-        if( ((SwFmtPageDesc&)GetFmtAttr( RES_PAGEDESC )).GetPageDesc() )
+        if( static_cast<const SwFmtPageDesc&>(GetFmtAttr( RES_PAGEDESC )).GetPageDesc() )
         {
             const SwSectionNode* pNd = GetSectionNode();
             if( pNd )
-                ((SwFindNearestNode&)rInfo).CheckNode( *pNd );
+                static_cast<SwFindNearestNode&>(rInfo).CheckNode( *pNd );
         }
         return true;
 
@@ -870,7 +870,7 @@ bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
                     pChild = aFormatIter.Next();
                 }
             }
-            ((SwPtrMsgPoolItem&)rInfo).pObject = pFrm;
+            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = pFrm;
         }
         return false;
     }
@@ -1002,7 +1002,7 @@ void SwSectionFmt::UpdateParent()
             else if( !pSection &&
                     pLast->IsA( TYPE(SwSection) ) )
             {
-                pSection = (SwSection*)pLast;
+                pSection = static_cast<SwSection*>(pLast);
                 if( GetRegisteredIn() )
                 {
                     const SwSection* pPS = GetParentSection();
@@ -1141,7 +1141,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         if( pLnk && pLnk != &rUpdLnk &&
             OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
             pLnk->ISA( SwBaseLink ) &&
-            ( pBLink = (SwBaseLink*)pLnk )->IsInRange( rSectNd.GetIndex(),
+            ( pBLink = static_cast<SwBaseLink*>(pLnk) )->IsInRange( rSectNd.GetIndex(),
                                                 rSectNd.EndOfSectionIndex() ) )
         {
             // It's in the Section, so update. But only if it's not in the same File!
@@ -1267,7 +1267,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                                     sFilter, 0, pDoc->GetDocShell() );
                 if( nRet )
                 {
-                    SwDoc* pSrcDoc = ((SwDocShell*)&xDocSh)->GetDoc();
+                    SwDoc* pSrcDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
                     eOldRedlineMode = pSrcDoc->getIDocumentRedlineAccess().GetRedlineMode();
                     pSrcDoc->getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
                 }
@@ -1287,10 +1287,10 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     if( SfxItemState::SET == xDocSh->GetMedium()->GetItemSet()->
                         GetItemState( SID_PASSWORD, false, &pItem ) )
                         rSection.SetLinkFilePassword(
-                                ((SfxStringItem*)pItem)->GetValue() );
+                                static_cast<const SfxStringItem*>(pItem)->GetValue() );
                 }
 
-                SwDoc* pSrcDoc = ((SwDocShell*)&xDocSh)->GetDoc();
+                SwDoc* pSrcDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
 
                 if( !sRange.isEmpty() )
                 {
@@ -1298,8 +1298,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     bool bRecursion = false;
                     if( pSrcDoc == pDoc )
                     {
-                        tools::SvRef<SwServerObject> refObj( (SwServerObject*)
-                                        pDoc->getIDocumentLinksAdministration().CreateLinkSource( sRange ));
+                        tools::SvRef<SwServerObject> refObj( static_cast<SwServerObject*>(
+                                        pDoc->getIDocumentLinksAdministration().CreateLinkSource( sRange )));
                         if( refObj.Is() )
                         {
                             bRecursion = refObj->IsLinkInServer( this ) ||
@@ -1378,8 +1378,8 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             {
                 if( 2 == nRet )
                     xDocSh->DoClose();
-                else if( ((SwDocShell*)&xDocSh)->GetDoc() )
-                    ((SwDocShell*)&xDocSh)->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode(
+                else if( static_cast<SwDocShell*>(&xDocSh)->GetDoc() )
+                    static_cast<SwDocShell*>(&xDocSh)->GetDoc()->getIDocumentRedlineAccess().SetRedlineMode(
                                 eOldRedlineMode );
             }
         }

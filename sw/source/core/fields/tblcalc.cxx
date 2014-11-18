@@ -61,7 +61,7 @@ SwTblField::SwTblField( SwTblFieldType* pInitType, const OUString& rFormel,
 
 SwField* SwTblField::Copy() const
 {
-    SwTblField* pTmp = new SwTblField( (SwTblFieldType*)GetTyp(),
+    SwTblField* pTmp = new SwTblField( static_cast<SwTblFieldType*>(GetTyp()),
                                         SwTableFormula::GetFormula(), nSubType, GetFormat() );
     pTmp->sExpand     = sExpand;
     pTmp->SwValueField::SetValue(GetValue());
@@ -133,7 +133,7 @@ void SwTblField::SetSubType(sal_uInt16 nType)
 void SwTblField::SetValue( const double& rVal )
 {
     SwValueField::SetValue(rVal);
-    sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue(rVal, GetFormat(), GetLanguage());
+    sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, GetFormat(), GetLanguage());
 }
 
 OUString SwTblField::GetPar2() const

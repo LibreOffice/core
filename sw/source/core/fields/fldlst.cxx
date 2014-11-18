@@ -56,7 +56,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, bool bBuildTmpLst )
 
                 // only process InputFields, interactive SetExpFlds and DropDown fields
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
-                    !((SwSetExpField*)pFmtFld->GetField())->GetInputFlag()))
+                    !static_cast<SwSetExpField*>(pFmtFld->GetField())->GetInputFlag()))
                     continue;
 
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
@@ -144,7 +144,7 @@ bool SwInputFieldList::BuildSortLst()
 
                 //  process only InputFields and interactive SetExpFlds
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
-                    !((SwSetExpField*)pFmtFld->GetField())->GetInputFlag()))
+                    !static_cast<SwSetExpField*>(pFmtFld->GetField())->GetInputFlag()))
                     continue;
 
                 const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();

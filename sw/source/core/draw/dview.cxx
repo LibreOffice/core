@@ -77,7 +77,7 @@ bool SwSdrHdl::IsFocusHdl() const
 static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 {
     const SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
-                                            (SwVirtFlyDrawObj*)pObj : 0;
+                                            static_cast<const SwVirtFlyDrawObj*>(pObj) : 0;
     if ( pVirt )
     {
         if ( bAll || !pVirt->GetFlyFrm()->IsFlyInCntFrm() )
@@ -85,7 +85,7 @@ static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
     }
     else
     {
-        const SwDrawContact *pCont = (const SwDrawContact*)GetUserCall(pObj);
+        const SwDrawContact *pCont = static_cast<const SwDrawContact*>(GetUserCall(pObj));
         if ( pCont )
             return pCont->GetAnchorFrm( pObj );
     }
@@ -93,7 +93,7 @@ static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
 }
 
 SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
-    FmFormView( (FmFormModel*)pMd, pOutDev ),
+    FmFormView( static_cast<FmFormModel*>(pMd), pOutDev ),
     rImp( rI )
 {
     SetPageVisible( false );
@@ -681,12 +681,12 @@ const SwFrm* SwDrawView::CalcAnchor()
     const bool bFly = pObj->ISA(SwVirtFlyDrawObj);
     if ( bFly )
     {
-        pAnch = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchorFrm();
-        aMyRect = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().SVRect();
+        pAnch = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchorFrm();
+        aMyRect = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->Frm().SVRect();
     }
     else
     {
-        SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
+        SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pObj));
         // determine correct anchor position for 'virtual' drawing objects.
         // #i26791#
         pAnch = pC->GetAnchorFrm( pObj );
@@ -724,13 +724,13 @@ const SwFrm* SwDrawView::CalcAnchor()
             // allow drawing objects in header/footer,
             // but exclude control objects.
             bool bBodyOnly = CheckControlLayer( pObj );
-            pAnch = ::FindAnchor( (SwCntntFrm*)pAnch, aPt, bBodyOnly );
+            pAnch = ::FindAnchor( static_cast<const SwCntntFrm*>(pAnch), aPt, bBodyOnly );
         }
         else if ( !bFly )
         {
             const SwRect aRect( aPt.getX(), aPt.getY(), 1, 1 );
 
-            SwDrawContact* pContact = (SwDrawContact*)GetUserCall(pObj);
+            SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
             if ( pContact->GetAnchorFrm( pObj ) &&
                  pContact->GetAnchorFrm( pObj )->IsPageFrm() )
                 pAnch = pContact->GetPageFrm();
@@ -823,13 +823,13 @@ void SwDrawView::CheckPossibilities()
         const SwFrm *pFrm = NULL;
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
-            const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+            const SwFlyFrm *pFly = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
             if ( pFly  )
             {
                 pFrm = pFly->GetAnchorFrm();
                 if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
                 {
-                    SwOLENode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode();
+                    SwOLENode *pNd = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(pFly->Lower()))->GetNode()->GetOLENode();
                     if ( pNd )
                     {
                         uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
@@ -855,7 +855,7 @@ void SwDrawView::CheckPossibilities()
         }
         else
         {
-            SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
+            SwDrawContact *pC = static_cast<SwDrawContact*>(GetUserCall(pObj));
             if ( pC )
                 pFrm = pC->GetAnchorFrm( pObj );
         }

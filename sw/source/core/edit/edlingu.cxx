@@ -1425,7 +1425,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         pMySh->GoEndSentence();
         if( bGrammarErrorFound )
         {
-            const ModelToViewHelper aConversionMap((SwTxtNode&)pCrsr->GetNode());
+            const ModelToViewHelper aConversionMap(static_cast<SwTxtNode&>(pCrsr->GetNode()));
             OUString aExpandText = aConversionMap.getViewText();
             sal_Int32 nSentenceEnd =
                 aConversionMap.ConvertToViewPosition( aGrammarResult.nBehindEndOfSentencePosition );

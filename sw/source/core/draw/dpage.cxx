@@ -67,8 +67,8 @@ SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
     OSL_ENSURE( pOld, "Oups, Object not replaced" );
     SdrObjUserCall* pContact;
     if ( 0 != ( pContact = GetUserCall(pOld) ) &&
-         RES_DRAWFRMFMT == ((SwContact*)pContact)->GetFmt()->Which())
-        ((SwDrawContact*)pContact)->ChangeMasterObject( pNewObj );
+         RES_DRAWFRMFMT == static_cast<SwContact*>(pContact)->GetFmt()->Which())
+        static_cast<SwDrawContact*>(pContact)->ChangeMasterObject( pNewObj );
     return FmFormPage::ReplaceObject( pNewObj, nObjNum );
 }
 
@@ -86,7 +86,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
 {
     SwViewShell *pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     while (pSh && pSh->Imp()->GetPageView() != pPV)
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
     if (pSh)
     {
         if ( pGridLst )
@@ -135,7 +135,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
         if( pView->PickObj( aPos, 0, pObj, pPV, SDRSEARCH_PICKMACRO ) &&
              pObj->ISA(SwVirtFlyDrawObj) )
         {
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+            SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
             const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
             OUString sTxt;
             if( rURL.GetMap() )

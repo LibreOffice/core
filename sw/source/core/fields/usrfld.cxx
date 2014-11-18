@@ -46,14 +46,14 @@ SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt
 OUString SwUserField::Expand() const
 {
     if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
-        return ((SwUserFieldType*)GetTyp())->Expand(GetFormat(), nSubType, GetLanguage());
+        return static_cast<SwUserFieldType*>(GetTyp())->Expand(GetFormat(), nSubType, GetLanguage());
 
     return OUString();
 }
 
 SwField* SwUserField::Copy() const
 {
-    SwField* pTmp = new SwUserField((SwUserFieldType*)GetTyp(), nSubType, GetFormat());
+    SwField* pTmp = new SwUserField(static_cast<SwUserFieldType*>(GetTyp()), nSubType, GetFormat());
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
     return pTmp;
 }
@@ -67,39 +67,39 @@ OUString SwUserField::GetFieldName() const
 
 double SwUserField::GetValue() const
 {
-    return ((SwUserFieldType*)GetTyp())->GetValue();
+    return static_cast<SwUserFieldType*>(GetTyp())->GetValue();
 }
 
 void SwUserField::SetValue( const double& rVal )
 {
-    ((SwUserFieldType*)GetTyp())->SetValue(rVal);
+    static_cast<SwUserFieldType*>(GetTyp())->SetValue(rVal);
 }
 
 /// Get name
 OUString SwUserField::GetPar1() const
 {
-    return ((const SwUserFieldType*)GetTyp())->GetName();
+    return static_cast<const SwUserFieldType*>(GetTyp())->GetName();
 }
 
 /// Get content
 OUString SwUserField::GetPar2() const
 {
-    return ((SwUserFieldType*)GetTyp())->GetContent(GetFormat());
+    return static_cast<SwUserFieldType*>(GetTyp())->GetContent(GetFormat());
 }
 
 void SwUserField::SetPar2(const OUString& rStr)
 {
-    ((SwUserFieldType*)GetTyp())->SetContent(rStr, GetFormat());
+    static_cast<SwUserFieldType*>(GetTyp())->SetContent(rStr, GetFormat());
 }
 
 sal_uInt16 SwUserField::GetSubType() const
 {
-    return ((SwUserFieldType*)GetTyp())->GetType() | nSubType;
+    return static_cast<SwUserFieldType*>(GetTyp())->GetType() | nSubType;
 }
 
 void SwUserField::SetSubType(sal_uInt16 nSub)
 {
-    ((SwUserFieldType*)GetTyp())->SetType(nSub & 0x00ff);
+    static_cast<SwUserFieldType*>(GetTyp())->SetType(nSub & 0x00ff);
     nSubType = nSub & 0xff00;
 }
 

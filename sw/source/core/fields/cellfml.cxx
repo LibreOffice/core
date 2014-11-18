@@ -107,12 +107,12 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                                 RES_BOXATR_FORMULA, false, &pItem ) )
         {
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
-            if( !((SwTblBoxFormula*)pItem)->IsValid() )
+            if( !static_cast<const SwTblBoxFormula*>(pItem)->IsValid() )
             {
                 // calculate
                 const SwTable* pTmp = rCalcPara.pTbl;
                 rCalcPara.pTbl = &pBox->GetSttNd()->FindTableNode()->GetTable();
-                ((SwTblBoxFormula*)pItem)->Calc( rCalcPara, nRet );
+                const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem))->Calc( rCalcPara, nRet );
 
                 if( !rCalcPara.IsStackOverflow() )
                 {
@@ -134,7 +134,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                                 RES_BOXATR_VALUE, false, &pItem ) )
         {
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
-            nRet = ((SwTblBoxValue*)pItem)->GetValue();
+            nRet = static_cast<const SwTblBoxValue*>(pItem)->GetValue();
             break;
         }
 
@@ -163,14 +163,14 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
             switch ( pFld->GetTyp()->Which() )
             {
             case RES_SETEXPFLD:
-                nRet = ( (SwSetExpField*) pFld )->GetValue();
+                nRet = static_cast<const SwSetExpField*>( pFld )->GetValue();
                 break;
             case RES_USERFLD:
                 nRet = ( (SwUserFieldType*) pFld )->GetValue();
                 break;
             case RES_TABLEFLD:
                 {
-                    SwTblField* pTblFld = (SwTblField*)pFld;
+                    SwTblField* pTblFld = const_cast<SwTblField*>(static_cast<const SwTblField*>(pFld));
                     if( !pTblFld->IsValid() )
                     {
                         // use the right table!
@@ -184,7 +184,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 break;
 
             case RES_DATETIMEFLD:
-                nRet = ( (SwDateTimeField*) pFld )->GetValue();
+                nRet = static_cast<const SwDateTimeField*>( pFld )->GetValue();
                 break;
 
             case RES_JUMPEDITFLD:
@@ -423,7 +423,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
     {
         const SwTableBox *pRelLastBox = lcl_RelToBox( rTbl, pBox, *pLastBox );
         if ( pRelLastBox )
-            rNewStr += OUString::number((sal_PtrDiff)pRelLastBox);
+            rNewStr += OUString::number(reinterpret_cast<sal_PtrDiff>(pRelLastBox));
         else
             rNewStr += "0";
         rNewStr += ":";
@@ -432,7 +432,7 @@ void SwTableFormula::RelBoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
 
     const SwTableBox *pRelFirstBox = lcl_RelToBox( rTbl, pBox, rFirstBox );
     if ( pRelFirstBox )
-        rNewStr += OUString::number((sal_PtrDiff)pRelFirstBox);
+        rNewStr += OUString::number(reinterpret_cast<sal_PtrDiff>(pRelFirstBox));
     else
         rNewStr += "0";
 
@@ -517,13 +517,13 @@ void SwTableFormula::BoxNmsToPtr( const SwTable& rTbl, OUString& rNewStr,
     if( pLastBox )
     {
         pBox = rTbl.GetTblBox( *pLastBox );
-        rNewStr += OUString::number((sal_PtrDiff)pBox)
+        rNewStr += OUString::number(reinterpret_cast<sal_PtrDiff>(pBox))
                 +  ":";
         rFirstBox = rFirstBox.copy( pLastBox->getLength()+1 );
     }
 
     pBox = rTbl.GetTblBox( rFirstBox );
-    rNewStr += OUString::number((sal_PtrDiff)pBox)
+    rNewStr += OUString::number(reinterpret_cast<sal_PtrDiff>(pBox))
             +  OUString(rFirstBox[ rFirstBox.getLength()-1 ]); // get label for the box
 }
 
@@ -1024,7 +1024,7 @@ bool SwTableFormula::HasValidBoxes() const
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && 0 != ( pNd = pNd->FindTableNode() ) )
         ScanString( &SwTableFormula::_HasValidBoxes,
-                        ((SwTableNode*)pNd)->GetTable(), &bRet );
+                        static_cast<const SwTableNode*>(pNd)->GetTable(), &bRet );
     return bRet;
 }
 
@@ -1180,9 +1180,9 @@ void SwTableFormula::_SplitMergeBoxNm( const SwTable& rTbl, OUString& rNewStr,
     }
 
     if( pLastBox )
-        rNewStr += OUString::number((sal_PtrDiff)pEndBox) + ":";
+        rNewStr += OUString::number(reinterpret_cast<sal_PtrDiff>(pEndBox)) + ":";
 
-    rNewStr += OUString::number((sal_PtrDiff)pSttBox)
+    rNewStr += OUString::number(reinterpret_cast<sal_PtrDiff>(pSttBox))
             +  OUString(rFirstBox[ rFirstBox.getLength()-1] );
 }
 
@@ -1192,7 +1192,7 @@ void SwTableFormula::ToSplitMergeBoxNm( SwTableFmlUpdate& rTblUpd )
     const SwTable* pTbl;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && 0 != ( pNd = pNd->FindTableNode() ))
-        pTbl = &((SwTableNode*)pNd)->GetTable();
+        pTbl = &static_cast<const SwTableNode*>(pNd)->GetTable();
     else
         pTbl = rTblUpd.pTbl;
 

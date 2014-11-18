@@ -87,7 +87,7 @@ OUString SwChapterField::Expand() const
 SwField* SwChapterField::Copy() const
 {
     SwChapterField *pTmp =
-        new SwChapterField((SwChapterFieldType*)GetTyp(), GetFormat());
+        new SwChapterField(static_cast<SwChapterFieldType*>(GetTyp()), GetFormat());
     pTmp->nLevel = nLevel;
     pTmp->sTitle = sTitle;
     pTmp->sNumber = sNumber;

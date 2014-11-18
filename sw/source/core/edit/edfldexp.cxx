@@ -58,7 +58,7 @@ bool SwEditShell::IsFieldDataSourceAvailable(OUString& rUsedDataSource) const
                         if(pFmtFld->IsFldInDoc())
                         {
                             const SwDBData& rData =
-                                    ((SwDBFieldType*)pFmtFld->GetField()->GetTyp())->GetDBData();
+                                    static_cast<SwDBFieldType*>(pFmtFld->GetField()->GetTyp())->GetDBData();
                             try
                             {
                                 return xDBContext->getByName(rData.sDataSource).hasValue();

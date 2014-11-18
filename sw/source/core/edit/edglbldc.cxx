@@ -75,7 +75,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                 break;      // ignore
             case TOX_CONTENT_SECTION:
                 OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
-                pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
+                pNew = new SwGlblDocContent( static_cast<const SwTOXBaseSection*>(pSect) );
                 break;
 
             default:
@@ -286,7 +286,7 @@ bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 
     case GLBLDOC_TOXBASE:
         {
-            SwTOXBaseSection* pTOX = (SwTOXBaseSection*)rDelPos.GetTOX();
+            const SwTOXBaseSection* pTOX = static_cast<const SwTOXBaseSection*>(rDelPos.GetTOX());
             pMyDoc->DeleteTOX( *pTOX, true );
         }
         break;

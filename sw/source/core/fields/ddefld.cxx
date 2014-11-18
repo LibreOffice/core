@@ -111,7 +111,7 @@ public:
             do {
                 // a DDE table or a DDE field attribute in the text
                 if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
-                    ((SwFmtFld*)pLast)->GetTxtFld() )
+                    static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
                 {
                     if( !bCallModify )
                     {
@@ -176,12 +176,12 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
             // a DDE table or a DDE field attribute in the text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
             {
-                SwDepend* pDep = (SwDepend*)pLast;
-                SwDDETable* pDDETbl = (SwDDETable*)pDep->GetToTell();
+                SwDepend* pDep = static_cast<SwDepend*>(pLast);
+                SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
                 pNd = pDDETbl->GetTabSortBoxes()[0]->GetSttNd();
             }
-            else if( ((SwFmtFld*)pLast)->GetTxtFld() )
-                pNd = ((SwFmtFld*)pLast)->GetTxtFld()->GetpTxtNode();
+            else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
+                pNd = static_cast<SwFmtFld*>(pLast)->GetTxtFld()->GetpTxtNode();
 
             if( pNd && &rFldType.GetDoc()->GetNodes() == &pNd->GetNodes() )
                 break;
@@ -203,8 +203,8 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
             // a DDE table or a DDE field attribute in the text
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
             {
-                SwDepend* pDep = (SwDepend*)pLast;
-                SwDDETable* pDDETbl = (SwDDETable*)pDep->GetToTell();
+                SwDepend* pDep = static_cast<SwDepend*>(pLast);
+                SwDDETable* pDDETbl = static_cast<SwDDETable*>(pDep->GetToTell());
                 const SwTableNode* pTblNd = pDDETbl->GetTabSortBoxes()[0]->
                                 GetSttNd()->FindTableNode();
                 if( pTblNd->GetNodes().IsDocNodes() &&
@@ -212,9 +212,9 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                     nEndNd > pTblNd->GetIndex() )
                     return true;
             }
-            else if( ((SwFmtFld*)pLast)->GetTxtFld() )
+            else if( static_cast<SwFmtFld*>(pLast)->GetTxtFld() )
             {
-                const SwTxtFld* pTFld = ((SwFmtFld*)pLast)->GetTxtFld();
+                const SwTxtFld* pTFld = static_cast<SwFmtFld*>(pLast)->GetTxtFld();
                 const SwTxtNode* pNd = pTFld->GetpTxtNode();
                 if( pNd && pNds == &pNd->GetNodes() )
                 {
@@ -385,12 +385,12 @@ SwDDEField::SwDDEField( SwDDEFieldType* pInitType )
 SwDDEField::~SwDDEField()
 {
     if( GetTyp()->IsLastDepend() )
-        ((SwDDEFieldType*)GetTyp())->Disconnect();
+        static_cast<SwDDEFieldType*>(GetTyp())->Disconnect();
 }
 
 OUString SwDDEField::Expand() const
 {
-    OUString aStr = ((SwDDEFieldType*)GetTyp())->GetExpansion();
+    OUString aStr = static_cast<SwDDEFieldType*>(GetTyp())->GetExpansion();
     aStr = aStr.replaceAll("\r", OUString());
     aStr = aStr.replaceAll("\t", " ");
     aStr = aStr.replaceAll("\n", "|");
@@ -403,25 +403,25 @@ OUString SwDDEField::Expand() const
 
 SwField* SwDDEField::Copy() const
 {
-    return new SwDDEField((SwDDEFieldType*)GetTyp());
+    return new SwDDEField(static_cast<SwDDEFieldType*>(GetTyp()));
 }
 
 /// get field type name
 OUString SwDDEField::GetPar1() const
 {
-    return ((const SwDDEFieldType*)GetTyp())->GetName();
+    return static_cast<const SwDDEFieldType*>(GetTyp())->GetName();
 }
 
 /// get field type command
 OUString SwDDEField::GetPar2() const
 {
-    return ((const SwDDEFieldType*)GetTyp())->GetCmd();
+    return static_cast<const SwDDEFieldType*>(GetTyp())->GetCmd();
 }
 
 /// set field type command
 void SwDDEField::SetPar2(const OUString& rStr)
 {
-    ((SwDDEFieldType*)GetTyp())->SetCmd(rStr);
+    static_cast<SwDDEFieldType*>(GetTyp())->SetCmd(rStr);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

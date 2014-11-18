@@ -44,7 +44,7 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
         SwPaM* pStartCrsr = pCrsr;
         do {
                 GetDoc()->ResetAttrs(*pCrsr, true, attrs);
-        } while ( ( pCrsr = ( SwPaM* ) pCrsr->GetNext() ) != pStartCrsr );
+        } while ( ( pCrsr = static_cast< SwPaM* >( pCrsr->GetNext() ) ) != pStartCrsr );
 
     if( bUndoGroup )
     {
@@ -73,7 +73,7 @@ void SwEditShell::GCAttr()
             SwNode* pNd = &aIdx.GetNode();
             do {
                 if( pNd->IsTxtNode() )
-                    ((SwTxtNode*)pNd)->GCAttr();
+                    static_cast<SwTxtNode*>(pNd)->GCAttr();
             }
             while( 0 != ( pNd = GetDoc()->GetNodes().GoNext( &aIdx )) &&
                     aIdx <= rEnd );
@@ -144,7 +144,7 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* 
             {
                 GetDoc()->getIDocumentContentOperations().InsertItemSet(*pTmpCrsr, rSet, nFlags );
             }
-        } while ( ( pTmpCrsr = (SwPaM*)pTmpCrsr->GetNext() ) != pStartPaM );
+        } while ( ( pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext()) ) != pStartPaM );
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }

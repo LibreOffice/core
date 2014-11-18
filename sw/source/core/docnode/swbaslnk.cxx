@@ -237,8 +237,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                     pLnk->ISA( SwBaseLink ) && pLnk->GetObj() == GetObj() )
                 {
-                    SwBaseLink* pBLink = (SwBaseLink*)pLnk;
-                    SwGrfNode* pGrfNd = (SwGrfNode*)pBLink->pCntntNode;
+                    SwBaseLink* pBLink = static_cast<SwBaseLink*>(pLnk);
+                    SwGrfNode* pGrfNd = static_cast<SwGrfNode*>(pBLink->pCntntNode);
 
                     if( pBLink != this &&
                         ( !bSwapIn ||
@@ -248,7 +248,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                         pBLink->DataChanged( rMimeType, rValue );
                         pBLink->bIgnoreDataChanged = true;
 
-                        pGrfNd->SetGraphicArrived( ((SwGrfNode*)pCntntNode)->
+                        pGrfNd->SetGraphicArrived( static_cast<SwGrfNode*>(pCntntNode)->
                                                     IsGraphicArrived() );
 
                         // Adjust the Fly's graphic
@@ -433,7 +433,7 @@ void SwBaseLink::Closed()
     {
         // Delete the connection
         if( pCntntNode->IsGrfNode() )
-            ((SwGrfNode*)pCntntNode)->ReleaseLink();
+            static_cast<SwGrfNode*>(pCntntNode)->ReleaseLink();
     }
     SvBaseLink::Closed();
 }
@@ -465,7 +465,7 @@ const SwNode* SwBaseLink::GetAnchor() const
 
 bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
 {
-    tools::SvRef<SwServerObject> aRef( (SwServerObject*)GetObj() );
+    tools::SvRef<SwServerObject> aRef( static_cast<SwServerObject*>(GetObj()) );
     if( aRef.Is() )
     {
         // As it's a ServerObject, we query all contained Links

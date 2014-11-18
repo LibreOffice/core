@@ -33,7 +33,7 @@ SwPamRanges::SwPamRanges( const SwPaM& rRing )
     const SwPaM* pTmp = &rRing;
     do {
         Insert( pTmp->GetMark()->nNode, pTmp->GetPoint()->nNode );
-    } while( &rRing != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
+    } while( &rRing != ( pTmp = static_cast<const SwPaM*>(pTmp->GetNext()) ));
 }
 
 void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
@@ -485,8 +485,8 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 
                         if (pNd->IsSectionNode() ||
                             ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode()) ||
-                            ( pNd->IsTxtNode() && pOrig == ((SwTxtNode*)pNd)->GetNumRule() &&
-                              ((SwTxtNode*)pNd)->GetActualListLevel() > nUpperLevel ))
+                            ( pNd->IsTxtNode() && pOrig == static_cast<const SwTxtNode*>(pNd)->GetNumRule() &&
+                              static_cast<const SwTxtNode*>(pNd)->GetActualListLevel() > nUpperLevel ))
                         {
                             ++nIdx;
                         }

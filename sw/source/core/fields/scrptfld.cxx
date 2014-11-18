@@ -52,7 +52,7 @@ OUString SwScriptField::Expand() const
 
 SwField* SwScriptField::Copy() const
 {
-    return new SwScriptField( (SwScriptFieldType*)GetTyp(), sType, sCode, bCodeURL );
+    return new SwScriptField( static_cast<SwScriptFieldType*>(GetTyp()), sType, sCode, bCodeURL );
 }
 
 /// set type

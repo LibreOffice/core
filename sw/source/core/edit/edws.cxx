@@ -73,10 +73,10 @@ void SwEditShell::StartAllAction()
     SwViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwEditShell ) ) )
-            ((SwEditShell*)pSh)->StartAction();
+            static_cast<SwEditShell*>(pSh)->StartAction();
         else
             pSh->StartAction();
-        pSh = (SwViewShell *)pSh->GetNext();
+        pSh = static_cast<SwViewShell *>(pSh->GetNext());
     } while(pSh != this);
 }
 
@@ -85,10 +85,10 @@ void SwEditShell::EndAllAction()
     SwViewShell *pSh = this;
     do {
         if( pSh->IsA( TYPE( SwEditShell ) ) )
-            ((SwEditShell*)pSh)->EndAction();
+            static_cast<SwEditShell*>(pSh)->EndAction();
         else
             pSh->EndAction();
-        pSh = (SwViewShell *)pSh->GetNext();
+        pSh = static_cast<SwViewShell *>(pSh->GetNext());
     } while(pSh != this);
 }
 
@@ -102,7 +102,7 @@ void SwEditShell::CalcLayout()
     {
         if ( pSh->GetWin() )
             pSh->GetWin()->Invalidate();
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
 
     } while ( pSh != this );
 

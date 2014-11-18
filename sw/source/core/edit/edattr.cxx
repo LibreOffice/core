@@ -141,14 +141,14 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                         ? nEndCnt
                         : pNd->GetTxtNode()->GetTxt().getLength();
 
-                    ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
+                    static_cast<SwTxtNode*>(pNd)->GetAttr( *pSet, nStt, nEnd,
                                                 false, true,
                                                 bMergeIndentValuesOfNumRule );
                 }
                 break;
             case ND_GRFNODE:
             case ND_OLENODE:
-                ((SwCntntNode*)pNd)->GetAttr( *pSet );
+                static_cast<SwCntntNode*>(pNd)->GetAttr( *pSet );
                 break;
 
             default:
@@ -166,7 +166,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             pSet = &aSet;
         }
 
-    } while ( ( pPaM = (SwPaM*)pPaM->GetNext() ) != pStartPaM );
+    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
 
     return true;
 }
@@ -311,7 +311,7 @@ std::vector<const SfxPoolItem*> SwEditShell::GetCurItem( sal_uInt16 nWhich )
             {
             case ND_TEXTNODE:
                 {
-                    SwTxtNode* pTxtNd = (SwTxtNode*) pNd;
+                    SwTxtNode* pTxtNd = static_cast<SwTxtNode*>(pNd);
                     const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
                     const sal_Int32 nEnd = (n == nEndNd)
                         ? nEndCnt : pTxtNd->GetTxt().getLength();
@@ -371,7 +371,7 @@ std::vector<const SfxPoolItem*> SwEditShell::GetCurItem( sal_uInt16 nWhich )
                 pNd = 0;
             }
         }
-    } while ( ( pPaM = (SwPaM*)pPaM->GetNext() ) != pStartPaM );
+    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
     return vItem;
 }
 
@@ -403,7 +403,7 @@ std::vector<SwPaM*> SwEditShell::GetSplitPaM( sal_uInt16 nWhich)
             {
             case ND_TEXTNODE:
                 {
-                    SwTxtNode* pTxtNd = (SwTxtNode*) pNd;
+                    SwTxtNode* pTxtNd = static_cast<SwTxtNode*>(pNd);
                     const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
                     const sal_Int32 nEnd = (n == nEndNd)
                         ? nEndCnt : pTxtNd->GetTxt().getLength();
@@ -451,7 +451,7 @@ std::vector<SwPaM*> SwEditShell::GetSplitPaM( sal_uInt16 nWhich)
                 pNd = 0;
             }
         }
-    } while ( ( pPaM = (SwPaM*)pPaM->GetNext() ) != pStartPaM );
+    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
     return vPaMs;
 }
 
@@ -468,7 +468,7 @@ bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
     if( pFtn && pFillFtn )
     {
         // Transfer data from the attribute
-        const SwFmtFtn &rFtn = ((SwTxtFtn*)pFtn)->GetFtn();
+        const SwFmtFtn &rFtn = static_cast<SwTxtFtn*>(pFtn)->GetFtn();
         pFillFtn->SetNumber( rFtn );
         pFillFtn->SetEndNote( rFtn.IsEndNote() );
     }
@@ -485,7 +485,7 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
         bChgd |=
             mpDoc->SetCurFtn( *pCrsr, rFillFtn.GetNumStr(), rFillFtn.GetNumber(), rFillFtn.IsEndNote() );
 
-    } while( pFirst != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
+    } while( pFirst != ( pCrsr = static_cast<SwPaM*>(pCrsr->GetNext()) ));
 
     EndAllAction();
     return bChgd;
@@ -523,7 +523,7 @@ size_t SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
             SwNodeIndex aIdx( *pIdx, 1 );
             SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
             if( !pTxtNd )
-                pTxtNd = (SwTxtNode*)mpDoc->GetNodes().GoNext( &aIdx );
+                pTxtNd = static_cast<SwTxtNode*>(mpDoc->GetNodes().GoNext( &aIdx ));
 
             if( pTxtNd )
             {
@@ -548,8 +548,8 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
 {
     bool bRet = true;
 
-    const SvxTabStopItem& rTabItem = (SvxTabStopItem&)GetDoc()->
-                                GetDefault( RES_PARATR_TABSTOP );
+    const SvxTabStopItem& rTabItem = static_cast<const SvxTabStopItem&>(GetDoc()->
+                                GetDefault( RES_PARATR_TABSTOP ));
     sal_uInt16 nDefDist = static_cast<sal_uInt16>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
     if( !nDefDist )
         return false;
@@ -566,8 +566,8 @@ bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
             if( 0 != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTxtNode() ))
             {
-                const SvxLRSpaceItem& rLS = (SvxLRSpaceItem&)
-                                            pCNd->GetAttr( RES_LR_SPACE );
+                const SvxLRSpaceItem& rLS = static_cast<const SvxLRSpaceItem&>(
+                                            pCNd->GetAttr( RES_LR_SPACE ));
                 if( bRight )
                 {
                     long nNext = rLS.GetTxtLeft() + nDefDist;

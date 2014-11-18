@@ -204,7 +204,7 @@ sal_uInt16 SwField::GetTypeId() const
     case RES_SETEXPFLD:
         if( nsSwGetSetExpType::GSE_SEQ & GetSubType() )
             nRet = TYP_SEQFLD;
-        else if( ((SwSetExpField*)this)->GetInputFlag() )
+        else if( static_cast<const SwSetExpField*>(this)->GetInputFlag() )
             nRet = TYP_SETINPFLD;
         else
             nRet = TYP_SETFLD;
@@ -339,7 +339,7 @@ bool SwField::HasClickHdl() const
         break;
 
     case RES_SETEXPFLD:
-        bRet = ((SwSetExpField*)this)->GetInputFlag();
+        bRet = static_cast<const SwSetExpField*>(this)->GetInputFlag();
         break;
     }
     return bRet;
@@ -553,7 +553,7 @@ SwValueField::~SwValueField()
  */
 SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
 {
-    SwDoc* pNewDoc = ((SwValueFieldType *)pNewType)->GetDoc();
+    SwDoc* pNewDoc = static_cast<SwValueFieldType *>(pNewType)->GetDoc();
     SwDoc* pDoc    = GetDoc();
 
     if( pNewDoc && pDoc && pDoc != pNewDoc)
@@ -561,7 +561,7 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
         SvNumberFormatter* pFormatter = pNewDoc->GetNumberFormatter();
 
         if( pFormatter && pFormatter->HasMergeFmtTbl() &&
-            ((SwValueFieldType *)GetTyp())->UseFormat() )
+            static_cast<SwValueFieldType *>(GetTyp())->UseFormat() )
             SetFormat(pFormatter->GetMergeFmtIndex( GetFormat() ));
     }
 
@@ -603,7 +603,7 @@ sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt
 void SwValueField::SetLanguage( sal_uInt16 nLng )
 {
     if( IsAutomaticLanguage() &&
-            ((SwValueFieldType *)GetTyp())->UseFormat() &&
+            static_cast<SwValueFieldType *>(GetTyp())->UseFormat() &&
         GetFormat() != SAL_MAX_UINT32 )
     {
         // Bug #60010
@@ -658,7 +658,7 @@ SwFormulaField::SwFormulaField( SwValueFieldType* pFldType, sal_uInt32 nFmt, con
 }
 
 SwFormulaField::SwFormulaField( const SwFormulaField& rFld )
-    : SwValueField((SwValueFieldType *)rFld.GetTyp(), rFld.GetFormat(),
+    : SwValueField(static_cast<SwValueFieldType *>(rFld.GetTyp()), rFld.GetFormat(),
                     rFld.GetLanguage(), rFld.GetValue())
 {
 }
@@ -687,7 +687,7 @@ void SwFormulaField::SetExpandedFormula( const OUString& rStr )
 {
     sal_uInt32 nFmt(GetFormat());
 
-    if (nFmt && nFmt != SAL_MAX_UINT32 && ((SwValueFieldType *)GetTyp())->UseFormat())
+    if (nFmt && nFmt != SAL_MAX_UINT32 && static_cast<SwValueFieldType *>(GetTyp())->UseFormat())
     {
         double fTmpValue;
 
@@ -697,7 +697,7 @@ void SwFormulaField::SetExpandedFormula( const OUString& rStr )
         {
             SwValueField::SetValue(fTmpValue);
 
-            sFormula = ((SwValueFieldType *)GetTyp())->DoubleToString(fTmpValue, nFmt);
+            sFormula = static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(fTmpValue, nFmt);
             return;
         }
     }
@@ -708,7 +708,7 @@ OUString SwFormulaField::GetExpandedFormula() const
 {
     sal_uInt32 nFmt(GetFormat());
 
-    if (nFmt && nFmt != SAL_MAX_UINT32 && ((SwValueFieldType *)GetTyp())->UseFormat())
+    if (nFmt && nFmt != SAL_MAX_UINT32 && static_cast<SwValueFieldType *>(GetTyp())->UseFormat())
     {
         OUString sFormattedValue;
         Color* pCol = 0;
@@ -717,7 +717,7 @@ OUString SwFormulaField::GetExpandedFormula() const
 
         if (pFormatter->IsTextFormat(nFmt))
         {
-            OUString sTempIn(((SwValueFieldType *)GetTyp())->DoubleToString(GetValue(), nFmt));
+            OUString sTempIn(static_cast<SwValueFieldType *>(GetTyp())->DoubleToString(GetValue(), nFmt));
             pFormatter->GetOutputString(sTempIn, nFmt, sFormattedValue, &pCol);
         }
         else

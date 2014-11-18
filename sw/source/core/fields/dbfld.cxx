@@ -146,7 +146,7 @@ bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
                     SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
                     if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
                     {
-                        SwDBField* pDBField = (SwDBField*)pFmtFld->GetField();
+                        SwDBField* pDBField = static_cast<SwDBField*>(pFmtFld->GetField());
                         pDBField->ClearInitialized();
                         pDBField->InitContent();
                     }
@@ -174,21 +174,21 @@ SwDBField::SwDBField(SwDBFieldType* pTyp, sal_uLong nFmt)
         bInitialized(false)
 {
     if (GetTyp())
-        ((SwDBFieldType*)GetTyp())->AddRef();
+        static_cast<SwDBFieldType*>(GetTyp())->AddRef();
     InitContent();
 }
 
 SwDBField::~SwDBField()
 {
     if (GetTyp())
-        ((SwDBFieldType*)GetTyp())->ReleaseRef();
+        static_cast<SwDBFieldType*>(GetTyp())->ReleaseRef();
 }
 
 void SwDBField::InitContent()
 {
     if (!IsInitialized())
     {
-        aContent = "<" + ((const SwDBFieldType*)GetTyp())->GetColumnName() + ">";
+        aContent = "<" + static_cast<const SwDBFieldType*>(GetTyp())->GetColumnName() + ">";
     }
 }
 
@@ -198,7 +198,7 @@ void SwDBField::InitContent(const OUString& rExpansion)
     {
         const OUString sColumn( rExpansion.copy( 1, rExpansion.getLength() - 2 ) );
         if( ::GetAppCmpStrIgnore().isEqual( sColumn,
-                        ((SwDBFieldType *)GetTyp())->GetColumnName() ))
+                        static_cast<SwDBFieldType *>(GetTyp())->GetColumnName() ))
         {
             InitContent();
             return;
@@ -216,7 +216,7 @@ OUString SwDBField::Expand() const
 
 SwField* SwDBField::Copy() const
 {
-    SwDBField *pTmp = new SwDBField((SwDBFieldType*)GetTyp(), GetFormat());
+    SwDBField *pTmp = new SwDBField(static_cast<SwDBFieldType*>(GetTyp()), GetFormat());
     pTmp->aContent      = aContent;
     pTmp->bIsInBodyTxt  = bIsInBodyTxt;
     pTmp->bValidValue   = bValidValue;
@@ -250,15 +250,15 @@ void SwDBField::ChgValue( double d, bool bVal )
     SetValue(d);
 
     if( bValidValue )
-        aContent = ((SwValueFieldType*)GetTyp())->ExpandValue(d, GetFormat(), GetLanguage());
+        aContent = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(d, GetFormat(), GetLanguage());
 }
 
 SwFieldType* SwDBField::ChgTyp( SwFieldType* pNewType )
 {
     SwFieldType* pOld = SwValueField::ChgTyp( pNewType );
 
-    ((SwDBFieldType*)pNewType)->AddRef();
-    ((SwDBFieldType*)pOld)->ReleaseRef();
+    static_cast<SwDBFieldType*>(pNewType)->AddRef();
+    static_cast<SwDBFieldType*>(pOld)->ReleaseRef();
 
     return pOld;
 }
@@ -325,7 +325,7 @@ void SwDBField::Evaluate()
     sal_uInt32 nFmt;
 
     // search corresponding column name
-    OUString aColNm( ((SwDBFieldType*)GetTyp())->GetColumnName() );
+    OUString aColNm( static_cast<SwDBFieldType*>(GetTyp())->GetColumnName() );
 
     SvNumberFormatter* pDocFormatter = GetDoc()->GetNumberFormatter();
     pMgr->GetMergeColumnCnt(aColNm, GetLanguage(), aContent, &nValue, &nFmt);
@@ -340,7 +340,7 @@ void SwDBField::Evaluate()
     bValidValue = FormatValue( pDocFormatter, aContent, nFmt, nValue, nColumnType, this );
 
     if( DBL_MAX != nValue )
-        aContent = ((SwValueFieldType*)GetTyp())->ExpandValue(nValue, GetFormat(), GetLanguage());
+        aContent = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(nValue, GetFormat(), GetLanguage());
 
     bInitialized = true;
 }
@@ -348,7 +348,7 @@ void SwDBField::Evaluate()
 /// get name
 OUString SwDBField::GetPar1() const
 {
-    return ((const SwDBFieldType*)GetTyp())->GetName();
+    return static_cast<const SwDBFieldType*>(GetTyp())->GetName();
 }
 
 sal_uInt16 SwDBField::GetSubType() const
@@ -421,7 +421,7 @@ bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             while(pFmtFld)
             {
                 SwTxtFld *pTxtFld = pFmtFld->GetTxtFld();
-                if(pTxtFld && (SwDBField*)pFmtFld->GetField() == this )
+                if(pTxtFld && static_cast<SwDBField*>(pFmtFld->GetField()) == this )
                 {
                     //notify the change
                     pTxtFld->NotifyContentChange(*pFmtFld);
@@ -584,7 +584,7 @@ OUString SwDBNextSetField::Expand() const
 
 SwField* SwDBNextSetField::Copy() const
 {
-    SwDBNextSetField *pTmp = new SwDBNextSetField((SwDBNextSetFieldType*)GetTyp(),
+    SwDBNextSetField *pTmp = new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(GetTyp()),
                                          aCond, OUString(), GetDBData());
     pTmp->SetSubType(GetSubType());
     pTmp->bCondValid = bCondValid;
@@ -671,7 +671,7 @@ OUString SwDBNumSetField::Expand() const
 
 SwField* SwDBNumSetField::Copy() const
 {
-    SwDBNumSetField *pTmp = new SwDBNumSetField((SwDBNumSetFieldType*)GetTyp(),
+    SwDBNumSetField *pTmp = new SwDBNumSetField(static_cast<SwDBNumSetFieldType*>(GetTyp()),
                                          aCond, aPar2, GetDBData());
     pTmp->bCondValid = bCondValid;
     pTmp->SetSubType(GetSubType());
@@ -779,13 +779,13 @@ SwDBNameField::SwDBNameField(SwDBNameFieldType* pTyp, const SwDBData& rDBData, s
 OUString SwDBNameField::Expand() const
 {
     if(0 ==(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE))
-        return ((SwDBNameFieldType*)GetTyp())->Expand(GetFormat());
+        return static_cast<SwDBNameFieldType*>(GetTyp())->Expand(GetFormat());
     return OUString();
 }
 
 SwField* SwDBNameField::Copy() const
 {
-    SwDBNameField *pTmp = new SwDBNameField((SwDBNameFieldType*)GetTyp(), GetDBData());
+    SwDBNameField *pTmp = new SwDBNameField(static_cast<SwDBNameFieldType*>(GetTyp()), GetDBData());
     pTmp->ChangeFormat(GetFormat());
     pTmp->SetLanguage(GetLanguage());
     pTmp->SetSubType(GetSubType());
@@ -842,7 +842,7 @@ void SwDBSetNumberField::Evaluate(SwDoc* pDoc)
 SwField* SwDBSetNumberField::Copy() const
 {
     SwDBSetNumberField *pTmp =
-        new SwDBSetNumberField((SwDBSetNumberFieldType*)GetTyp(), GetDBData(), GetFormat());
+        new SwDBSetNumberField(static_cast<SwDBSetNumberFieldType*>(GetTyp()), GetDBData(), GetFormat());
     pTmp->SetLanguage(GetLanguage());
     pTmp->SetSetNumber(nNumber);
     pTmp->SetSubType(GetSubType());

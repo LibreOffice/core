@@ -212,7 +212,7 @@ namespace drawinglayer
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const SwVirtFlyDrawObjPrimitive& rCompare = (SwVirtFlyDrawObjPrimitive&)rPrimitive;
+                const SwVirtFlyDrawObjPrimitive& rCompare = static_cast<const SwVirtFlyDrawObjPrimitive&>(rPrimitive);
 
                 return (&getSwVirtFlyDrawObj() == &rCompare.getSwVirtFlyDrawObj()
                     && getOuterRange() == rCompare.getOuterRange());
@@ -274,7 +274,7 @@ namespace sdr
             /// access to SwVirtFlyDrawObj
             SwVirtFlyDrawObj& GetSwVirtFlyDrawObj() const
             {
-                return (SwVirtFlyDrawObj&)mrObject;
+                return static_cast<SwVirtFlyDrawObj&>(mrObject);
             }
         };
     } // end of namespace contact
@@ -601,7 +601,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
     //anchor must be set. Anchor and the new RelPos is calculated and
     //placed by the Fly itself.
     if( GetFlyFrm()->IsFlyAtCntFrm() )
-        ((SwFlyAtCntFrm*)GetFlyFrm())->SetAbsPos( aNewPos );
+        static_cast<SwFlyAtCntFrm*>(GetFlyFrm())->SetAbsPos( aNewPos );
     else
     {
         const SwFrmFmt *pTmpFmt = GetFmt();

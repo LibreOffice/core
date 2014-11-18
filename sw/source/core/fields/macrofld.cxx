@@ -54,7 +54,7 @@ OUString SwMacroField::Expand() const
 
 SwField* SwMacroField::Copy() const
 {
-    return new SwMacroField((SwMacroFieldType*)GetTyp(), aMacro, aText);
+    return new SwMacroField(static_cast<SwMacroFieldType*>(GetTyp()), aMacro, aText);
 }
 
 OUString SwMacroField::GetFieldName() const

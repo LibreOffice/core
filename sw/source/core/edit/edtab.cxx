@@ -304,7 +304,7 @@ bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
             } while ( pFrm && !pFrm->IsCellFrm() );
             if ( pFrm )
             {
-                SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
                 aBoxes.insert( pBox );
             }
         } while( false );
@@ -313,7 +313,7 @@ bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
     for (size_t n = 0; n < aBoxes.size(); ++n)
     {
         const SwTableBox* pSelBox = aBoxes[ n ];
-        const SwTableBoxFmt* pTblFmt = (SwTableBoxFmt*)pSelBox->GetFrmFmt();
+        const SwTableBoxFmt* pTblFmt = static_cast<SwTableBoxFmt*>(pSelBox->GetFrmFmt());
         if( !n )
         {
             // Convert formulae into external presentation
@@ -346,7 +346,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
             } while ( pFrm && !pFrm->IsCellFrm() );
             if ( pFrm )
             {
-                SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
                 aBoxes.insert( pBox );
             }
         } while( false );
@@ -371,14 +371,14 @@ bool SwEditShell::IsTableBoxTextFormat() const
     if( IsTableMode() )
         return false;
 
-    SwTableBox *pBox = 0;
+    const SwTableBox *pBox = 0;
     {
         SwFrm *pFrm = GetCurrFrm();
         do {
             pFrm = pFrm->GetUpper();
         } while ( pFrm && !pFrm->IsCellFrm() );
         if ( pFrm )
-            pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+            pBox = static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
     }
 
     if( !pBox )
@@ -389,7 +389,7 @@ bool SwEditShell::IsTableBoxTextFormat() const
     if( SfxItemState::SET == pBox->GetFrmFmt()->GetAttrSet().GetItemState(
         RES_BOXATR_FORMAT, true, &pItem ))
     {
-        nFmt = ((SwTblBoxNumFormat*)pItem)->GetValue();
+        nFmt = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
         return GetDoc()->GetNumberFormatter()->IsTextFormat( nFmt ) ||
                 NUMBERFORMAT_TEXT == nFmt;
     }
@@ -411,14 +411,14 @@ OUString SwEditShell::GetTableBoxText() const
     OUString sRet;
     if( !IsTableMode() )
     {
-        SwTableBox *pBox = 0;
+        const SwTableBox *pBox = 0;
         {
             SwFrm *pFrm = GetCurrFrm();
             do {
                 pFrm = pFrm->GetUpper();
             } while ( pFrm && !pFrm->IsCellFrm() );
             if ( pFrm )
-                pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+                pBox = static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox());
         }
 
         sal_uLong nNd;

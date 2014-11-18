@@ -114,7 +114,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
 
             SaveTblBoxCntnt( _pStartCrsr->GetPoint() );
 
-        } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
+        } while( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext() )) != __pStartCrsr );
     }
 
     // calculate cursor bidi level
@@ -133,7 +133,7 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
             if ( nPrevPos )
                 --nPrevPos;
 
-            SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( ((SwTxtNode&)rNode), true );
+            SwScriptInfo* pSI = SwScriptInfo::GetScriptInfo( static_cast<SwTxtNode&>(rNode), true );
 
             sal_uInt8 nLevel = 0;
             if ( ! pSI )
@@ -141,17 +141,17 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
                 // seems to be an empty paragraph.
                 Point aPt;
                 SwCntntFrm* pFrm =
-                        ((SwTxtNode&)rNode).getLayoutFrm( GetLayout(), &aPt, pTmpCrsr->GetPoint(),
+                        static_cast<SwTxtNode&>(rNode).getLayoutFrm( GetLayout(), &aPt, pTmpCrsr->GetPoint(),
                                                     false );
 
                 SwScriptInfo aScriptInfo;
-                aScriptInfo.InitScriptInfo( (SwTxtNode&)rNode, pFrm->IsRightToLeft() );
+                aScriptInfo.InitScriptInfo( static_cast<SwTxtNode&>(rNode), pFrm->IsRightToLeft() );
                 nLevel = aScriptInfo.DirType( nPrevPos );
             }
             else
             {
                 if ( COMPLETE_STRING != pSI->GetInvalidityA() )
-                    pSI->InitScriptInfo( (SwTxtNode&)rNode );
+                    pSI->InitScriptInfo( static_cast<SwTxtNode&>(rNode) );
                 nLevel = pSI->DirType( nPrevPos );
             }
 
@@ -318,7 +318,7 @@ void SwEditShell::SetGraphicPolygon( const tools::PolyPolygon *pPoly )
     SwNoTxtNode *pNd = GetCrsr()->GetNode().GetNoTxtNode();
     StartAllAction();
     pNd->SetContour( pPoly );
-    SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
+    SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pNd->getLayoutFrm(GetLayout())->GetUpper());
     const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
     pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
     GetDoc()->getIDocumentState().SetModified();
@@ -333,7 +333,7 @@ void SwEditShell::ClearAutomaticContour()
     {
         StartAllAction();
         pNd->SetContour( NULL, false );
-        SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
+        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pNd->getLayoutFrm(GetLayout())->GetUpper());
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
         pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
         GetDoc()->getIDocumentState().SetModified();
@@ -370,8 +370,8 @@ bool SwEditShell::HasOLEObj( const OUString &rName ) const
         ++aIdx;
         SwNode& rNd = aIdx.GetNode();
         if( rNd.IsOLENode() &&
-            rName == ((SwOLENode&)rNd).GetChartTblName() &&
-            ((SwOLENode&)rNd).getLayoutFrm( GetLayout() ) )
+            rName == static_cast<SwOLENode&>(rNd).GetChartTblName() &&
+            static_cast<SwOLENode&>(rNd).getLayoutFrm( GetLayout() ) )
             return true;
 
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
@@ -505,7 +505,7 @@ void SwEditShell::ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM )
 OUString SwEditShell::Calculate()
 {
     OUString  aFormel;                    // the final formula
-    SwPaM     *pPaMLast = (SwPaM*)GetCrsr()->GetNext(),
+    SwPaM     *pPaMLast = static_cast<SwPaM*>(GetCrsr()->GetNext()),
               *pPaM = pPaMLast;           // cursor pointers
     SwCalc    aCalc( *GetDoc() );
     const CharClass& rCC = GetAppCharClass();
@@ -561,7 +561,7 @@ OUString SwEditShell::Calculate()
                     aFormel += OUString(ch);
             }
         }
-    } while( pPaMLast != (pPaM = (SwPaM*)pPaM->GetNext()) );
+    } while( pPaMLast != (pPaM = static_cast<SwPaM*>(pPaM->GetNext())) );
 
     return aCalc.GetStrResult( aCalc.Calculate(aFormel) );
 }
@@ -594,7 +594,7 @@ Graphic SwEditShell::GetIMapGraphic() const
         }
         else if ( rNd.IsOLENode() )
         {
-            aRet = *((SwOLENode&)rNd).GetGraphic();
+            aRet = *static_cast<SwOLENode&>(rNd).GetGraphic();
         }
         else
         {
@@ -753,10 +753,10 @@ void SwEditShell::SetNumberingRestart()
                 switch( pNd->GetNodeType() )
                 {
                 case ND_TEXTNODE:
-                    if( 0 != ( pCntFrm = ((SwTxtNode*)pNd)->getLayoutFrm( GetLayout() )) )
+                    if( 0 != ( pCntFrm = static_cast<SwTxtNode*>(pNd)->getLayoutFrm( GetLayout() )) )
                     {
                         // skip hidden frames - ignore protection!
-                        if( !((SwTxtFrm*)pCntFrm)->IsHiddenNow() )
+                        if( !static_cast<SwTxtFrm*>(pCntFrm)->IsHiddenNow() )
                         {
                             // if the node is numbered and the starting value of the numbering equals the
                             // start value of the numbering rule then set this value as hard starting value
@@ -795,7 +795,7 @@ void SwEditShell::SetNumberingRestart()
                     break;
                 case ND_SECTIONNODE:
                     // skip hidden sections  - ignore protection!
-                    if(((SwSectionNode*)pNd)->GetSection().IsHidden() )
+                    if(static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() )
                         nCurrNd = pNd->EndOfSectionIndex();
                     break;
                 case ND_ENDNODE:
@@ -865,7 +865,7 @@ sal_uInt16 SwEditShell::GetLineCount( bool bActPos )
         {
             sal_Int32 nActPos = bActPos && aStart == rPtIdx ?
                 pPam->GetPoint()->nContent.GetIndex() : USHRT_MAX;
-            nRet = nRet + ((SwTxtFrm*)pCntFrm)->GetLineCount( nActPos );
+            nRet = nRet + static_cast<SwTxtFrm*>(pCntFrm)->GetLineCount( nActPos );
         }
     }
     return nRet;

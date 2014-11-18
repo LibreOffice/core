@@ -107,7 +107,7 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, bool bReset)
             SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC,false ) ||
             ( SfxItemState::SET == pSet->GetItemState( RES_PARATR_NUMRULE,
                 false, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
-                ((SwNumRuleItem*)pItem)->GetValue() )) &&
+                static_cast<const SwNumRuleItem*>(pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() )
             )
         {
@@ -117,7 +117,7 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, bool bReset)
 
             if( pRule || (SfxItemState::SET == pSet->GetItemState( RES_PARATR_NUMRULE,
                 false, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
-                ((SwNumRuleItem*)pItem)->GetValue() )) &&
+                static_cast<const SwNumRuleItem*>(pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() ))
                 aSet.ClearItem( RES_PARATR_NUMRULE );
 

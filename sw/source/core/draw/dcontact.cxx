@@ -104,7 +104,7 @@ SwFrmFmt *FindFrmFmt( SdrObject *pObj )
 
     if ( pObj->ISA(SwVirtFlyDrawObj) )
     {
-       pRetval = ((SwVirtFlyDrawObj*)pObj)->GetFmt();
+       pRetval = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFmt();
     }
     else
     {
@@ -165,7 +165,7 @@ bool IsMarqueeTextObj( const SdrObject& rObj )
     SdrTextAniKind eTKind;
     return SdrInventor == rObj.GetObjInventor() &&
         OBJ_TEXT == rObj.GetObjIdentifier() &&
-        ( SDRTEXTANI_SCROLL == ( eTKind = ((SdrTextObj&)rObj).GetTextAniKind())
+        ( SDRTEXTANI_SCROLL == ( eTKind = static_cast<const SdrTextObj&>(rObj).GetTextAniKind())
          || SDRTEXTANI_ALTERNATE == eTKind || SDRTEXTANI_SLIDE == eTKind );
 }
 
@@ -562,7 +562,7 @@ bool CheckControlLayer( const SdrObject *pObj )
         return true;
     if ( pObj->ISA( SdrObjGroup ) )
     {
-        const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
+        const SdrObjList *pLst = static_cast<const SdrObjGroup*>(pObj)->GetSubList();
         for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
         {
             if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
@@ -655,14 +655,14 @@ void SwDrawContact::GetTextObjectsFromFmt( std::list<SdrTextObj*>& rTextObjects,
                             if( pSdrOElement && pSdrOElement->IsA( TYPE(SdrTextObj) ) &&
                                 static_cast<SdrTextObj*>( pSdrOElement)->HasText() )
                             {
-                                rTextObjects.push_back((SdrTextObj*) pSdrOElement);
+                                rTextObjects.push_back(static_cast<SdrTextObj*>( pSdrOElement ));
                             }
                         }
                     }
                     else if( pSdrO->IsA( TYPE(SdrTextObj) ) &&
                             static_cast<SdrTextObj*>( pSdrO )->HasText() )
                     {
-                        rTextObjects.push_back((SdrTextObj*) pSdrO);
+                        rTextObjects.push_back(static_cast<SdrTextObj*>( pSdrO ));
                     }
                 }
             }
@@ -991,7 +991,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
             SwRect aRect( pDrawVirtObj->GetAnchoredObj().GetObjRectWithSpaces() );
             if (aRect.HasArea() && pPage)
             {
-                SwPageFrm* pPg = (SwPageFrm*)::FindPage( aRect, pPage );
+                SwPageFrm* pPg = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(::FindPage( aRect, pPage )));
                 if ( pPg )
                     ::Notify_Background( pDrawVirtObj, pPg, aRect,
                                          PREP_FLY_ARRIVE, true );
@@ -1019,7 +1019,7 @@ static void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
             if( aOldRect.HasArea() )
             {
                 // #i34640# - determine correct page frame
-                SwPageFrm* pOldPageFrm = (SwPageFrm*)::FindPage( aOldRect, pPageFrm );
+                SwPageFrm* pOldPageFrm = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(::FindPage( aOldRect, pPageFrm )));
                 ::Notify_Background( &_rObj, pOldPageFrm, aOldRect,
                                      PREP_FLY_LEAVE, true);
             }
@@ -1028,7 +1028,7 @@ static void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
         SwRect aNewRect( pAnchoredObj->GetObjRectWithSpaces() );
         if( aNewRect.HasArea() && pPageFrm )
         {
-            pPageFrm = (SwPageFrm*)::FindPage( aNewRect, pPageFrm );
+            pPageFrm = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(::FindPage( aNewRect, pPageFrm )));
             ::Notify_Background( &_rObj, pPageFrm, aNewRect,
                                  PREP_FLY_ARRIVE, true );
         }
@@ -1069,7 +1069,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
             {   if ( pSh->Imp()->IsAction() || pSh->Imp()->IsIdleAction() )
                     pSh = 0;
                 else
-                    pSh = (SwViewShell*)pSh->GetNext();
+                    pSh = static_cast<SwViewShell*>(pSh->GetNext());
 
             } while ( pSh && pSh != pOrg );
 
@@ -1502,11 +1502,11 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
              RES_OPAQUE == nWhich ||
              RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
              ( RES_ATTRSET_CHG == nWhich &&
-               ( SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+               ( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                            RES_SURROUND, false ) ||
-                 SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                 SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                            RES_OPAQUE, false ) ||
-                 SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                 SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                            RES_WRAP_INFLUENCE_ON_OBJPOS, false ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
@@ -1518,15 +1518,15 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                   // #i28701# - add attribute 'Follow text flow'
                   RES_FOLLOW_TEXT_FLOW == nWhich ||
                   ( RES_ATTRSET_CHG == nWhich &&
-                    ( SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                    ( SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                                 RES_LR_SPACE, false ) ||
-                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                                 RES_UL_SPACE, false ) ||
-                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                                 RES_HORI_ORIENT, false ) ||
-                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                                 RES_VERT_ORIENT, false ) ||
-                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
                                 RES_FOLLOW_TEXT_FLOW, false ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
@@ -1650,7 +1650,7 @@ void SwDrawContact::RemoveMasterFromDrawPage()
         GetMaster()->SetUserCall( 0 );
         if ( GetMaster()->IsInserted() )
         {
-            ((SwFrmFmt*)GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+            static_cast<SwFrmFmt*>(GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
                                         RemoveObject( GetMaster()->GetOrdNum() );
         }
     }
@@ -1730,7 +1730,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
         return;
     }
 
-    SwFrmFmt* pDrawFrmFmt = (SwFrmFmt*)GetRegisteredIn();
+    SwFrmFmt* pDrawFrmFmt = static_cast<SwFrmFmt*>(GetRegisteredIn());
 
     if( !pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )
         return;
@@ -1835,7 +1835,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                     // (2) drawing object isn't a control object to be anchored
                     //     in header/footer.
                     const bool bAdd = ( !pFrm->IsCntntFrm() ||
-                                        !((SwCntntFrm*)pFrm)->IsFollow() ) &&
+                                        !static_cast<SwCntntFrm*>(pFrm)->IsFollow() ) &&
                                       ( !::CheckControlLayer( GetMaster() ) ||
                                         !pFrm->FindFooterOrHeader() );
 
@@ -1914,7 +1914,7 @@ SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
     if ( !pPg && GetAnchorFrm() )
         pPg = GetAnchorFrm()->FindPageFrm();
     if ( pPg )
-        pPg = (SwPageFrm*)::FindPage( rRect, pPg );
+        pPg = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(::FindPage( rRect, pPg )));
     return pPg;
 }
 
@@ -2034,7 +2034,7 @@ namespace sdr
             /// access to SwDrawVirtObj
             SwDrawVirtObj& GetSwDrawVirtObj() const
             {
-                return (SwDrawVirtObj&)mrObject;
+                return static_cast<SwDrawVirtObj&>(mrObject);
             }
         };
     } // end of namespace contact

@@ -148,7 +148,7 @@ SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
     }
     else if ( !pCFrm->IsValid() )
     {
-        pTxtNode = (SwTxtNode*)pCFrm->GetNode();
+        pTxtNode = const_cast<SwTxtNode*>(static_cast<const SwTxtNode*>(pCFrm->GetNode()));
         rPos.nNode = *pTxtNode;
         rPos.nContent.Assign( pTxtNode, 0 );
     }
@@ -171,7 +171,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         if( pLayout->IsFlyFrm() )
         {
             // get the FlyFormat
-            SwFrmFmt* pFlyFmt = ((SwFlyFrm*)pLayout)->GetFmt();
+            const SwFrmFmt* pFlyFmt = static_cast<const SwFlyFrm*>(pLayout)->GetFmt();
             OSL_ENSURE( pFlyFmt, "Could not find FlyFormat, where is the field?" );
 
             const SwFmtAnchor &rAnchor = pFlyFmt->GetAnchor();
@@ -179,7 +179,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             if( FLY_AT_FLY == rAnchor.GetAnchorId() )
             {
                 // the fly needs to be attached somewhere, so ask it
-                pLayout = (SwLayoutFrm*)((SwFlyFrm*)pLayout)->GetAnchorFrm();
+                pLayout = static_cast<const SwLayoutFrm*>(static_cast<const SwFlyFrm*>(pLayout)->GetAnchorFrm());
                 continue;
             }
             else if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -196,8 +196,8 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                 }
 
                 // do not break yet, might be as well in Header/Footer/Footnote/Fly
-                pLayout = ((SwFlyFrm*)pLayout)->GetAnchorFrm()
-                            ? ((SwFlyFrm*)pLayout)->GetAnchorFrm()->GetUpper() : 0;
+                pLayout = static_cast<const SwFlyFrm*>(pLayout)->GetAnchorFrm()
+                            ? static_cast<const SwFlyFrm*>(pLayout)->GetAnchorFrm()->GetUpper() : 0;
                 continue;
             }
             else
@@ -210,7 +210,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         else if( pLayout->IsFtnFrm() )
         {
             // get the anchor's node
-            const SwTxtFtn* pFtn = ((SwFtnFrm*)pLayout)->GetAttr();
+            const SwTxtFtn* pFtn = static_cast<const SwFtnFrm*>(pLayout)->GetAttr();
             pTxtNode = &pFtn->GetTxtNode();
             rPos.nNode = *pTxtNode;
             rPos.nContent = pFtn->GetStart();
@@ -306,7 +306,7 @@ OUString SwGetExpField::GetFieldName() const
 
 SwField* SwGetExpField::Copy() const
 {
-    SwGetExpField *pTmp = new SwGetExpField((SwGetExpFieldType*)GetTyp(),
+    SwGetExpField *pTmp = new SwGetExpField(static_cast<SwGetExpFieldType*>(GetTyp()),
                                             GetFormula(), nSubType, GetFormat());
     pTmp->SetLanguage(GetLanguage());
     pTmp->SwValueField::SetValue(GetValue());
@@ -370,7 +370,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
         SetValue(aCalc.Calculate(GetFormula()).GetDouble());
 
         // analyse based on format
-        sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue(
+        sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(
                                 GetValue(), GetFormat(), GetLanguage());
     }
 }
@@ -531,7 +531,7 @@ sal_uLong SwSetExpFieldType::GetSeqFormat()
     if( !GetDepends() )
         return SVX_NUM_ARABIC;
 
-    SwField *pFld = ((SwFmtFld*)GetDepends())->GetField();
+    const SwField *pFld = static_cast<const SwFmtFld*>(GetDepends())->GetField();
     return pFld->GetFormat();
 }
 
@@ -551,7 +551,7 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
         if( pF->GetField() != &rFld && pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
-            InsertSort( aArr, ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
+            InsertSort( aArr, static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
 
     // check first if number already exists
     sal_uInt16 nNum = rFld.GetSeqNumber();
@@ -589,7 +589,7 @@ size_t SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
         {
             _SeqFldLstElem* pNew = new _SeqFldLstElem(
                     pNd->GetExpandTxt( 0, -1 ),
-                    ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
+                    static_cast<SwSetExpField*>(pF->GetField())->GetSeqNumber() );
             rList.InsertSort( pNew );
         }
 
@@ -823,7 +823,7 @@ OUString SwSetExpField::GetFieldName() const
 
 SwField* SwSetExpField::Copy() const
 {
-    SwSetExpField *pTmp = new SwSetExpField((SwSetExpFieldType*)GetTyp(),
+    SwSetExpField *pTmp = new SwSetExpField(static_cast<SwSetExpFieldType*>(GetTyp()),
                                             GetFormula(), GetFormat());
     pTmp->SwValueField::SetValue(GetValue());
     pTmp->sExpand       = sExpand;
@@ -839,7 +839,7 @@ SwField* SwSetExpField::Copy() const
 
 void SwSetExpField::SetSubType(sal_uInt16 nSub)
 {
-    ((SwSetExpFieldType*)GetTyp())->SetType(nSub & 0xff);
+    static_cast<SwSetExpFieldType*>(GetTyp())->SetType(nSub & 0xff);
     nSubType = nSub & 0xff00;
 
     OSL_ENSURE( (nSub & 0xff) != 3, "SubType ist illegal!" );
@@ -847,7 +847,7 @@ void SwSetExpField::SetSubType(sal_uInt16 nSub)
 
 sal_uInt16 SwSetExpField::GetSubType() const
 {
-    return ((SwSetExpFieldType*)GetTyp())->GetType() | nSubType;
+    return static_cast<SwSetExpFieldType*>(GetTyp())->GetType() | nSubType;
 }
 
 void SwSetExpField::SetValue( const double& rAny )
@@ -857,14 +857,14 @@ void SwSetExpField::SetValue( const double& rAny )
     if( IsSequenceFld() )
         sExpand = FormatNumber( (sal_uInt32)GetValue(), GetFormat() );
     else
-        sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue( rAny,
+        sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny,
                                                 GetFormat(), GetLanguage());
 }
 
 void SwGetExpField::SetValue( const double& rAny )
 {
     SwValueField::SetValue(rAny);
-    sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue( rAny, GetFormat(),
+    sExpand = static_cast<SwValueFieldType*>(GetTyp())->ExpandValue( rAny, GetFormat(),
                                                             GetLanguage());
 }
 
@@ -904,10 +904,10 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc,
         SwAttrSet aSet(rDoc.GetAttrPool(), nIds);
         rTxtNode.GetAttr(aSet, nRet, nRet+1);
 
-        if( RTL_TEXTENCODING_SYMBOL != ((SvxFontItem&)aSet.Get(
+        if( RTL_TEXTENCODING_SYMBOL != static_cast<const SvxFontItem&>(aSet.Get(
                 GetWhichOfScript( RES_CHRATR_FONT, nSrcpt )) ).GetCharSet() )
         {
-            LanguageType eLang = ((SvxLanguageItem&)aSet.Get(
+            LanguageType eLang = static_cast<const SvxLanguageItem&>(aSet.Get(
                 GetWhichOfScript( RES_CHRATR_LANGUAGE, nSrcpt )) ).GetLanguage();
             LanguageTag aLanguageTag( eLang);
             CharClass aCC( aLanguageTag);
@@ -932,12 +932,12 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc,
 
 OUString SwSetExpField::GetPar1() const
 {
-    return ((const SwSetExpFieldType*)GetTyp())->GetName();
+    return static_cast<const SwSetExpFieldType*>(GetTyp())->GetName();
 }
 
 OUString SwSetExpField::GetPar2() const
 {
-    sal_uInt16 nType = ((SwSetExpFieldType*)GetTyp())->GetType();
+    sal_uInt16 nType = static_cast<SwSetExpFieldType*>(GetTyp())->GetType();
 
     if (nType & nsSwGetSetExpType::GSE_STRING)
         return GetFormula();
@@ -946,7 +946,7 @@ OUString SwSetExpField::GetPar2() const
 
 void SwSetExpField::SetPar2(const OUString& rStr)
 {
-    sal_uInt16 nType = ((SwSetExpFieldType*)GetTyp())->GetType();
+    sal_uInt16 nType = static_cast<SwSetExpFieldType*>(GetTyp())->GetType();
 
     if( !(nType & nsSwGetSetExpType::GSE_SEQ) || !rStr.isEmpty() )
     {

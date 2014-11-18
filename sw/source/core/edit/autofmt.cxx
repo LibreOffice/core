@@ -248,10 +248,10 @@ SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
         SwRect aTmpPrt( pFrm->Prt() );
         pFrm->Calc();
         if( pFrm->Frm() != aTmpFrm || pFrm->Prt() != aTmpPrt ||
-            ( pFrm->IsTxtFrm() && !((SwTxtFrm*)pFrm)->Paint().IsEmpty() ) )
+            ( pFrm->IsTxtFrm() && !const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pFrm))->Paint().IsEmpty() ) )
             pFrm->SetCompletePaint();
     }
-    return ((SwTxtFrm*)pFrm)->GetFormatted();
+    return const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pFrm))->GetFormatted();
 }
 
 void SwAutoFormat::_SetRedlineTxt( sal_uInt16 nActionId )
@@ -332,7 +332,7 @@ OUString SwAutoFormat::GoNextPara()
         ::SetProgressState( m_aNdIdx.GetIndex() + m_nEndNdIdx - m_aEndNdIdx.GetIndex(),
                             m_pDoc->GetDocShell() );
 
-    m_pCurTxtNd = (SwTxtNode*)pNewNd;
+    m_pCurTxtNd = static_cast<SwTxtNode*>(pNewNd);
     m_pCurTxtFrm = GetFrm( *m_pCurTxtNd );
     return m_pCurTxtNd->GetTxt();
 }
@@ -1024,12 +1024,12 @@ bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
 
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem )
-        && SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak() )
+        && SVX_BREAK_NONE != static_cast<const SvxFmtBreakItem*>(pItem)->GetBreak() )
         return true;
 
     if( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )
-        && ((SwFmtPageDesc*)pItem)->GetPageDesc()
-        && nsUseOnPage::PD_NONE != ((SwFmtPageDesc*)pItem)->GetPageDesc()->GetUseOn() )
+        && static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc()
+        && nsUseOnPage::PD_NONE != static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc()->GetUseOn() )
         return true;
     return false;
 }
@@ -1194,7 +1194,7 @@ void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
 
         SwPaM* pNxt;
         do {
-            pNxt = (SwPaM*)m_aDelPam.GetNext();
+            pNxt = static_cast<SwPaM*>(m_aDelPam.GetNext());
             if( pNxt->HasMark() && *pNxt->GetPoint() != *pNxt->GetMark() )
             {
                 bool bHasBlnks = HasSelBlanks( *pNxt );

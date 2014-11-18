@@ -83,7 +83,7 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
                 break;
 
             if( pFrm->IsFlyFrm() )
-                pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
+                pFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm();
             else
                 pFrm = pFrm->GetUpper();
         }
@@ -93,8 +93,8 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTxtNode& rBehindNd, sal_Int32 nSttPos )
 {
-    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false),
-                   *pFrm = (SwTxtFrm*)rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false);
+    const SwTxtFrm *pMyFrm = static_cast<SwTxtFrm*>(rMyNd.getLayoutFrm( rMyNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false) ),
+                   *pFrm = static_cast<SwTxtFrm*>(rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false) );
 
     while( pFrm && !pFrm->IsInside( nSttPos ) )
         pFrm = (SwTxtFrm*)pFrm->GetFollow();
@@ -274,7 +274,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 {
     sTxt.clear();
 
-    SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
+    SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
     // finding the reference target (the number)
     sal_Int32 nNumStart = -1;
     sal_Int32 nNumEnd = -1;
@@ -418,7 +418,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
-            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false),
+            const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pTxtNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout(), 0, 0, false)),
                         *pSave = pFrm;
             while( pFrm && !pFrm->IsInside( nNumStart ) )
                 pFrm = (SwTxtFrm*)pFrm->GetFollow();
@@ -571,7 +571,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
 
 SwField* SwGetRefField::Copy() const
 {
-    SwGetRefField* pFld = new SwGetRefField( (SwGetRefFieldType*)GetTyp(),
+    SwGetRefField* pFld = new SwGetRefField( static_cast<SwGetRefFieldType*>(GetTyp()),
                                                 sSetRefName, nSubType,
                                                 nSeqNo, GetFormat() );
     pFld->sTxt = sTxt;
@@ -747,7 +747,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
 {
     if(GetTyp() && REF_SEQUENCEFLD == nSubType)
     {
-        SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
+        SwDoc* pDoc = static_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
         const OUString rPar1 = GetPar1();
         // don't convert when the name points to an existing field type
         if(!pDoc->getIDocumentFieldsAccess().GetFldType(RES_SETEXPFLD, rPar1, false))
@@ -794,7 +794,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
         {
             // update only the GetRef fields
             //JP 3.4.2001: Task 71231 - we need the correct language
-            SwGetRefField* pGRef = (SwGetRefField*)pFmtFld->GetField();
+            SwGetRefField* pGRef = static_cast<SwGetRefField*>(pFmtFld->GetField());
             const SwTxtFld* pTFld;
             if( !pGRef->GetLanguage() &&
                 0 != ( pTFld = pFmtFld->GetTxtFld()) &&
@@ -838,13 +838,13 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
         {
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetFldType( RES_SETEXPFLD, rRefMark, false );
             if( pFldType && pFldType->GetDepends() &&
-                nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)pFldType)->GetType() )
+                nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFldType)->GetType() )
             {
                 SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
                 for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
                 {
                     if( pFmtFld->GetTxtFld() && nSeqNo ==
-                        ((SwSetExpField*)pFmtFld->GetField())->GetSeqNumber() )
+                        static_cast<SwSetExpField*>(pFmtFld->GetField())->GetSeqNumber() )
                     {
                         SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
                         pTxtNd = (SwTxtNode*)pTxtFld->GetpTxtNode();
@@ -906,7 +906,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                     {
                         SwNodeIndex aIdx( *pIdx, 1 );
                         if( 0 == ( pTxtNd = aIdx.GetNode().GetTxtNode()))
-                            pTxtNd = (SwTxtNode*)pDoc->GetNodes().GoNext( &aIdx );
+                            pTxtNd = static_cast<SwTxtNode*>(pDoc->GetNodes().GoNext( &aIdx ));
                     }
                     *pStt = 0;
                     if( pEnd )
@@ -1104,7 +1104,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );
         for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
         {
-            SwGetRefField& rRefFld = *(SwGetRefField*)pFld->GetField();
+            SwGetRefField& rRefFld = *static_cast<SwGetRefField*>(pFld->GetField());
             switch( rRefFld.GetSubType() )
             {
             case REF_SEQUENCEFLD:
