@@ -469,7 +469,7 @@ bool SwCursor::IsSelOvr( int eFlags )
         return false;
 
     // in different tables or only mark in table
-    if( ( pPtNd && pMrkNd ) || pMrkNd )
+    if( pMrkNd )
     {
         // not allowed, so go back to old position
         RestoreSavePos();
@@ -478,68 +478,64 @@ bool SwCursor::IsSelOvr( int eFlags )
     }
 
     // Note: this cannot happen in TableMode
-    if( pPtNd )     // if only Point in Table then go behind/in front of table
+    // Only Point in Table then go behind/in front of table
+    if (nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags)
     {
-        if( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags )
-        {
-            bool bSelTop = GetPoint()->nNode.GetIndex() <
-                (( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags ) ? pSavePos->nNode
-                : GetMark()->nNode.GetIndex());
+        bool bSelTop = GetPoint()->nNode.GetIndex() <
+            (( nsSwCursorSelOverFlags::SELOVER_TOGGLE & eFlags ) ? pSavePos->nNode
+            : GetMark()->nNode.GetIndex());
 
-            do { // loop for table after table
-                sal_uLong nSEIdx = pPtNd->EndOfSectionIndex();
-                sal_uLong nSttEndTbl = nSEIdx + 1;
+        do { // loop for table after table
+            sal_uLong nSEIdx = pPtNd->EndOfSectionIndex();
+            sal_uLong nSttEndTbl = nSEIdx + 1;
 
-                if( bSelTop )
-                    nSttEndTbl = rNds[ nSEIdx ]->StartOfSectionIndex() - 1;
+            if( bSelTop )
+                nSttEndTbl = rNds[ nSEIdx ]->StartOfSectionIndex() - 1;
 
-                GetPoint()->nNode = nSttEndTbl;
-                const SwNode* pMyNd = &(GetNode());
+            GetPoint()->nNode = nSttEndTbl;
+            const SwNode* pMyNd = &(GetNode());
 
-                if( pMyNd->IsSectionNode() || ( pMyNd->IsEndNode() &&
-                    pMyNd->StartOfSectionNode()->IsSectionNode() ) )
-                {
-                    pMyNd = bSelTop
-                        ? rNds.GoPrevSection( &GetPoint()->nNode,true,false )
-                        : rNds.GoNextSection( &GetPoint()->nNode,true,false );
+            if( pMyNd->IsSectionNode() || ( pMyNd->IsEndNode() &&
+                pMyNd->StartOfSectionNode()->IsSectionNode() ) )
+            {
+                pMyNd = bSelTop
+                    ? rNds.GoPrevSection( &GetPoint()->nNode,true,false )
+                    : rNds.GoNextSection( &GetPoint()->nNode,true,false );
 
-                    /* #i12312# Handle failure of Go{Prev|Next}Section */
-                    if ( 0 == pMyNd)
-                        break;
-
-                    if( 0 != ( pPtNd = pMyNd->FindTableNode() ))
-                        continue;
-                }
-
-                // we permit these
-                if( pMyNd->IsCntntNode() &&
-                    ::CheckNodesRange( GetMark()->nNode,
-                    GetPoint()->nNode, true ))
-                {
-                    // table in table
-                    const SwTableNode* pOuterTableNd = pMyNd->FindTableNode();
-                    if ( pOuterTableNd )
-                        pMyNd = pOuterTableNd;
-                    else
-                    {
-                        SwCntntNode* pCNd = const_cast<SwCntntNode*>(static_cast<const SwCntntNode*>(pMyNd));
-                        GetPoint()->nContent.Assign( pCNd, bSelTop ? pCNd->Len() : 0 );
-                        return false;
-                    }
-                }
-                if( bSelTop
-                    ? ( !pMyNd->IsEndNode() || 0 == ( pPtNd = pMyNd->FindTableNode() ))
-                    : 0 == ( pPtNd = pMyNd->GetTableNode() ))
+                /* #i12312# Handle failure of Go{Prev|Next}Section */
+                if ( 0 == pMyNd)
                     break;
-            } while( true );
-        }
 
-        // stay on old position
-        RestoreSavePos();
-        return true;
+                if( 0 != ( pPtNd = pMyNd->FindTableNode() ))
+                    continue;
+            }
+
+            // we permit these
+            if( pMyNd->IsCntntNode() &&
+                ::CheckNodesRange( GetMark()->nNode,
+                GetPoint()->nNode, true ))
+            {
+                // table in table
+                const SwTableNode* pOuterTableNd = pMyNd->FindTableNode();
+                if ( pOuterTableNd )
+                    pMyNd = pOuterTableNd;
+                else
+                {
+                    SwCntntNode* pCNd = const_cast<SwCntntNode*>(static_cast<const SwCntntNode*>(pMyNd));
+                    GetPoint()->nContent.Assign( pCNd, bSelTop ? pCNd->Len() : 0 );
+                    return false;
+                }
+            }
+            if( bSelTop
+                ? ( !pMyNd->IsEndNode() || 0 == ( pPtNd = pMyNd->FindTableNode() ))
+                : 0 == ( pPtNd = pMyNd->GetTableNode() ))
+                break;
+        } while( true );
     }
 
-    return false;
+    // stay on old position
+    RestoreSavePos();
+    return true;
 }
 
 bool SwCursor::IsInProtectTable( bool bMove, bool bChgCrsr )
