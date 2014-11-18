@@ -448,7 +448,7 @@ void ScTable::FillFormula(
                 ScFormulaCell* pOrgCell = pDocument->GetFormulaCell(aOrg);
                 if (pOrgCell && pOrgCell->GetMatrixFlag() == MM_FORMULA)
                 {
-                    ((ScFormulaCell*)pOrgCell)->SetMatColsRows(
+                    pOrgCell->SetMatColsRows(
                         nDestCol - aOrg.Col() + 1,
                         nDestRow - aOrg.Row() + 1 );
                 }
