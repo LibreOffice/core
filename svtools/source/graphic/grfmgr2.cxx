@@ -200,11 +200,7 @@ namespace
 void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore)
 {
     // detect maximum allowed memory footprint. Use the user-settings of MaxCacheSize (defaulted
-    // to 20MB) and add a decent multiplicator (experimented to find one). Limit to
-    // a useful maximum for 32Bit address space
-
-    // default is 20MB, so allow 200MB initially
-    static sal_uLong aMultiplicator(10);
+    // to 200MB). Limit to a useful maximum for 32Bit address space
 
     // max at 500MB; I experimented with 800 for debug and 750 for non-debug settings (pics start
     // missing when office reaches a mem footprint of 1.5GB) but some secure left over space for
@@ -212,7 +208,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
     static sal_uLong aMaxSize32Bit(500 * 1024 * 1024);
 
     // calc max allowed cache size
-    const sal_uLong nMaxCacheSize(::std::min(GetMaxCacheSize() * aMultiplicator, aMaxSize32Bit));
+    const sal_uLong nMaxCacheSize(::std::min(GetMaxCacheSize(), aMaxSize32Bit));
 
     if(mnUsedSize >= nMaxCacheSize)
     {
