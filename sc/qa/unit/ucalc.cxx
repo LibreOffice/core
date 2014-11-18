@@ -65,6 +65,7 @@
 #include <inputopt.hxx>
 
 #include <editable.hxx>
+#include <bcaslot.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 
@@ -3943,6 +3944,72 @@ void Test::testCopyPasteRelativeFormula()
     // Delete A3 and make sure it doesn't crash (see fdo#76132).
     clearRange(m_pDoc, ScAddress(0,2,0));
     CPPUNIT_ASSERT(m_pDoc->GetCellType(ScAddress(0,2,0)) == CELLTYPE_NONE);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testCopyPasteRepeatOneFormula()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+
+    m_pDoc->InsertTab(0, "Test");
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScMarkData aMark;
+
+    // Insert values in A1:B10.
+    for (SCROW i = 0; i < 10; ++i)
+    {
+        m_pDoc->SetValue(ScAddress(0,i,0), i+1.0);        // column A
+        m_pDoc->SetValue(ScAddress(1,i,0), (i+1.0)*10.0); // column B
+    }
+
+    // Insert a formula in C1.
+    ScAddress aPos(2,0,0); // C1
+    m_pDoc->SetString(aPos, "=SUM(A1:B1)");
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(aPos));
+
+    // At this point, there should be only one normal area listener listening
+    // on A1:B1.
+    ScRange aWholeSheet(0,0,0,MAXCOL,MAXROW,0);
+    ScBroadcastAreaSlotMachine* pBASM = m_pDoc->GetBASM();
+    CPPUNIT_ASSERT(pBASM);
+    std::vector<sc::AreaListener> aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
+    const sc::AreaListener* pListener = &aListeners[0];
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,0,0), pListener->maArea);
+    CPPUNIT_ASSERT_MESSAGE("This listener shouldn't be a group listener.", !pListener->mbGroupListening);
+
+    // Copy C1 to clipboard.
+    ScClipParam aClipParam(aPos, false);
+    aMark.SetMarkArea(aPos);
+    m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
+
+    // Paste it to C2:C10.
+    InsertDeleteFlags nFlags = IDF_CONTENTS;
+    ScRange aDestRange(2,1,0,2,9,0);
+    aMark.SetMarkArea(aDestRange);
+    m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, NULL, &aClipDoc);
+
+    // Make sure C1:C10 are grouped.
+    const ScFormulaCell* pFC = m_pDoc->GetFormulaCell(aPos);
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
+
+    // Check the formula results.
+    for (SCROW i = 0; i < 10; ++i)
+    {
+        double fExpected = (i+1.0)*11.0;
+        CPPUNIT_ASSERT_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(2,i,0)));
+    }
+
+    // At this point, there should only be one area listener and it should be
+    // a group listener listening on A1:B10.
+    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
+    pListener = &aListeners[0];
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
+    CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
 
     m_pDoc->DeleteTab(0);
 }

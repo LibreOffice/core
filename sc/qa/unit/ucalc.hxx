@@ -291,6 +291,7 @@ public:
     void testUndoCut();
     void testMoveBlock();
     void testCopyPasteRelativeFormula();
+    void testCopyPasteRepeatOneFormula();
     void testMergedCells();
     void testUpdateReference();
     void testSearchCells();
@@ -518,6 +519,7 @@ public:
     CPPUNIT_TEST(testUndoCut);
     CPPUNIT_TEST(testMoveBlock);
     CPPUNIT_TEST(testCopyPasteRelativeFormula);
+    CPPUNIT_TEST(testCopyPasteRepeatOneFormula);
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testSearchCells);
