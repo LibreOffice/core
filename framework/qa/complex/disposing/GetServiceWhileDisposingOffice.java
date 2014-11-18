@@ -56,7 +56,7 @@ public class GetServiceWhileDisposingOffice
             xDesktop.terminate();
             for (; step < 10000; step++)
             {
-                Object o = xMSF.createInstance("com.sun.star.frame.Desktop");
+                xMSF.createInstance("com.sun.star.frame.Desktop");
             }
         }
         catch (com.sun.star.lang.DisposedException e)

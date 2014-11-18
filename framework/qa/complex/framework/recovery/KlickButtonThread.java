@@ -19,21 +19,18 @@
 package complex.framework.recovery;
 
 import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
 import util.UITools;
 
 /**
  * Thread to crash the office. This thread dies after the office process
- * is nopt longer available.
+ * is no longer available.
  */
 public class KlickButtonThread extends Thread {
     private final XWindow xWindow;
-    private final XMultiServiceFactory xMSF;
     private final String buttonName;
 
-    public KlickButtonThread(XMultiServiceFactory xMSF, XWindow xWindow, String buttonName) {
+    public KlickButtonThread(XWindow xWindow, String buttonName) {
         this.xWindow = xWindow;
-        this.xMSF = xMSF;
         this.buttonName = buttonName;
     }
 

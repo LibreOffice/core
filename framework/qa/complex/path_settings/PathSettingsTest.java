@@ -242,7 +242,7 @@ public class PathSettingsTest
 
             try
             {
-                final String sValue = AnyConverter.toString(o);
+                AnyConverter.toString(o);
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {

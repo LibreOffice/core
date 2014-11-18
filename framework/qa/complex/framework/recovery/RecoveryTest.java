@@ -280,7 +280,7 @@ public class RecoveryTest extends ComplexTestCase {
             if (cancel) {
                 log.println("clicking 'Cancel' button...");
 
-                rt.clickThreadButton(xMSF, xWindow, "Cancel");
+                rt.clickThreadButton(xWindow, "Cancel");
             }
             else {
                 log.println("clicking 'Next' button...");
@@ -371,7 +371,7 @@ public class RecoveryTest extends ComplexTestCase {
                 if (cancel) {
                     log.println("clicking 'Cancel' button...");
 
-                     rt.clickThreadButton(xMSF, xWindow, "Cancel");
+                     rt.clickThreadButton(xWindow, "Cancel");
 
                 }
                 else {
@@ -384,7 +384,7 @@ public class RecoveryTest extends ComplexTestCase {
             } else {
                     log.println("do not recover: clicking 'Cancel' button...");
 
-                    rt.clickThreadButton(xMSF, xWindow, "Cancel");
+                    rt.clickThreadButton(xWindow, "Cancel");
             }
 
         } catch (Exception e){

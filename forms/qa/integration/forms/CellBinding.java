@@ -539,8 +539,7 @@ public class CellBinding extends complexlib.ComplexTestCase
         XAccessible accessible = UnoRuntime.queryInterface(
             XAccessible.class, m_document.getCurrentView().getControl( controlModel ) );
 
-        XAccessibleContext context = accessible.getAccessibleContext();
-        XServiceInfo si = UnoRuntime.queryInterface( XServiceInfo.class,
+        UnoRuntime.queryInterface( XServiceInfo.class,
             accessible.getAccessibleContext() );
 
         XAccessibleEditableText textAccess = UnoRuntime.queryInterface(
