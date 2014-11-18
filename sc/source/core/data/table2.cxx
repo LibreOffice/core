@@ -1043,10 +1043,10 @@ void ScTable::DetachFormulaCells(
         aCol[nCol].DetachFormulaCells(rCxt, nRow1, nRow2);
 }
 
-void ScTable::StartNeededListeners()
+void ScTable::StartNeededListeners( sc::StartListeningContext& rCxt )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
-        aCol[i].StartNeededListeners();
+        aCol[i].StartNeededListeners(rCxt);
 }
 
 void ScTable::SetDirtyFromClip(

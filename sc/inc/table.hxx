@@ -916,7 +916,7 @@ public:
      * Have formula cells with NeedsListening() == true start listening to the
      * document.
      */
-    void StartNeededListeners();
+    void StartNeededListeners( sc::StartListeningContext& rCxt );
 
     /**
      * Mark formula cells dirty that have the mbPostponedDirty flag set or
