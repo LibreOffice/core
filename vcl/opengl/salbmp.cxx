@@ -35,8 +35,7 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 }
 
 OpenGLSalBitmap::OpenGLSalBitmap()
-: mpContext(NULL)
-, mbDirtyTexture(true)
+: mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
 , mnWidth(0)
@@ -59,14 +58,13 @@ OpenGLSalBitmap::~OpenGLSalBitmap()
     SAL_INFO( "vcl.opengl", "~OpenGLSalBitmap" );
 }
 
-bool OpenGLSalBitmap::Create( OpenGLContext& rContext, const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
+bool OpenGLSalBitmap::Create( const OpenGLTexture& rTex, long nX, long nY, long nWidth, long nHeight )
 {
     static const BitmapPalette aEmptyPalette;
 
     Destroy();
     SAL_INFO( "vcl.opengl", "OpenGLSalBitmap::Create from FBO: [" << nX << ", " << nY << "] " << nWidth << "x" << nHeight );
 
-    mpContext = &rContext;
     mnWidth = nWidth;
     mnHeight = nHeight;
     mnBufWidth = 0;
@@ -131,7 +129,6 @@ bool OpenGLSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
         maPalette = rSourceBitmap.maPalette;
         // execute any pending operations on the source bitmap
         maTexture = rSourceBitmap.GetTexture();
-        mpContext = rSourceBitmap.mpContext;
         mbDirtyTexture = false;
         maUserBuffer = rSourceBitmap.maUserBuffer;
 
@@ -468,13 +465,17 @@ sal_uInt16 OpenGLSalBitmap::GetBitCount() const
     return mnBits;
 }
 
+OpenGLContext* OpenGLSalBitmap::GetBitmapContext() const
+{
+    return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
+}
+
 void OpenGLSalBitmap::makeCurrent()
 {
-    if (!mpContext || !mpContext->isInitialized())
-        mpContext = ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
-
-    assert(mpContext && "Couldn't get default OpenGL context provider");
-    mpContext->makeCurrent();
+    // Always use the default window's context for bitmap
+    OpenGLContext* pContext = GetBitmapContext();
+    assert(pContext && "Couldn't get default OpenGL context provider");
+    pContext->makeCurrent();
 }
 
 BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )

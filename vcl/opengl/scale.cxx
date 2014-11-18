@@ -312,7 +312,7 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_u
         nScaleFlag == BMP_SCALE_LANCZOS )
     {
         //TODO maUserBuffer.reset();
-        if( mpContext == NULL )
+        if( GetBitmapContext() == NULL )
         {
             SAL_INFO( "vcl.opengl", "Add ScaleOp to pending operations" );
             maPendingOps.push_back( new ScaleOp( this, rScaleX, rScaleY, nScaleFlag ) );
