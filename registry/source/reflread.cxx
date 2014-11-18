@@ -363,7 +363,8 @@ const sal_Char* ConstantPool::readUTF8NameConstant(sal_uInt16 index)
         if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_UTF8_NAME)
         {
             sal_uInt32 n = m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA;
-            if (n < m_bufferLen && std::memchr(m_pBuffer, 0, n) != nullptr)
+            if (n < m_bufferLen
+                && std::memchr(m_pBuffer + n, 0, m_bufferLen - n) != nullptr)
             {
                 aName = (const sal_Char*) (m_pBuffer + n);
             }
@@ -564,7 +565,9 @@ const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index)
             if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_CONST_STRING)
             {
                 sal_uInt32 n = m_pIndex[index - 1] + CP_OFFSET_ENTRY_DATA;
-                if (n >= m_bufferLen || std::memchr(m_pBuffer, 0, n) == nullptr)
+                if (n >= m_bufferLen
+                    || (std::memchr(m_pBuffer + n, 0, m_bufferLen - n)
+                        == nullptr))
                 {
                     throw BoundsError();
                 }
