@@ -40,13 +40,13 @@ public:
     CollectCellAction( const FormulaGroupAreaListener& rAreaListener ) :
         mrAreaListener(rAreaListener) {}
 
-    virtual void startColumn( ScColumn* pCol )
+    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
     {
         maPos.SetTab(pCol->GetTab());
         maPos.SetCol(pCol->GetCol());
     }
 
-    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal )
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
     {
         if (!bVal)
             return;
