@@ -913,10 +913,14 @@ public:
     void SetFormulaResults( SCCOL nCol, SCROW nRow, const formula::FormulaTokenRef* pResults, size_t nLen );
 
     /**
-     * Have formula cells with NeedsListening() == true start listening to the
-     * document.
+     * Either start all formula cells as listeners unconditionally, or start
+     * those that are marked "needs listening".
+     *
+     * @param rCxt context object.
+     * @param bAll when true, start all formula cells as listeners. When
+     *             false, only start those that are marked "needs listening".
      */
-    void StartNeededListeners( sc::StartListeningContext& rCxt );
+    void StartListeners( sc::StartListeningContext& rCxt, bool bAll );
 
     /**
      * Mark formula cells dirty that have the mbPostponedDirty flag set or
@@ -1070,7 +1074,6 @@ private:
     void        EndListening( const ScAddress& rAddress, SvtListener* pListener );
     void StartListening( sc::StartListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow, SvtListener& rListener );
-    void        StartAllListeners();
 
     void AttachFormulaCells( sc::StartListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     void DetachFormulaCells( sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );

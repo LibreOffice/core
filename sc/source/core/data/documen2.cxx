@@ -99,6 +99,7 @@
 #include "interpre.hxx"
 #include <tokenstringcontext.hxx>
 #include "docsh.hxx"
+#include <listenercontext.hxx>
 
 using namespace com::sun::star;
 
@@ -765,10 +766,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
                 if (*it)
                     (*it)->UpdateCompile();
             SetNoListening( false );
-            it = maTabs.begin();
-            for (; it != maTabs.end(); ++it)
-                if (*it)
-                    (*it)->StartAllListeners();
+            StartAllListeners();
+
             // sheet names of references may not be valid until sheet is moved
             pChartListenerCollection->UpdateScheduledSeriesRanges();
 
@@ -806,6 +805,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     sc::AutoCalcSwitch aACSwitch(*this, false);
     sc::RefUpdateInsertTabContext aCxt(nNewPos, 1);
+    sc::StartListeningContext aSLCxt(*this);
 
     if (bValid)
     {
@@ -854,7 +854,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 SetNoListening( false );
                 for (TableContainer::iterator it = maTabs.begin(); it != maTabs.end(); ++it)
                     if (*it && it != maTabs.begin()+nOldPos && it != maTabs.begin()+nNewPos)
-                        (*it)->StartAllListeners();
+                        (*it)->StartListeners(aSLCxt, true);
 
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
@@ -889,8 +889,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nOldPos]->UpdateCompile();
         maTabs[nNewPos]->UpdateCompile( true ); //  maybe already compiled in Clone, but used names need recompilation
         SetNoListening( false );
-        maTabs[nOldPos]->StartAllListeners();
-        maTabs[nNewPos]->StartAllListeners();
+        maTabs[nOldPos]->StartListeners(aSLCxt, true);
+        maTabs[nNewPos]->StartListeners(aSLCxt, true);
 
         sc::SetFormulaDirtyContext aFormulaDirtyCxt;
         SetAllFormulasDirty(aFormulaDirtyCxt);
@@ -1000,7 +1000,10 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         SetNoListening( false );
         if ( !bResultsOnly )
-            maTabs[nDestPos]->StartAllListeners();
+        {
+            sc::StartListeningContext aSLCxt(*this);
+            maTabs[nDestPos]->StartListeners(aSLCxt, true);
+        }
         SetDirty( ScRange( 0, 0, nDestPos, MAXCOL, MAXROW, nDestPos));
 
         if ( bResultsOnly )

@@ -620,9 +620,10 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
 
 void ScDocument::StartAllListeners()
 {
+    sc::StartListeningContext aCxt(*this);
     for ( SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); ++i )
         if ( maTabs[i] )
-            maTabs[i]->StartAllListeners();
+            maTabs[i]->StartListeners(aCxt, true);
 }
 
 void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,

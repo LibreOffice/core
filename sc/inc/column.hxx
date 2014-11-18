@@ -491,8 +491,7 @@ public:
     void        EndListening( SvtListener& rLst, SCROW nRow );
     void StartListening( sc::StartListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
     void EndListening( sc::EndListeningContext& rCxt, SCROW nRow, SvtListener& rListener );
-    void        StartAllListeners();
-    void StartNeededListeners( sc::StartListeningContext& rCxt ); // only for cells where NeedsListening()==true
+    void StartListeners( sc::StartListeningContext& rCxt, bool bAll );
     void        SetDirtyIfPostponed();
     void BroadcastRecalcOnRefMove();
     void TransferListeners( ScColumn& rDestCol, SCROW nRow1, SCROW nRow2, SCROW nRowDelta );
