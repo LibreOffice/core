@@ -31,6 +31,8 @@ class ImplAnimView
 {
 private:
 
+    friend class Animation;
+
     Animation*      mpParent;
     OutputDevice*   mpOut;
     long            mnExtraData;
@@ -55,8 +57,8 @@ private:
     void            ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
     void            ImplDraw( sal_uLong nPos, VirtualDevice* pVDev );
 
-public:
 
+private:
                     ImplAnimView( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = NULL );
