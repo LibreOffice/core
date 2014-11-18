@@ -4011,6 +4011,45 @@ void Test::testCopyPasteRepeatOneFormula()
     CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
     CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
 
+    // Insert a new row at row 1.
+    ScRange aRowOne(0,0,0,MAXCOL,0,0);
+    aMark.SetMarkArea(aRowOne);
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS, true, true, false);
+
+    CPPUNIT_ASSERT_MESSAGE("C1 should be empty.", m_pDoc->GetCellType(ScAddress(2,0,0)) == CELLTYPE_NONE);
+
+    // Make there we only have one group area listener listening on A2:B11.
+    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
+    pListener = &aListeners[0];
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,1,0,1,10,0), pListener->maArea);
+    CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
+
+    // Check the formula results.
+    for (SCROW i = 0; i < 10; ++i)
+    {
+        double fExpected = (i+1.0)*11.0;
+        CPPUNIT_ASSERT_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(2,i+1,0)));
+    }
+
+    // Delete row at row 1 to shift the cells up.
+    rFunc.DeleteCells(aRowOne, &aMark, DEL_DELROWS, true, true);
+
+    // Check the formula results again.
+    for (SCROW i = 0; i < 10; ++i)
+    {
+        double fExpected = (i+1.0)*11.0;
+        CPPUNIT_ASSERT_EQUAL(fExpected, m_pDoc->GetValue(ScAddress(2,i,0)));
+    }
+
+    // Check the group area listener again to make sure it's listening on A1:B10 once again.
+    aListeners = pBASM->GetAllListeners(aWholeSheet, sc::AreaInside);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aListeners.size());
+    pListener = &aListeners[0];
+    CPPUNIT_ASSERT_EQUAL(ScRange(0,0,0,1,9,0), pListener->maArea);
+    CPPUNIT_ASSERT_MESSAGE("This listener should be a group listener.", pListener->mbGroupListening);
+
     m_pDoc->DeleteTab(0);
 }
 
