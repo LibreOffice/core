@@ -217,7 +217,6 @@ javaPluginError jfw_plugin_getAllJavaInfos(
     OSL_ASSERT(sMinVersion);
     OSL_ASSERT(sMaxVersion);
     OSL_ASSERT(parJavaInfo);
-    OSL_ASSERT(parJavaInfo);
     OSL_ASSERT(nLenInfoList);
     if (!sVendor || !sMinVersion || !sMaxVersion || !parJavaInfo || !nLenInfoList)
         return JFW_PLUGIN_E_INVALID_ARG;
