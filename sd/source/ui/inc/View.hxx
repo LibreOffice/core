@@ -276,8 +276,8 @@ protected:
     Point                   maDropPos;
     ::std::vector<OUString> maDropFileVector;
     sal_Int8                mnAction;
-    Timer                   maDropErrorTimer;
-    Timer                   maDropInsertFileTimer;
+    Idle                    maDropErrorIdle;
+    Idle                    maDropInsertFileIdle;
     sal_uInt16                  mnLockRedrawSmph;
     boost::ptr_vector<SdViewRedrawRec> maLockedRedraws;
     bool                    mbIsDropAllowed;

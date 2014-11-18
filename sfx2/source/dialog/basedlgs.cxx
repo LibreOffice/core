@@ -52,7 +52,7 @@ public:
     bool            bConstructed;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    Timer           aMoveTimer;
+    Idle            aMoveIdle;
 };
 
 void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -75,7 +75,7 @@ public:
     OString aWinState;
     SfxChildWindow* pMgr;
     bool            bConstructed;
-    Timer           aMoveTimer;
+    Idle            aMoveIdle;
 
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 };
@@ -267,7 +267,7 @@ void SfxModelessDialog::Resize()
     if ( pImp->bConstructed && pImp->pMgr )
     {
         // start timer for saving window status information
-        pImp->aMoveTimer.Start();
+        pImp->aMoveIdle.Start();
     }
 }
 
@@ -277,7 +277,7 @@ void SfxModelessDialog::Move()
     if ( pImp->bConstructed && pImp->pMgr && IsReallyVisible() )
     {
         // start timer for saving window status information
-        pImp->aMoveTimer.Start();
+        pImp->aMoveIdle.Start();
     }
 }
 
@@ -287,7 +287,7 @@ void SfxModelessDialog::Move()
 */
 IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl)
 {
-    pImp->aMoveTimer.Stop();
+    pImp->aMoveIdle.Stop();
     if ( pImp->bConstructed && pImp->pMgr )
     {
         if ( !IsRollUp() )
@@ -318,8 +318,8 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     SetUniqueId( GetHelpId() );
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxModelessDialog,TimerHdl));
+    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
 /*  [Description]
@@ -457,8 +457,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     SetHelpId("");
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
+    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
@@ -478,8 +478,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
+    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 bool SfxFloatingWindow::Close()
@@ -532,7 +532,7 @@ void SfxFloatingWindow::Resize()
     if ( pImp->bConstructed && pImp->pMgr )
     {
         // start timer for saving window status information
-        pImp->aMoveTimer.Start();
+        pImp->aMoveIdle.Start();
     }
 }
 
@@ -542,7 +542,7 @@ void SfxFloatingWindow::Move()
     if ( pImp->bConstructed && pImp->pMgr )
     {
         // start timer for saving window status information
-        pImp->aMoveTimer.Start();
+        pImp->aMoveIdle.Start();
     }
 }
 
@@ -552,7 +552,7 @@ void SfxFloatingWindow::Move()
 */
 IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl)
 {
-    pImp->aMoveTimer.Stop();
+    pImp->aMoveIdle.Stop();
     if ( pImp->bConstructed && pImp->pMgr )
     {
         if ( !IsRollUp() )

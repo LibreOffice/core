@@ -138,10 +138,10 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     SetMeasureLayer(SD_RESSTR(STR_LAYER_MEASURELINES));
 
     // Timer for delayed drop (has to be for MAC)
-    maDropErrorTimer.SetTimeoutHdl( LINK(this, View, DropErrorHdl) );
-    maDropErrorTimer.SetTimeout(50);
-    maDropInsertFileTimer.SetTimeoutHdl( LINK(this, View, DropInsertFileHdl) );
-    maDropInsertFileTimer.SetTimeout(50);
+    maDropErrorIdle.SetIdleHdl( LINK(this, View, DropErrorHdl) );
+    maDropErrorIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
+    maDropInsertFileIdle.SetIdleHdl( LINK(this, View, DropInsertFileHdl) );
+    maDropInsertFileIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);
 }
 
 void View::ImplClearDrawDropMarker()
@@ -160,8 +160,8 @@ View::~View()
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( true );
 
-    maDropErrorTimer.Stop();
-    maDropInsertFileTimer.Stop();
+    maDropErrorIdle.Stop();
+    maDropInsertFileIdle.Stop();
 
     ImplClearDrawDropMarker();
 

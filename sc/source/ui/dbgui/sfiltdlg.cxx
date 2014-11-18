@@ -57,7 +57,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
         pDoc            ( NULL ),
         pRefInputEdit   ( NULL ),
         bRefInputMode   ( false ),
-        pTimer          ( NULL )
+        pIdle          ( NULL )
 {
         get(pLbFilterArea,"lbfilterarea");
         get(pEdFilterArea,"edfilterarea");
@@ -85,10 +85,10 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     pEdFilterArea->GrabFocus();
 
     // Hack: RefInput-Kontrolle
-    pTimer = new Timer;
-    pTimer->SetTimeout( 50 ); // 50ms warten
-    pTimer->SetTimeoutHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
-    pTimer->Start();
+    pIdle = new Idle;
+    pIdle->SetTimeout( VCL_IDLE_PRIORITY_MEDIUM ); // 50ms warten
+    pIdle->SetIdleHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
+    pIdle->Start();
 
     pLbCopyArea->SetAccessibleName(pBtnCopyResult->GetText());
     pEdCopyArea->SetAccessibleName(pBtnCopyResult->GetText());
@@ -108,8 +108,8 @@ ScSpecialFilterDlg::~ScSpecialFilterDlg()
         delete pOutItem;
 
     // Hack: RefInput-Kontrolle
-    pTimer->Stop();
-    delete pTimer;
+    pIdle->Stop();
+    delete pIdle;
 }
 
 void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
@@ -376,11 +376,11 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
+IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle )
 {
     // alle 50ms nachschauen, ob RefInputMode noch stimmt
 
-    if( (_pTimer == pTimer) && IsActive() )
+    if( (_pIdle == pIdle) && IsActive() )
     {
         if( pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus() )
         {
@@ -399,7 +399,7 @@ IMPL_LINK( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pTimer )
         }
     }
 
-    pTimer->Start();
+    pIdle->Start();
 
     return 0;
 }

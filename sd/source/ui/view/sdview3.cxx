@@ -580,7 +580,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             }
                             else
                             {
-                                maDropErrorTimer.Start();
+                                maDropErrorIdle.Start();
                                 bReturn = false;
                             }
                         }
@@ -617,7 +617,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 }
                 else
                 {
-                    maDropErrorTimer.Start();
+                    maDropErrorIdle.Start();
                     bReturn = false;
                 }
             }
@@ -1448,7 +1448,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             for( sal_uLong i = 0, nCount = aDropFileList.Count(); i < nCount; i++ )
                 maDropFileVector.push_back( aDropFileList.GetFile( i ) );
 
-            maDropInsertFileTimer.Start();
+            maDropInsertFileIdle.Start();
         }
 
         bReturn = true;
@@ -1462,7 +1462,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         {
             maDropFileVector.clear();
             maDropFileVector.push_back( aDropFile );
-            maDropInsertFileTimer.Start();
+            maDropInsertFileIdle.Start();
         }
 
         bReturn = true;

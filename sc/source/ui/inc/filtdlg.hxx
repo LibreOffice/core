@@ -206,7 +206,7 @@ private:
     bool                bRefInputMode;
 
     // Hack: RefInput control
-    Timer*  pTimer;
+    Idle*  pIdle;
 
 private:
     void            Init( const SfxItemSet& rArgSet );
@@ -220,7 +220,7 @@ private:
     DECL_LINK( ScrollHdl, ScrollBar* );
 
     // Hack: RefInput control
-    DECL_LINK( TimeOutHdl,       Timer* );
+    DECL_LINK( TimeOutHdl,       Idle* );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX

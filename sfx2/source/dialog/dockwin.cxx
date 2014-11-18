@@ -403,7 +403,7 @@ friend class SfxDockingWindow;
     Size                aMinSize;
     SfxSplitWindow*     pSplitWin;
     bool                bSplitable;
-    Timer               aMoveTimer;
+    Idle                aMoveIdle;
 
     // The following members are only valid in the time from startDocking to
     // EndDocking:
@@ -447,7 +447,7 @@ void SfxDockingWindow::Resize()
         if ( IsFloatingMode() )
         {
             // start timer for saving window status information
-            pImp->aMoveTimer.Start();
+            pImp->aMoveIdle.Start();
         }
         else
         {
@@ -888,8 +888,8 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
 
@@ -939,8 +939,8 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = false;
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImp->aMoveIdle.SetPriority(VCL_IDLE_PRIORITY_RESIZE);
+    pImp->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
 }
 
 
@@ -1869,12 +1869,12 @@ void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
 void SfxDockingWindow::Move()
 {
     if ( pImp )
-        pImp->aMoveTimer.Start();
+        pImp->aMoveIdle.Start();
 }
 
 IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl)
 {
-    pImp->aMoveTimer.Stop();
+    pImp->aMoveIdle.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )
     {
         if( !GetFloatingWindow()->IsRollUp() )
