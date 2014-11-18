@@ -1030,10 +1030,10 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         if (!ImplDoTiledRendering())
         {
             mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( VCL_IDLE_PRIORITY_REPAINT );
-            mpWindowImpl->mpFrameData->maPaintIdle.SetIdleHdl( LINK( this, Window, ImplHandlePaintHdl ) );
+            mpWindowImpl->mpFrameData->maPaintIdle.idleSignal.connect( &Window::ImplHandlePaintHdl );
         }
         mpWindowImpl->mpFrameData->maResizeIdle.SetPriority( VCL_IDLE_PRIORITY_RESIZE );
-        mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
+        mpWindowImpl->mpFrameData->maResizeIdle.idleSignal.connect( &Window::ImplHandleResizeTimerHdl );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
 
         if ( pRealParent && IsTopWindow() )
@@ -2533,7 +2533,7 @@ Size Window::GetSizePixel() const
     {
         ImplDelData aDogtag( this );
         mpWindowImpl->mpFrameData->maResizeIdle.Stop();
-        mpWindowImpl->mpFrameData->maResizeIdle.GetIdleHdl().Call( NULL );
+        mpWindowImpl->mpFrameData->maResizeIdle.idleSignal( NULL );
         if( aDogtag.IsDead() )
             return Size(0,0);
     }

@@ -36,9 +36,9 @@ struct ImplCursorData
     long            mnPixSlant;         // Pixel-Slant
     short           mnOrientation;      // Pixel-Orientation
     unsigned char   mnDirection;        // indicates writing direction
-    sal_uInt16          mnStyle;            // Cursor-Style
+    sal_uInt16      mnStyle;            // Cursor-Style
     bool            mbCurVisible;       // Ist Cursor aktuell sichtbar
-    vcl::Window*         mpWindow;           // Zugeordnetes Windows
+    vcl::Window*    mpWindow;           // Zugeordnetes Windows
 };
 
 static void ImplCursorInvert( ImplCursorData* pData )
@@ -171,7 +171,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             {
                 mpData = new ImplCursorData;
                 mpData->mbCurVisible = false;
-                mpData->maTimer.SetTimeoutHdl( LINK( this, Cursor, ImplTimerHdl ) );
+                mpData->maTimer.timeoutSignal.connect( &vcl::Cursor::ImplTimerHdl );
             }
 
             mpData->mpWindow    = pWindow;
@@ -246,13 +246,12 @@ void vcl::Cursor::ImplNew()
     }
 }
 
-IMPL_LINK_NOARG(vcl::Cursor, ImplTimerHdl)
+void vcl::Cursor::ImplTimerHdl()
 {
     if ( mpData->mbCurVisible )
         ImplRestore();
     else
         ImplDraw();
-    return 0;
 }
 
 vcl::Cursor::Cursor()

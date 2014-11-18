@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_TIMER_HXX
 #define INCLUDED_VCL_TIMER_HXX
 
+#include <boost/signals2/signal.hpp>
 #include <tools/link.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
@@ -36,7 +37,6 @@ protected:
     bool            mbActive;
     bool            mbAuto;
     bool            mbIdle;
-    Link            maTimeoutHdl;
 
     friend struct ImplTimerData;
 
@@ -55,11 +55,10 @@ public:
     sal_uLong       GetTimeout() const { return mnTimeout; }
     bool            IsActive() const { return mbActive; }
 
-    /// Make it possible to associate a callback with this timeout
-    void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
-    const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
-
     Timer&          operator=( const Timer& rTimer );
+
+    /// Make it possible to associate a callback with this timeout
+    boost::signals2::signal< void () > timeoutSignal;
 
     static void ImplDeInitTimer();
     static void ImplTimerCallbackProc();
@@ -104,8 +103,7 @@ class VCL_DLLPUBLIC Idle : public Timer
 
     /// Make it possible to associate a callback with this idle handler
     /// of course, you can also sub-class and override 'DoIdle'
-    void            SetIdleHdl( const Link& rLink ) { SetTimeoutHdl( rLink ); }
-    const Link&     GetIdleHdl() const              { return GetTimeoutHdl(); }
+    boost::signals2::signal< void () > idleSignal;
 
     void            Start() { Timer::Start(); }
     void            Stop()  { Timer::Stop();  }

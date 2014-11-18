@@ -255,8 +255,7 @@ Timer::Timer( const Timer& rTimer ):
     mnTimeout(rTimer.mnTimeout),
     mbActive(false),
     mbAuto(false),
-    mbIdle(false),
-    maTimeoutHdl(rTimer.maTimeoutHdl)
+    mbIdle(false)
 {
     if ( rTimer.IsActive() )
         Start();
@@ -273,7 +272,7 @@ Timer::~Timer()
 
 void Timer::Timeout()
 {
-    maTimeoutHdl.Call( this );
+    timeoutSignal( this );
 }
 
 void Timer::SetTimeout( sal_uLong nNewTimeout )
@@ -358,7 +357,6 @@ Timer& Timer::operator=( const Timer& rTimer )
 
     mbActive        = false;
     mnTimeout       = rTimer.mnTimeout;
-    maTimeoutHdl    = rTimer.maTimeoutHdl;
 
     if ( rTimer.IsActive() )
         Start();
@@ -433,7 +431,7 @@ void Idle::SetPriority( IdlePriority ePriority )
 
 void Idle::DoIdle()
 {
-    maTimeoutHdl.Call( this );
+    timeoutSignal( this );
 }
 
 

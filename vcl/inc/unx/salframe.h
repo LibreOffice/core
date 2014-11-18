@@ -153,7 +153,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     long            HandleReparentEvent ( XReparentEvent    *pEvent );
     long            HandleClientMessage ( XClientMessageEvent*pEvent );
 
-    DECL_LINK( HandleAlwaysOnTopRaise, void* );
+    void            HandleAlwaysOnTopRaise();
 
     void            createNewWindow( ::Window aParent, SalX11Screen nXScreen = SalX11Screen( -1 ) );
     void            updateScreenNumber();

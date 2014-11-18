@@ -97,7 +97,7 @@ private:
 
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
-    DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, void* );
+    SAL_DLLPRIVATE void        ImplUpdateDataHdl();
 
     SAL_DLLPRIVATE bool        ImplTruncateToMaxLen( OUString&, sal_Int32 nSelectionLen ) const;
     SAL_DLLPRIVATE void        ImplInitEditData();

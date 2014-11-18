@@ -82,11 +82,11 @@ private:
     SAL_DLLPRIVATE long         ImplDoAction( bool bCallEndScroll );
     SAL_DLLPRIVATE void         ImplDoMouseAction( const Point& rPos, bool bCallAction = true );
     SAL_DLLPRIVATE void         ImplInvert();
-    SAL_DLLPRIVATE bool     ImplDrawNative( sal_uInt16 nDrawFlags );
+    SAL_DLLPRIVATE bool         ImplDrawNative( sal_uInt16 nDrawFlags );
     SAL_DLLPRIVATE void         ImplDragThumb( const Point& rMousePos );
     SAL_DLLPRIVATE Size         getCurrentCalcSize() const;
-    DECL_DLLPRIVATE_LINK(       ImplTimerHdl, Timer* );
-    DECL_DLLPRIVATE_LINK(       ImplAutoTimerHdl, void* );
+    SAL_DLLPRIVATE void         ImplTimerHdl();
+    SAL_DLLPRIVATE void         ImplAutoTimerHdl();
 
 public:
     explicit        ScrollBar( vcl::Window* pParent, WinBits nStyle = WB_VERT );

@@ -1278,7 +1278,7 @@ class PrinterUpdate
     static int    nActiveJobs;
 
     static void doUpdate();
-    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
+    static void UpdateTimerHdl();
 public:
     static void update(SalGenericInstance &rInstance);
     static void jobStarted() { nActiveJobs++; }
@@ -1296,7 +1296,7 @@ void PrinterUpdate::doUpdate()
         pInst->PostPrintersChanged();
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
+void PrinterUpdate::UpdateTimerHdl()
 {
     if( nActiveJobs < 1 )
     {
@@ -1307,7 +1307,6 @@ IMPL_STATIC_LINK_NOINSTANCE( PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
     else
         pPrinterUpdateTimer->Start();
 
-    return 0;
 }
 
 void PrinterUpdate::update(SalGenericInstance &rInstance)
@@ -1328,7 +1327,7 @@ void PrinterUpdate::update(SalGenericInstance &rInstance)
     {
         pPrinterUpdateTimer = new Timer();
         pPrinterUpdateTimer->SetTimeout( 500 );
-        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateTimer->timeoutSignal.connect( &PrinterUpdate::UpdateTimerHdl );
         pPrinterUpdateTimer->Start();
     }
 }

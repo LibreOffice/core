@@ -54,7 +54,7 @@ protected:
     SAL_DLLPRIVATE void   ImplInit( vcl::Window* pParent, WinBits nStyle );
 
 private:
-    DECL_DLLPRIVATE_LINK( ImplTimeout, Timer* );
+    SAL_DLLPRIVATE void   ImplTimeout( Timer* pTimer );
     SAL_DLLPRIVATE void   ImplInitSpinFieldData();
     SAL_DLLPRIVATE void   ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rectangle& rDDArea, Rectangle& rSpinUpArea, Rectangle& rSpinDownArea );
 
