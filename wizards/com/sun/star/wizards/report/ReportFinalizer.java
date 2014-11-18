@@ -16,10 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 package com.sun.star.wizards.report;
-import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Exception;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.awt.VclWindowPeerAttribute;
@@ -52,7 +49,6 @@ public class ReportFinalizer
         this.CurUnoDialog = _CurUnoDialog;
         this.CurReportDocument = _CurReportDocument;
         short curtabindex = (short) (ReportWizard.SOSTOREPAGE * 100);
-        Desktop odesktop = new Desktop();
 
         String sSaveAsTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 40);
         String sUseTemplate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 41);
@@ -188,20 +184,9 @@ public class ReportFinalizer
 
     public String getStorePath()
     {
-        try
-        {
-            StoreName = getStoreName();
-            String StorePath;
-            XInterface xInterface = (XInterface) m_xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
-            StorePath = FileAccess.getOfficePath(m_xMSF, "Temp", xSimpleFileAccess) + "/" + StoreName;
-            return StorePath;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-            return PropertyNames.EMPTY_STRING;
-        }
+        StoreName = getStoreName();
+        String StorePath = FileAccess.getOfficePath(m_xMSF, "Temp") + "/" + StoreName;
+        return StorePath;
     }
 
     public void changeReportTitle()

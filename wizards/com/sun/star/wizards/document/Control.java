@@ -276,7 +276,6 @@ public class Control extends Shape
             double dblEffMax = 0;
             if (xPropertySet.getPropertySetInfo().hasPropertyByName("EffectiveMax"))
             {
-                Object oValue = xPropertySet.getPropertyValue("EffectiveMax");
                 if (xPropertySet.getPropertyValue("EffectiveMax") != com.sun.star.uno.Any.VOID)
                 {
                     dblEffMax = AnyConverter.toDouble(xPropertySet.getPropertyValue("EffectiveMax"));

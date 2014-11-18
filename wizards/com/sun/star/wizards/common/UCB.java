@@ -32,7 +32,6 @@ import com.sun.star.ucb.OpenCommandArgument2;
 import com.sun.star.ucb.OpenMode;
 import com.sun.star.ucb.TransferCommandOperation;
 import com.sun.star.ucb.XCommandProcessor;
-import com.sun.star.ucb.XContentAccess;
 import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 import com.sun.star.ucb.XContentProvider;
@@ -161,14 +160,9 @@ public class UCB
 
         if (xResultSet.first())
         {
-            // obtain XContentAccess interface for child content access and XRow for properties
-            XContentAccess xContentAccess = UnoRuntime.queryInterface(
-                XContentAccess.class, xResultSet);
             XRow xRow = UnoRuntime.queryInterface(XRow.class, xResultSet);
             do
             {
-                // Obtain URL of child.
-                String aId = xContentAccess.queryContentIdentifierString();
                 // First column: Title (column numbers are 1-based!)
                 String aTitle = xRow.getString(1);
                 if (aTitle.length() == 0 && xRow.wasNull())

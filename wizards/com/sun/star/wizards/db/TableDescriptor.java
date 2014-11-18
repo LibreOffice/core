@@ -709,7 +709,6 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             {
                 ColumnDescriptor oColumnDescriptor = columncontainer.get(i);
                 XPropertySet xColPropertySet = getByName(oColumnDescriptor.Name);
-                Property[] aProperties = xColPropertySet.getPropertySetInfo().getProperties();
                 int itype;
                 try
                 {

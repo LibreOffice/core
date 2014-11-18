@@ -105,7 +105,7 @@ public class SortingComponent
                         }); //Short.valueOf((short) (17+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 1);
-                XRadioButton xRadioButtonAsc = CurUnoDialog.insertRadioButton("optAscend" + Integer.toString(i + 1), 0, new String[]
+                CurUnoDialog.insertRadioButton("optAscend" + Integer.toString(i + 1), 0, new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
@@ -114,7 +114,7 @@ public class SortingComponent
                         }); //, Short.valueOf((short) (18+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 2);
-                XRadioButton xRadioButtonDesc = CurUnoDialog.insertRadioButton("optDescend" + Integer.toString(i + 1), 0, new String[]
+                CurUnoDialog.insertRadioButton("optDescend" + Integer.toString(i + 1), 0, new String[]
                         {
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]

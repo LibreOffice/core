@@ -47,7 +47,6 @@ public class RecordTable
         try
         {
             this.oTextTableHandler = _oTextTableHandler;
-            String[] TableNames = oTextTableHandler.xTextTablesSupplier.getTextTables().getElementNames();
             XNameAccess xAllTextTables = oTextTableHandler.xTextTablesSupplier.getTextTables();
             if ((xAllTextTables.hasByName(ReportTextDocument.TBLRECORDSECTION)) || (xAllTextTables.hasByName(ReportTextDocument.COPYOFTBLRECORDSECTION)))
             {

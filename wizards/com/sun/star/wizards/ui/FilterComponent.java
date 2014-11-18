@@ -374,7 +374,7 @@ public class FilterComponent
 
     /** Creates a new instance of FilterComponent
      */
-    public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
+    public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
         this.curHelpID = _firstHelpID;
         this.xMSF = _xMSF;

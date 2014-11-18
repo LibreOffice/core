@@ -35,7 +35,7 @@ public class Resource
 
     /** Creates a new instance of Resource
      */
-    public Resource(XMultiServiceFactory _xMSF, String _Unit /* unused */, String _Module)
+    public Resource(XMultiServiceFactory _xMSF, String _Module)
     {
         this.xMSF = _xMSF;
         this.Module = _Module;

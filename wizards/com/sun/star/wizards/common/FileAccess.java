@@ -54,8 +54,7 @@ public class FileAccess
 
     public static void addOfficePath(XMultiServiceFactory xMSF, String sPath, String sAddPath)
     {
-        XSimpleFileAccess xSimpleFileAccess = null;
-        String ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess);
+        String ResultPath = getOfficePath(xMSF, sPath);
         // As there are several conventions about the look of Url  (e.g. with " " or with "%20") you cannot make a
         // simple String comparison to find out, if a path is already in "ResultPath"
         String[] PathList = JavaTools.ArrayoutofString(ResultPath, PropertyNames.SEMI_COLON);
@@ -92,7 +91,7 @@ public class FileAccess
      * chapter 6.2.7
      * @return the respective path of the office application. A probable following "/" at the end is trimmed.
      */
-    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, XSimpleFileAccess xSimpleFileAccess)
+    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath)
     {
         try
         {
@@ -187,7 +186,7 @@ public class FileAccess
         return ResultPath;
     }
 
-    public static ArrayList<String> getOfficePaths(XMultiServiceFactory xMSF, String _sPath, String sType, String sSearchDir)
+    public static ArrayList<String> getOfficePaths(XMultiServiceFactory xMSF, String _sPath)
     {
         //This method currently only works with sPath="Template"
 
@@ -366,7 +365,7 @@ public class FileAccess
         String sNoDirCreation = PropertyNames.EMPTY_STRING;
         try
         {
-            Resource oResource = new Resource(xMSF, "ImportWizard", "imp");
+            Resource oResource = new Resource(xMSF, "imp");
             sNoDirCreation = oResource.getResText(1050);
             String sMsgDirNotThere = oResource.getResText(1051);
             String sQueryForNewCreation = oResource.getResText(1052);
@@ -416,7 +415,7 @@ public class FileAccess
             {
                 if (xSimpleFileAccess.exists(Path))
                 {
-                    Resource oResource = new Resource(xMSF, "ImportWizard", "imp");
+                    Resource oResource = new Resource(xMSF, "imp");
                     String sFileexists = oResource.getResText(1053);
                     String NewString = JavaTools.convertfromURLNotation(Path);
                     sFileexists = JavaTools.replaceSubString(sFileexists, NewString, "<1>");

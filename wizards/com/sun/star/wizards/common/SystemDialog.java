@@ -279,7 +279,7 @@ public class SystemDialog
     {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);
-        oResource = new Resource(xMSF, ResName, ResPrefix);
+        oResource = new Resource(xMSF, ResPrefix);
         String sErrorMessage = oResource.getResText(ResID);
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, ProductName, "%PRODUCTNAME");
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, String.valueOf((char) 13), "<BR>");
@@ -291,7 +291,7 @@ public class SystemDialog
     {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);
-        oResource = new Resource(xMSF, ResName, ResPrefix);
+        oResource = new Resource(xMSF, ResPrefix);
         String sErrorMessage = oResource.getResText(ResID);
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, ProductName, "%PRODUCTNAME");
         sErrorMessage = JavaTools.replaceSubString(sErrorMessage, String.valueOf((char) 13), "<BR>");

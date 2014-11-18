@@ -305,7 +305,7 @@ public class CommandMetaData extends DBMetaData
         {
             exception.printStackTrace(System.err);
         }
-        Resource oResource = new Resource(xMSF, "Database", "dbw");
+        Resource oResource = new Resource(xMSF, "dbw");
         String sMsgNoFieldsFromCommand = oResource.getResText(RID_DB_COMMON + 45);
         sMsgNoFieldsFromCommand = JavaTools.replaceSubString(sMsgNoFieldsFromCommand, _commandname, "%NAME");
         showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgNoFieldsFromCommand);

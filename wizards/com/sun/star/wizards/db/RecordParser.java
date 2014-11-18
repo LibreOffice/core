@@ -191,7 +191,6 @@ public class RecordParser extends QueryMetaData
                 initializeFieldColumns(_sFieldNames, xColumns);
             }
             String[] AllQueryFieldNames = xColumns.getElementNames();
-            String[] sFieldNames = getFieldNames();
             for (int i = 0; i < FieldColumns.length; i++)
             {
                 String sFieldName = FieldColumns[i].getFieldName();

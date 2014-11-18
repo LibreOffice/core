@@ -24,7 +24,7 @@ public class TerminateWizardException extends Exception
 
     public TerminateWizardException(XMultiServiceFactory xMSF)
     {
-        Resource oResource = new Resource(xMSF, "AutoPilot", "dbw");
+        Resource oResource = new Resource(xMSF, "dbw");
         String sErrorMessage = oResource.getResText(1006);
         SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sErrorMessage);
         printStackTrace(System.out);

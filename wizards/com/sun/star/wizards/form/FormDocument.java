@@ -46,7 +46,6 @@ public class FormDocument extends TextDocument
     protected String[][] LinkFieldNames;
 
     private FormHandler oFormHandler;
-    private ViewHandler oViewHandler;
     private XPropertySet xPropPageStyle;
     private static final int SOFORMGAP = 2000;
     private boolean bhasSubForm;
@@ -67,12 +66,12 @@ public class FormDocument extends TextDocument
         {
             oFormHandler = new FormHandler(xMSF, xTextDocument);
             oFormHandler.setDrawObjectsCaptureMode(false);
-            TextStyleHandler oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
-            oViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
+            TextStyleHandler oTextStyleHandler = new TextStyleHandler(xTextDocument);
+            new ViewHandler(xTextDocument);
             oMainFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);
             oSubFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);
-            ViewHandler oViewHandler = new ViewHandler(xMSF, xTextDocument);
-            TextStyleHandler oTextStyleSupplier = new TextStyleHandler(xMSFDoc, xTextDocument);
+            ViewHandler oViewHandler = new ViewHandler(xTextDocument);
+            TextStyleHandler oTextStyleSupplier = new TextStyleHandler(xTextDocument);
             Helper.setUnoPropertyValue(xTextDocument, "ApplyFormDesignMode", Boolean.FALSE);
             oViewHandler.setViewSetting("ShowTableBoundaries", Boolean.FALSE);
             oViewHandler.setViewSetting("ShowOnlineLayout", Boolean.TRUE);

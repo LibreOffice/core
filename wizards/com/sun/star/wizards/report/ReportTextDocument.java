@@ -92,8 +92,8 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         oTextTableHandler = new TextTableHandler(xMSFDoc, xTextDocument);
         oTextSectionHandler = new TextSectionHandler(xMSFDoc, xTextDocument);
         oFormHandler = new FormHandler(xMSFDoc, xTextDocument);
-        oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
-        oViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
+        oTextStyleHandler = new TextStyleHandler(xTextDocument);
+        oViewHandler = new ViewHandler(xTextDocument);
         oTextFieldHandler = new TextFieldHandler(xMSFDoc, xTextDocument);
         DBColumnsVector = new java.util.ArrayList<DBColumn>();
         oNumberFormatter = oTextTableHandler.getNumberFormatter();

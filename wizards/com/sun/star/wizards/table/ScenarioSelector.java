@@ -20,7 +20,6 @@ package com.sun.star.wizards.table;
 import java.util.ArrayList;
 
 import com.sun.star.awt.ItemEvent;
-import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;

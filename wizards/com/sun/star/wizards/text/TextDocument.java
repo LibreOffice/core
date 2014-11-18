@@ -266,7 +266,7 @@ public class TextDocument
         DocSize = getPageSize();
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
 
-        ViewHandler myViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
+        ViewHandler myViewHandler = new ViewHandler(xTextDocument);
         try
         {
             myViewHandler.setViewSetting("ZoomType", Short.valueOf(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
@@ -307,7 +307,6 @@ public class TextDocument
     public TextDocument(XMultiServiceFactory xMSF, String URL, PropertyValue[] xArgs, XTerminateListener listener)
     {
         this.xMSF = xMSF;
-        XDesktop xDesktop = Desktop.getDesktop(xMSF);
 
         xFrame = OfficeDocument.createNewFrame(xMSF, listener);
         Object oDoc = OfficeDocument.load(xFrame, URL, "_self", xArgs);

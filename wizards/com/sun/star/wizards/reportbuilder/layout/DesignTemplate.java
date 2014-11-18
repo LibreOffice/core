@@ -225,7 +225,6 @@ public class DesignTemplate
                                 m_aGroupTextField[nGroup] = SectionTextField.create(aFormattedField);
                             }
                         }
-                        int dummy = 0;
                     }
                     catch (com.sun.star.lang.IndexOutOfBoundsException ex)
                     {

@@ -668,7 +668,7 @@ public class DBMetaData
 
     private boolean getConnection(XDataSource _dataSource)
     {
-        Resource oResource = new Resource(xMSF, "Database", "dbw");
+        Resource oResource = new Resource(xMSF, "dbw");
         try
         {
             int iMsg = 0;
@@ -1003,9 +1003,7 @@ public class DBMetaData
     {
         try
         {
-            XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
-            String storepath = FileAccess.getOfficePath(xMSF, "Temp", xSimpleFileAccess) + "/" + _storename;
+            String storepath = FileAccess.getOfficePath(xMSF, "Temp") + "/" + _storename;
             XStorable xStoreable = UnoRuntime.queryInterface( XStorable.class, _xcomponent );
             PropertyValue[] oStoreProperties = new PropertyValue[1];
             oStoreProperties[0] = Properties.createProperty("FilterName", "writer8");

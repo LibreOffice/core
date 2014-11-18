@@ -133,7 +133,6 @@ public class TextSectionHandler
             for (int i = TextSectionCount - 1; i >= 0; i--)
             {
                 XTextContent xTextContentTextSection = UnoRuntime.queryInterface(XTextContent.class, xAllTextSections.getByIndex(i));
-                XPropertySet xTextSectionPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xTextContentTextSection);
                 xText.removeTextContent(xTextContentTextSection);
             }
         }

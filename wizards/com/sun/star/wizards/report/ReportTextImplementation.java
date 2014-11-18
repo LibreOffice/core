@@ -600,7 +600,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             // Check general availability of office paths
             try
             {
-                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
+                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template");
                 FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
             }
             catch (Exception e)

@@ -21,7 +21,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
 import java.util.Calendar;
 
-import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.Locale;
@@ -56,7 +55,6 @@ public class Helper
             }
             else
             {
-                Property[] selementnames = xPSet.getPropertySetInfo().getProperties();
                 throw new java.lang.IllegalArgumentException("No Such Property: '" + PropertyName + "'");
             }
         }

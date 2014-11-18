@@ -37,10 +37,6 @@ public class DocumentPreview
      * The frame service which is used to show the preview
      */
     private XFrame xFrame;
-    /**
-     * The content component of the frame.
-     */
-    private XComponent xComponent;
     private final XControl xControl;
     private PropertyValue[] loadArgs;
     private String url;
@@ -78,7 +74,7 @@ public class DocumentPreview
         loadArgs = lArgs;
         XComponentLoader xCompLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
         xFrame.activate();
-        return xComponent = xCompLoader.loadComponentFromURL(url, "_self", 0, loadArgs);
+        return xCompLoader.loadComponentFromURL(url, "_self", 0, loadArgs);
     }
 
     public void reload(XMultiServiceFactory xmsf) throws com.sun.star.lang.IllegalArgumentException, IOException, CloseVetoException, com.sun.star.uno.Exception

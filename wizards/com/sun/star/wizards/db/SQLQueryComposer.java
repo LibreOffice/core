@@ -21,7 +21,6 @@ package com.sun.star.wizards.db;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
@@ -229,8 +228,6 @@ public class SQLQueryComposer
 
     private PropertyValue[][] replaceConditionsByAlias(PropertyValue _filterconditions[][])
     {
-        XColumnsSupplier columnSup = UnoRuntime.queryInterface(XColumnsSupplier.class, m_xQueryAnalyzer);
-        XNameAccess columns = columnSup.getColumns();
         for (int n = 0; n < _filterconditions.length; n++)
         {
             for (int m = 0; m < _filterconditions[n].length; m++)

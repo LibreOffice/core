@@ -61,17 +61,16 @@ public class GridControl extends Shape
             xGridColumnFactory = UnoRuntime.queryInterface( XGridColumnFactory.class, oGridModel );
             xComponent = UnoRuntime.queryInterface( XComponent.class, oGridModel );
 
-//      Helper.setUnoPropertyValue(oGridModel, PropertyNames.PROPERTY_NAME, _sname);
             for (int i = 0; i < fieldcolumns.length; i++)
             {
                 FieldColumn curfieldcolumn = fieldcolumns[i];
                 if (curfieldcolumn.getFieldType() == DataType.TIMESTAMP)
                 {
-                    TimeStampControl oControl = new TimeStampControl(new Resource(_xMSF, PropertyNames.EMPTY_STRING, "dbw"), this, curfieldcolumn);
+                    new TimeStampControl(new Resource(_xMSF, "dbw"), this, curfieldcolumn);
                 }
                 else
                 {
-                    Control oControl = new DatabaseControl(this, curfieldcolumn);
+                    new DatabaseControl(this, curfieldcolumn);
                 }
             }
 

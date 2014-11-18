@@ -65,7 +65,7 @@ public class StyleApplier
             this.curFormDocument = _curFormDocument;
             xMSF = curFormDocument.xMSF;
 
-            TextStyleHandler oTextStyleHandler = new TextStyleHandler(xMSF, curFormDocument.xTextDocument);
+            TextStyleHandler oTextStyleHandler = new TextStyleHandler(curFormDocument.xTextDocument);
             xPageStylePropertySet = oTextStyleHandler.getStyleByName("PageStyles", "Standard");
             short curtabindex = (short) (FormWizard.SOSTYLE_PAGE * 100);
             Integer IStyleStep = Integer.valueOf(FormWizard.SOSTYLE_PAGE);
@@ -121,7 +121,7 @@ public class StyleApplier
                         UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, Short.valueOf((short) 1), IStyleStep, Short.valueOf(curtabindex++), "1", 93
                     });
 
-            XRadioButton optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
+            CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH

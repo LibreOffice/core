@@ -78,7 +78,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     {
         super(xMSF);
         hid = hid_;
-        oWizardResource = new Resource(xMSF, "Common", "dbw");
+        oWizardResource = new Resource(xMSF, "dbw");
         sMsgEndAutopilot = oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
     }
 

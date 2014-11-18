@@ -504,7 +504,7 @@ public class UnoDialog implements EventNames
     /**
      * The problem with setting the visibility of controls is that changing the current step
      * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
-     * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
+     * the property "visible". Therefore a control meant to be invisible is placed on a step far far away.
      * Afterwards the step property of the dialog has to be set with "repaintDialogStep". As the performance
      * of that method is very bad it should be used only once for all controls
      * @param controlname the name of the control
@@ -514,7 +514,6 @@ public class UnoDialog implements EventNames
     {
         try
         {
-            int iCurControlStep = AnyConverter.toInt(getControlProperty(controlname, PropertyNames.PROPERTY_STEP));
             int iCurDialogStep = AnyConverter.toInt(Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_STEP));
             if (bIsVisible)
             {
@@ -664,7 +663,6 @@ public class UnoDialog implements EventNames
         {
             createWindowPeer();
         }
-        XVclWindowPeer xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
         xDialog = UnoRuntime.queryInterface(XDialog.class, xUnoDialog);
         this.xWindow.setVisible(true);
     }
@@ -884,7 +882,6 @@ public class UnoDialog implements EventNames
      */
     public static String getDisplayProperty(Object oControlModel)
     {
-        XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, oControlModel);
         int itype = getControlModelType(oControlModel);
         return getDisplayProperty(itype);
     }
@@ -938,7 +935,7 @@ public class UnoDialog implements EventNames
 
     public void addResourceHandler(String _Unit, String _Module)
     {
-        m_oResource = new Resource(xMSF, _Unit, _Module);
+        m_oResource = new Resource(xMSF, _Module);
     }
 
     public static short setInitialTabindex(int _istep)
