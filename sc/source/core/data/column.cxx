@@ -2083,7 +2083,6 @@ class UpdateRefOnNonCopy : std::unary_function<sc::FormulaGroupEntry, void>
 
         if (aRes.mbReferenceModified || aRes.mbNameModified)
         {
-            sc::StartListeningContext aStartCxt(mpCxt->mrDoc);
             sc::EndListeningContext aEndCxt(mpCxt->mrDoc, pOldCode.get());
             aEndCxt.setPositionDelta(
                 ScAddress(-mpCxt->mnColDelta, -mpCxt->mnRowDelta, -mpCxt->mnTabDelta));
