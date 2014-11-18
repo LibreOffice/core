@@ -50,8 +50,8 @@ private:
     ImplSVEvent *   mnLastUserEvent;
 
     DECL_LINK(DockingHdl, void *);
-    DECL_LINK(DockTimerHdl, void *);
-    DECL_LINK(EndDockTimerHdl, void *);
+    void DockTimerHdl( Timer* );
+    void EndDockTimerHdl( Timer* );
 public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
@@ -91,9 +91,9 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
 
     SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
-    maDockTimer.SetTimeoutHdl( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
+    maDockTimer.timeoutSignal.connect(boost::bind( &ImplDockFloatWin2::DockTimerHdl, this, _1 ));
     maDockTimer.SetTimeout( 50 );
-    maEndDockTimer.SetTimeoutHdl( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
+    maEndDockTimer.timeoutSignal.connect(boost::bind( &ImplDockFloatWin2::EndDockTimerHdl, this, _1 ));
     maEndDockTimer.SetTimeout( 50 );
 }
 
@@ -103,7 +103,7 @@ ImplDockFloatWin2::~ImplDockFloatWin2()
         Application::RemoveUserEvent( mnLastUserEvent );
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
+void ImplDockFloatWin2::DockTimerHdl( Timer* )
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -127,11 +127,9 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
         maDockTimer.Start();
     }
-
-    return 0;
 }
 
-IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
+void ImplDockFloatWin2::EndDockTimerHdl( Timer* )
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "enddocktimer called but not floating" );
 
@@ -146,8 +144,6 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
     {
         maEndDockTimer.Start();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
@@ -210,13 +206,13 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
                  maDockRect.TopLeft() ) );
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
             maEndDockTimer.Stop();
-            DockTimerHdl( this );
+            DockTimerHdl( NULL );
         }
         else
         {
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
             maDockTimer.Stop();
-            EndDockTimerHdl( this );
+            EndDockTimerHdl( NULL );
         }
     }
     mbInMove = false;

@@ -36,7 +36,7 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnValueStep = 1;
 
     maRepeatTimer.SetTimeout( GetSettings().GetMouseSettings().GetButtonStartRepeat() );
-    maRepeatTimer.SetTimeoutHdl( LINK( this, SpinButton, ImplTimeout ) );
+    maRepeatTimer.timeoutSignal.connect( boost::bind( &SpinButton::ImplTimeout, this, _1 ) );
 
     mbRepeat = 0 != ( nStyle & WB_REPEAT );
 
@@ -59,7 +59,7 @@ SpinButton::~SpinButton()
 {
 }
 
-IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
+void SpinButton::ImplTimeout( Timer* pTimer )
 {
     if ( pTimer->GetTimeout() == GetSettings().GetMouseSettings().GetButtonStartRepeat() )
     {
@@ -73,8 +73,6 @@ IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
         else
             Down();
     }
-
-    return 0;
 }
 
 void SpinButton::Up()

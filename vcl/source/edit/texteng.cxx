@@ -92,7 +92,7 @@ TextEngine::TextEngine()
     mpLocaleDataWrapper = NULL;
 
     mpIdleFormatter = new IdleFormatter;
-    mpIdleFormatter->SetTimeoutHdl( LINK( this, TextEngine, IdleFormatHdl ) );
+    mpIdleFormatter->timeoutSignal.connect(boost::bind( &TextEngine::IdleFormatHdl, this, _1 ));
 
     mpRefDev = new VirtualDevice;
 
@@ -1519,10 +1519,9 @@ void TextEngine::UpdateViews( TextView* pCurView )
     maInvalidRect = Rectangle();
 }
 
-IMPL_LINK_NOARG(TextEngine, IdleFormatHdl)
+void TextEngine::IdleFormatHdl(Timer*)
 {
     FormatAndUpdate( mpIdleFormatter->GetView() );
-    return 0;
 }
 
 void TextEngine::CheckIdleFormatter()
