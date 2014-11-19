@@ -3028,14 +3028,15 @@ void ScColumn::SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rB
     aHdl.fillBroadcastSpans(rBroadcastSpans);
 }
 
-void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2 )
+void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, bool bBroadcast )
 {
     // broadcasts everything within the range, with FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
     SetDirtyOnRangeHandler aHdl(*this);
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl, aHdl);
-    aHdl.broadcast();
+    if (bBroadcast)
+        aHdl.broadcast();
 }
 
 void ScColumn::SetTableOpDirty( const ScRange& rRange )

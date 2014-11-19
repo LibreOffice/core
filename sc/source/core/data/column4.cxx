@@ -1140,20 +1140,33 @@ bool ScColumn::HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const
 
 namespace {
 
-class StartListeningFromClipHandler
+void endListening( sc::EndListeningContext& rCxt, ScFormulaCell** pp, ScFormulaCell** ppEnd )
+{
+    for (; pp != ppEnd; ++pp)
+    {
+        ScFormulaCell& rFC = **pp;
+        rFC.EndListeningTo(rCxt);
+    }
+}
+
+class StartListeningFormulaCellsHandler
 {
     sc::StartListeningContext& mrStartCxt;
     sc::EndListeningContext& mrEndCxt;
+    SCROW mnStartRow;
+    SCROW mnEndRow;
 
 public:
-    StartListeningFromClipHandler( sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt ) :
-        mrStartCxt(rStartCxt), mrEndCxt(rEndCxt) {}
+    StartListeningFormulaCellsHandler( sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt ) :
+        mrStartCxt(rStartCxt), mrEndCxt(rEndCxt), mnStartRow(-1), mnEndRow(-1) {}
 
     void operator() ( const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize )
     {
         if (node.type != sc::element_type_formula)
             // We are only interested in formulas.
             return;
+
+        mnStartRow = node.position + nOffset;
 
         ScFormulaCell** ppBeg = &sc::formula_block::at(*node.data, nOffset);
         ScFormulaCell** ppEnd = ppBeg + nDataSize;
@@ -1173,7 +1186,8 @@ public:
                 assert(static_cast<size_t>(nBackTrackSize) <= nOffset);
                 for (SCROW i = 0; i < nBackTrackSize; ++i)
                     --pp;
-                endListening(pp, ppBeg);
+                endListening(mrEndCxt, pp, ppBeg);
+                mnStartRow -= nBackTrackSize;
             }
         }
 
@@ -1183,6 +1197,7 @@ public:
 
             if (!pFC->IsSharedTop())
             {
+                assert(!pFC->IsShared());
                 pFC->StartListeningTo(mrStartCxt);
                 continue;
             }
@@ -1191,12 +1206,13 @@ public:
             // extends beyond the range, in which case have the excess
             // formula cells stop listening.
             size_t nEndGroupPos = (pp - ppBeg) + pFC->GetSharedLength();
+            mnEndRow = node.position + nOffset + nEndGroupPos - 1; // absolute row position of the last one in the group.
             if (nEndGroupPos > nDataSize)
             {
                 size_t nExcessSize = nEndGroupPos - nDataSize;
                 ScFormulaCell** ppGrpEnd = pp + pFC->GetSharedLength();
                 ScFormulaCell** ppGrp = ppGrpEnd - nExcessSize;
-                endListening(ppGrp, ppGrpEnd);
+                endListening(mrEndCxt, ppGrp, ppGrpEnd);
 
                 // Register formula cells as a group.
                 sc::SharedFormulaUtil::startListeningAsGroup(mrStartCxt, pp);
@@ -1211,24 +1227,132 @@ public:
         }
     }
 
-private:
-    void endListening( ScFormulaCell** pp, ScFormulaCell** ppEnd )
+    SCROW getStartRow() const
     {
+        return mnStartRow;
+    }
+
+    SCROW getEndRow() const
+    {
+        return mnEndRow;
+    }
+
+private:
+};
+
+class EndListeningFormulaCellsHandler
+{
+    sc::EndListeningContext& mrEndCxt;
+    SCROW mnStartRow;
+    SCROW mnEndRow;
+
+public:
+    EndListeningFormulaCellsHandler( sc::EndListeningContext& rEndCxt ) :
+        mrEndCxt(rEndCxt), mnStartRow(-1), mnEndRow(-1) {}
+
+    void operator() ( const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize )
+    {
+        if (node.type != sc::element_type_formula)
+            // We are only interested in formulas.
+            return;
+
+        mnStartRow = node.position + nOffset;
+
+        ScFormulaCell** ppBeg = &sc::formula_block::at(*node.data, nOffset);
+        ScFormulaCell** ppEnd = ppBeg + nDataSize;
+
+        ScFormulaCell** pp = ppBeg;
+
+        // If the first formula cell belongs to a group and it's not the top
+        // cell, move up to the top cell of the group.
+
+        ScFormulaCell* pFC = *pp;
+        if (pFC->IsShared() && !pFC->IsSharedTop())
+        {
+            SCROW nBackTrackSize = pFC->aPos.Row() - pFC->GetSharedTopRow();
+            if (nBackTrackSize > 0)
+            {
+                assert(static_cast<size_t>(nBackTrackSize) <= nOffset);
+                for (SCROW i = 0; i < nBackTrackSize; ++i)
+                    --pp;
+                mnStartRow -= nBackTrackSize;
+            }
+        }
+
         for (; pp != ppEnd; ++pp)
         {
-            ScFormulaCell& rFC = **pp;
-            rFC.EndListeningTo(mrEndCxt);
+            pFC = *pp;
+
+            if (!pFC->IsSharedTop())
+            {
+                assert(!pFC->IsShared());
+                pFC->EndListeningTo(mrEndCxt);
+                continue;
+            }
+
+            size_t nEndGroupPos = (pp - ppBeg) + pFC->GetSharedLength();
+            mnEndRow = node.position + nOffset + nEndGroupPos - 1; // absolute row position of the last one in the group.
+
+            ScFormulaCell** ppGrpEnd = pp + pFC->GetSharedLength();
+            endListening(mrEndCxt, pp, ppGrpEnd);
+
+            if (nEndGroupPos > nDataSize)
+            {
+                // The group goes beyond the specified end row.  Move to the
+                // one before the end postion to finish the loop.
+                pp = ppEnd - 1;
+            }
+            else
+            {
+                // Move to the last one in the group.
+                pp += pFC->GetSharedLength() - 1;
+            }
         }
+    }
+
+    SCROW getStartRow() const
+    {
+        return mnStartRow;
+    }
+
+    SCROW getEndRow() const
+    {
+        return mnEndRow;
     }
 };
 
 }
 
-void ScColumn::StartListeningFromClip(
-    sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2 )
+void ScColumn::StartListeningFormulaCells(
+    sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
+    SCROW nRow1, SCROW nRow2, SCROW* pStartRow, SCROW* pEndRow )
 {
-    StartListeningFromClipHandler aFunc(rStartCxt, rEndCxt);
+    StartListeningFormulaCellsHandler aFunc(rStartCxt, rEndCxt);
     sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+
+    if (pStartRow)
+        // start row position may be smaller than nRow1 in case the formula
+        // group starts before nRow1 position.
+        *pStartRow = aFunc.getStartRow();
+
+    if (pEndRow)
+        // row position of the last cell that started listening, which may be
+        // greater than nRow2 in case the formula group extends beyond nRow2.
+        *pEndRow = aFunc.getEndRow();
+}
+
+void ScColumn::EndListeningFormulaCells(
+    sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
+    SCROW* pStartRow, SCROW* pEndRow )
+{
+    EndListeningFormulaCellsHandler aFunc(rCxt);
+    sc::ProcessBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
+
+    if (pStartRow)
+        *pStartRow = aFunc.getStartRow();
+
+    if (pEndRow)
+        *pEndRow = aFunc.getEndRow();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

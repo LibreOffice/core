@@ -1061,7 +1061,7 @@ void ScTable::StartListeningFromClip(
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
-            aCol[i].StartListeningFromClip(rStartCxt, rEndCxt, nRow1, nRow2);
+            aCol[i].StartListeningFormulaCells(rStartCxt, rEndCxt, nRow1, nRow2);
 }
 
 void ScTable::CopyToTable(
