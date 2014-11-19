@@ -137,10 +137,10 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
 
 }
 
-static sal_Bool
+static bool
 cpyBootstrapSocketPath(sal_Char *name, size_t len)
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     rtl_uString *pName = 0, *pValue = 0;
 
     rtl_uString_newFromAscii(&pName, "OSL_SOCKET_PATH");
@@ -180,7 +180,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 
     sal_Char     name[PATH_MAX + 1];
     size_t nNameLength = 0;
-    int bNameTooLong = 0;
+    bool bNameTooLong = false;
     oslPipe  pPipe;
 
     if (access(PIPEDEFAULTPATH, R_OK|W_OK) == 0)

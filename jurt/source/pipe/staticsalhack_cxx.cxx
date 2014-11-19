@@ -30,6 +30,7 @@
 #include <sal/osl/unx/module.cxx>
 #include <sal/osl/unx/mutex.cxx>
 #include <sal/osl/unx/nlsupport.cxx>
+#include <sal/osl/unx/pipe.cxx>
 #include <sal/osl/unx/process.cxx>
 #include <sal/osl/unx/process_impl.cxx>
 #include <sal/osl/unx/profile.cxx>
