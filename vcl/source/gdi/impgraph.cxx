@@ -40,7 +40,6 @@
 #include <vcl/dibtools.hxx>
 #include <boost/scoped_ptr.hpp>
 
-#define GRAPHIC_MAXPARTLEN          256000L
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
 
@@ -970,7 +969,7 @@ const OUString& ImpGraphic::ImplGetDocFileName() const
 }
 
 
-bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
+bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
 {
     MapMode         aMapMode;
     Size            aSize;
@@ -1071,93 +1070,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
             maMetaFile.SetPrefSize( aSize );
         }
 
-        if( bSwap )
-        {
-            if (!maDocFileURLStr.isEmpty())
-            {
-                rIStm.Seek( nStartPos + nHeaderLen + nLen );
-                bRet = mbSwapOut = true;
-            }
-            else
-            {
-                ::utl::TempFile     aTempFile;
-                const INetURLObject aTmpURL( aTempFile.GetURL() );
-
-                if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
-                {
-                    boost::scoped_ptr<SvStream> pOStm;
-                    try
-                    {
-                        pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
-                    }
-                    catch( const ::com::sun::star::uno::Exception& )
-                    {
-                    }
-
-                    if( pOStm )
-                    {
-                        sal_uLong   nFullLen = nHeaderLen + nLen;
-                        sal_uLong   nPartLen = std::min( nFullLen, (sal_uLong) GRAPHIC_MAXPARTLEN );
-                        sal_uInt8*  pBuffer = (sal_uInt8*) rtl_allocateMemory( nPartLen );
-
-                          pOStm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
-                        if( pBuffer )
-                        {
-                            rIStm.Seek( nStartPos );
-
-                            while( nFullLen )
-                            {
-                                rIStm.Read( (char*) pBuffer, nPartLen );
-                                pOStm->Write( (char*) pBuffer, nPartLen );
-
-                                nFullLen -= nPartLen;
-
-                                if( nFullLen < GRAPHIC_MAXPARTLEN )
-                                    nPartLen = nFullLen;
-                            }
-
-                            rtl_freeMemory( pBuffer );
-                            sal_uLong nReadErr = rIStm.GetError(), nWriteErr = pOStm->GetError();
-                            pOStm.reset();
-
-                            if( !nReadErr && !nWriteErr )
-                            {
-                                bRet = mbSwapOut = true;
-                                mpSwapFile = new ImpSwapFile;
-                                mpSwapFile->nRefCount = 1;
-                                mpSwapFile->aSwapURL = aTmpURL;
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                                         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
-                                                         comphelper::getProcessComponentContext() );
-
-                                    aCnt.executeCommand( OUString("delete"),
-                                                         ::com::sun::star::uno::makeAny( true ) );
-                                }
-                                catch( const ::com::sun::star::ucb::ContentCreationException& )
-                                {
-                                }
-                                catch( const ::com::sun::star::uno::RuntimeException& )
-                                {
-                                }
-                                catch( const ::com::sun::star::ucb::CommandAbortedException& )
-                                {
-                                }
-                                catch( const ::com::sun::star::uno::Exception& )
-                                {
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else if( meType == GRAPHIC_BITMAP || meType == GRAPHIC_GDIMETAFILE )
+        if( meType == GRAPHIC_BITMAP || meType == GRAPHIC_GDIMETAFILE )
         {
             ReadImpGraphic( rIStm, *this );
             bRet = ( rIStm.GetError() == 0UL );

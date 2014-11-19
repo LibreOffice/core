@@ -136,7 +136,7 @@ private:
     const OUString&     ImplGetDocFileName() const;
     sal_uLong               ImplGetDocFilePos() const { return mnDocFilePos;}
 
-    bool                ImplReadEmbedded( SvStream& rIStream, bool bSwap = false );
+    bool                ImplReadEmbedded( SvStream& rIStream );
     bool                ImplWriteEmbedded( SvStream& rOStream );
 
     bool                ImplSwapIn();
