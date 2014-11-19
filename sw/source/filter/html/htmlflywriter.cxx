@@ -1842,9 +1842,12 @@ void SwHTMLWriter::AddLinkTarget( const OUString& rURL )
             bFound = true;
             break;
         case '%':
-            bFound = (rURL.getLength() - nPos) >=3 &&
-                     rURL[ nPos+1 ] == '7' &&
-                     ((c =rURL[ nPos+2 ]) == 'C' || c == 'c');
+            bFound = (rURL.getLength() - nPos) >=3 && rURL[ nPos+1 ] == '7';
+            if(bFound)
+            {
+                c = rURL[ nPos+2 ];
+                bFound = (c == 'C' || c == 'c');
+            }
             if( bFound )
                 bEncoded = true;
         }
