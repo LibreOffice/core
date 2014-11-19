@@ -2159,6 +2159,28 @@ DECLARE_RTFIMPORT_TEST(testCp950listleveltext3, "cp950listleveltext3.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString(aExpectedSuffix,SAL_N_ELEMENTS(aExpectedSuffix)), aSuffix);
 }
 
+DECLARE_RTFIMPORT_TEST(testChtOutlineNumberingRtf, "chtoutline.rtf")
+{
+    const sal_Unicode aExpectedPrefix[2] = { 0x7b2c, 0x0020 };
+    const sal_Unicode aExpectedSuffix[2] = { 0x0020, 0x7ae0 };
+    uno::Reference< text::XChapterNumberingSupplier > xChapterNumberingSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference< container::XIndexAccess> xLevels(xChapterNumberingSupplier->getChapterNumberingRules());
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    OUString aSuffix,aPrefix;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "Suffix")
+            aSuffix = rProp.Value.get<OUString>();
+        if (rProp.Name == "Prefix")
+            aPrefix = rProp.Value.get<OUString>();
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedPrefix,SAL_N_ELEMENTS(aExpectedPrefix)), aPrefix);
+    CPPUNIT_ASSERT_EQUAL(OUString(aExpectedSuffix,SAL_N_ELEMENTS(aExpectedSuffix)), aSuffix);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
