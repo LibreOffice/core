@@ -129,8 +129,10 @@
 #include <svx/xpoly.hxx>
 #include <rtl/strbuf.hxx>
 #include <svdoopengl.hxx>
+#include <svdobjplusdata.hxx>
+#include <svdobjuserdatalist.hxx>
+
 #include <boost/scoped_ptr.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 
@@ -225,47 +227,6 @@ OUString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/,
     return OUString();
 }
 
-class SdrObjUserDataList
-{
-    typedef boost::ptr_vector<SdrObjUserData> ListType;
-    ListType maList;
-
-public:
-    SdrObjUserDataList();
-    ~SdrObjUserDataList();
-
-    size_t GetUserDataCount() const;
-    SdrObjUserData* GetUserData(size_t nNum);
-    void AppendUserData(SdrObjUserData* pData);
-    void DeleteUserData(size_t nNum);
-};
-
-SdrObjUserDataList::SdrObjUserDataList() {}
-SdrObjUserDataList::~SdrObjUserDataList() {}
-
-size_t SdrObjUserDataList::GetUserDataCount() const
-{
-    return static_cast<sal_uInt16>(maList.size());
-}
-
-SdrObjUserData* SdrObjUserDataList::GetUserData(size_t nNum)
-{
-    return &maList.at(nNum);
-}
-
-void SdrObjUserDataList::AppendUserData(SdrObjUserData* pData)
-{
-    maList.push_back(pData);
-}
-
-void SdrObjUserDataList::DeleteUserData(size_t nNum)
-{
-    maList.erase(maList.begin()+nNum);
-}
-
-
-
-
 SdrObjGeoData::SdrObjGeoData():
     pGPL(NULL),
     bMovProt(false),
@@ -280,58 +241,6 @@ SdrObjGeoData::SdrObjGeoData():
 SdrObjGeoData::~SdrObjGeoData()
 {
     delete pGPL;
-}
-
-
-
-TYPEINIT0(SdrObjPlusData);
-
-SdrObjPlusData::SdrObjPlusData():
-    pBroadcast(NULL),
-    pUserDataList(NULL),
-    pGluePoints(NULL)
-{
-}
-
-SdrObjPlusData::~SdrObjPlusData()
-{
-    delete pBroadcast;
-    delete pUserDataList;
-    delete pGluePoints;
-}
-
-SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
-{
-    SdrObjPlusData* pNeuPlusData=new SdrObjPlusData;
-    if (pUserDataList!=NULL) {
-        sal_uInt16 nAnz=pUserDataList->GetUserDataCount();
-        if (nAnz!=0) {
-            pNeuPlusData->pUserDataList=new SdrObjUserDataList;
-            for (sal_uInt16 i=0; i<nAnz; i++) {
-                SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i)->Clone(pObj1);
-                if (pNeuUserData!=NULL) {
-                    pNeuPlusData->pUserDataList->AppendUserData(pNeuUserData);
-                } else {
-                    OSL_FAIL("SdrObjPlusData::Clone(): UserData.Clone() returns NULL.");
-                }
-            }
-        }
-    }
-    if (pGluePoints!=NULL) pNeuPlusData->pGluePoints=new SdrGluePointList(*pGluePoints);
-    // MtfAnimator isn't copied either
-
-    // #i68101#
-    // copy object name, title and description
-    pNeuPlusData->aObjName = aObjName;
-    pNeuPlusData->aObjTitle = aObjTitle;
-    pNeuPlusData->aObjDescription = aObjDescription;
-
-    return pNeuPlusData;
-}
-
-void SdrObjPlusData::SetGluePoints(const SdrGluePointList& rPts)
-{
-    return *pGluePoints = rPts;
 }
 
 SdrObjTransformInfoRec::SdrObjTransformInfoRec() :

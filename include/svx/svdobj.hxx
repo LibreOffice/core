@@ -73,6 +73,7 @@ class SfxPoolItem;
 class SdrVirtObj;
 class SdrDragView;
 class SdrObjUserDataList;
+class SdrObjPlusData;
 
 namespace sdr
 {
@@ -225,30 +226,6 @@ public:
 public:
     SdrObjGeoData();
     virtual ~SdrObjGeoData();
-};
-
-// Bitsack for DrawObjects
-class SdrObjPlusData
-{
-    friend class                SdrObject;
-
-    SfxBroadcaster*             pBroadcast;    // broadcaster, if this object is referenced (bVirtObj=true). Also for connectors etc.
-    SdrObjUserDataList*         pUserDataList; // application specific data
-    SdrGluePointList*           pGluePoints;   // glue points for glueing object connectors
-
-    // #i68101#
-    // object name, title and description
-    OUString aObjName;
-    OUString aObjTitle;
-    OUString aObjDescription;
-
-public:
-    TYPEINFO();
-    SdrObjPlusData();
-    virtual ~SdrObjPlusData();
-    virtual SdrObjPlusData* Clone(SdrObject* pObj1) const;
-
-    void SetGluePoints(const SdrGluePointList& rPts);
 };
 
 // provides information about various ZObject properties
