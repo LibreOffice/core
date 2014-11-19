@@ -7,7 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <staticsalhack.h>
+#define DISABLE_DYNLOADING
+#define FORCE_SYSALLOC
+#define NO_CHILD_PROCESSES
+#undef SAL_LOG_INFO
+#undef SAL_LOG_WARN
 
 #include <sal/rtl/string.cxx>
 #undef IMPL_RTL_EMPTYSTRING
@@ -34,6 +38,7 @@
 #include <sal/osl/unx/process.cxx>
 #include <sal/osl/unx/process_impl.cxx>
 #include <sal/osl/unx/profile.cxx>
+#include <sal/osl/unx/readwrite_helper.cxx>
 #include <sal/osl/unx/security.cxx>
 #include <sal/osl/unx/thread.cxx>
 #include <sal/osl/unx/uunxapi.cxx>

@@ -48,11 +48,10 @@ else
 
 $(eval $(call gb_Library_add_cobjects,jpipe, \
     jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection \
-    jurt/source/pipe/staticsalhack_c \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,jpipe, \
-    jurt/source/pipe/staticsalhack_cxx \
+    jurt/source/pipe/staticsalhack \
 ))
 
 $(eval $(call gb_Library_add_defs,jpipe, \

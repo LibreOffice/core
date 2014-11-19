@@ -15,7 +15,7 @@
 sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 {
     sal_Int32 nToWrite = dataSize;
-    unsigned char* dataToWrite = data;
+    unsigned char* dataToWrite = static_cast<unsigned char *>(data);
 
     // Check for overflow as we convert a signed to an unsigned.
     OSL_ASSERT(dataSize == (sal_uInt32)nToWrite);
@@ -40,7 +40,7 @@ sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 sal_Bool safeRead( int fd, void* buffer, sal_uInt32 count )
 {
     sal_Int32 nToRead = count;
-    unsigned char* bufferForReading = buffer;
+    unsigned char* bufferForReading = static_cast<unsigned char *>(buffer);
 
     // Check for overflow as we convert a signed to an unsigned.
     OSL_ASSERT(count == (sal_uInt32)nToRead);
