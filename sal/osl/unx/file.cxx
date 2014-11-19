@@ -32,7 +32,7 @@
 
 #include "system.h"
 #include "createfilehandlefromfd.hxx"
-#include "file_error_transl.h"
+#include "file_error_transl.hxx"
 #include "file_impl.hxx"
 #include "file_url.h"
 #include "uunxapi.h"

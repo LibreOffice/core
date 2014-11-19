@@ -17,16 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_H
-#define INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_H
+#ifndef INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_HXX
+#define INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_HXX
 
 #include <osl/file.h>
 #include <sal/types.h>
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 /*********************************************
    oslTranslateFileError
@@ -49,14 +44,10 @@ extern "C"
 
  *********************************************/
 
-#define OSL_FET_SUCCESS sal_False
-#define OSL_FET_ERROR   sal_True
+#define OSL_FET_SUCCESS false
+#define OSL_FET_ERROR   true
 
-oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno);
-
-#ifdef __cplusplus
-}
-#endif
+oslFileError oslTranslateFileError(bool bIsError, int Errno);
 
 #endif
 

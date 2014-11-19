@@ -28,7 +28,7 @@
 
 #include "system.h"
 #include "file_impl.hxx"
-#include "file_error_transl.h"
+#include "file_error_transl.hxx"
 #include "file_path_helper.hxx"
 #include "file_url.h"
 #include "uunxapi.hxx"

@@ -23,7 +23,7 @@
 #include "osl/thread.h"
 #include "rtl/alloc.h"
 
-#include "file_error_transl.h"
+#include "file_error_transl.hxx"
 #include "file_url.h"
 #include "system.h"
 

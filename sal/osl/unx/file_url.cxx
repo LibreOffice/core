@@ -37,7 +37,7 @@
 #include <rtl/ustrbuf.h>
 #include "rtl/textcvt.h"
 
-#include "file_error_transl.h"
+#include "file_error_transl.hxx"
 #include "file_path_helper.hxx"
 
 #include "uunxapi.hxx"

@@ -18,16 +18,16 @@
  */
 
 #include <errno.h>
-#include "file_error_transl.h"
+#include "file_error_transl.hxx"
 #include <osl/diagnose.h>
 
-oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
+oslFileError oslTranslateFileError(bool bIsError, int Errno)
 {
     oslFileError osl_error = osl_File_E_invalidError;
 
     OSL_ENSURE((bIsError && (0 != Errno)) || (!bIsError && (0 == Errno)), "oslTranslateFileError strange input combination!");
 
-    /* Have a look at file_error_transl.h for
+    /* Have a look at file_error_transl.hxx for
        the reason that we do this here */
     if (bIsError && (0 == Errno))
         return osl_error;
