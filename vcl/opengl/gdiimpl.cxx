@@ -182,7 +182,8 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
         mbUseStencil = false;
         mbUseScissor = true;
         maContext.makeCurrent();
-        glScissor( aRect.Left(), GetHeight() - aRect.Top(), aRect.GetWidth(), aRect.GetHeight() );
+        glViewport( 0, 0, GetWidth(), GetHeight() );
+        glScissor( aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight() );
     }
     else
     {
