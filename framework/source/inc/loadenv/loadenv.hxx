@@ -447,7 +447,7 @@ private:
                 the whole runtime can't be used any longer.
      */
     bool impl_handleContent()
-        throw(LoadEnvException, css::uno::RuntimeException, css::beans::IllegalTypeException, std::exception);
+        throw(LoadEnvException, css::uno::RuntimeException, std::exception);
 
     /** @short  tries to use FrameLoader objects for loading.
 
