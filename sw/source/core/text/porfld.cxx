@@ -445,9 +445,13 @@ bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 void SwFldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     sal_Int32 nH = 0;
+    sal_Int32 nW = 0;
     if (pFnt)
+    {
         nH = pFnt->GetSize(pFnt->GetActual()).Height();
-    rPH.Special( GetLen(), aExpand, GetWhichPor(), nH );
+        nW = pFnt->GetSize(pFnt->GetActual()).Width();
+    }
+    rPH.Special( GetLen(), aExpand, GetWhichPor(), nH, nW, pFnt );
     if( GetWhichPor() == POR_FLD )
     {
         rPH.SetAttrFieldType(m_nAttrFldType);

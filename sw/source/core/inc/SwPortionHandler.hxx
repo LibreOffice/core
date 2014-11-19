@@ -22,6 +22,8 @@
 
 #include <swtypes.hxx>
 
+class SwFont;
+
 /** The SwPortionHandler interface implements a visitor for the layout
  * engine's text portions. This can be used to gather information of
  * the on-screen representation of a single paragraph.
@@ -35,7 +37,7 @@
  * held by the corresponding SwTxtNode.
  *
  * The SwPortionHandler can be used with the
- * SwTextFrame::VisitPortions(...) method.
+ * SwTxtFrm::VisitPortions(...) method.
  */
 class SwPortionHandler
 {
@@ -68,7 +70,8 @@ public:
         const OUString& rText, /// text which is painted on-screen
         sal_uInt16 nType,         /// type of this portion
         sal_Int32 nHeight = 0,     /// font height of the painted text
-        sal_Int32 nWidth = 0     /// width of this portion
+        sal_Int32 nWidth = 0,     /// width of this portion
+        const SwFont* pFont = 0 /// font of this portion
         ) = 0;
 
     /** line break. This method is called whenever a line break in the

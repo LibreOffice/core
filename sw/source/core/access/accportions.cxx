@@ -135,7 +135,7 @@ void SwAccessiblePortionData::SetAttrFieldType( sal_uInt16 nAttrFldType )
 }
 
 void SwAccessiblePortionData::Special(
-    sal_Int32 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/)
+    sal_Int32 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/, const SwFont* /*pFont*/)
 {
     OSL_ENSURE( nModelPosition >= 0, "illegal position" );
     OSL_ENSURE( (nModelPosition + nLength) <= pTxtNode->GetTxt().getLength(),

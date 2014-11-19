@@ -150,7 +150,8 @@ class XmlPortionDumper:public SwPortionHandler
                           const OUString & rText,
                           sal_uInt16 nType,
                           sal_Int32 nHeight,
-                          sal_Int32 nWidth ) SAL_OVERRIDE
+                          sal_Int32 nWidth,
+                          const SwFont* pFont ) SAL_OVERRIDE
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Special" ) );
         xmlTextWriterWriteFormatAttribute( writer,
@@ -170,6 +171,9 @@ class XmlPortionDumper:public SwPortionHandler
 
         if (nWidth > 0)
             xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("nWidth"), "%i", (int)nWidth);
+
+        if (pFont)
+            pFont->dumpAsXml(writer);
 
         xmlTextWriterEndElement( writer );
         ofs += nLength;
@@ -430,6 +434,14 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
 
     if ( bCreateWriter )
         lcl_freeWriter( writer );
+}
+
+void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
+{
+    xmlTextWriterStartElement(writer, BAD_CAST("pFont"));
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%s", const_cast<Color&>(GetColor()).AsRGBHexString().toUtf8().getStr());
+    xmlTextWriterEndElement(writer);
 }
 
 void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const

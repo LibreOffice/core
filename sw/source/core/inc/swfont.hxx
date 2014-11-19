@@ -36,6 +36,7 @@ class SwDrawTextInfo;   // _DrawText
 class SwScriptInfo;     // _GetTxtSize
 class SwViewShell;
 class IDocumentSettingAccess;
+typedef struct _xmlTextWriter *xmlTextWriterPtr;
 
 const sal_Unicode CH_BLANK = ' ';   // ' ' blank spaces
 const sal_Unicode CH_BREAK = 0x0A;
@@ -449,6 +450,8 @@ public:
     sal_uInt16 CalcShadowSpace(
         const sal_uInt16 nShadow, const bool bVertLayout,
         const bool bSkipLeft, const bool bSkipRight ) const;
+
+    void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
 };
 
 inline void SwFont::SetColor( const Color& rColor )
