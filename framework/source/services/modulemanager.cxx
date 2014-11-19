@@ -235,59 +235,49 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
            css::lang::WrappedTargetException     ,
            css::uno::RuntimeException, std::exception            )
 {
-    try
+    ::comphelper::SequenceAsHashMap lProps(aValue);
+    if (lProps.empty() )
     {
-        ::comphelper::SequenceAsHashMap lProps(aValue);
-        if (lProps.empty() )
-        {
-            throw css::lang::IllegalArgumentException(
-                    OUString("No properties given to replace part of module."),
-                    static_cast< cppu::OWeakObject * >(this),
-                    2);
-        }
-
-        // get access to the element
-        // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
-        // it cache it as a member of this module manager instance. If we change some props there ... but dont
-        // flush changes (because an error occurred) we will read them later. If we use a different config access
-        // we can close it without a flush ... and our read data wont be affected .-)
-        css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
-                                                                            m_xContext,
-                                                                            "/org.openoffice.Setup/Office/Factories",
-                                                                            ::comphelper::ConfigurationHelper::E_STANDARD);
-        css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::container::XNameReplace > xModule;
-
-        xModules->getByName(sName) >>= xModule;
-        if (!xModule.is())
-        {
-            throw css::uno::RuntimeException(
-                    OUString("Was not able to get write access to the requested module entry inside configuration."),
-                    static_cast< cppu::OWeakObject * >(this));
-        }
-
-        ::comphelper::SequenceAsHashMap::const_iterator pProp;
-        for (  pProp  = lProps.begin();
-               pProp != lProps.end();
-             ++pProp                  )
-        {
-            const OUString& sPropName  = pProp->first;
-            const css::uno::Any&   aPropValue = pProp->second;
-
-            // let "NoSuchElementException" out ! We support the same API ...
-            // and without a flush() at the end all changed data before will be ignored !
-            xModule->replaceByName(sPropName, aPropValue);
-        }
-
-        ::comphelper::ConfigurationHelper::flush(xCfg);
+        throw css::lang::IllegalArgumentException(
+                OUString("No properties given to replace part of module."),
+                static_cast< cppu::OWeakObject * >(this),
+                2);
     }
-    catch (const css::beans::IllegalTypeException& e)
+
+    // get access to the element
+    // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
+    // it cache it as a member of this module manager instance. If we change some props there ... but dont
+    // flush changes (because an error occurred) we will read them later. If we use a different config access
+    // we can close it without a flush ... and our read data wont be affected .-)
+    css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
+                                                                        m_xContext,
+                                                                        "/org.openoffice.Setup/Office/Factories",
+                                                                        ::comphelper::ConfigurationHelper::E_STANDARD);
+    css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::container::XNameReplace > xModule  ;
+
+    xModules->getByName(sName) >>= xModule;
+    if (!xModule.is())
     {
-        css::uno::Any a(e);
-        throw css::lang::WrappedTargetException(
-                OUString("ModuleManager::replaceByName: IllegalType exception"),
-                css::uno::Reference<css::uno::XInterface>(*this), a);
+        throw css::uno::RuntimeException(
+                OUString("Was not able to get write access to the requested module entry inside configuration."),
+                static_cast< cppu::OWeakObject * >(this));
     }
+
+    ::comphelper::SequenceAsHashMap::const_iterator pProp;
+    for (  pProp  = lProps.begin();
+           pProp != lProps.end()  ;
+         ++pProp                  )
+    {
+        const OUString& sPropName  = pProp->first;
+        const css::uno::Any&   aPropValue = pProp->second;
+
+        // let "NoSuchElementException" out ! We support the same API ...
+        // and without a flush() at the end all changed data before will be ignored !
+        xModule->replaceByName(sPropName, aPropValue);
+    }
+
+    ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
 css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
