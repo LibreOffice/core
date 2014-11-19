@@ -54,23 +54,33 @@ if [ ! -f ./autogen.sh ]; then
   error "$USAGE"
 fi
 
+# --java-target-version is now hardcoded to 1.5
+# --enable-pch makes impress unit tests fail
 do_configure()
 {
   if [ "_$windows" = "_1" ]; then
     JDK_HOME='/cygdrive/c/Program Files (x86)/Java/jdk1.7.0_67'
-    ANT_HOME='/opt/apache-ant-1.9.4'
-    if [ ! -e "${JDK_HOME}" ]; then
+    ANT_HOME='/cygdrive/c/sources/apache-ant-1.9.4'
+    JUNIT_HOME='/cygdrive/c/sources/junit-4.10.jar'
+
+    if [ ! -d "${JDK_HOME}" ]; then
       error "Kein JDK in ${JDK_HOME} gefunden."
     fi
-    if [ ! -e "${ANT_HOME}" ]; then
+    if [ ! -d "${ANT_HOME}" ]; then
       error "Kein ANT in ${ANT_HOME} gefunden."
     fi
+    if [ ! -f "${JUNIT_HOME}" ]; then
+      error "Kein JUNIT in ${JUNIT_HOME} gefunden."
+    fi
     OPTIONS_PLATFORM=(
+      --disable-ccache
       --with-ant-home="${ANT_HOME}"
-      --with-lang='de'
+      --with-external-tar=/cygdrive/c/sources/lo-external
+      --with-jdk-home="${JDK_HOME}"
+      --with-junit="${JUNIT_HOME}"
     )
   else
-    if [ -f /usr/lib/j2sdk1.5-sun/bin/javac  ]; then
+    if [ -f /usr/lib/j2sdk1.5-sun/bin/javac ]; then
       JDK_HOME="/usr/lib/j2sdk1.5-sun"
     else
       JDK_HOME="/usr/lib/jvm/java-6-sun"
@@ -91,12 +101,14 @@ do_configure()
       --without-doxygen
       --without-fonts
       --without-ppds
-      --with-lang='en-US de fr es it pt'
+      --with-external-tar="${HOME}/lo-external"
       --with-package-format=deb
       --with-system-curl
       --with-system-expat
       --with-system-jpeg
+      --with-system-libpng
       --with-system-libxml
+      --with-system-openldap
       --with-system-sane
       --with-system-zlib
     )
@@ -112,8 +124,8 @@ do_configure()
     --with-help
     --with-java
     --with-jdk-home="${JDK_HOME}"
+    --with-lang='de fr es it pt'
     --with-myspell-dicts
-    --without-junit
     --with-system-dicts
     --with-vendor='it@M Landeshauptstadt München'
     "${OPTIONS_PLATFORM[@]}"
