@@ -43,6 +43,7 @@
 #include <my_module/XSomething.hpp>
 
 
+using namespace ::rtl; // for OUString
 using namespace ::com::sun::star; // for odk interfaces
 using namespace ::com::sun::star::uno; // for basic types
 

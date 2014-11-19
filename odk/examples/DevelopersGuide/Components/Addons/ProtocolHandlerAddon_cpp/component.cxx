@@ -46,6 +46,7 @@
 // include our specific addon header to get access to functions and definitions
 #include <addon.hxx>
 
+using namespace ::rtl;
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;

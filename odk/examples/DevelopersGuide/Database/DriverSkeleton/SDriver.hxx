@@ -41,6 +41,10 @@
 #include <cppuhelper/compbase2.hxx>
 #include "SConnection.hxx"
 
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+} } } }
+
 namespace connectivity
 {
     namespace skeleton

@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <osl/diagnose.h>
 #include <uno/lbnames.h>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -59,6 +60,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
+using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::beans;

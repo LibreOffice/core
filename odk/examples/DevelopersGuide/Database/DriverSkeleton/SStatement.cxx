@@ -44,6 +44,7 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include "propertyids.hxx"
 
 using namespace connectivity::skeleton;
