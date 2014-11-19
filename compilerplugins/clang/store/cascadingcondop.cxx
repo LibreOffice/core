@@ -14,8 +14,8 @@
 /*
 This is a compile check.
 
-It checks for conditional operators in conditional operators, which are
-errorprone, e.g.
+It checks for complex statements with conditional operators in conditional
+operators, which are errorprone, e.g.
  Thing foo = IsBar() ? ( IsBaz() ? b1 : b2 ) : b3;
 
 However, it finds 556 cases in sw/source alone, thus likely needs some more
@@ -24,8 +24,18 @@ a certain length in characters (but that needs the Context/SourceManager, which
 I havent played with yet).
 */
 
+// the value is rather arbitrary, but code above this number of stmts begins to
+// be smelly
+static const int stmtlimit = 50;
+
 namespace loplugin
 {
+
+struct WalkCounter
+{
+    int  stmtcount;
+    bool cascading;
+};
 
 // Ctor, nothing special, pass the argument(s).
 CascadingCondOp::CascadingCondOp( const InstantiationData& data )
@@ -41,20 +51,30 @@ void CascadingCondOp::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
 }
 
-void CascadingCondOp::Walk( const Stmt* stmt )
+void CascadingCondOp::Walk( const Stmt* stmt, WalkCounter& c )
 {
     for(Stmt::const_child_iterator it = stmt->child_begin(); it != stmt->child_end(); ++it)
     {
-        if ( const ConditionalOperator* condop = dyn_cast< ConditionalOperator >( *it ))
-            report( DiagnosticsEngine::Warning, "cascading conditional operator", condop->getLocStart());
-        Walk(*it);
+        ++c.stmtcount;
+        if ( dyn_cast< ConditionalOperator >( *it ))
+            c.cascading = true;
+        Walk(*it, c);
     }
 }
 
 bool CascadingCondOp::VisitStmt( const Stmt* stmt )
 {
     if ( const ConditionalOperator* condop = dyn_cast< ConditionalOperator >( stmt ))
-        Walk(condop);
+    {
+        WalkCounter c = { 0, false };
+        Walk(condop, c);
+        if(c.cascading && c.stmtcount >= stmtlimit)
+        {
+            std::string msg("cascading conditional operator, complexity: ");
+            msg.append(std::to_string(c.stmtcount));
+            report( DiagnosticsEngine::Warning, msg, condop->getLocStart());
+        }
+    }
     return true;
 }
 

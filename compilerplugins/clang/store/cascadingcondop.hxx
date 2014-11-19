@@ -17,6 +17,8 @@
 namespace loplugin
 {
 
+struct WalkCounter;
+
 // The class implementing the plugin action.
 class CascadingCondOp
     // Inherits from the Clang class that will allow examing the Clang AST tree (i.e. syntax tree).
@@ -27,7 +29,7 @@ class CascadingCondOp
     public:
         CascadingCondOp( const InstantiationData& data );
         virtual void run() override;
-        void Walk( const Stmt* stmt );
+        void Walk( const Stmt* stmt, WalkCounter& c );
         bool VisitStmt( const Stmt* stmt );
     };
 
