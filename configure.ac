@@ -4537,6 +4537,7 @@ if test "$enable_crashdump" = "yes"; then
     ENABLE_CRASHDUMP="TRUE"
     BUILD_TYPE="$BUILD_TYPE CRASHREP"
     AC_MSG_RESULT([yes])
+    AC_DEFINE(HAVE_FEATURE_CRASHDUMP)
 else
     ENABLE_CRASHDUMP=""
     AC_MSG_RESULT([no])

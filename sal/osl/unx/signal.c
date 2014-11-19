@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <config_features.h>
+
 /* system headers */
 #include "system.h"
 
@@ -25,7 +29,7 @@
 #if defined( INTEL )
 #include "backtrace.h"
 #define INCLUDE_BACKTRACE
-#ifdef SAL_ENABLE_CRASH_REPORT
+#if HAVE_FEATURE_CRASHDUMP
 #define STACKTYPE "MacOsX_X86"
 #endif
 #endif /* INTEL */
@@ -36,7 +40,7 @@
 #include <execinfo.h>
 #include <link.h>
 #define INCLUDE_BACKTRACE
-#if defined SAL_ENABLE_CRASH_REPORT
+#if HAVE_FEATURE_CRASHDUMP
 #define STACKTYPE "Linux"
 #endif
 #endif
@@ -46,7 +50,7 @@
 #include "backtrace.h"
 #define INCLUDE_BACKTRACE
 
-#if defined SAL_ENABLE_CRASH_REPORT
+#if HAVE_FEATURE_CRASHDUMP
 #if defined( SPARC )
 #define STACKTYPE "Solaris_Sparc"
 #elif defined( INTEL )
@@ -77,7 +81,7 @@
 #define ACT_EXIT    2
 #define ACT_SYSTEM  3
 #define ACT_HIDE    4
-#ifdef SAL_ENABLE_CRASH_REPORT
+#if HAVE_FEATURE_CRASHDUMP
 #    define ACT_ABORT   5
 #else
 #    define ACT_ABORT   ACT_SYSTEM
@@ -310,7 +314,7 @@ static sal_Bool DeInitSignal(void)
     return sal_False;
 }
 
-#if defined (SAL_ENABLE_CRASH_REPORT) && defined(INCLUDE_BACKTRACE)
+#if HAVE_FEATURE_CRASHDUMP && defined(INCLUDE_BACKTRACE)
 
 static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum, sal_uInt32 nChecksumLen )
 {
@@ -389,8 +393,7 @@ static int fputs_xml( const char *string, FILE *stream )
 
 /* Create intermediate files and run crash reporter */
 
-#if defined SAL_ENABLE_CRASH_REPORT && defined INCLUDE_BACKTRACE && \
-    defined LINUX
+#if HAVE_FEATURE_CRASHDUMP && defined INCLUDE_BACKTRACE && defined LINUX
 
 typedef struct
 {
@@ -473,7 +476,7 @@ dynamic_section_offset(const char *name)
 
 static int ReportCrash( int Signal )
 {
-#ifdef SAL_ENABLE_CRASH_REPORT
+#if HAVE_FEATURE_CRASHDUMP
 
 #define REPORTENV_PARAM     "-crashreportenv:"
 
@@ -794,12 +797,12 @@ static int ReportCrash( int Signal )
     }
 
     return 1;
-#else /* defined SAL_ENABLE_CRASH_REPORT */
+#else /* HAVE_FEATURE_CRASHDUMP */
     /* the utility crash_report is not build, so do the same as when
        the option -nocrashreport is used */
     (void) Signal; // avoid warnings
     return -1;
-#endif /* defined SAL_ENABLE_CRASH_REPORT */
+#endif /* HAVE_FEATURE_CRASHDUMP */
 }
 
 static void PrintStack( int sig )
