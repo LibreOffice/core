@@ -1702,7 +1702,6 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
     aBoundRect.Top()--;
     aBoundRect.Right()++;
     aBoundRect.Bottom()++;
-    //TODO: lfrb: some missing transformation with the polygon in outdev
 
     PreDraw();
 
