@@ -46,6 +46,7 @@
 #endif
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
+#include <osl/process.h>
 #include <osl/conditn.h>
 #include <osl/thread.h>
 #include <osl/file.h>
@@ -57,7 +58,6 @@
 
 #include "createfilehandlefromfd.hxx"
 #include "file_url.hxx"
-#include "procimpl.h"
 #include "readwrite_helper.h"
 #include "sockimpl.h"
 #include "secimpl.h"
@@ -67,6 +67,13 @@
 
 namespace
 {
+
+struct oslProcessImpl {
+    pid_t           m_pid;
+    oslCondition    m_terminated;
+    int             m_status;
+    oslProcessImpl* m_pnext;
+};
 
 struct ProcessData
 {
