@@ -1259,7 +1259,7 @@ sal_uInt32 RegionBand::getRectangleCount() const
         pBand = pBand->mpNextBand;
     }
 
-    return 0;
+    return nCount;
 }
 
 #ifdef DBG_UTIL
