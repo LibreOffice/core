@@ -501,21 +501,6 @@ void Graphic::SetContext( GraphicReader* pReader )
     mpImpGraphic->ImplSetContext( pReader );
 }
 
-void Graphic::SetDocFileName( const OUString& rName, sal_uLong nFilePos )
-{
-    mpImpGraphic->ImplSetDocFileName( rName, nFilePos );
-}
-
-const OUString& Graphic::GetDocFileName() const
-{
-    return mpImpGraphic->ImplGetDocFileName();
-}
-
-sal_uLong Graphic::GetDocFilePos() const
-{
-    return mpImpGraphic->ImplGetDocFilePos();
-}
-
 bool Graphic::SwapOut()
 {
     ImplTestRefCount();

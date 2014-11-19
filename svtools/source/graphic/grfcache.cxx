@@ -265,8 +265,6 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     const Size          aPrefSize( rSubstitute.GetPrefSize() );
     const MapMode       aPrefMapMode( rSubstitute.GetPrefMapMode() );
     const Link          aAnimationNotifyHdl( rSubstitute.GetAnimationNotifyHdl() );
-    const OUString      aDocFileName( rSubstitute.GetDocFileName() );
-    const sal_uLong     nDocFilePos = rSubstitute.GetDocFilePos();
     const GraphicType   eOldType = rSubstitute.GetType();
     const bool          bDefaultType = ( rSubstitute.GetType() == GRAPHIC_DEFAULT );
 
@@ -299,7 +297,6 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
         rSubstitute.SetPrefSize( aPrefSize );
         rSubstitute.SetPrefMapMode( aPrefMapMode );
         rSubstitute.SetAnimationNotifyHdl( aAnimationNotifyHdl );
-        rSubstitute.SetDocFileName( aDocFileName, nDocFilePos );
     }
 
     if( GFX_LINK_TYPE_NONE != maGfxLink.GetType() )

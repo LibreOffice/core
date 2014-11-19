@@ -95,7 +95,6 @@ ImpGraphic::ImpGraphic() :
         mpSwapFile      ( NULL ),
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_NONE ),
-        mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -109,8 +108,6 @@ ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
         mpContext       ( NULL ),
         mpSwapFile      ( rImpGraphic.mpSwapFile ),
         meType          ( rImpGraphic.meType ),
-        maDocFileURLStr ( rImpGraphic.maDocFileURLStr ),
-        mnDocFilePos    ( rImpGraphic.mnDocFilePos ),
         mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( rImpGraphic.mbSwapOut ),
@@ -142,7 +139,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         mpSwapFile      ( NULL ),
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_BITMAP ),
-        mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -157,7 +153,6 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         mpSwapFile      ( NULL ),
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_BITMAP ),
-        mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -171,7 +166,6 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
     mpSwapFile( NULL ),
     mpGfxLink( NULL ),
     meType( rSvgDataPtr.get() ? GRAPHIC_BITMAP : GRAPHIC_NONE ),
-    mnDocFilePos( 0UL ),
     mnSizeBytes( 0UL ),
     mnRefCount( 1UL ),
     mbSwapOut( false ),
@@ -187,7 +181,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         mpSwapFile      ( NULL ),
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_BITMAP ),
-        mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -202,7 +195,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         mpSwapFile      ( NULL ),
         mpGfxLink       ( NULL ),
         meType          ( GRAPHIC_GDIMETAFILE ),
-        mnDocFilePos    ( 0UL ),
         mnSizeBytes     ( 0UL ),
         mnRefCount      ( 1UL ),
         mbSwapOut       ( false ),
@@ -244,8 +236,6 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 
         if( !mbSwapUnderway )
         {
-            maDocFileURLStr = rImpGraphic.maDocFileURLStr;
-            mnDocFilePos = rImpGraphic.mnDocFilePos;
             mbSwapOut = rImpGraphic.mbSwapOut;
             mpSwapFile = rImpGraphic.mpSwapFile;
 
@@ -393,8 +383,6 @@ void ImpGraphic::ImplClear()
     }
 
     mbSwapOut = false;
-    mnDocFilePos = 0UL;
-    maDocFileURLStr.clear();
 
     // cleanup
     ImplClearGraphics( false );
@@ -953,22 +941,6 @@ void ImpGraphic::ImplSetContext( GraphicReader* pReader )
     mpContext = pReader;
 }
 
-void ImpGraphic::ImplSetDocFileName( const OUString& rName, sal_uLong nFilePos )
-{
-    const INetURLObject aURL( rName );
-
-    DBG_ASSERT( rName.isEmpty() || ( aURL.GetProtocol() != INET_PROT_NOT_VALID ), "Graphic::SetDocFileName(...): invalid URL" );
-
-    maDocFileURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
-    mnDocFilePos = nFilePos;
-}
-
-const OUString& ImpGraphic::ImplGetDocFileName() const
-{
-    return maDocFileURLStr;
-}
-
-
 bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
 {
     MapMode         aMapMode;
@@ -1184,65 +1156,57 @@ bool ImpGraphic::ImplSwapOut()
 
     if( !ImplIsSwapOut() )
     {
-        if (maDocFileURLStr.isEmpty())
+        ::utl::TempFile     aTempFile;
+        const INetURLObject aTmpURL( aTempFile.GetURL() );
+
+        if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
         {
-            ::utl::TempFile     aTempFile;
-            const INetURLObject aTmpURL( aTempFile.GetURL() );
-
-            if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
+            boost::scoped_ptr<SvStream> pOStm;
+            try
             {
-                boost::scoped_ptr<SvStream> pOStm;
-                try
-                {
-                    pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
-                }
-                catch( const ::com::sun::star::uno::Exception& )
-                {
-                }
-                if( pOStm )
-                {
-                    pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-                    pOStm->SetCompressMode( COMPRESSMODE_NATIVE );
+                pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | STREAM_SHARE_DENYWRITE ));
+            }
+            catch( const ::com::sun::star::uno::Exception& )
+            {
+            }
+            if( pOStm )
+            {
+                pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
+                pOStm->SetCompressMode( COMPRESSMODE_NATIVE );
 
-                    if( ( bRet = ImplSwapOut( pOStm.get() ) ) )
+                if( ( bRet = ImplSwapOut( pOStm.get() ) ) )
+                {
+                    mpSwapFile = new ImpSwapFile;
+                    mpSwapFile->nRefCount = 1;
+                    mpSwapFile->aSwapURL = aTmpURL;
+                }
+                else
+                {
+                    pOStm.reset();
+
+                    try
                     {
-                        mpSwapFile = new ImpSwapFile;
-                        mpSwapFile->nRefCount = 1;
-                        mpSwapFile->aSwapURL = aTmpURL;
+                        ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
+                                            comphelper::getProcessComponentContext() );
+
+                        aCnt.executeCommand( OUString("delete"),
+                                            ::com::sun::star::uno::makeAny( true ) );
                     }
-                    else
+                    catch( const ::com::sun::star::ucb::ContentCreationException& )
                     {
-                        pOStm.reset();
-
-                        try
-                        {
-                            ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
-                                                 ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
-                                                 comphelper::getProcessComponentContext() );
-
-                            aCnt.executeCommand( OUString("delete"),
-                                                 ::com::sun::star::uno::makeAny( true ) );
-                        }
-                        catch( const ::com::sun::star::ucb::ContentCreationException& )
-                        {
-                        }
-                        catch( const ::com::sun::star::uno::RuntimeException& )
-                        {
-                        }
-                        catch( const ::com::sun::star::ucb::CommandAbortedException& )
-                        {
-                        }
-                        catch( const ::com::sun::star::uno::Exception& )
-                        {
-                        }
+                    }
+                    catch( const ::com::sun::star::uno::RuntimeException& )
+                    {
+                    }
+                    catch( const ::com::sun::star::ucb::CommandAbortedException& )
+                    {
+                    }
+                    catch( const ::com::sun::star::uno::Exception& )
+                    {
                     }
                 }
             }
-        }
-        else
-        {
-            ImplClearGraphics( true );
-            bRet = mbSwapOut = true;
         }
     }
 
@@ -1292,8 +1256,6 @@ bool ImpGraphic::ImplSwapIn()
 
         if( mpSwapFile )
             aSwapURL = mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE );
-        else
-            aSwapURL = maDocFileURLStr;
 
         if( !aSwapURL.isEmpty() )
         {
@@ -1310,9 +1272,6 @@ bool ImpGraphic::ImplSwapIn()
             {
                 pIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
                 pIStm->SetCompressMode( COMPRESSMODE_NATIVE );
-
-                if( !mpSwapFile )
-                    pIStm->Seek( mnDocFilePos );
 
                 bRet = ImplSwapIn( pIStm.get() );
                 pIStm.reset();

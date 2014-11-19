@@ -56,8 +56,6 @@ private:
     ImpSwapFile*        mpSwapFile;
     GfxLink*            mpGfxLink;
     GraphicType         meType;
-    OUString            maDocFileURLStr;
-    sal_uLong           mnDocFilePos;
     mutable sal_uLong   mnSizeBytes;
     sal_uLong           mnRefCount;
     bool            mbSwapOut;
@@ -131,11 +129,6 @@ private:
     void                ImplSetContext( GraphicReader* pReader );
 
 private:
-
-    void                ImplSetDocFileName( const OUString& rName, sal_uLong nFilePos );
-    const OUString&     ImplGetDocFileName() const;
-    sal_uLong               ImplGetDocFilePos() const { return mnDocFilePos;}
-
     bool                ImplReadEmbedded( SvStream& rIStream );
     bool                ImplWriteEmbedded( SvStream& rOStream );
 

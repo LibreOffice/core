@@ -170,12 +170,6 @@ public:
     GraphicReader*      GetContext();
     void                SetContext( GraphicReader* pReader );
 
-public:
-
-    void                SetDocFileName( const OUString& rName, sal_uLong nFilePos );
-    const OUString&       GetDocFileName() const;
-    sal_uLong               GetDocFilePos() const;
-
 private:
     friend class GraphicObject;
     bool                SwapOut();
