@@ -873,7 +873,7 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
             locale = getenv( "LANG" );
 
         if( NULL == locale )
-            locale = "C";
+            locale = strdup("C");
     }
 
     /* return the locale */
