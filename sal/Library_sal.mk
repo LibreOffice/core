@@ -206,7 +206,7 @@ $(eval $(call gb_Library_add_asmobjects,sal,\
 	sal/osl/unx/asm/interlck_sparc \
 ))
 else
-$(eval $(call gb_Library_add_cobjects,sal,\
+$(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/interlck \
 ))
 endif
