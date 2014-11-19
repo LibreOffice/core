@@ -735,7 +735,7 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>&, OUStrin
 }
 
 void LoadEnv::impl_detectTypeAndFilter()
-    throw(LoadEnvException, css::uno::RuntimeException, beans::IllegalTypeException, std::exception)
+    throw(LoadEnvException, css::uno::RuntimeException, std::exception)
 {
     static const char TYPEPROP_PREFERREDFILTER[] = "PreferredFilter";
     static const char FILTERPROP_FLAGS        [] = "Flags";

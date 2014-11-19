@@ -22,7 +22,6 @@
 #include <loadenv/loadenvexception.hxx>
 #include <loadenv/actionlockguard.hxx>
 
-#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -413,7 +412,7 @@ private:
                 the whole runtime can't be used any longer.
      */
     void impl_detectTypeAndFilter()
-        throw(LoadEnvException, css::uno::RuntimeException, css::beans::IllegalTypeException, std::exception);
+        throw(LoadEnvException, css::uno::RuntimeException, std::exception);
 
     /** @short  tries to ask user for it's filter decision in case
                 normal detection failed.
