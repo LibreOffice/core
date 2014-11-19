@@ -40,6 +40,12 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 100;
 
+    // Keep in order of opcode value, is that clearest? (Random order,
+    // at least, would make no sense at all.)
+    maOpenCLSubsetOpCodes.insert(ocAdd);
+    maOpenCLSubsetOpCodes.insert(ocSub);
+    maOpenCLSubsetOpCodes.insert(ocMul);
+    maOpenCLSubsetOpCodes.insert(ocDiv);
     maOpenCLSubsetOpCodes.insert(ocSin);
     maOpenCLSubsetOpCodes.insert(ocCos);
     maOpenCLSubsetOpCodes.insert(ocTan);
