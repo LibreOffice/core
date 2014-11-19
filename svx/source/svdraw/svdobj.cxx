@@ -235,7 +235,6 @@ public:
     ~SdrObjUserDataList();
 
     size_t GetUserDataCount() const;
-    const SdrObjUserData* GetUserData(size_t nNum) const;
     SdrObjUserData* GetUserData(size_t nNum);
     void AppendUserData(SdrObjUserData* pData);
     void DeleteUserData(size_t nNum);
@@ -247,11 +246,6 @@ SdrObjUserDataList::~SdrObjUserDataList() {}
 size_t SdrObjUserDataList::GetUserDataCount() const
 {
     return static_cast<sal_uInt16>(maList.size());
-}
-
-const SdrObjUserData* SdrObjUserDataList::GetUserData(size_t nNum) const
-{
-    return &maList.at(nNum);
 }
 
 SdrObjUserData* SdrObjUserDataList::GetUserData(size_t nNum)
