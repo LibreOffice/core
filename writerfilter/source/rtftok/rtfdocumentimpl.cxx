@@ -5865,7 +5865,7 @@ int RTFDocumentImpl::popState()
             RTFValue::Pointer_t pValue(new RTFValue(aState.aDestinationText.makeStringAndClear(), true));
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_LevelSuffix_val, pValue);
         }
-    break;
+        break;
     case DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE:
         if (!m_aStates.empty())
         {
@@ -5873,7 +5873,7 @@ int RTFDocumentImpl::popState()
             RTFValue::Pointer_t pValue(new RTFValue(aState.aDestinationText.makeStringAndClear(), true));
             m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_LevelText_val, pValue);
         }
-    break;
+        break;
     case DESTINATION_LISTNAME:
         break;
     case DESTINATION_LISTLEVEL:
@@ -5888,7 +5888,7 @@ int RTFDocumentImpl::popState()
             else
                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_NumLvl_lvl, pValue);
         }
-    break;
+        break;
     case DESTINATION_LFOLEVEL:
         if (!m_aStates.empty())
         {
@@ -5898,7 +5898,7 @@ int RTFDocumentImpl::popState()
             RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_lvlOverride, pValue);
         }
-    break;
+        break;
     // list override table
     case DESTINATION_LISTOVERRIDEENTRY:
         if (!m_aStates.empty())
@@ -5916,14 +5916,14 @@ int RTFDocumentImpl::popState()
                 m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pValue, OVERWRITE_NO_APPEND);
             }
         }
-    break;
+        break;
     case DESTINATION_LEVELTEXT:
         if (!m_aStates.empty())
         {
             RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes));
             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_lvlText, pValue);
         }
-    break;
+        break;
     case DESTINATION_LEVELNUMBERS:
         if (!m_aStates.empty())
             m_aStates.top().aTableSprms = aState.aTableSprms;
@@ -5947,7 +5947,7 @@ int RTFDocumentImpl::popState()
             // both \sp and \sv are destinations, copy the text up-ward for later
             m_aStates.top().aDestinationText = aState.aDestinationText;
         }
-    break;
+        break;
     case DESTINATION_FALT:
         if (!m_aStates.empty())
             m_aStates.top().aTableSprms = aState.aTableSprms;
