@@ -28,7 +28,7 @@
 #include <postmac.h>
 #endif
 
-#include "system.h"
+#include "system.hxx"
 
 #include <osl/security.h>
 #include <osl/diagnose.h>

@@ -22,7 +22,7 @@
 
 #include <config_features.h>
 
-#include "system.h"
+#include "system.hxx"
 
 #ifdef NO_PTHREAD_RTL
 

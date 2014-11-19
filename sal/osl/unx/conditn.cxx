@@ -21,7 +21,7 @@
 
 #include <assert.h>
 
-#include "system.h"
+#include "system.hxx"
 #include <sal/log.hxx>
 #include <sal/types.h>
 

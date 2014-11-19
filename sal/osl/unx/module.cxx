@@ -26,7 +26,7 @@
 #include <osl/process.h>
 #include <osl/file.h>
 #include <assert.h>
-#include "system.h"
+#include "system.hxx"
 #include "file_url.hxx"
 
 #ifdef AIX

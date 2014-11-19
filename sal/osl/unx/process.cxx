@@ -40,7 +40,7 @@
 #include <machine/param.h>
 #endif
 
-#include "system.h"
+#include "system.hxx"
 #if defined(SOLARIS)
 # include <sys/procfs.h>
 #endif

@@ -19,7 +19,7 @@
 
 #include "file_url.hxx"
 
-#include "system.h"
+#include "system.hxx"
 
 #include <limits.h>
 #include <errno.h>

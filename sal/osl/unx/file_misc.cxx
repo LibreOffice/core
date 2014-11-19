@@ -26,7 +26,7 @@
 #include "rtl/alloc.h"
 #include <rtl/string.hxx>
 
-#include "system.h"
+#include "system.hxx"
 #include "file_impl.hxx"
 #include "file_error_transl.hxx"
 #include "file_path_helper.hxx"

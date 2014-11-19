@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_SYSTEM_H
-#define INCLUDED_SAL_OSL_UNX_SYSTEM_H
+#ifndef INCLUDED_SAL_OSL_UNX_SYSTEM_HXX
+#define INCLUDED_SAL_OSL_UNX_SYSTEM_HXX
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -246,13 +246,7 @@
 #   define  NO_PTHREAD_RTL
 /* for NSGetArgc/Argv/Environ */
 #       include <crt_externs.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
 int macxp_resolveAlias(char *path, int buflen);
-#ifdef __cplusplus
-}
-#endif
 #endif
 
 #ifdef IOS

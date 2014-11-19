@@ -19,7 +19,7 @@
 
 #include "osl/file.h"
 
-#include "system.h"
+#include "system.hxx"
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>

@@ -30,7 +30,7 @@
 
 #include <sal/log.hxx>
 
-#include "system.h"
+#include "system.hxx"
 #include "createfilehandlefromfd.hxx"
 #include "file_error_transl.hxx"
 #include "file_impl.hxx"

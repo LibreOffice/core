@@ -22,7 +22,7 @@
 #include <config_features.h>
 
 /* system headers */
-#include "system.h"
+#include "system.hxx"
 
 #if defined( MACOSX )
 

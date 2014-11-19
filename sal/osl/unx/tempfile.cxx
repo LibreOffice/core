@@ -22,7 +22,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include "system.h"
+#include "system.hxx"
 #include <osl/file.h>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.h>

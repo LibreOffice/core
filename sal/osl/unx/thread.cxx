@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include "system.h"
+#include "system.hxx"
 #include <string.h>
 #if defined(OPENBSD)
 #include <sched.h>

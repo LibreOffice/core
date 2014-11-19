@@ -836,7 +836,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 }
 
 #if defined(MACOSX) || defined(IOS)
-#include "system.h"
+#include "system.hxx"
 
 /*****************************************************************************
  return the current process locale

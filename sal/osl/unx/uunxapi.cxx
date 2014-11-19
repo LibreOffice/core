@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include "uunxapi.hxx"
-#include "system.h"
+#include "system.hxx"
 #include <limits.h>
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>

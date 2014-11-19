@@ -25,7 +25,7 @@
 
 #include "file_error_transl.hxx"
 #include "file_url.hxx"
-#include "system.h"
+#include "system.hxx"
 
 #include <errno.h>
 #include <limits.h>

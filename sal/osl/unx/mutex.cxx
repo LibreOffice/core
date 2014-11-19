@@ -23,7 +23,7 @@
 #define _GNU_SOURCE 1
 #endif
 #endif
-#include "system.h"
+#include "system.hxx"
 
 #include <osl/mutex.h>
 #include <osl/diagnose.h>
