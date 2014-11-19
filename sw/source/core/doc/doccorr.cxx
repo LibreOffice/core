@@ -358,4 +358,13 @@ SwEditShell* SwDoc::GetEditShell()
     return GetEditShell();
 }
 
+//bool foo()
+//{
+//    bool b1 = true ? true : false;
+//    bool b2 = (true ? true : false) ? true : false;
+//    bool b3 = true ? (true ? true : false) : false;
+//    bool b4 = true ? true : (true ? true : false);
+//    return false;
+//}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
