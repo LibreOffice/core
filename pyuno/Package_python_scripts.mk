@@ -13,6 +13,7 @@ $(eval $(call gb_Package_add_files,pyuno_python_scripts,$(LIBO_LIB_PYUNO_FOLDER)
 	loader/pythonloader.py \
 	module/uno.py \
 	module/unohelper.py \
+	officehelper.py \
 ))
 
 # vim: set noet sw=4 ts=4:

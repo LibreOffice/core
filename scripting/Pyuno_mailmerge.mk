@@ -14,7 +14,6 @@ $(eval $(call gb_Pyuno_set_componentfile,mailmerge,scripting/source/pyprov/mailm
 $(eval $(call gb_Pyuno_add_files,mailmerge,,\
 	mailmerge.py \
 	msgbox.py \
-	officehelper.py \
 ))
 
 # vim: set noet sw=4 ts=4:
