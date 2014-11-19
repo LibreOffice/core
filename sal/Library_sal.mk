@@ -87,6 +87,7 @@ endif
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/all/compat \
 	sal/osl/all/debugbase \
+	sal/osl/all/filepath \
 	sal/osl/all/loadmodulerelative \
 	sal/osl/all/log  \
 	sal/osl/all/utility \
@@ -122,9 +123,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/textenc/textcvt \
 	sal/textenc/textenc \
 	sal/textenc/unichars \
-))
-$(eval $(call gb_Library_add_cobjects,sal,\
-	sal/osl/all/filepath \
 ))
 
 ifeq ($(OS),IOS)
