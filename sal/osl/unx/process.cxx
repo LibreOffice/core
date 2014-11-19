@@ -58,7 +58,7 @@
 
 #include "createfilehandlefromfd.hxx"
 #include "file_url.hxx"
-#include "readwrite_helper.h"
+#include "readwrite_helper.hxx"
 #include "sockimpl.h"
 #include "secimpl.h"
 

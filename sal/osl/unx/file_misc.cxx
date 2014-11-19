@@ -32,7 +32,7 @@
 #include "file_path_helper.hxx"
 #include "file_url.hxx"
 #include "uunxapi.hxx"
-#include "readwrite_helper.h"
+#include "readwrite_helper.hxx"
 
 #include <sys/types.h>
 #include <errno.h>

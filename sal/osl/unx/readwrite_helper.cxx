@@ -7,12 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "readwrite_helper.h"
+#include "readwrite_helper.hxx"
 
 #include <osl/diagnose.h>
 #include <system.h>
 
-sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
+bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
 {
     sal_Int32 nToWrite = dataSize;
     unsigned char* dataToWrite = static_cast<unsigned char *>(data);
@@ -25,7 +25,7 @@ sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
             if ( errno == EINTR )
                 continue;
 
-            return sal_False;
+            return false;
 
         }
 
@@ -34,10 +34,10 @@ sal_Bool safeWrite(int fd, void* data, sal_uInt32 dataSize)
         dataToWrite += nWritten;
     }
 
-    return sal_True;
+    return true;
 }
 
-sal_Bool safeRead( int fd, void* buffer, sal_uInt32 count )
+bool safeRead( int fd, void* buffer, sal_uInt32 count )
 {
     sal_Int32 nToRead = count;
     unsigned char* bufferForReading = static_cast<unsigned char *>(buffer);
@@ -51,19 +51,19 @@ sal_Bool safeRead( int fd, void* buffer, sal_uInt32 count )
             if (errno == EINTR)
                 continue;
 
-            return sal_False;
+            return false;
         }
 
         // If we reach the EOF, we consider this a partial transfer and thus
         // an error.
         if ( nRead == 0 )
-            return sal_False;
+            return false;
 
         nToRead -= nRead;
         bufferForReading += nRead;
     }
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,7 @@
  */
 
 #include "system.h"
-#include "readwrite_helper.h"
+#include "readwrite_helper.hxx"
 #include "file_url.hxx"
 
 #include <osl/diagnose.h>
