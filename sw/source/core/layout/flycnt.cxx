@@ -1202,16 +1202,19 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     if ( pCnt->Frm().IsInside( aNew ) )
     {
         // #i70582#
-        const SwTwips nTopForObjPos =
-                bVert
-                ? ( bVertL2R
-                    ? ( pCnt->Frm().Left() +
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
-                    : ( pCnt->Frm().Left() +
-                        pCnt->Frm().Width() -
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
-                : ( pCnt->Frm().Top() +
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
+        SwTwips nTopForObjPos;
+        if ( bVert )
+        {
+            nTopForObjPos = pCnt->Frm().Left();
+            if ( bVertL2R )
+                nTopForObjPos += pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+            else
+                nTopForObjPos += pCnt->Frm().Width() - pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        }
+        else
+        {
+            nTopForObjPos = pCnt->Frm().Top() + pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        }
         if( bVert )
         {
             if ( bVertL2R )
