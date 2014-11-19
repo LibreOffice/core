@@ -26,6 +26,10 @@
 #include <cppuhelper/compbase3.hxx>
 #include <connectivity/CommonTools.hxx>
 
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+}}}}
+
 namespace connectivity
 {
     namespace ado
