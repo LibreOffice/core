@@ -1358,12 +1358,26 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygonBezier(
 
 // CopyArea --> No RasterOp, but ClipRegion
 void OpenGLSalGraphicsImpl::copyArea(
-            long /*nDestX*/, long /*nDestY*/,
-            long /*nSrcX*/, long /*nSrcY*/,
-            long /*nSrcWidth*/, long /*nSrcHeight*/,
+            long nDestX, long nDestY,
+            long nSrcX, long nSrcY,
+            long nSrcWidth, long nSrcHeight,
             sal_uInt16 /*nFlags*/ )
 {
-    SAL_INFO( "vcl.opengl", "::copyArea" );
+    SAL_INFO( "vcl.opengl", "::copyArea " << nSrcX << "," << nSrcY << " >> " << nDestX << "," << nDestY << " (" << nSrcWidth << "," << nSrcHeight << ")" );
+    OpenGLTexture aTexture;
+    SalTwoRect aPosAry;
+
+    aPosAry.mnSrcX = 0;
+    aPosAry.mnSrcY = 0;
+    aPosAry.mnDestX = nDestX;
+    aPosAry.mnDestY = nDestY;
+    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = nSrcWidth;
+    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = nSrcHeight;
+
+    PreDraw();
+    aTexture = OpenGLTexture( nSrcX, GetHeight() - nSrcY - nSrcHeight, nSrcWidth, nSrcHeight );
+    DrawTexture( aTexture, aPosAry );
+    PostDraw();
 }
 
 // CopyBits and DrawBitmap --> RasterOp and ClipRegion
@@ -1456,6 +1470,7 @@ SalBitmap* OpenGLSalGraphicsImpl::getBitmap( long nX, long nY, long nWidth, long
     SAL_INFO( "vcl.opengl", "::getBitmap " << nX << "," << nY <<
               " " << nWidth << "x" << nHeight );
     PreDraw();
+    nY = GetHeight() - nHeight - nY;
     if( !pBitmap->Create( maOffscreenTex, nX, nY, nWidth, nHeight ) )
     {
         delete pBitmap;
