@@ -32,7 +32,7 @@
 #include "sal/main.h"
 #include "sal/types.h"
 
-#include <saltime.h>
+#include <saltime.hxx>
 
 #if HAVE_SYSLOG_H
 #include <string.h>

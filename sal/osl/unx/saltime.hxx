@@ -17,20 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_SALTIME_H
-#define INCLUDED_SAL_OSL_UNX_SALTIME_H
+#ifndef INCLUDED_SAL_OSL_UNX_SALTIME_HXX
+#define INCLUDED_SAL_OSL_UNX_SALTIME_HXX
 
 #include <sal/config.h>
 
-#if defined __cplusplus
-extern "C" {
-#endif
-
 void sal_initGlobalTimer(void);
-
-#if defined __cplusplus
-}
-#endif
 
 #endif
 

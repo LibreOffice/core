@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include "saltime.h"
+#include "saltime.hxx"
 #include "system.h"
 
 #include <osl/diagnose.h>
