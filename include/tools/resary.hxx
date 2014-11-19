@@ -19,42 +19,30 @@
 #ifndef INCLUDED_TOOLS_RESARY_HXX
 #define INCLUDED_TOOLS_RESARY_HXX
 
-#include <boost/noncopyable.hpp>
-#include <vector>
 #include <tools/toolsdllapi.h>
-#include <tools/resid.hxx>
+#include <rtl/ustring.hxx>
 
 #define RESARRAY_INDEX_NOTFOUND (0xffffffff)
 
-class TOOLS_DLLPUBLIC ResStringArray : private boost::noncopyable
+class ResId;
+
+class TOOLS_DLLPUBLIC ResStringArray
 {
-private:
-    struct ImplResStringItem
-    {
-        OUString m_aStr;
-        sal_IntPtr m_nValue;
+    struct Impl;
+    Impl* mpImpl;
 
-        ImplResStringItem( const OUString& rStr, long nValue = 0 ) :
-        m_aStr( rStr ),
-        m_nValue( nValue )
-        {}
-    };
-
-    std::vector< ImplResStringItem >    m_aStrings;
+    ResStringArray( const ResStringArray& ); // disabled
+    ResStringArray& operator=( const ResStringArray& ); // disabled
 
 public:
     ResStringArray( const ResId& rResId );
     ~ResStringArray();
 
-    const OUString      GetString( sal_uInt32 nIndex ) const
-    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : OUString(); }
-    sal_IntPtr          GetValue( sal_uInt32 nIndex ) const
-    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_nValue : -1; }
-    sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }
-
-    sal_uInt32          FindIndex( sal_IntPtr nValue ) const;
-
-    sal_uInt32          AddItem( const OUString& rString, sal_IntPtr nValue );
+    OUString GetString( sal_uInt32 nIndex ) const;
+    sal_IntPtr GetValue( sal_uInt32 nIndex ) const;
+    sal_uInt32 Count() const;
+    sal_uInt32 FindIndex( sal_IntPtr nValue ) const;
+    sal_uInt32 AddItem( const OUString& rString, sal_IntPtr nValue );
 };
 
 #endif
