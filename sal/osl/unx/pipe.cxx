@@ -27,7 +27,7 @@
 #include <rtl/ustring.h>
 #include <rtl/bootstrap.h>
 
-#include "sockimpl.h"
+#include "sockimpl.hxx"
 #include "secimpl.hxx"
 
 #define PIPEDEFAULTPATH     "/tmp"
@@ -97,10 +97,10 @@ oslPipe __osl_createPipeImpl(void)
     if (pPipeImpl == NULL)
         return NULL;
     pPipeImpl->m_nRefCount =1;
-    pPipeImpl->m_bClosed = sal_False;
+    pPipeImpl->m_bClosed = false;
 #if defined(LINUX)
-    pPipeImpl->m_bIsInShutdown = sal_False;
-    pPipeImpl->m_bIsAccepting = sal_False;
+    pPipeImpl->m_bIsInShutdown = false;
+    pPipeImpl->m_bIsAccepting = false;
 #endif
     return pPipeImpl;
 }
@@ -386,7 +386,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
 #if defined(LINUX)
     if ( pPipe->m_bIsAccepting )
     {
-        pPipe->m_bIsInShutdown = sal_True;
+        pPipe->m_bIsInShutdown = true;
         pPipe->m_Socket = -1;
         fd = socket(AF_UNIX, SOCK_STREAM, 0);
         if ( fd < 0 )
@@ -427,7 +427,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
     {
         unlink(pPipe->m_Name);
     }
-    pPipe->m_bClosed = sal_True;
+    pPipe->m_bClosed = true;
 
 /*      OSL_TRACE("Out osl_destroyPipe");     */
 }
@@ -446,13 +446,13 @@ oslPipe SAL_CALL osl_acceptPipe(oslPipe pPipe)
     OSL_ASSERT(strlen(pPipe->m_Name) > 0);
 
 #if defined(LINUX)
-    pPipe->m_bIsAccepting = sal_True;
+    pPipe->m_bIsAccepting = true;
 #endif
 
     s = accept(pPipe->m_Socket, NULL, NULL);
 
 #if defined(LINUX)
-    pPipe->m_bIsAccepting = sal_False;
+    pPipe->m_bIsAccepting = false;
 #endif
 
     if (s < 0)

@@ -59,7 +59,7 @@
 #include "createfilehandlefromfd.hxx"
 #include "file_url.hxx"
 #include "readwrite_helper.hxx"
-#include "sockimpl.h"
+#include "sockimpl.hxx"
 #include "secimpl.hxx"
 
 #define MAX_ARGS        255

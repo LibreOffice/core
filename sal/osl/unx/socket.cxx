@@ -29,7 +29,7 @@
 #include <ctype.h>
 #include <sal/types.h>
 
-#include "sockimpl.h"
+#include "sockimpl.hxx"
 
 /* defines for poll */
 #ifdef HAVE_POLL_H
@@ -448,7 +448,7 @@ oslSocket __osl_createSocketImpl(int Socket)
     pSocket->m_nRefCount = 1;
 
 #if defined(LINUX)
-    pSocket->m_bIsAccepting = sal_False;
+    pSocket->m_bIsAccepting = false;
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1362,7 +1362,7 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
     if( pSocket && 0 == osl_atomic_decrement( &(pSocket->m_nRefCount) ) )
     {
 #if defined(LINUX)
-    if ( pSocket->m_bIsAccepting == sal_True )
+    if ( pSocket->m_bIsAccepting )
     {
         OSL_FAIL("osl_destroySocket : attempt to destroy socket while accepting\n");
         return;
@@ -1391,9 +1391,9 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     pSocket->m_Socket = OSL_INVALID_SOCKET;
 
 #if defined(LINUX)
-    pSocket->m_bIsInShutdown = sal_True;
+    pSocket->m_bIsInShutdown = true;
 
-    if ( pSocket->m_bIsAccepting == sal_True )
+    if ( pSocket->m_bIsAccepting )
     {
         int nConnFD;
         union {
@@ -1430,7 +1430,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
                 close(nConnFD);
             }
         }
-        pSocket->m_bIsAccepting = sal_False;
+        pSocket->m_bIsAccepting = false;
     }
 #endif /* LINUX */
 
@@ -1688,7 +1688,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
 
     pSocket->m_nLastError=0;
 #if defined(LINUX)
-    pSocket->m_bIsAccepting = sal_True;
+    pSocket->m_bIsAccepting = true;
 #endif /* LINUX */
 
     if( ppAddr && *ppAddr )
@@ -1710,7 +1710,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
         OSL_TRACE("osl_acceptConnectionOnSocket : accept error '%s'",strerror(errno));
 
 #if defined(LINUX)
-        pSocket->m_bIsAccepting = sal_False;
+        pSocket->m_bIsAccepting = false;
 #endif /* LINUX */
         return 0;
     }
@@ -1718,7 +1718,7 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     OSL_ASSERT(AddrLen == sizeof(struct sockaddr));
 
 #if defined(LINUX)
-    if ( pSocket->m_bIsInShutdown == sal_True )
+    if ( pSocket->m_bIsInShutdown )
     {
         close(Connection);
         OSL_TRACE("osl_acceptConnectionOnSocket : close while accept");
@@ -1751,9 +1751,9 @@ oslSocket SAL_CALL osl_acceptConnectionOnSocket(oslSocket pSocket,
     pConnectionSockImpl->m_Socket           = Connection;
     pConnectionSockImpl->m_nLastError       = 0;
 #if defined(LINUX)
-    pConnectionSockImpl->m_bIsAccepting     = sal_False;
+    pConnectionSockImpl->m_bIsAccepting     = false;
 
-    pSocket->m_bIsAccepting = sal_False;
+    pSocket->m_bIsAccepting = false;
 #endif /* LINUX */
     return pConnectionSockImpl;
 }

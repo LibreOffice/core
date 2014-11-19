@@ -17,24 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SOCKETIMPL_H_
-#define _OSL_SOCKETIMPL_H_
+#ifndef INCLUDED_SAL_OSL_UNX_SOCKIMPL_HXX
+#define INCLUDED_SAL_OSL_UNX_SOCKIMPL_HXX
 
 #include <osl/pipe.h>
 #include <osl/socket.h>
 #include <osl/interlck.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 struct oslSocketImpl {
     int                 m_Socket;
     int                 m_nLastError;
     oslInterlockedCount m_nRefCount;
 #if defined(LINUX)
-    sal_Bool            m_bIsAccepting;
-    sal_Bool            m_bIsInShutdown;
+    bool                m_bIsAccepting;
+    bool                m_bIsInShutdown;
 #endif
 };
 
@@ -48,19 +44,15 @@ struct oslPipeImpl {
     int  m_Socket;
     sal_Char m_Name[PATH_MAX + 1];
     oslInterlockedCount m_nRefCount;
-    sal_Bool m_bClosed;
+    bool m_bClosed;
 #if defined(LINUX)
-    sal_Bool m_bIsAccepting;
-    sal_Bool m_bIsInShutdown;
+    bool m_bIsAccepting;
+    bool m_bIsInShutdown;
 #endif
 };
 
 oslSocket __osl_createSocketImpl(int Socket);
 void __osl_destroySocketImpl(oslSocket pImpl);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 
