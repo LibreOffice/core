@@ -11,7 +11,6 @@ namespace oglcanvas
     }
     void RenderHelper::InitOpenGL()
     {
-        GLenum err = glewInit();
         //Load Shaders //
         m_texManProgID = OpenGLHelper::LoadShaders("textManipulatingVertexShader", "textFragmentShader");
         m_simpleProgID = OpenGLHelper::LoadShaders("simpleVertexShader", "textFragmentShader");
@@ -37,7 +36,7 @@ namespace oglcanvas
         m_simplePosAttrb = glGetAttribLocation(m_simpleProgID ,"vPosition");
         m_texPosAttrb = glGetAttribLocation(m_texProgID ,"vPosition");
 
-        //glViewport(0, 0, m_iWidth, m_iHeight);
+        glViewport(0, 0, m_iWidth, m_iHeight);
     }
     //Todo figgure out, which parameters i should use :)
     void RenderHelper::SetVP(int width, int height)
@@ -77,8 +76,8 @@ namespace oglcanvas
         glDrawArrays(mode, 0, sizeof(vertices) / sizeof(vertices[0]) /2);
 
         glDisableVertexAttribArray(m_texPosAttrb);
-        glUseProgram(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glUseProgram(0);
 
     }
     //Renders a TriangleStrip, Texture has to be stored in TextureUnit0
@@ -122,6 +121,7 @@ namespace oglcanvas
 
         glDisableVertexAttribArray(m_simplePosAttrb);
         glDisableVertexAttribArray(m_simpleUvAttrb);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         glUseProgram(0);
     }
 
@@ -164,6 +164,7 @@ namespace oglcanvas
         glDrawArrays(mode, 0, sizeof(vertices) / sizeof(vertices[0]) /2);
 
         glDisableVertexAttribArray(m_manPosAttrb);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
         glUseProgram(0);
     }
 }
