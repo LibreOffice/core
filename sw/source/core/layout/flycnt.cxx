@@ -46,6 +46,26 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+
+static inline SwTwips lcl_GetTopForObjPos(const SwCntntFrm* pCnt, const bool bVert, const bool bVertL2R)
+{
+    if ( bVert )
+    {
+        SwTwips aResult = pCnt->Frm().Left();
+        if ( bVertL2R )
+            aResult += pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        else
+            aResult += pCnt->Frm().Width() - pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        return aResult;
+    }
+    else
+        return pCnt->Frm().Top() + pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+}
+
+}
+
 SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFmt, pSib, pAnch )
 {
@@ -562,17 +582,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
         //Follow the text flow.
         // #i70582#
         // --> OD 2009-03-05 - adopted for Support for Classical Mongolian Script
-        SwTwips nTopForObjPos;
-        if ( bVert )
-        {
-            nTopForObjPos = pCnt->Frm().Left();
-            if ( bVertL2R )
-                nTopForObjPos += pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
-            else
-                nTopForObjPos += pCnt->Frm().Width() - pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
-        }
-        else
-            nTopForObjPos = pCnt->Frm().Top() + pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        const SwTwips nTopForObjPos = lcl_GetTopForObjPos(pCnt, bVert, bVertL2R);
         if ( pUp->Frm().IsInside( rPt ) )
         {
             // <rPt> point is inside environment of given content frame
@@ -1260,16 +1270,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     if ( nY == LONG_MAX )
     {
         // #i70582#
-        const SwTwips nTopForObjPos =
-                bVert
-                ? ( bVertL2R
-                    ? ( pCnt->Frm().Left() +
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
-                    : ( pCnt->Frm().Left() +
-                        pCnt->Frm().Width() -
-                        pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
-                : ( pCnt->Frm().Top() +
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
+        const SwTwips nTopForObjPos = lcl_GetTopForObjPos(pCnt, bVert, bVertL2R);
         if( bVert )
         {
             if ( bVertL2R )
