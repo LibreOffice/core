@@ -35,7 +35,7 @@
 #include "file_error_transl.hxx"
 #include "file_impl.hxx"
 #include "file_url.hxx"
-#include "uunxapi.h"
+#include "uunxapi.hxx"
 
 #include <algorithm>
 #include <limits>

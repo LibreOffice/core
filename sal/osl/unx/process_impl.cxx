@@ -33,7 +33,7 @@
 
 #include "file_path_helper.h"
 
-#include "uunxapi.h"
+#include "uunxapi.hxx"
 #include "getexecutablefile.hxx"
 #include "nlsupport.hxx"
 

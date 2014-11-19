@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include "uunxapi.h"
+#include "uunxapi.hxx"
 #include "system.h"
 #include <limits.h>
 #include <rtl/ustring.hxx>
@@ -186,19 +186,19 @@ int access_u(const rtl_uString* pustrPath, int mode)
     return result;
 }
 
-sal_Bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
+bool realpath_u(const rtl_uString* pustrFileName, rtl_uString** ppustrResolvedName)
 {
     rtl::OString fn = OUStringToOString(pustrFileName);
 #ifdef ANDROID
     if (fn == "/assets" || fn.startsWith("/assets/"))
     {
         if (access_u(pustrFileName, F_OK) == -1)
-            return sal_False;
+            return false;
 
         rtl_uString silly(*pustrFileName);
         rtl_uString_assign(ppustrResolvedName, &silly);
 
-        return sal_True;
+        return true;
     }
 #endif
 
