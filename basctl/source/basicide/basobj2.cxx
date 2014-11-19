@@ -17,31 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basobj.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
-#include "iderid.hxx"
 #include "macrodlg.hxx"
 #include "moduldlg.hxx"
-#include "basidesh.hxx"
 #include "basidesh.hrc"
 #include "baside2.hxx"
-#include "basicmod.hxx"
-#include "basdoc.hxx"
 
-#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <basic/sbmeth.hxx>
-#include <basic/sbx.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <framework/documentundoguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
-#include <vcl/layout.hxx>
 
-#include <vector>
-#include <algorithm>
 #include <basic/basmgr.hxx>
 namespace basctl
 {

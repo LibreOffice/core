@@ -20,12 +20,10 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BRKDLG_HXX
 
-#include <bastypes.hxx>
 #include <vcl/dialog.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
-#include <vcl/fixed.hxx>
 
 namespace basctl
 {

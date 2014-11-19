@@ -19,8 +19,6 @@
 
 #include <config_options.h>
 
-#include "basidesh.hxx"
-
 #include <tools/diagnose_ex.h>
 #include <basic/basmgr.hxx>
 #include <basidesh.hrc>
@@ -29,7 +27,6 @@
 #include <basdoc.hxx>
 #include <basicbox.hxx>
 #include <editeng/sizeitem.hxx>
-#include <objdlg.hxx>
 #include <tbxctl.hxx>
 #include <iderdll2.hxx>
 #include <basidectrlr.hxx>
@@ -41,7 +38,6 @@
 #include <sfx2/minfitem.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/aeitem.hxx>
-#include <svl/intitem.hxx>
 #include <svl/srchitem.hxx>
 
 #define basctl_Shell

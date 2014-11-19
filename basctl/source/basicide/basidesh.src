@@ -19,7 +19,6 @@
 
 #include <baside2.hrc>
 #include <helpid.hrc>
-#include <svx/globlmn.hrc>
 #include "dlgresid.hrc"
 #include <sfx2/sfxcommands.h>
 #include <svx/svxcommands.h>

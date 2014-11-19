@@ -19,16 +19,11 @@
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-#include <basic/sbx.hxx>
 #include <bastype2.hxx>
-#include <basobj.hxx>
 #include <baside2.hrc>
-#include <iderid.hxx>
 #include <bastypes.hxx>
-#include <basdoc.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <deque>
 #include <sfx2/docfac.hxx>
 #include <svtools/treelistentry.hxx>
 

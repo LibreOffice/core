@@ -21,8 +21,6 @@
 
 #include "basidesh.hxx"
 
-#include <cppuhelper/queryinterface.hxx>
-#include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <vcl/syswin.hxx>

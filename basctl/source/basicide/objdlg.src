@@ -18,7 +18,6 @@
  */
 
 #include <objdlg.hrc>
-#include <helpid.hrc>
 
 Control RID_TLB_MACROS
 {

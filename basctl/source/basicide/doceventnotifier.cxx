@@ -21,7 +21,6 @@
 #include "scriptdocument.hxx"
 
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
-#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -29,8 +28,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <osl/mutex.hxx>
-#include <sal/macros.h>
 
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>

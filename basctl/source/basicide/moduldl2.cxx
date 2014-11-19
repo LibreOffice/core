@@ -17,23 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/layout.hxx>
-#include <sot/storinfo.hxx>
 
 #include <moduldlg.hxx>
-#include <basidesh.hrc>
 #include <basidesh.hxx>
-#include <bastypes.hxx>
-#include <basobj.hxx>
 #include <baside2.hrc>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <svx/passwd.hxx>
-#include <sbxitem.hxx>
-#include <basdoc.hxx>
 #include <ucbhelper/content.hxx>
 #include <rtl/uri.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -42,11 +34,9 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/treelistentry.hxx>
 
-#include <sot/storage.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
 #include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
@@ -58,15 +48,11 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <unotools/pathoptions.hxx>
-#include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
-#include <cassert>
-#include <memory>
 
-#include <boost/scoped_ptr.hpp>
 
 namespace basctl
 {

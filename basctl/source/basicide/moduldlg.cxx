@@ -17,18 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
-#include <memory>
 
-#include "baside2.hrc"
 #include "basidesh.hrc"
 
 #include "moduldlg.hxx"
 #include "localizationmgr.hxx"
 #include "basidesh.hxx"
-#include "baside3.hxx"
-#include "iderdll.hxx"
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
@@ -36,10 +31,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/layout.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <svtools/treelistentry.hxx>
