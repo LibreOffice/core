@@ -21,7 +21,7 @@
 #include <osl/diagnose.h>
 #include <osl/process.h>
 
-#include "nlsupport.h"
+#include "nlsupport.hxx"
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \

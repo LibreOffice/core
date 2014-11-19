@@ -17,26 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_NLSUPPORT_H
-#define INCLUDED_SAL_OSL_UNX_NLSUPPORT_H
+#ifndef INCLUDED_SAL_OSL_UNX_NLSUPPORT_HXX
+#define INCLUDED_SAL_OSL_UNX_NLSUPPORT_HXX
 
 #include <sal/config.h>
 
 #include <rtl/locale.h>
-
-#if defined __cplusplus
-extern "C" {
-#endif
 
 void _imp_getProcessLocale( rtl_Locale ** );
 int  _imp_setProcessLocale( rtl_Locale * );
 
 #if defined IOS || defined MACOSX
 int macosx_getLocale(char *locale, sal_uInt32 bufferLen);
-#endif
-
-#if defined __cplusplus
-}
 #endif
 
 #endif

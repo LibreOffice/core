@@ -35,7 +35,7 @@
 
 #include "uunxapi.h"
 #include "getexecutablefile.hxx"
-#include "nlsupport.h"
+#include "nlsupport.hxx"
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>

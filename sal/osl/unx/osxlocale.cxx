@@ -27,7 +27,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
 
-#include <nlsupport.h>
+#include <nlsupport.hxx>
 
 namespace
 {
