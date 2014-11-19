@@ -562,16 +562,17 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
         //Follow the text flow.
         // #i70582#
         // --> OD 2009-03-05 - adopted for Support for Classical Mongolian Script
-        const SwTwips nTopForObjPos =
-            bVert
-            ? ( bVertL2R
-                ? ( pCnt->Frm().Left() +
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
-                : ( pCnt->Frm().Left() +
-                    pCnt->Frm().Width() -
-                    pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() ) )
-            : ( pCnt->Frm().Top() +
-                pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
+        SwTwips nTopForObjPos;
+        if ( bVert )
+        {
+            nTopForObjPos = pCnt->Frm().Left();
+            if ( bVertL2R )
+                nTopForObjPos += pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+            else
+                nTopForObjPos += pCnt->Frm().Width() - pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
+        }
+        else
+            nTopForObjPos = pCnt->Frm().Top() + pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid();
         if ( pUp->Frm().IsInside( rPt ) )
         {
             // <rPt> point is inside environment of given content frame
