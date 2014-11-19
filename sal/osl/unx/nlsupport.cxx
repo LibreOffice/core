@@ -844,7 +844,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    static char *locale = NULL;
+    static char const *locale = NULL;
 
     /* basic thread safeness */
 //    pthread_mutex_lock( &aLocalMutex );
