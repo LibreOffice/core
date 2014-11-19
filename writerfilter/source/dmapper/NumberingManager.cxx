@@ -614,7 +614,8 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 // Get the prefix / suffix / Parent numbering
                 // and add them to the level properties
                 OUString sText = pAbsLevel->GetBulletChar( );
-                if ( pLevel.get( ) )
+                // Inherit <w:lvlText> from the abstract level in case the override would be empty.
+                if (pLevel.get() && !pLevel->GetBulletChar().isEmpty())
                     sText = pLevel->GetBulletChar( );
 
                 OUString sPrefix;
