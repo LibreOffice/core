@@ -130,6 +130,7 @@
 #include <rtl/strbuf.hxx>
 #include <svdoopengl.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 
@@ -223,6 +224,22 @@ OUString SdrObjUserData::GetMacroPopupComment(const SdrObjMacroHitRec& /*rRec*/,
 {
     return OUString();
 }
+
+class SdrObjUserDataList
+{
+    typedef boost::ptr_vector<SdrObjUserData> ListType;
+    ListType maList;
+
+public:
+    SdrObjUserDataList();
+    ~SdrObjUserDataList();
+
+    size_t GetUserDataCount() const;
+    const SdrObjUserData* GetUserData(size_t nNum) const;
+    SdrObjUserData* GetUserData(size_t nNum);
+    void AppendUserData(SdrObjUserData* pData);
+    void DeleteUserData(size_t nNum);
+};
 
 SdrObjUserDataList::SdrObjUserDataList() {}
 SdrObjUserDataList::~SdrObjUserDataList() {}

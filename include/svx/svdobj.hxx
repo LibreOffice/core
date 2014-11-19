@@ -42,7 +42,6 @@
 #include <vcl/timer.hxx>
 
 #include <boost/optional.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 // forward declarations
 
@@ -73,6 +72,7 @@ namespace tools { class PolyPolygon; }
 class SfxPoolItem;
 class SdrVirtObj;
 class SdrDragView;
+class SdrObjUserDataList;
 
 namespace sdr
 {
@@ -206,22 +206,6 @@ public:
     virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
     virtual bool DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
     virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-};
-
-class SdrObjUserDataList
-{
-    typedef boost::ptr_vector<SdrObjUserData> ListType;
-    ListType maList;
-
-public:
-    SdrObjUserDataList();
-    ~SdrObjUserDataList();
-
-    size_t GetUserDataCount() const;
-    const SdrObjUserData* GetUserData(size_t nNum) const;
-    SdrObjUserData* GetUserData(size_t nNum);
-    void AppendUserData(SdrObjUserData* pData);
-    void DeleteUserData(size_t nNum);
 };
 
 // all geometrical data of an arbitrary object for use in undo/redo
