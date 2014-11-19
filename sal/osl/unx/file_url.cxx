@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file_url.h"
+#include "file_url.hxx"
 
 #include "system.h"
 

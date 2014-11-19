@@ -34,7 +34,7 @@
 #include "createfilehandlefromfd.hxx"
 #include "file_error_transl.hxx"
 #include "file_impl.hxx"
-#include "file_url.h"
+#include "file_url.hxx"
 #include "uunxapi.h"
 
 #include <algorithm>

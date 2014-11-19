@@ -29,7 +29,7 @@
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 
-#include "file_url.h"
+#include "file_url.hxx"
 #include "file_impl.hxx"
 
 oslFileError SAL_CALL osl_getTempDirURL( rtl_uString** pustrTempDir )

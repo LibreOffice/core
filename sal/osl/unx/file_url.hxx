@@ -17,15 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SAL_OSL_UNX_FILE_URL_H
-#define INCLUDED_SAL_OSL_UNX_FILE_URL_H
+#ifndef INCLUDED_SAL_OSL_UNX_FILE_URL_HXX
+#define INCLUDED_SAL_OSL_UNX_FILE_URL_HXX
 
 #include "osl/file.h"
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 
 oslFileError osl_getSystemPathFromFileURL_Ex(rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
 
@@ -35,10 +30,6 @@ int UnicodeToText(char * buffer, size_t bufLen, const sal_Unicode * uniText, sal
 
 int TextToUnicode(const char* text, size_t text_buffer_size, sal_Unicode* unic_text, sal_Int32 unic_text_buffer_size);
 
-#ifdef __cplusplus
-}
 #endif
-
-#endif /* #define INCLUDED_SAL_OSL_UNX_FILE_URL_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

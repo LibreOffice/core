@@ -30,7 +30,7 @@
 #include "file_impl.hxx"
 #include "file_error_transl.hxx"
 #include "file_path_helper.hxx"
-#include "file_url.h"
+#include "file_url.hxx"
 #include "uunxapi.hxx"
 #include "readwrite_helper.h"
 

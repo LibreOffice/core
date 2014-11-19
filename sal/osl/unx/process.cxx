@@ -56,7 +56,7 @@
 #include <grp.h>
 
 #include "createfilehandlefromfd.hxx"
-#include "file_url.h"
+#include "file_url.hxx"
 #include "procimpl.h"
 #include "readwrite_helper.h"
 #include "sockimpl.h"

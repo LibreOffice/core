@@ -27,7 +27,7 @@
 #include <osl/file.h>
 #include <assert.h>
 #include "system.h"
-#include "file_url.h"
+#include "file_url.hxx"
 
 #ifdef AIX
 #include <sys/ldr.h>
