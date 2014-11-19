@@ -41,8 +41,6 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
 void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                                  const Gradient& rGradient )
 {
-    bool bDrawn = false;
-
     if ( mnDrawMode & DRAWMODE_NOGRADIENT )
         return;     // nothing to draw!
 
@@ -52,12 +50,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
     if ( mbOutputClipped )
         return;
 
-    if ( mpGraphics || AcquireGraphics() )
-    {
-        bDrawn = mpGraphics->DrawGradient( rPolyPoly, rGradient, this );
-    }
-
-    if ( !bDrawn && rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
+    if ( rPolyPoly.Count() && rPolyPoly[ 0 ].GetSize() )
     {
         if ( mnDrawMode & ( DRAWMODE_BLACKGRADIENT | DRAWMODE_WHITEGRADIENT | DRAWMODE_SETTINGSGRADIENT) )
         {
@@ -95,6 +88,9 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
             // do nothing if the rectangle is empty
             if ( !aRect.IsEmpty() )
             {
+                tools::PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+                bool bDrawn = false;
+
                 if( !mpGraphics && !AcquireGraphics() )
                     return;
 
@@ -105,10 +101,11 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                 if( mbInitClipRegion )
                     InitClipRegion();
 
-                if( !mbOutputClipped )
-                {
-                    tools::PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+                // try to draw gradient natively
+                bDrawn = mpGraphics->DrawGradient( aClipPolyPoly, aGradient, this );
 
+                if( !bDrawn && !mbOutputClipped )
+                {
                     // draw gradients without border
                     if( mbLineColor || mbInitLineColor )
                     {
