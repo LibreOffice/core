@@ -973,9 +973,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
 {
     MapMode         aMapMode;
     Size            aSize;
-    const sal_uLong     nStartPos = rIStm.Tell();
     sal_uInt32      nId;
-    sal_uLong           nHeaderLen;
     sal_Int32       nType;
     sal_Int32       nLen;
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
@@ -1032,7 +1030,6 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
                             Fraction( nScaleNumY, nScaleDenomY ) );
     }
 
-    nHeaderLen = rIStm.Tell() - nStartPos;
     meType = (GraphicType) nType;
 
     if( meType )
