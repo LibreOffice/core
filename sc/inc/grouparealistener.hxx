@@ -11,6 +11,7 @@
 #define INCLUDED_SC_GROUPAREALISTENER_HXX
 
 #include <address.hxx>
+#include <calcmacros.hxx>
 
 #include <svl/listener.hxx>
 
@@ -50,6 +51,11 @@ public:
      *               this container.
      */
     void collectFormulaCells( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
+
+#if DEBUG_AREA_BROADCASTER
+    ScAddress getTopCellPos() const;
+    SCROW getGroupLength() const;
+#endif
 
 private:
     void notifyCellChange( const SfxHint& rHint, const ScAddress& rPos );

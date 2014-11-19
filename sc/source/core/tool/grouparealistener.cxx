@@ -219,6 +219,19 @@ void FormulaGroupAreaListener::collectFormulaCells(
     }
 }
 
+#if DEBUG_AREA_BROADCASTER
+ScAddress FormulaGroupAreaListener::getTopCellPos() const
+{
+    const ScFormulaCell& rFC = **mppTopCell;
+    return rFC.aPos;
+}
+
+SCROW FormulaGroupAreaListener::getGroupLength() const
+{
+    return mnGroupLen;
+}
+#endif
+
 void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScAddress& rPos )
 {
     // Determine which formula cells within the group need to be notified of this change.
