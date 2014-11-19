@@ -23,6 +23,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
+
 using namespace ::com::sun::star;
 
 namespace oglcanvas
@@ -53,16 +54,28 @@ namespace oglcanvas
 
         better not leave triangulation to OpenGL. also, ignores texturing
     */
-    //move to canvashelper, or take renderHelper as parameter?
-    void renderPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
+    void renderPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper, glm::vec4 color)
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
             aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
-
-        for( sal_uInt32 i=0; i<aPolyPoly.count(); i++ )
+        for(sal_uInt32 i=0; i<aPolyPoly.count(); i++ )
         {
 
+
+            const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
+
+            const sal_uInt32 nPts=rPolygon.count();
+            const sal_uInt32 nExtPts=nPts + int(rPolygon.isClosed());
+            GLfloat vertices[nExtPts*2];
+            for( sal_uInt32 j=0; j<nExtPts; j++ )
+            {
+                const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
+                vertices[j*2] = rPt.getX();
+                vertices[j*2+1] = rPt.getY();
+            }
+            renderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
+            /*
             glBegin(GL_LINE_STRIP);
 
             const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
@@ -76,9 +89,12 @@ namespace oglcanvas
             }
 
             glEnd();
+            */
+
         }
+
     }
-    //makes it sence to enable evrytime glBlend glBlendfunc...?
+
     glm::mat4 setupState( const ::basegfx::B2DHomMatrix&   rTransform,
                      GLenum                           eSrcBlend,
                      GLenum                           eDstBlend)
@@ -96,8 +112,7 @@ namespace oglcanvas
         return glm::make_mat4(aGLTransform);
     }
 
-    //What does it make,
-    void renderOSD( const std::vector<double>& rNumbers, double scale )
+    void renderOSD( const std::vector<double>& rNumbers, double scale, RenderHelper *renderHelper)
     {
         double y=4.0;
         basegfx::B2DHomMatrix aTmp;
@@ -116,9 +131,9 @@ namespace oglcanvas
 
             aTmp=aTmp*aScaleShear;
             aPoly.transform(aTmp);
-
             glColor4f(0,1,0,1);
-            renderPolyPolygon(aPoly);
+            glm::vec4 color  = glm::vec4(1, 0, 0, 1);
+            renderPolyPolygon(aPoly, renderHelper, color);
         }
     }
 }

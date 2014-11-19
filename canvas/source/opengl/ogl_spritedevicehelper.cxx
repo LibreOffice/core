@@ -59,7 +59,6 @@ static void initTransformation(const ::Size& rSize, bool bMirror=false)
     glViewport( 0,0,
                 (GLsizei)rSize.Width(),
                 (GLsizei)rSize.Height() );
-
     // model coordinate system is already in device pixel
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -310,7 +309,6 @@ namespace oglcanvas
         SystemChildWindow* pChildWindow = maContext.getChildWindow();
         const ::Size& rOutputSize = pChildWindow->GetSizePixel();
         initTransformation(rOutputSize);
-
         // render the actual spritecanvas content
         mpSpriteCanvas->renderRecordedActions();
 
@@ -345,7 +343,7 @@ namespace oglcanvas
         aVec.push_back(mpTextureCache->getCacheSize());
         aVec.push_back(mpTextureCache->getCacheMissCount());
         aVec.push_back(mpTextureCache->getCacheHitCount());
-        renderOSD( aVec, 20 );
+        renderOSD( aVec, 20 , getRenderHelper());
 
         /*
          * TODO: moggi: fix it!

@@ -149,29 +149,7 @@ namespace oglcanvas
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
             while( aCurr != aEnd )
             {
-               // renderPolyPolygon(*aCurr++);
-               const ::basegfx::B2DPolyPolygon& rPolyPoly= *aCurr++;
-                ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
-                if( aPolyPoly.areControlPointsUsed() )
-                    aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
-
-                for( sal_uInt32 i=0; i<aPolyPoly.count(); i++ )
-                {
-
-
-                    const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
-
-                    const sal_uInt32 nPts=rPolygon.count();
-                    const sal_uInt32 nExtPts=nPts + int(rPolygon.isClosed());
-                    GLfloat vertices[nExtPts*2];
-                    for( sal_uInt32 j=0; j<nExtPts; j++ )
-                    {
-                        const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
-                        vertices[j*2] = rPt.getX();
-                        vertices[j*2+1] = rPt.getY();
-                    }
-                    pRenderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
-                }
+                renderPolyPolygon(*aCurr++, pRenderHelper, color);
             }
 
             return true;
@@ -299,6 +277,7 @@ namespace oglcanvas
                                     sal_uInt32                       nPixelCrc32)
 
         {
+
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
             pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
 
@@ -319,7 +298,6 @@ namespace oglcanvas
 
             // blend against fixed vertex color; texture alpha is multiplied in
             glm::vec4 color  = glm::vec4(1, 1, 1, 1);
-
             GLfloat vertices[] = {0, 0,
                                   0, (float) rPixelSize.Height,
                                   (float) rPixelSize.Width, 0,
@@ -328,7 +306,7 @@ namespace oglcanvas
                                        0, 1,
                                        1, 0,
                                        1, 1 };
-            pRenderHelper->renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
+            pRenderHelper->renderVertexUVTex(vertices, uvCoordinates, color, GL_TRIANGLE_STRIP );
 
             glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -863,6 +841,7 @@ namespace oglcanvas
             CanvasBitmap* pOwnBitmap=dynamic_cast<CanvasBitmap*>(xBitmap.get());
             if( pOwnBitmap )
             {
+
                 // insert as transformed copy of bitmap action vector -
                 // during rendering, this gets rendered into a temporary
                 // buffer, and then composited to the front
@@ -873,6 +852,7 @@ namespace oglcanvas
                 rAct.maFunction = ::boost::bind(&lcl_drawOwnBitmap,
                                                 _1,_2,_3,_4,_5,
                                                 *pOwnBitmap);
+
             }
             else
             {

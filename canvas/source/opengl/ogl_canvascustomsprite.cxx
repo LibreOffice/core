@@ -127,6 +127,7 @@ namespace oglcanvas
 
     bool CanvasCustomSprite::renderSprite()
     {
+
         if( ::basegfx::fTools::equalZero( mfAlpha ) )
             return true;
 
@@ -152,6 +153,7 @@ namespace oglcanvas
             const glm::mat4 translate = glm::translate(glm::vec3(maPosition.getX(), maPosition.getY(), 0));
             if( pBufferContext )
             {
+
                 const glm::mat4 aGLTransform = glm::mat4(
                         maTransformation.m00, maTransformation.m10, 0, 0,
                         maTransformation.m01, maTransformation.m11, 0, 0,
@@ -225,7 +227,9 @@ namespace oglcanvas
                 }
 
                 glBindTexture(GL_TEXTURE_2D, 0);
+
             }
+
         // translate sprite to output position
         pRenderHelper->SetModelAndMVP(translate);
         GLfloat vertices[] = {-2, -2,
@@ -241,7 +245,8 @@ namespace oglcanvas
         aVec.push_back(mfAlpha);
         aVec.push_back(mfPriority);
         aVec.push_back(maCanvasHelper.getRecordedActionCount());
-        renderOSD( aVec, 10 );
+
+        renderOSD( aVec, 10, pRenderHelper);
 
         return true;
     }
