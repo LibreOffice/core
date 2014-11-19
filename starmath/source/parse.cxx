@@ -961,13 +961,13 @@ void SmParser::Table()
 
     for (sal_uLong i = 0; i < n; i++)
     {
-        LineArray[n - (i + 1)] = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        auto pNode = m_aNodeStack.pop_front();
+        LineArray[n - (i + 1)] = pNode.release();
     }
 
     SmStructureNode *pSNode = new SmTableNode(m_aCurToken);
     pSNode->SetSubNodes(LineArray);
-    m_aNodeStack.push(pSNode);
+    m_aNodeStack.push_front(pSNode);
 }
 
 
@@ -996,7 +996,7 @@ void SmParser::Align()
     if (pSNode)
     {
         pSNode->SetSubNodes(popOrZero(m_aNodeStack), 0);
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
 }
 
@@ -1036,7 +1036,7 @@ void SmParser::Line()
 
     SmStructureNode *pSNode = new SmLineNode(m_aCurToken);
     pSNode->SetSubNodes(ExpressionArray);
-    m_aNodeStack.push(pSNode);
+    m_aNodeStack.push_front(pSNode);
 }
 
 
@@ -1045,12 +1045,11 @@ void SmParser::Expression()
     bool bUseExtraSpaces = true;
     if (!m_aNodeStack.empty())
     {
-        SmNode *pNode = m_aNodeStack.top();
-        m_aNodeStack.pop();
+        auto pNode = m_aNodeStack.pop_front();
         if (pNode->GetToken().eType == TNOSPACE)
             bUseExtraSpaces = false;
         else
-            m_aNodeStack.push(pNode);  // push the node from above again (now to be used as argument to this current 'nospace' node)
+            m_aNodeStack.push_front(pNode.release());  // push the node from above again (now to be used as argument to this current 'nospace' node)
     }
 
     sal_uInt16       n = 0;
@@ -1073,12 +1072,12 @@ void SmParser::Expression()
         SmExpressionNode *pSNode = new SmExpressionNode(m_aCurToken);
         pSNode->SetSubNodes(RelationArray);
         pSNode->SetUseExtraSpaces(bUseExtraSpaces);
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
     else
     {
         // This expression has only one node so just push this node.
-        m_aNodeStack.push(RelationArray[0]);
+        m_aNodeStack.push_front(RelationArray[0]);
     }
 }
 
@@ -1097,7 +1096,7 @@ void SmParser::Relation()
         Sum();
 
         pSNode->SetSubNodes(pFirst, pSecond, popOrZero(m_aNodeStack));
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
 }
 
@@ -1116,7 +1115,7 @@ void SmParser::Sum()
         Product();
 
         pSNode->SetSubNodes(pFirst, pSecond, popOrZero(m_aNodeStack));
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
 }
 
@@ -1193,7 +1192,7 @@ void SmParser::Product()
         {
             pSNode->SetSubNodes(pFirst, pOper, popOrZero(m_aNodeStack));
         }
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
 }
 
@@ -1262,14 +1261,14 @@ void SmParser::SubSup(sal_uLong nActiveGroup)
     }
 
     pNode->SetSubNodes(aSubNodes);
-    m_aNodeStack.push(pNode);
+    m_aNodeStack.push_front(pNode);
 }
 
 
 void SmParser::OpSubSup()
 {
     // push operator symbol
-    m_aNodeStack.push(new SmMathSymbolNode(m_aCurToken));
+    m_aNodeStack.push_front(new SmMathSymbolNode(m_aCurToken));
     // skip operator token
     NextToken();
     // get sub- supscripts if any
@@ -1305,7 +1304,7 @@ void SmParser::Blank()
         pBlankNode->Clear();
     }
 
-    m_aNodeStack.push(pBlankNode);
+    m_aNodeStack.push_front(pBlankNode);
 }
 
 
@@ -1323,12 +1322,12 @@ void SmParser::Term(bool bGroupNumberIdent)
             bool bNoSpace = m_aCurToken.eType == TNOSPACE;
             if (bNoSpace)   // push 'no space' node and continue to parse expression
             {
-                m_aNodeStack.push(new SmExpressionNode(m_aCurToken));
+                m_aNodeStack.push_front(new SmExpressionNode(m_aCurToken));
                 NextToken();
             }
             if (m_aCurToken.eType != TLGROUP)
             {
-                m_aNodeStack.pop();    // get rid of the 'no space' node pushed above
+                m_aNodeStack.pop_front();    // get rid of the 'no space' node pushed above
                 Term(false);
             }
             else
@@ -1339,10 +1338,10 @@ void SmParser::Term(bool bGroupNumberIdent)
                 if (m_aCurToken.eType == TRGROUP)
                 {
                     if (bNoSpace)   // get rid of the 'no space' node pushed above
-                        m_aNodeStack.pop();
+                        m_aNodeStack.pop_front();
                     SmStructureNode *pSNode = new SmExpressionNode(m_aCurToken);
                     pSNode->SetSubNodes(NULL, NULL);
-                    m_aNodeStack.push(pSNode);
+                    m_aNodeStack.push_front(pSNode);
 
                     NextToken();
                 }
@@ -1368,17 +1367,17 @@ void SmParser::Term(bool bGroupNumberIdent)
             break;
 
         case TTEXT :
-            m_aNodeStack.push(new SmTextNode(m_aCurToken, FNT_TEXT));
+            m_aNodeStack.push_front(new SmTextNode(m_aCurToken, FNT_TEXT));
             NextToken();
             break;
         case TCHARACTER :
-            m_aNodeStack.push(new SmTextNode(m_aCurToken, FNT_VARIABLE));
+            m_aNodeStack.push_front(new SmTextNode(m_aCurToken, FNT_VARIABLE));
             NextToken();
             break;
         case TIDENT :
         case TNUMBER :
         {
-            m_aNodeStack.push(new SmTextNode(m_aCurToken,
+            m_aNodeStack.push_front(new SmTextNode(m_aCurToken,
                                              m_aCurToken.eType == TNUMBER ?
                                              FNT_NUMBER :
                                              FNT_VARIABLE));
@@ -1415,7 +1414,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                         moveToNextToken = false;
                         break;
                     }
-                    m_aNodeStack.push(new SmTextNode(m_aCurToken,
+                    m_aNodeStack.push_front(new SmTextNode(m_aCurToken,
                                                      m_aCurToken.eType ==
                                                      TNUMBER ?
                                                      FNT_NUMBER :
@@ -1436,7 +1435,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                     }
                     SmExpressionNode* pNode = new SmExpressionNode(SmToken());
                     pNode->SetSubNodes(nodeArray);
-                    m_aNodeStack.push(pNode);
+                    m_aNodeStack.push_front(pNode);
                 }
             }
             break;
@@ -1461,7 +1460,7 @@ void SmParser::Term(bool bGroupNumberIdent)
         case TDOTSLOW :
         case TDOTSUP :
         case TDOTSVERT :
-            m_aNodeStack.push(new SmMathSymbolNode(m_aCurToken));
+            m_aNodeStack.push_front(new SmMathSymbolNode(m_aCurToken));
             NextToken();
             break;
 
@@ -1479,12 +1478,12 @@ void SmParser::Term(bool bGroupNumberIdent)
         case TWP :
         case TEMPTYSET :
         case TINFINITY :
-            m_aNodeStack.push(new SmMathIdentifierNode(m_aCurToken));
+            m_aNodeStack.push_front(new SmMathIdentifierNode(m_aCurToken));
             NextToken();
             break;
 
         case TPLACE:
-            m_aNodeStack.push(new SmPlaceNode(m_aCurToken));
+            m_aNodeStack.push_front(new SmPlaceNode(m_aCurToken));
             NextToken();
             break;
 
@@ -1546,7 +1545,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                     pFirstNode = aArray[n - 1];
                     n--;
                 }
-                m_aNodeStack.push(pFirstNode);
+                m_aNodeStack.push_front(pFirstNode);
             }
             else if (TokenInGroup(TGFUNCTION))
             {
@@ -1590,7 +1589,7 @@ void SmParser::Escape()
     }
 
     SmNode *pNode = new SmMathSymbolNode(m_aCurToken);
-    m_aNodeStack.push(pNode);
+    m_aNodeStack.push_front(pNode);
 
     NextToken();
 }
@@ -1612,7 +1611,7 @@ void SmParser::Operator()
         Power();
 
         pSNode->SetSubNodes(pOperator, popOrZero(m_aNodeStack));
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
 }
 
@@ -1665,7 +1664,7 @@ void SmParser::Oper()
         default :
             assert(false && "unknown case");
     }
-    m_aNodeStack.push(pNode);
+    m_aNodeStack.push_front(pNode);
 
     NextToken();
 }
@@ -1765,7 +1764,7 @@ void SmParser::UnOper()
             pSNode->SetSubNodes(pOper, pArg);
     }
 
-    m_aNodeStack.push(pSNode);
+    m_aNodeStack.push_front(pSNode);
 }
 
 
@@ -1801,7 +1800,7 @@ void SmParser::Attribut()
 
     pSNode->SetSubNodes(pAttr, 0);
     pSNode->SetScaleMode(eScaleMode);
-    m_aNodeStack.push(pSNode);
+    m_aNodeStack.push_front(pSNode);
 }
 
 
@@ -1816,7 +1815,7 @@ void SmParser::FontAttribut()
         case TBOLD :
         case TNBOLD :
         case TPHANTOM :
-            m_aNodeStack.push(new SmFontNode(m_aCurToken));
+            m_aNodeStack.push_front(new SmFontNode(m_aCurToken));
             NextToken();
             break;
 
@@ -1855,7 +1854,7 @@ void SmParser::Color()
             Error(PE_COLOR_EXPECTED);
     } while (m_aCurToken.eType == TCOLOR);
 
-    m_aNodeStack.push(new SmFontNode(aToken));
+    m_aNodeStack.push_front(new SmFontNode(aToken));
 }
 
 
@@ -1876,7 +1875,7 @@ void SmParser::Font()
             Error(PE_FONT_EXPECTED);
     } while (m_aCurToken.eType == TFONT);
 
-    m_aNodeStack.push(new SmFontNode(aToken));
+    m_aNodeStack.push_front(new SmFontNode(aToken));
 }
 
 
@@ -1967,7 +1966,7 @@ void SmParser::FontSize()
     NextToken();
 
     pFontNode->SetSizeParameter(aValue, Type);
-    m_aNodeStack.push(pFontNode);
+    m_aNodeStack.push_front(pFontNode);
 }
 
 
@@ -2057,7 +2056,7 @@ void SmParser::Brace()
         OSL_ENSURE(pRight, "Sm: NULL pointer");
         pSNode->SetSubNodes(pLeft, pBody, pRight);
         pSNode->SetScaleMode(eScaleMode);
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
     else
     {   delete pSNode;
@@ -2083,7 +2082,7 @@ void SmParser::Bracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                m_aNodeStack.push(new SmMathSymbolNode(m_aCurToken));
+                m_aNodeStack.push_front(new SmMathSymbolNode(m_aCurToken));
                 NextToken();
                 nNum++;
             }
@@ -2102,7 +2101,7 @@ void SmParser::Bracebody(bool bIsLeftRight)
         {
             if (m_aCurToken.eType == TMLINE)
             {
-                m_aNodeStack.push(new SmMathSymbolNode(m_aCurToken));
+                m_aNodeStack.push_front(new SmMathSymbolNode(m_aCurToken));
                 NextToken();
                 nNum++;
             }
@@ -2125,7 +2124,7 @@ void SmParser::Bracebody(bool bIsLeftRight)
 
     pBody->SetSubNodes(aNodes);
     pBody->SetScaleMode(bIsLeftRight ? SCALE_HEIGHT : SCALE_NONE);
-    m_aNodeStack.push(pBody);
+    m_aNodeStack.push_front(pBody);
 }
 
 
@@ -2156,7 +2155,7 @@ void SmParser::Function()
         case TLN :
         case TLOG :
         case TEXP :
-            m_aNodeStack.push(new SmTextNode(m_aCurToken, FNT_FUNCTION));
+            m_aNodeStack.push_front(new SmTextNode(m_aCurToken, FNT_FUNCTION));
             NextToken();
             break;
 
@@ -2184,7 +2183,7 @@ void SmParser::Binom()
     }
 
     pSNode->SetSubNodes(ExpressionArray);
-    m_aNodeStack.push(pSNode);
+    m_aNodeStack.push_front(pSNode);
 }
 
 
@@ -2222,7 +2221,7 @@ void SmParser::Stack()
         aTok.eType = TSTACK;
         SmStructureNode *pSNode = new SmTableNode(aTok);
         pSNode->SetSubNodes(ExpressionArray);
-        m_aNodeStack.push(pSNode);
+        m_aNodeStack.push_front(pSNode);
     }
     else
         Error(PE_LGROUP_EXPECTED);
@@ -2285,7 +2284,7 @@ void SmParser::Matrix()
         SmMatrixNode *pMNode = new SmMatrixNode(m_aCurToken);
         pMNode->SetSubNodes(ExpressionArray);
         pMNode->SetRowCol(r, c);
-        m_aNodeStack.push(pMNode);
+        m_aNodeStack.push_front(pMNode);
     }
     else
         Error(PE_LGROUP_EXPECTED);
@@ -2331,14 +2330,14 @@ void SmParser::Special()
     if (!aSymbolName.isEmpty())
         AddToUsedSymbols( aSymbolName );
 
-    m_aNodeStack.push(new SmSpecialNode(m_aCurToken));
+    m_aNodeStack.push_front(new SmSpecialNode(m_aCurToken));
     NextToken();
 }
 
 
 void SmParser::GlyphSpecial()
 {
-    m_aNodeStack.push(new SmGlyphSpecialNode(m_aCurToken));
+    m_aNodeStack.push_front(new SmGlyphSpecialNode(m_aCurToken));
     NextToken();
 }
 
@@ -2352,7 +2351,7 @@ void SmParser::Error(SmParseError eError)
     //! put a structure node on the stack (instead of the error node itself)
     //! because sometimes such a node is expected in order to attach some
     //! subnodes
-    m_aNodeStack.push(pSNode);
+    m_aNodeStack.push_front(pSNode);
 
     AddError(eError, pSNode);
 
@@ -2388,8 +2387,7 @@ SmNode *SmParser::Parse(const OUString &rBuffer)
 
     m_aErrDescList.clear();
 
-    while ( !m_aNodeStack.empty() )
-        m_aNodeStack.pop();
+    m_aNodeStack.clear();
 
     SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();
@@ -2410,8 +2408,7 @@ SmNode *SmParser::ParseExpression(const OUString &rBuffer)
 
     m_aErrDescList.clear();
 
-    while ( !m_aNodeStack.empty() )
-        m_aNodeStack.pop();
+    m_aNodeStack.clear();
 
     SetLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
     NextToken();

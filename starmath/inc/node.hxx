@@ -23,13 +23,13 @@
 #include <vector>
 #include <ostream>
 #include <stdio.h>
-#include <stack>
 
 #include "types.hxx"
 #include "token.hxx"
 #include "error.hxx"
 #include "rect.hxx"
 #include "format.hxx"
+#include <boost/ptr_container/ptr_deque.hpp>
 
 
 #define ATTR_BOLD       0x0001
@@ -60,18 +60,17 @@ class SmNode;
 class SmStructureNode;
 
 typedef boost::shared_ptr<SmNode> SmNodePointer;
-typedef std::stack< SmNode* > SmNodeStack;
+typedef boost::ptr_deque<SmNode> SmNodeStack;
 typedef std::vector< SmNode * > SmNodeArray;
 typedef std::vector< SmStructureNode * > SmStructureNodeArray;
 
 template < typename T >
-T* popOrZero( ::std::stack<T*> & rStack )
+T* popOrZero( boost::ptr_deque<T> & rStack )
 {
     if (rStack.empty())
         return 0;
-    T* pTmp = rStack.top();
-    rStack.pop();
-    return pTmp;
+    auto pTmp = rStack.pop_front();
+    return pTmp.release();
 }
 
 enum SmScaleMode    { SCALE_NONE, SCALE_WIDTH, SCALE_HEIGHT };
