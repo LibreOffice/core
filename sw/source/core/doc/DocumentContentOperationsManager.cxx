@@ -2032,15 +2032,18 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         // where the rPaM is located.
         // If the Content was moved to the back and the SavePam's SPoint is
         // in the next Node, we have to deal with this when saving the Undo object!
-        SwTxtNode * pPamTxtNd = 0;
+        SwTxtNode * pPamTxtNd = nullptr;
 
         // Is passed to SwUndoMove, which happens when subsequently calling Undo JoinNext.
         // If it's not possible to call Undo JoinNext here.
         bool bJoin = bSplit && pTNd;
-        bCorrSavePam = bCorrSavePam &&
-                        0 != ( pPamTxtNd = rPaM.GetNode().GetTxtNode() )
-                        && pPamTxtNd->CanJoinNext()
-                        && (*rPaM.GetPoint() <= *aSavePam.GetPoint());
+        if( bCorrSavePam )
+        {
+            pPamTxtNd = rPaM.GetNode().GetTxtNode();
+            bCorrSavePam = (pPamTxtNd != nullptr)
+                            && pPamTxtNd->CanJoinNext()
+                            && (*rPaM.GetPoint() <= *aSavePam.GetPoint());
+        }
 
         // Do two Nodes have to be joined at the SavePam?
         if( bJoin && pTNd->CanJoinNext() )
