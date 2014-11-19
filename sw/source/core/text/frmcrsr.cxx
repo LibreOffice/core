@@ -368,10 +368,16 @@ bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
     SwTwips nUpperMaxY = (pTmpFrm->*fnRect->fnGetPrtBottom)();
 
     // nMaxY is in absolute value
-    SwTwips nMaxY = bVert ?
-                    ( bVertL2R ? std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) : std::max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY ) ) :
-                    std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
-
+    SwTwips nMaxY;
+    if ( bVert )
+    {
+        if ( bVertL2R )
+            nMaxY = std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
+        else
+            nMaxY = std::max( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
+    }
+    else
+        nMaxY = std::min( (pFrm->*fnRect->fnGetPrtBottom)(), nUpperMaxY );
     if ( pFrm->IsEmpty() || ! (pFrm->Prt().*fnRect->fnGetHeight)() )
     {
         Point aPnt1 = pFrm->Frm().Pos() + pFrm->Prt().Pos();
