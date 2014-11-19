@@ -103,7 +103,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="check">
-                <property name="label" translatable="yes">Check for_Updates...</property>
+                <property name="label" translatable="yes">Check for _Updates...</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
