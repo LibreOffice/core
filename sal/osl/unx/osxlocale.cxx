@@ -63,7 +63,7 @@ namespace
 
 /** Grab current locale from system.
 */
-int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
+void macosx_getLocale(char *locale, sal_uInt32 bufferLen)
 {
     CFStringRef sref = getProcessLocale();
     CFStringGuard sGuard(sref);
@@ -91,8 +91,6 @@ int macosx_getLocale(char *locale, sal_uInt32 bufferLen)
     // system interface is UTF-8 based and sal tries to determine
     // the file system locale from the locale information
     strlcat(locale, ".UTF-8", bufferLen - strlen(locale));
-
-    return noErr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

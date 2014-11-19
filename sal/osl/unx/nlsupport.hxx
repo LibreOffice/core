@@ -28,7 +28,7 @@ void _imp_getProcessLocale( rtl_Locale ** );
 int  _imp_setProcessLocale( rtl_Locale * );
 
 #if defined IOS || defined MACOSX
-int macosx_getLocale(char *locale, sal_uInt32 bufferLen);
+void macosx_getLocale(char *locale, sal_uInt32 bufferLen);
 #endif
 
 #endif
