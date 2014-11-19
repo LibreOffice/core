@@ -3808,7 +3808,13 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             OUString aName = getStyleName(nParam);
             if (!aName.isEmpty())
-                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle, RTFValue::Pointer_t(new RTFValue(aName)));
+            {
+                if (m_aStates.top().nDestinationState == DESTINATION_LISTLEVEL)
+                    m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_pStyle, RTFValue::Pointer_t(new RTFValue(aName)));
+                else
+                    m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle, RTFValue::Pointer_t(new RTFValue(aName)));
+
+            }
         }
     }
     break;
