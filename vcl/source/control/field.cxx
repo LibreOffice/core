@@ -1367,7 +1367,12 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
         sal_uLong       nMask = pMgr->ReadLong();
 
         if ( METRICFORMATTER_UNIT & nMask )
-            meUnit = (FieldUnit)pMgr->ReadLong();
+        {
+            sal_uLong nUnit = pMgr->ReadLong();
+            assert(nUnit <= FUNIT_MILLISECOND && "out of FieldUnit bounds");
+            if (nUnit <= FUNIT_MILLISECOND)
+                meUnit = (FieldUnit)nUnit;
+        }
 
         if ( METRICFORMATTER_CUSTOMUNITTEXT & nMask )
             maCustomUnitText = pMgr->ReadString();
