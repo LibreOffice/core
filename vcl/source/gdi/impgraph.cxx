@@ -981,17 +981,6 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
     bool            bRet = false;
 
-    if( !mbSwapUnderway )
-    {
-        const OUString aTempURLStr( maDocFileURLStr );
-        const sal_uLong nTempPos = mnDocFilePos;
-
-        ImplClear();
-
-        maDocFileURLStr = aTempURLStr;
-        mnDocFilePos = nTempPos;
-    }
-
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rIStm.ReadUInt32( nId );
 
