@@ -60,12 +60,14 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pNewFrm, const SwTwips nRst )
     SWAP_IF_SWAPPED( pFrm )
     SWRECTFN( pFrm )
     nOrigin = (pFrm->*fnRect->fnGetPrtTop)();
-    SwSectionFrm* pSct;
-    bKeep = !pFrm->IsMoveable() || IsNastyFollow( pFrm ) ||
-            ( pFrm->IsInSct() && (pSct=pFrm->FindSctFrm())->Lower()->IsColumnFrm()
-              && !pSct->MoveAllowed( pFrm ) ) ||
-            !pFrm->GetTxtNode()->GetSwAttrSet().GetSplit().GetValue() ||
-            pFrm->GetTxtNode()->GetSwAttrSet().GetKeep().GetValue();
+    bKeep = !pFrm->IsMoveable() || IsNastyFollow( pFrm );
+    if( !bKeep && pFrm->IsInSct() )
+    {
+        const SwSectionFrm* const pSct = pFrm->FindSctFrm();
+        bKeep = pSct->Lower()->IsColumnFrm() && !pSct->MoveAllowed( pFrm );
+    }
+    bKeep = bKeep || !pFrm->GetTxtNode()->GetSwAttrSet().GetSplit().GetValue() ||
+        pFrm->GetTxtNode()->GetSwAttrSet().GetKeep().GetValue();
     bBreak = false;
 
     if( !nRstHeight && !pFrm->IsFollow() && pFrm->IsInFtn() && pFrm->HasPara() )
