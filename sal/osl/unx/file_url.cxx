@@ -621,9 +621,7 @@ oslFileError osl_getAbsoluteFileURL(rtl_uString*  ustrBaseDirURL, rtl_uString* u
     return oslFileError(rc);
 }
 
-namespace
-{
-
+namespace osl { namespace detail {
     /*********************************************
      No separate error code if unicode to text
      conversion or getenv fails because for the
@@ -642,7 +640,10 @@ namespace
 
         return bfound;
     }
+} }
 
+namespace
+{
     /*********************************************
      No separate error code if unicode to text
      conversion or getcwd fails because for the
@@ -689,7 +690,7 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
     rtl::OUString result;
 
     if (find_in_searchPath(file_path, ustrSearchPath, result) ||
-        find_in_PATH(file_path, result) ||
+        osl::detail::find_in_PATH(file_path, result) ||
         find_in_CWD(file_path, result))
     {
         rtl::OUString resolved;

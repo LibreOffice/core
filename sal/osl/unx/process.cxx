@@ -50,6 +50,7 @@
 #include <osl/conditn.h>
 #include <osl/thread.h>
 #include <osl/file.h>
+#include <osl/file.hxx>
 #include <osl/signal.h>
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
@@ -93,69 +94,6 @@ struct ProcessData
 
 static oslProcessImpl* ChildList;
 static oslMutex        ChildListMutex;
-
-/******************************************************************************
- Deprecated
- Old and buggy implementation of osl_searchPath used only by
- osl_psz_executeProcess.
- A new implementation is in file_path_helper.cxx
- *****************************************************************************/
-
-static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,
-                   sal_Char *pszBuffer, sal_uInt32 Max)
-{
-    sal_Char path[PATH_MAX + 1];
-    sal_Char *pchr;
-
-    path[0] = '\0';
-
-    OSL_ASSERT(pszName != NULL);
-
-    if ( pszName == 0 )
-    {
-        return osl_Process_E_NotFound;
-    }
-
-    if ( (pchr = getenv("PATH")) != 0 )
-    {
-        sal_Char *pstr;
-
-        while (*pchr != '\0')
-        {
-            pstr = path;
-
-            while ((*pchr != '\0') && (*pchr != ':'))
-                *pstr++ = *pchr++;
-
-            if ((pstr > path) && ((*(pstr - 1) != '/')))
-                *pstr++ = '/';
-
-            *pstr = '\0';
-            size_t reminder = PATH_MAX - strlen(path);
-            if(reminder > strlen(pszName))
-            {
-                strncat(path, pszName, reminder);
-
-                if (access(path, 0) == 0)
-                {
-                    char szRealPathBuf[PATH_MAX + 1] = "";
-
-                    if( NULL == realpath(path, szRealPathBuf) || (strlen(szRealPathBuf) >= (sal_uInt32)Max))
-                        return osl_Process_E_Unknown;
-
-                    strcpy(pszBuffer, path);
-
-                    return osl_Process_E_None;
-                }
-
-                if (*pchr == ':')
-                    pchr++;
-            }
-        }
-    }
-
-    return osl_Process_E_NotFound;
-}
 
 } //Anonymous namespace
 
@@ -480,6 +418,38 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                             oslFileHandle   *pErrorRead
                                             )
 {
+    rtl::OUString image;
+    if (ustrImageName == nullptr)
+    {
+        if (nArguments == 0)
+        {
+            return osl_Process_E_InvalidError;
+        }
+        image = rtl::OUString::unacquired(ustrArguments);
+    }
+    else
+    {
+        osl::FileBase::RC e = osl::FileBase::getSystemPathFromFileURL(
+            rtl::OUString::unacquired(&ustrImageName), image);
+        if (e != osl::FileBase::E_None)
+        {
+            SAL_INFO(
+                "sal.osl",
+                "getSystemPathFromFileURL("
+                    << rtl::OUString::unacquired(&ustrImageName)
+                    << ") failed with " << e);
+            return osl_Process_E_Unknown;
+        }
+    }
+
+    if ((Options & osl_Process_SEARCHPATH) != 0)
+    {
+        rtl::OUString path;
+        if (osl::detail::find_in_PATH(image, path))
+        {
+            image = path;
+        }
+    }
 
     oslProcessError Error;
     sal_Char* pszWorkDir=0;
@@ -488,13 +458,18 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     unsigned int idx;
 
     char szImagePath[PATH_MAX] = "";
-    char szWorkDir[PATH_MAX] = "";
-
-    if ( ustrImageName && ustrImageName->length )
+    if (!image.isEmpty()
+        && (UnicodeToText(
+                szImagePath, SAL_N_ELEMENTS(szImagePath), image.getStr(),
+                image.getLength())
+            == 0))
     {
-        FileURLToPath( szImagePath, PATH_MAX, ustrImageName );
+        int e = errno;
+        SAL_INFO("sal.osl", "UnicodeToText(" << image << ") failed with " << e);
+        return osl_Process_E_Unknown;
     }
 
+    char szWorkDir[PATH_MAX] = "";
     if ( ustrWorkDir != 0 && ustrWorkDir->length )
     {
         FileURLToPath( szWorkDir, PATH_MAX, ustrWorkDir );
@@ -621,19 +596,13 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 )
 {
     int     i;
-    sal_Char    path[PATH_MAX + 1];
     ProcessData Data;
     oslThread hThread;
-
-    path[0] = '\0';
 
     memset(&Data,0,sizeof(ProcessData));
     Data.m_pInputWrite = pInputWrite;
     Data.m_pOutputRead = pOutputRead;
     Data.m_pErrorRead = pErrorRead;
-
-    if (pszImageName == NULL)
-        pszImageName = pszArguments[0];
 
     OSL_ASSERT(pszImageName != NULL);
 
@@ -641,10 +610,6 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     {
         return osl_Process_E_NotFound;
     }
-
-    if ((Options & osl_Process_SEARCHPATH) &&
-        (osl_searchPath_impl(pszImageName, path, sizeof(path)) == osl_Process_E_None))
-        pszImageName = path;
 
     Data.m_pszArgs[0] = strdup(pszImageName);
     Data.m_pszArgs[1] = 0;
