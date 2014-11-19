@@ -17,36 +17,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/bitmap.hxx>
-#include <vcl/builder.hxx>
 
-#include "basidesh.hxx"
-#include "iderdll.hxx"
-#include "iderdll2.hxx"
-#include <basidesh.hrc>
 #include <bastypes.hxx>
 #include <bastype2.hxx>
-#include <basobj.hxx>
 #include <baside2.hrc>
 #include <iderid.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
-#include <basic/sbx.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/treelistentry.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
 
-#include <cassert>
 #include <initializer_list>
-#include <memory>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 

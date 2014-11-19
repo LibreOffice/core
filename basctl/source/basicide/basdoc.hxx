@@ -22,7 +22,6 @@
 
 #include <iderid.hxx>
 #include <sfx2/docfac.hxx>
-#include <sfx2/objsh.hxx>
 #include <svx/ifaceids.hxx>
 
 #include <boost/scoped_ptr.hpp>

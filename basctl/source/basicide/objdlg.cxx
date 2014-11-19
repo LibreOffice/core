@@ -17,21 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "basidesh.hrc"
 #include "objdlg.hrc"
 
-#include "basidesh.hxx"
-#include "iderdll.hxx"
-#include "iderdll2.hxx"
 #include "objdlg.hxx"
 #include "helpid.hrc"
 
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svl/itemset.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
 
 namespace basctl

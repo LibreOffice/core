@@ -22,7 +22,6 @@
 #include <basic/sbmod.hxx>
 #include <tools/debug.hxx>
 
-#include <stddef.h>
 
 namespace basctl
 {

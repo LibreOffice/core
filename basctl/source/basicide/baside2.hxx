@@ -21,7 +21,6 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASIDE2_HXX
 
 #include "layout.hxx"
-#include "bastypes.hxx"
 #include "bastype3.hxx"
 #include "basidesh.hxx"
 #include "breakpoint.hxx"
@@ -34,20 +33,11 @@ class SvxSearchItem;
 #include <svtools/headbar.hxx>
 
 #include <vcl/button.hxx>
-#include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
-#include <vcl/split.hxx>
-#include <svl/lstner.hxx>
-#include <svtools/colorcfg.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/scrbar.hxx>
 
 #include <sfx2/progress.hxx>
-#include <unotools/options.hxx>
-#include <rtl/ref.hxx>
 
-#include <set>
-#include <boost/scoped_ptr.hpp>
 
 #include <vcl/textdata.hxx>
 #include <basic/codecompletecache.hxx>

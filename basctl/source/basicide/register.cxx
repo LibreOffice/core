@@ -18,9 +18,6 @@
  */
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <rtl/ustring.hxx>
 
 #include <cppuhelper/factory.hxx>
 

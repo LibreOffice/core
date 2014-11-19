@@ -20,29 +20,19 @@
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include <sfx2/app.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/genlink.hxx>
 
-#include <svl/solar.hrc>
-#include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <iderid.hxx>
-#include <svx/svxids.hrc>
 #include <basidesh.hxx>
 #include <basidesh.hrc>
-#include <basobj.hxx>
-#include <bastypes.hxx>
 #include <basdoc.hxx>
 #include <basicmod.hxx>
-#include <propbrw.hxx>
 
 #include <svl/srchitem.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <vcl/settings.hxx>
 
-#include <boost/scoped_ptr.hpp>
 
 namespace basctl
 {

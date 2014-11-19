@@ -31,8 +31,6 @@
 #include "iderdll.hxx"
 #include "idetemp.hxx"
 #include "localizationmgr.hxx"
-#include "propbrw.hxx"
-#include "objdlg.hxx"
 #include "managelang.hxx"
 
 #include <basic/basmgr.hxx>
@@ -42,9 +40,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/processfactory.hxx>
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>

@@ -18,38 +18,22 @@
  */
 
 #include <vcl/layout.hxx>
-#include <algorithm>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
-#include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
-#include <basobj.hxx>
-#include <basidesh.hxx>
-#include <objdlg.hxx>
-#include <bastypes.hxx>
 #include <basdoc.hxx>
 #include <basidesh.hrc>
 
 #include <baside2.hxx>
 #include <baside3.hxx>
-#include <basicmod.hxx>
 #include <localizationmgr.hxx>
 #include "dlged.hxx"
-#include <dlgeddef.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <xmlscript/xmldlg_imexp.hxx>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <rtl/uri.hxx>
-#include <osl/process.h>
-#include <osl/file.hxx>
 
 namespace basctl
 {

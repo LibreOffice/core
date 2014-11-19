@@ -22,7 +22,6 @@
 
 #include "baside2.hxx"
 #include "baside3.hxx"
-#include "basobj.hxx"
 #include "docsignature.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
@@ -31,16 +30,13 @@
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
-#include <boost/scoped_ptr.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sfx2/childwin.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/minfitem.hxx>
-#include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
