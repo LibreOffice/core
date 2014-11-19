@@ -164,7 +164,7 @@ public:
 
     // Return color as RGB hex string
     // for example "00ff00" for green color
-    OUString AsRGBHexString();
+    OUString AsRGBHexString() const;
 
     // get ::basegfx::BColor from this color
     ::basegfx::BColor getBColor() const { return ::basegfx::BColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0); }

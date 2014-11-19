@@ -440,7 +440,7 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
 {
     xmlTextWriterStartElement(writer, BAD_CAST("pFont"));
     xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
-    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%s", const_cast<Color&>(GetColor()).AsRGBHexString().toUtf8().getStr());
+    xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%s", GetColor().AsRGBHexString().toUtf8().getStr());
     xmlTextWriterEndElement(writer);
 }
 

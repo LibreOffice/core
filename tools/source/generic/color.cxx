@@ -232,7 +232,7 @@ SvStream& Color::Write( SvStream& rOStm, bool bNewFormat )
     return rOStm;
 }
 
-OUString Color::AsRGBHexString()
+OUString Color::AsRGBHexString() const
 {
     std::stringstream ss;
     ss << std::hex << std::setfill ('0') << std::setw(6) << GetRGBColor();
