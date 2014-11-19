@@ -1419,7 +1419,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 break;
 //    4 - on field UE and on error CO
                 case FULL       :
-                    nAction = bHasField ? ACTION_UNDOEDIT : ACTION_CONTINUE;
+                    nAction = ACTION_UNDOEDIT;
                 break;
 //    5 - on field FS and on error CO
                 case INSIDE_YES :
