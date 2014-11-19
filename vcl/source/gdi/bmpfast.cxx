@@ -566,7 +566,7 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     // source and destination don't match: upside down
     if( (rSrcBuffer.mnFormat ^ rDstBuffer.mnFormat) & BMP_FORMAT_TOP_DOWN )
     {
-        aDstLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nDstLinestep );
+        aDstLine.AddByteOffset( (rDstBuffer.mnHeight - 1) * nDstLinestep );
         nDstLinestep = -nDstLinestep;
     }
 
