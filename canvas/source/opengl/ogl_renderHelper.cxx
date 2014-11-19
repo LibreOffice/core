@@ -61,6 +61,7 @@ namespace oglcanvas
         glUseProgram(m_texProgID);
 
         glUniform4fv(m_texColorUnf, 1, glm::value_ptr(color));
+        glUniformMatrix4fv(m_texMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
         glEnableVertexAttribArray(m_texPosAttrb); //vertices
 
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
