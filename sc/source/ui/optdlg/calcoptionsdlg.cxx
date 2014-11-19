@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cmath>
 
 #include "calcconfig.hxx"
@@ -999,27 +1000,43 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
         pDoc->SetValue(ScAddress(0,i,1), (i%13)/13.);
 #endif
         pDoc->SetValue(ScAddress(1,i,1), comphelper::rng::uniform_real_distribution(0, 1000));
+        // The [0.1,2.5) interval is carefully chosen to keep the product of them likely "sane"
+        pDoc->SetValue(ScAddress(6,i,1), comphelper::rng::uniform_real_distribution(0.1, 2.5));
         pDoc->SetString(ScAddress(10,i,1), OUString("=IF(AND(A") + OUString::number(i+1) + ">= 0,A" + OUString::number(i+1) + "<= 1),0,1)");
     }
 
     pDoc->SetString(ScAddress(0,1,0), OUString("=SUM(RAND.K1:RAND.K") + sN + ")");
 
-    for (int i = 0; i < N/10; ++i)
+    for (int i = 0; i < N/3; ++i)
     {
         pDoc->SetString(ScAddress(2,i,1), OUString("=SUM(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
         pDoc->SetString(ScAddress(3,i,1), OUString("=AVERAGE(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
+        pDoc->SetString(ScAddress(4,i,1), OUString("=MIN(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
+        pDoc->SetString(ScAddress(5,i,1), OUString("=MAX(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
+        pDoc->SetString(ScAddress(7,i,1), OUString("=PRODUCT(G") + OUString::number(i+1) + ":G" + OUString::number(i+N/2) + ")");
 
-        double sum(0);
+        double nSum(0), nMin(DBL_MAX), nMax(-DBL_MAX), nProduct(1);
         for (int j = 0; j < N/2; ++j)
-            sum += pDoc->GetValue(ScAddress(1,i+j,1));
+        {
+            nSum += pDoc->GetValue(ScAddress(1,i+j,1));
+            nMin = std::min(nMin, pDoc->GetValue(ScAddress(1,i+j,1)));
+            nMax = std::max(nMax, pDoc->GetValue(ScAddress(1,i+j,1)));
+            nProduct *= pDoc->GetValue(ScAddress(6,i+j,1));
+        }
 
         pDoc->SetString(ScAddress(12,i,1),
-                        OUString("=IF(C") + OUString::number(i+1) + "-" + OUString::number(sum) + "<" + sEpsilon + ",0,1");
+                        OUString("=IF(C") + OUString::number(i+1) + "-" + OUString::number(nSum) + "<" + sEpsilon + ",0,1");
         pDoc->SetString(ScAddress(13,i,1),
-                        OUString("=IF(D") + OUString::number(i+1) + "-" + OUString::number(sum/(N/2)) + "<" + sEpsilon + ",0,1");
+                        OUString("=IF(D") + OUString::number(i+1) + "-" + OUString::number(nSum/(N/2)) + "<" + sEpsilon + ",0,1");
+        pDoc->SetString(ScAddress(14,i,1),
+                        OUString("=IF(E") + OUString::number(i+1) + "-" + OUString::number(nMin) + "<" + sEpsilon + ",0,1");
+        pDoc->SetString(ScAddress(15,i,1),
+                        OUString("=IF(F") + OUString::number(i+1) + "-" + OUString::number(nMax) + "<" + sEpsilon + ",0,1");
+        pDoc->SetString(ScAddress(16,i,1),
+                        OUString("=IF((H") + OUString::number(i+1) + "-" + OUString::number(nProduct) + ")/H" + OUString::number(i+1) + "<" + sEpsilon + ",0,1");
     }
 
-    pDoc->SetString(ScAddress(0,2,0), OUString("=SUM(RAND.M1:RAND.N") + OUString::number(N/10) + ")");
+    pDoc->SetString(ScAddress(0,2,0), OUString("=SUM(RAND.M1:RAND.Q") + OUString::number(N/3) + ")");
 
     // MISCMATH sheet
     pDoc->InsertTab(2, "MISCMATH");
