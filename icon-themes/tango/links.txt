@@ -135,6 +135,7 @@ cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/lc_objectmirrorvertical.png cmd/sc_flipvertical.png
 cmd/lc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+cmd/sc_numberformattime.png cmd/sc_timefield.png
 
 # Duplicates
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
