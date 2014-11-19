@@ -3676,6 +3676,25 @@ void ScDocument::CompileAll()
     SetAllFormulasDirty(aFormulaDirtyCxt);
 }
 
+namespace {
+
+class CompileXMLHandler : std::unary_function<ScTable*, void>
+{
+    sc::CompileFormulaContext* mpCxt;
+    ScProgress* mpProgress;
+public:
+    CompileXMLHandler( sc::CompileFormulaContext& rCxt, ScProgress& rProgress ) :
+        mpCxt(&rCxt), mpProgress(&rProgress) {} // Take pointers to make it copyable.
+
+    void operator() ( ScTable* pTab )
+    {
+        if (pTab)
+            pTab->CompileXML(*mpCxt, *mpProgress);
+    }
+};
+
+}
+
 void ScDocument::CompileXML()
 {
     bool bOldAutoCalc = GetAutoCalc();
@@ -3692,10 +3711,8 @@ void ScDocument::CompileXML()
     if (pRangeName)
         pRangeName->CompileUnresolvedXML(aCxt);
 
-    TableContainer::iterator it = maTabs.begin();
-    for (; it != maTabs.end(); ++it)
-        if (*it)
-            (*it)->CompileXML(aCxt, aProgress);
+    std::for_each(maTabs.begin(), maTabs.end(), CompileXMLHandler(aCxt, aProgress));
+    StartAllListeners();
 
     DELETEZ( pAutoNameCache );  // valid only during CompileXML, where cell contents don't change
 
