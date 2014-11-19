@@ -21,9 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_DOCUMENTENUMERATION_HXX
 
 #include <boost/scoped_ptr.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
 

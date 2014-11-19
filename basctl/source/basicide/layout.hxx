@@ -20,12 +20,8 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_LAYOUT_HXX
 
-#include <vcl/window.hxx>
 #include <vcl/split.hxx>
-#include <unotools/options.hxx>
 
-#include <vector>
-#include <boost/shared_ptr.hpp>
 
 class DockingWindow;
 class SfxRequest;

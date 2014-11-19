@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASCTL_SOURCE_BASICIDE_BASICBOX_HXX
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASICBOX_HXX
 
-#include "doceventnotifier.hxx"
 #include <svl/stritem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <vcl/lstbox.hxx>

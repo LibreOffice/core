@@ -19,27 +19,17 @@
 
 #include "docsignature.hxx"
 
-#include <basic/sbx.hxx>
 #include "basicrenderable.hxx"
 
 #include <com/sun/star/frame/XTitle.hpp>
 
-#include <basidesh.hxx>
 #include <basidesh.hrc>
 #include <baside2.hxx>
 #include <basdoc.hxx>
-#include <basobj.hxx>
-#include <vcl/texteng.hxx>
-#include <vcl/textview.hxx>
 #include <vcl/xtextedt.hxx>
-#include <tools/diagnose_ex.h>
-#include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfxdefs.hxx>
 #include <sfx2/signaturestate.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace basctl
 {

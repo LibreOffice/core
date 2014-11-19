@@ -21,8 +21,6 @@
 #include "baside3.hxx"
 #include "brkdlg.hxx"
 #include "iderdll.hxx"
-#include "iderdll2.hxx"
-#include "objdlg.hxx"
 #include "moduldlg.hxx"
 #include "docsignature.hxx"
 
@@ -37,8 +35,6 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/FilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
@@ -52,10 +48,6 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/layout.hxx>
-#include <cassert>
-#include <basic/codecompletecache.hxx>
-#include <svtools/miscopt.hxx>
 
 namespace basctl
 {

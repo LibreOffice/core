@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
-#include <cassert>
 
 #include "helpid.hrc"
 #include "baside2.hrc"
@@ -27,37 +25,27 @@
 #include "baside2.hxx"
 #include "brkdlg.hxx"
 #include "iderdll.hxx"
-#include "iderdll2.hxx"
-#include "objdlg.hxx"
 
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
-#include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#include <comphelper/processfactory.hxx>
+#include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/string.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/textwindowpeer.hxx>
-#include <tools/stream.hxx>
-#include <comphelper/syntaxhighlight.hxx>
 #include <svtools/treelistentry.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
 
 #include <vector>
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/reflection/XIdlField.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/uno/Exception.hpp>
 
 namespace basctl
 {

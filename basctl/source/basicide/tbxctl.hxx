@@ -20,7 +20,6 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_TBXCTL_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 
 namespace basctl
 {

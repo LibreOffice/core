@@ -19,10 +19,7 @@
 
 
 #include <basdoc.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <iderdll.hxx>
-#include <osl/mutex.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 

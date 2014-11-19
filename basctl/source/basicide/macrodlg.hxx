@@ -21,9 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_MACRODLG_HXX
 
 #include <bastype2.hxx>
-#include <bastype3.hxx>
 #include <sfx2/basedlgs.hxx>
-#include <vcl/fixed.hxx>
 
 #include <vcl/button.hxx>
 

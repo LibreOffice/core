@@ -20,7 +20,6 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_UNOMODEL_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <sfx2/sfxbasemodel.hxx>
 
 namespace basctl

@@ -23,7 +23,6 @@
 class StarBASIC;
 class SvxSearchItem;
 
-#include <tools/link.hxx>
 
 #include <bastypes.hxx>
 #include <bastype2.hxx>

@@ -17,13 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "baside2.hrc"
 #include "basidesh.hrc"
 #include "helpid.hrc"
 
 #include "baside2.hxx"
 #include "baside3.hxx"
-#include "basobj.hxx"
 #include "iderdll.hxx"
 #include "iderdll2.hxx"
 
@@ -32,11 +30,8 @@
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/layout.hxx>
-#include <tools/stream.hxx>
 
 namespace basctl
 {

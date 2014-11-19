@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/config.h>
 
 #include <set>
 
@@ -27,8 +26,6 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <tools/diagnose_ex.h>
 
