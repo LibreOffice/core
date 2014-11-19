@@ -89,26 +89,51 @@ namespace detail
         typedef DifferenceType   difference_type;
         typedef IteratorCategory iterator_category;
 
+        struct Impl
+        {
+            iterator1_type maIter1;
+            iterator2_type maIter2;
+            Impl()
+                : maIter1()
+                , maIter2()
+            {
+            }
+            Impl(const iterator1_type& rIter1, const iterator2_type& rIter2)
+                : maIter1(rIter1)
+                , maIter2(rIter2)
+            {
+            }
+        };
+
     protected:
-        iterator1_type maIter1;
-        iterator2_type maIter2;
+        Impl* pImpl;
 
     private:
         bool equal(CompositeIteratorBase const & rhs) const
         {
-            return (maIter1 == rhs.maIter1) && (maIter2 == rhs.maIter2);
+            return (pImpl->maIter1 == rhs.pImpl->maIter1) && (pImpl->maIter2 == rhs.pImpl->maIter2);
         }
 
     public:
-        CompositeIteratorBase() :
-            maIter1(),
-            maIter2()
-        {}
+        CompositeIteratorBase()
+        {
+            pImpl = new Impl();
+        }
 
-        CompositeIteratorBase( const iterator1_type& rIter1, const iterator2_type& rIter2 ) :
-            maIter1( rIter1 ),
-            maIter2( rIter2 )
-        {}
+        CompositeIteratorBase(const iterator1_type& rIter1, const iterator2_type& rIter2)
+        {
+            pImpl = new Impl(rIter1, rIter2);
+        }
+
+        CompositeIteratorBase(const CompositeIteratorBase& rOther)
+        {
+            pImpl = new Impl(rOther.pImpl->maIter1, rOther.pImpl->maIter2);
+        }
+
+        ~CompositeIteratorBase()
+        {
+            delete pImpl;
+        }
 
         bool operator==(Derived const & rhs) const
         {
@@ -122,21 +147,21 @@ namespace detail
 
         difference_type operator-(Derived const & rhs) const
         {
-            OSL_ASSERT( maIter1 - rhs.maIter1 == maIter2 - rhs.maIter2 );
-            return maIter1 - rhs.maIter1;
+            OSL_ASSERT(pImpl->maIter1 - rhs.pImpl->maIter1 == pImpl->maIter2 - rhs.pImpl->maIter2);
+            return pImpl->maIter1 - rhs.pImpl->maIter1;
         }
 
         Derived & operator+=(difference_type const & s)
         {
-            maIter1 += s;
-            maIter2 += s;
+            pImpl->maIter1 += s;
+            pImpl->maIter2 += s;
             return static_cast<Derived&>(*this);
         }
 
         Derived & operator-=(difference_type const & s)
         {
-            maIter1 -= s;
-            maIter2 -= s;
+            pImpl->maIter1 -= s;
+            pImpl->maIter2 -= s;
             return static_cast<Derived&>(*this);
         }
 
@@ -156,63 +181,70 @@ namespace detail
 
         Derived& operator++()
         {
-            ++maIter1;
-            ++maIter2;
+            ++pImpl->maIter1;
+            ++pImpl->maIter2;
             return static_cast<Derived&>(*this);
         }
 
         Derived& operator--()
         {
-            --maIter1;
-            --maIter2;
+            --pImpl->maIter1;
+            --pImpl->maIter2;
             return static_cast<Derived&>(*this);
         }
 
         Derived operator++(int)
         {
             Derived ret(static_cast<Derived const&>(*this));
-            ++maIter1;
-            ++maIter2;
+            ++pImpl->maIter1;
+            ++pImpl->maIter2;
             return ret;
         }
 
         Derived operator--(int)
         {
             Derived ret(static_cast<Derived const&>(*this));
-            --maIter1;
-            --maIter2;
+            --pImpl->maIter1;
+            --pImpl->maIter2;
             return ret;
         }
 
         value_type get() const
         {
-            return value_type(maIter1.get(),
-                              maIter2.get());
+            return value_type(pImpl->maIter1.get(),
+                              pImpl->maIter2.get());
         }
 
         value_type get(difference_type const & d) const
         {
-            return value_type(maIter1.get(d),
-                              maIter2.get(d));
+            return value_type(pImpl->maIter1.get(d),
+                              pImpl->maIter2.get(d));
         }
 
         void set( value_type v ) const
         {
-            maIter1.set(v);
-            maIter2.set(v);
+            pImpl->maIter1.set(v);
+            pImpl->maIter2.set(v);
         }
 
         void set( value_type v, difference_type const & d ) const
         {
-            maIter1.set(v,d);
-            maIter2.set(v,d);
+            pImpl->maIter1.set(v,d);
+            pImpl->maIter2.set(v,d);
         }
 
-        const iterator1_type& first() const { return maIter1; }
-        iterator1_type& first() { return maIter1; }
+        CompositeIteratorBase& operator=(const CompositeIteratorBase& rNew)
+        {
+            this->pImpl->maIter1 = rNew.pImpl->maIter1;
+            this->pImpl->maIter2 = rNew.pImpl->maIter2;
+            return *this;
+        }
 
-        const iterator2_type& second() const { return maIter2; }
-        iterator2_type& second() { return maIter2; }
+        const iterator1_type& first() const { return pImpl->maIter1; }
+        iterator1_type& first() { return pImpl->maIter1; }
+
+        const iterator2_type& second() const { return pImpl->maIter2; }
+        iterator2_type& second() { return pImpl->maIter2; }
     };
 }
 
@@ -314,43 +346,45 @@ public:
 
     CompositeIterator2D() :
         base_type(),
-        x(this->maIter1.x,this->maIter2.x),
-        y(this->maIter1.y,this->maIter2.y)
+        x(this->pImpl->maIter1.x,this->pImpl->maIter2.x),
+        y(this->pImpl->maIter1.y,this->pImpl->maIter2.y)
     {}
 
     CompositeIterator2D( const Iterator1& rIter1, const Iterator2& rIter2 ) :
         base_type( rIter1, rIter2 ),
-        x(this->maIter1.x,this->maIter2.x),
-        y(this->maIter1.y,this->maIter2.y)
+        x(this->pImpl->maIter1.x,this->pImpl->maIter2.x),
+        y(this->pImpl->maIter1.y,this->pImpl->maIter2.y)
     {}
 
     CompositeIterator2D( const CompositeIterator2D& rOld ) :
         base_type(rOld),
-        x(this->maIter1.x,this->maIter2.x),
-        y(this->maIter1.y,this->maIter2.y)
+        x(this->pImpl->maIter1.x,this->pImpl->maIter2.x),
+        y(this->pImpl->maIter1.y,this->pImpl->maIter2.y)
     {}
 
     CompositeIterator2D& operator=( const CompositeIterator2D& rNew )
     {
-        this->maIter1 = rNew.maIter1;
-        this->maIter2 = rNew.maIter2;
+        this->pImpl->maIter1 = rNew.pImpl->maIter1;
+        this->pImpl->maIter2 = rNew.pImpl->maIter2;
 
-        x = MoveX(this->maIter1.x,
-                  this->maIter2.x);
-        y = MoveY(this->maIter1.y,
-                  this->maIter2.y);
+        x = MoveX(this->pImpl->maIter1.x,
+                  this->pImpl->maIter2.x);
+        y = MoveY(this->pImpl->maIter1.y,
+                  this->pImpl->maIter2.y);
+
+        return *this;
     }
 
     row_iterator rowIterator() const
     {
-        return row_iterator(this->maIter1.rowIterator(),
-                            this->maIter2.rowIterator());
+        return row_iterator(this->pImpl->maIter1.rowIterator(),
+                            this->pImpl->maIter2.rowIterator());
     }
 
     column_iterator columnIterator() const
     {
-        return column_iterator(this->maIter1.columnIterator(),
-                               this->maIter2.columnIterator());
+        return column_iterator(this->pImpl->maIter1.columnIterator(),
+                               this->pImpl->maIter2.columnIterator());
     }
 };
 
