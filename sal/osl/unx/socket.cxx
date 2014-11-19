@@ -762,13 +762,13 @@ static sal_Char* _osl_getFullQualifiedDomainName (const sal_Char *pHostName)
     return pFullQualifiedName;
 }
 
-static sal_Bool _osl_isFullQualifiedDomainName (const sal_Char *pHostName)
+static bool _osl_isFullQualifiedDomainName (const sal_Char *pHostName)
 {
     /* a FQDN (aka 'hostname.domain.top_level_domain' )
      * is a name which contains a dot '.' in it ( would
      * match as well for 'hostname.' but is good enough
      * for now )*/
-    return (sal_Bool)( strchr( pHostName, (int)'.' ) != NULL );
+    return strchr( pHostName, (int)'.' ) != NULL;
 }
 
 struct oslHostAddrImpl
@@ -825,7 +825,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
         /* future extensions for new families might be implemented here */
 
         OSL_TRACE("_osl_hostentToHostAddr: unknown address family.");
-        OSL_ASSERT(sal_False);
+        OSL_ASSERT(false);
 
         __osl_destroySocketAddr( pSockAddr );
         free (cn);
@@ -1988,7 +1988,7 @@ sal_Int32 SAL_CALL osl_writeSocket(
 
 #ifdef HAVE_POLL_H /* poll() */
 
-sal_Bool __osl_socket_poll (
+bool __osl_socket_poll (
     oslSocket        pSocket,
     const TimeValue* pTimeout,
     short            nEvent)
@@ -1999,7 +1999,7 @@ sal_Bool __osl_socket_poll (
 
     OSL_ASSERT(0 != pSocket);
     if (0 == pSocket)
-      return sal_False; /* EINVAL */
+      return false; /* EINVAL */
 
     pSocket->m_nLastError = 0;
 
@@ -2021,12 +2021,12 @@ sal_Bool __osl_socket_poll (
         pSocket->m_nLastError = errno;
         OSL_TRACE("__osl_socket_poll(): poll error: %d (%s)",
                   errno, strerror(errno));
-        return sal_False;
+        return false;
     }
     if (result == 0)
     {
         /* Timeout */
-        return sal_False;
+        return false;
     }
 
     return ((fds.revents & nEvent) == nEvent);
@@ -2431,7 +2431,7 @@ sal_Bool SAL_CALL osl_isInSocketSet(oslSocketSet Set, oslSocket pSocket)
 
     pSet= (TSocketSetImpl*)Set;
 
-    return (FD_ISSET(pSocket->m_Socket, &pSet->m_Set) != 0);
+    return bool(FD_ISSET(pSocket->m_Socket, &pSet->m_Set));
 }
 
 sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
