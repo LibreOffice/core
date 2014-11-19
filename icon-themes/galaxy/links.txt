@@ -14,6 +14,7 @@ cmd/lc_objectmirrorhorizontal.png cmd/sc_fliphorizontal.png
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
 cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
+cmd/sc_numberformattime.png cmd/sc_timefield.png
 
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
