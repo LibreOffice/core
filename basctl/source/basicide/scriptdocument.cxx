@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "scriptdocument.hxx"
 #include "basobj.hxx"
 #include "basidesh.hrc"
 #include "iderid.hxx"
@@ -25,7 +24,6 @@
 #include "doceventnotifier.hxx"
 #include "documentenumeration.hxx"
 
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -39,12 +37,9 @@
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 
 #include <sfx2/objsh.hxx>
-#include <sfx2/app.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 
-#include <vcl/svapp.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 
@@ -56,20 +51,14 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/documentinfo.hxx>
 
-#include <osl/mutex.hxx>
 
-#include <cppuhelper/implbase1.hxx>
 
 #include <rtl/uri.hxx>
-#include <rtl/bootstrap.hxx>
 
-#include <osl/process.h>
 #include <osl/file.hxx>
 
-#include <set>
 
 namespace basctl
 {

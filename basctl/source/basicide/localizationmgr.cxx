@@ -21,13 +21,11 @@
 
 #include "basidesh.hxx"
 #include "baside3.hxx"
-#include "basobj.hxx"
 #include "iderdll.hxx"
 #include "dlged.hxx"
 #include "managelang.hxx"
 
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
-#include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sfx2/dispatch.hxx>
 
 namespace basctl

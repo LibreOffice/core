@@ -8,10 +8,8 @@
  */
 
 #include "baside2.hxx"
-#include "linenumberwindow.hxx"
 
 #include <vcl/xtextedt.hxx>
-#include <vcl/textview.hxx>
 #include <vcl/settings.hxx>
 
 namespace basctl

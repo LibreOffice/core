@@ -19,21 +19,14 @@
 
 #include <basidesh.hrc>
 #include <basidesh.hxx>
-#include <basobj.hxx>
 
 #include <basicbox.hxx>
-#include <iderid.hxx>
 #include <iderdll.hxx>
-#include <bastypes.hxx>
-#include "bastype2.hxx"
-#include "basdoc.hxx"
 
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
 #include "dlgresid.hrc"
-#include <editeng/unolingu.hxx>
 
-#include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/langtab.hxx>
 

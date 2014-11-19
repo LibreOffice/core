@@ -23,10 +23,7 @@
 #include "bastype2.hxx"
 #include "bastypes.hxx"
 
-#include <vcl/floatwin.hxx>
-#include <vcl/toolbox.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/image.hxx>
 
 namespace basctl
 {

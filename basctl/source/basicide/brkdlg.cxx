@@ -22,11 +22,8 @@
 #include "breakpoint.hxx"
 #include "brkdlg.hxx"
 #include "basidesh.hxx"
-#include "basidesh.hrc"
-#include "iderdll.hxx"
 
 #include <sfx2/dispatch.hxx>
-#include <sfx2/viewfrm.hxx>
 
 namespace basctl
 {

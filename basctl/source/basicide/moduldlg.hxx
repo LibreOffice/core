@@ -22,9 +22,6 @@
 
 #include <bastype2.hxx>
 #include <svtools/svtabbx.hxx>
-#include <vcl/button.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/tabctrl.hxx>

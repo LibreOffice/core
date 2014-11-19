@@ -18,11 +18,8 @@
  */
 
 #include <sfx2/app.hxx>
-#include <sfx2/docfac.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/objface.hxx>
-#include <sfx2/objsh.hxx>
-#include <svl/itemset.hxx>
 
 #include "unomodel.hxx"
 
