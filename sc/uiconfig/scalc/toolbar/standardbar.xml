@@ -46,11 +46,13 @@
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
  <toolbar:toolbaritem xlink:href=".uno:DeleteRows"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>
  <toolbar:toolbaritem xlink:href=".uno:DeleteColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells"/>
+ <toolbar:toolbaritem xlink:href=".uno:SplitCell" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DefinePrintArea" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DataSort"/>
  <toolbar:toolbaritem xlink:href=".uno:SortAscending"/>
@@ -58,14 +60,14 @@
  <toolbar:toolbaritem xlink:href=".uno:DataFilterAutoFilter"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataDataPilotRun"/>
+ <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw"/>
- <toolbar:toolbaritem xlink:href=".uno:DataDataPilotRun" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FreezePanes" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false"/>
