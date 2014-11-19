@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <cmath>
+
 #include "calcconfig.hxx"
 #include "calcoptionsdlg.hxx"
 #include "docsh.hxx"
@@ -1049,7 +1053,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
         // Handle TAN undefinedness. Use a relative epsilon for larger TAN values
         if (i <= 16 && i % 4 == 2)
             pDoc->SetValue(ScAddress(23,i,2), 0);
-        else if (abs(tan(d)) < 10)
+        else if (std::abs(tan(d)) < 10)
             pDoc->SetString(ScAddress(23,i,2),
                             OUString("=IF(ABS(D") + is + "-N" + is + ")<" + sEpsilon + ",0,1)");
         else
