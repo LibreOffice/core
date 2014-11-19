@@ -1920,8 +1920,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
             // 1. Check if the whole paragraph is hidden
             // 2. Check for hidden text attribute
-            if ( static_cast<const SwTxtNode&>(rTNd).IsHidden() ||
-                 mrSh.SelectHiddenRange() )
+            if ( rTNd.GetTxtNode()->IsHidden() || mrSh.SelectHiddenRange() )
                 continue;
 
             SwCrsrSaveState aSaveState( *mrSh._GetCrsr() );

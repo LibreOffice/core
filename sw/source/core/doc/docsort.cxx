@@ -258,7 +258,7 @@ OUString SwSortBoxElement::GetKey(sal_uInt16 nKey) const
             const SwNode *pNd = 0, *pEndNd = pMyBox->GetSttNd()->EndOfSectionNode();
             for( sal_uLong nIdx = pMyBox->GetSttIdx() + 1; pNd != pEndNd; ++nIdx )
                 if( ( pNd = pDoc->GetNodes()[ nIdx ])->IsTxtNode() )
-                    aRetStr += static_cast<const SwTxtNode*>(pNd)->GetTxt();
+                    aRetStr += pNd->GetTxtNode()->GetTxt();
         }
     }
     return aRetStr;

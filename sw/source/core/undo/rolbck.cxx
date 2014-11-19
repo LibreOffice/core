@@ -853,8 +853,7 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
             // area: use TextNode
             for ( it = m_Array.begin(); it != m_Array.end(); ++it )
             {
-                static_cast<SwTxtNode*>(pCntntNd)->
-                    DeleteAttributes( *it, m_nStart, m_nEnd );
+                pCntntNd->GetTxtNode()-> DeleteAttributes( *it, m_nStart, m_nEnd );
             }
         }
     }

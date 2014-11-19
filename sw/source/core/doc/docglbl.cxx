@@ -294,7 +294,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     OUString sTitle( xDocProps->getTitle() );
                     if (!sTitle.isEmpty())
                         sTitle += ": ";
-                    sTitle += static_cast<SwTxtNode*>(pStartNd)->GetExpandTxt();
+                    sTitle += pStartNd->GetTxtNode()->GetExpandTxt();
                     xDocProps->setTitle( sTitle );
 
                     // Replace template
@@ -398,7 +398,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
 
                         // set the link in the StartNode
                         SwFmtINetFmt aINet( sFileName , OUString() );
-                        SwTxtNode* pTNd = static_cast<SwTxtNode*>(pStartNd);
+                        SwTxtNode* pTNd = pStartNd->GetTxtNode();
                         pTNd->InsertItem(aINet, 0, pTNd->GetTxt().getLength());
 
                         // If the link cannot be found anymore,

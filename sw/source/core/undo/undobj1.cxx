@@ -114,7 +114,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
         SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
         OSL_ENSURE( pCNd->IsTxtNode(), "no Text Node at position." );
         SwFmtFlyCnt aFmt( pFrmFmt );
-        static_cast<SwTxtNode*>(pCNd)->InsertItem( aFmt, nCntPos, nCntPos );
+        pCNd->GetTxtNode()->InsertItem( aFmt, nCntPos, nCntPos );
     }
 
     pFrmFmt->MakeFrms();
@@ -506,13 +506,13 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
             if ((FLY_AS_CHAR == nAnchorTyp) ||
                 (FLY_AT_CHAR == nAnchorTyp))
             {
-                if (nCntnt > static_cast<SwTxtNode*>(pNd)->GetTxt().getLength())
+                if (nCntnt > pNd->GetTxtNode()->GetTxt().getLength())
                 {
                     pNd = 0;    // invalid position
                 }
                 else
                 {
-                    aPos.nContent.Assign(static_cast<SwTxtNode*>(pNd), nCntnt);
+                    aPos.nContent.Assign(pNd->GetTxtNode(), nCntnt);
                 }
             }
             if ( pNd )

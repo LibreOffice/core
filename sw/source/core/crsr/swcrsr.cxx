@@ -1706,7 +1706,7 @@ bool SwCursor::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
         if ( &rTmpNode != &rNode && rTmpNode.IsTxtNode() )
         {
             Point aPt;
-            const SwCntntFrm* pEndFrm = static_cast<SwTxtNode&>(rTmpNode).getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
+            const SwCntntFrm* pEndFrm = rTmpNode.GetTxtNode()->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &aPt, GetPoint() );
             if ( pEndFrm )
             {
                 if ( ! pEndFrm->IsRightToLeft() != ! pSttFrm->IsRightToLeft() )
@@ -1732,14 +1732,13 @@ void SwCursor::DoSetBidiLevelUpDown()
     if ( rNode.IsTxtNode() )
     {
         const SwScriptInfo* pSI =
-            SwScriptInfo::GetScriptInfo( static_cast<SwTxtNode&>(rNode) );
+            SwScriptInfo::GetScriptInfo( *rNode.GetTxtNode() );
         if ( pSI )
         {
             SwIndex& rIdx = GetPoint()->nContent;
             const sal_Int32 nPos = rIdx.GetIndex();
 
-            if (nPos && nPos <
-                    static_cast<SwTxtNode&>(rNode).GetTxt().getLength())
+            if (nPos && nPos < rNode.GetTxtNode()->GetTxt().getLength())
             {
                 const sal_uInt8 nCurrLevel = pSI->DirType( nPos );
                 const sal_uInt8 nPrevLevel = pSI->DirType( nPos - 1 );

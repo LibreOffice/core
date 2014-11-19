@@ -512,8 +512,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                                     static_cast<SwTxtNode*>(pTmpNd)->RemoveFromList();
 
                                 // remove outline index from old nodes array
-                                if (pCNd->IsTxtNode() &&
-                                    static_cast<SwTxtNode*>(pCNd)->IsOutline())
+                                if (pCNd->IsTxtNode() && pCNd->GetTxtNode()->IsOutline())
                                 {
                                     pOutlineNds->erase( pCNd );
                                 }
@@ -545,8 +544,7 @@ bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                         {
                             SwNode* pNd = &aMvIdx.GetNode();
 
-                            const bool bOutlNd = pNd->IsTxtNode() &&
-                                static_cast<SwTxtNode*>(pNd)->IsOutline();
+                            const bool bOutlNd = pNd->IsTxtNode() && pNd->GetTxtNode()->IsOutline();
                             // delete outline indices from old node array
                             if( bOutlNd )
                                 pOutlineNds->erase( pNd );
@@ -1127,7 +1125,7 @@ void SwNodes::Delete(const SwNodeIndex &rIndex, sal_uLong nNodes)
 
                     if( pNd->IsTxtNode() )
                     {
-                        SwTxtNode *const pTxtNode(static_cast<SwTxtNode*>(pNd));
+                        SwTxtNode *const pTxtNode(pNd->GetTxtNode());
                         if (pTxtNode->IsOutline() &&
                                 pOutlineNds->Seek_Entry( pNd, &nIdxPos ))
                         {
@@ -1384,7 +1382,7 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, sal_uLong nCnt )
         {
             SwNode* pNd = (*this)[ n ];
 
-            if (pNd->IsTxtNode() && static_cast<SwTxtNode*>(pNd)->IsOutline())
+            if (pNd->IsTxtNode() && pNd->GetTxtNode()->IsOutline())
             {
                 // remove the outline indices
                 sal_uInt16 nIdxPos;

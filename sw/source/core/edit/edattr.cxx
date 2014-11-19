@@ -139,7 +139,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                     const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
                     const sal_Int32 nEnd = (n == nEndNd)
                         ? nEndCnt
-                        : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
+                        : pNd->GetTxtNode()->GetTxt().getLength();
 
                     ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
                                                 false, true,
@@ -270,7 +270,7 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
             if( pNd->IsTxtNode() )
             {
                 // if it's a text node get its named paragraph format
-                SwTxtFmtColl* pFmt = static_cast<SwTxtNode*>(pNd)->GetTxtColl();
+                SwTxtFmtColl* pFmt = pNd->GetTxtNode()->GetTxtColl();
 
                 // if the paragraph format exist stop here and return it
                 if( pFmt != NULL )

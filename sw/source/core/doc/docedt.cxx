@@ -512,7 +512,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
             switch( pNd->GetNodeType() )
             {
             case ND_TEXTNODE:
-                if( 0 != ( pCntFrm = static_cast<SwTxtNode*>(pNd)->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout() )) )
+                if( 0 != ( pCntFrm = pNd->GetTxtNode()->getLayoutFrm( getIDocumentLayoutAccess().GetCurrentLayout() )) )
                 {
                     // skip protected and hidden Cells and Flys
                     if( pCntFrm->IsProtected() )
@@ -558,16 +558,13 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             }
                             nEndGrammarCheck = (pSpellArgs->pEndNode == pNd)
                                 ? pSpellArgs->pEndIdx->GetIndex()
-                                : static_cast<SwTxtNode const*>(pNd)
+                                : pNd->GetTxtNode()
                                     ->GetTxt().getLength();
                         }
 
-                        sal_Int32 nSpellErrorPosition =
-                            static_cast<SwTxtNode const*>(pNd)->GetTxt().getLength();
-                        if( (!pConvArgs &&
-                                static_cast<SwTxtNode*>(pNd)->Spell( pSpellArgs )) ||
-                            ( pConvArgs &&
-                                static_cast<SwTxtNode*>(pNd)->Convert( *pConvArgs )))
+                        sal_Int32 nSpellErrorPosition = pNd->GetTxtNode()->GetTxt().getLength();
+                        if( (!pConvArgs && pNd->GetTxtNode()->Spell( pSpellArgs )) ||
+                            ( pConvArgs && pNd->GetTxtNode()->Convert( *pConvArgs )))
                         {
                             // Cancel and remember position
                             pSttPos->nNode = nCurrNd;
@@ -586,11 +583,11 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             {
                                 uno::Reference< lang::XComponent > xDoc( ((SwDocShell*)GetDocShell())->GetBaseModel(), uno::UNO_QUERY );
                                 // Expand the string:
-                                const ModelToViewHelper aConversionMap(*static_cast<SwTxtNode*>(pNd));
+                                const ModelToViewHelper aConversionMap(*pNd->GetTxtNode());
                                 OUString aExpandText = aConversionMap.getViewText();
 
                                 // get XFlatParagraph to use...
-                                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *static_cast<SwTxtNode*>(pNd), aExpandText, aConversionMap );
+                                uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *pNd->GetTxtNode(), aExpandText, aConversionMap );
 
                                 // get error position of cursor in XFlatParagraph
                                 linguistic2::ProofreadingResult aResult;
@@ -601,7 +598,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 
-                                    lcl_syncGrammarError( *static_cast<SwTxtNode*>(pNd), aResult, aConversionMap );
+                                    lcl_syncGrammarError( *pNd->GetTxtNode(), aResult, aConversionMap );
 
                                     // get suggestions to use for the specific error position
                                     nGrammarErrors = aResult.aErrors.getLength();
@@ -621,10 +618,10 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                     nCurrNd = pNd->GetIndex();
                                     pSttPos->nNode = nCurrNd;
                                     pEndPos->nNode = nCurrNd;
-                                    pSpellArgs->pStartNode = static_cast<SwTxtNode*>(pNd);
-                                    pSpellArgs->pEndNode = static_cast<SwTxtNode*>(pNd);
-                                    pSpellArgs->pStartIdx->Assign(static_cast<SwTxtNode*>(pNd), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
-                                    pSpellArgs->pEndIdx->Assign(static_cast<SwTxtNode*>(pNd), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
+                                    pSpellArgs->pStartNode = pNd->GetTxtNode();
+                                    pSpellArgs->pEndNode = pNd->GetTxtNode();
+                                    pSpellArgs->pStartIdx->Assign(pNd->GetTxtNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos );
+                                    pSpellArgs->pEndIdx->Assign(pNd->GetTxtNode(), aConversionMap.ConvertToModelPosition( rError.nErrorStart + rError.nErrorLength ).mnPos );
                                     nCurrNd = nEndNd;
                                 }
                             }

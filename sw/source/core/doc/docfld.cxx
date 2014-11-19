@@ -257,8 +257,7 @@ bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
             if( pFirst->IsTxtNode() && pNext->IsTxtNode() &&
                 ( pFirst->FindFlyStartNode() || pNext->FindFlyStartNode() ))
             {
-                return ::IsFrameBehind( *static_cast<const SwTxtNode*>(pNext), nCntnt,
-                                        *static_cast<const SwTxtNode*>(pFirst), nCntnt );
+                return ::IsFrameBehind( *pNext->GetTxtNode(), nCntnt, *pFirst->GetTxtNode(), nCntnt );
             }
             return pFirstStt->GetIndex() < pNextStt->GetIndex();
         }

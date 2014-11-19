@@ -1045,7 +1045,7 @@ void SwRangeRedline::InvalidateRange()       // trigger the Layout
 
         if (pNode && pNode->IsTxtNode())
         {
-            SwTxtNode* pNd = static_cast< SwTxtNode* >(pNode);
+            SwTxtNode* pNd = pNode->GetTxtNode();
             SwUpdateAttr aHt(
                 n == nSttNd ? nSttCnt : 0,
                 n == nEndNd ? nEndCnt : pNd->GetTxt().getLength(),
@@ -1123,11 +1123,10 @@ void SwRangeRedline::MoveToSection()
         if( pCSttNd || pCEndNd )
         {
             SwTxtFmtColl* pColl = (pCSttNd && pCSttNd->IsTxtNode() )
-                                    ? static_cast<SwTxtNode*>(pCSttNd)->GetTxtColl()
+                                    ? pCSttNd->GetTxtNode()->GetTxtColl()
                                     : (pCEndNd && pCEndNd->IsTxtNode() )
-                                        ? static_cast<SwTxtNode*>(pCEndNd)->GetTxtColl()
-                                        : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(
-                                                RES_POOLCOLL_STANDARD );
+                                        ? pCEndNd->GetTxtNode()->GetTxtColl()
+                                        : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
 
             pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),
                                             SwNormalStartNode, pColl );
@@ -1193,9 +1192,8 @@ void SwRangeRedline::CopyToSection()
         if( pCSttNd )
         {
             SwTxtFmtColl* pColl = (pCSttNd && pCSttNd->IsTxtNode() )
-                                    ? static_cast<SwTxtNode*>(pCSttNd)->GetTxtColl()
-                                    : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(
-                                                RES_POOLCOLL_STANDARD );
+                                    ? pCSttNd->GetTxtNode()->GetTxtColl()
+                                    : pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
 
             pSttNd = rNds.MakeTextSection( SwNodeIndex( rNds.GetEndOfRedlines() ),
                                             SwNormalStartNode, pColl );
@@ -1213,8 +1211,7 @@ void SwRangeRedline::CopyToSection()
                 if( pDestNd )
                 {
                     if( pDestNd->IsTxtNode() && pCEndNd->IsTxtNode() )
-                        static_cast<SwTxtNode*>(pCEndNd)->CopyCollFmt(
-                                            *static_cast<SwTxtNode*>(pDestNd) );
+                        pCEndNd->GetTxtNode()->CopyCollFmt(*pDestNd->GetTxtNode());
                     else
                         pDestNd->ChgFmtColl( pCEndNd->GetFmtColl() );
                 }

@@ -63,7 +63,7 @@ void SwEditShell::FillByEx(SwCharFmt* pCharFmt, bool bReset)
     const SwCntntNode* pCNd = pPam->GetCntntNode();
     if( pCNd->IsTxtNode() )
     {
-        SwTxtNode const*const pTxtNode(static_cast<SwTxtNode const*>(pCNd));
+        SwTxtNode const*const pTxtNode(pCNd->GetTxtNode());
         sal_Int32 nStt;
         sal_Int32 nEnd;
         if( pPam->HasMark() )

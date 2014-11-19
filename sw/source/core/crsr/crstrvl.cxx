@@ -967,7 +967,7 @@ bool SwCrsrShell::GotoNextOutline()
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *pCrsr );
     pCrsr->GetPoint()->nNode = *pNd;
-    pCrsr->GetPoint()->nContent.Assign( static_cast<SwTxtNode*>(pNd), 0 );
+    pCrsr->GetPoint()->nContent.Assign( pNd->GetTxtNode(), 0 );
 
     bool bRet = !pCrsr->IsSelOvr();
     if( bRet )
@@ -996,7 +996,7 @@ bool SwCrsrShell::GotoPrevOutline()
         SwCallLink aLk( *this ); // watch Crsr-Moves
         SwCrsrSaveState aSaveState( *pCrsr );
         pCrsr->GetPoint()->nNode = *pNd;
-        pCrsr->GetPoint()->nContent.Assign( static_cast<SwTxtNode*>(pNd), 0 );
+        pCrsr->GetPoint()->nContent.Assign( pNd->GetTxtNode(), 0 );
 
         bRet = !pCrsr->IsSelOvr();
         if( bRet )
@@ -1020,7 +1020,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     {
         pNd = rNds.GetOutLineNds()[ nPos ];
 
-        if( static_cast<SwTxtNode*>(pNd)->GetAttrOutlineLevel()-1 <= nLevel )
+        if( pNd->GetTxtNode()->GetAttrOutlineLevel()-1 <= nLevel )
             return nPos;
 
     }
@@ -1705,7 +1705,7 @@ bool SwContentAtPos::IsInRTLText()const
             aTemp.Move(fnMoveForward, fnGoNode);
             SwCntntNode* pCntntNode = aTemp.GetCntntNode();
             if(pCntntNode && pCntntNode->IsTxtNode())
-                pNd = static_cast<SwTxtNode*>(pCntntNode);
+                pNd = pCntntNode->GetTxtNode();
         }
     }
     if(pNd)

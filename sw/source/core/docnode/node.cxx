@@ -1288,7 +1288,7 @@ void SwCntntNode::DelFrms( bool bIsDisposeAccTable )
 
     if( bIsDisposeAccTable && IsTxtNode() )
     {
-        static_cast<SwTxtNode *>(this)->DelFrms_TxtNodePart();
+        GetTxtNode()->DelFrms_TxtNodePart();
     }
 }
 
@@ -1639,8 +1639,7 @@ static bool lcl_CheckMaxLength(SwNode const& rPrev, SwNode const& rNext)
     }
 
     // Check if a node can contain the other (order is not significant)
-    return static_cast<const SwTxtNode&>(rPrev).GetSpaceLeft() >
-           static_cast<const SwTxtNode&>(rNext).Len();
+    return rPrev.GetTxtNode()->GetSpaceLeft() > rNext.GetTxtNode()->Len();
 }
 
 /// Can we join two Nodes?

@@ -1549,7 +1549,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
             {
                 const sal_Int32 nPos = rPos.nContent.GetIndex();
                 SfxItemSet aSet(pDoc->GetAttrPool(), nWhich, nWhich);
-                if (static_cast<const SwTxtNode*>(pNd)->GetAttr(aSet, nPos, nPos))
+                if (pNd->GetTxtNode()->GetAttr(aSet, nPos, nPos))
                     pItem = aSet.GetItem(nWhich);
             }
 

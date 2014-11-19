@@ -915,8 +915,8 @@ bool SwPaM::Find( const SfxPoolItem& rAttr, bool bValue, SwMoveFn fnMove,
             if( !pNode->IsTxtNode() ) // CharAttr are only in text nodes
                 continue;
 
-            if( static_cast<SwTxtNode*>(pNode)->HasHints() &&
-                lcl_Search( *static_cast<SwTxtNode*>(pNode), *pPam, rAttr, fnMove,  bValue ))
+            if( pNode->GetTxtNode()->HasHints() &&
+                lcl_Search( *pNode->GetTxtNode(), *pPam, rAttr, fnMove,  bValue ))
             {
                 // set to the values of the attribute
                 SetMark();
@@ -1005,7 +1005,7 @@ bool SwPaM::Find( const SfxItemSet& rSet, bool bNoColls, SwMoveFn fnMove,
 
             if( (!aOtherSet.Count() ||
                 lcl_Search( *pNode, aOtherSet, bNoColls )) &&
-                (*fnSearch)( *static_cast<SwTxtNode*>(pNode), aCmpArr, *pPam ))
+                (*fnSearch)( *pNode->GetTxtNode(), aCmpArr, *pPam ))
             {
                 // set to the values of the attribute
                 SetMark();

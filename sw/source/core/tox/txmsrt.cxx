@@ -568,7 +568,7 @@ OUString SwTOXPara::GetURL() const
     case nsSwTOXElement::TOX_TEMPLATE:
     case nsSwTOXElement::TOX_OUTLINELEVEL:
         {
-            const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
+            const SwTxtNode * pTxtNd = pNd->GetTxtNode();
 
             SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
             ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(

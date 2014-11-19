@@ -894,8 +894,7 @@ namespace
                 SwNode* pNode = &aIdx.GetNode();
                 if( pNode->IsTxtNode() ) // Looking for text nodes...
                 {
-                    SwpHints *pHints =
-                        static_cast<SwTxtNode*>(pNode)->GetpSwpHints();
+                    SwpHints *pHints = pNode->GetTxtNode()->GetpSwpHints();
                     if( pHints && pHints->HasFtn() ) //...with footnotes
                     {
                         bUpdateFtn = true; // Heureka
@@ -1294,7 +1293,7 @@ namespace //local functions originally from docfmt.cxx
 
             if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
             {
-                SwTxtNode* pTxtNd = static_cast<SwTxtNode*>(pNode);
+                SwTxtNode* pTxtNd = pNode->GetTxtNode();
                 const SwIndex& rSt = pStt->nContent;
                 sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
                 const OUString& rStr = pTxtNd->GetTxt();
@@ -1559,7 +1558,7 @@ namespace //local functions originally from docfmt.cxx
                 SwNode* pNd = pDoc->GetNodes()[ nStart ];
                 if (!pNd || !pNd->IsTxtNode())
                     continue;
-                SwTxtNode *pCurrentNd = static_cast<SwTxtNode*>(pNd);
+                SwTxtNode *pCurrentNd = pNd->GetTxtNode();
                 pCurrentNd->TryCharSetExpandToNum(*pCharSet);
             }
         }
@@ -1964,7 +1963,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
         pCntntStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
 
-        pTNd = static_cast<SwTxtNode*>(pTNd->SplitCntntNode( rPos ));
+        pTNd = pTNd->SplitCntntNode( rPos )->GetTxtNode();
 
         if( !pCntntStore->Empty() )
             pCntntStore->Restore( &m_rDoc, rPos.nNode.GetIndex()-1, 0, true );
@@ -2919,7 +2918,7 @@ bool DocumentContentOperationsManager::AppendTxtNode( SwPosition& rPos )
                         m_rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
     }
     else
-        pCurNode = static_cast<SwTxtNode*>(pCurNode->AppendNode( rPos ));
+        pCurNode = pCurNode->AppendNode( rPos )->GetTxtNode();
 
     rPos.nNode++;
     rPos.nContent.Assign( pCurNode, 0 );
@@ -3354,8 +3353,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
              newPos.nNode.GetNode().IsTxtNode() )
         {
-            newPos.nContent.Assign( static_cast<SwTxtNode*>(&newPos.nNode.GetNode()),
-                                        newPos.nContent.GetIndex() );
+            newPos.nContent.Assign( newPos.nNode.GetNode().GetTxtNode(), newPos.nContent.GetIndex() );
         }
         else
         {
@@ -4182,7 +4180,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                             pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD));
                     else
                     {
-                        pDestTxtNd = static_cast<SwTxtNode*>(pSttTxtNd->MakeCopy( pDoc, aInsPos ));
+                        pDestTxtNd = pSttTxtNd->MakeCopy( pDoc, aInsPos )->GetTxtNode();
                         bCopyOk = true;
                     }
                     aDestIdx.Assign( pDestTxtNd, 0 );

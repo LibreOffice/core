@@ -222,7 +222,7 @@ void SwCrsrShell::StartAction()
         m_nAktNdTyp = rNd.GetNodeType();
         m_bAktSelection = *m_pCurCrsr->GetPoint() != *m_pCurCrsr->GetMark();
         if( rNd.IsTxtNode() )
-            m_nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), const_cast<SwTxtNode&>(static_cast<const SwTxtNode&>(rNd)), m_nAktCntnt, true );
+            m_nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), const_cast<SwTxtNode&>(*rNd.GetTxtNode()), m_nAktCntnt, true );
         else
             m_nLeftFrmPos = 0;
     }
@@ -1352,7 +1352,7 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
     {
         SwCntntNode* pCntnt = aTmp.GetNodes().GoNext( &aTmp );
         if ( pCntnt && pCntnt->IsTxtNode() )
-            pTxtNd = static_cast<SwTxtNode*>(pCntnt);
+            pTxtNd = pCntnt->GetTxtNode();
         else
             pTxtNd = 0;
     }

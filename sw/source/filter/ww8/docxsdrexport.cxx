@@ -1655,7 +1655,7 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
     if (!pStartNode->IsTxtNode())
         return false;
 
-    SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(pStartNode);
+    SwTxtNode* pTxtNode = pStartNode->GetTxtNode();
 
     const SfxPoolItem* pItem = 0; // explicitly init to avoid warnings
     bool bItemSet = false;

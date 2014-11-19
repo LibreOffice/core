@@ -1011,7 +1011,7 @@ sal_uLong SwCompareLine::GetHashValue() const
     switch( rNode.GetNodeType() )
     {
     case ND_TEXTNODE:
-        nRet = GetTxtNodeHashValue( static_cast<const SwTxtNode&>(rNode), nRet );
+        nRet = GetTxtNodeHashValue( *rNode.GetTxtNode(), nRet );
         break;
 
     case ND_TABLENODE:
@@ -1021,7 +1021,7 @@ sal_uLong SwCompareLine::GetHashValue() const
             while( &aIdx.GetNode() != pEndNd )
             {
                 if( aIdx.GetNode().IsTxtNode() )
-                    nRet = GetTxtNodeHashValue( static_cast<SwTxtNode&>(aIdx.GetNode()), nRet );
+                    nRet = GetTxtNodeHashValue( *aIdx.GetNode().GetTxtNode(), nRet );
                 ++aIdx;
             }
         }
@@ -1102,8 +1102,8 @@ bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
     switch( rDstNd.GetNodeType() )
     {
     case ND_TEXTNODE:
-        bRet = CompareTxtNd( static_cast<const SwTxtNode&>(rDstNd), static_cast<const SwTxtNode&>(rSrcNd) )
-            && ( !CmpOptions.bUseRsid || static_cast<const SwTxtNode&>(rDstNd).CompareParRsid( static_cast<const SwTxtNode&>(rSrcNd) ) );
+        bRet = CompareTxtNd( *rDstNd.GetTxtNode(), *rSrcNd.GetTxtNode() )
+            && ( !CmpOptions.bUseRsid || rDstNd.GetTxtNode()->CompareParRsid( *rSrcNd.GetTxtNode() ) );
         break;
 
     case ND_TABLENODE:
@@ -1191,7 +1191,7 @@ OUString SwCompareLine::GetText() const
     switch( rNode.GetNodeType() )
     {
     case ND_TEXTNODE:
-        sRet = static_cast<const SwTxtNode&>(rNode).GetExpandTxt();
+        sRet = rNode.GetTxtNode()->GetExpandTxt();
         break;
 
     case ND_TABLENODE:

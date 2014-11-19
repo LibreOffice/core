@@ -1198,7 +1198,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             ::SetProgressState( i, GetDocShell() );
             const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
 
-            const int nLvl = static_cast<SwTxtNode*>(GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;
+            const int nLvl = GetNodes()[ nIndex ]->GetTxtNode()->GetAttrOutlineLevel()-1;
             if( nLvl > nLevel )
                 continue;
             sal_uInt16 nEndOfs = 1;
@@ -1209,7 +1209,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
                    GetNodes()[ nIndex + nEndOfs ]->IsTxtNode() )
             {
-                SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(GetNodes()[ nIndex+nEndOfs ]);
+                SwTxtNode* pTxtNode = GetNodes()[ nIndex+nEndOfs ]->GetTxtNode();
                 if (pTxtNode->GetTxt().getLength() && nWish)
                     --nWish;
                 bKeep = pTxtNode->GetSwAttrSet().GetKeep().GetValue();
@@ -1230,7 +1230,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             bool bDelete = false;
             if( (pNode = &aIndx.GetNode())->IsTxtNode() )
             {
-                SwTxtNode *pNd = static_cast<SwTxtNode*>(pNode);
+                SwTxtNode *pNd = pNode->GetTxtNode();
                 if( pNd->HasSwAttrSet() )
                     pNd->ResetAttr( RES_PAGEDESC, RES_BREAK );
                 if( bImpress )
@@ -1675,8 +1675,7 @@ bool SwDoc::ContainsHiddenChars() const
     for( sal_uLong n = GetNodes().Count(); n; )
     {
         SwNode* pNd = GetNodes()[ --n ];
-        if ( pNd->IsTxtNode() &&
-             static_cast<SwTxtNode*>(pNd)->HasHiddenCharAttribute( false ) )
+        if ( pNd->IsTxtNode() && pNd->GetTxtNode()->HasHiddenCharAttribute( false ) )
             return true;
     }
 

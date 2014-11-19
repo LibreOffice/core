@@ -381,9 +381,8 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
                         ? rStart.nContent.GetIndex() : 0;
                     const sal_Int32 nEnd   = (n == nEndNd)
                         ? rEnd.nContent.GetIndex()
-                        : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
-                    static_cast<SwTxtNode*>(pNd)->GetAttr(
-                        *pSet, nStart, nEnd, bOnlyTxtAttr, bGetFromChrFmt);
+                        : pNd->GetTxtNode()->GetTxt().getLength();
+                    pNd->GetTxtNode()->GetAttr(*pSet, nStart, nEnd, bOnlyTxtAttr, bGetFromChrFmt);
                 }
                 break;
 

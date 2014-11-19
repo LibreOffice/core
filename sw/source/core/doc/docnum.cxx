@@ -437,7 +437,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     SwNode* pSrch = &aSttRg.GetNode();
 
    if( pSrch->IsTxtNode())
-        nOutLineLevel = static_cast<sal_uInt8>(static_cast<SwTxtNode*>(pSrch)->GetAttrOutlineLevel()-1);
+        nOutLineLevel = static_cast<sal_uInt8>(pSrch->GetTxtNode()->GetAttrOutlineLevel()-1);
     SwNode* pEndSrch = &aEndRg.GetNode();
     if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
     {
@@ -459,7 +459,7 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( GetNodes().GetOutLineNds().Seek_Entry( pEndSrch, &nTmpPos ) )
     {
         if( !pEndSrch->IsTxtNode() || pEndSrch == pSrch ||
-            nOutLineLevel < static_cast<SwTxtNode*>(pEndSrch)->GetAttrOutlineLevel()-1 )
+            nOutLineLevel < pEndSrch->GetTxtNode()->GetAttrOutlineLevel()-1 )
             ++nTmpPos; // For sub outlines only!
     }
 

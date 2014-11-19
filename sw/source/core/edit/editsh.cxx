@@ -763,7 +763,7 @@ void SwEditShell::SetNumberingRestart()
 
                             // get the node num
                             // OD 2005-11-09
-                            SwTxtNode* pTxtNd( static_cast<SwTxtNode*>(pNd) );
+                            SwTxtNode* pTxtNd( pNd->GetTxtNode() );
                             SwNumRule* pNumRule( pTxtNd->GetNumRule() );
 
                             bool bIsNodeNum =

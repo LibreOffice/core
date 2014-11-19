@@ -72,7 +72,7 @@ OUString * SwUndoInsert::GetTxtFromDoc() const
 
     if( pCNd->IsTxtNode() )
     {
-        OUString sTxt = static_cast<SwTxtNode*>(pCNd)->GetTxt();
+        OUString sTxt = pCNd->GetTxtNode()->GetTxt();
 
         sal_Int32 nStart = nCntnt-nLen;
         sal_Int32 nLength = nLen;
@@ -406,7 +406,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
         }
         else
         {
-            OUString const aTxt( static_cast<SwTxtNode*>(pCNd)->GetTxt() );
+            OUString const aTxt( pCNd->GetTxtNode()->GetTxt() );
             ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
             rDoc.getIDocumentContentOperations().InsertString( rContext.GetRepeatPaM(),
                 aTxt.copy(nCntnt - nLen, nLen) );

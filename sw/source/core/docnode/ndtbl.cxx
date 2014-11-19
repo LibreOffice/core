@@ -891,7 +891,7 @@ static void lcl_RemoveBreaks(SwCntntNode & rNode, SwTableFmt *const pTableFmt)
         return;
     }
 
-    SwTxtNode & rTxtNode = static_cast<SwTxtNode&>(rNode);
+    SwTxtNode & rTxtNode = *rNode.GetTxtNode();
     // remove PageBreaks/PageDesc/ColBreak
     SfxItemSet const* pSet = rTxtNode.GetpSwAttrSet();
     if (pSet)

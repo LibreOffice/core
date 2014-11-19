@@ -241,7 +241,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     {
         if( pNode->IsTxtNode() )
         {
-            sal_Int32 nTxtLen = static_cast<SwTxtNode*>(pNode)->GetTxt().getLength();
+            sal_Int32 nTxtLen = pNode->GetTxtNode()->GetTxt().getLength();
             sal_Int32 nEnd;
             if( rNdIdx == pPam->GetMark()->nNode )
                 nEnd = pPam->GetMark()->nContent.GetIndex();
@@ -253,7 +253,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             // if there are SwPostItFields inside our current node text, we
             // split the text into separate pieces and search for text inside
             // the pieces as well as inside the fields
-            const SwpHints *pHts = static_cast<SwTxtNode*>(pNode)->GetpSwpHints();
+            const SwpHints *pHts = pNode->GetTxtNode()->GetpSwpHints();
 
             // count PostItFields by looping over all fields
             sal_Int32 aNumberPostits = 0;
@@ -414,10 +414,10 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     }
 
     if( bSrchForward )
-        sCleanStr = lcl_CleanStr(*static_cast<SwTxtNode*>(pNode), nStart, nEnd,
+        sCleanStr = lcl_CleanStr(*pNode->GetTxtNode(), nStart, nEnd,
                         aFltArr, bRemoveSoftHyphens);
     else
-        sCleanStr = lcl_CleanStr(*static_cast<SwTxtNode*>(pNode), nEnd, nStart,
+        sCleanStr = lcl_CleanStr(*pNode->GetTxtNode(), nEnd, nStart,
                         aFltArr, bRemoveSoftHyphens);
 
     SwScriptIterator* pScriptIter = 0;
@@ -446,7 +446,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             if ( nSearchScript == nCurrScript )
             {
                 const LanguageType eCurrLang =
-                        static_cast<SwTxtNode*>(pNode)->GetLang( bSrchForward ?
+                        pNode->GetTxtNode()->GetLang( bSrchForward ?
                                                       nStart :
                                                       nEnd );
 
@@ -653,7 +653,7 @@ OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
         if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( false ) )
         {
             utl::TextSearch aSTxt( rSearchOpt );
-            const OUString& rStr = static_cast<const SwTxtNode*>(pTxtNode)->GetTxt();
+            const OUString& rStr = pTxtNode->GetTxtNode()->GetTxt();
             sal_Int32 nStart = pPam->Start()->nContent.GetIndex();
             sal_Int32 nEnd = pPam->End()->nContent.GetIndex();
             SearchResult aResult;
