@@ -230,7 +230,7 @@ public:
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    void DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGraphicsImpl *pSrcImpl );
+    void DoCopyBits(const SalTwoRect& rPosAry, OpenGLSalGraphicsImpl &rSrcImpl);
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) SAL_OVERRIDE;
 

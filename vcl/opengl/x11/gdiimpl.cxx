@@ -83,8 +83,8 @@ void X11OpenGLSalGraphicsImpl::Init()
 
 void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
-    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? dynamic_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
-    OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, pImpl );
+    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
+    OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
 bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )

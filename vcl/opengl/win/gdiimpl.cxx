@@ -20,8 +20,8 @@ WinOpenGLSalGraphicsImpl::WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics):
 
 void WinOpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
-    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? dynamic_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
-    OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, pImpl );
+    OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
+    OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
 }
 
 GLfloat WinOpenGLSalGraphicsImpl::GetWidth() const

@@ -1301,13 +1301,11 @@ void OpenGLSalGraphicsImpl::copyArea(
 
 // CopyBits and DrawBitmap --> RasterOp and ClipRegion
 // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGraphicsImpl* pSrcImpl )
+void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGraphicsImpl& rImpl )
 {
-    OpenGLSalGraphicsImpl *pImpl = pSrcImpl;
-
     SAL_INFO( "vcl.opengl", "::copyBits" );
 
-    if( pImpl == this &&
+    if( &rImpl == this &&
         (rPosAry.mnSrcWidth == rPosAry.mnDestWidth) &&
         (rPosAry.mnSrcHeight == rPosAry.mnDestHeight))
     {
@@ -1321,10 +1319,10 @@ void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGrap
         return;
     }
 
-    if( pImpl->mbOffscreen )
+    if( rImpl.mbOffscreen )
     {
         PreDraw();
-        DrawTexture( pImpl->maOffscreenTex, rPosAry );
+        DrawTexture( rImpl.maOffscreenTex, rPosAry );
         PostDraw();
         return;
     }
