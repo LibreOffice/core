@@ -579,7 +579,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
             // #i70582#
             if( bVert )
             {
-                   if ( bVertL2R )
+                if ( bVertL2R )
                     rRet.nMain =  rPt.X() - nTopForObjPos;
                 else
                     rRet.nMain =  nTopForObjPos - rPt.X();
@@ -608,7 +608,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                 // #i70582#
                 if( bVert )
                 {
-                       if ( bVertL2R )
+                    if ( bVertL2R )
                         rRet.nMain = rPt.X() - nTopForObjPos;
                     else
                         rRet.nMain =  nTopForObjPos - rPt.X();
