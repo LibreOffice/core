@@ -60,7 +60,7 @@
 #include "file_url.hxx"
 #include "readwrite_helper.hxx"
 #include "sockimpl.h"
-#include "secimpl.h"
+#include "secimpl.hxx"
 
 #define MAX_ARGS        255
 #define MAX_ENVS        255

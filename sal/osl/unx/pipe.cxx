@@ -28,7 +28,7 @@
 #include <rtl/bootstrap.h>
 
 #include "sockimpl.h"
-#include "secimpl.h"
+#include "secimpl.hxx"
 
 #define PIPEDEFAULTPATH     "/tmp"
 #define PIPEALTERNATEPATH   "/var/tmp"

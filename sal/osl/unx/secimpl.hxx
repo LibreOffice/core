@@ -17,25 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_SECURITYIMPL_H_
-#define _OSL_SECURITYIMPL_H_
+#ifndef INCLUDED_SAL_OSL_UNX_SECIMPL_HXX
+#define INCLUDED_SAL_OSL_UNX_SECIMPL_HXX
 
 #include <pwd.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct _oslSecurityImpl {
     struct passwd m_pPasswd;
     char m_buffer[1]; /* should be a C99 flexible array member */
 } oslSecurityImpl;
 
-sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
-
-#ifdef __cplusplus
-}
-#endif
+bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax);
 
 #endif
 

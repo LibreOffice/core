@@ -42,7 +42,7 @@
 #include <crypt.h>
 #endif
 
-#include "secimpl.h"
+#include "secimpl.hxx"
 
 #ifdef ANDROID
 #define getpwuid_r(uid, pwd, buf, buflen, result) (*(result) = getpwuid(uid), (*(result) ? (memcpy (buf, *(result), sizeof (struct passwd)), 0) : errno))
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
     return bRet;
 }
 
-sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
+bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
 {
     sal_Char  buffer[32];
     sal_Int32 nChr;
@@ -235,15 +235,15 @@ sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent,
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
 
     if (pSecImpl == NULL)
-        return sal_False;
+        return false;
 
     nChr = snprintf(buffer, sizeof(buffer), "%u", pSecImpl->m_pPasswd.pw_uid);
     if ( nChr < 0 || sal::static_int_cast<sal_uInt32>(nChr) >= sizeof(buffer)
          || sal::static_int_cast<sal_uInt32>(nChr) >= nMax )
-        return sal_False; /* leave *pszIdent unmodified in case of failure */
+        return false; /* leave *pszIdent unmodified in case of failure */
 
     memcpy(pszIdent, buffer, nChr+1);
-    return sal_True;
+    return true;
 }
 
 sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
