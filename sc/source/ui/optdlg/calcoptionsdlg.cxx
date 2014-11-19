@@ -965,6 +965,21 @@ IMPL_LINK( ScCalcOptionsDialog, ListDeleteClickHdl, PushButton*, )
     return 0;
 }
 
+#if 0 // Can't decide whether to use this or just hardcode column
+      // names when constructing the formulae below...
+
+namespace {
+
+OUString col(int nCol)
+{
+    ScAddress aAddr(nCol, 0, 0);
+    return aAddr.Format(SCA_VALID_COL);
+}
+
+}
+
+#endif
+
 IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 {
     // Automatically test the current implementation of OpenCL. If it
@@ -987,7 +1002,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 
     sc::AutoCalcSwitch aACSwitch(*pDoc, true);
 
-    pDoc->SetString(ScAddress(0,0,0), "=IF(SUM(A2:A4)=0,\"PASS\",\"FAIL\")");
+    pDoc->SetString(ScAddress(0,0,0), "=IF(SUM(A2:A5)=0,\"PASS\",\"FAIL\")");
 
     // RAND sheet
     pDoc->InsertTab(1, "RAND");
@@ -999,13 +1014,30 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 #else
         pDoc->SetValue(ScAddress(0,i,1), (i%13)/13.);
 #endif
-        pDoc->SetValue(ScAddress(1,i,1), comphelper::rng::uniform_real_distribution(0, 1000));
+        double nLarge = comphelper::rng::uniform_real_distribution(0, 1000);
+        pDoc->SetValue(ScAddress(1,i,1), nLarge);
         // The [0.1,2.5) interval is carefully chosen to keep the product of them likely "sane"
-        pDoc->SetValue(ScAddress(6,i,1), comphelper::rng::uniform_real_distribution(0.1, 2.5));
+        double nSmall = comphelper::rng::uniform_real_distribution(0.1, 2.5);
+        pDoc->SetValue(ScAddress(6,i,1), nSmall);
         pDoc->SetString(ScAddress(10,i,1), OUString("=IF(AND(A") + OUString::number(i+1) + ">= 0,A" + OUString::number(i+1) + "<= 1),0,1)");
+
+        pDoc->SetString(ScAddress(20,i,1), OUString("=B") + OUString::number(i+1) + "+G" + OUString::number(i+1));
+        pDoc->SetString(ScAddress(21,i,1), OUString("=B") + OUString::number(i+1) + "-G" + OUString::number(i+1));
+        pDoc->SetString(ScAddress(22,i,1), OUString("=B") + OUString::number(i+1) + "*G" + OUString::number(i+1));
+        pDoc->SetString(ScAddress(23,i,1), OUString("=B") + OUString::number(i+1) + "/G" + OUString::number(i+1));
+
+        pDoc->SetString(ScAddress(30,i,1),
+                        OUString("=IF(ABS(U") + OUString::number(i+1) + "-" + OUString::number(nLarge+nSmall) + ")<" + sEpsilon + ",0,1)");
+        pDoc->SetString(ScAddress(31,i,1),
+                        OUString("=IF(ABS(V") + OUString::number(i+1) + "-" + OUString::number(nLarge-nSmall) + ")<" + sEpsilon +",0,1)");
+        pDoc->SetString(ScAddress(32,i,1),
+                        OUString("=IF(ABS(W") + OUString::number(i+1) + "-" + OUString::number(nLarge*nSmall) + ")<" + sEpsilon + ",0,1)");
+        pDoc->SetString(ScAddress(33,i,1),
+                        OUString("=IF(ABS(X") + OUString::number(i+1) + "-" + OUString::number(nLarge/nSmall) + ")<" + sEpsilon + ",0,1)");
     }
 
     pDoc->SetString(ScAddress(0,1,0), OUString("=SUM(RAND.K1:RAND.K") + sN + ")");
+    pDoc->SetString(ScAddress(0,2,0), OUString("=SUM(RAND.AE1:RAND.AH") + sN + ")");
 
     for (int i = 0; i < N/3; ++i)
     {
@@ -1036,7 +1068,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                         OUString("=IF((H") + OUString::number(i+1) + "-" + OUString::number(nProduct) + ")/H" + OUString::number(i+1) + "<" + sEpsilon + ",0,1");
     }
 
-    pDoc->SetString(ScAddress(0,2,0), OUString("=SUM(RAND.M1:RAND.Q") + OUString::number(N/3) + ")");
+    pDoc->SetString(ScAddress(0,3,0), OUString("=SUM(RAND.M1:RAND.Q") + OUString::number(N/3) + ")");
 
     // MISCMATH sheet
     pDoc->InsertTab(2, "MISCMATH");
@@ -1097,7 +1129,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                         OUString("=IF(ABS(H") + is + "-r" + is + ")<" + sEpsilon + ",0,1)");
     }
 
-    pDoc->SetString(ScAddress(0,3,0), "=SUM(MISCMATH.V1:MISCMATH.AB1000)");
+    pDoc->SetString(ScAddress(0,4,0), "=SUM(MISCMATH.V1:MISCMATH.AB1000)");
 
     return 0;
 }
