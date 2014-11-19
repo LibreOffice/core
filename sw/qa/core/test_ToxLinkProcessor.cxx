@@ -64,7 +64,9 @@ ToxLinkProcessorTest::ExceptionIsThrownIfTooManyLinksAreClosed()
     ToxLinkProcessor sut;
     sut.StartNewLink(0, STYLE_NAME_1);
     sut.CloseLink(1, URL_1);
-    CPPUNIT_ASSERT_THROW(sut.CloseLink(1, URL_1), std::runtime_error);
+    // fdo#85872 actually it turns out the UI does something like this
+    // so an exception must not be thrown!
+    sut.CloseLink(1, URL_1);
 }
 
 void

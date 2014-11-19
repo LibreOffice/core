@@ -11,6 +11,7 @@
 
 #include "SwStyleNameMapper.hxx"
 #include "ndtxt.hxx"
+#include <poolfmt.hrc>
 
 #include <boost/foreach.hpp>
 #include <stdexcept>
@@ -26,11 +27,13 @@ ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characte
 void
 ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
 {
-    if (mStartedLinks.empty()) {
-        throw std::runtime_error("ToxLinkProcessor: More calls for CloseLink() than open links exist.");
+    StartedLink const startedLink( (mStartedLinks.empty())
+        ? StartedLink(0, SW_RES(STR_POOLCHR_TOXJUMP))
+        : mStartedLinks.back() );
+    if (!mStartedLinks.empty())
+    {
+        mStartedLinks.pop_back();
     }
-    StartedLink startedLink = mStartedLinks.back();
-    mStartedLinks.pop_back();
 
     if (url.isEmpty()) {
         return;
