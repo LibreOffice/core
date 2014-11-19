@@ -30,35 +30,29 @@ import java.lang.reflect.Method;
  * You can trick this class how much you want: it will all throw exceptions
  * on the java level. i throw no error warnings or my own exceptions...</p>
  */
-public class MethodInvocation
+final class MethodInvocation
 {
     //the method to invoke.
-    Method mMethod;
+    private final Method mMethod;
     //the object to invoke the method on.
-    Object mObject;
+    private final Object mTargetObject;
     //with one Parameter / without
-    boolean mWithParam;
+    private final boolean mWithParam;
 
     /** Creates a new instance of MethodInvokation */
-    public MethodInvocation(String methodName, Object obj) throws NoSuchMethodException
+    public MethodInvocation(String methodName, Object target) throws NoSuchMethodException
     {
-        this(methodName, obj, null);
+        this(methodName, target, null);
     }
 
-    public MethodInvocation(Method method, Object obj)
+    public MethodInvocation(String methodName, Object target, Class<?> paramClass) throws NoSuchMethodException
     {
-        this(method, obj, null);
-    }
-
-    public MethodInvocation(String methodName, Object obj, Class<?> paramClass) throws NoSuchMethodException
-    {
-        this(paramClass == null ? obj.getClass().getMethod(methodName) : obj.getClass().getMethod(methodName, paramClass), obj, paramClass);
-    }
-
-    public MethodInvocation(Method method, Object obj, Class<?> paramClass)
-    {
-        mMethod = method;
-        mObject = obj;
+        if (paramClass == null) {
+            mMethod = target.getClass().getMethod(methodName);
+        } else {
+            mMethod = target.getClass().getMethod(methodName, paramClass);
+        }
+        mTargetObject = target;
         mWithParam = paramClass != null;
     }
 
@@ -69,20 +63,12 @@ public class MethodInvocation
     {
         if (mWithParam)
         {
-            return mMethod.invoke(mObject, param);
+            return mMethod.invoke(mTargetObject, param);
         }
         else
         {
-            return mMethod.invoke(mObject);
+            return mMethod.invoke(mTargetObject);
         }
     }
 
-    /**
-     * This method is a convenience method.
-     * It is the same as calling invoke(null);
-     */
-    public Object invoke() throws IllegalAccessException, InvocationTargetException
-    {
-        return invoke(null);
-    }
 }

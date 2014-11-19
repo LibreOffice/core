@@ -20,7 +20,6 @@ package com.sun.star.wizards.ui;
 import java.beans.*;
 
 import com.sun.star.wizards.ui.event.EventNames;
-import com.sun.star.wizards.ui.event.MethodInvocation;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.*;
 import com.sun.star.uno.AnyConverter;
@@ -241,17 +240,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             xSSFRoadmap = UnoRuntime.queryInterface(XSingleServiceFactory.class, oRoadmap);
             xIndexContRoadmap = UnoRuntime.queryInterface(XIndexContainer.class, oRoadmap);
 
-            MethodInvocation mi = new MethodInvocation("itemStateChanged", this, com.sun.star.awt.ItemEvent.class);
-            guiEventListener.add("rdmNavi", EventNames.ITEM_CHANGED, mi);
+            guiEventListener.add("rdmNavi", EventNames.ITEM_CHANGED, "itemStateChanged", this, com.sun.star.awt.ItemEvent.class);
             xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
             xRoadmapBroadcaster.addItemListener(guiEventListener);
 
             Helper.setUnoPropertyValue(oRoadmap, "Text", oWizardResource.getResText(UIConsts.RID_COMMON + 16));
-        }
-        catch (NoSuchMethodException ex)
-        {
-            Resource.showCommonResourceError(xMSF);
         }
         catch (java.lang.Exception jexception)
         {
@@ -481,10 +475,9 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             // add a window listener, to know
             // if the user used "escape" key to
             // close the dialog.
-            MethodInvocation windowHidden = new MethodInvocation("windowHidden", this);
             xWindow.addWindowListener(guiEventListener);
             String dialogName = (String) Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_NAME);
-            guiEventListener.add(dialogName, EventNames.ACTION_PERFORMED, windowHidden);
+            guiEventListener.add(dialogName, EventNames.ACTION_PERFORMED, "windowHidden", this);
 
         }
         catch (java.lang.Exception jexception)
