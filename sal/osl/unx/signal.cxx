@@ -75,7 +75,7 @@
 #include <rtl/bootstrap.h>
 #include <rtl/digest.h>
 
-#include "file_path_helper.h"
+#include "file_path_helper.hxx"
 
 #define ACT_IGNORE  1
 #define ACT_EXIT    2

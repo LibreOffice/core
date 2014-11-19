@@ -31,7 +31,7 @@
 #include "rtl/ustring.hxx"
 #include "rtl/strbuf.h"
 
-#include "file_path_helper.h"
+#include "file_path_helper.hxx"
 
 #include "uunxapi.hxx"
 #include "getexecutablefile.hxx"

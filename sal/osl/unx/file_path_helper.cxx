@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file_path_helper.h"
 #include "file_path_helper.hxx"
 #include "uunxapi.hxx"
 
@@ -79,7 +78,7 @@ void SAL_CALL osl_systemPathEnsureSeparator(rtl_uString** ppustrPath)
     }
 }
 
-sal_Bool SAL_CALL osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
+bool SAL_CALL osl_systemPathIsRelativePath(const rtl_uString* pustrPath)
 {
     OSL_PRECOND(0 != pustrPath, "osl_systemPathIsRelativePath: Invalid parameter");
     return ((0 == pustrPath) || (0 == pustrPath->length) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
@@ -124,12 +123,12 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
     rtl_uString_assign(ppustrFileNameOrLastDirPart, last_part.pData);
 }
 
-sal_Bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
+bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
     const rtl_uString* pustrPath)
 {
     OSL_PRECOND(0 != pustrPath, "osl_systemPathIsHiddenFileOrDirectoryEntry: Invalid parameter");
     if ((0 == pustrPath) || (0 == pustrPath->length))
-        return sal_False;
+        return false;
 
     rtl::OUString fdp;
     osl_systemPathGetFileNameOrLastDirectoryPart(pustrPath, &fdp.pData);
@@ -139,7 +138,7 @@ sal_Bool SAL_CALL osl_systemPathIsHiddenFileOrDirectoryEntry(
             !osl_systemPathIsLocalOrParentDirectoryEntry(fdp.pData));
 }
 
-sal_Bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
+bool SAL_CALL osl_systemPathIsLocalOrParentDirectoryEntry(
     const rtl_uString* pustrPath)
 {
     OSL_PRECOND(pustrPath, "osl_systemPathIsLocalOrParentDirectoryEntry: Invalid parameter");
@@ -219,7 +218,7 @@ private:
     const sal_Unicode*  m_path_segment_end;
 };
 
-sal_Bool SAL_CALL osl_searchPath(
+bool SAL_CALL osl_searchPath(
     const rtl_uString* pustrFilePath,
     const rtl_uString* pustrSearchPathList,
     rtl_uString**      ppustrPathFound)
