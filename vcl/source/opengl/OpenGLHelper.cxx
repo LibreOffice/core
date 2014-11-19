@@ -318,38 +318,39 @@ void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebu
     glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferDepthId);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, nWidth, nHeight);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
+    // create a framebuffer object
+    glGenFramebuffers(1, &nFramebufferId);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    glBindFramebuffer(GL_FRAMEBUFFER, nFramebufferId);
     if(bRenderbuffer)
     {
         // create a renderbuffer for color attachment
         glGenRenderbuffers(1, &nRenderbufferColorId);
         glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferColorId);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, nWidth, nHeight);
+        // attach a renderbuffer to FBO color attachement point
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, nRenderbufferColorId);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }
     else
     {
+        // create a texture for rendering
         glGenTextures(1, &nRenderbufferColorId);
         glBindTexture(GL_TEXTURE_2D, nRenderbufferColorId);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, nWidth, nHeight, 0,
-                             GL_RGBA, GL_UNSIGNED_BYTE, 0);
+                             GL_BGRA, GL_UNSIGNED_BYTE, 0);
+
         glBindTexture(GL_TEXTURE_2D, 0);
 
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                 GL_TEXTURE_2D, nRenderbufferColorId, 0);
     }
 
-    // create a framebuffer object and attach renderbuffer
-    glGenFramebuffers(1, &nFramebufferId);
-    glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    glBindFramebuffer(GL_FRAMEBUFFER, nFramebufferId);
-    // attach a renderbuffer to FBO color attachment point
-    glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferColorId);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, nRenderbufferColorId);
     glCheckFramebufferStatus(GL_FRAMEBUFFER);
     // attach a renderbuffer to depth attachment point
     glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferDepthId);
