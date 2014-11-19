@@ -5238,12 +5238,9 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
     ScInputHandler* pInputHdl = NULL;
     if (pViewSh)
         pInputHdl = pViewSh->GetInputHandler();
-
-    if (pInputHdl && pInputHdl->IsInputMode())
-    {
-        EditView* pView = pInputHdl->GetTableView();
+    EditView* pView = (pInputHdl && pInputHdl->IsInputMode()) ? pInputHdl->GetTableView() : NULL;
+    if (pView)
         return extractURLInfo(pView->GetFieldUnderMousePointer(), pName, pUrl, pTarget);
-    }
 
     //! nPosX/Y mit uebergeben?
     SCsCOL nPosX;
