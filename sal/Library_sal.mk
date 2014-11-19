@@ -169,15 +169,13 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/profile \
 	sal/osl/unx/readwrite_helper \
 	sal/osl/unx/security \
+	sal/osl/unx/signal \
 	sal/osl/unx/socket \
 	sal/osl/unx/system \
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
 	sal/osl/unx/time \
         $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
-))
-$(eval $(call gb_Library_add_cobjects,sal, \
-	sal/osl/unx/signal \
 ))
 
 # Note that the uunxapi.mm file just includes the uunxapi.cxx one

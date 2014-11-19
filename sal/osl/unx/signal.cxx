@@ -158,13 +158,13 @@ what looks like a bug in the new handler*/
 };
 const int NoSignals = sizeof(Signals) / sizeof(struct SignalAction);
 
-static sal_Bool               bErrorReportingEnabled = sal_True;
-static sal_Bool               bInitSignal = sal_False;
+static bool               bErrorReportingEnabled = true;
+static bool               bInitSignal = false;
 static oslMutex               SignalListMutex;
 static oslSignalHandlerImpl*  SignalList;
-static sal_Bool               bSetSEGVHandler = sal_False;
-static sal_Bool               bSetWINCHHandler = sal_False;
-static sal_Bool               bSetILLHandler = sal_False;
+static bool               bSetSEGVHandler = false;
+static bool               bSetWINCHHandler = false;
+static bool               bSetILLHandler = false;
 
 static void SignalHandlerFunction(int);
 
@@ -189,7 +189,7 @@ static void getExecutableName_Impl (rtl_String ** ppstrProgName)
     }
 }
 
-static sal_Bool is_soffice_Impl (void)
+static bool is_soffice_Impl (void)
 {
     sal_Int32    idx       = -1;
     rtl_String * strProgName = 0;
@@ -203,7 +203,7 @@ static sal_Bool is_soffice_Impl (void)
     return (idx != -1);
 }
 
-static sal_Bool InitSignal(void)
+static bool InitSignal(void)
 {
     int i;
     struct sigaction act;
@@ -220,17 +220,17 @@ static sal_Bool InitSignal(void)
         // TEMPORARY SOLUTION:
         //   the office sets the signal handler during startup
         //   java can than overwrite it, if needed
-        bSetSEGVHandler = sal_True;
+        bSetSEGVHandler = true;
 
         // WORKAROUND FOR WINCH HANDLER (SEE ABOVE)
-        bSetWINCHHandler = sal_True;
+        bSetWINCHHandler = true;
 
         // WORKAROUND FOR ILLEGAL INSTRUCTION HANDLER (SEE ABOVE)
-        bSetILLHandler = sal_True;
+        bSetILLHandler = true;
     }
 
 #ifdef DBG_UTIL
-    bSetSEGVHandler = bSetWINCHHandler = bSetILLHandler = sal_False;
+    bSetSEGVHandler = bSetWINCHHandler = bSetILLHandler = false;
 #endif
 
     SignalListMutex = osl_createMutex();
@@ -289,10 +289,10 @@ static sal_Bool InitSignal(void)
         OSL_TRACE("sigemptyset or pthread_sigmask failed");
     }
 
-    return sal_True;
+    return true;
 }
 
-static sal_Bool DeInitSignal(void)
+static bool DeInitSignal(void)
 {
     int i;
     struct sigaction act;
@@ -311,7 +311,7 @@ static sal_Bool DeInitSignal(void)
 
     osl_destroyMutex(SignalListMutex);
 
-    return sal_False;
+    return false;
 }
 
 #if HAVE_FEATURE_CRASHDUMP && defined(INCLUDE_BACKTRACE)
@@ -883,7 +883,7 @@ void CallSystemHandler(int Signal)
                     break;
 
                 default:            /* should never happen */
-                    OSL_ASSERT(0);
+                    OSL_ASSERT(false);
             }
         }
         else
@@ -1082,7 +1082,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
 
 sal_Bool SAL_CALL osl_setErrorReporting( sal_Bool bEnable )
 {
-    sal_Bool bOld = bErrorReportingEnabled;
+    bool bOld = bErrorReportingEnabled;
     bErrorReportingEnabled = bEnable;
 
     return bOld;
