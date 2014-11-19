@@ -173,10 +173,8 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/system \
 	sal/osl/unx/tempfile \
 	sal/osl/unx/thread \
-        $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
-))
-$(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/time \
+        $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
 ))
 $(eval $(call gb_Library_add_cobject,sal,sal/osl/unx/signal, \
 	$(if $(ENABLE_CRASHDUMP),-DSAL_ENABLE_CRASH_REPORT) \
