@@ -10,15 +10,14 @@
 #ifndef INCLUDED_SVL_SHAREDSTRINGPOOL_HXX
 #define INCLUDED_SVL_SHAREDSTRINGPOOL_HXX
 
-#include <svl/sharedstring.hxx>
-#include <osl/mutex.hxx>
-
-#include <boost/unordered_map.hpp>
-#include <boost/unordered_set.hpp>
+#include <svl/svldllapi.h>
+#include <rtl/ustring.hxx>
 
 class CharClass;
 
 namespace svl {
+
+class SharedString;
 
 /**
  * Storage for pool of shared strings.  It also provides mapping from
@@ -27,19 +26,16 @@ namespace svl {
  */
 class SVL_DLLPUBLIC SharedStringPool
 {
-    typedef boost::unordered_set<OUString, OUStringHash> StrHashType;
-    typedef std::pair<StrHashType::iterator, bool> InsertResultType;
-    typedef boost::unordered_map<const rtl_uString*, OUString> StrStoreType;
+    struct Impl;
+    Impl* mpImpl;
 
-    mutable osl::Mutex maMutex;
-    StrHashType maStrPool;
-    StrHashType maStrPoolUpper;
-    StrStoreType maStrStore;
-    const CharClass* mpCharClass;
+    SharedStringPool(); // disabled
+    SharedStringPool( const SharedStringPool& ); // disabled
+    SharedStringPool& operator=( const SharedStringPool& ); // disabled
 
 public:
-
     SharedStringPool( const CharClass* pCharClass );
+    ~SharedStringPool();
 
     /**
      * Intern a string object into the shared string pool.
@@ -60,9 +56,6 @@ public:
     size_t getCount() const;
 
     size_t getCountIgnoreCase() const;
-
-private:
-    InsertResultType findOrInsert( StrHashType& rPool, const OUString& rStr ) const;
 };
 
 }
