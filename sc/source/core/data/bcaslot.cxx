@@ -31,6 +31,7 @@
 
 #if DEBUG_AREA_BROADCASTER
 #include <formulacell.hxx>
+#include <grouparealistener.hxx>
 #endif
 
 // Number of slots per dimension
@@ -620,20 +621,35 @@ void ScBroadcastAreaSlot::Dump() const
     {
         const ScBroadcastAreaEntry& rEntry = *it;
         const ScBroadcastArea* pArea = rEntry.mpArea;
-        cout << "  * range: " << rtl::OUStringToOString(pArea->GetRange().Format(SCA_VALID|SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr() << endl;
         const SvtBroadcaster& rBC = pArea->GetBroadcaster();
         const SvtBroadcaster::ListenersType& rListeners = rBC.GetAllListeners();
         size_t n = rListeners.size();
-        cout << "    * listener count: " << n << endl;
+
+        cout << "  * range: " << rtl::OUStringToOString(pArea->GetRange().Format(SCA_VALID|SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
+            << ", listener count: " << n << endl;
+
         for (size_t i = 0; i < n; ++i)
         {
             const ScFormulaCell* pFC = dynamic_cast<const ScFormulaCell*>(rListeners[i]);
-            if (!pFC)
+            if (pFC)
+            {
+                cout << "    * listener: formula cell: "
+                     << rtl::OUStringToOString(pFC->aPos.Format(SCA_VALID|SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
+                     << endl;
                 continue;
+            }
 
-            cout << "      * listener: formula cell: "
-                << rtl::OUStringToOString(pFC->aPos.Format(SCA_VALID|SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
-                << endl;
+            const sc::FormulaGroupAreaListener* pFGListener = dynamic_cast<const sc::FormulaGroupAreaListener*>(rListeners[i]);
+            if (pFGListener)
+            {
+                cout << "    * listener: formula group: (pos: "
+                     << rtl::OUStringToOString(pFGListener->getTopCellPos().Format(SCA_VALID | SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
+                     << ", length: " << pFGListener->getGroupLength()
+                     << ")" << endl;
+                continue;
+            }
+
+            cout << "    * listener: unknown" << endl;
         }
     }
 }
