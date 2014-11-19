@@ -162,6 +162,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/memory \
 	sal/osl/unx/module \
 	sal/osl/unx/mutex \
+	sal/osl/unx/nlsupport \
 	sal/osl/unx/process \
 	sal/osl/unx/process_impl \
 	sal/osl/unx/profile \
@@ -171,7 +172,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
         $(if $(filter DESKTOP,$(BUILD_TYPE)), sal/osl/unx/salinit) \
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
-	sal/osl/unx/nlsupport \
 	sal/osl/unx/pipe \
 	sal/osl/unx/readwrite_helper \
 	sal/osl/unx/socket \

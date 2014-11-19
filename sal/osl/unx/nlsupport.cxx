@@ -106,7 +106,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
                 pLocale->Language->buffer, pLocale->Language->length,
                 RTL_TEXTENCODING_ASCII_US, OUSTRING_TO_OSTRING_CVTFLAGS );
 
-            if( SAL_INT_CAST(sal_uInt32, pLanguage->length) < n )
+            if( sal::static_int_cast<sal_uInt32>(pLanguage->length) < n )
             {
                 strcpy( buffer, pLanguage->buffer );
                 offset = pLanguage->length;
@@ -136,7 +136,7 @@ static char * _compose_locale( rtl_Locale * pLocale, char * buffer, size_t n )
 
         /* convert variant to ascii - check if there is enough space for the variant string */
         if( pLocale->Variant && pLocale->Variant->length &&
-            ( SAL_INT_CAST(sal_uInt32, pLocale->Variant->length) < n - 6 ) )
+            ( sal::static_int_cast<sal_uInt32>(pLocale->Variant->length) < n - 6 ) )
         {
             rtl_String *pVariant = NULL;
 
