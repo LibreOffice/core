@@ -599,11 +599,11 @@ static int ReportCrash( int Signal )
                         Dl_info dl_info;
 
                         fprintf( stackout, "0x%" SAL_PRIxUINTPTR ":",
-                            SAL_INT_CAST(sal_uIntPtr, stackframes[iFrame]) );
+                            reinterpret_cast<sal_uIntPtr>(stackframes[iFrame]) );
 
                         fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%" SAL_PRIxUINTPTR "\"",
                             iFrame,
-                            SAL_INT_CAST(sal_uIntPtr, stackframes[iFrame])
+                            reinterpret_cast<sal_uIntPtr>(stackframes[iFrame])
                             );
 
                         memset( &dl_info, 0, sizeof(dl_info) );
@@ -648,8 +648,8 @@ static int ReportCrash( int Signal )
                                     for ( j = 0; j < 16; fprintf( checksumout, "%02X", checksum[j++] ) );
                                     fprintf( checksumout,
                                         "\" bytes=\"%lu\" file=\"%s\"/>\n",
-                                        SAL_INT_CAST(
-                                            unsigned long, nBytesProcessed),
+                                        sal::static_int_cast<
+                                            unsigned long>(nBytesProcessed),
                                         dli_fname );
                                 }
                             }
