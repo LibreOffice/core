@@ -1222,7 +1222,6 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 bSubTotal = pPreviousCell->bSubTotal;
                 bChanged = true;
                 bCompile = false;
-                StartListeningTo( pDocument );
 
                 if (bSubTotal)
                     pDocument->AddSubTotalCell(this);
@@ -1257,7 +1256,6 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 nFormatType = aComp.GetNumFormatType();
                 bChanged = true;
                 bCompile = false;
-                StartListeningTo( pDocument );
             }
 
             if (bSubTotal)
