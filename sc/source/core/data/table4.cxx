@@ -1130,6 +1130,10 @@ void ScTable::FillFormulaVertical(
     SCCOLROW& rInner, SCCOL nCol, SCROW nRow1, SCROW nRow2,
     ScProgress* pProgress, sal_uLong& rProgress )
 {
+    // rInner is the row position when filling vertically.  Also, when filling
+    // across hidden regions, it may create multiple dis-jointed spans of
+    // formula cells.
+
     bool bHidden = false;
     SCCOLROW nHiddenLast = -1;
 
@@ -1163,9 +1167,24 @@ void ScTable::FillFormulaVertical(
         aSpans.push_back(sc::RowSpan(nRowStart, nRowEnd));
     }
 
+    if (aSpans.empty())
+        return;
+
     aCol[nCol].DeleteRanges(aSpans, IDF_CONTENTS, false);
-    sc::StartListeningContext aCxt(*pDocument);
-    aCol[nCol].CloneFormulaCell(rSrcCell, aSpans, &aCxt);
+    aCol[nCol].CloneFormulaCell(rSrcCell, aSpans, NULL);
+
+    boost::shared_ptr<sc::ColumnBlockPositionSet> pSet(new sc::ColumnBlockPositionSet(*pDocument));
+    sc::StartListeningContext aStartCxt(*pDocument, pSet);
+    sc::EndListeningContext aEndCxt(*pDocument, pSet);
+
+    SCROW nStartRow = aSpans.front().mnRow1;
+    SCROW nEndRow = aSpans.back().mnRow2;
+    aCol[nCol].EndListeningFormulaCells(aEndCxt, nStartRow, nEndRow, &nStartRow, &nEndRow);
+    aCol[nCol].StartListeningFormulaCells(aStartCxt, aEndCxt, nStartRow, nEndRow);
+
+    std::vector<sc::RowSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+    for (; it != itEnd; ++it)
+        aCol[nCol].SetDirty(it->mnRow1, it->mnRow2, false);
 
     rProgress += nRow2 - nRow1 + 1;
     if (pProgress)
@@ -1424,6 +1443,13 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     double nStepValue, double nMaxValue, sal_uInt16 nArgMinDigits,
                     bool bAttribs, ScProgress* pProgress )
 {
+    // The term 'inner' here refers to the loop in the filling direction i.e.
+    // when filling vertically, the inner position is the row position whereas
+    // when filling horizontally the column position becomes the inner
+    // position. The term 'outer' refers to the column position when filling
+    // vertically, or the row positon when filling horizontally. The fill is
+    // performed once in each 'outer' position e.g. when filling vertically,
+    // we perform the fill once in each column.
 
     //  Detect direction
 
@@ -1450,13 +1476,15 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         nOEnd = nCol2;
         if (bPositive)
         {
-            nISource = nRow1;
-            nIStart = nRow1 + 1;
+            // downward fill
+            nISource = nRow1; // top row of the source range.
+            nIStart = nRow1 + 1; // first row where we start filling.
             nIEnd = nRow1 + nFillCount;
             aFillRange = ScRange(nCol1, nRow1 + 1, nTab, nCol2, nRow1 + nFillCount, nTab);
         }
         else
         {
+            // upward fill
             nISource = nRow2;
             nIStart = nRow2 - 1;
             nIEnd = nRow2 - nFillCount;
@@ -1472,6 +1500,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         nOEnd = nRow2;
         if (bPositive)
         {
+            // to the right
             nISource = nCol1;
             nIStart = nCol1 + 1;
             nIEnd = nCol1 + nFillCount;
@@ -1479,6 +1508,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         }
         else
         {
+            // to the left
             nISource = nCol2;
             nIStart = nCol2 - 1;
             nIEnd = nCol2 - nFillCount;
@@ -1504,7 +1534,8 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (pProgress)
         nProgress = pProgress->GetState();
 
-    //  execute
+    // Perform the fill once per each 'outer' position i.e. one per column
+    // when filling vertically.
 
     sal_uLong nActFormCnt = 0;
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)

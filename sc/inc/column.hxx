@@ -255,9 +255,6 @@ public:
     void CopyFromClip(
         sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn );
 
-    void StartListeningFromClip(
-        sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2 );
-
     void        RemoveEditAttribs( SCROW nStartRow, SCROW nEndRow );
 
                 //  Selection (?) of this document
@@ -355,7 +352,7 @@ public:
 
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
-    void SetDirty( SCROW nRow1, SCROW nRow2 );
+    void SetDirty( SCROW nRow1, SCROW nRow2, bool bBroadcast = true );
     void        SetDirtyVar();
     void        SetDirtyAfterLoad();
     void        SetTableOpDirty( const ScRange& );
@@ -486,6 +483,14 @@ public:
     void UpdateInsertTabAbs(SCTAB nNewPos);
     bool    TestTabRefAbs(SCTAB nTable) const;
     bool    GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const;
+
+    void StartListeningFormulaCells(
+        sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt, SCROW nRow1, SCROW nRow2,
+        SCROW* pStartRow = NULL, SCROW* pEndRow = NULL );
+
+    void EndListeningFormulaCells(
+        sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
+        SCROW* pStartRow = NULL, SCROW* pEndRow = NULL );
 
     void        StartListening( SvtListener& rLst, SCROW nRow );
     void        EndListening( SvtListener& rLst, SCROW nRow );
