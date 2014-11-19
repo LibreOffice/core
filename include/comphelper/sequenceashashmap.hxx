@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <comphelper/comphelperdllapi.h>
 
 
@@ -99,7 +98,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  aSource
                     contains the new items for this map.
 
-            @throw  An com::sun::star::beans::IllegalTypeException
+            @throw  An com::sun::star::lang::IllegalArgumentException
                     is thrown, if the given any does not contain a suitable sequence ...
                     but not if it's a VOID Any!
          */
@@ -114,7 +113,7 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
             @param  lSource
                     contains the new items for this map.
 
-            @throw  An com::sun::star::beans::IllegalTypeException
+            @throw  An com::sun::star::lang::IllegalArgumentException
                     is thrown, if the given any sequence
                     uses wrong types for its items. VOID Any will be ignored!
          */

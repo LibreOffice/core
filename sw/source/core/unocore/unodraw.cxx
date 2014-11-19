@@ -58,10 +58,8 @@
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/makesequence.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/scene3d.hxx>
-#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <fmtwrapinfluenceonobjpos.hxx>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -1483,14 +1481,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             if (pFmt)
             {
                 // We have a pFmt (but no pEntry): try to sync TextBox property.
-                try {
-                    SwTextBoxHelper::syncProperty(pFmt, rPropertyName, aValue);
-                } catch (css::beans::IllegalTypeException & e) {
-                    css::uno::Any a(cppu::getCaughtException());
-                    throw css::lang::WrappedTargetException(
-                        "wrapped IllegalTypeException " + e.Message,
-                        css::uno::Reference<css::uno::XInterface>(), a);
-                }
+                SwTextBoxHelper::syncProperty(pFmt, rPropertyName, aValue);
             }
 
             // #i31698# - restore object position, if caption point is set.

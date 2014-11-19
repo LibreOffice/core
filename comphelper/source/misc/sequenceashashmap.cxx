@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 
 
@@ -75,8 +78,9 @@ void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
         return;
     }
 
-    throw css::beans::IllegalTypeException(
-            "Any contains wrong type." );
+    throw css::lang::IllegalArgumentException(
+        "Any contains wrong type.", css::uno::Reference<css::uno::XInterface>(),
+        -1);
 }
 
 
@@ -94,8 +98,9 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (lP.Name.isEmpty()) ||
                 (!lP.Value.hasValue())
                )
-                throw css::beans::IllegalTypeException(
-                        "PropertyValue struct contains no useful information." );
+                throw css::lang::IllegalArgumentException(
+                    "PropertyValue struct contains no useful information.",
+                    css::uno::Reference<css::uno::XInterface>(), -1);
             (*this)[lP.Name] = lP.Value;
             continue;
         }
@@ -107,16 +112,18 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
                 (lN.Name.isEmpty()) ||
                 (!lN.Value.hasValue())
                )
-                throw css::beans::IllegalTypeException(
-                        "NamedValue struct contains no useful information." );
+                throw css::lang::IllegalArgumentException(
+                    "NamedValue struct contains no useful information.",
+                    css::uno::Reference<css::uno::XInterface>(), -1);
             (*this)[lN.Name] = lN.Value;
             continue;
         }
 
         // ignore VOID Any ... but reject wrong filled ones!
         if (lSource[i].hasValue())
-            throw css::beans::IllegalTypeException(
-                    "Any contains wrong type." );
+            throw css::lang::IllegalArgumentException(
+                "Any contains wrong type.",
+                css::uno::Reference<css::uno::XInterface>(), -1);
     }
 }
 

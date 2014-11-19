@@ -22,6 +22,7 @@
 #include <loadenv/loadenvexception.hxx>
 #include <loadenv/actionlockguard.hxx>
 
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
