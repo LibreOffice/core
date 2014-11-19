@@ -90,7 +90,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     // Size setting: Fixed size is always the width
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
     const sal_uInt16 nDir =
-        ((SvxFrameDirectionItem&)pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
+        static_cast<const SvxFrameDirectionItem&>(pFmt->GetFmtAttr( RES_FRAMEDIR )).GetValue();
     if( FRMDIR_ENVIRONMENT == nDir )
     {
         mbDerivedVert = true;
@@ -196,8 +196,8 @@ void SwFlyFrm::InsertCnt()
         const SwFmtCntnt& rCntnt = GetFmt()->GetCntnt();
         OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( no content prepared." );
         sal_uLong nIndex = rCntnt.GetCntntIdx()->GetIndex();
-        // Lower() means SwColumnFrm; the Content then needs to be instered into the (Column)BodyFrm
-        ::_InsertCnt( Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower() : (SwLayoutFrm*)this,
+        // Lower() means SwColumnFrm; the Content then needs to be inserted into the (Column)BodyFrm
+        ::_InsertCnt( Lower() ? static_cast<SwLayoutFrm*>(static_cast<SwLayoutFrm*>(Lower())->Lower()) : (SwLayoutFrm*)this,
                       GetFmt()->GetDoc(), nIndex );
 
         // NoTxt always have a fixed height.
@@ -436,7 +436,7 @@ void SwFlyFrm::FinitDrawObj()
                 // as the Object was already removed
                 if( pSh->HasDrawView() )
                     pSh->Imp()->GetDrawView()->UnmarkAll();
-                pSh = (SwViewShell*)pSh->GetNext();
+                pSh = static_cast<SwViewShell*>(pSh->GetNext());
 
             } while ( pSh != p1St );
         }
@@ -555,8 +555,8 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
     OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( No content prepared." );
     sal_uLong nIndex = rCntnt.GetCntntIdx()->GetIndex();
     // Lower() means SwColumnFrm: this one contains another SwBodyFrm
-    ::_InsertCnt( pFollow->Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)pFollow->Lower())->Lower()
-                                   : (SwLayoutFrm*)pFollow,
+    ::_InsertCnt( pFollow->Lower() ? const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(pFollow->Lower())->Lower()))
+                                   : static_cast<SwLayoutFrm*>(pFollow),
                   pFollow->GetFmt()->GetDoc(), ++nIndex );
 
     // invalidate accessible relation set (accessibility wrapper)
@@ -683,10 +683,10 @@ void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
     if (pNew && pOld && RES_ATTRSET_CHG == pNew->Which())
     {
-        SfxItemIter aNIter( *((SwAttrSetChg*)pNew)->GetChgSet() );
-        SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
-        SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
-        SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
+        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
+        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+        SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
+        SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
         while( true )
         {
             _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
@@ -784,7 +784,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if ( Lower() && Lower()->IsNoTxtFrm() &&
                  !GetFmt()->GetSurround().IsContour() )
             {
-                SwNoTxtNode *pNd = (SwNoTxtNode*)((SwCntntFrm*)Lower())->GetNode();
+                SwNoTxtNode *pNd = static_cast<SwNoTxtNode*>(static_cast<SwCntntFrm*>(Lower())->GetNode());
                 if ( pNd->HasContour() )
                     pNd->SetContour( 0 );
             }
@@ -797,7 +797,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_PROTECT:
             if (pNew)
             {
-                const SvxProtectItem *pP = (SvxProtectItem*)pNew;
+                const SvxProtectItem *pP = static_cast<const SvxProtectItem*>(pNew);
                 GetVirtDrawObj()->SetMoveProtect( pP->IsPosProtected()   );
                 GetVirtDrawObj()->SetResizeProtect( pP->IsSizeProtected() );
                 if( pSh )
@@ -811,7 +811,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_COL:
             if (pOld && pNew)
             {
-                ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
+                ChgColumns( *static_cast<const SwFmtCol*>(pOld), *static_cast<const SwFmtCol*>(pNew) );
                 const SwFmtFrmSize &rNew = GetFmt()->GetFrmSize();
                 if ( FrmSizeChg( rNew ) )
                     NotifyDrawObj();
@@ -830,10 +830,10 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             {
                 SwRect aNew( GetObjRectWithSpaces() );
                 SwRect aOld( maFrm );
-                const SvxULSpaceItem &rUL = ((SwFmtChg*)pOld)->pChangedFmt->GetULSpace();
+                const SvxULSpaceItem &rUL = static_cast<const SwFmtChg*>(pOld)->pChangedFmt->GetULSpace();
                 aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
                 aOld.SSize().Height()+= rUL.GetLower();
-                const SvxLRSpaceItem &rLR = ((SwFmtChg*)pOld)->pChangedFmt->GetLRSpace();
+                const SvxLRSpaceItem &rLR = static_cast<const SwFmtChg*>(pOld)->pChangedFmt->GetLRSpace();
                 aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
                 aOld.SSize().Width() += rLR.GetRight();
                 aNew.Union( aOld );
@@ -862,9 +862,9 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             SwFmtFrmSize *pNewFmtFrmSize = NULL;
             SwFmtChg *pOldFmtChg = NULL;
             if (nWhich == RES_FRM_SIZE)
-                pNewFmtFrmSize = (SwFmtFrmSize*)pNew;
+                pNewFmtFrmSize = const_cast<SwFmtFrmSize*>(static_cast<const SwFmtFrmSize*>(pNew));
             else
-                pOldFmtChg = (SwFmtChg*)pOld;
+                pOldFmtChg = const_cast<SwFmtChg*>(static_cast<const SwFmtChg*>(pOld));
 
             if (aURL.GetMap() && (pNewFmtFrmSize || pOldFmtChg))
             {
@@ -902,14 +902,14 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if( Lower()->IsNoTxtFrm() &&
                      !GetFmt()->GetSurround().IsContour() )
                 {
-                    SwNoTxtNode *pNd = (SwNoTxtNode*)((SwCntntFrm*)Lower())->GetNode();
+                    SwNoTxtNode *pNd = static_cast<SwNoTxtNode*>(static_cast<SwCntntFrm*>(Lower())->GetNode());
                     if ( pNd->HasContour() )
                         pNd->SetContour( 0 );
                 }
                 else if( !Lower()->IsColumnFrm() )
                 {
                     SwFrm* pFrm = GetLastLower();
-                    if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
+                    if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsUndersized() )
                         pFrm->Prepare( PREP_ADJUST_FRM );
                 }
             }
@@ -932,13 +932,13 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             {
                 if ( RES_UL_SPACE == nWhich )
                 {
-                    const SvxULSpaceItem &rUL = *(SvxULSpaceItem*)pNew;
+                    const SvxULSpaceItem &rUL = *static_cast<const SvxULSpaceItem*>(pNew);
                     aOld.Top( std::max( aOld.Top() - long(rUL.GetUpper()), 0L ) );
                     aOld.SSize().Height()+= rUL.GetLower();
                 }
                 else
                 {
-                    const SvxLRSpaceItem &rLR = *(SvxLRSpaceItem*)pNew;
+                    const SvxLRSpaceItem &rLR = *static_cast<const SvxLRSpaceItem*>(pNew);
                     aOld.Left  ( std::max( aOld.Left() - long(rLR.GetLeft()), 0L ) );
                     aOld.SSize().Width() += rLR.GetRight();
                 }
@@ -972,7 +972,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                     pSh->InvalidateWindows( Frm() );
 
                 const IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
-                const sal_uInt8 nId = ((SvxOpaqueItem*)pNew)->GetValue() ?
+                const sal_uInt8 nId = static_cast<const SvxOpaqueItem*>(pNew)->GetValue() ?
                                     pIDDMA->GetHeavenId() :
                                     pIDDMA->GetHellId();
                 GetVirtDrawObj()->SetLayer( nId );
@@ -995,7 +995,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // The interface changes the frame size when interacting with text frames,
             // the Map, however, needs to be relative to FrmSize().
             if ( (!Lower() || !Lower()->IsNoTxtFrm()) && pNew && pOld &&
-                 ((SwFmtURL*)pNew)->GetMap() && ((SwFmtURL*)pOld)->GetMap() )
+                 static_cast<const SwFmtURL*>(pNew)->GetMap() && static_cast<const SwFmtURL*>(pOld)->GetMap() )
             {
                 const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
                 if ( rSz.GetHeight() != Frm().Height() ||
@@ -1017,7 +1017,7 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         case RES_CHAIN:
             if (pNew)
             {
-                SwFmtChain *pChain = (SwFmtChain*)pNew;
+                const SwFmtChain *pChain = static_cast<const SwFmtChain*>(pNew);
                 if ( pChain->GetNext() )
                 {
                     SwFlyFrm *pFollow = FindChainNeighbour( *pChain->GetNext() );
@@ -1127,7 +1127,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                          RES_VERT_ORIENT, RES_HORI_ORIENT);
 
         SwFmtVertOrient aVert( pFmt->GetVertOrient() );
-        SwTxtFrm *pAutoFrm = NULL;
+        const SwTxtFrm *pAutoFrm = NULL;
         // #i34948# - handle also at-page and at-fly anchored
         // Writer fly frames
         const RndStdIds eAnchorType = GetFrmFmt().GetAnchor().GetAnchorId();
@@ -1151,7 +1151,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                     sal_Int32 nOfs =
                         pFmt->GetAnchor().GetCntntAnchor()->nContent.GetIndex();
                     OSL_ENSURE( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected" );
-                    pAutoFrm = (SwTxtFrm*)GetAnchorFrm();
+                    pAutoFrm = static_cast<const SwTxtFrm*>(GetAnchorFrm());
                     while( pAutoFrm->GetFollow() &&
                            pAutoFrm->GetFollow()->GetOfst() <= nOfs )
                     {
@@ -1160,7 +1160,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                         nTmpY -= pAutoFrm->GetUpper()->Prt().Height();
                         pAutoFrm = pAutoFrm->GetFollow();
                     }
-                    nTmpY = ((SwFlyAtCntFrm*)this)->GetRelCharY(pAutoFrm)-nTmpY;
+                    nTmpY = static_cast<SwFlyAtCntFrm*>(this)->GetRelCharY(pAutoFrm)-nTmpY;
                 }
                 else
                     aVert.SetVertOrient( text::VertOrientation::CHAR_BOTTOM );
@@ -1207,12 +1207,12 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                             sal_Int32 nOfs = pFmt->GetAnchor().GetCntntAnchor()
                                           ->nContent.GetIndex();
                             OSL_ENSURE( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected");
-                            pAutoFrm = (SwTxtFrm*)GetAnchorFrm();
+                            pAutoFrm = static_cast<const SwTxtFrm*>(GetAnchorFrm());
                             while( pAutoFrm->GetFollow() &&
                                    pAutoFrm->GetFollow()->GetOfst() <= nOfs )
                                 pAutoFrm = pAutoFrm->GetFollow();
                         }
-                        nTmpX -= ((SwFlyAtCntFrm*)this)->GetRelCharX(pAutoFrm);
+                        nTmpX -= static_cast<SwFlyAtCntFrm*>(this)->GetRelCharX(pAutoFrm);
                     }
                 }
                 else
@@ -1378,7 +1378,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
     bool bCollect = false;
     if( pLay->IsSctFrm() )
     {
-        pSect = (SwSectionFrm*)pLay;
+        pSect = static_cast<SwSectionFrm*>(pLay);
         if( pSect->IsEndnAtEnd() && !bNoColl )
         {
             bCollect = true;
@@ -1442,14 +1442,14 @@ void CalcCntnt( SwLayoutFrm *pLay,
 
             if ( pFrm->IsTabFrm() )
             {
-                ((SwTabFrm*)pFrm)->bCalcLowers = true;
+                static_cast<SwTabFrm*>(pFrm)->bCalcLowers = true;
                 // OD 26.08.2003 #i18103# - lock move backward of follow table,
                 // if no section content is formatted or follow table belongs
                 // to the section, which content is formatted.
-                if ( ((SwTabFrm*)pFrm)->IsFollow() &&
+                if ( static_cast<SwTabFrm*>(pFrm)->IsFollow() &&
                      ( !pSect || pSect == pFrm->FindSctFrm() ) )
                 {
-                    ((SwTabFrm*)pFrm)->bLockBackMove = true;
+                    static_cast<SwTabFrm*>(pFrm)->bLockBackMove = true;
                 }
             }
 
@@ -1615,23 +1615,23 @@ void CalcCntnt( SwLayoutFrm *pLay,
             }
             if ( pFrm->IsTabFrm() )
             {
-                if ( ((SwTabFrm*)pFrm)->IsFollow() )
-                    ((SwTabFrm*)pFrm)->bLockBackMove = false;
+                if ( static_cast<SwTabFrm*>(pFrm)->IsFollow() )
+                    static_cast<SwTabFrm*>(pFrm)->bLockBackMove = false;
             }
 
             pFrm = bPrevInvalid ? pTmpPrev : pFrm->FindNext();
             if( !bPrevInvalid && pFrm && pFrm->IsSctFrm() && pSect )
             {
                 // Empty SectionFrms could be present here
-                while( pFrm && pFrm->IsSctFrm() && !((SwSectionFrm*)pFrm)->GetSection() )
+                while( pFrm && pFrm->IsSctFrm() && !static_cast<SwSectionFrm*>(pFrm)->GetSection() )
                     pFrm = pFrm->FindNext();
 
                 // If FindNext returns the Follow of the original Area, we want to
                 // continue with this content as long as it flows back.
                 if( pFrm && pFrm->IsSctFrm() && ( pFrm == pSect->GetFollow() ||
-                    ((SwSectionFrm*)pFrm)->IsAnFollow( pSect ) ) )
+                    static_cast<SwSectionFrm*>(pFrm)->IsAnFollow( pSect ) ) )
                 {
-                    pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
+                    pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                     if( pFrm )
                         pFrm->_InvalidatePos();
                 }
@@ -1828,7 +1828,7 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, bool bTst )
                     bFormatHeightOnly = true;
                 }
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
-                ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
+                static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll();
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
                 // #i55416#
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
@@ -1923,7 +1923,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, bool bTst )
                     bFormatHeightOnly = true;
                 }
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
-                ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
+                static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll();
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
                 // #i55416#
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
@@ -1999,7 +1999,7 @@ bool SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
         if ( pFrm == pUpperFrm )
             return true;
         pFrm = pFrm->IsFlyFrm()
-               ? ((const SwFlyFrm*)pFrm)->GetAnchorFrm()
+               ? static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm()
                : pFrm->GetUpper();
     } while ( pFrm );
     return false;
@@ -2389,21 +2389,21 @@ static SwTwips lcl_CalcAutoWidth( const SwLayoutFrm& rFrm )
     {
         if ( pFrm->IsSctFrm() )
         {
-            nMin = lcl_CalcAutoWidth( *(SwSectionFrm*)pFrm );
+            nMin = lcl_CalcAutoWidth( *static_cast<const SwSectionFrm*>(pFrm) );
         }
         if ( pFrm->IsTxtFrm() )
         {
-            nMin = ((SwTxtFrm*)pFrm)->CalcFitToContent();
+            nMin = const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pFrm))->CalcFitToContent();
             const SvxLRSpaceItem &rSpace =
-                ((SwTxtFrm*)pFrm)->GetTxtNode()->GetSwAttrSet().GetLRSpace();
-            if (!((SwTxtFrm*)pFrm)->IsLocked())
+                static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetSwAttrSet().GetLRSpace();
+            if (!static_cast<const SwTxtFrm*>(pFrm)->IsLocked())
                 nMin += rSpace.GetRight() + rSpace.GetTxtLeft() + rSpace.GetTxtFirstLineOfst();
         }
         else if ( pFrm->IsTabFrm() )
         {
-            const SwFmtFrmSize& rTblFmtSz = ((SwTabFrm*)pFrm)->GetTable()->GetFrmFmt()->GetFrmSize();
+            const SwFmtFrmSize& rTblFmtSz = static_cast<const SwTabFrm*>(pFrm)->GetTable()->GetFrmFmt()->GetFrmSize();
             if ( USHRT_MAX == rTblFmtSz.GetSize().Width() ||
-                 text::HoriOrientation::NONE == ((SwTabFrm*)pFrm)->GetFmt()->GetHoriOrient().GetHoriOrient() )
+                 text::HoriOrientation::NONE == static_cast<const SwTabFrm*>(pFrm)->GetFmt()->GetHoriOrient().GetHoriOrient() )
             {
                 const SwPageFrm* pPage = rFrm.FindPageFrm();
                 // auto width table

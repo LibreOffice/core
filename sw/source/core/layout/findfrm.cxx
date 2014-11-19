@@ -38,7 +38,7 @@ SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
     SwFrm *pLay = Lower();
     while ( pLay && !pLay->IsBodyFrm() )
         pLay = pLay->GetNext();
-    return (SwLayoutFrm*)pLay;
+    return static_cast<SwLayoutFrm*>(pLay);
 }
 
 /// Searches the last CntntFrm in BodyText below the page.
@@ -70,7 +70,7 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
     {
         while ( (!pLayLeaf->IsSctFrm() || pLayLeaf == this ) &&
                 pLayLeaf->Lower() && pLayLeaf->Lower()->IsLayoutFrm() )
-            pLayLeaf = (SwLayoutFrm*)pLayLeaf->Lower();
+            pLayLeaf = static_cast<const SwLayoutFrm*>(pLayLeaf->Lower());
 
         if( pLayLeaf->IsSctFrm() && pLayLeaf != this )
         {
@@ -81,15 +81,15 @@ const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
             {
                 if( pLayLeaf->GetNext()->IsLayoutFrm() )
                 {
-                    pLayLeaf = (SwLayoutFrm*)pLayLeaf->GetNext();
+                    pLayLeaf = static_cast<const SwLayoutFrm*>(pLayLeaf->GetNext());
                     continue;
                 }
                 else
-                    return (SwCntntFrm*)pLayLeaf->GetNext();
+                    return static_cast<const SwCntntFrm*>(pLayLeaf->GetNext());
             }
         }
         else if ( pLayLeaf->Lower() )
-            return (SwCntntFrm*)pLayLeaf->Lower();
+            return static_cast<const SwCntntFrm*>(pLayLeaf->Lower());
 
         pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
         if( !IsAnLower( pLayLeaf) )
@@ -108,7 +108,7 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
     const SwFrm* pCnt = ContainsAny();
     while( pCnt && !pCnt->IsCellFrm() )
         pCnt = pCnt->GetUpper();
-    return (const SwCellFrm*)pCnt;
+    return static_cast<const SwCellFrm*>(pCnt);
 }
 
 /** return CntntFrms, sections, and tables.
@@ -130,7 +130,7 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
         while ( ( (!pLayLeaf->IsSctFrm() && !pLayLeaf->IsTabFrm())
                  || pLayLeaf == this ) &&
                 pLayLeaf->Lower() && pLayLeaf->Lower()->IsLayoutFrm() )
-            pLayLeaf = (SwLayoutFrm*)pLayLeaf->Lower();
+            pLayLeaf = static_cast<const SwLayoutFrm*>(pLayLeaf->Lower());
 
         if( ( pLayLeaf->IsTabFrm() || pLayLeaf->IsSctFrm() )
             && pLayLeaf != this )
@@ -140,7 +140,7 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
             return pLayLeaf;
         }
         else if ( pLayLeaf->Lower() )
-            return (SwCntntFrm*)pLayLeaf->Lower();
+            return static_cast<const SwCntntFrm*>(pLayLeaf->Lower());
 
         pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
         if( bNoFtn && pLayLeaf && pLayLeaf->IsInFtn() )
@@ -158,12 +158,12 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
 
 const SwFrm* SwFrm::GetLower() const
 {
-    return IsLayoutFrm() ? ((SwLayoutFrm*)this)->Lower() : 0;
+    return IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(this)->Lower() : 0;
 }
 
 SwFrm* SwFrm::GetLower()
 {
-    return IsLayoutFrm() ? ((SwLayoutFrm*)this)->Lower() : 0;
+    return IsLayoutFrm() ? static_cast<SwLayoutFrm*>(this)->Lower() : 0;
 }
 
 bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
@@ -174,7 +174,7 @@ bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
         if ( pUp == this )
             return true;
         if ( pUp->IsFlyFrm() )
-            pUp = ((SwFlyFrm*)pUp)->GetAnchorFrm();
+            pUp = static_cast<const SwFlyFrm*>(pUp)->GetAnchorFrm();
         else
             pUp = pUp->GetUpper();
     }
@@ -226,11 +226,11 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
         {
             // travel through the next's of <pUp> and check if one of these
             // contain the check reference.
-            SwLayoutFrm* pUpNext = (SwLayoutFrm*)pUp->GetNext();
+            const SwLayoutFrm* pUpNext = static_cast<const SwLayoutFrm*>(pUp->GetNext());
             while ( pUpNext &&
                     !pUpNext->IsAnLower( _pCheckRefLayFrm ) )
             {
-                pUpNext = (SwLayoutFrm*)pUpNext->GetNext();
+                pUpNext = static_cast<const SwLayoutFrm*>(pUpNext->GetNext());
             }
             bReturn = pUpNext != 0;
         }
@@ -245,7 +245,7 @@ static const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
 {
     const SwFrm* pRet = 0;
     if ( pFrm->IsFlyFrm() )
-        pRet = bNext ? ((SwFlyFrm*)pFrm)->GetNextLink() : ((SwFlyFrm*)pFrm)->GetPrevLink();
+        pRet = bNext ? static_cast<const SwFlyFrm*>(pFrm)->GetNextLink() : static_cast<const SwFlyFrm*>(pFrm)->GetPrevLink();
     else
         pRet = bNext ? pFrm->GetNext() : pFrm->GetPrev();
 
@@ -307,7 +307,7 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 
     } while( ( p && !p->IsFlowFrm() ) ||
              pFrm == this ||
-             0 == ( pLayoutFrm = pFrm->IsLayoutFrm() ? (SwLayoutFrm*)pFrm : 0 ) ||
+             0 == ( pLayoutFrm = pFrm->IsLayoutFrm() ? static_cast<const SwLayoutFrm*>(pFrm) : 0 ) ||
              pLayoutFrm->IsAnLower( this ) );
 
     return pLayoutFrm;
@@ -327,7 +327,7 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 {
     const SwFrm *pFrm = this;
     // #100926#
-    SwCntntFrm *pCntntFrm = 0;
+    const SwCntntFrm *pCntntFrm = 0;
     bool bGoingUp = false;
     do {
         const SwFrm *p = 0;
@@ -357,7 +357,7 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
         }
 
         pFrm = p;
-    } while ( 0 == (pCntntFrm = (pFrm->IsCntntFrm() ? (SwCntntFrm*)pFrm:0) ));
+    } while ( 0 == (pCntntFrm = (pFrm->IsCntntFrm() ? static_cast<const SwCntntFrm*>(pFrm) : 0) ));
 
     return pCntntFrm;
 }
@@ -380,7 +380,7 @@ SwPageFrm* SwFrm::FindPageFrm()
         else
             return 0;
     }
-    return (SwPageFrm*)pRet;
+    return static_cast<SwPageFrm*>(pRet);
 }
 
 SwFtnBossFrm* SwFrm::FindFtnBossFrm( bool bFootnotes )
@@ -413,7 +413,7 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( bool bFootnotes )
         if( !pSct->IsFtnAtEnd() )
             return pSct->FindFtnBossFrm( true );
     }
-    return (SwFtnBossFrm*)pRet;
+    return static_cast<SwFtnBossFrm*>(pRet);
 }
 
 SwTabFrm* SwFrm::ImplFindTabFrm()
@@ -425,7 +425,7 @@ SwTabFrm* SwFrm::ImplFindTabFrm()
         if ( !pRet )
             return 0;
     }
-    return (SwTabFrm*)pRet;
+    return static_cast<SwTabFrm*>(pRet);
 }
 
 SwSectionFrm* SwFrm::ImplFindSctFrm()
@@ -437,7 +437,7 @@ SwSectionFrm* SwFrm::ImplFindSctFrm()
         if ( !pRet )
             return 0;
     }
-    return (SwSectionFrm*)pRet;
+    return static_cast<SwSectionFrm*>(pRet);
 }
 
 SwFtnFrm *SwFrm::ImplFindFtnFrm()
@@ -449,16 +449,16 @@ SwFtnFrm *SwFrm::ImplFindFtnFrm()
         if ( !pRet )
             return 0;
     }
-    return (SwFtnFrm*)pRet;
+    return static_cast<SwFtnFrm*>(pRet);
 }
 
 SwFlyFrm *SwFrm::ImplFindFlyFrm()
 {
-    const SwFrm *pRet = this;
+    SwFrm *pRet = this;
     do
     {
         if ( pRet->IsFlyFrm() )
-            return (SwFlyFrm*)pRet;
+            return static_cast<SwFlyFrm*>(pRet);
         else
             pRet = pRet->GetUpper();
     } while ( pRet );
@@ -492,7 +492,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
         else if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
-            pRet = ((SwFlyFrm*)pRet)->AnchorFrm();
+            pRet = static_cast<SwFlyFrm*>(pRet)->AnchorFrm();
         else
             return 0;
     } while ( pRet );
@@ -501,7 +501,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
 
 const SwFtnFrm* SwFtnContFrm::FindFootNote() const
 {
-    const SwFtnFrm* pRet = (SwFtnFrm*)Lower();
+    const SwFtnFrm* pRet = static_cast<const SwFtnFrm*>(Lower());
     if( pRet && !pRet->GetAttr()->GetFtn().IsEndNote() )
         return pRet;
     return NULL;
@@ -552,9 +552,9 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
 const SwAttrSet* SwFrm::GetAttrSet() const
 {
     if ( IsCntntFrm() )
-        return &((const SwCntntFrm*)this)->GetNode()->GetSwAttrSet();
+        return &static_cast<const SwCntntFrm*>(this)->GetNode()->GetSwAttrSet();
     else
-        return &((const SwLayoutFrm*)this)->GetFmt()->GetAttrSet();
+        return &static_cast<const SwLayoutFrm*>(this)->GetFmt()->GetAttrSet();
 }
 
 //UUUU
@@ -608,11 +608,11 @@ static SwFrm* lcl_NextFrm( SwFrm* pFrm )
         SwFrm *p = 0;
 
         bool bGoingFwd = false;
-        bool bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)));
+        bool bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? static_cast<SwLayoutFrm*>(pFrm)->Lower() : 0)));
 
         if( !bGoingDown )
         {
-            bGoingFwd = (0 != (p = ( pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink() : pFrm->GetNext())));
+            bGoingFwd = (0 != (p = ( pFrm->IsFlyFrm() ? static_cast<SwFlyFrm*>(pFrm)->GetNextLink() : pFrm->GetNext())));
             if ( !bGoingFwd )
             {
                 bGoingUp = (0 != (p = pFrm->GetUpper()));
@@ -639,10 +639,10 @@ SwFrm *SwFrm::_FindNext()
         //The last Cntnt of the table gets picked up and his follower is
         //returned. To be able to deactivate the special case for tables
         //(see below) bIgnoreTab will be set.
-        if ( ((SwTabFrm*)this)->GetFollow() )
-            return ((SwTabFrm*)this)->GetFollow();
+        if ( static_cast<SwTabFrm*>(this)->GetFollow() )
+            return static_cast<SwTabFrm*>(this)->GetFollow();
 
-        pThis = ((SwTabFrm*)this)->FindLastCntnt();
+        pThis = static_cast<SwTabFrm*>(this)->FindLastCntnt();
         if ( !pThis )
             pThis = this;
         bIgnoreTab = true;
@@ -650,23 +650,23 @@ SwFrm *SwFrm::_FindNext()
     else if ( IsSctFrm() )
     {
         //The last Cntnt of the section gets picked and his follower is returned.
-        if ( ((SwSectionFrm*)this)->GetFollow() )
-            return ((SwSectionFrm*)this)->GetFollow();
+        if ( static_cast<SwSectionFrm*>(this)->GetFollow() )
+            return static_cast<SwSectionFrm*>(this)->GetFollow();
 
-        pThis = ((SwSectionFrm*)this)->FindLastCntnt();
+        pThis = static_cast<SwSectionFrm*>(this)->FindLastCntnt();
         if ( !pThis )
             pThis = this;
     }
     else if ( IsCntntFrm() )
     {
-        if( ((SwCntntFrm*)this)->GetFollow() )
-            return ((SwCntntFrm*)this)->GetFollow();
+        if( static_cast<SwCntntFrm*>(this)->GetFollow() )
+            return static_cast<SwCntntFrm*>(this)->GetFollow();
     }
     else if ( IsRowFrm() )
     {
         SwFrm* pMyUpper = GetUpper();
-        if ( pMyUpper->IsTabFrm() && ((SwTabFrm*)pMyUpper)->GetFollow() )
-            return ((SwTabFrm*)pMyUpper)->GetFollow()->GetLower();
+        if ( pMyUpper->IsTabFrm() && static_cast<SwTabFrm*>(pMyUpper)->GetFollow() )
+            return static_cast<SwTabFrm*>(pMyUpper)->GetFollow()->GetLower();
         else return NULL;
     }
     else
@@ -680,9 +680,9 @@ SwFrm *SwFrm::_FindNext()
         while ( !pUp->IsCellFrm() )
             pUp = pUp->GetUpper();
         OSL_ENSURE( pUp, "Cntnt in Tabelle aber nicht in Zelle." );
-        SwFrm* pNxt = ((SwCellFrm*)pUp)->GetFollowCell();
+        SwFrm* pNxt = static_cast<SwCellFrm*>(pUp)->GetFollowCell();
         if ( pNxt )
-            pNxt = ((SwCellFrm*)pNxt)->ContainsCntnt();
+            pNxt = static_cast<SwCellFrm*>(pNxt)->ContainsCntnt();
         if ( !pNxt )
         {
             pNxt = lcl_NextFrm( pThis );
@@ -766,36 +766,36 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
 
     if ( IsTabFrm() )
     {
-        if ( ((SwTabFrm*)this)->GetFollow() )
+        if ( static_cast<SwTabFrm*>(this)->GetFollow() )
         {
-            pThis = ((SwTabFrm*)this)->GetFollow()->ContainsCntnt();
+            pThis = static_cast<SwTabFrm*>(this)->GetFollow()->ContainsCntnt();
             if( pThis )
-                return (SwCntntFrm*)pThis;
+                return static_cast<SwCntntFrm*>(pThis);
         }
-        pThis = ((SwTabFrm*)this)->FindLastCntnt();
+        pThis = static_cast<SwTabFrm*>(this)->FindLastCntnt();
         if ( !pThis )
             return 0;
     }
     else if ( IsSctFrm() )
     {
-        if ( ((SwSectionFrm*)this)->GetFollow() )
+        if ( static_cast<SwSectionFrm*>(this)->GetFollow() )
         {
-            pThis = ((SwSectionFrm*)this)->GetFollow()->ContainsCntnt();
+            pThis = static_cast<SwSectionFrm*>(this)->GetFollow()->ContainsCntnt();
             if( pThis )
-                return (SwCntntFrm*)pThis;
+                return static_cast<SwCntntFrm*>(pThis);
         }
-        pThis = ((SwSectionFrm*)this)->FindLastCntnt();
+        pThis = static_cast<SwSectionFrm*>(this)->FindLastCntnt();
         if ( !pThis )
             return 0;
     }
-    else if ( IsCntntFrm() && ((SwCntntFrm*)this)->GetFollow() )
-        return ((SwCntntFrm*)this)->GetFollow();
+    else if ( IsCntntFrm() && static_cast<SwCntntFrm*>(this)->GetFollow() )
+        return static_cast<SwCntntFrm*>(this)->GetFollow();
 
     if ( pThis->IsCntntFrm() )
     {
         const bool bBody = pThis->IsInDocBody();
         const bool bFtn  = pThis->IsInFtn();
-        SwCntntFrm *pNxtCnt = ((SwCntntFrm*)pThis)->GetNextCntntFrm();
+        SwCntntFrm *pNxtCnt = static_cast<SwCntntFrm*>(pThis)->GetNextCntntFrm();
         if ( pNxtCnt )
         {
             // #i27138#
@@ -1021,16 +1021,16 @@ SwFrm *SwFrm::_FindPrev()
         //The first Cntnt of the table gets picked up and his predecessor is
         //returned. To be able to deactivate the special case for tables
         //(see below) bIgnoreTab will be set.
-        if ( ((SwTabFrm*)this)->IsFollow() )
-            return ((SwTabFrm*)this)->FindMaster();
+        if ( static_cast<SwTabFrm*>(this)->IsFollow() )
+            return static_cast<SwTabFrm*>(this)->FindMaster();
         else
-            pThis = ((SwTabFrm*)this)->ContainsCntnt();
+            pThis = static_cast<SwTabFrm*>(this)->ContainsCntnt();
         bIgnoreTab = true;
     }
 
     if ( pThis && pThis->IsCntntFrm() )
     {
-        SwCntntFrm *pPrvCnt = ((SwCntntFrm*)pThis)->GetPrevCntntFrm();
+        SwCntntFrm *pPrvCnt = static_cast<SwCntntFrm*>(pThis)->GetPrevCntntFrm();
         if( !pPrvCnt )
             return 0;
         if ( !bIgnoreTab && pThis->IsInTab() )
@@ -1097,13 +1097,13 @@ void SwFrm::ImplInvalidateNextPos( bool bNoFtn )
         {
             while( pFrm && pFrm->IsSctFrm() )
             {
-                if( ((SwSectionFrm*)pFrm)->GetSection() )
+                if( static_cast<SwSectionFrm*>(pFrm)->GetSection() )
                 {
-                    SwFrm* pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
+                    SwFrm* pTmp = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                     if( pTmp )
                         pTmp->InvalidatePos();
                     else if( !bNoFtn )
-                        ((SwSectionFrm*)pFrm)->InvalidateFtnPos();
+                        static_cast<SwSectionFrm*>(pFrm)->InvalidateFtnPos();
                     if( !IsInSct() || FindSctFrm()->GetFollow() != pFrm )
                         pFrm->InvalidatePos();
                     return;
@@ -1116,7 +1116,7 @@ void SwFrm::ImplInvalidateNextPos( bool bNoFtn )
                 {
                     // We need to invalidate the section's content so it gets
                     // the chance to flow to a different page.
-                    SwFrm* pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
+                    SwFrm* pTmp = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                     if( pTmp )
                         pTmp->InvalidatePos();
                     if( !IsInSct() || FindSctFrm()->GetFollow() != pFrm )
@@ -1316,7 +1316,7 @@ void SwFrm::SetDirFlags( bool bVert )
         if( mbDerivedVert )
         {
             const SwFrm* pAsk = IsFlyFrm() ?
-                          ((SwFlyFrm*)this)->GetAnchorFrm() : GetUpper();
+                          static_cast<SwFlyFrm*>(this)->GetAnchorFrm() : GetUpper();
 
             OSL_ENSURE( pAsk != this, "Autsch! Stack overflow is about to happen" );
 
@@ -1342,7 +1342,7 @@ void SwFrm::SetDirFlags( bool bVert )
         if( mbDerivedR2L )
         {
             const SwFrm* pAsk = IsFlyFrm() ?
-                          ((SwFlyFrm*)this)->GetAnchorFrm() : GetUpper();
+                          static_cast<SwFlyFrm*>(this)->GetAnchorFrm() : GetUpper();
 
             OSL_ENSURE( pAsk != this, "Oops! Stack overflow is about to happen" );
 
@@ -1362,7 +1362,7 @@ SwLayoutFrm* SwFrm::GetNextCellLeaf( MakePageType )
         pTmpFrm = pTmpFrm->GetUpper();
 
     OSL_ENSURE( pTmpFrm, "SwFrm::GetNextCellLeaf() without cell" );
-    return ((SwCellFrm*)pTmpFrm)->GetFollowCell();
+    return static_cast<SwCellFrm*>(pTmpFrm)->GetFollowCell();
 }
 
 SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType )
@@ -1372,7 +1372,7 @@ SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType )
         pTmpFrm = pTmpFrm->GetUpper();
 
     OSL_ENSURE( pTmpFrm, "SwFrm::GetNextPreviousLeaf() without cell" );
-    return ((SwCellFrm*)pTmpFrm)->GetPreviousCell();
+    return static_cast<SwCellFrm*>(pTmpFrm)->GetPreviousCell();
 }
 
 static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
@@ -1381,13 +1381,13 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
                                          bool bInFollow )
 {
     SwCellFrm* pRet = NULL;
-    SwCellFrm* pCell = (SwCellFrm*)rOrigRow.Lower();
-    SwCellFrm* pCorrCell = (SwCellFrm*)rCorrRow.Lower();
+    const SwCellFrm* pCell = static_cast<const SwCellFrm*>(rOrigRow.Lower());
+    SwCellFrm* pCorrCell = const_cast<SwCellFrm*>(static_cast<const SwCellFrm*>(rCorrRow.Lower()));
 
     while ( pCell != &rOrigCell && !pCell->IsAnLower( &rOrigCell ) )
     {
-        pCell = (SwCellFrm*)pCell->GetNext();
-        pCorrCell = (SwCellFrm*)pCorrCell->GetNext();
+        pCell = static_cast<const SwCellFrm*>(pCell->GetNext());
+        pCorrCell = static_cast<SwCellFrm*>(pCorrCell->GetNext());
     }
 
     assert(pCell && pCorrCell && "lcl_FindCorrespondingCellFrm does not work");
@@ -1398,9 +1398,9 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
         assert(pCell->Lower() && pCell->Lower()->IsRowFrm() &&
                "lcl_FindCorrespondingCellFrm does not work");
 
-        SwRowFrm* pRow = (SwRowFrm*)pCell->Lower();
+        const SwRowFrm* pRow = static_cast<const SwRowFrm*>(pCell->Lower());
         while ( !pRow->IsAnLower( &rOrigCell ) )
-            pRow = (SwRowFrm*)pRow->GetNext();
+            pRow = static_cast<const SwRowFrm*>(pRow->GetNext());
 
         SwRowFrm* pCorrRow = 0;
         if ( bInFollow )
@@ -1467,7 +1467,7 @@ SwCellFrm* SwCellFrm::GetFollowCell() const
     if ( !pRow->GetNext() &&
          NULL != ( pFollowRow = pRow->IsInSplitTableRow() ) &&
          ( !pFollowRow->IsRowSpanLine() || nRowSpan > 1 ) )
-         pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *pThisCell, *pFollowRow, true );
+         pRet = lcl_FindCorrespondingCellFrm( *static_cast<const SwRowFrm*>(pRow), *pThisCell, *pFollowRow, true );
 
     return pRet;
 }
@@ -1489,7 +1489,7 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
 
     OSL_ENSURE( pRow->GetUpper() && pRow->GetUpper()->IsTabFrm(), "GetPreviousCell without Table" );
 
-    SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
+    const SwTabFrm* pTab = static_cast<const SwTabFrm*>(pRow->GetUpper());
 
     if ( pTab->IsFollow() )
     {
@@ -1503,7 +1503,7 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
             {
                 SwRowFrm* pMasterRow = static_cast<SwRowFrm*>(pMaster->GetLastLower());
                 if ( pMasterRow )
-                    pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
+                    pRet = lcl_FindCorrespondingCellFrm( *static_cast<const SwRowFrm*>(pRow), *this, *pMasterRow, false );
                 if ( pRet && pRet->GetTabBox()->getRowSpan() < 1 )
                     pRet = &const_cast<SwCellFrm&>(pRet->FindStartEndOfRowSpanCell( true, true ));
             }
@@ -1617,7 +1617,7 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
 
     OSL_ENSURE( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" );
 
-    const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
+    const SwTabFrm* pTab = static_cast<const SwTabFrm*>(pRow->GetUpper());
 
     // If most upper row frame is a headline row, the current frame
     // can't be in a splitted table row. Thus, add corresponding condition.
@@ -1649,7 +1649,7 @@ const SwRowFrm* SwFrm::IsInFollowFlowRow() const
 
     OSL_ENSURE( pRow->GetUpper()->IsTabFrm(), "Confusion in table layout" );
 
-    const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
+    const SwTabFrm* pTab = static_cast<const SwTabFrm*>(pRow->GetUpper());
 
     const SwTabFrm* pMaster = pTab->IsFollow() ? pTab->FindMaster() : 0;
 

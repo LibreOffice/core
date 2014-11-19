@@ -253,25 +253,25 @@ void SwFrm::PrepareMake()
         const bool bTab = IsTabFrm();
         bool bNoSect = IsInSct();
         bool bOldTabLock = false, bFoll = false;
-        SwFlowFrm* pThis = bCnt ? (SwCntntFrm*)this : NULL;
+        SwFlowFrm* pThis = bCnt ? static_cast<SwCntntFrm*>(this) : NULL;
 
         if ( bTab )
         {
-            pThis = (SwTabFrm*)this;
-            bOldTabLock = ((SwTabFrm*)this)->IsJoinLocked();
-            ::PrepareLock( (SwTabFrm*)this );
+            pThis = static_cast<SwTabFrm*>(this);
+            bOldTabLock = static_cast<SwTabFrm*>(this)->IsJoinLocked();
+            ::PrepareLock( static_cast<SwTabFrm*>(this) );
             bFoll = pThis->IsFollow();
         }
         else if( IsSctFrm() )
         {
-            pThis = (SwSectionFrm*)this;
+            pThis = static_cast<SwSectionFrm*>(this);
             bFoll = pThis->IsFollow();
             bNoSect = false;
         }
         else if ( bCnt && (bFoll = pThis->IsFollow()) && GetPrev() )
         {
             //Do not follow the chain when we need only one instance
-            const SwTxtFrm* pMaster = ((SwCntntFrm*)this)->FindMaster();
+            const SwTxtFrm* pMaster = static_cast<SwCntntFrm*>(this)->FindMaster();
             if ( pMaster && pMaster->IsLocked() )
             {
                 MakeAll();
@@ -304,7 +304,7 @@ void SwFrm::PrepareMake()
                         break;
 
                     pFrm->MakeAll();
-                    if( IsSctFrm() && !((SwSectionFrm*)this)->GetSection() )
+                    if( IsSctFrm() && !static_cast<SwSectionFrm*>(this)->GetSection() )
                         break;
                 }
                 // With CntntFrms, the chain may be broken while walking through
@@ -319,7 +319,7 @@ void SwFrm::PrepareMake()
                 // won't find ourselves anymore!
                 if( bNoSect && pFrm && pFrm->IsSctFrm() )
                 {
-                    SwFrm* pCnt = ((SwSectionFrm*)pFrm)->ContainsAny();
+                    SwFrm* pCnt = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                     if( pCnt )
                         pFrm = pCnt;
                 }
@@ -335,7 +335,7 @@ void SwFrm::PrepareMake()
         }
 
         if ( bTab && !bOldTabLock )
-            ::PrepareUnlock( (SwTabFrm*)this );
+            ::PrepareUnlock( static_cast<SwTabFrm*>(this) );
     }
     MakeAll();
 }
@@ -377,17 +377,17 @@ void SwFrm::PrepareCrsr()
         bool bNoSect = IsInSct();
 
         bool bOldTabLock = false, bFoll;
-        SwFlowFrm* pThis = bCnt ? (SwCntntFrm*)this : NULL;
+        SwFlowFrm* pThis = bCnt ? static_cast<SwCntntFrm*>(this) : NULL;
 
         if ( bTab )
         {
-            bOldTabLock = ((SwTabFrm*)this)->IsJoinLocked();
-            ::PrepareLock( (SwTabFrm*)this );
-            pThis = (SwTabFrm*)this;
+            bOldTabLock = static_cast<SwTabFrm*>(this)->IsJoinLocked();
+            ::PrepareLock( static_cast<SwTabFrm*>(this) );
+            pThis = static_cast<SwTabFrm*>(this);
         }
         else if( IsSctFrm() )
         {
-            pThis = (SwSectionFrm*)this;
+            pThis = static_cast<SwSectionFrm*>(this);
             bNoSect = false;
         }
         bFoll = pThis && pThis->IsFollow();
@@ -418,7 +418,7 @@ void SwFrm::PrepareCrsr()
             pFrm = pFrm->FindNext();
             if( bNoSect && pFrm && pFrm->IsSctFrm() )
             {
-                SwFrm* pCnt = ((SwSectionFrm*)pFrm)->ContainsAny();
+                SwFrm* pCnt = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                 if( pCnt )
                     pFrm = pCnt;
             }
@@ -432,7 +432,7 @@ void SwFrm::PrepareCrsr()
         OSL_ENSURE( GetUpper(), "Layout unstable (Upper gone III)." );
 
         if ( bTab && !bOldTabLock )
-            ::PrepareUnlock( (SwTabFrm*)this );
+            ::PrepareUnlock( static_cast<SwTabFrm*>(this) );
     }
     Calc();
 }
@@ -445,7 +445,7 @@ static SwFrm* lcl_Prev( SwFrm* pFrm, bool bSectPrv = true )
         bSectPrv && !pFrm->IsColumnFrm() )
         pRet = pFrm->GetUpper()->GetPrev();
     while( pRet && pRet->IsSctFrm() &&
-           !((SwSectionFrm*)pRet)->GetSection() )
+           !static_cast<SwSectionFrm*>(pRet)->GetSection() )
         pRet = pRet->GetPrev();
     return pRet;
 }
@@ -456,7 +456,7 @@ static SwFrm* lcl_NotHiddenPrev( SwFrm* pFrm )
     do
     {
         pRet = lcl_Prev( pRet );
-    } while ( pRet && pRet->IsTxtFrm() && ((SwTxtFrm*)pRet)->IsHiddenNow() );
+    } while ( pRet && pRet->IsTxtFrm() && static_cast<SwTxtFrm*>(pRet)->IsHiddenNow() );
     return pRet;
 }
 
@@ -469,7 +469,7 @@ void SwFrm::MakePos()
         SwFrm* pPrv = lcl_Prev( this );
         if ( pPrv &&
              ( !pPrv->IsCntntFrm() ||
-               ( ((SwCntntFrm*)pPrv)->GetFollow() != this ) )
+               ( static_cast<SwCntntFrm*>(pPrv)->GetFollow() != this ) )
            )
         {
             if ( !StackHack::IsLocked() &&
@@ -674,7 +674,7 @@ void SwPageFrm::MakeAll()
                     const long nTop    = pAttrs->CalcTopLine()   + aBorder.Height();
                     const long nBottom = pAttrs->CalcBottomLine()+ aBorder.Height();
 
-                    long nWidth = GetUpper() ? ((SwRootFrm*)GetUpper())->GetBrowseWidth() : 0;
+                    long nWidth = GetUpper() ? static_cast<SwRootFrm*>(GetUpper())->GetBrowseWidth() : 0;
                     if ( nWidth < pSh->GetBrowseWidth() )
                         nWidth = pSh->GetBrowseWidth();
                     nWidth += + 2 * aBorder.Width();
@@ -696,18 +696,18 @@ void SwPageFrm::MakeAll()
                         while ( pFrm )
                         {
                             long nTmp = 0;
-                            SwFrm *pCnt = ((SwLayoutFrm*)pFrm)->ContainsAny();
+                            SwFrm *pCnt = static_cast<SwLayoutFrm*>(pFrm)->ContainsAny();
                             while ( pCnt && (pCnt->GetUpper() == pFrm ||
-                                             ((SwLayoutFrm*)pFrm)->IsAnLower( pCnt )))
+                                             static_cast<SwLayoutFrm*>(pFrm)->IsAnLower( pCnt )))
                             {
                                 nTmp += pCnt->Frm().Height();
                                 if( pCnt->IsTxtFrm() &&
-                                    ((SwTxtFrm*)pCnt)->IsUndersized() )
-                                    nTmp += ((SwTxtFrm*)pCnt)->GetParHeight()
+                                    static_cast<SwTxtFrm*>(pCnt)->IsUndersized() )
+                                    nTmp += static_cast<SwTxtFrm*>(pCnt)->GetParHeight()
                                             - pCnt->Prt().Height();
                                 else if( pCnt->IsSctFrm() &&
-                                         ((SwSectionFrm*)pCnt)->IsUndersized() )
-                                    nTmp += ((SwSectionFrm*)pCnt)->Undersize();
+                                         static_cast<SwSectionFrm*>(pCnt)->IsUndersized() )
+                                    nTmp += static_cast<SwSectionFrm*>(pCnt)->Undersize();
                                 pCnt = pCnt->FindNext();
                             }
                             // OD 29.10.2002 #97265# - consider invalid body frame properties
@@ -880,8 +880,8 @@ bool SwFrm::IsCollapse() const
     if (!IsTxtFrm())
         return false;
 
-    const SwTxtFrm *pTxtFrm=(SwTxtFrm*)this;
-    const SwTxtNode *pTxtNode=pTxtFrm->GetTxtNode();
+    const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>(this);
+    const SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
     return pTxtNode && pTxtNode->IsCollapse();
 }
 
@@ -896,13 +896,13 @@ bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         SWRECTFN( this )
         const bool bTxtFrm = IsTxtFrm();
         SwTwips nUpper = 0;
-        if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
+        if ( bTxtFrm && static_cast<SwTxtFrm*>(this)->IsHiddenNow() )
         {
-            if ( ((SwTxtFrm*)this)->HasFollow() )
-                ((SwTxtFrm*)this)->JoinFrm();
+            if ( static_cast<SwTxtFrm*>(this)->HasFollow() )
+                static_cast<SwTxtFrm*>(this)->JoinFrm();
 
             if( (Prt().*fnRect->fnGetHeight)() )
-                ((SwTxtFrm*)this)->HideHidden();
+                static_cast<SwTxtFrm*>(this)->HideHidden();
             Prt().Pos().setX(0);
             Prt().Pos().setY(0);
             (Prt().*fnRect->fnSetWidth)( (Frm().*fnRect->fnGetWidth)() );
@@ -1035,11 +1035,11 @@ void SwCntntFrm::MakeAll()
     if ( IsJoinLocked() )
         return;
 
-    OSL_ENSURE( !((SwTxtFrm*)this)->IsSwapped(), "Calculation of a swapped frame" );
+    OSL_ENSURE( !static_cast<SwTxtFrm*>(this)->IsSwapped(), "Calculation of a swapped frame" );
 
     StackHack aHack;
 
-    if ( ((SwTxtFrm*)this)->IsLocked() )
+    if ( static_cast<SwTxtFrm*>(this)->IsLocked() )
     {
         OSL_FAIL( "Format for locked TxtFrm." );
         return;
@@ -1111,13 +1111,13 @@ void SwCntntFrm::MakeAll()
     {
         SwFtnFrm *pFtn = FindFtnFrm();
         SwSectionFrm* pSct = pFtn->FindSctFrm();
-        if ( !((SwTxtFrm*)pFtn->GetRef())->IsLocked() )
+        if ( !static_cast<SwTxtFrm*>(pFtn->GetRef())->IsLocked() )
         {
             SwFtnBossFrm* pBoss = pFtn->GetRef()->FindFtnBossFrm(
                                     pFtn->GetAttr()->GetFtn().IsEndNote() );
             if( !pSct || pSct->IsColLocked() || !pSct->Growable() )
                 pSaveFtn = new SwSaveFtnHeight( pBoss,
-                    ((SwTxtFrm*)pFtn->GetRef())->GetFtnLine( pFtn->GetAttr() ) );
+                    static_cast<SwTxtFrm*>(pFtn->GetRef())->GetFtnLine( pFtn->GetAttr() ) );
         }
     }
 
@@ -1154,7 +1154,7 @@ void SwCntntFrm::MakeAll()
 
     // If a Follow sits next to it's Master and doesn't fit, we know it can
     // be moved right now.
-    if ( lcl_Prev( this ) && ((SwTxtFrm*)this)->IsFollow() && IsMoveable() )
+    if ( lcl_Prev( this ) && static_cast<SwTxtFrm*>(this)->IsFollow() && IsMoveable() )
     {
         bMovedFwd = true;
         // OD 2004-03-02 #106629# - If follow frame is in table, it's master
@@ -1388,9 +1388,9 @@ void SwCntntFrm::MakeAll()
                 SwFrm *pNxt = HasFollow() ? NULL : FindNext();
                 while( pNxt && pNxt->IsSctFrm() )
                 {   // Leave empty sections out, go into the other ones.
-                    if( ((SwSectionFrm*)pNxt)->GetSection() )
+                    if( static_cast<SwSectionFrm*>(pNxt)->GetSection() )
                     {
-                        SwFrm* pTmp = ((SwSectionFrm*)pNxt)->ContainsAny();
+                        SwFrm* pTmp = static_cast<SwSectionFrm*>(pNxt)->ContainsAny();
                         if( pTmp )
                         {
                             pNxt = pTmp;
@@ -1480,9 +1480,9 @@ void SwCntntFrm::MakeAll()
                 // the page if required.
                 while( pNxt && pNxt->IsSctFrm() )
                 {
-                    if( ((SwSectionFrm*)pNxt)->GetSection() )
+                    if( static_cast<SwSectionFrm*>(pNxt)->GetSection() )
                     {
-                        pNxt = ((SwSectionFrm*)pNxt)->ContainsAny();
+                        pNxt = static_cast<SwSectionFrm*>(pNxt)->ContainsAny();
                         break;
                     }
                     pNxt = pNxt->FindNext();
@@ -1492,7 +1492,7 @@ void SwCntntFrm::MakeAll()
                     const bool bMoveFwdInvalid = 0 != GetIndNext();
                     const bool bNxtNew =
                         ( 0 == (pNxt->Prt().*fnRect->fnGetHeight)() ) &&
-                        (!pNxt->IsTxtFrm() ||!((SwTxtFrm*)pNxt)->IsHiddenNow());
+                        (!pNxt->IsTxtFrm() ||!static_cast<SwTxtFrm*>(pNxt)->IsHiddenNow());
 
                     pNxt->Calc();
 
@@ -1602,7 +1602,7 @@ void SwCntntFrm::MakeAll()
         if( IsInSct() && bMovedFwd && bMakePage && pOldUp->IsColBodyFrm() &&
             pOldUp->GetUpper()->GetUpper()->IsSctFrm() &&
             ( pPre || pOldUp->GetUpper()->GetPrev() ) &&
-            ((SwSectionFrm*)pOldUp->GetUpper()->GetUpper())->MoveAllowed(this) )
+            static_cast<SwSectionFrm*>(pOldUp->GetUpper()->GetUpper())->MoveAllowed(this) )
         {
             bMovedFwd = false;
         }
@@ -1699,7 +1699,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
     // we recursively end up in here again.
     if ( pNxt->IsCntntFrm() )
     {
-        SwCntntNotify aNotify( (SwCntntFrm*)pNxt );
+        SwCntntNotify aNotify( static_cast<SwCntntFrm*>(pNxt) );
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pNxt );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         if ( !pNxt->GetValidSizeFlag() )
@@ -1709,12 +1709,12 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
             else
                 pNxt->Frm().Width( pNxt->GetUpper()->Prt().Width() );
         }
-        ((SwCntntFrm*)pNxt)->MakePrtArea( rAttrs );
+        static_cast<SwCntntFrm*>(pNxt)->MakePrtArea( rAttrs );
         pNxt->Format( &rAttrs );
     }
     else
     {
-        SwLayNotify aNotify( (SwLayoutFrm*)pNxt );
+        SwLayNotify aNotify( static_cast<SwLayoutFrm*>(pNxt) );
         SwBorderAttrAccess aAccess( SwFrm::GetCache(), pNxt );
         const SwBorderAttrs &rAttrs = *aAccess.Get();
         if ( !pNxt->GetValidSizeFlag() )
@@ -1770,7 +1770,7 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
     SwCntntFrm *pFrm = this;
     const SwFrm *pTmpPrev = pNewUpper->Lower();
     if( pTmpPrev && pTmpPrev->IsFtnFrm() )
-        pTmpPrev = ((SwFtnFrm*)pTmpPrev)->Lower();
+        pTmpPrev = static_cast<const SwFtnFrm*>(pTmpPrev)->Lower();
     while ( pTmpPrev && pTmpPrev->GetNext() )
         pTmpPrev = pTmpPrev->GetNext();
     do
@@ -1802,15 +1802,15 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
             pTmpFrm->InsertBefore( pNewUpper, 0 );
             if ( pFrm->IsTxtFrm() &&
                  ( bTstMove ||
-                   ((SwTxtFrm*)pFrm)->HasFollow() ||
-                   ( !((SwTxtFrm*)pFrm)->HasPara() &&
-                     !((SwTxtFrm*)pFrm)->IsEmpty()
+                   static_cast<SwTxtFrm*>(pFrm)->HasFollow() ||
+                   ( !static_cast<SwTxtFrm*>(pFrm)->HasPara() &&
+                     !static_cast<SwTxtFrm*>(pFrm)->IsEmpty()
                    )
                  )
                )
             {
                 bTstMove = true;
-                bRet = ((SwTxtFrm*)pFrm)->TestFormat( pTmpPrev, nSpace, bSplit );
+                bRet = static_cast<SwTxtFrm*>(pFrm)->TestFormat( pTmpPrev, nSpace, bSplit );
             }
             else
                 bRet = pFrm->WouldFit( nSpace, bSplit, false );
@@ -1914,9 +1914,9 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
         {
             if( bTstMove )
             {
-                while( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->HasFollow() )
+                while( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->HasFollow() )
                 {
-                    pFrm = ((SwTxtFrm*)pFrm)->GetFollow();
+                    pFrm = static_cast<SwTxtFrm*>(pFrm)->GetFollow();
                 }
                 // OD 11.04.2003 #108824# - If last follow frame of <this> text
                 // frame isn't valid, a formatting of the next content frame
@@ -1952,12 +1952,12 @@ bool SwCntntFrm::_WouldFit( SwTwips nSpace,
                     pTmpPrev = 0;
                 else
                 {
-                    if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow() )
+                    if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsHiddenNow() )
                         pTmpPrev = lcl_NotHiddenPrev( pFrm );
                     else
                         pTmpPrev = pFrm;
                 }
-                pFrm = (SwCntntFrm*)pNxt;
+                pFrm = static_cast<SwCntntFrm*>(pNxt);
             }
             else
                 pFrm = 0;

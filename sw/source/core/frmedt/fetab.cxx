@@ -127,7 +127,7 @@ void SwFEShell::ParkCursorInTab()
         if (*pMk > aEndPos)
             aEndPos = *pMk;
 
-        pTmpCrsr = (SwCursor *) pTmpCrsr->GetNext();
+        pTmpCrsr = static_cast<SwCursor *>( pTmpCrsr->GetNext() );
     }
     while (pTmpCrsr != pSwCrsr);
 
@@ -362,7 +362,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         //  2. the preceding row, if there is another row before this
         //  3. otherwise below the table
         {
-            SwTableNode* pTblNd = ((SwCntntFrm*)pFrm)->GetNode()->FindTableNode();
+            SwTableNode* pTblNd = static_cast<SwCntntFrm*>(pFrm)->GetNode()->FindTableNode();
 
             // search all boxes / lines
             _FndBox aFndBox( 0, 0 );
@@ -565,7 +565,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 if ( pColumnCacheLastCellFrm != pBox )
                 {
                     pTab->GetTable()->GetTabCols( *pLastCols,
-                                        ((SwCellFrm*)pBox)->GetTabBox(), true);
+                                        static_cast<const SwCellFrm*>(pBox)->GetTabBox(), true);
                     pColumnCacheLastCellFrm = pBox;
                 }
                 rToFill = *pLastCols;
@@ -578,7 +578,7 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
     }
     if ( !pLastCols )
     {
-        GetDoc()->GetTabCols( rToFill, 0, (SwCellFrm*)pBox );
+        GetDoc()->GetTabCols( rToFill, 0, static_cast<const SwCellFrm*>(pBox) );
 
         pLastCols   = new SwTabCols( rToFill );
         pColumnCacheLastTable  = pTab->GetTable();
@@ -634,7 +634,7 @@ void SwFEShell::_GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const
     }
     if ( !pLastRows )
     {
-        GetDoc()->GetTabRows( rToFill, 0, (SwCellFrm*)pBox );
+        GetDoc()->GetTabRows( rToFill, 0, static_cast<const SwCellFrm*>(pBox) );
 
         pLastRows   = new SwTabCols( rToFill );
         pRowCacheLastTable  = pTab->GetTable();
@@ -656,7 +656,7 @@ void SwFEShell::SetTabCols( const SwTabCols &rNew, bool bCurRowOnly )
         pBox = pBox->GetUpper();
     } while ( !pBox->IsCellFrm() );
 
-    GetDoc()->SetTabCols( rNew, bCurRowOnly, 0, (SwCellFrm*)pBox );
+    GetDoc()->SetTabCols( rNew, bCurRowOnly, 0, static_cast<SwCellFrm*>(pBox) );
     EndAllActionAndCall();
 }
 
@@ -697,7 +697,7 @@ void SwFEShell::SetTabRows( const SwTabCols &rNew, bool bCurColOnly )
         pBox = pBox->GetUpper();
     } while ( !pBox->IsCellFrm() );
 
-    GetDoc()->SetTabRows( rNew, bCurColOnly, 0, (SwCellFrm*)pBox );
+    GetDoc()->SetTabRows( rNew, bCurColOnly, 0, static_cast<SwCellFrm*>(pBox) );
     EndAllActionAndCall();
 }
 
@@ -715,7 +715,7 @@ void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, bool bCurColOnly, const 
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetTabRows( rNew, bCurColOnly, 0, (SwCellFrm*)pBox );
+        GetDoc()->SetTabRows( rNew, bCurColOnly, 0, static_cast<const SwCellFrm*>(pBox) );
         EndAllActionAndCall();
     }
 }
@@ -947,7 +947,7 @@ void SwFEShell::UnProtectCells()
         } while ( pFrm && !pFrm->IsCellFrm() );
         if( pFrm )
         {
-            SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+            SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
             aBoxes.insert( pBox );
         }
     }
@@ -990,7 +990,7 @@ bool SwFEShell::CanUnProtectCells() const
             } while ( pFrm && !pFrm->IsCellFrm() );
             if( pFrm )
             {
-                SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+                SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
                 aBoxes.insert( pBox );
             }
         }
@@ -1042,7 +1042,7 @@ static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
         while ( !pRow->GetUpper()->IsTabFrm() )
             pRow = pRow->GetUpper();
 
-        const SwTabFrm* pTabFrm = (const SwTabFrm*)pRow->GetUpper();
+        const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>(pRow->GetUpper());
         const SwTableLine* pTabLine = static_cast<const SwRowFrm*>(pRow)->GetTabLine();
 
         sal_uInt16 nI = 0;
@@ -1108,7 +1108,7 @@ bool SwFEShell::CheckHeadline( bool bRepeat ) const
             }
             else
             {
-                bRet =  ((SwLayoutFrm*)pTab->Lower())->IsAnLower( pFrm ) ||
+                bRet = static_cast<SwLayoutFrm*>(pTab->Lower())->IsAnLower( pFrm ) ||
                         pTab->IsInHeadline( *pFrm );
             }
         }
@@ -1149,7 +1149,7 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
         do
         {   pFrm = pFrm->GetUpper();
         } while ( !pFrm->IsCellFrm() );
-        SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+        SwTableBox *pBox = const_cast<SwTableBox*>(static_cast<const SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()));
         aBoxes.insert( pBox );
     }
 
@@ -1161,7 +1161,7 @@ bool SwFEShell::IsAdjustCellWidthAllowed( bool bBalance ) const
             SwNodeIndex aIdx( *pBox->GetSttNd(), 1 );
             SwTxtNode* pCNd = aIdx.GetNode().GetTxtNode();
             if( !pCNd )
-                pCNd = (SwTxtNode*)GetDoc()->GetNodes().GoNext( &aIdx );
+                pCNd = static_cast<SwTxtNode*>(GetDoc()->GetNodes().GoNext( &aIdx ));
 
             while ( pCNd )
             {
@@ -1272,7 +1272,7 @@ bool SwFEShell::DeleteTblSel()
         // position they'll be set to the old position
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
-        ParkCrsr( SwNodeIndex( *((SwCellFrm*)pFrm)->GetTabBox()->GetSttNd() ));
+        ParkCrsr( SwNodeIndex( *static_cast<SwCellFrm*>(pFrm)->GetTabBox()->GetSttNd() ));
 
         bRet = GetDoc()->DeleteRowCol( aBoxes );
 
@@ -1356,7 +1356,7 @@ static const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt,
         {
             if ( pFrm->IsLayoutFrm() )
             {
-                const SwFrm *pTmp = ::lcl_FindFrmInTab( (SwLayoutFrm*)pFrm, rPt, nFuzzy );
+                const SwFrm *pTmp = ::lcl_FindFrmInTab( static_cast<const SwLayoutFrm*>(pFrm), rPt, nFuzzy );
                 if ( pTmp )
                     return pTmp;
             }
@@ -1461,7 +1461,7 @@ static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                 }
 
                 const SwFrm* pTmp = bSearchForFrmInTab ?
-                                    ::lcl_FindFrmInTab( (SwLayoutFrm*)pFrm, aPt, nTmpFuzzy ) :
+                                    ::lcl_FindFrmInTab( static_cast<const SwLayoutFrm*>(pFrm), aPt, nTmpFuzzy ) :
                                     0;
 
                 if ( pTmp )
@@ -1563,7 +1563,7 @@ static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 
 const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) const
 {
-    const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();
+    const SwPageFrm *pPage = static_cast<SwPageFrm*>(GetLayout()->Lower());
     vcl::Window* pOutWin = GetWin();
     SwTwips nFuzzy = COLFUZZY;
     if( pOutWin )
@@ -1576,7 +1576,7 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
     }
 
     while ( pPage && !pPage->Frm().IsNear( rPt, nFuzzy ) )
-        pPage = (SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
 
     const SwCellFrm *pFrm = 0;
     if ( pPage )
@@ -1599,11 +1599,11 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
                 }
             }
         }
-        const SwLayoutFrm *pLay = (SwLayoutFrm*)pPage->Lower();
+        const SwLayoutFrm *pLay = static_cast<const SwLayoutFrm*>(pPage->Lower());
         while ( pLay && !pFrm )
         {
             pFrm = lcl_FindFrm( pLay, rPt, nFuzzy, pbRow, pbCol );
-            pLay = (SwLayoutFrm*)pLay->GetNext();
+            pLay = static_cast<const SwLayoutFrm*>(pLay->GetNext());
         }
     }
     return pFrm;
@@ -1860,19 +1860,19 @@ SwTab SwFEShell::WhichMouseTabCol( const Point &rPt ) const
     bool bSelect = false;
 
     // First try: Do we get the row/col move cursor?
-    SwCellFrm* pFrm = (SwCellFrm*)GetBox( rPt, &bRow, 0 );
+    const SwCellFrm* pFrm = static_cast<const SwCellFrm*>(GetBox( rPt, &bRow, 0 ));
 
     if ( !pFrm )
     {
         // Second try: Do we get the row/col/tab selection cursor?
-        pFrm = (SwCellFrm*)GetBox( rPt, &bRow, &bCol );
+        pFrm = static_cast<const SwCellFrm*>(GetBox( rPt, &bRow, &bCol ));
         bSelect = true;
     }
 
     if( pFrm )
     {
         while( pFrm && pFrm->Lower() && pFrm->Lower()->IsRowFrm() )
-            pFrm = (SwCellFrm*)((SwLayoutFrm*)pFrm->Lower())->Lower();
+            pFrm = static_cast<const SwCellFrm*>(static_cast<const SwLayoutFrm*>(pFrm->Lower())->Lower());
         if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
             pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
             pFrm = 0;
@@ -2005,7 +2005,7 @@ void SwFEShell::SetMouseTabCols( const SwTabCols &rNew, bool bCurRowOnly,
     {
         SET_CURR_SHELL( this );
         StartAllAction();
-        GetDoc()->SetTabCols( rNew, bCurRowOnly, 0, (SwCellFrm*)pBox );
+        GetDoc()->SetTabCols( rNew, bCurRowOnly, 0, static_cast<const SwCellFrm*>(pBox) );
         EndAllActionAndCall();
     }
 }
@@ -2173,7 +2173,7 @@ bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
 
     /** The cells are destroyed in here */
     bool bRet = GetDoc()->SetColRowWidthHeight(
-                    *(SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox(),
+                    *const_cast<SwTableBox*>(static_cast<SwCellFrm*>(pFrm)->GetTabBox()),
                     eType, nDiff, nLogDiff );
 
     delete pLastCols, pLastCols = 0;

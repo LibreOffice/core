@@ -74,15 +74,15 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
                 break;
             }
         }
-        pPage = (SwPageFrm*) pPage->GetPrev();
+        pPage = static_cast<SwPageFrm*>( pPage->GetPrev() );
     }
     if ( !pPage )
     {
-        pPage = (SwPageFrm*) (GetLayout()->Lower());
+        pPage = static_cast<SwPageFrm*>(GetLayout()->Lower());
         pFlow = pPage->FindFirstBodyCntnt();
         if ( !pFlow )
         {
-            pPage   = (SwPageFrm*)pPage->GetNext();
+            pPage   = static_cast<SwPageFrm*>(pPage->GetNext());
             pFlow = pPage->FindFirstBodyCntnt();
             OSL_ENSURE( pFlow, "Dokuemnt ohne Inhalt?!?" );
         }
@@ -96,7 +96,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         GetDoc()->SetAttr( aNew, *(SwFmt*)pFlow->FindTabFrm()->GetFmt() );
     else
     {
-        SwPaM aPaM( *((SwCntntFrm*)pFlow)->GetNode() );
+        SwPaM aPaM( *static_cast<const SwCntntFrm*>(pFlow)->GetNode() );
         GetDoc()->getIDocumentContentOperations().InsertPoolItem( aPaM, aNew, 0 );
     }
     EndAllActionAndCall();
@@ -185,7 +185,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
 {
     const SwCntntNode* pCNd;
     const SwFrm* pMkFrm, *pPtFrm;
-    const SwPageDesc* pFnd, *pRetDesc = (SwPageDesc*)0xffffffff;
+    const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(0xffffffff);
     const Point aNulPt;
 
     FOREACHPAM_START(GetCrsr())
@@ -206,27 +206,27 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
         if( !pMkFrm || !pPtFrm )
             pFnd = 0;
         else if( pMkFrm == pPtFrm )
-            pFnd = ((SwPageFrm*)pMkFrm)->GetPageDesc();
+            pFnd = static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc();
         else
         {
             // swap pointer if PtFrm before MkFrm
-            if( ((SwPageFrm*)pMkFrm)->GetPhyPageNum() >
-                ((SwPageFrm*)pPtFrm)->GetPhyPageNum() )
+            if( static_cast<const SwPageFrm*>(pMkFrm)->GetPhyPageNum() >
+                static_cast<const SwPageFrm*>(pPtFrm)->GetPhyPageNum() )
             {
                 const SwFrm* pTmp = pMkFrm; pMkFrm = pPtFrm; pPtFrm = pTmp;
             }
 
             // now check from MkFrm to PtFrm for equal PageDescs
-            pFnd = ((SwPageFrm*)pMkFrm)->GetPageDesc();
+            pFnd = static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc();
             while( pFnd && pMkFrm != pPtFrm )
             {
                 pMkFrm = pMkFrm->GetNext();
-                if( !pMkFrm || pFnd != ((SwPageFrm*)pMkFrm)->GetPageDesc() )
+                if( !pMkFrm || pFnd != static_cast<const SwPageFrm*>(pMkFrm)->GetPageDesc() )
                     pFnd = 0;
             }
         }
 
-        if( (SwPageDesc*)0xffffffff == pRetDesc )
+        if( reinterpret_cast<SwPageDesc*>(0xffffffff) == pRetDesc )
             pRetDesc = pFnd;
         else if( pFnd != pRetDesc )
         {

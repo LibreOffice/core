@@ -136,7 +136,7 @@ void SwFlowFrm::CheckKeep()
     SwFrm *pPre = m_rThis.GetIndPrev();
     if( pPre->IsSctFrm() )
     {
-        SwFrm *pLast = ((SwSectionFrm*)pPre)->FindLastCntnt();
+        SwFrm *pLast = static_cast<SwSectionFrm*>(pPre)->FindLastCntnt();
         if( pLast && pLast->FindSctFrm() == pPre )
             pPre = pLast;
         else
@@ -149,7 +149,7 @@ void SwFlowFrm::CheckKeep()
     {
         if( pTmp->IsSctFrm() )
         {
-            SwFrm *pLast = ((SwSectionFrm*)pTmp)->FindLastCntnt();
+            SwFrm *pLast = static_cast<SwSectionFrm*>(pTmp)->FindLastCntnt();
             if( pLast && pLast->FindSctFrm() == pTmp )
                 pTmp = pLast;
             else
@@ -331,14 +331,14 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
                         {
                             const SwNode *pNode;
                             if ( m_rThis.IsCntntFrm() )
-                                pNode = ((SwCntntFrm&)m_rThis).GetNode();
+                                pNode = static_cast<SwCntntFrm&>(m_rThis).GetNode();
                             else if( m_rThis.IsSctFrm() )
-                                pNode = ((SwSectionFmt*)((SwSectionFrm&)m_rThis).
+                                pNode = static_cast<SwSectionFmt*>(static_cast<SwSectionFrm&>(m_rThis).
                                         GetFmt())->GetSectionNode();
                             else
                             {
                                 OSL_ENSURE( m_rThis.IsTabFrm(), "new FowFrm?" );
-                                pNode = ((SwTabFrm&)m_rThis).GetTable()->
+                                pNode = static_cast<SwTabFrm&>(m_rThis).GetTable()->
                                     GetTabSortBoxes()[0]->GetSttNd()->FindTableNode();
                             }
                             nIndex = pNode->GetIndex();
@@ -391,15 +391,15 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
     if ( pLay->IsFtnFrm() )
     {
         if ( !pLay->Lower() && !pLay->IsColLocked() &&
-             !((SwFtnFrm*)pLay)->IsBackMoveLocked() )
+             !static_cast<SwFtnFrm*>(pLay)->IsBackMoveLocked() )
         {
             pLay->Cut();
             delete pLay;
         }
         else
         {
-            bool bUnlock = !((SwFtnFrm*)pLay)->IsBackMoveLocked();
-            ((SwFtnFrm*)pLay)->LockBackMove();
+            bool bUnlock = !static_cast<SwFtnFrm*>(pLay)->IsBackMoveLocked();
+            static_cast<SwFtnFrm*>(pLay)->LockBackMove();
             pLay->InvalidateSize();
             pLay->Calc();
             SwCntntFrm *pCnt = pLay->ContainsCntnt();
@@ -409,14 +409,14 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
                 // to end up in an endless page migration, so we're not even
                 // going to call Calc!
                 OSL_ENSURE( pCnt->IsTxtFrm(), "The Graphic has landed." );
-                if ( ((SwTxtFrm*)pCnt)->IsLocked() ||
-                     ((SwTxtFrm*)pCnt)->GetFollow() == pStart )
+                if ( static_cast<SwTxtFrm*>(pCnt)->IsLocked() ||
+                     static_cast<SwTxtFrm*>(pCnt)->GetFollow() == pStart )
                     break;
                 pCnt->Calc();
                 pCnt = pCnt->GetNextCntntFrm();
             }
             if( bUnlock )
-                ((SwFtnFrm*)pLay)->UnlockBackMove();
+                static_cast<SwFtnFrm*>(pLay)->UnlockBackMove();
         }
         pLay = 0;
     }
@@ -498,8 +498,8 @@ bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         // The CacheIdx idea seems to be a bit risky!
         if ( pFloat->IsTxtFrm() )
         {
-            if ( ((SwTxtFrm*)pFloat)->GetCacheIdx() != USHRT_MAX )
-                ((SwTxtFrm*)pFloat)->Init();    // I'm his friend.
+            if ( static_cast<SwTxtFrm*>(pFloat)->GetCacheIdx() != USHRT_MAX )
+                static_cast<SwTxtFrm*>(pFloat)->Init();    // I'm his friend.
         }
         else
             bRet = true;
@@ -521,7 +521,7 @@ bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         if( pSibling->IsInFtn() )
         {
             if( pSibling->IsSctFrm() )
-                pSibling = ((SwSectionFrm*)pSibling)->ContainsAny();
+                pSibling = static_cast<SwSectionFrm*>(pSibling)->ContainsAny();
             if( pSibling )
                 pSibling->Prepare( PREP_ERGOSUM );
         }
@@ -534,7 +534,7 @@ bool SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
     }
 
     if ( pParent->IsFtnFrm() )
-        ((SwFtnFrm*)pParent)->InvalidateNxtFtnCnts( pParent->FindPageFrm() );
+        static_cast<SwFtnFrm*>(pParent)->InvalidateNxtFtnCnts( pParent->FindPageFrm() );
     return bRet;
 }
 
@@ -593,7 +593,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
         m_rThis.GetUpper()->Calc();
     else if( m_rThis.GetUpper()->IsSctFrm() )
     {
-        SwSectionFrm* pTmpSct = (SwSectionFrm*)m_rThis.GetUpper();
+        SwSectionFrm* pTmpSct = static_cast<SwSectionFrm*>(m_rThis.GetUpper());
         bool bOld = pTmpSct->IsCntntLocked();
         pTmpSct->SetCntntLock( true );
         pTmpSct->Calc();
@@ -607,7 +607,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
         m_rThis.InvalidatePage( pPage );
         if ( m_rThis.IsLayoutFrm() )
         {
-            SwCntntFrm *pCnt = ((SwLayoutFrm*)&m_rThis)->ContainsCntnt();
+            SwCntntFrm *pCnt = static_cast<SwLayoutFrm*>(&m_rThis)->ContainsCntnt();
             if ( pCnt )
                 pCnt->InvalidatePage( pPage );
         }
@@ -641,7 +641,7 @@ SwTxtFrm* SwCntntFrm::FindMaster() const
     if ( pPrec && pPrec->HasFollow() && pPrec->GetFollow() == this )
     {
         OSL_ENSURE( pPrec->IsTxtFrm(), "NoTxtFrm with follow found" );
-        return ( SwTxtFrm* )pPrec;
+        return const_cast<SwTxtFrm*>(static_cast< const SwTxtFrm* >(pPrec));
     }
 
     OSL_FAIL( "Follow ist lost in Space." );
@@ -721,7 +721,7 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, bool bFwd,
     {   pLeaf = ((SwFrm*)pLeaf)->GetLeaf( eMakePage, bFwd );
 
         if ( pLeaf &&
-            (!IsLayoutFrm() || !((SwLayoutFrm*)this)->IsAnLower( pLeaf )))
+            (!IsLayoutFrm() || !static_cast<const SwLayoutFrm*>(this)->IsAnLower( pLeaf )))
         {
             if ( pAnch->IsInDocBody() == pLeaf->IsInDocBody() &&
                  pAnch->IsInFtn()     == pLeaf->IsInFtn() )
@@ -731,7 +731,7 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, bool bFwd,
         }
     } while ( !bFound && pLeaf );
 
-    return (const SwLayoutFrm*)pLeaf;
+    return static_cast<const SwLayoutFrm*>(pLeaf);
 }
 
 SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, bool bFwd )
@@ -861,7 +861,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
     SwLayoutFrm *pLayLeaf = 0;
     if ( IsTabFrm() )
     {
-        SwCntntFrm* pTmp = ((SwTabFrm*)this)->FindLastCntnt();
+        SwCntntFrm* pTmp = static_cast<SwTabFrm*>(this)->FindLastCntnt();
         if ( pTmp )
             pLayLeaf = pTmp->GetUpper();
     }
@@ -920,7 +920,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                         // If the reference of the first footnote of this page
                         // lies before the page, we'd rather not insert a new page.
                         // (Bug #55620#)
-                        SwFtnFrm *pFtn = (SwFtnFrm*)pCont->Lower();
+                        SwFtnFrm *pFtn = static_cast<SwFtnFrm*>(pCont->Lower());
                         if( pFtn && pFtn->GetRef() )
                         {
                             const sal_uInt16 nRefNum = pNew->GetPhyPageNum();
@@ -938,7 +938,7 @@ SwLayoutFrm *SwFrm::GetNextLeaf( MakePageType eMakePage )
                                     pOldLayLeaf->FindPageFrm() : 0;
                         if ( pPg && pPg->IsEmptyPage() )
                             // Don't insert behind. Insert before the EmptyPage.
-                            pPg = (SwPageFrm*)pPg->GetPrev();
+                            pPg = static_cast<SwPageFrm*>(pPg->GetPrev());
 
                         if ( !pPg || pPg == pNew )
                             pPg = FindPageFrm();
@@ -1093,7 +1093,7 @@ bool SwFlowFrm::IsPageBreak( bool bAct ) const
         // Determine predecessor
         const SwFrm *pPrev = m_rThis.FindPrev();
         while ( pPrev && ( !pPrev->IsInDocBody() ||
-                ( pPrev->IsTxtFrm() && ((SwTxtFrm*)pPrev)->IsHiddenNow() ) ) )
+                ( pPrev->IsTxtFrm() && static_cast<const SwTxtFrm*>(pPrev)->IsHiddenNow() ) ) )
             pPrev = pPrev->FindPrev();
 
         if ( pPrev )
@@ -1147,7 +1147,7 @@ bool SwFlowFrm::IsColBreak( bool bAct ) const
             // Determine predecessor
             const SwFrm *pPrev = m_rThis.FindPrev();
             while( pPrev && ( ( !pPrev->IsInDocBody() && !m_rThis.IsInFly() ) ||
-                   ( pPrev->IsTxtFrm() && ((SwTxtFrm*)pPrev)->IsHiddenNow() ) ) )
+                   ( pPrev->IsTxtFrm() && static_cast<const SwTxtFrm*>(pPrev)->IsHiddenNow() ) ) )
                     pPrev = pPrev->FindPrev();
 
             if ( pPrev )
@@ -1187,7 +1187,7 @@ bool SwFlowFrm::HasParaSpaceAtPages( bool bSct ) const
         {
             if( pTmp->IsCellFrm() || pTmp->IsFlyFrm() ||
                 pTmp->IsFooterFrm() || pTmp->IsHeaderFrm() ||
-                ( pTmp->IsFtnFrm() && !((SwFtnFrm*)pTmp)->GetMaster() ) )
+                ( pTmp->IsFtnFrm() && !static_cast<const SwFtnFrm*>(pTmp)->GetMaster() ) )
                 return true;
             if( pTmp->IsPageFrm() )
                 return !( pTmp->GetPrev() && !IsPageBreak(true) );
@@ -1298,14 +1298,14 @@ static bool lcl_IdenticalStyles(const SwFrm* pPrevFrm, const SwFrm* pFrm)
     SwTxtFmtColl *pPrevFmtColl = 0;
     if (pPrevFrm && pPrevFrm->IsTxtFrm())
     {
-        SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) pPrevFrm;
+        const SwTxtFrm *pTxtFrm = static_cast< const SwTxtFrm * >( pPrevFrm );
         pPrevFmtColl = dynamic_cast<SwTxtFmtColl*>(pTxtFrm->GetTxtNode()->GetFmtColl());
     }
 
     bool bIdenticalStyles = false;
     if (pFrm && pFrm->IsTxtFrm())
     {
-        SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) pFrm;
+        const SwTxtFrm *pTxtFrm = static_cast< const SwTxtFrm * >( pFrm );
         SwTxtFmtColl *pFmtColl = dynamic_cast<SwTxtFmtColl*>(pTxtFrm->GetTxtNode()->GetFmtColl());
         bIdenticalStyles = pPrevFmtColl == pFmtColl;
     }
@@ -1338,7 +1338,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     {
         if( m_rThis.IsSctFrm() )
         {
-            SwSectionFrm* pFoll = &((SwSectionFrm&)m_rThis);
+            SwSectionFrm* pFoll = &static_cast<SwSectionFrm&>(m_rThis);
             do
                 pOwn = pFoll->ContainsAny();
             while( !pOwn && 0 != ( pFoll = pFoll->GetFollow() ) );
@@ -1424,7 +1424,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                 {
                     // former consideration
                     if ( pOwn->IsTxtFrm() )
-                        nUpper = std::max( nUpper, ((SwTxtFrm*)pOwn)->GetLineSpace() );
+                        nUpper = std::max( nUpper, static_cast<SwTxtFrm*>(pOwn)->GetLineSpace() );
                     if ( nPrevLineSpacing != 0 )
                     {
                         nUpper = std::max( nUpper, nPrevLineSpacing );
@@ -1696,15 +1696,15 @@ bool SwFlowFrm::CheckMoveFwd( bool& rbMakePage, bool bKeep, bool )
     const SwFrm* pNxt = m_rThis.GetIndNext();
 
     if ( bKeep && //!bMovedBwd &&
-         ( !pNxt || ( pNxt->IsTxtFrm() && ((SwTxtFrm*)pNxt)->IsEmptyMaster() ) ) &&
+         ( !pNxt || ( pNxt->IsTxtFrm() && static_cast<const SwTxtFrm*>(pNxt)->IsEmptyMaster() ) ) &&
          ( 0 != (pNxt = m_rThis.FindNext()) ) && IsKeepFwdMoveAllowed() )
     {
         if( pNxt->IsSctFrm() )
         {   // Don't get fooled by empty SectionFrms
             const SwFrm* pTmp = NULL;
             while( pNxt && pNxt->IsSctFrm() &&
-                   ( !((SwSectionFrm*)pNxt)->GetSection() ||
-                     0 == ( pTmp = ((SwSectionFrm*)pNxt)->ContainsAny() ) ) )
+                   ( !static_cast<const SwSectionFrm*>(pNxt)->GetSection() ||
+                     0 == ( pTmp = static_cast<const SwSectionFrm*>(pNxt)->ContainsAny() ) ) )
             {
                 pNxt = pNxt->FindNext();
                 pTmp = NULL;
@@ -1781,7 +1781,7 @@ bool SwFlowFrm::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 //!!!!MoveFtnCntFwd might need to be updated as well.
     SwFtnBossFrm *pOldBoss = m_rThis.FindFtnBossFrm();
     if ( m_rThis.IsInFtn() )
-        return ((SwCntntFrm&)m_rThis).MoveFtnCntFwd( bMakePage, pOldBoss );
+        return static_cast<SwCntntFrm&>(m_rThis).MoveFtnCntFwd( bMakePage, pOldBoss );
 
     if( !IsFwdMoveAllowed() && !bMoveAlways )
     {
@@ -1877,11 +1877,11 @@ bool SwFlowFrm::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             SwSaveFtnHeight aHeight( pOldBoss,
                 (pOldBoss->Frm().*fnRect->fnGetBottom)() );
             SwCntntFrm* pStart = m_rThis.IsCntntFrm() ?
-                (SwCntntFrm*)&m_rThis : ((SwLayoutFrm&)m_rThis).ContainsCntnt();
-            OSL_ENSURE( pStart || ( m_rThis.IsTabFrm() && !((SwTabFrm&)m_rThis).Lower() ),
+                static_cast<SwCntntFrm*>(&m_rThis) : static_cast<SwLayoutFrm&>(m_rThis).ContainsCntnt();
+            OSL_ENSURE( pStart || ( m_rThis.IsTabFrm() && !static_cast<SwTabFrm&>(m_rThis).Lower() ),
                     "MoveFwd: Missing Content" );
             SwLayoutFrm* pBody = pStart ? ( pStart->IsTxtFrm() ?
-                (SwLayoutFrm*)((SwTxtFrm*)pStart)->FindBodyFrm() : 0 ) : 0;
+                (SwLayoutFrm*)static_cast<SwTxtFrm*>(pStart)->FindBodyFrm() : 0 ) : 0;
             if( pBody )
                 bFtnMoved = pBody->MoveLowerFtns( pStart, pOldBoss, pNewBoss,
                                                   false);
@@ -2048,7 +2048,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
             long nDiff = pOldPage->GetPhyPageNum() - pFlow->GetPhyPageNum();
             if ( nDiff > 1 )
             {
-                if ( ((SwPageFrm*)pOldPage->GetPrev())->IsEmptyPage() )
+                if ( static_cast<SwPageFrm*>(pOldPage->GetPrev())->IsEmptyPage() )
                     nDiff -= 1;
                 if ( nDiff > 1 )
                 {
@@ -2159,8 +2159,8 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
                 {
                     // ColumnFrms now with BodyFrm
                     SwLayoutFrm* pColBody = pCol->IsColumnFrm() ?
-                        (SwLayoutFrm*)((SwLayoutFrm*)pCol)->Lower() :
-                        (SwLayoutFrm*)pCol;
+                        const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(pCol)->Lower())) :
+                        const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(pCol));
                     if ( pColBody->ContainsCntnt() )
                     {
                         bGoOn = false; // We have content here! we accept this
@@ -2411,11 +2411,11 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
                     while( pTmp->GetNext() )
                         pTmp = pTmp->GetNext();
                     if( !pTmp->IsSctFrm() ||
-                        ((SwSectionFrm*)pTmp)->GetFollow() != pSct )
+                        static_cast<SwSectionFrm*>(pTmp)->GetFollow() != pSct )
                         pTmp = NULL;
                 }
                 if( pTmp )
-                    pNewUpper = (SwSectionFrm*)pTmp;
+                    pNewUpper = static_cast<SwSectionFrm*>(pTmp);
                 else
                 {
                     pSct = new SwSectionFrm( *pSct, true );
@@ -2480,7 +2480,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
                 {
                     SwPageFrm* pStartPage = bCheckPageDescOfNextPage ?
                                             pNewPage :
-                                            (SwPageFrm*)pNewPage->GetNext();
+                                            static_cast<SwPageFrm*>(pNewPage->GetNext());
                     SwFrm::CheckPageDescs( pStartPage, false);
                 }
                 else if ( m_rThis.GetAttrSet()->GetPageDesc().GetPageDesc() )
@@ -2498,22 +2498,22 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
 SwFlowFrm *SwFlowFrm::CastFlowFrm( SwFrm *pFrm )
 {
     if ( pFrm->IsCntntFrm() )
-        return (SwCntntFrm*)pFrm;
+        return static_cast<SwCntntFrm*>(pFrm);
     if ( pFrm->IsTabFrm() )
-        return (SwTabFrm*)pFrm;
+        return static_cast<SwTabFrm*>(pFrm);
     if ( pFrm->IsSctFrm() )
-        return (SwSectionFrm*)pFrm;
+        return static_cast<SwSectionFrm*>(pFrm);
     return 0;
 }
 
 const SwFlowFrm *SwFlowFrm::CastFlowFrm( const SwFrm *pFrm )
 {
     if ( pFrm->IsCntntFrm() )
-        return (SwCntntFrm*)pFrm;
+        return static_cast<const SwCntntFrm*>(pFrm);
     if ( pFrm->IsTabFrm() )
-        return (SwTabFrm*)pFrm;
+        return static_cast<const SwTabFrm*>(pFrm);
     if ( pFrm->IsSctFrm() )
-        return (SwSectionFrm*)pFrm;
+        return static_cast<const SwSectionFrm*>(pFrm);
     return 0;
 }
 

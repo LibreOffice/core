@@ -59,12 +59,12 @@ void SwFEShell::EndAllActionAndCall()
     do {
         if( pTmp->IsA( TYPE(SwCrsrShell) ) )
         {
-            ((SwFEShell*)pTmp)->EndAction();
-            ((SwFEShell*)pTmp)->CallChgLnk();
+            static_cast<SwFEShell*>(pTmp)->EndAction();
+            static_cast<SwFEShell*>(pTmp)->CallChgLnk();
         }
         else
             pTmp->EndAction();
-    } while( this != ( pTmp = (SwViewShell*)pTmp->GetNext() ));
+    } while( this != ( pTmp = static_cast<SwViewShell*>(pTmp->GetNext()) ));
 }
 
 // Determine the Cntnt's nearest to the point
@@ -162,7 +162,7 @@ sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
     while ( pPage && !pPage->Frm().IsInside( rPoint ) )
         pPage = pPage->GetNext();
     if ( pPage )
-        return ((const SwPageFrm*)pPage)->GetPhyPageNum();
+        return static_cast<const SwPageFrm*>(pPage)->GetPhyPageNum();
     else
         return 0;
 }
@@ -187,15 +187,15 @@ bool SwFEShell::GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum,
     else                                // first visible page
     {
         pPage = Imp()->GetFirstVisPage();
-        if ( pPage && ((SwPageFrm*)pPage)->IsEmptyPage() )
+        if ( pPage && static_cast<const SwPageFrm*>(pPage)->IsEmptyPage() )
             pPage = pPage->GetNext();
     }
 
     if( pPage )
     {
-        rPhyNum  = ((const SwPageFrm*)pPage)->GetPhyPageNum();
-        rVirtNum = ((const SwPageFrm*)pPage)->GetVirtPageNum();
-        const SvxNumberType& rNum = ((const SwPageFrm*)pPage)->GetPageDesc()->GetNumType();
+        rPhyNum  = static_cast<const SwPageFrm*>(pPage)->GetPhyPageNum();
+        rVirtNum = static_cast<const SwPageFrm*>(pPage)->GetVirtPageNum();
+        const SvxNumberType& rNum = static_cast<const SwPageFrm*>(pPage)->GetPageDesc()->GetNumType();
         rDisplay = rNum.GetNumStr( rVirtNum );
     }
 
@@ -239,7 +239,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
                                     nReturn |= FRMTYPE_COLUMN;
                                 break;
             case FRM_PAGE:      nReturn |= FRMTYPE_PAGE;
-                                if( ((SwPageFrm*)pFrm)->IsFtnPage() )
+                                if( static_cast<const SwPageFrm*>(pFrm)->IsFtnPage() )
                                     nReturn |= FRMTYPE_FTNPAGE;
                                 break;
             case FRM_HEADER:    nReturn |= FRMTYPE_HEADER;      break;
@@ -248,13 +248,13 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
                                     nReturn |= FRMTYPE_BODY;
                                 break;
             case FRM_FTN:       nReturn |= FRMTYPE_FOOTNOTE;    break;
-            case FRM_FLY:       if( ((SwFlyFrm*)pFrm)->IsFlyLayFrm() )
+            case FRM_FLY:       if( static_cast<const SwFlyFrm*>(pFrm)->IsFlyLayFrm() )
                                     nReturn |= FRMTYPE_FLY_FREE;
-                                else if ( ((SwFlyFrm*)pFrm)->IsFlyAtCntFrm() )
+                                else if ( static_cast<const SwFlyFrm*>(pFrm)->IsFlyAtCntFrm() )
                                     nReturn |= FRMTYPE_FLY_ATCNT;
                                 else
                                 {
-                                    OSL_ENSURE( ((SwFlyFrm*)pFrm)->IsFlyInCntFrm(),
+                                    OSL_ENSURE( static_cast<const SwFlyFrm*>(pFrm)->IsFlyInCntFrm(),
                                             "New frametype?" );
                                     nReturn |= FRMTYPE_FLY_INCNT;
                                 }
@@ -268,7 +268,7 @@ sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, bool bStopAtFly ) const
             default:            /* do nothing */                break;
         }
         if ( pFrm->IsFlyFrm() )
-            pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
+            pFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm();
         else
             pFrm = pFrm->GetUpper();
     }
@@ -361,7 +361,7 @@ void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
                 break;
             }
         }
-        pPage = (SwPageFrm*)pPage->GetPrev();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetPrev());
     }
 }
 
@@ -379,7 +379,7 @@ sal_uInt16 SwFEShell::GetPageOffset() const
             if ( oNumOffset )
                 return oNumOffset.get();
         }
-        pPage = (SwPageFrm*)pPage->GetPrev();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetPrev());
     }
     return 0;
 }
@@ -565,7 +565,7 @@ sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
                 {
                     if( ( FRM_PAGE | FRM_FLY | FRM_SECTION ) & pFrm->GetType() )
                     {
-                        pPara->pFrmFmt = ((SwLayoutFrm*)pFrm)->GetFmt();
+                        pPara->pFrmFmt = static_cast<const SwLayoutFrm*>(pFrm)->GetFmt();
                         pPara->pPrtRect = &pFrm->Prt();
                         pPara->pFrmRect = &pFrm->Frm();
                         break;
@@ -1002,7 +1002,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         else
         {
             if( _opRef && pFly && pFly->IsFlyInCntFrm() )
-                *_opRef = ( (SwFlyInCntFrm*)pFly )->GetRefPoint();
+                *_opRef = static_cast<const SwFlyInCntFrm*>( pFly )->GetRefPoint();
 
             _orRect = pUpper->Frm();
             if( !pUpper->IsBodyFrm() )
@@ -1026,7 +1026,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
         }
 
         const SwTwips nBaseOfstForFly = ( pFrm->IsTxtFrm() && pFly ) ?
-                                        ((SwTxtFrm*)pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
+                                        static_cast<const SwTxtFrm*>(pFrm)->GetBaseOfstForFly( !bWrapThrough ) :
                                          0;
         if( bVert || bVertL2R )
         {

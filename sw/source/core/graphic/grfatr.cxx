@@ -56,7 +56,7 @@ sal_uInt16 SwMirrorGrf::GetValueCount() const
 bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
 {
     return SfxEnumItem::operator==(rItem) &&
-            ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
+            static_cast<const SwMirrorGrf&>(rItem).IsGrfToggle() == IsGrfToggle();
 }
 
 static bool lcl_IsHoriOnEvenPages(int nEnum, bool bToggle)
@@ -168,7 +168,7 @@ SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
 bool SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxUInt16Item::operator==( rCmp ) &&
-        GetUnrotatedSize() == ((SwRotationGrf&)rCmp).GetUnrotatedSize();
+        GetUnrotatedSize() == static_cast<const SwRotationGrf&>(rCmp).GetUnrotatedSize();
 }
 
 bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
@@ -232,7 +232,7 @@ SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
 bool SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 {
     return SfxPoolItem::operator==( rCmp ) &&
-        nValue == ((SwGammaGrf&)rCmp).GetValue();
+        nValue == static_cast<const SwGammaGrf&>(rCmp).GetValue();
 }
 
 bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const

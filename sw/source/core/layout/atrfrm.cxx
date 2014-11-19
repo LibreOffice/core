@@ -148,9 +148,9 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 while ( aIdx < nEnd )
                 {
                     if ( pNode->IsCntntNode() &&
-                         ((SwCntntNode*)pNode)->GetDepends() )
+                         static_cast<SwCntntNode*>(pNode)->GetDepends() )
                     {
-                        SwCrsrShell *pShell = SwIterator<SwCrsrShell,SwCntntNode>::FirstElement( *(SwCntntNode*)pNode );
+                        SwCrsrShell *pShell = SwIterator<SwCrsrShell,SwCntntNode>::FirstElement( *static_cast<SwCntntNode*>(pNode) );
                         if( pShell )
                         {
                             pShell->ParkCrsr( aIdx );
@@ -199,13 +199,13 @@ SwFmtFrmSize& SwFmtFrmSize::operator=( const SwFmtFrmSize& rCpy )
 bool SwFmtFrmSize::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return( m_eFrmHeightType  == ((SwFmtFrmSize&)rAttr).m_eFrmHeightType &&
-            m_eFrmWidthType  == ((SwFmtFrmSize&)rAttr).m_eFrmWidthType &&
-            m_aSize           == ((SwFmtFrmSize&)rAttr).GetSize()&&
-            m_nWidthPercent   == ((SwFmtFrmSize&)rAttr).GetWidthPercent() &&
-            m_eWidthPercentRelation == ((SwFmtFrmSize&)rAttr).GetWidthPercentRelation() &&
-            m_nHeightPercent  == ((SwFmtFrmSize&)rAttr).GetHeightPercent() &&
-            m_eHeightPercentRelation == ((SwFmtFrmSize&)rAttr).GetHeightPercentRelation() );
+    return( m_eFrmHeightType  == static_cast<const SwFmtFrmSize&>(rAttr).m_eFrmHeightType &&
+            m_eFrmWidthType  == static_cast<const SwFmtFrmSize&>(rAttr).m_eFrmWidthType &&
+            m_aSize           == static_cast<const SwFmtFrmSize&>(rAttr).GetSize()&&
+            m_nWidthPercent   == static_cast<const SwFmtFrmSize&>(rAttr).GetWidthPercent() &&
+            m_eWidthPercentRelation == static_cast<const SwFmtFrmSize&>(rAttr).GetWidthPercentRelation() &&
+            m_nHeightPercent  == static_cast<const SwFmtFrmSize&>(rAttr).GetHeightPercent() &&
+            m_eHeightPercentRelation == static_cast<const SwFmtFrmSize&>(rAttr).GetHeightPercentRelation() );
 }
 
 SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
@@ -465,8 +465,8 @@ SwFmtHeader::SwFmtHeader( bool bOn )
 bool SwFmtHeader::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( GetRegisteredIn() == ((SwFmtHeader&)rAttr).GetRegisteredIn() &&
-             bActive == ((SwFmtHeader&)rAttr).IsActive() );
+    return ( GetRegisteredIn() == static_cast<const SwFmtHeader&>(rAttr).GetRegisteredIn() &&
+             bActive == static_cast<const SwFmtHeader&>(rAttr).IsActive() );
 }
 
 SfxPoolItem*  SwFmtHeader::Clone( SfxItemPool* ) const
@@ -515,8 +515,8 @@ void SwFmtFooter::RegisterToFormat( SwFmt& rFmt )
 bool SwFmtFooter::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( GetRegisteredIn() == ((SwFmtFooter&)rAttr).GetRegisteredIn() &&
-             bActive == ((SwFmtFooter&)rAttr).IsActive() );
+    return ( GetRegisteredIn() == static_cast<const SwFmtFooter&>(rAttr).GetRegisteredIn() &&
+             bActive == static_cast<const SwFmtFooter&>(rAttr).IsActive() );
 }
 
 SfxPoolItem*  SwFmtFooter::Clone( SfxItemPool* ) const
@@ -552,10 +552,10 @@ void SwFmtCntnt::SetNewCntntIdx( const SwNodeIndex *pIdx )
 bool SwFmtCntnt::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    if( (bool)pStartNode != (bool)((SwFmtCntnt&)rAttr).pStartNode )
+    if( (bool)pStartNode != (bool)static_cast<const SwFmtCntnt&>(rAttr).pStartNode )
         return false;
     if( pStartNode )
-        return ( *pStartNode == *((SwFmtCntnt&)rAttr).GetCntntIdx() );
+        return ( *pStartNode == *static_cast<const SwFmtCntnt&>(rAttr).GetCntntIdx() );
     return true;
 }
 
@@ -603,9 +603,9 @@ bool SwFmtPageDesc::KnowsPageDesc() const
 bool SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return  ( pDefinedIn == ((SwFmtPageDesc&)rAttr).pDefinedIn ) &&
-            ( oNumOffset == ((SwFmtPageDesc&)rAttr).oNumOffset ) &&
-            ( GetPageDesc() == ((SwFmtPageDesc&)rAttr).GetPageDesc() );
+    return  ( pDefinedIn == static_cast<const SwFmtPageDesc&>(rAttr).pDefinedIn ) &&
+            ( oNumOffset == static_cast<const SwFmtPageDesc&>(rAttr).oNumOffset ) &&
+            ( GetPageDesc() == static_cast<const SwFmtPageDesc&>(rAttr).GetPageDesc() );
 }
 
 SfxPoolItem*  SwFmtPageDesc::Clone( SfxItemPool* ) const
@@ -625,9 +625,9 @@ void SwFmtPageDesc::SwClientNotify( const SwModify&, const SfxHint& rHint )
         if ( pMod )
         {
             if( pMod->ISA( SwCntntNode ) )
-                ((SwCntntNode*)pMod)->SetAttr( aDfltDesc );
+                const_cast<SwCntntNode*>(static_cast<const SwCntntNode*>(pMod))->SetAttr( aDfltDesc );
             else if( pMod->ISA( SwFmt ))
-                ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
+                const_cast<SwFmt*>(static_cast<const SwFmt*>(pMod))->SetFmtAttr( aDfltDesc );
             else
             {
                 OSL_FAIL( "What kind of SwModify is this?" );
@@ -830,7 +830,7 @@ SwFmtCol::SwFmtCol()
 bool SwFmtCol::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    const SwFmtCol &rCmp = (const SwFmtCol&)rAttr;
+    const SwFmtCol &rCmp = static_cast<const SwFmtCol&>(rAttr);
     if( !(m_eLineStyle        == rCmp.m_eLineStyle  &&
           m_nLineWidth        == rCmp.m_nLineWidth  &&
           m_aLineColor        == rCmp.m_aLineColor  &&
@@ -1116,10 +1116,10 @@ SwFmtSurround::SwFmtSurround( const SwFmtSurround &rCpy ) :
 bool SwFmtSurround::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( GetValue() == ((SwFmtSurround&)rAttr).GetValue() &&
-             bAnchorOnly== ((SwFmtSurround&)rAttr).bAnchorOnly &&
-             bContour== ((SwFmtSurround&)rAttr).bContour &&
-             bOutside== ((SwFmtSurround&)rAttr).bOutside );
+    return ( GetValue() == static_cast<const SwFmtSurround&>(rAttr).GetValue() &&
+             bAnchorOnly== static_cast<const SwFmtSurround&>(rAttr).bAnchorOnly &&
+             bContour== static_cast<const SwFmtSurround&>(rAttr).bContour &&
+             bOutside== static_cast<const SwFmtSurround&>(rAttr).bOutside );
 }
 
 SfxPoolItem*  SwFmtSurround::Clone( SfxItemPool* ) const
@@ -1274,9 +1274,9 @@ SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, sal_Int16 eVert,
 bool SwFmtVertOrient::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( m_nYPos     == ((SwFmtVertOrient&)rAttr).m_nYPos &&
-             m_eOrient   == ((SwFmtVertOrient&)rAttr).m_eOrient &&
-             m_eRelation == ((SwFmtVertOrient&)rAttr).m_eRelation );
+    return ( m_nYPos     == static_cast<const SwFmtVertOrient&>(rAttr).m_nYPos &&
+             m_eOrient   == static_cast<const SwFmtVertOrient&>(rAttr).m_eOrient &&
+             m_eRelation == static_cast<const SwFmtVertOrient&>(rAttr).m_eRelation );
 }
 
 SfxPoolItem*  SwFmtVertOrient::Clone( SfxItemPool* ) const
@@ -1357,10 +1357,10 @@ SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
 bool SwFmtHoriOrient::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( nXPos == ((SwFmtHoriOrient&)rAttr).nXPos &&
-             eOrient == ((SwFmtHoriOrient&)rAttr).eOrient &&
-             eRelation == ((SwFmtHoriOrient&)rAttr).eRelation &&
-             bPosToggle == ((SwFmtHoriOrient&)rAttr).bPosToggle );
+    return ( nXPos == static_cast<const SwFmtHoriOrient&>(rAttr).nXPos &&
+             eOrient == static_cast<const SwFmtHoriOrient&>(rAttr).eOrient &&
+             eRelation == static_cast<const SwFmtHoriOrient&>(rAttr).eRelation &&
+             bPosToggle == static_cast<const SwFmtHoriOrient&>(rAttr).bPosToggle );
 }
 
 SfxPoolItem*  SwFmtHoriOrient::Clone( SfxItemPool* ) const
@@ -1665,7 +1665,7 @@ SwFmtURL::~SwFmtURL()
 bool SwFmtURL::operator==( const SfxPoolItem &rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    const SwFmtURL &rCmp = (SwFmtURL&)rAttr;
+    const SwFmtURL &rCmp = static_cast<const SwFmtURL&>(rAttr);
     bool bRet = bIsServerMap     == rCmp.IsServerMap() &&
                 sURL             == rCmp.GetURL() &&
                 sTargetFrameName == rCmp.GetTargetFrameName() &&
@@ -1835,7 +1835,7 @@ SwFmtFtnEndAtTxtEnd& SwFmtFtnEndAtTxtEnd::operator=(
 
 bool SwFmtFtnEndAtTxtEnd::operator==( const SfxPoolItem& rItem ) const
 {
-    const SwFmtFtnEndAtTxtEnd& rAttr = (SwFmtFtnEndAtTxtEnd&)rItem;
+    const SwFmtFtnEndAtTxtEnd& rAttr = static_cast<const SwFmtFtnEndAtTxtEnd&>(rItem);
     return SfxEnumItem::operator==( rAttr ) &&
             aFmt.GetNumberingType() == rAttr.aFmt.GetNumberingType() &&
             nOffset == rAttr.nOffset &&
@@ -1972,8 +1972,8 @@ bool SwFmtChain::operator==( const SfxPoolItem &rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return GetPrev() == ((SwFmtChain&)rAttr).GetPrev() &&
-           GetNext() == ((SwFmtChain&)rAttr).GetNext();
+    return GetPrev() == static_cast<const SwFmtChain&>(rAttr).GetPrev() &&
+           GetNext() == static_cast<const SwFmtChain&>(rAttr).GetNext();
 }
 
 SwFmtChain::SwFmtChain( const SwFmtChain &rCpy ) :
@@ -2046,8 +2046,8 @@ bool SwFmtLineNumber::operator==( const SfxPoolItem &rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return nStartValue  == ((SwFmtLineNumber&)rAttr).GetStartValue() &&
-           bCountLines  == ((SwFmtLineNumber&)rAttr).IsCount();
+    return nStartValue  == static_cast<const SwFmtLineNumber&>(rAttr).GetStartValue() &&
+           bCountLines  == static_cast<const SwFmtLineNumber&>(rAttr).IsCount();
 }
 
 SfxPoolItem* SwFmtLineNumber::Clone( SfxItemPool* ) const
@@ -2450,15 +2450,15 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if( RES_ATTRSET_CHG == nWhich )
     {
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
             RES_HEADER, false, (const SfxPoolItem**)&pH );
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
             RES_FOOTER, false, (const SfxPoolItem**)&pF );
 
         //UUUU reset fill information
         if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
         {
-            SfxItemIter aIter(*((SwAttrSetChg*)pNew)->GetChgSet());
+            SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNew)->GetChgSet());
             bool bReset(false);
 
             for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
@@ -2481,9 +2481,9 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
     }
     else if( RES_HEADER == nWhich )
-        pH = (SwFmtHeader*)pNew;
+        pH = const_cast<SwFmtHeader*>(static_cast<const SwFmtHeader*>(pNew));
     else if( RES_FOOTER == nWhich )
-        pF = (SwFmtFooter*)pNew;
+        pF = const_cast<SwFmtFooter*>(static_cast<const SwFmtFooter*>(pNew));
 
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
     {   //If he doesn't have one, I'll add one
@@ -2560,7 +2560,7 @@ SwRect SwFrmFmt::FindLayoutRect( const bool bPrtArea, const Point* pPoint,
     if( ISA( SwSectionFmt ) )
     {
         // get the Frame using Node2Layout
-        SwSectionNode* pSectNd = ((SwSectionFmt*)this)->GetSectionNode();
+        const SwSectionNode* pSectNd = static_cast<const SwSectionFmt*>(this)->GetSectionNode();
         if( pSectNd )
         {
             SwNode2Layout aTmp( *pSectNd, pSectNd->GetIndex() - 1 );
@@ -2619,8 +2619,8 @@ SdrObject* SwFrmFmt::FindRealSdrObject()
     if( RES_FLYFRMFMT == Which() )
     {
         Point aNullPt;
-        SwFlyFrm* pFly = (SwFlyFrm*)::GetFrmOfModify( 0, *this, FRM_FLY,
-                                                    &aNullPt, 0, false );
+        SwFlyFrm* pFly = static_cast<SwFlyFrm*>(::GetFrmOfModify( 0, *this, FRM_FLY,
+                                                    &aNullPt, 0, false ));
         return pFly ? pFly->GetVirtDrawObj() : 0;
     }
     return FindSdrObject();
@@ -2796,7 +2796,7 @@ void SwFlyFrmFmt::MakeFrms()
     case FLY_AT_PAGE:
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
-            SwPageFrm *pPage = (SwPageFrm*)GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->Lower();
+            SwPageFrm *pPage = static_cast<SwPageFrm*>(GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->Lower());
             if( nPgNum == 0 && aAnchorAttr.GetCntntAnchor() )
             {
                 SwCntntNode *pCNd = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
@@ -2822,7 +2822,7 @@ void SwFlyFrmFmt::MakeFrms()
                     pPage->PlaceFly( 0, this );
                     break;
                 }
-                pPage = (SwPageFrm*)pPage->GetNext();
+                pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             }
         }
         break;
@@ -2836,7 +2836,7 @@ void SwFlyFrmFmt::MakeFrms()
         for( SwFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
             bool bAdd = !pFrm->IsCntntFrm() ||
-                            !((SwCntntFrm*)pFrm)->IsFollow();
+                            !static_cast<SwCntntFrm*>(pFrm)->IsFollow();
 
             if ( FLY_AT_FLY == aAnchorAttr.GetAnchorId() && !pFrm->IsFlyFrm() )
             {
@@ -2904,8 +2904,8 @@ void SwFlyFrmFmt::MakeFrms()
 
 SwFlyFrm* SwFlyFrmFmt::GetFrm( const Point* pPoint, const bool bCalcFrm ) const
 {
-    return (SwFlyFrm*)::GetFrmOfModify( 0, *(SwModify*)this, FRM_FLY,
-                                            pPoint, 0, bCalcFrm );
+    return static_cast<SwFlyFrm*>(::GetFrmOfModify( 0, *(SwModify*)this, FRM_FLY,
+                                            pPoint, 0, bCalcFrm ));
 }
 
 SwAnchoredObject* SwFlyFrmFmt::GetAnchoredObj( const Point* pPoint, const bool bCalcFrm ) const
@@ -2928,7 +2928,7 @@ bool SwFlyFrmFmt::GetInfo( SfxPoolItem& rInfo ) const
     {
     case RES_CONTENT_VISIBLE:
         {
-            ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *this );
+            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *this );
         }
         bRet = false;
         break;
@@ -3159,14 +3159,14 @@ SwDrawFrmFmt::~SwDrawFrmFmt()
 
 void SwDrawFrmFmt::MakeFrms()
 {
-    SwDrawContact *pContact = (SwDrawContact*)FindContactObj();
+    SwDrawContact *pContact = static_cast<SwDrawContact*>(FindContactObj());
     if ( pContact )
          pContact->ConnectToLayout();
 }
 
 void SwDrawFrmFmt::DelFrms()
 {
-    SwDrawContact *pContact = (SwDrawContact *)FindContactObj();
+    SwDrawContact *pContact = static_cast<SwDrawContact *>(FindContactObj());
     if ( pContact ) //for the reader and other unpredictable things.
         pContact->DisconnectFromLayout();
 }
@@ -3247,12 +3247,12 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
     //Original size for OLE and graphic is TwipSize, otherwise the size of
     //FrmFmt of the Fly.
     const SwFrm *pRef;
-    SwNoTxtNode *pNd = 0;
+    const SwNoTxtNode *pNd = 0;
     Size aOrigSz;
     if( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
     {
         pRef = pFly->Lower();
-        pNd = ((SwCntntFrm*)pRef)->GetNode()->GetNoTxtNode();
+        pNd = static_cast<const SwCntntFrm*>(pRef)->GetNode()->GetNoTxtNode();
         aOrigSz = pNd->GetTwipSize();
     }
     else

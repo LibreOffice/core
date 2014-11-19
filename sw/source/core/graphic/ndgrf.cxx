@@ -131,7 +131,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
             FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::NO_DECODE ) ))
         {
             // file exists, so create connection without an update
-            ((SwBaseLink*)&refLink)->Connect();
+            static_cast<SwBaseLink*>(&refLink)->Connect();
         }
     }
 }
@@ -172,7 +172,7 @@ bool SwGrfNode::ReRead(
                 if( nNewType != refLink->GetObjType() )
                 {
                     refLink->Disconnect();
-                    ((SwBaseLink*)&refLink)->SetObjType( nNewType );
+                    static_cast<SwBaseLink*>(&refLink)->SetObjType( nNewType );
                 }
             }
 
@@ -214,7 +214,7 @@ bool SwGrfNode::ReRead(
                 else if ( bNewGrf )
                 {
                     //TODO refLink->setInputStream(getInputStream());
-                    ((SwBaseLink*)&refLink)->SwapIn();
+                    static_cast<SwBaseLink*>(&refLink)->SwapIn();
                 }
             }
             onGraphicChanged();
@@ -249,7 +249,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic
-                ((SwBaseLink*)&refLink)->Connect();
+                static_cast<SwBaseLink*>(&refLink)->Connect();
             }
             else if( pGrfObj )
             {
@@ -258,7 +258,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic
-                ((SwBaseLink*)&refLink)->Connect();
+                static_cast<SwBaseLink*>(&refLink)->Connect();
             }
             else
             {
@@ -268,7 +268,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 if ( bNewGrf )
                 {
-                    ((SwBaseLink*)&refLink)->SwapIn();
+                    static_cast<SwBaseLink*>(&refLink)->SwapIn();
                 }
             }
         }
@@ -520,7 +520,7 @@ bool SwGrfNode::SwapIn( bool bWaitForData )
 
     bool bRet = false;
     bInSwapIn = true;
-    SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
+    SwBaseLink* pLink = static_cast<SwBaseLink*>((::sfx2::SvBaseLink*) refLink);
 
     if( pLink )
     {
@@ -737,7 +737,7 @@ void SwGrfNode::ReleaseLink()
 
         {
             bInSwapIn = true;
-            SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
+            SwBaseLink* pLink = static_cast<SwBaseLink*>((::sfx2::SvBaseLink*) refLink);
             pLink->SwapIn( true, true );
             bInSwapIn = false;
         }
@@ -986,7 +986,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
         pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
     }
 
-    return (sal_IntPtr)pRet;
+    return reinterpret_cast<sal_IntPtr>(pRet);
 }
 
 /// delete all QuickDraw-Bitmaps in the specified document
@@ -1005,7 +1005,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                 rLnkMgr.GetDisplayNames( pLnk, 0, &sFileNm ) &&
                 pLnk->ISA( SwBaseLink ) && 0 != ( pGrfNd =
-                ((SwBaseLink*)pLnk)->GetCntntNode()->GetGrfNode()) )
+                static_cast<SwBaseLink*>(pLnk)->GetCntntNode()->GetGrfNode()) )
             {
                 pGrfNd->ReleaseGraphicFromCache();
             }
@@ -1096,14 +1096,14 @@ bool SwGrfNode::IsSelected() const
         const SwNode* pN = this;
         const SwViewShell* pV = pESh;
         do {
-            if( pV->ISA( SwEditShell ) && pN == &((SwCrsrShell*)pV)
+            if( pV->ISA( SwEditShell ) && pN == &static_cast<const SwCrsrShell*>(pV)
                                 ->GetCrsr()->GetPoint()->nNode.GetNode() )
             {
                 bRet = true;
                 break;
             }
         }
-        while( pESh != ( pV = (SwViewShell*)pV->GetNext() ));
+        while( pESh != ( pV = static_cast<SwViewShell*>(pV->GetNext()) ));
     }
     return bRet;
 }

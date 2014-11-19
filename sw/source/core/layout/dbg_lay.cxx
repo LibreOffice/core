@@ -115,7 +115,7 @@ static sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
         return pFrm->GetFrmId();
 #endif
     if( pFrm && pFrm->IsTxtFrm() )
-        return ((SwTxtFrm*)pFrm)->GetTxtNode()->GetIndex();
+        return static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetIndex();
     return 0;
 }
 

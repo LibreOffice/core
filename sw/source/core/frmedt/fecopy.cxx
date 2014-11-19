@@ -104,7 +104,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
     // also delete surrounding FlyFrames if any
     for( sal_uInt16 n = 0; n < pClpDoc->GetSpzFrmFmts()->size(); ++n )
     {
-        SwFlyFrmFmt* pFly = (SwFlyFrmFmt*)(*pClpDoc->GetSpzFrmFmts())[n];
+        SwFlyFrmFmt* pFly = static_cast<SwFlyFrmFmt*>((*pClpDoc->GetSpzFrmFmts())[n]);
         pClpDoc->getIDocumentLayoutAccess().DelLayoutFmt( pFly );
     }
     pClpDoc->GetDocumentFieldsManager().GCFieldTypes();        // delete the FieldTypes
@@ -199,7 +199,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
             }
             else
             {
-                SwDrawContact *pContact = (SwDrawContact*)GetUserCall( pObj );
+                SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
                 SwFrmFmt *pFmt = pContact->GetFmt();
                 SwFmtAnchor aAnchor( pFmt->GetAnchor() );
                 if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
@@ -232,7 +232,7 @@ static const Point &lcl_FindBasePos( const SwFrm *pFrm, const Point &rPt )
     while ( pF && !pF->Frm().IsInside( rPt ) )
     {
         if ( pF->IsCntntFrm() )
-            pF = ((SwCntntFrm*)pF)->GetFollow();
+            pF = static_cast<const SwCntntFrm*>(pF)->GetFollow();
         else
             pF = 0;
     }
@@ -301,7 +301,7 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
     {
         SdrObject *pObj = aMrkList.GetMark( i )->GetMarkedSdrObj();
 
-        SwDrawContact *pContact = (SwDrawContact*)GetUserCall( pObj );
+        SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
         SwFrmFmt *pFmt = pContact->GetFmt();
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
 
@@ -549,7 +549,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             // only select if it can be shifted/copied in the same shell
             if( bSelectInsert )
             {
-                SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aPt, false );
+                SwFlyFrm* pFlyFrm = static_cast<SwFlyFrmFmt*>(pFlyFmt)->GetFrm( &aPt, false );
                 if( pFlyFrm )
                 {
                     //JP 12.05.98: should this be in SelectFlyFrm???
@@ -976,7 +976,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                         if( RES_FLYFRMFMT == pNew->Which() )
                         {
                             const Point aPt( GetCrsrDocPos() );
-                            SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pNew)->
+                            SwFlyFrm* pFlyFrm = static_cast<SwFlyFrmFmt*>(pNew)->
                                                         GetFrm( &aPt, false );
                             if( pFlyFrm )
                                 SelectFlyFrm( *pFlyFrm, true );
@@ -1371,7 +1371,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                     pFmt = FindFrmFmt( pOldObj );
 
                     Point aNullPt;
-                    SwFlyFrm* pFlyFrm = ((SwFlyFrmFmt*)pFmt)->GetFrm( &aNullPt );
+                    SwFlyFrm* pFlyFrm = static_cast<const SwFlyFrmFmt*>(pFmt)->GetFrm( &aNullPt );
                     pAnchor = pFlyFrm ? pFlyFrm->GetAnchorFrm() : NULL;
 
                     if (!pAnchor || pAnchor->FindFooterOrHeader())
@@ -1411,9 +1411,9 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                     aFrmSet.Set( pFmt->GetAttrSet() );
 
                     Point aNullPt;
-                    if( pAnchor->IsTxtFrm() && ((SwTxtFrm*)pAnchor)->IsFollow() )
+                    if( pAnchor->IsTxtFrm() && static_cast<const SwTxtFrm*>(pAnchor)->IsFollow() )
                     {
-                        const SwTxtFrm* pTmp = (SwTxtFrm*)pAnchor;
+                        const SwTxtFrm* pTmp = static_cast<const SwTxtFrm*>(pAnchor);
                         do {
                             pTmp = pTmp->FindMaster();
                             OSL_ENSURE( pTmp, "Where's my Master?" );
@@ -1421,7 +1421,7 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                         pAnchor = pTmp;
                     }
                     if( pOldObj->ISA( SdrCaptionObj ))
-                        aNullPt = ((SdrCaptionObj*)pOldObj)->GetTailPos();
+                        aNullPt = static_cast<SdrCaptionObj*>(pOldObj)->GetTailPos();
                     else
                         aNullPt = aOldObjRect.TopLeft();
 
@@ -1564,7 +1564,7 @@ bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
 
         if(dynamic_cast< SdrGrafObj* >(pObj))
         {
-            SdrGrafObj* pNewGrafObj = (SdrGrafObj*)pObj->Clone();
+            SdrGrafObj* pNewGrafObj = static_cast<SdrGrafObj*>(pObj->Clone());
 
             pNewGrafObj->SetGraphic(rGrf);
 

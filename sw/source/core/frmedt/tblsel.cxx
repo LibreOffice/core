@@ -285,7 +285,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             // Skip any repeated headlines in the follow:
             const SwLayoutFrm* pRow = pTable->IsFollow() ?
                                       pTable->GetFirstNonHeadlineRow() :
-                                     (const SwLayoutFrm*)pTable->Lower();
+                                      static_cast<const SwLayoutFrm*>(pTable->Lower());
 
             while( pRow && bTblIsValid )
             {
@@ -311,7 +311,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                         if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                         {
                             SwTableBox* pBox = (SwTableBox*)
-                                ((SwCellFrm*)pCell)->GetTabBox();
+                                static_cast<const SwCellFrm*>(pCell)->GetTabBox();
                             // check for cell protection??
                             if( !bChkProtected ||
                                 !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
@@ -360,7 +360,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                         }
                         if ( pCell->GetNext() )
                         {
-                            pCell = (const SwLayoutFrm*)pCell->GetNext();
+                            pCell = static_cast<const SwLayoutFrm*>(pCell->GetNext());
                             if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
@@ -368,7 +368,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
                             pCell = ::lcl_FindNextCellFrm( pCell );
                     }
                 }
-                pRow = (const SwLayoutFrm*)pRow->GetNext();
+                pRow = static_cast<const SwLayoutFrm*>(pRow->GetNext());
             }
         }
 
@@ -488,7 +488,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             // Skip any repeated headlines in the follow:
             const SwLayoutFrm* pRow = pTable->IsFollow() ?
                                       pTable->GetFirstNonHeadlineRow() :
-                                      (const SwLayoutFrm*)pTable->Lower();
+                                      static_cast<const SwLayoutFrm*>(pTable->Lower());
 
             while( pRow && bTblIsValid && bValidChartSel )
             {
@@ -544,7 +544,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                                 nFrmBottom      <= nUnionBottom+ nYFuzzy )
 
                                 aCellFrms.push_back(
-                                        _Sort_CellFrm( *(SwCellFrm*)pCell) );
+                                        _Sort_CellFrm( *static_cast<const SwCellFrm*>(pCell)) );
                             else
                             {
                                 bValidChartSel = false;
@@ -553,7 +553,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                         }
                         if ( pCell->GetNext() )
                         {
-                            pCell = (const SwLayoutFrm*)pCell->GetNext();
+                            pCell = static_cast<const SwLayoutFrm*>(pCell->GetNext());
                             if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
@@ -561,7 +561,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
                             pCell = ::lcl_FindNextCellFrm( pCell );
                     }
                 }
-                pRow = (const SwLayoutFrm*)pRow->GetNext();
+                pRow = static_cast<const SwLayoutFrm*>(pRow->GetNext());
             }
 
             if( !bValidChartSel )
@@ -702,7 +702,7 @@ bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
         // Skip any repeated headlines in the follow:
         const SwLayoutFrm* pRow = pTable->IsFollow() ?
                                   pTable->GetFirstNonHeadlineRow() :
-                                  (const SwLayoutFrm*)pTable->Lower();
+                                  static_cast<const SwLayoutFrm*>(pTable->Lower());
 
         while( pRow )
         {
@@ -730,11 +730,11 @@ bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 
                     OSL_ENSURE( pCell->IsCellFrm(), "Frame without cell" );
                     if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
-                        pUpperCell = (SwCellFrm*)pCell;
+                        pUpperCell = static_cast<const SwCellFrm*>(pCell);
 
                     if( pCell->GetNext() )
                     {
-                        pCell = (const SwLayoutFrm*)pCell->GetNext();
+                        pCell = static_cast<const SwLayoutFrm*>(pCell->GetNext());
                         if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
@@ -750,7 +750,7 @@ bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                 i = aUnions.size();
                 break;
             }
-            pRow = (const SwLayoutFrm*)pRow->GetNext();
+            pRow = static_cast<const SwLayoutFrm*>(pRow->GetNext());
         }
     }
 
@@ -771,7 +771,7 @@ bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
             // Skip any repeated headlines in the follow:
             const SwLayoutFrm* pRow = pTable->IsFollow() ?
                                       pTable->GetFirstNonHeadlineRow() :
-                                      (const SwLayoutFrm*)pTable->Lower();
+                                      static_cast<const SwLayoutFrm*>(pTable->Lower());
 
             while( pRow )
             {
@@ -799,12 +799,12 @@ bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                         OSL_ENSURE( pCell->IsCellFrm(), "Frame without cell" );
                         if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                         {
-                            SwCellFrm* pC = (SwCellFrm*)pCell;
+                            SwCellFrm* pC = const_cast<SwCellFrm*>(static_cast<const SwCellFrm*>(pCell));
                             rBoxes.push_back( pC );
                         }
                         if( pCell->GetNext() )
                         {
-                            pCell = (const SwLayoutFrm*)pCell->GetNext();
+                            pCell = static_cast<const SwLayoutFrm*>(pCell->GetNext());
                             if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
@@ -818,7 +818,7 @@ bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                     break;
                 }
 
-                pRow = (const SwLayoutFrm*)pRow->GetNext();
+                pRow = static_cast<const SwLayoutFrm*>(pRow->GetNext());
             }
         }
     }
@@ -852,13 +852,13 @@ static void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
                                 ->GetCntntNode();
     if( pCNd && pCNd->IsTxtNode() )
         pDoc->GetNodes().InsBoxen( pTblNd, pBox->GetUpper(),
-                (SwTableBoxFmt*)pBox->GetFrmFmt(),
-                ((SwTxtNode*)pCNd)->GetTxtColl(),
+                static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt()),
+                static_cast<SwTxtNode*>(pCNd)->GetTxtColl(),
                 pCNd->GetpSwAttrSet(),
                 nInsPos, nCnt );
     else
         pDoc->GetNodes().InsBoxen( pTblNd, pBox->GetUpper(),
-                (SwTableBoxFmt*)pBox->GetFrmFmt(),
+                static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt()),
                 (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl(), 0,
                 nInsPos, nCnt );
 }
@@ -945,7 +945,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
         // Skip any repeated headlines in the follow:
         const SwLayoutFrm* pRow = pTabFrm->IsFollow() ?
                                   pTabFrm->GetFirstNonHeadlineRow() :
-                                  (const SwLayoutFrm*)pTabFrm->Lower();
+                                  static_cast<const SwLayoutFrm*>(pTabFrm->Lower());
 
         while ( pRow )
         {
@@ -960,7 +960,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if( rUnion.Top() <= pCell->Frm().Top() &&
                         rUnion.Bottom() >= pCell->Frm().Bottom() )
                     {
-                        SwTableBox* pBox =(SwTableBox*)((SwCellFrm*)pCell)->GetTabBox();
+                        SwTableBox* pBox = const_cast<SwTableBox*>(static_cast<const SwCellFrm*>(pCell)->GetTabBox());
 
                         // only overlap to the right?
                         if( ( rUnion.Left() - COLFUZZY ) <= pCell->Frm().Left() &&
@@ -1031,7 +1031,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             if( SfxItemState::SET == pBox->GetFrmFmt()->GetAttrSet()
                                         .GetItemState( RES_BOX, false, &pItem ))
                             {
-                                SvxBoxItem aBox( *(SvxBoxItem*)pItem );
+                                SvxBoxItem aBox( *static_cast<const SvxBoxItem*>(pItem) );
                                 aBox.SetLine( 0, BOX_LINE_RIGHT );
                                 pBox->GetFrmFmt()->SetFmtAttr( aBox );
                             }
@@ -1099,7 +1099,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     }
                     if ( pCell->GetNext() )
                     {
-                        pCell = (const SwLayoutFrm*)pCell->GetNext();
+                        pCell = static_cast<const SwLayoutFrm*>(pCell->GetNext());
                         // --> Check if table cell is not empty
                         if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
@@ -1108,7 +1108,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                         pCell = ::lcl_FindNextCellFrm( pCell );
                 }
             }
-            pRow = (const SwLayoutFrm*)pRow->GetNext();
+            pRow = static_cast<const SwLayoutFrm*>(pRow->GetNext());
         }
     }
 
@@ -1506,7 +1506,7 @@ static SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
     {
         while ( pTmp->GetPrev() )
         {
-            pTmp = (SwLayoutFrm*)pTmp->GetPrev();
+            pTmp = static_cast<const SwLayoutFrm*>(pTmp->GetPrev());
             long nTmp = pTmp->GetFmt()->GetFrmSize().GetWidth();
             nRet += ( bRTL ? ( -1 ) : 1 ) * nTmp * nAct / nWish;
         }
@@ -1523,9 +1523,9 @@ static void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
 {
     // Put Start at beginning of a row.
     // Put End at the end of its row.
-    rpStart = (SwLayoutFrm*)rpStart->GetUpper()->Lower();
+    rpStart = static_cast<const SwLayoutFrm*>(rpStart->GetUpper()->Lower());
     while ( rpEnd->GetNext() )
-        rpEnd = (SwLayoutFrm*)rpEnd->GetNext();
+        rpEnd = static_cast<const SwLayoutFrm*>(rpEnd->GetNext());
 
     std::deque<const SwLayoutFrm *> aSttArr, aEndArr;
     const SwLayoutFrm *pTmp;
@@ -1558,18 +1558,18 @@ static void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
                 rpEnd = aEndArr[ n+1 ];
                 if( n )
                 {
-                    const SwCellFrm* pCellFrm = (SwCellFrm*)aSttArr[ n-1 ];
+                    const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>(aSttArr[ n-1 ]);
                     const SwTableLines& rLns = pCellFrm->
                                                 GetTabBox()->GetTabLines();
-                    if( rLns[ 0 ] == ((SwRowFrm*)aSttArr[ n ])->GetTabLine() &&
+                    if( rLns[ 0 ] == static_cast<const SwRowFrm*>(aSttArr[ n ])->GetTabLine() &&
                         rLns[ rLns.size() - 1 ] ==
-                                    ((SwRowFrm*)aEndArr[ n ])->GetTabLine() )
+                                    static_cast<const SwRowFrm*>(aEndArr[ n ])->GetTabLine() )
                     {
                         rpStart = rpEnd = pCellFrm;
                         while ( rpStart->GetPrev() )
-                            rpStart = (SwLayoutFrm*)rpStart->GetPrev();
+                            rpStart = static_cast<const SwLayoutFrm*>(rpStart->GetPrev());
                         while ( rpEnd->GetNext() )
-                            rpEnd = (SwLayoutFrm*)rpEnd->GetNext();
+                            rpEnd = static_cast<const SwLayoutFrm*>(rpEnd->GetNext());
                     }
                 }
             }
@@ -1581,9 +1581,9 @@ static void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
 
     // Beginning and end should not be in protected cells
     while ( rpStart->GetFmt()->GetProtect().IsCntntProtected() )
-        rpStart = (SwLayoutFrm*)rpStart->GetNext();
+        rpStart = static_cast<const SwLayoutFrm*>(rpStart->GetNext());
     while ( rpEnd->GetFmt()->GetProtect().IsCntntProtected() )
-        rpEnd = (SwLayoutFrm*)rpEnd->GetPrev();
+        rpEnd = static_cast<const SwLayoutFrm*>(rpEnd->GetPrev());
 }
 
 static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
@@ -1608,7 +1608,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     {
         const SwFrm *pTmp = pTab->FindPrev();
         OSL_ENSURE( pTmp->IsTabFrm(), "Predecessor of Follow is not Master." );
-        pTab = (const SwTabFrm*)pTmp;
+        pTab = static_cast<const SwTabFrm*>(pTmp);
     }
 
     SwTwips nSX  = 0;
@@ -1729,7 +1729,7 @@ static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         const SwTabFrm *pTmpTab = rpEnd->FindTabFrm();
         if ( !pTmpLeaf || !pTmpTab->IsAnLower( pTmpLeaf ) )
         {
-            pTmpTab = (const SwTabFrm*)pTmpTab->FindPrev();
+            pTmpTab = static_cast<const SwTabFrm*>(pTmpTab->FindPrev());
             OSL_ENSURE( pTmpTab->IsTabFrm(), "Predecessor of Follow not Master.");
             rpEnd = pTmpTab->FindLastCntnt()->GetUpper();
             while( !rpEnd->IsCellFrm() )
@@ -1868,10 +1868,10 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             // within the union and use their values for a new union
             const SwLayoutFrm* pRow = pTable->IsFollow() ?
                                       pTable->GetFirstNonHeadlineRow() :
-                                      (const SwLayoutFrm*)pTable->Lower();
+                                      static_cast<const SwLayoutFrm*>(pTable->Lower());
 
             while ( pRow && !pRow->Frm().IsOver( aUnion ) )
-                pRow = (SwLayoutFrm*)pRow->GetNext();
+                pRow = static_cast<const SwLayoutFrm*>(pRow->GetNext());
 
             // #i31976#
             // A follow flow row may contain emtpy cells. These are not
@@ -1899,7 +1899,7 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             {
                 if ( pFirst->GetNext() )
                 {
-                    pFirst = (const SwLayoutFrm*)pFirst->GetNext();
+                    pFirst = static_cast<const SwLayoutFrm*>(pFirst->GetNext());
                     if ( pFirst->Lower() && pFirst->Lower()->IsRowFrm() )
                         pFirst = pFirst->FirstCell();
                 }
@@ -1984,7 +1984,7 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
         // Skip any repeated headlines in the follow:
         const SwLayoutFrm* pRow = pTable->IsFollow() ?
                                   pTable->GetFirstNonHeadlineRow() :
-                                  (const SwLayoutFrm*)pTable->Lower();
+                                  static_cast<const SwLayoutFrm*>(pTable->Lower());
 
         while ( pRow )
         {
@@ -2003,7 +2003,7 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 
                     if ( pCell->GetNext() )
                     {
-                        pCell = (const SwLayoutFrm*)pCell->GetNext();
+                        pCell = static_cast<const SwLayoutFrm*>(pCell->GetNext());
                         if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                             pCell = pCell->FirstCell();
                     }
@@ -2011,7 +2011,7 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
                         pCell = ::lcl_FindNextCellFrm( pCell );
                 }
             }
-            pRow = (const SwLayoutFrm*)pRow->GetNext();
+            pRow = static_cast<const SwLayoutFrm*>(pRow->GetNext());
         }
     }
     return true;
@@ -2024,9 +2024,9 @@ bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 static void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 {
     SwRowFrm *pRow = new SwRowFrm( rLine, pUpper );
-    if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->IsFollow() )
+    if ( pUpper->IsTabFrm() && static_cast<SwTabFrm*>(pUpper)->IsFollow() )
     {
-        SwTabFrm* pTabFrm = (SwTabFrm*)pUpper;
+        SwTabFrm* pTabFrm = static_cast<SwTabFrm*>(pUpper);
         pTabFrm->FindMaster()->InvalidatePos(); //can absorb the line
 
         if ( pSibling && pTabFrm->IsInHeadline( *pSibling ) )
@@ -2188,21 +2188,21 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
                 {
                     bool bDel = true;
                     SwTabFrm *pUp = !pFrm->GetPrev() && !pFrm->GetNext() ?
-                                            (SwTabFrm*)pFrm->GetUpper() : 0;
+                                            static_cast<SwTabFrm*>(pFrm->GetUpper()) : 0;
                     if ( !pUp )
                     {
                         const sal_uInt16 nRepeat =
-                                ((SwTabFrm*)pFrm->GetUpper())->GetTable()->GetRowsToRepeat();
+                                static_cast<SwTabFrm*>(pFrm->GetUpper())->GetTable()->GetRowsToRepeat();
                         if ( nRepeat > 0 &&
-                             ((SwTabFrm*)pFrm->GetUpper())->IsFollow() )
+                             static_cast<SwTabFrm*>(pFrm->GetUpper())->IsFollow() )
                         {
                             if ( !pFrm->GetNext() )
                             {
                                 SwRowFrm* pFirstNonHeadline =
-                                    ((SwTabFrm*)pFrm->GetUpper())->GetFirstNonHeadlineRow();
+                                    static_cast<SwTabFrm*>(pFrm->GetUpper())->GetFirstNonHeadlineRow();
                                 if ( pFirstNonHeadline == pFrm )
                                 {
-                                    pUp = (SwTabFrm*)pFrm->GetUpper();
+                                    pUp = static_cast<SwTabFrm*>(pFrm->GetUpper());
                                 }
                             }
                         }
@@ -2216,7 +2216,7 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
                             SwFrm *pTmp = pPrev->FindPrev();
                             OSL_ENSURE( pTmp->IsTabFrm(),
                                     "Predecessor of Follow is no Master.");
-                            pPrev = (SwTabFrm*)pTmp;
+                            pPrev = static_cast<SwTabFrm*>(pTmp);
                         }
                         if ( pPrev )
                         {
@@ -2258,12 +2258,12 @@ void _FndBox::DelFrms( SwTable &rTable, bool bAccTableDispose )
                         SwFrm* pTabFrm = pFrm->GetUpper();
                         if ( pTabFrm->IsTabFrm() &&
                             !pFrm->GetNext() &&
-                             ((SwTabFrm*)pTabFrm)->GetFollow() )
+                             static_cast<SwTabFrm*>(pTabFrm)->GetFollow() )
                         {
                             // We do not delete the follow flow line,
                             // this will be done automatically in the
                             // next turn.
-                            ((SwTabFrm*)pTabFrm)->SetFollowFlowLine( false );
+                            static_cast<SwTabFrm*>(pTabFrm)->SetFollowFlowLine( false );
                         }
                         //Set acc table dispose state
                         pFrm->SetAccTableDispose( bAccTableDispose );
@@ -2291,14 +2291,14 @@ static void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
 
     // Delete remaining headlines:
     SwRowFrm* pLower = 0;
-    while ( 0 != ( pLower = (SwRowFrm*)rTabFrm.Lower() ) && pLower->IsRepeatedHeadline() )
+    while ( 0 != ( pLower = static_cast<SwRowFrm*>(rTabFrm.Lower()) ) && pLower->IsRepeatedHeadline() )
     {
         pLower->Cut();
         delete pLower;
     }
 
     // Insert fresh set of headlines:
-    pLower = (SwRowFrm*)rTabFrm.Lower();
+    pLower = static_cast<SwRowFrm*>(rTabFrm.Lower());
     SwTable& rTable = *rTabFrm.GetTable();
     const sal_uInt16 nRepeat = rTable.GetRowsToRepeat();
     for ( sal_uInt16 nIdx = 0; nIdx < nRepeat; ++nIdx )
@@ -2374,9 +2374,9 @@ void _FndBox::MakeFrms( SwTable &rTable )
 
             for ( i = nStPos; (sal_uInt16)i <= nEndPos; ++i )
                 ::lcl_InsertRow( *rTable.GetTabLines()[static_cast<sal_uInt16>(i)],
-                                (SwLayoutFrm*)pUpperFrm, pSibling );
+                                static_cast<SwLayoutFrm*>(pUpperFrm), pSibling );
             if ( pUpperFrm->IsTabFrm() )
-                ((SwTabFrm*)pUpperFrm)->SetCalcLowers();
+                static_cast<SwTabFrm*>(pUpperFrm)->SetCalcLowers();
         }
         else if ( rTable.GetRowsToRepeat() > 0 )
         {
@@ -2450,7 +2450,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                 for ( ; i < nMax; ++i )
                     ::lcl_InsertRow( *rTable.GetTabLines()[i], pUpperFrm, pSibling );
                 if ( pUpperFrm->IsTabFrm() )
-                    ((SwTabFrm*)pUpperFrm)->SetCalcLowers();
+                    static_cast<SwTabFrm*>(pUpperFrm)->SetCalcLowers();
             }
             else // insert before
             {
@@ -2487,7 +2487,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
 
                 pUpperFrm = pSibling->GetUpper();
                 if ( pLineBefore )
-                    pSibling = (SwRowFrm*) pSibling->GetNext();
+                    pSibling = static_cast<SwRowFrm*>( pSibling->GetNext() );
 
                 sal_uInt16 nMax = nBhPos != USHRT_MAX ?
                                     nBhPos - nCnt :
@@ -2498,7 +2498,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                     ::lcl_InsertRow( *rTable.GetTabLines()[i],
                                 pUpperFrm, pSibling );
                 if ( pUpperFrm->IsTabFrm() )
-                    ((SwTabFrm*)pUpperFrm)->SetCalcLowers();
+                    static_cast<SwTabFrm*>(pUpperFrm)->SetCalcLowers();
             }
         }
     }
@@ -2519,7 +2519,7 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const sal_uInt16 nNumber,
                     lcl_UpdateRepeatedHeadlines( *pTable, true );
                 }
 
-                OSL_ENSURE( ((SwRowFrm*)pTable->Lower())->GetTabLine() ==
+                OSL_ENSURE( static_cast<SwRowFrm*>(pTable->Lower())->GetTabLine() ==
                         rTable.GetTabLines()[0], "MakeNewFrms: Table corruption!" );
             }
         }

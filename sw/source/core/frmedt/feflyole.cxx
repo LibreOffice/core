@@ -46,7 +46,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
     SwFlyFrm *pFly = FindFlyFrm();
     if ( pFly && pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
     {
-        SwOLENode *pNd = ((SwNoTxtFrm*)pFly->Lower())->GetNode()->GetOLENode();
+        SwOLENode *pNd = static_cast<SwNoTxtFrm*>(pFly->Lower())->GetNode()->GetOLENode();
         if ( !pNd || pNd->GetOLEObj().GetOleRef() != xObj )
             pFly = 0;
     }
@@ -65,10 +65,10 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
         {
             SwNode *pNd = GetNodes()[ nSttIdx+1 ];
             if ( pNd->IsOLENode() &&
-                 ((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == xObj )
+                 static_cast<SwOLENode*>(pNd)->GetOLEObj().GetOleRef() == xObj )
             {
                 bExist = true;
-                SwFrm *pFrm = ((SwOLENode*)pNd)->getLayoutFrm( GetLayout() );
+                SwFrm *pFrm = static_cast<SwOLENode*>(pNd)->getLayoutFrm( GetLayout() );
                 if ( pFrm )
                     pFly = pFrm->FindFlyFrm();
                 break;
@@ -121,7 +121,7 @@ bool SwFEShell::FinishOLEObj()                      // Server is terminated
         if( CNT_OLE == GetCntType() )
             ClearAutomaticContour();
 
-        if( ((SwOleClient*)pIPClient)->IsCheckForOLEInCaption() !=
+        if( static_cast<SwOleClient*>(pIPClient)->IsCheckForOLEInCaption() !=
             IsCheckForOLEInCaption() )
             SetCheckForOLEInCaption( !IsCheckForOLEInCaption() );
 

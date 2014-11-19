@@ -106,7 +106,7 @@ static bool lcl_FindAnchorPos(
     SfxItemSet& rSet )
 {
     bool bRet = true;
-    SwFmtAnchor aNewAnch( (SwFmtAnchor&)rSet.Get( RES_ANCHOR ) );
+    SwFmtAnchor aNewAnch( static_cast<const SwFmtAnchor&>(rSet.Get( RES_ANCHOR )) );
     RndStdIds nNew = aNewAnch.GetAnchorId();
     const SwFrm *pNewAnch;
 
@@ -120,7 +120,7 @@ static bool lcl_FindAnchorPos(
         {
             // starting from the upper-left corner of the Fly,
             // search nearest CntntFrm
-            const SwFrm* pFrm = rFrm.IsFlyFrm() ? ((SwFlyFrm&)rFrm).GetAnchorFrm()
+            const SwFrm* pFrm = rFrm.IsFlyFrm() ? static_cast<const SwFlyFrm&>(rFrm).GetAnchorFrm()
                                                 : &rFrm;
             pNewAnch = ::FindAnchor( pFrm, aTmpPnt );
             if( pNewAnch->IsProtected() )
@@ -129,7 +129,7 @@ static bool lcl_FindAnchorPos(
                 break;
             }
 
-            SwPosition aPos( *((SwCntntFrm*)pNewAnch)->GetNode() );
+            SwPosition aPos( *static_cast<const SwCntntFrm*>(pNewAnch)->GetNode() );
             if ((FLY_AT_CHAR == nNew) || (FLY_AS_CHAR == nNew))
             {
                 // textnode should be found, as only in those
@@ -138,7 +138,7 @@ static bool lcl_FindAnchorPos(
                 aTmpPnt.setX(aTmpPnt.getX() - 1);                   // do not land in the fly!
                 if( !pNewAnch->GetCrsrOfst( &aPos, aTmpPnt, &aState ) )
                 {
-                    SwCntntNode* pCNd = ((SwCntntFrm*)pNewAnch)->GetNode();
+                    SwCntntNode* pCNd = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(pNewAnch))->GetNode();
                     if( pNewAnch->Frm().Bottom() < aTmpPnt.Y() )
                         pCNd->MakeStartIndex( &aPos.nContent );
                     else
@@ -170,7 +170,7 @@ static bool lcl_FindAnchorPos(
 
             if( pNewAnch && &rFrm != pNewAnch && !pNewAnch->IsProtected() )
             {
-                aPos.nNode = *((SwFlyFrm*)pNewAnch)->GetFmt()->GetCntnt().
+                aPos.nNode = *static_cast<const SwFlyFrm*>(pNewAnch)->GetFmt()->GetCntnt().
                                 GetCntntIdx();
                 aNewAnch.SetAnchor( &aPos );
                 break;
@@ -204,7 +204,7 @@ bool sw_ChkAndSetNewAnchor(
     const SwFmtAnchor &rOldAnch = rFmt.GetAnchor();
     const RndStdIds nOld = rOldAnch.GetAnchorId();
 
-    RndStdIds nNew = ((SwFmtAnchor&)rSet.Get( RES_ANCHOR )).GetAnchorId();
+    RndStdIds nNew = static_cast<const SwFmtAnchor&>(rSet.Get( RES_ANCHOR )).GetAnchorId();
 
     if( nOld == nNew )
         return false;
@@ -267,7 +267,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
             return 0;
 
         SdrObject *pO = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        return ( pO && pO->ISA(SwVirtFlyDrawObj) ) ? ((SwVirtFlyDrawObj*)pO)->GetFlyFrm() : 0;
+        return ( pO && pO->ISA(SwVirtFlyDrawObj) ) ? static_cast<SwVirtFlyDrawObj*>(pO)->GetFlyFrm() : 0;
     }
     return 0;
 }
@@ -301,11 +301,11 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
     if( pFmt && FLY_AT_FLY == pFmt->GetAnchor().GetAnchorId() )
     {
         const SwFrm* pFly = pObj->ISA(SwVirtFlyDrawObj) ?
-            ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchorFrm() :
-            ((SwDrawContact*)GetUserCall(pObj))->GetAnchorFrm( pObj );
+            static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchorFrm() :
+            static_cast<SwDrawContact*>(GetUserCall(pObj))->GetAnchorFrm( pObj );
         OSL_ENSURE( pFly, "IsFlyInFly: Where's my anchor?" );
         OSL_ENSURE( pFly->IsFlyFrm(), "IsFlyInFly: Funny anchor!" );
-        return ((SwFlyFrm*)pFly)->GetFmt();
+        return static_cast<const SwFlyFrm*>(pFly)->GetFmt();
     }
 
     Point aTmpPos = pObj->GetCurrentBoundRect().TopLeft();
@@ -346,7 +346,7 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     // Set an anchor starting from the absolute position for paragraph bound Flys
     // Anchor and new RelPos will be calculated and set by the Fly
     if ( pFly->IsFlyAtCntFrm() )
-        ((SwFlyAtCntFrm*)pFly)->SetAbsPos( rAbsPos );
+        static_cast<SwFlyAtCntFrm*>(pFly)->SetAbsPos( rAbsPos );
     else
     {
             const SwFrm *pAnch = pFly->GetAnchorFrm();
@@ -487,14 +487,14 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                     }
                     case FLY_AT_PAGE:
                     {
-                        aAnch.SetPageNum( ((const SwPageFrm*)pNewAnch)->
+                        aAnch.SetPageNum( static_cast<const SwPageFrm*>(pNewAnch)->
                                           GetPhyPageNum() );
                         break;
                     }
 
                     case FLY_AT_FLY:
                     {
-                        SwPosition aPos( *((SwFlyFrm*)pNewAnch)->GetFmt()->
+                        SwPosition aPos( *static_cast<const SwFlyFrm*>(pNewAnch)->GetFmt()->
                                                   GetCntnt().GetCntntIdx() );
                         aAnch.SetAnchor( &aPos );
                         break;
@@ -604,7 +604,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
 
     const SwPosition& rPos = *pCrsr->Start();
 
-    SwFmtAnchor& rAnch = (SwFmtAnchor&)rSet.Get( RES_ANCHOR );
+    SwFmtAnchor& rAnch = const_cast<SwFmtAnchor&>(static_cast<const SwFmtAnchor&>(rSet.Get( RES_ANCHOR )));
     RndStdIds eRndId = rAnch.GetAnchorId();
     switch( eRndId )
     {
@@ -655,17 +655,17 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
 
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == rSet.GetItemState( RES_HORI_ORIENT, false, &pItem )
-                && text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient() )
+                && text::HoriOrientation::NONE == static_cast<const SwFmtHoriOrient*>(pItem)->GetHoriOrient() )
             {
                 bHOriChgd = true;
-                aOldH = *((SwFmtHoriOrient*)pItem);
+                aOldH = *static_cast<const SwFmtHoriOrient*>(pItem);
                 ((SfxItemSet&)rSet).Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
             if( SfxItemState::SET == rSet.GetItemState( RES_VERT_ORIENT, false, &pItem )
-                && text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
+                && text::VertOrientation::NONE == static_cast<const SwFmtVertOrient*>(pItem)->GetVertOrient() )
             {
                 bVOriChgd = true;
-                aOldV = *((SwFmtVertOrient*)pItem);
+                aOldV = *static_cast<const SwFmtVertOrient*>(pItem);
                 ((SfxItemSet&)rSet).Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ) );
             }
         }
@@ -684,10 +684,10 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
                 pRet->DelFrms();
 
                 const SwFrm* pAnch = ::FindAnchor( GetLayout(), aPt, false );
-                SwPosition aPos( *((SwCntntFrm*)pAnch)->GetNode() );
+                SwPosition aPos( *static_cast<const SwCntntFrm*>(pAnch)->GetNode() );
                 if ( FLY_AS_CHAR == eRndId )
                 {
-                    aPos.nContent.Assign( ((SwCntntFrm*)pAnch)->GetNode(), 0 );
+                    aPos.nContent.Assign( const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(pAnch))->GetNode(), 0 );
                 }
                 pOldAnchor->SetAnchor( &aPos );
 
@@ -765,7 +765,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
             if( SfxItemState::SET == pFlyAttrSet->GetItemState( RES_ANCHOR, false,
                     &pItem ) )
             {
-                SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
+                SwFmtAnchor* pAnchor = const_cast<SwFmtAnchor*>(static_cast<const SwFmtAnchor*>(pItem));
                 switch( pAnchor->GetAnchorId())
                 {
                 case FLY_AT_PARA:
@@ -947,7 +947,7 @@ void SwFEShell::SetPageObjsNewPage( std::vector<SwFrmFmt*>& rFillArr, int nOffse
                 {
                     SwContact *pCon = pFmt->FindContactObj();
                     if( pCon )
-                        ((SwDrawContact*)pCon)->DisconnectFromLayout();
+                        static_cast<SwDrawContact*>(pCon)->DisconnectFromLayout();
                 }
                 else
                     pFmt->DelFrms();
@@ -997,7 +997,7 @@ bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false, &pItem ) )
     {
-        SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
+        const SwFmtAnchor* pAnchor = static_cast<const SwFmtAnchor*>(pItem);
         RndStdIds eType = pAnchor->GetAnchorId();
 
         if ( FLY_AT_PAGE != eType )
@@ -1078,7 +1078,7 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     StartAllAction();
     if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))
     {
-        RndStdIds nNew = ((SwFmtAnchor&)rSet.Get( RES_ANCHOR )).GetAnchorId();
+        RndStdIds nNew = static_cast<const SwFmtAnchor&>(rSet.Get( RES_ANCHOR )).GetAnchorId();
         if ( nNew != pFmt->GetAnchor().GetAnchorId() )
         {
             ChgAnchor( nNew );
@@ -1149,7 +1149,7 @@ SwFrmFmt* SwFEShell::GetCurFrmFmt() const
 {
     SwFrmFmt* pRet = 0;
     SwLayoutFrm *pFly = FindFlyFrm();
-    if( pFly && ( pRet = (SwFrmFmt*)pFly->GetFmt()->DerivedFrom() ) ==
+    if( pFly && ( pRet = static_cast<SwFrmFmt*>(pFly->GetFmt()->DerivedFrom()) ) ==
                                             GetDoc()->GetDfltFrmFmt() )
         pRet = 0;
     return pRet;
@@ -1163,7 +1163,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
         const SwFrmFmt* pFmt = GetFmtFromObj( *pDocPos );
 
         if(PTR_CAST(SwFlyFrmFmt, pFmt))
-            pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
+            pFly = static_cast<const SwFlyFrmFmt*>(pFmt)->GetFrm();
     }
     else
         pFly = FindFlyFrm();
@@ -1298,7 +1298,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             pAnchor->IsTxtFrm() &&
             !pAnchor->GetNext() && !pAnchor->GetPrev() &&
             pAnchor->GetUpper()->IsFlyFrm() &&
-            0 != ( pTNd = ((SwTxtFrm*)pAnchor)->GetNode()->GetTxtNode()) &&
+            0 != ( pTNd = static_cast<const SwTxtFrm*>(pAnchor)->GetNode()->GetTxtNode()) &&
             0 != ( pHts = pTNd->GetpSwpHints() ))
         {
             // search for a sequence field:
@@ -1307,10 +1307,10 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             {
                 const SfxPoolItem* pItem = &(*pHts)[ n ]->GetAttr();
                 if( RES_TXTATR_FIELD == pItem->Which()
-                    && TYP_SEQFLD == ((SwFmtFld*)pItem)->GetField()->GetTypeId() )
+                    && TYP_SEQFLD == static_cast<const SwFmtFld*>(pItem)->GetField()->GetTypeId() )
                 {
                     // sequence field found
-                    SwFlyFrm* pChgFly = (SwFlyFrm*)pAnchor->GetUpper();
+                    SwFlyFrm* pChgFly = const_cast<SwFlyFrm*>(static_cast<const SwFlyFrm*>(pAnchor->GetUpper()));
                     // calculate the changed size:
                     // width must change, height can change
                     Size aNewSz( aSz.Width() + pChgFly->Frm().Width() -
@@ -1343,7 +1343,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
 
         // if the object changes, the contour is outside the object
         OSL_ENSURE( pFly->Lower()->IsNoTxtFrm(), "Request without NoTxt" );
-        SwNoTxtNode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetNoTxtNode();
+        SwNoTxtNode *pNd = static_cast<SwCntntFrm*>(pFly->Lower())->GetNode()->GetNoTxtNode();
         OSL_ENSURE( pNd, "Request without Node" );
         pNd->SetContour( 0 );
         ClrContourCache();
@@ -1363,7 +1363,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         // a new anchor is to be set. The anchor and the new RelPos are
         // calculated by the Fly and set
         if( pFly->IsFlyAtCntFrm() )
-            ((SwFlyAtCntFrm*)pFly)->SetAbsPos( aPt );
+            static_cast<SwFlyAtCntFrm*>(pFly)->SetAbsPos( aPt );
         else
         {
             const SwFrmFmt *pFmt = pFly->GetFmt();
@@ -1422,7 +1422,7 @@ void SwFEShell::SetFlyName( const OUString& rName )
 {
     SwLayoutFrm *pFly = FindFlyFrm();
     if( pFly )
-        GetDoc()->SetFlyName( *(SwFlyFrmFmt*)pFly->GetFmt(), rName );
+        GetDoc()->SetFlyName( *static_cast<SwFlyFrmFmt*>(pFly->GetFmt()), rName );
     else {
         OSL_ENSURE( false, "no FlyFrame selected" );
     }
@@ -1444,7 +1444,7 @@ const uno::Reference < embed::XEmbeddedObject > SwFEShell::GetOleRef() const
     SwFlyFrm * pFly = FindFlyFrm();
     if (pFly && pFly->Lower() && pFly->Lower()->IsNoTxtFrm())
     {
-        SwOLENode *pNd = ((SwNoTxtFrm*)pFly->Lower())->GetNode()->GetOLENode();
+        SwOLENode *pNd = static_cast<SwNoTxtFrm*>(pFly->Lower())->GetNode()->GetOLENode();
         if (pNd)
             xObj = pNd->GetOLEObj().GetOleRef();
     }
@@ -1474,7 +1474,7 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, OUString* pURL,
     if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV,SDRSEARCH_PICKMACRO ) &&
         pObj->ISA(SwVirtFlyDrawObj) )
     {
-        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+        SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
         if( !rURL.GetURL().isEmpty() || rURL.GetMap() )
         {
@@ -1541,10 +1541,10 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
 
     if( pDView->PickObj( rPt, pDView->getHitTolLog(), pObj, pPV ) && pObj->ISA(SwVirtFlyDrawObj) )
     {
-        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+        SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
         {
-            SwGrfNode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetGrfNode();
+            SwGrfNode *pNd = static_cast<SwCntntFrm*>(pFly->Lower())->GetNode()->GetGrfNode();
             if ( pNd )
             {
                 if ( pNd->IsGrfLink() )
@@ -1585,9 +1585,9 @@ const SwFrmFmt* SwFEShell::GetFmtFromObj( const Point& rPt, SwRect** pRectToFill
         {
            // first check it:
             if ( pObj->ISA(SwVirtFlyDrawObj) )
-                pRet = ((SwVirtFlyDrawObj*)pObj)->GetFmt();
+                pRet = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFmt();
             else if ( pObj->GetUserCall() ) //not for group objects
-                pRet = ((SwDrawContact*)pObj->GetUserCall())->GetFmt();
+                pRet = static_cast<SwDrawContact*>(pObj->GetUserCall())->GetFmt();
             if(pRet && pRectToFill)
                 **pRectToFill = pObj->GetCurrentBoundRect();
         }
@@ -1607,7 +1607,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromAnyObj( const Point& rPt ) const
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
         SwFrm* pFrm = pNd->getLayoutFrm( GetLayout(), &rPt, 0, false )->FindFlyFrm();
-        pRet = pFrm ? ((SwLayoutFrm*)pFrm)->GetFmt() : 0;
+        pRet = pFrm ? static_cast<SwLayoutFrm*>(pFrm)->GetFmt() : 0;
     }
     return pRet;
 }
@@ -1633,7 +1633,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
     {
         eType = OBJCNT_CONTROL;
         uno::Reference< awt::XControlModel >  xModel =
-                ((SdrUnoObj&)(*pInvestigatedObj)).GetUnoControlModel();
+                static_cast<const SdrUnoObj&>(*pInvestigatedObj).GetUnoControlModel();
         if( xModel.is() )
         {
             uno::Any aVal;
@@ -1652,10 +1652,10 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
     }
     else if( pInvestigatedObj->ISA(SwVirtFlyDrawObj) )
     {
-        SwFlyFrm *pFly = ((SwVirtFlyDrawObj&)(*pInvestigatedObj)).GetFlyFrm();
+        const SwFlyFrm *pFly = static_cast<const SwVirtFlyDrawObj&>(*pInvestigatedObj).GetFlyFrm();
         if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
         {
-            if ( ((SwCntntFrm*)pFly->Lower())->GetNode()->GetGrfNode() )
+            if ( static_cast<const SwCntntFrm*>(pFly->Lower())->GetNode()->GetGrfNode() )
                 eType = OBJCNT_GRF;
             else
                 eType = OBJCNT_OLE;
@@ -1878,7 +1878,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
         aRestVec.clear();
 
         /* number of page rFmt resides on */
-        sal_uInt16 nPageNum = SwFmtGetPageNum((SwFlyFrmFmt *) &rFmt);
+        sal_uInt16 nPageNum = SwFmtGetPageNum(static_cast<SwFlyFrmFmt *>(&rFmt));
 
         ::std::vector< const SwFrmFmt * >::const_iterator aIt;
 
@@ -1891,7 +1891,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
             if (aString != rReference && aString != rFmt.GetName())
             {
                 sal_uInt16 nNum1 =
-                    SwFmtGetPageNum((SwFlyFrmFmt *) *aIt);
+                    SwFmtGetPageNum(static_cast<const SwFlyFrmFmt *>(*aIt));
 
                 if (nNum1 == nPageNum -1)
                     aPrevPageVec.push_back(aString);
