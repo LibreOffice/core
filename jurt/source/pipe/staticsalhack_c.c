@@ -9,7 +9,6 @@
 
 #include <staticsalhack.h>
 
-#include <sal/osl/unx/memory.c>
 #include <sal/osl/unx/mutex.c>
 #include <sal/osl/unx/nlsupport.c>
 #include <sal/osl/unx/pipe.c>

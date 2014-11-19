@@ -26,6 +26,7 @@
 #include <sal/osl/unx/file_path_helper.cxx>
 #include <sal/osl/unx/file_stat.cxx>
 #include <sal/osl/unx/file_url.cxx>
+#include <sal/osl/unx/memory.cxx>
 #include <sal/osl/unx/module.cxx>
 #include <sal/osl/unx/process.cxx>
 #include <sal/osl/unx/process_impl.cxx>
