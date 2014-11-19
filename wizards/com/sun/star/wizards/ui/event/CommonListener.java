@@ -54,6 +54,18 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
         }
     }
 
+    public void add(String componentName, EventNames eventName, String methodName, Object target, Class<?> paramClass)
+    {
+        try
+        {
+            add(componentName, eventName, new MethodInvocation(methodName, target, paramClass));
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
     public void add(String componentName, EventNames eventName, MethodInvocation mi)
     {
         mHashtable.put(componentName + eventName, mi);

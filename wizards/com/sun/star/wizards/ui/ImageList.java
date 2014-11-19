@@ -80,7 +80,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private final static Short HIDE_PAGE = Short.valueOf((short) 99);
     private final static Integer TRANSPARENT = Integer.valueOf(-1);
     private final static int LINE_HEIGHT = 8;
-    private MethodInvocation METHOD_MOUSE_PRESSED;
 
     /** Getter for property imageSize.
      * @return Value of property imageSize.
@@ -272,15 +271,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         m_aImages = new XControl[rows * cols];
 
-        try
-        {
-            METHOD_MOUSE_PRESSED = new MethodInvocation("mousePressed", this, Object.class);
-        }
-        catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-        }
-
         m_imageHeight = Integer.valueOf(imageSize.Height);
         m_imageWidth = Integer.valueOf(imageSize.Width);
 
@@ -337,7 +327,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         XWindow win = UnoRuntime.queryInterface(XWindow.class, image);
         win.addMouseListener(uiEventListener);
         win.addKeyListener(imageKeyListener);
-        uiEventListener.add(imageName, EventNames.MOUSE_PRESSED, METHOD_MOUSE_PRESSED);
+        uiEventListener.add(imageName, EventNames.MOUSE_PRESSED, "mousePressed", this, Object.class);
 
         return image;
     }
