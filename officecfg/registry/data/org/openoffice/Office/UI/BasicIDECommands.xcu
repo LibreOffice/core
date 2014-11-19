@@ -5,7 +5,7 @@
     <node oor:name="Commands">
       <node oor:name=".uno:GotoLine" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Goto Line Number...</value>
+          <value xml:lang="en-US">Go to Line...</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowLines" oor:op="replace">
