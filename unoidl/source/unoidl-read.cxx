@@ -136,16 +136,19 @@ OUString decomposeType(
 }
 
 struct Entity {
+    enum class Sorted { NO, ACTIVE, YES };
+
     explicit Entity(
         rtl::Reference<unoidl::Entity> const & theEntity, bool theRelevant):
-        entity(theEntity), relevant(theRelevant), sorted(false), written(false)
+        entity(theEntity), relevant(theRelevant), sorted(Sorted::NO),
+        written(false)
     {}
 
     rtl::Reference<unoidl::Entity> const entity;
     std::set<OUString> dependencies;
     std::set<OUString> interfaceDependencies;
     bool relevant;
-    bool sorted;
+    Sorted sorted;
     bool written;
 };
 
@@ -160,7 +163,7 @@ void insertEntityDependency(
         if (weakInterfaceDependency) {
             rtl::Reference<unoidl::Entity> ent(manager->findEntity(name));
             if (!ent.is()) {
-                std::cerr << "unknown entity " << name << std::endl;
+                std::cerr << "Unknown entity " << name << std::endl;
                 std::exit(EXIT_FAILURE);
             }
             ifc = ent->getSort() == unoidl::Entity::SORT_INTERFACE_TYPE;
@@ -404,7 +407,7 @@ void scanMap(
 void propagateRelevant(std::map<OUString, Entity> & entities, Entity & entity) {
     if (!entity.relevant) {
         entity.relevant = true;
-        if (entity.sorted) {
+        if (entity.sorted != Entity::Sorted::YES) {
             for (std::set<OUString>::iterator i(entity.dependencies.begin());
                  i != entity.dependencies.end(); ++i)
             {
@@ -422,10 +425,9 @@ void visit(
     std::map<OUString, Entity>::iterator const & iterator,
     std::vector<OUString> & result)
 {
-    if (!iterator->second.sorted) {
-        // Doesn't bother to verify the graph is acyclic (which it is guaranteed
-        // to be for a consistent set of entities); a non-DAG will lead to
-        // infinite recursion/stack overflow:
+    switch (iterator->second.sorted) {
+    case Entity::Sorted::NO:
+        iterator->second.sorted = Entity::Sorted::ACTIVE;
         for (std::set<OUString>::iterator i(
                  iterator->second.dependencies.begin());
              i != iterator->second.dependencies.end(); ++i)
@@ -438,8 +440,17 @@ void visit(
                 visit(entities, j, result);
             }
         }
-        iterator->second.sorted = true;
+        iterator->second.sorted = Entity::Sorted::YES;
         result.push_back(iterator->first);
+        break;
+    case Entity::Sorted::ACTIVE:
+        std::cerr
+            << "Entity " << iterator->first << " recursively depends on itself"
+            << std::endl;
+        std::exit(EXIT_FAILURE);
+        // fall-through avoids warnings
+    default:
+        break;
     }
 }
 
