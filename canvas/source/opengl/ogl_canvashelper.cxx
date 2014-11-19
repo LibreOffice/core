@@ -500,7 +500,7 @@ namespace oglcanvas
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(xPolyPolygon));
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
 
-          //  rAct.maFunction = &lcl_drawPolyPolygon;
+            rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
         // TODO(P1): Provide caching here.
