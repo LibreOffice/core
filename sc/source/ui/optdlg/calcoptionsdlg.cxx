@@ -993,7 +993,11 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 
     for (int i = 0; i < N; ++i)
     {
+#if 0 // While our RAND OpenCL implementation is broken...
         pDoc->SetString(ScAddress(0,i,1), "=RAND()");
+#else
+        pDoc->SetValue(ScAddress(0,i,1), (i%13)/13.);
+#endif
         pDoc->SetValue(ScAddress(1,i,1), comphelper::rng::uniform_real_distribution(0, 1000));
         pDoc->SetString(ScAddress(10,i,1), OUString("=IF(AND(A") + OUString::number(i+1) + ">= 0,A" + OUString::number(i+1) + "<= 1),0,1)");
     }
