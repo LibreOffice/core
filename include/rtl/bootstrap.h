@@ -160,13 +160,14 @@ typedef void * rtlBootstrapHandle;
    Opens a bootstrap argument container.
    @param pIniName [in]   The name of the ini-file to use, if <code>NULL</code> defaults
                           to the excutables name
-   @return                Handle for a boostrap argument container
+   @return                Handle for a bootstrap argument
+                          container
 */
 SAL_DLLPUBLIC rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
     SAL_THROW_EXTERN_C();
 
 /**
-   Closes a boostrap agument container.
+   Closes a bootstrap agument container.
    @param handle [in]     The handle got by <code>rtl_bootstrap_args_open()</code>
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
