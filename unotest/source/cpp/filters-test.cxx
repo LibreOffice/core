@@ -122,7 +122,8 @@ void FiltersTest::recursiveScan(filterStatus nExpected,
                 bRes?"Pass":"Fail",nEndTime-nStartTime);
             if (nExpected == test::indeterminate)
                 continue;
-            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), bRes == (nExpected == test::pass));
+            filterStatus nResult = bRes ? test::pass : test::fail;
+            CPPUNIT_ASSERT_MESSAGE(aRes.getStr(), nResult == nExpected);
         }
     }
     CPPUNIT_ASSERT(osl::FileBase::E_None == aDir.close());
