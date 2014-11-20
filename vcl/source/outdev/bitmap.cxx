@@ -522,17 +522,6 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                 SalBitmap* pSalAlphaBmp = pMaskBmp->ImplGetSalBitmap();
                 bool bTryDirectPaint(pSalSrcBmp && pSalAlphaBmp);
 
-                if (bTryDirectPaint)
-                {
-                    // only paint direct when no MapMode, else the
-                    // more expensive conversions may be done for short-time Bitmap/BitmapEx
-                    // used for buffering only
-                    if (IsMapModeEnabled())
-                    {
-                        bTryDirectPaint = false;
-                    }
-                }
-
                 if (bTryDirectPaint && mpGraphics->DrawAlphaBitmap(aPosAry, *pSalSrcBmp, *pSalAlphaBmp, this))
                 {
                     // tried to paint as alpha directly. If tis worked, we are done (except
@@ -660,17 +649,6 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         // #i83087# Naturally, system alpha blending cannot work with
         // separate alpha VDev
         bool bTryDirectPaint(!mpAlphaVDev && !pDisableNative && !bHMirr && !bVMirr);
-
-        if (bTryDirectPaint)
-        {
-            // only paint direct when no MapMode, else the
-            // more expensive conversions may be done for short-time Bitmap/BitmapEx
-            // used for buffering only
-            if (IsMapModeEnabled())
-            {
-                bTryDirectPaint = false;
-            }
-        }
 
         if(bTryDirectPaint)
         {
