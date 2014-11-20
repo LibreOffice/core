@@ -3419,16 +3419,14 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                     if( pHt->DontExpand() ? nBegin >= *pEndIdx : nBegin > *pEndIdx)
                         continue;
                 }
-                {
-                    const SfxPoolItem* pItem = CharFmt::GetItem( *pHt, nWhichId );
-                    const sal_uInt16 nLng = ((SvxLanguageItem*)pItem)->GetLanguage();
+                const SfxPoolItem* pItem = CharFmt::GetItem( *pHt, nWhichId );
+                const sal_uInt16 nLng = ((SvxLanguageItem*)pItem)->GetLanguage();
 
-                    // Umfasst das Attribut den Bereich komplett?
-                    if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
-                        nRet = nLng;
-                    else if( LANGUAGE_DONTKNOW == nRet )
-                        nRet = nLng; // partielle Ueberlappung, der 1. gewinnt
-                }
+                // Umfasst das Attribut den Bereich komplett?
+                if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
+                    nRet = nLng;
+                else if( LANGUAGE_DONTKNOW == nRet )
+                    nRet = nLng; // partielle Ueberlappung, der 1. gewinnt
             }
         }
     }
