@@ -3208,11 +3208,18 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 && pAnchor->GetAnchorId() != FLY_AT_FLY
                 && pAnchor->GetAnchorId() != FLY_AT_CHAR)
             continue;
-        if (( bCopyFlyAtFly && FLY_AT_FLY == pAnchor->GetAnchorId() )
-                    ? rRg.aStart <= pAPos->nNode.GetIndex() + 1
-                    : ( m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()
-                            ? rRg.aStart < pAPos->nNode
-                            : rRg.aStart <= pAPos->nNode ))
+        if ( bCopyFlyAtFly && FLY_AT_FLY == pAnchor->GetAnchorId() )
+        {
+            if( rRg.aStart > pAPos->nNode.GetIndex() + 1 )
+                continue;
+        }
+        else
+        {
+            if ( m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()
+                    ? rRg.aStart >= pAPos->nNode
+                    : rRg.aStart > pAPos->nNode )
+                continue;
+        }
         {
             if ( pAPos->nNode > rRg.aEnd )
                 continue;
