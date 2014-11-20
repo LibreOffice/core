@@ -218,13 +218,12 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
         WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
         if (pImpl)
         {
-            OpenGLTexture *pTexture = aDC.getTexture();
+            boost::scoped_ptr<OpenGLTexture> pTexture(aDC.getTexture());
             if (pTexture)
             {
                 pImpl->PreDraw();
                 pImpl->DrawMask(*pTexture, salColor, aDC.getTwoRect());
                 pImpl->PostDraw();
-                delete pTexture;
             }
         }
     }

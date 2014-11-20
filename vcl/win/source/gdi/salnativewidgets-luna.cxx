@@ -1288,23 +1288,18 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         if (ImplDrawNativeControl(aBlackDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr) &&
             ImplDrawNativeControl(aWhiteDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
         {
-            OpenGLTexture *pBlackTexture = aBlackDC.getTexture();
+            boost::scoped_ptr<OpenGLTexture> pBlackTexture(aBlackDC.getTexture());
             if (!pBlackTexture)
                 return false;
 
-            OpenGLTexture *pWhiteTexture = aWhiteDC.getTexture();
+            boost::scoped_ptr<OpenGLTexture> pWhiteTexture(aWhiteDC.getTexture());
             if (!pWhiteTexture)
-            {
-                delete pBlackTexture;
                 return false;
-            }
 
             pImpl->PreDraw();
             pImpl->DrawTexture(*pBlackTexture, aBlackDC.getTwoRect()); // FIXME combine the textures - DrawTextureSynthesizedAlpha()
             pImpl->PostDraw();
 
-            delete pBlackTexture;
-            delete pWhiteTexture;
             bOk = true;
         }
     }
