@@ -192,6 +192,10 @@ OUString ReplaceStringHookProc(const OUString& rStr);
 
 }
 
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+bool fire_glxtest_process();
+#endif
+
 #endif // INCLUDED_DESKTOP_INC_APP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

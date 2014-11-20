@@ -53,10 +53,6 @@
 #include <touch/touch.h>
 #endif
 
-#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
-bool fire_glxtest_process();
-#endif
-
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
