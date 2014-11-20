@@ -599,6 +599,13 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideLvltext, "num-override-lvltext.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("00000a"), parseDump("//Special[@nType='POR_NUMBER']/pFont", "color"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testNumOverrideStart, "num-override-start.docx")
+{
+    uno::Reference<container::XIndexAccess> xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    // This was 1, i.e. the numbering on the second level was "1.1", not "1.3".
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), comphelper::SequenceAsHashMap(xRules->getByIndex(1))["StartWith"].get<sal_Int16>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1047,6 +1047,17 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     pProperties->resolve(*this);
             }
             break;
+            case NS_ooxml::LN_CT_NumLvl_startOverride:
+            {
+                if(m_pCurrentDefinition)
+                {
+                    if (ListLevel::Pointer pCurrentLevel = m_pCurrentDefinition->GetCurrentLevel())
+                        // <w:num> -> <w:lvlOverride> -> <w:startOverride> is the non-abstract equivalent of
+                        // <w:abstractNum> -> <w:lvl> -> <w:start>
+                        pCurrentLevel->SetValue(NS_ooxml::LN_CT_Lvl_start, nIntValue);
+                }
+            }
+            break;
             case NS_ooxml::LN_CT_AbstractNum_numStyleLink:
             {
                 OUString sStyleName = rSprm.getValue( )->getString( );
