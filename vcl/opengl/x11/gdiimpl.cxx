@@ -62,6 +62,9 @@ GLfloat X11OpenGLSalGraphicsImpl::GetHeight() const
 void X11OpenGLSalGraphicsImpl::Init()
 {
     X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
+
+    // Called after eg. a vdev re-size where we need to update the underlying pixmap
+    maContext.resetToReInitialize();
     if (pProvider)
     {
         Window aWin = pProvider->GetX11Window();

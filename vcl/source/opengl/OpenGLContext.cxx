@@ -610,6 +610,14 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
     return ImplInit();
 }
 
+void OpenGLContext::resetToReInitialize()
+{
+    if( !mbInitialized )
+        return;
+    resetCurrent();
+    mbInitialized = false;
+}
+
 bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned int height, int nScreen)
 {
     if(mbInitialized)
@@ -712,7 +720,12 @@ bool OpenGLContext::ImplInit()
     SAL_INFO("vcl.opengl", "available GL  extensions: " << m_aGLWin.GLExtensions);
 
     XWindowAttributes xWinAttr;
-    if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr ) )
+    if( mbPixmap )
+    {
+        m_aGLWin.Width = 0; // FIXME: correct ?
+        m_aGLWin.Height = 0;
+    }
+    else if( !XGetWindowAttributes( m_aGLWin.dpy, m_aGLWin.win, &xWinAttr ) )
     {
         SAL_WARN("vcl.opengl", "Failed to get window attributes on " << m_aGLWin.win);
         m_aGLWin.Width = 0;
@@ -1159,7 +1172,7 @@ void OpenGLContext::makeCurrent()
         SAL_INFO("vcl.opengl", "OpenGLContext::makeCurrent(): Avoid setting the same context");
     }
     else if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
-        SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed");
+        SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable << " pixmap? " << mbPixmap);
 #endif
 }
 

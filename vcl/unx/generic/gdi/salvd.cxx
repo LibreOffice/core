@@ -196,6 +196,8 @@ SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 { bGraphics_ = false; }
 
+#include "opengl/x11/gdiimpl.hxx"
+
 bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( bExternPixmap_ )
@@ -229,7 +231,14 @@ bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     nDY_ = nDY;
 
     if( pGraphics_ )
+    {
         InitGraphics( this );
+
+        // re-initialize OpenGLContext [!] having freed it's underlying pixmap above
+        X11OpenGLSalGraphicsImpl *pImpl = dynamic_cast< X11OpenGLSalGraphicsImpl* >(pGraphics_->GetImpl());
+        if( pImpl )
+            pImpl->Init();
+    }
 
     return true;
 }
