@@ -685,7 +685,7 @@
               <object class="GtkLabel" id="opencl_blacklist">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">List of known-bad OpenCL implementations</property>
+                <property name="label" translatable="yes">OpenCL implementation blacklist</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -698,7 +698,7 @@
               <object class="GtkLabel" id="opencl_blacklist_desc">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">List of known-bad OpenCL implementations.</property>
+                <property name="label" translatable="yes">List of OpenCL implementations known to be not good enough for LibreOffice. All the fields except OS are regular expressions.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">56</property>
               </object>
@@ -713,7 +713,7 @@
               <object class="GtkLabel" id="opencl_whitelist">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">List of known-good OpenCL implementations</property>
+                <property name="label" translatable="yes">OpenCL implementation whitelist</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -726,7 +726,7 @@
               <object class="GtkLabel" id="opencl_whitelist_desc">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">List of known-good OpenCL implementations.</property>
+                <property name="label" translatable="yes">List of OpenCL implementations known to be usable by LibreOffice. All the fields except OS are regular expressions.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">56</property>
               </object>
