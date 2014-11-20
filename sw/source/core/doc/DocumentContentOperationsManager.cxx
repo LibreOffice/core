@@ -3182,7 +3182,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     const SwNodeRange& rRg,
     const sal_Int32 nEndContentIndex,
     const SwNodeIndex& rStartIdx,
-    const bool bCopyFlyAtFly,
+    bool bCopyFlyAtFly,
     const bool bMergedFirstNode ) const
 {
     // First collect all Flys, sort them according to their ordering number,
@@ -3207,24 +3207,20 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         switch ( pAnchor->GetAnchorId() )
         {
             case FLY_AT_FLY:
+                if( bCopyFlyAtFly && rRg.aStart > pAPos->nNode.GetIndex() + 1 )
+                    continue;
+            break;
             case FLY_AT_CHAR:
             case FLY_AT_PARA:
-                break;
+                bCopyFlyAtFly = false;
+            break;
             default:
                 continue;
         }
-        if ( bCopyFlyAtFly && FLY_AT_FLY == pAnchor->GetAnchorId() )
-        {
-            if( rRg.aStart > pAPos->nNode.GetIndex() + 1 )
-                continue;
-        }
-        else
-        {
-            if ( m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()
+        if ( !bCopyFlyAtFly && ( m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()
                     ? rRg.aStart >= pAPos->nNode
-                    : rRg.aStart > pAPos->nNode )
-                continue;
-        }
+                    : rRg.aStart > pAPos->nNode ))
+            continue;
         if ( pAPos->nNode > rRg.aEnd )
             continue;
         //frames at the last source node are not always copied:
