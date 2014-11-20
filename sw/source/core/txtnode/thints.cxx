@@ -1763,7 +1763,7 @@ void SwTxtNode::DelSoftHyph( const sal_Int32 nStt, const sal_Int32 nEnd )
 
 bool SwTxtNode::IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
 {
-    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_BACKGROUND || nWhich == RES_CHRATR_ESCAPEMENT);
+    return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_COLOR || nWhich == RES_CHRATR_BACKGROUND || nWhich == RES_CHRATR_ESCAPEMENT);
 }
 
 //In MS Word, following properties of the paragraph end position wont affect the formatting of bullets, so we ignore them:

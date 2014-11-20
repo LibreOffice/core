@@ -51,6 +51,7 @@
 #include "reffld.hxx"
 #include "flddat.hxx"
 #include "fmtautofmt.hxx"
+#include <svl/itemiter.hxx>
 
 static bool lcl_IsInBody( SwFrm *pFrm )
 {
@@ -421,7 +422,27 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtForm
                 && *hint->GetStart() == *hint->GetEnd() && *hint->GetStart() == node->Len())
             {
                 boost::shared_ptr<SfxItemSet> pSet(hint->GetAutoFmt().GetStyleHandle());
-                pNumFnt->SetDiffFnt( pSet.get(), pIDSA );
+
+                // Check each item and in case it should be ignored, then clear it.
+                boost::shared_ptr<SfxItemSet> pCleanedSet;
+                if (pSet.get())
+                {
+                    pCleanedSet.reset(pSet->Clone());
+
+                    SfxItemIter aIter(*pSet);
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
+                    while (true)
+                    {
+                        if (SwTxtNode::IsIgnoredCharFmtForNumbering(pItem->Which()))
+                            pCleanedSet->ClearItem(pItem->Which());
+
+                        if (aIter.IsAtEnd())
+                            break;
+
+                        pItem = aIter.NextItem();
+                    }
+                }
+                pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
             }
         }
     }
