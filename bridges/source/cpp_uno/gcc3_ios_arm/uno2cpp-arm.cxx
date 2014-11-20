@@ -28,6 +28,8 @@
 // place to keep this file as close to ../gcc3_linux_arm/uno2cpp.cxx
 // as possible, to make future unification easier.
 
+#include <osl/diagnose.h>
+
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
