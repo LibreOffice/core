@@ -375,13 +375,13 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
 }
 
 void ScColumn::AttachNewFormulaCell(
-    const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin )
+    const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin, bool bSingle )
 {
-    AttachNewFormulaCell(maCells.position(itPos, nRow), rCell, bJoin);
+    AttachNewFormulaCell(maCells.position(itPos, nRow), rCell, bJoin, bSingle);
 }
 
 void ScColumn::AttachNewFormulaCell(
-    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin )
+    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin, bool bSingle )
 {
     if (bJoin)
         // See if this new formula cell can join an existing shared formula group.
@@ -394,7 +394,17 @@ void ScColumn::AttachNewFormulaCell(
     // After Import we call CalcAfterLoad and in there Listening.
     if (!pDocument->IsClipOrUndo() && !pDocument->IsInsertingFromOtherDoc())
     {
-        rCell.StartListeningTo(pDocument);
+        if (bSingle)
+        {
+            boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*pDocument));
+            sc::StartListeningContext aStartCxt(*pDocument, pPosSet);
+            sc::EndListeningContext aEndCxt(*pDocument, pPosSet);
+            SCROW nRow = aPos.first->position + aPos.second;
+            StartListeningFormulaCells(aStartCxt, aEndCxt, nRow, nRow);
+        }
+        else
+            rCell.StartListeningTo(pDocument);
+
         if (!pDocument->IsCalcingAfterLoad())
             rCell.SetDirty();
     }
@@ -1822,7 +1832,7 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
     AttachNewFormulaCell(it, nRow, *pCell);
 }
 
-ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
+ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell, bool bSingle )
 {
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
@@ -1833,7 +1843,7 @@ ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell )
 
     CellStorageModified();
 
-    AttachNewFormulaCell(it, nRow, *pCell);
+    AttachNewFormulaCell(it, nRow, *pCell, true, bSingle);
     return pCell;
 }
 
