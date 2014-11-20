@@ -237,6 +237,7 @@ public:
 private:
     bool consume(EventList *);
     void deleteUsedEvents();
+    void sendPendingCharacters();
 
     sal_Int32 GetToken( const xmlChar* pName, sal_Int32 nameLen );
     sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen ) throw (::com::sun::star::xml::sax::SAXException);
@@ -257,6 +258,7 @@ private:
 
     Entity *mpTop;                          /// std::stack::top() is amazingly slow => cache this.
     ::std::stack< Entity > maEntities;      /// Entity stack for each call of parseStream().
+    OUString pendingCharacters;             /// Data from characters() callback that needs to be sent.
 };
 
 } // namespace sax_fastparser
@@ -1048,6 +1050,8 @@ void FastSaxParserImpl::parse()
 void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
     int numNamespaces, const xmlChar** namespaces, int numAttributes, int /*defaultedAttributes*/, const xmlChar **attributes)
 {
+    if( !pendingCharacters.isEmpty())
+        sendPendingCharacters();
     Entity& rEntity = getEntity();
     if( rEntity.maNamespaceCount.empty() )
     {
@@ -1154,6 +1158,8 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
 void FastSaxParserImpl::callbackEndElement( const xmlChar*, const xmlChar*, const xmlChar* )
 {
+    if( !pendingCharacters.isEmpty())
+        sendPendingCharacters();
     Entity& rEntity = getEntity();
     assert( !rEntity.maNamespaceCount.empty() );
     if( !rEntity.maNamespaceCount.empty() )
@@ -1172,9 +1178,20 @@ void FastSaxParserImpl::callbackEndElement( const xmlChar*, const xmlChar*, cons
 
 void FastSaxParserImpl::callbackCharacters( const xmlChar* s, int nLen )
 {
+    // SAX interface allows that the characters callback splits content of one XML node
+    // (e.g. because there's an entity that needs decoding), however for consumers it's
+    // simpler FastSaxParser's character callback provides the whole string at once,
+    // so merge data from possible multiple calls and send them at once (before the element
+    // ends or another one starts).
+    pendingCharacters += OUString( XML_CAST( s ), nLen, RTL_TEXTENCODING_UTF8 );
+}
+
+void FastSaxParserImpl::sendPendingCharacters()
+{
     Entity& rEntity = getEntity();
     Event& rEvent = rEntity.getEvent( CHARACTERS );
-    rEvent.msChars = OUString( XML_CAST( s ), nLen, RTL_TEXTENCODING_UTF8);
+    rEvent.msChars = pendingCharacters;
+    pendingCharacters.clear();
     if (rEntity.mbEnableThreads)
         produce();
     else
