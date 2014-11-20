@@ -53,8 +53,20 @@
 #include <touch/touch.h>
 #endif
 
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+bool fire_glxtest_process();
+#endif
+
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    /* Run test for OpenGL support in own process to avoid crash with broken
+     * OpenGL drivers. Start process as early as possible.
+     */
+    bool bSuccess = fire_glxtest_process();
+    SAL_WARN_IF(!bSuccess, "desktop.opengl", "problems with glxtest");
+#endif
+
 #if defined ANDROID
     try {
         rtl::Bootstrap::setIniFilename("file:///assets/program/lofficerc");

@@ -122,6 +122,7 @@ $(eval $(call gb_Library_use_externals,vcl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/opengl/DeviceInfo \
 	vcl/opengl/gdiimpl \
 	vcl/opengl/salbmp \
 	vcl/opengl/scale \
@@ -704,6 +705,10 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lGL \
     -lGLU \
     -lX11 \
+))
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+	vcl/opengl/x11/X11DeviceInfo \
 ))
 endif
 

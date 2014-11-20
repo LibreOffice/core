@@ -22,6 +22,10 @@
 
 #include <vector>
 
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+#include "opengl/x11/X11DeviceInfo.hxx"
+#endif
+
 namespace {
 
 OUString getShaderFolder()
@@ -360,11 +364,31 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
     }
 }
 
+bool OpenGLHelper::isDeviceBlacklisted()
+{
+    static bool bSet = false;
+    static bool bBlacklisted = true; // assume the worst
+    if (!bSet)
+    {
+#if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
+        X11OpenGLDeviceInfo aInfo;
+        bBlacklisted = aInfo.isDeviceBlocked();
+        SAL_INFO("vcl.opengl", "blacklisted: " << bBlacklisted);
+#else
+        bBlacklisted = false;
+#endif
+        bSet = true;
+    }
+
+    return bBlacklisted;
+}
+
 bool OpenGLHelper::supportsVCLOpenGL()
 {
     static bool bDisableGL = !!getenv("SAL_DISABLEGL");
+    bool bBlacklisted = isDeviceBlacklisted();
 
-    if (bDisableGL)
+    if (bDisableGL || bBlacklisted)
         return false;
     else
         return true;

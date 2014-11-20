@@ -54,6 +54,10 @@ public:
     static void checkGLError(const char* aFile, size_t nLine);
 
     /**
+     * checks if the device/driver pair is on our OpenGL blacklist
+     */
+    static bool isDeviceBlacklisted();
+    /**
      * checks if the system supports all features that are necessary for the OpenGL VCL support
      */
     static bool supportsVCLOpenGL();
