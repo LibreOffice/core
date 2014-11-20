@@ -14,10 +14,12 @@
 
 #include "calcconfig.hxx"
 #include "calcoptionsdlg.hxx"
+#include "docfunc.hxx"
 #include "docsh.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
 #include "scopetools.hxx"
+#include "viewdata.hxx"
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
@@ -954,25 +956,323 @@ IMPL_LINK( ScCalcOptionsDialog, ListDeleteClickHdl, PushButton*, )
     return 0;
 }
 
-#if 0 // Can't decide whether to use this or just hardcode column
-      // names when constructing the formulae below...
-
 namespace {
 
-OUString col(int nCol)
+struct Area
 {
-    ScAddress aAddr(nCol, 0, 0);
-    return aAddr.Format(SCA_VALID_COL);
-}
+    OUString msTitle;
+    int mnRows;
+
+    Area(const OUString& rTitle, int nRows) :
+        msTitle(rTitle),
+        mnRows(nRows)
+    {
+    }
+
+    virtual ~Area()
+    {
+    }
+
+    virtual void addHeader(ScDocument *pDoc, int nTab) const = 0;
+
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const = 0;
+
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const = 0;
+};
+
+struct OpenCLTester
+{
+    int mnTestAreas;
+    ScDocShell* mpDocShell;
+    ScDocument *mpDoc;
+
+    OpenCLTester() :
+        mnTestAreas(0)
+    {
+        css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        css::uno::Reference< css::frame::XDesktop2 > xComponentLoader = css::frame::Desktop::create(xContext);
+        css::uno::Reference< css::lang::XComponent >
+            xComponent( xComponentLoader->loadComponentFromURL( "private:factory/scalc",
+                                                                "_blank", 0,
+                                                                css::uno::Sequence < css::beans::PropertyValue >() ) );
+        mpDocShell = dynamic_cast<ScDocShell*>(SfxObjectShell::GetShellFromComponent(xComponent));
+
+        assert(mpDocShell);
+
+        mpDoc = &mpDocShell->GetDocument();
+
+        mpDoc->SetString(ScAddress(0,0,0), "Result:");
+    }
+
+    void addTest(const Area &rArea)
+    {
+        sc::AutoCalcSwitch aACSwitch(*mpDoc, true);
+
+        mnTestAreas++;
+        mpDocShell->GetDocFunc().InsertTable(mnTestAreas, rArea.msTitle, false, true);
+
+        rArea.addHeader(mpDoc, mnTestAreas);
+
+        for (int i = 0; i < rArea.mnRows; ++i)
+            rArea.addRow(mpDoc, i, mnTestAreas);
+
+        mpDoc->SetString(ScAddress(0,1+mnTestAreas-1,0), rArea.msTitle + ":");
+        mpDoc->SetString(ScAddress(1,1+mnTestAreas-1,0), rArea.getSummaryFormula(mpDoc, mnTestAreas));
+
+        mpDoc->SetString(ScAddress(1,0,0),
+                        OUString("=IF(SUM(") +
+                        ScRange(ScAddress(1,1,0),
+                                ScAddress(1,1+mnTestAreas-1,0)).Format(SCA_VALID|SCA_VALID_COL|SCA_VALID_ROW) +
+                        ")=0,\"PASS\",\"FAIL\")");
+    }
+};
+
+struct Op : Area
+{
+    OUString msOp;
+    double mnRangeLo;
+    double mnRangeHi;
+    double mnEpsilon;
+
+    Op(const OUString& rTitle,
+       const OUString& rOp,
+       double nRangeLo, double nRangeHi,
+       double nEpsilon) :
+        Area(rTitle, 1000),
+        msOp(rOp),
+        mnRangeLo(nRangeLo),
+        mnRangeHi(nRangeHi),
+        mnEpsilon(nEpsilon)
+    {
+    }
+
+    virtual ~Op()
+    {
+    }
+};
+
+struct UnOp : Op
+{
+    double (*mpFun)(double nArg);
+    bool (*mpFilterOut)(double nArg);
+
+    UnOp(const OUString& rTitle,
+         const OUString& rOp,
+         double nRangeLo, double nRangeHi,
+         double nEpsilon,
+         double (*pFun)(double nArg),
+         bool (*pFilterOut)(double nArg) = nullptr) :
+        Op(rTitle, rOp, nRangeLo, nRangeHi, nEpsilon),
+        mpFun(pFun),
+        mpFilterOut(pFilterOut)
+    {
+    }
+
+    virtual ~UnOp()
+    {
+    }
+
+    virtual void addHeader(ScDocument *pDoc, int nTab) const override
+    {
+        pDoc->SetString(ScAddress(0,0,nTab), "arg");
+        pDoc->SetString(ScAddress(1,0,nTab), msOp + "(arg)");
+        pDoc->SetString(ScAddress(2,0,nTab), "expected");
+    }
+
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const override
+    {
+        double nArg;
+
+        do {
+            nArg = comphelper::rng::uniform_real_distribution(mnRangeLo, mnRangeHi);
+        } while (mpFilterOut != nullptr && mpFilterOut(nArg));
+
+        pDoc->SetValue(ScAddress(0,1+nRow,nTab), nArg);
+
+        pDoc->SetString(ScAddress(1,1+nRow,nTab),
+                        OUString("=") + msOp + "(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) + ")");
+
+        pDoc->SetValue(ScAddress(2,1+nRow,nTab), (mpFun)(nArg));
+
+        if (mnEpsilon < 0)
+        {
+            // relative epsilon
+            pDoc->SetString(ScAddress(3,1+nRow,nTab),
+                            OUString("=IF(ABS((") + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            ")/" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            ")<=" + OUString::number(-mnEpsilon) +
+                            ",0,1)");
+        }
+        else
+        {
+            // absolute epsilon
+            pDoc->SetString(ScAddress(3,1+nRow,nTab),
+                            OUString("=IF(ABS(") + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            ")<=" + OUString::number(mnEpsilon) +
+                            ",0,1)");
+        }
+    }
+
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
+    {
+        return OUString("=SUM(") +
+            ScRange(ScAddress(3,1,nTab),
+                    ScAddress(3,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+            ")";
+    }
+};
+
+struct BinOp : Op
+{
+    double (*mpFun)(double nLhs, double nRhs);
+    bool (*mpFilterOut)(double nLhs, double nRhs);
+
+    BinOp(const OUString& rTitle,
+          const OUString& rOp,
+          double nRangeLo, double nRangeHi,
+          double nEpsilon,
+          double (*pFun)(double nLhs, double nRhs),
+          bool (*pFilterOut)(double nLhs, double nRhs) = nullptr) :
+        Op(rTitle, rOp, nRangeLo, nRangeHi, nEpsilon),
+        mpFun(pFun),
+        mpFilterOut(pFilterOut)
+    {
+    }
+
+    virtual ~BinOp()
+    {
+    }
+
+    virtual void addHeader(ScDocument *pDoc, int nTab) const override
+    {
+        pDoc->SetString(ScAddress(0,0,nTab), "lhs");
+        pDoc->SetString(ScAddress(1,0,nTab), "rhs");
+        pDoc->SetString(ScAddress(2,0,nTab), OUString("lhs") + msOp + "rhs");
+        pDoc->SetString(ScAddress(3,0,nTab), "expected");
+    }
+
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const override
+    {
+        double nLhs, nRhs;
+
+        do {
+            nLhs = comphelper::rng::uniform_real_distribution(mnRangeLo, mnRangeHi);
+            nRhs = comphelper::rng::uniform_real_distribution(mnRangeLo, mnRangeHi);
+        } while (mpFilterOut != nullptr && mpFilterOut(nLhs, nRhs));
+
+        pDoc->SetValue(ScAddress(0,1+nRow,nTab), nLhs);
+        pDoc->SetValue(ScAddress(1,1+nRow,nTab), nRhs);
+
+        pDoc->SetString(ScAddress(2,1+nRow,nTab),
+                        OUString("=") + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        msOp + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW));
+
+        pDoc->SetValue(ScAddress(3,1+nRow,nTab), (mpFun)(nLhs, nRhs));
+
+        pDoc->SetString(ScAddress(4,1+nRow,nTab),
+                        OUString("=IF(ABS(") + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "-" + ScAddress(3,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        ")<=" + OUString::number(mnEpsilon) +
+                        ",0,1)");
+    }
+
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const override
+    {
+        return OUString("=SUM(") +
+            ScRange(ScAddress(4,1,nTab),
+                    ScAddress(4,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+            ")";
+    }
+};
 
 }
-
-#endif
 
 IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 {
     // Automatically test the current implementation of OpenCL. If it
     // seems good, whitelist it. If it seems bad, blacklist it.
+
+    auto pTestDocument = new OpenCLTester();
+
+    pTestDocument->addTest(BinOp("Plus", "+", -1000, 1000, 3e-10,
+                                 [] (double nLhs, double nRhs)
+                                 {
+                                     return nLhs + nRhs;
+                                 }));
+    pTestDocument->addTest(BinOp("Minus", "-", -1000, 1000, 3e-10,
+                                 [] (double nLhs, double nRhs)
+                                 {
+                                     return nLhs - nRhs;
+                                 }));
+
+    pTestDocument->addTest(BinOp("Times", "*", -1000, 1000, 3e-10,
+                                 [] (double nLhs, double nRhs)
+                                 {
+                                     return nLhs * nRhs;
+                                 }));
+    pTestDocument->addTest(BinOp("Divided", "/", -1000, 1000, 3e-10,
+                                 [] (double nLhs, double nRhs)
+                                 {
+                                     return nLhs / nRhs;
+                                 },
+                                 [] (double, double nRhs)
+                                 {
+                                     return (nRhs == 0);
+                                 }));
+
+    pTestDocument->addTest(UnOp("Sin", "SIN", -10, 10, 3e-10,
+                                [] (double nArg)
+                                {
+                                    return sin(nArg);
+                                }));
+
+    pTestDocument->addTest(UnOp("Cos", "COS", -10, 10, 3e-10,
+                                [] (double nArg)
+                                {
+                                    return cos(nArg);
+                                }));
+
+    pTestDocument->addTest(UnOp("Tan", "TAN", 0, 10, -3e-10,
+                                [] (double nArg)
+                                {
+                                    return tan(nArg);
+                                },
+                                [] (double nArg)
+                                {
+                                    return (std::fmod(nArg, M_PI) == M_PI/2);
+                                }));
+
+    pTestDocument->addTest(UnOp("Atan", "ATAN", -10, 10, 3e-10,
+                                [] (double nArg)
+                                {
+                                    return atan(nArg);
+                                }));
+
+    pTestDocument->addTest(UnOp("Sqrt", "SQRT", 0, 1000, 3e-10,
+                                [] (double nArg)
+                                {
+                                    return sqrt(nArg);
+                                }));
+
+    pTestDocument->addTest(UnOp("Exp", "EXP", 0, 10, 3e-10,
+                                [] (double nArg)
+                                {
+                                    return exp(nArg);
+                                }));
+
+    pTestDocument->addTest(UnOp("Ln", "LN", 0, 1000, 3e-10,
+                                [] (double nArg)
+                                {
+                                    return log(nArg);
+                                },
+                                [] (double nArg)
+                                {
+                                    return (nArg == 0);
+                                }));
+
+#if 0
 
     const double nEpsilon = 0.0000000003;
     OUString sEpsilon(OUString::number(nEpsilon));
@@ -1119,6 +1419,8 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
     }
 
     pDoc->SetString(ScAddress(0,4,0), "=SUM(MISCMATH.V1:MISCMATH.AB1000)");
+
+#endif
 
     return 0;
 }
