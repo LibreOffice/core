@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5afe65bd_8eca7a4e",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitInit.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-20T09:05:03Z",
+      "side": 1,
+      "message": "Hi Michael,\n\nthanks for that info, my first decision was the underscore at the end, but i have made as windows, on the next i us a prefix.",
+      "parentUuid": "5afe65bd_2e69468c",
+      "revId": "725a52c55e91d3629dfbfb9ba4758048d8bf1a77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5afe65bd_4e6c829c",
         "filename": "include/LibreOfficeKit/LibreOfficeKitInit.h",
         "patchSetId": 3
