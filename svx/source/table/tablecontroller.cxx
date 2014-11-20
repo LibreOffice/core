@@ -894,7 +894,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
             SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) != aBoxItem.GetDistance( BOX_LINE_LEFT ) )
-                aNewSet.Put(SdrMetricItem( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) ) );
+                aNewSet.Put(makeSdrTextLeftDistItem( aNewBoxItem.GetDistance( BOX_LINE_LEFT ) ) );
 
             if( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) != aBoxItem.GetDistance( BOX_LINE_RIGHT ) )
                 aNewSet.Put(makeSdrTextRightDistItem( aNewBoxItem.GetDistance( BOX_LINE_RIGHT ) ) );
