@@ -751,10 +751,10 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
                         xStyle = new SwXPageStyle(*pBasePool, pDocShell, eFamily, sStyleName);
                         break;
                     case SFX_STYLE_FAMILY_FRAME:
-                        xStyle = new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
+                        xStyle = new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName());
                         break;
                     default:
-                        new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
+                        xStyle = new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
                 }
             }
             aRet.setValue(&xStyle, cppu::UnoType<style::XStyle>::get());

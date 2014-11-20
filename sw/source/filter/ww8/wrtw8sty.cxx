@@ -313,8 +313,11 @@ void MSWordStyles::BuildStyleIds()
 
     for (sal_uInt16 n = 1; n < nUsedSlots; ++n)
     {
-        const OUString aName(pFmtA[n]? pFmtA[n]->GetName(): (m_aNumRules.find(n) != m_aNumRules.end() ? m_aNumRules[n]->GetName() : OUString()));
-
+        OUString aName;
+        if(pFmtA[n])
+            aName = pFmtA[n]->GetName();
+        else if (m_aNumRules.find(n) != m_aNumRules.end())
+            aName = m_aNumRules[n]->GetName();
         OStringBuffer aStyleIdBuf(aName.getLength());
         for (int i = 0; i < aName.getLength(); ++i)
         {
