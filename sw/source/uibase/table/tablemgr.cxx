@@ -69,10 +69,15 @@ SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
     {
         if(aCols.Count() == GetColCount())
         {
-            nWidth = (SwTwips)((nNum == aCols.Count()) ?
-                    aCols.GetRight() - aCols[nNum-1] :
-                    nNum == 0 ? aCols[nNum] - aCols.GetLeft() :
-                                aCols[nNum] - aCols[nNum-1]);
+            if(nNum == aCols.Count())
+                nWidth = aCols.GetRight() - aCols[nNum-1];
+            else
+            {
+                if(nNum == 0)
+                    nWidth = aCols[nNum] - aCols.GetLeft();
+                else
+                    nWidth = aCols[nNum] - aCols[nNum-1];
+            }
         }
         else
         {
@@ -87,7 +92,6 @@ SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
     }
     else
         nWidth = aCols.GetRight();
-
     return nWidth;
 }
 
@@ -99,13 +103,18 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
     {
         // The maximum width arises from the own width and
         // the width each of the neighbor cells reduced by MINLAY.
-        SwTwips nMax =  nNum == 0 ?
-            GetColWidth(1) - MINLAY :
-                nNum == GetColCount() ?
-                    GetColWidth( nNum-1 ) - MINLAY :
-                        GetColWidth(nNum - 1) + GetColWidth( nNum + 1 ) - 2 * MINLAY;
-
-        return nMax + GetColWidth(nNum) ;
+        SwTwips nMax;
+        if(nNum == 0)
+            nMax = GetColWidth(1) - MINLAY;
+        else
+        {
+            nMax = GetColWidth(nNum-1);
+            if(nNum == GetColCount())
+                nMax -= MINLAY;
+            else
+                nMax += GetColWidth(nNum+1) - 2 * MINLAY;
+        }
+        return nMax + GetColWidth(nNum);
     }
     else
         return GetColWidth(nNum);
