@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <rtl/byteseq.h>
 #include "rtl/uuid.h"
 #include "osl/thread.h"
 #include "osl/mutex.hxx"

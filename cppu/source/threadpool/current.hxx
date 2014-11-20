@@ -20,18 +20,18 @@
 #ifndef INCLUDED_CPPU_SOURCE_THREADPOOL_CURRENT_HXX
 #define INCLUDED_CPPU_SOURCE_THREADPOOL_CURRENT_HXX
 
-#include "rtl/byteseq.h"
+#include <sal/config.h>
 
-typedef struct _uno_ExtEnvironment uno_ExtEnvironment;
+#include <sal/types.h>
+
+struct _uno_ExtEnvironment;
 
 namespace cppu
 {
-struct CurrentContext;
-
 struct IdContainer
 {
     void *               pCurrentContext;
-    uno_ExtEnvironment * pCurrentContextEnv;
+    _uno_ExtEnvironment * pCurrentContextEnv;
 
     bool            bInit;
     sal_Sequence *      pLocalThreadId;
