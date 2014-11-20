@@ -319,10 +319,10 @@ ifneq ($(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_ObjCxxObject__tool_command,$*,$<)
 else
-
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
 	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
 	$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$<,$(call gb_ObjCxxObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_ObjCxxObject_get_dep_target,%)).dir :
@@ -335,7 +335,6 @@ $(call gb_ObjCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
 endif
-endif
 
 
 # ObjCObject class
@@ -347,10 +346,10 @@ ifneq ($(COMPILER_PLUGIN_TOOL),)
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) $(gb_FORCE_COMPILE_ALL_TARGET)
 	$(call gb_ObjCObject__tool_command,$*,$<)
 else
-
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
 	$(call gb_Output_announce,$*.m,$(true),OCC,3)
 	$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$<,$(call gb_ObjCObject_get_dep_target,$*),$(T_COMPILER_PLUGINS))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(dir $(call gb_ObjCObject_get_dep_target,%)).dir :
@@ -362,7 +361,6 @@ $(dir $(call gb_ObjCObject_get_dep_target,%))%/.dir :
 $(call gb_ObjCObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@)
 
-endif
 endif
 
 
