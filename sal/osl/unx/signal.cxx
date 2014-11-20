@@ -480,8 +480,8 @@ static int ReportCrash( int Signal )
 
 #define REPORTENV_PARAM     "-crashreportenv:"
 
-    static sal_Bool bCrashReporterExecuted = sal_False;
-    sal_Bool        bAutoCrashReport = sal_False;
+    static bool bCrashReporterExecuted = false;
+    bool bAutoCrashReport = false;
 
     sal_uInt32  argi;
     sal_uInt32  argc;
@@ -503,7 +503,7 @@ static int ReportCrash( int Signal )
             }
             else if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "--autocrashreport" ) )
             {
-                bAutoCrashReport = sal_True;
+                bAutoCrashReport = true;
             }
             else if ( 0 == rtl_ustr_ascii_shortenedCompare_WithLength(
                 rtl_uString_getStr( ustrCommandArg ), rtl_uString_getLength( ustrCommandArg ),
@@ -784,7 +784,7 @@ static int ReportCrash( int Signal )
 
                 if ( -1 != ret )
                 {
-                    bCrashReporterExecuted = sal_True;
+                    bCrashReporterExecuted = true;
                     return 1;
                 }
                 else
