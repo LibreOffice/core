@@ -3220,59 +3220,57 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                     : rRg.aStart > pAPos->nNode )
                 continue;
         }
+        if ( pAPos->nNode > rRg.aEnd )
+            continue;
+        //frames at the last source node are not always copied:
+        //- if the node is empty and is the last node of the document or a table cell
+        //  or a text frame then tey have to be copied
+        //- if the content index in this node is > 0 then paragph and frame bound objects are copied
+        //- to-character bound objects are copied if their index is <= nEndContentIndex
+        bool bAdd = false;
+        if( pAPos->nNode < rRg.aEnd )
+            bAdd = true;
+        if (!bAdd && !m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()) // fdo#40599: not for redline move
         {
-            if ( pAPos->nNode > rRg.aEnd )
-                continue;
-            //frames at the last source node are not always copied:
-            //- if the node is empty and is the last node of the document or a table cell
-            //  or a text frame then tey have to be copied
-            //- if the content index in this node is > 0 then paragph and frame bound objects are copied
-            //- to-character bound objects are copied if their index is <= nEndContentIndex
-            bool bAdd = false;
-            if( pAPos->nNode < rRg.aEnd )
-                bAdd = true;
-            if (!bAdd && !m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()) // fdo#40599: not for redline move
+            bool bEmptyNode = false;
+            bool bLastNode = false;
+            // is the node empty?
+            const SwNodes& rNodes = pAPos->nNode.GetNodes();
+            SwTxtNode* pTxtNode;
+            if( 0 != ( pTxtNode = pAPos->nNode.GetNode().GetTxtNode() ))
             {
-                bool bEmptyNode = false;
-                bool bLastNode = false;
-                // is the node empty?
-                const SwNodes& rNodes = pAPos->nNode.GetNodes();
-                SwTxtNode* pTxtNode;
-                if( 0 != ( pTxtNode = pAPos->nNode.GetNode().GetTxtNode() ))
+                bEmptyNode = pTxtNode->GetTxt().isEmpty();
+                if( bEmptyNode )
                 {
-                    bEmptyNode = pTxtNode->GetTxt().isEmpty();
-                    if( bEmptyNode )
+                    //last node information is only necessary to know for the last TextNode
+                    SwNodeIndex aTmp( pAPos->nNode );
+                    ++aTmp;//goto next node
+                    while (aTmp.GetNode().IsEndNode())
                     {
-                        //last node information is only necessary to know for the last TextNode
-                        SwNodeIndex aTmp( pAPos->nNode );
-                        ++aTmp;//goto next node
-                        while (aTmp.GetNode().IsEndNode())
+                        if( aTmp == rNodes.GetEndOfContent().GetIndex() )
                         {
-                            if( aTmp == rNodes.GetEndOfContent().GetIndex() )
-                            {
-                                bLastNode = true;
-                                break;
-                            }
-                            ++aTmp;
+                            bLastNode = true;
+                            break;
                         }
+                        ++aTmp;
                     }
                 }
-                bAdd = bLastNode && bEmptyNode;
-                if( !bAdd )
-                {
-                    if( bAtCntnt )
-                        bAdd = nEndContentIndex > 0;
-                    else
-                        bAdd = pAPos->nContent <= nEndContentIndex;
-                }
             }
-            if( bAdd )
+            bAdd = bLastNode && bEmptyNode;
+            if( !bAdd )
             {
-                // Make sure draw formats don't refer to content, so that such
-                // content can be removed without problems.
-                SwTextBoxHelper::resetLink(pFmt, aOldContent);
-                aSet.insert( _ZSortFly( pFmt, pAnchor, nArrLen + aSet.size() ));
+                if( bAtCntnt )
+                    bAdd = nEndContentIndex > 0;
+                else
+                    bAdd = pAPos->nContent <= nEndContentIndex;
             }
+        }
+        if( bAdd )
+        {
+            // Make sure draw formats don't refer to content, so that such
+            // content can be removed without problems.
+            SwTextBoxHelper::resetLink(pFmt, aOldContent);
+            aSet.insert( _ZSortFly( pFmt, pAnchor, nArrLen + aSet.size() ));
         }
     }
 
