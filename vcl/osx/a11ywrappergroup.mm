@@ -34,7 +34,7 @@
     NSMutableArray * attributeNames = [ NSMutableArray arrayWithArray: [ super accessibilityAttributeNames ] ];
     // Special Attributes and removing unwanted attributes depending on role
     [ attributeNames removeObjectsInArray: [ NSArray arrayWithObjects:
-            NSAccessibilityTitleAttribute, 
+            // NSAccessibilityTitleAttribute,
             NSAccessibilityEnabledAttribute, 
             NSAccessibilitySelectedChildrenAttribute, 
             nil ]
