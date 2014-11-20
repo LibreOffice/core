@@ -208,10 +208,16 @@ sal_Int32 SwVbaTableHelper::GetColWidth( SwTabCols& rCols, sal_Int32 nNum ) thro
     {
         if(rCols.Count() == static_cast<size_t>(GetColCount( rCols )))
         {
-            nWidth = ((static_cast<size_t>(nNum) == rCols.Count()) ?
-                    rCols.GetRight() - rCols[nNum-1] :
-                    nNum == 0 ? rCols[nNum] - rCols.GetLeft() :
-                                rCols[nNum] - rCols[nNum-1]);
+            if(static_cast<size_t>(nNum) == rCols.Count())
+                nWidth = rCols.GetRight() - rCols[nNum-1];
+            else
+            {
+                nWidth = rCols[nNum];
+                if(nNum == 0)
+                    nWidth -= rCols.GetLeft();
+                else
+                    nWidth -= rCols[nNum-1];
+            }
         }
         else
         {
