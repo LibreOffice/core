@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libmwaw,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
 	external/libmwaw/0001-librevenge-stream-is-optional-don-t-depend-on-it.patch \
 	external/libmwaw/0002-librevenge-stream-is-optional-don-t-depend-on-it.patch \
+	external/libmwaw/0001-initialize-image-data.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

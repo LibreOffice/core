@@ -1,0 +1,25 @@
+From 091ef2d999916d3578111af40f32bf5d92759883 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Thu, 5 Jun 2014 10:17:17 -0400
+Subject: [PATCH] initialize image data
+
+valgrind complains on that on SuperPaint/1.0/paint1.sp.hqx test file.
+---
+ src/lib/MWAWPictBitmap.hxx | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/lib/MWAWPictBitmap.hxx b/src/lib/MWAWPictBitmap.hxx
+index fe366de..666ec34 100644
+--- a/src/lib/MWAWPictBitmap.hxx
++++ b/src/lib/MWAWPictBitmap.hxx
+@@ -58,6 +58,7 @@ public:
+   MWAWPictBitmapContainer(Vec2i const &sz) : m_size(sz), m_data(0L)
+   {
+     if (m_size[0]*m_size[1] != 0) m_data = new T[size_t(m_size[0]*m_size[1])];
++    std::uninitialized_fill_n(m_data, m_size[0] * m_size[1], T());
+   }
+   //! destructor
+   virtual ~MWAWPictBitmapContainer()
+-- 
+2.1.0
+
