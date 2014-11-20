@@ -572,11 +572,11 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 }
 
 static oslFileError osl_psz_removeFile(const sal_Char* pszPath);
-static oslFileError osl_psz_copyFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
+static oslFileError osl_psz_copyFile(const sal_Char* pszPath, const sal_Char* pszDestPath, bool preserveMetadata);
 static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
 
 static oslFileError  oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, mode_t nMode, size_t nSourceSize, int DestFileExists);
-static oslFileError  oslChangeFileModes(const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID);
+static void attemptChangeMetadata(const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID);
 static int           oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName);
 static int           oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName, size_t nSourceSize, mode_t mode);
 static oslFileError  oslDoMoveFile(const sal_Char* pszPath, const sal_Char* pszDestPath);
@@ -632,7 +632,7 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* ustrFileURL, rtl_uString* ustrD
       return oslTranslateFileError( OSL_FET_ERROR, errno );
 #endif/* MACOSX */
 
-    return osl_psz_copyFile( srcPath, destPath );
+    return osl_psz_copyFile( srcPath, destPath, false );
 }
 
 oslFileError SAL_CALL osl_removeFile( rtl_uString* ustrFileURL )
@@ -668,7 +668,7 @@ static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszD
         return tErr;
     }
 
-    tErr=osl_psz_copyFile(pszPath,pszDestPath);
+    tErr=osl_psz_copyFile(pszPath,pszDestPath, true);
 
     if ( tErr != osl_File_E_None )
     {
@@ -723,7 +723,7 @@ static oslFileError osl_psz_moveFile(const sal_Char* pszPath, const sal_Char* ps
     return osl_File_E_None;
 }
 
-static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* pszDestPath )
+static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* pszDestPath, bool preserveMetadata )
 {
     time_t nAcTime=0;
     time_t nModTime=0;
@@ -786,12 +786,10 @@ static oslFileError osl_psz_copyFile( const sal_Char* pszPath, const sal_Char* p
         return tErr;
     }
 
-    /*
-     *   mfe: ignore return code
-     *        since only  the success of the copy is
-     *        important
-     */
-    oslChangeFileModes(pszDestPath,nMode,nAcTime,nModTime,nUID,nGID);
+    if (preserveMetadata)
+    {
+        attemptChangeMetadata(pszDestPath,nMode,nAcTime,nModTime,nUID,nGID);
+    }
 
     return tErr;
 }
@@ -866,42 +864,36 @@ static oslFileError oslDoCopy(const sal_Char* pszSourceFileName, const sal_Char*
     return osl_File_E_None;
 }
 
-static oslFileError oslChangeFileModes( const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID)
+void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nAcTime, time_t nModTime, uid_t nUID, gid_t nGID)
 {
-    int nRet=0;
     struct utimbuf aTimeBuffer;
 
-    nRet = chmod(pszFileName,nMode);
-    if ( nRet < 0 )
+    if ( chmod(pszFileName,nMode) < 0 )
     {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        int e = errno;
+        SAL_INFO(
+            "sal.osl", "chmod(" << pszFileName << ") failed with errno " << e);
     }
 
     aTimeBuffer.actime=nAcTime;
     aTimeBuffer.modtime=nModTime;
-    nRet=utime(pszFileName,&aTimeBuffer);
-    if ( nRet < 0 )
+    if ( utime(pszFileName,&aTimeBuffer) < 0 )
     {
-        nRet=errno;
-        return oslTranslateFileError(OSL_FET_ERROR, nRet);
+        int e = errno;
+        SAL_INFO(
+            "sal.osl", "utime(" << pszFileName << ") failed with errno " << e);
     }
 
     if ( nUID != getuid() )
     {
         nUID=getuid();
     }
-
-    nRet=chown(pszFileName,nUID,nGID);
-    if ( nRet < 0 )
+    if ( chown(pszFileName,nUID,nGID) < 0 )
     {
-        nRet=errno;
-
-        /* mfe: do not return an error here! */
-        /* return oslTranslateFileError(nRet);*/
+        int e = errno;
+        SAL_INFO(
+            "sal.osl", "chown(" << pszFileName << ") failed with errno " << e);
     }
-
-    return osl_File_E_None;
 }
 
 static int oslDoCopyLink(const sal_Char* pszSourceFileName, const sal_Char* pszDestFileName)
