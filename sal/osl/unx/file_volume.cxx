@@ -211,76 +211,98 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 static oslFileError osl_psz_getVolumeInformation (
     const sal_Char* pszDirectory, oslVolumeInfo* pInfo, sal_uInt32 uFieldMask)
 {
-    __OSL_STATFS_STRUCT sfs;
-
     if (!pInfo)
         return osl_File_E_INVAL;
 
-    __OSL_STATFS_INIT(sfs);
-
     pInfo->uValidFields = 0;
     pInfo->uAttributes  = 0;
-
-    if ((__OSL_STATFS(pszDirectory, &sfs)) < 0)
-    {
-        oslFileError result = oslTranslateFileError(OSL_FET_ERROR, errno);
-        return (result);
-    }
-
-    /* FIXME: how to detect the kind of storage (fixed, cdrom, ...) */
-    if (uFieldMask & osl_VolumeInfo_Mask_Attributes)
-    {
-        if (__OSL_STATFS_ISREMOTE(sfs))
-            pInfo->uAttributes  |= osl_Volume_Attribute_Remote;
-
-        pInfo->uValidFields |= osl_VolumeInfo_Mask_Attributes;
-    }
-
-    if (uFieldMask & osl_VolumeInfo_Mask_FileSystemCaseHandling)
-    {
-        if (__OSL_STATFS_IS_CASE_SENSITIVE_FS(sfs))
-            pInfo->uAttributes |= osl_Volume_Attribute_Case_Sensitive;
-
-        if (__OSL_STATFS_IS_CASE_PRESERVING_FS(sfs))
-            pInfo->uAttributes |= osl_Volume_Attribute_Case_Is_Preserved;
-
-        pInfo->uValidFields |= osl_VolumeInfo_Mask_Attributes;
-    }
-
     pInfo->uTotalSpace = 0;
     pInfo->uFreeSpace  = 0;
     pInfo->uUsedSpace  = 0;
 
+    if ((uFieldMask
+         & (osl_VolumeInfo_Mask_Attributes | osl_VolumeInfo_Mask_TotalSpace
+            | osl_VolumeInfo_Mask_UsedSpace | osl_VolumeInfo_Mask_FreeSpace
+            | osl_VolumeInfo_Mask_FileSystemName
+            | osl_VolumeInfo_Mask_FileSystemCaseHandling))
+        != 0)
+    {
+        __OSL_STATFS_STRUCT sfs;
+        __OSL_STATFS_INIT(sfs);
+        if ((__OSL_STATFS(pszDirectory, &sfs)) < 0)
+        {
+            oslFileError result = oslTranslateFileError(OSL_FET_ERROR, errno);
+            return (result);
+        }
+
+        /* FIXME: how to detect the kind of storage (fixed, cdrom, ...) */
+        if (uFieldMask & osl_VolumeInfo_Mask_Attributes)
+        {
+            if (__OSL_STATFS_ISREMOTE(sfs))
+                pInfo->uAttributes  |= osl_Volume_Attribute_Remote;
+
+            pInfo->uValidFields |= osl_VolumeInfo_Mask_Attributes;
+        }
+
+        if (uFieldMask & osl_VolumeInfo_Mask_FileSystemCaseHandling)
+        {
+            if (__OSL_STATFS_IS_CASE_SENSITIVE_FS(sfs))
+                pInfo->uAttributes |= osl_Volume_Attribute_Case_Sensitive;
+
+            if (__OSL_STATFS_IS_CASE_PRESERVING_FS(sfs))
+                pInfo->uAttributes |= osl_Volume_Attribute_Case_Is_Preserved;
+
+            pInfo->uValidFields |= osl_VolumeInfo_Mask_Attributes;
+        }
+
 #if defined(__OSL_STATFS_BLKSIZ)
 
-    if ((uFieldMask & osl_VolumeInfo_Mask_TotalSpace) ||
-        (uFieldMask & osl_VolumeInfo_Mask_UsedSpace))
-    {
-        pInfo->uTotalSpace   = __OSL_STATFS_BLKSIZ(sfs);
-        pInfo->uTotalSpace  *= (sal_uInt64)(sfs.f_blocks);
-        pInfo->uValidFields |= osl_VolumeInfo_Mask_TotalSpace;
-    }
+        if ((uFieldMask & osl_VolumeInfo_Mask_TotalSpace) ||
+            (uFieldMask & osl_VolumeInfo_Mask_UsedSpace))
+        {
+            pInfo->uTotalSpace   = __OSL_STATFS_BLKSIZ(sfs);
+            pInfo->uTotalSpace  *= (sal_uInt64)(sfs.f_blocks);
+            pInfo->uValidFields |= osl_VolumeInfo_Mask_TotalSpace;
+        }
 
-    if ((uFieldMask & osl_VolumeInfo_Mask_FreeSpace) ||
-        (uFieldMask & osl_VolumeInfo_Mask_UsedSpace))
-    {
-        pInfo->uFreeSpace = __OSL_STATFS_BLKSIZ(sfs);
+        if ((uFieldMask & osl_VolumeInfo_Mask_FreeSpace) ||
+            (uFieldMask & osl_VolumeInfo_Mask_UsedSpace))
+        {
+            pInfo->uFreeSpace = __OSL_STATFS_BLKSIZ(sfs);
 
-        if (getuid() == 0)
-            pInfo->uFreeSpace *= (sal_uInt64)(sfs.f_bfree);
-        else
-            pInfo->uFreeSpace *= (sal_uInt64)(sfs.f_bavail);
+            if (getuid() == 0)
+                pInfo->uFreeSpace *= (sal_uInt64)(sfs.f_bfree);
+            else
+                pInfo->uFreeSpace *= (sal_uInt64)(sfs.f_bavail);
 
-        pInfo->uValidFields |= osl_VolumeInfo_Mask_FreeSpace;
-    }
+            pInfo->uValidFields |= osl_VolumeInfo_Mask_FreeSpace;
+        }
+
+        if ((pInfo->uValidFields & osl_VolumeInfo_Mask_TotalSpace) &&
+            (pInfo->uValidFields & osl_VolumeInfo_Mask_FreeSpace ))
+        {
+            pInfo->uUsedSpace    = pInfo->uTotalSpace - pInfo->uFreeSpace;
+            pInfo->uValidFields |= osl_VolumeInfo_Mask_UsedSpace;
+        }
 
 #endif  /* __OSL_STATFS_BLKSIZ */
 
-    if ((pInfo->uValidFields & osl_VolumeInfo_Mask_TotalSpace) &&
-        (pInfo->uValidFields & osl_VolumeInfo_Mask_FreeSpace ))
-    {
-        pInfo->uUsedSpace    = pInfo->uTotalSpace - pInfo->uFreeSpace;
-        pInfo->uValidFields |= osl_VolumeInfo_Mask_UsedSpace;
+#if defined(__OSL_STATFS_TYPENAME)
+
+        if (uFieldMask & osl_VolumeInfo_Mask_FileSystemName)
+        {
+            rtl_string2UString(
+                &(pInfo->ustrFileSystemName),
+                __OSL_STATFS_TYPENAME(sfs),
+                rtl_str_getLength(__OSL_STATFS_TYPENAME(sfs)),
+                osl_getThreadTextEncoding(),
+                OUSTRING_TO_OSTRING_CVTFLAGS);
+            OSL_ASSERT(pInfo->ustrFileSystemName != 0);
+
+            pInfo->uValidFields |= osl_VolumeInfo_Mask_FileSystemName;
+        }
+
+#endif /* __OSL_STATFS_TYPENAME */
     }
 
     pInfo->uMaxNameLength = 0;
@@ -304,23 +326,6 @@ static oslFileError osl_psz_getVolumeInformation (
             pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxPathLength;
         }
     }
-
-#if defined(__OSL_STATFS_TYPENAME)
-
-    if (uFieldMask & osl_VolumeInfo_Mask_FileSystemName)
-    {
-        rtl_string2UString(
-            &(pInfo->ustrFileSystemName),
-            __OSL_STATFS_TYPENAME(sfs),
-            rtl_str_getLength(__OSL_STATFS_TYPENAME(sfs)),
-            osl_getThreadTextEncoding(),
-            OUSTRING_TO_OSTRING_CVTFLAGS);
-        OSL_ASSERT(pInfo->ustrFileSystemName != 0);
-
-        pInfo->uValidFields |= osl_VolumeInfo_Mask_FileSystemName;
-    }
-
-#endif /* __OSL_STATFS_TYPENAME */
 
     return osl_File_E_None;
 }
