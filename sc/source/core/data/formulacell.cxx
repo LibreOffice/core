@@ -1283,7 +1283,7 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         pDocument->PutInFormulaTree(this);
 }
 
-void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
+void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening )
 {
     bool bNewCompiled = false;
     // If a Calc 1.0-doc is read, we have a result, but no token array
@@ -1332,7 +1332,9 @@ void ScFormulaCell::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
     // the listener and Recalculate (if needed) if not RECALCMODE_NORMAL
     if( !bNewCompiled || !pCode->GetCodeError() )
     {
-        StartListeningTo( pDocument );
+        if (bStartListening)
+            StartListeningTo(pDocument);
+
         if( !pCode->IsRecalcModeNormal() )
             bDirty = true;
     }

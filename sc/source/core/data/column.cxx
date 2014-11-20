@@ -2850,12 +2850,15 @@ public:
 class CalcAfterLoadHandler
 {
     sc::CompileFormulaContext& mrCxt;
+    bool mbStartListening;
+
 public:
-    CalcAfterLoadHandler( sc::CompileFormulaContext& rCxt ) : mrCxt(rCxt) {}
+    CalcAfterLoadHandler( sc::CompileFormulaContext& rCxt, bool bStartListening ) :
+        mrCxt(rCxt), mbStartListening(bStartListening) {}
 
     void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
     {
-        pCell->CalcAfterLoad(mrCxt);
+        pCell->CalcAfterLoad(mrCxt, mbStartListening);
     }
 };
 
@@ -3283,9 +3286,9 @@ bool ScColumn::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nE
     return aHdl.isCompiled();
 }
 
-void ScColumn::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
+void ScColumn::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening )
 {
-    CalcAfterLoadHandler aFunc(rCxt);
+    CalcAfterLoadHandler aFunc(rCxt, bStartListening);
     sc::ProcessFormula(maCells, aFunc);
 }
 

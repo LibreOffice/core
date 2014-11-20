@@ -3740,7 +3740,7 @@ bool ScDocument::CompileErrorCells(sal_uInt16 nErrCode)
     return bCompiled;
 }
 
-void ScDocument::CalcAfterLoad()
+void ScDocument::CalcAfterLoad( bool bStartListening )
 {
     if (bIsClip)    // Excel-Dateien werden aus dem Clipboard in ein Clip-Doc geladen
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
@@ -3751,7 +3751,7 @@ void ScDocument::CalcAfterLoad()
         TableContainer::iterator it = maTabs.begin();
         for (; it != maTabs.end(); ++it)
             if (*it)
-                (*it)->CalcAfterLoad(aCxt);
+                (*it)->CalcAfterLoad(aCxt, bStartListening);
         for (it = maTabs.begin(); it != maTabs.end(); ++it)
             if (*it)
                 (*it)->SetDirtyAfterLoad();

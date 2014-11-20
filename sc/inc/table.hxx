@@ -533,7 +533,7 @@ public:
     void        SetDirtyVar();
     void        SetTableOpDirty( const ScRange& );
     void        CalcAll();
-    void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
+    void CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening );
     void CompileAll( sc::CompileFormulaContext& rCxt );
     void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );
 

@@ -1015,7 +1015,7 @@ public:
     void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
     void            InterpretDirtyCells( const ScRangeList& rRanges );
     SC_DLLPUBLIC void CalcAll();
-    SC_DLLPUBLIC void CalcAfterLoad();
+    SC_DLLPUBLIC void CalcAfterLoad( bool bStartListening = true );
     void            CompileAll();
     void            CompileXML();
 
