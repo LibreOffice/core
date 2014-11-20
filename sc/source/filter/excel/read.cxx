@@ -752,7 +752,7 @@ FltError ImportExcel::Read( void )
         AdjustRowHeight();
         PostDocLoad();
 
-        pD->CalcAfterLoad();
+        pD->CalcAfterLoad(false);
 
         const XclImpAddressConverter& rAddrConv = GetAddressConverter();
         if( rAddrConv.IsTabTruncated() )
@@ -1291,7 +1291,7 @@ FltError ImportExcel8::Read( void )
 #endif
         PostDocLoad();
 
-        pD->CalcAfterLoad();
+        pD->CalcAfterLoad(false);
 
         // import change tracking data
         XclImpChangeTrack aImpChTr( GetRoot(), maStrm );

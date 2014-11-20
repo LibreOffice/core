@@ -1772,10 +1772,10 @@ bool ScTable::CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nEr
     return bCompiled;
 }
 
-void ScTable::CalcAfterLoad( sc::CompileFormulaContext& rCxt )
+void ScTable::CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening )
 {
     for (SCCOL i = 0; i <= MAXCOL; ++i)
-        aCol[i].CalcAfterLoad(rCxt);
+        aCol[i].CalcAfterLoad(rCxt, bStartListening);
 }
 
 void ScTable::ResetChanged( const ScRange& rRange )

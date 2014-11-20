@@ -237,7 +237,7 @@ public:
     void CompileTokenArray( bool bNoListening = false );
     void CompileTokenArray( sc::CompileFormulaContext& rCxt, bool bNoListening = false );
     void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );        // compile temporary string tokens
-    void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
+    void CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening );
     bool            MarkUsedExternalReferences();
     void            Interpret();
     bool IsIterCell() const { return bIsIterCell; }
