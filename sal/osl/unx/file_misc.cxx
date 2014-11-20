@@ -868,31 +868,37 @@ void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nA
 {
     struct utimbuf aTimeBuffer;
 
-    if ( chmod(pszFileName,nMode) < 0 )
+    if ( fchmodat(AT_FDCWD, pszFileName, nMode, AT_SYMLINK_NOFOLLOW) < 0 )
     {
         int e = errno;
         SAL_INFO(
-            "sal.osl", "chmod(" << pszFileName << ") failed with errno " << e);
+            "sal.osl",
+            "fchmodat(" << pszFileName << ") failed with errno " << e);
     }
 
-    aTimeBuffer.actime=nAcTime;
-    aTimeBuffer.modtime=nModTime;
-    if ( utime(pszFileName,&aTimeBuffer) < 0 )
+    // No way to change utime of a symlink itself:
+    if (!S_ISLNK(nMode))
     {
-        int e = errno;
-        SAL_INFO(
-            "sal.osl", "utime(" << pszFileName << ") failed with errno " << e);
+        aTimeBuffer.actime=nAcTime;
+        aTimeBuffer.modtime=nModTime;
+        if ( utime(pszFileName,&aTimeBuffer) < 0 )
+        {
+            int e = errno;
+            SAL_INFO(
+                "sal.osl",
+                "utime(" << pszFileName << ") failed with errno " << e);
+        }
     }
 
     if ( nUID != getuid() )
     {
         nUID=getuid();
     }
-    if ( chown(pszFileName,nUID,nGID) < 0 )
+    if ( lchown(pszFileName,nUID,nGID) < 0 )
     {
         int e = errno;
         SAL_INFO(
-            "sal.osl", "chown(" << pszFileName << ") failed with errno " << e);
+            "sal.osl", "lchown(" << pszFileName << ") failed with errno " << e);
     }
 }
 
