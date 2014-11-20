@@ -1556,7 +1556,6 @@ public:
     virtual void                SetMapMode( const MapMode& rNewMapMode );
     virtual void                SetRelativeMapMode( const MapMode& rNewMapMode );
     const MapMode&              GetMapMode() const { return maMapMode; }
-    bool                        IsMapMode() const { return mbMap; }
 
      // #i75163#
     basegfx::B2DHomMatrix       GetViewTransformation() const;

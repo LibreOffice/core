@@ -595,7 +595,7 @@ void Application::SetSettings( const AllSettings& rSettings )
                         {
                             pVirDev->mnDPIX = pFirstFrame->mnDPIX;
                             pVirDev->mnDPIY = pFirstFrame->mnDPIY;
-                            if ( pVirDev->IsMapMode() )
+                            if (pVirDev->IsMapModeEnabled())
                             {
                                 MapMode aMapMode = pVirDev->GetMapMode();
                                 pVirDev->SetMapMode();
