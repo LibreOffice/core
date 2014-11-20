@@ -307,7 +307,7 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
         bool unknownOS = maOS.isEmpty() || maOSRelease.isEmpty();
         OUString aOS = rtl::OStringToOUString(maOS, RTL_TEXTENCODING_UTF8);
         OUString aOSRelease = rtl::OStringToOUString(maOSRelease, RTL_TEXTENCODING_UTF8);
-        bool badOS = aOS.indexOf("Linux", true) != -1 &&
+        bool badOS = aOS.indexOf("Linux") != -1 &&
             maOSRelease.indexOf("2.6.32") != -1;
         if (unknownOS || badOS) {
             SAL_WARN("vcl.opengl", "blocked OS version with fglrx");
