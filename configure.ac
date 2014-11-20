@@ -924,11 +924,6 @@ AC_ARG_ENABLE(lockdown,
         [Disables the gconf integration work in LibreOffice.]),
 )
 
-AC_ARG_ENABLE(vba,
-    AS_HELP_STRING([--disable-vba],
-        [Disables the vba compatibility feature.])
-)
-
 AC_ARG_ENABLE(pch,
     AS_HELP_STRING([--enable-pch],
         [Enables precompiled header support for C++.])
