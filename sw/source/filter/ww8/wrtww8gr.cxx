@@ -688,10 +688,6 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
         Set_UInt16( pArr, nCropR );                     // set dxaCropRight
         Set_UInt16( pArr, nCropB );                     // set dyaCropBottom
     }
-    else
-    {
-        pArr += 8;
-    }
 
     rStrm.Write( aArr, nHdrLen );
 }
