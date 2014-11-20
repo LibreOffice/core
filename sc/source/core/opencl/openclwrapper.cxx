@@ -529,7 +529,7 @@ bool match(const OUString& rPattern, const OUString& rInput)
     icu::UnicodeString sIcuInput(reinterpret_cast<const UChar*>(rInput.getStr()), rInput.getLength());
     RegexMatcher aMatcher(sIcuPattern, sIcuInput, 0, nIcuError);
 
-    if (nIcuError == U_ZERO_ERROR && aMatcher.matches(nIcuError) && nIcuError == U_ZERO_ERROR)
+    if (U_SUCCESS(nIcuError) && aMatcher.matches(nIcuError) && U_SUCCESS(nIcuError))
         return true;
 
     return false;
