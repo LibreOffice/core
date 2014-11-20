@@ -16,11 +16,13 @@
 
 set -e
 
-iwyu_INCLUDES=$(grep -h -r ":$" ${BUILDDIR}/workdir/Dep/*Object* | grep -v 'workdir\|config_host' | sed -e "s,^${SRCDIR}/,," | sed -e "s/:$//"  | sort -u)
+iwyu_INCLUDES=$(grep -h -r ":$" ${BUILDDIR}/workdir/Dep/*Object* | grep -v 'workdir\|config_host' | grep -v "^/usr" | sed -e "s,^${SRCDIR}/,," | sed -e "s/:$//"  | sort -u)
 
 iwyu_INCLUDEDIRS=$(echo "${iwyu_INCLUDES}" | sed -e "s,/[^/]*$,," | grep -v "^include" | sort -u)
 
-iwyu_EXTERNALS=$(ls ${SRCDIR}/*/*Library*mk ${SRCDIR}/*/*Executable*mk | xargs awk 'BEGIN {domatch=0;} /))/ {domatch=0;} domatch { if (!($1 in exts)) {exts[$1]; print $1;} } /use_external(s)?,/ { if (index($0, "))")) { gsub(/.*,/, ""); gsub(/)+/, ""); if (!($0 in exts)) {exts[$0]; print $0; } } else { domatch=1;} }' | grep -v '$(\|)\|tde\|expat_x64\|zlib_x64\|mozilla\|apr\|serf')
+iwyu_EXTERNALS=$(ls ${SRCDIR}/*/*Library*mk ${SRCDIR}/*/*Executable*mk \
+    | xargs awk -f bin/gen-iwyu-dummy-lib.awk \
+    | grep -v '$(\|)\|tde\|expat_x64\|zlib_x64\|mozilla\|apr\|serf')
 
 mkdir -p ${BUILDDIR}/iwyudummy
 iwyu_MOD=${BUILDDIR}/iwyudummy/Module_iwyudummy.mk
@@ -33,7 +35,7 @@ echo '$(eval $(call gb_Module_add_targets,iwyudummy,StaticLibrary_iwyudummy))' >
 
 echo '$(eval $(call gb_StaticLibrary_StaticLibrary,iwyudummy))' > ${iwyu_LIB}
 # clang will "compile" headers to .gch by default
-echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++))' >> ${iwyu_LIB}
+echo '$(eval $(call gb_StaticLibrary_add_cxxflags,iwyudummy,-x c++ -Wno-unused-macros))' >> ${iwyu_LIB}
 echo '$(eval $(call gb_StaticLibrary_use_custom_headers,iwyudummy,officecfg/registry))' >> ${iwyu_LIB}
 echo '$(eval $(call gb_StaticLibrary_use_sdk_api,iwyudummy))' >> ${iwyu_LIB}
 echo '$(eval $(call gb_StaticLibrary_use_externals,iwyudummy,\' >> ${iwyu_LIB}
