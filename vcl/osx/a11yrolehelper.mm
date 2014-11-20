@@ -96,7 +96,7 @@ using namespace ::com::sun::star::uno;
         MAP( AccessibleRole::SEPARATOR, NSAccessibilitySplitterRole ); // FIXME
         MAP( AccessibleRole::SLIDER, NSAccessibilitySliderRole );
         MAP( AccessibleRole::SPIN_BOX, NSAccessibilityUnknownRole ); // FIXME
-        MAP( AccessibleRole::SPLIT_PANE, NSAccessibilitySplitterRole );
+        MAP( AccessibleRole::SPLIT_PANE, NSAccessibilitySplitGroupRole );
         MAP( AccessibleRole::STATUS_BAR, NSAccessibilityGroupRole ); // FIXME
         MAP( AccessibleRole::TABLE, NSAccessibilityTableRole );
         MAP( AccessibleRole::TABLE_CELL, NSAccessibilityTextFieldRole );

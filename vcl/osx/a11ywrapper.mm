@@ -718,7 +718,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     BOOL ignored = NO;
     sal_Int16 nRole = [ self accessibleContext ] -> getAccessibleRole();
     switch ( nRole ) {
-        case AccessibleRole::PANEL:
+        //case AccessibleRole::PANEL:
         case AccessibleRole::FRAME:
         case AccessibleRole::ROOT_PANE:
         case AccessibleRole::SEPARATOR:
