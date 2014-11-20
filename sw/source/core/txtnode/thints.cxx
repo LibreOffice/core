@@ -3405,15 +3405,20 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                 const sal_Int32 *pEndIdx = pHt->End();
                 // Ueberlappt das Attribut den Bereich?
 
-                if (!pEndIdx)
+                if( !pEndIdx )
                     continue;
-
-                if( nLen ? ( nAttrStart < nEnd && nBegin < *pEndIdx )
-                         : (( nAttrStart < nBegin &&
-                                ( pHt->DontExpand() ? nBegin < *pEndIdx
-                                                    : nBegin <= *pEndIdx )) ||
-                            ( nBegin == nAttrStart &&
-                                ( nAttrStart == *pEndIdx || !nBegin ))) )
+                if( nLen )
+                {
+                    if( nAttrStart >= nEnd || nBegin >= *pEndIdx )
+                        continue;
+                }
+                else if( nBegin != nAttrStart || ( nAttrStart != *pEndIdx && nBegin ))
+                {
+                    if( nAttrStart >= nBegin )
+                        continue;
+                    if( pHt->DontExpand() ? nBegin >= *pEndIdx : nBegin > *pEndIdx)
+                        continue;
+                }
                 {
                     const SfxPoolItem* pItem = CharFmt::GetItem( *pHt, nWhichId );
                     const sal_uInt16 nLng = ((SvxLanguageItem*)pItem)->GetLanguage();
