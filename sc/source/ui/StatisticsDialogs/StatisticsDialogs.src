@@ -276,6 +276,7 @@ Resource RID_STATISTICS_DLGS
         Text [ en-US ] = "Sampling";
     };
 
+    /* Names of dialogs */
     String STR_FTEST
     {
         Text [ en-US ] = "F-test";
@@ -299,6 +300,10 @@ Resource RID_STATISTICS_DLGS
     String STR_ZTEST_UNDO_NAME
     {
         Text [ en-US ] = "z-test";
+    };
+    String STR_CHI_SQUARE_TEST
+    {
+        Text [ en-US ] = "Test of Independence (Chi-Square)";
     };
 
     /* Common */
@@ -333,6 +338,22 @@ Resource RID_STATISTICS_DLGS
     String STR_OBSERVED_MEAN_DIFFERENCE_LABEL
     {
         Text [ en-US ] = "Observed Mean Difference";
+    };
+    String STR_DEGREES_OF_FREEDOM_LABEL
+    {
+        Text [ en-US ] = "df";
+    };
+    String STR_P_VALUE_LABEL
+    {
+        Text [ en-US ] = "P-value";
+    };
+    String STR_CRITICAL_VALUE_LABEL
+    {
+        Text [ en-US ] = "Critical Value";
+    };
+    String STR_TEST_STATISTIC_LABEL
+    {
+        Text [ en-US ] = "Test Statistic";
     };
 
     /*F Test */
