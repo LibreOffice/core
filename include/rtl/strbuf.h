@@ -101,7 +101,9 @@ SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_ensureCapacity(
     @param[in,out]  This        the String to operate on.
     @param[in,out]  capacity    the capacity of the string buffer
     @param[in]      offset      the offset.
-    @param[in]      str         a character array.
+    @param[in]      str         a character array.  Since LibreOffice 4.4, as a
+                                special case, if str is null then the len added
+                                characters are left uninitialized.
     @param[in]      len         the number of characters to append.
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_stringbuffer_insert(

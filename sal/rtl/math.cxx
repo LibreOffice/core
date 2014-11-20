@@ -222,6 +222,7 @@ struct StringTraits
                                    sal_Int32 * pOffset, sal_Char const * pChars,
                                    sal_Int32 nLen)
     {
+        assert(pChars != nullptr);
         rtl_stringbuffer_insert(pBuffer, pCapacity, *pOffset, pChars, nLen);
         *pOffset += nLen;
     }
@@ -230,6 +231,7 @@ struct StringTraits
                                    sal_Int32 * pOffset, sal_Char const * pStr,
                                    sal_Int32 nLen)
     {
+        assert(pStr != nullptr);
         rtl_stringbuffer_insert(pBuffer, pCapacity, *pOffset, pStr, nLen);
         *pOffset += nLen;
     }
