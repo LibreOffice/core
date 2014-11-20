@@ -1779,8 +1779,7 @@ void SwTxtNode::DelSoftHyph( const sal_Int32 nStt, const sal_Int32 nEnd )
     }
 }
 
-//In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, so we ignore it
-bool lcl_IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
+bool SwTxtNode::IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich)
 {
     return (nWhich ==  RES_CHRATR_UNDERLINE || nWhich == RES_CHRATR_BACKGROUND || nWhich == RES_CHRATR_ESCAPEMENT);
 }
@@ -1830,7 +1829,7 @@ bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
         {
             if (pCurrNumFmt->IsItemize() && lcl_IsIgnoredCharFmtForBullets(nWhich))
                 return bRet;
-            if (pCurrNumFmt->IsEnumeration() && lcl_IsIgnoredCharFmtForNumbering(nWhich))
+            if (pCurrNumFmt->IsEnumeration() && SwTxtNode::IsIgnoredCharFmtForNumbering(nWhich))
                 return bRet;
             SwCharFmt* pCurrCharFmt =pCurrNumFmt->GetCharFmt();
 
