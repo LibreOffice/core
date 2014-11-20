@@ -738,7 +738,6 @@ linux-android*)
     build_gstreamer_0_10=no
     enable_lotuswordpro=no
     enable_mpl_subset=yes
-    enable_opengl=no
     enable_coinmp=yes
     enable_lpsolve=no
     enable_report_builder=no
@@ -1101,10 +1100,6 @@ AC_ARG_ENABLE(cairo-canvas,
 [  --disable-cairo-canvas  Determines whether to build the Cairo canvas on
                           platforms where Cairo is available.
 ])
-
-AC_ARG_ENABLE(opengl,
-    AS_HELP_STRING([--disable-opengl],
-        [Determines whether to build the OpenGL 3D slide transitions and canvas component.]))
 
 AC_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
@@ -7168,7 +7163,6 @@ AC_SUBST(WINEGCC)
 
 if test $_os = iOS; then
     enable_mpl_subset=yes
-    enable_opengl=no
     enable_lotuswordpro=no
     enable_coinmp=yes
     enable_lpsolve=no
@@ -10231,33 +10225,14 @@ else
 fi
 AC_SUBST(ENABLE_VLC)
 
-dnl ===================================================================
-dnl Check whether the OpenGL libraries are available
-dnl ===================================================================
-
-AC_MSG_CHECKING([whether to build the OpenGL Transitions component])
 ENABLE_OPENGL=
-
-if test -z "$enable_opengl"; then
-    if test $_os = iOS; then
-        # As such with some suitable minor tweaks the Mac OpenGL transitions code would presumably
-        # build fine for iOS, too, but let's leave that for later
-        enable_opengl=no
-    elif test "$with_x" = "no"; then
-        enable_opengl=no
-    else
-        enable_opengl=yes
-    fi
-fi
-
-if test "x$enable_opengl" = "xno"; then
-    AC_MSG_RESULT([no])
+if test $_os = iOS -o $_os = Android; then
+   : # disable
 elif test "$_os" = "Darwin"; then
     # We use frameworks on Mac OS X, no need for detail checks
     ENABLE_OPENGL=TRUE
     ENABLE_OPENGL_CANVAS=TRUE
     SYSTEM_MESA_HEADERS=TRUE
-    AC_MSG_RESULT([yes])
 elif test $_os = WINNT; then
     # Experimental: try to use OpenGL on Windows
     ENABLE_OPENGL=TRUE
@@ -10265,22 +10240,9 @@ elif test $_os = WINNT; then
     # We need the internal "Mesa" headers.
     SYSTEM_MESA_HEADERS=
     BUILD_TYPE="$BUILD_TYPE MESA"
-    AC_MSG_RESULT([yes])
 else
-    save_LDFLAGS=$LDFLAGS
-    LDFLAGS="$LDFLAGS -lm"
-    AC_MSG_RESULT([yes])
-    AC_CHECK_LIB([GL], [main],
-        [AC_CHECK_LIB([GL], [glCreateShader], [ENABLE_OPENGL_CANVAS=TRUE],
-            [add_warning "no shader support in libGL - will enable openGL transitions, but not openGL canvas"
-             AC_MSG_WARN([no shader support in libGL - will enable openGL transitions, but not openGL canvas])
-             ENABLE_OPENGL_CANVAS=], [])],
-        [AC_MSG_ERROR(libGL not installed or functional)], [])
-    LDFLAGS="$LDFLAGS -lGL"
-    AC_CHECK_LIB([GLU], [main], [:],
-              [AC_MSG_ERROR(libGLU not installed or functional)], [])
     ENABLE_OPENGL=TRUE
-    LDFLAGS=$save_LDFLAGS
+    ENABLE_OPENGL_CANVAS=TRUE
 
     dnl ===================================================================
     dnl Check for system Mesa
@@ -12686,9 +12648,9 @@ if test "$enable_mpl_subset" = "yes"; then
         *) : ;;
         esac
     done
-    if test "$enable_opengl" != "no" -o "x$ENABLE_OPENGL" = "xTRUE"; then
-        AC_MSG_ERROR([need to --disable-opengl - GL transitions support.])
-    fi
+
+    ENABLE_OPENGL=
+
     if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" = "xTRUE"; then
         AC_MSG_ERROR([need to --disable-lpsolve - calc linear programming solver.])
     fi
