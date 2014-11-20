@@ -302,7 +302,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 // Search for SwTxtFld ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && ( aPam.Find( aFldHint, false, fnMoveForward, &aCurPam )
+                     && ( aPam.Find( aFldHint, false, fnMoveForward, &aCurPam, true )
                           || aPam.Find( aAnnotationFldHint, false, fnMoveForward, &aCurPam )
                           || aPam.Find( aInputFldHint, false, fnMoveForward, &aCurPam ) ) )
                 {
