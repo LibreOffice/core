@@ -18,6 +18,7 @@
  */
 
 #include "MNameMapper.hxx"
+#include <osl/diagnose.h>
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())

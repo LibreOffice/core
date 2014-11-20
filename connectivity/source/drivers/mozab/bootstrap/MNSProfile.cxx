@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#include <osl/diagnose.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
