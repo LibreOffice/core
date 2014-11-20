@@ -20,6 +20,9 @@
 #ifndef INCLUDED_ANIMATIONS_SOURCE_ANIMCORE_FACTREG_HXX
 #define INCLUDED_ANIMATIONS_SOURCE_ANIMCORE_FACTREG_HXX
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
 namespace animcore {
 
 #define DECL_NODE_FACTORY(N)\
