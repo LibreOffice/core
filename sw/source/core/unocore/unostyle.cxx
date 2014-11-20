@@ -745,11 +745,17 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
             uno::Reference< style::XStyle >  xStyle = _FindStyle(sStyleName);
             if(!xStyle.is())
             {
-                xStyle = eFamily == SFX_STYLE_FAMILY_PAGE ?
-                    new SwXPageStyle(*pBasePool, pDocShell, eFamily, sStyleName) :
-                        eFamily == SFX_STYLE_FAMILY_FRAME ?
-                        new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
-                            new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
+                switch(eFamily)
+                {
+                    case SFX_STYLE_FAMILY_PAGE:
+                        xStyle = new SwXPageStyle(*pBasePool, pDocShell, eFamily, sStyleName);
+                        break;
+                    case SFX_STYLE_FAMILY_FRAME:
+                        xStyle = new SwXFrameStyle(*pBasePool, pDocShell->GetDoc(), pBase->GetName()):
+                        break;
+                    default:
+                        new SwXStyle(*pBasePool, eFamily, pDocShell->GetDoc(), sStyleName);
+                }
             }
             aRet.setValue(&xStyle, cppu::UnoType<style::XStyle>::get());
         }
