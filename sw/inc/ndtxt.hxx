@@ -797,6 +797,9 @@ public:
     bool CompareParRsid( const SwTxtNode &rTxtNode ) const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
+
+    /// In MS Word, the font underline setting of the paragraph end position wont affect the formatting of numbering, so we ignore it
+    static bool IsIgnoredCharFmtForNumbering(const sal_uInt16 nWhich);
 };
 
 inline SwpHints & SwTxtNode::GetSwpHints()
