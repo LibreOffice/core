@@ -301,11 +301,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
         m_pImpl->m_sName = "TextSection";
     }
-    SectionType eType = (m_pImpl->m_pProps->m_bDDE)
-        ? DDE_LINK_SECTION
-        : ((!m_pImpl->m_pProps->m_sLinkFileName.isEmpty() ||
-            !m_pImpl->m_pProps->m_sSectionRegion.isEmpty())
-                ?  FILE_LINK_SECTION : CONTENT_SECTION);
+    SectionType eType(FILE_LINK_SECTION);
+    if( m_pImpl->m_pProps->m_bDDE )
+        eType = DDE_LINK_SECTION;
+    else if( m_pImpl->m_pProps->m_sLinkFileName.isEmpty() && m_pImpl->m_pProps->m_sSectionRegion.isEmpty() )
+        eType = CONTENT_SECTION;
     // index header section?
     if (m_pImpl->m_bIndexHeader)
     {
