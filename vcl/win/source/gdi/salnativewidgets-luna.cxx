@@ -35,6 +35,7 @@
 
 #include "osl/module.h"
 
+#include <opengl/win/gdiimpl.hxx>
 #include "vcl/svapp.hxx"
 #include <vcl/settings.hxx>
 
@@ -1260,18 +1261,53 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     rc.top    = buttonRect.Top();
     rc.bottom = buttonRect.Bottom()+1;
 
-    // set default text alignment
-    int ta = SetTextAlign( getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP );
+    OUString aCaptionStr(aCaption.replace('~', '&')); // translate mnemonics
 
-    OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
-    bOk = ImplDrawNativeControl(getHDC(), hTheme, rc,
-                            nType, nPart, nState, aValue,
-                            aCaptionStr );
+    WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(mpImpl.get());
+    if (pImpl == NULL)
+    {
+        // set default text alignment
+        int ta = SetTextAlign(getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
 
-    // restore alignment
-    SetTextAlign( getHDC(), ta );
+        bOk = ImplDrawNativeControl(getHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr);
 
-    //GdiFlush();
+        // restore alignment
+        SetTextAlign(getHDC(), ta);
+    }
+    else
+    {
+        // We can do OpenGL
+        OpenGLCompatibleDC aBlackDC(*this, buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight());
+        SetTextAlign(aBlackDC.getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
+        aBlackDC.fill(MAKE_SALCOLOR(0, 0, 0));
+
+        OpenGLCompatibleDC aWhiteDC(*this, buttonRect.Left(), buttonRect.Top(), buttonRect.GetWidth(), buttonRect.GetHeight());
+        SetTextAlign(aWhiteDC.getCompatibleHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
+        aWhiteDC.fill(MAKE_SALCOLOR(0xff, 0xff, 0xff));
+
+        if (ImplDrawNativeControl(aBlackDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr) &&
+            ImplDrawNativeControl(aWhiteDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
+        {
+            OpenGLTexture *pBlackTexture = aBlackDC.getTexture();
+            if (!pBlackTexture)
+                return false;
+
+            OpenGLTexture *pWhiteTexture = aWhiteDC.getTexture();
+            if (!pWhiteTexture)
+            {
+                delete pBlackTexture;
+                return false;
+            }
+
+            pImpl->PreDraw();
+            pImpl->DrawTexture(*pBlackTexture, aBlackDC.getTwoRect()); // FIXME combine the textures - DrawTextureSynthesizedAlpha()
+            pImpl->PostDraw();
+
+            delete pBlackTexture;
+            delete pWhiteTexture;
+            bOk = true;
+        }
+    }
 
     return bOk;
 }

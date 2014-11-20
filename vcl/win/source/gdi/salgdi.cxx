@@ -601,18 +601,23 @@ OpenGLCompatibleDC::~OpenGLCompatibleDC()
     }
 }
 
-void OpenGLCompatibleDC::DrawMask(SalColor color)
+void OpenGLCompatibleDC::fill(sal_uInt32 color)
 {
-    if (!mpImpl)
+    if (!mpData)
         return;
 
-    // turn what's in the mpData into a texture
-    OpenGLTexture aTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_RGBA, GL_UNSIGNED_BYTE, mpData);
-    CHECK_GL_ERROR();
+    sal_uInt32 *p = mpData;
+    for (int i = maRects.mnSrcWidth * maRects.mnSrcHeight; i > 0; --i)
+        *p++ = color;
+}
 
-    mpImpl->PreDraw();
-    mpImpl->DrawMask(aTexture, color, maRects);
-    mpImpl->PostDraw();
+OpenGLTexture* OpenGLCompatibleDC::getTexture()
+{
+    if (!mpImpl)
+        return NULL;
+
+    // turn what's in the mpData into a texture
+    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_RGBA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
 }
 
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd):
