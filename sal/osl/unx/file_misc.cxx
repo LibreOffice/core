@@ -868,12 +868,15 @@ void attemptChangeMetadata( const sal_Char* pszFileName, mode_t nMode, time_t nA
 {
     struct utimbuf aTimeBuffer;
 
+#if !defined AT_FDCWD
+    if (!S_ISLNK(nMode) && chmod(pszFileName, nMode) < 0)
+#else
     if ( fchmodat(AT_FDCWD, pszFileName, nMode, AT_SYMLINK_NOFOLLOW) < 0 )
+#endif
     {
         int e = errno;
         SAL_INFO(
-            "sal.osl",
-            "fchmodat(" << pszFileName << ") failed with errno " << e);
+            "sal.osl", "chmod(" << pszFileName << ") failed with errno " << e);
     }
 
     // No way to change utime of a symlink itself:
