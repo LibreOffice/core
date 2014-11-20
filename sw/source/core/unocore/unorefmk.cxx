@@ -542,9 +542,9 @@ public:
 
     // XInterface
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE
-        { OSL_FAIL("ERROR: SwXMetaText::acquire"); }
+        { assert(false); }
     virtual void SAL_CALL release() throw() SAL_OVERRIDE
-        { OSL_FAIL("ERROR: SwXMetaText::release"); }
+        { assert(false); }
 
     // XTypeProvider
     virtual uno::Sequence< sal_Int8 > SAL_CALL
@@ -750,7 +750,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             const uno::Reference<lang::XUnoTunnel> xUT(xMeta, uno::UNO_QUERY);
             SwXMeta *const pXMeta(
                 ::sw::UnoTunnelGetImplementation<SwXMeta>(xUT));
-            OSL_ENSURE(pXMeta, "no pXMeta?");
+            assert(pXMeta);
             // NB: the meta must always be created with the complete content
             // if SwXTextPortionEnumeration is created for a selection,
             // it must be checked that the Meta is contained in the selection!
@@ -758,7 +758,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             // ??? is this necessary?
             if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
             {
-                OSL_FAIL("SwXMeta with different parent?");
+                SAL_WARN("sw.uno", "SwXMeta with different parent?");
                 pXMeta->m_pImpl->m_xParentText.set(i_xParent);
             }
         }
@@ -767,13 +767,13 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
 
     // create new SwXMeta
     SwTxtNode * const pTxtNode( rMeta.GetTxtNode() );
-    OSL_ENSURE(pTxtNode, "CreateXMeta: no text node?");
+    SAL_WARN_IF(!pTxtNode, "sw.uno", "CreateXMeta: no text node?");
     if (!pTxtNode) { return 0; }
     uno::Reference<text::XText> xParentText(i_xParent);
     if (!xParentText.is())
     {
         SwTxtMeta * const pTxtAttr( rMeta.GetTxtAttr() );
-        OSL_ENSURE(pTxtAttr, "CreateXMeta: no text attr?");
+        SAL_WARN_IF(!pTxtAttr, "sw.uno", "CreateXMeta: no text attr?");
         if (!pTxtAttr) { return 0; }
         const SwPosition aPos(*pTxtNode, pTxtAttr->GetStart());
         xParentText.set( ::sw::CreateParentXText(*pTxtNode->GetDoc(), aPos) );
@@ -971,7 +971,7 @@ SwXMeta::dispose() throw (uno::RuntimeException, std::exception)
             pDoc->getIDocumentContentOperations().DeleteAndJoin( aPam );
 
             // removal should call Modify and do the dispose
-            OSL_ENSURE(m_pImpl->m_bIsDisposed, "zombie meta");
+            assert(m_pImpl->m_bIsDisposed);
         }
     }
 }

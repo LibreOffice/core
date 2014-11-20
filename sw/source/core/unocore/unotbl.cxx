@@ -516,15 +516,15 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
     {
         const SwTableLines& rLines(bFirst ? rTableLines : pBox->GetTabLines());
         bFirst = false;
-        OSL_ASSERT(rLines.size() != 0);
+        assert(rLines.size() != 0);
         if (!rLines.empty())
         {
             const SwTableLine* pLine(i_bTopLeft ? rLines.front() : rLines.back());
-            OSL_ASSERT(pLine);
+            assert(pLine);
             const SwTableBoxes& rBoxes(pLine->GetTabBoxes());
-            OSL_ASSERT(rBoxes.size() != 0);
+            assert(rBoxes.size() != 0);
             pBox = i_bTopLeft ? rBoxes.front() : rBoxes.back();
-            OSL_ASSERT(pBox);
+            assert(pBox);
         }
         else
         {
@@ -1062,7 +1062,7 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
             SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
             sal_Int16 nNum = 0;
             aValue >>= nNum;
-            OSL_TRACE("FRMDirection val %d", nNum );
+            SAL_INFO("sw.uno", "FRMDirection val " << nNum);
             switch (nNum)
             {
                 case 0:

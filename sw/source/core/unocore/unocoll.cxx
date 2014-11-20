@@ -143,7 +143,6 @@ public:
         OUString sCodeName;
         if ( mpDocShell )
         {
-            OSL_TRACE( "*** In ScVbaCodeNameProvider::getCodeNameForObject");
             // need to find the page ( and index )  for this control
             uno::Reference< drawing::XDrawPageSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
@@ -209,9 +208,8 @@ public:
 
         OUString sProjectName;
         aElement >>= sProjectName;
-        OSL_TRACE("** Template cache inserting template name %s with project %s"
-            , OUStringToOString( aName, RTL_TEXTENCODING_UTF8 ).getStr()
-            , OUStringToOString( sProjectName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        SAL_INFO("sw.uno", "Template cache inserting template name " << aName
+                << " with project " << sProjectName);
         mTemplateToProject[ aName ] = sProjectName;
     }
 
@@ -262,11 +260,12 @@ public:
     {
         if ( !hasByName( aName ) )
              throw container::NoSuchElementException();
-    uno::Sequence< uno::Any > aArgs( 2 );
+        uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] = uno::Any( uno::Reference< uno::XInterface >() );
         aArgs[1] = uno::Any( mpDocShell->GetModel() );
         uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
-        OSL_TRACE("Creating Object ( ooo.vba.word.Document ) 0x%p", xDocObj.get() );
+        SAL_INFO("sw.uno",
+            "Creating Object ( ooo.vba.word.Document ) 0x" << xDocObj.get());
         return  uno::makeAny( xDocObj );
     }
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -816,9 +815,12 @@ SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
             // paste, there should be no data provider, so that own data is used
             // This should not happen during copy/paste, as this will unlink
             // charts using table data.
-            OSL_ASSERT(rDoc.GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED);
             if (rDoc.GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED)
                 xRet = (cppu::OWeakObject*) rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ );
+            else
+                SAL_WARN("sw.uno",
+                    "not creating chart data provider for embedded object");
+
         break;
         case SW_SERVICE_TYPE_META:
             xRet = SwXMeta::CreateXMeta(rDoc, false);

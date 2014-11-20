@@ -389,7 +389,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                 switch (splitPolicy(nNewWhich, nOtherWhich))
                 {
                     case FAIL:
-                        OSL_TRACE("cannot insert hint: overlap detected");
+                        SAL_INFO("sw.core", "cannot insert hint: overlap");
                         ::std::for_each(SplitNew.begin(), SplitNew.end(),
                             TxtAttrDeleter(*rNode.GetDoc()));
                         return false;
@@ -485,7 +485,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         {
                             if ( MAX_HINTS <= Count() )
                             {
-                                OSL_FAIL("hints array full :-(");
+                                SAL_INFO("sw.core", "hints array full :-(");
                                 return false;
                             }
                             SwTxtAttrNesting * const pOtherLeft(
@@ -504,7 +504,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         {
                             if ( MAX_HINTS <= Count() )
                             {
-                                OSL_FAIL("hints array full :-(");
+                                SAL_INFO("sw.core", "hints array full :-(");
                                 return false;
                             }
                             SwTxtAttrNesting * const pOtherRight(
@@ -522,7 +522,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
 
     if ( MAX_HINTS <= Count() || MAX_HINTS - Count() <= SplitNew.size() )
     {
-        OSL_FAIL("hints array full :-(");
+        SAL_INFO("sw.core", "hints array full :-(");
         return false;
     }
 
@@ -600,9 +600,8 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
     std::vector<SwTxtAttr*> aInsDelHints;
     std::vector<SwTxtAttr*>::iterator aIter;
 
-    OSL_ENSURE( RES_TXTATR_CHARFMT == rNewHint.Which() ||
-            RES_TXTATR_AUTOFMT == rNewHint.Which(),
-            "Expecting CHARFMT or AUTOFMT" );
+    assert( RES_TXTATR_CHARFMT == rNewHint.Which() ||
+            RES_TXTATR_AUTOFMT == rNewHint.Which() );
 
     // 2. Find the hints which cover the start and end position
     // of the new hint. These hints have to be split into two portions:
@@ -1101,7 +1100,7 @@ SwTxtAttr* MakeTxtAttr(
                 static_cast<SwFmtMeta&>(rNew), nStt, nEnd, bIsCopy == COPY );
         break;
     default:
-        OSL_ENSURE(RES_TXTATR_AUTOFMT == rNew.Which(), "unknown attribute");
+        assert(RES_TXTATR_AUTOFMT == rNew.Which());
         pNew = new SwTxtAttrEnd( rNew, nStt, nEnd );
         break;
     }
