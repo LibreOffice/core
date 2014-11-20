@@ -1409,7 +1409,7 @@ ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* p
         return NULL;
     }
 
-    return aCol[nCol].SetFormulaCell(nRow, pCell);
+    return aCol[nCol].SetFormulaCell(nRow, pCell, true);
 }
 
 bool ScTable::SetFormulaCells( SCCOL nCol, SCROW nRow, std::vector<ScFormulaCell*>& rCells )
