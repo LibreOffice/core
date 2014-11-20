@@ -795,7 +795,7 @@ bool ScDrawStringsVars::HasEditCharacters() const
 
 double ScOutputData::GetStretch()
 {
-    if ( mpRefDevice->IsMapMode() )
+    if ( mpRefDevice->IsMapModeEnabled() )
     {
         //  If a non-trivial MapMode is set, its scale is now already
         //  taken into account in the OutputDevice's font handling
