@@ -56,8 +56,6 @@
 #include <unomid.h>
 #include <boost/scoped_ptr.hpp>
 
-#define PAGE_CHANGE_TIMEOUT 1000
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 

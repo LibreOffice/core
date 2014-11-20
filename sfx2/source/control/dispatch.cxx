@@ -139,8 +139,6 @@ struct SfxDispatcher_Impl
     std::deque< std::deque<SfxToDo_Impl> > aToDoCopyStack;
 };
 
-#define SFX_FLUSH_TIMEOUT    50
-
 /** This method checks if the stack of the SfxDispatchers is flushed, or if
     push- or pop- commands are pending.
 */

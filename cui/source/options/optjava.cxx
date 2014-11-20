@@ -53,7 +53,6 @@
 // define ----------------------------------------------------------------
 
 #define CLASSPATH_DELIMITER SAL_PATHSEPARATOR
-#define RESET_TIMEOUT       300
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;

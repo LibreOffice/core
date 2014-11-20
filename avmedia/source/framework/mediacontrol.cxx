@@ -33,7 +33,6 @@
 #include <math.h>
 #include <algorithm>
 
-#define AVMEDIA_TIMEOUT             100
 #define AVMEDIA_TIME_RANGE          2048
 #define AVMEDIA_DB_RANGE            -40
 #define AVMEDIA_LINEINCREMENT       1.0

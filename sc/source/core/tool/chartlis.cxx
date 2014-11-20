@@ -34,7 +34,6 @@ using ::std::for_each;
 
 // Update chart listeners quickly, to get a similar behavior to loaded charts
 // which register UNO listeners.
-#define SC_CHARTTIMEOUT 10
 
 class ScChartUnoData
 {
