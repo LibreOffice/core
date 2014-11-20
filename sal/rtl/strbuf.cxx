@@ -114,11 +114,10 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
             memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Char) );
 
         /* insert the new characters */
-        n = len;
         if( len == 1 )
                             /* optimized for 1 character */
             pBuf[offset] = *str;
-        else if( n > 1 )
+        else if( len > 1 )
             memcpy( pBuf + offset, str, len * sizeof(sal_Char) );
         (*This)->length = nOldLen + len;
         pBuf[ nOldLen + len ] = 0;
