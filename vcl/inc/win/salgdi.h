@@ -41,6 +41,7 @@ class ImplWinFontEntry;
 class ImplFontAttrCache;
 class PhysicalFontCollection;
 class SalGraphicsImpl;
+class WinOpenGLSalGraphicsImpl;
 
 #define RGB_TO_PALRGB(nRGB)         ((nRGB)|0x02000000)
 #define PALRGB_TO_RGB(nPalRGB)      ((nPalRGB)&0x00ffffff)
@@ -139,11 +140,43 @@ public:
     bool                    IsGSUBstituted( sal_UCS4 ) const;
 };
 
+/** Class that creates (and destroys) a compatible Device Context.
+
+This is to be used for GDI drawing into a DIB that we later use as a texture for OpenGL drawing.
+*/
+class OpenGLCompatibleDC
+{
+private:
+    /// The compatible DC that we create for our purposes.
+    HDC mhCompatibleDC;
+
+    /// DIBSection that we use for the GDI drawing, and later obtain.
+    HBITMAP mhBitmap;
+
+    /// DIBSection data.
+    sal_uInt8 *mpData;
+
+    /// Mapping between the GDI position and OpenGL, to use for OpenGL drawing.
+    SalTwoRect maRects;
+
+    /// The OpenGL-based SalGraphicsImpl where we will draw.  If null, we ignora the drawing, it means it happened directly to the DC..
+    WinOpenGLSalGraphicsImpl *mpImpl;
+
+public:
+    OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height);
+    ~OpenGLCompatibleDC();
+
+    HDC getCompatibleHDC() { return mhCompatibleDC; }
+
+    /// Call the WinOpenGLSalGraphicsImpl's DrawMask().
+    void DrawMask(SalColor color);
+};
+
 class WinSalGraphics : public SalGraphics
 {
     friend class WinSalGraphicsImpl;
     friend class ScopedFont;
-    friend class WinLayout;
+    friend class OpenGLCompatibleDC;
 private:
     boost::scoped_ptr<SalGraphicsImpl> mpImpl;
 

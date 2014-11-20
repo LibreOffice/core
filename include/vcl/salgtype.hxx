@@ -46,6 +46,13 @@ struct SalTwoRect
     long        mnDestY;
     long        mnDestWidth;
     long        mnDestHeight;
+
+    SalTwoRect() {}
+
+    SalTwoRect(long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, long nDestX, long nDestY, long nDestWidth, long nDestHeight)
+        : mnSrcX(nSrcX), mnSrcY(nSrcY), mnSrcWidth(nSrcWidth), mnSrcHeight(nSrcHeight), mnDestX(nDestX), mnDestY(nDestY), mnDestWidth(nDestWidth), mnDestHeight(nDestHeight)
+    {
+    }
 };
 
 typedef sal_uInt16 SalROPColor;
