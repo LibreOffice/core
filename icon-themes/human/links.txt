@@ -1,4 +1,5 @@
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
