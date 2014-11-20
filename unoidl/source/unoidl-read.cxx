@@ -606,9 +606,14 @@ void writeEntity(
             std::map<OUString, Entity>::iterator k(entities.find(*j));
             if (k != entities.end() && !k->second.written) {
                 OUString id(openModulesFor(modules, *j));
-                assert(
-                    k->second.entity->getSort()
-                    == unoidl::Entity::SORT_INTERFACE_TYPE);
+                if (k->second.entity->getSort()
+                    != unoidl::Entity::SORT_INTERFACE_TYPE)
+                {
+                    std::cerr
+                        << "Entity " << *j << " should be an interface type"
+                        << std::endl;
+                    std::exit(EXIT_FAILURE);
+                }
                 writePublished(
                     static_cast<unoidl::PublishableEntity *>(
                         k->second.entity.get()));
