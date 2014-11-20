@@ -27,6 +27,8 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
 
+#include <rtl/ustrbuf.hxx>
+
 #include <nlsupport.hxx>
 
 namespace
@@ -59,11 +61,17 @@ namespace
 
         return CFLocaleCreateCanonicalLocaleIdentifierFromString(kCFAllocatorDefault, sref);
     }
+
+    void append(rtl::OUStringBuffer & buffer, CFStringRef string) {
+        CFIndex n = CFStringGetLength(string);
+        CFStringGetCharacters(
+            string, CFRangeMake(0, n), buffer.appendUninitialized(n));
+    }
 }
 
 /** Grab current locale from system.
 */
-void macosx_getLocale(char *locale, sal_uInt32 bufferLen)
+rtl::OUString macosx_getLocale()
 {
     CFStringRef sref = getProcessLocale();
     CFStringGuard sGuard(sref);
@@ -75,22 +83,21 @@ void macosx_getLocale(char *locale, sal_uInt32 bufferLen)
     CFArrayRef subs = CFStringCreateArrayBySeparatingStrings(NULL, sref, CFSTR("-"));
     CFArrayGuard arrGuard(subs);
 
-    CFStringRef lang = (CFStringRef)CFArrayGetValueAtIndex(subs, 0);
-    CFStringGetCString(lang, locale, bufferLen, kCFStringEncodingASCII);
+    rtl::OUStringBuffer buf;
+    append(buf, (CFStringRef)CFArrayGetValueAtIndex(subs, 0));
 
     // country also available? Assumption: if the array contains more than one
     // value the second value is always the country!
     if (CFArrayGetCount(subs) > 1)
     {
-        strlcat(locale, "_", bufferLen - strlen(locale));
-
-        CFStringRef country = (CFStringRef)CFArrayGetValueAtIndex(subs, 1);
-        CFStringGetCString(country, locale + strlen(locale), bufferLen - strlen(locale), kCFStringEncodingASCII);
+        buf.append("_");
+        append(buf, (CFStringRef)CFArrayGetValueAtIndex(subs, 1));
     }
     // Append 'UTF-8' to the locale because the Mac OS X file
     // system interface is UTF-8 based and sal tries to determine
     // the file system locale from the locale information
-    strlcat(locale, ".UTF-8", bufferLen - strlen(locale));
+    buf.append(".UTF-8");
+    return buf.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

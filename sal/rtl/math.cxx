@@ -31,6 +31,7 @@
 #include "sal/types.h"
 
 #include <algorithm>
+#include <cassert>
 #include <float.h>
 #include <limits.h>
 #include <math.h>
@@ -256,6 +257,7 @@ struct UStringTraits
                                    sal_Int32 * pCapacity, sal_Int32 * pOffset,
                                    sal_Unicode const * pChars, sal_Int32 nLen)
     {
+        assert(pChars != nullptr);
         rtl_uStringbuffer_insert(pBuffer, pCapacity, *pOffset, pChars, nLen);
         *pOffset += nLen;
     }

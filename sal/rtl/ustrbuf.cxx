@@ -140,11 +140,14 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
             memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Unicode) );
 
         /* insert the new characters */
-        if( len == 1 )
-            /* optimized for 1 character */
-            pBuf[offset] = *str;
-        else if( len > 1 )
-            memcpy( pBuf + offset, str, len * sizeof(sal_Unicode) );
+        if( str != nullptr )
+        {
+            if( len == 1 )
+                /* optimized for 1 character */
+                pBuf[offset] = *str;
+            else if( len > 1 )
+                memcpy( pBuf + offset, str, len * sizeof(sal_Unicode) );
+        }
         (*This)->length = nOldLen + len;
         pBuf[ nOldLen + len ] = 0;
     }

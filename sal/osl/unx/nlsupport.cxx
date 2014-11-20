@@ -20,6 +20,8 @@
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include "nlsupport.hxx"
 
@@ -844,7 +846,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    static char *locale = NULL;
+    static char const *locale = NULL;
 
     /* basic thread safeness */
 //    pthread_mutex_lock( &aLocalMutex );
@@ -852,12 +854,16 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     /* Only fetch the locale once and cache it */
     if ( NULL == locale )
     {
-
-        locale = (char *)malloc( 128 );
-        if ( locale )
-            macosx_getLocale( locale, 128 );
-        else
-            fprintf( stderr, "nlsupport.c:  locale allocation returned NULL!\n" );
+        rtl::OUString loc16(macosx_getLocale());
+        rtl::OString loc8;
+        if (loc16.convertToString(
+                &loc8, RTL_TEXTENCODING_UTF8,
+                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                 | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+        {
+            rtl_string_acquire(loc8.pData); // leak, for setenv
+            locale = loc8.getStr();
+        }
     }
 
     /* handle the case where OS specific method of finding locale fails */
@@ -873,7 +879,7 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
             locale = getenv( "LANG" );
 
         if( NULL == locale )
-            locale = strdup("C");
+            locale = "C";
     }
 
     /* return the locale */

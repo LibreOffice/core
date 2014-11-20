@@ -474,6 +474,7 @@ public:
     OUStringBuffer & append( const sal_Unicode * str, sal_Int32 len)
     {
         assert( len >= 0 );
+        assert( len == 0 || str != 0 );
         rtl_uStringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -734,6 +735,28 @@ public:
     }
 
     /**
+       Unsafe way to make space for a fixed amount of characters to be appended
+       into this OUStringBuffer.
+
+       A call to this function must immediately be followed by code that
+       completely fills the uninitialized block pointed to by the return value.
+
+       @param length the length of the uninitialized block of sal_Unicode
+       entities; must be non-negative
+
+       @return a pointer to the start of the uninitialized block; only valid
+       until this OUStringBuffer's capacity changes
+
+       @since LibreOffice 4.4
+    */
+    sal_Unicode * appendUninitialized(sal_Int32 length) {
+        assert(length >= 0);
+        sal_Int32 n = getLength();
+        rtl_uStringbuffer_insert(&pData, &nCapacity, n, 0, length);
+        return pData->buffer + n;
+    }
+
+    /**
         Inserts the string into this string buffer.
 
         The characters of the <code>String</code> argument are inserted, in
@@ -797,6 +820,7 @@ public:
     {
         assert( offset >= 0 && offset <= pData->length );
         assert( len >= 0 );
+        assert( len == 0 || str != 0 );
         rtl_uStringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }
