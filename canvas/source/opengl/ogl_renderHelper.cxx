@@ -29,7 +29,7 @@ namespace oglcanvas
         m_simpleTexUnf = glGetUniformLocation(m_simpleProgID, "TextTex");
 
         m_manCordUnf = glGetUniformLocation(m_texManProgID, "texCord");
-        m_texColorUnf = glGetUniformLocation(m_texProgID, "constantColor");
+        m_texColorUnf = glGetUniformLocation(m_texProgID, "constColor");
 
         m_manColorUnf = glGetUniformLocation(m_texManProgID,"colorTex");
         m_simpleColorUnf = glGetUniformLocation(m_simpleProgID,"colorTex");
@@ -45,7 +45,7 @@ namespace oglcanvas
         m_simplePosAttrb = glGetAttribLocation(m_simpleProgID ,"vPosition");
         m_texPosAttrb = glGetAttribLocation(m_texProgID ,"vPosition");
 
-        glViewport(0, 0, m_iWidth, m_iHeight);
+        //glViewport(0, 0, m_iWidth, m_iHeight);
     }
     //Todo figgure out, which parameters i should use :)
     void RenderHelper::SetVP(int width, int height)
@@ -62,6 +62,8 @@ namespace oglcanvas
         m_Model = mat;
         m_MVP = m_Projection * m_View * m_Model;
     }
+
+
     void RenderHelper::renderVertexConstColor(GLfloat vertices[], glm::vec4 color, GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
@@ -69,7 +71,7 @@ namespace oglcanvas
 
         glUseProgram(m_texProgID);
 
-        glUniform4fv(m_texColorUnf, 1, glm::value_ptr(color));
+        glUniform4fv(m_texColorUnf, 1, &color[0]);
         glUniformMatrix4fv(m_texMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
         glEnableVertexAttribArray(m_texPosAttrb); //vertices
 
@@ -83,7 +85,7 @@ namespace oglcanvas
                         (void*)0                      // array buffer offset
         );
 
-        glDrawArrays(mode, 0, sizeof(vertices) / sizeof(vertices[0]) /2);
+        glDrawArrays(mode, 0, sizeof(vertices) / 2);
 
         glDisableVertexAttribArray(m_texPosAttrb);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -102,7 +104,8 @@ namespace oglcanvas
         glUseProgram(m_simpleProgID);
 
         glUniform1i(m_simpleTexUnf, 0); //Use texture Unit 0
-        glUniform4fv(m_simpleColorUnf, 1, glm::value_ptr(color));
+
+        glUniform4fv(m_simpleColorUnf, 1, &color[0]);
         glUniformMatrix4fv(m_simpleMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_simplePosAttrb);
@@ -127,7 +130,7 @@ namespace oglcanvas
             (void*)0                      // array buffer offset
         );
 
-        glDrawArrays(mode, 0, sizeof(vertices) / sizeof(vertices[0]) /2);
+        glDrawArrays(mode, 0, sizeof(vertices) / 2);
 
         glDisableVertexAttribArray(m_simplePosAttrb);
         glDisableVertexAttribArray(m_simpleUvAttrb);
@@ -157,7 +160,7 @@ namespace oglcanvas
         //Set Uniforms
         glUniform1i(m_manTexUnf, 0);
         glUniform2f(m_manCordUnf,fWidth,fHeight);
-        glUniform4fv(m_manColorUnf, 1,  glm::value_ptr(color));
+        glUniform4fv(m_manColorUnf, 1, &color[0]);
         glUniformMatrix4fv(m_manMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
 
         glEnableVertexAttribArray(m_manPosAttrb);
@@ -171,7 +174,7 @@ namespace oglcanvas
             (void*)0                      // array buffer offset
         );
 
-        glDrawArrays(mode, 0, sizeof(vertices) / sizeof(vertices[0]) /2);
+        glDrawArrays(mode, 0, sizeof(vertices) / 2);
 
         glDisableVertexAttribArray(m_manPosAttrb);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
