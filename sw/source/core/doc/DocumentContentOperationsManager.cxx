@@ -3202,17 +3202,20 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
         bool bAtCntnt = (pAnchor->GetAnchorId() == FLY_AT_PARA);
-        if ( pAPos &&
-             ( bAtCntnt ||
-              (pAnchor->GetAnchorId() == FLY_AT_FLY) ||
-              (pAnchor->GetAnchorId() == FLY_AT_CHAR)) &&
-             (( bCopyFlyAtFly && FLY_AT_FLY == pAnchor->GetAnchorId() )
+        if ( !pAPos )
+            continue;
+        if ( !bAtCntnt
+                && pAnchor->GetAnchorId() != FLY_AT_FLY
+                && pAnchor->GetAnchorId() != FLY_AT_CHAR)
+            continue;
+        if (( bCopyFlyAtFly && FLY_AT_FLY == pAnchor->GetAnchorId() )
                     ? rRg.aStart <= pAPos->nNode.GetIndex() + 1
                     : ( m_rDoc.getIDocumentRedlineAccess().IsRedlineMove()
                             ? rRg.aStart < pAPos->nNode
-                            : rRg.aStart <= pAPos->nNode )) &&
-             pAPos->nNode <= rRg.aEnd )
+                            : rRg.aStart <= pAPos->nNode ))
         {
+            if ( pAPos->nNode > rRg.aEnd )
+                continue;
             //frames at the last source node are not always copied:
             //- if the node is empty and is the last node of the document or a table cell
             //  or a text frame then tey have to be copied
