@@ -363,11 +363,22 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 bool bNew = !(pPostIt && pPostIt->GetTyp()->Which() == RES_POSTITFLD);
                 if (bNew || GetView().GetPostItMgr()->IsAnswer())
                 {
-                    SvtUserOptions aUserOpt;
+                    SFX_REQUEST_ARG( rReq, pAuthorItem, SvxPostItAuthorItem, SID_ATTR_POSTIT_AUTHOR, false );
                     OUString sAuthor;
-                    if( (sAuthor = aUserOpt.GetFullName()).isEmpty())
-                        if( (sAuthor = aUserOpt.GetID()).isEmpty() )
-                            sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
+                    if ( pAuthorItem )
+                        sAuthor = pAuthorItem->GetValue();
+                    else
+                    {
+                        SvtUserOptions aUserOpt;
+                        if( (sAuthor = aUserOpt.GetFullName()).isEmpty())
+                            if( (sAuthor = aUserOpt.GetID()).isEmpty() )
+                                sAuthor = SW_RES( STR_REDLINE_UNKNOWN_AUTHOR );
+                    }
+
+                    SFX_REQUEST_ARG( rReq, pTextItem, SvxPostItTextItem, SID_ATTR_POSTIT_TEXT, false );
+                    OUString sText;
+                    if ( pTextItem )
+                        sText = pTextItem->GetValue();
 
                     if ( rSh.HasSelection() && !rSh.IsTableMode() )
                     {
@@ -378,14 +389,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     // --> suggestion has to be removed before
                     GetView().GetEditWin().StopQuickHelp();
 
-                    SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, OUString(), 0);
+                    SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, sText, 0);
                     aFldMgr.InsertFld( aData );
 
                     rSh.Push();
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, false);
                     pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
                     rSh.Pop(false); // Restore cursor position
-                 }
+                }
 
                 if (pPostIt)
                 {
