@@ -42,8 +42,8 @@ class ImplDockFloatWin2 : public FloatingWindow
 private:
     ImplDockingWindowWrapper*  mpDockWin;
     sal_uLong           mnLastTicks;
-    Timer           maDockTimer;
-    Timer           maEndDockTimer;
+    Idle            maDockIdle;
+    Idle            maEndDockIdle;
     Point           maDockPos;
     Rectangle       maDockRect;
     bool            mbInMove;
@@ -91,10 +91,10 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
 
     SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
-    maDockTimer.SetTimeoutHdl( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
-    maDockTimer.SetTimeout( 50 );
-    maEndDockTimer.SetTimeoutHdl( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
-    maEndDockTimer.SetTimeout( 50 );
+    maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
+    maDockIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    maEndDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
+    maEndDockIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
 }
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
-    maDockTimer.Stop();
+    maDockIdle.Stop();
     PointerState aState = GetPointerState();
 
     if( aState.mnState & KEY_MOD1 )
@@ -115,7 +115,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
         // i43499 CTRL disables docking now
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
         if( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
-            maDockTimer.Start();
+            maDockIdle.Start();
     }
     else if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockTimerHdl)
     else
     {
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
-        maDockTimer.Start();
+        maDockIdle.Start();
     }
 
     return 0;
@@ -135,7 +135,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "enddocktimer called but not floating" );
 
-    maEndDockTimer.Stop();
+    maEndDockIdle.Stop();
     PointerState aState = GetPointerState();
     if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
@@ -144,7 +144,7 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, EndDockTimerHdl)
     }
     else
     {
-        maEndDockTimer.Start();
+        maEndDockIdle.Start();
     }
 
     return 0;
@@ -209,13 +209,13 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
             maDockRect.SetPos( mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ScreenToOutputPixel(
                  maDockRect.TopLeft() ) );
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
-            maEndDockTimer.Stop();
+            maEndDockIdle.Stop();
             DockTimerHdl( this );
         }
         else
         {
             mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
-            maDockTimer.Stop();
+            maDockIdle.Stop();
             EndDockTimerHdl( this );
         }
     }

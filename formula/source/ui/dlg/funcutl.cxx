@@ -455,15 +455,13 @@ void EditBox::UpdateOldSel()
 
 // class RefEdit
 
-#define SC_ENABLE_TIME 100
-
 RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle )
     : Edit( _pParent, nStyle )
     , pAnyRefDlg( NULL )
     , pLabelWidget(pShrinkModeLabel)
 {
-    aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
-    aTimer.SetTimeout( SC_ENABLE_TIME );
+    aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
+    aIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
 }
 
 RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
@@ -472,8 +470,8 @@ RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
     , pAnyRefDlg( pParent )
     , pLabelWidget(pShrinkModeLabel)
 {
-    aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
-    aTimer.SetTimeout( SC_ENABLE_TIME );
+    aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
+    aIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -483,8 +481,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *p
 
 RefEdit::~RefEdit()
 {
-    aTimer.SetTimeoutHdl( Link() );
-    aTimer.Stop();
+    aIdle.SetIdleHdl( Link() );
+    aIdle.Stop();
 }
 
 void RefEdit::SetRefString( const OUString& rStr )
@@ -509,12 +507,12 @@ void RefEdit::SetRefValid(bool bValid)
 void RefEdit::SetText(const OUString& rStr)
 {
     Edit::SetText( rStr );
-    UpdateHdl( &aTimer );
+    UpdateHdl( &aIdle );
 }
 
 void RefEdit::StartUpdateData()
 {
-    aTimer.Start();
+    aIdle.Start();
 }
 
 void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel )
@@ -524,13 +522,13 @@ void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel
 
     if( pDlg )
     {
-        aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
-        aTimer.SetTimeout( SC_ENABLE_TIME );
+        aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
+        aIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
     }
     else
     {
-        aTimer.SetTimeoutHdl( Link() );
-        aTimer.Stop();
+        aIdle.SetIdleHdl( Link() );
+        aIdle.Stop();
     }
 }
 

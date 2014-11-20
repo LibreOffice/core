@@ -29,7 +29,7 @@ class IMapOwnData
 {
 public:
 
-    Timer           aTimer;
+    Idle            aIdle;
     Timer           aTbxTimer;
     Graphic         aUpdateGraphic;
     ImageMap        aUpdateImageMap;

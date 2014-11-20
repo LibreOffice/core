@@ -166,8 +166,8 @@ class SvxIconChoiceCtrl_Impl
     std::vector<Rectangle*> aSelectedRectList;
     Idle                    aEditIdle;                 // for editing in place
     Idle                    aAutoArrangeIdle;
-    Timer                   aDocRectChangedTimer;
-    Timer                   aVisRectChangedTimer;
+    Idle                    aDocRectChangedIdle;
+    Idle                    aVisRectChangedIdle;
     Idle                    aCallSelectHdlIdle;
     Size                    aVirtOutputSize;
     Size                    aImageSize;
@@ -308,8 +308,8 @@ class SvxIconChoiceCtrl_Impl
                         {
                             return (ePositionMode == IcnViewPositionModeAutoAdjust);
                         }
-    void                DocRectChanged() { aDocRectChangedTimer.Start(); }
-    void                VisRectChanged() { aVisRectChangedTimer.Start(); }
+    void                DocRectChanged() { aDocRectChangedIdle.Start(); }
+    void                VisRectChanged() { aVisRectChangedIdle.Start(); }
     void                SetOrigin( const Point&, bool bDoNotUpdateWallpaper = false );
 
                         DECL_LINK(TextEditEndedHdl, void *);

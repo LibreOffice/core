@@ -183,7 +183,7 @@ namespace formula
         bool        bStructUpdate;
         MultiLineEdit*  pMEdit;
         bool        bUserMatrixFlag;
-        Timer           aTimer;
+        Idle            aIdle;
 
         const OUString  aTitle1;
         const OUString  aTitle2;
@@ -353,11 +353,11 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
 
 FormulaDlg_Impl::~FormulaDlg_Impl()
 {
-    if(aTimer.IsActive())
+    if(aIdle.IsActive())
     {
-        aTimer.SetTimeoutHdl(Link());
-        aTimer.Stop();
-    }// if(aTimer.IsActive())
+        aIdle.SetIdleHdl(Link());
+        aIdle.Stop();
+    }// if(aIdle.IsActive())
     bIsShutDown=true;// Set it in order to PreNotify not to save GetFocus.
 
     m_pTabCtrl->RemovePage(TP_FUNCTION);
@@ -412,7 +412,7 @@ void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
 
                 FormEditData* pData = m_pHelper->getFormEditData();
 
-                if (pData && !aTimer.IsActive()) // won't be destroyed via Close
+                if (pData && !aIdle.IsActive()) // won't be destroyed via Close
                 {
                     pData->SetUniqueId(aActivWinId);
                 }
@@ -1773,9 +1773,9 @@ OUString FormulaDlg::GetMeText() const
 void FormulaDlg::Update()
 {
     m_pImpl->Update();
-    m_pImpl->aTimer.SetTimeout(200);
-    m_pImpl->aTimer.SetTimeoutHdl(LINK( this, FormulaDlg, UpdateFocusHdl));
-    m_pImpl->aTimer.Start();
+    m_pImpl->aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWER);
+    m_pImpl->aIdle.SetIdleHdl(LINK( this, FormulaDlg, UpdateFocusHdl));
+    m_pImpl->aIdle.Start();
 }
 
 void FormulaDlg::DoEnter(bool _bOk)

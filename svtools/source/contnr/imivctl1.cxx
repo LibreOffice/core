@@ -142,10 +142,10 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     aCallSelectHdlIdle.SetPriority( VCL_IDLE_PRIORITY_LOWEST );
     aCallSelectHdlIdle.SetIdleHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
 
-    aDocRectChangedTimer.SetTimeout( 50 );
-    aDocRectChangedTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
-    aVisRectChangedTimer.SetTimeout( 50 );
-    aVisRectChangedTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
+    aDocRectChangedIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    aDocRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
+    aVisRectChangedIdle.SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    aVisRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
 
@@ -2895,14 +2895,14 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl)
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl)
 {
-    aVisRectChangedTimer.Stop();
+    aVisRectChangedIdle.Stop();
     pView->VisibleRectChanged();
     return 0;
 }
 
 IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl)
 {
-    aDocRectChangedTimer.Stop();
+    aDocRectChangedIdle.Stop();
     pView->DocumentRectChanged();
     return 0;
 }

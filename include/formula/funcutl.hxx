@@ -32,7 +32,7 @@ class IControlReferenceHandler;
 class FORMULA_DLLPUBLIC RefEdit : public Edit
 {
 private:
-    Timer                     aTimer;
+    Idle                      aIdle;
     IControlReferenceHandler* pAnyRefDlg; // parent dialog
     vcl::Window*                   pLabelWidget;
 

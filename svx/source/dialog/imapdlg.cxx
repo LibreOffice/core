@@ -210,8 +210,8 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     m_pCbbTarget->Disable();
     pOwnData->bExecState = false;
 
-    pOwnData->aTimer.SetTimeout( 100 );
-    pOwnData->aTimer.SetTimeoutHdl( LINK( this, SvxIMapDlg, UpdateHdl ) );
+    pOwnData->aIdle.SetPriority( VCL_IDLE_PRIORITY_LOW );
+    pOwnData->aIdle.SetIdleHdl( LINK( this, SvxIMapDlg, UpdateHdl ) );
 
     m_pTbxIMapDlg1->EnableItem( mnActiveId, false );
     m_pTbxIMapDlg1->EnableItem( mnMacroId, false );
@@ -318,7 +318,7 @@ void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
             pOwnData->aUpdateTargetList.push_back( aTargetList[ i ] );
     }
 
-    pOwnData->aTimer.Start();
+    pOwnData->aIdle.Start();
 }
 
 
@@ -687,7 +687,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl)
 
 IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
 {
-    pOwnData->aTimer.Stop();
+    pOwnData->aIdle.Stop();
 
     if ( pOwnData->pUpdateEditingObject != pCheckObj )
     {
