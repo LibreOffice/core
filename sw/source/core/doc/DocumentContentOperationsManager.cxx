@@ -3204,10 +3204,15 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         bool bAtCntnt = (pAnchor->GetAnchorId() == FLY_AT_PARA);
         if ( !pAPos )
             continue;
-        if ( !bAtCntnt
-                && pAnchor->GetAnchorId() != FLY_AT_FLY
-                && pAnchor->GetAnchorId() != FLY_AT_CHAR)
-            continue;
+        switch ( pAnchor->GetAnchorId() )
+        {
+            case FLY_AT_FLY:
+            case FLY_AT_CHAR:
+            case FLY_AT_PARA:
+                break;
+            default:
+                continue;
+        }
         if ( bCopyFlyAtFly && FLY_AT_FLY == pAnchor->GetAnchorId() )
         {
             if( rRg.aStart > pAPos->nNode.GetIndex() + 1 )
