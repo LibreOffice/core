@@ -204,8 +204,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     }
 
     // Anchor not yet set?
-    RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
-                                  : pFmt->GetAnchor().GetAnchorId();
+    RndStdIds eAnchorId;
     // #i107811# Assure that at-page anchored fly frames have a page num or a
     // content anchor set.
     if ( !pAnchor ||
