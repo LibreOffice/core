@@ -1784,9 +1784,6 @@ bool SwHTMLTableLayout::Resize( sal_uInt16 nAbsAvail, bool bRecalc,
 
     if( nDelay==0 && aResizeTimer.IsActive() )
     {
-        // If there is an asynchronous resize left to process when we call
-        // a synchronous resize, we only take over the new values.
-        bRecalc |= bDelayedResizeRecalc;
         nDelayedResizeAbsAvail = nAbsAvail;
         return false;
     }
