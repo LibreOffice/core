@@ -38,6 +38,9 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
      }
      else
      {
+         if (nBitCount == 0)
+             nBitCount = (WORD)GetDeviceCaps(hDC, BITSPIXEL);
+
         // #146839# Don't use CreateCompatibleBitmap() - there seem to
         // be build-in limits for those HBITMAPs, at least this fails
         // rather often on large displays/multi-monitor setups.
@@ -46,8 +49,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
          aBitmapInfo.bmiHeader.biWidth = nDX;
          aBitmapInfo.bmiHeader.biHeight = nDY;
          aBitmapInfo.bmiHeader.biPlanes = 1;
-         aBitmapInfo.bmiHeader.biBitCount = (WORD)GetDeviceCaps( hDC,
-                                                                 BITSPIXEL );
+         aBitmapInfo.bmiHeader.biBitCount = nBitCount;
          aBitmapInfo.bmiHeader.biCompression = BI_RGB;
          aBitmapInfo.bmiHeader.biSizeImage = 0;
          aBitmapInfo.bmiHeader.biXPelsPerMeter = 0;

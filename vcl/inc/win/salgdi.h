@@ -39,6 +39,7 @@
 class FontSelectPattern;
 class ImplWinFontEntry;
 class ImplFontAttrCache;
+class OpenGLTexture;
 class PhysicalFontCollection;
 class SalGraphicsImpl;
 class WinOpenGLSalGraphicsImpl;
@@ -154,7 +155,7 @@ private:
     HBITMAP mhBitmap;
 
     /// DIBSection data.
-    sal_uInt8 *mpData;
+    sal_uInt32 *mpData;
 
     /// Mapping between the GDI position and OpenGL, to use for OpenGL drawing.
     SalTwoRect maRects;
@@ -168,8 +169,13 @@ public:
 
     HDC getCompatibleHDC() { return mhCompatibleDC; }
 
-    /// Call the WinOpenGLSalGraphicsImpl's DrawMask().
-    void DrawMask(SalColor color);
+    SalTwoRect getTwoRect() { return maRects; }
+
+    /// Reset the DC with the defined color.
+    void fill(sal_uInt32 color);
+
+    /// Obtain the texture; the caller must delete it after use.
+    OpenGLTexture* getTexture();
 };
 
 class WinSalGraphics : public SalGraphics
@@ -177,9 +183,12 @@ class WinSalGraphics : public SalGraphics
     friend class WinSalGraphicsImpl;
     friend class ScopedFont;
     friend class OpenGLCompatibleDC;
-private:
+    friend class WinLayout;
+
+protected:
     boost::scoped_ptr<SalGraphicsImpl> mpImpl;
 
+private:
     HDC                     mhLocalDC;              // HDC
     bool                    mbPrinter : 1;          // is Printer
     bool                    mbVirDev : 1;           // is VirDev

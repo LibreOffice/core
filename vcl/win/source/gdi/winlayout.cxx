@@ -215,7 +215,18 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
         COLORREF color = GetTextColor(hDC);
         SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
 
-        aDC.DrawMask(salColor);
+        WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
+        if (pImpl)
+        {
+            OpenGLTexture *pTexture = aDC.getTexture();
+            if (pTexture)
+            {
+                pImpl->PreDraw();
+                pImpl->DrawMask(*pTexture, salColor, aDC.getTwoRect());
+                pImpl->PostDraw();
+                delete pTexture;
+            }
+        }
     }
 }
 
