@@ -223,6 +223,8 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
         CPPUNIT_ASSERT(!pGrafObj1->IsSwappedOut());
         CPPUNIT_ASSERT(!pGrafObj2->IsSwappedOut());
     }
+
+    xComponent->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GraphicObjectTest);
