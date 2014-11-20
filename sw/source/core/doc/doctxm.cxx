@@ -1608,7 +1608,7 @@ void SwTOXBaseSection::UpdatePageNum()
                     if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->HasFollow() )
                     {
                         // find the right one
-                        SwTxtFrm* pNext = static_cast<SwTxtFrm*>(pFrm);
+                        SwTxtFrm* pNext;
                         while( 0 != ( pNext = static_cast<SwTxtFrm*>(pFrm->GetFollow()) )
                                 && rTOXSource.nPos >= pNext->GetOfst() )
                             pFrm = pNext;
