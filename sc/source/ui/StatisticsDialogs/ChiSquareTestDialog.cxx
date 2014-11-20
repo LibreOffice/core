@@ -35,7 +35,7 @@ ScChiSquareTestDialog::ScChiSquareTestDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "ChiSquareTestDialog", "modules/scalc/ui/chisquaretestdialog.ui" )
 {
-    SetText(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST));
+    SetText(SC_STRLOAD(RID_STATISTICS_DLGS, STR_CHI_SQUARE_TEST));
 }
 
 ScChiSquareTestDialog::~ScChiSquareTestDialog()
@@ -48,7 +48,7 @@ bool ScChiSquareTestDialog::Close()
 
 sal_Int16 ScChiSquareTestDialog::GetUndoNameId()
 {
-    return STR_ZTEST_UNDO_NAME;
+    return STR_CHI_SQUARE_TEST;
 }
 
 ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
@@ -59,7 +59,7 @@ ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
 
     aTemplate.autoReplaceRange("%RANGE%", mInputRange);
 
-    aOutput.writeBoldString("Independence Test (Chi-Square)");
+    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_CHI_SQUARE_TEST));
     aOutput.newLine();
 
     // Alpha
@@ -70,7 +70,7 @@ ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // DF
-    aOutput.writeString("df");
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_DEGREES_OF_FREEDOM_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=(COLUMNS(%RANGE%) - 1) * (ROWS(%RANGE%) - 1)");
     aTemplate.autoReplaceAddress("%DEGREES_OF_FREEDOM%", aOutput.current());
@@ -78,14 +78,22 @@ ScRange ScChiSquareTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // p Value
-    aOutput.writeString("P-Value");
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_P_VALUE_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=CHITEST(%RANGE%; MMULT(MMULT(%RANGE%;TRANSPOSE(IF(COLUMN(%RANGE%))));MMULT(TRANSPOSE(IF(ROW(%RANGE%)));%RANGE%)) / SUM(%RANGE%))");
+    aTemplate.autoReplaceAddress("%P_VALUE%", aOutput.current());
+    aOutput.writeFormula(aTemplate.getTemplate());
+    aOutput.newLine();
+
+    // Test Statistic
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_TEST_STATISTIC_LABEL));
+    aOutput.nextColumn();
+    aTemplate.setTemplate("=CHIINV(%P_VALUE%; %DEGREES_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     // Critical value
-    aOutput.writeString("Critical Value");
+    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_CRITICAL_VALUE_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=CHIINV(%ALPHA%; %DEGREES_OF_FREEDOM%)");
     aOutput.writeFormula(aTemplate.getTemplate());

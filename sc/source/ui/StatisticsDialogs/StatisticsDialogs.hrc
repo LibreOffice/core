@@ -61,6 +61,7 @@
 #define STR_FTEST_UNDO_NAME                         69
 #define STR_ZTEST                                   70
 #define STR_ZTEST_UNDO_NAME                         71
+#define STR_CHI_SQUARE_TEST                         72
 
 #define STR_COLUMN_LABEL_TEMPLATE                   100
 #define STR_ROW_LABEL_TEMPLATE                      101
@@ -79,35 +80,39 @@
 #define STR_ANOVA_LABEL_TOTAL                       121
 #define STR_ANOVA_TWO_FACTOR_LABEL                  122
 
-#define STR_CORRELATION_LABEL                      130
-#define STR_COVARIANCE_LABEL                       131
-#define STR_LABEL_ALPHA                            132
-#define STR_VARIABLE_1_LABEL                       133
-#define STR_VARIABLE_2_LABEL                       134
-#define STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL     135
-#define STR_OBSERVATIONS_LABEL                     136
-#define STR_OBSERVED_MEAN_DIFFERENCE_LABEL         137
+#define STR_CORRELATION_LABEL                       140
+#define STR_COVARIANCE_LABEL                        141
+#define STR_LABEL_ALPHA                             142
+#define STR_VARIABLE_1_LABEL                        143
+#define STR_VARIABLE_2_LABEL                        144
+#define STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL      145
+#define STR_OBSERVATIONS_LABEL                      146
+#define STR_OBSERVED_MEAN_DIFFERENCE_LABEL          147
+#define STR_DEGREES_OF_FREEDOM_LABEL                148
+#define STR_P_VALUE_LABEL                           149
+#define STR_CRITICAL_VALUE_LABEL                    150
+#define STR_TEST_STATISTIC_LABEL                    151
 
-#define STR_FTEST_P_RIGHT_TAIL                     140
-#define STR_FTEST_F_CRITICAL_RIGHT_TAIL            141
-#define STR_FTEST_P_LEFT_TAIL                      142
-#define STR_FTEST_F_CRITICAL_LEFT_TAIL             143
-#define STR_FTEST_P_TWO_TAIL                       144
-#define STR_FTEST_F_CRITICAL_TWO_TAIL              145
+#define STR_FTEST_P_RIGHT_TAIL                      200
+#define STR_FTEST_F_CRITICAL_RIGHT_TAIL             201
+#define STR_FTEST_P_LEFT_TAIL                       202
+#define STR_FTEST_F_CRITICAL_LEFT_TAIL              203
+#define STR_FTEST_P_TWO_TAIL                        204
+#define STR_FTEST_F_CRITICAL_TWO_TAIL               205
 
-#define STR_TTEST_PEARSON_CORRELATION              150
-#define STR_TTEST_VARIANCE_OF_THE_DIFFERENCES      152
-#define STR_TTEST_T_STAT                           153
-#define STR_TTEST_P_ONE_TAIL                       154
-#define STR_TTEST_T_CRITICAL_ONE_TAIL              155
-#define STR_TTEST_P_TWO_TAIL                       156
-#define STR_TTEST_T_CRITICAL_TWO_TAIL              157
+#define STR_TTEST_PEARSON_CORRELATION               220
+#define STR_TTEST_VARIANCE_OF_THE_DIFFERENCES       222
+#define STR_TTEST_T_STAT                            223
+#define STR_TTEST_P_ONE_TAIL                        224
+#define STR_TTEST_T_CRITICAL_ONE_TAIL               225
+#define STR_TTEST_P_TWO_TAIL                        226
+#define STR_TTEST_T_CRITICAL_TWO_TAIL               227
 
-#define STR_ZTEST_KNOWN_VARIANCE                   160
-#define STR_ZTEST_Z_VALUE                          161
-#define STR_ZTEST_P_ONE_TAIL                       162
-#define STR_ZTEST_Z_CRITICAL_ONE_TAIL              163
-#define STR_ZTEST_P_TWO_TAIL                       164
-#define STR_ZTEST_Z_CRITICAL_TWO_TAIL              165
+#define STR_ZTEST_KNOWN_VARIANCE                    240
+#define STR_ZTEST_Z_VALUE                           241
+#define STR_ZTEST_P_ONE_TAIL                        242
+#define STR_ZTEST_Z_CRITICAL_ONE_TAIL               243
+#define STR_ZTEST_P_TWO_TAIL                        244
+#define STR_ZTEST_Z_CRITICAL_TWO_TAIL               245
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
