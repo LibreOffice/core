@@ -255,7 +255,6 @@ extern const sal_uLong nVCLLut[ 256 ];
 
 class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
 {
-    friend class Application;
     friend class ::Bitmap;
     friend class ImplImageBmp;
     friend class Printer;
@@ -462,6 +461,9 @@ public:
      @returns y-axis DPI value
      */
     SAL_DLLPRIVATE sal_Int32    GetDPIY() const { return mnDPIY; }
+
+    SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { mnDPIX = nDPIX; }
+    SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { mnDPIY = nDPIY; }
 
     sal_Int32                   GetDPIScaleFactor() const { return mnDPIScaleFactor; }
 

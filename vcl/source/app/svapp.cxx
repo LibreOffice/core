@@ -548,8 +548,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             long nOldDPIY = 0;
             if ( pFirstFrame )
             {
-                nOldDPIX = pFirstFrame->mnDPIX;
-                nOldDPIY = pFirstFrame->mnDPIY;
+                nOldDPIX = pFirstFrame->GetDPIX();
+                nOldDPIY = pFirstFrame->GetDPIY();
                 vcl::Window::ImplInitAppFontData(pFirstFrame);
             }
             vcl::Window* pFrame = pFirstFrame;
@@ -583,18 +583,18 @@ void Application::SetSettings( const AllSettings& rSettings )
             pFirstFrame = pSVData->maWinData.mpFirstFrame;
             if ( pFirstFrame )
             {
-                if ( (pFirstFrame->mnDPIX != nOldDPIX) ||
-                     (pFirstFrame->mnDPIY != nOldDPIY) )
+                if ( (pFirstFrame->GetDPIX() != nOldDPIX) ||
+                     (pFirstFrame->GetDPIY() != nOldDPIY) )
                 {
                     VirtualDevice* pVirDev = pSVData->maGDIData.mpFirstVirDev;
                     while ( pVirDev )
                     {
                         if ( pVirDev->mbScreenComp &&
-                             (pVirDev->mnDPIX == nOldDPIX) &&
-                             (pVirDev->mnDPIY == nOldDPIY) )
+                             (pVirDev->GetDPIX() == nOldDPIX) &&
+                             (pVirDev->GetDPIY() == nOldDPIY) )
                         {
-                            pVirDev->mnDPIX = pFirstFrame->mnDPIX;
-                            pVirDev->mnDPIY = pFirstFrame->mnDPIY;
+                            pVirDev->SetDPIX( pFirstFrame->GetDPIX() );
+                            pVirDev->SetDPIY( pFirstFrame->GetDPIY() );
                             if ( pVirDev->IsMapMode() )
                             {
                                 MapMode aMapMode = pVirDev->GetMapMode();
@@ -745,8 +745,8 @@ ImplSVEvent * Application::PostMouseEvent( sal_uLong nEvent, vcl::Window *pWin, 
     {
         Point aTransformedPos( pMouseEvent->GetPosPixel() );
 
-        aTransformedPos.X() += pWin->mnOutOffX;
-        aTransformedPos.Y() += pWin->mnOutOffY;
+        aTransformedPos.X() += pWin->GetOutOffXPixel();
+        aTransformedPos.Y() += pWin->GetOutOffYPixel();
 
         const MouseEvent aTransformedEvent( aTransformedPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(),
                                             pMouseEvent->GetButtons(), pMouseEvent->GetModifier() );
@@ -780,8 +780,8 @@ ImplSVEvent * Application::PostZoomEvent( sal_uLong nEvent, vcl::Window *pWin, Z
     {
         Point aTransformedPos( pZoomEvent->GetCenter() );
 
-        aTransformedPos.X() += pWin->mnOutOffX;
-        aTransformedPos.Y() += pWin->mnOutOffY;
+        aTransformedPos.X() += pWin->GetOutOffXPixel();
+        aTransformedPos.Y() += pWin->GetOutOffYPixel();
 
         const ZoomEvent aTransformedEvent( aTransformedPos, pZoomEvent->GetScale() );
 
