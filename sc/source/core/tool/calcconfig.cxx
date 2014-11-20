@@ -69,15 +69,15 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     // This entry we have had for some time (when blacklisting was
     // done elsewhere in the code), so presumably there is a known
     // good reason for it.
-    maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "*", "Intel(R) Corporation", "*", "9.17.10.2884", ""));
+    maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
 
     // This is what I have tested on Linux and it works for our unit tests.
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("Linux", "*", "Advanced Micro Devices, Inc.", "*", "1445.5 (sse2,avx)", ""));
+    maOpenCLWhiteList.insert(OpenCLImplMatcher("Linux", "", "Advanced Micro Devices, Inc\\.", "", "1445\\.5 \\(sse2,avx\\)"));
 
     // For now, assume that AMD, Intel and NVIDIA drivers are good
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("*", "*", "Advanced Micro Devices, Inc.", "*", "*", ""));
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("*", "*", "Intel(R) Corporation", "*", "*", ""));
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("*", "*", "NVIDIA Corporation", "*", "*", ""));
+    maOpenCLWhiteList.insert(OpenCLImplMatcher("", "", "Advanced Micro Devices, Inc\\.", "", ""));
+    maOpenCLWhiteList.insert(OpenCLImplMatcher("", "", "Intel\\(R\\) Corporation", "", ""));
+    maOpenCLWhiteList.insert(OpenCLImplMatcher("", "", "NVIDIA Corporation", "", ""));
 }
 
 void ScCalcConfig::reset()
@@ -122,7 +122,7 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMa
         "OSVersion=" << rImpl.maOSVersion << ","
         "PlatformVendor=" << rImpl.maPlatformVendor << ","
         "Device=" << rImpl.maDevice << ","
-        "DriverVersion=[" << rImpl.maDriverVersionMin << "," << rImpl.maDriverVersionMax << "]"
+        "DriverVersion=" << rImpl.maDriverVersion <<
         "}";
 
     return rStream;

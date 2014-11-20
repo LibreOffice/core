@@ -302,12 +302,12 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="opencldriverversionminlabel">
+                              <object class="GtkLabel" id="opencldriverversionlabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">OpenCL Driver Version Lower Bound</property>
-                                <property name="mnemonic_widget">opencldriverversionmin:border</property>
+                                <property name="label" translatable="yes">OpenCL Driver Version</property>
+                                <property name="mnemonic_widget">opencldriverversion:border</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
@@ -315,36 +315,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="opencldriverversionmin:border">
+                              <object class="GtkEntry" id="opencldriverversion:border">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">9</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="opencldriverversionmaxlabel">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">OpenCL Driver Version Upper Bound</property>
-                                <property name="mnemonic_widget">opencldriverversionmax:border</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">10</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="opencldriverversionmax:border">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">11</property>
                               </packing>
                             </child>
                           </object>

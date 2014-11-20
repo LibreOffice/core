@@ -9,24 +9,26 @@
 
 #include <config_folders.h>
 
-#include "openclwrapper.hxx"
-
-#include <comphelper/string.hxx>
-#include <rtl/ustring.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/digest.h>
-#include <rtl/bootstrap.hxx>
-#include <boost/scoped_array.hpp>
-
-#include <sal/config.h>
-#include <osl/file.hxx>
 #include "calcconfig.hxx"
 #include "interpre.hxx"
 #include "opencl_device.hxx"
+#include "openclwrapper.hxx"
+
+#include <comphelper/string.hxx>
+#include <osl/file.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/digest.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/config.h>
+
+#include <boost/scoped_array.hpp>
+#include <unicode/regex.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include <cmath>
 
 #ifdef _WIN32
@@ -517,31 +519,44 @@ bool OpenCLDevice::initOpenCLRunEnv( GPUEnv *gpuInfo )
 
 namespace {
 
+bool match(const OUString& rPattern, const OUString& rInput)
+{
+    if (rPattern == "")
+        return true;
+
+    UErrorCode nIcuError(U_ZERO_ERROR);
+    icu::UnicodeString sIcuPattern(reinterpret_cast<const UChar*>(rPattern.getStr()), rPattern.getLength());
+    icu::UnicodeString sIcuInput(reinterpret_cast<const UChar*>(rInput.getStr()), rInput.getLength());
+    RegexMatcher aMatcher(sIcuPattern, sIcuInput, 0, nIcuError);
+
+    if (nIcuError == U_ZERO_ERROR && aMatcher.matches(nIcuError) && nIcuError == U_ZERO_ERROR)
+        return true;
+
+    return false;
+}
+
 bool match(const ScCalcConfig::OpenCLImplMatcher& rListEntry, const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice)
 {
 #if defined WNT
-    if (rListEntry.maOS != "*" && rListEntry.maOS != "Windows")
+    if (rListEntry.maOS != "" && rListEntry.maOS != "Windows")
         return false;
 #elif defined LINUX
-    if (rListEntry.maOS != "*" && rListEntry.maOS != "Linux")
+    if (rListEntry.maOS != "" && rListEntry.maOS != "Linux")
         return false;
 #elif defined MACOSX
-    if (rListEntry.maOS != "*" && rListEntry.maOS != "OS X")
+    if (rListEntry.maOS != "" && rListEntry.maOS != "OS X")
         return false;
 #endif
 
     // OS version check not yet implemented
 
-    if (rListEntry.maPlatformVendor != "*" && rListEntry.maPlatformVendor != rPlatform.maVendor)
+    if (!match(rListEntry.maPlatformVendor, rPlatform.maVendor))
         return false;
 
-    if (rListEntry.maDevice != "*" && rListEntry.maDevice != rDevice.maName)
+    if (!match(rListEntry.maDevice, rDevice.maName))
         return false;
 
-    if (rListEntry.maDriverVersionMin != "*" &&
-        (comphelper::string::compareVersionStrings(rListEntry.maDriverVersionMin, rDevice.maDriver) > 0 ||
-         (rListEntry.maDriverVersionMax != "" && comphelper::string::compareVersionStrings(rListEntry.maDriverVersionMax, rDevice.maDriver) < 0) ||
-         (rListEntry.maDriverVersionMax == "" && comphelper::string::compareVersionStrings(rListEntry.maDriverVersionMin, rDevice.maDriver) < 0)))
+    if (!match(rListEntry.maDriverVersion, rDevice.maDriver))
         return false;
 
     return true;

@@ -293,8 +293,7 @@ css::uno::Sequence<OUString> SetOfOpenCLImplMatcherToStringSequence(std::set<ScC
             (*i).maOSVersion.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
             (*i).maPlatformVendor.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
             (*i).maDevice.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
-            (*i).maDriverVersionMin.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B") + "/" +
-            (*i).maDriverVersionMax.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B");
+            (*i).maDriverVersion.replaceAll("%", "%25").replaceAll("/", "%2F").replaceAll(";", "%3B");
     }
 
     return result;
@@ -337,8 +336,7 @@ std::set<ScCalcConfig::OpenCLImplMatcher> StringSequenceToSetOfOpenCLImplMatcher
         m.maOSVersion = getToken(*i, index);
         m.maPlatformVendor = getToken(*i, index);
         m.maDevice = getToken(*i, index);
-        m.maDriverVersionMin = getToken(*i, index);
-        m.maDriverVersionMax = getToken(*i, index);
+        m.maDriverVersion = getToken(*i, index);
 
         result.insert(m);
     }
