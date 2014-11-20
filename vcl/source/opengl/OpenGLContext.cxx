@@ -463,8 +463,7 @@ GLXFBConfig* getFBConfigForPixmap(Display* dpy, int& nBestFBC, bool bUseDoubleBu
     return pFBC;
 }
 
-#ifdef DBG_UTIL
-GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering)
+GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering, bool bWithSameVisualID)
 {
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return NULL;
@@ -513,7 +512,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     for(int i = 0; i < fbCount; ++i)
     {
         XVisualInfo* pVi = glXGetVisualFromFBConfig( dpy, pFBC[i] );
-        if(pVi && pVi->visualid == xattr.visual->visualid)
+        if(pVi && (!bWithSameVisualID || pVi->visualid == xattr.visual->visualid) )
         {
             // pick the one with the most samples per pixel
             int nSampleBuf = 0;
@@ -532,7 +531,6 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
 
     return pFBC;
 }
-#endif
 
 // we need them before glew can initialize them
 // glew needs an OpenGL context so we need to get the address manually
@@ -662,7 +660,7 @@ bool OpenGLContext::ImplInit()
     if (!mbPixmap && glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
-        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering);
+        GLXFBConfig* pFBC = getFBConfig(m_aGLWin.dpy, m_aGLWin.win, best_fbc, mbUseDoubleBufferedRendering, true);
         if (!pFBC)
             return false;
 
@@ -1140,7 +1138,25 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return aWinData;
 
-    aWinData.pVisual = getVisual(dpy, win);
+    initOpenGLFunctionPointers();
+
+    int best_fbc = -1;
+    GLXFBConfig* pFBC = getFBConfig(dpy, win, best_fbc, true, false);
+
+    if (!pFBC)
+        return aWinData;
+
+    XVisualInfo* vi = 0;
+    if( best_fbc != -1 )
+        vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
+
+    XFree(pFBC);
+
+    if( vi )
+    {
+        SAL_INFO("vcl.opengl", "using VisualID " << vi->visualid);
+        aWinData.pVisual = (void*)(vi->visual);
+    }
 
     return aWinData;
 }
