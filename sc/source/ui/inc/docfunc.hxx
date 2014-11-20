@@ -132,7 +132,7 @@ public:
     bool            MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                                        bool bCut, bool bRecord, bool bPaint, bool bApi );
 
-    bool            InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
+    SC_DLLPUBLIC bool InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
     bool            RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
     bool            DeleteTable( SCTAB nTab, bool bRecord, bool bApi );
 
