@@ -2093,7 +2093,7 @@ AC_ARG_WITH(gssapi,
 
 AC_ARG_WITH(iwyu,
     AS_HELP_STRING([--with-iwyu],
-        [Provide IWYU binary path to check unneeded includes instead of building.
+        [Use given IWYU binary path to check unneeded includes instead of building.
          Use only if you are hacking on it.]),
 ,)
 
@@ -12565,6 +12565,12 @@ AC_SUBST(PARALLELISM)
 
 IWYU_PATH="$with_iwyu"
 AC_SUBST(IWYU_PATH)
+if test ! -z "$IWYU_PATH"; then
+    if test ! -f "$IWYU_PATH"; then
+        AC_MSG_ERROR([cannot find include-what-you-use binary specified by --with-iwyu])
+    fi
+fi
+
 #
 # Set up ILIB for MSVC build
 #
