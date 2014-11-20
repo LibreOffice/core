@@ -141,7 +141,7 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
             if( len == 1 )
                 /* optimized for 1 character */
                 pBuf[offset] = *str;
-            else if( len > 1 )
+            else
                 memcpy( pBuf + offset, str, len * sizeof(sal_Unicode) );
         }
         (*This)->length = nOldLen + len;
