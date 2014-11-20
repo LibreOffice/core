@@ -856,6 +856,19 @@ void SvxTableController::onSelect( sal_uInt16 nSId )
     }
 }
 
+namespace
+{
+    SvxBoxItem mergeDrawinglayerTextDistancesAndSvxBoxItem(const SfxItemSet& rAttrSet)
+    {
+        // merge drawing layer text distance items into SvxBoxItem used by the dialog
+        SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( rAttrSet.Get( SDRATTR_TABLE_BORDER ) ) );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LEFTDIST)).GetValue()), BOX_LINE_LEFT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_RIGHTDIST)).GetValue()), BOX_LINE_RIGHT );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_UPPERDIST)).GetValue()), BOX_LINE_TOP );
+        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(rAttrSet.Get(SDRATTR_TEXT_LOWERDIST)).GetValue()), BOX_LINE_BOTTOM );
+        return aBoxItem;
+    }
+}
 
 void SvxTableController::onFormatTable( SfxRequest& rReq )
 {
@@ -870,15 +883,11 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         SfxItemSet aNewAttr( pTableObj->GetModel()->GetItemPool() );
 
         // merge drawing layer text distance items into SvxBoxItem used by the dialog
-        SvxBoxItem aBoxItem( static_cast< const SvxBoxItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER ) ) );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_LEFTDIST)).GetValue()), BOX_LINE_LEFT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_RIGHTDIST)).GetValue()), BOX_LINE_RIGHT );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_UPPERDIST)).GetValue()), BOX_LINE_TOP );
-        aBoxItem.SetDistance( sal::static_int_cast< sal_uInt16 >( static_cast<const SdrMetricItem&>(aNewAttr.Get(SDRATTR_TEXT_LOWERDIST)).GetValue()), BOX_LINE_BOTTOM );
+        SvxBoxItem aBoxItem(mergeDrawinglayerTextDistancesAndSvxBoxItem(aNewAttr));
 
         SvxBoxInfoItem aBoxInfoItem( static_cast< const SvxBoxInfoItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) ) );
 
-        MergeAttrFromSelectedCells(aNewAttr, true);
+        MergeAttrFromSelectedCells(aNewAttr, false);
         FillCommonBorderAttrFromSelectedCells( aBoxItem, aBoxInfoItem );
         aNewAttr.Put( aBoxItem );
         aNewAttr.Put( aBoxInfoItem );
@@ -888,8 +897,21 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         // Even Cancel Button is returning positive(101) value,
         if( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
         {
-            SfxItemSet aNewSet( aNewAttr );
-            aNewSet.Put( *(pDlg->GetOutputItemSet ()) );
+            SfxItemSet aNewSet( *(pDlg->GetOutputItemSet ()) );
+
+            //Only properties that were unchanged by the dialog appear in this
+            //itemset.  We had constructed these two properties from other
+            //ones, so if they were not changed, then forcible set them back to
+            //their originals in the new result set so we can decompose that
+            //unchanged state back to their input properties
+            if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER, false) != SfxItemState::SET)
+            {
+                aNewSet.Put(aBoxItem);
+            }
+            if (aNewSet.GetItemState(SDRATTR_TABLE_BORDER_INNER, false) != SfxItemState::SET)
+            {
+                aNewSet.Put(aBoxInfoItem);
+            }
 
             SvxBoxItem aNewBoxItem( static_cast< const SvxBoxItem& >( aNewSet.Get( SDRATTR_TABLE_BORDER ) ) );
 
@@ -909,8 +931,6 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         }
     }
 }
-
-
 
 void SvxTableController::Execute( SfxRequest& rReq )
 {
@@ -2949,8 +2969,8 @@ void SvxTableController::FillCommonBorderAttrFromSelectedCells( SvxBoxItem& rBox
                     nCellFlags |= (nCol > aEnd.mnCol)    ? CELL_AFTER : 0;
 
                     const SfxItemSet& rSet = xCell->GetItemSet();
-                    const SvxBoxItem& rCellBoxItem = static_cast< const SvxBoxItem& >( rSet.Get(SDRATTR_TABLE_BORDER ) );
-                    lcl_MergeCommonBorderAttr( aLinesState, rCellBoxItem, nCellFlags );
+                    SvxBoxItem aCellBoxItem(mergeDrawinglayerTextDistancesAndSvxBoxItem(rSet));
+                    lcl_MergeCommonBorderAttr( aLinesState, aCellBoxItem, nCellFlags );
                 }
             }
 
