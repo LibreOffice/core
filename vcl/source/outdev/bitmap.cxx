@@ -527,7 +527,7 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
                     // only paint direct when no MapMode, else the
                     // more expensive conversions may be done for short-time Bitmap/BitmapEx
                     // used for buffering only
-                    if (IsMapMode())
+                    if (IsMapModeEnabled())
                     {
                         bTryDirectPaint = false;
                     }
@@ -666,7 +666,7 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
             // only paint direct when no MapMode, else the
             // more expensive conversions may be done for short-time Bitmap/BitmapEx
             // used for buffering only
-            if (IsMapMode())
+            if (IsMapModeEnabled())
             {
                 bTryDirectPaint = false;
             }

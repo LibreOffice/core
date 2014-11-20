@@ -1447,7 +1447,7 @@ void Window::ImplInitResolutionSettings()
 
     // update the recalculated values for logical units
     // and also tools belonging to the values
-    if ( IsMapMode() )
+    if (IsMapModeEnabled())
     {
         MapMode aMapMode = GetMapMode();
         SetMapMode();
