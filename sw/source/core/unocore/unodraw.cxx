@@ -1756,6 +1756,19 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 aRet >>= aPath;
                 aRet <<= _ConvertPolyPolygonBezierToLayoutDir( aPath );
             }
+            else if (rPropertyName == "ZOrder")
+            {
+                // Convert the real draw page position to the logical one that ignores textboxes.
+                if (pFmt)
+                {
+                    const SdrObject* pObj = pFmt->FindRealSdrObject();
+                    if (pObj)
+                    {
+                        std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pFmt->GetDoc());
+                        aRet <<= SwTextBoxHelper::getOrdNum(pObj, aTextBoxes);
+                    }
+                }
+            }
         }
     }
     return aRet;

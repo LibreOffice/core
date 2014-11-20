@@ -22,6 +22,7 @@
 #include <swdllapi.h>
 
 class SdrPage;
+class SdrObject;
 class SfxItemSet;
 class SwFrmFmt;
 class SwFrmFmts;
@@ -82,6 +83,8 @@ public:
     static sal_Int32 getCount(SdrPage* pPage, std::set<const SwFrmFmt*>& rTextBoxes);
     /// Get a shape by index, excluding TextBoxes.
     static css::uno::Any getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<const SwFrmFmt*>& rTextBoxes) throw(css::lang::IndexOutOfBoundsException);
+    /// Get the order of the shape, excluding TextBoxes.
+    static sal_Int32 getOrdNum(const SdrObject* pObject, std::set<const SwFrmFmt*>& rTextBoxes);
 
     /// Saves the current shape -> textbox links in a map, so they can be restored later.
     static void saveLinks(const SwFrmFmts& rFormats, std::map<const SwFrmFmt*, const SwFrmFmt*>& rLinks);

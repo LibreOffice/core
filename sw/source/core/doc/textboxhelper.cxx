@@ -215,6 +215,25 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<
     return pRet ? uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY)) : uno::Any();
 }
 
+sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject, std::set<const SwFrmFmt*>& rTextBoxes)
+{
+    if (const SdrPage* pPage = pObject->GetPage())
+    {
+        sal_Int32 nOrder = 0; // Current logical order.
+        for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+        {
+            if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
+                continue;
+            if (pPage->GetObj(i) == pObject)
+                return nOrder;
+            ++nOrder;
+        }
+    }
+
+    SAL_WARN("sw.core", "SwTextBoxHelper::getOrdNum: no page or page doesn't contain the object");
+    return pObject->GetOrdNum();
+}
+
 SwFrmFmt* SwTextBoxHelper::findTextBox(uno::Reference<drawing::XShape> xShape)
 {
     SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());

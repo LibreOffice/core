@@ -56,6 +56,7 @@ public:
     void testChineseConversionNonChineseText();
     void testChineseConversionTraditionalToSimplified();
     void testChineseConversionSimplifiedToTraditional();
+    void testFdo85554();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -78,6 +79,7 @@ public:
     CPPUNIT_TEST(testChineseConversionNonChineseText);
     CPPUNIT_TEST(testChineseConversionTraditionalToSimplified);
     CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
+    CPPUNIT_TEST(testFdo85554);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -559,6 +561,29 @@ void SwUiWriterTest::testChineseConversionSimplifiedToTraditional()
     SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
     CPPUNIT_ASSERT_EQUAL(CHINESE_TRADITIONAL_CONTENT, pTxtNode->GetTxt());
 
+}
+
+void SwUiWriterTest::testFdo85554()
+{
+    // Load the document, it contains one shape with a textbox.
+    load("/sw/qa/extras/uiwriter/data/", "fdo85554.odt");
+
+    // Add a second shape to the document.
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(10000, 10000));
+    xShape->setPosition(awt::Point(1000, 1000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    xDrawPage->add(xShape);
+
+    // Save it and load it back.
+    reload("writer8", "fdo85554.odt");
+
+    xDrawPageSupplier.set(mxComponent, uno::UNO_QUERY);
+    xDrawPage = xDrawPageSupplier->getDrawPage();
+    // This was 1, we lost a shape on export.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
 }
 
 
