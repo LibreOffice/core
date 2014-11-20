@@ -3785,8 +3785,7 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         OUString sRepl( rStr );
         SwTxtNode* pTxtNd = pStt->nNode.GetNode().GetTxtNode();
         sal_Int32 nStt = pStt->nContent.GetIndex();
-        sal_Int32 nEnd = bOneNode ? pEnd->nContent.GetIndex()
-                                : pTxtNd->GetTxt().getLength();
+        sal_Int32 nEnd;
 
         SwDataChanged aTmp( aDelPam );
 
