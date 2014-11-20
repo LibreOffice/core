@@ -513,12 +513,6 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         }
         else if( pPos->InGlueGrp() && pPos->InFixMargGrp() )
         {
-            if( nCompress )
-            {
-                nKanaDiffSum *= nCompress;
-                nKanaDiffSum /= 10000;
-            }
-
             pPos->Width( static_cast<sal_uInt16>(pPos->Width() - nDecompress) );
 
             if ( pPos->InTabGrp() )
