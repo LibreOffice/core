@@ -124,10 +124,6 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
         if (*capacity < (*This)->length + len)
             rtl_uStringbuffer_ensureCapacity( This, capacity, (*This)->length + len );
 
-        /*
-        if( len == 1 )
-            This->buffer
-        */
         nOldLen = (*This)->length;
         pBuf = (*This)->buffer;
 
