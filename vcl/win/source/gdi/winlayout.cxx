@@ -27,7 +27,6 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
-#include <win/salvd.h>
 
 #include "sft.hxx"
 #include "sallayout.hxx"
@@ -195,64 +194,28 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
         Rectangle aRect;
         GetBoundRect(rGraphics, aRect);
 
-        const int origin_x = aRect.Left();
-        const int origin_y = aRect.Top();
-        const int width = aRect.GetWidth();
-        const int height = aRect.GetHeight();
-        const int bpp = 32;
+        OpenGLCompatibleDC aDC(rGraphics, aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
 
-        HDC compatibleDC = CreateCompatibleDC(hDC);
-
-        // move the origin so that we always paint at 0,0 - to keep the bitmap
-        // small
-        OffsetViewportOrgEx(compatibleDC, -origin_x, -origin_y, NULL);
-
-        sal_uInt8 *data;
-        HBITMAP hBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(compatibleDC, width, height, bpp, reinterpret_cast<void **>(&data));
+        // we are making changes to the DC, make sure we got a new one
+        assert(aDC.getCompatibleHDC() != hDC);
 
         // setup the hidden DC with black color and white background, we will
         // use the result of the text drawing later as a mask only
-        HGDIOBJ hBitmapOld = SelectObject(compatibleDC, hBitmap);
-        SelectFont(compatibleDC, mhFont);
+        SelectFont(aDC.getCompatibleHDC(), mhFont);
 
-        SetTextColor(compatibleDC, RGB(0, 0, 0));
-        SetBkColor(compatibleDC, RGB(255, 255, 255));
+        SetTextColor(aDC.getCompatibleHDC(), RGB(0, 0, 0));
+        SetBkColor(aDC.getCompatibleHDC(), RGB(255, 255, 255));
 
         UINT nTextAlign = GetTextAlign(hDC);
-        SetTextAlign(compatibleDC, nTextAlign);
+        SetTextAlign(aDC.getCompatibleHDC(), nTextAlign);
 
         // the actual drawing
-        DrawTextImpl(compatibleDC);
+        DrawTextImpl(aDC.getCompatibleHDC());
 
-        SelectObject(compatibleDC, hBitmapOld);
+        COLORREF color = GetTextColor(hDC);
+        SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
 
-        // and turn it into a texture
-        OpenGLTexture aTexture(width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        CHECK_GL_ERROR();
-
-        WinOpenGLSalGraphicsImpl *pImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
-        if (pImpl)
-        {
-            SalTwoRect aRects;
-            aRects.mnSrcX = 0;
-            aRects.mnSrcY = 0;
-            aRects.mnSrcWidth = width;
-            aRects.mnSrcHeight = height;
-            aRects.mnDestX = origin_x;
-            aRects.mnDestY = origin_y;
-            aRects.mnDestWidth = width;
-            aRects.mnDestHeight = height;
-
-            COLORREF color = GetTextColor(hDC);
-            SalColor salColor = MAKE_SALCOLOR(GetRValue(color), GetGValue(color), GetBValue(color));
-
-            pImpl->PreDraw();
-            pImpl->DrawMask(aTexture, salColor, aRects);
-            pImpl->PostDraw();
-        }
-
-        DeleteObject(hBitmap);
-        DeleteDC(compatibleDC);
+        aDC.DrawMask(salColor);
     }
 }
 

@@ -653,12 +653,12 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         if(bTryDirectPaint)
         {
             Point aRelPt = aOutPt + Point( mnOutOffX, mnOutOffY );
-            SalTwoRect aTR = {
+            SalTwoRect aTR(
                 rSrcPtPixel.X(), rSrcPtPixel.Y(),
                 rSrcSizePixel.Width(), rSrcSizePixel.Height(),
                 aRelPt.X(), aRelPt.Y(),
-                aOutSz.Width(), aOutSz.Height()
-            };
+                aOutSz.Width(), aOutSz.Height());
+
             SalBitmap* pSalSrcBmp = rBmp.ImplGetImpBitmap()->ImplGetSalBitmap();
             SalBitmap* pSalAlphaBmp = rAlpha.ImplGetImpBitmap()->ImplGetSalBitmap();
 

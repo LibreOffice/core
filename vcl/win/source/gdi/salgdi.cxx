@@ -30,6 +30,7 @@
 #include <win/saldata.hxx>
 #include <win/salgdi.h>
 #include <win/salframe.h>
+#include <win/salvd.h>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "salgdiimpl.hxx"
@@ -563,6 +564,55 @@ void ImplClearHDCCache( SalData* pData )
             DeleteObject( pC->mhSelBmp );
         }
     }
+}
+
+OpenGLCompatibleDC::OpenGLCompatibleDC(SalGraphics &rGraphics, int x, int y, int width, int height)
+    : mhBitmap(0)
+    , mpData(NULL)
+    , maRects(0, 0, width, height, x, y, width, height)
+{
+    WinSalGraphics& rWinGraphics = static_cast<WinSalGraphics&>(rGraphics);
+    mpImpl = dynamic_cast<WinOpenGLSalGraphicsImpl*>(rWinGraphics.mpImpl.get());
+
+    if (!mpImpl)
+    {
+        // we avoid the OpenGL drawing, instead we draw directly to the DC
+        mhCompatibleDC = rWinGraphics.getHDC();
+        return;
+    }
+
+    mhCompatibleDC = CreateCompatibleDC(rWinGraphics.getHDC());
+
+    // move the origin so that we always paint at 0,0 - to keep the bitmap
+    // small
+    OffsetViewportOrgEx(mhCompatibleDC, -x, -y, NULL);
+
+    mhBitmap = WinSalVirtualDevice::ImplCreateVirDevBitmap(mhCompatibleDC, width, height, 32, reinterpret_cast<void **>(&mpData));
+
+    SelectObject(mhCompatibleDC, mhBitmap);
+}
+
+OpenGLCompatibleDC::~OpenGLCompatibleDC()
+{
+    if (mpImpl)
+    {
+        DeleteObject(mhBitmap);
+        DeleteDC(mhCompatibleDC);
+    }
+}
+
+void OpenGLCompatibleDC::DrawMask(SalColor color)
+{
+    if (!mpImpl)
+        return;
+
+    // turn what's in the mpData into a texture
+    OpenGLTexture aTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_RGBA, GL_UNSIGNED_BYTE, mpData);
+    CHECK_GL_ERROR();
+
+    mpImpl->PreDraw();
+    mpImpl->DrawMask(aTexture, color, maRects);
+    mpImpl->PostDraw();
 }
 
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd):
