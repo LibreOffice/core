@@ -231,7 +231,8 @@ SwCallLink::~SwCallLink()
 
 long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, sal_Int32 nCntPos, bool bCalcFrm )
 {
-    SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(rNd.getLayoutFrm(pRoot,0,0,bCalcFrm)), *pNext = pFrm;
+    SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(rNd.getLayoutFrm(pRoot,0,0,bCalcFrm));
+    SwTxtFrm* pNext;
     if ( pFrm && !pFrm->IsHiddenNow() )
     {
         if( pFrm->HasFollow() )
