@@ -402,7 +402,7 @@ unsigned char * codeSnippet(
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset)
 {
     unsigned char * p = code;
-    static_assert(sizeof (sal_Int32) == 4);
+    static_assert(sizeof (sal_Int32) == 4, "boo");
     // mov eax, functionIndex:
     *p++ = 0xB8;
     *reinterpret_cast< sal_Int32 * >(p) = functionIndex;

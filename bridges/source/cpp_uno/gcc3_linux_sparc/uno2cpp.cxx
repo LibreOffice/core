@@ -336,7 +336,7 @@ static void cpp_call(
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
-                        static_assert(sizeof (double) == sizeof (sal_Int64));
+                        static_assert(sizeof (double) == sizeof (sal_Int64), "boo");
                           *reinterpret_cast< sal_Int32 * >(pCppStack) =
                           *reinterpret_cast< sal_Int32 const * >(pUnoArgs[ nPos ]);
                           pCppStack += sizeof (sal_Int32);

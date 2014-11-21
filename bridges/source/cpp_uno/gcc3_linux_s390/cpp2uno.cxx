@@ -543,7 +543,7 @@ unsigned char* codeSnippet( unsigned char * code, sal_Int16 nFunctionIndex, sal_
     if (! simple_ret_type)
         nOffsetAndIndex |= 0x8000;
 
-    static_assert( sizeof (long) == 4 );
+    static_assert(sizeof (long) == 4, "boo");
 
      /* generate this code */
      // lr      %r0,%r13

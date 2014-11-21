@@ -406,7 +406,7 @@ unsigned char * codeSnippet(
     if (returnType)
     TYPELIB_DANGER_RELEASE( returnTypeDescr );
     unsigned char * p = code;
-    static_assert(sizeof (sal_Int32) == 4);
+    static_assert(sizeof (sal_Int32) == 4, "boo");
     // mov function_index, %eax:
     *p++ = 0xB8;
     *reinterpret_cast< sal_Int32 * >(p) = functionIndex;
