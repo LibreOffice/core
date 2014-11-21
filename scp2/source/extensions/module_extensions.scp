@@ -95,12 +95,14 @@ End
 /* ** ConvertTextToNumber ** */
 
 #ifdef WITH_EXTENSION_CT2N
+
+#include "AutoInstall/extensions_ct2n"
+
 Module gid_Module_Optional_Extensions_CT2N
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_CT2N);
     ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_CT2N );
+    Files = (auto_extensions_ct2n_ALL);
     Minimal = NO;
     Default = YES;
     Styles = ( );
