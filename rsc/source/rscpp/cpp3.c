@@ -148,6 +148,7 @@ int AddInclude( char* pIncStr )
         *incend++ = pIncPos;
         pIncPos   = strtok( NULL, ";" );
     }
+    /* coverity[leaked_storage] - we know this leaks, but it doesn't matter in this short lived utility */
     return( 1 );
 }
 
