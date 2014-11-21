@@ -844,7 +844,9 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
     int len = GetUInt16(name+6, 12 * n + 8, 1);
 
     // sanity check
-    if( (len <= 0) || ((ptr+len) > (name+nTableSize)) )
+    const sal_uInt8* end_table = name+nTableSize;
+    const int available_space = ptr > end_table ? 0 : (end_table - ptr);
+    if( (len <= 0) || len > available_space)
     {
         if( ucs2result )
             *ucs2result = NULL;
