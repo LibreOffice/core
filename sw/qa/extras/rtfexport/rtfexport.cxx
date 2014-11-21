@@ -54,7 +54,7 @@ public:
 
     bool CjkNumberedListTestHelper(sal_Int16& rValue)
     {
-        sal_Bool isNumber;
+        sal_Bool isNumber = false;
         uno::Reference<text::XTextRange> xPara(getParagraph(1));
         uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
         properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
