@@ -1756,6 +1756,7 @@ void SwContentTree::Display( bool bActive )
         ScrollOutputArea( (short)nDelta );
     }
 
+    m_bActiveDocModified = false;
 }
 
 // In the Clear the content types have to be deleted, also.
@@ -2208,6 +2209,8 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     bool bClear = pActiveShell != pSh;
     if(bIsActive && bClear)
     {
+        if (pActiveShell)
+            EndListening(*pActiveShell->GetView().GetDocShell());
         pActiveShell = pSh;
         FindActiveTypeAndRemoveUserData();
         Clear();
@@ -2216,6 +2219,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     {
         if(!lcl_FindShell(pActiveShell))
         {
+            EndListening(*pActiveShell->GetView().GetDocShell());
             pActiveShell = pSh;
             bIsActive = true;
             bIsConstant = false;
@@ -2226,6 +2230,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     // the screen filled new.
     if(bIsActive && bClear)
     {
+        StartListening(*pActiveShell->GetView().GetDocShell());
         FindActiveTypeAndRemoveUserData();
         for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
         {
@@ -2239,15 +2244,33 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
 
 void SwContentTree::SetConstantShell(SwWrtShell* pSh)
 {
+    if (pActiveShell)
+        EndListening(*pActiveShell->GetView().GetDocShell());
     pActiveShell = pSh;
     bIsActive       = false;
     bIsConstant     = true;
+    StartListening(*pActiveShell->GetView().GetDocShell());
     FindActiveTypeAndRemoveUserData();
     for(sal_uInt16 i=0; i < CONTENT_TYPE_MAX; i++)
     {
         DELETEZ(aActiveContentArr[i]);
     }
     Display(true);
+}
+
+
+
+void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
+{
+    SfxSimpleHint const*const pHint(dynamic_cast<SfxSimpleHint const*>(&rHint));
+    if (pHint && SFX_HINT_DOCCHANGED == pHint->GetId())
+    {
+        m_bActiveDocModified = true;
+    }
+    else
+    {
+        SfxListener::Notify(rBC, rHint);
+    }
 }
 
 // Execute commands of the Navigator
@@ -2436,18 +2459,25 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
         }
 
         if(bIsActive && pActShell != GetWrtShell())
+        {
             SetActiveShell(pActShell);
+        }
         else if( (bIsActive || (bIsConstant && pActShell == GetWrtShell())) &&
                     HasContentChanged())
         {
-            FindActiveTypeAndRemoveUserData();
-            Display(true);
+            if (!bIsActive || m_bActiveDocModified)
+            {   // don't burn cpu and redraw and flicker if not modified
+                FindActiveTypeAndRemoveUserData();
+                Display(true);
+            }
         }
     }
     else if(!pView && bIsActive && !bIsIdleClear)
     {
         if(pActiveShell)
+        {
             SetActiveShell(0);
+        }
         Clear();
         bIsIdleClear = true;
     }
