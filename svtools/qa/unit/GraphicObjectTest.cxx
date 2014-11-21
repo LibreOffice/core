@@ -168,6 +168,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
         if( aNodes[nIndex]->IsGrfNode() )
         {
             SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
+            CPPUNIT_ASSERT(pGrfNode);
             if( !pGrafObj1 )
             {
                 pGrafObj1 = &pGrfNode->GetGrfObj();
