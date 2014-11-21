@@ -1065,7 +1065,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 }
                 nXStart /= 2;
                 nXStart += 2;
-                long nTextOffset = 2 * nXStep;
+                long nTextOffset;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
                     lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYStart, nWidthRelation);
