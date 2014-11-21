@@ -309,7 +309,7 @@ namespace CPPU_CURRENT_NAMESPACE
             RuntimeException aRE( "no exception header!" );
             Type const & rType = ::getCppuType( &aRE );
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-            SAL_WARN("bridges", aRE.Message)
+            SAL_WARN("bridges", aRE.Message);
             return;
         }
 
@@ -325,7 +325,7 @@ namespace CPPU_CURRENT_NAMESPACE
             RuntimeException aRE( OUString("exception type not found: ") + unoName );
             Type const & rType = ::getCppuType( &aRE );
             uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-            SAL_WARN("bridges", aRE.Message)
+            SAL_WARN("bridges", aRE.Message);
         }
         else
         {
