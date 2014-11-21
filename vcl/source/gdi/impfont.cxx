@@ -209,8 +209,12 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                 const unsigned char* pGlyphIdPtr = pOffsetBase + 2*i + nRangeOffset;
                 const size_t nRemainingSize = pEndValidArea - pGlyphIdPtr;
                 const size_t nMaxPossibleRecords = nRemainingSize/2;
-                const size_t nRequestedRecords = cMaxChar - cMinChar + 1;
-                if (nRequestedRecords > nMaxPossibleRecords) {  // no sane font should trigger this
+                if (nMaxPossibleRecords == 0) {  // no sane font should trigger this
+                    SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
+                    break;
+                }
+                const size_t nMaxLegalChar = cMinChar + nMaxPossibleRecords-1;
+                if (cMaxChar > nMaxLegalChar) {  // no sane font should trigger this
                     SAL_WARN("vcl.gdi", "More indexes claimed that space available in font!");
                     break;
                 }
