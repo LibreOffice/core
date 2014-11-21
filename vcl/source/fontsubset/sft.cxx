@@ -920,9 +920,9 @@ static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
 static void GetNames(TrueTypeFont *t)
 {
     const sal_uInt8* table = getTable( t, O_name );
-    int nTableSize = getTableSize(t, O_name);
+    const sal_uInt32 nTableSize = getTableSize(t, O_name);
 
-    if (nTableSize < 4)
+    if (nTableSize < 6)
     {
 #if OSL_DEBUG_LEVEL > 1
         fprintf(stderr, "O_name table too small\n");
@@ -931,12 +931,16 @@ static void GetNames(TrueTypeFont *t)
     }
 
     sal_uInt16 n = GetUInt16(table, 2, 1);
+
+    /* simple sanity check for name table entry count */
+    const size_t nMinRecordSize = 12;
+    const size_t nSpaceAvailable = nTableSize - 6;
+    const size_t nMaxRecords = nSpaceAvailable/nMinRecordSize;
+    if (n >= nMaxRecords)
+        n = 0;
+
     int i, r;
     bool bPSNameOK = true;
-
-    /* #129743# simple sanity check for name table entry count */
-    if( nTableSize <= n * 12 + 6 )
-        n = 0;
 
     /* PostScript name: preferred Microsoft */
     t->psname = NULL;
