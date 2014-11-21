@@ -1092,7 +1092,7 @@ struct UnOp : Op
         pDoc->SetString(ScAddress(1,1+nRow,nTab),
                         OUString("=") + msOp + "(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) + ")");
 
-        pDoc->SetValue(ScAddress(2,1+nRow,nTab), (mpFun)(nArg));
+        pDoc->SetValue(ScAddress(2,1+nRow,nTab), mpFun(nArg));
 
         if (mnEpsilon < 0)
         {
@@ -1169,7 +1169,7 @@ struct BinOp : Op
                         OUString("=") + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                         msOp + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW));
 
-        pDoc->SetValue(ScAddress(3,1+nRow,nTab), (mpFun)(nLhs, nRhs));
+        pDoc->SetValue(ScAddress(3,1+nRow,nTab), mpFun(nLhs, nRhs));
 
         pDoc->SetString(ScAddress(4,1+nRow,nTab),
                         OUString("=IF(ABS(") + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
@@ -1183,6 +1183,81 @@ struct BinOp : Op
         return OUString("=SUM(") +
             ScRange(ScAddress(4,1,nTab),
                     ScAddress(4,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+            ")";
+    }
+};
+
+struct Reduction : Op
+{
+    int mnNum;
+    double mnAccumInitial;
+    double (*mpFun)(double nAccum, double nArg);
+    bool (*mpFilterOut)(double nArg);
+
+    Reduction(const OUString& rTitle,
+              const OUString& rOp,
+              int nNum,
+              double nAccumInitial,
+              double nRangeLo, double nRangeHi,
+              double nEpsilon,
+              double (*pFun)(double nAccum, double nArg),
+              bool (*pFilterOut)(double nArg) = nullptr) :
+        Op(rTitle, rOp, nRangeLo, nRangeHi, nEpsilon),
+        mnNum(nNum),
+        mnAccumInitial(nAccumInitial),
+        mpFun(pFun),
+        mpFilterOut(pFilterOut)
+    {
+    }
+
+    virtual ~Reduction()
+    {
+    }
+
+    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    {
+        pDoc->SetString(ScAddress(0,0,nTab), "x");
+        pDoc->SetString(ScAddress(1,0,nTab), msOp + "(" + OUString::number(mnNum) + ")");
+        pDoc->SetString(ScAddress(2,0,nTab), "expected");
+    }
+
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    {
+        double nArg;
+
+        do {
+            nArg = comphelper::rng::uniform_real_distribution(mnRangeLo, mnRangeHi);
+        } while (mpFilterOut != nullptr && mpFilterOut(nArg));
+
+        pDoc->SetValue(ScAddress(0,1+nRow,nTab), nArg);
+
+        if (nRow >= mnNum)
+        {
+            pDoc->SetString(ScAddress(1,1+nRow,nTab),
+                            OUString("=") + msOp + "(" +
+                            ScRange(ScAddress(0,1+nRow-mnNum,nTab),
+                                    ScAddress(0,1+nRow,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW) +
+                            ")");
+
+            double nAccum(mnAccumInitial);
+            for (int i = 0; i < mnNum; i++)
+                nAccum = mpFun(nAccum, pDoc->GetValue(ScAddress(0,1+nRow-mnNum+i,nTab)));
+
+            pDoc->SetValue(ScAddress(2,1+nRow,nTab), nAccum);
+
+            pDoc->SetString(ScAddress(3,1+nRow,nTab),
+                            OUString("=IF(ABS(") + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                            ")<=" + OUString::number(mnEpsilon) +
+                            ",0,1)");
+        }
+    }
+
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    {
+        return OUString("=SUM(") +
+            ScRange(ScAddress(3,1+mnNum,nTab),
+                    ScAddress(3,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
             ")";
     }
 };
@@ -1201,6 +1276,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                  {
                                      return nLhs + nRhs;
                                  }));
+
     pTestDocument->addTest(BinOp("Minus", "-", -1000, 1000, 3e-10,
                                  [] (double nLhs, double nRhs)
                                  {
@@ -1212,6 +1288,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                  {
                                      return nLhs * nRhs;
                                  }));
+
     pTestDocument->addTest(BinOp("Divided", "/", -1000, 1000, 3e-10,
                                  [] (double nLhs, double nRhs)
                                  {
@@ -1272,155 +1349,17 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                     return (nArg == 0);
                                 }));
 
-#if 0
+    pTestDocument->addTest(Reduction("Sum", "SUM", 500, 0, -1000, 1000, 3e-10,
+                                     [] (double nAccum, double nArg)
+                                     {
+                                         return (nAccum + nArg);
+                                     }));
 
-    const double nEpsilon = 0.0000000003;
-    OUString sEpsilon(OUString::number(nEpsilon));
-
-    const int N = 1000;
-    OUString sN(OUString::number(N));
-
-    css::uno::Reference< css::uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    css::uno::Reference< css::frame::XDesktop2 > xComponentLoader = css::frame::Desktop::create(xContext);
-    css::uno::Reference< css::lang::XComponent > xComponent( xComponentLoader->loadComponentFromURL( "private:factory/scalc",
-                                                                                                     "_blank", 0,
-                                                                                                     css::uno::Sequence < css::beans::PropertyValue >() ) );
-    ScDocShell* pDocShell( dynamic_cast<ScDocShell*>(SfxObjectShell::GetShellFromComponent(xComponent)) );
-
-    auto pDoc = &pDocShell->GetDocument();
-
-    sc::AutoCalcSwitch aACSwitch(*pDoc, true);
-
-    pDoc->SetString(ScAddress(0,0,0), "=IF(SUM(A2:A5)=0,\"PASS\",\"FAIL\")");
-
-    // RAND sheet
-    pDoc->InsertTab(1, "RAND");
-
-    for (int i = 0; i < N; ++i)
-    {
-#if 0 // While our RAND OpenCL implementation is broken...
-        pDoc->SetString(ScAddress(0,i,1), "=RAND()");
-#else
-        pDoc->SetValue(ScAddress(0,i,1), (i%13)/13.);
-#endif
-        double nLarge = comphelper::rng::uniform_real_distribution(0, 1000);
-        pDoc->SetValue(ScAddress(1,i,1), nLarge);
-        // The [0.1,2.5) interval is carefully chosen to keep the product of them likely "sane"
-        double nSmall = comphelper::rng::uniform_real_distribution(0.1, 2.5);
-        pDoc->SetValue(ScAddress(6,i,1), nSmall);
-        pDoc->SetString(ScAddress(10,i,1), OUString("=IF(AND(A") + OUString::number(i+1) + ">= 0,A" + OUString::number(i+1) + "<= 1),0,1)");
-
-        pDoc->SetString(ScAddress(20,i,1), OUString("=B") + OUString::number(i+1) + "+G" + OUString::number(i+1));
-        pDoc->SetString(ScAddress(21,i,1), OUString("=B") + OUString::number(i+1) + "-G" + OUString::number(i+1));
-        pDoc->SetString(ScAddress(22,i,1), OUString("=B") + OUString::number(i+1) + "*G" + OUString::number(i+1));
-        pDoc->SetString(ScAddress(23,i,1), OUString("=B") + OUString::number(i+1) + "/G" + OUString::number(i+1));
-
-        pDoc->SetString(ScAddress(30,i,1),
-                        OUString("=IF(ABS(U") + OUString::number(i+1) + "-" + OUString::number(nLarge+nSmall) + ")<" + sEpsilon + ",0,1)");
-        pDoc->SetString(ScAddress(31,i,1),
-                        OUString("=IF(ABS(V") + OUString::number(i+1) + "-" + OUString::number(nLarge-nSmall) + ")<" + sEpsilon +",0,1)");
-        pDoc->SetString(ScAddress(32,i,1),
-                        OUString("=IF(ABS(W") + OUString::number(i+1) + "-" + OUString::number(nLarge*nSmall) + ")<" + sEpsilon + ",0,1)");
-        pDoc->SetString(ScAddress(33,i,1),
-                        OUString("=IF(ABS(X") + OUString::number(i+1) + "-" + OUString::number(nLarge/nSmall) + ")<" + sEpsilon + ",0,1)");
-    }
-
-    pDoc->SetString(ScAddress(0,1,0), OUString("=SUM(RAND.K1:RAND.K") + sN + ")");
-    pDoc->SetString(ScAddress(0,2,0), OUString("=SUM(RAND.AE1:RAND.AH") + sN + ")");
-
-    for (int i = 0; i < N/3; ++i)
-    {
-        pDoc->SetString(ScAddress(2,i,1), OUString("=SUM(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
-        pDoc->SetString(ScAddress(3,i,1), OUString("=AVERAGE(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
-        pDoc->SetString(ScAddress(4,i,1), OUString("=MIN(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
-        pDoc->SetString(ScAddress(5,i,1), OUString("=MAX(B") + OUString::number(i+1) + ":B" + OUString::number(i+N/2) + ")");
-        pDoc->SetString(ScAddress(7,i,1), OUString("=PRODUCT(G") + OUString::number(i+1) + ":G" + OUString::number(i+N/2) + ")");
-
-        double nSum(0), nMin(DBL_MAX), nMax(-DBL_MAX), nProduct(1);
-        for (int j = 0; j < N/2; ++j)
-        {
-            nSum += pDoc->GetValue(ScAddress(1,i+j,1));
-            nMin = std::min(nMin, pDoc->GetValue(ScAddress(1,i+j,1)));
-            nMax = std::max(nMax, pDoc->GetValue(ScAddress(1,i+j,1)));
-            nProduct *= pDoc->GetValue(ScAddress(6,i+j,1));
-        }
-
-        pDoc->SetString(ScAddress(12,i,1),
-                        OUString("=IF(C") + OUString::number(i+1) + "-" + OUString::number(nSum) + "<" + sEpsilon + ",0,1");
-        pDoc->SetString(ScAddress(13,i,1),
-                        OUString("=IF(D") + OUString::number(i+1) + "-" + OUString::number(nSum/(N/2)) + "<" + sEpsilon + ",0,1");
-        pDoc->SetString(ScAddress(14,i,1),
-                        OUString("=IF(E") + OUString::number(i+1) + "-" + OUString::number(nMin) + "<" + sEpsilon + ",0,1");
-        pDoc->SetString(ScAddress(15,i,1),
-                        OUString("=IF(F") + OUString::number(i+1) + "-" + OUString::number(nMax) + "<" + sEpsilon + ",0,1");
-        pDoc->SetString(ScAddress(16,i,1),
-                        OUString("=IF((H") + OUString::number(i+1) + "-" + OUString::number(nProduct) + ")/H" + OUString::number(i+1) + "<" + sEpsilon + ",0,1");
-    }
-
-    pDoc->SetString(ScAddress(0,3,0), OUString("=SUM(RAND.M1:RAND.Q") + OUString::number(N/3) + ")");
-
-    // MISCMATH sheet
-    pDoc->InsertTab(2, "MISCMATH");
-
-    for (int i = 0; i < 1000; ++i)
-    {
-        OUString is(OUString::number(i+1));
-        double d;
-        if (i <= 16)
-            d = M_PI*(i/4.0);
-        else
-            d = comphelper::rng::uniform_real_distribution(0, 10);
-        pDoc->SetValue(ScAddress(0,i,2), d);
-        pDoc->SetValue(ScAddress(1,i,2), sin(d));
-        pDoc->SetValue(ScAddress(2,i,2), cos(d));
-        pDoc->SetValue(ScAddress(3,i,2), tan(d));
-        pDoc->SetValue(ScAddress(4,i,2), sqrt(d));
-        pDoc->SetValue(ScAddress(5,i,2), exp(d));
-        pDoc->SetValue(ScAddress(6,i,2), log(d));
-        pDoc->SetValue(ScAddress(7,i,2), atan(tan(d)));
-
-        pDoc->SetString(ScAddress(11,i,2), OUString("=SIN(A") + is + ")");
-        pDoc->SetString(ScAddress(12,i,2), OUString("=COS(A") + is + ")");
-        pDoc->SetString(ScAddress(13,i,2), OUString("=TAN(A") + is + ")");
-        pDoc->SetString(ScAddress(14,i,2), OUString("=SQRT(A") + is + ")");
-        pDoc->SetString(ScAddress(15,i,2), OUString("=EXP(A") + is + ")");
-        pDoc->SetString(ScAddress(16,i,2), OUString("=LN(A") + is + ")");
-        pDoc->SetString(ScAddress(17,i,2), OUString("=ATAN(D") + is + ")");
-
-        pDoc->SetString(ScAddress(21,i,2),
-                        OUString("=IF(ABS(B") + is + "-L" + is + ")<" + sEpsilon + ",0,1)");
-        pDoc->SetString(ScAddress(22,i,2),
-                        OUString("=IF(ABS(C") + is + "-M" + is + ")<" + sEpsilon + ",0,1)");
-
-        // Handle TAN undefinedness. Use a relative epsilon for larger TAN values
-        if (i <= 16 && i % 4 == 2)
-            pDoc->SetValue(ScAddress(23,i,2), 0);
-        else if (std::abs(tan(d)) < 10)
-            pDoc->SetString(ScAddress(23,i,2),
-                            OUString("=IF(ABS(D") + is + "-N" + is + ")<" + sEpsilon + ",0,1)");
-        else
-            pDoc->SetString(ScAddress(23,i,2),
-                            OUString("=IF(ABS((D") + is + "-N" + is + ")/D" + is + ")<" + sEpsilon + ",0,1)");
-
-        pDoc->SetString(ScAddress(24,i,2),
-                        OUString("=IF(ABS(E") + is + "-O" + is + ")<" + sEpsilon + ",0,1)");
-        pDoc->SetString(ScAddress(25,i,2),
-                        OUString("=IF(ABS(F") + is + "-P" + is + ")<" + sEpsilon + ",0,1)");
-
-        // Handle LN undefinedness
-        if (i == 0)
-            pDoc->SetValue(ScAddress(26,i,2), 0);
-        else
-            pDoc->SetString(ScAddress(26,i,2),
-                            OUString("=IF(ABS(G") + is + "-Q" + is + ")<" + sEpsilon + ",0,1)");
-
-        pDoc->SetString(ScAddress(27,i,2),
-                        OUString("=IF(ABS(H") + is + "-r" + is + ")<" + sEpsilon + ",0,1)");
-    }
-
-    pDoc->SetString(ScAddress(0,4,0), "=SUM(MISCMATH.V1:MISCMATH.AB1000)");
-
-#endif
+    pTestDocument->addTest(Reduction("Product", "PRODUCT", 500, 0, 0.1, 2.5, 3e-10,
+                                     [] (double nAccum, double nArg)
+                                     {
+                                         return (nAccum * nArg);
+                                     }));
 
     return 0;
 }
