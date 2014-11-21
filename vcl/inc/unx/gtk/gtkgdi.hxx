@@ -163,8 +163,17 @@ public:
 protected:
     typedef std::list< Rectangle > clipList;
 
-    GdkX11Pixmap* NWGetPixmapFromScreen( Rectangle srcRect );
-    bool NWRenderPixmapToScreen( GdkX11Pixmap* pPixmap, Rectangle dstRect );
+    GdkX11Pixmap* NWGetPixmapFromScreen( Rectangle srcRect, int nBgColor = 0 );
+    bool NWRenderPixmapToScreen( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask, Rectangle dstRect );
+
+    bool DoDrawNativeControl( GdkDrawable* pDrawable,
+                           ControlType nType,
+                           ControlPart nPart,
+                           const Rectangle& aCtrlRect,
+                           const clipList& aClip,
+                           ControlState nState,
+                           const ImplControlValue& aValue,
+                           const OUString& rCaption );
 
     bool NWPaintGTKArrow( GdkDrawable* gdkDrawable, ControlType nType, ControlPart nPart,
                            const Rectangle& rControlRectangle,

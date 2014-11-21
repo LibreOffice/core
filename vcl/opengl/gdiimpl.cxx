@@ -84,6 +84,9 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     , mnTransformedMaskedTransformUniform(0)
     , mnTransformedMaskedSamplerUniform(0)
     , mnTransformedMaskedMaskUniform(0)
+    , mnDiffTextureProgram(0)
+    , mnDiffTextureUniform(0)
+    , mnDiffMaskUniform(0)
     , mnMaskedTextureProgram(0)
     , mnMaskedSamplerUniform(0)
     , mnMaskSamplerUniform(0)
@@ -368,6 +371,21 @@ bool OpenGLSalGraphicsImpl::CreateTransformedTextureProgram( void )
     mnTransformedViewportUniform = glGetUniformLocation( mnTransformedTextureProgram, "viewport" );
     mnTransformedTransformUniform = glGetUniformLocation( mnTransformedTextureProgram, "transform" );
     mnTransformedSamplerUniform = glGetUniformLocation( mnTransformedTextureProgram, "sampler" );
+
+    CHECK_GL_ERROR();
+    return true;
+}
+
+bool OpenGLSalGraphicsImpl::CreateDiffTextureProgram( void )
+{
+    mnDiffTextureProgram = OpenGLHelper::LoadShaders( "textureVertexShader", "diffTextureFragmentShader" );
+    if( mnDiffTextureProgram == 0 )
+        return false;
+
+    glBindAttribLocation( mnDiffTextureProgram, GL_ATTRIB_POS, "position" );
+    glBindAttribLocation( mnDiffTextureProgram, GL_ATTRIB_TEX, "tex_coord_in" );
+    mnDiffTextureUniform = glGetUniformLocation( mnDiffTextureProgram, "texture" );
+    mnDiffMaskUniform = glGetUniformLocation( mnDiffTextureProgram, "mask" );
 
     CHECK_GL_ERROR();
     return true;
@@ -838,6 +856,35 @@ void OpenGLSalGraphicsImpl::DrawAlphaTexture( OpenGLTexture& rTexture, const Sal
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     DrawTexture( rTexture, rPosAry, bInverted );
     glDisable( GL_BLEND );
+    CHECK_GL_ERROR();
+}
+
+void OpenGLSalGraphicsImpl::DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted )
+{
+    if( mnDiffTextureProgram == 0 )
+    {
+        if( !CreateDiffTextureProgram() )
+            return;
+    }
+
+    glUseProgram( mnDiffTextureProgram );
+    glUniform1i( mnDiffTextureUniform, 0 );
+    glUniform1i( mnDiffMaskUniform, 1 );
+    glActiveTexture( GL_TEXTURE0 );
+    rTexture.Bind();
+    glActiveTexture( GL_TEXTURE1 );
+    rMask.Bind();
+
+    glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    DrawTextureRect( rTexture, rPosAry, bInverted );
+    glDisable( GL_BLEND );
+
+    glActiveTexture( GL_TEXTURE1 );
+    rMask.Unbind();
+    glActiveTexture( GL_TEXTURE0 );
+    rTexture.Unbind();
+    glUseProgram( 0 );
 
     CHECK_GL_ERROR();
 }

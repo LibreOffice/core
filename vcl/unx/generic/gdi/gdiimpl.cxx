@@ -185,8 +185,9 @@ bool X11SalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int n
     return true;
 }
 
-bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
+bool X11SalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* /*Mask*/, int nX, int nY )
 {
+    // TODO: lfrb: Use the mask
     GC aFontGC = mrParent.GetFontGC();
 
     // The GC can't be null, otherwise we'd have no clip region

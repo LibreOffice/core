@@ -126,16 +126,17 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
     return true;
 }
 
-bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
+bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
 {
     const int aAttribs[] = {
         GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-        GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGB_EXT,
+        GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
         None
     };
     Display* pDisplay = mrParent.GetXDisplay();
     GLXFBConfig pFbConfig;
     GLXPixmap pGlxPixmap;
+    GLXPixmap pGlxMask;
     SalTwoRect aPosAry;
     bool bInverted;
 
@@ -148,25 +149,48 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX,
     aPosAry.mnSrcWidth = aPosAry.mnDestWidth = pPixmap->GetWidth();
     aPosAry.mnSrcHeight = aPosAry.mnDestHeight = pPixmap->GetHeight();
 
+    PreDraw();
+    //glClear( GL_COLOR_BUFFER_BIT );
+
     XSync( pDisplay, 0 );
     pFbConfig = OpenGLHelper::GetPixmapFBConfig( pDisplay, bInverted );
     pGlxPixmap = glXCreatePixmap( pDisplay, pFbConfig, pPixmap->GetPixmap(), aAttribs);
+    if( pMask != NULL )
+        pGlxMask = glXCreatePixmap( pDisplay, pFbConfig, pMask->GetPixmap(), aAttribs);
     XSync( pDisplay, 0 );
 
-    PreDraw();
+    if( !pGlxPixmap )
+        SAL_WARN( "vcl.opengl", "Couldn't create GLXPixmap" );
+
+    //TODO: lfrb: glXGetProc to get the functions
 
     OpenGLTexture aTexture( pPixmap->GetWidth(), pPixmap->GetHeight(), false );
     glActiveTexture( GL_TEXTURE0 );
     aTexture.Bind();
-
-    //TODO: lfrb: glXGetProc to get the functions
     glXBindTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT, NULL );
+    aTexture.Unbind();
 
-    DrawTexture( aTexture, aPosAry, bInverted );
+    if( pMask != NULL && pGlxMask )
+    {
+        OpenGLTexture aMaskTexture( pMask->GetWidth(), pMask->GetHeight(), false );
+        aMaskTexture.Bind();
+        glXBindTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT, NULL );
+        aMaskTexture.Unbind();
+
+        DrawTextureDiff( aTexture, aMaskTexture, aPosAry, !bInverted );
+
+        glXReleaseTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT );
+        glXDestroyPixmap( pDisplay, pGlxMask );
+    }
+    else
+    {
+        DrawTexture( aTexture, aPosAry, !bInverted );
+    }
+
+    CHECK_GL_ERROR();
 
     glXReleaseTexImageEXT( pDisplay, pGlxPixmap, GLX_FRONT_LEFT_EXT );
     glXDestroyPixmap( pDisplay, pGlxPixmap );
-    aTexture.Unbind();
 
     PostDraw();
 

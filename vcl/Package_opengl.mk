@@ -12,6 +12,7 @@ $(eval $(call gb_Package_Package,vcl_opengl_shader,$(SRCDIR)/vcl/opengl))
 $(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
 	blendedTextureFragmentShader.glsl \
 	blendedTextureVertexShader.glsl \
+	diffTextureFragmentShader.glsl \
 	convolutionFragmentShader.glsl \
 	linearGradientFragmentShader.glsl \
 	maskFragmentShader.glsl \

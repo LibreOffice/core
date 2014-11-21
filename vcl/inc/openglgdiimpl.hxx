@@ -67,6 +67,10 @@ protected:
     GLuint mnTransformedMaskedSamplerUniform;
     GLuint mnTransformedMaskedMaskUniform;
 
+    GLuint mnDiffTextureProgram;
+    GLuint mnDiffTextureUniform;
+    GLuint mnDiffMaskUniform;
+
     GLuint mnMaskedTextureProgram;
     GLuint mnMaskedSamplerUniform;
     GLuint mnMaskSamplerUniform;
@@ -96,6 +100,7 @@ protected:
     bool CreateSolidProgram( void );
     bool CreateTextureProgram( void );
     bool CreateTransformedTextureProgram( void );
+    bool CreateDiffTextureProgram( void );
     bool CreateMaskedTextureProgram( void );
     bool CreateBlendedTextureProgram( void );
     bool CreateTransformedMaskedTextureProgram( void );
@@ -124,6 +129,7 @@ public:
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
     void DrawAlphaTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false, bool pPremultiplied = false );
+    void DrawTextureDiff( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTextureWithMask( OpenGLTexture& rTexture, OpenGLTexture& rMask, const SalTwoRect& rPosAry );
     void DrawBlendedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, OpenGLTexture& rAlpha, const SalTwoRect& rPosAry );
     void DrawMask( OpenGLTexture& rTexture, SalColor nMaskColor, const SalTwoRect& rPosAry );
