@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_CONTTREE_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_CONTTREE_HXX
 
+#include <svl/lstner.hxx>
 #include <svtools/treelistbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include "swcont.hxx"
@@ -43,7 +44,9 @@ class SdrObject;
 #define EDIT_MODE_DELETE        4
 #define EDIT_MODE_RENAME        5
 
-class SwContentTree : public SvTreeListBox
+class SwContentTree
+    : public SvTreeListBox
+    , public SfxListener
 {
     ImageList           aEntryImages;
     OUString            sSpace;
@@ -85,6 +88,7 @@ class SwContentTree : public SvTreeListBox
     bool                bIsOutlineMoveable  :1;
     bool                bViewHasChanged     :1;
     bool                bIsImageListInitialized : 1;
+    bool                m_bActiveDocModified :1;
 
     static bool         bIsInDrag;
 
@@ -196,6 +200,10 @@ public:
 
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true ) SAL_OVERRIDE;
     virtual sal_Int32  GetEntryRealChildrenNum( SvTreeListEntry* pEntry ) const;
+
+    using Control::Notify; // FIXME why do we have 2 of these
+    virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) SAL_OVERRIDE;
+
 };
 
 // TreeListBox for global documents
