@@ -252,7 +252,7 @@ void SdModule::Execute(SfxRequest& rReq)
     }
 }
 
-void SdModule::OutlineToImpress (SfxRequest& rRequest)
+bool SdModule::OutlineToImpress(SfxRequest& rRequest)
 {
     const SfxItemSet* pSet = rRequest.GetArgs();
 
@@ -312,7 +312,7 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
         }
     }
 
-    rRequest.IsDone();
+    return rRequest.IsDone();
 }
 
 static bool bOnce = false;

@@ -168,7 +168,7 @@ private:
             This typically is the unmodified request from a execute()
             function from where this function is called.
     */
-    void OutlineToImpress (SfxRequest& rRequest);
+    bool OutlineToImpress(SfxRequest& rRequest);
 
     /** Add an eventlistener as soon as possible in sd, allows to use
         remote devices to start the slideshow elegantly, and respecting
