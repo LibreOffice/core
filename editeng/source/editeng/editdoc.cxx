@@ -1738,7 +1738,7 @@ void ContentNode::UnExpandPosition( sal_Int32 &rPos, bool bBiasStart )
     {
         const EditCharAttrib& rAttr = rAttrs[nAttr];
         assert (!(nAttr < rAttrs.size() - 1) ||
-                rAttrs[nAttr].GetStart() < rAttrs[nAttr + 1].GetStart());
+                rAttrs[nAttr].GetStart() <= rAttrs[nAttr + 1].GetStart());
 
         nOffset = rAttr.GetStart();
 
