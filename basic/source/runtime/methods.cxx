@@ -3717,11 +3717,12 @@ RTLFUNC(Shell)
             osl_freeProcessHandle( pApp );
         }
 
-        for(int j = 0; i < nParamCount; i++)
+        for(int j = 0; j < nParamCount; ++j)
         {
             rtl_uString_release(pParamList[j]);
-            pParamList[j] = NULL;
         }
+
+        delete [] pParamList;
 
         if( !bSucc )
         {
