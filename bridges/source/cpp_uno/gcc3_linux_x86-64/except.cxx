@@ -22,7 +22,6 @@
 #include <string.h>
 
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
 #include <sal/log.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
@@ -51,7 +50,7 @@ static OUString toUNOname( char const * p )
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
     OUStringBuffer buf( 64 );
-    OSL_ASSERT( 'N' == *p );
+    assert( 'N' == *p );
     ++p; // skip N
 
     while ('E' != *p)
@@ -86,7 +85,7 @@ static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
     typelib_TypeDescription * pTD = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
     ::typelib_typedescription_getByName( &pTD, unoName.pData );
-    OSL_ENSURE( pTD, "### unknown exception type! leaving out destruction => leaking!!!" );
+    assert(pTD && "### unknown exception type! leaving out destruction => leaking!!!");
     if (pTD)
     {
         ::uno_destructData( pExc, pTD, cpp_release );
@@ -111,7 +110,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     // construct cpp exception object
     typelib_TypeDescription * pTypeDescr = 0;
     TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
-    OSL_ASSERT( pTypeDescr );
+    assert(pTypeDescr);
     if (! pTypeDescr)
     {
         throw RuntimeException(
@@ -127,7 +126,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     // avoiding locked counts
     rtti = x86_64::getRtti(*pTypeDescr);
     TYPELIB_DANGER_RELEASE( pTypeDescr );
-    OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
+    assert(rtti && "### no rtti for throwing exception!");
     if (! rtti)
     {
         throw RuntimeException(
@@ -146,10 +145,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         RuntimeException aRE( "no exception header!" );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#if OSL_DEBUG_LEVEL > 0
-        OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr.getStr() );
-#endif
+        SAL_WARN("bridges", aRE.Message);
         return;
     }
 
@@ -165,10 +161,7 @@ void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping 
         RuntimeException aRE( OUString("exception type not found: ") + unoName );
         Type const & rType = ::getCppuType( &aRE );
         uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#if OSL_DEBUG_LEVEL > 0
-        OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_FAIL( cstr.getStr() );
-#endif
+        SAL_WARN("bridges", aRE.Message);
     }
     else
     {

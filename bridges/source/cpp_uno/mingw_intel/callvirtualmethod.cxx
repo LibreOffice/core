@@ -20,7 +20,6 @@
 #include "sal/config.h"
 
 #include "cppu/macros.hxx"
-#include "osl/diagnose.h"
 #include "sal/types.h"
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
@@ -49,9 +48,9 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     // parameter list is mixed list of * and values
     // reference parameters are pointers
 
-    OSL_ENSURE( pStackLongs && pAdjustedThisPtr, "### null ptr!" );
-    OSL_ENSURE( (sizeof(void *) == 4) && (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
-    OSL_ENSURE( nStackLongs && pStackLongs, "### no stack in callVirtualMethod !" );
+    assert(pStackLongs && pAdjustedThisPtr);
+    static_assert( (sizeof(void *) == 4) && (sizeof(sal_Int32) == 4), "### unexpected size of int!");
+    assert(nStackLongs && pStackLongs && "### no stack in callVirtualMethod !");
 
     // never called
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something

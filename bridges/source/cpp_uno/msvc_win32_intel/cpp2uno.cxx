@@ -20,7 +20,6 @@
 
 #include <malloc.h>
 
-#include <osl/diagnose.h>
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
@@ -77,7 +76,7 @@ static inline typelib_TypeClass cpp2uno_call(
     }
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
@@ -232,7 +231,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
     void ** pCallStack, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-    OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
+    static_assert(sizeof(sal_Int32)==sizeof(void *), "### unexpected!");
 
     // pCallStack: ret adr, this, [ret *], params
     void * pThis = static_cast< char * >(pCallStack[1]) - nVtableOffset;
@@ -257,7 +256,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-    OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
+    assert(nMemberPos < pTypeDescr->nAllMembers);
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
@@ -403,7 +402,7 @@ unsigned char * codeSnippet(
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset)
 {
     unsigned char * p = code;
-    OSL_ASSERT(sizeof (sal_Int32) == 4);
+    static_assert(sizeof (sal_Int32) == 4);
     // mov eax, functionIndex:
     *p++ = 0xB8;
     *reinterpret_cast< sal_Int32 * >(p) = functionIndex;
@@ -417,7 +416,7 @@ unsigned char * codeSnippet(
     *reinterpret_cast< sal_Int32 * >(p)
         = ((unsigned char *) cpp_vtable_call) - p - sizeof (sal_Int32);
     p += sizeof (sal_Int32);
-    OSL_ASSERT(p - code <= codeSnippetSize);
+    assert(p - code <= codeSnippetSize);
     return code + codeSnippetSize;
 }
 

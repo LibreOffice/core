@@ -36,7 +36,6 @@ using namespace com::sun::star::uno;
 #ifdef BRDEBUG
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 using namespace ::std;
 using namespace ::osl;
@@ -131,7 +130,7 @@ namespace
     nw++;
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
@@ -381,7 +380,7 @@ namespace
       void ** gpreg, void ** fpreg, void ** ovrflw,
       sal_Int64 * pRegisterReturn /* space for register return */ )
   {
-    OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
+    static_assert(sizeof(sal_Int32)==sizeof(void *), "### unexpected!");
 
 #ifdef BRDEBUG
     fprintf(stderr,"cpp_mediate1 gp=%p,fp=%p,ov=%p\n",gpreg,fpreg,ovrflw);
@@ -435,7 +434,7 @@ namespace
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-    OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
+    assert(nMemberPos < pTypeDescr->nAllMembers);
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
@@ -653,8 +652,8 @@ namespace
 
     unsigned long * p = (unsigned long *) code;
 
-    // OSL_ASSERT( sizeof (long) == 4 );
-    OSL_ASSERT((((unsigned long)code) & 0x3) == 0 );  //aligned to 4 otherwise a mistake
+    // static_assert( sizeof (long) == 4 );
+    assert((((unsigned long)code) & 0x3) == 0 );  //aligned to 4 otherwise a mistake
 
     /* generate this code */
     /*
@@ -765,7 +764,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
   for (sal_Int32 i = 0; i < type->nMembers; ++i) {
     typelib_TypeDescription * member = 0;
     TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
-    OSL_ASSERT(member != 0);
+    assert(member != 0);
     switch (member->eTypeClass) {
       case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         // Getter:
@@ -798,7 +797,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         break;
 
       default:
-        OSL_ASSERT(false);
+        assert(false);
         break;
     }
     TYPELIB_DANGER_RELEASE(member);

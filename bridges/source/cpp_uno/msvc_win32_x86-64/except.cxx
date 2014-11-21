@@ -245,6 +245,7 @@ void
 #include "rtl/alloc.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+#include <sal/log.hxx>
 
 #include "com/sun/star/uno/Any.hxx"
 
@@ -339,7 +340,7 @@ __type_info::~__type_info() throw ()
 type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
 {
     // a must be
-    OSL_ENSURE( sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!" );
+    static_assert(sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!");
 
     MutexGuard aGuard( _aMutex );
     t_string2PtrMap::const_iterator const iFind( _allRTTI.find( rUNOname ) );
@@ -355,7 +356,7 @@ type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
         // put into map
         pair< t_string2PtrMap::iterator, bool > insertion(
             _allRTTI.insert( t_string2PtrMap::value_type( rUNOname, pRTTI ) ) );
-        OSL_ENSURE( insertion.second, "### rtti insertion failed?!" );
+        assert(insertion.second && "### rtti insertion failed?!");
 
         return (type_info *)pRTTI;
     }
@@ -371,9 +372,7 @@ RTTInfos::RTTInfos() throw ()
 
 RTTInfos::~RTTInfos() throw ()
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "> freeing generated RTTI infos... <" );
-#endif
+    SAL_INFO("bridges", "> freeing generated RTTI infos... <");
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
@@ -421,7 +420,7 @@ void GenerateConstructorTrampoline(
     // jmp r11
     *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
 
-    OSL_ASSERT( p < code + codeSnippetSize );
+    assert( p < code + codeSnippetSize );
 }
 
 void GenerateDestructorTrampoline(
@@ -441,7 +440,7 @@ void GenerateDestructorTrampoline(
     // jmp r11
     *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
 
-    OSL_ASSERT( p < code + codeSnippetSize );
+    assert( p < code + codeSnippetSize );
 }
 
 // This looks like it is the struct catchabletype above
@@ -541,7 +540,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTD )throw ()
     BOOL success =
 #endif
         VirtualProtect( pCode, codeSize, PAGE_EXECUTE_READWRITE, &old_protect );
-        OSL_ENSURE( success, "VirtualProtect() failed!" );
+    assert(success && "VirtualProtect() failed!");
 
     ::typelib_typedescription_acquire( pTD );
 
@@ -587,9 +586,7 @@ ExceptionInfos::ExceptionInfos() throw ()
 
 ExceptionInfos::~ExceptionInfos() throw ()
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "> freeing exception infos... <" );
-#endif
+    SAL_INFO("bridges", "> freeing exception infos... <");
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
@@ -620,7 +617,7 @@ RaiseInfo * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTD ) throw 
         }
     }
 
-    OSL_ASSERT( pTD &&
+    assert( pTD &&
                 (pTD->eTypeClass == typelib_TypeClass_STRUCT ||
                  pTD->eTypeClass == typelib_TypeClass_EXCEPTION) );
 
@@ -637,7 +634,7 @@ RaiseInfo * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTD ) throw 
         // Put into map
         pair< t_string2PtrMap::iterator, bool > insertion(
             s_pInfos->_allRaiseInfos.insert( t_string2PtrMap::value_type( rTypeName, (void *)pRaiseInfo ) ) );
-        OSL_ENSURE( insertion.second, "### raise info insertion failed?!" );
+        assert(insertion.second && "### raise info insertion failed?!");
     }
     else
     {
@@ -712,7 +709,7 @@ int mscx_filterCppException(
         return EXCEPTION_CONTINUE_SEARCH;
 
     bool rethrow = __CxxDetectRethrow( &pRecord );
-    OSL_ASSERT( pRecord == pPointers->ExceptionRecord );
+    assert(pRecord == pPointers->ExceptionRecord);
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {

@@ -24,7 +24,6 @@
 #include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "rtl/ustring.h"
 #include "sal/types.h"
@@ -54,7 +53,7 @@ void cpp2unoMapping(
     uno_Mapping * pMapping, void ** ppUnoI, void * pCppI,
     typelib_InterfaceTypeDescription * pTypeDescr)
 {
-    OSL_ENSURE( ppUnoI && pTypeDescr, "### null ptr!" );
+    assert(ppUnoI && pTypeDescr);
     if (*ppUnoI)
     {
         (*reinterpret_cast< uno_Interface * >( *ppUnoI )->release)(
@@ -69,7 +68,7 @@ void cpp2unoMapping(
         rtl_uString * pOId = 0;
         (*pBridge->pCppEnv->getObjectIdentifier)(
             pBridge->pCppEnv, &pOId, pCppI );
-        OSL_ASSERT( pOId );
+        assert(pOId);
 
         // try to get any known interface from target environment
         (*pBridge->pUnoEnv->getRegisteredInterface)(
@@ -100,7 +99,7 @@ void uno2cppMapping(
     uno_Mapping * pMapping, void ** ppCppI, void * pUnoI,
     typelib_InterfaceTypeDescription * pTypeDescr)
 {
-    OSL_ASSERT( ppCppI && pTypeDescr );
+    assert(ppCppI && pTypeDescr);
     if (*ppCppI)
     {
         static_cast< ::com::sun::star::uno::XInterface * >( *ppCppI )->
@@ -115,7 +114,7 @@ void uno2cppMapping(
         rtl_uString * pOId = 0;
         (*pBridge->pUnoEnv->getObjectIdentifier)(
             pBridge->pUnoEnv, &pOId, pUnoI );
-        OSL_ASSERT( pOId );
+        assert(pOId);
 
         // try to get any known interface from target environment
         (*pBridge->pCppEnv->getRegisteredInterface)(

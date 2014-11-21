@@ -27,7 +27,6 @@
 #include "osl/thread.h"
 #include "osl/security.hxx"
 #include "osl/file.hxx"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "rtl/alloc.h"
 #include "rtl/ustring.hxx"
@@ -209,7 +208,7 @@ VtableFactory::Vtables VtableFactory::getVtables(
         GuardedBlocks blocks(*this);
         createVtables(blocks, BaseOffset(type), type, 0, type, true);
         Vtables vtables;
-        OSL_ASSERT(blocks.size() <= SAL_MAX_INT32);
+        assert(blocks.size() <= SAL_MAX_INT32);
         vtables.count = static_cast< sal_Int32 >(blocks.size());
         bridges::cpp_uno::shared::GuardedArray< Block > guardedBlocks(
             new Block[vtables.count]);

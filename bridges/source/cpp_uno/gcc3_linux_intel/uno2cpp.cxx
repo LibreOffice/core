@@ -19,7 +19,6 @@
 
 
 #include <sal/alloca.h>
-#include <osl/diagnose.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -53,7 +52,7 @@ static void cpp_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
+    assert(pReturnTypeDescr);
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
     bool bSimpleReturn = true;
@@ -83,7 +82,7 @@ static void cpp_call(
     pCppStack += sizeof( void* );
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indices of values this have to be converted (interface conversion cpp<=>uno)
@@ -155,7 +154,7 @@ static void cpp_call(
 
     try
     {
-        OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic)" );
+        assert( !( (pCppStack - pCppStackStart ) & 3) && "UNALIGNED STACK !!! (Please DO panic)" );
         CPPU_CURRENT_NAMESPACE::callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
             pCppReturn, pReturnTypeDescr, bSimpleReturn,

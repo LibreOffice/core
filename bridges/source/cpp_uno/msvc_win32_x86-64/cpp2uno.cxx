@@ -255,7 +255,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
     // Determine called method
     int nMemberPos = pTD->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-    OSL_ENSURE( nMemberPos < pTD->nAllMembers, "### illegal member index!\n" );
+    assert(nMemberPos < pTD->nAllMembers);
 
     TypeDescription aMemberDescr( pTD->ppAllMembers[nMemberPos] );
 
@@ -433,7 +433,7 @@ unsigned char * codeSnippet(
     // jmp r11
     *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
 
-    OSL_ASSERT( p < code + codeSnippetSize );
+    assert(p < code + codeSnippetSize);
 
     return code + codeSnippetSize;
 }
@@ -491,7 +491,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         typelib_TypeDescription * pTD = NULL;
 
         TYPELIB_DANGER_GET( &pTD, type->ppMembers[ member ] );
-        OSL_ASSERT( pTD );
+        assert(pTD);
 
         char param_kind[4];
         int nr = 0;
@@ -515,7 +515,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             {
                 typelib_TypeDescription * pAttrTD = NULL;
                 TYPELIB_DANGER_GET( &pAttrTD, pIfaceAttrTD->pAttributeTypeRef );
-                OSL_ASSERT( pAttrTD );
+                assert(pAttrTD);
 
                 // Setter
                 if ( pAttrTD->eTypeClass == typelib_TypeClass_FLOAT ||
@@ -535,7 +535,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 
             typelib_TypeDescription * pReturnTD = NULL;
             TYPELIB_DANGER_GET( &pReturnTD, pMethodTD->pReturnTypeRef );
-            OSL_ASSERT( pReturnTD );
+            assert(pReturnTD);
 
             if ( !bridges::cpp_uno::shared::isSimpleType( pReturnTD ) )
             {
@@ -548,7 +548,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 typelib_TypeDescription * pParamTD = NULL;
 
                 TYPELIB_DANGER_GET( &pParamTD, pMethodTD->pParams[param].pTypeRef );
-                OSL_ASSERT( pParamTD );
+                assert(pParamTD);
 
                 if ( pParamTD->eTypeClass == typelib_TypeClass_FLOAT ||
                      pParamTD->eTypeClass == typelib_TypeClass_DOUBLE )
@@ -562,7 +562,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             TYPELIB_DANGER_RELEASE( pReturnTD );
         }
         else
-            OSL_ASSERT( false );
+            assert(false);
 
         TYPELIB_DANGER_RELEASE( pTD );
     }

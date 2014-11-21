@@ -22,13 +22,13 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "osl/mutex.hxx"
 #include "osl/time.h"
 #include "rtl/process.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include <sal/log.hxx>
 #include "sal/types.h"
 #include "uno/environment.h"
 #include "uno/lbnames.h"
@@ -87,7 +87,7 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
     void                * pInterface = va_arg(*pParam, void *);
 
 
-    OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
+    assert(pEnv && ppOId && pInterface);
     if (pEnv && ppOId && pInterface)
     {
         if (*ppOId)
@@ -103,7 +103,7 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
                       reinterpret_cast< ::com::sun::star::uno::XInterface * >(
                           pInterface ),
                       ::com::sun::star::uno::UNO_QUERY );
-            OSL_ENSURE( xHome.is(), "### query to XInterface failed!" );
+            assert(xHome.is() && "### query to XInterface failed!");
             if (xHome.is())
             {
                 // interface
@@ -125,10 +125,11 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
                 ::rtl_uString_acquire( *ppOId = aRet.pData );
             }
         }
-        catch (const ::com::sun::star::uno::RuntimeException &)
+        catch (const ::com::sun::star::uno::RuntimeException & e)
         {
-            OSL_FAIL(
-                "### RuntimeException occurred during queryInterface()!" );
+            SAL_WARN("bridges",
+                "### RuntimeException occurred during queryInterface(): "
+                << e.Message);
         }
     }
 }
@@ -177,12 +178,12 @@ static void SAL_CALL environmentDisposing(
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment(uno_Environment * pCppEnv)
     SAL_THROW_EXTERN_C()
 {
-    OSL_ENSURE( pCppEnv->pExtEnv, "### expected extended environment!" );
-    OSL_ENSURE(
+    assert(pCppEnv->pExtEnv);
+    assert(
         ::rtl_ustr_ascii_compare_WithLength(
              pCppEnv->pTypeName->buffer, rtl_str_getLength(CPPU_CURRENT_LANGUAGE_BINDING_NAME), CPPU_CURRENT_LANGUAGE_BINDING_NAME )
-        == 0,
-        "### wrong environment type!" );
+        == 0
+        && "### wrong environment type!");
     ((uno_ExtEnvironment *)pCppEnv)->computeObjectIdentifier
         = computeObjectIdentifier;
     ((uno_ExtEnvironment *)pCppEnv)->acquireInterface = acquireInterface;
@@ -198,7 +199,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo)
     SAL_THROW_EXTERN_C()
 {
-    OSL_ASSERT( ppMapping && pFrom && pTo );
+    assert(ppMapping && pFrom && pTo);
     if (ppMapping && pFrom && pTo && pFrom->pExtEnv && pTo->pExtEnv)
     {
         uno_Mapping * pMapping = 0;

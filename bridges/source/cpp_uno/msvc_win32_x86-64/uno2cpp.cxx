@@ -71,7 +71,7 @@ static bool cpp_call(
     // Return type
     typelib_TypeDescription * pReturnTD = NULL;
     TYPELIB_DANGER_GET( &pReturnTD, pReturnTypeRef );
-    OSL_ENSURE( pReturnTD, "### expected return type description!" );
+    assert(pReturnTD);
 
     // 'this'
     void * pAdjustedThisPtr = (void **)( pThis->getCppI() ) + aVtableSlot.offset;
@@ -309,7 +309,7 @@ void unoInterfaceProxyDispatch(
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberTD)->nPosition;
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
         VtableSlot aVtableSlot(
             getVtableSlot(
@@ -356,7 +356,7 @@ void unoInterfaceProxyDispatch(
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberTD)->nPosition;
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
         VtableSlot aVtableSlot(
             getVtableSlot(

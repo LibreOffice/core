@@ -82,7 +82,7 @@ static typelib_TypeClass cpp2uno_call(
     ng++;
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int64), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int64), "### unexpected size!");
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
@@ -316,7 +316,7 @@ static typelib_TypeClass cpp_mediate(
     void ** gpreg, void ** fpreg, void ** ovrflw,
     sal_Int64 * pRegisterReturn /* space for register return */ )
 {
-    OSL_ENSURE( sizeof(sal_Int64)==sizeof(void *), "### unexpected!" );
+    static_assert(sizeof(sal_Int64)==sizeof(void *), "### unexpected!");
 
     sal_Int32 nVtableOffset = (nOffsetAndIndex >> 32);
     sal_Int32 nFunctionIndex = (nOffsetAndIndex & 0xFFFFFFFF);
@@ -381,7 +381,7 @@ static typelib_TypeClass cpp_mediate(
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-    OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!" );
+    assert(nMemberPos < pTypeDescr->nAllMembers);
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
@@ -604,7 +604,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
-        OSL_ASSERT(member != 0);
+        assert(member != 0);
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
@@ -637,7 +637,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             break;
 
         default:
-            OSL_ASSERT(false);
+            assert(false);
             break;
         }
         TYPELIB_DANGER_RELEASE(member);

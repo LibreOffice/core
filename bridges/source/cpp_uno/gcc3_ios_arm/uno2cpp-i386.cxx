@@ -62,9 +62,9 @@ void callVirtualMethod(
     // parameter list is mixed list of * and values
     // reference parameters are pointers
 
-    OSL_ENSURE( pStackLongs && pAdjustedThisPtr, "### null ptr!" );
-    OSL_ENSURE( (sizeof(void *) == 4) && (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
-    OSL_ENSURE( nStackLongs && pStackLongs, "### no stack in callVirtualMethod !" );
+    assert(pStackLongs && pAdjustedThisPtr);
+    static_assert( (sizeof(void *) == 4) && (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
+    assert(nStackLongs && pStackLongs && "### no stack in callVirtualMethod !");
 
     // never called
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
@@ -161,7 +161,7 @@ static void cpp_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
+    assert(pReturnTypeDescr);
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
     bool bSimpleReturn = true;
@@ -192,7 +192,7 @@ static void cpp_call(
     pCppStack += sizeof( void* );
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indices of values this have to be converted (interface conversion cpp<=>uno)
@@ -263,7 +263,7 @@ static void cpp_call(
 
     try
     {
-        OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic)" );
+        assert( !( (pCppStack - pCppStackStart ) & 3) && "UNALIGNED STACK !!! (Please DO panic)" );
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
             pCppReturn, pReturnTypeDescr, bSimpleReturn,

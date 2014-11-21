@@ -22,7 +22,6 @@
 #include "bridges/cpp_uno/shared/bridge.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "typelib/typedescription.h"
 #include "uno/dispatcher.h"
@@ -35,7 +34,7 @@ void freeUnoInterfaceProxy(uno_ExtEnvironment * pEnv, void * pProxy)
         static_cast< UnoInterfaceProxy * >(
             reinterpret_cast< uno_Interface * >( pProxy ) );
     if (pEnv != pThis->pBridge->getUnoEnv()) {
-        OSL_ASSERT(false);
+        assert(false);
     }
 
     (*pThis->pBridge->getCppEnv()->revokeInterface)(
@@ -68,7 +67,7 @@ void acquireProxy(uno_Interface * pUnoI)
              static_cast< UnoInterfaceProxy * >( pUnoI )->oid.pData,
              static_cast< UnoInterfaceProxy * >( pUnoI )->pTypeDescr );
 #if OSL_DEBUG_LEVEL > 1
-        OSL_ASSERT( pThis == pUnoI );
+        assert(pThis == pUnoI);
 #endif
     }
 }
@@ -110,9 +109,7 @@ UnoInterfaceProxy::UnoInterfaceProxy(
     if (! ((typelib_TypeDescription *)pTypeDescr)->bComplete)
         ::typelib_typedescription_complete(
             (typelib_TypeDescription **)&pTypeDescr );
-    OSL_ENSURE(
-        ((typelib_TypeDescription *)pTypeDescr)->bComplete,
-        "### type is incomplete!" );
+    assert(((typelib_TypeDescription *)pTypeDescr)->bComplete);
     pCppI->acquire();
     (*pBridge->getCppEnv()->registerInterface)(
         pBridge->getCppEnv(), reinterpret_cast< void ** >( &pCppI ), oid.pData,

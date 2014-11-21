@@ -25,7 +25,6 @@
 #include "bridges/cpp_uno/shared/vtablefactory.hxx"
 
 #include "com/sun/star/uno/XInterface.hpp"
-#include "osl/diagnose.h"
 #include "osl/getglobalmutex.hxx"
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
@@ -80,7 +79,7 @@ void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
     CppInterfaceProxy * pThis = CppInterfaceProxy::castInterfaceToProxy(
         pInterface);
     if (pEnv != pThis->pBridge->getCppEnv()) {
-        OSL_ASSERT(false);
+        assert(false);
     }
 
     (*pThis->pBridge->getUnoEnv()->revokeInterface)(
@@ -129,7 +128,7 @@ void CppInterfaceProxy::acquireProxy()
         (*pBridge->getCppEnv()->registerProxyInterface)(
             pBridge->getCppEnv(), &pThis, freeCppInterfaceProxy, oid.pData,
             pTypeDescr );
-        OSL_ASSERT( pThis == castProxyToInterface( this ) );
+        assert(pThis == castProxyToInterface(this));
     }
 }
 

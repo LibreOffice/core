@@ -28,7 +28,7 @@
 #include "rtl/alloc.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #include "com/sun/star/uno/Any.hxx"
 
@@ -122,7 +122,7 @@ __type_info::~__type_info() throw ()
 type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
 {
     // a must be
-    OSL_ENSURE( sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!" );
+    static_assert(sizeof(__type_info) == sizeof(type_info), "### type info structure size differ!");
 
     MutexGuard aGuard( _aMutex );
     t_string2PtrMap::const_iterator const iFind( _allRTTI.find( rUNOname ) );
@@ -138,7 +138,7 @@ type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
         // put into map
         pair< t_string2PtrMap::iterator, bool > insertion(
             _allRTTI.insert( t_string2PtrMap::value_type( rUNOname, pRTTI ) ) );
-        OSL_ENSURE( insertion.second, "### rtti insertion failed?!" );
+        assert(insertion.second && "### rtti insertion failed?!");
 
         return (type_info *)pRTTI;
     }
@@ -154,9 +154,7 @@ RTTInfos::RTTInfos() throw ()
 
 RTTInfos::~RTTInfos() throw ()
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "> freeing generated RTTI infos... <" );
-#endif
+    SAL_INFO("bridges", "> freeing generated RTTI infos... <");
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
@@ -194,7 +192,7 @@ inline void * ObjectFunction::operator new ( size_t nSize )
         BOOL success =
 #endif
         VirtualProtect( pMem, nSize, PAGE_EXECUTE_READWRITE, &old_protect );
-        OSL_ENSURE( success, "VirtualProtect() failed!" );
+        assert(success && "VirtualProtect() failed!");
     }
     return pMem;
 }
@@ -212,7 +210,7 @@ ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpF
 
     unsigned char * pCode = (unsigned char *)somecode;
     // a must be!
-    OSL_ENSURE( (void *)this == (void *)pCode, "### unexpected!" );
+    assert((void *)this == (void *)pCode);
 
     // push ObjectFunction this
     *pCode++ = 0x68;
@@ -310,7 +308,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     , _n4( 0 )
 {
     // a must be
-    OSL_ENSURE( sizeof(sal_Int32) == sizeof(ExceptionType *), "### pointer size differs from sal_Int32!" );
+    static_assert(sizeof(sal_Int32) == sizeof(ExceptionType *), "### pointer size differs from sal_Int32!");
 
     typelib_CompoundTypeDescription * pCompTypeDescr;
 
@@ -366,9 +364,7 @@ ExceptionInfos::ExceptionInfos() throw ()
 
 ExceptionInfos::~ExceptionInfos() throw ()
 {
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "> freeing exception infos... <" );
-#endif
+    SAL_INFO("bridges", "> freeing exception infos... <");
 
     MutexGuard aGuard( _aMutex );
     for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
@@ -395,7 +391,7 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
         }
     }
 
-    OSL_ASSERT( pTypeDescr &&
+    assert( pTypeDescr &&
                 (pTypeDescr->eTypeClass == typelib_TypeClass_STRUCT ||
                  pTypeDescr->eTypeClass == typelib_TypeClass_EXCEPTION) );
 
@@ -411,7 +407,7 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
         // put into map
         pair< t_string2PtrMap::iterator, bool > insertion(
             s_pInfos->_allRaiseInfos.insert( t_string2PtrMap::value_type( rTypeName, pRaiseInfo ) ) );
-        OSL_ENSURE( insertion.second, "### raise info insertion failed?!" );
+        assert(insertion.second && "### raise info insertion failed?!");
     }
     else
     {
@@ -459,8 +455,7 @@ void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // a must be
-    OSL_ENSURE(
-        sizeof(sal_Int32) == sizeof(void *),
+    static_assert(sizeof(sal_Int32) == sizeof(void *),
         "### pointer size differs from sal_Int32!" );
     DWORD arFilterArgs[3];
     arFilterArgs[0] = MSVC_magic_number;
@@ -486,7 +481,7 @@ int msci_filterCppException(
         return EXCEPTION_CONTINUE_SEARCH;
 
     bool rethrow = __CxxDetectRethrow( &pRecord );
-    OSL_ASSERT( pRecord == pPointers->ExceptionRecord );
+    assert(pRecord == pPointers->ExceptionRecord);
 
     if (rethrow && pRecord == pPointers->ExceptionRecord)
     {
