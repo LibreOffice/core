@@ -34,8 +34,6 @@
 // file as close to ../gcc3_linux_arm/cpp2uno.cxx as possible, to make
 // future unification easier.
 
-#include <osl/diagnose.h>
-
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
