@@ -62,8 +62,6 @@ using namespace com::sun::star;
 
 namespace {
 
-/* commented out because the only use of thse are in another commented-out block
-
 basegfx::B2DPolygon makeRectPolygon( double fX, double fY, double fW, double fH )
 {
     basegfx::B2DPolygon aPoly;
@@ -87,7 +85,6 @@ void drawHairLine(
     pOutDev->SetLineColor(Color(rColor));
     pOutDev->DrawPolyLine(aTarget);
 }
-*/
 
 }
 
