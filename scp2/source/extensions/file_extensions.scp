@@ -48,19 +48,6 @@ End
 
 #endif
 
-/* ** ConvertTextToNumber ** */
-
-#ifdef WITH_EXTENSION_CT2N
-
-File gid_File_Oxt_CT2N
-	TXT_FILE_BODY;
-	Styles = (PACKED, FILELIST);
-	Dir = FILELIST_DIR;
-	Name = "ct2n.filelist";
-End
-
-#endif
-
 /* ** Hungarian Cross-reference Toolbar** */
 
 #ifdef WITH_EXTENSION_HUNART
