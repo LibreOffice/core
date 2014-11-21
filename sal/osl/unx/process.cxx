@@ -472,7 +472,15 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     char szWorkDir[PATH_MAX] = "";
     if ( ustrWorkDir != 0 && ustrWorkDir->length )
     {
-        FileURLToPath( szWorkDir, PATH_MAX, ustrWorkDir );
+        oslFileError e = FileURLToPath( szWorkDir, PATH_MAX, ustrWorkDir );
+        if (e != osl_File_E_None)
+        {
+            SAL_INFO(
+                "sal.osl",
+                "FileURLToPath(" << rtl::OUString::unacquired(&ustrWorkDir)
+                    << ") failed with " << e);
+            return osl_Process_E_Unknown;
+        }
         pszWorkDir = szWorkDir;
     }
 
