@@ -2716,9 +2716,11 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
                 continue;
             }
 
-            const  sal_uInt8* rec_string = table + nStrBase + nStrOffset;
+            const sal_uInt8* rec_string = table + nStrBase + nStrOffset;
             // sanity check
-            if( rec_string > (sal_uInt8*)ttf->ptr && rec_string < ((sal_uInt8*)ttf->ptr + ttf->fsize - rec[i].slen ) )
+            const sal_uInt8* end_table = ttf->ptr + ttf->fsize;
+            const size_t available_space = rec_string > end_table ? 0 : (end_table - rec_string);
+            if (rec[i].slen <= available_space)
             {
                 rec[i].sptr = (sal_uInt8 *) malloc(rec[i].slen); assert(rec[i].sptr != 0);
                 memcpy(rec[i].sptr, rec_string, rec[i].slen);
