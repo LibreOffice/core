@@ -5,8 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "app.hxx"
-
 //////////////////////////////////////////////////////////////////////////////
 //
 // Explanation: See bug 639842. Safely getting GL driver info on X11 is hard, because the only way to do

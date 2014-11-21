@@ -41,4 +41,19 @@ $(eval $(call gb_Executable_use_static_libraries,vcldemo,\
     vclmain \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Executable_add_libs,vcldemo,\
+	-lm \
+	-ldl \
+	-lpthread \
+    -lGL \
+    -lGLU \
+    -lX11 \
+))
+
+$(eval $(call gb_Executable_use_static_libraries,vcldemo,\
+	glxtest \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
