@@ -1357,4 +1357,74 @@ void ScColumn::EndListeningFormulaCells(
         *pEndRow = aFunc.getEndRow();
 }
 
+void ScColumn::EndListeningIntersectedGroups(
+    sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos )
+{
+    // Only end the intersected group.
+    sc::CellStoreType::position_type aPos = maCells.position(nRow1);
+    sc::CellStoreType::iterator it = aPos.first;
+    if (it->type == sc::element_type_formula)
+    {
+        ScFormulaCell* pFC = sc::formula_block::at(*it->data, aPos.second);
+        ScFormulaCellGroupRef xGroup = pFC->GetCellGroup();
+        if (xGroup && !pFC->IsSharedTop())
+        {
+            // End listening.
+            pFC->EndListeningTo(rCxt);
+            if (pGroupPos)
+                // Record the position of the top cell of the group.
+                pGroupPos->push_back(xGroup->mpTopCell->aPos);
+        }
+    }
+
+    aPos = maCells.position(it, nRow2);
+    it = aPos.first;
+    if (it->type == sc::element_type_formula)
+    {
+        ScFormulaCell* pFC = sc::formula_block::at(*it->data, aPos.second);
+        ScFormulaCellGroupRef xGroup = pFC->GetCellGroup();
+        if (xGroup && !pFC->IsSharedTop())
+        {
+            // End listening.
+            pFC->EndListeningTo(rCxt);
+            if (pGroupPos)
+            {
+                // Record the position of the bottom cell of the group.
+                ScAddress aPosLast = xGroup->mpTopCell->aPos;
+                aPosLast.IncRow(xGroup->mnLength-1);
+                pGroupPos->push_back(aPosLast);
+            }
+        }
+    }
+}
+
+void ScColumn::SetNeedsListeningGroup( SCROW nRow )
+{
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    if (aPos.first->type != sc::element_type_formula)
+        // not a formula cell.
+        return;
+
+    ScFormulaCell** pp = &sc::formula_block::at(*aPos.first->data, aPos.second);
+
+    ScFormulaCellGroupRef xGroup = (*pp)->GetCellGroup();
+    if (!xGroup)
+    {
+        // not a formula group.
+        (*pp)->SetNeedsListening(true);
+        return;
+    }
+
+    // Move back to the top cell.
+    SCROW nTopDelta = (*pp)->aPos.Row() - xGroup->mpTopCell->aPos.Row();
+    for (SCROW i = 0; i < nTopDelta; ++i)
+        --pp;
+
+    // Set the needs listening flag to all cells in the group.
+    assert(*pp == xGroup->mpTopCell);
+    ScFormulaCell** ppEnd = pp + xGroup->mnLength;
+    for (; pp != ppEnd; ++pp)
+        (*pp)->SetNeedsListening(true);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

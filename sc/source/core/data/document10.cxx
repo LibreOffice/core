@@ -355,4 +355,33 @@ bool ScDocument::HasFormulaCell( const ScRange& rRange ) const
     return false;
 }
 
+void ScDocument::EndListeningIntersectedGroups(
+    sc::EndListeningContext& rCxt, const ScRange& rRange, std::vector<ScAddress>* pGroupPos )
+{
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->EndListeningIntersectedGroups(
+            rCxt, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(),
+            pGroupPos);
+    }
+}
+
+void ScDocument::SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray )
+{
+    std::vector<ScAddress>::const_iterator it = rPosArray.begin(), itEnd = rPosArray.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScAddress& rPos = *it;
+        ScTable* pTab = FetchTable(rPos.Tab());
+        if (!pTab)
+            return;
+
+        pTab->SetNeedsListeningGroup(rPos.Col(), rPos.Row());
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
