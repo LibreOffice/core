@@ -54,12 +54,12 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:style="radio auto"/>
  <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:tooltip="Format as General" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency" toolbar:tooltip="Format as Currency"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent" toolbar:tooltip="Format as Percent"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal" toolbar:tooltip="Format as Number"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:tooltip="Format as Date" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:tooltip="Format as Scientific" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecimal"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatIncDecimals"/>
  <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecDecimals"/>
  <toolbar:toolbarseparator/>
