@@ -255,7 +255,6 @@ extern const sal_uLong nVCLLut[ 256 ];
 
 class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
 {
-    friend class ::Bitmap;
     friend class ImplImageBmp;
     friend class Printer;
     friend class System;
