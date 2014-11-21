@@ -520,10 +520,9 @@ bool SwWrtShell::PopCrsr(bool bUpdate, bool bSelect)
 
 void SwWrtShell::_ResetCursorStack()
 {
-    CrsrStack *pTmp = pCrsrStack;
     while(pCrsrStack)
     {
-        pTmp = pCrsrStack->pNext;
+        CrsrStack* const pTmp = pCrsrStack->pNext;
         delete pCrsrStack;
         pCrsrStack = pTmp;
     }
