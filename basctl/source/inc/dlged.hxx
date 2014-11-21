@@ -100,7 +100,6 @@ public:
     };
 
 private:
-    DECL_LINK(PaintTimeout, void *);
     DECL_LINK(MarkTimeout, void *);
 
     void Print( Printer* pPrinter, const OUString& rTitle );
@@ -128,7 +127,6 @@ private:
     bool                bGridVisible;
     bool                bGridSnap;
     bool                bCreateOK;
-    Timer               aPaintTimer;
     Rectangle           aPaintRect;
     bool                bDialogModelChanged;
     Timer               aMarkTimer;
