@@ -219,9 +219,6 @@ DlgEditor::DlgEditor (
     m_ClipboardDataFlavorsResource[1].HumanPresentableName = "Dialog 8.0" ;
     m_ClipboardDataFlavorsResource[1].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-    aPaintTimer.SetTimeout( 1 );
-    aPaintTimer.SetTimeoutHdl( LINK( this, DlgEditor, PaintTimeout ) );
-
     aMarkTimer.SetTimeout( 100 );
     aMarkTimer.SetTimeoutHdl( LINK( this, DlgEditor, MarkTimeout ) );
 
@@ -249,7 +246,6 @@ DlgEditor::DlgEditor (
 
 DlgEditor::~DlgEditor()
 {
-    aPaintTimer.Stop();
     aMarkTimer.Stop();
 
     ::comphelper::disposeComponent( m_xControlContainer );
@@ -478,12 +474,7 @@ bool DlgEditor::KeyInput( const KeyEvent& rKEvt )
 void DlgEditor::Paint( const Rectangle& rRect )
 {
     aPaintRect = rRect;
-    PaintTimeout( &aPaintTimer );
-}
 
-
-IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
-{
     mnPaintGuard++;
 
     Size aMacSize;
@@ -580,8 +571,6 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
     }
 
     mnPaintGuard--;
-
-    return 0;
 }
 
 
