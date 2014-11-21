@@ -83,7 +83,6 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id="vnd.sun.star.findbar:FocusToFindbar"/>
             <menu:menuitem menu:id=".uno:SearchDialog"/>
-            <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:ChangesMenu">
                 <menu:menupopup>
@@ -200,6 +199,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:HyperlinkDialog"/>
+            <menu:menuitem menu:id=".uno:EditHeaderAndFooter"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:FunctionDialog"/>
             <menu:menuitem menu:id=".uno:FunctionBox"/>
