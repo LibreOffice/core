@@ -135,11 +135,13 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOption Options)
 {
     char profilePath[PATH_MAX] = "";
-
-    if ( ustrProfileName != 0  && ustrProfileName->buffer[0] != 0 )
-        FileURLToPath( profilePath, PATH_MAX, ustrProfileName );
-
-    return osl_psz_openProfile( profilePath,Options );
+    return
+        (ustrProfileName == nullptr
+         || ustrProfileName->buffer[0] == 0
+         || (FileURLToPath(profilePath, PATH_MAX, ustrProfileName)
+             == osl_File_E_None))
+        ? osl_psz_openProfile(profilePath, Options)
+        : nullptr;
 }
 
 static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, oslProfileOption Flags)
