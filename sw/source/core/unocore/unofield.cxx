@@ -2079,8 +2079,9 @@ SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
         return 0;
 
     // If this is a postit field, then return the range of its annotation mark if it has one.
-    if (const SwPostItField* pPostItField = dynamic_cast<const SwPostItField*>(pField))
+    if (pField->Which() == RES_POSTITFLD)
     {
+        const SwPostItField* pPostItField = static_cast<const SwPostItField*>(pField);
         IDocumentMarkAccess* pMarkAccess = m_pImpl->m_pDoc->getIDocumentMarkAccess();
         for (IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAnnotationMarksBegin(); ppMark != pMarkAccess->getAnnotationMarksEnd(); ++ppMark)
         {
