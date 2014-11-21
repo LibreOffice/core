@@ -18,6 +18,7 @@ $(eval $(call gb_Executable_use_api,ui-previewer,\
 
 $(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
     vclmain \
+	glxtest \
 ))
 
 $(eval $(call gb_Executable_use_libraries,ui-previewer,\
@@ -33,5 +34,16 @@ $(eval $(call gb_Executable_use_libraries,ui-previewer,\
 $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
     vcl/source/uipreviewer/previewer \
 ))
+
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,ui-previewer,\
+	-lm \
+	-ldl \
+	-lpthread \
+    -lGL \
+    -lGLU \
+    -lX11 \
+))
+endif
 
 # vim: set noet sw=4 ts=4:
