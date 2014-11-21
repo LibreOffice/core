@@ -475,7 +475,6 @@ bool DlgEditor::KeyInput( const KeyEvent& rKEvt )
 void DlgEditor::Paint( const Rectangle& rRect )
 {
     aPaintRect = rRect;
-
     mnPaintGuard++;
 
     Size aMacSize;
