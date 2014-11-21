@@ -3722,6 +3722,8 @@ RTLFUNC(Shell)
             pParamList[j] = NULL;
         }
 
+        delete [] pParamList;
+
         if( !bSucc )
         {
             StarBASIC::Error( SbERR_FILE_NOT_FOUND );
