@@ -46,7 +46,14 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
     for ( i = 0; i < aPropSeq.getLength(); i++ )
     {
         beans::PropertyValue& rPropVal = aPropSeq[ i ];
-        aPropHashMap[ rPropVal.Name ] = i;
+        std::pair<PropertyHashMap::iterator, bool> const ret(
+                aPropHashMap.insert(std::make_pair(rPropVal.Name, i)));
+        assert(ret.second); // serious bug: duplicate xml attribute exported
+        if (!ret.second)
+        {
+            throw uno::RuntimeException(
+                "CustomShapeGeometry has duplicate property " + rPropVal.Name, 0);
+        }
         if ( rPropVal.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
         {
             uno::Sequence< beans::PropertyValue >& rPropSeq = *( uno::Sequence< beans::PropertyValue >*)rPropVal.Value.getValue();
@@ -88,6 +95,19 @@ com::sun::star::uno::Any* SdrCustomShapeGeometryItem::GetPropertyValueByName( co
     return pRet;
 }
 
+struct FindByName
+{
+    beans::PropertyValue const& m_rPropertyValue;
+    FindByName(beans::PropertyValue const& rPropertyValue)
+        : m_rPropertyValue(rPropertyValue)
+    {
+    }
+    bool operator()(beans::PropertyValue const& rVal)
+    {
+        return rVal.Name == m_rPropertyValue.Name;
+    }
+};
+
 void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::PropertyValue& rPropVal )
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );
@@ -119,6 +139,8 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
     }
     else
     {   // it's a new property
+        assert(aPropSeq.end() == std::find_if(aPropSeq.begin(), aPropSeq.end(),
+             FindByName(rPropVal)));
         sal_uInt32 nIndex = aPropSeq.getLength();
         aPropSeq.realloc( nIndex + 1 );
         aPropSeq[ nIndex ] = rPropVal ;
@@ -142,6 +164,8 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             aValue.Name = rSequenceName;
             aValue.Value = ::com::sun::star::uno::makeAny( aSeq );
 
+            assert(aPropSeq.end() == std::find_if(aPropSeq.begin(), aPropSeq.end(),
+                FindByName(aValue)));
             sal_uInt32 nIndex = aPropSeq.getLength();
             aPropSeq.realloc( nIndex + 1 );
             aPropSeq[ nIndex ] = aValue;
@@ -284,7 +308,23 @@ bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
     if ( ! ( rVal >>= aPropSeq ) )
         return false;
     else
+    {
+        for (sal_Int32 i = 0; i < aPropSeq.getLength(); ++i)
+        {
+            for (sal_Int32 j = i+1; j < aPropSeq.getLength(); ++j)
+            {
+                if (aPropSeq[i].Name == aPropSeq[j].Name)
+                {
+                    assert(0); // serious bug: duplicate xml attribute exported
+                    OUString const name(aPropSeq[i].Name);
+                    aPropSeq.realloc(0);
+                    throw uno::RuntimeException(
+                        "CustomShapeGeometry has duplicate property " + name, 0);
+                }
+            }
+        }
         return true;
+    }
 }
 const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeometry() const
 {
