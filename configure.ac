@@ -1317,12 +1317,6 @@ AC_ARG_ENABLE(silent-msi,
         [Enable MSI with LIMITUI=1 (silent install).]),
 ,)
 
-AC_ARG_ENABLE(macosx-retina,
-    AS_HELP_STRING([--enable-macosx-retina],
-        [deprecated... enabled by default now. Kept for backward compat only.
-         ]),
-,)
-
 AC_ARG_ENABLE(macosx-code-signing,
     AS_HELP_STRING([--enable-macosx-code-signing=<identity>],
         [Sign executables, dylibs, frameworks and the app bundle. If you
