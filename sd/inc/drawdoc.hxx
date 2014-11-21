@@ -149,7 +149,7 @@ private:
     ::sd::Outliner*     mpOutliner;          ///< local outliner for outline mode
     ::sd::Outliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
     Timer*              mpWorkStartupTimer;
-    Timer*              mpOnlineSpellingTimer;
+    Idle*               mpOnlineSpellingIdle;
     sd::ShapeList*      mpOnlineSpellingList;
     SvxSearchItem*      mpOnlineSearchItem;
     std::vector<sd::FrameView*> maFrameViewList;

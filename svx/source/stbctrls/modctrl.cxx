@@ -35,12 +35,6 @@ using ::com::sun::star::beans::PropertyValue;
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 
-
-namespace
-{
-const unsigned _FEEDBACK_TIMEOUT = 3000;
-}
-
 struct SvxModifyControl::ImplData
 {
     enum ModificationState
@@ -51,7 +45,7 @@ struct SvxModifyControl::ImplData
         MODIFICATION_STATE_SIZE
     };
 
-    Timer maTimer;
+    Idle  maIdle;
     Image maImages[MODIFICATION_STATE_SIZE];
 
     ModificationState mnModState;
@@ -63,7 +57,7 @@ struct SvxModifyControl::ImplData
         maImages[MODIFICATION_STATE_YES]      = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES));
         maImages[MODIFICATION_STATE_FEEDBACK] = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_FEEDBACK));
 
-        maTimer.SetTimeout(_FEEDBACK_TIMEOUT);
+        maIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
     }
 };
 
@@ -82,7 +76,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
         }
     }
 //#endif
-    mpImpl->maTimer.SetTimeoutHdl( LINK(this, SvxModifyControl, OnTimer) );
+    mpImpl->maIdle.SetIdleHdl( LINK(this, SvxModifyControl, OnTimer) );
 }
 
 
@@ -95,7 +89,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 
     DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
     const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
-    mpImpl->maTimer.Stop();
+    mpImpl->maIdle.Stop();
 
     bool modified = pItem->GetValue();
     bool start = ( !modified && mpImpl->mnModState == ImplData::MODIFICATION_STATE_YES);  // should timer be started and feedback image displayed ?
@@ -108,7 +102,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
     GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(nResId));
 
     if ( start )
-        mpImpl->maTimer.Start();
+        mpImpl->maIdle.Start();
 }
 
 

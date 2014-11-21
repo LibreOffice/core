@@ -725,13 +725,13 @@ sal_uInt16 SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
 
 void SdDrawDocument::StopOnlineSpelling()
 {
-    if (mpOnlineSpellingTimer && mpOnlineSpellingTimer->IsActive())
+    if (mpOnlineSpellingIdle && mpOnlineSpellingIdle->IsActive())
     {
-        mpOnlineSpellingTimer->Stop();
+        mpOnlineSpellingIdle->Stop();
     }
 
-    delete mpOnlineSpellingTimer;
-    mpOnlineSpellingTimer = NULL;
+    delete mpOnlineSpellingIdle;
+    mpOnlineSpellingIdle = NULL;
 
     delete mpOnlineSpellingList;
     mpOnlineSpellingList = NULL;
@@ -773,10 +773,10 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
         }
 
         mpOnlineSpellingList->seekShape(0);
-        mpOnlineSpellingTimer = new Timer();
-        mpOnlineSpellingTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
-        mpOnlineSpellingTimer->SetTimeout(250);
-        mpOnlineSpellingTimer->Start();
+        mpOnlineSpellingIdle = new Idle();
+        mpOnlineSpellingIdle->SetIdleHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
+        mpOnlineSpellingIdle->SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+        mpOnlineSpellingIdle->Start();
     }
 }
 
@@ -861,7 +861,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
         }
 
         // Continue search
-        mpOnlineSpellingTimer->Start();
+        mpOnlineSpellingIdle->Start();
     }
     else
     {
