@@ -56,9 +56,9 @@ public:
     const SwLinePortion *GetPortion() const{ return pPor; }
     sal_uInt16 GetDirection() const { return nDir; }
     bool operator<( const SwBlinkPortion& rBlinkPortion ) const
-    { return (sal_IntPtr)pPor < (sal_IntPtr)rBlinkPortion.pPor; }
+    { return reinterpret_cast<sal_IntPtr>(pPor) < reinterpret_cast<sal_IntPtr>(rBlinkPortion.pPor); }
     bool operator==( const SwBlinkPortion& rBlinkPortion ) const
-    { return (sal_IntPtr)pPor == (sal_IntPtr)rBlinkPortion.pPor; }
+    { return reinterpret_cast<sal_IntPtr>(pPor) == reinterpret_cast<sal_IntPtr>(rBlinkPortion.pPor); }
 };
 
 class SwBlinkList : public boost::ptr_set<SwBlinkPortion> {};

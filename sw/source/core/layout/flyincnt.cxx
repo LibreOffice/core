@@ -87,13 +87,13 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if (RES_ATTRSET_CHG == nWhich && pNew)
     {
         if(pOld &&
-            (SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
+            (SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->
             GetItemState(RES_SURROUND, false) ||
-            SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
+            SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->
             GetItemState(RES_FRMMACRO, false)) )
         {
-            SwAttrSetChg aOld( *(SwAttrSetChg*)pOld );
-            SwAttrSetChg aNew( *(SwAttrSetChg*)pNew );
+            SwAttrSetChg aOld( *static_cast<const SwAttrSetChg*>(pOld) );
+            SwAttrSetChg aNew( *static_cast<const SwAttrSetChg*>(pNew) );
 
             aOld.ClearItem( RES_SURROUND );
             aNew.ClearItem( RES_SURROUND );
@@ -105,7 +105,7 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 bCallPrepare = true;
             }
         }
-        else if( ((SwAttrSetChg*)pNew)->GetChgSet()->Count())
+        else if( static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->Count())
         {
             SwFlyFrm::Modify( pOld, pNew );
             bCallPrepare = true;

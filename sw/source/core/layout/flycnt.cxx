@@ -82,7 +82,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     const SwFmtAnchor *pAnch = 0;
 
     if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
+        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
             (const SfxPoolItem**)&pAnch ))
         ;       // The anchor pointer is set at GetItemState!
 
@@ -91,7 +91,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         //Change anchor, I move myself to a new place.
         //The anchor type must not change, this is only possible using
         //SwFEShell.
-        pAnch = (const SwFmtAnchor*)pNew;
+        pAnch = static_cast<const SwFmtAnchor*>(pNew);
     }
 
     if( pAnch )
@@ -103,7 +103,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         SwRect aOld( GetObjRectWithSpaces() );
         SwPageFrm *pOldPage = FindPageFrm();
         const SwFrm *pOldAnchor = GetAnchorFrm();
-        SwCntntFrm *pCntnt = (SwCntntFrm*)GetAnchorFrm();
+        SwCntntFrm *pCntnt = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetAnchorFrm()));
         AnchorFrm()->RemoveFly( this );
 
         const bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
@@ -728,7 +728,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
             {
                 if ( pLay->IsFtnContFrm() )
                 {
-                    if ( !((SwLayoutFrm*)pLay)->Lower() )
+                    if ( !static_cast<const SwLayoutFrm*>(pLay)->Lower() )
                     {
                         SwFrm *pDel = (SwFrm*)pLay;
                         pDel->Cut();
@@ -837,7 +837,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                     else
                         rRet.nMain += nDiff;
                 }
-                if ( pLay->IsFtnContFrm() && !((SwLayoutFrm*)pLay)->Lower() )
+                if ( pLay->IsFtnContFrm() && !static_cast<const SwLayoutFrm*>(pLay)->Lower() )
                 {
                     SwFrm *pDel = (SwFrm*)pLay;
                     pDel->Cut();
@@ -944,7 +944,7 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
         sal_uInt64 nOldNew = SAL_MAX_UINT64;
         for ( int i = 0; pPge->GetPrev() && (i < 3); ++i )
         {
-            pPge = (SwLayoutFrm*)pPge->GetPrev();
+            pPge = static_cast<const SwLayoutFrm*>(pPge->GetPrev());
             const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
@@ -969,7 +969,7 @@ static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
         nOldNew = SAL_MAX_UINT64;
         for ( int j = 0; pPge->GetNext() && (j < 3); ++j )
         {
-            pPge = (SwLayoutFrm*)pPge->GetNext();
+            pPge = static_cast<const SwLayoutFrm*>(pPge->GetNext());
             const sal_uInt64 nNew = ::lcl_FindCntDiff( rPt, pPge, pNew, bBody, bFtn );
             if ( nNew < nDist )
             {
@@ -1024,16 +1024,16 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     const SwCntntFrm* pCnt;
     if ( pOldAnch->IsCntntFrm() )
     {
-        pCnt = (const SwCntntFrm*)pOldAnch;
+        pCnt = static_cast<const SwCntntFrm*>(pOldAnch);
     }
     else
     {
         Point aTmp( rNew );
-        SwLayoutFrm *pTmpLay = (SwLayoutFrm*)pOldAnch;
+        const SwLayoutFrm *pTmpLay = static_cast<const SwLayoutFrm*>(pOldAnch);
         if( pTmpLay->IsRootFrm() )
         {
             SwRect aTmpRect( aTmp, Size(0,0) );
-            pTmpLay = (SwLayoutFrm*)::FindPage( aTmpRect, pTmpLay->Lower() );
+            pTmpLay = static_cast<const SwLayoutFrm*>(::FindPage( aTmpRect, pTmpLay->Lower() ));
         }
         pCnt = pTmpLay->GetCntntPos( aTmp, false, bBodyOnly );
     }
@@ -1177,7 +1177,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         aNew.setX(aNew.getX() + Frm().Width());
     SwCntntFrm *pCnt = (SwCntntFrm*)::FindAnchor( GetAnchorFrm(), aNew );
     if( pCnt->IsProtected() )
-        pCnt = (SwCntntFrm*)GetAnchorFrm();
+        pCnt = const_cast<SwCntntFrm*>(static_cast<const SwCntntFrm*>(GetAnchorFrm()));
 
     SwPageFrm *pTmpPage = 0;
     const bool bVert = pCnt->IsVertical();
@@ -1200,7 +1200,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         pTmpPage = pCnt->FindPageFrm();
         ::lcl_PointToPrt( aNew, pTmpPage->GetUpper() );
         SwRect aTmp( aNew, Size( 0, 0 ) );
-        pTmpPage = (SwPageFrm*)::FindPage( aTmp, pTmpPage );
+        pTmpPage = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(::FindPage( aTmp, pTmpPage )));
         ::lcl_PointToPrt( aNew, pTmpPage );
     }
 

@@ -155,7 +155,7 @@ void SwSectionFrm::CheckDirection( bool bVert )
     {
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-        CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(static_cast<const SvxFrameDirectionItem&>(pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, true, bBrowseMode );
     }
     else
@@ -169,7 +169,7 @@ void SwFlyFrm::CheckDirection( bool bVert )
     {
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-        CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(static_cast<const SvxFrameDirectionItem&>(pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, false, bBrowseMode );
     }
     else
@@ -183,7 +183,7 @@ void SwTabFrm::CheckDirection( bool bVert )
     {
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();
         const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
-        CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
+        CheckDir(static_cast<const SvxFrameDirectionItem&>(pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, true, bBrowseMode );
     }
     else
@@ -222,8 +222,8 @@ void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
     if( pOld && pNew && RES_ATTRSET_CHG == pNew->Which() )
     {
-        SfxItemIter aNIter( *((SwAttrSetChg*)pNew)->GetChgSet() );
-        SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
+        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
+        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
         while( true )
         {
             _UpdateAttrFrm( (SfxPoolItem*)aOIter.GetCurItem(),
@@ -370,7 +370,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
         if ( pPage->GetFmt()->GetDoc()->IsInDtor() )
             return;
 
-        SwRootFrm *pRoot = (SwRootFrm*)pPage->GetUpper();
+        SwRootFrm *pRoot = const_cast<SwRootFrm*>(static_cast<const SwRootFrm*>(pPage->GetUpper()));
         const SwFlyFrm *pFly = FindFlyFrm();
         if ( IsCntntFrm() )
         {
@@ -378,7 +378,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
             {
                 // If a ContentFrame wants to register for a second time, make it a TurboAction.
                 if ( !pRoot->GetTurbo() || this == pRoot->GetTurbo() )
-                    pRoot->SetTurbo( (const SwCntntFrm*)this );
+                    pRoot->SetTurbo( static_cast<const SwCntntFrm*>(this) );
                 else
                 {
                     pRoot->DisallowTurbo();
@@ -396,7 +396,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
                     {
                         if ( pFly->IsFlyInCntFrm() )
                         {   pPage->InvalidateFlyInCnt();
-                            ((SwFlyInCntFrm*)pFly)->InvalidateCntnt();
+                            static_cast<const SwFlyInCntFrm*>(pFly)->InvalidateCntnt();
                             pFly->GetAnchorFrm()->InvalidatePage();
                         }
                         else
@@ -417,7 +417,7 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
                     if ( pFly->IsFlyInCntFrm() )
                     {
                         pPage->InvalidateFlyInCnt();
-                        ((SwFlyInCntFrm*)pFly)->InvalidateLayout();
+                        static_cast<const SwFlyInCntFrm*>(pFly)->InvalidateLayout();
                         pFly->GetAnchorFrm()->InvalidatePage();
                     }
                     else
@@ -463,10 +463,10 @@ Size SwFrm::ChgSize( const Size& aNewSize )
         {
             if ( GetUpper()->IsFtnBossFrm() && HasFixSize() &&
                  NA_GROW_SHRINK !=
-                 ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this ) )
+                 static_cast<SwFtnBossFrm*>(GetUpper())->NeighbourhoodAdjustment( this ) )
             {
                 (maFrm.*fnRect->fnSetHeight)( nNew );
-                SwTwips nReal = ((SwLayoutFrm*)this)->AdjustNeighbourhood(nDiff);
+                SwTwips nReal = static_cast<SwLayoutFrm*>(this)->AdjustNeighbourhood(nDiff);
                 if ( nReal != nDiff )
                     (maFrm.*fnRect->fnSetHeight)( nNew - nDiff + nReal );
             }
@@ -507,8 +507,8 @@ Size SwFrm::ChgSize( const Size& aNewSize )
         {
             if( IsRightToLeft() )
                 _InvalidatePos();
-            if( ((SwLayoutFrm*)this)->Lower() )
-                ((SwLayoutFrm*)this)->Lower()->_InvalidateSize();
+            if( static_cast<SwLayoutFrm*>(this)->Lower() )
+                static_cast<SwLayoutFrm*>(this)->Lower()->_InvalidateSize();
         }
         _InvalidatePrt();
         _InvalidateSize();
@@ -639,11 +639,11 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             else
                 pBehind->GetUpper()->pLower = NULL;
             pBehind->mpPrev = NULL;
-            SwLayoutFrm* pTmp = (SwLayoutFrm*)pSct;
+            SwLayoutFrm* pTmp = static_cast<SwLayoutFrm*>(pSct);
             if( pTmp->Lower() )
             {
                 OSL_ENSURE( pTmp->Lower()->IsColumnFrm(), "InsertGrp: Used SectionFrm" );
-                pTmp = (SwLayoutFrm*)((SwLayoutFrm*)pTmp->Lower())->Lower();
+                pTmp = static_cast<SwLayoutFrm*>(static_cast<SwLayoutFrm*>(pTmp->Lower())->Lower());
                 OSL_ENSURE( pTmp, "InsertGrp: Missing ColBody" );
             }
             pBehind->mpUpper = pTmp;
@@ -658,12 +658,12 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         else
         {
             OSL_ENSURE( pSct->IsSctFrm(), "InsertGroup: For SectionFrms only" );
-            delete ((SwSectionFrm*)pSct);
+            delete static_cast<SwSectionFrm*>(pSct);
         }
     }
     else
     {
-        mpUpper = (SwLayoutFrm*)pParent;
+        mpUpper = static_cast<SwLayoutFrm*>(pParent);
         SwFrm *pLast = this;
         while( pLast->GetNext() )
         {
@@ -727,7 +727,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
             "<SwCntntFrm::Paste(..)> - sibling not of expected type." );
 
     //Insert in the tree.
-    InsertBefore( (SwLayoutFrm*)pParent, pSibling );
+    InsertBefore( static_cast<SwLayoutFrm*>(pParent), pSibling );
 
     SwPageFrm *pPage = FindPageFrm();
     _InvalidateAll();
@@ -748,7 +748,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         pNxt->_InvalidatePos();
         pNxt->InvalidatePage( pPage );
         if( pNxt->IsSctFrm() )
-            pNxt = ((SwSectionFrm*)pNxt)->ContainsCntnt();
+            pNxt = static_cast<SwSectionFrm*>(pNxt)->ContainsCntnt();
         if( pNxt && pNxt->IsTxtFrm() && pNxt->IsInFtn() )
             pNxt->Prepare( PREP_FTN, 0, false );
     }
@@ -763,7 +763,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     {
         if ( IsFollow() )
             //I'm a direct follower of my master now
-            ((SwCntntFrm*)GetPrev())->Prepare( PREP_FOLLOW_FOLLOWS );
+            static_cast<SwCntntFrm*>(GetPrev())->Prepare( PREP_FOLLOW_FOLLOWS );
         else
         {
             if ( GetPrev()->Frm().Height() !=
@@ -788,13 +788,13 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     {
         SwFrm* pFrm = GetIndPrev();
         if( pFrm && pFrm->IsSctFrm() )
-            pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
+            pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
         if( pFrm )
             pFrm->Prepare( PREP_QUOVADIS, 0, false );
         if( !GetNext() )
         {
             pFrm = FindFtnFrm()->GetNext();
-            if( pFrm && 0 != (pFrm=((SwLayoutFrm*)pFrm)->ContainsAny()) )
+            if( pFrm && 0 != (pFrm=static_cast<SwLayoutFrm*>(pFrm)->ContainsAny()) )
                 pFrm->_InvalidatePrt();
         }
     }
@@ -827,7 +827,7 @@ void SwCntntFrm::Cut()
     if( pFrm )
     {
         if( pFrm->IsSctFrm() )
-            pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
+            pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
         if ( pFrm && pFrm->IsCntntFrm() )
         {
             pFrm->_InvalidatePrt();
@@ -867,7 +867,7 @@ void SwCntntFrm::Cut()
         pFrm->InvalidatePage( pPage );
         if( pFrm->IsSctFrm() )
         {
-            pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
+            pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
             if( pFrm )
             {
                 pFrm->_InvalidatePrt();
@@ -957,7 +957,7 @@ void SwCntntFrm::Cut()
                 {
                     if( pUp->GetNext() && !pUp->GetPrev() )
                     {
-                        SwFrm* pTmp = ((SwLayoutFrm*)pUp->GetNext())->ContainsAny();
+                        SwFrm* pTmp = static_cast<SwLayoutFrm*>(pUp->GetNext())->ContainsAny();
                         if( pTmp )
                             pTmp->_InvalidatePrt();
                     }
@@ -1004,7 +1004,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
             "I'm still registered somewhere." );
 
     //Insert in the tree.
-    InsertBefore( (SwLayoutFrm*)pParent, pSibling );
+    InsertBefore( static_cast<SwLayoutFrm*>(pParent), pSibling );
 
     // OD 24.10.2002 #103517# - correct setting of variable <fnRect>
     // <fnRect> is used for the following:
@@ -1054,7 +1054,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
             if( IsInFtn() )
             {
                 if( pFrm->IsSctFrm() )
-                    pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
+                    pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
                 if( pFrm )
                     pFrm->Prepare( PREP_ERGOSUM, 0, false );
             }
@@ -1062,7 +1062,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         if ( IsInFtn() && 0 != ( pFrm = GetIndPrev() ) )
         {
             if( pFrm->IsSctFrm() )
-                pFrm = ((SwSectionFrm*)pFrm)->ContainsAny();
+                pFrm = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();
             if( pFrm )
                 pFrm->Prepare( PREP_QUOVADIS, 0, false );
         }
@@ -1073,7 +1073,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         // AdjustNeighbourhood is now also called in columns which are not
         // placed inside a frame
         sal_uInt8 nAdjust = GetUpper()->IsFtnBossFrm() ?
-                ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
+                static_cast<SwFtnBossFrm*>(GetUpper())->NeighbourhoodAdjustment( this )
                 : NA_GROW_SHRINK;
         SwTwips nGrow = (Frm().*fnRect->fnGetHeight)();
         if( NA_ONLY_ADJUST == nAdjust )
@@ -1112,7 +1112,7 @@ void SwLayoutFrm::Cut()
     {
         if( pUp->IsFtnBossFrm() )
         {
-            sal_uInt8 nAdjust= ((SwFtnBossFrm*)pUp)->NeighbourhoodAdjustment( this );
+            sal_uInt8 nAdjust= static_cast<SwFtnBossFrm*>(pUp)->NeighbourhoodAdjustment( this );
             if( NA_ONLY_ADJUST == nAdjust )
                 AdjustNeighbourhood( -nShrink );
             else
@@ -1163,9 +1163,9 @@ SwTwips SwFrm::Grow( SwTwips nDist, bool bTst, bool bInfo )
             nDist = LONG_MAX - nPrtHeight;
 
         if ( IsFlyFrm() )
-            return ((SwFlyFrm*)this)->_Grow( nDist, bTst );
+            return static_cast<SwFlyFrm*>(this)->_Grow( nDist, bTst );
         else if( IsSctFrm() )
-            return ((SwSectionFrm*)this)->_Grow( nDist, bTst );
+            return static_cast<SwSectionFrm*>(this)->_Grow( nDist, bTst );
         else
         {
             const SwCellFrm* pThisCell = dynamic_cast<const SwCellFrm*>(this);
@@ -1201,9 +1201,9 @@ SwTwips SwFrm::Shrink( SwTwips nDist, bool bTst, bool bInfo )
     if ( nDist )
     {
         if ( IsFlyFrm() )
-            return ((SwFlyFrm*)this)->_Shrink( nDist, bTst );
+            return static_cast<SwFlyFrm*>(this)->_Shrink( nDist, bTst );
         else if( IsSctFrm() )
-            return ((SwSectionFrm*)this)->_Shrink( nDist, bTst );
+            return static_cast<SwSectionFrm*>(this)->_Shrink( nDist, bTst );
         else
         {
             const SwCellFrm* pThisCell = dynamic_cast<const SwCellFrm*>(this);
@@ -1266,8 +1266,8 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     //The (Page-)Body only changes in BrowseMode, but only if it does not
     //contain columns.
     if ( IsPageBodyFrm() && (!bBrowse ||
-          (((SwLayoutFrm*)this)->Lower() &&
-           ((SwLayoutFrm*)this)->Lower()->IsColumnFrm())) )
+          (static_cast<SwLayoutFrm*>(this)->Lower() &&
+           static_cast<SwLayoutFrm*>(this)->Lower()->IsColumnFrm())) )
         return 0L;
 
     //In BrowseView mode the PageFrm can handle some of the requests.
@@ -1296,7 +1296,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 if ( !pViewShell || pViewShell->VisArea().Height() >= pUp->Frm().Height() )
                 {
                     //First minimize Body, it will grow again later.
-                    SwFrm *pBody = ((SwFtnBossFrm*)pUp)->FindBodyCont();
+                    SwFrm *pBody = static_cast<SwFtnBossFrm*>(pUp)->FindBodyCont();
                     const long nTmp = nChg - pBody->Prt().Height();
                     if ( !bTst )
                     {
@@ -1338,7 +1338,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             {
                 SetCompletePaint();
                 if ( !IsHeaderFrm() )
-                    ((SwFtnBossFrm*)pUp)->FindBodyCont()->SetCompletePaint();
+                    static_cast<SwFtnBossFrm*>(pUp)->FindBodyCont()->SetCompletePaint();
             }
             //Invalidate the page because of the frames. Thereby the page becomes
             //the right size again if a frame didn't fit. This only works
@@ -1392,7 +1392,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             }
             if ( !IsBodyFrm() )
                 pUp->_InvalidateSize();
-            InvalidatePage( (SwPageFrm*)pUp );
+            InvalidatePage( static_cast<SwPageFrm*>(pUp) );
         }
         nDiff -= nChg;
         if ( !nDiff )
@@ -1401,7 +1401,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             nBrowseAdd = nChg;
     }
 
-    const SwFtnBossFrm *pBoss = (SwFtnBossFrm*)GetUpper();
+    const SwFtnBossFrm *pBoss = static_cast<SwFtnBossFrm*>(GetUpper());
 
     SwTwips nReal = 0,
             nAdd  = 0;
@@ -1416,9 +1416,9 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
             if( nDiff > 0 && pSect->IsEndnAtEnd() && GetNext() &&
                 GetNext()->IsFtnContFrm() )
             {
-                SwFtnContFrm* pCont = (SwFtnContFrm*)GetNext();
+                SwFtnContFrm* pCont = static_cast<SwFtnContFrm*>(GetNext());
                 SwTwips nMinH = 0;
-                SwFtnFrm* pFtn = (SwFtnFrm*)pCont->Lower();
+                SwFtnFrm* pFtn = static_cast<SwFtnFrm*>(pCont->Lower());
                 bool bFtn = false;
                 while( pFtn )
                 {
@@ -1427,7 +1427,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                         nMinH += (pFtn->Frm().*fnRect->fnGetHeight)();
                         bFtn = true;
                     }
-                    pFtn = (SwFtnFrm*)pFtn->GetNext();
+                    pFtn = static_cast<SwFtnFrm*>(pFtn->GetNext());
                 }
                 if( bFtn )
                     nMinH += (pCont->Prt().*fnRect->fnGetTop)();
@@ -1447,7 +1447,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
     }
     else
     {
-        const bool bFtnPage = pBoss->IsPageFrm() && ((SwPageFrm*)pBoss)->IsFtnPage();
+        const bool bFtnPage = pBoss->IsPageFrm() && static_cast<const SwPageFrm*>(pBoss)->IsFtnPage();
         if ( bFtnPage && !IsFtnContFrm() )
             pFrm = (SwFrm*)pBoss->FindFtnCont();
         if ( !pFrm )
@@ -1564,7 +1564,7 @@ void SwFrm::ImplInvalidateSize()
     {
         mbValidSize = false;
         if ( IsFlyFrm() )
-            ((SwFlyFrm*)this)->_Invalidate();
+            static_cast<SwFlyFrm*>(this)->_Invalidate();
         else
             InvalidatePage();
 
@@ -1579,7 +1579,7 @@ void SwFrm::ImplInvalidatePrt()
     {
         mbValidPrtArea = false;
         if ( IsFlyFrm() )
-            ((SwFlyFrm*)this)->_Invalidate();
+            static_cast<SwFlyFrm*>(this)->_Invalidate();
         else
             InvalidatePage();
 
@@ -1595,7 +1595,7 @@ void SwFrm::ImplInvalidatePos()
         mbValidPos = false;
         if ( IsFlyFrm() )
         {
-            ((SwFlyFrm*)this)->_Invalidate();
+            static_cast<SwFlyFrm*>(this)->_Invalidate();
         }
         else
         {
@@ -1629,13 +1629,13 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
         mbFixSize = false;
         if ( GetType() & (FRM_HEADER | FRM_FOOTER | FRM_ROW) )
         {
-            SwFrm *pFrm = ((SwLayoutFrm*)this)->Lower();
+            SwFrm *pFrm = static_cast<SwLayoutFrm*>(this)->Lower();
             while ( pFrm )
             {   pFrm->_InvalidateSize();
                 pFrm->_InvalidatePrt();
                 pFrm = pFrm->GetNext();
             }
-            SwCntntFrm *pCnt = ((SwLayoutFrm*)this)->ContainsCntnt();
+            SwCntntFrm *pCnt = static_cast<SwLayoutFrm*>(this)->ContainsCntnt();
             // #i36991# - be save.
             // E.g., a row can contain *no* content.
             if ( pCnt )
@@ -1646,7 +1646,7 @@ void SwFrm::ReinitializeFrmSizeAttrFlags()
                     pCnt->Prepare( PREP_ADJUST_FRM );
                     pCnt->_InvalidateSize();
                     pCnt = pCnt->GetNextCntntFrm();
-                } while ( ((SwLayoutFrm*)this)->IsAnLower( pCnt ) );
+                } while ( static_cast<SwLayoutFrm*>(this)->IsAnLower( pCnt ) );
             }
         }
     }
@@ -1925,10 +1925,10 @@ void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
     if( pNew && RES_ATTRSET_CHG == pNew->Which() && pOld )
     {
-        SfxItemIter aNIter( *((SwAttrSetChg*)pNew)->GetChgSet() );
-        SfxItemIter aOIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
-        SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
-        SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
+        SfxItemIter aNIter( *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet() );
+        SfxItemIter aOIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
+        SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
+        SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
         while( true )
         {
             _UpdateAttr( (SfxPoolItem*)aOIter.GetCurItem(),
@@ -2012,7 +2012,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                 if ( !GetPrev() )
                     CheckPageDescs( pPage );
                 if ( GetAttrSet()->GetPageDesc().GetNumOffset() )
-                    ((SwRootFrm*)pPage->GetUpper())->SetVirtPageNum( true );
+                    static_cast<SwRootFrm*>(pPage->GetUpper())->SetVirtPageNum( true );
                 SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
                 pPage->GetFmt()->GetDoc()->getIDocumentFieldsAccess().UpdatePageFlds( &aMsgHnt );
             }
@@ -2033,7 +2033,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                         pNxt->_InvalidatePrt();
                         if( pNxt->IsSctFrm() )
                         {
-                            SwFrm* pCnt = ((SwSectionFrm*)pNxt)->ContainsAny();
+                            SwFrm* pCnt = static_cast<SwSectionFrm*>(pNxt)->ContainsAny();
                             if( pCnt )
                             {
                                 pCnt->_InvalidatePrt();
@@ -2078,7 +2078,7 @@ void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                         pNxt->_InvalidatePrt();
                         if( pNxt->IsSctFrm() )
                         {
-                            SwFrm* pCnt = ((SwSectionFrm*)pNxt)->ContainsAny();
+                            SwFrm* pCnt = static_cast<SwSectionFrm*>(pNxt)->ContainsAny();
                             if( pCnt )
                             {
                                 pCnt->_InvalidatePrt();
@@ -2165,7 +2165,7 @@ SwTwips SwLayoutFrm::InnerHeight() const
     {
         do
         {
-            SwTwips nTmp = ((SwLayoutFrm*)pCnt)->InnerHeight();
+            SwTwips nTmp = static_cast<const SwLayoutFrm*>(pCnt)->InnerHeight();
             if( pCnt->GetValidPrtAreaFlag() )
                 nTmp += (pCnt->Frm().*fnRect->fnGetHeight)() -
                         (pCnt->Prt().*fnRect->fnGetHeight)();
@@ -2179,11 +2179,11 @@ SwTwips SwLayoutFrm::InnerHeight() const
         do
         {
             nRet += (pCnt->Frm().*fnRect->fnGetHeight)();
-            if( pCnt->IsCntntFrm() && ((SwTxtFrm*)pCnt)->IsUndersized() )
-                nRet += ((SwTxtFrm*)pCnt)->GetParHeight() -
+            if( pCnt->IsCntntFrm() && static_cast<const SwTxtFrm*>(pCnt)->IsUndersized() )
+                nRet += static_cast<const SwTxtFrm*>(pCnt)->GetParHeight() -
                         (pCnt->Prt().*fnRect->fnGetHeight)();
             if( pCnt->IsLayoutFrm() && !pCnt->IsTabFrm() )
-                nRet += ((SwLayoutFrm*)pCnt)->InnerHeight() -
+                nRet += static_cast<const SwLayoutFrm*>(pCnt)->InnerHeight() -
                         (pCnt->Prt().*fnRect->fnGetHeight)();
             pCnt = pCnt->GetNext();
         } while( pCnt );
@@ -2238,7 +2238,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         if ( GetUpper() )
         {   // AdjustNeighbourhood now only for the columns (but not in frames)
             sal_uInt8 nAdjust = GetUpper()->IsFtnBossFrm() ?
-                ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
+                static_cast<SwFtnBossFrm*>(GetUpper())->NeighbourhoodAdjustment( this )
                 : NA_GROW_SHRINK;
             if( NA_ONLY_ADJUST == nAdjust )
                 nReal = AdjustNeighbourhood( nReal, bTst );
@@ -2287,7 +2287,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
                     if ( nReal > nSpace )
                         nReal = nSpace;
                     if ( nReal && !bTst )
-                        ((SwFtnFrm*)this)->InvalidateNxtFtnCnts( FindPageFrm() );
+                        static_cast<SwFtnFrm*>(this)->InvalidateNxtFtnCnts( FindPageFrm() );
                 }
                 else
                     nReal = nGrow;
@@ -2399,7 +2399,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
     }
 
     sal_uInt8 nAdjust = GetUpper() && GetUpper()->IsFtnBossFrm() ?
-                   ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
+                   static_cast<SwFtnBossFrm*>(GetUpper())->NeighbourhoodAdjustment( this )
                    : NA_GROW_SHRINK;
 
     // AdjustNeighbourhood also in columns (but not in frames)
@@ -2469,7 +2469,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
             if ( GetNext()->IsCntntFrm() )
                 GetNext()->InvalidatePage( pPage );
             if ( IsTabFrm() )
-                ((SwTabFrm*)this)->SetComplete();
+                static_cast<SwTabFrm*>(this)->SetComplete();
         }
         else
         {   if ( IsRetoucheFrm() )
@@ -2477,7 +2477,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
             if ( IsTabFrm() )
             {
                 if( IsTabFrm() )
-                    ((SwTabFrm*)this)->SetComplete();
+                    static_cast<SwTabFrm*>(this)->SetComplete();
                 if ( Lower() )  // Can also be in the Join and be empty!
                     InvalidateNextPos();
             }
@@ -2506,10 +2506,10 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
             InvaPercentLowers( nReal );
 
         SwCntntFrm *pCnt;
-        if( IsFtnFrm() && !((SwFtnFrm*)this)->GetAttr()->GetFtn().IsEndNote() &&
+        if( IsFtnFrm() && !static_cast<SwFtnFrm*>(this)->GetAttr()->GetFtn().IsEndNote() &&
             ( GetFmt()->GetDoc()->GetFtnInfo().ePos != FTNPOS_CHAPTER ||
               ( IsInSct() && FindSctFrm()->IsFtnAtEnd() ) ) &&
-              0 != (pCnt = ((SwFtnFrm*)this)->GetRefFromAttr() ) )
+              0 != (pCnt = static_cast<SwFtnFrm*>(this)->GetRefFromAttr() ) )
         {
             if ( pCnt->IsFollow() )
             {   // If we are in an other column/page than the frame with the
@@ -2566,7 +2566,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         // corresponding flags at the page.
         do
         {
-            if( pLowerFrm->IsSctFrm() &&((SwSectionFrm*)pLowerFrm)->_ToMaximize() )
+            if( pLowerFrm->IsSctFrm() && static_cast<SwSectionFrm*>(pLowerFrm)->_ToMaximize() )
             {
                 pLowerFrm->_InvalidateSize();
                 pLowerFrm->InvalidatePage( pPage );
@@ -2579,7 +2579,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         // If found last lower is a section frame containing no section
         // (section frame isn't valid and will be deleted in the future),
         // travel backwards.
-        while( pLowerFrm->IsSctFrm() && !((SwSectionFrm*)pLowerFrm)->GetSection() &&
+        while( pLowerFrm->IsSctFrm() && !static_cast<SwSectionFrm*>(pLowerFrm)->GetSection() &&
                pLowerFrm->GetPrev() )
             pLowerFrm = pLowerFrm->GetPrev();
         // If found last lower is a section frame, set <pLowerFrm> to its last
@@ -2587,9 +2587,9 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         // Otherwise set <pLowerFrm> to NULL - In this case body frame only
         //      contains invalid section frames.
         if( pLowerFrm->IsSctFrm() )
-            pLowerFrm = ((SwSectionFrm*)pLowerFrm)->GetSection() &&
-                   !((SwSectionFrm*)pLowerFrm)->ToMaximize( false ) ?
-                   ((SwSectionFrm*)pLowerFrm)->FindLastCntnt() : NULL;
+            pLowerFrm = static_cast<SwSectionFrm*>(pLowerFrm)->GetSection() &&
+                   !static_cast<SwSectionFrm*>(pLowerFrm)->ToMaximize( false ) ?
+                   static_cast<SwSectionFrm*>(pLowerFrm)->FindLastCntnt() : NULL;
 
         // continue with found last lower, probably the last content of a section
         if ( pLowerFrm )
@@ -2621,7 +2621,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                     !SwFlowFrm::CastFlowFrm( pLowerFrm )->HasFollow() )
                     pLowerFrm->InvalidateNextPos( true );
                 if ( pLowerFrm->IsTxtFrm() )
-                    ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
+                    static_cast<SwCntntFrm*>(pLowerFrm)->Prepare( PREP_ADJUST_FRM );
             }
             else
             {
@@ -2653,7 +2653,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                     pLowerFrm->_InvalidateSize();
                     pLowerFrm->InvalidatePage( pPage );
                     if ( pLowerFrm->IsTxtFrm() )
-                        ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
+                        static_cast<SwCntntFrm*>(pLowerFrm)->Prepare( PREP_ADJUST_FRM );
                 }
             }
             // #i41694# - improvement by removing duplicates
@@ -2961,12 +2961,12 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
                 SwFrm *pFrm = Lower();
                 while ( pFrm )
                 {   nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
-                    if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
+                    if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsUndersized() )
                     // This TxtFrm would like to be a bit bigger
-                        nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
+                        nRemaining += static_cast<SwTxtFrm*>(pFrm)->GetParHeight()
                                       - (pFrm->Prt().*fnRect->fnGetHeight)();
-                    else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
-                        nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
+                    else if( pFrm->IsSctFrm() && static_cast<SwSectionFrm*>(pFrm)->IsUndersized() )
+                        nRemaining += static_cast<SwSectionFrm*>(pFrm)->Undersize();
                     pFrm = pFrm->GetNext();
                 }
                 nRemaining += nBorder;
@@ -3063,7 +3063,7 @@ void SwLayoutFrm::InvaPercentLowers( SwTwips nDiff )
 
             if ( pFrm->IsTabFrm() )
             {
-                const SwFmtFrmSize &rSz = ((SwLayoutFrm*)pFrm)->GetFmt()->GetFrmSize();
+                const SwFmtFrmSize &rSz = static_cast<SwLayoutFrm*>(pFrm)->GetFmt()->GetFrmSize();
                 if ( rSz.GetWidthPercent() || rSz.GetHeightPercent() )
                     pFrm->InvalidatePrt();
             }
@@ -3102,16 +3102,16 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, bool ) const
 static long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
 {
     long nDiff = 0, nFirstDiff = 0;
-    SwLayoutFrm *pCol = (SwLayoutFrm*)pLayFrm->Lower();
+    SwLayoutFrm *pCol = static_cast<SwLayoutFrm*>(pLayFrm->Lower());
     OSL_ENSURE( pCol, "Where's the columnframe?" );
     SwFrm *pFrm = pCol->Lower();
     do
     {
         if( pFrm && pFrm->IsBodyFrm() )
-            pFrm = ((SwBodyFrm*)pFrm)->Lower();
+            pFrm = static_cast<SwBodyFrm*>(pFrm)->Lower();
         if ( pFrm && pFrm->IsTxtFrm() )
         {
-            const long nTmp = ((SwTxtFrm*)pFrm)->FirstLineHeight();
+            const long nTmp = static_cast<SwTxtFrm*>(pFrm)->FirstLineHeight();
             if ( nTmp != USHRT_MAX )
             {
                 if ( pCol == pLayFrm->Lower() )
@@ -3121,9 +3121,9 @@ static long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
             }
         }
         //Skip empty columns!
-        pCol = (SwLayoutFrm*)pCol->GetNext();
+        pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
         while ( pCol && 0 == (pFrm = pCol->Lower()) )
-            pCol = (SwLayoutFrm*)pCol->GetNext();
+            pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
 
     } while ( pFrm && pCol );
 
@@ -3228,7 +3228,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             if( nMaximum > BROWSE_HEIGHT )
                 nMaximum = BROWSE_HEIGHT;
 
-            bNoBalance = ((SwSectionFrm*)this)->GetSection()->GetFmt()->
+            bNoBalance = static_cast<SwSectionFrm*>(this)->GetSection()->GetFmt()->
                          GetBalancedColumns().GetValue();
             SwFrm* pAny = ContainsAny();
             if( bNoBalance ||
@@ -3243,16 +3243,16 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     nTop = nMaximum;
                 (this->*fnRect->fnSetYMargins)( nTop, 0 );
             }
-            if( !pAny && !((SwSectionFrm*)this)->IsFtnLock() )
+            if( !pAny && !static_cast<SwSectionFrm*>(this)->IsFtnLock() )
             {
-                SwFtnContFrm* pFtnCont = ((SwSectionFrm*)this)->ContainsFtnCont();
+                SwFtnContFrm* pFtnCont = static_cast<SwSectionFrm*>(this)->ContainsFtnCont();
                 if( pFtnCont )
                 {
                     SwFrm* pFtnAny = pFtnCont->ContainsAny();
                     if( pFtnAny && pFtnAny->IsValid() )
                     {
                         bBackLock = true;
-                        ((SwSectionFrm*)this)->SetFtnLock( true );
+                        static_cast<SwSectionFrm*>(this)->SetFtnLock( true );
                     }
                 }
             }
@@ -3286,7 +3286,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             //First format the column as this will relieve the stack a bit.
             //Also set width and height of the column (if they are wrong)
             //while we are at it.
-            SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
+            SwLayoutFrm *pCol = static_cast<SwLayoutFrm*>(Lower());
 
             // #i27399#
             // Simply setting the column width based on the values returned by
@@ -3300,12 +3300,12 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 pCol->Lower()->Calc();
                 if( pCol->Lower()->GetNext() )
                     pCol->Lower()->GetNext()->Calc();  // SwFtnCont
-                pCol = (SwLayoutFrm*)pCol->GetNext();
+                pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
             }
 
             ::CalcCntnt( this );
 
-            pCol = (SwLayoutFrm*)Lower();
+            pCol = static_cast<SwLayoutFrm*>(Lower());
             OSL_ENSURE( pCol && pCol->GetNext(), ":-( column making holidays?");
             // set bMinDiff if no empty columns exist
             bool bMinDiff = true;
@@ -3313,9 +3313,9 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             while ( bMinDiff && pCol )
             {
                 bMinDiff = 0 != pCol->ContainsCntnt();
-                pCol = (SwLayoutFrm*)pCol->GetNext();
+                pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
             }
-            pCol = (SwLayoutFrm*)Lower();
+            pCol = static_cast<SwLayoutFrm*>(Lower());
             // OD 28.03.2003 #108446# - initialize local variable
             SwFrm *pLow = NULL;
             SwTwips nDiff = 0;
@@ -3325,7 +3325,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             bool bFoundLower = false;
             while( pCol )
             {
-                SwLayoutFrm* pLay = (SwLayoutFrm*)pCol->Lower();
+                SwLayoutFrm* pLay = static_cast<SwLayoutFrm*>(pCol->Lower());
                 SwTwips nInnerHeight = (pLay->Frm().*fnRect->fnGetHeight)() -
                                        (pLay->Prt().*fnRect->fnGetHeight)();
                 if( pLay->Lower() )
@@ -3339,7 +3339,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if( pLay->GetNext() )
                 {
                     bFoundLower = true;
-                    pLay = (SwLayoutFrm*)pLay->GetNext();
+                    pLay = static_cast<SwLayoutFrm*>(pLay->GetNext());
                     OSL_ENSURE( pLay->IsFtnContFrm(),"FtnContainer expected" );
                     nInnerHeight += pLay->InnerHeight();
                     nInnerHeight += (pLay->Frm().*fnRect->fnGetHeight)() -
@@ -3358,10 +3358,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     if( nAllFree > -nInnerHeight )
                         nAllFree = -nInnerHeight;
                 }
-                pCol = (SwLayoutFrm*)pCol->GetNext();
+                pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
             }
 
-            if ( bFoundLower || ( IsSctFrm() && ((SwSectionFrm*)this)->HasFollow() ) )
+            if ( bFoundLower || ( IsSctFrm() && static_cast<SwSectionFrm*>(this)->HasFollow() ) )
             {
                 SwTwips nMinDiff = ::lcl_CalcMinColDiff( this );
                 // Here we decide if growing is needed - this is the case, if
@@ -3369,7 +3369,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 // In sections with columns we take into account to set the size
                 // when having a non-empty Follow.
                 if ( nDiff || ::lcl_IsFlyHeightClipped( this ) ||
-                     ( IsSctFrm() && ((SwSectionFrm*)this)->CalcMinDiff( nMinDiff ) ) )
+                     ( IsSctFrm() && static_cast<SwSectionFrm*>(this)->CalcMinDiff( nMinDiff ) ) )
                 {
                     long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
                     // The minimum must not be smaller than our PrtHeight as
@@ -3476,20 +3476,20 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     //Invalidate suitable to nicely balance the Frms.
                     //- Every first one after the second column gets a
                     //  InvalidatePos();
-                    pCol = (SwLayoutFrm*)Lower()->GetNext();
+                    pCol = static_cast<SwLayoutFrm*>(Lower()->GetNext());
                     while ( pCol )
                     {
                         pLow = pCol->Lower();
                         if ( pLow )
                             pLow->_InvalidatePos();
-                        pCol = (SwLayoutFrm*)pCol->GetNext();
+                        pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
                     }
-                    if( IsSctFrm() && ((SwSectionFrm*)this)->HasFollow() )
+                    if( IsSctFrm() && static_cast<SwSectionFrm*>(this)->HasFollow() )
                     {
                         // If we created a Follow, we need to give its content
                         // the opportunity to flow back inside the CalcCntnt
                         SwCntntFrm* pTmpCntnt =
-                            ((SwSectionFrm*)this)->GetFollow()->ContainsCntnt();
+                            static_cast<SwSectionFrm*>(this)->GetFollow()->ContainsCntnt();
                         if( pTmpCntnt )
                             pTmpCntnt->_InvalidatePos();
                     }
@@ -3510,7 +3510,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // OD 14.03.2003 #i11760# - adjust 2nd parameter - sal_True --> true
         ::CalcCntnt( this, true );
         if( bBackLock )
-            ((SwSectionFrm*)this)->SetFtnLock( false );
+            static_cast<SwSectionFrm*>(this)->SetFtnLock( false );
     }
 }
 
@@ -3637,7 +3637,7 @@ static void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
 void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
 {
     // First process all page bound FlyFrms.
-    SwPageFrm *pPage = (SwPageFrm*)Lower();
+    SwPageFrm *pPage = static_cast<SwPageFrm*>(Lower());
     while( pPage )
     {
         pPage->InvalidateFlyLayout();
@@ -3664,7 +3664,7 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
         }
         if( nInv & INV_DIRECTION )
             pPage->CheckDirChange();
-        pPage = (SwPageFrm*)(pPage->GetNext());
+        pPage = static_cast<SwPageFrm*>(pPage->GetNext());
     }
 
     //Invalidate the whole document content and the character bound Flys here.

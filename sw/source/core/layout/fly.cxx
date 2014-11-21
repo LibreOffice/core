@@ -2440,7 +2440,7 @@ bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
     if( GetFmt()->GetSurround().IsContour() && Lower() &&
         Lower()->IsNoTxtFrm() )
     {
-        SwNoTxtNode *pNd = (SwNoTxtNode*)((SwCntntFrm*)Lower())->GetNode();
+        SwNoTxtNode *pNd = const_cast<SwNoTxtNode*>(static_cast<const SwNoTxtNode*>(static_cast<const SwCntntFrm*>(Lower())->GetNode()));
         // OD 16.04.2003 #i13147# - determine <GraphicObject> instead of <Graphic>
         // in order to avoid load of graphic, if <SwNoTxtNode> contains a graphic
         // node and method is called for paint.
@@ -2476,7 +2476,7 @@ bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
             SwRect aClip;
             SwRect aOrig;
             Lower()->Calc();
-            ((SwNoTxtFrm*)Lower())->GetGrfArea( aClip, &aOrig, false );
+            static_cast<const SwNoTxtFrm*>(Lower())->GetGrfArea( aClip, &aOrig, false );
             // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
             // in order to avoid that graphic has to be loaded for contour scale.
             //SvxContourDlg::ScaleContour( rContour, aGrf, MAP_TWIP, aOrig.SSize() );
@@ -2658,12 +2658,12 @@ SwTwips SwFlyFrm::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips n
             while ( pFrm )
             {
                 nHeight += (pFrm->Frm().*fnRect->fnGetHeight)();
-                if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
+                if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsUndersized() )
                 // This TxtFrm would like to be a bit larger
-                    nHeight += ((SwTxtFrm*)pFrm)->GetParHeight()
+                    nHeight += static_cast<SwTxtFrm*>(pFrm)->GetParHeight()
                             - (pFrm->Prt().*fnRect->fnGetHeight)();
-                else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
-                    nHeight += ((SwSectionFrm*)pFrm)->Undersize();
+                else if( pFrm->IsSctFrm() && static_cast<SwSectionFrm*>(pFrm)->IsUndersized() )
+                    nHeight += static_cast<SwSectionFrm*>(pFrm)->Undersize();
                 pFrm = pFrm->GetNext();
             }
         }

@@ -163,7 +163,7 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 {
     const SwModify* pReg = aDepend.GetRegisteredIn();
-    return (SwTxtFmtColl*)pReg;
+    return static_cast<const SwTxtFmtColl*>(pReg);
 }
 
 /// notifie all affected page frames
@@ -189,7 +189,7 @@ void SwPageDesc::RegisterChange()
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
-                ((SwPageFrm*)pLast)->PrepareRegisterChg();
+                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
         }
     }
     {
@@ -197,7 +197,7 @@ void SwPageDesc::RegisterChange()
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
-                ((SwPageFrm*)pLast)->PrepareRegisterChg();
+                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
         }
     }
     {
@@ -205,7 +205,7 @@ void SwPageDesc::RegisterChange()
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
-                ((SwPageFrm*)pLast)->PrepareRegisterChg();
+                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
         }
     }
     {
@@ -213,7 +213,7 @@ void SwPageDesc::RegisterChange()
         for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
         {
             if( pLast->IsPageFrm() )
-                ((SwPageFrm*)pLast)->PrepareRegisterChg();
+                static_cast<SwPageFrm*>(pLast)->PrepareRegisterChg();
         }
     }
 }
@@ -233,16 +233,16 @@ void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
 static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
 {
-    SwModify* pMod;
+    const SwModify* pMod;
     sal_uInt16 nFrmType = FRM_CNTNT;
 
     if( rNd.IsCntntNode() )
     {
-        pMod = &(SwCntntNode&)rNd;
+        pMod = &static_cast<const SwCntntNode&>(rNd);
     }
     else if( rNd.IsTableNode() )
     {
-        pMod = ((SwTableNode&)rNd).GetTable().GetFrmFmt();
+        pMod = static_cast<const SwTableNode&>(rNd).GetTable().GetFrmFmt();
         nFrmType = FRM_TAB;
     }
     else
@@ -258,7 +258,7 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
     const SwPageDesc* pRet = 0;
     const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
     if (pChkFrm && 0 != (pChkFrm = pChkFrm->FindPageFrm()))
-        pRet = ((const SwPageFrm*)pChkFrm)->GetPageDesc();
+        pRet = static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc();
     return pRet;
 }
 
@@ -272,9 +272,9 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
     if( pChkFrm && 0 != ( pChkFrm = pChkFrm->FindPageFrm() ))
     {
         const SwPageDesc* pPd = bCheckForThisPgDc ? this :
-                                ((SwPageFrm*)pChkFrm)->GetPageDesc();
+                                static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc();
         pRet = &pPd->GetMaster();
-        OSL_ENSURE( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
+        OSL_ENSURE( static_cast<const SwPageFrm*>(pChkFrm)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
         // this page is assigned to which format?
         if( !pChkFrm->KnowsFormat(*pRet) )
         {
@@ -296,7 +296,7 @@ bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
         if( pChkFrm && 0 != ( pChkFrm = pChkFrm->FindPageFrm() ) &&
             pChkFrm->IsPageFrm() &&
             ( !pChkFrm->GetNext() || GetFollow() ==
-                        ((SwPageFrm*)pChkFrm->GetNext())->GetPageDesc() ))
+                        static_cast<const SwPageFrm*>(pChkFrm->GetNext())->GetPageDesc() ))
             // the page on which the follow points was found
             bRet = true;
     }

@@ -64,16 +64,16 @@ static SwTwips lcl_CalcContentHeight(SwLayoutFrm & frm)
 
         nTmp = pFrm->Frm().Height();
         nRemaining += nTmp;
-        if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
+        if( pFrm->IsTxtFrm() && static_cast<SwTxtFrm*>(pFrm)->IsUndersized() )
         {
-            nTmp = ((SwTxtFrm*)pFrm)->GetParHeight()
+            nTmp = static_cast<SwTxtFrm*>(pFrm)->GetParHeight()
                 - pFrm->Prt().Height();
             // This TxtFrm would like to be a bit bigger
             nRemaining += nTmp;
         }
-        else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
+        else if( pFrm->IsSctFrm() && static_cast<SwSectionFrm*>(pFrm)->IsUndersized() )
         {
-            nTmp = ((SwSectionFrm*)pFrm)->Undersize();
+            nTmp = static_cast<SwSectionFrm*>(pFrm)->Undersize();
             nRemaining += nTmp;
         }
         pFrm = pFrm->GetNext();
@@ -278,13 +278,13 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     nRemaining += pFrm->Frm().Height();
 
                     if( pFrm->IsTxtFrm() &&
-                        ((SwTxtFrm*)pFrm)->IsUndersized() )
+                        static_cast<SwTxtFrm*>(pFrm)->IsUndersized() )
                         // This TxtFrm would like to be a bit bigger
-                        nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
+                        nRemaining += static_cast<SwTxtFrm*>(pFrm)->GetParHeight()
                             - pFrm->Prt().Height();
                     else if( pFrm->IsSctFrm() &&
-                             ((SwSectionFrm*)pFrm)->IsUndersized() )
-                        nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
+                             static_cast<SwSectionFrm*>(pFrm)->IsUndersized() )
+                        nRemaining += static_cast<SwSectionFrm*>(pFrm)->Undersize();
                     pFrm = pFrm->GetNext();
                 }
                 if ( nRemaining < nMinHeight )
@@ -325,7 +325,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                             {
                                 if( pFrm->IsTxtFrm())
                                 {
-                                    SwTxtFrm * pTmpFrm = (SwTxtFrm*) pFrm;
+                                    SwTxtFrm * pTmpFrm = static_cast<SwTxtFrm*>(pFrm);
                                     if (pTmpFrm->IsUndersized() )
                                     {
                                         pTmpFrm->InvalidateSize();
@@ -337,7 +337,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                                 else if (pFrm->IsSctFrm())
                                 {
                                     SwSectionFrm * pTmpFrm =
-                                        (SwSectionFrm*) pFrm;
+                                        static_cast<SwSectionFrm*>(pFrm);
                                     if (pTmpFrm->IsUndersized() )
                                     {
                                         pTmpFrm->InvalidateSize();
@@ -666,11 +666,11 @@ void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
 /// Creates or removes headers
 void SwPageFrm::PrepareHeader()
 {
-    SwLayoutFrm *pLay = (SwLayoutFrm*)Lower();
+    SwLayoutFrm *pLay = static_cast<SwLayoutFrm*>(Lower());
     if ( !pLay )
         return;
 
-    const SwFmtHeader &rH = ((SwFrmFmt*)GetRegisteredIn())->GetHeader();
+    const SwFmtHeader &rH = static_cast<SwFrmFmt*>(GetRegisteredIn())->GetHeader();
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
@@ -684,7 +684,7 @@ void SwPageFrm::PrepareHeader()
 
         if ( pLay->IsHeaderFrm() )
         {   SwLayoutFrm *pDel = pLay;
-            pLay = (SwLayoutFrm*)pLay->GetNext();
+            pLay = static_cast<SwLayoutFrm*>(pLay->GetNext());
             ::DelFlys( pDel, this );
             pDel->Cut();
             delete pDel;
@@ -706,13 +706,13 @@ void SwPageFrm::PrepareHeader()
 /// Creates or removes footer
 void SwPageFrm::PrepareFooter()
 {
-    SwLayoutFrm *pLay = (SwLayoutFrm*)Lower();
+    SwLayoutFrm *pLay = static_cast<SwLayoutFrm*>(Lower());
     if ( !pLay )
         return;
 
-    const SwFmtFooter &rF = ((SwFrmFmt*)GetRegisteredIn())->GetFooter();
+    const SwFmtFooter &rF = static_cast<SwFrmFmt*>(GetRegisteredIn())->GetFooter();
     while ( pLay->GetNext() )
-        pLay = (SwLayoutFrm*)pLay->GetNext();
+        pLay = static_cast<SwLayoutFrm*>(pLay->GetNext());
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());

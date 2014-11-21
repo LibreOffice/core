@@ -415,7 +415,7 @@ void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
 {
     // Activate some shell if possible
     if ( pCurrShell == pSh )
-        pCurrShell = pSh->GetNext() != pSh ? (SwViewShell*)pSh->GetNext() : 0;
+        pCurrShell = pSh->GetNext() != pSh ? static_cast<SwViewShell*>(pSh->GetNext()) : 0;
 
     // Doesn't matter anymore
     if ( pWaitingCurrShell == pSh )
@@ -540,7 +540,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     // Find the first page in the Bodytext section.
     SwLayoutFrm *pLay = pPage->FindBodyCont();
     while( pLay->Lower() )
-        pLay = (SwLayoutFrm*)pLay->Lower();
+        pLay = static_cast<SwLayoutFrm*>(pLay->Lower());
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), true );
@@ -620,16 +620,16 @@ void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 void SwRootFrm::AllCheckPageDescs() const
 {
     if ( !IsLayoutFreezed() )
-        CheckPageDescs( (SwPageFrm*)this->Lower() );
+        CheckPageDescs( const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(this->Lower())) );
 }
 
 void SwRootFrm::AllInvalidateAutoCompleteWords() const
 {
-    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    SwPageFrm *pPage = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(this->Lower()));
     while ( pPage )
     {
         pPage->InvalidateAutoCompleteWords();
-        pPage = (SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<SwPageFrm*>(pPage->GetNext());
     }
 }
 
@@ -645,14 +645,14 @@ void SwRootFrm::AllRemoveFtns()
 
 void SwRootFrm::AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const
 {
-    SwPageFrm *pPage = (SwPageFrm*)this->Lower();
+    SwPageFrm *pPage = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(this->Lower()));
     while ( pPage )
     {
         if ( bSmartTags )
             pPage->InvalidateSmartTags();
 
         pPage->InvalidateSpelling();
-        pPage = (SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<SwPageFrm*>(pPage->GetNext());
     }
 }
 

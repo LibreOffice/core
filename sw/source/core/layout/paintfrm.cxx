@@ -1458,11 +1458,11 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                 SwTwips nDiff = 0;
                 // #i29550#
                 if ( pFrm->IsTabFrm() &&
-                     ((SwTabFrm*)pFrm)->IsCollapsingBorders() )
+                     static_cast<const SwTabFrm*>(pFrm)->IsCollapsingBorders() )
                 {
                     // For collapsing borders, we have to add the height of
                     // the height of the last line
-                    nDiff = ((SwTabFrm*)pFrm)->GetBottomLineSize();
+                    nDiff = static_cast<const SwTabFrm*>(pFrm)->GetBottomLineSize();
                 }
                 else
                 {
@@ -3480,7 +3480,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
 
         OSL_ENSURE( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
                 "Neighbour of page is not a page." );
-        pPage = (SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
     }
 
     DELETEZ( gProp.pSLines );
@@ -3575,7 +3575,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     if ( pFrm->IsFtnContFrm() )
     {
-        ::lcl_EmergencyFormatFtnCont( (SwFtnContFrm*)pFrm );
+        ::lcl_EmergencyFormatFtnCont( const_cast<SwFtnContFrm*>(static_cast<const SwFtnContFrm*>(pFrm)) );
         pFrm = Lower();
     }
 
@@ -3660,7 +3660,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
         }
         if ( !bCnt && pFrm->GetNext() && pFrm->GetNext()->IsFtnContFrm() )
-            ::lcl_EmergencyFormatFtnCont( (SwFtnContFrm*)pFrm->GetNext() );
+            ::lcl_EmergencyFormatFtnCont( const_cast<SwFtnContFrm*>(static_cast<const SwFtnContFrm*>(pFrm->GetNext())) );
 
         pFrm = pFrm->GetNext();
 
@@ -4000,7 +4000,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
 
     //Attribute dependent, don't paint for printer or Preview
     bool bPaint =  gProp.pSFlyOnlyDraw ||
-                       ((SwContact*)pUserCall)->GetFmt()->GetPrint().GetValue();
+                       static_cast<SwContact*>(pUserCall)->GetFmt()->GetPrint().GetValue();
     if ( !bPaint )
         bPaint = pSh->GetWin() && !pSh->IsPreview();
 
@@ -4014,7 +4014,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
         }
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
-            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+            SwFlyFrm *pFly = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
             if ( gProp.pSFlyOnlyDraw && gProp.pSFlyOnlyDraw == pFly )
                 return true;
 
@@ -4126,7 +4126,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     const SwPageFrm* pPage = FindPageFrm();
 
     const SwNoTxtFrm *pNoTxt = Lower() && Lower()->IsNoTxtFrm()
-                                                ? (SwNoTxtFrm*)Lower() : 0;
+                                                ? static_cast<const SwNoTxtFrm*>(Lower()) : 0;
 
     bool bIsChart = false; //#i102950# don't paint additional borders for charts
     //check whether we have a chart
@@ -6429,7 +6429,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     {
         SwRect aRect( rRect );
         if( IsPageFrm() )
-            ((SwPageFrm*)this)->PaintGrid( pOut, aRect );
+            static_cast<const SwPageFrm*>(this)->PaintGrid( pOut, aRect );
         PaintBorder( aRect, pPage, rAttrs );
     }
 
@@ -6722,7 +6722,7 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
         if ( pLow->Frm().IsOver( rRect ) && pLow->Frm().HasArea() )
         {
             if ( pLow->IsLayoutFrm() )
-                ((const SwLayoutFrm*)pLow)->RefreshLaySubsidiary( pPage, rRect);
+                static_cast<const SwLayoutFrm*>(pLow)->RefreshLaySubsidiary( pPage, rRect);
             else if ( pLow->GetDrawObjs() )
             {
                 const SwSortedObjs& rObjs = *(pLow->GetDrawObjs());
@@ -6738,7 +6738,7 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                         if ( pFly->IsFlyInCntFrm() && pFly->Frm().IsOver( rRect ) )
                         {
                             if ( !pFly->Lower() || !pFly->Lower()->IsNoTxtFrm() ||
-                                 !((SwNoTxtFrm*)pFly->Lower())->HasAnimation())
+                                 !static_cast<const SwNoTxtFrm*>(pFly->Lower())->HasAnimation())
                                 pFly->RefreshLaySubsidiary( pPage, rRect );
                         }
                     }
@@ -6804,7 +6804,7 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
 
         while ( aIter() )
         {
-            const SwVirtFlyDrawObj *pObj = (SwVirtFlyDrawObj*)aIter();
+            const SwVirtFlyDrawObj *pObj = static_cast<const SwVirtFlyDrawObj*>(aIter());
             const SwFlyFrm *pFly = pObj ? pObj->GetFlyFrm() : 0;
 
             //I certainly won't avoid myself, even if I'm placed _inside_ the
@@ -7240,7 +7240,7 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
              pCnt->Frm().Top() <= rRect.Bottom() &&
              pCnt->Frm().Bottom() >= rRect.Top() )
         {
-            ((SwTxtFrm*)pCnt)->PaintExtraData( rRect );
+            const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pCnt))->PaintExtraData( rRect );
         }
         if ( bLineInFly && pCnt->GetDrawObjs() )
             for ( size_t i = 0; i < pCnt->GetDrawObjs()->size(); ++i )
@@ -7467,7 +7467,7 @@ bool SwFrm::GetBackgroundBrush(
 
         if( pFrm->IsSctFrm() )
         {
-            const SwSection* pSection = ((SwSectionFrm*)pFrm)->GetSection();
+            const SwSection* pSection = static_cast<const SwSectionFrm*>(pFrm)->GetSection();
             // OD 20.08.2002 #99657# #GetTransChg#
             //     Note: If frame <pFrm> is a section of the index and
             //         it its background color is "no fill"/"auto fill" and
@@ -7621,7 +7621,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
             OSL_ENSURE( !pNoteURL, "MakeGraphic: pNoteURL already used? " );
             pNoteURL = new SwNoteURL;
         }
-        SwFlyFrm *pFly = (SwFlyFrm*)pFirst;
+        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pFirst);
 
         OutputDevice *pOld = pSh->GetOut();
         VirtualDevice aDev( *pOld );

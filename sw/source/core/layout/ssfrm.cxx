@@ -207,13 +207,13 @@ void SwFrm::CheckDirChange()
             if ( IsCellFrm() && GetUpper() )
             {
                 if ( IsVertical() != GetUpper()->IsVertical() &&
-                     ((SwCellFrm*)this)->GetTabBox()->getRowSpan() == 1 )
+                     static_cast<SwCellFrm*>(this)->GetTabBox()->getRowSpan() == 1 )
                 {
                     enum {
                         MIN_VERT_CELL_HEIGHT = 1135
                     };
 
-                    SwTableLine* pLine = (SwTableLine*)((SwCellFrm*)this)->GetTabBox()->GetUpper();
+                    SwTableLine* pLine = (SwTableLine*)static_cast<SwCellFrm*>(this)->GetTabBox()->GetUpper();
                     SwFrmFmt* pFrmFmt = pLine->GetFrmFmt();
                     SwFmtFrmSize aNew( pFrmFmt->GetFrmSize() );
                     if ( ATT_FIX_SIZE != aNew.GetHeightSizeType() )
@@ -225,7 +225,7 @@ void SwFrm::CheckDirChange()
                 }
             }
 
-            SwFrm* pFrm = ((SwLayoutFrm*)this)->Lower();
+            SwFrm* pFrm = static_cast<SwLayoutFrm*>(this)->Lower();
             const SwFmtCol* pCol = NULL;
             SwLayoutFrm* pBody = 0;
             if( pFrm )
@@ -234,13 +234,13 @@ void SwFrm::CheckDirChange()
                 {
                     // If we're a page frame and we change our layout direction,
                     // we have to look for columns and rearrange them.
-                    pBody = ((SwPageFrm*)this)->FindBodyCont();
+                    pBody = static_cast<SwPageFrm*>(this)->FindBodyCont();
                     if(pBody && pBody->Lower() && pBody->Lower()->IsColumnFrm())
-                        pCol = &((SwPageFrm*)this)->GetFmt()->GetCol();
+                        pCol = &static_cast<SwPageFrm*>(this)->GetFmt()->GetCol();
                 }
                 else if( pFrm->IsColumnFrm() )
                 {
-                    pBody = ((SwLayoutFrm*)this);
+                    pBody = static_cast<SwLayoutFrm*>(this);
                     const SwFrmFmt *pFmt = pBody->GetFmt();
                     if( pFmt )
                         pCol = &pFmt->GetCol();
@@ -255,7 +255,7 @@ void SwFrm::CheckDirChange()
                 pBody->AdjustColumns( pCol, true );
         }
         else if( IsTxtFrm() )
-            ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
+            static_cast<SwTxtFrm*>(this)->Prepare( PREP_CLEAR );
 
         // #i31698# - notify anchored objects also for page frames.
         // Remove code above for special handling of page frames
@@ -299,7 +299,7 @@ Point SwFrm::GetFrmAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
     if ( IsTxtFrm() )
     {
         SwTwips nBaseOfstForFly =
-            ((SwTxtFrm*)this)->GetBaseOfstForFly( bIgnoreFlysAnchoredAtThisFrame );
+            static_cast<const SwTxtFrm*>(this)->GetBaseOfstForFly( bIgnoreFlysAnchoredAtThisFrame );
         if ( IsVertical() )
             aAnchor.Y() += nBaseOfstForFly;
         else
@@ -378,7 +378,7 @@ SwFrm::~SwFrm()
 
 #if OSL_DEBUG_LEVEL > 0
     // JP 15.10.2001: for detection of access to deleted frames
-    mpDrawObjs = (SwSortedObjs*)0x33333333;
+    mpDrawObjs = reinterpret_cast<SwSortedObjs*>(0x33333333);
 #endif
 }
 
@@ -548,7 +548,7 @@ const SwRect SwFrm::PaintArea() const
     {
         if( pTmp->IsCellFrm() && pTmp->GetUpper() &&
             pTmp->GetUpper()->IsVertical() != pTmp->IsVertical() )
-            nRowSpan = ((SwCellFrm*)pTmp)->GetTabBox()->getRowSpan();
+            nRowSpan = static_cast<const SwCellFrm*>(pTmp)->GetTabBox()->getRowSpan();
         long nTmpRight = (pTmp->Frm().*fnRect->fnGetRight)();
         long nTmpLeft = (pTmp->Frm().*fnRect->fnGetLeft)();
         if( pTmp->IsRowFrm() && nRowSpan > 1 )
@@ -662,9 +662,9 @@ const SwRect SwFrm::UnionFrm( bool bBorder ) const
             nAdd += rShadow.CalcShadowSpace( SHADOW_RIGHT );
         }
     }
-    if( IsTxtFrm() && ((SwTxtFrm*)this)->HasPara() )
+    if( IsTxtFrm() && static_cast<const SwTxtFrm*>(this)->HasPara() )
     {
-        long nTmp = ((SwTxtFrm*)this)->HangingMargin();
+        long nTmp = static_cast<const SwTxtFrm*>(this)->HangingMargin();
         if( nTmp > nAdd )
             nAdd = nTmp;
     }

@@ -226,7 +226,7 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             {
                 // Set point to pCnt, delete mark
                 // this may happen, if pCnt is hidden
-                aTextPos = SwPosition( *pCnt->GetNode(), SwIndex( (SwTxtNode*)pCnt->GetNode(), 0 ) );
+                aTextPos = SwPosition( *pCnt->GetNode(), SwIndex( const_cast<SwTxtNode*>(static_cast<const SwTxtNode*>(pCnt->GetNode())), 0 ) );
                 bTextRet = true;
             }
         }
@@ -702,16 +702,16 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         // Check, if cell has a Prev/Follow cell:
         const bool bFwd = ( fnNxtPrv == lcl_GetNxtCnt );
         const SwLayoutFrm* pTmpCell = bFwd ?
-            ((SwCellFrm*)pCell)->GetFollowCell() :
-            ((SwCellFrm*)pCell)->GetPreviousCell();
+            static_cast<const SwCellFrm*>(pCell)->GetFollowCell() :
+            static_cast<const SwCellFrm*>(pCell)->GetPreviousCell();
 
         const SwCntntFrm* pTmpStart = pStart;
         while ( pTmpCell && 0 != ( pTmpStart = pTmpCell->ContainsCntnt() ) )
         {
             pCell = pTmpCell;
             pTmpCell = bFwd ?
-                ((SwCellFrm*)pCell)->GetFollowCell() :
-                ((SwCellFrm*)pCell)->GetPreviousCell();
+                static_cast<const SwCellFrm*>(pCell)->GetFollowCell() :
+                static_cast<const SwCellFrm*>(pCell)->GetPreviousCell();
         }
         const SwCntntFrm *pNxt = pCnt = pTmpStart;
 
@@ -796,7 +796,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         if ( pStart->IsInDocBody() )
         {
             while ( pCnt && (!pCnt->IsInDocBody() ||
-                             (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
+                             (pCnt->IsTxtFrm() && static_cast<const SwTxtFrm*>(pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTblSel );
@@ -808,7 +808,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         else if ( pStart->IsInFtn() )
         {
             while ( pCnt && (!pCnt->IsInFtn() ||
-                            (pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow())))
+                            (pCnt->IsTxtFrm() && static_cast<const SwTxtFrm*>(pCnt)->IsHiddenNow())))
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTblSel );
@@ -818,7 +818,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         //In Flys we can go ahead blindly as long as we find a Cntnt.
         else if ( pStart->IsInFly() )
         {
-            if ( pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow() )
+            if ( pCnt && pCnt->IsTxtFrm() && static_cast<const SwTxtFrm*>(pCnt)->IsHiddenNow() )
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTblSel );
@@ -842,7 +842,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             }
             if ( !bSame )
                 pCnt = 0;
-            else if ( pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow() ) // i73332
+            else if ( pCnt && pCnt->IsTxtFrm() && static_cast<const SwTxtFrm*>(pCnt)->IsHiddenNow() ) // i73332
             {
                 pCnt = (*fnNxtPrv)( pCnt );
                 pCnt = ::lcl_MissProtectedFrames( pCnt, fnNxtPrv, true, bInReadOnly, bTblSel );
@@ -926,7 +926,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
         }
 
     } while ( !bEnd ||
-              (pCnt && pCnt->IsTxtFrm() && ((SwTxtFrm*)pCnt)->IsHiddenNow()));
+              (pCnt && pCnt->IsTxtFrm() && static_cast<const SwTxtFrm*>(pCnt)->IsHiddenNow()));
 
     if( pCnt )
     {   // set the Point on the Content-Node
@@ -977,11 +977,11 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "No page available." );
 
-    SwPageFrm *pPage = (SwPageFrm*)Lower();
+    SwPageFrm *pPage = static_cast<SwPageFrm*>(Lower());
     bool bEnd =false;
     while ( !bEnd && pPage->GetPhyPageNum() != nPageNum )
     {   if ( pPage->GetNext() )
-            pPage = (SwPageFrm*)pPage->GetNext();
+            pPage = static_cast<SwPageFrm*>(pPage->GetNext());
         else
         {   //Search the first CntntFrm and format until a new page is started
             //or until the CntntFrm are all done.
@@ -993,7 +993,7 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
             }
             //Either this is a new page or we found the last page.
             if ( pPage->GetNext() )
-                pPage = (SwPageFrm*)pPage->GetNext();
+                pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             else
                 bEnd = true;
         }
@@ -1013,7 +1013,7 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
         SwCntntNode* pCNd = (SwCntntNode*)pCntnt->GetNode();
         pToSet->GetPoint()->nNode = *pCNd;
         pCNd->MakeStartIndex( (SwIndex*)&pToSet->GetPoint()->nContent );
-        pToSet->GetPoint()->nContent = ((SwTxtFrm*)pCntnt)->GetOfst();
+        pToSet->GetPoint()->nContent = static_cast<const SwTxtFrm*>(pCntnt)->GetOfst();
 
         SwShellCrsr* pSCrsr = dynamic_cast<SwShellCrsr*>(pToSet);
         if( pSCrsr )
@@ -1029,23 +1029,23 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 
 SwCntntFrm *GetFirstSub( const SwLayoutFrm *pLayout )
 {
-    return ((SwPageFrm*)pLayout)->FindFirstBodyCntnt();
+    return const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(pLayout))->FindFirstBodyCntnt();
 }
 
 SwCntntFrm *GetLastSub( const SwLayoutFrm *pLayout )
 {
-    return ((SwPageFrm*)pLayout)->FindLastBodyCntnt();
+    return const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(pLayout))->FindLastBodyCntnt();
 }
 
 SwLayoutFrm *GetNextFrm( const SwLayoutFrm *pFrm )
 {
     SwLayoutFrm *pNext =
         (pFrm->GetNext() && pFrm->GetNext()->IsLayoutFrm()) ?
-                                            (SwLayoutFrm*)pFrm->GetNext() : 0;
+                                            const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(pFrm->GetNext())) : 0;
     // #i39402# in case of an empty page
     if(pNext && !pNext->ContainsCntnt())
         pNext = (pNext->GetNext() && pNext->GetNext()->IsLayoutFrm()) ?
-                                            (SwLayoutFrm*)pNext->GetNext() : 0;
+                                            static_cast<SwLayoutFrm*>(pNext->GetNext()) : 0;
     return pNext;
 }
 
@@ -1058,11 +1058,11 @@ SwLayoutFrm *GetPrevFrm( const SwLayoutFrm *pFrm )
 {
     SwLayoutFrm *pPrev =
         (pFrm->GetPrev() && pFrm->GetPrev()->IsLayoutFrm()) ?
-                                            (SwLayoutFrm*)pFrm->GetPrev() : 0;
+                                            const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(pFrm->GetPrev())) : 0;
     // #i39402# in case of an empty page
     if(pPrev && !pPrev->ContainsCntnt())
         pPrev = (pPrev->GetPrev() && pPrev->GetPrev()->IsLayoutFrm()) ?
-                                            (SwLayoutFrm*)pPrev->GetPrev() : 0;
+                                            static_cast<SwLayoutFrm*>(pPrev->GetPrev()) : 0;
     return pPrev;
 }
 
@@ -1119,10 +1119,10 @@ bool GetFrmInPage( const SwCntntFrm *pCnt, SwWhichPage fnWhichPage,
         pPam->GetPoint()->nNode = *pCNd;
         sal_Int32 nIdx;
         if( fnPosPage == GetFirstSub )
-            nIdx = ((SwTxtFrm*)pCnt)->GetOfst();
+            nIdx = static_cast<const SwTxtFrm*>(pCnt)->GetOfst();
         else
             nIdx = pCnt->GetFollow() ?
-                    ((SwTxtFrm*)pCnt)->GetFollow()->GetOfst()-1 : pCNd->Len();
+                    static_cast<const SwTxtFrm*>(pCnt)->GetFollow()->GetOfst()-1 : pCNd->Len();
         pPam->GetPoint()->nContent.Assign( pCNd, nIdx );
         return true;
     }
@@ -1179,7 +1179,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
 {
     //Determine the first CntntFrm.
     const SwLayoutFrm *pStart = (!bDontLeave && bDefaultExpand && GetPrev()) ?
-                                    (SwLayoutFrm*)GetPrev() : this;
+                                    static_cast<const SwLayoutFrm*>(GetPrev()) : this;
     const SwCntntFrm *pCntnt = pStart->ContainsCntnt();
 
     if ( !pCntnt && (GetPrev() && !bDontLeave) )
@@ -1212,7 +1212,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                 if ( pComp != pCntnt )
                     continue;
 
-                if ( !pCntnt->IsTxtFrm() || !((SwTxtFrm*)pCntnt)->IsHiddenNow() )
+                if ( !pCntnt->IsTxtFrm() || !static_cast<const SwTxtFrm*>(pCntnt)->IsHiddenNow() )
                 {
                     if ( bCalc )
                         pCntnt->Calc();
@@ -1280,7 +1280,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                     ++nMaxPage;
                     if( !pStart->GetPrev()->IsLayoutFrm() )
                         return 0;
-                    pStart = (SwLayoutFrm*)pStart->GetPrev();
+                    pStart = static_cast<const SwLayoutFrm*>(pStart->GetPrev());
                     pCntnt = pStart->IsInDocBody()
                                 ? pStart->ContainsCntnt()
                                 : pStart->FindPageFrm()->FindFirstBodyCntnt();
@@ -1301,7 +1301,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
                 {
                     if( !pStart->GetPrev()->IsLayoutFrm() )
                         return 0;
-                    pStart = (SwLayoutFrm*)pStart->GetPrev();
+                    pStart = static_cast<const SwLayoutFrm*>(pStart->GetPrev());
                     pCntnt = pStart->ContainsCntnt();
                 }
                 else // Somewhere down the road we have to start with one!
@@ -1496,10 +1496,10 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, bool bNext ) const
     //Search the first CntntFrm and his successor in the body area.
     //To be efficient (and not formatting too much) we'll start at the correct
     //page.
-    SwLayoutFrm *pPage = (SwLayoutFrm*)Lower();
+    const SwLayoutFrm *pPage = static_cast<const SwLayoutFrm*>(Lower());
     if( pPage )
         while( pPage->GetNext() && pPage->Frm().Bottom() < rPoint.Y() )
-            pPage = (SwLayoutFrm*)pPage->GetNext();
+            pPage = static_cast<const SwLayoutFrm*>(pPage->GetNext());
 
     const SwCntntFrm *pCnt = pPage ? pPage->ContainsCntnt() : ContainsCntnt();
     while ( pCnt && !pCnt->IsInDocBody() )
@@ -1515,11 +1515,11 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, bool bNext ) const
         // still precedent pages I'll go to the next page.
         while ( rPoint.Y() < pCnt->Frm().Top() && pPage->GetPrev() )
         {
-            pPage = (SwLayoutFrm*)pPage->GetPrev();
+            pPage = static_cast<const SwLayoutFrm*>(pPage->GetPrev());
             pCnt = pPage->ContainsCntnt();
             while ( !pCnt )
             {
-                pPage = (SwLayoutFrm*)pPage->GetPrev();
+                pPage = static_cast<const SwLayoutFrm*>(pPage->GetPrev());
                 if ( pPage )
                     pCnt = pPage->ContainsCntnt();
                 else
@@ -1589,12 +1589,12 @@ Point SwRootFrm::GetPagePos( sal_uInt16 nPageNum ) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "No page available." );
 
-    const SwPageFrm *pPage = (const SwPageFrm*)Lower();
+    const SwPageFrm *pPage = static_cast<const SwPageFrm*>(Lower());
     while ( true )
     {
         if ( pPage->GetPhyPageNum() >= nPageNum || !pPage->GetNext() )
             break;
-        pPage = (const SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
     }
     return pPage->Frm().Pos();
 }
@@ -1629,9 +1629,9 @@ bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
     if( !Lower() || !nPageNum || nPageNum > GetPageNum() )
         return true;
 
-    const SwPageFrm *pPage = (const SwPageFrm*)Lower();
+    const SwPageFrm *pPage = static_cast<const SwPageFrm*>(Lower());
     while( pPage && nPageNum < pPage->GetPhyPageNum() )
-        pPage = (const SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
     return !pPage || pPage->IsEmptyPage();
 }
 
@@ -1641,9 +1641,9 @@ bool SwRootFrm::IsDummyPage( sal_uInt16 nPageNum ) const
  */
 bool SwFrm::IsProtected() const
 {
-    if (this->IsCntntFrm() && ((SwCntntFrm*)this)->GetNode())
+    if (this->IsCntntFrm() && static_cast<const SwCntntFrm*>(this)->GetNode())
     {
-        const SwDoc *pDoc=((SwCntntFrm*)this)->GetNode()->GetDoc();
+        const SwDoc *pDoc=static_cast<const SwCntntFrm*>(this)->GetNode()->GetDoc();
         bool isFormProtected=pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::PROTECT_FORM );
         if (isFormProtected)
         {
@@ -1657,14 +1657,14 @@ bool SwFrm::IsProtected() const
     {
         if ( pFrm->IsCntntFrm() )
         {
-            if ( ((SwCntntFrm*)pFrm)->GetNode() &&
-                 ((SwCntntFrm*)pFrm)->GetNode()->IsInProtectSect() )
+            if ( static_cast<const SwCntntFrm*>(pFrm)->GetNode() &&
+                 static_cast<const SwCntntFrm*>(pFrm)->GetNode()->IsInProtectSect() )
                 return true;
         }
         else
         {
-            if ( ((SwLayoutFrm*)pFrm)->GetFmt() &&
-                 ((SwLayoutFrm*)pFrm)->GetFmt()->
+            if ( static_cast<const SwLayoutFrm*>(pFrm)->GetFmt() &&
+                 static_cast<const SwLayoutFrm*>(pFrm)->GetFmt()->
                  GetProtect().IsCntntProtected() )
                 return true;
             if ( pFrm->IsCoveredCell() )
@@ -1674,19 +1674,19 @@ bool SwFrm::IsProtected() const
         {
             //In a chain the protection of the content can be specified by the
             //master of the chain.
-            if ( ((SwFlyFrm*)pFrm)->GetPrevLink() )
+            if ( static_cast<const SwFlyFrm*>(pFrm)->GetPrevLink() )
             {
-                SwFlyFrm *pMaster = (SwFlyFrm*)pFrm;
+                const SwFlyFrm *pMaster = static_cast<const SwFlyFrm*>(pFrm);
                 do
                 {   pMaster = pMaster->GetPrevLink();
                 } while ( pMaster->GetPrevLink() );
                 if ( pMaster->IsProtected() )
                     return true;
             }
-            pFrm = ((SwFlyFrm*)pFrm)->GetAnchorFrm();
+            pFrm = static_cast<const SwFlyFrm*>(pFrm)->GetAnchorFrm();
         }
         else if ( pFrm->IsFtnFrm() )
-            pFrm = ((SwFtnFrm*)pFrm)->GetRef();
+            pFrm = static_cast<const SwFtnFrm*>(pFrm)->GetRef();
         else
             pFrm = pFrm->GetUpper();
 
@@ -1736,9 +1736,9 @@ bool SwFrm::WannaRightPage() const
     }
     if ( !pDesc )
     {
-        SwPageFrm *pPrv = (SwPageFrm*)pPage->GetPrev();
+        SwPageFrm *pPrv = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(pPage->GetPrev()));
         if( pPrv && pPrv->IsEmptyPage() )
-            pPrv = (SwPageFrm*)pPrv->GetPrev();
+            pPrv = static_cast<SwPageFrm*>(pPrv->GetPrev());
         if( pPrv )
             pDesc = pPrv->GetPageDesc()->GetFollow();
         else
@@ -1754,7 +1754,7 @@ bool SwFrm::WannaRightPage() const
     else
     {
         bOdd = pPage->OnRightPage();
-        if( pPage->GetPrev() && ((SwPageFrm*)pPage->GetPrev())->IsEmptyPage() )
+        if( pPage->GetPrev() && static_cast<const SwPageFrm*>(pPage->GetPrev())->IsEmptyPage() )
             bOdd = !bOdd;
     }
     if( !pPage->IsEmptyPage() )
@@ -1811,7 +1811,7 @@ sal_uInt16 SwFrm::GetVirtPageNum() const
         if( 0 == (pItem = rPool.GetItem2( RES_PAGEDESC, n ) ))
             continue;
 
-        const SwFmtPageDesc *pDesc = (SwFmtPageDesc*)pItem;
+        const SwFmtPageDesc *pDesc = static_cast<const SwFmtPageDesc*>(pItem);
         if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
         {
             const SwModify *pMod = pDesc->GetDefinedIn();
@@ -1899,7 +1899,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
             // Skip any repeated headlines in the follow:
             SwLayoutFrm* pRow = pTable->IsFollow() ?
                                 pTable->GetFirstNonHeadlineRow() :
-                                (SwLayoutFrm*)pTable->Lower();
+                                const_cast<SwLayoutFrm*>(static_cast<const SwLayoutFrm*>(pTable->Lower()));
 
             while ( pRow )
             {
@@ -1915,12 +1915,12 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                              !pCell->GetFmt()->GetProtect().IsCntntProtected()))
                         {
                             SwTableBox* pInsBox = (SwTableBox*)
-                                ((SwCellFrm*)pCell)->GetTabBox();
+                                static_cast<const SwCellFrm*>(pCell)->GetTabBox();
                             aNew.insert( pInsBox );
                         }
                         if ( pCell->GetNext() )
                         {
-                            pCell = (const SwLayoutFrm*)pCell->GetNext();
+                            pCell = static_cast<const SwLayoutFrm*>(pCell->GetNext());
                             if ( pCell->Lower() && pCell->Lower()->IsRowFrm() )
                                 pCell = pCell->FirstCell();
                         }
@@ -1943,7 +1943,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
                         }
                     }
                 }
-                pRow = (SwLayoutFrm*)pRow->GetNext();
+                pRow = static_cast<SwLayoutFrm*>(pRow->GetNext());
             }
         }
 
@@ -2072,11 +2072,11 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
         case FRM_TAB:
             // On different pages? Then check for table-headline
             {
-                const SwTabFrm* pTabFrm = (SwTabFrm*)pSttLFrm;
+                const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>(pSttLFrm);
                 if( ( pTabFrm->GetFollow() ||
-                    ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
+                    static_cast<const SwTabFrm*>(pEndLFrm)->GetFollow() ) &&
                     pTabFrm->GetTable()->GetRowsToRepeat() > 0 &&
-                    pTabFrm->GetLower() != ((SwTabFrm*)pEndLFrm)->GetLower() &&
+                    pTabFrm->GetLower() != static_cast<const SwTabFrm*>(pEndLFrm)->GetLower() &&
                     ( lcl_IsInRepeatedHeadline( pStartFrm ) ||
                     lcl_IsInRepeatedHeadline( pEndFrm ) ) )
                 {
@@ -2461,7 +2461,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
         //Now the frames between, if there are any
         bool const bBody = pStartFrm->IsInDocBody();
         const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
-            ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
+            static_cast<const SwCellFrm*>(pStartFrm->GetUpper())->GetTabBox() : 0;
         if (pSh->IsSelectAll())
             pCellBox = 0;
 
@@ -2482,7 +2482,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
             // If pStartFrm is inside a SwCellFrm, consider only frames which are inside the
             // same cell frame (or its follow cell)
             const SwTableBox* pTmpCellBox = pCntnt->GetUpper()->IsCellFrm() ?
-                ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
+                static_cast<const SwCellFrm*>(pCntnt->GetUpper())->GetTabBox() : 0;
             if (pSh->IsSelectAll())
                 pTmpCellBox = 0;
             if ( bBody == pCntnt->IsInDocBody() &&
@@ -2611,19 +2611,19 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
         if ( pPage == pEndPage )
             break;
         else
-            pPage = (SwPageFrm*)pPage->GetNext();
+            pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
     }
 
     //Because it looks better, we close the DropCaps.
     SwRect aDropRect;
     if ( pStartFrm->IsTxtFrm() )
     {
-        if ( ((SwTxtFrm*)pStartFrm)->GetDropRect( aDropRect ) )
+        if ( static_cast<const SwTxtFrm*>(pStartFrm)->GetDropRect( aDropRect ) )
             Sub( aRegion, aDropRect );
     }
     if ( pEndFrm != pStartFrm && pEndFrm->IsTxtFrm() )
     {
-        if ( ((SwTxtFrm*)pEndFrm)->GetDropRect( aDropRect ) )
+        if ( static_cast<const SwTxtFrm*>(pEndFrm)->GetDropRect( aDropRect ) )
             Sub( aRegion, aDropRect );
     }
 

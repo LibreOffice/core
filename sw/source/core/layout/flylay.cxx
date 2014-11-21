@@ -426,7 +426,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 {
                     pLow->Calc();
                     // also calculate the (Column)BodyFrm
-                    ((SwLayoutFrm*)pLow)->Lower()->Calc();
+                    static_cast<SwLayoutFrm*>(pLow)->Lower()->Calc();
                     pLow = pLow->GetNext();
                 } while ( pLow );
                 ::CalcCntnt( this );
@@ -470,9 +470,9 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
 
-    SwFmtAnchor *pAnch = 0;
+    const SwFmtAnchor *pAnch = 0;
     if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
+        static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
             (const SfxPoolItem**)&pAnch ))
         ; // GetItemState sets the anchor pointer!
 
@@ -481,7 +481,7 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         // Change of anchor. I'm attaching myself to the new place.
         // It's not allowed to change the anchor type. This is only
         // possible via SwFEShell.
-        pAnch = (SwFmtAnchor*)pNew;
+        pAnch = static_cast<const SwFmtAnchor*>(pNew);
     }
 
     if( pAnch )
@@ -500,9 +500,9 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             sal_uInt16 nPgNum = pAnch->GetPageNum();
             SwRootFrm *pRoot = getRootFrm();
-            SwPageFrm *pTmpPage = (SwPageFrm*)pRoot->Lower();
+            SwPageFrm *pTmpPage = static_cast<SwPageFrm*>(pRoot->Lower());
             for ( sal_uInt16 i = 1; (i <= nPgNum) && pTmpPage; ++i,
-                                pTmpPage = (SwPageFrm*)pTmpPage->GetNext() )
+                                pTmpPage = static_cast<SwPageFrm*>(pTmpPage->GetNext()) )
             {
                 if ( i == nPgNum )
                 {
@@ -553,8 +553,8 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
     if ( GetUpper() )
     {
-        ((SwRootFrm*)GetUpper())->SetIdleFlags();
-        ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
+        static_cast<SwRootFrm*>(GetUpper())->SetIdleFlags();
+        static_cast<SwRootFrm*>(GetUpper())->InvalidateBrowseWidth();
     }
 
     SdrObject* pObj = pNew->GetVirtDrawObj();
@@ -644,8 +644,8 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     if ( GetUpper() )
     {
         if ( !pToRemove->IsFlyInCntFrm() )
-            ((SwRootFrm*)GetUpper())->SetSuperfluous();
-        ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
+            static_cast<SwRootFrm*>(GetUpper())->SetSuperfluous();
+        static_cast<SwRootFrm*>(GetUpper())->InvalidateBrowseWidth();
     }
 
     // Don't look further at Flys that sit inside the Cntnt.
@@ -689,9 +689,9 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     // Invalidations
     if ( GetUpper() )
     {
-        ((SwRootFrm*)GetUpper())->SetIdleFlags();
+        static_cast<SwRootFrm*>(GetUpper())->SetIdleFlags();
         if ( !pToMove->IsFlyInCntFrm() && pDest->GetPhyPageNum() < GetPhyPageNum() )
-            ((SwRootFrm*)GetUpper())->SetSuperfluous();
+            static_cast<SwRootFrm*>(GetUpper())->SetSuperfluous();
     }
 
     pDest->InvalidateSpelling();
@@ -792,7 +792,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
 
     if ( GetUpper() )
     {
-        ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
+        static_cast<SwRootFrm*>(GetUpper())->InvalidateBrowseWidth();
     }
 
     OSL_ENSURE( _rNewObj.GetAnchorFrm(), "anchored draw object without anchor" );
@@ -851,10 +851,10 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
             if (FLY_AS_CHAR !=
                     _rToRemoveObj.GetFrmFmt().GetAnchor().GetAnchorId())
             {
-                ((SwRootFrm*)GetUpper())->SetSuperfluous();
+                static_cast<SwRootFrm*>(GetUpper())->SetSuperfluous();
                 InvalidatePage();
             }
-            ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
+            static_cast<SwRootFrm*>(GetUpper())->InvalidateBrowseWidth();
         }
     }
     _rToRemoveObj.SetPageFrm( 0 );
@@ -902,7 +902,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
     bool bRet = true;
     if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
     {
-        const SwFlyFrm* pFly = ((const SwVirtFlyDrawObj*)pSdrObj)->GetFlyFrm();
+        const SwFlyFrm* pFly = static_cast<const SwVirtFlyDrawObj*>(pSdrObj)->GetFlyFrm();
         const bool bFollowTextFlow = pFly->GetFmt()->GetFollowTextFlow().GetValue();
         // #i28701#
         const bool bConsiderWrapOnObjPos =
@@ -1066,7 +1066,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
                         {
                             if( pUp->IsFlyFrm() )
                             {
-                                SwFlyFrm *pTmpFly = (SwFlyFrm*)pUp;
+                                const SwFlyFrm *pTmpFly = static_cast<const SwFlyFrm*>(pUp);
                                 while( pTmpFly->GetNextLink() )
                                 {
                                     pTmpFly = pTmpFly->GetNextLink();
@@ -1145,13 +1145,13 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             if( bMove )
             {
-                nTop = bVert ? ((SwFlyInCntFrm*)pFly)->GetRefPoint().X() :
-                               ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y();
+                nTop = bVert ? static_cast<const SwFlyInCntFrm*>(pFly)->GetRefPoint().X() :
+                               static_cast<const SwFlyInCntFrm*>(pFly)->GetRefPoint().Y();
                 nTop = (*fnRect->fnYInc)( nTop, -nHeight );
                 long nWidth = (pFly->Frm().*fnRect->fnGetWidth)();
                 (rRect.*fnRect->fnSetLeftAndWidth)( bVert ?
-                            ((SwFlyInCntFrm*)pFly)->GetRefPoint().Y() :
-                            ((SwFlyInCntFrm*)pFly)->GetRefPoint().X(), nWidth );
+                            static_cast<const SwFlyInCntFrm*>(pFly)->GetRefPoint().Y() :
+                            static_cast<const SwFlyInCntFrm*>(pFly)->GetRefPoint().X(), nWidth );
                 nHeight = 2*nHeight - rUL.GetLower() - rUL.GetUpper();
             }
             else
@@ -1166,7 +1166,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
     }
     else
     {
-        const SwDrawContact *pC = (const SwDrawContact*)GetUserCall(pSdrObj);
+        const SwDrawContact *pC = static_cast<const SwDrawContact*>(GetUserCall(pSdrObj));
         const SwFrmFmt  *pFmt = (const SwFrmFmt*)pC->GetFmt();
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( FLY_AS_CHAR == rAnch.GetAnchorId() )

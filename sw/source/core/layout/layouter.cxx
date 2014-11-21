@@ -132,7 +132,7 @@ void SwEndnoter::InsertEndnotes()
             "InsertEndnotes: Where's my column?" );
     SwFrm* pRef = pSect->FindLastCntnt( FINDMODE_MYLAST );
     SwFtnBossFrm *pBoss = pRef ? pRef->FindFtnBossFrm()
-                               : (SwFtnBossFrm*)pSect->Lower();
+                               : static_cast<SwFtnBossFrm*>(pSect->Lower());
     pBoss->_MoveFtns( *pEndArr );
     delete pEndArr;
     pEndArr = NULL;
@@ -193,9 +193,9 @@ void SwLooping::Control( SwPageFrm* pPage )
 
         Drastic( pPage->Lower() );
         if( nNew > nMinPage && pPage->GetPrev() )
-            Drastic( ((SwPageFrm*)pPage->GetPrev())->Lower() );
+            Drastic( static_cast<SwPageFrm*>(pPage->GetPrev())->Lower() );
         if( nNew < nMaxPage && pPage->GetNext() )
-            Drastic( ((SwPageFrm*)pPage->GetNext())->Lower() );
+            Drastic( static_cast<SwPageFrm*>(pPage->GetNext())->Lower() );
 
         ++mnLoopControlStage;
         nCount = 0;
