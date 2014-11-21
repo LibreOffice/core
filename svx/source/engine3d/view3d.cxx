@@ -684,17 +684,17 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
     {
         const SfxItemSet& rSet = pObj->GetMergedItemSet();
         sal_Int32 nLineWidth = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue();
-        XLineStyle eLineStyle = (XLineStyle)static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
+        drawing::LineStyle eLineStyle = (drawing::LineStyle)static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
         drawing::FillStyle eFillStyle = ITEMVALUE(rSet, XATTR_FILLSTYLE, XFillStyleItem);
 
         if(static_cast<SdrPathObj*>(pObj)->IsClosed()
-            && eLineStyle == XLINE_SOLID
+            && eLineStyle == drawing::LineStyle_SOLID
             && !nLineWidth
             && eFillStyle != drawing::FillStyle_NONE)
         {
             if(pObj->GetPage() && GetModel()->IsUndoEnabled() )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj, false, false));
-            pObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
+            pObj->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
             pObj->SetMergedItem(XLineWidthItem(0L));
         }
     }
@@ -719,7 +719,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
         drawing::FillStyle eFillStyle = ITEMVALUE(aSet, XATTR_FILLSTYLE, XFillStyleItem);
 
         // line style turned off
-        aSet.Put(XLineStyleItem(XLINE_NONE));
+        aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
 
         //Determining if FILL_Attribut is set.
         if(!pPath->IsClosed() || eFillStyle == drawing::FillStyle_NONE)

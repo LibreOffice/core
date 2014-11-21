@@ -207,7 +207,7 @@ namespace sdr
 
                 if(nDifference)
                 {
-                    const bool bLineVisible(XLINE_NONE != static_cast<const XLineStyleItem&>(GetItem(XATTR_LINESTYLE)).GetValue());
+                    const bool bLineVisible(drawing::LineStyle_NONE != static_cast<const XLineStyleItem&>(GetItem(XATTR_LINESTYLE)).GetValue());
 
                     if(bLineVisible)
                     {
@@ -376,7 +376,7 @@ namespace sdr
 
             if(bTextFrame)
             {
-                mpItemSet->Put(XLineStyleItem(XLINE_NONE));
+                mpItemSet->Put(XLineStyleItem(drawing::LineStyle_NONE));
                 mpItemSet->Put(XFillColorItem(OUString(), Color(COL_WHITE)));
                 mpItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }

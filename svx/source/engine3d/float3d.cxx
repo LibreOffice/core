@@ -1661,10 +1661,10 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         // Update preview
         SfxItemSet aSet(rAttrs);
 
-        // set LineStyle hard to XLINE_NONE when it's not set so that
-        // the default (XLINE_SOLID) is not used for 3d preview
+        // set LineStyle hard to drawing::LineStyle_NONE when it's not set so that
+        // the default (drawing::LineStyle_SOLID) is not used for 3d preview
         if(SfxItemState::SET != aSet.GetItemState(XATTR_LINESTYLE, false))
-            aSet.Put(XLineStyleItem(XLINE_NONE));
+            aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
 
         // set FillColor hard to WHITE when it's SfxItemState::DONTCARE so that
         // the default (Blue7) is not used for 3d preview

@@ -469,7 +469,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                     aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
                     aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
                     aSet.Put(XLineColorItem(OUString(),Color(COL_BLACK))); // in case someone turns on Solid
-                    aSet.Put(XLineStyleItem(XLINE_NONE));
+                    aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
                 }
@@ -768,9 +768,9 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             {
                 const SfxItemSet& rSet = pAktCreate->GetMergedItemSet();
                 const drawing::FillStyle eFill(static_cast<const XFillStyleItem&>(rSet.Get(XATTR_FILLSTYLE)).GetValue());
-                const XLineStyle eLine(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
+                const drawing::LineStyle eLine(static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue());
 
-                if(XLINE_NONE == eLine && drawing::FillStyle_NONE == eFill)
+                if(drawing::LineStyle_NONE == eLine && drawing::FillStyle_NONE == eFill)
                 {
                     bUseSolidDragging = false;
                 }

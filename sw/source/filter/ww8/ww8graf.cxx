@@ -205,7 +205,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
                         WW8_DP_SHADOW& rSh )
 {
     if( SVBT16ToShort( rL.lnps ) == 5 ){            // invisible
-        rSet.Put( XLineStyleItem( XLINE_NONE ) );
+        rSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     }else{                                          // sichtbar
         Color aCol( WW8TransCol( rL.lnpc ) );           // LinienFarbe
         rSet.Put( XLineColorItem( OUString(), aCol ) );
@@ -213,7 +213,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
                                                     // line thickness
         if( SVBT16ToShort( rL.lnps ) >= 1
             && SVBT16ToShort(rL.lnps ) <= 4 ){      // line style
-            rSet.Put( XLineStyleItem( XLINE_DASH ) );
+            rSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
             sal_Int16 nLen = SVBT16ToShort( rL.lnpw );
             XDash aD( XDASH_RECT, 1, 2 * nLen, 1, 5 * nLen, 5 * nLen );
             switch( SVBT16ToShort( rL.lnps ) ){
@@ -227,7 +227,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
             }
             rSet.Put( XLineDashItem( OUString(), aD ) );
         }else{
-            rSet.Put( XLineStyleItem( XLINE_SOLID ) );  // needed for TextBox
+            rSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );  // needed for TextBox
         }
     }
     if( SVBT16ToShort( rSh.shdwpi ) ){                  // shadow
@@ -2720,7 +2720,7 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
 
         SfxItemSet aSet(pDrawModel->GetItemPool());
         aSet.Put(XFillStyleItem(drawing::FillStyle_NONE));
-        aSet.Put(XLineStyleItem(XLINE_NONE));
+        aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
         aSet.Put(SdrTextFitToSizeTypeItem( SDRTEXTFIT_NONE ));
         aSet.Put(makeSdrTextAutoGrowHeightItem(false));
         aSet.Put(makeSdrTextAutoGrowWidthItem(false));

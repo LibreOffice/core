@@ -188,7 +188,7 @@ SdrAttrObj* E3dLatheObj::GetBreakObj()
         SfxItemSet aSet(GetObjectItemSet());
 
         // Enable lines to guarantee that the object becomes visible
-        aSet.Put(XLineStyleItem(XLINE_SOLID));
+        aSet.Put(XLineStyleItem(com::sun::star::drawing::LineStyle_SOLID));
 
         pPathObj->SetMergedItemSet(aSet);
     }
