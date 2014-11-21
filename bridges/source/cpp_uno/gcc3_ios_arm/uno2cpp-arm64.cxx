@@ -19,8 +19,6 @@
 
 #ifdef __arm64
 
-#include <osl/diagnose.h>
-
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include "bridges/cpp_uno/shared/bridge.hxx"
