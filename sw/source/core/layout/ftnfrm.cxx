@@ -1248,7 +1248,7 @@ void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
             }
             nCmpPos  = ::lcl_FindFtnPos( pDoc, pSibling->GetAttr() );
 
-            SwFtnBossFrm *pNxtB = this; // remember the last one to not
+            SwFtnBossFrm *pNxtB; // remember the last one to not
             SwFtnFrm  *pLastSib = 0;    // go too far.
 
             while ( pSibling && nCmpPos <= nStPos )
