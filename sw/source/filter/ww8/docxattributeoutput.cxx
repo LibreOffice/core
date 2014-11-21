@@ -5499,8 +5499,17 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmF
             aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
         }
 
+        // By top margin, impl_borders() means the distance between the top of the page and the header frame.
+        PageMargins aMargins = m_pageMargins;
+        HdFtDistanceGlue aGlue(pFmt->GetAttrSet());
+        if (aGlue.HasHeader())
+            aMargins.nPageMarginTop = aGlue.dyaHdrTop;
+        // Ditto for bottom margin.
+        if (aGlue.HasFooter())
+            aMargins.nPageMarginBottom = aGlue.dyaHdrBottom;
+
         std::map<sal_uInt16, css::table::BorderLine2> aEmptyMap; // empty styles map
-        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &m_pageMargins,
+        impl_borders( m_pSerializer, rBox, aOutputBorderOptions, &aMargins,
                       aEmptyMap );
 
         m_pSerializer->endElementNS( XML_w, XML_pgBorders );

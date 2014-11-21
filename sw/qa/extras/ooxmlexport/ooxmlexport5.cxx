@@ -702,9 +702,15 @@ DECLARE_OOXMLEXPORT_TEST(testFD083057, "fdo83057.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testHeaderBorder, "header-border.docx")
 {
-    // This was 0, as header margin was lost during import.
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // This was 0, as header margin was lost during import.
         assertXPath(pXmlDoc, "//w:pgMar", "header", "720");
+        // This was 33: 33 points -> 660 twips. We counted 900 - 240 (distance
+        // of page and body frame) instead of 720 - 240 (distance of page and
+        // header frame).
+        assertXPath(pXmlDoc, "//w:pgBorders/w:top", "space", "24");
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
