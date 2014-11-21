@@ -19,7 +19,7 @@ public:
 
     virtual void Init() = 0;
     virtual bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
-    virtual bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
+    virtual bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) = 0;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_X11_X11GDIIMPL_HXX

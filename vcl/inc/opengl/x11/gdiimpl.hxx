@@ -35,7 +35,7 @@ public:
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
     void Init() SAL_OVERRIDE;
     bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
-    bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
+    bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_X11_GDIIMPL_HXX
