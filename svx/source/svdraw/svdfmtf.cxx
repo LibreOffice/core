@@ -735,7 +735,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction& rAct)
     long nRad=(rAct.GetHorzRound()+rAct.GetVertRound())/2;
     if (nRad!=0) {
         SfxItemSet aSet(*mpLineAttr->GetPool(), SDRATTR_ECKENRADIUS, SDRATTR_ECKENRADIUS, 0, 0);
-        aSet.Put(SdrMetricItem(nRad));
+        aSet.Put(SdrMetricItem(SDRATTR_ECKENRADIUS, nRad));
         pRect->SetMergedItemSet(aSet);
     }
     InsertObj(pRect);
