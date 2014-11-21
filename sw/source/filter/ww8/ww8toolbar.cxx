@@ -122,8 +122,7 @@ bool SwCTBWrapper::Read( SvStream& rS )
         // but the size of a SwTBC element is dynamic ( and this relates to TBDelta's
         int nStart = rS.Tell();
 
-        int bytesRead = 0;
-        int bytesToRead = cbDTBC - bytesRead;
+        int bytesToRead;
         // cbDTBC specifies the size ( in bytes ) taken by an array ( of unspecified size )
         // of SwTBC records ( SwTBC records have dynamic length, so we need to check our position
         // after each read )
