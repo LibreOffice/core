@@ -12766,8 +12766,6 @@ else
         fi
         ;;
     esac
-
-    pathmunge "." "before"
 fi
 
 AC_SUBST(LO_PATH)
