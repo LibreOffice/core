@@ -28,7 +28,14 @@
 
 #include "salinst.hxx"
 
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+#include <vcl/opengl/glxtest.hxx>
+#endif
+
 SAL_IMPLEMENT_MAIN() {
+#if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
+    fire_glxtest_process();
+#endif
     tools::extendApplicationEnvironment();
     vclmain::createApplication();
     return SVMain();

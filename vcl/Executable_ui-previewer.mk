@@ -34,4 +34,19 @@ $(eval $(call gb_Executable_add_exception_objects,ui-previewer,\
     vcl/source/uipreviewer/previewer \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Executable_add_libs,ui-previewer,\
+	-lm \
+	-ldl \
+	-lpthread \
+    -lGL \
+    -lGLU \
+    -lX11 \
+))
+
+$(eval $(call gb_Executable_use_static_libraries,ui-previewer,\
+	glxtest \
+))
+endif
+
 # vim: set noet sw=4 ts=4:

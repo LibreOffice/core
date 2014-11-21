@@ -24,7 +24,16 @@ $(eval $(call gb_Executable_use_api,icontest,\
 ifeq ($(OS),LINUX)
 
 $(eval $(call gb_Executable_add_libs,icontest,\
+	-lm \
+	-ldl \
+	-lpthread \
     -lGL \
+    -lGLU \
+    -lX11 \
+))
+
+$(eval $(call gb_Executable_use_static_libraries,icontest,\
+	glxtest \
 ))
 
 else ifeq ($(OS),WNT)

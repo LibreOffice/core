@@ -17,52 +17,20 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Executable_Executable,gengal))
+$(eval $(call gb_StaticLibrary_StaticLibrary,glxtest))
 
-$(eval $(call gb_Executable_set_include,gengal,\
+$(eval $(call gb_StaticLibrary_set_include,glxtest,\
     $$(INCLUDE) \
-    -I$(SRCDIR)/svx/inc/ \
-    -I$(SRCDIR)/svx/inc/pch \
+    -I$(SRCDIR)/vcl/inc \
 ))
 
-$(eval $(call gb_Executable_use_external,gengal,boost_headers))
-
-$(eval $(call gb_Executable_use_sdk_api,gengal))
-
-$(eval $(call gb_Executable_use_libraries,gengal,\
-    basegfx \
-    sal \
-    tl \
-    svl \
-    svt \
-    comphelper \
-    cppu \
-    cppuhelper \
-    utl \
-    vcl \
-    svxcore \
-	$(gb_UWINAPI) \
+$(eval $(call gb_StaticLibrary_use_api,glxtest,\
+    offapi \
+    udkapi \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,gengal,\
-    svx/source/gengal/gengal \
-))
-
-$(eval $(call gb_Executable_use_static_libraries,gengal,\
-    vclmain \
-))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_use_system_win32_libs,gengal,\
-	kernel32 \
-	msvcrt \
-	oldnames \
-	user32 \
-))
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_libs,gengal,\
+$(eval $(call gb_StaticLibrary_add_libs,glxtest,\
+	-lm \
 	-ldl \
 	-lpthread \
     -lGL \
@@ -70,9 +38,8 @@ $(eval $(call gb_Executable_add_libs,gengal,\
     -lX11 \
 ))
 
-$(eval $(call gb_Executable_use_static_libraries,gengal,\
-	glxtest \
+$(eval $(call gb_StaticLibrary_add_exception_objects,glxtest,\
+    vcl/unx/glxtest \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
