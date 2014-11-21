@@ -727,6 +727,9 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     const basegfx::B2DPoint& rX,
     const basegfx::B2DPoint& rY )
 {
+    if (!rTexture.GetWidth() || !rTexture.GetHeight())
+        return;
+
     const basegfx::B2DVector aXRel = rX - rNull;
     const basegfx::B2DVector aYRel = rY - rNull;
     const float aValues[] = {
