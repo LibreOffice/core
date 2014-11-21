@@ -1482,7 +1482,7 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, sal_Int32 /*nActPos*/ 
         rSmartTagMgr.RecognizeTextRange(xRange, xTextMarkup, xController);
 
         sal_Int32 nLangBegin = nBegin;
-        sal_Int32 nLangEnd = nEnd;
+        sal_Int32 nLangEnd;
 
         // smart tag recognition has to be done for each language portion:
         SwLanguageIterator aIter( *pNode, nLangBegin );
