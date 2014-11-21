@@ -664,6 +664,8 @@ bool ZipFile::readLOC( ZipEntry &rEntry )
         const sal_Int64 nBytesAvailable = aGrabber.getLength() - aGrabber.getPosition();
         if (nPathLenToRead > nBytesAvailable)
             nPathLenToRead = nBytesAvailable;
+        else if (nPathLenToRead < 0)
+            nPathLenToRead = 0;
 
         // read always in UTF8, some tools seem not to set UTF8 bit
         uno::Sequence<sal_Int8> aNameBuffer(nPathLenToRead);
