@@ -39,4 +39,39 @@ void SfxChildWinContextArr_Impl::push_back( SfxChildWinContextFactory* p )
     maData.push_back(p);
 }
 
+size_t SfxChildWinFactArr_Impl::size() const
+{
+    return maData.size();
+}
+
+const SfxChildWinFactory& SfxChildWinFactArr_Impl::operator []( size_t i ) const
+{
+    return maData[i];
+}
+
+SfxChildWinFactory& SfxChildWinFactArr_Impl::operator []( size_t i )
+{
+    return maData[i];
+}
+
+void SfxChildWinFactArr_Impl::push_back( SfxChildWinFactory* p )
+{
+    maData.push_back(p);
+}
+
+void SfxChildWinFactArr_Impl::erase( iterator it )
+{
+    maData.erase(it);
+}
+
+SfxChildWinFactArr_Impl::iterator SfxChildWinFactArr_Impl::begin()
+{
+    return maData.begin();
+}
+
+SfxChildWinFactArr_Impl::const_iterator SfxChildWinFactArr_Impl::begin() const
+{
+    return maData.begin();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

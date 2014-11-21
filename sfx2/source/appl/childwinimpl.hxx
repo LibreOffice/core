@@ -36,6 +36,25 @@ public:
     void push_back( SfxChildWinContextFactory* p );
 };
 
+class SfxChildWinFactArr_Impl
+{
+    typedef boost::ptr_vector<SfxChildWinFactory> DataType;
+    DataType maData;
+
+public:
+    typedef DataType::iterator iterator;
+    typedef DataType::const_iterator const_iterator;
+
+    size_t size() const;
+    const SfxChildWinFactory& operator []( size_t i ) const;
+    SfxChildWinFactory& operator []( size_t i );
+    void push_back( SfxChildWinFactory* p );
+    void erase( iterator it );
+
+    iterator begin();
+    const_iterator begin() const;
+};
+
 #endif
 
 

@@ -41,6 +41,7 @@
 
 #define SfxModule
 #include "sfxslots.hxx"
+#include "childwinimpl.hxx"
 
 static SfxModuleArr_Impl* pModules=0;
 

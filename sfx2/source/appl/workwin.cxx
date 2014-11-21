@@ -32,6 +32,7 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include "splitwin.hxx"
+#include "childwinimpl.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/request.hxx>

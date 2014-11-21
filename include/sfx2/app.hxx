@@ -35,7 +35,6 @@
 // header file because in former times SfxApplication was derived from it
 #include <vcl/svapp.hxx>
 
-#include <sfx2/childwin.hxx>
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/stbitem.hxx>
@@ -56,7 +55,7 @@ class AppSettings;
 struct SfxChildWinContextFactory;
 class SfxAppData_Impl;
 class SfxBindings;
-typedef boost::ptr_vector<SfxChildWinFactory> SfxChildWinFactArr_Impl;
+class SfxChildWinFactArr_Impl;
 class SfxChildWindow;
 class SfxDispatcher;
 class SfxEventConfiguration;

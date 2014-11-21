@@ -53,6 +53,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include "appbaslib.hxx"
+#include "childwinimpl.hxx"
 #include <basic/basicmanagerrepository.hxx>
 #include <svtools/svtresid.hxx>
 
