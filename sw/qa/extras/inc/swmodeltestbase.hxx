@@ -27,7 +27,6 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#include <com/sun/star/text/MailMergeType.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
@@ -157,9 +156,6 @@ private:
 
 protected:
     uno::Reference< lang::XComponent > mxComponent;
-    uno::Reference< lang::XComponent > mxMMComponent;
-    uno::Reference< com::sun::star::task::XJob > mxJob;
-    uno::Sequence< beans::NamedValue > mSeqMailMergeArgs;
 
     xmlBufferPtr mpXmlBuffer;
     const char* mpTestDocumentPath;
@@ -175,9 +171,6 @@ protected:
     sal_uInt32 mnStartTime;
     utl::TempFile maTempFile;
     bool mbExported; ///< Does maTempFile already contain something useful?
-    sal_Int16 nCurOutputType;
-    OUString mailMergeOutputURL;
-    OUString mailMergeOutputPrefix;
 
 protected:
     virtual OUString getTestName() { return OUString(); }
@@ -198,7 +191,6 @@ public:
         , mpFilter(pFilter)
         , mnStartTime(0)
         , mbExported(false)
-        , nCurOutputType(0)
     {
         maTempFile.EnableKillingFile();
     }
@@ -217,17 +209,6 @@ public:
     {
         if (mxComponent.is())
             mxComponent->dispose();
-        if (mxMMComponent.is())
-        {
-            if (nCurOutputType == text::MailMergeType::SHELL)
-            {
-                SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-                CPPUNIT_ASSERT(pTxtDoc);
-                pTxtDoc->GetDocShell()->DoClose();
-            }
-            else
-                mxMMComponent->dispose();
-        }
 
         test::BootstrapFixture::tearDown();
     }
@@ -356,6 +337,7 @@ private:
         xmlFreeTextWriter(pXmlWriter);
     }
 
+protected:
     void discardDumpedLayout()
     {
         if (mpXmlBuffer)
@@ -373,7 +355,6 @@ private:
         pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
     }
 
-protected:
     /// Get the length of the whole document.
     int getLength()
     {
@@ -618,26 +599,6 @@ protected:
             calcLayout();
     }
 
-    /**
-     Loads number-th document from mail merge. Requires file output from mail merge.
-    */
-    void loadMailMergeDocument( int number )
-    {
-        assert( nCurOutputType == text::MailMergeType::FILE );
-        if (mxComponent.is())
-            mxComponent->dispose();
-        OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
-        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
-        std::cout << name << ",";
-        mnStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(mailMergeOutputURL + "/" + name, "com.sun.star.text.TextDocument");
-        CPPUNIT_ASSERT( mxComponent.is());
-        OString name2 = OUStringToOString( name, RTL_TEXTENCODING_UTF8 );
-        discardDumpedLayout();
-        if (mustCalcLayoutOf(name2.getStr()))
-            calcLayout();
-    }
-
     void reload(const char* pFilter, const char* filename)
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -710,18 +671,6 @@ protected:
             return 0;
 
         return parseExportInternal( maTempFile.GetURL(), rStreamName );
-    }
-
-    /**
-     * Like parseExport(), but for given mail merge document.
-     */
-    xmlDocPtr parseMailMergeExport(int number, const OUString& rStreamName = OUString("word/document.xml"))
-    {
-        if (nCurOutputType != text::MailMergeType::FILE)
-            return 0;
-
-        OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
-        return parseExportInternal( mailMergeOutputURL + "/" + name, rStreamName );
     }
 
     xmlDocPtr parseExportInternal( const OUString& url, const OUString& rStreamName )

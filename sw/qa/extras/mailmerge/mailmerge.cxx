@@ -40,7 +40,24 @@ DBuriMap aDBuriMap;
 class MMTest : public SwModelTestBase
 {
 public:
-        MMTest() : SwModelTestBase("/sw/qa/extras/mailmerge/data/", "writer8") {}
+    MMTest();
+
+    virtual void tearDown() SAL_OVERRIDE
+    {
+        if (mxMMComponent.is())
+        {
+            if (mnCurOutputType == text::MailMergeType::SHELL)
+            {
+                SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
+                CPPUNIT_ASSERT(pTxtDoc);
+                pTxtDoc->GetDocShell()->DoClose();
+            }
+            else
+                mxMMComponent->dispose();
+        }
+        SwModelTestBase::tearDown();
+    }
+
     /**
      * Helper func used by each unit test to test the 'mail merge' code.
      *
@@ -67,7 +84,7 @@ public:
         finish();
 
         ::utl::removeTree(aWorkDir);
-        nCurOutputType = 0;
+        mnCurOutputType = 0;
     }
 
     OUString registerDBsource( const OUString &aURI, const OUString &aWorkDir )
@@ -131,12 +148,12 @@ public:
             else if (rName == UNO_NAME_FILE_NAME_PREFIX)
                 bOk &= rValue >>= mailMergeOutputPrefix;
             else if (rName == UNO_NAME_OUTPUT_TYPE)
-                bOk &= rValue >>= nCurOutputType;
+                bOk &= rValue >>= mnCurOutputType;
         }
 
         CPPUNIT_ASSERT(bOk);
 
-        if (nCurOutputType == text::MailMergeType::SHELL)
+        if (mnCurOutputType == text::MailMergeType::SHELL)
         {
             CPPUNIT_ASSERT(res >>= mxMMComponent);
             CPPUNIT_ASSERT(mxMMComponent.is());
@@ -148,9 +165,48 @@ public:
         }
     }
 
+    /**
+     * Like parseExport(), but for given mail merge document.
+     */
+    xmlDocPtr parseMailMergeExport(int number, const OUString& rStreamName = OUString("word/document.xml"))
+    {
+        if (mnCurOutputType != text::MailMergeType::FILE)
+            return 0;
+
+        OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
+        return parseExportInternal( mailMergeOutputURL + "/" + name, rStreamName );
+    }
+
+    /**
+     Loads number-th document from mail merge. Requires file output from mail merge.
+    */
+    void loadMailMergeDocument( int number )
+    {
+        assert( mnCurOutputType == text::MailMergeType::FILE );
+        if (mxComponent.is())
+            mxComponent->dispose();
+        OUString name = mailMergeOutputPrefix + OUString::number( number ) + ".odt";
+        // Output name early, so in the case of a hang, the name of the hanging input file is visible.
+        std::cout << name << ",";
+        mnStartTime = osl_getGlobalTimer();
+        mxComponent = loadFromDesktop(mailMergeOutputURL + "/" + name, "com.sun.star.text.TextDocument");
+        CPPUNIT_ASSERT( mxComponent.is());
+        OString name2 = OUStringToOString( name, RTL_TEXTENCODING_UTF8 );
+        discardDumpedLayout();
+        if (mustCalcLayoutOf(name2.getStr()))
+            calcLayout();
+    }
+
 protected:
     // Returns page number of the first page of a MM document inside the large MM document (used in the SHELL case).
     int documentStartPageNumber( int document ) const;
+
+    uno::Reference< com::sun::star::task::XJob > mxJob;
+    uno::Sequence< beans::NamedValue > mSeqMailMergeArgs;
+    OUString mailMergeOutputURL;
+    OUString mailMergeOutputPrefix;
+    sal_Int16 mnCurOutputType;
+    uno::Reference< lang::XComponent > mxMMComponent;
 };
 
 #define DECLARE_MAILMERGE_TEST(TestName, filename, datasource, tablename, file, BaseClass) \
@@ -200,6 +256,11 @@ int MMTest::documentStartPageNumber( int document ) const
     shell->GetPageNum( page, dummy );
     shell->Pop(false);
     return page;
+}
+MMTest::MMTest()
+    : SwModelTestBase("/sw/qa/extras/mailmerge/data/", "writer8")
+    , mnCurOutputType(0)
+{
 }
 
 DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored-draws.odt", "4_v01.ods", "Tabelle1")
