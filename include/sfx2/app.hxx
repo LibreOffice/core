@@ -90,8 +90,6 @@ class ModalDialog;
 class SbxArray;
 class SbxValue;
 
-typedef ::std::vector< SfxMedium* > SfxMediumList;
-
 namespace sfx2
 {
     class SvLinkSource;
@@ -111,20 +109,6 @@ public:
     SfxLinkItem( sal_uInt16 nWhichId, const Link& rValue ) : SfxPoolItem( nWhichId )
     {   aLink = rValue; }
     const Link&              GetValue() const { return aLink; }
-};
-
-//TODO/CLEANUP
-//is apparently used only in SfxPickList/SfxFrameLoader
-class SfxStringHint: public SfxSimpleHint
-{
-    OUString  aObj;
-
-public:
-    SfxStringHint( sal_uInt16 nId, const OUString& rObject ):
-        SfxSimpleHint( nId ),
-        aObj(rObject) { }
-    const OUString& GetObject() const { return aObj; }
-    virtual ~SfxStringHint() {}
 };
 
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED

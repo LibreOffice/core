@@ -274,8 +274,6 @@ public:
 
 typedef tools::SvRef<SfxMedium> SfxMediumRef;
 
-typedef ::std::vector< SfxMedium* > SfxMediumList;
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,6 +48,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include "objshimp.hxx"
+#include <stringhint.hxx>
 #include <sfx2/docfilt.hxx>
 
 #include <rtl/instance.hxx>

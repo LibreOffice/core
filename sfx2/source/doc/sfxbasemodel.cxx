@@ -110,6 +110,7 @@
 #include <sfx2/brokenpackageint.hxx>
 #include "graphhelp.hxx"
 #include "docundomanager.hxx"
+#include <stringhint.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
