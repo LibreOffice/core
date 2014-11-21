@@ -70,6 +70,10 @@
  <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ConditionalFormatDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConditionalFormatDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorScaleFormatDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataBarFormatDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:IconSetFormatDialog" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleSheetGrid" toolbar:visible="false"/>
 </toolbar:toolbar>
