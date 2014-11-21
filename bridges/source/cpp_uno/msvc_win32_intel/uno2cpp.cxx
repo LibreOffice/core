@@ -172,7 +172,7 @@ static void cpp_call(
 
     // stack space
 
-    static_assert(sizeof(void *) == sizeof(sal_Int32));
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indices of values this have to be converted (interface conversion cpp<=>uno)

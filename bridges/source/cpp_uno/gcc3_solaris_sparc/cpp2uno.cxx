@@ -97,7 +97,7 @@ static typelib_TypeClass cpp2uno_call(
                     {
             if ((reinterpret_cast< long >(pCppStack) & 7) != 0)
                       {
-                   static_assert(sizeof (double) == sizeof (sal_Int64));
+                   static_assert(sizeof (double) == sizeof (sal_Int64), "boo");
                            void * pDest = alloca( sizeof (sal_Int64) );
                            *reinterpret_cast< sal_Int32 * >(pDest) =
                            *reinterpret_cast< sal_Int32 const * >(pCppStack);
