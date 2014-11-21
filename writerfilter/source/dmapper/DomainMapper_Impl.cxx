@@ -4354,7 +4354,6 @@ void DomainMapper_Impl::PopFieldContext()
 
 void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
 {
-    // SAL_DEBUG("DomainMapper_Impl::SetBookmarkName for id " << m_sCurrentBkmkId << " to " << rBookmarkName);
     BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find( m_sCurrentBkmkId );
     if( aBookmarkIter != m_aBookmarkMap.end() )
         aBookmarkIter->second.m_sBookmarkName = rBookmarkName;
@@ -4364,7 +4363,6 @@ void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
 
 void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
 {
-    // SAL_DEBUG("DomainMapper_Impl::AddBookmark " << rId);
     /*
      * Add the dummy paragraph to handle section properties
      * iff the first element in the section is a table. If the dummy para is not added yet, then add it;

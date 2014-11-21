@@ -219,11 +219,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_endnote:
             break;
         case NS_ooxml::LN_CT_Bookmark_name:
-            // SAL_DEBUG("LN_CT_Bookmark_name " << sStringValue);
             m_pImpl->SetBookmarkName( sStringValue );
         break;
         case NS_ooxml::LN_CT_MarkupRangeBookmark_id:
-            // SAL_DEBUG("LN_CT_MarkupRangeBookmark_id " << sStringValue);
             // add a bookmark range -- this remembers a bookmark starting here
             // or, if the bookmark was already started or, if the bookmark was
             // already started before, writes out the bookmark
