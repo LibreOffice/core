@@ -133,6 +133,7 @@ public:
     // will be set when UI theme was changed
     static  bool        bThemeChanged;
     static  bool        bNeedPixmapPaint;
+    static  bool        bNeedTwoPasses;
 
     // native widget methods
     virtual bool        IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
