@@ -1154,19 +1154,6 @@ bool ScDocument::CanInsertRow( const ScRange& rRange ) const
 
 namespace {
 
-class StartNeededListenersHandler : std::unary_function<ScTable*, void>
-{
-    boost::shared_ptr<sc::StartListeningContext> mpCxt;
-public:
-    StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
-
-    void operator() (ScTable* p)
-    {
-        if (p)
-            p->StartListeners(*mpCxt, false);
-    }
-};
-
 struct SetDirtyIfPostponedHandler : std::unary_function<ScTable*, void>
 {
     void operator() (ScTable* p)
@@ -1276,7 +1263,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         }
         else
         {   // Listeners have been removed in UpdateReference
-            std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+            StartNeededListeners();
 
             // At least all cells using range names pointing relative to the
             // moved range must be recalculated, and all cells marked postponed
@@ -1369,7 +1356,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     if ( ValidRow(nStartRow+nSize) )
     {
         // Listeners have been removed in UpdateReference
-        std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+        StartNeededListeners();
 
         // At least all cells using range names pointing relative to the moved
         // range must be recalculated, and all cells marked postponed dirty.
@@ -1475,7 +1462,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         else
         {
             // Listeners have been removed in UpdateReference
-            std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+            StartNeededListeners();
             // At least all cells using range names pointing relative to the
             // moved range must be recalculated, and all cells marked postponed
             // dirty.
@@ -1564,7 +1551,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {
         // Listeners have been removed in UpdateReference
-        std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+        StartNeededListeners();
 
         // At least all cells using range names pointing relative to the moved
         // range must be recalculated, and all cells marked postponed dirty.
@@ -1777,11 +1764,29 @@ void ScDocument::DeleteArea(
 
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
+
+    // Record the positions of top and/or bottom formula groups that intersect
+    // the area borders.
+    std::vector<ScAddress> aGroupPos;
+    sc::EndListeningContext aCxt(*this);
+    ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    for (size_t i = 0; i < maTabs.size(); ++i)
+    {
+        aRange.aStart.SetTab(i);
+        aRange.aEnd.SetTab(i);
+
+        EndListeningIntersectedGroups(aCxt, aRange, &aGroupPos);
+    }
+    aCxt.purgeEmptyBroadcasters();
+
     for (SCTAB i = 0; i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
             if ( rMark.GetTableSelect(i) || bIsUndo )
                 maTabs[i]->DeleteArea(nCol1, nRow1, nCol2, nRow2, nDelFlag, bBroadcast, pBroadcastSpans);
 
+    // Re-start listeners on those top bottom groups that have been split.
+    SetNeedsListeningGroups(aGroupPos);
+    StartNeededListeners();
 }
 
 void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,

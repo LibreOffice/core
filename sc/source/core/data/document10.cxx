@@ -384,4 +384,26 @@ void ScDocument::SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArra
     }
 }
 
+namespace {
+
+class StartNeededListenersHandler : std::unary_function<ScTable*, void>
+{
+    boost::shared_ptr<sc::StartListeningContext> mpCxt;
+public:
+    StartNeededListenersHandler( ScDocument& rDoc ) : mpCxt(new sc::StartListeningContext(rDoc)) {}
+
+    void operator() (ScTable* p)
+    {
+        if (p)
+            p->StartListeners(*mpCxt, false);
+    }
+};
+
+}
+
+void ScDocument::StartNeededListeners()
+{
+    std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
