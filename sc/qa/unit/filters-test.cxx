@@ -613,22 +613,35 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
 // Document contains cached external references.
 void ScFiltersTest::testSortWithSheetExternalReferencesODS()
 {
-    // this test only works with UpdateReferenceOnSort == true, set it now.
-    // we reset the value back to the original in tearDown()
-    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
-    aInputOption.SetSortRefUpdate(true);
-    SC_MOD()->SetInputOptions(aInputOption);
-
     ScDocShellRef xDocSh = loadDoc("sort-with-sheet-external-references.", ODS, true);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn auto calc on.
     rDoc.CalcAll();
 
+    // The relative test only works with UpdateReferenceOnSort == true, set it
+    // now. We reset the value back to the original in tearDown()
+    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    aInputOption.SetSortRefUpdate(true);
+    SC_MOD()->SetInputOptions(aInputOption);
+
     // Sort A15:D20 with relative row references.
     testSortWithSheetExternalReferencesODS_Impl( xDocSh, 14, 19);
 
-    // Sort A23:D28 with absolute row references.
+    // Sort with absolute references has to work in both UpdateReferenceOnSort
+    // modes.
+
+    // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==true
+    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 22, 27);
+
+    // Undo sort with absolute references to perform same sort.
+    rDoc.GetUndoManager()->Undo();
+    rDoc.CalcAll();
+
+    aInputOption.SetSortRefUpdate(false);
+    SC_MOD()->SetInputOptions(aInputOption);
+
+    // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==false
     testSortWithSheetExternalReferencesODS_Impl( xDocSh, 22, 27);
 
     xDocSh->DoClose();
