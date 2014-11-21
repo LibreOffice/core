@@ -700,6 +700,13 @@ DECLARE_OOXMLEXPORT_TEST(testFD083057, "fdo83057.docx")
     assertXPath(pXmlDoc, "//mc:AlternateContent//w:sdt", 0);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testHeaderBorder, "header-border.docx")
+{
+    // This was 0, as header margin was lost during import.
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        assertXPath(pXmlDoc, "//w:pgMar", "header", "720");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

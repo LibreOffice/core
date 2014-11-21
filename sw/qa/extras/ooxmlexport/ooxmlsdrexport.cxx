@@ -453,7 +453,7 @@ DECLARE_OOXMLEXPORT_TEST(testVMLData, "TestVMLData.docx")
 {
     // The problem was exporter was exporting vml data for shape in w:rPr element.
     // vml data should not come under w:rPr element.
-    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
     if (!pXmlDoc)
         return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect", "stroked").match("f"));
@@ -463,7 +463,7 @@ DECLARE_OOXMLEXPORT_TEST(testImageData, "image_data.docx")
 {
     // The problem was exporter was exporting v:imagedata data for shape in w:pict as v:fill w element.
 
-    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
     if (!pXmlDoc)
         return;
     CPPUNIT_ASSERT(getXPath(pXmlDoc, "/w:hdr/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:imagedata", "detectmouseclick").match("t"));
