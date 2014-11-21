@@ -22,6 +22,8 @@
 #include <vcl/splitwin.hxx>
 #include <sfx2/childwin.hxx>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 class SfxWorkWindow;
 class SfxDockingWindow;
 class SfxEmptySplitWin_Impl;

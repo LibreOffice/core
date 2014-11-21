@@ -24,6 +24,7 @@
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
+#include "childwinimpl.hxx"
 #include <sfx2/childwin.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/request.hxx>

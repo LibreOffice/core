@@ -27,7 +27,6 @@
 
 #include <sfx2/shell.hxx>
 #include <sfx2/chalign.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class SfxWorkWindow;
 class SfxModule;
@@ -92,7 +91,7 @@ struct SfxChildWinContextFactory
     {}
 };
 
-typedef boost::ptr_vector<SfxChildWinContextFactory> SfxChildWinContextArr_Impl;
+class SfxChildWinContextArr_Impl;
 
 struct SFX2_DLLPUBLIC SfxChildWinFactory
 {
