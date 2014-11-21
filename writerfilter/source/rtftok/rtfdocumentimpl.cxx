@@ -33,6 +33,7 @@
 #include <oox/mathml/import.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <dmapper/GraphicHelpers.hxx>
 #include <rtfsdrimport.hxx>
 #include <rtflookahead.hxx>
@@ -40,8 +41,6 @@
 #include <rtfreferenceproperties.hxx>
 #include <rtfskipdestination.hxx>
 #include <rtffly.hxx>
-
-#define MM100_TO_EMU(MM100)     (MM100 * 360)
 
 using namespace com::sun::star;
 
@@ -894,8 +893,8 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         nXExt = (((long)m_aStates.top().aPicture.nScaleX) * (nXExt - (m_aStates.top().aPicture.nCropL + m_aStates.top().aPicture.nCropR))) / 100L;
     if (m_aStates.top().aPicture.nScaleY != 100)
         nYExt = (((long)m_aStates.top().aPicture.nScaleY) * (nYExt - (m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB))) / 100L;
-    RTFValue::Pointer_t pXExtValue(new RTFValue(MM100_TO_EMU(nXExt)));
-    RTFValue::Pointer_t pYExtValue(new RTFValue(MM100_TO_EMU(nYExt)));
+    RTFValue::Pointer_t pXExtValue(new RTFValue(oox::drawingml::convertHmmToEmu(nXExt)));
+    RTFValue::Pointer_t pYExtValue(new RTFValue(oox::drawingml::convertHmmToEmu(nYExt)));
     aExtentAttributes.set(NS_ooxml::LN_CT_PositiveSize2D_cx, pXExtValue);
     aExtentAttributes.set(NS_ooxml::LN_CT_PositiveSize2D_cy, pYExtValue);
     RTFValue::Pointer_t pExtentValue(new RTFValue(aExtentAttributes));
@@ -956,14 +955,14 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
         if (m_aStates.top().aShape.nHoriOrientRelationToken > 0)
             aPoshSprms.set(NS_ooxml::LN_CT_PosH_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nHoriOrientRelationToken)));
         if (m_aStates.top().aShape.nLeft != 0)
-            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nLeft)), false);
+            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nLeft)), false);
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionH, RTFValue::Pointer_t(new RTFValue(aPoshSprms)));
 
         RTFSprms aPosvSprms;
         if (m_aStates.top().aShape.nVertOrientRelationToken > 0)
             aPosvSprms.set(NS_ooxml::LN_CT_PosV_relativeFrom, RTFValue::Pointer_t(new RTFValue(m_aStates.top().aShape.nVertOrientRelationToken)));
         if (m_aStates.top().aShape.nTop != 0)
-            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(MM100_TO_EMU(m_aStates.top().aShape.nTop)), true);
+            writerfilter::dmapper::PositionHandler::setPositionOffset(OUString::number(oox::drawingml::convertHmmToEmu(m_aStates.top().aShape.nTop)), true);
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_positionV, RTFValue::Pointer_t(new RTFValue(aPosvSprms)));
 
         aAnchorSprms.set(NS_ooxml::LN_CT_Anchor_docPr, pDocprValue);
