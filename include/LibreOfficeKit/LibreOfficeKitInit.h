@@ -26,26 +26,28 @@ extern "C"
 
 #ifndef _WIN32
     #include "dlfcn.h"
+    #include <limits.h>
     #ifdef  _AIX
     #  include <sys/ldr.h>
     #endif
     #define TARGET_LIB        "lib" "sofficeapp" ".so"
     #define TARGET_MERGED_LIB "lib" "mergedlo" ".so"
-    #define SEPERATOR         '/'
+    #define SEPARATOR         '/'
+    #define MAXPATH           PATH_MAX
 
-    void *_dlopen(const char *pFN)
+    void *LibOpen(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY);
     }
 
 
-    void *_dlsym(void *Hnd, const char *pName)
+    void *LibSym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
     }
 
 
-    int _dlclose(void *Hnd)
+    int LibClose(void *Hnd)
     {
         return dlclose(Hnd);
     }
@@ -55,29 +57,39 @@ extern "C"
         (void)pPath;
     }
 
+    bool IsAbsolutePath(const char *pPath)
+    {
+        if (pPath[0] != '/')
+            return false;
+
+        return true;
+    }
+
+    char * SetFullPath(const char *relative, char *fullpath)
+    {
+        return realpath(relative, fullpath);
+    }
 
 #else
 
     #include <windows.h>
     #define TARGET_LIB        "sofficeapp" ".dll"
     #define TARGET_MERGED_LIB "mergedlo" ".dll"
-    #define SEPERATOR         '\\'
+    #define SEPARATOR         '\\'
     #define UNOPATH           "\\..\\URE\\bin"
+    #define MAXPATH           MAX_PATH
 
-
-    void *_dlopen(const char *pFN)
+    void * LibOpen(const char *pFN)
     {
         return (void *) LoadLibrary(pFN);
     }
 
-
-    void *_dlsym(void *Hnd, const char *pName)
+    void *LibSym(void *Hnd, const char *pName)
     {
         return GetProcAddress((HINSTANCE) Hnd, pName);
     }
 
-
-    int _dlclose(void *Hnd)
+    int LibClose(void *Hnd)
     {
         return FreeLibrary((HINSTANCE) Hnd);
     }
@@ -102,10 +114,12 @@ extern "C"
         }
         //prepare the new PATH. Add the Ure/bin directory at the front.
         //note also adding ';'
-        char * sNewPath = new char[strlen(sEnvPath) + strlen(pPath) + strlen(UNOPATH) + 2];
+        char * sNewPath = new char[strlen(sEnvPath) + strlen(pPath) * 2 + strlen(UNOPATH) + 4];
         sNewPath[0] = L'\0';
+        strcat(sNewPath, pPath);     // program to PATH
+        strcat(sNewPath, ";");
         strcat(sNewPath, pPath);
-        strcat(sNewPath, UNOPATH);
+        strcat(sNewPath, UNOPATH);   // UNO to PATH
         if (strlen(sEnvPath))
         {
             strcat(sNewPath, ";");
@@ -117,6 +131,21 @@ extern "C"
         delete[] sEnvPath;
         delete[] sNewPath;
     }
+
+
+    bool IsAbsolutePath(const char *pPath)
+    {
+        if (pPath[1] != ':')
+            return false;
+
+        return true;
+    }
+
+    char * SetFullPath(const char *relative, char *fullpath)
+    {
+        return _fullpath(fullpath, relative, MAXPATH);
+    }
+
 #endif
 
 
@@ -132,12 +161,21 @@ static LibreOfficeKit *lok_init( const char *install_path )
     size_t partial_length;
     void *dlhandle;
     HookFunction *pSym;
+    char instPath[MAXPATH];
 
     if (!install_path)
         return NULL;
 
+    if( !IsAbsolutePath(install_path) )
+    {
+        if(SetFullPath(install_path, instPath) == NULL)
+            return NULL;
+    }
+    else
+        strcpy(instPath, install_path);
+
     // allocate large enough buffer
-    partial_length = strlen(install_path);
+    partial_length = strlen(instPath);
     imp_lib = (char *) malloc(partial_length + sizeof(TARGET_LIB) + sizeof(TARGET_MERGED_LIB) + 2);
     if (!imp_lib)
     {
@@ -145,39 +183,39 @@ static LibreOfficeKit *lok_init( const char *install_path )
         return NULL;
     }
 
-    strcpy(imp_lib, install_path);
+    strcpy(imp_lib, instPath);
 
-     extendUnoPath(install_path);
+    extendUnoPath(instPath);
 
-    imp_lib[partial_length++] = SEPERATOR;
+    imp_lib[partial_length++] = SEPARATOR;
     strcpy(imp_lib + partial_length, TARGET_LIB);
 
-    dlhandle = _dlopen(imp_lib);
+    dlhandle = LibOpen(imp_lib);
     if (!dlhandle)
     {
         strcpy(imp_lib + partial_length, TARGET_MERGED_LIB);
 
-        dlhandle = _dlopen(imp_lib);
+        dlhandle = LibOpen(imp_lib);
         if (!dlhandle)
         {
             fprintf(stderr, "failed to open library '%s' or '%s' in '%s/'\n",
-                    TARGET_LIB, TARGET_MERGED_LIB, install_path);
+                    TARGET_LIB, TARGET_MERGED_LIB, instPath);
             free(imp_lib);
             return NULL;
         }
     }
 
-    pSym = (HookFunction *) _dlsym( dlhandle, "libreofficekit_hook" );
+    pSym = (HookFunction *) LibSym( dlhandle, "libreofficekit_hook" );
     if (!pSym)
     {
         fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
-        _dlclose( dlhandle );
+        LibClose( dlhandle );
         free( imp_lib );
         return NULL;
     }
 
     free( imp_lib );
-    return pSym( install_path );
+    return pSym( instPath );
 }
 
 #endif // defined(__linux__) || defined(_AIX)
