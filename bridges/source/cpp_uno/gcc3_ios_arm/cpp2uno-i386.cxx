@@ -91,7 +91,7 @@ void cpp2uno_call(
     pCppStack += sizeof( void* );
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
@@ -234,7 +234,7 @@ extern "C" void cpp_vtable_call(
     int nFunctionIndex, int nVtableOffset, void** pCallStack,
     void * pReturnValue )
 {
-    OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
+    static_assert(sizeof(sal_Int32)==sizeof(void *), "### unexpected!");
 
     // pCallStack: ret adr, [ret *], this, params
     void * pThis;
@@ -488,7 +488,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     for (sal_Int32 i = 0; i < type->nMembers; ++i) {
         typelib_TypeDescription * member = 0;
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
-        OSL_ASSERT(member != 0);
+        assert(member != 0);
         switch (member->eTypeClass) {
         case typelib_TypeClass_INTERFACE_ATTRIBUTE:
             // Getter:
@@ -515,7 +515,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             break;
 
         default:
-            OSL_ASSERT(false);
+            assert(false);
             break;
         }
         TYPELIB_DANGER_RELEASE(member);

@@ -521,7 +521,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     {
         typelib_TypeDescription * member = 0;
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
-        OSL_ASSERT(member != 0);
+        assert(member != 0);
         switch (member->eTypeClass)
         {
             case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -545,7 +545,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 break;
             }
         default:
-            OSL_ASSERT(false);
+            assert(false);
             break;
         }
         TYPELIB_DANGER_RELEASE(member);

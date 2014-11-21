@@ -209,7 +209,7 @@ static void cpp_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
+    assert(pReturnTypeDescr);
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
@@ -234,7 +234,7 @@ static void cpp_call(
     INSERT_INT64( &pAdjustedThisPtr, nRegs, pGPR, pStack );
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int64), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int64), "### unexpected size!");
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indices of values this have to be converted (interface conversion cpp<=>uno)

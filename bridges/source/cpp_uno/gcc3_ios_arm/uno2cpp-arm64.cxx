@@ -236,7 +236,7 @@ static void cpp_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
+    assert( pReturnTypeDescr);
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
@@ -435,7 +435,7 @@ void unoInterfaceProxyDispatch(
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        assert( nMemberPos < pTypeDescr->nAllMembers && "### member pos out of range!");
 #endif
 
         VtableSlot aVtableSlot(
@@ -484,7 +484,7 @@ void unoInterfaceProxyDispatch(
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        assert(nMemberPos < pTypeDescr->nAllMembers && "### member pos out of range!");
 #endif
 
         VtableSlot aVtableSlot(

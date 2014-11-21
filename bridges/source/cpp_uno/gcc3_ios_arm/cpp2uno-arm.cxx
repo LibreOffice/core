@@ -101,7 +101,7 @@ namespace
         pCppStack += sizeof( void* );
 
         // stack space
-        OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32),
+        static_assert( sizeof(void *) == sizeof(sal_Int32),
             "### unexpected size!" );
         // parameters
         void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
@@ -298,7 +298,7 @@ namespace
         void ** pCallStack,
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
-        OSL_ENSURE( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
+        static_assert( sizeof(sal_Int32)==sizeof(void *), "### unexpected!" );
 
         // pCallStack: [ret *], this, params
         // _this_ ptr is patched cppu_XInterfaceProxy object
@@ -320,7 +320,7 @@ namespace
 
         typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 
-        OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex,
+        assert( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex &&
             "### illegal vtable index!" );
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
@@ -328,11 +328,11 @@ namespace
         }
 
         // determine called method
-        OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex,
+        assert( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex &&
             "### illegal vtable index!" );
         sal_Int32 nMemberPos =
             pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers,
+        assert( nMemberPos < pTypeDescr->nAllMembers &&
             "### illegal member index!" );
 
         TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
@@ -529,7 +529,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     {
         typelib_TypeDescription * member = 0;
         TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
-        OSL_ASSERT(member != 0);
+        assert(member != 0);
         switch (member->eTypeClass)
         {
             case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -563,7 +563,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 break;
             }
         default:
-            OSL_ASSERT(false);
+            assert(false);
             break;
         }
         TYPELIB_DANGER_RELEASE(member);

@@ -61,10 +61,10 @@ void callVirtualMethod( void * pAdjustedThisPtr,
     // parameter list is mixed list of * and values
     // reference parameters are pointers
 
-    OSL_ENSURE( pStackLongs && pAdjustedThisPtr, "### null ptr!" );
-    OSL_ENSURE( (sizeof(void *) == 4) &&
+    assert(pStackLongs && pAdjustedThisPtr);
+    static_assert( (sizeof(void *) == 4) &&
                  (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
-    OSL_ENSURE( nStackLongs && pStackLongs, "### no stack in callVirtualMethod !" );
+    assert(nStackLongs && pStackLongs && "### no stack in callVirtualMethod !");
 
     // never called
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
@@ -285,7 +285,7 @@ static void cpp_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
+    assert(pReturnTypeDescr);
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
@@ -312,7 +312,7 @@ static void cpp_call(
     pCppStack += sizeof( void* );
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indices of values this have to be converted (interface conversion cpp<=>uno)
@@ -336,7 +336,7 @@ static void cpp_call(
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
-                        OSL_ASSERT( sizeof (double) == sizeof (sal_Int64) );
+                        static_assert(sizeof (double) == sizeof (sal_Int64));
                           *reinterpret_cast< sal_Int32 * >(pCppStack) =
                           *reinterpret_cast< sal_Int32 const * >(pUnoArgs[ nPos ]);
                           pCppStack += sizeof (sal_Int32);
@@ -390,7 +390,7 @@ static void cpp_call(
     try
     {
         int nStackLongs = (pCppStack - pCppStackStart)/sizeof(sal_Int32);
-        OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 3), "UNALIGNED STACK !!! (Please DO panic" );
+        assert( !( (pCppStack - pCppStackStart ) & 3) && "UNALIGNED STACK !!! (Please DO panic" );
 
         if( nStackLongs & 1 )
             // stack has to be 8 byte aligned

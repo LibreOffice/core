@@ -54,7 +54,7 @@
 
 #include "abi.hxx"
 
-#include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 using namespace x86_64;
 
@@ -244,10 +244,9 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
             }
 
         default:
-#if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE( "Unhandled case: pType->eTypeClass == %d", pTypeRef->eTypeClass );
-#endif
-            OSL_ASSERT(false);
+            SAL_WARN("bridges", "Unhandled case: pType->eTypeClass == "
+                    << pTypeRef->eTypeClass);
+            assert(false);
     }
     return 0; /* Never reached.  */
 }
@@ -287,10 +286,8 @@ bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool 
                     return false;
                 break;
             default:
-#if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE( "Unhandled case: classes[n] == %d", classes[n] );
-#endif
-            OSL_ASSERT(false);
+            SAL_WARN("bridges", "Unhandled case: classes[n] == " << classes[n]);
+            assert(false);
         }
     return true;
 }

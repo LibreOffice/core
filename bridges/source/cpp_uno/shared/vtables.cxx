@@ -20,11 +20,11 @@
 
 #include "bridges/cpp_uno/shared/vtables.hxx"
 
-#include "osl/diagnose.h"
 #include "sal/types.h"
 #include "typelib/typedescription.h"
 
 #include <algorithm>
+#include <cassert>
 
 namespace
 {
@@ -83,14 +83,14 @@ template< typename T > bridges::cpp_uno::shared::VtableSlot doGetVtableSlot(
     slot.offset = 0;
     T * member = const_cast< T * >(ifcMember);
     while (member->pBaseRef != 0) {
-        OSL_ASSERT(member->nIndex < member->pInterface->nBaseTypes);
+        assert(member->nIndex < member->pInterface->nBaseTypes);
         for (sal_Int32 i = 0; i < member->nIndex; ++i) {
             slot.offset += getVtableCount(member->pInterface->ppBaseTypes[i]);
         }
         typelib_TypeDescription * desc = 0;
         typelib_typedescriptionreference_getDescription(
             &desc, member->pBaseRef);
-        OSL_ASSERT(
+        assert(
             desc != 0 && desc->eTypeClass == member->aBase.aBase.eTypeClass);
         if (member != ifcMember) {
             typelib_typedescription_release(&member->aBase.aBase);

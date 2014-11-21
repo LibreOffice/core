@@ -116,7 +116,7 @@ static typelib_TypeClass cpp2uno_call(
         if ( !rParam.bOut && bridges::cpp_uno::shared::isSimpleType( rParam.pTypeRef ) ) // value
         {
             // Simple types must fit exactly one register on x86_64
-            OSL_ASSERT( bFitsRegisters && ( ( nUsedSSE == 1 && nUsedGPR == 0 ) || ( nUsedSSE == 0 && nUsedGPR == 1 ) ) );
+            assert( bFitsRegisters && ( ( nUsedSSE == 1 && nUsedGPR == 0 ) || ( nUsedSSE == 0 && nUsedGPR == 1 ) ) );
 
             if ( nUsedSSE == 1 )
             {
@@ -291,7 +291,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-    OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!\n" );
+    assert(nMemberPos < pTypeDescr->nAllMembers);
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
@@ -468,7 +468,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         typelib_TypeDescription * pTD = 0;
 
         TYPELIB_DANGER_GET( &pTD, type->ppMembers[ nPos ] );
-        OSL_ASSERT( pTD );
+        assert(pTD);
 
         if ( typelib_TypeClass_INTERFACE_ATTRIBUTE == pTD->eTypeClass )
         {
@@ -497,7 +497,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                                 x86_64::return_in_hidden_param( pMethodTD->pReturnTypeRef ) );
         }
         else
-            OSL_ASSERT( false );
+            assert(false);
 
         TYPELIB_DANGER_RELEASE( pTD );
     }

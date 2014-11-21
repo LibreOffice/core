@@ -22,7 +22,6 @@
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include <osl/diagnose.h>
 #include <uno/data.h>
 
 #include <bridges/cpp_uno/shared/bridge.hxx>
@@ -403,7 +402,7 @@ static void cpp_call(
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
+    assert(pReturnTypeDescr);
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
@@ -431,7 +430,7 @@ static void cpp_call(
     INSERT_INT32( &pAdjustedThisPtr, nGPR, pGPR, pStack );
 
     // stack space
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int32), "### unexpected size!" );
+    static_assert(sizeof(void *) == sizeof(sal_Int32), "### unexpected size!");
     // args
     void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
     // indices of values this have to be converted (interface conversion cpp<=>uno)
@@ -613,7 +612,7 @@ void unoInterfaceProxyDispatch(
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
 
         VtableSlot aVtableSlot(
@@ -662,7 +661,7 @@ void unoInterfaceProxyDispatch(
 #if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
-        OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+        assert(nMemberPos < pTypeDescr->nAllMembers);
 #endif
 
         VtableSlot aVtableSlot(
