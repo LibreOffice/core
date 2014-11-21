@@ -922,7 +922,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
         MSO_LineDashing eLineDashing = (MSO_LineDashing)GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid );
         if ( eLineDashing == mso_lineSolid )
-            rSet.Put(XLineStyleItem( XLINE_SOLID ) );
+            rSet.Put(XLineStyleItem( drawing::LineStyle_SOLID ) );
         else
         {
             XDashStyle  eDash = XDASH_RECT;
@@ -982,7 +982,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             }
 
             rSet.Put( XLineDashItem( OUString(), XDash( eDash, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
-            rSet.Put( XLineStyleItem( XLINE_DASH ) );
+            rSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
         }
         rSet.Put( XLineColorItem( OUString(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor ), DFF_Prop_lineColor ) ) );
         if ( IsProperty( DFF_Prop_lineOpacity ) )
@@ -1050,7 +1050,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
         }
     }
     else
-        rSet.Put( XLineStyleItem( XLINE_NONE ) );
+        rSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
 }
 
 struct ShadeColor

@@ -44,6 +44,7 @@
 
 #include <basegfx/color/bcolor.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace com::sun::star;
 
@@ -354,14 +355,14 @@ void FuMorph::ImpInsertPolygons(
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
 
-    const XLineStyle eLineStyle1 = ITEMVALUE( aSet1, XATTR_LINESTYLE, XLineStyleItem );
-    const XLineStyle eLineStyle2 = ITEMVALUE( aSet2, XATTR_LINESTYLE, XLineStyleItem );
+    const drawing::LineStyle eLineStyle1 = ITEMVALUE( aSet1, XATTR_LINESTYLE, XLineStyleItem );
+    const drawing::LineStyle eLineStyle2 = ITEMVALUE( aSet2, XATTR_LINESTYLE, XLineStyleItem );
     const drawing::FillStyle eFillStyle1 = ITEMVALUE( aSet1, XATTR_FILLSTYLE, XFillStyleItem );
     const drawing::FillStyle eFillStyle2 = ITEMVALUE( aSet2, XATTR_FILLSTYLE, XFillStyleItem );
 
     if ( bAttributeFade )
     {
-        if ( ( eLineStyle1 != XLINE_NONE ) && ( eLineStyle2 != XLINE_NONE ) )
+        if ( ( eLineStyle1 != drawing::LineStyle_NONE ) && ( eLineStyle2 != drawing::LineStyle_NONE ) )
         {
             bLineWidth = bLineColor = true;
 
@@ -373,7 +374,7 @@ void FuMorph::ImpInsertPolygons(
             nStartLineWidth = ITEMVALUE( aSet1, XATTR_LINEWIDTH, XLineWidthItem );
             nEndLineWidth = ITEMVALUE( aSet2, XATTR_LINEWIDTH, XLineWidthItem );
         }
-        else if ( ( eLineStyle1 == XLINE_NONE ) && ( eLineStyle2 == XLINE_NONE ) )
+        else if ( ( eLineStyle1 == drawing::LineStyle_NONE ) && ( eLineStyle2 == drawing::LineStyle_NONE ) )
             bIgnoreLine = true;
 
         if ( ( eFillStyle1 == drawing::FillStyle_SOLID ) && ( eFillStyle2 == drawing::FillStyle_SOLID ) )
@@ -398,7 +399,7 @@ void FuMorph::ImpInsertPolygons(
         const double    fDelta = nEndLineWidth - nStartLineWidth;
         double          fFactor = fStep;
 
-        aSet.Put( XLineStyleItem( XLINE_SOLID ) );
+        aSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
         aSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
 
         for ( size_t i = 0; i < nCount; i++, fFactor += fStep )
@@ -413,7 +414,7 @@ void FuMorph::ImpInsertPolygons(
                 aSet.Put( XLineColorItem( aEmptyStr, Color(aLineColor)));
             }
             else if ( bIgnoreLine )
-                aSet.Put( XLineStyleItem( XLINE_NONE ) );
+                aSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
 
             // fill color
             if ( bFillColor )

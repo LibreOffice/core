@@ -653,7 +653,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             {
                 pTempBackgroundShape = new SdrRectObj(Rectangle(Point(0,0), pPage->GetSize()));
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
-                pTempBackgroundShape->SetMergedItem(XLineStyleItem(XLINE_NONE));
+                pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
                 aShapes.push_back(pTempBackgroundShape);
             }

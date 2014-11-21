@@ -626,38 +626,38 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
         {
             default:
             case EXC_OBJ_LINE_SOLID:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_SOLID ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_SOLID ) );
             break;
             case EXC_OBJ_LINE_DASH:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_DASH ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
                 rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 0, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DOT:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_DASH ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
                 rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 1, nDotLen, 0, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DASHDOT:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_DASH ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
                 rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 1, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DASHDOTDOT:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_DASH ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
                 rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 2, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_MEDTRANS:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_SOLID ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_SOLID ) );
                 rSdrObj.SetMergedItem( XLineTransparenceItem( 50 ) );
             break;
             case EXC_OBJ_LINE_DARKTRANS:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_SOLID ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_SOLID ) );
                 rSdrObj.SetMergedItem( XLineTransparenceItem( 25 ) );
             break;
             case EXC_OBJ_LINE_LIGHTTRANS:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_SOLID ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_SOLID ) );
                 rSdrObj.SetMergedItem( XLineTransparenceItem( 75 ) );
             break;
             case EXC_OBJ_LINE_NONE:
-                rSdrObj.SetMergedItem( XLineStyleItem( XLINE_NONE ) );
+                rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_NONE ) );
             break;
         }
     }

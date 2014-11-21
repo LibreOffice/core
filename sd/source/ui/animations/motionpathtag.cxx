@@ -359,7 +359,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     XDash aDash( XDASH_RECT, 1, 80, 1, 80, 80);
     OUString aEmpty( "?" );
     mpPathObj->SetMergedItem( XLineDashItem( aEmpty, aDash ) );
-    mpPathObj->SetMergedItem( XLineStyleItem( XLINE_DASH ) );
+    mpPathObj->SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
     mpPathObj->SetMergedItem( XLineColorItem(aEmpty, ::Color(COL_GRAY)) );
     mpPathObj->SetMergedItem( XFillStyleItem( drawing::FillStyle_NONE ) );
 

@@ -44,6 +44,7 @@
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <sdr/attribute/sdrformtextoutlineattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 
 // helper to get line, stroke and transparence attributes from SfxItemSet
@@ -121,11 +122,11 @@ namespace
 
     drawinglayer::attribute::StrokeAttribute impGetStrokeAttribute(const SfxItemSet& rSet)
     {
-        const XLineStyle eLineStyle = (static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE))).GetValue();
+        const com::sun::star::drawing::LineStyle eLineStyle = (static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE))).GetValue();
         double fFullDotDashLen(0.0);
         ::std::vector< double > aDotDashArray;
 
-        if(XLINE_DASH == eLineStyle)
+        if(com::sun::star::drawing::LineStyle_DASH == eLineStyle)
         {
             const XDash& rDash = (static_cast<const XLineDashItem&>(rSet.Get(XATTR_LINEDASH))).GetDashValue();
 

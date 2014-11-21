@@ -614,9 +614,9 @@ bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rI
         case XATTR_LINETRANSPARENCE : {
             rIndent=1;
             if (ImpGetItem(*pSet,XATTR_LINESTYLE,pItem)) {
-                XLineStyle eLineStyle=static_cast<const XLineStyleItem*>(pItem)->GetValue();
-                if (eLineStyle==XLINE_NONE) return true;
-                if (eLineStyle!=XLINE_DASH && nWhich==XATTR_LINEDASH) return true;
+                drawing::LineStyle eLineStyle=static_cast<const XLineStyleItem*>(pItem)->GetValue();
+                if (eLineStyle==drawing::LineStyle_NONE) return true;
+                if (eLineStyle!=drawing::LineStyle_DASH && nWhich==XATTR_LINEDASH) return true;
             }
             if (nWhich==XATTR_LINESTART || nWhich==XATTR_LINESTARTCENTER) {
                 rIndent=2;
