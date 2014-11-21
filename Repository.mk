@@ -771,6 +771,12 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
 ))
 endif
 
+ifeq (CT2N,$(filter CT2N,$(BUILD_TYPE)))
+$(eval $(call gb_Helper_register_packages_for_install,extensions_ct2n,\
+	ct2n \
+))
+endif
+
 $(eval $(call gb_Helper_register_jars,OXT, \
 	EvolutionarySolver \
 	active_java \
