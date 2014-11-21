@@ -43,7 +43,7 @@ class SwGrammarContact : public IGrammarContact, public SwClient
     Timer aTimer;
     SwGrammarMarkUp *mpProxyList;
     bool mbFinished;
-    SwTxtNode* getMyTxtNode() { return (SwTxtNode*)GetRegisteredIn(); }
+    SwTxtNode* getMyTxtNode() { return static_cast<SwTxtNode*>(GetRegisteredIn()); }
       DECL_LINK( TimerRepaint, Timer * );
 
 public:
@@ -118,7 +118,7 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
             if( !mpProxyList )
             {
                 if( rTxtNode.GetGrammarCheck() )
-                    mpProxyList = (SwGrammarMarkUp*)rTxtNode.GetGrammarCheck()->Clone();
+                    mpProxyList = static_cast<SwGrammarMarkUp*>(rTxtNode.GetGrammarCheck()->Clone());
                 else
                 {
                     mpProxyList = new SwGrammarMarkUp();
@@ -148,7 +148,7 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
     if( !pOld || pOld->Which() != RES_OBJECTDYING )
         return;
 
-    SwPtrMsgPoolItem *pDead = (SwPtrMsgPoolItem *)pOld;
+    const SwPtrMsgPoolItem *pDead = static_cast<const SwPtrMsgPoolItem *>(pOld);
     if( pDead->pObject == GetRegisteredIn() )
     {    // if my current paragraph dies, I throw the proxy list away
         aTimer.Stop();

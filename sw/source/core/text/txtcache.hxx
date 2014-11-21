@@ -60,7 +60,7 @@ public:
 
 inline SwTxtLine &SwTxtLineAccess::GetTxtLine()
 {
-    return *((SwTxtLine*)Get());
+    return *static_cast<SwTxtLine*>(Get());
 }
 
 #endif

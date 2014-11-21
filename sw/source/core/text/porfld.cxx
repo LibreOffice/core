@@ -364,7 +364,7 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             sal_Int32 nNextOfst = aExpand.getLength() - nRest;
 
             if ( IsQuoVadisPortion() )
-                nNextOfst = nNextOfst + ((SwQuoVadisPortion*)this)->GetContTxt().getLength();
+                nNextOfst = nNextOfst + static_cast<SwQuoVadisPortion*>(this)->GetContTxt().getLength();
 
             OUString aNew( aExpand.copy( nNextOfst ) );
             aExpand = aExpand.copy( 0, nNextOfst );
@@ -634,11 +634,11 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
     while ( pTmp && pTmp->InNumberGrp() )
     {
         nSumWidth = nSumWidth + pTmp->Width();
-        if ( ((SwNumberPortion*)pTmp)->HasFollow() )
+        if ( static_cast<const SwNumberPortion*>(pTmp)->HasFollow() )
             pTmp = pTmp->GetPortion();
         else
         {
-            nOffset = pTmp->Width() - ((SwNumberPortion*)pTmp)->nFixWidth;
+            nOffset = pTmp->Width() - static_cast<const SwNumberPortion*>(pTmp)->nFixWidth;
             break;
         }
     }
@@ -1037,7 +1037,7 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
             while( pPor )
             {
                 if( pPor->IsGrfNumPortion() )
-                    ((SwGrfNumPortion*)pPor)->StopAnimation( pOut );
+                    static_cast<SwGrfNumPortion*>(pPor)->StopAnimation( pOut );
                 // Die Numerierungsportion sitzt immer vor dem ersten Zeichen,
                 // deshalb koennen wir abbrechen, sobald wir eine Portion mit
                 // einer Laenge > 0 erreicht haben.
@@ -1278,7 +1278,7 @@ bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     if( bFull )
     {
         if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()
-            || !((SwFldPortion*)rInf.GetLast())->IsFollow() ) )
+            || !static_cast<SwFldPortion*>(rInf.GetLast())->IsFollow() ) )
             Width( (sal_uInt16)( rInf.Width() - rInf.X() ) );
         else
         {

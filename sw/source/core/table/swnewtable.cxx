@@ -705,7 +705,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         SwTableBox* pBox = pLine->GetTabBoxes()[ nInsPos ];
         if( bBehind )
             ++nInsPos;
-        SwTableBoxFmt* pBoxFrmFmt = (SwTableBoxFmt*)pBox->GetFrmFmt();
+        SwTableBoxFmt* pBoxFrmFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
         ::_InsTblBox( pDoc, pTblNd, pLine, pBoxFrmFmt, pBox, nInsPos, nCnt );
         long nRowSpan = pBox->getRowSpan();
         long nDiff = i - nLastLine;
@@ -757,7 +757,7 @@ bool SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 pFrmFmt->SetFmtAttr( aFrmSz );
                 if( pNoRightBorder && ( !bBehind || j+1 < nCnt ) )
                     pFrmFmt->SetFmtAttr( *pNoRightBorder );
-                aInsFormat[j] = (SwTableBoxFmt*)pFrmFmt;
+                aInsFormat[j] = static_cast<SwTableBoxFmt*>(pFrmFmt);
             }
             else
                 pCurrBox->ChgFrmFmt( aInsFormat[j] );
@@ -943,7 +943,7 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, 0, 0 ) );
                 }
                 else
-                    pBox->ChgFrmFmt( (SwTableBoxFmt*)pNewFmt );
+                    pBox->ChgFrmFmt( static_cast<SwTableBoxFmt*>(pNewFmt) );
             }
         }
         if( pLastBox ) // Robust

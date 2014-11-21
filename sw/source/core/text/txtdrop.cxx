@@ -210,14 +210,14 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
                     const SwLinePortion* pFirstPor = pPara->GetFirstPortion();
                     if (pFirstPor && pFirstPor->IsDropPortion())
                     {
-                        const SwDropPortion* pDrop = (const SwDropPortion*)pFirstPor;
+                        const SwDropPortion* pDrop = static_cast<const SwDropPortion*>(pFirstPor);
                         rDropHeight = pDrop->GetDropHeight();
                         rDropDescent = pDrop->GetDropDescent();
                         if (const SwFont *pFont = pDrop->GetFnt())
                             rFontHeight = pFont->GetSize(pFont->GetActual()).Height();
                         else
                         {
-                            const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get(RES_CHRATR_FONTSIZE);
+                            const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get(RES_CHRATR_FONTSIZE));
                             rFontHeight = rItem.GetHeight();
                         }
                     }
@@ -231,7 +231,7 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
     {
         const sal_uInt16 nLines = rDrop.GetLines();
 
-        const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( RES_CHRATR_FONTSIZE );
+        const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(rSet.Get( RES_CHRATR_FONTSIZE ));
         rFontHeight = rItem.GetHeight();
         rDropHeight = nLines * rFontHeight;
         rDropDescent = rFontHeight / 5;

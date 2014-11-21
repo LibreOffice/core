@@ -170,7 +170,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         while( pPos )
         {
             if( pPos->InFixMargGrp() )
-                pLeft = (SwGluePortion*)pPos;
+                pLeft = static_cast<SwGluePortion*>(pPos);
             pPos = pPos->GetPortion();
             if( pPos == pRight)
                 pPos = 0;
@@ -193,7 +193,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
 
             if ( pRight->IsFlyPortion() && pRight->GetLen() )
             {
-                SwFlyPortion *pFly = (SwFlyPortion *)pRight;
+                SwFlyPortion *pFly = static_cast<SwFlyPortion *>(pRight);
                 if ( pFly->GetBlankWidth() < nRightGlue )
                 {
                     // Creating new TxtPortion, that takes over the
@@ -235,7 +235,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                          && pPrev->GetPortion()->IsHolePortion() )
                     {
                         SwHolePortion *pHolePor =
-                            (SwHolePortion*)pPrev->GetPortion();
+                            static_cast<SwHolePortion*>(pPrev->GetPortion());
                         if ( !pHolePor->GetPortion() ||
                              !pHolePor->GetPortion()->InFixMargGrp() )
                         {

@@ -217,12 +217,12 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
             else
                 aAttrSet.ClearItem( RES_CHRATR_COLOR );
             pDoc->GetNodes().InsBoxen( pTblNd, pLine, pBoxFrmFmt,
-                                    ((SwTxtNode*)pCNd)->GetTxtColl(),
+                                    static_cast<SwTxtNode*>(pCNd)->GetTxtColl(),
                                     &aAttrSet, nInsPos, nCnt );
         }
         else
             pDoc->GetNodes().InsBoxen( pTblNd, pLine, pBoxFrmFmt,
-                                    ((SwTxtNode*)pCNd)->GetTxtColl(),
+                                    static_cast<SwTxtNode*>(pCNd)->GetTxtColl(),
                                     pCNd->GetpSwAttrSet(),
                                     nInsPos, nCnt );
     }
@@ -288,7 +288,7 @@ SwTable::~SwTable()
     }
 
     // the table can be deleted if it's the last client of the FrameFormat
-    SwTableFmt* pFmt = (SwTableFmt*)GetFrmFmt();
+    SwTableFmt* pFmt = static_cast<SwTableFmt*>(GetFrmFmt());
     pFmt->Remove( this );               // remove
 
     if( !pFmt->GetDepends() )
@@ -386,16 +386,16 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     if( RES_ATTRSET_CHG == nWhich )
     {
-        if (pOld && pNew && SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+        if (pOld && pNew && SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
             RES_FRM_SIZE, false, (const SfxPoolItem**)&pNewSize))
         {
-            pOldSize = &((SwAttrSetChg*)pOld)->GetChgSet()->GetFrmSize();
+            pOldSize = &static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->GetFrmSize();
         }
     }
     else if( RES_FRM_SIZE == nWhich )
     {
-        pOldSize = (const SwFmtFrmSize*)pOld;
-        pNewSize = (const SwFmtFrmSize*)pNew;
+        pOldSize = static_cast<const SwFmtFrmSize*>(pOld);
+        pNewSize = static_cast<const SwFmtFrmSize*>(pNew);
     }
     else
         CheckRegistration( pOld, pNew );
@@ -1479,7 +1479,7 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
         while ( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
-            pRet = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+            pRet = (SwTableBox*)static_cast<SwCellFrm*>(pFrm)->GetTabBox();
     }
 
     // In case the layout doesn't exist yet or anything else goes wrong.
@@ -1539,7 +1539,7 @@ SwFrmFmt* SwTableLine::ClaimFrmFmt()
     // of an SwTableLineFmt object
     // If other SwTableLine objects currently listen to the same SwTableLineFmt as
     // this one, something needs to be done
-    SwTableLineFmt *pRet = (SwTableLineFmt*)GetFrmFmt();
+    SwTableLineFmt *pRet = static_cast<SwTableLineFmt*>(GetFrmFmt());
     SwIterator<SwTableLine,SwFmt> aIter( *pRet );
     for( SwTableLine* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
@@ -1759,7 +1759,7 @@ SwFrmFmt* SwTableBox::ClaimFrmFmt()
     // of an SwTableBoxFmt object
     // If other SwTableBox objects currently listen to the same SwTableBoxFmt as
     // this one, something needs to be done
-    SwTableBoxFmt *pRet = (SwTableBoxFmt*)GetFrmFmt();
+    SwTableBoxFmt *pRet = static_cast<SwTableBoxFmt*>(GetFrmFmt());
     SwIterator<SwTableBox,SwFmt> aIter( *pRet );
     for( SwTableBox* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
@@ -1911,12 +1911,12 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
         case RES_AUTOFMT_DOCNODE:
         {
             const SwTableNode* pTblNode = GetTableNode();
-            if( pTblNode && &pTblNode->GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+            if( pTblNode && &pTblNode->GetNodes() == static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
             {
                 if (!m_TabSortContentBoxes.empty())
                 {
                     SwNodeIndex aIdx( *m_TabSortContentBoxes[0]->GetSttNd() );
-                    ((SwAutoFmtGetDocNode&)rInfo).pCntntNode =
+                    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode =
                                     GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
                 }
                 return false;
@@ -1924,7 +1924,7 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
             break;
         }
         case RES_FINDNEARESTNODE:
-            if( GetFrmFmt() && ((SwFmtPageDesc&)GetFrmFmt()->GetFmtAttr(
+            if( GetFrmFmt() && static_cast<const SwFmtPageDesc&>(GetFrmFmt()->GetFmtAttr(
                 RES_PAGEDESC )).GetPageDesc() &&
                 !m_TabSortContentBoxes.empty() &&
                 m_TabSortContentBoxes[0]->GetSttNd()->GetNodes().IsDocNodes() )
@@ -1933,7 +1933,7 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
             break;
 
         case RES_CONTENT_VISIBLE:
-            ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *GetFrmFmt() );
+            static_cast<SwPtrMsgPoolItem&>(rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *GetFrmFmt() );
             return false;
     }
     return true;
@@ -1987,10 +1987,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
         if( bChgAlign )
         {
             pItem = &pTNd->SwCntntNode::GetAttr( RES_PARATR_ADJUST );
-            SvxAdjust eAdjust = ((SvxAdjustItem*)pItem)->GetAdjust();
+            SvxAdjust eAdjust = static_cast<const SvxAdjustItem*>(pItem)->GetAdjust();
             if( SVX_ADJUST_LEFT == eAdjust || SVX_ADJUST_BLOCK == eAdjust )
             {
-                SvxAdjustItem aAdjust( *(SvxAdjustItem*)pItem );
+                SvxAdjustItem aAdjust( *static_cast<const SvxAdjustItem*>(pItem) );
                 aAdjust.SetAdjust( SVX_ADJUST_RIGHT );
                 pTNd->SetAttr( aAdjust );
             }
@@ -2002,7 +2002,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
             pItem = 0;
 
         const Color* pOldNumFmtColor = rBox.GetSaveNumFmtColor();
-        const Color* pNewUserColor = pItem ? &((SvxColorItem*)pItem)->GetValue() : 0;
+        const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : 0;
 
         if( ( pNewUserColor && pOldNumFmtColor &&
                 *pNewUserColor == *pOldNumFmtColor ) ||
@@ -2076,7 +2076,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
         if( bChgAlign &&
             ( SfxItemState::SET != rBox.GetFrmFmt()->GetItemState(
                 RES_VERT_ORIENT, true, &pItem ) ||
-                text::VertOrientation::TOP == ((SwFmtVertOrient*)pItem)->GetVertOrient() ))
+                text::VertOrientation::TOP == static_cast<const SwFmtVertOrient*>(pItem)->GetVertOrient() ))
         {
             rBox.GetFrmFmt()->SetFmtAttr( SwFmtVertOrient( 0, text::VertOrientation::BOTTOM ));
         }
@@ -2119,7 +2119,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         // assign adjustment
         if( bChgAlign && pAttrSet && SfxItemState::SET == pAttrSet->GetItemState(
             RES_PARATR_ADJUST, false, &pItem ) &&
-                SVX_ADJUST_RIGHT == ((SvxAdjustItem*)pItem)->GetAdjust() )
+                SVX_ADJUST_RIGHT == static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
         {
             pTNd->SetAttr( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
         }
@@ -2130,7 +2130,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
             pItem = 0;
 
         const Color* pOldNumFmtColor = rBox.GetSaveNumFmtColor();
-        const Color* pNewUserColor = pItem ? &((SvxColorItem*)pItem)->GetValue() : 0;
+        const Color* pNewUserColor = pItem ? &static_cast<const SvxColorItem*>(pItem)->GetValue() : 0;
 
         if( ( pNewUserColor && pOldNumFmtColor &&
                 *pNewUserColor == *pOldNumFmtColor ) ||
@@ -2165,7 +2165,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         if( bChgAlign &&
             SfxItemState::SET == rBox.GetFrmFmt()->GetItemState(
             RES_VERT_ORIENT, false, &pItem ) &&
-            text::VertOrientation::BOTTOM == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
+            text::VertOrientation::BOTTOM == static_cast<const SwFmtVertOrient*>(pItem)->GetVertOrient() )
         {
             rBox.GetFrmFmt()->SetFmtAttr( SwFmtVertOrient( 0, text::VertOrientation::TOP ));
         }
@@ -2186,10 +2186,10 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         {
             case RES_ATTRSET_CHG:
             {
-                const SfxItemSet& rSet = *((SwAttrSetChg*)pNew)->GetChgSet();
+                const SfxItemSet& rSet = *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
                 if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT,
                                     false, (const SfxPoolItem**)&pNewFmt ) )
-                    nOldFmt = ((SwTblBoxNumFormat&)((SwAttrSetChg*)pOld)->
+                    nOldFmt = static_cast<const SwTblBoxNumFormat&>(static_cast<const SwAttrSetChg*>(pOld)->
                             GetChgSet()->Get( RES_BOXATR_FORMAT )).GetValue();
                 rSet.GetItemState( RES_BOXATR_FORMULA, false,
                                     (const SfxPoolItem**)&pNewFml );
@@ -2198,14 +2198,14 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 break;
             }
             case RES_BOXATR_FORMAT:
-                pNewFmt = (SwTblBoxNumFormat*)pNew;
-                nOldFmt = ((SwTblBoxNumFormat*)pOld)->GetValue();
+                pNewFmt = static_cast<const SwTblBoxNumFormat*>(pNew);
+                nOldFmt = static_cast<const SwTblBoxNumFormat*>(pOld)->GetValue();
                 break;
             case RES_BOXATR_FORMULA:
-                pNewFml = (SwTblBoxFormula*)pNew;
+                pNewFml = static_cast<const SwTblBoxFormula*>(pNew);
                 break;
             case RES_BOXATR_VALUE:
-                pNewVal = (SwTblBoxValue*)pNew;
+                pNewVal = static_cast<const SwTblBoxValue*>(pNew);
                 break;
         }
 
@@ -2394,7 +2394,7 @@ bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT, false, &pItem ))
         {
-            rFmtIndex = ((SwTblBoxNumFormat*)pItem)->GetValue();
+            rFmtIndex = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
             // Special casing for percent
             if( !rIsEmptyTxtNd && NUMBERFORMAT_PERCENT == pNumFmtr->GetType( rFmtIndex ))
             {
@@ -2554,14 +2554,14 @@ void SwTableBox::ActualiseValueBox()
     if( SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_FORMAT, true, &pFmtItem )
         && SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_VALUE, true, &pValItem ))
     {
-        const sal_uLong nFmtId = ((SwTblBoxNumFormat*)pFmtItem)->GetValue();
+        const sal_uLong nFmtId = static_cast<const SwTblBoxNumFormat*>(pFmtItem)->GetValue();
         sal_uLong nNdPos = ULONG_MAX;
         SvNumberFormatter* pNumFmtr = pFmt->GetDoc()->GetNumberFormatter();
 
         if( !pNumFmtr->IsTextFormat( nFmtId ) &&
             ULONG_MAX != (nNdPos = IsValidNumTxtNd( true )) )
         {
-            double fVal = ((SwTblBoxValue*)pValItem)->GetValue();
+            double fVal = static_cast<const SwTblBoxValue*>(pValItem)->GetValue();
             Color* pCol = 0;
             OUString sNewTxt;
             pNumFmtr->GetOutputString( fVal, nFmtId, sNewTxt, &pCol );

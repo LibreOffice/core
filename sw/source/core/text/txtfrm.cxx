@@ -488,7 +488,7 @@ void SwTxtFrm::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
                 {
                     if( !pPage )
                         pPage = FindPageFrm();
-                    pPage->RemoveFtn( this, (SwTxtFtn*)pHt );
+                    pPage->RemoveFtn( this, static_cast<const SwTxtFtn*>(pHt) );
                 }
             }
         }
@@ -946,8 +946,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         break;
         case RES_INS_TXT:
         {
-            nPos = ((SwInsTxt*)pNew)->nPos;
-            nLen = ((SwInsTxt*)pNew)->nLen;
+            nPos = static_cast<const SwInsTxt*>(pNew)->nPos;
+            nLen = static_cast<const SwInsTxt*>(pNew)->nLen;
             if( IsIdxInside( nPos, nLen ) )
             {
                 if( !nLen )
@@ -970,7 +970,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         break;
         case RES_DEL_CHR:
         {
-            nPos = ((SwDelChr*)pNew)->nPos;
+            nPos = static_cast<const SwDelChr*>(pNew)->nPos;
             InvalidateRange( SwCharRange( nPos, 1 ), -1 );
             lcl_SetWrong( *this, nPos, -1, true );
             lcl_SetScriptInval( *this, nPos );
@@ -981,8 +981,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         break;
         case RES_DEL_TXT:
         {
-            nPos = ((SwDelTxt*)pNew)->nStart;
-            nLen = ((SwDelTxt*)pNew)->nLen;
+            nPos = static_cast<const SwDelTxt*>(pNew)->nStart;
+            nLen = static_cast<const SwDelTxt*>(pNew)->nLen;
             const sal_Int32 m = -nLen;
             if( IsIdxInside( nPos, nLen ) )
             {
@@ -1000,8 +1000,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         break;
         case RES_UPDATE_ATTR:
         {
-            nPos = ((SwUpdateAttr*)pNew)->getStart();
-            nLen = ((SwUpdateAttr*)pNew)->getEnd() - nPos;
+            nPos = static_cast<const SwUpdateAttr*>(pNew)->getStart();
+            nLen = static_cast<const SwUpdateAttr*>(pNew)->getEnd() - nPos;
             if( IsIdxInside( nPos, nLen ) )
             {
                 // We need to reformat anyways, even if the invalidated
@@ -1014,7 +1014,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     nLen = 1;
 
                 _InvalidateRange( SwCharRange( nPos, nLen) );
-                const sal_uInt16 nTmp = ((SwUpdateAttr*)pNew)->getWhichAttr();
+                const sal_uInt16 nTmp = static_cast<const SwUpdateAttr*>(pNew)->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
@@ -1024,8 +1024,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 }
             }
 
-            if( isA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->getWhichAttr() ) &&
-                    hasA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->getFmtAttr() ) )
+            if( isA11yRelevantAttribute( static_cast<const SwUpdateAttr*>(pNew)->getWhichAttr() ) &&
+                    hasA11yRelevantAttribute( static_cast<const SwUpdateAttr*>(pNew)->getFmtAttr() ) )
             {
                 // #i104008#
                 SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
@@ -1064,7 +1064,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         case RES_TXTATR_FIELD:
         case RES_TXTATR_ANNOTATION:
             {
-                nPos = ((SwFmtFld*)pNew)->GetTxtFld()->GetStart();
+                nPos = static_cast<const SwFmtFld*>(pNew)->GetTxtFld()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                 {
                     if( pNew == pOld )
@@ -1086,9 +1086,9 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
         case RES_TXTATR_FTN :
         {
-            nPos = ((SwFmtFtn*)pNew)->GetTxtFtn()->GetStart();
+            nPos = static_cast<const SwFmtFtn*>(pNew)->GetTxtFtn()->GetStart();
             if( IsInFtn() || IsIdxInside( nPos, 1 ) )
-                Prepare( PREP_FTN, ((SwFmtFtn*)pNew)->GetTxtFtn() );
+                Prepare( PREP_FTN, static_cast<const SwFmtFtn*>(pNew)->GetTxtFtn() );
             break;
         }
 
@@ -1096,14 +1096,14 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             InvalidateLineNum();
 
-            SwAttrSet& rNewSet = *((SwAttrSetChg*)pNew)->GetChgSet();
+            const SwAttrSet& rNewSet = *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
             const SfxPoolItem* pItem = 0;
             int nClear = 0;
             sal_uInt16 nCount = rNewSet.Count();
 
             if( SfxItemState::SET == rNewSet.GetItemState( RES_TXTATR_FTN, false, &pItem ))
             {
-                nPos = ((SwFmtFtn*)pItem)->GetTxtFtn()->GetStart();
+                nPos = static_cast<const SwFmtFtn*>(pItem)->GetTxtFtn()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                     Prepare( PREP_FTN, pNew );
                 nClear = 0x01;
@@ -1112,11 +1112,11 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
             if( SfxItemState::SET == rNewSet.GetItemState( RES_TXTATR_FIELD, false, &pItem ))
             {
-                nPos = ((SwFmtFld*)pItem)->GetTxtFld()->GetStart();
+                nPos = static_cast<const SwFmtFld*>(pItem)->GetTxtFld()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                 {
                     const SfxPoolItem& rOldItem =
-                        ((SwAttrSetChg*)pOld)->GetChgSet()->Get( RES_TXTATR_FIELD );
+                        static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->Get( RES_TXTATR_FIELD );
                     if( pItem == &rOldItem )
                     {
                         InvalidatePage();
@@ -1244,8 +1244,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
                 if( nClear )
                 {
-                    SwAttrSetChg aOldSet( *(SwAttrSetChg*)pOld );
-                    SwAttrSetChg aNewSet( *(SwAttrSetChg*)pNew );
+                    SwAttrSetChg aOldSet( *static_cast<const SwAttrSetChg*>(pOld) );
+                    SwAttrSetChg aNewSet( *static_cast<const SwAttrSetChg*>(pNew) );
 
                     if( 0x01 & nClear )
                     {
@@ -1298,10 +1298,10 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             if( pOld && pNew )
             {
-                const SwDocPosUpdate *pDocPos = (const SwDocPosUpdate*)pOld;
+                const SwDocPosUpdate *pDocPos = static_cast<const SwDocPosUpdate*>(pOld);
                 if( pDocPos->nDocPos <= maFrm.Top() )
                 {
-                    const SwFmtFld *pFld = (const SwFmtFld *)pNew;
+                    const SwFmtFld *pFld = static_cast<const SwFmtFld *>(pNew);
                     InvalidateRange(
                         SwCharRange( pFld->GetTxtFld()->GetStart(), 1 ) );
                 }
@@ -1343,7 +1343,7 @@ bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
 {
     if ( RES_VIRTPAGENUM_INFO == rHnt.Which() && IsInDocBody() && ! IsFollow() )
     {
-        SwVirtPageNumInfo &rInfo = (SwVirtPageNumInfo&)rHnt;
+        SwVirtPageNumInfo &rInfo = static_cast<SwVirtPageNumInfo&>(rHnt);
         const SwPageFrm *pPage = FindPageFrm();
         if ( pPage )
         {
@@ -2516,7 +2516,7 @@ void SwTxtFrm::RecalcAllLines()
             if ( bRestart && pPrv && pPrv->FindPageFrm() != FindPageFrm() )
                 pPrv = 0;
 
-            nNewNum = pPrv ? ((SwTxtFrm*)pPrv)->GetAllLines() : 0;
+            nNewNum = pPrv ? static_cast<SwTxtFrm*>(pPrv)->GetAllLines() : 0;
         }
         if ( rLineNum.IsCount() )
             nNewNum += GetThisLines();

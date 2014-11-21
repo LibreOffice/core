@@ -908,7 +908,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
     if ( bRight )
     {
         bool bRecurse = pPor && pPor->IsMultiPortion() &&
-                           ((SwMultiPortion*)pPor)->IsBidi();
+                           static_cast<const SwMultiPortion*>(pPor)->IsBidi();
 
         // 1. special case: at beginning of bidi portion
         if ( bRecurse && nIdx == nPos )
@@ -930,7 +930,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
 
         // 2. special case: at beginning of portion after bidi portion
         else if ( pLast && pLast->IsMultiPortion() &&
-                 ((SwMultiPortion*)pLast)->IsBidi() && nIdx == nPos )
+                 static_cast<const SwMultiPortion*>(pLast)->IsBidi() && nIdx == nPos )
         {
             // enter bidi portion
             if ( nCrsrLevel != nDefaultDir )
@@ -944,7 +944,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         // Recursion
         if ( bRecurse )
         {
-            const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
+            const SwLineLayout& rLine = static_cast<const SwMultiPortion*>(pPor)->GetRoot();
             sal_Int32 nTmpPos = nPos - nIdx;
             bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
@@ -966,7 +966,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
     }
     else
     {
-        bool bRecurse = pPor && pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi();
+        bool bRecurse = pPor && pPor->IsMultiPortion() && static_cast<const SwMultiPortion*>(pPor)->IsBidi();
 
         // 1. special case: at beginning of bidi portion
         if ( bRecurse && nIdx == nPos )
@@ -980,7 +980,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
 
         // 2. special case: at beginning of portion after bidi portion
         else if ( pLast && pLast->IsMultiPortion() &&
-                 ((SwMultiPortion*)pLast)->IsBidi() && nIdx == nPos )
+                 static_cast<const SwMultiPortion*>(pLast)->IsBidi() && nIdx == nPos )
         {
             nPos = nPos - pLast->GetLen();
 
@@ -1003,7 +1003,7 @@ static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, sal_Int32 nI
         // go forward
         if ( bRecurse )
         {
-            const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
+            const SwLineLayout& rLine = static_cast<const SwMultiPortion*>(pPor)->GetRoot();
             sal_Int32 nTmpPos = nPos - nIdx;
             bool bTmpForward = ! bRight;
             sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
@@ -1257,7 +1257,7 @@ bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
     if( pTmpFollow )
     {
         aCharBox.Pos().Y() = pTmpFollow->Frm().Top() + 1;
-        return ((SwTxtFrm*)pTmpFollow)->GetKeyCrsrOfst( pPam->GetPoint(),
+        return static_cast<const SwTxtFrm*>(pTmpFollow)->GetKeyCrsrOfst( pPam->GetPoint(),
                                                      aCharBox.Pos() );
     }
     return SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
@@ -1297,17 +1297,17 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
     if( !rFill.bColumn && GetUpper()->IsColBodyFrm() ) // ColumnFrms now with BodyFrm
     {
         const SwColumnFrm* pTmp =
-            (SwColumnFrm*)GetUpper()->GetUpper()->GetUpper()->Lower(); // The 1st column
+            static_cast<const SwColumnFrm*>(GetUpper()->GetUpper()->GetUpper()->Lower()); // The 1st column
         // The first SwFrm in BodyFrm of the first column
-        const SwFrm* pFrm = ((SwLayoutFrm*)pTmp->Lower())->Lower();
+        const SwFrm* pFrm = static_cast<const SwLayoutFrm*>(pTmp->Lower())->Lower();
         sal_uInt16 nNextCol = 0;
         // In which column do we end up in?
         while( rFill.X() > pTmp->Frm().Right() && pTmp->GetNext() )
         {
-            pTmp = (SwColumnFrm*)pTmp->GetNext();
-            if( ((SwLayoutFrm*)pTmp->Lower())->Lower() ) // ColumnFrms now with BodyFrm
+            pTmp = static_cast<const SwColumnFrm*>(pTmp->GetNext());
+            if( static_cast<const SwLayoutFrm*>(pTmp->Lower())->Lower() ) // ColumnFrms now with BodyFrm
             {
-                pFrm = ((SwLayoutFrm*)pTmp->Lower())->Lower();
+                pFrm = static_cast<const SwLayoutFrm*>(pTmp->Lower())->Lower();
                 nNextCol = 0;
             }
             else
@@ -1335,7 +1335,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 rFill.bColumn = true;
                 if( rFill.pPos )
                 {
-                    SwTxtNode* pTxtNd = ((SwTxtFrm*)pFrm)->GetTxtNode();
+                    SwTxtNode* pTxtNd = const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pFrm))->GetTxtNode();
                     rFill.pPos->nNode = *pTxtNd;
                     rFill.pPos->nContent.Assign(
                             pTxtNd, pTxtNd->GetTxt().getLength());
@@ -1347,7 +1347,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 }
                 else
                     rFill.aFrm = pFrm->Frm();
-                ((SwTxtFrm*)pFrm)->FillCrsrPos( rFill );
+                static_cast<const SwTxtFrm*>(pFrm)->FillCrsrPos( rFill );
             }
             return;
         }
@@ -1526,8 +1526,8 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                         else
                         {
                             const SvxTabStopItem& rTab =
-                                (const SvxTabStopItem &)pSet->
-                                GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
+                                static_cast<const SvxTabStopItem &>(pSet->
+                                GetPool()->GetDefaultItem( RES_PARATR_TABSTOP ));
                             const SwTwips nDefTabDist = rTab[0].GetTabPos();
                             nRightTab = nLeftTab - nTxtLeft;
                             nRightTab /= nDefTabDist;

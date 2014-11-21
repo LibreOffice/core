@@ -242,7 +242,7 @@ sal_uInt16 SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
             nOfst = nOfst + nPorAscent;
 
             if ( ! pPor || ! pPor->IsMultiPortion() ||
-                 ! ((SwMultiPortion*)pPor)->IsRuby() )
+                 ! static_cast<const SwMultiPortion*>(pPor)->IsRuby() )
             {
                 // Portions which are bigger than on grid distance are
                 // centered inside the whole line.
@@ -306,7 +306,7 @@ static bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
     bool bRet = false;
     while( pPor && !bRet )
     {
-        bRet = pPor->InFldGrp() && ((SwFldPortion*)pPor)->HasFollow();
+        bRet = pPor->InFldGrp() && static_cast<const SwFldPortion*>(pPor)->HasFollow();
         if( !pPor->GetPortion() || !pPor->GetPortion()->InFldGrp() )
             break;
         pPor = pPor->GetPortion();

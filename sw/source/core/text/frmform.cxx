@@ -120,11 +120,11 @@ void _ValidateBodyFrm( SwFrm *pFrm )
             pFrm->Calc();
         else
         {
-            const bool bOld = ((SwSectionFrm*)pFrm)->IsCntntLocked();
-            ((SwSectionFrm*)pFrm)->SetCntntLock( true );
+            const bool bOld = static_cast<SwSectionFrm*>(pFrm)->IsCntntLocked();
+            static_cast<SwSectionFrm*>(pFrm)->SetCntntLock( true );
             pFrm->Calc();
             if( !bOld )
-                ((SwSectionFrm*)pFrm)->SetCntntLock( false );
+                static_cast<SwSectionFrm*>(pFrm)->SetCntntLock( false );
         }
     }
 }
@@ -621,13 +621,13 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
                     {
                         if( !pEndBoss )
                             pEndBoss = pFoll->FindFtnBossFrm();
-                        pEndBoss->ChangeFtnRef( pFoll, (SwTxtFtn*)pHt, this );
+                        pEndBoss->ChangeFtnRef( pFoll, static_cast<const SwTxtFtn*>(pHt), this );
                     }
                     else
                     {
                         if( !pFtnBoss )
                             pFtnBoss = pFoll->FindFtnBossFrm( true );
-                        pFtnBoss->ChangeFtnRef( pFoll, (SwTxtFtn*)pHt, this );
+                        pFtnBoss->ChangeFtnRef( pFoll, static_cast<const SwTxtFtn*>(pHt), this );
                     }
                     SetFtn( true );
                 }
@@ -674,7 +674,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
     // The Paste sends a Modify() to me
     // I lock myself, so that my data does not disappear
     SwTxtFrmLocker aLock( this );
-    SwTxtFrm *pNew = (SwTxtFrm *)(GetTxtNode()->MakeFrm( this ));
+    SwTxtFrm *pNew = static_cast<SwTxtFrm *>(GetTxtNode()->MakeFrm( this ));
 
     pNew->SetFollow( GetFollow() );
     SetFollow( pNew );
@@ -714,13 +714,13 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const sal_Int32 nTxtPos )
                     {
                         if( !pEndBoss )
                             pEndBoss = FindFtnBossFrm();
-                        pEndBoss->ChangeFtnRef( this, (SwTxtFtn*)pHt, pNew );
+                        pEndBoss->ChangeFtnRef( this, static_cast<const SwTxtFtn*>(pHt), pNew );
                     }
                     else
                     {
                         if( !pFtnBoss )
                             pFtnBoss = FindFtnBossFrm( true );
-                        pFtnBoss->ChangeFtnRef( this, (SwTxtFtn*)pHt, pNew );
+                        pFtnBoss->ChangeFtnRef( this, static_cast<const SwTxtFtn*>(pHt), pNew );
                     }
                     pNew->SetFtn( true );
                 }

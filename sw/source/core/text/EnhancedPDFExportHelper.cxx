@@ -1595,7 +1595,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                             vcl::PDFNote aNote;
 
                             // Use the NumberFormatter to get the date string:
-                            const SwPostItField* pField = (SwPostItField*)pFirst->GetField();
+                            const SwPostItField* pField = static_cast<SwPostItField*>(pFirst->GetField());
                             SvNumberFormatter* pNumFormatter = pDoc->GetNumberFormatter();
                             const Date aDateDiff( pField->GetDate() -
                                                  *pNumFormatter->GetNullDate() );
@@ -1847,7 +1847,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                     // Destination Rectangle
                     const SwGetRefField* pField =
-                        (SwGetRefField*)pFirst->GetField();
+                        static_cast<SwGetRefField*>(pFirst->GetField());
                     const OUString& rRefName = pField->GetSetRefName();
                     mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
                     const SwRect& rDestRect = mrSh.GetCharRect();

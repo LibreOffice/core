@@ -143,9 +143,9 @@ const SfxItemSet* GetItemSet( const SfxPoolItem& rAttr )
     else
     {
         // Get the attributes from the template
-        SwCharFmt* pFmt = RES_TXTATR_INETFMT == rAttr.Which() ?
-                        ((SwFmtINetFmt&)rAttr).GetTxtINetFmt()->GetCharFmt() :
-                        ((SwFmtCharFmt&)rAttr).GetCharFmt();
+        const SwCharFmt* pFmt = RES_TXTATR_INETFMT == rAttr.Which() ?
+                        static_cast<const SwFmtINetFmt&>(rAttr).GetTxtINetFmt()->GetCharFmt() :
+                        static_cast<const SwFmtCharFmt&>(rAttr).GetCharFmt();
         if( pFmt )
         {
             pSet = &pFmt->GetAttrSet();
@@ -225,7 +225,7 @@ static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                 const SwCharFmt* pTmpFmt = rINetAttr.GetCharFmt();
                 const SfxPoolItem* pItem;
                 if (SfxItemState::SET == pTmpFmt->GetItemState(RES_CHRATR_COLOR, true, &pItem))
-                    *pColor = ((SvxColorItem*)pItem)->GetValue();
+                    *pColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 rINetAttr.SetVisited(true);
             }
             return true;
@@ -598,11 +598,11 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         if ( pTwoLineAttr )
         {
              const SfxPoolItem* pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
-             bTwoLineAct = ((SvxTwoLinesItem*)pTwoLineItem)->GetValue();
+             bTwoLineAct = static_cast<const SvxTwoLinesItem*>(pTwoLineItem)->GetValue();
         }
         else
             bTwoLineAct =
-                ((SvxTwoLinesItem*)pDefaultArray[ nTwoLineStack ])->GetValue();
+                static_cast<const SvxTwoLinesItem*>(pDefaultArray[ nTwoLineStack ])->GetValue();
 
         if ( bTwoLineAct )
             return;
@@ -614,12 +614,12 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
         if ( pRotateAttr )
         {
             const SfxPoolItem* pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
-            rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
+            rFnt.SetVertical( static_cast<const SvxCharRotateItem*>(pRotateItem)->GetValue(),
                                bVertLayout );
         }
         else
             rFnt.SetVertical(
-                ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue(),
+                static_cast<const SvxCharRotateItem*>(pDefaultArray[ nRotateStack ])->GetValue(),
                  bVertLayout
             );
     }
@@ -637,42 +637,42 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
     switch ( rItem.Which() )
     {
         case RES_CHRATR_CASEMAP :
-            rFnt.SetCaseMap( ((SvxCaseMapItem&)rItem).GetCaseMap() );
+            rFnt.SetCaseMap( static_cast<const SvxCaseMapItem&>(rItem).GetCaseMap() );
             break;
         case RES_CHRATR_COLOR :
-            rFnt.SetColor( ((SvxColorItem&)rItem).GetValue() );
+            rFnt.SetColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_CONTOUR :
-            rFnt.SetOutline( ((SvxContourItem&)rItem).GetValue() );
+            rFnt.SetOutline( static_cast<const SvxContourItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_CROSSEDOUT :
-            rFnt.SetStrikeout( ((SvxCrossedOutItem&)rItem).GetStrikeout() );
+            rFnt.SetStrikeout( static_cast<const SvxCrossedOutItem&>(rItem).GetStrikeout() );
             break;
         case RES_CHRATR_ESCAPEMENT :
-            rFnt.SetEscapement( ((SvxEscapementItem&)rItem).GetEsc() );
-            rFnt.SetProportion( ((SvxEscapementItem&)rItem).GetProp() );
+            rFnt.SetEscapement( static_cast<const SvxEscapementItem&>(rItem).GetEsc() );
+            rFnt.SetProportion( static_cast<const SvxEscapementItem&>(rItem).GetProp() );
             break;
         case RES_CHRATR_FONT :
-            rFnt.SetName( ((SvxFontItem&)rItem).GetFamilyName(), SW_LATIN );
-            rFnt.SetStyleName( ((SvxFontItem&)rItem).GetStyleName(), SW_LATIN );
-            rFnt.SetFamily( ((SvxFontItem&)rItem).GetFamily(), SW_LATIN );
-            rFnt.SetPitch( ((SvxFontItem&)rItem).GetPitch(), SW_LATIN );
-            rFnt.SetCharSet( ((SvxFontItem&)rItem).GetCharSet(), SW_LATIN );
+            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SW_LATIN );
+            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SW_LATIN );
+            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SW_LATIN );
+            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SW_LATIN );
+            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SW_LATIN );
             break;
         case RES_CHRATR_FONTSIZE :
-            rFnt.SetSize(Size(0,((SvxFontHeightItem&)rItem).GetHeight() ), SW_LATIN );
+            rFnt.SetSize(Size(0,static_cast<const SvxFontHeightItem&>(rItem).GetHeight() ), SW_LATIN );
             break;
         case RES_CHRATR_KERNING :
-            rFnt.SetFixKerning( ((SvxKerningItem&)rItem).GetValue() );
+            rFnt.SetFixKerning( static_cast<const SvxKerningItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_LANGUAGE :
-            rFnt.SetLanguage( ((SvxLanguageItem&)rItem).GetLanguage(), SW_LATIN );
+            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SW_LATIN );
             break;
         case RES_CHRATR_POSTURE :
-            rFnt.SetItalic( ((SvxPostureItem&)rItem).GetPosture(), SW_LATIN );
+            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SW_LATIN );
             break;
         case RES_CHRATR_SHADOWED :
-            rFnt.SetShadow( ((SvxShadowedItem&)rItem).GetValue() );
+            rFnt.SetShadow( static_cast<const SvxShadowedItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_UNDERLINE :
         {
@@ -686,8 +686,8 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             if( (mpShell && !mpShell->GetWin()) ||
                 (pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue()) )
             {
-                rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetLineStyle() );
-                rFnt.SetUnderColor( ((SvxUnderlineItem&)rItem).GetColor() );
+                rFnt.SetUnderline( static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle() );
+                rFnt.SetUnderColor( static_cast<const SvxUnderlineItem&>(rItem).GetColor() );
             }
             break;
         }
@@ -713,17 +713,17 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             break;
         }
         case RES_CHRATR_OVERLINE :
-            rFnt.SetOverline( ((SvxOverlineItem&)rItem).GetLineStyle() );
-            rFnt.SetOverColor( ((SvxOverlineItem&)rItem).GetColor() );
+            rFnt.SetOverline( static_cast<const SvxOverlineItem&>(rItem).GetLineStyle() );
+            rFnt.SetOverColor( static_cast<const SvxOverlineItem&>(rItem).GetColor() );
             break;
         case RES_CHRATR_WEIGHT :
-            rFnt.SetWeight( ((SvxWeightItem&)rItem).GetWeight(), SW_LATIN );
+            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SW_LATIN );
             break;
         case RES_CHRATR_WORDLINEMODE :
-            rFnt.SetWordLineMode( ((SvxWordLineModeItem&)rItem).GetValue() );
+            rFnt.SetWordLineMode( static_cast<const SvxWordLineModeItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_AUTOKERN :
-            if( ((SvxAutoKernItem&)rItem).GetValue() )
+            if( static_cast<const SvxAutoKernItem&>(rItem).GetValue() )
             {
                 rFnt.SetAutoKern( ( !mpIDocumentSettingAccess ||
                                     !mpIDocumentSettingAccess->get(IDocumentSettingAccess::KERN_ASIAN_PUNCTUATION) ) ?
@@ -734,67 +734,67 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
                 rFnt.SetAutoKern( 0 );
             break;
         case RES_CHRATR_BLINK :
-            rFnt.SetBlink( ((SvxBlinkItem&)rItem).GetValue() );
+            rFnt.SetBlink( static_cast<const SvxBlinkItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_BACKGROUND :
-            rFnt.SetBackColor(new Color( ((SvxBrushItem&)rItem).GetColor() ) );
+            rFnt.SetBackColor(new Color( static_cast<const SvxBrushItem&>(rItem).GetColor() ) );
             break;
         case RES_CHRATR_HIGHLIGHT :
-            rFnt.SetHighlightColor( ((SvxBrushItem&)rItem).GetColor() );
+            rFnt.SetHighlightColor( static_cast<const SvxBrushItem&>(rItem).GetColor() );
             break;
         case RES_CHRATR_CJK_FONT :
-            rFnt.SetName( ((SvxFontItem&)rItem).GetFamilyName(), SW_CJK );
-            rFnt.SetStyleName( ((SvxFontItem&)rItem).GetStyleName(), SW_CJK );
-            rFnt.SetFamily( ((SvxFontItem&)rItem).GetFamily(), SW_CJK );
-            rFnt.SetPitch( ((SvxFontItem&)rItem).GetPitch(), SW_CJK );
-            rFnt.SetCharSet( ((SvxFontItem&)rItem).GetCharSet(), SW_CJK );
+            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SW_CJK );
+            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SW_CJK );
+            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SW_CJK );
+            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SW_CJK );
+            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SW_CJK );
             break;
         case RES_CHRATR_CJK_FONTSIZE :
-            rFnt.SetSize(Size( 0, ((SvxFontHeightItem&)rItem).GetHeight()), SW_CJK);
+            rFnt.SetSize(Size( 0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight()), SW_CJK);
             break;
         case RES_CHRATR_CJK_LANGUAGE :
-            rFnt.SetLanguage( ((SvxLanguageItem&)rItem).GetLanguage(), SW_CJK );
+            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SW_CJK );
             break;
         case RES_CHRATR_CJK_POSTURE :
-            rFnt.SetItalic( ((SvxPostureItem&)rItem).GetPosture(), SW_CJK );
+            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SW_CJK );
             break;
         case RES_CHRATR_CJK_WEIGHT :
-            rFnt.SetWeight( ((SvxWeightItem&)rItem).GetWeight(), SW_CJK );
+            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SW_CJK );
             break;
         case RES_CHRATR_CTL_FONT :
-            rFnt.SetName( ((SvxFontItem&)rItem).GetFamilyName(), SW_CTL );
-            rFnt.SetStyleName( ((SvxFontItem&)rItem).GetStyleName(), SW_CTL );
-            rFnt.SetFamily( ((SvxFontItem&)rItem).GetFamily(), SW_CTL );
-            rFnt.SetPitch( ((SvxFontItem&)rItem).GetPitch(), SW_CTL );
-            rFnt.SetCharSet( ((SvxFontItem&)rItem).GetCharSet(), SW_CTL );
+            rFnt.SetName( static_cast<const SvxFontItem&>(rItem).GetFamilyName(), SW_CTL );
+            rFnt.SetStyleName( static_cast<const SvxFontItem&>(rItem).GetStyleName(), SW_CTL );
+            rFnt.SetFamily( static_cast<const SvxFontItem&>(rItem).GetFamily(), SW_CTL );
+            rFnt.SetPitch( static_cast<const SvxFontItem&>(rItem).GetPitch(), SW_CTL );
+            rFnt.SetCharSet( static_cast<const SvxFontItem&>(rItem).GetCharSet(), SW_CTL );
             break;
         case RES_CHRATR_CTL_FONTSIZE :
-            rFnt.SetSize(Size(0, ((SvxFontHeightItem&)rItem).GetHeight() ), SW_CTL);
+            rFnt.SetSize(Size(0, static_cast<const SvxFontHeightItem&>(rItem).GetHeight() ), SW_CTL);
             break;
         case RES_CHRATR_CTL_LANGUAGE :
-            rFnt.SetLanguage( ((SvxLanguageItem&)rItem).GetLanguage(), SW_CTL );
+            rFnt.SetLanguage( static_cast<const SvxLanguageItem&>(rItem).GetLanguage(), SW_CTL );
             break;
         case RES_CHRATR_CTL_POSTURE :
-            rFnt.SetItalic( ((SvxPostureItem&)rItem).GetPosture(), SW_CTL );
+            rFnt.SetItalic( static_cast<const SvxPostureItem&>(rItem).GetPosture(), SW_CTL );
             break;
         case RES_CHRATR_CTL_WEIGHT :
-            rFnt.SetWeight( ((SvxWeightItem&)rItem).GetWeight(), SW_CTL );
+            rFnt.SetWeight( static_cast<const SvxWeightItem&>(rItem).GetWeight(), SW_CTL );
             break;
         case RES_CHRATR_EMPHASIS_MARK :
             rFnt.SetEmphasisMark(
-                     ((SvxEmphasisMarkItem&)rItem).GetEmphasisMark()
+                     static_cast<const SvxEmphasisMarkItem&>(rItem).GetEmphasisMark()
                      );
             break;
         case RES_CHRATR_SCALEW :
-            rFnt.SetPropWidth( ((SvxCharScaleWidthItem&)rItem).GetValue() );
+            rFnt.SetPropWidth( static_cast<const SvxCharScaleWidthItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_RELIEF :
-            rFnt.SetRelief( (FontRelief)((SvxCharReliefItem&)rItem).GetValue() );
+            rFnt.SetRelief( (FontRelief)static_cast<const SvxCharReliefItem&>(rItem).GetValue() );
             break;
         case RES_CHRATR_HIDDEN :
             if( mpShell && mpShell->GetWin())
             {
-                if ( ((SvxCharHiddenItem&)rItem).GetValue() )
+                if ( static_cast<const SvxCharHiddenItem&>(rItem).GetValue() )
                     rFnt.SetUnderline( UNDERLINE_DOTTED );
                 else
                     ActivateTop( rFnt, RES_CHRATR_UNDERLINE );
@@ -819,14 +819,14 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             if ( pTwoLineAttr )
             {
                 const SfxPoolItem* pTwoLineItem = CharFmt::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
-                bTwoLineAct = ((SvxTwoLinesItem*)pTwoLineItem)->GetValue();
+                bTwoLineAct = static_cast<const SvxTwoLinesItem*>(pTwoLineItem)->GetValue();
             }
             else
                 bTwoLineAct =
-                    ((SvxTwoLinesItem*)pDefaultArray[ nTwoLineStack ])->GetValue();
+                    static_cast<const SvxTwoLinesItem*>(pDefaultArray[ nTwoLineStack ])->GetValue();
 
             if ( !bTwoLineAct )
-                rFnt.SetVertical( ((SvxCharRotateItem&)rItem).GetValue(),
+                rFnt.SetVertical( static_cast<const SvxCharRotateItem&>(rItem).GetValue(),
                                    bVertLayout );
 
             break;
@@ -839,7 +839,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             // two line is activated, if
             // 1. no ruby attribute is set and
             // 2. attribute is active
-            if ( !bRuby && ((SvxTwoLinesItem&)rItem).GetValue() )
+            if ( !bRuby && static_cast<const SvxTwoLinesItem&>(rItem).GetValue() )
             {
                 rFnt.SetVertical( 0, bVertLayout );
                 break;
@@ -856,12 +856,12 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             if ( pRotateAttr )
             {
                 const SfxPoolItem* pRotateItem = CharFmt::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
-                rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
+                rFnt.SetVertical( static_cast<const SvxCharRotateItem*>(pRotateItem)->GetValue(),
                                    bVertLayout );
             }
             else
                 rFnt.SetVertical(
-                    ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue(),
+                    static_cast<const SvxCharRotateItem*>(pDefaultArray[ nRotateStack ])->GetValue(),
                      bVertLayout
                 );
             break;

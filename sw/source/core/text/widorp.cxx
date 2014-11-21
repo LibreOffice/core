@@ -47,7 +47,7 @@ namespace
 inline bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
     OSL_ENSURE( !pFrm->IsFollow() || !pFrm->GetPrev() ||
-            ((const SwTxtFrm*)pFrm->GetPrev())->GetFollow() == pFrm,
+            static_cast<const SwTxtFrm*>(pFrm->GetPrev())->GetFollow() == pFrm,
             "IsNastyFollow: Was ist denn hier los?" );
     return  pFrm->IsFollow() && pFrm->GetPrev();
 }

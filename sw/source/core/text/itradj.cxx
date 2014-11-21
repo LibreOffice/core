@@ -301,10 +301,10 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
         }
 
         if ( pPos->InTxtGrp() )
-            nGluePortion = nGluePortion + ((SwTxtPortion*)pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
+            nGluePortion = nGluePortion + static_cast<SwTxtPortion*>(pPos)->GetSpaceCnt( GetInfo(), nCharCnt );
         else if( pPos->IsMultiPortion() )
         {
-            SwMultiPortion* pMulti = (SwMultiPortion*)pPos;
+            SwMultiPortion* pMulti = static_cast<SwMultiPortion*>(pPos);
             // a multiportion with a tabulator inside breaks the text adjustment
             // a ruby portion will not be stretched by text adjustment
             // a double line portion takes additional space for each blank
@@ -319,9 +319,9 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                 nCharCnt = 0;
             }
             else if( pMulti->IsDouble() )
-                nGluePortion = nGluePortion + ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
+                nGluePortion = nGluePortion + static_cast<SwDoubleLinePortion*>(pMulti)->GetSpaceCnt();
             else if ( pMulti->IsBidi() )
-                nGluePortion = nGluePortion + ((SwBidiPortion*)pMulti)->GetSpaceCnt( GetInfo() );  // i60594
+                nGluePortion = nGluePortion + static_cast<SwBidiPortion*>(pMulti)->GetSpaceCnt( GetInfo() );  // i60594
         }
 
         if( pPos->InGlueGrp() )
@@ -369,13 +369,13 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                     }
 
                     pCurrent->SetLLSpaceAdd( nSpaceAdd , nSpaceIdx );
-                    pPos->Width( ( (SwGluePortion*)pPos )->GetFixWidth() );
+                    pPos->Width( static_cast<SwGluePortion*>(pPos)->GetFixWidth() );
                 }
                 else if ( IsOneBlock() && nCharCnt > 1 )
                 {
                     const long nSpaceAdd = - nGluePortionWidth / ( nCharCnt - 1 );
                     pCurrent->SetLLSpaceAdd( nSpaceAdd, nSpaceIdx );
-                    pPos->Width( ( (SwGluePortion*)pPos )->GetFixWidth() );
+                    pPos->Width( static_cast<SwGluePortion*>(pPos)->GetFixWidth() );
                 }
 
                 nSpaceIdx++;
@@ -457,7 +457,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
             else
             {
                 nRest = ! bNoCompression ?
-                        ((SwGluePortion*)pPos)->GetPrtGlue() :
+                        static_cast<SwGluePortion*>(pPos)->GetPrtGlue() :
                         0;
 
                 bNoCompression = false;
@@ -517,7 +517,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
             if ( pPos->InTabGrp() )
                 // set fix width to width
-                ((SwTabPortion*)pPos)->SetFixWidth( pPos->Width() );
+                static_cast<SwTabPortion*>(pPos)->SetFixWidth( pPos->Width() );
 
             if ( ++nKanaIdx < pCurrent->GetKanaComp().size() )
                 nCompress = ( pCurrent->GetKanaComp() )[ nKanaIdx ];
@@ -602,7 +602,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 
     while( pPos )
     {
-        if ( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasTabulator() )
+        if ( pPos->IsMultiPortion() && static_cast<SwMultiPortion*>(pPos)->HasTabulator() )
             bMultiTab = true;
         else if( pPos->InFixMargGrp() &&
                ( bTabCompat ? ! pPos->InTabGrp() : ! bMultiTab ) )
@@ -611,7 +611,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
             // in non tab compat mode we do not want to change margins if we
             // found a multi portion with tabs
             if( SVX_ADJUST_RIGHT == GetAdjust() )
-                ((SwGluePortion*)pPos)->MoveAllGlue( pGlue );
+                static_cast<SwGluePortion*>(pPos)->MoveAllGlue( pGlue );
             else
             {
                 // We set the first text portion to right-aligned and the last one
@@ -619,7 +619,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                 // The first text portion gets the whole Glue, but only if we have
                 // more than one line.
                 if( bComplete && GetInfo().GetTxt().getLength() == nLen )
-                    ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
+                    static_cast<SwGluePortion*>(pPos)->MoveHalfGlue( pGlue );
                 else
                 {
                     if ( ! bTabCompat )
@@ -629,23 +629,23 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                             // If we only have a left and right margin, the
                             // margins share the Glue.
                             if( nLen + pPos->GetLen() >= pCurrent->GetLen() )
-                                ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
+                                static_cast<SwGluePortion*>(pPos)->MoveHalfGlue( pGlue );
                             else
-                                ((SwGluePortion*)pPos)->MoveAllGlue( pGlue );
+                                static_cast<SwGluePortion*>(pPos)->MoveAllGlue( pGlue );
                         }
                         else
                         {
                          // The last text portion retains its Glue.
                          if( !pPos->IsMarginPortion() )
-                              ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
+                              static_cast<SwGluePortion*>(pPos)->MoveHalfGlue( pGlue );
                          }
                      }
                      else
-                        ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
+                        static_cast<SwGluePortion*>(pPos)->MoveHalfGlue( pGlue );
                 }
             }
 
-            pGlue = (SwGluePortion*)pPos;
+            pGlue = static_cast<SwGluePortion*>(pPos);
             bComplete = false;
         }
         nLen = nLen + pPos->GetLen();
@@ -754,8 +754,8 @@ void SwTxtAdjuster::CalcDropAdjust()
         if( pPor->InGlueGrp() && pPor->GetPortion()
               && pPor->GetPortion()->IsDropPortion() )
         {
-            const SwLinePortion *pDropPor = (SwDropPortion*) pPor->GetPortion();
-            SwGluePortion *pLeft = (SwGluePortion*) pPor;
+            const SwLinePortion *pDropPor = static_cast<SwDropPortion*>( pPor->GetPortion() );
+            SwGluePortion *pLeft = static_cast<SwGluePortion*>( pPor );
 
             // 4) pRight: Find the GluePor coming after the DropPor
             pPor = pPor->GetPortion();
@@ -763,7 +763,7 @@ void SwTxtAdjuster::CalcDropAdjust()
                 pPor = pPor->GetPortion();
 
             SwGluePortion *pRight = ( pPor && pPor->InGlueGrp() ) ?
-                                    (SwGluePortion*) pPor : 0;
+                                    static_cast<SwGluePortion*>(pPor) : 0;
             if( pRight && pRight != pLeft )
             {
                 // 5) Calculate nMinLeft. Who is the most to left?
@@ -779,7 +779,7 @@ void SwTxtAdjuster::CalcDropAdjust()
 
                         pPor = pCurr->GetFirstPortion();
                         const SwMarginPortion *pMar = pPor->IsMarginPortion() ?
-                                                      (SwMarginPortion*)pPor : 0;
+                                                      static_cast<SwMarginPortion*>(pPor) : 0;
                         if( !pMar )
                             nMinLeft = 0;
                         else

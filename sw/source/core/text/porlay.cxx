@@ -182,7 +182,7 @@ bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 SwMarginPortion *SwLineLayout::CalcLeftMargin()
 {
     SwMarginPortion *pLeft = (GetPortion() && GetPortion()->IsMarginPortion()) ?
-        (SwMarginPortion *)GetPortion() : 0;
+        static_cast<SwMarginPortion *>(GetPortion()) : 0;
     if( !GetPortion() )
          SetPortion( new SwTxtPortion( *(SwLinePortion*)this ) );
     if( !pLeft )
@@ -207,7 +207,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
         if( pPos->IsFlyPortion() )
         {
             // The FlyPortion get's sucked out ...
-            pLeft->Join( (SwGluePortion*)pPos );
+            pLeft->Join( static_cast<SwGluePortion*>(pPos) );
             pPos = pLeft->GetPortion();
             if( GetpKanaComp() && !GetKanaComp().empty() )
                 GetKanaComp().pop_front();
@@ -411,14 +411,14 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                                 Height(nPosHeight);
                         }
                         if( pPos->IsFlyCntPortion() || ( pPos->IsMultiPortion()
-                            && ((SwMultiPortion*)pPos)->HasFlyInCntnt() ) )
+                            && static_cast<SwMultiPortion*>(pPos)->HasFlyInCntnt() ) )
                             rLine.SetFlyInCntBase();
                         if( pPos->IsFlyCntPortion() &&
-                            ((SwFlyCntPortion*)pPos)->GetAlign() )
+                            static_cast<SwFlyCntPortion*>(pPos)->GetAlign() )
                         {
-                            ((SwFlyCntPortion*)pPos)->SetMax( false );
+                            static_cast<SwFlyCntPortion*>(pPos)->SetMax( false );
                             if( !pFlyCnt || pPos->Height() > pFlyCnt->Height() )
-                                pFlyCnt = (SwFlyCntPortion*)pPos;
+                                pFlyCnt = static_cast<SwFlyCntPortion*>(pPos);
                         }
                         else
                         {
@@ -1989,7 +1989,7 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
         while ( pPos && !pPos->GetLen() )
             pPos = pPos->GetPortion();
         if( pPos && pPos->IsDropPortion() )
-            return (SwDropPortion *)pPos;
+            return static_cast<const SwDropPortion *>(pPos);
         pLay = pLay->GetLen() ? NULL : pLay->GetNext();
     }
     return NULL;
@@ -2017,7 +2017,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
     {
         if( pPor->IsHangingPortion() )
         {
-            nDiff = ((SwHangingPortion*)pPor)->GetInnerWidth() - pPor->Width();
+            nDiff = static_cast<SwHangingPortion*>(pPor)->GetInnerWidth() - pPor->Width();
             if( nDiff )
                 bFound = true;
         }
@@ -2058,7 +2058,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
 
     const SfxPoolItem* pItem = 0;
     if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) &&
-        ((SvxCharHiddenItem*)pItem)->GetValue() )
+        static_cast<const SvxCharHiddenItem*>(pItem)->GetValue() )
     {
         rHiddenMulti.SelectAll();
     }

@@ -695,7 +695,7 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
 {
     Size aSize( rPor.Width(), rPor.Height() );
     if( rPor.IsHangingPortion() )
-        aSize.Width() = ((SwHangingPortion&)rPor).GetInnerWidth();
+        aSize.Width() = static_cast<const SwHangingPortion&>(rPor).GetInnerWidth();
     if( rPor.InSpaceGrp() && GetSpaceAdd() )
     {
         SwTwips nAdd = rPor.CalcSpacing( GetSpaceAdd(), *this );
@@ -907,7 +907,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
             m_pOut->DrawRect( rRect.SVRect() );
         else
         {
-            if(pBrushItem != ((SvxBrushItem*)-1))
+            if(pBrushItem != reinterpret_cast<SvxBrushItem*>(-1))
             {
                 ::DrawGraphic( pBrushItem, m_pOut, aItemRect, rRect );
             }
@@ -962,9 +962,9 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 void SwTxtPaintInfo::DrawRedArrow( const SwLinePortion &rPor ) const
 {
     Size aSize( SPECIAL_FONT_HEIGHT, SPECIAL_FONT_HEIGHT );
-    SwRect aRect( ((SwArrowPortion&)rPor).GetPos(), aSize );
+    SwRect aRect( static_cast<const SwArrowPortion&>(rPor).GetPos(), aSize );
     sal_Unicode cChar;
-    if( ((SwArrowPortion&)rPor).IsLeft() )
+    if( static_cast<const SwArrowPortion&>(rPor).IsLeft() )
     {
         aRect.Pos().Y() += 20 - GetAscent();
         aRect.Pos().X() += 20;
@@ -1394,7 +1394,7 @@ void SwTxtFormatInfo::Init()
         // there is a master for this follow and the master does not have
         // any contents (especially it does not have a number portion)
         bNumDone = ! pTmpPara ||
-                   ! ((SwParaPortion*)pTmpPara)->GetFirstPortion()->IsFlyPortion();
+                   ! static_cast<const SwParaPortion*>(pTmpPara)->GetFirstPortion()->IsFlyPortion();
     }
 
     pRoot = 0;
@@ -1480,7 +1480,7 @@ bool SwTxtFormatInfo::_CheckFtnPortion( SwLineLayout* pCurr )
     const sal_uInt16 nHeight = pCurr->GetRealHeight();
     for( SwLinePortion *pPor = pCurr->GetPortion(); pPor; pPor = pPor->GetPortion() )
     {
-        if( pPor->IsFtnPortion() && nHeight > ((SwFtnPortion*)pPor)->Orig() )
+        if( pPor->IsFtnPortion() && nHeight > static_cast<SwFtnPortion*>(pPor)->Orig() )
         {
             SetLineHeight( nHeight );
             SetLineNetHeight( pCurr->Height() );
@@ -1655,15 +1655,15 @@ SwTxtSlot::SwTxtSlot(
                 const sal_uInt16 nPos = pOldSmartTagList->GetWrongPos(nIdx);
                 const sal_Int32 nListPos = pOldSmartTagList->Pos(nPos);
                 if( nListPos == nIdx )
-                    ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
+                    static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
                 else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && !aTxt.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
                     pTempList->Insert( OUString(), 0, 0, aTxt.getLength(), 0 );
-                    ((SwTxtPaintInfo*)pInf)->SetSmartTags( pTempList );
+                    static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( pTempList );
                 }
                 else
-                    ((SwTxtPaintInfo*)pInf)->SetSmartTags( 0);
+                    static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( 0);
             }
             pOldGrammarCheckList = static_cast<SwTxtPaintInfo*>(pInf)->GetGrammarCheckList();
             if ( pOldGrammarCheckList )
@@ -1671,15 +1671,15 @@ SwTxtSlot::SwTxtSlot(
                 const sal_uInt16 nPos = pOldGrammarCheckList->GetWrongPos(nIdx);
                 const sal_Int32 nListPos = pOldGrammarCheckList->Pos(nPos);
                 if( nListPos == nIdx )
-                    ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
+                    static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
                 else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && !aTxt.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
                     pTempList->Insert( OUString(), 0, 0, aTxt.getLength(), 0 );
-                    ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pTempList );
+                    static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( pTempList );
                 }
                 else
-                    ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( 0);
+                    static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( 0);
             }
         }
     }
@@ -1696,9 +1696,9 @@ SwTxtSlot::~SwTxtSlot()
         // ST2
         // Restore old smart tag list
         if ( pOldSmartTagList )
-            ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList );
+            static_cast<SwTxtPaintInfo*>(pInf)->SetSmartTags( pOldSmartTagList );
         if ( pOldGrammarCheckList )
-            ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pOldGrammarCheckList );
+            static_cast<SwTxtPaintInfo*>(pInf)->SetGrammarCheckList( pOldGrammarCheckList );
         delete pTempList;
     }
 }

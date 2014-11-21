@@ -404,7 +404,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         // We have to check the script for fields in order to set the
         // correct nActual value for the font.
         if( pPor->InFldGrp() )
-            ((SwFldPortion*)pPor)->CheckScript( rInf );
+            static_cast<SwFldPortion*>(pPor)->CheckScript( rInf );
 
         if( ! bHasGrid && rInf.HasScriptSpace() &&
             rInf.GetLast() && rInf.GetLast()->InTxtGrp() &&
@@ -422,12 +422,12 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             if ( pPor->InFldGrp() )
             {
                 OUString aAltTxt;
-                if ( ((SwFldPortion*)pPor)->GetExpTxt( rInf, aAltTxt ) &&
+                if ( static_cast<SwFldPortion*>(pPor)->GetExpTxt( rInf, aAltTxt ) &&
                         !aAltTxt.isEmpty() )
                 {
                     bAllowBehind = rCC.isLetterNumeric( aAltTxt, 0 );
 
-                    const SwFont* pTmpFnt = ((SwFldPortion*)pPor)->GetFont();
+                    const SwFont* pTmpFnt = static_cast<SwFldPortion*>(pPor)->GetFont();
                     if ( pTmpFnt )
                         nNxtActual = pTmpFnt->GetActual();
                 }
@@ -445,12 +445,12 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 if ( pLast->InFldGrp() )
                 {
                     OUString aAltTxt;
-                    if ( ((SwFldPortion*)pLast)->GetExpTxt( rInf, aAltTxt ) &&
+                    if ( static_cast<const SwFldPortion*>(pLast)->GetExpTxt( rInf, aAltTxt ) &&
                          !aAltTxt.isEmpty() )
                     {
                         bAllowBefore = rCC.isLetterNumeric( aAltTxt, aAltTxt.getLength() - 1 );
 
-                        const SwFont* pTmpFnt = ((SwFldPortion*)pLast)->GetFont();
+                        const SwFont* pTmpFnt = static_cast<const SwFldPortion*>(pLast)->GetFont();
                         if ( pTmpFnt )
                         {
                             nLstActual = pTmpFnt->GetActual();
@@ -484,7 +484,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             // insert a grid kerning portion
             if ( ! pGridKernPortion )
                 pGridKernPortion = pPor->IsKernPortion() ?
-                                   (SwKernPortion*)pPor :
+                                   static_cast<SwKernPortion*>(pPor) :
                                    new SwKernPortion( *pCurr );
 
             // if we have a new GridKernPortion, we initially calculate
@@ -527,7 +527,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
 
         // the multi-portion has it's own format function
         if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
-            bFull = BuildMultiPortion( rInf, *((SwMultiPortion*)pPor) );
+            bFull = BuildMultiPortion( rInf, *static_cast<SwMultiPortion*>(pPor) );
         else
             bFull = pPor->Format( rInf );
 
@@ -566,7 +566,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                    // 2. Right Tab
                    ( ( pPor->InTabGrp() && !pPor->IsTabLeftPortion() ) ||
                    // 3. BidiPortions
-                     ( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() ) ||
+                     ( pPor->IsMultiPortion() && static_cast<SwMultiPortion*>(pPor)->IsBidi() ) ||
                    // 4. Multi Portion and 5. Drop Caps
                      ( ( pPor->IsDropPortion() || pPor->IsMultiPortion() ) &&
                        rInf.GetReformatStart() >= rInf.GetIdx() &&
@@ -585,7 +585,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             nUnderLineStart = 0;
 
         if( pPor->IsFlyCntPortion() || ( pPor->IsMultiPortion() &&
-            ((SwMultiPortion*)pPor)->HasFlyInCntnt() ) )
+            static_cast<SwMultiPortion*>(pPor)->HasFlyInCntnt() ) )
             SetFlyInCntBase();
         // bUnderflow needs to be reset or we wrap again at the next softhyphen
         if ( !bFull )
@@ -700,7 +700,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
             rInf.GetLast()->FormatEOL( rInf );
     }
     if( pCurr->GetPortion() && pCurr->GetPortion()->InNumberGrp()
-        && ((SwNumberPortion*)pCurr->GetPortion())->IsHide() )
+        && static_cast<SwNumberPortion*>(pCurr->GetPortion())->IsHide() )
         rInf.SetNumDone( false );
 
     // Delete fly in any case
@@ -728,11 +728,11 @@ void SwTxtFormatter::CalcAdjustLine( SwLineLayout *pCurrent )
 void SwTxtFormatter::CalcAscent( SwTxtFormatInfo &rInf, SwLinePortion *pPor )
 {
     bool bCalc = false;
-    if ( pPor->InFldGrp() && ((SwFldPortion*)pPor)->GetFont() )
+    if ( pPor->InFldGrp() && static_cast<SwFldPortion*>(pPor)->GetFont() )
     {
         // Numbering + InterNetFlds can keep an own font, then their size is
         // independent from hard attribute values
-        SwFont* pFldFnt = ((SwFldPortion*)pPor)->pFnt;
+        SwFont* pFldFnt = static_cast<SwFldPortion*>(pPor)->pFnt;
         SwFontSave aSave( rInf, pFldFnt );
         pPor->Height( rInf.GetTxtHeight() );
         pPor->SetAscent( rInf.GetAscent() );
@@ -1137,8 +1137,8 @@ static bool lcl_OldFieldRest( const SwLineLayout* pCurr )
     bool bRet = false;
     while( pPor && !bRet )
     {
-        bRet = (pPor->InFldGrp() && ((SwFldPortion*)pPor)->IsFollow()) ||
-            (pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsFollowFld());
+        bRet = (pPor->InFldGrp() && static_cast<const SwFldPortion*>(pPor)->IsFollow()) ||
+            (pPor->IsMultiPortion() && static_cast<const SwMultiPortion*>(pPor)->IsFollowFld());
         if( !pPor->GetLen() )
             break;
         pPor = pPor->GetPortion();
@@ -1396,7 +1396,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     {
         if ( pPor->IsFtnPortion() )
         {
-            const SwTxtFtn* pTxtFtn = ((SwFtnPortion*)pPor)->GetTxtFtn();
+            const SwTxtFtn* pTxtFtn = static_cast<SwFtnPortion*>(pPor)->GetTxtFtn();
 
             if ( pTxtFtn )
             {
@@ -1413,7 +1413,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
                 sal_uInt16 nDir = 0;
                 if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
                     true, &pItem ))
-                    nDir = ((SvxCharRotateItem*)pItem)->GetValue();
+                    nDir = static_cast<const SvxCharRotateItem*>(pItem)->GetValue();
 
                 if ( 0 != nDir )
                 {
@@ -1426,7 +1426,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         }
         else if ( pPor->InNumberGrp() )
         {
-            const SwFont* pNumFnt = ((SwFldPortion*)pPor)->GetFont();
+            const SwFont* pNumFnt = static_cast<SwFldPortion*>(pPor)->GetFont();
 
             if ( pNumFnt )
             {
@@ -1502,7 +1502,7 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
     boost::scoped_ptr<SwFldPortion> xSaveFld;
 
     if ( pFld && pFld->InFldGrp() && !pFld->IsFtnPortion() )
-        xSaveFld.reset(new SwFldPortion( *((SwFldPortion*)pFld) ));
+        xSaveFld.reset(new SwFldPortion( *static_cast<SwFldPortion*>(pFld) ));
 
     // for an optimal repaint rectangle, we want to compare fly portions
     // before and after the BuildPortions call
@@ -2076,7 +2076,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
                     nTmpDescent = nTmpHeight - nAscent;
                     nFlyDesc = nTmpDescent;
                 }
-                ((SwGrfNumPortion*)pPos)->SetBase( nTmpAscent, nTmpDescent,
+                static_cast<SwGrfNumPortion*>(pPos)->SetBase( nTmpAscent, nTmpDescent,
                                                    nFlyAsc, nFlyDesc );
             }
             else
@@ -2085,22 +2085,22 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
                 if ( GetInfo().GetTxtFrm()->IsVertical() )
                     GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aBase );
 
-                ((SwFlyCntPortion*)pPos)->SetBase( *aTmpInf.GetTxtFrm(),
+                static_cast<SwFlyCntPortion*>(pPos)->SetBase( *aTmpInf.GetTxtFrm(),
                     aBase, nTmpAscent, nTmpDescent, nFlyAsc,
                     nFlyDesc, nFlags );
             }
         }
-        if( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasFlyInCntnt() )
+        if( pPos->IsMultiPortion() && static_cast<SwMultiPortion*>(pPos)->HasFlyInCntnt() )
         {
             OSL_ENSURE( !GetMulti(), "Too much multi" );
-            ((SwTxtFormatter*)this)->pMulti = (SwMultiPortion*)pPos;
+            const_cast<SwTxtFormatter*>(static_cast<const SwTxtFormatter*>(this))->pMulti = static_cast<SwMultiPortion*>(pPos);
             SwLineLayout *pLay = &GetMulti()->GetRoot();
             Point aSt( aTmpInf.X(), aStart.Y() );
 
             if ( GetMulti()->HasBrackets() )
             {
                 OSL_ENSURE( GetMulti()->IsDouble(), "Brackets only for doubles");
-                aSt.X() += ((SwDoubleLinePortion*)GetMulti())->PreWidth();
+                aSt.X() += static_cast<SwDoubleLinePortion*>(GetMulti())->PreWidth();
             }
             else if( GetMulti()->HasRotation() )
             {
@@ -2155,7 +2155,7 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
             pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
 
             if( pPos->IsGrfNumPortion() )
-                ((SwGrfNumPortion*)pPos)->SetBase( nTmpAscent, nTmpDescent,
+                static_cast<SwGrfNumPortion*>(pPos)->SetBase( nTmpAscent, nTmpDescent,
                                                    nFlyAsc, nFlyDesc );
             else
             {
@@ -2163,12 +2163,12 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
                 if ( GetInfo().GetTxtFrm()->IsVertical() )
                 {
                     nBaseLine = GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( nBaseLine );
-                    aBase = Point( nBaseLine, ((SwFlyCntPortion*)pPos)->GetRefPoint().Y() );
+                    aBase = Point( nBaseLine, static_cast<SwFlyCntPortion*>(pPos)->GetRefPoint().Y() );
                 }
                 else
-                    aBase = Point( ((SwFlyCntPortion*)pPos)->GetRefPoint().X(), nBaseLine );
+                    aBase = Point( static_cast<SwFlyCntPortion*>(pPos)->GetRefPoint().X(), nBaseLine );
 
-                ((SwFlyCntPortion*)pPos)->SetBase( *GetInfo().GetTxtFrm(), aBase, nTmpAscent, nTmpDescent,
+                static_cast<SwFlyCntPortion*>(pPos)->SetBase( *GetInfo().GetTxtFrm(), aBase, nTmpAscent, nTmpDescent,
                     nFlyAsc, nFlyDesc, nFlags );
             }
         }
@@ -2248,7 +2248,7 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                     // we also have to reformat the line, if the fly size
                     // differs from the intersection interval's size.
                     if( ! aInter.HasArea() ||
-                        ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
+                        static_cast<const SwFlyPortion*>(pPos)->GetFixWidth() != aInter.Width() )
                     {
                         rInf.SetLineHeight( nHeight );
                         rInf.SetLineNetHeight( pCurr->Height() );
@@ -2477,9 +2477,9 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     const SwFrm *pFrame = (SwFrm*)pFrm;
 
     SwFlyInCntFrm *pFly;
-    SwFrmFmt* pFrmFmt = ((SwTxtFlyCnt*)pHint)->GetFlyCnt().GetFrmFmt();
+    SwFrmFmt* pFrmFmt = static_cast<SwTxtFlyCnt*>(pHint)->GetFlyCnt().GetFrmFmt();
     if( RES_FLYFRMFMT == pFrmFmt->Which() )
-        pFly = ((SwTxtFlyCnt*)pHint)->GetFlyFrm(pFrame);
+        pFly = static_cast<SwTxtFlyCnt*>(pHint)->GetFlyFrm(pFrame);
     else
         pFly = NULL;
     // aBase is the document-global position, from which the new extra portion is placed

@@ -208,7 +208,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     if (IsCollapse()) {
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
         if ( pSh->IsA( TYPE(SwCrsrShell) ) ) {
-            SwCrsrShell *pCrSh=(SwCrsrShell*)pSh;
+            SwCrsrShell *pCrSh = static_cast<SwCrsrShell*>(pSh);
             SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
             if (pCurrFrm==(SwCntntFrm*)this) {
                 // do nothing
@@ -359,7 +359,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
         pFrm = pFrm->FindPageFrm();
         if( pFrm->IsPageFrm() )
         {
-            SwPageDesc* pDesc = ((SwPageFrm*)pFrm)->FindPageDesc();
+            SwPageDesc* pDesc = const_cast<SwPageFrm*>(static_cast<const SwPageFrm*>(pFrm))->FindPageDesc();
             if( pDesc )
             {
                 rRegDiff = pDesc->GetRegHeight();

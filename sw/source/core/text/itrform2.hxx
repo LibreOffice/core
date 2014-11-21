@@ -216,9 +216,9 @@ public:
     void SetFlyInCntBase( bool bNew = true ) { bFlyInCntBase = bNew; }
 
     SwTxtFormatInfo &GetInfo()
-        { return (SwTxtFormatInfo&)SwTxtIter::GetInfo(); }
+        { return static_cast<SwTxtFormatInfo&>(SwTxtIter::GetInfo()); }
     const SwTxtFormatInfo &GetInfo() const
-        { return (const SwTxtFormatInfo&)SwTxtIter::GetInfo(); }
+        { return static_cast<const SwTxtFormatInfo&>(SwTxtIter::GetInfo()); }
 
     void InitCntHyph() { CntHyphens( nCntEndHyph, nCntMidHyph ); }
     const sal_uInt8 &CntEndHyph() const { return nCntEndHyph; }

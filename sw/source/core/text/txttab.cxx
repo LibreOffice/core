@@ -149,8 +149,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             if( USHRT_MAX == nDefTabDist )
             {
                 const SvxTabStopItem& rTab =
-                    (const SvxTabStopItem &)pFrm->GetAttrSet()->
-                    GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
+                    static_cast<const SvxTabStopItem &>(pFrm->GetAttrSet()->
+                      GetPool()->GetDefaultItem( RES_PARATR_TABSTOP ));
                 if( rTab.Count() )
                     nDefTabDist = (sal_uInt16)rTab[0].GetTabPos();
                 else
@@ -371,7 +371,7 @@ bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
             {
                 if( POR_TABDECIMAL == nWhich )
                     rInf.SetTabDecimal(
-                        ((SwTabDecimalPortion*)this)->GetTabDecimal());
+                        static_cast<SwTabDecimalPortion*>(this)->GetTabDecimal());
                 rInf.SetLastTab( this );
                 break;
             }

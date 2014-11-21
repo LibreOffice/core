@@ -109,12 +109,12 @@ bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 bool SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( nLines == ((SwFmtDrop&)rAttr).GetLines() &&
-             nChars == ((SwFmtDrop&)rAttr).GetChars() &&
-             nDistance ==  ((SwFmtDrop&)rAttr).GetDistance() &&
-             bWholeWord == ((SwFmtDrop&)rAttr).GetWholeWord() &&
-             GetCharFmt() == ((SwFmtDrop&)rAttr).GetCharFmt() &&
-             pDefinedIn == ((SwFmtDrop&)rAttr).pDefinedIn );
+    return ( nLines == static_cast<const SwFmtDrop&>(rAttr).GetLines() &&
+             nChars == static_cast<const SwFmtDrop&>(rAttr).GetChars() &&
+             nDistance ==  static_cast<const SwFmtDrop&>(rAttr).GetDistance() &&
+             bWholeWord == static_cast<const SwFmtDrop&>(rAttr).GetWholeWord() &&
+             GetCharFmt() == static_cast<const SwFmtDrop&>(rAttr).GetCharFmt() &&
+             pDefinedIn == static_cast<const SwFmtDrop&>(rAttr).pDefinedIn );
 }
 
 SfxPoolItem* SwFmtDrop::Clone( SfxItemPool* ) const
@@ -219,7 +219,7 @@ bool SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
+    return GetValue() == static_cast<const SwNumRuleItem&>(rAttr).GetValue();
 }
 
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 ) const

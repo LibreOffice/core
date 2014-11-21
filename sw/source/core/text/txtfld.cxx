@@ -123,7 +123,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         case RES_CHAPTERFLD:
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
-                ((SwChapterField*)pFld)->ChangeExpansion( pFrame,
+                static_cast<SwChapterField*>(pFld)->ChangeExpansion( pFrame,
                     &static_txtattr_cast<SwTxtFld const*>(pHint)->GetTxtNode());
             }
             {
@@ -137,7 +137,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         case RES_DOCSTATFLD:
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
-                ((SwDocStatField*)pFld)->ChangeExpansion( pFrame );
+                static_cast<SwDocStatField*>(pFld)->ChangeExpansion( pFrame );
             }
             {
                 OUString const aStr( (bName)
@@ -146,14 +146,14 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 pRet = new SwFldPortion( aStr );
             }
             if(pRet)
-                ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_PAGECOOUNTFLD;
+                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGECOOUNTFLD;
             break;
 
         case RES_PAGENUMBERFLD:
         {
             if( !bName && pSh && pSh->GetLayout() && !pSh->Imp()->IsUpdateExpFlds() )
             {
-                SwPageNumberFieldType *pPageNr = (SwPageNumberFieldType *)pFld->GetTyp();
+                SwPageNumberFieldType *pPageNr = static_cast<SwPageNumberFieldType *>(pFld->GetTyp());
 
                 const SwRootFrm* pTmpRootFrm = pSh->GetLayout();
                 const bool bVirt = pTmpRootFrm->IsVirtPageNum();
@@ -175,14 +175,14 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
                 pRet = new SwFldPortion( aStr );
             }
             if(pRet)
-                ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_PAGENUMBERFLD;
+                static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_PAGENUMBERFLD;
             break;
         }
         case RES_GETEXPFLD:
         {
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
-                SwGetExpField* pExpFld = (SwGetExpField*)pFld;
+                SwGetExpField* pExpFld = static_cast<SwGetExpField*>(pFld);
                 if( !::lcl_IsInBody( pFrame ) )
                 {
                     pExpFld->ChgBodyTxtFlag( false );
@@ -209,7 +209,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         {
             if( !bName )
             {
-                SwDBField* pDBFld = (SwDBField*)pFld;
+                SwDBField* pDBFld = static_cast<SwDBField*>(pFld);
                 pDBFld->ChgBodyTxtFlag( ::lcl_IsInBody( pFrame ) );
             }
             {
@@ -223,7 +223,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
         case RES_REFPAGEGETFLD:
             if( !bName && pSh && !pSh->Imp()->IsUpdateExpFlds() )
             {
-                ((SwRefPageGetField*)pFld)->ChangeExpansion(pFrame,
+                static_cast<SwRefPageGetField*>(pFld)->ChangeExpansion(pFrame,
                         static_txtattr_cast<SwTxtFld const*>(pHint));
             }
             {
@@ -236,12 +236,12 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 
         case RES_JUMPEDITFLD:
             if( !bName )
-                pChFmt =  ((SwJumpEditField*)pFld)->GetCharFmt();
+                pChFmt = static_cast<SwJumpEditField*>(pFld)->GetCharFmt();
             bNewFlyPor = true;
             bPlaceHolder = true;
             break;
         case RES_GETREFFLD:
-            subType = ((SwGetRefField*)pFld)->GetSubType();
+            subType = static_cast<SwGetRefField*>(pFld)->GetSubType();
             {
                 OUString const str( (bName)
                         ? pFld->GetFieldName()
@@ -251,13 +251,13 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             if(pRet)
             {
                 if( subType == REF_BOOKMARK  )
-                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_BOOKMARKFLD;
+                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_BOOKMARKFLD;
                 else if( subType == REF_SETREFATTR )
-                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_SETREFATTRFLD;
+                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_SETREFATTRFLD;
                 break;
             }
         case RES_DATETIMEFLD:
-            subType = ((SwDateTimeField*)pFld)->GetSubType();
+            subType = static_cast<SwDateTimeField*>(pFld)->GetSubType();
             {
                 OUString const str( (bName)
                         ? pFld->GetFieldName()
@@ -267,9 +267,9 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             if(pRet)
             {
                 if( subType & DATEFLD  )
-                    ((SwFldPortion*)pRet)->m_nAttrFldType= ATTR_DATEFLD;
+                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType= ATTR_DATEFLD;
                 else if( subType & TIMEFLD )
-                    ((SwFldPortion*)pRet)->m_nAttrFldType = ATTR_TIMEFLD;
+                    static_cast<SwFldPortion*>(pRet)->m_nAttrFldType = ATTR_TIMEFLD;
                 break;
             }
         default:
@@ -496,7 +496,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             long nTmpA = rInf.GetLast()->GetAscent();
             long nTmpD = rInf.GetLast()->Height() - nTmpA;
             if( !rInf.IsTest() )
-                ((SwGrfNumPortion*)pRet)->SetBase( nTmpA, nTmpD, nTmpA, nTmpD );
+                static_cast<SwGrfNumPortion*>(pRet)->SetBase( nTmpA, nTmpD, nTmpA, nTmpD );
         }
         else
         {

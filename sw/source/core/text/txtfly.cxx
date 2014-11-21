@@ -226,8 +226,8 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
             // GetContour() causes the graphic to be loaded, which may cause
             // the graphic to change its size, call ClrObject()
             tools::PolyPolygon aPoly;
-            if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
-                aPoly = tools::PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
+            if( !static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetContour( aPoly ) )
+                aPoly = tools::PolyPolygon( static_cast<const SwVirtFlyDrawObj*>(pObj)->
                                      GetFlyFrm()->Frm().SVRect() );
             aPolyPolygon.clear();
             aPolyPolygon.append(aPoly.getB2DPolyPolygon());
@@ -537,7 +537,7 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         // Except for the content is transparent
                         const SwNoTxtFrm *pNoTxt =
                                 rFly.Lower() && rFly.Lower()->IsNoTxtFrm()
-                                                   ? (SwNoTxtFrm*)rFly.Lower()
+                                                   ? static_cast<const SwNoTxtFrm*>(rFly.Lower())
                                                    : 0;
                         if ( !pNoTxt ||
                              (!pNoTxt->IsTransparent() && !rSur.IsContour()) )
@@ -643,7 +643,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         }
         else
         {
-            if(((SvxBrushItem*)-1) != rInf.GetBrushItem())
+            if(reinterpret_cast<SvxBrushItem*>(-1) != rInf.GetBrushItem())
             {
                 ::DrawGraphic(rInf.GetBrushItem(), pOut, rInf.GetBrushRect(), aRegion[i] );
             }
@@ -672,8 +672,8 @@ bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         // #102344# Ignore connectors which have one or more connections
         if(pNew && pNew->ISA(SdrEdgeObj))
         {
-            if(((SdrEdgeObj*)pNew)->GetConnectedNode(true)
-                || ((SdrEdgeObj*)pNew)->GetConnectedNode(false))
+            if(static_cast<const SdrEdgeObj*>(pNew)->GetConnectedNode(true)
+                || static_cast<const SdrEdgeObj*>(pNew)->GetConnectedNode(false))
             {
                 return false;
             }

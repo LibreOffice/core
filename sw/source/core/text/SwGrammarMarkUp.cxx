@@ -32,7 +32,7 @@ SwWrongList* SwGrammarMarkUp::Clone()
 
 void SwGrammarMarkUp::CopyFrom( const SwWrongList& rCopy )
 {
-    maSentence = ((const SwGrammarMarkUp&)rCopy).maSentence;
+    maSentence = static_cast<const SwGrammarMarkUp&>(rCopy).maSentence;
     SwWrongList::CopyFrom( rCopy );
 }
 
@@ -57,7 +57,7 @@ void SwGrammarMarkUp::MoveGrammar( sal_Int32 nPos, sal_Int32 nDiff )
 
 SwGrammarMarkUp* SwGrammarMarkUp::SplitGrammarList( sal_Int32 nSplitPos )
 {
-    SwGrammarMarkUp* pNew = (SwGrammarMarkUp*)SplitList( nSplitPos );
+    SwGrammarMarkUp* pNew = static_cast<SwGrammarMarkUp*>(SplitList( nSplitPos ));
     if( !maSentence.size() )
         return pNew;
     std::vector< sal_Int32 >::iterator pIter = maSentence.begin();

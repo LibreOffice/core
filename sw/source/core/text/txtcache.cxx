@@ -41,10 +41,10 @@ SwParaPortion *SwTxtLineAccess::GetPara()
 {
     SwTxtLine *pRet;
     if ( pObj )
-        pRet = (SwTxtLine*)pObj;
+        pRet = static_cast<SwTxtLine*>(pObj);
     else
     {
-        pRet = (SwTxtLine*)Get();
+        pRet = static_cast<SwTxtLine*>(Get());
         ((SwTxtFrm*)pOwner)->SetCacheIdx( pRet->GetCachePos() );
     }
     if ( !pRet->GetPara() )
@@ -59,13 +59,13 @@ SwTxtLineAccess::SwTxtLineAccess( const SwTxtFrm *pOwn ) :
 
 bool SwTxtLineAccess::IsAvailable() const
 {
-    return pObj && ((SwTxtLine*)pObj)->GetPara();
+    return pObj && static_cast<SwTxtLine*>(pObj)->GetPara();
 }
 
 bool SwTxtFrm::_HasPara() const
 {
-    SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                            Get( this, GetCacheIdx(), false );
+    SwTxtLine *pTxtLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+                                            Get( this, GetCacheIdx(), false ));
     if ( pTxtLine )
     {
         if ( pTxtLine->GetPara() )
@@ -80,8 +80,9 @@ bool SwTxtFrm::_HasPara() const
 SwParaPortion *SwTxtFrm::GetPara()
 {
     if ( GetCacheIdx() != USHRT_MAX )
-    {   SwTxtLine *pLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                        Get( this, GetCacheIdx(), false );
+    {
+        SwTxtLine *pLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+                                        Get( this, GetCacheIdx(), false ));
         if ( pLine )
             return pLine->GetPara();
         else
@@ -95,8 +96,8 @@ void SwTxtFrm::ClearPara()
     OSL_ENSURE( !IsLocked(), "+SwTxtFrm::ClearPara: this is locked." );
     if ( !IsLocked() && GetCacheIdx() != USHRT_MAX )
     {
-        SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                        Get( this, GetCacheIdx(), false );
+        SwTxtLine *pTxtLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+                                        Get( this, GetCacheIdx(), false ));
         if ( pTxtLine )
         {
             delete pTxtLine->GetPara();
@@ -112,8 +113,8 @@ void SwTxtFrm::SetPara( SwParaPortion *pNew, bool bDelete )
     if ( GetCacheIdx() != USHRT_MAX )
     {
         // Only change the information, the CacheObj stays there
-        SwTxtLine *pTxtLine = (SwTxtLine*)SwTxtFrm::GetTxtCache()->
-                                        Get( this, GetCacheIdx(), false );
+        SwTxtLine *pTxtLine = static_cast<SwTxtLine*>(SwTxtFrm::GetTxtCache()->
+                                        Get( this, GetCacheIdx(), false ));
         if ( pTxtLine )
         {
             if( bDelete )

@@ -887,7 +887,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     const SwFrm* pObjContext = ::FindKontext( &rAnchorTxtFrm, FRM_COLUMN );
     sal_uLong nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
     SwOrderIter aIter( pObjPage, true );
-    const SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
+    const SwFlyFrm* pFly = static_cast<const SwVirtFlyDrawObj*>(aIter.Bottom())->GetFlyFrm();
     while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
     {
         if ( _DrawAsideFly( pFly, aTmpObjRect, pObjContext, nObjIndex,
@@ -967,7 +967,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
             } // end of <if (bVert)>
         } // end of <if _DrawAsideFly(..)>
 
-        pFly = ((SwVirtFlyDrawObj*)aIter.Next())->GetFlyFrm();
+        pFly = static_cast<const SwVirtFlyDrawObj*>(aIter.Next())->GetFlyFrm();
     } // end of <loop on fly frames
 
     return nAdjustedRelPosX;

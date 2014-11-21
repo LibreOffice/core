@@ -337,7 +337,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
         // Dump the children
         if ( IsTxtFrm(  ) )
         {
-            SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
+            const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm *>(this);
             OUString aTxt = pTxtFrm->GetTxt(  );
             for ( int i = 0; i < 32; i++ )
             {
@@ -392,13 +392,13 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrmId() );
     if ( IsTxtFrm(  ) )
     {
-        SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
-        SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
+        const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm *>(this);
+        const SwTxtNode *pTxtNode = pTxtFrm->GetTxtNode();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "txtNodeIndex" ), TMP_FORMAT, pTxtNode->GetIndex() );
     }
     if (IsHeaderFrm() || IsFooterFrm())
     {
-        SwHeadFootFrm *pHeadFootFrm = (SwHeadFootFrm*)this;
+        const SwHeadFootFrm *pHeadFootFrm = static_cast<const SwHeadFootFrm*>(this);
         OUString aFmtName = pHeadFootFrm->GetFmt()->GetName();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrm->GetFmt());

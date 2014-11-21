@@ -73,7 +73,7 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
     if( !rObjSh.IsA( TYPE(SwDocShell) ) )
         return false;
 
-    SwDocShell& rDShell = (SwDocShell&)rObjSh;
+    SwDocShell& rDShell = static_cast<SwDocShell&>(rObjSh);
     sal_uLong nRet = 0;
 
     // mba: relative URLs don't make sense here

@@ -248,7 +248,7 @@ public:
 
 inline bool SwMultiPortion::HasBrackets() const
 {
-    return IsDouble() && 0 != ((SwDoubleLinePortion*)this)->GetBrackets();
+    return IsDouble() && 0 != static_cast<const SwDoubleLinePortion*>(this)->GetBrackets();
 }
 
 #endif

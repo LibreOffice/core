@@ -100,7 +100,7 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf )
     } while ( pLay );
     if( HasBrackets() )
     {
-        sal_uInt16 nTmp = ((SwDoubleLinePortion*)this)->GetBrackets()->nHeight;
+        sal_uInt16 nTmp = static_cast<SwDoubleLinePortion*>(this)->GetBrackets()->nHeight;
         if( nTmp > Height() )
         {
             const sal_uInt16 nAdd = ( nTmp - Height() ) / 2;
@@ -108,7 +108,7 @@ void SwMultiPortion::CalcSize( SwTxtFormatter& rLine, SwTxtFormatInfo &rInf )
             GetRoot().Height( GetRoot().Height() + nAdd );
             Height( nTmp );
         }
-        nTmp = ((SwDoubleLinePortion*)this)->GetBrackets()->nAscent;
+        nTmp = static_cast<SwDoubleLinePortion*>(this)->GetBrackets()->nAscent;
         if( nTmp > GetAscent() )
             SetAscent( nTmp );
     }
@@ -153,7 +153,7 @@ void SwMultiPortion::ActualizeTabulator()
 SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
     sal_Int32 nEnd, bool bRTL ) : SwMultiPortion( nEnd )
 {
-    const SvxCharRotateItem* pRot = (SvxCharRotateItem*)rCreate.pItem;
+    const SvxCharRotateItem* pRot = static_cast<const SvxCharRotateItem*>(rCreate.pItem);
     if( !pRot )
     {
         const SwTxtAttr& rAttr = *rCreate.pAttr;
@@ -215,10 +215,10 @@ sal_Int32 SwBidiPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf ) const
     for( nBlanks = 0; pPor; pPor = pPor->GetPortion() )
     {
         if( pPor->InTxtGrp() )
-            nBlanks = nBlanks + ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
+            nBlanks = nBlanks + static_cast<SwTxtPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
         else if ( pPor->IsMultiPortion() &&
-                 ((SwMultiPortion*)pPor)->IsBidi() )
-            nBlanks = nBlanks + ((SwBidiPortion*)pPor)->GetSpaceCnt( rInf );
+                 static_cast<SwMultiPortion*>(pPor)->IsBidi() )
+            nBlanks = nBlanks + static_cast<SwBidiPortion*>(pPor)->GetSpaceCnt( rInf );
 
         ((SwTxtSizeInfo &)rInf).SetIdx( rInf.GetIdx() + pPor->GetLen() );
     }
@@ -264,7 +264,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
     , nBlank2(0)
 {
     SetDouble();
-    const SvxTwoLinesItem* pTwo = (SvxTwoLinesItem*)rCreate.pItem;
+    const SvxTwoLinesItem* pTwo = static_cast<const SvxTwoLinesItem*>(rCreate.pItem);
     if( pTwo )
         pBracket->nStart = 0;
     else
@@ -449,7 +449,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTxtFormatInfo &rInf )
     for( nBlank1 = 0; pPor; pPor = pPor->GetPortion() )
     {
         if( pPor->InTxtGrp() )
-            nBlank1 = nBlank1 + ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
+            nBlank1 = nBlank1 + static_cast<SwTxtPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
         rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
         if( pPor->InTabGrp() )
             SetTab1( true );
@@ -463,7 +463,7 @@ void SwDoubleLinePortion::CalcBlanks( SwTxtFormatInfo &rInf )
     for( nBlank2 = 0; pPor; pPor = pPor->GetPortion() )
     {
         if( pPor->InTxtGrp() )
-            nBlank2 = nBlank2 + ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nNull );
+            nBlank2 = nBlank2 + static_cast<SwTxtPortion*>(pPor)->GetSpaceCnt( rInf, nNull );
         rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
         if( pPor->InTabGrp() )
             SetTab2( true );
@@ -651,7 +651,7 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
             for( pPor = pCurr->GetFirstPortion(); pPor; pPor = pPor->GetPortion() )
             {
                 if( pPor->InTxtGrp() )
-                    ((SwTxtPortion*)pPor)->GetSpaceCnt( rInf, nCharCnt );
+                    static_cast<SwTxtPortion*>(pPor)->GetSpaceCnt( rInf, nCharCnt );
                 rInf.SetIdx( rInf.GetIdx() + pPor->GetLen() );
             }
             if( nCharCnt > nSub )
@@ -716,7 +716,7 @@ void SwRubyPortion::CalcRubyOffset()
     while( pPor )
     {
         if( pPor->InFldGrp() )
-            pFld = (SwFldPortion*)pPor;
+            pFld = static_cast<const SwFldPortion*>(pPor);
         pPor = pPor->GetPortion();
     }
     if( pFld )
@@ -740,12 +740,12 @@ static bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef
     const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
     if( pItem )
     {
-        rValue = ((SvxTwoLinesItem*)pItem)->GetValue();
+        rValue = static_cast<const SvxTwoLinesItem*>(pItem)->GetValue();
         if( !rpRef )
-            rpRef = (SvxTwoLinesItem*)pItem;
-        else if( ((SvxTwoLinesItem*)pItem)->GetEndBracket() !=
+            rpRef = static_cast<const SvxTwoLinesItem*>(pItem);
+        else if( static_cast<const SvxTwoLinesItem*>(pItem)->GetEndBracket() !=
                     rpRef->GetEndBracket() ||
-                    ((SvxTwoLinesItem*)pItem)->GetStartBracket() !=
+                    static_cast<const SvxTwoLinesItem*>(pItem)->GetStartBracket() !=
                     rpRef->GetStartBracket() )
             rValue = false;
         return true;
@@ -766,10 +766,10 @@ static bool lcl_HasRotation( const SwTxtAttr& rAttr,
     const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_ROTATE );
     if ( pItem )
     {
-        rValue = ((SvxCharRotateItem*)pItem)->GetValue();
+        rValue = static_cast<const SvxCharRotateItem*>(pItem)->GetValue();
         if( !rpRef )
-            rpRef = (SvxCharRotateItem*)pItem;
-        else if( ((SvxCharRotateItem*)pItem)->GetValue() !=
+            rpRef = static_cast<const SvxCharRotateItem*>(pItem);
+        else if( static_cast<const SvxCharRotateItem*>(pItem)->GetValue() !=
                     rpRef->GetValue() )
             rValue = false;
         return true;
@@ -798,7 +798,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     {
         OSL_ENSURE( pMulti->IsBidi(), "Nested MultiPortion is not BidiPortion" );
         // level associated with bidi-portion;
-        nCurrLevel = ((SwBidiPortion*)pMulti)->GetLevel();
+        nCurrLevel = static_cast<SwBidiPortion*>(pMulti)->GetLevel();
     }
     else
         // no nested bidi portion required
@@ -836,8 +836,8 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     const SfxPoolItem* pRotItem;
     if( SfxItemState::SET == m_pFrm->GetTxtNode()->GetSwAttrSet().
         GetItemState( RES_CHRATR_ROTATE, true, &pRotItem ) &&
-        ((SvxCharRotateItem*)pRotItem)->GetValue() )
-        pRotate = (SvxCharRotateItem*)pRotItem;
+        static_cast<const SvxCharRotateItem*>(pRotItem)->GetValue() )
+        pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
     else
         pRotItem = NULL;
     const SvxTwoLinesItem* p2Lines = NULL;
@@ -847,8 +847,8 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == pLclTxtNode->GetSwAttrSet().
         GetItemState( RES_CHRATR_TWO_LINES, true, &pItem ) &&
-        ((SvxTwoLinesItem*)pItem)->GetValue() )
-        p2Lines = (SvxTwoLinesItem*)pItem;
+        static_cast<const SvxTwoLinesItem*>(pItem)->GetValue() )
+        p2Lines = static_cast<const SvxTwoLinesItem*>(pItem);
     else
         pItem = NULL;
 
@@ -921,9 +921,9 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             if( pItem )
             {
                 aEnd.front() = GetTxt().getLength();
-                bOn = ((SvxTwoLinesItem*)pItem)->GetEndBracket() ==
+                bOn = static_cast<const SvxTwoLinesItem*>(pItem)->GetEndBracket() ==
                         p2Lines->GetEndBracket() &&
-                      ((SvxTwoLinesItem*)pItem)->GetStartBracket() ==
+                      static_cast<const SvxTwoLinesItem*>(pItem)->GetStartBracket() ==
                         p2Lines->GetStartBracket();
             }
         }
@@ -1093,7 +1093,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             if( pRotItem )
             {
                 aEnd.front() = GetTxt().getLength();
-                bOn = ((SvxCharRotateItem*)pRotItem)->GetValue() ==
+                bOn = static_cast<const SvxCharRotateItem*>(pRotItem)->GetValue() ==
                         pRotate->GetValue();
             }
         }
@@ -1285,8 +1285,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         OSL_ENSURE( ! pEnvPor || pEnvPor->IsBidi(),
                 "Oh no, I expected a BidiPortion" );
         nFrmDir = GetInfo().GetTxtFrm()->IsRightToLeft() ? 1 : 0;
-        nEnvDir = pEnvPor ? ((SwBidiPortion*)pEnvPor)->GetLevel() % 2 : nFrmDir;
-        nThisDir = ((SwBidiPortion&)rMulti).GetLevel() % 2;
+        nEnvDir = pEnvPor ? static_cast<const SwBidiPortion*>(pEnvPor)->GetLevel() % 2 : nFrmDir;
+        nThisDir = static_cast<SwBidiPortion&>(rMulti).GetLevel() % 2;
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -1333,9 +1333,9 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     if( rMulti.HasBrackets() )
     {
         sal_Int32 nTmpOldIdx = GetInfo().GetIdx();
-        GetInfo().SetIdx(((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart);
+        GetInfo().SetIdx(static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
-        ((SwDoubleLinePortion&)rMulti).PaintBracket( GetInfo(), 0, true );
+        static_cast<SwDoubleLinePortion&>(rMulti).PaintBracket( GetInfo(), 0, true );
         GetInfo().SetIdx( nTmpOldIdx );
     }
 
@@ -1436,7 +1436,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
         if( bRest && pPor->InFldGrp() && !pPor->GetLen() )
         {
-            if( ((SwFldPortion*)pPor)->HasFont() )
+            if( static_cast<SwFldPortion*>(pPor)->HasFont() )
                  bSeeked = false;
             else
                 SeekAndChgBefore( GetInfo() );
@@ -1477,11 +1477,11 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pTmpFont->SetVertical( 0, GetInfo().GetTxtFrm()->IsVertical() );
         }
 
-        if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->IsBidi() )
+        if( pPor->IsMultiPortion() && static_cast<SwMultiPortion*>(pPor)->IsBidi() )
         {
             // but we do allow nested bidi portions
             OSL_ENSURE( rMulti.IsBidi(), "Only nesting of bidi portions is allowed" );
-            PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor, &rMulti );
+            PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor), &rMulti );
         }
         else
             pPor->Paint( GetInfo() );
@@ -1558,10 +1558,10 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     if( rMulti.HasBrackets() )
     {
         sal_Int32 nTmpOldIdx = GetInfo().GetIdx();
-        GetInfo().SetIdx(((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart);
+        GetInfo().SetIdx(static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
         GetInfo().X( nOldX );
-        ((SwDoubleLinePortion&)rMulti).PaintBracket( GetInfo(),
+        static_cast<SwDoubleLinePortion&>(rMulti).PaintBracket( GetInfo(),
             aManip.GetSpaceAdd(), false );
         GetInfo().SetIdx( nTmpOldIdx );
     }
@@ -1585,7 +1585,7 @@ static bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
     bool bRet = rpFld != 0;
     if( bRet )
     {
-        if( ((SwFldPortion*)rpFld)->IsFollow() )
+        if( static_cast<SwFldPortion*>(rpFld)->IsFollow() )
         {
             rpFld->Truncate();
             pLast->SetPortion( NULL );
@@ -1630,10 +1630,10 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     if( rMulti.HasBrackets() )
     {
         sal_Int32 nOldIdx = rInf.GetIdx();
-        rInf.SetIdx( ((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart );
+        rInf.SetIdx( static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart );
         SeekAndChg( rInf );
         nOldX = GetInfo().X();
-        ((SwDoubleLinePortion&)rMulti).FormatBrackets( rInf, nMaxWidth );
+        static_cast<SwDoubleLinePortion&>(rMulti).FormatBrackets( rInf, nMaxWidth );
         rInf.SetIdx( nOldIdx );
     }
 
@@ -1680,7 +1680,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             assert(pUpperFrm); //pFrm is in table but does not have an upper cell frame
             if (!pUpperFrm)
                 return false;
-            const SwTableLine* pLine = ((SwRowFrm*)pUpperFrm->GetUpper())->GetTabLine();
+            const SwTableLine* pLine = static_cast<const SwRowFrm*>(pUpperFrm->GetUpper())->GetTabLine();
             const SwFmtFrmSize& rFrmFmtSize = pLine->GetFrmFmt()->GetFrmSize();
             if ( ATT_VAR_SIZE == rFrmFmtSize.GetHeightSizeType() )
                 pUpperFrm = pPage;
@@ -1772,8 +1772,8 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         {
             OSL_ENSURE( pFirstRest->InFldGrp(), "BuildMulti: Fieldrest expected");
             SwFldPortion *pFld =
-                ((SwFldPortion*)pFirstRest)->Clone(
-                    ((SwFldPortion*)pFirstRest)->GetExp() );
+                static_cast<SwFldPortion*>(pFirstRest)->Clone(
+                    static_cast<SwFldPortion*>(pFirstRest)->GetExp() );
             pFld->SetFollow( true );
             aInf.SetRest( pFld );
         }
@@ -1818,8 +1818,8 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 if( pSecondRest )
                 {
                     OSL_ENSURE( pSecondRest->InFldGrp(), "Fieldrest expected");
-                    SwFldPortion *pFld = ((SwFldPortion*)pSecondRest)->Clone(
-                                    ((SwFldPortion*)pSecondRest)->GetExp() );
+                    SwFldPortion *pFld = static_cast<SwFldPortion*>(pSecondRest)->Clone(
+                                    static_cast<SwFldPortion*>(pSecondRest)->GetExp() );
                     pFld->SetFollow( true );
                     aTmp.SetRest( pFld );
                 }
@@ -1900,11 +1900,11 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     if( rMulti.IsDouble() )
     {
-        ((SwDoubleLinePortion&)rMulti).CalcBlanks( rInf );
-        if( ((SwDoubleLinePortion&)rMulti).GetLineDiff() )
+        static_cast<SwDoubleLinePortion&>(rMulti).CalcBlanks( rInf );
+        if( static_cast<SwDoubleLinePortion&>(rMulti).GetLineDiff() )
         {
             SwLineLayout* pLine = &rMulti.GetRoot();
-            if( ((SwDoubleLinePortion&)rMulti).GetLineDiff() > 0 )
+            if( static_cast<SwDoubleLinePortion&>(rMulti).GetLineDiff() > 0 )
             {
                 rInf.SetIdx( nStartIdx + pLine->GetLen() );
                 pLine = pLine->GetNext();
@@ -1926,10 +1926,10 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             }
             rInf.SetIdx( nStartIdx );
         }
-        if( ((SwDoubleLinePortion&)rMulti).GetBrackets() )
+        if( static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets() )
         {
             rMulti.Width( rMulti.Width() +
-                    ((SwDoubleLinePortion&)rMulti).BracketWidth() );
+                    static_cast<SwDoubleLinePortion&>(rMulti).BracketWidth() );
             GetInfo().X( nOldX );
         }
     }
@@ -1938,8 +1938,8 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         rMulti.ActualizeTabulator();
         if( rMulti.IsRuby() )
         {
-            ((SwRubyPortion&)rMulti).Adjust( rInf );
-            ((SwRubyPortion&)rMulti).CalcRubyOffset();
+            static_cast<SwRubyPortion&>(rMulti).Adjust( rInf );
+            static_cast<SwRubyPortion&>(rMulti).CalcRubyOffset();
         }
     }
     if( rMulti.HasRotation() )
@@ -1968,7 +1968,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             "BuildMultiPortion: Surprising restportion, field expected" );
         SwMultiPortion *pTmp;
         if( rMulti.IsDouble() )
-            pTmp = new SwDoubleLinePortion( ((SwDoubleLinePortion&)rMulti),
+            pTmp = new SwDoubleLinePortion( static_cast<SwDoubleLinePortion&>(rMulti),
                                             nMultiLen + rInf.GetIdx() );
         else if( rMulti.IsRuby() )
         {
@@ -1978,7 +1978,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             if ( rInf.GetIdx() == rInf.GetLineStart() )
             {
                 // the ruby portion has to be split in two portions
-                pTmp = new SwRubyPortion( ((SwRubyPortion&)rMulti),
+                pTmp = new SwRubyPortion( static_cast<SwRubyPortion&>(rMulti),
                                           nMultiLen + rInf.GetIdx() );
 
                 if( pNextSecond )
@@ -2029,7 +2029,7 @@ bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             }
 
             pTmp = new SwBidiPortion( nMultiLen + rInf.GetIdx(),
-                                    ((SwBidiPortion&)rMulti).GetLevel() );
+                                    static_cast<SwBidiPortion&>(rMulti).GetLevel() );
         }
         else
             pTmp = NULL;
@@ -2101,7 +2101,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         {
             if( !pHelpMulti )
                 pTmpMulti = NULL;
-            pFld = (SwFldPortion*)pPor;
+            pFld = const_cast<SwFldPortion*>(static_cast<const SwFldPortion*>(pPor));
         }
         else if( pPor->IsMultiPortion() )
         {
@@ -2109,7 +2109,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
                     "Nested multiportions are forbidden." );
 
             pFld = NULL;
-            pTmpMulti = (SwMultiPortion*)pPor;
+            pTmpMulti = static_cast<const SwMultiPortion*>(pPor);
         }
         pPor = pPor->GetPortion();
         // If the last portion is a multi-portion, we enter it
@@ -2151,7 +2151,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         {
             pRest = NewFldPortion( GetInfo(), pHint );
             if( pRest->InFldGrp() )
-                ((SwFldPortion*)pRest)->TakeNextOffset( pFld );
+                static_cast<SwFldPortion*>(pRest)->TakeNextOffset( pFld );
             else
             {
                 delete pRest;
@@ -2177,7 +2177,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         return pRest;
 
     if( pRest || nMultiPos > nPosition || ( pHelpMulti->IsRuby() &&
-        ((SwRubyPortion*)pHelpMulti)->GetRubyOffset() < COMPLETE_STRING ) )
+        static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset() < COMPLETE_STRING ) )
     {
         SwMultiPortion* pTmp;
         if( pHelpMulti->IsDouble() )
@@ -2202,7 +2202,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
                                       *pFrm->GetTxtNode()->getIDocumentSettingAccess(),
-                                       nMultiPos, ((SwRubyPortion*)pHelpMulti)->GetRubyOffset(),
+                                       nMultiPos, static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset(),
                                        pRubyPos );
         }
         else if( pHelpMulti->HasRotation() )
@@ -2259,13 +2259,13 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
         if ( pMulti->IsDouble() )
         {
             pTxtCursor->SetPropFont( 50 );
-            nSpaceCnt = ((SwDoubleLinePortion*)pMulti)->GetSpaceCnt();
+            nSpaceCnt = static_cast<SwDoubleLinePortion*>(pMulti)->GetSpaceCnt();
         }
         else
         {
             const sal_Int32 nOldIdx = pTxtCursor->GetInfo().GetIdx();
             pTxtCursor->GetInfo().SetIdx ( nCurrStart );
-            nSpaceCnt = ((SwBidiPortion*)pMulti)->GetSpaceCnt(pTxtCursor->GetInfo());
+            nSpaceCnt = static_cast<SwBidiPortion*>(pMulti)->GetSpaceCnt(pTxtCursor->GetInfo());
             pTxtCursor->GetInfo().SetIdx ( nOldIdx );
         }
 

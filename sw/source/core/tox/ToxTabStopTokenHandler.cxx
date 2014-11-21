@@ -48,7 +48,7 @@ DefaultToxTabStopTokenHandler::HandleTabStopToken(
 
     // check whether a tab adjustment has been specified.
     if (SVX_TAB_ADJUST_END > aToken.eTabAlign) {
-        const SvxLRSpaceItem& rLR = (SvxLRSpaceItem&) targetNode.SwCntntNode::GetAttr(RES_LR_SPACE, true);
+        const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>( targetNode.SwCntntNode::GetAttr(RES_LR_SPACE, true) );
 
         long nTabPosition = aToken.nTabStopPosition;
         if (!mTabPositionIsRelativeToParagraphIndent && rLR.GetTxtLeft()) {
@@ -101,7 +101,7 @@ DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTx
 DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTxtNode& targetNode, const SwRootFrm *currentLayout)
 {
     const SwPageDesc* pageDescription =
-            ((SwFmtPageDesc&) targetNode.SwCntntNode::GetAttr(RES_PAGEDESC)).GetPageDesc();
+            static_cast<const SwFmtPageDesc&>( targetNode.SwCntntNode::GetAttr(RES_PAGEDESC)).GetPageDesc();
 
     if (!pageDescription) {
         return false;

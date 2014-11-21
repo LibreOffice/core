@@ -123,7 +123,7 @@ bool SwTxtFrm::CalcPrepFtnAdjust()
     const SwFtnFrm *pFtn = pBoss->FindFirstFtn( this );
     if( pFtn && FTNPOS_CHAPTER != GetNode()->GetDoc()->GetFtnInfo().ePos &&
         ( !pBoss->GetUpper()->IsSctFrm() ||
-        !((SwSectionFrm*)pBoss->GetUpper())->IsFtnAtEnd() ) )
+        !static_cast<SwSectionFrm*>(pBoss->GetUpper())->IsFtnAtEnd() ) )
     {
         const SwFtnContFrm *pCont = pBoss->FindFtnCont();
         bool bReArrange = true;
@@ -181,7 +181,7 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         const SwFrm* pRow = pFrm;
         while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
             pRow = pRow->GetUpper();
-        const SwTabFrm* pTabFrm = (SwTabFrm*)pRow->GetUpper();
+        const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>(pRow->GetUpper());
 
         OSL_ENSURE( pTabFrm && pRow &&
                 pRow->GetUpper()->IsTabFrm(), "Upper of row should be tab" );
@@ -192,7 +192,7 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         SwTwips nMin = 0;
         if ( bDontSplit )
             nMin = (pTabFrm->Frm().*fnRect->fnGetBottom)();
-        else if ( !((SwRowFrm*)pRow)->IsRowSplitAllowed() )
+        else if ( !static_cast<const SwRowFrm*>(pRow)->IsRowSplitAllowed() )
             nMin = (pRow->Frm().*fnRect->fnGetBottom)();
 
         if ( nMin && (*fnRect->fnYDiff)( nMin, nLower ) > 0 )
@@ -291,7 +291,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
     OSL_ENSURE( !IsFollow() && IsInFtn(), "SwTxtFrm::SetFtnLine: moon walk" );
 
     const SwFtnFrm *pFtnFrm = FindFtnFrm();
-    const SwTxtFrm *pRef = (const SwTxtFrm *)pFtnFrm->GetRef();
+    const SwTxtFrm *pRef = static_cast<const SwTxtFrm *>(pFtnFrm->GetRef());
     const SwFtnBossFrm *pBoss = FindFtnBossFrm();
     if( pBoss != pRef->FindFtnBossFrm( !pFtnFrm->GetAttr()->
                                         GetFtn().IsEndNote() ) )
@@ -335,10 +335,10 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
             if ( !pRef->IsInFtnConnect() )
             {
                 SwSaveFtnHeight aSave( (SwFtnBossFrm*)pBoss, nHeight  );
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, true );
+                nHeight = const_cast<SwFtnContFrm*>(static_cast<const SwFtnContFrm*>(pCont))->Grow( LONG_MAX, true );
             }
             else
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, true );
+                nHeight = const_cast<SwFtnContFrm*>(static_cast<const SwFtnContFrm*>(pCont))->Grow( LONG_MAX, true );
 
             nHeight += nTmp;
             if( nHeight < 0 )
@@ -371,15 +371,15 @@ SwTxtFrm *SwTxtFrm::FindQuoVadisFrm()
         return 0;
 
     // Nun den letzten Cntnt:
-    const SwCntntFrm *pCnt = pFtnFrm->ContainsCntnt();
+    SwCntntFrm *pCnt = pFtnFrm->ContainsCntnt();
     if( !pCnt )
         return NULL;
-    const SwCntntFrm *pLast;
+    SwCntntFrm *pLast;
     do
     {   pLast = pCnt;
         pCnt = pCnt->GetNextCntntFrm();
     } while( pCnt && pFtnFrm->IsAnLower( pCnt ) );
-    return (SwTxtFrm*)pLast;
+    return static_cast<SwTxtFrm*>(pLast);
 }
 
 void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
@@ -428,7 +428,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
 
             if( nEnd >= nIdx )
             {
-                SwTxtFtn *pFtn = (SwTxtFtn*)pHt;
+                SwTxtFtn *pFtn = static_cast<SwTxtFtn*>(pHt);
                 const bool bEndn = pFtn->GetFtn().IsEndNote();
 
                 if( bEndn )
@@ -443,8 +443,8 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                         pFtnBoss = pSource->FindFtnBossFrm( true );
                         if( pFtnBoss->GetUpper()->IsSctFrm() )
                         {
-                            SwSectionFrm* pSect = (SwSectionFrm*)
-                                                  pFtnBoss->GetUpper();
+                            SwSectionFrm* pSect = static_cast<SwSectionFrm*>(
+                                                  pFtnBoss->GetUpper());
                             if( pSect->IsFtnAtEnd() )
                                 bFtnEndDoc = false;
                         }
@@ -478,7 +478,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                     else if( GetFollow() )
                     {
                         SwCntntFrm *pDest = GetFollow();
-                        while( pDest->GetFollow() && ((SwTxtFrm*)pDest->
+                        while( pDest->GetFollow() && static_cast<SwTxtFrm*>(pDest->
                                GetFollow())->GetOfst() <= nIdx )
                             pDest = pDest->GetFollow();
                         OSL_ENSURE( !SwFtnBossFrm::FindFtn(
@@ -505,7 +505,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                             pFtnBoss->MoveFtns( this, pDest, pFtn );
                             bRemove = true;
                         }
-                        ((SwTxtFrm*)pDest)->SetFtn( true );
+                        static_cast<SwTxtFrm*>(pDest)->SetFtn( true );
 
                         OSL_ENSURE( SwFtnBossFrm::FindFtn( pDest,
                            pFtn),"SwTxtFrm::RemoveFtn: footnote ChgRef failed");
@@ -784,8 +784,8 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( !pFrm->IsFtnAllowed() )
         return 0;
 
-    SwTxtFtn  *pFtn = (SwTxtFtn*)pHint;
-    SwFmtFtn& rFtn = (SwFmtFtn&)pFtn->GetFtn();
+    SwTxtFtn  *pFtn = static_cast<SwTxtFtn*>(pHint);
+    const SwFmtFtn& rFtn = static_cast<const SwFmtFtn&>(pFtn->GetFtn());
     SwDoc *pDoc = pFrm->GetNode()->GetDoc();
 
     if( rInf.IsTest() )
@@ -866,7 +866,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                         SwFtnContFrm* pFtnC = pTmp->FindFtnCont();
                         if( pFtnC )
                         {
-                            SwFtnFrm* pTmpFrm = (SwFtnFrm*)pFtnC->Lower();
+                            SwFtnFrm* pTmpFrm = static_cast<SwFtnFrm*>(pFtnC->Lower());
                             if( pTmpFrm && *pTmpFrm < pFtn )
                             {
                                 rInf.SetStop( true );
@@ -1058,8 +1058,8 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     while( pPor )
     {
         if ( pPor->IsFlyPortion() )
-            nLastLeft = ( (SwFlyPortion*) pPor)->Fix() +
-                        ( (SwFlyPortion*) pPor)->Width();
+            nLastLeft = static_cast<SwFlyPortion*>(pPor)->Fix() +
+                        static_cast<SwFlyPortion*>(pPor)->Width();
         pPor = pPor->GetPortion();
     }
     // Das alte Spiel: wir wollen, dass die Zeile an einer bestimmten
@@ -1110,7 +1110,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     // die beim erneuten Aufspannen nur Aerger bereiten wuerde.
     pPor = pCurr->FindLastPortion();
     SwGluePortion *pGlue = pPor->IsMarginPortion() ?
-        (SwMarginPortion*) pPor : 0;
+        static_cast<SwMarginPortion*>(pPor) : 0;
     if( pGlue )
     {
         pGlue->Height( 0 );
@@ -1181,7 +1181,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     {
         // pPor->Append deletes the pPortoin pointer of pPor. Therefore
         // we have to keep a pointer to the next portion
-        pQuo = (SwQuoVadisPortion*)pCurrPor->GetPortion();
+        pQuo = static_cast<SwQuoVadisPortion*>(pCurrPor->GetPortion());
         pPor->Append( pCurrPor );
         pPor = pPor->GetPortion();
         pCurrPor = pQuo;
@@ -1280,14 +1280,14 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
             true, &pItem ))
-            pFnt->SetVertical( ((SvxCharRotateItem*)pItem)->GetValue(),
+            pFnt->SetVertical( static_cast<const SvxCharRotateItem*>(pItem)->GetValue(),
                                 rInf.GetTxtFrm()->IsVertical() );
 
         pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
 
         if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             true, &pItem ))
-            pFnt->SetBackColor( new Color( ((SvxBrushItem*)pItem)->GetColor() ) );
+            pFnt->SetBackColor( new Color( static_cast<const SvxBrushItem*>(pItem)->GetColor() ) );
     }
     else
         pFnt = NULL;
@@ -1485,7 +1485,7 @@ void SwParaPortion::SetErgoSumNum( const OUString& rErgo )
     while( pPor && !pQuo )
     {
         if ( pPor->IsQuoVadisPortion() )
-            pQuo = (SwQuoVadisPortion*)pPor;
+            pQuo = static_cast<SwQuoVadisPortion*>(pPor);
         pPor = pPor->GetPortion();
     }
     if( pQuo )
@@ -1505,7 +1505,7 @@ bool SwParaPortion::UpdateQuoVadis( const OUString &rQuo )
     while( pPor && !pQuo )
     {
         if ( pPor->IsQuoVadisPortion() )
-            pQuo = (SwQuoVadisPortion*)pPor;
+            pQuo = static_cast<SwQuoVadisPortion*>(pPor);
         pPor = pPor->GetPortion();
     }
 

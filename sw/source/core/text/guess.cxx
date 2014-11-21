@@ -262,7 +262,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
              CH_TXTATR_BREAKWORD ==
                 ( cFldChr = rInf.GetTxt()[ rInf.GetIdx() - 1 ] ) )
         {
-            SwFldPortion* pFld = (SwFldPortion*)rInf.GetLast();
+            SwFldPortion* pFld = static_cast<SwFldPortion*>(rInf.GetLast());
             OUString aTxt;
             pFld->GetExpTxt( rInf, aTxt );
 

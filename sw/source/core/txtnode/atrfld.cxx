@@ -129,15 +129,15 @@ SwFmtFld::~SwFmtFld()
         switch( pType->Which() )
         {
         case RES_USERFLD:
-            bDel = ((SwUserFieldType*)pType)->IsDeleted();
+            bDel = static_cast<SwUserFieldType*>(pType)->IsDeleted();
             break;
 
         case RES_SETEXPFLD:
-            bDel = ((SwSetExpFieldType*)pType)->IsDeleted();
+            bDel = static_cast<SwSetExpFieldType*>(pType)->IsDeleted();
             break;
 
         case RES_DDEFLD:
-            bDel = ((SwDDEFieldType*)pType)->IsDeleted();
+            bDel = static_cast<SwDDEFieldType*>(pType)->IsDeleted();
             break;
         }
 
@@ -186,10 +186,10 @@ void SwFmtFld::ClearTxtFld()
 bool SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return ( ( mpField && ((SwFmtFld&)rAttr).GetField()
-               && mpField->GetTyp() == ((SwFmtFld&)rAttr).GetField()->GetTyp()
-               && mpField->GetFormat() == ((SwFmtFld&)rAttr).GetField()->GetFormat() ) )
-             || ( !mpField && !((SwFmtFld&)rAttr).GetField() );
+    return ( ( mpField && static_cast<const SwFmtFld&>(rAttr).GetField()
+               && mpField->GetTyp() == static_cast<const SwFmtFld&>(rAttr).GetField()->GetTyp()
+               && mpField->GetFormat() == static_cast<const SwFmtFld&>(rAttr).GetField()->GetFormat() ) )
+             || ( !mpField && !static_cast<const SwFmtFld&>(rAttr).GetField() );
 }
 
 SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
@@ -292,7 +292,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if( RES_USERFLD == GetField()->GetTyp()->Which() )
     {
-        SwUserFieldType* pType = (SwUserFieldType*)GetField()->GetTyp();
+        SwUserFieldType* pType = static_cast<SwUserFieldType*>(GetField()->GetTyp());
         if(!pType->IsValid())
         {
             SwCalc aCalc( *pTxtNd->GetDoc() );
@@ -309,10 +309,10 @@ bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
     const SwTxtNode* pTxtNd;
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() ||
         !mpTxtFld || 0 == ( pTxtNd = mpTxtFld->GetpTxtNode() ) ||
-        &pTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+        &pTxtNd->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
         return true;
 
-    ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pTxtNd;
+    static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = pTxtNd;
     return false;
 }
 
@@ -377,7 +377,7 @@ void SwTxtFld::ExpandTxtFld(const bool bForceNotify) const
              // Page count fields to not use aExpand during formatting,
              // therefore an invalidation of the text frame has to be triggered even if aNewExpand == aExpand:
              && ( RES_DOCSTATFLD != nWhich || DS_PAGE != static_cast<const SwDocStatField*>(pFld)->GetSubType() )
-             && ( RES_GETEXPFLD != nWhich || ((SwGetExpField*)pFld)->IsInBodyTxt() ) )
+             && ( RES_GETEXPFLD != nWhich || static_cast<const SwGetExpField*>(pFld)->IsInBodyTxt() ) )
         {
             if( m_pTxtNode->CalcHiddenParaField() )
             {
@@ -431,9 +431,9 @@ void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
         {
             if( rDestFmtFld.GetTxtFld() )
             {
-                ((SwDDEFieldType*)rDestFmtFld.GetField()->GetTyp())->DecRefCnt();
+                static_cast<SwDDEFieldType*>(rDestFmtFld.GetField()->GetTyp())->DecRefCnt();
             }
-            ((SwDDEFieldType*)pFldType)->IncRefCnt();
+            static_cast<SwDDEFieldType*>(pFldType)->IncRefCnt();
         }
 
         OSL_ENSURE( pFldType, "unbekannter FieldType" );
@@ -451,12 +451,12 @@ void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
     }
     // Tabellenfelder auf externe Darstellung
     else if( RES_TABLEFLD == nFldWhich
-             && ((SwTblField*)rDestFmtFld.GetField())->IsIntrnlName() )
+             && static_cast<SwTblField*>(rDestFmtFld.GetField())->IsIntrnlName() )
     {
         // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
         const SwTableNode* pTblNd = m_pTxtNode->FindTableNode();
         if( pTblNd )        // steht in einer Tabelle
-            ((SwTblField*)rDestFmtFld.GetField())->PtrToBoxNm( &pTblNd->GetTable() );
+            static_cast<SwTblField*>(rDestFmtFld.GetField())->PtrToBoxNm( &pTblNd->GetTable() );
     }
 }
 

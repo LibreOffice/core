@@ -182,7 +182,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
             if( nWrdStart >= nPamStart && pPos->InHyphGrp()
                 && ( !pPos->IsSoftHyphPortion()
-                     || ((SwSoftHyphPortion*)pPos)->IsExpand() ) )
+                     || static_cast<SwSoftHyphPortion*>(pPos)->IsExpand() ) )
             {
                 nWrdStart = nWrdStart + pPos->GetLen();
                 break;
@@ -202,7 +202,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
     if( pOldCurr->IsParaPortion() )
     {
-        SetParaPortion( &rInf, (SwParaPortion*)pOldCurr );
+        SetParaPortion( &rInf, static_cast<SwParaPortion*>(pOldCurr) );
         OSL_ENSURE( IsParaLine(), "SwTxtFormatter::Hyphenate: even not the first" );
     }
 

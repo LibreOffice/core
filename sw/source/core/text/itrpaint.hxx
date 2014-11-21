@@ -54,9 +54,9 @@ public:
     inline void SetPaintDrop( const bool bNew ) { bPaintDrop = bNew; }
     inline bool IsPaintDrop() const { return bPaintDrop; }
     inline SwTxtPaintInfo &GetInfo()
-        { return (SwTxtPaintInfo&)SwTxtIter::GetInfo(); }
+        { return static_cast<SwTxtPaintInfo&>(SwTxtIter::GetInfo()); }
     inline const SwTxtPaintInfo &GetInfo() const
-        { return (const SwTxtPaintInfo&)SwTxtIter::GetInfo(); }
+        { return static_cast<const SwTxtPaintInfo&>(SwTxtIter::GetInfo()); }
 };
 
 bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );

@@ -64,7 +64,7 @@ bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt )
            rPor.IsFlyPortion() || rPor.IsFlyCntPortion() ||
            rPor.IsBreakPortion() || rPor.IsMarginPortion() ||
            rPor.IsHolePortion() ||
-          ( rPor.IsMultiPortion() && ! ((SwMultiPortion&)rPor).IsBidi() ) ||
+          ( rPor.IsMultiPortion() && ! static_cast<const SwMultiPortion&>(rPor).IsBidi() ) ||
            rFnt.GetEscapement() < 0 || rFnt.IsWordLineMode() ||
            SVX_CASEMAP_KAPITAELCHEN == rFnt.GetCaseMap();
 }
@@ -370,7 +370,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, &aPorInfo, *pOut );
 
             if( pPor->IsMultiPortion() )
-                PaintMultiPortion( rPaint, (SwMultiPortion&)*pPor );
+                PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor) );
             else
                 pPor->Paint( GetInfo() );
         }
@@ -389,7 +389,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if( pNext || !pPor->IsMarginPortion() )
             pPor->Move( GetInfo() );
         if( pPor->IsArrowPortion() && GetInfo().OnWin() && !pArrow )
-            pArrow = (SwArrowPortion*)pPor;
+            pArrow = static_cast<SwArrowPortion*>(pPor);
 
         pPor = bDrawInWindow || GetInfo().X() <= nMaxRight ||
                // #i16816# tagged pdf support
@@ -433,7 +433,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 ( GetTxtFrm()->GetNext() &&
                   0 == GetTxtFrm()->GetNext()->Prt().Height() &&
                   GetTxtFrm()->GetNext()->IsTxtFrm() &&
-                  ((SwTxtFrm*)GetTxtFrm()->GetNext())->IsUndersized() ) ;
+                  static_cast<SwTxtFrm*>(GetTxtFrm()->GetNext())->IsUndersized() ) ;
 
             if( bUnderSz || bNextUndersized )
             {
@@ -565,7 +565,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
             if ( pPor->IsFlyPortion() || pPor->IsFlyCntPortion() ||
                 pPor->IsBreakPortion() || pPor->IsMarginPortion() ||
                 pPor->IsHolePortion() ||
-                ( pPor->IsMultiPortion() && ! ((SwMultiPortion*)pPor)->IsBidi() ) )
+                ( pPor->IsMultiPortion() && ! static_cast<const SwMultiPortion*>(pPor)->IsBidi() ) )
                 break;
 
             aIter.Seek( nTmpIdx );

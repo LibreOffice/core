@@ -299,7 +299,7 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
         else
             rInf.X( rInf.X() + PrtWidth() );
     }
-    if( IsMultiPortion() && ((SwMultiPortion*)this)->HasTabulator() )
+    if( IsMultiPortion() && static_cast<SwMultiPortion*>(this)->HasTabulator() )
         rInf.IncSpaceIdx();
 
     rInf.SetIdx( rInf.GetIdx() + GetLen() );

@@ -215,9 +215,9 @@ public:
     sal_Int32 GetTxtEnd() const;
 
     inline SwTxtSizeInfo &GetInfo()
-        { return (SwTxtSizeInfo&)SwTxtIter::GetInfo(); }
+        { return static_cast<SwTxtSizeInfo&>(SwTxtIter::GetInfo()); }
     inline const SwTxtSizeInfo &GetInfo() const
-        { return (const SwTxtSizeInfo&)SwTxtIter::GetInfo(); }
+        { return static_cast<const SwTxtSizeInfo&>(SwTxtIter::GetInfo()); }
 
 };
 

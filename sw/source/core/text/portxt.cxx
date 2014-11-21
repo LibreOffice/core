@@ -389,7 +389,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                         ( rInf.GetLast()->InFldGrp() &&
                           ! rInf.GetLast()->InNumberGrp() &&
                           ! rInf.GetLast()->IsErgoSumPortion() &&
-                          lcl_HasContent(*((SwFldPortion*)rInf.GetLast()),rInf ) ) ) ) )
+                          lcl_HasContent(*static_cast<SwFldPortion*>(rInf.GetLast()),rInf ) ) ) ) )
         {
             if ( rInf.X() + aGuess.BreakWidth() <= rInf.Width() )
                 Width( aGuess.BreakWidth() );
@@ -420,7 +420,7 @@ bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
             aGuess.BreakPos() != rInf.GetLineStart() &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
-            ( !rInf.GetLast()->IsBlankPortion() ||  ((SwBlankPortion*)
+            ( !rInf.GetLast()->IsBlankPortion() ||  static_cast<SwBlankPortion*>(
               rInf.GetLast())->MayUnderflow( rInf, rInf.GetIdx()-1, true )))
         {       // case C1 (former BreakUnderflow())
             BreakUnderflow( rInf );
@@ -485,8 +485,8 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
         rInf.X( rInf.X() - nBlankSize );
         SetLen( GetLen() - nHoleLen );
         SwLinePortion *pHole = new SwHolePortion( *this );
-        ( (SwHolePortion *)pHole )->SetBlankWidth( nBlankSize );
-        ( (SwHolePortion *)pHole )->SetLen( nHoleLen );
+        static_cast<SwHolePortion *>( pHole )->SetBlankWidth( nBlankSize );
+        static_cast<SwHolePortion *>( pHole )->SetLen( nHoleLen );
         Insert( pHole );
     }
 }

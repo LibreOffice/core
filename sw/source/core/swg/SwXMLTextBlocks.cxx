@@ -255,7 +255,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     if(!xBlkRoot.is())
         return ERR_SWG_WRITE_ERROR;
 
-    uno::Reference < container::XNameAccess > xAccess( ((SwXMLTextBlocks&)rDestImp).xBlkRoot, uno::UNO_QUERY );
+    uno::Reference < container::XNameAccess > xAccess( static_cast<SwXMLTextBlocks&>(rDestImp).xBlkRoot, uno::UNO_QUERY );
     while ( xAccess->hasByName( sDestShortName ) )
     {
         ++nIdx;
@@ -272,7 +272,7 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     try
     {
         uno::Reference < embed::XStorage > rSourceRoot = xBlkRoot->openStorageElement( aGroup, embed::ElementModes::READ );
-        uno::Reference < embed::XStorage > rDestRoot = ((SwXMLTextBlocks&)rDestImp).xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
+        uno::Reference < embed::XStorage > rDestRoot = static_cast<SwXMLTextBlocks&>(rDestImp).xBlkRoot->openStorageElement( sDestShortName, embed::ElementModes::READWRITE );
         rSourceRoot->copyToStorage( rDestRoot );
     }
     catch (const uno::Exception&)
@@ -283,8 +283,8 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     if(!nError)
     {
         rShort = sDestShortName;
-        ((SwXMLTextBlocks&)rDestImp).AddName( rShort, rLong, bTextOnly );
-        ((SwXMLTextBlocks&)rDestImp).MakeBlockList();
+        static_cast<SwXMLTextBlocks&>(rDestImp).AddName( rShort, rLong, bTextOnly );
+        static_cast<SwXMLTextBlocks&>(rDestImp).MakeBlockList();
     }
     CloseFile();
     rDestImp.CloseFile();
@@ -596,7 +596,7 @@ void SwXMLTextBlocks::MakeBlockText( const OUString& rText )
     {
         if ( nPos )
         {
-            pTxtNode = (SwTxtNode*)pTxtNode->AppendNode( SwPosition( *pTxtNode ) );
+            pTxtNode = static_cast<SwTxtNode*>(pTxtNode->AppendNode( SwPosition( *pTxtNode ) ));
         }
         SwIndex aIdx( pTxtNode );
         pTxtNode->InsertText( rText.getToken( 0, '\015', nPos ), aIdx );

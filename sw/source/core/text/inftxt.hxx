@@ -407,7 +407,7 @@ protected:
         , pSmartTags(0)
         , pSpaceAdd(0)
 #ifdef DBG_UTIL
-        , pBrushItem((SvxBrushItem*)-1)
+        , pBrushItem(reinterpret_cast<SvxBrushItem*>(-1))
 #else
         , pBrushItem(0)
 #endif
