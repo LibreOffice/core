@@ -41,7 +41,9 @@
 #include <svx/fmobjfac.hxx>
 #include <svx/svdfield.hxx>
 #include <svx/objfac3d.hxx>
+#include <editeng/acorrcfg.hxx>
 
+#include <swacorr.hxx>
 #include <unomid.h>
 
 #include "swdllimpl.hxx"
@@ -135,10 +137,19 @@ SwDLL::SwDLL()
     // register your controllers here
     RegisterControls();
 #endif
+
+    // replace SvxAutocorrect with SwAutocorrect
+    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+    const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
+    rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
 }
 
 SwDLL::~SwDLL()
 {
+    // fdo#86494 SwAutoCorrect must be deleted before _FinitCore
+    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+    rACfg.SetAutoCorrect(0); // delete SwAutoCorrect before exit handlers
+
     // Pool has to be deleted before statics are
     SW_MOD()->RemoveAttrPool();
 

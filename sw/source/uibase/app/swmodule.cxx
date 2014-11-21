@@ -60,7 +60,6 @@
 #include <docsh.hxx>
 #include <swmodule.hxx>
 #include <swevent.hxx>
-#include <swacorr.hxx>
 #include <cmdid.h>
 #include <dobjfac.hxx>
 #include <init.hxx>
@@ -118,7 +117,6 @@
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <editeng/acorrcfg.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <avmedia/mediaplayer.hxx>
@@ -192,11 +190,6 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pAuthorNames = new std::vector<OUString>;  // All Redlining-Authors
 
-    // replace SvxAutocorrect with SwAutocorrect
-    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-    const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
-    rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
-
     StartListening( *SfxGetpApp() );
 
     // OD 14.02.2003 #107424# - init color configuration
@@ -227,9 +220,6 @@ SwModule::~SwModule()
 {
     delete pErrorHdl;
     EndListening( *SfxGetpApp() );
-
-    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-    rACfg.SetAutoCorrect(0); // delete SwAutCorrect before exit handlers
 }
 
 void SwModule::CreateLngSvcEvtListener()
