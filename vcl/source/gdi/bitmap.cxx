@@ -1745,11 +1745,13 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 {
     Bitmap aDispBmp( *this );
 
-    if( mpImpBmp && ( pDisplay->mpGraphics || pDisplay->AcquireGraphics() ) )
+    SalGraphics* pDispGraphics = pDisplay->GetGraphics();
+
+    if( mpImpBmp && pDispGraphics )
     {
         ImpBitmap* pImpDispBmp = new ImpBitmap;
 
-        if( pImpDispBmp->ImplCreate( *mpImpBmp, pDisplay->mpGraphics ) )
+        if( pImpDispBmp->ImplCreate( *mpImpBmp, pDispGraphics ) )
             aDispBmp.ImplSetImpBitmap( pImpDispBmp );
         else
             delete pImpDispBmp;
