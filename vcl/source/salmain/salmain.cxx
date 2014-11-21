@@ -28,7 +28,10 @@
 
 #include "salinst.hxx"
 
+bool fire_glxtest_process();
+
 SAL_IMPLEMENT_MAIN() {
+    fire_glxtest_process();
     tools::extendApplicationEnvironment();
     vclmain::createApplication();
     return SVMain();
