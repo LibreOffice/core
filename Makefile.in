@@ -257,7 +257,7 @@ cross-toolset: bootstrap fetch
 
 define gb_Top_DoInstall
 echo "$(1) in $(INSTALLDIR) ..." && \
-ooinstall $(2) "$(INSTALLDIR)"
+$(SRCDIR)/solenv/bin/ooinstall $(2) "$(INSTALLDIR)"
 
 endef
 
@@ -295,9 +295,9 @@ test-install: build
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd $(SRCDIR)/instsetoo_native && $(MAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
-	@ooinstall $(TESTINSTALLDIR)
+	@$(SRCDIR)/solenv/bin/ooinstall $(TESTINSTALLDIR)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app
+	@$(SRCDIR)/solenv/bin/macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app
 endif
 endif
 	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
@@ -321,16 +321,16 @@ install-package-%:
 	$(MAKE) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 id:
-	@create-ids
+	@$(SRCDIR)/solenv/bin/create-ids
 
 tags:
-	@create-tags
+	@$(SRCDIR)/solenv/bin/create-tags
 
 etags:
-	@create-tags -e
+	@$(SRCDIR)/solenv/bin/create-tags -e
 
 docs:
-	@mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg
+	@$(SRCDIR)/solenv/bin/mkdocs.sh $(SRCDIR)/docs $(SRCDIR)/solenv/inc/doxygen.cfg
 
 findunusedcode:
 	@$(SRCDIR)/bin/findunusedcode $(SRCDIR) $(MAKE)
