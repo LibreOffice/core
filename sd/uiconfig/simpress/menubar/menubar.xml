@@ -147,7 +147,6 @@
             <menu:menuitem menu:id=".uno:Gallery"/>
             <menu:menuitem menu:id=".uno:Navigator"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
             <menu:menu menu:id=".uno:ZoomMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:ZoomPage"/>
@@ -186,6 +185,7 @@
                     <menu:menuitem menu:id=".uno:InsertFileField"/>
                 </menu:menupopup>
             </menu:menu>
+            <menu:menuitem menu:id=".uno:HeaderAndFooter"/>
       <menu:menuitem menu:id=".uno:InsertAnnotation"/>
       <menu:menuitem menu:id=".uno:InsertSymbol"/>
             <menu:menu menu:id=".uno:FormattingMarkMenu">
