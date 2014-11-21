@@ -1595,6 +1595,9 @@
       </node>
       <node oor:name=".uno:NumberFormatCurrency" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format as Currency</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Currency</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1603,6 +1606,9 @@
       </node>
       <node oor:name=".uno:NumberFormatPercent" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format as Percent</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Percent</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1611,6 +1617,9 @@
       </node>
       <node oor:name=".uno:NumberFormatStandard" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format as General</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">General</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1619,6 +1628,9 @@
       </node>
       <node oor:name=".uno:NumberFormatDate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format as Date</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Date</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1627,6 +1639,9 @@
       </node>
       <node oor:name=".uno:NumberFormatDecimal" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format as Number</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Number</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
@@ -1635,6 +1650,9 @@
       </node>
       <node oor:name=".uno:NumberFormatScientific" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Format as Scientific</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Scientific</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
