@@ -665,6 +665,11 @@ private:
      * column.
      */
     std::vector<sc::FormulaGroupEntry> GetFormulaGroupEntries();
+
+    void EndListeningIntersectedGroups(
+        sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos = NULL );
+
+    void SetNeedsListeningGroup( SCROW nRow );
 };
 
 #endif

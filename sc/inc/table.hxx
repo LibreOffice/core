@@ -1109,6 +1109,12 @@ private:
     ScColumn* FetchColumn( SCCOL nCol );
     const ScColumn* FetchColumn( SCCOL nCol ) const;
 
+    void EndListeningIntersectedGroups(
+        sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        std::vector<ScAddress>* pGroupPos = NULL );
+
+    void SetNeedsListeningGroup( SCCOL nCol, SCROW nRow );
+
     /**
      * Use this to iterate through non-empty visible cells in a single column.
      */

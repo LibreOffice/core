@@ -1218,11 +1218,22 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         SCTAB nTabRangeStart = nStartTab;
         SCTAB nTabRangeEnd = nEndTab;
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
+        ScRange aShiftedRange(nStartCol, nStartRow, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
+        sc::EndListeningContext aEndListenCxt(*this);
+
+        std::vector<ScAddress> aGroupPos;
         do
         {
-            UpdateBroadcastAreas( URM_INSDEL, ScRange(
-                ScAddress( nStartCol, nStartRow, nTabRangeStart ),
-                ScAddress( nEndCol, MAXROW, nTabRangeEnd )), 0, static_cast<SCsROW>(nSize), 0 );
+            aShiftedRange.aStart.SetTab(nTabRangeStart);
+            aShiftedRange.aEnd.SetTab(nTabRangeEnd);
+
+            // Collect all formula groups that will get split by the shifting,
+            // and end all their listening.  Record the position of the top
+            // cell of the topmost group, and the postion of the bottom cell
+            // of the bottommost group.
+            EndListeningIntersectedGroups(aEndListenCxt, aShiftedRange, &aGroupPos);
+
+            UpdateBroadcastAreas(URM_INSDEL, aShiftedRange, 0, static_cast<SCsROW>(nSize), 0);
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
@@ -1230,13 +1241,20 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
 
         sc::RefUpdateContext aCxt(*this);
         aCxt.meMode = URM_INSDEL;
-        aCxt.maRange = ScRange(nStartCol, nStartRow, nTabRangeStart, nEndCol, MAXROW, nTabRangeEnd);
+        aCxt.maRange = aShiftedRange;
         aCxt.mnRowDelta = nSize;
         do
         {
+            aCxt.maRange.aStart.SetTab(nTabRangeStart);
+            aCxt.maRange.aEnd.SetTab(nTabRangeEnd);
             UpdateReference(aCxt, pRefUndoDoc, false);        // without drawing objects
         }
         while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
+
+        // UpdateReference should have set "needs listening" flags to those
+        // whose references have been modified.  We also need to set this flag
+        // to those that were in the groups that got split by shifting.
+        SetNeedsListeningGroups(aGroupPos);
 
         for (i=nStartTab; i<=nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
