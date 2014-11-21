@@ -59,6 +59,7 @@
 
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
@@ -236,10 +237,10 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     SFX_REQUEST_ARG (rReq, pLineStyle, SfxUInt32Item, ID_VAL_STYLE, false);
-                    if (CHECK_RANGE (XLINE_NONE, (sal_Int32)pLineStyle->GetValue (), XLINE_DASH))
+                    if (CHECK_RANGE (drawing::LineStyle_NONE, (sal_Int32)pLineStyle->GetValue (), drawing::LineStyle_DASH))
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
-                        pAttr->Put (XLineStyleItem ((XLineStyle) pLineStyle->GetValue ()), XATTR_LINESTYLE);
+                        pAttr->Put (XLineStyleItem ((drawing::LineStyle) pLineStyle->GetValue ()), XATTR_LINESTYLE);
                         rBindings.Invalidate (SID_ATTR_LINE_STYLE);
                     }
 #if HAVE_FEATURE_SCRIPTING
@@ -465,7 +466,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             pDashList->Insert (pEntry);
 
                         pAttr->Put (XLineDashItem (pName->GetValue (), aNewDash), XATTR_LINEDASH);
-                        pAttr->Put (XLineStyleItem (XLINE_DASH), XATTR_LINESTYLE);
+                        pAttr->Put (XLineStyleItem (drawing::LineStyle_DASH), XATTR_LINESTYLE);
                         rBindings.Invalidate (SID_ATTR_LINE_DASH);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }

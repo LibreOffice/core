@@ -29,6 +29,7 @@
 #include <svx/svdobj.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace com::sun::star;
 
@@ -51,12 +52,12 @@ MorphDlg::MorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObjec
     aSet1.Put(pObj1->GetMergedItemSet());
     aSet2.Put(pObj2->GetMergedItemSet());
 
-    const XLineStyle    eLineStyle1 = static_cast<const XLineStyleItem&>( aSet1.Get( XATTR_LINESTYLE ) ).GetValue();
-    const XLineStyle    eLineStyle2 = static_cast<const XLineStyleItem&>( aSet2.Get( XATTR_LINESTYLE ) ).GetValue();
+    const drawing::LineStyle eLineStyle1 = static_cast<const XLineStyleItem&>( aSet1.Get( XATTR_LINESTYLE ) ).GetValue();
+    const drawing::LineStyle eLineStyle2 = static_cast<const XLineStyleItem&>( aSet2.Get( XATTR_LINESTYLE ) ).GetValue();
     const drawing::FillStyle eFillStyle1 = static_cast<const XFillStyleItem&>( aSet1.Get( XATTR_FILLSTYLE ) ).GetValue();
     const drawing::FillStyle eFillStyle2 = static_cast<const XFillStyleItem&>( aSet2.Get( XATTR_FILLSTYLE ) ).GetValue();
 
-    if ( ( ( eLineStyle1 == XLINE_NONE ) || ( eLineStyle2 == XLINE_NONE ) ) &&
+    if ( ( ( eLineStyle1 == drawing::LineStyle_NONE ) || ( eLineStyle2 == drawing::LineStyle_NONE ) ) &&
          ( ( eFillStyle1 != drawing::FillStyle_SOLID ) || ( eFillStyle2 != drawing::FillStyle_SOLID ) ) )
     {
         m_pCbxAttributes->Disable();

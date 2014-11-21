@@ -168,11 +168,11 @@ bool SdrCircObj::PaintNeedsXPolyCirc() const
     if(!bNeed)
     {
         // XPoly is necessary for everything that isn't LineSolid or LineNone
-        XLineStyle eLine = static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
-        bNeed = eLine != XLINE_NONE && eLine != XLINE_SOLID;
+        drawing::LineStyle eLine = static_cast<const XLineStyleItem&>(rSet.Get(XATTR_LINESTYLE)).GetValue();
+        bNeed = eLine != drawing::LineStyle_NONE && eLine != drawing::LineStyle_SOLID;
 
         // XPoly is necessary for thick lines
-        if(!bNeed && eLine != XLINE_NONE)
+        if(!bNeed && eLine != drawing::LineStyle_NONE)
             bNeed = static_cast<const XLineWidthItem&>(rSet.Get(XATTR_LINEWIDTH)).GetValue() != 0;
 
         // XPoly is necessary for circle arcs with line ends

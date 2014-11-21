@@ -62,6 +62,7 @@
 #define MN_SYMBOLS_AUTO    2
 #define MN_GALLERY_ENTRY 100
 
+using namespace com::sun::star;
 
 // static ----------------------------------------------------------------
 
@@ -99,7 +100,7 @@ SvxLineTabPage::SvxLineTabPage
     bObjSelected( false ),
 
     pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
-    aXLStyle            ( XLINE_DASH ),
+    aXLStyle            ( drawing::LineStyle_DASH ),
     aXWidth             ( 1 ),
     aXDash              ( OUString(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
     aXColor             ( OUString(), COL_LIGHTRED ),
@@ -689,12 +690,12 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
             boost::scoped_ptr<XLineStyleItem> pStyleItem;
 
             if( nPos == 0 )
-                pStyleItem.reset(new XLineStyleItem( XLINE_NONE ));
+                pStyleItem.reset(new XLineStyleItem( drawing::LineStyle_NONE ));
             else if( nPos == 1 )
-                pStyleItem.reset(new XLineStyleItem( XLINE_SOLID ));
+                pStyleItem.reset(new XLineStyleItem( drawing::LineStyle_SOLID ));
             else
             {
-                pStyleItem.reset(new XLineStyleItem( XLINE_DASH ));
+                pStyleItem.reset(new XLineStyleItem( drawing::LineStyle_DASH ));
 
                 // For added security
                 if( pDashList->Count() > (long) ( nPos - 2 ) )
@@ -965,15 +966,15 @@ bool SvxLineTabPage::FillXLSet_Impl()
 
     if( m_pLbLineStyle->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
     {
-        rXLSet.Put( XLineStyleItem( XLINE_NONE ) );
+        rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     }
     else if( m_pLbLineStyle->IsEntryPosSelected( 0 ) )
-        rXLSet.Put( XLineStyleItem( XLINE_NONE ) );
+        rXLSet.Put( XLineStyleItem( drawing::LineStyle_NONE ) );
     else if( m_pLbLineStyle->IsEntryPosSelected( 1 ) )
-        rXLSet.Put( XLineStyleItem( XLINE_SOLID ) );
+        rXLSet.Put( XLineStyleItem( drawing::LineStyle_SOLID ) );
     else
     {
-        rXLSet.Put( XLineStyleItem( XLINE_DASH ) );
+        rXLSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
 
         nPos = m_pLbLineStyle->GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1086,7 +1087,7 @@ bool SvxLineTabPage::FillXLSet_Impl()
 
 void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    XLineStyle  eXLS; // XLINE_NONE, XLINE_SOLID, XLINE_DASH
+    drawing::LineStyle  eXLS; // drawing::LineStyle_NONE, drawing::LineStyle_SOLID, drawing::LineStyle_DASH
 
     // Line style
     const SfxPoolItem *pPoolItem;
@@ -1213,18 +1214,18 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
     {
-        eXLS = (XLineStyle) static_cast<const XLineStyleItem&>( rAttrs->Get( XATTR_LINESTYLE ) ).GetValue();
+        eXLS = (drawing::LineStyle) static_cast<const XLineStyleItem&>( rAttrs->Get( XATTR_LINESTYLE ) ).GetValue();
 
         switch( eXLS )
         {
-            case XLINE_NONE:
+            case drawing::LineStyle_NONE:
                 m_pLbLineStyle->SelectEntryPos( 0 );
                 break;
-            case XLINE_SOLID:
+            case drawing::LineStyle_SOLID:
                 m_pLbLineStyle->SelectEntryPos( 1 );
                 break;
 
-            case XLINE_DASH:
+            case drawing::LineStyle_DASH:
                 m_pLbLineStyle->SetNoSelection();
                 m_pLbLineStyle->SelectEntry( static_cast<const XLineDashItem&>( rAttrs->Get( XATTR_LINEDASH ) ).GetName() );
                 break;
