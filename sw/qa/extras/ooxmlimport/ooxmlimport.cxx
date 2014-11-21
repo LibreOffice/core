@@ -64,6 +64,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <swtypes.hxx>
 #include <tools/datetimeutils.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include <bordertest.hxx>
 
@@ -1216,7 +1217,7 @@ DECLARE_OOXMLIMPORT_TEST(testfdo78904, "fdo78904.docx")
     if (xIndexAccess->getCount())
     {
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(0)), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(0)), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
     }
 }
 
@@ -1381,7 +1382,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo43641, "fdo43641.docx")
     uno::Reference<container::XIndexAccess> xGroupShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xLine(xGroupShape->getByIndex(1), uno::UNO_QUERY);
     // This was 2200, not 2579 in mm100, i.e. the size of the line shape was incorrect.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(928694)), xLine->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(928440)), xLine->getSize().Width);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTableAutoColumnFixedSize, "table-auto-column-fixed-size.docx")
@@ -1660,7 +1661,7 @@ DECLARE_OOXMLIMPORT_TEST(testWpsOnly, "wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_PARAGRAPH, eValue);
 
     // Check position, it was 0. This is a shape, so use getPosition(), not a property.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(671830)), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(671830)), xShape->getPosition().X);
 
     // Left margin was 0, instead of 114300 EMU's.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(xShape, "LeftMargin"));
@@ -1705,7 +1706,7 @@ DECLARE_OOXMLIMPORT_TEST(testWpgOnly, "wpg-only.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
     // Check position, it was nearly 0. This is a shape, so use getPosition(), not a property.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(548005)), xShape->getPosition().X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(548005)), xShape->getPosition().X);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testWpgNested, "wpg-nested.docx")
@@ -1871,7 +1872,7 @@ DECLARE_OOXMLIMPORT_TEST(testDmlCharheightDefault, "dml-charheight-default.docx"
 DECLARE_OOXMLIMPORT_TEST(testGroupshapeRelsize, "groupshape-relsize.docx")
 {
     // This was 43760, i.e. the height of the groupshape was larger than the page height, which is obviously incorrect.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(9142730)), getShape(1)->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(oox::drawingml::convertEmuToHmm(9142730)), getShape(1)->getSize().Height);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testOleAnchor, "ole-anchor.docx")

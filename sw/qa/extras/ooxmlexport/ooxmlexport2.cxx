@@ -49,6 +49,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include <string>
 
@@ -974,17 +975,16 @@ DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
     // the actual attributes where 'distT', 'distB', 'distL', 'distR'
     uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(0) ), getProperty<sal_Int32>(xPropertySet, "TopMargin") );
-    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(0) ), getProperty<sal_Int32>(xPropertySet, "BottomMargin") );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( oox::drawingml::convertEmuToHmm(0) ), getProperty<sal_Int32>(xPropertySet, "TopMargin") );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( oox::drawingml::convertEmuToHmm(0) ), getProperty<sal_Int32>(xPropertySet, "BottomMargin") );
 
-    // Going to do '+1' because the 'getProperty' return 318 (instead of 317.5)
+    // 'getProperty' return 318 (instead of 317.5)
     // I think this is because it returns an integer, instead of a float.
     // The actual exporting to DOCX exports the correct value (114300 = 317.5 * 360)
     // The exporting to DOCX uses the 'SvxLRSpacing' that stores the value in TWIPS (180 TWIPS)
     // However, the 'LeftMargin' property is an integer property that holds that value in 'MM100' (should hold 317.5, but it is 318)
-    // So I had to add the hack of the '+1' to make the test-case pass
-    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1 ), getProperty<sal_Int32>(xPropertySet, "LeftMargin") );
-    CPPUNIT_ASSERT_EQUAL(sal_Int32( EMU_TO_MM100(114300) + 1), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( oox::drawingml::convertEmuToHmm(114300) ), getProperty<sal_Int32>(xPropertySet, "LeftMargin") );
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( oox::drawingml::convertEmuToHmm(114300) ), getProperty<sal_Int32>(xPropertySet, "RightMargin") );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo64350, "fdo64350.docx")

@@ -51,7 +51,6 @@
 using namespace css;
 
 #define DEFAULT_STYLE "Default Style"
-#define EMU_TO_MM100(EMU) (EMU / 360)
 
 /**
  * Macro to declare a new test (with full round-trip. To test
