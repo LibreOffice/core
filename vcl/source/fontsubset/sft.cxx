@@ -879,11 +879,11 @@ static char *nameExtract( const sal_uInt8* name, int nTableSize, int n, int dbFl
 static int findname( const sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID,
     sal_uInt16 encodingID, sal_uInt16 languageID, sal_uInt16 nameID )
 {
+    if (n == 0) return -1;
+
     int l = 0, r = n-1, i;
     sal_uInt32 t1, t2;
     sal_uInt32 m1, m2;
-
-    if (n == 0) return -1;
 
     m1 = (platformID << 16) | encodingID;
     m2 = (languageID << 16) | nameID;
