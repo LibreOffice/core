@@ -278,7 +278,7 @@ namespace drawinglayer
 
             return bTryWorked;
         }
-/*
+
         bool VclPixelProcessor2D::tryDrawBorderLinePrimitive2DDirect(
             const drawinglayer::primitive2d::BorderLinePrimitive2D& rSource)
         {
@@ -613,7 +613,7 @@ namespace drawinglayer
             }
             return false;
         }
-*/
+
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitive2DID())
@@ -1229,10 +1229,10 @@ namespace drawinglayer
                     sal_uInt16 nAntiAliasing = mpOutputDevice->GetAntialiasing();
                     mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
 
-                    //const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder =
-                        //static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate);
+                    const drawinglayer::primitive2d::BorderLinePrimitive2D& rBorder =
+                        static_cast<const drawinglayer::primitive2d::BorderLinePrimitive2D&>(rCandidate);
 
-                    //if (!tryDrawBorderLinePrimitive2DDirect(rBorder))
+                    if (!tryDrawBorderLinePrimitive2DDirect(rBorder))
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
                     mpOutputDevice->SetAntialiasing(nAntiAliasing);
