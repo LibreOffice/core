@@ -40,6 +40,19 @@
 
 static const sal_uInt16 nVersion = 2;
 
+SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID,
+        sal_uInt16 n )
+    : pCtor(pTheCtor)
+    , nId( nID )
+    , nPos(n)
+    , pArr( NULL )
+{}
+
+SfxChildWinFactory::~SfxChildWinFactory()
+{
+    delete pArr;
+}
+
 struct SfxChildWindow_Impl
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >             xFrame;

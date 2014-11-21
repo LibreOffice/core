@@ -94,7 +94,7 @@ struct SfxChildWinContextFactory
 
 typedef boost::ptr_vector<SfxChildWinContextFactory> SfxChildWinContextArr_Impl;
 
-struct SfxChildWinFactory
+struct SFX2_DLLPUBLIC SfxChildWinFactory
 {
     SfxChildWinCtor            pCtor;  // Factory method
     sal_uInt16              nId;            // ChildWindow-Id ( SlotId )
@@ -102,19 +102,8 @@ struct SfxChildWinFactory
     sal_uInt16                  nPos;  // Position in UI
     SfxChildWinContextArr_Impl *pArr;  // Array for Contexts
 
-    SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID,
-            sal_uInt16 n )
-        : pCtor(pTheCtor)
-        , nId( nID )
-        , nPos(n)
-        , pArr( NULL )
-    {}
-
-    ~SfxChildWinFactory()
-    {
-        delete pArr;
-    }
-
+    SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID, sal_uInt16 n );
+    ~SfxChildWinFactory();
 };
 
 class FloatingWindow;
