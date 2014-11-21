@@ -199,6 +199,7 @@ namespace
 
 void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGraphicToIgnore)
 {
+    return;
     // detect maximum allowed memory footprint. Use the user-settings of MaxCacheSize (defaulted
     // to 20MB) and add a decent multiplicator (experimented to find one). Limit to
     // a useful maximum for 32Bit address space
