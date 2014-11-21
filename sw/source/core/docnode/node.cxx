@@ -509,9 +509,8 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
             // Find the right Anchor first
             const SwFrmFmt* pFmt = 0;
             const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-            sal_uInt16 n;
 
-            for( n = 0; n < rFmts.size(); ++n )
+            for( size_t n = 0; n < rFmts.size(); ++n )
             {
                 const SwFrmFmt* pFrmFmt = rFmts[ n ];
                 const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
@@ -534,6 +533,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                     while( pFlyNd )
                     {
                         // Get up through the Anchor
+                        size_t n;
                         for( n = 0; n < rFmts.size(); ++n )
                         {
                             const SwFrmFmt* pFrmFmt = rFmts[ n ];
@@ -635,7 +635,7 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
                     // the Anchor can only be in the Body text
                     const SwTxtFtn* pTxtFtn;
                     const SwFtnIdxs& rFtnArr = pDoc->GetFtnIdxs();
-                    for( sal_uInt16 n = 0; n < rFtnArr.size(); ++n )
+                    for( size_t n = 0; n < rFtnArr.size(); ++n )
                         if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                             (SwNode*)pSttNd ==
                             &pTxtFtn->GetStartNode()->GetNode() )
@@ -714,7 +714,7 @@ SwFrmFmt* SwNode::GetFlyFmt() const
         {
             // The hard way through the Doc is our last way out
             const SwFrmFmts& rFrmFmtTbl = *GetDoc()->GetSpzFrmFmts();
-            for( sal_uInt16 n = 0; n < rFrmFmtTbl.size(); ++n )
+            for( size_t n = 0; n < rFrmFmtTbl.size(); ++n )
             {
                 SwFrmFmt* pFmt = rFrmFmtTbl[n];
                 const SwFmtCntnt& rCntnt = pFmt->GetCntnt();
@@ -1756,7 +1756,7 @@ bool SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                         const SwTxtFtn* pTxtFtn;
                         const SwNode* pSrchNd = pSttNd;
 
-                        for( sal_uInt16 n = 0; n < rFtnArr.size(); ++n )
+                        for( size_t n = 0; n < rFtnArr.size(); ++n )
                             if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                                 pSrchNd == &pTxtFtn->GetStartNode()->GetNode() )
                             {
