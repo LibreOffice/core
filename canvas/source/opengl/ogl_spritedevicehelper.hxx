@@ -17,6 +17,7 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include "ogl_buffercontext.hxx"
 #include "ogl_renderHelper.hxx"
@@ -152,7 +153,7 @@ namespace oglcanvas
         unsigned int                                       mnRectangularTwoColorGradientProgram;
         unsigned int                                       mnRectangularMultiColorGradientProgram;
 
-        OpenGLContext maContext;
+        boost::scoped_ptr<OpenGLContext> mpContext;
         RenderHelper                                      mRenderHelper;
     };
 }

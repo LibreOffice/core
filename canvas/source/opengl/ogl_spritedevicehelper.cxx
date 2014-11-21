@@ -103,8 +103,9 @@ namespace oglcanvas
                 VCLUnoHelper::GetInterface(&rWindow),
                 uno::UNO_QUERY_THROW) );
 
-        maContext.requestLegacyContext();
-        maContext.init(&rWindow);
+        mpContext.reset(new OpenGLContext);
+        mpContext->requestLegacyContext();
+        mpContext->init(&rWindow);
         // init window context
         initContext();
         mRenderHelper.InitOpenGL();
@@ -128,7 +129,7 @@ namespace oglcanvas
         mnRectangularTwoColorGradientProgram =
             OpenGLHelper::LoadShaders("dummyVertexShader", "rectangularTwoColorGradientFragmentShader");
 
-        maContext.makeCurrent();
+        mpContext->makeCurrent();
 
         notifySizeUpdate(rViewArea);
         // TODO(E3): check for GL_ARB_imaging extension
@@ -141,7 +142,7 @@ namespace oglcanvas
         mpDevice = NULL;
         mpTextureCache.reset();
 
-        if( maContext.isInitialized() )
+        if( mpContext->isInitialized() )
         {
             glDeleteProgram( mnRectangularTwoColorGradientProgram );
             glDeleteProgram( mnRectangularMultiColorGradientProgram );
@@ -150,16 +151,17 @@ namespace oglcanvas
             glDeleteProgram( mnLinearTwoColorGradientProgram );
             glDeleteProgram( mnLinearMultiColorGradientProgram );
         }
+        mpContext.reset();
         mRenderHelper.dispose();
     }
 
     geometry::RealSize2D SpriteDeviceHelper::getPhysicalResolution()
     {
-        if( !maContext.isInitialized() )
+        if( !mpContext->isInitialized() )
             return ::canvas::tools::createInfiniteSize2D(); // we're disposed
 
         // Map a one-by-one millimeter box to pixel
-        SystemChildWindow* pChildWindow = maContext.getChildWindow();
+        SystemChildWindow* pChildWindow = mpContext->getChildWindow();
         const MapMode aOldMapMode( pChildWindow->GetMapMode() );
         pChildWindow->SetMapMode( MapMode(MAP_MM) );
         const Size aPixelSize( pChildWindow->LogicToPixel(Size(1,1)) );
@@ -170,11 +172,11 @@ namespace oglcanvas
 
     geometry::RealSize2D SpriteDeviceHelper::getPhysicalSize()
     {
-        if( !maContext.isInitialized() )
+        if( !mpContext->isInitialized() )
             return ::canvas::tools::createInfiniteSize2D(); // we're disposed
 
         // Map the pixel dimensions of the output window to millimeter
-        SystemChildWindow* pChildWindow = maContext.getChildWindow();
+        SystemChildWindow* pChildWindow = mpContext->getChildWindow();
         const MapMode aOldMapMode( pChildWindow->GetMapMode() );
         pChildWindow->SetMapMode( MapMode(MAP_MM) );
         const Size aLogSize( pChildWindow->PixelToLogic(pChildWindow->GetOutputSizePixel()) );
@@ -300,13 +302,13 @@ namespace oglcanvas
     bool SpriteDeviceHelper::showBuffer( bool bIsVisible, bool /*bUpdateAll*/ )
     {
         // hidden or disposed?
-        if( !bIsVisible || !maContext.isInitialized() || !mpSpriteCanvas )
+        if( !bIsVisible || !mpContext->isInitialized() || !mpSpriteCanvas )
             return false;
 
         if( !activateWindowContext() )
             return false;
 
-        SystemChildWindow* pChildWindow = maContext.getChildWindow();
+        SystemChildWindow* pChildWindow = mpContext->getChildWindow();
         const ::Size& rOutputSize = pChildWindow->GetSizePixel();
         initTransformation(rOutputSize);
         // render the actual spritecanvas content
@@ -343,6 +345,16 @@ namespace oglcanvas
         aVec.push_back(mpTextureCache->getCacheSize());
         aVec.push_back(mpTextureCache->getCacheMissCount());
         aVec.push_back(mpTextureCache->getCacheHitCount());
+
+        glm::mat4 ViewTranslate = glm::translate(
+            glm::mat4(1.0f),
+            glm::vec3(-1.0,1.0,0.0));
+        glm::mat4 ViewScaled = glm::scale(
+            ViewTranslate,
+            glm::vec3(2.0  / rOutputSize.Width(),
+                  -2.0 / rOutputSize.Height(),
+                  1.0 ));
+        mRenderHelper.SetModelAndMVP(ViewScaled);
         renderOSD( aVec, 20 , getRenderHelper());
 
         /*
@@ -355,7 +367,7 @@ namespace oglcanvas
         unx::glXWaitGL();
         XSync( reinterpret_cast<unx::Display*>(mpDisplay), false );
         */
-        maContext.swapBuffers();
+        mpContext->swapBuffers();
 
         // flush texture cache, such that it does not build up
         // indefinitely.
@@ -379,7 +391,7 @@ namespace oglcanvas
 
     uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
-        const SystemChildWindow* pChildWindow = maContext.getChildWindow();
+        const SystemChildWindow* pChildWindow = mpContext->getChildWindow();
         return uno::makeAny( reinterpret_cast< sal_Int64 >(pChildWindow) );
     }
 
@@ -398,9 +410,9 @@ namespace oglcanvas
 
     void SpriteDeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
     {
-        if( maContext.isInitialized() )
+        if( mpContext->isInitialized() )
         {
-            SystemChildWindow* pChildWindow = maContext.getChildWindow();
+            SystemChildWindow* pChildWindow = mpContext->getChildWindow();
             pChildWindow->setPosSizePixel(
                 0,0,rBounds.Width,rBounds.Height);
         }
@@ -535,7 +547,7 @@ namespace oglcanvas
 
     bool SpriteDeviceHelper::activateWindowContext()
     {
-        maContext.makeCurrent();
+        mpContext->makeCurrent();
         return true;
     }
 
