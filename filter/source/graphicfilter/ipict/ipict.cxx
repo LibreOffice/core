@@ -909,6 +909,19 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if ( nRowBytes < 2 * nWidth )
             BITMAPERROR;
 
+        size_t nMinRecordSize;
+        if ( nRowBytes < 8 || nPackType == 1 )
+            nMinRecordSize = sizeof(sal_uInt16);
+        else if ( nRowBytes > 250 )
+            nMinRecordSize = sizeof(sal_uInt16);
+        else
+            nMinRecordSize = 1;
+
+        const size_t nMinRowWidth = nWidth * nMinRecordSize;
+        const size_t nMaxRows = pPict->remainingSize() / nMinRowWidth;
+        if (nHeight > nMaxRows)
+            BITMAPERROR;
+
         for ( ny = 0; ny < nHeight; ny++ )
         {
             nx = 0;
@@ -1031,6 +1044,20 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         {
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
+                size_t nMinRecordSize;
+                if (nRowBytes > 250)
+                    nMinRecordSize = sizeof(sal_uInt16);
+                else
+                    nMinRecordSize = 1;
+
+                const size_t nMinRowWidth = nWidth * nMinRecordSize;
+                const size_t nMaxRows = pPict->remainingSize() / nMinRowWidth;
+                if (nHeight > nMaxRows)
+                    BITMAPERROR;
+                const size_t nMaxWidth = pPict->remainingSize() / nHeight;
+                if (nWidth > nMaxWidth)
+                    BITMAPERROR;
+
                 boost::scoped_array<sal_uInt8> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
                 for ( ny = 0; ny < nHeight; ny++ )
                 {
