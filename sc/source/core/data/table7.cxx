@@ -199,4 +199,23 @@ bool ScTable::HasFormulaCell( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2
     return false;
 }
 
+void ScTable::EndListeningIntersectedGroups(
+    sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    std::vector<ScAddress>* pGroupPos )
+{
+    if (nCol2 < nCol1 || !ValidCol(nCol1) || !ValidCol(nCol2))
+        return;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].EndListeningIntersectedGroups(rCxt, nRow1, nRow2, pGroupPos);
+}
+
+void ScTable::SetNeedsListeningGroup( SCCOL nCol, SCROW nRow )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].SetNeedsListeningGroup(nRow);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

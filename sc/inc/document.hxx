@@ -2177,6 +2177,11 @@ private:
     bool   ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve );
 
     void SharePooledResources( ScDocument* pSrcDoc );
+
+    void EndListeningIntersectedGroups(
+        sc::EndListeningContext& rCxt, const ScRange& rRange, std::vector<ScAddress>* pGroupPos = NULL );
+
+    void SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray );
 };
 
 #endif
