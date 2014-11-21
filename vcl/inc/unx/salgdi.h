@@ -284,7 +284,7 @@ public:
     bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY );
 
     // render a pixmap to the screen
-    bool RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY );
+    bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY );
 
 
     /*  use to handle GraphicsExpose/NoExpose after XCopyArea & friends

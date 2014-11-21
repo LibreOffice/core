@@ -853,7 +853,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         return false;
 
     // Bitblt it to the screen
-    pGraphics->RenderPixmapToScreen( &xPixmap, qWidgetPos.x(), qWidgetPos.y() );
+    pGraphics->RenderPixmapToScreen( &xPixmap, NULL, qWidgetPos.x(), qWidgetPos.y() );
 
     // Restore widget's position
     pWidget->move( qWidgetPos );

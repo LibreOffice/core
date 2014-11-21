@@ -50,6 +50,13 @@ const char* const tabPrelitDataName="libreoffice-tab-is-prelit";
 bool GtkSalGraphics::bThemeChanged = true;
 bool GtkSalGraphics::bNeedPixmapPaint = false;
 
+enum
+{
+    BG_NONE = 0,
+    BG_WHITE,
+    BG_BLACK
+};
+
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     : X11SalGraphics(),
       m_pWindow( pWindow ),
@@ -284,9 +291,12 @@ protected:
 
 GdkX11Pixmap::GdkX11Pixmap( int nWidth, int nHeight, int nDepth )
 : X11Pixmap( nWidth, nHeight )
-, mnDepth( nDepth )
 {
     mpGdkPixmap = gdk_pixmap_new( NULL, nWidth, nHeight, nDepth );
+    mnDepth = gdk_drawable_get_depth( GDK_DRAWABLE( mpGdkPixmap ) );
+
+    GdkScreen *pScreen = gdk_drawable_get_screen( GDK_DRAWABLE( mpGdkPixmap ) );
+    gdk_drawable_set_colormap( GDK_DRAWABLE( mpGdkPixmap ), gdk_screen_get_default_colormap( pScreen ) );
 }
 
 GdkX11Pixmap::~GdkX11Pixmap()
@@ -336,11 +346,12 @@ public:
     ControlState m_nState;
     Rectangle      m_pixmapRect;
     GdkX11Pixmap*  m_pixmap;
+    GdkX11Pixmap*  m_mask;
 
-    NWPixmapCacheData() : m_nType(0), m_nState(0), m_pixmap(0) {}
+    NWPixmapCacheData() : m_nType(0), m_nState(0), m_pixmap(0), m_mask(0) {}
     ~NWPixmapCacheData()
-        { SetPixmap( NULL ); };
-    void SetPixmap( GdkX11Pixmap* pPixmap );
+        { SetPixmap( NULL, NULL ); };
+    void SetPixmap( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask );
 };
 
 class NWPixmapCache
@@ -357,8 +368,8 @@ public:
         { delete [] pData; m_idx = 0; m_size = n; pData = new NWPixmapCacheData[m_size]; }
     int GetSize() const { return m_size; }
 
-    bool Find( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap** pPixmap );
-    void Fill( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap* pPixmap );
+    bool Find( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap** pPixmap, GdkX11Pixmap** pMask );
+    void Fill( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask );
 
     void ThemeChanged();
 };
@@ -375,12 +386,15 @@ public:
 
 // --- implementation ---
 
-void NWPixmapCacheData::SetPixmap( GdkX11Pixmap* pPixmap )
+void NWPixmapCacheData::SetPixmap( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask )
 {
     if( m_pixmap )
         delete m_pixmap;
+    if( m_mask )
+        delete m_mask;
 
     m_pixmap = pPixmap;
+    m_mask = pMask;
 }
 
 NWPixmapCache::NWPixmapCache( SalX11Screen nScreen )
@@ -403,10 +417,10 @@ void NWPixmapCache::ThemeChanged()
     // throw away cached pixmaps
     int i;
     for(i=0; i<m_size; i++)
-        pData[i].SetPixmap( NULL );
+        pData[i].SetPixmap( NULL, NULL );
 }
 
-bool  NWPixmapCache::Find( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap** pPixmap )
+bool  NWPixmapCache::Find( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap** pPixmap, GdkX11Pixmap** pMask )
 {
     aState &= ~CTRL_CACHING_ALLOWED; // mask clipping flag
     int i;
@@ -419,13 +433,14 @@ bool  NWPixmapCache::Find( ControlType aType, ControlState aState, const Rectang
             pData[i].m_pixmap != NULL )
         {
             *pPixmap = pData[i].m_pixmap;
+            *pMask = pData[i].m_mask;
             return true;
         }
     }
     return false;
 }
 
-void NWPixmapCache::Fill( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap* pPixmap )
+void NWPixmapCache::Fill( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask )
 {
     if( !(aState & CTRL_CACHING_ALLOWED) )
         return;
@@ -435,7 +450,7 @@ void NWPixmapCache::Fill( ControlType aType, ControlState aState, const Rectangl
     pData[m_idx].m_nType = aType;
     pData[m_idx].m_nState = aState;
     pData[m_idx].m_pixmapRect = r_pixmapRect;
-    pData[m_idx].SetPixmap( pPixmap );
+    pData[m_idx].SetPixmap( pPixmap, pMask );
 }
 
 void NWPixmapCacheList::AddCache( NWPixmapCache* pCache )
@@ -494,6 +509,10 @@ void GtkData::initNWF( void )
 
     pSVData->maNWFData.mbDDListBoxNoTextArea = true;
 
+    // use offscreen rendering when using OpenGL backend
+    if( OpenGLHelper::isVCLOpenGLEnabled() )
+        GtkSalGraphics::bNeedPixmapPaint = true;
+
     int nScreens = GetGtkSalData()->GetGtkDisplay()->GetXScreenCount();
     gWidgetData = WidgetDataVector( nScreens );
     for( int i = 0; i < nScreens; i++ )
@@ -528,10 +547,6 @@ void GtkData::initNWF( void )
     }
     static const char* pEnv = getenv( "SAL_GTK_USE_PIXMAPPAINT" );
     if( pEnv && *pEnv )
-        GtkSalGraphics::bNeedPixmapPaint = true;
-
-    // use offscreen rendering when using OpenGL backend
-    if( OpenGLHelper::isVCLOpenGLEnabled() )
         GtkSalGraphics::bNeedPixmapPaint = true;
 
     #if OSL_DEBUG_LEVEL > 1
@@ -864,8 +879,10 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         aClipRegion = aCtrlRect;
 
     clipList aClip;
-    GdkDrawable* gdkDrawable = GDK_DRAWABLE( GetGdkWindow() );
+    int nPasses = 0;
+    GdkDrawable* gdkDrawable[2];
     std::unique_ptr<GdkX11Pixmap> xPixmap;
+    std::unique_ptr<GdkX11Pixmap> xMask;
     Rectangle aPixmapRect;
     if( ( bNeedPixmapPaint )
         && nType != CTRL_SCROLLBAR
@@ -880,15 +897,22 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         // outside the rectangle, see e.g. checkbox
         aPixmapRect = Rectangle( Point( aCtrlRect.Left()-1, aCtrlRect.Top()-1 ),
                                  Size( aCtrlRect.GetWidth()+2, aCtrlRect.GetHeight()+2) );
-        xPixmap.reset(NWGetPixmapFromScreen(aPixmapRect));
-        if (!xPixmap)
+
+        xPixmap.reset( NWGetPixmapFromScreen( aPixmapRect, BG_WHITE ) );
+        xMask.reset( NWGetPixmapFromScreen( aPixmapRect, BG_BLACK ) );
+        if( !xPixmap || !xMask )
             return false;
-        gdkDrawable = xPixmap->GetGdkDrawable();
+        nPasses = 2;
+        gdkDrawable[0] = xPixmap->GetGdkDrawable();
+        gdkDrawable[1] = xMask->GetGdkDrawable();
+
         aCtrlRect = Rectangle( Point(1,1), aCtrlRect.GetSize() );
         aClip.push_back( aCtrlRect );
     }
     else
     {
+        nPasses = 1;
+        gdkDrawable[0] = GDK_DRAWABLE( GetGdkWindow() );
         RectangleVector aRectangles;
         aClipRegion.GetRegionRectangles(aRectangles);
 
@@ -901,68 +925,95 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
         }
     }
 
-    assert(gdkDrawable && "rhbz#1050162");
-    if (gdkDrawable == 0)
-        return false;
+    bool returnVal = false;
+    SAL_INFO( "vcl.opengl", "Rendering with " << nPasses << " passe(s)" );
 
-    bool            returnVal = false;
+    for( int i = 0; i < nPasses; ++i )
+    {
+        assert(gdkDrawable[i] && "rhbz#1050162");
+        if( gdkDrawable[i] == 0 )
+            return false;
+
+        returnVal = DoDrawNativeControl( gdkDrawable[i], nType, nPart, aCtrlRect, aClip,
+                                         nState, aValue, rCaption );
+        if( !returnVal )
+            break;
+    }
+
+    if( xPixmap )
+        returnVal = NWRenderPixmapToScreen( xPixmap.get(), xMask.get(), aPixmapRect) && returnVal;
+
+    return( returnVal );
+}
+
+
+bool GtkSalGraphics::DoDrawNativeControl(
+                            GdkDrawable* pDrawable,
+                            ControlType nType,
+                            ControlPart nPart,
+                            const Rectangle& aCtrlRect,
+                            const clipList& aClip,
+                            ControlState nState,
+                            const ImplControlValue& aValue,
+                            const OUString& rCaption )
+{
     if ( (nType==CTRL_PUSHBUTTON) && (nPart==PART_ENTIRE_CONTROL) )
     {
-        returnVal = NWPaintGTKButton( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKButton( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( (nType==CTRL_RADIOBUTTON) && (nPart==PART_ENTIRE_CONTROL) )
     {
-        returnVal = NWPaintGTKRadio( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKRadio( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( (nType==CTRL_CHECKBOX) && (nPart==PART_ENTIRE_CONTROL) )
     {
-        returnVal = NWPaintGTKCheck( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKCheck( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( (nType==CTRL_SCROLLBAR) && ((nPart==PART_DRAW_BACKGROUND_HORZ) || (nPart==PART_DRAW_BACKGROUND_VERT)) )
     {
-        returnVal = NWPaintGTKScrollbar( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKScrollbar( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( ((nType==CTRL_EDITBOX) && ((nPart==PART_ENTIRE_CONTROL) || (nPart==HAS_BACKGROUND_TEXTURE)) )
         || ((nType==CTRL_SPINBOX) && (nPart==HAS_BACKGROUND_TEXTURE))
     || ((nType==CTRL_COMBOBOX) && (nPart==HAS_BACKGROUND_TEXTURE))
     || ((nType==CTRL_LISTBOX) && (nPart==HAS_BACKGROUND_TEXTURE)) )
     {
-        returnVal = NWPaintGTKEditBox( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKEditBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( ((nType==CTRL_MULTILINE_EDITBOX) && ((nPart==PART_ENTIRE_CONTROL) || (nPart==HAS_BACKGROUND_TEXTURE)) ) )
     {
-        returnVal = NWPaintGTKEditBox( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKEditBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( ((nType==CTRL_SPINBOX) || (nType==CTRL_SPINBUTTONS))
         && ((nPart==PART_ENTIRE_CONTROL) || (nPart==PART_ALL_BUTTONS)) )
     {
-        returnVal = NWPaintGTKSpinBox( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKSpinBox( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( (nType == CTRL_COMBOBOX) &&
         ( (nPart==PART_ENTIRE_CONTROL)
         ||(nPart==PART_BUTTON_DOWN)
         ) )
     {
-        returnVal = NWPaintGTKComboBox( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKComboBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( (nType==CTRL_TAB_ITEM) || (nType==CTRL_TAB_PANE) || (nType==CTRL_TAB_BODY) )
     {
         if ( nType == CTRL_TAB_BODY )
-            returnVal = true;
+            return true;
         else
-            returnVal = NWPaintGTKTabItem( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
+            return NWPaintGTKTabItem( nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
     }
     else if ( (nType==CTRL_LISTBOX) && ((nPart==PART_ENTIRE_CONTROL) || (nPart==PART_WINDOW)) )
     {
-        returnVal = NWPaintGTKListBox( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKListBox( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( nType== CTRL_TOOLBAR )
     {
-        returnVal = NWPaintGTKToolbar( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKToolbar( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if ( nType== CTRL_MENUBAR )
     {
-        returnVal = NWPaintGTKMenubar( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKMenubar( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if(    (nType == CTRL_MENU_POPUP)
         && (  (nPart == PART_ENTIRE_CONTROL)
@@ -974,55 +1025,50 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     )
     )
     {
-        returnVal = NWPaintGTKPopupMenu( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKPopupMenu( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if( (nType == CTRL_TOOLTIP) && (nPart == PART_ENTIRE_CONTROL) )
     {
-        returnVal = NWPaintGTKTooltip( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKTooltip( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if( (nType == CTRL_PROGRESS) && (nPart == PART_ENTIRE_CONTROL) )
     {
-        returnVal = NWPaintGTKProgress( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKProgress( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if( (nType == CTRL_LISTNODE) && (nPart == PART_ENTIRE_CONTROL) )
     {
-        returnVal = NWPaintGTKListNode( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKListNode( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if( (nType == CTRL_LISTNET) && (nPart == PART_ENTIRE_CONTROL) )
     {
         // don't actually draw anything; gtk treeviews do not draw lines
-        returnVal = TRUE;
+        return TRUE;
     }
     else if( nType == CTRL_SLIDER )
     {
-        returnVal = NWPaintGTKSlider( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKSlider( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if( nType == CTRL_WINDOW_BACKGROUND )
     {
-        returnVal = NWPaintGTKWindowBackground( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKWindowBackground( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if( nType == CTRL_FIXEDLINE )
     {
-        returnVal = NWPaintGTKFixedLine( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+        return NWPaintGTKFixedLine( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
     else if(nType==CTRL_FRAME)
     {
-        returnVal = NWPaintGTKFrame( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
+        return NWPaintGTKFrame( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption);
     }
     else if(nType==CTRL_LISTHEADER)
     {
         if(nPart == PART_BUTTON)
-            returnVal = NWPaintGTKListHeader( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+            return NWPaintGTKListHeader( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
         else if(nPart == PART_ARROW)
-            returnVal = NWPaintGTKArrow( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
+            return NWPaintGTKArrow( pDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rCaption );
     }
 
-    if( xPixmap )
-    {
-        returnVal = NWRenderPixmapToScreen(xPixmap.get(), aPixmapRect) && returnVal;
-    }
-
-    return( returnVal );
+    return false;
 }
 
 /*
@@ -2114,7 +2160,7 @@ bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                          arrowRect.GetWidth(), arrowRect.GetHeight() );
     }
 
-    bool bRet = NWRenderPixmapToScreen( pixmap, pixmapRect );
+    bool bRet = NWRenderPixmapToScreen( pixmap, NULL, pixmapRect );
     delete pixmap;
 
     return bRet;
@@ -2341,8 +2387,6 @@ bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
                                         const ImplControlValue& aValue,
                                         const OUString& rCaption )
 {
-    GdkX11Pixmap *       pixmap;
-    GdkPixmap *          gdkPixmap;
     Rectangle            pixmapRect;
     GtkStateType        stateType;
     GtkShadowType        shadowType;
@@ -2383,56 +2427,59 @@ bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
     else
         pixmapRect = rControlRectangle;
 
-    pixmap = NWGetPixmapFromScreen( pixmapRect );
-    if ( !pixmap )
+    std::unique_ptr<GdkX11Pixmap> pixmap( NWGetPixmapFromScreen( pixmapRect, BG_WHITE ) );
+    std::unique_ptr<GdkX11Pixmap> mask( NWGetPixmapFromScreen( pixmapRect, BG_BLACK ) );
+    if( !pixmap || !mask )
         return false;
-    gdkPixmap = pixmap->GetGdkPixmap();
 
-    // First render background
-    gtk_paint_flat_box(m_pWindow->style,gdkPixmap,GTK_STATE_NORMAL,GTK_SHADOW_NONE,NULL,m_pWindow,"base",
-            -pixmapRect.Left(),
-            -pixmapRect.Top(),
-            pixmapRect.Right(),
-            pixmapRect.Bottom() );
-
-    upBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
-    downBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
-
-    if ( (nType==CTRL_SPINBOX) && (nPart!=PART_ALL_BUTTONS) )
+    for( int i = 0; i < 2; ++i )
     {
-        // Draw an edit field for SpinBoxes and ComboBoxes
-        Rectangle aEditBoxRect( pixmapRect );
-        aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - upBtnRect.GetWidth(), aEditBoxRect.GetHeight() ) );
-        if( Application::GetSettings().GetLayoutRTL() )
-            aEditBoxRect.setX( upBtnRect.GetWidth() );
-        else
-            aEditBoxRect.setX( 0 );
-        aEditBoxRect.setY( 0 );
+        GdkPixmap* gdkPixmap = (i == 0) ? pixmap->GetGdkPixmap()
+                                        : mask->GetGdkPixmap();
 
-        NWPaintOneEditBox( m_nXScreen, gdkPixmap, NULL, nType, nPart, aEditBoxRect, nState, aValue, rCaption );
+        // First render background
+        gtk_paint_flat_box(m_pWindow->style,gdkPixmap,GTK_STATE_NORMAL,GTK_SHADOW_NONE,NULL,m_pWindow,"base",
+                -pixmapRect.Left(),
+                -pixmapRect.Top(),
+                pixmapRect.Right(),
+                pixmapRect.Bottom() );
+
+        upBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
+        downBtnRect = NWGetSpinButtonRect( m_nXScreen, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
+
+        if ( (nType==CTRL_SPINBOX) && (nPart!=PART_ALL_BUTTONS) )
+        {
+            // Draw an edit field for SpinBoxes and ComboBoxes
+            Rectangle aEditBoxRect( pixmapRect );
+            aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - upBtnRect.GetWidth(), aEditBoxRect.GetHeight() ) );
+            if( Application::GetSettings().GetLayoutRTL() )
+                aEditBoxRect.setX( upBtnRect.GetWidth() );
+            else
+                aEditBoxRect.setX( 0 );
+            aEditBoxRect.setY( 0 );
+
+            NWPaintOneEditBox( m_nXScreen, gdkPixmap, NULL, nType, nPart, aEditBoxRect, nState, aValue, rCaption );
+        }
+
+        NWSetWidgetState( gWidgetData[m_nXScreen].gSpinButtonWidget, nState, stateType );
+        gtk_widget_style_get( gWidgetData[m_nXScreen].gSpinButtonWidget, "shadow_type", &shadowType, (char *)NULL );
+
+        if ( shadowType != GTK_SHADOW_NONE )
+        {
+            Rectangle        shadowRect( upBtnRect );
+
+            shadowRect.Union( downBtnRect );
+            gtk_paint_box( gWidgetData[m_nXScreen].gSpinButtonWidget->style, gdkPixmap, GTK_STATE_NORMAL, shadowType, NULL,
+                gWidgetData[m_nXScreen].gSpinButtonWidget, "spinbutton",
+                (shadowRect.Left() - pixmapRect.Left()), (shadowRect.Top() - pixmapRect.Top()),
+                shadowRect.GetWidth(), shadowRect.GetHeight() );
+        }
+
+        NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
+        NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
     }
 
-    NWSetWidgetState( gWidgetData[m_nXScreen].gSpinButtonWidget, nState, stateType );
-    gtk_widget_style_get( gWidgetData[m_nXScreen].gSpinButtonWidget, "shadow_type", &shadowType, (char *)NULL );
-
-    if ( shadowType != GTK_SHADOW_NONE )
-    {
-        Rectangle        shadowRect( upBtnRect );
-
-        shadowRect.Union( downBtnRect );
-        gtk_paint_box( gWidgetData[m_nXScreen].gSpinButtonWidget->style, gdkPixmap, GTK_STATE_NORMAL, shadowType, NULL,
-            gWidgetData[m_nXScreen].gSpinButtonWidget, "spinbutton",
-            (shadowRect.Left() - pixmapRect.Left()), (shadowRect.Top() - pixmapRect.Top()),
-            shadowRect.GetWidth(), shadowRect.GetHeight() );
-    }
-
-    NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, upBtnPart, pixmapRect, upBtnState, aValue, rCaption );
-    NWPaintOneSpinButton( m_nXScreen, gdkPixmap, nType, downBtnPart, pixmapRect, downBtnState, aValue, rCaption );
-
-    bool bRet = NWRenderPixmapToScreen( pixmap, pixmapRect );
-    delete pixmap;
-
-    return bRet;
+    return NWRenderPixmapToScreen( pixmap.get(), mask.get(), pixmapRect );
 }
 
 static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
@@ -2667,7 +2714,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 {
     OSL_ASSERT( nType != CTRL_TAB_ITEM || aValue.getType() == CTRL_TAB_ITEM );
     GdkX11Pixmap *   pixmap;
-    GdkPixmap *      gdkPixmap;
+    GdkX11Pixmap *   mask;
     Rectangle        pixmapRect;
     Rectangle        tabRect;
     GtkStateType    stateType;
@@ -2730,83 +2777,88 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
     if( nType == CTRL_TAB_ITEM )
     {
-        if( aCacheItems.Find( nType, nState, pixmapRect, &pixmap ) )
-            return NWRenderPixmapToScreen( pixmap, pixmapRect );
+        if( aCacheItems.Find( nType, nState, pixmapRect, &pixmap, &mask ) )
+            return NWRenderPixmapToScreen( pixmap, mask, pixmapRect );
     }
     else
     {
-        if( aCachePage.Find( nType, nState, pixmapRect, &pixmap ) )
-            return NWRenderPixmapToScreen( pixmap, pixmapRect );
+        if( aCachePage.Find( nType, nState, pixmapRect, &pixmap, &mask ) )
+            return NWRenderPixmapToScreen( pixmap, mask, pixmapRect );
     }
 
-    pixmap = new GdkX11Pixmap( pixmapRect.GetWidth(), pixmapRect.GetHeight(),
-                               GetGenericData()->GetSalDisplay()->GetVisual( m_nXScreen ).GetDepth() );
-    gdkPixmap = pixmap->GetGdkPixmap();
+    int nDepth = GetGenericData()->GetSalDisplay()->GetVisual( m_nXScreen ).GetDepth();
+    pixmap = new GdkX11Pixmap( pixmapRect.GetWidth(), pixmapRect.GetHeight(), nDepth );
+    mask = new GdkX11Pixmap( pixmapRect.GetWidth(), pixmapRect.GetHeight(), nDepth );
     GdkRectangle paintRect;
     paintRect.x = paintRect.y = 0;
     paintRect.width = pixmapRect.GetWidth();
     paintRect.height = pixmapRect.GetHeight();
 
-    gtk_paint_flat_box( m_pWindow->style, gdkPixmap, GTK_STATE_NORMAL,
-                        GTK_SHADOW_NONE, &paintRect, m_pWindow, "base",
-                        -rControlRectangle.Left(),
-                        -rControlRectangle.Top(),
-                        pixmapRect.GetWidth()+rControlRectangle.Left(),
-                        pixmapRect.GetHeight()+rControlRectangle.Top());
-
-    NWSetWidgetState( gWidgetData[m_nXScreen].gNotebookWidget, nState, stateType );
-
-    switch( nType )
+    for( int i = 0; i < 2; ++i )
     {
-        case CTRL_TAB_BODY:
-            break;
+        GdkPixmap* gdkPixmap = (i == 0) ? pixmap->GetGdkPixmap() : mask->GetGdkPixmap();
 
-        case CTRL_TAB_PANE:
-            gtk_paint_box_gap( gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
-                (char *)"notebook", 0, 0, pixmapRect.GetWidth(), pixmapRect.GetHeight(), GTK_POS_TOP, 0, 0 );
-            break;
+        gtk_paint_flat_box( m_pWindow->style, gdkPixmap, GTK_STATE_NORMAL,
+                            GTK_SHADOW_NONE, &paintRect, m_pWindow, "base",
+                            -rControlRectangle.Left(),
+                            -rControlRectangle.Top(),
+                            pixmapRect.GetWidth()+rControlRectangle.Left(),
+                            pixmapRect.GetHeight()+rControlRectangle.Top());
 
-        case CTRL_TAB_ITEM:
+        NWSetWidgetState( gWidgetData[m_nXScreen].gNotebookWidget, nState, stateType );
+
+        switch( nType )
         {
-            stateType = ( nState & CTRL_STATE_SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
+            case CTRL_TAB_BODY:
+                break;
 
-            // First draw the background
-            gtk_paint_flat_box(gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap,
-                                   GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, m_pWindow, "base",
-                                   -rControlRectangle.Left(),
-                                   -rControlRectangle.Top(),
-                                   pixmapRect.GetWidth()+rControlRectangle.Left(),
-                                   pixmapRect.GetHeight()+rControlRectangle.Top());
+            case CTRL_TAB_PANE:
+                gtk_paint_box_gap( gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap, GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
+                    (char *)"notebook", 0, 0, pixmapRect.GetWidth(), pixmapRect.GetHeight(), GTK_POS_TOP, 0, 0 );
+                break;
 
-            // Now the tab itself
-            if( nState & CTRL_STATE_ROLLOVER )
-                g_object_set_data(G_OBJECT(gdkPixmap),tabPrelitDataName,reinterpret_cast<gpointer>(TRUE));
-
-            gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
-                (char *)"tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
-                tabRect.GetWidth(), tabRect.GetHeight(), GTK_POS_BOTTOM );
-
-            g_object_steal_data(G_OBJECT(gdkPixmap),tabPrelitDataName);
-
-            if ( nState & CTRL_STATE_SELECTED )
+            case CTRL_TAB_ITEM:
             {
-                gtk_paint_flat_box( m_pWindow->style, gdkPixmap, stateType, GTK_SHADOW_NONE, NULL, m_pWindow,
-                    "base", 0, (pixmapRect.GetHeight() - 1), pixmapRect.GetWidth(), 1 );
-            }
-            break;
-        }
+                stateType = ( nState & CTRL_STATE_SELECTED ) ? GTK_STATE_NORMAL : GTK_STATE_ACTIVE;
 
-        default:
-            break;
+                // First draw the background
+                gtk_paint_flat_box(gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap,
+                                       GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, m_pWindow, "base",
+                                       -rControlRectangle.Left(),
+                                       -rControlRectangle.Top(),
+                                       pixmapRect.GetWidth()+rControlRectangle.Left(),
+                                       pixmapRect.GetHeight()+rControlRectangle.Top());
+
+                // Now the tab itself
+                if( nState & CTRL_STATE_ROLLOVER )
+                    g_object_set_data(G_OBJECT(gdkPixmap),tabPrelitDataName,reinterpret_cast<gpointer>(TRUE));
+
+                gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, gdkPixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
+                    (char *)"tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
+                    tabRect.GetWidth(), tabRect.GetHeight(), GTK_POS_BOTTOM );
+
+                g_object_steal_data(G_OBJECT(gdkPixmap),tabPrelitDataName);
+
+                if ( nState & CTRL_STATE_SELECTED )
+                {
+                    gtk_paint_flat_box( m_pWindow->style, gdkPixmap, stateType, GTK_SHADOW_NONE, NULL, m_pWindow,
+                        "base", 0, (pixmapRect.GetHeight() - 1), pixmapRect.GetWidth(), 1 );
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
     }
 
     // cache data
     if( nType == CTRL_TAB_ITEM )
-        aCacheItems.Fill( nType, nState, pixmapRect, pixmap );
+        aCacheItems.Fill( nType, nState, pixmapRect, pixmap, mask );
     else
-        aCachePage.Fill( nType, nState, pixmapRect, pixmap );
+        aCachePage.Fill( nType, nState, pixmapRect, pixmap, mask );
 
-    bool bSuccess = NWRenderPixmapToScreen( pixmap, pixmapRect );
+    bool bSuccess = NWRenderPixmapToScreen( pixmap, mask, pixmapRect );
     return bSuccess;
 }
 
@@ -3382,24 +3434,26 @@ bool GtkSalGraphics::NWPaintGTKListNode(
             break;
     }
 
-    GdkX11Pixmap* pixmap = NWGetPixmapFromScreen( aRect );
-    if( ! pixmap )
+    std::unique_ptr<GdkX11Pixmap> pixmap( NWGetPixmapFromScreen( aRect, BG_WHITE ) );
+    std::unique_ptr<GdkX11Pixmap> mask( NWGetPixmapFromScreen( aRect, BG_BLACK ) );
+    if( !pixmap || !mask )
         return false;
 
-    GdkDrawable* const &pixDrawable = pixmap->GetGdkDrawable();
-    gtk_paint_expander( gWidgetData[m_nXScreen].gTreeView->style,
-                        pixDrawable,
-                        stateType,
-                        NULL,
-                        gWidgetData[m_nXScreen].gTreeView,
-                        "treeview",
-                        w/2, h/2,
-                        eStyle );
+    for( int i = 0; i < 2; ++i )
+    {
+        GdkDrawable* const &pixDrawable = (i == 0) ? pixmap->GetGdkDrawable()
+                                                   : mask->GetGdkDrawable();
+        gtk_paint_expander( gWidgetData[m_nXScreen].gTreeView->style,
+                            pixDrawable,
+                            stateType,
+                            NULL,
+                            gWidgetData[m_nXScreen].gTreeView,
+                            "treeview",
+                            w/2, h/2,
+                            eStyle );
+    }
 
-    bool bRet = NWRenderPixmapToScreen( pixmap, aRect );
-    delete pixmap;
-
-    return bRet;
+    return NWRenderPixmapToScreen( pixmap.get(), mask.get(), aRect );
 }
 
 bool GtkSalGraphics::NWPaintGTKProgress(
@@ -3418,57 +3472,60 @@ bool GtkSalGraphics::NWPaintGTKProgress(
 
     long nProgressWidth = rValue.getNumericVal();
 
-    GdkX11Pixmap* pixmap = NWGetPixmapFromScreen( Rectangle( Point( 0, 0 ), Size( w, h ) ) );
-    if( ! pixmap )
+    Rectangle aRect( Point( 0, 0 ), Size( w, h ) );
+    std::unique_ptr<GdkX11Pixmap> pixmap( NWGetPixmapFromScreen( aRect, BG_WHITE ) );
+    std::unique_ptr<GdkX11Pixmap> mask( NWGetPixmapFromScreen( aRect, BG_BLACK ) );
+    if( !pixmap || !mask )
         return false;
 
-    GdkDrawable* const &pixDrawable = pixmap->GetGdkDrawable();
-
-    // paint background
-    gtk_paint_flat_box(gWidgetData[m_nXScreen].gProgressBar->style, pixDrawable,
-                           GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, m_pWindow, "base",
-                           -rControlRectangle.Left(),-rControlRectangle.Top(),
-                           rControlRectangle.Left()+w,rControlRectangle.Top()+h);
-
-    gtk_paint_flat_box( gWidgetData[m_nXScreen].gProgressBar->style,
-                        pixDrawable,
-                        GTK_STATE_NORMAL,
-                        GTK_SHADOW_NONE,
-                        NULL,
-                        gWidgetData[m_nXScreen].gProgressBar,
-                        "trough",
-                        0, 0, w, h );
-    if( nProgressWidth > 0 )
+    for( int i = 0; i < 2; ++i )
     {
-        // paint progress
-        if( Application::GetSettings().GetLayoutRTL() )
+        GdkDrawable* const &pixDrawable = (i == 0) ? pixmap->GetGdkDrawable()
+                                                   : mask->GetGdkDrawable();
+
+        // paint background
+        gtk_paint_flat_box(gWidgetData[m_nXScreen].gProgressBar->style, pixDrawable,
+                               GTK_STATE_NORMAL, GTK_SHADOW_NONE, NULL, m_pWindow, "base",
+                               -rControlRectangle.Left(),-rControlRectangle.Top(),
+                               rControlRectangle.Left()+w,rControlRectangle.Top()+h);
+
+        gtk_paint_flat_box( gWidgetData[m_nXScreen].gProgressBar->style,
+                            pixDrawable,
+                            GTK_STATE_NORMAL,
+                            GTK_SHADOW_NONE,
+                            NULL,
+                            gWidgetData[m_nXScreen].gProgressBar,
+                            "trough",
+                            0, 0, w, h );
+        if( nProgressWidth > 0 )
         {
-            gtk_paint_box( gWidgetData[m_nXScreen].gProgressBar->style,
-                           pixDrawable,
-                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-                           NULL,
-                           gWidgetData[m_nXScreen].gProgressBar,
-                           "bar",
-                           w-nProgressWidth, 0, nProgressWidth, h
-                           );
-        }
-        else
-        {
-            gtk_paint_box( gWidgetData[m_nXScreen].gProgressBar->style,
-                           pixDrawable,
-                           GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
-                           NULL,
-                           gWidgetData[m_nXScreen].gProgressBar,
-                           "bar",
-                           0, 0, nProgressWidth, h
-                           );
+            // paint progress
+            if( Application::GetSettings().GetLayoutRTL() )
+            {
+                gtk_paint_box( gWidgetData[m_nXScreen].gProgressBar->style,
+                               pixDrawable,
+                               GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+                               NULL,
+                               gWidgetData[m_nXScreen].gProgressBar,
+                               "bar",
+                               w-nProgressWidth, 0, nProgressWidth, h
+                               );
+            }
+            else
+            {
+                gtk_paint_box( gWidgetData[m_nXScreen].gProgressBar->style,
+                               pixDrawable,
+                               GTK_STATE_PRELIGHT, GTK_SHADOW_OUT,
+                               NULL,
+                               gWidgetData[m_nXScreen].gProgressBar,
+                               "bar",
+                               0, 0, nProgressWidth, h
+                               );
+            }
         }
     }
 
-    bool bRet = NWRenderPixmapToScreen( pixmap, rControlRectangle );
-    delete pixmap;
-
-    return bRet;
+    return NWRenderPixmapToScreen( pixmap.get(), mask.get(), rControlRectangle );
 }
 
 bool GtkSalGraphics::NWPaintGTKSlider(
@@ -3488,75 +3545,78 @@ bool GtkSalGraphics::NWPaintGTKSlider(
 
     const SliderValue* pVal = static_cast<const SliderValue*>(&rValue);
 
-    GdkX11Pixmap* pixmap = NWGetPixmapFromScreen( rControlRectangle );
-    if( ! pixmap )
+    std::unique_ptr<GdkX11Pixmap> pixmap( NWGetPixmapFromScreen( rControlRectangle, BG_WHITE ) );
+    std::unique_ptr<GdkX11Pixmap> mask( NWGetPixmapFromScreen( rControlRectangle, BG_BLACK ) );
+    if( !pixmap || !mask )
         return false;
 
-    GdkDrawable* const &pixDrawable = pixmap->GetGdkDrawable();
-    GtkWidget* pWidget = (nPart == PART_TRACK_HORZ_AREA)
-                         ? GTK_WIDGET(gWidgetData[m_nXScreen].gHScale)
-                         : GTK_WIDGET(gWidgetData[m_nXScreen].gVScale);
-    const gchar* pDetail = (nPart == PART_TRACK_HORZ_AREA) ? "hscale" : "vscale";
-    GtkOrientation eOri = (nPart == PART_TRACK_HORZ_AREA) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    gint slider_width = 10;
-    gint slider_length = 10;
-    gint trough_border = 0;
-    gtk_widget_style_get( pWidget,
-                          "slider-width", &slider_width,
-                          "slider-length", &slider_length,
-                          "trough-border", &trough_border,
-                          NULL);
-
-    GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
-    if( nPart == PART_TRACK_HORZ_AREA )
+    for( int i = 0; i < 2; ++i )
     {
-        gtk_paint_box( pWidget->style,
-                       pixDrawable,
-                       eState,
-                       GTK_SHADOW_IN,
-                       NULL,
-                       pWidget,
-                       "trough",
-                       0, (h-slider_width-2*trough_border)/2, w, slider_width + 2*trough_border);
-        gint x = (w - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
-        gtk_paint_slider( pWidget->style,
-                          pixDrawable,
-                          eState,
-                          GTK_SHADOW_OUT,
-                          NULL,
-                          pWidget,
-                          pDetail,
-                          x, (h-slider_width)/2,
-                          slider_length, slider_width,
-                          eOri );
-    }
-    else
-    {
-        gtk_paint_box( pWidget->style,
-                       pixDrawable,
-                       eState,
-                       GTK_SHADOW_IN,
-                       NULL,
-                       pWidget,
-                       "trough",
-                       (w-slider_width-2*trough_border)/2, 0, slider_width + 2*trough_border, h);
-        gint y = (h - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
-        gtk_paint_slider( pWidget->style,
-                          pixDrawable,
-                          eState,
-                          GTK_SHADOW_OUT,
-                          NULL,
-                          pWidget,
-                          pDetail,
-                          (w-slider_width)/2, y,
-                          slider_width, slider_length,
-                          eOri );
+        GdkDrawable* const &pixDrawable = (i == 0) ? pixmap->GetGdkDrawable()
+                                                   : mask->GetGdkDrawable();
+
+        GtkWidget* pWidget = (nPart == PART_TRACK_HORZ_AREA)
+                             ? GTK_WIDGET(gWidgetData[m_nXScreen].gHScale)
+                             : GTK_WIDGET(gWidgetData[m_nXScreen].gVScale);
+        const gchar* pDetail = (nPart == PART_TRACK_HORZ_AREA) ? "hscale" : "vscale";
+        GtkOrientation eOri = (nPart == PART_TRACK_HORZ_AREA) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
+        gint slider_width = 10;
+        gint slider_length = 10;
+        gint trough_border = 0;
+        gtk_widget_style_get( pWidget,
+                              "slider-width", &slider_width,
+                              "slider-length", &slider_length,
+                              "trough-border", &trough_border,
+                              NULL);
+
+        GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
+        if( nPart == PART_TRACK_HORZ_AREA )
+        {
+            gtk_paint_box( pWidget->style,
+                           pixDrawable,
+                           eState,
+                           GTK_SHADOW_IN,
+                           NULL,
+                           pWidget,
+                           "trough",
+                           0, (h-slider_width-2*trough_border)/2, w, slider_width + 2*trough_border);
+            gint x = (w - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
+            gtk_paint_slider( pWidget->style,
+                              pixDrawable,
+                              eState,
+                              GTK_SHADOW_OUT,
+                              NULL,
+                              pWidget,
+                              pDetail,
+                              x, (h-slider_width)/2,
+                              slider_length, slider_width,
+                              eOri );
+        }
+        else
+        {
+            gtk_paint_box( pWidget->style,
+                           pixDrawable,
+                           eState,
+                           GTK_SHADOW_IN,
+                           NULL,
+                           pWidget,
+                           "trough",
+                           (w-slider_width-2*trough_border)/2, 0, slider_width + 2*trough_border, h);
+            gint y = (h - slider_length + 1) * (pVal->mnCur - pVal->mnMin) / (pVal->mnMax - pVal->mnMin);
+            gtk_paint_slider( pWidget->style,
+                              pixDrawable,
+                              eState,
+                              GTK_SHADOW_OUT,
+                              NULL,
+                              pWidget,
+                              pDetail,
+                              (w-slider_width)/2, y,
+                              slider_width, slider_length,
+                              eOri );
+        }
     }
 
-    bool bRet = NWRenderPixmapToScreen( pixmap, rControlRectangle );
-    delete pixmap;
-
-    return bRet;
+    return NWRenderPixmapToScreen( pixmap.get(), mask.get(), rControlRectangle );
 }
 
 static int getFrameWidth(GtkWidget* widget)
@@ -4128,12 +4188,26 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
  * Create a GdkPixmap filled with the contents of an area of an Xlib window
  ************************************************************************/
 
-GdkX11Pixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
+GdkX11Pixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect, int nBgColor )
 {
     GdkX11Pixmap* pPixmap;
+    int nDepth = GetGenericData()->GetSalDisplay()->GetVisual( m_nXScreen ).GetDepth();
+;
 
-    pPixmap = new GdkX11Pixmap( srcRect.GetWidth(), srcRect.GetHeight(), 24 );
-    FillPixmapFromScreen( pPixmap, srcRect.Left(), srcRect.Top() );
+    pPixmap = new GdkX11Pixmap( srcRect.GetWidth(), srcRect.GetHeight(), nDepth );
+
+    if( nBgColor != BG_NONE )
+    {
+        cairo_t *cr = gdk_cairo_create( pPixmap->GetGdkDrawable() );
+        if( nBgColor == BG_BLACK)
+            cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
+        else
+            cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 1.0);
+        cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+        cairo_paint (cr);
+        cairo_destroy(cr);
+    }
+
     return pPixmap;
 }
 
@@ -4141,9 +4215,9 @@ GdkX11Pixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect )
  * Copy an alpha pixmap to screen using a gc with clipping
  ************************************************************************/
 
-bool GtkSalGraphics::NWRenderPixmapToScreen( GdkX11Pixmap* pPixmap, Rectangle dstRect )
+bool GtkSalGraphics::NWRenderPixmapToScreen( GdkX11Pixmap* pPixmap, GdkX11Pixmap* pMask, Rectangle dstRect )
 {
-    return RenderPixmapToScreen( pPixmap, dstRect.Left(), dstRect.Top() );
+    return RenderPixmapToScreen( pPixmap, pMask, dstRect.Left(), dstRect.Top() );
 }
 
 /************************************************************************

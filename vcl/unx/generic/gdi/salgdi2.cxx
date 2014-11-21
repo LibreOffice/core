@@ -89,11 +89,11 @@ bool X11SalGraphics::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
     return rImpl.FillPixmapFromScreen( pPixmap, nX, nY );
 }
 
-bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, int nX, int nY )
+bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
 {
     SAL_INFO( "vcl", "RenderPixmapToScreen" );
     X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mpImpl.get());
-    return rImpl.RenderPixmapToScreen( pPixmap, nX, nY );
+    return rImpl.RenderPixmapToScreen( pPixmap, pMask, nX, nY );
 }
 
 extern "C"
