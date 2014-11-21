@@ -294,7 +294,7 @@ sal_Int32 OTextInputStream::implReadNext()
         sal_Int32 nBytesToRead = READ_BYTE_COUNT;
         sal_Int32 nRead = mxStream->readSomeBytes( mSeqSource, nBytesToRead );
         sal_Int32 nTotalRead = nRead;
-        if( nRead < nBytesToRead )
+        if( nRead == 0 )
             mbReachedEOF = true;
 
         // Try to convert
