@@ -49,20 +49,12 @@ public:
     typedef std::pair < const OUString, const OUString > PropertyPair;
 
 private:
-    struct SVX_DLLPUBLIC PropertyEq
-    {
-        bool operator()( const OUString&, const OUString& ) const;
-    };
-    struct SVX_DLLPUBLIC PropertyPairEq
-    {
-        bool operator()( const SdrCustomShapeGeometryItem::PropertyPair&, const SdrCustomShapeGeometryItem::PropertyPair& ) const;
-    };
     struct SVX_DLLPUBLIC PropertyPairHash
     {
         size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
-    typedef boost::unordered_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
-    typedef boost::unordered_map< OUString, sal_Int32, OUStringHash, PropertyEq > PropertyHashMap;
+    typedef boost::unordered_map <PropertyPair, sal_Int32, PropertyPairHash> PropertyPairHashMap;
+    typedef boost::unordered_map<OUString, sal_Int32, OUStringHash> PropertyHashMap;
 
     PropertyHashMap     aPropHashMap;
     PropertyPairHashMap aPropPairHashMap;
@@ -120,16 +112,6 @@ inline SdrOnOffItem makeSdrTextAutoGrowSizeItem( bool bAuto ) {
 }
 
 // some useful inline methods
-
-inline bool SdrCustomShapeGeometryItem::PropertyEq::operator()( const OUString& r1, const OUString& r2 ) const
-{
-    return r1.equals( r2 );
-}
-
-inline bool SdrCustomShapeGeometryItem::PropertyPairEq::operator()( const SdrCustomShapeGeometryItem::PropertyPair& r1, const SdrCustomShapeGeometryItem::PropertyPair& r2 ) const
-{
-    return ( r1.first.equals( r2.first ) ) && ( r1.second.equals( r2.second ) );
-}
 
 inline size_t SdrCustomShapeGeometryItem::PropertyPairHash::operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const
 {
