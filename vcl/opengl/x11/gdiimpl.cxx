@@ -199,14 +199,14 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixm
         glXBindTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT, NULL );
         aMaskTexture.Unbind();
 
-        DrawTextureDiff( aTexture, aMaskTexture, aPosAry, !bInverted );
+        DrawTextureDiff( aTexture, aMaskTexture, aPosAry, bInverted );
 
         glXReleaseTexImageEXT( pDisplay, pGlxMask, GLX_FRONT_LEFT_EXT );
         glXDestroyPixmap( pDisplay, pGlxMask );
     }
     else
     {
-        DrawTexture( aTexture, aPosAry, !bInverted );
+        DrawTexture( aTexture, aPosAry, bInverted );
     }
 
     CHECK_GL_ERROR();
