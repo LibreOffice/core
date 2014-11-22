@@ -71,6 +71,7 @@
 #include <svx/svxdlg.hxx>
 #include <svx/xtable.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 #include <boost/scoped_ptr.hpp>
