@@ -837,7 +837,6 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     // Boxes!
     if( 1 != rCpyTbl.GetTabSortBoxes().size() )
     {
-        SwTableLine* pSttLine = pSttBox->GetUpper();
         _FndBox* pFndBox;
 
         sal_uInt16 nFndCnt = aFndBox.GetLines().size();
@@ -847,8 +846,7 @@ bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         // Check if we have enough space for all Lines and Boxes
         sal_uInt16 nTstLns = 0;
         pFLine = &aFndBox.GetLines().front();
-        pSttLine = pFLine->GetLine();
-        sal_uInt16 nSttLine = GetTabLines().GetPos( pSttLine );
+        sal_uInt16 nSttLine = GetTabLines().GetPos( pFLine->GetLine() );
         // Do we have as many rows, actually?
         if( 1 == nFndCnt )
         {
