@@ -1575,7 +1575,6 @@ void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
     Reference< ::com::sun::star::chart::XStatisticDisplay > xChartPropProvider( mxDiagram, uno::UNO_QUERY );
     if(xChartPropProvider.is())
     {
-        Reference< beans::XPropertySet > xChartPropSet = xChartPropProvider->getMinMaxLine();
         //  updownbar
         pFS->startElement( FSNS( XML_c, XML_upDownBars ),
                 FSEND );
@@ -1585,7 +1584,7 @@ void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
                 XML_val, I32S( nGapWidth ),
                     FSEND );
 
-        xChartPropSet = xChartPropProvider->getUpBar();
+        Reference< beans::XPropertySet > xChartPropSet = xChartPropProvider->getUpBar();
         if( xChartPropSet.is() )
         {
             pFS->startElement( FSNS( XML_c, XML_upBars ),
