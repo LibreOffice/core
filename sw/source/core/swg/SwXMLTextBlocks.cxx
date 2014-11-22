@@ -324,7 +324,7 @@ sal_uLong SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& 
 
 sal_uLong SwXMLTextBlocks::PutBlock( SwPaM& , const OUString& )
 {
-    sal_uLong nRes = 0;
+    sal_uLong nRes = 0; // dead variable, this always returns 0
     sal_uInt16 nCommitFlags = nFlags & (SWXML_CONVBLOCK|SWXML_NOROOTCOMMIT);
 
     nFlags |= nCommitFlags;
