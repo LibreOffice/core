@@ -5637,6 +5637,16 @@
               <desc>Sifr - an adaptation of the Gnome symbolic theme</desc>
             </info>
           </enumeration>
+          <enumeration oor:value="breeze">
+            <info>
+              <desc>Breeze - the icon theme from KDE Plasma</desc>
+            </info>
+          </enumeration>
+          <enumeration oor:value="oxygen">
+            <info>
+              <desc>Oxygen - the icon theme from KDE 4</desc>
+            </info>
+          </enumeration>
         </constraints>
         <value>auto</value>
       </prop>
