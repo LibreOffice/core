@@ -2691,6 +2691,8 @@ bool CompareSvxAutocorrWordList::operator()( SvxAutocorrWord* const& lhs, SvxAut
     return rCmp.compareString( lhs->GetShort(), rhs->GetShort() ) < 0;
 }
 
+SvxAutocorrWordList::SvxAutocorrWordList() {}
+
 SvxAutocorrWordList::~SvxAutocorrWordList()
 {
     DeleteAndDestroyAll();

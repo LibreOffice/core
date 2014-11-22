@@ -143,6 +143,9 @@ typedef ::boost::unordered_map< OUString, SvxAutocorrWord *,
 
 class EDITENG_DLLPUBLIC SvxAutocorrWordList
 {
+    SvxAutocorrWordList( const SvxAutocorrWordList& ); // disabled
+    const SvxAutocorrWordList& operator= ( const SvxAutocorrWordList& ); // disabled
+
     // only one of these contains the data
     mutable SvxAutocorrWordList_Set  maSet;
     mutable SvxAutocorrWordList_Hash maHash; // key is 'Short'
@@ -152,6 +155,7 @@ class EDITENG_DLLPUBLIC SvxAutocorrWordList
                                        sal_Int32 &rStt,
                                        sal_Int32 nEndPos) const;
 public:
+    SvxAutocorrWordList();
                            // free any objects still in the set
                            ~SvxAutocorrWordList();
     void                   DeleteAndDestroyAll();
