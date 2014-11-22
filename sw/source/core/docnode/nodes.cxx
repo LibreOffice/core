@@ -1944,11 +1944,9 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
                 (bSkipProtect && rSect.IsProtectFlag()) )
                 // than skip the section
                 aTmp = *pNd->EndOfSectionNode();
-            bFirst = false;
         }
         else if( bFirst )
         {
-            bFirst = false;
             if( pNd->pStartOfSection->IsSectionNode() )
             {
                 const SwSection& rSect = static_cast<SwSectionNode*>(pNd->
