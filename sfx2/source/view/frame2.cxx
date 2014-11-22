@@ -49,6 +49,7 @@
 #include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/syswin.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -66,6 +66,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <iostream>
+#include <map>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

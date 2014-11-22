@@ -36,9 +36,6 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/shell.hxx>
-#include <sfx2/stbitem.hxx>
-#include <sfx2/tbxctrl.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 
 class Timer;
@@ -67,8 +64,8 @@ class SfxObjectShell;
 typedef ::std::vector<SfxObjectShell*> SfxObjectShellArr_Impl;
 class SfxProgress;
 class SfxSlotPool;
-typedef boost::ptr_vector<SfxStbCtrlFactory> SfxStbCtrlFactArr_Impl;
-typedef boost::ptr_vector<SfxTbxCtrlFactory> SfxTbxCtrlFactArr_Impl;
+class SfxStbCtrlFactArr_Impl;
+class SfxTbxCtrlFactArr_Impl;
 class SfxViewFrame;
 typedef ::std::vector<SfxViewFrame*> SfxViewFrameArr_Impl;
 class SfxViewShell;

@@ -39,4 +39,44 @@ size_t SfxMenuCtrlFactArr_Impl::size() const
     return maData.size();
 }
 
+const SfxStbCtrlFactory& SfxStbCtrlFactArr_Impl::operator []( size_t i ) const
+{
+    return maData[i];
+}
+
+SfxStbCtrlFactory& SfxStbCtrlFactArr_Impl::operator []( size_t i )
+{
+    return maData[i];
+}
+
+void SfxStbCtrlFactArr_Impl::push_back( SfxStbCtrlFactory* p )
+{
+    maData.push_back(p);
+}
+
+size_t SfxStbCtrlFactArr_Impl::size() const
+{
+    return maData.size();
+}
+
+const SfxTbxCtrlFactory& SfxTbxCtrlFactArr_Impl::operator []( size_t i ) const
+{
+    return maData[i];
+}
+
+SfxTbxCtrlFactory& SfxTbxCtrlFactArr_Impl::operator []( size_t i )
+{
+    return maData[i];
+}
+
+void SfxTbxCtrlFactArr_Impl::push_back( SfxTbxCtrlFactory* p )
+{
+    maData.push_back(p);
+}
+
+size_t SfxTbxCtrlFactArr_Impl::size() const
+{
+    return maData.size();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

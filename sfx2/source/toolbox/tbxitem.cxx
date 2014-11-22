@@ -91,6 +91,7 @@
 #include <sfx2/imgmgr.hxx>
 #include "virtmenu.hxx"
 #include <sfx2/imagemgr.hxx>
+#include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
