@@ -668,7 +668,6 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
                                 lcl_DBDataToString(static_cast<SwDBNameInfField*>(pFld)->GetRealDBData())))
                 {
                     static_cast<SwDBNameInfField*>(pFld)->SetDBData(aNewDBData);
-                    bExpand = true;
                 }
                 // no break;
             case RES_HIDDENTXTFLD:
