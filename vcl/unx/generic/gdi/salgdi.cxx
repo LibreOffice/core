@@ -150,7 +150,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
 
     if( hDrawable_ )
     {
-        dynamic_cast<X11GraphicsImpl&>(*mpImpl.get()).Init();
+        mpImpl->Init();
         // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
     }
 }

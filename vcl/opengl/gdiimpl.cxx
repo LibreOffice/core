@@ -31,6 +31,7 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include "salgdi.hxx"
+#include "svdata.hxx"
 #include "opengl/salbmp.hxx"
 
 #include <glm/glm.hpp>
@@ -63,8 +64,7 @@
                  1.0f )
 
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
-    : mpFrame(NULL)
-    , mnPainting(0)
+    : mpContext(0)
     , mbUseScissor(false)
     , mbUseStencil(false)
     , mbOffscreen(false)
@@ -109,11 +109,106 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
 
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
+    ReleaseContext();
+}
+
+bool OpenGLSalGraphicsImpl::AcquireContext( bool bOffscreen )
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if( mpContext )
+        mpContext->DeRef();
+
+    if( bOffscreen )
+    {
+        mpContext = CreatePixmapContext();
+        return (mpContext != NULL);
+    }
+
+    OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
+    while( pContext )
+    {
+        // check if this context can be used by this SalGraphicsImpl instance
+        if( CompareWinContext( pContext )  )
+            break;
+        pContext = pContext->mpPrevContext;
+    }
+
+    if( pContext )
+        pContext->AddRef();
+    else
+        pContext = CreateWinContext();
+
+    mpContext = pContext;
+    return (mpContext != NULL);
+}
+
+bool OpenGLSalGraphicsImpl::ReleaseContext()
+{
+    if( mpContext )
+        mpContext->DeRef();
+    mpContext = NULL;
+    return true;
+}
+
+void OpenGLSalGraphicsImpl::Init()
+{
+    const bool bOffscreen = IsOffscreen();
+
+    // check if we can simply re-use the same context
+    if( mpContext )
+    {
+        if( bOffscreen != mbOffscreen || ( !mbOffscreen && CompareWinContext( mpContext ) ) )
+            ReleaseContext();
+    }
+
+    if( !mpContext && !AcquireContext( bOffscreen ) )
+    {
+        SAL_WARN( "vcl.opengl", "Couldn't acquire context for SalGraphics" );
+        return;
+    }
+
+    mpContext->makeCurrent();
+
+    if( mbOffscreen == bOffscreen )
+    {
+        // Nothing more to do for onscreen case
+        if( !mbOffscreen )
+            return;
+
+        // Already enabled and same size
+        if( maOffscreenTex.GetWidth()  == GetWidth() &&
+            maOffscreenTex.GetHeight() == GetHeight() )
+            return;
+    }
+    else
+    {
+        mbOffscreen = bOffscreen;
+        if( bOffscreen )
+            glGenFramebuffers( 1, &mnFramebufferId );
+        else
+            glDeleteFramebuffers( 1, &mnFramebufferId );
+    }
+
+    // Create/update attached offscreen texture
+    if( mbOffscreen )
+    {
+        glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
+        maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
+        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, maOffscreenTex.Id(), 0 );
+        GLenum nStatus = glCheckFramebufferStatus( GL_FRAMEBUFFER );
+        if( nStatus != GL_FRAMEBUFFER_COMPLETE )
+            SAL_WARN( "vcl.opengl", "Incomplete framebuffer " << nStatus );
+        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+        CHECK_GL_ERROR();
+    }
 }
 
 void OpenGLSalGraphicsImpl::PreDraw()
 {
-    maContext.makeCurrent();
+    assert( mpContext && mpContext->isInitialized() );
+
+    mpContext->makeCurrent();
     // TODO: lfrb: make sure the render target has the right size
     if( mbOffscreen )
         CheckOffscreenTexture();
@@ -273,46 +368,17 @@ void OpenGLSalGraphicsImpl::SetROPFillColor( SalROPColor /*nROPColor*/ )
 {
 }
 
-// enable/disbale offscreen rendering
-void OpenGLSalGraphicsImpl::SetOffscreen( bool bOffscreen )
-{
-    if( bOffscreen == mbOffscreen )
-    {
-        // Already disabled
-        if( !mbOffscreen )
-            return;
-
-        // Already enabled and same size
-        if( maOffscreenTex.GetWidth()  == GetWidth() &&
-            maOffscreenTex.GetHeight() == GetHeight() )
-            return;
-    }
-    else
-    {
-        mbOffscreen = bOffscreen;
-        if( bOffscreen )
-            glGenFramebuffers( 1, &mnFramebufferId );
-        else
-            glDeleteFramebuffers( 1, &mnFramebufferId );
-    }
-
-    if( mbOffscreen )
-    {
-        glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
-        maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
-        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, maOffscreenTex.Id(), 0 );
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    }
-
-    CHECK_GL_ERROR();
-}
-
 bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 {
     glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
 
     if( maOffscreenTex.IsUnique() )
+    {
+        GLenum nStatus = glCheckFramebufferStatus( GL_FRAMEBUFFER );
+        if( nStatus != GL_FRAMEBUFFER_COMPLETE )
+            SAL_WARN( "vcl.opengl", "Incomplete framebuffer " << nStatus );
         return true;
+    }
 
     SalTwoRect aPosAry;
     aPosAry.mnSrcX = aPosAry.mnDestX = 0;
@@ -1816,7 +1882,7 @@ void OpenGLSalGraphicsImpl::endPaint()
     SAL_INFO( "vcl.opengl", "END PAINT " << this );
     if( mnPainting == 0 )
     {
-        maContext.makeCurrent();
+        mpContext->makeCurrent();
         glFlush();
     }
 }

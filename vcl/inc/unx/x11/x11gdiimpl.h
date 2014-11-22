@@ -17,7 +17,6 @@ class X11GraphicsImpl
 public:
     virtual ~X11GraphicsImpl() {};
 
-    virtual void Init() = 0;
     virtual bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) = 0;
     virtual bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) = 0;
 };

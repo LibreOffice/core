@@ -89,6 +89,7 @@ class SalI18NImeStatus;
 class DockingManager;
 class VclEventListeners2;
 class SalData;
+class OpenGLContext;
 
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
 
@@ -161,6 +162,8 @@ struct ImplSVGDIData
     OutputDevice*           mpLastPrnGraphics;  // Last OutputDevice with a InfoPrinter Graphics
     VirtualDevice*          mpFirstVirDev;      // First VirtualDevice
     VirtualDevice*          mpLastVirDev;       // Last VirtualDevice
+    OpenGLContext*          mpFirstContext;     // First OpenGLContext
+    OpenGLContext*          mpLastContext;      // Last OpenGLContext
     Printer*                mpFirstPrinter;     // First Printer
     Printer*                mpLastPrinter;      // Last Printer
     ImplPrnQueueList*       mpPrinterQueueList; // List of all printer queue
