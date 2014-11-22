@@ -73,7 +73,7 @@ void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttrib
     for (sal_Int32 j = 0; j < rAttributeList.getLength(); ++j)
     {
         if (rAttributeList[j].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), rtl::OUStringToOString(rAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+            pAttributeList->add(FSNS(XML_w, XML_val), rAttributeList[j].Value.get<OUString>().toUtf8());
         else
         {
             static DocxStringTokenMap const aTokens[] =
@@ -94,7 +94,7 @@ void DocxTableStyleExport::CnfStyle(uno::Sequence<beans::PropertyValue>& rAttrib
             };
 
             if (sal_Int32 nToken = DocxStringGetToken(aTokens, rAttributeList[j].Name))
-                pAttributeList->add(FSNS(XML_w, nToken), rtl::OUStringToOString(rAttributeList[j].Value.get<OUString>(), RTL_TEXTENCODING_UTF8));
+                pAttributeList->add(FSNS(XML_w, nToken), rAttributeList[j].Value.get<OUString>().toUtf8());
         }
     }
 
@@ -157,7 +157,7 @@ void DocxTableStyleExport::Impl::tableStyleTblCellMar(uno::Sequence<beans::Prope
             comphelper::SequenceAsHashMap aMap(rTblCellMar[i].Value.get< uno::Sequence<beans::PropertyValue> >());
             m_pSerializer->singleElementNS(XML_w, nToken,
                                            FSNS(XML_w, XML_w), OString::number(aMap["w"].get<sal_Int32>()),
-                                           FSNS(XML_w, XML_type), OUStringToOString(aMap["type"].get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
+                                           FSNS(XML_w, XML_type), aMap["type"].get<OUString>().toUtf8(),
                                            FSEND);
         }
     }
@@ -183,7 +183,7 @@ void DocxTableStyleExport::Impl::tableStyleTcBorder(sal_Int32 nToken, const uno:
     sax_fastparser::FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
     for (sal_Int32 i = 0; i < rTcBorder.getLength(); ++i)
         if (sal_Int32 nAttrToken = DocxStringGetToken(aTcBorderTokens, rTcBorder[i].Name))
-            pAttributeList->add(FSNS(XML_w, nAttrToken), OUStringToOString(rTcBorder[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, nAttrToken), rTcBorder[i].Value.get<OUString>().toUtf8());
 
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
@@ -225,17 +225,17 @@ void DocxTableStyleExport::Impl::tableStyleShd(uno::Sequence<beans::PropertyValu
     for (sal_Int32 i = 0; i < rShd.getLength(); ++i)
     {
         if (rShd[i].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_val), rShd[i].Value.get<OUString>().toUtf8());
         else if (rShd[i].Name == "color")
-            pAttributeList->add(FSNS(XML_w, XML_color), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_color), rShd[i].Value.get<OUString>().toUtf8());
         else if (rShd[i].Name == "fill")
-            pAttributeList->add(FSNS(XML_w, XML_fill), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_fill), rShd[i].Value.get<OUString>().toUtf8());
         else if (rShd[i].Name == "themeFill")
-            pAttributeList->add(FSNS(XML_w, XML_themeFill), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_themeFill), rShd[i].Value.get<OUString>().toUtf8());
         else if (rShd[i].Name == "themeFillShade")
-            pAttributeList->add(FSNS(XML_w, XML_themeFillShade), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_themeFillShade), rShd[i].Value.get<OUString>().toUtf8());
         else if (rShd[i].Name == "themeFillTint")
-            pAttributeList->add(FSNS(XML_w, XML_themeFillTint), OUStringToOString(rShd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_themeFillTint), rShd[i].Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_shd, xAttributeList);
@@ -250,13 +250,13 @@ void DocxTableStyleExport::Impl::tableStyleRColor(uno::Sequence<beans::PropertyV
     for (sal_Int32 i = 0; i < rColor.getLength(); ++i)
     {
         if (rColor[i].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_val), rColor[i].Value.get<OUString>().toUtf8());
         else if (rColor[i].Name == "themeColor")
-            pAttributeList->add(FSNS(XML_w, XML_themeColor), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_themeColor), rColor[i].Value.get<OUString>().toUtf8());
         else if (rColor[i].Name == "themeTint")
-            pAttributeList->add(FSNS(XML_w, XML_themeTint), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_themeTint), rColor[i].Value.get<OUString>().toUtf8());
         else if (rColor[i].Name == "themeShade")
-            pAttributeList->add(FSNS(XML_w, XML_themeShade), OUStringToOString(rColor[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_themeShade), rColor[i].Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_color, xAttributeList);
@@ -271,11 +271,11 @@ void DocxTableStyleExport::Impl::tableStyleRLang(uno::Sequence<beans::PropertyVa
     for (sal_Int32 i = 0; i < rLang.getLength(); ++i)
     {
         if (rLang[i].Name == "eastAsia")
-            pAttributeList->add(FSNS(XML_w, XML_eastAsia), OUStringToOString(rLang[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_eastAsia), rLang[i].Value.get<OUString>().toUtf8());
         else if (rLang[i].Name == "val")
-            pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(rLang[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_val), rLang[i].Value.get<OUString>().toUtf8());
         else if (rLang[i].Name == "bidi")
-            pAttributeList->add(FSNS(XML_w, XML_bidi), OUStringToOString(rLang[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_bidi), rLang[i].Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_lang, xAttributeList);
@@ -290,13 +290,13 @@ void DocxTableStyleExport::Impl::tableStyleRRFonts(uno::Sequence<beans::Property
     for (sal_Int32 i = 0; i < rRFonts.getLength(); ++i)
     {
         if (rRFonts[i].Name == "eastAsiaTheme")
-            pAttributeList->add(FSNS(XML_w, XML_eastAsiaTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_eastAsiaTheme), rRFonts[i].Value.get<OUString>().toUtf8());
         else if (rRFonts[i].Name == "asciiTheme")
-            pAttributeList->add(FSNS(XML_w, XML_asciiTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_asciiTheme), rRFonts[i].Value.get<OUString>().toUtf8());
         else if (rRFonts[i].Name == "cstheme")
-            pAttributeList->add(FSNS(XML_w, XML_cstheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_cstheme), rRFonts[i].Value.get<OUString>().toUtf8());
         else if (rRFonts[i].Name == "hAnsiTheme")
-            pAttributeList->add(FSNS(XML_w, XML_hAnsiTheme), OUStringToOString(rRFonts[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_hAnsiTheme), rRFonts[i].Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_rFonts, xAttributeList);
@@ -311,20 +311,20 @@ void DocxTableStyleExport::Impl::tableStylePSpacing(uno::Sequence<beans::Propert
     for (sal_Int32 i = 0; i < rSpacing.getLength(); ++i)
     {
         if (rSpacing[i].Name == "after")
-            pAttributeList->add(FSNS(XML_w, XML_after), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_after), rSpacing[i].Value.get<OUString>().toUtf8());
         else if (rSpacing[i].Name == "before")
-            pAttributeList->add(FSNS(XML_w, XML_before), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_before), rSpacing[i].Value.get<OUString>().toUtf8());
         else if (rSpacing[i].Name == "line")
-            pAttributeList->add(FSNS(XML_w, XML_line), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_line), rSpacing[i].Value.get<OUString>().toUtf8());
         else if (rSpacing[i].Name == "lineRule")
-            pAttributeList->add(FSNS(XML_w, XML_lineRule), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_lineRule), rSpacing[i].Value.get<OUString>().toUtf8());
         else if (rSpacing[i].Name == "beforeLines")
-            pAttributeList->add(FSNS(XML_w, XML_beforeLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_beforeLines), rSpacing[i].Value.get<OUString>().toUtf8());
         else if (rSpacing[i].Name == "ParaTopMarginBeforeAutoSpacing")
             // Auto spacing will be available in grab bag only if it was set to true
             pAttributeList->add(FSNS(XML_w, XML_beforeAutospacing), "1");
         else if (rSpacing[i].Name == "afterLines")
-            pAttributeList->add(FSNS(XML_w, XML_afterLines), OUStringToOString(rSpacing[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_afterLines), rSpacing[i].Value.get<OUString>().toUtf8());
         else if (rSpacing[i].Name == "ParaBottomMarginAfterAutoSpacing")
             // Auto spacing will be available in grab bag only if it was set to true
             pAttributeList->add(FSNS(XML_w, XML_afterAutospacing), "1");
@@ -342,9 +342,9 @@ void DocxTableStyleExport::Impl::tableStylePInd(uno::Sequence<beans::PropertyVal
     for (sal_Int32 i = 0; i < rInd.getLength(); ++i)
     {
         if (rInd[i].Name == "rightChars")
-            pAttributeList->add(FSNS(XML_w, XML_rightChars), OUStringToOString(rInd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_rightChars), rInd[i].Value.get<OUString>().toUtf8());
         else if (rInd[i].Name == "right")
-            pAttributeList->add(FSNS(XML_w, XML_right), OUStringToOString(rInd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_right), rInd[i].Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_ind, xAttributeList);
@@ -361,7 +361,7 @@ void DocxTableStyleExport::Impl::tableStyleTblInd(uno::Sequence<beans::PropertyV
         if (rTblInd[i].Name == "w")
             pAttributeList->add(FSNS(XML_w, XML_w), OString::number(rTblInd[i].Value.get<sal_Int32>()));
         else if (rTblInd[i].Name == "type")
-            pAttributeList->add(FSNS(XML_w, XML_type), OUStringToOString(rTblInd[i].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr());
+            pAttributeList->add(FSNS(XML_w, XML_type), rTblInd[i].Value.get<OUString>().toUtf8());
     }
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, XML_tblInd, xAttributeList);
@@ -373,7 +373,7 @@ void DocxTableStyleExport::Impl::handleBoolean(const OUString& aValue, sal_Int32
         return;
     sax_fastparser::FastAttributeList* pAttributeList = m_pSerializer->createAttrList();
     if (aValue != "1")
-        pAttributeList->add(FSNS(XML_w, XML_val), OUStringToOString(aValue, RTL_TEXTENCODING_UTF8).getStr());
+        pAttributeList->add(FSNS(XML_w, XML_val), aValue.toUtf8());
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->singleElementNS(XML_w, nToken, xAttributeList);
 }
@@ -434,20 +434,20 @@ void DocxTableStyleExport::Impl::tableStyleRPr(uno::Sequence<beans::PropertyValu
     if (bSequenceFlag)
     {
         m_pSerializer->singleElementNS(XML_w, XML_spacing,
-                                       FSNS(XML_w, XML_val),OUStringToOString(aSpacingSequence[0].Value.get<OUString>(), RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aSpacingSequence[0].Value.get<OUString>().toUtf8(),
                                        FSEND);
     }
     if (!aSpacing.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_spacing,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aSpacing, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aSpacing.toUtf8(),
                                        FSEND);
     if (!aSz.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_sz,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aSz, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aSz.toUtf8(),
                                        FSEND);
     if (!aSzCs.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_szCs,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aSzCs, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aSzCs.toUtf8(),
                                        FSEND);
 
     m_pSerializer->endElementNS(XML_w, XML_rPr);
@@ -483,7 +483,7 @@ void DocxTableStyleExport::Impl::tableStylePPr(uno::Sequence<beans::PropertyValu
     tableStylePSpacing(aSpacing);
     if (!aJc.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_jc,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aJc, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aJc.toUtf8(),
                                        FSEND);
 
     m_pSerializer->endElementNS(XML_w, XML_pPr);
@@ -551,7 +551,7 @@ void DocxTableStyleExport::Impl::tableStyleTcPr(uno::Sequence<beans::PropertyVal
     tableStyleShd(aShd);
     if (!aVAlign.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_vAlign,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aVAlign, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aVAlign.toUtf8(),
                                        FSEND);
 
     m_pSerializer->endElementNS(XML_w, XML_tcPr);
@@ -579,7 +579,7 @@ void DocxTableStyleExport::Impl::tableStyleTblStylePr(uno::Sequence<beans::Prope
     }
 
     m_pSerializer->startElementNS(XML_w, XML_tblStylePr,
-                                  FSNS(XML_w, XML_type), OUStringToOString(aType, RTL_TEXTENCODING_UTF8).getStr(),
+                                  FSNS(XML_w, XML_type), aType.toUtf8(),
                                   FSEND);
 
     tableStylePPr(aPPr);
@@ -643,20 +643,20 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
     if (bCustomStyle)
         pAttributeList->add(FSNS(XML_w, XML_customStyle), "1");
     if (!aStyleId.isEmpty())
-        pAttributeList->add(FSNS(XML_w, XML_styleId), OUStringToOString(aStyleId, RTL_TEXTENCODING_UTF8).getStr());
+        pAttributeList->add(FSNS(XML_w, XML_styleId), aStyleId.toUtf8());
     sax_fastparser::XFastAttributeListRef xAttributeList(pAttributeList);
     m_pSerializer->startElementNS(XML_w, XML_style, xAttributeList);
 
     m_pSerializer->singleElementNS(XML_w, XML_name,
-                                   FSNS(XML_w, XML_val), OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(),
+                                   FSNS(XML_w, XML_val), aName.toUtf8(),
                                    FSEND);
     if (!aBasedOn.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_basedOn,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aBasedOn, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aBasedOn.toUtf8(),
                                        FSEND);
     if (!aUiPriority.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_uiPriority,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aUiPriority, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aUiPriority.toUtf8(),
                                        FSEND);
     if (bSemiHidden)
         m_pSerializer->singleElementNS(XML_w, XML_semiHidden, FSEND);
@@ -666,7 +666,7 @@ void DocxTableStyleExport::Impl::TableStyle(uno::Sequence<beans::PropertyValue>&
         m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (!aRsid.isEmpty())
         m_pSerializer->singleElementNS(XML_w, XML_rsid,
-                                       FSNS(XML_w, XML_val), OUStringToOString(aRsid, RTL_TEXTENCODING_UTF8).getStr(),
+                                       FSNS(XML_w, XML_val), aRsid.toUtf8(),
                                        FSEND);
 
     tableStylePPr(aPPr);
