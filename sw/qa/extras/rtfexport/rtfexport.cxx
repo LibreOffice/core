@@ -843,6 +843,14 @@ DECLARE_RTFEXPORT_TEST(testNumOverrideStart, "num-override-start.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), comphelper::SequenceAsHashMap(xRules->getByIndex(0))["StartWith"].get<sal_Int16>());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), comphelper::SequenceAsHashMap(xRules->getByIndex(1))["StartWith"].get<sal_Int16>());
 }
+
+DECLARE_RTFEXPORT_TEST(testFdo82006, "fdo82006.rtf")
+{
+    // These were 176 (100 twips), as \sbauto and \sbbefore were ignored.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
