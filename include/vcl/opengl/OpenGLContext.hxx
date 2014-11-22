@@ -230,6 +230,7 @@ private:
 #endif
 
 public:
+    vcl::Region maClipRegion;
     int mnPainting;
 
     OpenGLContext* mpPrevContext;
