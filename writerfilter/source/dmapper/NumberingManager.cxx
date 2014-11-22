@@ -263,7 +263,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
     };
 
     PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    PropertyValueVector_t aNumberingProperties;
+    comphelper::SequenceAsVector<beans::PropertyValue> aNumberingProperties;
 
     if( m_nIStartAt >= 0)
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_START_WITH, (sal_Int16)m_nIStartAt) );
@@ -343,15 +343,7 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
                 beans::PropertyValue( aPropNameSupplier.GetName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE )
                 );
 
-    uno::Sequence< beans::PropertyValue > aRet(aNumberingProperties.size());
-    beans::PropertyValue* pValues = aRet.getArray();
-    PropertyValueVector_t::const_iterator aIt = aNumberingProperties.begin();
-    PropertyValueVector_t::const_iterator aEndIt = aNumberingProperties.end();
-    for(sal_uInt32 nIndex = 0; aIt != aEndIt; ++aIt,++nIndex)
-    {
-        pValues[nIndex] = *aIt;
-    }
-    return aRet;
+    return aNumberingProperties.getAsConstList();
 }
 
 // Add the properties only if they do not already exist in the sequence.
