@@ -263,7 +263,7 @@
               <object class="GtkLabel" id="comparisonft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Comparison of Boolean values:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">comparison</property>
@@ -293,7 +293,7 @@
               <object class="GtkLabel" id="rowsft">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="xalign">0</property>
+                <property name="xalign">1</property>
                 <property name="label" translatable="yes">Rows to scan column types:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">rows</property>

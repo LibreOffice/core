@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="MysqlNativeSettings">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -14,15 +15,16 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <child>
           <object class="GtkLabel" id="dbnamelabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">_Database name</property>
+            <property name="label" translatable="yes">_Database name:</property>
             <property name="use_underline">True</property>
+            <property name="mnemonic_widget">dbname</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -56,15 +58,13 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="row_spacing">6</property>
-        <property name="column_spacing">6</property>
         <child>
           <object class="GtkRadioButton" id="hostport">
-            <property name="label" translatable="yes">Se_rver / Port</property>
+            <property name="label" translatable="yes">Se_rver/port</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="active">True</property>
@@ -73,8 +73,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -82,7 +80,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
@@ -90,37 +87,33 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="serverlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Server</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_Server:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">server</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="portlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Port</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_Port:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">port</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -129,13 +122,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
                     <property name="width">2</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -149,8 +140,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -159,14 +148,11 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="numeric">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -175,8 +161,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
@@ -192,15 +176,14 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="row_spacing">6</property>
-        <property name="column_spacing">6</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkRadioButton" id="socketlabel">
-            <property name="label" translatable="yes">So_cket</property>
+            <property name="label" translatable="yes">So_cket:</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -209,8 +192,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -223,8 +204,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
@@ -240,15 +219,14 @@
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
         <property name="row_spacing">6</property>
-        <property name="column_spacing">6</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkRadioButton" id="namedpipelabel">
-            <property name="label" translatable="yes">Named p_ipe</property>
+            <property name="label" translatable="yes">Named p_ipe:</property>
             <property name="use_action_appearance">False</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="use_action_appearance">False</property>
             <property name="use_underline">True</property>
             <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
@@ -257,8 +235,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -271,8 +247,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
