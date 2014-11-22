@@ -99,7 +99,6 @@
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
-                <property name="row_homogeneous">True</property>
                 <child>
                   <object class="GtkEntry" id="formated">
                     <property name="visible">True</property>
@@ -223,8 +222,8 @@
               <object class="GtkGrid" id="grid5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">10</property>
-                <property name="column_spacing">20</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkSpinButton" id="decimalsed">
                     <property name="visible">True</property>
@@ -253,6 +252,7 @@
                   <object class="GtkLabel" id="decimalsft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">1</property>
                     <property name="label" translatable="yes">_Decimal places:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">decimalsed</property>
@@ -266,6 +266,7 @@
                   <object class="GtkLabel" id="leadzerosft">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">1</property>
                     <property name="label" translatable="yes">Leading _zeroes:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">leadzerosed</property>
@@ -332,7 +333,7 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="row_spacing">12</property>
-        <property name="column_spacing">6</property>
+        <property name="column_spacing">12</property>
         <child>
           <object class="GtkFrame" id="categoryframe">
             <property name="visible">True</property>
@@ -545,12 +546,11 @@
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="mode">vertical</property>
+    <property name="mode">both</property>
     <property name="ignore_hidden">True</property>
     <widgets>
       <widget name="categoryframe"/>
       <widget name="formatframe"/>
-      <widget name="languageframe"/>
     </widgets>
   </object>
 </interface>
