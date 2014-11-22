@@ -48,6 +48,7 @@
 #include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
 #include "virtmenu.hxx"
+#include <ctrlfactoryimpl.hxx>
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/module.hxx>

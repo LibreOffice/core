@@ -54,6 +54,7 @@
 #include <sfx2/docfac.hxx>
 #include "appbaslib.hxx"
 #include "childwinimpl.hxx"
+#include <ctrlfactoryimpl.hxx>
 #include <basic/basicmanagerrepository.hxx>
 #include <svtools/svtresid.hxx>
 

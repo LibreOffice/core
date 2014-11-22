@@ -35,7 +35,6 @@
 // header file because in former times SfxApplication was derived from it
 #include <vcl/svapp.hxx>
 
-#include <sfx2/mnuitem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/stbitem.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -62,7 +61,7 @@ class SfxEventConfiguration;
 class SfxEventHint;
 class SfxItemSet;
 class SfxMedium;
-typedef boost::ptr_vector<SfxMenuCtrlFactory> SfxMenuCtrlFactArr_Impl;
+class SfxMenuCtrlFactArr_Impl;
 class SfxNewFileDialog;
 class SfxObjectShell;
 typedef ::std::vector<SfxObjectShell*> SfxObjectShellArr_Impl;

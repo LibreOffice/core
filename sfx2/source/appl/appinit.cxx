@@ -67,6 +67,7 @@
 #include <sfx2/fcontnr.hxx>
 #include "helper.hxx"
 #include "sfxpicklist.hxx"
+#include <ctrlfactoryimpl.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

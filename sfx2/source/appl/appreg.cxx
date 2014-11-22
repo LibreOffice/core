@@ -34,6 +34,7 @@
 #include "partwnd.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "recfloat.hxx"
+#include <ctrlfactoryimpl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objface.hxx>

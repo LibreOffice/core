@@ -25,6 +25,7 @@
 #include <sal/config.h>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/dllapi.h>
+#include <tools/link.hxx>
 
 class SfxVirtualMenu;
 class SfxBindings;
