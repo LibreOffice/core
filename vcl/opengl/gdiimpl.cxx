@@ -212,6 +212,9 @@ void OpenGLSalGraphicsImpl::PreDraw()
     // TODO: lfrb: make sure the render target has the right size
     if( mbOffscreen )
         CheckOffscreenTexture();
+    else
+        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    CHECK_GL_ERROR();
     glViewport( 0, 0, GetWidth(), GetHeight() );
     ImplInitClipRegion();
 
