@@ -24,6 +24,7 @@
 
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <svl/currencytable.hxx>
 
 #include <svtools/langtab.hxx>
 #include <vcl/svapp.hxx>

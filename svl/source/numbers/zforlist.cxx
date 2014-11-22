@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svl/zforlist.hxx>
+#include <svl/currencytable.hxx>
+
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/charclass.hxx>
@@ -31,7 +34,6 @@
 
 
 #include <osl/mutex.hxx>
-#include <svl/zforlist.hxx>
 
 #include "zforscan.hxx"
 #include "zforfind.hxx"

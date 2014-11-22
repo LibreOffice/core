@@ -127,6 +127,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/notify/isethint \
     svl/source/notify/listener \
     svl/source/notify/lstner \
+    svl/source/numbers/currencytable \
     svl/source/numbers/numfmuno \
     svl/source/numbers/numuno \
     svl/source/numbers/supservs \

@@ -34,7 +34,6 @@
 
 #include <map>
 #include <set>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 class Date;
 class Color;
@@ -300,11 +299,10 @@ public:
     static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
 
-typedef boost::ptr_vector<NfCurrencyEntry> NfCurrencyTable;
-
 typedef std::vector< OUString > NfWSStringsDtor;
 
 class SvNumberFormatterRegistry_Impl;
+class NfCurrencyTable;
 
 class SVL_DLLPUBLIC SvNumberFormatter
 {

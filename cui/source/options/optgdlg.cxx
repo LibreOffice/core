@@ -18,6 +18,7 @@
  */
 
 #include <svl/zforlist.hxx>
+#include <svl/currencytable.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>

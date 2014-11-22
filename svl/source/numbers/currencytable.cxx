@@ -1,0 +1,52 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+* This file is part of the LibreOffice project.
+*
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+*/
+
+#include <svl/currencytable.hxx>
+
+NfCurrencyTable::iterator NfCurrencyTable::begin()
+{
+    return maData.begin();
+}
+
+NfCurrencyTable::iterator NfCurrencyTable::end()
+{
+    return maData.end();
+}
+
+NfCurrencyTable::const_iterator NfCurrencyTable::begin() const
+{
+    return maData.begin();
+}
+
+NfCurrencyTable::const_iterator NfCurrencyTable::end() const
+{
+    return maData.end();
+}
+
+NfCurrencyEntry& NfCurrencyTable::operator[] ( size_t i )
+{
+    return maData[i];
+}
+
+const NfCurrencyEntry& NfCurrencyTable::operator[] ( size_t i ) const
+{
+    return maData[i];
+}
+
+size_t NfCurrencyTable::size() const
+{
+    return maData.size();
+}
+
+void NfCurrencyTable::insert( iterator it, NfCurrencyEntry* p )
+{
+    maData.insert(it, p);
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
