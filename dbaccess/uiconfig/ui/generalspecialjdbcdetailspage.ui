@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="GeneralSpecialJDBCDetails">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -35,32 +35,28 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Host name</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_Host name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">hostNameEntry</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_Port number</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_Port number:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">portNumberSpinbutton</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -72,38 +68,32 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="socketLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Socket</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Socket:</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="driverClassLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">MySQL JDBC d_river class</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">MySQL JDBC d_river class:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">jdbcDriverClassEntry</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -115,13 +105,11 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="testDriverClassButton">
-                    <property name="label" translatable="yes">Test class</property>
+                    <property name="label" translatable="yes">Test Class</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -130,8 +118,6 @@
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -143,8 +129,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -156,8 +140,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -214,7 +196,7 @@
                   <object class="GtkLabel" id="charsetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Character set</property>
+                    <property name="label" translatable="yes">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -244,7 +226,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data conversion</property>
+            <property name="label" translatable="yes">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

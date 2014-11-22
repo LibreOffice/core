@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="MysqlNativePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -81,21 +81,19 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="usernamelabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_User name</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_User name:</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">username</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -108,8 +106,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -125,8 +121,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -140,7 +134,7 @@
           <object class="GtkLabel" id="userheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">User authentication</property>
+            <property name="label" translatable="yes">User Authentication</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -173,14 +167,13 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="charsetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_Character set</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -210,7 +203,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data conversion</property>
+            <property name="label" translatable="yes">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

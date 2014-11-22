@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="DbasePage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -29,12 +30,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="charsetlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_Character set</property>
+                    <property name="label" translatable="yes">_Character set:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">charset</property>
                   </object>
@@ -64,7 +65,7 @@
           <object class="GtkLabel" id="charsetheader">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data conversion</property>
+            <property name="label" translatable="yes">Data Conversion</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -97,7 +98,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">2</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="showDelRowsCheckbutton">
                     <property name="label" translatable="yes">Display deleted records as well</property>
@@ -137,7 +138,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Optional settings</property>
+            <property name="label" translatable="yes">Optional Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

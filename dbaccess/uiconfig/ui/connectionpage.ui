@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="ConnectionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -30,20 +31,20 @@
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="row_spacing">2</property>
-                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="browseurllabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">Path to the dBASE files</property>
+                    <property name="label" translatable="yes">Path to the dBASE files:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">browseurl</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -52,13 +53,10 @@
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -73,13 +71,11 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="browse">
-                    <property name="label" translatable="yes">_Browse</property>
+                    <property name="label" translatable="yes">_Browse…</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -89,8 +85,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -137,24 +131,19 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
-                <child>
-                  <placeholder/>
-                </child>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="userNameLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">_User name</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_User name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">userNameEntry</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -166,8 +155,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -183,9 +170,10 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -195,7 +183,7 @@
           <object class="GtkLabel" id="userlabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">User authentication</property>
+            <property name="label" translatable="yes">User Authentication</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -230,12 +218,13 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="spacing">6</property>
+                <property name="spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="javaDriverLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">_JDBC driver class</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">_JDBC driver class:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">driverEntry</property>
                   </object>
@@ -280,7 +269,7 @@
           <object class="GtkLabel" id="JDBCLabel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">JDBC properties</property>
+            <property name="label" translatable="yes">JDBC Properties</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
