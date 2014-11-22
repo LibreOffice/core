@@ -65,7 +65,7 @@
         <property name="vexpand">True</property>
         <child>
           <object class="GtkButton" id="spacing_1">
-            <property name="label">Spacing: 1</property>
+            <property name="label" translatable="yes">Spacing: 1</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -83,7 +83,7 @@
         </child>
         <child>
           <object class="GtkButton" id="spacing_115">
-            <property name="label">Spacing: 1.15</property>
+            <property name="label" translatable="yes">Spacing: 1.15</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -101,7 +101,7 @@
         </child>
         <child>
           <object class="GtkButton" id="spacing_15">
-            <property name="label">Spacing: 1.5</property>
+            <property name="label" translatable="yes">Spacing: 1.5</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -119,7 +119,7 @@
         </child>
         <child>
           <object class="GtkButton" id="spacing_2">
-            <property name="label">Spacing: 2</property>
+            <property name="label" translatable="yes">Spacing: 2</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

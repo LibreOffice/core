@@ -50,19 +50,19 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
     m_vSearchSuggestions[0]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_vSearchSuggestions[1], "suggestion2" );
-    m_vSearchSuggestions[1]->SetText( "Abstract" );
+    m_vSearchSuggestions[1]->SetText( CUI_RES ( RID_SVXSTR_PERSONA_ABSTRACT ) );
     m_vSearchSuggestions[1]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_vSearchSuggestions[2], "suggestion3" );
-    m_vSearchSuggestions[2]->SetText( "Color" );
+    m_vSearchSuggestions[2]->SetText( CUI_RES ( RID_SVXSTR_PERSONA_COLOR ) );
     m_vSearchSuggestions[2]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_vSearchSuggestions[3], "suggestion4" );
-    m_vSearchSuggestions[3]->SetText( "Music" );
+    m_vSearchSuggestions[3]->SetText( CUI_RES( RID_SVXSTR_PERSONA_MUSIC ) );
     m_vSearchSuggestions[3]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_vSearchSuggestions[4], "suggestion5" );
-    m_vSearchSuggestions[4]->SetText( "Nature" );
+    m_vSearchSuggestions[4]->SetText( CUI_RES( RID_SVXSTR_PERSONA_NATURE ) );
     m_vSearchSuggestions[4]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_pEdit, "search_term" );
@@ -75,7 +75,6 @@ SelectPersonaDialog::SelectPersonaDialog( vcl::Window *pParent )
 
     get( m_pCancelButton, "cancel" );
     m_pCancelButton->SetClickHdl( LINK( this, SelectPersonaDialog, ActionCancel ) );
-
     get( m_vResultList[0], "result1" );
     get( m_vResultList[1], "result2" );
     get( m_vResultList[2], "result3" );
