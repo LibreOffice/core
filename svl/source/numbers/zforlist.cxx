@@ -312,6 +312,10 @@ SvNumberFormatterRegistry_Impl& SvNumberFormatter::GetFormatterRegistry()
     return *pFormatterRegistry;
 }
 
+void SvNumberFormatter::SetColorLink( const Link& rColorTableCallBack )
+{
+    aColorLink = rColorTableCallBack;
+}
 
 Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
 {
@@ -343,9 +347,19 @@ void SvNumberFormatter::ChangeStandardPrec(short nPrec)
     pFormatScanner->ChangeStandardPrec(nPrec);
 }
 
+void SvNumberFormatter::SetNoZero(bool bNZ)
+{
+    bNoZero = bNZ;
+}
+
 sal_uInt16 SvNumberFormatter::GetStandardPrec()
 {
     return pFormatScanner->GetStandardPrec();
+}
+
+bool SvNumberFormatter::GetNoZero()
+{
+    return bNoZero;
 }
 
 void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
@@ -443,6 +457,39 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     ImpGenerateAdditionalFormats( nCLOffset, aNumberFormatCode, true );
 }
 
+css::uno::Reference<css::uno::XComponentContext> SvNumberFormatter::GetComponentContext() const
+{
+    return m_xContext;
+}
+
+const ImpSvNumberformatScan* SvNumberFormatter::GetFormatScanner() const { return pFormatScanner; }
+
+const LanguageTag& SvNumberFormatter::GetLanguageTag() const { return maLanguageTag; }
+
+const ::utl::TransliterationWrapper* SvNumberFormatter::GetTransliteration() const
+{
+    return xTransliteration.get();
+}
+
+const ::utl::TransliterationWrapper* SvNumberFormatter::GetTransliterationForModule( const OUString& rModule,
+                                                                         LanguageType eLang ) const
+{
+    return xTransliteration.getForModule( rModule, eLang );
+}
+
+const CharClass* SvNumberFormatter::GetCharClass() const { return pCharClass; }
+
+const LocaleDataWrapper* SvNumberFormatter::GetLocaleData() const { return xLocaleData.get(); }
+
+CalendarWrapper* SvNumberFormatter::GetCalendar() const { return xCalendar.get(); }
+
+const NativeNumberWrapper* SvNumberFormatter::GetNatNum() const { return xNatNum.get(); }
+
+const OUString& SvNumberFormatter::GetNumDecimalSep() const { return aDecimalSep; }
+
+const OUString& SvNumberFormatter::GetNumThousandSep() const { return aThousandSep; }
+
+const OUString& SvNumberFormatter::GetDateSep() const { return aDateSep; }
 
 bool SvNumberFormatter::IsTextFormat(sal_uInt32 F_Index) const
 {
@@ -965,6 +1012,11 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
         }
     }
     return res;
+}
+
+LanguageType SvNumberFormatter::GetLanguage() const
+{
+    return IniLnge;
 }
 
 bool SvNumberFormatter::IsCompatible(short eOldType,
@@ -1746,6 +1798,15 @@ sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
         return pFormatScanner->GetStandardPrec();
 }
 
+sal_Unicode SvNumberFormatter::GetDecSep() const
+{
+    return GetNumDecimalSep()[0];
+}
+
+OUString SvNumberFormatter::GetDecimalSep() const
+{
+    return GetNumDecimalSep();
+}
 
 OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
 {
@@ -1986,6 +2047,11 @@ SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey )
     if (it != aFTable.end())
         return it->second;
     return 0;
+}
+
+const SvNumberformat* SvNumberFormatter::GetFormatEntry( sal_uInt32 nKey ) const
+{
+    return GetEntry( nKey);
 }
 
 const SvNumberformat* SvNumberFormatter::GetEntry( sal_uInt32 nKey ) const
@@ -2924,6 +2990,15 @@ NfIndexTableOffset SvNumberFormatter::GetIndexTableOffset( sal_uInt32 nFormat ) 
     return NF_INDEX_TABLE_ENTRIES;      // bad luck
 }
 
+void SvNumberFormatter::SetEvalDateFormat( NfEvalDateFormat eEDF )
+{
+    eEvalDateFormat = eEDF;
+}
+
+NfEvalDateFormat SvNumberFormatter::GetEvalDateFormat() const
+{
+    return eEvalDateFormat;
+}
 
 void SvNumberFormatter::SetYear2000( sal_uInt16 nVal )
 {
@@ -3175,14 +3250,10 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 
 
 // static
-// try to make it inline if possible since this a loop body
 // true: continue; false: break loop, if pFoundEntry==NULL dupe found
-#ifndef DBG_UTIL
-inline
-#endif
-    bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody( const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank,
-                                                            const NfCurrencyEntry* pData, sal_uInt16 nPos,
-                                                            const OUString& rSymbol )
+bool SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
+    const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank, const NfCurrencyEntry* pData,
+    sal_uInt16 nPos, const OUString& rSymbol )
 {
     bool bFound;
     if ( pData->GetSymbol() == rSymbol )
@@ -3706,6 +3777,41 @@ sal_uInt16 SvNumberFormatter::GetCurrencyFormatStrings( NfWSStringsDtor& rStrArr
         }
     }
     return nDefault;
+}
+
+sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
+{
+    if (pMergeTable)
+    {
+        SvNumberFormatterIndexTable::iterator it = pMergeTable->find(nOldFmt);
+        if (it != pMergeTable->end())
+        {
+            return it->second;
+        }
+    }
+    return nOldFmt;
+}
+
+bool SvNumberFormatter::HasMergeFmtTbl() const
+{
+    return pMergeTable && !pMergeTable->empty();
+}
+
+// static
+sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart )
+{
+    if ( nYear < 100 )
+    {
+        if ( nYear < (nTwoDigitYearStart % 100) )
+        {
+            return nYear + (((nTwoDigitYearStart / 100) + 1) * 100);
+        }
+        else
+        {
+            return nYear + ((nTwoDigitYearStart / 100) * 100);
+        }
+    }
+    return nYear;
 }
 
 NfCurrencyEntry::NfCurrencyEntry( const LocaleDataWrapper& rLocaleData, LanguageType eLang )

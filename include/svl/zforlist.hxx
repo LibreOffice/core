@@ -330,7 +330,7 @@ public:
     ~SvNumberFormatter();
 
     /// Set CallBack to ColorTable
-    void SetColorLink( const Link& rColorTableCallBack )    { aColorLink = rColorTableCallBack; }
+    void SetColorLink( const Link& rColorTableCallBack );
     /// Do the CallBack to ColorTable
     Color* GetUserDefColor(sal_uInt16 nIndex);
 
@@ -341,11 +341,11 @@ public:
     /// Change standard precision
     void ChangeStandardPrec(short nPrec);
     /// Set zero value suppression
-    void SetNoZero(bool bNZ) { bNoZero = bNZ; }
+    void SetNoZero(bool bNZ);
 
     /** The language with which the formatter was initialized (system setting),
         NOT the current language after a ChangeIntl() */
-    LanguageType GetLanguage() const { return IniLnge; }
+    LanguageType GetLanguage() const;
 
     // Determine whether two format types are input compatible or not
     bool IsCompatible(short eOldType, short eNewType);
@@ -571,7 +571,7 @@ public:
     /// Return the standard decimal precision
     sal_uInt16 GetStandardPrec();
     /// Return whether zero suppression is switched on
-    bool GetNoZero() { return bNoZero; }
+    bool GetNoZero();
     /** Get the type of a format (or NUMBERFORMAT_UNDEFINED if no entry),
          but with NUMBERFORMAT_DEFINED masked out */
     short GetType(sal_uInt32 nFIndex);
@@ -582,9 +582,9 @@ public:
     SvNumberFormatterIndexTable* MergeFormatter(SvNumberFormatter& rNewTable);
 
     /// Whether a merge table is present or not
-    inline bool HasMergeFmtTbl() const;
+    bool HasMergeFmtTbl() const;
     /// Return the new format index for an old format index, if a merge table exists
-    inline sal_uInt32 GetMergeFmtIndex( sal_uInt32 nOldFmt ) const;
+    sal_uInt32 GetMergeFmtIndex( sal_uInt32 nOldFmt ) const;
 
     /** Convert the ugly old tools' Table type bloated with new'ed sal_uInt32
         entries merge table to ::std::map with old index key and new index key.
@@ -613,8 +613,8 @@ public:
     /** Set evaluation type and order of input date strings
         @see NfEvalDateFormat
      */
-    void SetEvalDateFormat( NfEvalDateFormat eEDF ) { eEvalDateFormat = eEDF; }
-    NfEvalDateFormat GetEvalDateFormat() const { return eEvalDateFormat; }
+    void SetEvalDateFormat( NfEvalDateFormat eEDF );
+    NfEvalDateFormat GetEvalDateFormat() const;
 
     /** Set TwoDigitYearStart, how the input string scanner handles a two digit year.
         Default from VCL: 1930, 30-99 19xx, 00-29 20xx
@@ -630,12 +630,12 @@ public:
     static  sal_uInt16  GetYear2000Default();
 
     sal_uInt16  ExpandTwoDigitYear( sal_uInt16 nYear ) const;
-    inline  static  sal_uInt16  ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart );
+    static sal_uInt16 ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart );
 
     /// DEPRECATED: Return first character of the decimal separator of the current language/country
-    sal_Unicode GetDecSep() const { return GetNumDecimalSep()[0]; }
+    sal_Unicode GetDecSep() const;
     /// Return the decimal separator of the current language/country
-    OUString GetDecimalSep() const { return GetNumDecimalSep(); }
+    OUString GetDecimalSep() const;
 
     /// Return the decimal separator matching the locale of the given format
     OUString GetFormatDecimalSep( sal_uInt32 nFormat ) const;
@@ -869,18 +869,12 @@ private:
 
     // Obtain the format entry for a given key index.
     SVL_DLLPRIVATE       SvNumberformat* GetFormatEntry( sal_uInt32 nKey );
-    SVL_DLLPRIVATE const SvNumberformat* GetFormatEntry( sal_uInt32 nKey ) const
-        {
-            return GetEntry( nKey);
-        }
+    SVL_DLLPRIVATE const SvNumberformat* GetFormatEntry( sal_uInt32 nKey ) const;
 
     // used as a loop body inside of GetNewCurrencySymbolString() and GetCurrencyEntry()
-#ifndef DBG_UTIL
-    inline
-#endif
-    static bool ImpLookupCurrencyEntryLoopBody( const NfCurrencyEntry*& pFoundEntry,
-                                                bool& bFoundBank, const NfCurrencyEntry* pData,
-                                                sal_uInt16 nPos, const OUString& rSymbol );
+    static bool ImpLookupCurrencyEntryLoopBody(
+        const NfCurrencyEntry*& pFoundEntry, bool& bFoundBank, const NfCurrencyEntry* pData,
+        sal_uInt16 nPos, const OUString& rSymbol );
 
     // link to be set at <method>SvtSysLocaleOptions::SetCurrencyChangeLink()</method>
     DECL_DLLPRIVATE_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void* );
@@ -903,93 +897,49 @@ public:
     // new format codes are appended.
     void ReplaceSystemCL( LanguageType eOldLanguage );
 
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > GetComponentContext() const
-        {
-            return m_xContext;
-        }
+    css::uno::Reference<css::uno::XComponentContext> GetComponentContext() const;
 
     //! The following method is not to be used from outside but must be
     //! public for the InputScanner.
     // return the current FormatScanner
-    inline const ImpSvNumberformatScan* GetFormatScanner() const { return pFormatScanner; }
+    const ImpSvNumberformatScan* GetFormatScanner() const;
 
     //! The following methods are not to be used from outside but must be
     //! public for the InputScanner and FormatScanner.
 
     // return current (!) Locale
-    inline const LanguageTag& GetLanguageTag() const { return maLanguageTag; }
+    const LanguageTag& GetLanguageTag() const;
 
     // return corresponding Transliteration wrapper
-    inline const ::utl::TransliterationWrapper* GetTransliteration() const
-        {
-            return xTransliteration.get();
-        }
+    const ::utl::TransliterationWrapper* GetTransliteration() const;
 
     // return corresponding Transliteration wrapper with loadModuleByImplName()
-    inline const ::utl::TransliterationWrapper* GetTransliterationForModule( const OUString& rModule,
-                                                                             LanguageType eLang ) const
-        {
-            return xTransliteration.getForModule( rModule, eLang );
-        }
+    const ::utl::TransliterationWrapper* GetTransliterationForModule(
+        const OUString& rModule, LanguageType eLang ) const;
 
     // return the corresponding CharacterClassification wrapper
-    inline const CharClass* GetCharClass() const { return pCharClass; }
+    const CharClass* GetCharClass() const;
 
     // return the corresponding LocaleData wrapper
-    inline const LocaleDataWrapper* GetLocaleData() const { return xLocaleData.get(); }
+    const LocaleDataWrapper* GetLocaleData() const;
 
     // return the corresponding Calendar wrapper
-    inline CalendarWrapper* GetCalendar() const { return xCalendar.get(); }
+    CalendarWrapper* GetCalendar() const;
 
     // return the corresponding NativeNumberSupplier wrapper
-    inline const NativeNumberWrapper* GetNatNum() const { return xNatNum.get(); }
+    const NativeNumberWrapper* GetNatNum() const;
 
     // cached locale data items
 
     // return the corresponding decimal separator
-    inline const OUString& GetNumDecimalSep() const { return aDecimalSep; }
+    const OUString& GetNumDecimalSep() const;
 
     // return the corresponding group (AKA thousand) separator
-    inline const OUString& GetNumThousandSep() const { return aThousandSep; }
+    const OUString& GetNumThousandSep() const;
 
     // return the corresponding date separator
-    inline const OUString& GetDateSep() const { return aDateSep; }
+    const OUString& GetDateSep() const;
 };
-
-inline sal_uInt32 SvNumberFormatter::GetMergeFmtIndex( sal_uInt32 nOldFmt ) const
-{
-    if (pMergeTable)
-    {
-        SvNumberFormatterIndexTable::iterator it = pMergeTable->find(nOldFmt);
-        if (it != pMergeTable->end())
-        {
-            return it->second;
-        }
-    }
-    return nOldFmt;
-}
-
-inline bool SvNumberFormatter::HasMergeFmtTbl() const
-{
-    return pMergeTable && !pMergeTable->empty();
-}
-
-// static
-inline sal_uInt16 SvNumberFormatter::ExpandTwoDigitYear( sal_uInt16 nYear, sal_uInt16 nTwoDigitYearStart )
-{
-    if ( nYear < 100 )
-    {
-        if ( nYear < (nTwoDigitYearStart % 100) )
-        {
-            return nYear + (((nTwoDigitYearStart / 100) + 1) * 100);
-        }
-        else
-        {
-            return nYear + ((nTwoDigitYearStart / 100) * 100);
-        }
-    }
-    return nYear;
-}
 
 #endif // INCLUDED_SVL_ZFORLIST_HXX
 
