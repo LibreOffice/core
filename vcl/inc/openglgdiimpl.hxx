@@ -38,6 +38,7 @@ protected:
     OpenGLContext* mpContext;
 
     // clipping
+    vcl::Region maClipRegion;
     bool mbUseScissor;
     bool mbUseStencil;
 
@@ -91,6 +92,7 @@ protected:
     GLuint mnRadialGradientEndColorUniform;
     GLuint mnRadialGradientCenterUniform;
 
+    void ImplInitClipRegion();
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
 
     bool CheckOffscreenTexture();
