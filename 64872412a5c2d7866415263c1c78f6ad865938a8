@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_64caca51",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5649,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-11-22T19:42:15Z",
+      "side": 1,
+      "message": "Does this belong to this change?",
+      "range": {
+        "startLine": 5645,
+        "startChar": 10,
+        "endLine": 5649,
+        "endChar": 24
+      },
+      "revId": "64872412a5c2d7866415263c1c78f6ad865938a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
