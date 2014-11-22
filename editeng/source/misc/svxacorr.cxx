@@ -2685,11 +2685,14 @@ bool SvxAutoCorrectLanguageLists::DeleteText( const OUString& rShort )
 }
 
 // Keep the list sorted ...
-bool CompareSvxAutocorrWordList::operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const
+struct CompareSvxAutocorrWordList
 {
-    CollatorWrapper& rCmp = ::GetCollatorWrapper();
-    return rCmp.compareString( lhs->GetShort(), rhs->GetShort() ) < 0;
-}
+    bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const
+    {
+        CollatorWrapper& rCmp = ::GetCollatorWrapper();
+        return rCmp.compareString( lhs->GetShort(), rhs->GetShort() ) < 0;
+    }
+};
 
 namespace {
 

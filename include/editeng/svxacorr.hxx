@@ -130,11 +130,6 @@ public:
     bool IsTextOnly() const                           { return bIsTxtOnly; }
 };
 
-struct CompareSvxAutocorrWordList
-{
-  bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const;
-};
-
 class EDITENG_DLLPUBLIC SvxAutocorrWordList
 {
     struct Impl;
