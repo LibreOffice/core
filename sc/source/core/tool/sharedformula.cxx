@@ -110,11 +110,12 @@ void SharedFormulaUtil::splitFormulaCellGroups(CellStoreType& rCells, std::vecto
     }
 }
 
-void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2)
+bool SharedFormulaUtil::joinFormulaCells(
+    const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2 )
 {
     ScFormulaCell::CompareState eState = rCell1.CompareByTokenArray(rCell2);
     if (eState == ScFormulaCell::NotEqual)
-        return;
+        return false;
 
     // Formula tokens equal those of the previous formula cell.
     ScFormulaCellGroupRef xGroup1 = rCell1.GetCellGroup();
@@ -126,7 +127,7 @@ void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPo
             // Both cell 1 and cell 2 are shared. Merge them together.
             if (xGroup1.get() == xGroup2.get())
                 // They belong to the same group.
-                return;
+                return false;
 
             // Set the group object from cell 1 to all cells in group 2.
             xGroup1->mnLength += xGroup2->mnLength;
@@ -161,24 +162,26 @@ void SharedFormulaUtil::joinFormulaCells(const CellStoreType::position_type& rPo
             rCell2.SetCellGroup(xGroup1);
         }
     }
+
+    return true;
 }
 
-void SharedFormulaUtil::joinFormulaCellAbove(const CellStoreType::position_type& aPos)
+bool SharedFormulaUtil::joinFormulaCellAbove( const CellStoreType::position_type& aPos )
 {
     if (aPos.first->type != sc::element_type_formula)
         // This is not a formula cell.
-        return;
+        return false;
 
     if (aPos.second == 0)
         // This cell is already the top cell in a formula block; the previous
         // cell is not a formula cell.
-        return;
+        return false;
 
     ScFormulaCell& rPrev = *sc::formula_block::at(*aPos.first->data, aPos.second-1);
     ScFormulaCell& rCell = *sc::formula_block::at(*aPos.first->data, aPos.second);
     sc::CellStoreType::position_type aPosPrev = aPos;
     --aPosPrev.second;
-    joinFormulaCells(aPosPrev, rPrev, rCell);
+    return joinFormulaCells(aPosPrev, rPrev, rCell);
 }
 
 void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& aPos, ScFormulaCell& rCell)

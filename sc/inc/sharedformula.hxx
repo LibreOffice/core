@@ -82,17 +82,23 @@ public:
      * @param rPos position object of the first cell
      * @param rCell1 first cell
      * @param rCell2 second cell located immediately below the first cell.
+     *
+     * @return true if the cells are merged, false otherwise.  If the two
+     *         cells already belong to the same group, it returns false.
      */
-    static void joinFormulaCells(
-        const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2);
+    static bool joinFormulaCells(
+        const CellStoreType::position_type& rPos, ScFormulaCell& rCell1, ScFormulaCell& rCell2 );
     /**
      * Merge with an existing formula group (if any) located immediately above
      * if the cell at specified position is a formula cell, and its formula
      * tokens are identical to that of the above formula group.
      *
      * @param aPos position of cell to examine.
+     *
+     * @return true if the cells are merged, false otherwise.  If the two
+     *         cells already belong to the same group, it returns false.
      */
-    static void joinFormulaCellAbove(const CellStoreType::position_type& aPos);
+    static bool joinFormulaCellAbove( const CellStoreType::position_type& aPos );
 
     /**
      * Turn a shared formula cell into a non-shared one, and split it off from

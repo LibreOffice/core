@@ -626,6 +626,7 @@ void ScBroadcastAreaSlot::Dump() const
         size_t n = rListeners.size();
 
         cout << "  * range: " << rtl::OUStringToOString(pArea->GetRange().Format(SCA_VALID|SCA_TAB_3D, pDoc), RTL_TEXTENCODING_UTF8).getStr()
+            << ", group: " << pArea->IsGroupListening()
             << ", listener count: " << n << endl;
 
         for (size_t i = 0; i < n; ++i)

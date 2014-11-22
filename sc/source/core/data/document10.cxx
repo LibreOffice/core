@@ -370,6 +370,23 @@ void ScDocument::EndListeningIntersectedGroups(
     }
 }
 
+void ScDocument::EndListeningGroups( const std::vector<ScAddress>& rPosArray )
+{
+    sc::EndListeningContext aCxt(*this);
+    std::vector<ScAddress>::const_iterator it = rPosArray.begin(), itEnd = rPosArray.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScAddress& rPos = *it;
+        ScTable* pTab = FetchTable(rPos.Tab());
+        if (!pTab)
+            return;
+
+        pTab->EndListeningGroup(aCxt, rPos.Col(), rPos.Row());
+    }
+
+    aCxt.purgeEmptyBroadcasters();
+}
+
 void ScDocument::SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray )
 {
     std::vector<ScAddress>::const_iterator it = rPosArray.begin(), itEnd = rPosArray.end();
