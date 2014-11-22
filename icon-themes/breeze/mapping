@@ -1,4 +1,119 @@
-actions/toolbar/document-save.svg cmd/lc_save.png 26
-actions/toolbar/document-save.svg cmd/sc_save.png 16
-actions/toolbar/document-save-as.svg cmd/lc_saveas.png 26
-actions/toolbar/document-save-as.svg cmd/sc_saveas.png 16
+actions/toolbar/document-save.svg cmd/lc_save.png
+actions/toolbar/document-save-as.svg cmd/lc_saveas.png
+actions/toolbar/document-new.svg cmd/lc_newdoc.png
+actions/toolbar/document-properties.svg cmd/lc_setdocumentproperties.png
+document-page-setup.png,lc_printersetup.png
+actions/toolbar/document-close.svg cmd/lc_closedoc.png
+actions/toolbar/document-close.svg cmd/lc_exportto.png
+edit-repeat.png,lc_repeat.png
+insert-plugin.png,lc_insertplugin.png
+tools-gallery.png,lc_gallery.png
+actions/toolbar/document-new.svg cmd/lc_adddirect
+actions/toolbar/document-open.svg cmd/lc_open
+mail-attachment lc_sendmail
+lc_editdoc - Edit Document
+mimetypes/file-types/pdf.svg cmd/lc_exportdirecttopdf
+lc_print - Print
+lc_printdefault - Print Directly
+lc_printpreview - Print Preview
+lc_cut - Cut
+lc_copy - Copy
+lc_paste - Paste
+lc_undo - Undo
+lc_redo - Redo
+lc_formatpaintbrush - Format Paintbrush
+lc_spelling - Spellcheck
+lc_spellonline - Automatic Spell Checking
+lc_searchdialog - Find
+lc_recsearch - Find & Replace
+lc_controlcodes - Non-Printable Character
+lc_inserttable - Table
+lc_insertgraphic - Image
+lc_insertobjectchart - Chart
+lc_insertfootnote - Footnote
+lc_insertpagebreak - Page Break
+lc_inserthyperlink - Hyperlink
+lc_insertsymbol - Symbol
+lc_insertpagenumberfield - Page Number
+lc_insertannotation - Comment
+lc_text - Textbox
+lc_viewdatasourcebrowser - Data Sources
+lc_helpindex - Help
+lc_extendedhelp - Extended Help
+
+lc_designerdialog - Styles
+lc_bold - Bold
+lc_italic - Italics
+lc_underline - Underline
+lc_underlinedouble - Double Underline
+lc_upperline - Overline
+lc_strikeout - Strike Through
+lc_shadowed - Shadow
+lc_outlinefont - Font Outline
+lc_grow - Increase Font
+lc_shrink - Decrease Font
+lc_superscript - Superscript
+lc_subscript - Subscript
+lc_color - Font Color
+lc_backcolor - Highlight Color
+lc_backgroundcolor - Background Color
+lc_defaultnumbering - Numbering List
+lc_defaultbullet - Bullet List
+lc_incrementindent - Increase Indent
+lc_decrementindent - Decrease Indent
+lc_leftpara - Left Alignment
+lc_centerpara - Center Alignment
+lc_rightpara - Right Alignment
+lc_justifypara - Justified
+lc_spacepara1 - Line Spacing 1
+lc_spacepara15 - Line Spacing 1.5
+lc_spacepara2 - Line Spacing 2
+lc_pararighttoleft - Right to Left
+lc_paralefttoright - Left to Right
+lc_fontdialog - Font Dialog
+lc_paragraphdialog - Paragraph Dialog
+lc_selectall - Select All
+#Writer:
+lc_insertobjectstarmath - Formula
+lc_insertendnote - Endnote
+lc_insertbookmark - Bookmark
+lc_insertreferencefield - Cross Reference
+lc_insertindexesentry - Index Entry
+lc_insertfieldctrl - Insert Field
+lc_insertdraw - Shapes
+Calc:
+lc_datasort - Sort
+lc_sortascending - Sort Ascending
+lc_sortdescending - Sort Descending
+lc_datafilterstandardfilter - Standard Filter
+lc_datafilterautofilter - Auto Filter
+lc_datafilterspecialfilter - Special Filter
+lc_datadatapilotrun - Pivot Table
+lc_togglemergecells - Merge and Center Cells
+lc_mergecells - Merge Cells
+lc_wraptext - Wrap Text
+lc_deleterows - Delete Rows
+lc_insertrows - Insert Rows
+lc_deletecolumns - Delete Columns
+lc_insertcolumns - Insert Columns
+lc_textdirectionlefttoright - Left to Right
+lc_textdirectiontoptobottom - Top to Bottom
+lc_aligntop - Align Top
+lc_alignverticalcenter - Align Center
+lc_alignbottom - Align Bottom
+lc_numberformatstandard - Number Format: General
+lc_numberformatcurrency - Number Format: Currency
+lc_numberformatpercent - Number Format: Percent
+lc_numberformatdecimal - Number Format: Number
+lc_numberformatscientific - Number Format: Scientific
+lc_numberformatdate - Number Format: Date
+lc_numberformatdecdecimals - Decrease Decimals
+lc_numberformatincdecimals - Increase Decimals
+lc_setborderstyle - Cell Borders
+lc_linestyle - Border Style
+lc_framelinecolor - Border Color
+lc_togglesheetgrid - Show/Hide Sheet Grid
+lc_autosum - Sum
+lc_insertformula - Function wizard
+lc_okay - Okay
+lc_cancel - Cancel
