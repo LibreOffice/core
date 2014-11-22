@@ -294,6 +294,10 @@ WinSalGraphicsImpl::~WinSalGraphicsImpl()
 
 }
 
+void WinSalGraphicsImpl::Init()
+{
+}
+
 void WinSalGraphicsImpl::freeResources()
 {
 }

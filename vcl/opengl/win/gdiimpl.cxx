@@ -68,4 +68,34 @@ GLfloat WinOpenGLSalGraphicsImpl::GetHeight() const
     return 1;
 }
 
+bool WinOpenGLSalGraphicsImpl::IsOffscreen() const
+{
+    WinSalFrame* pFrame = GetWindowPtr( mrParent.gethWnd() );
+    return ( pFrame == NULL );
+}
+
+OpenGLContext* WinOpenGLSalGraphicsImpl::CreateWinContext()
+{
+    OpenGLContext* pContext = new OpenGLContext();
+    pContext->requestSingleBufferedRendering();
+    pContext->init( mrParent.mhLocalDC, mrParent.mhWnd );
+    return pContext;
+}
+
+bool WinOpenGLSalGraphicsImpl::CompareWinContext( OpenGLContext* pContext )
+{
+    if( !pContext || !pContext->isInitialized() )
+        return false;
+    return ( pContext->getOpenGLWindow().hWnd == mrParent.mhWnd );
+}
+
+OpenGLContext* WinOpenGLSalGraphicsImpl::CreatePixmapContext()
+{
+    OpenGLContext* pContext = new OpenGLContext();
+    pContext->requestVirtualDevice();
+    pContext->requestSingleBufferedRendering();
+    pContext->init( mrParent.mhLocalDC, mrParent.mhWnd );
+    return pContext;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

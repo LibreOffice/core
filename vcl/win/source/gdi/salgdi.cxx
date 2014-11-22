@@ -482,15 +482,7 @@ void WinSalGraphics::InitGraphics()
     ::SetTextAlign( getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
     ::SetBkMode( getHDC(), WIN32_TRANSPARENT );
     ::SetROP2( getHDC(), R2_COPYPEN );
-
-    OpenGLSalGraphicsImpl* pImpl = dynamic_cast<OpenGLSalGraphicsImpl*>(mpImpl.get());
-    if (pImpl)
-    {
-        if (mbVirDev)
-            pImpl->GetOpenGLContext().requestVirtualDevice();
-        pImpl->GetOpenGLContext().requestSingleBufferedRendering();
-        pImpl->GetOpenGLContext().init(mhLocalDC, mhWnd);
-    }
+    mpImpl->Init();
 }
 
 void WinSalGraphics::DeInitGraphics()

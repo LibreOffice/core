@@ -181,6 +181,7 @@ public:
 class WinSalGraphics : public SalGraphics
 {
     friend class WinSalGraphicsImpl;
+    friend class WinOpenGLSalGraphicsImpl;
     friend class ScopedFont;
     friend class OpenGLCompatibleDC;
     friend class WinLayout;

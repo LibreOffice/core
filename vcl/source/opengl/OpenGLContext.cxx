@@ -27,6 +27,8 @@
 #include <win/saldata.hxx>
 #endif
 
+#include "svdata.hxx"
+
 using namespace com::sun::star;
 
 // TODO use rtl::Static instead of 'static'
@@ -47,13 +49,26 @@ OpenGLContext::OpenGLContext():
     mpWindow(NULL),
     m_pChildWindow(NULL),
     mbInitialized(false),
+    mnRefCount(1),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
-    mbRequestVirtualDevice(false)
+    mbRequestVirtualDevice(false),
+    mpPrevContext(NULL),
+    mpNextContext(NULL)
 {
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     mbPixmap = false;
 #endif
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->maGDIData.mpLastContext )
+    {
+        pSVData->maGDIData.mpLastContext->mpNextContext = this;
+        mpPrevContext = pSVData->maGDIData.mpLastContext;
+    }
+    else
+        pSVData->maGDIData.mpFirstContext = this;
+    pSVData->maGDIData.mpLastContext = this;
 }
 
 OpenGLContext::~OpenGLContext()
@@ -67,6 +82,16 @@ OpenGLContext::~OpenGLContext()
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
     }
+    ImplSVData* pSVData = ImplGetSVData();
+    if( mpPrevContext )
+        mpPrevContext->mpNextContext = mpNextContext;
+    else
+        pSVData->maGDIData.mpFirstContext = mpNextContext;
+    if( mpNextContext )
+        mpNextContext->mpPrevContext = mpPrevContext;
+    else
+        pSVData->maGDIData.mpLastContext = mpPrevContext;
+
 #elif defined( MACOSX )
     OpenGLWrapper::resetCurrent();
 #elif defined( IOS ) || defined( ANDROID )
@@ -87,6 +112,17 @@ OpenGLContext::~OpenGLContext()
             glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
     }
 #endif
+}
+
+void OpenGLContext::AddRef()
+{
+    mnRefCount++;
+}
+
+void OpenGLContext::DeRef()
+{
+    if( --mnRefCount == 0 )
+        delete this;
 }
 
 void OpenGLContext::requestLegacyContext()
