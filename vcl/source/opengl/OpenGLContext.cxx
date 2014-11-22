@@ -83,8 +83,8 @@ OpenGLContext::~OpenGLContext()
         }
         glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
 
-        if (mbPixmap)
-            glXDestroyGLXPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
+        if (mbPixmap && m_aGLWin.glPix != None)
+            glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
     }
 #endif
 }
@@ -613,6 +613,12 @@ void OpenGLContext::resetToReInitialize()
     if( !mbInitialized )
         return;
     resetCurrent();
+
+    if (mbPixmap)
+    {
+        glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
+        m_aGLWin.glPix = None;
+    }
     mbInitialized = false;
 }
 
