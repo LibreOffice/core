@@ -25,12 +25,22 @@
         <value>false</value>
       </prop>
     </node>
-    <node oor:name="swriter/10336" oor:op="replace">
+    <node oor:name="scalc/10336" oor:op="replace">
+      <prop oor:name="Visible" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="sdraw/10336" oor:op="replace">
       <prop oor:name="Visible" oor:type="xs:boolean">
         <value>true</value>
       </prop>
     </node>
     <node oor:name="simpress/10336" oor:op="replace">
+      <prop oor:name="Visible" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="swriter/10336" oor:op="replace">
       <prop oor:name="Visible" oor:type="xs:boolean">
         <value>true</value>
       </prop>
