@@ -870,13 +870,10 @@ sal_uLong Compare::CompareSequence::CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
     }
 }
 
-void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
+namespace
 {
-    for( int iz = 0; iz < 2; ++iz )
+    static inline void lcl_ShiftBoundariesOneway( CompareData* const pData, CompareData* const pOtherData)
     {
-        CompareData* pData = &rData1;
-        CompareData* pOtherData = &rData2;
-
         sal_uLong i = 0;
         sal_uLong j = 0;
         sal_uLong i_end = pData->GetLineCount();
@@ -940,10 +937,13 @@ void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
             preceding = i;
             other_preceding = j;
         }
-
-        pData = &rData2;
-        pOtherData = &rData1;
     }
+}
+
+void Compare::ShiftBoundaries( CompareData& rData1, CompareData& rData2 )
+{
+    lcl_ShiftBoundariesOneway(&rData1, &rData2);
+    lcl_ShiftBoundariesOneway(&rData2, &rData1);
 }
 
 class SwCompareLine : public CompareLine
