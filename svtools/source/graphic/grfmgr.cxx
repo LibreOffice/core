@@ -404,6 +404,8 @@ void GraphicObject::SetUserData()
 void GraphicObject::SetUserData( const OUString& rUserData )
 {
     maUserData = rUserData;
+    if( !rUserData.isEmpty() )
+        SetSwapState();
 }
 
 void GraphicObject::SetSwapStreamHdl()
