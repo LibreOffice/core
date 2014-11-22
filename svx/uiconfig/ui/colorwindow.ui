@@ -127,7 +127,7 @@
         </child>
         <child>
           <object class="GtkButton" id="color_picker_button">
-            <property name="label">Custom Color…</property>
+            <property name="label" translatable="yes">Custom Color…</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

@@ -49,4 +49,24 @@ String RID_SVXSTR_APPLYPERSONA
     Text [ en-US ] = "Applying Theme...";
 };
 
+String RID_SVXSTR_PERSONA_ABSTRACT
+{
+    Text [ en-US ] = "Abstract";
+};
+
+String RID_SVXSTR_PERSONA_COLOR
+{
+    Text [ en-US ] = "Color";
+};
+
+String RID_SVXSTR_PERSONA_MUSIC
+{
+    Text [ en-US ] = "Music";
+};
+
+String RID_SVXSTR_PERSONA_NATURE
+{
+    Text [ en-US ] = "Nature";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

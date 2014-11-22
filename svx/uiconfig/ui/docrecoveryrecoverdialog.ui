@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label">Discard Recovery Data</property>
+                <property name="label" translatable="yes">Discard Recovery Data</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
