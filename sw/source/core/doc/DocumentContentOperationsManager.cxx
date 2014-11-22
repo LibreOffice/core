@@ -3374,7 +3374,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
         aAnchor.SetAnchor( &newPos );
 
         // Check recursion: copy content in its own frame, then don't copy it.
-        bool bMakeCpy = true;
         if( pDest == &m_rDoc )
         {
             const SwFmtCntnt& rCntnt = (*it).GetFmt()->GetCntnt();
@@ -3384,16 +3383,14 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 pSNd->GetIndex() < rStartIdx.GetIndex() &&
                 rStartIdx.GetIndex() < pSNd->EndOfSectionIndex() )
             {
-                bMakeCpy = false;
                 aSet.erase (it++);
                 continue;
             }
         }
 
         // Copy the format and set the new anchor
-        if( bMakeCpy )
-            aVecSwFrmFmt.push_back( pDest->getIDocumentLayoutAccess().CopyLayoutFmt( *(*it).GetFmt(),
-                        aAnchor, false, true ) );
+        aVecSwFrmFmt.push_back( pDest->getIDocumentLayoutAccess().CopyLayoutFmt( *(*it).GetFmt(),
+                aAnchor, false, true ) );
         ++it;
     }
 
