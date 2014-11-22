@@ -997,10 +997,7 @@ void SwSectionFrm::_CheckClipping( bool bGrow, bool bMaximize )
     {
         nDiff = (*fnRect->fnYDiff)( nDeadLine, (Frm().*fnRect->fnGetTop)() );
         if( nDiff < 0 )
-        {
-            nDiff = 0;
             nDeadLine = (Frm().*fnRect->fnGetTop)();
-        }
         const Size aOldSz( Prt().SSize() );
         long nTop = (this->*fnRect->fnGetTopMargin)();
         (Frm().*fnRect->fnSetBottom)( nDeadLine );
