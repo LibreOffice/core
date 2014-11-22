@@ -24,6 +24,7 @@
 #include <vcl/dllapi.h>
 
 #include "opengl/texture.hxx"
+#include "regionband.hxx"
 
 #include <tools/poly.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -125,6 +126,7 @@ public:
     void DrawRect( const Rectangle& rRect );
     void DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry );
     void DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
+    void DrawRegionBand( const RegionBand& rRegion );
     void DrawTextureRect( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& rPosAry, bool bInverted = false );
     void DrawTransformedTexture( OpenGLTexture& rTexture, OpenGLTexture& rMask, const basegfx::B2DPoint& rNull, const basegfx::B2DPoint& rX, const basegfx::B2DPoint& rY );
