@@ -254,7 +254,6 @@ extern const sal_uLong nVCLLut[ 256 ];
 class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
 {
     friend class Printer;
-    //friend class System;
     friend class VirtualDevice;
     friend class vcl::Window;
     friend class WorkWindow;
