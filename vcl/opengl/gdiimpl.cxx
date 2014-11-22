@@ -213,13 +213,7 @@ void OpenGLSalGraphicsImpl::PreDraw()
     if( mbOffscreen )
         CheckOffscreenTexture();
     glViewport( 0, 0, GetWidth(), GetHeight() );
-    if( mbUseScissor )
-        glEnable( GL_SCISSOR_TEST );
-    if( mbUseStencil )
-    {
-        glStencilFunc( GL_EQUAL, 1, 0x1 );
-        glEnable( GL_STENCIL_TEST );
-    }
+    ImplInitClipRegion();
 
     CHECK_GL_ERROR();
 }
@@ -263,36 +257,44 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
     CHECK_GL_ERROR();
 }
 
+void OpenGLSalGraphicsImpl::ImplInitClipRegion()
+{
+    // make sure the context has the right clipping set
+    if( maClipRegion != mpContext->maClipRegion )
+    {
+        mpContext->maClipRegion = maClipRegion;
+        if( maClipRegion.IsRectangle() )
+        {
+            Rectangle aRect( maClipRegion.GetBoundRect() );
+            glScissor( aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth() + 1, aRect.GetHeight() + 1 );
+        }
+        else if( !maClipRegion.IsEmpty() )
+        {
+            ImplSetClipBit( maClipRegion, 0x01 );
+        }
+    }
+
+    if( mbUseScissor )
+        glEnable( GL_SCISSOR_TEST );
+    if( mbUseStencil )
+    {
+        glStencilFunc( GL_EQUAL, 1, 0x1 );
+        glEnable( GL_STENCIL_TEST );
+    }
+}
+
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
     SAL_INFO( "vcl.opengl", "::setClipRegion " << rClip );
+    maClipRegion = rClip;
 
-    if( rClip.IsEmpty() )
-    {
-        ResetClipRegion();
-        return true;
-    }
-
-    if( rClip.IsRectangle() )
-    {
-        Rectangle aRect( rClip.GetBoundRect() );
-
-        mbUseStencil = false;
+    mbUseStencil = false;
+    mbUseScissor = false;
+    if( maClipRegion.IsRectangle() )
         mbUseScissor = true;
-        maContext.makeCurrent();
-        glViewport( 0, 0, GetWidth(), GetHeight() );
-        glScissor( aRect.Left(), GetHeight() - aRect.Bottom() - 1, aRect.GetWidth(), aRect.GetHeight() );
-    }
-    else
-    {
+    else if ( !maClipRegion.IsEmpty() )
         mbUseStencil = true;
-        mbUseScissor = false;
-        maContext.makeCurrent();
-        glViewport( 0, 0, GetWidth(), GetHeight() );
-        ImplSetClipBit( rClip, 0x01 );
-    }
 
-    CHECK_GL_ERROR();
     return true;
 }
 
@@ -300,6 +302,7 @@ bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 void OpenGLSalGraphicsImpl::ResetClipRegion()
 {
     SAL_INFO( "vcl.opengl", "::ResetClipRegion" );
+    maClipRegion.SetEmpty();
     mbUseScissor = false;
     mbUseStencil = false;
 }
