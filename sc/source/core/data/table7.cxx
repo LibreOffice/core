@@ -210,6 +210,14 @@ void ScTable::EndListeningIntersectedGroups(
         aCol[nCol].EndListeningIntersectedGroups(rCxt, nRow1, nRow2, pGroupPos);
 }
 
+void ScTable::EndListeningGroup( sc::EndListeningContext& rCxt, SCCOL nCol, SCROW nRow )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].EndListeningGroup(rCxt, nRow);
+}
+
 void ScTable::SetNeedsListeningGroup( SCCOL nCol, SCROW nRow )
 {
     if (!ValidCol(nCol))

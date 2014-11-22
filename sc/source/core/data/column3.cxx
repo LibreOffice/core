@@ -152,7 +152,7 @@ public:
 
 }
 
-void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
+void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>* pGroupPos )
 {
     pAttrArray->DeleteRow( nStartRow, nSize );
 
@@ -221,7 +221,9 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     ShiftFormulaPosHandler aShiftFormulaFunc;
     sc::ProcessFormula(aPos.first, maCells, nStartRow, MAXROW, aShiftFormulaFunc);
 
-    sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+    bool bJoined = sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+    if (bJoined && pGroupPos)
+        pGroupPos->push_back(ScAddress(nCol, nStartRow, nTab));
 
     // Shift the text attribute array too (before the broadcast).
     maCellTextAttrs.erase(nStartRow, nEndRow);
@@ -2873,8 +2875,11 @@ namespace {
 class GroupFormulaCells
 {
     ScFormulaCellGroupRef mxNone;
+    std::vector<ScAddress>* mpGroupPos;
 
 public:
+    GroupFormulaCells( std::vector<ScAddress>* pGroupPos ) :
+        mpGroupPos(pGroupPos) {}
 
     void operator() (sc::CellStoreType::value_type& node)
     {
@@ -2977,6 +2982,9 @@ public:
                 ++it;
             }
 
+            if (mpGroupPos)
+                mpGroupPos->push_back(pCur->aPos);
+
             pCur = pPrev;
             xCurGrp = xPrevGrp;
         }
@@ -2985,10 +2993,10 @@ public:
 
 }
 
-void ScColumn::RegroupFormulaCells()
+void ScColumn::RegroupFormulaCells( std::vector<ScAddress>* pGroupPos )
 {
     // re-build formula groups.
-    std::for_each(maCells.begin(), maCells.end(), GroupFormulaCells());
+    std::for_each(maCells.begin(), maCells.end(), GroupFormulaCells(pGroupPos));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
