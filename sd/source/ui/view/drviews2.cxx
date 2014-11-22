@@ -1159,7 +1159,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_ATTR_TABLE:
         {
             SetCurrentFunction( FuInsertOLE::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-
+            // Set the selection tool as the old one. This in particular important for the
+            // zoom function, in which clicking without dragging zooms as well, and that
+            // makes exiting the object editing mode impossible.
+            SetOldFunction( FuSelection::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
 
