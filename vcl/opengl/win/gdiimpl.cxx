@@ -18,6 +18,15 @@ WinOpenGLSalGraphicsImpl::WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics):
 {
 }
 
+void WinOpenGLSalGraphicsImpl::Init()
+{
+    // FIXME - is this still needed after the recent changes?
+    //if (mbVirDev)
+    //    GetOpenGLContext().requestVirtualDevice();
+    GetOpenGLContext().requestSingleBufferedRendering();
+    GetOpenGLContext().init(mhLocalDC, mhWnd);
+}
+
 void WinOpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
     OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? dynamic_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
