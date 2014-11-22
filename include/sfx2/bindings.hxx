@@ -28,17 +28,12 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#include <vector>
-
 
 //  some other includes
 
-
 #include <sfx2/viewfrm.hxx>
 
-
 //  forwards, typedefs, declarations
-
 
 class SystemWindow;
 class SfxSlot;
@@ -54,8 +49,7 @@ class SfxWorkWindow;
 class SfxUnoControllerItem;
 struct SfxFoundCache_Impl;
 class SfxFoundCacheArr_Impl;
-
-typedef std::vector<SfxUnoControllerItem*> SfxUnoControllerArr_Impl;
+class SfxUnoControllerArr_Impl;
 
 enum class SfxCallMode : sal_uInt16
 {

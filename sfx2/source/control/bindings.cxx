@@ -127,6 +127,51 @@ public:
     }
 };
 
+class SfxUnoControllerArr_Impl
+{
+    typedef std::vector<SfxUnoControllerItem*> DataType;
+    DataType maData;
+
+public:
+
+    typedef DataType::iterator iterator;
+
+    iterator begin()
+    {
+        return maData.begin();
+    }
+
+    iterator end()
+    {
+        return maData.end();
+    }
+
+    void erase( iterator it )
+    {
+        maData.erase(it);
+    }
+
+    SfxUnoControllerItem* operator[] ( size_t i )
+    {
+        return maData[i];
+    }
+
+    const SfxUnoControllerItem* operator[] ( size_t i ) const
+    {
+        return maData[i];
+    }
+
+    size_t size() const
+    {
+        return maData.size();
+    }
+
+    void push_back( SfxUnoControllerItem* p )
+    {
+        maData.push_back(p);
+    }
+};
+
 class SfxAsyncExec_Impl
 {
     ::com::sun::star::util::URL aCommand;
