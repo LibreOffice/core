@@ -230,6 +230,8 @@ private:
 #endif
 
 public:
+    int mnPainting;
+
     OpenGLContext* mpPrevContext;
     OpenGLContext* mpNextContext;
 };

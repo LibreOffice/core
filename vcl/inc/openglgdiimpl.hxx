@@ -35,8 +35,6 @@ class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
 protected:
 
-    SalFrame* mpFrame;
-    int mnPainting;
     OpenGLContext* mpContext;
 
     // clipping
