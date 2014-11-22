@@ -247,7 +247,10 @@ void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMa
 
     glClear( GL_STENCIL_BUFFER_BIT );
     BeginSolid( MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ) );
-    DrawPolyPolygon( rClip.GetAsB2DPolyPolygon() );
+    if( rClip.getRegionBand() )
+        DrawRegionBand( *rClip.getRegionBand() );
+    else
+        DrawPolyPolygon( rClip.GetAsB2DPolyPolygon() );
     EndSolid();
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
@@ -788,6 +791,41 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
     glEnableVertexAttribArray( GL_ATTRIB_POS );
     glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pVertices.data() );
     glDrawArrays( GL_TRIANGLES, 0, pVertices.size() / 2 );
+    glDisableVertexAttribArray( GL_ATTRIB_POS );
+
+    CHECK_GL_ERROR();
+}
+
+void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
+{
+    RectangleVector aRects;
+    std::vector<GLfloat> aVertices;
+    rRegion.GetRegionRectangles( aRects );
+
+    if( aRects.empty() )
+        return;
+
+#define ADD_VERTICE(pt) \
+    aVertices.push_back( 2 * pt.X() / GetWidth() - 1.0 ); \
+    aVertices.push_back( 1.0 - (2 * pt.Y() / GetHeight()) );
+
+    for( size_t i = 0; i < aRects.size(); ++i )
+    {
+        aRects[i].Bottom() += 1;
+        aRects[i].Right() += 1;
+        ADD_VERTICE( aRects[i].TopLeft() );
+        ADD_VERTICE( aRects[i].TopRight() );
+        ADD_VERTICE( aRects[i].BottomLeft() );
+        ADD_VERTICE( aRects[i].BottomLeft() );
+        ADD_VERTICE( aRects[i].TopRight() );
+        ADD_VERTICE( aRects[i].BottomRight() );
+    }
+
+#undef ADD_VERTICE
+
+    glEnableVertexAttribArray( GL_ATTRIB_POS );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, &aVertices[0] );
+    glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 
     CHECK_GL_ERROR();
