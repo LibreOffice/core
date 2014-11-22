@@ -1307,8 +1307,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         nEndTab = static_cast<SCTAB>(maTabs.size())-1;
     }
 
-    bool bOldAutoCalc = GetAutoCalc();
-    SetAutoCalc( false );   // avoid multiple calculations
+    sc::AutoCalcSwitch aACSwitch(*this, false); // avoid multiple calculations
 
     // handle chunks of consecutive selected sheets together
     SCTAB nTabRangeStart = nStartTab;
@@ -1349,9 +1348,20 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     if (pUndoOutline)
         *pUndoOutline = false;
 
+    // Keep track of the positions of all formula groups that have been joined
+    // during row deletion.
+    std::vector<ScAddress> aGroupPos;
+
     for ( i = nStartTab; i <= nEndTab && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
-            maTabs[i]->DeleteRow(aCxt.maRegroupCols, nStartCol, nEndCol, nStartRow, nSize, pUndoOutline);
+            maTabs[i]->DeleteRow(aCxt.maRegroupCols, nStartCol, nEndCol, nStartRow, nSize, pUndoOutline, &aGroupPos);
+
+    // Newly joined groups have some of their members still listening.  We
+    // need to make sure none of them are listening.
+    EndListeningGroups(aGroupPos);
+
+    // Mark all joined groups for group listening.
+    SetNeedsListeningGroups(aGroupPos);
 
     if ( ValidRow(nStartRow+nSize) )
     {
@@ -1368,7 +1378,6 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         std::for_each(maTabs.begin(), maTabs.end(), BroadcastRecalcOnRefMoveHandler());
     }
 
-    SetAutoCalc( bOldAutoCalc );
     pChartListenerCollection->UpdateDirtyCharts();
 }
 

@@ -68,12 +68,15 @@ namespace {
 class ColumnRegroupFormulaCells
 {
     ScColumn* mpCols;
+    std::vector<ScAddress>* mpGroupPos;
+
 public:
-    ColumnRegroupFormulaCells(ScColumn* pCols) : mpCols(pCols) {}
+    ColumnRegroupFormulaCells( ScColumn* pCols, std::vector<ScAddress>* pGroupPos ) :
+        mpCols(pCols), mpGroupPos(pGroupPos) {}
 
     void operator() (SCCOL nCol)
     {
-        mpCols[nCol].RegroupFormulaCells();
+        mpCols[nCol].RegroupFormulaCells(mpGroupPos);
     }
 };
 
@@ -199,7 +202,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
 void ScTable::DeleteRow(
     const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
-    bool* pUndoOutline )
+    bool* pUndoOutline, std::vector<ScAddress>* pGroupPos )
 {
     if (nStartCol==0 && nEndCol==MAXCOL)
     {
@@ -240,12 +243,13 @@ void ScTable::DeleteRow(
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
         for (SCCOL j=nStartCol; j<=nEndCol; j++)
-            aCol[j].DeleteRow( nStartRow, nSize );
+            aCol[j].DeleteRow(nStartRow, nSize, pGroupPos);
     }
 
     std::vector<SCCOL> aRegroupCols;
     rRegroupCols.getColumns(nTab, aRegroupCols);
-    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
+    std::for_each(
+        aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol, pGroupPos));
 
     InvalidatePageBreaks();
 
@@ -320,7 +324,7 @@ void ScTable::InsertCol(
 
     std::vector<SCCOL> aRegroupCols;
     rRegroupCols.getColumns(nTab, aRegroupCols);
-    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
+    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol, NULL));
 
     if (nStartCol>0)                        // copy old attributes
     {
@@ -400,7 +404,7 @@ void ScTable::DeleteCol(
 
     std::vector<SCCOL> aRegroupCols;
     rRegroupCols.getColumns(nTab, aRegroupCols);
-    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol));
+    std::for_each(aRegroupCols.begin(), aRegroupCols.end(), ColumnRegroupFormulaCells(aCol, NULL));
 
     InvalidatePageBreaks();
 

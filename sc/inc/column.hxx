@@ -229,7 +229,14 @@ public:
     bool    TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
     bool TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const;
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
-    void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
+
+    /**
+     * @param nStartRow top row position
+     * @param nSize size of the segment to delete.
+     * @param pGroupPos when non-NULL, stores the top position of formula
+     *                  group that's been merged as a result of row deletion.
+     */
+    void DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>* pGroupPos = NULL );
 
     void DeleteArea(
         SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag,
@@ -594,7 +601,7 @@ public:
     /**
      * Regroup formula cells for the entire column.
      */
-    void RegroupFormulaCells();
+    void RegroupFormulaCells( std::vector<ScAddress>* pGroupPos = NULL );
 
     /**
      * Reset column position of formula cells within specified row range.
@@ -669,6 +676,7 @@ private:
     void EndListeningIntersectedGroups(
         sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, std::vector<ScAddress>* pGroupPos = NULL );
 
+    void EndListeningGroup( sc::EndListeningContext& rCxt, SCROW nRow );
     void SetNeedsListeningGroup( SCROW nRow );
 };
 

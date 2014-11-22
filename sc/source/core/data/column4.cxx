@@ -1396,6 +1396,35 @@ void ScColumn::EndListeningIntersectedGroups(
     }
 }
 
+void ScColumn::EndListeningGroup( sc::EndListeningContext& rCxt, SCROW nRow )
+{
+    sc::CellStoreType::position_type aPos = maCells.position(nRow);
+    if (aPos.first->type != sc::element_type_formula)
+        // not a formula cell.
+        return;
+
+    ScFormulaCell** pp = &sc::formula_block::at(*aPos.first->data, aPos.second);
+
+    ScFormulaCellGroupRef xGroup = (*pp)->GetCellGroup();
+    if (!xGroup)
+    {
+        // not a formula group.
+        (*pp)->EndListeningTo(rCxt);
+        return;
+    }
+
+    // Move back to the top cell.
+    SCROW nTopDelta = (*pp)->aPos.Row() - xGroup->mpTopCell->aPos.Row();
+    for (SCROW i = 0; i < nTopDelta; ++i)
+        --pp;
+
+    // Set the needs listening flag to all cells in the group.
+    assert(*pp == xGroup->mpTopCell);
+    ScFormulaCell** ppEnd = pp + xGroup->mnLength;
+    for (; pp != ppEnd; ++pp)
+        (*pp)->EndListeningTo(rCxt);
+}
+
 void ScColumn::SetNeedsListeningGroup( SCROW nRow )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow);

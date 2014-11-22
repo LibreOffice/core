@@ -2182,6 +2182,7 @@ private:
     void EndListeningIntersectedGroups(
         sc::EndListeningContext& rCxt, const ScRange& rRange, std::vector<ScAddress>* pGroupPos = NULL );
 
+    void EndListeningGroups( const std::vector<ScAddress>& rPosArray );
     void SetNeedsListeningGroups( const std::vector<ScAddress>& rPosArray );
 };
 
