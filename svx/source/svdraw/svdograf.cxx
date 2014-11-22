@@ -563,7 +563,7 @@ OUString SdrGrafObj::GetGrafStreamURL() const
 
 void SdrGrafObj::ForceSwapIn() const
 {
-    if( mbIsPreview )
+    if( mbIsPreview && pGraphic->HasUserData() )
     {
         // removing preview graphic
         const OUString aUserData( pGraphic->GetUserData() );
@@ -1372,9 +1372,15 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData))
                     {
                         const OUString aNewUserData( pGraphic->GetUserData() );
-
                         pGraphic->SetGraphic( aGraphic );
-                        pGraphic->SetUserData();
+                        if( mbIsPreview )
+                        {
+                            pGraphic->SetUserData(aNewUserData);
+                        }
+                        else
+                        {
+                            pGraphic->SetUserData();
+                        }
 
                         // Graphic successfully swapped in.
                         pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
