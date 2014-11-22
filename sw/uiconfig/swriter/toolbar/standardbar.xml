@@ -61,11 +61,11 @@
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:helpid="20328"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFieldCtrl" toolbar:helpid="52824"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="10244"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:helpid="10253"/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:visible="false" toolbar:helpid="10102"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="10244"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:visible="false" toolbar:helpid="6660"/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
