@@ -113,9 +113,13 @@ static void loadImageFromStream(
 
 }
 
-ImplImageTree::ImplImageTree() { m_cacheIcons = true; }
+ImplImageTree::ImplImageTree()
+{
+}
 
-ImplImageTree::~ImplImageTree() {}
+ImplImageTree::~ImplImageTree()
+{
+}
 
 bool ImplImageTree::loadImage(
     OUString const & name, OUString const & style, BitmapEx & bitmap,
@@ -151,18 +155,19 @@ bool ImplImageTree::doLoadImage(
     bool localized)
 {
     setStyle(style);
-    if (m_cacheIcons && iconCacheLookup(name, localized, bitmap)) {
+    if (iconCacheLookup(name, localized, bitmap))
         return true;
-    }
-    if (!bitmap.IsEmpty()) {
+
+    if (!bitmap.IsEmpty())
         bitmap.SetEmpty();
-    }
+
     std::vector< OUString > paths;
     paths.push_back(getRealImageName(name));
 
     if (localized) {
         sal_Int32 pos = name.lastIndexOf('/');
-        if (pos != -1) {
+        if (pos != -1)
+        {
             // find() uses a reverse iterator, so push in reverse order.
             std::vector< OUString > aFallbacks( Application::GetSettings().GetUILanguageTag().getFallbackStrings(true));
             for (std::vector< OUString >::reverse_iterator it( aFallbacks.rbegin());
@@ -180,9 +185,10 @@ bool ImplImageTree::doLoadImage(
     } catch (const css::uno::Exception & e) {
         SAL_INFO("vcl", "ImplImageTree::doLoadImage exception " << e.Message);
     }
-    if (m_cacheIcons && found) {
+
+    if (found)
         m_iconCache[name.intern()] = std::make_pair(localized, bitmap);
-    }
+
     return found;
 }
 
@@ -235,20 +241,6 @@ bool ImplImageTree::iconCacheLookup(
 bool ImplImageTree::find(
     std::vector< OUString > const & paths, BitmapEx & bitmap)
 {
-    if (!m_cacheIcons) {
-        for (std::vector< OUString >::const_reverse_iterator j(
-                 paths.rbegin());
-             j != paths.rend(); ++j)
-        {
-            osl::File file(m_path.first + "/" + *j);
-            if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
-                loadImageFromStream( wrapFile(file), *j, bitmap );
-                file.close();
-                return true;
-            }
-        }
-    }
-
     if (!checkPathAccess())
         return false;
 
@@ -269,17 +261,6 @@ bool ImplImageTree::find(
 void ImplImageTree::loadImageLinks()
 {
     const OUString aLinkFilename("links.txt");
-
-    if (!m_cacheIcons)
-    {
-        osl::File file(m_path.first + "/" + aLinkFilename);
-        if (file.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None)
-        {
-            parseLinkFile( wrapFile(file) );
-            file.close();
-            return;
-        }
-    }
 
     if (!checkPathAccess())
         return;

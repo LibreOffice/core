@@ -70,7 +70,6 @@ private:
     OUString m_style;
     Path m_path;
     IconCache m_iconCache;
-    bool m_cacheIcons;
     IconLinkHash m_linkHash;
 
     bool checkPathAccess();
