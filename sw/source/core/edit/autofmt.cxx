@@ -2051,7 +2051,6 @@ void SwAutoFormat::AutoCorrect( sal_Int32 nPos )
                 {
                     SetRedlineTxt( STR_AUTOFMTREDL_CPTL_STT_SENT );
                     pATst->FnCptlSttSntnc( aACorrDoc, *pTxt, true, nSttPos, nPos, eLang);
-                    bFirst = false;
                 }
 
                 bFirst = bFirstSent;
