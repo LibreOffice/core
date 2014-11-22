@@ -1002,7 +1002,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
         DelNodes( pRange->aEnd, 1 );
     else
     {
-        pAktNode = new SwStartNode( pRange->aEnd );
+        new SwStartNode( pRange->aEnd );
 /*?? which NodeType ??*/
         aTmpIdx = *pRange->aEnd.GetNode().EndOfSectionNode();
         pRange->aEnd--;
