@@ -27,10 +27,10 @@
 
 enum SvxZoomType
 {
-    SVX_ZOOM_PERCENT,       // GetValue() ist kein besonderer prozentualer Wert
-    SVX_ZOOM_OPTIMAL,       // GetValue() entspricht der optimalen Gr"o\se
-    SVX_ZOOM_WHOLEPAGE,     // GetValue() entspricht der ganzen Seite
-    SVX_ZOOM_PAGEWIDTH,      // GetValue() entspricht der Seitenbreite
+    SVX_ZOOM_PERCENT,       // GetValue() is no special percentage value
+    SVX_ZOOM_OPTIMAL,       // GetValue() corresponds to the optimal size
+    SVX_ZOOM_WHOLEPAGE,     // GetValue() corresponds to the whole page
+    SVX_ZOOM_PAGEWIDTH,      // GetValue() corresponds to the page width
     SVX_ZOOM_PAGEWIDTH_NOBORDER  // GetValue() pagewidth without border
 };
 
@@ -38,7 +38,7 @@ enum SvxZoomType
 
 class SFX2_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
 {
-    sal_uInt16                  nValueSet;  // erlaubte Werte (siehe #defines unten)
+    sal_uInt16                  nValueSet;  // allowed values (see #defines below)
     SvxZoomType             eType;
 
 public:

@@ -356,9 +356,9 @@ public:
  *  which stores its own length so that it can be skipped by
  *  older versions and readers that do not known the record type (tag).
  *
- *  It contains multipl contents of the same type (tag) and the same
+ *  It contains multiple contents of the same type (tag) and the same
  *  version, which have been identified once and for all in the
- *  header of the reacord. All contents have a length which is
+ *  header of the record. All contents have a length which is
  *  known in advance and identical.
  *
  *  To be able to guarantee forward and backwards compatibility,
@@ -397,11 +397,11 @@ public:
 class SVL_DLLPUBLIC SfxMultiFixRecordWriter: public SfxSingleRecordWriter
 {
 protected:
-    sal_uInt32          _nContentStartPos;  /*  Startposition des jeweiligen
-                                            Contents - nur bei DBG_UTIL
-                                            und f"ur Subklassen */
-    sal_uInt32          _nContentSize;      //  Gr"o\se jedes Contents
-    sal_uInt16          _nContentCount;     //  jeweilige Anzahl der Contents
+    sal_uInt32          _nContentStartPos;  /*  start position of respective
+                                            content - only with DBG_UTIL
+                                            and for subclasses */
+    sal_uInt32          _nContentSize;      //  size of each content
+    sal_uInt16          _nContentCount;     //  number of contents
 
                     SfxMultiFixRecordWriter( sal_uInt8 nRecordType,
                                              SvStream *pStream,

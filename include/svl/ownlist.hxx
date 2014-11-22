@@ -32,12 +32,10 @@ namespace com { namespace sun { namespace star {
 
 
 class SvCommand
-/*  [Beschreibung]
-
-    Enth"alt einen String, welcher das Kommando angibt und eine weiteren
-    String, der das Argument des Kommandos bildet. W"urde solch ein
-    Kommando "uber die Kommandozeile angegeben werden, s"ahe es wie folgt
-    aus: Kommando = Argument.
+/*
+    Contains a string that defines the command and another string for the
+    command arguments. If such a command were given in the command line,
+    it would look like this: command = argument
 */
 {
     OUString aCommand;
@@ -57,12 +55,11 @@ typedef ::std::vector< SvCommand > SvCommandList_impl;
 
 
 class SVL_DLLPUBLIC SvCommandList
-/*  [Beschreibung]
-
-    Die Liste enth"alt Objekte vom Typ SvCommand. Wird ein Objekt
-    eingef"ugt, dann wird es kopiert und das neue Objekt wird
-    in die Liste gestellt.
-*/
+/*
+  The list contains objects of type SvCommand.
+  If an object is inserted, it is copied and inserted at the end
+  of the list.
+ */
 {
 private:
     SvCommandList_impl  aCommandList;
