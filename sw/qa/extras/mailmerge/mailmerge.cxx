@@ -12,8 +12,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/XCell.hpp>
@@ -394,8 +392,6 @@ DECLARE_SHELL_MAILMERGE_TEST(testPageBoundaries2Pages, "simple-mail-merge-2pages
         CPPUNIT_ASSERT_EQUAL( doc * 2 + 1, documentStartPageNumber( doc ));
     }
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
