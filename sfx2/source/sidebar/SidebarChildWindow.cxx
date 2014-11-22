@@ -26,12 +26,9 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 
-
 namespace sfx2 { namespace sidebar {
 
-
 SFX_IMPL_DOCKINGWINDOW_WITHID(SidebarChildWindow, SID_SIDEBAR);
-
 
 SidebarChildWindow::SidebarChildWindow (
     vcl::Window* pParentWindow,
@@ -58,9 +55,6 @@ SidebarChildWindow::SidebarChildWindow (
     this->pWindow->Show();
 }
 
-
-
-
 sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)
 {
     if (pWindow != NULL)
@@ -74,7 +68,6 @@ sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)
     else
         return 0;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

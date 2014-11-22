@@ -326,11 +326,11 @@ css::uno::Sequence< css::beans::NamedValue > SvtViewOptionsBase_Impl::GetUserDat
             xNode->getByName(PROPERTY_USERDATA) >>= xUserData;
         if (xUserData.is())
         {
-            const css::uno::Sequence< OUString >         lNames = xUserData->getElementNames();
-            const OUString*                              pNames = lNames.getConstArray();
-                  sal_Int32                                     c      = lNames.getLength();
-                  sal_Int32                                     i      = 0;
-                  css::uno::Sequence< css::beans::NamedValue >  lUserData(c);
+            const css::uno::Sequence<OUString> lNames = xUserData->getElementNames();
+            const OUString* pNames = lNames.getConstArray();
+            sal_Int32 c = lNames.getLength();
+            sal_Int32 i = 0;
+            css::uno::Sequence< css::beans::NamedValue > lUserData(c);
 
             for (i=0; i<c; ++i)
             {

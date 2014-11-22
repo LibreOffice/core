@@ -60,9 +60,6 @@ using namespace css;
 using namespace css::uno;
 using ::rtl::OUString;
 
-
-#undef VERBOSE
-
 namespace
 {
     const static char gsReadOnlyCommandName[] = ".uno:EditDoc";
@@ -70,7 +67,6 @@ namespace
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
 }
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -220,9 +216,6 @@ void SAL_CALL SidebarController::disposing (void)
     maAsynchronousDeckSwitch.CancelRequest();
 }
 
-
-
-
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -239,9 +232,6 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     }
 }
 
-
-
-
 void SAL_CALL SidebarController::disposing (const css::lang::EventObject& rEventObject)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -250,9 +240,6 @@ void SAL_CALL SidebarController::disposing (const css::lang::EventObject& rEvent
     dispose();
 }
 
-
-
-
 void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChangeEvent& rEvent)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -260,9 +247,6 @@ void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChang
 
     maPropertyChangeForwarder.RequestCall();
 }
-
-
-
 
 void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEvent& rEvent)
     throw(css::uno::RuntimeException, std::exception)
@@ -283,9 +267,6 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
         maContextChangeUpdate.RequestCall();
     }
 }
-
-
-
 
 void SAL_CALL SidebarController::requestLayout (void)
     throw(css::uno::RuntimeException, std::exception)
@@ -437,9 +418,6 @@ void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
     }
 }
 
-
-
-
 void SidebarController::UpdateConfigurations (void)
 {
     if (maCurrentContext != maRequestedContext
@@ -502,7 +480,6 @@ void SidebarController::UpdateConfigurations (void)
         }
     }
 }
-
 
 void SidebarController::RequestSwitchToDeck (
     const ::rtl::OUString& rsDeckId)
@@ -705,9 +682,6 @@ void SidebarController::SwitchToDeck (
     UpdateTitleBarIcons();
 }
 
-
-
-
 SharedPanel SidebarController::CreatePanel (
     const OUString& rsPanelId,
     vcl::Window* pParentWindow,
@@ -744,9 +718,6 @@ SharedPanel SidebarController::CreatePanel (
 
     return pPanel;
 }
-
-
-
 
 Reference<ui::XUIElement> SidebarController::CreateUIElement (
     const Reference<awt::XWindowPeer>& rxWindow,
@@ -791,9 +762,6 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
         return NULL;
     }
 }
-
-
-
 
 IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
 {
@@ -856,9 +824,6 @@ IMPL_LINK(SidebarController, WindowEventHandler, VclWindowEvent*, pEvent)
     return sal_True;
 }
 
-
-
-
 void SidebarController::ShowPopupMenu (
     const Rectangle& rButtonBox,
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
@@ -871,9 +836,6 @@ void SidebarController::ShowPopupMenu (
     aBox.Move(mpTabBar->GetPosPixel().X(), 0);
     pMenu->Execute(mpParentWindow, aBox, POPUPMENU_EXECUTE_DOWN);
 }
-
-
-
 
 ::boost::shared_ptr<PopupMenu> SidebarController::CreatePopupMenu (
     const ::std::vector<TabBar::DeckMenuData>& rMenuData) const
@@ -938,9 +900,6 @@ void SidebarController::ShowPopupMenu (
     return pMenu;
 }
 
-
-
-
 IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
 {
     if (pMenu == NULL)
@@ -988,9 +947,6 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
     return 1;
 }
 
-
-
-
 void SidebarController::RequestCloseDeck (void)
 {
     mbIsDeckRequestedOpen = false;
@@ -999,9 +955,6 @@ void SidebarController::RequestCloseDeck (void)
     // remove highlight from TabBar, because Deck will be closed
     mpTabBar->RemoveDeckHighlight();
 }
-
-
-
 
 void SidebarController::RequestOpenDeck (void)
 {
@@ -1013,7 +966,6 @@ bool SidebarController::IsDeckVisible(const OUString& rsDeckId)
 {
     return mbIsDeckOpen && mbIsDeckOpen.get() && msCurrentDeckId == rsDeckId;
 }
-
 
 void SidebarController::UpdateDeckOpenState (void)
 {
@@ -1051,13 +1003,6 @@ void SidebarController::UpdateDeckOpenState (void)
     }
 }
 
-
-
-
-
-
-
-
 bool SidebarController::CanModifyChildWindowWidth (void)
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
@@ -1074,9 +1019,6 @@ bool SidebarController::CanModifyChildWindowWidth (void)
     else
         return false;
 }
-
-
-
 
 sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
 {
@@ -1102,9 +1044,6 @@ sal_Int32 SidebarController::SetChildWindowWidth (const sal_Int32 nNewWidth)
     return static_cast<sal_Int32>(nColumnWidth);
 }
 
-
-
-
 void SidebarController::RestrictWidth (sal_Int32 nWidth)
 {
     SfxSplitWindow* pSplitWindow = GetSplitWindow();
@@ -1118,9 +1057,6 @@ void SidebarController::RestrictWidth (sal_Int32 nWidth)
                   gnMaximumSidebarWidth * mpTabBar->GetDPIScaleFactor()));
     }
 }
-
-
-
 
 SfxSplitWindow* SidebarController::GetSplitWindow (void)
 {
@@ -1142,9 +1078,6 @@ SfxSplitWindow* SidebarController::GetSplitWindow (void)
     else
         return NULL;
 }
-
-
-
 
 void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
 {
@@ -1180,9 +1113,6 @@ void SidebarController::UpdateCloseIndicator (const bool bCloseAfterDrag)
             mpCloseIndicator->Hide();
     }
 }
-
-
-
 
 void SidebarController::UpdateTitleBarIcons (void)
 {
@@ -1225,19 +1155,11 @@ void SidebarController::UpdateTitleBarIcons (void)
     }
 }
 
-
-
-
 void SidebarController::ShowPanel (const Panel& rPanel)
 {
     if (mpCurrentDeck)
         mpCurrentDeck->ShowPanel(rPanel);
 }
-
-
-
-
-
 
 } } // end of namespace sfx2::sidebar
 

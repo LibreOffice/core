@@ -387,7 +387,6 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     OUString aWinData( aTmp );
     rInfo.aWinState = OUStringToOString(xWinOpt->GetWindowState(), RTL_TEXTENCODING_UTF8);
 
-
     if ( !aWinData.isEmpty() )
     {
         // Search for version ID
