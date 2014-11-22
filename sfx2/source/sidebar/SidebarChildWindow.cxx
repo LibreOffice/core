@@ -37,22 +37,22 @@ SidebarChildWindow::SidebarChildWindow (
     SfxChildWinInfo* pInfo)
     : SfxChildWindow(pParentWindow, nId)
 {
-    this->pWindow = new SidebarDockingWindow(
+    pWindow = new SidebarDockingWindow(
         pBindings,
         *this,
         pParentWindow,
         WB_STDDOCKWIN | WB_OWNERDRAWDECORATION | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK | WB_ROLLABLE);
     eChildAlignment = SFX_ALIGN_RIGHT;
 
-    this->pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
-    this->pWindow->SetOutputSizePixel(Size(GetDefaultWidth(this->pWindow), 450));
+    pWindow->SetHelpId(HID_SIDEBAR_WINDOW);
+    pWindow->SetOutputSizePixel(Size(GetDefaultWidth(pWindow), 450));
 
-    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(this->pWindow);
+    SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow);
     if (pDockingParent != NULL)
         pDockingParent->Initialize(pInfo);
     SetHideNotDelete(true);
 
-    this->pWindow->Show();
+    pWindow->Show();
 }
 
 sal_Int32 SidebarChildWindow::GetDefaultWidth (vcl::Window* pWindow)
