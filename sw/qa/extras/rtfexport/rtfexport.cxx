@@ -836,6 +836,13 @@ DECLARE_RTFEXPORT_TEST(testTableRtl, "table-rtl.rtf")
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, getProperty<sal_Int16>(xTable, "WritingMode"));
 }
 
+DECLARE_RTFEXPORT_TEST(testNumOverrideStart, "num-override-start.rtf")
+{
+    // The numbering on the second level was "3.1", not "1.3".
+    uno::Reference<container::XIndexAccess> xRules = getProperty< uno::Reference<container::XIndexAccess> >(getStyles("NumberingStyles")->getByName("WWNum1"), "NumberingRules");
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), comphelper::SequenceAsHashMap(xRules->getByIndex(0))["StartWith"].get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(3), comphelper::SequenceAsHashMap(xRules->getByIndex(1))["StartWith"].get<sal_Int16>());
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
