@@ -194,7 +194,7 @@ static SalInstance* autodetect_plugin()
         pList = pKDEFallbackList;
         nListEntry = 1;
     }
-    else if( desktop == DESKTOP_KDE4 )
+    else if( desktop == DESKTOP_KDE4 || desktop == DESKTOP_KDE5 )
         pList = pKDEFallbackList;
 
     SalInstance* pInst = NULL;
@@ -288,7 +288,7 @@ const OUString& SalGetDesktopEnvironment()
     static const char * const desktop_strings[] = {
         "none", "unknown", "GNOME", "UNITY",
         "XFCE", "MATE", "TDE",
-        "KDE", "KDE4" };
+        "KDE", "KDE4", "KDE5" };
     static OUString aRet;
     if( aRet.isEmpty())
     {
