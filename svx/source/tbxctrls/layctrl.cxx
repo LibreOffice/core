@@ -143,8 +143,8 @@ TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUStri
 
     SetText( rText );
 
-    aTableButton.SetPosSizePixel( Point( mnTablePosX + mnTableCellWidth, mnTableHeight + 5 ),
-            Size( mnTableWidth - mnTablePosX - 2*mnTableCellWidth, 24 ) );
+    aTableButton.SetPosSizePixel( Point( mnTablePosX, mnTableHeight + 5 ),
+            Size( mnTableWidth - mnTablePosX, 24 ) );
     aTableButton.SetText( SVX_RESSTR( RID_SVXSTR_MORE ) );
     aTableButton.SetClickHdl( LINK( this, TableWindow, SelectHdl ) );
     aTableButton.Show();
