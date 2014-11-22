@@ -5902,7 +5902,7 @@ int RTFDocumentImpl::popState()
             aState.aTableAttributes.set(NS_ooxml::LN_CT_NumLvl_ilvl, pInnerValue);
 
             RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
-            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_lvlOverride, pValue);
+            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_lvlOverride, pValue, OVERWRITE_NO_APPEND);
         }
         break;
     // list override table
