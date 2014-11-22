@@ -140,8 +140,8 @@ public:
     const SvNumberNatNum& GetNatNum() const { return aNatNum; }
 
 private:
-    ImpSvNumberformatInfo aI;           // Hilfsstruct fuer die restlichen Infos
-    OUString sColorName;                  // color name
+    ImpSvNumberformatInfo aI;           // helper struct for remaining information
+    OUString sColorName;                // color name
     Color* pColor;                      // pointer to color of subformat
     sal_uInt16 nAnzStrings;             // count of symbols
     SvNumberNatNum aNatNum;             // DoubleByteNumber
@@ -582,8 +582,6 @@ private:
                                  sal_uInt16 j,
                                  sal_uInt16 nIx,
                                  sal_Int32 nDigCnt );
-                                    // Hilfsfunktion zum Auffuellen der Vor-
-                                    // kommazahl auch mit Tausenderpunkt
 
     // Helper function to fill in the group (AKA thousand) separators
     // or to skip additional digits

@@ -23,18 +23,14 @@
 #include <rtl/ustring.hxx>
 
 
-
+/**
+ * This class represents a bookmark that consists of a URL and
+ * a corresponding description text.
+ *
+ * There is an own clipboard format and helper methods to copy
+ * to and from clipboard and DragServer.
+ */
 class INetBookmark
-
-/*  [Beschreibung]
-
-    Diese Klasse stellt ein Bookmark dar, welches aus einer URL und
-    einem dazuge"horigen Beschreibungstext besteht.
-
-    Es gibt ein eigenes Clipboardformat und Hilfsmethoden zum Kopieren
-    und Einf"ugen in und aus Clipboard und DragServer.
-*/
-
 {
     OUString          aUrl;
     OUString          aDescr;

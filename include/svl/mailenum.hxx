@@ -66,16 +66,16 @@ enum MailReceiverRole
 
 enum MailAction
 {
-    MAIL_ACTION_DYING,      // Server stirbt
-    MAIL_ACTION_SEND,       // Mail wurde versendet
-    MAIL_ACTION_READ,       // Mail wurde als gelesen gekennzeichnet
-    MAIL_ACTION_REMOVED,    // Mail wurde gel"oscht
-    MAIL_ACTION_UPDATED,    // alle Mails wurden neu eingelesen
-    MAIL_ACTION_NEXT,       // Sprung zur n"achsten Mail
-    MAIL_ACTION_PREV        // Sprung zur vorherigen Mail
+    MAIL_ACTION_DYING,      // server dies
+    MAIL_ACTION_SEND,       // mail was sent
+    MAIL_ACTION_READ,       // mail was marked as read
+    MAIL_ACTION_REMOVED,    // mail was deleted
+    MAIL_ACTION_UPDATED,    // all mails were updated
+    MAIL_ACTION_NEXT,       // jump to next mail
+    MAIL_ACTION_PREV        // jump to previous mail
 };
 
-// Textformat zum Versenden von Nachrichten ------------------------------
+// text format for the sending of messages ------------------------------
 
 #define TXTFORMAT_ASCII     ((sal_uInt8)0x01)
 #define TXTFORMAT_HTML      ((sal_uInt8)0x02)

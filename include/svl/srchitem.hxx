@@ -55,23 +55,23 @@ class SVL_DLLPUBLIC SvxSearchItem :
 {
     com::sun::star::util::SearchOptions aSearchOpt;
 
-    SfxStyleFamily  eFamily;            // Vorlagen-Familie
+    SfxStyleFamily  eFamily;            // style family
 
-    sal_uInt16      nCommand;           // Kommando (Suchen, Alle Suchen, Ersetzen, Alle Ersetzen)
+    sal_uInt16      nCommand;           // command (Search, Search all, Replace, Replace all)
 
-    // Calc-Spezifische Daten
-    sal_uInt16      nCellType;          // Suche in Formeln/Werten/Notizen
-    sal_uInt16      nAppFlag;           // Fuer welche Applikation ist der Dialog ueberhaupt
-    bool            bRowDirection;      // Suchrichtung Zeilenweise/Spaltenweise
-    bool            bAllTables;         // in alle Tabellen suchen
+    // Calc-specific
+    sal_uInt16      nCellType;          // Search in Formulas/Values/Notes
+    sal_uInt16      nAppFlag;           // application which the dialog is for
+    bool            bRowDirection;      // search direction: row-wise/column-wise
+    bool            bAllTables;         // search in all sheets
     bool            bSearchFiltered;      // search filtered cells.
 
-    // Writer-spezifisch
+    // Writer-specific
     bool            bNotes;
 
-    bool            bBackward;          // Suche Rueckwaerts
-    bool            bPattern;           // Suche nach Vorlagen
-    bool            bContent;           // Suche im Inhalt
+    bool            bBackward;          // search backwards
+    bool            bPattern;           // search for styles
+    bool            bContent;           // search in content
     bool            bAsianOptions;      // use asian options?
 
 public:
