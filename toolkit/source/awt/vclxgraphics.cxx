@@ -66,10 +66,10 @@ VCLXGraphics::VCLXGraphics()
 
 VCLXGraphics::~VCLXGraphics()
 {
-    VCLXGraphicsList_impl* pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : NULL;
+    std::vector< VCLXGraphics* > *pLst = mpOutputDevice ? mpOutputDevice->GetUnoGraphicsList() : NULL;
     if ( pLst )
     {
-        for( VCLXGraphicsList_impl::iterator it = pLst->begin(); it != pLst->end(); ++it )
+        for( std::vector< VCLXGraphics* >::iterator it = pLst->begin(); it != pLst->end(); ++it )
         {
             if( *it == this ) {
                 pLst->erase( it );
@@ -97,7 +97,7 @@ void VCLXGraphics::Init( OutputDevice* pOutDev )
     mpClipRegion    = NULL;
 
     // Register at OutputDevice
-    VCLXGraphicsList_impl* pLst = mpOutputDevice->GetUnoGraphicsList();
+    std::vector< VCLXGraphics* > *pLst = mpOutputDevice->GetUnoGraphicsList();
     if ( !pLst )
         pLst = mpOutputDevice->CreateUnoGraphicsList();
     pLst->push_back( this );

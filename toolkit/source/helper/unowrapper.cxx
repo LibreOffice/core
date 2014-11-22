@@ -194,7 +194,7 @@ void UnoWrapper::SetWindowInterface( vcl::Window* pWindow, ::com::sun::star::uno
 
 void UnoWrapper::ReleaseAllGraphics( OutputDevice* pOutDev )
 {
-    VCLXGraphicsList_impl* pLst = pOutDev->GetUnoGraphicsList();
+    std::vector< VCLXGraphics* > *pLst = pOutDev->GetUnoGraphicsList();
     if ( pLst )
     {
         for ( size_t n = 0; n < pLst->size(); n++ )

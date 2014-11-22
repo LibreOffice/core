@@ -379,9 +379,9 @@ css::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()
     return pWrapper ? pWrapper->CreateGraphics( this ) : css::uno::Reference< css::awt::XGraphics >();
 }
 
-VCLXGraphicsList_impl*  OutputDevice::CreateUnoGraphicsList()
+std::vector< VCLXGraphics* > *OutputDevice::CreateUnoGraphicsList()
 {
-    mpUnoGraphicsList = new VCLXGraphicsList_impl();
+    mpUnoGraphicsList = new std::vector< VCLXGraphics* >();
     return mpUnoGraphicsList;
 }
 

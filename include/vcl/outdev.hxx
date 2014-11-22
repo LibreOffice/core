@@ -242,8 +242,6 @@ namespace vcl {
     class FontInfo;
 }
 
-typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
-
 sal_uLong AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
 
@@ -275,7 +273,7 @@ private:
     mutable ImplGetDevSizeList*     mpGetDevSizeList;
     boost::ptr_deque<OutDevState>*  mpOutDevStateStack;
     ImplOutDevData*                 mpOutDevData;
-    VCLXGraphicsList_impl*          mpUnoGraphicsList;
+    std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::PDFWriterImpl*             mpPDFWriter;
     vcl::ExtOutDevData*             mpExtOutDevData;
 
@@ -406,8 +404,8 @@ public:
 
     css::uno::Reference< css::awt::XGraphics >
                                 CreateUnoGraphics();
-    VCLXGraphicsList_impl*      GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
-    VCLXGraphicsList_impl*      CreateUnoGraphicsList();
+    std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
+    std::vector< VCLXGraphics* > *CreateUnoGraphicsList();
 
 protected:
 
