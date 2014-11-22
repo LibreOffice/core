@@ -2691,34 +2691,55 @@ bool CompareSvxAutocorrWordList::operator()( SvxAutocorrWord* const& lhs, SvxAut
     return rCmp.compareString( lhs->GetShort(), rhs->GetShort() ) < 0;
 }
 
-SvxAutocorrWordList::SvxAutocorrWordList() {}
+namespace {
+
+typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> AutocorrWordSetType;
+typedef boost::unordered_map<OUString, SvxAutocorrWord*, OUStringHash> AutocorrWordHashType;
+
+}
+
+struct SvxAutocorrWordList::Impl
+{
+
+    // only one of these contains the data
+    mutable AutocorrWordSetType maSet;
+    mutable AutocorrWordHashType maHash; // key is 'Short'
+
+    void DeleteAndDestroyAll()
+    {
+        for (AutocorrWordHashType::const_iterator it = maHash.begin(); it != maHash.end(); ++it)
+            delete it->second;
+        maHash.clear();
+
+        for (AutocorrWordSetType::const_iterator it2 = maSet.begin(); it2 != maSet.end(); ++it2)
+            delete *it2;
+        maSet.clear();
+    }
+};
+
+SvxAutocorrWordList::SvxAutocorrWordList() : mpImpl(new Impl) {}
 
 SvxAutocorrWordList::~SvxAutocorrWordList()
 {
-    DeleteAndDestroyAll();
+    mpImpl->DeleteAndDestroyAll();
+    delete mpImpl;
 }
 
 void SvxAutocorrWordList::DeleteAndDestroyAll()
 {
-    for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
-        delete it->second;
-    maHash.clear();
-
-    for( SvxAutocorrWordList_Set::const_iterator it2 = maSet.begin(); it2 != maSet.end(); ++it2 )
-        delete *it2;
-    maSet.clear();
+    mpImpl->DeleteAndDestroyAll();
 }
 
 // returns true if inserted
 bool SvxAutocorrWordList::Insert(SvxAutocorrWord *pWord) const
 {
-    if ( maSet.empty() ) // use the hash
+    if ( mpImpl->maSet.empty() ) // use the hash
     {
         OUString aShort( pWord->GetShort() );
-        return maHash.insert( std::pair<OUString, SvxAutocorrWord *>( aShort, pWord ) ).second;
+        return mpImpl->maHash.insert( std::pair<OUString, SvxAutocorrWord *>( aShort, pWord ) ).second;
     }
     else
-        return maSet.insert( pWord ).second;
+        return mpImpl->maSet.insert( pWord ).second;
 }
 
 void SvxAutocorrWordList::LoadEntry(const OUString& sWrong, const OUString& sRight, bool bOnlyTxt)
@@ -2730,29 +2751,29 @@ void SvxAutocorrWordList::LoadEntry(const OUString& sWrong, const OUString& sRig
 
 bool SvxAutocorrWordList::empty() const
 {
-    return maHash.empty() && maSet.empty();
+    return mpImpl->maHash.empty() && mpImpl->maSet.empty();
 }
 
 SvxAutocorrWord *SvxAutocorrWordList::FindAndRemove(SvxAutocorrWord *pWord)
 {
     SvxAutocorrWord *pMatch = NULL;
 
-    if ( maSet.empty() ) // use the hash
+    if ( mpImpl->maSet.empty() ) // use the hash
     {
-        SvxAutocorrWordList_Hash::iterator it = maHash.find( pWord->GetShort() );
-        if( it != maHash.end() )
+        AutocorrWordHashType::iterator it = mpImpl->maHash.find( pWord->GetShort() );
+        if( it != mpImpl->maHash.end() )
         {
             pMatch = it->second;
-            maHash.erase (it);
+            mpImpl->maHash.erase (it);
         }
     }
     else
     {
-        SvxAutocorrWordList_Set::iterator it = maSet.find( pWord );
-        if( it != maSet.end() )
+        AutocorrWordSetType::iterator it = mpImpl->maSet.find( pWord );
+        if( it != mpImpl->maSet.end() )
         {
             pMatch = *it;
-            maSet.erase (it);
+            mpImpl->maSet.erase (it);
         }
     }
     return pMatch;
@@ -2764,14 +2785,14 @@ SvxAutocorrWordList::Content SvxAutocorrWordList::getSortedContent() const
     Content aContent;
 
     // convert from hash to set permanantly
-    if ( maSet.empty() )
+    if ( mpImpl->maSet.empty() )
     {
         // This beasty has some O(N log(N)) in a terribly slow ICU collate fn.
-        for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
-            maSet.insert( it->second );
-        maHash.clear();
+        for (AutocorrWordHashType::const_iterator it = mpImpl->maHash.begin(); it != mpImpl->maHash.end(); ++it)
+            mpImpl->maSet.insert( it->second );
+        mpImpl->maHash.clear();
     }
-    for( SvxAutocorrWordList_Set::const_iterator it = maSet.begin(); it != maSet.end(); ++it )
+    for (AutocorrWordSetType::const_iterator it = mpImpl->maSet.begin(); it != mpImpl->maSet.end(); ++it)
         aContent.push_back( *it );
 
     return aContent;
@@ -2888,13 +2909,13 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
 const SvxAutocorrWord* SvxAutocorrWordList::SearchWordsInList(const OUString& rTxt, sal_Int32& rStt,
                                                               sal_Int32 nEndPos) const
 {
-    for( SvxAutocorrWordList_Hash::const_iterator it = maHash.begin(); it != maHash.end(); ++it )
+    for (AutocorrWordHashType::const_iterator it = mpImpl->maHash.begin(); it != mpImpl->maHash.end(); ++it)
     {
         if( const SvxAutocorrWord *aTmp = WordMatches( it->second, rTxt, rStt, nEndPos ) )
             return aTmp;
     }
 
-    for( SvxAutocorrWordList_Set::const_iterator it2 = maSet.begin(); it2 != maSet.end(); ++it2 )
+    for (AutocorrWordSetType::const_iterator it2 = mpImpl->maSet.begin(); it2 != mpImpl->maSet.end(); ++it2)
     {
         if( const SvxAutocorrWord *aTmp = WordMatches( *it2, rTxt, rStt, nEndPos ) )
             return aTmp;

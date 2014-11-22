@@ -32,8 +32,6 @@
 #include <editeng/editengdllapi.h>
 
 #include <map>
-#include <set>
-#include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 
 class CharClass;
@@ -137,18 +135,13 @@ struct CompareSvxAutocorrWordList
   bool operator()( SvxAutocorrWord* const& lhs, SvxAutocorrWord* const& rhs ) const;
 };
 
-typedef std::set<SvxAutocorrWord*, CompareSvxAutocorrWordList> SvxAutocorrWordList_Set;
-typedef ::boost::unordered_map< OUString, SvxAutocorrWord *,
-                                OUStringHash >          SvxAutocorrWordList_Hash;
-
 class EDITENG_DLLPUBLIC SvxAutocorrWordList
 {
+    struct Impl;
+    Impl* mpImpl;
+
     SvxAutocorrWordList( const SvxAutocorrWordList& ); // disabled
     const SvxAutocorrWordList& operator= ( const SvxAutocorrWordList& ); // disabled
-
-    // only one of these contains the data
-    mutable SvxAutocorrWordList_Set  maSet;
-    mutable SvxAutocorrWordList_Hash maHash; // key is 'Short'
 
     const SvxAutocorrWord* WordMatches(const SvxAutocorrWord *pFnd,
                                        const OUString &rTxt,
