@@ -354,7 +354,6 @@ bool SwCursor::IsSelOvr( int eFlags )
             {
                 // set this CntntNode as new position
                 rPtIdx = *pCNd;
-                pNd = pCNd;
 
                 // assign corresponding ContentIndex
                 const sal_Int32 nTmpPos = bGoNxt ? 0 : pCNd->Len();
