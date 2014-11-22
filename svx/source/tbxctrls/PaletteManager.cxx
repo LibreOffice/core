@@ -23,13 +23,10 @@
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 #include <svtools/colrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-
-#define STR_DEFAULT_PAL         "Default palette"
-#define STR_DOC_COLORS          "Document colors"
-#define STR_DOC_COLOR_PREFIX    "Document Color "
 
 PaletteManager::PaletteManager() :
     mnMaxRecentColors(Application::GetSettings().GetStyleSettings().GetColorValueSetColumnCount()),
@@ -110,7 +107,7 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
         std::vector<Color> aColors = pDocSh->GetDocColors();
         mnColorCount = aColors.size();
         rColorSet.Clear();
-        rColorSet.addEntriesForColorVector(aColors, STR_DOC_COLOR_PREFIX );
+        rColorSet.addEntriesForColorVector(aColors, SVX_RESSTR( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
     }
     else
     {
@@ -135,7 +132,7 @@ std::vector<OUString> PaletteManager::GetPaletteList()
 {
     std::vector<OUString> aPaletteNames;
 
-    aPaletteNames.push_back( STR_DEFAULT_PAL );
+    aPaletteNames.push_back( SVX_RESSTR( RID_SVXSTR_DEFAULT_PAL ) );
 
     for( boost::ptr_vector<Palette>::iterator it = maPalettes.begin();
          it != maPalettes.end();
@@ -144,7 +141,7 @@ std::vector<OUString> PaletteManager::GetPaletteList()
         aPaletteNames.push_back( (*it).GetName() );
     }
 
-    aPaletteNames.push_back( STR_DOC_COLORS );
+    aPaletteNames.push_back( SVX_RESSTR ( RID_SVXSTR_DOC_COLORS ) );
 
     return aPaletteNames;
 }
