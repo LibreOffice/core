@@ -15,6 +15,8 @@
 #include "openglgdiimpl.hxx"
 #include "win/salgdi.h"
 
+class OpenGLContext;
+
 class WinOpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl
 {
     friend class WinLayout;
@@ -24,9 +26,16 @@ private:
 public:
     WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics);
 
+    virtual void Init() SAL_OVERRIDE;
+
 protected:
     virtual GLfloat GetWidth() const SAL_OVERRIDE;
     virtual GLfloat GetHeight() const SAL_OVERRIDE;
+    virtual bool    IsOffscreen() const SAL_OVERRIDE;
+
+    virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
+    virtual bool CompareWinContext( OpenGLContext* pContext ) SAL_OVERRIDE;
+    virtual OpenGLContext* CreatePixmapContext() SAL_OVERRIDE;
 
 public:
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;

@@ -35,9 +35,9 @@ class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
 protected:
 
-    OpenGLContext maContext;
     SalFrame* mpFrame;
     int mnPainting;
+    OpenGLContext* mpContext;
 
     // clipping
     bool mbUseScissor;
@@ -144,21 +144,35 @@ public:
     // get the height of the device
     virtual GLfloat GetHeight() const = 0;
 
+    // check whether this instance is used for offscreen rendering
+    virtual bool IsOffscreen() const = 0;
+
     // operations to do before painting
     virtual void PreDraw();
 
     // operations to do after painting
     virtual void PostDraw();
 
-    // enable/disable offscreen rendering
-    virtual void SetOffscreen( bool bOffscreen );
+protected:
+    bool AcquireContext( bool bOffscreen );
+    bool ReleaseContext();
 
+    // create a new context for window rendering
+    virtual OpenGLContext* CreateWinContext() = 0;
+
+    // check whether the given context can be used by this instance
+    virtual bool CompareWinContext( OpenGLContext* pContext ) = 0;
+
+    // create a new context for window rendering
+    virtual OpenGLContext* CreatePixmapContext() = 0;
 
 public:
     OpenGLSalGraphicsImpl();
     virtual ~OpenGLSalGraphicsImpl ();
 
-    OpenGLContext& GetOpenGLContext() { return maContext; }
+    OpenGLContext& GetOpenGLContext() { return *mpContext; }
+
+    virtual void Init() SAL_OVERRIDE;
 
     virtual void freeResources() SAL_OVERRIDE;
 

@@ -59,29 +59,51 @@ GLfloat X11OpenGLSalGraphicsImpl::GetHeight() const
     return 1;
 }
 
-void X11OpenGLSalGraphicsImpl::Init()
+bool X11OpenGLSalGraphicsImpl::IsOffscreen() const
 {
     X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
-
-    // Called after eg. a vdev re-size where we need to update the underlying pixmap
-    maContext.resetToReInitialize();
-    if (pProvider)
-    {
-        Window aWin = pProvider->GetX11Window();
-        maContext.init( mrParent.GetXDisplay(), aWin, mrParent.m_nXScreen.getXScreen());
-        SetOffscreen( false );
-    }
+    if( pProvider )
+        return false;
     else if( mrParent.m_pVDev )
-    {
-        maContext.init( mrParent.GetXDisplay(), mrParent.m_pVDev->GetDrawable(),
-                        mrParent.m_pVDev->GetWidth(), mrParent.m_pVDev->GetHeight(),
-                        mrParent.m_nXScreen.getXScreen() );
-        SetOffscreen( true );
-    }
+        return true;
     else
     {
         SAL_WARN( "vcl.opengl", "what happened here?" );
+        return true;
     }
+}
+
+OpenGLContext* X11OpenGLSalGraphicsImpl::CreateWinContext()
+{
+    X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
+
+    if( !pProvider )
+        return NULL;
+    Window aWin = pProvider->GetX11Window();
+    OpenGLContext* pContext = new OpenGLContext();
+    pContext->init( mrParent.GetXDisplay(), aWin,
+                    mrParent.m_nXScreen.getXScreen() );
+    return pContext;
+}
+
+bool X11OpenGLSalGraphicsImpl::CompareWinContext( OpenGLContext* pContext )
+{
+    X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
+
+    if( !pProvider || !pContext->isInitialized() )
+        return false;
+    return ( pContext->getOpenGLWindow().win == pProvider->GetX11Window() );
+}
+
+OpenGLContext* X11OpenGLSalGraphicsImpl::CreatePixmapContext()
+{
+    if( mrParent.m_pVDev == NULL )
+        return NULL;
+    OpenGLContext* pContext = new OpenGLContext();
+    pContext->init( mrParent.GetXDisplay(), mrParent.m_pVDev->GetDrawable(),
+                    mrParent.m_pVDev->GetWidth(), mrParent.m_pVDev->GetHeight(),
+                    mrParent.m_nXScreen.getXScreen() );
+    return pContext;
 }
 
 void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
@@ -104,7 +126,7 @@ bool X11OpenGLSalGraphicsImpl::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX,
         return false;
 
     // make sure everything is synced up before reading back
-    maContext.makeCurrent();
+    mpContext->makeCurrent();
     glXWaitX();
 
     // TODO: lfrb: What if offscreen?
