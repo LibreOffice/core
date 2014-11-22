@@ -95,6 +95,7 @@
 #include <sfx2/msg.hxx>
 #include "appbaslib.hxx"
 #include <sfx2/sfxbasemodel.hxx>
+#include <shellimpl.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 

@@ -89,6 +89,7 @@
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
 #include <framework/framelistanalyzer.hxx>
+#include <shellimpl.hxx>
 
 #include <boost/optional.hpp>
 

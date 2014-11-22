@@ -80,6 +80,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>
 #include "openuriexternally.hxx"
+#include <shellimpl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

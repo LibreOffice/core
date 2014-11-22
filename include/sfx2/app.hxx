@@ -36,7 +36,6 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/shell.hxx>
-#include <vector>
 
 class Timer;
 class WorkWindow;
@@ -61,15 +60,15 @@ class SfxMedium;
 class SfxMenuCtrlFactArr_Impl;
 class SfxNewFileDialog;
 class SfxObjectShell;
-typedef ::std::vector<SfxObjectShell*> SfxObjectShellArr_Impl;
+class SfxObjectShellArr_Impl;
 class SfxProgress;
 class SfxSlotPool;
 class SfxStbCtrlFactArr_Impl;
 class SfxTbxCtrlFactArr_Impl;
 class SfxViewFrame;
-typedef ::std::vector<SfxViewFrame*> SfxViewFrameArr_Impl;
+class SfxViewFrameArr_Impl;
 class SfxViewShell;
-typedef ::std::vector<SfxViewShell*> SfxViewShellArr_Impl;
+class SfxViewShellArr_Impl;
 class StarBASIC;
 class SfxWorkWindow;
 class SfxFilterMatcher;
