@@ -49,34 +49,12 @@
 
 namespace {
 
-static OUString createPath(
-    OUString const & name, sal_Int32 pos, OUString const & locale)
+static OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
 {
     return name.copy(0, pos + 1) + locale + name.copy(pos);
 }
 
-static boost::shared_ptr< SvStream > wrapFile(osl::File & file)
-{
-    // This could use SvInputStream instead if that did not have a broken
-    // SeekPos implementation for an XInputStream that is not also XSeekable
-    // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
-    // l. 593):
-    boost::shared_ptr< SvStream > s(new SvMemoryStream);
-    for (;;) {
-        void *data[2048];
-        sal_uInt64 n;
-        file.read(data, 2048, n);
-        s->Write(data, n);
-        if (n < 2048) {
-            break;
-        }
-    }
-    s->Seek(0);
-    return s;
-}
-
-static boost::shared_ptr< SvStream > wrapStream(
-    css::uno::Reference< css::io::XInputStream > const & stream)
+static boost::shared_ptr< SvStream > wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
 {
     // This could use SvInputStream instead if that did not have a broken
     // SeekPos implementation for an XInputStream that is not also XSeekable
@@ -84,29 +62,29 @@ static boost::shared_ptr< SvStream > wrapStream(
     // l. 593):
     OSL_ASSERT(stream.is());
     boost::shared_ptr< SvStream > s(new SvMemoryStream);
-    for (;;) {
+    for (;;)
+    {
         sal_Int32 const size = 2048;
         css::uno::Sequence< sal_Int8 > data(size);
         sal_Int32 n = stream->readBytes(data, size);
         s->Write(data.getConstArray(), n);
-        if (n < size) {
+        if (n < size)
             break;
-        }
     }
     s->Seek(0);
     return s;
 }
 
-static void loadImageFromStream(
-    boost::shared_ptr< SvStream > pStream,
-    OUString const & rPath, BitmapEx & rBitmap)
+static void loadImageFromStream(boost::shared_ptr< SvStream > pStream, OUString const & rPath, BitmapEx & rBitmap)
 {
     if (rPath.endsWith(".png"))
     {
         vcl::PNGReader aPNGReader( *pStream );
         aPNGReader.SetIgnoreGammaChunk( true );
         rBitmap = aPNGReader.Read();
-    } else {
+    }
+    else
+    {
         ReadDIBBitmapEx(rBitmap, *pStream);
     }
 }
@@ -121,9 +99,8 @@ ImplImageTree::~ImplImageTree()
 {
 }
 
-bool ImplImageTree::loadImage(
-    OUString const & name, OUString const & style, BitmapEx & bitmap,
-    bool localized, bool loadMissing )
+bool ImplImageTree::loadImage(OUString const & name, OUString const & style, BitmapEx & bitmap,
+    bool localized, bool loadMissing)
 {
     bool found = false;
     try {
@@ -141,17 +118,14 @@ bool ImplImageTree::loadImage(
     return loadDefaultImage(style, bitmap);
 }
 
-bool ImplImageTree::loadDefaultImage(
-    OUString const & style,
-    BitmapEx& bitmap)
+bool ImplImageTree::loadDefaultImage(OUString const & style, BitmapEx& bitmap)
 {
     return doLoadImage(
         OUString("res/grafikde.png"),
         style, bitmap, false);
 }
 
-bool ImplImageTree::doLoadImage(
-    OUString const & name, OUString const & style, BitmapEx & bitmap,
+bool ImplImageTree::doLoadImage(OUString const & name, OUString const & style, BitmapEx & bitmap,
     bool localized)
 {
     setStyle(style);
@@ -164,11 +138,12 @@ bool ImplImageTree::doLoadImage(
     std::vector< OUString > paths;
     paths.push_back(getRealImageName(name));
 
-    if (localized) {
+    if (localized)
+    {
         sal_Int32 pos = name.lastIndexOf('/');
         if (pos != -1)
         {
-            // find() uses a reverse iterator, so push in reverse order.
+            // findImage() uses a reverse iterator, so push in reverse order.
             std::vector< OUString > aFallbacks( Application::GetSettings().GetUILanguageTag().getFallbackStrings(true));
             for (std::vector< OUString >::reverse_iterator it( aFallbacks.rbegin());
                     it != aFallbacks.rend(); ++it)
@@ -177,9 +152,10 @@ bool ImplImageTree::doLoadImage(
             }
         }
     }
+
     bool found = false;
     try {
-        found = find(paths, bitmap);
+        found = findImage(paths, bitmap);
     } catch (css::uno::RuntimeException &) {
         throw;
     } catch (const css::uno::Exception & e) {
@@ -192,16 +168,19 @@ bool ImplImageTree::doLoadImage(
     return found;
 }
 
-void ImplImageTree::shutDown() {
+void ImplImageTree::shutDown()
+{
     m_style.clear();
         // for safety; empty m_style means "not initialized"
     m_iconCache.clear();
     m_linkHash.clear();
 }
 
-void ImplImageTree::setStyle(OUString const & style) {
+void ImplImageTree::setStyle(OUString const & style)
+{
     OSL_ASSERT(!style.isEmpty()); // empty m_style means "not initialized"
-    if (style != m_style) {
+    if (style != m_style)
+    {
         m_style = style;
         resetPaths();
         m_iconCache.clear();
@@ -210,7 +189,8 @@ void ImplImageTree::setStyle(OUString const & style) {
     }
 }
 
-void ImplImageTree::resetPaths() {
+void ImplImageTree::resetPaths()
+{
     OUString url( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/" );
     rtl::Bootstrap::expandMacros(url);
     if ( m_style != "default" )
@@ -227,19 +207,18 @@ void ImplImageTree::resetPaths() {
         url, css::uno::Reference< css::container::XNameAccess >());
 }
 
-bool ImplImageTree::iconCacheLookup(
-    OUString const & name, bool localized, BitmapEx & bitmap)
+bool ImplImageTree::iconCacheLookup(OUString const & name, bool localized, BitmapEx & bitmap)
 {
     IconCache::iterator i(m_iconCache.find(getRealImageName(name)));
-    if (i != m_iconCache.end() && i->second.first == localized) {
+    if (i != m_iconCache.end() && i->second.first == localized)
+    {
         bitmap = i->second.second;
         return true;
     }
     return false;
 }
 
-bool ImplImageTree::find(
-    std::vector< OUString > const & paths, BitmapEx & bitmap)
+bool ImplImageTree::findImage(std::vector<OUString> const & paths, BitmapEx & bitmap)
 {
     if (!checkPathAccess())
         return false;
@@ -247,7 +226,8 @@ bool ImplImageTree::find(
     for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
          j != paths.rend(); ++j)
     {
-        if (m_path.second->hasByName(*j)) {
+        if (m_path.second->hasByName(*j))
+        {
             css::uno::Reference< css::io::XInputStream > s;
             bool ok = m_path.second->getByName(*j) >>= s;
             OSL_ASSERT(ok); (void) ok;
@@ -328,14 +308,14 @@ bool ImplImageTree::checkPathAccess()
     return m_path.second.is();
 }
 
-css::uno::Reference< css::container::XNameAccess > ImplImageTree::getNameAccess()
+css::uno::Reference<css::container::XNameAccess> ImplImageTree::getNameAccess()
 {
     checkPathAccess();
     return m_path.second;
 }
 
 /// Recursively dump all names ...
-css::uno::Sequence< OUString > ImageTree_getAllImageNames()
+css::uno::Sequence<OUString> ImageTree_getAllImageNames()
 {
     static ImplImageTreeSingletonRef aImageTree;
 

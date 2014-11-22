@@ -80,7 +80,7 @@ private:
 
     bool iconCacheLookup( OUString const & name, bool localized, BitmapEx & bitmap );
 
-    bool find(std::vector< OUString > const & paths, BitmapEx & bitmap );
+    bool findImage(std::vector< OUString > const & paths, BitmapEx & bitmap );
 
     void loadImageLinks();
     void parseLinkFile(boost::shared_ptr< SvStream > stream);
