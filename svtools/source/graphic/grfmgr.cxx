@@ -454,7 +454,7 @@ void GraphicObject::SetSwapStreamHdl(const Link& rHdl)
 {
     delete mpSwapStreamHdl, mpSwapStreamHdl = new Link( rHdl );
 
-    sal_uInt32 const nSwapOutTimeout(GetCacheTimeInMs());
+/*    sal_uInt32 const nSwapOutTimeout(GetCacheTimeInMs());
     if( nSwapOutTimeout )
     {
         if( !mpSwapOutTimer )
@@ -467,7 +467,7 @@ void GraphicObject::SetSwapStreamHdl(const Link& rHdl)
         mpSwapOutTimer->Start();
     }
     else
-        delete mpSwapOutTimer, mpSwapOutTimer = NULL;
+        delete mpSwapOutTimer, mpSwapOutTimer = NULL;*/
 }
 
 void GraphicObject::FireSwapInRequest()
