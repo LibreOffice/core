@@ -228,7 +228,7 @@ void OpenGLSalGraphicsImpl::PostDraw()
 {
     if( mbOffscreen )
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    else if( mnPainting == 0 )
+    else if( mpContext->mnPainting == 0 )
         glFlush();
     if( mbUseScissor )
         glDisable( GL_SCISSOR_TEST );
@@ -1867,15 +1867,16 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
 void OpenGLSalGraphicsImpl::beginPaint()
 {
-    mnPainting++;
     SAL_INFO( "vcl.opengl", "BEGIN PAINT " << this );
+    mpContext->mnPainting++;
 }
 
 void OpenGLSalGraphicsImpl::endPaint()
 {
-    mnPainting--;
     SAL_INFO( "vcl.opengl", "END PAINT " << this );
-    if( mnPainting == 0 )
+    mpContext->mnPainting--;
+    assert( mpContext->mnPainting >= 0 );
+    if( mpContext->mnPainting == 0 && !mbOffscreen )
     {
         mpContext->makeCurrent();
         glFlush();

@@ -53,6 +53,7 @@ OpenGLContext::OpenGLContext():
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
     mbRequestVirtualDevice(false),
+    mnPainting(0),
     mpPrevContext(NULL),
     mpNextContext(NULL)
 {
