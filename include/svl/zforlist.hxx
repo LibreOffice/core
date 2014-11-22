@@ -250,7 +250,12 @@ public:
                         NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr,
                                          const LocaleDataWrapper& rLocaleData,
                                          LanguageType eLang );
+                        NfCurrencyEntry( const OUString& rSymbol, const OUString& rBankSymbol, LanguageType eLang,
+                                         sal_uInt16 nPositiveFmt, sal_uInt16 nNegativeFmt, sal_uInt16 nDig,
+                                         sal_Unicode cZero );
                         ~NfCurrencyEntry() {}
+
+    NfCurrencyEntry* Clone() const;
 
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
@@ -298,6 +303,11 @@ public:
     /// General Unicode Euro symbol
     static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
+
+inline NfCurrencyEntry* new_clone( const NfCurrencyEntry& r )
+{
+    return r.Clone();
+}
 
 typedef std::vector< OUString > NfWSStringsDtor;
 

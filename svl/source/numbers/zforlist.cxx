@@ -3840,6 +3840,19 @@ NfCurrencyEntry::NfCurrencyEntry( const ::com::sun::star::i18n::Currency & rCurr
     cZeroChar       = rLocaleData.getCurrZeroChar();
 }
 
+NfCurrencyEntry::NfCurrencyEntry(
+   const OUString& rSymbol, const OUString& rBankSymbol, LanguageType eLang,
+   sal_uInt16 nPositiveFmt, sal_uInt16 nNegativeFmt, sal_uInt16 nDig,
+   sal_Unicode cZero ) :
+    aSymbol(rSymbol), aBankSymbol(rBankSymbol), eLanguage(eLang),
+    nPositiveFormat(nPositiveFmt), nNegativeFormat(nNegativeFmt),
+    nDigits(nDig), cZeroChar(cZero) {}
+
+NfCurrencyEntry* NfCurrencyEntry::Clone() const
+{
+    return new NfCurrencyEntry(
+       aSymbol, aBankSymbol, eLanguage, nPositiveFormat, nNegativeFormat, nDigits, cZeroChar);
+}
 
 bool NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
 {
