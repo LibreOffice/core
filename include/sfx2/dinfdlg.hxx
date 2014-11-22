@@ -19,10 +19,6 @@
 #ifndef INCLUDED_SFX2_DINFDLG_HXX
 #define INCLUDED_SFX2_DINFDLG_HXX
 
-#include <boost/optional/optional.hpp>
-
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 
@@ -48,6 +44,8 @@
 #include <vcl/ctrl.hxx>
 
 #include <sfx2/tabdlg.hxx>
+
+#include <boost/optional/optional.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace document {
