@@ -50,12 +50,14 @@ End
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT
+
+#include "AutoInstall/extensions_numbertext"
+
 Module gid_Module_Optional_Extensions_NumberText
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT);
     ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_NumberText );
+    Files = (auto_extensions_numbertext_ALL);
     Minimal = NO;
     Default = YES;
     Styles = ( );
