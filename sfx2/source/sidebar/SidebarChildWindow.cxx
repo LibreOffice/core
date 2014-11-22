@@ -49,7 +49,20 @@ SidebarChildWindow::SidebarChildWindow (
 
     SfxDockingWindow* pDockingParent = dynamic_cast<SfxDockingWindow*>(pWindow);
     if (pDockingParent != NULL)
+    {
+        if (pInfo && pInfo->aExtraString.isEmpty() && pInfo->aModule != "simpress")
+        {
+            // When this is the first start (never had the sidebar open yet),
+            // default to non-expanded sidebars in Writer, Calc, and Draw
+            //
+            // HACK: unfortunately I haven't found a clean solution to do
+            // this, so do it this way:
+            //
+            pDockingParent->SetSizePixel(Size(TabBar::GetDefaultWidth() * pWindow->GetDPIScaleFactor(),
+                        pDockingParent->GetSizePixel().Height()));
+        }
         pDockingParent->Initialize(pInfo);
+    }
     SetHideNotDelete(true);
 
     pWindow->Show();
