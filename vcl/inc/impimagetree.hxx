@@ -62,16 +62,10 @@ private:
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized);
 
-    typedef std::pair<
-        OUString,
-        css::uno::Reference< css::container::XNameAccess > > Path;
+    typedef std::pair<OUString, css::uno::Reference<css::container::XNameAccess>> Path;
 
-    typedef boost::unordered_map<
-        OUString, bool, OUStringHash > CheckStyleCache;
-    typedef boost::unordered_map<
-        OUString, std::pair< bool, BitmapEx >, OUStringHash > IconCache;
-    typedef boost::unordered_map<
-        OUString, OUString, OUStringHash > IconLinkHash;
+    typedef boost::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
+    typedef boost::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
 
     OUString m_style;
     Path m_path;
