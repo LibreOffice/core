@@ -1269,13 +1269,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     if( rReformat.Len() > nStrLen )
         rReformat.Len() = nStrLen;
 
-    // Optimized:
-    sal_Int32 nEnd = rReformat.Start() + rReformat.Len();
-    if( nEnd > nStrLen )
-    {
+    if( rReformat.Start() + rReformat.Len() > nStrLen )
         rReformat.Len() = nStrLen - rReformat.Start();
-        nEnd = nStrLen;
-    }
 
     SwTwips nOldBottom;
     if( GetOfst() && !IsFollow() )
