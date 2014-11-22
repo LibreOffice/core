@@ -29,7 +29,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 
 //  some other includes
@@ -53,6 +52,8 @@ class SfxBindings_Impl;
 class Timer;
 class SfxWorkWindow;
 class SfxUnoControllerItem;
+struct SfxFoundCache_Impl;
+class SfxFoundCacheArr_Impl;
 
 typedef std::vector<SfxUnoControllerItem*> SfxUnoControllerArr_Impl;
 
@@ -96,23 +97,6 @@ enum SfxPopupAction
     SFX_POPUP_HIDE,
     SFX_POPUP_SHOW
 };
-
-struct SfxFoundCache_Impl
-{
-    sal_uInt16      nSlotId;   // the Slot-Id
-    sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
-    const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
-    SfxStateCache*  pCache;    // Pointer to StatusCache, if possible NULL
-
-    SfxFoundCache_Impl(sal_uInt16 nS, sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
-        nSlotId(nS),
-        nWhichId(nW),
-        pSlot(pS),
-        pCache(pC)
-    {}
-};
-
-typedef boost::ptr_vector<SfxFoundCache_Impl> SfxFoundCacheArr_Impl;
 
 class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
 

@@ -66,6 +66,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -83,7 +84,48 @@ typedef boost::unordered_map< sal_uInt16, bool > InvalidateSlotMap;
 
 typedef std::vector<SfxStateCache*> SfxStateCacheArr_Impl;
 
+struct SfxFoundCache_Impl
+{
+    sal_uInt16      nSlotId;   // the Slot-Id
+    sal_uInt16      nWhichId;  // If available: Which-Id, else: nSlotId
+    const SfxSlot*  pSlot;     // Pointer to <Master-Slot>
+    SfxStateCache*  pCache;    // Pointer to StatusCache, if possible NULL
 
+    SfxFoundCache_Impl(sal_uInt16 nS, sal_uInt16 nW, const SfxSlot *pS, SfxStateCache *pC ):
+        nSlotId(nS),
+        nWhichId(nW),
+        pSlot(pS),
+        pCache(pC)
+    {}
+};
+
+class SfxFoundCacheArr_Impl
+{
+    typedef boost::ptr_vector<SfxFoundCache_Impl> DataType;
+    DataType maData;
+
+public:
+
+    SfxFoundCache_Impl& operator[] ( size_t i )
+    {
+        return maData[i];
+    }
+
+    const SfxFoundCache_Impl& operator[] ( size_t i ) const
+    {
+        return maData[i];
+    }
+
+    size_t size() const
+    {
+        return maData.size();
+    }
+
+    void push_back( SfxFoundCache_Impl* p )
+    {
+        maData.push_back(p);
+    }
+};
 
 class SfxAsyncExec_Impl
 {
