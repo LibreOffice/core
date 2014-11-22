@@ -665,6 +665,13 @@ DECLARE_RTFEXPORT_TEST(testFdo82858, "fdo82858.docx")
     CPPUNIT_ASSERT_EQUAL(table::BorderLineStyle::NONE, getProperty<table::BorderLine2>(getShape(1), "TopBorder").LineStyle);
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo82006, "fdo82006.rtf")
+{
+    // These were 176 (100 twips), as \sbauto and \sbbefore were ignored.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

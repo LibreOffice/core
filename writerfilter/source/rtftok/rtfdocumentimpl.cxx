@@ -4757,6 +4757,14 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
                                NS_ooxml::LN_trackchange, NS_ooxml::LN_token, pValue);
     }
     break;
+    case RTF_SBAUTO:
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
+                               NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_beforeAutospacing, pBoolValue, OVERWRITE_YES);
+        break;
+    case RTF_SAAUTO:
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
+                               NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue, OVERWRITE_YES);
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle toggle '" << lcl_RtfToString(nKeyword) << "'");
