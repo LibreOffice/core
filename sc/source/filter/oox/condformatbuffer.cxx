@@ -129,8 +129,16 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
 {
     OUString aType = rAttribs.getString( XML_type, OUString() );
 
-    double nVal = rAttribs.getDouble( XML_val, 0.0 );
-    pEntry->mnVal = nVal;
+    if( aType == "formula" )
+    {
+        OUString aFormula = rAttribs.getString( XML_val, OUString() );
+        pEntry->maFormula = aFormula;
+    }
+    else
+    {
+        double nVal = rAttribs.getDouble( XML_val, 0.0 );
+        pEntry->mnVal = nVal;
+    }
     if (aType == "num")
     {
         // nothing to do
@@ -151,12 +159,6 @@ void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttrib
     {
         pEntry->mbPercentile = true;
     }
-    else if( aType == "formula" )
-    {
-        OUString aFormula = rAttribs.getString( XML_val, OUString() );
-        pEntry->maFormula = aFormula;
-    }
-
 }
 
 }
