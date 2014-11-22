@@ -35,19 +35,6 @@ End
 
 #endif
 
-/* ** Numbertext ** */
-
-#ifdef WITH_EXTENSION_NUMBERTEXT
-
-File gid_File_Oxt_NumberText
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "numbertext.filelist";
-End
-
-#endif
-
 /* ** Hungarian Cross-reference Toolbar** */
 
 #ifdef WITH_EXTENSION_HUNART
