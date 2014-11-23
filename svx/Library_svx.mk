@@ -175,9 +175,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/sidebar/PanelLayout \
     svx/source/sidebar/SelectionAnalyzer \
     svx/source/sidebar/SelectionChangeHandler \
-    svx/source/sidebar/debug/ColorPanel \
-    svx/source/sidebar/debug/ContextPanel \
-    svx/source/sidebar/debug/NotYetImplementedPanel \
     svx/source/sidebar/text/TextCharacterSpacingControl \
     svx/source/sidebar/text/TextCharacterSpacingPopup \
     svx/source/sidebar/text/TextUnderlineControl \

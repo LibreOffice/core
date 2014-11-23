@@ -227,29 +227,6 @@
         </prop>
       </node>
 
-      <node oor:name="ContextPanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Current Context (only for debugging)</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>Context</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>PropertyDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            none, none, visible ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SvxPanelFactory/Debug_ContextPanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>10</value>
-        </prop>
-      </node>
-
       <node oor:name="PagePropertyPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Page</value>
@@ -275,29 +252,6 @@
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>300</value>
-        </prop>
-      </node>
-
-      <node oor:name="ColorPanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Colors (only for debugging)</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>ColorPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>PropertyDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            none, any, visible ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/SvxPanelFactory/Debug_ColorPanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>110</value>
         </prop>
       </node>
 
