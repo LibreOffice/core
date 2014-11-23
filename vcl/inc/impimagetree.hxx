@@ -58,17 +58,27 @@ public:
     css::uno::Reference< css::container::XNameAccess > getNameAccess();
 
 private:
+    struct IconSet {
+        OUString maURL;
+        css::uno::Reference<css::container::XNameAccess> maNameAccess;
+
+        IconSet() {}
+        IconSet(const OUString &aURL) : maURL(aURL) {}
+    };
+
+    /// Map between the theme name(s) and the content.
+    typedef boost::unordered_map<OUString, IconSet, OUStringHash> StyleIconSet;
+
+    StyleIconSet maIconSet;
+
     bool doLoadImage(
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized);
-
-    typedef std::pair<OUString, css::uno::Reference<css::container::XNameAccess>> Path;
 
     typedef boost::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
     typedef boost::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
 
     OUString m_style;
-    Path m_path;
     IconCache m_iconCache;
     IconLinkHash m_linkHash;
 

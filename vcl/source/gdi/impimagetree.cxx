@@ -47,6 +47,8 @@
 #include "impimagetree.hxx"
 #include <vcldemo-debug.hxx>
 
+using namespace css;
+
 namespace {
 
 static OUString createPath(OUString const & name, sal_Int32 pos, OUString const & locale)
@@ -191,6 +193,9 @@ void ImplImageTree::setStyle(OUString const & style)
 
 void ImplImageTree::resetPaths()
 {
+    if (maIconSet.find(m_style) != maIconSet.end())
+        return;
+
     OUString url( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/" );
     rtl::Bootstrap::expandMacros(url);
     if ( m_style != "default" )
@@ -203,8 +208,8 @@ void ImplImageTree::resetPaths()
     }
     else
         url += "images";
-    m_path = std::make_pair(
-        url, css::uno::Reference< css::container::XNameAccess >());
+
+    maIconSet[m_style] = IconSet(url);
 }
 
 bool ImplImageTree::iconCacheLookup(OUString const & name, bool localized, BitmapEx & bitmap)
@@ -223,14 +228,16 @@ bool ImplImageTree::findImage(std::vector<OUString> const & paths, BitmapEx & bi
     if (!checkPathAccess())
         return false;
 
-    for (std::vector< OUString >::const_reverse_iterator j(paths.rbegin());
-         j != paths.rend(); ++j)
+    const uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[m_style].maNameAccess;
+
+    for (std::vector<OUString>::const_reverse_iterator j(paths.rbegin()); j != paths.rend(); ++j)
     {
-        if (m_path.second->hasByName(*j))
+        if (rNameAccess->hasByName(*j))
         {
             css::uno::Reference< css::io::XInputStream > s;
-            bool ok = m_path.second->getByName(*j) >>= s;
-            OSL_ASSERT(ok); (void) ok;
+            bool ok = rNameAccess->getByName(*j) >>= s;
+            assert(ok);
+
             loadImageFromStream( wrapStream(s), *j, bitmap );
             return true;
         }
@@ -245,11 +252,13 @@ void ImplImageTree::loadImageLinks()
     if (!checkPathAccess())
         return;
 
-    if ( m_path.second->hasByName(aLinkFilename) )
+    const uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[m_style].maNameAccess;
+
+    if (rNameAccess->hasByName(aLinkFilename))
     {
         css::uno::Reference< css::io::XInputStream > s;
-        bool ok = m_path.second->getByName(aLinkFilename) >>= s;
-        OSL_ASSERT(ok); (void) ok;
+        bool ok = rNameAccess->getByName(aLinkFilename) >>= s;
+        assert(ok);
 
         parseLinkFile( wrapStream(s) );
         return;
@@ -293,25 +302,27 @@ OUString const & ImplImageTree::getRealImageName(OUString const & name)
 
 bool ImplImageTree::checkPathAccess()
 {
-    if (m_path.second.is())
+    uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[m_style].maNameAccess;
+    if (rNameAccess.is())
         return true;
 
     try {
-        m_path.second = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), m_path.first + ".zip");
-    } catch (const css::uno::RuntimeException &) {
+        rNameAccess = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), maIconSet[m_style].maURL + ".zip");
+    }
+    catch (const css::uno::RuntimeException &) {
         throw;
-    } catch (const css::uno::Exception & e) {
-        SAL_INFO("vcl", "ImplImageTree::zip file location exception "
-                 << e.Message << " for " << m_path.first);
+    }
+    catch (const css::uno::Exception & e) {
+        SAL_INFO("vcl", "ImplImageTree::zip file location exception " << e.Message << " for " << maIconSet[m_style].maURL);
         return false;
     }
-    return m_path.second.is();
+    return rNameAccess.is();
 }
 
 css::uno::Reference<css::container::XNameAccess> ImplImageTree::getNameAccess()
 {
     checkPathAccess();
-    return m_path.second;
+    return maIconSet[m_style].maNameAccess;
 }
 
 /// Recursively dump all names ...
@@ -319,8 +330,7 @@ css::uno::Sequence<OUString> ImageTree_getAllImageNames()
 {
     static ImplImageTreeSingletonRef aImageTree;
 
-    css::uno::Reference< css::container::XNameAccess > xRef(
-        aImageTree->getNameAccess() );
+    css::uno::Reference<css::container::XNameAccess> xRef(aImageTree->getNameAccess());
 
     return xRef->getElementNames();
 }
