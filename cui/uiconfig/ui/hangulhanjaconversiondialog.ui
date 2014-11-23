@@ -245,7 +245,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="hangulbracket">
-                        <property name="label" translatable="yes">Hanja(Han_gul)</property>
+                        <property name="label" translatable="yes">Hanja (Han_gul)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -262,7 +262,7 @@
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="hanjabracket">
-                        <property name="label" translatable="yes">Hang_ul(Hanja)</property>
+                        <property name="label" translatable="yes">Hang_ul (Hanja)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
