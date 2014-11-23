@@ -5639,7 +5639,7 @@
           </enumeration>
           <enumeration oor:value="breeze">
             <info>
-              <desc>Breeze - the icon theme from KDE Plasma</desc>
+              <desc>Breeze - the icon theme from KDE Plasma 5</desc>
             </info>
           </enumeration>
           <enumeration oor:value="oxygen">
