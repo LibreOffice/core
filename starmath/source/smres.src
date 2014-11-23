@@ -184,7 +184,7 @@ String STR_AQUA
 };
 String STR_FUCHSIA
 {
-    Text [ en-US ] = "funchsia" ;
+    Text [ en-US ] = "fuchsia" ;
 };
 String STR_GRAY
 {
