@@ -68,8 +68,9 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     }
 
     const SfxItemSet* pArgs = rReq.GetArgs();
+    SFX_ITEMSET_ARG( pArgs, pPageItem, SfxStringItem, FN_PARAM_1, false );
 
-    if( !pArgs )
+    if ( !pArgs || pPageItem )
     {
         // fill ItemSet for Dialog
         SfxItemSet aEditAttr( mpDoc->GetPool() );
@@ -84,6 +85,8 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
         boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0);
         if( pDlg )
         {
+            if ( pPageItem )
+                pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
             sal_uInt16 nResult = pDlg->Execute();
 
             switch( nResult )
