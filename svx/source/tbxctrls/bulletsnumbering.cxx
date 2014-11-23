@@ -34,15 +34,17 @@
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
 
+class NumberingToolBoxControl;
+
 class NumberingPopup : public svtools::ToolbarMenu
 {
     bool mbBulletItem;
-    svt::ToolboxController& mrController;
+    NumberingToolBoxControl& mrController;
     SvxNumValueSet* mpValueSet;
     DECL_LINK( VSSelectHdl, void * );
 
 public:
-    NumberingPopup( svt::ToolboxController& rController,
+    NumberingPopup( NumberingToolBoxControl& rController,
                     const css::uno::Reference< css::frame::XFrame >& rFrame,
                     vcl::Window* pParent, bool bBulletItem );
 
@@ -57,6 +59,7 @@ class NumberingToolBoxControl : public svt::PopupWindowController
 public:
     NumberingToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual vcl::Window* createPopupWindow( vcl::Window* pParent ) SAL_OVERRIDE;
+    bool IsInImpressDraw();
 
     // XStatusListener
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent )
@@ -76,7 +79,7 @@ public:
 };
 
 //class NumberingPopup
-NumberingPopup::NumberingPopup( svt::ToolboxController& rController,
+NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
                                 const css::uno::Reference< css::frame::XFrame >& rFrame,
                                 vcl::Window* pParent, bool bBulletItem ) :
     ToolbarMenu( rFrame, pParent, WB_STDPOPUP ),
@@ -164,7 +167,16 @@ IMPL_LINK( NumberingPopup, VSSelectHdl, void *, pControl )
     }
     else if ( getSelectedEntryId() == 1 )
     {
-        css::uno::Sequence< css::beans::PropertyValue > aArgs( 0 );
+        OUString aPageName;
+        if ( mrController.IsInImpressDraw() )
+            aPageName = "customize";
+        else
+            // Writer variants
+            aPageName = "options";
+
+        css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
+        aArgs[0].Name = "Page";
+        aArgs[0].Value <<= aPageName;
         mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
     }
 
@@ -182,6 +194,12 @@ NumberingToolBoxControl::NumberingToolBoxControl( const css::uno::Reference< css
 vcl::Window* NumberingToolBoxControl::createPopupWindow( vcl::Window* pParent )
 {
     return new NumberingPopup( *this, m_xFrame, pParent, mbBulletItem );
+}
+
+bool NumberingToolBoxControl::IsInImpressDraw()
+{
+    return ( m_sModuleName == "com.sun.star.presentation.PresentationDocument" ||
+             m_sModuleName == "com.sun.star.drawing.DrawingDocument" );
 }
 
 void SAL_CALL NumberingToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )

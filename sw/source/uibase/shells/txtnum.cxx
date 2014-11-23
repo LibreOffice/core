@@ -186,6 +186,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell()));
         OSL_ENSURE(pDlg, "Dialog creation failed!");
+        SFX_REQUEST_ARG( rReq, pPageItem, SfxStringItem, FN_PARAM_1, false );
+        if ( pPageItem )
+            pDlg->SetCurPageId( OUStringToOString( pPageItem->GetValue(), RTL_TEXTENCODING_UTF8 ) );
         const short nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
         if ( RET_OK == nRet )
