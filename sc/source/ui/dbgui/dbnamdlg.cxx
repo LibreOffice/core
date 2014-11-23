@@ -154,10 +154,6 @@ ScDbNameDlg::ScDbNameDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     pSaveObj = new DBSaveData( *m_pEdAssign, *m_pBtnHeader,
                         *m_pBtnDoSize, *m_pBtnKeepFmt, *m_pBtnStripData, theCurArea );
     Init();
-
-    SynFocusTimer.SetTimeout(150);
-    SynFocusTimer.SetTimeoutHdl(LINK( this, ScDbNameDlg, FocusToComoboxHdl));
-    SynFocusTimer.Start();
 }
 
 ScDbNameDlg::~ScDbNameDlg()
@@ -632,14 +628,6 @@ IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
         m_pFTOperations->Disable();
     }
 
-    return 0;
-}
-
-IMPL_LINK( ScDbNameDlg, FocusToComoboxHdl, Timer*, pTi)
-{
-    (void)pTi;
-    // CallEventListeners is still protected - figure out if we need to make it public, or if the focus stuff can be handled better in VCL directly. First see what AT is expecting...
-    // aEdName.CallEventListeners( VCLEVENT_CONTROL_GETFOCUS );
     return 0;
 }
 
