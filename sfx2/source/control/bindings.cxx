@@ -111,11 +111,6 @@ public:
         return maData[i];
     }
 
-    const SfxFoundCache_Impl& operator[] ( size_t i ) const
-    {
-        return maData[i];
-    }
-
     size_t size() const
     {
         return maData.size();
@@ -152,11 +147,6 @@ public:
     }
 
     SfxUnoControllerItem* operator[] ( size_t i )
-    {
-        return maData[i];
-    }
-
-    const SfxUnoControllerItem* operator[] ( size_t i ) const
     {
         return maData[i];
     }
