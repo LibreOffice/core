@@ -846,55 +846,38 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
-    static char const *locale = NULL;
-
-    /* basic thread safeness */
-//    pthread_mutex_lock( &aLocalMutex );
-
-    /* Only fetch the locale once and cache it */
-    if ( NULL == locale )
+    rtl::OUString loc16(macosx_getLocale());
+    rtl::OString locale;
+    if (!loc16.convertToString(
+            &locale, RTL_TEXTENCODING_UTF8,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+             | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
     {
-        rtl::OUString loc16(macosx_getLocale());
-        rtl::OString loc8;
-        if (loc16.convertToString(
-                &loc8, RTL_TEXTENCODING_UTF8,
-                (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
-                 | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
-        {
-            rtl_string_acquire(loc8.pData); // leak, for setenv
-            locale = loc8.getStr();
-        }
+        SAL_INFO("sal.osl", "Cannot convert \"" << loc16 << "\" to UTF-8");
     }
 
     /* handle the case where OS specific method of finding locale fails */
-    if ( NULL == locale )
+    if ( locale.isEmpty() )
     {
         /* simulate behavior of setlocale */
         locale = getenv( "LC_ALL" );
 
-        if( NULL == locale )
+        if( locale.isEmpty() )
             locale = getenv( "LC_CTYPE" );
 
-        if( NULL == locale )
+        if( locale.isEmpty() )
             locale = getenv( "LANG" );
 
-        if( NULL == locale )
+        if( locale.isEmpty() )
             locale = "C";
     }
 
     /* return the locale */
-    *ppLocale = _parse_locale( locale );
+    *ppLocale = _parse_locale( locale.getStr() );
 
-    setenv( "LC_ALL", locale, 1);
-    setenv("LC_CTYPE", locale, 1 );
-    setenv("LANG", locale, 1 );
-
-#if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("_imp_getProcessLocale() returning %s as current locale.", locale );
-#endif
-
-//    pthread_mutex_unlock( &aLocalMutex );
-
+    setenv( "LC_ALL", locale.getStr(), 1);
+    setenv("LC_CTYPE", locale.getStr(), 1 );
+    setenv("LANG", locale.getStr(), 1 );
 }
 #else
 /*****************************************************************************
