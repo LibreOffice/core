@@ -19,6 +19,7 @@
 #ifndef INCLUDED_STARMATH_INC_DIALOG_HXX
 #define INCLUDED_STARMATH_INC_DIALOG_HXX
 
+#include <boost/signals2/signal.hpp>
 #include <vcl/image.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -257,8 +258,6 @@ class SmShowSymbolSetWindow : public Control
 {
     ScrollBar*  m_pVScrollBar;
     SymbolPtrVec_t aSymbolSet;
-    Link        aSelectHdlLink;
-    Link        aDblClickHdlLink;
     long        nLen;
     long        nRows, nColumns;
     long        nXOffset, nYOffset;
@@ -281,15 +280,18 @@ public:
     void    SelectSymbol(sal_uInt16 nSymbol);
     sal_uInt16  GetSelectSymbol() const { return nSelectSymbol; }
     void SetSymbolSet(const SymbolPtrVec_t& rSymbolSet);
-    void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
-    void SetDblClickHdl(const Link& rLink) { aDblClickHdlLink = rLink; }
+    boost::signals2::signal< void () > aSelectSignal;
+    boost::signals2::signal< void () > aSelectDblClickSignal;
 };
+
+class SmSymbolDialog;
 
 class SmShowSymbolSet : public VclHBox
 {
+    friend class SmSymbolDialog;
+
     SmShowSymbolSetWindow aSymbolWindow;
     ScrollBar   aVScrollBar;
-
 public:
     SmShowSymbolSet(vcl::Window *pParent);
 
@@ -297,16 +299,13 @@ public:
 
     void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow.SelectSymbol(nSymbol); }
     sal_uInt16  GetSelectSymbol() const { return aSymbolWindow.GetSelectSymbol(); }
-
-    void SetSelectHdl(const Link& rLink)   { aSymbolWindow.SetSelectHdl(rLink); }
-    void SetDblClickHdl(const Link& rLink) { aSymbolWindow.SetDblClickHdl(rLink); }
 };
-
-
 
 class SmShowSymbol : public Control
 {
-    Link  aDblClickHdlLink;
+    friend class SmSymbolDialog;
+
+    boost::signals2::signal< void () >  aSelectDblClickSignal;
 
     virtual void    Paint(const Rectangle&) SAL_OVERRIDE;
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
@@ -321,7 +320,6 @@ public:
     }
 
     void    SetSymbol(const SmSym *pSymbol);
-    void    SetDblClickHdl(const Link &rLink) { aDblClickHdlLink = rLink; }
 };
 
 
@@ -346,8 +344,8 @@ class SmSymbolDialog : public ModalDialog
     OutputDevice       *pFontListDev;
 
     DECL_LINK(SymbolSetChangeHdl, void*);
-    DECL_LINK(SymbolChangeHdl, void*);
-    DECL_LINK(SymbolDblClickHdl, void*);
+    void SymbolChangeHandler();
+    void SymbolDblClickHandler();
     DECL_LINK(EditClickHdl, void*);
     DECL_LINK(GetClickHdl, void*);
 

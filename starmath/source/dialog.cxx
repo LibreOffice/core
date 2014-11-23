@@ -37,7 +37,6 @@
 #include <osl/diagnose.h>
 #include <svx/ucsubset.hxx>
 
-
 #include "dialog.hxx"
 #include "starmath.hrc"
 #include "config.hxx"
@@ -1123,10 +1122,10 @@ void SmShowSymbolSetWindow::MouseButtonDown(const MouseEvent& rMEvt)
                       m_pVScrollBar->GetThumbPos() * nColumns;
         SelectSymbol( sal::static_int_cast< sal_uInt16 >(nPos) );
 
-        aSelectHdlLink.Call(this);
+        aSelectSignal();
 
         if (rMEvt.GetClicks() > 1)
-            aDblClickHdlLink.Call(this);
+            aSelectDblClickSignal();
     }
 }
 
@@ -1169,7 +1168,7 @@ void SmShowSymbolSetWindow::KeyInput(const KeyEvent& rKEvt)
     }
 
     SelectSymbol(n);
-    aSelectHdlLink.Call(this);
+    aSelectSignal();
 }
 
 void SmShowSymbolSetWindow::setScrollbar(ScrollBar *pVScrollBar)
@@ -1322,11 +1321,10 @@ void SmShowSymbol::Paint(const Rectangle &rRect)
 void SmShowSymbol::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if (rMEvt.GetClicks() > 1)
-        aDblClickHdlLink.Call(this);
+        aSelectDblClickSignal();
     else
         Control::MouseButtonDown (rMEvt);
 }
-
 
 void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 {
@@ -1371,11 +1369,9 @@ IMPL_LINK_NOARG( SmSymbolDialog, SymbolSetChangeHdl )
     return 0;
 }
 
-
-IMPL_LINK_NOARG( SmSymbolDialog, SymbolChangeHdl )
+void SmSymbolDialog::SymbolChangeHandler()
 {
     SelectSymbol(m_pSymbolSetDisplay->GetSelectSymbol());
-    return 0;
 }
 
 IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
@@ -1421,14 +1417,11 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl)
     return 0;
 }
 
-
-IMPL_LINK_NOARG( SmSymbolDialog, SymbolDblClickHdl )
+void SmSymbolDialog::SymbolDblClickHandler()
 {
     GetClickHdl(m_pGetBtn);
     EndDialog(RET_OK);
-    return 0;
 }
-
 
 IMPL_LINK_NOARG( SmSymbolDialog, GetClickHdl )
 {
@@ -1478,9 +1471,9 @@ SmSymbolDialog::SmSymbolDialog(vcl::Window *pParent, OutputDevice *pFntListDevic
     m_pSymbolDisplay->SetBorderStyle( WindowBorderStyle::MONO );
 
     m_pSymbolSets->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolSetChangeHdl));
-    m_pSymbolSetDisplay->SetSelectHdl(LINK(this, SmSymbolDialog, SymbolChangeHdl));
-    m_pSymbolSetDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
-    m_pSymbolDisplay->SetDblClickHdl(LINK(this, SmSymbolDialog, SymbolDblClickHdl));
+    m_pSymbolSetDisplay->aSymbolWindow.aSelectSignal.connect( boost::bind( &SmSymbolDialog::SymbolChangeHandler, this, _1) );
+    m_pSymbolSetDisplay->aSymbolWindow.aSelectDblClickSignal.connect( boost::bind( &SmSymbolDialog::SymbolDblClickHandler, this, _1) );
+    m_pSymbolDisplay->aSelectDblClickSignal.connect( boost::bind( &SmSymbolDialog::SymbolDblClickHandler, this, _1) );
     m_pEditBtn->SetClickHdl(LINK(this, SmSymbolDialog, EditClickHdl));
     m_pGetBtn->SetClickHdl(LINK(this, SmSymbolDialog, GetClickHdl));
 }
