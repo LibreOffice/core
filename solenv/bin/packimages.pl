@@ -211,11 +211,19 @@ sub parse_image_list
         tr{/}{}s;
         # hack "res" back into globals
         if ( /^\Q$img_global\E\/(.*)$/o ) {
-            $global_hash_ref->{"res/".$1}++;
+            my $image = $1;
+            $global_hash_ref->{"res/".$image}++;
+            if ($image =~ /^(.*\/)[ls]c_([^\/]*).png$/) {
+                $global_hash_ref->{"res/".$1.$2.".svg"}++;
+            }
             next;
         }
         if ( /^\Q$img_module\E\/(.*)$/o ) {
-            $module_hash_ref->{$1}++;
+            my $image = $1;
+            $module_hash_ref->{$image}++;
+            if ($image =~ /^(.*\/)[ls]c_([^\/]*).png$/) {
+                $module_hash_ref->{$1.$2.".svg"}++;
+            }
             next;
         }
         # parse failed if we reach this point, bail out
@@ -248,7 +256,7 @@ sub wanted
 {
     my $file = $_;
 
-    if ( $file =~ /.*\.png$/ && -f $file ) {
+    if ( $file =~ /.*\.(png|svg)$/ && -f $file ) {
         push @custom_list, $File::Find::name;
     }
 }

@@ -36,6 +36,7 @@
 #include "osl/file.hxx"
 #include "osl/diagnose.h"
 #include "rtl/bootstrap.hxx"
+#include <vcl/svgdata.hxx>
 
 #include "tools/stream.hxx"
 #include "tools/urlobj.hxx"
@@ -75,6 +76,31 @@ static boost::shared_ptr< SvStream > wrapStream(css::uno::Reference< css::io::XI
     }
     s->Seek(0);
     return s;
+}
+
+static void loadSvgFromStream(boost::shared_ptr<SvStream> pStream, OUString const & /*rFileName*/, bool bLarge, bool bSmall, BitmapEx & rBitmap)
+{
+    const sal_uInt32 nStreamPosition(pStream->Tell());
+    const sal_uInt32 nStreamLength(pStream->Seek(STREAM_SEEK_TO_END) - nStreamPosition);
+
+    SvgDataArray aNewData(new sal_uInt8[nStreamLength]);
+    pStream->Seek(nStreamPosition);
+    pStream->Read(aNewData.get(), nStreamLength);
+
+    if (!pStream->GetError())
+    {
+        SvgDataPtr aSvgDataPtr(new SvgData(aNewData, nStreamLength, OUString()));
+        Graphic aGraphic(aSvgDataPtr);
+
+        Size aSize(aGraphic.GetSizePixel());
+        if (bLarge)
+            aSize = Size(24, 24);
+        else if (bSmall)
+            aSize = Size(16, 16);
+
+        GraphicConversionParameters aConv(aSize, false, true);
+        rBitmap = aGraphic.GetBitmapEx(aConv);
+    }
 }
 
 static void loadImageFromStream(boost::shared_ptr< SvStream > pStream, OUString const & rPath, BitmapEx & rBitmap)
@@ -253,13 +279,43 @@ bool ImplImageTree::findImage(std::vector<OUString> const & paths, BitmapEx & bi
 
     for (std::vector<OUString>::const_reverse_iterator j(paths.rbegin()); j != paths.rend(); ++j)
     {
-        if (rNameAccess->hasByName(*j))
-        {
-            css::uno::Reference< css::io::XInputStream > s;
-            bool ok = rNameAccess->getByName(*j) >>= s;
-            assert(ok);
+        OUString aFileName(*j);
+        OUString aSvgName;
 
-            loadImageFromStream( wrapStream(s), *j, bitmap );
+        // we may need to specify the size of the SVG image explicitly
+        bool bLarge = false;
+        bool bSmall = false;
+
+        // try if we have a svg version of the image
+        if (aFileName.endsWith(".png", &aSvgName))
+        {
+            sal_Int32 nSlash = aSvgName.lastIndexOf('/');
+
+            bLarge = aSvgName.matchAsciiL("lc_", 3, nSlash + 1);
+            bSmall = !bLarge && aSvgName.matchAsciiL("sc_", 3, nSlash + 1);
+
+            if (bLarge || bSmall)
+            {
+                if (nSlash >= 0)
+                    aSvgName = aSvgName.copy(0, nSlash + 1) + aSvgName.copy(nSlash + 4) + ".svg";
+                else
+                    aSvgName = aSvgName.copy(nSlash + 4) + ".svg";
+            }
+            else
+                aSvgName = aSvgName + ".svg";
+        }
+
+        css::uno::Reference< css::io::XInputStream > s;
+        if (!aSvgName.isEmpty() && rNameAccess->hasByName(aSvgName) && (rNameAccess->getByName(aSvgName) >>= s))
+        {
+            loadSvgFromStream(wrapStream(s), aSvgName, bLarge, bSmall, bitmap);
+            if (!bitmap.IsEmpty())
+                return true;
+        }
+
+        if (rNameAccess->hasByName(aFileName) && (rNameAccess->getByName(aFileName) >>= s))
+        {
+            loadImageFromStream(wrapStream(s), aFileName, bitmap);
             return true;
         }
     }
