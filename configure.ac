@@ -576,6 +576,7 @@ linux-gnu*|k*bsd*-gnu*)
     test_tde=yes
     test_kde=yes
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     _os=Linux
     ;;
@@ -669,6 +670,7 @@ freebsd*)
     test_tde=yes
     test_kde=yes
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -699,6 +701,7 @@ freebsd*)
     test_tde=no
     test_kde=no
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -728,6 +731,7 @@ dragonfly*)
     test_tde=yes
     test_kde=yes
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -750,6 +754,7 @@ linux-android*)
     test_tde=no
     test_kde=no
     test_kde4=no
+    test_kde5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -1174,6 +1179,12 @@ AC_ARG_ENABLE(kde4,
         [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
          KDE4 are available. May be used with --enable-kde if you want to support
          both KDE3 and KDE4.]),
+,)
+
+AC_ARG_ENABLE(kde5,
+    AS_HELP_STRING([--enable-kde5],
+        [Determines whether to use Qt5/KDE5 vclplug on platforms where Qt5 and
+         KDE5 are available.]),
 ,)
 
 AC_ARG_ENABLE(randr,
@@ -4574,6 +4585,7 @@ if test "$with_x" = "no"; then
     test_tde=no
     test_kde=no
     test_kde4=no
+    test_kde5=no
     enable_cairo_canvas=no
     enable_gnome_vfs=no
 fi
@@ -9886,6 +9898,14 @@ if test "x$enable_kde4" = "xyes"; then
 fi
 AC_SUBST(ENABLE_KDE4)
 
+ENABLE_KDE5=""
+if test "x$enable_kde5" = "xyes"; then
+    ENABLE_KDE5="TRUE"
+    AC_DEFINE(ENABLE_KDE5)
+    R="$R kde5"
+fi
+AC_SUBST(ENABLE_KDE5)
+
 ENABLE_HEADLESS=""
 if test "x$with_x" = "xno"; then
     ENABLE_HEADLESS="TRUE"
@@ -11278,6 +11298,170 @@ fi
 AC_SUBST(KDE4_CFLAGS)
 AC_SUBST(KDE4_LIBS)
 AC_SUBST(MOC4)
+AC_SUBST(KDE_GLIB_CFLAGS)
+AC_SUBST(KDE_GLIB_LIBS)
+AC_SUBST(KDE_HAVE_GLIB)
+
+
+dnl ===================================================================
+dnl KF5 Integration
+dnl ===================================================================
+
+KDE5_CFLAGS=""
+KDE5_LIBS=""
+QMAKE5="qmake"
+KF5_CONFIG="kf5-config"
+MOC5="moc"
+KDE_GLIB_CFLAGS=""
+KDE_GLIB_LIBS=""
+KDE_HAVE_GLIB=""
+if test "$test_kde5" = "yes" -a "$ENABLE_KDE5" = "TRUE"; then
+    qt_incdirs="$QT5INC /usr/include/qt5 /usr/include $x_includes"
+    qt_libdirs="$QT5LIB /usr/lib/qt5 /usr/lib $x_libraries"
+
+    kde_incdirs="/usr/include /usr/include/KF5 $x_includes"
+    kde_libdirs="/usr/lib /usr/lib/kde5 /usr/lib/kde5/devel $x_libraries"
+
+    if test -n "$supports_multilib"; then
+        qt_libdirs="$qt_libdirs /usr/lib64/qt5 /usr/lib64/qt /usr/lib64"
+        kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde5 /usr/lib64/kde5/devel"
+    fi
+
+    qt_test_include="QtCore/qobject.h"
+    qt_test_library="libQt5Network.so"
+    kde_test_include="KWindowSystem/kwindowsystem.h"
+    kde_test_library="libKF5Solid.so"
+
+    qt_incdirs="`$QMAKE5 -query QT_INSTALL_HEADERS` $qt_incdirs"
+    AC_MSG_CHECKING([for Qt5 headers])
+    qt_header_dir="no"
+    for inc_dir in $qt_incdirs; do
+        if test -r "$inc_dir/$qt_test_include"; then
+            qt_header_dir="$inc_dir"
+            break
+        fi
+    done
+
+    AC_MSG_RESULT([$qt_header_dir])
+    if test "x$qt_header_dir" = "xno"; then
+        AC_MSG_ERROR([Qt5 headers not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+    fi
+
+    dnl Check for qmake
+    AC_PATH_PROG( QMAKEQT5, qmake-qt5, no, [`dirname $qt_header_dir`/bin:$QT5DIR/bin:$PATH] )
+    QMAKE5="$QMAKEQT5"
+    if test "$QMAKE5" = "no"; then
+        AC_PATH_PROG( QMAKE5, qmake, no, [`dirname $qt_header_dir`/bin:$QT5DIR/bin:$PATH] )
+        if test "$QMAKE5" = "no"; then
+            AC_MSG_ERROR([Qt 5 qmake not found.  Please specify
+the root of your Qt installation by exporting QT5DIR before running "configure".])
+        fi
+    fi
+
+    qt_libdirs="`$QMAKE5 -query QT_INSTALL_LIBS` $qt_libdirs"
+    AC_MSG_CHECKING([for Qt5 libraries])
+    qt_lib_dir="no"
+    for lib_dir in $qt_libdirs; do
+        if test -r "$lib_dir/$qt_test_library"; then
+            qt_lib_dir="$lib_dir"
+            PKG_CONFIG_PATH="$qt_lib_dir"/pkgconfig:$PKG_CONFIG_PATH
+            break
+        fi
+    done
+
+    AC_MSG_RESULT([$qt_lib_dir])
+
+    if test "x$qt_lib_dir" = "xno"; then
+        AC_MSG_ERROR([Qt5 libraries not found.  Please specify the root of your Qt5 installation by exporting QT5DIR before running "configure".])
+    fi
+
+    dnl Check for Meta Object Compiler
+
+    AC_PATH_PROG( MOCQT5, moc-qt5, no, [`dirname $qt_lib_dir`/bin:$QT5DIR/bin:$PATH] )
+    MOC4="$MOCQT5"
+    if test "$MOC5" = "no"; then
+        AC_PATH_PROG( MOC5, moc, no, [`dirname $qt_lib_dir`/bin:$QT5DIR/bin:$PATH] )
+        if test "$MOC5" = "no"; then
+            AC_MSG_ERROR([Qt Meta Object Compiler not found.  Please specify
+the root of your Qt installation by exporting QT5DIR before running "configure".])
+        fi
+    fi
+
+    dnl Check for KF5 headers
+    AC_MSG_CHECKING([for KF5 headers])
+    kde_incdirs="`$KF5_CONFIG --path include` $kde_incdirs"
+    kde_incdir="no"
+    for kde_check in $kde_incdirs; do
+        if test -r "$kde_check/$kde_test_include"; then
+            kde_incdir="$kde_check"
+            break
+        fi
+    done
+    AC_MSG_RESULT([$kde_incdir])
+    if test "x$kde_incdir" = "xno"; then
+        AC_MSG_ERROR([KF5 headers not found.  Please specify the root of your KF5 installation by exporting KDE5DIR before running "configure".])
+    fi
+
+    dnl Check for KF5 libraries
+    AC_MSG_CHECKING([for KF5 libraries])
+    kde_libdirs="`$KF5_CONFIG --path lib` $kde_libdirs"
+    kde_libdir="no"
+    for kde_check in $kde_libdirs; do
+        if test -r "$kde_check/$kde_test_library"; then
+            kde_libdir="$kde_check"
+            break
+        fi
+    done
+
+    AC_MSG_RESULT([$kde_libdir])
+    if test "x$kde_libdir" = "xno"; then
+        AC_MSG_ERROR([KDE5 libraries not found.  Please specify the root of your KDE5 installation by exporting KDE5DIR before running "configure".])
+    fi
+
+    PKG_CHECK_MODULES([QT5],[QtNetwork QtGui])
+    KDE5_CFLAGS="-I$kde_incdir $QT5_CFLAGS -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
+    KDE5_LIBS="-L$kde_libdir -lkio -lkfile -lkdeui -lkdecore -L$qt_lib_dir $QT5_LIBS"
+    KDE5_CFLAGS=$(printf '%s' "$KDE5_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS $KDE5_CFLAGS"
+    AC_MSG_CHECKING([whether KDE is >= 4.2])
+       AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <kdeversion.h>
+
+int main(int argc, char **argv) {
+       if (KDE_VERSION_MAJOR == 4 && KDE_VERSION_MINOR >= 2) return 0;
+       else return 1;
+}
+       ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([KDE version too old])],[])
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
+
+    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled.
+    # Sets also KDE_GLIB_CFLAGS/KDE_GLIB_LIBS if successful.
+    PKG_CHECK_MODULES(KDE_GLIB,[glib-2.0 >= 2.4],
+        [
+            KDE_HAVE_GLIB=1
+            AC_DEFINE(KDE_HAVE_GLIB,1)
+            KDE_GLIB_CFLAGS=$(printf '%s' "$KDE_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+
+            AC_LANG_PUSH([C++])
+            save_CXXFLAGS=$CXXFLAGS
+            CXXFLAGS="$CXXFLAGS $KDE5_CFLAGS"
+            save_LIBS=$LIBS
+            LIBS="$LIBS $KDE5_LIBS"
+            AC_MSG_CHECKING([whether Qt has fixed ExcludeSocketNotifiers])
+
+            LIBS=$save_LIBS
+            CXXFLAGS=$save_CXXFLAGS
+            AC_LANG_POP([C++])
+        ],
+        AC_MSG_WARN([[No Glib found, KDE4 support will not use native file pickers!]]))
+fi
+AC_SUBST(KDE5_CFLAGS)
+AC_SUBST(KDE5_LIBS)
+AC_SUBST(MOC5)
 AC_SUBST(KDE_GLIB_CFLAGS)
 AC_SUBST(KDE_GLIB_LIBS)
 AC_SUBST(KDE_HAVE_GLIB)
