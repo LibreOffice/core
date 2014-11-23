@@ -381,8 +381,6 @@ sub create_zip_archive
             if ( !$member ) {
                 print_error("can't add file '$path' to image zip archive: $!", 5);
             }
-        } else {
-                print_warning("file '$path' not found");
         }
     }
     my $status = $zip->writeToFileNamed($tmp_out_file);
