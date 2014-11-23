@@ -576,6 +576,7 @@ linux-gnu*|k*bsd*-gnu*)
     test_tde=yes
     test_kde=yes
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     _os=Linux
     ;;
@@ -669,6 +670,7 @@ freebsd*)
     test_tde=yes
     test_kde=yes
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     AC_MSG_CHECKING([the FreeBSD operating system release])
     if test -n "$with_os_version"; then
@@ -699,6 +701,7 @@ freebsd*)
     test_tde=no
     test_kde=no
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread -lpthread"
     _os=NetBSD
@@ -728,6 +731,7 @@ dragonfly*)
     test_tde=yes
     test_kde=yes
     test_kde4=yes
+    test_kde5=yes
     test_freetype=yes
     PTHREAD_LIBS="-pthread"
     _os=DragonFly
@@ -750,6 +754,7 @@ linux-android*)
     test_tde=no
     test_kde=no
     test_kde4=no
+    test_kde5=no
     test_randr=no
     test_xrender=no
     _os=Android
@@ -1174,6 +1179,12 @@ AC_ARG_ENABLE(kde4,
         [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
          KDE4 are available. May be used with --enable-kde if you want to support
          both KDE3 and KDE4.]),
+,)
+
+AC_ARG_ENABLE(kde5,
+    AS_HELP_STRING([--enable-kde5],
+        [Determines whether to use Qt5/KDE5 vclplug on platforms where Qt5 and
+         KDE5 are available.]),
 ,)
 
 AC_ARG_ENABLE(randr,
@@ -4574,6 +4585,7 @@ if test "$with_x" = "no"; then
     test_tde=no
     test_kde=no
     test_kde4=no
+    test_kde5=no
     enable_cairo_canvas=no
     enable_gnome_vfs=no
 fi
@@ -9885,6 +9897,14 @@ if test "x$enable_kde4" = "xyes"; then
     R="$R kde4"
 fi
 AC_SUBST(ENABLE_KDE4)
+
+ENABLE_KDE5=""
+if test "x$enable_kde5" = "xyes"; then
+    ENABLE_KDE5="TRUE"
+    AC_DEFINE(ENABLE_KDE5)
+    R="$R kde5"
+fi
+AC_SUBST(ENABLE_KDE5)
 
 ENABLE_HEADLESS=""
 if test "x$with_x" = "xno"; then

@@ -8,11 +8,11 @@ actions/toolbar/document-close.svg cmd/lc_exportto.png
 edit-repeat.png,lc_repeat.png
 insert-plugin.png,lc_insertplugin.png
 tools-gallery.png,lc_gallery.png
-actions/toolbar/document-new.svg cmd/lc_adddirect
-actions/toolbar/document-open.svg cmd/lc_open
+actions/toolbar/document-new.svg cmd/lc_adddirect.png
+actions/toolbar/document-open.svg cmd/lc_open.png
 mail-attachment lc_sendmail
 lc_editdoc - Edit Document
-mimetypes/file-types/pdf.svg cmd/lc_exportdirecttopdf
+mimetypes/file-types/pdf.svg cmd/lc_exportdirecttopdf.png
 lc_print - Print
 lc_printdefault - Print Directly
 lc_printpreview - Print Preview

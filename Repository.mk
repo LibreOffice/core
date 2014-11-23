@@ -276,6 +276,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		$(if $(ENABLE_KDE),vclplug_kde) \
 		$(if $(ENABLE_KDE4),vclplug_kde4) \
+		$(if $(ENABLE_KDE5),vclplug_kde5) \
 	) \
 ))
 
