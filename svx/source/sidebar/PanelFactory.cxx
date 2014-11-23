@@ -25,9 +25,6 @@
 #include "possize/PosSizePropertyPanel.hxx"
 #include "insert/InsertPropertyPanel.hxx"
 #include "GalleryControl.hxx"
-#include "debug/ColorPanel.hxx"
-#include "debug/ContextPanel.hxx"
-#include "debug/NotYetImplementedPanel.hxx"
 #include "EmptyPanel.hxx"
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/Tools.hxx>
@@ -129,66 +126,49 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     vcl::Window* pControl = NULL;
     ui::LayoutSize aLayoutSize (-1,-1,-1);
 
-#define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))
-    if (DoesResourceEndWith("/TextPropertyPanel"))
+    if (rsResourceURL.endsWith("/TextPropertyPanel"))
     {
         pControl = TextPropertyPanel::Create(pParentWindow, xFrame, pBindings, aContext);
     }
-    else if (DoesResourceEndWith("/ParaPropertyPanel"))
+    else if (rsResourceURL.endsWith("/ParaPropertyPanel"))
     {
         pControl = ParaPropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
     }
-    else if (DoesResourceEndWith("/AreaPropertyPanel"))
+    else if (rsResourceURL.endsWith("/AreaPropertyPanel"))
     {
         pControl = AreaPropertyPanel::Create(pParentWindow, xFrame, pBindings);
     }
-    else if (DoesResourceEndWith("/GraphicPropertyPanel"))
+    else if (rsResourceURL.endsWith("/GraphicPropertyPanel"))
     {
         pControl = GraphicPropertyPanel::Create(pParentWindow, xFrame, pBindings);
     }
-    else if (DoesResourceEndWith("/LinePropertyPanel"))
+    else if (rsResourceURL.endsWith("/LinePropertyPanel"))
     {
         pControl = LinePropertyPanel::Create(pParentWindow, xFrame, pBindings);
     }
-    else if (DoesResourceEndWith("/PosSizePropertyPanel"))
+    else if (rsResourceURL.endsWith("/PosSizePropertyPanel"))
     {
         pControl = PosSizePropertyPanel::Create(pParentWindow, xFrame, pBindings, xSidebar);
     }
-    else if (DoesResourceEndWith("/InsertPropertyPanel"))
+    else if (rsResourceURL.endsWith("/InsertPropertyPanel"))
     {
         pControl = new InsertPropertyPanel(pParentWindow, xFrame);
     }
-    else if (DoesResourceEndWith("/GalleryPanel"))
+    else if (rsResourceURL.endsWith("/GalleryPanel"))
     {
         pControl = new GalleryControl(pBindings, pParentWindow);
         aLayoutSize = ui::LayoutSize(300,-1,400);
     }
-    else if (DoesResourceEndWith("/StyleListPanel"))
+    else if (rsResourceURL.endsWith("/StyleListPanel"))
     {
         pControl = new SfxTemplatePanelControl(pBindings, pParentWindow);
         aLayoutSize = ui::LayoutSize(0,-1,-1);
     }
-    else if (DoesResourceEndWith("/Debug_ColorPanel"))
-    {
-        pControl = new ColorPanel(pParentWindow);
-        aLayoutSize = ui::LayoutSize(300,-1,400);
-    }
-    else if (DoesResourceEndWith("/Debug_ContextPanel"))
-    {
-        pControl = new ContextPanel(pParentWindow);
-        aLayoutSize = ui::LayoutSize(45,45,45);
-    }
-    else if (DoesResourceEndWith("/Debug_NotYetImplementedPanel"))
-    {
-        pControl = new NotYetImplementedPanel(pParentWindow);
-        aLayoutSize = ui::LayoutSize(20,25,25);
-    }
-    else if (DoesResourceEndWith("/EmptyPanel"))
+    else if (rsResourceURL.endsWith("/EmptyPanel"))
     {
         pControl = new EmptyPanel(pParentWindow);
         aLayoutSize = ui::LayoutSize(20,-1, 50);
     }
-#undef DoesResourceEndWith
 
     if (pControl != NULL)
     {
