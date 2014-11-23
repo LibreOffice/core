@@ -44,6 +44,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:style="dropdown" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomObjects"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
