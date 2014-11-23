@@ -179,8 +179,7 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
      </ClCompile>
 --- python3/PCbuild/make_versioninfo.vcxproj
 +++ python3/PCbuild/make_versioninfo.vcxproj
-@@ -114,24 +114,25 @@
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+@@ -115,7 +115,7 @@
      <CustomBuildStep>
        <Message>Build PC/pythonnt_rc(_d).h</Message>
        <Command>cd $(SolutionDir)
@@ -189,10 +188,7 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
  </Command>
        <Outputs>$(SolutionDir)..\PC\pythonnt_rc.h;%(Outputs)</Outputs>
      </CustomBuildStep>
-     <ClCompile>
-       <Optimization>MaxSpeed</Optimization>
-       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-       <IntrinsicFunctions>true</IntrinsicFunctions>
+@@ -126,11 +126,12 @@
        <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
      </ClCompile>
      <Link>
@@ -207,24 +203,34 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
  </Command>
      </PostBuildEvent>
    </ItemDefinitionGroup>
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+@@ -168,7 +169,7 @@
+     <CustomBuildStep>
+       <Message>Build PC/pythonnt_rc(_d).h</Message>
+       <Command>cd $(SolutionDir)
+-make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h
++amd64\make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h
+ </Command>
+       <Outputs>$(SolutionDir)..\PC\pythonnt_rc_d.h;%(Outputs)</Outputs>
+     </CustomBuildStep>
+@@ -182,12 +183,13 @@
+       <PreprocessorDefinitions>_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+     </ClCompile>
+     <Link>
+-      <OutputFile>$(SolutionDir)make_versioninfo_d.exe</OutputFile>
++      <OutputFile>$(SolutionDir)amd64\make_versioninfo_d.exe</OutputFile>
++      <SubSystem>Console</SubSystem>
+       <TargetMachine>MachineX64</TargetMachine>
+     </Link>
+     <PostBuildEvent>
+       <Command>cd $(SolutionDir)
+-make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h
++amd64\make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h
+ </Command>
+     </PostBuildEvent>
+   </ItemDefinitionGroup>
 --- python3/PCbuild/pythoncore.vcxproj
 +++ python3/PCbuild/pythoncore.vcxproj
-@@ -195,35 +195,35 @@
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-     <Midl>
-       <TargetEnvironment>X64</TargetEnvironment>
-     </Midl>
-     <ClCompile>
-       <AdditionalOptions>/Zm200  %(AdditionalOptions)</AdditionalOptions>
-       <AdditionalIncludeDirectories>..\Python;..\Modules\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <PreprocessorDefinitions>_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-     </ClCompile>
-     <ResourceCompile>
-       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-       <Culture>0x0409</Culture>
-       <AdditionalIncludeDirectories>..\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+@@ -209,7 +209,7 @@
      </ResourceCompile>
      <PreLinkEvent>
        <Message>Generate build information...</Message>
@@ -233,17 +239,12 @@ diff -ru python3/PCbuild/pcbuild.sln python3.new/PCbuild/pcbuild.sln
      </PreLinkEvent>
      <Link>
        <AdditionalDependencies>$(IntDir)getbuildinfo.o;%(AdditionalDependencies)</AdditionalDependencies>
-       <IgnoreSpecificDefaultLibraries>libc;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-       <BaseAddress>0x1e000000</BaseAddress>
-     </Link>
-     <PreBuildEvent>
-       <Command>$(KillPythonExe)
- IF %ERRORLEVEL% NEQ 0 (
-     echo kill_python: warning: could not kill running Pythons, exit code %ERRORLEVEL%
-     exit /b 0
- )</Command>
-     </PreBuildEvent>
-     <PreBuildEvent>
-       <Message>Killing any running $(PythonExe) instances...</Message>
-     </PreBuildEvent>
-   </ItemDefinitionGroup>
+@@ -282,7 +282,7 @@
+     </ResourceCompile>
+     <PreLinkEvent>
+       <Message>Generate build information...</Message>
+-      <Command>"$(SolutionDir)make_buildinfo.exe" Debug "$(IntDir)"</Command>
++      <Command>"$(SolutionDir)amd64\make_buildinfo.exe" Debug "$(IntDir)"</Command>
+     </PreLinkEvent>
+     <Link>
+       <AdditionalDependencies>$(IntDir)getbuildinfo.o;%(AdditionalDependencies)</AdditionalDependencies>
