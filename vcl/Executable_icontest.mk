@@ -21,6 +21,10 @@ $(eval $(call gb_Executable_use_api,icontest,\
     udkapi \
 ))
 
+$(eval $(call gb_Executable_use_static_libraries,icontest,\
+    vclmain \
+))
+
 ifeq ($(OS),LINUX)
 
 $(eval $(call gb_Executable_add_libs,icontest,\
@@ -49,10 +53,6 @@ $(eval $(call gb_Executable_add_libs,icontest,\
 ))
 
 endif
-
-$(eval $(call gb_Executable_use_static_libraries,icontest,\
-    vclmain \
-))
 
 $(eval $(call gb_Executable_use_libraries,icontest,\
     comphelper \
