@@ -100,6 +100,7 @@ $(eval $(call gb_CppunitTest_use_components,sc_tablesheetobj,\
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
     xmloff/util/xo \
+	svtools/util/svt \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_tablesheetobj))
