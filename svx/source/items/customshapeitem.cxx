@@ -336,7 +336,7 @@ bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
             {
                 if (aPropSeq[i].Name == aPropSeq[j].Name)
                 {
-                    assert(0); // serious bug: duplicate xml attribute exported
+                    assert(false); // serious bug: duplicate xml attribute exported
                     OUString const name(aPropSeq[i].Name);
                     aPropSeq.realloc(0);
                     throw uno::RuntimeException(
