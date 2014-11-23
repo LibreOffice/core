@@ -101,21 +101,39 @@ ImplImageTree::~ImplImageTree()
 {
 }
 
+OUString ImplImageTree::fallbackStyle(const OUString &style)
+{
+    if (style == "galaxy")
+        return OUString();
+    else if (style == "industrial")
+        return OUString("galaxy");
+    else if (style == "tango")
+        return OUString("industrial");
+    else if (style == "breeze")
+        return OUString("sifr");
+
+    return OUString("tango");
+}
+
 bool ImplImageTree::loadImage(OUString const & name, OUString const & style, BitmapEx & bitmap,
     bool localized, bool loadMissing)
 {
-    bool found = false;
-    try {
-        found = doLoadImage(name, style, bitmap, localized);
-    } catch (css::uno::RuntimeException &) {
-        if (!loadMissing)
-            throw;
-    }
-    if (found || !loadMissing)
-        return found;
+    OUString aStyle(style);
+    while (!aStyle.isEmpty())
+    {
+        try {
+            if (doLoadImage(name, aStyle, bitmap, localized))
+                return true;
+        }
+        catch (css::uno::RuntimeException &) {}
 
-    SAL_INFO("vcl", "ImplImageTree::loadImage exception couldn't load \""
-        << name << "\", fetching default image");
+        aStyle = fallbackStyle(aStyle);
+    }
+
+    if (!loadMissing)
+        return false;
+
+    SAL_INFO("vcl", "ImplImageTree::loadImage couldn't load \"" << name << "\", fetching default image");
 
     return loadDefaultImage(style, bitmap);
 }

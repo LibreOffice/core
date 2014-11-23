@@ -95,8 +95,17 @@ private:
     bool findImage(std::vector< OUString > const & paths, BitmapEx & bitmap );
 
     void loadImageLinks();
+
     void parseLinkFile(boost::shared_ptr< SvStream > stream);
+
+    /// Return name of a real .png according to links.txt.
     OUString const & getRealImageName(OUString const & name);
+
+    /** Rerurn name of the fallback style for the provided one.
+
+        Must not be cyclic :-)  The last theme in the chain returns an empty string.
+    */
+    OUString fallbackStyle(const OUString &style);
 };
 
 typedef salhelper::SingletonRef< ImplImageTree > ImplImageTreeSingletonRef;
