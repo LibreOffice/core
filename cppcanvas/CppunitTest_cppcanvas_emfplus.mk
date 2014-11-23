@@ -57,6 +57,7 @@ $(eval $(call gb_CppunitTest_use_components,cppcanvas_emfplus,\
 	ucb/source/core/ucb1 \
 	ucb/source/ucp/file/ucpfile1 \
 	unoxml/source/service/unoxml \
+	svtools/util/svt \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,cppcanvas_emfplus))
