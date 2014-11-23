@@ -25,8 +25,7 @@
 #include <tools/ref.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <vector>
 
 struct SvParser_Impl;
@@ -248,21 +247,17 @@ public:
  *
  *======================================================================*/
 
-typedef boost::ptr_vector<SvKeyValue> SvKeyValueList_Impl;
-
 class SVT_DLLPUBLIC SvKeyValueIterator : public SvRefBase,
     private boost::noncopyable
 {
-    /** Representation.
-    */
-    SvKeyValueList_Impl* m_pList;
-    sal_uInt16               m_nPos;
+    struct Impl;
+    Impl* mpImpl;
 
 public:
     /** Construction/Destruction.
     */
-    SvKeyValueIterator (void);
-    virtual ~SvKeyValueIterator (void);
+    SvKeyValueIterator();
+    virtual ~SvKeyValueIterator();
 
     /** Operation.
     */

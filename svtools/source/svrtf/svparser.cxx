@@ -17,12 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <svtools/svparser.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
+
+#include <stdio.h>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 // structure to store the actuel data
 struct SvParser_Impl
@@ -649,40 +651,34 @@ IMPL_STATIC_LINK( SvParser, NewDataRead, void*, EMPTYARG )
  *
  *======================================================================*/
 
-/*
- * SvKeyValueIterator.
- */
-SvKeyValueIterator::SvKeyValueIterator (void)
-    : m_pList (new SvKeyValueList_Impl),
-      m_nPos  (0)
+typedef boost::ptr_vector<SvKeyValue> SvKeyValueList_Impl;
+
+struct SvKeyValueIterator::Impl
 {
+    SvKeyValueList_Impl maList;
+    sal_uInt16 mnPos;
+
+    Impl() : mnPos(0) {}
+};
+
+SvKeyValueIterator::SvKeyValueIterator() : mpImpl(new Impl) {}
+
+SvKeyValueIterator::~SvKeyValueIterator()
+{
+    delete mpImpl;
 }
 
-/*
- * ~SvKeyValueIterator.
- */
-SvKeyValueIterator::~SvKeyValueIterator (void)
-{
-    delete m_pList;
-}
-
-/*
- * GetFirst.
- */
 bool SvKeyValueIterator::GetFirst (SvKeyValue &rKeyVal)
 {
-    m_nPos = m_pList->size();
+    mpImpl->mnPos = mpImpl->maList.size();
     return GetNext (rKeyVal);
 }
 
-/*
- * GetNext.
- */
 bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
 {
-    if (m_nPos > 0)
+    if (mpImpl->mnPos > 0)
     {
-        rKeyVal = (*m_pList)[--m_nPos];
+        rKeyVal = mpImpl->maList[--mpImpl->mnPos];
         return true;
     }
     else
@@ -692,12 +688,9 @@ bool SvKeyValueIterator::GetNext (SvKeyValue &rKeyVal)
     }
 }
 
-/*
- * Append.
- */
 void SvKeyValueIterator::Append (const SvKeyValue &rKeyVal)
 {
-    m_pList->push_back(new SvKeyValue(rKeyVal));
+    mpImpl->maList.push_back(new SvKeyValue(rKeyVal));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
