@@ -44,6 +44,40 @@
 #include "childwinimpl.hxx"
 #include <ctrlfactoryimpl.hxx>
 
+class SfxModuleArr_Impl
+{
+    typedef ::std::vector<SfxModule*> DataType;
+    DataType maData;
+public:
+
+    typedef DataType::iterator iterator;
+
+    iterator begin()
+    {
+        return maData.begin();
+    }
+
+    void erase( iterator it )
+    {
+        maData.erase(it);
+    }
+
+    SfxModule* operator[] ( size_t i )
+    {
+        return maData[i];
+    }
+
+    void push_back( SfxModule* p )
+    {
+        maData.push_back(p);
+    }
+
+    size_t size() const
+    {
+        return maData.size();
+    }
+};
+
 static SfxModuleArr_Impl* pModules=0;
 
 class SfxModule_Impl

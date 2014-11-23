@@ -21,9 +21,6 @@
 
 #include <vector>
 
-class SfxModule;
-typedef ::std::vector<SfxModule*> SfxModuleArr_Impl;
-
 class SfxFrame;
 typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
 
