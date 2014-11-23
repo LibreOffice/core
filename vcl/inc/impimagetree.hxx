@@ -50,17 +50,22 @@ public:
         OUString const & style,
         BitmapEx& bitmap);
 
-/** a crude form of life cycle control (called from DeInitVCL; otherwise,
- *  if the ImplImageTree singleton were destroyed during exit that would
- *  be too late for the destructors of the bitmaps in m_iconCache)*/
+    /** a crude form of life cycle control (called from DeInitVCL; otherwise,
+     *  if the ImplImageTree singleton were destroyed during exit that would
+     *  be too late for the destructors of the bitmaps in maIconCache)*/
     void shutDown();
 
     css::uno::Reference< css::container::XNameAccess > getNameAccess();
 
 private:
+    typedef boost::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
+    typedef boost::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
+
     struct IconSet {
         OUString maURL;
         css::uno::Reference<css::container::XNameAccess> maNameAccess;
+        IconCache maIconCache;
+        IconLinkHash maLinkHash;
 
         IconSet() {}
         IconSet(const OUString &aURL) : maURL(aURL) {}
@@ -69,24 +74,21 @@ private:
     /// Map between the theme name(s) and the content.
     typedef boost::unordered_map<OUString, IconSet, OUStringHash> StyleIconSet;
 
+    /// Remember all the (used) icon styles and individual icons in them.
     StyleIconSet maIconSet;
+
+    /// Styly used for the current operations; switches switch several times during fallback search.
+    OUString maCurrentStyle;
 
     bool doLoadImage(
         OUString const & name, OUString const & style,
         BitmapEx & bitmap, bool localized);
 
-    typedef boost::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
-    typedef boost::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
-
-    OUString m_style;
-    IconCache m_iconCache;
-    IconLinkHash m_linkHash;
-
     bool checkPathAccess();
 
     void setStyle(OUString const & style );
 
-    void resetPaths();
+    void createStyle();
 
     bool iconCacheLookup( OUString const & name, bool localized, BitmapEx & bitmap );
 

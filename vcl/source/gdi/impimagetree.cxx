@@ -165,57 +165,60 @@ bool ImplImageTree::doLoadImage(OUString const & name, OUString const & style, B
     }
 
     if (found)
-        m_iconCache[name.intern()] = std::make_pair(localized, bitmap);
+        maIconSet[maCurrentStyle].maIconCache[name.intern()] = std::make_pair(localized, bitmap);
 
     return found;
 }
 
 void ImplImageTree::shutDown()
 {
-    m_style.clear();
-        // for safety; empty m_style means "not initialized"
-    m_iconCache.clear();
-    m_linkHash.clear();
+    maCurrentStyle.clear();
+    for (StyleIconSet::iterator it = maIconSet.begin(); it != maIconSet.end(); ++it)
+    {
+        it->second.maIconCache.clear();
+        it->second.maLinkHash.clear();
+    }
 }
 
 void ImplImageTree::setStyle(OUString const & style)
 {
-    OSL_ASSERT(!style.isEmpty()); // empty m_style means "not initialized"
-    if (style != m_style)
+    assert(!style.isEmpty());
+    if (style != maCurrentStyle)
     {
-        m_style = style;
-        resetPaths();
-        m_iconCache.clear();
-        m_linkHash.clear();
-        loadImageLinks();
+        maCurrentStyle = style;
+        createStyle();
     }
 }
 
-void ImplImageTree::resetPaths()
+void ImplImageTree::createStyle()
 {
-    if (maIconSet.find(m_style) != maIconSet.end())
+    if (maIconSet.find(maCurrentStyle) != maIconSet.end())
         return;
 
     OUString url( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/config/" );
     rtl::Bootstrap::expandMacros(url);
-    if ( m_style != "default" )
+    if (maCurrentStyle != "default")
     {
         INetURLObject u(url);
         OSL_ASSERT(!u.HasError());
-        bool ok = u.Append("images_" + m_style, INetURLObject::ENCODE_ALL);
+        bool ok = u.Append("images_" + maCurrentStyle, INetURLObject::ENCODE_ALL);
         OSL_ASSERT(ok); (void) ok;
         url = u.GetMainURL(INetURLObject::NO_DECODE);
     }
     else
         url += "images";
 
-    maIconSet[m_style] = IconSet(url);
+    maIconSet[maCurrentStyle] = IconSet(url);
+
+    loadImageLinks();
 }
 
 bool ImplImageTree::iconCacheLookup(OUString const & name, bool localized, BitmapEx & bitmap)
 {
-    IconCache::iterator i(m_iconCache.find(getRealImageName(name)));
-    if (i != m_iconCache.end() && i->second.first == localized)
+    IconCache &rIconCache = maIconSet[maCurrentStyle].maIconCache;
+
+    IconCache::iterator i(rIconCache.find(getRealImageName(name)));
+    if (i != rIconCache.end() && i->second.first == localized)
     {
         bitmap = i->second.second;
         return true;
@@ -228,7 +231,7 @@ bool ImplImageTree::findImage(std::vector<OUString> const & paths, BitmapEx & bi
     if (!checkPathAccess())
         return false;
 
-    const uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[m_style].maNameAccess;
+    const uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[maCurrentStyle].maNameAccess;
 
     for (std::vector<OUString>::const_reverse_iterator j(paths.rbegin()); j != paths.rend(); ++j)
     {
@@ -252,7 +255,7 @@ void ImplImageTree::loadImageLinks()
     if (!checkPathAccess())
         return;
 
-    const uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[m_style].maNameAccess;
+    const uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[maCurrentStyle].maNameAccess;
 
     if (rNameAccess->hasByName(aLinkFilename))
     {
@@ -288,32 +291,35 @@ void ImplImageTree::parseLinkFile(boost::shared_ptr< SvStream > pStream)
             continue;
         }
 
-        m_linkHash[aLink] = aOriginal;
+        maIconSet[maCurrentStyle].maLinkHash[aLink] = aOriginal;
     }
 }
 
 OUString const & ImplImageTree::getRealImageName(OUString const & name)
 {
-    IconLinkHash::iterator it(m_linkHash.find(name));
-    if (it == m_linkHash.end())
+    IconLinkHash &rLinkHash = maIconSet[maCurrentStyle].maLinkHash;
+
+    IconLinkHash::iterator it(rLinkHash.find(name));
+    if (it == rLinkHash.end())
         return name;
+
     return it->second;
 }
 
 bool ImplImageTree::checkPathAccess()
 {
-    uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[m_style].maNameAccess;
+    uno::Reference<container::XNameAccess> &rNameAccess = maIconSet[maCurrentStyle].maNameAccess;
     if (rNameAccess.is())
         return true;
 
     try {
-        rNameAccess = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), maIconSet[m_style].maURL + ".zip");
+        rNameAccess = css::packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), maIconSet[maCurrentStyle].maURL + ".zip");
     }
     catch (const css::uno::RuntimeException &) {
         throw;
     }
     catch (const css::uno::Exception & e) {
-        SAL_INFO("vcl", "ImplImageTree::zip file location exception " << e.Message << " for " << maIconSet[m_style].maURL);
+        SAL_INFO("vcl", "ImplImageTree::zip file location exception " << e.Message << " for " << maIconSet[maCurrentStyle].maURL);
         return false;
     }
     return rNameAccess.is();
@@ -322,7 +328,7 @@ bool ImplImageTree::checkPathAccess()
 css::uno::Reference<css::container::XNameAccess> ImplImageTree::getNameAccess()
 {
     checkPathAccess();
-    return maIconSet[m_style].maNameAccess;
+    return maIconSet[maCurrentStyle].maNameAccess;
 }
 
 /// Recursively dump all names ...
