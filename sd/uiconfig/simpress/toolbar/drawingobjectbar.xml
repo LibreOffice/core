@@ -46,5 +46,7 @@
  <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:style="auto" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:AnimationEffects"/>
  <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomObjects"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
 </toolbar:toolbar>
