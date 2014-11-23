@@ -92,7 +92,7 @@ static typelib_TypeClass cpp2uno_call(
     ng++;
 
     // stack space
-    assert(sizeof(void *) == sizeof(sal_Int64), "### unexpected size!");
+    static_assert(sizeof(void *) == sizeof(sal_Int64), "### unexpected size!");
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
