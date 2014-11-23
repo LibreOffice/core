@@ -85,7 +85,7 @@ String ST_TYPE_UNPUBLISHED
 };
 String ST_TYPE_EMAIL
 {
-    Text [ en-US ] = "e-mail";
+    Text [ en-US ] = "E-mail";
 };
 String ST_TYPE_WWW
 {
