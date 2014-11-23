@@ -270,7 +270,6 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
     SAL_INFO("vcl.opengl", "OS: " << maOS);
     SAL_INFO("vcl.opengl", "OSRelease: " << maOSRelease);
 
-
     if (mbIsMesa) {
         if (mbIsNouveau && version(mnMajorVersion, mnMinorVersion) < version(8,0)) {
             SAL_WARN("vcl.opengl", "blocked driver version: old nouveau driver (requires mesa 8.0+)");
