@@ -13,10 +13,6 @@ $(eval $(call gb_CustomTarget_CustomTarget,postprocess/images))
 packimages_DIR := $(call gb_CustomTarget_get_workdir,postprocess/images)
 helpimages_DIR := $(call gb_CustomTarget_get_workdir,helpcontent2/source/auxiliary)
 
-# Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
-# (Tango fallbacks to Industrial for the missing icons)
-packimages_CUSTOM_FALLBACKS := -c $(SRCDIR)/icon-themes/tango -c $(SRCDIR)/icon-themes/industrial
-
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \
 	commandimagelist.ilst \
@@ -36,11 +32,9 @@ $(packimages_DIR)/%.zip : \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SRCDIR)/solenv/bin/packimages.pl \
-			-g $(SRCDIR)/icon-themes/galaxy \
-			-m $(SRCDIR)/icon-themes/galaxy \
 			$(if $(DEFAULT_THEME),\
-				-c $(packimages_DIR),\
-				-c $(SRCDIR)/icon-themes/$(subst images_,,$*) $(packimages_CUSTOM_FALLBACKS) \
+				-g $(packimages_DIR) -m $(packimages_DIR) -c $(packimages_DIR),\
+				-g $(SRCDIR)/icon-themes/$(subst images_,,$*) -m $(SRCDIR)/icon-themes/$(subst images_,,$*) -c $(SRCDIR)/icon-themes/$(subst images_,,$*) \
 			) \
 			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
 			-l $(packimages_DIR) \
