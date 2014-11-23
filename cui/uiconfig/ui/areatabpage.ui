@@ -620,7 +620,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="halign">start</property>
                                     <property name="invisible_char">•</property>
-                                    <property name="text" translatable="yes">0</property>
+                                    <property name="text" translatable="no">0</property>
                                     <property name="adjustment">adjustment2</property>
                                   </object>
                                   <packing>
@@ -666,7 +666,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="halign">start</property>
                                     <property name="invisible_char">•</property>
-                                    <property name="text" translatable="yes">0</property>
+                                    <property name="text" translatable="no">0</property>
                                     <property name="adjustment">adjustment2</property>
                                   </object>
                                   <packing>
@@ -804,7 +804,7 @@
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="invisible_char">•</property>
-                            <property name="text" translatable="yes">0</property>
+                            <property name="text" translatable="no">0</property>
                             <property name="adjustment">adjustment2</property>
                           </object>
                           <packing>
