@@ -279,6 +279,11 @@ bool X11OpenGLDeviceInfo::isDeviceBlocked()
             SAL_WARN("vcl.opengl", "blocked driver version: requires at least mesa 7.10.3");
             return true;
         }
+        else if (mbIsIntel && version(mnMajorVersion, mnMinorVersion, mnRevisionVersion) == version(9,0,2))
+        {
+            SAL_WARN("vcl.opengl", "blocked driver version: my broken intel driver Mesa 9.0.2");
+            return true;
+        }
         else if (mbIsOldSwrast) {
             SAL_WARN("vcl.opengl", "blocked driver version: software rasterizer");
             return true;
