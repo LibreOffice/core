@@ -41,6 +41,8 @@
 
 #include <abi.hxx>
 
+#include <osl/mutex.hxx>
+
 namespace {
 
 OUString toUnoName(char const * name) {
