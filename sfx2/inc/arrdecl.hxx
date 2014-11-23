@@ -21,9 +21,6 @@
 
 #include <vector>
 
-class SfxFrame;
-typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
-
 class SfxFilter;
 typedef ::std::vector< SfxFilter* > SfxFilterList_Impl;
 

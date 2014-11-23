@@ -60,6 +60,7 @@
 #include <sfx2/msgpool.hxx>
 #include "objshimp.hxx"
 #include <sfx2/ipclient.hxx>
+#include <childwinimpl.hxx>
 
 #ifdef DBG_UTIL
 #include <sfx2/frmhtmlw.hxx>

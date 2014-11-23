@@ -76,9 +76,7 @@ class Rectangle;
 class SfxRequest;
 class SfxUnoControllerItem;
 class SystemWindow;
-
-class SfxFrame;
-typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
+class SfxFrameArr_Impl;
 
 typedef ::std::vector<OUString> TargetList;
 

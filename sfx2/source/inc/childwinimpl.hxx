@@ -24,6 +24,8 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+class SfxFrame;
+
 class SfxChildWinContextArr_Impl
 {
     typedef boost::ptr_vector<SfxChildWinContextFactory> DataType;
@@ -53,6 +55,28 @@ public:
 
     iterator begin();
     const_iterator begin() const;
+};
+
+class SfxFrameArr_Impl
+{
+    typedef std::vector<SfxFrame*> DataType;
+    DataType maData;
+
+public:
+    typedef DataType::iterator iterator;
+
+    iterator begin();
+    iterator end();
+
+    SfxFrame* front();
+
+    void erase( iterator it );
+
+    SfxFrame* operator[] ( size_t i );
+
+    void push_back( SfxFrame* p );
+    size_t size() const;
+    bool empty() const;
 };
 
 #endif

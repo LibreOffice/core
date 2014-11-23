@@ -45,7 +45,7 @@ class SfxStatusDispatcher;
 class SfxDdeTriggerTopic_Impl;
 class SfxDocumentTemplates;
 class SfxFrame;
-typedef ::std::vector<SfxFrame*> SfxFrameArr_Impl;
+class SfxFrameArr_Impl;
 class SvtSaveOptions;
 class SvtHelpOptions;
 class ResMgr;

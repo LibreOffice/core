@@ -43,6 +43,7 @@
 #include "objshimp.hxx"
 #include "imestatuswindow.hxx"
 #include "appbaslib.hxx"
+#include <childwinimpl.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
