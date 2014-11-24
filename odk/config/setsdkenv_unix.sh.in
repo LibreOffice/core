@@ -80,14 +80,6 @@ fi
 
 export OO_SDK_HOME
 
-# Check installation path for the office.
-if [ -z "${OFFICE_HOME}" ] && [ -z "${OO_SDK_URE_HOME}" ]
-then
-    echo 'Error: Please set either the environment variable OFFICE_HOME or the'
-    echo 'environment variable OO_SDK_URE_HOME.'
-    exit 0
-fi
-
 # Get the operating system.
 sdk_platform=`/bin/sh ${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`
 
@@ -104,41 +96,27 @@ case ${sdk_platform} in
 esac
 
 # Set office program path (only set when using an Office).
-if [ "${OFFICE_HOME}" ]
-then
-    OFFICE_PROGRAM_PATH=${OFFICE_HOME}/${programdir}
-    export OFFICE_PROGRAM_PATH
-fi
-
+OFFICE_PROGRAM_PATH=${OFFICE_HOME}/${programdir}
+export OFFICE_PROGRAM_PATH
 
 # Set UNO path, necessary to ensure that the cpp examples using the
 # new UNO bootstrap mechanism use the configured office installation (only set
 # when using an Office).
-if [ "${OFFICE_HOME}" ]
-then
-    UNO_PATH=${OFFICE_PROGRAM_PATH}
-    export UNO_PATH
-fi
+UNO_PATH=${OFFICE_PROGRAM_PATH}
+export UNO_PATH
 
-if [ "${OO_SDK_URE_HOME}" ]
-then
-    case ${sdk_platform} in
-      darwin*)
+case ${sdk_platform} in
+    darwin*)
         OO_SDK_URE_BIN_DIR=${OO_SDK_URE_HOME}/MacOS
         OO_SDK_URE_LIB_DIR=${OO_SDK_URE_HOME}/Frameworks
         OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/Resources/java
         ;;
-      *)
+    *)
         OO_SDK_URE_BIN_DIR=${OO_SDK_URE_HOME}/bin
         OO_SDK_URE_LIB_DIR=${OO_SDK_URE_HOME}/lib
         OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/share/java
         ;;
-    esac
-else
-    OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
-    OO_SDK_URE_LIB_DIR=${OFFICE_PROGRAM_PATH}
-    OO_SDK_URE_JAVA_DIR=${OFFICE_PROGRAM_PATH}/classes
-fi
+esac
 export OO_SDK_URE_BIN_DIR
 export OO_SDK_URE_LIB_DIR
 export OO_SDK_URE_JAVA_DIR
@@ -294,20 +272,17 @@ then
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
 #    prepare links
-    if [ "${OO_SDK_URE_HOME}" ]
-    then
-	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
-	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
-	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_sal.${soext}.3" \
-	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
-	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
-	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
-	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
-    fi
+    mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_sal.${soext}.3" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
+    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 fi
 
 
