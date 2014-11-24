@@ -129,6 +129,8 @@ SwParaDlg::SwParaDlg(vcl::Window *pParent,
         RemoveTabPage("labelTP_DROPCAPS");
         RemoveTabPage("labelTP_BACKGROUND");
         RemoveTabPage("labelTP_BORDER");
+        RemoveTabPage("area");
+        RemoveTabPage("transparence");
     }
     else
     {
