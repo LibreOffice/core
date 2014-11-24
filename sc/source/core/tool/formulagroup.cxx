@@ -20,6 +20,7 @@
 #include "globalnames.hxx"
 
 #include <formula/vectortoken.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <vector>
@@ -522,7 +523,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     if ( !msInstance )
     {
         const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
-        if (rConfig.mbOpenCLEnabled)
+        if (officecfg::Office::Common::Misc::UseOpenCL::get())
             switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect, false);
 
         if ( !msInstance ) // software fallback
@@ -549,7 +550,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 
 bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
-    bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
+    bool bOpenCLEnabled = officecfg::Office::Common::Misc::UseOpenCL::get();
     if (!bOpenCLEnabled || rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME)
     {
         if(msInstance)
@@ -576,7 +577,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     msInstance = NULL;
 
 #if HAVE_FEATURE_OPENCL
-    if ( ScInterpreter::GetGlobalConfig().mbOpenCLEnabled )
+    if ( officecfg::Office::Common::Misc::UseOpenCL::get() )
     {
         msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
         return msInstance != NULL;
@@ -591,7 +592,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
 {
     rDeviceId = -1;
     rPlatformId = -1;
-    bool bOpenCLEnabled = ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
+    bool bOpenCLEnabled = officecfg::Office::Common::Misc::UseOpenCL::get();
     if(!bOpenCLEnabled)
         return;
 
@@ -608,8 +609,11 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
 
 void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely, const std::set<OpCodeEnum>& rSubsetToEnable)
 {
+    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::UseOpenCL::set(bEnable, batch);
+    batch->commit();
+
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
-    aConfig.mbOpenCLEnabled = bEnable;
     aConfig.mbOpenCLSubsetOnly = !bEnableCompletely;
     aConfig.maOpenCLSubsetOpCodes = rSubsetToEnable;
     ScInterpreter::SetGlobalConfig(aConfig);

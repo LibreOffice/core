@@ -23,6 +23,7 @@
 #include <stdio.h>
 
 #include <unotools/bootstrap.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svl/zforlist.hxx>
 
 #include "interpre.hxx"
@@ -908,7 +909,7 @@ void ScInterpreter::ScMatInv()
         SCSIZE nC, nR;
         pMat->GetDimensions(nC, nR);
 
-        if (maCalcConfig.mbOpenCLEnabled)
+        if (officecfg::Office::Common::Misc::UseOpenCL::get())
         {
             ScMatrixRef xResMat = sc::FormulaGroupInterpreter::getStatic()->inverseMatrix(*pMat);
             if (xResMat)

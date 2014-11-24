@@ -200,15 +200,14 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 #define SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO 7
 #define SCFORMULAOPT_OOXML_RECALC         8
 #define SCFORMULAOPT_ODF_RECALC           9
-#define SCFORMULAOPT_OPENCL_ENABLED      10
-#define SCFORMULAOPT_OPENCL_AUTOSELECT   11
-#define SCFORMULAOPT_OPENCL_DEVICE       12
-#define SCFORMULAOPT_OPENCL_SUBSET_ONLY  13
-#define SCFORMULAOPT_OPENCL_MIN_SIZE     14
-#define SCFORMULAOPT_OPENCL_SUBSET_OPS   15
-#define SCFORMULAOPT_OPENCL_BLACKLIST    16
-#define SCFORMULAOPT_OPENCL_WHITELIST    17
-#define SCFORMULAOPT_COUNT               18
+#define SCFORMULAOPT_OPENCL_AUTOSELECT   10
+#define SCFORMULAOPT_OPENCL_DEVICE       11
+#define SCFORMULAOPT_OPENCL_SUBSET_ONLY  12
+#define SCFORMULAOPT_OPENCL_MIN_SIZE     13
+#define SCFORMULAOPT_OPENCL_SUBSET_OPS   14
+#define SCFORMULAOPT_OPENCL_BLACKLIST    15
+#define SCFORMULAOPT_OPENCL_WHITELIST    16
+#define SCFORMULAOPT_COUNT               17
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -224,7 +223,6 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
         "Syntax/EmptyStringAsZero",      // SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO
         "Load/OOXMLRecalcMode",          // SCFORMULAOPT_OOXML_RECALC
         "Load/ODFRecalcMode",            // SCFORMULAOPT_ODF_RECALC
-        "Calculation/OpenCL",            // SCFORMULAOPT_OPENCL_ENABLED
         "Calculation/OpenCLAutoSelect",  // SCFORMULAOPT_OPENCL_AUTOSELECT
         "Calculation/OpenCLDevice",      // SCFORMULAOPT_OPENCL_DEVICE
         "Calculation/OpenCLSubsetOnly",  // SCFORMULAOPT_OPENCL_SUBSET_ONLY
@@ -255,7 +253,6 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
         SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO,
         SCFORMULAOPT_OOXML_RECALC,
         SCFORMULAOPT_ODF_RECALC,
-        SCFORMULAOPT_OPENCL_ENABLED,
         SCFORMULAOPT_OPENCL_AUTOSELECT,
         SCFORMULAOPT_OPENCL_DEVICE,
         SCFORMULAOPT_OPENCL_SUBSET_ONLY,
@@ -542,17 +539,6 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     SetODFRecalcOptions(eOpt);
                 }
                 break;
-                case SCFORMULAOPT_OPENCL_ENABLED:
-                {
-                    bool bVal = GetCalcConfig().mbOpenCLEnabled;
-                    pValues[nProp] >>= bVal;
-#if 0 // Don't remove please.
-      // The intent here is that tml when running CppunitTest_sc_opencl_test turns this on.
-                    bVal = sal_True;
-#endif
-                    GetCalcConfig().mbOpenCLEnabled = bVal;
-                }
-                break;
                 case SCFORMULAOPT_OPENCL_AUTOSELECT:
                 {
                     bool bVal = GetCalcConfig().mbOpenCLAutoSelect;
@@ -714,13 +700,6 @@ void ScFormulaCfg::Commit()
                 }
 
                 pValues[nProp] <<= nVal;
-            }
-            break;
-            case SCFORMULAOPT_OPENCL_ENABLED:
-            {
-                bool bVal = GetCalcConfig().mbOpenCLEnabled;
-                pValues[nProp] <<= bVal;
-                bSetOpenCL = bVal;
             }
             break;
             case SCFORMULAOPT_OPENCL_AUTOSELECT:

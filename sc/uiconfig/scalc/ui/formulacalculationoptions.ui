@@ -570,34 +570,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="opencl_enabled">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Enable OpenCL for some formula computation</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">15</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="opencl_enabled_desc">
-                <property name="can_focus">False</property>
-                <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">This option enables some sorts of simple formula expressions to be executed using OpenCL if it is available on your system.</property>
-                <property name="wrap">True</property>
-                <property name="max_width_chars">56</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">16</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="opencl_subset_enabled">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
@@ -605,7 +577,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">17</property>
+                <property name="top_attach">15</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -620,7 +592,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">18</property>
+                <property name="top_attach">16</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -633,7 +605,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">19</property>
+                <property name="top_attach">17</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -648,7 +620,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">20</property>
+                <property name="top_attach">18</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -661,7 +633,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">21</property>
+                <property name="top_attach">19</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -676,7 +648,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">22</property>
+                <property name="top_attach">20</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -689,7 +661,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">23</property>
+                <property name="top_attach">21</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -704,7 +676,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">24</property>
+                <property name="top_attach">22</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -717,7 +689,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">25</property>
+                <property name="top_attach">23</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -732,7 +704,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">26</property>
+                <property name="top_attach">25</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -954,7 +926,6 @@
       <widget name="annotation"/>
       <widget name="ref_syntax_desc"/>
       <widget name="empty_str_as_zero_desc"/>
-      <widget name="opencl_enabled_desc"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">

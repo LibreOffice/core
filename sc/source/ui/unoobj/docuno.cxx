@@ -2324,17 +2324,19 @@ void ScModelObj::HandleCalculateEvents()
 sal_Bool ScModelObj::isOpenCLEnabled()
     throw (uno::RuntimeException, std::exception)
 {
-    return ScInterpreter::GetGlobalConfig().mbOpenCLEnabled;
+    return officecfg::Office::Common::Misc::UseOpenCL::get();
 }
 
 void ScModelObj::enableOpenCL(sal_Bool bEnable)
     throw (uno::RuntimeException, std::exception)
 {
+    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Misc::UseOpenCL::set(bEnable, batch);
+    batch->commit();
+
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
     if (bEnable)
         aConfig.setOpenCLConfigToDefault();
-    else
-        aConfig.mbOpenCLEnabled = false;
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 
