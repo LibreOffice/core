@@ -106,7 +106,7 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, bool bReadonly)
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
-    ((SwTOXBase&)rTOXBase).SetProtected(bReadonly);
+    const_cast<SwTOXBase&>(rTOXBase).SetProtected(bReadonly);
     OSL_ENSURE( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
 
     SwSectionData aSectionData(rTOXSect);
@@ -143,7 +143,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     CalcLayout();
 
     // insert page numbering
-    ((SwTOXBaseSection*)pTOX)->UpdatePageNum();
+    const_cast<SwTOXBaseSection*>(pTOX)->UpdatePageNum();
 
     pTOX->SetPosAtStartEnd( *GetCrsr()->GetPoint() );
 

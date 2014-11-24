@@ -438,7 +438,7 @@ sal_uInt16 SwAutoFormat::CalcLevel( const SwTxtNode& rNd, sal_uInt16 *pDigitLvl 
         if( m_aFlags.bAFmtByInput )
         {
             nLvl = rNd.GetAutoFmtLvl();
-            ((SwTxtNode&)rNd).SetAutoFmtLvl( 0 );
+            const_cast<SwTxtNode&>(rNd).SetAutoFmtLvl( 0 );
             if( nLvl )
                 return nLvl;
         }

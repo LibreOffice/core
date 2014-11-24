@@ -864,7 +864,7 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                 if ( pTab->IsFollow() && pTab->IsInHeadline( *pCell ) )
                     continue;
 
-                ((SwTableBox*)pCell->GetTabBox())->ClaimFrmFmt();
+                const_cast<SwTableBox*>(pCell->GetTabBox())->ClaimFrmFmt();
                 SwFrmFmt *pFmt = pCell->GetFmt();
                 SvxBoxItem aBox( pFmt->GetBox() );
 

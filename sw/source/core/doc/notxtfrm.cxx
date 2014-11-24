@@ -958,7 +958,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 else if ( !rGrfObj.GetGraphic().IsSupportedGraphic() )
                     nResId = STR_COMCORE_CANT_SHOW;
 
-                ((SwNoTxtFrm*)this)->nWeight = -1;
+                const_cast<SwNoTxtFrm*>(this)->nWeight = -1;
                 OUString aText;
                 if ( !nResId &&
                      (aText = pGrfNd->GetTitle()).isEmpty() &&

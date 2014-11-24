@@ -223,8 +223,8 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
         pCT->pTblNd->GetTable().GetTabLines().push_back( pNewLine );
     }
     pCT->pInsLine = pNewLine;
-    for( SwTableBoxes::iterator it = ((SwTableLine*)pLine)->GetTabBoxes().begin();
-             it != ((SwTableLine*)pLine)->GetTabBoxes().end(); ++it)
+    for( SwTableBoxes::iterator it = const_cast<SwTableLine*>(pLine)->GetTabBoxes().begin();
+             it != const_cast<SwTableLine*>(pLine)->GetTabBoxes().end(); ++it)
         lcl_CopyTblBox(*it, pCT );
 }
 

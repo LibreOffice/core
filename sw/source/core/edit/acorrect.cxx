@@ -463,7 +463,7 @@ void SwDontExpandItem::SaveDontExpandItems( const SwPosition& rPos )
     const SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
     {
-        pDontExpItems = new SfxItemSet( ((SwDoc*)pTxtNd->GetDoc())->GetAttrPool(),
+        pDontExpItems = new SfxItemSet( const_cast<SwDoc*>(pTxtNd->GetDoc())->GetAttrPool(),
                                             aCharFmtSetRange );
         const sal_Int32 n = rPos.nContent.GetIndex();
         if( !pTxtNd->GetAttr( *pDontExpItems, n, n,

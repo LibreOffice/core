@@ -1631,7 +1631,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         // Instead of removing 'master' object from drawing page, move the
         // 'master' drawing object into the corresponding invisible layer.
         {
-            //((SwFrmFmt*)GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+            //static_cast<SwFrmFmt*>(GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
             //                            RemoveObject( GetMaster()->GetOrdNum() );
             // #i18447# - in order to consider group object correct
             // use new method <SwDrawContact::MoveObjToInvisibleLayer(..)>
@@ -2449,8 +2449,8 @@ void SwDrawVirtObj::RecalcSnapRect()
 
 const Rectangle& SwDrawVirtObj::GetSnapRect() const
 {
-    ((SwDrawVirtObj*)this)->aSnapRect = rRefObj.GetSnapRect();
-    ((SwDrawVirtObj*)this)->aSnapRect += GetOffset();
+    const_cast<SwDrawVirtObj*>(this)->aSnapRect = rRefObj.GetSnapRect();
+    const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
 
     return aSnapRect;
 }
@@ -2475,8 +2475,8 @@ void SwDrawVirtObj::NbcSetSnapRect(const Rectangle& rRect)
 
 const Rectangle& SwDrawVirtObj::GetLogicRect() const
 {
-    ((SwDrawVirtObj*)this)->aSnapRect = rRefObj.GetLogicRect();
-    ((SwDrawVirtObj*)this)->aSnapRect += GetOffset();
+    const_cast<SwDrawVirtObj*>(this)->aSnapRect = rRefObj.GetLogicRect();
+    const_cast<SwDrawVirtObj*>(this)->aSnapRect += GetOffset();
 
     return aSnapRect;
 }

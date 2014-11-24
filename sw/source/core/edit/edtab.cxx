@@ -281,7 +281,7 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
 
     if( pTblNd )
     {
-        ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
+        const_cast<SwTable&>(pTblNd->GetTable()).SetTblChgMode( eMode );
         if( !GetDoc()->getIDocumentState().IsModified() )   // Bug 57028
         {
             GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
@@ -321,7 +321,7 @@ bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
 
             SwTableFmlUpdate aTblUpdate( (SwTable*)&rTbl );
             aTblUpdate.eFlags = TBL_BOXNAME;
-            ((SwDoc*)GetDoc())->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
+            static_cast<SwDoc*>(GetDoc())->getIDocumentFieldsAccess().UpdateTblFlds( &aTblUpdate );
 
             rSet.Put( pTblFmt->GetAttrSet() );
         }

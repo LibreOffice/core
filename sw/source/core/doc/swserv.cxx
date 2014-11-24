@@ -233,7 +233,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
         // To avoid recursions: convert ServerType!
         SwServerObject::ServerModes eSave = eType;
         if( !pChkLnk )
-            ((SwServerObject*)this)->eType = NONE_SERVER;
+            const_cast<SwServerObject*>(this)->eType = NONE_SERVER;
         for( sal_uInt16 n = rLnks.size(); n; )
         {
             const ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
@@ -253,7 +253,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
             }
         }
         if( !pChkLnk )
-            ((SwServerObject*)this)->eType = eSave;
+            const_cast<SwServerObject*>(this)->eType = eSave;
     }
 
     return false;

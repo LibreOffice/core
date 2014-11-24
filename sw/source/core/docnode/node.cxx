@@ -940,14 +940,14 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
                 if( pFmt->GetRegisteredIn() )
                 {
                     // If Parent, register anew in the new Parent
-                    ((SwModify*)pFmt->GetRegisteredIn())->Add( this );
+                    static_cast<SwModify*>(pFmt->GetRegisteredIn())->Add( this );
                     if ( GetpSwAttrSet() )
                         AttrSetHandleHelper::SetParent( mpAttrSet, *this, GetFmtColl(), GetFmtColl() );
                 }
                 else
                 {
                     // Else register anyways when dying
-                    ((SwModify*)GetRegisteredIn())->Remove( this );
+                    static_cast<SwModify*>(GetRegisteredIn())->Remove( this );
                     if ( GetpSwAttrSet() )
                         AttrSetHandleHelper::SetParent( mpAttrSet, *this, 0, 0 );
                 }
@@ -1275,7 +1275,7 @@ void SwCntntNode::DelFrms( bool bIsDisposeAccTable )
                 0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
             {
                 OSL_ENSURE( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
-                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
+                static_cast<SwTxtFrm*>(pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
             }
         }
         //Set acc table dispose state

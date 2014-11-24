@@ -90,9 +90,9 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
     if (pSh)
     {
         if ( pGridLst )
-            ((SwDPage*)this)->pGridLst->Clear();
+            const_cast<SwDPage*>(this)->pGridLst->Clear();
         else
-            ((SwDPage*)this)->pGridLst = new SdrPageGridFrameList;
+            const_cast<SwDPage*>(this)->pGridLst = new SdrPageGridFrameList;
 
         if ( pRect )
         {
@@ -101,7 +101,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwFrm *pPg = pSh->GetLayout()->Lower();
             do
             {   if ( pPg->Frm().IsOver( aRect ) )
-                    ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
+                    ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst, pPg );
                 pPg = pPg->GetNext();
             } while ( pPg );
         }
@@ -111,7 +111,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
             const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
             if ( pPg )
                 do
-                {   ::InsertGridFrame( ((SwDPage*)this)->pGridLst, pPg );
+                {   ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst, pPg );
                     pPg = pPg->GetNext();
                 } while ( pPg && pPg->Frm().IsOver( pSh->VisArea() ) );
         }

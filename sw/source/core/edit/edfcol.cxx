@@ -34,7 +34,7 @@
 
 SwTxtFmtColl& SwEditShell::GetDfltTxtFmtColl() const
 {
-    return *((SwTxtFmtColl*) (GetDoc()->GetDfltTxtFmtColl()));
+    return *static_cast<SwTxtFmtColl*>( (GetDoc()->GetDfltTxtFmtColl()));
 }
 
 sal_uInt16 SwEditShell::GetTxtFmtCollCount() const

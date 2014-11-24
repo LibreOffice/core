@@ -502,9 +502,9 @@ void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 void SwVirtFlyDrawObj::SetRect() const
 {
     if ( GetFlyFrm()->Frm().HasArea() )
-        ((SwVirtFlyDrawObj*)this)->aOutRect = GetFlyFrm()->Frm().SVRect();
+        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = GetFlyFrm()->Frm().SVRect();
     else
-        ((SwVirtFlyDrawObj*)this)->aOutRect = Rectangle();
+        const_cast<SwVirtFlyDrawObj*>(this)->aOutRect = Rectangle();
 }
 
 const Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
