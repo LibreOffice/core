@@ -37,15 +37,14 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::linguistic2;
 
 
 
 TextConvWrapper::TextConvWrapper( vcl::Window* pWindow,
         const Reference< XComponentContext >& rxContext,
-        const Locale& rSourceLocale,
-        const Locale& rTargetLocale,
+        const lang::Locale& rSourceLocale,
+        const lang::Locale& rTargetLocale,
         const vcl::Font* pTargetFont,
         sal_Int32 nOptions,
         bool bIsInteractive,
