@@ -18,7 +18,6 @@
  */
 
 #include <svx/svxids.hrc>
-#include "app.hrc"
 
 String RID_APPTITLE
 {
@@ -50,13 +49,6 @@ ImageList RID_DEFAULTIMAGELIST_LC
     Prefix = "lc";
     MASKCOLOR
     IMAGE_ID_LIST
-};
-
-// Strings ---------------------------------------------------------------
-
-String RID_DESKTOP
-{
-    Text = "%PRODUCTNAME" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
