@@ -59,7 +59,6 @@ struct SfxObjectUI_Impl
     sal_uInt32  nResId;
     bool        bVisible;
     bool        bContext;
-    OUString*   pName;
     sal_uInt32  nFeature;
 
     SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, bool bVis, sal_uInt32 nFeat) :
@@ -67,14 +66,8 @@ struct SfxObjectUI_Impl
         nResId(nId),
         bVisible(bVis),
         bContext(false),
-        pName(0),
         nFeature(nFeat)
     {
-    }
-
-    ~SfxObjectUI_Impl()
-    {
-        delete pName;
     }
 };
 
