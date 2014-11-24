@@ -40,7 +40,6 @@ ELF platforms (Linux, Solaris, *BSD):
 /opt/openoffice.org/ure/share/misc/types.rdb
 /opt/openoffice.org/ure/share/misc/services.rdb
 /opt/openoffice.org/ure/lib/libxml2.so.2  [external]
-/opt/openoffice.org/ure/bin/startup.sh  [private]
 /opt/openoffice.org/ure/bin/uno.bin  [private]
 /opt/openoffice.org/ure/lib/unorc  [private]
 /opt/openoffice.org/ure/lib/libreglo.so  [private]
