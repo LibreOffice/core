@@ -119,7 +119,6 @@ public:
     SfxViewShellArr_Impl*       pViewShells;
     SfxObjectShellArr_Impl*     pObjShells;
     ResMgr*                     pSfxResManager;
-    ResMgr*                     pOfaResMgr;
     SfxBasicManagerHolder*      pBasicManager;
     SfxBasicManagerCreationListener*
                                 pBasMgrListener;

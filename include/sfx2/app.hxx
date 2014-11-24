@@ -241,7 +241,6 @@ public:
     // already removed, or the below methods?
     SAL_DLLPRIVATE SfxSlotPool& GetAppSlotPool_Impl() const;
     SAL_DLLPRIVATE SfxModule*   GetModule_Impl();
-    SAL_DLLPRIVATE ResMgr*      GetOffResManager_Impl();
 
     static bool loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth);
 

@@ -110,7 +110,6 @@ void SfxApplication::Deinitialize()
     DELETEZ(pAppData_Impl->pAppDispat);
     SfxResId::DeleteResMgr();
     SvtResId::DeleteResMgr();
-    DELETEZ(pAppData_Impl->pOfaResMgr);
 
     // from here no SvObjects have to exists
     DELETEZ(pAppData_Impl->pMatcher);
