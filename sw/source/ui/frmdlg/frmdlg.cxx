@@ -61,7 +61,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pViewFrame,
     , m_bNew(bNewFrm)
     , m_rSet(rCoreSet)
     , m_sDlgType(sResType)
-    , m_pWrtShell(((SwView*)pViewFrame->GetViewShell())->GetWrtShellPtr())
+    , m_pWrtShell(static_cast<SwView*>(pViewFrame->GetViewShell())->GetWrtShellPtr())
     , m_nStdId(0)
     , m_nAddId(0)
     , m_nWrapId(0)
@@ -146,31 +146,31 @@ void SwFrmDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (nId == m_nStdId)
     {
-        ((SwFrmPage&)rPage).SetNewFrame(m_bNew);
-        ((SwFrmPage&)rPage).SetFormatUsed(m_bFormat);
-        ((SwFrmPage&)rPage).SetFrmType(m_sDlgType);
+        static_cast<SwFrmPage&>(rPage).SetNewFrame(m_bNew);
+        static_cast<SwFrmPage&>(rPage).SetFormatUsed(m_bFormat);
+        static_cast<SwFrmPage&>(rPage).SetFrmType(m_sDlgType);
     }
     else if (nId == m_nAddId)
     {
-        ((SwFrmAddPage&)rPage).SetFormatUsed(m_bFormat);
-        ((SwFrmAddPage&)rPage).SetFrmType(m_sDlgType);
-        ((SwFrmAddPage&)rPage).SetNewFrame(m_bNew);
-        ((SwFrmAddPage&)rPage).SetShell(m_pWrtShell);
+        static_cast<SwFrmAddPage&>(rPage).SetFormatUsed(m_bFormat);
+        static_cast<SwFrmAddPage&>(rPage).SetFrmType(m_sDlgType);
+        static_cast<SwFrmAddPage&>(rPage).SetNewFrame(m_bNew);
+        static_cast<SwFrmAddPage&>(rPage).SetShell(m_pWrtShell);
     }
     else if (nId == m_nWrapId)
     {
-        ((SwWrapTabPage&)rPage).SetNewFrame(m_bNew);
-        ((SwWrapTabPage&)rPage).SetFormatUsed(m_bFormat, false);
-        ((SwWrapTabPage&)rPage).SetShell(m_pWrtShell);
+        static_cast<SwWrapTabPage&>(rPage).SetNewFrame(m_bNew);
+        static_cast<SwWrapTabPage&>(rPage).SetFormatUsed(m_bFormat, false);
+        static_cast<SwWrapTabPage&>(rPage).SetShell(m_pWrtShell);
     }
     else if (nId == m_nColumnId)
     {
-        ((SwColumnPage&)rPage).SetFrmMode(true);
-        ((SwColumnPage&)rPage).SetFormatUsed(m_bFormat);
+        static_cast<SwColumnPage&>(rPage).SetFrmMode(true);
+        static_cast<SwColumnPage&>(rPage).SetFormatUsed(m_bFormat);
 
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)
                                             m_rSet.Get( RES_FRM_SIZE );
-        ((SwColumnPage&)rPage).SetPageWidth( rSize.GetWidth() );
+        static_cast<SwColumnPage&>(rPage).SetPageWidth( rSize.GetWidth() );
     }
     else if (nId == m_nMacroId)
     {

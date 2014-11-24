@@ -146,7 +146,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( vcl::Window* pParent, SwDocShell& rDocSh,
                 if(pDoc)
                 {
                     const sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
-                    aOpt.SetLanguage( ((SvxLanguageItem&)pDoc->
+                    aOpt.SetLanguage( static_cast<const SvxLanguageItem&>(pDoc->
                                 GetDefault( nWhich )).GetLanguage());
                 }
                 else

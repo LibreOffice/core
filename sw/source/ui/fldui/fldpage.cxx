@@ -194,7 +194,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
                 aData.nCommandType = rPar1.getToken(0, DB_DELIM, nPos).toInt32();
                 sPar1 = rPar1.copy(nPos);
 
-                ((SwDBNameInfField*)pTmpFld)->SetDBData(aData);
+                static_cast<SwDBNameInfField*>(pTmpFld)->SetDBData(aData);
             }
             break;
 

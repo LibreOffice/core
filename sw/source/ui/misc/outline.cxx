@@ -200,12 +200,12 @@ void SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)
 {
     if (nPageId == m_nNumPosId)
     {
-        ((SwNumPositionTabPage&)rPage).SetWrtShell(&rWrtSh);
-        ((SwNumPositionTabPage&)rPage).SetOutlineTabDialog(this);
+        static_cast<SwNumPositionTabPage&>(rPage).SetWrtShell(&rWrtSh);
+        static_cast<SwNumPositionTabPage&>(rPage).SetOutlineTabDialog(this);
     }
     else if (nPageId == m_nOutlineId)
     {
-        ((SwOutlineSettingsTabPage&)rPage).SetWrtShell(&rWrtSh);
+        static_cast<SwOutlineSettingsTabPage&>(rPage).SetWrtShell(&rWrtSh);
     }
 }
 
@@ -717,7 +717,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CharFmtHdl)
             pBase = pPool->Find(sEntry, SFX_STYLE_FAMILY_CHAR);
             if(!pBase)
                 pBase = &pPool->Make(sEntry, SFX_STYLE_FAMILY_PAGE);
-            pFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+            pFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
 
         }
     }
@@ -746,8 +746,8 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
 {
     pSh = pShell;
     // query this document's NumRules
-    pNumRule = ((SwOutlineTabDialog*)GetTabDialog())->GetNumRule();
-    pCollNames = ((SwOutlineTabDialog*)GetTabDialog())->GetCollNames();
+    pNumRule = static_cast<SwOutlineTabDialog*>(GetTabDialog())->GetNumRule();
+    pCollNames = static_cast<SwOutlineTabDialog*>(GetTabDialog())->GetCollNames();
 
     m_pPreviewWIN->SetNumRule(pNumRule);
     m_pPreviewWIN->SetOutlineNames(pCollNames);

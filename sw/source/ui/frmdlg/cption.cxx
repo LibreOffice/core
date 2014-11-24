@@ -210,7 +210,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         pFldType = pMgr->GetFldType(USHRT_MAX, --i);
         if( pFldType->GetName().equals(m_pCategoryBox->GetText()) )
         {
-            nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
+            nSelFmt = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFldType)->GetSeqFormat();
             break;
         }
     }
@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
                     : 0;
     m_pOKButton->Enable( bCorrectFldName &&
                         (!pType ||
-                            ((SwSetExpFieldType*)pType)->GetType() == nsSwGetSetExpType::GSE_SEQ) );
+                            static_cast<SwSetExpFieldType*>(pType)->GetType() == nsSwGetSetExpType::GSE_SEQ) );
     m_pOptionButton->Enable( m_pOKButton->IsEnabled() && !bNone );
     m_pNumberingSeparatorFT->Enable( bOrderNumberingFirst && !bNone );
     m_pNumberingSeparatorED->Enable( bOrderNumberingFirst && !bNone );

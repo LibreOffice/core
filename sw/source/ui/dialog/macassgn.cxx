@@ -130,7 +130,7 @@ bool SwMacroAssignDlg::INetFmtDlg( vcl::Window* pParent, SwWrtShell& rSh,
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == pOutSet->GetItemState( RES_FRMMACRO, false, &pItem ))
         {
-            rpINetItem->SetMacroTable( ((SvxMacroItem*)pItem)->GetMacroTable() );
+            rpINetItem->SetMacroTable( static_cast<const SvxMacroItem*>(pItem)->GetMacroTable() );
             bRet = true;
         }
     }

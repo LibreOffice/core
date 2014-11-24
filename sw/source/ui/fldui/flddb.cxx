@@ -287,12 +287,12 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
             OUString sColumnName;
             if (nTypeId == TYP_DBFLD)
             {
-                aData = ((SwDBField*)GetCurField())->GetDBData();
-                sColumnName = ((SwDBFieldType*)GetCurField()->GetTyp())->GetColumnName();
+                aData = static_cast<SwDBField*>(GetCurField())->GetDBData();
+                sColumnName = static_cast<SwDBFieldType*>(GetCurField()->GetTyp())->GetColumnName();
             }
             else
             {
-                aData = ((SwDBNameInfField*)GetCurField())->GetDBData(pSh->GetDoc());
+                aData = static_cast<SwDBNameInfField*>(GetCurField())->GetDBData(pSh->GetDoc());
             }
             m_pDatabaseTLB->Select(aData.sDataSource, aData.sCommand, sColumnName);
         }

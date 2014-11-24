@@ -1098,9 +1098,9 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                         if( SfxItemState::SET == eEndState )
                             pRepr->GetEndNtAtEnd() = *(SwFmtEndAtTxtEnd*)pEndItem;
                         if( SfxItemState::SET == eBalanceState )
-                            pRepr->GetBalance().SetValue(((SwFmtNoBalancedColumns*)pBalanceItem)->GetValue());
+                            pRepr->GetBalance().SetValue(static_cast<const SwFmtNoBalancedColumns*>(pBalanceItem)->GetValue());
                         if( SfxItemState::SET == eFrmDirState )
-                            pRepr->GetFrmDir().SetValue(((SvxFrameDirectionItem*)pFrmDirItem)->GetValue());
+                            pRepr->GetFrmDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrmDirItem)->GetValue());
                         if( SfxItemState::SET == eLRState )
                             pRepr->GetLRSpace() = *(SvxLRSpaceItem*)pLRSpaceItem;
 
@@ -1424,7 +1424,7 @@ SwInsertSectionTabDialog::~SwInsertSectionTabDialog()
 void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     if (nId == m_nSectionPageId)
-        ((SwInsertSectionTabPage&)rPage).SetWrtShell(rWrtSh);
+        static_cast<SwInsertSectionTabPage&>(rPage).SetWrtShell(rWrtSh);
     else if (nId == m_nBackPageId)
     {
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -1434,12 +1434,12 @@ void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nColumnPageId)
     {
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)GetInputSetImpl()->Get(RES_FRM_SIZE);
-        ((SwColumnPage&)rPage).SetPageWidth(rSize.GetWidth());
-        ((SwColumnPage&)rPage).ShowBalance(true);
-        ((SwColumnPage&)rPage).SetInSection(true);
+        static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
+        static_cast<SwColumnPage&>(rPage).ShowBalance(true);
+        static_cast<SwColumnPage&>(rPage).SetInSection(true);
     }
     else if (nId == m_nIndentPage)
-        ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
+        static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
 }
 
 void SwInsertSectionTabDialog::SetSectionData(SwSectionData const& rSect)
@@ -1627,7 +1627,7 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
                                         FILE_LINK_SECTION);
         }
     }
-    ((SwInsertSectionTabDialog*)GetTabDialog())->SetSectionData(aSection);
+    static_cast<SwInsertSectionTabDialog*>(GetTabDialog())->SetSectionData(aSection);
     return true;
 }
 
@@ -2076,11 +2076,11 @@ void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage 
     }
     else if (nId == m_nColumnPageId)
     {
-        ((SwColumnPage&)rPage).ShowBalance(true);
-        ((SwColumnPage&)rPage).SetInSection(true);
+        static_cast<SwColumnPage&>(rPage).ShowBalance(true);
+        static_cast<SwColumnPage&>(rPage).SetInSection(true);
     }
     else if (nId == m_nIndentPage)
-        ((SwSectionIndentTabPage&)rPage).SetWrtShell(rWrtSh);
+        static_cast<SwSectionIndentTabPage&>(rPage).SetWrtShell(rWrtSh);
 }
 
 SwSectionIndentTabPage::SwSectionIndentTabPage(vcl::Window *pParent, const SfxItemSet &rAttrSet)

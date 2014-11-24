@@ -74,7 +74,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
     const SwEnvItem& rItem =
-        ((SwEnvDlg*) GetParentDialog())->aEnvItem;
+        static_cast<SwEnvDlg*>( GetParentDialog())->aEnvItem;
 
     const long nPageW = std::max(rItem.lWidth, rItem.lHeight);
     const long nPageH = std::min(rItem.lWidth, rItem.lHeight);
@@ -161,7 +161,7 @@ void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
     if (nId == m_nEnvPrintId)
     {
-        ((SwEnvPrtPage*)&rPage)->SetPrt(pPrinter);
+        static_cast<SwEnvPrtPage*>(&rPage)->SetPrt(pPrinter);
     }
 }
 

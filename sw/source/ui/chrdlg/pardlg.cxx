@@ -218,7 +218,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
     else if( m_nParaDrpCps == nId )
     {
-        ((SwDropCapsPage&)rPage).SetFormat(false);
+        static_cast<SwDropCapsPage&>(rPage).SetFormat(false);
     }
     else if( m_nParaBckGrnd == nId )
     {
@@ -241,11 +241,11 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
         SwTxtFmtColl* pTmpColl = rSh.GetCurTxtFmtColl();
         if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
+            static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;
         }
 
-        ((SwParagraphNumTabPage&)rPage).EnableNewStart();
-        ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
+        static_cast<SwParagraphNumTabPage&>(rPage).EnableNewStart();
+        ListBox & rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = rView.GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
         const SfxStyleSheetBase* pBase = pPool->First();

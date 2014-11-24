@@ -108,7 +108,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
-        && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pTabFT->Hide();
         m_pTabMF->Hide();
@@ -297,7 +297,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_pMetricLB->SaveValue();
     if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
     {
-        m_nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
+        m_nLastTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         m_pTabMF->SetValue(m_pTabMF->Normalize(m_nLastTab), FUNIT_TWIP);
     }
     m_pTabMF->SaveValue();
@@ -462,7 +462,7 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
             pFldType = pMgr->GetFldType(USHRT_MAX, --i);
             if (pFldType->GetName().equals(m_pCategoryBox->GetText()))
             {
-                nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
+                nSelFmt = (sal_uInt16)static_cast<SwSetExpFieldType*>(pFldType)->GetSeqFormat();
                 break;
             }
         }

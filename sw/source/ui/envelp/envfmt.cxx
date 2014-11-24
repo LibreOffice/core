@@ -289,7 +289,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         aTmpSet.Put( aTabPos );
 
         // left border as offset
-        const long nOff = ((SvxLRSpaceItem&)aTmpSet.Get( RES_LR_SPACE )).
+        const long nOff = static_cast<const SvxLRSpaceItem&>(aTmpSet.Get( RES_LR_SPACE )).
                                                             GetTxtLeft();
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aTmpSet.Put( aOff );
@@ -309,7 +309,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 
             if( SfxItemState::SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
                 false, &pItem ) &&
-                nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
+                nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
             {
                 SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
                 MakeDefTabs( nNewDist, aDefTabs );

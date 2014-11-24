@@ -335,7 +335,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 // It must be used though because otherwise in GetPar2 only
                 // the value calculated by Kalkulator would be displayed
                 // (instead of test2 = test + 1)
-                m_pValueED->SetText(((SwSetExpField*)GetCurField())->GetFormula());
+                m_pValueED->SetText(static_cast<SwSetExpField*>(GetCurField())->GetFormula());
             }
             m_pValueED->SetDropEnable(true);
             break;
@@ -422,7 +422,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         }
                     }
                     if (GetCurField() && IsFldEdit() && (!pBox || bInit) )
-                        m_pValueED->SetText(((SwSetExpField*)GetCurField())->GetPromptText());
+                        m_pValueED->SetText(static_cast<SwSetExpField*>(GetCurField())->GetPromptText());
                 }
                 else    // USERFLD
                     bFormat = bNumFmt = false;
@@ -476,7 +476,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 }
 
                 if( GetCurField() && IsFldEdit() )
-                    m_pValueED->SetText( ((SwSetExpField*)GetCurField())->
+                    m_pValueED->SetText( static_cast<SwSetExpField*>(GetCurField())->
                                         GetFormula() );
 
                 if( IsFldEdit() || pBox )   // only when interacting via mouse
@@ -484,12 +484,12 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                 if( pFldTyp )
                 {
-                    sal_uInt8 nLevel = ((SwSetExpFieldType*)pFldTyp)->GetOutlineLvl();
+                    sal_uInt8 nLevel = static_cast<SwSetExpFieldType*>(pFldTyp)->GetOutlineLvl();
                     if( 0x7f == nLevel )
                         m_pChapterLevelLB->SelectEntryPos( 0 );
                     else
                         m_pChapterLevelLB->SelectEntryPos( nLevel + 1 );
-                    OUString sDelim = ((SwSetExpFieldType*)pFldTyp)->GetDelimiter();
+                    OUString sDelim = static_cast<SwSetExpFieldType*>(pFldTyp)->GetDelimiter();
                     m_pSeparatorED->SetText( sDelim );
                     ChapterHdl();
                 }
@@ -508,7 +508,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 {
                     bValue = true;      // SubType OFF - knows no Offset
                     if (GetCurField() && IsFldEdit())
-                        m_pValueED->SetText(OUString::number(((SwRefPageSetField*)GetCurField())->GetOffset()));
+                        m_pValueED->SetText(OUString::number(static_cast<SwRefPageSetField*>(GetCurField())->GetOffset()));
                 }
             }
             break;
@@ -627,8 +627,8 @@ void SwFldVarPage::UpdateSubType()
                     case TYP_SETREFPAGEFLD:
                     {
                         if (GetCurField() != NULL
-                            && ((((SwRefPageSetField*)GetCurField())->IsOn()
-                                 && i) || (!((SwRefPageSetField*)GetCurField())
+                            && ((static_cast<SwRefPageSetField*>(GetCurField())->IsOn()
+                                 && i) || (!static_cast<SwRefPageSetField*>(GetCurField())
                                                 ->IsOn() && !i)))
                         {
                             sOldSel = aList[i];
@@ -1008,8 +1008,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                             // that
                             nFmt = SwValueField::GetSystemFormat(pSh->GetNumberFormatter(), nFmt);
                         }
-                        ((SwUserFieldType*)pType)->SetContent(m_pValueED->GetText(), nFmt);
-                        ((SwUserFieldType*)pType)->SetType(
+                        static_cast<SwUserFieldType*>(pType)->SetContent(m_pValueED->GetText(), nFmt);
+                        static_cast<SwUserFieldType*>(pType)->SetType(
                             nNumFormatPos == 0 ? nsSwGetSetExpType::GSE_STRING : nsSwGetSetExpType::GSE_EXPR );
                     }
                 }
@@ -1022,8 +1022,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                         sal_Int32 nTmpPos = 0;
                         sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
                         sValue = sValue.replaceFirst( " ", OUString(sfx2::cTokenSeparator), &nTmpPos );
-                        ((SwDDEFieldType*)pType)->SetCmd(sValue);
-                        ((SwDDEFieldType*)pType)->SetType((sal_uInt16)nFormat);
+                        static_cast<SwDDEFieldType*>(pType)->SetCmd(sValue);
+                        static_cast<SwDDEFieldType*>(pType)->SetType((sal_uInt16)nFormat);
                     }
                 }
                 pType->UpdateFlds();

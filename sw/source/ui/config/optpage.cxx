@@ -102,7 +102,7 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
     /* This part is visible only with Writer/Web->View dialogue. */
     const SfxPoolItem* pItem;
     if (! (SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
-           && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON))
+           && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON))
     {
         m_pSettingsFrame->Hide();
         m_pSettingsLabel->Hide();
@@ -169,7 +169,7 @@ static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemS
     const SfxPoolItem* pItem;
     if( rSet.GetItemState( nSID, false, &pItem ) >= SfxItemState::DEFAULT )
     {
-        FieldUnit eFieldUnit = (FieldUnit)((SfxUInt16Item*)pItem)->GetValue();
+        FieldUnit eFieldUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
         {
             if ( (int)(sal_IntPtr)rMetric->GetEntryData( i ) == (int)eFieldUnit )
@@ -339,7 +339,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(vcl::Window* pParent,
 
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
-        && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pLeftPageCB->Hide();
         m_pRightPageCB->Hide();
@@ -1302,7 +1302,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
     m_pFillSpaceRB->Check( FILL_SPACE == eMode );
 
     if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
-        && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pTabCB->Hide();
         m_pCharHiddenCB->Hide();
@@ -1356,7 +1356,7 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     bool bRet = false;
     const SfxPoolItem* pItem = 0;
     if( SfxItemState::SET != rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem )
-        ||  ((SwShadowCursorItem&)*pItem) != aOpt )
+        ||  static_cast<const SwShadowCursorItem&>(*pItem) != aOpt )
     {
         rSet->Put( aOpt );
         bRet = true;

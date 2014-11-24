@@ -53,7 +53,7 @@ SwFootNoteOptionDlg::SwFootNoteOptionDlg(vcl::Window *pParent, SwWrtShell &rS)
 
 void SwFootNoteOptionDlg::PageCreated( sal_uInt16 /*nId*/, SfxTabPage &rPage )
 {
-    ((SwEndNoteOptionPage&)rPage).SetShell( rSh );
+    static_cast<SwEndNoteOptionPage&>(rPage).SetShell( rSh );
 }
 
 IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
@@ -339,7 +339,7 @@ static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFmtNa
         pBase = pPool->Find(rCharFmtName, SFX_STYLE_FAMILY_CHAR);
         if(!pBase)
             pBase = &pPool->Make(rCharFmtName, SFX_STYLE_FAMILY_CHAR);
-        pFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+        pFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
     }
     return pFmt;
 }

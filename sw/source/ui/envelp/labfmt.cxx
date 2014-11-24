@@ -379,7 +379,7 @@ IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, PreviewHdl)
 // LoseFocus-Handler: Update on change
 IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
 {
-    if (((Edit*) pControl)->IsModified())
+    if (static_cast<Edit*>( pControl)->IsModified())
         PreviewHdl(0);
     return 0;
 }

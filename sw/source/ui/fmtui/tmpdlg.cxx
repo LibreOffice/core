@@ -211,7 +211,7 @@ SwTemplateDlg::SwTemplateDlg(vcl::Window* pParent,
 
             m_nConditionId = AddTabPage("condition", SwCondCollPage::Create,
                                         SwCondCollPage::GetRanges );
-            if( (!bNewStyle && RES_CONDTXTFMTCOLL != ((SwDocStyleSheet&)rBase).GetCollection()->Which())
+            if( (!bNewStyle && RES_CONDTXTFMTCOLL != static_cast<SwDocStyleSheet&>(rBase).GetCollection()->Which())
             || nHtmlMode & HTMLMODE_ON )
                 RemoveTabPage("condition");
 
@@ -351,7 +351,7 @@ short SwTemplateDlg::Ok()
             *pExItem != *pOutItem ))
         {
             if( GetOutputItemSet() )
-                ((SfxItemSet*)GetOutputItemSet())->Put( *pExItem );
+                const_cast<SfxItemSet*>(GetOutputItemSet())->Put( *pExItem );
             else
                 nRet = RET_CANCEL;
         }
@@ -435,10 +435,10 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         SwTxtFmtColl* pTmpColl = pWrtShell->FindTxtFmtCollByName( GetStyleSheet().GetName() );
         if( pTmpColl && pTmpColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            ((SwParagraphNumTabPage&)rPage).DisableOutline() ;
-            ((SwParagraphNumTabPage&)rPage).DisableNumbering();
+            static_cast<SwParagraphNumTabPage&>(rPage).DisableOutline() ;
+            static_cast<SwParagraphNumTabPage&>(rPage).DisableNumbering();
         }//<-end
-        ListBox & rBox = ((SwParagraphNumTabPage&)rPage).GetStyleBox();
+        ListBox & rBox = static_cast<SwParagraphNumTabPage&>(rPage).GetStyleBox();
         SfxStyleSheetBasePool* pPool = pWrtShell->GetView().GetDocShell()->GetStyleSheetPool();
         pPool->SetSearchMask(SFX_STYLE_FAMILY_PSEUDO, SFXSTYLEBIT_ALL);
         const SfxStyleSheetBase* pBase = pPool->First();
@@ -458,23 +458,23 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nTypeId)
     {
-        ((SwFrmPage&)rPage).SetNewFrame( true );
-        ((SwFrmPage&)rPage).SetFormatUsed( true );
+        static_cast<SwFrmPage&>(rPage).SetNewFrame( true );
+        static_cast<SwFrmPage&>(rPage).SetFormatUsed( true );
     }
     else if (nId == m_nOptionsId)
     {
-        ((SwFrmAddPage&)rPage).SetFormatUsed(true);
-        ((SwFrmAddPage&)rPage).SetNewFrame(true);
+        static_cast<SwFrmAddPage&>(rPage).SetFormatUsed(true);
+        static_cast<SwFrmAddPage&>(rPage).SetNewFrame(true);
     }
     else if (nId == m_nWrapId)
     {
-        ((SwWrapTabPage&)rPage).SetFormatUsed( true, false );
+        static_cast<SwWrapTabPage&>(rPage).SetFormatUsed( true, false );
     }
     else if (nId == m_nColumnId)
     {
         if( nType == SFX_STYLE_FAMILY_FRAME )
-            ((SwColumnPage&)rPage).SetFrmMode(true);
-        ((SwColumnPage&)rPage).SetFormatUsed( true );
+            static_cast<SwColumnPage&>(rPage).SetFrmMode(true);
+        static_cast<SwColumnPage&>(rPage).SetFormatUsed( true );
     }
     //UUUU do not remove; many other style dialog combinations still use the SfxTabPage
     // for the SvxBrushItem (see RID_SVXPAGE_BACKGROUND)
@@ -492,8 +492,8 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nConditionId)
     {
-        ((SwCondCollPage&)rPage).SetCollection(
-            ((SwDocStyleSheet&)GetStyleSheet()).GetCollection(), bNewStyle );
+        static_cast<SwCondCollPage&>(rPage).SetCollection(
+            static_cast<SwDocStyleSheet&>(GetStyleSheet()).GetCollection(), bNewStyle );
     }
     else if (nId == m_nPageId)
     {
@@ -573,7 +573,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         if(0 == (nHtmlMode & HTMLMODE_ON ))
         {
-            ((SvxHeaderPage&)rPage).EnableDynamicSpacing();
+            static_cast<SvxHeaderPage&>(rPage).EnableDynamicSpacing();
         }
 
         //UUUU set DrawingLayer FillStyles active
@@ -584,7 +584,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         if(0 == (nHtmlMode & HTMLMODE_ON ))
         {
-            ((SvxFooterPage&)rPage).EnableDynamicSpacing();
+            static_cast<SvxFooterPage&>(rPage).EnableDynamicSpacing();
         }
 
         //UUUU set DrawingLayer FillStyles active

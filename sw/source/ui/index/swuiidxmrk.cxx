@@ -1397,8 +1397,8 @@ void SwAuthorMarkPane::InitControls()
     if(bNewEntry || !pField || pField->GetTyp()->Which() != RES_AUTHORITY)
         return;
 
-    const SwAuthEntry* pEntry = ((SwAuthorityFieldType*)pField->GetTyp())->
-            GetEntryByHandle(((SwAuthorityField*)pField)->GetHandle());
+    const SwAuthEntry* pEntry = static_cast<SwAuthorityFieldType*>(pField->GetTyp())->
+            GetEntryByHandle(static_cast<SwAuthorityField*>(pField)->GetHandle());
 
     OSL_ENSURE(pEntry, "No authority entry found");
     if(!pEntry)

@@ -314,7 +314,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
                     break;
 
                 case REF_SEQUENCEFLD:
-                    sName = ((SwGetRefField*)GetCurField())->GetSetRefName();
+                    sName = static_cast<SwGetRefField*>(GetCurField())->GetSetRefName();
                     nFlag = REFFLDFLAG;
                     break;
             }

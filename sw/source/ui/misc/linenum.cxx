@@ -185,7 +185,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
         pBase = pPool->Find(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
         if(!pBase)
             pBase = &pPool->Make(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
-        pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+        pCharFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
     }
 
     if (pCharFmt)

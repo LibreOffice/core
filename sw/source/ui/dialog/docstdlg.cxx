@@ -107,9 +107,9 @@ void SwDocStatPage::Update()
     SfxViewShell *pVSh = SfxViewShell::Current();
     SwViewShell *pSh = 0;
     if ( pVSh->ISA(SwView) )
-        pSh = ((SwView*)pVSh)->GetWrtShellPtr();
+        pSh = static_cast<SwView*>(pVSh)->GetWrtShellPtr();
     else if ( pVSh->ISA(SwPagePreview) )
-        pSh = ((SwPagePreview*)pVSh)->GetViewShell();
+        pSh = static_cast<SwPagePreview*>(pVSh)->GetViewShell();
 
     OSL_ENSURE( pSh, "Shell not found" );
 

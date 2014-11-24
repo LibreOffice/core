@@ -243,9 +243,9 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                         case TYP_TIMEFLD:
                             nPos = m_pSelectionLB->InsertEntry(aLst[i]);
                             m_pSelectionLB->SetEntryData(nPos, reinterpret_cast<void*>(i));
-                            if (((SwDateTimeField*)GetCurField())->IsFixed() && !i)
+                            if (static_cast<SwDateTimeField*>(GetCurField())->IsFixed() && !i)
                                 m_pSelectionLB->SelectEntryPos(nPos);
-                            if (!((SwDateTimeField*)GetCurField())->IsFixed() && i)
+                            if (!static_cast<SwDateTimeField*>(GetCurField())->IsFixed() && i)
                                 m_pSelectionLB->SelectEntryPos(nPos);
                             break;
 
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                 m_pDateOffsetED->SetLast(31);
 
                 if (IsFldEdit())
-                    m_pDateOffsetED->SetValue( ((SwDateTimeField*)GetCurField())->GetOffset() / 24 / 60);
+                    m_pDateOffsetED->SetValue( static_cast<SwDateTimeField*>(GetCurField())->GetOffset() / 24 / 60);
                 break;
 
             case TYP_TIMEFLD:
@@ -334,7 +334,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                 m_pDateOffsetED->SetLast(1440);
 
                 if (IsFldEdit())
-                    m_pDateOffsetED->SetValue( ((SwDateTimeField*)GetCurField())->GetOffset() );
+                    m_pDateOffsetED->SetValue( static_cast<SwDateTimeField*>(GetCurField())->GetOffset() );
                 break;
 
             case TYP_PREVPAGEFLD:
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
                             m_pValueED->SetText(aEmptyOUStr);
                     }
                     else
-                        m_pValueED->SetText(((SwPageNumberField*)GetCurField())->GetUserString());
+                        m_pValueED->SetText(static_cast<SwPageNumberField*>(GetCurField())->GetUserString());
                 }
                 bValue = true;
                 break;
@@ -365,7 +365,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
             case TYP_CHAPTERFLD:
                 m_pValueFT->SetText(SW_RESSTR(STR_LEVEL));
                 if (IsFldEdit())
-                    m_pLevelED->SetText(OUString::number(((SwChapterField*)GetCurField())->GetLevel() + 1));
+                    m_pLevelED->SetText(OUString::number(static_cast<SwChapterField*>(GetCurField())->GetLevel() + 1));
                 bLevel = true;
                 break;
 

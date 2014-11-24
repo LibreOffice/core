@@ -79,11 +79,11 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
     {
         if(m_bLabel)
         {
-            ((SwLabPage*)&rPage)->SetDBManager(pDBManager);
-            ((SwLabPage*)&rPage)->InitDatabaseBox();
+            static_cast<SwLabPage*>(&rPage)->SetDBManager(pDBManager);
+            static_cast<SwLabPage*>(&rPage)->InitDatabaseBox();
         }
         else
-            ((SwLabPage*)&rPage)->SetToBusinessCard();
+            static_cast<SwLabPage*>(&rPage)->SetToBusinessCard();
     }
     else if (nId == m_nOptionsId)
         pPrtPage = (SwLabPrtPage*)&rPage;

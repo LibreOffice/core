@@ -183,7 +183,7 @@ void SwCondCollPage::Reset(const SfxItemSet *)
 
         const SwCollCondition* pCond = 0;
         if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
-            0 != ( pCond = ((SwConditionTxtFmtColl*)pFmt)->
+            0 != ( pCond = static_cast<SwConditionTxtFmtColl*>(pFmt)->
             HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
             && pCond->GetTxtFmtColl() )
         {

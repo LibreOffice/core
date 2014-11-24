@@ -1080,7 +1080,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         SwAsciiOptions aOpt;
         sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
         sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
-        aOpt.SetLanguage( ((SvxLanguageItem&)pTargetView->GetWrtShell().
+        aOpt.SetLanguage( static_cast<const SvxLanguageItem&>(pTargetView->GetWrtShell().
                             GetDefault( nWhich )).GetLanguage());
         aOpt.SetParaFlags( LINEEND_CR );
         aOpt.WriteUserData( sFilterOptions );

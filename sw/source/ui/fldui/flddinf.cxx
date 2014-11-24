@@ -109,7 +109,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet* )
     if (IsFldEdit())
     {
         const SwField* pCurField = GetCurField();
-        nSubType = ((SwDocInfoField*)pCurField)->GetSubType() & 0xff;
+        nSubType = static_cast<const SwDocInfoField*>(pCurField)->GetSubType() & 0xff;
         if( nSubType == DI_CUSTOM )
         {
             m_sOldCustomFieldName = static_cast<const SwDocInfoField*>(pCurField)->GetName();
@@ -315,9 +315,9 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
         bEnable = true;
     }
 
-    sal_uLong nFormat = IsFldEdit() ? ((SwDocInfoField*)GetCurField())->GetFormat() : 0;
+    sal_uLong nFormat = IsFldEdit() ? static_cast<SwDocInfoField*>(GetCurField())->GetFormat() : 0;
 
-    sal_uInt16 nOldSubType = IsFldEdit() ? (((SwDocInfoField*)GetCurField())->GetSubType() & 0xff00) : 0;
+    sal_uInt16 nOldSubType = IsFldEdit() ? (static_cast<SwDocInfoField*>(GetCurField())->GetSubType() & 0xff00) : 0;
 
     if (IsFldEdit())
     {
@@ -375,7 +375,7 @@ sal_Int32 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
 
     sal_uInt16 nSize = 0;
     sal_Int32 nSelPos = LISTBOX_ENTRY_NOTFOUND;
-    sal_uInt16 nExtSubType = IsFldEdit() ? (((SwDocInfoField*)GetCurField())->GetSubType() & 0xff00) : 0;
+    sal_uInt16 nExtSubType = IsFldEdit() ? (static_cast<SwDocInfoField*>(GetCurField())->GetSubType() & 0xff00) : 0;
 
     if (IsFldEdit())
     {
