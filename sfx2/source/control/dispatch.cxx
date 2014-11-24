@@ -1339,8 +1339,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 
             if ( bUIActive || bIsActive )
             {
-                pWorkWin->SetObjectBar_Impl(
-                    nPos, rBar.nResId, rBar.pIFace, &rBar.aName );
+                pWorkWin->SetObjectBar_Impl(nPos, rBar.nResId, rBar.pIFace);
             }
 
             if ( !bVisible )
@@ -1403,8 +1402,8 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         {
             SfxObjectBars_Impl& rBar = pImp->aObjBars[nPos];
             rBar = rFixed;
-            pWorkWin->SetObjectBar_Impl( rFixed.nMode,
-                rFixed.nResId, rFixed.pIFace, &rFixed.aName );
+            pWorkWin->SetObjectBar_Impl(rFixed.nMode,
+                rFixed.nResId, rFixed.pIFace);
         }
     }
 

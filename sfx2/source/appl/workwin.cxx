@@ -1134,8 +1134,8 @@ void SfxWorkWindow::ResetObjectBars_Impl()
         aChildWins[n]->nId = 0;
 }
 
-void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
-            SfxInterface* pIFace, const OUString *pName)
+void SfxWorkWindow::SetObjectBar_Impl(sal_uInt16 nPos, sal_uInt32 nResId,
+            SfxInterface* pIFace)
 {
     DBG_ASSERT( (nPos & SFX_POSITION_MASK) < SFX_OBJECTBAR_MAX,
                 "object bar position overflow" );
@@ -1143,7 +1143,7 @@ void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
     sal_uInt16 nRealPos = nPos & SFX_POSITION_MASK;
     if ( pParent && IsAppWorkWinToolbox_Impl( nRealPos ) )
     {
-        pParent->SetObjectBar_Impl( nPos, nResId, pIFace, pName );
+        pParent->SetObjectBar_Impl(nPos, nResId, pIFace);
         return;
     }
 

@@ -290,8 +290,8 @@ public:
     // Methods for Objectbars
     virtual void            UpdateObjectBars_Impl();
     void                    ResetObjectBars_Impl();
-    void                    SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
-                                    SfxInterface *pIFace, const OUString* pName=0 );
+    void                    SetObjectBar_Impl(sal_uInt16 nPos, sal_uInt32 nResId,
+                                    SfxInterface *pIFace);
     bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
     bool                    IsVisible_Impl();
     void                    MakeVisible_Impl( bool );
