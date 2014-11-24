@@ -2616,6 +2616,7 @@ void Test::testFunctionLists()
         "COLUMN",
         "COLUMNS",
         "DDE",
+        "ERROR.TYPE",
         "ERRORTYPE",
         "GETPIVOTDATA",
         "HLOOKUP",
