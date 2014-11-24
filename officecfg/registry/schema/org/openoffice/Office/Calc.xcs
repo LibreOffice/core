@@ -1344,13 +1344,6 @@
 	to those assigned in setOpenCLConfigToDefault() in
 	sc/source/core/tool/calcconfig.cxx
 	-->
-        <prop oor:name="OpenCL" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
-          <info>
-            <desc>Whether to use OpenCL for formula computation, if available.</desc>
-          </info>
-          <value>true</value>
-        </prop>
         <prop oor:name="OpenCLSubsetOnly" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options  Spreadsheet  Formula -->
           <info>

@@ -119,9 +119,6 @@ private:
     OUString maCaptionEmptyStringAsZero;
     OUString maDescEmptyStringAsZero;
 
-    OUString maCaptionOpenCLEnabled;
-    OUString maDescOpenCLEnabled;
-
     OUString maCaptionOpenCLSubsetEnabled;
     OUString maDescOpenCLSubsetEnabled;
 

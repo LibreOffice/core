@@ -96,7 +96,6 @@ struct SC_DLLPUBLIC ScCalcConfig
     StringConversion meStringConversion;
     bool mbEmptyStringAsZero:1;
 
-    bool mbOpenCLEnabled:1;
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;
     OUString maOpenCLDevice;

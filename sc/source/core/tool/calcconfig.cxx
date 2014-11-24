@@ -35,7 +35,6 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     // Note that these defaults better be kept in sync with those in
     // officecfg/registry/schema/org/openoffice/Office/Calc.xcs.
     // Crazy.
-    mbOpenCLEnabled = true;
     mbOpenCLSubsetOnly = true;
     mbOpenCLAutoSelect = true;
     mnOpenCLMinimumFormulaGroupSize = 100;
@@ -99,7 +98,6 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
            meStringConversion == r.meStringConversion &&
            mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
-           mbOpenCLEnabled == r.mbOpenCLEnabled &&
            mbOpenCLSubsetOnly == r.mbOpenCLSubsetOnly &&
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
            maOpenCLDevice == r.maOpenCLDevice &&
@@ -147,7 +145,6 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "StringRefAddressSyntax=" << rConfig.meStringRefAddressSyntax << ","
         "StringConversion=" << rConfig.meStringConversion << ","
         "EmptyStringAsZero=" << (rConfig.mbEmptyStringAsZero?"Y":"N") << ","
-        "OpenCLEnabled=" << (rConfig.mbOpenCLEnabled?"Y":"N") << ","
         "OpenCLSubsetOnly=" << (rConfig.mbOpenCLSubsetOnly?"Y":"N") << ","
         "OpenCLAutoSelect=" << (rConfig.mbOpenCLAutoSelect?"Y":"N") << ","
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"

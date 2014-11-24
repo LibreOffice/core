@@ -39,7 +39,6 @@ typedef enum {
     CALC_OPTION_STRING_CONVERSION,
     CALC_OPTION_EMPTY_AS_ZERO,
     CALC_OPTION_REF_SYNTAX,
-    CALC_OPTION_ENABLE_OPENCL,
     CALC_OPTION_ENABLE_OPENCL_SUBSET,
     CALC_OPTION_OPENCL_MIN_SIZE,
     CALC_OPTION_OPENCL_SUBSET_OPS,
@@ -205,9 +204,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
     maCaptionEmptyStringAsZero = get<vcl::Window>("empty_str_as_zero_caption")->GetText();
     maDescEmptyStringAsZero = get<vcl::Window>("empty_str_as_zero_desc")->GetText();
-
-    maCaptionOpenCLEnabled = get<vcl::Window>("opencl_enabled")->GetText();
-    maDescOpenCLEnabled = get<vcl::Window>("opencl_enabled_desc")->GetText();
 
     maCaptionOpenCLSubsetEnabled = get<vcl::Window>("opencl_subset_enabled")->GetText();
     maDescOpenCLSubsetEnabled = get<vcl::Window>("opencl_subset_enabled_desc")->GetText();
@@ -387,7 +383,6 @@ void ScCalcOptionsDialog::FillOptionsList()
     }
 
 #if HAVE_FEATURE_OPENCL
-    pModel->Insert(createItem(maCaptionOpenCLEnabled,toString(maConfig.mbOpenCLEnabled)));
     pModel->Insert(createItem(maCaptionOpenCLSubsetEnabled,toString(maConfig.mbOpenCLSubsetOnly)));
     pModel->Insert(createItem(maCaptionOpenCLMinimumFormulaSize,toString(maConfig.mnOpenCLMinimumFormulaGroupSize)));
     pModel->Insert(createItem(maCaptionOpenCLSubsetOpCodes,ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes)));
@@ -480,7 +475,6 @@ void ScCalcOptionsDialog::SelectionChanged()
 
         // booleans
         case CALC_OPTION_EMPTY_AS_ZERO:
-        case CALC_OPTION_ENABLE_OPENCL:
         case CALC_OPTION_ENABLE_OPENCL_SUBSET:
         {
             mpLbOptionEdit->Hide();
@@ -507,19 +501,6 @@ void ScCalcOptionsDialog::SelectionChanged()
                     case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
                         break;  // nothing
                 }
-            }
-            else if ( nSelectedPos == CALC_OPTION_ENABLE_OPENCL )
-            {
-                bValue = maConfig.mbOpenCLEnabled;
-                mpFtAnnotation->SetText(maDescOpenCLEnabled);
-                mpOpenclInfoList->GetParent()->Show();
-                setOptimalLayoutSize();
-                if(bValue)
-                    mpOpenclInfoList->GetParent()->Enable();
-                else
-                    mpOpenclInfoList->GetParent()->Disable();
-
-                OpenCLAutomaticSelectionChanged();
             }
             else if ( nSelectedPos == CALC_OPTION_ENABLE_OPENCL_SUBSET )
             {
@@ -663,7 +644,6 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
         break;
 
         case CALC_OPTION_EMPTY_AS_ZERO:
-        case CALC_OPTION_ENABLE_OPENCL:
         case CALC_OPTION_ENABLE_OPENCL_SUBSET:
         case CALC_OPTION_OPENCL_MIN_SIZE:
         case CALC_OPTION_OPENCL_SUBSET_OPS:
@@ -729,14 +709,6 @@ void ScCalcOptionsDialog::RadioValueChanged()
             return;
         case CALC_OPTION_EMPTY_AS_ZERO:
             maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero = bValue;
-            break;
-        case CALC_OPTION_ENABLE_OPENCL:
-            maConfig.mbOpenCLEnabled = bValue;
-            if(bValue)
-                mpOpenclInfoList->GetParent()->Enable();
-            else
-                mpOpenclInfoList->GetParent()->Disable();
-            OpenCLAutomaticSelectionChanged();
             break;
         case CALC_OPTION_ENABLE_OPENCL_SUBSET:
             maConfig.mbOpenCLSubsetOnly = bValue;

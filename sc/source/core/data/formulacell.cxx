@@ -59,6 +59,7 @@
 #include <listenerquery.hxx>
 #include <listenerqueryids.hxx>
 #include <grouparealistener.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -419,7 +420,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     meKernelState(sc::OpenCLKernelNone)
 {
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+    if (officecfg::Office::Common::Misc::UseOpenCL::get())
     {
         osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
         if (snCount++ == 0)
@@ -435,7 +436,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
-    if (ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+    if (officecfg::Office::Common::Misc::UseOpenCL::get())
     {
         osl::MutexGuard aGuard(getOpenCLCompilationThreadMutex());
         if (--snCount == 0 && sxCompilationThread.is())
@@ -3667,7 +3668,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
 
 bool ScFormulaCell::InterpretFormulaGroup()
 {
-    if (!ScInterpreter::GetGlobalConfig().mbOpenCLEnabled)
+    if (!officecfg::Office::Common::Misc::UseOpenCL::get())
         return false;
 
     if (!mxGroup || !pCode)
