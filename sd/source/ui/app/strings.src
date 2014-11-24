@@ -64,10 +64,6 @@ String STR_DRAW_TEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar" ;
 };
-String RID_APPTITLE
-{
-    Text = "StarImpress 4.0" ;
-};
 String STR_NULL
 {
     Text [ en-US ] = "None" ;
