@@ -1275,27 +1275,27 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
     // Automatically test the current implementation of OpenCL. If it
     // seems good, whitelist it. If it seems bad, blacklist it.
 
-    auto pTestDocument = new OpenCLTester();
+    std::unique_ptr<OpenCLTester> xTestDocument(new OpenCLTester());
 
-    pTestDocument->addTest(BinOp("Plus", "+", -1000, 1000, 3e-10,
+    xTestDocument->addTest(BinOp("Plus", "+", -1000, 1000, 3e-10,
                                  [] (double nLhs, double nRhs)
                                  {
                                      return nLhs + nRhs;
                                  }));
 
-    pTestDocument->addTest(BinOp("Minus", "-", -1000, 1000, 3e-10,
+    xTestDocument->addTest(BinOp("Minus", "-", -1000, 1000, 3e-10,
                                  [] (double nLhs, double nRhs)
                                  {
                                      return nLhs - nRhs;
                                  }));
 
-    pTestDocument->addTest(BinOp("Times", "*", -1000, 1000, 3e-10,
+    xTestDocument->addTest(BinOp("Times", "*", -1000, 1000, 3e-10,
                                  [] (double nLhs, double nRhs)
                                  {
                                      return nLhs * nRhs;
                                  }));
 
-    pTestDocument->addTest(BinOp("Divided", "/", -1000, 1000, 3e-10,
+    xTestDocument->addTest(BinOp("Divided", "/", -1000, 1000, 3e-10,
                                  [] (double nLhs, double nRhs)
                                  {
                                      return nLhs / nRhs;
@@ -1305,19 +1305,19 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                      return (nRhs == 0);
                                  }));
 
-    pTestDocument->addTest(UnOp("Sin", "SIN", -10, 10, 3e-10,
+    xTestDocument->addTest(UnOp("Sin", "SIN", -10, 10, 3e-10,
                                 [] (double nArg)
                                 {
                                     return sin(nArg);
                                 }));
 
-    pTestDocument->addTest(UnOp("Cos", "COS", -10, 10, 3e-10,
+    xTestDocument->addTest(UnOp("Cos", "COS", -10, 10, 3e-10,
                                 [] (double nArg)
                                 {
                                     return cos(nArg);
                                 }));
 
-    pTestDocument->addTest(UnOp("Tan", "TAN", 0, 10, -3e-10,
+    xTestDocument->addTest(UnOp("Tan", "TAN", 0, 10, -3e-10,
                                 [] (double nArg)
                                 {
                                     return tan(nArg);
@@ -1327,25 +1327,25 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                     return (std::fmod(nArg, M_PI) == M_PI/2);
                                 }));
 
-    pTestDocument->addTest(UnOp("Atan", "ATAN", -10, 10, 3e-10,
+    xTestDocument->addTest(UnOp("Atan", "ATAN", -10, 10, 3e-10,
                                 [] (double nArg)
                                 {
                                     return atan(nArg);
                                 }));
 
-    pTestDocument->addTest(UnOp("Sqrt", "SQRT", 0, 1000, 3e-10,
+    xTestDocument->addTest(UnOp("Sqrt", "SQRT", 0, 1000, 3e-10,
                                 [] (double nArg)
                                 {
                                     return sqrt(nArg);
                                 }));
 
-    pTestDocument->addTest(UnOp("Exp", "EXP", 0, 10, 3e-10,
+    xTestDocument->addTest(UnOp("Exp", "EXP", 0, 10, 3e-10,
                                 [] (double nArg)
                                 {
                                     return exp(nArg);
                                 }));
 
-    pTestDocument->addTest(UnOp("Ln", "LN", 0, 1000, 3e-10,
+    xTestDocument->addTest(UnOp("Ln", "LN", 0, 1000, 3e-10,
                                 [] (double nArg)
                                 {
                                     return log(nArg);
@@ -1355,31 +1355,31 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                     return (nArg == 0);
                                 }));
 
-    pTestDocument->addTest(Reduction("Sum", "SUM", 100, 0, -1000, 1000, 3e-10,
+    xTestDocument->addTest(Reduction("Sum", "SUM", 100, 0, -1000, 1000, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
                                          return (nAccum + nArg);
                                      }));
 
-    pTestDocument->addTest(Reduction("Average", "AVERAGE", 100, 0, -1000, 1000, 3e-10,
+    xTestDocument->addTest(Reduction("Average", "AVERAGE", 100, 0, -1000, 1000, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
                                          return (nAccum + nArg/100.);
                                      }));
 
-    pTestDocument->addTest(Reduction("Product", "PRODUCT", 100, 1, 0.1, 2.5, 3e-10,
+    xTestDocument->addTest(Reduction("Product", "PRODUCT", 100, 1, 0.1, 2.5, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
                                          return (nAccum * nArg);
                                      }));
 
-    pTestDocument->addTest(Reduction("Min", "MIN", 100, DBL_MAX, -1000, 1000, 0,
+    xTestDocument->addTest(Reduction("Min", "MIN", 100, DBL_MAX, -1000, 1000, 0,
                                      [] (double nAccum, double nArg)
                                      {
                                          return std::min(nAccum, nArg);
                                      }));
 
-    pTestDocument->addTest(Reduction("Max", "MAX", 100, -DBL_MAX, -1000, 1000, 0,
+    xTestDocument->addTest(Reduction("Max", "MAX", 100, -DBL_MAX, -1000, 1000, 0,
                                      [] (double nAccum, double nArg)
                                      {
                                          return std::max(nAccum, nArg);
