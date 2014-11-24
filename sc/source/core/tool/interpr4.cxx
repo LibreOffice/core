@@ -4222,6 +4222,7 @@ StackVar ScInterpreter::Interpret()
                 case ocTableOp          : ScTableOp();                  break;
                 case ocStop :                                           break;
                 case ocErrorType        : ScErrorType();                break;
+                case ocErrorType_ODF    : ScErrorType_ODF();            break;
                 case ocCurrent          : ScCurrent();                  break;
                 case ocStyle            : ScStyle();                    break;
                 case ocDde              : ScDde();                      break;
@@ -4328,7 +4329,8 @@ StackVar ScInterpreter::Interpret()
     case ocN : \
     case ocType : \
     case ocIfError : \
-    case ocIfNA :
+    case ocIfNA : \
+    case ocErrorType_ODF :
 
         switch ( eOp )
         {
