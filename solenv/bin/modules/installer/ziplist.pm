@@ -193,7 +193,7 @@ sub analyze_settings_block
             next;
         }
 
-        # complete blocks of unknows strings are not recorded
+        # complete blocks of unknown strings are not recorded
 
         if ((!($line =~ /^\s*\Q$installer::globals::build\E\s*$/i)) &&
             (!($line =~ /^\s*\bSettings\b\s*$/i)) &&

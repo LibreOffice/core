@@ -87,7 +87,7 @@ sub getparameter
         else
         {
             print "\n**********************************************\n";
-            print "Error: Unknows parameter: $param";
+            print "Error: Unknown parameter: $param";
             print "\n**********************************************\n";
             usage();
             exit(-1);

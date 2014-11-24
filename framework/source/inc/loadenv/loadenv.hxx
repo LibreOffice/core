@@ -256,14 +256,14 @@ public:
 
         @param  eContentType
                 classify the given content.
-                This value is set to a default value "UNKNWON_CONTENT", which force
+                This value is set to a default value "UNKNOWN_CONTENT", which force
                 an internal check, if this content is loadable or not.
                 But may this check was already made by the caller of this method and
                 passing this information to this LoadEnv instance can suppress this
                 might expensive check.
                 That can be useful in case this information is needed outside too,
                 to decide if its necessary to create some resources for this load
-                request ... or to reject the request imidiatly if it seems to be not
+                request ... or to reject the request immediately if it seems to be not
                 loadable in general.
 
         @throw  A LoadEnvException e.g. if another load operation is till in progress

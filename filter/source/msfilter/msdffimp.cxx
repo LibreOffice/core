@@ -2221,7 +2221,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                                 case 0x0:
                                 {
                                     //It is msopathEscapeExtension which is transformed into LINETO.
-                                    //If issue happens, I think this part can be comment so that it will be taken as unknow command.
+                                    //If issue happens, I think this part can be comment so that it will be taken as unknown command.
                                     //When export, origin data will be export without any change.
                                     nCommand = EnhancedCustomShapeSegmentCommand::LINETO;
                                     if ( !nCnt )

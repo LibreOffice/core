@@ -132,7 +132,7 @@ public:
         // );
     oslProcessInfo* pInfo = new oslProcessInfo;
     //please pay attention to initial the Size to sizeof(oslProcessInfo), or else
-    //you will get unknow error when call osl_getProcessInfo
+    //you will get unknown error when call osl_getProcessInfo
     pInfo->Size = sizeof(oslProcessInfo);
     osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo );
     CPPUNIT_ASSERT_MESSAGE

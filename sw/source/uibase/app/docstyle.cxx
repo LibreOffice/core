@@ -1163,7 +1163,7 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
     case SFX_STYLE_FAMILY_PSEUDO:
         break;
     default:
-        OSL_ENSURE(false, "unknwown style family");
+        OSL_ENSURE(false, "unknown style family");
     }
 
     return true;

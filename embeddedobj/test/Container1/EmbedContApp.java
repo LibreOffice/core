@@ -755,7 +755,7 @@ public class EmbedContApp extends Applet
                 }
                 else
                 {
-                    System.out.println( "Unknoun action is requested: " + aAction.m_nID + "\n" );
+                    System.out.println( "Unknown action is requested: " + aAction.m_nID + "\n" );
                 }
             }
         }
