@@ -1025,7 +1025,7 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     {
         case RID_SCPAGE_OPREDLINE :
             return ScRedlineOptionsTabPage::Create;
-        case    RID_SCPAGE_CALC :
+        case RID_SCPAGE_CALC :
             return ScTpCalcOptions::Create;
         case RID_SCPAGE_FORMULA:
             return ScTpFormulaOptions::Create;
@@ -1033,9 +1033,9 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             return ScTpCompatOptions::Create;
         case RID_SCPAGE_DEFAULTS:
             return ScTpDefaultsOptions::Create;
-        case    RID_SCPAGE_PRINT :
+        case RID_SCPAGE_PRINT :
             return ScTpPrintOptions::Create;
-        case    RID_SCPAGE_STAT :
+        case RID_SCPAGE_STAT :
             return ScDocStatPage::Create;
         case RID_SCPAGE_USERLISTS :
              return ScTpUserLists::Create;
