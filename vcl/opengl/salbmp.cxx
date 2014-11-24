@@ -578,4 +578,9 @@ bool OpenGLSalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
     return false;
 }
 
+bool OpenGLSalBitmap::Erase( const ::Color& /*rFillColor*/ )
+{
+    return false;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
