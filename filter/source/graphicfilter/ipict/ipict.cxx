@@ -906,7 +906,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         sal_uInt16  nByteCount, nCount, nD;
         sal_uLong   nSrcBitsPos;
 
-        if ( nRowBytes < 2 * nWidth )
+        if (nWidth > nRowBytes / 2)
             BITMAPERROR;
 
         size_t nMinRecordSize;
@@ -920,6 +920,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         const size_t nMinRowWidth = nWidth * nMinRecordSize;
         const size_t nMaxRows = pPict->remainingSize() / nMinRowWidth;
         if (nHeight > nMaxRows)
+            BITMAPERROR;
+        const size_t nMaxCols = pPict->remainingSize() / nHeight;
+        if (nWidth > nMaxCols)
             BITMAPERROR;
 
         for ( ny = 0; ny < nHeight; ny++ )
