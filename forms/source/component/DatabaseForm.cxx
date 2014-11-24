@@ -70,12 +70,12 @@
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <svl/inettype.hxx>
+#include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/ucblockbytes.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>

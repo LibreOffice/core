@@ -347,7 +347,6 @@
 #include <unotools/streamhelper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/textsearch.hxx>
-#include <unotools/ucblockbytes.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/cvtgrf.hxx>

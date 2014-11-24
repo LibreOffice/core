@@ -26,7 +26,6 @@
 #include "componenttools.hxx"
 
 #include <svtools/imageresourceaccess.hxx>
-#include <unotools/ucblockbytes.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/awt/PopupMenu.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>

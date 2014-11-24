@@ -204,8 +204,7 @@ void OFileTable::dropColumn(sal_Int32 /*_nPos*/)
 
 SvStream* OFileTable::createStream_simpleError( const OUString& _rFileName, StreamMode _eOpenMode)
 {
-    utl::UcbLockBytesHandler* p_null_dummy = NULL;
-    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, (_eOpenMode & STREAM_NOCREATE) == STREAM_NOCREATE, p_null_dummy);
+    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, (_eOpenMode & STREAM_NOCREATE) == STREAM_NOCREATE);
     if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
     {
         delete pReturn;

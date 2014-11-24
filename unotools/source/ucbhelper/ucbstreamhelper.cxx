@@ -18,7 +18,6 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <unotools/ucblockbytes.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -29,6 +28,7 @@
 
 #include <ucbhelper/content.hxx>
 #include <unotools/streamwrap.hxx>
+#include <ucblockbytes.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;

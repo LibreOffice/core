@@ -23,7 +23,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <unotools/unotoolsdllapi.h>
 
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
@@ -90,7 +89,7 @@ public:
 
 typedef tools::SvRef<UcbLockBytesHandler> UcbLockBytesHandlerRef;
 
-class UNOTOOLS_DLLPUBLIC UcbLockBytes : public virtual SvLockBytes
+class UcbLockBytes : public virtual SvLockBytes
 {
     osl::Condition          m_aInitialized;
     osl::Condition          m_aTerminated;

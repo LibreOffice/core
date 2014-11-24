@@ -739,7 +739,6 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <unotools/ucblockbytes.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/viewoptions.hxx>
