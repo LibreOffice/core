@@ -380,13 +380,12 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
     pImpData->aPopupRes = rResId;
 }
 
-void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId,
-        const OUString *pStr )
+void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, const ResId& rResId)
 {
-    RegisterObjectBar( nPos, rResId, 0UL, pStr );
+    RegisterObjectBar(nPos, rResId, 0UL);
 }
 
-void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr )
+void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature)
 {
     SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, rResId, nFeature);
     if ( pUI )
