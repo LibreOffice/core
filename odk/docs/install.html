@@ -68,8 +68,8 @@
                           <td><b>LibreOffice %PRODUCT_RELEASE%
                               installation</b></td>
                           <td class="content80">The SDK works on top of an
-                            existing office installation and uses the same
-                            libraries as the office installation.</td>
+                            existing LibreOffice installation and uses the same
+                            libraries as the LibreOffice installation.</td>
                         </tr>
                         <tr valign="middle">
                           <td colspan="2"><img class="line" src="images/sdk_line-1.gif"/></td>
@@ -228,12 +228,9 @@
                               <tr valign="top">
                                 <td class="cell20"><b>OFFICE_HOME</b></td>
                                 <td class="cell80">Path to an existing
-                                  LibreOffice base installation, e.g.
+                                  LibreOffice installation, e.g.
                                   &quot;/opt/libreoffice8&quot;. Be sure that it
-                                  is not a user installation only. Exactly one
-                                  of OFFICE_HOME and OO_SDK_URE_HOME must be
-                                  set. The other should be either unset or set
-                                  to an empty value.</td>
+                                  is not a user installation only.</td>
                               </tr>
                               <tr>
                                 <td class="cell20"><a name="oosdkname"/><b>OO_SDK_NAME</b></td>
@@ -251,10 +248,7 @@
                                 <td class="cell20"><b>OO_SDK_URE_HOME</b></td>
                                 <td class="cell80">Path to an existing UNO
                                   Runtime Environment installation, e.g.
-                                  &quot;/opt/libreoffice/ure&quot;. Exactly one
-                                  of OFFICE_HOME and OO_SDK_URE_HOME must be
-                                  set. The other should be either unset or set
-                                  to an empty value.</td>
+                                  &quot;/opt/libreoffice/ure&quot;.</td>
                               </tr>
                               <tr>
                                 <td class="cell20"><b>OO_SDK_HOME</b></td>
@@ -321,11 +315,10 @@
                                 <td class="cell20"><b>SDK_AUTO_DEPLOYMENT</b></td>
                                 <td class="cell80">If this variable is set, the
                                   component examples are automatically deployed
-                                  into the Office installation referenced by
-                                  OFFICE_HOME. See also chapter
+                                  into the LibreOffice installation referenced
+                                  by OFFICE_HOME. See also chapter
                                   <a href="http://wiki.openoffice.org/wiki/Documentation/DevGuide/Extensions/unopkg" title="link to the &quot;Extension Manager - unopkg&quot; chapter in the Developer's Guide">&quot;Extension Manager - unopkg&quot;</a>
-                                  from the Developer's Guide. This variable is
-                                  only relevant when OFFICE_HOME is set.</td>
+                                  from the Developer's Guide.</td>
                               </tr>
                             </table>
                             <p>You must run the <b>setsdkenv_XXX</b> script
@@ -358,30 +351,24 @@
                               <tr valign="top">
                                 <td class="cell20">OO_SDK_URE_BIN_DIR</td>
                                 <td class="cell80">The path within the chosen
-                                  office or URE installation where binary
-                                  executables are located (e.g.,
-                                  <i>$OFFICE_HOME/program</i> for an office
-                                  installation, or <i>$OO_SDK_URE_HOME/bin</i>
-                                  for a Unix URE installation).</td>
+                                  URE installation where binary executables are
+                                  located (e.g., <i>$OO_SDK_URE_HOME/bin</i>
+                                  for a Unix installation).</td>
                               </tr>
                               <tr valign="top">
                                 <td class="cell20">OO_SDK_URE_LIB_DIR</td>
                                 <td class="cell80">The path within the chosen
-                                  office or URE installation where dynamic
-                                  libraries are located (e.g.,
-                                  <i>$OFFICE_HOME/program</i> for an office
-                                  installation, or <i>$OO_SDK_URE_HOME/lib</i>
-                                  for a Unix URE installation).</td>
+                                  URE installation where dynamic libraries are
+                                  located (e.g., <i>$OO_SDK_URE_HOME/lib</i>
+                                  for a Unix installation).</td>
                               </tr>
                               <tr valign="top">
                                 <td class="cell20">OO_SDK_URE_JAVA_DIR</td>
                                 <td class="cell80">The path within the chosen
-                                  office or URE installation where Java JARs are
+                                  URE installation where Java JARs are
                                   located (e.g.,
-                                  <i>$OFFICE_HOME/program/classes</i> for an
-                                  office installation, or
                                   <i>$OO_SDK_URE_HOME/share/java</i> for a Unix
-                                  URE installation).</td>
+                                  installation).</td>
                               </tr>
                               <tr valign="top">
                                 <td class="cell20">CLASSPATH</td>
@@ -389,12 +376,11 @@
                                     $OO_SDK_URE_JAVA_DIR/jurt.jar;
                                     $OO_SDK_URE_JAVA_DIR/ridl.jar;
                                     $OO_SDK_URE_JAVA_DIR/unoloader.jar;
-                                    [$OO_SDK_URE_JAVA_DIR/unoil.jar;]
+                                    $OO_SDK_URE_JAVA_DIR/unoil.jar;
                                     $CLASSPATH</i><br/>
                                   <p>The classpath will be set or extended to
                                     the necessary jar files of the specified
-                                    office installation. (<i>unoil.jar</i> is
-                                    only included when OFFICE_HOME is set.)</p>
+                                    LibreOffice installation.</p>
                                 </td>
                               </tr>
                               <tr valign="top">
@@ -402,8 +388,7 @@
                                 <td class="cell80">=<i>$OFFICE_HOME/program</i><br/>
                                   <p>This variable is used to find, for example,
                                     the office type library and the UNO package
-                                    deployment tool. This variable is only
-                                    relevant when OFFICE_HOME is set.</p>
+                                    deployment tool.</p>
                                 </td>
                               </tr>
                               <tr valign="top">
@@ -411,16 +396,14 @@
                                 <td class="cell80">=<i>$OFFICE_PROGRAM_PATH</i><br/>
                                   <p>This variable is used to ensure that the
                                     new C++ UNO bootstrap mechanism uses the
-                                    configured office installation of the SDK.
-                                    Normally the bootstrap mechanism finds the
-                                    default office installation for the user on
-                                    the system. This variable is optional but is
-                                    set from the scripts to ensure a homogeneous
-                                    environment. Especially useful during
-                                    development where you might have more than
-                                    one office installation installed. This
-                                    variable is only relevant when OFFICE_HOME
-                                    is set.</p>
+                                    configured LibreOffice installation of the
+                                    SDK. Normally the bootstrap mechanism finds
+                                    the default office installation for the user
+                                    on the system. This variable is optional but
+                                    is set from the scripts to ensure a
+                                    homogeneous environment. Especially useful
+                                    during development where you might have more
+                                    than one office installation installed.</p>
                                 </td>
                               </tr>
                             </table>
@@ -452,8 +435,7 @@
                                 </td>
                               </tr>
                               <tr>
-                                <td colspan="2" class="cell80">When
-                                  OO_SDK_URE_HOME is set, the script
+                                <td colspan="2" class="cell80">The script
                                   additionally creates symbolic links to the
                                   public dynamic libraries of the URE in
                                   <i>$OO_SDK_HOME/(solsparc|solintel)/lib</i>,
@@ -487,8 +469,7 @@
                                 </td>
                               </tr>
                               <tr>
-                                <td colspan="2" class="cell80">When
-                                  OO_SDK_URE_HOME is set, the script
+                                <td colspan="2" class="cell80">The script
                                   additionally creates symbolic links to the
                                   public dynamic libraries of the URE in
                                   <i>$OO_SDK_HOME/linux/lib</i>, which are
