@@ -170,9 +170,7 @@ const sal_Unicode cMarkSeparator = '|';
 // Sequences names for jumps are <name of sequence>!<no>
 const sal_Unicode cSequenceMarkSeparator = '!';
 
-#ifndef DB_DELIM                            // This is defined in OFA!
 #define DB_DELIM ((sal_Unicode)0xff)        // Database <-> table separator.
-#endif
 
 typedef sal_uInt16 SetAttrMode;
 
