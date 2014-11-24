@@ -18,6 +18,7 @@
  */
 
 #include <redline.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -46,7 +47,7 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(vcl::Window *pParent)
     : SfxModalDialog(pParent,
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
 {
-    pImplDlg = new SwRedlineAcceptDlg(this, true);
+    pImplDlg = new SwRedlineAcceptDlg(this, get_content_area(), true);
 
     pImplDlg->Initialize(GetExtraData());
     pImplDlg->Activate();   // for data's initialisation
