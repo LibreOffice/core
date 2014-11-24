@@ -115,42 +115,6 @@ String STR_PAGE_COUNT_CUSTOM
 {
         Text [ en-US ] = "Page %1 of %2 (Page %3)" ;
 };
-String RID_TEXT_TOOLBOX
-{
-        Text [ en-US ] = "Text Object Bar" ;
-};
-String RID_TABLE_TOOLBOX
-{
-        Text [ en-US ] = "Table Object Bar" ;
-};
-String RID_FRAME_TOOLBOX
-{
-        Text [ en-US ] = "Frame Object Bar" ;
-};
-String RID_GRAFIK_TOOLBOX
-{
-        Text [ en-US ] = "Images Object Bar" ;
-};
-String RID_OLE_TOOLBOX
-{
-        Text [ en-US ] = "Object" ;
-};
-String RID_DRAW_TOOLBOX
-{
-        Text [ en-US ] = "Draw Object Bar" ;
-};
-String RID_BEZIER_TOOLBOX
-{
-        Text [ en-US ] = "Bézier Object Bar" ;
-};
-String RID_DRAW_TEXT_TOOLBOX
-{
-    Text [ en-US ] = "Text Object Bar/Images" ;
-};
-String RID_NUM_TOOLBOX
-{
-        Text [ en-US ] = "Numbering Object Bar" ;
-};
 String STR_SHELLNAME_TEXT
 {
         Text [ en-US ] = "Text" ;

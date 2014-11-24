@@ -364,27 +364,6 @@
         };\
     };
 
- //     Objekt-Leisten
-
-String RID_DRAW_OBJECTBAR
-{
-    Text [ en-US ] = "Drawing Object Bar" ;
-};
-
- // Text-Toolbox
-
-String RID_TEXT_TOOLBOX
-{
-    Text [ en-US ] = "Text Object Bar" ;
-};
-
- // Graphics toolbox
-
-String RID_GRAPHIC_OBJECTBAR
-{
-    Text [ en-US ] = "Image Object Bar";
-};
-
  // Popup-Menues ---------------------------------------------------------------------
 
 String RID_POPUP_DRAW

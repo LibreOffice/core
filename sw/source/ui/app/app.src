@@ -466,11 +466,6 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text [ en-US ] = "Unknown Author";
 };
 
-String RID_MODULE_TOOLBOX
-{
-    Text [ en-US ] = "Function Bar (viewing mode)" ;
-};
-
 String  STR_DONT_ASK_AGAIN
 {
     Text [ en-US ] = "~Do not show warning again" ;
@@ -606,83 +601,6 @@ String STR_ACCESS_PAGESETUP_SPACING
 String STR_ACCESS_COLUMN_WIDTH
 {
     Text [ en-US ] = "Column %1 Width";
-};
-
-ToolBox RID_MODULE_TOOLBOX
-{
-    HelpID = HID_MODULE_TOOLBOX ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    LineSpacing = TRUE ;
-    Customize = TRUE ;
-    MenuStrings = TRUE ;
-    Hide = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_SAVEASDOC ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EDITDOC ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_MAIL_SENDDOC ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DIRECTEXPORTDOCASPDF ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PRINTDOCDIRECT ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_COPY ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SEARCH_DLG ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NAVIGATOR ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ATTR_ZOOM ;
-        };
-    };
-    Scroll = TRUE ;
 };
 
 String STR_CAPTION_TABLE

@@ -374,11 +374,6 @@ String RID_ERR_RIGHTEXPECTED
     Text [ en-US ] = "'RIGHT' expected" ;
 };
 
-String RID_MATH_TOOLBOX
-{
-    Text [ en-US ] = "Main Toolbar" ;
-};
-
 StringArray RID_PRINTUIOPTIONS
 {
     ItemList [en-US] =

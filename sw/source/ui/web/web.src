@@ -59,17 +59,5 @@ String RID_WEBTEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar/Web" ;
 };
-String RID_WEBFRAME_TOOLBOX
-{
-    Text [ en-US ] = "Frame Object Bar/Web" ;
-};
-String RID_WEBGRAPHIC_TOOLBOX
-{
-    Text [ en-US ] = "Image Object Bar/Web" ;
-};
-String RID_WEBOLE_TOOLBOX
-{
-    Text [ en-US ] = "Object/Web" ;
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
