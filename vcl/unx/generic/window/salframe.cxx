@@ -270,15 +270,8 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
     if( aIcon.IsEmpty() )
         return false;
 
-    SalTwoRect aRect;
-    aRect.mnSrcX = 0; aRect.mnSrcY = 0;
-    aRect.mnSrcWidth = iconSize; aRect.mnSrcHeight = iconSize;
-    aRect.mnDestX = 0; aRect.mnDestY = 0;
-    aRect.mnDestWidth = iconSize; aRect.mnDestHeight = iconSize;
-
     X11SalBitmap *pBitmap = dynamic_cast < X11SalBitmap * >
         (aIcon.ImplGetBitmapImpBitmap()->ImplGetSalBitmap());
-
     if (!pBitmap) // FIXME: opengl
         return false;
 
@@ -288,6 +281,8 @@ static bool lcl_SelectAppIconPixmap( SalDisplay *pDisplay, SalX11Screen nXScreen
                                  DefaultDepth( pDisplay->GetDisplay(),
                                                nXScreen.getXScreen() )
                                  );
+
+    SalTwoRect aRect(0, 0, iconSize, iconSize, 0, 0, iconSize, iconSize);
 
     pBitmap->ImplDraw( icon_pixmap,
                        nXScreen,

@@ -73,13 +73,8 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
     {
         X11SalBitmap aBM;
         aBM.ImplCreateFromDrawable( aSrc, nXScreenSrc, nSrcDepth, src_x, src_y, w, h );
-        SalTwoRect aTwoRect;
-        aTwoRect.mnSrcX = aTwoRect.mnSrcY = 0;
-        aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = w;
-        aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = h;
-        aTwoRect.mnDestX = dest_x;
-        aTwoRect.mnDestY = dest_y;
-        aBM.ImplDraw( aDest, nXScreenDest, nDestDepth, aTwoRect,aDestGC );
+        SalTwoRect aTwoRect(0, 0, w, h, dest_x, dest_y, w, h);
+        aBM.ImplDraw(aDest, nXScreenDest, nDestDepth, aTwoRect,aDestGC);
     }
 }
 

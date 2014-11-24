@@ -1229,15 +1229,8 @@ void Window::drawFrameDev( const Point& rPt, const Point& rDevPt, const Size& rD
     else
         SelectClipRegion( rRegion );
 
-    SalTwoRect aPosAry;
-    aPosAry.mnSrcX       = rDevPt.X();
-    aPosAry.mnSrcY       = rDevPt.Y();
-    aPosAry.mnSrcWidth   = rDevSize.Width();
-    aPosAry.mnSrcHeight  = rDevSize.Height();
-    aPosAry.mnDestX      = rPt.X();
-    aPosAry.mnDestY      = rPt.Y();
-    aPosAry.mnDestWidth  = rDevSize.Width();
-    aPosAry.mnDestHeight = rDevSize.Height();
+    SalTwoRect aPosAry(rDevPt.X(), rDevPt.Y(), rDevSize.Width(), rDevSize.Height(),
+                       rPt.X(), rPt.Y(), rDevSize.Width(), rDevSize.Height());
     drawOutDevDirect( &rOutDev, aPosAry );
 
     // Ensure that ClipRegion is recalculated and set

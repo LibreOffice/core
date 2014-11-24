@@ -102,16 +102,10 @@ void OutputDevice::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
     const ImpBitmap* pImpBmp = rMask.ImplGetImpBitmap();
     if ( pImpBmp )
     {
-        SalTwoRect aPosAry;
-
-        aPosAry.mnSrcX = rSrcPtPixel.X();
-        aPosAry.mnSrcY = rSrcPtPixel.Y();
-        aPosAry.mnSrcWidth = rSrcSizePixel.Width();
-        aPosAry.mnSrcHeight = rSrcSizePixel.Height();
-        aPosAry.mnDestX = ImplLogicXToDevicePixel( rDestPt.X() );
-        aPosAry.mnDestY = ImplLogicYToDevicePixel( rDestPt.Y() );
-        aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
-        aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+        SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
+                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
+                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
         // we don't want to mirror via cooridates
         const sal_uLong nMirrFlags = AdjustTwoRect( aPosAry, pImpBmp->ImplGetSize() );
