@@ -77,10 +77,10 @@ css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequenc
     if( it != m_aInstances.end() )
         return it->second;
 
-    X11Clipboard* pClipboard = new X11Clipboard( rManager, nSelection );
+    css::uno::Reference<css::datatransfer::clipboard::XClipboard> pClipboard = X11Clipboard::create( rManager, nSelection );
     m_aInstances[ nSelection ] = pClipboard;
 
-    return static_cast<OWeakObject*>(pClipboard);
+    return pClipboard;
 }
 
 css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
