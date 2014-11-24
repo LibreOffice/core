@@ -27,7 +27,6 @@ $(eval $(call gb_SrsTarget_SrsTarget,svx/ofa))
 
 $(eval $(call gb_SrsTarget_add_files,svx/ofa,\
     svx/source/src/errtxt.src \
-    svx/source/src/app.src \
 ))
 
 # vim: set noet sw=4 ts=4:
