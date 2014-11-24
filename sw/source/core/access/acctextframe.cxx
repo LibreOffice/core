@@ -172,7 +172,7 @@ void SAL_CALL
 void SAL_CALL SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )> - missing implementation" );
+    SAL_WARN("sw.core", "<SwAccessibleTextFrame::selectAccessibleChild( sal_Int32 )> - missing implementation" );
 }
 
 sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nChildIndex )
@@ -204,13 +204,13 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int32 nC
 void SAL_CALL SwAccessibleTextFrame::clearAccessibleSelection(  )
     throw ( uno::RuntimeException, std::exception )
 {
-    DBG_ASSERT( false, "<SwAccessibleTextFrame::clearAccessibleSelection(  )> - missing implementation" );
+    SAL_WARN("sw.core", "<SwAccessibleTextFrame::clearAccessibleSelection(  )> - missing implementation");
 }
 
 void SAL_CALL SwAccessibleTextFrame::selectAllAccessibleChildren(  )
     throw ( uno::RuntimeException, std::exception )
 {
-    DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAllAccessibleChildren(  )> - missing implementation" );
+    SAL_WARN("sw.core", "<SwAccessibleTextFrame::selectAllAccessibleChildren(  )> - missing implementation");
 }
 
 sal_Int32 SAL_CALL SwAccessibleTextFrame::getSelectedAccessibleChildCount()
@@ -245,7 +245,7 @@ uno::Reference<XAccessible> SAL_CALL SwAccessibleTextFrame::getSelectedAccessibl
 void SAL_CALL SwAccessibleTextFrame::deselectAccessibleChild( sal_Int32 )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    DBG_ASSERT( false, "<SwAccessibleTextFrame::selectAllAccessibleChildren( sal_Int32 )> - missing implementation" );
+    SAL_WARN("sw.core", "<SwAccessibleTextFrame::selectAllAccessibleChildren( sal_Int32 )> - missing implementation");
 }
 
 // #i73249#
@@ -310,7 +310,7 @@ SwFlyFrm* SwAccessibleTextFrame::getFlyFrm() const
     SwFlyFrm* pFlyFrm = NULL;
 
     const SwFrm* pFrm = GetFrm();
-    OSL_ENSURE( pFrm != NULL, "frame expected" );
+    assert(pFrm);
     if( pFrm->IsFlyFrm() )
     {
         pFlyFrm = static_cast<SwFlyFrm*>( const_cast<SwFrm*>( pFrm ) );
@@ -337,7 +337,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL SwAccessibleTextFrame::getAccess
     AccessibleRelationSetHelper* pHelper = new AccessibleRelationSetHelper();
 
     SwFlyFrm* pFlyFrm = getFlyFrm();
-    OSL_ENSURE( pFlyFrm != NULL, "fly frame expected" );
+    assert(pFlyFrm);
 
     const SwFlyFrm* pPrevFrm = pFlyFrm->GetPrevLink();
     if( pPrevFrm != NULL )
