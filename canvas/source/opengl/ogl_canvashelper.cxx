@@ -155,7 +155,7 @@ namespace oglcanvas
             return true;
         }
 
-        bool lcl_fillPolyPolygon( const CanvasHelper&                    /*rHelper*/,
+        bool lcl_fillPolyPolygon( const CanvasHelper&                    rHelper,
                                   const ::basegfx::B2DHomMatrix&         rTransform,
                                   GLenum                                 eSrcBlend,
                                   GLenum                                 eDstBlend,
@@ -163,7 +163,7 @@ namespace oglcanvas
                                   const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
         {
             //no texture bind ?
-            TransformationPreserver aPreserver;
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
             setupState(rTransform, eSrcBlend, eDstBlend);
 
             ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
@@ -186,9 +186,7 @@ namespace oglcanvas
                                           const rendering::Texture&                      rTexture,
                                           const ::basegfx::B2DPolyPolygonVector&         rPolyPolygons )
         {
-          //not complete
-            TransformationPreserver aPreserver;
-          //  setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
             setupState(rTransform, eSrcBlend, eDstBlend);
 
             // convert to weird canvas textur coordinate system (not
@@ -261,7 +259,6 @@ namespace oglcanvas
                                 const rendering::ARGBColor&      rColor,
                                 const CanvasBitmap&              rBitmap )
         {
-            TransformationPreserver aPreserver;
             setupState(rTransform, eSrcBlend, eDstBlend);
 
             return rBitmap.renderRecordedActions();
@@ -323,7 +320,6 @@ namespace oglcanvas
                                           sal_uInt32                             nPixelCrc32,
                                           const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
         {
-            TransformationPreserver aPreserver;
          //   setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
             setupState(rTransform, eSrcBlend, eDstBlend);
 
@@ -356,7 +352,6 @@ namespace oglcanvas
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
             aTextureTransform.invert();
 
-            glMatrixMode(GL_TEXTURE);
             double aTexTransform[] =
                 {
                     aTextureTransform.get(0,0), aTextureTransform.get(1,0), 0, 0,
@@ -364,10 +359,6 @@ namespace oglcanvas
                     0,                          0,                          1, 0,
                     aTextureTransform.get(0,2), aTextureTransform.get(1,2), 0, 1
                 };
-            glLoadMatrixd(aTexTransform);
-
-            // blend against fixed vertex color; texture alpha is multiplied in
-            glColor4f(1,1,1,rTexture.Alpha);
 
             aCurr=rPolyPolygons.begin();
             while( aCurr != aEnd )
@@ -377,8 +368,6 @@ namespace oglcanvas
                 glEnd();
             }
 
-            glLoadIdentity();
-            glMatrixMode(GL_MODELVIEW);
 
             glBindTexture(GL_TEXTURE_2D, 0);
             glDisable(GL_TEXTURE_2D);

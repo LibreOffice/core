@@ -39,9 +39,6 @@ static void initContext()
     // need the backside for mirror effects
     glDisable(GL_CULL_FACE);
 
-    // no perspective, we're 2D
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
 
     // misc preferences
     glEnable(GL_POINT_SMOOTH);
@@ -60,13 +57,6 @@ static void initTransformation(const ::Size& rSize, bool bMirror=false)
                 (GLsizei)rSize.Width(),
                 (GLsizei)rSize.Height() );
     // model coordinate system is already in device pixel
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslated(-1.0, (bMirror ? -1.0 : 1.0), 0.0);
-    glScaled( 2.0  / rSize.Width(),
-              (bMirror ? 2.0 : -2.0) / rSize.Height(),
-              1.0 );
-
     // clear to black
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -109,7 +99,6 @@ namespace oglcanvas
         // init window context
         initContext();
         mRenderHelper.InitOpenGL();
-        mRenderHelper.SetVP(1200, 600);//is this right?
 
         mnLinearMultiColorGradientProgram =
             OpenGLHelper::LoadShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader");
