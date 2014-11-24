@@ -1390,7 +1390,7 @@ static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
         do
         {
             if ( pFrm->IsInTab() )
-                pFrm = ((SwFrm*)pFrm)->ImplFindTabFrm();
+                pFrm = const_cast<SwFrm*>(pFrm)->ImplFindTabFrm();
 
             if ( pFrm->IsTabFrm() )
             {

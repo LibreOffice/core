@@ -224,7 +224,7 @@ public:
 
 inline const SwCntntFrm *SwTabFrm::FindLastCntnt() const
 {
-    return ((SwTabFrm*)this)->FindLastCntnt();
+    return const_cast<SwTabFrm*>(this)->FindLastCntnt();
 }
 
 inline const SwTabFrm *SwTabFrm::GetFollow() const

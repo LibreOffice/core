@@ -193,8 +193,8 @@ public:
 
     void ChgRelPos( const Point &rAbsPos );
     bool IsInvalid() const { return bInvalid; }
-    void Invalidate() const { ((SwFlyFrm*)this)->bInvalid = true; }
-    void Validate() const { ((SwFlyFrm*)this)->bInvalid = false; }
+    void Invalidate() const { const_cast<SwFlyFrm*>(this)->bInvalid = true; }
+    void Validate() const { const_cast<SwFlyFrm*>(this)->bInvalid = false; }
 
     bool IsMinHeight()  const { return bMinHeight; }
     bool IsLocked()     const { return bLocked; }

@@ -457,9 +457,9 @@ inline sal_uInt16 SwBorderAttrs::GetBottomLine( const SwFrm& _rFrm ) const
 }
 inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
 {
-    ((SwBorderAttrs*)this)->bCacheGetLine = bNew;
-    ((SwBorderAttrs*)this)->bCachedGetBottomLine =
-    ((SwBorderAttrs*)this)->bCachedGetTopLine = false;
+    const_cast<SwBorderAttrs*>(this)->bCacheGetLine = bNew;
+    const_cast<SwBorderAttrs*>(this)->bCachedGetBottomLine =
+    const_cast<SwBorderAttrs*>(this)->bCachedGetTopLine = false;
     // invalidate cache for values <bJoinedWithPrev> and <bJoinedWithNext>
     bCachedJoinedWithPrev = false;
     bCachedJoinedWithNext = false;
@@ -468,43 +468,43 @@ inline void SwBorderAttrs::SetGetCacheLine( bool bNew ) const
 inline sal_uInt16 SwBorderAttrs::CalcTopLine() const
 {
     if ( bTopLine )
-        ((SwBorderAttrs*)this)->_CalcTopLine();
+        const_cast<SwBorderAttrs*>(this)->_CalcTopLine();
     return nTopLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcBottomLine() const
 {
     if ( bBottomLine )
-        ((SwBorderAttrs*)this)->_CalcBottomLine();
+        const_cast<SwBorderAttrs*>(this)->_CalcBottomLine();
     return nBottomLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcLeftLine() const
 {
     if ( bLeftLine )
-        ((SwBorderAttrs*)this)->_CalcLeftLine();
+        const_cast<SwBorderAttrs*>(this)->_CalcLeftLine();
     return nLeftLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcRightLine() const
 {
     if ( bRightLine )
-        ((SwBorderAttrs*)this)->_CalcRightLine();
+        const_cast<SwBorderAttrs*>(this)->_CalcRightLine();
     return nRightLine;
 }
 inline sal_uInt16 SwBorderAttrs::CalcTop() const
 {
     if ( bTop )
-        ((SwBorderAttrs*)this)->_CalcTop();
+        const_cast<SwBorderAttrs*>(this)->_CalcTop();
     return nTop;
 }
 inline sal_uInt16 SwBorderAttrs::CalcBottom() const
 {
     if ( bBottom )
-        ((SwBorderAttrs*)this)->_CalcBottom();
+        const_cast<SwBorderAttrs*>(this)->_CalcBottom();
     return nBottom;
 }
 inline bool SwBorderAttrs::IsLine() const
 {
     if ( bLine )
-        ((SwBorderAttrs*)this)->_IsLine();
+        const_cast<SwBorderAttrs*>(this)->_IsLine();
     return bIsLine;
 }
 

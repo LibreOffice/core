@@ -776,7 +776,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
                     aTmpCalcPnt = pCnt->Prt();
                     aTmpCalcPnt += pCnt->Frm().Pos();
                     if ( aRect.IsOver( aTmpCalcPnt ) )
-                        ((SwFrm*)pCnt)->Prepare( PREP_FLY_ATTR_CHG );
+                        static_cast<SwFrm*>(pCnt)->Prepare( PREP_FLY_ATTR_CHG );
                     pCnt = pCnt->GetNextCntntFrm();
                 }
             }
@@ -2429,7 +2429,7 @@ void SwFEShell::CheckUnboundObjects()
             SwPosition aPos( *static_cast<const SwCntntFrm*>(pAnch)->GetNode() );
             aAnch.SetType( FLY_AT_PARA );
             aAnch.SetAnchor( &aPos );
-            ((SwRect&)GetCharRect()).Pos() = aPt;
+            const_cast<SwRect&>(GetCharRect()).Pos() = aPt;
             }
 
             // First the action here, to assure GetCharRect delivers current values.

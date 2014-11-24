@@ -674,7 +674,7 @@ public:
 
     SwFrm* GetIndNext()
         { return ( mpNext || !IsInSct() ) ? mpNext : _GetIndNext(); }
-    const SwFrm* GetIndNext() const { return ((SwFrm*)this)->GetIndNext(); }
+    const SwFrm* GetIndNext() const { return static_cast<const SwFrm*>(this)->GetIndNext(); }
 
     sal_uInt16 GetPhyPageNum() const;   // page number without offset
     sal_uInt16 GetVirtPageNum() const;  // page number with offset
@@ -909,37 +909,37 @@ public:
 inline bool SwFrm::IsInDocBody() const
 {
     if ( mbInfInvalid )
-        ((SwFrm*)this)->SetInfFlags();
+        const_cast<SwFrm*>(this)->SetInfFlags();
     return mbInfBody;
 }
 inline bool SwFrm::IsInFtn() const
 {
     if ( mbInfInvalid )
-        ((SwFrm*)this)->SetInfFlags();
+        const_cast<SwFrm*>(this)->SetInfFlags();
     return mbInfFtn;
 }
 inline bool SwFrm::IsInTab() const
 {
     if ( mbInfInvalid )
-        ((SwFrm*)this)->SetInfFlags();
+        const_cast<SwFrm*>(this)->SetInfFlags();
     return mbInfTab;
 }
 inline bool SwFrm::IsInFly() const
 {
     if ( mbInfInvalid )
-        ((SwFrm*)this)->SetInfFlags();
+        const_cast<SwFrm*>(this)->SetInfFlags();
     return mbInfFly;
 }
 inline bool SwFrm::IsInSct() const
 {
     if ( mbInfInvalid )
-        ((SwFrm*)this)->SetInfFlags();
+        const_cast<SwFrm*>(this)->SetInfFlags();
     return mbInfSct;
 }
 bool SwFrm::IsVertical() const
 {
     if( mbInvalidVert )
-        ((SwFrm*)this)->SetDirFlags( true );
+        const_cast<SwFrm*>(this)->SetDirFlags( true );
     return mbVertical;
 }
 inline bool SwFrm::IsVertLR() const
@@ -949,26 +949,26 @@ inline bool SwFrm::IsVertLR() const
 inline bool SwFrm::IsRightToLeft() const
 {
     if( mbInvalidR2L )
-        ((SwFrm*)this)->SetDirFlags( false );
+        const_cast<SwFrm*>(this)->SetDirFlags( false );
     return mbRightToLeft;
 }
 
 inline void SwFrm::SetCompletePaint() const
 {
-    ((SwFrm*)this)->mbCompletePaint = true;
+    const_cast<SwFrm*>(this)->mbCompletePaint = true;
 }
 inline void SwFrm::ResetCompletePaint() const
 {
-    ((SwFrm*)this)->mbCompletePaint = false;
+    const_cast<SwFrm*>(this)->mbCompletePaint = false;
 }
 
 inline void SwFrm::SetRetouche() const
 {
-    ((SwFrm*)this)->mbRetouche = true;
+    const_cast<SwFrm*>(this)->mbRetouche = true;
 }
 inline void SwFrm::ResetRetouche() const
 {
-    ((SwFrm*)this)->mbRetouche = false;
+    const_cast<SwFrm*>(this)->mbRetouche = false;
 }
 
 inline SwLayoutFrm *SwFrm::GetNextLayoutLeaf()
@@ -1031,12 +1031,12 @@ inline void SwFrm::InvalidateNextPos( bool bNoFtn )
 inline void SwFrm::Calc() const
 {
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
-        ((SwFrm*)this)->PrepareMake();
+        const_cast<SwFrm*>(this)->PrepareMake();
 }
 inline void SwFrm::OptCalc() const
 {
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
-        ((SwFrm*)this)->OptPrepareMake();
+        const_cast<SwFrm*>(this)->OptPrepareMake();
 }
 
 inline Point SwFrm::GetRelPos() const
@@ -1050,15 +1050,15 @@ inline Point SwFrm::GetRelPos() const
 
 inline const SwPageFrm *SwFrm::FindPageFrm() const
 {
-    return ((SwFrm*)this)->FindPageFrm();
+    return const_cast<SwFrm*>(this)->FindPageFrm();
 }
 inline const SwFrm *SwFrm::FindColFrm() const
 {
-    return ((SwFrm*)this)->FindColFrm();
+    return const_cast<SwFrm*>(this)->FindColFrm();
 }
 inline const SwFrm *SwFrm::FindFooterOrHeader() const
 {
-    return ((SwFrm*)this)->FindFooterOrHeader();
+    return const_cast<SwFrm*>(this)->FindFooterOrHeader();
 }
 inline SwTabFrm *SwFrm::FindTabFrm()
 {
@@ -1066,7 +1066,7 @@ inline SwTabFrm *SwFrm::FindTabFrm()
 }
 inline const SwFtnBossFrm *SwFrm::FindFtnBossFrm( bool bFtn ) const
 {
-    return ((SwFrm*)this)->FindFtnBossFrm( bFtn );
+    return const_cast<SwFrm*>(this)->FindFtnBossFrm( bFtn );
 }
 inline SwFtnFrm *SwFrm::FindFtnFrm()
 {
@@ -1083,19 +1083,19 @@ inline SwSectionFrm *SwFrm::FindSctFrm()
 
 inline const SwTabFrm *SwFrm::FindTabFrm() const
 {
-    return IsInTab() ? ((SwFrm*)this)->ImplFindTabFrm() : 0;
+    return IsInTab() ? const_cast<SwFrm*>(this)->ImplFindTabFrm() : 0;
 }
 inline const SwFtnFrm *SwFrm::FindFtnFrm() const
 {
-    return IsInFtn() ? ((SwFrm*)this)->ImplFindFtnFrm() : 0;
+    return IsInFtn() ? const_cast<SwFrm*>(this)->ImplFindFtnFrm() : 0;
 }
 inline const SwFlyFrm *SwFrm::FindFlyFrm() const
 {
-    return IsInFly() ? ((SwFrm*)this)->ImplFindFlyFrm() : 0;
+    return IsInFly() ? const_cast<SwFrm*>(this)->ImplFindFlyFrm() : 0;
 }
 inline const SwSectionFrm *SwFrm::FindSctFrm() const
 {
-    return IsInSct() ? ((SwFrm*)this)->ImplFindSctFrm() : 0;
+    return IsInSct() ? const_cast<SwFrm*>(this)->ImplFindSctFrm() : 0;
 }
 inline SwFrm *SwFrm::FindNext()
 {
@@ -1109,7 +1109,7 @@ inline const SwFrm *SwFrm::FindNext() const
     if ( mpNext )
         return mpNext;
     else
-        return ((SwFrm*)this)->_FindNext();
+        return const_cast<SwFrm*>(this)->_FindNext();
 }
 // #i27138# - add parameter <_bInSameFtn>
 inline SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
@@ -1125,7 +1125,7 @@ inline const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
     if ( mpNext && mpNext->IsCntntFrm() )
         return (SwCntntFrm*)mpNext;
     else
-        return ((SwFrm*)this)->_FindNextCnt( _bInSameFtn );
+        return const_cast<SwFrm*>(this)->_FindNextCnt( _bInSameFtn );
 }
 inline SwFrm *SwFrm::FindPrev()
 {
@@ -1139,7 +1139,7 @@ inline const SwFrm *SwFrm::FindPrev() const
     if ( mpPrev && !mpPrev->IsSctFrm() )
         return mpPrev;
     else
-        return ((SwFrm*)this)->_FindPrev();
+        return const_cast<SwFrm*>(this)->_FindPrev();
 }
 
 inline bool SwFrm::IsLayoutFrm() const

@@ -341,7 +341,7 @@ inline SwTwips SwTxtFly::GetMinBottom() const
 
 inline const SwCntntFrm* SwTxtFly::GetMaster() const
 {
-    return pMaster ? pMaster : ((SwTxtFly*)this)->_GetMaster();
+    return pMaster ? pMaster : const_cast<SwTxtFly*>(this)->_GetMaster();
 }
 
 inline long SwTxtFly::GetNextTop() const
@@ -351,7 +351,7 @@ inline long SwTxtFly::GetNextTop() const
 
 inline void SwTxtFly::SetNextTop( long nNew ) const
 {
-    ((SwTxtFly*)this)->nNextTop = nNew;
+    const_cast<SwTxtFly*>(this)->nNextTop = nNew;
 }
 
 inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, bool bTop ) const

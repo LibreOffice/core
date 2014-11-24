@@ -1111,7 +1111,7 @@ OUString SwDocInfoField::Expand() const
                         uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
                         aNew >>= sVal;
                     }
-                    ((SwDocInfoField*)this)->aContent = sVal;
+                    const_cast<SwDocInfoField*>(this)->aContent = sVal;
                 }
             }
         }
@@ -2205,7 +2205,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
         }
     }
     // start formatting
-    ((SwFmtFld&)pTxtFld->GetFmtFld()).ModifyNotification( 0, 0 );
+    const_cast<SwFmtFld&>(pTxtFld->GetFmtFld()).ModifyNotification( 0, 0 );
 }
 
 // queries for relative page numbering

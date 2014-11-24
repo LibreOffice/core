@@ -299,8 +299,8 @@ public:
      */
     bool MakeTblCrsrs( SwTableCursor& );
 
-    void DisallowTurbo()  const { ((SwRootFrm*)this)->bTurboAllowed = false; }
-    void ResetTurboFlag() const { ((SwRootFrm*)this)->bTurboAllowed = true; }
+    void DisallowTurbo()  const { const_cast<SwRootFrm*>(this)->bTurboAllowed = false; }
+    void ResetTurboFlag() const { const_cast<SwRootFrm*>(this)->bTurboAllowed = true; }
     bool IsTurboAllowed() const { return bTurboAllowed; }
     void SetTurbo( const SwCntntFrm *pCntnt ) { pTurbo = pCntnt; }
     void ResetTurbo() { pTurbo = 0; }
@@ -372,7 +372,7 @@ public:
 inline long SwRootFrm::GetBrowseWidth() const
 {
     if ( !bBrowseWidthValid )
-        ((SwRootFrm*)this)->ImplCalcBrowseWidth();
+        const_cast<SwRootFrm*>(this)->ImplCalcBrowseWidth();
     return nBrowseWidth;
 }
 
@@ -384,7 +384,7 @@ inline void SwRootFrm::InvalidateBrowseWidth()
 
 inline  void SwRootFrm::SetVirtPageNum( const bool bOf) const
 {
-    ((SwRootFrm*)this)->bIsVirtPageNum = bOf;
+    const_cast<SwRootFrm*>(this)->bIsVirtPageNum = bOf;
 }
 
 #endif // INCLUDED_SW_SOURCE_CORE_INC_ROOTFRM_HXX

@@ -168,7 +168,7 @@ bool SwFEShell::Copy( SwDoc* pClpDoc, const OUString* pNewClpTxt )
                     rIdx.GetIndex(), RES_TXTATR_FLYCNT));
             if( pTxtFly )
             {
-                ((SwFmtFlyCnt&)pTxtFly->GetFlyCnt()).SetFlyFmt( 0 );
+                const_cast<SwFmtFlyCnt&>(pTxtFly->GetFlyCnt()).SetFlyFmt( 0 );
                 pTxtNd->EraseText( rIdx, 1 );
             }
         }

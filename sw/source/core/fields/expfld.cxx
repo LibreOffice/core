@@ -239,7 +239,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             {
                 pTxtNode = pCntFrm->GetNode()->GetTxtNode();
                 rPos.nNode = *pTxtNode;
-                ((SwTxtNode*)pTxtNode)->MakeEndIndex( &rPos.nContent );
+                const_cast<SwTxtNode*>(pTxtNode)->MakeEndIndex( &rPos.nContent );
             }
             else
             {

@@ -225,20 +225,20 @@ public:
 
 inline void SwFlyInCntFrm::InvalidateLayout() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidLayout = true;
+    const_cast<SwFlyInCntFrm*>(this)->bInvalidLayout = true;
 }
 inline void SwFlyInCntFrm::InvalidateCntnt() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidCntnt = true;
+    const_cast<SwFlyInCntFrm*>(this)->bInvalidCntnt = true;
 }
 
 inline void SwFlyInCntFrm::ValidateLayout() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidLayout = false;
+    const_cast<SwFlyInCntFrm*>(this)->bInvalidLayout = false;
 }
 inline void SwFlyInCntFrm::ValidateCntnt() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidCntnt = false;
+    const_cast<SwFlyInCntFrm*>(this)->bInvalidCntnt = false;
 }
 
 #endif

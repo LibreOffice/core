@@ -125,12 +125,12 @@ public:
 
 inline const SwLayoutFrm *SwFtnBossFrm::FindBodyCont() const
 {
-    return ((SwFtnBossFrm*)this)->FindBodyCont();
+    return const_cast<SwFtnBossFrm*>(this)->FindBodyCont();
 }
 
 inline const SwFtnContFrm *SwFtnBossFrm::FindFtnCont() const
 {
-    return ((SwFtnBossFrm*)this)->FindFtnCont();
+    return const_cast<SwFtnBossFrm*>(this)->FindFtnCont();
 }
 
 #endif

@@ -344,81 +344,81 @@ inline const SwCntntFrm *SwPageFrm::FindFirstBodyCntnt() const
 }
 inline const SwCntntFrm *SwPageFrm::FindLastBodyCntnt() const
 {
-    return ((SwPageFrm*)this)->FindLastBodyCntnt();
+    return const_cast<SwPageFrm*>(this)->FindLastBodyCntnt();
 }
 inline void SwPageFrm::InvalidateFlyLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyLayout = true;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyLayout = true;
 }
 inline void SwPageFrm::InvalidateFlyCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyCntnt = true;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyCntnt = true;
 }
 inline void SwPageFrm::InvalidateFlyInCnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyInCnt = true;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyInCnt = true;
 }
 inline void SwPageFrm::InvalidateLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidLayout = true;
+    const_cast<SwPageFrm*>(this)->bInvalidLayout = true;
 }
 inline void SwPageFrm::InvalidateCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidCntnt = true;
+    const_cast<SwPageFrm*>(this)->bInvalidCntnt = true;
 }
 inline void SwPageFrm::InvalidateSpelling() const
 {
-    ((SwPageFrm*)this)->bInvalidSpelling = true;
+    const_cast<SwPageFrm*>(this)->bInvalidSpelling = true;
 }
 
 inline void SwPageFrm::InvalidateSmartTags() const
 {
-   ((SwPageFrm*)this)->bInvalidSmartTags = true;
+   const_cast<SwPageFrm*>(this)->bInvalidSmartTags = true;
 }
 inline void SwPageFrm::InvalidateAutoCompleteWords() const
 {
-    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = true;
+    const_cast<SwPageFrm*>(this)->bInvalidAutoCmplWrds = true;
 }
 inline void SwPageFrm::InvalidateWordCount() const
 {
-    ((SwPageFrm*)this)->bInvalidWordCount = true;
+    const_cast<SwPageFrm*>(this)->bInvalidWordCount = true;
 }
 inline void SwPageFrm::ValidateFlyLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyLayout = false;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyLayout = false;
 }
 inline void SwPageFrm::ValidateFlyCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyCntnt = false;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyCntnt = false;
 }
 inline void SwPageFrm::ValidateFlyInCnt() const
 {
-    ((SwPageFrm*)this)->bInvalidFlyInCnt = false;
+    const_cast<SwPageFrm*>(this)->bInvalidFlyInCnt = false;
 }
 inline void SwPageFrm::ValidateLayout() const
 {
-    ((SwPageFrm*)this)->bInvalidLayout = false;
+    const_cast<SwPageFrm*>(this)->bInvalidLayout = false;
 }
 inline void SwPageFrm::ValidateCntnt() const
 {
-    ((SwPageFrm*)this)->bInvalidCntnt = false;
+    const_cast<SwPageFrm*>(this)->bInvalidCntnt = false;
 }
 inline void SwPageFrm::ValidateSpelling() const
 {
-    ((SwPageFrm*)this)->bInvalidSpelling = false;
+    const_cast<SwPageFrm*>(this)->bInvalidSpelling = false;
 }
 
 inline void SwPageFrm::ValidateSmartTags() const
 {
-   ((SwPageFrm*)this)->bInvalidSmartTags = false;
+   const_cast<SwPageFrm*>(this)->bInvalidSmartTags = false;
 }
 inline void SwPageFrm::ValidateAutoCompleteWords() const
 {
-    ((SwPageFrm*)this)->bInvalidAutoCmplWrds = false;
+    const_cast<SwPageFrm*>(this)->bInvalidAutoCmplWrds = false;
 }
 inline void SwPageFrm::ValidateWordCount() const
 {
-    ((SwPageFrm*)this)->bInvalidWordCount = false;
+    const_cast<SwPageFrm*>(this)->bInvalidWordCount = false;
 }
 
 inline bool SwPageFrm::IsInvalid() const

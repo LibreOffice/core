@@ -659,14 +659,14 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
             {
                 bHOriChgd = true;
                 aOldH = *static_cast<const SwFmtHoriOrient*>(pItem);
-                ((SfxItemSet&)rSet).Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT ) );
+                const_cast<SfxItemSet&>(rSet).Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
             if( SfxItemState::SET == rSet.GetItemState( RES_VERT_ORIENT, false, &pItem )
                 && text::VertOrientation::NONE == static_cast<const SwFmtVertOrient*>(pItem)->GetVertOrient() )
             {
                 bVOriChgd = true;
                 aOldV = *static_cast<const SwFmtVertOrient*>(pItem);
-                ((SfxItemSet&)rSet).Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ) );
+                const_cast<SfxItemSet&>(rSet).Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ) );
             }
         }
 
@@ -706,12 +706,12 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
                     }
                 }
 
-                ((SfxItemSet&)rSet).Put( *pOldAnchor );
+                const_cast<SfxItemSet&>(rSet).Put( *pOldAnchor );
 
                 if( bHOriChgd )
-                    ((SfxItemSet&)rSet).Put( aOldH );
+                    const_cast<SfxItemSet&>(rSet).Put( aOldH );
                 if( bVOriChgd )
-                    ((SfxItemSet&)rSet).Put( aOldV );
+                    const_cast<SfxItemSet&>(rSet).Put( aOldV );
 
                 GetDoc()->SetFlyFrmAttr( *pRet, (SfxItemSet&)rSet );
                 GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);

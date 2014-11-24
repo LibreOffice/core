@@ -101,9 +101,9 @@ void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >&
         aTmp += pFly->Frm().Pos();
         if ( !aTmp.IsOver( VisArea() ) )
         {
-            ((SwFEShell*)this)->StartAction();
-            ((SwFEShell*)this)->MakeVisible( aTmp );
-            ((SwFEShell*)this)->EndAction();
+            const_cast<SwFEShell*>(this)->StartAction();
+            const_cast<SwFEShell*>(this)->MakeVisible( aTmp );
+            const_cast<SwFEShell*>(this)->EndAction();
         }
     }
 }

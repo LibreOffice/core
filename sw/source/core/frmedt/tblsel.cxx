@@ -120,7 +120,7 @@ static const SwLayoutFrm *lcl_FindNextCellFrm( const SwLayoutFrm *pLay )
 void GetTblSelCrs( const SwCrsrShell &rShell, SwSelBoxes& rBoxes )
 {
     rBoxes.clear();
-    if( rShell.IsTableMode() && ((SwCrsrShell&)rShell).UpdateTblSelBoxes())
+    if( rShell.IsTableMode() && const_cast<SwCrsrShell&>(rShell).UpdateTblSelBoxes())
     {
         rBoxes.insert(rShell.GetTableCrsr()->GetSelectedBoxes());
     }

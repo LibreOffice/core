@@ -659,7 +659,7 @@ public:
 
 inline const SwParaPortion *SwTxtFrm::GetPara() const
 {
-    return ((SwTxtFrm*)this)->GetPara();
+    return const_cast<SwTxtFrm*>(this)->GetPara();
 }
 
 inline bool SwTxtFrm::HasPara() const
@@ -722,7 +722,7 @@ inline SwTxtFrm *SwTxtFrm::GetFollow()
 
 inline const SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos) const
 {
-    return ((SwTxtFrm*)this)->GetFrmAtPos( rPos );
+    return const_cast<SwTxtFrm*>(this)->GetFrmAtPos( rPos );
 }
 
 inline void SwTxtFrm::AdjustFollow( SwTxtFormatter &rLine,
@@ -740,20 +740,20 @@ inline void SwTxtFrm::SetOfst( const sal_Int32 nNewOfst )
 
 inline void SwTxtFrm::SetRepaint() const
 {
-    ((SwTxtFrm*)this)->bRepaint = true;
+    const_cast<SwTxtFrm*>(this)->bRepaint = true;
 }
 inline void SwTxtFrm::ResetRepaint() const
 {
-    ((SwTxtFrm*)this)->bRepaint = false;
+    const_cast<SwTxtFrm*>(this)->bRepaint = false;
 }
 
 inline void SwTxtFrm::SetBlinkPor() const
 {
-    ((SwTxtFrm*)this)->bBlinkPor = true;
+    const_cast<SwTxtFrm*>(this)->bBlinkPor = true;
 }
 inline void SwTxtFrm::ResetBlinkPor() const
 {
-    ((SwTxtFrm*)this)->bBlinkPor = false;
+    const_cast<SwTxtFrm*>(this)->bBlinkPor = false;
 }
 
 #define SWAP_IF_SWAPPED( pFrm )\
@@ -761,7 +761,7 @@ inline void SwTxtFrm::ResetBlinkPor() const
     if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
     {                                 \
         bUndoSwap = true;         \
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
+        const_cast<SwTxtFrm*>(pFrm)->SwapWidthAndHeight();         \
     }
 
 #define SWAP_IF_NOT_SWAPPED( pFrm )\
@@ -769,12 +769,12 @@ inline void SwTxtFrm::ResetBlinkPor() const
     if ( pFrm->IsVertical() && ! pFrm->IsSwapped() )\
     {                                   \
         bUndoSwap = true;           \
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
+        const_cast<SwTxtFrm*>(pFrm)->SwapWidthAndHeight();         \
     }
 
 #define UNDO_SWAP( pFrm )\
     if ( bUndoSwap )\
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+        const_cast<SwTxtFrm*>(pFrm)->SwapWidthAndHeight();
 
 /**
  * Helper class which can be used instead of the macros if a function

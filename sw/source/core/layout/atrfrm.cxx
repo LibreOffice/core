@@ -1996,7 +1996,7 @@ void SwFmtChain::SetPrev( SwFlyFrmFmt *pFmt )
     if ( pFmt )
         pFmt->Add( &aPrev );
     else if ( aPrev.GetRegisteredIn() )
-        ((SwModify*)aPrev.GetRegisteredIn())->Remove( &aPrev );
+        static_cast<SwModify*>(aPrev.GetRegisteredIn())->Remove( &aPrev );
 }
 
 void SwFmtChain::SetNext( SwFlyFrmFmt *pFmt )
@@ -2004,7 +2004,7 @@ void SwFmtChain::SetNext( SwFlyFrmFmt *pFmt )
     if ( pFmt )
         pFmt->Add( &aNext );
     else if ( aNext.GetRegisteredIn() )
-        ((SwModify*)aNext.GetRegisteredIn())->Remove( &aNext );
+        static_cast<SwModify*>(aNext.GetRegisteredIn())->Remove( &aNext );
 }
 
 bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -3285,7 +3285,7 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
                 nFlags = IMAP_MIRROR_HORZ;
 
         }
-        return ((ImageMap*)rURL.GetMap())->GetHitIMapObject( aOrigSz,
+        return const_cast<ImageMap*>(rURL.GetMap())->GetHitIMapObject( aOrigSz,
                                                 aActSz, aPos, nFlags );
     }
 

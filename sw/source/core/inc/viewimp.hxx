@@ -282,7 +282,7 @@ inline SwPageFrm *SwViewImp::GetFirstVisPage()
 inline const SwPageFrm *SwViewImp::GetFirstVisPage() const
 {
     if ( bFirstPageInvalid )
-        ((SwViewImp*)this)->SetFirstVisPage();
+        const_cast<SwViewImp*>(this)->SetFirstVisPage();
     return pFirstVisPage;
 }
 
