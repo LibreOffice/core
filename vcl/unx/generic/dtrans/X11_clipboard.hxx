@@ -46,6 +46,8 @@ namespace x11 {
         ::std::list< css::uno::Reference< css::datatransfer::clipboard::XClipboardListener > > m_aListeners;
         Atom                                                    m_aSelection;
 
+        X11Clipboard( SelectionManager& rManager, Atom aSelection );
+
     protected:
 
         friend class SelectionManager;
@@ -55,7 +57,9 @@ namespace x11 {
 
     public:
 
-        X11Clipboard( SelectionManager& rManager, Atom aSelection );
+        static css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+        create( SelectionManager& rManager, Atom aSelection );
+
         virtual ~X11Clipboard();
 
         static X11Clipboard* get( const OUString& rDisplayName, Atom aSelection );
