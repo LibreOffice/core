@@ -22,6 +22,7 @@
 #include <PagePropertyPanel.hxx>
 #include <WrapPropertyPanel.hxx>
 #include <navipi.hxx>
+#include <redlndlg.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
@@ -102,8 +103,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             "PanelFactory::createUIElement called without SfxBindings",
             NULL);
 
-#define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))
-    if (DoesResourceEndWith("/PagePropertyPanel"))
+    if (rsResourceURL.endsWith("/PagePropertyPanel"))
     {
         sw::sidebar::PagePropertyPanel* pPanel = sw::sidebar::PagePropertyPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -112,7 +112,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             pPanel,
             ui::LayoutSize(-1,-1,-1));
     }
-    else if (DoesResourceEndWith("/WrapPropertyPanel"))
+    else if (rsResourceURL.endsWith("/WrapPropertyPanel"))
     {
         sw::sidebar::WrapPropertyPanel* pPanel = sw::sidebar::WrapPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -121,7 +121,7 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             pPanel,
             ui::LayoutSize(-1,-1,-1));
     }
-    else if (DoesResourceEndWith("/NavigatorPanel"))
+    else if (rsResourceURL.endsWith("/NavigatorPanel"))
     {
         vcl::Window* pPanel = new SwNavigationPI(pBindings, NULL, pParentWindow);
         xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -130,7 +130,15 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             pPanel,
             ui::LayoutSize(0,-1,-1));
     }
-#undef DoesResourceEndWith
+    else if (rsResourceURL.endsWith("/ManageChangesPanel"))
+    {
+        vcl::Window* pPanel = new SwRedlineAcceptPanel(pParentWindow, xFrame);
+        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+            rsResourceURL,
+            xFrame,
+            pPanel,
+            ui::LayoutSize(-1,-1,-1));
+    }
 
     return xElement;
 }

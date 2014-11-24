@@ -314,7 +314,7 @@ private:
     DECL_LINK( PbClickHdl, PushButton* );
 
 public:
-    SvxTPView(vcl::Window * pParent);
+    SvxTPView(vcl::Window * pParent, VclBuilderContainer *pTopLevel);
     virtual ~SvxTPView();
 
     void            InsertWriterHeader();
@@ -373,7 +373,7 @@ private:
     sal_uInt16      m_nFilterPageId;
 
 public:
-                    SvxAcceptChgCtr(vcl::Window* pParent);
+                    SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel);
 
                     virtual ~SvxAcceptChgCtr();
 

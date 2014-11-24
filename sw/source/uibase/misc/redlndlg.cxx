@@ -89,7 +89,7 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui")
     , pChildWin       (pChild)
 {
-    pImplDlg = new SwRedlineAcceptDlg(this);
+    pImplDlg = new SwRedlineAcceptDlg(this, get_content_area());
 }
 
 void SwModelessRedlineAcceptDlg::Activate()
@@ -141,9 +141,9 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
     delete pImplDlg;
 }
 
-SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, bool bAutoFmt) :
+SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, vcl::Window *pContentArea, bool bAutoFmt) :
     pParentDlg      (pParent),
-    aTabPagesCTRL   (pParent->get_content_area()),
+    aTabPagesCTRL   (pContentArea, dynamic_cast<VclBuilderContainer*>(pParent)),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
     sInserted       (SW_RES(STR_REDLINE_INSERTED)),
     sDeleted        (SW_RES(STR_REDLINE_DELETED)),
@@ -1204,6 +1204,16 @@ void SwRedlineAcceptDlg::FillInfo(OUString &rExtraData) const
         rExtraData += ";";
     }
     rExtraData += ")";
+}
+
+SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame)
+    : PanelLayout(pParent, "ManageChangesPanel", "modules/swriter/ui/managechangessidebar.ui", rFrame)
+{
+    pImplDlg = new SwRedlineAcceptDlg(this, get<VclGrid>("content_area"));
+}
+
+SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

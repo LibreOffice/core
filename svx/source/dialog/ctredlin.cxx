@@ -374,7 +374,7 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     }
 }
 
-SvxTPView::SvxTPView(vcl::Window * pParent)
+SvxTPView::SvxTPView(vcl::Window *pParent, VclBuilderContainer *pTopLevel)
     : TabPage(pParent, "RedlineViewPage", "svx/ui/redlineviewpage.ui")
     , bEnableAccept(true)
     , bEnableAcceptAll(true)
@@ -382,7 +382,6 @@ SvxTPView::SvxTPView(vcl::Window * pParent)
     , bEnableRejectAll(true)
     , bEnableUndo(true)
 {
-    Dialog *pTopLevel = GetParentDialog();
     pTopLevel->get(m_pAccept, "accept");
     pTopLevel->get(m_pReject, "reject");
     pTopLevel->get(m_pAcceptAll, "acceptall");
@@ -1056,13 +1055,13 @@ IMPL_LINK( SvxTPFilter, RefHandle, PushButton*, pRef )
     return 0;
 }
 
-SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent)
+SvxAcceptChgCtr::SvxAcceptChgCtr(vcl::Window* pParent, VclBuilderContainer* pTopLevel)
     : TabControl(pParent, WB_TABSTOP | WB_DIALOGCONTROL)
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "svx/ui/redlinecontrol.ui", "RedlineControl");
 
     pTPFilter = new SvxTPFilter(this);
-    pTPView = new SvxTPView(this);
+    pTPView = new SvxTPView(this, pTopLevel);
 
     m_nViewPageId = GetPageId("view");
     m_nFilterPageId = GetPageId("filter");

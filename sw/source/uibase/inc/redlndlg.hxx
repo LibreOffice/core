@@ -24,6 +24,7 @@
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>
+#include <svx/sidebar/PanelLayout.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -66,7 +67,7 @@ typedef std::vector<SvLBoxEntryPtr> SvLBoxEntryArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
-    Dialog*                 pParentDlg;
+    vcl::Window*            pParentDlg;
     SwRedlineDataParentArr  aRedlineParents;
     SwRedlineDataChildArr   aRedlineChildren;
     SwRedlineDataParentSortArr aUsedSeqNo;
@@ -113,7 +114,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SAL_DLLPRIVATE sal_uInt16    GetRedlinePos( const SvTreeListEntry& rEntry) const;
 
 public:
-    SwRedlineAcceptDlg(Dialog *pParent, bool bAutoFmt = false);
+    SwRedlineAcceptDlg(vcl::Window *pParent, vcl::Window *pContentArea, bool bAutoFmt = false);
     virtual ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
@@ -155,6 +156,15 @@ public:
     SFX_DECL_CHILDWINDOW_WITHID( SwRedlineAcceptChild );
 
     virtual bool    ReInitDlg(SwDocShell *pDocSh) SAL_OVERRIDE;
+};
+
+/// Redline (Manage Changes) panel for the sidebar.
+class SwRedlineAcceptPanel : public PanelLayout
+{
+    SwRedlineAcceptDlg* pImplDlg;
+public:
+    SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rFrame);
+    virtual ~SwRedlineAcceptPanel();
 };
 
 #endif
