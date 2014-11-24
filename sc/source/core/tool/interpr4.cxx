@@ -4222,6 +4222,7 @@ StackVar ScInterpreter::Interpret()
                 case ocTableOp          : ScTableOp();                  break;
                 case ocStop :                                           break;
                 case ocErrorType        : ScErrorType();                break;
+                case ocErrorType_MS     : ScErrorType_MS();             break;
                 case ocCurrent          : ScCurrent();                  break;
                 case ocStyle            : ScStyle();                    break;
                 case ocDde              : ScDde();                      break;
