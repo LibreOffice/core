@@ -17,14 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <tools/debug.hxx>
+#include <svl/lstner.hxx>
 
 #include <svl/hint.hxx>
 #include <svl/SfxBroadcaster.hxx>
 
-#include <svl/lstner.hxx>
 #include <algorithm>
+#include <cassert>
 
 TYPEINIT0(SfxListener);
 
@@ -72,7 +71,7 @@ void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
         rBroadcaster.AddListener(*this);
         aBCs.push_back( &rBroadcaster );
 
-        DBG_ASSERT( IsListening(rBroadcaster), "StartListening failed" );
+        assert(IsListening(rBroadcaster) && "StartListening failed");
     }
 }
 
@@ -117,16 +116,10 @@ bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 
 // base implementation of notification handler
 
-#ifdef DBG_UTIL
 void SfxListener::Notify( SfxBroadcaster& rBroadcaster, const SfxHint& )
-#else
-void SfxListener::Notify( SfxBroadcaster&, const SfxHint& )
-#endif
 {
-    #ifdef DBG_UTIL
-    DBG_ASSERT(aBCs.end() != std::find(aBCs.begin(), aBCs.end(), &rBroadcaster),
-                "notification from unregistered broadcaster" );
-    #endif
+    (void) rBroadcaster;
+    assert(IsListening(rBroadcaster));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
