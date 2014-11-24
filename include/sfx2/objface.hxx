@@ -63,8 +63,6 @@ public:
 
     const char*             GetClassName() const { return pName; }
     bool                    HasName() const { return 0 != aNameResId.GetId(); }
-    OUString                GetName() const
-                            { return HasName() ? aNameResId.toString() : OUString(); }
 
     const SfxInterface*     GetGenoType() const { return pGenoType; }
 

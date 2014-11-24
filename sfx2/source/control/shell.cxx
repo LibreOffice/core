@@ -117,8 +117,6 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
 
 SfxShell::~SfxShell()
 {
-
-
     delete pImp;
 }
 
@@ -305,7 +303,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 #endif
     SAL_INFO(
         "sfx.control",
-        "SfxShell::DoActivate() " << this << "  " << GetInterface()->GetName()
+        "SfxShell::DoActivate() " << this << "  " << GetInterface()->GetClassName()
             << " bMDI " << (bMDI ? "MDI" : ""));
 
     if ( bMDI )
@@ -328,7 +326,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 #endif
     SAL_INFO(
         "sfx.control",
-        "SfxShell::DoDeactivate()" << this << "  " << GetInterface()->GetName()
+        "SfxShell::DoDeactivate()" << this << "  " << GetInterface()->GetClassName()
             << " bMDI " << (bMDI ? "MDI" : ""));
 
     // Only when it comes from a Frame
