@@ -512,7 +512,7 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
     for(int i = 0; i < fbCount; ++i)
     {
         XVisualInfo* pVi = glXGetVisualFromFBConfig( dpy, pFBC[i] );
-        if(pVi && (!bWithSameVisualID || pVi->visualid == xattr.visual->visualid) )
+        if(pVi && (!bWithSameVisualID || (xattr.visual && pVi->visualid == xattr.visual->visualid)) )
         {
             // pick the one with the most samples per pixel
             int nSampleBuf = 0;
