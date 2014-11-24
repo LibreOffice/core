@@ -134,7 +134,7 @@ lcl_ReAssignTOXType(SwDoc* pDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
         pNewType = pDoc->InsertTOXType( aNewType );
     }
 
-    rTOXBase.RegisterToTOXType( *((SwTOXType*)pNewType) );
+    rTOXBase.RegisterToTOXType( *const_cast<SwTOXType*>(pNewType) );
 }
 
 static const char cUserDefined[] = "User-Defined";

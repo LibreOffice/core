@@ -267,17 +267,17 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
         if( bResetMod )
         {
             aOle2Lnk = pDoc->GetOle2Link();
-            ((SwDoc*)pDoc)->SetOle2Link( Link() );
+            const_cast<SwDoc*>(pDoc)->SetOle2Link( Link() );
         }
 
         pRet = IsPoolUserFmt( nId )
-                ? ((SwDoc*)pDoc)->FindCharFmtByName( rStr )
-                : ((SwDoc*)pDoc)->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
+                ? const_cast<SwDoc*>(pDoc)->FindCharFmtByName( rStr )
+                : const_cast<SwDoc*>(pDoc)->getIDocumentStylePoolAccess().GetCharFmtFromPool( nId );
 
         if( bResetMod )
         {
-            ((SwDoc*)pDoc)->getIDocumentState().ResetModified();
-            ((SwDoc*)pDoc)->SetOle2Link( aOle2Lnk );
+            const_cast<SwDoc*>(pDoc)->getIDocumentState().ResetModified();
+            const_cast<SwDoc*>(pDoc)->SetOle2Link( aOle2Lnk );
         }
     }
 

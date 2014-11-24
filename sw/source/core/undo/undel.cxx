@@ -933,9 +933,9 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 
             SwNode* pNode = pDoc->GetNodes()[ nEndNode + 1 ];
             if( pNode->IsCntntNode() )
-                ((SwCntntNode*)pNode)->ResetAttr( nStt, nEnd );
+                static_cast<SwCntntNode*>(pNode)->ResetAttr( nStt, nEnd );
             else if( pNode->IsTableNode() )
-                ((SwTableNode*)pNode)->GetTable().GetFrmFmt()->ResetFmtAttr( nStt, nEnd );
+                static_cast<SwTableNode*>(pNode)->GetTable().GetFrmFmt()->ResetFmtAttr( nStt, nEnd );
         }
     }
     // delete the temporarily added Node

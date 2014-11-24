@@ -442,7 +442,7 @@ void SwDoDrawStretchCapital::Do()
             GetOut().DrawStretchText( aPos, nPartWidth,
                                 rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
     }
-    ((Point&)rInf.GetPos()).X() += nPartWidth;
+    const_cast<Point&>(rInf.GetPos()).X() += nPartWidth;
 }
 
 void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
@@ -637,7 +637,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         pLastFont = pSpaceFont;
                         pLastFont->SetDevFont( rDo.GetInf().GetShell(),
                                                rDo.GetOut() );
-                        ((SwDoDrawCapital&)rDo).DrawSpace( aStartPos );
+                        static_cast<SwDoDrawCapital&>(rDo).DrawSpace( aStartPos );
                         pLastFont = pBigFont;
                         pLastFont->SetDevFont( rDo.GetInf().GetShell(),
                                                rDo.GetOut() );

@@ -220,8 +220,8 @@ void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pCNd->HasSwAttrSet() )
                 pCNd->ResetAllAttr();
 
-            if( pCNd->IsTxtNode() && ((SwTxtNode*)pCNd)->GetpSwpHints() )
-                ((SwTxtNode*)pCNd)->ClearSwpHintsArr( false );
+            if( pCNd->IsTxtNode() && static_cast<SwTxtNode*>(pCNd)->GetpSwpHints() )
+                static_cast<SwTxtNode*>(pCNd)->ClearSwpHintsArr( false );
 
             // first delete all attributes at InsertPos
             const bool bSuccess = pDoc->getIDocumentContentOperations().MoveRange( aPam, aPos, (bMoveRedlines)

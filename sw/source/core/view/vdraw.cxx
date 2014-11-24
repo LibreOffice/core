@@ -49,7 +49,7 @@ void SwViewImp::StartAction()
     {
         SET_CURR_SHELL( GetShell() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->HideChainMarker(); // might have changed
+            static_cast<SwFEShell*>(pSh)->HideChainMarker(); // might have changed
     }
 }
 
@@ -59,7 +59,7 @@ void SwViewImp::EndAction()
     {
         SET_CURR_SHELL( GetShell() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->SetChainMarker(); // might have changed
+            static_cast<SwFEShell*>(pSh)->SetChainMarker(); // might have changed
     }
 }
 
@@ -220,7 +220,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
             if( !pCont || !pCont->ISA(SwDrawContact) )
                 continue;
 
-            const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchorFrm();
+            const SwFrm *pAnchor = static_cast<const SwDrawContact*>(pCont)->GetAnchorFrm();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
                  (FLY_AS_CHAR == pCont->GetFmt()->GetAnchor().GetAnchorId()) )

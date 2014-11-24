@@ -208,7 +208,7 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
             pESh->CalcLayout();
 
         // insert page numbers
-        ((SwTOXBaseSection*)pUpdateTOX)->UpdatePageNum();
+        const_cast<SwTOXBaseSection*>(pUpdateTOX)->UpdatePageNum();
     }
 }
 

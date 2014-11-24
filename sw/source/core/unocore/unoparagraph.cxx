@@ -650,7 +650,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     SwTxtNode & rTxtNode(m_pImpl->GetTxtNodeOrThrow());
 
     //SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-    //const SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
+    //const SwAttrSet& rAttrSet = static_cast<SwTxtNode&>(rTxtNode).GetSwAttrSet();
     //sal_uInt16 nAttrCount = rAttrSet.Count();
 
     const sal_Int32 nProps = rPropertyNames.getLength();

@@ -155,7 +155,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
         }
         bRepaint = pWList == mpTxtNode->GetGrammarCheck();
         if( pWList->GetBeginInv() < COMPLETE_STRING )
-            ((SwGrammarMarkUp*)pWList)->ClearGrammarList();
+            static_cast<SwGrammarMarkUp*>(pWList)->ClearGrammarList();
     }
     else if ( nType == text::TextMarkupType::SMARTTAG )
     {
@@ -254,7 +254,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
     if ( bCommit )
     {
         if( nType == text::TextMarkupType::SENTENCE )
-            ((SwGrammarMarkUp*)pWList)->setSentence( nStart );
+            static_cast<SwGrammarMarkUp*>(pWList)->setSentence( nStart );
         else
             pWList->Insert( rIdentifier, xMarkupInfoContainer, nStart, nLength );
     }
@@ -350,7 +350,7 @@ static void lcl_commitGrammarMarkUp(
     if ( bCommit )
     {
         if( nType == text::TextMarkupType::SENTENCE )
-            ((SwGrammarMarkUp*)pWList)->setSentence( nStart+nLength );
+            static_cast<SwGrammarMarkUp*>(pWList)->setSentence( nStart+nLength );
         else
             pWList->Insert( rIdentifier, xMarkupInfoContainer, nStart, nLength );
     }

@@ -168,7 +168,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly ohne Inhalt" );
 
         SaveSection( pDoc, *rCntnt.GetCntntIdx() );
-        ((SwFmtCntnt&)rCntnt).SetNewCntntIdx( (const SwNodeIndex*)0 );
+        const_cast<SwFmtCntnt&>(rCntnt).SetNewCntntIdx( (const SwNodeIndex*)0 );
     }
     // OD 02.07.2003 #108784# - remove 'master' drawing object from drawing page
     else if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
@@ -197,7 +197,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
         if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFrmFmt )
         {
             // Pointer to 0, do not delete
-            ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
+            const_cast<SwFmtFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFmt();
             SwIndex aIdx( pPos->nContent );
             pTxtNd->EraseText( aIdx, 1 );
         }
@@ -495,7 +495,7 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
 
         if( FLY_AT_FLY == nAnchorTyp
                 ? ( !pNd->IsStartNode() || SwFlyStartNode !=
-                    ((SwStartNode*)pNd)->GetStartNodeType() )
+                    static_cast<SwStartNode*>(pNd)->GetStartNodeType() )
                 : !pNd->IsTxtNode() )
         {
             pNd = 0;    // invalid position
@@ -689,7 +689,7 @@ void SwUndoSetFlyFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
             PutAttr( nWhich, pOld );
         else if( RES_ATTRSET_CHG == nWhich )
         {
-            SfxItemIter aIter( *((SwAttrSetChg*)pOld)->GetChgSet() );
+            SfxItemIter aIter( *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet() );
             const SfxPoolItem* pItem = aIter.GetCurItem();
             while( pItem )
             {

@@ -528,7 +528,7 @@ sal_Int32 SwXDrawPage::getCount(void) throw( uno::RuntimeException, std::excepti
         return 0;
     else
     {
-        ((SwXDrawPage*)this)->GetSvxPage();
+        static_cast<SwXDrawPage*>(this)->GetSvxPage();
 
         std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
 
@@ -555,7 +555,7 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex, std::set<const SwFrmFmt*>* pT
     if(!pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         throw lang::IndexOutOfBoundsException();
 
-    ((SwXDrawPage*)this)->GetSvxPage();
+    static_cast<SwXDrawPage*>(this)->GetSvxPage();
     std::set<const SwFrmFmt*> aTextBoxes;
     if (!pTextBoxes)
     {
@@ -582,7 +582,7 @@ sal_Bool SwXDrawPage::hasElements(void) throw( uno::RuntimeException, std::excep
     if(!pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return sal_False;
     else
-        return ((SwXDrawPage*)this)->GetSvxPage()->hasElements();
+        return static_cast<SwXDrawPage*>(this)->GetSvxPage()->hasElements();
 }
 
 void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
@@ -1449,7 +1449,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     break;
                 }
                 if(pItem)
-                    ((SfxPoolItem*)pItem)->PutValue(aValue, pEntry->nMemberId);
+                    static_cast<SfxPoolItem*>(pItem)->PutValue(aValue, pEntry->nMemberId);
             }
         }
         else

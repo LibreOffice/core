@@ -199,7 +199,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
 
     SET_CURR_SHELL( this );
 
-    ((SwHiddenTxtFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
+    static_cast<SwHiddenTxtFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
         SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrmFmt is created.
@@ -273,7 +273,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     if ( mbPreview )
         mpImp->InitPagePreviewLayout();
 
-    ((SwHiddenTxtFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
+    static_cast<SwHiddenTxtFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
             SetHiddenFlag( !mpOpt->IsShowHiddenField() );
 
     // In Init a standard FrmFmt is created.
@@ -320,7 +320,7 @@ SwViewShell::~SwViewShell()
                         for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
                         {
                             OSL_ENSURE( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
-                            ((SwNoTxtFrm*)pFrm)->StopAnimation( mpOut );
+                            static_cast<SwNoTxtFrm*>(pFrm)->StopAnimation( mpOut );
                         }
                     }
                 }

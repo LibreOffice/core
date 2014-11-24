@@ -129,9 +129,9 @@ SwFmtFtn::SwFmtFtn( bool bEndNote )
 bool SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return m_nNumber  == ((SwFmtFtn&)rAttr).m_nNumber &&
-           m_aNumber  == ((SwFmtFtn&)rAttr).m_aNumber &&
-           m_bEndNote == ((SwFmtFtn&)rAttr).m_bEndNote;
+    return m_nNumber  == static_cast<const SwFmtFtn&>(rAttr).m_nNumber &&
+           m_aNumber  == static_cast<const SwFmtFtn&>(rAttr).m_aNumber &&
+           m_bEndNote == static_cast<const SwFmtFtn&>(rAttr).m_bEndNote;
 }
 
 SfxPoolItem* SwFmtFtn::Clone( SfxItemPool* ) const
@@ -185,12 +185,12 @@ void SwFmtFtn::GetFtnText( OUString& rStr ) const
             pCNd = aIdx.GetNodes().GoNext( &aIdx );
 
         if( pCNd->IsTxtNode() ) {
-            rStr = ((SwTxtNode*)pCNd)->GetExpandTxt();
+            rStr = static_cast<SwTxtNode*>(pCNd)->GetExpandTxt();
 
             ++aIdx;
             while ( !aIdx.GetNode().IsEndNode() ) {
                 if ( aIdx.GetNode().IsTxtNode() )
-                    rStr += "  " + ((SwTxtNode*)(aIdx.GetNode().GetTxtNode()))->GetExpandTxt();
+                    rStr += "  " + static_cast<SwTxtNode*>((aIdx.GetNode().GetTxtNode()))->GetExpandTxt();
                 ++aIdx;
             }
         }
@@ -352,7 +352,7 @@ void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
         {
             // Es koennen ja auch Grafiken in der Fussnote stehen ...
             if( ( pNd = rNodes[ nSttIdx ] )->IsTxtNode() )
-                ((SwTxtNode*)pNd)->ModifyNotification( 0, &rFtn );
+                static_cast<SwTxtNode*>(pNd)->ModifyNotification( 0, &rFtn );
         }
     }
 }
@@ -536,7 +536,7 @@ void SwTxtFtn::CheckCondColl()
 {
 //FEATURE::CONDCOLL
     if( GetStartNode() )
-        ((SwStartNode&)GetStartNode()->GetNode()).CheckSectionCondColl();
+        static_cast<SwStartNode&>(GetStartNode()->GetNode()).CheckSectionCondColl();
 //FEATURE::CONDCOLL
 }
 

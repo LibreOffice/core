@@ -1247,7 +1247,7 @@ void SwXNumberingRules::replaceByIndex(sal_Int32 nIndex, const uno::Any& rElemen
                                                                     SFX_STYLE_FAMILY_CHAR);
                     if(!pBase)
                         pBase = &pDocShell->GetStyleSheetPool()->Make(m_sNewCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
-                    pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                    pCharFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
 
                 }
                 aFmt.SetCharFmt( pCharFmt );
@@ -1782,10 +1782,10 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
 
                                 SfxStyleSheetBase* pBase;
                                 SfxStyleSheetBasePool* pPool = pLocalDoc->GetDocShell()->GetStyleSheetPool();
-                                pBase = ((SfxStyleSheetBasePool*)pPool)->Find(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
+                                pBase = static_cast<SfxStyleSheetBasePool*>(pPool)->Find(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
                                 if(!pBase)
                                     pBase = &pPool->Make(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
-                                pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                                pCharFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
                             }
                         }
                         aFmt.SetCharFmt( pCharFmt );

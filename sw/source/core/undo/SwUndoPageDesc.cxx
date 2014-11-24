@@ -206,7 +206,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         const SfxPoolItem* pItem;
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
-        SwFrmFmt* pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+        SwFrmFmt* pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
 #if OSL_DEBUG_LEVEL > 1
         const SwFmtCntnt& rSourceCntnt = rSourceHead.GetHeaderFmt()->GetCntnt();
         (void)rSourceCntnt;
@@ -220,7 +220,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         // it loses the responsible and can be destroyed without removing the content nodes.
         rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         pNewItem = pItem->Clone();
-        pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+        pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
         pNewFmt->SetFmtAttr( SwFmtCntnt() );
         delete pNewItem;
 
@@ -230,7 +230,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             const SwFmtHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
 #if OSL_DEBUG_LEVEL > 1
             const SwFmtCntnt& rSourceCntnt1 = rSourceLeftHead.GetHeaderFmt()->GetCntnt();
             (void)rSourceCntnt1;
@@ -241,7 +241,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
             delete pNewItem;
         }
@@ -251,7 +251,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             const SwFmtHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
 #if OSL_DEBUG_LEVEL > 1
             const SwFmtCntnt& rSourceCntnt1 = rSourceFirstMasterHead.GetHeaderFmt()->GetCntnt();
             (void)rSourceCntnt1;
@@ -262,7 +262,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             delete pNewItem;
             rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
+            pNewFmt = static_cast<SwFmtHeader*>(pNewItem)->GetHeaderFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
             delete pNewItem;
         }
@@ -275,7 +275,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         const SfxPoolItem* pItem;
         rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
-        SwFrmFmt *pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+        SwFrmFmt *pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
         pNewFmt->SetFmtAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
         delete pNewItem;
 
@@ -287,7 +287,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 #endif
         rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
         pNewItem = pItem->Clone();
-        pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+        pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
         pNewFmt->SetFmtAttr( SwFmtCntnt() );
         delete pNewItem;
 
@@ -303,12 +303,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 #endif
             rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( rSourceLeftFoot.GetFooterFmt()->GetCntnt() );
             delete pNewItem;
             rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
             delete pNewItem;
         }
@@ -324,12 +324,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 #endif
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( rSourceFirstMasterFoot.GetFooterFmt()->GetCntnt() );
             delete pNewItem;
             rSource.GetFirstMaster().GetAttrSet().GetItemState( RES_FOOTER, false, &pItem );
             pNewItem = pItem->Clone();
-            pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
+            pNewFmt = static_cast<SwFmtFooter*>(pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
             delete pNewItem;
         }

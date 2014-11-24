@@ -137,12 +137,12 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
         switch (pNd->GetNodeType())
         {
         case ND_TABLENODE:
-            ((SwTableNode*)pNd)->MakeFrms( aIdx );
+            static_cast<SwTableNode*>(pNd)->MakeFrms( aIdx );
             return pNode;
 
         case ND_SECTIONNODE:
-            if( ((SwSectionNode*)pNd)->GetSection().IsHidden() ||
-                ((SwSectionNode*)pNd)->IsCntntHidden() )
+            if( static_cast<SwSectionNode*>(pNd)->GetSection().IsHidden() ||
+                static_cast<SwSectionNode*>(pNd)->IsCntntHidden() )
             {
                 SwNodeIndex aTmpIdx( *pNode );
                 pNd = FindPrvNxtFrmNode( aTmpIdx, pNode );
@@ -151,13 +151,13 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                 aTmp = *pNd;
                 break;
             }
-            ((SwSectionNode*)pNd)->MakeFrms( aIdx );
+            static_cast<SwSectionNode*>(pNd)->MakeFrms( aIdx );
             return pNode;
 
         case ND_TEXTNODE:
         case ND_GRFNODE:
         case ND_OLENODE:
-            ((SwCntntNode*)pNd)->MakeFrms( *pNode );
+            static_cast<SwCntntNode*>(pNd)->MakeFrms( *pNode );
             return pNode;
 
         case ND_ENDNODE:
@@ -343,7 +343,7 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
                         {
                             pFtn->SetRef( pFrm );
                             pFtn = pFtn->GetFollow();
-                            ((SwTxtFrm*)pFrm)->SetFtn( true );
+                            static_cast<SwTxtFrm*>(pFrm)->SetFtn( true );
                         }
                     }
 #if OSL_DEBUG_LEVEL > 0
@@ -484,8 +484,8 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
             pFrm->RegisterToNode( *pNode );
-            if( pFrm->IsTxtFrm() && !pFrm->IsFollow() && ((SwTxtFrm*)pFrm)->GetOfst() )
-                ((SwTxtFrm*)pFrm)->SetOfst( 0 );
+            if( pFrm->IsTxtFrm() && !pFrm->IsFollow() && static_cast<SwTxtFrm*>(pFrm)->GetOfst() )
+                static_cast<SwTxtFrm*>(pFrm)->SetOfst( 0 );
         }
 
         if ( IsInCache() )
@@ -3467,7 +3467,7 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
         // Dadurch wird die Attributierung des 1. Zeichen expandiert!
         m_Text = m_Text.replaceAt(nStartPos, 1, sInserted.copy(0, 1));
 
-        ++((SwIndex&)rStart);
+        ++const_cast<SwIndex&>(rStart);
         m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, "");
         Update( rStart, nLen - 1, true );
 
@@ -3676,12 +3676,12 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
     //  Bug25481:
     //      bei Nodes im Undo nie _ChgTxtCollUpdateNum rufen.
     if( pOldValue && pNewValue && RES_FMT_CHG == pOldValue->Which() &&
-        GetRegisteredIn() == ((SwFmtChg*)pNewValue)->pChangedFmt &&
+        GetRegisteredIn() == static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt &&
         GetNodes().IsDocNodes() )
     {
         _ChgTxtCollUpdateNum(
-                        (SwTxtFmtColl*)((SwFmtChg*)pOldValue)->pChangedFmt,
-                        (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
+                        (SwTxtFmtColl*)static_cast<const SwFmtChg*>(pOldValue)->pChangedFmt,
+                        (SwTxtFmtColl*)static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt );
     }
 
     //UUUU reset fill information
@@ -3692,7 +3692,7 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
 
         if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
         {
-            SfxItemIter aIter(*((SwAttrSetChg*)pNewValue)->GetChgSet());
+            SfxItemIter aIter(*static_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet());
 
             for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
             {

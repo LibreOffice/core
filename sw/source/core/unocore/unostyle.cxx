@@ -258,7 +258,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             {
                 if(!pxCharStyles)
                 {
-                    ((SwXStyleFamilies*)this)->pxCharStyles = new uno::Reference< container::XNameContainer > ();
+                    static_cast<SwXStyleFamilies*>(this)->pxCharStyles = new uno::Reference< container::XNameContainer > ();
                     *pxCharStyles = new SwXStyleFamily(pDocShell, nType);
                 }
                 aRef = *pxCharStyles;
@@ -268,7 +268,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             {
                 if(!pxParaStyles)
                 {
-                    ((SwXStyleFamilies*)this)->pxParaStyles = new uno::Reference< container::XNameContainer > ();
+                    static_cast<SwXStyleFamilies*>(this)->pxParaStyles = new uno::Reference< container::XNameContainer > ();
                     *pxParaStyles = new SwXStyleFamily(pDocShell, nType);
                 }
                 aRef = *pxParaStyles;
@@ -278,7 +278,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             {
                 if(!pxPageStyles)
                 {
-                    ((SwXStyleFamilies*)this)->pxPageStyles = new uno::Reference< container::XNameContainer > ();
+                    static_cast<SwXStyleFamilies*>(this)->pxPageStyles = new uno::Reference< container::XNameContainer > ();
                     *pxPageStyles = new SwXStyleFamily(pDocShell, nType);
                 }
                 aRef = *pxPageStyles;
@@ -288,7 +288,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             {
                 if(!pxFrameStyles)
                 {
-                    ((SwXStyleFamilies*)this)->pxFrameStyles = new uno::Reference< container::XNameContainer > ();
+                    static_cast<SwXStyleFamilies*>(this)->pxFrameStyles = new uno::Reference< container::XNameContainer > ();
                     *pxFrameStyles = new SwXStyleFamily(pDocShell, nType);
                 }
                 aRef = *pxFrameStyles;
@@ -298,7 +298,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
             {
                 if(!pxNumberingStyles)
                 {
-                    ((SwXStyleFamilies*)this)->pxNumberingStyles = new uno::Reference< container::XNameContainer > ();
+                    static_cast<SwXStyleFamilies*>(this)->pxNumberingStyles = new uno::Reference< container::XNameContainer > ();
                     *pxNumberingStyles = new SwXStyleFamily(pDocShell, nType);
                 }
                 aRef = *pxNumberingStyles;
@@ -1307,7 +1307,7 @@ SwXStyle::SwXStyle(SfxStyleSheetBasePool& rPool, SfxStyleFamily eFam,
             if(nId != USHRT_MAX)
                 bIsConditional = ::IsConditionalByPoolId( nId );
             else
-                bIsConditional = RES_CONDTXTFMTCOLL == ((SwDocStyleSheet*)pBase)->GetCollection()->Which();
+                bIsConditional = RES_CONDTXTFMTCOLL == static_cast<SwDocStyleSheet*>(pBase)->GetCollection()->Which();
         }
     }
 }
@@ -1892,10 +1892,10 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                                 {
 
                                     SfxStyleSheetBase* pBase;
-                                    pBase = ((SfxStyleSheetBasePool*)pBasePool)->Find(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
+                                    pBase = static_cast<SfxStyleSheetBasePool*>(pBasePool)->Find(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
                                     if(!pBase)
                                         pBase = &pBasePool->Make(pCharStyleNames[i], SFX_STYLE_FAMILY_CHAR);
-                                    pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                                    pCharFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
 
                                 }
 
@@ -1963,7 +1963,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             const SfxPoolItem* pItem;
             if(SfxItemState::SET == rStyleSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
             {
-                pNewDesc = new SwFmtPageDesc(*((SwFmtPageDesc*)pItem));
+                pNewDesc = new SwFmtPageDesc(*static_cast<const SwFmtPageDesc*>(pItem));
             }
             if(!pNewDesc)
                 pNewDesc = new SwFmtPageDesc();
@@ -2128,7 +2128,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SwFmtRuby* pRuby = 0;
                     const SfxPoolItem* pItem;
                     if(SfxItemState::SET == rStyleSet.GetItemState( RES_TXTATR_CJK_RUBY, true, &pItem ) )
-                        pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
+                        pRuby = new SwFmtRuby(*static_cast<const SwFmtRuby*>(pItem));
                     if(!pRuby)
                         pRuby = new SwFmtRuby(OUString());
                     OUString sStyle;
@@ -2159,7 +2159,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     SwFmtDrop* pDrop = 0;
                     const SfxPoolItem* pItem;
                     if(SfxItemState::SET == rStyleSet.GetItemState( RES_PARATR_DROP, true, &pItem ) )
-                        pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
+                        pDrop = new SwFmtDrop(*static_cast<const SwFmtDrop*>(pItem));
                     if(!pDrop)
                         pDrop = new SwFmtDrop();
                     OUString uStyle;
@@ -2330,11 +2330,11 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         sal_Bool bPhys = pBase != 0;
         if(pBase)
         {
-            bPhys = ((SwDocStyleSheet*)pBase)->IsPhysical();
+            bPhys = static_cast<SwDocStyleSheet*>(pBase)->IsPhysical();
             // The standard character format is not existing physically
             if( bPhys && SFX_STYLE_FAMILY_CHAR == eFamily &&
-                ((SwDocStyleSheet*)pBase)->GetCharFmt() &&
-                ((SwDocStyleSheet*)pBase)->GetCharFmt()->IsDefault() )
+                static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt() &&
+                static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt()->IsDefault() )
                 bPhys = sal_False;
         }
         aRet.setValue(&bPhys, ::getBooleanCppuType());
@@ -2466,7 +2466,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 uno::Sequence< beans::NamedValue > aSeq(COND_COMMAND_COUNT);
                 beans::NamedValue *pSeq = aSeq.getArray();
 
-                SwFmt *pFmt = ((SwDocStyleSheet*)pBase)->GetCollection();
+                SwFmt *pFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCollection();
                 const CommandStruct *pCmds = SwCondCollItem::GetCmds();
                 for (sal_uInt16 n = 0;  n < COND_COMMAND_COUNT;  ++n)
                 {
@@ -2474,7 +2474,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
                     const SwCollCondition* pCond = 0;
                     if( pFmt && RES_CONDTXTFMTCOLL == pFmt->Which() &&
-                        0 != ( pCond = ((SwConditionTxtFmtColl*)pFmt)->
+                        0 != ( pCond = static_cast<SwConditionTxtFmtColl*>(pFmt)->
                         HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
                         && pCond->GetTxtFmtColl() )
                     {
@@ -3315,8 +3315,8 @@ void SwXStyle::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if( pHint->GetId() &(SFX_STYLESHEET_CHANGED|SFX_STYLESHEET_ERASED) )
         {
-            ((SfxStyleSheetBasePool&)rBC).SetSearchMask(eFamily);
-            SfxStyleSheetBase* pOwnBase = ((SfxStyleSheetBasePool&)rBC).Find(m_sStyleName);
+            static_cast<SfxStyleSheetBasePool&>(rBC).SetSearchMask(eFamily);
+            SfxStyleSheetBase* pOwnBase = static_cast<SfxStyleSheetBasePool&>(rBC).Find(m_sStyleName);
             if(!pOwnBase)
             {
                 EndListening(rBC);

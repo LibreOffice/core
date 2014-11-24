@@ -250,7 +250,7 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 
     SwTxtFmtColl* pSavTxtFmtColl = pTxtFmtColl;
     if( pTxtFmtColl && pCNd && pCNd->IsTxtNode() )
-        pSavTxtFmtColl = ((SwTxtNode*)pCNd)->GetTxtColl();
+        pSavTxtFmtColl = static_cast<SwTxtNode*>(pCNd)->GetTxtColl();
 
     pHistory->SetTmpEnd( nSetPos );
 

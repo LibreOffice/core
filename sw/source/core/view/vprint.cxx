@@ -386,7 +386,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
             pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
         // copy the paragraph attributes of the first paragraph
         if( pLastNd && pLastNd->IsTxtNode() )
-            ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
+            static_cast<SwTxtNode*>(pLastNd)->CopyCollFmt( *pTxtNd );
     }
 
     // fill it with the selected content
@@ -414,7 +414,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
                         pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
                     // copy paragraph attributes of the first paragraph
                     if( pFirstNd && pFirstNd->IsTxtNode() )
-                        ((SwTxtNode*)pFirstNd)->CopyCollFmt( *pTxtNd );
+                        static_cast<SwTxtNode*>(pFirstNd)->CopyCollFmt( *pTxtNd );
                 }
             }
         }

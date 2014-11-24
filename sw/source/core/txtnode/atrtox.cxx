@@ -81,7 +81,7 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
     }
     // Verzeichnistyp umhaengen
 
-    ((SwTOXType*)pType)->Add( &rTOX );
+    const_cast<SwTOXType*>(pType)->Add( &rTOX );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

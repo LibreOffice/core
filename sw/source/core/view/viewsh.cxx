@@ -291,7 +291,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             // right border. Without ShowCrsr the selection disappears.
             bool bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
             if( bShowCrsr )
-                ((SwCrsrShell*)this)->HideCrsrs();
+                static_cast<SwCrsrShell*>(this)->HideCrsrs();
 
             if ( pRegion )
             {
@@ -395,7 +395,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                 Imp()->DelRegion();
             }
             if( bShowCrsr )
-                ((SwCrsrShell*)this)->ShowCrsrs( true );
+                static_cast<SwCrsrShell*>(this)->ShowCrsrs( true );
         }
         else
         {
@@ -605,14 +605,14 @@ void SwViewShell::UpdateFlds(bool bCloseDB)
 
     bool bCrsr = ISA(SwCrsrShell);
     if ( bCrsr )
-        ((SwCrsrShell*)this)->StartAction();
+        static_cast<SwCrsrShell*>(this)->StartAction();
     else
         StartAction();
 
     GetDoc()->getIDocumentFieldsAccess().UpdateFlds(0, bCloseDB);
 
     if ( bCrsr )
-        ((SwCrsrShell*)this)->EndAction();
+        static_cast<SwCrsrShell*>(this)->EndAction();
     else
         EndAction();
 }
@@ -684,12 +684,12 @@ static void lcl_InvalidateAllCntnt( SwViewShell& rSh, sal_uInt8 nInv )
 {
     bool bCrsr = rSh.ISA(SwCrsrShell);
     if ( bCrsr )
-        ((SwCrsrShell&)rSh).StartAction();
+        static_cast<SwCrsrShell&>(rSh).StartAction();
     else
         rSh.StartAction();
     rSh.GetLayout()->InvalidateAllCntnt( nInv );
     if ( bCrsr )
-        ((SwCrsrShell&)rSh).EndAction();
+        static_cast<SwCrsrShell&>(rSh).EndAction();
     else
         rSh.EndAction();
 
@@ -968,7 +968,7 @@ void SwViewShell::SizeChgNotify()
 
         if ( !Imp()->IsCalcLayoutProgress() && ISA( SwCrsrShell ) )
         {
-            const SwFrm *pCnt = ((SwCrsrShell*)this)->GetCurrFrm( false );
+            const SwFrm *pCnt = static_cast<SwCrsrShell*>(this)->GetCurrFrm( false );
             const SwPageFrm *pPage;
             if ( pCnt && 0 != (pPage = pCnt->FindPageFrm()) )
             {
@@ -2096,7 +2096,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( mpOpt->IsShowHiddenField() != rOpt.IsShowHiddenField() )
     {
-        ((SwHiddenTxtFieldType*)mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
+        static_cast<SwHiddenTxtFieldType*>(mpDoc->getIDocumentFieldsAccess().GetSysFldType( RES_HIDDENTXTFLD ))->
                                             SetHiddenFlag( !rOpt.IsShowHiddenField() );
         bReformat = true;
     }

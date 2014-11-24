@@ -74,7 +74,7 @@ SwFmtCharFmt::~SwFmtCharFmt() {}
 bool SwFmtCharFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return GetCharFmt() == ((SwFmtCharFmt&)rAttr).GetCharFmt();
+    return GetCharFmt() == static_cast<const SwFmtCharFmt&>(rAttr).GetCharFmt();
 }
 
 SfxPoolItem* SwFmtCharFmt::Clone( SfxItemPool* ) const
@@ -125,7 +125,7 @@ SwFmtAutoFmt::~SwFmtAutoFmt()
 bool SwFmtAutoFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return mpHandle == ((SwFmtAutoFmt&)rAttr).mpHandle;
+    return mpHandle == static_cast<const SwFmtAutoFmt&>(rAttr).mpHandle;
 }
 
 SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
@@ -200,18 +200,18 @@ bool SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
     bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
-                && msURL == ((SwFmtINetFmt&)rAttr).msURL
-                && msHyperlinkName == ((SwFmtINetFmt&)rAttr).msHyperlinkName
-                && msTargetFrame == ((SwFmtINetFmt&)rAttr).msTargetFrame
-                && msINetFmtName == ((SwFmtINetFmt&)rAttr).msINetFmtName
-                && msVisitedFmtName == ((SwFmtINetFmt&)rAttr).msVisitedFmtName
-                && mnINetFmtId == ((SwFmtINetFmt&)rAttr).mnINetFmtId
-                && mnVisitedFmtId == ((SwFmtINetFmt&)rAttr).mnVisitedFmtId;
+                && msURL == static_cast<const SwFmtINetFmt&>(rAttr).msURL
+                && msHyperlinkName == static_cast<const SwFmtINetFmt&>(rAttr).msHyperlinkName
+                && msTargetFrame == static_cast<const SwFmtINetFmt&>(rAttr).msTargetFrame
+                && msINetFmtName == static_cast<const SwFmtINetFmt&>(rAttr).msINetFmtName
+                && msVisitedFmtName == static_cast<const SwFmtINetFmt&>(rAttr).msVisitedFmtName
+                && mnINetFmtId == static_cast<const SwFmtINetFmt&>(rAttr).mnINetFmtId
+                && mnVisitedFmtId == static_cast<const SwFmtINetFmt&>(rAttr).mnVisitedFmtId;
 
     if( !bRet )
         return false;
 
-    const SvxMacroTableDtor* pOther = ((SwFmtINetFmt&)rAttr).mpMacroTbl;
+    const SvxMacroTableDtor* pOther = static_cast<const SwFmtINetFmt&>(rAttr).mpMacroTbl;
     if( !mpMacroTbl )
         return ( !pOther || pOther->empty() );
     if( !pOther )
@@ -422,11 +422,11 @@ SwFmtRuby& SwFmtRuby::operator=( const SwFmtRuby& rAttr )
 bool SwFmtRuby::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return sRubyTxt == ((SwFmtRuby&)rAttr).sRubyTxt &&
-           sCharFmtName == ((SwFmtRuby&)rAttr).sCharFmtName &&
-           nCharFmtId == ((SwFmtRuby&)rAttr).nCharFmtId &&
-           nPosition == ((SwFmtRuby&)rAttr).nPosition &&
-           nAdjustment == ((SwFmtRuby&)rAttr).nAdjustment;
+    return sRubyTxt == static_cast<const SwFmtRuby&>(rAttr).sRubyTxt &&
+           sCharFmtName == static_cast<const SwFmtRuby&>(rAttr).sCharFmtName &&
+           nCharFmtId == static_cast<const SwFmtRuby&>(rAttr).nCharFmtId &&
+           nPosition == static_cast<const SwFmtRuby&>(rAttr).nPosition &&
+           nAdjustment == static_cast<const SwFmtRuby&>(rAttr).nAdjustment;
 }
 
 SfxPoolItem* SwFmtRuby::Clone( SfxItemPool* ) const

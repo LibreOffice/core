@@ -138,7 +138,7 @@ static void lcl_SaveAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
             if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFmt )
             {
                 // just set pointer to 0, don't delete
-                ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
+                const_cast<SwFmtFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFmt();
                 SwIndex aIdx( pTxtNd, nCntntPos );
                 pTxtNd->EraseText( aIdx, 1 );
             }

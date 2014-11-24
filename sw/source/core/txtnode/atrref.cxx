@@ -47,7 +47,7 @@ SwFmtRefMark::SwFmtRefMark( const SwFmtRefMark& rAttr )
 bool SwFmtRefMark::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return aRefName == ((SwFmtRefMark&)rAttr).aRefName;
+    return aRefName == static_cast<const SwFmtRefMark&>(rAttr).aRefName;
 }
 
 SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const

@@ -541,7 +541,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {
                     const SwTableNode* pTblNode = pSttNode->FindTableNode();
                     SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-                    //SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
+                    //SwTable& rTable = static_cast<SwTableNode*>(pSttNode)->GetTable();
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
                         uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
@@ -807,7 +807,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                             // shall it really be created?
                                 if(!pBase)
                                     pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
-                                pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                                pCharFmt = static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt();
                             }
                             if(pCharFmt)
                                 aFmt.SetCharFmt(pCharFmt);
