@@ -1355,7 +1355,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                          return (nAccum + nArg);
                                      }));
 
-    pTestDocument->addTest(Reduction("Product", "PRODUCT", 500, 0, 0.1, 2.5, 3e-10,
+    pTestDocument->addTest(Reduction("Product", "PRODUCT", 500, 1, 0.1, 2.5, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
                                          return (nAccum * nArg);
