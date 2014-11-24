@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_e78ebc26",
+        "filename": "Makefile.in",
+        "patchSetId": 6
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-24T12:46:48Z",
+      "side": 1,
+      "message": "where\u0027s the target for this StaticLibrary.mk?",
+      "revId": "35c48713515d31a3b7194f16887f9a4be421846d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_c793c04e",
+        "filename": "bin/gen-iwyu-dummy-lib",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-24T12:46:48Z",
+      "side": 1,
+      "message": "why remove \"/usr\"? there should be no system headers in the generated dependencies since we use -MM to exclude them",
+      "revId": "35c48713515d31a3b7194f16887f9a4be421846d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
