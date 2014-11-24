@@ -48,6 +48,8 @@
 #include <unotools/fontcvt.hxx>
 #include <tools/tenccvt.hxx>
 
+#include <libxml/xmlwriter.h>
+
 #if DEBUG_EDIT_ENGINE
 #include <iostream>
 using std::cout;
