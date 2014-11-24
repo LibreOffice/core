@@ -3000,7 +3000,6 @@ void ScInterpreter::ScValue()
             return;
         case svDouble:
             return;     // leave on stack
-            //break;
 
         case svSingleRef:
         case svDoubleRef:
@@ -3046,7 +3045,6 @@ void ScInterpreter::ScValue()
                     case SC_MATVAL_BOOLEAN:
                         PushDouble( fVal);
                         return;
-                        //break;
                     case SC_MATVAL_STRING:
                         // evaluated below
                         break;

@@ -577,7 +577,6 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
                     return;
                 }
-                //break;
 
         case FN_INSERT_SOFT_HYPHEN:
             lclInsertCharacter( pTableView, pTopView, CHAR_SHY );

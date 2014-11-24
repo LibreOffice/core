@@ -285,7 +285,6 @@ bool ScImportExport::ImportString( const OUString& rText, sal_uLong nFmt )
             return ImportStream( aStrm, OUString(), nFmt );
             // ImportStream must handle RTL_TEXTENCODING_UNICODE
         }
-        //break;
         default:
         {
             rtl_TextEncoding eEnc = osl_getThreadTextEncoding();

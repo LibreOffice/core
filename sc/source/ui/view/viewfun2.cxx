@@ -2485,7 +2485,6 @@ void ScViewFunc::MoveTable(
                 ErrorMessage(STR_TABINSERT_ERROR);
                 return;
             }
-            //break;
             case 2:
                 ErrorMessage(STR_ABSREFLOST);
             break;

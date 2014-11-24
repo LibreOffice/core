@@ -984,14 +984,12 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                     pEditView->Undo();
                 return true;
             }
-            // break;
             case KeyFuncType::REDO:
             {
                 if ( !bReadOnly )
                     pEditView->Redo();
                 return true;
             }
-            // break;
 
             default:    // is then possible edited below.
                         eFunc = KeyFuncType::DONTKNOW;

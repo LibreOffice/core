@@ -312,10 +312,8 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
     {
         case ocExternal:
             return GetExternalParameterType( pToken, nParameter);
-        //break;
         case ocMacro:
             return Reference;
-        //break;
         default:
         {
             // added to avoid warnings

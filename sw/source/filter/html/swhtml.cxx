@@ -2724,7 +2724,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                     // ungueltige Attribute koennen gloescht werden
                     delete pAttr;
                     pAttr = pPrev;
-                    continue; //break;
+                    continue;
                 }
 
                 pCNd = pAttr->nSttPara.GetNode().GetCntntNode();
@@ -2740,7 +2740,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                         // es sei denn, es ist ein Text-Attribut.
                         delete pAttr;
                         pAttr = pPrev;
-                        continue; //break;
+                        continue;
                     }
                     pCNd = pDoc->GetNodes().GoNext( &(pAttr->nSttPara) );
                     if( pCNd )
@@ -2750,7 +2750,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                         OSL_ENSURE( false, "SetAttr: GoNext() failed!" );
                         delete pAttr;
                         pAttr = pPrev;
-                        continue; // break;
+                        continue;
                     }
                 }
                 pAttrPam->GetPoint()->nNode = pAttr->nSttPara;
@@ -2777,7 +2777,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                             pAttrPam->DeleteMark();
                             delete pAttr;
                             pAttr = pPrev;
-                            continue; // break;
+                            continue;
                         }
                     }
 

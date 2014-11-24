@@ -2504,7 +2504,6 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos ) const
             }
 #endif
             return nEdges;
-//            break;
         }
         default:
             return 0;
