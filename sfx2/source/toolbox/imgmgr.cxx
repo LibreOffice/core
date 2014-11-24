@@ -55,7 +55,7 @@ public:
     std::vector< ToolBoxInf_Impl* > m_aToolBoxes;
     sal_Int16                       m_nSymbolsSize;
     ImageList*                      m_pImageList[IMAGELIST_COUNT];
-    SfxModule*                      m_pModule;
+    SfxModule&                      m_rModule;
     bool                            m_bAppEventListener;
 
     ImageList*              GetImageList( bool bBig );
@@ -65,8 +65,7 @@ public:
     DECL_LINK( OptionsChanged_Impl, void* );
     DECL_LINK( SettingsChanged_Impl, VclWindowEvent* );
 
-
-    SfxImageManager_Impl( SfxModule* pModule );
+    SfxImageManager_Impl(SfxModule& rModule);
     ~SfxImageManager_Impl();
 };
 
@@ -76,57 +75,25 @@ namespace
 
     class theImageManagerImplMap :
         public rtl::Static<SfxImageManagerImplMap, theImageManagerImplMap> {};
-
-    class theGlobalImageManager :
-        public rtl::StaticWithArg<SfxImageManager_Impl, SfxModule*,
-            theGlobalImageManager> {};
 }
 
-static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
+static SfxImageManager_Impl* GetImageManager(SfxModule& rModule)
 {
     SolarMutexGuard aGuard;
 
-    if ( pModule == 0 )
-    {
-        return &theGlobalImageManager::get(NULL);
-    }
+    SfxImageManagerImplMap &rImageManager_ImplMap =
+        theImageManagerImplMap::get();
+    SfxImageManager_Impl* pImpl( 0 );
+    SfxModule* pModule(&rModule);
+    SfxImageManagerImplMap::const_iterator pIter = rImageManager_ImplMap.find(pModule);
+    if ( pIter != rImageManager_ImplMap.end() )
+        pImpl = pIter->second.get();
     else
     {
-        SfxImageManagerImplMap &rImageManager_ImplMap =
-            theImageManagerImplMap::get();
-        SfxImageManager_Impl* pImpl( 0 );
-        SfxImageManagerImplMap::const_iterator pIter = rImageManager_ImplMap.find(pModule);
-        if ( pIter != rImageManager_ImplMap.end() )
-            pImpl = pIter->second.get();
-        else
-        {
-            rImageManager_ImplMap[pModule].reset(new SfxImageManager_Impl(pModule));
-            pImpl = rImageManager_ImplMap[pModule].get();
-        }
-        return pImpl;
+        rImageManager_ImplMap[pModule].reset(new SfxImageManager_Impl(rModule));
+        pImpl = rImageManager_ImplMap[pModule].get();
     }
-}
-
-// Global image list
-static ImageList* GetImageList( bool bBig )
-{
-    SolarMutexGuard aGuard;
-    ImageList* rpList = NULL;
-
-    ResMgr *pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
-
-    ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr);
-
-    aResId.SetRT( RSC_IMAGELIST );
-
-    DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
-
-    if ( pResMgr->IsAvailable(aResId) )
-        rpList = new ImageList( aResId );
-    else
-        rpList = new ImageList();
-
-    return rpList;
+    return pImpl;
 }
 
 static sal_Int16 impl_convertBools( bool bLarge )
@@ -137,10 +104,8 @@ static sal_Int16 impl_convertBools( bool bLarge )
     return nIndex;
 }
 
-
-
-SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule )
-    : m_pModule(pModule)
+SfxImageManager_Impl::SfxImageManager_Impl(SfxModule& rModule)
+    : m_rModule(rModule)
     , m_bAppEventListener(false)
 {
     m_nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
@@ -171,10 +136,7 @@ ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
     sal_Int32 nIndex = impl_convertBools( bBig );
     if ( !m_pImageList[nIndex] )
     {
-        if ( !m_pModule )
-            m_pImageList[nIndex] = ::GetImageList( bBig );
-        else
-            m_pImageList[nIndex] = m_pModule->GetImageList_Impl( bBig );
+        m_pImageList[nIndex] = m_rModule.GetImageList_Impl( bBig );
     }
 
     return m_pImageList[nIndex];
@@ -274,22 +236,14 @@ IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
     return 0L;
 }
 
-
-
-
-
-SfxImageManager::SfxImageManager( SfxModule* pModule )
+SfxImageManager::SfxImageManager(SfxModule& rModule)
 {
-    pImp = ::GetImageManager( pModule );
+    pImp = ::GetImageManager(rModule);
 }
-
-
 
 SfxImageManager::~SfxImageManager()
 {
 }
-
-
 
 namespace
 {
@@ -299,25 +253,23 @@ namespace
         public rtl::Static<SfxImageManagerMap, theImageManagerMap> {};
 }
 
-SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
+SfxImageManager* SfxImageManager::GetImageManager(SfxModule& rModule)
 {
     SolarMutexGuard aGuard;
     SfxImageManager* pSfxImageManager(0);
 
     SfxImageManagerMap &rImageManagerMap = theImageManagerMap::get();
-
+    SfxModule* pModule = &rModule;
     SfxImageManagerMap::const_iterator pIter = rImageManagerMap.find(pModule);
     if ( pIter != rImageManagerMap.end() )
         pSfxImageManager = pIter->second.get();
     else
     {
-        rImageManagerMap[pModule].reset(new SfxImageManager(pModule));
+        rImageManagerMap[pModule].reset(new SfxImageManager(rModule));
         pSfxImageManager = rImageManagerMap[pModule].get();
     }
     return pSfxImageManager;
 }
-
-
 
 Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
 {
@@ -327,40 +279,25 @@ Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
     return Image();
 }
 
-
-
 Image SfxImageManager::GetImage( sal_uInt16 nId ) const
 {
     bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
     return GetImage( nId, bLarge );
 }
 
-
-
 Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
 {
-    bool bGlobal = ( pImp->m_pModule == 0 );
     ImageList* pImageList = pImp->GetImageList( bBig );
-    if ( pImageList && pImageList->HasImageAtPos( nId ) )
+    if (pImageList && pImageList->HasImageAtPos(nId))
         return pImageList->GetImage( nId );
-    else if ( !bGlobal )
-    {
-        pImageList = ::GetImageManager( 0 )->GetImageList( bBig );
-        if ( pImageList )
-            return pImageList->GetImage( nId );
-    }
     return Image();
 }
-
-
 
 Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
 {
     bool bLarge = SvtMiscOptions().AreCurrentSymbolsLarge();
     return SeekImage( nId, bLarge );
 }
-
-
 
 void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
 {

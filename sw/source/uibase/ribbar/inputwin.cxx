@@ -77,7 +77,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
 
     aEdit.SetSizePixel( aEdit.CalcMinimumSize() );
 
-    SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
+    SfxImageManager* pManager = SfxImageManager::GetImageManager( *SW_MOD() );
     pManager->RegisterToolBox(this);
 
     pView = ::GetActiveView();
@@ -127,7 +127,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
 
 SwInputWindow::~SwInputWindow()
 {
-    SfxImageManager::GetImageManager( SW_MOD() )->ReleaseToolBox(this);
+    SfxImageManager::GetImageManager( *SW_MOD() )->ReleaseToolBox(this);
 
     // wake rulers
     if(pView)
@@ -165,7 +165,7 @@ void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         // update item images
         SwModule *pMod  = SW_MOD();
-        SfxImageManager *pImgMgr = SfxImageManager::GetImageManager( pMod );
+        SfxImageManager *pImgMgr = SfxImageManager::GetImageManager(*pMod);
         SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC   ));
         SetItemImage( FN_FORMULA_CANCEL, pImgMgr->GetImage(FN_FORMULA_CANCEL ));
         SetItemImage( FN_FORMULA_APPLY,  pImgMgr->GetImage(FN_FORMULA_APPLY  ));

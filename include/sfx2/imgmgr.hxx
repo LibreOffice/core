@@ -34,10 +34,10 @@ class SFX2_DLLPUBLIC SfxImageManager
     SfxImageManager_Impl* pImp;
 
 public:
-    static SfxImageManager*  GetImageManager( SfxModule* );
+    static SfxImageManager*  GetImageManager(SfxModule&);
 
-                    SfxImageManager( SfxModule* pModule = 0 );
-                    ~SfxImageManager();
+    SfxImageManager(SfxModule& rModule);
+    ~SfxImageManager();
 
     void            RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags=0xFFFF);
     void            ReleaseToolBox( ToolBox *pBox );

@@ -813,7 +813,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     StartListening(*SfxGetpApp());
     if ( pCreateView )
         StartListening(*pCreateView);
-    SfxImageManager* pImgMan = SfxImageManager::GetImageManager( SW_MOD() );
+    SfxImageManager* pImgMan = SfxImageManager::GetImageManager(*SW_MOD());
     pImgMan->RegisterToolBox(&aContentToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
     pImgMan->RegisterToolBox(&aGlobalToolBox, SFX_TOOLBOX_CHANGEOUTSTYLE);
 
@@ -862,7 +862,7 @@ SwNavigationPI::~SwNavigationPI()
 
     EndListening(*SfxGetpApp());
 
-    SfxImageManager* pImgMan = SfxImageManager::GetImageManager( SW_MOD() );
+    SfxImageManager* pImgMan = SfxImageManager::GetImageManager(*SW_MOD());
     pImgMan->ReleaseToolBox(&aContentToolBox);
     pImgMan->ReleaseToolBox(&aGlobalToolBox);
     delete aContentToolBox.GetItemWindow(FN_PAGENUMBER);

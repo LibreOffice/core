@@ -229,7 +229,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
     m_sCompleted = m_pResult1->GetText();
     m_sFailed = m_pResult2->GetText();
 
-    SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
+    SfxImageManager* pManager = SfxImageManager::GetImageManager(*SW_MOD());
     m_aFailedImg = pManager->GetImage(FN_FORMULA_CANCEL);
     m_aCompletedImg = pManager->GetImage(FN_FORMULA_APPLY);
 

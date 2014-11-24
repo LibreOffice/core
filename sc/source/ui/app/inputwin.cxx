@@ -187,7 +187,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         mbIsMultiLine   ( lcl_isExperimentalMode() )
 {
     ScModule*        pScMod  = SC_MOD();
-    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
+    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
 
     // #i73615# don't rely on SfxViewShell::Current while constructing the input line
     // (also for GetInputHdl below)
@@ -281,7 +281,7 @@ ScInputWindow::~ScInputWindow()
         }
     }
 
-    SfxImageManager::GetImageManager( SC_MOD() )->ReleaseToolBox( this );
+    SfxImageManager::GetImageManager( *SC_MOD() )->ReleaseToolBox( this );
 }
 
 void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
@@ -648,7 +648,7 @@ void ScInputWindow::SetOkCancelMode()
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
     ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
+    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
     if (!bIsOkCancelMode)
     {
         RemoveItem( 3 ); // Remove SID_INPUT_SUM and SID_INPUT_EQUAL
@@ -670,7 +670,7 @@ void ScInputWindow::SetSumAssignMode()
     EnableButtons( pViewFrm && !pViewFrm->GetChildWindow( SID_OPENDLG_FUNCTION ) );
 
     ScModule* pScMod = SC_MOD();
-    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
+    SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
     if (bIsOkCancelMode)
     {
         // Remove SID_INPUT_CANCEL, and SID_INPUT_OK
@@ -783,7 +783,7 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     {
         //  update item images
         ScModule*        pScMod  = SC_MOD();
-        SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
+        SfxImageManager* pImgMgr = SfxImageManager::GetImageManager(*pScMod);
 
         // IMAGE macro uses pScMod, pImgMg
         SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
