@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svl/undo.hxx>
 
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <osl/mutex.hxx>
 #include <comphelper/flagguard.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <svl/undo.hxx>
 
 #include <vector>
 #include <list>
@@ -99,7 +97,7 @@ OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 void SfxUndoAction::Undo()
 {
     // These are only conceptually pure virtual
-    OSL_FAIL( "pure virtual function called: SfxUndoAction::Undo()" );
+    assert(!"pure virtual function called: SfxUndoAction::Undo()");
 }
 
 
@@ -113,7 +111,7 @@ void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
 void SfxUndoAction::Redo()
 {
     // These are only conceptually pure virtual
-    OSL_FAIL( "pure virtual function called: SfxUndoAction::Redo()" );
+    assert(!"pure virtual function called: SfxUndoAction::Redo()");
 }
 
 
@@ -127,7 +125,7 @@ void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
 void SfxUndoAction::Repeat(SfxRepeatTarget&)
 {
     // These are only conceptually pure virtual
-    OSL_FAIL( "pure virtual function called: SfxUndoAction::Repeat()" );
+    assert(!"pure virtual function called: SfxUndoAction::Repeat()");
 }
 
 
@@ -221,7 +219,7 @@ namespace svl { namespace undo { namespace impl
 
         void operator()( SfxUndoListener* i_listener ) const
         {
-            OSL_PRECOND( is(), "NotifyUndoListener: this will crash!" );
+            assert( is() && "NotifyUndoListener: this will crash!" );
             if ( m_altNotificationMethod != 0 )
             {
                 ( i_listener->*m_altNotificationMethod )( m_sActionComment );
@@ -452,7 +450,8 @@ void SfxUndoManager::Clear()
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    OSL_ENSURE( !ImplIsInListAction_Lock(), "SfxUndoManager::Clear: suspicious call - do you really wish to clear the current level?" );
+    SAL_WARN_IF( ImplIsInListAction_Lock(), "svl",
+        "SfxUndoManager::Clear: suspicious call - do you really wish to clear the current level?" );
     ImplClearCurrentLevel_NoNotify( aGuard );
 
     // notify listeners
@@ -485,7 +484,8 @@ void SfxUndoManager::ImplClearRedo_NoLock( bool const i_currentLevel )
 
 void SfxUndoManager::ClearRedo()
 {
-    OSL_ENSURE( !IsInListAction(), "SfxUndoManager::ClearRedo: suspicious call - do you really wish to clear the current level?" );
+    SAL_WARN_IF( IsInListAction(), "svl",
+        "SfxUndoManager::ClearRedo: suspicious call - do you really wish to clear the current level?" );
     ImplClearRedo_NoLock( CurrentLevel );
 }
 
@@ -584,7 +584,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
             }
             else
             {
-                OSL_ENSURE(false, "CurrentUndoAction going negative (!)");
+                assert(!"CurrentUndoAction going negative (!)");
             }
             // fdo#66071 invalidate the current empty mark when removing
             --m_pData->mnEmptyMark;
@@ -624,7 +624,7 @@ OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentL
 
     OUString sComment;
     const SfxUndoArray* pUndoArray = i_currentLevel ? m_pData->pActUndoArray : m_pData->pUndoArray;
-    DBG_ASSERT( nNo < pUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoActionComment: illegal index!" );
+    assert(nNo < pUndoArray->nCurUndoAction);
     if( nNo < pUndoArray->nCurUndoAction )
         sComment = pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction - 1 - nNo ].pAction->GetComment();
     return sComment;
@@ -635,7 +635,7 @@ sal_uInt16 SfxUndoManager::GetUndoActionId() const
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    DBG_ASSERT( m_pData->pActUndoArray->nCurUndoAction > 0, "svl::SfxUndoManager::GetUndoActionId(), illegal id!" );
+    assert(m_pData->pActUndoArray->nCurUndoAction > 0);
     if ( m_pData->pActUndoArray->nCurUndoAction == 0 )
         return 0;
     return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1].pAction->GetId();
@@ -646,7 +646,7 @@ SfxUndoAction* SfxUndoManager::GetUndoAction( size_t nNo ) const
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    DBG_ASSERT( nNo < m_pData->pActUndoArray->nCurUndoAction, "svl::SfxUndoManager::GetUndoAction(), illegal id!" );
+    assert(nNo < m_pData->pActUndoArray->nCurUndoAction);
     if( nNo >= m_pData->pActUndoArray->nCurUndoAction )
         return NULL;
     return m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1-nNo].pAction;
@@ -696,20 +696,20 @@ bool SfxUndoManager::UndoWithContext( SfxUndoContext& i_context )
 bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
 {
     UndoManagerGuard aGuard( *m_pData );
-    OSL_ENSURE( !IsDoing(), "SfxUndoManager::Undo: *nested* Undo/Redo actions? How this?" );
+    assert( !IsDoing() && "SfxUndoManager::Undo: *nested* Undo/Redo actions? How this?" );
 
     ::comphelper::FlagGuard aDoingGuard( m_pData->mbDoing );
     LockGuard aLockGuard( *this );
 
     if ( ImplIsInListAction_Lock() )
     {
-        OSL_ENSURE( false, "SfxUndoManager::Undo: not possible when within a list action!" );
+        assert(!"SfxUndoManager::Undo: not possible when within a list action!");
         return false;
     }
 
     if ( m_pData->pActUndoArray->nCurUndoAction == 0 )
     {
-        OSL_ENSURE( false, "SfxUndoManager::Undo: undo stack is empty!" );
+        SAL_WARN("svl", "SfxUndoManager::Undo: undo stack is empty!" );
         return false;
     }
 
@@ -743,7 +743,7 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
                 throw;
             }
         }
-        OSL_ENSURE( false, "SfxUndoManager::Undo: can't clear the Undo stack after the failure - some other party was faster ..." );
+        SAL_WARN("svl", "SfxUndoManager::Undo: can't clear the Undo stack after the failure - some other party was faster ..." );
         throw;
     }
 
@@ -808,20 +808,20 @@ bool SfxUndoManager::RedoWithContext( SfxUndoContext& i_context )
 bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
 {
     UndoManagerGuard aGuard( *m_pData );
-    OSL_ENSURE( !IsDoing(), "SfxUndoManager::Redo: *nested* Undo/Redo actions? How this?" );
+    assert( !IsDoing() && "SfxUndoManager::Redo: *nested* Undo/Redo actions? How this?" );
 
     ::comphelper::FlagGuard aDoingGuard( m_pData->mbDoing );
     LockGuard aLockGuard( *this );
 
     if ( ImplIsInListAction_Lock() )
     {
-        OSL_ENSURE( false, "SfxUndoManager::Redo: not possible when within a list action!" );
+        assert(!"SfxUndoManager::Redo: not possible when within a list action!");
         return false;
     }
 
     if ( m_pData->pActUndoArray->nCurUndoAction >= m_pData->pActUndoArray->aUndoActions.size() )
     {
-        OSL_ENSURE( false, "SfxUndoManager::Redo: redo stack is empty!" );
+        SAL_WARN("svl", "SfxUndoManager::Redo: redo stack is empty!");
         return false;
     }
 
@@ -856,7 +856,7 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
             }
             ++nCurAction;
         }
-        OSL_ENSURE( false, "SfxUndoManager::Redo: can't clear the Undo stack after the failure - some other party was faster ..." );
+        SAL_WARN("svl", "SfxUndoManager::Redo: can't clear the Undo stack after the failure - some other party was faster ..." );
         throw;
     }
 
@@ -1023,11 +1023,11 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
 
     if( !ImplIsInListAction_Lock() )
     {
-        OSL_TRACE( "svl::SfxUndoManager::ImplLeaveListAction, called without calling EnterListAction()!" );
+        SAL_WARN("svl", "svl::SfxUndoManager::ImplLeaveListAction, called without calling EnterListAction()!" );
         return 0;
     }
 
-    DBG_ASSERT( m_pData->pActUndoArray->pFatherUndoArray, "SfxUndoManager::ImplLeaveListAction, no father undo array!?" );
+    assert(m_pData->pActUndoArray->pFatherUndoArray);
 
     // the array/level which we're about to leave
     SfxUndoArray* pArrayToLeave = m_pData->pActUndoArray;
@@ -1057,7 +1057,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
     if ( i_merge )
     {
         // merge the list action with its predecessor on the same level
-        OSL_ENSURE( m_pData->pActUndoArray->nCurUndoAction > 1,
+        SAL_WARN_IF( m_pData->pActUndoArray->nCurUndoAction <= 1, "svl",
             "SfxUndoManager::ImplLeaveListAction: cannot merge the list action if there's no other action on the same level - check this beforehand!" );
         if ( m_pData->pActUndoArray->nCurUndoAction > 1 )
         {
@@ -1095,9 +1095,9 @@ UndoStackMark SfxUndoManager::MarkTopUndoAction()
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    OSL_ENSURE( !IsInListAction(),
+    SAL_WARN_IF( IsInListAction(), "svl",
             "SfxUndoManager::MarkTopUndoAction(): suspicious call!" );
-    OSL_ENSURE((m_pData->mnMarks + 1) < (m_pData->mnEmptyMark - 1),
+    assert((m_pData->mnMarks + 1) < (m_pData->mnEmptyMark - 1) &&
             "SfxUndoManager::MarkTopUndoAction(): mark overflow!");
 
     size_t const nActionPos = m_pData->pUndoArray->nCurUndoAction;
@@ -1141,7 +1141,7 @@ void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
             }
         }
     }
-    OSL_ENSURE( false, "SfxUndoManager::RemoveMark: mark not found!" );
+    SAL_WARN("svl", "SfxUndoManager::RemoveMark: mark not found!");
         // TODO: this might be too offensive. There are situations where we implicitly remove marks
         // without our clients, in particular the client which created the mark, having a chance to know
         // about this.
@@ -1183,7 +1183,7 @@ void SfxUndoManager::RemoveOldestUndoActions( size_t const i_count )
 
         if ( IsInListAction() && ( m_pData->pUndoArray->nCurUndoAction == 1 ) )
         {
-            OSL_ENSURE( false, "SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!" );
+            assert(!"SfxUndoManager::RemoveOldestUndoActions: cannot remove a not-yet-closed list action!");
             return;
         }
 
@@ -1371,8 +1371,8 @@ SfxLinkUndoAction::~SfxLinkUndoAction()
 
 void SfxLinkUndoAction::LinkedSfxUndoActionDestructed(const SfxUndoAction& rCandidate)
 {
-    OSL_ENSURE(0 != pAction, "OOps, we have no linked SfxUndoAction (!)");
-    OSL_ENSURE(pAction == &rCandidate, "OOps, the destroyed and linked UndoActions differ (!)");
+    assert(0 != pAction);
+    assert(pAction == &rCandidate && "Oops, the destroyed and linked UndoActions differ (!)");
     (void)rCandidate;
     pAction = 0;
 }
