@@ -1367,6 +1367,18 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                          return (nAccum * nArg);
                                      }));
 
+    pTestDocument->addTest(Reduction("Min", "MIN", 500, DBL_MAX, -1000, 1000, 0,
+                                     [] (double nAccum, double nArg)
+                                     {
+                                         return std::min(nAccum, nArg);
+                                     }));
+
+    pTestDocument->addTest(Reduction("Max", "MAX", 500, -DBL_MAX, -1000, 1000, 0,
+                                     [] (double nAccum, double nArg)
+                                     {
+                                         return std::max(nAccum, nArg);
+                                     }));
+
     return 0;
 }
 
