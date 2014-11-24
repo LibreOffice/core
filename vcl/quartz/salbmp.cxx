@@ -572,11 +572,7 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
         aSrcBuf.mnWidth = aDstBuf.mnWidth = nWidth;
         aSrcBuf.mnHeight = aDstBuf.mnHeight = nHeight;
 
-        SalTwoRect aTwoRects;
-        aTwoRects.mnSrcX = aTwoRects.mnDestX = 0;
-        aTwoRects.mnSrcY = aTwoRects.mnDestY = 0;
-        aTwoRects.mnSrcWidth = aTwoRects.mnDestWidth = mnWidth;
-        aTwoRects.mnSrcHeight = aTwoRects.mnDestHeight = mnHeight;
+        SalTwoRect aTwoRects(0, 0, mnWidth, mnHeight, 0, 0, mnWidth, mnHeight);
         bConverted = ::ImplFastBitmapConversion( aDstBuf, aSrcBuf, aTwoRects );
     }
 

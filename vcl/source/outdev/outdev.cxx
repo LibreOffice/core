@@ -429,18 +429,17 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if ( mbOutputClipped )
         return;
 
-    SalTwoRect aPosAry;
-    aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
-    aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
-    aPosAry.mnDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
-    aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+    long nSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    long nSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
+    long nDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
+    long nDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
 
-    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+    if (nSrcWidth && nSrcHeight && nDestWidth && nDestHeight)
     {
-        aPosAry.mnSrcX       = ImplLogicXToDevicePixel( rSrcPt.X() );
-        aPosAry.mnSrcY       = ImplLogicYToDevicePixel( rSrcPt.Y() );
-        aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
-        aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
+        SalTwoRect aPosAry(ImplLogicXToDevicePixel(rSrcPt.X()), ImplLogicYToDevicePixel(rSrcPt.Y()),
+                           nSrcWidth, nSrcHeight,
+                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
+                           nDestWidth, nDestHeight);
 
         const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );
@@ -487,15 +486,14 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
     if ( mbOutputClipped )
         return;
 
-    SalTwoRect aPosAry;
-    aPosAry.mnSrcX       = rOutDev.ImplLogicXToDevicePixel( rSrcPt.X() );
-    aPosAry.mnSrcY       = rOutDev.ImplLogicYToDevicePixel( rSrcPt.Y() );
-    aPosAry.mnSrcWidth   = rOutDev.ImplLogicWidthToDevicePixel( rSrcSize.Width() );
-    aPosAry.mnSrcHeight  = rOutDev.ImplLogicHeightToDevicePixel( rSrcSize.Height() );
-    aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
-    aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
-    aPosAry.mnDestWidth  = ImplLogicWidthToDevicePixel( rDestSize.Width() );
-    aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+    SalTwoRect aPosAry(rOutDev.ImplLogicXToDevicePixel(rSrcPt.X()),
+                       rOutDev.ImplLogicYToDevicePixel(rSrcPt.Y()),
+                       rOutDev.ImplLogicWidthToDevicePixel(rSrcSize.Width()),
+                       rOutDev.ImplLogicHeightToDevicePixel(rSrcSize.Height()),
+                       ImplLogicXToDevicePixel(rDestPt.X()),
+                       ImplLogicYToDevicePixel(rDestPt.Y()),
+                       ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                       ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
     if( mpAlphaVDev )
     {
@@ -550,18 +548,14 @@ void OutputDevice::CopyArea( const Point& rDestPt,
     if ( mbOutputClipped )
         return;
 
-    SalTwoRect aPosAry;
-    aPosAry.mnSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
-    aPosAry.mnSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
-
-    if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight )
+    long nSrcWidth   = ImplLogicWidthToDevicePixel( rSrcSize.Width() );
+    long nSrcHeight  = ImplLogicHeightToDevicePixel( rSrcSize.Height() );
+    if (nSrcWidth && nSrcHeight)
     {
-        aPosAry.mnSrcX       = ImplLogicXToDevicePixel( rSrcPt.X() );
-        aPosAry.mnSrcY       = ImplLogicYToDevicePixel( rSrcPt.Y() );
-        aPosAry.mnDestX      = ImplLogicXToDevicePixel( rDestPt.X() );
-        aPosAry.mnDestY      = ImplLogicYToDevicePixel( rDestPt.Y() );
-        aPosAry.mnDestWidth  = aPosAry.mnSrcWidth;
-        aPosAry.mnDestHeight = aPosAry.mnSrcHeight;
+        SalTwoRect aPosAry(ImplLogicXToDevicePixel(rSrcPt.X()), ImplLogicYToDevicePixel(rSrcPt.Y()),
+                           nSrcWidth, nSrcHeight,
+                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
+                           nSrcWidth, nSrcHeight);
 
         const Rectangle aSrcOutRect( Point( mnOutOffX, mnOutOffY ),
                                      Size( mnOutWidth, mnOutHeight ) );

@@ -667,19 +667,8 @@ void X11SalGraphicsImpl::copyArea ( long nDestX,    long nDestY,
                                 long nSrcWidth, long nSrcHeight,
                                 sal_uInt16 )
 {
-    SalTwoRect aPosAry;
-
-    aPosAry.mnDestX = nDestX;
-    aPosAry.mnDestY = nDestY;
-    aPosAry.mnDestWidth  = nSrcWidth;
-    aPosAry.mnDestHeight = nSrcHeight;
-
-    aPosAry.mnSrcX = nSrcX;
-    aPosAry.mnSrcY = nSrcY;
-    aPosAry.mnSrcWidth  = nSrcWidth;
-    aPosAry.mnSrcHeight = nSrcHeight;
-
-    copyBits ( aPosAry, 0 );
+    SalTwoRect aPosAry(nSrcX, nSrcY, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
+    copyBits(aPosAry, 0);
 }
 
 void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
