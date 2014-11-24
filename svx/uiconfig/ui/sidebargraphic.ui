@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="0to100adjustment">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="gammaadjustment">
+    <property name="lower">0.01</property>
+    <property name="upper">10</property>
+    <property name="value">1</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="plusminus100adjustment">
+    <property name="lower">-100</property>
     <property name="upper">100</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -37,8 +51,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -49,15 +61,12 @@
                 <property name="tooltip_markup" translatable="yes">Specify the luminance of the graphic.</property>
                 <property name="tooltip_text" translatable="yes">Specify the luminance of the graphic.</property>
                 <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <property name="climb_rate">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -72,8 +81,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -84,15 +91,12 @@
                 <property name="tooltip_markup" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="tooltip_text" translatable="yes">Specify the degree of difference between the lightest and darkest parts of the graphic.</property>
                 <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="adjustment">plusminus100adjustment</property>
                 <property name="climb_rate">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -107,24 +111,16 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="setcolormode">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="wrap_width">1</property>
-                <property name="row_span_column">0</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">1</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -139,8 +135,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -151,15 +145,12 @@
                 <property name="tooltip_markup" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="tooltip_text" translatable="yes">Specify the percentage of transparency; 0% is fully opaque and 100% is fully transparent.</property>
                 <property name="invisible_char">•</property>
-                <property name="invisible_char_set">True</property>
                 <property name="adjustment">0to100adjustment</property>
                 <property name="climb_rate">1</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -171,6 +162,8 @@
                   <object class="GtkImage" id="image1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="pixbuf">svx/res/symphony/AdjustColorRed_16x16.png</property>
                   </object>
                   <packing>
@@ -187,7 +180,6 @@
                     <property name="tooltip_markup" translatable="yes">Red</property>
                     <property name="tooltip_text" translatable="yes">Red</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">plusminus100adjustment</property>
                     <property name="climb_rate">1</property>
                   </object>
@@ -201,8 +193,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -214,6 +204,8 @@
                   <object class="GtkImage" id="image2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="pixbuf">svx/res/symphony/AdjustColorGreen_16x16.png</property>
                   </object>
                   <packing>
@@ -230,7 +222,6 @@
                     <property name="tooltip_markup" translatable="yes">Green</property>
                     <property name="tooltip_text" translatable="yes">Green</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">plusminus100adjustment</property>
                     <property name="climb_rate">1</property>
                   </object>
@@ -245,8 +236,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -258,6 +247,8 @@
                   <object class="GtkImage" id="image3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="pixbuf">svx/res/symphony/AdjustColorBlue_16x16.png</property>
                   </object>
                   <packing>
@@ -274,7 +265,6 @@
                     <property name="tooltip_markup" translatable="yes">Blue</property>
                     <property name="tooltip_text" translatable="yes">Blue</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">plusminus100adjustment</property>
                     <property name="climb_rate">1</property>
                   </object>
@@ -288,8 +278,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -301,6 +289,8 @@
                   <object class="GtkImage" id="image4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="pixbuf">svx/res/symphony/AdjustColorGamma_16x16.png</property>
                   </object>
                   <packing>
@@ -317,7 +307,6 @@
                     <property name="tooltip_markup" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="tooltip_text" translatable="yes">Specify the gamma value that affects the brightness of the midtone values.</property>
                     <property name="invisible_char">•</property>
-                    <property name="invisible_char_set">True</property>
                     <property name="adjustment">gammaadjustment</property>
                     <property name="climb_rate">0.10000000000000001</property>
                     <property name="digits">2</property>
@@ -333,8 +322,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
           </object>
@@ -348,22 +335,7 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="gammaadjustment">
-    <property name="lower">0.01</property>
-    <property name="upper">10</property>
-    <property name="value">1</property>
-    <property name="step_increment">0.10000000000000001</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="plusminus100adjustment">
-    <property name="lower">-100</property>
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>
