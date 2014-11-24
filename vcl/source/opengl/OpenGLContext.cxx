@@ -83,16 +83,6 @@ OpenGLContext::~OpenGLContext()
         wglDeleteContext( m_aGLWin.hRC );
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
     }
-    ImplSVData* pSVData = ImplGetSVData();
-    if( mpPrevContext )
-        mpPrevContext->mpNextContext = mpNextContext;
-    else
-        pSVData->maGDIData.mpFirstContext = mpNextContext;
-    if( mpNextContext )
-        mpNextContext->mpPrevContext = mpPrevContext;
-    else
-        pSVData->maGDIData.mpLastContext = mpPrevContext;
-
 #elif defined( MACOSX )
     OpenGLWrapper::resetCurrent();
 #elif defined( IOS ) || defined( ANDROID )
@@ -113,6 +103,16 @@ OpenGLContext::~OpenGLContext()
             glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
     }
 #endif
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if( mpPrevContext )
+        mpPrevContext->mpNextContext = mpNextContext;
+    else
+        pSVData->maGDIData.mpFirstContext = mpNextContext;
+    if( mpNextContext )
+        mpNextContext->mpPrevContext = mpPrevContext;
+    else
+        pSVData->maGDIData.mpLastContext = mpPrevContext;
 }
 
 void OpenGLContext::AddRef()
