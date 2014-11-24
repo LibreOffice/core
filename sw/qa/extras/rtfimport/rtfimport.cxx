@@ -2023,6 +2023,32 @@ DECLARE_RTFIMPORT_TEST(testFdo83204, "fdo83204.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Heading 1"), getProperty<OUString>(getParagraph(1), "ParaStyleName"));
 }
 
+
+DECLARE_RTFIMPORT_TEST(testFdo85889pc, "fdo85889-pc.rtf")
+{
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+
+    OUString aExpected("\xc2\xb1\xe2\x89\xa5\xe2\x89\xa4", 8, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+}
+
+DECLARE_RTFIMPORT_TEST(testFdo85889pca, "fdo85889-pca.rtf")
+{
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+
+    OUString aExpected("\xc2\xb1\xe2\x80\x97\xc2\xbe", 7, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+}
+
+DECLARE_RTFIMPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
+{
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+
+    OUString aExpected("\xc3\x92\xc3\x9a\xc3\x9b", 6, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
