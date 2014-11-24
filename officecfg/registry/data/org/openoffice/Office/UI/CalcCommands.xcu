@@ -605,6 +605,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Delete...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:FillDown" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1060,6 +1063,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Sheet...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertSheetFromFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1210,6 +1216,9 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Hide</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:Show" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -1285,6 +1294,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Sheet...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ToolProtectionDocument" oor:op="replace">
@@ -1494,6 +1506,9 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">~Move/Copy...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:TableSelectAll" oor:op="replace">
