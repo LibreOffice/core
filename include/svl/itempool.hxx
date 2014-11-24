@@ -185,9 +185,7 @@ public:
     void                            SetStoringRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     void                            SetSecondaryPool( SfxItemPool *pPool );
     SfxItemPool*                    GetSecondaryPool() const;
-#ifdef DBG_UTIL
     SfxItemPool*                    GetMasterPool() const;
-#endif
     void                            FreezeIdRanges();
 
     void                            Delete();

@@ -441,7 +441,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 
     // Set Master of new Secondary Pools
     DBG_ASSERT( !pPool || pPool->pImp->mpMaster == pPool, "Secondary is present in two Pools" );
-    SfxItemPool *pNewMaster = pImp->mpMaster ? pImp->mpMaster : this;
+    SfxItemPool *pNewMaster = GetMasterPool() ? pImp->mpMaster : this;
     for ( SfxItemPool *p = pPool; p; p = p->pImp->mpSecondary )
         p->pImp->mpMaster = pNewMaster;
 
@@ -894,12 +894,10 @@ SfxItemPool* SfxItemPool::GetSecondaryPool() const
     return pImp->mpSecondary;
 }
 
-#ifdef DBG_UTIL
 SfxItemPool* SfxItemPool::GetMasterPool() const
 {
     return pImp->mpMaster;
 }
-#endif
 
 /**
  * This method should be called at the master pool, when all secondary
