@@ -13,4 +13,8 @@ $(eval $(call gb_Module_add_targets,io,\
     Library_io \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,io,\
+    CppunitTest_io_textinputstream \
+))
+
 # vim:set noet sw=4 ts=4:
