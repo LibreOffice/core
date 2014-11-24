@@ -239,7 +239,8 @@ void X11OpenGLDeviceInfo::GetData()
     // read major.minor version numbers of the driver (not to be confused with the OpenGL version)
     if (whereToReadVersionNumbers) {
         // copy into writable buffer, for tokenization
-        strncpy(buf, whereToReadVersionNumbers, buf_size);
+        strncpy(buf, whereToReadVersionNumbers, buf_size-1);
+        buf[buf_size-1] = 0;
         bufptr = buf;
 
         // now try to read major.minor version numbers. In case of failure, gracefully exit: these numbers have
