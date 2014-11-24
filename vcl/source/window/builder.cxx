@@ -2397,7 +2397,7 @@ void VclBuilder::handleAtkObject(xmlreader::XmlReader &reader, const OString &rI
         const OString &rKey = aI->first;
         const OString &rValue = aI->second;
 
-        if (rKey.match("AtkObject::"))
+        if (pWindow && rKey.match("AtkObject::"))
             pWindow->set_property(rKey.copy(RTL_CONSTASCII_LENGTH("AtkObject::")), rValue);
         else
             SAL_WARN("vcl.layout", "unhandled atk prop: " << rKey.getStr());
