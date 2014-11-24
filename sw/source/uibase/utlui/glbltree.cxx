@@ -431,10 +431,10 @@ sal_uInt16  SwGlobalTree::GetEnableFlags() const
     if(nSelCount == 1)
     {
         nRet |= ENABLE_EDIT;
-        if (pEntry && ((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
-                    (!pPrevEntry || ((SwGlblDocContent*)pPrevEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN))
+        if (pEntry && static_cast<SwGlblDocContent*>(pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
+                    (!pPrevEntry || static_cast<SwGlblDocContent*>(pPrevEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN))
             nRet |= ENABLE_INSERT_TEXT;
-        if (pEntry && GLBLDOC_SECTION == ((SwGlblDocContent*)pEntry->GetUserData())->GetType())
+        if (pEntry && GLBLDOC_SECTION == static_cast<SwGlblDocContent*>(pEntry->GetUserData())->GetType())
             nRet |= ENABLE_EDIT_LINK;
     }
     else if(!nEntryCount)
@@ -792,7 +792,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 if(GLBLDOC_SECTION == pContent->GetType() &&
                     pContent->GetSection()->IsConnected())
                 {
-                    ((SwSection*)pContent->GetSection())->UpdateNow();
+                    const_cast<SwSection*>(pContent->GetSection())->UpdateNow();
                 }
 
                 pSelEntry = NextSelected(pSelEntry);

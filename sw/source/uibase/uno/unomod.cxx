@@ -228,7 +228,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeE
     SolarMutexGuard aGuard;
     if(!pxViewSettings)
     {
-        ((SwXModule*)this)->pxViewSettings = new Reference< XPropertySet > ;
+        static_cast<SwXModule*>(this)->pxViewSettings = new Reference< XPropertySet > ;
         OSL_FAIL("Web or Text?");
         *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, 0 ) );
     }
@@ -240,7 +240,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::Runtime
     SolarMutexGuard aGuard;
     if(!pxPrintSettings)
     {
-        ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
+        static_cast<SwXModule*>(this)->pxPrintSettings = new Reference< XPropertySet > ;
         OSL_FAIL("Web or Text?");
         *pxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
     }

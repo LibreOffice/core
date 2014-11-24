@@ -579,12 +579,12 @@ void SwWrtShell::LaunchOLEObj( long nVerb )
         if ( !pCli )
             pCli = new SwOleClient( &GetView(), &GetView().GetEditWin(), xRef );
 
-        ((SwOleClient*)pCli)->SetInDoVerb( true );
+        static_cast<SwOleClient*>(pCli)->SetInDoVerb( true );
 
         CalcAndSetScale( xRef );
         pCli->DoVerb( nVerb );
 
-        ((SwOleClient*)pCli)->SetInDoVerb( false );
+        static_cast<SwOleClient*>(pCli)->SetInDoVerb( false );
         CalcAndSetScale( xRef );
     }
 }
@@ -1351,7 +1351,7 @@ SelectionType SwWrtShell::GetSelectionType() const
     if ( BasicActionPend() )
         return IsSelFrmMode() ? nsSelectionType::SEL_FRM : nsSelectionType::SEL_TXT;
 
-    SwView &_rView = ((SwView&)GetView());
+    SwView &_rView = const_cast<SwView&>(GetView());
     if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
         return nsSelectionType::SEL_POSTIT;
 

@@ -636,7 +636,7 @@ Reference< XIndexAccess >  SwXTextDocument::getNumberingRules(void) throw( Runti
         throw RuntimeException();
     if(!pxXNumberingRules )
     {
-        ((SwXTextDocument*)this)->pxXNumberingRules = new Reference< XIndexAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXNumberingRules = new Reference< XIndexAccess > ;
         *pxXNumberingRules = new SwXNumberingRulesCollection( pDocShell->GetDoc() );
     }
     return *pxXNumberingRules;
@@ -649,7 +649,7 @@ Reference< XIndexAccess >  SwXTextDocument::getFootnotes(void) throw( RuntimeExc
         throw RuntimeException();
     if(!pxXFootnotes)
     {
-        ((SwXTextDocument*)this)->pxXFootnotes = new Reference< XIndexAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXFootnotes = new Reference< XIndexAccess > ;
         *pxXFootnotes = new SwXFootnotes(false, pDocShell->GetDoc());
     }
     return *pxXFootnotes;
@@ -663,7 +663,7 @@ Reference< XPropertySet >  SAL_CALL
         throw RuntimeException();
     if(!pxXFootnoteSettings)
     {
-        ((SwXTextDocument*)this)->pxXFootnoteSettings = new Reference< XPropertySet > ;
+        static_cast<SwXTextDocument*>(this)->pxXFootnoteSettings = new Reference< XPropertySet > ;
         *pxXFootnoteSettings = new SwXFootnoteProperties(pDocShell->GetDoc());
     }
     return *pxXFootnoteSettings;
@@ -676,7 +676,7 @@ Reference< XIndexAccess >  SwXTextDocument::getEndnotes(void) throw( RuntimeExce
         throw RuntimeException();
     if(!pxXEndnotes)
     {
-        ((SwXTextDocument*)this)->pxXEndnotes = new Reference< XIndexAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXEndnotes = new Reference< XIndexAccess > ;
         *pxXEndnotes = new SwXFootnotes(true, pDocShell->GetDoc());
     }
     return *pxXEndnotes;
@@ -689,7 +689,7 @@ Reference< XPropertySet >  SwXTextDocument::getEndnoteSettings(void) throw( Runt
         throw RuntimeException();
     if(!pxXEndnoteSettings)
     {
-        ((SwXTextDocument*)this)->pxXEndnoteSettings = new Reference< XPropertySet > ;
+        static_cast<SwXTextDocument*>(this)->pxXEndnoteSettings = new Reference< XPropertySet > ;
         *pxXEndnoteSettings = new SwXEndnoteProperties(pDocShell->GetDoc());
     }
     return *pxXEndnoteSettings;
@@ -1225,7 +1225,7 @@ Reference< XNameAccess >  SwXTextDocument::getReferenceMarks(void)
         throw RuntimeException();
     if(!pxXReferenceMarks)
     {
-        ((SwXTextDocument*)this)->pxXReferenceMarks = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXReferenceMarks = new Reference< XNameAccess > ;
         *pxXReferenceMarks = new SwXReferenceMarks(pDocShell->GetDoc());
     }
     return *pxXReferenceMarks;
@@ -1238,7 +1238,7 @@ Reference< XEnumerationAccess >  SwXTextDocument::getTextFields(void) throw( Run
         throw RuntimeException();
     if(!pxXTextFieldTypes)
     {
-        ((SwXTextDocument*)this)->pxXTextFieldTypes = new Reference< XEnumerationAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXTextFieldTypes = new Reference< XEnumerationAccess > ;
         *pxXTextFieldTypes = new SwXTextFieldTypes(pDocShell->GetDoc());
     }
     return *pxXTextFieldTypes;
@@ -1252,7 +1252,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFieldMasters(void)
         throw RuntimeException();
     if(!pxXTextFieldMasters)
     {
-        ((SwXTextDocument*)this)->pxXTextFieldMasters = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXTextFieldMasters = new Reference< XNameAccess > ;
         *pxXTextFieldMasters = new SwXTextFieldMasters(pDocShell->GetDoc());
     }
     return *pxXTextFieldMasters;
@@ -1265,7 +1265,7 @@ Reference< XNameAccess >  SwXTextDocument::getEmbeddedObjects(void) throw( Runti
         throw RuntimeException();
     if(!pxXEmbeddedObjects)
     {
-        ((SwXTextDocument*)this)->pxXEmbeddedObjects = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXEmbeddedObjects = new Reference< XNameAccess > ;
         *pxXEmbeddedObjects = new SwXTextEmbeddedObjects(pDocShell->GetDoc());
     }
     return *pxXEmbeddedObjects;
@@ -1278,7 +1278,7 @@ Reference< XNameAccess >  SwXTextDocument::getBookmarks(void) throw( RuntimeExce
         throw RuntimeException();
     if(!pxXBookmarks)
     {
-        ((SwXTextDocument*)this)->pxXBookmarks = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXBookmarks = new Reference< XNameAccess > ;
         *pxXBookmarks = new SwXBookmarks(pDocShell->GetDoc());
     }
     return *pxXBookmarks;
@@ -1291,7 +1291,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextSections(void) throw( RuntimeE
         throw RuntimeException();
     if(!pxXTextSections)
     {
-        ((SwXTextDocument*)this)->pxXTextSections = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXTextSections = new Reference< XNameAccess > ;
         *pxXTextSections = new SwXTextSections(pDocShell->GetDoc());
     }
     return *pxXTextSections;
@@ -1304,7 +1304,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextTables(void) throw( RuntimeExc
         throw RuntimeException();
     if(!pxXTextTables)
     {
-        ((SwXTextDocument*)this)->pxXTextTables = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXTextTables = new Reference< XNameAccess > ;
         *pxXTextTables = new SwXTextTables(pDocShell->GetDoc());
     }
     return *pxXTextTables;
@@ -1317,7 +1317,7 @@ Reference< XNameAccess >  SwXTextDocument::getGraphicObjects(void) throw( Runtim
         throw RuntimeException();
     if(!pxXGraphicObjects)
     {
-        ((SwXTextDocument*)this)->pxXGraphicObjects = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXGraphicObjects = new Reference< XNameAccess > ;
         *pxXGraphicObjects = new SwXTextGraphicObjects(pDocShell->GetDoc());
     }
     return *pxXGraphicObjects;
@@ -1330,7 +1330,7 @@ Reference< XNameAccess >  SwXTextDocument::getTextFrames(void) throw( RuntimeExc
         throw RuntimeException();
     if(!pxXTextFrames)
     {
-        ((SwXTextDocument*)this)->pxXTextFrames = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXTextFrames = new Reference< XNameAccess > ;
         *pxXTextFrames = new SwXTextFrames(pDocShell->GetDoc());
     }
     return *pxXTextFrames;
@@ -1343,7 +1343,7 @@ Reference< XNameAccess >  SwXTextDocument::getStyleFamilies(void) throw( Runtime
         throw RuntimeException();
     if(!pxXStyleFamilies)
     {
-        ((SwXTextDocument*)this)->pxXStyleFamilies = new Reference< XNameAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXStyleFamilies = new Reference< XNameAccess > ;
         *pxXStyleFamilies = new SwXStyleFamilies(*pDocShell);
     }
     return *pxXStyleFamilies;
@@ -1371,8 +1371,8 @@ Reference< drawing::XDrawPage >  SwXTextDocument::getDrawPage(void) throw( Runti
         throw RuntimeException();
     if(!pxXDrawPage)
     {
-        ((SwXTextDocument*)this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
-        ((SwXTextDocument*)this)->pxXDrawPage = new Reference< drawing::XDrawPage >(pDrawPage);
+        static_cast<SwXTextDocument*>(this)->pDrawPage = new SwXDrawPage(pDocShell->GetDoc());
+        static_cast<SwXTextDocument*>(this)->pxXDrawPage = new Reference< drawing::XDrawPage >(pDrawPage);
         // Create a Reference to trigger the complete initialization of the
         // object. Otherwise in some corner cases it would get initialized
         // at ::InitNewDoc -> which would get called during
@@ -1428,7 +1428,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXTextTables)
     {
          XNameAccess* pTbls = pxXTextTables->get();
-        ((SwXTextTables*)pTbls)->Invalidate();
+        static_cast<SwXTextTables*>(pTbls)->Invalidate();
         delete pxXTextTables;
         pxXTextTables = 0;
     }
@@ -1436,7 +1436,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXTextFrames)
     {
          XNameAccess* pFrms = pxXTextFrames->get();
-        ((SwXTextFrames*)pFrms)->Invalidate();
+        static_cast<SwXTextFrames*>(pFrms)->Invalidate();
         delete pxXTextFrames;
         pxXTextFrames = 0;
     }
@@ -1444,7 +1444,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXGraphicObjects)
     {
          XNameAccess* pFrms = pxXGraphicObjects->get();
-        ((SwXTextGraphicObjects*)pFrms)->Invalidate();
+        static_cast<SwXTextGraphicObjects*>(pFrms)->Invalidate();
         delete pxXGraphicObjects;
         pxXGraphicObjects = 0;
     }
@@ -1452,7 +1452,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXEmbeddedObjects)
     {
      XNameAccess* pOLE = pxXEmbeddedObjects->get();
-        ((SwXTextEmbeddedObjects*)pOLE)->Invalidate();
+        static_cast<SwXTextEmbeddedObjects*>(pOLE)->Invalidate();
         delete pxXEmbeddedObjects;
         pxXEmbeddedObjects = 0;
     }
@@ -1483,7 +1483,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXTextFieldTypes)
     {
          XEnumerationAccess* pT = pxXTextFieldTypes->get();
-        ((SwXTextFieldTypes*)pT)->Invalidate();
+        static_cast<SwXTextFieldTypes*>(pT)->Invalidate();
         delete pxXTextFieldTypes;
         pxXTextFieldTypes = 0;
     }
@@ -1491,7 +1491,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXTextFieldMasters)
     {
          XNameAccess* pT = pxXTextFieldMasters->get();
-        ((SwXTextFieldMasters*)pT)->Invalidate();
+        static_cast<SwXTextFieldMasters*>(pT)->Invalidate();
         delete pxXTextFieldMasters;
         pxXTextFieldMasters = 0;
     }
@@ -1499,7 +1499,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXTextSections)
     {
          XNameAccess* pSect = pxXTextSections->get();
-        ((SwXTextSections*)pSect)->Invalidate();
+        static_cast<SwXTextSections*>(pSect)->Invalidate();
         delete pxXTextSections;
         pxXTextSections = 0;
     }
@@ -1518,7 +1518,7 @@ void    SwXTextDocument::InitNewDoc()
     if ( pxXNumberingRules )
     {
         XIndexAccess* pNum = pxXNumberingRules->get();
-        ((SwXNumberingRulesCollection*)pNum)->Invalidate();
+        static_cast<SwXNumberingRulesCollection*>(pNum)->Invalidate();
         delete pxXNumberingRules;
         pxXNumberingRules = 0;
     }
@@ -1526,7 +1526,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXFootnotes)
     {
          XIndexAccess* pFtn = pxXFootnotes->get();
-        ((SwXFootnotes*)pFtn)->Invalidate();
+        static_cast<SwXFootnotes*>(pFtn)->Invalidate();
         delete pxXFootnotes;
         pxXFootnotes = 0;
     }
@@ -1534,7 +1534,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXEndnotes)
     {
          XIndexAccess* pFtn = pxXEndnotes->get();
-        ((SwXFootnotes*)pFtn)->Invalidate();
+        static_cast<SwXFootnotes*>(pFtn)->Invalidate();
         delete pxXEndnotes;
         pxXEndnotes = 0;
     }
@@ -1542,7 +1542,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXDocumentIndexes)
     {
          XIndexAccess* pIdxs = pxXDocumentIndexes->get();
-        ((SwXDocumentIndexes*)pIdxs)->Invalidate();
+        static_cast<SwXDocumentIndexes*>(pIdxs)->Invalidate();
         delete pxXDocumentIndexes;
         pxXDocumentIndexes = 0;
     }
@@ -1550,14 +1550,14 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXStyleFamilies)
     {
          XNameAccess* pStyles = pxXStyleFamilies->get();
-        ((SwXStyleFamilies*)pStyles)->Invalidate();
+        static_cast<SwXStyleFamilies*>(pStyles)->Invalidate();
         delete pxXStyleFamilies;
         pxXStyleFamilies = 0;
     }
     if(pxXAutoStyles)
     {
          XNameAccess* pStyles = pxXAutoStyles->get();
-        ((SwXAutoStyles*)pStyles)->Invalidate();
+        static_cast<SwXAutoStyles*>(pStyles)->Invalidate();
         delete pxXAutoStyles;
         pxXAutoStyles = 0;
     }
@@ -1565,7 +1565,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXBookmarks)
     {
          XNameAccess* pBm = pxXBookmarks->get();
-        ((SwXBookmarks*)pBm)->Invalidate();
+        static_cast<SwXBookmarks*>(pBm)->Invalidate();
         delete pxXBookmarks;
         pxXBookmarks = 0;
     }
@@ -1573,7 +1573,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXChapterNumbering)
     {
          XIndexReplace* pCh = pxXChapterNumbering->get();
-        ((SwXChapterNumbering*)pCh)->Invalidate();
+        static_cast<SwXChapterNumbering*>(pCh)->Invalidate();
         delete pxXChapterNumbering;
         pxXChapterNumbering = 0;
     }
@@ -1581,7 +1581,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXFootnoteSettings)
     {
          XPropertySet* pFntSet = pxXFootnoteSettings->get();
-        ((SwXFootnoteProperties*)pFntSet)->Invalidate();
+        static_cast<SwXFootnoteProperties*>(pFntSet)->Invalidate();
         delete pxXFootnoteSettings;
         pxXFootnoteSettings = 0;
     }
@@ -1589,7 +1589,7 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXEndnoteSettings)
     {
          XPropertySet* pEndSet = pxXEndnoteSettings->get();
-        ((SwXEndnoteProperties*)pEndSet)->Invalidate();
+        static_cast<SwXEndnoteProperties*>(pEndSet)->Invalidate();
         delete pxXEndnoteSettings;
         pxXEndnoteSettings = 0;
     }
@@ -1597,28 +1597,28 @@ void    SwXTextDocument::InitNewDoc()
     if(pxXLineNumberingProperties)
     {
          XPropertySet* pLine = pxXLineNumberingProperties->get();
-        ((SwXLineNumberingProperties*)pLine)->Invalidate();
+        static_cast<SwXLineNumberingProperties*>(pLine)->Invalidate();
         delete pxXLineNumberingProperties;
         pxXLineNumberingProperties = 0;
     }
     if(pxXReferenceMarks)
     {
          XNameAccess* pMarks = pxXReferenceMarks->get();
-        ((SwXReferenceMarks*)pMarks)->Invalidate();
+        static_cast<SwXReferenceMarks*>(pMarks)->Invalidate();
         delete pxXReferenceMarks;
         pxXReferenceMarks = 0;
     }
     if(pxLinkTargetSupplier)
     {
          XNameAccess* pAccess = (*pxLinkTargetSupplier).get();
-        ((SwXLinkTargetSupplier*)pAccess)->Invalidate();
+        static_cast<SwXLinkTargetSupplier*>(pAccess)->Invalidate();
         delete pxLinkTargetSupplier;
         pxLinkTargetSupplier = 0;
     }
     if(pxXRedlines)
     {
         XEnumerationAccess* pMarks = pxXRedlines->get();
-        ((SwXRedlines*)pMarks)->Invalidate();
+        static_cast<SwXRedlines*>(pMarks)->Invalidate();
         delete pxXRedlines;
         pxXRedlines = 0;
     }
@@ -1805,7 +1805,7 @@ Reference< XIndexAccess >  SwXTextDocument::getDocumentIndexes(void) throw( Runt
         throw RuntimeException();
     if(!pxXDocumentIndexes)
     {
-        ((SwXTextDocument*)this)->pxXDocumentIndexes = new Reference< XIndexAccess > ;
+        static_cast<SwXTextDocument*>(this)->pxXDocumentIndexes = new Reference< XIndexAccess > ;
         *pxXDocumentIndexes = new SwXDocumentIndexes(pDocShell->GetDoc());
     }
     return *pxXDocumentIndexes;
@@ -2442,7 +2442,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
                 }
                 if (xDocSh.Is())
                 {
-                    pDoc = ((SwDocShell*)&xDocSh)->GetDoc();
+                    pDoc = static_cast<SwDocShell*>(&xDocSh)->GetDoc();
                     rpView = pDoc->GetDocShell()->GetView();
                 }
             }
@@ -2540,10 +2540,10 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 //create a hidden view to be able to export as PDF also in print preview
                 //pView and pSwView are not changed intentionally!
                 m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
-                pViewShell = ((SwView*)m_pHiddenViewFrame->GetViewShell())->GetWrtShellPtr();
+                pViewShell = static_cast<SwView*>(m_pHiddenViewFrame->GetViewShell())->GetWrtShellPtr();
             }
             else
-                pViewShell = ((SwPagePreview*)pView)->GetViewShell();
+                pViewShell = static_cast<SwPagePreview*>(pView)->GetViewShell();
         }
 
         if (!pViewShell || !pViewShell->GetLayout())
@@ -2705,7 +2705,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if ( pSwView )
         pVwSh = pSwView->GetWrtShellPtr();
     else
-        pVwSh = ((SwPagePreview*)pView)->GetViewShell();
+        pVwSh = static_cast<SwPagePreview*>(pView)->GetViewShell();
 
     sal_Int32 nMaxRenderer = 0;
     if (!bIsSwSrcView && m_pRenderData)
@@ -2994,7 +2994,7 @@ void SAL_CALL SwXTextDocument::render(
                     if ( pSwView )
                         pVwSh = pSwView->GetWrtShellPtr();
                     else
-                        pVwSh = ((SwPagePreview*)pView)->GetViewShell();
+                        pVwSh = static_cast<SwPagePreview*>(pView)->GetViewShell();
                 }
 
                 // get output device to use
@@ -3021,7 +3021,7 @@ void SAL_CALL SwXTextDocument::render(
                     // the pdf file are collected, which are evaulated during painting.
 
                     SwWrtShell* pWrtShell = pView->IsA(aSwViewTypeId) ?
-                                            ((SwView*)pView)->GetWrtShellPtr() :
+                                            static_cast<SwView*>(pView)->GetWrtShellPtr() :
                                             0;
 
                     SwPrintData const& rSwPrtOptions =

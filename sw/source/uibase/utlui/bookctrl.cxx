@@ -78,12 +78,12 @@ void SwBookmarkControl::StateChanged(
         GetStatusBar().SetItemText( GetId(), OUString() );
     else if ( pState->ISA( SfxStringItem ) )
     {
-        sPageNumber = ((SfxStringItem*)pState)->GetValue();
+        sPageNumber = static_cast<const SfxStringItem*>(pState)->GetValue();
         GetStatusBar().SetItemText( GetId(), sPageNumber );
     }
     else if ( pState->ISA( SfxBoolItem ) )
     {
-        if (((SfxBoolItem*)pState)->GetValue()) // Indicates whether to show extended tooltip
+        if (static_cast<const SfxBoolItem*>(pState)->GetValue()) // Indicates whether to show extended tooltip
             GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT_EXTENDED));
         else
             GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_BOOKCTRL_HINT));

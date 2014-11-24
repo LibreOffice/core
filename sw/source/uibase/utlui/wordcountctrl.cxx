@@ -30,7 +30,7 @@ void SwWordCountStatusBarControl::StateChanged(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     if (eState == SfxItemState::DEFAULT) // Can access pState
-        GetStatusBar().SetItemText( GetId(), ((SfxStringItem*)pState)->GetValue() );
+        GetStatusBar().SetItemText( GetId(), static_cast<const SfxStringItem*>(pState)->GetValue() );
 
     GetStatusBar().SetQuickHelpText(GetId(), SW_RESSTR(STR_WORDCOUNT_HINT));
 }

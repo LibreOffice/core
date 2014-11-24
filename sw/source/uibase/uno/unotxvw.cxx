@@ -114,7 +114,7 @@ void SwXTextView::Invalidate()
     if(pxTextViewCursor)
     {
         text::XTextViewCursor* pCrsr = pxTextViewCursor->get();
-        ((SwXTextViewCursor*)pCrsr)->Invalidate();
+        static_cast<SwXTextViewCursor*>(pCrsr)->Invalidate();
         DELETEZ(pxTextViewCursor);
     }
 
@@ -502,7 +502,7 @@ uno::Reference< text::XTextViewCursor >  SwXTextView::getViewCursor(void) throw(
     {
         if(!pxTextViewCursor)
         {
-            ((SwXTextView*)this)->pxTextViewCursor = new uno::Reference< text::XTextViewCursor > ;
+            static_cast<SwXTextView*>(this)->pxTextViewCursor = new uno::Reference< text::XTextViewCursor > ;
             *pxTextViewCursor = new  SwXTextViewCursor(GetView());
         }
         return *pxTextViewCursor;
@@ -518,7 +518,7 @@ uno::Reference< beans::XPropertySet >  SwXTextView::getViewSettings(void) throw(
     {
         if(!pxViewSettings)
         {
-            ((SwXTextView*)this)->pxViewSettings = new uno::Reference< beans::XPropertySet > ;
+            static_cast<SwXTextView*>(this)->pxViewSettings = new uno::Reference< beans::XPropertySet > ;
             *pxViewSettings = static_cast < HelperBaseNoState * > ( new SwXViewSettings( false, m_pView ) );
         }
     }

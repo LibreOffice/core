@@ -357,8 +357,8 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             if( sRet != sText )
             {
                 StartAllAction();
-                ((SwField&)rFld).SetPar2( sRet );
-                ((SwField&)rFld).GetTyp()->UpdateFlds();
+                const_cast<SwField&>(rFld).SetPar2( sRet );
+                const_cast<SwField&>(rFld).GetTyp()->UpdateFlds();
                 EndAllAction();
             }
         }
@@ -366,9 +366,9 @@ void SwWrtShell::ClickToField( const SwField& rFld )
 
     case RES_GETREFFLD:
         StartAllAction();
-        SwCrsrShell::GotoRefMark( ((SwGetRefField&)rFld).GetSetRefName(),
-                                    ((SwGetRefField&)rFld).GetSubType(),
-                                    ((SwGetRefField&)rFld).GetSeqNo() );
+        SwCrsrShell::GotoRefMark( static_cast<const SwGetRefField&>(rFld).GetSetRefName(),
+                                    static_cast<const SwGetRefField&>(rFld).GetSubType(),
+                                    static_cast<const SwGetRefField&>(rFld).GetSeqNo() );
         EndAllAction();
         break;
 
@@ -383,7 +383,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
         break;
 
     case RES_SETEXPFLD:
-        if( ((SwSetExpField&)rFld).GetInputFlag() )
+        if( static_cast<const SwSetExpField&>(rFld).GetInputFlag() )
             StartInputFldDlg( (SwField*)&rFld, false );
         break;
     case RES_DROPDOWN :

@@ -423,7 +423,7 @@ void SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     if(rEvt.GetButtons() == MOUSE_LEFT &&
             FN_CREATE_NAVIGATION == GetItemId(rEvt.GetPosPixel()))
     {
-        ((SwNavigationPI*)GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), false, this);
+        static_cast<SwNavigationPI*>(GetParent())->CreateNavigationTool(GetItemRect(FN_CREATE_NAVIGATION), false, this);
     }
     else
         SwHelpToolBox::MouseButtonDown(rEvt);
@@ -547,8 +547,8 @@ void SwNavigationPI::_ZoomOut()
         bIsZoomedIn = false;
         Size aSz(GetOutputSizePixel());
         aSz.Height() = nZoomOut;
-        Size aMinOutSizePixel = ((SfxDockingWindow*)GetParent())->GetMinOutputSizePixel();
-        ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(Size(
+        Size aMinOutSizePixel = static_cast<SfxDockingWindow*>(GetParent())->GetMinOutputSizePixel();
+        static_cast<SfxDockingWindow*>(GetParent())->SetMinOutputSizePixel(Size(
                             aMinOutSizePixel.Width(),nZoomOutInit));
         if (pFloat != NULL)
             pFloat->SetOutputSizePixel(aSz);
@@ -587,8 +587,8 @@ void SwNavigationPI::_ZoomIn()
                 nZoomOut = ( short ) aSz.Height();
 
             aSz.Height() = nZoomIn;
-            Size aMinOutSizePixel = ((SfxDockingWindow*)GetParent())->GetMinOutputSizePixel();
-            ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(Size(
+            Size aMinOutSizePixel = static_cast<SfxDockingWindow*>(GetParent())->GetMinOutputSizePixel();
+            static_cast<SfxDockingWindow*>(GetParent())->SetMinOutputSizePixel(Size(
                     aMinOutSizePixel.Width(), aSz.Height()));
             pFloat->SetOutputSizePixel(aSz);
             SvTreeListEntry* pFirst = aContentTree.FirstSelected();
@@ -999,7 +999,7 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
     if(&rBrdc == pCreateView)
     {
-        if(dynamic_cast<const SfxSimpleHint*>(&rHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
+        if(dynamic_cast<const SfxSimpleHint*>(&rHint) && static_cast<const SfxSimpleHint&>(rHint).GetId() == SFX_HINT_DYING)
         {
             pCreateView = 0;
         }
@@ -1009,11 +1009,11 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
         if(dynamic_cast<const SfxEventHint*>(&rHint))
         {
             if( pxObjectShell &&
-                        ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_CLOSEAPP)
+                        static_cast<const SfxEventHint&>( rHint).GetEventId() == SFX_EVENT_CLOSEAPP)
             {
                 DELETEZ(pxObjectShell);
             }
-            else if(((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_OPENDOC)
+            else if(static_cast<const SfxEventHint&>( rHint).GetEventId() == SFX_EVENT_OPENDOC)
             {
 
                 SwView *pActView = GetCreateView();
@@ -1310,8 +1310,8 @@ SwView*  SwNavigationPI::GetCreateView() const
         {
             if(&pView->GetViewFrame()->GetBindings() == &rBindings)
             {
-                ((SwNavigationPI*)this)->pCreateView = pView;
-                ((SwNavigationPI*)this)->StartListening(*pCreateView);
+                const_cast<SwNavigationPI*>(this)->pCreateView = pView;
+                const_cast<SwNavigationPI*>(this)->StartListening(*pCreateView);
                 break;
             }
             pView = SwModule::GetNextView(pView);

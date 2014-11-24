@@ -56,7 +56,7 @@ SfxPoolItem*  SwPageFtnInfoItem::Clone( SfxItemPool * /*pPool*/ ) const
 bool SwPageFtnInfoItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( Which() == rAttr.Which(), "no equal attributes" );
-    return ( aFtnInfo == ((SwPageFtnInfoItem&)rAttr).GetPageFtnInfo());
+    return ( aFtnInfo == static_cast<const SwPageFtnInfoItem&>(rAttr).GetPageFtnInfo());
 }
 
 bool  SwPageFtnInfoItem::GetPresentation
@@ -245,7 +245,7 @@ SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const
 bool SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
+    return *pRule == *static_cast<const SwUINumRuleItem&>(rAttr).pRule;
 }
 
 bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const

@@ -78,7 +78,7 @@ void SwTemplateControl::StateChanged(
         GetStatusBar().SetItemText( GetId(), OUString() );
     else if ( pState->ISA( SfxStringItem ) )
     {
-        sTemplate = ((SfxStringItem*)pState)->GetValue();
+        sTemplate = static_cast<const SfxStringItem*>(pState)->GetValue();
         GetStatusBar().SetItemText( GetId(), sTemplate );
     }
 }
