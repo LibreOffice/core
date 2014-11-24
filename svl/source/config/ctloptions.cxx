@@ -23,11 +23,9 @@
 #include <svl/languageoptions.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <unotools/configitem.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>
-#include <osl/diagnose.h>
 #include <svl/smplhint.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/syslocale.hxx>
@@ -103,7 +101,7 @@ bool SvtCTLOptions_Impl::IsReadOnly(SvtCTLOptions::EOption eOption) const
         case SvtCTLOptions::E_CTLTEXTNUMERALS     : bReadOnly = m_bROCTLTextNumerals      ; break;
         case SvtCTLOptions::E_CTLSEQUENCECHECKINGRESTRICTED: bReadOnly = m_bROCTLRestricted  ; break;
         case SvtCTLOptions::E_CTLSEQUENCECHECKINGTYPEANDREPLACE: bReadOnly = m_bROCTLTypeAndReplace; break;
-        default: OSL_FAIL(  "SvtCTLOptions_Impl::IsReadOnly() - invalid option" );
+        default: assert(false);
     }
     return bReadOnly;
 }
@@ -250,8 +248,8 @@ void SvtCTLOptions_Impl::Load()
     Sequence< sal_Bool > aROStates = GetReadOnlyStates( rPropertyNames );
     const Any* pValues = aValues.getConstArray();
     const sal_Bool* pROStates = aROStates.getConstArray();
-    DBG_ASSERT( aValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
-    DBG_ASSERT( aROStates.getLength() == rPropertyNames.getLength(), "GetReadOnlyStates failed" );
+    assert(aValues.getLength() == rPropertyNames.getLength() && "GetProperties failed");
+    assert(aROStates.getLength() == rPropertyNames.getLength() && "GetReadOnlyStates failed");
     if ( aValues.getLength() == rPropertyNames.getLength() && aROStates.getLength() == rPropertyNames.getLength() )
     {
         bool bValue = false;
@@ -413,79 +411,79 @@ SvtCTLOptions::~SvtCTLOptions()
 
 void SvtCTLOptions::SetCTLFontEnabled( bool _bEnabled )
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     pCTLOptions->SetCTLFontEnabled( _bEnabled );
 }
 
 bool SvtCTLOptions::IsCTLFontEnabled() const
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     return pCTLOptions->IsCTLFontEnabled();
 }
 
 void SvtCTLOptions::SetCTLSequenceChecking( bool _bEnabled )
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     pCTLOptions->SetCTLSequenceChecking(_bEnabled);
 }
 
 bool SvtCTLOptions::IsCTLSequenceChecking() const
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     return pCTLOptions->IsCTLSequenceChecking();
 }
 
 void SvtCTLOptions::SetCTLSequenceCheckingRestricted( bool _bEnable )
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     pCTLOptions->SetCTLSequenceCheckingRestricted(_bEnable);
 }
 
 bool SvtCTLOptions::IsCTLSequenceCheckingRestricted( void ) const
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     return pCTLOptions->IsCTLSequenceCheckingRestricted();
 }
 
 void SvtCTLOptions::SetCTLSequenceCheckingTypeAndReplace( bool _bEnable )
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     pCTLOptions->SetCTLSequenceCheckingTypeAndReplace(_bEnable);
 }
 
 bool SvtCTLOptions::IsCTLSequenceCheckingTypeAndReplace() const
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     return pCTLOptions->IsCTLSequenceCheckingTypeAndReplace();
 }
 
 void SvtCTLOptions::SetCTLCursorMovement( SvtCTLOptions::CursorMovement _eMovement )
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     pCTLOptions->SetCTLCursorMovement( _eMovement );
 }
 
 SvtCTLOptions::CursorMovement SvtCTLOptions::GetCTLCursorMovement() const
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     return pCTLOptions->GetCTLCursorMovement();
 }
 
 void SvtCTLOptions::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumerals )
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     pCTLOptions->SetCTLTextNumerals( _eNumerals );
 }
 
 SvtCTLOptions::TextNumerals SvtCTLOptions::GetCTLTextNumerals() const
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     return pCTLOptions->GetCTLTextNumerals();
 }
 
 bool SvtCTLOptions::IsReadOnly(EOption eOption) const
 {
-    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    assert(pCTLOptions->IsLoaded());
     return pCTLOptions->IsReadOnly(eOption);
 }
 
