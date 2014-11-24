@@ -305,7 +305,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private Short m_tabIndex;
 
     private XControl createImage(UnoDialog2 dialog, int _row, int _col)
-                {
+    {
         String imageName = name + "_image" + (_row * cols + _col);
         XControl image = dialog.insertImage(imageName,
                 IMAGE_PROPS,
@@ -325,9 +325,18 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 });
 
         XWindow win = UnoRuntime.queryInterface(XWindow.class, image);
-        win.addMouseListener(uiEventListener);
+        win.addMouseListener(new XMouseListenerAdapter() {
+            public void mousePressed(MouseEvent event) {
+                int image = getImageFromEvent(event);
+                int index = getIndexFor(image);
+                if (index < listModel.getSize())
+                {
+                    focus(image);
+                    setSelected(index);
+                }
+            }
+        });
         win.addKeyListener(imageKeyListener);
-        uiEventListener.add(imageName, EventNames.MOUSE_PRESSED, "mousePressed", this, Object.class);
 
         return image;
     }
@@ -757,17 +766,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         String controlName = (String) Helper.getUnoPropertyValue(getModel(image), PropertyNames.PROPERTY_NAME);
         return Integer.parseInt(controlName.substring(6 + name.length()));
 
-    }
-
-    public void mousePressed(Object event)
-    {
-        int image = getImageFromEvent(event);
-        int index = getIndexFor(image);
-        if (index < listModel.getSize())
-        {
-            focus(image);
-            setSelected(index);
-        }
     }
 
     public Object[] getSelectedObjects()

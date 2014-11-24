@@ -17,26 +17,33 @@
  */
 package com.sun.star.wizards.ui;
 
-import java.beans.*;
+import java.beans.VetoableChangeListener;
+import java.beans.VetoableChangeSupport;
 
-import com.sun.star.wizards.ui.event.EventNames;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.awt.*;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.XInterface;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.Resource;
+import com.sun.star.awt.FontDescriptor;
+import com.sun.star.awt.PushButtonType;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XItemEventBroadcaster;
+import com.sun.star.awt.XItemListener;
+import com.sun.star.awt.XTopWindow;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexContainer;
-import com.sun.star.frame.XTerminateListener;
 import com.sun.star.frame.TerminationVetoException;
+import com.sun.star.frame.XTerminateListener;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.beans.*;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.HelpIds;
+import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
+import com.sun.star.wizards.ui.event.XWindowListenerAdapter;
 
 public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener, XCompletion
 {
@@ -52,7 +59,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private int nOldStep = 1;
     private int nMaxStep = 1;
     protected XItemListener RoadmapItemListener;
-    protected XControl xRoadmapControl;
     XItemEventBroadcaster xRoadmapBroadcaster;
     String[] sRMItemLabels;
     private Object oRoadmap;
@@ -139,23 +145,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         nNewStep = nOldStep;
     }
 
-    public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent)
-    {
-        try
-        {
-            nNewStep = itemEvent.ItemId;
-            nOldStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP));
-            if (nNewStep != nOldStep)
-            {
-                switchToStep();
-            }
-        }
-        catch (com.sun.star.lang.IllegalArgumentException exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
-
     public void setRoadmapInteractive(boolean _bInteractive)
     {
         Helper.setUnoPropertyValue(oRoadmap, "Activated", Boolean.valueOf(_bInteractive));
@@ -240,10 +229,25 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             xSSFRoadmap = UnoRuntime.queryInterface(XSingleServiceFactory.class, oRoadmap);
             xIndexContRoadmap = UnoRuntime.queryInterface(XIndexContainer.class, oRoadmap);
 
-            guiEventListener.add("rdmNavi", EventNames.ITEM_CHANGED, "itemStateChanged", this, com.sun.star.awt.ItemEvent.class);
-            xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
+            XControl xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             xRoadmapBroadcaster = UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
-            xRoadmapBroadcaster.addItemListener(guiEventListener);
+            xRoadmapBroadcaster.addItemListener(new XItemListenerAdapter() {
+                public void itemStateChanged(com.sun.star.awt.ItemEvent itemEvent) {
+                    try
+                    {
+                        nNewStep = itemEvent.ItemId;
+                        nOldStep = AnyConverter.toInt(Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_STEP));
+                        if (nNewStep != nOldStep)
+                        {
+                            switchToStep();
+                        }
+                    }
+                    catch (com.sun.star.lang.IllegalArgumentException exception)
+                    {
+                        exception.printStackTrace(System.err);
+                    }
+                }
+            });
 
             Helper.setUnoPropertyValue(oRoadmap, "Text", oWizardResource.getResText(UIConsts.RID_COMMON + 16));
         }
@@ -475,10 +479,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             // add a window listener, to know
             // if the user used "escape" key to
             // close the dialog.
-            xWindow.addWindowListener(guiEventListener);
-            String dialogName = (String) Helper.getUnoPropertyValue(xDialogModel, PropertyNames.PROPERTY_NAME);
-            guiEventListener.add(dialogName, EventNames.ACTION_PERFORMED, "windowHidden", this);
-
+            xWindow.addWindowListener(new XWindowListenerAdapter() {
+                @Override
+                public void windowHidden(EventObject event) {
+                    cancelWizard_1();
+                }
+            });
         }
         catch (java.lang.Exception jexception)
         {
@@ -730,11 +736,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     {
         cancelWizard();
         removeTerminateListener();
-    }
-
-    public void windowHidden()
-    {
-        cancelWizard_1();
     }
 
     public void notifyTermination(EventObject arg0)
