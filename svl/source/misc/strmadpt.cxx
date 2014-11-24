@@ -33,7 +33,8 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <svl/instrm.hxx>
 #include <svl/outstrm.hxx>
-#include <svl/strmadpt.hxx>
+
+#include <strmadpt.hxx>
 
 using namespace com::sun::star;
 

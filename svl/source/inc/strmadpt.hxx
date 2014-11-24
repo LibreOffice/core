@@ -20,12 +20,13 @@
 #ifndef INCLUDED_SVL_STRMADPT_HXX
 #define INCLUDED_SVL_STRMADPT_HXX
 
-#include <svl/svldllapi.h>
+#include <sal/config.h>
+
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <tools/stream.hxx>
 
 
-class SVL_DLLPUBLIC SvOutputStreamOpenLockBytes: public SvOpenLockBytes
+class SvOutputStreamOpenLockBytes: public SvOpenLockBytes
 {
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
         m_xOutputStream;

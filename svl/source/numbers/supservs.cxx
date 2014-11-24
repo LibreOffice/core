@@ -27,10 +27,10 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
-#include <svl/strmadpt.hxx>
 #include <svl/instrm.hxx>
 
 #include <registerservices.hxx>
+#include <strmadpt.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
