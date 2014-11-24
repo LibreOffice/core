@@ -128,16 +128,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
 
     if( !aBmp.IsEmpty() )
     {
-        SalTwoRect aPosAry;
-
-        aPosAry.mnSrcX = rSrcPtPixel.X();
-        aPosAry.mnSrcY = rSrcPtPixel.Y();
-        aPosAry.mnSrcWidth = rSrcSizePixel.Width();
-        aPosAry.mnSrcHeight = rSrcSizePixel.Height();
-        aPosAry.mnDestX = ImplLogicXToDevicePixel( rDestPt.X() );
-        aPosAry.mnDestY = ImplLogicYToDevicePixel( rDestPt.Y() );
-        aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
-        aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+        SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
+                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
+                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
         if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
@@ -422,19 +416,12 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                 {
                     if ( ((OutputDevice*)&aVDev)->mpGraphics || ((OutputDevice*)&aVDev)->AcquireGraphics() )
                     {
-                        SalTwoRect aPosAry;
-
-                        aPosAry.mnSrcX = nX;
-                        aPosAry.mnSrcY = nY;
-                        aPosAry.mnSrcWidth = nWidth;
-                        aPosAry.mnSrcHeight = nHeight;
-                        aPosAry.mnDestX = ( aRect.Left() < mnOutOffX ) ? ( mnOutOffX - aRect.Left() ) : 0L;
-                        aPosAry.mnDestY = ( aRect.Top() < mnOutOffY ) ? ( mnOutOffY - aRect.Top() ) : 0L;
-                        aPosAry.mnDestWidth = nWidth;
-                        aPosAry.mnDestHeight = nHeight;
-
                         if ( (nWidth > 0) && (nHeight > 0) )
                         {
+                            SalTwoRect aPosAry(nX, nY, nWidth, nHeight,
+                                              (aRect.Left() < mnOutOffX) ? (mnOutOffX - aRect.Left()) : 0L,
+                                              (aRect.Top() < mnOutOffY) ? (mnOutOffY - aRect.Top()) : 0L,
+                                              nWidth, nHeight);
                             (((OutputDevice*)&aVDev)->mpGraphics)->CopyBits( aPosAry, mpGraphics, this, this );
                         }
                         else
@@ -495,16 +482,10 @@ void OutputDevice::DrawDeviceBitmap( const Point& rDestPt, const Size& rDestSize
     }
     else if (!!rBitmapEx)
     {
-        SalTwoRect aPosAry;
-
-        aPosAry.mnSrcX = rSrcPtPixel.X();
-        aPosAry.mnSrcY = rSrcPtPixel.Y();
-        aPosAry.mnSrcWidth = rSrcSizePixel.Width();
-        aPosAry.mnSrcHeight = rSrcSizePixel.Height();
-        aPosAry.mnDestX = ImplLogicXToDevicePixel( rDestPt.X() );
-        aPosAry.mnDestY = ImplLogicYToDevicePixel( rDestPt.Y() );
-        aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
-        aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+        SalTwoRect aPosAry(rSrcPtPixel.X(), rSrcPtPixel.Y(), rSrcSizePixel.Width(), rSrcSizePixel.Height(),
+                           ImplLogicXToDevicePixel(rDestPt.X()), ImplLogicYToDevicePixel(rDestPt.Y()),
+                           ImplLogicWidthToDevicePixel(rDestSize.Width()),
+                           ImplLogicHeightToDevicePixel(rDestSize.Height()));
 
         const sal_uLong nMirrFlags = AdjustTwoRect(aPosAry, rBitmapEx.GetSizePixel());
 
@@ -1375,18 +1356,13 @@ Bitmap OutputDevice::BlendBitmap(
         bool bFastBlend = false;
         if( pP && pA && pB )
         {
-            SalTwoRect aTR;
-            aTR.mnSrcX      = aBmpRect.Left();
-            aTR.mnSrcY      = aBmpRect.Top();
-            aTR.mnSrcWidth  = aBmpRect.GetWidth();
-            aTR.mnSrcHeight = aBmpRect.GetHeight();
-            aTR.mnDestX     = nOffX;
-            aTR.mnDestY     = nOffY;
-            aTR.mnDestWidth = aOutSz.Width();
-            aTR.mnDestHeight= aOutSz.Height();
-
             if( !bHMirr && !bVMirr )
+            {
+                SalTwoRect aTR(aBmpRect.Left(), aBmpRect.Top(), aBmpRect.GetWidth(), aBmpRect.GetHeight(),
+                               nOffX, nOffY, aOutSz.Width(), aOutSz.Height());
+
                 bFastBlend = ImplFastBitmapBlending( *pB,*pP,*pA, aTR );
+            }
         }
 
         if( pP && pA && pB && !bFastBlend )

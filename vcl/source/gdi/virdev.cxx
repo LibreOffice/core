@@ -338,7 +338,6 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
             SalGraphics* pGraphics = pNewVirDev->AcquireGraphics();
             if ( pGraphics )
             {
-                SalTwoRect aPosAry;
                 long nWidth;
                 long nHeight;
                 if ( mnOutWidth < nNewWidth )
@@ -349,15 +348,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                     nHeight = mnOutHeight;
                 else
                     nHeight = nNewHeight;
-                aPosAry.mnSrcX       = 0;
-                aPosAry.mnSrcY       = 0;
-                aPosAry.mnSrcWidth   = nWidth;
-                aPosAry.mnSrcHeight  = nHeight;
-                aPosAry.mnDestX      = 0;
-                aPosAry.mnDestY      = 0;
-                aPosAry.mnDestWidth  = nWidth;
-                aPosAry.mnDestHeight = nHeight;
-
+                SalTwoRect aPosAry(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight);
                 pGraphics->CopyBits( aPosAry, mpGraphics, this, this );
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ReleaseGraphics();

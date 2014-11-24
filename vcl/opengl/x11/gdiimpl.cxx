@@ -159,17 +159,13 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixm
     GLXFBConfig pFbConfig;
     GLXPixmap pGlxPixmap;
     GLXPixmap pGlxMask;
-    SalTwoRect aPosAry;
     bool bInverted;
 
     SAL_INFO( "vcl.opengl", "RenderPixmapToScreen (" << nX << " " << nY << ")" );
 
-    aPosAry.mnSrcX = 0;
-    aPosAry.mnSrcY = 0;
-    aPosAry.mnDestX = nX;
-    aPosAry.mnDestY = nY;
-    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = pPixmap->GetWidth();
-    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = pPixmap->GetHeight();
+    const long nWidth = pPixmap->GetWidth();
+    const long nHeight = pPixmap->GetHeight();
+    SalTwoRect aPosAry(0, 0, nWidth, nHeight, nX, nY, nWidth, nHeight);
 
     PreDraw();
     //glClear( GL_COLOR_BUFFER_BIT );

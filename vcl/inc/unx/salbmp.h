@@ -161,8 +161,6 @@ private:
     long            mnDepth;
     SalX11Screen    mnXScreen;
 
-                    ImplSalDDB() : mnXScreen(0) {}
-
     static void     ImplDraw(
                         Drawable aSrcDrawable,
                         long nSrcDrawableDepth,
