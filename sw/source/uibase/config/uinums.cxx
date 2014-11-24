@@ -264,10 +264,10 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
                     pFmt->SetFmtAttr( aItems[ --n ] );
         }
     }
-    ((SwNumFmt&)aFmt).SetCharFmt( pFmt );
+    const_cast<SwNumFmt&>(aFmt).SetCharFmt( pFmt );
     rNew = aFmt;
     if( pFmt )
-        ((SwNumFmt&)aFmt).SetCharFmt( 0 );
+        const_cast<SwNumFmt&>(aFmt).SetCharFmt( 0 );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

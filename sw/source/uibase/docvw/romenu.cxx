@@ -68,7 +68,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
         {
             CheckItem ( nMID, !_pItem->ISA(SfxVoidItem) &&
                             _pItem->ISA(SfxBoolItem) &&
-                            ((SfxBoolItem*)_pItem)->GetValue());
+                            static_cast<SfxBoolItem*>(_pItem)->GetValue());
             //remove full screen entry when not in full screen mode
             if( SID_WIN_FULLSCREEN == nSID && !IsItemChecked(SID_WIN_FULLSCREEN) )
                 EnableItem(nMID, false);

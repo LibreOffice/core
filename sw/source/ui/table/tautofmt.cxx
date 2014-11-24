@@ -254,7 +254,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
     SwTableAutoFmt* pData  = &(*pTableTbl)[nIndex];
-    bool bCheck = ((CheckBox*)pBtn)->IsChecked(), bDataChgd = true;
+    bool bCheck = static_cast<CheckBox*>(pBtn)->IsChecked(), bDataChgd = true;
 
     if( pBtn == m_pBtnNumFormat )
         pData->SetValueFormat( bCheck );

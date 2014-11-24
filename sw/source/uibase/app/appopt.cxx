@@ -388,7 +388,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
     {
-        ((SwShadowCursorItem*)pItem)->FillViewOptions( aViewOpt );
+        static_cast<const SwShadowCursorItem*>(pItem)->FillViewOptions( aViewOpt );
         if(pBindings)
             pBindings->Invalidate(FN_SHADOWCURSOR);
     }

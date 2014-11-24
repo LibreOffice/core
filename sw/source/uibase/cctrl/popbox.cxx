@@ -52,12 +52,12 @@ SwHelpToolBox::~SwHelpToolBox() {}
 
 sal_Int8 SwHelpToolBox::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    return ((SwNavigationPI*)GetParent())->AcceptDrop( rEvt );
+    return static_cast<SwNavigationPI*>(GetParent())->AcceptDrop( rEvt );
 }
 
 sal_Int8 SwHelpToolBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    return ((SwNavigationPI*)GetParent())->ExecuteDrop( rEvt );
+    return static_cast<SwNavigationPI*>(GetParent())->ExecuteDrop( rEvt );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -72,7 +72,7 @@ void PageNumNotify( SwViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if ( pSfxVwSh && pSfxVwSh->ISA(SwView) &&
-         ((SwView*)pSfxVwSh)->GetCurShell() )
+         static_cast<SwView*>(pSfxVwSh)->GetCurShell() )
             ((SwView *)pSfxVwSh)->UpdatePageNums(nPhyNum, nVirtNum, rPgStr);
 }
 

@@ -412,7 +412,7 @@ void SwDocShell::AddLink()
         mpDoc->acquire();
     mpDoc->SetDocShell( this );      // set the DocShell-Pointer for Doc
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    ((SwXTextDocument*)xDoc.get())->Reactivate(this);
+    static_cast<SwXTextDocument*>(xDoc.get())->Reactivate(this);
 
     SetPool(&mpDoc->GetAttrPool());
 
@@ -441,7 +441,7 @@ void SwDocShell::RemoveLink()
 {
     // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    ((SwXTextDocument*)xDoc.get())->Invalidate();
+    static_cast<SwXTextDocument*>(xDoc.get())->Invalidate();
     aFinishedTimer.Stop();
     if (mpDoc)
     {
@@ -462,13 +462,13 @@ void SwDocShell::InvalidateModel()
 {
     // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    ((SwXTextDocument*)xDoc.get())->Invalidate();
+    static_cast<SwXTextDocument*>(xDoc.get())->Invalidate();
 }
 void SwDocShell::ReactivateModel()
 {
     // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
-    ((SwXTextDocument*)xDoc.get())->Reactivate(this);
+    static_cast<SwXTextDocument*>(xDoc.get())->Reactivate(this);
 }
 
 // Load, Default-Format

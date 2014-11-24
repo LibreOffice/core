@@ -160,7 +160,7 @@ void SwEditWin::DropCleanup()
     bNoInterrupt = false;
     if ( m_bOldIdleSet )
     {
-        ((SwViewOption*)rSh.GetViewOptions())->SetIdle( m_bOldIdle );
+        const_cast<SwViewOption*>(rSh.GetViewOptions())->SetIdle( m_bOldIdle );
         m_bOldIdleSet = false;
     }
     if ( m_pUserMarker )

@@ -673,7 +673,7 @@ inline long SwView::GetYScroll() const
 
 inline const SwDocShell *SwView::GetDocShell() const
 {
-    return ((SwView*)this)->GetDocShell();
+    return const_cast<SwView*>(this)->GetDocShell();
 }
 
 SfxTabPage* CreatePrintOptionsPage( vcl::Window *pParent,

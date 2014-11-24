@@ -956,7 +956,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                 while (pTmpFrm)     // Look for Preview
                 {
                     if ( PTR_CAST(SwView, pTmpFrm->GetViewShell()) &&
-                         ((SwView*)pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
+                         static_cast<SwView*>(pTmpFrm->GetViewShell())->GetWrtShell().GetViewOptions()->getBrowseMode() )
                     {
                         bDisable = true;
                         break;
@@ -1120,7 +1120,7 @@ void SwDocShell::LoadingFinished()
     {
         SfxViewShell* pShell = pVFrame->GetViewShell();
         if(PTR_CAST(SwSrcView, pShell))
-            ((SwSrcView*)pShell)->Load(this);
+            static_cast<SwSrcView*>(pShell)->Load(this);
     }
 
     // #i38810#
@@ -1294,7 +1294,7 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
     IDocumentRedlineAccess* pIDRA = mpWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
     if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
-        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() > 0))
+        && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswd.getLength() > 0))
         return false;
 
     bool bRes = false;
@@ -1329,7 +1329,7 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     IDocumentRedlineAccess* pIDRA = mpWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
     if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
-        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswdHash.getLength() != 0))
+        && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswdHash.getLength() != 0))
         return false;
     rPasswordHash = aPasswdHash;
     bRes = true;

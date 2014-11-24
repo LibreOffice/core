@@ -288,8 +288,8 @@ SfxPoolItem* SwShadowCursorItem::Clone( SfxItemPool* ) const
 
 bool SwShadowCursorItem::operator==( const SfxPoolItem& rCmp ) const
 {
-    return  IsOn() == ((SwShadowCursorItem&)rCmp).IsOn() &&
-            GetMode() == ((SwShadowCursorItem&)rCmp).GetMode();
+    return  IsOn() == static_cast<const SwShadowCursorItem&>(rCmp).IsOn() &&
+            GetMode() == static_cast<const SwShadowCursorItem&>(rCmp).GetMode();
 }
 
 void SwShadowCursorItem::operator=( const SwShadowCursorItem& rCpy )

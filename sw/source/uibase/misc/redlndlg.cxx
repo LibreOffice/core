@@ -78,7 +78,7 @@ bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
     bool bRet;
 
     if ((bRet = SwChildWinWrapper::ReInitDlg(pDocSh)))  // update immediately, doc switch!
-        ((SwModelessRedlineAcceptDlg*)GetWindow())->Activate();
+        static_cast<SwModelessRedlineAcceptDlg*>(GetWindow())->Activate();
 
     return bRet;
 }
@@ -846,7 +846,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
 sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry ) const
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-    return pSh->FindRedlineOfData( *((SwRedlineDataParent*)((RedlinData *)
+    return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(((RedlinData *)
                                     rEntry.GetUserData())->pData)->pData );
 }
 

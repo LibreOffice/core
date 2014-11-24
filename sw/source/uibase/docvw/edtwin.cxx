@@ -996,7 +996,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
                         RES_PROTECT, RES_PROTECT,
                         RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW, 0);
         rSh.GetFlyFrmAttr( aSet );
-        RndStdIds eAnchorId = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
+        RndStdIds eAnchorId = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
         Size aSnap;
         bool bHuge(MOVE_LEFT_HUGE == nDir ||
             MOVE_UP_HUGE == nDir ||
@@ -1035,7 +1035,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
             SwFmtVertOrient aVert( (SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT) );
             const bool bFollowTextFlow =
                     static_cast<const SwFmtFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
-            const SwPosition* pToCharCntntPos = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetCntntAnchor();
+            const SwPosition* pToCharCntntPos = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetCntntAnchor();
             rSh.CalcBoundRect( aBoundRect, eAnchorId,
                                text::RelOrientation::FRAME, aVert.GetRelationOrient(),
                                pToCharCntntPos, bFollowTextFlow,
@@ -1292,7 +1292,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
                         // switch snapping off
                         if(!bWasNoSnap)
-                            ((SdrDragStat&)rDragStat).SetNoSnap(true);
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap(true);
                         if(bWasSnapEnabled)
                             pSdrView->SetSnapEnabled(false);
 
@@ -1302,7 +1302,7 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
                         // restore snap
                         if(!bWasNoSnap)
-                            ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                            const_cast<SdrDragStat&>(rDragStat).SetNoSnap(bWasNoSnap);
                         if(bWasSnapEnabled)
                             pSdrView->SetSnapEnabled(bWasSnapEnabled);
                     }
@@ -2277,7 +2277,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             {
                                 EnterDrawTextMode(pObj->GetLogicRect().Center());
                                 if ( m_rView.GetCurShell()->ISA(SwDrawTextShell) )
-                                    ((SwDrawTextShell*)m_rView.GetCurShell())->Init();
+                                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
                                 rSh.GetDrawView()->KeyInput( rKEvt, this );
                             }
                         }
@@ -2320,7 +2320,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             {
                 EnterDrawTextMode(pObj->GetLogicRect().Center());
                 if ( m_rView.GetCurShell()->ISA(SwDrawTextShell) )
-                    ((SwDrawTextShell*)m_rView.GetCurShell())->Init();
+                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
             }
             eKeyState = KS_End;
         }
@@ -2330,7 +2330,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             const SdrHdlList& rHdlList = rSh.GetDrawView()->GetHdlList();
             bool bForward(!aKeyEvent.GetKeyCode().IsShift());
 
-            ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+            const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl(bForward);
             eKeyState = KS_End;
         }
         break;
@@ -3349,7 +3349,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                 RstMBDownFlags();
                                 EnterDrawTextMode(aDocPos);
                                 if ( m_rView.GetCurShell()->ISA(SwDrawTextShell) )
-                                    ((SwDrawTextShell*)m_rView.GetCurShell())->Init();
+                                    static_cast<SwDrawTextShell*>(m_rView.GetCurShell())->Init();
                                 return;
                             }
                         }
@@ -5203,7 +5203,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         {
                             if ( pMenu )
                             {
-                                sal_uInt16 nExecId = ((PopupMenu*)pMenu)->Execute(this, aPixPos);
+                                sal_uInt16 nExecId = static_cast<PopupMenu*>(pMenu)->Execute(this, aPixPos);
                                 if( !::ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu), *m_rView.GetViewFrame(), nExecId ))
                                     pROPopup->Execute(this, nExecId);
                             }

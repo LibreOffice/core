@@ -415,7 +415,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     nMask = ((const SfxUInt16Item*)pItem)->GetValue();
                 if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_WRTSHELL,
                     false, &pItem ))
-                    pActShell = pShell = (SwWrtShell*)((SwPtrItem*)pItem)->GetValue();
+                    pActShell = pShell = (SwWrtShell*)static_cast<const SwPtrItem*>(pItem)->GetValue();
 
                 if( nSlot == SID_STYLE_UPDATE_BY_EXAMPLE )
                 {
@@ -1258,7 +1258,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
         // of the template, update all the Source's
         // FixFields once.
         if(!bPreserveCurrentDocument)
-            ((SwDocShell&)rSource).mpDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
+            static_cast<SwDocShell&>(rSource).mpDoc->getIDocumentFieldsAccess().SetFixFields(false, NULL);
         if( mpWrtShell )
         {
             // rhbz#818557, fdo#58893: EndAllAction will call SelectShell(),
@@ -1267,13 +1267,13 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocu
             // setting bNoInterrupt appears to avoid the problem.
             ::comphelper::FlagRestorationGuard g(bNoInterrupt, true);
             mpWrtShell->StartAllAction();
-            mpDoc->ReplaceStyles( *((SwDocShell&)rSource).mpDoc );
+            mpDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).mpDoc );
             mpWrtShell->EndAllAction();
         }
         else
         {
             bool bModified = mpDoc->getIDocumentState().IsModified();
-            mpDoc->ReplaceStyles( *((SwDocShell&)rSource).mpDoc );
+            mpDoc->ReplaceStyles( *static_cast<SwDocShell&>(rSource).mpDoc );
             if( !bModified && mpDoc->getIDocumentState().IsModified() && !mpView )
             {
                 // the View is created later, but overwrites the Modify-Flag.

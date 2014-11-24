@@ -257,7 +257,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        sal_uInt32 nId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uInt32 nId = static_cast<const SfxEventHint&>(rHint).GetEventId();
         if ( nId == SW_EVENT_LAYOUT_FINISHED )
         {
             if ( !mbWaitingForCalcRects && !mvPostItFlds.empty())
@@ -269,7 +269,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         switch ( nId )
         {
             case SFX_HINT_MODECHANGED:

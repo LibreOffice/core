@@ -240,7 +240,7 @@ SwTransferable::~SwTransferable()
     // the DDELink still needs the WrtShell!
     if( refDdeLink.Is() )
     {
-        ((SwTrnsfrDdeLink*)&refDdeLink)->Disconnect( true );
+        static_cast<SwTrnsfrDdeLink*>(&refDdeLink)->Disconnect( true );
         refDdeLink.Clear();
     }
 
@@ -330,8 +330,8 @@ uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64&
         for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
             if( ND_OLENODE == pNd->GetNodeType() )
             {
-                xObj = ((SwOLENode*)pNd)->GetOLEObj().GetOleRef();
-                nAspect = ((SwOLENode*)pNd)->GetAspect();
+                xObj = static_cast<SwOLENode*>(pNd)->GetOLEObj().GetOleRef();
+                nAspect = static_cast<SwOLENode*>(pNd)->GetAspect();
                 break;
             }
     }
@@ -346,7 +346,7 @@ const Graphic* SwTransferable::FindOLEReplacementGraphic() const
         for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
             if( ND_OLENODE == pNd->GetNodeType() )
             {
-                return ((SwOLENode*)pNd)->GetGraphic();
+                return static_cast<SwOLENode*>(pNd)->GetGraphic();
             }
     }
 
@@ -463,7 +463,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
             if( pWrtShell->GetContentAtPos( aPos, aCntntAtPos, bSelect ) )
             {
                 pBkmk = new INetBookmark(
-                        ((SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr)->GetValue(),
+                        static_cast<const SwFmtINetFmt*>(aCntntAtPos.aFnd.pAttr)->GetValue(),
                         aCntntAtPos.sStr );
                 eBufferType = TRNSFR_INETFLD;
                 if( bSelect )
@@ -2118,9 +2118,9 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             pTyp = rWrtShell.GetFldType( j );
             if( RES_DDEFLD == pTyp->Which() )
             {
-                OUString sTmp( ((SwDDEFieldType*)pTyp)->GetCmd() );
+                OUString sTmp( static_cast<SwDDEFieldType*>(pTyp)->GetCmd() );
                 if( rColl.isEqual( sTmp, aCmd ) &&
-                    sfx2::LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
+                    sfx2::LINKUPDATE_ALWAYS == static_cast<SwDDEFieldType*>(pTyp)->GetType() )
                 {
                     aName = pTyp->GetName();
                     bDoublePaste = true;

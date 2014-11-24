@@ -194,7 +194,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
         //is maybe only a SwViewShell
         pSh->StartAction();
         pSh->ApplyViewOptions( *xViewOpt );
-        ((SwWrtShell*)pSh)->SetReadOnlyAvailable(xViewOpt->IsCursorInProtectedArea());
+        static_cast<SwWrtShell*>(pSh)->SetReadOnlyAvailable(xViewOpt->IsCursorInProtectedArea());
         pSh->EndAction();
     }
     if ( pSh->GetViewOptions()->IsReadonly() != bReadonly )

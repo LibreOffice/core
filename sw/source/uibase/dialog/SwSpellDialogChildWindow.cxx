@@ -704,7 +704,7 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
                 if(pSdrView && pSdrView->AreObjectsMarked() &&
                     pSdrView->GetHdlList().GetFocusHdl())
                 {
-                    ((SdrHdlList&)pSdrView->GetHdlList()).ResetFocusHdl();
+                    const_cast<SdrHdlList&>(pSdrView->GetHdlList()).ResetFocusHdl();
                 }
                 else
                 {

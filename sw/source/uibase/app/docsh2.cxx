@@ -184,7 +184,7 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
         {
             const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
             if ( SVX_ZOOM_PERCENT != eType)
-                ((SwView*)GetView())->SetZoom( eType );
+                static_cast<SwView*>(GetView())->SetZoom( eType );
         }
         pTempView->InvalidateBorder();
         pTempView->SetNewWindowAllowed(!bSet);
@@ -220,7 +220,7 @@ static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVB
     if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         uno::Sequence< uno::Any > aArgs;
-        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uLong nEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
         switch( nEventId )
         {
             case SFX_EVENT_CREATEDOC:
@@ -249,7 +249,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
         // switch for more actions
-        switch( ((SfxSimpleHint&) rHint).GetId() )
+        switch( static_cast<const SfxSimpleHint&>( rHint).GetId() )
         {
             case SFX_HINT_TITLECHANGED:
                 if( GetMedium() )
@@ -258,7 +258,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
     else if( dynamic_cast<const SfxEventHint*>(&rHint) &&
-        ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
+        static_cast<const SfxEventHint&>( rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
     {
         // #i38126# - own action id
         nAction = 3;
@@ -429,7 +429,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( pArgs && SfxItemState::SET ==
                     pArgs->GetItemState( SID_PRINTPREVIEW, false, &pItem ))
-                    bSet = ((SfxBoolItem*)pItem)->GetValue();
+                    bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else
                     bSet = !bCurrent;
 
@@ -1100,7 +1100,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState( nWhich , false, &pItem ))
             {
                 OSL_ENSURE(pItem->ISA(SfxUInt16Item), "wrong Item");
-                sal_uInt16 nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
+                sal_uInt16 nYear2K = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 // iterate over Views and put the State to FormShells
 
                 SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( this );
@@ -1146,7 +1146,7 @@ void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHel
     if ( rHint.ISA( SfxEventHint ) )
     {
         uno::Sequence< uno::Any > aArgs;
-        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uLong nEventId = static_cast<SfxEventHint&>(rHint).GetEventId();
         switch( nEventId )
         {
             case SFX_EVENT_CREATEDOC:
@@ -1338,7 +1338,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     // now also the UNO-Model has to be informed about the new Doc #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();
-    ((SwXTextDocument*)pxDoc)->InitNewDoc();
+    static_cast<SwXTextDocument*>(pxDoc)->InitNewDoc();
 
     AddLink();
     //#116402# update font list when new document is created
@@ -1533,7 +1533,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             const SfxPoolItem* pItem;
             if( ( SfxItemState::SET == pMed->GetItemSet()->GetItemState(
                                             SID_VERSION, false, &pItem ) )
-                    ? (nVersion == ((SfxInt16Item*)pItem)->GetValue())
+                    ? (nVersion == static_cast<const SfxInt16Item*>(pItem)->GetValue())
                     : !nVersion )
             {
                 // Found, thus return

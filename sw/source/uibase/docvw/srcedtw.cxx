@@ -393,7 +393,7 @@ void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
     if ( pTextView )
     {
         pTextView->MouseButtonUp( rEvt );
-        SfxBindings& rBindings = ((SwSrcEditWindow*)GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
+        SfxBindings& rBindings = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_TABLE_CELL );
         rBindings.Invalidate( SID_CUT );
         rBindings.Invalidate( SID_COPY );
@@ -421,7 +421,7 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
             const CommandWheelData* pWData = rCEvt.GetWheelData();
             if( !pWData || CommandWheelMode::ZOOM != pWData->GetMode() )
             {
-                ((SwSrcEditWindow*)GetParent())->HandleWheelCommand( rCEvt );
+                static_cast<SwSrcEditWindow*>(GetParent())->HandleWheelCommand( rCEvt );
             }
         }
         break;
@@ -442,7 +442,7 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     if(bChange)
         bDone = pTextView->KeyInput( rKEvt );
 
-    SfxBindings& rBindings = ((SwSrcEditWindow*)GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
+    SfxBindings& rBindings = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
     if ( !bDone )
     {
         if ( !SfxViewShell::Current()->KeyInput( rKEvt ) )

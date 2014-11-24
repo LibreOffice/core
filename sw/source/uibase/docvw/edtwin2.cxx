@@ -124,7 +124,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         if( pSdrView )
         {
             SdrPageView* pPV = pSdrView->GetSdrPageView();
-            SwDPage* pPage = pPV ? ((SwDPage*)pPV->GetPage()) : 0;
+            SwDPage* pPage = pPV ? static_cast<SwDPage*>(pPV->GetPage()) : 0;
             bContinue = pPage && pPage->RequestHelp(this, pSdrView, rEvt);
         }
     }
@@ -152,13 +152,13 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             {
             case SwContentAtPos::SW_TABLEBOXFML:
                 sTxt = "= ";
-                sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
+                sTxt += static_cast<const SwTblBoxFormula*>(aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
 #ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
                 sTxt = OStringToOUString(OString::number(
-                            ((SwTblBoxValue*)aCntntAtPos.aFnd.pAttr)->GetValue()),
+                            static_cast<const SwTblBoxValue*>(aCntntAtPos.aFnd.pAttr)->GetValue()),
                             osl_getThreadTextEncoding());
             }
             break;
@@ -169,7 +169,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
             case SwContentAtPos::SW_INETATTR:
             {
-                sTxt = ((SfxStringItem*)aCntntAtPos.aFnd.pAttr)->GetValue();
+                sTxt = static_cast<const SfxStringItem*>(aCntntAtPos.aFnd.pAttr)->GetValue();
                 sTxt = URIHelper::removePassword( sTxt,
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
@@ -298,9 +298,9 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case RES_GETEXPFLD:
                         {
                             sal_uInt16 nOldSubType = pFld->GetSubType();
-                            ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
+                            const_cast<SwField*>(pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
                             sTxt = pFld->ExpandField(true);
-                            ((SwField*)pFld)->SetSubType(nOldSubType);
+                            const_cast<SwField*>(pFld)->SetSubType(nOldSubType);
                         }
                         break;
 
@@ -350,7 +350,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 }
                                 else
                                 {
-                                    sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
+                                    sTxt = static_cast<const SwGetRefField*>(pFld)->GetSetRefName();
                                 }
                             }
                         }

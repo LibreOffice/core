@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 {
-    *((SwViewOption*)this) = rCopy;
+    *static_cast<SwViewOption*>(this) = rCopy;
 }
 
 SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :

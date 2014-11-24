@@ -466,18 +466,18 @@ bool SwFldMgr::GetSubTypes(sal_uInt16 nTypeId, std::vector<OUString>& rToFill)
                        (nTypeId == TYP_USERFLD && nWhich == RES_USERFLD) ||
 
                        (nTypeId == TYP_GETFLD && nWhich == RES_SETEXPFLD &&
-                        !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+                        !(static_cast<SwSetExpFieldType*>(pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
 
                        (nTypeId == TYP_SETFLD && nWhich == RES_SETEXPFLD &&
-                        !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+                        !(static_cast<SwSetExpFieldType*>(pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
 
                        (nTypeId == TYP_SEQFLD && nWhich == RES_SETEXPFLD  &&
-                       (((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
+                       (static_cast<SwSetExpFieldType*>(pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ)) ||
 
                        ((nTypeId == TYP_INPUTFLD || nTypeId == TYP_FORMELFLD) &&
                          (nWhich == RES_USERFLD ||
                           (nWhich == RES_SETEXPFLD &&
-                          !(((SwSetExpFieldType*)pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
+                          !(static_cast<SwSetExpFieldType*>(pFldType)->GetType() & nsSwGetSetExpType::GSE_SEQ))) ) )
                     {
                         rToFill.push_back(pFldType->GetName());
                     }
@@ -853,7 +853,7 @@ bool SwFldMgr::InsertFld(
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
-            ((SwChapterField*)pFld)->SetLevel((sal_uInt8)nByte);
+            static_cast<SwChapterField*>(pFld)->SetLevel((sal_uInt8)nByte);
             break;
         }
 
@@ -888,7 +888,7 @@ bool SwFldMgr::InsertFld(
 
             if( SVX_NUM_CHAR_SPECIAL == nFormatId &&
                 ( PG_PREV == nSubType || PG_NEXT == nSubType ) )
-                ((SwPageNumberField*)pFld)->SetUserString( rData.sPar2 );
+                static_cast<SwPageNumberField*>(pFld)->SetUserString( rData.sPar2 );
             break;
         }
 
@@ -1314,8 +1314,8 @@ bool SwFldMgr::InsertFld(
             OUString* pArray = aEntries.getArray();
             for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
                 pArray[nToken] = rData.sPar2.getToken(nToken, DB_DELIM);
-            ((SwDropDownField*)pFld)->SetItems(aEntries);
-            ((SwDropDownField*)pFld)->SetName(rData.sPar1);
+            static_cast<SwDropDownField*>(pFld)->SetItems(aEntries);
+            static_cast<SwDropDownField*>(pFld)->SetName(rData.sPar1);
         }
         break;
         default:
@@ -1345,7 +1345,7 @@ bool SwFldMgr::InsertFld(
         pCurShell->Right(CRSR_SKIP_CHARS, false, 1, false );
     }
     else if( bPageVar )
-        ((SwRefPageGetFieldType*)pCurShell->GetFldType( 0, RES_REFPAGEGETFLD ))->UpdateFlds();
+        static_cast<SwRefPageGetFieldType*>(pCurShell->GetFldType( 0, RES_REFPAGEGETFLD ))->UpdateFlds();
     else if( TYP_GETREFFLD == rData.nTypeId )
         pFld->GetTyp()->ModifyNotification( 0, 0 );
 
@@ -1413,19 +1413,19 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             nByte = std::max(sal_uInt16(1), nByte);
             nByte = std::min(nByte, sal_uInt16(MAXLEVEL));
             nByte -= 1;
-            ((SwChapterField*)pTmpFld)->SetLevel((sal_uInt8)nByte);
+            static_cast<SwChapterField*>(pTmpFld)->SetLevel((sal_uInt8)nByte);
             bSetPar2 = false;
             break;
         }
 
         case TYP_SCRIPTFLD:
-            ((SwScriptField*)pTmpFld)->SetCodeURL((bool)nFormat);
+            static_cast<SwScriptField*>(pTmpFld)->SetCodeURL((bool)nFormat);
             break;
 
         case TYP_NEXTPAGEFLD:
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
-                ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
+                static_cast<SwPageNumberField*>(pCurFld)->SetUserString( sPar2 );
                 sPar2 = "1";
             }
             else
@@ -1441,7 +1441,7 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         case TYP_PREVPAGEFLD:
             if( SVX_NUM_CHAR_SPECIAL == nFormat )
             {
-                ((SwPageNumberField*)pCurFld)->SetUserString( sPar2 );
+                static_cast<SwPageNumberField*>(pCurFld)->SetUserString( sPar2 );
                 sPar2 = "-1";
             }
             else
@@ -1463,10 +1463,10 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
         case TYP_GETREFFLD:
             {
                 bSetPar2 = false;
-                ((SwGetRefField*)pTmpFld)->SetSubType( (sal_uInt16)rPar2.toInt32() );
+                static_cast<SwGetRefField*>(pTmpFld)->SetSubType( (sal_uInt16)rPar2.toInt32() );
                 const sal_Int32 nPos = rPar2.indexOf( '|' );
                 if( nPos>=0 )
-                    ((SwGetRefField*)pTmpFld)->SetSeqNo( (sal_uInt16)rPar2.copy( nPos + 1 ).toInt32());
+                    static_cast<SwGetRefField*>(pTmpFld)->SetSeqNo( (sal_uInt16)rPar2.copy( nPos + 1 ).toInt32());
             }
             break;
         case TYP_DROPDOWN:
@@ -1476,8 +1476,8 @@ void SwFldMgr::UpdateCurFld(sal_uLong nFormat,
             OUString* pArray = aEntries.getArray();
             for(sal_Int32 nToken = 0; nToken < nTokenCount; nToken++)
                 pArray[nToken] = sPar2.getToken(nToken, DB_DELIM);
-            ((SwDropDownField*)pTmpFld)->SetItems(aEntries);
-            ((SwDropDownField*)pTmpFld)->SetName(sPar1);
+            static_cast<SwDropDownField*>(pTmpFld)->SetItems(aEntries);
+            static_cast<SwDropDownField*>(pTmpFld)->SetName(sPar1);
             bSetPar1 = bSetPar2 = false;
         }
         break;
@@ -1705,7 +1705,7 @@ Reference<XNumberingTypeInfo> SwFldMgr::GetNumberingInfo() const
     {
         Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
         Reference<XDefaultNumberingProvider> xDefNum = text::DefaultNumberingProvider::create(xContext);
-        ((SwFldMgr*)this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
+        const_cast<SwFldMgr*>(this)->xNumberingInfo = Reference<XNumberingTypeInfo>(xDefNum, UNO_QUERY);
     }
     return xNumberingInfo;
 }

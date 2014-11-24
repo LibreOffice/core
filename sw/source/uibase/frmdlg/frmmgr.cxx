@@ -142,8 +142,8 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
             SfxItemSet aGetSet( *m_aSet.GetPool(), RES_ANCHOR, RES_ANCHOR );
             if( m_pOwnSh->GetFlyFrmAttr( aGetSet ) && 1 == aGetSet.Count() &&
                 SfxItemState::SET == aGetSet.GetItemState( RES_ANCHOR, false, &pGItem )
-                && ((SwFmtAnchor*)pGItem)->GetAnchorId() ==
-                   ((SwFmtAnchor*)pItem)->GetAnchorId() )
+                && static_cast<const SwFmtAnchor*>(pGItem)->GetAnchorId() ==
+                   static_cast<const SwFmtAnchor*>(pItem)->GetAnchorId() )
                 m_aSet.ClearItem( RES_ANCHOR );
         }
 

@@ -348,14 +348,14 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
         else
         {
             boost::scoped_ptr<SfxPopupMenuManager> pMgr(SfxDispatcher::Popup(0, this,&rCEvt.GetMousePosPixel()));
-            ((PopupMenu*)pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTxtControl, Select) );
+            static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTxtControl, Select) );
 
             {
-                OUString aText = ((PopupMenu*)pMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
+                OUString aText = static_cast<PopupMenu*>(pMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
                 SwRewriter aRewriter;
                 aRewriter.AddRule(UndoArg1, mrSidebarWin.GetAuthor());
                 aText = aRewriter.Apply(aText);
-                ((PopupMenu*)pMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+                static_cast<PopupMenu*>(pMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
             }
 
             Point aPos;

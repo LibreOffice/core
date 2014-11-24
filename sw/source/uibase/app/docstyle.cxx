@@ -1007,7 +1007,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 // Set PageDesc - copy with earlier one - probably not
                 // necessary for setting the name. So here we allow a
                 // cast.
-                SwPageDesc aPageDesc(*((SwPageDesc*)pDesc));
+                SwPageDesc aPageDesc(*const_cast<SwPageDesc*>(pDesc));
                 const OUString aOldName(aPageDesc.GetName());
 
                 aPageDesc.SetName( rStr );
@@ -1042,7 +1042,7 @@ bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
                 else
                 {
                     // #i91400#
-                    ((SwNumRule*)pNumRule)->SetName( rStr, rDoc.getIDocumentListsAccess() );
+                    const_cast<SwNumRule*>(pNumRule)->SetName( rStr, rDoc.getIDocumentListsAccess() );
                     rDoc.getIDocumentState().SetModified();
 
                     bChg = true;
@@ -1240,7 +1240,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
                 }
 
                 OSL_ENSURE(pDesc, "No PageDescriptor");
-                ::PageDescToItemSet(*((SwPageDesc*)pDesc), aCoreSet);
+                ::PageDescToItemSet(*const_cast<SwPageDesc*>(pDesc), aCoreSet);
             }
             break;
 
@@ -1344,7 +1344,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 for(sal_uInt16 i = 0; i < COND_COMMAND_COUNT; i++)
                 {
                     SwCollCondition aCond( 0, pCmds[ i ].nCnd, pCmds[ i ].nSubCond );
-                    ((SwConditionTxtFmtColl*)pColl)->RemoveCondition( aCond );
+                    static_cast<SwConditionTxtFmtColl*>(pColl)->RemoveCondition( aCond );
                     const OUString sStyle = pCondItem->GetStyle( i );
                     if (sStyle.isEmpty())
                         continue;
@@ -1352,7 +1352,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     if (pFindFmt)
                     {
                         aCond.RegisterToFormat( *pFindFmt );
-                        ((SwConditionTxtFmtColl*)pColl)->InsertCondition( aCond );
+                        static_cast<SwConditionTxtFmtColl*>(pColl)->InsertCondition( aCond );
                     }
                 }
 
@@ -1406,7 +1406,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             const SfxPoolItem* pNumRuleItem = 0;
             if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE, false, &pNumRuleItem ) )
             {   // Setting a numbering rule?
-                const OUString sNumRule = ((SwNumRuleItem*)pNumRuleItem)->GetValue();
+                const OUString sNumRule = static_cast<const SwNumRuleItem*>(pNumRuleItem)->GetValue();
                 if (!sNumRule.isEmpty())
                 {
                     SwNumRule* pRule = rDoc.FindNumRulePtr( sNumRule );
@@ -1490,7 +1490,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 {
                 case SfxItemState::SET:
                 {
-                    SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
+                    SvxNumRule* pSetRule = static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule();
                     pSetRule->UnLinkGraphics();
                     SwNumRule aSetRule(*pNumRule);
                     aSetRule.SetSvxRule(*pSetRule, &rDoc);
@@ -2169,13 +2169,13 @@ void  SwDocStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
     case SFX_STYLE_FAMILY_PARA : pTmpFmt = pColl;       break;
     case SFX_STYLE_FAMILY_FRAME: pTmpFmt = pFrmFmt;     break;
     case SFX_STYLE_FAMILY_PAGE :
-        ((SwPageDesc*)pDesc)->SetPoolHelpId( nHId );
-        ((SwPageDesc*)pDesc)->SetPoolHlpFileId( nFileId );
+        const_cast<SwPageDesc*>(pDesc)->SetPoolHelpId( nHId );
+        const_cast<SwPageDesc*>(pDesc)->SetPoolHlpFileId( nFileId );
         break;
 
     case SFX_STYLE_FAMILY_PSEUDO:
-        ((SwNumRule*)pNumRule)->SetPoolHelpId( nHId );
-        ((SwNumRule*)pNumRule)->SetPoolHlpFileId( nFileId );
+        const_cast<SwNumRule*>(pNumRule)->SetPoolHelpId( nHId );
+        const_cast<SwNumRule*>(pNumRule)->SetPoolHlpFileId( nFileId );
         break;
 
     default:
@@ -2272,9 +2272,9 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
     {
         // deal with separately!
         SwPageDesc* pDestDsc =
-            (SwPageDesc*)((SwDocStyleSheet&)rTarget).GetPageDesc();
+            (SwPageDesc*)static_cast<SwDocStyleSheet&>(rTarget).GetPageDesc();
         SwPageDesc* pCpyDsc =
-            (SwPageDesc*)((SwDocStyleSheet&)rSource).GetPageDesc();
+            (SwPageDesc*)static_cast<SwDocStyleSheet&>(rSource).GetPageDesc();
         rDoc.CopyPageDesc( *pCpyDsc, *pDestDsc );
     }
     else
@@ -2286,23 +2286,23 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
         {
         case SFX_STYLE_FAMILY_CHAR :
             if( bSwSrcPool )
-                pSourceFmt = ((SwDocStyleSheet&)rSource).GetCharFmt();
-            pTargetFmt = ((SwDocStyleSheet&)rTarget).GetCharFmt();
+                pSourceFmt = static_cast<SwDocStyleSheet&>(rSource).GetCharFmt();
+            pTargetFmt = static_cast<SwDocStyleSheet&>(rTarget).GetCharFmt();
             break;
         case SFX_STYLE_FAMILY_PARA :
             if( bSwSrcPool )
-                pSourceFmt = ((SwDocStyleSheet&)rSource).GetCollection();
-            pTargetFmt = ((SwDocStyleSheet&)rTarget).GetCollection();
+                pSourceFmt = static_cast<SwDocStyleSheet&>(rSource).GetCollection();
+            pTargetFmt = static_cast<SwDocStyleSheet&>(rTarget).GetCollection();
             break;
         case SFX_STYLE_FAMILY_FRAME:
             if( bSwSrcPool )
-                pSourceFmt = ((SwDocStyleSheet&)rSource).GetFrmFmt();
-            pTargetFmt = ((SwDocStyleSheet&)rTarget).GetFrmFmt();
+                pSourceFmt = static_cast<SwDocStyleSheet&>(rSource).GetFrmFmt();
+            pTargetFmt = static_cast<SwDocStyleSheet&>(rTarget).GetFrmFmt();
             break;
         case SFX_STYLE_FAMILY_PAGE:
             {
                 SwPageDesc *pDesc = rDoc.FindPageDesc(
-                    ((SwDocStyleSheet&)rTarget).GetPageDesc()->GetName(),
+                    static_cast<SwDocStyleSheet&>(rTarget).GetPageDesc()->GetName(),
                     &nPgDscPos );
 
                 if( pDesc )
@@ -2331,7 +2331,7 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
                 rDoc.ChgPageDesc( nPgDscPos,
                                   rDoc.GetPageDesc(nPgDscPos) );
         }
-        ((SwDocStyleSheet&)rTarget).SetItemSet( rSource.GetItemSet() );
+        static_cast<SwDocStyleSheet&>(rTarget).SetItemSet( rSource.GetItemSet() );
     }
 }
 
@@ -2443,7 +2443,7 @@ bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
             mxStyleSheet->PresetName( rStyle );
             mxStyleSheet->PresetParent( rParent );
             if( SFX_STYLE_FAMILY_PARA == eFam )
-                mxStyleSheet->PresetFollow( ((SwTxtFmtColl*)pFmt)->
+                mxStyleSheet->PresetFollow( static_cast<SwTxtFmtColl*>(pFmt)->
                         GetNextTxtFmtColl().GetName() );
             else
                 mxStyleSheet->PresetFollow( OUString() );
@@ -2522,8 +2522,8 @@ SfxStyleSheetBase* SwDocStyleSheetPool::Find( const OUString& rName,
     if( pMod && !bSearchUsed )
     {
         const sal_uInt16 nId = SFX_STYLE_FAMILY_PAGE == eFam
-                        ? ((SwPageDesc*)pMod)->GetPoolFmtId()
-                        : ((SwFmt*)pMod)->GetPoolFmtId();
+                        ? static_cast<const SwPageDesc*>(pMod)->GetPoolFmtId()
+                        : static_cast<const SwFmt*>(pMod)->GetPoolFmtId();
 
         if( ( nSMask & ~SFXSTYLEBIT_USED) == SFXSTYLEBIT_USERDEF
             ? !(nId & USER_FMT)
@@ -2580,14 +2580,14 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
     // Delete current
     mxIterSheet->Reset();
 
-    SwDoc& rDoc = ((SwDocStyleSheetPool*)pBasePool)->GetDoc();
+    SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     const sal_uInt16 nSrchMask = nMask;
     const bool bIsSearchUsed = SearchUsed();
 
     bool bSearchHidden = ( nMask & SFXSTYLEBIT_HIDDEN );
     bool bOnlyHidden = nMask == SFXSTYLEBIT_HIDDEN;
 
-    const bool bOrganizer = ((SwDocStyleSheetPool*)pBasePool)->IsOrganizerMode();
+    const bool bOrganizer = static_cast<SwDocStyleSheetPool*>(pBasePool)->IsOrganizerMode();
     bool bAll = ( nSrchMask & SFXSTYLEBIT_ALL_VISIBLE ) == SFXSTYLEBIT_ALL_VISIBLE;
 
     if( nSearchFamily == SFX_STYLE_FAMILY_CHAR
@@ -2967,7 +2967,7 @@ void SwStyleSheetIterator::AppendStyleList(const ::std::vector<OUString>& rList,
                                             bool bTestUsed, bool bTestHidden, bool bOnlyHidden,
                                             sal_uInt16 nSection, char cType )
 {
-    SwDoc& rDoc = ((SwDocStyleSheetPool*)pBasePool)->GetDoc();
+    SwDoc& rDoc = static_cast<SwDocStyleSheetPool*>(pBasePool)->GetDoc();
     bool bUsed = false;
     for ( sal_uInt16 i=0; i < rList.size(); ++i )
     {

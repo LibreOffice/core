@@ -98,7 +98,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
             false, &pItem ) )
     {
-        const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
+        const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
             (const SfxBoolItem&)rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) );
 
@@ -145,7 +145,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
             false, &pItem ) )
     {
-        const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
+        const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn =
             (const SfxBoolItem&)rFooterSet.Get( SID_ATTR_PAGE_ON );
 

@@ -555,7 +555,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     //Text direction
     if( SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
-        sal_uIntPtr nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
+        sal_uIntPtr nVal  = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
         const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( (void*) nVal );
         m_pTextDirectionLB->SelectEntryPos( nPos );
         m_pTextDirectionLB->SaveValue();
@@ -1236,10 +1236,10 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
     else if (nId == m_nTextFlowId)
     {
-        ((SwTextFlowPage&)rPage).SetShell(pShell);
+        static_cast<SwTextFlowPage&>(rPage).SetShell(pShell);
         const sal_uInt16 eType = pShell->GetFrmType(0,true);
         if( !(FRMTYPE_BODY & eType) )
-            ((SwTextFlowPage&)rPage).DisablePageBreak();
+            static_cast<SwTextFlowPage&>(rPage).DisablePageBreak();
     }
 }
 

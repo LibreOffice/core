@@ -108,9 +108,9 @@ public:
     virtual ~SwInputChild();
     SFX_DECL_CHILDWINDOW_WITHID( SwInputChild );
     void            SetFormula( const OUString& rFormula, bool bDelSel = true )
-                        { ((SwInputWindow*)pWindow)->SetFormula(
+                        { static_cast<SwInputWindow*>(pWindow)->SetFormula(
                                     rFormula, bDelSel ); }
-    const SwView*   GetView() const{return ((SwInputWindow*)pWindow)->GetView();}
+    const SwView*   GetView() const{return static_cast<SwInputWindow*>(pWindow)->GetView();}
 
 };
 
