@@ -31,32 +31,23 @@ cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface()
 
 void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
 {
+    // XXX: lfrb: GLES 2.0 doesn't support GL_UNSIGNED_INT_8_8_8_8_REV
+    OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
+    if(!pImpl)
+        return;
+
     cairo_surface_t* pSurface = cairo_get_target(cr);
     int nWidth = cairo_image_surface_get_width( pSurface );
     int nHeight = cairo_image_surface_get_height( pSurface );
     cairo_surface_flush( pSurface );
     unsigned char *pSrc = cairo_image_surface_get_data( pSurface );
 
-    SalTwoRect aRect;
-    aRect.mnSrcX = 0;
-    aRect.mnSrcY = 0;
-    aRect.mnSrcWidth = nWidth;
-    aRect.mnSrcHeight = nHeight;
-    aRect.mnDestX = 0;
-    aRect.mnDestY = 0;
-    aRect.mnDestWidth = nWidth;
-    aRect.mnDestHeight = nHeight;
-
-    // XXX: lfrb: GLES 2.0 doesn't support GL_UNSIGNED_INT_8_8_8_8_REV
-    OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
-    if( pImpl )
-    {
-        // Cairo surface data is ARGB with premultiplied alpha and is Y-inverted
-        OpenGLTexture aTexture( nWidth, nHeight, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, pSrc );
-        pImpl->PreDraw();
-        pImpl->DrawAlphaTexture( aTexture, aRect, true, true );
-        pImpl->PostDraw();
-    }
+    SalTwoRect aRect(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight);
+    // Cairo surface data is ARGB with premultiplied alpha and is Y-inverted
+    OpenGLTexture aTexture( nWidth, nHeight, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, pSrc );
+    pImpl->PreDraw();
+    pImpl->DrawAlphaTexture( aTexture, aRect, true, true );
+    pImpl->PostDraw();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

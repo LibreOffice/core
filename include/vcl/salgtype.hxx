@@ -47,10 +47,10 @@ struct SalTwoRect
     long        mnDestWidth;
     long        mnDestHeight;
 
-    SalTwoRect() {}
-
-    SalTwoRect(long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, long nDestX, long nDestY, long nDestWidth, long nDestHeight)
-        : mnSrcX(nSrcX), mnSrcY(nSrcY), mnSrcWidth(nSrcWidth), mnSrcHeight(nSrcHeight), mnDestX(nDestX), mnDestY(nDestY), mnDestWidth(nDestWidth), mnDestHeight(nDestHeight)
+    SalTwoRect(long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight,
+               long nDestX, long nDestY, long nDestWidth, long nDestHeight)
+        : mnSrcX(nSrcX), mnSrcY(nSrcY), mnSrcWidth(nSrcWidth), mnSrcHeight(nSrcHeight)
+        , mnDestX(nDestX), mnDestY(nDestY), mnDestWidth(nDestWidth), mnDestHeight(nDestHeight)
     {
     }
 };

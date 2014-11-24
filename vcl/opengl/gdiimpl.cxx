@@ -389,11 +389,9 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
         return true;
     }
 
-    SalTwoRect aPosAry;
-    aPosAry.mnSrcX = aPosAry.mnDestX = 0;
-    aPosAry.mnSrcY = aPosAry.mnDestY = 0;
-    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = GetWidth();
-    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = GetHeight();
+    GLfloat fWidth = GetWidth();
+    GLfloat fHeight = GetHeight();
+    SalTwoRect aPosAry(0, 0, fWidth, fHeight, 0,0, fWidth, fHeight);
 
     // TODO: lfrb: User GL_ARB_copy_image?
     OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
@@ -894,7 +892,6 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
         0, (float) rTexture.GetHeight(), 0, 0,
         (float) rTexture.GetWidth(), 0, (float) rTexture.GetWidth(), (float) rTexture.GetHeight() };
     GLfloat aTexCoord[8];
-    SalTwoRect aPosAry;
 
     if( rMask )
     {
@@ -932,9 +929,9 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     rTexture.SetFilter( GL_LINEAR );
     CHECK_GL_ERROR();
 
-    aPosAry.mnSrcX = aPosAry.mnSrcY = 0;
-    aPosAry.mnSrcWidth = rTexture.GetWidth();
-    aPosAry.mnSrcHeight = rTexture.GetHeight();
+    GLfloat fWidth = rTexture.GetWidth();
+    GLfloat fHeight = rTexture.GetHeight();
+    SalTwoRect aPosAry(0, 0, fWidth, fHeight, 0, 0, fWidth, fHeight);
     rTexture.GetCoord( aTexCoord, aPosAry );
     glEnableVertexAttribArray( GL_ATTRIB_TEX );
     glVertexAttribPointer( GL_ATTRIB_TEX, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
@@ -1526,14 +1523,7 @@ void OpenGLSalGraphicsImpl::copyArea(
 {
     SAL_INFO( "vcl.opengl", "::copyArea " << nSrcX << "," << nSrcY << " >> " << nDestX << "," << nDestY << " (" << nSrcWidth << "," << nSrcHeight << ")" );
     OpenGLTexture aTexture;
-    SalTwoRect aPosAry;
-
-    aPosAry.mnSrcX = 0;
-    aPosAry.mnSrcY = 0;
-    aPosAry.mnDestX = nDestX;
-    aPosAry.mnDestY = nDestY;
-    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = nSrcWidth;
-    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = nSrcHeight;
+    SalTwoRect aPosAry(0, 0, nSrcWidth, nSrcHeight, nDestX, nDestY, nSrcWidth, nSrcHeight);
 
     PreDraw();
     aTexture = OpenGLTexture( nSrcX, GetHeight() - nSrcY - nSrcHeight, nSrcWidth, nSrcHeight );

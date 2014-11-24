@@ -910,7 +910,8 @@ ImplSalDDB::ImplSalDDB(
     long nY,
     long nWidth,
     long nHeight
-)   : mnDepth( nDrawableDepth )
+)   : maTwoRect(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight)
+    , mnDepth( nDrawableDepth )
     , mnXScreen( nXScreen )
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
@@ -934,14 +935,9 @@ ImplSalDDB::ImplSalDDB(
         ImplDraw( aDrawable, nDrawableDepth, maPixmap, mnDepth,
                   nX, nY, nWidth, nHeight, 0, 0, aGC );
         XFreeGC( pXDisp, aGC );
-
-        maTwoRect.mnSrcX = maTwoRect.mnSrcY = maTwoRect.mnDestX = maTwoRect.mnDestY = 0;
-        maTwoRect.mnSrcWidth = maTwoRect.mnDestWidth = nWidth;
-        maTwoRect.mnSrcHeight = maTwoRect.mnDestHeight = nHeight;
     }
     else
     {
-        maTwoRect.mnSrcX = maTwoRect.mnSrcY = maTwoRect.mnDestX = maTwoRect.mnDestY = 0;
         maTwoRect.mnSrcWidth = maTwoRect.mnDestWidth = 0;
         maTwoRect.mnSrcHeight = maTwoRect.mnDestHeight = 0;
     }
