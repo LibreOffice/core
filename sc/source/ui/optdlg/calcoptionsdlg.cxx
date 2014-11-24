@@ -1038,7 +1038,7 @@ struct Op : Area
        const OUString& rOp,
        double nRangeLo, double nRangeHi,
        double nEpsilon) :
-        Area(rTitle, 1000),
+        Area(rTitle, 200),
         msOp(rOp),
         mnRangeLo(nRangeLo),
         mnRangeHi(nRangeHi),
@@ -1355,31 +1355,31 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                     return (nArg == 0);
                                 }));
 
-    pTestDocument->addTest(Reduction("Sum", "SUM", 500, 0, -1000, 1000, 3e-10,
+    pTestDocument->addTest(Reduction("Sum", "SUM", 100, 0, -1000, 1000, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
                                          return (nAccum + nArg);
                                      }));
 
-    pTestDocument->addTest(Reduction("Average", "AVERAGE", 500, 0, -1000, 1000, 3e-10,
+    pTestDocument->addTest(Reduction("Average", "AVERAGE", 100, 0, -1000, 1000, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
-                                         return (nAccum + nArg / static_cast<double>(500));
+                                         return (nAccum + nArg/100.);
                                      }));
 
-    pTestDocument->addTest(Reduction("Product", "PRODUCT", 500, 1, 0.1, 2.5, 3e-10,
+    pTestDocument->addTest(Reduction("Product", "PRODUCT", 100, 1, 0.1, 2.5, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
                                          return (nAccum * nArg);
                                      }));
 
-    pTestDocument->addTest(Reduction("Min", "MIN", 500, DBL_MAX, -1000, 1000, 0,
+    pTestDocument->addTest(Reduction("Min", "MIN", 100, DBL_MAX, -1000, 1000, 0,
                                      [] (double nAccum, double nArg)
                                      {
                                          return std::min(nAccum, nArg);
                                      }));
 
-    pTestDocument->addTest(Reduction("Max", "MAX", 500, -DBL_MAX, -1000, 1000, 0,
+    pTestDocument->addTest(Reduction("Max", "MAX", 100, -DBL_MAX, -1000, 1000, 0,
                                      [] (double nAccum, double nArg)
                                      {
                                          return std::max(nAccum, nArg);
