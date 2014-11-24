@@ -2830,6 +2830,18 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_ANSI:
         m_aStates.top().nCurrentEncoding = RTL_TEXTENCODING_MS_1252;
         break;
+    case RTF_MAC:
+        m_nCurrentEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
+        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
+        break;
+    case RTF_PC:
+        m_nCurrentEncoding = RTL_TEXTENCODING_IBM_437;
+        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
+        break;
+    case RTF_PCA:
+        m_nCurrentEncoding = RTL_TEXTENCODING_IBM_850;
+        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
+        break;
     case RTF_PLAIN:
     {
         m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
