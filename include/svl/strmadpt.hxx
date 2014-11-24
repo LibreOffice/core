@@ -21,10 +21,7 @@
 #define INCLUDED_SVL_STRMADPT_HXX
 
 #include <svl/svldllapi.h>
-#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/io/XSeekable.hpp>
-#include <cppuhelper/weak.hxx>
 #include <tools/stream.hxx>
 
 
@@ -62,64 +59,6 @@ public:
     virtual sal_uInt64 Seek(sal_uInt64) SAL_OVERRIDE;
 
     virtual void Terminate() SAL_OVERRIDE;
-};
-
-
-class SVL_DLLPUBLIC SvLockBytesInputStream: public cppu::OWeakObject,
-                              public com::sun::star::io::XInputStream,
-                              public com::sun::star::io::XSeekable
-{
-    SvLockBytesRef m_xLockBytes;
-    sal_Int64 m_nPosition;
-
-public:
-    SvLockBytesInputStream(SvLockBytes * pTheLockBytes):
-        m_xLockBytes(pTheLockBytes), m_nPosition(0) {}
-
-    virtual com::sun::star::uno::Any SAL_CALL
-    queryInterface(const com::sun::star::uno::Type & rType)
-        throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE;
-
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE;
-
-    virtual sal_Int32 SAL_CALL
-    readBytes(com::sun::star::uno::Sequence< sal_Int8 > & rData,
-              sal_Int32 nBytesToRead)
-        throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual sal_Int32 SAL_CALL
-    readSomeBytes(com::sun::star::uno::Sequence< sal_Int8 > & rData,
-                  sal_Int32 nMaxBytesToRead)
-        throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual void SAL_CALL skipBytes(sal_Int32 nBytesToSkip)
-        throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual sal_Int32 SAL_CALL available()
-        throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual void SAL_CALL closeInput()
-        throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual void SAL_CALL seek(sal_Int64 nLocation)
-        throw (com::sun::star::lang::IllegalArgumentException,
-               com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual sal_Int64 SAL_CALL getPosition()
-        throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    virtual sal_Int64 SAL_CALL getLength()
-        throw (com::sun::star::io::IOException,
-               com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVL_STRMADPT_HXX
