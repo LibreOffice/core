@@ -56,21 +56,20 @@ SfxCompareSlots_bsearch( const void* pSmaller, const void* pBigger )
 struct SfxObjectUI_Impl
 {
     sal_uInt16  nPos;
-    ResId       aResId;
+    sal_uInt32  nResId;
     bool        bVisible;
     bool        bContext;
     OUString*   pName;
     sal_uInt32  nFeature;
 
-    SfxObjectUI_Impl(sal_uInt16 n, const ResId& rResId, bool bVis, sal_uInt32 nFeat) :
+    SfxObjectUI_Impl(sal_uInt16 n, sal_uInt32 nId, bool bVis, sal_uInt32 nFeat) :
         nPos(n),
-        aResId(rResId.GetId(), *rResId.GetResMgr()),
+        nResId(nId),
         bVisible(bVis),
         bContext(false),
         pName(0),
         nFeature(nFeat)
     {
-        aResId.SetRT(rResId.GetRT());
     }
 
     ~SfxObjectUI_Impl()
@@ -108,7 +107,7 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature);
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, sal_uInt32 nFeature);
 
 // constuctor, registeres a new unit
 SfxInterface::SfxInterface( const char *pClassName,
@@ -380,24 +379,24 @@ void SfxInterface::RegisterPopupMenu( const ResId& rResId )
     pImpData->aPopupRes = rResId;
 }
 
-void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, const ResId& rResId)
+void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId)
 {
-    RegisterObjectBar(nPos, rResId, 0UL);
+    RegisterObjectBar(nPos, nResId, 0UL);
 }
 
-void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature)
+void SfxInterface::RegisterObjectBar(sal_uInt16 nPos, sal_uInt32 nResId, sal_uInt32 nFeature)
 {
-    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, rResId, nFeature);
+    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, nResId, nFeature);
     if ( pUI )
         pImpData->aObjectBars.push_back(pUI);
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature)
+SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, sal_uInt32 nFeature)
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
 
-    return new SfxObjectUI_Impl(nPos, rResId, true, nFeature);
+    return new SfxObjectUI_Impl(nPos, nResId, true, nFeature);
 }
 
 sal_uInt32 SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
@@ -416,7 +415,7 @@ sal_uInt32 SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
 
     assert( nNo<pImpData->aObjectBars.size() );
 
-    return pImpData->aObjectBars[nNo]->aResId.GetId();
+    return pImpData->aObjectBars[nNo]->nResId;
 }
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
@@ -438,9 +437,6 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
     return pImpData->aObjectBars[nNo]->nPos;
 }
 
-
-
-
 sal_uInt16 SfxInterface::GetObjectBarCount() const
 {
     if (pGenoType && ! pGenoType->HasName())
@@ -456,7 +452,7 @@ void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext)
 
 void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, sal_uInt32 nFeature)
 {
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, ResId(nId, *SfxApplication::GetOrCreate()->GetOffResManager_Impl()), true, nFeature);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, true, nFeature);
     pUI->bContext = bContext;
     pImpData->aChildWindows.push_back(pUI);
 }
@@ -465,7 +461,6 @@ void SfxInterface::RegisterStatusBar(const ResId& rResId)
 {
     pImpData->aStatBarRes = rResId;
 }
-
 
 sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
 {
@@ -482,7 +477,7 @@ sal_uInt32 SfxInterface::GetChildWindowId (sal_uInt16 nNo) const
 
     assert( nNo<pImpData->aChildWindows.size() );
 
-    sal_uInt32 nRet = pImpData->aChildWindows[nNo]->aResId.GetId();
+    sal_uInt32 nRet = pImpData->aChildWindows[nNo]->nResId;
     if ( pImpData->aChildWindows[nNo]->bContext )
         nRet += sal_uInt32( nClassId ) << 16;
     return nRet;

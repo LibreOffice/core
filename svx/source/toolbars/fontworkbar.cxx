@@ -176,7 +176,7 @@ SFX_IMPL_INTERFACE(FontworkBar, SfxShell, SVX_RES(RID_SVX_FONTWORK_BAR))
 
 void FontworkBar::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SVX_RES(RID_SVX_FONTWORK_BAR));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_SVX_FONTWORK_BAR);
 }
 
 TYPEINIT1( FontworkBar, SfxShell );

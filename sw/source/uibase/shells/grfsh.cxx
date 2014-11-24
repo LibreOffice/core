@@ -103,7 +103,7 @@ void SwGrfShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_GRF_POPUPMENU));
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_GRAFIK_TOOLBOX));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_GRAFIK_TOOLBOX);
 }
 
 void SwGrfShell::Execute(SfxRequest &rReq)

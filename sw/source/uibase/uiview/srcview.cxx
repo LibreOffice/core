@@ -122,7 +122,7 @@ void SwSrcView::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_SRCVIEW_POPUPMENU));
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-                                            SW_RES(RID_WEBTOOLS_TOOLBOX) );
+                                            RID_WEBTOOLS_TOOLBOX);
 
     GetStaticInterface()->RegisterChildWindow(SvxSearchDialogWrapper::GetChildWindowId());
 }

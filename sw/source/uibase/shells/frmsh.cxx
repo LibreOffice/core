@@ -114,7 +114,7 @@ void SwFrameShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_FRM_POPUPMENU));
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_FRAME_TOOLBOX));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_FRAME_TOOLBOX);
 }
 
 void SwFrameShell::Execute(SfxRequest &rReq)

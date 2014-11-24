@@ -49,7 +49,7 @@ void SwBezierShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRAW_POPUPMENU));
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_BEZIER_TOOLBOX));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_BEZIER_TOOLBOX);
 }
 
 TYPEINIT1(SwBezierShell,SwBaseShell)

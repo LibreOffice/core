@@ -65,13 +65,13 @@ SFX_IMPL_INTERFACE(PresentationViewShell, DrawViewShell, SdResId( STR_PRESVIEWSH
 void PresentationViewShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
-                                            SdResId(RID_DRAW_TOOLBOX));
+                                            RID_DRAW_TOOLBOX);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER | SFX_VISIBILITY_READONLYDOC,
-                                            SdResId(RID_DRAW_VIEWER_TOOLBOX) );
+                                            RID_DRAW_VIEWER_TOOLBOX);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OPTIONS | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
-                                            SdResId(RID_DRAW_OPTIONS_TOOLBOX));
+                                            RID_DRAW_OPTIONS_TOOLBOX);
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_COMMONTASK | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
-                                            SdResId(RID_DRAW_COMMONTASK_TOOLBOX));
+                                            RID_DRAW_COMMONTASK_TOOLBOX);
 }
 
 TYPEINIT1( PresentationViewShell, DrawViewShell );

@@ -38,7 +38,7 @@ SFX_IMPL_INTERFACE(SwWebListShell, SwListShell, SW_RES(STR_SHELLNAME_LIST))
 
 void SwWebListShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_NUM_TOOLBOX));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_NUM_TOOLBOX);
 }
 
 TYPEINIT1(SwWebListShell,SwListShell)

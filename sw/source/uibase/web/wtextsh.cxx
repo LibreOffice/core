@@ -47,7 +47,7 @@ void SwWebTextShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_TEXT_POPUPMENU));
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_TEXT_TOOLBOX));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_TEXT_TOOLBOX);
 
     GetStaticInterface()->RegisterChildWindow(FN_EDIT_FORMULA);
     GetStaticInterface()->RegisterChildWindow(FN_INSERT_FIELD);

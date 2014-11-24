@@ -43,7 +43,7 @@ void SwOleShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_OLE_POPUPMENU));
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_OLE_TOOLBOX));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_OLE_TOOLBOX);
 }
 
 SwOleShell::SwOleShell(SwView &_rView) :

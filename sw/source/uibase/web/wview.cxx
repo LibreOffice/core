@@ -80,7 +80,7 @@ void SwWebView::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-                                            SW_RES(RID_WEBTOOLS_TOOLBOX) );
+                                            RID_WEBTOOLS_TOOLBOX);
 }
 
 TYPEINIT1(SwWebView,SwView)

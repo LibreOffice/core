@@ -87,7 +87,7 @@ void SwDrawTextShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterPopupMenu(SW_RES(MN_DRWTXT_POPUPMENU));
 
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, SW_RES(RID_DRAW_TEXT_TOOLBOX));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_DRAW_TEXT_TOOLBOX);
 
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
 }

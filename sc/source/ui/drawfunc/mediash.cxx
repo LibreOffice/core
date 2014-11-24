@@ -39,7 +39,7 @@ SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL))
 
 void ScMediaShell::InitInterface_Impl()
 {
-    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, ScResId(RID_MEDIA_OBJECTBAR));
+    GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT, RID_MEDIA_OBJECTBAR);
 
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_MEDIA));
 }

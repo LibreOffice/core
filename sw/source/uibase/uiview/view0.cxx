@@ -111,7 +111,7 @@ void SwView::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(FN_MAILMERGE_CHILDWINDOW, false, CHILDWIN_MAILMERGE);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_TOOLS|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-                                            SW_RES(RID_TOOLS_TOOLBOX));
+                                            RID_TOOLS_TOOLBOX);
 #endif
 }
 

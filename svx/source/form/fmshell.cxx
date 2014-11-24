@@ -171,15 +171,15 @@ SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
 void FmFormShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_NAVIGATION|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_READONLYDOC,
-                                            SVX_RES(RID_SVXTBX_FORM_NAVIGATION),
+                                            RID_SVXTBX_FORM_NAVIGATION,
                                             FM_UI_FEATURE_SHOW_DATABASEBAR);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_NAVIGATION|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_READONLYDOC,
-                                            SVX_RES(RID_SVXTBX_FORM_FILTER),
+                                            RID_SVXTBX_FORM_FILTER,
                                             FM_UI_FEATURE_SHOW_FILTERBAR);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_READONLYDOC,
-                                            SVX_RES(RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES),
+                                            RID_SVXTBX_TEXT_CONTROL_ATTRIBUTES,
                                             FM_UI_FEATURE_SHOW_TEXT_CONTROL_BAR);
 
     GetStaticInterface()->RegisterChildWindow(SID_FM_ADD_FIELD, false, FM_UI_FEATURE_SHOW_FIELD);
@@ -189,15 +189,15 @@ void FmFormShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SID_FM_SHOW_DATANAVIGATOR, false, FM_UI_FEATURE_SHOW_DATANAVIGATOR);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-                                            SVX_RES(RID_SVXTBX_CONTROLS),
+                                            RID_SVXTBX_CONTROLS,
                                             FM_UI_FEATURE_TB_CONTROLS);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-                                            SVX_RES(RID_SVXTBX_MORECONTROLS),
+                                            RID_SVXTBX_MORECONTROLS,
                                             FM_UI_FEATURE_TB_MORECONTROLS);
 
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD,
-                                            SVX_RES(RID_SVXTBX_FORMDESIGN),
+                                            RID_SVXTBX_FORMDESIGN,
                                             FM_UI_FEATURE_TB_FORMDESIGN);
 }
 

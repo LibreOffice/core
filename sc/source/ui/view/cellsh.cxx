@@ -69,7 +69,7 @@ SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell, ScResId(SCSTR_CELLSHELL))
 void ScCellShell::InitInterface_Impl()
 {
     GetStaticInterface()->RegisterObjectBar(SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
-                                            ScResId(RID_OBJECTBAR_FORMAT));
+                                            RID_OBJECTBAR_FORMAT);
 
     GetStaticInterface()->RegisterPopupMenu(ScResId(RID_POPUP_CELLS));
 }

@@ -70,8 +70,8 @@ public:
 
     const SfxInterface*     GetGenoType() const { return pGenoType; }
 
-    void                    RegisterObjectBar(sal_uInt16, const ResId&);
-    void                    RegisterObjectBar(sal_uInt16, const ResId&, sal_uInt32 nFeature);
+    void                    RegisterObjectBar(sal_uInt16, sal_uInt32 nResId);
+    void                    RegisterObjectBar(sal_uInt16, sal_uInt32 nResId, sal_uInt32 nFeature);
     void                    RegisterChildWindow(sal_uInt16, bool bContext = false);
     void                    RegisterChildWindow(sal_uInt16, bool bContext, sal_uInt32 nFeature);
     void                    RegisterStatusBar( const ResId& );
