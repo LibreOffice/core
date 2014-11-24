@@ -72,6 +72,7 @@ public:
     void testContentXLSXStrict(); // strict OOXML
     void testContentLotus123();
     void testContentDIF();
+    void testShapeRotationXLSX();
     //void testContentXLS_XML();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testContentXLSXStrict);
     CPPUNIT_TEST(testContentLotus123);
     CPPUNIT_TEST(testContentDIF);
+    CPPUNIT_TEST(testShapeRotationXLSX);
     //CPPUNIT_TEST(testContentXLS_XML);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
@@ -296,6 +298,29 @@ void ScFiltersTest::testContentDIF()
 
     ScDocument& rDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(&rDoc);
+    xDocSh->DoClose();
+}
+
+
+void ScFiltersTest::testShapeRotationXLSX()
+{
+    // Test to check rotation angle is properly imported for XLSX files.
+    // Test for fdo#83672 and fdo#67776
+    ScDocShellRef xDocSh = loadDoc("shape-rotation.", XLSX);
+
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocSh->GetModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xShape(
+        xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+
+    uno::Reference< beans::XPropertySet > xShapeProperties(
+        xShape, uno::UNO_QUERY );
+
+    CPPUNIT_ASSERT(xShapeProperties->getPropertyValue("RotateAngle") == 34318);
+
     xDocSh->DoClose();
 }
 
