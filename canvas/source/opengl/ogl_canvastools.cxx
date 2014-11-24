@@ -17,7 +17,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
-
+#include <vector>
 #include <com/sun/star/rendering/ARGBColor.hpp>
 
 #include <GL/glew.h>
@@ -30,7 +30,7 @@ namespace oglcanvas
 {
     /// triangulates polygon before
     //move to canvashelper, or take renderHelper as parameter?
-    void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly )
+    void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper, glm::vec4 color )
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
@@ -40,14 +40,14 @@ namespace oglcanvas
         const double nHeight=rBounds.getHeight();
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(aPolyPoly));
-
+        std::vector<glm::vec2> vertices;
+        vertices.reserve(rTriangulatedPolygon.count());
         for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
         {
             const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
-            const double s(rPt.getX()/nWidth);
-            const double t(rPt.getY()/nHeight);
-            glTexCoord2f(s,t); glVertex2d(rPt.getX(), rPt.getY());
+            vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
         }
+        renderHelper->renderVertexTex( vertices, nWidth, nHeight,  color, GL_TRIANGLES);
     }
 
     /** only use this for line polygons.
@@ -67,30 +67,14 @@ namespace oglcanvas
 
             const sal_uInt32 nPts=rPolygon.count();
             const sal_uInt32 nExtPts=nPts + int(rPolygon.isClosed());
-            GLfloat vertices[nExtPts*2];
+            std::vector<glm::vec2> vertices;
+            vertices.reserve(nExtPts);
             for( sal_uInt32 j=0; j<nExtPts; j++ )
             {
                 const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
-                vertices[j*2] = rPt.getX();
-                vertices[j*2+1] = rPt.getY();
+                vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
             }
             renderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
-            /*
-            glBegin(GL_LINE_STRIP);
-
-            const ::basegfx::B2DPolygon& rPolygon( aPolyPoly.getB2DPolygon(i) );
-
-            const sal_uInt32 nPts=rPolygon.count();
-            const sal_uInt32 nExtPts=nPts + int(rPolygon.isClosed());
-            for( sal_uInt32 j=0; j<nExtPts; j++ )
-            {
-                const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
-                glVertex2d(rPt.getX(), rPt.getY());
-            }
-
-            glEnd();
-            */
-
         }
 
     }
@@ -106,7 +90,6 @@ namespace oglcanvas
                 0,                   0,                   1, 0,
                 (float) rTransform.get(0,2), (float) rTransform.get(1,2), 0, 1
             };
-
         glEnable(GL_BLEND);
         glBlendFunc(eSrcBlend, eDstBlend);
         return glm::make_mat4(aGLTransform);
@@ -131,8 +114,8 @@ namespace oglcanvas
 
             aTmp=aTmp*aScaleShear;
             aPoly.transform(aTmp);
-            glColor4f(0,1,0,1);
-            glm::vec4 color  = glm::vec4(1, 0, 0, 1);
+            // glColor4f(0,1,0,1);
+            glm::vec4 color  = glm::vec4(0.5, 0, 0, 0.5);
             renderPolyPolygon(aPoly, renderHelper, color);
         }
     }

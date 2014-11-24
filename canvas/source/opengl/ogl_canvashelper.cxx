@@ -165,14 +165,16 @@ namespace oglcanvas
             //no texture bind ?
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
             setupState(rTransform, eSrcBlend, eDstBlend);
+            glm::vec4 color  = glm::vec4( (float) rColor.Red,
+                                          (float) rColor.Green,
+                                          (float) rColor.Blue,
+                                          (float) rColor.Alpha);
 
             ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
             while( aCurr != aEnd )
             {
-                glBegin(GL_TRIANGLES);
-                renderComplexPolyPolygon(*aCurr++);
-                glEnd();
+                renderPolyPolygon(*aCurr++, pRenderHelper, color);
             }
 
             return true;
@@ -188,6 +190,10 @@ namespace oglcanvas
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
             setupState(rTransform, eSrcBlend, eDstBlend);
+            glm::vec4 color  = glm::vec4( (float) rendering::ARGBColor().Red,
+                                (float) rendering::ARGBColor().Green,
+                                (float) rendering::ARGBColor().Blue,
+                                (float) rendering::ARGBColor().Alpha);
 
             // convert to weird canvas textur coordinate system (not
             // [0,1]^2, but path coordinate system)
@@ -240,14 +246,10 @@ namespace oglcanvas
             aCurr=rPolyPolygons.begin();
             while( aCurr != aEnd )
             {
-                glBegin(GL_TRIANGLES);
-                renderComplexPolyPolygon(*aCurr++);
-                glEnd();
+                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color);
             }
 
             glUseProgram(0);
-            glLoadIdentity();
-            glMatrixMode(GL_MODELVIEW);
 
             return true;
         }
@@ -321,7 +323,12 @@ namespace oglcanvas
                                           const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
         {
          //   setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
             setupState(rTransform, eSrcBlend, eDstBlend);
+            glm::vec4 color  = glm::vec4( (float) rendering::ARGBColor().Red,
+                                (float) rendering::ARGBColor().Green,
+                                (float) rendering::ARGBColor().Blue,
+                                (float) rendering::ARGBColor().Alpha);
 
             const unsigned int nTexId=rHelper.getDeviceHelper()->getTextureCache().getTexture(
                 rPixelSize, rPixelData.getConstArray(), nPixelCrc32);
@@ -363,9 +370,7 @@ namespace oglcanvas
             aCurr=rPolyPolygons.begin();
             while( aCurr != aEnd )
             {
-                glBegin(GL_TRIANGLES);
-                renderComplexPolyPolygon(*aCurr++);
-                glEnd();
+                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color);
             }
 
 
