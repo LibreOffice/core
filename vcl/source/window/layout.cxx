@@ -755,11 +755,11 @@ VclGrid::array_type VclGrid::assembleGrid() const
     for (vcl::Window* pChild = GetWindow(WINDOW_FIRSTCHILD); pChild;
         pChild = pChild->GetWindow(WINDOW_NEXT))
     {
-        sal_Int32 nLeftAttach = pChild->get_grid_left_attach();
+        sal_Int32 nLeftAttach = std::max(pChild->get_grid_left_attach(), 0);
         sal_Int32 nWidth = pChild->get_grid_width();
         sal_Int32 nMaxXPos = nLeftAttach+nWidth-1;
 
-        sal_Int32 nTopAttach = pChild->get_grid_top_attach();
+        sal_Int32 nTopAttach = std::max(pChild->get_grid_top_attach(), 0);
         sal_Int32 nHeight = pChild->get_grid_height();
         sal_Int32 nMaxYPos = nTopAttach+nHeight-1;
 
