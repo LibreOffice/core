@@ -909,11 +909,6 @@ char last_ns = 0;
 off_t size;
 
     buffer = file_load(fn, &size, &rc);
-    /* Note: yes we are going to leak 'buffer'
-     * this is on purpose, to avoid cloning the 'key' out of it
-     * and our special 'hash' just store the pointer to the key
-     * inside of buffer, hence it need to remain allocated
-     */
     if(!rc)
     {
         base = cursor_out = cursor = end = buffer;
@@ -1081,6 +1076,12 @@ off_t size;
             }
         }
     }
+    /* Note: yes we are going to leak 'buffer'
+     * this is on purpose, to avoid cloning the 'key' out of it and our special
+     * 'hash' just store the pointer to the key inside of buffer, hence it need
+     * to remain allocated
+     * coverity[leaked_storage] - this is on purpose
+     */
     return rc;
 }
 
