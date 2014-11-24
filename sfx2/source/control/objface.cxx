@@ -400,7 +400,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, const ResId& rResId, s
     return new SfxObjectUI_Impl(nPos, rResId, true, nFeature);
 }
 
-const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
+sal_uInt32 SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
 {
     bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
@@ -409,14 +409,14 @@ const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
         sal_uInt16 nBaseCount = pGenoType->GetObjectBarCount();
         if ( nNo < nBaseCount )
             // The Super class comes first
-            return pGenoType->GetObjectBarResId( nNo );
+            return pGenoType->GetObjectBarId(nNo);
         else
             nNo = nNo - nBaseCount;
     }
 
     assert( nNo<pImpData->aObjectBars.size() );
 
-    return pImpData->aObjectBars[nNo]->aResId;
+    return pImpData->aObjectBars[nNo]->aResId.GetId();
 }
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const

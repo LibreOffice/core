@@ -75,7 +75,7 @@ public:
     void                    RegisterChildWindow(sal_uInt16, bool bContext = false);
     void                    RegisterChildWindow(sal_uInt16, bool bContext, sal_uInt32 nFeature);
     void                    RegisterStatusBar( const ResId& );
-    const ResId&            GetObjectBarResId( sal_uInt16 nNo ) const;
+    sal_uInt32              GetObjectBarId(sal_uInt16 nNo) const;
     sal_uInt16              GetObjectBarPos( sal_uInt16 nNo ) const;
     sal_uInt32              GetObjectBarFeature( sal_uInt16 nNo ) const;
     sal_uInt16              GetObjectBarCount() const;

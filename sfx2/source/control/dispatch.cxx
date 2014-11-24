@@ -1328,7 +1328,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
 
             SfxObjectBars_Impl& rBar = pImp->aObjBars[nPos & SFX_POSITION_MASK];
             rBar.nMode = nPos;
-            rBar.nResId = pIFace->GetObjectBarResId(nNo).GetId();
+            rBar.nResId = pIFace->GetObjectBarId(nNo);
             rBar.pIFace = pIFace;
 
             if ( bUIActive || bIsActive )
