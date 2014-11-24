@@ -1361,6 +1361,12 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                          return (nAccum + nArg);
                                      }));
 
+    pTestDocument->addTest(Reduction("Average", "AVERAGE", 500, 0, -1000, 1000, 3e-10,
+                                     [] (double nAccum, double nArg)
+                                     {
+                                         return (nAccum + nArg / static_cast<double>(500));
+                                     }));
+
     pTestDocument->addTest(Reduction("Product", "PRODUCT", 500, 1, 0.1, 2.5, 3e-10,
                                      [] (double nAccum, double nArg)
                                      {
