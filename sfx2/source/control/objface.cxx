@@ -378,22 +378,17 @@ const SfxSlot* SfxInterface::GetRealSlot( sal_uInt16 nSlotId ) const
     return pSlot->pLinkedSlot;
 }
 
-
-
 void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 {
 
     pImpData->aPopupRes = rResId;
 }
 
-
-
 void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId,
         const OUString *pStr )
 {
     RegisterObjectBar( nPos, rResId, 0UL, pStr );
 }
-
 
 void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr )
 {
@@ -407,24 +402,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, 
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
 
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(nPos, rResId, true, nFeature);
-
-    if (pStr == 0)
-    {
-        ResId aResId(rResId);
-        aResId.SetRT(RSC_STRING);
-        aResId.SetResMgr(rResId.GetResMgr());
-        if( ! aResId.GetResMgr() )
-            aResId.SetResMgr( SfxApplication::GetOrCreate()->GetOffResManager_Impl() );
-        if ( !aResId.GetResMgr() || !aResId.GetResMgr()->IsAvailable(aResId) )
-            pUI->pName = new OUString ("NoName");
-        else
-            pUI->pName = new OUString(aResId.toString());
-    }
-    else
-        pUI->pName = new OUString(*pStr);
-
-    return pUI;
+    return new SfxObjectUI_Impl(nPos, rResId, true, nFeature);
 }
 
 const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
@@ -445,9 +423,6 @@ const ResId& SfxInterface::GetObjectBarResId( sal_uInt16 nNo ) const
 
     return pImpData->aObjectBars[nNo]->aResId;
 }
-
-
-
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
 {
