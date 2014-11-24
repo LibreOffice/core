@@ -551,7 +551,8 @@ void SfxTabDialog::SetApplyHandler(const Link& _rHdl)
 
 void SfxTabDialog::Start_Impl()
 {
-    DBG_ASSERT( pImpl->aData.size() == m_pTabCtrl->GetPageCount(), "not all pages registered" );
+    assert(pImpl->aData.size() == m_pTabCtrl->GetPageCount()
+            && "not all pages registered");
     sal_uInt16 nActPage = m_pTabCtrl->GetPageId( 0 );
 
     // load old settings, when exists
