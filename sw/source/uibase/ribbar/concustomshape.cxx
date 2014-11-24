@@ -83,7 +83,7 @@ bool ConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 SetAttributes( pObj );
                 bool bForceNoFillStyle = false;
-                if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
+                if ( static_cast<SdrObjCustomShape*>(pObj)->UseNoFillStyle() )
                     bForceNoFillStyle = true;
 
                 SfxItemSet aAttr( m_pView->GetPool() );
@@ -169,7 +169,7 @@ void ConstCustomShape::SetAttributes( SdrObject* pObj )
         pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
         pObj->SetMergedItem( makeSdrTextAutoGrowHeightItem( false ) );
-        ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &aCustomShape );
+        static_cast<SdrObjCustomShape*>(pObj)->MergeDefaultAttributes( &aCustomShape );
     }
 }
 

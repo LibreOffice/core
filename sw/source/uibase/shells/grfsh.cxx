@@ -356,14 +356,14 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                 SID_ATTR_GRAF_FRMSIZE, false, &pItem ))
                 {
                     SwFmtFrmSize aSize;
-                    const Size& rSz = ((SvxSizeItem*)pItem)->GetSize();
+                    const Size& rSz = static_cast<const SvxSizeItem*>(pItem)->GetSize();
                     aSize.SetWidth( rSz.Width() );
                     aSize.SetHeight( rSz.Height() );
 
                     if( SfxItemState::SET == pSet->GetItemState(
                             SID_ATTR_GRAF_FRMSIZE_PERCENT, false, &pItem ))
                     {
-                        const Size& rRelativeSize = ((SvxSizeItem*)pItem)->GetSize();
+                        const Size& rRelativeSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
                         aSize.SetWidthPercent( static_cast< sal_uInt8 >( rRelativeSize.Width() ) );
                         aSize.SetHeightPercent( static_cast< sal_uInt8 >( rRelativeSize.Height() ) );
                     }
@@ -412,13 +412,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if( SfxItemState::SET == pSet->GetItemState(
                                         SID_ATTR_GRAF_GRAPHIC, true, &pItem ))
                 {
-                    if( !((SvxBrushItem*)pItem)->GetGraphicLink().isEmpty() )
-                        sGrfNm = ((SvxBrushItem*)pItem)->GetGraphicLink();
+                    if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink().isEmpty() )
+                        sGrfNm = static_cast<const SvxBrushItem*>(pItem)->GetGraphicLink();
                     else
                         sGrfNm = "";
 
-                    if( !((SvxBrushItem*)pItem)->GetGraphicFilter().isEmpty() )
-                        sFilterNm = ((SvxBrushItem*)pItem)->GetGraphicFilter();
+                    if( !static_cast<const SvxBrushItem*>(pItem)->GetGraphicFilter().isEmpty() )
+                        sFilterNm = static_cast<const SvxBrushItem*>(pItem)->GetGraphicFilter();
                     else
                         sFilterNm = "";
 
@@ -527,37 +527,37 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_ATTR_GRAF_LUMINANCE:
             if( pItem )
                 aGrfSet.Put( SwLuminanceGrf(
-                            ((SfxInt16Item*)pItem)->GetValue() ));
+                            static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
             break;
 
         case SID_ATTR_GRAF_CONTRAST:
             if( pItem )
                 aGrfSet.Put( SwContrastGrf(
-                            ((SfxInt16Item*)pItem)->GetValue() ));
+                            static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
             break;
 
         case SID_ATTR_GRAF_RED:
             if( pItem )
                 aGrfSet.Put( SwChannelRGrf(
-                            ((SfxInt16Item*)pItem)->GetValue() ));
+                            static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
             break;
 
         case SID_ATTR_GRAF_GREEN:
             if( pItem )
                 aGrfSet.Put( SwChannelGGrf(
-                            ((SfxInt16Item*)pItem)->GetValue() ));
+                            static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
             break;
 
         case SID_ATTR_GRAF_BLUE:
             if( pItem )
                 aGrfSet.Put( SwChannelBGrf(
-                            ((SfxInt16Item*)pItem)->GetValue() ));
+                            static_cast<const SfxInt16Item*>(pItem)->GetValue() ));
             break;
 
         case SID_ATTR_GRAF_GAMMA:
             if( pItem )
             {
-                double fVal = ((SfxUInt32Item*)pItem)->GetValue();
+                double fVal = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                 aGrfSet.Put( SwGammaGrf(fVal/100. ));
             }
             break;
@@ -571,13 +571,13 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_ATTR_GRAF_INVERT:
             if( pItem )
                 aGrfSet.Put( SwInvertGrf(
-                            ((SfxBoolItem*)pItem)->GetValue() ));
+                            static_cast<const SfxBoolItem*>(pItem)->GetValue() ));
             break;
 
         case SID_ATTR_GRAF_MODE:
             if( pItem )
                 aGrfSet.Put( SwDrawModeGrf(
-                            ((SfxUInt16Item*)pItem)->GetValue() ));
+                            static_cast<const SfxUInt16Item*>(pItem)->GetValue() ));
             break;
 
         case SID_COLOR_SETTINGS:
@@ -695,31 +695,31 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_LUMINANCE:
             if( !bParentCntProt )
-                rSet.Put( SfxInt16Item( nWhich, ((SwLuminanceGrf&)
+                rSet.Put( SfxInt16Item( nWhich, static_cast<const SwLuminanceGrf&>(
                         aCoreSet.Get(RES_GRFATR_LUMINANCE)).GetValue() ));
             break;
 
         case SID_ATTR_GRAF_CONTRAST:
             if( !bParentCntProt )
-                rSet.Put( SfxInt16Item( nWhich, ((SwContrastGrf&)
+                rSet.Put( SfxInt16Item( nWhich, static_cast<const SwContrastGrf&>(
                         aCoreSet.Get(RES_GRFATR_CONTRAST)).GetValue() ));
             break;
 
         case SID_ATTR_GRAF_RED:
             if( !bParentCntProt )
-                rSet.Put( SfxInt16Item( nWhich, ((SwChannelRGrf&)
+                rSet.Put( SfxInt16Item( nWhich, static_cast<const SwChannelRGrf&>(
                         aCoreSet.Get(RES_GRFATR_CHANNELR)).GetValue() ));
             break;
 
         case SID_ATTR_GRAF_GREEN:
             if( !bParentCntProt )
-                rSet.Put( SfxInt16Item( nWhich, ((SwChannelGGrf&)
+                rSet.Put( SfxInt16Item( nWhich, static_cast<const SwChannelGGrf&>(
                         aCoreSet.Get(RES_GRFATR_CHANNELG)).GetValue() ));
             break;
 
         case SID_ATTR_GRAF_BLUE:
             if( !bParentCntProt )
-                rSet.Put( SfxInt16Item( nWhich, ((SwChannelBGrf&)
+                rSet.Put( SfxInt16Item( nWhich, static_cast<const SwChannelBGrf&>(
                         aCoreSet.Get(RES_GRFATR_CHANNELB)).GetValue() ));
             break;
 
@@ -740,7 +740,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                         GRAPHIC_GDIMETAFILE == pGrafObj->GetType() )
                         bDisable = true;
                     else
-                        rSet.Put( SfxUInt16Item( nWhich, ((SwTransparencyGrf&)
+                        rSet.Put( SfxUInt16Item( nWhich, static_cast<const SwTransparencyGrf&>(
                             aCoreSet.Get(RES_GRFATR_TRANSPARENCY)).GetValue() ));
                 }
             }
@@ -748,13 +748,13 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_INVERT:
             if( !bParentCntProt )
-                rSet.Put( SfxBoolItem( nWhich, ((SwInvertGrf&)
+                rSet.Put( SfxBoolItem( nWhich, static_cast<const SwInvertGrf&>(
                         aCoreSet.Get(RES_GRFATR_INVERT)).GetValue() ));
             break;
 
         case SID_ATTR_GRAF_MODE:
             if( !bParentCntProt )
-                rSet.Put( SfxUInt16Item( nWhich, ((SwDrawModeGrf&)
+                rSet.Put( SfxUInt16Item( nWhich, static_cast<const SwDrawModeGrf&>(
                         aCoreSet.Get(RES_GRFATR_DRAWMODE)).GetValue() ));
             break;
 

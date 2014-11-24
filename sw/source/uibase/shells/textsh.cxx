@@ -451,7 +451,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 svt::EmbeddedObjectRef& xObj = rSh.GetOLEObject();
                 if(pItem && xObj.is())
                 {
-                    Size aSize(((SvxSizeItem*)pItem)->GetSize());
+                    Size aSize(static_cast<const SvxSizeItem*>(pItem)->GetSize());
                     aSize = OutputDevice::LogicToLogic
                                     ( aSize, MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ) );
 

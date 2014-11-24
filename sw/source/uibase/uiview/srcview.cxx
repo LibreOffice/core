@@ -232,7 +232,7 @@ SwSrcView::~SwSrcView()
     SwDocShell* pDocShell = GetDocShell();
     OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Why no WebDocShell?");
     const TextSelection&  rSel = aEditWin.GetTextView()->GetSelection();
-    ((SwWebDocShell*)pDocShell)->SetSourcePara( static_cast< sal_uInt16 >( rSel.GetStart().GetPara() ) );
+    static_cast<SwWebDocShell*>(pDocShell)->SetSourcePara( static_cast< sal_uInt16 >( rSel.GetStart().GetPara() ) );
 
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         pDocShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -871,7 +871,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     // Disable AutoLoad
     pDocShell->SetAutoLoad(INetURLObject(), 0, false);
     OSL_ENSURE(PTR_CAST(SwWebDocShell, pDocShell), "Why no WebDocShell?");
-    sal_uInt16 nLine = ((SwWebDocShell*)pDocShell)->GetSourcePara();
+    sal_uInt16 nLine = static_cast<SwWebDocShell*>(pDocShell)->GetSourcePara();
     aEditWin.SetStartLine(nLine);
     aEditWin.GetTextEngine()->ResetUndo();
     aEditWin.GetOutWin()->GrabFocus();

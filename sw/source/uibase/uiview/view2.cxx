@@ -614,7 +614,7 @@ void SwView::Execute(SfxRequest &rReq)
             IDocumentRedlineAccess* pIDRA = m_pWrtShell->getIDocumentRedlineAccess();
             Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem )
-                && ((SfxBoolItem*)pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
+                && static_cast<const SfxBoolItem*>(pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
                 break;
 
             // xmlsec05:    new password dialog
@@ -822,7 +822,7 @@ void SwView::Execute(SfxRequest &rReq)
                 if(pSdrView && pSdrView->AreObjectsMarked() &&
                     pSdrView->GetHdlList().GetFocusHdl())
                 {
-                    ((SdrHdlList&)pSdrView->GetHdlList()).ResetFocusHdl();
+                    const_cast<SdrHdlList&>(pSdrView->GetHdlList()).ResetFocusHdl();
                 }
                 else
                 {
@@ -843,7 +843,7 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 GetEditWin().SetApplyTemplate(SwApplyTemplate());
             }
-            else if( ((SfxObjectShell*)GetDocShell())->IsInPlaceActive() )
+            else if( static_cast<SfxObjectShell*>(GetDocShell())->IsInPlaceActive() )
             {
                 Escape();
             }
@@ -902,7 +902,7 @@ void SwView::Execute(SfxRequest &rReq)
                 pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
 
             }
-                ((SwNavigationPI*) pCh->GetContextWindow(SW_MOD()))->GotoPage();
+                static_cast<SwNavigationPI*>( pCh->GetContextWindow(SW_MOD()))->GotoPage();
         }
         break;
         case  FN_EDIT_CURRENT_TOX:
@@ -995,7 +995,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
             {
-                const sal_uInt16 nValue = ((SfxUInt16Item*)pItem)->GetValue();
+                const sal_uInt16 nValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 switch ( nSlot )
                 {
                     case FN_INSERT_CTRL:
@@ -1035,7 +1035,7 @@ void SwView::Execute(SfxRequest &rReq)
         case SID_ATTR_LANGUAGE  :
         if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, false, &pItem))
         {
-            SvxLanguageItem aLang(((SvxLanguageItem*)pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
+            SvxLanguageItem aLang(static_cast<const SvxLanguageItem*>(pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
             m_pWrtShell->SetDefault( aLang );
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_LANGUAGE );
         }
@@ -1074,7 +1074,7 @@ void SwView::Execute(SfxRequest &rReq)
                 pVFrame->ToggleChildWindow( SID_NAVIGATOR );
                 pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
             }
-            ((SwNavigationPI*) pCh->GetContextWindow(SW_MOD()))->CreateNavigationTool(
+            static_cast<SwNavigationPI*>( pCh->GetContextWindow(SW_MOD()))->CreateNavigationTool(
                             GetVisArea(), true, &pVFrame->GetWindow());
         }
         break;
@@ -2028,9 +2028,9 @@ static sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
         const SwFrmFmt& rMaster = rPageDesc.GetMaster();
         const SfxPoolItem* pItem;
         if( ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_HEADER, false, &pItem ) &&
-              ((SwFmtHeader*)pItem)->IsActive() ) ||
+              static_cast<const SwFmtHeader*>(pItem)->IsActive() ) ||
             ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_FOOTER, false, &pItem )  &&
-              ((SwFmtFooter*)pItem)->IsActive()) )
+              static_cast<const SwFmtFooter*>(pItem)->IsActive()) )
             ++nRet;
     }
     return nRet; // number of page styles with active header/footer
@@ -2223,9 +2223,9 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             m_pWrtShell->EnterStdMode(); // delete selections
 
             if( bCompare )
-                nFound = m_pWrtShell->CompareDoc( *((SwDocShell*)&xDocSh)->GetDoc() );
+                nFound = m_pWrtShell->CompareDoc( *static_cast<SwDocShell*>(&xDocSh)->GetDoc() );
             else
-                nFound = m_pWrtShell->MergeDoc( *((SwDocShell*)&xDocSh)->GetDoc() );
+                nFound = m_pWrtShell->MergeDoc( *static_cast<SwDocShell*>(&xDocSh)->GetDoc() );
 
             m_pWrtShell->EndAllAction();
 

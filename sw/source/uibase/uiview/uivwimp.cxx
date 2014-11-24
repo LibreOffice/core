@@ -87,7 +87,7 @@ SwView_Impl::~SwView_Impl()
         pInterceptor->Invalidate();
     }
     view::XSelectionSupplier* pTextView = pxXTextView->get();
-    ((SwXTextView*)pTextView)->Invalidate();
+    static_cast<SwXTextView*>(pTextView)->Invalidate();
     delete pxXTextView;
     if( xScanEvtLstnr.is() )
            pScanEvtLstnr->ViewDestroyed();
@@ -116,7 +116,7 @@ view::XSelectionSupplier*   SwView_Impl::GetUNOObject()
 SwXTextView*    SwView_Impl::GetUNOObject_Impl()
 {
         view::XSelectionSupplier* pTextView = pxXTextView->get();
-        return ((SwXTextView*)pTextView);
+        return static_cast<SwXTextView*>(pTextView);
 }
 
 void SwView_Impl::ExecuteScan( SfxRequest& rReq )

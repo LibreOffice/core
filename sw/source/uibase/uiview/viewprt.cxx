@@ -290,7 +290,7 @@ void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
 
         if(bWeb)
             aSet.Put(SfxUInt16Item(SID_HTML_MODE,
-                    ::GetHtmlMode(((SwWrtShell*)pSh)->GetView().GetDocShell())));
+                    ::GetHtmlMode(static_cast<SwWrtShell*>(pSh)->GetView().GetDocShell())));
         aSet.Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN,
                         aMisc.IsNotFoundWarning() ));
         aSet.Put(aAddPrinterItem);

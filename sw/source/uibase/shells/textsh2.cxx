@@ -102,7 +102,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
     Sequence<Any> aSelection;
     if(pSelectionItem)
-        ((SfxUsrAnyItem*)pSelectionItem)->GetValue() >>= aSelection;
+        static_cast<const SfxUsrAnyItem*>(pSelectionItem)->GetValue() >>= aSelection;
 
     // get the data source name
     pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, false, &pSourceItem);
@@ -196,7 +196,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
 
                 OUString sColumnName;
                 if(pColumnNameItem)
-                    ((SfxUsrAnyItem*)pColumnNameItem)->GetValue() >>= sColumnName;
+                    static_cast<const SfxUsrAnyItem*>(pColumnNameItem)->GetValue() >>= sColumnName;
                 OUString sDBName = sSourceArg;
                 sDBName += OUString(DB_DELIM);
                 sDBName += sCommandArg;
@@ -208,9 +208,9 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 SwFldMgr aFldMgr(GetShellPtr());
                 SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, OUString(), 0);
                 if(pConnectionItem)
-                    aData.aDBConnection = ((SfxUsrAnyItem*)pConnectionItem)->GetValue();
+                    aData.aDBConnection = static_cast<const SfxUsrAnyItem*>(pConnectionItem)->GetValue();
                 if(pColumnItem)
-                    aData.aDBColumn = ((SfxUsrAnyItem*)pColumnItem)->GetValue();
+                    aData.aDBColumn = static_cast<const SfxUsrAnyItem*>(pColumnItem)->GetValue();
                 aFldMgr.InsertFld(aData);
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
                 uno::Reference< XDispatchRecorder > xRecorder =

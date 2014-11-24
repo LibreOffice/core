@@ -172,7 +172,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
                                 pOpt->CopyAttributes() );
     // Set Number Format
     if(pType)
-        ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
+        static_cast<SwSetExpFieldType*>(pType)->SetSeqFormat(pOpt->GetNumType());
 
     rSh.UpdateExpFlds( true );
 

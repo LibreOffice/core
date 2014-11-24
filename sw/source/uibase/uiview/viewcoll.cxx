@@ -49,11 +49,11 @@ void SwView::ExecColl(SfxRequest &rReq)
                 if (pArgs &&
                     SfxItemState::SET == pArgs->GetItemState( nWhich , true, &pItem ))
                 {
-                    if( ((SfxStringItem*)pItem)->GetValue() !=
+                    if( static_cast<const SfxStringItem*>(pItem)->GetValue() !=
                                             GetWrtShell().GetCurPageStyle(false) )
                     {
                         SfxStringItem aName(SID_STYLE_APPLY,
-                                   ((SfxStringItem*)pItem)->GetValue());
+                                   static_cast<const SfxStringItem*>(pItem)->GetValue());
                         SfxUInt16Item aFamItem( SID_STYLE_FAMILY,
                                             SFX_STYLE_FAMILY_PAGE);
                         SwPtrItem aShell(FN_PARAM_WRTSHELL, GetWrtShellPtr());

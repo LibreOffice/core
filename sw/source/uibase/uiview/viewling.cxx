@@ -242,7 +242,7 @@ void SwView::StartTextConversion(
     bool bOldIns = m_pWrtShell->IsInsMode();
     m_pWrtShell->SetInsMode( true );
 
-    const bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
+    const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection() ||
         m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
 
     const bool  bStart = bSelection || m_pWrtShell->IsStartOfDoc();
@@ -450,7 +450,7 @@ void SwView::HyphenateDocument()
         m_pWrtShell->StartUndo(UNDO_INSATTR);         // valid later
 
         bool bHyphSpecial = xProp.is() && xProp->getIsHyphSpecial();
-        bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection() ||
+        bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection() ||
             m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
         bool bOther = m_pWrtShell->HasOtherCnt() && bHyphSpecial && !bSelection;
         bool bStart = bSelection || ( !bOther && m_pWrtShell->IsStartOfDoc() );
@@ -488,7 +488,7 @@ bool SwView::IsValidSelectionForThesaurus() const
     // to be within a single paragraph
 
     const bool bMultiSel = m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
-    const bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
+    const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection();
     return !bMultiSel && (!bSelection || m_pWrtShell->IsSelOnePara() );
 }
 
@@ -565,7 +565,7 @@ void SwView::StartThesaurus()
     pVOpt->SetIdle( false );
 
     // get initial LookUp text
-    const bool bSelection = ((SwCrsrShell*)m_pWrtShell)->HasSelection();
+    const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection();
     OUString aTmp = GetThesaurusLookUpText( bSelection );
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
@@ -708,8 +708,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     //! 'custom made' menu... *sigh* (code copied from sfx2 and framework)
                     if ( pMenu )
                     {
-                        const sal_uInt16 nId = ((PopupMenu*)pMenu)->Execute(m_pEditWin, aPixPos);
-                        OUString aCommand = ((PopupMenu*)pMenu)->GetItemCommand(nId);
+                        const sal_uInt16 nId = static_cast<PopupMenu*>(pMenu)->Execute(m_pEditWin, aPixPos);
+                        OUString aCommand = static_cast<PopupMenu*>(pMenu)->GetItemCommand(nId);
                         if (aCommand.isEmpty() )
                         {
                             if(!ExecuteMenuCommand(dynamic_cast<PopupMenu&>(*pMenu), *GetViewFrame(), nId ))

@@ -279,7 +279,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     if(SfxItemState::SET == rSet.GetItemState(SID_BACKGRND_DESTINATION, false, &pItem))
     {
         SwViewOption aUsrPref( *rSh.GetViewOptions() );
-        aUsrPref.SetTblDest((sal_uInt8)((SfxUInt16Item*)pItem)->GetValue());
+        aUsrPref.SetTblDest((sal_uInt8)static_cast<const SfxUInt16Item*>(pItem)->GetValue());
         SW_MOD()->ApplyUsrPref(aUsrPref, &rSh.GetView());
     }
     bool bBorder = ( SfxItemState::SET == rSet.GetItemState( RES_BOX ) ||
@@ -389,7 +389,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         // The item must only be recorded while manual alignment, so that the
         // alignment is not overwritten by the distances while recording.
         if(eOrient != text::HoriOrientation::NONE)
-            ((SfxItemSet&)rSet).ClearItem( SID_ATTR_LRSPACE );
+            const_cast<SfxItemSet&>(static_cast<const SfxItemSet&>(rSet)).ClearItem( SID_ATTR_LRSPACE );
 
         if(pRep->HasColsChanged())
         {
@@ -398,10 +398,10 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     }
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem))
-        rSh.SetRowsToRepeat( ((SfxUInt16Item*)pItem)->GetValue() );
+        rSh.SetRowsToRepeat( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
 
     if( SfxItemState::SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, false, &pItem))
-        rSh.SetBoxAlign(((SfxUInt16Item*)(pItem))->GetValue());
+        rSh.SetBoxAlign(static_cast<const SfxUInt16Item*>((pItem))->GetValue());
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
         rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
@@ -636,12 +636,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 }
                 else
                     aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE,
-                                    ((SwTblBoxNumFormat&)aBoxSet.Get(
+                                    static_cast<const SwTblBoxNumFormat&>(aBoxSet.Get(
                                     RES_BOXATR_FORMAT )).GetValue() ));
 
                 OUString sCurText( rSh.GetTableBoxText() );
                 aCoreSet.Put( SvxNumberInfoItem( pFormatter,
-                                    ((SwTblBoxValue&)aBoxSet.Get(
+                                    static_cast<const SwTblBoxValue&>(aBoxSet.Get(
                                         RES_BOXATR_VALUE)).GetValue(),
                                     sCurText, SID_ATTR_NUMBERFORMAT_INFO ));
 
@@ -658,13 +658,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     const SfxPoolItem* pNumberFormatItem = GetView().GetDocShell()->
                                     GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
-                    if( pNumberFormatItem && 0 != ((SvxNumberInfoItem*)pNumberFormatItem)->GetDelCount() )
+                    if( pNumberFormatItem && 0 != static_cast<const SvxNumberInfoItem*>(pNumberFormatItem)->GetDelCount() )
                     {
-                        const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)
+                        const sal_uInt32* pDelArr = static_cast<const SvxNumberInfoItem*>(
                                                         pNumberFormatItem)->GetDelArray();
 
-                        for ( sal_uInt32 i = 0; i < ((SvxNumberInfoItem*)pNumberFormatItem)->GetDelCount(); i++ )
-                            ((SvxNumberInfoItem*)pNumberFormatItem)->
+                        for ( sal_uInt32 i = 0; i < static_cast<const SvxNumberInfoItem*>(pNumberFormatItem)->GetDelCount(); i++ )
+                            static_cast<const SvxNumberInfoItem*>(pNumberFormatItem)->
                             GetNumberFormatter()->DeleteEntry( pDelArr[i] );
                     }
 
@@ -674,7 +674,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         SfxItemSet aBoxFormatSet( *aCoreSet.GetPool(),
                                     RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
                         aBoxFormatSet.Put( SwTblBoxNumFormat(
-                                ((SfxUInt32Item*)pNumberFormatItem)->GetValue() ));
+                                static_cast<const SfxUInt32Item*>(pNumberFormatItem)->GetValue() ));
                         rSh.SetTblBoxFormulaAttrs( aBoxFormatSet );
 
                     }
@@ -710,7 +710,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             bool bAppendLine = true;
             if( pItem )
-                bAppendLine = ((SfxBoolItem*)pItem)->GetValue();
+                bAppendLine = static_cast<const SfxBoolItem*>(pItem)->GetValue();
             rReq.SetReturnValue( SfxBoolItem( nSlot,
                                     rSh.GoNextCell( bAppendLine ) ) );
             bCallDone = true;

@@ -49,7 +49,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
     // If the Ole-Frm is formatted, then the CalcAndSetScale() of the WrtShell
     // will be called. There the scaling of the SwOleClient is set if necessary.
 
-    SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
+    SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
 
     rSh.StartAllAction();
 
@@ -85,7 +85,7 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 
 void SwOleClient::ObjectAreaChanged()
 {
-    SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
+    SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
     SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     0, GetObject() ));
     if ( !aFrm.IsOver( rSh.VisArea() ) )
         rSh.MakeVisible( aFrm );
@@ -105,7 +105,7 @@ void SwOleClient::ViewChanged()
         return;
     }
 
-    SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
+    SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
 
     // Adjust the size of the object in the core. The Scaling must
     // be considered. Repercussions on the object are considered by
@@ -154,7 +154,7 @@ void SwOleClient::ViewChanged()
 
 void SwOleClient::MakeVisible()
 {
-    const SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
+    const SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
     rSh.MakeObjVisible( GetObject() );
 }
 

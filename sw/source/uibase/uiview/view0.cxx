@@ -362,7 +362,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( nSlot , false, &pAttr ))
     {
-        bSet = ((SfxBoolItem*)pAttr)->GetValue();
+        bSet = static_cast<const SfxBoolItem*>(pAttr)->GetValue();
         eState = bSet ? STATE_ON : STATE_OFF;
     }
 

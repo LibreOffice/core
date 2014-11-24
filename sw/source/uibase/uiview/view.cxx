@@ -498,7 +498,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
             const SfxPoolItem *pItem;
             if ( SfxItemState::SET != GetObjectShell()->GetMedium()->GetItemSet()->
                                     GetItemState( SID_HIDDEN, false, &pItem ) ||
-                 !((SfxBoolItem*)pItem)->GetValue() )
+                 !static_cast<const SfxBoolItem*>(pItem)->GetValue() )
             {
                 GetViewFrame()->GetBindings().ENTERREGISTRATIONS();
                 m_bAttrChgNotifiedWithRegistrations = true;
@@ -783,9 +783,9 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         // determine type of existing view
         if( pExistingSh->IsA( TYPE( SwPagePreview ) ) )
         {
-            m_sSwViewData = ((SwPagePreview*)pExistingSh)->GetPrevSwViewData();
-            m_sNewCrsrPos = ((SwPagePreview*)pExistingSh)->GetNewCrsrPos();
-            m_nNewPage = ((SwPagePreview*)pExistingSh)->GetNewPage();
+            m_sSwViewData = static_cast<SwPagePreview*>(pExistingSh)->GetPrevSwViewData();
+            m_sNewCrsrPos = static_cast<SwPagePreview*>(pExistingSh)->GetNewCrsrPos();
+            m_nNewPage = static_cast<SwPagePreview*>(pExistingSh)->GetNewPage();
             m_bOldShellWasPagePreview = true;
             m_bIsPreviewDoubleClick = !m_sNewCrsrPos.isEmpty() || m_nNewPage != USHRT_MAX;
         }
@@ -796,7 +796,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     SAL_INFO( "sw.ui", "before create WrtShell" );
     if(PTR_CAST( SwView, pExistingSh))
     {
-        m_pWrtShell = new SwWrtShell( *((SwView*)pExistingSh)->m_pWrtShell,
+        m_pWrtShell = new SwWrtShell( *static_cast<SwView*>(pExistingSh)->m_pWrtShell,
                                     m_pEditWin, *this);
     }
     else if( dynamic_cast<SwWrtShell*>( pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
@@ -806,7 +806,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
     else
     {
-        SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
+        SwDoc& rDoc = *static_cast<SwDocShell*>(pDocSh)->GetDoc();
 
         if( !bOldShellWasSrcView && bWebDShell && !m_bOldShellWasPagePreview )
             aUsrPref.setBrowseMode( true );
@@ -830,7 +830,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         // add the SwViewShell to the ring of the other SwViewShell(s)
         if(m_bOldShellWasPagePreview)
         {
-            SwViewShell& rPreviewViewShell = *((SwPagePreview*)pExistingSh)->GetViewShell();
+            SwViewShell& rPreviewViewShell = *static_cast<SwPagePreview*>(pExistingSh)->GetViewShell();
             m_pWrtShell->MoveTo(&rPreviewViewShell);
             // to update the field command et.al. if necessary
             const SwViewOption* pPreviewOpt = rPreviewViewShell.GetViewOptions();
@@ -841,11 +841,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
                 rPreviewViewShell.ApplyViewOptions(aUsrPref);
             // reset design mode at draw view for form
             // shell, if needed.
-            if ( ((SwPagePreview*)pExistingSh)->ResetFormDesignMode() &&
+            if ( static_cast<SwPagePreview*>(pExistingSh)->ResetFormDesignMode() &&
                  m_pWrtShell->HasDrawView() )
             {
                 SdrView* pDrawView = m_pWrtShell->GetDrawView();
-                pDrawView->SetDesignMode( ((SwPagePreview*)pExistingSh)->FormDesignModeToReset() );
+                pDrawView->SetDesignMode( static_cast<SwPagePreview*>(pExistingSh)->FormDesignModeToReset() );
             }
         }
     }
@@ -1590,7 +1590,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     bool bCallBase = true;
     if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
-        sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uInt32 nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         switch ( nId )
         {
             // sub shells will be destroyed by the
@@ -1662,7 +1662,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if(dynamic_cast<const FmDesignModeChangedHint*>(&rHint))
     {
-        bool bDesignMode = ((FmDesignModeChangedHint&)rHint).GetDesignMode();
+        bool bDesignMode = static_cast<const FmDesignModeChangedHint&>(rHint).GetDesignMode();
         if (!bDesignMode && GetDrawFuncPtr())
         {
             GetDrawFuncPtr()->Deactivate();

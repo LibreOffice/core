@@ -134,7 +134,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     case TYP_DDEFLD:
                     {
-                        ::sfx2::SvBaseLink& rLink = ((SwDDEFieldType*)pFld->GetTyp())->
+                        ::sfx2::SvBaseLink& rLink = static_cast<SwDDEFieldType*>(pFld->GetTyp())->
                                                 GetBaseLink();
                         if(rLink.IsVisible())
                         {
@@ -166,7 +166,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             if(pFld && pFld->GetTyp()->Which() == RES_MACROFLD)
             {
 
-                const OUString& rMacro = ((SwMacroField*)pFld)->GetMacro();
+                const OUString& rMacro = static_cast<SwMacroField*>(pFld)->GetMacro();
                 sal_Int32 nPos = rMacro.indexOf('.');
                 if(nPos != -1)
                 {
@@ -240,7 +240,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_3, false, &pItem ))
-                        nCommand = ((SfxInt32Item*)pItem)->GetValue();
+                        nCommand = static_cast<const SfxInt32Item*>(pItem)->GetValue();
                     aPar1 += OUString(DB_DELIM);
                     aPar1 += OUString::number(nCommand);
                     aPar1 += OUString(DB_DELIM);
@@ -542,7 +542,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 SwFldMgr aMgr;
                 if ( pItem )
                 {
-                    aText = ((SfxStringItem*)pItem)->GetValue();
+                    aText = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     SFX_REQUEST_ARG( rReq, pType, SfxStringItem, FN_PARAM_2 , false );
                     SFX_REQUEST_ARG( rReq, pIsUrl, SfxBoolItem, FN_PARAM_1 , false );
                     if ( pType )
@@ -685,7 +685,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     RES_AUTHORITY == nTempWhich )
                     rSet.DisableItem( nWhich );
                 else if( RES_DDEFLD == nTempWhich &&
-                    !((SwDDEFieldType*)pField->GetTyp())->GetBaseLink().IsVisible())
+                    !static_cast<SwDDEFieldType*>(pField->GetTyp())->GetBaseLink().IsVisible())
                 {
                     // nested links cannot be edited
                     rSet.DisableItem( nWhich );

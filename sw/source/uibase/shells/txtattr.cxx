@@ -471,8 +471,8 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                     rSh.StartUndo( UNDO_START );
                     if ( SfxItemState::SET == aSet.GetItemState(HINT_END,false,&pItem) )
                     {
-                        if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
-                            rSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
+                        if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
+                            rSh.ReplaceDropTxt(static_cast<const SfxStringItem*>(pItem)->GetValue());
                     }
                     rSh.SetAttrSet(*pDlg->GetOutputItemSet());
                     rSh.StartUndo( UNDO_END );

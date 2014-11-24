@@ -1455,7 +1455,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     sal_uInt16 nCnt = 1;
     const SfxPoolItem* pItem=0;
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ) )
-        nCnt = ((SfxUInt16Item*)pItem)->GetValue();
+        nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
     switch( nId )
     {
         case SID_UNDO:

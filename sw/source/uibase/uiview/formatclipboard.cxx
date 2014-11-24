@@ -159,7 +159,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
         rSh.SetTabBorders( rSet );
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem) )
-        rSh.SetRowsToRepeat( ((SfxUInt16Item*)pItem)->GetValue() );
+        rSh.SetRowsToRepeat( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
 
     SwFrmFmt* pFrmFmt = rSh.GetTableFmt();
     if(pFrmFmt)
@@ -209,7 +209,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     }
 
     if( SfxItemState::SET == rSet.GetItemState( FN_TABLE_SET_VERT_ALIGN, false, &pItem))
-        rSh.SetBoxAlign(((SfxUInt16Item*)(pItem))->GetValue());
+        rSh.SetBoxAlign(static_cast<const SfxUInt16Item*>((pItem))->GetValue());
 
     if( SfxItemState::SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pItem) )
         rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pItem));

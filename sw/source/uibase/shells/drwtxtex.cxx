@@ -663,7 +663,7 @@ ASK_ADJUST:
                 if( !pAdjust || IsInvalidItem( pAdjust ))
                     rSet.InvalidateItem( nSlotId ), nSlotId = 0;
                 else
-                    bFlag = eAdjust == ((SvxAdjustItem*)pAdjust)->GetAdjust();
+                    bFlag = eAdjust == static_cast<const SvxAdjustItem*>(pAdjust)->GetAdjust();
             }
             break;
 

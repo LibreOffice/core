@@ -526,7 +526,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OUString aTemplateName;
             if ( pItem )
             {
-                nKind = ((SfxInt16Item*)pItem)->GetValue();
+                nKind = static_cast<const SfxInt16Item*>(pItem)->GetValue();
                 SFX_REQUEST_ARG( rReq, pTemplate, SfxStringItem, FN_PARAM_1 , false );
                 SFX_REQUEST_ARG( rReq, pNumber, SfxUInt16Item, FN_PARAM_2 , false );
                 SFX_REQUEST_ARG( rReq, pIsNumberFilled, SfxBoolItem, FN_PARAM_3, false );
@@ -590,7 +590,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                OUString sName = ((SfxStringItem*)pItem)->GetValue();
+                OUString sName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                 rWrtSh.SetBookmark( vcl::KeyCode(), sName, OUString() );
             }
             else
@@ -610,7 +610,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
-                pMarkAccess->deleteMark( pMarkAccess->findMark(((SfxStringItem*)pItem)->GetValue()) );
+                pMarkAccess->deleteMark( pMarkAccess->findMark(static_cast<const SfxStringItem*>(pItem)->GetValue()) );
             }
             break;
         }
@@ -730,9 +730,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if(pFld && pFld->GetTypeId() == TYP_GETREFFLD)
             {
                 rWrtSh.StartAllAction();
-                rWrtSh.SwCrsrShell::GotoRefMark( ((SwGetRefField*)pFld)->GetSetRefName(),
-                                    ((SwGetRefField*)pFld)->GetSubType(),
-                                    ((SwGetRefField*)pFld)->GetSeqNo() );
+                rWrtSh.SwCrsrShell::GotoRefMark( static_cast<SwGetRefField*>(pFld)->GetSetRefName(),
+                                    static_cast<SwGetRefField*>(pFld)->GetSubType(),
+                                    static_cast<SwGetRefField*>(pFld)->GetSeqNo() );
                 rWrtSh.EndAllAction();
                 rReq.Done();
             }
@@ -953,7 +953,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // Left border as offset
             //#i24363# tab stops relative to indent
             const long nOff = rWrtSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
-                ((SvxLRSpaceItem&)aCoreSet.Get( RES_LR_SPACE )).GetTxtLeft() : 0;
+                static_cast<const SvxLRSpaceItem&>(aCoreSet.Get( RES_LR_SPACE )).GetTxtLeft() : 0;
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );
 
@@ -1006,7 +1006,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 sal_uInt16 nNewDist;
                 if( SfxItemState::SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, false, &pItem ) &&
-                    nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
+                    nDefDist != (nNewDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue()) )
                 {
                     SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
                     MakeDefTabs( nNewDist, aDefTabs );
@@ -1048,8 +1048,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.StartAction();
                     if ( SfxItemState::SET == pSet->GetItemState(FN_DROP_TEXT, false, &pItem) )
                     {
-                        if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
-                            rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue(), pPaM);
+                        if ( !static_cast<const SfxStringItem*>(pItem)->GetValue().isEmpty() )
+                            rWrtSh.ReplaceDropTxt(static_cast<const SfxStringItem*>(pItem)->GetValue(), pPaM);
                     }
                     rWrtSh.SetAttrSet( *pSet, 0, pPaM );
                     rWrtSh.EndAction();
@@ -1067,7 +1067,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //otherwise the SetNodeNumStart() value determines the start
                     //if it's set to something different than USHRT_MAX
 
-                    bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                    bool bStart = static_cast<const SfxBoolItem&>(pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
 
                     // Default value for restart value has to be USHRT_MAX
                     // in order to indicate that the restart value of the list
@@ -1075,14 +1075,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     sal_uInt16 nNumStart = USHRT_MAX;
                     if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
-                        nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                        nNumStart = static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                     }
                     rWrtSh.SetNumRuleStart(bStart, pPaM);
                     rWrtSh.SetNodeNumStart(nNumStart);
                 }
                 else if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                 {
-                    rWrtSh.SetNodeNumStart(((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue());
+                    rWrtSh.SetNodeNumStart(static_cast<const SfxUInt16Item&>(pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue());
                     rWrtSh.SetNumRuleStart(false, pPaM);
                 }
                 // #i56253#

@@ -151,7 +151,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     //determine the size of the object
                     if(pObj->IsGroupObject())
                     {
-                        const Rectangle& rBoundRect = ((SdrObjGroup*)pObj)->GetCurrentBoundRect();
+                        const Rectangle& rBoundRect = static_cast<SdrObjGroup*>(pObj)->GetCurrentBoundRect();
                         aStartPos.X() -= rBoundRect.GetWidth()/2;
                         aStartPos.Y() -= rBoundRect.GetHeight()/2;
                     }
@@ -490,7 +490,7 @@ bool SwView::EnterDrawTextMode(const Point& aDocPos)
         // To allow SwDrawVirtObj text objects to be activated, allow their type, too.
         ( pObj->ISA( SdrTextObj ) ||
           ( pObj->ISA(SwDrawVirtObj) &&
-            ((SwDrawVirtObj*)pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
+            static_cast<SwDrawVirtObj*>(pObj)->GetReferencedObj().ISA(SdrTextObj) ) ) &&
 
         !m_pWrtShell->IsSelObjProtected(FLYPROTECT_CONTENT))
     {
@@ -564,12 +564,12 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     if(pObj->ISA(SwDrawVirtObj))
     {
         SwDrawVirtObj* pVirtObj = (SwDrawVirtObj*)pObj;
-        pToBeActivated = &((SdrObject&)pVirtObj->GetReferencedObj());
+        pToBeActivated = &const_cast<SdrObject&>(pVirtObj->GetReferencedObj());
         aNewTextEditOffset = pVirtObj->GetOffset();
     }
 
     // set in each case, thus it will be correct for all objects
-    ((SdrTextObj*)pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
+    static_cast<SdrTextObj*>(pToBeActivated)->SetTextEditOffset(aNewTextEditOffset);
 
     bool bRet(pSdrView->SdrBeginTextEdit( pToBeActivated, pPV, pWin, true, pOutliner, 0, false, false, false ));
 

@@ -183,7 +183,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
         }
         // Compromise solution - Under certain circumstances SetZoom is called
         // in CalcVisAreas again and thus be set wrong values.
-        ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
+        const_cast<SwViewOption*>(m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
         CalcVisArea( rEditSize );   // for the recalculation of the viewable area
     }
     else if ( nZoomFac != pOpt->GetZoom() )
@@ -197,7 +197,7 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     m_pVRuler->ForceUpdate();
     m_pHRuler->SetZoom( aFrac );
     m_pHRuler->ForceUpdate();
-    ((SwViewOption*)m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
+    const_cast<SwViewOption*>(m_pWrtShell->GetViewOptions())->SetZoomType( eZoomType );
     } // end of SwActContext scope
 
     m_pWrtShell->UnlockPaint();

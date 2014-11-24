@@ -300,7 +300,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         SwView* pView = &rView;
 
                         SwTransferable::PasteFormat( rSh, aDataHelper,
-                                        ((SfxUInt32Item*)pFmt)->GetValue() );
+                                        static_cast<const SfxUInt32Item*>(pFmt)->GetValue() );
 
                         //Done() has to be called before the shell has been removed
                         rReq.Done();
@@ -463,7 +463,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
     if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ))
-        nCnt = ((SfxUInt16Item*)pItem)->GetValue();
+        nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
     // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
     SfxViewFrame *const pViewFrame( GetView().GetViewFrame() );
@@ -1552,7 +1552,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         rSh.GetObjAttr(aSet);
                     else
                         rSh.GetFlyFrmAttr(aSet);
-                    RndStdIds eSet = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
+                    RndStdIds eSet = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     const bool bSet =
                            ((nWhich == FN_TOOL_ANCHOR_PAGE) &&
                             (eSet == FLY_AT_PAGE))
@@ -1627,7 +1627,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else
                     {
                         rSh.GetFlyFrmAttr(aSet);
-                        nAnchorType = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
+                        nAnchorType = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     }
                     const SwFmtSurround& rWrap = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
 

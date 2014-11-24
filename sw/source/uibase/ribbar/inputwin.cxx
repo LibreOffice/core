@@ -260,7 +260,7 @@ void SwInputWindow::ShowWin()
 
                 SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_BOXATR_FORMULA, RES_BOXATR_FORMULA );
                 if( pWrtShell->GetTblBoxFormulaAttrs( aSet ))
-                    sEdit += ((SwTblBoxFormula&)aSet.Get( RES_BOXATR_FORMULA )).GetFormula();
+                    sEdit += static_cast<const SwTblBoxFormula&>(aSet.Get( RES_BOXATR_FORMULA )).GetFormula();
             }
         }
 
@@ -506,9 +506,9 @@ void InputEdit::KeyInput(const KeyEvent& rEvent)
 {
     const vcl::KeyCode aCode = rEvent.GetKeyCode();
     if(aCode == KEY_RETURN || aCode == KEY_F2 )
-        ((SwInputWindow*)GetParent())->ApplyFormula();
+        static_cast<SwInputWindow*>(GetParent())->ApplyFormula();
     else if(aCode == KEY_ESCAPE )
-        ((SwInputWindow*)GetParent())->CancelFormula();
+        static_cast<SwInputWindow*>(GetParent())->CancelFormula();
     else
         Edit::KeyInput(rEvent);
 }
@@ -617,7 +617,7 @@ SwInputChild::SwInputChild(vcl::Window* _pParent,
 {
     pDispatch = pBindings->GetDispatcher();
     pWindow = new SwInputWindow( _pParent, pBindings );
-    ((SwInputWindow*)pWindow)->ShowWin();
+    static_cast<SwInputWindow*>(pWindow)->ShowWin();
     eChildAlignment = SFX_ALIGN_LOWESTTOP;
 }
 

@@ -125,7 +125,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             bool bGlobal = false;
             if(pItem)
             {
-                pCurTOX = (const SwTOXBase* )((SwPtrItem*)pItem)->GetValue();
+                pCurTOX = (const SwTOXBase* )static_cast<const SwPtrItem*>(pItem)->GetValue();
                 bGlobal = true;
             }
             else

@@ -331,7 +331,7 @@ void SwTbxFieldCtrl::StateChanged( sal_uInt16,
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
     if (eState >= SfxItemState::DEFAULT)
     {
-        GetToolBox().CheckItem( GetId(), ((SfxBoolItem*)pState)->GetValue() );
+        GetToolBox().CheckItem( GetId(), static_cast<const SfxBoolItem*>(pState)->GetValue() );
     }
 }
 
@@ -502,8 +502,8 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
 void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ToolBox::MouseButtonUp(rMEvt);
-    if ( ((SwScrollNaviPopup*)GetParent())->IsInPopupMode() )
-        ((SwScrollNaviPopup*)GetParent())->EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
+    if ( static_cast<SwScrollNaviPopup*>(GetParent())->IsInPopupMode() )
+        static_cast<SwScrollNaviPopup*>(GetParent())->EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
 }
 
 void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )

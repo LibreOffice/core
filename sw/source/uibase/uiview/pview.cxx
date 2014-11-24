@@ -166,7 +166,7 @@ SwPreviewZoomDlg::SwPreviewZoomDlg( SwPagePreviewWin& rParent )
 
 void  SwPreviewZoomDlg::Apply()
 {
-    ((SwPagePreviewWin*)GetParent())->CalcWish(
+    static_cast<SwPagePreviewWin*>(GetParent())->CalcWish(
                 sal_uInt8(m_pRowEdit->GetValue()),
                 sal_uInt8(m_pColEdit->GetValue()) );
 }
@@ -1052,7 +1052,7 @@ void  SwPagePreview::GetState( SfxItemSet& rSet )
                 else if( SfxItemState::SET == aSet.GetItemState( SID_PRINTDOC,
                         false, &pItem ))
                 {
-                    ((SfxPoolItem*)pItem)->SetWhich( FN_PRINT_PAGEPREVIEW );
+                    const_cast<SfxPoolItem*>(pItem)->SetWhich( FN_PRINT_PAGEPREVIEW );
                     rSet.Put( *pItem );
                 }
             }
@@ -1175,12 +1175,12 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
     SwViewShell *pVS, *pNew;
 
     if( pOldSh && pOldSh->IsA( TYPE( SwPagePreview ) ) )
-        pVS = ((SwPagePreview*)pOldSh)->GetViewShell();
+        pVS = static_cast<SwPagePreview*>(pOldSh)->GetViewShell();
     else
     {
         if( pOldSh && pOldSh->IsA( TYPE( SwView ) ) )
         {
-            pVS = ((SwView*)pOldSh)->GetWrtShellPtr();
+            pVS = static_cast<SwView*>(pOldSh)->GetWrtShellPtr();
             // save the current ViewData of the previous SwView
             pOldSh->WriteUserData( sSwViewData, false );
         }
@@ -1190,7 +1190,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         {
             // Set the current page as the first.
             sal_uInt16 nPhysPg, nVirtPg;
-            ((SwCrsrShell*)pVS)->GetPageNum( nPhysPg, nVirtPg, true, false );
+            static_cast<SwCrsrShell*>(pVS)->GetPageNum( nPhysPg, nVirtPg, true, false );
             if( 1 != pViewWin->GetCol() && 1 == nPhysPg )
                 --nPhysPg;
             pViewWin->SetSttPage( nPhysPg );
@@ -1209,7 +1209,7 @@ SwPagePreview::SwPagePreview(SfxViewFrame *pViewFrame, SfxViewShell* pOldSh):
         pNew = new SwViewShell( *pVS, pViewWin, 0, VSHELLFLAG_ISPREVIEW );
     else
         pNew = new SwViewShell(
-                *((SwDocShell*)pViewFrame->GetObjectShell())->GetDoc(),
+                *static_cast<SwDocShell*>(pViewFrame->GetObjectShell())->GetDoc(),
                 pViewWin, 0, 0, VSHELLFLAG_ISPREVIEW );
 
     pViewWin->SetViewShell( pNew );
