@@ -129,9 +129,6 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixm
         None
     };
     Display* pDisplay = mrParent.GetXDisplay();
-    GLXFBConfig pFbConfig;
-    GLXPixmap pGlxPixmap;
-    GLXPixmap pGlxMask;
     bool bInverted;
 
     SAL_INFO( "vcl.opengl", "RenderPixmapToScreen (" << nX << " " << nY << ")" );
@@ -144,10 +141,13 @@ bool X11OpenGLSalGraphicsImpl::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixm
     //glClear( GL_COLOR_BUFFER_BIT );
 
     XSync( pDisplay, 0 );
-    pFbConfig = OpenGLHelper::GetPixmapFBConfig( pDisplay, bInverted );
-    pGlxPixmap = glXCreatePixmap( pDisplay, pFbConfig, pPixmap->GetPixmap(), aAttribs);
+    GLXFBConfig pFbConfig = OpenGLHelper::GetPixmapFBConfig( pDisplay, bInverted );
+    GLXPixmap pGlxPixmap = glXCreatePixmap( pDisplay, pFbConfig, pPixmap->GetPixmap(), aAttribs);
+    GLXPixmap pGlxMask;
     if( pMask != NULL )
         pGlxMask = glXCreatePixmap( pDisplay, pFbConfig, pMask->GetPixmap(), aAttribs);
+    else
+        pGlxMask = 0;
     XSync( pDisplay, 0 );
 
     if( !pGlxPixmap )
