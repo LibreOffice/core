@@ -258,6 +258,7 @@ bool ImplImageTree::findImage(std::vector<OUString> const & paths, BitmapEx & bi
             css::uno::Reference< css::io::XInputStream > s;
             bool ok = rNameAccess->getByName(*j) >>= s;
             assert(ok);
+            (void)ok; // prevent unused warning in release build
 
             loadImageFromStream( wrapStream(s), *j, bitmap );
             return true;
@@ -280,6 +281,7 @@ void ImplImageTree::loadImageLinks()
         css::uno::Reference< css::io::XInputStream > s;
         bool ok = rNameAccess->getByName(aLinkFilename) >>= s;
         assert(ok);
+        (void)ok; // prevent unused warning in release build
 
         parseLinkFile( wrapStream(s) );
         return;
