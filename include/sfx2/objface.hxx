@@ -80,7 +80,6 @@ public:
     sal_uInt32              GetObjectBarFeature( sal_uInt16 nNo ) const;
     sal_uInt16              GetObjectBarCount() const;
     void                    SetObjectBarPos( sal_uInt16 nPos, sal_uInt16 nId );
-    const OUString*         GetObjectBarName( sal_uInt16 nNo ) const;
     bool                    IsObjectBarVisible( sal_uInt16 nNo) const;
     sal_uInt32              GetChildWindowFeature( sal_uInt16 nNo ) const;
     sal_uInt32              GetChildWindowId( sal_uInt16 nNo ) const;

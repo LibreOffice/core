@@ -548,12 +548,10 @@ sal_uInt16 SfxInterface::GetChildWindowCount() const
         return pImpData->aChildWindows.size();
 }
 
-
 const ResId& SfxInterface::GetPopupMenuResId() const
 {
     return pImpData->aPopupRes;
 }
-
 
 const ResId& SfxInterface::GetStatusBarResId() const
 {
@@ -561,27 +559,6 @@ const ResId& SfxInterface::GetStatusBarResId() const
         return pGenoType->GetStatusBarResId();
     else
         return pImpData->aStatBarRes;
-}
-
-
-
-const OUString* SfxInterface::GetObjectBarName ( sal_uInt16 nNo ) const
-{
-    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
-    if ( bGenoType )
-    {
-        // Are there toolbars in the super class?
-        sal_uInt16 nBaseCount = pGenoType->GetObjectBarCount();
-        if ( nNo < nBaseCount )
-            // The Super class comes first
-            return pGenoType->GetObjectBarName( nNo );
-        else
-            nNo = nNo - nBaseCount;
-    }
-
-    assert( nNo<pImpData->aObjectBars.size() );
-
-    return pImpData->aObjectBars[nNo]->pName;
 }
 
 sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
