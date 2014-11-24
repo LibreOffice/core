@@ -1217,7 +1217,7 @@ struct Reduction : Op
     virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
     {
         pDoc->SetString(ScAddress(0,0,nTab), "x");
-        pDoc->SetString(ScAddress(1,0,nTab), msOp + "(" + OUString::number(mnNum) + ")");
+        pDoc->SetString(ScAddress(1,0,nTab), msOp);
         pDoc->SetString(ScAddress(2,0,nTab), "expected");
     }
 
@@ -1231,33 +1231,39 @@ struct Reduction : Op
 
         pDoc->SetValue(ScAddress(0,1+nRow,nTab), nArg);
 
-        if (nRow >= mnNum)
+        if (nRow >= mnNum-1)
         {
-            pDoc->SetString(ScAddress(1,1+nRow,nTab),
+            pDoc->SetString(ScAddress(1,1+nRow-mnNum+1,nTab),
                             OUString("=") + msOp + "(" +
-                            ScRange(ScAddress(0,1+nRow-mnNum,nTab),
+                            ScRange(ScAddress(0,1+nRow-mnNum+1,nTab),
                                     ScAddress(0,1+nRow,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW) +
                             ")");
 
             double nAccum(mnAccumInitial);
             for (int i = 0; i < mnNum; i++)
-                nAccum = mpFun(nAccum, pDoc->GetValue(ScAddress(0,1+nRow-mnNum+i,nTab)));
+                nAccum = mpFun(nAccum, pDoc->GetValue(ScAddress(0,1+nRow-mnNum+i+1,nTab)));
 
-            pDoc->SetValue(ScAddress(2,1+nRow,nTab), nAccum);
+            pDoc->SetValue(ScAddress(2,1+nRow-mnNum+1,nTab), nAccum);
 
-            pDoc->SetString(ScAddress(3,1+nRow,nTab),
-                            OUString("=IF(ABS(") + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                            "-" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                            ")<=" + OUString::number(mnEpsilon) +
-                            ",0,1)");
+            if (mnEpsilon != 0)
+                pDoc->SetString(ScAddress(3,1+nRow-mnNum+1,nTab),
+                                OUString("=IF(ABS(") + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "-" + ScAddress(2,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                ")<=" + OUString::number(mnEpsilon) +
+                                ",0,1)");
+            else
+                pDoc->SetString(ScAddress(3,1+nRow-mnNum+1,nTab),
+                                OUString("=IF(") + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "=" + ScAddress(2,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                ",0,1)");
         }
     }
 
     virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
     {
         return OUString("=SUM(") +
-            ScRange(ScAddress(3,1+mnNum,nTab),
-                    ScAddress(3,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+            ScRange(ScAddress(3,1+0,nTab),
+                    ScAddress(3,1+mnRows-mnNum-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
             ")";
     }
 };
