@@ -98,6 +98,11 @@ bool ImpBitmap::ImplCrop( const Rectangle& rRectPixel )
     return mpSalBitmap->Crop( rRectPixel );
 }
 
+bool ImpBitmap::ImplErase( const ::Color& rFillColor )
+{
+    return mpSalBitmap->Erase( rFillColor );
+}
+
 bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
     return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );

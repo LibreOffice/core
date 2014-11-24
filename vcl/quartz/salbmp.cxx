@@ -968,6 +968,11 @@ bool QuartzSalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
     return false;
 }
 
+bool QuartzSalBitmap::Erase( const ::Color& /*rFillColor*/ )
+{
+    return false;
+}
+
 bool QuartzSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
 {
     return false;
