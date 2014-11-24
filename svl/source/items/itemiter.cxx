@@ -25,8 +25,6 @@
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     : _rSet( rItemSet )
 {
-    DBG_ASSERTWARNING( _rSet.Count(), "es gibt gar keine Attribute" );
-
     if ( !_rSet._nCount )
     {
         _nStt = 1;
@@ -49,15 +47,9 @@ SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     _nAkt = _nStt;
 }
 
-
-
-
 SfxItemIter::~SfxItemIter()
 {
 }
-
-
-
 
 const SfxPoolItem* SfxItemIter::NextItem()
 {

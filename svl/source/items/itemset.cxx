@@ -36,10 +36,6 @@
 // STATIC DATA
 
 static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
-#if OSL_DEBUG_LEVEL > 1
-static sal_uLong nRangesCopyCount = 0;   // How often have ranges been copied?
-#endif
-
 #include "nranges.cxx"
 #include "poolio.hxx"
 
@@ -58,18 +54,18 @@ const sal_Char *DbgCheckItemSet( const void* pVoid )
         if ( pItem )
         {
             ++nCount;
-            DBG_ASSERT( IsInvalidItem(pItem) ||
-                        pItem->Which() == 0 || pItem->Which() == nWh,
-                        "SfxItemSet: invalid which-id" );
-            DBG_ASSERT( IsInvalidItem(pItem) || !pItem->Which() ||
+            assert((IsInvalidItem(pItem) ||
+                        pItem->Which() == 0 || pItem->Which() == nWh
+                    ) && "SfxItemSet: invalid which-id" );
+            assert((IsInvalidItem(pItem) || !pItem->Which() ||
                     !SfxItemPool::IsWhich(pItem->Which()) ||
                     pSet->GetPool()->IsItemFlag(nWh, SFX_ITEM_NOT_POOLABLE) ||
-                    SFX_ITEMS_NULL != pSet->GetPool()->GetSurrogate(pItem),
-                    "SfxItemSet: item in set which is not in pool" );
+                    SFX_ITEMS_NULL != pSet->GetPool()->GetSurrogate(pItem)
+                   ) && "SfxItemSet: item in set which is not in pool" );
         }
 
     }
-    DBG_ASSERT( pSet->_nCount == nCount, "wrong SfxItemSet::nCount detected" );
+    assert(pSet->_nCount == nCount);
 
     return 0;
 }
@@ -93,7 +89,7 @@ SfxItemSet::SfxItemSet
     _pParent( 0 ),
     _nCount( 0 )
 {
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
+    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 //  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
 //              "please use suitable ranges" );
 #if defined DBG_UTIL && defined SFX_ITEMSET_NO_DEFAULT_CTOR
@@ -104,7 +100,7 @@ SfxItemSet::SfxItemSet
 #endif
 
     _pWhichRanges = (sal_uInt16*) _pPool->GetFrozenIdRanges();
-    DBG_ASSERT( _pWhichRanges, "don't create ItemSets with full range before FreezeIdRanges()" );
+    assert( _pWhichRanges && "don't create ItemSets with full range before FreezeIdRanges()" );
     if ( !_pWhichRanges )
         _pPool->FillItemIdRanges_Impl( _pWhichRanges );
 
@@ -120,8 +116,8 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhic
     _pParent( 0 ),
     _nCount( 0 )
 {
-    DBG_ASSERT( nWhich1 <= nWhich2, "Invalid range" );
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
+    assert(nWhich1 <= nWhich2);
+    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     InitRanges_Impl(nWhich1, nWhich2);
 }
@@ -157,8 +153,8 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
     _pWhichRanges( 0 ),
     _nCount( 0 )
 {
-    DBG_ASSERT( nWh1 <= nWh2, "Invalid range" );
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
+    assert(nWh1 <= nWh2);
+    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     if(!nNull)
         InitRanges_Impl(
@@ -179,10 +175,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
 
 void SfxItemSet::InitRanges_Impl(const sal_uInt16 *pWhichPairTable)
 {
-    #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
-    #endif
-
     sal_uInt16 nCnt = 0;
     const sal_uInt16* pPtr = pWhichPairTable;
     while( *pPtr )
@@ -209,7 +201,7 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     , _pWhichRanges(0)
     , _nCount(0)
 {
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
+    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     // pWhichPairTable == 0 ist f"ur das SfxAllEnumItemSet
     if ( pWhichPairTable )
@@ -221,7 +213,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
     _pParent( rASet._pParent ),
     _nCount( rASet._nCount )
 {
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
+    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     // Calculate the attribute count
     sal_uInt16 nCnt = 0;
@@ -255,9 +247,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
             *ppDst = &_pPool->Put( **ppSrc );
 
     // Copy the WhichRanges
-    #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE("SfxItemSet: Ranges-CopyCount==%ul", ++nRangesCopyCount);
-    #endif
     std::ptrdiff_t cnt = pPtr - rASet._pWhichRanges+1;
     _pWhichRanges = new sal_uInt16[ cnt ];
     memcpy( _pWhichRanges, rASet._pWhichRanges, sizeof( sal_uInt16 ) * cnt);
@@ -439,7 +428,7 @@ void SfxItemSet::InvalidateDefaultItems()
 
 void SfxItemSet::InvalidateAllItems()
 {
-    DBG_ASSERT( !_nCount, "There are still Items set" );
+    assert( !_nCount && "There are still Items set" );
 
     memset( (void*)_aItems, -1, ( _nCount = TotalCount() ) * sizeof( SfxPoolItem*) );
 }
@@ -660,7 +649,7 @@ void SfxItemSet::PutExtended
                             break;
 
                         default:
-                            OSL_FAIL( "invalid Argument for eDontCareAs" );
+                            assert(!"invalid Argument for eDontCareAs");
                     }
                 }
                 else
@@ -685,7 +674,7 @@ void SfxItemSet::PutExtended
                         break;
 
                     default:
-                        OSL_FAIL( "invalid Argument for eDefaultAs" );
+                        assert(!"invalid Argument for eDefaultAs");
                 }
             }
         pPtr += 2;
@@ -890,7 +879,7 @@ const SfxPoolItem* SfxItemSet::GetItem
             return pItem;
 
         // Else report error
-        OSL_FAIL( "invalid argument type" );
+        assert(!"invalid argument type");
     }
 
     // No Item of wrong type found
@@ -928,7 +917,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 #ifdef DBG_UTIL
                         const SfxPoolItem *pItem = *ppFnd;
                         if ( pItem->ISA(SfxVoidItem) || !pItem->Which() )
-                            DBG_WARNING( "SFX_WARNING: Getting disabled Item" );
+                            SAL_INFO("svl.items", "SFX_WARNING: Getting disabled Item");
 #endif
                         return **ppFnd;
                     }
@@ -977,7 +966,7 @@ sal_uInt16 SfxItemSet::TotalCount() const
  */
 void SfxItemSet::Intersect( const SfxItemSet& rSet )
 {
-    DBG_ASSERT(_pPool, "Not implemented without Pool");
+    assert(_pPool && "Not implemented without Pool");
     if( !Count() ) // None set?
         return;
 
@@ -1269,7 +1258,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
 void SfxItemSet::MergeValues( const SfxItemSet& rSet, bool bIgnoreDefaults )
 {
     // WARNING! When making changes/fixing bugs, always update the table above!!
-    DBG_ASSERT( GetPool() == rSet.GetPool(), "MergeValues with different Pools" );
+    assert( GetPool() == rSet.GetPool() && "MergeValues with different Pools" );
 
     // Test if the which Ranges are different
     bool bEqual = true;
@@ -1389,7 +1378,7 @@ sal_uInt16 SfxItemSet::GetWhichByPos( sal_uInt16 nPos ) const
         nPos = nPos - n;
         pPtr += 2;
     }
-    DBG_ASSERT( false, "We're wrong here" );
+    assert(false);
     return 0;
 }
 
@@ -1412,8 +1401,8 @@ SvStream &SfxItemSet::Store
                                    false: Surrogates */
 )   const
 {
-    DBG_ASSERT( _pPool, "No Pool" );
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "no Master Pool" );
+    assert(_pPool);
+    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     // Remember position of the count (to be able to correct it, if need be)
     sal_uLong nCountPos = rStream.Tell();
@@ -1432,7 +1421,7 @@ SvStream &SfxItemSet::Store
               pItem = aIter.NextItem() )
         {
             // Let Items (if need be as a Surrogate) be saved via Pool
-            DBG_ASSERT( !IsInvalidItem(pItem), "can't store invalid items" );
+            SAL_WARN_IF(IsInvalidItem(pItem), "svl.items", "can't store invalid items");
             if ( !IsInvalidItem(pItem) &&
                  _pPool->StoreItem( rStream, *pItem, bDirect ) )
                 // Item was streamed in 'rStream'
@@ -1477,8 +1466,8 @@ SvStream &SfxItemSet::Load
                                         (e.g. when inserting documents) */
 )
 {
-    DBG_ASSERT( _pPool, "No Pool");
-    DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "No Master Pool");
+    assert(_pPool);
+    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     // No RefPool => Resolve Surrogates with ItemSet's Pool
     if ( !pRefPool )
