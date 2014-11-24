@@ -464,6 +464,19 @@ void EditTextObject::Dump() const
 }
 #endif
 
+void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("editTextObject"));
+    sal_Int32 nCount = GetParagraphCount();
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("paragraph"));
+        xmlTextWriterWriteString(pWriter, BAD_CAST(GetText(i).toUtf8().getStr()));
+        xmlTextWriterEndElement(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+}
+
 // from SfxItemPoolUser
 void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 {

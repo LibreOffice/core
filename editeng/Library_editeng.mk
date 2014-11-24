@@ -152,6 +152,7 @@ $(eval $(call gb_Library_use_externals,editeng,\
 	boost_headers \
 	icuuc \
 	icu_headers \
+	libxml2 \
 ))
 
 # Runtime dependency for unit-tests

@@ -33,6 +33,8 @@
 
 #include <vector>
 
+#include <libxml/xmlwriter.h>
+
 class SfxItemPool;
 class SfxStyleSheetPool;
 class SvxFieldItem;
@@ -146,6 +148,7 @@ public:
 #if DEBUG_EDIT_ENGINE
     void Dump() const;
 #endif
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 #endif // INCLUDED_EDITENG_EDITOBJ_HXX

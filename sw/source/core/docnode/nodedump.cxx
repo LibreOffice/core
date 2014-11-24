@@ -162,16 +162,7 @@ void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
                     writer.startElement("outliner");
                     writer.writeFormatAttribute("ptr", "%p", pOutliner);
                     if (pOutliner)
-                    {
-                        const EditTextObject& rEditObj = pOutliner->GetTextObject();
-                        sal_Int32 nPara = rEditObj.GetParagraphCount();
-                        for (sal_Int32 j = 0; j < nPara; ++j)
-                        {
-                            writer.startElement("paragraph");
-                            xmlTextWriterWriteString(writer, BAD_CAST(OUStringToOString(rEditObj.GetText(j), RTL_TEXTENCODING_UTF8).getStr()));
-                            writer.endElement();
-                        }
-                    }
+                        pOutliner->GetTextObject().dumpAsXml(writer);
                     writer.endElement();
                 }
                 writer.endElement();
