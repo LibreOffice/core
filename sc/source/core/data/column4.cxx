@@ -1023,6 +1023,8 @@ public:
             pCell->aPos.SetRow(nRow);
             if (mbUpdateRefs)
                 pCell->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, pCell->aPos);
+            else
+                pCell->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, pCell->aPos);
         }
         else
         {

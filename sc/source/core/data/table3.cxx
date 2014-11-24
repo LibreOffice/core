@@ -868,6 +868,10 @@ void ScTable::SortReorderByRow(
                         pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
                         pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
                     }
+                    else
+                    {
+                        pNew->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, aCellPos);
+                    }
 
                     rCellStore.push_back(pNew);
                 }
