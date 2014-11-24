@@ -45,22 +45,14 @@ End
 
 #if !defined WNT
 Directory gid_Dir_Ure_Lib
-#if defined MACOSX
-    ParentID = gid_Dir_UreLink;
-#else
     ParentID = gid_Dir_Common_Ure;
-#endif
     DosName = "lib";
 End
 #endif
 
 #if !defined WNT
 Directory gid_Dir_Ure_Share
-#if defined MACOSX
-    ParentID = gid_Dir_UreLink;
-#else
     ParentID = gid_Dir_Common_Ure;
-#endif
     DosName = "share";
 End
 #endif
