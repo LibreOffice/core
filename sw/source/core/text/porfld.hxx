@@ -193,7 +193,7 @@ public:
     inline void SetNoPaint( bool bNew ) { bNoPaint = bNew; }
     inline void SetRelPos( SwTwips nNew ) { nYPos = nNew; }
     inline void SetId( long nNew ) const
-        { ((SwGrfNumPortion*)this)->nId = nNew; }
+        { const_cast<SwGrfNumPortion*>(this)->nId = nNew; }
     inline SwTwips GetRelPos() const { return nYPos; }
     inline SwTwips GetGrfHeight() const { return nGrfHeight; }
     inline SwTwips GetId() const { return nId; }

@@ -77,7 +77,7 @@ public:
 };
 
 SwDropSave::SwDropSave( const SwTxtPaintInfo &rInf ) :
-        pInf( ((SwTxtPaintInfo*)&rInf) ), nIdx( rInf.GetIdx() ),
+        pInf( const_cast<SwTxtPaintInfo*>(&rInf) ), nIdx( rInf.GetIdx() ),
         nLen( rInf.GetLen() ), nX( rInf.X() ), nY( rInf.Y() )
 {
 }
@@ -252,8 +252,8 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
     const sal_uInt16 nOldAscent = GetAscent();
 
     const SwTwips nBasePosY  = rInf.Y();
-    ((SwTxtPaintInfo&)rInf).Y( nBasePosY + nY );
-    ((SwDropPortion*)this)->SetAscent( nOldAscent + nY );
+    const_cast<SwTxtPaintInfo&>(rInf).Y( nBasePosY + nY );
+    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent + nY );
     SwDropSave aSave( rInf );
     // for text inside drop portions we let vcl handle the text directions
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
@@ -261,9 +261,9 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 
     while ( pCurrPart )
     {
-        ((SwDropPortion*)this)->SetLen( pCurrPart->GetLen() );
-        ((SwDropPortion*)this)->Width( pCurrPart->GetWidth() );
-        ((SwTxtPaintInfo&)rInf).SetLen( pCurrPart->GetLen() );
+        const_cast<SwDropPortion*>(this)->SetLen( pCurrPart->GetLen() );
+        const_cast<SwDropPortion*>(this)->Width( pCurrPart->GetWidth() );
+        const_cast<SwTxtPaintInfo&>(rInf).SetLen( pCurrPart->GetLen() );
         SwFontSave aFontSave( rInf, &pCurrPart->GetFont() );
         const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(pCurrPart->GetJoinBorderWithNext());
         const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(pCurrPart->GetJoinBorderWithPrev());
@@ -277,15 +277,15 @@ void SwDropPortion::PaintTxt( const SwTxtPaintInfo &rInf ) const
 
         SwTxtPortion::Paint( rInf );
 
-        ((SwTxtPaintInfo&)rInf).SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
-        ((SwTxtPaintInfo&)rInf).X( rInf.X() + pCurrPart->GetWidth() );
+        const_cast<SwTxtPaintInfo&>(rInf).SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
+        const_cast<SwTxtPaintInfo&>(rInf).X( rInf.X() + pCurrPart->GetWidth() );
         pCurrPart = pCurrPart->GetFollow();
     }
 
-    ((SwTxtPaintInfo&)rInf).Y( nBasePosY );
-    ((SwDropPortion*)this)->Width( nOldWidth );
-    ((SwDropPortion*)this)->SetLen( nOldLen );
-    ((SwDropPortion*)this)->SetAscent( nOldAscent );
+    const_cast<SwTxtPaintInfo&>(rInf).Y( nBasePosY );
+    const_cast<SwDropPortion*>(this)->Width( nOldWidth );
+    const_cast<SwDropPortion*>(this)->SetLen( nOldLen );
+    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent );
     const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(false);
     const_cast<SwDropPortion*>(this)->SetJoinBorderWithPrev(false);
 }
@@ -308,12 +308,12 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     // make good for retouching
 
     // Set baseline
-    ((SwTxtPaintInfo&)rInf).Y( aOutPos.Y() + nDropHeight );
+    const_cast<SwTxtPaintInfo&>(rInf).Y( aOutPos.Y() + nDropHeight );
 
     // for background
-    ((SwDropPortion*)this)->Height( nDropHeight + nDropDescent );
-    ((SwDropPortion*)this)->Width( Width() - nX );
-    ((SwDropPortion*)this)->SetAscent( nDropHeight );
+    const_cast<SwDropPortion*>(this)->Height( nDropHeight + nDropDescent );
+    const_cast<SwDropPortion*>(this)->Width( Width() - nX );
+    const_cast<SwDropPortion*>(this)->SetAscent( nDropHeight );
 
     // adapt Clipregion to us
     // Und zwar immer, und nie mit dem bestehenden ClipRect
@@ -331,10 +331,10 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     PaintTxt( rInf );
 
     // save old values
-    ((SwDropPortion*)this)->Height( nOldHeight );
-    ((SwDropPortion*)this)->Width( nOldWidth );
-    ((SwDropPortion*)this)->SetAscent( nOldAscent );
-    ((SwTxtPaintInfo&)rInf).Y( nOldPosY );
+    const_cast<SwDropPortion*>(this)->Height( nOldHeight );
+    const_cast<SwDropPortion*>(this)->Width( nOldWidth );
+    const_cast<SwDropPortion*>(this)->SetAscent( nOldAscent );
+    const_cast<SwTxtPaintInfo&>(rInf).Y( nOldPosY );
 }
 
 void SwDropPortion::Paint( const SwTxtPaintInfo &rInf ) const
@@ -397,8 +397,8 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     sal_Int32 nOldIdx = rInf.GetIdx();
     sal_Int32 nOldLen = rInf.GetLen();
 
-    ((SwTxtSizeInfo&)rInf).SetIdx( nIdx );
-    ((SwTxtSizeInfo&)rInf).SetLen( rInf.GetLen() - nIdx );
+    const_cast<SwTxtSizeInfo&>(rInf).SetIdx( nIdx );
+    const_cast<SwTxtSizeInfo&>(rInf).SetLen( rInf.GetLen() - nIdx );
 
     if( pCurrPart )
     {
@@ -411,8 +411,8 @@ SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     SwPosSize aPosSize( SwTxtPortion::GetTxtSize( rInf ) );
     aPosSize.Width( aPosSize.Width() + nMyX );
 
-    ((SwTxtSizeInfo&)rInf).SetIdx( nOldIdx );
-    ((SwTxtSizeInfo&)rInf).SetLen( nOldLen );
+    const_cast<SwTxtSizeInfo&>(rInf).SetIdx( nOldIdx );
+    const_cast<SwTxtSizeInfo&>(rInf).SetLen( nOldLen );
     if( pCurrPart )
     {
         const_cast<SwDropPortion*>(this)->SetJoinBorderWithNext(false);
@@ -513,7 +513,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
     nPorLen = pFrm->GetTxtNode()->GetDropLen( nPorLen );
     if( !nPorLen )
     {
-        ((SwTxtFormatter*)this)->ClearDropFmt();
+        static_cast<SwTxtFormatter*>(this)->ClearDropFmt();
         return 0;
     }
 
@@ -543,7 +543,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
     // font is used.
     if ( GetDropLines() < 2 )
     {
-        ((SwTxtFormatter*)this)->SetPaintDrop( true );
+        static_cast<SwTxtFormatter*>(this)->SetPaintDrop( true );
         return pDropPor;
     }
 
@@ -589,7 +589,7 @@ SwDropPortion *SwTxtFormatter::NewDropPortion( SwTxtFormatInfo &rInf )
         pCurrPart = pPart;
     }
 
-    ((SwTxtFormatter*)this)->SetPaintDrop( true );
+    static_cast<SwTxtFormatter*>(this)->SetPaintDrop( true );
     return pDropPor;
 }
 

@@ -1126,11 +1126,11 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
                     aTmpFont.SetSize( aTmpSz, nAct );
                 }
             }
-            ((SwTxtPaintInfo&)rInf).SetPos( aOutPos );
+            const_cast<SwTxtPaintInfo&>(rInf).SetPos( aOutPos );
             rInf.DrawText( aExpand, *this, i, 1 );
         }
         // rInf is const, so we have to take back our manipulations
-        ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
+        const_cast<SwTxtPaintInfo&>(rInf).SetPos( aOldPos );
     }
 }
 

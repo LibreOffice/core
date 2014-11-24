@@ -119,7 +119,7 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
     // wenn hinter uns ein Blank ist, brauchen wir kein Underflow weiterreichen
     if (bUnderflow && nIdx + 1 < rInf.GetTxt().getLength() && CH_BLANK == rInf.GetTxt()[nIdx + 1])
         return 0;
-    if( nIdx && !((SwTxtFormatInfo&)rInf).GetFly() )
+    if( nIdx && !const_cast<SwTxtFormatInfo&>(rInf).GetFly() )
     {
         while( pPos && !pPos->IsFlyPortion() )
             pPos = pPos->GetPortion();

@@ -61,7 +61,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     sal_uInt16 nMaxSizeDiff;
 
     const SwScriptInfo& rSI =
-            ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+            static_cast<SwParaPortion*>(rInf.GetParaPortion())->GetScriptInfo();
 
     sal_uInt16 nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
                         rSI.CountCompChg() &&

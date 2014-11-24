@@ -718,7 +718,7 @@ const SwLayoutFrm *SwFrm::GetLeaf( MakePageType eMakePage, bool bFwd,
     bool bFound = false;
 
     do
-    {   pLeaf = ((SwFrm*)pLeaf)->GetLeaf( eMakePage, bFwd );
+    {   pLeaf = const_cast<SwFrm*>(pLeaf)->GetLeaf( eMakePage, bFwd );
 
         if ( pLeaf &&
             (!IsLayoutFrm() || !static_cast<const SwLayoutFrm*>(this)->IsAnLower( pLeaf )))
@@ -1845,7 +1845,7 @@ bool SwFlowFrm::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             }
         }
         // Do not calculate split cell frames.
-        else if ( !pNewUpper->IsCellFrm() || ((SwLayoutFrm*)pNewUpper)->Lower() )
+        else if ( !pNewUpper->IsCellFrm() || static_cast<SwLayoutFrm*>(pNewUpper)->Lower() )
             pNewUpper->Calc();
 
         SwFtnBossFrm *pNewBoss = pNewUpper->FindFtnBossFrm();

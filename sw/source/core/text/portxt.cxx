@@ -64,7 +64,7 @@ static sal_Int32 lcl_AddSpace( const SwTxtSizeInfo &rInf, const OUString* pStr,
         nPos = rInf.GetIdx();
         nEnd = rInf.GetIdx() + rPor.GetLen();
         pStr = &rInf.GetTxt();
-        pSI = &((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+        pSI = &const_cast<SwParaPortion*>(rInf.GetParaPortion())->GetScriptInfo();
     }
 
     sal_Int32 nCnt = 0;

@@ -198,7 +198,7 @@ SwArrowPortion::SwArrowPortion( const SwTxtPaintInfo &rInf )
 
 void SwArrowPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    ((SwArrowPortion*)this)->aPos = rInf.GetPos();
+    const_cast<SwArrowPortion*>(this)->aPos = rInf.GetPos();
 }
 
 SwLinePortion *SwArrowPortion::Compress() { return this; }
@@ -467,7 +467,7 @@ void SwHiddenTextPortion::Paint( const SwTxtPaintInfo & rInf) const
     aPos.Y() -= 150;
     aPos.X() -= 25;
     SwRect aRect( aPos, Size( 100, 200 ) );
-    ((OutputDevice*)pOut)->DrawRect( aRect.SVRect() );
+    static_cast<OutputDevice*>(pOut)->DrawRect( aRect.SVRect() );
     pOut->SetFillColor( aOldColor );
 #endif
 }

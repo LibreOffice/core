@@ -1384,7 +1384,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
 
                 if ( pUp->GetUpper() )
                     static_cast<SwRootFrm*>(pUp->GetUpper())->CheckViewLayout( 0, 0 );
-                //((SwPageFrm*)pUp)->AdjustRootSize( CHG_CHGPAGE, &aOldRect );
+                //static_cast<SwPageFrm*>(pUp)->AdjustRootSize( CHG_CHGPAGE, &aOldRect );
 
                 Frm().SSize().Height() = nOldFrmHeight;
                 Prt().SSize().Height() = nOldPrtHeight;
@@ -2934,7 +2934,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft( this );
     const sal_uInt16 nUpper = pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = (sal_uInt16)((SwBorderAttrs*)pAttrs)->CalcRight( this );
+    const sal_uInt16 nRight = (sal_uInt16)const_cast<SwBorderAttrs*>(pAttrs)->CalcRight( this );
     const sal_uInt16 nLower = pAttrs->CalcBottom();
     bool bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;

@@ -1627,8 +1627,8 @@ static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
 //             ///    first check "!bHell", then "..->Lower()" and "..->IsNoTxtFrm()"
 //             ///    have not to be performed, if frame is in "Hell"
 //             ( !bHell && pFly->Lower() && pFly->Lower()->IsNoTxtFrm() &&
-//               ( ((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
-//                 ((SwNoTxtFrm*)pFly->Lower())->HasAnimation() ||
+//               ( static_cast<SwNoTxtFrm*>(pFly->Lower())->IsTransparent() ||
+//                 static_cast<SwNoTxtFrm*>(pFly->Lower())->HasAnimation() ||
 //                 pFly->GetFmt()->GetSurround().IsContour()
 //               )
 //             )
@@ -1830,7 +1830,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
     }
 
     // No Link here, we want to load the graphic synchronously!
-    ((SvxBrushItem&)rBrush).SetDoneLink( Link() );
+    const_cast<SvxBrushItem&>(rBrush).SetDoneLink( Link() );
     GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject();
 
     // Outsource drawing of background with a background color
@@ -1956,11 +1956,11 @@ void DrawGraphic(
             if ( (rSh).GetViewOptions()->IsPDFExport() ||
                  rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
             {
-                ((SvxBrushItem*)pBrush)->PurgeMedium();
-                ((SvxBrushItem*)pBrush)->SetDoneLink( Link() );
+                const_cast<SvxBrushItem*>(pBrush)->PurgeMedium();
+                const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( Link() );
             }
             else
-                ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
+                const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( STATIC_LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
             OUString referer;
             SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
@@ -3203,13 +3203,13 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     }
     if ( bPerformLayoutAction )
     {
-        ((SwRootFrm*)this)->ResetTurbo();
+        const_cast<SwRootFrm*>(this)->ResetTurbo();
         SwLayAction aAction( (SwRootFrm*)this, pSh->Imp() );
         aAction.SetPaint( false );
         aAction.SetComplete( false );
         aAction.SetReschedule( gProp.pSProgress != nullptr );
         aAction.Action();
-        ((SwRootFrm*)this)->ResetTurboFlag();
+        const_cast<SwRootFrm*>(this)->ResetTurboFlag();
         if ( !pSh->ActionPend() )
             pSh->Imp()->DelRegion();
     }
@@ -3226,7 +3226,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     // of the document. Dangerous! We better set this flag to
     // avoid the reformat.
     const bool bOldAction = IsCallbackActionEnabled();
-    ((SwRootFrm*)this)->SetCallbackActionEnabled( false );
+    const_cast<SwRootFrm*>(this)->SetCallbackActionEnabled( false );
 
     const SwPageFrm *pPage = pSh->Imp()->GetFirstVisPage();
 
@@ -3495,7 +3495,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
         gProp.pSGlobalShell = 0;
     }
 
-    ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
+    const_cast<SwRootFrm*>(this)->SetCallbackActionEnabled( bOldAction );
 }
 
 static void lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
@@ -4386,7 +4386,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         aTabOutRect.Intersection( aTabRect );
         pViewOption->DrawRect( gProp.pSGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
     }
-    ((SwTabFrm*)this)->ResetComplete();
+    const_cast<SwTabFrm*>(this)->ResetComplete();
 }
 
 /**

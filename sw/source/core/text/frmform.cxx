@@ -553,7 +553,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
     {
         while( GetFollow() )
         {
-            if( ((SwTxtFrm*)GetFollow())->IsLocked() )
+            if( static_cast<SwTxtFrm*>(GetFollow())->IsLocked() )
             {
                 OSL_FAIL( "+SwTxtFrm::JoinFrm: Follow is locked." );
                 return;
@@ -1215,7 +1215,7 @@ bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const bool bPrev )
         if ( bHasUnderscore || rLine.GetCurr()->HasUnderscore() )
             rRepaint.Bottom( rRepaint.Bottom() + 40 );
 
-        ((SwLineLayout*)rLine.GetCurr())->SetUnderscore( bHasUnderscore );
+        const_cast<SwLineLayout*>(rLine.GetCurr())->SetUnderscore( bHasUnderscore );
     }
     if( !bUnChg )
         rLine.SetChanges();

@@ -412,7 +412,7 @@ SwOLENode * SwNodes::MakeOLENode( const SwNodeIndex & rWhere,
 Size SwOLENode::GetTwipSize() const
 {
     MapMode aMapMode( MAP_TWIP );
-    return ((SwOLENode*)this)->aOLEObj.GetObject().GetSize( &aMapMode );
+    return const_cast<SwOLENode*>(this)->aOLEObj.GetObject().GetSize( &aMapMode );
 }
 
 SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const

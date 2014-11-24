@@ -1141,7 +1141,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             }
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
-            const SwFmt *pFmt = ((SwContact*)GetUserCall(pSdrObj))->GetFmt();
+            const SwFmt *pFmt = static_cast<SwContact*>(GetUserCall(pSdrObj))->GetFmt();
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
             if( bMove )
             {
@@ -1175,7 +1175,7 @@ bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, bool bMove )
             if( !pAnchorFrm )
             {
                 OSL_FAIL( "<::CalcClipRect(..)> - missing anchor frame." );
-                ((SwDrawContact*)pC)->ConnectToLayout();
+                const_cast<SwDrawContact*>(pC)->ConnectToLayout();
                 pAnchorFrm = pC->GetAnchorFrm();
             }
             const SwFrm* pUp = pAnchorFrm->GetUpper();

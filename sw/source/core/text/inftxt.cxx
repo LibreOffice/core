@@ -193,12 +193,12 @@ inline sal_Int32 GetMinLen( const SwTxtSizeInfo &rInf )
 
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
     : SwTxtInfo( rNew ),
-      m_pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
-      m_pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
-      m_pOut(((SwTxtSizeInfo&)rNew).GetOut()),
-      m_pRef(((SwTxtSizeInfo&)rNew).GetRefDev()),
-      m_pFnt(((SwTxtSizeInfo&)rNew).GetFont()),
-      m_pUnderFnt(((SwTxtSizeInfo&)rNew).GetUnderFnt()),
+      m_pKanaComp(const_cast<SwTxtSizeInfo&>(rNew).GetpKanaComp()),
+      m_pVsh(const_cast<SwTxtSizeInfo&>(rNew).GetVsh()),
+      m_pOut(const_cast<SwTxtSizeInfo&>(rNew).GetOut()),
+      m_pRef(const_cast<SwTxtSizeInfo&>(rNew).GetRefDev()),
+      m_pFnt(const_cast<SwTxtSizeInfo&>(rNew).GetFont()),
+      m_pUnderFnt(const_cast<SwTxtSizeInfo&>(rNew).GetUnderFnt()),
       m_pFrm(rNew.m_pFrm),
       m_pOpt(&rNew.GetOpt()),
       m_pTxt(&rNew.GetTxt()),
@@ -304,12 +304,12 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
                               const sal_Int32 nIndex, const sal_Int32 nLength )
     : SwTxtInfo( rNew ),
-      m_pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
-      m_pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
-      m_pOut(((SwTxtSizeInfo&)rNew).GetOut()),
-      m_pRef(((SwTxtSizeInfo&)rNew).GetRefDev()),
-      m_pFnt(((SwTxtSizeInfo&)rNew).GetFont()),
-      m_pUnderFnt(((SwTxtSizeInfo&)rNew).GetUnderFnt()),
+      m_pKanaComp(const_cast<SwTxtSizeInfo&>(rNew).GetpKanaComp()),
+      m_pVsh(const_cast<SwTxtSizeInfo&>(rNew).GetVsh()),
+      m_pOut(const_cast<SwTxtSizeInfo&>(rNew).GetOut()),
+      m_pRef(const_cast<SwTxtSizeInfo&>(rNew).GetRefDev()),
+      m_pFnt(const_cast<SwTxtSizeInfo&>(rNew).GetFont()),
+      m_pUnderFnt(const_cast<SwTxtSizeInfo&>(rNew).GetUnderFnt()),
       m_pFrm( rNew.m_pFrm ),
       m_pOpt(&rNew.GetOpt()),
       m_pTxt(pTxt),
@@ -461,7 +461,7 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pSmartTags = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
-    pBrushItem = ((SvxBrushItem*)-1);
+    pBrushItem = static_cast<SvxBrushItem*>(-1);
 #else
     pBrushItem = 0;
 #endif
@@ -824,7 +824,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     Size aFontSize( 0, SPECIAL_FONT_HEIGHT );
     m_pFnt->SetSize( aFontSize, m_pFnt->GetActual() );
 
-    ((SwTxtPaintInfo&)rInf).SetFont( m_pFnt );
+    const_cast<SwTxtPaintInfo&>(rInf).SetFont( m_pFnt );
 
     // The maximum width depends on the current orientation
     const sal_uInt16 nDir = m_pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
@@ -886,13 +886,13 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     }
 
     Point aTmpPos( nX, nY );
-    ((SwTxtPaintInfo&)rInf).SetPos( aTmpPos );
+    const_cast<SwTxtPaintInfo&>(rInf).SetPos( aTmpPos );
     sal_uInt16 nOldWidth = rPor.Width();
-    ((SwLinePortion&)rPor).Width( (sal_uInt16)aFontSize.Width() );
+    const_cast<SwLinePortion&>(rPor).Width( (sal_uInt16)aFontSize.Width() );
     rInf.DrawText( aTmp, rPor );
-    ((SwLinePortion&)rPor).Width( nOldWidth );
-    ((SwTxtPaintInfo&)rInf).SetFont( (SwFont*)pOldFnt );
-    ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
+    const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
+    const_cast<SwTxtPaintInfo&>(rInf).SetFont( (SwFont*)pOldFnt );
+    const_cast<SwTxtPaintInfo&>(rInf).SetPos( aOldPos );
 }
 
 void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
@@ -901,7 +901,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
     if ( OnWin() || !bRetouche )
     {
         if( aTxtFly.IsOn() )
-            ((SwTxtPaintInfo*)this)->GetTxtFly().
+            const_cast<SwTxtPaintInfo*>(this)->GetTxtFly().
                 DrawFlyRect( m_pOut, rRect, *this, bNoGraphic );
         else if ( bNoGraphic )
             m_pOut->DrawRect( rRect.SVRect() );
@@ -941,7 +941,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     if( OnWin() )
     {
         sal_uInt16 nOldWidth = rPor.Width();
-        ((SwLinePortion&)rPor).Width( LINE_BREAK_WIDTH );
+        const_cast<SwLinePortion&>(rPor).Width( LINE_BREAK_WIDTH );
 
         SwRect aRect;
         CalcRect( rPor, &aRect );
@@ -955,7 +955,7 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
             lcl_DrawSpecial( *this, rPor, aRect, Color(NON_PRINTING_CHARACTER_COLOR), cChar, nOptions );
         }
 
-        ((SwLinePortion&)rPor).Width( nOldWidth );
+        const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
     }
 }
 
@@ -1706,12 +1706,12 @@ SwTxtSlot::~SwTxtSlot()
 SwFontSave::SwFontSave(const SwTxtSizeInfo &rInf, SwFont *pNew,
         SwAttrIter* pItr)
     : pInf(NULL)
-    , pFnt(pNew ? ((SwTxtSizeInfo&)rInf).GetFont() : NULL)
+    , pFnt(pNew ? const_cast<SwTxtSizeInfo&>(rInf).GetFont() : NULL)
     , pIter(NULL)
 {
     if( pFnt )
     {
-        pInf = &((SwTxtSizeInfo&)rInf);
+        pInf = &const_cast<SwTxtSizeInfo&>(rInf);
         // In these cases we temporarily switch to the new font:
         // 1. the fonts have a different magic number
         // 2. they have different script types

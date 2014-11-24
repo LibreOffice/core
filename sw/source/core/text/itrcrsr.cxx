@@ -101,7 +101,7 @@ static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
             rInf.GetFont()->SetActual( SwScriptInfo::WhichFont( 0, pString, 0 ) );
 
             sal_Int32 nOldLen = pPor->GetLen();
-            ((SwLinePortion*)pPor)->SetLen( nLen - 1 );
+            const_cast<SwLinePortion*>(pPor)->SetLen( nLen - 1 );
             const SwTwips nX1 = pPor->GetLen() ?
                                 pPor->GetTxtSize( rInf ).Width() :
                                 0;
@@ -109,11 +109,11 @@ static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
             SwTwips nX2 = 0;
             if ( rCMS.bRealWidth )
             {
-                ((SwLinePortion*)pPor)->SetLen( nLen );
+                const_cast<SwLinePortion*>(pPor)->SetLen( nLen );
                 nX2 = pPor->GetTxtSize( rInf ).Width();
             }
 
-            ((SwLinePortion*)pPor)->SetLen( nOldLen );
+            const_cast<SwLinePortion*>(pPor)->SetLen( nOldLen );
 
             rOrig.Pos().X() += nX1;
             rOrig.Width( ( nX2 > nX1 ) ?
@@ -1120,7 +1120,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const sal_Int32 nOfst,
                     // the portion. This can happen is the last portion
                     // inside the bidi portion is a nested bidi portion
                     SwLineLayout& rLineLayout =
-                            ((SwMultiPortion*)pLastBidiPor)->GetRoot();
+                            static_cast<SwMultiPortion*>(pLastBidiPor)->GetRoot();
 
                     const SwLinePortion *pLast = rLineLayout.FindLastPortion();
                     if ( pLast->IsMultiPortion() )
@@ -1305,7 +1305,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     {
         if ( pPor->InSpaceGrp() && nSpaceAdd )
         {
-            ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
+            const_cast<SwTxtSizeInfo&>(GetInfo()).SetIdx( nCurrStart );
             nWidth = nWidth + sal_uInt16( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
         }
         if( ( pPor->InFixMargGrp() && ! pPor->IsMarginPortion() ) ||
@@ -1349,7 +1349,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         {
             if ( pPor->InSpaceGrp() && nSpaceAdd )
             {
-                ((SwTxtSizeInfo&)GetInfo()).SetIdx( nCurrStart );
+                const_cast<SwTxtSizeInfo&>(GetInfo()).SetIdx( nCurrStart );
                 nWidth = nWidth + sal_uInt16( pPor->CalcSpacing( nSpaceAdd, GetInfo() ) );
             }
 
@@ -1400,7 +1400,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         }
     }
 
-    ((SwTxtSizeInfo&)GetInfo()).SetIdx( nOldIdx );
+    const_cast<SwTxtSizeInfo&>(GetInfo()).SetIdx( nOldIdx );
 
     sal_Int32 nLength = pPor->GetLen();
 
@@ -1409,7 +1409,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     if( bFieldInfo && ( nWidth30 < nX || bRightOver || bLeftOver ||
         ( pPor->InNumberGrp() && !pPor->IsFtnNumPortion() ) ||
         ( pPor->IsMarginPortion() && nWidth > nX + 30 ) ) )
-        ((SwCrsrMoveState*)pCMS)->bPosCorr = true;
+        static_cast<SwCrsrMoveState*>(pCMS)->bPosCorr = true;
 
     // #i27615#
     if (pCMS)
@@ -1430,16 +1430,16 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         if( pCMS )
         {
             if( pPor->IsFlyPortion() && bFieldInfo )
-                ((SwCrsrMoveState*)pCMS)->bPosCorr = true;
+                static_cast<SwCrsrMoveState*>(pCMS)->bPosCorr = true;
 
             if (!bRightOver && nX)
             {
                 if( pPor->IsFtnNumPortion())
-                    ((SwCrsrMoveState*)pCMS)->bFtnNoInfo = true;
+                    static_cast<SwCrsrMoveState*>(pCMS)->bFtnNoInfo = true;
                 else if (pPor->InNumberGrp() ) // #i23726#
                 {
-                    ((SwCrsrMoveState*)pCMS)->nInNumPostionOffset = nX;
-                    ((SwCrsrMoveState*)pCMS)->bInNumPortion = true;
+                    static_cast<SwCrsrMoveState*>(pCMS)->nInNumPostionOffset = nX;
+                    static_cast<SwCrsrMoveState*>(pCMS)->bInNumPortion = true;
                 }
             }
         }
@@ -1587,14 +1587,14 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             sal_uInt8 nOldProp;
             if( GetPropFont() )
             {
-                ((SwFont*)GetFnt())->SetProportion( GetPropFont() );
+                const_cast<SwFont*>(GetFnt())->SetProportion( GetPropFont() );
                 nOldProp = GetFnt()->GetPropr();
             }
             else
                 nOldProp = 0;
             {
                 SwTxtSizeInfo aSizeInf( GetInfo(), &rText, nCurrStart );
-                ((SwTxtCursor*)this)->SeekAndChg( aSizeInf );
+                const_cast<SwTxtCursor*>(this)->SeekAndChg( aSizeInf );
                 SwTxtSlot aDiffTxt( &aSizeInf, static_cast<SwTxtPortion*>(pPor), false, false );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
                         static_cast<SwDropPortion*>(pPor)->GetFnt() : NULL );
@@ -1676,7 +1676,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
                 // set cursor bidi level
                 if ( pCMS )
-                    ((SwCrsrMoveState*)pCMS)->nCursorBidiLevel =
+                    static_cast<SwCrsrMoveState*>(pCMS)->nCursorBidiLevel =
                         aDrawInf.GetCursorBidiLevel();
 
                 if( bFieldInfo && nLength == pPor->GetLen() &&
@@ -1685,7 +1685,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     --nLength;
             }
             if( nOldProp )
-                ((SwFont*)GetFnt())->SetProportion( nOldProp );
+                const_cast<SwFont*>(GetFnt())->SetProportion( nOldProp );
         }
         else
         {

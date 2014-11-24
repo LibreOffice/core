@@ -259,14 +259,14 @@ SwFrmSwapper::SwFrmSwapper( const SwTxtFrm* pTxtFrm, bool bSwapIfNotSwapped )
           ( ! bSwapIfNotSwapped && pFrm->IsSwapped() ) ) )
     {
         bUndo = true;
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+        const_cast<SwTxtFrm*>(pFrm)->SwapWidthAndHeight();
     }
 }
 
 SwFrmSwapper::~SwFrmSwapper()
 {
     if ( bUndo )
-        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+        const_cast<SwTxtFrm*>(pFrm)->SwapWidthAndHeight();
 }
 
 void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
@@ -298,12 +298,12 @@ SwLayoutModeModifier::SwLayoutModeModifier( const OutputDevice& rOutp ) :
 
 SwLayoutModeModifier::~SwLayoutModeModifier()
 {
-    ((OutputDevice&)rOut).SetLayoutMode( nOldLayoutMode );
+    const_cast<OutputDevice&>(rOut).SetLayoutMode( nOldLayoutMode );
 }
 
 void SwLayoutModeModifier::Modify( bool bChgToRTL )
 {
-    ((OutputDevice&)rOut).SetLayoutMode( bChgToRTL ?
+    const_cast<OutputDevice&>(rOut).SetLayoutMode( bChgToRTL ?
                                          TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
                                          TEXT_LAYOUT_BIDI_STRONG );
 }
@@ -311,7 +311,7 @@ void SwLayoutModeModifier::Modify( bool bChgToRTL )
 void SwLayoutModeModifier::SetAuto()
 {
     const ComplexTextLayoutMode nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
-    ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
+    const_cast<OutputDevice&>(rOut).SetLayoutMode( nNewLayoutMode );
 }
 
 SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageType eCurLang ) :
@@ -327,12 +327,12 @@ SwDigitModeModifier::SwDigitModeModifier( const OutputDevice& rOutp, LanguageTyp
     else if ( SvtCTLOptions::NUMERALS_SYSTEM == nTextNumerals )
         eLang = ::GetAppLanguage();
 
-    ((OutputDevice&)rOut).SetDigitLanguage( eLang );
+    const_cast<OutputDevice&>(rOut).SetDigitLanguage( eLang );
 }
 
 SwDigitModeModifier::~SwDigitModeModifier()
 {
-    ((OutputDevice&)rOut).SetDigitLanguage( nOldLanguageType );
+    const_cast<OutputDevice&>(rOut).SetDigitLanguage( nOldLanguageType );
 }
 
 void SwTxtFrm::Init()
@@ -385,7 +385,7 @@ SwTxtFrm::~SwTxtFrm()
     if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
         !pCNd->GetDoc()->IsInDtor() && HasFtn() )
     {
-        SwTxtNode *pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
+        SwTxtNode *pTxtNd = static_cast<SwTxtFrm*>(this)->GetTxtNode();
         const SwFtnIdxs &rFtnIdxs = pCNd->GetDoc()->GetFtnIdxs();
         size_t nPos = 0;
         sal_uLong nIndex = pCNd->GetIndex();

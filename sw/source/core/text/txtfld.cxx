@@ -81,7 +81,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     sal_uInt16 subType = 0;
 
     // set language
-    ((SwTxtFormatter*)this)->SeekAndChg( rInf );
+    const_cast<SwTxtFormatter*>(this)->SeekAndChg( rInf );
     if (pFld->GetLanguage() != GetFnt()->GetLanguage())
     {
         pFld->SetLanguage( GetFnt()->GetLanguage() );

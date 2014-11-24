@@ -142,12 +142,12 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
 void SwLinePortion::CalcTxtSize( const SwTxtSizeInfo &rInf )
 {
     if( GetLen() == rInf.GetLen()  )
-        *((SwPosSize*)this) = GetTxtSize( rInf );
+        *static_cast<SwPosSize*>(this) = GetTxtSize( rInf );
     else
     {
         SwTxtSizeInfo aInf( rInf );
         aInf.SetLen( GetLen() );
-        *((SwPosSize*)this) = GetTxtSize( aInf );
+        *static_cast<SwPosSize*>(this) = GetTxtSize( aInf );
     }
 }
 

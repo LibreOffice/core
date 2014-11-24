@@ -772,14 +772,14 @@ inline sal_uInt16 SwTxtSizeInfo::GetAscent() const
 {
     SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetAscent() without m_pOut" );
 
-    return ((SwFont*)GetFont())->GetAscent( m_pVsh, *GetOut() );
+    return const_cast<SwFont*>(GetFont())->GetAscent( m_pVsh, *GetOut() );
 }
 
 inline sal_uInt16 SwTxtSizeInfo::GetTxtHeight() const
 {
     SAL_WARN_IF( !GetOut(), "sw.core", "SwTxtSizeInfo::GetTxtHeight() without m_pOut" );
 
-    return ((SwFont*)GetFont())->GetHeight( m_pVsh, *GetOut() );
+    return const_cast<SwFont*>(GetFont())->GetHeight( m_pVsh, *GetOut() );
 }
 
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const OUString &rTxt ) const
@@ -810,13 +810,13 @@ inline void SwTxtPaintInfo::DrawText( const OUString &rText,
                             const sal_Int32 nStart, const sal_Int32 nLength,
                             const bool bKern ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( rText, rPor, nStart, nLength, bKern );
+    const_cast<SwTxtPaintInfo*>(this)->_DrawText( rText, rPor, nStart, nLength, bKern );
 }
 
 inline void SwTxtPaintInfo::DrawText( const SwLinePortion &rPor,
         const sal_Int32 nLength, const bool bKern ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern );
+    const_cast<SwTxtPaintInfo*>(this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern );
 }
 
 inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
@@ -826,7 +826,7 @@ inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
                                             const bool bSmartTags,
                                             const bool bGrammarCheck ) const
 {
-    ((SwTxtPaintInfo*)this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern, bWrong, bSmartTags, bGrammarCheck );
+    const_cast<SwTxtPaintInfo*>(this)->_DrawText( *m_pTxt, rPor, m_nIdx, nLength, bKern, bWrong, bSmartTags, bGrammarCheck );
 }
 
 inline sal_Int32 SwTxtFormatInfo::GetReformatStart() const

@@ -404,11 +404,11 @@ sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     if( !Width() && rInf.OnWin() && rInf.GetOpt().IsSoftHyph() && !IsExpand() )
     {
         if( !nViewWidth )
-            ((SwSoftHyphPortion*)this)->nViewWidth
+            const_cast<SwSoftHyphPortion*>(this)->nViewWidth
                 = rInf.GetTxtSize(OUString('-')).Width();
     }
     else
-        ((SwSoftHyphPortion*)this)->nViewWidth = 0;
+        const_cast<SwSoftHyphPortion*>(this)->nViewWidth = 0;
     return nViewWidth;
 }
 

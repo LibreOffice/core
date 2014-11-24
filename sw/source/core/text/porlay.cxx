@@ -2028,7 +2028,7 @@ SwTwips SwLineLayout::_GetHangingMargin() const
         pPor = pPor->GetPortion();
     }
     if( !bFound ) // update the hanging-flag
-        ((SwLineLayout*)this)->SetHanging( false );
+        const_cast<SwLineLayout*>(this)->SetHanging( false );
     return nDiff;
 }
 
@@ -2047,7 +2047,7 @@ SwTwips SwTxtFrm::HangingMargin() const
         pLine = pLine->GetNext();
     } while ( pLine );
     if( !nRet ) // update the margin-flag
-        ((SwParaPortion*)GetPara())->SetMargin( false );
+        const_cast<SwParaPortion*>(GetPara())->SetMargin( false );
     return nRet;
 }
 

@@ -806,7 +806,7 @@ bool SwFrm::IsFtnAllowed() const
     if ( IsInTab() )
     {
         // no footnotes in repeated headlines
-        const SwTabFrm *pTab = ((SwFrm*)this)->ImplFindTabFrm();
+        const SwTabFrm *pTab = const_cast<SwFrm*>(this)->ImplFindTabFrm();
         if ( pTab->IsFollow() )
             return !pTab->IsInHeadline( *this );
     }
@@ -1072,7 +1072,7 @@ SwFtnFrm *SwFtnBossFrm::FindFirstFtn()
 /// Get the first footnote of a given content
 const SwFtnFrm *SwFtnBossFrm::FindFirstFtn( SwCntntFrm *pCnt ) const
 {
-    const SwFtnFrm *pRet = ((SwFtnBossFrm*)this)->FindFirstFtn();
+    const SwFtnFrm *pRet = const_cast<SwFtnBossFrm*>(this)->FindFirstFtn();
     if ( pRet )
     {
         const sal_uInt16 nColNum = lcl_ColumnNum( this );

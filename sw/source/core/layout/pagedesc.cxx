@@ -151,9 +151,9 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
     if( pFmt != GetRegisterFmtColl() )
     {
         if( pFmt )
-            ((SwTxtFmtColl*)pFmt)->Add( &aDepend );
+            const_cast<SwTxtFmtColl*>(pFmt)->Add( &aDepend );
         else
-            ((SwTxtFmtColl*)GetRegisterFmtColl())->Remove( &aDepend );
+            const_cast<SwTxtFmtColl*>(GetRegisterFmtColl())->Remove( &aDepend );
 
         RegisterChange();
     }

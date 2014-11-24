@@ -790,7 +790,7 @@ static bool lcl_HasRotation( const SwTxtAttr& rAttr,
 SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
                                                 SwMultiPortion* pMulti ) const
 {
-    SwScriptInfo& rSI = ((SwParaPortion*)GetParaPortion())->GetScriptInfo();
+    SwScriptInfo& rSI = const_cast<SwParaPortion*>(GetParaPortion())->GetScriptInfo();
 
     // get the last embedding level
     sal_uInt8 nCurrLevel;

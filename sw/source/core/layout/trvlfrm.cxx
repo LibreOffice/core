@@ -209,7 +209,7 @@ bool SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         {
             if ( pCMS && (pCMS->bStop || pCMS->bExactOnly) )
             {
-                ((SwCrsrMoveState*)pCMS)->bStop = true;
+                static_cast<SwCrsrMoveState*>(pCMS)->bStop = true;
                 return false;
             }
             const SwCntntFrm *pCnt = GetCntntPos( aPoint, false, false, false, pCMS, false );
@@ -418,10 +418,10 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS, bool bTestBackground ) const
 {
     const bool bOldAction = IsCallbackActionEnabled();
-    ((SwRootFrm*)this)->SetCallbackActionEnabled( false );
+    const_cast<SwRootFrm*>(this)->SetCallbackActionEnabled( false );
     OSL_ENSURE( (Lower() && Lower()->IsPageFrm()), "No PageFrm found." );
     if( pCMS && pCMS->pFill )
-        ((SwCrsrMoveState*)pCMS)->bFillRet = false;
+        static_cast<SwCrsrMoveState*>(pCMS)->bFillRet = false;
     Point aOldPoint = rPoint;
 
     // search for page containing rPoint. The borders around the pages are considered
@@ -444,7 +444,7 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         pPage->SwPageFrm::GetCrsrOfst( pPos, rPoint, pCMS, bTestBackground );
     }
 
-    ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
+    const_cast<SwRootFrm*>(this)->SetCallbackActionEnabled( bOldAction );
     if( pCMS )
     {
         if( pCMS->bStop )
@@ -477,7 +477,7 @@ bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         const SwTabFrm *pTab = FindTabFrm();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *this ) )
         {
-            ((SwCrsrMoveState*)pCMS)->bStop = true;
+            static_cast<SwCrsrMoveState*>(pCMS)->bStop = true;
             return false;
         }
     }
@@ -608,7 +608,7 @@ bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
 {
     if( &pPam->GetNode() != (SwCntntNode*)GetNode() )
         return false;
-    ((SwCntntNode*)GetNode())->
+    const_cast<SwCntntNode*>(GetNode())->
         MakeStartIndex((SwIndex *) &pPam->GetPoint()->nContent);
     return true;
 }
@@ -617,7 +617,7 @@ bool SwCntntFrm::RightMargin(SwPaM *pPam, bool) const
 {
     if( &pPam->GetNode() != (SwCntntNode*)GetNode() )
         return false;
-    ((SwCntntNode*)GetNode())->
+    const_cast<SwCntntNode*>(GetNode())->
         MakeEndIndex((SwIndex *) &pPam->GetPoint()->nContent);
     return true;
 }
@@ -1322,7 +1322,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
         const SwTabFrm *pTab = pActual->FindTabFrm();
         if ( pTab->IsFollow() && pTab->IsInHeadline( *pActual ) )
         {
-            ((SwCrsrMoveState*)pCMS)->bStop = true;
+            const_cast<SwCrsrMoveState*>(pCMS)->bStop = true;
             return 0;
         }
     }

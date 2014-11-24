@@ -2636,7 +2636,7 @@ SwFlyFrmFmt * SwFlyFrm::GetFmt()
 void SwFlyFrm::Calc() const
 {
     if ( !m_bValidContentPos )
-        ((SwFlyFrm*)this)->PrepareMake();
+        const_cast<SwFlyFrm*>(this)->PrepareMake();
     else
         SwLayoutFrm::Calc();
 }

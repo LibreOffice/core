@@ -90,7 +90,7 @@ SwTwips SwTxtFrmInfo::GetLineStart( const SwTxtCursor &rLine ) const
         return rLine.GetLineStart();
 
     SwRect aRect;
-    if( ((SwTxtCursor&)rLine).GetCharRect( &aRect, nTxtStart ) )
+    if( const_cast<SwTxtCursor&>(rLine).GetCharRect( &aRect, nTxtStart ) )
         return aRect.Left();
 
     return rLine.GetLineStart();
@@ -115,7 +115,7 @@ SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
 
     SwTwips nStt, nNext;
     SwRect aRect;
-    if( ((SwTxtCursor&)aLine).GetCharRect( &aRect, nChar ) )
+    if( static_cast<SwTxtCursor&>(aLine).GetCharRect( &aRect, nChar ) )
     {
         if ( bVert )
             pFrm->SwitchHorizontalToVertical( aRect );
@@ -128,7 +128,7 @@ SwTwips SwTxtFrmInfo::GetCharPos( sal_Int32 nChar, bool bCenter ) const
     if( !bCenter )
         return nStt - (pFrm->Frm().*fnRect->fnGetLeft)();
 
-    if( ((SwTxtCursor&)aLine).GetCharRect( &aRect, nChar+1 ) )
+    if( static_cast<SwTxtCursor&>(aLine).GetCharRect( &aRect, nChar+1 ) )
     {
         if ( bVert )
             pFrm->SwitchHorizontalToVertical( aRect );

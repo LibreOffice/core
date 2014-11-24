@@ -253,7 +253,7 @@ public:
     inline void GetAdjusted() const
     {
         if( pCurr->IsFormatAdj() )
-            ((SwTxtAdjuster*)this)->CalcAdjLine( pCurr );
+            const_cast<SwTxtAdjuster*>(this)->CalcAdjLine( pCurr );
     }
 
     // Special treatment for DropCaps
