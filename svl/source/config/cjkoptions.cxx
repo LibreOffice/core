@@ -22,7 +22,6 @@
 #include <svl/languageoptions.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/configitem.hxx>
-#include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -171,8 +170,8 @@ void SvtCJKOptions_Impl::Load()
     Sequence< sal_Bool > aROStates = GetReadOnlyStates(rPropertyNames);
     const Any* pValues = aValues.getConstArray();
     const sal_Bool* pROStates = aROStates.getConstArray();
-    DBG_ASSERT( aValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
-    DBG_ASSERT( aROStates.getLength() == rPropertyNames.getLength(), "GetReadOnlyStates failed" );
+    assert(aValues.getLength() == rPropertyNames.getLength() && "GetProperties failed");
+    assert(aROStates.getLength() == rPropertyNames.getLength() && "GetReadOnlyStates failed");
     if ( aValues.getLength() == rPropertyNames.getLength() && aROStates.getLength() == rPropertyNames.getLength() )
     {
         for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
@@ -411,61 +410,61 @@ SvtCJKOptions::~SvtCJKOptions()
 
 bool SvtCJKOptions::IsCJKFontEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsCJKFontEnabled();
 }
 
 bool SvtCJKOptions::IsVerticalTextEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsVerticalTextEnabled();
 }
 
 bool SvtCJKOptions::IsAsianTypographyEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsAsianTypographyEnabled();
 }
 
 bool SvtCJKOptions::IsJapaneseFindEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsJapaneseFindEnabled();
 }
 
 bool SvtCJKOptions::IsRubyEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsRubyEnabled();
 }
 
 bool SvtCJKOptions::IsChangeCaseMapEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsChangeCaseMapEnabled();
 }
 
 bool SvtCJKOptions::IsDoubleLinesEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsDoubleLinesEnabled();
 }
 
 void        SvtCJKOptions::SetAll(bool bSet)
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     pCJKOptions->SetAll(bSet);
 }
 
 bool    SvtCJKOptions::IsAnyEnabled() const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsAnyEnabled();
 }
 
 bool    SvtCJKOptions::IsReadOnly(EOption eOption) const
 {
-    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJK options not loaded");
+    assert(pCJKOptions->IsLoaded());
     return pCJKOptions->IsReadOnly(eOption);
 }
 
