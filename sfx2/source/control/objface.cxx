@@ -108,13 +108,9 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr );
-
-
-
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature);
 
 // constuctor, registeres a new unit
-
 SfxInterface::SfxInterface( const char *pClassName,
                             const ResId& rNameResId,
                             SfxInterfaceId nId,
@@ -392,12 +388,12 @@ void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId,
 
 void SfxInterface::RegisterObjectBar( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr )
 {
-    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr );
+    SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl(nPos, rResId, nFeature);
     if ( pUI )
         pImpData->aObjectBars.push_back(pUI);
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl( sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature, const OUString *pStr )
+SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, const ResId& rResId, sal_uInt32 nFeature)
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
