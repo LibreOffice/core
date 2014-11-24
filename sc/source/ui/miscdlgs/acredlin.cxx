@@ -111,7 +111,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
         bHasFilterEntry(false),
         bUseColor(false)
 {
-    m_pAcceptChgCtr = new SvxAcceptChgCtr(get_content_area());
+    m_pAcceptChgCtr = new SvxAcceptChgCtr(get_content_area(), this);
     nAcceptCount=0;
     nRejectCount=0;
     aReOpenIdle.SetPriority(VCL_IDLE_PRIORITY_MEDIUM);

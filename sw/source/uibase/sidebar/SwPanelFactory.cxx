@@ -22,6 +22,7 @@
 #include <PagePropertyPanel.hxx>
 #include <WrapPropertyPanel.hxx>
 #include <navipi.hxx>
+#include <redlndlg.hxx>
 
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
@@ -128,6 +129,15 @@ Reference<ui::XUIElement> SAL_CALL SwPanelFactory::createUIElement (
             xFrame,
             pPanel,
             ui::LayoutSize(0,-1,-1));
+    }
+    else if (rsResourceURL.endsWith("/ManageChangesPanel"))
+    {
+        vcl::Window* pPanel = new SwRedlineAcceptPanel(pParentWindow, xFrame);
+        xElement = sfx2::sidebar::SidebarPanelBase::Create(
+            rsResourceURL,
+            xFrame,
+            pPanel,
+            ui::LayoutSize(-1,-1,-1));
     }
 
     return xElement;
