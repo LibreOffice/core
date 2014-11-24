@@ -1731,7 +1731,7 @@ SwTblNumFmtMerge::SwTblNumFmtMerge( const SwDoc& rSrc, SwDoc& rDest )
 {
     // a different Doc -> Number formatter needs to be merged
     SvNumberFormatter* pN;
-    if( &rSrc != &rDest && 0 != ( pN = ((SwDoc&)rSrc).GetNumberFormatter( false ) ))
+    if( &rSrc != &rDest && 0 != ( pN = const_cast<SwDoc&>(rSrc).GetNumberFormatter( false ) ))
         ( pNFmt = rDest.GetNumberFormatter( true ))->MergeFormatter( *pN );
 
     if( &rSrc != &rDest )

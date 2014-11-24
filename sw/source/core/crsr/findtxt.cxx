@@ -579,7 +579,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         if( bRegExp )
         {
             pPrev = pRegion->GetPrev();
-            ((Ring*)pRegion)->MoveRingTo( &rCursor );
+            const_cast<Ring*>(static_cast<const Ring*>(pRegion))->MoveRingTo( &rCursor );
         }
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp)

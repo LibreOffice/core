@@ -2850,8 +2850,8 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
                                         m_rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_TEXT ));
                 if( pTxtNd )
                 {
-                    ((SwPosition&)rPos).nNode = pTblNd->GetIndex()-1;
-                    ((SwPosition&)rPos).nContent.Assign( pTxtNd, 0 );
+                    const_cast<SwPosition&>(rPos).nNode = pTblNd->GetIndex()-1;
+                    const_cast<SwPosition&>(rPos).nContent.Assign( pTxtNd, 0 );
 
                     // only add page breaks/styles to the body area
                     if( nPrevPos > m_rDoc.GetNodes().GetEndOfExtras().GetIndex() )
@@ -3130,7 +3130,7 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
     if ( !bMergedFirstNode )
         ++aSavePos;
     if ( bEndIsEqualEndPos )
-        ((SwNodeIndex&)rRg.aEnd) = aSavePos;
+        const_cast<SwNodeIndex&>(rRg.aEnd) = aSavePos;
 
     aRedlRest.Restore();
 #if OSL_DEBUG_LEVEL > 0

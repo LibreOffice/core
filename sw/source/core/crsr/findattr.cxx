@@ -1148,7 +1148,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         if( bRegExp )
         {
             pPrevRing = pRegion->GetPrev();
-            ((Ring*)pRegion)->MoveRingTo( &rCursor );
+            const_cast<Ring*>(static_cast<const Ring*>(pRegion))->MoveRingTo( &rCursor );
         }
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp) ?

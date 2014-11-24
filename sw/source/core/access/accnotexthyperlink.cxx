@@ -181,7 +181,7 @@ Any SAL_CALL SwAccessibleNoTextHyperlink::getAccessibleActionAnchor(
         throw lang::IndexOutOfBoundsException();
 
     Any aRet;
-    //SwFrm* pAnchor = ((SwFlyFrm*)mpFrm)->GetAnchor();
+    //SwFrm* pAnchor = static_cast<SwFlyFrm*>(mpFrm)->GetAnchor();
     Reference< XAccessible > xAnchor = xFrame->GetAccessibleMap()->GetContext(mpFrm, true);
     //SwAccessibleNoTextFrame* pFrame = xFrame.get();
     //Reference< XAccessible > xAnchor = (XAccessible*)pFrame;

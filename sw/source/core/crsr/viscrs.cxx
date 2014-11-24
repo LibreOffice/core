@@ -621,7 +621,7 @@ short SwShellCrsr::MaxReplaceArived()
 
 void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 {
-    ((SwCrsrShell*)GetShell())->SaveTblBoxCntnt( pPos );
+    const_cast<SwCrsrShell*>(GetShell())->SaveTblBoxCntnt( pPos );
 }
 
 bool SwShellCrsr::UpDown( bool bUp, sal_uInt16 nCnt )

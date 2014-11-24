@@ -1116,7 +1116,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
-        OSL_ENSURE( pHnt && ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).
+        OSL_ENSURE( pHnt && const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).
                     GetFrmFmt() == (SwFrmFmt*)pOldFmt,
                     "Wrong TxtFlyCnt-Hint." );
 #endif

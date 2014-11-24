@@ -77,13 +77,13 @@ SwLineNumberInfo::SwLineNumberInfo(const SwLineNumberInfo &rCpy ) : SwClient(),
     bRestartEachPage( rCpy.IsRestartEachPage() )
 {
     if ( rCpy.GetRegisteredIn() )
-        ((SwModify*)rCpy.GetRegisteredIn())->Add( this );
+        const_cast<SwModify*>(rCpy.GetRegisteredIn())->Add( this );
 }
 
 SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
 {
     if ( rCpy.GetRegisteredIn() )
-        ((SwModify*)rCpy.GetRegisteredIn())->Add( this );
+        const_cast<SwModify*>(rCpy.GetRegisteredIn())->Add( this );
     else if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 

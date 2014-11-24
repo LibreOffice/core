@@ -427,7 +427,7 @@ void DocumentFieldsManager::InsDeletedFldType( SwFieldType& rFldTyp )
 
                 if( i >= nSize )        // not found
                 {
-                    ((OUString&)rFldNm) = sSrch;
+                    const_cast<OUString&>(rFldNm) = sSrch;
                     break;      // exit while loop
                 }
                 ++nNum;

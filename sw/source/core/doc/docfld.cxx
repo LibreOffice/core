@@ -941,7 +941,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
                     sFormula.clear();
                     // trigger formatting
-                    ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
+                    const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
                 }
                 break;
 
@@ -961,7 +961,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                     // evaluate field
                     const_cast<SwHiddenTxtField*>(static_cast<const SwHiddenTxtField*>(pFld))->Evaluate(&rDoc);
                     // trigger formatting
-                    ((SwFmtFld*)pFmtFld)->ModifyNotification( 0, 0 );
+                    const_cast<SwFmtFld*>(pFmtFld)->ModifyNotification( 0, 0 );
                 }
                 break;
 

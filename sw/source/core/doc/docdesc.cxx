@@ -381,7 +381,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 
     // Mirror at first if needed.
     if ( rChged.GetUseOn() == nsUseOnPage::PD_MIRROR )
-        ((SwPageDesc&)rChged).Mirror();
+        const_cast<SwPageDesc&>(rChged).Mirror();
     else
     {
         // Or else transfer values from Master to Left

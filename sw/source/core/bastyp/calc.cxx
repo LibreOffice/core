@@ -150,23 +150,23 @@ extern "C" {
 static int SAL_CALL OperatorCompare( const void *pFirst, const void *pSecond)
 {
     int nRet = 0;
-    if( CALC_NAME == ((_CalcOp*)pFirst)->eOp )
+    if( CALC_NAME == reinterpret_cast<const _CalcOp*>(pFirst)->eOp )
     {
-        if( CALC_NAME == ((_CalcOp*)pSecond)->eOp )
-            nRet = ((_CalcOp*)pFirst)->pUName->compareTo(
-                   *((_CalcOp*)pSecond)->pUName );
+        if( CALC_NAME == reinterpret_cast<const _CalcOp*>(pSecond)->eOp )
+            nRet = reinterpret_cast<const _CalcOp*>(pFirst)->pUName->compareTo(
+                   *reinterpret_cast<const _CalcOp*>(pSecond)->pUName );
         else
-            nRet = ((_CalcOp*)pFirst)->pUName->compareToAscii(
-                   ((_CalcOp*)pSecond)->pName );
+            nRet = reinterpret_cast<const _CalcOp*>(pFirst)->pUName->compareToAscii(
+                   reinterpret_cast<const _CalcOp*>(pSecond)->pName );
     }
     else
     {
-        if( CALC_NAME == ((_CalcOp*)pSecond)->eOp )
-            nRet = -1 * ((_CalcOp*)pSecond)->pUName->compareToAscii(
-                        ((_CalcOp*)pFirst)->pName );
+        if( CALC_NAME == reinterpret_cast<const _CalcOp*>(pSecond)->eOp )
+            nRet = -1 * reinterpret_cast<const _CalcOp*>(pSecond)->pUName->compareToAscii(
+                        reinterpret_cast<const _CalcOp*>(pFirst)->pName );
         else
-            nRet = strcmp( ((_CalcOp*)pFirst)->pName,
-                           ((_CalcOp*)pSecond)->pName );
+            nRet = strcmp( reinterpret_cast<const _CalcOp*>(pFirst)->pName,
+                           reinterpret_cast<const _CalcOp*>(pSecond)->pName );
     }
     return nRet;
 }
@@ -690,7 +690,7 @@ SwCalcOper SwCalc::GetToken()
             _CalcOp* pFnd = ::FindOperator( sLowerCaseName );
             if( pFnd )
             {
-                switch( ( eCurrOper = ((_CalcOp*)pFnd)->eOp ) )
+                switch( ( eCurrOper = static_cast<_CalcOp*>(pFnd)->eOp ) )
                 {
                 case CALC_SUM:
                 case CALC_MEAN:
@@ -1041,7 +1041,7 @@ SwCalcOper SwCalc::GetToken()
                 _CalcOp* pFnd = ::FindOperator( aStr );
                 if( pFnd )
                 {
-                    switch( ( eCurrOper = ((_CalcOp*)pFnd)->eOp ) )
+                    switch( ( eCurrOper = static_cast<_CalcOp*>(pFnd)->eOp ) )
                     {
                     case CALC_SUM :
                     case CALC_MEAN :

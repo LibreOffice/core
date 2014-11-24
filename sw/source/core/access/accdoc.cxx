@@ -638,7 +638,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sAttrName = "line-number:";
 
         SwCntntFrm* pCurrFrm = pCrsrShell->GetCurrFrm();
-        SwPageFrm* pCurrPage=((SwFrm*)pCurrFrm)->FindPageFrm();
+        SwPageFrm* pCurrPage=static_cast<SwFrm*>(pCurrFrm)->FindPageFrm();
         sal_uLong nLineNum = 0;
         SwTxtFrm* pTxtFrm = NULL;
         SwTxtFrm* pCurrTxtFrm = NULL;
@@ -735,7 +735,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
         sValue += ";";
 
-        SwFrm* pCurrCol=((SwFrm*)pCurrFrm)->FindColFrm();
+        SwFrm* pCurrCol=static_cast<SwFrm*>(pCurrFrm)->FindColFrm();
 
         sAttrName = "column-number:";
         sValue += sAttrName;
@@ -744,7 +744,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         if(pCurrCol!=NULL)
         {
             //SwLayoutFrm* pParent = pCurrCol->GetUpper();
-            SwFrm* pCurrPageCol=((SwFrm*)pCurrFrm)->FindColFrm();
+            SwFrm* pCurrPageCol=static_cast<SwFrm*>(pCurrFrm)->FindColFrm();
             while(pCurrPageCol && pCurrPageCol->GetUpper() && pCurrPageCol->GetUpper()->IsPageFrm())
             {
                 pCurrPageCol = pCurrPageCol->GetUpper();
@@ -775,7 +775,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
         sValue += ";";
 
-        SwSectionFrm* pCurrSctFrm=((SwFrm*)pCurrFrm)->FindSctFrm();
+        SwSectionFrm* pCurrSctFrm=static_cast<SwFrm*>(pCurrFrm)->FindSctFrm();
         if(pCurrSctFrm!=NULL && pCurrSctFrm->GetSection()!=NULL )
         {
             sAttrName = "section-name:";

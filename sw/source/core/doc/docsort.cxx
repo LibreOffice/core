@@ -634,7 +634,7 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
                 SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_FORMULA ) ||
                 SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_VALUE ) )
             {
-                pTFmt = ((SwTableBox*)pT)->ClaimFrmFmt();
+                pTFmt = const_cast<SwTableBox*>(pT)->ClaimFrmFmt();
                 pTFmt->LockModify();
                 if( pTFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE ) )
                     pTFmt->ResetFmtAttr( RES_VERT_ORIENT );
@@ -678,7 +678,7 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
                 SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_FORMULA ) ||
                 SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_VALUE ) )
             {
-                pTFmt = ((SwTableBox*)pT)->ClaimFrmFmt();
+                pTFmt = const_cast<SwTableBox*>(pT)->ClaimFrmFmt();
                 pTFmt->LockModify();
                 if( pTFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE ) )
                     pTFmt->ResetFmtAttr( RES_VERT_ORIENT );

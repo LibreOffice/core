@@ -45,20 +45,20 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
         GetRegisteredInNonConst()->Remove(this);
 
     if ( rInfo.aPageDescDep.GetRegisteredIn() )
-        ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
+        const_cast<SwModify*>(rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
     else if ( aPageDescDep.GetRegisteredIn() )
-        ((SwModify*)aPageDescDep.GetRegisteredIn())->Remove( &aPageDescDep );
+        const_cast<SwModify*>(aPageDescDep.GetRegisteredIn())->Remove( &aPageDescDep );
 
     if ( rInfo.aCharFmtDep.GetRegisteredIn() )
-        ((SwModify*)rInfo.aCharFmtDep.GetRegisteredIn())->Add( &aCharFmtDep );
+        const_cast<SwModify*>(rInfo.aCharFmtDep.GetRegisteredIn())->Add( &aCharFmtDep );
     else if ( aCharFmtDep.GetRegisteredIn() )
-        ((SwModify*)aCharFmtDep.GetRegisteredIn())->Remove( &aCharFmtDep );
+        const_cast<SwModify*>(aCharFmtDep.GetRegisteredIn())->Remove( &aCharFmtDep );
 
     if ( rInfo.aAnchorCharFmtDep.GetRegisteredIn() )
-        ((SwModify*)rInfo.aAnchorCharFmtDep.GetRegisteredIn())->Add(
+        const_cast<SwModify*>(rInfo.aAnchorCharFmtDep.GetRegisteredIn())->Add(
                                                     &aAnchorCharFmtDep );
     else if( aAnchorCharFmtDep.GetRegisteredIn() )
-        ((SwModify*)aAnchorCharFmtDep.GetRegisteredIn())->Remove(
+        static_cast<SwModify*>(aAnchorCharFmtDep.GetRegisteredIn())->Remove(
                                                     &aAnchorCharFmtDep );
 
     aFmt = rInfo.aFmt;
@@ -97,13 +97,13 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     nFtnOffset( rInfo.nFtnOffset )
 {
     if( rInfo.aPageDescDep.GetRegisteredIn() )
-        ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
+        const_cast<SwModify*>(rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
 
     if( rInfo.aCharFmtDep.GetRegisteredIn() )
-        ((SwModify*)rInfo.aCharFmtDep.GetRegisteredIn())->Add( &aCharFmtDep );
+        const_cast<SwModify*>(rInfo.aCharFmtDep.GetRegisteredIn())->Add( &aCharFmtDep );
 
     if( rInfo.aAnchorCharFmtDep.GetRegisteredIn() )
-        ((SwModify*)rInfo.aAnchorCharFmtDep.GetRegisteredIn())->Add(
+        const_cast<SwModify*>(rInfo.aAnchorCharFmtDep.GetRegisteredIn())->Add(
                 &aAnchorCharFmtDep );
 }
 
@@ -124,7 +124,7 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
     {
         SwPageDesc *pDesc = rDoc.getIDocumentStylePoolAccess().GetPageDescFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLPAGE_ENDNOTE   : RES_POOLPAGE_FOOTNOTE ) );
-        pDesc->Add( &((SwClient&)aPageDescDep) );
+        pDesc->Add( &const_cast<SwClient&>(static_cast<const SwClient&>(aPageDescDep)) );
     }
 
     return const_cast<SwPageDesc*>(static_cast<const SwPageDesc*>( aPageDescDep.GetRegisteredIn() ));
@@ -142,7 +142,7 @@ bool SwEndNoteInfo::DependsOn( const SwPageDesc* pDesc ) const
 
 void SwEndNoteInfo::ChgPageDesc( SwPageDesc *pDesc )
 {
-    pDesc->Add( &((SwClient&)aPageDescDep) );
+    pDesc->Add( &static_cast<SwClient&>(aPageDescDep) );
 }
 
 void SwEndNoteInfo::SetFtnTxtColl(SwTxtFmtColl& rFmt)
@@ -156,7 +156,7 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
     {
         SwCharFmt* pFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE ) );
-        pFmt->Add( &((SwClient&)aCharFmtDep) );
+        pFmt->Add( &const_cast<SwClient&>(static_cast<const SwClient&>(aCharFmtDep)) );
     }
     return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(aCharFmtDep.GetRegisteredIn()));
 }
@@ -164,7 +164,7 @@ SwCharFmt* SwEndNoteInfo::GetCharFmt(SwDoc &rDoc) const
 void SwEndNoteInfo::SetCharFmt( SwCharFmt* pChFmt )
 {
     OSL_ENSURE(pChFmt, "no CharFmt?");
-    pChFmt->Add( &((SwClient&)aCharFmtDep) );
+    pChFmt->Add( &static_cast<SwClient&>(aCharFmtDep) );
 }
 
 SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
@@ -173,7 +173,7 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
     {
         SwCharFmt* pFmt = rDoc.getIDocumentStylePoolAccess().GetCharFmtFromPool( static_cast<sal_uInt16>(
             m_bEndNote ? RES_POOLCHR_ENDNOTE_ANCHOR : RES_POOLCHR_FOOTNOTE_ANCHOR ) );
-        pFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
+        pFmt->Add( &const_cast<SwClient&>(static_cast<const SwClient&>(aAnchorCharFmtDep)) );
     }
     return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(aAnchorCharFmtDep.GetRegisteredIn()));
 }
@@ -181,7 +181,7 @@ SwCharFmt* SwEndNoteInfo::GetAnchorCharFmt(SwDoc &rDoc) const
 void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
 {
     OSL_ENSURE(pChFmt, "no CharFmt?");
-    pChFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
+    pChFmt->Add( &static_cast<SwClient&>(aAnchorCharFmtDep) );
 }
 
 void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
@@ -433,7 +433,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                 pTxtFtn->SetNumber( nNumber, rNumStr );
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
-                    ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
+                    const_cast<SwFmtFtn&>(rFtn).SetEndNote( bIsEndNote );
                     bTypeChgd = true;
                     pTxtFtn->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
@@ -463,7 +463,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                 pTxtFtn->SetNumber( nNumber, rNumStr );
                 if( rFtn.IsEndNote() != bIsEndNote )
                 {
-                    ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
+                    const_cast<SwFmtFtn&>(rFtn).SetEndNote( bIsEndNote );
                     bTypeChgd = true;
                     pTxtFtn->CheckCondColl();
                 }

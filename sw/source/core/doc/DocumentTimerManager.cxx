@@ -163,7 +163,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
     }
 #ifdef TIMELOG
     if( pModLogFile && 1 != (long)pModLogFile )
-        delete pModLogFile, ((long&)pModLogFile) = 1;
+        delete pModLogFile, static_cast<long&>(pModLogFile) = 1;
 #endif
     return 0;
 }

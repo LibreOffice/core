@@ -478,14 +478,14 @@ bool SwCrsrShell::bColumnChange()
         return false;
     }
 
-    SwFrm* pCurrCol=((SwFrm*)pCurrFrm)->FindColFrm();
+    SwFrm* pCurrCol=static_cast<SwFrm*>(pCurrFrm)->FindColFrm();
 
     while(pCurrCol== NULL && pCurrFrm!=NULL )
     {
         SwLayoutFrm* pParent = pCurrFrm->GetUpper();
         if(pParent!=NULL)
         {
-            pCurrCol=((SwFrm*)pParent)->FindColFrm();
+            pCurrCol=static_cast<SwFrm*>(pParent)->FindColFrm();
             pCurrFrm = (SwFrm*)pParent;
         }
         else
@@ -2168,13 +2168,13 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const bool bCalcFrm ) const
     {
         if ( bCalcFrm )
         {
-            const sal_uInt16* pST = &mnStartAction;
-            ++(*((sal_uInt16*)pST));
+            sal_uInt16* pST = const_cast<sal_uInt16*>(&mnStartAction);
+            ++(*pST);
             const Size aOldSz( GetDocSize() );
             pRet = pNd->getLayoutFrm( GetLayout(), &m_pCurCrsr->GetPtPos(), m_pCurCrsr->GetPoint() );
-            --(*((sal_uInt16*)pST));
+            --(*pST);
             if( aOldSz != GetDocSize() )
-                ((SwCrsrShell*)this)->SizeChgNotify();
+                const_cast<SwCrsrShell*>(this)->SizeChgNotify();
         }
         else
             pRet = pNd->getLayoutFrm( GetLayout(), &m_pCurCrsr->GetPtPos(), m_pCurCrsr->GetPoint(), false);

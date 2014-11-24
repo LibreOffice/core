@@ -581,7 +581,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             uno::Reference< linguistic2::XProofreadingIterator >  xGCIterator( GetGCIterator() );
                             if (xGCIterator.is())
                             {
-                                uno::Reference< lang::XComponent > xDoc( ((SwDocShell*)GetDocShell())->GetBaseModel(), uno::UNO_QUERY );
+                                uno::Reference< lang::XComponent > xDoc( const_cast<SwDocShell*>(GetDocShell())->GetBaseModel(), uno::UNO_QUERY );
                                 // Expand the string:
                                 const ModelToViewHelper aConversionMap(*pNd->GetTxtNode());
                                 OUString aExpandText = aConversionMap.getViewText();
