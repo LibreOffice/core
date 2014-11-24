@@ -990,7 +990,8 @@
 #define STR_TITLE_AUTHOR        (STR_START + 442)
 #define STR_TITLE_DATE          (STR_START + 443)
 #define STR_UNKNOWN_USER_CONFLICT    (STR_START + 444)
-#define STR_END                 (STR_UNKNOWN_USER_CONFLICT)
+#define RID_SC_NAME             (STR_START + 445)
+#define STR_END                 (RID_SC_NAME)
 
 #define BMP_START               (STR_END)
 
