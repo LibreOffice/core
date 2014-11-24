@@ -29,6 +29,7 @@
 #include <uno/mapping.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/tencinfo.h>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -57,16 +58,22 @@ X11Clipboard::X11Clipboard( SelectionManager& rManager, Atom aSelection ) :
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "creating instance of X11Clipboard (this=%p)\n", this );
 #endif
+}
 
-    if( m_aSelection != None )
+css::uno::Reference<css::datatransfer::clipboard::XClipboard>
+X11Clipboard::create( SelectionManager& rManager, Atom aSelection )
+{
+    rtl::Reference<X11Clipboard> cb(new X11Clipboard(rManager, aSelection));
+    if( aSelection != None )
     {
-        m_rSelectionManager.registerHandler( m_aSelection, *this );
+        rManager.registerHandler( aSelection, *cb.get() );
     }
     else
     {
-        m_rSelectionManager.registerHandler( XA_PRIMARY, *this );
-        m_rSelectionManager.registerHandler( m_rSelectionManager.getAtom( OUString("CLIPBOARD") ), *this );
+        rManager.registerHandler( XA_PRIMARY, *cb.get() );
+        rManager.registerHandler( rManager.getAtom( OUString("CLIPBOARD") ), *cb.get() );
     }
+    return cb.get();
 }
 
 X11Clipboard::~X11Clipboard()
