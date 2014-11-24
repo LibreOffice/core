@@ -26,6 +26,7 @@
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 struct BitmapBuffer;
+class Color;
 class SalGraphics;
 class BitmapPalette;
 struct BitmapSystemData;
@@ -56,6 +57,7 @@ public:
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
     virtual bool            Crop( const Rectangle& rRectPixel ) = 0;
+    virtual bool            Erase( const Color& rFillColor ) = 0;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) = 0;
 };
 

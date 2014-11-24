@@ -1067,6 +1067,11 @@ bool WinSalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
     return false;
 }
 
+bool WinSalBitmap::Erase( const ::Color& /*rFillColor*/ )
+{
+    return false;
+}
+
 bool WinSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
 {
     return false;

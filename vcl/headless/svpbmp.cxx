@@ -344,6 +344,11 @@ bool SvpSalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
     return false;
 }
 
+bool SvpSalBitmap::Erase( const ::Color& /*rFillColor*/ )
+{
+    return false;
+}
+
 bool SvpSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
 {
     return false;

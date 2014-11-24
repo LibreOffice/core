@@ -80,6 +80,7 @@ public:
     bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
     bool            Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
+    bool            Erase( const Color& rFillColor ) SAL_OVERRIDE;
     bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) SAL_OVERRIDE;
 
 public:

@@ -69,6 +69,7 @@ public:
     inline sal_uLong    ImplGetChecksum() const { return mnChecksum; }
 
     bool                ImplCrop( const Rectangle& rRectPixel );
+    bool                ImplErase( const Color& rFillColor );
     bool                ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
 };
 

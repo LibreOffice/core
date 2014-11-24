@@ -865,6 +865,11 @@ bool X11SalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
     return false;
 }
 
+bool X11SalBitmap::Erase( const ::Color& /*rFillColor*/ )
+{
+    return false;
+}
+
 bool X11SalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, sal_uInt32 /*nScaleFlag*/ )
 {
     return false;
