@@ -1134,8 +1134,6 @@ void SfxWorkWindow::ResetObjectBars_Impl()
         aChildWins[n]->nId = 0;
 }
 
-
-
 void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
             SfxInterface* pIFace, const OUString *pName)
 {
@@ -1154,10 +1152,6 @@ void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
     aObjBar.nId = sal::static_int_cast<sal_uInt16>(nResId);
     aObjBar.nPos = nRealPos;
     aObjBar.nMode = (nPos & SFX_VISIBILITY_MASK);
-    if (pName)
-        aObjBar.aName = *pName;
-    else
-        aObjBar.aName = "";
 
     for ( sal_uInt16 n=0; n<aObjBarList.size(); n++ )
     {
@@ -1170,8 +1164,6 @@ void SfxWorkWindow::SetObjectBar_Impl( sal_uInt16 nPos, sal_uInt32 nResId,
 
     aObjBarList.push_back( aObjBar );
 }
-
-
 
 bool SfxWorkWindow::KnowsObjectBar_Impl( sal_uInt16 nPos ) const
 

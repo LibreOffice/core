@@ -43,7 +43,6 @@ class SfxWorkWindow;
 
 
 // This struct makes all relevant Informationen available of Toolboxes
-
 struct SfxObjectBar_Impl
 {
     sal_uInt16        nId;   // Resource - and ConfigId of Toolbox
@@ -51,7 +50,6 @@ struct SfxObjectBar_Impl
     sal_uInt16        nPos;
     sal_uInt16        nIndex;
     bool          bDestroy;
-    OUString          aName;
     SfxInterface*     pIFace;
 
     SfxObjectBar_Impl() :
