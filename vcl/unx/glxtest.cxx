@@ -106,6 +106,8 @@ void glxtest()
   // any PR logging file descriptors. To that effect, we redirect all positive
   // file descriptors up to what open() returns here. In particular, 1 is stdout and 2 is stderr.
   int fd = open("/dev/null", O_WRONLY);
+  if (fd == -1)
+    fatal_error("could not redirect stdout+stderr");
   for (int i = 1; i < fd; i++)
     dup2(fd, i);
   close(fd);
