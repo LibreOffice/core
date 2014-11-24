@@ -33,20 +33,15 @@
 
 #include <sfx2/sfx.hrc>
 
-SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
+SfxSlotPool::SfxSlotPool(SfxSlotPool *pParent)
  : _pGroups(0)
  , _pParentPool( pParent )
- , _pResMgr( pResManager )
  , _pInterfaces(0)
  , _nCurGroup(0)
  , _nCurInterface(0)
  , _nCurMsg(0)
 {
-    if ( !_pResMgr )
-        _pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
 }
-
-
 
 SfxSlotPool::~SfxSlotPool()
 {

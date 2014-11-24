@@ -37,7 +37,6 @@ class SFX2_DLLPUBLIC SfxSlotPool
 {
     SfxSlotGroupArr_Impl*       _pGroups;
     SfxSlotPool*                _pParentPool;
-    ResMgr*                     _pResMgr;
     SfxInterfaceArr_Impl*       _pInterfaces;
     sal_uInt16                      _nCurGroup;
     sal_uInt16                      _nCurInterface;
@@ -47,8 +46,8 @@ private:
     const SfxSlot* SeekSlot( sal_uInt16 nObject );
 
 public:
-                        SfxSlotPool( SfxSlotPool* pParent=0, ResMgr* pMgr=0);
-                        ~SfxSlotPool();
+    SfxSlotPool(SfxSlotPool* pParent=0);
+    ~SfxSlotPool();
 
     void                RegisterInterface( SfxInterface& rFace );
     void                ReleaseInterface( SfxInterface& rFace );
