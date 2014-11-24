@@ -62,7 +62,10 @@ PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
 
 IWYU_OPTION := $(if $(IWYU_PATH),-k CC=$(IWYU_PATH) CXX=$(IWYU_PATH),)
 
+# don't want to have a dependency to iwyudummy.generate because it's
+# useful to manually edit the generated StaticLibrary_iwyudummy.mk
 iwyudummy: bootstrap fetch
+	$(if $(wildcard $(BUILDDIR)/iwyudummy),,$(error first call "make iwyudummy.generate"))
 	cd $(BUILDDIR)/iwyudummy && $(MAKE) $(IWYU_OPTION) $(GMAKE_OPTIONS)
 
 iwyudummy.generate:
