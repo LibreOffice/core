@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DRAWFONT_HXX
 
 #include <tools/solar.h>
-#include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
 class SwTxtFrm;
