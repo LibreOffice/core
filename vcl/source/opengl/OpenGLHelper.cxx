@@ -24,6 +24,8 @@
 
 #if defined UNX && !defined MACOSX && !defined IOS && !defined ANDROID
 #include "opengl/x11/X11DeviceInfo.hxx"
+#elif defined (_WIN32)
+#include "opengl/win/WinDeviceInfo.hxx"
 #endif
 
 namespace {
@@ -374,6 +376,9 @@ bool OpenGLHelper::isDeviceBlacklisted()
         X11OpenGLDeviceInfo aInfo;
         bBlacklisted = aInfo.isDeviceBlocked();
         SAL_INFO("vcl.opengl", "blacklisted: " << bBlacklisted);
+#elif defined( _WIN32 )
+        WinOpenGLDeviceInfo aInfo;
+        bBlacklisted = aInfo.isDeviceBlocked();
 #else
         bBlacklisted = false;
 #endif
