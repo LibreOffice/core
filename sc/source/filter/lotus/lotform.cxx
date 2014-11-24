@@ -138,6 +138,30 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             eParam[ 2 ] = n0Token;      //    -> 2. as Default
         }
             break;
+        case ocZZR:
+        {
+            OSL_ENSURE( nAnz == 3,
+                "*LotusToSc::DoFunc(): TERM() or CTERM() need 3 parameters!" );
+            nAnz = 4;
+            if ( OString(pExtString) == "TERM" )
+            {
+                // @TERM(pmt,int,fv) -> NPER(int,-pmt,pv=0,fv)
+                NegToken( eParam[ 2 ] );
+                eParam[ 3 ] = eParam[ 1 ];
+                eParam[ 1 ] = aPool.Store( 0.0 );
+            }
+            else //CTERM()
+            {
+                // @CTERM(int,fv,pv) -> NPER(int,pmt=0,-pv,fv)
+                NegToken( eParam[ 0 ] );
+                nMerk0 = eParam[ 1 ];
+                eParam[ 1 ] = eParam[ 0 ];
+                eParam[ 0 ] = nMerk0;
+                eParam[ 3 ] = eParam[ 2 ];
+                eParam[ 2 ] = aPool.Store( 0.0 );
+            }
+        }
+            break;
         default:;
     }
 
@@ -747,8 +771,8 @@ FUNC_TYPE LotusToSc::IndexToType( sal_uInt8 nIndex )
         FT_NotImpl,         //  114 Call()
         FT_FuncFix1,        //  115 @@()
         FT_FuncFix3,        //  116 Rate()
-        FT_FuncFix1,        //  117 Term()
-        FT_FuncFix1,        //  118 Cterm()
+        FT_FuncFix3,        //  117 Term()
+        FT_FuncFix3,        //  118 Cterm()
         FT_FuncFix3,        //  119 Sln()
         FT_FuncFix4,        //  120 Syd(), Soy()
         FT_FuncFix4,        //  121 Ddb()
@@ -1278,8 +1302,8 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
         FT_NotImpl,         //  114 App                  <- change in Bez.
         FT_FuncFix1,        //  115 @@()                 <- new
         FT_FuncFix3,        //  116 Rate()               <- new
-        FT_FuncFix3,        //  117 Term()               <- change in Anz.
-        FT_FuncFix3,        //  118 Cterm()              <- change in Anz.
+        FT_FuncFix3,        //  117 Term()
+        FT_FuncFix3,        //  118 Cterm()
         FT_FuncFix3,        //  119 Sln()                <- new
         FT_FuncFix4,        //  120 Syd()                <- new
         FT_FuncFix4,        //  121 Ddb()                <- new
@@ -1809,8 +1833,8 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
         NULL,                       //  114 Call()
         NULL,                       //  115 @@()
         NULL,                       //  116 Rate()
-        "ANN",                      //  117 Term()
-        NULL,                       //  118 Cterm()
+        "TERM",                     //  117 Term()
+        "CTERM",                    //  118 Cterm()
         NULL,                       //  119 Sln()
         NULL,                       //  120 Syd(), Soy()
         NULL,                       //  121 Ddb()
@@ -2024,6 +2048,10 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
             eId=ocNormDist;
     else if (rTest == "CRITBINOMIAL")
             eId=ocKritBinom;
+    else if (rTest == "TERM")
+            eId=ocZZR;
+    else if (rTest == "CTERM")
+            eId=ocZZR;
     return eId;
 }
 
