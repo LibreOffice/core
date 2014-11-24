@@ -8242,7 +8242,7 @@ void ScInterpreter::ScConcat()
     PushString( aRes );
 }
 
-void ScInterpreter::ScErrorType()
+sal_uInt16 ScInterpreter::GetErrorType()
 {
     sal_uInt16 nErr;
     sal_uInt16 nOldError = nGlobalError;
@@ -8310,6 +8310,13 @@ void ScInterpreter::ScErrorType()
             PopError();
             nErr = nGlobalError;
     }
+    nGlobalError = nOldError;
+    return nErr;
+}
+
+void ScInterpreter::ScErrorType()
+{
+    sal_uInt16 nErr = GetErrorType();
     if ( nErr )
     {
         nGlobalError = 0;
@@ -8317,9 +8324,64 @@ void ScInterpreter::ScErrorType()
     }
     else
     {
-        nGlobalError = nOldError;
         PushNA();
     }
+}
+
+void ScInterpreter::ScErrorType_ODF()
+{
+    sal_uInt16 nErr = GetErrorType();
+    sal_uInt16 nErrType;
+
+    switch ( nErr )
+    {
+        case errParameterExpected :  // #NULL!
+            nErrType = 1;
+            break;
+        case errDivisionByZero :     // #DIV/0!
+            nErrType = 2;
+            break;
+        case errNoValue :            // #VALUE!
+            nErrType = 3;
+            break;
+        case errNoRef :              // #REF!
+            nErrType = 4;
+            break;
+        case errNoName :             // #NAME?
+            nErrType = 5;
+            break;
+        case errIllegalFPOperation : // #NUM!
+            nErrType = 6;
+            break;
+        case NOTAVAILABLE :          // #N/A
+            nErrType = 7;
+            break;
+        /*
+        #GETTING_DATA is a message that can appear in Excel when a large or
+        complex worksheet is being calculated. In Excel 2007 and newer,
+        operations are grouped so more complicated cells may finish after
+        earlier ones do. While the calculations are still processing, the
+        unfinished cells may display #GETTING_DATA.
+        Because the message is temporary and disappears when the calculations
+        complete, this isn’t a true error.
+        No calc error code known (yet).
+
+        case :                       // GETTING_DATA
+            nErrType = 8;
+            break;
+        */
+        default :
+            nErrType = 0;
+            break;
+    }
+
+    if ( nErrType )
+    {
+        nGlobalError = 0;
+        PushDouble( nErrType );
+    }
+    else
+        PushNA();
 }
 
 bool ScInterpreter::MayBeRegExp( const OUString& rStr, const ScDocument* pDoc  )

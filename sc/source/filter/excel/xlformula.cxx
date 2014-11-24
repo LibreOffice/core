@@ -566,7 +566,8 @@ static const XclFunctionInfo saFuncTable_2013[] =
     EXC_FUNCENTRY_V_VR(         ocUnichar,       1,  1,  0,  "UNICHAR" ),
     EXC_FUNCENTRY_V_VR(         ocUnicode,       1,  1,  0,  "UNICODE" ),
     EXC_FUNCENTRY_V_VR(         ocWebservice,    1,  1,  0,  "WEBSERVICE" ),
-    EXC_FUNCENTRY_V_RX(         ocXor,           1,  MX, 0,  "XOR" )
+    EXC_FUNCENTRY_V_RX(         ocXor,           1,  MX, 0,  "XOR" ),
+    EXC_FUNCENTRY_V_VR(         ocErrorType_ODF, 1,  1,  0,  "ERROR.TYPE" )
 };
 
 #define EXC_FUNCENTRY_ODF( opcode, minparam, maxparam, flags, asciiname ) \

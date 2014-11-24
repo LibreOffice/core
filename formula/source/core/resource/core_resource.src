@@ -145,6 +145,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_GAMMA_LN_MS { Text = "COM.MICROSOFT.GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ORG.OPENOFFICE.ERRORTYPE" ; };
+    String SC_OPCODE_ERROR_TYPE_ODF { Text = "ERROR.TYPE" ; };
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
     String SC_OPCODE_CEIL { Text = "CEILING" ; };
@@ -552,6 +553,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_GAMMA_LN_MS { Text = "_xlfn.GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
+    String SC_OPCODE_ERROR_TYPE_ODF { Text = "ERROR.TYPE" ; };
     String SC_OPCODE_FORMULA { Text = "_xlfn.FORMULATEXT"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
     String SC_OPCODE_CEIL { Text = "CEILING" ; };
@@ -961,6 +963,7 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_GAMMA_LN_MS { Text = "GAMMALN.PRECISE" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
+    String SC_OPCODE_ERROR_TYPE_ODF { Text = "ERROR.TYPE" ; };
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
     String SC_OPCODE_CEIL { Text = "CEILING" ; };
@@ -1658,6 +1661,10 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_ERROR_TYPE
     {
         Text [ en-US ] = "ERRORTYPE" ;
+    };
+    String SC_OPCODE_ERROR_TYPE_ODF
+    {
+        Text [ en-US ] = "ERROR.TYPE" ;
     };
     String SC_OPCODE_FORMULA
     {

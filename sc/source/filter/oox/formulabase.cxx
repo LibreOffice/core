@@ -896,7 +896,8 @@ static const FunctionData saFuncTable2013[] =
     { "UNICHAR",                "UNICHAR",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "UNICODE",                "UNICODE",              NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.WEBSERVICE","WEBSERVICE",          NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "XOR",                    "XOR",                  NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW }
+    { "XOR",                    "XOR",                  NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALL_NEW },
+    { "ERROR.TYPE",             "ERROR.TYPE",           NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW }
 };
 
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
