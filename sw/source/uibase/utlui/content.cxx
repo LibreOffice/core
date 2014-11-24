@@ -822,6 +822,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId) :
         bIsOutlineMoveable(true),
         bViewHasChanged(false),
         bIsImageListInitialized(false),
+        m_bActiveDocModified(false),
         bIsKeySpace(false)
 {
     SetHelpId(HID_NAVIGATOR_TREELIST);
