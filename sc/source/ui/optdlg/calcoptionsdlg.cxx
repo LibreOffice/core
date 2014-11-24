@@ -1009,7 +1009,7 @@ struct OpenCLTester
         sc::AutoCalcSwitch aACSwitch(*mpDoc, true);
 
         mnTestAreas++;
-        mpDocShell->GetDocFunc().InsertTable(mnTestAreas, rArea.msTitle, false, true);
+        (void) mpDocShell->GetDocFunc().InsertTable(mnTestAreas, rArea.msTitle, false, true);
 
         rArea.addHeader(mpDoc, mnTestAreas);
 
