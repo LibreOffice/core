@@ -56,22 +56,22 @@ public class UnoDialog2 extends UnoDialog
         super(xmsf);
     }
 
-    public XButton insertButton(String sName, String actionPerformed, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XButton insertButton(String sName, String actionPerformedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
 
         XButton xButton = (XButton) insertControlModel2("com.sun.star.awt.UnoControlButtonModel", sName, sPropNames, oPropValues, XButton.class);
 
-        if (actionPerformed != null)
+        if (actionPerformedMethodName != null)
         {
             xButton.addActionListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ACTION_PERFORMED, actionPerformed, eventTarget);
+            guiEventListener.add(sName, EventNames.ACTION_PERFORMED, actionPerformedMethodName, eventTarget);
         }
         return xButton;
     }
 
-    public XButton insertButton(String sName, String actionPerformed, String[] sPropNames, Object[] oPropValues)
+    public XButton insertButton(String sName, String actionPerformedMethodName, String[] sPropNames, Object[] oPropValues)
     {
-        return insertButton(sName, actionPerformed, this, sPropNames, oPropValues);
+        return insertButton(sName, actionPerformedMethodName, this, sPropNames, oPropValues);
     }
 
     public XButton insertImageButton(String sName, com.sun.star.awt.XActionListener actionPerformed, Object eventTarget, String[] sPropNames, Object[] oPropValues)
@@ -91,63 +91,36 @@ public class UnoDialog2 extends UnoDialog
         return insertImageButton(sName, actionPerformed, this, sPropNames, oPropValues);
     }
 
-    public XCheckBox insertCheckBox(String sName, String itemChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XCheckBox insertCheckBox(String sName, String itemChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
 
         XCheckBox xCheckBox = (XCheckBox) insertControlModel2("com.sun.star.awt.UnoControlCheckBoxModel", sName, sPropNames, oPropValues, XCheckBox.class);
 
-        if (itemChanged != null)
+        if (itemChangedMethodName != null)
         {
             xCheckBox.addItemListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChanged, eventTarget);
+            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChangedMethodName, eventTarget);
         }
         return xCheckBox;
     }
 
-    public XCheckBox insertCheckBox(String sName, String itemChanged, String[] sPropNames, Object[] oPropValues)
+    public XCheckBox insertCheckBox(String sName, String itemChangedMethodName, String[] sPropNames, Object[] oPropValues)
     {
-        return insertCheckBox(sName, itemChanged, this, sPropNames, oPropValues);
+        return insertCheckBox(sName, itemChangedMethodName, this, sPropNames, oPropValues);
     }
 
-    public XComboBox insertComboBox(String sName, String actionPerformed, String itemChanged, String textChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        XComboBox xComboBox = (XComboBox) insertControlModel2("com.sun.star.awt.UnoControlComboBoxModel", sName, sPropNames, oPropValues, XComboBox.class);
-        if (actionPerformed != null)
-        {
-            xComboBox.addActionListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ACTION_PERFORMED, actionPerformed, eventTarget);
-        }
-        if (itemChanged != null)
-        {
-            xComboBox.addItemListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChanged, eventTarget);
-        }
-        if (textChanged != null)
-        {
-            XTextComponent xTextComponent = UnoRuntime.queryInterface(XTextComponent.class, xComboBox);
-            xTextComponent.addTextListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.TEXT_CHANGED, textChanged, eventTarget);
-        }
-        return xComboBox;
-    }
-
-    public XComboBox insertComboBox(String sName, String actionPerformed, String itemChanged, String textChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertComboBox(sName, actionPerformed, textChanged, itemChanged, this, sPropNames, oPropValues);
-    }
-
-    public XListBox insertListBox(String sName, String actionPerformed, String itemChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XListBox insertListBox(String sName, String actionPerformedMethodName, String itemChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         XListBox xListBox = (XListBox) insertControlModel2("com.sun.star.awt.UnoControlListBoxModel", sName, sPropNames, oPropValues, XListBox.class);
-        if (actionPerformed != null)
+        if (actionPerformedMethodName != null)
         {
             xListBox.addActionListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ACTION_PERFORMED, actionPerformed, eventTarget);
+            guiEventListener.add(sName, EventNames.ACTION_PERFORMED, actionPerformedMethodName, eventTarget);
         }
-        if (itemChanged != null)
+        if (itemChangedMethodName != null)
         {
             xListBox.addItemListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChanged, eventTarget);
+            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChangedMethodName, eventTarget);
         }
         return xListBox;
     }
@@ -157,13 +130,13 @@ public class UnoDialog2 extends UnoDialog
         return insertListBox(sName, actionPerformed, itemChanged, this, sPropNames, oPropValues);
     }
 
-    public XRadioButton insertRadioButton(String sName, String itemChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XRadioButton insertRadioButton(String sName, String itemChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
         XRadioButton xRadioButton = (XRadioButton) insertControlModel2("com.sun.star.awt.UnoControlRadioButtonModel", sName, sPropNames, oPropValues, XRadioButton.class);
-        if (itemChanged != null)
+        if (itemChangedMethodName != null)
         {
             xRadioButton.addItemListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChanged, eventTarget);
+            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChangedMethodName, eventTarget);
         }
         return xRadioButton;
     }
@@ -179,14 +152,9 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(XControl.class, oTitledBox);
     }
 
-    public XTextComponent insertTextField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XTextComponent insertTextField(String sName, String sTextChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
     {
-        return (XTextComponent) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues, XTextComponent.class);
-    }
-
-    public XTextComponent insertTextField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertTextField(sName, sTextChanged, this, sPropNames, oPropValues);
+        return (XTextComponent) insertEditField(sName, sTextChangedMethodName, eventTarget, "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues, XTextComponent.class);
     }
 
     public XControl insertImage(String sName, String[] sPropNames, Object[] oPropValues)
@@ -213,85 +181,15 @@ public class UnoDialog2 extends UnoDialog
      * This method is used for creating Edit, Currency, Date, Formatted, Pattern, File
      * and Time edit components.
      */
-    private Object insertEditField(String sName, String sTextChanged, Object eventTarget, String sModelClass, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
+    private Object insertEditField(String sName, String sTextChangedMethodName, Object eventTarget, String sModelClass, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
     {
         XTextComponent xField = (XTextComponent) insertControlModel2(sModelClass, sName, sPropNames, oPropValues, XTextComponent.class);
-        if (sTextChanged != null)
+        if (sTextChangedMethodName != null)
         {
             xField.addTextListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.TEXT_CHANGED, sTextChanged, eventTarget);
+            guiEventListener.add(sName, EventNames.TEXT_CHANGED, sTextChangedMethodName, eventTarget);
         }
         return UnoRuntime.queryInterface(type, xField);
-    }
-
-    public XControl insertFileControl(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XControl) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFileControlModel", sPropNames, oPropValues, XControl.class);
-    }
-
-    public XControl insertFileControl(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertFileControl(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
-
-    public XCurrencyField insertCurrencyField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XCurrencyField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlCurrencyFieldModel", sPropNames, oPropValues, XCurrencyField.class);
-    }
-
-    public XCurrencyField insertCurrencyField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertCurrencyField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
-
-    public XDateField insertDateField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XDateField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlDateFieldModel", sPropNames, oPropValues, XDateField.class);
-    }
-
-    public XDateField insertDateField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertDateField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
-
-    public XNumericField insertNumericField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XNumericField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlNumericFieldModel", sPropNames, oPropValues, XNumericField.class);
-    }
-
-    public XNumericField insertNumericField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertNumericField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
-
-    public XTimeField insertTimeField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XTimeField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlTimeFieldModel", sPropNames, oPropValues, XTimeField.class);
-    }
-
-    public XTimeField insertTimeField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertTimeField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
-
-    public XPatternField insertPatternField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XPatternField) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlPatternFieldModel", sPropNames, oPropValues, XPatternField.class);
-    }
-
-    public XPatternField insertPatternField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertPatternField(sName, sTextChanged, this, sPropNames, oPropValues);
-    }
-
-    public XTextComponent insertFormattedField(String sName, String sTextChanged, Object eventTarget, String[] sPropNames, Object[] oPropValues)
-    {
-        return (XTextComponent) insertEditField(sName, sTextChanged, eventTarget, "com.sun.star.awt.UnoControlFormattedFieldModel", sPropNames, oPropValues, XTextComponent.class);
-    }
-
-    public XTextComponent insertFormattedField(String sName, String sTextChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertFormattedField(sName, sTextChanged, this, sPropNames, oPropValues);
     }
 
     public XControl insertFixedLine(String sName, String[] sPropNames, Object[] oPropValues)

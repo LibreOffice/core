@@ -66,28 +66,19 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
         }
     }
 
-    public void add(String componentName, EventNames eventName, MethodInvocation mi)
+    private void add(String componentName, EventNames eventName, MethodInvocation mi)
     {
         mHashtable.put(componentName + eventName, mi);
     }
 
-    private MethodInvocation get(String componentName, EventNames eventName)
-    {
-        return mHashtable.get(componentName + eventName);
-    }
-
-    private Object invoke(String componentName, EventNames eventName, Object param)
+    private void invoke(String componentName, EventNames eventName, Object param)
     {
         try
         {
-            MethodInvocation mi = get(componentName, eventName);
+            MethodInvocation mi = mHashtable.get(componentName + eventName);
             if (mi != null)
             {
-                return mi.invoke(param);
-            }
-            else
-            {
-                return null;
+                mi.invoke(param);
             }
         }
         catch (InvocationTargetException ite)
@@ -115,8 +106,6 @@ public class CommonListener implements XActionListener, XItemListener, XTextList
             System.out.println("=======================================================");
             ex.printStackTrace();
         }
-
-        return null;
     }
 
     /**
