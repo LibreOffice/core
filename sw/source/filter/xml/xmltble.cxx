@@ -1074,7 +1074,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
         {
             // get DDE Field Type (contains the DDE connection)
             const SwDDEFieldType* pDDEFldType =
-                ((SwDDETable&)rTbl).GetDDEFldType();
+                static_cast<const SwDDETable&>(rTbl).GetDDEFldType();
 
             // connection name
             AddAttribute( XML_NAMESPACE_OFFICE, XML_NAME,
@@ -1113,8 +1113,8 @@ void SwXMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
         bool bAutoStyles, bool _bProgress )
 {
-    bool bOldShowProgress = ((SwXMLExport&)GetExport()).IsShowProgress();
-    ((SwXMLExport&)GetExport()).SetShowProgress( _bProgress );
+    bool bOldShowProgress = static_cast<SwXMLExport&>(GetExport()).IsShowProgress();
+    static_cast<SwXMLExport&>(GetExport()).SetShowProgress( _bProgress );
 
     Reference < XTextTable > xTxtTbl( rTextContent, UNO_QUERY );
     OSL_ENSURE( xTxtTbl.is(), "text table missing" );
@@ -1146,16 +1146,16 @@ void SwXMLTextParagraphExport::exportTable(
                 // ALL flags are set at the same time.
                 const bool bExportStyles = ( GetExport().getExportFlags() & EXPORT_STYLES ) != 0;
                 if ( bExportStyles || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )
-                    ((SwXMLExport&)GetExport()).ExportTableAutoStyles( *pTblNd );
+                    static_cast<SwXMLExport&>(GetExport()).ExportTableAutoStyles( *pTblNd );
             }
             else
             {
-                ((SwXMLExport&)GetExport()).ExportTable( *pTblNd );
+                static_cast<SwXMLExport&>(GetExport()).ExportTable( *pTblNd );
             }
         }
     }
 
-    ((SwXMLExport&)GetExport()).SetShowProgress( bOldShowProgress );
+    static_cast<SwXMLExport&>(GetExport()).SetShowProgress( bOldShowProgress );
 }
 
 void SwXMLExport::DeleteTableLines()

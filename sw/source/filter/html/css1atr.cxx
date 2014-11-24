@@ -2442,7 +2442,7 @@ static Writer& OutCSS1_SvxCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
     // This function only exports Hints!
     // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
-    if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
+    if( static_cast<SwHTMLWriter&>(rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
                 0, 0, (const SvxCrossedOutItem *)&rHt, 0 );
 
@@ -2612,7 +2612,7 @@ static Writer& OutCSS1_SvxUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     // This function only exports Hints!
     // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
-    if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
+    if( static_cast<SwHTMLWriter&>(rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
                 (const SvxUnderlineItem *)&rHt, 0, 0, 0 );
 
@@ -2624,7 +2624,7 @@ static Writer& OutCSS1_SvxOverline( Writer& rWrt, const SfxPoolItem& rHt )
     // This function only exports Hints!
     // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
-    if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
+    if( static_cast<SwHTMLWriter&>(rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
                 0, (const SvxOverlineItem *)&rHt, 0, 0 );
 
@@ -2688,7 +2688,7 @@ static Writer& OutCSS1_SvxBlink( Writer& rWrt, const SfxPoolItem& rHt )
     // This function only exports Hints!
     // Otherwise OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink() is called directly.
 
-    if( ((SwHTMLWriter&)rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
+    if( static_cast<SwHTMLWriter&>(rWrt).IsCSS1Source(CSS1_OUTMODE_HINT) )
         OutCSS1_SvxTxtLn_SvxCrOut_SvxBlink( rWrt,
                 0, 0, 0, (const SvxBlinkItem *)&rHt );
 

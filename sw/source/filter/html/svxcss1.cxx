@@ -3137,23 +3137,23 @@ extern "C"
 static int SAL_CALL CSS1PropEntryCompare( const void *pFirst, const void *pSecond)
 {
     int nRet;
-    if( ((CSS1PropEntry*)pFirst)->pFunc )
+    if( reinterpret_cast<const CSS1PropEntry*>(pFirst)->pFunc )
     {
-        if( ((CSS1PropEntry*)pSecond)->pFunc )
-            nRet = strcmp( ((CSS1PropEntry*)pFirst)->sName ,
-                    ((CSS1PropEntry*)pSecond)->sName );
+        if( reinterpret_cast<const CSS1PropEntry*>(pSecond)->pFunc )
+            nRet = strcmp( reinterpret_cast<const CSS1PropEntry*>(pFirst)->sName ,
+                    reinterpret_cast<const CSS1PropEntry*>(pSecond)->sName );
         else
-            nRet = -1 * ((CSS1PropEntry*)pSecond)->pName->compareToAscii(
-                            ((CSS1PropEntry*)pFirst)->sName );
+            nRet = -1 * reinterpret_cast<const CSS1PropEntry*>(pSecond)->pName->compareToAscii(
+                            reinterpret_cast<const CSS1PropEntry*>(pFirst)->sName );
     }
     else
     {
-        if( ((CSS1PropEntry*)pSecond)->pFunc )
-            nRet = ((CSS1PropEntry*)pFirst)->pName->compareToAscii(
-                        ((CSS1PropEntry*)pSecond)->sName );
+        if( reinterpret_cast<const CSS1PropEntry*>(pSecond)->pFunc )
+            nRet = reinterpret_cast<const CSS1PropEntry*>(pFirst)->pName->compareToAscii(
+                        reinterpret_cast<const CSS1PropEntry*>(pSecond)->sName );
         else
-            nRet = ((CSS1PropEntry*)pFirst)->pName->compareTo(
-                        *((CSS1PropEntry*)pSecond)->pName );
+            nRet = reinterpret_cast<const CSS1PropEntry*>(pFirst)->pName->compareTo(
+                        *reinterpret_cast<const CSS1PropEntry*>(pSecond)->pName );
     }
 
     return nRet;
@@ -3189,7 +3189,7 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
                         sizeof( CSS1PropEntry ),
                         CSS1PropEntryCompare )))
     {
-        (((CSS1PropEntry*)pFound)->pFunc)( pExpr, *pItemSet, *pPropInfo, *this );
+        (static_cast<CSS1PropEntry*>(pFound)->pFunc)( pExpr, *pItemSet, *pPropInfo, *this );
     }
 }
 

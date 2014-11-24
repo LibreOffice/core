@@ -154,7 +154,7 @@ long SwWriteTable::GetLineHeight( const SwTableBox *pBox ) const
 
     long nHeight = 0;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-        nHeight = ((SwFmtFrmSize*)pItem)->GetHeight();
+        nHeight = static_cast<const SwFmtFrmSize*>(pItem)->GetHeight();
 
     return nHeight;
 }
@@ -590,7 +590,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
 
         long nHeight = 0;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
-            nHeight = ((SwFmtFrmSize*)pItem)->GetHeight();
+            nHeight = static_cast<const SwFmtFrmSize*>(pItem)->GetHeight();
 
         const SvxBrushItem *pBrushItem, *pLineBrush = pParentBrush;
         if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,

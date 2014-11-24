@@ -259,7 +259,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     sal_uInt16 nOldTxtFmtCollCnt = 0, nOldCharFmtCnt = 0;
 
     OSL_ENSURE( !pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
-    pTemplate = ((HTMLReader*)ReadHTML)->GetTemplateDoc();
+    pTemplate = static_cast<HTMLReader*>(ReadHTML)->GetTemplateDoc();
     if( pTemplate )
     {
         pTemplate->acquire();

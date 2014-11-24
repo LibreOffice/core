@@ -1111,7 +1111,7 @@ void DocxSdrExport::writeDiagramRels(uno::Reference<xml::dom::XDocument> xDom,
 void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFrmFmt,  int nAnchorId)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
-    uno::Reference< drawing::XShape > xShape(((SdrObject*)sdrObject)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference< drawing::XShape > xShape(const_cast<SdrObject*>(sdrObject)->getUnoShape(), uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
 
     uno::Reference<xml::dom::XDocument> dataDom;

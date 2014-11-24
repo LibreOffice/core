@@ -1335,7 +1335,7 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     {
         if (rTxtNode.IsCountedInList())
         {
-            OUString sName(((SfxStringItem*)pItem)->GetValue());
+            OUString sName(static_cast<const SfxStringItem*>(pItem)->GetValue());
             const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
             if (pRule)
                 pRet = GetNumFmtFromSwNumRuleLevel(*pRule, rTxtNode.GetActualListLevel());
@@ -1599,11 +1599,11 @@ bool SwWW8FltRefStack::IsFtnEdnBkmField(
     sal_uInt16 nSubType;
     if(pFld && (RES_GETREFFLD == pFld->Which())
         && ((REF_FOOTNOTE == (nSubType = pFld->GetSubType())) || (REF_ENDNOTE  == nSubType))
-        && !((SwGetRefField*)pFld)->GetSetRefName().isEmpty())
+        && !static_cast<const SwGetRefField*>(pFld)->GetSetRefName().isEmpty())
     {
         const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
         IDocumentMarkAccess::const_iterator_t ppBkmk =
-            pMarkAccess->findMark( ((SwGetRefField*)pFld)->GetSetRefName() );
+            pMarkAccess->findMark( static_cast<const SwGetRefField*>(pFld)->GetSetRefName() );
         if(ppBkmk != pMarkAccess->getAllMarksEnd())
         {
             // find Sequence No of corresponding Foot-/Endnote
@@ -1650,12 +1650,12 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             rBkMrkPos.nContent.GetIndex()-1, RES_TXTATR_FTN );
                         if( pFtn )
                         {
-                            sal_uInt16 nRefNo = ((SwTxtFtn*)pFtn)->GetSeqRefNo();
+                            sal_uInt16 nRefNo = static_cast<SwTxtFtn*>(pFtn)->GetSeqRefNo();
 
-                            ((SwGetRefField*)pFld)->SetSeqNo( nRefNo );
+                            static_cast<SwGetRefField*>(pFld)->SetSeqNo( nRefNo );
 
                             if( pFtn->GetFtn().IsEndNote() )
-                                ((SwGetRefField*)pFld)->SetSubType(REF_ENDNOTE);
+                                static_cast<SwGetRefField*>(pFld)->SetSubType(REF_ENDNOTE);
                         }
                     }
                 }
@@ -1887,7 +1887,7 @@ void SwWW8ImplReader::ImportDop()
 
     // We want exactly one DefaultTab
     SvxTabStopItem aNewTab( 1, sal_uInt16(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-    ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
+    const_cast<SvxTabStop&>(aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
 
     rDoc.GetAttrPool().SetPoolDefaultItem( aNewTab );
 
@@ -6034,7 +6034,7 @@ sal_uInt16 SwWW8ImplReader::GetAnnotationEndIndex(sal_uInt16 nStart)
     if (mpAtnStarts->GetData(nStart, nStartAkt, p) && p)
     {
         // p is an FBKF, and its first 2 bytes is the ibkl member, which is the end index.
-        return SVBT16ToShort(*((SVBT16*)p));
+        return SVBT16ToShort(*static_cast<SVBT16*>(p));
     }
     return nStart;
 }

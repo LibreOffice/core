@@ -553,13 +553,13 @@ void SwHTMLParser::EndMarquee()
     }
 
     // den gesammelten Text einfuegen
-    ((SdrTextObj*)pMarquee)->SetText( aContents );
+    static_cast<SdrTextObj*>(pMarquee)->SetText( aContents );
     pMarquee->SetMergedItemSetAndBroadcast( pMarquee->GetMergedItemSet() );
 
     if( bFixMarqueeWidth )
     {
         // die Groesse dem Text anpassen.
-        ((SdrTextObj*)pMarquee)->FitFrameToTextSize();
+        static_cast<SdrTextObj*>(pMarquee)->FitFrameToTextSize();
     }
 
     aContents = "";

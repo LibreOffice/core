@@ -2562,7 +2562,7 @@ SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, bool bChkPtr )
     if( pActionViewShell )
     {
         if( pActionViewShell->ISA( SwEditShell ) )
-            ((SwEditShell*)pActionViewShell)->StartAction();
+            static_cast<SwEditShell*>(pActionViewShell)->StartAction();
         else
             pActionViewShell->StartAction();
     }
@@ -2594,7 +2594,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         SwViewShell *pSh = pActionViewShell;
         do {
             if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-                ((SwCrsrShell*)pSh)->SttEndDoc(true);
+                static_cast<SwCrsrShell*>(pSh)->SttEndDoc(true);
             pSh = (SwViewShell *)pSh->GetNext();
         } while( pSh != pActionViewShell );
 
@@ -2607,7 +2607,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         pActionViewShell->LockView( true );
         const bool bOldEndActionByVirDev = pActionViewShell->IsEndActionByVirDev();
         pActionViewShell->SetEndActionByVirDev( true );
-        ((SwEditShell*)pActionViewShell)->EndAction();
+        static_cast<SwEditShell*>(pActionViewShell)->EndAction();
         pActionViewShell->SetEndActionByVirDev( bOldEndActionByVirDev );
         pActionViewShell->LockView( bOldLock );
 
@@ -2826,7 +2826,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                 {
                 case RES_FLTR_BOOKMARK: // insert bookmark
                     {
-                        const OUString sName( ((SfxStringItem*)pAttr->pItem)->GetValue() );
+                        const OUString sName( static_cast<SfxStringItem*>(pAttr->pItem)->GetValue() );
                         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
@@ -2886,7 +2886,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                     // ggfs. ein Bookmark anspringen
                     if( RES_TXTATR_INETFMT == nWhich &&
                         JUMPTO_MARK == eJumpTo &&
-                        sJmpMark == ((SwFmtINetFmt*)pAttr->pItem)->GetName() )
+                        sJmpMark == static_cast<SwFmtINetFmt*>(pAttr->pItem)->GetName() )
                     {
                         bChkJumpMark = true;
                         eJumpTo = JUMPTO_NONE;

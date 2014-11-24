@@ -121,10 +121,10 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
         case RES_DATETIMEFLD:
             pTypeStr = OOO_STRING_SW_HTML_FT_datetime;
             bNumFmt = true;
-            if( ((SwDateTimeField*)pFld)->IsFixed() )
+            if( static_cast<const SwDateTimeField*>(pFld)->IsFixed() )
             {
                 bNumValue = true;
-                dNumValue = ((SwDateTimeField*)pFld)->GetValue();
+                dNumValue = static_cast<const SwDateTimeField*>(pFld)->GetValue();
             }
             break;
 
@@ -451,7 +451,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         // TODO: HTML-Tags are written without entitities, that for, characters
         // not contained in the destination encoding are lost!
         OString sTmp(OUStringToOString(rTxt,
-            ((SwHTMLWriter&)rWrt).eDestEnc));
+            static_cast<SwHTMLWriter&>(rWrt).eDestEnc));
         rWrt.Strm().WriteCharPtr( sTmp.getStr() ).WriteChar( '>' );
     }
     else if( RES_POSTITFLD == pFldTyp->Which() )
@@ -472,7 +472,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             // TODO: HTML-Tags are written without entitities, that for,
             // characters not contained in the destination encoding are lost!
             OString sTmp(OUStringToOString(sComment,
-                ((SwHTMLWriter&)rWrt).eDestEnc));
+                static_cast<SwHTMLWriter&>(rWrt).eDestEnc));
             rWrt.Strm().WriteCharPtr( sTmp.getStr() );
             bWritten = true;
         }
@@ -488,7 +488,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
                 // characters not contained in the destination encoding are
                 // lost!
                 OString sTmp(OUStringToOString(sComment,
-                    ((SwHTMLWriter&)rWrt).eDestEnc));
+                    static_cast<SwHTMLWriter&>(rWrt).eDestEnc));
                 rWrt.Strm().WriteCharPtr( sTmp.getStr() );
                 bWritten = true;
             }
@@ -502,7 +502,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             // TODO: ???
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
                 .append(' ').append(OUStringToOString(sComment,
-                    ((SwHTMLWriter&)rWrt).eDestEnc)).append(" -->");
+                    static_cast<SwHTMLWriter&>(rWrt).eDestEnc)).append(" -->");
             rWrt.Strm().WriteCharPtr( sOut.getStr() );
         }
     }

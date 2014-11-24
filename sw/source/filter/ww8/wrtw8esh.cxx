@@ -1125,7 +1125,7 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
 
     if( bStart )
     {
-        rtl_TextEncoding eChrSet = ((SvxFontItem&)rItem).GetCharSet();
+        rtl_TextEncoding eChrSet = static_cast<const SvxFontItem&>(rItem).GetCharSet();
         aChrSetArr.push_back( eChrSet );
         aChrTxtAtrArr.push_back( &rAttr );
     }
@@ -1693,19 +1693,19 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
     if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CONTRAST,
         true, &pItem))
     {
-        nContrast = ((SfxInt16Item*)pItem)->GetValue();
+        nContrast = static_cast<const SfxInt16Item*>(pItem)->GetValue();
     }
 
     if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_LUMINANCE,
         true, &pItem))
     {
-        nBrightness = ((SfxInt16Item*)pItem)->GetValue();
+        nBrightness = static_cast<const SfxInt16Item*>(pItem)->GetValue();
     }
 
     if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
         true, &pItem))
     {
-        nMode = ((SfxEnumItem*)pItem)->GetValue();
+        nMode = static_cast<const SfxEnumItem*>(pItem)->GetValue();
         if (nMode == GRAPHICDRAWMODE_WATERMARK)
         {
             /*
@@ -1758,13 +1758,13 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
     {
         const Size aSz( rNd.GetTwipSize() );
         sal_Int32 nVal;
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetLeft() ) )
+        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetLeft() ) )
             rPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, ToFract16( nVal, aSz.Width()) );
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetRight() ) )
+        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetRight() ) )
             rPropOpt.AddOpt( ESCHER_Prop_cropFromRight, ToFract16( nVal, aSz.Width()));
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetTop() ) )
+        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetTop() ) )
             rPropOpt.AddOpt( ESCHER_Prop_cropFromTop, ToFract16( nVal, aSz.Height()));
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetBottom() ) )
+        if( 0 != ( nVal = static_cast<const SwCropGrf*>(pItem )->GetBottom() ) )
             rPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nVal, aSz.Height()));
     }
 }
@@ -1916,7 +1916,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         const SvxBorderLine* pLine;
 
         for( sal_uInt16 n = 0; n < 4; ++n )
-            if( 0 != ( pLine = ((SvxBoxItem*)pItem)->GetLine( n )) )
+            if( 0 != ( pLine = static_cast<const SvxBoxItem*>(pItem)->GetLine( n )) )
             {
                 if( bFirstLine )
                 {
@@ -1971,7 +1971,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
                     bFirstLine = false;
                 }
                 rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(
-                    ((SvxBoxItem*)pItem)->GetDistance( n ) ));
+                    static_cast<const SvxBoxItem*>(pItem)->GetDistance( n ) ));
             }
             else
                 // MM If there is no line the distance should be set to 0
@@ -2086,9 +2086,9 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
     if (SfxItemState::SET == rFmt.GetItemState(RES_LR_SPACE, true, &pItem))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft,
-                DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetLeft() ) );
+                DrawModelToEmu( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() ) );
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight,
-                DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetRight() ) );
+                DrawModelToEmu( static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) );
     }
     else
     {
@@ -2099,9 +2099,9 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
     if (SfxItemState::SET == rFmt.GetItemState(RES_UL_SPACE, true, &pItem))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistTop,
-                DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetUpper() ) );
+                DrawModelToEmu( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() ) );
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistBottom,
-                DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetLower() ) );
+                DrawModelToEmu( static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) );
     }
 
     if (rFmt.GetSurround().IsContour())

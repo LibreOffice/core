@@ -1438,7 +1438,7 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
 
     if ( 0 == b || 0xFF == b )
     {
-        long nHeight = ((SvxFontHeightItem&)m_rWW8Export.GetItem(
+        long nHeight = static_cast<const SvxFontHeightItem&>(m_rWW8Export.GetItem(
                                     RES_CHRATR_FONTSIZE )).GetHeight();
         if( m_rWW8Export.bWrtWW8 )
             m_rWW8Export.InsUInt16( NS_sprm::LN_CHpsPos );
@@ -3052,7 +3052,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         else
             nScript = i18n::ScriptType::ASIAN;
 
-        long nHeight = ((SvxFontHeightItem&)(GetExport().GetItem(
+        long nHeight = static_cast<const SvxFontHeightItem&>((GetExport().GetItem(
             GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
@@ -3929,8 +3929,8 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_BOX );
         if ( pItem )
         {
-            nRDist = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_LEFT );
-            nLDist = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_RIGHT );
+            nRDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_LEFT );
+            nLDist = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_RIGHT );
         }
         else
             nLDist = nRDist = 0;

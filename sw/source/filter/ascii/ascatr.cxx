@@ -219,7 +219,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     if( !bLastNd ||
         ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
             && !nStrPos && nEnd == nNodeEnd ) )
-        rWrt.Strm().WriteUnicodeOrByteText( ((SwASCWriter&)rWrt).GetLineEnd());
+        rWrt.Strm().WriteUnicodeOrByteText( static_cast<SwASCWriter&>(rWrt).GetLineEnd());
 
     return rWrt;
 }

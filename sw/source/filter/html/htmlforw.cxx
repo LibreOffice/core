@@ -467,7 +467,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     uno::Any aTmp = xFormPropSet->getPropertyValue( "Name" );
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-        !((OUString*)aTmp.getValue())->isEmpty() )
+        !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
         Strm().WriteOString( sOut );
@@ -478,7 +478,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     aTmp = xFormPropSet->getPropertyValue( "TargetURL" );
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-        !((OUString*)aTmp.getValue())->isEmpty() )
+        !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_action) + "=\"";
         Strm().WriteOString( sOut );
@@ -526,7 +526,7 @@ void SwHTMLWriter::OutForm( bool bOn,
 
     aTmp = xFormPropSet->getPropertyValue( "TargetFrame" );
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get()&&
-        !((OUString*)aTmp.getValue())->isEmpty() )
+        !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_target) + "=\"";
         Strm().WriteOString( sOut );
@@ -599,7 +599,7 @@ void SwHTMLWriter::OutHiddenControls(
 
             aTmp = xPropSet->getPropertyValue( "Name" );
             if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-                !((OUString*)aTmp.getValue())->isEmpty() )
+                !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
             {
                 sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
                 Strm().WriteOString( sOut );
@@ -609,7 +609,7 @@ void SwHTMLWriter::OutHiddenControls(
             }
             aTmp = xPropSet->getPropertyValue( "HiddenValue" );
             if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-                !((OUString*)aTmp.getValue())->isEmpty() )
+                !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
             {
                 sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_value) + "=\"";
                 Strm().WriteOString( sOut );
@@ -792,7 +792,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
             aTmp = xPropSet->getPropertyValue( "Label" );
             if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-                !((OUString*)aTmp.getValue())->isEmpty() )
+                !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
             {
                 sValue = *(OUString*)aTmp.getValue();
             }
@@ -902,7 +902,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 {
                     aTmp = xPropSet->getPropertyValue( "DefaultText" );
                     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-                        !((OUString*)aTmp.getValue())->isEmpty() )
+                        !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
                     {
                         sValue = *(OUString*)aTmp.getValue();
                     }
@@ -949,7 +949,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 
     aTmp = xPropSet->getPropertyValue("Name");
     if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-        !((OUString*)aTmp.getValue())->isEmpty() )
+        !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
     {
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_name) + "=\"";
         rWrt.Strm().WriteOString( sOut );
@@ -979,7 +979,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         aTmp = xPropSet->getPropertyValue( "ImageURL" );
         if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-            !((OUString*)aTmp.getValue())->isEmpty() )
+            !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
         {
             sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_src) + "=\"";
             rWrt.Strm().WriteOString( sOut );
@@ -1087,7 +1087,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         {
             aTmp = xPropSet->getPropertyValue( "FontName" );
             if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-                !((OUString*)aTmp.getValue())->isEmpty() )
+                !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
             {
                 vcl::Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
@@ -1247,7 +1247,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         OUString sVal;
         aTmp = xPropSet->getPropertyValue( "DefaultText" );
         if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get()&&
-            !((OUString*)aTmp.getValue())->isEmpty() )
+            !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
         {
             sVal = *(OUString*)aTmp.getValue();
         }
@@ -1270,7 +1270,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     {
         aTmp = xPropSet->getPropertyValue("Label");
         if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
-            !((OUString*)aTmp.getValue())->isEmpty() )
+            !reinterpret_cast<const OUString*>(aTmp.getValue())->isEmpty() )
         {
             sValue = *(OUString*)aTmp.getValue();
             HTMLOutFuncs::Out_String( rWrt.Strm(), sValue,

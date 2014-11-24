@@ -809,7 +809,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
 
     if( bCheckTextBoxStory )
     {
-        bool bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
+        bool bReusable = (0 != SVBT16ToShort( static_cast<WW8_TXBXS*>(pT0)->fReusable ));
         while( bReusable )
         {
             pT->advance();
@@ -818,7 +818,7 @@ bool SwWW8ImplReader::GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp,
                 OSL_ENSURE( false, "+Wo ist der Grafik-Text (2-a) ?" );
                 return false;
             }
-            bReusable = (0 != SVBT16ToShort( ((WW8_TXBXS*)pT0)->fReusable ));
+            bReusable = (0 != SVBT16ToShort( static_cast<WW8_TXBXS*>(pT0)->fReusable ));
         }
     }
     pT->advance();
@@ -1054,7 +1054,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                 if( !pNew )
                                 {
                                     pNew = new SdrGrafObj;
-                                    ((SdrGrafObj*)pNew)->SetGraphic(aGraph);
+                                    static_cast<SdrGrafObj*>(pNew)->SetGraphic(aGraph);
                                 }
 
                                 GrafikCtor();
@@ -2956,7 +2956,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
 
     OUString aObjectName(rpObject->GetName());
     if (OBJ_OLE2 == SdrObjKind(rpObject->GetObjIdentifier()))
-        pRetFrmFmt = InsertOle(*((SdrOle2Obj*)rpObject), rFlySet, aGrSet);
+        pRetFrmFmt = InsertOle(*static_cast<SdrOle2Obj*>(rpObject), rFlySet, aGrSet);
     else
     {
         const SdrGrafObj *pGrf= (const SdrGrafObj*)rpObject;

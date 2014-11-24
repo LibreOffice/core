@@ -2208,7 +2208,7 @@ bool SwHTMLParser::GetMarginsFromContextWithNumBul( sal_uInt16& nLeft,
                                                     short& nIndent ) const
 {
     bool bRet = GetMarginsFromContext( nLeft, nRight, nIndent );
-    const SwHTMLNumRuleInfo& rInfo = ((SwHTMLParser*)this)->GetNumInfo();
+    const SwHTMLNumRuleInfo& rInfo = const_cast<SwHTMLParser*>(this)->GetNumInfo();
     if( rInfo.GetDepth() )
     {
         sal_uInt8 nLevel = (sal_uInt8)( (rInfo.GetDepth() <= MAXLEVEL ? rInfo.GetDepth()
@@ -2271,7 +2271,7 @@ void SwHTMLParser::EndContextAttrs( _HTMLAttrContext *pContext, bool bRemove )
                 pAttr->Invalidate();
             else if( nChars > MAX_DROPCAP_CHARS )
                 nChars = MAX_DROPCAP_CHARS;
-            ((SwFmtDrop&)pAttr->GetItem()).GetChars() = (sal_uInt8)nChars;
+            static_cast<SwFmtDrop&>(pAttr->GetItem()).GetChars() = (sal_uInt8)nChars;
         }
 
         EndAttr( pAttr );

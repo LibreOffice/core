@@ -583,7 +583,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
           (FLY_AS_CHAR == eAnchorId) ) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
     {
-        switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
+        switch( static_cast<const SwFmtVertOrient*>(pItem)->GetVertOrient() )
         {
         case text::VertOrientation::LINE_TOP:     pStr = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
         case text::VertOrientation::CHAR_TOP:
@@ -609,16 +609,16 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
     {
         aTwipSpc.Width() =
-            ( ((SvxLRSpaceItem*)pItem)->GetLeft() +
-                ((SvxLRSpaceItem*)pItem)->GetRight() ) / 2;
+            ( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() +
+                static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) / 2;
         nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
     }
     if( (nFrmOpts & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
     {
         aTwipSpc.Height()  =
-            ( ((SvxULSpaceItem*)pItem)->GetUpper() +
-                ((SvxULSpaceItem*)pItem)->GetLower() ) / 2;
+            ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
+                static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2;
         nDfltTopMargin = nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
     }
 
@@ -852,7 +852,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rF
           (FLY_AS_CHAR == eAnchorId) ) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
     {
-        switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
+        switch( static_cast<const SwFmtVertOrient*>(pItem)->GetVertOrient() )
         {
         case text::VertOrientation::LINE_TOP:     pAlignString = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
         case text::VertOrientation::CHAR_TOP:
@@ -877,16 +877,16 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rF
         SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
     {
         aTwipSpc.Width() =
-            ( ((SvxLRSpaceItem*)pItem)->GetLeft() +
-                ((SvxLRSpaceItem*)pItem)->GetRight() ) / 2;
+            ( static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft() +
+                static_cast<const SvxLRSpaceItem*>(pItem)->GetRight() ) / 2;
         nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
     }
     if( (nFrameOptions & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
     {
         aTwipSpc.Height()  =
-            ( ((SvxULSpaceItem*)pItem)->GetUpper() +
-                ((SvxULSpaceItem*)pItem)->GetLower() ) / 2;
+            ( static_cast<const SvxULSpaceItem*>(pItem)->GetUpper() +
+                static_cast<const SvxULSpaceItem*>(pItem)->GetLower() ) / 2;
         nDfltTopMargin = nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
     }
 

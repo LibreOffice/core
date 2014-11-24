@@ -291,7 +291,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
     {
         if (pRet->ISA(SdrOle2Obj))
         {
-            pFmt = InsertOle(*((SdrOle2Obj*)pRet), *pFlySet, *pGrfSet);
+            pFmt = InsertOle(*static_cast<SdrOle2Obj*>(pRet), *pFlySet, *pGrfSet);
             SdrObject::Free( pRet );        // das brauchen wir nicht mehr
         }
         else

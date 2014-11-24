@@ -482,7 +482,7 @@ void SwHTMLParser::NewField()
                 pFld = new SwDocInfoField( (SwDocInfoFieldType *)pType,
                                              nSub, aName, nNumFmt );
                 if( bHasNumValue )
-                    ((SwDocInfoField*)pFld)->SetValue( dValue );
+                    static_cast<SwDocInfoField*>(pFld)->SetValue( dValue );
             }
         }
         break;
@@ -543,27 +543,27 @@ void SwHTMLParser::EndField()
         switch( pField->Which() )
         {
         case RES_DOCINFOFLD:
-            OSL_ENSURE( ((SwDocInfoField*)pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwDocInfoField*>(pField)->IsFixed(),
                     "DokInfo-Feld haette nicht gemerkt werden muessen" );
-            ((SwDocInfoField*)pField)->SetExpansion( aContents );
+            static_cast<SwDocInfoField*>(pField)->SetExpansion( aContents );
             break;
 
         case RES_EXTUSERFLD:
-            OSL_ENSURE( ((SwExtUserField*)pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwExtUserField*>(pField)->IsFixed(),
                     "ExtUser-Feld haette nicht gemerkt werden muessen" );
-            ((SwExtUserField*)pField)->SetExpansion( aContents );
+            static_cast<SwExtUserField*>(pField)->SetExpansion( aContents );
             break;
 
         case RES_AUTHORFLD:
-            OSL_ENSURE( ((SwAuthorField*)pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwAuthorField*>(pField)->IsFixed(),
                     "Author-Feld haette nicht gemerkt werden muessen" );
-            ((SwAuthorField*)pField)->SetExpansion( aContents );
+            static_cast<SwAuthorField*>(pField)->SetExpansion( aContents );
             break;
 
         case RES_FILENAMEFLD:
-            OSL_ENSURE( ((SwFileNameField*)pField)->IsFixed(),
+            OSL_ENSURE( static_cast<SwFileNameField*>(pField)->IsFixed(),
                     "FileName-Feld haette nicht gemerkt werden muessen" );
-            ((SwFileNameField*)pField)->SetExpansion( aContents );
+            static_cast<SwFileNameField*>(pField)->SetExpansion( aContents );
             break;
         }
 

@@ -955,7 +955,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
 sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 {
-    SwOLEObj& rObj = ((SwOLENode*)rNode.GetOLENode())->GetOLEObj();
+    SwOLEObj& rObj = const_cast<SwOLENode*>(rNode.GetOLENode())->GetOLEObj();
 
     SwHTMLFrmType eType = HTML_FRMTYPE_OLE;
 

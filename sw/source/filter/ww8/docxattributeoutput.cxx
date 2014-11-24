@@ -4006,7 +4006,7 @@ void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 */
 void DocxAttributeOutput::WriteSrcRect(const SdrObject* pSdrObj )
 {
-    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
     uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
 
     OUString sUrl;
@@ -4263,7 +4263,7 @@ void DocxAttributeOutput::WriteOLE2Obj( const SdrObject* pSdrObj, SwOLENode& rOL
 bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& rSize )
 {
     uno::Reference< chart2::XChartDocument > xChartDoc;
-    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
     if( xShape.is() )
     {
         uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -4288,7 +4288,7 @@ void DocxAttributeOutput::WritePostponedChart()
        if(m_postponedChart == NULL)
                 return;
        uno::Reference< chart2::XChartDocument > xChartDoc;
-       uno::Reference< drawing::XShape > xShape( ((SdrObject*)m_postponedChart)->getUnoShape(), uno::UNO_QUERY );
+       uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(m_postponedChart)->getUnoShape(), uno::UNO_QUERY );
        if( xShape.is() )
        {
             uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
@@ -4956,7 +4956,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
 
 bool DocxAttributeOutput::IsDiagram( const SdrObject* sdrObject )
 {
-    uno::Reference< drawing::XShape > xShape( ((SdrObject*)sdrObject)->getUnoShape(), uno::UNO_QUERY );
+    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(sdrObject)->getUnoShape(), uno::UNO_QUERY );
     if ( !xShape.is() )
         return false;
 
@@ -7149,8 +7149,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
         if ( pItem )
         {
-            m_pageMargins.nPageMarginRight = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_LEFT );
-            m_pageMargins.nPageMarginLeft = ((SvxBoxItem*)pItem)->CalcLineSpace( BOX_LINE_RIGHT );
+            m_pageMargins.nPageMarginRight = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_LEFT );
+            m_pageMargins.nPageMarginLeft = static_cast<const SvxBoxItem*>(pItem)->CalcLineSpace( BOX_LINE_RIGHT );
         }
         else
             m_pageMargins.nPageMarginLeft = m_pageMargins.nPageMarginRight = 0;
@@ -7644,7 +7644,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                 const SdrObject* pSdrObj = m_rExport.mpParentFrame->GetFrmFmt().FindRealSdrObject();
                 if (pSdrObj)
                 {
-                    uno::Reference< drawing::XShape > xShape( ((SdrObject*)pSdrObj)->getUnoShape(), uno::UNO_QUERY );
+                    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY );
                     uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY );
                     m_rDrawingML.SetFS(m_pSerializer);
                     m_rDrawingML.WriteBlipFill( xPropertySet, "BackGraphicURL" );

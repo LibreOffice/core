@@ -281,7 +281,7 @@ SwXMLItemSetContext_Impl::~SwXMLItemSetContext_Impl()
     if( xBackground.Is() )
     {
         const SvxBrushItem& rItem =
-            ((SwXMLBrushItemImportContext*)&xBackground)->GetItem();
+            static_cast<SwXMLBrushItemImportContext*>(&xBackground)->GetItem();
         rItemSet.Put( rItem );
     }
 }

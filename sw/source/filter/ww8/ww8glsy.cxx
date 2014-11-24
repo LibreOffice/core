@@ -209,7 +209,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
             SfxObjectShellLock xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
             if (xDocSh->DoInitNew(0))
             {
-                SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
+                SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
                 SwWW8ImplReader* pRdr = new SwWW8ImplReader(pGlossary->nVersion,
                     xStg, &rStrm, *pD, rBlocks.GetBaseURL(), true);
 

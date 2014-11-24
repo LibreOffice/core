@@ -410,7 +410,7 @@ void SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
         {
             SwCollCondition aCond( pCondColl, pCond->GetCondition(),
                                               pCond->GetSubCondition() );
-            ((SwConditionTxtFmtColl*)pColl)->InsertCondition( aCond );
+            static_cast<SwConditionTxtFmtColl*>(pColl)->InsertCondition( aCond );
         }
     }
 }

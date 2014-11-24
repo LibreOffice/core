@@ -287,7 +287,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
                 // nur Absaetzte betrachten, an denen man was erkennt
                 // Das ist der Fall, wenn die Vorlage eine der Tabellen-Vorlagen
                 // ist oder von einer der beiden abgelitten ist.
-                const SwFmt *pFmt = &((SwTxtNode*)pNd)->GetAnyFmtColl();
+                const SwFmt *pFmt = &static_cast<SwTxtNode*>(pNd)->GetAnyFmtColl();
                 sal_uInt16 nPoolId = pFmt->GetPoolFmtId();
                 while( !pFmt->IsDefault() &&
                        RES_POOLCOLL_TABLE_HDLN!=nPoolId &&

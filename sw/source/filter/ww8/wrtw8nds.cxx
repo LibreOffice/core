@@ -2428,9 +2428,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState(
                     RES_UL_SPACE, true, &pItem ) &&
                 ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
-                   ((SvxULSpaceItem*)pItem)->GetUpper()) ||
+                   static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()) ||
                   ( !( ND_HAS_NEXT_LAYNODE & nPrvNxtNd ) &&
-                   ((SvxULSpaceItem*)pItem)->GetLower()) ))
+                   static_cast<const SvxULSpaceItem*>(pItem)->GetLower()) ))
             {
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
                 SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
@@ -2795,7 +2795,7 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
     {
         bool bNoPageBreak = false;
         if ( SfxItemState::SET != pSet->GetItemState(RES_PAGEDESC, true, &pI)
-            || 0 == ((SwFmtPageDesc*)pI)->GetPageDesc() )
+            || 0 == static_cast<const SwFmtPageDesc*>(pI)->GetPageDesc() )
         {
             bNoPageBreak = true;
         }
@@ -2842,7 +2842,7 @@ void MSWordExportBase::OutputSectionNode( const SwSectionNode& rSectionNode )
         else if ( rNd.IsCntntNode() )
         {
             pSet = &rNd.GetCntntNode()->GetSwAttrSet();
-            nRstLnNum = ((SwFmtLineNumber&)pSet->Get(
+            nRstLnNum = static_cast<const SwFmtLineNumber&>(pSet->Get(
                             RES_LINENUMBER )).GetStartValue();
         }
         else
