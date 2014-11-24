@@ -3604,6 +3604,49 @@ void ScTokenArray::AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const
     }
 }
 
+void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rOldPos, const ScAddress& rNewPos )
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        bool bAdjust = false;
+        switch ((*p)->GetType())
+        {
+            case svExternalSingleRef:
+                bAdjust = true;     // always
+                // fallthru
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rOldPos);
+                if (!bAdjust)
+                    bAdjust = (aAbs.Tab() != rOldPos.Tab());
+                if (bAdjust)
+                    rRef.SetAddress(aAbs, rNewPos);
+            }
+            break;
+            case svExternalDoubleRef:
+                bAdjust = true;     // always
+                // fallthru
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rOldPos);
+                if (!bAdjust)
+                    bAdjust = (rOldPos.Tab() < aAbs.aStart.Tab() || aAbs.aEnd.Tab() < rOldPos.Tab());
+                if (bAdjust)
+                    rRef.SetRange(aAbs, rNewPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 namespace {
 
 void clearTabDeletedFlag( ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
