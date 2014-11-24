@@ -47,9 +47,9 @@ bool SwAccessibleFrameBase::IsSelected()
 {
     bool bRet = false;
 
-    OSL_ENSURE( GetMap(), "no map?" );
+    assert(GetMap());
     const SwViewShell *pVSh = GetMap()->GetShell();
-    OSL_ENSURE( pVSh, "no shell?" );
+    assert(pVSh);
     if( pVSh->ISA( SwFEShell ) )
     {
         const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
@@ -67,7 +67,7 @@ void SwAccessibleFrameBase::GetStates(
     SwAccessibleContext::GetStates( rStateSet );
 
     const SwViewShell *pVSh = GetMap()->GetShell();
-    OSL_ENSURE( pVSh, "no shell?" );
+    assert(pVSh);
     bool bSelectable =  pVSh->ISA( SwFEShell );
 
     // SELECTABLE
@@ -82,7 +82,7 @@ void SwAccessibleFrameBase::GetStates(
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
+        assert(bIsSelected && "bSelected out of sync");
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
@@ -195,7 +195,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
             osl::MutexGuard aGuard( aMutex );
             bSelected = bIsSelected;
         }
-        OSL_ENSURE( bSelected, "focus object should be selected" );
+        assert(bSelected && "focus object should be selected");
 
         FireStateChangedEvent( AccessibleStateType::FOCUSED,
                                pWin->HasFocus() && bSelected );
@@ -222,17 +222,15 @@ void SwAccessibleFrameBase::Modify( const SfxPoolItem* pOld, const SfxPoolItem *
         if(  pFlyFrm )
         {
             const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-            OSL_ENSURE( pFrmFmt == GetRegisteredIn(), "invalid frame" );
+            assert(pFrmFmt == GetRegisteredIn() && "invalid frame");
 
             const OUString sOldName( GetName() );
-            OSL_ENSURE( !pOld ||
-                    static_cast < const SwStringMsgPoolItem * >( pOld )->GetString() == GetName(),
-                    "invalid old name" );
+            assert( !pOld ||
+                    static_cast<const SwStringMsgPoolItem *>(pOld)->GetString() == GetName());
 
             SetName( pFrmFmt->GetName() );
-            OSL_ENSURE( !pNew ||
-                    static_cast < const SwStringMsgPoolItem * >( pNew )->GetString() == GetName(),
-                    "invalid new name" );
+            assert( !pNew ||
+                    static_cast<const SwStringMsgPoolItem *>(pNew)->GetString() == GetName());
 
             if( sOldName != GetName() )
             {
@@ -368,7 +366,7 @@ SwFlyFrm* SwAccessibleFrameBase::getFlyFrm() const
     SwFlyFrm* pFlyFrm = NULL;
 
     const SwFrm* pFrm = GetFrm();
-    DBG_ASSERT( pFrm != NULL, "frame expected" );
+    assert(pFrm);
     if( pFrm->IsFlyFrm() )
     {
         pFlyFrm = static_cast<SwFlyFrm*>( const_cast<SwFrm*>( pFrm ) );
