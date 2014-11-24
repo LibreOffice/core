@@ -62,6 +62,7 @@ namespace
         }
         virtual void SAL_CALL disposing (void) SAL_OVERRIDE
         {
+            SolarMutexGuard g;
             if (mxFrame.is())
                 mxFrame->removeFrameActionListener(this);
         }
@@ -69,12 +70,15 @@ namespace
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)rEvent;
+
+            SolarMutexGuard g;
             mrControllerItem.ResetFrame();
             mxFrame = NULL;
         }
         virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
+            SolarMutexGuard g;
             if (rEvent.Action == frame::FrameAction_CONTEXT_CHANGED)
                 mrControllerItem.NotifyFrameContextChange();
         }
