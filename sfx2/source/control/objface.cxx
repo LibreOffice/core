@@ -449,13 +449,12 @@ sal_uInt16 SfxInterface::GetObjectBarCount() const
         return pImpData->aObjectBars.size();
 }
 
-
-void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, const OUString* pChildWinName)
+void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext)
 {
-    RegisterChildWindow( nId, bContext, 0UL, pChildWinName );
+    RegisterChildWindow(nId, bContext, 0UL);
 }
 
-void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, sal_uInt32 nFeature, const OUString*)
+void SfxInterface::RegisterChildWindow(sal_uInt16 nId, bool bContext, sal_uInt32 nFeature)
 {
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, ResId(nId, *SfxApplication::GetOrCreate()->GetOffResManager_Impl()), true, nFeature);
     pUI->bContext = bContext;
