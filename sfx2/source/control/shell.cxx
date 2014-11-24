@@ -395,11 +395,6 @@ void SfxShell::ParentDeactivate
 {
 }
 
-ResMgr* SfxShell::GetResMgr() const
-{
-    return GetInterface()->GetResMgr();
-}
-
 bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 {
     // Get Slot status

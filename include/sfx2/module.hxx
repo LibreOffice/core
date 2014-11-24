@@ -75,7 +75,6 @@ public:
                                     SfxObjectFactory* pFactoryP, ... );
                                 virtual ~SfxModule();
 
-    ResMgr*                     GetResMgr() const { return SfxShell::GetResMgr(); }
     virtual ResMgr*             GetResMgr();
     SfxSlotPool*                GetSlotPool() const;
 

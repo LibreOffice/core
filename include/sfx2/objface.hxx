@@ -65,8 +65,6 @@ public:
     bool                    HasName() const { return 0 != aNameResId.GetId(); }
     OUString                GetName() const
                             { return HasName() ? aNameResId.toString() : OUString(); }
-    ResMgr*                 GetResMgr() const
-                            { return aNameResId.GetResMgr(); }
 
     const SfxInterface*     GetGenoType() const { return pGenoType; }
 

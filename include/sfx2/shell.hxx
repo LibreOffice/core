@@ -431,12 +431,6 @@ public:
         */
     SfxViewFrame*               GetFrame() const;
 
-    /**
-        This method provides the ResMgr of the <Resource-DLL> that are used by
-        the SfxShell instance. If this is a NULL-pointer, then the current
-        resource manager is to be used.
-        */
-    ResMgr*                     GetResMgr() const;
     virtual bool                HasUIFeature( sal_uInt32 nFeature );
     void                        UIFeatureChanged();
 

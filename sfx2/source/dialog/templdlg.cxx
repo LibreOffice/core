@@ -714,7 +714,8 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     pCurObjShell = pViewFrame->GetObjectShell();
-    ResMgr* pMgr = pCurObjShell ? pCurObjShell->GetResMgr() : NULL;
+    pModule = pCurObjShell ? pCurObjShell->GetModule() : NULL;
+    ResMgr* pMgr = pModule ? pModule->GetResMgr() : NULL;
     ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
     aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
     m_pStyleFamiliesId = new ResId( aFamId.GetId(), *pMgr );
@@ -800,11 +801,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
 
     for ( i = nStart; i <= nEnd; i++ )
         pBindings->Update(i);
-
-    pModule = pCurObjShell ? pCurObjShell->GetModule() : NULL;
 }
-
-
 
 void SfxCommonTemplateDialog_Impl::ClearResource()
 {
@@ -834,7 +831,6 @@ SfxCommonTemplateDialog_Impl::impl_setDeletionWatcher(
     return pRet;
 }
 
-
 void SfxCommonTemplateDialog_Impl::Initialize()
 {
     // Read global user resource
@@ -854,8 +850,6 @@ void SfxCommonTemplateDialog_Impl::Initialize()
     if (!bHierarchical)
         aFmtLb.Show();
 }
-
-
 
 SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 {
