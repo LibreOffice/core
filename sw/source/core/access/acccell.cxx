@@ -57,9 +57,9 @@ bool SwAccessibleCell::IsSelected()
 {
     bool bRet = false;
 
-    OSL_ENSURE( GetMap(), "no map?" );
+    assert(GetMap());
     const SwViewShell *pVSh = GetMap()->GetShell();
-    OSL_ENSURE( pVSh, "no shell?" );
+    assert(pVSh);
     if( pVSh->ISA( SwCrsrShell ) )
     {
         const SwCrsrShell *pCSh = static_cast< const SwCrsrShell * >( pVSh );
@@ -83,7 +83,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 
     // SELECTABLE
     const SwViewShell *pVSh = GetMap()->GetShell();
-    OSL_ENSURE( pVSh, "no shell?" );
+    assert(pVSh);
     if( pVSh->ISA( SwCrsrShell ) )
         rStateSet.AddState( AccessibleStateType::SELECTABLE );
     //Add resizable state to table cell.
@@ -93,7 +93,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
+        assert(bIsSelected && "bSelected out of sync");
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
@@ -169,8 +169,7 @@ bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
                     GetMap()->GetContextImpl( pLower, false ) );
                 if( xAccImpl.is() )
                 {
-                    OSL_ENSURE( xAccImpl->GetFrm()->IsCellFrm(),
-                             "table child is not a cell frame" );
+                    assert(xAccImpl->GetFrm()->IsCellFrm());
                     bChanged = static_cast< SwAccessibleCell *>(
                             xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
@@ -210,7 +209,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
     }
 
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    OSL_ENSURE( pParent->IsTabFrm(), "parent is not a tab frame" );
+    assert(pParent->IsTabFrm());
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( pParent );
     if( pTabFrm->IsFollow() )
         pTabFrm = pTabFrm->FindMaster();
@@ -340,8 +339,8 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleCell::getImplementationId()
 
 SwFrmFmt* SwAccessibleCell::GetTblBoxFormat() const
 {
-    OSL_ENSURE( GetFrm() != NULL, "no frame?" );
-    OSL_ENSURE( GetFrm()->IsCellFrm(), "no cell frame?" );
+    assert(GetFrm());
+    assert(GetFrm()->IsCellFrm());
 
     const SwCellFrm* pCellFrm = static_cast<const SwCellFrm*>( GetFrm() );
     return pCellFrm->GetTabBox()->GetFrmFmt();
@@ -420,7 +419,7 @@ static OUString ReplaceFourChar(const OUString& oldOUString)
 
     ::com::sun::star::uno::Any strRet;
     SwFrmFmt *pFrmFmt = GetTblBoxFormat();
-    DBG_ASSERT(pFrmFmt,"Must be Valid");
+    assert(pFrmFmt);
 
     const SwTblBoxFormula& tbl_formula = pFrmFmt->GetTblBoxFormula();
 
