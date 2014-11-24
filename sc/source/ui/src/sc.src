@@ -21,7 +21,7 @@
 
 // App-Titel------------------------------------------------------
 
-String RID_APPTITLE
+String RID_SC_NAME
 {
     Text [ en-US ] = "%PRODUCTNAME Calc" ;
 };

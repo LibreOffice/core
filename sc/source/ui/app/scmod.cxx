@@ -119,7 +119,7 @@
 
 static sal_uInt16 nIdleCount = 0;
 
-SFX_IMPL_INTERFACE(ScModule, SfxShell, ScResId(RID_APPTITLE))
+SFX_IMPL_INTERFACE(ScModule, SfxShell, ScResId(RID_SC_NAME))
 
 void ScModule::InitInterface_Impl()
 {

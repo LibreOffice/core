@@ -179,9 +179,9 @@ String STR_BEZIEROBJECTBARSHELL
 {
     Text [ en-US ] = "Bézier mode" ;
 };
-String STR_APPLICATIONOBJECTBAR
+String RID_SD_NAME
 {
-    Text [ en-US ] = "StarImpress 4.0" ;
+    Text [ en-US ] = "%PRODUCTNAME Impress" ;
 };
 String STR_GLUEPOINTSOBJECTBARSHELL
 {

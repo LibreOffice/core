@@ -64,6 +64,8 @@
 
 #define STR_TITLE_USERDATALOCKED            (RID_DESKTOP_STRING_START+206)
 #define STR_TITLE_EXPIRED                   (RID_DESKTOP_STRING_START+207)
+#define RID_APPTITLE                        (RID_DESKTOP_STRING_START+208)
+
 
 #endif // _DESKTOP_HRC_
 

@@ -1419,9 +1419,8 @@ int Desktop::Main()
 
         // create title string
         LanguageTag aLocale( LANGUAGE_SYSTEM);
-        ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( "ofa", aLocale );
+        ResMgr* pLabelResMgr = GetDesktopResManager();
         OUString aTitle = pLabelResMgr ? ResId(RID_APPTITLE, *pLabelResMgr).toString() : OUString();
-        delete pLabelResMgr;
 
 #ifdef DBG_UTIL
         //include buildid in non product builds

@@ -33,7 +33,7 @@
 
 String RID_SW_NAME
 {
-    Text = "StarWriter" ;
+    Text = "%PRODUCTNAME Writer" ;
 };
 
 String STR_PRINT_MERGE_MACRO

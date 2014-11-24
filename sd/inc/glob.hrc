@@ -47,7 +47,7 @@
 #define STR_TEXTOBJECTBARSHELL                  RID_GLOB_START+23
 #define STR_STDOBJECTBARSHELL                   RID_GLOB_START+24
 #define STR_BEZIEROBJECTBARSHELL                RID_GLOB_START+25
-#define STR_APPLICATIONOBJECTBAR                RID_GLOB_START+26
+#define RID_SD_NAME                             RID_GLOB_START+26
 #define STR_LAYOUT_TITLE                        RID_GLOB_START+27
 #define STR_LAYOUT_OUTLINE                      RID_GLOB_START+28
 #define STR_LAYOUT_BACKGROUNDOBJECTS            RID_GLOB_START+29
