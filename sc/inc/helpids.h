@@ -624,5 +624,6 @@
 #define HID_FUNC_ERF_MS                                         "SC_HID_FUNC_ERF_MS"
 #define HID_FUNC_ERFC_MS                                        "SC_HID_FUNC_ERFC_MS"
 #define HID_FUNC_AGGREGATE                                      "SC_HID_FUNC_AGGREGATE"
+#define HID_FUNC_ERROR_TYPE_ODF                                 "SC_HID_FUNC_ERROR_TYPE_ODF"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

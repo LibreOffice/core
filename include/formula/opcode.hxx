@@ -178,6 +178,7 @@ enum OpCode : sal_uInt16
         ocGammaLn_MS        = SC_OPCODE_GAMMA_LN_MS,
         ocGamma             = SC_OPCODE_GAMMA,
         ocErrorType         = SC_OPCODE_ERROR_TYPE,
+        ocErrorType_ODF     = SC_OPCODE_ERROR_TYPE_ODF,
         ocFormula           = SC_OPCODE_FORMULA,
         ocArabic            = SC_OPCODE_ARABIC,
         ocInfo              = SC_OPCODE_INFO,
