@@ -57,6 +57,12 @@
           <value xml:lang="en-US">.uno:EditDoc</value>
         </prop>
       </node>
+      <node oor:name="F7_SHIFT" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:SpellOnline</value>
+        </prop>
+      </node>
       <node oor:name="K_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -748,7 +754,7 @@
             <value xml:lang="en-US">.uno:ThesaurusDialog</value>
           </prop>
         </node>
-        <node oor:name="F7_SHIFT" oor:op="replace">
+        <node oor:name="F9_SHIFT" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:ShowPrecedents</value>
