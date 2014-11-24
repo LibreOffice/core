@@ -1154,9 +1154,7 @@ uno::Sequence< OUString > getAttributeNames()
         pStrings[i++] = UNO_NAME_CHAR_UNDERLINE;
         pStrings[i++] = UNO_NAME_CHAR_UNDERLINE_COLOR;
         pStrings[i++] = UNO_NAME_CHAR_WEIGHT;
-        DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
-        if( i != pSeq->getLength() )
-            pSeq->realloc( i );
+        assert(i == pSeq->getLength());
         pNames = pSeq;
     }
     return *pNames;
@@ -1184,9 +1182,7 @@ uno::Sequence< OUString > getSupplementalAttributeNames()
         pStrings[i++] = UNO_NAME_PARA_LINE_SPACING;
         pStrings[i++] = UNO_NAME_PARA_RIGHT_MARGIN;
         pStrings[i++] = UNO_NAME_TABSTOPS;
-        DBG_ASSERT( i == pSeq->getLength(), "Please adjust length" );
-        if( i != pSeq->getLength() )
-            pSeq->realloc( i );
+        assert(i == pSeq->getLength());
         pNames = pSeq;
     }
     return *pNames;
@@ -3755,8 +3751,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                         }
                         else
                         {
-                            DBG_ASSERT( nHere == nStartIndex,
-                                        "miscalculated index" );
+                            assert(nHere == nStartIndex);
 
                             // selection starts in this node:
                             // then check whether it's before or inside our part of
@@ -3770,10 +3765,11 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                             else if( nCoreStart <=
                                      GetPortionData().GetLastValidCorePosition() )
                             {
-                                DBG_ASSERT(
+                                SAL_WARN_IF(
                                     GetPortionData().IsValidCorePosition(
-                                                                      nCoreStart ),
-                                     "problem determining valid core position" );
+                                                                  nCoreStart),
+                                    "sw.core",
+                                    "problem determining valid core position");
 
                                 nLocalStart =
                                     GetPortionData().GetAccessiblePosition(
@@ -3792,8 +3788,7 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                         }
                         else
                         {
-                            DBG_ASSERT( nHere == nStartIndex,
-                                        "miscalculated index" );
+                            assert(nHere == nEndIndex);
 
                             // selection ends in this node: then select everything
                             // before our part of the node
@@ -3809,10 +3804,11 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
                                      GetPortionData().GetFirstValidCorePosition() )
                             {
                                 // selection is inside our part of this para
-                                DBG_ASSERT(
+                                SAL_WARN_IF(
                                     GetPortionData().IsValidCorePosition(
-                                                                      nCoreEnd ),
-                                     "problem determining valid core position" );
+                                                                  nCoreEnd),
+                                    "sw.core",
+                                    "problem determining valid core position");
 
                                 nLocalEnd = GetPortionData().GetAccessiblePosition(
                                                                        nCoreEnd );
