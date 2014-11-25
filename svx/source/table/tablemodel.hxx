@@ -52,8 +52,8 @@ protected:
 
 typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::table::XTable, ::com::sun::star::util::XBroadcaster > TableModelBase;
 
-class TableModel : public TableModelBase,
-                   public ::comphelper::OBaseMutex,
+class TableModel : public ::comphelper::OBaseMutex,
+                   public TableModelBase,
                    public ICellRange
 {
     friend class InsertRowUndo;
