@@ -17,17 +17,19 @@
  */
 package com.sun.star.wizards.form;
 
+import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.ui.CommandFieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
-import com.sun.star.wizards.db.RelationController;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 /**
  * To change the template for this generated type comment go to
@@ -46,7 +48,6 @@ public class FormConfiguration
     XListBox lstRelations;
     String[] sreferencedTables;
     CommandFieldSelection CurSubFormFieldSelection;
-    String SSUBFORMMODE = "toggleSubFormMode";
     String STOGGLESTEPS = "toggleSteps";
     String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
     boolean bsupportsRelations;
@@ -64,7 +65,12 @@ public class FormConfiguration
         String sSubFormDescription = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 3);
 
         // CheckBox 'Add sub form'
-        chkcreateSubForm = CurUnoDialog.insertCheckBox("chkcreateSubForm", SSUBFORMMODE, this,
+        chkcreateSubForm = CurUnoDialog.insertCheckBox("chkcreateSubForm", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleSubFormMode();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -132,7 +138,7 @@ public class FormConfiguration
         return ((chkcreateSubForm.getState() == 1) && (optOnExistingRelation.getState()));
     }
 
-    public void toggleSubFormMode()
+    private void toggleSubFormMode()
     {
         boolean bdoEnable = (this.chkcreateSubForm.getState() == 1);
         Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable && bsupportsRelations));

@@ -21,6 +21,7 @@ import com.sun.star.awt.XActionListener;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XControl;
+import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XProgressBar;
 import com.sun.star.awt.XRadioButton;
@@ -73,21 +74,15 @@ public class UnoDialog2 extends UnoDialog
         return xButton;
     }
 
-    public XCheckBox insertCheckBox(String sName, String itemChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XCheckBox insertCheckBox(String sName, XItemListener itemListener, String[] sPropNames, Object[] oPropValues)
     {
         XCheckBox xCheckBox = (XCheckBox) insertControlModel2("com.sun.star.awt.UnoControlCheckBoxModel", sName, sPropNames, oPropValues, XCheckBox.class);
 
-        if (itemChangedMethodName != null)
+        if (itemListener != null)
         {
-            xCheckBox.addItemListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChangedMethodName, eventTarget);
+            xCheckBox.addItemListener(itemListener);
         }
         return xCheckBox;
-    }
-
-    public XCheckBox insertCheckBox(String sName, String itemChangedMethodName, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertCheckBox(sName, itemChangedMethodName, this, sPropNames, oPropValues);
     }
 
     public XListBox insertListBox(String sName, String actionPerformedMethodName, String itemChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)

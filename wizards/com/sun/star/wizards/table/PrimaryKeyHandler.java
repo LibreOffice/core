@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.table;
 
+import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
@@ -33,6 +34,7 @@ import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.XFieldSelectionListener;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 public class PrimaryKeyHandler implements XFieldSelectionListener
 {
@@ -79,7 +81,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     40, sExplanations, Boolean.TRUE, 91, 27, IPRIMEKEYSTEP, Short.valueOf(curtabindex++), 233
                 });
 
-        chkcreatePrimaryKey = CurUnoDialog.insertCheckBox("chkcreatePrimaryKey", SPRIMEKEYMODE, this,
+        chkcreatePrimaryKey = CurUnoDialog.insertCheckBox("chkcreatePrimaryKey", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        togglePrimeKeyFields();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -119,7 +126,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_PK_SEVERAL", sUseSeveral, 106, 132, IPRIMEKEYSTEP, Short.valueOf(curtabindex++), 200
                 });
 
-        chkApplyAutoValueAutomatic = CurUnoDialog.insertCheckBox("chkApplyAutoValueAutomatic", SPRIMEKEYMODE, this,
+        chkApplyAutoValueAutomatic = CurUnoDialog.insertCheckBox("chkApplyAutoValueAutomatic", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        togglePrimeKeyFields();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -167,7 +179,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     80
                 });
 
-        chkApplyAutoValueExisting = CurUnoDialog.insertCheckBox("chkApplyAutoValueExisting", SPRIMEKEYMODE, this,
+        chkApplyAutoValueExisting = CurUnoDialog.insertCheckBox("chkApplyAutoValueExisting", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        togglePrimeKeyFields();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -243,7 +260,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         return false;
     }
 
-    public void togglePrimeKeyFields()
+    private void togglePrimeKeyFields()
     {
         boolean bdoEnable = (this.chkcreatePrimaryKey.getState() == 1);
         Helper.setUnoPropertyValue(UnoDialog.getModel(optAddAutomatically), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable));
