@@ -26,8 +26,6 @@ private:
 public:
     WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics);
 
-    virtual void Init() SAL_OVERRIDE;
-
 protected:
     virtual GLfloat GetWidth() const SAL_OVERRIDE;
     virtual GLfloat GetHeight() const SAL_OVERRIDE;
