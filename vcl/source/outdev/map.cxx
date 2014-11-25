@@ -381,6 +381,8 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
        }
     }
     else
+#else
+    assert(n < std::numeric_limits<long>::max() / nMapNum); //detect overflows
 #endif
     {
        sal_Int64 n64 = n;

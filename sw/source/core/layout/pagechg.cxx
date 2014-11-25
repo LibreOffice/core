@@ -2177,7 +2177,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
             pSh->SetFirstVisPageInvalid();
             if (bOldCallbackActionEnabled)
             {
-                pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
+                pSh->InvalidateWindows( SwRect( 0, 0, INT_MAX, INT_MAX ) );
                 pSh->GetDoc()->GetDocShell()->Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
             }
         }
