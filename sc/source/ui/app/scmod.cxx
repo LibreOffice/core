@@ -112,7 +112,7 @@
 #include "formulagroup.hxx"
 #include <documentlinkmgr.hxx>
 
-SFX_IMPL_INTERFACE(ScModule, SfxShell, ScResId(RID_APPTITLE))
+SFX_IMPL_INTERFACE(ScModule, SfxShell)
 
 void ScModule::InitInterface_Impl()
 {
