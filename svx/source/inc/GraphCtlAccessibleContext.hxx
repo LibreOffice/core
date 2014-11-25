@@ -77,7 +77,9 @@ typedef ::cppu::WeakAggComponentImplHelper7<
                 ::com::sun::star::lang::XServiceName >
                 SvxGraphCtrlAccessibleContext_Base;
 
-class SvxGraphCtrlAccessibleContext : public SvxGraphCtrlAccessibleContext_Base, ::comphelper::OBaseMutex, SfxListener, ::accessibility::IAccessibleViewForwarder
+class SvxGraphCtrlAccessibleContext:
+    comphelper::OBaseMutex, public SvxGraphCtrlAccessibleContext_Base,
+    SfxListener, accessibility::IAccessibleViewForwarder
 {
 public:
     friend class GraphCtrl;
