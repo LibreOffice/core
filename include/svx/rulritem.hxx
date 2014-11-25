@@ -146,6 +146,16 @@ struct SVX_DLLPUBLIC SvxColumnDescription
     long GetWidth() const;
 };
 
+template<typename charT, typename traits>
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, SvxColumnDescription const& dsc)
+{
+    return stream << "{ nStart " << dsc.nStart << " nEnd " << dsc.nEnd
+        << " bVisible " << dsc.bVisible  << " nEndMin " << dsc.nEndMin
+        << " nEndMax " << dsc.nEndMax << " }";
+}
+
+
 class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
     typedef std::vector<SvxColumnDescription> SvxColumnDescriptionVector;
