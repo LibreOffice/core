@@ -259,20 +259,16 @@ static struct CommandArgs_Impl g_command_args =
 #pragma warning( push )
 #pragma warning( disable: 4100 )
 #endif
-static rtl_uString ** osl_createCommandArgs_Impl (int & argc, char **)
+static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 {
-    int nArgs(0);
-    LPWSTR *wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
-    if (argc != nArgs)
-    {
-        assert(argc == 0 /* special case - faked */);
-        argc = nArgs;
-    }
     rtl_uString ** ppArgs =
-        (rtl_uString**)rtl_allocateZeroMemory(nArgs * sizeof(rtl_uString*));
+        (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
     if (ppArgs != 0)
     {
         int i;
+        int nArgs;
+        LPWSTR *wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
+        OSL_ASSERT( nArgs == argc );
         for (i = 0; i < nArgs; i++)
         {
             /* Convert to unicode */
@@ -385,6 +381,7 @@ int SAL_CALL osl_areCommandArgsSet(void)
 
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
+    OSL_ASSERT(argc > 0);
     osl_acquireMutex (*osl_getGlobalMutex());
     if (g_command_args.m_nCount == 0)
     {
