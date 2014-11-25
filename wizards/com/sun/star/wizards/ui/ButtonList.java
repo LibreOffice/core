@@ -17,6 +17,10 @@
  */
 package com.sun.star.wizards.ui;
 
+import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
+
+import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XActionListener;
 import com.sun.star.awt.XButton;
@@ -28,15 +32,12 @@ import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.IRenderer;
-import com.sun.star.wizards.common.PropertySetHelper;
 import com.sun.star.wizards.common.PropertyNames;
-
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-
-import com.sun.star.wizards.common.HelpIds;
+import com.sun.star.wizards.common.PropertySetHelper;
+import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 
 public class ButtonList implements XItemEventBroadcaster, XActionListener
 {
@@ -149,7 +150,12 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             final Integer btnSize = Integer.valueOf(14);
 
 // TODO: if list of strings not the same length of list object, office will die.
-            btnBack = dialog.insertButton(m_aControlName + "_btnBack", "prevPage", this, pNames1, new Object[]
+            btnBack = dialog.insertButton(m_aControlName + "_btnBack", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            prevPage();
+                        }
+                    }, pNames1, new Object[]
                     {
                         btnSize,
                         HelpIds.getHelpIdString(helpURL++),
@@ -161,7 +167,12 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                         btnSize
                     });
 
-            btnNext = dialog.insertButton(m_aControlName + "_btnNext", "nextPage", this, pNames1, new Object[]
+            btnNext = dialog.insertButton(m_aControlName + "_btnNext", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            nextPage();
+                        }
+                    }, pNames1, new Object[]
                     {
                         btnSize,
                         HelpIds.getHelpIdString(helpURL++),
@@ -563,7 +574,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         showButtons = b;
     }
 
-    public void nextPage()
+    private void nextPage()
     {
         if (pageStart < getListModel().getSize() - rows * cols)
         {
@@ -571,7 +582,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
     }
 
-    public void prevPage()
+    private void prevPage()
     {
         if (pageStart == 0)
         {

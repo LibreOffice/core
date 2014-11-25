@@ -20,6 +20,7 @@ package com.sun.star.wizards.ui;
 import java.beans.VetoableChangeListener;
 import java.beans.VetoableChangeSupport;
 
+import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.PushButtonType;
 import com.sun.star.awt.XControl;
@@ -42,17 +43,13 @@ import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 import com.sun.star.wizards.ui.event.XWindowListenerAdapter;
 
 public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener, XCompletion
 {
 
-    private static final String NEXT_ACTION_PERFORMED = "gotoNextAvailableStep";
-    private static final String BACK_ACTION_PERFORMED = "gotoPreviousAvailableStep";
-    private static final String FINISH_ACTION_PERFORMED = "finishWizard_1";
-    private static final String CANCEL_ACTION_PERFORMED = "cancelWizard_1";
-    private static final String HELP_ACTION_PERFORMED = "callHelp";
     public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
     private static final int iButtonWidth = 50;
     private int nNewStep = 1;
@@ -443,7 +440,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             };
 
             Helper.setUnoPropertyValue(super.xDialogModel, PropertyNames.PROPERTY_HELPURL, HelpIds.getHelpIdString(hid));
-            insertButton("btnWizardHelp", HELP_ACTION_PERFORMED, new String[]
+            insertButton("btnWizardHelp", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            callHelp();
+                        }
+                    }, new String[]
                     {
                         PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
@@ -451,25 +453,45 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     {
                         true, IButtonHeight, oWizardResource.getResText(UIConsts.RID_COMMON + 15), Integer.valueOf(iHelpPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.HELP_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
-            insertButton("btnWizardBack", BACK_ACTION_PERFORMED, propNames,
+            insertButton("btnWizardBack", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            gotoPreviousAvailableStep();
+                        }
+                    }, propNames,
                     new Object[]
                     {
                         false, IButtonHeight, HelpIds.getHelpIdString(hid + 2), oWizardResource.getResText(UIConsts.RID_COMMON + 13), Integer.valueOf(iBackPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
 
-            insertButton("btnWizardNext", NEXT_ACTION_PERFORMED, propNames,
+            insertButton("btnWizardNext", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            gotoNextAvailableStep();
+                        }
+                    }, propNames,
                     new Object[]
                     {
                         true, IButtonHeight, HelpIds.getHelpIdString(hid + 3), oWizardResource.getResText(UIConsts.RID_COMMON + 14), Integer.valueOf(iNextPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
 
-            insertButton("btnWizardFinish", FINISH_ACTION_PERFORMED, propNames,
+            insertButton("btnWizardFinish", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            finishWizard_1();
+                        }
+                    }, propNames,
                     new Object[]
                     {
                         true, IButtonHeight, HelpIds.getHelpIdString(hid + 4), oWizardResource.getResText(UIConsts.RID_COMMON + 12), Integer.valueOf(iFinishPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
                     });
 
-            insertButton("btnWizardCancel", CANCEL_ACTION_PERFORMED, propNames,
+            insertButton("btnWizardCancel", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            cancelWizard_1();
+                        }
+                    }, propNames,
                     new Object[]
                     {
                         true, IButtonHeight, HelpIds.getHelpIdString(hid + 5), oWizardResource.getResText(UIConsts.RID_COMMON + 11), Integer.valueOf(iCancelPosX), Integer.valueOf(iBtnPosY), Short.valueOf((short) PushButtonType.STANDARD_value), ICurStep, Short.valueOf(curtabindex++), IButtonWidth
@@ -584,7 +606,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    public synchronized void gotoPreviousAvailableStep()
+    private synchronized void gotoPreviousAvailableStep()
     {
         boolean bIsEnabled;
         if (nNewStep > 1)
@@ -624,7 +646,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         return -1;
     }
 
-    public synchronized void gotoNextAvailableStep()
+    private synchronized void gotoNextAvailableStep()
     {
         nOldStep = nNewStep;
         nNewStep = getNextAvailableStep();
@@ -639,7 +661,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     /**
      * This function will call if the finish button is pressed on the UI.
      */
-    public void finishWizard_1()
+    private void finishWizard_1()
     {
         enableFinishButton(false);
         boolean success = false;
@@ -708,13 +730,13 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     public void cancelWizard()
     {
-        //can be overwritten by extending class
+        //can be overridden by extending class
         xDialog.endExecute();
     }
 
-    public void callHelp()
+    protected void callHelp()
     {
-        //should be overwritten by extending class
+        //should be overridden by extending class
     }
 
     public void removeTerminateListener()
@@ -732,7 +754,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
      * if this method was not called before,
      * perform a cancel.
      */
-    public void cancelWizard_1()
+    private void cancelWizard_1()
     {
         cancelWizard();
         removeTerminateListener();

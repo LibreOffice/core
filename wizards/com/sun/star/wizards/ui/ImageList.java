@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.ui;
 
+import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.Key;
 import com.sun.star.awt.KeyEvent;
 import com.sun.star.awt.MouseEvent;
@@ -223,7 +224,12 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         {
             final Integer btnSize = 14;
 
-            btnBack = dialog.insertButton(name + "_btnBack", "prevPage", this, pNames1, new Object[]
+            btnBack = dialog.insertButton(name + "_btnBack", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            prevPage();
+                        }
+                    }, pNames1, new Object[]
                     {
                         btnSize,
                         HelpIds.getHelpIdString(helpURL++),
@@ -235,7 +241,12 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                         btnSize
                     });
 
-            btnNext = dialog.insertButton(name + "_btnNext", "nextPage", this, pNames1, new Object[]
+            btnNext = dialog.insertButton(name + "_btnNext", new XActionListenerAdapter() {
+                        @Override
+                        public void actionPerformed(ActionEvent event) {
+                            nextPage();
+                        }
+                    }, pNames1, new Object[]
                     {
                         btnSize,
                         HelpIds.getHelpIdString(helpURL++),
@@ -722,7 +733,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         showButtons = b;
     }
 
-    public void nextPage()
+    private void nextPage()
     {
         if (pageStart < getListModel().getSize() - rows * cols)
         {
@@ -730,7 +741,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         }
     }
 
-    public void prevPage()
+    private void prevPage()
     {
         if (pageStart == 0)
         {

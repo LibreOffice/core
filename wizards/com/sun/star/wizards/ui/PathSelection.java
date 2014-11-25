@@ -17,12 +17,14 @@
  */
 package com.sun.star.wizards.ui;
 
+import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 
 public class PathSelection
 {
@@ -81,7 +83,12 @@ public class PathSelection
                 });
         //CurUnoDialog.setControlProperty("txtSavePath", PropertyNames.READ_ONLY, Boolean.TRUE);
         CurUnoDialog.setControlProperty("txtSavePath", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-        CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker", this, new String[]
+        CurUnoDialog.insertButton("cmdSelectPath", new XActionListenerAdapter() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        triggerPathPicker();
+                    }
+                }, new String[]
                 {
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
@@ -114,7 +121,7 @@ public class PathSelection
         }
     }
 
-    public void triggerPathPicker()
+    private void triggerPathPicker()
     {
         try
         {

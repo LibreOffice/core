@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.table;
 
+import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XButton;
@@ -33,6 +34,7 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
+import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 
 public class FieldFormatter implements XItemListener
 {
@@ -98,7 +100,12 @@ public class FieldFormatter implements XItemListener
         FontDescriptor oFontDesc = new FontDescriptor();
         oFontDesc.Name = "StarSymbol";
 
-        btnShiftUp = CurUnoDialog.insertButton("btnShiftUp", "shiftFieldNameUp", this,
+        btnShiftUp = CurUnoDialog.insertButton("btnShiftUp", new XActionListenerAdapter() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        shiftFieldNameUp();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -108,7 +115,12 @@ public class FieldFormatter implements XItemListener
                     Boolean.FALSE, oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMOVEFIELDUP", String.valueOf((char) 8743), 158, 139, IFieldFormatStep, Short.valueOf(curtabindex++), 14
                 });
 
-        btnShiftDown = CurUnoDialog.insertButton("btnShiftDown", "shiftFieldNameDown", this,
+        btnShiftDown = CurUnoDialog.insertButton("btnShiftDown", new XActionListenerAdapter() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        shiftFieldNameDown();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -120,7 +132,12 @@ public class FieldFormatter implements XItemListener
         oFontDesc = new FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
         oFontDesc.Height = (short) 13;
-        btnminus = CurUnoDialog.insertButton("btnminus", "removeFieldName", this,
+        btnminus = CurUnoDialog.insertButton("btnminus", new XActionListenerAdapter() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        removeFieldName();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -130,7 +147,12 @@ public class FieldFormatter implements XItemListener
                     oFontDesc, 14, "HID:WIZARDS_HID_DLGTABLE_CMDMINUS", "-", 118, 175, IFieldFormatStep, Short.valueOf(curtabindex++), 14
                 });
 
-        btnplus = CurUnoDialog.insertButton("btnplus", "addFieldName", this,
+        btnplus = CurUnoDialog.insertButton("btnplus", new XActionListenerAdapter() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        addFieldName();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -230,7 +252,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, blistispopulated);
     }
 
-    public void addFieldName()
+    private void addFieldName()
     {
         String snewfieldname = Desktop.getUniqueName(xlstFieldNames.getItems(), suntitled, PropertyNames.EMPTY_STRING);
         short icount = xlstFieldNames.getItemCount();
@@ -251,7 +273,7 @@ public class FieldFormatter implements XItemListener
         }
     }
 
-    public void removeFieldName()
+    private void removeFieldName()
     {
         String[] fieldnames = (String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xlstFieldNames), PropertyNames.STRING_ITEM_LIST);
         short ipos = UnoDialog.getSelectedItemPos(xlstFieldNames);
@@ -323,7 +345,7 @@ public class FieldFormatter implements XItemListener
         }
     }
 
-    public void shiftFieldNameUp()
+    private void shiftFieldNameUp()
     {
         short ipos = xlstFieldNames.getSelectedItemPos();
         String[] snewlist = shiftArrayItem(xlstFieldNames.getItems(), ipos, -1);
@@ -339,7 +361,7 @@ public class FieldFormatter implements XItemListener
         toggleButtons();
     }
 
-    public void shiftFieldNameDown()
+    private void shiftFieldNameDown()
     {
         short ipos = xlstFieldNames.getSelectedItemPos();
         String[] snewlist = shiftArrayItem(xlstFieldNames.getItems(), ipos, 1);
