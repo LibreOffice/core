@@ -71,7 +71,7 @@ public:
 
           SwTableBox* GetTableBox();
     const SwTableBox* GetTableBox() const
-        { return const_cast<SwTblBoxFormula*>(this)->GetTableBox(); }
+        { return ((SwTblBoxFormula*)this)->GetTableBox(); }
 
     void ChangeState( const SfxPoolItem* pItem );
     void Calc( SwTblCalcPara& rCalcPara, double& rValue );

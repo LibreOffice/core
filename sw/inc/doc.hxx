@@ -1691,7 +1691,7 @@ void ClrContourCache();
 
 inline const SwTableNode* SwDoc::IsIdxInTbl( const SwNodeIndex& rIdx ) const
 {
-    return static_cast<const SwDoc*>(this)->IsIdxInTbl( rIdx );
+    return ((SwDoc*)this)->IsIdxInTbl( rIdx );
 }
 
 inline SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate )
@@ -1703,7 +1703,7 @@ inline SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate )
 
 inline const SvNumberFormatter* SwDoc::GetNumberFormatter( bool bCreate ) const
 {
-    return static_cast<const SwDoc*>(this)->GetNumberFormatter( bCreate );
+    return ((SwDoc*)this)->GetNumberFormatter( bCreate );
 }
 
 inline void SwDoc::SetOLEPrtNotifyPending( bool bSet )
