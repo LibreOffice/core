@@ -1204,6 +1204,7 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
 
     sc::BulkDataHint aHint(*pDoc, NULL);
 
+    bool bBroadcasted = false;
     BulkGroupAreasType::iterator it = maBulkGroupAreas.begin(), itEnd = maBulkGroupAreas.end();
     for (; it != itEnd; ++it)
     {
@@ -1213,9 +1214,12 @@ void ScBroadcastAreaSlotMachine::BulkBroadcastGroupAreas()
         assert(pSpans);
         aHint.setSpans(pSpans);
         pArea->GetBroadcaster().Broadcast(aHint);
+        bBroadcasted = true;
     }
 
     maBulkGroupAreas.clear();
+    if (bBroadcasted)
+        pDoc->TrackFormulas();
 }
 
 size_t ScBroadcastAreaSlotMachine::RemoveBulkArea( const ScBroadcastArea* pArea )
