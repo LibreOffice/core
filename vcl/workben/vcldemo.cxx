@@ -912,7 +912,7 @@ public:
     void drawToDevice(OutputDevice &rDev, Size aSize, bool bVDev)
     {
         RenderContext aCtx;
-        double mnStartTime;
+        double mnStartTime(0);
         aCtx.mbVDev = bVDev;
         aCtx.mpDemoRenderer = this;
         aCtx.maSize = aSize;
