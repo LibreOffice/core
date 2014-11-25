@@ -15,28 +15,6 @@
 #  gb_UnpackedTarget_TARFILE_LOCATION
 #   NOTE: only for commands; targets should use TARFILE_LOCATION directly
 
-gb_UnpackedTarget_STRIP_COMPONENTS_TAR_DEFAULT := 1
-
-# Note that because of a bug in
-# gb_UnpackedTarget__get_strip_components, this _ZIP_DEFAULT is
-# actually not used, but the above _TAR_DEFAULT is used for .zip
-# archives, too.
-gb_UnpackedTarget_STRIP_COMPONENTS_ZIP_DEFAULT := 0
-
-# gb_UnpackedTarget__get_strip_components target strip-components?
-# Note: the suiffix function returns also the period, like ".zip",
-# so the condition below is never true. I don't dare fix this as this
-# stuff seems to work anyway by accident...
-define gb_UnpackedTarget__get_strip_components
-$(strip $(if $(2),\
-	$(2),\
-	$(if $(filter zip,$(suffix $(1))),\
-		$(gb_UnpackedTarget_STRIP_COMPONENTS_ZIP_DEFAULT),\
-		$(gb_UnpackedTarget_STRIP_COMPONENTS_TAR_DEFAULT) \
-	) \
-))
-endef
-
 define gb_UnpackedTarget__command_untar
 $(GNUTAR) \
 	-x \
@@ -96,7 +74,7 @@ $(call gb_UnpackedTarget_get_clean_target,%) :
 define gb_UnpackedTarget_UnpackedTarget
 $(call gb_UnpackedTarget_get_target,$(1)) : UNPACKED_DIR := $(2)
 $(call gb_UnpackedTarget_get_target,$(1)) : UNPACKED_TARBALL := $(gb_UnpackedTarget_TARFILE_LOCATION)/$(1)
-$(call gb_UnpackedTarget_get_target,$(1)) : UNPACKED_STRIP_COMPONENTS := $(call gb_UnpackedTarget__get_strip_components,$(1),$(3))
+$(call gb_UnpackedTarget_get_target,$(1)) : UNPACKED_STRIP_COMPONENTS := $(if $(strip $(3)),$(strip $(3)),1)
 
 $(call gb_UnpackedTarget_get_target,$(1)) : $(TARFILE_LOCATION)/$(1)
 $(call gb_UnpackedTarget_get_target,$(1)) :| $(dir $(call gb_UnpackedTarget_get_target,$(1))).dir
