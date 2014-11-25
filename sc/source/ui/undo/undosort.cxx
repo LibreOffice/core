@@ -49,6 +49,9 @@ void UndoSort::Execute( bool bUndo )
     rDoc.SetDirty(maParam.maSortRange);
     if (!aParam.mbUpdateRefs)
         rDoc.BroadcastCells(aParam.maSortRange, SC_HINT_DATACHANGED);
+
+    pDocShell->PostPaint(maParam.maSortRange, PAINT_GRID);
+    pDocShell->PostDataChanged();
 }
 
 }
