@@ -41,7 +41,7 @@ private:
      * entries. As a side effect, the listeners get sorted by pointer values
      * after this call.
      */
-    void Normalize();
+    void Normalize() const;
 
     void Add( SvtListener* p );
     void Remove( SvtListener* p );
@@ -74,16 +74,16 @@ public:
     void PrepareForDestruction();
 
 private:
-    ListenersType maListeners;
+    mutable ListenersType maListeners;
 
     /// When the broadcaster is about to die, collect listeners that asked for removal.
-    ListenersType maDestructedListeners;
+    mutable ListenersType maDestructedListeners;
 
     /// Indicate that this broadcaster will be destructed (we indicate this on all ScColumn's broadcasters during the ScTable destruction, eg.)
     bool mbAboutToDie:1;
     bool mbDisposing:1;
-    bool mbNormalized:1;
-    bool mbDestNormalized:1;
+    mutable bool mbNormalized:1;
+    mutable bool mbDestNormalized:1;
 };
 
 

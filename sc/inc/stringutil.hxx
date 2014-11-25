@@ -23,6 +23,7 @@
 #include <rtl/ustring.hxx>
 #include "scdllapi.h"
 #include <i18nlangtag/lang.h>
+#include <types.hxx>
 
 class SvNumberFormatter;
 
@@ -78,6 +79,8 @@ struct SC_DLLPUBLIC ScSetStringParam
      * entered literally as string.
      */
     bool mbHandleApostrophe;
+
+    sc::StartListeningType meStartListening;
 
     ScSetStringParam();
 

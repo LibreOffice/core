@@ -1057,7 +1057,7 @@ void ScTable::SetDirtyFromClip(
             aCol[i].SetDirtyFromClip(nRow1, nRow2, rBroadcastSpans);
 }
 
-void ScTable::StartListeningFromClip(
+void ScTable::StartListeningFormulaCells(
     sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
@@ -1066,6 +1066,16 @@ void ScTable::StartListeningFromClip(
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
         for (SCCOL i = nCol1; i <= nCol2; i++)
             aCol[i].StartListeningFormulaCells(rStartCxt, rEndCxt, nRow1, nRow2);
+}
+
+void ScTable::EndListeningFormulaCells(
+    sc::EndListeningContext& rEndCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
+{
+    if (nCol2 > MAXCOL) nCol2 = MAXCOL;
+    if (nRow2 > MAXROW) nRow2 = MAXROW;
+    if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
+        for (SCCOL i = nCol1; i <= nCol2; ++i)
+            aCol[i].EndListeningFormulaCells(rEndCxt, nRow1, nRow2);
 }
 
 void ScTable::CopyToTable(
@@ -1413,7 +1423,7 @@ ScFormulaCell* ScTable::SetFormulaCell( SCCOL nCol, SCROW nRow, ScFormulaCell* p
         return NULL;
     }
 
-    return aCol[nCol].SetFormulaCell(nRow, pCell, true);
+    return aCol[nCol].SetFormulaCell(nRow, pCell, sc::ConvertToGroupListening);
 }
 
 bool ScTable::SetFormulaCells( SCCOL nCol, SCROW nRow, std::vector<ScFormulaCell*>& rCells )

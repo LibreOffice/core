@@ -40,6 +40,11 @@ struct AreaListener
     ScRange maArea;
     bool mbGroupListening;
     SvtListener* mpListener;
+
+    struct SortByArea : std::binary_function<AreaListener, AreaListener, bool>
+    {
+        bool operator() ( const AreaListener& rLeft, const AreaListener& rRight ) const;
+    };
 };
 
 }

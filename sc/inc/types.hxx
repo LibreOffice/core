@@ -108,6 +108,13 @@ enum AreaOverlapType
     OneColumnInsideArea
 };
 
+enum StartListeningType
+{
+    ConvertToGroupListening,
+    SingleCellListening,
+    NoListening
+};
+
 }
 
 #endif

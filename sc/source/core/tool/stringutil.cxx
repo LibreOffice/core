@@ -29,7 +29,8 @@ ScSetStringParam::ScSetStringParam() :
     mpNumFormatter(NULL),
     mbDetectNumberFormat(true),
     meSetTextNumFormat(Never),
-    mbHandleApostrophe(true)
+    mbHandleApostrophe(true),
+    meStartListening(sc::SingleCellListening)
 {
 }
 

@@ -62,6 +62,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 using namespace formula;
 
@@ -383,6 +384,40 @@ void adjustDBRange(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScD
     pToken->SetIndex(pNewDBData->GetIndex());
 }
 
+struct AreaListenerKey
+{
+    ScRange maRange;
+    bool mbStartFixed;
+    bool mbEndFixed;
+
+    AreaListenerKey( const ScRange& rRange, bool bStartFixed, bool bEndFixed ) :
+        maRange(rRange), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed) {}
+
+    bool operator < ( const AreaListenerKey& r ) const
+    {
+        if (maRange.aStart.Tab() != r.maRange.aStart.Tab())
+            return maRange.aStart.Tab() < r.maRange.aStart.Tab();
+        if (maRange.aStart.Col() != r.maRange.aStart.Col())
+            return maRange.aStart.Col() < r.maRange.aStart.Col();
+        if (maRange.aStart.Row() != r.maRange.aStart.Row())
+            return maRange.aStart.Row() < r.maRange.aStart.Row();
+        if (maRange.aEnd.Tab() != r.maRange.aEnd.Tab())
+            return maRange.aEnd.Tab() < r.maRange.aEnd.Tab();
+        if (maRange.aEnd.Col() != r.maRange.aEnd.Col())
+            return maRange.aEnd.Col() < r.maRange.aEnd.Col();
+        if (maRange.aEnd.Row() != r.maRange.aEnd.Row())
+            return maRange.aEnd.Row() < r.maRange.aEnd.Row();
+        if (mbStartFixed != r.mbStartFixed)
+            return r.mbStartFixed;
+        if (mbEndFixed != r.mbEndFixed)
+            return r.mbEndFixed;
+
+        return false;
+    }
+};
+
+typedef boost::ptr_map<AreaListenerKey, sc::FormulaGroupAreaListener> AreaListenersType;
+
 }
 
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
@@ -407,7 +442,13 @@ int ScFormulaCellGroup::snCount = 0;
 rtl::Reference<sc::CLBuildKernelThread> ScFormulaCellGroup::sxCompilationThread;
 #endif
 
+struct ScFormulaCellGroup::Impl
+{
+    AreaListenersType maAreaListeners;
+};
+
 ScFormulaCellGroup::ScFormulaCellGroup() :
+    mpImpl(new Impl),
     mnRefCount(0),
     mpCode(NULL),
     mpCompiledFormula(NULL),
@@ -451,6 +492,7 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
 #endif
     delete mpCode;
     delete mpCompiledFormula;
+    delete mpImpl;
 }
 
 void ScFormulaCellGroup::scheduleCompilation()
@@ -513,24 +555,29 @@ void ScFormulaCellGroup::compileOpenCLKernel()
 sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
     ScFormulaCell** ppTopCell, const ScRange& rRange, bool bStartFixed, bool bEndFixed )
 {
-    // TODO : Find existing one with the same criteria.
-    maAreaListeners.push_back(new sc::FormulaGroupAreaListener(rRange, ppTopCell, mnLength, bStartFixed, bEndFixed));
-    return &maAreaListeners.back();
+    AreaListenerKey aKey(rRange, bStartFixed, bEndFixed);
+
+    std::pair<AreaListenersType::iterator, bool> r =
+        mpImpl->maAreaListeners.insert(
+            aKey, new sc::FormulaGroupAreaListener(
+                rRange, ppTopCell, mnLength, bStartFixed, bEndFixed));
+
+    return r.first->second;
 }
 
 void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
 {
-    AreaListenersType::iterator it = maAreaListeners.begin(), itEnd = maAreaListeners.end();
+    AreaListenersType::iterator it = mpImpl->maAreaListeners.begin(), itEnd = mpImpl->maAreaListeners.end();
     for (; it != itEnd; ++it)
     {
-        sc::FormulaGroupAreaListener* pListener = &(*it);
+        sc::FormulaGroupAreaListener* pListener = it->second;
         ScRange aListenRange = pListener->getListeningRange();
         // This "always listen" special range is never grouped.
         bool bGroupListening = (aListenRange != BCA_LISTEN_ALWAYS);
         rDoc.EndListeningArea(aListenRange, bGroupListening, pListener);
     }
 
-    maAreaListeners.clear();
+    mpImpl->maAreaListeners.clear();
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :

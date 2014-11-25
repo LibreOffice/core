@@ -1916,6 +1916,8 @@ public:
     void                SetHardRecalcState( bool bVal ) { bHardRecalcState = bVal; }
     void                StartAllListeners();
     void StartNeededListeners();
+    void StartAllListeners( const ScRange& rRange );
+    void EndAllListeners( const ScRange& rRange );
     const ScFormulaCell*    GetFormulaTree() const { return pFormulaTree; }
     bool                HasForcedFormulas() const { return bHasForcedFormulas; }
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }

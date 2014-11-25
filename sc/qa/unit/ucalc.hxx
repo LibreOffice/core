@@ -12,6 +12,7 @@
 
 #include "helper/qahelper.hxx"
 #include "document.hxx"
+#include <stringutil.hxx>
 
 struct TestImpl;
 class ScUndoPaste;
@@ -55,9 +56,16 @@ public:
 
     static void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
 
+
     template<size_t _Size>
-    static ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
+    static ScRange insertRangeData(
+        ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount,
+        bool bGroupListening = false )
     {
+        // TODO : Ideally bGroupListening should be always true for all tests.
+        // Eventually we want to drop this parameter once all tests pass with
+        // group listening turned on.
+
         ScRange aRange(rPos);
         aRange.aEnd.SetCol(rPos.Col()+_Size-1);
         aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
@@ -73,9 +81,20 @@ public:
 
                 SCCOL nCol = i + rPos.Col();
                 SCROW nRow = j + rPos.Row();
-                pDoc->SetString(nCol, nRow, rPos.Tab(), OUString(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8));
+                OUString aStr(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8);
+                if (bGroupListening)
+                {
+                    ScSetStringParam aParam; // Leave default.
+                    aParam.meStartListening = sc::NoListening;
+                    pDoc->SetString(nCol, nRow, rPos.Tab(), aStr, &aParam);
+                }
+                else
+                    pDoc->SetString(nCol, nRow, rPos.Tab(), aStr, NULL);
             }
         }
+
+        if (bGroupListening)
+            pDoc->StartAllListeners(aRange);
 
         printRange(pDoc, aRange, "Range data content");
         return aRange;
@@ -300,6 +319,7 @@ public:
     void testSharedFormulasRefUpdateMove();
     void testSharedFormulasRefUpdateMove2();
     void testSharedFormulasRefUpdateRange();
+    void testSharedFormulasRefUpdateRangeDeleteRow();
     void testSharedFormulasRefUpdateExternal();
     void testSharedFormulasInsertRow();
     void testSharedFormulasDeleteRows();
@@ -529,6 +549,7 @@ public:
     CPPUNIT_TEST(testSharedFormulasRefUpdateMove);
     CPPUNIT_TEST(testSharedFormulasRefUpdateMove2);
     CPPUNIT_TEST(testSharedFormulasRefUpdateRange);
+    CPPUNIT_TEST(testSharedFormulasRefUpdateRangeDeleteRow);
     CPPUNIT_TEST(testSharedFormulasRefUpdateExternal);
     CPPUNIT_TEST(testSharedFormulasInsertRow);
     CPPUNIT_TEST(testSharedFormulasDeleteRows);

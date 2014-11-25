@@ -21,7 +21,7 @@
 #include <svl/listener.hxx>
 #include <svl/smplhint.hxx>
 
-void SvtBroadcaster::Normalize()
+void SvtBroadcaster::Normalize() const
 {
     if (!mbNormalized)
     {
@@ -140,11 +140,13 @@ void SvtBroadcaster::ListenersGone() {}
 
 SvtBroadcaster::ListenersType& SvtBroadcaster::GetAllListeners()
 {
+    Normalize();
     return maListeners;
 }
 
 const SvtBroadcaster::ListenersType& SvtBroadcaster::GetAllListeners() const
 {
+    Normalize();
     return maListeners;
 }
 

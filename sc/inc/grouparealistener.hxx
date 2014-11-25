@@ -32,6 +32,7 @@ class FormulaGroupAreaListener : public SvtListener
     FormulaGroupAreaListener(); // disabled
 
 public:
+
     FormulaGroupAreaListener(
         const ScRange& rRange, ScFormulaCell** ppTopCell, SCROW nGroupLen, bool bStartFixed, bool bEndFixed );
 
@@ -52,10 +53,11 @@ public:
      */
     void collectFormulaCells( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
 
-#if DEBUG_AREA_BROADCASTER
     ScAddress getTopCellPos() const;
+    const ScRange& getRange() const;
     SCROW getGroupLength() const;
-#endif
+    bool isStartFixed() const;
+    bool isEndFixed() const;
 
 private:
     void notifyCellChange( const SfxHint& rHint, const ScAddress& rPos );

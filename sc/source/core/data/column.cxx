@@ -1232,6 +1232,8 @@ class CopyAsLinkHandler
     sc::ColumnBlockPosition* mpDestPos;
     InsertDeleteFlags mnCopyFlags;
 
+    sc::StartListeningType meListenType;
+
     void setDefaultAttrToDest(size_t nRow)
     {
         maDestPos.miCellTextAttrPos = mrDestCol.GetCellAttrStore().set(
@@ -1263,7 +1265,7 @@ class CopyAsLinkHandler
         for (size_t i = 0; i < nDataSize; ++i)
         {
             SCROW nRow = nTopRow + i;
-            mrDestCol.SetFormulaCell(maDestPos, nRow, createRefCell(nRow));
+            mrDestCol.SetFormulaCell(maDestPos, nRow, createRefCell(nRow), meListenType);
         }
 
         setDefaultAttrsToDest(nTopRow, nDataSize);
@@ -1276,7 +1278,11 @@ class CopyAsLinkHandler
 
 public:
     CopyAsLinkHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, InsertDeleteFlags nCopyFlags) :
-        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mnCopyFlags(nCopyFlags)
+        mrSrcCol(rSrcCol),
+        mrDestCol(rDestCol),
+        mpDestPos(pDestPos),
+        mnCopyFlags(nCopyFlags),
+        meListenType(sc::SingleCellListening)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -1286,6 +1292,11 @@ public:
     {
         if (mpDestPos)
             *mpDestPos = maDestPos;
+    }
+
+    void setStartListening( bool b )
+    {
+        meListenType = b ? sc::SingleCellListening : sc::NoListening;
     }
 
     void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
@@ -1353,6 +1364,8 @@ class CopyByCloneHandler
     svl::SharedStringPool* mpSharedStringPool;
     InsertDeleteFlags mnCopyFlags;
 
+    sc::StartListeningType meListenType;
+
     void setDefaultAttrToDest(size_t nRow)
     {
         maDestPos.miCellTextAttrPos = mrDestCol.GetCellAttrStore().set(
@@ -1396,7 +1409,7 @@ class CopyByCloneHandler
             // Clone as formula cell.
             ScFormulaCell* pCell = new ScFormulaCell(rSrcCell, mrDestCol.GetDoc(), aDestPos);
             pCell->SetDirtyVar();
-            mrDestCol.SetFormulaCell(maDestPos, nRow, pCell);
+            mrDestCol.SetFormulaCell(maDestPos, nRow, pCell, meListenType);
             setDefaultAttrToDest(nRow);
             return;
         }
@@ -1412,7 +1425,7 @@ class CopyByCloneHandler
                 // error codes are cloned with values
                 ScFormulaCell* pErrCell = new ScFormulaCell(&mrDestCol.GetDoc(), aDestPos);
                 pErrCell->SetErrCode(nErr);
-                mrDestCol.SetFormulaCell(maDestPos, nRow, pErrCell);
+                mrDestCol.SetFormulaCell(maDestPos, nRow, pErrCell, meListenType);
                 setDefaultAttrToDest(nRow);
                 return;
             }
@@ -1466,8 +1479,12 @@ class CopyByCloneHandler
 public:
     CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos,
             InsertDeleteFlags nCopyFlags, svl::SharedStringPool* pSharedStringPool) :
-        mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mpSharedStringPool(pSharedStringPool),
-        mnCopyFlags(nCopyFlags)
+        mrSrcCol(rSrcCol),
+        mrDestCol(rDestCol),
+        mpDestPos(pDestPos),
+        mpSharedStringPool(pSharedStringPool),
+        mnCopyFlags(nCopyFlags),
+        meListenType(sc::SingleCellListening)
     {
         if (mpDestPos)
             maDestPos = *mpDestPos;
@@ -1477,6 +1494,11 @@ public:
     {
         if (mpDestPos)
             *mpDestPos = maDestPos;
+    }
+
+    void setStartListening( bool b )
+    {
+        meListenType = b ? sc::SingleCellListening : sc::NoListening;
     }
 
     void operator() (const sc::CellStoreType::value_type& aNode, size_t nOffset, size_t nDataSize)
@@ -1642,6 +1664,7 @@ void ScColumn::CopyToColumn(
         if (bAsLink)
         {
             CopyAsLinkHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags);
+            aFunc.setStartListening(rCxt.isStartListening());
             sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
         }
         else
@@ -1653,6 +1676,7 @@ void ScColumn::CopyToColumn(
                 &rColumn.pDocument->GetSharedStringPool() : NULL;
             CopyByCloneHandler aFunc(*this, rColumn, rCxt.getBlockPosition(rColumn.nTab, rColumn.nCol), nFlags,
                     pSharedStringPool);
+            aFunc.setStartListening(rCxt.isStartListening());
             sc::ParseBlock(maCells.begin(), maCells, aFunc, nRow1, nRow2);
         }
 

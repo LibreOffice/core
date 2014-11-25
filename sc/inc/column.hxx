@@ -314,8 +314,12 @@ public:
      * @return pCell if it was successfully inserted, NULL otherwise. pCell
      *         is deleted automatically on failure to insert.
      */
-    ScFormulaCell* SetFormulaCell( SCROW nRow, ScFormulaCell* pCell, bool bSingle = false );
-    ScFormulaCell* SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell );
+    ScFormulaCell* SetFormulaCell(
+        SCROW nRow, ScFormulaCell* pCell,
+        sc::StartListeningType eListenType = sc::SingleCellListening );
+    ScFormulaCell* SetFormulaCell(
+        sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
+        sc::StartListeningType eListenType = sc::SingleCellListening );
 
     bool SetFormulaCells( SCROW nRow, std::vector<ScFormulaCell*>& rCells );
 
@@ -639,10 +643,15 @@ private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow );
     sc::CellStoreType::iterator GetPositionToInsert( const sc::CellStoreType::iterator& it, SCROW nRow );
+
     void AttachNewFormulaCell(
-        const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin = true, bool bSingle = false );
+        const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell,
+        bool bJoin = true, sc::StartListeningType eListenType = sc::SingleCellListening );
+
     void AttachNewFormulaCell(
-        const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin = true, bool bSingle = false );
+        const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell,
+        bool bJoin = true, sc::StartListeningType eListenType = sc::SingleCellListening );
+
     void AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength );
     void BroadcastNewCell( SCROW nRow );
     bool UpdateScriptType( sc::CellTextAttr& rAttr, SCROW nRow, const sc::CellStoreType::iterator& itr );
