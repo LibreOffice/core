@@ -34,8 +34,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/txtstyli.hxx>
 #include <xmloff/xmlnumi.hxx>
-#include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <xmloff/maptype.hxx>
 
 #include "txtparai.hxx"
@@ -919,7 +917,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                     OUString sListId;
                     xNumRuleProps->getPropertyValue(s_PropNameDefaultListId)
                         >>= sListId;
-                    DBG_ASSERT( !sListId.isEmpty(),
+                    assert( !sListId.isEmpty() &&
                                 "no default list id found at chapter numbering rules instance. Serious defect -> please inform OD." );
                     if ( !sListId.isEmpty() )
                     {
@@ -1097,8 +1095,8 @@ bool XMLTextImportHelper::HasFrameByName( const OUString& rName ) const
 
 void XMLTextImportHelper::InsertString( const OUString& rChars )
 {
-    DBG_ASSERT(m_pImpl->m_xText.is(), "no text");
-    DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
+    assert(m_pImpl->m_xText.is());
+    assert(m_pImpl->m_xCursorAsRange.is());
     if (m_pImpl->m_xText.is())
     {
         m_pImpl->m_xText->insertString(m_pImpl->m_xCursorAsRange,
@@ -1109,8 +1107,8 @@ void XMLTextImportHelper::InsertString( const OUString& rChars )
 void XMLTextImportHelper::InsertString( const OUString& rChars,
                                         bool& rIgnoreLeadingSpace )
 {
-    DBG_ASSERT(m_pImpl->m_xText.is(), "no text");
-    DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
+    assert(m_pImpl->m_xText.is());
+    assert(m_pImpl->m_xCursorAsRange.is());
     if (m_pImpl->m_xText.is())
     {
         sal_Int32 nLen = rChars.getLength();
@@ -1142,8 +1140,8 @@ void XMLTextImportHelper::InsertString( const OUString& rChars,
 
 void XMLTextImportHelper::InsertControlCharacter( sal_Int16 nControl )
 {
-    DBG_ASSERT(m_pImpl->m_xText.is(), "no text");
-    DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
+    assert(m_pImpl->m_xText.is());
+    assert(m_pImpl->m_xCursorAsRange.is());
     if (m_pImpl->m_xText.is())
     {
         m_pImpl->m_xText->insertControlCharacter(
@@ -1154,8 +1152,8 @@ void XMLTextImportHelper::InsertControlCharacter( sal_Int16 nControl )
 void XMLTextImportHelper::InsertTextContent(
     Reference < XTextContent > & xContent )
 {
-    DBG_ASSERT(m_pImpl->m_xText.is(), "no text");
-    DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
+    assert(m_pImpl->m_xText.is());
+    assert(m_pImpl->m_xCursorAsRange.is());
     if (m_pImpl->m_xText.is())
     {
         try {
@@ -1169,9 +1167,9 @@ void XMLTextImportHelper::InsertTextContent(
 
 void XMLTextImportHelper::DeleteParagraph()
 {
-    DBG_ASSERT(m_pImpl->m_xText.is(), "no text");
-    DBG_ASSERT(m_pImpl->m_xCursor.is(), "no cursor");
-    DBG_ASSERT(m_pImpl->m_xCursorAsRange.is(), "no range");
+    assert(m_pImpl->m_xText.is());
+    assert(m_pImpl->m_xCursor.is());
+    assert(m_pImpl->m_xCursorAsRange.is());
 
     bool bDelete = true;
     Reference < XEnumerationAccess > const xEnumAccess(
@@ -1179,11 +1177,12 @@ void XMLTextImportHelper::DeleteParagraph()
     if( xEnumAccess.is() )
     {
         Reference < XEnumeration > xEnum(xEnumAccess->createEnumeration());
-        DBG_ASSERT( xEnum->hasMoreElements(), "empty text enumeration" );
+        SAL_WARN_IF(!xEnum->hasMoreElements(), "xmloff.text",
+                "empty text enumeration");
         if( xEnum->hasMoreElements() )
         {
             Reference < XComponent > xComp( xEnum->nextElement(), UNO_QUERY );
-            DBG_ASSERT( xComp.is(), "got no component" );
+            assert(xComp.is());
             if( xComp.is() )
             {
                 xComp->dispose();
@@ -1480,7 +1479,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         GetTextListHelper().ListContextTop(
             pListBlock, pListItem, pNumberedParagraph);
 
-        OSL_ENSURE(!(pListBlock && pNumberedParagraph), "XMLTextImportHelper::"
+        assert(!(pListBlock && pNumberedParagraph) && "XMLTextImportHelper::"
             "SetStyleAndAttrs: both list and numbered-paragraph???");
 
         Reference < XIndexReplace > xNewNumRules;
@@ -1619,11 +1618,6 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 sal_Int32 nUPD( 0 );
                 sal_Int32 nBuild( 0 );
                 const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
-                DBG_ASSERT( ( bBuildIdFound && nUPD == 680 ) ||
-                            !pStyle ||
-                            !pStyle->IsListStyleSet() ||
-                            pStyle->GetListStyle().isEmpty(),
-                            "automatic paragraph style with list style name, but paragraph not in list???" );
                 if ( ( bBuildIdFound && nUPD == 680 ) ||
                      !pStyle || !pStyle->IsListStyleSet() )
                 {
@@ -1640,6 +1634,12 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                             bApplyOutlineLevelAsListLevel = true;
                         }
                     }
+                }
+                else
+                {
+                    SAL_INFO_IF(!pStyle->GetListStyle().isEmpty(),
+                        "xmloff.text",
+                        "automatic paragraph style with list style name, but paragraph not in list???");
                 }
                 if ( bRemove )
                 {
@@ -2566,8 +2566,7 @@ void XMLTextImportHelper::popFieldCtx()
 
 void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& value )
 {
-    DBG_ASSERT(!m_pImpl->m_FieldStack.empty(),
-        "stack is empty: not good! Do a pushFieldCtx before...");
+    assert(!m_pImpl->m_FieldStack.empty());
     if (!m_pImpl->m_FieldStack.empty()) {
         Impl::field_stack_item_t & FieldStackItem(m_pImpl->m_FieldStack.top());
         FieldStackItem.second.push_back(Impl::field_param_t( name, value ));
@@ -2576,8 +2575,7 @@ void XMLTextImportHelper::addFieldParam( const OUString& name, const OUString& v
 
 OUString XMLTextImportHelper::getCurrentFieldType()
 {
-    DBG_ASSERT(!m_pImpl->m_FieldStack.empty(),
-        "stack is empty: not good! Do a pushFieldCtx before...");
+    assert(!m_pImpl->m_FieldStack.empty());
     if (!m_pImpl->m_FieldStack.empty())
     {
         return m_pImpl->m_FieldStack.top().first.second;
@@ -2595,8 +2593,7 @@ bool XMLTextImportHelper::hasCurrentFieldCtx()
 
 void XMLTextImportHelper::setCurrentFieldParamsTo(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField> &xFormField)
 {
-    DBG_ASSERT(!m_pImpl->m_FieldStack.empty(),
-        "stack is empty: not good! Do a pushFieldCtx before...");
+    assert(!m_pImpl->m_FieldStack.empty());
     if (!m_pImpl->m_FieldStack.empty() && xFormField.is())
     {
         FieldParamImporter(&m_pImpl->m_FieldStack.top().second,
