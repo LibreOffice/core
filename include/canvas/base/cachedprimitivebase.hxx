@@ -40,8 +40,8 @@ namespace canvas
     /** Base class, providing common functionality for implementers of
         the XCachedPrimitive interface.
      */
-    class CANVASTOOLS_DLLPUBLIC CachedPrimitiveBase : public CachedPrimitiveBase_Base,
-                                public ::comphelper::OBaseMutex
+    class CANVASTOOLS_DLLPUBLIC CachedPrimitiveBase:
+        public comphelper::OBaseMutex, public CachedPrimitiveBase_Base
     {
     public:
 
