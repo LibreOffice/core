@@ -462,6 +462,98 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     }
                 }
             }
+
+            if ( pArr->GetLen() != 3 )
+            {
+                SAL_INFO("sc.units", "not checking -- doesn't have 3 tokens");
+                continue;
+            }
+
+            formula::FormulaToken* pTokenCheck = pArr->First();
+            assert( pTokenCheck );
+
+            SCROW nRow1, nRow2;
+            SCCOL nCol1, nCol2;
+            SCTAB nTab1, nTab2;
+
+            // ScSingleRefData can return data in terms of a relative address,
+            // but we need absolute addresses for retrieving the formats later.
+            // Hence we need to get the formula's address first and use it
+            // to determine the absolute addresses of the input cells later.
+            const ScAddress aFormulaAddress( nCol, nRow, nTab );
+
+            if ( pTokenCheck && pTokenCheck->GetType() == formula::svSingleRef )
+            {
+                ScSingleRefData* pRef = pTokenCheck->GetSingleRef();
+                assert(pRef);
+
+                ScAddress aInput = pRef->toAbs( aFormulaAddress );
+
+                nRow1 = aInput.Row();
+                nCol1 = aInput.Col();
+                nTab1 = aInput.Tab();
+            }
+            else
+            {
+                continue;
+            }
+
+            pTokenCheck = pArr->Next();
+            assert(pTokenCheck);
+
+            if ( pTokenCheck->GetType() == formula::svByte &&
+                (pTokenCheck->GetOpCode() == ocAdd ||
+                 pTokenCheck->GetOpCode() == ocSub))
+            {
+                SAL_INFO("sc.units","Dimension checking an add/subtract operation.");
+            }
+            else
+            {
+                SAL_INFO("sc.units", "not an add/subtract operation -- ignoring");
+                continue;
+            }
+
+
+            pTokenCheck = pArr->Next();
+            assert(pTokenCheck);
+
+            // TODO: refactor out
+            if ( pTokenCheck && pTokenCheck->GetType() == formula::svSingleRef )
+            {
+                ScSingleRefData* pRef = pTokenCheck->GetSingleRef();
+                assert(pRef);
+
+                // ScSingleRefData can return data in terms of a relative address,
+                // but we need absolute addresses for retrieving the formats later.
+                ScAddress aInput = pRef->toAbs( aFormulaAddress );
+
+                nRow2 = aInput.Row();
+                nCol2 = aInput.Col();
+                nTab2 = aInput.Tab();
+            }
+            else
+            {
+                continue;
+            }
+
+            sal_uInt32 nFormat1, nFormat2;
+            pDoc->GetNumberFormat( nCol1, nRow1, nTab1, nFormat1 );
+            pDoc->GetNumberFormat( nCol2, nRow2, nTab2, nFormat2 );
+
+            if ( nFormat1 == nFormat2 )
+            {
+                SAL_INFO("sc.units", "formats match+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            }
+            else
+            {
+                SAL_INFO("sc.units", "formats don't match----------------------------------------------------------");
+
+                SfxViewFrame* pFrame = GetViewData().GetViewShell()->GetViewFrame();
+                pFrame->AppendInfoBar( "diman", "Units are invalid", std::vector< PushButton* >() );
+            }
+
+            // TODO: this only is fired when we create the formula, but not if input data has changed.
+
         } while ( bAgain );
         // to be used in multiple tabs, the formula must be compiled anew
         // via ScFormulaCell copy-ctor because of RangeNames,
