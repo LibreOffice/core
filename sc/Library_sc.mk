@@ -676,6 +676,12 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/op_spreadsheet \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,sc,\
+    -lrt \
+))
+endif
+
 endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
