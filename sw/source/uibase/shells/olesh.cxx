@@ -37,7 +37,7 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 
-SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell, SW_RES(STR_SHELLNAME_OBJECT))
+SFX_IMPL_INTERFACE(SwOleShell, SwFrameShell)
 
 void SwOleShell::InitInterface_Impl()
 {

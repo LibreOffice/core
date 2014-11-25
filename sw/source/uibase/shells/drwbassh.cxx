@@ -66,7 +66,7 @@
 
 using namespace ::com::sun::star;
 
-SFX_IMPL_INTERFACE(SwDrawBaseShell, SwBaseShell, SW_RES(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SwDrawBaseShell, SwBaseShell)
 
 void SwDrawBaseShell::InitInterface_Impl()
 {

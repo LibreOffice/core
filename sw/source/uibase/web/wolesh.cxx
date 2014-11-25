@@ -35,7 +35,7 @@
 #define SwWebOleShell
 #include "swslots.hxx"
 
-SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell, SW_RES(STR_SHELLNAME_OBJECT))
+SFX_IMPL_INTERFACE(SwWebOleShell, SwOleShell)
 
 void SwWebOleShell::InitInterface_Impl()
 {

@@ -38,7 +38,7 @@
 
 #include <unomid.h>
 
-SFX_IMPL_INTERFACE(SwWebDocShell, SfxObjectShell, SW_RES(0) )
+SFX_IMPL_SUPERCLASS_INTERFACE(SwWebDocShell, SfxObjectShell)
 
 void SwWebDocShell::InitInterface_Impl()
 {

@@ -54,7 +54,7 @@ namespace sd {
 
 // - GraphicObjectBar -
 
-SFX_IMPL_INTERFACE(GraphicObjectBar, SfxShell, SdResId(STR_GRAFOBJECTBARSHELL))
+SFX_IMPL_INTERFACE(GraphicObjectBar, SfxShell)
 
 void GraphicObjectBar::InitInterface_Impl()
 {

@@ -52,7 +52,7 @@ namespace sd {
 
 TYPEINIT1( MediaObjectBar, SfxShell );
 
-SFX_IMPL_INTERFACE(MediaObjectBar, SfxShell, SdResId(STR_MEDIAOBJECTBARSHELL))
+SFX_IMPL_INTERFACE(MediaObjectBar, SfxShell)
 
 void MediaObjectBar::InitInterface_Impl()
 {

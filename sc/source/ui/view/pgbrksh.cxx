@@ -36,7 +36,7 @@
 
 TYPEINIT1( ScPageBreakShell, SfxShell );
 
-SFX_IMPL_INTERFACE(ScPageBreakShell, SfxShell, ScResId(SCSTR_PAGEBREAKSHELL))
+SFX_IMPL_INTERFACE(ScPageBreakShell, SfxShell)
 
 void ScPageBreakShell::InitInterface_Impl()
 {

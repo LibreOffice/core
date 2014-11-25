@@ -69,7 +69,7 @@
 #include "swabstdlg.hxx"
 #include <boost/scoped_ptr.hpp>
 
-SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
+SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell)
 
 void SwMediaShell::InitInterface_Impl()
 {

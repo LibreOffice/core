@@ -108,7 +108,7 @@ static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const OUString& rNam
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
-SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
+SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell)
 
 void SwFrameShell::InitInterface_Impl()
 {

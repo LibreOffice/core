@@ -97,7 +97,7 @@ namespace
     };
 }
 
-SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell, SW_RES(STR_SHELLNAME_GRAPHIC))
+SFX_IMPL_INTERFACE(SwGrfShell, SwBaseShell)
 
 void SwGrfShell::InitInterface_Impl()
 {

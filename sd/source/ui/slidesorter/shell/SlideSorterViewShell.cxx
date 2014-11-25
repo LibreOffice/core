@@ -81,7 +81,7 @@ using ::sfx2::sidebar::EnumContext;
 
 namespace sd { namespace slidesorter {
 
-SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell, SdResId(STR_SLIDESORTERVIEWSHELL))
+SFX_IMPL_INTERFACE(SlideSorterViewShell, SfxShell)
 
 void SlideSorterViewShell::InitInterface_Impl()
 {

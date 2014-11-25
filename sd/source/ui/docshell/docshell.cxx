@@ -72,7 +72,7 @@ using namespace sd;
 #define DrawDocShell
 #include "sdslots.hxx"
 
-SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(DrawDocShell, SfxObjectShell);
 
 void DrawDocShell::InitInterface_Impl()
 {

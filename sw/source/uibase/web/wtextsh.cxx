@@ -41,7 +41,7 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
-SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_WEBTEXT))
+SFX_IMPL_INTERFACE(SwWebTextShell, SwBaseShell)
 
 void SwWebTextShell::InitInterface_Impl()
 {

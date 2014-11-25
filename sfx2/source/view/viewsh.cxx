@@ -293,7 +293,7 @@ SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 ,   m_pController(0)
 {}
 
-SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewShell,SfxShell)
 
 void SfxViewShell::InitInterface_Impl()
 {

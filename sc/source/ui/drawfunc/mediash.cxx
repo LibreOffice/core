@@ -35,7 +35,7 @@
 #define ScMediaShell
 #include "scslots.hxx"
 
-SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL))
+SFX_IMPL_INTERFACE(ScMediaShell, ScDrawShell)
 
 void ScMediaShell::InitInterface_Impl()
 {

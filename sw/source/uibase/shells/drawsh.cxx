@@ -75,7 +75,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
+SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell)
 
 void SwDrawShell::InitInterface_Impl()
 {

@@ -29,7 +29,7 @@
 #include <unomid.h>
 #include "navmgr.hxx"
 
-SFX_IMPL_INTERFACE(SwNavigationShell, SwBaseShell, SW_RES(STR_SHELLNAME_NAVIGATION))
+SFX_IMPL_INTERFACE(SwNavigationShell, SwBaseShell)
 
 void SwNavigationShell::InitInterface_Impl()
 {

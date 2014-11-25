@@ -145,7 +145,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include "sfxslots.hxx"
 #undef SfxViewFrame
 
-SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
 void SfxViewFrame::InitInterface_Impl()
 {

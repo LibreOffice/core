@@ -136,7 +136,7 @@ using namespace ::com::sun::star::i18n;
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 
-SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
+SFX_IMPL_INTERFACE(SwAnnotationShell, SfxShell)
 
 void SwAnnotationShell::InitInterface_Impl()
 {

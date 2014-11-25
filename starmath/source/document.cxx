@@ -107,7 +107,7 @@ using namespace ::com::sun::star::uno;
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
 
-SFX_IMPL_INTERFACE(SmDocShell, SfxObjectShell, SmResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)
 
 void SmDocShell::InitInterface_Impl()
 {

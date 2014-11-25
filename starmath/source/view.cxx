@@ -929,7 +929,7 @@ struct SmViewShell_Impl
 
 TYPEINIT1( SmViewShell, SfxViewShell );
 
-SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SmViewShell, SfxViewShell)
 
 void SmViewShell::InitInterface_Impl()
 {

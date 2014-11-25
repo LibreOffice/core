@@ -155,7 +155,7 @@ const OUString SmLocalizedSymbolData::GetExportSymbolSetName( const OUString &rU
     return aRes;
 }
 
-SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
+SFX_IMPL_INTERFACE(SmModule, SfxModule)
 
 void SmModule::InitInterface_Impl()
 {

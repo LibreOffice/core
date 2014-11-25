@@ -104,14 +104,14 @@ static SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nRes
 
 // constuctor, registeres a new unit
 SfxInterface::SfxInterface( const char *pClassName,
-                            const ResId& rNameResId,
+                            bool bUsableSuperClass,
                             SfxInterfaceId nId,
                             const SfxInterface* pParent,
                             SfxSlot &rSlotMap, sal_uInt16 nSlotCount ):
     pName(pClassName),
     pGenoType(pParent),
     nClassId(nId),
-    aNameResId(rNameResId.GetId(),*rNameResId.GetResMgr()),
+    bSuperClass(bUsableSuperClass),
     pImpData(0)
 {
     pImpData = new SfxInterface_Impl;
@@ -394,7 +394,7 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl(sal_uInt16 nPos, sal_uInt32 nResId, sal
 
 sal_uInt32 SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
 {
-    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && pGenoType->UseAsSuperClass());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
@@ -413,7 +413,7 @@ sal_uInt32 SfxInterface::GetObjectBarId(sal_uInt16 nNo) const
 
 sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
 {
-    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && pGenoType->UseAsSuperClass());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
@@ -432,7 +432,7 @@ sal_uInt16 SfxInterface::GetObjectBarPos( sal_uInt16 nNo ) const
 
 sal_uInt16 SfxInterface::GetObjectBarCount() const
 {
-    if (pGenoType && ! pGenoType->HasName())
+    if (pGenoType && pGenoType->UseAsSuperClass())
         return pImpData->aObjectBars.size() + pGenoType->GetObjectBarCount();
     else
         return pImpData->aObjectBars.size();
@@ -520,7 +520,7 @@ const ResId& SfxInterface::GetStatusBarResId() const
 
 sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
 {
-    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && pGenoType->UseAsSuperClass());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?
@@ -539,7 +539,7 @@ sal_uInt32 SfxInterface::GetObjectBarFeature ( sal_uInt16 nNo ) const
 
 bool SfxInterface::IsObjectBarVisible(sal_uInt16 nNo) const
 {
-    bool bGenoType = (pGenoType != 0 && !pGenoType->HasName());
+    bool bGenoType = (pGenoType != 0 && pGenoType->UseAsSuperClass());
     if ( bGenoType )
     {
         // Are there toolbars in the super class?

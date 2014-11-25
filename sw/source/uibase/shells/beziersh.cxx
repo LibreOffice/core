@@ -43,7 +43,7 @@
 
 #include <unomid.h>
 
-SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell, SW_RES(STR_SHELLNAME_BEZIER))
+SFX_IMPL_INTERFACE(SwBezierShell, SwBaseShell)
 
 void SwBezierShell::InitInterface_Impl()
 {

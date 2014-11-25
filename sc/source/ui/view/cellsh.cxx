@@ -64,7 +64,7 @@
 
 TYPEINIT1( ScCellShell, ScFormatShell );
 
-SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell, ScResId(SCSTR_CELLSHELL))
+SFX_IMPL_INTERFACE(ScCellShell, ScFormatShell)
 
 void ScCellShell::InitInterface_Impl()
 {

@@ -54,8 +54,7 @@ namespace sd {
 /**
  * Declare default interface (Slotmap must not be empty)
  */
-
-SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
+SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell)
 
 void BezierObjectBar::InitInterface_Impl()
 {

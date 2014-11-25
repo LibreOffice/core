@@ -59,7 +59,7 @@ TYPEINIT1( SdModule, SfxModule );
 #define SdModule
 #include "sdslots.hxx"
 
-SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(RID_SD_NAME))
+SFX_IMPL_INTERFACE(SdModule, SfxModule)
 
 void SdModule::InitInterface_Impl()
 {

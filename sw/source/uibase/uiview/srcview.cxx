@@ -115,7 +115,7 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
 
-SFX_IMPL_INTERFACE(SwSrcView, SfxViewShell, SW_RES(0) )
+SFX_IMPL_SUPERCLASS_INTERFACE(SwSrcView, SfxViewShell)
 
 void SwSrcView::InitInterface_Impl()
 {

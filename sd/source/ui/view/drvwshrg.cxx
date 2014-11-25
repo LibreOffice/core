@@ -59,7 +59,7 @@ namespace sd {
  * Declare SFX-Slotmap and Standardinterface
  */
 
-SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
+SFX_IMPL_INTERFACE(DrawViewShell, SfxShell)
 
 void DrawViewShell::InitInterface_Impl()
 {
@@ -84,8 +84,7 @@ void DrawViewShell::InitInterface_Impl()
 TYPEINIT1( DrawViewShell, ViewShell );
 
 // SdGraphicViewShell
-
-SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH...
+SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell)
 
 void GraphicViewShell::InitInterface_Impl()
 {

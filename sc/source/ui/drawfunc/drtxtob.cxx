@@ -81,7 +81,7 @@
 
 using namespace ::com::sun::star;
 
-SFX_IMPL_INTERFACE(ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL))
+SFX_IMPL_INTERFACE(ScDrawTextObjectBar, SfxShell)
 
 void ScDrawTextObjectBar::InitInterface_Impl()
 {

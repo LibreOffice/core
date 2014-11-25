@@ -76,7 +76,7 @@ void RegisterInterfaces(SfxModule* pMod)
 
 TYPEINIT1( TableObjectBar, SfxShell );
 
-SFX_IMPL_INTERFACE(TableObjectBar, SfxShell, SdResId(STR_TABLEOBJECTBARSHELL))
+SFX_IMPL_INTERFACE(TableObjectBar, SfxShell)
 
 void TableObjectBar::InitInterface_Impl()
 {

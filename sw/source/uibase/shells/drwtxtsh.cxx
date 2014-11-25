@@ -81,7 +81,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::i18n;
 
-SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell, SW_RES(STR_SHELLNAME_DRAW_TEXT))
+SFX_IMPL_INTERFACE(SwDrawTextShell, SfxShell)
 
 void SwDrawTextShell::InitInterface_Impl()
 {

@@ -85,7 +85,7 @@ using namespace com::sun::star;
 
 TYPEINIT1( ScPreviewShell, SfxViewShell );
 
-SFX_IMPL_INTERFACE(ScPreviewShell, SfxViewShell, ScResId(SCSTR_PREVIEWSHELL))
+SFX_IMPL_INTERFACE(ScPreviewShell, SfxViewShell)
 
 void ScPreviewShell::InitInterface_Impl()
 {

@@ -116,7 +116,7 @@ using namespace ::com::sun::star;
 #include <unomid.h>
 #include <boost/scoped_ptr.hpp>
 
-SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
+SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
 
 void SwTextShell::InitInterface_Impl()
 {

@@ -570,16 +570,16 @@ inline void SfxShell::SetPool
             static void                         RegisterInterface(SfxModule* pMod=NULL); \
             virtual SfxInterface*       GetInterface() const SAL_OVERRIDE;
 
-#define SFX_IMPL_INTERFACE(Class,SuperClass,NameResId)                      \
+#define SFX_TMPL_INTERFACE(Class,SuperClass,Abstract)                       \
                                                                             \
     SfxInterface* Class::pInterface = 0;                                    \
-    SfxInterface* Class::GetStaticInterface()                      \
+    SfxInterface* Class::GetStaticInterface()                               \
     {                                                                       \
         if ( !pInterface )                                                  \
         {                                                                   \
             pInterface =                                                    \
                 new SfxInterface(                                           \
-            #Class, NameResId, GetInterfaceId(),                            \
+            #Class, Abstract, GetInterfaceId(),                             \
             SuperClass::GetStaticInterface(),                               \
             a##Class##Slots_Impl[0],                                        \
             (sal_uInt16) (sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) );   \
@@ -597,6 +597,12 @@ inline void SfxShell::SetPool
     {                                                                       \
         GetStaticInterface()->Register(pMod);                               \
     }
+
+#define SFX_IMPL_INTERFACE(Class,SuperClass)                                \
+SFX_TMPL_INTERFACE(Class,SuperClass,false)                                  \
+
+#define SFX_IMPL_SUPERCLASS_INTERFACE(Class,SuperClass)                     \
+SFX_TMPL_INTERFACE(Class,SuperClass,true)                                   \
 
 #define SFX_POSITION_MASK               0x000F
 #define SFX_VISIBILITY_MASK             0xFFF0

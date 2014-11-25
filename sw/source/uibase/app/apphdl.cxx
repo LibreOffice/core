@@ -115,7 +115,7 @@ using namespace ::com::sun::star;
 
 #include <shells.hrc>
 
-SFX_IMPL_INTERFACE(SwModule, SfxModule, SW_RES(RID_SW_NAME) )
+SFX_IMPL_INTERFACE(SwModule, SfxModule)
 
 void SwModule::InitInterface_Impl()
 {

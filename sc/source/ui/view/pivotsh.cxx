@@ -45,7 +45,7 @@
 
 TYPEINIT1( ScPivotShell, SfxShell );
 
-SFX_IMPL_INTERFACE(ScPivotShell, SfxShell, ScResId(SCSTR_PIVOTSHELL))
+SFX_IMPL_INTERFACE(ScPivotShell, SfxShell)
 
 void ScPivotShell::InitInterface_Impl()
 {

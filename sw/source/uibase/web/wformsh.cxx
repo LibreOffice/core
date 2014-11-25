@@ -36,7 +36,7 @@
 #define SwWebDrawFormShell
 #include "swslots.hxx"
 
-SFX_IMPL_INTERFACE(SwWebDrawFormShell, SwDrawFormShell, SW_RES(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SwWebDrawFormShell, SwDrawFormShell)
 
 void SwWebDrawFormShell::InitInterface_Impl()
 {

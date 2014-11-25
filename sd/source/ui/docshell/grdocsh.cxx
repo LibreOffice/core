@@ -43,7 +43,7 @@ namespace sd
 {
 TYPEINIT1(GraphicDocShell, DrawDocShell);
 
-SFX_IMPL_INTERFACE(GraphicDocShell, SfxObjectShell, SdResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(GraphicDocShell, SfxObjectShell)
 
 void GraphicDocShell::InitInterface_Impl()
 {

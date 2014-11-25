@@ -136,7 +136,7 @@ SFX_IMPL_NAMED_VIEWFACTORY( Shell, "Default" )
     SFX_VIEW_REGISTRATION( DocShell );
 }
 
-SFX_IMPL_INTERFACE(basctl_Shell, SfxViewShell, IDEResId(RID_STR_IDENAME))
+SFX_IMPL_INTERFACE(basctl_Shell, SfxViewShell)
 
 void basctl_Shell::InitInterface_Impl()
 {

@@ -89,7 +89,7 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreview, "PrintPreview")
     SFX_VIEW_REGISTRATION(SwGlobalDocShell);
 }
 
-SFX_IMPL_INTERFACE(SwPagePreview, SfxViewShell, SW_RES(RID_PVIEW_TOOLBOX))
+SFX_IMPL_INTERFACE(SwPagePreview, SfxViewShell)
 
 void SwPagePreview::InitInterface_Impl()
 {

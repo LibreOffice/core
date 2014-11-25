@@ -166,7 +166,7 @@ const sal_uInt32 FM_UI_FEATURE_TB_MORECONTROLS          = 0x00000100;
 const sal_uInt32 FM_UI_FEATURE_TB_FORMDESIGN            = 0x00000200;
 const sal_uInt32 FM_UI_FEATURE_SHOW_DATANAVIGATOR       = 0x00000400;
 
-SFX_IMPL_INTERFACE(FmFormShell, SfxShell, SVX_RES(RID_STR_FORMSHELL))
+SFX_IMPL_INTERFACE(FmFormShell, SfxShell)
 
 void FmFormShell::InitInterface_Impl()
 {

@@ -64,7 +64,7 @@ public:
     }
 };
 
-SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL))
+SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell)
 
 void ScGraphicShell::InitInterface_Impl()
 {

@@ -91,7 +91,7 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
+SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell)
 
 void SwTableShell::InitInterface_Impl()
 {

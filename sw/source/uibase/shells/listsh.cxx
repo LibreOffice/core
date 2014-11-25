@@ -51,7 +51,7 @@
 
 #include <IDocumentOutlineNodes.hxx>
 
-SFX_IMPL_INTERFACE(SwListShell, SwBaseShell, SW_RES(STR_SHELLNAME_LIST))
+SFX_IMPL_INTERFACE(SwListShell, SwBaseShell)
 
 void SwListShell::InitInterface_Impl()
 {

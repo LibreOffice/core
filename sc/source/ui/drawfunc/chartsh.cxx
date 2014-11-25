@@ -45,7 +45,7 @@ using namespace css::uno;
 
 namespace drawing = com::sun::star::drawing;
 
-SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL))
+SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell)
 
 void ScChartShell::InitInterface_Impl()
 {

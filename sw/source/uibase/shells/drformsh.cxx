@@ -57,7 +57,7 @@
 
 using namespace ::com::sun::star;
 
-SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAWFORM))
+SFX_IMPL_INTERFACE(SwDrawFormShell, SwDrawBaseShell)
 
 void SwDrawFormShell::InitInterface_Impl()
 {

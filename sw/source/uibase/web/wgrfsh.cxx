@@ -38,7 +38,7 @@
 #define SwWebGrfShell
 #include "swslots.hxx"
 
-SFX_IMPL_INTERFACE(SwWebGrfShell, SwGrfShell, SW_RES(STR_SHELLNAME_GRAPHIC))
+SFX_IMPL_INTERFACE(SwWebGrfShell, SwGrfShell)
 
 void SwWebGrfShell::InitInterface_Impl()
 {

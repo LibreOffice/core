@@ -134,7 +134,7 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
 
 TYPEINIT1(SfxModule, SfxShell);
 
-SFX_IMPL_INTERFACE(SfxModule, SfxShell, SfxResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
 void SfxModule::InitInterface_Impl()
 {

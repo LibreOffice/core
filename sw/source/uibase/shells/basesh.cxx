@@ -144,7 +144,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 
-SFX_IMPL_INTERFACE(SwBaseShell, SfxShell, SW_RES(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SwBaseShell, SfxShell)
 
 void SwBaseShell::InitInterface_Impl()
 {

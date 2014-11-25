@@ -40,14 +40,14 @@ friend class SfxSlotPool;
     SfxSlot*                pSlots;         // SlotMap
     sal_uInt16              nCount;         // number of slots in SlotMap
     SfxInterfaceId          nClassId;       // Id of interface
-    ResId                   aNameResId;     // ResId of external interface name
+    bool                    bSuperClass;    // Whether children inherit its toolbars etc
     SfxInterface_Impl*      pImpData;
 
     SfxSlot*                operator[]( sal_uInt16 nPos ) const;
 
 public:
                             SfxInterface( const char *pClass,
-                                          const ResId& rResId,
+                                          bool bSuperClass,
                                           SfxInterfaceId nClassId,
                                           const SfxInterface* pGeno,
                                           SfxSlot &rMessages, sal_uInt16 nMsgCount );
@@ -62,7 +62,7 @@ public:
     const SfxSlot*          GetSlot( const OUString& rCommand ) const;
 
     const char*             GetClassName() const { return pName; }
-    bool                    HasName() const { return 0 != aNameResId.GetId(); }
+    bool                    UseAsSuperClass() const { return bSuperClass; }
 
     const SfxInterface*     GetGenoType() const { return pGenoType; }
 

@@ -36,7 +36,7 @@
 
 TYPEINIT1( ScAuditingShell, SfxShell );
 
-SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell, ScResId(SCSTR_AUDITSHELL))
+SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell)
 
 void ScAuditingShell::InitInterface_Impl()
 {

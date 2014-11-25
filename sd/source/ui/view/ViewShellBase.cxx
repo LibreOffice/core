@@ -221,7 +221,7 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 
 SfxViewFactory* ViewShellBase::pFactory;
 
-SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(ViewShellBase, SfxViewShell)
 
 void ViewShellBase::InitInterface_Impl()
 {

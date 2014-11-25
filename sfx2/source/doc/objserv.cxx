@@ -116,7 +116,7 @@ using namespace ::com::sun::star::task;
 #define SfxObjectShell
 #include "sfxslots.hxx"
 
-SFX_IMPL_INTERFACE(SfxObjectShell, SfxShell, SfxResId(0))
+SFX_IMPL_SUPERCLASS_INTERFACE(SfxObjectShell, SfxShell)
 
 void SfxObjectShell::InitInterface_Impl()
 {

@@ -38,7 +38,7 @@
 #include "svx/svxids.hrc"
 #include "swslots.hxx"
 
-SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell, SW_RES(STR_SHELLNAME_TABLE))
+SFX_IMPL_INTERFACE(SwWebTableShell, SwTableShell)
 
 void SwWebTableShell::InitInterface_Impl()
 {

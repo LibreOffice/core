@@ -88,7 +88,7 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
     }
 }
 
-SFX_IMPL_INTERFACE(SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
+SFX_IMPL_INTERFACE(SwView, SfxViewShell)
 
 void SwView::InitInterface_Impl()
 {

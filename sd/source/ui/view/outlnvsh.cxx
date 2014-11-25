@@ -106,7 +106,7 @@ namespace sd {
 /**
  * Declare SFX-Slotmap and standard interface
  */
-SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
+SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell)
 
 void OutlineViewShell::InitInterface_Impl()
 {

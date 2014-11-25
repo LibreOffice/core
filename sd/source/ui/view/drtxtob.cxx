@@ -76,8 +76,7 @@ namespace sd {
  * Declare default interface (Slotmap must not be empty, therefore enter
  * something that (hopefully) never occurs.
  */
-
-SFX_IMPL_INTERFACE(TextObjectBar, SfxShell, SdResId(STR_TEXTOBJECTBARSHELL))
+SFX_IMPL_INTERFACE(TextObjectBar, SfxShell)
 
 void TextObjectBar::InitInterface_Impl()
 {

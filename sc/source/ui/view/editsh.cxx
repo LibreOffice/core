@@ -82,7 +82,7 @@ using namespace ::com::sun::star;
 
 TYPEINIT1( ScEditShell, SfxShell );
 
-SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
+SFX_IMPL_INTERFACE(ScEditShell, SfxShell)
 
 void ScEditShell::InitInterface_Impl()
 {

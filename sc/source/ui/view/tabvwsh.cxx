@@ -46,7 +46,7 @@
 
 TYPEINIT2(ScTabViewShell,SfxViewShell,SfxListener);
 
-SFX_IMPL_INTERFACE(ScTabViewShell, SfxViewShell, ScResId(SCSTR_TABVIEWSHELL))
+SFX_IMPL_INTERFACE(ScTabViewShell, SfxViewShell)
 
 void ScTabViewShell::InitInterface_Impl()
 {

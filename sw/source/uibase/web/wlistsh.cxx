@@ -34,7 +34,7 @@
 #define SwWebListShell
 #include "swslots.hxx"
 
-SFX_IMPL_INTERFACE(SwWebListShell, SwListShell, SW_RES(STR_SHELLNAME_LIST))
+SFX_IMPL_INTERFACE(SwWebListShell, SwListShell)
 
 void SwWebListShell::InitInterface_Impl()
 {

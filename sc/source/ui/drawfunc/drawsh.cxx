@@ -62,7 +62,7 @@
 
 TYPEINIT1( ScDrawShell, SfxShell );
 
-SFX_IMPL_INTERFACE(ScDrawShell, SfxShell, ScResId(SCSTR_DRAWSHELL))
+SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
 void ScDrawShell::InitInterface_Impl()
 {

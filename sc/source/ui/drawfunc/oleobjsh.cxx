@@ -40,7 +40,7 @@
 #define ScOleObjectShell
 #include "scslots.hxx"
 
-SFX_IMPL_INTERFACE(ScOleObjectShell, ScDrawShell, ScResId(SCSTR_OLEOBJECTSHELL))
+SFX_IMPL_INTERFACE(ScOleObjectShell, ScDrawShell)
 
 void ScOleObjectShell::InitInterface_Impl()
 {

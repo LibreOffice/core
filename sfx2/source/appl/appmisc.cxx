@@ -89,7 +89,7 @@ using namespace ::com::sun::star::container;
 
 #define SFX_ITEMTYPE_STATBAR             4
 
-SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
+SFX_IMPL_INTERFACE(SfxApplication,SfxShell)
 
 void SfxApplication::InitInterface_Impl()
 {

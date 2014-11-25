@@ -172,7 +172,7 @@ SFX_SLOTMAP(FontworkBar)
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
-SFX_IMPL_INTERFACE(FontworkBar, SfxShell, SVX_RES(RID_SVX_FONTWORK_BAR))
+SFX_IMPL_INTERFACE(FontworkBar, SfxShell)
 
 void FontworkBar::InitInterface_Impl()
 {
