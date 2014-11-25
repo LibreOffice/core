@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
@@ -58,7 +56,7 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
     case CTF_FONTNAME_CTL:
         if( GetImport().GetFontDecls() != NULL )
         {
-            DBG_ASSERT(
+            assert((
                 ( CTF_FONTFAMILYNAME ==
                     getPropertySetMapper()->GetEntryContextId(nIndex+1) &&
                   CTF_FONTSTYLENAME ==
@@ -88,8 +86,8 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
                   CTF_FONTPITCH_CTL ==
                     getPropertySetMapper()->GetEntryContextId(nIndex+4) &&
                   CTF_FONTCHARSET_CTL ==
-                    getPropertySetMapper()->GetEntryContextId(nIndex+5) ),
-                "illegal property map" );
+                    getPropertySetMapper()->GetEntryContextId(nIndex+5) )
+              ) && "illegal property map" );
 
             GetImport().GetFontDecls()->FillProperties(
                             rValue, rProperties,
@@ -197,11 +195,10 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontStyleName )
         {
             aAny <<= sEmpty;
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 1 );
-                DBG_ASSERT( nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL,
-                            "wrong property context id" );
+                assert(nTmp == CTF_FONTSTYLENAME || nTmp == CTF_FONTSTYLENAME_CJK || nTmp == CTF_FONTSTYLENAME_CTL);
     #endif
                 *ppNewFontStyleName = new XMLPropertyState( pFontFamilyName->mnIndex + 1,
                                                        aAny );
@@ -211,11 +208,10 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         {
             aAny <<= (sal_Int16)com::sun::star::awt::FontFamily::DONTKNOW;
 
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 2 );
-                DBG_ASSERT( nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL,
-                            "wrong property context id" );
+                assert(nTmp == CTF_FONTFAMILY || nTmp == CTF_FONTFAMILY_CJK || nTmp == CTF_FONTFAMILY_CTL);
     #endif
                 *ppNewFontFamily = new XMLPropertyState( pFontFamilyName->mnIndex + 2,
                                                        aAny );
@@ -224,11 +220,10 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontPitch )
         {
             aAny <<= (sal_Int16)com::sun::star::awt::FontPitch::DONTKNOW;
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 3 );
-                DBG_ASSERT( nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL,
-                            "wrong property context id" );
+                assert(nTmp == CTF_FONTPITCH || nTmp == CTF_FONTPITCH_CJK || nTmp == CTF_FONTPITCH_CTL);
     #endif
                 *ppNewFontPitch = new XMLPropertyState( pFontFamilyName->mnIndex + 3,
                                                        aAny );
@@ -237,11 +232,10 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
         if( !pFontCharSet )
         {
             aAny <<= (sal_Int16)osl_getThreadTextEncoding();
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
                 sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                                 pFontFamilyName->mnIndex + 4 );
-                DBG_ASSERT( nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL,
-                            "wrong property context id" );
+                assert(nTmp == CTF_FONTCHARSET || nTmp == CTF_FONTCHARSET_CJK || nTmp == CTF_FONTCHARSET_CTL);
     #endif
                 *ppNewFontCharSet = new XMLPropertyState( pFontFamilyName->mnIndex + 4,
                                                        aAny );
@@ -282,19 +276,27 @@ static void lcl_SeparateBorder(
     XMLPropertyState* pAllBorder, XMLPropertyState* pBorders[4],
     XMLPropertyState* pNewBorders[4], XMLPropertyState* pAllBorderWidth,
     XMLPropertyState* pBorderWidths[4]
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     , const rtl::Reference< XMLPropertySetMapper >& rMapper
 #endif
 )
 {
     if( pAllBorderDistance && !pBorderDistances[nIndex] )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         sal_Int16 nTmp = rMapper->GetEntryContextId(
                                     pAllBorderDistance->mnIndex + nIndex + 1 );
-        DBG_ASSERT( nTmp >= CTF_LEFTBORDERDISTANCE &&
-                    nTmp <= CTF_BOTTOMBORDERDISTANCE,
-                    "wrong property context id" );
+        if (CTF_CHARALLBORDERDISTANCE ==
+                rMapper->GetEntryContextId(pAllBorderDistance->mnIndex))
+        {
+            assert(nTmp >= CTF_CHARLEFTBORDERDISTANCE &&
+                   nTmp <= CTF_CHARBOTTOMBORDERDISTANCE);
+        }
+        else
+        {
+            assert(nTmp >= CTF_LEFTBORDERDISTANCE &&
+                   nTmp <= CTF_BOTTOMBORDERDISTANCE);
+        }
 #endif
         pNewBorderDistances[nIndex] =
             new XMLPropertyState( pAllBorderDistance->mnIndex + nIndex + 1,
@@ -303,11 +305,18 @@ static void lcl_SeparateBorder(
     }
     if( pAllBorder && !pBorders[nIndex] )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         sal_Int16 nTmp = rMapper->GetEntryContextId(
                                         pAllBorder->mnIndex + nIndex + 1 );
-        DBG_ASSERT( nTmp >= CTF_LEFTBORDER && nTmp <= CTF_BOTTOMBORDER,
-                    "wrong property context id" );
+        if (CTF_CHARALLBORDER ==
+                rMapper->GetEntryContextId(pAllBorder->mnIndex))
+        {
+            assert(nTmp >= CTF_CHARLEFTBORDER && nTmp <= CTF_CHARBOTTOMBORDER);
+        }
+        else
+        {
+            assert(nTmp >= CTF_LEFTBORDER && nTmp <= CTF_BOTTOMBORDER);
+        }
 #endif
         pNewBorders[nIndex] = new XMLPropertyState( pAllBorder->mnIndex + nIndex + 1,
                                                    pAllBorder->maValue );
@@ -531,9 +540,8 @@ void XMLTextImportPropertyMapper::finished(
 #if OSL_DEBUG_LEVEL > 0
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pAllParaMargin->mnIndex + (2*i) + 2 );
-            OSL_ENSURE( nTmp >= CTF_PARALEFTMARGIN &&
-                        nTmp <= CTF_PARABOTTOMMARGIN_REL,
-                        "wrong property context id" );
+            assert(nTmp >= CTF_PARALEFTMARGIN &&
+                   nTmp <= CTF_PARABOTTOMMARGIN_REL);
 #endif
             pNewParaMargins[i].reset(new XMLPropertyState(
                 pAllParaMargin->mnIndex + (2*i) + 2, pAllParaMargin->maValue));
@@ -543,8 +551,7 @@ void XMLTextImportPropertyMapper::finished(
 #if OSL_DEBUG_LEVEL > 0
             sal_Int16 nTmp = getPropertySetMapper()->GetEntryContextId(
                                         pAllMargin->mnIndex + i + 1 );
-            OSL_ENSURE( nTmp >= CTF_MARGINLEFT && nTmp <= CTF_MARGINBOTTOM,
-                        "wrong property context id" );
+            assert(nTmp >= CTF_MARGINLEFT && nTmp <= CTF_MARGINBOTTOM);
 #endif
             pNewMargins[i].reset(new XMLPropertyState(
                 pAllMargin->mnIndex + i + 1, pAllMargin->maValue));
@@ -554,7 +561,7 @@ void XMLTextImportPropertyMapper::finished(
             i, pAllBorderDistance, pBorderDistances, pNewBorderDistances,
             pAllBorder, pBorders, pNewBorders,
             pAllBorderWidth, pBorderWidths
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             , getPropertySetMapper()
 #endif
             );
@@ -563,7 +570,7 @@ void XMLTextImportPropertyMapper::finished(
             i, pCharAllBorderDistance, pCharBorderDistances,
             pCharNewBorderDistances, pCharAllBorder, pCharBorders,
             pCharNewBorders, pCharAllBorderWidth, pCharBorderWidths
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
             , getPropertySetMapper()
 #endif
             );
