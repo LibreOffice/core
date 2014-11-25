@@ -366,6 +366,7 @@ public:
     void testSortRefUpdate2();
     void testSortRefUpdate3();
     void testSortRefUpdate4();
+    void testSortRefUpdate4_Impl();
     void testSortRefUpdate5();
     void testSortRefUpdate6();
     void testSortOutOfPlaceResult();
