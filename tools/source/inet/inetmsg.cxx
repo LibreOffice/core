@@ -327,8 +327,8 @@ bool INetRFC822Message::ParseDateField (
             rDateTime.SetSec    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetNanoSec (0);
 
-            if ((aDateField[nIndex] == '+') ||
-                (aDateField[nIndex] == '-')    )
+            const char cPossiblePlusMinus = nIndex < aDateField.getLength() ? aDateField[nIndex] : 0;
+            if (cPossiblePlusMinus == '+' || cPossiblePlusMinus == '-')
             {
                 // Offset from GMT: "(+|-)HHMM".
                 bool bEast   = (aDateField[nIndex++] == '+');
