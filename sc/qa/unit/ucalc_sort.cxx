@@ -1028,8 +1028,19 @@ void Test::testSortRefUpdate3()
 // testRefInterne.ods
 void Test::testSortRefUpdate4()
 {
-    SortRefUpdateSetter aUpdateSet;
+    // This test has to work in both update reference modes.
+    {
+        SortRefNoUpdateSetter aUpdateSet;
+        testSortRefUpdate4_Impl();
+    }
+    {
+        SortRefUpdateSetter aUpdateSet;
+        testSortRefUpdate4_Impl();
+    }
+}
 
+void Test::testSortRefUpdate4_Impl()
+{
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
     m_pDoc->InsertTab(0, "Sort");
     m_pDoc->InsertTab(1, "Lesson1");
