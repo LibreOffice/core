@@ -161,7 +161,8 @@ namespace oglcanvas
                         maTransformation.m02, maTransformation.m12, 0, 1
                     );
 
-                pRenderHelper->SetModelAndMVP(translate * aGLTransform);
+                //pRenderHelper->SetModelAndMVP(translate * aGLTransform);
+                pRenderHelper->SetModelAndMVP( aGLTransform);
                 // content ended up in background buffer - compose to
                 // screen now. Calls below switches us back to window
                 // context, and binds to generated, dynamic texture
@@ -200,12 +201,12 @@ namespace oglcanvas
                                 aSpriteSizePixel.x,
                                 aSpriteSizePixel.y)));
 
-                    GLfloat vertices[rTriangulatedPolygon.count()*2];
+                    std::vector<glm::vec2> vertices;
+                    vertices.reserve(rTriangulatedPolygon.count());
                     for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
                     {
                         const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
-                        vertices[i*2]= rPt.getX();
-                        vertices[i*2+1]= rPt.getY();
+                        vertices.push_back(glm::vec2(rPt.getX(), rPt.getY()));
                     }
                     pRenderHelper->renderVertexTex( vertices, fWidth, fHeight,  color, GL_TRIANGLES);
                 }
@@ -214,14 +215,19 @@ namespace oglcanvas
                     const double fWidth=maSize.Width/aSpriteSizePixel.x;
                     const double fHeight=maSize.Height/aSpriteSizePixel.y;
 
-                    GLfloat vertices[] = {0, 0,
-                                          0, (float) aSpriteSizePixel.y,
-                                          (float) aSpriteSizePixel.x, 0,
-                                          (float) aSpriteSizePixel.x, (float) aSpriteSizePixel.y };
-                    GLfloat uvCoordinates[] = {0, 0,
-                                               0, (float) fHeight,
-                                               (float) fWidth, 0,
-                                               (float) fWidth, (float) fHeight };
+                    std::vector<glm::vec2> vertices;
+                    vertices.reserve(4);
+                    vertices.push_back(glm::vec2(0, 0));
+                    vertices.push_back(glm::vec2(0, (float) aSpriteSizePixel.y));
+                    vertices.push_back(glm::vec2((float) aSpriteSizePixel.x, 0));
+                    vertices.push_back(glm::vec2((float) aSpriteSizePixel.x, (float) aSpriteSizePixel.y));
+
+                    std::vector<glm::vec2> uvCoordinates;
+                    uvCoordinates.reserve(4);
+                    uvCoordinates.push_back(glm::vec2(0, 0));
+                    uvCoordinates.push_back(glm::vec2(0, (float) fHeight));
+                    uvCoordinates.push_back(glm::vec2((float) fWidth, 0));
+                    uvCoordinates.push_back(glm::vec2((float) fWidth, (float) fHeight));
 
                     pRenderHelper->renderVertexUVTex(vertices,  uvCoordinates, color, GL_TRIANGLE_STRIP );
                 }
@@ -230,23 +236,25 @@ namespace oglcanvas
 
             }
 
-        // translate sprite to output position
-        pRenderHelper->SetModelAndMVP(translate);
-        GLfloat vertices[] = {-2, -2,
-                              -2, (float) maSize.Height+4,
-                              (float) maSize.Width+4, (float) maSize.Height+4,
-                              (float) maSize.Width+4, -2,
-                              -2, -2,
-                              (float) maSize.Width+4, (float) maSize.Height+4 };
+        std::vector<glm::vec2> vertices;
+        vertices.reserve(6);
+        vertices.push_back(glm::vec2(-2, -2));
+        vertices.push_back(glm::vec2(-2, (float) maSize.Height+4));
+        vertices.push_back(glm::vec2((float) maSize.Width+4, (float) maSize.Height+4));
+        vertices.push_back(glm::vec2((float) maSize.Width+4, -2));
+        vertices.push_back(glm::vec2(-2, -2));
+        vertices.push_back(glm::vec2((float) maSize.Width+4, (float) maSize.Height+4));
 
         pRenderHelper->renderVertexConstColor(vertices, glm::vec4(1, 0, 0, 1), GL_LINE_STRIP);
 
+#ifdef DEBUG_RENDERING
         std::vector<double> aVec;
         aVec.push_back(mfAlpha);
         aVec.push_back(mfPriority);
         aVec.push_back(maCanvasHelper.getRecordedActionCount());
 
         renderOSD( aVec, 10, pRenderHelper);
+#endif
 
         return true;
     }

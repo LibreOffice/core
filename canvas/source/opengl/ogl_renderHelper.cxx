@@ -10,13 +10,13 @@
 #include <GL/glew.h>
 #include "ogl_renderHelper.hxx"
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/opengl/GLMHelper.hxx>
 namespace oglcanvas
 {
-    RenderHelper::RenderHelper()
-    : m_iWidth(1600) //Why this dimensions?
-    , m_iHeight(900) //Whole window, see spritedevicehelper
-    , m_Model(glm::mat4(1.0f))
+    RenderHelper::RenderHelper():
+        m_Model(glm::mat4(1.0f))
     {
+
     }
     void RenderHelper::InitOpenGL()
     {
@@ -29,7 +29,7 @@ namespace oglcanvas
         m_simpleTexUnf = glGetUniformLocation(m_simpleProgID, "TextTex");
 
         m_manCordUnf = glGetUniformLocation(m_texManProgID, "texCord");
-        m_texColorUnf = glGetUniformLocation(m_texProgID, "constColor");
+        m_texColorUnf = glGetUniformLocation(m_texProgID, "constantColor");
 
         m_manColorUnf = glGetUniformLocation(m_texManProgID,"colorTex");
         m_simpleColorUnf = glGetUniformLocation(m_simpleProgID,"colorTex");
@@ -45,29 +45,24 @@ namespace oglcanvas
         m_simplePosAttrb = glGetAttribLocation(m_simpleProgID ,"vPosition");
         m_texPosAttrb = glGetAttribLocation(m_texProgID ,"vPosition");
 
-        //glViewport(0, 0, m_iWidth, m_iHeight);
     }
-    //Todo figgure out, which parameters i should use :)
-    void RenderHelper::SetVP(int width, int height)
-    {
-        m_Projection = glm::ortho(0.f, float(m_iWidth), 0.f, float(m_iHeight), -4.f, 3.f);
-        m_Projection = m_Projection * glm::scale(glm::vec3((float)width / m_iWidth, -(float)height / m_iHeight, 1.0f));
 
-        m_View       = glm::lookAt(glm::vec3(0,m_iHeight,1),
-                                   glm::vec3(0,m_iHeight,0),
-                                   glm::vec3(0,1,0) );
+    void RenderHelper::SetVP(const float width, const float height)
+    {
+        m_VP = glm::ortho(0.0f, width, 0.0f, height);
+
     }
-    void RenderHelper::SetModelAndMVP(glm::mat4 mat)
+
+    void RenderHelper::SetModelAndMVP(const glm::mat4& mat)
     {
         m_Model = mat;
-        m_MVP = m_Projection * m_View * m_Model;
+        m_MVP = m_Model * m_VP;
     }
 
-
-    void RenderHelper::renderVertexConstColor(GLfloat vertices[], glm::vec4 color, GLenum mode) const
+    void RenderHelper::renderVertexConstColor(const std::vector<glm::vec2>& rVertices, glm::vec4 color, GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, rVertices.size()*2, &rVertices[0].x, GL_STATIC_DRAW);
 
         glUseProgram(m_texProgID);
 
@@ -85,7 +80,7 @@ namespace oglcanvas
                         (void*)0                      // array buffer offset
         );
 
-        glDrawArrays(mode, 0, sizeof(vertices) / 2);
+        glDrawArrays(mode, 0, rVertices.size());
 
         glDisableVertexAttribArray(m_texPosAttrb);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -93,13 +88,13 @@ namespace oglcanvas
 
     }
     //Renders a TriangleStrip, Texture has to be stored in TextureUnit0
-    void RenderHelper::renderVertexUVTex(GLfloat vertices[], GLfloat uvCoordinates[], glm::vec4 color, GLenum mode) const
+    void RenderHelper::renderVertexUVTex(const std::vector<glm::vec2>& rVertices, const std::vector<glm::vec2>& rUVcoords, glm::vec4 color, GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, rVertices.size()*2, &rVertices[0].x, GL_STATIC_DRAW);
 
         glBindBuffer(GL_ARRAY_BUFFER, m_uvBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(uvCoordinates), uvCoordinates, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, rUVcoords.size()*2, &rUVcoords[0].x, GL_STATIC_DRAW);
 
         glUseProgram(m_simpleProgID);
 
@@ -130,7 +125,7 @@ namespace oglcanvas
             (void*)0                      // array buffer offset
         );
 
-        glDrawArrays(mode, 0, sizeof(vertices) / 2);
+        glDrawArrays(mode, 0, rVertices.size());
 
         glDisableVertexAttribArray(m_simplePosAttrb);
         glDisableVertexAttribArray(m_simpleUvAttrb);
@@ -150,10 +145,10 @@ namespace oglcanvas
 
     // Renders a Polygon, Texture has to be stored in TextureUnit0
     // Uses fWidth,fHeight to generate texture coordinates in vertex-shader.
-    void RenderHelper::renderVertexTex(GLfloat vertices[], GLfloat fWidth, GLfloat fHeight, glm::vec4 color, GLenum mode) const
+    void RenderHelper::renderVertexTex(const std::vector<glm::vec2>& rVertices, GLfloat fWidth, GLfloat fHeight, glm::vec4 color, GLenum mode) const
     {
         glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, rVertices.size()*2, &rVertices[0].x, GL_STATIC_DRAW);
 
         glUseProgram(m_texManProgID);
 
@@ -174,7 +169,7 @@ namespace oglcanvas
             (void*)0                      // array buffer offset
         );
 
-        glDrawArrays(mode, 0, sizeof(vertices) / 2);
+        glDrawArrays(mode, 0, rVertices.size());
 
         glDisableVertexAttribArray(m_manPosAttrb);
         glBindBuffer(GL_ARRAY_BUFFER, 0);

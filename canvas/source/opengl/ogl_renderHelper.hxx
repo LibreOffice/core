@@ -12,20 +12,21 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include "glm/gtx/transform.hpp"
+#include <vector>
 namespace oglcanvas
 {
     class RenderHelper
     {
     public:
 
-        void renderVertexConstColor(GLfloat vertices[], glm::vec4 color, GLenum mode) const;
-        void renderVertexUVTex(GLfloat vertices[], GLfloat uvCoordinates[], glm::vec4 color, GLenum mode) const;
-        void renderVertexTex(GLfloat vertices[], GLfloat, GLfloat, glm::vec4 color, GLenum mode) const;
+        void renderVertexConstColor(const std::vector<glm::vec2>& rVertices, glm::vec4 color, GLenum mode) const;
+        void renderVertexUVTex(const std::vector<glm::vec2>& rVertices, const std::vector<glm::vec2>& rUVcoords, glm::vec4 color, GLenum mode) const;
+        void renderVertexTex(const std::vector<glm::vec2>& rVertices, GLfloat, GLfloat, glm::vec4 color, GLenum mode) const;
 
         RenderHelper();
 
-        void SetVP(int width, int height);
-        void SetModelAndMVP(glm::mat4 mat);
+        void SetVP(const float width, const float height);
+        void SetModelAndMVP(const glm::mat4& mat);
         void dispose();
         void  InitOpenGL();
 
@@ -59,10 +60,7 @@ namespace oglcanvas
         int                                               m_iWidth;
         int                                               m_iHeight;
 
-        // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-        glm::mat4                                         m_Projection;
-        // Camera matrix
-        glm::mat4                                         m_View;
+        glm::mat4                                         m_VP;
         // Model matrix : an identity matrix (model will be at the origin
         glm::mat4                                         m_Model;
         // Our ModelViewProjection : multiplication of our 3 matrices

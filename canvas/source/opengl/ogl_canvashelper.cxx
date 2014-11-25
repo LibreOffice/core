@@ -101,12 +101,14 @@ namespace oglcanvas
                             const geometry::RealPoint2D&     rPoint)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            setupState(rTransform, eSrcBlend, eDstBlend);
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
                                 (float) rColor.Alpha);
-            GLfloat vertices[] = {(float) rPoint.X, (float) rPoint.Y};
+            std::vector<glm::vec2> vertices;
+            vertices.reserve(1);
+            vertices.push_back(glm::vec2((float) rPoint.X, (float) rPoint.Y));
             pRenderHelper->renderVertexConstColor(vertices, color, GL_POINTS);
             return true;
         }
@@ -120,13 +122,16 @@ namespace oglcanvas
                            const geometry::RealPoint2D&     rEndPoint)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            setupState(rTransform, eSrcBlend, eDstBlend);
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
                                 (float) rColor.Alpha);
-            GLfloat vertices[] = {(float) rStartPoint.X, (float) rStartPoint.Y,
-                                  (float) rEndPoint.X, (float) rEndPoint.Y };
+
+            std::vector<glm::vec2> vertices;
+            vertices.reserve(2);
+            vertices.push_back(glm::vec2((float) rStartPoint.X, (float) rStartPoint.Y));
+            vertices.push_back(glm::vec2((float) rEndPoint.X, (float) rEndPoint.Y));
             pRenderHelper->renderVertexConstColor(vertices, color, GL_LINES);
             return true;
         }
@@ -139,7 +144,7 @@ namespace oglcanvas
                                   const ::basegfx::B2DPolyPolygonVector& rPolyPolygons)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            setupState(rTransform, eSrcBlend, eDstBlend);
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
@@ -278,7 +283,7 @@ namespace oglcanvas
         {
 
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            setupState(rTransform, eSrcBlend, eDstBlend);
 
             const unsigned int nTexId=rHelper.getDeviceHelper()->getTextureCache().getTexture(
                 rPixelSize, rPixelData.getConstArray(), nPixelCrc32);
@@ -297,14 +302,20 @@ namespace oglcanvas
 
             // blend against fixed vertex color; texture alpha is multiplied in
             glm::vec4 color  = glm::vec4(1, 1, 1, 1);
-            GLfloat vertices[] = {0, 0,
-                                  0, (float) rPixelSize.Height,
-                                  (float) rPixelSize.Width, 0,
-                                  (float) rPixelSize.Width, (float) rPixelSize.Height };
-            GLfloat uvCoordinates[] = {0, 0,
-                                       0, 1,
-                                       1, 0,
-                                       1, 1 };
+
+            std::vector<glm::vec2> vertices;
+            vertices.reserve(4);
+            vertices.push_back(glm::vec2(0, 0));
+            vertices.push_back(glm::vec2(0, (float) rPixelSize.Height));
+            vertices.push_back(glm::vec2((float) rPixelSize.Width, 0));
+            vertices.push_back(glm::vec2((float) rPixelSize.Width, (float) rPixelSize.Height));
+
+            std::vector<glm::vec2> uvCoordinates;
+            uvCoordinates.reserve(4);
+            uvCoordinates.push_back(glm::vec2(0, 0));
+            uvCoordinates.push_back(glm::vec2(0, 1));
+            uvCoordinates.push_back(glm::vec2(1, 0));
+            uvCoordinates.push_back(glm::vec2(1, 1));
             pRenderHelper->renderVertexUVTex(vertices, uvCoordinates, color, GL_TRIANGLE_STRIP );
 
             glBindTexture(GL_TEXTURE_2D, 0);
