@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.query;
 
+import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.IllegalArgumentException;
@@ -28,6 +29,7 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
+import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,7 +68,12 @@ public class Finalizer
                 {
                     8, reslblQueryTitle, 95, 27, Integer.valueOf(QueryWizard.SOSUMMARY_PAGE), Short.valueOf(curtabindex++), 52
                 });
-        m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", "changeTitle", this, new String[]
+        m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", new XTextListenerAdapter() {
+                    @Override
+                    public void textChanged(TextEvent event) {
+                        changeTitle();
+                    }
+                }, new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
@@ -119,7 +126,7 @@ public class Finalizer
                 });
     }
 
-    public void changeTitle()
+    private void changeTitle()
     {
         final String TitleName = m_aTxtTitle.getText();
         m_queryWizard.enableFinishButton( TitleName.length() > 0 );

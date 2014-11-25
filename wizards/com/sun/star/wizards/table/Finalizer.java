@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.table;
 
+import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
@@ -26,6 +27,7 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 
 public class Finalizer
 {
@@ -39,7 +41,6 @@ public class Finalizer
     XListBox xCatalogListBox;
     XListBox xSchemaListBox;
     TableDescriptor curtabledescriptor;
-    public String SETCOMPLETIONFLAG = "setCompletionFlag";
     public static int WORKWITHTABLEMODE = 0;
     public static int MODIFYTABLEMODE = 1;
     public static int STARTFORMWIZARDMODE = 2;
@@ -76,7 +77,12 @@ public class Finalizer
                     {
                         UIConsts.INTEGERS[8], slblTableName, 97, 25, IFINALSTEP, 220
                     });
-            txtTableName = CurUnoDialog.insertTextField("txtTableName", SETCOMPLETIONFLAG, this,
+            txtTableName = CurUnoDialog.insertTextField("txtTableName", new XTextListenerAdapter() {
+                        @Override
+                        public void textChanged(TextEvent event) {
+                            setCompletionFlag();
+                        }
+                    },
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
@@ -344,7 +350,7 @@ public class Finalizer
         return (txtTableName.getText().length() > 0);
     }
 
-    public void setCompletionFlag()
+    private void setCompletionFlag()
     {
         CurUnoDialog.setcompleted(TableWizard.SOFINALPAGE, iscompleted());
     }

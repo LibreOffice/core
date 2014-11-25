@@ -16,15 +16,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 package com.sun.star.wizards.report;
-import com.sun.star.uno.Exception;
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 import com.sun.star.awt.ItemEvent;
+import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.Exception;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.RecordParser;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.WizardDialog;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
+import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 
 public class ReportFinalizer
 {
@@ -33,7 +39,6 @@ public class ReportFinalizer
     XTextComponent xTitleTextBox;
     XTextComponent[] xSaveTextBox = new XTextComponent[2];
     Object chkTemplate;
-    String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
     String TemplatePath;
     String StoreName;
     boolean bfinalaskbeforeOverwrite;
@@ -70,7 +75,12 @@ public class ReportFinalizer
                     8, sReportTitle, 95, 27, Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 68
                 });
 
-        xTitleTextBox = CurUnoDialog.insertTextField("txtTitle", CHANGEREPORTTITLE_FUNCNAME, this,
+        xTitleTextBox = CurUnoDialog.insertTextField("txtTitle", new XTextListenerAdapter() {
+                    @Override
+                    public void textChanged(TextEvent arg0) {
+                        changeReportTitle();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -211,7 +221,7 @@ public class ReportFinalizer
         return StorePath;
     }
 
-    public void changeReportTitle()
+    private void changeReportTitle()
     {
         final String TitleName = xTitleTextBox.getText();
         CurReportDocument.liveupdate_updateReportTitle(TitleName);

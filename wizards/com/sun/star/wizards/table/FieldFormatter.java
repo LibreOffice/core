@@ -20,6 +20,7 @@ package com.sun.star.wizards.table;
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.ItemEvent;
+import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
@@ -35,6 +36,7 @@ import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.event.XActionListenerAdapter;
+import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 
 public class FieldFormatter implements XItemListener
 {
@@ -49,10 +51,6 @@ public class FieldFormatter implements XItemListener
     XButton btnShiftUp;
     XButton btnShiftDown;
     short curtabindex;
-    String TOGGLEBUTTONS = "toggleButtons";
-    String ADDFIELDNAME = "addFieldName";
-    String REMOVEFIELDNAME = "removeFieldName";
-    String MODIFYFIELDNAME = "modifyFieldName";
     String[] fieldnames;
     String suntitled;
     Integer IFieldFormatStep;
@@ -183,7 +181,12 @@ public class FieldFormatter implements XItemListener
                     UIConsts.INTEGERS[8], sFieldName, 158, 39, IFieldFormatStep, Short.valueOf(curtabindex++), 94
                 });
 
-        txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
+        txtfieldname = CurUnoDialog.insertTextField("txtfieldname", new XTextListenerAdapter() {
+                    @Override
+                    public void textChanged(TextEvent event) {
+                        modifyFieldName();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH

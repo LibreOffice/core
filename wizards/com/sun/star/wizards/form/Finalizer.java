@@ -17,11 +17,13 @@
  */
 package com.sun.star.wizards.form;
 
+import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 
 /**
  *
@@ -56,7 +58,12 @@ public class Finalizer
                 {
                     UIConsts.INTEGERS[8], slblFormName, 97, 25, UIConsts.INTEGERS[8], Short.valueOf(curtabindex++), 111
                 });
-        txtFormName = CurUnoDialog.insertTextField("txtFormName", "toggleFinishButton", this,
+        txtFormName = CurUnoDialog.insertTextField("txtFormName", new XTextListenerAdapter() {
+                    @Override
+                    public void textChanged(TextEvent event) {
+                        toggleFinishButton();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
@@ -106,7 +113,7 @@ public class Finalizer
         }
     }
 
-    public void toggleFinishButton()
+    private void toggleFinishButton()
     {
         CurUnoDialog.enableFinishButton(txtFormName.getText().length() > 0);
     }

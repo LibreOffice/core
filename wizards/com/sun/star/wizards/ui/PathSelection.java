@@ -18,6 +18,7 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.ActionEvent;
+import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
@@ -25,6 +26,7 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.ui.event.XActionListenerAdapter;
+import com.sun.star.wizards.ui.event.XTextListenerAdapter;
 
 public class PathSelection
 {
@@ -74,7 +76,13 @@ public class PathSelection
                         Boolean.valueOf(Enabled), 8, LabelText, Integer.valueOf(XPos), Integer.valueOf(YPos), Integer.valueOf(DialogStep), Short.valueOf(CurTabIndex), Integer.valueOf(Width)
                 });
 
-        xSaveTextBox = CurUnoDialog.insertTextField("txtSavePath", "callXPathSelectionListener", this, new String[]
+        xSaveTextBox = CurUnoDialog.insertTextField("txtSavePath", new XTextListenerAdapter() {
+                    @Override
+                    public void textChanged(TextEvent arg0) {
+                        callXPathSelectionListener();
+                    }
+                },
+                new String[]
                 {
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
@@ -174,7 +182,7 @@ public class PathSelection
         }
     }
 
-    public void callXPathSelectionListener()
+    private void callXPathSelectionListener()
     {
         if (xAction != null)
         {

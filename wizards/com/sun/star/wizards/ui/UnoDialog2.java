@@ -27,6 +27,7 @@ import com.sun.star.awt.XProgressBar;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XScrollBar;
 import com.sun.star.awt.XTextComponent;
+import com.sun.star.awt.XTextListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -34,7 +35,6 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.ui.event.EventNames;
 
 /**
  * This class contains convenience methods for inserting components to a dialog.
@@ -115,9 +115,9 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(XControl.class, oTitledBox);
     }
 
-    public XTextComponent insertTextField(String sName, String sTextChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XTextComponent insertTextField(String sName, XTextListener textListener, String[] sPropNames, Object[] oPropValues)
     {
-        return (XTextComponent) insertEditField(sName, sTextChangedMethodName, eventTarget, "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues, XTextComponent.class);
+        return (XTextComponent) insertEditField(sName, textListener, "com.sun.star.awt.UnoControlEditModel", sPropNames, oPropValues, XTextComponent.class);
     }
 
     public XControl insertImage(String sName, String[] sPropNames, Object[] oPropValues)
@@ -144,13 +144,12 @@ public class UnoDialog2 extends UnoDialog
      * This method is used for creating Edit, Currency, Date, Formatted, Pattern, File
      * and Time edit components.
      */
-    private Object insertEditField(String sName, String sTextChangedMethodName, Object eventTarget, String sModelClass, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
+    private Object insertEditField(String sName, XTextListener textListener, String sModelClass, String[] sPropNames, Object[] oPropValues, Class<? extends XInterface> type)
     {
         XTextComponent xField = (XTextComponent) insertControlModel2(sModelClass, sName, sPropNames, oPropValues, XTextComponent.class);
-        if (sTextChangedMethodName != null)
+        if (textListener != null)
         {
-            xField.addTextListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.TEXT_CHANGED, sTextChangedMethodName, eventTarget);
+            xField.addTextListener(textListener);
         }
         return UnoRuntime.queryInterface(type, xField);
     }

@@ -55,7 +55,6 @@ public class UnoDialog
     public Resource m_oResource;
     public XWindowPeer xWindowPeer = null;
     private PeerConfig m_oPeerConfig;
-    protected final CommonListener guiEventListener = new CommonListener();
 
     public UnoDialog(XMultiServiceFactory xMSF)
     {
