@@ -164,7 +164,9 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount (void)
     sal_uInt32 result = 0;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    SAL_WARN_IF (g_command_args.m_nCount == 0, "sal.osl", "osl_setCommandArgs() not called before calling osl_getCommandArgCount()");
+    SAL_INFO_IF(
+        g_command_args.m_nCount == 0, "sal.osl",
+        "osl_getCommandArgCount w/o prior call to osl_setCommandArgs");
     if (g_command_args.m_nCount > 0)
         result = g_command_args.m_nCount - 1;
     pthread_mutex_unlock (&(g_command_args.m_mutex));
@@ -180,7 +182,7 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     oslProcessError result = osl_Process_E_NotFound;
 
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ASSERT(g_command_args.m_nCount > 0);
+    assert(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
         rtl_uString_assign (strCommandArg, g_command_args.m_ppArgs[nArg + 1]);
@@ -204,7 +206,7 @@ int SAL_CALL osl_areCommandArgsSet (void)
  **************************************/
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
-    OSL_ASSERT(argc > 0);
+    assert(argc > 0);
     pthread_mutex_lock (&(g_command_args.m_mutex));
     assert (g_command_args.m_nCount == 0);
     if (g_command_args.m_nCount == 0)
