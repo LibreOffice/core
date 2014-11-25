@@ -704,7 +704,7 @@ exec_javaldx (Args *args)
     rtl_uString_newFromAscii( &pApp, "file://" );
     rtl_uString_newConcat( &pApp, pApp, args->pAppPath );
     pTmp = NULL;
-    rtl_uString_newFromAscii( &pTmp, "../ure-link/bin/javaldx" );
+    rtl_uString_newFromAscii( &pTmp, "javaldx" );
     rtl_uString_newConcat( &pApp, pApp, pTmp );
     rtl_uString_release( pTmp );
 

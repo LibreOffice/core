@@ -74,7 +74,11 @@
     #define GID_BRAND_DIR_ETC gid_Brand_Dir_Program
     #define GID_DIR_PY gid_Brand_Dir_Program
     #define GID_DIR_URE gid_Dir_Common_Ure
+#if defined UNX
+    #define GID_DIR_URE_BIN gid_Brand_Dir_Program
+#else
     #define GID_DIR_URE_BIN gid_Dir_Ure_Bin
+#endif
     #define GID_DIR_URE_JAVA gid_Dir_Ure_Java
     #define GID_DIR_URE_LIB gid_Dir_Ure_Lib
     #define GID_DIR_URE_SHARE gid_Dir_Ure_Share

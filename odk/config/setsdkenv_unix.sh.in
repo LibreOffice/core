@@ -112,7 +112,7 @@ case ${sdk_platform} in
         OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/Resources/java
         ;;
     *)
-        OO_SDK_URE_BIN_DIR=${OO_SDK_URE_HOME}/bin
+        OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
         OO_SDK_URE_LIB_DIR=${OO_SDK_URE_HOME}/lib
         OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/share/java
         ;;

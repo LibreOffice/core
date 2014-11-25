@@ -103,7 +103,7 @@ endef
 
 gb_LinkTarget__RPATHS := \
 	URELIB:\dORIGIN \
-	UREBIN:\dORIGIN/../lib:\dORIGIN \
+	UREBIN:\dORIGIN/../ure-link/lib \
 	OOO:\dORIGIN:\dORIGIN/../ure-link/lib \
 	SDKBIN:\dORIGIN/../../ure-link/lib \
 	OXT: \

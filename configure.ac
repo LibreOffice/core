@@ -3056,7 +3056,7 @@ else
     LIBO_SHARE_PRESETS_FOLDER=presets
     LIBO_SHARE_RESOURCE_FOLDER=program/resource
     LIBO_SHARE_SHELL_FOLDER=program/shell
-    LIBO_URE_BIN_FOLDER=ure/bin
+    LIBO_URE_BIN_FOLDER=program
     LIBO_URE_ETC_FOLDER=ure/lib
     LIBO_URE_LIB_FOLDER=ure/lib
     LIBO_URE_SHARE_FOLDER=ure/share
