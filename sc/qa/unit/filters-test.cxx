@@ -80,7 +80,8 @@ public:
     void testEnhancedProtectionXLSX();
     void testSortWithSharedFormulasODS();
     void testSortWithSheetExternalReferencesODS();
-    void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocShRef, SCROW nRow1, SCROW nRow2 );
+    void testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocShRef, SCROW nRow1, SCROW nRow2,
+            bool bCheckRelativeInSheet );
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testCVEs);
@@ -619,20 +620,44 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS()
     sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn auto calc on.
     rDoc.CalcAll();
 
-    // The relative test only works with UpdateReferenceOnSort == true, set it
-    // now. We reset the value back to the original in tearDown()
+    // We reset the SortRefUpdate value back to the original in tearDown().
     ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+
+    // The complete relative test only works with UpdateReferenceOnSort==true,
+    // but the internal and external sheet references have to work in both
+    // modes.
+
     aInputOption.SetSortRefUpdate(true);
     SC_MOD()->SetInputOptions(aInputOption);
 
-    // Sort A15:D20 with relative row references.
-    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 14, 19);
+    // Sort A15:D20 with relative row references. UpdateReferenceOnSort==true
+    // With in-sheet relative references.
+    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 14, 19, true);
+
+    // Undo sort with relative references to perform same sort.
+    rDoc.GetUndoManager()->Undo();
+    rDoc.CalcAll();
+
+    aInputOption.SetSortRefUpdate(false);
+    SC_MOD()->SetInputOptions(aInputOption);
+
+    // Sort A15:D20 with relative row references. UpdateReferenceOnSort==false
+    // Without in-sheet relative references.
+    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 14, 19, false);
+
+    // Undo sort with relative references to perform new sort.
+    rDoc.GetUndoManager()->Undo();
+    rDoc.CalcAll();
 
     // Sort with absolute references has to work in both UpdateReferenceOnSort
     // modes.
 
+    aInputOption.SetSortRefUpdate(true);
+    SC_MOD()->SetInputOptions(aInputOption);
+
     // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==true
-    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 22, 27);
+    // With in-sheet relative references.
+    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 22, 27, true);
 
     // Undo sort with absolute references to perform same sort.
     rDoc.GetUndoManager()->Undo();
@@ -642,12 +667,14 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS()
     SC_MOD()->SetInputOptions(aInputOption);
 
     // Sort A23:D28 with absolute row references. UpdateReferenceOnSort==false
-    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 22, 27);
+    // With in-sheet relative references.
+    testSortWithSheetExternalReferencesODS_Impl( xDocSh, 22, 27, true);
 
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocSh, SCROW nRow1, SCROW nRow2 )
+void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef xDocSh, SCROW nRow1, SCROW nRow2,
+        bool bCheckRelativeInSheet )
 {
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -694,9 +721,11 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef x
         double aCheck[] = { 5, 4, 3, 2, 1 };
         CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(0,nRow,0)));
     }
+    // The last column (D) are in-sheet relative references.
+    SCCOL nEndCol = (bCheckRelativeInSheet ? 3 : 2);
     for (SCROW nRow=nRow1+1; nRow <= nRow2; ++nRow)
     {
-        for (SCCOL nCol=1; nCol <= 3; ++nCol)
+        for (SCCOL nCol=1; nCol <= nEndCol; ++nCol)
         {
             double aCheck[] = { 12345, 1234, 123, 12, 1 };
             CPPUNIT_ASSERT_EQUAL( aCheck[nRow-nRow1-1], rDoc.GetValue( ScAddress(nCol,nRow,0)));
