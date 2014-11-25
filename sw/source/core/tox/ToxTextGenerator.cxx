@@ -52,7 +52,7 @@ bool sortTabHasNoToxSourcesOrFirstToxSourceHasNoNode(const SwTOXSortTabBase& sor
     if (sortTab.aTOXSources.empty()) {
         return true;
     }
-    if (sortTab.aTOXSources.at(0).pNd != NULL) {
+    if (sortTab.aTOXSources.at(0).pNd == nullptr) {
         return true;
     }
     return false;
@@ -70,7 +70,7 @@ ToxTextGenerator::GetNumStringOfFirstNode( const SwTOXSortTabBase& rBase, bool b
     }
 
     OUString sRet;
-    if (!rBase.pTxtMark) { // only if it's not a Mark
+    if (rBase.pTxtMark) { // only if it's not a Mark
         return sRet;
     }
 
