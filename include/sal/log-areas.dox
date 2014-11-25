@@ -115,6 +115,7 @@ certain functionality.
 @li @c sc.core
 @li @c sc.filter - Calc filter
 @li @c sc.ui - Calc UI
+@li @c sc.units - Calc Unit-Verification
 
 @section desktop
 
