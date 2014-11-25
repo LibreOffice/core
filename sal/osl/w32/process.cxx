@@ -28,11 +28,14 @@
 #pragma warning(pop)
 #endif
 
+#include <cassert>
+
 #include <osl/diagnose.h>
 #include <osl/security.h>
 #include <osl/nlsupport.h>
 #include <osl/mutex.h>
 #include <osl/thread.h>
+#include <sal/log.hxx>
 
 #include "getexecutablefile.hxx"
 #include "procimpl.h"
@@ -268,7 +271,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
         int i;
         int nArgs;
         LPWSTR *wargv = CommandLineToArgvW( GetCommandLineW(), &nArgs );
-        OSL_ASSERT( nArgs == argc );
+        assert( nArgs == argc );
         for (i = 0; i < nArgs; i++)
         {
             /* Convert to unicode */
@@ -334,11 +337,9 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount(void)
     sal_uInt32 result = 0;
 
     osl_acquireMutex (*osl_getGlobalMutex());
-    if (g_command_args.m_nCount == 0) {
-        OSL_TRACE(
-            OSL_LOG_PREFIX
-            "osl_getCommandArgCount w/o prior call to osl_setCommandArgs");
-    }
+    SAL_INFO_IF(
+        g_command_args.m_nCount == 0, "sal.osl",
+        "osl_getCommandArgCount w/o prior call to osl_setCommandArgs");
     if (g_command_args.m_nCount > 0)
     {
         /* We're not counting argv[0] here. */
@@ -356,7 +357,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
     oslProcessError result = osl_Process_E_NotFound;
 
     osl_acquireMutex (*osl_getGlobalMutex());
-    OSL_ASSERT(g_command_args.m_nCount > 0);
+    assert(g_command_args.m_nCount > 0);
     if (g_command_args.m_nCount > (nArg + 1))
     {
         /* We're not counting argv[0] here. */
@@ -381,7 +382,7 @@ int SAL_CALL osl_areCommandArgsSet(void)
 
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
-    OSL_ASSERT(argc > 0);
+    assert(argc > 0);
     osl_acquireMutex (*osl_getGlobalMutex());
     if (g_command_args.m_nCount == 0)
     {
