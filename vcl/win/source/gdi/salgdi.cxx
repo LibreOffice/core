@@ -482,6 +482,7 @@ void WinSalGraphics::InitGraphics()
     ::SetTextAlign( getHDC(), TA_BASELINE | TA_LEFT | TA_NOUPDATECP );
     ::SetBkMode( getHDC(), WIN32_TRANSPARENT );
     ::SetROP2( getHDC(), R2_COPYPEN );
+
     mpImpl->Init();
 }
 
