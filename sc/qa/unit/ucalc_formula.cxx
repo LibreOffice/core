@@ -4248,6 +4248,35 @@ void Test::testFormulaDepTracking2()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaDepTracking3()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+
+    m_pDoc->InsertTab(0, "Formula");
+
+    const char* pData[][4] = {
+        { "1", "2", "=SUM(A1:B1)", "=SUM(C1:C3)" },
+        { "3", "4", "=SUM(A2:B2)", 0 },
+        { "5", "6", "=SUM(A3:B3)", 0 },
+    };
+
+    insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData), true);
+
+    // Check the initial formula results.
+    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL( 7.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(21.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+
+    // Change B3 and make sure the change gets propagated to D1.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    rFunc.SetValueCell(ScAddress(1,2,0), 60.0, false);
+    CPPUNIT_ASSERT_EQUAL(65.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+    CPPUNIT_ASSERT_EQUAL(75.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaDepTrackingDeleteRow()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.

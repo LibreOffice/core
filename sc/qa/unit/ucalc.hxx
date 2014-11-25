@@ -204,6 +204,8 @@ public:
      */
     void testFormulaDepTracking2();
 
+    void testFormulaDepTracking3();
+
     void testFormulaDepTrackingDeleteRow();
 
     void testFormulaDepTrackingDeleteCol();
@@ -491,6 +493,7 @@ public:
     CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFormulaDepTracking2);
+    CPPUNIT_TEST(testFormulaDepTracking3);
     CPPUNIT_TEST(testFormulaDepTrackingDeleteRow);
     CPPUNIT_TEST(testFormulaDepTrackingDeleteCol);
     CPPUNIT_TEST(testFormulaMatrixResultUpdate);
