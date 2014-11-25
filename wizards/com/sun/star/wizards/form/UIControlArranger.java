@@ -29,6 +29,7 @@ import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.ui.ButtonList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ListModel;
@@ -47,7 +48,6 @@ public class UIControlArranger
     private final Integer IControlStep;
     private static final int SOBASEIMAGEYPOSITION = 66;
     private static final int SOIMAGELISTHEIGHT = 60;
-    private static final String SOALIGNMETHOD = "alignLabelControls";
 
     public UIControlArranger(FormWizard _CurUnoDialog, FormDocument _curFormDocument)
     {
@@ -70,7 +70,12 @@ public class UIControlArranger
                     UIConsts.INTEGERS[8], sLabelPlacment, 97, 25, IControlStep, Short.valueOf(curtabindex++), 207
                 });
         // Radio Button "Align Left"
-        optAlignLeft = CurUnoDialog.insertRadioButton("optAlignLeft", SOALIGNMETHOD, this,
+        optAlignLeft = CurUnoDialog.insertRadioButton("optAlignLeft", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        alignLabelControls();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -80,7 +85,12 @@ public class UIControlArranger
                     UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, 107, 38, Short.valueOf((short) 1), IControlStep, Short.valueOf(curtabindex++), 171
                 });
         // Radio Button "Align Right"
-        optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", SOALIGNMETHOD, this,
+        optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        alignLabelControls();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -148,7 +158,7 @@ public class UIControlArranger
         return optAlignLeft.getState() ? (short)0 : (short)2;
     }
 
-    public void alignLabelControls()
+    private void alignLabelControls()
     {
         try
         {

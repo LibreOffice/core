@@ -17,15 +17,17 @@
  */
 package com.sun.star.wizards.form;
 
+import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
-import com.sun.star.wizards.ui.UIConsts;
-import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 public class DataEntrySetter
 {
@@ -46,7 +48,12 @@ public class DataEntrySetter
         String sNoAddition = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 49);     // AlowInserts
         String sdontdisplayExistingData = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 45);
 
-        CurUnoDialog.insertRadioButton("optNewDataOnly", "toggleCheckBoxes", this,
+        CurUnoDialog.insertRadioButton("optNewDataOnly", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleCheckBoxes();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -56,7 +63,12 @@ public class DataEntrySetter
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTNEWDATAONLY", sNewDataOnly, 98, 25, IDataStep, Short.valueOf(curtabindex++), 195
                 });
 
-        optDisplayAllData = CurUnoDialog.insertRadioButton("optDisplayAllData", "toggleCheckBoxes", this,
+        optDisplayAllData = CurUnoDialog.insertRadioButton("optDisplayAllData", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleCheckBoxes();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -125,7 +137,7 @@ public class DataEntrySetter
 
     }
 
-    public void toggleCheckBoxes()
+    private void toggleCheckBoxes()
     {
         boolean bdisplayalldata = optDisplayAllData.getState();
         Helper.setUnoPropertyValue(UnoDialog.getModel(chknomodification), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdisplayalldata));

@@ -37,6 +37,7 @@ import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.XFieldSelectionListener;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 /**
  * To change the template for this generated type comment go to
@@ -53,7 +54,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     private final TableDescriptor curtabledescriptor;
     private final CGCategory oCGCategory;
     protected CGTable oCGTable;
-    private static final String SELECTCATEGORY = "selectCategory";
     protected boolean bcolumnnameislimited;
     private final int imaxcolumnchars;
     private final String smytable;
@@ -100,7 +100,12 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     8, sCategories, 91, 60, IMAINSTEP, Short.valueOf(pretabindex++), 100
                 });
 
-        optBusiness = CurTableWizardUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
+        optBusiness = CurTableWizardUnoDialog.insertRadioButton("optBusiness", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        selectCategory();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -110,7 +115,12 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, 98, 70, Short.valueOf((short) 1), IMAINSTEP, Short.valueOf(pretabindex++), 78
                 });
 
-        CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
+        CurTableWizardUnoDialog.insertRadioButton("optPrivate", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        selectCategory();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -149,7 +159,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         initializeCategory(BUSINESS);
     }
 
-    public void selectCategory()
+    private void selectCategory()
     {
         if (optBusiness.getState())
         {

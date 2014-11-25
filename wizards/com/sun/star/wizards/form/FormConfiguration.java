@@ -48,7 +48,6 @@ public class FormConfiguration
     XListBox lstRelations;
     String[] sreferencedTables;
     CommandFieldSelection CurSubFormFieldSelection;
-    String STOGGLESTEPS = "toggleSteps";
     String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
     boolean bsupportsRelations;
     RelationController oRelationController = null;
@@ -79,7 +78,12 @@ public class FormConfiguration
                 {
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKCREATESUBFORM", sSelectManually, 97, 26, ISubFormStep, Short.valueOf(curtabindex++), 160
                 });
-        optOnExistingRelation = CurUnoDialog.insertRadioButton("optOnExistingRelation", STOGGLESTEPS, this,
+        optOnExistingRelation = CurUnoDialog.insertRadioButton("optOnExistingRelation", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleSteps();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -88,7 +92,12 @@ public class FormConfiguration
                 {
                     Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTONEXISTINGRELATION", sOnExistingRelation, 107, 43, ISubFormStep, Short.valueOf(curtabindex++), 160
                 });
-        optSelectManually = CurUnoDialog.insertRadioButton("optSelectManually", STOGGLESTEPS, this,
+        optSelectManually = CurUnoDialog.insertRadioButton("optSelectManually", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleSteps();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

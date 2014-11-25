@@ -40,7 +40,6 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
 {
 
     private final TableWizard CurUnoDialog;
-    private final static String SPRIMEKEYMODE = "togglePrimeKeyFields";
     private final XRadioButton optAddAutomatically;
     private final XRadioButton optUseExisting;
     private final XRadioButton optUseSeveral;
@@ -96,7 +95,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_CHK_USEPRIMEKEY", screatePrimaryKey, 97, 70, Short.valueOf((short) 1), IPRIMEKEYSTEP, Short.valueOf(curtabindex++), 160
                 });
 
-        optAddAutomatically = CurUnoDialog.insertRadioButton("optAddAutomatically", SPRIMEKEYMODE, this,
+        optAddAutomatically = CurUnoDialog.insertRadioButton("optAddAutomatically", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        togglePrimeKeyFields();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -106,7 +110,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_PK_AUTOMATIC", sAddAutomatically, 106, 82, Short.valueOf((short) 1), IPRIMEKEYSTEP, Short.valueOf(curtabindex++), 200
                 });
 
-        optUseExisting = CurUnoDialog.insertRadioButton("optUseExisting", SPRIMEKEYMODE, this,
+        optUseExisting = CurUnoDialog.insertRadioButton("optUseExisting", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        togglePrimeKeyFields();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -116,7 +125,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_PK_SINGLE", sUseExisting, 106, 104, IPRIMEKEYSTEP, Short.valueOf(curtabindex++), 200
                 });
 
-        optUseSeveral = CurUnoDialog.insertRadioButton("optUseSeveral", SPRIMEKEYMODE, this,
+        optUseSeveral = CurUnoDialog.insertRadioButton("optUseSeveral", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        togglePrimeKeyFields();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

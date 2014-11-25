@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.form;
 
+import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.XPropertySet;
@@ -39,6 +40,7 @@ import com.sun.star.wizards.document.GridControl;
 import com.sun.star.wizards.document.TimeStampControl;
 import com.sun.star.wizards.text.TextStyleHandler;
 import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 public class StyleApplier
 {
@@ -51,7 +53,6 @@ public class StyleApplier
     private final FormDocument curFormDocument;
     private short iOldLayoutPos;
     private static final String SCHANGELAYOUT = "changeLayout";
-    private static final String SCHANGEBORDERTYPE = "changeBorderLayouts";
     private String[] StyleNames;
     private String[] FileNames;
     private final static int SOBACKGROUNDCOLOR = 0;
@@ -101,7 +102,12 @@ public class StyleApplier
                         143, "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", 92, 35, SelLayoutPos, IStyleStep, this.StyleNames, Short.valueOf(curtabindex++), 90
                     });
 
-            optNoBorder = CurUnoDialog.insertRadioButton("otpNoBorder", SCHANGEBORDERTYPE, this,
+            optNoBorder = CurUnoDialog.insertRadioButton("otpNoBorder", new XItemListenerAdapter() {
+                        @Override
+                        public void itemStateChanged(ItemEvent event) {
+                            changeBorderLayouts();
+                        }
+                    },
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
@@ -111,7 +117,12 @@ public class StyleApplier
                         UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, 196, 39, IStyleStep, Short.valueOf(curtabindex++), "0", 93
                     });
 
-            opt3DLook = CurUnoDialog.insertRadioButton("otp3DLook", SCHANGEBORDERTYPE, this,
+            opt3DLook = CurUnoDialog.insertRadioButton("otp3DLook", new XItemListenerAdapter() {
+                        @Override
+                        public void itemStateChanged(ItemEvent event) {
+                            changeBorderLayouts();
+                        }
+                    },
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
@@ -121,7 +132,12 @@ public class StyleApplier
                         UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, Short.valueOf((short) 1), IStyleStep, Short.valueOf(curtabindex++), "1", 93
                     });
 
-            CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
+            CurUnoDialog.insertRadioButton("otpFlat", new XItemListenerAdapter() {
+                        @Override
+                        public void itemStateChanged(ItemEvent event) {
+                            changeBorderLayouts();
+                        }
+                    },
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
@@ -214,7 +230,7 @@ public class StyleApplier
         return IBorderValue;
     }
 
-    public void changeBorderLayouts()
+    private void changeBorderLayouts()
     {
         try
         {

@@ -106,20 +106,14 @@ public class UnoDialog2 extends UnoDialog
         return insertListBox(sName, actionPerformed, itemChanged, this, sPropNames, oPropValues);
     }
 
-    public XRadioButton insertRadioButton(String sName, String itemChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XRadioButton insertRadioButton(String sName, XItemListener itemListener, String[] sPropNames, Object[] oPropValues)
     {
         XRadioButton xRadioButton = (XRadioButton) insertControlModel2("com.sun.star.awt.UnoControlRadioButtonModel", sName, sPropNames, oPropValues, XRadioButton.class);
-        if (itemChangedMethodName != null)
+        if (itemListener != null)
         {
-            xRadioButton.addItemListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChangedMethodName, eventTarget);
+            xRadioButton.addItemListener(itemListener);
         }
         return xRadioButton;
-    }
-
-    public XRadioButton insertRadioButton(String sName, String itemChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertRadioButton(sName, itemChanged, this, sPropNames, oPropValues);
     }
 
     public XControl insertTitledBox(String sName, String[] sPropNames, Object[] oPropValues)

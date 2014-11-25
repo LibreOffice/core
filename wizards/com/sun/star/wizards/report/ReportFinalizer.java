@@ -19,10 +19,13 @@ package com.sun.star.wizards.report;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.ui.event.XItemListenerAdapter;
+import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.db.RecordParser;
+
 public class ReportFinalizer
 {
 
@@ -31,7 +34,6 @@ public class ReportFinalizer
     XTextComponent[] xSaveTextBox = new XTextComponent[2];
     Object chkTemplate;
     String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
-    String TOGGLESUBTEMPLATECONTROLS_FUNCNAME = "toggleSubTemplateControls";
     String TemplatePath;
     String StoreName;
     boolean bfinalaskbeforeOverwrite;
@@ -88,7 +90,12 @@ public class ReportFinalizer
                     8, slblChooseReportKind, 95, 57, Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 209
                 });
 
-        CurUnoDialog.insertRadioButton("optCreateDocument", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
+        CurUnoDialog.insertRadioButton("optCreateDocument", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleSubTemplateControls();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -98,7 +105,12 @@ public class ReportFinalizer
                     10, "HID:WIZARDS_HID_DLGREPORT_5_OPTSTATDOCUMENT", sSaveAsDocument, 95, 69, Short.valueOf((short) 0), Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 138
                 });
 
-        CurUnoDialog.insertRadioButton("optCreateReportTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
+        CurUnoDialog.insertRadioButton("optCreateReportTemplate", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleSubTemplateControls();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -120,7 +132,12 @@ public class ReportFinalizer
                 });
 
 
-        CurUnoDialog.insertRadioButton("optEditTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
+        CurUnoDialog.insertRadioButton("optEditTemplate", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleSubTemplateControls();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -130,7 +147,12 @@ public class ReportFinalizer
                     10, "HID:WIZARDS_HID_DLGREPORT_5_OPTEDITTEMPLATE", sEditTemplate, 111, 105, 6, Short.valueOf(curtabindex++), 138
                 });
 
-        CurUnoDialog.insertRadioButton("optUseTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
+        CurUnoDialog.insertRadioButton("optUseTemplate", new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        toggleSubTemplateControls();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -142,10 +164,10 @@ public class ReportFinalizer
     }
 
 
-    /*
+    /**
      * This function is called if one of the radio buttons is pressed
      */
-    public void toggleSubTemplateControls()
+    private void toggleSubTemplateControls()
     {
         // String sStorePath = PropertyNames.EMPTY_STRING;
         Short iState = (Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", PropertyNames.PROPERTY_STATE);
