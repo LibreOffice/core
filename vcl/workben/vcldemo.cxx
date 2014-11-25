@@ -33,8 +33,23 @@
 
 #include <vcldemo-debug.hxx>
 
+#include <rtl/math.hxx>
+
 #define FIXME_SELF_INTERSECTING_WORKING 0
 #define FIXME_BOUNCE_BUTTON 0
+
+using namespace com::sun::star;
+
+namespace {
+    double getTimeNow()
+    {
+        TimeValue aValue;
+        osl_getSystemTime(&aValue);
+        return (double)aValue.Seconds * 1000 +
+            (double)aValue.Nanosec / (1000*1000);
+    }
+
+}
 
 using namespace css;
 
@@ -69,10 +84,14 @@ class DemoRenderer
             { return OUString(SAL_STRINGIFY(name)); } \
         virtual sal_uInt16 getAccelerator() SAL_OVERRIDE \
             { return key; }
+
+        double sumTime = 0;
+        int countTime = 0;
     };
 
     std::vector< RegionRenderer * > maRenderers;
     sal_Int32  mnSelectedRenderer;
+    sal_Int32  iterCount = 0;
 
     void     InitRenderers();
 
@@ -97,7 +116,12 @@ public:
     }
 
     OUString getRendererList();
+    double   getAndResetBenchmark(const char * st);
     void     selectRenderer(const OUString &rName);
+    int      selectNextRenderer();
+    void     setIterCount(sal_Int32 iterCount);
+    sal_Int32 getIterCount();
+    void     addTime(int i, double t);
 
     Size maSize;
     void SetSizePixel(const Size &rSize) { maSize = rSize; }
@@ -883,10 +907,10 @@ public:
     void drawToDevice(OutputDevice &rDev, Size aSize, bool bVDev)
     {
         RenderContext aCtx;
+        double mnStartTime;
         aCtx.mbVDev = bVDev;
         aCtx.mpDemoRenderer = this;
         aCtx.maSize = aSize;
-
         Rectangle aWholeWin(Point(0,0), rDev.GetOutputSizePixel());
 
         drawBackground(rDev, aWholeWin);
@@ -895,7 +919,9 @@ public:
             mnSelectedRenderer >= 0)
         {
             aCtx.meStyle = RENDER_EXPANDED;
+            mnStartTime = getTimeNow();
             maRenderers[mnSelectedRenderer]->RenderRegion(rDev, aWholeWin, aCtx);
+            addTime(mnSelectedRenderer, getTimeNow() - mnStartTime);
         }
         else
         {
@@ -903,7 +929,11 @@ public:
             std::vector<Rectangle> aRegions(partition(aSize, mnSegmentsX, mnSegmentsY));
             DemoRenderer::clearRects(rDev, aRegions);
             for (size_t i = 0; i < maRenderers.size(); i++)
+            {
+                mnStartTime = getTimeNow();
                 maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
+                if (!bVDev) addTime(i, getTimeNow() - mnStartTime);
+            }
         }
     }
     std::vector<vcl::Window *> maInvalidates;
@@ -1055,6 +1085,41 @@ OUString DemoRenderer::getRendererList()
     return aBuf.makeStringAndClear();
 }
 
+double DemoRenderer::getAndResetBenchmark(const char * st)
+{
+    double geomean = 1.0;
+    fprintf(stderr, "Rendering: %s, Times (ms):\n", st);
+    for (size_t i = 0; i < maRenderers.size(); i++)
+    {
+        double avgtime = maRenderers[i]->sumTime / maRenderers[i]->countTime;
+        geomean *= avgtime;
+        fprintf(stderr, "%s: %f (IterCount: %d)\n",
+                rtl::OUStringToOString(maRenderers[i]->getName(),
+                RTL_TEXTENCODING_UTF8).getStr(), avgtime, maRenderers[i]->countTime);
+        maRenderers[i]->sumTime = 0;
+        maRenderers[i]->countTime = 0;
+    }
+    geomean = pow(geomean, static_cast<double>(1.0)/maRenderers.size());
+    fprintf(stderr, "GEOMEAN_%s: %f\n", st, geomean);
+    return geomean;
+}
+
+void DemoRenderer::setIterCount(sal_Int32 i)
+{
+    iterCount = i;
+}
+
+sal_Int32 DemoRenderer::getIterCount()
+{
+    return iterCount;
+}
+
+void DemoRenderer::addTime(int i, double t)
+{
+    maRenderers[i]->sumTime += t;
+    maRenderers[i]->countTime++;
+}
+
 void DemoRenderer::selectRenderer(const OUString &rName)
 {
     for (size_t i = 0; i < maRenderers.size(); i++)
@@ -1066,6 +1131,15 @@ void DemoRenderer::selectRenderer(const OUString &rName)
             return;
         }
     }
+}
+
+int DemoRenderer::selectNextRenderer()
+{
+    mnSelectedRenderer++;
+    if (mnSelectedRenderer == (signed) maRenderers.size())
+        mnSelectedRenderer = -1;
+    Invalidate();
+    return mnSelectedRenderer;
 }
 
 class DemoWin : public WorkWindow
@@ -1101,7 +1175,27 @@ public:
     {
         mrRenderer.SetSizePixel(GetSizePixel());
         fprintf(stderr, "DemoWin::Paint(%ld,%ld,%ld,%ld)\n", rRect.getX(), rRect.getY(), rRect.getWidth(), rRect.getHeight());
-        mrRenderer.drawToDevice(*this, GetSizePixel(), false);
+        if (mrRenderer.getIterCount() == 0)
+            mrRenderer.drawToDevice(*this, GetSizePixel(), false);
+        else
+            TestAndQuit();
+    }
+
+    virtual void TestAndQuit()
+    {
+        for (sal_Int32 i = 0; i < mrRenderer.getIterCount(); i++)
+            while (mrRenderer.selectNextRenderer() > -1)
+                mrRenderer.drawToDevice(*this, GetSizePixel(), false);
+
+        double expandedGEOMEAN = mrRenderer.getAndResetBenchmark("EXPANDED");
+
+        for (sal_Int32 i = 0; i < mrRenderer.getIterCount(); i++)
+            mrRenderer.drawToDevice(*this, GetSizePixel(), false);
+
+        double thumbGEOMEAN = mrRenderer.getAndResetBenchmark("THUMB");
+
+        fprintf(stderr, "GEOMEAN_TOTAL: %f\n", pow(thumbGEOMEAN * expandedGEOMEAN, static_cast<double>(0.5)));
+        Application::Quit();
     }
 };
 
@@ -1111,11 +1205,12 @@ class DemoApp : public Application
     int showHelp(DemoRenderer &rRenderer)
     {
         fprintf(stderr,"vcldemo - a VCL test app\n");
-        fprintf(stderr,"  --help            - print this text\n");
-        fprintf(stderr,"  --show <renderer> - start with a given renderer, options are:\n");
+        fprintf(stderr,"  --help             - print this text\n");
+        fprintf(stderr,"  --show <renderer>  - start with a given renderer, options are:\n");
         OUString aRenderers(rRenderer.getRendererList());
-        fprintf(stderr,"         %s\n\n",
+        fprintf(stderr,"         %s\n",
                 rtl::OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
+        fprintf(stderr,"  --test <iterCount> - create benchmark data\n\n");
         return 0;
     }
 
@@ -1140,6 +1235,13 @@ public:
                         return showHelp(aRenderer);
                     else
                         aRenderer.selectRenderer(GetCommandLineParam(++i));
+                }
+                if (aArg == "--test")
+                {
+                    if (bLast)
+                        return showHelp(aRenderer);
+                    else
+                        aRenderer.setIterCount(GetCommandLineParam(++i).toInt32());
                 }
             }
 
