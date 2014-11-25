@@ -57,15 +57,22 @@ static OString ImplGetDialogText( Dialog* pDialog )
 {
     OStringBuffer aErrorStr(OUStringToOString(
         pDialog->GetText(), RTL_TEXTENCODING_UTF8));
-    if ( (pDialog->GetType() == WINDOW_MESSBOX) ||
-         (pDialog->GetType() == WINDOW_INFOBOX) ||
-         (pDialog->GetType() == WINDOW_WARNINGBOX) ||
-         (pDialog->GetType() == WINDOW_ERRORBOX) ||
-         (pDialog->GetType() == WINDOW_QUERYBOX) )
+
+    OUString sMessage;
+    if (MessBox* pMessBox = dynamic_cast<MessBox*>(pDialog))
+    {
+        sMessage = pMessBox->GetMessText();
+    }
+    else if (MessageDialog* pMessDialog = dynamic_cast<MessageDialog*>(pDialog))
+    {
+        sMessage = pMessDialog->get_primary_text();
+    }
+
+    if (!sMessage.isEmpty())
     {
         aErrorStr.append(", ");
         aErrorStr.append(OUStringToOString(
-            static_cast<MessBox*>(pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8));
+            sMessage, RTL_TEXTENCODING_UTF8));
     }
     return aErrorStr.makeStringAndClear();
 }
