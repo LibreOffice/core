@@ -20,8 +20,6 @@
 
 #include <txtlists.hxx>
 #include <comphelper/random.hxx>
-#include <tools/debug.hxx>
-#include <osl/diagnose.h>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
@@ -95,8 +93,7 @@ void XMLTextListsHelper::PushListContext(
 
 void XMLTextListsHelper::PopListContext()
 {
-    OSL_ENSURE(mListStack.size(),
-        "internal error: PopListContext: mListStack empty");
+    assert(mListStack.size());
 //    fprintf(stderr, "PopListContext\n");
     if ( !mListStack.empty())
         mListStack.pop();
@@ -121,11 +118,10 @@ void XMLTextListsHelper::SetListItem( XMLTextListItemContext *i_pListItem )
 {
     // may be cleared by ListBlockContext for upper list...
     if (i_pListItem) {
-        OSL_ENSURE(mListStack.size(),
-            "internal error: SetListItem: mListStack empty");
-        OSL_ENSURE(mListStack.top().get<0>(),
+        assert(mListStack.size());
+        assert(mListStack.top().get<0>() &&
             "internal error: SetListItem: mListStack has no ListBlock");
-        OSL_ENSURE(!mListStack.top().get<1>(),
+        assert(!mListStack.top().get<1>() &&
             "error: SetListItem: list item already exists");
     }
     if ( !mListStack.empty() ) {
@@ -141,7 +137,7 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
 {
     if ( IsListProcessed( sListId ) )
     {
-        DBG_ASSERT( false,
+        assert(false &&
                     "<XMLTextListsHelper::KeepListAsProcessed(..)> - list id already added" );
         return;
     }
@@ -345,13 +341,13 @@ XMLTextListsHelper::GetNumberedParagraphListId(
     const OUString& i_StyleName)
 {
     if (i_StyleName.isEmpty()) {
-        OSL_FAIL("invalid numbered-paragraph: no style-name");
+        SAL_INFO("xmloff.text", "invalid numbered-paragraph: no style-name");
     }
     if (!i_StyleName.isEmpty()
         && (i_Level < mLastNumberedParagraphs.size())
         && (mLastNumberedParagraphs[i_Level].first == i_StyleName) )
     {
-        OSL_ENSURE(!mLastNumberedParagraphs[i_Level].second.isEmpty(),
+        assert(!mLastNumberedParagraphs[i_Level].second.isEmpty() &&
             "internal error: numbered-paragraph style-name but no list-id?");
         return mLastNumberedParagraphs[i_Level].second;
     } else {
@@ -363,7 +359,7 @@ static void
 ClampLevel(uno::Reference<container::XIndexReplace> const& i_xNumRules,
     sal_Int16 & io_rLevel)
 {
-    OSL_ENSURE(i_xNumRules.is(), "internal error: ClampLevel: NumRules null");
+    assert(i_xNumRules.is());
     if (i_xNumRules.is()) {
         const sal_Int32 nLevelCount( i_xNumRules->getCount() );
         if ( io_rLevel >= nLevelCount ) {
@@ -378,8 +374,8 @@ XMLTextListsHelper::EnsureNumberedParagraph(
     const OUString& i_ListId,
     sal_Int16 & io_rLevel, const OUString& i_StyleName)
 {
-    OSL_ENSURE(!i_ListId.isEmpty(), "invalid ListId");
-    OSL_ENSURE(io_rLevel >= 0, "invalid Level");
+    assert(!i_ListId.isEmpty());
+    assert(io_rLevel >= 0);
     NumParaList_t & rNPList( mNPLists[i_ListId] );
     const OUString none; // default
     if ( rNPList.empty() ) {
@@ -488,7 +484,7 @@ XMLTextListsHelper::MakeNumRule(
 
         xNumRules =
             SvxXMLListStyleContext::CreateNumRule( i_rImport.GetModel() );
-        DBG_ASSERT( xNumRules.is(), "got no numbering rule" );
+        assert(xNumRules.is());
         if ( !xNumRules.is() )
             return xNumRules;
 
