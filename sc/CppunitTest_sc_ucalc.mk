@@ -31,6 +31,7 @@ endif
 
 $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	boost_headers \
+    $(call gb_Helper_optional,CLCC,clew) \
     icu_headers \
     icui18n \
     icuuc \
@@ -104,13 +105,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     unoxml/source/service/unoxml \
     uui/util/uui \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_CppunitTest_add_libs,sc_ucalc,\
-    -ldl \
-	-lrt \
-))
-endif
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_ucalc))
 

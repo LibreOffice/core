@@ -1,0 +1,52 @@
+--- src/clew.h
++++ src/clew.h
+@@ -1141,25 +1141,28 @@
+ // calling the returned function address.
+ //
+ typedef CL_API_ENTRY void * (CL_API_CALL * PFNCLGETEXTENSIONFUNCTIONADDRESS)(const char * /* func_name */) CL_API_SUFFIX__VERSION_1_0;
+-
+-
+-#define CLEW_STATIC
+ 
+ #ifdef CLEW_STATIC
+ #  define CLEWAPI extern
+ #else
+ #  ifdef CLEW_BUILD
+-#    define CLEWAPI extern __declspec(dllexport)
++#    if defined(_WIN32)
++#      define CLEWAPI extern __declspec(dllexport)
++#    elif defined(HAVE_GCC_VISIBILITY_FEATURE)
++#      define CLEWAPI extern __attribute__ ((visibility("default")))
++#    else
++#      define CLEWAPI extern
++#    endif
+ #  else
+-#    define CLEWAPI extern __declspec(dllimport)
++#    if defined(_WIN32)
++#      define CLEWAPI extern __declspec(dllimport)
++#    else
++#      define CLEWAPI extern
++#    endif
+ #  endif
+ #endif
+ 
+-#if defined(_WIN32)
+-#define CLEW_FUN_EXPORT extern
+-#else
+ #define CLEW_FUN_EXPORT CLEWAPI
+-#endif
+ 
+ #define CLEW_GET_FUN(x) x
+ 
+@@ -1305,9 +1305,9 @@
+ #define CLEW_ERROR_IMPORT_FAILED    -3      //!<    Error code for failing to import a named function from the dll
+ 
+ //! \brief Load OpenCL dynamic library and set function entry points
+-int         clewInit        (const char*);
++CLEW_FUN_EXPORT int         clewInit        (const char*);
+ //! \brief Convert an OpenCL error code to its string equivalent
+-const char* clewErrorString (cl_int error);
++CLEW_FUN_EXPORT const char* clewErrorString (cl_int error);
+ 
+ #ifdef __cplusplus
+ }

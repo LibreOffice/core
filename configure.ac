@@ -10264,6 +10264,7 @@ dnl =================================================
 ENABLE_OPENCL=
 if test $_os != iOS -a $_os != Android; then
     ENABLE_OPENCL=TRUE
+    BUILD_TYPE="$BUILD_TYPE CLCC"
     AC_DEFINE(HAVE_FEATURE_OPENCL)
 fi
 AC_SUBST(ENABLE_OPENCL)
