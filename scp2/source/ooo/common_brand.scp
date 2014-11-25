@@ -1151,18 +1151,6 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
 #endif
 End
 
-ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Lib_Dir
-    ModuleID = gid_Module_Root_Brand;
-    ProfileID = gid_Brand_Profile_Fundamental_Ini;
-    Section = "Bootstrap";
-    Key = "URE_LIB_DIR";
-#if defined WNT
-    Value = "${.link:${BRAND_BASE_DIR}/ure-link}/bin";
-#else
-    Value = "${BRAND_BASE_DIR}/ure-link/lib";
-#endif
-End
-
 ProfileItem gid_Brand_Profileitem_Fundamental_Configuration_Layers
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     ModuleID = gid_Module_Root_Brand;

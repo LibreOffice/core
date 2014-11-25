@@ -157,7 +157,6 @@ copy-stuff:
 # Set up fundamentalrc
 	echo '[Bootstrap]' > assets/program/fundamentalrc
 	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/fundamentalrc
-	echo 'URE_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/fundamentalrc # checkme - is this used to find configs ?
 	echo 'BRAND_BASE_DIR=file:///assets' >> assets/program/fundamentalrc
 	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/share/registry' >> assets/program/fundamentalrc
 	echo 'URE_BIN_DIR=file:///assets/ure/bin/dir/nothing-here/we-can/exec-anyway' >> assets/program/fundamentalrc
