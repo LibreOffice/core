@@ -395,7 +395,7 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     aPosAry.mnSrcWidth = aPosAry.mnDestWidth = GetWidth();
     aPosAry.mnSrcHeight = aPosAry.mnDestHeight = GetHeight();
 
-    // TODO: lfrb: User GL_ARB_copy_image?
+    // TODO: improve performance: lfrb: User GL_ARB_copy_image?
     OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aNewTex.Id(), 0 );
     glViewport( 0, 0, GetWidth(), GetHeight() );
@@ -1374,7 +1374,7 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
 
     if( mnLineColor != SALCOLOR_NONE )
     {
-        // TODO Use glMultiDrawElements or primitive restart
+        // TODO performance: Use glMultiDrawElements or primitive restart
         BeginSolid( mnLineColor );
         for( sal_uInt32 i = 0; i < nPoly; i++ )
             DrawLines( pPoints[i], pPtAry[i], true );
@@ -1567,7 +1567,8 @@ void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGrap
     }
 
     SAL_WARN( "vcl.opengl", "*** NOT IMPLEMENTED *** copyBits" );
-    // TODO Copy from one FBO to the other (glBlitFramebuffer)
+    // TODO: Copy from one FBO to the other (glBlitFramebuffer)
+    //       ie. copying from one visible window to another visible window
 }
 
 void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
