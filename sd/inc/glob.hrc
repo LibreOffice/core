@@ -42,12 +42,8 @@
 #define BMP_PRESOBJ_CHART                       RID_GLOB_START+16
 #define BMP_PRESOBJ_ORGCHART                    RID_GLOB_START+17
 #define BMP_PRESOBJ_TABLE                       RID_GLOB_START+18
-#define STR_OUTLINEVIEWSHELL                    RID_GLOB_START+21
-#define STR_DRAWVIEWSHELL                       RID_GLOB_START+22
-#define STR_TEXTOBJECTBARSHELL                  RID_GLOB_START+23
 #define STR_STDOBJECTBARSHELL                   RID_GLOB_START+24
-#define STR_BEZIEROBJECTBARSHELL                RID_GLOB_START+25
-#define RID_SD_NAME                             RID_GLOB_START+26
+
 #define STR_LAYOUT_TITLE                        RID_GLOB_START+27
 #define STR_LAYOUT_OUTLINE                      RID_GLOB_START+28
 #define STR_LAYOUT_BACKGROUNDOBJECTS            RID_GLOB_START+29
@@ -109,24 +105,22 @@
 #define STR_EMPTY_STYLESHEET_NAME               RID_GLOB_START+91
 #define STR_LAYER_MEASURELINES                  RID_GLOB_START+92
 #define STR_LAYOUT_DEFAULT_TITLE_NAME           RID_GLOB_START+93
-#define STR_GRAFOBJECTBARSHELL                  RID_GLOB_START+94
+
 #define STR_POWERPOINT_IMPORT                   RID_GLOB_START+95
-#define STR_PRESVIEWSHELL                       RID_GLOB_START+98
 #define STR_LOAD_DOC                            RID_GLOB_START+99
 #define STR_SAVE_DOC                            RID_GLOB_START+100
 #define STR_PREVIEWVIEWSHELL                    RID_GLOB_START+101
 #define RID_SD_ERRHDL                           RID_GLOB_START+102
 #define STR_3DOBJECTBARSHELL                    RID_GLOB_START+104
 #define STR_FONTWORKOBJECTBARSHELL              RID_GLOB_START+105
-#define STR_SLIDESORTERVIEWSHELL                RID_GLOB_START+106
+
 #define STR_SIDEBARVIEWSHELL                    RID_GLOB_START+107
 #define STR_MASTERPAGESSELECTOR                 RID_GLOB_START+108
 #define STR_SIDEBAR_LAYOUTMENU                  RID_GLOB_START+109
-#define STR_MEDIAOBJECTBARSHELL                 RID_GLOB_START+110
+
 #define STR_PAGE_NAME                           RID_GLOB_START+111
 #define STR_SLIDE_NAME                          RID_GLOB_START+112
-#define STR_LEFT_IMPRESS_PANE_SHELL             RID_GLOB_START+113
-#define STR_LEFT_DRAW_PANE_SHELL                RID_GLOB_START+114
+
 #define STR_ENTER_PIN                           RID_GLOB_START+115
 #define STR_TOOL_PANEL_SHELL                    RID_GLOB_START+116
 
@@ -142,7 +136,7 @@
 #define RID_SLIDESHOW_CONTEXTMENU               RID_GLOB_START+223
 
 #define DLG_TABLEDESIGNPANE                     RID_GLOB_START+224
-#define STR_TABLEOBJECTBARSHELL                 RID_GLOB_START+225
+
 #define RID_TABPAGE_PARA_NUMBERING              RID_GLOB_START+226
 #define STR_CUSTOMANIMATIONPANE                 RID_GLOB_START+227
 #define STR_SLIDE_TRANSITION_PANE               RID_GLOB_START+228

@@ -70,10 +70,6 @@ Resource RID_RSC_TABWIN_PREFIX
         Text [ en-US ] = "SQL";
     };
 };
-String RID_STR_FORMSHELL
-{
-    Text = "Form Shell";
-};
 String RID_STR_STDFORMNAME
 {
     Text [ en-US ]= "Form";

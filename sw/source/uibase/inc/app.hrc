@@ -25,9 +25,6 @@
 #define STR_CANTCREATE                  (RC_APP_BEGIN + 4)
 #define STR_CANTOPEN                    (RC_APP_BEGIN + 5)
 
-// For the interface because the RID_APP_BEGIN is now Desktop.
-#define RID_SW_NAME                     ( RC_APP_BEGIN + 8)
-
 #define STR_UNBENANNT                   (RC_APP_BEGIN + 13)
 #define STR_VERSION                     (RC_APP_BEGIN + 14)
 #define STR_PRINT_MERGE_MACRO           (RC_APP_BEGIN + 15)

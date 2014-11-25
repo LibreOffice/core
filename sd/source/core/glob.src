@@ -151,37 +151,13 @@ String STR_PRESOBJ_TABLE
 {
     Text [ en-US ] = "Double-click to add a Spreadsheet" ;
 };
-String STR_OUTLINEVIEWSHELL
-{
-    Text [ en-US ] = "Outline View" ;
-};
-String STR_DRAWVIEWSHELL
-{
-    Text [ en-US ] = "Drawing View" ;
-};
-String STR_PRESVIEWSHELL
-{
-    Text [ en-US ] = "Presentation mode" ;
-};
 String STR_PREVIEWVIEWSHELL
 {
     Text [ en-US ] = "Preview Window";
 };
-String STR_TEXTOBJECTBARSHELL
-{
-    Text [ en-US ] = "Text Mode" ;
-};
 String STR_STDOBJECTBARSHELL
 {
     Text [ en-US ] = "Document Mode" ;
-};
-String STR_BEZIEROBJECTBARSHELL
-{
-    Text [ en-US ] = "Bézier mode" ;
-};
-String RID_SD_NAME
-{
-    Text [ en-US ] = "%PRODUCTNAME Impress" ;
 };
 String STR_GLUEPOINTSOBJECTBARSHELL
 {
@@ -326,39 +302,10 @@ String STR_PSEUDOSHEET_NOTES
 {
     Text [ en-US ] = "Notes" ;
 };
-String STR_GRAFOBJECTBARSHELL
-{
-    Text [ en-US ] = "Graphics mode" ;
-};
-
-String STR_MEDIAOBJECTBARSHELL
-{
-    Text [ en-US ] = "Media Playback" ;
-};
-
-String STR_TABLEOBJECTBARSHELL
-{
-    Text [ en-US ] = "Table" ;
-};
-
-String STR_SLIDESORTERVIEWSHELL
-{
-    Text [ en-US ] = "Slide Sorter" ;
-};
 
 String STR_TOOL_PANEL_SHELL
 {
     Text [ en-US ] = "Tool Panel" ;
-};
-
-String STR_LEFT_IMPRESS_PANE_SHELL
-{
-    Text [ en-US ] = "Slides" ;
-};
-
-String STR_LEFT_DRAW_PANE_SHELL
-{
-    Text [ en-US ] = "Pages" ;
 };
 
 String STR_TASKPANEVIEWSHELL

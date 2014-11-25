@@ -755,13 +755,8 @@
 #define SCSTR_APDTABLE          (STR_START + 27)
 #define SCSTR_RENAMETAB         (STR_START + 28)
 #define STR_INSERTGRAPHIC       (STR_START + 29)
-#define SCSTR_DOCSHELL          (STR_START + 32)
-#define SCSTR_TABVIEWSHELL      (STR_START + 33)
-#define SCSTR_EDITSHELL         (STR_START + 34)
-#define SCSTR_DRAWSHELL         (STR_START + 35)
-#define SCSTR_DRAWTEXTSHELL     (STR_START + 36)
+
 #define SCSTR_NEWTABLE          (STR_START + 37)
-#define SCSTR_PREVIEWSHELL      (STR_START + 38)
 
 #define SCSTR_PROTECTDOC        (STR_START + 39)
 #define SCSTR_UNPROTECTDOC      (STR_START + 40)
@@ -771,7 +766,6 @@
 #define SCSTR_PASSWORDOPT       (STR_START + 44)
 #define SCSTR_WRONGPASSWORD     (STR_START + 45)
 
-#define SCSTR_PIVOTSHELL        (STR_START + 46)
 #define SCSTR_END               (STR_START + 47)
 #define SCSTR_STAT_PRINT        (STR_START + 48)
 
@@ -787,8 +781,6 @@
 #define SCSTR_CFG_SPELLCHECK    (STR_START + 56)
 #define SCSTR_CFG_PRINT         (STR_START + 57)
 
-#define SCSTR_AUDITSHELL        (STR_START + 58)
-
 #define SCSTR_CHARSET_USER      (STR_START + 59)
 #define SCSTR_COLUMN_USER       (STR_START + 60)
 #define SCSTR_FIELDSEP          (STR_START + 61)
@@ -800,14 +792,6 @@
 #define SCSTR_TOP10FILTER       (STR_START + 66)
 
 #define SCSTR_CFG_NAVIPI        (STR_START + 67)
-
-#define SCSTR_DRAWFORMSHELL     (STR_START + 70)
-#define SCSTR_CELLSHELL         (STR_START + 71)
-#define SCSTR_FORMATSHELL       (STR_START + 72)
-#define SCSTR_OLEOBJECTSHELL    (STR_START + 73)
-#define SCSTR_CHARTSHELL        (STR_START + 74)
-#define SCSTR_GRAPHICSHELL      (STR_START + 75)
-#define SCSTR_PAGEBREAKSHELL    (STR_START + 76)
 
 #define SCSTR_GRFILTER_OPENERROR     (STR_START + 77)
 #define SCSTR_GRFILTER_IOERROR       (STR_START + 78)
@@ -1006,8 +990,7 @@
 #define STR_TITLE_AUTHOR        (STR_START + 442)
 #define STR_TITLE_DATE          (STR_START + 443)
 #define STR_UNKNOWN_USER_CONFLICT    (STR_START + 444)
-#define RID_SC_NAME             (STR_START + 445)
-#define STR_END                 (RID_SC_NAME)
+#define STR_END                 (STR_UNKNOWN_USER_CONFLICT)
 
 #define BMP_START               (STR_END)
 

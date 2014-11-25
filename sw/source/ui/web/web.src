@@ -40,14 +40,6 @@ String STR_WRITER_WEBDOC_FULLTYPE
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document";
 };
-String STR_SHELLNAME_WEBTEXT
-{
-    Text [ en-US ] = "Text/Web" ;
-};
-String STR_SHELLNAME_WEBFRAME
-{
-    Text [ en-US ] = "Frame/Web" ;
-};
 String RID_WEBTOOLS_TOOLBOX
 {
     Text [ en-US ] = "Main Toolbar/Web" ;

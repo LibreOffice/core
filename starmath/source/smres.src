@@ -35,10 +35,6 @@ String RID_FONTBOLD
 {
     Text [ en-US ] = "Bold" ;
 };
-String RID_APPLICATION
-{
-    Text = "StarMath" ;
-};
 String RID_OBJECTNAME
 {
     Text = "SMath3" ;

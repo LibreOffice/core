@@ -26,10 +26,6 @@
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
-String RID_STR_IDENAME
-{
-    Text = "BasicIDE" ;
-};
 String RID_STR_FILTER_ALLFILES
 {
     Text [ en-US ] = "<All>" ;

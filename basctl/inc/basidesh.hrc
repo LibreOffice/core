@@ -52,7 +52,7 @@
 #define RID_STR_FILTER_ALLFILES         ( RID_BASICIDE_START +  4 )
 // free
 #define RID_STR_CANNOTCLOSE             ( RID_BASICIDE_START + 13 )
-#define RID_STR_IDENAME                 ( RID_BASICIDE_START + 14 )
+// free
 #define RID_STR_INITIDE                 ( RID_BASICIDE_START + 15 )
 #define RID_STR_STACKNAME               ( RID_BASICIDE_START + 16 )
 #define RID_STR_WATCHNAME               ( RID_BASICIDE_START + 17 )

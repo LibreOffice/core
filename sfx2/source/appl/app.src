@@ -331,11 +331,6 @@ String RID_SECURITY_WARNING_TITLE
     Text [ en-US ] = "Security Warning" ;
 };
 
-String RID_DESKTOP
-{
-    Text = "%PRODUCTNAME" ;
-};
-
 String RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE
 {
     Text [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?" ;

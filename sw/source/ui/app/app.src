@@ -31,11 +31,6 @@
 #include "shells.hrc"
 #include "helpid.h"
 
-String RID_SW_NAME
-{
-    Text = "%PRODUCTNAME Writer" ;
-};
-
 String STR_PRINT_MERGE_MACRO
 {
     Text [ en-US ] = "Print form letters" ;

@@ -115,54 +115,6 @@ String STR_PAGE_COUNT_CUSTOM
 {
         Text [ en-US ] = "Page %1 of %2 (Page %3)" ;
 };
-String STR_SHELLNAME_TEXT
-{
-        Text [ en-US ] = "Text" ;
-};
-String STR_SHELLNAME_TABLE
-{
-        Text [ en-US ] = "Table" ;
-};
-String STR_SHELLNAME_FRAME
-{
-        Text [ en-US ] = "Frame" ;
-};
-String STR_SHELLNAME_GRAPHIC
-{
-        Text [ en-US ] = "Image" ;
-};
-String STR_SHELLNAME_OBJECT
-{
-        Text [ en-US ] = "Object" ;
-};
-String STR_SHELLNAME_LIST
-{
-        Text [ en-US ] = "List" ;
-};
-String STR_SHELLNAME_DRAW
-{
-        Text [ en-US ] = "Drawing" ;
-};
-String STR_SHELLNAME_DRAWFORM
-{
-        Text [ en-US ] = "Forms" ;
-};
-String STR_SHELLNAME_BEZIER
-{
-        Text [ en-US ] = "Bézier" ;
-};
-String STR_SHELLNAME_DRAW_TEXT
-{
-        Text [ en-US ] = "Draw text" ;
-};
-String STR_SHELLNAME_MEDIA
-{
-        Text [ en-US ] = "Media" ;
-};
-String STR_SHELLNAME_NAVIGATION
-{
-        Text [ en-US ] = "Navigation" ;
-};
  //Strings for gallery/background
 String STR_SWBG_PARAGRAPH
 {

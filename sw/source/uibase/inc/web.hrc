@@ -26,8 +26,6 @@
 #define RID_WEBTEXT_TOOLBOX                     (RC_WEB_BEGIN + 3)
 #define STR_HUMAN_SWWEBDOC_NAME                 (RC_WEB_BEGIN + 4)
 #define STR_WRITER_WEBDOC_FULLTYPE_40           (RC_WEB_BEGIN + 5)
-#define STR_SHELLNAME_WEBTEXT                   (RC_WEB_BEGIN + 6)
-#define STR_SHELLNAME_WEBFRAME                  (RC_WEB_BEGIN + 7)
 #define RID_WEBFRAME_TOOLBOX                    (RC_WEB_BEGIN + 8)
 #define STR_WRITER_WEBDOC_FULLTYPE_50           (RC_WEB_BEGIN + 9)
 #define RID_WEBGRAPHIC_TOOLBOX                  (RC_WEB_BEGIN + 10)
