@@ -69,7 +69,7 @@ $(packimages_DIR)/sorted.lst : \
 		$(call gb_Postprocess_get_target,AllUIConfigs)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		$(PERL) $(SRCDIR)/solenv/bin/image-sort.pl \
+		$(PYTHON) $(SRCDIR)/solenv/bin/image-sort.pl \
 			$< $(INSTROOT)/$(gb_UIConfig_INSTDIR) $@)
 
 # vim: set noet sw=4 ts=4:
