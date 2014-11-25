@@ -107,9 +107,7 @@ namespace {
 
 typedef ::cppu::WeakComponentImplHelper1< graphic::XGraphicRenderer > DummyRenderer_Base;
 
-class DummyRenderer :
-        public DummyRenderer_Base,
-        public cppu::BaseMutex
+class DummyRenderer: public cppu::BaseMutex, public DummyRenderer_Base
 {
 public:
     DummyRenderer() :
