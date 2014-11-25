@@ -26,7 +26,6 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <rtl/ustrbuf.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #define XML_WRITTENNUMBERSTYLES "WrittenNumberStyles"
 
@@ -41,7 +40,7 @@ class SvNumberformat;
 class SvXMLNumUsedList_Impl;
 
 struct SvXMLEmbeddedTextEntry;
-typedef boost::ptr_vector<SvXMLEmbeddedTextEntry> SvXMLEmbeddedTextEntryArr;
+class SvXMLEmbeddedTextEntryArr;
 
 class XMLOFF_DLLPUBLIC SvXMLNumFmtExport
 {

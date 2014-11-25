@@ -46,6 +46,7 @@
 #include <xmloff/xmlexp.hxx>
 
 #include <set>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -62,6 +63,29 @@ struct LessuInt32
 };
 
 typedef std::set< sal_uInt32, LessuInt32 >  SvXMLuInt32Set;
+
+class SvXMLEmbeddedTextEntryArr
+{
+    typedef boost::ptr_vector<SvXMLEmbeddedTextEntry> DataType;
+    DataType maData;
+
+public:
+
+    void push_back( SvXMLEmbeddedTextEntry* p )
+    {
+        maData.push_back(p);
+    }
+
+    const SvXMLEmbeddedTextEntry& operator[] ( size_t i ) const
+    {
+        return maData[i];
+    }
+
+    size_t size() const
+    {
+        return maData.size();
+    }
+};
 
 class SvXMLNumUsedList_Impl
 {
