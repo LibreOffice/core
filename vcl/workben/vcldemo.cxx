@@ -935,7 +935,7 @@ public:
             DemoRenderer::clearRects(rDev, aRegions);
             for (size_t i = 0; i < maRenderers.size(); i++)
             {
-                mnStartTime = getTimeNow();
+                if (!bVDev) mnStartTime = getTimeNow();
                 maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
                 if (!bVDev) addTime(i, getTimeNow() - mnStartTime);
             }
