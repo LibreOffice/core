@@ -71,7 +71,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     private int selected = -1;
     private int pageStart = 0;
     public int helpURL = 0;
-    private final CommonListener uiEventListener = new CommonListener();
     private IImageRenderer renderer;
     private ListModel listModel;
     public IRenderer counterRenderer = new SimpleCounterRenderer();

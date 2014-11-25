@@ -75,7 +75,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/db/TableDescriptor				\
 	wizards/com/sun/star/wizards/db/SQLQueryComposer				\
 	wizards/com/sun/star/wizards/db/DatabaseObjectWizard					\
-	wizards/com/sun/star/wizards/ui/event/CommonListener				\
 	wizards/com/sun/star/wizards/ui/event/DataAware				\
 	wizards/com/sun/star/wizards/ui/event/DataAwareFields				\
 	wizards/com/sun/star/wizards/ui/event/EventNames				\
