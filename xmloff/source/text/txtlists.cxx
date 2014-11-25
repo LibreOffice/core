@@ -76,7 +76,6 @@ XMLTextListsHelper::~XMLTextListsHelper()
 void XMLTextListsHelper::PushListContext(
     XMLTextListBlockContext *i_pListBlock)
 {
-//    fprintf(stderr, "PushListContext\n");
     mListStack.push(::boost::make_tuple(i_pListBlock,
         static_cast<XMLTextListItemContext*>(0),
         static_cast<XMLNumberedParaContext*>(0)));
@@ -85,7 +84,6 @@ void XMLTextListsHelper::PushListContext(
 void XMLTextListsHelper::PushListContext(
     XMLNumberedParaContext *i_pNumberedParagraph)
 {
-//    fprintf(stderr, "PushListContext(NP)\n");
     mListStack.push(::boost::make_tuple(
         static_cast<XMLTextListBlockContext*>(0),
         static_cast<XMLTextListItemContext*>(0), i_pNumberedParagraph));
@@ -94,7 +92,6 @@ void XMLTextListsHelper::PushListContext(
 void XMLTextListsHelper::PopListContext()
 {
     assert(mListStack.size());
-//    fprintf(stderr, "PopListContext\n");
     if ( !mListStack.empty())
         mListStack.pop();
 }
