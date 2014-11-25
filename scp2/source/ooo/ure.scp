@@ -20,23 +20,18 @@
 
 #include "AutoInstall/ure"
 
-#ifndef MACOSX
+#if !defined MACOSX
+
 Directory gid_Dir_Common_Ure
   #ifdef WNT
     ParentID = gid_Dir_Brand_Root;
-  #else
-    ParentID = PREDEFINED_PROGDIR;
-  #endif
-  #ifdef WNT
     HostName = "URE";
   #else
+    ParentID = PREDEFINED_PROGDIR;
     HostName = "ure";
   #endif
     Styles = (UREDIRECTORY);
 End
-#endif
-
-#if !defined MACOSX
 
 Directory gid_Dir_Ure_Bin
     ParentID = gid_Dir_Common_Ure;
