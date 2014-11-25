@@ -50,8 +50,8 @@ namespace pcr
     /** implements an <type>XPropertyHandler</type> which composes it's information
         from a set of other property handlers
     */
-    class PropertyComposer  :public PropertyComposer_Base
-                            ,public ::comphelper::OBaseMutex
+    class PropertyComposer  :public ::comphelper::OBaseMutex
+                            ,public PropertyComposer_Base
                             ,public IPropertyExistenceCheck
     {
     public:
