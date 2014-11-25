@@ -316,6 +316,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	chartcore \
 	chartcontroller \
 	chartopengl \
+	$(call gb_Helper_optional,CLCC,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
 	configmgr \

@@ -279,6 +279,17 @@ endef
 
 endif # SYSTEM_GLEW
 
+define gb_LinkTarget__use_clew
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,clcc)/src \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),\
+	clew \
+)
+
+endef
+
 define gb_LinkTarget__use_iconv
 $(call gb_LinkTarget_add_libs,$(1),-liconv)
 

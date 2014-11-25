@@ -107,13 +107,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_opencl_test,\
     xmloff/util/xo \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_CppunitTest_add_libs,sc_opencl_test,\
-    -ldl \
-	-lrt \
-))
-endif
-
 $(eval $(call gb_CppunitTest_use_configuration,sc_opencl_test))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,sc_opencl_test))

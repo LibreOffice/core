@@ -37,6 +37,7 @@ $(eval $(call gb_Library_use_sdk_api,sc))
 
 $(eval $(call gb_Library_use_externals,sc,\
     boost_headers \
+    $(call gb_Helper_optional,CLCC,clew) \
     icu_headers \
     icui18n \
     icuuc \
@@ -673,21 +674,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/op_array \
     sc/source/core/opencl/op_logical \
     sc/source/core/opencl/op_spreadsheet \
-    sc/source/core/opencl/clcc/clew \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_libs,sc,\
-    -ldl \
-	-lrt \
-))
-endif
-
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Library_add_libs,sc,\
-    -framework OpenCL \
-))
-endif
 
 endif
 

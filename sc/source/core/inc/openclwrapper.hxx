@@ -21,7 +21,7 @@
 
 #include <rtl/string.hxx>
 
-#include "clcc/clew.h"
+#include <clew.h>
 
 #define CHECK_OPENCL(status,name)    \
 if( status != CL_SUCCESS )    \
