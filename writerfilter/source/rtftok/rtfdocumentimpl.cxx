@@ -368,7 +368,6 @@ void RTFDocumentImpl::resolveSubstream(sal_Size nPos, Id nId, OUString& rIgnoreF
     Mapper().substream(nId, pImpl);
     SAL_INFO("writerfilter", "substream end");
     Strm().Seek(nCurrent);
-    nPos = 0;
 }
 
 void RTFDocumentImpl::checkFirstRun()
