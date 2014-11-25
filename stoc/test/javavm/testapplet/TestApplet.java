@@ -21,11 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.net.MalformedURLException;
-/*
- * TestApplet.java
- *
- * Created on 21. November 2001, 09:37
- */
 
 public class TestApplet extends java.applet.Applet {
 

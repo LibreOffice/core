@@ -15,13 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * StorageNativeOutputStream.java
- *
- * Created on 1. September 2004, 10:20
- */
-
 package com.sun.star.sdbcx.comp.hsqldb;
 
 public class StorageNativeOutputStream {

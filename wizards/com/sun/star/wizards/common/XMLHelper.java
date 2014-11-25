@@ -15,12 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * XMLHelper.java
- *
- * Created on 30. September 2003, 15:38
- */
 package com.sun.star.wizards.common;
 
 import org.w3c.dom.*;

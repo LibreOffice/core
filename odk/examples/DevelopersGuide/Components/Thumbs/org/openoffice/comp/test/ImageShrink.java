@@ -31,15 +31,7 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
 package org.openoffice.comp.test;
-
-
-/*
- * ImageShrink.java
- *
- * Created on 4. Mai 2002, 20:25
- */
 
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;

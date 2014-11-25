@@ -100,11 +100,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XRefreshable;
 import com.sun.star.view.XPrintable;
 
-/*
- * TextDocuments.java
- *
- * Created on 11. April 2002, 08:47
- */
 
 public class TextDocuments {
     // adjust these constant to your local printer!

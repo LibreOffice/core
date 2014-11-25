@@ -37,14 +37,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.beans.XPropertySet;
 
-
-
-/*
- * OpenQuery.java
- *
- * Created on 6. Juli 2002, 10:25
- */
-
 public class OpenQuery {
 
     /**

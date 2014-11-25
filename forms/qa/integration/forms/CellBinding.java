@@ -15,13 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * CellBinding.java
- *
- * Created on 12. Mai 2004, 15:15
- */
-
 package integration.forms;
 
 import com.sun.star.uno.*;

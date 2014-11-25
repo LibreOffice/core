@@ -15,13 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * _XSingleLayerStratum.java
- *
- * Created on 23. March 2004, 16:37
- */
 package ifc.configuration.backend;
+
 import com.sun.star.configuration.backend.XLayer;
 import com.sun.star.configuration.backend.XSingleLayerStratum;
 import com.sun.star.configuration.backend.XUpdatableLayer;

@@ -43,12 +43,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 
 
-/*
- * OpenQuery.java
- *
- * Created on 6. Juli 2002, 10:25
- */
-
 public class Organigram {
 
     private XComponentContext xRemoteContext = null;

@@ -15,13 +15,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-/*
- * StorageFileAccess.java
- *
- * Created on 31. August 2004, 11:56
- */
-
 package com.sun.star.sdbcx.comp.hsqldb;
+
 import org.hsqldb.lib.FileAccess;
 import org.hsqldb.lib.FileSystemRuntimeException;
 

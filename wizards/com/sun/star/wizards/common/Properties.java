@@ -15,11 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-/*
- * Properties.java
- *
- * Created on 1. Oktober 2003, 17:16
- */
 package com.sun.star.wizards.common;
 
 import com.sun.star.beans.PropertyValue;

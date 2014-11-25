@@ -15,12 +15,6 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-/*
- * TypeDetection6FileFormat.java
- *
- * Created on 26. April 2004, 10:37
- */
 package complex.filter.misc;
 
 import com.sun.star.container.XNameAccess;
