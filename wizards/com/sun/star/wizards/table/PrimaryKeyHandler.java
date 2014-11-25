@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.table;
 
+import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XFixedText;
@@ -34,6 +35,7 @@ import com.sun.star.wizards.ui.FieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.XFieldSelectionListener;
+import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 public class PrimaryKeyHandler implements XFieldSelectionListener
@@ -165,7 +167,12 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
                     Boolean.FALSE, UIConsts.INTEGERS[8], slblPrimeFieldName, 116, 117, IPRIMEKEYSTEP, Short.valueOf(curtabindex++), 46
                 });
 
-        lstSinglePrimeKey = CurUnoDialog.insertListBox("lstSinglePrimeKey", "onPrimeKeySelected", null, this,
+        lstSinglePrimeKey = CurUnoDialog.insertListBox("lstSinglePrimeKey", new XActionListenerAdapter() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        onPrimeKeySelected();
+                    }
+                }, null,
                 new String[]
                 {
                     "Dropdown",
@@ -363,7 +370,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
         return bischecked;
     }
 
-    public void onPrimeKeySelected()
+    private void onPrimeKeySelected()
     {
         try
         {

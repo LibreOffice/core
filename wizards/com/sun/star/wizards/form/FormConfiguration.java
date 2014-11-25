@@ -17,6 +17,7 @@
  */
 package com.sun.star.wizards.form;
 
+import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XFixedText;
@@ -29,6 +30,7 @@ import com.sun.star.wizards.ui.CommandFieldSelection;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
+import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 /**
@@ -48,7 +50,6 @@ public class FormConfiguration
     XListBox lstRelations;
     String[] sreferencedTables;
     CommandFieldSelection CurSubFormFieldSelection;
-    String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
     boolean bsupportsRelations;
     RelationController oRelationController = null;
 
@@ -115,7 +116,17 @@ public class FormConfiguration
                 {
                     Boolean.FALSE, 19, sSelectRelation, Boolean.TRUE, 119, 56, ISubFormStep, Short.valueOf(curtabindex++), 80
                 });
-        lstRelations = CurUnoDialog.insertListBox("lstrelations", SONEXISTINGRELATIONSELECTION, SONEXISTINGRELATIONSELECTION, this,
+        lstRelations = CurUnoDialog.insertListBox("lstrelations", new XActionListenerAdapter() {
+                    @Override
+                    public void actionPerformed(ActionEvent event) {
+                        onexistingRelationSelection();
+                    }
+                }, new XItemListenerAdapter() {
+                    @Override
+                    public void itemStateChanged(ItemEvent event) {
+                        onexistingRelationSelection();
+                    }
+                },
                 new String[]
                 {
                     PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -205,7 +216,7 @@ public class FormConfiguration
         return PropertyNames.EMPTY_STRING;
     }
 
-    public void onexistingRelationSelection()
+    private void onexistingRelationSelection()
     {
         String scurreferencedTableName = getreferencedTableName();
         if (scurreferencedTableName.length() > 0)

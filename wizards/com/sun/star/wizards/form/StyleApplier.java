@@ -39,7 +39,9 @@ import com.sun.star.wizards.document.DatabaseControl;
 import com.sun.star.wizards.document.GridControl;
 import com.sun.star.wizards.document.TimeStampControl;
 import com.sun.star.wizards.text.TextStyleHandler;
-import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.UnoDialog;
+import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.ui.event.XItemListenerAdapter;
 
 public class StyleApplier
@@ -52,7 +54,6 @@ public class StyleApplier
     private final XListBox lstStyles;
     private final FormDocument curFormDocument;
     private short iOldLayoutPos;
-    private static final String SCHANGELAYOUT = "changeLayout";
     private String[] StyleNames;
     private String[] FileNames;
     private final static int SOBACKGROUNDCOLOR = 0;
@@ -92,7 +93,12 @@ public class StyleApplier
                         UIConsts.INTEGERS[8], sPageStyles, 92, 25, IStyleStep, Short.valueOf(curtabindex++), 90
                     });
 
-            lstStyles = CurUnoDialog.insertListBox("lstStyles", null, SCHANGELAYOUT, this,
+            lstStyles = CurUnoDialog.insertListBox("lstStyles", null, new XItemListenerAdapter() {
+                        @Override
+                        public void itemStateChanged(ItemEvent event) {
+                            changeLayout();
+                        }
+                    },
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.SELECTED_ITEMS, PropertyNames.PROPERTY_STEP, PropertyNames.STRING_ITEM_LIST, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -212,7 +218,7 @@ public class StyleApplier
         }
     }
 
-    public void changeLayout()
+    private void changeLayout()
     {
         short iPos = lstStyles.getSelectedItemPos();
         if (iPos != iOldLayoutPos)

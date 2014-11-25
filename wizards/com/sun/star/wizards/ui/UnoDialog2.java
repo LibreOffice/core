@@ -85,25 +85,18 @@ public class UnoDialog2 extends UnoDialog
         return xCheckBox;
     }
 
-    public XListBox insertListBox(String sName, String actionPerformedMethodName, String itemChangedMethodName, Object eventTarget, String[] sPropNames, Object[] oPropValues)
+    public XListBox insertListBox(String sName, XActionListener actionListener, XItemListener itemListener, String[] sPropNames, Object[] oPropValues)
     {
         XListBox xListBox = (XListBox) insertControlModel2("com.sun.star.awt.UnoControlListBoxModel", sName, sPropNames, oPropValues, XListBox.class);
-        if (actionPerformedMethodName != null)
+        if (actionListener != null)
         {
-            xListBox.addActionListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ACTION_PERFORMED, actionPerformedMethodName, eventTarget);
+            xListBox.addActionListener(actionListener);
         }
-        if (itemChangedMethodName != null)
+        if (itemListener != null)
         {
-            xListBox.addItemListener(guiEventListener);
-            guiEventListener.add(sName, EventNames.ITEM_CHANGED, itemChangedMethodName, eventTarget);
+            xListBox.addItemListener(itemListener);
         }
         return xListBox;
-    }
-
-    public XListBox insertListBox(String sName, String actionPerformed, String itemChanged, String[] sPropNames, Object[] oPropValues)
-    {
-        return insertListBox(sName, actionPerformed, itemChanged, this, sPropNames, oPropValues);
     }
 
     public XRadioButton insertRadioButton(String sName, XItemListener itemListener, String[] sPropNames, Object[] oPropValues)
