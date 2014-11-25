@@ -74,6 +74,10 @@ class DemoRenderer
     };
     struct RegionRenderer {
     public:
+        RegionRenderer() :
+            sumTime(0),
+            countTime(0)
+        { }
         virtual ~RegionRenderer() {}
         virtual OUString getName() = 0;
         virtual sal_uInt16 getAccelerator() = 0;
@@ -85,13 +89,13 @@ class DemoRenderer
         virtual sal_uInt16 getAccelerator() SAL_OVERRIDE \
             { return key; }
 
-        double sumTime = 0;
-        int countTime = 0;
+        double sumTime;
+        int countTime;
     };
 
     std::vector< RegionRenderer * > maRenderers;
     sal_Int32  mnSelectedRenderer;
-    sal_Int32  iterCount = 0;
+    sal_Int32  iterCount;
 
     void     InitRenderers();
 
@@ -99,6 +103,7 @@ public:
     DemoRenderer() : mnSegmentsX(4)
                    , mnSegmentsY(3)
                    , mnSelectedRenderer(-1)
+                   , iterCount(0)
 #if FIXME_BOUNCE_BUTTON
                    , mpButton(NULL)
                    , mpButtonWin(NULL)
