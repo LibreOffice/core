@@ -119,11 +119,11 @@ public:
     static bool IsSortingRequired( const SwFrm& rFrm );
 
     iterator begin() { return maMap.begin(); }
-    const_iterator cbegin() const noexcept { return maMap.cbegin(); }
+    const_iterator cbegin() const { return maMap.cbegin(); }
     iterator end() { return maMap.end(); }
-    const_iterator cend() const noexcept { return maMap.cend(); }
-    const_reverse_iterator crbegin() const noexcept { return maMap.crbegin(); }
-    const_reverse_iterator crend() const noexcept { return maMap.crend(); }
+    const_iterator cend() const { return maMap.cend(); }
+    const_reverse_iterator crbegin() const { return maMap.crbegin(); }
+    const_reverse_iterator crend() const { return maMap.crend(); }
 
     std::pair<iterator,bool> insert(const value_type& value) { return maMap.insert(value); }
 };
