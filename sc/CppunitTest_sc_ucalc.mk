@@ -106,6 +106,12 @@ $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     uui/util/uui \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_CppunitTest_add_libs,sc_ucalc,\
+     -lrt \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_configuration,sc_ucalc))
 
 # vim: set noet sw=4 ts=4:
