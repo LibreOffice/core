@@ -35,28 +35,36 @@
 #include <refupdatecontext.hxx>
 
 ScRefUndoData::ScRefUndoData( const ScDocument* pDoc ) :
-    pUnoRefs( NULL )
+    pDBCollection(NULL),
+    pRangeName(NULL),
+    pPrintRanges(pDoc->CreatePrintRangeSaver()),
+    pDPCollection(NULL),
+    pDetOpList(NULL),
+    pChartListenerCollection(NULL),
+    pAreaLinks(NULL),
+    pUnoRefs(NULL)
 {
-    ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
-    pDBCollection = pOldDBColl ? new ScDBCollection(*pOldDBColl) : NULL;
+    const ScDBCollection* pOldDBColl = pDoc->GetDBCollection();
+    if (pOldDBColl && !pOldDBColl->empty())
+        pDBCollection = new ScDBCollection(*pOldDBColl);
 
-    ScRangeName* pOldRanges = ((ScDocument*)pDoc)->GetRangeName();          //! const
-    pRangeName = pOldRanges ? new ScRangeName(*pOldRanges) : NULL;
-
-    pPrintRanges = pDoc->CreatePrintRangeSaver();       // recreated
+    const ScRangeName* pOldRanges = pDoc->GetRangeName();
+    if (pOldRanges && !pOldRanges->empty())
+        pRangeName = new ScRangeName(*pOldRanges);
 
     // when handling Pivot solely keep the range?
 
-    ScDPCollection* pOldDP = ((ScDocument*)pDoc)->GetDPCollection();        //! const
-    pDPCollection = pOldDP ? new ScDPCollection(*pOldDP) : NULL;
+    const ScDPCollection* pOldDP = pDoc->GetDPCollection();
+    if (pOldDP && pOldDP->GetCount())
+        pDPCollection = new ScDPCollection(*pOldDP);
 
-    ScDetOpList* pOldDetOp = pDoc->GetDetOpList();
-    pDetOpList = pOldDetOp ? new ScDetOpList(*pOldDetOp) : 0;
+    const ScDetOpList* pOldDetOp = pDoc->GetDetOpList();
+    if (pOldDetOp && pOldDetOp->Count())
+        pDetOpList = new ScDetOpList(*pOldDetOp);
 
-    ScChartListenerCollection* pOldChartListenerCollection =
-        pDoc->GetChartListenerCollection();
-    pChartListenerCollection = pOldChartListenerCollection ?
-        new ScChartListenerCollection( *pOldChartListenerCollection ) : NULL;
+    const ScChartListenerCollection* pOldChartLisColl = pDoc->GetChartListenerCollection();
+    if (pOldChartLisColl)
+        pChartListenerCollection = new ScChartListenerCollection(*pOldChartLisColl);
 
     pAreaLinks = ScAreaLinkSaveCollection::CreateFromDoc(pDoc);     // returns NULL if empty
 

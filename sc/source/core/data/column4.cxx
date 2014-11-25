@@ -1240,8 +1240,6 @@ public:
     {
         return mnEndRow;
     }
-
-private:
 };
 
 class EndListeningFormulaCellsHandler

@@ -64,6 +64,30 @@
 
 // STATIC DATA -----------------------------------------------------------
 
+namespace sc {
+
+bool AreaListener::SortByArea::operator ()( const AreaListener& rLeft, const AreaListener& rRight ) const
+{
+    if (rLeft.maArea.aStart.Tab() != rRight.maArea.aStart.Tab())
+        return rLeft.maArea.aStart.Tab() < rRight.maArea.aStart.Tab();
+
+    if (rLeft.maArea.aStart.Col() != rRight.maArea.aStart.Col())
+        return rLeft.maArea.aStart.Col() < rRight.maArea.aStart.Col();
+
+    if (rLeft.maArea.aStart.Row() != rRight.maArea.aStart.Row())
+        return rLeft.maArea.aStart.Row() < rRight.maArea.aStart.Row();
+
+    if (rLeft.maArea.aEnd.Tab() != rRight.maArea.aEnd.Tab())
+        return rLeft.maArea.aEnd.Tab() < rRight.maArea.aEnd.Tab();
+
+    if (rLeft.maArea.aEnd.Col() != rRight.maArea.aEnd.Col())
+        return rLeft.maArea.aEnd.Col() < rRight.maArea.aEnd.Col();
+
+    return rLeft.maArea.aEnd.Row() < rRight.maArea.aEnd.Row();
+}
+
+}
+
 struct ScSlotData
 {
     SCROW  nStartRow;   // first row of this segment

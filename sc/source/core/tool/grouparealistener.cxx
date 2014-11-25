@@ -219,18 +219,31 @@ void FormulaGroupAreaListener::collectFormulaCells(
     }
 }
 
-#if DEBUG_AREA_BROADCASTER
 ScAddress FormulaGroupAreaListener::getTopCellPos() const
 {
     const ScFormulaCell& rFC = **mppTopCell;
     return rFC.aPos;
 }
 
+const ScRange& FormulaGroupAreaListener::getRange() const
+{
+    return maRange;
+}
+
 SCROW FormulaGroupAreaListener::getGroupLength() const
 {
     return mnGroupLen;
 }
-#endif
+
+bool FormulaGroupAreaListener::isStartFixed() const
+{
+    return mbStartFixed;
+}
+
+bool FormulaGroupAreaListener::isEndFixed() const
+{
+    return mbEndFixed;
+}
 
 void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScAddress& rPos )
 {

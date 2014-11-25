@@ -440,7 +440,7 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
     mfValue = 0.0;
 }
 
-void ScCellValue::release( ScColumn& rColumn, SCROW nRow )
+void ScCellValue::release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType eListenType )
 {
     switch (meType)
     {
@@ -460,7 +460,7 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow )
         break;
         case CELLTYPE_FORMULA:
             // This formula cell instance is directly placed in the document without copying.
-            rColumn.SetFormulaCell(nRow, mpFormula);
+            rColumn.SetFormulaCell(nRow, mpFormula, eListenType);
         break;
         default:
             rColumn.Delete(nRow);

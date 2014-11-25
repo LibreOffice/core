@@ -76,7 +76,7 @@ struct SC_DLLPUBLIC ScCellValue
      */
     void release( ScDocument& rDoc, const ScAddress& rPos );
 
-    void release( ScColumn& rColumn, SCROW nRow );
+    void release( ScColumn& rColumn, SCROW nRow, sc::StartListeningType eListenType = sc::SingleCellListening );
 
     OUString getString( const ScDocument* pDoc );
 

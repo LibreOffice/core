@@ -327,8 +327,20 @@ bool CopyToClipContext::isCloneNotes() const
     return mbCloneNotes;
 }
 
-CopyToDocContext::CopyToDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
+CopyToDocContext::CopyToDocContext(ScDocument& rDoc) :
+    ClipContextBase(rDoc), mbStartListening(true) {}
+
 CopyToDocContext::~CopyToDocContext() {}
+
+void CopyToDocContext::setStartListening( bool b )
+{
+    mbStartListening = b;
+}
+
+bool CopyToDocContext::isStartListening() const
+{
+    return mbStartListening;
+}
 
 MixDocContext::MixDocContext(ScDocument& rDoc) : ClipContextBase(rDoc) {}
 MixDocContext::~MixDocContext() {}

@@ -144,9 +144,14 @@ public:
 
 class CopyToDocContext : public ClipContextBase
 {
+    bool mbStartListening;
+
 public:
     CopyToDocContext(ScDocument& rDoc);
     virtual ~CopyToDocContext();
+
+    void setStartListening( bool b );
+    bool isStartListening() const;
 };
 
 class MixDocContext : public ClipContextBase

@@ -1960,8 +1960,8 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     PutInOrder( nTab1, nTab2 );
     if (ValidTab(nTab1) && ValidTab(nTab2))
     {
-        bool bOldAutoCalc = pDestDoc->GetAutoCalc();
-        pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
+        sc::AutoCalcSwitch aACSwitch(*pDestDoc, false); // avoid multiple calculations
+
         if (nTab1 > 0)
             CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTab1-1, IDF_FORMULA, false, pDestDoc, pMarks );
 
@@ -1976,7 +1976,6 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
         if (nTab2 < MAXTAB)
             CopyToDocument( 0,0,nTab2+1, MAXCOL,MAXROW,MAXTAB, IDF_FORMULA, false, pDestDoc, pMarks );
-        pDestDoc->SetAutoCalc( bOldAutoCalc );
     }
 }
 
@@ -1989,21 +1988,26 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
 
     if( pDestDoc->aDocName.isEmpty() )
         pDestDoc->aDocName = aDocName;
-    bool bOldAutoCalc = pDestDoc->GetAutoCalc();
-    pDestDoc->SetAutoCalc( false );     // avoid multiple calculations
+
+    sc::AutoCalcSwitch aACSwitch(*pDestDoc, false); // avoid multiple calculations
+
     sc::CopyToDocContext aCxt(*pDestDoc);
+    aCxt.setStartListening(false);
+
     SCTAB nMinSizeBothTabs = static_cast<SCTAB>(std::min(maTabs.size(), pDestDoc->maTabs.size()));
     for (SCTAB i = aNewRange.aStart.Tab(); i <= aNewRange.aEnd.Tab() && i < nMinSizeBothTabs; i++)
     {
-        if (!TableExists(i) || !pDestDoc->TableExists(i))
+        ScTable* pTab = FetchTable(i);
+        ScTable* pDestTab = pDestDoc->FetchTable(i);
+        if (!pTab || !pDestTab)
             continue;
 
-        maTabs[i]->CopyToTable(aCxt, aNewRange.aStart.Col(), aNewRange.aStart.Row(),
-                               aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
-                               nFlags, bOnlyMarked, pDestDoc->maTabs[i],
-                               pMarks, false, bColRowFlags);
+        pTab->CopyToTable(
+            aCxt, aNewRange.aStart.Col(), aNewRange.aStart.Row(), aNewRange.aEnd.Col(), aNewRange.aEnd.Row(),
+            nFlags, bOnlyMarked, pDestTab, pMarks, false, bColRowFlags);
     }
-    pDestDoc->SetAutoCalc( bOldAutoCalc );
+
+    pDestDoc->StartAllListeners(aNewRange);
 }
 
 void ScDocument::UndoToDocument(const ScRange& rRange,
@@ -2452,7 +2456,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
         ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
         for (; itr != itrEnd && *itr < nMax; ++itr)
             if (maTabs[*itr])
-                maTabs[*itr]->StartListeningFromClip(aStartCxt, aEndCxt, nCol1, nRow1, nCol2, nRow2);
+                maTabs[*itr]->StartListeningFormulaCells(aStartCxt, aEndCxt, nCol1, nRow1, nCol2, nRow2);
     }
 }
 

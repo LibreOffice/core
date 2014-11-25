@@ -23,7 +23,6 @@
 #include <set>
 
 #include <boost/noncopyable.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include <formula/tokenarray.hxx>
 #include <osl/conditn.hxx>
@@ -58,7 +57,11 @@ class ScTokenArray;
 
 struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 {
-    typedef boost::ptr_vector<sc::FormulaGroupAreaListener> AreaListenersType;
+private:
+    struct Impl;
+    Impl* mpImpl;
+
+public:
 
     mutable size_t mnRefCount;
 
@@ -72,8 +75,6 @@ struct SC_DLLPUBLIC ScFormulaCellGroup : boost::noncopyable
 
     sal_uInt8 meCalcState;
     sal_uInt8 meKernelState;
-
-    AreaListenersType maAreaListeners;
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();

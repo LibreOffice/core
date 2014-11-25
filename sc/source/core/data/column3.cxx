@@ -377,13 +377,15 @@ sc::CellStoreType::iterator ScColumn::GetPositionToInsert( const sc::CellStoreTy
 }
 
 void ScColumn::AttachNewFormulaCell(
-    const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell, bool bJoin, bool bSingle )
+    const sc::CellStoreType::iterator& itPos, SCROW nRow, ScFormulaCell& rCell,
+    bool bJoin, sc::StartListeningType eListenType )
 {
-    AttachNewFormulaCell(maCells.position(itPos, nRow), rCell, bJoin, bSingle);
+    AttachNewFormulaCell(maCells.position(itPos, nRow), rCell, bJoin, eListenType);
 }
 
 void ScColumn::AttachNewFormulaCell(
-    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell, bool bJoin, bool bSingle )
+    const sc::CellStoreType::position_type& aPos, ScFormulaCell& rCell,
+    bool bJoin, sc::StartListeningType eListenType )
 {
     if (bJoin)
         // See if this new formula cell can join an existing shared formula group.
@@ -394,9 +396,12 @@ void ScColumn::AttachNewFormulaCell(
     // we call StartListeningFromClip and BroadcastFromClip.
     // If we insert into the Clipboard/andoDoc, we do not use a Broadcast.
     // After Import we call CalcAfterLoad and in there Listening.
-    if (!pDocument->IsClipOrUndo() && !pDocument->IsInsertingFromOtherDoc())
+    if (pDocument->IsClipOrUndo() || pDocument->IsInsertingFromOtherDoc())
+        return;
+
+    switch (eListenType)
     {
-        if (bSingle)
+        case sc::ConvertToGroupListening:
         {
             boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*pDocument));
             sc::StartListeningContext aStartCxt(*pDocument, pPosSet);
@@ -404,12 +409,18 @@ void ScColumn::AttachNewFormulaCell(
             SCROW nRow = aPos.first->position + aPos.second;
             StartListeningFormulaCells(aStartCxt, aEndCxt, nRow, nRow);
         }
-        else
+        break;
+        case sc::SingleCellListening:
             rCell.StartListeningTo(pDocument);
+        break;
+        case sc::NoListening:
+        default:
+            ;
 
-        if (!pDocument->IsCalcingAfterLoad())
-            rCell.SetDirty();
     }
+
+    if (!pDocument->IsCalcingAfterLoad())
+        rCell.SetDirty();
 }
 
 void ScColumn::AttachNewFormulaCells( const sc::CellStoreType::position_type& aPos, size_t nLength )
@@ -1734,7 +1745,10 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const OUString& rString,
 
     ScCellValue aNewCell;
     bool bNumFmtSet = ParseString(aNewCell, nRow, nTabP, rString, eConv, pParam);
-    aNewCell.release(*this, nRow);
+    if (pParam)
+        aNewCell.release(*this, nRow, pParam->meStartListening);
+    else
+        aNewCell.release(*this, nRow);
 
     // Do not set Formats and Formulas here anymore!
     // These are queried during output
@@ -1834,7 +1848,8 @@ void ScColumn::SetFormula( SCROW nRow, const OUString& rFormula, formula::Formul
     AttachNewFormulaCell(it, nRow, *pCell);
 }
 
-ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell, bool bSingle )
+ScFormulaCell* ScColumn::SetFormulaCell(
+    SCROW nRow, ScFormulaCell* pCell, sc::StartListeningType eListenType )
 {
     sc::CellStoreType::iterator it = GetPositionToInsert(nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
@@ -1845,11 +1860,13 @@ ScFormulaCell* ScColumn::SetFormulaCell( SCROW nRow, ScFormulaCell* pCell, bool 
 
     CellStorageModified();
 
-    AttachNewFormulaCell(it, nRow, *pCell, true, bSingle);
+    AttachNewFormulaCell(it, nRow, *pCell, true, eListenType);
     return pCell;
 }
 
-ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell )
+ScFormulaCell* ScColumn::SetFormulaCell(
+    sc::ColumnBlockPosition& rBlockPos, SCROW nRow, ScFormulaCell* pCell,
+    sc::StartListeningType eListenType )
 {
     rBlockPos.miCellPos = GetPositionToInsert(rBlockPos.miCellPos, nRow);
     sal_uInt32 nCellFormat = GetNumberFormat(nRow);
@@ -1861,7 +1878,7 @@ ScFormulaCell* ScColumn::SetFormulaCell( sc::ColumnBlockPosition& rBlockPos, SCR
 
     CellStorageModified();
 
-    AttachNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell);
+    AttachNewFormulaCell(rBlockPos.miCellPos, nRow, *pCell, true, eListenType);
     return pCell;
 }
 

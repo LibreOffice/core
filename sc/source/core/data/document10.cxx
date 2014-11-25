@@ -423,4 +423,38 @@ void ScDocument::StartNeededListeners()
     std::for_each(maTabs.begin(), maTabs.end(), StartNeededListenersHandler(*this));
 }
 
+void ScDocument::StartAllListeners( const ScRange& rRange )
+{
+    boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
+    sc::StartListeningContext aStartCxt(*this, pPosSet);
+    sc::EndListeningContext aEndCxt(*this, pPosSet);
+
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->StartListeningFormulaCells(
+            aStartCxt, aEndCxt,
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    }
+}
+
+void ScDocument::EndAllListeners( const ScRange& rRange )
+{
+    sc::EndListeningContext aEndCxt(*this);
+
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->EndListeningFormulaCells(
+            aEndCxt,
+            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
