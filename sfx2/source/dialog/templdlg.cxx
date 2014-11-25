@@ -716,14 +716,17 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     pCurObjShell = pViewFrame->GetObjectShell();
     pModule = pCurObjShell ? pCurObjShell->GetModule() : NULL;
     ResMgr* pMgr = pModule ? pModule->GetResMgr() : NULL;
-    ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
-    aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
-    m_pStyleFamiliesId = new ResId( aFamId.GetId(), *pMgr );
-    m_pStyleFamiliesId->SetRT(RSC_SFX_STYLE_FAMILIES);
-    if( !pMgr || !pMgr->IsAvailable( aFamId ) )
+    if (pMgr)
+    {
+        ResId aFamId( DLG_STYLE_DESIGNER, *pMgr );
+        aFamId.SetRT(RSC_SFX_STYLE_FAMILIES);
+        m_pStyleFamiliesId = new ResId( aFamId.GetId(), *pMgr );
+        m_pStyleFamiliesId->SetRT(RSC_SFX_STYLE_FAMILIES);
+        if (pMgr->IsAvailable(aFamId))
+            pStyleFamilies = new SfxStyleFamilies( aFamId );
+    }
+    if (!pStyleFamilies)
         pStyleFamilies = new SfxStyleFamilies;
-    else
-        pStyleFamilies = new SfxStyleFamilies( aFamId );
 
     nActFilter = pCurObjShell ? static_cast< sal_uInt16 >( LoadFactoryStyleFilter( pCurObjShell ) ) : SFXSTYLEBIT_ALL;
     if ( pCurObjShell && SFXSTYLEBIT_ALL == nActFilter )
