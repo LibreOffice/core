@@ -610,7 +610,7 @@ OpenGLTexture* OpenGLCompatibleDC::getTexture()
         return NULL;
 
     // turn what's in the mpData into a texture
-    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_RGBA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
+    return new OpenGLTexture(maRects.mnSrcWidth, maRects.mnSrcHeight, GL_BGRA, GL_UNSIGNED_BYTE, reinterpret_cast<sal_uInt8*>(mpData));
 }
 
 WinSalGraphics::WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd):

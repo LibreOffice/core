@@ -1297,7 +1297,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                 return false;
 
             pImpl->PreDraw();
-            pImpl->DrawTexture(*pBlackTexture, aBlackDC.getTwoRect()); // FIXME combine the textures - DrawTextureSynthesizedAlpha()
+            pImpl->DrawTextureDiff(*pWhiteTexture, *pBlackTexture, aBlackDC.getTwoRect());
             pImpl->PostDraw();
 
             bOk = true;
