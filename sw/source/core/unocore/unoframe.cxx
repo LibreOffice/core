@@ -954,8 +954,8 @@ bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItem
         OUString sStyle;
         *pStyleName >>= sStyle;
         SwStyleNameMapper::FillUIName(sStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
-        pStyle = (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME);
+        pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
+                                                    SFX_STYLE_FAMILY_FRAME));
     }
 
     const ::uno::Any* pColumns = NULL;
@@ -1028,8 +1028,8 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
         OUString sStyle;
         *pStyleName >>= sStyle;
         SwStyleNameMapper::FillUIName(sStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
-        pStyle = (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME);
+        pStyle = static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
+                                                    SFX_STYLE_FAMILY_FRAME));
     }
 
     const ::uno::Any* pHEvenMirror = 0;
@@ -1276,7 +1276,7 @@ void SwXFrame::setName(const OUString& rName) throw( uno::RuntimeException, std:
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        pFmt->GetDoc()->SetFlyName((SwFlyFrmFmt&)*pFmt, rName);
+        pFmt->GetDoc()->SetFlyName(static_cast<SwFlyFrmFmt&>(*pFmt), rName);
         if(pFmt->GetName() != rName)
         {
             throw uno::RuntimeException();
@@ -1360,8 +1360,8 @@ static SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
         SwStyleNameMapper::FillUIName(uTemp, sStyle,
                 nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, true);
         SwDocStyleSheet* pStyle =
-                (SwDocStyleSheet*)pDocSh->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME);
+                static_cast<SwDocStyleSheet*>(pDocSh->GetStyleSheetPool()->Find(sStyle,
+                                                    SFX_STYLE_FAMILY_FRAME));
         if(pStyle)
             pRet = pStyle->GetFrmFmt();
     }
@@ -1518,9 +1518,9 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     // see SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
                     SwFlyFrm *pFly = 0;
                     {
-                        const :: SwFrmFmt* pFmtXX = pFmt;
+                        const SwFrmFmt* pFmtXX = pFmt;
                         if (PTR_CAST(SwFlyFrmFmt, pFmtXX))
-                            pFly = ((SwFlyFrmFmt*)pFmtXX)->GetFrm();
+                            pFly = static_cast<const SwFlyFrmFmt*>(pFmtXX)->GetFrm();
                     }
                     if ( pFly )
                     {
@@ -1548,7 +1548,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             OUString sGrfName;
             OUString sFltName;
             GraphicObject *pGrfObj = 0;
-            pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, &sGrfName, &sFltName );
+            pFmt->GetDoc()->GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), &sGrfName, &sFltName );
             OUString sTmp;
             aValue >>= sTmp;
             UnoActionContext aAction(pFmt->GetDoc());
@@ -1716,7 +1716,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             if( nZOrder >= 0 && aTextBoxes.find(pFmt) == aTextBoxes.end())
             {
                 SdrObject* pObject =
-                    GetOrCreateSdrObject( (SwFlyFrmFmt&)*pFmt );
+                    GetOrCreateSdrObject( static_cast<SwFlyFrmFmt&>(*pFmt) );
                 SwDrawModel *pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
                 pDrawModel->GetPage(0)->
                             SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
@@ -1737,7 +1737,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     SfxItemSet aSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
                     aSet.SetParent(&pFmt->GetAttrSet());
-                    SwFmtAnchor aAnchor = (const :: SwFmtAnchor&)aSet.Get(pEntry->nWID);
+                    SwFmtAnchor aAnchor = static_cast<const SwFmtAnchor&>(aSet.Get(pEntry->nWID));
 
                     SwPosition aPos(*pFrame->GetFrmFmt()->GetCntnt().GetCntntIdx());
                     aAnchor.SetAnchor(&aPos);
@@ -1870,7 +1870,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 
             if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == nMemberId)
             {
-                SwFmtAnchor aAnchor = (const :: SwFmtAnchor&)aSet.Get(pEntry->nWID);
+                SwFmtAnchor aAnchor = static_cast<const SwFmtAnchor&>(aSet.Get(pEntry->nWID));
                 if(aAnchor.GetAnchorId() == FLY_AT_FLY)
                 {
                     const :: SwPosition* pPosition = aAnchor.GetCntntAnchor();
@@ -1907,7 +1907,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
                     SwFlyFrm *pFly = 0;
                     if (PTR_CAST(SwFlyFrmFmt, pFmt))
-                        pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
+                        pFly = static_cast<SwFlyFrmFmt*>(pFmt)->GetFrm();
                     if (pFly)
                     {
                         const :: SfxPoolItem* pItem;
@@ -2050,7 +2050,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     throw uno::RuntimeException();
                 if( pGrfNode->IsGrfLink() )
                 {
-                    pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, &sGrfName, 0 );
+                    pFmt->GetDoc()->GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), &sGrfName, 0 );
                 }
                 else
                 {
@@ -2088,7 +2088,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         else if( FN_UNO_GRAPHIC_FILTER == pEntry->nWID )
         {
             OUString sFltName;
-            pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, 0, &sFltName );
+            pFmt->GetDoc()->GetGrfNms( *static_cast<SwFlyFrmFmt*>(pFmt), 0, &sFltName );
                 aAny <<= sFltName;
         }
         else if( FN_UNO_GRAPHIC == pEntry->nWID )
@@ -2726,7 +2726,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         RndStdIds eAnchorId = FLY_AT_PARA;
         if(SfxItemState::SET == aFrmSet.GetItemState(RES_ANCHOR, false, &pItem) )
         {
-            eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
+            eAnchorId = static_cast<const SwFmtAnchor*>(pItem)->GetAnchorId();
             if( FLY_AT_FLY == eAnchorId &&
                 !aPam.GetNode().FindFlyStartNode())
             {
@@ -2735,9 +2735,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 aFrmSet.Put(aAnchor);
             }
             else if ((FLY_AT_PAGE == eAnchorId) &&
-                     0 == ((const SwFmtAnchor*)pItem)->GetPageNum() )
+                     0 == static_cast<const SwFmtAnchor*>(pItem)->GetPageNum() )
             {
-                SwFmtAnchor aAnchor( *((const SwFmtAnchor*)pItem) );
+                SwFmtAnchor aAnchor( *static_cast<const SwFmtAnchor*>(pItem) );
                 aAnchor.SetAnchor( aPam.GetPoint() );
                 aFrmSet.Put(aAnchor);
             }
@@ -2791,7 +2791,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, m_sName);
             }
             // wake up the SwXTextFrame
-            ((SwXTextFrame*)this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrmFmt()->GetDoc() );
+            static_cast<SwXTextFrame*>(this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrmFmt()->GetDoc() );
         }
         else if( eType == FLYCNTTYPE_GRF)
         {
@@ -3039,7 +3039,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         {
             SfxItemSet aSet( pDoc->GetAttrPool(), RES_ANCHOR, RES_ANCHOR );
             aSet.SetParent(&pFmt->GetAttrSet());
-            SwFmtAnchor aAnchor = (const SwFmtAnchor&)aSet.Get(RES_ANCHOR);
+            SwFmtAnchor aAnchor = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR));
             aAnchor.SetAnchor( aIntPam.Start() );
             aSet.Put(aAnchor);
             pDoc->SetFlyFrmAttr( *pFmt, aSet );

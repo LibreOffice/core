@@ -414,7 +414,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
         break;
     case ND_GRFNODE:
         {
-            SwGrfNode* pGrfNd = (SwGrfNode*)pCNd;
+            SwGrfNode* pGrfNd = static_cast<SwGrfNode*>(pCNd);
             OUString sFile;
             OUString sFilter;
             if( pGrfNd->IsGrfLink() )
@@ -902,7 +902,7 @@ void SwUndoInsertLabel::UndoImpl(::sw::UndoRedoContext & rContext)
         SwFrmFmt* pFmt;
         SdrObject *pSdrObj = 0;
         if( OBJECT.pUndoAttr &&
-            0 != (pFmt = (SwFrmFmt*)OBJECT.pUndoAttr->GetFmt( rDoc )) &&
+            0 != (pFmt = static_cast<SwFrmFmt*>(OBJECT.pUndoAttr->GetFmt( rDoc ))) &&
             ( LTYPE_DRAW != eType ||
               0 != (pSdrObj = pFmt->FindSdrObject()) ) )
         {
@@ -941,7 +941,7 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
         SwFrmFmt* pFmt;
         SdrObject *pSdrObj = 0;
         if( OBJECT.pUndoAttr &&
-            0 != (pFmt = (SwFrmFmt*)OBJECT.pUndoAttr->GetFmt( rDoc )) &&
+            0 != (pFmt = static_cast<SwFrmFmt*>(OBJECT.pUndoAttr->GetFmt( rDoc ))) &&
             ( LTYPE_DRAW != eType ||
               0 != (pSdrObj = pFmt->FindSdrObject()) ) )
         {

@@ -491,7 +491,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 // Unfortunately an index needs to be created. Otherwise there
                 // will be problems with TextNode because the index will be
                 // deleted in the DTOR of SwFtn!
-                SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
+                SwTxtNode* pTxtNd = const_cast<SwTxtNode*>(static_cast<const SwTxtNode*>(pFtnNd));
                 if( !pHistory )
                     pHistory = new SwHistory;
                 SwTxtAttr* const pFtnHnt =
@@ -516,7 +516,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                 // Unfortunately an index needs to be created. Otherwise there
                 // will be problems with TextNode because the index will be
                 // deleted in the DTOR of SwFtn!
-                SwTxtNode* pTxtNd = (SwTxtNode*)pFtnNd;
+                SwTxtNode* pTxtNd = const_cast<SwTxtNode*>(static_cast<const SwTxtNode*>(pFtnNd));
                 if( !pHistory )
                     pHistory = new SwHistory;
                 SwTxtAttr* const pFtnHnt =

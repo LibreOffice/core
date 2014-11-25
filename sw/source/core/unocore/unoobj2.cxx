@@ -290,15 +290,15 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
     {
     case RES_REMOVE_UNO_OBJECT:
     case RES_OBJECTDYING:
-        if( (void*)pClient->GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+        if( (void*)pClient->GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
             ((SwModify*)pClient->GetRegisteredIn())->Remove(pClient);
         break;
 
     case RES_FMT_CHG:
         // Is the move to the new one finished and will the old one be deleted?
-        if( ((SwFmtChg*)pNew)->pChangedFmt == pClient->GetRegisteredIn() &&
-            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
-            ((SwModify*)pClient->GetRegisteredIn())->Remove(pClient);
+        if( static_cast<const SwFmtChg*>(pNew)->pChangedFmt == pClient->GetRegisteredIn() &&
+            static_cast<const SwFmtChg*>(pOld)->pChangedFmt->IsFmtInDTOR() )
+            static_cast<SwModify*>(pClient->GetRegisteredIn())->Remove(pClient);
         break;
     }
 }
@@ -1081,7 +1081,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
                 : ((pPortion) ? pPortion->GetCursor() : 0);
             if (pUnoCrsr && pDoc == rToFill.GetDoc())
             {
-                OSL_ENSURE((SwPaM*)pUnoCrsr->GetNext() == pUnoCrsr,
+                OSL_ENSURE(static_cast<SwPaM*>(pUnoCrsr->GetNext()) == pUnoCrsr,
                         "what to do about rings?");
                 bRet = true;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();

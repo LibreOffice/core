@@ -134,7 +134,7 @@ SwUnoInternalPaM&   SwUnoInternalPaM::operator=(const SwPaM& rPaM)
     }
     else
         DeleteMark();
-    while(&rPaM != (pTmp = (const SwPaM*)pTmp->GetNext()))
+    while(&rPaM != (pTmp = static_cast<const SwPaM*>(pTmp->GetNext())))
     {
         if(pTmp->HasMark())
             new SwPaM(*pTmp->GetMark(), *pTmp->GetPoint(), this);

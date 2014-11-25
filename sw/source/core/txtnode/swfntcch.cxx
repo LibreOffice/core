@@ -52,7 +52,7 @@ SwFontAccess::SwFontAccess( const void *pOwn, SwViewShell *pSh ) :
 
 SwFontObj *SwFontAccess::Get( )
 {
-    return (SwFontObj *) SwCacheAccess::Get( );
+    return static_cast<SwFontObj *>( SwCacheAccess::Get( ) );
 }
 
 SwCacheObj *SwFontAccess::NewObj( )

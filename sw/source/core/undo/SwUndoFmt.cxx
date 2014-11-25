@@ -198,12 +198,12 @@ SwUndoTxtFmtCollCreate::SwUndoTxtFmtCollCreate
 
 SwFmt * SwUndoTxtFmtCollCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeTxtFmtColl(sNewName, (SwTxtFmtColl *)pDerivedFrom, true);
+    return pDoc->MakeTxtFmtColl(sNewName, static_cast<SwTxtFmtColl *>(pDerivedFrom), true);
 }
 
 void SwUndoTxtFmtCollCreate::Delete()
 {
-    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pNew, true);
+    pDoc->DelTxtFmtColl(static_cast<SwTxtFmtColl *>(pNew), true);
 }
 
 SwFmt * SwUndoTxtFmtCollCreate::Find(const OUString & rName) const
@@ -219,12 +219,12 @@ SwUndoTxtFmtCollDelete::SwUndoTxtFmtCollDelete(SwTxtFmtColl * _pOld,
 
 SwFmt * SwUndoTxtFmtCollDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeTxtFmtColl(sOldName, (SwTxtFmtColl *) pDerivedFrom, true);
+    return pDoc->MakeTxtFmtColl(sOldName, static_cast<SwTxtFmtColl *>(pDerivedFrom), true);
 }
 
 void SwUndoTxtFmtCollDelete::Delete(SwFmt * pOld)
 {
-    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pOld, true);
+    pDoc->DelTxtFmtColl(static_cast<SwTxtFmtColl *>(pOld), true);
 }
 
 SwFmt * SwUndoTxtFmtCollDelete::Find(const OUString & rName) const
@@ -240,7 +240,7 @@ SwUndoCondTxtFmtCollCreate::SwUndoCondTxtFmtCollCreate(SwConditionTxtFmtColl *_p
 
 SwFmt * SwUndoCondTxtFmtCollCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCondTxtFmtColl(sNewName, (SwTxtFmtColl *)pDerivedFrom, true);
+    return pDoc->MakeCondTxtFmtColl(sNewName, static_cast<SwTxtFmtColl *>(pDerivedFrom), true);
 }
 
 SwUndoCondTxtFmtCollDelete::SwUndoCondTxtFmtCollDelete(SwTxtFmtColl * _pOld,
@@ -251,7 +251,7 @@ SwUndoCondTxtFmtCollDelete::SwUndoCondTxtFmtCollDelete(SwTxtFmtColl * _pOld,
 
 SwFmt * SwUndoCondTxtFmtCollDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCondTxtFmtColl(sOldName, (SwTxtFmtColl *) pDerivedFrom, true);
+    return pDoc->MakeCondTxtFmtColl(sOldName, static_cast<SwTxtFmtColl *>(pDerivedFrom), true);
 }
 
 SwUndoRenameFmtColl::SwUndoRenameFmtColl(const OUString & sInitOldName,
@@ -275,12 +275,12 @@ SwUndoCharFmtCreate::SwUndoCharFmtCreate(SwCharFmt * pNewFmt,
 
 SwFmt * SwUndoCharFmtCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCharFmt(sNewName, (SwCharFmt *) pDerivedFrom, true);
+    return pDoc->MakeCharFmt(sNewName, static_cast<SwCharFmt *>(pDerivedFrom), true);
 }
 
 void SwUndoCharFmtCreate::Delete()
 {
-    pDoc->DelCharFmt((SwCharFmt *) pNew, true);
+    pDoc->DelCharFmt(static_cast<SwCharFmt *>(pNew), true);
 }
 
 SwFmt * SwUndoCharFmtCreate::Find(const OUString & rName) const
@@ -295,12 +295,12 @@ SwUndoCharFmtDelete::SwUndoCharFmtDelete(SwCharFmt * pOld, SwDoc * pDocument)
 
 SwFmt * SwUndoCharFmtDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCharFmt(sOldName, (SwCharFmt *) pDerivedFrom, true);
+    return pDoc->MakeCharFmt(sOldName, static_cast<SwCharFmt *>(pDerivedFrom), true);
 }
 
 void SwUndoCharFmtDelete::Delete(SwFmt * pFmt)
 {
-    pDoc->DelCharFmt((SwCharFmt *) pFmt, true);
+    pDoc->DelCharFmt(static_cast<SwCharFmt *>(pFmt), true);
 }
 
 SwFmt * SwUndoCharFmtDelete::Find(const OUString & rName) const
@@ -330,12 +330,12 @@ SwUndoFrmFmtCreate::SwUndoFrmFmtCreate(SwFrmFmt * pNewFmt,
 
 SwFmt * SwUndoFrmFmtCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeFrmFmt(sNewName, (SwFrmFmt *) pDerivedFrom, true, bAuto);
+    return pDoc->MakeFrmFmt(sNewName, static_cast<SwFrmFmt *>(pDerivedFrom), true, bAuto);
 }
 
 void SwUndoFrmFmtCreate::Delete()
 {
-    pDoc->DelFrmFmt((SwFrmFmt *) pNew, true);
+    pDoc->DelFrmFmt(static_cast<SwFrmFmt *>(pNew), true);
 }
 
 SwFmt * SwUndoFrmFmtCreate::Find(const OUString & rName) const
@@ -350,12 +350,12 @@ SwUndoFrmFmtDelete::SwUndoFrmFmtDelete(SwFrmFmt * pOld, SwDoc * pDocument)
 
 SwFmt * SwUndoFrmFmtDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeFrmFmt(sOldName, (SwFrmFmt *) pDerivedFrom, true);
+    return pDoc->MakeFrmFmt(sOldName, static_cast<SwFrmFmt *>(pDerivedFrom), true);
 }
 
 void SwUndoFrmFmtDelete::Delete(SwFmt * pFmt)
 {
-    pDoc->DelFrmFmt((SwFrmFmt *) pFmt, true);
+    pDoc->DelFrmFmt(static_cast<SwFrmFmt *>(pFmt), true);
 }
 
 SwFmt * SwUndoFrmFmtDelete::Find(const OUString & rName) const

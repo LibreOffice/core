@@ -100,7 +100,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 
             // than delete it again
             SwNodeIndex aDelNd( *pTblNd, -1 );
-            rPam.GetPoint()->nContent.Assign( (SwCntntNode*)pCurrNd, 0 );
+            rPam.GetPoint()->nContent.Assign( static_cast<SwCntntNode*>(pCurrNd), 0 );
             RemoveIdxRel( aDelNd.GetIndex(), *rPam.GetPoint() );
             pDoc->GetNodes().Delete( aDelNd );
         }

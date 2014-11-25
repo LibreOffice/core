@@ -307,7 +307,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::_CreateShape( SdrObject *pObj ) 
     uno::Reference< drawing::XShape >  xRet;
     if(pObj->ISA(SwVirtFlyDrawObj) || pObj->GetObjInventor() == SWGInventor)
     {
-        SwFlyDrawContact* pFlyContact = (SwFlyDrawContact*)pObj->GetUserCall();
+        SwFlyDrawContact* pFlyContact = static_cast<SwFlyDrawContact*>(pObj->GetUserCall());
         if(pFlyContact)
         {
             SwFrmFmt* pFlyFmt = pFlyContact->GetFmt();
@@ -1124,7 +1124,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                             SfxItemSet aItemSet( pDoc->GetAttrPool(),
                                         RES_FRMATR_BEGIN, RES_FRMATR_END - 1 );
                             aItemSet.SetParent(&pFmt->GetAttrSet());
-                            SwFmtAnchor aAnchor = (const SwFmtAnchor&)aItemSet.Get(pEntry->nWID);
+                            SwFmtAnchor aAnchor = static_cast<const SwFmtAnchor&>(aItemSet.Get(pEntry->nWID));
                             SwPosition aPos(*pFrame->GetFrmFmt()->GetCntnt().GetCntntIdx());
                             aAnchor.SetAnchor(&aPos);
                             aAnchor.SetType(FLY_AT_FLY);

@@ -320,7 +320,9 @@ inline const SwFrmFmt *SwPageDesc::GetLeftFmt(bool const bFirst) const
 
 class SwPageDescExt
 {
+public:
     SwPageDesc aPageDesc;
+private:
     SwDoc * pDoc;
     OUString sFollow;
 

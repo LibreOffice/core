@@ -1359,7 +1359,7 @@ void SwXStyle::setName(const OUString& rName) throw( uno::RuntimeException, std:
         bool bExcept = true;
         if(pBase && pBase->IsUserDefined())
         {
-            rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+            rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
             bExcept = !xTmp->SetName(rName);
             if(!bExcept)
                 m_sStyleName = rName;
@@ -1436,7 +1436,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         SfxStyleSheetBase* pBase = pBasePool->Find(m_sStyleName);
         if(pBase)
         {
-            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
+            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)) );
             //make it a 'real' style - necessary for pooled styles
             xBase->GetItemSet();
             if(xBase->GetParent() != sParentStyle)
@@ -1907,8 +1907,8 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                                 (!pFmt->GetBulletFont() || pFmt->GetBulletFont()->GetName() != pBulletFontNames[i]) )
                             {
                                 const SvxFontListItem* pFontListItem =
-                                        (const SvxFontListItem* )pDoc->GetDocShell()
-                                                            ->GetItem( SID_ATTR_CHAR_FONTLIST );
+                                        static_cast<const SvxFontListItem*>(pDoc->GetDocShell()
+                                                            ->GetItem( SID_ATTR_CHAR_FONTLIST ));
                                 const FontList*  pList = pFontListItem->GetFontList();
                                 vcl::FontInfo aInfo = pList->Get(
                                     pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
@@ -2167,7 +2167,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                     OUString sStyle;
                     SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                     SwDocStyleSheet* pStyle =
-                        (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
+                        static_cast<SwDocStyleSheet*>(pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR));
                     if(pStyle)
                         pDrop->SetCharFmt(pStyle->GetCharFmt());
                     else
@@ -2256,7 +2256,7 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
         pBasePool->SetSearchMask(eFamily, nSaveMask );
         OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
-            aBaseImpl.setNewBase(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
+            aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
         else
             throw uno::RuntimeException();
     }
@@ -2344,7 +2344,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         sal_Bool bHidden = sal_False;
         if(pBase)
         {
-            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
+            rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)) );
             bHidden = xBase->IsHidden();
         }
         aRet.setValue(&bHidden, ::getBooleanCppuType());
@@ -2353,7 +2353,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     {
         if (pBase)
         {
-            rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
+            rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
             xBase->GetGrabBagItem(aRet);
         }
     }
@@ -2361,7 +2361,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     {
         if(!rBase.getNewBase().is())
         {
-            rBase.setNewBase(new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ));
+            rBase.setNewBase(new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ));
         }
 
         //UUUU
@@ -2428,7 +2428,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 const SfxPoolItem* pItem;
                 if (SfxItemState::SET == rBase.GetItemSet().GetItemState(RES_PAGEDESC, true, &pItem))
                 {
-                    const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
+                    const SwPageDesc* pDesc = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc();
                     if(pDesc)
                     {
                         OUString aString;
@@ -2853,7 +2853,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
         if(pBase)
         {
             const OUString* pNames = rPropertyNames.getConstArray();
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
             sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
 
             switch(eFamily)
@@ -2997,7 +2997,7 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
 
         if(pBase)
         {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
             switch(eFamily)
             {
                 case SFX_STYLE_FAMILY_CHAR:
@@ -3107,7 +3107,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
 
         if(pBase)
         {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
             SwFmt *pTargetFmt = 0;
             sal_uInt16 nPgDscPos = USHRT_MAX;
             switch(eFamily)
@@ -3238,7 +3238,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
 
             if(pBase)
             {
-                rtl::Reference< SwDocStyleSheet > xStyle(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
+                rtl::Reference< SwDocStyleSheet > xStyle(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
                 sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
                 switch(eFamily)
                 {
@@ -3403,7 +3403,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
         {
-            aBaseImpl.setNewBase(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
+            aBaseImpl.setNewBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
         }
         else
         {
@@ -3753,7 +3753,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                     if(bHeader || bFooter || rPropName == UNO_NAME_FIRST_IS_SHARED)
                     {
                         // slot is a Header/Footer slot
-                        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+                        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
                         const SfxItemSet& rSet = xStyle->GetItemSet();
                         const SvxSetItem* pSetItem;
 
@@ -3826,7 +3826,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
 
                     if (bHeader || bFooter)
                     {
-                        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+                        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
                         const SfxItemSet& rSet = xStyle->GetItemSet();
                         const SvxSetItem* pSetItem;
                         if(SfxItemState::SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, false, (const SfxPoolItem**)&pSetItem))
@@ -3905,7 +3905,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
 
                 case FN_PARAM_FTN_INFO :
                 {
-                    rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+                    rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
                     const SfxItemSet& rSet = xStyle->GetItemSet();
                     const SfxPoolItem& rItem = rSet.Get(FN_PARAM_FTN_INFO);
                     rItem.QueryValue(pRet[nProp], nMemberId);

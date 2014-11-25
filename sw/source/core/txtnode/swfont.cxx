@@ -490,7 +490,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_FONT,
             true, &pItem ))
         {
-            const SvxFontItem *pFont = (const SvxFontItem *)pItem;
+            const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
             aSub[SW_LATIN].SetFamily( pFont->GetFamily() );
             aSub[SW_LATIN].Font::SetName( pFont->GetFamilyName() );
             aSub[SW_LATIN].Font::SetStyleName( pFont->GetStyleName() );
@@ -500,7 +500,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_FONTSIZE,
             true, &pItem ))
         {
-            const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
+            const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             aSub[SW_LATIN].SvxFont::SetPropr( 100 );
             aSub[SW_LATIN].aSize = aSub[SW_LATIN].Font::GetSize();
             Size aTmpSize = aSub[SW_LATIN].aSize;
@@ -520,7 +520,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CJK_FONT,
             true, &pItem ))
         {
-            const SvxFontItem *pFont = (const SvxFontItem *)pItem;
+            const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
             aSub[SW_CJK].SetFamily( pFont->GetFamily() );
             aSub[SW_CJK].Font::SetName( pFont->GetFamilyName() );
             aSub[SW_CJK].Font::SetStyleName( pFont->GetStyleName() );
@@ -530,7 +530,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CJK_FONTSIZE,
             true, &pItem ))
         {
-            const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
+            const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             aSub[SW_CJK].SvxFont::SetPropr( 100 );
             aSub[SW_CJK].aSize = aSub[SW_CJK].Font::GetSize();
             Size aTmpSize = aSub[SW_CJK].aSize;
@@ -556,7 +556,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CTL_FONT,
             true, &pItem ))
         {
-            const SvxFontItem *pFont = (const SvxFontItem *)pItem;
+            const SvxFontItem *pFont = static_cast<const SvxFontItem *>(pItem);
             aSub[SW_CTL].SetFamily( pFont->GetFamily() );
             aSub[SW_CTL].Font::SetName( pFont->GetFamilyName() );
             aSub[SW_CTL].Font::SetStyleName( pFont->GetStyleName() );
@@ -566,7 +566,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_CTL_FONTSIZE,
             true, &pItem ))
         {
-            const SvxFontHeightItem *pHeight = (const SvxFontHeightItem *)pItem;
+            const SvxFontHeightItem *pHeight = static_cast<const SvxFontHeightItem *>(pItem);
             aSub[SW_CTL].SvxFont::SetPropr( 100 );
             aSub[SW_CTL].aSize = aSub[SW_CTL].Font::GetSize();
             Size aTmpSize = aSub[SW_CTL].aSize;
@@ -639,7 +639,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
         if( SfxItemState::SET == pAttrSet->GetItemState( RES_CHRATR_ESCAPEMENT,
             true, &pItem ))
         {
-            const SvxEscapementItem *pEsc = (const SvxEscapementItem *)pItem;
+            const SvxEscapementItem *pEsc = static_cast<const SvxEscapementItem *>(pItem);
             SetEscapement( pEsc->GetEsc() );
             if( aSub[SW_LATIN].IsEsc() )
                 SetProportion( pEsc->GetProp() );

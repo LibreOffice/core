@@ -745,7 +745,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         {
             pLastFont = pSpaceFont;
             pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
-            ( (SwDoDrawCapital&) rDo ).DrawSpace( aStartPos );
+            static_cast<SwDoDrawCapital&>( rDo ).DrawSpace( aStartPos );
         }
         if ( bWordWise )
             delete pSpaceFontAccess;

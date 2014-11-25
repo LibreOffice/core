@@ -275,7 +275,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             OUString sPDesc;
             if(SfxItemState::SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem))
             {
-                const SwPageDesc* pDsc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
+                const SwPageDesc* pDsc = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc();
                 if(pDsc)
                 {
                    sPDesc = SwStyleNameMapper::GetProgName(pDsc->GetName(), nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC );
@@ -614,8 +614,8 @@ static void lcl_FormatTable(SwFrmFmt* pTblFmt)
         {
             if(pFrm->IsValid())
                 pFrm->InvalidatePos();
-            ((SwTabFrm*)pFrm)->SetONECalcLowers();
-            ((SwTabFrm*)pFrm)->Calc();
+            static_cast<SwTabFrm*>(pFrm)->SetONECalcLowers();
+            static_cast<SwTabFrm*>(pFrm)->Calc();
         }
     }
 }
@@ -758,8 +758,8 @@ void sw_setValue( SwXCell &rCell, double nVal )
         // - the current number format is not a number format according to the number formatter, but rather a text format
         // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
         if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
-            ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
-            ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT)
+            ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue())
+            ||  static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue() == NUMBERFORMAT_TEXT)
         {
             aSet.Put(SwTblBoxNumFormat(0));
         }
@@ -940,7 +940,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException,
         const SfxPoolItem* pItem;
         SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
         if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
-            ||  pMyDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue()))
+            ||  pMyDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue()))
         {
             aSet.Put(SwTblBoxNumFormat(0));
         }
@@ -1548,8 +1548,8 @@ const SwPaM*        SwXTextTableCursor::GetPaM() const  { return GetCrsr(); }
 SwPaM*              SwXTextTableCursor::GetPaM()        { return GetCrsr(); }
 const SwDoc*        SwXTextTableCursor::GetDoc() const  { return GetFrmFmt()->GetDoc(); }
 SwDoc*              SwXTextTableCursor::GetDoc()        { return GetFrmFmt()->GetDoc(); }
-const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
-SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return (SwUnoCrsr*)aCrsrDepend.GetRegisteredIn(); }
+const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return static_cast<const SwUnoCrsr*>(aCrsrDepend.GetRegisteredIn()); }
+SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return static_cast<SwUnoCrsr*>(aCrsrDepend.GetRegisteredIn()); }
 
 uno::Sequence< OUString > SwXTextTableCursor::getSupportedServiceNames(void) throw( uno::RuntimeException, std::exception )
 {
@@ -3420,8 +3420,8 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                     pDoc->GetTabBorders(rCrsr, aSet);
                     const SvxBoxInfoItem& rBoxInfoItem =
-                        (const SvxBoxInfoItem&)aSet.Get(SID_ATTR_BORDER_INNER);
-                    const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
+                        static_cast<const SvxBoxInfoItem&>(aSet.Get(SID_ATTR_BORDER_INNER));
+                    const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
 
                     if (FN_UNO_TABLE_BORDER == pEntry->nWID)
                     {

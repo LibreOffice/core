@@ -1963,8 +1963,8 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                     if( !sBulletFontName.isEmpty() && pLclDocShell )
                     {
                         const SvxFontListItem* pFontListItem =
-                                (const SvxFontListItem* )pLclDocShell
-                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST );
+                                static_cast<const SvxFontListItem* >(pLclDocShell
+                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
                         const FontList*  pList = pFontListItem->GetFontList();
                         vcl::FontInfo aInfo = pList->Get(
                             sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
@@ -2061,7 +2061,7 @@ void SwXNumberingRules::SetPropertiesToNumFmt(
                     if(!pSetVOrient)
                     {
                         if(aFmt.GetGraphicOrientation())
-                            pSetVOrient = (SwFmtVertOrient*)aFmt.GetGraphicOrientation()->Clone();
+                            pSetVOrient = static_cast<SwFmtVertOrient*>(aFmt.GetGraphicOrientation()->Clone());
                         else
                             pSetVOrient = new SwFmtVertOrient;
                     }

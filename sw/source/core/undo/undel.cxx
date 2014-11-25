@@ -58,7 +58,7 @@ static void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
         const SwFmtAnchor* pAnchor;
         for( size_t n = 0; n < rSpzArr.size(); ++n )
         {
-            pFmt = (SwFlyFrmFmt*)rSpzArr[n];
+            pFmt = static_cast<SwFlyFrmFmt*>(rSpzArr[n]);
             pAnchor = &pFmt->GetAnchor();
             if (pAnchor->GetAnchorId() == FLY_AT_CHAR)
             {
@@ -722,7 +722,7 @@ static void lcl_ReAnchorAtCntntFlyFrames( const SwFrmFmts& rSpzArr, SwPosition &
         const SwPosition* pAPos;
         for( size_t n = 0; n < rSpzArr.size(); ++n )
         {
-            pFmt = (SwFlyFrmFmt*)rSpzArr[n];
+            pFmt = static_cast<SwFlyFrmFmt*>(rSpzArr[n]);
             pAnchor = &pFmt->GetAnchor();
             if (pAnchor->GetAnchorId() == FLY_AT_PARA)
             {
@@ -765,7 +765,7 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
             else
             {
                 if( pInsNd->IsCntntNode() )
-                    aPos.nContent.Assign( (SwCntntNode*)pInsNd, nSttCntnt );
+                    aPos.nContent.Assign( static_cast<SwCntntNode*>(pInsNd), nSttCntnt );
                 if( !bTblDelLastNd )
                     pInsNd = 0;         // do not delete Node!
             }

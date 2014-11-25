@@ -287,8 +287,8 @@ void SwUndoInsTbl::UndoImpl(::sw::UndoRedoContext & rContext)
 
     sTblNm = pTblNd->GetTable().GetFrmFmt()->GetName();
     if( pTblNd->GetTable().IsA( TYPE( SwDDETable )) )
-        pDDEFldType = (SwDDEFieldType*)((SwDDETable&)pTblNd->GetTable()).
-                                        GetDDEFldType()->Copy();
+        pDDEFldType = static_cast<SwDDEFieldType*>(static_cast<SwDDETable&>(pTblNd->GetTable()).
+                                        GetDDEFldType()->Copy());
 
     rDoc.GetNodes().Delete( aIdx, pTblNd->EndOfSectionIndex() -
                                 aIdx.GetIndex() + 1 );
@@ -312,8 +312,8 @@ void SwUndoInsTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pDDEFldType )
     {
-        SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.getIDocumentFieldsAccess().InsertFldType(
-                                                            *pDDEFldType);
+        SwDDEFieldType* pNewType = static_cast<SwDDEFieldType*>(rDoc.getIDocumentFieldsAccess().InsertFldType(
+                                                            *pDDEFldType));
         SwDDETable* pDDETbl = new SwDDETable( pTblNode->GetTable(), pNewType );
         pTblNode->SetNewTable( pDDETbl );
         delete pDDEFldType, pDDEFldType = 0;
@@ -408,7 +408,7 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     pBoxSaves = new SwTblToTxtSaves( (SwTblToTxtSaves::size_type)rTbl.GetTabSortBoxes().size() );
 
     if( rTbl.IsA( TYPE( SwDDETable ) ) )
-        pDDEFldType = (SwDDEFieldType*)((SwDDETable&)rTbl).GetDDEFldType()->Copy();
+        pDDEFldType = static_cast<SwDDEFieldType*>(static_cast<const SwDDETable&>(rTbl).GetDDEFldType()->Copy());
 
     bCheckNumFmt = rTbl.GetFrmFmt()->GetDoc()->IsInsTblFormatNum();
 
@@ -473,8 +473,8 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( pDDEFldType )
     {
-        SwDDEFieldType* pNewType = (SwDDEFieldType*)rDoc.getIDocumentFieldsAccess().InsertFldType(
-                                                            *pDDEFldType);
+        SwDDEFieldType* pNewType = static_cast<SwDDEFieldType*>(rDoc.getIDocumentFieldsAccess().InsertFldType(
+                                                            *pDDEFldType));
         SwDDETable* pDDETbl = new SwDDETable( pTblNd->GetTable(), pNewType );
         pTblNd->SetNewTable( pDDETbl, false );
         delete pDDEFldType, pDDEFldType = 0;
@@ -531,7 +531,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
         for( n = pTblNd->GetIndex() + 1; n < nTmpEnd; ++n )
         {
             if( ( pNd = (*this)[ n ] )->IsCntntNode() )
-                ((SwCntntNode*)pNd)->DelFrms();
+                static_cast<SwCntntNode*>(pNd)->DelFrms();
             pNd->pStartOfSection = pTblNd;
         }
     }
@@ -636,8 +636,8 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
     OSL_ENSURE( pTblNd, "Could not find any TableNode" );
 
     if( pTblNd->GetTable().IsA( TYPE( SwDDETable )) )
-        pDDEFldType = (SwDDEFieldType*)((SwDDETable&)pTblNd->GetTable()).
-                                                GetDDEFldType()->Copy();
+        pDDEFldType = static_cast<SwDDEFieldType*>(static_cast<SwDDETable&>(pTblNd->GetTable()).
+                                                GetDDEFldType()->Copy());
 
     rDoc.TableToText( pTblNd, cTrenner );
 
@@ -909,9 +909,10 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
             {
                 SwTableFmlUpdate aMsgHnt( pSwTable );
                 aMsgHnt.eFlags = TBL_BOXNAME;
-                ((SwTblBoxFormula*)pItem)->ChgDefinedIn( pFmt );
-                ((SwTblBoxFormula*)pItem)->ChangeState( &aMsgHnt );
-                ((SwTblBoxFormula*)pItem)->ChgDefinedIn( 0 );
+                SwTblBoxFormula* pFormulaItem = const_cast<SwTblBoxFormula*>(static_cast<const SwTblBoxFormula*>(pItem));
+                pFormulaItem->ChgDefinedIn( pFmt );
+                pFormulaItem->ChangeState( &aMsgHnt );
+                pFormulaItem->ChgDefinedIn( 0 );
             }
         }
         nRet = aSets.size();
@@ -995,7 +996,7 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
     }
 
     // SwTableBox must have a format
-    SwTableBox aParent( (SwTableBoxFmt*)pFmt, rTbl.GetTabLines().size(), 0 );
+    SwTableBox aParent( static_cast<SwTableBoxFmt*>(pFmt), rTbl.GetTabLines().size(), 0 );
 
     // fill FrmFmts with defaults (0)
     pFmt = 0;
@@ -1099,16 +1100,16 @@ void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
     SwIterator<SwTabFrm,SwFmt> aIter( *pOldFmt );
     for( SwFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        if( pTblLn ? ((SwRowFrm*)pLast)->GetTabLine() == pTblLn
-                    : ((SwCellFrm*)pLast)->GetTabBox() == pTblBx )
+        if( pTblLn ? static_cast<SwRowFrm*>(pLast)->GetTabLine() == pTblLn
+                    : static_cast<SwCellFrm*>(pLast)->GetTabBox() == pTblBx )
         {
             pLast->RegisterToFormat(*pFmt);
             pLast->InvalidateAll();
             pLast->ReinitializeFrmSizeAttrFlags();
             if ( !pTblLn )
             {
-                ((SwCellFrm*)pLast)->SetDerivedVert( false );
-                ((SwCellFrm*)pLast)->CheckDirChange();
+                static_cast<SwCellFrm*>(pLast)->SetDerivedVert( false );
+                static_cast<SwCellFrm*>(pLast)->CheckDirChange();
             }
         }
     }
@@ -1176,7 +1177,7 @@ void _SaveLine::SaveCntntAttrs( SwDoc* pDoc )
 
 void _SaveLine::CreateNew( SwTable& rTbl, SwTableBox& rParent, _SaveTable& rSTbl )
 {
-    SwTableLineFmt* pFmt = (SwTableLineFmt*)rSTbl.aFrmFmts[ nItemSet ];
+    SwTableLineFmt* pFmt = static_cast<SwTableLineFmt*>(rSTbl.aFrmFmts[ nItemSet ]);
     if( !pFmt )
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
@@ -1330,7 +1331,7 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
 
 void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl )
 {
-    SwTableBoxFmt* pFmt = (SwTableBoxFmt*)rSTbl.aFrmFmts[ nItemSet ];
+    SwTableBoxFmt* pFmt = static_cast<SwTableBoxFmt*>(rSTbl.aFrmFmts[ nItemSet ]);
     if( !pFmt )
     {
         SwDoc* pDoc = rTbl.GetFrmFmt()->GetDoc();
@@ -1711,7 +1712,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
             pSave->RestoreSection( &rDoc, &aIdx, SwTableBoxStartNode );
             if( pSave->GetHistory() )
                 pSave->GetHistory()->Rollback( &rDoc );
-            SwTableBox* pBox = new SwTableBox( (SwTableBoxFmt*)pCpyBox->GetFrmFmt(), aIdx,
+            SwTableBox* pBox = new SwTableBox( static_cast<SwTableBoxFmt*>(pCpyBox->GetFrmFmt()), aIdx,
                                                 pCpyBox->GetUpper() );
             rLnBoxes.push_back( pBox );
         }
@@ -1978,7 +1979,7 @@ CHECKTABLE(pTblNd->GetTable())
         aIdx = *it;
         SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection( aIdx,
                                             SwTableBoxStartNode, pColl );
-        pBox = new SwTableBox( (SwTableBoxFmt*)pCpyBox->GetFrmFmt(), *pSttNd,
+        pBox = new SwTableBox( static_cast<SwTableBoxFmt*>(pCpyBox->GetFrmFmt()), *pSttNd,
                                 pCpyBox->GetUpper() );
         rLnBoxes.push_back( pBox );
 
@@ -2191,19 +2192,19 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
                 false, &pItem ))
         {
             bNewFmt = true;
-            nNewFmtIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
+            nNewFmtIdx = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
         }
         if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
                 false, &pItem ))
         {
             bNewFml = true;
-            aNewFml = ((SwTblBoxFormula*)pItem)->GetFormula();
+            aNewFml = static_cast<const SwTblBoxFormula*>(pItem)->GetFormula();
         }
         if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
                 false, &pItem ))
         {
             bNewValue = true;
-            fNewNum = ((SwTblBoxValue*)pItem)->GetValue();
+            fNewNum = static_cast<const SwTblBoxValue*>(pItem)->GetValue();
         }
     }
 
@@ -2398,7 +2399,7 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( !pNd->IsCntntNode() )
         pNd = rDoc.GetNodes().GoNext( &pPam->GetPoint()->nNode );
-    pPam->GetPoint()->nContent.Assign( (SwCntntNode*)pNd, 0 );
+    pPam->GetPoint()->nContent.Assign( static_cast<SwCntntNode*>(pNd), 0 );
 }
 
 void SwUndoTblNumFmt::SetBox( const SwTableBox& rBox )

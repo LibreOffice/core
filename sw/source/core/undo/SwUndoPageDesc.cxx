@@ -107,8 +107,8 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     OSL_ENSURE(0 != pDoc, "no document?");
 
 #if OSL_DEBUG_LEVEL > 1
-    DebugHeaderFooterContent( (SwPageDesc&)aOld );
-    DebugHeaderFooterContent( (SwPageDesc&)aNew );
+    DebugHeaderFooterContent( aOld.aPageDesc );
+    DebugHeaderFooterContent( aNew.aPageDesc );
 #endif
 
     /*
@@ -118,8 +118,8 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
     But this happens, this Undo Ctor will destroy the unnecessary duplicate and manipulate the
     content pointer of the both page descriptions.
     */
-    SwPageDesc &rOldDesc = (SwPageDesc&)aOld;
-    SwPageDesc &rNewDesc = (SwPageDesc&)aNew;
+    SwPageDesc &rOldDesc = aOld.aPageDesc;
+    SwPageDesc &rNewDesc = aNew.aPageDesc;
     const SwFmtHeader& rOldHead = rOldDesc.GetMaster().GetHeader();
     const SwFmtHeader& rNewHead = rNewDesc.GetMaster().GetHeader();
     const SwFmtFooter& rOldFoot = rOldDesc.GetMaster().GetFooter();
@@ -182,10 +182,10 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
 
         // After this exchange method the old page description will point to zero,
         // the new one will point to the node position of the original content nodes.
-        ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
+        ExchangeContentNodes( aOld.aPageDesc, aNew.aPageDesc );
 #if OSL_DEBUG_LEVEL > 1
-        DebugHeaderFooterContent( (SwPageDesc&)aOld );
-        DebugHeaderFooterContent( (SwPageDesc&)aNew );
+        DebugHeaderFooterContent( aOld.aPageDesc );
+        DebugHeaderFooterContent( aNew.aPageDesc );
 #endif
     }
 }
@@ -340,7 +340,7 @@ void SwUndoPageDesc::UndoImpl(::sw::UndoRedoContext &)
 {
     // Move (header/footer)content node responsibility from new page descriptor to old one again.
     if( bExchange )
-        ExchangeContentNodes( (SwPageDesc&)aNew, (SwPageDesc&)aOld );
+        ExchangeContentNodes( aNew.aPageDesc, aOld.aPageDesc );
     pDoc->ChgPageDesc(aOld.GetName(), aOld);
 }
 
@@ -348,7 +348,7 @@ void SwUndoPageDesc::RedoImpl(::sw::UndoRedoContext &)
 {
     // Move (header/footer)content node responsibility from old page descriptor to new one again.
     if( bExchange )
-        ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
+        ExchangeContentNodes( aOld.aPageDesc, aNew.aPageDesc );
     pDoc->ChgPageDesc(aNew.GetName(), aNew);
 }
 

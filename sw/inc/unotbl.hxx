@@ -44,6 +44,7 @@
 #include <calbck.hxx>
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
+#include <frmfmt.hxx>
 
 class SwUnoCrsr;
 class SwTable;
@@ -152,7 +153,7 @@ public:
     static SwXCell*     CreateXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, SwTable *pTbl = 0 );
     SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
 
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 };
 
 class SwXTextTableRow : public cppu::WeakImplHelper2
@@ -165,7 +166,7 @@ class SwXTextTableRow : public cppu::WeakImplHelper2
     const SfxItemPropertySet*   m_pPropSet;
     SwTableLine*            pLine;
 
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 protected:
     virtual ~SwXTextTableRow();
     //SwClient
@@ -274,7 +275,7 @@ public:
 
     const SwUnoCrsr*            GetCrsr() const;
     SwUnoCrsr*                  GetCrsr();
-    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt*       GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 };
 
 struct SwRangeDescriptor
@@ -432,7 +433,7 @@ public:
     //SwClient
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 };
 
 class SwXCellRange : public cppu::WeakImplHelper7
@@ -529,7 +530,7 @@ public:
     //SwClient
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
-    SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt*   GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
     sal_uInt16      getRowCount(void);
     sal_uInt16      getColumnCount(void);
 
@@ -552,7 +553,7 @@ class SwXTableRows : public cppu::WeakImplHelper2
     public SwClient
 
 {
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 protected:
     virtual ~SwXTableRows();
 public:
@@ -593,7 +594,7 @@ class SwXTableColumns : public cppu::WeakImplHelper2
     public SwClient
 
 {
-    SwFrmFmt* GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt* GetFrmFmt() const { return const_cast<SwFrmFmt*>(static_cast<const SwFrmFmt*>(GetRegisteredIn())); }
 protected:
     virtual ~SwXTableColumns();
 public:

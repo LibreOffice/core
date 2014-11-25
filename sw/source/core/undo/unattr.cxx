@@ -471,7 +471,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
             (FLY_AT_CHAR == rAnchor.GetAnchorId()))
         {
-            aPos.nContent.Assign( (SwTxtNode*)pNd, rAnchor.GetPageNum() );
+            aPos.nContent.Assign( static_cast<SwTxtNode*>(pNd), rAnchor.GetPageNum() );
             if ( aPos.nContent.GetIndex() > pNd->GetTxtNode()->GetTxt().getLength())
             {
                 // #i35443# - invalid position.
@@ -515,7 +515,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         // To prevent that, first detach the connection between attribute and
         // format.
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
-        SwTxtNode *pTxtNode = (SwTxtNode*)&pPos->nNode.GetNode();
+        SwTxtNode *pTxtNode = static_cast<SwTxtNode*>(&pPos->nNode.GetNode());
         OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const sal_Int32 nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const pHnt =

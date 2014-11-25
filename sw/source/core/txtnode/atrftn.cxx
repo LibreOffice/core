@@ -212,11 +212,11 @@ OUString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, bool bInclStrings ) const
 
         if( pSectNd )
         {
-            const SwFmtFtnEndAtTxtEnd& rFtnEnd = (SwFmtFtnEndAtTxtEnd&)
+            const SwFmtFtnEndAtTxtEnd& rFtnEnd = static_cast<const SwFmtFtnEndAtTxtEnd&>(
                 pSectNd->GetSection().GetFmt()->GetFmtAttr(
                                 IsEndNote() ?
                                 static_cast<sal_uInt16>(RES_END_AT_TXTEND) :
-                                static_cast<sal_uInt16>(RES_FTN_AT_TXTEND) );
+                                static_cast<sal_uInt16>(RES_FTN_AT_TXTEND) ) );
 
             if( FTNEND_ATTXTEND_OWNNUMANDFMT == rFtnEnd.GetValue() )
             {
@@ -473,7 +473,7 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
                 while ( pFrm && !pFrm->IsFtnFrm() )
                     pFrm = pFrm->GetUpper();
 
-                SwFtnFrm *pFtn = (SwFtnFrm*)pFrm;
+                SwFtnFrm *pFtn = static_cast<SwFtnFrm*>(pFrm);
                 while ( pFtn && pFtn->GetMaster() )
                     pFtn = pFtn->GetMaster();
                 OSL_ENSURE( pFtn->GetAttr() == this, "Ftn mismatch error." );

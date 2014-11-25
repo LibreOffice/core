@@ -1371,7 +1371,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                     aDateTime.SetSec(m_pImpl->m_pProps->pDateTime->Seconds);
                 }
                 SwPostItField* pPostItField = new SwPostItField(
-                    (SwPostItFieldType*)pFldType,
+                    static_cast<SwPostItFieldType*>(pFldType),
                     m_pImpl->m_pProps->sPar1, // author
                     m_pImpl->m_pProps->sPar2, // content
                     m_pImpl->m_pProps->sPar3, // author's initials
@@ -1388,7 +1388,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         case SW_SERVICE_FIELDTYPE_SCRIPT:
         {
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_SCRIPTFLD);
-            pFld = new SwScriptField((SwScriptFieldType*)pFldType,
+            pFld = new SwScriptField(static_cast<SwScriptFieldType*>(pFldType),
                     m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar2,
                     m_pImpl->m_pProps->bBool1);
         }
@@ -1438,7 +1438,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         case SW_SERVICE_FIELDTYPE_TEMPLATE_NAME:
         {
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_TEMPLNAMEFLD);
-            pFld = new SwTemplNameField((SwTemplNameFieldType*)pFldType,
+            pFld = new SwTemplNameField(static_cast<SwTemplNameFieldType*>(pFldType),
                                         m_pImpl->m_pProps->nFormat);
             uno::Any aFormat;
             aFormat <<= m_pImpl->m_pProps->nFormat;
@@ -1501,7 +1501,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         case SW_SERVICE_FIELDTYPE_GET_REFERENCE:
         {
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_GETREFFLD);
-            pFld = new SwGetRefField((SwGetRefFieldType*)pFldType,
+            pFld = new SwGetRefField(static_cast<SwGetRefFieldType*>(pFldType),
                         m_pImpl->m_pProps->sPar1,
                         0,
                         0,
@@ -1520,7 +1520,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         case SW_SERVICE_FIELDTYPE_JUMP_EDIT:
         {
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_JUMPEDITFLD);
-            pFld = new SwJumpEditField((SwJumpEditFieldType*)pFldType,
+            pFld = new SwJumpEditField(static_cast<SwJumpEditFieldType*>(pFldType),
                     m_pImpl->m_pProps->nUSHORT1, m_pImpl->m_pProps->sPar2,
                     m_pImpl->m_pProps->sPar1);
         }
@@ -1593,11 +1593,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             if (m_pImpl->m_pProps->bBool2)
                 nUserSubType |= nsSwExtendedSubType::SUB_CMD;
             if (m_pImpl->m_pProps->bFormatIsDefault &&
-                nsSwGetSetExpType::GSE_STRING == ((SwUserFieldType*)pFldType)->GetType())
+                nsSwGetSetExpType::GSE_STRING == static_cast<SwUserFieldType*>(pFldType)->GetType())
             {
                 m_pImpl->m_pProps->nFormat = -1;
             }
-            pFld = new SwUserField((SwUserFieldType*)pFldType,
+            pFld = new SwUserField(static_cast<SwUserFieldType*>(pFldType),
                                 nUserSubType,
                                 m_pImpl->m_pProps->nFormat);
         }
@@ -1605,7 +1605,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         case SW_SERVICE_FIELDTYPE_REF_PAGE_SET:
         {
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_REFPAGESETFLD);
-            pFld = new SwRefPageSetField( (SwRefPageSetFieldType*)pFldType,
+            pFld = new SwRefPageSetField( static_cast<SwRefPageSetFieldType*>(pFldType),
                                 m_pImpl->m_pProps->nUSHORT1,
                                 m_pImpl->m_pProps->bBool1 );
         }
@@ -1640,7 +1640,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 pDoc->getIDocumentFieldsAccess().GetFldType(RES_DDEFLD, m_pImpl->m_sTypeName, true);
             if (!pFldType)
                 throw uno::RuntimeException();
-            pFld = new SwDDEField( (SwDDEFieldType*)pFldType );
+            pFld = new SwDDEField( static_cast<SwDDEFieldType*>(pFldType) );
         }
         break;
         case SW_SERVICE_FIELDTYPE_DATABASE_NAME:
@@ -1651,7 +1651,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
             aData.sCommand = m_pImpl->m_pProps->sPar2;
             aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
-            pFld = new SwDBNameField((SwDBNameFieldType*)pFldType, aData);
+            pFld = new SwDBNameField(static_cast<SwDBNameFieldType*>(pFldType), aData);
             sal_uInt16  nSubType = pFld->GetSubType();
             if (m_pImpl->m_pProps->bBool2)
                 nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
@@ -1669,7 +1669,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             aData.sCommand = m_pImpl->m_pProps->sPar2;
             aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
             SwFieldType* pFldType = pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_DBNEXTSETFLD);
-            pFld = new SwDBNextSetField((SwDBNextSetFieldType*)pFldType,
+            pFld = new SwDBNextSetField(static_cast<SwDBNextSetFieldType*>(pFldType),
                     m_pImpl->m_pProps->sPar3, OUString(), aData);
         }
 #endif
@@ -1681,8 +1681,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             aData.sDataSource = m_pImpl->m_pProps->sPar1;
             aData.sCommand = m_pImpl->m_pProps->sPar2;
             aData.nCommandType = m_pImpl->m_pProps->nSHORT1;
-            pFld = new SwDBNumSetField( (SwDBNumSetFieldType*)
-                pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_DBNUMSETFLD),
+            pFld = new SwDBNumSetField( static_cast<SwDBNumSetFieldType*>(
+                pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_DBNUMSETFLD)),
                 m_pImpl->m_pProps->sPar3,
                 OUString::number(m_pImpl->m_pProps->nFormat),
                 aData );
@@ -1720,7 +1720,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 throw uno::RuntimeException();
             pFld = new SwDBField(static_cast<SwDBFieldType*>(pFldType),
                     m_pImpl->m_pProps->nFormat);
-            ((SwDBField*)pFld)->InitContent(m_pImpl->m_pProps->sPar1);
+            static_cast<SwDBField*>(pFld)->InitContent(m_pImpl->m_pProps->sPar1);
             sal_uInt16  nSubType = pFld->GetSubType();
             if (m_pImpl->m_pProps->bBool2)
                 nSubType &= ~nsSwExtendedSubType::SUB_INVISIBLE;
@@ -1738,7 +1738,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 throw uno::RuntimeException();
             // detect the field type's sub type and set an appropriate number format
             if (m_pImpl->m_pProps->bFormatIsDefault &&
-                nsSwGetSetExpType::GSE_STRING == ((SwSetExpFieldType*)pFldType)->GetType())
+                nsSwGetSetExpType::GSE_STRING == static_cast<SwSetExpFieldType*>(pFldType)->GetType())
             {
                 m_pImpl->m_pProps->nFormat = -1;
             }
@@ -1848,7 +1848,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 SwMacroField::CreateMacroString(aName,
                     m_pImpl->m_pProps->sPar1, m_pImpl->m_pProps->sPar3);
             }
-            pFld = new SwMacroField((SwMacroFieldType*)pFldType, aName,
+            pFld = new SwMacroField(static_cast<SwMacroFieldType*>(pFldType), aName,
                                     m_pImpl->m_pProps->sPar2);
         }
         break;
@@ -1892,8 +1892,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         break;
         case SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS:
             // create field
-            pFld = new SwCombinedCharField( (SwCombinedCharFieldType*)
-                        pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_COMBINED_CHARS),
+            pFld = new SwCombinedCharField( static_cast<SwCombinedCharFieldType*>(
+                        pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_COMBINED_CHARS)),
                         m_pImpl->m_pProps->sPar1);
             break;
         case SW_SERVICE_FIELDTYPE_DROPDOWN:
@@ -1921,12 +1921,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 if (m_pImpl->m_pProps->bFormatIsDefault)
                     m_pImpl->m_pProps->nFormat = -1;
             }
-            pFld = new SwTblField( (SwTblFieldType*)
-                pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_TABLEFLD),
+            pFld = new SwTblField( static_cast<SwTblFieldType*>(
+                pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_TABLEFLD)),
                 m_pImpl->m_pProps->sPar2,
                 nType,
                 m_pImpl->m_pProps->nFormat);
-           ((SwTblField*)pFld)->ChgExpStr(m_pImpl->m_pProps->sPar1);
+           static_cast<SwTblField*>(pFld)->ChgExpStr(m_pImpl->m_pProps->sPar1);
         }
         break;
         default: OSL_FAIL("was ist das fuer ein Typ?");
@@ -2528,19 +2528,19 @@ void SwXTextField::removeVetoableChangeListener(const OUString& /*PropertyName*/
 void SAL_CALL SwXTextField::update() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwField const*const pFld = m_pImpl->GetField();
+    SwField * pFld = const_cast<SwField*>(m_pImpl->GetField());
     if (pFld)
     {
         switch(pFld->Which())
         {
             case RES_DATETIMEFLD:
-            ((SwDateTimeField*)pFld)->SetDateTime( ::DateTime( ::DateTime::SYSTEM ) );
+            static_cast<SwDateTimeField*>(pFld)->SetDateTime( ::DateTime( ::DateTime::SYSTEM ) );
             break;
 
             case RES_EXTUSERFLD:
             {
-                SwExtUserField* pExtUserFld = (SwExtUserField*)pFld;
-                pExtUserFld->SetExpansion( ((SwExtUserFieldType*)pFld->GetTyp())->Expand(
+                SwExtUserField* pExtUserFld = static_cast<SwExtUserField*>(pFld);
+                pExtUserFld->SetExpansion( static_cast<SwExtUserFieldType*>(pFld->GetTyp())->Expand(
                                             pExtUserFld->GetSubType(),
                                             pExtUserFld->GetFormat() ) );
             }
@@ -2548,24 +2548,24 @@ void SAL_CALL SwXTextField::update() throw (uno::RuntimeException, std::exceptio
 
             case RES_AUTHORFLD:
             {
-                SwAuthorField* pAuthorFld = (SwAuthorField*)pFld;
-                pAuthorFld->SetExpansion( ((SwAuthorFieldType*)pFld->GetTyp())->Expand(
+                SwAuthorField* pAuthorFld = static_cast<SwAuthorField*>(pFld);
+                pAuthorFld->SetExpansion( static_cast<SwAuthorFieldType*>(pFld->GetTyp())->Expand(
                                             pAuthorFld->GetFormat() ) );
             }
             break;
 
             case RES_FILENAMEFLD:
             {
-                SwFileNameField* pFileNameFld = (SwFileNameField*)pFld;
-                pFileNameFld->SetExpansion( ((SwFileNameFieldType*)pFld->GetTyp())->Expand(
+                SwFileNameField* pFileNameFld = static_cast<SwFileNameField*>(pFld);
+                pFileNameFld->SetExpansion( static_cast<SwFileNameFieldType*>(pFld->GetTyp())->Expand(
                                             pFileNameFld->GetFormat() ) );
             }
             break;
 
             case RES_DOCINFOFLD:
             {
-                    SwDocInfoField* pDocInfFld = (SwDocInfoField*)pFld;
-                    pDocInfFld->SetExpansion( ((SwDocInfoFieldType*)pFld->GetTyp())->Expand(
+                    SwDocInfoField* pDocInfFld = static_cast<SwDocInfoField*>(pFld);
+                    pDocInfFld->SetExpansion( static_cast<SwDocInfoFieldType*>(pFld->GetTyp())->Expand(
                                                 pDocInfFld->GetSubType(),
                                                 pDocInfFld->GetFormat(),
                                                 pDocInfFld->GetLanguage(),
@@ -2652,14 +2652,14 @@ void SwXTextField::Impl::Modify(
     {
     case RES_REMOVE_UNO_OBJECT:
     case RES_OBJECTDYING:
-        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+        if( (void*)GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
             Invalidate();
         break;
 
     case RES_FMT_CHG:
         // Am I re-attached to a new one and will the old one be deleted?
-        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
-            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
+        if( static_cast<const SwFmtChg*>(pNew)->pChangedFmt == GetRegisteredIn() &&
+            static_cast<const SwFmtChg*>(pOld)->pChangedFmt->IsFmtInDTOR() )
             Invalidate();
         break;
     }

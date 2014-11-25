@@ -821,8 +821,8 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                       )
                     {
                         const SvxFontListItem* pFontListItem =
-                                (const SvxFontListItem* )pDoc->GetDocShell()
-                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST );
+                                static_cast<const SvxFontListItem* >(pDoc->GetDocShell()
+                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST ));
                         const FontList*  pList = pFontListItem->GetFontList();
 
                         vcl::FontInfo aInfo = pList->Get(

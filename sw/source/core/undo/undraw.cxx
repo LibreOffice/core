@@ -211,7 +211,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 
     // save group object
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
-    SwDrawContact* pDrawContact = (SwDrawContact*)pFmt->FindContactObj();
+    SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pFmt->FindContactObj());
     SdrObject* pObj = pDrawContact->GetMaster();
     pObjArr->pObj = pObj;
 
@@ -267,7 +267,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 
         pObj = rSave.pObj;
 
-        SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
+        SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
         // object will destroy itself
         pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
@@ -326,8 +326,8 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     nSize = (sal_uInt16)pObj->GetSubList()->GetObjCount() + 1;
     pObjArr = new SwUndoGroupObjImpl[ nSize ];
 
-    SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-    SwDrawFrmFmt* pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
+    SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+    SwDrawFrmFmt* pFmt = static_cast<SwDrawFrmFmt*>(pContact->GetFmt());
 
     pObjArr->pObj = pObj;
     pObjArr->pFmt = pFmt;
@@ -403,7 +403,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // save group object
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
-    SwDrawContact* pContact = (SwDrawContact*)pFmt->FindContactObj();
+    SwDrawContact* pContact = static_cast<SwDrawContact*>(pFmt->FindContactObj());
 
         // object will destroy itself
     pContact->Changed( *pObjArr->pObj, SDRUSERCALL_DELETE,
@@ -546,8 +546,8 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
         SdrObject *pObj = rSave.pObj;
-        SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-        SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
+        SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
+        SwDrawFrmFmt *pFmt = static_cast<SwDrawFrmFmt*>(pContact->GetFmt());
 
         // object will destroy itself
         pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );

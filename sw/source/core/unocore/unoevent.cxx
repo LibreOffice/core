@@ -197,7 +197,7 @@ void SwFrameEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
 
 const SvxMacroItem& SwFrameEventDescriptor::getMacroItem()
 {
-    return (const SvxMacroItem&)rFrame.GetFrmFmt()->GetFmtAttr(RES_FRMMACRO);
+    return static_cast<const SvxMacroItem&>(rFrame.GetFrmFmt()->GetFmtAttr(RES_FRMMACRO));
 }
 
 sal_uInt16 SwFrameEventDescriptor::getMacroItemWhich() const
@@ -234,7 +234,7 @@ void SwFrameStyleEventDescriptor::setMacroItem(const SvxMacroItem& rItem)
         SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
         if (pBase)
         {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase) ) );
             SfxItemSet& rStyleSet = xStyle->GetItemSet();
             SfxItemSet aSet(*rStyleSet.GetPool(), RES_FRMMACRO, RES_FRMMACRO);
             aSet.Put(rItem);
@@ -255,8 +255,8 @@ const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
         SfxStyleSheetBase* pBase = pBasePool->Find(rStyle.GetStyleName());
         if (pBase)
         {
-            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase) );
-            return (const SvxMacroItem&)xStyle->GetItemSet().Get(RES_FRMMACRO);
+            rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pBase)) );
+            return static_cast<const SvxMacroItem&>(xStyle->GetItemSet().Get(RES_FRMMACRO));
         }
         else
             return aEmptyMacroItem;

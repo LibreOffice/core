@@ -456,7 +456,7 @@ void SwUndoDelLayFmt::RedoForRollback()
 
 SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
     : SwUndo( UNDO_SETFLYFRMFMT ), SwClient( &rFlyFmt ), pFrmFmt( &rFlyFmt ),
-    pOldFmt( (SwFrmFmt*)rFlyFmt.DerivedFrom() ), pNewFmt( &rNewFrmFmt ),
+    pOldFmt( static_cast<SwFrmFmt*>(rFlyFmt.DerivedFrom()) ), pNewFmt( &rNewFrmFmt ),
     pItemSet( new SfxItemSet( *rFlyFmt.GetAttrSet().GetPool(),
                                 rFlyFmt.GetAttrSet().GetRanges() )),
     nOldNode( 0 ), nNewNode( 0 ),
@@ -640,7 +640,7 @@ void SwUndoSetFlyFmt::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 
             bAnchorChgd = true;
 
-            const SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
+            const SwFmtAnchor* pAnchor = static_cast<const SwFmtAnchor*>(pItem);
             switch( nOldAnchorTyp = static_cast<sal_uInt16>(pAnchor->GetAnchorId()) )
             {
             case FLY_AS_CHAR:

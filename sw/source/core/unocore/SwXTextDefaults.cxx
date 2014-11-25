@@ -88,7 +88,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
             OUString sStyle;
             SwStyleNameMapper::FillUIName(uStyle, sStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
             SwDocStyleSheet* pStyle =
-                (SwDocStyleSheet*)m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
+                static_cast<SwDocStyleSheet*>(m_pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR));
             SwFmtDrop* pDrop = 0;
             SwFmtCharFmt *pCharFmt = 0;
             if(pStyle)
@@ -96,13 +96,13 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
                 rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
                 if (RES_PARATR_DROP == pMap->nWID)
                 {
-                    pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem is const...
+                    pDrop = static_cast<SwFmtDrop*>(rItem.Clone());   // because rItem is const...
                     pDrop->SetCharFmt(xStyle->GetCharFmt());
                     m_pDoc->SetDefault(*pDrop);
                 }
                 else // RES_TXTATR_CHARFMT == pMap->nWID
                 {
-                    pCharFmt = (SwFmtCharFmt*)rItem.Clone();   // because rItem is const...
+                    pCharFmt = static_cast<SwFmtCharFmt*>(rItem.Clone());   // because rItem is const...
                     pCharFmt->SetCharFmt(xStyle->GetCharFmt());
                     m_pDoc->SetDefault(*pCharFmt);
                 }

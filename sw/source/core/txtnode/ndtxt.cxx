@@ -316,7 +316,7 @@ static void lcl_ChangeFtnRef( SwTxtNode &rNode )
                     if( !pFrm )
                         return;
                 }
-                SwTxtFtn *pAttr = (SwTxtFtn*)pHt;
+                SwTxtFtn *pAttr = static_cast<SwTxtFtn*>(pHt);
                 OSL_ENSURE( pAttr->GetStartNode(), "FtnAtr ohne StartNode." );
                 SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
                 SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
@@ -3680,8 +3680,8 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
         GetNodes().IsDocNodes() )
     {
         _ChgTxtCollUpdateNum(
-                        (SwTxtFmtColl*)static_cast<const SwFmtChg*>(pOldValue)->pChangedFmt,
-                        (SwTxtFmtColl*)static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt );
+                        static_cast<const SwTxtFmtColl*>(static_cast<const SwFmtChg*>(pOldValue)->pChangedFmt),
+                        static_cast<const SwTxtFmtColl*>(static_cast<const SwFmtChg*>(pNewValue)->pChangedFmt) );
     }
 
     //UUUU reset fill information
@@ -3821,7 +3821,7 @@ void SwTxtNode::UpdateOutlineState()
 
 int SwTxtNode::GetAttrOutlineLevel() const
 {
-    return ((const SfxUInt16Item &)GetAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
+    return static_cast<const SfxUInt16Item &>(GetAttr(RES_PARATR_OUTLINELEVEL)).GetValue();
 }
 
 void SwTxtNode::SetAttrOutlineLevel(int nLevel)
@@ -4966,7 +4966,7 @@ sal_uInt32 SwTxtNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
     SfxItemSet aSet( (SfxItemPool&) (GetDoc()->GetAttrPool()), RES_CHRATR_RSID, RES_CHRATR_RSID );
     if ( GetAttr(aSet, nStt, nEnd) )
     {
-        SvxRsidItem* pRsid = (SvxRsidItem*)aSet.GetItem(RES_CHRATR_RSID);
+        const SvxRsidItem* pRsid = static_cast<const SvxRsidItem*>(aSet.GetItem(RES_CHRATR_RSID));
         if( pRsid )
             return pRsid->GetValue();
     }

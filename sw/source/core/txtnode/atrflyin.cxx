@@ -45,9 +45,9 @@ SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
 bool SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    return( pTxtAttr && ((SwFmtFlyCnt&)rAttr).pTxtAttr &&
-            pTxtAttr->GetStart() == ((SwFmtFlyCnt&)rAttr).pTxtAttr->GetStart() &&
-            pFmt == ((SwFmtFlyCnt&)rAttr).GetFrmFmt() );
+    return( pTxtAttr && static_cast<const SwFmtFlyCnt&>(rAttr).pTxtAttr &&
+            pTxtAttr->GetStart() == static_cast<const SwFmtFlyCnt&>(rAttr).pTxtAttr->GetStart() &&
+            pFmt == static_cast<const SwFmtFlyCnt&>(rAttr).GetFrmFmt() );
 }
 
 SfxPoolItem* SwFmtFlyCnt::Clone( SfxItemPool* ) const
@@ -213,21 +213,21 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     SwFrm* pFrm = aIter.First();
     if ( pFrm )
     {
-        SwTxtFrm *pFirst = (SwTxtFrm*)pCurrFrm;
+        SwTxtFrm *pFirst = const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pCurrFrm));
         while ( pFirst->IsFollow() )
             pFirst = pFirst->FindMaster();
         do
             {
                 SwTxtFrm *pTmp = pFirst;
                 do
-                {   if( ( (SwFlyFrm*)pFrm )->GetAnchorFrm() == (SwFrm*) pTmp )
+                {   if( static_cast<SwFlyFrm*>(pFrm)->GetAnchorFrm() == static_cast<SwFrm*>(pTmp) )
                     {
                         if ( pTmp != pCurrFrm )
                         {
-                            pTmp->RemoveFly( (SwFlyFrm*)pFrm );
-                            ((SwTxtFrm*)pCurrFrm)->AppendFly( (SwFlyFrm*)pFrm );
+                            pTmp->RemoveFly( static_cast<SwFlyFrm*>(pFrm) );
+                            const_cast<SwTxtFrm*>(static_cast<const SwTxtFrm*>(pCurrFrm))->AppendFly( static_cast<SwFlyFrm*>(pFrm) );
                         }
-                        return (SwFlyInCntFrm*)pFrm;
+                        return static_cast<SwFlyInCntFrm*>(pFrm);
                     }
                     pTmp = pTmp->GetFollow();
                 } while ( pTmp );
@@ -243,7 +243,7 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
     // Die Rekursion wird durch den Lockmechanismus in SwTxtFrm::Format()
     // abgewuergt.
     SwFrm* pCurrFrame = const_cast< SwFrm* >(pCurrFrm);
-    SwFlyInCntFrm *pFly = new SwFlyInCntFrm( (SwFlyFrmFmt*)pFrmFmt, pCurrFrame, pCurrFrame );
+    SwFlyInCntFrm *pFly = new SwFlyInCntFrm( static_cast<SwFlyFrmFmt*>(pFrmFmt), pCurrFrame, pCurrFrame );
     pCurrFrame->AppendFly( pFly );
     pFly->RegistFlys();
 

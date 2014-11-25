@@ -230,7 +230,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
             pTxtNode->ResetAllAttr();
 
             if( USHRT_MAX != pDoc->GetTxtFmtColls()->GetPos( pTxtFmtColl ))
-                pTxtFmtColl = (SwTxtFmtColl*)pTxtNode->ChgFmtColl( pTxtFmtColl );
+                pTxtFmtColl = static_cast<SwTxtFmtColl*>(pTxtNode->ChgFmtColl( pTxtFmtColl )) ;
 
             pHistory->SetTmpEnd( nSetPos );
             pHistory->TmpRollback( pDoc, 0, false );

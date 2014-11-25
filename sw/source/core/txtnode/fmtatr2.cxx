@@ -441,8 +441,8 @@ bool SwFmtRuby::QueryValue( uno::Any& rVal,
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        case MID_RUBY_TEXT: rVal <<= (OUString)sRubyTxt;                    break;
-         case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
+        case MID_RUBY_TEXT: rVal <<= sRubyTxt;                    break;
+        case MID_RUBY_ADJUST:  rVal <<= (sal_Int16)nAdjustment;    break;
         case MID_RUBY_CHARSTYLE:
         {
             OUString aString;
@@ -452,8 +452,7 @@ bool SwFmtRuby::QueryValue( uno::Any& rVal,
         break;
         case MID_RUBY_ABOVE:
         {
-            sal_Bool bAbove = !nPosition;
-            rVal.setValue(&bAbove, ::getBooleanCppuType());
+            rVal <<= bool(!nPosition) ;
         }
         break;
         default:

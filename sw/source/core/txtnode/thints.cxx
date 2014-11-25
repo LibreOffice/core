@@ -1028,7 +1028,7 @@ SwTxtAttr* MakeTxtAttr(
     {
     case RES_TXTATR_CHARFMT:
         {
-            SwFmtCharFmt &rFmtCharFmt = (SwFmtCharFmt&) rNew;
+            SwFmtCharFmt &rFmtCharFmt = static_cast<SwFmtCharFmt&>(rNew);
             if( !rFmtCharFmt.GetCharFmt() )
             {
                 rFmtCharFmt.SetCharFmt( rDoc.GetDfltCharFmt() );
@@ -1038,7 +1038,7 @@ SwTxtAttr* MakeTxtAttr(
         }
         break;
     case RES_TXTATR_INETFMT:
-        pNew = new SwTxtINetFmt( (SwFmtINetFmt&)rNew, nStt, nEnd );
+        pNew = new SwTxtINetFmt( static_cast<SwFmtINetFmt&>(rNew), nStt, nEnd );
         break;
 
     case RES_TXTATR_FIELD:
@@ -1068,7 +1068,7 @@ SwTxtAttr* MakeTxtAttr(
     case RES_TXTATR_FLYCNT:
         {
             // erst hier wird das Frame-Format kopiert (mit Inhalt) !!
-            pNew = new SwTxtFlyCnt( (SwFmtFlyCnt&)rNew, nStt );
+            pNew = new SwTxtFlyCnt( static_cast<SwFmtFlyCnt&>(rNew), nStt );
             // Kopie von einem Text-Attribut
             if ( static_cast<const SwFmtFlyCnt &>(rAttr).GetTxtFlyCnt() )
             {
@@ -1078,21 +1078,21 @@ SwTxtAttr* MakeTxtAttr(
         }
         break;
     case RES_TXTATR_FTN:
-        pNew = new SwTxtFtn( (SwFmtFtn&)rNew, nStt );
+        pNew = new SwTxtFtn( static_cast<SwFmtFtn&>(rNew), nStt );
         // ggfs. SeqNo kopieren
-        if( ((SwFmtFtn&)rAttr).GetTxtFtn() )
-            ((SwTxtFtn*)pNew)->SetSeqNo( ((SwFmtFtn&)rAttr).GetTxtFtn()->GetSeqRefNo() );
+        if( static_cast<SwFmtFtn&>(rAttr).GetTxtFtn() )
+            static_cast<SwTxtFtn*>(pNew)->SetSeqNo( static_cast<SwFmtFtn&>(rAttr).GetTxtFtn()->GetSeqRefNo() );
         break;
     case RES_TXTATR_REFMARK:
         pNew = nStt == nEnd
-                ? new SwTxtRefMark( (SwFmtRefMark&)rNew, nStt )
-                : new SwTxtRefMark( (SwFmtRefMark&)rNew, nStt, &nEnd );
+                ? new SwTxtRefMark( static_cast<SwFmtRefMark&>(rNew), nStt )
+                : new SwTxtRefMark( static_cast<SwFmtRefMark&>(rNew), nStt, &nEnd );
         break;
     case RES_TXTATR_TOXMARK:
-        pNew = new SwTxtTOXMark( (SwTOXMark&)rNew, nStt, &nEnd );
+        pNew = new SwTxtTOXMark( static_cast<SwTOXMark&>(rNew), nStt, &nEnd );
         break;
     case RES_TXTATR_CJK_RUBY:
-        pNew = new SwTxtRuby( (SwFmtRuby&)rNew, nStt, nEnd );
+        pNew = new SwTxtRuby( static_cast<SwFmtRuby&>(rNew), nStt, nEnd );
         break;
     case RES_TXTATR_META:
     case RES_TXTATR_METAFIELD:
@@ -1143,7 +1143,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
             break;
 
         case RES_TXTATR_FTN:
-            ((SwTxtFtn*)pAttr)->SetStartNode( 0 );
+            static_cast<SwTxtFtn*>(pAttr)->SetStartNode( 0 );
             static_cast<SwFmtFtn&>(pAttr->GetAttr()).InvalidateFootnote();
             break;
 
@@ -1180,7 +1180,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                     break;
                 case RES_DDEFLD:
                     if (GetNodes().IsDocNodes() && pTxtFld->GetpTxtNode())
-                        ((SwDDEFieldType*)pFld->GetTyp())->DecRefCnt();
+                        static_cast<SwDDEFieldType*>(pFld->GetTyp())->DecRefCnt();
                     break;
                 case RES_POSTITFLD:
                     {
@@ -1275,7 +1275,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         {
         case RES_TXTATR_FLYCNT:
             {
-                SwTxtFlyCnt *pFly = (SwTxtFlyCnt *)pAttr;
+                SwTxtFlyCnt *pFly = static_cast<SwTxtFlyCnt *>(pAttr);
                 SwFrmFmt* pFmt = pAttr->GetFlyCnt().GetFrmFmt();
                 if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
                 {
@@ -1388,10 +1388,10 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 }
 
                 // wird eine neue Fussnote eingefuegt ??
-                bool bNewFtn = 0 == ((SwTxtFtn*)pAttr)->GetStartNode();
+                bool bNewFtn = 0 == static_cast<SwTxtFtn*>(pAttr)->GetStartNode();
                 if( bNewFtn )
                 {
-                    ((SwTxtFtn*)pAttr)->MakeNewTextSection( GetNodes() );
+                    static_cast<SwTxtFtn*>(pAttr)->MakeNewTextSection( GetNodes() );
                     SwRegHistory* pHist = GetpSwpHints()
                         ? GetpSwpHints()->GetHistory() : 0;
                     if( pHist )
@@ -1401,7 +1401,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 {
                     // loesche alle Frames der Section, auf die der StartNode zeigt
                     sal_uLong nSttIdx =
-                        ((SwTxtFtn*)pAttr)->GetStartNode()->GetIndex();
+                        static_cast<SwTxtFtn*>(pAttr)->GetStartNode()->GetIndex();
                     sal_uLong nEndIdx = rNodes[ nSttIdx++ ]->EndOfSectionIndex();
                     SwCntntNode* pCNd;
                     for( ; nSttIdx < nEndIdx; ++nSttIdx )
@@ -1443,11 +1443,11 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         // der Index noch gar nicht in der Verwaltung stehen !!
                 }
                 if( !pTxtFtn )
-                    pTxtFtn = (SwTxtFtn*)pAttr;
+                    pTxtFtn = static_cast<SwTxtFtn*>(pAttr);
 
                 // fuers Update der Nummern und zum Sortieren
                 // muss der Node gesetzt sein.
-                ((SwTxtFtn*)pAttr)->ChgTxtNode( this );
+                static_cast<SwTxtFtn*>(pAttr)->ChgTxtNode( this );
 
                 // FussNote im Redline-Bereich NICHT ins FtnArray einfuegen!
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
@@ -1458,7 +1458,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 }
                 SwNodeIndex aTmpIndex( *this );
                 pDoc->GetFtnIdxs().UpdateFtn( aTmpIndex);
-                ((SwTxtFtn*)pAttr)->SetSeqRefNo();
+                static_cast<SwTxtFtn*>(pAttr)->SetSeqRefNo();
             }
             break;
 
@@ -2211,7 +2211,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                                     if( nAttrStart > nStt )
                                     {
                                         rSet.InvalidateItem( nHintWhich );
-                                        pPrev->mpItem = (SfxPoolItem*)-1;
+                                        pPrev->mpItem = reinterpret_cast<SfxPoolItem*>(-1);
                                     }
                                     else
                                     {
@@ -2220,7 +2220,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                                     }
                                 }
                             }
-                            else if( (SfxPoolItem*)-1 != pPrev->mpItem )
+                            else if( reinterpret_cast<SfxPoolItem*>(-1) != pPrev->mpItem )
                             {
                                 if( pPrev->mnEndPos == nAttrStart &&
                                     *pPrev->mpItem == *pItem )
@@ -2231,7 +2231,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                                 else
                                 {
                                     rSet.InvalidateItem( nHintWhich );
-                                    pPrev->mpItem = (SfxPoolItem*)-1;
+                                    pPrev->mpItem = reinterpret_cast<SfxPoolItem*>(-1);
                                 }
                             }
                         }
@@ -2247,7 +2247,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                 for (size_t n = 0; n < coArrSz; ++n)
                 {
                     const SwPoolItemEndPair& rItemPair = (*pAttrArr)[ n ];
-                    if( (0 != rItemPair.mpItem) && ((SfxPoolItem*)-1 != rItemPair.mpItem) )
+                    if( (0 != rItemPair.mpItem) && (reinterpret_cast<SfxPoolItem*>(-1) != rItemPair.mpItem) )
                     {
                         const sal_uInt16 nWh =
                             static_cast<sal_uInt16>(n + RES_CHRATR_BEGIN);
@@ -2619,7 +2619,7 @@ bool SwpHints::CalcHiddenParaField()
             const SwFmtFld& rFld = pTxtHt->GetFmtFld();
             if( RES_HIDDENPARAFLD == rFld.GetField()->GetTyp()->Which() )
             {
-                if( !((SwHiddenParaField*)rFld.GetField())->IsHidden() )
+                if( !static_cast<const SwHiddenParaField*>(rFld.GetField())->IsHidden() )
                 {
                     SetHiddenParaField(false);
                     return bOldHasHiddenParaField != bNewHasHiddenParaField;
@@ -3049,7 +3049,7 @@ bool SwpHints::TryInsertHint(
                     break;
                 case RES_DDEFLD:
                     if( rNode.GetNodes().IsDocNodes() )
-                        ((SwDDEFieldType*)pFld->GetTyp())->IncRefCnt();
+                        static_cast<SwDDEFieldType*>(pFld->GetTyp())->IncRefCnt();
                     break;
                 }
             }
@@ -3061,30 +3061,30 @@ bool SwpHints::TryInsertHint(
                 switch( pFld->GetTyp()->Which() )
                 {
                 case RES_SETEXPFLD:
-                    bInsFldType = ((SwSetExpFieldType*)pFld->GetTyp())->IsDeleted();
-                    if( nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)pFld->GetTyp())->GetType() )
+                    bInsFldType = static_cast<SwSetExpFieldType*>(pFld->GetTyp())->IsDeleted();
+                    if( nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pFld->GetTyp())->GetType() )
                     {
                         // bevor die ReferenzNummer gesetzt wird, sollte
                         // das Feld am richtigen FeldTypen haengen!
-                        SwSetExpFieldType* pFldType = (SwSetExpFieldType*)
-                                    pDoc->getIDocumentFieldsAccess().InsertFldType( *pFld->GetTyp() );
+                        SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(
+                                    pDoc->getIDocumentFieldsAccess().InsertFldType( *pFld->GetTyp() ) );
                         if( pFldType != pFld->GetTyp() )
                         {
                             SwFmtFld* pFmtFld = const_cast<SwFmtFld*>(&pTxtFld->GetFmtFld());
                             pFmtFld->RegisterToFieldType( *pFldType );
                             pFmtFld->GetField()->ChgTyp( pFldType );
                         }
-                        pFldType->SetSeqRefNo( *(SwSetExpField*)pFld );
+                        pFldType->SetSeqRefNo( *const_cast<SwSetExpField*>(static_cast<const SwSetExpField*>(pFld)) );
                     }
                     break;
                 case RES_USERFLD:
-                    bInsFldType = ((SwUserFieldType*)pFld->GetTyp())->IsDeleted();
+                    bInsFldType = static_cast<SwUserFieldType*>(pFld->GetTyp())->IsDeleted();
                     break;
 
                 case RES_DDEFLD:
                     if( pDoc->getIDocumentFieldsAccess().IsNewFldLst() )
-                        ((SwDDEFieldType*)pFld->GetTyp())->IncRefCnt();
-                    bInsFldType = ((SwDDEFieldType*)pFld->GetTyp())->IsDeleted();
+                        static_cast<SwDDEFieldType*>(pFld->GetTyp())->IncRefCnt();
+                    bInsFldType = static_cast<SwDDEFieldType*>(pFld->GetTyp())->IsDeleted();
                     break;
 
                 case RES_POSTITFLD:
@@ -3101,7 +3101,7 @@ bool SwpHints::TryInsertHint(
         }
         break;
     case RES_TXTATR_FTN :
-        ((SwTxtFtn*)pHint)->ChgTxtNode( &rNode );
+        static_cast<SwTxtFtn*>(pHint)->ChgTxtNode( &rNode );
         break;
     case RES_TXTATR_REFMARK:
         static_txtattr_cast<SwTxtRefMark*>(pHint)->ChgTxtNode( &rNode );
@@ -3303,7 +3303,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
         {
             const SwTxtNode* pNd = pTxtFld->GetpTxtNode();
             if( pNd && pNd->GetNodes().IsDocNodes() )
-                ((SwDDEFieldType*)pFldTyp)->DecRefCnt();
+                const_cast<SwDDEFieldType*>(static_cast<const SwDDEFieldType*>(pFldTyp))->DecRefCnt();
             pTxtFld->ChgTxtNode(0);
         }
         else if ( m_bHasHiddenParaField &&
@@ -3420,7 +3420,7 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                         continue;
                 }
                 const SfxPoolItem* pItem = CharFmt::GetItem( *pHt, nWhichId );
-                const sal_uInt16 nLng = ((SvxLanguageItem*)pItem)->GetLanguage();
+                const sal_uInt16 nLng = static_cast<const SvxLanguageItem*>(pItem)->GetLanguage();
 
                 // Umfasst das Attribut den Bereich komplett?
                 if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
@@ -3432,7 +3432,7 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
     }
     if( LANGUAGE_DONTKNOW == nRet )
     {
-        nRet = ((SvxLanguageItem&)GetSwAttrSet().Get( nWhichId )).GetLanguage();
+        nRet = static_cast<const SvxLanguageItem&>(GetSwAttrSet().Get( nWhichId )).GetLanguage();
         if( LANGUAGE_DONTKNOW == nRet )
             nRet = static_cast<sal_uInt16>(GetAppLanguage());
     }

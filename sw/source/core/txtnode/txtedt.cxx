@@ -1074,7 +1074,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     OSL_ENSURE( pFont, "target font missing?" );
     if (pFont)
     {
-        SvxFontItem aFontItem = (SvxFontItem&) aSet.Get( nFontWhichId );
+        SvxFontItem aFontItem = static_cast<const SvxFontItem&>( aSet.Get( nFontWhichId ) );
         aFontItem.SetFamilyName(   pFont->GetName());
         aFontItem.SetFamily(       pFont->GetFamily());
         aFontItem.SetStyleName(    pFont->GetStyleName());
@@ -1599,7 +1599,7 @@ bool SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( pLinguNode != this )
     {
         pLinguNode = this;
-        pLinguFrm = (SwTxtFrm*)getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), (Point*)(rHyphInf.GetCrsrPos()) );
+        pLinguFrm = static_cast<SwTxtFrm*>(getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), (Point*)(rHyphInf.GetCrsrPos()) ));
     }
     SwTxtFrm *pFrm = pLinguFrm;
     if( pFrm )
