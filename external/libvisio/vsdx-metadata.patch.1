@@ -460,3 +460,41 @@ index 0392862..d832604 100644
  dc:title
 +dcterms:created
 +dcterms:modified
+diff --git a/src/lib/Makefile.in b/src/lib/Makefile.in
+index 1881b7d..a51ac14 100644
+--- a/src/lib/Makefile.in
++++ b/src/lib/Makefile.in
+@@ -134,7 +134,7 @@ am_libvisio_@VSD_MAJOR_VERSION@_@VSD_MINOR_VERSION@_la_OBJECTS =  \
+ 	VSDParser.lo VSDShapeList.lo VSDStencils.lo VSDStyles.lo \
+ 	VSDStylesCollector.lo VSDXMLHelper.lo VDXParser.lo \
+ 	VSDXMLParserBase.lo VSDXMLTokenMap.lo VSDXParser.lo \
+-	VSDXTheme.lo $(am__objects_1)
++	VSDXTheme.lo VSDXMetaData.lo $(am__objects_1)
+ libvisio_@VSD_MAJOR_VERSION@_@VSD_MINOR_VERSION@_la_OBJECTS = $(am_libvisio_@VSD_MAJOR_VERSION@_@VSD_MINOR_VERSION@_la_OBJECTS)
+ AM_V_lt = $(am__v_lt_@AM_V@)
+ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+@@ -436,6 +436,8 @@ libvisio_@VSD_MAJOR_VERSION@_@VSD_MINOR_VERSION@_la_SOURCES = \
+ 	VSDXParser.h \
+ 	VSDXTheme.cpp \
+ 	VSDXTheme.h \
++	VSDXMetaData.cpp \
++	VSDXMetaData.h \
+ 	$(generated_files)
+ 
+ EXTRA_DIST = \
+@@ -548,6 +550,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VSDXMLHelper.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VSDXMLParserBase.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VSDXMLTokenMap.Plo@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VSDXMetaData.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VSDXParser.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VSDXTheme.Plo@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/VisioDocument.Plo@am__quote@
+@@ -771,6 +774,7 @@ VSDXMLParserBase.lo : $(generated_files)
+ VSDXMLTokenMap.lo : $(generated_files)
+ VSDXParser.lo : $(generated_files)
+ VSDXTheme.lo : $(generated_files)
++VSDXMetaData.lo : $(generated_files)
+ 
+ $(top_builddir)/src/lib/tokens.h : $(top_builddir)/src/lib/tokens.gperf
+ 
