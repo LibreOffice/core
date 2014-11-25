@@ -8,14 +8,13 @@
  */
 
 #version 120
-
+	
 attribute vec2 vPosition;
 uniform mat4 MVP;
 
 void main(void)
 {
-     vec4 v =  vec4(vPosition,1,1);	
-     gl_Position = MVP * v;
+     gl_Position = MVP * vec4(vPosition,1,1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
