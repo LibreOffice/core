@@ -17,7 +17,12 @@
  */
 package com.sun.star.wizards.reportbuilder;
 
-import com.sun.star.util.XModeSelector;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
@@ -35,18 +40,14 @@ import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XModeSelector;
 import com.sun.star.util.XModifiable;
 import com.sun.star.util.XURLTransformer;
-import com.sun.star.wizards.common.Resource;
-import com.sun.star.wizards.db.FieldColumn;
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Set;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.NamedValueCollection;
 import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.report.IReportBuilderLayouter;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
 import com.sun.star.wizards.report.IReportDocument;
@@ -54,8 +55,6 @@ import com.sun.star.wizards.report.ReportImplementationHelper;
 import com.sun.star.wizards.report.ReportLayouter;
 import com.sun.star.wizards.report.ReportWizard;
 import com.sun.star.wizards.ui.UIConsts;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * This class use the IReportDocument Interface to communicate between the UI
@@ -520,34 +519,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         return m_nDefaultPageOrientation;
     }
 
-    /**
-     * Helper function to get a com.sun.star.wizards.report.layout.ReportBuilderLayouter by its name
-     *
-     * @param _sClassName
-     * @return the object or null
-     */
-    private IReportBuilderLayouter getLayoutInstanceFrom(String _sClassName)
-    {
-        try
-        {
-            // TODO: Use Package.getPackages(...)
-            final Class<?> a = Class.forName(_sClassName);
-
-            final Constructor<?> cTor = a.getConstructor(new Class[]
-                    {
-                        IReportDefinitionReadAccess.class, Resource.class
-                    });
-            Object[] aParams = new Object[2];
-            aParams[0] = this;
-            aParams[1] = m_resource;
-            return (IReportBuilderLayouter) cTor.newInstance(aParams);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
     private LinkedHashMap<String, IReportBuilderLayouter> m_aLayoutMap = null;
 
     private void insertIntoLayoutMap(IReportBuilderLayouter _aLayout)
@@ -579,17 +550,17 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             m_aLayoutMap = new LinkedHashMap<String, IReportBuilderLayouter>();
 
             // TODO: We must know the name of a layouts, There should be a way to say where to find, not the names.
-            IReportBuilderLayouter aLayout = getLayoutInstanceFrom("com.sun.star.wizards.reportbuilder.layout.Tabular");
+            IReportBuilderLayouter aLayout = new com.sun.star.wizards.reportbuilder.layout.Tabular(this, m_resource);
             insertIntoLayoutMap(aLayout, true);
-            aLayout = getLayoutInstanceFrom("com.sun.star.wizards.reportbuilder.layout.ColumnarSingleColumn");
+            aLayout = new com.sun.star.wizards.reportbuilder.layout.ColumnarSingleColumn(this, m_resource);
             insertIntoLayoutMap(aLayout);
-            aLayout = getLayoutInstanceFrom("com.sun.star.wizards.reportbuilder.layout.ColumnarTwoColumns");
+            aLayout = new com.sun.star.wizards.reportbuilder.layout.ColumnarTwoColumns(this, m_resource);
             insertIntoLayoutMap(aLayout);
-            aLayout = getLayoutInstanceFrom("com.sun.star.wizards.reportbuilder.layout.ColumnarThreeColumns");
+            aLayout = new com.sun.star.wizards.reportbuilder.layout.ColumnarThreeColumns(this, m_resource);
             insertIntoLayoutMap(aLayout);
-            aLayout = getLayoutInstanceFrom("com.sun.star.wizards.reportbuilder.layout.InBlocksLabelsAbove");
+            aLayout = new com.sun.star.wizards.reportbuilder.layout.InBlocksLabelsAbove(this, m_resource);
             insertIntoLayoutMap(aLayout);
-            aLayout = getLayoutInstanceFrom("com.sun.star.wizards.reportbuilder.layout.InBlocksLabelsLeft");
+            aLayout = new com.sun.star.wizards.reportbuilder.layout.InBlocksLabelsLeft(this, m_resource);
             insertIntoLayoutMap(aLayout);
 
         }
