@@ -197,7 +197,6 @@ void ParaPropertyPanel::DataChanged (const DataChangedEvent& rEvent)
 
 ParaPropertyPanel::~ParaPropertyPanel()
 {
-    delete mpLnSPItem;
 }
 
 void ParaPropertyPanel::ReSize(bool /* bSize */)
@@ -487,10 +486,6 @@ void ParaPropertyPanel::NotifyItemUpdate(
         StateChangedIndentImpl( nSID, eState, pState );
         break;
 
-    case SID_ATTR_PARA_LINESPACE:
-        StateChangedLnSPImpl( nSID, eState, pState );
-        break;
-
     case SID_ATTR_PARA_ULSPACE:
         StateChangedULImpl( nSID, eState, pState );
         break;
@@ -657,18 +652,6 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
     }
 }
 
-void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
-{
-    meLnSpState = eState;
-
-    if( pState && eState >= SfxItemState::DEFAULT )
-    {
-        if(mpLnSPItem)
-            delete mpLnSPItem;
-        mpLnSPItem = static_cast<SvxLineSpacingItem *>(pState->Clone());
-    }
-}
-
 void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     mpTopDist->SetMax( mpTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
@@ -798,8 +781,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       maSpace3 (SVX_RES(IMG_SPACE3)),
       maIndHang (SVX_RES(IMG_INDENT_HANG)),
       maTxtLeft (0),
-      mpLnSPItem (NULL),
-      meLnSpState (SfxItemState::DONTCARE),
       mbOutLineLeft (false),
       mbOutLineRight (false),
       maUpper (0),
@@ -809,7 +790,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
       m_eLRSpaceUnit(),
       m_eULSpaceUnit(),
       maLRSpaceControl (SID_ATTR_PARA_LRSPACE,*pBindings,*this),
-      maLNSpaceControl (SID_ATTR_PARA_LINESPACE, *pBindings,*this),
       maULSpaceControl (SID_ATTR_PARA_ULSPACE, *pBindings,*this),
       maOutLineLeftControl(SID_OUTLINE_LEFT, *pBindings, *this, OUString("OutlineRight"), rxFrame),
       maOutLineRightControl(SID_OUTLINE_RIGHT, *pBindings, *this, OUString("OutlineLeft"), rxFrame),

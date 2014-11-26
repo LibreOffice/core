@@ -86,9 +86,6 @@ private:
 
     // Data Member
     long                maTxtLeft;
-    //Line spacing
-    SvxLineSpacingItem  *mpLnSPItem;
-    SfxItemState            meLnSpState;
     bool                    mbOutLineLeft;
     bool                    mbOutLineRight;
     long                    maUpper;
@@ -100,7 +97,6 @@ private:
     SfxMapUnit                      m_eULSpaceUnit;
     // Control Items
     ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
-    ::sfx2::sidebar::ControllerItem  maLNSpaceControl;
     ::sfx2::sidebar::ControllerItem  maULSpaceControl;
     ::sfx2::sidebar::ControllerItem  maOutLineLeftControl;
     ::sfx2::sidebar::ControllerItem  maOutLineRightControl;
@@ -127,7 +123,6 @@ private:
     DECL_LINK(ClickUL_IncDec_Hdl_Impl, ToolBox*);
 
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
-    void StateChangedLnSPImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
