@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,collada2gltf,\
 	external/collada2gltf/patches/collada2gltf.fix-memory-leak2.patch.1 \
 	external/collada2gltf/patches/shader_compatibility.patch.1 \
 	external/collada2gltf/patches/drop_tr1_support.patch.1 \
+	external/collada2gltf/patches/collada2gltf.add-glsl-version.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
