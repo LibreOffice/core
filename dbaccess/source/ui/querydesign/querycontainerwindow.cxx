@@ -160,7 +160,7 @@ namespace dbaui
         bool bHandled = false;
         switch (rNEvt.GetType())
         {
-            case  EVENT_GETFOCUS:
+            case  MouseNotifyEvent::GETFOCUS:
                 if ( m_pViewSwitch )
                 {
                     OJoinController& rController = m_pViewSwitch->getDesignView()->getController();

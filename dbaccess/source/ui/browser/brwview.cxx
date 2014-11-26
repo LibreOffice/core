@@ -305,7 +305,7 @@ void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& 
 bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if(rNEvt.GetType() == EVENT_KEYINPUT)
+    if(rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         bool bGrabAllowed = isGrabVclControlFocusAllowed(this);
         if ( bGrabAllowed )

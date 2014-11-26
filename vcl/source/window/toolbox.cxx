@@ -4266,7 +4266,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 
 bool ToolBox::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         KeyEvent aKEvt = *rNEvt.GetKeyEvent();
         vcl::KeyCode aKeyCode = aKEvt.GetKeyCode();
@@ -4294,7 +4294,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
                 break;
         };
     }
-    else if( rNEvt.GetType() == EVENT_GETFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         if( rNEvt.GetWindow() == this )
         {
@@ -4336,7 +4336,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
             return DockingWindow::Notify( rNEvt );
         }
     }
-    else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         // deselect
         ImplHideFocus();

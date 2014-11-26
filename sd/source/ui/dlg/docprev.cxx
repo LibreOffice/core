@@ -189,7 +189,7 @@ void SdDocPreviewWin::startPreview()
 
 bool SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
         if ( pMEvt->IsLeft() )

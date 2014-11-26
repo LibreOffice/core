@@ -217,7 +217,7 @@ sal_Int32 BookmarkCombo::GetSelectEntryPos( sal_Int32 nSelIndex ) const
 bool BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 {
     bool nHandled = false;
-    if( EVENT_KEYINPUT == rNEvt.GetType() &&
+    if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType() &&
          rNEvt.GetKeyEvent()->GetCharCode() )
     {
         OUString sKey( rNEvt.GetKeyEvent()->GetCharCode() );

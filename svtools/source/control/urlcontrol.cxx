@@ -44,7 +44,7 @@ namespace svt
     bool OFileURLControl::PreNotify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
-            if (EVENT_KEYINPUT == _rNEvt.GetType())
+            if (MouseNotifyEvent::KEYINPUT == _rNEvt.GetType())
                 if (KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode())
                     if (IsInDropDown())
                         m_sPreservedText = GetURL();
@@ -55,7 +55,7 @@ namespace svt
     bool OFileURLControl::Notify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
-            if (EVENT_KEYINPUT == _rNEvt.GetType())
+            if (MouseNotifyEvent::KEYINPUT == _rNEvt.GetType())
                 if (KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode())
                     if (IsInDropDown())
                     {

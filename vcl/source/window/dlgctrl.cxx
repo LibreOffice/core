@@ -687,11 +687,11 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
             // in case AROUND is being processed
             if ( pTempWindow && (pTempWindow == pSWindow) )
             {
-                NotifyEvent aNEvt1( EVENT_LOSEFOCUS, pSWindow );
+                NotifyEvent aNEvt1( MouseNotifyEvent::LOSEFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt1 ) )
                     pSWindow->LoseFocus();
                 pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
-                NotifyEvent aNEvt2( EVENT_GETFOCUS, pSWindow );
+                NotifyEvent aNEvt2( MouseNotifyEvent::GETFOCUS, pSWindow );
                 if ( !ImplCallPreNotify( aNEvt2 ) )
                     pSWindow->GetFocus();
                 pSWindow->mpWindowImpl->mnGetFocusFlags = 0;
@@ -819,11 +819,11 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
                         // in case AROUND is being processed
                         if ( pWindow == pSWindow )
                         {
-                            NotifyEvent aNEvt1( EVENT_LOSEFOCUS, pSWindow );
+                            NotifyEvent aNEvt1( MouseNotifyEvent::LOSEFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt1 ) )
                                 pSWindow->LoseFocus();
                             pSWindow->mpWindowImpl->mnGetFocusFlags = nGetFocusFlags | GETFOCUS_AROUND;
-                            NotifyEvent aNEvt2( EVENT_GETFOCUS, pSWindow );
+                            NotifyEvent aNEvt2( MouseNotifyEvent::GETFOCUS, pSWindow );
                             if ( !ImplCallPreNotify( aNEvt2 ) )
                                 pSWindow->GetFocus();
                             pSWindow->mpWindowImpl->mnGetFocusFlags = 0;

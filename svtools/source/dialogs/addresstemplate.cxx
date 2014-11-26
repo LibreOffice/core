@@ -1230,7 +1230,7 @@ void AssignmentPersistentData::Commit()
     {
         switch (_rNEvt.GetType())
         {
-            case EVENT_KEYINPUT:
+            case MouseNotifyEvent::KEYINPUT:
             {
                 const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
                 sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();

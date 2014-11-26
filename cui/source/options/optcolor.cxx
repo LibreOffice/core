@@ -935,7 +935,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
 
 bool ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    if(rNEvt.GetType() == EVENT_COMMAND)
+    if(rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         sal_uInt16 nCmd = pCEvt->GetCommand();

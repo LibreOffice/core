@@ -937,8 +937,8 @@ void ScRefHandler::preNotify(const NotifyEvent& rNEvt, const bool bBindRef)
 {
     if( bBindRef || m_bInRefMode )
     {
-        sal_uInt16 nSwitch=rNEvt.GetType();
-        if(nSwitch==EVENT_GETFOCUS)
+        MouseNotifyEvent nSwitch=rNEvt.GetType();
+        if(nSwitch==MouseNotifyEvent::GETFOCUS)
         {
             pActiveWin=rNEvt.GetWindow();
         }

@@ -2359,7 +2359,7 @@ void ImplCFieldFloatWin::ArrangeButtons()
 
 bool ImplCFieldFloatWin::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         if ( pKEvt->GetKeyCode().GetCode() == KEY_RETURN )

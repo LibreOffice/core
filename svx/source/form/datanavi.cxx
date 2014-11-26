@@ -1019,7 +1019,7 @@ namespace svxform
     {
         bool nHandled = false;
 
-        if ( rNEvt.GetType() == EVENT_KEYINPUT )
+        if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 

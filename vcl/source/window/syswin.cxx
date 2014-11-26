@@ -114,7 +114,7 @@ SystemWindow::~SystemWindow()
 bool SystemWindow::Notify( NotifyEvent& rNEvt )
 {
     // capture KeyEvents for menu handling
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
@@ -133,7 +133,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
 bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
 {
     // capture KeyEvents for taskpane cycling
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F6 &&
             rNEvt.GetKeyEvent()->GetKeyCode().IsMod1() &&

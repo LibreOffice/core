@@ -128,7 +128,7 @@ namespace pcr
 
     bool ControlHelper::handlePreNotify(NotifyEvent& rNEvt)
     {
-        if (EVENT_KEYINPUT == rNEvt.GetType())
+        if (MouseNotifyEvent::KEYINPUT == rNEvt.GetType())
         {
             const vcl::KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();

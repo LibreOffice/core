@@ -2452,7 +2452,7 @@ bool ScPosWnd::Notify( NotifyEvent& rNEvt )
 
     switch (rNEvt.GetType())
     {
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 
@@ -2478,14 +2478,14 @@ bool ScPosWnd::Notify( NotifyEvent& rNEvt )
             }
         }
         break;
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
         {
             // Select the whole text upon focus.
             OUString aStr = GetText();
             SetSelection(Selection(0, aStr.getLength()));
         }
         break;
-        case EVENT_LOSEFOCUS:
+        case MouseNotifyEvent::LOSEFOCUS:
             HideTip();
             bHandled = false;
         break;

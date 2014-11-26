@@ -383,14 +383,14 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
     bool nDone = false;
     switch( rEvt.GetType() )
     {
-        case EVENT_MOUSEBUTTONDOWN:
+        case MouseNotifyEvent::MOUSEBUTTONDOWN:
         {
             const MouseEvent* pMEvt = rEvt.GetMouseEvent();
             if(pMEvt->IsRight() && !pMEvt->GetModifier())
                 nDone = true;
         }
             break;
-        case EVENT_COMMAND:
+        case MouseNotifyEvent::COMMAND:
         {
             if(!IsPrimaryKeyAllowed())
                 break;

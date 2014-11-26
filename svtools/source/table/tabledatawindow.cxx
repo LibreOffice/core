@@ -213,7 +213,7 @@ namespace svt { namespace table
     bool TableDataWindow::Notify(NotifyEvent& rNEvt )
     {
         bool nDone = false;
-        if ( rNEvt.GetType() == EVENT_COMMAND )
+        if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
         {
             const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
             if ( rCEvt.GetCommand() == COMMAND_WHEEL )

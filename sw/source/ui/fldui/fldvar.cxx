@@ -1264,7 +1264,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSelectionListBox(vcl::
 bool SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 {
     bool nHandled = ListBox::PreNotify( rNEvt );
-    if ( rNEvt.GetType() == EVENT_KEYUP )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
@@ -1272,7 +1272,7 @@ bool SelectionListBox::PreNotify( NotifyEvent& rNEvt )
         if( aKeyCode.GetCode() == KEY_SPACE && !nModifier)
             bCallAddSelection = true;
     }
-    if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
 

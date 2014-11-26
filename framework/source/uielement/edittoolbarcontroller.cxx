@@ -186,7 +186,7 @@ void EditToolbarController::LoseFocus()
 
 bool EditToolbarController::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();

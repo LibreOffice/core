@@ -241,7 +241,7 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindow::getSelectedFieldDescripto
 
 bool OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
 {
-    if ( EVENT_KEYINPUT == _rNEvt.GetType() )
+    if ( MouseNotifyEvent::KEYINPUT == _rNEvt.GetType() )
     {
         const vcl::KeyCode& rKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
         if ( ( 0 == rKeyCode.GetModifier() ) && ( KEY_RETURN == rKeyCode.GetCode() ) )

@@ -107,7 +107,7 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     if ( !pView || !pView->GetObjectShell() )
         return Window::Notify( rNEvt );
 
-    if ( rNEvt.GetType() == EVENT_GETFOCUS )
+    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
@@ -120,17 +120,17 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
         pView->GetBindings().Invalidate( SID_PASTE_SPECIAL );
         return true;
     }
-    else if( rNEvt.GetType() == EVENT_KEYINPUT )
+    else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
             return true;
     }
-    else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTDISABLE*/ )
+    else if ( rNEvt.GetType() == MouseNotifyEvent::EXECUTEDIALOG /*|| rNEvt.GetType() == MouseNotifyEvent::INPUTDISABLE*/ )
     {
         pView->SetModalMode( true );
         return true;
     }
-    else if ( rNEvt.GetType() == EVENT_ENDEXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTENABLE*/ )
+    else if ( rNEvt.GetType() == MouseNotifyEvent::ENDEXECUTEDIALOG /*|| rNEvt.GetType() == MouseNotifyEvent::INPUTENABLE*/ )
     {
         pView->SetModalMode( false );
         return true;
@@ -141,15 +141,15 @@ bool SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 
 bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
-    if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
+    MouseNotifyEvent nType = rNEvt.GetType();
+    if ( nType == MouseNotifyEvent::KEYINPUT || nType == MouseNotifyEvent::KEYUP )
     {
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
         SfxViewShell* pShell = pView ? pView->GetViewShell() : NULL;
         if ( pShell && pShell->HasKeyListeners_Impl() && pShell->HandleNotifyEvent_Impl( rNEvt ) )
             return true;
     }
-    else if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
+    else if ( nType == MouseNotifyEvent::MOUSEBUTTONUP || nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
@@ -160,7 +160,7 @@ bool SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     return true;
     }
 
-    if ( nType == EVENT_MOUSEBUTTONDOWN )
+    if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
         const MouseEvent* pMEvent = rNEvt.GetMouseEvent();

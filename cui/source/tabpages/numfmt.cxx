@@ -1660,7 +1660,7 @@ void SvxNumberFormatTabPage::ChangePreviewText( sal_uInt16 nPos )
 
 bool SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 {
-    if(rNEvt.GetType()==EVENT_LOSEFOCUS)
+    if(rNEvt.GetType()==MouseNotifyEvent::LOSEFOCUS)
     {
         if ( rNEvt.GetWindow() == dynamic_cast< vcl::Window* >( m_pEdComment ) && !m_pEdComment->IsVisible() )
         {

@@ -1365,7 +1365,7 @@ namespace svx
     bool SuggestionEdit::PreNotify( NotifyEvent& rNEvt )
     {
         bool nHandled = false;
-        if( rNEvt.GetType() == EVENT_KEYINPUT )
+        if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const KeyEvent*     pKEvt = rNEvt.GetKeyEvent();
             const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();

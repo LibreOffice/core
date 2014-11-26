@@ -111,7 +111,7 @@ bool ScScenarioListBox::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         vcl::KeyCode aCode = rNEvt.GetKeyEvent()->GetKeyCode();
         switch( aCode.GetCode() )
@@ -126,7 +126,7 @@ bool ScScenarioListBox::Notify( NotifyEvent& rNEvt )
             break;
         }
     }
-    else if ( rNEvt.GetType() == EVENT_COMMAND && GetSelectEntryCount() )
+    else if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND && GetSelectEntryCount() )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt && pCEvt->GetCommand() == COMMAND_CONTEXTMENU )

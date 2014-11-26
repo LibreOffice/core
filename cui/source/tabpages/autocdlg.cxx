@@ -2323,7 +2323,7 @@ bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
 {
     bool nHandled = MultiListBox::PreNotify( rNEvt );
 
-    if( !nHandled && EVENT_KEYUP == rNEvt.GetType() )
+    if( !nHandled && MouseNotifyEvent::KEYUP == rNEvt.GetType() )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )

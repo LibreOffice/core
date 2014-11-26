@@ -212,7 +212,7 @@ void BibBookContainer::GetFocus()
 bool BibBookContainer::PreNotify( NotifyEvent& rNEvt )
 {
     bool nHandled = false;
-    if( EVENT_KEYINPUT == rNEvt.GetType()  )
+    if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType()  )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();

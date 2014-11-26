@@ -493,7 +493,7 @@ void SvxColorDockingWindow::GetFocus (void)
 bool SvxColorDockingWindow::Notify( NotifyEvent& rNEvt )
 {
     bool nRet = false;
-    if( ( rNEvt.GetType() == EVENT_KEYINPUT ) )
+    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
         sal_uInt16   nKeyCode = aKeyEvt.GetKeyCode().GetCode();

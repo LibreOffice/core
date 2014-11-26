@@ -613,7 +613,7 @@ namespace svt
     {
         switch (rEvt.GetType())
         {
-            case EVENT_KEYINPUT:
+            case MouseNotifyEvent::KEYINPUT:
                 if  (   (IsEditing() && Controller()->GetWindow().HasChildPathFocus())
                     ||  rEvt.GetWindow() == &GetDataWindow()
                     ||  (!IsEditing() && HasChildPathFocus())
@@ -738,11 +738,11 @@ namespace svt
     {
         switch (rEvt.GetType())
         {
-            case EVENT_GETFOCUS:
+            case MouseNotifyEvent::GETFOCUS:
                 DetermineFocus( getRealGetFocusFlags( this ) );
                 break;
 
-            case EVENT_LOSEFOCUS:
+            case MouseNotifyEvent::LOSEFOCUS:
                 DetermineFocus( 0 );
                 break;
         }

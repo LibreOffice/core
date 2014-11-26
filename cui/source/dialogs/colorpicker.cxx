@@ -188,7 +188,7 @@ sal_Int32 HexColorControl::GetColor()
 
 bool HexColorControl::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
+    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplProcessKeyInput( *rNEvt.GetKeyEvent() ) )
             return true;

@@ -397,7 +397,7 @@ void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
 bool ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT &&
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         GetDoubleClickHdl().Call( NULL );
@@ -491,7 +491,7 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 bool IndexBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT &&
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         GetDoubleClickHdl().Call( NULL );
@@ -850,7 +850,7 @@ bool SearchBox_Impl::PreNotify( NotifyEvent& rNEvt )
     bool bHandled = false;
     if ( !IsInDropDown() &&
          rNEvt.GetWindow() == GetSubEdit() &&
-         rNEvt.GetType() == EVENT_KEYINPUT &&
+         rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         aSearchLink.Call( NULL );
@@ -884,7 +884,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSearchResultsBox(vcl::
 bool SearchResultsBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT &&
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT &&
          KEY_RETURN == rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
     {
         GetDoubleClickHdl().Call( NULL );
@@ -1208,8 +1208,8 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
 bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool nRet = false;
-    sal_uInt16 nType = rNEvt.GetType();
-    if ( EVENT_KEYINPUT == nType )
+    MouseNotifyEvent nType = rNEvt.GetType();
+    if ( MouseNotifyEvent::KEYINPUT == nType )
     {
         sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
         if ( KEY_DELETE == nCode && GetEntryCount() > 0 )
@@ -1223,7 +1223,7 @@ bool BookmarksBox_Impl::Notify( NotifyEvent& rNEvt )
             nRet = true;
         }
     }
-    else if ( EVENT_COMMAND == nType )
+    else if ( MouseNotifyEvent::COMMAND == nType )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt->GetCommand() == COMMAND_CONTEXTMENU )
@@ -1590,8 +1590,8 @@ Size SfxHelpIndexWindow_Impl::GetOptimalSize() const
 bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
 {
     bool nDone = false;
-    sal_uInt16 nType = rNEvt.GetType();
-    if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
+    MouseNotifyEvent nType = rNEvt.GetType();
+    if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nCode = rKeyCode.GetCode();
@@ -1808,7 +1808,7 @@ TextWin_Impl::~TextWin_Impl()
 
 bool TextWin_Impl::Notify( NotifyEvent& rNEvt )
 {
-    if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
+    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB )
         return GetParent()->Notify( rNEvt );
     else
         return DockingWindow::Notify( rNEvt );
@@ -2316,8 +2316,8 @@ void SfxHelpTextWindow_Impl::Resize()
 bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    sal_uInt16 nType = rNEvt.GetType();
-    if ( EVENT_COMMAND == nType && rNEvt.GetCommandEvent() )
+    MouseNotifyEvent nType = rNEvt.GetType();
+    if ( MouseNotifyEvent::COMMAND == nType && rNEvt.GetCommandEvent() )
     {
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
         vcl::Window* pCmdWin = rNEvt.GetWindow();
@@ -2410,7 +2410,7 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             nDone = true;
         }
     }
-    else if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
+    else if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();
@@ -3002,7 +3002,7 @@ SfxHelpWindow_Impl::~SfxHelpWindow_Impl()
 bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         // Backward == <ALT><LEFT> or <BACKSPACE> Forward == <ALT><RIGHT>
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();

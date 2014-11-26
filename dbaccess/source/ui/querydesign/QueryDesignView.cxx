@@ -2772,7 +2772,7 @@ bool OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 {
     switch (rNEvt.GetType())
     {
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
 #if OSL_DEBUG_LEVEL > 0
             {
                 vcl::Window* pFocus = Application::GetFocusWindow();

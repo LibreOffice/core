@@ -167,7 +167,7 @@ bool SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
 {
     bool nRet = Control::Notify( rNEvt );
 
-    if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == EVENT_GETFOCUS )
+    if ( m_pFocusCtrl && rNEvt.GetWindow() != m_pFocusCtrl && rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         m_pFocusCtrl->GrabFocus();
     return nRet;
 }

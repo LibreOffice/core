@@ -464,11 +464,11 @@ void SvxStyleBox_Impl::SetFamily( SfxStyleFamily eNewFamily )
 
 bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
 
-    if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
+    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
         nCurSel = GetSelectEntryPos();
-    else if ( EVENT_LOSEFOCUS == nType )
+    else if ( MouseNotifyEvent::LOSEFOCUS == nType )
     {
         // don't handle before our Select() is called
         if ( !HasFocus() && !HasChildPathFocus() )
@@ -481,7 +481,7 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = false;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
@@ -933,9 +933,9 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
 
 bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
 
-    if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
+    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
     {
         EnableControls_Impl();
         FillList();
@@ -947,10 +947,10 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = false;
     mbEndPreview = false;
-    if ( rNEvt.GetType() == EVENT_KEYUP )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
         mbEndPreview = true;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
@@ -974,7 +974,7 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
-    else if ( EVENT_LOSEFOCUS == rNEvt.GetType() )
+    else if ( MouseNotifyEvent::LOSEFOCUS == rNEvt.GetType() )
     {
         vcl::Window* pFocusWin = Application::GetFocusWindow();
         if ( !HasFocus() && GetSubEdit() != pFocusWin )
