@@ -149,11 +149,7 @@ void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
         m_aXRenderPicture = 0;
     }
 
-    if( hDrawable_ )
-    {
-        mpImpl->Init();
-        // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
-    }
+    // TODO: moggi: FIXME nTextPixel_     = GetPixel( nTextColor_ );
 }
 
 void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
@@ -161,11 +157,15 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
 {
     m_pColormap = &GetGenericData()->GetSalDisplay()->GetColormap(nXScreen);
     m_nXScreen  = nXScreen;
+
     m_pFrame    = pFrame;
-    SetDrawable( aTarget, nXScreen );
+    m_pVDev     = NULL;
 
     bWindow_    = true;
-    m_pVDev     = NULL;
+    bVirDev_    = false;
+
+    SetDrawable( aTarget, nXScreen );
+    mpImpl->Init();
 }
 
 void X11SalGraphics::DeInit()

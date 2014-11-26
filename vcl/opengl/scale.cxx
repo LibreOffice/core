@@ -86,8 +86,8 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     const double& rScaleY,
     GLenum        nFilter )
 {
+    OpenGLFramebuffer* pFramebuffer;
     GLuint nProgram;
-    GLuint nFramebufferId;
     GLenum nOldFilter;
     int nNewWidth( mnWidth * rScaleX );
     int nNewHeight( mnHeight * rScaleY );
@@ -96,15 +96,13 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     if( nProgram == 0 )
         return false;
 
-    glGenFramebuffers( 1, &nFramebufferId );
-    glBindFramebuffer( GL_FRAMEBUFFER, nFramebufferId );
+    OpenGLTexture aNewTex = OpenGLTexture( nNewWidth, nNewHeight );
+    pFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
+
     glUseProgram( nProgram );
     glUniform1i( mnTexSamplerUniform, 0 );
-
-    OpenGLTexture aNewTex = OpenGLTexture( nNewWidth, nNewHeight );
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aNewTex.Id(), 0 );
-
-    glViewport( 0, 0, nNewWidth, nNewHeight );
+    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glClear( GL_COLOR_BUFFER_BIT );
     maTexture.Bind();
     nOldFilter = maTexture.GetFilter();
     maTexture.SetFilter( nFilter );
@@ -113,8 +111,7 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     maTexture.Unbind();
 
     glUseProgram( 0 );
-    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    glDeleteFramebuffers( 1, &nFramebufferId );
+    mpContext->ReleaseFramebuffer( pFramebuffer );
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
@@ -167,8 +164,8 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     const double& rScaleY,
     const Kernel& aKernel )
 {
+    OpenGLFramebuffer* pFramebuffer;
     GLfloat* pWeights( 0 );
-    GLuint nFramebufferId;
     GLuint nProgram;
     sal_uInt32 nKernelSize;
     GLfloat aOffsets[32];
@@ -181,8 +178,6 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     if( nProgram == 0 )
         return false;
 
-    glGenFramebuffers( 1, &nFramebufferId );
-    glBindFramebuffer( GL_FRAMEBUFFER, nFramebufferId );
     glUseProgram( nProgram );
     glUniform1i( mnConvSamplerUniform, 0 );
     CHECK_GL_ERROR();
@@ -191,8 +186,7 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     if( mnWidth != nNewWidth )
     {
         OpenGLTexture aScratchTex = OpenGLTexture( nNewWidth, mnHeight );
-        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aScratchTex.Id(), 0 );
-        CHECK_GL_ERROR();
+        pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
 
         for( sal_uInt32 i = 0; i < 16; i++ )
         {
@@ -205,19 +199,19 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
         glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
         CHECK_GL_ERROR();
 
-        glViewport( 0, 0, nNewWidth, mnHeight );
         maTexture.Bind();
         maTexture.Draw();
         maTexture.Unbind();
 
         maTexture = aScratchTex;
+        mpContext->ReleaseFramebuffer( pFramebuffer );
     }
 
     // vertical scaling in final texture
     if( mnHeight != nNewHeight )
     {
         OpenGLTexture aScratchTex = OpenGLTexture( nNewWidth, nNewHeight );
-        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aScratchTex.Id(), 0 );
+        pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
 
         for( sal_uInt32 i = 0; i < 16; i++ )
         {
@@ -229,17 +223,15 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
         glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
         CHECK_GL_ERROR();
 
-        glViewport( 0, 0, nNewWidth, nNewHeight );
         maTexture.Bind();
         maTexture.Draw();
         maTexture.Unbind();
 
         maTexture = aScratchTex;
+        mpContext->ReleaseFramebuffer( pFramebuffer );
     }
 
     glUseProgram( 0 );
-    glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    glDeleteFramebuffers( 1, &nFramebufferId );
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;
@@ -314,7 +306,8 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_u
         nScaleFlag == BMP_SCALE_LANCZOS )
     {
         //TODO maUserBuffer.reset();
-        if( GetBitmapContext() == NULL )
+        makeCurrent();
+        if( mpContext == NULL )
         {
             SAL_INFO( "vcl.opengl", "Add ScaleOp to pending operations" );
             maPendingOps.push_back( new ScaleOp( this, rScaleX, rScaleY, nScaleFlag ) );

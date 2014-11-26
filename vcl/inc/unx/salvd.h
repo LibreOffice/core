@@ -44,19 +44,12 @@ class X11SalVirtualDevice : public SalVirtualDevice
     bool        bExternPixmap_;
 
 public:
-    X11SalVirtualDevice();
+    X11SalVirtualDevice( SalGraphics *pGraphics,
+                         long nDX, long nDY,
+                         sal_uInt16 nBitCount,
+                         const SystemGraphicsData *pData );
     virtual ~X11SalVirtualDevice();
 
-    bool            Init( SalDisplay *pDisplay,
-                              long nDX, long nDY,
-                              sal_uInt16 nBitCount,
-                              SalX11Screen nXScreen,
-                              Pixmap hDrawable = None,
-                              XRenderPictFormat* pXRenderFormat = NULL );
-    void InitGraphics( X11SalVirtualDevice *pVD )
-    {
-        pGraphics_->Init( pVD );
-    }
     Display *GetXDisplay() const
     {
         return pDisplay_->GetDisplay();
