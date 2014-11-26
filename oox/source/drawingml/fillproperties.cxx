@@ -368,7 +368,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                     sal_Int32 nDmlAngle = 0;
                     if( maGradientProps.moGradientPath.has() )
                     {
-                        aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle) ? awt::GradientStyle_ELLIPTICAL : awt::GradientStyle_RECT;
+                        aGradient.Style = (maGradientProps.moGradientPath.get() == XML_circle) ? awt::GradientStyle_RADIAL : awt::GradientStyle_RECT;
                         // position of gradient center (limited to [30%;70%], otherwise gradient is too hidden)
                         IntegerRectangle2D aFillToRect = maGradientProps.moFillToRect.get( IntegerRectangle2D( 0, 0, MAX_PERCENT, MAX_PERCENT ) );
                         sal_Int32 nCenterX = (MAX_PERCENT + aFillToRect.X1 - aFillToRect.X2) / 2;
@@ -378,6 +378,35 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                         ::std::swap( aGradient.StartColor, aGradient.EndColor );
                         ::std::swap( nStartTrans, nEndTrans );
                         nDmlAngle = nShapeRotation;
+
+                        // A copy of the gradient stops for local modification
+                        GradientFillProperties::GradientStopMap aGradientStops(maGradientProps.maGradientStops);
+
+                        // Add a fake gradient stop at 0% and 100% if necessary, so that the gradient always starts
+                        // at 0% and ends at 100%, to make following logic clearer (?).
+                        if( aGradientStops.find(0.0) == aGradientStops.end() )
+                        {
+                            // temp variable required
+                            Color aFirstColor(aGradientStops.begin()->second);
+                            aGradientStops[0.0] = aFirstColor;
+                        }
+
+                        if( aGradientStops.find(1.0) == aGradientStops.end() )
+                        {
+                            // ditto
+                            Color aLastColor(aGradientStops.rbegin()->second);
+                            aGradientStops[1.0] = aLastColor;
+                        }
+
+                        uno::Sequence<css::awt::GradientStop> aAwtGradStops(aGradientStops.size());
+                        for (GradientFillProperties::GradientStopMap::iterator p(aGradientStops.begin());
+                             p != aGradientStops.end();
+                             ++p)
+                        {
+                            css::awt::GradientStop aGradStop(p->first*100,p->second.getColor( rGraphicHelper, nPhClr ));
+                            aAwtGradStops[std::distance(aGradientStops.begin(), p)] = aGradStop;
+                        }
+                        aGradient.GradientStops = aAwtGradStops;
                     }
                     else
                     {

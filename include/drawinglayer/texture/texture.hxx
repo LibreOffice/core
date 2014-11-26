@@ -181,6 +181,17 @@ namespace drawinglayer
                 double fBorder,
                 double fOffsetX,
                 double fOffsetY);
+
+            GeoTexSvxGradientRadial(
+                const basegfx::B2DRange& rDefinitionRange,
+                const basegfx::BColor& rStart,
+                const basegfx::BColor& rEnd,
+                sal_uInt32 nSteps,
+                double fBorder,
+                double fOffsetX,
+                double fOffsetY,
+                std::vector< std::tuple< double, Color > > aGradStops);
+
             virtual ~GeoTexSvxGradientRadial();
 
             virtual void appendTransformationsAndColors(

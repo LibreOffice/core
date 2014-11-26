@@ -101,7 +101,8 @@ namespace drawinglayer
                         nSteps,
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
-                        getFillGradient().getOffsetY());
+                        getFillGradient().getOffsetY(),
+                        getFillGradient().getGradientStops());
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
