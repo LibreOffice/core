@@ -20,6 +20,7 @@
 
 #include <UndoBookmark.hxx>
 
+#include <comcore.hrc>
 #include "doc.hxx"
 #include "docary.hxx"
 #include "swundo.hxx"           // fuer die UndoIds
@@ -92,5 +93,51 @@ void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
     SetInDoc( &rContext.GetDoc() );
 }
 
+SwUndoRenameBookmark::SwUndoRenameBookmark( const ::sw::mark::IMark& rBkmk, const OUString& rOldName )
+    : SwUndo( UNDO_BOOKMARK_RENAME )
+    , m_sOldName( rOldName )
+    , m_sNewName( rBkmk.GetName() )
+{
+}
+
+SwUndoRenameBookmark::~SwUndoRenameBookmark()
+{
+}
+
+static OUString lcl_QuoteName(const OUString& rName)
+{
+    static const OUString sStart = SW_RES(STR_START_QUOTE);
+    static const OUString sEnd = SW_RES(STR_END_QUOTE);
+    return sStart + rName + sEnd;
+}
+
+SwRewriter SwUndoRenameBookmark::GetRewriter() const
+{
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, lcl_QuoteName(m_sOldName));
+    aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
+    aRewriter.AddRule(UndoArg3, lcl_QuoteName(m_sNewName));
+    return aRewriter;
+}
+
+void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext & rContext, const OUString& sFrom, const OUString& sTo)
+{
+    IDocumentMarkAccess* const pMarkAccess = rContext.GetDoc().getIDocumentMarkAccess();
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(sFrom);
+    if (ppBkmk != pMarkAccess->getMarksEnd())
+    {
+        pMarkAccess->renameMark( ppBkmk->get(), sTo );
+    }
+}
+
+void SwUndoRenameBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    Rename(rContext, m_sNewName, m_sOldName);
+}
+
+void SwUndoRenameBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    Rename(rContext, m_sOldName, m_sNewName);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

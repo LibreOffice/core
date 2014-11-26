@@ -24,39 +24,23 @@
 #include <vcl/svapp.hxx>
 
 #include <TextCursorHelper.hxx>
+#include <UndoBookmark.hxx>
 #include <unotextrange.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <doc.hxx>
+#include <IDocumentState.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
-#include <comcore.hrc>
-#include <SwRewriter.hxx>
 #include <docsh.hxx>
 #include <xmloff/odffields.hxx>
 #include <comphelper/servicehelper.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
-
-
-namespace
-{
-    static OUString lcl_QuoteName(const OUString& rName)
-    {
-        static const OUString sStart = OUString(String(SW_RES(STR_START_QUOTE)));
-        static const OUString sEnd = OUString(String(SW_RES(STR_END_QUOTE)));
-        OUStringBuffer sBuf(64);
-        return sBuf.append(sStart).append(rName).append(sEnd).makeStringAndClear();
-    }
-}
-
-/******************************************************************
- * SwXBookmark
- ******************************************************************/
 
 class SwXBookmark::Impl
     : public SwClient
@@ -362,16 +346,16 @@ throw (uno::RuntimeException)
         *aPam.GetMark() = m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos();
     }
 
-    SwRewriter aRewriter;
-    aRewriter.AddRule(UndoArg1, lcl_QuoteName(getName()));
-    aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
-    aRewriter.AddRule(UndoArg3, lcl_QuoteName(rName));
-
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(
-            UNDO_BOOKMARK_RENAME, &aRewriter);
-    pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName);
-    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(
-            UNDO_BOOKMARK_RENAME, &aRewriter);
+    const OUString sOldName(m_pImpl->m_pRegisteredBookmark->GetName());
+    if (pMarkAccess->renameMark(m_pImpl->m_pRegisteredBookmark, rName))
+    {
+        if (m_pImpl->m_pDoc->GetIDocumentUndoRedo().DoesUndo())
+        {
+            m_pImpl->m_pDoc->GetIDocumentUndoRedo().AppendUndo(
+                    new SwUndoRenameBookmark(*m_pImpl->m_pRegisteredBookmark, sOldName));
+        }
+        m_pImpl->m_pDoc->SetModified();
+    }
 }
 
 OUString SAL_CALL
