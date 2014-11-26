@@ -666,14 +666,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
 
     try
     {
-        // If we've set up the command args elsewhere then we cannot do it
-        // again (as an assert will fire), this will be the case e.g.
-        // for unit tests (and possibly if UNO is being used in addition
-        // to LOK in an external program).
-        if (!osl_areCommandArgsSet())
-        {
-            osl_setCommandArgs(0, NULL);
-        }
         initialize_uno(aAppURL);
         force_c_locale();
 
