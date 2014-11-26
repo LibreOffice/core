@@ -563,7 +563,6 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
 
         long nVal = OutputDevice::LogicToLogic( maTxtLeft, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
         nVal = (long)mpLeftIndent->Normalize( (long)nVal );
-        mpLeftIndent->SetValue( nVal, FUNIT_100TH_MM );
 
         if ( maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Text)
              && maContext.GetCombinedContext_DI() != CombinedEnumContext(Application_WriterVariants, Context_Default)
@@ -574,11 +573,6 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
 
         long nrVal = OutputDevice::LogicToLogic( aTxtRight, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
         nrVal = (long)mpRightIndent->Normalize( (long)nrVal );
-        mpRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
-
-        long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-        nfVal = (long)mpFLineIndent->Normalize( (long)nfVal );
-        mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
 
         switch (maContext.GetCombinedContext_DI())
         {
@@ -604,6 +598,13 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
                 mpFLineIndent->SetMax( MAX_SC_SD - nVal - nrVal, FUNIT_100TH_MM );
             }
         }
+
+        mpLeftIndent->SetValue( nVal, FUNIT_100TH_MM );
+        mpRightIndent->SetValue( nrVal, FUNIT_100TH_MM );
+
+        long nfVal = OutputDevice::LogicToLogic( aTxtFirstLineOfst, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
+        nfVal = (long)mpFLineIndent->Normalize( (long)nfVal );
+        mpFLineIndent->SetValue( nfVal, FUNIT_100TH_MM );
 
         mpTbxIndent_IncDec->Enable();
 
@@ -823,6 +824,7 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
     get(mpTbxUL_IncDec, "paraspacing");
 
     initial();
+    m_aMetricCtl.RequestUpdate();
 }
 
 } } // end of namespace svx::sidebar
