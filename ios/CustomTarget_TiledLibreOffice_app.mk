@@ -111,9 +111,7 @@ TiledLibreOffice_setup:
 	echo '[Version]'            >  $$file; \
 	echo 'AllLanguages=en-US'   >> $$file; \
 	echo 'BuildVersion='        >> $$file; \
-	echo "buildid=$(BUILDID)"   >> $$file; \
-	echo 'ProductMajor=360'     >> $$file; \
-	echo 'ProductMinor=1'       >> $$file;
+	echo "buildid=$(BUILDID)"   >> $$file;
 
 # Clean
 $(call gb_CustomTarget_get_clean_target,ios/TiledLibreOffice):

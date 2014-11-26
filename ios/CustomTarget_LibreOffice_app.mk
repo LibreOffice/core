@@ -123,8 +123,6 @@ $(SCRIPT_OUTPUT_FILE_0) : $(call gb_Executable_get_target,LibreOffice)
 		echo 'AllLanguages=en-US' && \
 		echo 'BuildVersion=' && \
 		echo 'buildid=$(buildid)' && \
-		echo 'ProductMajor=360' && \
-		echo 'ProductMinor=1' && \
 	: ) > $(appdir)/program/versionrc
 #
 # Copy a sample document... good old test1.odt...

@@ -178,8 +178,6 @@ copy-stuff:
 	echo 'AllLanguages=en-US' >> assets/program/versionrc
 	echo 'BuildVersion=' >> assets/program/versionrc
 	echo 'buildid=dead-beef' >> assets/program/versionrc
-	echo 'ProductMajor=$(LIBO_VERSION_MAJOR)$(LIBO_VERSION_MINOR)0' >> assets/program/versionrc
-	echo 'ProductMinor=1' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=4.1' >> assets/program/versionrc
 #
 # .res files

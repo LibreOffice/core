@@ -882,24 +882,6 @@ End
 
 #endif
 
-ProfileItem gid_Brand_Profileitem_Version_Productmajor
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 10;
-    Key = "ProductMajor";
-    Value = "<productmajor>";
-End
-
-ProfileItem gid_Brand_Profileitem_Version_Productminor
-    ProfileID = gid_Brand_Profile_Version_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "Version";
-    Order = 11;
-    Key = "ProductMinor";
-    Value = "<productminor>";
-End
-
 ProfileItem gid_Brand_Profileitem_Version_Alllanguages
     ProfileID = gid_Brand_Profile_Version_Ini;
     ModuleID = gid_Module_Root_Brand;

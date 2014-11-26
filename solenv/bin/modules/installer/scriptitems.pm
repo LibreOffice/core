@@ -667,8 +667,6 @@ sub replace_setup_variables
         $value =~ s/\<productcode\>/$installer::globals::productcode/;
         $value =~ s/\<upgradecode\>/$installer::globals::upgradecode/;
         $value =~ s/\<alllanguages\>/$languagesstring/;
-        $value =~ s/\<productmajor\>/$localbuild/;
-        $value =~ s/\<productminor\>/$localminor/;
         $value =~ s/\<sourceid\>/$installer::globals::build/;
         $value =~ s/\<updateid\>/$updateid/;
         $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
