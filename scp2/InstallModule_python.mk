@@ -36,10 +36,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/python,\
 
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DPYVERSION=$(PYTHON_VERSION) \
-	-DPYMAJMIN=$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR) \
-	-DPYMAJOR=$(PYTHON_VERSION_MAJOR) \
-	-DPY_FULL_DLL_NAME=$(if $(filter WNT-MSC,$(OS)-$(COM)),python$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)$(if $(MSVC_USE_DEBUG_RUNTIME),_d).dll,libpython$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)m.so) \
-	$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_PKG_DEBUG_RUNTIME)) \
 ))
 endif
 
