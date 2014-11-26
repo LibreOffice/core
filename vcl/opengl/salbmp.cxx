@@ -35,7 +35,8 @@ static bool isValidBitCount( sal_uInt16 nBitCount )
 }
 
 OpenGLSalBitmap::OpenGLSalBitmap()
-: mbDirtyTexture(true)
+: mpContext(NULL)
+, mbDirtyTexture(true)
 , mnBits(0)
 , mnBytesPerRow(0)
 , mnWidth(0)
@@ -472,10 +473,14 @@ OpenGLContext* OpenGLSalBitmap::GetBitmapContext() const
 
 void OpenGLSalBitmap::makeCurrent()
 {
-    // Always use the default window's context for bitmap
-    OpenGLContext* pContext = GetBitmapContext();
-    assert(pContext && "Couldn't get default OpenGL context provider");
-    pContext->makeCurrent();
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // TODO: make sure we can really use the last used context
+    mpContext = pSVData->maGDIData.mpLastContext;
+    if( !mpContext )
+        mpContext = GetBitmapContext();
+    assert(mpContext && "Couldn't get an OpenGL context");
+    mpContext->makeCurrent();
 }
 
 BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
@@ -490,8 +495,6 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 
     if( !maPendingOps.empty() )
     {
-        makeCurrent();
-
         SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediatly" );
         if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
             return NULL;

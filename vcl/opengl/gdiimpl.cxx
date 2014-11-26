@@ -65,10 +65,10 @@
 
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
     : mpContext(0)
+    , mpFramebuffer(NULL)
     , mbUseScissor(false)
     , mbUseStencil(false)
     , mbOffscreen(false)
-    , mnFramebufferId(0)
     , mnLineColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
     , mnSolidProgram(0)
@@ -112,24 +112,25 @@ OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
     ReleaseContext();
 }
 
-bool OpenGLSalGraphicsImpl::AcquireContext( bool bOffscreen )
+OpenGLContext* OpenGLSalGraphicsImpl::GetOpenGLContext()
+{
+    if( !mpContext )
+        AcquireContext();
+    return mpContext;
+}
+
+bool OpenGLSalGraphicsImpl::AcquireContext( )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if( mpContext )
         mpContext->DeRef();
 
-    if( bOffscreen )
-    {
-        mpContext = CreatePixmapContext();
-        return (mpContext != NULL);
-    }
-
     OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
     while( pContext )
     {
         // check if this context can be used by this SalGraphicsImpl instance
-        if( CompareWinContext( pContext )  )
+        if( UseContext( pContext )  )
             break;
         pContext = pContext->mpPrevContext;
     }
@@ -137,7 +138,7 @@ bool OpenGLSalGraphicsImpl::AcquireContext( bool bOffscreen )
     if( pContext )
         pContext->AddRef();
     else
-        pContext = CreateWinContext();
+        pContext = mbOffscreen ? CreatePixmapContext() : CreateWinContext();
 
     mpContext = pContext;
     return (mpContext != NULL);
@@ -153,68 +154,41 @@ bool OpenGLSalGraphicsImpl::ReleaseContext()
 
 void OpenGLSalGraphicsImpl::Init()
 {
-    const bool bOffscreen = IsOffscreen();
+    mbOffscreen = IsOffscreen();
 
     // check if we can simply re-use the same context
     if( mpContext )
     {
-        if( bOffscreen != mbOffscreen || ( !mbOffscreen && CompareWinContext( mpContext ) ) )
+        if( !UseContext( mpContext ) )
             ReleaseContext();
     }
 
-    if( !mpContext && !AcquireContext( bOffscreen ) )
+    // reset the offscreen texture
+    if( !mbOffscreen ||
+        maOffscreenTex.GetWidth()  != GetWidth() ||
+        maOffscreenTex.GetHeight() != GetHeight() )
     {
-        SAL_WARN( "vcl.opengl", "Couldn't acquire context for SalGraphics" );
-        return;
-    }
-
-    mpContext->makeCurrent();
-
-    if( mbOffscreen == bOffscreen )
-    {
-        // Nothing more to do for onscreen case
-        if( !mbOffscreen )
-            return;
-
-        // Already enabled and same size
-        if( maOffscreenTex.GetWidth()  == GetWidth() &&
-            maOffscreenTex.GetHeight() == GetHeight() )
-            return;
-    }
-    else
-    {
-        mbOffscreen = bOffscreen;
-        if( bOffscreen )
-            glGenFramebuffers( 1, &mnFramebufferId );
-        else
-            glDeleteFramebuffers( 1, &mnFramebufferId );
-    }
-
-    // Create/update attached offscreen texture
-    if( mbOffscreen )
-    {
-        glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
-        maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
-        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, maOffscreenTex.Id(), 0 );
-        GLenum nStatus = glCheckFramebufferStatus( GL_FRAMEBUFFER );
-        if( nStatus != GL_FRAMEBUFFER_COMPLETE )
-            SAL_WARN( "vcl.opengl", "Incomplete framebuffer " << nStatus );
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-        CHECK_GL_ERROR();
+        maOffscreenTex = OpenGLTexture();
     }
 }
 
 void OpenGLSalGraphicsImpl::PreDraw()
 {
-    assert( mpContext && mpContext->isInitialized() );
+    if( !mpContext && !AcquireContext() )
+    {
+        SAL_WARN( "vcl.opengl", "Couldn't acquire context" );
+        return;
+    }
 
     mpContext->makeCurrent();
-    // TODO: lfrb: make sure the render target has the right size
-    if( mbOffscreen )
-        CheckOffscreenTexture();
-    else
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
     CHECK_GL_ERROR();
+
+    if( !mbOffscreen )
+        mpContext->AcquireDefaultFramebuffer();
+    else
+        CheckOffscreenTexture();
+    CHECK_GL_ERROR();
+
     glViewport( 0, 0, GetWidth(), GetHeight() );
     ImplInitClipRegion();
 
@@ -223,14 +197,15 @@ void OpenGLSalGraphicsImpl::PreDraw()
 
 void OpenGLSalGraphicsImpl::PostDraw()
 {
-    if( mbOffscreen )
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-    else if( mpContext->mnPainting == 0 )
+    if( !mbOffscreen && mpContext->mnPainting == 0 )
         glFlush();
     if( mbUseScissor )
         glDisable( GL_SCISSOR_TEST );
     if( mbUseStencil )
         glDisable( GL_STENCIL_TEST );
+
+    mpContext->ReleaseFramebuffer( mpFramebuffer );
+    mpFramebuffer = NULL;
 
     CHECK_GL_ERROR();
 }
@@ -287,6 +262,8 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
         glStencilFunc( GL_EQUAL, 1, 0x1 );
         glEnable( GL_STENCIL_TEST );
     }
+
+    CHECK_GL_ERROR();
 }
 
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
@@ -379,28 +356,27 @@ void OpenGLSalGraphicsImpl::SetROPFillColor( SalROPColor /*nROPColor*/ )
 
 bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
 {
-    glBindFramebuffer( GL_FRAMEBUFFER, mnFramebufferId );
+    if( !maOffscreenTex )
+        maOffscreenTex = OpenGLTexture( GetWidth(), GetHeight() );
 
-    if( maOffscreenTex.IsUnique() )
+    if( !maOffscreenTex.IsUnique() )
     {
-        GLenum nStatus = glCheckFramebufferStatus( GL_FRAMEBUFFER );
-        if( nStatus != GL_FRAMEBUFFER_COMPLETE )
-            SAL_WARN( "vcl.opengl", "Incomplete framebuffer " << nStatus );
-        return true;
+        SalTwoRect aPosAry;
+        aPosAry.mnSrcX = aPosAry.mnDestX = 0;
+        aPosAry.mnSrcY = aPosAry.mnDestY = 0;
+        aPosAry.mnSrcWidth = aPosAry.mnDestWidth = GetWidth();
+        aPosAry.mnSrcHeight = aPosAry.mnDestHeight = GetHeight();
+
+        // TODO: lfrb: User GL_ARB_copy_image?
+        OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
+        mpFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
+        DrawTexture( maOffscreenTex, aPosAry );
+        maOffscreenTex = aNewTex;
     }
-
-    SalTwoRect aPosAry;
-    aPosAry.mnSrcX = aPosAry.mnDestX = 0;
-    aPosAry.mnSrcY = aPosAry.mnDestY = 0;
-    aPosAry.mnSrcWidth = aPosAry.mnDestWidth = GetWidth();
-    aPosAry.mnSrcHeight = aPosAry.mnDestHeight = GetHeight();
-
-    // TODO: lfrb: User GL_ARB_copy_image?
-    OpenGLTexture aNewTex = OpenGLTexture( GetWidth(), GetHeight() );
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, aNewTex.Id(), 0 );
-    glViewport( 0, 0, GetWidth(), GetHeight() );
-    DrawTexture( maOffscreenTex, aPosAry );
-    maOffscreenTex = aNewTex;
+    else
+    {
+        mpFramebuffer = mpContext->AcquireFramebuffer( maOffscreenTex );
+    }
 
     CHECK_GL_ERROR();
     return true;
@@ -1916,13 +1892,17 @@ bool OpenGLSalGraphicsImpl::drawGradient(const tools::PolyPolygon& rPolyPoly,
 
 void OpenGLSalGraphicsImpl::beginPaint()
 {
-    SAL_INFO( "vcl.opengl", "BEGIN PAINT " << this );
+    if( !mpContext && !AcquireContext() )
+        return;
+
     mpContext->mnPainting++;
 }
 
 void OpenGLSalGraphicsImpl::endPaint()
 {
-    SAL_INFO( "vcl.opengl", "END PAINT " << this );
+    if( !mpContext && !AcquireContext() )
+        return;
+
     mpContext->mnPainting--;
     assert( mpContext->mnPainting >= 0 );
     if( mpContext->mnPainting == 0 && !mbOffscreen )

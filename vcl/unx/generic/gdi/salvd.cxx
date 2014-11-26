@@ -32,49 +32,17 @@
 
 #include <salinst.hxx>
 
+#include <vcl/opengl/OpenGLHelper.hxx>
+#include <opengl/x11/salvd.hxx>
+
 SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
                                                        long nDX, long nDY,
                                                        sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
-    X11SalVirtualDevice *pVDev = new X11SalVirtualDevice();
-    if( !nBitCount && pGraphics )
-        nBitCount = pGraphics->GetBitCount();
-
-    if( pData && pData->hDrawable != None )
-    {
-        ::Window aRoot;
-        int x, y;
-        unsigned int w = 0, h = 0, bw, d;
-        Display* pDisp = GetGenericData()->GetSalDisplay()->GetDisplay();
-        XGetGeometry( pDisp, pData->hDrawable,
-                      &aRoot, &x, &y, &w, &h, &bw, &d );
-        int nScreen = 0;
-        while( nScreen < ScreenCount( pDisp ) )
-        {
-            if( RootWindow( pDisp, nScreen ) == aRoot )
-                break;
-            nScreen++;
-        }
-        nDX = (long)w;
-        nDY = (long)h;
-        if( !pVDev->Init( GetGenericData()->GetSalDisplay(), nDX, nDY, nBitCount,
-                          SalX11Screen( nScreen ), pData->hDrawable,
-                static_cast< XRenderPictFormat* >( pData->pXRenderFormat )) )
-        {
-            delete pVDev;
-            return NULL;
-        }
-    }
-    else if( !pVDev->Init( GetGenericData()->GetSalDisplay(), nDX, nDY, nBitCount,
-                           pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
-                                       GetGenericData()->GetSalDisplay()->GetDefaultXScreen() ) )
-    {
-        delete pVDev;
-        return NULL;
-    }
-
-    pVDev->InitGraphics( pVDev );
-    return pVDev;
+    if (OpenGLHelper::isVCLOpenGLEnabled())
+        return new X11OpenGLSalVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
+    else
+        return new X11SalVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
 }
 
 void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
@@ -110,66 +78,78 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
 
     const Drawable aVdevDrawable = pDevice->GetDrawable();
     SetDrawable( aVdevDrawable, m_nXScreen );
+    mpImpl->Init();
 }
 
-bool X11SalVirtualDevice::Init( SalDisplay *pDisplay,
-                                    long nDX, long nDY,
-                                    sal_uInt16 nBitCount,
-                                    SalX11Screen nXScreen,
-                                    Pixmap hDrawable,
-                                    XRenderPictFormat* pXRenderFormat )
+X11SalVirtualDevice::X11SalVirtualDevice( SalGraphics* pGraphics,
+                                          long nDX, long nDY,
+                                          sal_uInt16 nBitCount,
+                                          const SystemGraphicsData *pData ) :
+    m_nXScreen( 0 ),
+    bGraphics_( false )
 {
     SalColormap* pColormap = NULL;
     bool bDeleteColormap = false;
 
-    pDisplay_               = pDisplay;
+    if( !nBitCount && pGraphics )
+        nBitCount = pGraphics->GetBitCount();
+
+    pDisplay_               = GetGenericData()->GetSalDisplay();
     pGraphics_              = new X11SalGraphics();
-    m_nXScreen              = nXScreen;
-    if( pXRenderFormat ) {
+    nDepth_                 = nBitCount;
+
+    if( pData && pData->hDrawable != None )
+    {
+        ::Window aRoot;
+        int x, y;
+        unsigned int w = 0, h = 0, bw, d;
+        Display* pDisp = pDisplay_->GetDisplay();
+        XGetGeometry( pDisp, pData->hDrawable,
+                      &aRoot, &x, &y, &w, &h, &bw, &d );
+        int nScreen = 0;
+        while( nScreen < ScreenCount( pDisp ) )
+        {
+            if( RootWindow( pDisp, nScreen ) == aRoot )
+                break;
+            nScreen++;
+        }
+        nDX_ = (long)w;
+        nDY_ = (long)h;
+        m_nXScreen = SalX11Screen( nScreen );
+        hDrawable_ = pData->hDrawable;
+        bExternPixmap_ = true;
+    }
+    else
+    {
+        nDX_ = nDX;
+        nDY_ = nDY;
+        m_nXScreen = pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
+                                 GetGenericData()->GetSalDisplay()->GetDefaultXScreen();
+        hDrawable_ = limitXCreatePixmap( GetXDisplay(),
+                                         pDisplay_->GetDrawable( m_nXScreen ),
+                                         nDX_, nDY_,
+                                         GetDepth() );
+        bExternPixmap_ = false;
+    }
+
+    XRenderPictFormat* pXRenderFormat = pData ? static_cast<XRenderPictFormat*>(pData->pXRenderFormat) : NULL;
+    if( pXRenderFormat )
+    {
         pGraphics_->SetXRenderFormat( pXRenderFormat );
         if( pXRenderFormat->colormap )
-            pColormap = new SalColormap( pDisplay, pXRenderFormat->colormap, m_nXScreen );
+            pColormap = new SalColormap( pDisplay_, pXRenderFormat->colormap, m_nXScreen );
         else
             pColormap = new SalColormap( nBitCount );
          bDeleteColormap = true;
     }
-    else if( nBitCount != pDisplay->GetVisual( m_nXScreen ).GetDepth() )
+    else if( nBitCount != pDisplay_->GetVisual( m_nXScreen ).GetDepth() )
     {
         pColormap = new SalColormap( nBitCount );
         bDeleteColormap = true;
     }
+
     pGraphics_->SetLayout( 0 ); // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
-    nDX_                    = nDX;
-    nDY_                    = nDY;
-    nDepth_                 = nBitCount;
-
-    if( hDrawable == None )
-        hDrawable_          = limitXCreatePixmap( GetXDisplay(),
-                                             pDisplay_->GetDrawable( m_nXScreen ),
-                                             nDX_, nDY_,
-                                             GetDepth() );
-    else
-    {
-        hDrawable_ = hDrawable;
-        bExternPixmap_ = true;
-    }
-
     pGraphics_->Init( this, pColormap, bDeleteColormap );
-
-    return hDrawable_ != None;
-}
-
-X11SalVirtualDevice::X11SalVirtualDevice() :
-    m_nXScreen( 0 )
-{
-    pDisplay_               = NULL;
-    pGraphics_              = NULL;
-    hDrawable_              = None;
-    nDX_                    = 0;
-    nDY_                    = 0;
-    nDepth_                 = 0;
-    bGraphics_              = false;
-    bExternPixmap_          = false;
 }
 
 X11SalVirtualDevice::~X11SalVirtualDevice()
@@ -195,8 +175,6 @@ SalGraphics* X11SalVirtualDevice::AcquireGraphics()
 
 void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 { bGraphics_ = false; }
-
-#include "opengl/x11/gdiimpl.hxx"
 
 bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
@@ -231,14 +209,7 @@ bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     nDY_ = nDY;
 
     if( pGraphics_ )
-    {
-        InitGraphics( this );
-
-        // re-initialize OpenGLContext [!] having freed it's underlying pixmap above
-        X11OpenGLSalGraphicsImpl *pImpl = dynamic_cast< X11OpenGLSalGraphicsImpl* >(pGraphics_->GetImpl());
-        if( pImpl )
-            pImpl->Init();
-    }
+        pGraphics_->Init( this );
 
     return true;
 }

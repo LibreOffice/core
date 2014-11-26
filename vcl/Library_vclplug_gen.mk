@@ -107,6 +107,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gen,\
     vcl/unx/x11/x11sys \
     vcl/unx/x11/xlimits \
 	vcl/opengl/x11/gdiimpl \
+	vcl/opengl/x11/salvd \
 ))
 
 # ultimately we want to split the x11 dependencies out
