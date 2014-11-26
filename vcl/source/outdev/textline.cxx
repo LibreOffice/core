@@ -591,7 +591,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
         return;
 
     // prepare string for strikeout measurement
-    char cStrikeoutChar =  eStrikeout == STRIKEOUT_SLASH ? '/' : 'X';
+    const char cStrikeoutChar =  eStrikeout == STRIKEOUT_SLASH ? '/' : 'X';
     static const int nTestStrLen = 4;
     static const int nMaxStrikeStrLen = 2048;
     sal_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
