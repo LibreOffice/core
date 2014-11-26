@@ -213,15 +213,10 @@ static bool getFromCommandLineArgs(
     return found;
 }
 
-inline void getExecutableFile_Impl (rtl_uString ** ppFileURL)
-{
-    osl_bootstrap_getExecutableFile_Impl (ppFileURL);
-}
-
 static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
 {
     OUString fileName;
-    getExecutableFile_Impl (&(fileName.pData));
+    osl_bootstrap_getExecutableFile_Impl (&(fileName.pData));
 
     sal_Int32 nDirEnd = fileName.lastIndexOf('/');
     OSL_ENSURE(nDirEnd >= 0, "Cannot locate executable directory");
@@ -259,7 +254,7 @@ static OUString & getIniFileName_Impl()
         }
         else
         {
-            getExecutableFile_Impl (&(fileName.pData));
+            osl_bootstrap_getExecutableFile_Impl (&(fileName.pData));
 
             // get rid of a potential executable extension
             OUString progExt = ".bin";
