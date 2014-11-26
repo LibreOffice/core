@@ -236,7 +236,9 @@
       <prop oor:name="ObjectDocumentServiceName">
         <value>com.sun.star.formula.FormulaProperties</value>
       </prop>
-      <prop oor:name="ObjectMiscStatus"/>
+      <prop oor:name="ObjectMiscStatus">
+        <value>8589934592</value>
+      </prop>
       <prop oor:name="ObjectVerbs">
         <value>PRIMARY SHOW OPEN HIDE UIACTIVATE IPACTIVATE SAVECOPYAS</value>
       </prop>
