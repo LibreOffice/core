@@ -77,7 +77,7 @@ OpenGLContext::~OpenGLContext()
 #if defined( WNT )
     if (m_aGLWin.hRC)
     {
-        vShareList.erase(std::remove(vShareList.begin(), vShareList.end(), m_aGLWin.hRC));
+        vShareList.erase(std::remove(vShareList.begin(), vShareList.end(), m_aGLWin.hRC), vShareList.end());
 
         wglMakeCurrent( m_aGLWin.hDC, 0 );
         wglDeleteContext( m_aGLWin.hRC );
@@ -90,7 +90,7 @@ OpenGLContext::~OpenGLContext()
 #elif defined( UNX )
     if(m_aGLWin.ctx)
     {
-        vShareList.erase(std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx ));
+        vShareList.erase(std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx), vShareList.end());
 
         glXMakeCurrent(m_aGLWin.dpy, None, NULL);
         if( glGetError() != GL_NO_ERROR )
