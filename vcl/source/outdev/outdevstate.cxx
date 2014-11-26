@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
+#include <vcl/outdevstate.hxx>
 
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
@@ -33,10 +33,9 @@
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 
-#include <vcl/outdevstate.hxx>
-
 #include "outdev.h"
 #include "outdata.hxx"
+#include <outdevstatestack.hxx>
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 

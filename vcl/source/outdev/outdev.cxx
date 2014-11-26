@@ -44,6 +44,7 @@
 #include <window.h>
 #include <outdev.h>
 #include <outdata.hxx>
+#include <outdevstatestack.hxx>
 
 #include "PhysicalFontCollection.hxx"
 
@@ -95,7 +96,7 @@ OutputDevice::OutputDevice() :
     mpFontCollection                = NULL;
     mpGetDevFontList                = NULL;
     mpGetDevSizeList                = NULL;
-    mpOutDevStateStack              = new boost::ptr_deque<OutDevState>();
+    mpOutDevStateStack              = new OutDevStateStack;
     mpPDFWriter                     = NULL;
     mpAlphaVDev                     = NULL;
     mpExtOutDevData                 = NULL;

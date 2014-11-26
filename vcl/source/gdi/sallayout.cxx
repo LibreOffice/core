@@ -50,6 +50,7 @@
 #endif
 
 #include <algorithm>
+#include <boost/scoped_array.hpp>
 
 #ifdef DEBUG
 //#define MULTI_SL_DEBUG

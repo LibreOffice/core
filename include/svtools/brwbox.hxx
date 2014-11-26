@@ -28,6 +28,7 @@
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibletableprovider.hxx>
 #include <vector>
+#include <stack>
 
 #include <limits.h>
 #include <memory>

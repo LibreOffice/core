@@ -49,14 +49,12 @@
 #  //some problem with MacOSX and a check define
 #  undef check
 #endif
-#include <boost/ptr_container/ptr_deque.hpp>
 #include <boost/intrusive_ptr.hpp>
 
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
 
 #include <vector>
-#include <stack>
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
@@ -235,6 +233,7 @@ class Printer;
 class FontSelectPattern;
 class ImplFontMetricData;
 class VCLXGraphics;
+class OutDevStateStack;
 
 typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
 
@@ -270,7 +269,7 @@ private:
     mutable PhysicalFontCollection* mpFontCollection;
     mutable ImplGetDevFontList*     mpGetDevFontList;
     mutable ImplGetDevSizeList*     mpGetDevSizeList;
-    boost::ptr_deque<OutDevState>*  mpOutDevStateStack;
+    OutDevStateStack*               mpOutDevStateStack;
     ImplOutDevData*                 mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::PDFWriterImpl*             mpPDFWriter;

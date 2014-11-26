@@ -20,13 +20,12 @@
 #ifndef INCLUDED_VCL_OUTDEVSTATE_HXX
 #define INCLUDED_VCL_OUTDEVSTATE_HXX
 
-#include <sal/types.h>
-
 #include <vcl/mapmod.hxx>
 #include <vcl/region.hxx>
 #include <vcl/font.hxx>
 #include <vcl/vclenum.hxx>
 
+#include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>

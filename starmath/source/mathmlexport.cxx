@@ -63,6 +63,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <memory>
+#include <stack>
 
 #include "mathmlexport.hxx"
 #include "register.hxx"
