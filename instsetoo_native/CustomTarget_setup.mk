@@ -13,7 +13,6 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(call gb_Helper_get_rcfile,bootstrap) \
 	$(call gb_Helper_get_rcfile,fundamental) \
 	$(call gb_Helper_get_rcfile,louno) \
-	$(if $(ENABLE_OOENV),ooenv) \
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,$(call gb_Helper_get_rcfile,pythonloader.uno)) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),$(if $(filter-out MACOSX,$(OS)), \
 	    $(call gb_Helper_get_rcfile,redirect))) \
@@ -26,7 +25,6 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,bootstrap) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,fundamental) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,pythonloader.uno) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) \
 	: $(SRCDIR)/instsetoo_native/CustomTarget_setup.mk
@@ -87,18 +85,6 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'UNO_SHARED_PACKAGES_CACHE=$$UNO_SHARED_PACKAGES/cache' \
 		&& echo 'UNO_USER_PACKAGES=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/uno_packages' \
 		&& echo 'UNO_USER_PACKAGES_CACHE=$$UNO_USER_PACKAGES/cache' \
-	) > $@
-
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	( \
-		echo 'ulimit -c unlimited' && \
-		echo '# debugging assistance' && \
-		echo 'export SAL_DISABLE_FLOATGRAB=1' && \
-		echo 'export G_SLICE=always-malloc' && \
-		echo 'export MALLOC_CHECK_=2' && \
-		echo 'export MALLOC_PERTURB_=153' && \
-		echo 'export OOO_DISABLE_RECOVERY=1' \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,pythonloader.uno) :

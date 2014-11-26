@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_targets,instsetoo_native,\
 	CustomTarget_setup \
 	Package_setup \
 	Package_setup_ure \
+	$(if $(ENABLE_OOENV),Package_instsetoo_native_ooenv) \
 ))
 
 # vim: set noet sw=4 ts=4:
