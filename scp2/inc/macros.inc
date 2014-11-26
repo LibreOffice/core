@@ -290,7 +290,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\new\command)); \
-        Value = "\"<progpath>\program\\" STRING(app) "\" -n \"%1\""; \
+        Value = "\"<progpath>\program\\" STRING(app) "\" -o \"%1\""; \
     End
 
 #define REGISTRY_ENTRY_OPEN_CMD(name,modid,app) \

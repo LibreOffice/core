@@ -355,7 +355,7 @@ RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "soffice.StarImpressDocument.6\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_6_Shell_Open_Command
@@ -810,7 +810,7 @@ RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Impress_Bin;
     Subkey = "LibreOffice.ImpressDocument.1\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Impressdocument_1_Shell_Open_Command

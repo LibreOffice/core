@@ -355,7 +355,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterDocument.6\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_Shell_Open_Command
@@ -442,7 +442,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "soffice.StarWriterGlobalDocument.6\shell\new\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_Shell_Open_Command
@@ -945,7 +945,7 @@ RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "LibreOffice.WriterDocument.1\shell\new\command";
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_Open_Command
@@ -1293,7 +1293,7 @@ RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "LibreOffice.WriterGlobalDocument.1\shell\new\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
+    Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_Open_Command
