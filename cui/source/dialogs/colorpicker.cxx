@@ -665,6 +665,7 @@ void ColorFieldControl::Paint( const Rectangle& rRect )
 void ColorFieldControl::Resize()
 {
     UpdateBitmap();
+    UpdatePosition();
     Control::Resize();
 }
 
