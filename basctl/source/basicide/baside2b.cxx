@@ -2776,7 +2776,7 @@ void CodeCompleteListBox::KeyInput( const KeyEvent& rKeyEvt )
                 InsertSelectedEntry();
                 break;
             case KEY_UP: case KEY_DOWN:
-                NotifyEvent nEvt( EVENT_KEYINPUT, NULL, &rKeyEvt );
+                NotifyEvent nEvt( MouseNotifyEvent::KEYINPUT, NULL, &rKeyEvt );
                 PreNotify(nEvt);
                 break;
         }

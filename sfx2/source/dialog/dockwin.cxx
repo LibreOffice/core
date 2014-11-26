@@ -1767,7 +1767,7 @@ Size SfxDockingWindow::GetMinOutputSizePixel() const
 
 bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == EVENT_GETFOCUS )
+    if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         if (pMgr != NULL)
             pBindings->SetActiveFrame( pMgr->GetFrame() );
@@ -1783,7 +1783,7 @@ bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
         DockingWindow::Notify( rEvt );
         return true;
     }
-    else if( rEvt.GetType() == EVENT_KEYINPUT )
+    else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions
         if ( !DockingWindow::Notify( rEvt ) && SfxViewShell::Current() )
@@ -1791,7 +1791,7 @@ bool SfxDockingWindow::Notify( NotifyEvent& rEvt )
             return SfxViewShell::Current()->GlobalKeyInput_Impl( *rEvt.GetKeyEvent() );
         return true;
     }
-    else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
+    else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
     {
         pBindings->SetActiveFrame( NULL );
         if (pMgr != NULL)

@@ -1381,7 +1381,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
 bool VclMultiLineEdit::Notify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if( rNEvt.GetType() == EVENT_COMMAND )
+    if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         nDone = pImpVclMEdit->HandleCommand( *rNEvt.GetCommandEvent() );
     }
@@ -1392,7 +1392,7 @@ bool VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
 
-    if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( !GetTextView()->IsCursorEnabled() ) )
+    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( !GetTextView()->IsCursorEnabled() ) )
     {
         const KeyEvent& rKEvent = *rNEvt.GetKeyEvent();
         if ( !rKEvent.GetKeyCode().IsShift() && ( rKEvent.GetKeyCode().GetGroup() == KEYGROUP_CURSOR ) )

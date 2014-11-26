@@ -197,7 +197,7 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
 
     switch ( rNEvt.GetType() )
     {
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             bool bShift = pKeyEvent->GetKeyCode().IsShift();
@@ -243,7 +243,7 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             break;
         }
 
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
             SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             break;
     }

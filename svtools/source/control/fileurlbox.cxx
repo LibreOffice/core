@@ -56,7 +56,7 @@ namespace svt
     {
         switch ( _rNEvt.GetType() )
         {
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
             if  (   ( GetSubEdit() == _rNEvt.GetWindow()                         )
                 &&  ( KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
                 &&  ( IsInDropDown()                                             )
@@ -64,7 +64,7 @@ namespace svt
                 m_sPreservedText = GetURL();
             break;
 
-        case EVENT_LOSEFOCUS:
+        case MouseNotifyEvent::LOSEFOCUS:
             if ( IsWindowOrChild( _rNEvt.GetWindow() ) )
                 DisplayURL( GetText() );
             break;
@@ -78,7 +78,7 @@ namespace svt
     {
         switch ( _rNEvt.GetType() )
         {
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
             if  (   ( GetSubEdit() == _rNEvt.GetWindow()                         )
                 &&  ( KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
                 &&  ( IsInDropDown()                                             )

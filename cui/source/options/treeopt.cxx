@@ -891,7 +891,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
 
 bool OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();

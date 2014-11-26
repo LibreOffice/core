@@ -388,8 +388,8 @@ void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
 
 void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nSwitch=rNEvt.GetType();
-    if(nSwitch==EVENT_GETFOCUS && !bIsShutDown)
+    MouseNotifyEvent nSwitch=rNEvt.GetType();
+    if(nSwitch==MouseNotifyEvent::GETFOCUS && !bIsShutDown)
     {
         vcl::Window* pWin=rNEvt.GetWindow();
         if(pWin!=NULL)

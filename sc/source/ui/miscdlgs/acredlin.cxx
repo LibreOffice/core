@@ -747,7 +747,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionC
 
 bool ScAcceptChgDlg::PreNotify( NotifyEvent& rNEvt )
 {
-    if(rNEvt.GetType()==EVENT_GETFOCUS && bNeedsUpdate)
+    if(rNEvt.GetType()==MouseNotifyEvent::GETFOCUS && bNeedsUpdate)
     {
         ClearView();
         UpdateView();

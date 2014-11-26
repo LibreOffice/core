@@ -57,7 +57,7 @@ bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
     bool nHandled = false;
     switch ( rNEvt.GetType() )
     {
-        case EVENT_LOSEFOCUS:
+        case MouseNotifyEvent::LOSEFOCUS:
         {
             nHandled = LimitBox::Notify( rNEvt );
             uno::Sequence< beans::PropertyValue > aArgs( 1 );
@@ -66,7 +66,7 @@ bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
             m_pControl->dispatchCommand( aArgs );
             break;
         }
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
             switch ( nCode )

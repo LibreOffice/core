@@ -54,7 +54,7 @@ namespace svt
     {
         switch (rNEvt.GetType())
         {
-            case EVENT_KEYINPUT:
+            case MouseNotifyEvent::KEYINPUT:
                 if (!IsInDropDown())
                 {
                     const KeyEvent *pEvt = rNEvt.GetKeyEvent();
@@ -162,7 +162,7 @@ namespace svt
     {
         switch (rNEvt.GetType())
         {
-            case EVENT_KEYINPUT:
+            case MouseNotifyEvent::KEYINPUT:
                 if (!IsInDropDown())
                 {
                     const KeyEvent *pEvt = rNEvt.GetKeyEvent();
@@ -328,10 +328,10 @@ namespace svt
     {
         switch (rEvt.GetType())
         {
-            case EVENT_GETFOCUS:
+            case MouseNotifyEvent::GETFOCUS:
                 ShowFocus(aFocusRect);
                 break;
-            case EVENT_LOSEFOCUS:
+            case MouseNotifyEvent::LOSEFOCUS:
                 HideFocus();
         }
         return Control::PreNotify(rEvt);
@@ -572,7 +572,7 @@ namespace svt
 
     bool MultiLineTextCell::PreNotify( NotifyEvent& rNEvt )
     {
-        if ( rNEvt.GetType() == EVENT_KEYINPUT )
+        if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             if ( IsWindowOrChild( rNEvt.GetWindow() ) )
             {

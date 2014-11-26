@@ -389,38 +389,41 @@ inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
 
 // - NotifyEvent -
 
-
-#define EVENT_MOUSEBUTTONDOWN   1
-#define EVENT_MOUSEBUTTONUP     2
-#define EVENT_MOUSEMOVE         3
-#define EVENT_KEYINPUT          4
-#define EVENT_KEYUP             5
-#define EVENT_GETFOCUS          6
-#define EVENT_LOSEFOCUS         7
-#define EVENT_COMMAND           8
-#define EVENT_DESTROY           9
-#define EVENT_INPUTENABLE       10
-#define EVENT_INPUTDISABLE      11
-#define EVENT_EXECUTEDIALOG     100
-#define EVENT_ENDEXECUTEDIALOG  101
+enum class MouseNotifyEvent
+{
+    NONE             = 0,
+    MOUSEBUTTONDOWN  = 1,
+    MOUSEBUTTONUP    = 2,
+    MOUSEMOVE        = 3,
+    KEYINPUT         = 4,
+    KEYUP            = 5,
+    GETFOCUS         = 6,
+    LOSEFOCUS        = 7,
+    COMMAND          = 8,
+    DESTROY          = 9,
+    INPUTENABLE      = 10,
+    INPUTDISABLE     = 11,
+    EXECUTEDIALOG    = 100,
+    ENDEXECUTEDIALOG = 101
+};
 
 class VCL_DLLPUBLIC NotifyEvent
 {
 private:
     vcl::Window*                 mpWindow;
     void*                   mpData;
-    sal_uInt16                  mnType;
+    MouseNotifyEvent        mnEventType;
     long                    mnRetValue;
 
 public:
                             NotifyEvent();
-                            NotifyEvent( sal_uInt16 nType,
+                            NotifyEvent( MouseNotifyEvent nEventType,
                                          vcl::Window* pWindow,
                                          const void* pEvent = NULL,
                                          long nRet = 0 );
 
-    sal_uInt16                  GetType() const { return mnType; }
-    vcl::Window*                 GetWindow() const { return mpWindow; }
+    MouseNotifyEvent        GetType() const { return mnEventType; }
+    vcl::Window*            GetWindow() const { return mpWindow; }
     void*                   GetData() const { return mpData; }
 
     void                    SetReturnValue( long nRet ) { mnRetValue = nRet; }
@@ -435,22 +438,22 @@ inline NotifyEvent::NotifyEvent()
 {
     mpWindow    = NULL;
     mpData      = NULL;
-    mnType      = 0;
+    mnEventType = MouseNotifyEvent::NONE;
     mnRetValue  = 0;
 }
 
-inline NotifyEvent::NotifyEvent( sal_uInt16 nType, vcl::Window* pWindow,
+inline NotifyEvent::NotifyEvent( MouseNotifyEvent nEventType, vcl::Window* pWindow,
                                  const void* pEvent, long nRet )
 {
     mpWindow    = pWindow;
     mpData      = (void*)pEvent;
-    mnType      = nType;
+    mnEventType  = nEventType;
     mnRetValue  = nRet;
 }
 
 inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 {
-    if ( (mnType == EVENT_KEYINPUT) || (mnType == EVENT_KEYUP) )
+    if ( (mnEventType == MouseNotifyEvent::KEYINPUT) || (mnEventType == MouseNotifyEvent::KEYUP) )
         return (const KeyEvent*)mpData;
     else
         return NULL;
@@ -458,7 +461,7 @@ inline const KeyEvent* NotifyEvent::GetKeyEvent() const
 
 inline const MouseEvent* NotifyEvent::GetMouseEvent() const
 {
-    if ( (mnType >= EVENT_MOUSEBUTTONDOWN) && (mnType <= EVENT_MOUSEMOVE) )
+    if ( (mnEventType >= MouseNotifyEvent::MOUSEBUTTONDOWN) && (mnEventType <= MouseNotifyEvent::MOUSEMOVE) )
         return (const MouseEvent*)mpData;
     else
         return NULL;
@@ -466,7 +469,7 @@ inline const MouseEvent* NotifyEvent::GetMouseEvent() const
 
 inline const CommandEvent* NotifyEvent::GetCommandEvent() const
 {
-    if ( mnType == EVENT_COMMAND )
+    if ( mnEventType == MouseNotifyEvent::COMMAND )
         return (const CommandEvent*)mpData;
     else
         return NULL;

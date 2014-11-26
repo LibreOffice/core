@@ -124,7 +124,7 @@ void ImplTabButton::Command( const CommandEvent& rCEvt )
 
 bool ImplTabButton::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         if ( GetParent()->IsInEditMode() )
         {
@@ -275,7 +275,7 @@ TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
 
 bool TabBarEdit::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         if ( !pKEvt->GetKeyCode().GetModifier() )

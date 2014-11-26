@@ -472,7 +472,7 @@ LongCurrencyField::~LongCurrencyField()
 
 bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return true;
@@ -482,11 +482,11 @@ bool LongCurrencyField::PreNotify( NotifyEvent& rNEvt )
 
 bool LongCurrencyField::Notify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_GETFOCUS )
+    if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         MarkToBeReformatted( false );
     }
-    else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         if ( MustBeReformatted() )
         {
@@ -550,7 +550,7 @@ LongCurrencyBox::~LongCurrencyBox()
 
 bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( ImplLongCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), GetLocaleDataWrapper() ) )
             return true;
@@ -560,11 +560,11 @@ bool LongCurrencyBox::PreNotify( NotifyEvent& rNEvt )
 
 bool LongCurrencyBox::Notify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_GETFOCUS )
+    if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         MarkToBeReformatted( false );
     }
-    else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         if ( MustBeReformatted() )
         {

@@ -3387,7 +3387,7 @@ void IcnViewEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 
 bool IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         if ( !bAlreadyInCallback &&
             ((!Application::GetFocusWindow()) || !IsChild(Application::GetFocusWindow())))

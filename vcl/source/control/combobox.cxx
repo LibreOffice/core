@@ -690,7 +690,7 @@ bool ComboBox::PreNotify( NotifyEvent& rNEvt )
 bool ComboBox::Notify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( rNEvt.GetWindow() == mpSubEdit )
+    if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( rNEvt.GetWindow() == mpSubEdit )
             && !IsReadOnly() )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
@@ -737,14 +737,14 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
             break;
         }
     }
-    else if ( (rNEvt.GetType() == EVENT_LOSEFOCUS) && mpFloatWin )
+    else if ( (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS) && mpFloatWin )
     {
         if( mpFloatWin->HasChildPathFocus() )
             mpSubEdit->GrabFocus();
         else if ( mpFloatWin->IsInPopupMode() && !HasChildPathFocus( true ) )
             mpFloatWin->EndPopupMode();
     }
-    else if( (rNEvt.GetType() == EVENT_COMMAND) &&
+    else if( (rNEvt.GetType() == MouseNotifyEvent::COMMAND) &&
              (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
              (rNEvt.GetWindow() == mpSubEdit) )
     {
@@ -762,7 +762,7 @@ bool ComboBox::Notify( NotifyEvent& rNEvt )
             nDone = false;  // don't eat this event, let the default handling happen (i.e. scroll the context)
         }
     }
-    else if( ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == &mpImplLB->GetMainWindow() ) )
+    else if( ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN ) && ( rNEvt.GetWindow() == &mpImplLB->GetMainWindow() ) )
     {
         mpSubEdit->GrabFocus();
     }

@@ -993,8 +993,8 @@ namespace pcr
     {
         bool nResult = true;
 
-        sal_uInt16 nSwitch = _rNEvt.GetType();
-        if (EVENT_KEYINPUT == nSwitch)
+        MouseNotifyEvent nSwitch = _rNEvt.GetType();
+        if (MouseNotifyEvent::KEYINPUT == nSwitch)
         {
             const vcl::KeyCode& aKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();
@@ -1099,7 +1099,7 @@ namespace pcr
     {
         bool nResult = true;
 
-        if (rNEvt.GetType() == EVENT_KEYINPUT)
+        if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         {
             const vcl::KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();

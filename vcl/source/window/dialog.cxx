@@ -557,7 +557,7 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
     bool nRet = SystemWindow::Notify( rNEvt );
     if ( !nRet )
     {
-        if ( rNEvt.GetType() == EVENT_KEYINPUT )
+        if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             vcl::KeyCode    aKeyCode = pKEvt->GetKeyCode();
@@ -574,7 +574,7 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
                 return true;
             }
         }
-        else if ( rNEvt.GetType() == EVENT_GETFOCUS )
+        else if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
             // make sure the dialog is still modal
             // changing focus between application frames may
@@ -770,7 +770,7 @@ bool Dialog::ImplStartExecuteModal()
 
     if ( GetParent() )
     {
-        NotifyEvent aNEvt( EVENT_EXECUTEDIALOG, this );
+        NotifyEvent aNEvt( MouseNotifyEvent::EXECUTEDIALOG, this );
         GetParent()->Notify( aNEvt );
     }
     mbInExecute = true;
@@ -939,7 +939,7 @@ void Dialog::EndDialog( long nResult )
         EnableSaveBackground( mbOldSaveBack );
         if ( GetParent() )
         {
-            NotifyEvent aNEvt( EVENT_ENDEXECUTEDIALOG, this );
+            NotifyEvent aNEvt( MouseNotifyEvent::ENDEXECUTEDIALOG, this );
             GetParent()->Notify( aNEvt );
         }
 

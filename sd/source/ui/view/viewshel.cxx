@@ -597,7 +597,7 @@ bool ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
 {
     // handle scroll commands when they arrived at child windows
     bool nRet = false;
-    if( rNEvt.GetType() == EVENT_COMMAND )
+    if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         // note: dynamic_cast is not possible as GetData() returns a void*
         CommandEvent* pCmdEvent = reinterpret_cast< CommandEvent* >(rNEvt.GetData());

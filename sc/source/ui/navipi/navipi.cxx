@@ -95,8 +95,8 @@ bool ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = SpinField::Notify( rNEvt );
 
-    sal_uInt16 nType = rNEvt.GetType();
-    if ( nType == EVENT_KEYINPUT )
+    MouseNotifyEvent nType = rNEvt.GetType();
+    if ( nType == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aCode = pKEvt->GetKeyCode();
@@ -115,8 +115,8 @@ bool ColumnEdit::Notify( NotifyEvent& rNEvt )
             }
         }
     }
-    else if ( nType == EVENT_LOSEFOCUS )    // LoseFocus wird bei VCL nicht gerufen
-        EvalText();                         // nCol setzen
+    else if ( nType == MouseNotifyEvent::LOSEFOCUS )    // LoseFocus not called at VCL
+        EvalText();                         // nCol set
 
     return nHandled;
 }
@@ -267,7 +267,7 @@ bool RowEdit::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = NumericField::Notify( rNEvt );
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aCode = pKEvt->GetKeyCode();

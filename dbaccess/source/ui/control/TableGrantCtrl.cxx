@@ -145,14 +145,14 @@ void OTableGrantControl::Resize()
 
 bool OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == EVENT_LOSEFOCUS)
+    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
         if (!HasChildPathFocus())
         {
             if (m_nDeactivateEvent)
                 Application::RemoveUserEvent(m_nDeactivateEvent);
             m_nDeactivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchDeactivate));
         }
-    if (rNEvt.GetType() == EVENT_GETFOCUS)
+    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
         if (m_nDeactivateEvent)
             Application::RemoveUserEvent(m_nDeactivateEvent);
