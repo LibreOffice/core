@@ -386,16 +386,6 @@ End
 
 #ifdef UNX
 
-Directory gid_Dir_User_Psprint
-    ParentID = gid_Dir_User;
-    DosName = "psprint";
-    Styles = (CREATE);
-End
-
-#endif
-
-#ifdef UNX
-
 Directory gid_Dir_Fonts_Truetype
     ParentID = gid_Dir_Fonts;
     DosName = "truetype";
