@@ -304,7 +304,6 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     {
         // This is the common case: "close sdt before the current paragraph" was requrested by the next paragraph.
         EndSdtBlock();
-        bEndParaSdt = false;
         m_bStartedParaSdt = false;
         m_aStartedParagraphSdtPrAlias = "";
     }
@@ -1208,7 +1207,6 @@ void DocxAttributeOutput::EndRun()
         m_pSerializer->mark();
         EndSdtBlock();
         m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
-        bCloseEarlierSDT = false;
     }
 
     m_pSerializer->mergeTopMarks();
