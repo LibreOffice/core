@@ -90,9 +90,12 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
                                  bool bCurrency = false )
 {
     OUString            aStr = rStr;
-    OUStringBuffer aStr1, aStr2;
+    OUString            fStr;
+    OUStringBuffer      aStr1, aStr2, aStrFrac, aStrNum, aStrDenom;
     bool                bNegative = false;
-    sal_Int32           nDecPos;
+    bool                bFrac = false;
+    sal_Int32           nDecPos, nFracDivPos, nFracNumPos;
+    sal_Int64           nValue;
 
     // react on empty string
     if ( rStr.isEmpty() )
@@ -101,9 +104,25 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     // remove leading and trailing spaces
     aStr = aStr.trim();
 
+
+
     // find position of decimal point
     nDecPos = aStr.indexOf( rLocaleDataWrappper.getNumDecimalSep() );
-    if ( nDecPos >= 0)
+    // find position of fraction
+    nFracDivPos = aStr.indexOf( '/' );
+
+    // parse fractional strings
+    if (nFracDivPos > 0)
+    {
+        OString o = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US );
+        bFrac = true;
+        nFracNumPos = aStr.lastIndexOf(' ', nFracDivPos);
+        aStr1.append(aStr.getStr(), nFracNumPos);
+        aStrNum.append(aStr.getStr()+nFracNumPos+1, nFracDivPos-nFracNumPos-1);
+        aStrDenom.append(aStr.getStr()+nFracDivPos+1);
+    }
+    // parse decimal strings
+    else if ( nDecPos >= 0)
     {
         aStr1.append(aStr.getStr(), nDecPos);
         aStr2.append(aStr.getStr()+nDecPos+1);
@@ -152,9 +171,12 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     {
         if ( !aStr1.isEmpty() && aStr1[0] == '-')
             bNegative = true;
+        if ( !aStrNum.isEmpty() && aStrNum[0] == '-') // For non-mixed fractions
+            bNegative = true;
     }
 
     // remove all unwanted charaters
+    // For whole number
     for (sal_Int32 i=0; i < aStr1.getLength(); )
     {
         if ( (aStr1[i] >= '0') && (aStr1[i] <= '9') )
@@ -162,21 +184,65 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
         else
             aStr1.remove( i, 1 );
     }
-    for (sal_Int32 i=0; i < aStr2.getLength(); )
-    {
-        if ((aStr2[i] >= '0') && (aStr2[i] <= '9'))
-            ++i;
-        else
-            aStr2.remove(i, 1);
+    // For decimal
+    if (!bFrac) {
+        for (sal_Int32 i=0; i < aStr2.getLength(); )
+        {
+            if ((aStr2[i] >= '0') && (aStr2[i] <= '9'))
+                ++i;
+            else
+                aStr2.remove(i, 1);
+        }
+    }
+    else {
+        // for numerator
+        for (sal_Int32 i=0; i < aStrNum.getLength(); )
+        {
+            if ((aStrNum[i] >= '0') && (aStrNum[i] <= '9'))
+                ++i;
+            else
+                aStrNum.remove(i, 1);
+        }
+        // for denominator
+        for (sal_Int32 i=0; i < aStrDenom.getLength(); )
+        {
+            if ((aStrDenom[i] >= '0') && (aStrDenom[i] <= '9'))
+                ++i;
+            else
+                aStrDenom.remove(i, 1);
+        }
     }
 
-    if ( aStr1.isEmpty() && aStr2.isEmpty() )
+
+    if ( !bFrac && aStr1.isEmpty() && aStr2.isEmpty() )
+        return false;
+    else if ( bFrac && aStr1.isEmpty() && (aStrNum.isEmpty() || aStrDenom.isEmpty()) )
         return false;
 
     if ( aStr1.isEmpty() )
         aStr1 = "0";
     if ( bNegative )
         aStr1.insert(0, "-");
+
+    // Convert fractional strings
+    if (bFrac) {
+        // Convert to fraction
+        sal_Int64 nWholeNum = aStr1.makeStringAndClear().toInt64();
+        sal_Int64 nNum = aStrNum.makeStringAndClear().toInt64();
+        sal_Int64 nDenom = aStrDenom.makeStringAndClear().toInt64();
+        if (nDenom == 0) return false; // Division by zero
+        double nFrac2Dec = nWholeNum + (double)nNum/nDenom; // Convert to double for floating point precision
+        aStrFrac.append(nFrac2Dec);
+        // Reconvert division result to string and parse
+        nDecPos = aStrFrac.indexOf( rLocaleDataWrappper.getNumDecimalSep() );
+        if ( nDecPos >= 0)
+        {
+            aStr1.append(aStrFrac.getStr(), nDecPos);
+            aStr2.append(aStrFrac.getStr()+nDecPos+1);
+        }
+        else
+            aStr1 = aStrFrac;
+    }
 
     // prune and round fraction
     bool bRound = false;
@@ -192,7 +258,7 @@ static bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
     aStr  = aStr1.makeStringAndClear() + aStr2.makeStringAndClear();
 
     // check range
-    sal_Int64 nValue = aStr.toInt64();
+    nValue = aStr.toInt64();
     if( nValue == 0 )
     {
         // check if string is equivalent to zero
