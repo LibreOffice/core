@@ -208,7 +208,6 @@ OfaMiscTabPage::OfaMiscTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pYearValueField, "year");
     get(m_pToYearFT, "toyear");
     get(m_pCollectUsageInfo, "collectusageinfo");
-    get(m_pUseOpenCL, "useopencl");
 
     if (m_pFileDlgCB->IsVisible() && SvtMiscOptions().IsUseSystemFileDialogReadOnly())
     {
@@ -301,12 +300,6 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
         bModified = true;
     }
 
-    if (m_pUseOpenCL->IsValueChangedFromSaved())
-    {
-        officecfg::Office::Common::Misc::UseOpenCL::set(m_pUseOpenCL->IsChecked(), batch);
-        bModified = true;
-    }
-
     batch->commit();
 
     return bModified;
@@ -348,9 +341,6 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 
     m_pCollectUsageInfo->Check(officecfg::Office::Common::Misc::CollectUsageInformation::get());
     m_pCollectUsageInfo->SaveValue();
-
-    m_pUseOpenCL->Check(officecfg::Office::Common::Misc::UseOpenCL::get());
-    m_pUseOpenCL->SaveValue();
 }
 
 

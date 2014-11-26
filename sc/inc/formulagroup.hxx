@@ -12,10 +12,10 @@
 
 #include "address.hxx"
 #include "types.hxx"
-#include "platforminfo.hxx"
 #include "stlalgorithm.hxx"
 
 #include <formula/opcode.hxx>
+#include <opencl/platforminfo.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <set>

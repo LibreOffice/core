@@ -40,58 +40,6 @@ struct SC_DLLPUBLIC ScCalcConfig
         STRING_CONVERSION_UNAMBIGUOUS,      ///<  =1+"1" gives 2, but =1+"1.000" or =1+"x" give #VALUE!
         STRING_CONVERSION_LOCALE_DEPENDENT  ///<  =1+"1.000" may be 2 or 1001 ... =1+"x" gives #VALUE!
     };
-
-    struct OpenCLImplMatcher
-    {
-        OUString maOS;
-        OUString maOSVersion;
-        OUString maPlatformVendor;
-        OUString maDevice;
-        OUString maDriverVersion;
-
-        OpenCLImplMatcher()
-        {
-        }
-
-        OpenCLImplMatcher(const OUString& rOS,
-                          const OUString& rOSVersion,
-                          const OUString& rPlatformVendor,
-                          const OUString& rDevice,
-                          const OUString& rDriverVersion)
-            : maOS(rOS),
-              maOSVersion(rOSVersion),
-              maPlatformVendor(rPlatformVendor),
-              maDevice(rDevice),
-              maDriverVersion(rDriverVersion)
-        {
-        }
-
-        bool operator==(const OpenCLImplMatcher& r) const
-        {
-            return maOS == r.maOS &&
-                   maOSVersion == r.maOSVersion &&
-                   maPlatformVendor == r.maPlatformVendor &&
-                   maDevice == r.maDevice &&
-                   maDriverVersion == r.maDriverVersion;
-        }
-        bool operator!=(const OpenCLImplMatcher& r) const
-        {
-            return !operator==(r);
-        }
-        bool operator<(const OpenCLImplMatcher& r) const
-        {
-            return (maOS < r.maOS ||
-                    (maOS == r.maOS &&
-                     (maOSVersion < r.maOSVersion ||
-                      (maOSVersion == r.maOSVersion &&
-                       (maPlatformVendor < r.maPlatformVendor ||
-                        (maPlatformVendor == r.maPlatformVendor &&
-                         (maDevice < r.maDevice ||
-                          (maDevice == r.maDevice &&
-                           (maDriverVersion < r.maDriverVersion)))))))));
-        }
-    };
-
     formula::FormulaGrammar::AddressConvention meStringRefAddressSyntax;
     StringConversion meStringConversion;
     bool mbEmptyStringAsZero:1;
@@ -105,11 +53,6 @@ struct SC_DLLPUBLIC ScCalcConfig
 
     OpCodeSet maOpenCLSubsetOpCodes;
 
-    typedef std::set<OpenCLImplMatcher> OpenCLImplMatcherSet;
-
-    OpenCLImplMatcherSet maOpenCLBlackList;
-    OpenCLImplMatcherSet maOpenCLWhiteList;
-
     ScCalcConfig();
 
     void setOpenCLConfigToDefault();
@@ -121,8 +64,6 @@ struct SC_DLLPUBLIC ScCalcConfig
     bool operator!= (const ScCalcConfig& r) const;
 };
 
-SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcher& rImpl);
-SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcherSet& rSet);
 SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig);
 
 SC_DLLPUBLIC OUString ScOpCodeSetToNumberString(const ScCalcConfig::OpCodeSet& rOpCodes);

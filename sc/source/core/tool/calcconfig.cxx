@@ -64,19 +64,6 @@ void ScCalcConfig::setOpenCLConfigToDefault()
     maOpenCLSubsetOpCodes.insert(ocCount);
     maOpenCLSubsetOpCodes.insert(ocNormDist);
     maOpenCLSubsetOpCodes.insert(ocSumIfs);
-
-    // This entry we have had for some time (when blacklisting was
-    // done elsewhere in the code), so presumably there is a known
-    // good reason for it.
-    maOpenCLBlackList.insert(OpenCLImplMatcher("Windows", "", "Intel\\(R\\) Corporation", "", "9\\.17\\.10\\.2884"));
-
-    // This is what I have tested on Linux and it works for our unit tests.
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("Linux", "", "Advanced Micro Devices, Inc\\.", "", "1445\\.5 \\(sse2,avx\\)"));
-
-    // For now, assume that AMD, Intel and NVIDIA drivers are good
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("", "", "Advanced Micro Devices, Inc\\.", "", ""));
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("", "", "Intel\\(R\\) Corporation", "", ""));
-    maOpenCLWhiteList.insert(OpenCLImplMatcher("", "", "NVIDIA Corporation", "", ""));
 }
 
 void ScCalcConfig::reset()
@@ -103,40 +90,12 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
            maOpenCLDevice == r.maOpenCLDevice &&
            mnOpenCLMinimumFormulaGroupSize == r.mnOpenCLMinimumFormulaGroupSize &&
            maOpenCLSubsetOpCodes == r.maOpenCLSubsetOpCodes &&
-           maOpenCLBlackList == r.maOpenCLBlackList &&
-           maOpenCLWhiteList == r.maOpenCLWhiteList &&
            true;
 }
 
 bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 {
     return !operator==(r);
-}
-
-std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcher& rImpl)
-{
-    rStream << "{"
-        "OS=" << rImpl.maOS << ","
-        "OSVersion=" << rImpl.maOSVersion << ","
-        "PlatformVendor=" << rImpl.maPlatformVendor << ","
-        "Device=" << rImpl.maDevice << ","
-        "DriverVersion=" << rImpl.maDriverVersion <<
-        "}";
-
-    return rStream;
-}
-
-std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig::OpenCLImplMatcherSet& rSet)
-{
-    rStream << "{";
-    for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
-    {
-        if (i != rSet.cbegin())
-            rStream << ",";
-        rStream << *i;
-    }
-    rStream << "}";
-    return rStream;
 }
 
 std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
@@ -150,8 +109,6 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"
         "OpenCLMinimumFormulaGroupSize=" << rConfig.mnOpenCLMinimumFormulaGroupSize << ","
         "OpenCLSubsetOpCodes={" << ScOpCodeSetToSymbolicString(rConfig.maOpenCLSubsetOpCodes) << "},"
-        "OpenCLBlackList=" << rConfig.maOpenCLBlackList << ","
-        "OpenCLWhiteList=" << rConfig.maOpenCLWhiteList <<
         "}";
     return rStream;
 }

@@ -28,6 +28,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/baselinksdialog \
 	cui/uiconfig/ui/bitmaptabpage \
+	cui/uiconfig/ui/blackorwhitelistentrydialog \
 	cui/uiconfig/ui/borderareatransparencydialog \
 	cui/uiconfig/ui/borderbackgrounddialog \
 	cui/uiconfig/ui/borderpage \
@@ -131,6 +132,8 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optmemorypage \
 	cui/uiconfig/ui/optnewdictionarydialog \
 	cui/uiconfig/ui/optonlineupdatepage \
+	$(call gb_Helper_optional,OPENCL, \
+		cui/uiconfig/ui/optopenclpage) \
 	cui/uiconfig/ui/optpathspage \
 	cui/uiconfig/ui/optproxypage \
 	cui/uiconfig/ui/optsavepage \

@@ -43,6 +43,7 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Advanced" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
             < "Basic IDE Options" ; RID_SVXPAGE_BASICIDE_OPTIONS ; > ;
             < "Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
+            < "OpenCL" ; RID_SVXPAGE_OPENCL ; > ;
         };
     };
     StringArray SID_LANGUAGE_OPTIONS

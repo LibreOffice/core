@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_opencl_test, \
 
 $(eval $(call gb_CppunitTest_use_externals,sc_opencl_test, \
 	boost_headers \
+	clew \
 	mdds_headers \
 	orcus \
 	orcus-parser \
