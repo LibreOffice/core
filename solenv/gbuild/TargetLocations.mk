@@ -209,7 +209,7 @@ $(WORKDIR)/LinkTarget/$(call gb_Library__get_workdir_linktargetname,$(1)).export
 endef
 
 define gb_Library_get_versionlink_target
-$(INSTDIR)/$(SDKDIRNAME)/lib/$(basename $(call gb_Library_get_filename,$(1)))
+$(call gb_Library_get_sdk_link_dir)/$(basename $(call gb_Library_get_filename,$(1)))
 endef
 
 define gb_Library_get_headers_target

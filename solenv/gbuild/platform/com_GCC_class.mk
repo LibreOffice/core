@@ -197,7 +197,7 @@ gb_StaticLibrary_StaticLibrary_platform :=
 
 gb_LinkTarget_get_linksearchpath_for_layer = \
 	-L$(WORKDIR)/LinkTarget/StaticLibrary \
-	-L$(INSTDIR)/$(SDKDIRNAME)/lib \
+	-L$(call gb_Library_get_sdk_link_dir) \
 	$(foreach layer,\
 		$(subst +, ,$(patsubst $(1):%.,%,\
 			$(filter $(1):%.,$(gb_LinkTarget_LAYER_LINKPATHS)))),\
