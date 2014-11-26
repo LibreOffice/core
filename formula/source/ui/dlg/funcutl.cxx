@@ -398,8 +398,8 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
 
     if(pMEdit==NULL) return nResult;
 
-    sal_uInt16 nSwitch=rNEvt.GetType();
-    if(nSwitch==EVENT_KEYINPUT)// || nSwitch==EVENT_KEYUP)
+    MouseNotifyEvent nSwitch=rNEvt.GetType();
+    if(nSwitch==MouseNotifyEvent::KEYINPUT)// || nSwitch==MouseNotifyEvent::KEYUP)
     {
         const vcl::KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey=aKeyCode.GetCode();
@@ -418,7 +418,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
     {
         nResult=Control::PreNotify(rNEvt);
 
-        if(nSwitch==EVENT_MOUSEBUTTONDOWN || nSwitch==EVENT_MOUSEBUTTONUP)
+        if(nSwitch==MouseNotifyEvent::MOUSEBUTTONDOWN || nSwitch==MouseNotifyEvent::MOUSEBUTTONUP)
         {
             bMouseFlag=true;
             Application::PostUserEvent( LINK( this, EditBox, ChangedHdl ) );

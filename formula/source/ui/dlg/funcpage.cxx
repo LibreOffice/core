@@ -49,8 +49,8 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
     bool nResult = ListBox::PreNotify(rNEvt);
 
-    sal_uInt16 nSwitch=aNotifyEvt.GetType();
-    if(nSwitch==EVENT_KEYINPUT)
+    MouseNotifyEvent nSwitch=aNotifyEvt.GetType();
+    if(nSwitch==MouseNotifyEvent::KEYINPUT)
     {
         KeyInput(*aNotifyEvt.GetKeyEvent());
     }

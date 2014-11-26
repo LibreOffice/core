@@ -3198,7 +3198,7 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
 
     switch (rEvt.GetType())
     {
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rEvt.GetKeyEvent();
 

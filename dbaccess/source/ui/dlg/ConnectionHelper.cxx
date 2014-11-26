@@ -560,14 +560,14 @@ namespace dbaui
         {
             switch (_rNEvt.GetType())
             {
-                case EVENT_GETFOCUS:
+                case MouseNotifyEvent::GETFOCUS:
                     if (m_pConnectionURL->IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
                     {   // a descendant of the URL edit field got the focus
                         m_pConnectionURL->SaveValueNoPrefix();
                     }
                     break;
 
-                case EVENT_LOSEFOCUS:
+                case MouseNotifyEvent::LOSEFOCUS:
                     if (m_pConnectionURL->IsWindowOrChild(_rNEvt.GetWindow()) && m_bUserGrabFocus)
                     {   // a descendant of the URL edit field lost the focus
                         if (!commitURL())

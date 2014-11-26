@@ -269,7 +269,7 @@ bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
     bool bHandled = false;
     switch(rNEvt.GetType())
     {
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
             if( getGenPage() && getGenPage()->HasChildPathFocus() )
                 m_eChildFocus = DESCRIPTION;
             else

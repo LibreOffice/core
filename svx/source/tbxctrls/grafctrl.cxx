@@ -368,9 +368,9 @@ void ImplGrafModeControl::Select()
 
 bool ImplGrafModeControl::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
 
-    if( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
+    if( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
         mnCurPos = GetSelectEntryPos();
 
     return ListBox::PreNotify( rNEvt );
@@ -380,7 +380,7 @@ bool ImplGrafModeControl::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = ListBox::Notify( rNEvt );
 
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 

@@ -257,7 +257,7 @@ void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLo
 bool LibBox::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
         sal_uInt16 nKeyCode = aKeyEvt.GetKeyCode().GetCode();
@@ -279,7 +279,7 @@ bool LibBox::PreNotify( NotifyEvent& rNEvt )
             break;
         }
     }
-    else if( rNEvt.GetType() == EVENT_GETFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         if ( bFillBox )
         {
@@ -287,7 +287,7 @@ bool LibBox::PreNotify( NotifyEvent& rNEvt )
             bFillBox = false;
         }
     }
-    else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         if ( !HasChildPathFocus(true) )
         {
@@ -475,7 +475,7 @@ void LanguageBox::Select()
 bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         sal_uInt16 nKeyCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
         switch( nKeyCode )
@@ -495,10 +495,10 @@ bool LanguageBox::PreNotify( NotifyEvent& rNEvt )
             break;
         }
     }
-    else if( rNEvt.GetType() == EVENT_GETFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
     }
-    else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
     }
 

@@ -75,7 +75,7 @@ ResizableMultiLineEdit::~ResizableMultiLineEdit ()
 bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
 {
     bool nDone = false;
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
         vcl::KeyCode aCode = rKEvt.GetKeyCode();
@@ -92,7 +92,7 @@ bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
                 break;
         }
     }
-    else if ( rNEvt.GetType() == EVENT_LOSEFOCUS && !mbIsInGrabFocus )
+    else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !mbIsInGrabFocus )
     {
         mpItem->setTitle( GetText() );
         mpItem->setEditTitle(false, false);

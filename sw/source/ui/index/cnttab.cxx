@@ -2142,7 +2142,7 @@ void SwTOXEntryTabPage::SetFocus2theAllBtn()
 
 bool SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
         vcl::KeyCode aCode = rKEvt.GetKeyCode();

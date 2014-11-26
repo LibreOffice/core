@@ -206,7 +206,7 @@ IMPL_LINK_NOARG(DropListBox_Impl, OnAsyncExecuteDrop)
 bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool nRet = false;
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if(!rKeyCode.GetModifier())
@@ -423,7 +423,7 @@ bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
     // handle <RETURN> as double click
 
     bool nRet = false;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if ( !rKeyCode.GetModifier() && KEY_RETURN == rKeyCode.GetCode() )

@@ -120,7 +120,7 @@ void SidebarToolBox::Paint (const Rectangle& rRect)
 
 bool SidebarToolBox::Notify (NotifyEvent& rEvent)
 {
-    if (rEvent.GetType() == EVENT_KEYINPUT)
+    if (rEvent.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         if (rEvent.GetKeyEvent()->GetKeyCode().GetCode() == KEY_TAB)
         {

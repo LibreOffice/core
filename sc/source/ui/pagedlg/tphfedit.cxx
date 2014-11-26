@@ -396,8 +396,8 @@ void ScExtIButton::StartPopup()
 
 bool ScExtIButton::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nSwitch=rNEvt.GetType();
-    if(nSwitch==EVENT_MOUSEBUTTONUP)
+    MouseNotifyEvent nSwitch=rNEvt.GetType();
+    if(nSwitch==MouseNotifyEvent::MOUSEBUTTONUP)
     {
         MouseButtonUp(*rNEvt.GetMouseEvent());
     }

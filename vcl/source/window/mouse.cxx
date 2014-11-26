@@ -153,7 +153,7 @@ void Window::ImplCallMouseMove( sal_uInt16 nMouseCode, bool bModChanged )
         nMode |= MouseEventModifiers::SYNTHETIC;
         if ( bModChanged )
             nMode |= MouseEventModifiers::MODIFIERCHANGED;
-        ImplHandleMouseEvent( mpWindowImpl->mpFrameWindow, EVENT_MOUSEMOVE, bLeave, nX, nY, nTime, nCode, nMode );
+        ImplHandleMouseEvent( mpWindowImpl->mpFrameWindow, MouseNotifyEvent::MOUSEMOVE, bLeave, nX, nY, nTime, nCode, nMode );
     }
 }
 
@@ -352,7 +352,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
             if ( pOldFocusWindow->IsTracking() &&
                  (pSVData->maWinData.mnTrackFlags & STARTTRACK_FOCUSCANCEL) )
                 pOldFocusWindow->EndTracking( ENDTRACK_CANCEL | ENDTRACK_FOCUS );
-            NotifyEvent aNEvt( EVENT_LOSEFOCUS, pOldFocusWindow );
+            NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pOldFocusWindow );
             if ( !ImplCallPreNotify( aNEvt ) )
                 pOldFocusWindow->LoseFocus();
             pOldFocusWindow->ImplCallDeactivateListeners( this );
@@ -380,7 +380,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
                     ! aOldFocusDel.IsDead() &&
                     ( pOldFocusWindow->GetDialogControlFlags() & WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ) )
                     mpWindowImpl->mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
-                NotifyEvent aNEvt( EVENT_GETFOCUS, this );
+                NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
                 if ( !ImplCallPreNotify( aNEvt ) && !aDogTag.IsDead() )
                     GetFocus();
                 if( !aDogTag.IsDead() )
@@ -414,21 +414,21 @@ void Window::ImplGrabFocusToDocument( sal_uInt16 nFlags )
 
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
-    NotifyEvent aNEvt( EVENT_MOUSEMOVE, this, &rMEvt );
+    NotifyEvent aNEvt( MouseNotifyEvent::MOUSEMOVE, this, &rMEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbMouseMove = true;
 }
 
 void Window::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    NotifyEvent aNEvt( EVENT_MOUSEBUTTONDOWN, this, &rMEvt );
+    NotifyEvent aNEvt( MouseNotifyEvent::MOUSEBUTTONDOWN, this, &rMEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbMouseButtonDown = true;
 }
 
 void Window::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    NotifyEvent aNEvt( EVENT_MOUSEBUTTONUP, this, &rMEvt );
+    NotifyEvent aNEvt( MouseNotifyEvent::MOUSEBUTTONUP, this, &rMEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbMouseButtonUp = true;
 }

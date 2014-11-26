@@ -608,7 +608,7 @@ bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
@@ -631,7 +631,7 @@ bool SwZoomBox_Impl::Notify( NotifyEvent& rNEvt )
                 break;
         }
     }
-    else if ( EVENT_LOSEFOCUS == rNEvt.GetType() )
+    else if ( MouseNotifyEvent::LOSEFOCUS == rNEvt.GetType() )
     {
         vcl::Window* pFocusWin = Application::GetFocusWindow();
         if ( !HasFocus() && GetSubEdit() != pFocusWin )

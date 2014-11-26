@@ -359,7 +359,7 @@ namespace offapp
 
     bool ConnectionPoolOptionsPage::Notify( NotifyEvent& _rNEvt )
     {
-        if (EVENT_LOSEFOCUS == _rNEvt.GetType())
+        if (MouseNotifyEvent::LOSEFOCUS == _rNEvt.GetType())
             if (m_pTimeout->IsWindowOrChild(_rNEvt.GetWindow()))
                 commitTimeoutField();
 

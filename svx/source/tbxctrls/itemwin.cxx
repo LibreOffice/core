@@ -156,18 +156,18 @@ void SvxLineBox::Select()
 
 bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
 
     switch(nType)
     {
-        case EVENT_MOUSEBUTTONDOWN:
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::MOUSEBUTTONDOWN:
+        case MouseNotifyEvent::GETFOCUS:
             nCurPos = GetSelectEntryPos();
         break;
-        case EVENT_LOSEFOCUS:
+        case MouseNotifyEvent::LOSEFOCUS:
             SelectEntryPos(nCurPos);
         break;
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
@@ -187,7 +187,7 @@ bool SvxLineBox::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = LineLB::Notify( rNEvt );
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 
@@ -354,9 +354,9 @@ void SvxMetricField::RefreshDlgUnit()
 
 bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
 
-    if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
+    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
         aCurTxt = GetText();
 
     return MetricField::PreNotify( rNEvt );
@@ -368,7 +368,7 @@ bool SvxMetricField::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = MetricField::Notify( rNEvt );
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKey = pKEvt->GetKeyCode();
@@ -442,11 +442,11 @@ SvxFillTypeBox::~SvxFillTypeBox()
 
 bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
 
-    if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
+    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
-    else if ( EVENT_LOSEFOCUS == nType
+    else if ( MouseNotifyEvent::LOSEFOCUS == nType
         && Application::GetFocusWindow()
         && !IsWindowOrChild( Application::GetFocusWindow(), true ) )
     {
@@ -465,7 +465,7 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = FillTypeLB::Notify( rNEvt );
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         switch ( pKEvt->GetKeyCode().GetCode() )
@@ -529,9 +529,9 @@ SvxFillAttrBox::~SvxFillAttrBox()
 
 bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
 
-    if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
+    if ( MouseNotifyEvent::MOUSEBUTTONDOWN == nType || MouseNotifyEvent::GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
 
     return FillAttrLB::PreNotify( rNEvt );
@@ -543,7 +543,7 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 {
     bool nHandled = FillAttrLB::Notify( rNEvt );
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
 

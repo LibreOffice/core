@@ -422,7 +422,7 @@ bool ExtBoxWithBtns_Impl::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
@@ -1109,7 +1109,7 @@ bool ExtMgrDialog::Notify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();

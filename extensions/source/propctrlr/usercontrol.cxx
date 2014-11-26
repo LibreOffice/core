@@ -48,7 +48,7 @@ namespace pcr
     bool NumberFormatSampleField::PreNotify( NotifyEvent& rNEvt )
     {
         // want to handle two keys myself : Del/Backspace should empty the window (setting my prop to "standard" this way)
-        if (EVENT_KEYINPUT == rNEvt.GetType())
+        if (MouseNotifyEvent::KEYINPUT == rNEvt.GetType())
         {
             sal_uInt16 nKey = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 

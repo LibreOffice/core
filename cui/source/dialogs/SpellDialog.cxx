@@ -988,12 +988,12 @@ bool SpellDialog::Notify( NotifyEvent& rNEvt )
     */
     if( IsVisible() && !bFocusLocked )
     {
-        if( rNEvt.GetType() ==  EVENT_GETFOCUS )
+        if( rNEvt.GetType() ==  MouseNotifyEvent::GETFOCUS )
         {
             //notify the child window of the focus change
             rParent.GetFocus();
         }
-        else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+        else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
         {
             //notify the child window of the focus change
             rParent.LoseFocus();
@@ -1274,7 +1274,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bChange = false;
     const TextCharAttrib*  pErrorAttrib = 0;
-    if(rNEvt.GetType() == EVENT_KEYINPUT)
+    if(rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent& rKeyEvt = *rNEvt.GetKeyEvent();
         bChange = TextEngine::DoesKeyChangeText( rKeyEvt );
