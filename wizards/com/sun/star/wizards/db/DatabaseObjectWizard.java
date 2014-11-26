@@ -31,8 +31,6 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.NamedValueCollection;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.ui.WizardDialog;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,7 +87,12 @@ public abstract class DatabaseObjectWizard extends WizardDialog
         }
     }
 
-    protected static void executeWizardFromCommandLine( final String i_args[], final String i_className )
+    public interface WizardFromCommandLineStarter
+    {
+        void start(XMultiServiceFactory factory, PropertyValue[] curproperties);
+    }
+
+    protected static void executeWizardFromCommandLine( final String i_args[], WizardFromCommandLineStarter starter )
     {
         final String settings[] = new String[] { null, null, null };
         final int IDX_PIPE_NAME = 0;
@@ -156,11 +159,7 @@ public abstract class DatabaseObjectWizard extends WizardDialog
                 else
                     curproperties[0] = Properties.createProperty( "DataSourceName", settings[ IDX_DSN ] );
 
-                final Class wizardClass = Class.forName( i_className );
-                final Constructor ctor = wizardClass.getConstructor( XMultiServiceFactory.class, PropertyValue[].class );
-                final Method invokeMethod = wizardClass.getMethod( "start", new Class[0] );
-                final Object wizardInstance = ctor.newInstance( serviceFactory, curproperties );
-                invokeMethod.invoke( wizardInstance );
+                starter.start(serviceFactory, curproperties);
             }
         }
         catch (java.lang.Exception jexception)

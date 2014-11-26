@@ -84,7 +84,12 @@ public class FormWizard extends DatabaseObjectWizard
 
     public static void main(String i_args[])
     {
-        executeWizardFromCommandLine( i_args, FormWizard.class.getName() );
+        executeWizardFromCommandLine( i_args, new WizardFromCommandLineStarter() {
+            public void start(XMultiServiceFactory factory, PropertyValue[] curproperties) {
+                FormWizard wizard = new FormWizard(factory, curproperties);
+                wizard.start();
+            }
+        });
     }
 
     // @Override

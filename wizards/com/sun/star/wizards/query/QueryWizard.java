@@ -79,7 +79,12 @@ public class QueryWizard extends DatabaseObjectWizard
 
     public static void main(String i_args[])
     {
-        executeWizardFromCommandLine( i_args, QueryWizard.class.getName() );
+        executeWizardFromCommandLine( i_args, new WizardFromCommandLineStarter() {
+            public void start(XMultiServiceFactory factory, PropertyValue[] curproperties) {
+                QueryWizard wizard = new QueryWizard(factory, curproperties);
+                wizard.start();
+            }
+        });
     }
 
     public final XFrame getFrame()
