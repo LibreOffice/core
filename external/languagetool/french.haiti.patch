@@ -1,0 +1,11 @@
+--- misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/language/French.java
++++ misc/build/JLanguageTool-1.7.0/src/java/org/languagetool/language/French.java
+@@ -54,7 +54,7 @@
+   @Override
+   public String[] getCountryVariants() {
+     return new String[]{"FR", "", "BE", "CH", "CA", "LU", "MC", "CM",
+-            "CI", "HI", "ML", "SN", "CD", "MA", "RE"};
++            "CI", "HT", "ML", "SN", "CD", "MA", "RE"};
+   }
+ 
+   @Override
