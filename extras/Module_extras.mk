@@ -29,7 +29,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 	Package_gallwwwgraf \
 	Package_glade \
 	Package_labels \
-	Package_newfiles \
+	$(if $(filter WNT,$(OS)),Package_newfiles) \
 	Package_palettes \
 	Package_tpllayoutimpr \
 	Package_tplwizagenda \
