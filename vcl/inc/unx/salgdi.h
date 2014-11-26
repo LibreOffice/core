@@ -46,6 +46,7 @@ class X11Pixmap;
 class X11SalVirtualDevice;
 class X11SalGraphicsImpl;
 class X11OpenGLSalGraphicsImpl;
+class X11OpenGLSalVirtualDevice;
 class PspSalPrinter;
 class PspSalInfoPrinter;
 class ServerFont;
@@ -73,7 +74,7 @@ private:
 
 protected:
     SalFrame*               m_pFrame; // the SalFrame which created this Graphics or NULL
-    X11SalVirtualDevice*    m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
+    SalVirtualDevice*       m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
     const SalColormap*      m_pColormap;
     SalColormap    *m_pDeleteColormap;
@@ -123,6 +124,7 @@ public:
 
             void            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
             void            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = NULL, bool bDeleteColormap = false );
+            void            Init( X11OpenGLSalVirtualDevice *pVirtualDevice );
             void            Init( class ImplSalPrinterData *pPrinter );
             void            DeInit();
 

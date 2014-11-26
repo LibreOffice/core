@@ -29,6 +29,9 @@
 
 #include "svdata.hxx"
 
+#include <opengl/framebuffer.hxx>
+#include <opengl/texture.hxx>
+
 using namespace com::sun::star;
 
 // TODO use rtl::Static instead of 'static'
@@ -52,6 +55,9 @@ OpenGLContext::OpenGLContext():
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
     mbRequestVirtualDevice(false),
+    mpCurrentFramebuffer(NULL),
+    mpFirstFramebuffer(NULL),
+    mpLastFramebuffer(NULL),
     mnPainting(0),
     mpPrevContext(NULL),
     mpNextContext(NULL)
@@ -73,6 +79,15 @@ OpenGLContext::OpenGLContext():
 
 OpenGLContext::~OpenGLContext()
 {
+    ImplSVData* pSVData = ImplGetSVData();
+    if( mpPrevContext )
+        mpPrevContext->mpNextContext = mpNextContext;
+    else
+        pSVData->maGDIData.mpFirstContext = mpNextContext;
+    if( mpNextContext )
+        mpNextContext->mpPrevContext = mpPrevContext;
+    else
+        pSVData->maGDIData.mpLastContext = mpPrevContext;
 #if defined( WNT )
     if (m_aGLWin.hRC)
     {
@@ -102,16 +117,6 @@ OpenGLContext::~OpenGLContext()
             glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
     }
 #endif
-
-    ImplSVData* pSVData = ImplGetSVData();
-    if( mpPrevContext )
-        mpPrevContext->mpNextContext = mpNextContext;
-    else
-        pSVData->maGDIData.mpFirstContext = mpNextContext;
-    if( mpNextContext )
-        mpNextContext->mpPrevContext = mpPrevContext;
-    else
-        pSVData->maGDIData.mpLastContext = mpPrevContext;
 }
 
 void OpenGLContext::requestLegacyContext()
@@ -565,6 +570,7 @@ void initOpenGLFunctionPointers()
     glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
     glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
     glXCreateContextAttribsARB = (GLXContext(*) (Display*, GLXFBConfig, GLXContext, Bool, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreateContextAttribsARB");;
+    glXCreatePixmap = (GLXPixmap(*) (Display*, GLXFBConfig, Pixmap, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreatePixmap");;
 }
 
 Visual* getVisual(Display* dpy, Window win)
@@ -655,6 +661,8 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
     if (!dpy)
         return false;
 
+    initOpenGLFunctionPointers();
+
     SAL_INFO("vcl.opengl", "init with pixmap");
     m_aGLWin.dpy = dpy;
     m_aGLWin.Width = width;
@@ -672,8 +680,6 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
     m_aGLWin.glPix = glXCreatePixmap(dpy, config[best_fbc], pix, attrib_list);
 
     mbPixmap = true;
-
-    initOpenGLFunctionPointers();
 
     return ImplInit();
 }
@@ -873,7 +879,7 @@ bool OpenGLContext::ImplInit()
     }
 
     HGLRC hTempRC = wglCreateContext(m_aGLWin.hDC);
-    if (m_aGLWin.hRC == NULL)
+    if (hTempRC == NULL)
     {
         ImplWriteLastError(GetLastError(), "wglCreateContext in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglCreateContext failed");
@@ -1213,13 +1219,32 @@ void OpenGLContext::makeCurrent()
     // nothing
 #elif defined( UNX )
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
+    static int nSwitch = 0;
     if (glXGetCurrentContext() == m_aGLWin.ctx &&
         glXGetCurrentDrawable() == nDrawable)
     {
-        SAL_INFO("vcl.opengl", "OpenGLContext::makeCurrent(): Avoid setting the same context");
+        ; // no-op
     }
     else if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable << " pixmap? " << mbPixmap);
+    else
+    {
+        SAL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
+        ImplSVData* pSVData = ImplGetSVData();
+        if( mpNextContext )
+        {
+            if( mpPrevContext )
+                mpPrevContext->mpNextContext = mpNextContext;
+            else
+                pSVData->maGDIData.mpFirstContext = mpNextContext;
+            mpNextContext->mpPrevContext = mpPrevContext;
+
+            mpPrevContext = pSVData->maGDIData.mpLastContext;
+            mpNextContext = NULL;
+            pSVData->maGDIData.mpLastContext->mpNextContext = this;
+            pSVData->maGDIData.mpLastContext = this;
+        }
+    }
 #endif
 }
 
@@ -1291,5 +1316,79 @@ NSOpenGLView* OpenGLContext::getOpenGLView()
     return reinterpret_cast<NSOpenGLView*>(m_pChildWindow->GetSystemData()->mpNSView);
 }
 #endif
+
+bool OpenGLContext::AcquireFramebuffer( OpenGLFramebuffer* pFramebuffer )
+{
+    if( pFramebuffer != mpCurrentFramebuffer )
+    {
+        // release the attached texture so it's available from the other contexts
+        //if( mpCurrentFramebuffer )
+        //    mpCurrentFramebuffer->DetachTexture();
+
+        if( pFramebuffer )
+            pFramebuffer->Bind();
+        else
+            mpCurrentFramebuffer->Unbind();
+        mpCurrentFramebuffer = pFramebuffer;
+    }
+
+    return true;
+}
+
+bool OpenGLContext::AcquireDefaultFramebuffer()
+{
+    return AcquireFramebuffer( NULL );
+}
+
+OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rTexture )
+{
+    OpenGLFramebuffer* pFramebuffer = NULL;
+    OpenGLFramebuffer* pFreeFramebuffer = NULL;
+
+    // check if there is already a framebuffer attached to that texture
+    pFramebuffer = mpLastFramebuffer;
+    while( pFramebuffer )
+    {
+        if( pFramebuffer->IsAttached( rTexture ) )
+            break;
+        if( !pFreeFramebuffer && pFramebuffer->IsFree() )
+            pFreeFramebuffer = pFramebuffer;
+        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
+    }
+
+    // else use the first free framebuffer
+    if( !pFramebuffer && pFreeFramebuffer )
+        pFramebuffer = pFreeFramebuffer;
+
+    // if there isn't any free one, create a new one
+    if( !pFramebuffer )
+    {
+        pFramebuffer = new OpenGLFramebuffer();
+        if( mpLastFramebuffer )
+        {
+            pFramebuffer->mpPrevFramebuffer = mpLastFramebuffer;
+            mpLastFramebuffer->mpNextFramebuffer = pFramebuffer;
+            mpLastFramebuffer = pFramebuffer;
+        }
+        else
+        {
+            mpFirstFramebuffer = pFramebuffer;
+            mpLastFramebuffer = pFramebuffer;
+        }
+    }
+
+    AcquireFramebuffer( pFramebuffer );
+    if( pFramebuffer->IsFree() )
+        pFramebuffer->AttachTexture( rTexture );
+    glViewport( 0, 0, rTexture.GetWidth(), rTexture.GetHeight() );
+
+    return pFramebuffer;
+}
+
+void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )
+{
+    if( pFramebuffer )
+        pFramebuffer->DetachTexture();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,6 +22,9 @@
 
 #include <GL/glew.h>
 #include <vcl/dllapi.h>
+#include <vcl/salgtype.hxx>
+
+#include <tools/gen.hxx>
 
 class ImplOpenGLTexture
 {

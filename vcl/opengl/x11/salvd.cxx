@@ -1,0 +1,102 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <vcl/sysdata.hxx>
+
+#include <unx/salunx.h>
+#include <unx/saldata.hxx>
+#include <unx/saldisp.hxx>
+#include <unx/salgdi.h>
+#include <unx/salvd.h>
+
+#include <opengl/x11/salvd.hxx>
+
+void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
+{
+    SalDisplay *pDisplay  = pDevice->GetDisplay();
+
+    m_nXScreen = pDevice->GetXScreenNumber();
+    m_pColormap = &pDisplay->GetColormap( m_nXScreen );
+
+    m_pVDev      = pDevice;
+    m_pFrame     = NULL;
+
+    bWindow_     = pDisplay->IsDisplay();
+    bVirDev_     = true;
+
+    mpImpl->Init();
+}
+
+X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
+                                                      long nDX, long nDY,
+                                                      sal_uInt16 nBitCount,
+                                                      const SystemGraphicsData *pData ) :
+    mbGraphics( false ),
+    mnXScreen( 0 )
+{
+    // TODO Do we really need the requested bit count?
+    if( !nBitCount && pGraphics )
+        nBitCount = pGraphics->GetBitCount();
+
+    // TODO Check where a VirtualDevice is created from SystemGraphicsData
+    assert( pData == NULL ); (void)pData;
+
+    mpDisplay  = GetGenericData()->GetSalDisplay();
+    mnDepth    = nBitCount;
+    mnXScreen  = pGraphics ? static_cast<X11SalGraphics*>(pGraphics)->GetScreenNumber() :
+                             GetGenericData()->GetSalDisplay()->GetDefaultXScreen();
+    mnWidth    = nDX;
+    mnHeight   = nDY;
+    mpGraphics = new X11SalGraphics();
+    mpGraphics->SetLayout( 0 );
+    mpGraphics->Init( this );
+}
+
+X11OpenGLSalVirtualDevice::~X11OpenGLSalVirtualDevice()
+{
+    if( mpGraphics )
+        delete mpGraphics;
+}
+
+SalGraphics* X11OpenGLSalVirtualDevice::AcquireGraphics()
+{
+    if( mbGraphics )
+        return NULL;
+
+    if( mpGraphics )
+        mbGraphics = true;
+
+    return mpGraphics;
+}
+
+void X11OpenGLSalVirtualDevice::ReleaseGraphics( SalGraphics* )
+{
+    mbGraphics = false;
+}
+
+bool X11OpenGLSalVirtualDevice::SetSize( long nDX, long nDY )
+{
+    if( !nDX ) nDX = 1;
+    if( !nDY ) nDY = 1;
+
+    mnWidth = nDX;
+    mnHeight = nDY;
+    if( mpGraphics )
+        mpGraphics->Init( this );
+
+    return true;
+}
+
+void X11OpenGLSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
+{
+    rWidth  = mnWidth;
+    rHeight = mnHeight;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

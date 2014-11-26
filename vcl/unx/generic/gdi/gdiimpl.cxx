@@ -728,7 +728,7 @@ void X11SalGraphicsImpl::drawMaskedBitmap( const SalTwoRect& rPosAry,
     // bitdepth to create pixmaps for, otherwise, XCopyArea will
     // refuse to work.
     const sal_uInt16    nDepth( mrParent.m_pVDev ?
-                            mrParent.m_pVDev->GetDepth() :
+                            static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetDepth() :
                             pSalDisp->GetVisual( mrParent.m_nXScreen ).GetDepth() );
     Pixmap          aFG( limitXCreatePixmap( pXDisp, aDrawable, rPosAry.mnDestWidth,
                                         rPosAry.mnDestHeight, nDepth ) );
@@ -850,7 +850,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     Display* pXDisplay = pSalDisp->GetDisplay();
 
     // create source Picture
-    int nDepth = mrParent.m_pVDev ? mrParent.m_pVDev->GetDepth() : rSalVis.GetDepth();
+    int nDepth = mrParent.m_pVDev ? static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetDepth() : rSalVis.GetDepth();
     const X11SalBitmap& rSrcX11Bmp = static_cast<const X11SalBitmap&>( rSrcBitmap );
     ImplSalDDB* pSrcDDB = rSrcX11Bmp.ImplGetDDB( mrParent.hDrawable_, mrParent.m_nXScreen, nDepth, rTR );
     if( !pSrcDDB )
@@ -977,7 +977,7 @@ bool X11SalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
     if( mbPenGC || !mbBrushGC || mbXORMode )
         return false; // can only perform solid fills without XOR.
 
-    if( mrParent.m_pVDev && mrParent.m_pVDev->GetDepth() < 8 )
+    if( mrParent.m_pVDev && static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetDepth() < 8 )
         return false;
 
     Picture aDstPic = GetXRenderPicture();
@@ -1564,7 +1564,7 @@ long X11SalGraphicsImpl::GetGraphicsHeight() const
     if( mrParent.m_pFrame )
         return mrParent.m_pFrame->maGeometry.nHeight;
     else if( mrParent.m_pVDev )
-        return mrParent.m_pVDev->GetHeight();
+        return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetHeight();
     else
         return 0;
 }
@@ -1838,7 +1838,7 @@ long X11SalGraphicsImpl::GetGraphicsWidth() const
     if( mrParent.m_pFrame )
         return mrParent.m_pFrame->maGeometry.nWidth;
     else if( mrParent.m_pVDev )
-        return mrParent.m_pVDev->GetWidth();
+        return static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetWidth();
     else
         return 0;
 }

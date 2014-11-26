@@ -7,16 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "vcl/salbtype.hxx"
+#include <vcl/salbtype.hxx>
 
-#include "unx/pixmap.hxx"
-#include "unx/saldisp.hxx"
-#include "unx/salframe.h"
-#include "unx/salgdi.h"
-#include "unx/salvd.h"
+#include <svdata.hxx>
 
-#include "opengl/texture.hxx"
-#include "opengl/x11/gdiimpl.hxx"
+#include <unx/pixmap.hxx>
+#include <unx/saldisp.hxx>
+#include <unx/salframe.h>
+#include <unx/salgdi.h>
+#include <unx/salvd.h>
+#include <unx/x11/xlimits.hxx>
+
+#include <opengl/texture.hxx>
+#include <opengl/x11/gdiimpl.hxx>
+#include <opengl/x11/salvd.hxx>
 
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
@@ -36,12 +40,7 @@ GLfloat X11OpenGLSalGraphicsImpl::GetWidth() const
     if( mrParent.m_pFrame )
         return mrParent.m_pFrame->maGeometry.nWidth;
     else if( mrParent.m_pVDev )
-    {
-        long nWidth = 0;
-        long nHeight = 0;
-        mrParent.m_pVDev->GetSize( nWidth, nHeight );
-        return nWidth;
-    }
+        return static_cast< X11OpenGLSalVirtualDevice* >(mrParent.m_pVDev)->GetWidth();
     return 1;
 }
 
@@ -50,12 +49,7 @@ GLfloat X11OpenGLSalGraphicsImpl::GetHeight() const
     if( mrParent.m_pFrame )
         return mrParent.m_pFrame->maGeometry.nHeight;
     else if( mrParent.m_pVDev )
-    {
-        long nWidth = 0;
-        long nHeight = 0;
-        mrParent.m_pVDev->GetSize( nWidth, nHeight );
-        return nHeight;
-    }
+        return static_cast< X11OpenGLSalVirtualDevice* >(mrParent.m_pVDev)->GetHeight();
     return 1;
 }
 
@@ -79,6 +73,7 @@ OpenGLContext* X11OpenGLSalGraphicsImpl::CreateWinContext()
 
     if( !pProvider )
         return NULL;
+
     Window aWin = pProvider->GetX11Window();
     OpenGLContext* pContext = new OpenGLContext();
     pContext->init( mrParent.GetXDisplay(), aWin,
@@ -86,24 +81,27 @@ OpenGLContext* X11OpenGLSalGraphicsImpl::CreateWinContext()
     return pContext;
 }
 
-bool X11OpenGLSalGraphicsImpl::CompareWinContext( OpenGLContext* pContext )
+OpenGLContext* X11OpenGLSalGraphicsImpl::CreatePixmapContext()
+{
+    X11OpenGLSalVirtualDevice* pVDev = dynamic_cast<X11OpenGLSalVirtualDevice*>(mrParent.m_pVDev);
+
+    if( pVDev == NULL )
+        return NULL;
+
+    return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
+}
+
+bool X11OpenGLSalGraphicsImpl::UseContext( OpenGLContext* pContext )
 {
     X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
 
-    if( !pProvider || !pContext->isInitialized() )
+    if( !pContext->isInitialized() )
         return false;
-    return ( pContext->getOpenGLWindow().win == pProvider->GetX11Window() );
-}
 
-OpenGLContext* X11OpenGLSalGraphicsImpl::CreatePixmapContext()
-{
-    if( mrParent.m_pVDev == NULL )
-        return NULL;
-    OpenGLContext* pContext = new OpenGLContext();
-    pContext->init( mrParent.GetXDisplay(), mrParent.m_pVDev->GetDrawable(),
-                    mrParent.m_pVDev->GetWidth(), mrParent.m_pVDev->GetHeight(),
-                    mrParent.m_nXScreen.getXScreen() );
-    return pContext;
+    if( !pProvider )
+        return ( pContext->getOpenGLWindow().win != None );
+    else
+        return ( pContext->getOpenGLWindow().win == pProvider->GetX11Window() );
 }
 
 void X11OpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )

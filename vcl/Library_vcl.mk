@@ -126,6 +126,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/gdiimpl \
 	vcl/opengl/salbmp \
 	vcl/opengl/scale \
+	vcl/opengl/framebuffer \
 	vcl/opengl/texture \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
