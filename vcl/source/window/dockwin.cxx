@@ -561,7 +561,7 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
 
     if ( mbDockable )
     {
-        if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+        if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
             if ( pMEvt->IsLeft() )
@@ -591,7 +591,7 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
                 }
             }
         }
-        else if( rNEvt.GetType() == EVENT_KEYINPUT )
+        else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
             if( rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&

@@ -393,7 +393,7 @@ Window::~Window()
 
     // announce the window is to be destroyed
     {
-        NotifyEvent aNEvt( EVENT_DESTROY, this );
+        NotifyEvent aNEvt( MouseNotifyEvent::DESTROY, this );
         Notify( aNEvt );
     }
 
@@ -1915,14 +1915,14 @@ void Window::SimulateKeyPress( sal_uInt16 nKeyCode ) const
 
 void Window::KeyInput( const KeyEvent& rKEvt )
 {
-    NotifyEvent aNEvt( EVENT_KEYINPUT, this, &rKEvt );
+    NotifyEvent aNEvt( MouseNotifyEvent::KEYINPUT, this, &rKEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbKeyInput = true;
 }
 
 void Window::KeyUp( const KeyEvent& rKEvt )
 {
-    NotifyEvent aNEvt( EVENT_KEYUP, this, &rKEvt );
+    NotifyEvent aNEvt( MouseNotifyEvent::KEYUP, this, &rKEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbKeyUp = true;
 }
@@ -1949,13 +1949,13 @@ void Window::GetFocus()
             return;
     }
 
-    NotifyEvent aNEvt( EVENT_GETFOCUS, this );
+    NotifyEvent aNEvt( MouseNotifyEvent::GETFOCUS, this );
     Notify( aNEvt );
 }
 
 void Window::LoseFocus()
 {
-    NotifyEvent aNEvt( EVENT_LOSEFOCUS, this );
+    NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, this );
     Notify( aNEvt );
 }
 
@@ -2013,7 +2013,7 @@ void Window::Command( const CommandEvent& rCEvt )
 {
     ImplCallEventListeners( VCLEVENT_WINDOW_COMMAND, (void*)&rCEvt );
 
-    NotifyEvent aNEvt( EVENT_COMMAND, this, &rCEvt );
+    NotifyEvent aNEvt( MouseNotifyEvent::COMMAND, this, &rCEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbCommand = true;
 }
@@ -2679,7 +2679,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
     // #104827# notify parent
     if ( bNotify )
     {
-        NotifyEvent aNEvt( bEnable ? EVENT_INPUTENABLE : EVENT_INPUTDISABLE, this );
+        NotifyEvent aNEvt( bEnable ? MouseNotifyEvent::INPUTENABLE : MouseNotifyEvent::INPUTDISABLE, this );
         Notify( aNEvt );
     }
 }

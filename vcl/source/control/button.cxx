@@ -1496,7 +1496,7 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
         {
@@ -2623,7 +2623,7 @@ bool RadioButton::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
@@ -3557,7 +3557,7 @@ bool CheckBox::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {

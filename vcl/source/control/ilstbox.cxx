@@ -2494,7 +2494,7 @@ void ImplListBox::DataChanged( const DataChangedEvent& rDCEvt )
 bool ImplListBox::Notify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if ( rNEvt.GetType() == EVENT_COMMAND )
+    if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         const CommandEvent& rCEvt = *rNEvt.GetCommandEvent();
         if ( rCEvt.GetCommand() == COMMAND_WHEEL )
@@ -2622,7 +2622,7 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
         {
@@ -2915,7 +2915,7 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( vcl::Window* pParent ) :
 
 bool ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+    if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         if( !GetParent()->HasChildPathFocus( true ) )
             EndPopupMode();

@@ -878,7 +878,7 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
     bool nDone = false;
     if ( mpImplLB )
     {
-        if( ( rNEvt.GetType() == EVENT_KEYINPUT ) && ( rNEvt.GetWindow() == mpImplWin ) )
+        if( ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT ) && ( rNEvt.GetWindow() == mpImplWin ) )
         {
             KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
             switch( aKeyEvt.GetKeyCode().GetCode() )
@@ -930,12 +930,12 @@ bool ListBox::PreNotify( NotifyEvent& rNEvt )
                 }
             }
         }
-        else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
+        else if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
         {
             if ( IsInDropDown() && !HasChildPathFocus( true ) )
                 mpFloatWin->EndPopupMode();
         }
-        else if ( (rNEvt.GetType() == EVENT_COMMAND) &&
+        else if ( (rNEvt.GetType() == MouseNotifyEvent::COMMAND) &&
                   (rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL) &&
                   (rNEvt.GetWindow() == mpImplWin) )
         {
