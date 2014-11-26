@@ -118,17 +118,10 @@ SwRewriter SwUndoRenameBookmark::GetRewriter() const
 void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext & rContext, const OUString& sFrom, const OUString& sTo)
 {
     IDocumentMarkAccess* const pMarkAccess = rContext.GetDoc().getIDocumentMarkAccess();
-    for ( IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getAllMarksBegin();
-          ppBkmk != pMarkAccess->getAllMarksEnd();
-          ++ppBkmk )
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark(sFrom);
+    if (ppBkmk != pMarkAccess->getAllMarksEnd())
     {
-        if ( m_nNode == ppBkmk->get()->GetMarkPos().nNode.GetIndex()
-             && m_nCntnt == ppBkmk->get()->GetMarkPos().nContent.GetIndex()
-             && sFrom == ppBkmk->get()->GetName() )
-        {
-            pMarkAccess->renameMark( ppBkmk->get(), sTo );
-            break;
-        }
+        pMarkAccess->renameMark( ppBkmk->get(), sTo );
     }
 }
 
