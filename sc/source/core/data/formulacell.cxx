@@ -557,12 +557,16 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
 {
     AreaListenerKey aKey(rRange, bStartFixed, bEndFixed);
 
-    std::pair<AreaListenersType::iterator, bool> r =
-        mpImpl->maAreaListeners.insert(
-            aKey, new sc::FormulaGroupAreaListener(
+    AreaListenersType::iterator it = mpImpl->maAreaListeners.lower_bound(aKey);
+    if (it == mpImpl->maAreaListeners.end() || mpImpl->maAreaListeners.key_comp()(aKey, it->first))
+    {
+        // Insert a new one.
+        it = mpImpl->maAreaListeners.insert(
+            it, aKey, new sc::FormulaGroupAreaListener(
                 rRange, ppTopCell, mnLength, bStartFixed, bEndFixed));
+    }
 
-    return r.first->second;
+    return it->second;
 }
 
 void ScFormulaCellGroup::endAllGroupListening( ScDocument& rDoc )
