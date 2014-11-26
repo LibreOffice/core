@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_8aaf0f94",
+        "filename": "postprocess/CustomTarget_images.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-11-26T09:28:01Z",
+      "side": 1,
+      "message": "I guess there\u0027s a typo here, the script extension is still .pl instead of .py",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 2
+      },
+      "revId": "27b715108bf1542a97f1175b40ab60a23cdf9dec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
