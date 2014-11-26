@@ -19,6 +19,7 @@
 
 
 #include "sunversion.hxx"
+#include "osl/diagnose.h"
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/security.hxx"
