@@ -12,9 +12,11 @@ $(eval $(call gb_Module_Module,pyuno))
 ifneq ($(DISABLE_PYTHON),TRUE)
 
 $(eval $(call gb_Module_add_targets,pyuno,\
+    CustomTarget_pyuno_pythonloader_ini \
     Library_pyuno \
     Library_pythonloader \
     Package_python_scripts \
+    Package_pyuno_pythonloader_ini \
     Rdb_pyuno \
 ))
 

@@ -13,7 +13,6 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(call gb_Helper_get_rcfile,bootstrap) \
 	$(call gb_Helper_get_rcfile,fundamental) \
 	$(call gb_Helper_get_rcfile,louno) \
-	$(if $(filter TRUE,$(DISABLE_PYTHON)),,$(call gb_Helper_get_rcfile,pythonloader.uno)) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),$(if $(filter-out MACOSX,$(OS)), \
 	    $(call gb_Helper_get_rcfile,redirect))) \
 	$(call gb_Helper_get_rcfile,setup) \
@@ -25,7 +24,6 @@ $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,bootstrap) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,fundamental) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,pythonloader.uno) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) \
 	: $(SRCDIR)/instsetoo_native/CustomTarget_setup.mk
 
@@ -85,25 +83,6 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'UNO_SHARED_PACKAGES_CACHE=$$UNO_SHARED_PACKAGES/cache' \
 		&& echo 'UNO_USER_PACKAGES=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/uno_packages' \
 		&& echo 'UNO_USER_PACKAGES_CACHE=$$UNO_USER_PACKAGES/cache' \
-	) > $@
-
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,pythonloader.uno) :
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
-	( \
-		printf '[Bootstrap]\n' && \
-		$(if $(SYSTEM_PYTHON),, \
-			printf 'PYUNO_LOADER_PYTHONHOME=%s\n' \
-				$(if $(filter MACOSX,$(OS)), \
-					'$$ORIGIN/../Frameworks/LibreOfficePython.framework', \
-					'$$ORIGIN/python-core-$(PYTHON_VERSION)') &&) \
-		printf 'PYUNO_LOADER_PYTHONPATH=%s$$ORIGIN\n' \
-			$(if $(SYSTEM_PYTHON), \
-				'', \
-			$(if $(filter MACOSX,$(OS)), \
-				'$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(dir))) ', \
-			$(if $(filter WNTMSC,$(OS)$(COM)), \
-				'$(foreach dir,/ /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) ', \
-				'$(foreach dir,/ /lib-dynload /lib-tk /site-packages,$(patsubst %/,%,$$ORIGIN/python-core-$(PYTHON_VERSION)/lib$(dir))) '))) \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,redirect) :
