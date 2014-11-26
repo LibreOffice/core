@@ -37,6 +37,7 @@
 
 #define FIXME_SELF_INTERSECTING_WORKING 0
 #define FIXME_BOUNCE_BUTTON 0
+#define THUMB_REPEAT_FACTOR 10
 
 using namespace com::sun::star;
 
@@ -83,11 +84,15 @@ class DemoRenderer
         virtual sal_uInt16 getAccelerator() = 0;
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) = 0;
-#define RENDER_DETAILS(name,key) \
+        // repeating count for profiling (to exceed the poor time resolution on Windows)
+        virtual sal_uInt16 getTestRepeatCount() = 0;
+#define RENDER_DETAILS(name,key,repeat) \
         virtual OUString getName() SAL_OVERRIDE \
             { return OUString(SAL_STRINGIFY(name)); } \
         virtual sal_uInt16 getAccelerator() SAL_OVERRIDE \
-            { return key; }
+            { return key; } \
+        virtual sal_uInt16 getTestRepeatCount() SAL_OVERRIDE \
+            { return repeat; }
 
         double sumTime;
         int countTime;
@@ -202,7 +207,7 @@ public:
 
     struct DrawLines : public RegionRenderer
     {
-        RENDER_DETAILS(lines,KEY_L)
+        RENDER_DETAILS(lines,KEY_L,100)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
@@ -289,7 +294,7 @@ public:
 
     struct DrawText : public RegionRenderer
     {
-        RENDER_DETAILS(text,KEY_T)
+        RENDER_DETAILS(text,KEY_T,100)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -302,7 +307,7 @@ public:
 
     struct DrawCheckered : public RegionRenderer
     {
-        RENDER_DETAILS(checks,KEY_C)
+        RENDER_DETAILS(checks,KEY_C,20)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
@@ -363,7 +368,7 @@ public:
 
     struct DrawPoly : public RegionRenderer
     {
-        RENDER_DETAILS(poly,KEY_P)
+        RENDER_DETAILS(poly,KEY_P,20)
         DrawCheckered maCheckered;
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
@@ -387,7 +392,7 @@ public:
 
     struct DrawEllipse : public RegionRenderer
     {
-        RENDER_DETAILS(ellipse,KEY_E)
+        RENDER_DETAILS(ellipse,KEY_E,5000)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -399,7 +404,7 @@ public:
 
     struct DrawGradient : public RegionRenderer
     {
-        RENDER_DETAILS(gradient,KEY_G)
+        RENDER_DETAILS(gradient,KEY_G,50)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
         {
@@ -469,7 +474,7 @@ public:
 
     struct DrawBitmap : public RegionRenderer
     {
-        RENDER_DETAILS(bitmap,KEY_B)
+        RENDER_DETAILS(bitmap,KEY_B,10)
 
         // Simulate Page Borders rendering - which ultimately should
         // be done with a shader / gradient
@@ -529,7 +534,7 @@ public:
 
     struct DrawBitmapEx : public RegionRenderer
     {
-        RENDER_DETAILS(bitmapex,KEY_X)
+        RENDER_DETAILS(bitmapex,KEY_X,2)
         DrawCheckered maCheckered;
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &rCtx) SAL_OVERRIDE
@@ -547,7 +552,7 @@ public:
 
     struct DrawPolyPolygons : public RegionRenderer
     {
-        RENDER_DETAILS(polypoly,KEY_N)
+        RENDER_DETAILS(polypoly,KEY_N,100)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -598,7 +603,7 @@ public:
 
     struct DrawToVirtualDevice : public RegionRenderer
     {
-        RENDER_DETAILS(vdev,KEY_V)
+        RENDER_DETAILS(vdev,KEY_V,1)
         enum RenderType {
             RENDER_AS_BITMAP,
             RENDER_AS_OUTDEV,
@@ -665,7 +670,7 @@ public:
 
     struct DrawIcons : public RegionRenderer
     {
-        RENDER_DETAILS(icons,KEY_I)
+        RENDER_DETAILS(icons,KEY_I,1)
 
         std::vector<OUString> maIconNames;
         std::vector<BitmapEx> maIcons;
@@ -899,7 +904,7 @@ public:
 
     struct FetchDrawBitmap : public RegionRenderer
     {
-        RENDER_DETAILS(fetchdraw,KEY_F)
+        RENDER_DETAILS(fetchdraw,KEY_F,50)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -924,9 +929,16 @@ public:
             mnSelectedRenderer >= 0)
         {
             aCtx.meStyle = RENDER_EXPANDED;
-            mnStartTime = getTimeNow();
-            maRenderers[mnSelectedRenderer]->RenderRegion(rDev, aWholeWin, aCtx);
-            addTime(mnSelectedRenderer, getTimeNow() - mnStartTime);
+            RegionRenderer * r = maRenderers[mnSelectedRenderer];
+            // profiling?
+            if (getIterCount() > 0)
+            {
+                mnStartTime = getTimeNow();
+                for (int i = 0; i < r->getTestRepeatCount(); i++)
+                    r->RenderRegion(rDev, aWholeWin, aCtx);
+                addTime(mnSelectedRenderer, getTimeNow() - mnStartTime);
+            } else
+                r->RenderRegion(rDev, aWholeWin, aCtx);
         }
         else
         {
@@ -935,9 +947,21 @@ public:
             DemoRenderer::clearRects(rDev, aRegions);
             for (size_t i = 0; i < maRenderers.size(); i++)
             {
-                if (!bVDev) mnStartTime = getTimeNow();
-                maRenderers[i]->RenderRegion(rDev, aRegions[i], aCtx);
-                if (!bVDev) addTime(i, getTimeNow() - mnStartTime);
+                RegionRenderer * r = maRenderers[i];
+                // profiling?
+                if (getIterCount() > 0)
+                {
+                    if (!bVDev)
+                    {
+                        mnStartTime = getTimeNow();
+                        for (int j = 0; j < r->getTestRepeatCount() * THUMB_REPEAT_FACTOR; j++)
+                            r->RenderRegion(rDev, aRegions[i], aCtx);
+                        addTime(i, (getTimeNow() - mnStartTime) / THUMB_REPEAT_FACTOR);
+                    } else
+                        for (int j = 0; j < r->getTestRepeatCount(); j++)
+                            r->RenderRegion(rDev, aRegions[i], aCtx);
+                } else
+                    r->RenderRegion(rDev, aRegions[i], aCtx);
             }
         }
     }
@@ -1121,7 +1145,7 @@ sal_Int32 DemoRenderer::getIterCount()
 
 void DemoRenderer::addTime(int i, double t)
 {
-    maRenderers[i]->sumTime += t;
+    maRenderers[i]->sumTime += t / maRenderers[i]->getTestRepeatCount();
     maRenderers[i]->countTime++;
 }
 
@@ -1150,12 +1174,14 @@ int DemoRenderer::selectNextRenderer()
 class DemoWin : public WorkWindow
 {
     DemoRenderer &mrRenderer;
+    bool underTesting;
 public:
     DemoWin(DemoRenderer &rRenderer) :
         WorkWindow(NULL, WB_APP | WB_STDWORK),
         mrRenderer(rRenderer)
     {
         mrRenderer.addInvalidate(this);
+        underTesting = false;
     }
     virtual ~DemoWin()
     {
@@ -1188,6 +1214,8 @@ public:
 
     virtual void TestAndQuit()
     {
+        if (underTesting) return;
+        underTesting=true;
         for (sal_Int32 i = 0; i < mrRenderer.getIterCount(); i++)
             while (mrRenderer.selectNextRenderer() > -1)
                 mrRenderer.drawToDevice(*this, GetSizePixel(), false);
