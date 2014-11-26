@@ -31,7 +31,7 @@ endif
 
 $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	boost_headers \
-    $(call gb_Helper_optional,CLCC,clew) \
+    $(call gb_Helper_optional,OPENCL,clew) \
     icu_headers \
     icui18n \
     icuuc \
@@ -53,6 +53,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     forui \
     i18nlangtag \
     i18nutil \
+	$(call gb_Helper_optional,OPENCL, \
+		opencl) \
     sal \
     salhelper \
     sax \

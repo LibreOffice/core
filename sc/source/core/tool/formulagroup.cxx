@@ -21,6 +21,7 @@
 
 #include <formula/vectortoken.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <opencl/platforminfo.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include <vector>
@@ -541,7 +542,7 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 #if !HAVE_FEATURE_OPENCL
     (void) rPlatforms;
 #else
-    const std::vector<sc::OpenCLPlatformInfo>& rPlatformsFromWrapper =
+    const std::vector<OpenCLPlatformInfo>& rPlatformsFromWrapper =
         sc::opencl::fillOpenCLInfo();
 
     rPlatforms.assign(rPlatformsFromWrapper.begin(), rPlatformsFromWrapper.end());

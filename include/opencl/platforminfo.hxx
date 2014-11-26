@@ -7,21 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_INC_PLATFORMINFO_HXX
-#define INCLUDED_SC_INC_PLATFORMINFO_HXX
+#ifndef INCLUDED_OPENCL_PLATFORMINFO_HXX
+#define INCLUDED_OPENCL_PLATFORMINFO_HXX
 
 #include <ostream>
 #include <vector>
 
+#include <clew.h>
+
+#include <opencl/opencldllapi.h>
 #include <rtl/ustring.hxx>
 
-#include "scdllapi.h"
+// Struct that describs an actual instance of an OpenCL device
 
-namespace sc {
-
-struct SC_DLLPUBLIC OpenCLDeviceInfo
+struct OPENCL_DLLPUBLIC OpenCLDeviceInfo
 {
-    void* device;
+    cl_device_id device;
     OUString maName;
     OUString maVendor;
     OUString maDriver;
@@ -32,9 +33,11 @@ struct SC_DLLPUBLIC OpenCLDeviceInfo
     OpenCLDeviceInfo();
 };
 
-struct SC_DLLPUBLIC OpenCLPlatformInfo
+// Struct that describs an actual instance of an OpenCL platform implementation
+
+struct OPENCL_DLLPUBLIC OpenCLPlatformInfo
 {
-    void* platform;
+    cl_platform_id platform;
     OUString maVendor;
     OUString maName;
     std::vector<OpenCLDeviceInfo> maDevices;
@@ -42,9 +45,7 @@ struct SC_DLLPUBLIC OpenCLPlatformInfo
     OpenCLPlatformInfo();
 };
 
-}
-
-SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLPlatformInfo& rPlatform);
-SC_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLDeviceInfo& rDevice);
+OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLPlatformInfo& rPlatform);
+OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLDeviceInfo& rDevice);
 
 #endif

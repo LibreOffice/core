@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "platforminfo.hxx"
+#include <ostream>
 
-namespace sc {
+#include <opencl/platforminfo.hxx>
 
 OpenCLDeviceInfo::OpenCLDeviceInfo()
     : device(0)
@@ -24,9 +24,7 @@ OpenCLPlatformInfo::OpenCLPlatformInfo()
 {
 }
 
-}
-
-std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLPlatformInfo& rPlatform)
+std::ostream& operator<<(std::ostream& rStream, const OpenCLPlatformInfo& rPlatform)
 {
     rStream << "{"
         "Vendor=" << rPlatform.maVendor << ","
@@ -35,7 +33,7 @@ std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLPlatformInfo& rP
     return rStream;
 }
 
-std::ostream& operator<<(std::ostream& rStream, const sc::OpenCLDeviceInfo& rDevice)
+std::ostream& operator<<(std::ostream& rStream, const OpenCLDeviceInfo& rDevice)
 {
     rStream << "{"
         "Name=" << rDevice.maName << ","

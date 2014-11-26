@@ -42,8 +42,6 @@ typedef enum {
     CALC_OPTION_ENABLE_OPENCL_SUBSET,
     CALC_OPTION_OPENCL_MIN_SIZE,
     CALC_OPTION_OPENCL_SUBSET_OPS,
-    CALC_OPTION_OPENCL_BLACKLIST,
-    CALC_OPTION_OPENCL_WHITELIST,
 } CalcOptionOrder;
 
 class OptionString : public SvLBoxString
@@ -155,16 +153,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpBtnFalse, "false");
     get(mpSpinButton, "spinbutton");
     get(mpEditField, "entry");
-    get(mpOpenCLWhiteAndBlackListGrid, "listgrid");
-    get(mpOpenCLWhiteAndBlackListBox, "listbox");
-    get(mpOS, "os");
-    get(mpOSVersion, "osversion");
-    get(mpPlatformVendor, "platformvendor");
-    get(mpDevice, "opencldevice");
-    get(mpDriverVersion, "opencldriverversion");
-    get(mpListNewButton, "listbox-new");
-    get(mpListDeleteButton, "listbox-delete");
-    get(mpTestButton, "test");
     get(mpOpenclInfoList, "opencl_list");
     get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
     get(mpBtnAutomaticSelectionFalse, "automatic_select_false");
@@ -174,14 +162,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
     mpSpinButton->SetModifyHdl(LINK(this, ScCalcOptionsDialog, NumModifiedHdl));
     mpEditField->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
-    mpOS->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
-    mpOSVersion->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
-    mpPlatformVendor->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
-    mpDevice->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
-    mpDriverVersion->SetModifyHdl(LINK(this, ScCalcOptionsDialog, EditModifiedHdl));
-
-    mpOpenCLWhiteAndBlackListBox->set_height_request(4* mpOpenCLWhiteAndBlackListBox->GetTextHeight());
-    mpOpenCLWhiteAndBlackListBox->SetStyle(mpOpenCLWhiteAndBlackListBox->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
 
     mpOpenclInfoList->set_height_request(4* mpOpenclInfoList->GetTextHeight());
     mpOpenclInfoList->SetStyle(mpOpenclInfoList->GetStyle() | WB_CLIPCHILDREN | WB_FORCE_MAKEVISIBLE);
@@ -214,12 +194,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     maCaptionOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes")->GetText();
     maDescOpenCLSubsetOpCodes = get<vcl::Window>("opencl_subset_opcodes_desc")->GetText();
 
-    maCaptionOpenCLBlackList = get<vcl::Window>("opencl_blacklist")->GetText();
-    maDescOpenCLBlackList = get<vcl::Window>("opencl_blacklist_desc")->GetText();
-
-    maCaptionOpenCLWhiteList = get<vcl::Window>("opencl_whitelist")->GetText();
-    maDescOpenCLWhiteList = get<vcl::Window>("opencl_whitelist_desc")->GetText();
-
     maSoftware = get<vcl::Window>("software")->GetText();
 
     mpLbSettings->set_height_request(8 * mpLbSettings->GetTextHeight());
@@ -229,14 +203,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     Link aLink = LINK(this, ScCalcOptionsDialog, SettingsSelHdl);
     mpLbSettings->SetSelectHdl(aLink);
     mpLbOptionEdit->SetSelectHdl(aLink);
-
-    aLink = LINK(this, ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl);
-    mpOpenCLWhiteAndBlackListBox->SetSelectHdl(aLink);
-
-    mpListNewButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, ListNewClickHdl));
-    mpListDeleteButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, ListDeleteClickHdl));
-
-    mpTestButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, TestClickHdl));
 
     aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
     mpBtnTrue->SetToggleHdl(aLink); // Set handler only to the 'True' button.
@@ -293,10 +259,10 @@ void ScCalcOptionsDialog::fillOpenCLList()
     SvTreeListEntry* pSelectedEntry = NULL;
 
     sc::FormulaGroupInterpreter::fillOpenCLInfo(maPlatformInfo);
-    for(std::vector<sc::OpenCLPlatformInfo>::iterator it = maPlatformInfo.begin(),
+    for(std::vector<OpenCLPlatformInfo>::iterator it = maPlatformInfo.begin(),
             itEnd = maPlatformInfo.end(); it != itEnd; ++it)
     {
-        for(std::vector<sc::OpenCLDeviceInfo>::iterator
+        for(std::vector<OpenCLDeviceInfo>::iterator
                 itr = it->maDevices.begin(), itrEnd = it->maDevices.end(); itr != itrEnd; ++itr)
         {
             OUString aDeviceId = it->maVendor + " " + itr->maName + " " + itr->maDriver;
@@ -319,32 +285,6 @@ void ScCalcOptionsDialog::fillOpenCLList()
 
     SelectedDeviceChanged();
 }
-
-namespace {
-
-OUString format(const ScCalcConfig::OpenCLImplMatcher& rImpl)
-{
-    return (rImpl.maOS + " " +
-            rImpl.maOSVersion + " " +
-            rImpl.maPlatformVendor + " " +
-            rImpl.maDevice + " " +
-            rImpl.maDriverVersion);
-}
-
-void fillListBox(ListBox* pListBox, const ScCalcConfig::OpenCLImplMatcherSet& rSet)
-{
-    pListBox->SetUpdateMode(false);
-    pListBox->Clear();
-
-    for (auto i = rSet.cbegin(); i != rSet.cend(); ++i)
-    {
-        pListBox->InsertEntry(format(*i), LISTBOX_APPEND);
-    }
-
-    pListBox->SetUpdateMode(true);
-}
-
-} // anonymous namespace
 
 #endif
 
@@ -386,8 +326,6 @@ void ScCalcOptionsDialog::FillOptionsList()
     pModel->Insert(createItem(maCaptionOpenCLSubsetEnabled,toString(maConfig.mbOpenCLSubsetOnly)));
     pModel->Insert(createItem(maCaptionOpenCLMinimumFormulaSize,toString(maConfig.mnOpenCLMinimumFormulaGroupSize)));
     pModel->Insert(createItem(maCaptionOpenCLSubsetOpCodes,ScOpCodeSetToSymbolicString(maConfig.maOpenCLSubsetOpCodes)));
-    pModel->Insert(createItem(maCaptionOpenCLBlackList,""));
-    pModel->Insert(createItem(maCaptionOpenCLWhiteList,""));
 
     fillOpenCLList();
 
@@ -410,7 +348,6 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpBtnFalse->Hide();
             mpSpinButton->Hide();
             mpEditField->Hide();
-            mpOpenCLWhiteAndBlackListGrid->Hide();
             mpLbOptionEdit->Show();
             mpOpenclInfoList->GetParent()->Hide();
 
@@ -445,7 +382,6 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpBtnFalse->Hide();
             mpSpinButton->Hide();
             mpEditField->Hide();
-            mpOpenCLWhiteAndBlackListGrid->Hide();
             mpLbOptionEdit->Show();
             mpOpenclInfoList->GetParent()->Hide();
 
@@ -482,7 +418,6 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpBtnFalse->Show();
             mpSpinButton->Hide();
             mpEditField->Hide();
-            mpOpenCLWhiteAndBlackListGrid->Hide();
 
             bool bValue = false;
             bool bEnable = true;
@@ -546,7 +481,6 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpBtnFalse->Hide();
             mpSpinButton->Show();
             mpEditField->Hide();
-            mpOpenCLWhiteAndBlackListGrid->Hide();
             mpOpenclInfoList->GetParent()->Hide();
             mpFtAnnotation->SetText(maDescOpenCLMinimumFormulaSize);
             mpSpinButton->SetValue(nValue);
@@ -563,38 +497,12 @@ void ScCalcOptionsDialog::SelectionChanged()
             mpBtnFalse->Hide();
             mpSpinButton->Hide();
             mpEditField->Show();
-            mpOpenCLWhiteAndBlackListGrid->Hide();
             mpOpenclInfoList->GetParent()->Hide();
             mpFtAnnotation->SetText(maDescOpenCLSubsetOpCodes);
             mpEditField->SetText(sValue);
         }
         break;
 
-        // string lists
-        case CALC_OPTION_OPENCL_BLACKLIST:
-        case CALC_OPTION_OPENCL_WHITELIST:
-        {
-            mpLbOptionEdit->Hide();
-            mpBtnTrue->Hide();
-            mpBtnFalse->Hide();
-            mpSpinButton->Hide();
-            mpEditField->Hide();
-            mpOpenCLWhiteAndBlackListGrid->Show();
-            mpOpenclInfoList->GetParent()->Hide();
-#if HAVE_FEATURE_OPENCL
-            if ( nSelectedPos == CALC_OPTION_OPENCL_WHITELIST )
-            {
-                mpFtAnnotation->SetText(maDescOpenCLWhiteList);
-                fillListBox(mpOpenCLWhiteAndBlackListBox, maConfig.maOpenCLWhiteList);
-            }
-            else
-            {
-                mpFtAnnotation->SetText(maDescOpenCLBlackList);
-                fillListBox(mpOpenCLWhiteAndBlackListBox, maConfig.maOpenCLBlackList);
-            }
-#endif
-        }
-        break;
     }
 }
 
@@ -647,8 +555,6 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
         case CALC_OPTION_ENABLE_OPENCL_SUBSET:
         case CALC_OPTION_OPENCL_MIN_SIZE:
         case CALC_OPTION_OPENCL_SUBSET_OPS:
-        case CALC_OPTION_OPENCL_BLACKLIST:
-        case CALC_OPTION_OPENCL_WHITELIST:
         break;
     }
 }
@@ -671,7 +577,7 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
     if(!pEntry)
         return;
 
-    sc::OpenCLDeviceInfo* pInfo = reinterpret_cast<sc::OpenCLDeviceInfo*>(pEntry->GetUserData());
+    OpenCLDeviceInfo* pInfo = reinterpret_cast<OpenCLDeviceInfo*>(pEntry->GetUserData());
     if(pInfo)
     {
         mpFtFrequency->SetText(OUString::number(pInfo->mnFrequency));
@@ -726,22 +632,6 @@ void ScCalcOptionsDialog::SpinButtonValueChanged()
     maConfig.mnOpenCLMinimumFormulaGroupSize = nVal;
 }
 
-ScCalcConfig::OpenCLImplMatcherSet& ScCalcOptionsDialog::CurrentWhiteOrBlackList()
-{
-    return (mpLbSettings->GetSelectEntryPos() == CALC_OPTION_OPENCL_WHITELIST ? maConfig.maOpenCLWhiteList : maConfig.maOpenCLBlackList);
-}
-
-const ScCalcConfig::OpenCLImplMatcher& ScCalcOptionsDialog::CurrentWhiteOrBlackListEntry()
-{
-    ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
-
-    auto i = rSet.begin();
-    int n(mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos());
-    std::advance(i, n);
-
-    return *i;
-}
-
 void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
 {
     Edit& rEdit(dynamic_cast<Edit&>(*pCtrl));
@@ -753,46 +643,6 @@ void ScCalcOptionsDialog::EditFieldValueChanged(Control *pCtrl)
         // We know that the mpEditField is used for only one thing at the moment,
         // the OpenCL subset list of opcodes
         maConfig.maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
-    }
-    else
-    {
-        // We know that this handler is otherwise currently used only
-        // for the OpenCL white/blacklists
-
-        const ScCalcConfig::OpenCLImplMatcher& impl(CurrentWhiteOrBlackListEntry());
-        ScCalcConfig::OpenCLImplMatcher newImpl(impl);
-
-        if (&rEdit == mpOS)
-        {
-            newImpl.maOS = sVal;
-        }
-        else if (&rEdit == mpOSVersion)
-        {
-            newImpl.maOSVersion = sVal;
-        }
-        else if (&rEdit == mpPlatformVendor)
-        {
-            newImpl.maPlatformVendor = sVal;
-        }
-        else if (&rEdit == mpDevice)
-        {
-            newImpl.maDevice = sVal;
-        }
-        else if (&rEdit == mpDriverVersion)
-        {
-            newImpl.maDriverVersion = sVal;
-        }
-        else
-            assert(false && "rEdit does not match any of the Edit fields");
-
-        ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
-
-        rSet.erase(impl);
-        rSet.insert(newImpl);
-#if HAVE_FEATURE_OPENCL
-        fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
-        mpOpenCLWhiteAndBlackListBox->SelectEntry(format(newImpl));
-#endif
     }
 }
 
@@ -879,54 +729,7 @@ IMPL_LINK(ScCalcOptionsDialog, EditModifiedHdl, Control*, pCtrl)
     return 0;
 }
 
-IMPL_LINK(ScCalcOptionsDialog, OpenCLWhiteAndBlackListSelHdl, Control*, )
-{
-    // We know this handler is used for the mpOpenCLWhiteAndBlackListBox
-
-    const ScCalcConfig::OpenCLImplMatcher& impl(CurrentWhiteOrBlackListEntry());
-
-    mpOS->SetText(impl.maOS);
-    mpOSVersion->SetText(impl.maOSVersion);
-    mpPlatformVendor->SetText(impl.maPlatformVendor);
-    mpDevice->SetText(impl.maDevice);
-    mpDriverVersion->SetText(impl.maDriverVersion);
-
-    return 0;
-}
-
-IMPL_LINK( ScCalcOptionsDialog, ListNewClickHdl, PushButton*, )
-{
-    ScCalcConfig::OpenCLImplMatcher aEmpty;
-    ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
-
-    mpOS->SetText("");
-    mpOSVersion->SetText("");
-    mpPlatformVendor->SetText("");
-    mpDevice->SetText("");
-    mpDriverVersion->SetText("");
-
-    rSet.insert(aEmpty);
-#if HAVE_FEATURE_OPENCL
-    fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
-    mpOpenCLWhiteAndBlackListBox->SelectEntry(format(aEmpty));
-#endif
-    return 0;
-}
-
-IMPL_LINK( ScCalcOptionsDialog, ListDeleteClickHdl, PushButton*, )
-{
-    if (mpOpenCLWhiteAndBlackListBox->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND)
-        return 0;
-
-    ScCalcConfig::OpenCLImplMatcherSet& rSet(CurrentWhiteOrBlackList());
-    const ScCalcConfig::OpenCLImplMatcher& rImpl(CurrentWhiteOrBlackListEntry());
-
-#if HAVE_FEATURE_OPENCL
-    rSet.erase(rImpl);
-    fillListBox(mpOpenCLWhiteAndBlackListBox, rSet);
-#endif
-    return 0;
-}
+#if 0
 
 namespace {
 
@@ -1359,5 +1162,7 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 
     return 0;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

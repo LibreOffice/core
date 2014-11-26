@@ -58,6 +58,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <opencl/platforminfo.hxx>
 
 #include "docuno.hxx"
 #include "cellsuno.hxx"
@@ -93,7 +94,6 @@
 #include "sheetevents.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
-#include "platforminfo.hxx"
 #include "interpre.hxx"
 #include "formulagroup.hxx"
 #include "gridwin.hxx"
@@ -2369,7 +2369,7 @@ void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
     if(nPlatform < 0 || nDevice < 0)
         throw uno::RuntimeException();
 
-    std::vector<sc::OpenCLPlatformInfo> aPlatformInfo;
+    std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
     if(size_t(nPlatform) >= aPlatformInfo.size())
         throw uno::RuntimeException();
@@ -2402,7 +2402,7 @@ sal_Int32 ScModelObj::getDeviceID()
 uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
     throw (uno::RuntimeException, std::exception)
 {
-    std::vector<sc::OpenCLPlatformInfo> aPlatformInfo;
+    std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
 
     uno::Sequence<sheet::opencl::OpenCLPlatform> aRet(aPlatformInfo.size());
@@ -2414,7 +2414,7 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
         aRet[i].Devices.realloc(aPlatformInfo[i].maDevices.size());
         for(size_t j = 0; j < aPlatformInfo[i].maDevices.size(); ++j)
         {
-            const sc::OpenCLDeviceInfo& rDevice = aPlatformInfo[i].maDevices[j];
+            const OpenCLDeviceInfo& rDevice = aPlatformInfo[i].maDevices[j];
             aRet[i].Devices[j].Name = rDevice.maName;
             aRet[i].Devices[j].Vendor = rDevice.maVendor;
             aRet[i].Devices[j].Driver = rDevice.maDriver;

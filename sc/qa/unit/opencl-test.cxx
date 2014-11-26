@@ -10,6 +10,7 @@
 #include <osl/file.hxx>
 
 #include "scdll.hxx"
+#include <opencl/platforminfo.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -30,7 +31,6 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "formulacell.hxx"
-#include "platforminfo.hxx"
 #include "formulagroup.hxx"
 
 #include <svx/svdpage.hxx>

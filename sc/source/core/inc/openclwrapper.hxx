@@ -11,13 +11,12 @@
 #define INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
 
 #include <config_features.h>
-#include <formula/opcode.hxx>
 #include <sal/detail/log.h>
+#include <opencl/platforminfo.hxx>
 #include <osl/file.hxx>
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <cassert>
-#include "platforminfo.hxx"
 
 #include <rtl/string.hxx>
 
@@ -101,8 +100,6 @@ bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSelect,
         bool bForceEvaluation);
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
-
-bool checkForKnownBadCompilers(const OpenCLPlatformInfo& rPlatform, const OpenCLDeviceInfo& rDevice);
 
 }}
 

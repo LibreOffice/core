@@ -21,13 +21,16 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
-#include <sal/log.hxx>
-#include <comphelper/random.hxx>
+
 #include <boost/scoped_ptr.hpp>
+
+#include <comphelper/random.hxx>
+#include <opencl/openclconfig.hxx>
+#include <opencl/platforminfo.hxx>
+#include <sal/log.hxx>
 
 #include "opencl_device.hxx"
 #include "openclwrapper.hxx"
-#include "platforminfo.hxx"
 
 #define INPUTSIZE  15360
 #define OUTPUTSIZE 15360
@@ -418,7 +421,7 @@ ds_status pickBestDevice(ds_profile* profile, int* bestDeviceIdx)
             aDevice.maDriver = OUString(device.oclDriverVersion, strlen(device.oclDriverVersion), RTL_TEXTENCODING_UTF8);
 
             // If blacklisted or not whitelisted, ignore it
-            if (opencl::checkForKnownBadCompilers(aPlatform, aDevice))
+            if (OpenCLConfig::get().checkImplementation(aPlatform, aDevice))
             {
                 SAL_INFO("sc.opencl.device", "Device[" << d << "] " << device.oclDeviceName << " is blacklisted or not whitelisted");
                 pScore->fTime = DBL_MAX;

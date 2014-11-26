@@ -82,6 +82,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	officecfg \
 	oovbaapi \
 	oox \
+	$(call gb_Helper_optional,OPENCL,opencl) \
 	package \
 	postprocess \
 	$(call gb_Helper_optional,PYUNO,pyuno) \

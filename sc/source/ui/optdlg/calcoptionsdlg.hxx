@@ -25,7 +25,8 @@
 #include "calcconfig.hxx"
 
 #if HAVE_FEATURE_OPENCL
-#include "platforminfo.hxx"
+#include <opencl/openclconfig.hxx>
+#include <opencl/platforminfo.hxx>
 #endif
 
 class ScCalcOptionsDialog : public ModalDialog
@@ -40,10 +41,6 @@ public:
     DECL_LINK( DeviceSelHdl, void* );
     DECL_LINK( NumModifiedHdl, void * );
     DECL_LINK( EditModifiedHdl, Control * );
-    DECL_LINK( OpenCLWhiteAndBlackListSelHdl, Control* );
-    DECL_LINK( ListNewClickHdl, PushButton* );
-    DECL_LINK( ListDeleteClickHdl, PushButton* );
-    DECL_LINK( TestClickHdl, PushButton* );
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 
@@ -66,8 +63,8 @@ private:
     OUString toString(sal_Int32 nVal) const;
     SvTreeListEntry *createItem(const OUString &rCaption, const OUString& sValue) const;
     void     setValueAt(size_t nPos, const OUString &rString);
-    std::set<ScCalcConfig::OpenCLImplMatcher>& CurrentWhiteOrBlackList();
-    const ScCalcConfig::OpenCLImplMatcher& CurrentWhiteOrBlackListEntry();
+    OpenCLConfig::ImplMatcherSet& CurrentWhiteOrBlackList();
+    const OpenCLConfig::ImplMatcher& CurrentWhiteOrBlackListEntry();
 
 private:
     SvxCheckListBox* mpLbSettings;
@@ -77,16 +74,6 @@ private:
     RadioButton* mpBtnFalse;
     NumericField* mpSpinButton;
     Edit* mpEditField;
-    VclGrid* mpOpenCLWhiteAndBlackListGrid;
-    ListBox* mpOpenCLWhiteAndBlackListBox;
-    Edit* mpOS;
-    Edit* mpOSVersion;
-    Edit* mpPlatformVendor;
-    Edit* mpDevice;
-    Edit* mpDriverVersion;
-    PushButton* mpListNewButton;
-    PushButton* mpListDeleteButton;
-    PushButton* mpTestButton;
 
     FixedText* mpFtAnnotation;
     FixedText* mpFtFrequency;
@@ -128,17 +115,11 @@ private:
     OUString maCaptionOpenCLSubsetOpCodes;
     OUString maDescOpenCLSubsetOpCodes;
 
-    OUString maCaptionOpenCLWhiteList;
-    OUString maDescOpenCLWhiteList;
-
-    OUString maCaptionOpenCLBlackList;
-    OUString maDescOpenCLBlackList;
-
     OUString maSoftware;
 
     ScCalcConfig maConfig;
 #if HAVE_FEATURE_OPENCL
-    std::vector<sc::OpenCLPlatformInfo> maPlatformInfo;
+    std::vector<OpenCLPlatformInfo> maPlatformInfo;
 #endif
 
     bool mbSelectedEmptyStringAsZero;

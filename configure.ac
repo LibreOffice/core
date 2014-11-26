@@ -10261,13 +10261,13 @@ dnl =================================================
 dnl Check whether to build with OpenCL support.
 dnl =================================================
 
-ENABLE_OPENCL=
 if test $_os != iOS -a $_os != Android; then
-    ENABLE_OPENCL=TRUE
-    BUILD_TYPE="$BUILD_TYPE CLCC"
+    # CLCC in BUILD_TYPE tells that we are building a bundled clcc (just the clew part), OPENCL in
+    # BUILD_TYPE tells that OpenCL is potentially available on the platform (optional at run-time,
+    # used through clew).
+    BUILD_TYPE="$BUILD_TYPE CLCC OPENCL"
     AC_DEFINE(HAVE_FEATURE_OPENCL)
 fi
-AC_SUBST(ENABLE_OPENCL)
 
 dnl ===================================================================
 dnl Check whether to enable glTF support

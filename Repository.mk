@@ -402,6 +402,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	odfflatxml \
 	offacc \
 	oox \
+	$(call gb_Helper_optional,OPENCL,opencl) \
 	passwordcontainer \
 	pcr \
 	$(if $(ENABLE_NPAPI_FROM_BROWSER),pl) \

@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_sdk_api,sc))
 
 $(eval $(call gb_Library_use_externals,sc,\
     boost_headers \
-    $(call gb_Helper_optional,CLCC,clew) \
+    $(call gb_Helper_optional,OPENCL,clew) \
     icu_headers \
     icui18n \
     icuuc \
@@ -72,6 +72,8 @@ $(eval $(call gb_Library_use_libraries,sc,\
     forui \
     i18nlangtag \
     i18nutil \
+    $(call gb_Helper_optional,OPENCL, \
+        opencl) \
     sal \
     salhelper \
     sax \
@@ -247,7 +249,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/optutil \
     sc/source/core/tool/orcusxml \
     sc/source/core/tool/parclass \
-    sc/source/core/tool/platforminfo \
     sc/source/core/tool/printopt \
     sc/source/core/tool/prnsave \
     sc/source/core/tool/progress \
@@ -660,8 +661,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/xmlsource/xmlsourcedlg \
 ))
 
-ifneq (,$(ENABLE_OPENCL))
-
+$(call gb_Helper_optional,OPENCL,\
 $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/formulagroupcl \
     sc/source/core/opencl/openclwrapper \
@@ -675,14 +675,12 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/op_array \
     sc/source/core/opencl/op_logical \
     sc/source/core/opencl/op_spreadsheet \
-))
+)))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,sc,\
     -lrt \
 ))
-endif
-
 endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
