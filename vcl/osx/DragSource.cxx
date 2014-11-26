@@ -266,6 +266,8 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   g_DropSuccessSet = false;
   g_DropSuccess = false;
 
+  SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    //TODO: 10.7 dragImage:at:offset:event:pasteboard:source:slideBack:
   [mView dragImage: dragImage
    at: p
    offset: NSMakeSize(0,0)
@@ -273,6 +275,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
    pasteboard: clipb->getPasteboard()
    source: mDragSourceHelper
    slideBack: 1];
+   SAL_WNODEPRECATED_DECLARATIONS_POP
 
   [dragImage release];
 

@@ -58,7 +58,9 @@ rtl::OUString FSRefToOUString(FSRef fsRef, InfoType info)
 {
     //DBG_PRINT_ENTRY("CFStringUtilities", __func__);
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 CFURLCreateFromFSRef
     CFURLRef aUrlRef = CFURLCreateFromFSRef(NULL, &fsRef);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     rtl::OUString sResult = CFURLRefToOUString(aUrlRef, info);
 

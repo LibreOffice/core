@@ -241,7 +241,10 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
             return subRole;
         } else {
             [ subRole release ];
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH
+                //TODO: 10.10 accessibilityAttributeValue:
             return [ super accessibilityAttributeValue: NSAccessibilitySubroleAttribute ];
+            SAL_WNODEPRECATED_DECLARATIONS_POP
         }
     }
 }
@@ -917,7 +920,10 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     if ( [ parent isKindOfClass: [ AquaA11yWrapper class ] ] ) {
         parentAsWrapper = (AquaA11yWrapper *) parent;
     }
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        //TODO: 10.10 accessibilityAttributeValue:
     NSString * parentRole = (NSString *) [ parent accessibilityAttributeValue: NSAccessibilityRoleAttribute ];
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     // if we are a textarea inside a combobox, then the combobox is the action responder
     if ( enabled
       && [ role isEqualToString: NSAccessibilityTextAreaRole ]
@@ -959,8 +965,11 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 -(BOOL)isViewElement:(NSObject *)viewElement hitByPoint:(NSPoint)point {
     BOOL hit = NO;
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+        //TODO: 10.10 accessibilityAttributeValue:
     NSValue * position = [ viewElement accessibilityAttributeValue: NSAccessibilityPositionAttribute ];
     NSValue * size = [ viewElement accessibilityAttributeValue: NSAccessibilitySizeAttribute ];
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if ( position != nil && size != nil ) {
         float minX = [ position pointValue ].x;
         float minY = [ position pointValue ].y;

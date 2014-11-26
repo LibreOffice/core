@@ -630,6 +630,8 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 
     if( mpPrinter )
     {
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH
+            //TODO: 10.9 statusForTable:, stringListForKey:inTable:
         if( [mpPrinter statusForTable: @"PPD"] == NSPrinterTableOK )
         {
             NSArray* pPaperNames = [mpPrinter stringListForKey: @"PageSize" inTable: @"PPD"];
@@ -661,6 +663,7 @@ void AquaSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
                 }
             }
         }
+        SAL_WNODEPRECATED_DECLARATIONS_POP
     }
 }
 

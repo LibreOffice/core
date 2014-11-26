@@ -150,7 +150,9 @@ int AquaSalSystem::ShowNativeMessageBox( const OUString& rTitle,
         }
     }
 
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.10 NSRunAlertPanel
     int nResult = NSRunAlertPanel( pTitle, @"%@", pDefText, pAltText, pOthText, pMessage );
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     if( pTitle )
         [pTitle release];

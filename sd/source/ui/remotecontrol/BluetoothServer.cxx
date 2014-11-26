@@ -1491,7 +1491,9 @@ void SAL_CALL BluetoothServer::run()
 
     // Create service
     IOBluetoothSDPServiceRecordRef serviceRecordRef;
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 IOBluetoothAddServiceDict
     IOReturn rc = IOBluetoothAddServiceDict((CFDictionaryRef) dict, &serviceRecordRef);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     SAL_INFO("sdremote.bluetooth", "IOBluetoothAddServiceDict returned " << rc);
 

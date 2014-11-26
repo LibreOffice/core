@@ -970,6 +970,7 @@ void OGLTransitionerImpl::impl_createTexture(
             maSlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
                 data,
                 getOGLColorSpace()));
+        SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 gluBuild2DMipmaps
         gluBuild2DMipmaps(GL_TEXTURE_2D,
                           4,
                           maSlideSize.Width,
@@ -977,6 +978,7 @@ void OGLTransitionerImpl::impl_createTexture(
                           GL_RGBA,
                           GL_UNSIGNED_BYTE,
                           &tempBytes[0]);
+        SAL_WNODEPRECATED_DECLARATIONS_POP
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); //TRILINEAR FILTERING
 
@@ -990,7 +992,9 @@ void OGLTransitionerImpl::impl_createTexture(
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
         } else {
+            SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9 gluBuild2DMipmaps
             gluBuild2DMipmaps( GL_TEXTURE_2D, pFormat->nInternalFormat, maSlideSize.Width, maSlideSize.Height, pFormat->eFormat, pFormat->eType, &data[0] );
+            SAL_WNODEPRECATED_DECLARATIONS_POP
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR ); //TRILINEAR FILTERING
 

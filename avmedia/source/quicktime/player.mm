@@ -25,6 +25,8 @@
 
 using namespace ::com::sun::star;
 
+SAL_WNODEPRECATED_DECLARATIONS_PUSH //TODO: 10.9
+
 namespace avmedia { namespace quicktime {
 
 
@@ -388,5 +390,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
 
 } // namespace quicktime
 } // namespace avmedia
+
+SAL_WNODEPRECATED_DECLARATIONS_POP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
