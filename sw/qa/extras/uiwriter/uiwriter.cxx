@@ -22,6 +22,8 @@
 #include <textboxhelper.hxx>
 #include <view.hxx>
 #include <hhcwrp.hxx>
+#include <swacorr.hxx>
+#include <editeng/acorrcfg.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -57,6 +59,7 @@ public:
     void testChineseConversionTraditionalToSimplified();
     void testChineseConversionSimplifiedToTraditional();
     void testFdo85554();
+    void testAutoCorr();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -80,6 +83,7 @@ public:
     CPPUNIT_TEST(testChineseConversionTraditionalToSimplified);
     CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
     CPPUNIT_TEST(testFdo85554);
+    CPPUNIT_TEST(testAutoCorr);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -586,6 +590,34 @@ void SwUiWriterTest::testFdo85554()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xDrawPage->getCount());
 }
 
+void SwUiWriterTest::testAutoCorr()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    const sal_Unicode cIns = ' ';
+
+    //Normal AutoCorrect
+    pWrtShell->Insert("tset");
+    pWrtShell->AutoCorrect(corr, cIns);
+    sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(OUString("Test "), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex])->GetTxt());
+
+    //AutoCorrect with change style to bolt
+    pWrtShell->Insert("Bolt");
+    pWrtShell->AutoCorrect(corr, cIns);
+    nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
+    const uno::Reference< text::XTextRange > xRun = getRun(getParagraph(1), 2);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bolt"), xRun->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun, "CharFontName"));
+
+    //AutoCorrect inserts Table with 2 rows and 3 columns
+    pWrtShell->Insert("4xx");
+    pWrtShell->AutoCorrect(corr, cIns);
+    const uno::Reference< text::XTextTable > xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
