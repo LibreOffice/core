@@ -19,21 +19,17 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARAPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_PARAGRAPH_PARAPROPERTYPANEL_HXX
 
-#include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <editeng/lspcitem.hxx>
-#include <svtools/ctrlbox.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <svx/relfld.hxx>
 #include <editeng/svxenum.hxx>
-#include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
 
 #include <vcl/vclenum.hxx>
-#include <vcl/fixed.hxx>
 #include <svl/poolitem.hxx>
 #include <tools/fldunit.hxx>
 
