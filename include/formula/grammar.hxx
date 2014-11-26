@@ -22,7 +22,6 @@
 
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <formula/formuladllapi.h>
-#include <tools/debug.hxx>
 
 namespace formula
 {
@@ -159,45 +158,9 @@ public:
 
     /** Compatibility helper for old "bCompileEnglish, bCompileXML" API calls
         to obtain the new grammar. */
-    static Grammar mapAPItoGrammar( const bool bEnglish, const bool bXML )
-    {
-        Grammar eGrammar;
-        if (bEnglish && bXML)
-            eGrammar = GRAM_PODF;
-        else if (bEnglish && !bXML)
-            eGrammar = GRAM_PODF_A1;
-        else if (!bEnglish && bXML)
-            eGrammar = GRAM_NATIVE_ODF;
-        else // (!bEnglish && !bXML)
-            eGrammar = GRAM_NATIVE;
-        return eGrammar;
-    }
+    static Grammar mapAPItoGrammar( const bool bEnglish, const bool bXML );
 
-    static bool isSupported( const Grammar eGrammar )
-    {
-        switch (eGrammar)
-        {
-            case GRAM_ODFF           :
-            case GRAM_PODF           :
-            case GRAM_ENGLISH        :
-            case GRAM_NATIVE         :
-            case GRAM_ODFF_UI        :
-            case GRAM_ODFF_A1        :
-            case GRAM_PODF_UI        :
-            case GRAM_PODF_A1        :
-            case GRAM_NATIVE_UI      :
-            case GRAM_NATIVE_ODF     :
-            case GRAM_NATIVE_XL_A1   :
-            case GRAM_NATIVE_XL_R1C1 :
-            case GRAM_ENGLISH_XL_A1  :
-            case GRAM_ENGLISH_XL_R1C1:
-            case GRAM_ENGLISH_XL_OOX :
-            case GRAM_OOXML          :
-                return true;
-            default:
-                return extractFormulaLanguage( eGrammar) == GRAM_EXTERNAL;
-        }
-    }
+    static bool isSupported( const Grammar eGrammar );
 
     static inline sal_Int32 extractFormulaLanguage( const Grammar eGrammar )
     {
@@ -211,24 +174,9 @@ public:
                 kConventionOffset);
     }
 
-    static inline Grammar setEnglishBit( const Grammar eGrammar, const bool bEnglish )
-    {
-        if (bEnglish)
-            return static_cast<Grammar>( eGrammar | kEnglishBit);
-        else
-            return static_cast<Grammar>( eGrammar & ~kEnglishBit);
-    }
+    static Grammar setEnglishBit( const Grammar eGrammar, const bool bEnglish );
 
-    static inline Grammar mergeToGrammar( const Grammar eGrammar, const AddressConvention eConv )
-    {
-        bool bEnglish = isEnglish( eGrammar);
-        Grammar eGram = static_cast<Grammar>(
-                extractFormulaLanguage( eGrammar) |
-                ((eConv + kConventionOffset) << kConventionShift));
-        eGram = setEnglishBit( eGram, bEnglish);
-        DBG_ASSERT( isSupported( eGram), "CompilerGrammarMap::mergeToGrammar: unsupported grammar");
-        return eGram;
-    }
+    static Grammar mergeToGrammar( const Grammar eGrammar, const AddressConvention eConv );
 
     /// If grammar is of ODF 1.1
     static inline bool isPODF( const Grammar eGrammar )
