@@ -169,12 +169,6 @@ static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(
     return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(aAttributes));
 }
 
-static writerfilter::Reference<Properties>::Pointer_t lcl_getBookmarkProperties(int nPos)
-{
-    OUString aStr;
-    return lcl_getBookmarkProperties(nPos, aStr);
-}
-
 static const char* lcl_RtfToString(RTFKeyword nKeyword)
 {
     for (int i = 0; i < nRTFControlWords; i++)
@@ -5189,10 +5183,13 @@ int RTFDocumentImpl::popState()
     }
     break;
     case DESTINATION_BOOKMARKEND:
+    {
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
             break; // not for nested group
-        Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[m_aStates.top().pDestinationText->makeStringAndClear()]));
-        break;
+        OUString aStr = m_aStates.top().pDestinationText->makeStringAndClear();
+        Mapper().props(lcl_getBookmarkProperties(m_aBookmarks[aStr], aStr));
+    }
+    break;
     case DESTINATION_FORMFIELDNAME:
     {
         if (&m_aStates.top().aDestinationText != m_aStates.top().pDestinationText)
