@@ -193,7 +193,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // LOOP
     sal_Int32 nCount =
-        ((const SdrTextAniCountItem&)rItemSet.Get( SDRATTR_TEXT_ANICOUNT ))
+        static_cast<const SdrTextAniCountItem&>(rItemSet.Get( SDRATTR_TEXT_ANICOUNT ))
                                              .GetValue();
     if( 0==nCount )
         nCount = SDRTEXTANI_SLIDE==eAniKind ? 1 : -1;
@@ -202,14 +202,14 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // SCROLLDELAY
     sal_uInt16 nDelay =
-        ((const SdrTextAniDelayItem&)rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
+        static_cast<const SdrTextAniDelayItem&>(rItemSet.Get( SDRATTR_TEXT_ANIDELAY ))
                                             .GetValue();
     sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_scrolldelay).
         append("=\"").append(static_cast<sal_Int32>(nDelay)).append("\"");
 
     // SCROLLAMOUNT
     sal_Int16 nAmount =
-        ((const SdrTextAniAmountItem&)rItemSet.Get( SDRATTR_TEXT_ANIAMOUNT ))
+        static_cast<const SdrTextAniAmountItem&>(rItemSet.Get( SDRATTR_TEXT_ANIAMOUNT ))
                                              .GetValue();
     if( nAmount < 0 )
     {
@@ -268,11 +268,11 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 
     // BGCOLOR
     drawing::FillStyle eFillStyle =
-        ((const XFillStyleItem&)rItemSet.Get(XATTR_FILLSTYLE)).GetValue();
+        static_cast<const XFillStyleItem&>(rItemSet.Get(XATTR_FILLSTYLE)).GetValue();
     if( drawing::FillStyle_SOLID==eFillStyle )
     {
         const Color& rFillColor =
-            ((const XFillColorItem&)rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
+            static_cast<const XFillColorItem&>(rItemSet.Get(XATTR_FILLCOLOR)).GetColorValue();
 
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_bgcolor).append("=");
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );

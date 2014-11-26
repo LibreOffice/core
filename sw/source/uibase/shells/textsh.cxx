@@ -151,7 +151,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     {
     case FN_INSERT_STRING:
         if( pItem )
-            rSh.InsertByWord(((const SfxStringItem *)pItem)->GetValue());
+            rSh.InsertByWord(static_cast<const SfxStringItem *>(pItem)->GetValue());
         break;
 
     case FN_INSERT_SOFT_HYPHEN:
@@ -228,7 +228,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case SID_HYPERLINK_SETLINK:
         if (pItem)
-            InsertHyperlink(*((const SvxHyperlinkItem *)pItem));
+            InsertHyperlink(*static_cast<const SvxHyperlinkItem *>(pItem));
         rReq.Done();
         break;
 
@@ -973,7 +973,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     OUString aChars, aFontName;
     if ( pItem )
     {
-        aChars = ((const SfxStringItem*)pItem)->GetValue();
+        aChars = static_cast<const SfxStringItem*>(pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );

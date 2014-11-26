@@ -974,7 +974,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            const Color &rColor = ((const SvxBrushItem *)pItem)->GetColor();
+            const Color &rColor = static_cast<const SvxBrushItem *>(pItem)->GetColor();
             /// copy color, if color is not "no fill"/"auto fill"
             if( rColor.GetColor() != COL_TRANSPARENT )
             {
@@ -990,7 +990,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int32)((const SvxColorItem *)pItem)->GetValue()
+            aTmp <<= (sal_Int32)static_cast<const SvxColorItem *>(pItem)->GetValue()
                                                          .GetRGBColor();
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }

@@ -597,7 +597,7 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     DELETEZ(pGridItem);
     //get the grid information
     if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID, true))
-        pGridItem = (SwTextGridItem*)((const SwTextGridItem&)rSet.Get(RES_TEXTGRID)).Clone();
+        pGridItem = (SwTextGridItem*)static_cast<const SwTextGridItem&>(rSet.Get(RES_TEXTGRID)).Clone();
     if( SfxItemState::DEFAULT <= rSet.GetItemState( RES_FRAMEDIR, true ))
     {
         const SvxFrameDirectionItem& rDirItem =

@@ -73,7 +73,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
         ( 0 != ( pObjSh = SfxObjectShell::Current()) &&
           0 != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
     {
-        const sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
+        const sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
         if (HTMLMODE_ON & nHtmlMode)
             m_pCountParaFram->Hide();
@@ -167,7 +167,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     sal_Int16 nOutlineLv;
     if( eItemState >= SfxItemState::DEFAULT )
     {
-        nOutlineLv = ((const SfxUInt16Item &)rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
+        nOutlineLv = static_cast<const SfxUInt16Item &>(rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
         m_pOutlineLvLB->SelectEntryPos( nOutlineLv ) ;
     }
     else
@@ -180,7 +180,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
 
     if( eItemState >= SfxItemState::DEFAULT )
     {
-        OUString aStyle = ((const SfxStringItem &)rSet->Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
+        OUString aStyle = static_cast<const SfxStringItem &>(rSet->Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
         if(aStyle.isEmpty())
             aStyle = m_pNumberStyleLB->GetEntry(0);
 
@@ -221,7 +221,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART_AT);
     if( eItemState > SfxItemState::DEFAULT )
     {
-        const sal_uInt16 nNewStart = ((const SfxUInt16Item&)rSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+        const sal_uInt16 nNewStart = static_cast<const SfxUInt16Item&>(rSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
         const bool bNotMax = USHRT_MAX != nNewStart;
         m_pNewStartNumberCB->Check(bNotMax);
         m_pNewStartNF->SetValue(bNotMax ? nNewStart : 1);

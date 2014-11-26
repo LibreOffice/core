@@ -89,7 +89,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
     const SfxPoolItem* pItem = 0;
     bool bQuiet = false;
     if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_SEARCH_QUIET, false, &pItem))
-        bQuiet = ((const SfxBoolItem*) pItem)->GetValue();
+        bQuiet = static_cast<const SfxBoolItem*>( pItem)->GetValue();
 
     bool bApi = bQuiet || bNoMessage;
 

@@ -485,7 +485,7 @@ IMAGE_SETEVENT:
         if( aAttrTab.pINetFmt )
         {
             const OUString& rURL =
-                ((const SwFmtINetFmt&)aAttrTab.pINetFmt->GetItem()).GetValue();
+                static_cast<const SwFmtINetFmt&>(aAttrTab.pINetFmt->GetItem()).GetValue();
 
             pCSS1Parser->SetATagStyles();
             sal_uInt16 nPoolId =  static_cast< sal_uInt16 >(pDoc->IsVisitedURL( rURL )

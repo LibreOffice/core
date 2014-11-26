@@ -736,7 +736,7 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
     {
         if (const SwFmt *pParent = rFmt.DerivedFrom())
         {
-            if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
+            if (static_cast<const SwTxtFmtColl*>(pParent)->IsAssignedToListLevelOfOutlineStyle())
             {
                 if (bWrtWW8)
                 {
@@ -769,8 +769,8 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
         {
             int nLvl = MAXLEVEL;
 
-            if (((const SwTxtFmtColl&)rFmt).IsAssignedToListLevelOfOutlineStyle())
-                nLvl = ((const SwTxtFmtColl&)rFmt).GetAssignedOutlineStyleLevel();
+            if (static_cast<const SwTxtFmtColl&>(rFmt).IsAssignedToListLevelOfOutlineStyle())
+                nLvl = static_cast<const SwTxtFmtColl&>(rFmt).GetAssignedOutlineStyleLevel();
 
             if (nLvl >= 0 && nLvl < MAXLEVEL)
             {
@@ -1284,7 +1284,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
     const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_CHRATR_WORDLINEMODE );
     bool bWord = false;
     if (pItem)
-        bWord = ((const SvxWordLineModeItem*)pItem)->GetValue() ? true : false;
+        bWord = static_cast<const SvxWordLineModeItem*>(pItem)->GetValue() ? true : false;
 
     // WW95 - parameters:   0 = none,   1 = single, 2 = by Word,
     //                      3 = double, 4 = dotted, 5 = hidden
@@ -3340,7 +3340,7 @@ static bool lcl_IsAtTxtEnd(const SwFmtFtn& rFtn)
         const SwSectionNode* pSectNd = rFtn.GetTxtFtn()->GetTxtNode().
                                                         FindSectionNode();
         while( pSectNd && FTNEND_ATPGORDOCEND ==
-                ((const SwFmtFtnEndAtTxtEnd&)pSectNd->GetSection().GetFmt()->
+                static_cast<const SwFmtFtnEndAtTxtEnd&>(pSectNd->GetSection().GetFmt()->
                 GetFmtAttr( nWh, true)).GetValue() )
             pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
 

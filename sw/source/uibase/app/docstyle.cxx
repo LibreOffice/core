@@ -1330,7 +1330,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             const SfxPoolItem* pAutoUpdate;
             if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
-                pColl->SetAutoUpdateFmt(((const SfxBoolItem*)pAutoUpdate)->GetValue());
+                pColl->SetAutoUpdateFmt(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
             }
 
             const SwCondCollItem* pCondItem;
@@ -1455,7 +1455,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             const SfxPoolItem* pAutoUpdate;
             if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
-                pFrmFmt->SetAutoUpdateFmt(((const SfxBoolItem*)pAutoUpdate)->GetValue());
+                pFrmFmt->SetAutoUpdateFmt(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
             }
             pFmt = pFrmFmt;
         }

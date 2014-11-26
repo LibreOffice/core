@@ -104,7 +104,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     ;
             }
             OSL_ENSURE( pSubStr, "ubekannter Subtyp fuer SwExtUserField" );
-            bFixed = ((const SwExtUserField*)pFld)->IsFixed();
+            bFixed = static_cast<const SwExtUserField*>(pFld)->IsFixed();
             break;
 
         case RES_AUTHORFLD:
@@ -115,7 +115,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 case AF_SHORTCUT:  pFmtStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
             }
             OSL_ENSURE( pFmtStr, "ubekanntes Format fuer SwAuthorField" );
-            bFixed = ((const SwAuthorField*)pFld)->IsFixed();
+            bFixed = static_cast<const SwAuthorField*>(pFld)->IsFixed();
             break;
 
         case RES_DATETIMEFLD:
@@ -143,7 +143,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
                 if( (SvxExtNumType)nFmt==SVX_NUM_CHAR_SPECIAL )
                 {
-                    aValue = ((const SwPageNumberField *)pFld)->GetUserString();
+                    aValue = static_cast<const SwPageNumberField *>(pFld)->GetUserString();
                 }
                 else
                 {
@@ -198,7 +198,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                             break;
                     }
                 }
-                bFixed = ((const SwDocInfoField*)pFld)->IsFixed();
+                bFixed = static_cast<const SwDocInfoField*>(pFld)->IsFixed();
                 if( bNumFmt )
                 {
                     if( bFixed )
@@ -206,7 +206,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                         // Fuer ein fixes Feld och den Num-Value ausgeben.
                         // Fixe Felder ohne Zahlenformate sollte es
                         // eigentlich nicht geben. OSL_ENSURE(ist unten.
-                        dNumValue = ((const SwDocInfoField*)pFld)->GetValue();
+                        dNumValue = static_cast<const SwDocInfoField*>(pFld)->GetValue();
                         bNumValue = true;
                     }
                     else if( !nFmt  )
@@ -249,7 +249,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 default:
                     ;
             }
-            bFixed = ((const SwFileNameField*)pFld)->IsFixed();
+            bFixed = static_cast<const SwFileNameField*>(pFld)->IsFixed();
             OSL_ENSURE( pFmtStr, "unbekanntes Format fuer SwFileNameField" );
             break;
     }
@@ -512,7 +512,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         if( rHTMLWrt.bLFPossible )
             rHTMLWrt.OutNewLine( true );
 
-        bool bURL = ((const SwScriptField *)pFld)->IsCodeURL();
+        bool bURL = static_cast<const SwScriptField *>(pFld)->IsCodeURL();
         const OUString& rType = pFld->GetPar1();
         OUString aContents, aURL;
         if(bURL)

@@ -1688,7 +1688,7 @@ void SwHTMLParser::NextToken( int nToken )
                     Show();     // show what we have up to here
 
                 SvxAdjust eAdjust = aAttrTab.pAdjust
-                    ? ((const SvxAdjustItem&)aAttrTab.pAdjust->GetItem()).
+                    ? static_cast<const SvxAdjustItem&>(aAttrTab.pAdjust->GetItem()).
                                              GetAdjust()
                     : SVX_ADJUST_END;
                 BuildTable( eAdjust );
@@ -2348,7 +2348,7 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
                 {
                     bool bFont = (nIdx % 5) == 0;
                     const SfxPoolItem& rItem =
-                        ((const SwCntntNode *)pTxtNd)->GetAttr( nWhich );
+                        static_cast<const SwCntntNode *>(pTxtNd)->GetAttr( nWhich );
                     if( bFont ? swhtml_css1atr_equalFontItems(rItem,pHt->GetAttr())
                               : rItem == pHt->GetAttr() )
                     {
@@ -2852,7 +2852,7 @@ void SwHTMLParser::_SetAttr( bool bChkEnd, bool bBeforeTable,
                     {
                         sal_uInt16 nFldWhich =
                             pPostIts
-                            ? ((const SwFmtFld *)pAttr->pItem)->GetField()->GetTyp()->Which()
+                            ? static_cast<const SwFmtFld *>(pAttr->pItem)->GetField()->GetTyp()->Which()
                             : 0;
                         if( pPostIts && (RES_POSTITFLD == nFldWhich ||
                                          RES_SCRIPTFLD == nFldWhich) )
@@ -4910,7 +4910,7 @@ void SwHTMLParser::InsertSpacer()
 
             // der Rahmen anlegen
             RndStdIds eAnchorId =
-                ((const SwFmtAnchor &)aFrmSet.Get(RES_ANCHOR)).GetAnchorId();
+                static_cast<const SwFmtAnchor &>(aFrmSet.Get(RES_ANCHOR)).GetAnchorId();
             SwFrmFmt *pFlyFmt = pDoc->MakeFlySection( eAnchorId,
                                             pPam->GetPoint(), &aFrmSet );
             // Ggf Frames anlegen und auto-geb. Rahmen registrieren

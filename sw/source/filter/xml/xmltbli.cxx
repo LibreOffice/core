@@ -797,7 +797,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
             SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
         {
-            const SwFmtFrmSize *pSize = ((const SwFmtFrmSize *)pItem);
+            const SwFmtFrmSize *pSize = static_cast<const SwFmtFrmSize *>(pItem);
             nWidth = pSize->GetWidth();
             bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
         }
@@ -2676,7 +2676,7 @@ void SwXMLTableContext::MakeTable()
         if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_HORI_ORIENT, false,
                                                         &pItem ) )
         {
-            eHoriOrient = ((const SwFmtHoriOrient *)pItem)->GetHoriOrient();
+            eHoriOrient = static_cast<const SwFmtHoriOrient *>(pItem)->GetHoriOrient();
             switch( eHoriOrient )
             {
             case text::HoriOrientation::FULL:

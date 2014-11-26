@@ -214,7 +214,7 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
             const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
             if( SfxItemState::SET == rItemSet.GetItemState( RES_COL,
                                                        true, &pItem ) &&
-                ((const SwFmtCol *)pItem)->GetNumCols() > 1 )
+                static_cast<const SwFmtCol *>(pItem)->GetNumCols() > 1 )
             {
                 // spaltiger Rahmen
                 eType = HTML_FRMTYPE_MULTICOL;
@@ -676,7 +676,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( (nFrmOpts & HTML_FRMOPT_SIZE) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
         ( (nFrmOpts & HTML_FRMOPT_ANYSIZE) ||
-          ATT_FIX_SIZE == ((const SwFmtFrmSize *)pItem)->GetHeightSizeType()) )
+          ATT_FIX_SIZE == static_cast<const SwFmtFrmSize *>(pItem)->GetHeightSizeType()) )
     {
         const SwFmtFrmSize *pFSItem = (const SwFmtFrmSize *)pItem;
         sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();
@@ -942,7 +942,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rF
     if( (nFrameOptions & HTML_FRMOPT_SIZE) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
         ( (nFrameOptions & HTML_FRMOPT_ANYSIZE) ||
-          ATT_FIX_SIZE == ((const SwFmtFrmSize *)pItem)->GetHeightSizeType()) )
+          ATT_FIX_SIZE == static_cast<const SwFmtFrmSize *>(pItem)->GetHeightSizeType()) )
     {
         const SwFmtFrmSize *pFSItem = (const SwFmtFrmSize *)pItem;
         sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();
@@ -1372,7 +1372,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     // Events
     if (SfxItemState::SET == rItemSet.GetItemState(RES_FRMMACRO, true, &pItem))
     {
-        const SvxMacroTableDtor& rMacTable = ((const SvxMacroItem *)pItem)->GetMacroTable();
+        const SvxMacroTableDtor& rMacTable = static_cast<const SvxMacroItem *>(pItem)->GetMacroTable();
         if (!rMacTable.empty())
         {
             HtmlWriterHelper::applyEvents(aHtml, rMacTable, aImageEventTable, rHTMLWrt.bCfgStarBasic);

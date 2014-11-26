@@ -188,7 +188,7 @@ void SwDrawTextShell::ExecFontWork(SfxRequest& rReq)
     if ( rReq.GetArgs() )
     {
         pVFrame->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
-                                ((const SfxBoolItem&) (rReq.GetArgs()->
+                                static_cast<const SfxBoolItem&>( (rReq.GetArgs()->
                                 Get(SID_FONTWORK))).GetValue());
     }
     else
@@ -417,7 +417,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                         if(pNewAttrs)
             {
                                 pNewAttrs->GetItemState(nSlot, false, &pItem );
-                             pOLV->InsertText(((const SfxStringItem *)pItem)->GetValue());
+                             pOLV->InsertText(static_cast<const SfxStringItem *>(pItem)->GetValue());
             }
                         break;
                 }
@@ -700,7 +700,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     OUString sFontName;
     if ( pItem )
     {
-        sSym = ((const SfxStringItem*)pItem)->GetValue();
+        sSym = static_cast<const SfxStringItem*>(pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
@@ -860,7 +860,7 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
                 //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
                 if(SfxItemState::DONTCARE != eVState)
                 {
-                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                    SdrTextVertAdjust eTVA = (SdrTextVertAdjust)static_cast<const SdrTextVertAdjustItem&>(aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||
                             (nSlotId == SID_TABLE_VERT_CENTER && eTVA == SDRTEXTVERTADJUST_CENTER) ||
                             (nSlotId == SID_TABLE_VERT_BOTTOM && eTVA == SDRTEXTVERTADJUST_BOTTOM);

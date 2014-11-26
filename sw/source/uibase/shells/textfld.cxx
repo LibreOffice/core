@@ -518,7 +518,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if ( pDlg->Execute() == RET_OK )
                     {
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                        OUString sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
+                        OUString sMsg(static_cast<const SvxPostItTextItem&>(pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
 
                         // Insert or change a comment
                         rSh.SetRedlineComment(sMsg);

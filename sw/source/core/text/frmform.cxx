@@ -1574,7 +1574,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         return;
 
     // If necessary the pPara
-    sal_uInt16 nOld  = ((const SwTxtMargin&)rLine).GetDropHeight();
+    sal_uInt16 nOld  = static_cast<const SwTxtMargin&>(rLine).GetDropHeight();
     bool bShrink = false;
     bool bGrow   = false;
     bool bGoOn   = rLine.IsOnceMore();
@@ -1593,7 +1593,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         bGoOn = rLine.IsOnceMore();
         if( bGoOn )
         {
-            const sal_uInt16 nNew = ((const SwTxtMargin&)rLine).GetDropHeight();
+            const sal_uInt16 nNew = static_cast<const SwTxtMargin&>(rLine).GetDropHeight();
             if( nOld == nNew )
                 bGoOn = false;
             else

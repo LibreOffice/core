@@ -107,22 +107,22 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     // get the data source name
     pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, false, &pSourceItem);
     if(pSourceItem)
-        ((const SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSourceArg;
+        static_cast<const SfxUsrAnyItem*>(pSourceItem)->GetValue() >>= sSourceArg;
 
     // get the command
     pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, false, &pCommandItem);
     if(pCommandItem)
-        ((const SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommandArg;
+        static_cast<const SfxUsrAnyItem*>(pCommandItem)->GetValue() >>= sCommandArg;
 
     // get the command type
     pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, false, &pCommandTypeItem);
     if(pCommandTypeItem)
-        ((const SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
+        static_cast<const SfxUsrAnyItem*>(pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
 
     Reference<XConnection> xConnection;
     pArgs->GetItemState(FN_DB_CONNECTION_ANY, false, &pConnectionItem);
     if ( pConnectionItem )
-        ((const SfxUsrAnyItem*)pConnectionItem)->GetValue() >>= xConnection;
+        static_cast<const SfxUsrAnyItem*>(pConnectionItem)->GetValue() >>= xConnection;
     // may be we even get no connection
     if ( !xConnection.is() )
     {
@@ -136,7 +136,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     Reference<XResultSet> xCursor;
     pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, false, &pCursorItem);
     if ( pCursorItem )
-        ((const SfxUsrAnyItem*)pCursorItem)->GetValue() >>= xCursor;
+        static_cast<const SfxUsrAnyItem*>(pCursorItem)->GetValue() >>= xCursor;
 
     switch (rReq.GetSlot())
     {

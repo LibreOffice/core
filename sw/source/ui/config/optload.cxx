@@ -252,7 +252,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     const SfxPoolItem* pItem;
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
-        m_pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
+        m_pWrtShell = (SwWrtShell*)static_cast<const SwPtrItem*>(pItem)->GetValue();
 
     SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
     m_nOldLinkMode = GLOBALSETTING;
@@ -312,7 +312,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
 
     if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_APPLYCHARUNIT, false, &pItem))
     {
-        bool bUseCharUnit = ((const SfxBoolItem*)pItem)->GetValue();
+        bool bUseCharUnit = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         m_pUseCharUnit->Check(bUseCharUnit);
     }
     else
@@ -558,7 +558,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
     {
-        bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+        bHTMLMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
     }
 
     DelUserData();

@@ -218,7 +218,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
     {
         if (const SwFmt *pParent = rFmt.DerivedFrom())
         {
-            if (((const SwTxtFmtColl*)pParent)->IsAssignedToListLevelOfOutlineStyle())
+            if (static_cast<const SwTxtFmtColl*>(pParent)->IsAssignedToListLevelOfOutlineStyle())
             {
                 ::sax_fastparser::FSHelperPtr pSerializer = m_pAttrOutput->GetSerializer( );
                 // Level 9 disables the outline

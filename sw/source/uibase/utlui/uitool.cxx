@@ -297,11 +297,11 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             ::FillHdFt(pHeaderFmt, rHeaderSet);
 
-            rPageDesc.ChgHeaderShare(((const SfxBoolItem&)
+            rPageDesc.ChgHeaderShare(static_cast<const SfxBoolItem&>(
                         rHeaderSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
             if (nFirstShare < 0)
             {
-                rPageDesc.ChgFirstShare(((const SfxBoolItem&)
+                rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
                             rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
                 nFirstShare = rPageDesc.IsFirstShared() ? 1 : 0;
             }
@@ -337,11 +337,11 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             ::FillHdFt(pFooterFmt, rFooterSet);
 
-            rPageDesc.ChgFooterShare(((const SfxBoolItem&)
+            rPageDesc.ChgFooterShare(static_cast<const SfxBoolItem&>(
                         rFooterSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
             if (nFirstShare < 0)
             {
-                rPageDesc.ChgFirstShare(((const SfxBoolItem&)
+                rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
                             rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
                 nFirstShare = rPageDesc.IsFirstShared() ? 1 : 0;
             }
@@ -370,13 +370,13 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
     if(SfxItemState::SET == rSet.GetItemState(
                             SID_SWREGISTER_MODE, false, &pItem))
     {
-        bool bSet = ((const SfxBoolItem*)pItem)->GetValue();
+        bool bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if(!bSet)
             rPageDesc.SetRegisterFmtColl(0);
         else if(SfxItemState::SET == rSet.GetItemState(
                                 SID_SWREGISTER_COLLECTION, false, &pItem))
         {
-            const OUString& rColl = ((const SfxStringItem*)pItem)->GetValue();
+            const OUString& rColl = static_cast<const SfxStringItem*>(pItem)->GetValue();
             SwDoc& rDoc = *rMaster.GetDoc();
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName( rColl );
             if( !pColl )

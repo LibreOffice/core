@@ -775,11 +775,11 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 sal_uInt16 nZoomFactor = USHRT_MAX;
                 if(SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOM, true, &pItem))
                 {
-                    eType = ((const SvxZoomItem *)pItem)->GetType();
-                    nZoomFactor = ((const SvxZoomItem *)pItem)->GetValue();
+                    eType = static_cast<const SvxZoomItem *>(pItem)->GetType();
+                    nZoomFactor = static_cast<const SvxZoomItem *>(pItem)->GetValue();
                 }
                 else if(SfxItemState::SET == pArgs->GetItemState(FN_PREVIEW_ZOOM, true, &pItem))
-                    nZoomFactor = ((const SfxUInt16Item *)pItem)->GetValue();
+                    nZoomFactor = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
                 if(USHRT_MAX != nZoomFactor)
                     SetZoom(eType, nZoomFactor);
             }
@@ -792,7 +792,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
 
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) )
             {
-                const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
                 SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
             }
         }

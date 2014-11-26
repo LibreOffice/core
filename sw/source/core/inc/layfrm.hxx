@@ -195,17 +195,17 @@ public:
  */
 inline SwCntntFrm* SwLayoutFrm::ContainsCntnt()
 {
-    return (SwCntntFrm*)(((const SwLayoutFrm*)this)->ContainsCntnt());
+    return (SwCntntFrm*)(static_cast<const SwLayoutFrm*>(this)->ContainsCntnt());
 }
 
 inline SwCellFrm* SwLayoutFrm::FirstCell()
 {
-    return (SwCellFrm*)(((const SwLayoutFrm*)this)->FirstCell());
+    return (SwCellFrm*)(static_cast<const SwLayoutFrm*>(this)->FirstCell());
 }
 
 inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
 {
-    return (SwFrm*)(((const SwLayoutFrm*)this)->ContainsAny( _bInvestigateFtnForSections ));
+    return (SwFrm*)(static_cast<const SwLayoutFrm*>(this)->ContainsAny( _bInvestigateFtnForSections ));
 }
 
 /**

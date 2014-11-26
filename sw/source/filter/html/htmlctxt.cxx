@@ -601,7 +601,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             {
                 sal_uInt16 nUpper = 0, nLower = 0;
                 GetULSpaceFromContext( nUpper, nLower );
-                SvxULSpaceItem aULSpace( *((const SvxULSpaceItem *)pItem) );
+                SvxULSpaceItem aULSpace( *static_cast<const SvxULSpaceItem *>(pItem) );
                 if( !rPropInfo.bTopMargin )
                     aULSpace.SetUpper( nUpper );
                 if( !rPropInfo.bBottomMargin )
@@ -622,17 +622,17 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             break;
         case RES_CHRATR_FONTSIZE:
             // es werden keine Attribute mit %-Angaben gesetzt
-            if( ((const SvxFontHeightItem *)pItem)->GetProp() == 100 )
+            if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
                 ppAttr = &aAttrTab.pFontHeight;
             break;
         case RES_CHRATR_CJK_FONTSIZE:
             // es werden keine Attribute mit %-Angaben gesetzt
-            if( ((const SvxFontHeightItem *)pItem)->GetProp() == 100 )
+            if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
                 ppAttr = &aAttrTab.pFontHeightCJK;
             break;
         case RES_CHRATR_CTL_FONTSIZE:
             // es werden keine Attribute mit %-Angaben gesetzt
-            if( ((const SvxFontHeightItem *)pItem)->GetProp() == 100 )
+            if( static_cast<const SvxFontHeightItem *>(pItem)->GetProp() == 100 )
                 ppAttr = &aAttrTab.pFontHeightCTL;
             break;
 

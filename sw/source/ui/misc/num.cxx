@@ -368,7 +368,7 @@ void SwNumPositionTabPage::ActivatePage(const SfxItemSet& )
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet && pExampleSet->GetItemState(FN_PARAM_NUM_PRESET, false, &pItem) != SfxItemState::UNKNOWN)
     {
-        bPreset = ((const SfxBoolItem*)pItem)->GetValue();
+        bPreset = static_cast<const SfxBoolItem*>(pItem)->GetValue();
     }
     bModified = (!pActNum->GetNumFmt( 0 ) || bPreset);
     if(*pActNum != *pSaveNum ||

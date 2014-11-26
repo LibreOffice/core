@@ -1508,7 +1508,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                         SfxItemState::SET==pCNd->GetpSwAttrSet()->GetItemState(
                             RES_PARATR_ADJUST, false, &pItem ) )
                     {
-                        eAdjust = ((const SvxAdjustItem *)pItem)
+                        eAdjust = static_cast<const SvxAdjustItem *>(pItem)
                             ->GetAdjust();
                     }
                 }
@@ -2961,7 +2961,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
         if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
-            pBrushItem = new SvxBrushItem( *((const SvxBrushItem *)pItem) );
+            pBrushItem = new SvxBrushItem( *static_cast<const SvxBrushItem *>(pItem) );
         }
     }
 
@@ -3504,7 +3504,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                         RES_PARATR_SPLIT, false, &pItem ) )
                 {
                     aItemSet.Put(
-                        SwFmtLayoutSplit( ((const SvxFmtSplitItem *)pItem)
+                        SwFmtLayoutSplit( static_cast<const SvxFmtSplitItem *>(pItem)
                                                 ->GetValue() ) );
                     aItemSet.ClearItem( RES_PARATR_SPLIT );
                 }
@@ -3703,7 +3703,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( nSpace )
                         aFrmSet.Put( SvxULSpaceItem(nSpace,nSpace, RES_UL_SPACE) );
 
-                    RndStdIds eAnchorId = ((const SwFmtAnchor&)aFrmSet.
+                    RndStdIds eAnchorId = static_cast<const SwFmtAnchor&>(aFrmSet.
                                                 Get( RES_ANCHOR )).
                                                 GetAnchorId();
                     SwFrmFmt *pFrmFmt =  pDoc->MakeFlySection(
@@ -3924,7 +3924,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                     // in der Zelle kann sich ein Bereich befinden!
                     eTabAdjust = aAttrTab.pAdjust
-                        ? ((const SvxAdjustItem&)aAttrTab.pAdjust->GetItem()).
+                        ? static_cast<const SvxAdjustItem&>(aAttrTab.pAdjust->GetItem()).
                                                  GetAdjust()
                         : SVX_ADJUST_END;
                 }

@@ -1737,7 +1737,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         bFound = pSty->GetAttrSet().GetItemState(RES_PARATR_TABSTOP, false,
             &pTabs) == SfxItemState::SET;
         if( bFound )
-            aAttr = *((const SvxTabStopItem*)pTabs);
+            aAttr = *static_cast<const SvxTabStopItem*>(pTabs);
         else
         {
             sal_uInt16 nOldTabBase = nTabBase;
@@ -5522,7 +5522,7 @@ namespace
         const SfxPoolItem *pPasswordItem;
 
         if(pSet && SfxItemState::SET == pSet->GetItemState(SID_PASSWORD, true, &pPasswordItem))
-            aPassw = ((const SfxStringItem *)pPasswordItem)->GetValue();
+            aPassw = static_cast<const SfxStringItem *>(pPasswordItem)->GetValue();
         else
         {
             try

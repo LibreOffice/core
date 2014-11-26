@@ -441,7 +441,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     if( pTxtNode )
     {
         const SvxULSpaceItem& rULSpace =
-            ((const SvxULSpaceItem&)pTxtNode
+            static_cast<const SvxULSpaceItem&>(pTxtNode
                 ->SwCntntNode::GetAttr( RES_UL_SPACE ));
 
         // Der untere Absatz-Abstand wird zum Abstand zur
@@ -474,7 +474,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     if( pTxtNode )
     {
         const SvxULSpaceItem& rULSpace =
-            ((const SvxULSpaceItem&)pTxtNode
+            static_cast<const SvxULSpaceItem&>(pTxtNode
                 ->SwCntntNode::GetAttr( RES_UL_SPACE ));
 
         // Der obere Absatz-Abstand wird zum Abstand zur
@@ -769,7 +769,7 @@ void SwHTMLParser::InsertFlyFrame( const SfxItemSet& rItemSet,
                                    sal_uInt16 nFlags )
 {
     RndStdIds eAnchorId =
-        ((const SwFmtAnchor&)rItemSet.Get( RES_ANCHOR )).GetAnchorId();
+        static_cast<const SwFmtAnchor&>(rItemSet.Get( RES_ANCHOR )).GetAnchorId();
 
     // Den Rahmen anlegen
     SwFlyFrmFmt* pFlyFmt = pDoc->MakeFlySection( eAnchorId, pPam->GetPoint(),

@@ -328,7 +328,7 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
         }
         SfxItemSet aLangSet(pSh->GetAttrPool(), nWhich, nWhich);
         pSh->GetCurAttr(aLangSet);
-        nLangForPhoneticReading = ((const SvxLanguageItem&)aLangSet.Get(nWhich)).GetLanguage();
+        nLangForPhoneticReading = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
     }
 
 }

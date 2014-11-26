@@ -438,12 +438,12 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     bool bNumFmt = false, bValue = false;
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
     {
-        nNumFmt = ((const SwTblBoxNumFormat *)pItem)->GetValue();
+        nNumFmt = static_cast<const SwTblBoxNumFormat *>(pItem)->GetValue();
         bNumFmt = true;
     }
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BOXATR_VALUE, false, &pItem ) )
     {
-        nValue = ((const SwTblBoxValue *)pItem)->GetValue();
+        nValue = static_cast<const SwTblBoxValue *>(pItem)->GetValue();
         bValue = true;
         if( !bNumFmt )
             nNumFmt = pBox->GetFrmFmt()->GetTblBoxNumFmt().GetValue();

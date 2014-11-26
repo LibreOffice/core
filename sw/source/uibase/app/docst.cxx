@@ -279,20 +279,20 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
         if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
             false, &pItem ))
         {
-            const sal_uInt16 nFamily = ((const SfxUInt16Item*)pItem)->GetValue();
+            const sal_uInt16 nFamily = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
             OUString sName;
             sal_uInt16 nMask = 0;
             if( SfxItemState::SET == pArgs->GetItemState( SID_STYLE_NEW,
                 false, &pItem ))
-                sName = ((const SfxStringItem*)pItem)->GetValue();
+                sName = static_cast<const SfxStringItem*>(pItem)->GetValue();
             if( SfxItemState::SET == pArgs->GetItemState( SID_STYLE_MASK,
                 false, &pItem ))
-                nMask = ((const SfxUInt16Item*)pItem)->GetValue();
+                nMask = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             OUString sParent;
             if( SfxItemState::SET == pArgs->GetItemState( SID_STYLE_REFERENCE,
                 false, &pItem ))
-                sParent = ((const SfxStringItem*)pItem)->GetValue();
+                sParent = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
             if (sName.isEmpty() && mxBasePool.get())
                 sName = SfxStyleDialog::GenerateUnusedName(*mxBasePool);
@@ -385,15 +385,15 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
                 SwWrtShell* pShell = GetWrtShell();
                 if( SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
-                    aParam = ((const SfxStringItem*)pItem)->GetValue();
+                    aParam = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_FAMILY,
                     false, &pItem ))
-                    nFamily = ((const SfxUInt16Item*)pItem)->GetValue();
+                    nFamily = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_FAMILYNAME, false, &pItem ))
                 {
-                    OUString aFamily = ((const SfxStringItem*)pItem)->GetValue();
+                    OUString aFamily = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if(aFamily.equalsAscii("CharacterStyles"))
                         nFamily = SFX_STYLE_FAMILY_CHAR;
                     else
@@ -412,7 +412,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
                 if( SfxItemState::SET == pArgs->GetItemState(SID_STYLE_MASK,
                     false, &pItem ))
-                    nMask = ((const SfxUInt16Item*)pItem)->GetValue();
+                    nMask = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_WRTSHELL,
                     false, &pItem ))
                     pActShell = pShell = (SwWrtShell*)static_cast<const SwPtrItem*>(pItem)->GetValue();
@@ -445,7 +445,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         case SFX_STYLE_FAMILY_PSEUDO:
                         if(SfxItemState::SET == pArgs->GetItemState(SID_STYLE_UPD_BY_EX_NAME, false, &pItem))
                         {
-                            aParam = ((const SfxStringItem*)pItem)->GetValue();
+                            aParam = static_cast<const SfxStringItem*>(pItem)->GetValue();
                         }
                         break;
                     }

@@ -429,7 +429,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             if( bShowLanguageControl && SfxItemState::SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_ADD_AUTO, false, &pItem ))
             {
-                bUseAutomaticLanguage = ((const SfxBoolItem*)pItem)->GetValue();
+                bUseAutomaticLanguage = static_cast<const SfxBoolItem*>(pItem)->GetValue();
             }
         }
         else

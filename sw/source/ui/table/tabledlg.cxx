@@ -97,7 +97,7 @@ SwFormatTablePage::SwFormatTablePage(vcl::Window* pParent, const SfxItemSet& rSe
 
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
-        bHtmlMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+        bHtmlMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
 
     bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
     get<VclContainer>("properties")->Show(!bHtmlMode && bCTL);
@@ -447,13 +447,13 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     //Name
     if(SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
     {
-        m_pNameED->SetText(((const SfxStringItem*)pItem)->GetValue());
+        m_pNameED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
         m_pNameED->SaveValue();
     }
 
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pTblData = (SwTableRep*)((const SwPtrItem*) pItem)->GetValue();
+        pTblData = (SwTableRep*)static_cast<const SwPtrItem*>( pItem)->GetValue();
         nMinTableWidth = pTblData->GetColCount() * MINLAY;
 
         if(pTblData->GetWidthPercent())
@@ -545,9 +545,9 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     if(SfxItemState::SET == rSet.GetItemState( RES_UL_SPACE, false,&pItem ))
     {
         m_pTopMF->SetValue(m_pTopMF->Normalize(
-                        ((const SvxULSpaceItem*)pItem)->GetUpper()), FUNIT_TWIP);
+                        static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()), FUNIT_TWIP);
         m_pBottomMF->SetValue(m_pBottomMF->Normalize(
-                        ((const SvxULSpaceItem*)pItem)->GetLower()), FUNIT_TWIP);
+                        static_cast<const SvxULSpaceItem*>(pItem)->GetLower()), FUNIT_TWIP);
         m_pTopMF->SaveValue();
         m_pBottomMF->SaveValue();
     }
@@ -746,7 +746,7 @@ SwTableColumnPage::SwTableColumnPage(vcl::Window* pParent, const SfxItemSet& rSe
 
     const SfxPoolItem* pItem;
     Init((SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
-        && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON));
+        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON));
 }
 
 //Description: Page column configuration
@@ -767,7 +767,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pTblData = (SwTableRep*)((const SwPtrItem*) pItem)->GetValue();
+        pTblData = (SwTableRep*)static_cast<const SwPtrItem*>( pItem)->GetValue();
         nNoOfVisibleCols = pTblData->GetColCount();
         nNoOfCols = pTblData->GetAllColCount();
         nTableWidth = pTblData->GetAlign() != text::HoriOrientation::FULL &&
@@ -1300,7 +1300,7 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
 #ifndef SW_FILEFORMAT_40
     const SfxPoolItem *pItem;
     if(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
-        && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
+        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
 #endif
     {
         m_pKeepCB->Hide();
@@ -1459,12 +1459,12 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
         if(SfxItemState::SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
         {
-            m_pKeepCB->Check( ((const SvxFmtKeepItem*)pItem)->GetValue() );
+            m_pKeepCB->Check( static_cast<const SvxFmtKeepItem*>(pItem)->GetValue() );
             m_pKeepCB->SaveValue();
         }
         if(SfxItemState::SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
         {
-            m_pSplitCB->Check( ((const SwFmtLayoutSplit*)pItem)->GetValue() );
+            m_pSplitCB->Check( static_cast<const SwFmtLayoutSplit*>(pItem)->GetValue() );
         }
         else
             m_pSplitCB->Check();
@@ -1474,7 +1474,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
         if(SfxItemState::SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
         {
-            m_pSplitRowCB->Check( ((const SwFmtRowSplit*)pItem)->GetValue() );
+            m_pSplitRowCB->Check( static_cast<const SwFmtRowSplit*>(pItem)->GetValue() );
         }
         else
             m_pSplitRowCB->SetState(TRISTATE_INDET);
@@ -1485,10 +1485,10 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
             if(SfxItemState::SET == rSet->GetItemState( RES_PAGEDESC, false, &pItem ))
             {
                 OUString sPageDesc;
-                const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
+                const SwPageDesc* pDesc = static_cast<const SwFmtPageDesc*>(pItem)->GetPageDesc();
 
-                //m_pPageNoNF->SetValue(((const SwFmtPageDesc*)pItem)->GetNumOffset());
-                ::boost::optional<sal_uInt16> oNumOffset = ((const SwFmtPageDesc*)pItem)->GetNumOffset();
+                //m_pPageNoNF->SetValue(static_cast<const SwFmtPageDesc*>(pItem)->GetNumOffset());
+                ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFmtPageDesc*>(pItem)->GetNumOffset();
                 if (oNumOffset)
                     m_pPageNoNF->SetValue(oNumOffset.get());
                 else
@@ -1587,7 +1587,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
     if(SfxItemState::SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
     {
-        sal_uInt16 nRep = ((const SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nRep = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         m_pHeadLineCB->Check( nRep > 0 );
         m_pHeadLineCB->SaveValue();
         m_pRepeatHeaderNF->SetValue( nRep );
@@ -1596,13 +1596,13 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     }
     if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
     {
-        sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
+        sal_uLong nDirection = static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
         m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( (const void*)nDirection ));
     }
 
     if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT )
     {
-        sal_uInt16 nVert = ((const SfxUInt16Item&)rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
+        sal_uInt16 nVert = static_cast<const SfxUInt16Item&>(rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
         sal_uInt16 nPos = 0;
         switch(nVert)
         {

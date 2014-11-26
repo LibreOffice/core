@@ -42,7 +42,7 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
         if( SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, false, &pItem ) )
         {
             sal_Int16 eBoxVertOri =
-                ((const SwFmtVertOrient *)pItem)->GetVertOrient();
+                static_cast<const SwFmtVertOrient *>(pItem)->GetVertOrient();
             if( text::VertOrientation::CENTER==eBoxVertOri || text::VertOrientation::BOTTOM==eBoxVertOri)
                 eCellVertOri = eBoxVertOri;
         }

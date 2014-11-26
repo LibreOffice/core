@@ -1577,7 +1577,7 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
     m_rExport.m_aCurrentCharPropStarts.push( nAktPos );
     const SfxPoolItem &rItem = GetItem(RES_CHRATR_CASEMAP);
 
-    if (SVX_CASEMAP_TITEL == ((const SvxCaseMapItem&)rItem).GetValue())
+    if (SVX_CASEMAP_TITEL == static_cast<const SvxCaseMapItem&>(rItem).GetValue())
     {
         sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
         if (g_pBreakIt->GetBreakIter().is())
@@ -1587,14 +1587,14 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
         switch (nScriptType)
         {
         case i18n::ScriptType::ASIAN:
-                nLanguage = ((const SvxLanguageItem&)GetItem(RES_CHRATR_CJK_LANGUAGE)).GetLanguage();
+                nLanguage = static_cast<const SvxLanguageItem&>(GetItem(RES_CHRATR_CJK_LANGUAGE)).GetLanguage();
                 break;
         case i18n::ScriptType::COMPLEX:
-                nLanguage = ((const SvxLanguageItem&)GetItem(RES_CHRATR_CTL_LANGUAGE)).GetLanguage();
+                nLanguage = static_cast<const SvxLanguageItem&>(GetItem(RES_CHRATR_CTL_LANGUAGE)).GetLanguage();
                 break;
         case i18n::ScriptType::LATIN:
             default:
-                nLanguage = ((const SvxLanguageItem&)GetItem(RES_CHRATR_LANGUAGE)).GetLanguage();
+                nLanguage = static_cast<const SvxLanguageItem&>(GetItem(RES_CHRATR_LANGUAGE)).GetLanguage();
                 break;
         }
 
@@ -2806,7 +2806,7 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
                 bNoPageBreak = true;
             else
             {
-                SvxBreak eBreak = ((const SvxFmtBreakItem*)pI)->GetBreak();
+                SvxBreak eBreak = static_cast<const SvxFmtBreakItem*>(pI)->GetBreak();
                 switch (eBreak)
                 {
                     case SVX_BREAK_PAGE_BEFORE:

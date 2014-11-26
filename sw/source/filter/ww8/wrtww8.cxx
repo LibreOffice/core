@@ -3227,7 +3227,7 @@ void WW8Export::ExportDocument_Impl()
     if (pStdTxtFmtColl && SfxItemState::SET == pStdTxtFmtColl->GetItemState(
         RES_PARATR_HYPHENZONE, false, &pItem))
     {
-        pDop->fAutoHyphen = ((const SvxHyphenZoneItem*)pItem)->IsHyphen();
+        pDop->fAutoHyphen = static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen();
     }
 
     StoreDoc1();

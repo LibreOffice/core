@@ -281,7 +281,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 {
                     sTxt = SW_RESSTR(STR_CONTENT_TYPE_SINGLE_REFERENCE);
                     sTxt += ": ";
-                    sTxt += ((const SwFmtRefMark*)aCntntAtPos.aFnd.pAttr)->GetRefName();
+                    sTxt += static_cast<const SwFmtRefMark*>(aCntntAtPos.aFnd.pAttr)->GetRefName();
                 }
             break;
 
@@ -328,7 +328,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             break;
 
                         case RES_MACROFLD:
-                            sTxt = ((const SwMacroField*)pFld)->GetMacro();
+                            sTxt = static_cast<const SwMacroField*>(pFld)->GetMacro();
                             break;
 
                         case RES_GETREFFLD:

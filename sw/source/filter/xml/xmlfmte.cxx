@@ -87,7 +87,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
         {
             OUString sName;
             const SwPageDesc *pPageDesc =
-                ((const SwFmtPageDesc *)pItem)->GetPageDesc();
+                static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc();
             if( pPageDesc )
                 SwStyleNameMapper::FillProgName(
                                     pPageDesc->GetName(),
@@ -109,7 +109,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
                                             false, &pItem ) )
         {
             sal_Int32 nFormat = (sal_Int32)
-                ((const SwTblBoxNumFormat *)pItem)->GetValue();
+                static_cast<const SwTblBoxNumFormat *>(pItem)->GetValue();
 
             if ( (nFormat != -1) && (nFormat != NUMBERFORMAT_TEXT) )
             {

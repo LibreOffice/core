@@ -752,7 +752,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         FONT_GROUP_CJK == nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
 
     if( SfxItemState::SET == rSet->GetItemState(nLangSlot, false, &pLang))
-        eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
+        eLanguage = static_cast<const SvxLanguageItem*>(pLang)->GetValue();
 
     OUString sToReplace = sScriptWestern;
     if(FONT_GROUP_CJK == nFontGroup )
@@ -770,7 +770,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
     {
-        pPrt = (SfxPrinter*)((const SwPtrItem*)pItem)->GetValue();
+        pPrt = (SfxPrinter*)static_cast<const SwPtrItem*>(pItem)->GetValue();
     }
     else
     {
@@ -807,12 +807,12 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     }
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_STDFONTS, false, &pItem))
     {
-         pFontConfig = (SwStdFontConfig*)((const SwPtrItem*)pItem)->GetValue();
+         pFontConfig = (SwStdFontConfig*)static_cast<const SwPtrItem*>(pItem)->GetValue();
     }
 
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
     {
-        pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
+        pWrtShell = (SwWrtShell*)static_cast<const SwPtrItem*>(pItem)->GetValue();
     }
     OUString sStdBackup;
     OUString sOutBackup;
@@ -1211,7 +1211,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     const SfxPoolItem* pItem;
     if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
     {
-        bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
+        bHTMLMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
     }
 
     // hide certain controls for html
@@ -1421,7 +1421,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
     }
 
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
-        m_pCrsrInProtCB->Check(((const SfxBoolItem*)pItem)->GetValue());
+        m_pCrsrInProtCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     m_pCrsrInProtCB->SaveValue();
 
     const SwDocDisplayItem* pDocDisplayAttr = 0;

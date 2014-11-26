@@ -96,7 +96,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         if ( SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_REGION_NAME, true, &pItem) )
         {
-            const OUString sRemoveWhenUniStringIsGone = ((const SfxStringItem *)pItem)->GetValue();
+            const OUString sRemoveWhenUniStringIsGone = static_cast<const SfxStringItem *>(pItem)->GetValue();
             aTmpStr = rSh.GetUniqueSectionName(&sRemoveWhenUniStringIsGone);
         }
         else
@@ -127,12 +127,12 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         }
 
         const bool bHidden = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_HIDDEN, true, &pItem) &&
-                             ((const SfxBoolItem *)pItem)->GetValue();
+                             static_cast<const SfxBoolItem *>(pItem)->GetValue();
         const bool bProtect = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem) &&
-                              ((const SfxBoolItem *)pItem)->GetValue();
+                              static_cast<const SfxBoolItem *>(pItem)->GetValue();
         // #114856# edit in readonly sections
         const bool bEditInReadonly = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem) &&
-                                     ((const SfxBoolItem *)pItem)->GetValue();
+                                     static_cast<const SfxBoolItem *>(pItem)->GetValue();
 
         aSection.SetProtectFlag(bProtect);
         aSection.SetHidden(bHidden);
@@ -141,16 +141,16 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
 
         if(SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_REGION_CONDITION, true, &pItem))
-            aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
+            aSection.SetCondition(static_cast<const SfxStringItem *>(pItem)->GetValue());
 
         OUString aFile, aSub;
         if(SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_1, true, &pItem))
-            aFile = ((const SfxStringItem *)pItem)->GetValue();
+            aFile = static_cast<const SfxStringItem *>(pItem)->GetValue();
 
         if(SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_3, true, &pItem))
-            aSub = ((const SfxStringItem *)pItem)->GetValue();
+            aSub = static_cast<const SfxStringItem *>(pItem)->GetValue();
 
         if(!aFile.isEmpty() || !aSub.isEmpty())
         {
@@ -162,7 +162,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
                     pSet->GetItemState(FN_PARAM_2, true, &pItem))
             {
                 sLinkFileName = comphelper::string::setToken(sLinkFileName, 1, sfx2::cTokenSeparator,
-                    ((const SfxStringItem *)pItem)->GetValue());
+                    static_cast<const SfxStringItem *>(pItem)->GetValue());
             }
 
             sLinkFileName += aSub;
@@ -223,7 +223,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
                 OSL_ENSURE(pEditRegionDlg, "Dialog creation failed!");
                 if(pItem && pItem->ISA(SfxStringItem))
                 {
-                    pEditRegionDlg->SelectSection(((const SfxStringItem*)pItem)->GetValue());
+                    pEditRegionDlg->SelectSection(static_cast<const SfxStringItem*>(pItem)->GetValue());
                 }
                 pEditRegionDlg->Execute();
             }

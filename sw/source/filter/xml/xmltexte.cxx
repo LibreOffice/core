@@ -99,7 +99,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {
             const SwFmtCollConditions& rConditions =
-                ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
+                static_cast<const SwConditionTxtFmtColl *>(pColl)->GetCondColls();
             for( size_t i=0; i < rConditions.size(); ++i )
             {
                 const SwCollCondition& rCond = rConditions[i];

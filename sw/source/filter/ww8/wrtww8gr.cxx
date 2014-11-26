@@ -445,7 +445,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
                 SwTwips nHeight = rFlyFmt.GetFrmSize().GetHeight();
                 nHeight/=20; //nHeight was in twips, want it in half points, but
                              //then half of total height.
-                long nFontHeight = ((const SvxFontHeightItem&)
+                long nFontHeight = static_cast<const SvxFontHeightItem&>(
                     GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
                 nHeight-=nFontHeight/20;
 

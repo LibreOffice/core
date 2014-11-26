@@ -289,7 +289,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 if( aPropInfo.bTextIndent )
                 {
                     short nTextIndent =
-                        ((const SvxLRSpaceItem &)aItemSet.Get( RES_LR_SPACE ))
+                        static_cast<const SvxLRSpaceItem &>(aItemSet.Get( RES_LR_SPACE ))
                                                         .GetTxtFirstLineOfst();
                     aNumFmt.SetFirstLineOffset( nTextIndent );
                     bChangeNumFmt = true;

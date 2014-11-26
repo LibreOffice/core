@@ -2101,11 +2101,11 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                     vcl::Font aFont;
                     if(pI && pI->ISA(SvxFontItem))
                     {
-                        aFont.SetName( ((const SvxFontItem*)pI)->GetFamilyName());
-                        aFont.SetStyleName(((const SvxFontItem*)pI)->GetStyleName());
-                        aFont.SetFamily(((const SvxFontItem*)pI)->GetFamily());
-                        aFont.SetPitch(((const SvxFontItem*)pI)->GetPitch());
-                        aFont.SetCharSet(((const SvxFontItem*)pI)->GetCharSet());
+                        aFont.SetName( static_cast<const SvxFontItem*>(pI)->GetFamilyName());
+                        aFont.SetStyleName(static_cast<const SvxFontItem*>(pI)->GetStyleName());
+                        aFont.SetFamily(static_cast<const SvxFontItem*>(pI)->GetFamily());
+                        aFont.SetPitch(static_cast<const SvxFontItem*>(pI)->GetPitch());
+                        aFont.SetCharSet(static_cast<const SvxFontItem*>(pI)->GetCharSet());
                     }
 
                     bool bVertical = rSh.IsInVerticalText();

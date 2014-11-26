@@ -4384,7 +4384,7 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
             nLang = SVBT16ToShort( pLang );
         else
         {
-            nLang = ((const SvxLanguageItem *)
+            nLang = static_cast<const SvxLanguageItem *>(
                 GetFmtAttr(RES_CHRATR_CJK_LANGUAGE))->GetLanguage();
         }
 

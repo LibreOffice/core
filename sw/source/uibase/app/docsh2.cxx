@@ -862,7 +862,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 OUString aFileName, aTemplateName;
                 if( pArgs && SfxItemState::SET == pArgs->GetItemState( nWhich, false, &pItem ) )
                 {
-                    aFileName = ((const SfxStringItem*)pItem)->GetValue();
+                    aFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     SFX_ITEMSET_ARG( pArgs, pTemplItem, SfxStringItem, SID_TEMPLATE_NAME, false );
                     if ( pTemplItem )
                         aTemplateName = pTemplItem->GetValue();

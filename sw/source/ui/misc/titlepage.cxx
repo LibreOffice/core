@@ -38,7 +38,7 @@ namespace
             const SfxPoolItem* pItem(0);
             if (SfxItemState::SET == aSet.GetItemState( RES_PAGEDESC, true, &pItem ) && pItem)
             {
-                ::boost::optional<sal_uInt16> oNumOffset = ((const SwFmtPageDesc *)pItem)->GetNumOffset();
+                ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFmtPageDesc *>(pItem)->GetNumOffset();
                 if (oNumOffset)
                     rPageNo = oNumOffset.get();
                 if (ppPageFmtDesc)

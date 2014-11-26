@@ -670,9 +670,9 @@ inline bool SwTxtFrm::HasPara() const
 /// 9104: Frm().Height() - Prt().Height(), see widorp.cxx and 7455, 6114, 7908
 inline SwTwips SwTxtFrm::GetRstHeight() const
 {
-    return !GetUpper() ? 0 : ((const SwFrm*)GetUpper())->Frm().Top()
-                           + ((const SwFrm*)GetUpper())->Prt().Top()
-                           + ((const SwFrm*)GetUpper())->Prt().Height()
+    return !GetUpper() ? 0 : static_cast<const SwFrm*>(GetUpper())->Frm().Top()
+                           + static_cast<const SwFrm*>(GetUpper())->Prt().Top()
+                           + static_cast<const SwFrm*>(GetUpper())->Prt().Height()
                            - Frm().Top() - (Frm().Height() - Prt().Height());
 }
 

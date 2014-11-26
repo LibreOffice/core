@@ -57,9 +57,9 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     {
         const SfxPoolItem *pItem;
         if(SfxItemState::SET == pArgs->GetItemState(FN_PARAM_MOVE_COUNT, true, &pItem))
-            nCount = ((const SfxInt32Item *)pItem)->GetValue();
+            nCount = static_cast<const SfxInt32Item *>(pItem)->GetValue();
         if(SfxItemState::SET == pArgs->GetItemState(FN_PARAM_MOVE_SELECTION, true, &pItem))
-            bSelect = ((const SfxBoolItem *)pItem)->GetValue();
+            bSelect = static_cast<const SfxBoolItem *>(pItem)->GetValue();
     }
     switch(rReq.GetSlot())
     {

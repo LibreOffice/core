@@ -1011,7 +1011,7 @@ void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {
             const SwFmtCollConditions& rConditions =
-                ((const SwConditionTxtFmtColl *)pColl)->GetCondColls();
+                static_cast<const SwConditionTxtFmtColl *>(pColl)->GetCondColls();
             bool bSendModify = false;
             for( size_t j=0; j < rConditions.size() && !bSendModify; ++j )
             {

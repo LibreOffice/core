@@ -173,7 +173,7 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         return;
 
 
-    OUString sFilterOptions = ((const SfxStringItem*)pItem)->GetValue();
+    OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
     if (sFilterOptions == "SkipImages")
     {
         mbSkipImages = true;
@@ -313,7 +313,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         nCSS1Script = CSS1_OUTMODE_WESTERN;
         break;
     }
-    eLang = ((const SvxLanguageItem&)pDoc
+    eLang = static_cast<const SvxLanguageItem&>(pDoc
             ->GetDefault(GetLangWhichIdFromScript(nCSS1Script))).GetLanguage();
 
     nFootNote = nEndNote = 0;
@@ -396,7 +396,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         SfxItemState::SET == rPageItemSet.GetItemState( RES_HEADER, true, &pItem) )
     {
         const SwFrmFmt *pHeaderFmt =
-            ((const SwFmtHeader *)pItem)->GetHeaderFmt();
+            static_cast<const SwFmtHeader *>(pItem)->GetHeaderFmt();
         if( pHeaderFmt )
             OutHTML_HeaderFooter( *this, *pHeaderFmt, true );
     }
@@ -416,7 +416,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         SfxItemState::SET == rPageItemSet.GetItemState( RES_FOOTER, true, &pItem) )
     {
         const SwFrmFmt *pFooterFmt =
-            ((const SwFmtFooter *)pItem)->GetFooterFmt();
+            static_cast<const SwFmtFooter *>(pItem)->GetFooterFmt();
         if( pFooterFmt )
             OutHTML_HeaderFooter( *this, *pFooterFmt, false );
     }
@@ -522,7 +522,7 @@ static const SwFmtCol *lcl_html_GetFmtCol( const SwSection& rSection,
     const SfxPoolItem* pItem;
     if( FILE_LINK_SECTION != rSection.GetType() &&
         SfxItemState::SET == rFmt.GetAttrSet().GetItemState(RES_COL,false,&pItem) &&
-        ((const SwFmtCol *)pItem)->GetNumCols() > 1 )
+        static_cast<const SwFmtCol *>(pItem)->GetNumCols() > 1 )
     {
         pCol = (const SwFmtCol *)pItem;
     }
@@ -860,7 +860,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
             if( COL_AUTO == aColor.GetColor() )
                 aColor.SetColor( COL_BLACK );
 
-            Color aRefColor( ((const SvxColorItem*)pRefItem)->GetValue() );
+            Color aRefColor( static_cast<const SvxColorItem*>(pRefItem)->GetValue() );
             if( COL_AUTO == aRefColor.GetColor() )
                 aRefColor.SetColor( COL_BLACK );
 
@@ -919,7 +919,7 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
                 break;
 
             const sal_uInt16 nFldWhich =
-                ((const SwFmtFld&)pHt->GetAttr()).GetField()->GetTyp()->Which();
+                static_cast<const SwFmtFld&>(pHt->GetAttr()).GetField()->GetTyp()->Which();
             if( RES_POSTITFLD!=nFldWhich &&
                 RES_SCRIPTFLD!=nFldWhich )
                 break;
@@ -986,7 +986,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         SwNode *pNd = pDoc->GetNodes()[ nNodeIdx ];
         if( pNd->IsCntntNode() )
         {
-            pPageDesc = ((const SwFmtPageDesc &)pNd->GetCntntNode()
+            pPageDesc = static_cast<const SwFmtPageDesc &>(pNd->GetCntntNode()
                 ->GetAttr(RES_PAGEDESC)).GetPageDesc();
             break;
         }
@@ -1236,7 +1236,7 @@ void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet, bool bGraphic )
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                &pItem ))
     {
-        OutBackground( ((const SvxBrushItem*)pItem), bGraphic );
+        OutBackground( static_cast<const SvxBrushItem*>(pItem), bGraphic );
     }
 }
 

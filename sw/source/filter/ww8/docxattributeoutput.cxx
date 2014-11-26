@@ -6974,7 +6974,7 @@ static void impl_WriteTabElement( FSHelperPtr pSerializer,
 void DocxAttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStop )
 {
     const SfxPoolItem* pLR = m_rExport.HasItem( RES_LR_SPACE );
-    long nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
+    long nCurrentLeft = pLR ? static_cast<const SvxLRSpaceItem*>(pLR)->GetTxtLeft() : 0;
 
     sal_uInt16 nCount = rTabStop.Count();
 

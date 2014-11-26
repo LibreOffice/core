@@ -162,7 +162,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     const SfxItemSet* pMedSet;
     if( 0 != ( pMedSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
             pMedSet->GetItemState( FN_API_CALL, true, &pApiItem ) )
-            bAPICall = ((const SfxBoolItem*)pApiItem)->GetValue();
+            bAPICall = static_cast<const SfxBoolItem*>(pApiItem)->GetValue();
 
     const SfxFilter* pFlt = rMedium.GetFilter();
     if( !pFlt )
@@ -206,7 +206,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
             const SfxItemSet* pSet = rMedium.GetItemSet();
             const SfxPoolItem *pPassItem;
             if(pSet && SfxItemState::SET == pSet->GetItemState(SID_PASSWORD, true, &pPassItem))
-                aPasswd = ((const SfxStringItem *)pPassItem)->GetValue();
+                aPasswd = static_cast<const SfxStringItem *>(pPassItem)->GetValue();
         }
 
         if (!(*ppRdr)->CheckPasswd( aPasswd, *pRead ))
@@ -232,7 +232,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         const SfxPoolItem* pItem;
         if( 0 != ( pSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
             pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
-            aOpt.ReadUserData( ((const SfxStringItem*)pItem)->GetValue() );
+            aOpt.ReadUserData( static_cast<const SfxStringItem*>(pItem)->GetValue() );
 
         if( pRead )
             pRead->GetReaderOpt().SetASCIIOpts( aOpt );
@@ -703,7 +703,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         {
             if( SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS,
                                                     true, &pItem ) )
-                sItemOpt = ((const SfxStringItem*)pItem)->GetValue();
+                sItemOpt = static_cast<const SfxStringItem*>(pItem)->GetValue();
         }
         if(!sItemOpt.isEmpty())
             aOpt.ReadUserData( sItemOpt );

@@ -116,12 +116,12 @@ namespace
 {
     static bool lcl_IsContent(const SvTreeListEntry* pEntry)
     {
-        return ((const SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
+        return static_cast<const SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
     }
 
     static bool lcl_IsContentType(const SvTreeListEntry* pEntry)
     {
-        return ((const SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
+        return static_cast<const SwTypeNumber*>(pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
     }
 
     static bool lcl_FindShell(SwWrtShell* pShell)

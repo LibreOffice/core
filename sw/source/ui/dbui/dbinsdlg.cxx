@@ -1438,7 +1438,7 @@ void SwInsertDBColAutoPilot::SetTabSet()
     }
 
     if( SfxItemState::SET == pTblSet->GetItemState( FN_PARAM_TABLE_NAME, false,
-        &pItem ) && ((const SfxStringItem*)pItem)->GetValue() ==
+        &pItem ) && static_cast<const SfxStringItem*>(pItem)->GetValue() ==
                     rSh.GetTableFmt()->GetName() )
         pTblSet->ClearItem( FN_PARAM_TABLE_NAME );
 

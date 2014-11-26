@@ -156,7 +156,7 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
         ( 0 != ( pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
-        sal_uInt16 nHtmlMode = ((const SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         if(HTMLMODE_ON & nHtmlMode)
             m_pCharStyleContainer->Hide();
     }
@@ -227,7 +227,7 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
     }
     if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_SELECTION, false, &pItem))
     {
-        m_pTextED->SetText(((const SfxStringItem*)pItem)->GetValue());
+        m_pTextED->SetText(static_cast<const SfxStringItem*>(pItem)->GetValue());
         m_pTextFT->Enable( false );
         m_pTextED->Enable( false );
     }

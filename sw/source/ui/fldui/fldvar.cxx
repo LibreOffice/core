@@ -610,7 +610,7 @@ void SwFldVarPage::UpdateSubType()
                         break;
 
                     case TYP_GETFLD:
-                        if (GetCurField() && aList[i] == ((const SwFormulaField*)GetCurField())->GetFormula())
+                        if (GetCurField() && aList[i] == static_cast<const SwFormulaField*>(GetCurField())->GetFormula())
                             bInsert = true;
                         break;
 

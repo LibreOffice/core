@@ -989,10 +989,10 @@ const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep )
 
 bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 )
 {
-    return  ((const SvxFontItem &)r1).GetFamilyName() ==
-                    ((const SvxFontItem &)r2).GetFamilyName() &&
-            ((const SvxFontItem &)r1).GetFamily() ==
-                    ((const SvxFontItem &)r2).GetFamily();
+    return  static_cast<const SvxFontItem &>(r1).GetFamilyName() ==
+                    static_cast<const SvxFontItem &>(r2).GetFamilyName() &&
+            static_cast<const SvxFontItem &>(r1).GetFamily() ==
+                    static_cast<const SvxFontItem &>(r2).GetFamily();
 }
 
 void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
@@ -2393,7 +2393,7 @@ static Writer& OutCSS1_SvxCaseMap( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    switch( ((const SvxCaseMapItem&)rHt).GetCaseMap() )
+    switch( static_cast<const SvxCaseMapItem&>(rHt).GetCaseMap() )
     {
     case SVX_CASEMAP_NOT_MAPPED:
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_font_variant, sCSS1_PV_normal );
@@ -2428,7 +2428,7 @@ static Writer& OutCSS1_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
     OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "write color as Hint?" );
 
-    Color aColor( ((const SvxColorItem&)rHt).GetValue() );
+    Color aColor( static_cast<const SvxColorItem&>(rHt).GetValue() );
     if( COL_AUTO == aColor.GetColor() )
         aColor.SetColor( COL_BLACK );
 
@@ -2473,7 +2473,7 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     // MS IE3b1 has problems with single quotes
     sal_uInt16 nMode = rHTMLWrt.nCSS1OutMode & CSS1_OUTMODE_ANY_ON;
     sal_Unicode cQuote = nMode == CSS1_OUTMODE_RULE_ON ? '\"' : '\'';
-    SwHTMLWriter::PrepareFontList( ((const SvxFontItem&)rHt), sOut, cQuote,
+    SwHTMLWriter::PrepareFontList( static_cast<const SvxFontItem&>(rHt), sOut, cQuote,
                                    true );
 
     rHTMLWrt.OutCSS1_Property( sCSS1_P_font_family, sOut );
@@ -2500,7 +2500,7 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     if( !rHTMLWrt.IsCSS1Script( nScript ) )
         return rWrt;
 
-    sal_uInt32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
+    sal_uInt32 nHeight = static_cast<const SvxFontHeightItem&>(rHt).GetHeight();
     OString sHeight(OString::number(nHeight/20) + OString(sCSS1_UNIT_pt));
     rHTMLWrt.OutCSS1_PropertyAscii(sCSS1_P_font_size, sHeight);
 
@@ -2521,7 +2521,7 @@ static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     const sal_Char *pStr = 0;
-    switch( ((const SvxPostureItem&)rHt).GetPosture() )
+    switch( static_cast<const SvxPostureItem&>(rHt).GetPosture() )
     {
     case ITALIC_NONE:       pStr = sCSS1_PV_normal;     break;
     case ITALIC_OBLIQUE:    pStr = sCSS1_PV_oblique;    break;
@@ -2549,7 +2549,7 @@ static Writer& OutCSS1_SvxKerning( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    sal_Int16 nValue = ((const SvxKerningItem&)rHt).GetValue();
+    sal_Int16 nValue = static_cast<const SvxKerningItem&>(rHt).GetValue();
     if( nValue )
     {
         OStringBuffer sOut;
@@ -2596,7 +2596,7 @@ static Writer& OutCSS1_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     OSL_ENSURE( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "write Language as Hint?" );
 
-    LanguageType eLang = ((const SvxLanguageItem &)rHt).GetLanguage();
+    LanguageType eLang = static_cast<const SvxLanguageItem &>(rHt).GetLanguage();
     if( LANGUAGE_DONTKNOW == eLang )
         return rWrt;
 
@@ -2635,7 +2635,7 @@ static Writer& OutCSS1_SvxHidden( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    if ( ((const SvxCharHiddenItem&)rHt).GetValue() )
+    if ( static_cast<const SvxCharHiddenItem&>(rHt).GetValue() )
         rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_display, sCSS1_PV_none );
 
     return rWrt;
@@ -2655,7 +2655,7 @@ static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     const sal_Char *pStr = 0;
-    switch( ((const SvxWeightItem&)rHt).GetWeight() )
+    switch( static_cast<const SvxWeightItem&>(rHt).GetWeight() )
     {
     case WEIGHT_ULTRALIGHT: pStr = sCSS1_PV_extra_light;    break;
     case WEIGHT_LIGHT:      pStr = sCSS1_PV_light;          break;
@@ -2758,7 +2758,7 @@ static Writer& OutCSS1_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
         return rWrt;
 
     const sal_Char* pStr = 0;
-    switch( ((const SvxAdjustItem&)rHt).GetAdjust() )
+    switch( static_cast<const SvxAdjustItem&>(rHt).GetAdjust() )
     {
     case SVX_ADJUST_LEFT:   pStr = sCSS1_PV_left;       break;
     case SVX_ADJUST_RIGHT:  pStr = sCSS1_PV_right;      break;
@@ -2778,7 +2778,7 @@ static Writer& OutCSS1_SvxFmtSplit( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    const sal_Char *pStr = ((const SvxFmtSplitItem&)rHt).GetValue()
+    const sal_Char *pStr = static_cast<const SvxFmtSplitItem&>(rHt).GetValue()
                             ? sCSS1_PV_auto
                             : sCSS1_PV_avoid;
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_inside, pStr );
@@ -2790,7 +2790,7 @@ static Writer& OutCSS1_SwFmtLayoutSplit( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    const sal_Char *pStr = ((const SwFmtLayoutSplit&)rHt).GetValue()
+    const sal_Char *pStr = static_cast<const SwFmtLayoutSplit&>(rHt).GetValue()
                             ? sCSS1_PV_auto
                             : sCSS1_PV_avoid;
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_page_break_inside, pStr );
@@ -2802,7 +2802,7 @@ static Writer& OutCSS1_SvxWidows( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    OString aStr(OString::number(((const SvxWidowsItem&)rHt).GetValue()));
+    OString aStr(OString::number(static_cast<const SvxWidowsItem&>(rHt).GetValue()));
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_widows, aStr );
 
     return rWrt;
@@ -2812,7 +2812,7 @@ static Writer& OutCSS1_SvxOrphans( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    OString aStr(OString::number(((const SvxOrphansItem&)rHt).GetValue()));
+    OString aStr(OString::number(static_cast<const SvxOrphansItem&>(rHt).GetValue()));
     rHTMLWrt.OutCSS1_PropertyAscii( sCSS1_P_orphans, aStr );
 
     return rWrt;
@@ -3157,9 +3157,9 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         return rWrt;
 
     // start getting a few values
-//  const Brush &rBrush = ((const SvxBrushItem &)rHt).GetBrush();
-    const Color & rColor = ((const SvxBrushItem &)rHt).GetColor();
-    SvxGraphicPosition ePos = ((const SvxBrushItem &)rHt).GetGraphicPos();
+//  const Brush &rBrush = static_cast<const SvxBrushItem &>(rHt).GetBrush();
+    const Color & rColor = static_cast<const SvxBrushItem &>(rHt).GetColor();
+    SvxGraphicPosition ePos = static_cast<const SvxBrushItem &>(rHt).GetGraphicPos();
 
     // get the color
     bool bColor = false;
@@ -3176,7 +3176,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     OUString aGraphicInBase64;
 
     // Embedded Grafic -> export WriteEmbedded
-    const Graphic* pGrf = ((const SvxBrushItem &)rHt).GetGraphic();
+    const Graphic* pGrf = static_cast<const SvxBrushItem &>(rHt).GetGraphic();
     if( pGrf )
     {
         sal_uLong nErr = XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64);

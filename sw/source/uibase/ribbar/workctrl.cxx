@@ -682,7 +682,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
     if(SfxItemState::DEFAULT <= eState)
     {
-        OUString sZoom(unicode::formatPercent(((const SfxUInt16Item*)pState)->GetValue(),
+        OUString sZoom(unicode::formatPercent(static_cast<const SfxUInt16Item*>(pState)->GetValue(),
             Application::GetSettings().GetUILanguageTag()));
         pBox->SetText(sZoom);
         pBox->SaveValue();

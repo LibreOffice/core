@@ -1547,7 +1547,7 @@ sal_Int32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
     return nOutsideThick;
 }
 
-#define WW8ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define WW8ITEMVALUE(ItemSet,Id,Cast)  static_cast<const Cast&>((ItemSet).Get(Id)).GetValue()
 
 void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_LineDashing eDashing, MSO_SPT eShapeType,
@@ -1749,7 +1749,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     eState = rOldSet.GetItemState(XATTR_FILLSTYLE, true, &pItem);
     if (eState == SfxItemState::SET)
     {
-        const drawing::FillStyle eFill = ((const XFillStyleItem*)pItem)->GetValue();
+        const drawing::FillStyle eFill = static_cast<const XFillStyleItem*>(pItem)->GetValue();
 
         switch (eFill)
         {

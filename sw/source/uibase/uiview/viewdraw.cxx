@@ -538,7 +538,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 
         pOutliner->SetControlWord(nCntrl);
         const SfxPoolItem& rItem = pSh->GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);
-        pOutliner->SetDefaultLanguage(((const SvxLanguageItem&)rItem).GetLanguage());
+        pOutliner->SetDefaultLanguage(static_cast<const SvxLanguageItem&>(rItem).GetLanguage());
 
         if( bIsNewObj )
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == m_nDrawSfxId ||
@@ -751,7 +751,7 @@ bool SwView::IsDrawTextHyphenate()
                             EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
     if( pSdrView->GetAttributes( aNewAttr ) &&
         aNewAttr.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
-        bHyphenate = ((const SfxBoolItem&)aNewAttr.Get( EE_PARA_HYPHENATE )).
+        bHyphenate = static_cast<const SfxBoolItem&>(aNewAttr.Get( EE_PARA_HYPHENATE )).
                         GetValue();
 
     return bHyphenate;

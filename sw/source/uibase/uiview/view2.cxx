@@ -579,7 +579,7 @@ void SwView::Execute(SfxRequest &rReq)
                 Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
                 if( aPasswd.getLength() )
                 {
-                    OSL_ENSURE( !((const SfxBoolItem*)pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
+                    OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
                     // xmlsec05:    new password dialog
                     vcl::Window* pParent;
                     const SfxPoolItem* pParentItem;
@@ -602,7 +602,7 @@ void SwView::Execute(SfxRequest &rReq)
                     }
                 }
 
-                const sal_uInt16 nOn = ((const SfxBoolItem*)pItem)->GetValue()
+                const sal_uInt16 nOn = static_cast<const SfxBoolItem*>(pItem)->GetValue()
                     ? nsRedlineMode_t::REDLINE_ON : 0;
                 const sal_uInt16 nMode = m_pWrtShell->GetRedlineMode();
                 m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
@@ -660,7 +660,7 @@ void SwView::Execute(SfxRequest &rReq)
             {
                 sal_uInt16 nMode = ( ~(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)
                         & m_pWrtShell->GetRedlineMode() ) | nsRedlineMode_t::REDLINE_SHOW_INSERT;
-                if( ((const SfxBoolItem*)pItem)->GetValue() )
+                if( static_cast<const SfxBoolItem*>(pItem)->GetValue() )
                     nMode |= nsRedlineMode_t::REDLINE_SHOW_DELETE;
 
                 m_pWrtShell->SetRedlineModeAndCheckInsMode( nMode );
@@ -759,20 +759,20 @@ void SwView::Execute(SfxRequest &rReq)
                 if( pArgs )
                 {
                     if( SfxItemState::SET == pArgs->GetItemState( SID_FILE_NAME, false, &pItem ))
-                        sFileName = ((const SfxStringItem*)pItem)->GetValue();
+                        sFileName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     bHasFileName = !sFileName.isEmpty();
 
                     if( SfxItemState::SET == pArgs->GetItemState( SID_FILTER_NAME, false, &pItem ))
-                        sFilterName = ((const SfxStringItem*)pItem)->GetValue();
+                        sFilterName = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
                     if( SfxItemState::SET == pArgs->GetItemState( SID_VERSION, false, &pItem ))
                     {
-                        nVersion = ((const SfxInt16Item *)pItem)->GetValue();
+                        nVersion = static_cast<const SfxInt16Item *>(pItem)->GetValue();
                         m_pViewImpl->SetParam( nVersion );
                     }
                     if( SfxItemState::SET == pArgs->GetItemState( SID_NO_ACCEPT_DIALOG, false, &pItem ))
                     {
-                        bNoAcceptDialog = ((const SfxBoolItem *)pItem)->GetValue();
+                        bNoAcceptDialog = static_cast<const SfxBoolItem *>(pItem)->GetValue();
                     }
                 }
 
@@ -1026,7 +1026,7 @@ void SwView::Execute(SfxRequest &rReq)
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
             {
                 SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-                const sal_uInt16 nTab = ((const SfxUInt16Item*)pItem)->GetValue();
+                const sal_uInt16 nTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                 MakeDefTabs( nTab, aDefTabs );
                 m_pWrtShell->SetDefault( aDefTabs );
             }
@@ -1109,7 +1109,7 @@ void SwView::Execute(SfxRequest &rReq)
             bool bShow = false;
             if( pArgs &&
                 SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
-                bShow = ((const SfxBoolItem*)pItem)->GetValue();
+                bShow = static_cast<const SfxBoolItem*>(pItem)->GetValue();
             if((bShow && m_bInMailMerge) != GetViewFrame()->HasChildWindow(nSlot))
                 GetViewFrame()->ToggleChildWindow(nSlot);
             //if fields have been successfully inserted call the "real"
@@ -1185,7 +1185,7 @@ void SwView::Execute(SfxRequest &rReq)
             SfxViewFrame* pViewFrame = GetViewFrame();
             if (rReq.GetArgs() != NULL)
                 pViewFrame->SetChildWindow (FN_SPELL_GRAMMAR_DIALOG,
-                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                    static_cast<const SfxBoolItem&>( (rReq.GetArgs()->
                         Get(FN_SPELL_GRAMMAR_DIALOG))).GetValue());
             else
                 pViewFrame->ToggleChildWindow(FN_SPELL_GRAMMAR_DIALOG);
@@ -1549,7 +1549,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                aSet.GetItemState(RES_PARATR_NUMRULE, true))
                             {
                                 const OUString& rNumStyle =
-                                    ((const SfxStringItem &)
+                                    static_cast<const SfxStringItem &>(
                                      aSet.Get(RES_PARATR_NUMRULE)).GetValue();
                                 if(!rNumStyle.isEmpty())
                                 {
@@ -1719,15 +1719,15 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 const SfxPoolItem* pViewLayoutItem = 0;
                 if ( pSet && SfxItemState::SET == pSet->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pViewLayoutItem))
                 {
-                    const sal_uInt16 nColumns = ((const SvxViewLayoutItem *)pViewLayoutItem)->GetValue();
-                    const bool bBookMode  = ((const SvxViewLayoutItem *)pViewLayoutItem)->IsBookMode();
+                    const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem *>(pViewLayoutItem)->GetValue();
+                    const bool bBookMode  = static_cast<const SvxViewLayoutItem *>(pViewLayoutItem)->IsBookMode();
                     SetViewLayout( nColumns, bBookMode );
                 }
 
                 if ( pSet && SfxItemState::SET == pSet->GetItemState(SID_ATTR_ZOOM, true, &pItem))
                 {
-                    enum SvxZoomType eType = ((const SvxZoomItem *)pItem)->GetType();
-                    SetZoom( eType, ((const SvxZoomItem *)pItem)->GetValue() );
+                    enum SvxZoomType eType = static_cast<const SvxZoomItem *>(pItem)->GetType();
+                    SetZoom( eType, static_cast<const SvxZoomItem *>(pItem)->GetValue() );
                 }
                 bUp = true;
                 if ( pItem )
@@ -1744,10 +1744,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             {
                 if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pItem ))
                 {
-                    const sal_uInt16 nColumns = ((const SvxViewLayoutItem *)pItem)->GetValue();
+                    const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem *>(pItem)->GetValue();
                     const bool bBookMode  = (0 == nColumns || 0 != (nColumns % 2)) ?
                                             false :
-                                            ((const SvxViewLayoutItem *)pItem)->IsBookMode();
+                                            static_cast<const SvxViewLayoutItem *>(pItem)->IsBookMode();
 
                     SetViewLayout( nColumns, bBookMode );
                 }
@@ -1766,7 +1766,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             {
                 if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ))
                 {
-                    const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
                     SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
                 }
 
@@ -1782,7 +1782,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             {
                 if (SfxItemState::SET == pArgs->GetItemState( nWhich, true, &pItem))
                 {
-                    switch ( ((const SfxUInt16Item *)pItem)->GetValue() )
+                    switch ( static_cast<const SfxUInt16Item *>(pItem)->GetValue() )
                     {
                         case 0: rSh.EnterStdMode(); break;
                         case 1: rSh.EnterExtMode(); break;

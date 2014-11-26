@@ -1335,7 +1335,7 @@ sal_Bool SwXTextViewCursor::screenDown()
         SfxRequest aReq(FN_PAGEDOWN, SfxCallMode::SLOT, m_pView->GetPool());
         m_pView->Execute(aReq);
         const SfxPoolItem* pRet = aReq.GetReturnValue();
-        bRet = pRet && ((const SfxBoolItem*)pRet)->GetValue();
+        bRet = pRet && static_cast<const SfxBoolItem*>(pRet)->GetValue();
     }
     else
         throw uno::RuntimeException();
@@ -1352,7 +1352,7 @@ sal_Bool SwXTextViewCursor::screenUp()
         SfxRequest aReq(FN_PAGEUP, SfxCallMode::SLOT, m_pView->GetPool());
         m_pView->Execute(aReq);
         const SfxPoolItem* pRet = aReq.GetReturnValue();
-        bRet = pRet && ((const SfxBoolItem*)pRet)->GetValue();
+        bRet = pRet && static_cast<const SfxBoolItem*>(pRet)->GetValue();
     }
     else
         throw uno::RuntimeException();
