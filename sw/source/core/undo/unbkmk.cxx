@@ -19,6 +19,7 @@
 
 #include <UndoBookmark.hxx>
 
+#include <comcore.hrc>
 #include "doc.hxx"
 #include "docary.hxx"
 #include "swundo.hxx"
@@ -83,6 +84,62 @@ void SwUndoInsBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     SetInDoc( &rContext.GetDoc() );
+}
+
+SwUndoRenameBookmark::SwUndoRenameBookmark( const ::sw::mark::IMark& rBkmk, const OUString& rOldName )
+    : SwUndo( UNDO_BOOKMARK_RENAME )
+    , m_sOldName( rOldName )
+    , m_sNewName( rBkmk.GetName() )
+    , m_nNode( rBkmk.GetMarkPos().nNode.GetIndex() )
+    , m_nCntnt( rBkmk.GetMarkPos().nContent.GetIndex() )
+{
+}
+
+SwUndoRenameBookmark::~SwUndoRenameBookmark()
+{
+}
+
+static OUString lcl_QuoteName(const OUString& rName)
+{
+    static const OUString sStart = SW_RES(STR_START_QUOTE);
+    static const OUString sEnd = SW_RES(STR_END_QUOTE);
+    return sStart + rName + sEnd;
+}
+
+SwRewriter SwUndoRenameBookmark::GetRewriter() const
+{
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, lcl_QuoteName(m_sOldName));
+    aRewriter.AddRule(UndoArg2, SW_RES(STR_YIELDS));
+    aRewriter.AddRule(UndoArg3, lcl_QuoteName(m_sNewName));
+    return aRewriter;
+}
+
+void SwUndoRenameBookmark::Rename(::sw::UndoRedoContext & rContext, const OUString& sFrom, const OUString& sTo)
+{
+    IDocumentMarkAccess* const pMarkAccess = rContext.GetDoc().getIDocumentMarkAccess();
+    for ( IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getAllMarksBegin();
+          ppBkmk != pMarkAccess->getAllMarksEnd();
+          ++ppBkmk )
+    {
+        if ( m_nNode == ppBkmk->get()->GetMarkPos().nNode.GetIndex()
+             && m_nCntnt == ppBkmk->get()->GetMarkPos().nContent.GetIndex()
+             && sFrom == ppBkmk->get()->GetName() )
+        {
+            pMarkAccess->renameMark( ppBkmk->get(), sTo );
+            break;
+        }
+    }
+}
+
+void SwUndoRenameBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    Rename(rContext, m_sNewName, m_sOldName);
+}
+
+void SwUndoRenameBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
+{
+    Rename(rContext, m_sOldName, m_sNewName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

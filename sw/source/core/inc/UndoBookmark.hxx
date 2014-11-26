@@ -67,6 +67,24 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 };
 
+class SwUndoRenameBookmark : public SwUndo
+{
+    const OUString m_sOldName;
+    const OUString m_sNewName;
+    const sal_uLong m_nNode;
+    const sal_Int32 m_nCntnt;
+
+public:
+    SwUndoRenameBookmark( const ::sw::mark::IMark&, const OUString& rNewName );
+    virtual ~SwUndoRenameBookmark();
+
+private:
+    virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
+    void Rename( ::sw::UndoRedoContext &, const OUString& sFrom, const OUString& sTo );
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
+};
+
 #endif // INCLUDED_SW_SOURCE_CORE_INC_UNDOBOOKMARK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
