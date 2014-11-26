@@ -33,9 +33,9 @@ using namespace com::sun::star;
 
 // TODO use rtl::Static instead of 'static'
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
-static std::vector<GLXContext> vShareList;
+static std::vector<GLXContext> g_vShareList;
 #elif defined(WNT)
-static std::vector<HGLRC> vShareList;
+static std::vector<HGLRC> g_vShareList;
 #endif
 
 GLWindow::~GLWindow()
@@ -77,7 +77,7 @@ OpenGLContext::~OpenGLContext()
 #if defined( WNT )
     if (m_aGLWin.hRC)
     {
-        vShareList.erase(std::remove(vShareList.begin(), vShareList.end(), m_aGLWin.hRC), vShareList.end());
+        g_vShareList.erase(std::remove(g_vShareList.begin(), g_vShareList.end(), m_aGLWin.hRC), g_vShareList.end());
 
         wglMakeCurrent( m_aGLWin.hDC, 0 );
         wglDeleteContext( m_aGLWin.hRC );
@@ -90,7 +90,7 @@ OpenGLContext::~OpenGLContext()
 #elif defined( UNX )
     if(m_aGLWin.ctx)
     {
-        vShareList.erase(std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx), vShareList.end());
+        g_vShareList.erase(std::remove( g_vShareList.begin(), g_vShareList.end(), m_aGLWin.ctx), g_vShareList.end());
 
         glXMakeCurrent(m_aGLWin.dpy, None, NULL);
         if( glGetError() != GL_NO_ERROR )
@@ -696,8 +696,8 @@ bool OpenGLContext::ImplInit()
 
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
 
-    if( !vShareList.empty() )
-        pSharedCtx = vShareList.front();
+    if (!g_vShareList.empty())
+        pSharedCtx = g_vShareList.front();
 
 #ifdef DBG_UTIL
     if (!mbPixmap && glXCreateContextAttribsARB && !mbRequestLegacyContext)
@@ -737,7 +737,7 @@ bool OpenGLContext::ImplInit()
 
     if( m_aGLWin.ctx )
     {
-        vShareList.push_back( m_aGLWin.ctx );
+        g_vShareList.push_back( m_aGLWin.ctx );
     }
     else
     {
@@ -903,8 +903,8 @@ bool OpenGLContext::ImplInit()
         return false;
 
     HGLRC hSharedCtx = 0;
-    if (!vShareList.empty())
-        hSharedCtx = vShareList.front();
+    if (!g_vShareList.empty())
+        hSharedCtx = g_vShareList.front();
 
     // now setup the shared context; this needs a temporary context already
     // set up in order to work
@@ -926,7 +926,7 @@ bool OpenGLContext::ImplInit()
         return false;
     }
 
-    vShareList.push_back(m_aGLWin.hRC);
+    g_vShareList.push_back(m_aGLWin.hRC);
 
     RECT clientRect;
     GetClientRect(WindowFromDC(m_aGLWin.hDC), &clientRect);
