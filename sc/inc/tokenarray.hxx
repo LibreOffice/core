@@ -36,6 +36,7 @@ struct RefUpdateDeleteTabContext;
 struct RefUpdateMoveTabContext;
 struct RefUpdateResult;
 struct TokenStringContext;
+class ColRowReorderMapType;
 
 }
 

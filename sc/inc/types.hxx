@@ -13,7 +13,6 @@
 #include <sal/types.h>
 
 #include <boost/intrusive_ptr.hpp>
-#include <boost/unordered_map.hpp>
 
 class ScMatrix;
 
@@ -97,8 +96,6 @@ struct RangeMatrix
 
     bool isRangeValid() const;
 };
-
-typedef boost::unordered_map<SCCOLROW,SCCOLROW> ColRowReorderMapType;
 
 enum AreaOverlapType
 {

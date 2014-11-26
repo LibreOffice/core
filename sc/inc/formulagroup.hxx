@@ -22,7 +22,7 @@
 #include <vector>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 
 class ScDocument;
 class ScTokenArray;

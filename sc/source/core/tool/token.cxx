@@ -43,6 +43,7 @@
 #include "types.hxx"
 #include "globstr.hrc"
 #include "addincol.hxx"
+#include <reordermap.hxx>
 #include <svl/sharedstring.hxx>
 
 using ::std::vector;

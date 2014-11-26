@@ -62,6 +62,7 @@
 #include <refhint.hxx>
 #include <listenerquery.hxx>
 #include <bcaslot.hxx>
+#include <reordermap.hxx>
 
 #include <svl/sharedstringpool.hxx>
 

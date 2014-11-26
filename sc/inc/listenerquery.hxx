@@ -13,6 +13,8 @@
 #include <address.hxx>
 #include <svl/listener.hxx>
 
+#include <boost/unordered_map.hpp>
+
 namespace sc {
 
 /**
