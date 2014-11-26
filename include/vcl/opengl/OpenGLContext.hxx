@@ -55,6 +55,9 @@ class NSOpenGLView;
 #include <tools/gen.hxx>
 #include <vcl/syschild.hxx>
 
+class OpenGLFramebuffer;
+class OpenGLTexture;
+
 /// Holds the information of our new child window
 struct GLWindow
 {
@@ -177,6 +180,13 @@ public:
     void AddRef();
     void DeRef();
 
+    // use these methods right after setting a context to make sure drawing happens
+    // in the right FBO (default one is for onscreen painting)
+    bool               AcquireDefaultFramebuffer();
+    bool               AcquireFramebuffer( OpenGLFramebuffer* pFramebuffer );
+    OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
+    void               ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
+
     void makeCurrent();
     void resetCurrent();
     void swapBuffers();
@@ -228,6 +238,11 @@ private:
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     bool mbPixmap; // is a pixmap instead of a window
 #endif
+
+    int mnFramebufferCount;
+    OpenGLFramebuffer* mpCurrentFramebuffer;
+    OpenGLFramebuffer* mpFirstFramebuffer;
+    OpenGLFramebuffer* mpLastFramebuffer;
 
 public:
     vcl::Region maClipRegion;

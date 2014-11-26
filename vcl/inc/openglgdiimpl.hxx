@@ -23,6 +23,7 @@
 #include "salgdiimpl.hxx"
 #include <vcl/dllapi.h>
 
+#include "opengl/framebuffer.hxx"
 #include "opengl/texture.hxx"
 #include "regionband.hxx"
 
@@ -37,6 +38,7 @@ class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 protected:
 
     OpenGLContext* mpContext;
+    OpenGLFramebuffer* mpFramebuffer;
 
     // clipping
     vcl::Region maClipRegion;
@@ -44,7 +46,6 @@ protected:
     bool mbUseStencil;
 
     bool mbOffscreen;
-    GLuint mnFramebufferId;
     OpenGLTexture maOffscreenTex;
 
     SalColor mnLineColor;
@@ -156,23 +157,23 @@ public:
     virtual void PostDraw();
 
 protected:
-    bool AcquireContext( bool bOffscreen );
+    bool AcquireContext();
     bool ReleaseContext();
 
     // create a new context for window rendering
     virtual OpenGLContext* CreateWinContext() = 0;
 
-    // check whether the given context can be used by this instance
-    virtual bool CompareWinContext( OpenGLContext* pContext ) = 0;
-
-    // create a new context for window rendering
+    // create a new context for offscreen rendering
     virtual OpenGLContext* CreatePixmapContext() = 0;
+
+    // check whether the given context can be used by this instance
+    virtual bool UseContext( OpenGLContext* pContext ) = 0;
 
 public:
     OpenGLSalGraphicsImpl();
     virtual ~OpenGLSalGraphicsImpl ();
 
-    OpenGLContext& GetOpenGLContext() { return *mpContext; }
+    OpenGLContext* GetOpenGLContext();
 
     virtual void Init() SAL_OVERRIDE;
 

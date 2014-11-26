@@ -32,7 +32,7 @@ protected:
     virtual bool    IsOffscreen() const SAL_OVERRIDE;
 
     virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
-    virtual bool CompareWinContext( OpenGLContext* pContext ) SAL_OVERRIDE;
+    virtual bool UseContext( OpenGLContext* pContext ) SAL_OVERRIDE;
     virtual OpenGLContext* CreatePixmapContext() SAL_OVERRIDE;
 
 public:

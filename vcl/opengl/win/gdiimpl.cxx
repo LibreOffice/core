@@ -82,7 +82,7 @@ OpenGLContext* WinOpenGLSalGraphicsImpl::CreateWinContext()
     return pContext;
 }
 
-bool WinOpenGLSalGraphicsImpl::CompareWinContext( OpenGLContext* pContext )
+bool WinOpenGLSalGraphicsImpl::UseContext( OpenGLContext* pContext )
 {
     if( !pContext || !pContext->isInitialized() )
         return false;

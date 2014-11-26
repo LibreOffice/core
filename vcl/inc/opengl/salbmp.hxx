@@ -39,6 +39,7 @@ class   BitmapPalette;
 class VCL_PLUGIN_PUBLIC OpenGLSalBitmap : public SalBitmap
 {
 private:
+    OpenGLContext*                      mpContext;
     OpenGLTexture                       maTexture;
     bool                                mbDirtyTexture;
     BitmapPalette                       maPalette;
