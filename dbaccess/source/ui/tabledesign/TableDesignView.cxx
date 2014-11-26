@@ -224,7 +224,7 @@ bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )
     bool bHandled = false;
     switch(rNEvt.GetType())
     {
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
             if( GetDescWin() && GetDescWin()->HasChildPathFocus() )
                 m_eChildFocus = DESCRIPTION;
             else if ( GetEditorCtrl() && GetEditorCtrl()->HasChildPathFocus() )

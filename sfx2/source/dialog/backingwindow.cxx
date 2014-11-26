@@ -374,7 +374,7 @@ void BackingWindow::Paint( const Rectangle& )
 
 bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
         const vcl::KeyCode& rKeyCode(pEvt->GetKeyCode());
@@ -409,7 +409,7 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
 
 bool BackingWindow::Notify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         // try the 'normal' accelerators (so that eg. Ctrl+Q works)
         if( !mpAccExec )

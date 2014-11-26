@@ -83,7 +83,7 @@ namespace pcr
 
     bool OPropertyBrowserView::Notify( NotifyEvent& _rNEvt )
     {
-        if ( EVENT_KEYINPUT == _rNEvt.GetType() )
+        if ( MouseNotifyEvent::KEYINPUT == _rNEvt.GetType() )
         {
             sal_uInt16 nKey = _rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 

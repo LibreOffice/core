@@ -532,7 +532,7 @@ void FormattedField::ImplSetTextImpl(const OUString& rNew, Selection* pNewSel)
 
 bool FormattedField::PreNotify(NotifyEvent& rNEvt)
 {
-    if (rNEvt.GetType() == EVENT_KEYINPUT)
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         m_aLastSelection = GetSelection();
     return SpinField::PreNotify(rNEvt);
 }
@@ -763,7 +763,7 @@ void FormattedField::ReFormat()
 bool FormattedField::Notify(NotifyEvent& rNEvt)
 {
 
-    if ((rNEvt.GetType() == EVENT_KEYINPUT) && !IsReadOnly())
+    if ((rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && !IsReadOnly())
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
         sal_uInt16 nMod = rKEvt.GetKeyCode().GetModifier();
@@ -782,7 +782,7 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
         }
     }
 
-    if ((rNEvt.GetType() == EVENT_COMMAND) && !IsReadOnly())
+    if ((rNEvt.GetType() == MouseNotifyEvent::COMMAND) && !IsReadOnly())
     {
         const CommandEvent* pCommand = rNEvt.GetCommandEvent();
         if (pCommand->GetCommand() == COMMAND_WHEEL)
@@ -798,7 +798,7 @@ bool FormattedField::Notify(NotifyEvent& rNEvt)
         }
     }
 
-    if (rNEvt.GetType() == EVENT_LOSEFOCUS)
+    if (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS)
     {
         // Sonderbehandlung fuer leere Texte
         if (GetText().isEmpty())

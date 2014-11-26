@@ -39,7 +39,7 @@ PopupContainer::~PopupContainer (void)
 
 long  PopupContainer::Notify (NotifyEvent& rEvent)
 {
-    if (rEvent.GetType() == EVENT_LOSEFOCUS)
+    if (rEvent.GetType() == MouseNotifyEvent::LOSEFOCUS)
     {
         if( ! HasChildPathFocus(sal_True))
             EndPopupMode();

@@ -497,7 +497,7 @@ void SpinField::MouseMove( const MouseEvent& rMEvt )
 bool SpinField::Notify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
         if ( !IsReadOnly() )
@@ -551,7 +551,7 @@ bool SpinField::Notify( NotifyEvent& rNEvt )
         }
     }
 
-    if ( rNEvt.GetType() == EVENT_COMMAND )
+    if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         if ( ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) && !IsReadOnly() )
         {
@@ -856,7 +856,7 @@ bool SpinField::PreNotify( NotifyEvent& rNEvt )
 {
     const MouseEvent* pMouseEvt = NULL;
 
-    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
+    if( (rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) != NULL )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {

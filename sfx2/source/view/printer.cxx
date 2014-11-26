@@ -253,7 +253,7 @@ short SfxPrintOptionsDialog::Execute()
 
 bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F1 && pDlgImpl->mbHelpDisabled )
             return true; // help disabled -> <F1> does nothing

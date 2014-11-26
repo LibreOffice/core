@@ -45,7 +45,7 @@ void SvSimpleTableContainer::SetTable(SvSimpleTable* pTable)
 bool SvSimpleTableContainer::PreNotify( NotifyEvent& rNEvt )
 {
     bool nResult = true;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const vcl::KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();

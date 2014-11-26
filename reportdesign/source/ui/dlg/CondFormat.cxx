@@ -472,7 +472,7 @@ namespace rptui
     {
         switch ( _rNEvt.GetType() )
         {
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKeyEvent( _rNEvt.GetKeyEvent() );
             const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
@@ -491,7 +491,7 @@ namespace rptui
             }
         }
         break;
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
         {
             if ( m_bDeletingCondition )
                 break;

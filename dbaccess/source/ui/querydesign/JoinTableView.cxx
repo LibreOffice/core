@@ -1236,7 +1236,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
     bool bHandled = false;
     switch (rNEvt.GetType())
     {
-        case EVENT_COMMAND:
+        case MouseNotifyEvent::COMMAND:
         {
             const CommandEvent* pCommand = rNEvt.GetCommandEvent();
             if (pCommand->GetCommand() == COMMAND_WHEEL)
@@ -1253,7 +1253,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
             }
         }
         break;
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             if (m_aTableMap.empty())
                 // no tab wins -> no conns -> no traveling
@@ -1386,7 +1386,7 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
             }
         }
         break;
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
         {
             if (m_aTableMap.empty())
                 // no tab wins -> no conns -> no focus change

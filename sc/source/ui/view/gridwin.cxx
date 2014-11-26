@@ -277,7 +277,7 @@ void ScFilterListBox::LoseFocus()
 bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
         vcl::KeyCode aCode = aKeyEvt.GetKeyCode();
@@ -2653,8 +2653,8 @@ static void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const
 bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
 {
     bool bDone = false;
-    sal_uInt16 nType = rNEvt.GetType();
-    if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
+    MouseNotifyEvent nType = rNEvt.GetType();
+    if ( nType == MouseNotifyEvent::MOUSEBUTTONUP || nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         vcl::Window* pWindow = rNEvt.GetWindow();
         if (pWindow == this && pViewData)
@@ -2672,7 +2672,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
                         lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
                         if ( rNEvt.GetWindow() )
                             aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
-                        if ( nType == EVENT_MOUSEBUTTONDOWN)
+                        if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN)
                             bDone = pImp->MousePressed( aEvent );
                         else
                             bDone = pImp->MouseReleased( aEvent );
@@ -2683,7 +2683,7 @@ bool ScGridWindow::PreNotify( NotifyEvent& rNEvt )
     }
     if (bDone)      // event consumed by a listener
     {
-        if ( nType == EVENT_MOUSEBUTTONDOWN )
+        if ( nType == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMouseEvent = rNEvt.GetMouseEvent();
             if ( pMouseEvent->IsRight() && pMouseEvent->GetClicks() == 1 )

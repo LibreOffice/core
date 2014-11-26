@@ -999,7 +999,7 @@ void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
 
 bool SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
 {
-    if(rNEvt.GetType() == EVENT_COMMAND)
+    if(rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         const sal_uInt16 nCmd = pCEvt->GetCommand();
@@ -1286,12 +1286,12 @@ void AddressMultiLineEdit::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 bool AddressMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     bool nHandled = false;
-    if( EVENT_KEYINPUT == rNEvt.GetType()  &&
+    if( MouseNotifyEvent::KEYINPUT == rNEvt.GetType()  &&
         rNEvt.GetKeyEvent()->GetCharCode())
     {
         nHandled = true;
     }
-    else if(EVENT_MOUSEBUTTONDOWN == rNEvt.GetType()) {
+    else if(MouseNotifyEvent::MOUSEBUTTONDOWN == rNEvt.GetType()) {
         const MouseEvent *pMEvt = rNEvt.GetMouseEvent();
         if(pMEvt->GetClicks() >= 2)
             nHandled = true;

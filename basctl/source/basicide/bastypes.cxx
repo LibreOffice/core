@@ -112,7 +112,7 @@ bool BaseWindow::Notify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         KeyEvent aKEvt = *rNEvt.GetKeyEvent();
         vcl::KeyCode aCode = aKEvt.GetKeyCode();

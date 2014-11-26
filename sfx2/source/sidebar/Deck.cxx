@@ -190,7 +190,7 @@ void Deck::DataChanged (const DataChangedEvent& rEvent)
 
 bool Deck::Notify (NotifyEvent& rEvent)
 {
-    if (rEvent.GetType() == EVENT_COMMAND)
+    if (rEvent.GetType() == MouseNotifyEvent::COMMAND)
     {
         CommandEvent* pCommandEvent = reinterpret_cast<CommandEvent*>(rEvent.GetData());
         if (pCommandEvent != NULL)

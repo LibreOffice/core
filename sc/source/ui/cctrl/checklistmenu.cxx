@@ -1171,7 +1171,7 @@ bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
 {
     switch (rNEvt.GetType())
     {
-        case EVENT_KEYUP:
+        case MouseNotifyEvent::KEYUP:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();

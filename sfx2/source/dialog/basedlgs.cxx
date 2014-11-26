@@ -329,17 +329,17 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
 */
 bool SfxModelessDialog::Notify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == EVENT_GETFOCUS )
+    if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
     }
-    else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
+    else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && !HasChildPathFocus() )
     {
         pBindings->SetActiveFrame( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > () );
         pImp->pMgr->Deactivate_Impl();
     }
-    else if( rEvt.GetType() == EVENT_KEYINPUT )
+    else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions ( TAB etc. )
         if ( !ModelessDialog::Notify( rEvt ) && SfxViewShell::Current() )
@@ -417,12 +417,12 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
 */
 
 {
-    if ( rEvt.GetType() == EVENT_GETFOCUS )
+    if ( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         pBindings->SetActiveFrame( pImp->pMgr->GetFrame() );
         pImp->pMgr->Activate_Impl();
     }
-    else if ( rEvt.GetType() == EVENT_LOSEFOCUS )
+    else if ( rEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
     {
         if ( !HasChildPathFocus() )
         {
@@ -430,7 +430,7 @@ bool SfxFloatingWindow::Notify( NotifyEvent& rEvt )
             pImp->pMgr->Deactivate_Impl();
         }
     }
-    else if( rEvt.GetType() == EVENT_KEYINPUT )
+    else if( rEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         // First, allow KeyInput for Dialog functions
         if ( !FloatingWindow::Notify( rEvt ) && SfxViewShell::Current() )

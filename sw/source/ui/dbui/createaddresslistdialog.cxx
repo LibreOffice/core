@@ -343,7 +343,7 @@ void SwAddressControl_Impl::Command( const CommandEvent& rCEvt )
 
 bool SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    if(rNEvt.GetType() == EVENT_COMMAND)
+    if(rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         const sal_uInt16 nCmd = pCEvt->GetCommand();

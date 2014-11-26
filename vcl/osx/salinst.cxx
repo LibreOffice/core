@@ -521,7 +521,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         {
             const Point aPoint;
             CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &nCommand );
-            NotifyEvent aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
+            NotifyEvent aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
 
             if ( !ImplCallPreNotify( aNCmdEvt ) )
                 pWindow->Command( aCEvt );

@@ -1205,7 +1205,7 @@ namespace pcr
     {
         switch ( _rNEvt.GetType() )
         {
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
             if  (   ( pKeyEvent->GetKeyCode().GetModifier() != 0 )
@@ -1263,7 +1263,7 @@ namespace pcr
     {
         switch ( _rNEvt.GetType() )
         {
-        case EVENT_COMMAND:
+        case MouseNotifyEvent::COMMAND:
         {
             const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
             if  (   ( COMMAND_WHEEL == pCommand->GetCommand() )

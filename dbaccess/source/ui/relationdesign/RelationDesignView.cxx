@@ -71,7 +71,7 @@ void ORelationDesignView::initialize()
 bool ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
 {
     bool nDone = false;
-    if(rNEvt.GetType() == EVENT_GETFOCUS)
+    if(rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
         if(!m_pTableView->HasChildPathFocus())
         {

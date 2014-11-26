@@ -429,7 +429,7 @@ void WizardDialog::StateChanged( StateChangedType nType )
 
 bool WizardDialog::Notify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && mpPrevBtn && mpNextBtn )
+    if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) && mpPrevBtn && mpNextBtn )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();

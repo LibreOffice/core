@@ -1095,7 +1095,7 @@ void SvtURLBox::Modify()
 
 bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == EVENT_KEYINPUT )
+    if( rNEvt.GetWindow() == GetSubEdit() && rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
 
         const KeyEvent& rEvent = *rNEvt.GetKeyEvent();
@@ -1135,14 +1135,14 @@ void SvtURLBox::AutoCompleteHandler( Edit* )
 
 bool SvtURLBox::Notify( NotifyEvent &rEvt )
 {
-    if ( EVENT_GETFOCUS == rEvt.GetType() )
+    if ( MouseNotifyEvent::GETFOCUS == rEvt.GetType() )
     {
 #ifndef UNX
         // pb: don't select automatically on unix #93251#
         SetSelection( Selection( 0, GetText().getLength() ) );
 #endif
     }
-    else if ( EVENT_LOSEFOCUS == rEvt.GetType() )
+    else if ( MouseNotifyEvent::LOSEFOCUS == rEvt.GetType() )
     {
         if( GetText().isEmpty() )
             ClearModifyFlag();

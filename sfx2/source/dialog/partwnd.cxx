@@ -181,7 +181,7 @@ bool SfxPartDockWnd_Impl::QueryClose()
 
 bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
 {
-    if( rEvt.GetType() == EVENT_GETFOCUS )
+    if( rEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         SfxChildWindow* pChild = GetChildWindow_Impl();
         if( pChild )

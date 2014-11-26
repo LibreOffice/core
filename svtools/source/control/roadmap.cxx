@@ -612,7 +612,7 @@ namespace svt
     bool ORoadmap::PreNotify( NotifyEvent& _rNEvt )
     {
         // capture KeyEvents for taskpane cycling
-        if ( _rNEvt.GetType() == EVENT_KEYINPUT )
+        if ( _rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             vcl::Window* pWindow = _rNEvt.GetWindow();
             RoadmapItem* pItem = GetByPointer( pWindow );

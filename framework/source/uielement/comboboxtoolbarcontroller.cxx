@@ -222,7 +222,7 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
 {
     switch ( rNEvt.GetType() )
     {
-        case EVENT_KEYINPUT :
+        case MouseNotifyEvent::KEYINPUT :
             {
                 const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
@@ -235,10 +235,10 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
                 }
             }
             break;
-        case EVENT_GETFOCUS :
+        case MouseNotifyEvent::GETFOCUS :
             notifyFocusGet();
             break;
-        case EVENT_LOSEFOCUS :
+        case MouseNotifyEvent::LOSEFOCUS :
             notifyFocusLost();
             break;
         default :

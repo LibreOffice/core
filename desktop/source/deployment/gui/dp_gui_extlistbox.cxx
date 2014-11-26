@@ -879,7 +879,7 @@ bool ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
 
     bool bHandled = false;
 
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    if ( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
@@ -891,7 +891,7 @@ bool ExtensionBox_Impl::Notify( NotifyEvent& rNEvt )
             bHandled = HandleCursorKey( nKeyCode );
     }
 
-    if ( rNEvt.GetType() == EVENT_COMMAND )
+    if ( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         if ( m_bHasScrollBar &&
              ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) )

@@ -51,6 +51,7 @@ class VCLXWindow;
 class SalFrame;
 class SalObject;
 enum class MouseEventModifiers;
+enum class MouseNotifyEvent;
 
 namespace com {
 namespace sun {
@@ -377,7 +378,7 @@ public:
 
 // helper methods
 
-bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeave,
+bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
                            long nX, long nY, sal_uIntPtr nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode );
 void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );

@@ -447,7 +447,7 @@ namespace svt
     bool ToolPanelDeck::Notify( NotifyEvent& i_rNotifyEvent )
     {
         bool bHandled = false;
-        if ( i_rNotifyEvent.GetType() == EVENT_KEYINPUT )
+        if ( i_rNotifyEvent.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const KeyEvent* pEvent = i_rNotifyEvent.GetKeyEvent();
             const vcl::KeyCode& rKeyCode = pEvent->GetKeyCode();

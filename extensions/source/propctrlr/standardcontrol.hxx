@@ -73,7 +73,7 @@ namespace pcr
     template< class LISTBOX_WINDOW >
     bool ListLikeControlWithModifyHandler< LISTBOX_WINDOW >::PreNotify( NotifyEvent& _rNEvt )
     {
-        if ( _rNEvt.GetType() == EVENT_KEYINPUT )
+        if ( _rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const ::KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
             if  (   ( pKeyEvent->GetKeyCode().GetModifier() == 0 )

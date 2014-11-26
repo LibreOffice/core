@@ -243,7 +243,7 @@ OUString Control::GetDisplayText() const
 
 bool Control::Notify( NotifyEvent& rNEvt )
 {
-    if ( rNEvt.GetType() == EVENT_GETFOCUS )
+    if ( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
     {
         if ( !mbHasControlFocus )
         {
@@ -256,7 +256,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
     }
     else
     {
-        if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
+        if ( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
         {
             vcl::Window* pFocusWin = Application::GetFocusWindow();
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )

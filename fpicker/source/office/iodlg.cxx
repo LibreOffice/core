@@ -1593,10 +1593,10 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
 */
 
 {
-    sal_uInt16 nType = rNEvt.GetType();
+    MouseNotifyEvent nType = rNEvt.GetType();
     bool nRet = false;
 
-    if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
+    if ( MouseNotifyEvent::KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
         const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nCode = rKeyCode.GetCode();

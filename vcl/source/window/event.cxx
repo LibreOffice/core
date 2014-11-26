@@ -57,7 +57,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
 
     if ( !bDone )
     {
-        if( rNEvt.GetType() == EVENT_GETFOCUS )
+        if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
         {
             bool bCompoundFocusChanged = false;
             if ( mpWindowImpl->mbCompoundControl && !mpWindowImpl->mbCompoundControlHasFocus && HasChildPathFocus() )
@@ -69,7 +69,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
             if ( bCompoundFocusChanged || ( rNEvt.GetWindow() == this ) )
                 ImplCallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
         }
-        else if( rNEvt.GetType() == EVENT_LOSEFOCUS )
+        else if( rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS )
         {
             bool bCompoundFocusChanged = false;
             if ( mpWindowImpl->mbCompoundControl && mpWindowImpl->mbCompoundControlHasFocus && !HasChildPathFocus() )
@@ -99,7 +99,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
     if( pWrapper && !( !pWrapper->IsFloatingMode() && pWrapper->IsLocked() ) )
     {
-        if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+        if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
             bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
@@ -119,7 +119,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
                 }
             }
         }
-        else if ( rNEvt.GetType() == EVENT_MOUSEMOVE )
+        else if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
         {
             const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
             bool bHit = pWrapper->GetDragArea().IsInside( pMEvt->GetPosPixel() );
@@ -142,7 +142,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
                 return true;
             }
         }
-        else if( rNEvt.GetType() == EVENT_KEYINPUT )
+        else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
             if( rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&
@@ -166,18 +166,18 @@ bool Window::Notify( NotifyEvent& rNEvt )
     if ( (GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
     {
         // if the parent also has dialog control activated, the parent takes over control
-        if ( (rNEvt.GetType() == EVENT_KEYINPUT) || (rNEvt.GetType() == EVENT_KEYUP) )
+        if ( (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT) || (rNEvt.GetType() == MouseNotifyEvent::KEYUP) )
         {
             if ( ImplIsOverlapWindow() ||
                  ((getNonLayoutRealParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
             {
-                nRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == EVENT_KEYINPUT );
+                nRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == MouseNotifyEvent::KEYINPUT );
             }
         }
-        else if ( (rNEvt.GetType() == EVENT_GETFOCUS) || (rNEvt.GetType() == EVENT_LOSEFOCUS) )
+        else if ( (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS) || (rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS) )
         {
-            ImplDlgCtrlFocusChanged( rNEvt.GetWindow(), rNEvt.GetType() == EVENT_GETFOCUS );
-            if ( (rNEvt.GetWindow() == this) && (rNEvt.GetType() == EVENT_GETFOCUS) &&
+            ImplDlgCtrlFocusChanged( rNEvt.GetWindow(), rNEvt.GetType() == MouseNotifyEvent::GETFOCUS );
+            if ( (rNEvt.GetWindow() == this) && (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS) &&
                  !(GetStyle() & WB_TABSTOP) && !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) )
             {
                 sal_uInt16 n = 0;
@@ -322,7 +322,7 @@ CommandEvent ImplTranslateCommandEvent( const CommandEvent& rCEvt, vcl::Window* 
 
 void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
 {
-    if( rNEvt.GetType() == EVENT_COMMAND )
+    if( rNEvt.GetType() == MouseNotifyEvent::COMMAND )
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
         if ( pCEvt->GetCommand() != COMMAND_CONTEXTMENU )
@@ -352,7 +352,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
 
-    if( rNEvt.GetType() == EVENT_MOUSEMOVE )
+    if( rNEvt.GetType() == MouseNotifyEvent::MOUSEMOVE )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
@@ -365,7 +365,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
             }
         }
     }
-    else if( rNEvt.GetType() == EVENT_MOUSEBUTTONUP )
+    else if( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONUP )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
@@ -378,7 +378,7 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
             }
         }
     }
-    else if( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
+    else if( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
         {
@@ -391,12 +391,12 @@ void Window::ImplNotifyKeyMouseCommandEventListeners( NotifyEvent& rNEvt )
             }
         }
     }
-    else if( rNEvt.GetType() == EVENT_KEYINPUT )
+    else if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
             ImplCallEventListeners( VCLEVENT_WINDOW_KEYINPUT, (void*)rNEvt.GetKeyEvent() );
     }
-    else if( rNEvt.GetType() == EVENT_KEYUP )
+    else if( rNEvt.GetType() == MouseNotifyEvent::KEYUP )
     {
         if ( mpWindowImpl->mbCompoundControl || ( rNEvt.GetWindow() == this ) )
             ImplCallEventListeners( VCLEVENT_WINDOW_KEYUP, (void*)rNEvt.GetKeyEvent() );

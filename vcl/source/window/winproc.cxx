@@ -63,7 +63,7 @@ bool ImplCallPreNotify( NotifyEvent& rEvt )
 
 enum ENUM_IHMFM {IHMFM_FALSE = 0, IHMFM_TRUE = 1, IHMFM_FLOAT = 2};
 static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rMousePos,
-                                      sal_uInt16 nCode, sal_uInt16 nSVEvent,
+                                      sal_uInt16 nCode, MouseNotifyEvent nSVEvent,
                                       bool bMouseLeave )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -79,7 +79,7 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
         FloatingWindow* pFloat = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pChild, rMousePos, nHitTest );
         FloatingWindow* pLastLevelFloat;
         sal_uLong           nPopupFlags;
-        if ( nSVEvent == EVENT_MOUSEMOVE )
+        if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         {
             if ( bMouseLeave )
                 return IHMFM_TRUE;
@@ -96,7 +96,7 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
         {
             if ( nCode & MOUSE_LEFT )
             {
-                if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+                if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
                 {
                     if ( !pFloat )
                     {
@@ -144,7 +144,7 @@ static sal_uInt16 ImplHandleMouseFloatMode( vcl::Window* pChild, const Point& rM
                     if ( nPopupFlags & FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE )
                     {
                         if ( (nPopupFlags & FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE) &&
-                             (nSVEvent == EVENT_MOUSEBUTTONUP) )
+                             (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
                             return IHMFM_TRUE;
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
                         if ( nPopupFlags & FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK )
@@ -220,7 +220,7 @@ static bool ImplCallCommand( vcl::Window* pChild, sal_uInt16 nEvt, void* pData =
     }
 
     CommandEvent    aCEvt( aPos, nEvt, bMouse, pData );
-    NotifyEvent     aNCmdEvt( EVENT_COMMAND, pChild, &aCEvt );
+    NotifyEvent     aNCmdEvt( MouseNotifyEvent::COMMAND, pChild, &aCEvt );
     ImplDelData     aDelData( pChild );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
     if ( aDelData.IsDead() )
@@ -267,7 +267,7 @@ static long ContextMenuEventLink( void* pCEvent, void* )
     return 0;
 }
 
-bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeave,
+bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool bMouseLeave,
                            long nX, long nY, sal_uLong nMsgTime,
                            sal_uInt16 nCode, MouseEventModifiers nMode )
 {
@@ -281,9 +281,9 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
 
     // we need a mousemove event, before we get a mousebuttondown or a
     // mousebuttonup event
-    if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) || (nSVEvent == EVENT_MOUSEBUTTONUP) )
+    if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) || (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
     {
-        if ( (nSVEvent == EVENT_MOUSEBUTTONUP) && pSVData->maHelpData.mbExtHelpMode )
+        if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) && pSVData->maHelpData.mbExtHelpMode )
             Help::EndExtHelp();
         if ( pSVData->maHelpData.mpHelpWin )
         {
@@ -299,7 +299,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
         if ( (pWinFrameData->mnLastMouseX != nX) ||
              (pWinFrameData->mnLastMouseY != nY) )
         {
-            ImplHandleMouseEvent( pWindow, EVENT_MOUSEMOVE, false, nX, nY, nMsgTime, nCode, nMode );
+            ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, false, nX, nY, nMsgTime, nCode, nMode );
         }
     }
 
@@ -332,7 +332,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
                 "ImplHandleMouseEvent: TrackWin != CaptureWin" );
 
     // AutoScrollMode
-    if ( pSVData->maWinData.mpAutoScrollWin && (nSVEvent == EVENT_MOUSEBUTTONDOWN) )
+    if ( pSVData->maWinData.mpAutoScrollWin && (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) )
     {
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
         return true;
@@ -385,7 +385,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
         if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalNonRefMode() ) )
         {
             sal_uInt16 FloatHdl = (ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave ) & IHMFM_FLOAT);
-            if ( nSVEvent == EVENT_MOUSEMOVE )
+            if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
             {
                 ImplHandleMouseHelpRequest( pChild, aMousePos );
                 if( pWinFrameData->mpMouseMoveWin != pChild )
@@ -406,12 +406,12 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
 
             if(FloatHdl != IHMFM_FLOAT) // mouse-button left: don't stop the handling for the click fdo#84795
             {
-                if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+                if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
                     return true;
                 else
                 {
                     // Set normal MousePointer for disabled windows
-                    if ( nSVEvent == EVENT_MOUSEMOVE )
+                    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
                         ImplSetMousePointer( pChild );
 
                     return false;
@@ -421,13 +421,13 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
 
         // End ExtTextInput-Mode, if the user click in the same TopLevel Window
         if ( pSVData->maWinData.mpExtTextInputWin &&
-             ((nSVEvent == EVENT_MOUSEBUTTONDOWN) ||
-              (nSVEvent == EVENT_MOUSEBUTTONUP)) )
+             ((nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) ||
+              (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP)) )
             pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
     }
 
     // determine mouse event data
-    if ( nSVEvent == EVENT_MOUSEMOVE )
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
     {
         // check if MouseMove belongs to same window and if the
         // status did not change
@@ -539,7 +539,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
             {
                 Point       aLeaveMousePos = pMouseMoveWin->ImplFrameToOutput( aMousePos );
                 MouseEvent  aMLeaveEvt( aLeaveMousePos, nClicks, nMode | MouseEventModifiers::LEAVEWINDOW, nCode, nCode );
-                NotifyEvent aNLeaveEvt( EVENT_MOUSEMOVE, pMouseMoveWin, &aMLeaveEvt );
+                NotifyEvent aNLeaveEvt( MouseNotifyEvent::MOUSEMOVE, pMouseMoveWin, &aMLeaveEvt );
                 ImplDelData aDelData;
                 ImplDelData aDelData2;
                 pWinFrameData->mbInMouseMove = true;
@@ -586,7 +586,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
         if (pChild)
         {
             // mouse click
-            if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+            if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
             {
                 const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
                 sal_uLong   nDblClkTime = rMSettings.GetDoubleClickTime();
@@ -668,11 +668,11 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
     ImplDelData aDelData;
     NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
     pChild->ImplAddDel( &aDelData );
-    if ( nSVEvent == EVENT_MOUSEMOVE )
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         pChild->ImplGetFrameData()->mbInMouseMove = true;
 
     // bring window into foreground on mouseclick
-    if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+    if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
     {
         if( !pSVData->maWinData.mpFirstFloat && // totop for floating windows in popup would change the focus and would close them immediately
             !(pChild->ImplGetFrameWindow()->GetStyle() & WB_OWNERDRAWDECORATION) )    // ownerdrawdecorated windows must never grab focus
@@ -686,7 +686,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
     else
     {
         bRet = false;
-        if ( nSVEvent == EVENT_MOUSEMOVE )
+        if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         {
             if ( pSVData->maWinData.mpTrackWin )
             {
@@ -723,7 +723,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
                 }
             }
         }
-        else if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+        else if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             if ( pSVData->maWinData.mpTrackWin &&
                  !(pSVData->maWinData.mnTrackFlags & STARTTRACK_MOUSEBUTTONDOWN) )
@@ -755,10 +755,10 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
     if ( aDelData.IsDead() )
         return true;
 
-    if ( nSVEvent == EVENT_MOUSEMOVE )
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
         pChild->ImplGetWindowImpl()->mpFrameData->mbInMouseMove = false;
 
-    if ( nSVEvent == EVENT_MOUSEMOVE )
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
     {
         if ( bCallHelpRequest && !pSVData->maHelpData.mbKeyboardHelp )
             ImplHandleMouseHelpRequest( pChild, pChild->OutputToScreenPixel( aMEvt.GetPosPixel() ) );
@@ -766,7 +766,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
     }
     else if ( !bRet )
     {
-        if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
+        if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
         {
             if ( !pChild->ImplGetWindowImpl()->mbMouseButtonDown )
                 bRet = true;
@@ -780,18 +780,18 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
 
     pChild->ImplRemoveDel( &aDelData );
 
-    if ( nSVEvent == EVENT_MOUSEMOVE )
+    if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
     {
         // set new mouse pointer
         if ( !bMouseLeave )
             ImplSetMousePointer( pChild );
     }
-    else if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) || (nSVEvent == EVENT_MOUSEBUTTONUP) )
+    else if ( (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) || (nSVEvent == MouseNotifyEvent::MOUSEBUTTONUP) )
     {
         if ( !bDrag )
         {
             // Command-Events
-            if ( /*!bRet &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
+            if ( /*!bRet &&*/ (nClicks == 1) && (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN) &&
                  (nCode == MOUSE_MIDDLE) )
             {
                 sal_uInt16 nMiddleAction = pChild->GetSettings().GetMouseSettings().GetMiddleButtonAction();
@@ -807,7 +807,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, sal_uInt16 nSVEvent, bool bMous
                 if ( (nCode == rMSettings.GetContextMenuCode()) &&
                      (nClicks == rMSettings.GetContextMenuClicks()) )
                 {
-                    bool bContextMenu = (nSVEvent == EVENT_MOUSEBUTTONDOWN);
+                    bool bContextMenu = (nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN);
                     if ( bContextMenu )
                     {
                         if( pSVData->maAppData.mpActivePopupMenu )
@@ -878,7 +878,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     return pChild;
 }
 
-static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
+static bool ImplHandleKey( vcl::Window* pWindow, MouseNotifyEvent nSVEvent,
                            sal_uInt16 nKeyCode, sal_uInt16 nCharCode, sal_uInt16 nRepeat, bool bForward )
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -894,10 +894,10 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
         sal_uInt16 nVCLEvent;
         switch( nSVEvent )
         {
-            case EVENT_KEYINPUT:
+            case MouseNotifyEvent::KEYINPUT:
                 nVCLEvent = VCLEVENT_WINDOW_KEYINPUT;
                 break;
-            case EVENT_KEYUP:
+            case MouseNotifyEvent::KEYUP:
                 nVCLEvent = VCLEVENT_WINDOW_KEYUP;
                 break;
             default:
@@ -924,7 +924,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
     pSVData->maAppData.mnLastInputTime = tools::Time::GetSystemTicks();
 
     // handle tracking window
-    if ( nSVEvent == EVENT_KEYINPUT )
+    if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
     {
 #ifdef DBG_UTIL
         // #105224# use Ctrl-Alt-Shift-D, Ctrl-Shift-D must be useable by app
@@ -1028,7 +1028,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
 
     if ( !bKeyPreNotify && !aDelData.IsDead() )
     {
-        if ( nSVEvent == EVENT_KEYINPUT )
+        if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
         {
             pChild->ImplGetWindowImpl()->mbKeyInput = false;
             pChild->KeyInput( aKeyEvt );
@@ -1047,7 +1047,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
 
     pChild->ImplRemoveDel( &aDelData );
 
-    if ( nSVEvent == EVENT_KEYINPUT )
+    if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
     {
         if ( !bKeyPreNotify && pChild->ImplGetWindowImpl()->mbKeyInput )
         {
@@ -1141,7 +1141,7 @@ static bool ImplHandleKey( vcl::Window* pWindow, sal_uInt16 nSVEvent,
 
         if ( !bPreNotify )
         {
-            if ( nSVEvent == EVENT_KEYINPUT )
+            if ( nSVEvent == MouseNotifyEvent::KEYINPUT )
             {
                 pChild->ImplGetWindowImpl()->mbKeyInput = false;
                 pChild->KeyInput( aKEvt );
@@ -1343,7 +1343,7 @@ static bool ImplCallWheelCommand( vcl::Window* pWindow, const Point& rPos,
 {
     Point               aCmdMousePos = pWindow->ImplFrameToOutput( rPos );
     CommandEvent        aCEvt( aCmdMousePos, COMMAND_WHEEL, true, pWheelData );
-    NotifyEvent         aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
+    NotifyEvent         aNCmdEvt( MouseNotifyEvent::COMMAND, pWindow, &aCEvt );
     ImplDelData         aDelData( pWindow );
     bool bPreNotify = ImplCallPreNotify( aNCmdEvt );
     if ( aDelData.IsDead() )
@@ -1753,7 +1753,7 @@ IMPL_LINK_NOARG(vcl::Window, ImplAsyncFocusHdl)
                 static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE");
                 if( !(pEnv && *pEnv) )
                 {
-                    NotifyEvent aNEvt( EVENT_LOSEFOCUS, pFocusWin );
+                    NotifyEvent aNEvt( MouseNotifyEvent::LOSEFOCUS, pFocusWin );
                     if ( !ImplCallPreNotify( aNEvt ) )
                         pFocusWin->LoseFocus();
                     pFocusWin->ImplCallDeactivateListeners( NULL );
@@ -1956,7 +1956,7 @@ static MouseEventModifiers ImplGetMouseButtonMode( SalMouseEvent* pEvent )
 
 inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent* pEvent )
 {
-    return ImplHandleMouseEvent( pWindow, EVENT_MOUSEMOVE, true,
+    return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, true,
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime, pEvent->mnCode,
                                  ImplGetMouseMoveMode( pEvent ) );
@@ -1964,7 +1964,7 @@ inline bool ImplHandleSalMouseLeave( vcl::Window* pWindow, SalMouseEvent* pEvent
 
 inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent* pEvent )
 {
-    return ImplHandleMouseEvent( pWindow, EVENT_MOUSEMOVE, false,
+    return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEMOVE, false,
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime, pEvent->mnCode,
                                  ImplGetMouseMoveMode( pEvent ) );
@@ -1972,7 +1972,7 @@ inline bool ImplHandleSalMouseMove( vcl::Window* pWindow, SalMouseEvent* pEvent 
 
 inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent* pEvent )
 {
-    return ImplHandleMouseEvent( pWindow, EVENT_MOUSEBUTTONDOWN, false,
+    return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONDOWN, false,
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime,
 #ifdef MACOSX
@@ -1985,7 +1985,7 @@ inline bool ImplHandleSalMouseButtonDown( vcl::Window* pWindow, SalMouseEvent* p
 
 inline bool ImplHandleSalMouseButtonUp( vcl::Window* pWindow, SalMouseEvent* pEvent )
 {
-    return ImplHandleMouseEvent( pWindow, EVENT_MOUSEBUTTONUP, false,
+    return ImplHandleMouseEvent( pWindow, MouseNotifyEvent::MOUSEBUTTONUP, false,
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime,
 #ifdef MACOSX
@@ -2357,28 +2357,28 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
         case SALEVENT_KEYINPUT:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
-            nRet = ImplHandleKey( pWindow, EVENT_KEYINPUT,
+            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, true );
             }
             break;
         case SALEVENT_EXTERNALKEYINPUT:
             {
             KeyEvent* pKeyEvt = (KeyEvent*) pEvent;
-            nRet = ImplHandleKey( pWindow, EVENT_KEYINPUT,
+            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYINPUT,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), false );
             }
             break;
         case SALEVENT_KEYUP:
             {
             SalKeyEvent* pKeyEvt = (SalKeyEvent*)pEvent;
-            nRet = ImplHandleKey( pWindow, EVENT_KEYUP,
+            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
                 pKeyEvt->mnCode, pKeyEvt->mnCharCode, pKeyEvt->mnRepeat, true );
             }
             break;
         case SALEVENT_EXTERNALKEYUP:
             {
             KeyEvent* pKeyEvt = (KeyEvent*) pEvent;
-            nRet = ImplHandleKey( pWindow, EVENT_KEYUP,
+            nRet = ImplHandleKey( pWindow, MouseNotifyEvent::KEYUP,
                 pKeyEvt->GetKeyCode().GetFullCode(), pKeyEvt->GetCharCode(), pKeyEvt->GetRepeat(), false );
             }
             break;

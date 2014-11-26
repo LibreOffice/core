@@ -260,7 +260,7 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
 {
     switch(rNEvt.GetType())
     {
-        case EVENT_GETFOCUS:
+        case MouseNotifyEvent::GETFOCUS:
             if( m_pWin && getPanel() && getPanel()->HasChildPathFocus() )
                 m_eChildFocus = PANELSWAP;
             else if ( m_pWin && getDetailView() && getDetailView()->HasChildPathFocus() )
@@ -268,7 +268,7 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
             else
                 m_eChildFocus = NONE;
             break;
-        case EVENT_KEYINPUT:
+        case MouseNotifyEvent::KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             // give the pane the chance to intercept mnemonic accelerators
