@@ -27,6 +27,7 @@
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <osl/diagnose.h>
 
 namespace pdfi
 {
