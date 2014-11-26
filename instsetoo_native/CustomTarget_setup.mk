@@ -131,7 +131,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
 		echo '[Bootstrap]' \
-		&& echo 'buildid=$(LIBO_VERSION_MAJOR)$(LIBO_VERSION_MINOR)$(LIBO_VERSION_MICRO)(Build:$(LIBO_VERSION_PATCH))' \
+		&& echo 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)' \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,soffice) :
