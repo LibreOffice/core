@@ -2448,13 +2448,12 @@ void XMLShapeExport::ImpExportConnectorShape(
                 nDelta1);
         if( nDelta2 != 0 || nDelta3 != 0 )
         {
-            const char aSpace = ' ';
-            sStringBuffer.appendAscii( &aSpace, 1 );
+            sStringBuffer.append( ' ' );
             mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                     nDelta2);
             if( nDelta3 != 0 )
             {
-                sStringBuffer.appendAscii( &aSpace, 1 );
+                sStringBuffer.append( ' ' );
                 mrExport.GetMM100UnitConverter().convertMeasureToXML(
                         sStringBuffer, nDelta3);
             }
