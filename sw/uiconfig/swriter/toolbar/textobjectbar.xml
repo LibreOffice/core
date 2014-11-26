@@ -36,7 +36,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
- <toolbar:toolbaritem xlink:href=".uno:Shadowed" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontColor"/>
@@ -48,20 +48,27 @@
  <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:helpid="27346" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:helpid="27347" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectAll" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SelectAll" toolbar:visible="false"/>
 </toolbar:toolbar>
