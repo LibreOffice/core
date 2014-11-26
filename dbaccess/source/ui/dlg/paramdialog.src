@@ -21,7 +21,7 @@
 
 String STR_COULD_NOT_CONVERT_PARAM
 {
-    Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\"column";
+    Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\" column";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
