@@ -315,7 +315,7 @@ void SfxInfoBarContainerWindow::Resize( )
     }
 }
 
-SFX_IMPL_POS_CHILDWINDOW_WITHID( SfxInfoBarContainerChild, SID_INFOBARCONTAINER, SFX_OBJECTBAR_OBJECT );
+SFX_IMPL_POS_CHILDWINDOW_WITHID( SfxInfoBarContainerChild, SID_INFOBAR, SFX_OBJECTBAR_OBJECT );
 
 SfxInfoBarContainerChild::SfxInfoBarContainerChild( vcl::Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* ) :
     SfxChildWindow( _pParent, nId ),

@@ -3497,7 +3497,6 @@ SfxVoidItem NameChangedOnTab SID_BASICIDE_NAMECHANGEDONTAB
 
 
 SfxBoolItem Navigator SID_NAVIGATOR
-
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -3522,6 +3521,30 @@ SfxBoolItem Navigator SID_NAVIGATOR
     GroupId = GID_NAVIGATOR;
 ]
 
+SfxBoolItem InfoBar SID_INFOBAR
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
 
 SfxBoolItem TaskPane SID_TASKPANE
 [

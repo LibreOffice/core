@@ -572,7 +572,7 @@
 #define SID_SIDEBAR                         (SID_SVX_START + 336)
 #define SID_HYPERLINK_GETLINK               (SID_SVX_START + 361)
 #define SID_HYPERLINK_SETLINK               (SID_SVX_START + 362)
-#define SID_INFOBARCONTAINER                (SID_SVX_START + 365)
+#define SID_INFOBAR                         (SID_SVX_START + 365)
 #define SID_NAVIGATOR                       (SID_SVX_START + 366)
 #define SID_TASKPANE                        (SID_SVX_START + 370)
 #define SID_ZOOM_NEXT                       (SID_SVX_START + 402)
