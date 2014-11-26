@@ -46,7 +46,6 @@ endif
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/python,\
     scp2/source/python/file_python \
     scp2/source/python/file_python_librelogo \
-    scp2/source/python/profileitem_python \
     scp2/source/python/module_python \
 ))
 

@@ -840,6 +840,12 @@ $(eval $(call gb_Helper_register_packages_for_install,writer_brand,\
 ))
 endif # GUIBASE=unx
 
+ifneq ($(DISABLE_PYTHON),TRUE)
+$(eval $(call gb_Helper_register_packages_for_install,python, \
+    pyuno_pythonloader_ini \
+))
+endif
+
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\
 	genbrk \
