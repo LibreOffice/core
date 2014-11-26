@@ -20,5 +20,6 @@ $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/tem
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/standard.bau,user/autotext/en-US/standard.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/autotext/en-US/crdbus50.bau,user/autotext/en-US/crdbus50.bau))
 $(eval $(call gb_Package_add_file,test_unittest,unittest/user/config/soffice.cfg/.dummy,empty-directory-dummy))
+$(eval $(call gb_Package_add_file,test_unittest,unittest/user/autocorr/acor_en-US.dat,user/autocorr/acor_fr.dat))
 
 # vim: set noet sw=4 ts=4:
