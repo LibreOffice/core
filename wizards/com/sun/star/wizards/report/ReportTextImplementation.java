@@ -129,9 +129,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     static String sReportFormNotExisting;
     static String sMsgHiddenControlMissing;
     static String sMsgEndAutopilot;
-    static String sMsgConnectionImpossible;
     static String sMsgNoConnection;
-    static String[] ReportMessages = new String[4];
 
     private void initialResources()
     {

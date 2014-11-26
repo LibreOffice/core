@@ -34,7 +34,6 @@ public class TitlesComponent extends ControlScroller
     public String[] fieldnames;
     public Map<String, String> fieldtitleset;
     public String[] fieldtitles;
-    public XTextListener xTextListener;
     static final String SOLABELPREFIX = "lblColumnName_";
     static final String SOTITLEPREFIX = "lblTitleName_";
 
@@ -87,7 +86,6 @@ public class TitlesComponent extends ControlScroller
     class ControlRow
     {
 
-        PropertyValue[] regproperties;
         XTextComponent xTextComponent;
 
         public ControlRow(int _index, int _iCompPosY)

@@ -47,13 +47,10 @@ public class DBColumn
     public XCell xValCell;
     public XTextRange xValTextCell;
     public XTextCursor xValCellCursor;
-    public XNumberFormats xValCellNumberFormats;
     public XCell xNameCell;
     public XTextRange xNameTextCell;
     public boolean bAlignLeft;
-    public Object DefaultValue;
     public String CharFontName;
-    public int FormatKey;
     public PropertyState PropertyState;
     public int ValColumn = 1;
     public int ValRow = 0;
@@ -63,7 +60,6 @@ public class DBColumn
     private XCellRange xCellRange;
     public XNamed xTableName;
     private boolean bIsGroupColumn;
-    TextDocument oTextDocument;
     RecordParser CurDBMetaData;
     RecordTable CurRecordTable;
     TextTableHandler oTextTableHandler;

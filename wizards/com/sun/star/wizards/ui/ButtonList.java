@@ -61,7 +61,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private static final int imageTextLines = 1;
     private boolean rowSelect = false;
     public int tabIndex;
-    public Boolean scaleImages = Boolean.TRUE;
     private String m_aControlName = "il";
     private int m_nCurrentSelection = -1;
     private int pageStart = 0;

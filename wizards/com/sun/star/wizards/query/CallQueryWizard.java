@@ -57,7 +57,6 @@ public class CallQueryWizard
     {
         private PropertyValue[] m_wizardContext;
         public String           Command;
-        public final Integer    CommandType = com.sun.star.sdb.CommandType.QUERY;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param i_serviceFactory A special service factory could be introduced while initializing.

@@ -51,7 +51,6 @@ public class FieldFormatter implements XItemListener
     XButton btnShiftUp;
     XButton btnShiftDown;
     short curtabindex;
-    String[] fieldnames;
     String suntitled;
     Integer IFieldFormatStep;
 

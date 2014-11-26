@@ -72,7 +72,6 @@ public class TextDocument
 
     public XComponent xComponent;
     public com.sun.star.text.XTextDocument xTextDocument;
-    public com.sun.star.util.XNumberFormats NumberFormats;
     public com.sun.star.document.XDocumentProperties m_xDocProps;
     public com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
@@ -82,9 +81,7 @@ public class TextDocument
     public com.sun.star.util.XNumberFormatsSupplier xNumberFormatsSupplier;
     public com.sun.star.awt.XWindowPeer xWindowPeer;
     public int PageWidth;
-    public int ScaleWidth;
     public Size DocSize;
-    public com.sun.star.awt.Rectangle PosSize;
     public com.sun.star.lang.Locale CharLocale;
     public XStorable xStorable;
 

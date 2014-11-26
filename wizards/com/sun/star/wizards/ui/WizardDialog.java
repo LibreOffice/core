@@ -50,12 +50,10 @@ import com.sun.star.wizards.ui.event.XWindowListenerAdapter;
 public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener, XCompletion
 {
 
-    public VetoableChangeSupport vetos = new VetoableChangeSupport(this);
     private static final int iButtonWidth = 50;
     private int nNewStep = 1;
     private int nOldStep = 1;
     private int nMaxStep = 1;
-    protected XItemListener RoadmapItemListener;
     XItemEventBroadcaster xRoadmapBroadcaster;
     String[] sRMItemLabels;
     private Object oRoadmap;

@@ -42,7 +42,6 @@ public abstract class ControlScroller
     protected int iCompPosY;
     protected Integer ICompWidth;
     protected int iCompWidth;
-    protected Integer ICompHeight;
     protected int iCompHeight;
     protected int iStartPosY;
     protected short curtabindex;
@@ -54,7 +53,6 @@ public abstract class ControlScroller
     protected int curHelpIndex;
     String sIncSuffix;
     protected ArrayList<Object> ControlGroupVector = new ArrayList<Object>();
-    protected PeerConfig oTitlePeerConfig;
 
     class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
     {

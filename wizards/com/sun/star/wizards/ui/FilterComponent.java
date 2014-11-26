@@ -101,12 +101,6 @@ public class FilterComponent
     static final int SO_SECONDBOOLFIELDNAME = 256 + 2;
     static final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     static final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
-    int SO_BOOLEANLIST[] =
-
-
-    {
-        SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
-    };
     static final int SO_OPTQUERYMODE = 5;
     int SOI_MATCHALL = 0;
     int SOI_MATCHANY = 1;

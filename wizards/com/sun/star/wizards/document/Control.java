@@ -45,10 +45,7 @@ public class Control extends Shape
     public XPropertySet xPropertySet;
     XPropertySet xControlPropertySet;
     XWindowPeer xWindowPeer;
-    Object oDefaultValue;
-    GridControl oGridControl;
     String sServiceName;
-    XNamed xNamed;
     static final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
     protected XNameContainer xFormName;

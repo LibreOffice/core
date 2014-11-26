@@ -30,7 +30,6 @@ public class PlaceholderTextElement extends TextElement
     String hint;
     String placeHolderText;
     XMultiServiceFactory xmsf;
-    TextDocument templateDocument;
 
     public PlaceholderTextElement(XTextRange textRange, String placeHolderText_, String hint_, XMultiServiceFactory xmsf_)
     {

@@ -36,7 +36,6 @@ public class Finalizer
     WizardDialog CurUnoDialog;
     short curtabindex;
     XRadioButton optModifyForm;
-    XRadioButton optWorkWithForm;
     XTextComponent txtFormName;
     FormDocument oFormDocument;
 

@@ -38,7 +38,6 @@ public class TimeStampControl extends DatabaseControl
     DatabaseControl oDateControl;
     DatabaseControl oTimeControl;
     Resource oResource;
-    XShapes xGroupShapes = null;
     double nreldatewidth;
     double nreltimewidth;
     int nTimeWidth;

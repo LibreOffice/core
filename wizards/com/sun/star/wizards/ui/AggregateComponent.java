@@ -52,20 +52,10 @@ public class AggregateComponent extends ControlScroller
     String slblFieldNames;
     String sDuplicateAggregateFunction;
     int Count;
-    int iQueryType;
     static final int SOADDROW = 1;
     static final int SOREMOVEROW = 2;
     static final int CONTROLROWDIST = 18;
     ArrayList<ControlRow> ControlRowVector;
-    String OPTIONBUTTONDETAILQUERY_ITEM_CHANGED = "toggleComponent";
-    String OPTIONBUTTONSUMMARYQUERY_ITEM_CHANGED = "toggleComponent";
-    String LISTBOXFUNCTIONS_ACTION_PERFORMED;
-    String LISTBOXFUNCTIONS_ITEM_CHANGED;
-    String LISTBOXFIELDNAMES_ACTION_PERFORMED;
-    String LISTBOXFIELDNAMES_ITEM_CHANGED;
-    String COMMANDBUTTONPLUS_ACTION_PERFORMED = "addRow";
-    String COMMANDBUTTONMINUS_ACTION_PERFORMED = "removeRow";
-    ArrayList<String> ControlRows;
     int curHelpID;
     int lastHelpIndex;
 

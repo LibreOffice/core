@@ -86,7 +86,6 @@ public class DBMetaData
     private XOfficeDatabaseDocument xModel;
     private XPropertySet xDataSourcePropertySet;
     public String[] DataSourceNames;
-    public String[] CommandNames;
     public java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
     public Locale aLocale;
     public int[] CommandTypes;

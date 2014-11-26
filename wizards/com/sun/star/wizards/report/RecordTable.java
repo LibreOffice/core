@@ -33,8 +33,6 @@ import com.sun.star.wizards.text.ViewHandler;
 public class RecordTable
 {
 
-    String CurFieldName;
-    String LabelDescription;
     public XNamed xTableName;
     public XCellRange xCellRange;
     public XTextTable xTextTable;

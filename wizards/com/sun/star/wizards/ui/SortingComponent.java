@@ -30,13 +30,11 @@ public class SortingComponent
     com.sun.star.lang.XMultiServiceFactory xMSF;
     WizardDialog CurUnoDialog;
     int MaxSortIndex = -1;
-    public String[][] FieldNames;
     static String sNoSorting;
     static String sSortCriteriaisduplicate;
     static String[] sSortHeader = new String[4];
     static String[] sSortAscend = new String[4];
     static String[] sSortDescend = new String[4];
-    static short[] bOldSortValues = new short[4];
     public int MAXSORTCRITERIAINDEX = 3;
     static final int SOFIRSTSORTLST = 0;
     static final int SOSECSORTLST = 1;

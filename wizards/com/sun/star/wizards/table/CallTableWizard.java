@@ -58,7 +58,6 @@ public class CallTableWizard
         private PropertyValue[] m_wizardContext;
         // <properties>
         public String           Command;
-        public final Integer    CommandType = com.sun.star.sdb.CommandType.TABLE;
         // </properties>
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.

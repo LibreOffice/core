@@ -37,11 +37,7 @@ public class ReportFinalizer
 
     WizardDialog CurUnoDialog;
     XTextComponent xTitleTextBox;
-    XTextComponent[] xSaveTextBox = new XTextComponent[2];
-    Object chkTemplate;
-    String TemplatePath;
     String StoreName;
-    boolean bfinalaskbeforeOverwrite;
     String DefaultName;
     String OldDefaultName;
     IReportDocument CurReportDocument;

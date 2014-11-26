@@ -58,7 +58,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     public static final int SOPRIMARYKEYPAGE = 3;
     public static final int SOFINALPAGE = 4;
     private String sMsgColumnAlreadyExists = PropertyNames.EMPTY_STRING;
-    String WizardHeaderText[] = new String[8];
 
     private String m_tableName;
 

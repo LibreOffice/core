@@ -41,7 +41,6 @@ public class RecordParser extends QueryMetaData
 {
 
     XNameAccess xColumns;
-    com.sun.star.sdbc.XRow xRow;
     com.sun.star.sdbc.XRow xResultSetRow;
     public XResultSet ResultSet;
     XInterface xRowSet;
