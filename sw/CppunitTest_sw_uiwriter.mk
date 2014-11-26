@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     sfx \
     svl \

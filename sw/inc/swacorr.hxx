@@ -25,8 +25,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include "SwXMLTextBlocks.hxx"
+#include "swdllapi.h"
 
-class SwAutoCorrect : public SvxAutoCorrect
+class SW_DLLPUBLIC SwAutoCorrect : public SvxAutoCorrect
 {
     using  SvxAutoCorrect::PutText;
 
