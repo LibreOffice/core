@@ -47,7 +47,7 @@ private:
             css::io::BufferSizeExceededException, css::io::IOException,
             css::uno::RuntimeException, std::exception)
         SAL_OVERRIDE
-    { CPPUNIT_FAIL("readLine is supposed to call readSomeBytes instead"); }
+    { CPPUNIT_FAIL("readLine is supposed to call readSomeBytes instead"); return 0;}
 
     sal_Int32 SAL_CALL readSomeBytes(
         css::uno::Sequence<sal_Int8 > & aData, sal_Int32 nMaxBytesToRead)
