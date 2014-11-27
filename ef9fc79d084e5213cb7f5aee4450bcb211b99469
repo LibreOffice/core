@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_6a5e1347",
+        "filename": "sw/inc/editsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-27T15:07:56Z",
+      "side": 1,
+      "message": "typo \"vecotr\"",
+      "revId": "ef9fc79d084e5213cb7f5aee4450bcb211b99469",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
