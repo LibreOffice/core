@@ -37,7 +37,6 @@ public class ReportLayouter
 {
 
     UnoDialog CurUnoDialog;
-    static final int SOTXTTITLE = 28;
     static final int SOCONTENTLST = 29;
     final static public int SOOPTLANDSCAPE = 30;
     final static public int SOOPTPORTRAIT = 31;

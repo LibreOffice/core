@@ -54,7 +54,6 @@ public class AggregateComponent extends ControlScroller
     int Count;
     static final int SOADDROW = 1;
     static final int SOREMOVEROW = 2;
-    static final int CONTROLROWDIST = 18;
     ArrayList<ControlRow> ControlRowVector;
     int curHelpID;
     int lastHelpIndex;

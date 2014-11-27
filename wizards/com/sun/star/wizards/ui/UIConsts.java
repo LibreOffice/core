@@ -59,11 +59,9 @@ public interface UIConsts
         public static final int RADIOBUTTON = 6;
         public static final int DATEFIELD = 7;
         public static final int EDITCONTROL = 8;
-        public static final int FILECONTROL = 9;
         public static final int FIXEDLINE = 10;
         public static final int FIXEDTEXT = 11;
         public static final int FORMATTEDFIELD = 12;
-        public static final int GROUPBOX = 13;
         public static final int HYPERTEXT = 14;
         public static final int NUMERICFIELD = 15;
         public static final int PATTERNFIELD = 16;

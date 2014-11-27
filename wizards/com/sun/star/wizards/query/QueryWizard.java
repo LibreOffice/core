@@ -43,7 +43,6 @@ import com.sun.star.wizards.ui.TitlesComponent;
 public class QueryWizard extends DatabaseObjectWizard
 {
 
-    public static final String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
     private static final int SOFIELDSELECTION_PAGE = 1;
     private static final int SOSORTING_PAGE = 2;
     private static final int SOFILTER_PAGE = 3;

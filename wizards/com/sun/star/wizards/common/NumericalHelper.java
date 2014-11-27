@@ -33,7 +33,6 @@ import com.sun.star.uno.TypeClass;
 public class NumericalHelper
 {
 
-    public static final int UNKNOWN_TYPE = -32768;
     public static final int BYTE_TYPE = 0;
     public static final int SHORT_TYPE = 1;
     public static final int INT_TYPE = 2;
@@ -44,9 +43,6 @@ public class NumericalHelper
     public static final int STRING_TYPE = -1;
     public static final int BOOLEAN_TYPE = -2;
     public static final int SEQUENCE_TYPE = -3;
-    public static final int ASCII_VALUE_0 = 48;
-    public static final int ASCII_VALUE_A = 65;
-    public static final int COUNT_CHARS_IN_ALPHABET = 26;
     private static final int HEX_BASE = 16;
     private static final int DEC_BASE = 10;
     private static final int ASCII_LETTER_A_OFFSET = 55;

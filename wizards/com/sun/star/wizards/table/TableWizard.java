@@ -52,7 +52,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     String serrTableNameexists;
     String scomposedtablename;
     TableDescriptor curTableDescriptor;
-    public static final int SONULLPAGE = 0;
     public static final int SOMAINPAGE = 1;
     public static final int SOFIELDSFORMATPAGE = 2;
     public static final int SOPRIMARYKEYPAGE = 3;

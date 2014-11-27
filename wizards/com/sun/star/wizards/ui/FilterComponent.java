@@ -101,7 +101,6 @@ public class FilterComponent
     static final int SO_SECONDBOOLFIELDNAME = 256 + 2;
     static final int SO_THIRDBOOLFIELDNAME = 256 + 3;
     static final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
-    static final int SO_OPTQUERYMODE = 5;
     int SOI_MATCHALL = 0;
     int SOI_MATCHANY = 1;
     int curHelpID;
