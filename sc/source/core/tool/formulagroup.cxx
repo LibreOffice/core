@@ -21,7 +21,9 @@
 
 #include <formula/vectortoken.hxx>
 #include <officecfg/Office/Common.hxx>
+#if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
+#endif
 #include <rtl/bootstrap.hxx>
 
 #include <vector>
@@ -33,9 +35,7 @@
 #include <cstdio>
 
 #if HAVE_FEATURE_OPENCL
-
 #include "openclwrapper.hxx"
-
 #endif
 
 namespace sc {
@@ -537,16 +537,13 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
     return msInstance;
 }
 
+#if HAVE_FEATURE_OPENCL
 void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms)
 {
-#if !HAVE_FEATURE_OPENCL
-    (void) rPlatforms;
-#else
     const std::vector<OpenCLPlatformInfo>& rPlatformsFromWrapper =
         sc::opencl::fillOpenCLInfo();
 
     rPlatforms.assign(rPlatformsFromWrapper.begin(), rPlatformsFromWrapper.end());
-#endif
 }
 
 bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
@@ -566,26 +563,19 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         msInstance = new sc::FormulaGroupInterpreterSoftware();
         return true;
     }
-#if HAVE_FEATURE_OPENCL
     bool bSuccess = sc::opencl::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
-#else
-    (void) bAutoSelect;
-#endif
 
     delete msInstance;
     msInstance = NULL;
 
-#if HAVE_FEATURE_OPENCL
     if ( officecfg::Office::Common::Misc::UseOpenCL::get() )
     {
         msInstance = new sc::opencl::FormulaGroupInterpreterOpenCL();
         return msInstance != NULL;
     }
-#else
-    (void) bForceEvaluation;
-#endif
+
     return false;
 }
 
@@ -597,15 +587,12 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     if(!bOpenCLEnabled)
         return;
 
-#if HAVE_FEATURE_OPENCL
-
     size_t aDeviceId = static_cast<size_t>(-1);
     size_t aPlatformId = static_cast<size_t>(-1);
 
     sc::opencl::getOpenCLDeviceInfo(aDeviceId, aPlatformId);
     rDeviceId = aDeviceId;
     rPlatformId = aPlatformId;
-#endif
 }
 
 void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely, const std::set<OpCodeEnum>& rSubsetToEnable)
@@ -619,6 +606,8 @@ void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely,
     aConfig.maOpenCLSubsetOpCodes = rSubsetToEnable;
     ScInterpreter::SetGlobalConfig(aConfig);
 }
+
+#endif
 
 } // namespace sc
 
