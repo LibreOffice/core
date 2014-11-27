@@ -153,6 +153,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpBtnFalse, "false");
     get(mpSpinButton, "spinbutton");
     get(mpEditField, "entry");
+    get(mpTestButton, "test");
     get(mpOpenclInfoList, "opencl_list");
     get(mpBtnAutomaticSelectionTrue, "automatic_select_true");
     get(mpBtnAutomaticSelectionFalse, "automatic_select_false");
@@ -203,6 +204,8 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     Link aLink = LINK(this, ScCalcOptionsDialog, SettingsSelHdl);
     mpLbSettings->SetSelectHdl(aLink);
     mpLbOptionEdit->SetSelectHdl(aLink);
+
+    mpTestButton->SetClickHdl(LINK(this, ScCalcOptionsDialog, TestClickHdl));
 
     aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
     mpBtnTrue->SetToggleHdl(aLink); // Set handler only to the 'True' button.
@@ -729,8 +732,6 @@ IMPL_LINK(ScCalcOptionsDialog, EditModifiedHdl, Control*, pCtrl)
     return 0;
 }
 
-#if 0
-
 namespace {
 
 struct Area
@@ -1162,7 +1163,5 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 
     return 0;
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
