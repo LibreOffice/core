@@ -1124,7 +1124,6 @@ namespace {
 
 bool needToExtendSelection(const OUString& rSelectedText, const OUString& rInsertText)
 {
-    SAL_DEBUG(rSelectedText);
     return !rInsertText.startsWithIgnoreAsciiCase(rSelectedText);
 }
 
