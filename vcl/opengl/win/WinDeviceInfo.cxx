@@ -343,6 +343,7 @@ bool ParseDriverVersion(const OUString& aVersion, uint64_t *aNumericVersion)
 
 template<typename T> void appendIntegerWithPadding(OUString& rString, T value, sal_uInt32 nChars)
 {
+    rString += "0x";
     OUString aValue = OUString::number(value, 16);
     sal_Int32 nLength = aValue.getLength();
     sal_uInt32 nPadLength = nChars - nLength;
@@ -572,6 +573,7 @@ WinOpenGLDeviceInfo::WinOpenGLDeviceInfo():
     mbRDP(false)
 {
     GetData();
+    FillBlacklist();
 }
 
 WinOpenGLDeviceInfo::~WinOpenGLDeviceInfo()
@@ -616,36 +618,35 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
             }
         }
 
-#if defined(XP_WIN) || defined(ANDROID)
         switch (maDriverInfo[i].meComparisonOp) {
-            case DRIVER_LESS_THAN:
+            case wgl::DRIVER_LESS_THAN:
                 match = driverVersion < maDriverInfo[i].mnDriverVersion;
                 break;
-            case DRIVER_LESS_THAN_OR_EQUAL:
+            case wgl::DRIVER_LESS_THAN_OR_EQUAL:
                 match = driverVersion <= maDriverInfo[i].mnDriverVersion;
                 break;
-            case DRIVER_GREATER_THAN:
+            case wgl::DRIVER_GREATER_THAN:
                 match = driverVersion > maDriverInfo[i].mnDriverVersion;
                 break;
-            case DRIVER_GREATER_THAN_OR_EQUAL:
+            case wgl::DRIVER_GREATER_THAN_OR_EQUAL:
                 match = driverVersion >= maDriverInfo[i].mnDriverVersion;
                 break;
-            case DRIVER_EQUAL:
+            case wgl::DRIVER_EQUAL:
                 match = driverVersion == maDriverInfo[i].mnDriverVersion;
                 break;
-            case DRIVER_NOT_EQUAL:
+            case wgl::DRIVER_NOT_EQUAL:
                 match = driverVersion != maDriverInfo[i].mnDriverVersion;
                 break;
-            case DRIVER_BETWEEN_EXCLUSIVE:
+            case wgl::DRIVER_BETWEEN_EXCLUSIVE:
                 match = driverVersion > maDriverInfo[i].mnDriverVersion && driverVersion < maDriverInfo[i].mnDriverVersionMax;
                 break;
-            case DRIVER_BETWEEN_INCLUSIVE:
+            case wgl::DRIVER_BETWEEN_INCLUSIVE:
                 match = driverVersion >= maDriverInfo[i].mnDriverVersion && driverVersion <= maDriverInfo[i].mnDriverVersionMax;
                 break;
-            case DRIVER_BETWEEN_INCLUSIVE_START:
+            case wgl::DRIVER_BETWEEN_INCLUSIVE_START:
                 match = driverVersion >= maDriverInfo[i].mnDriverVersion && driverVersion < maDriverInfo[i].mnDriverVersionMax;
                 break;
-            case DRIVER_COMPARISON_IGNORED:
+            case wgl::DRIVER_COMPARISON_IGNORED:
                 // We don't have a comparison op, so we match everything.
                 match = true;
                 break;
@@ -653,11 +654,6 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
                 SAL_WARN("vcl.opengl", "Bogus op in GfxDriverInfo");
                 break;
         }
-#else
-        // We don't care what driver version it was. We only check OS version and if
-        // the device matches.
-        match = true;
-#endif
 
         if (match || maDriverInfo[i].mnDriverVersion == wgl::DriverInfo::allDriverVersions) {
             match = true;
