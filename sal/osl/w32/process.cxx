@@ -37,7 +37,6 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 
-#include "getexecutablefile.hxx"
 #include "procimpl.h"
 #include "sockimpl.h"
 #include "file_url.h"
@@ -205,18 +204,9 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     return osl_error;
 }
 
-/***************************************************************************
- * osl_bootstrap_getExecutableFile_Impl().
- *
- * @internal
- * @see rtl_bootstrap
- * @see #i37371#
- *
- ***************************************************************************/
+namespace {
 
-extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
-    rtl_uString ** ppFileURL
-) SAL_THROW_EXTERN_C()
+oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
     oslProcessError result = osl_Process_E_NotFound;
 
@@ -240,6 +230,8 @@ extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     }
 
     return (result);
+}
+
 }
 
 /***************************************************************************
@@ -315,19 +307,17 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 
 oslProcessError SAL_CALL osl_getExecutableFile( rtl_uString **ppustrFile )
 {
-    oslProcessError result = osl_Process_E_NotFound;
-
     osl_acquireMutex (*osl_getGlobalMutex());
-    OSL_ASSERT(g_command_args.m_nCount > 0);
-    if (g_command_args.m_nCount > 0)
+    if (g_command_args.m_nCount == 0)
     {
-        /* CommandArgs set. Obtain arv[0]. */
-        rtl_uString_assign (ppustrFile, g_command_args.m_ppArgs[0]);
-        result = osl_Process_E_None;
+        osl_releaseMutex (*osl_getGlobalMutex());
+        return bootstrap_getExecutableFile(ppustrFile);
     }
-    osl_releaseMutex (*osl_getGlobalMutex());
 
-    return (result);
+    /* CommandArgs set. Obtain arv[0]. */
+    rtl_uString_assign (ppustrFile, g_command_args.m_ppArgs[0]);
+    osl_releaseMutex (*osl_getGlobalMutex());
+    return osl_Process_E_None;
 }
 
 /***************************************************************************/
