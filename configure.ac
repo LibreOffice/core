@@ -5103,7 +5103,7 @@ find_winsdk()
 
 find_msms()
 {
-    for ver in 10.0 11.0; do
+    for ver in 10.0 11.0 12.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
