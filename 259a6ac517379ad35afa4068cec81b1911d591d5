@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_2d34b5dc",
+        "filename": "sw/source/core/doc/docbm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 555,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-27T20:12:39Z",
+      "side": 1,
+      "message": "better just do the SetModified call from here",
+      "revId": "259a6ac517379ad35afa4068cec81b1911d591d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_8d24c9af",
+        "filename": "sw/source/core/inc/bookmrk.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-27T20:12:39Z",
+      "side": 1,
+      "message": "please don\u0027t overload virtual functions, it\u0027s very confusing!",
+      "revId": "259a6ac517379ad35afa4068cec81b1911d591d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
