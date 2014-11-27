@@ -87,7 +87,8 @@ void GetDLLVersion(const sal_Unicode* aDLLPath, OUString& aVersion)
 template<typename T, size_t N>
 size_t ArrayLength(T (&aArr)[N])
 {
-      return N;
+    (void) aArr;
+    return N;
 }
 
 #define GFX_DRIVER_VERSION(a,b,c,d) \
@@ -200,6 +201,29 @@ enum {
     kWindows8_1 = 0x60003,
     kWindows10 = 0x60004
 };
+
+
+wgl::OperatingSystem WindowsVersionToOperatingSystem(int32_t aWindowsVersion)
+{
+    switch(aWindowsVersion) {
+        case kWindowsXP:
+            return wgl::DRIVER_OS_WINDOWS_XP;
+        case kWindowsServer2003:
+            return wgl::DRIVER_OS_WINDOWS_SERVER_2003;
+        case kWindowsVista:
+            return wgl::DRIVER_OS_WINDOWS_VISTA;
+        case kWindows7:
+            return wgl::DRIVER_OS_WINDOWS_7;
+        case kWindows8:
+            return wgl::DRIVER_OS_WINDOWS_8;
+        case kWindows8_1:
+            return wgl::DRIVER_OS_WINDOWS_8_1;
+        case kWindowsUnknown:
+        default:
+            return wgl::DRIVER_OS_UNKNOWN;
+    };
+}
+
 
 int32_t WindowsOSVersion()
 {
@@ -321,7 +345,7 @@ template<typename T> void appendIntegerWithPadding(OUString& rString, T value, s
 {
     OUString aValue = OUString::number(value, 16);
     sal_Int32 nLength = aValue.getLength();
-    sal_Int32 nPadLength = nChars - nLength;
+    sal_uInt32 nPadLength = nChars - nLength;
     assert(nPadLength >= 0);
     OUStringBuffer aBuffer;
     for (sal_uInt32 i = 0; i < nPadLength; ++i)
@@ -366,7 +390,10 @@ DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor,
     meComparisonOp(op),
     mnDriverVersion(driverVersion),
     mnDriverVersionMax(0)
-{}
+{
+    if (suggestedVersion)
+        maSuggestedVersion = OStringToOUString(OString(suggestedVersion), RTL_TEXTENCODING_UTF8);
+}
 
 DriverInfo::DriverInfo(const DriverInfo& aOrig)
     : meOperatingSystem(aOrig.meOperatingSystem),
@@ -551,6 +578,97 @@ WinOpenGLDeviceInfo::~WinOpenGLDeviceInfo()
 {
 }
 
+bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
+{
+    uint64_t driverVersion;
+    ParseDriverVersion(maDriverVersion, &driverVersion);
+
+    wgl::OperatingSystem eOS = WindowsVersionToOperatingSystem(mnWindowsVersion);
+    bool match = false;
+    uint32_t i = 0;
+    for (; i < maDriverInfo.size(); i++) {
+        if (maDriverInfo[i].meOperatingSystem != wgl::DRIVER_OS_ALL &&
+                maDriverInfo[i].meOperatingSystem != eOS)
+        {
+            continue;
+        }
+
+        if (maDriverInfo[i].mnOperatingSystemVersion && maDriverInfo[i].mnOperatingSystemVersion != mnWindowsVersion) {
+            continue;
+        }
+
+        if (!maDriverInfo[i].maAdapterVendor.equalsIgnoreAsciiCase(GetDeviceVendor(wgl::VendorAll)) &&
+                !maDriverInfo[i].maAdapterVendor.equalsIgnoreAsciiCase(maAdapterVendorID)) {
+            continue;
+        }
+
+        if (maDriverInfo[i].mpDevices != wgl::DriverInfo::allDevices && maDriverInfo[i].mpDevices->size()) {
+            bool deviceMatches = false;
+            for (uint32_t j = 0; j < maDriverInfo[i].mpDevices->size(); j++) {
+                if ((*maDriverInfo[i].mpDevices)[j].equalsIgnoreAsciiCase(maAdapterDeviceID)) {
+                    deviceMatches = true;
+                    break;
+                }
+            }
+
+            if (!deviceMatches) {
+                continue;
+            }
+        }
+
+#if defined(XP_WIN) || defined(ANDROID)
+        switch (maDriverInfo[i].meComparisonOp) {
+            case DRIVER_LESS_THAN:
+                match = driverVersion < maDriverInfo[i].mnDriverVersion;
+                break;
+            case DRIVER_LESS_THAN_OR_EQUAL:
+                match = driverVersion <= maDriverInfo[i].mnDriverVersion;
+                break;
+            case DRIVER_GREATER_THAN:
+                match = driverVersion > maDriverInfo[i].mnDriverVersion;
+                break;
+            case DRIVER_GREATER_THAN_OR_EQUAL:
+                match = driverVersion >= maDriverInfo[i].mnDriverVersion;
+                break;
+            case DRIVER_EQUAL:
+                match = driverVersion == maDriverInfo[i].mnDriverVersion;
+                break;
+            case DRIVER_NOT_EQUAL:
+                match = driverVersion != maDriverInfo[i].mnDriverVersion;
+                break;
+            case DRIVER_BETWEEN_EXCLUSIVE:
+                match = driverVersion > maDriverInfo[i].mnDriverVersion && driverVersion < maDriverInfo[i].mnDriverVersionMax;
+                break;
+            case DRIVER_BETWEEN_INCLUSIVE:
+                match = driverVersion >= maDriverInfo[i].mnDriverVersion && driverVersion <= maDriverInfo[i].mnDriverVersionMax;
+                break;
+            case DRIVER_BETWEEN_INCLUSIVE_START:
+                match = driverVersion >= maDriverInfo[i].mnDriverVersion && driverVersion < maDriverInfo[i].mnDriverVersionMax;
+                break;
+            case DRIVER_COMPARISON_IGNORED:
+                // We don't have a comparison op, so we match everything.
+                match = true;
+                break;
+            default:
+                SAL_WARN("vcl.opengl", "Bogus op in GfxDriverInfo");
+                break;
+        }
+#else
+        // We don't care what driver version it was. We only check OS version and if
+        // the device matches.
+        match = true;
+#endif
+
+        if (match || maDriverInfo[i].mnDriverVersion == wgl::DriverInfo::allDriverVersions) {
+            match = true;
+            SAL_WARN("vcl.opengl", "use : " << maDriverInfo[i].maSuggestedVersion);
+            break;
+        }
+    }
+
+    return match;
+}
+
 bool WinOpenGLDeviceInfo::isDeviceBlocked()
 {
     SAL_INFO("vcl.opengl", maDriverVersion);
@@ -561,7 +679,13 @@ bool WinOpenGLDeviceInfo::isDeviceBlocked()
     SAL_INFO("vcl.opengl", maAdapterSubsysID);
     SAL_INFO("vcl.opengl", maDeviceKey);
     SAL_INFO("vcl.opengl", maDeviceString);
-    return false;
+
+    // Check if the device is blocked from the downloaded blocklist. If not, check
+    // the static list after that. This order is used so that we can later escape
+    // out of static blocks (i.e. if we were wrong or something was patched, we
+    // can back out our static block without doing a release).
+
+    return FindBlocklistedDeviceInList();
 }
 
 void WinOpenGLDeviceInfo::GetData()
