@@ -1562,7 +1562,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
 
     _nWhich = GetWhich( SID_ATTR_PARA_PAGENUM );
 
-    if ( rSet.GetItemState(_nWhich) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState(_nWhich) >= SFX_ITEM_SET )
     {
         const sal_uInt16 nPageNum =
             ( (const SfxUInt16Item&)rSet.Get( _nWhich ) ).GetValue();
