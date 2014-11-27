@@ -977,8 +977,6 @@ private:
                             void* pClientData,
                             Rectangle& rTextRect,
                             SdrObject* pOldSdrObj = 0 ) SAL_OVERRIDE;
-    /** Returns the BLIP stream position, based on the passed DFF stream position. */
-    virtual sal_uLong       Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong nStreamPos ) const SAL_OVERRIDE;
 
     // virtual functions of SvxMSConvertOCXControls
 

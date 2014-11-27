@@ -3534,11 +3534,6 @@ SdrObject* XclImpDffConverter::ProcessObj( SvStream& rDffStrm, DffObjData& rDffO
     return xSdrObj.release();
 }
 
-sal_uLong XclImpDffConverter::Calc_nBLIPPos( sal_uLong /*nOrgVal*/, sal_uLong nStreamPos ) const
-{
-    return nStreamPos + 4;
-}
-
 bool XclImpDffConverter::InsertControl( const Reference< XFormComponent >& rxFormComp,
         const ::com::sun::star::awt::Size& /*rSize*/, Reference< XShape >* pxShape,
         bool /*bFloatingCtrl*/ )

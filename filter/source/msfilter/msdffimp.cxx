@@ -5863,10 +5863,6 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 if( (!nBLIPPos) && (nBLIPLen < nLenFBSE) )
                     nBLIPPos = rSt.Tell() + 4;
 
-                // That worked great!
-                // We store, that we do have one FBSE more in the pointer array.
-                nBLIPPos = Calc_nBLIPPos(nBLIPPos, rSt.Tell());
-
                 if( USHRT_MAX == nBLIPCount )
                     nBLIPCount = 1;
                 else
@@ -6483,11 +6479,6 @@ bool SvxMSDffManager::ProcessClientData(SvStream& rStData, sal_uInt32 nDatLen,
 void SvxMSDffManager::ProcessClientAnchor2( SvStream& /* rSt */, DffRecordHeader& /* rHd */ , void* /* pData */, DffObjData& /* rObj */ )
 {
     return;  // will be overloaded by SJ in Draw
-}
-
-sal_uLong SvxMSDffManager::Calc_nBLIPPos( sal_uLong nOrgVal, sal_uLong /* nStreamPos */ ) const
-{
-    return nOrgVal;
 }
 
 bool SvxMSDffManager::GetOLEStorageName( long /* nOLEId */, OUString&, SvStorageRef&, uno::Reference < embed::XStorage >& ) const

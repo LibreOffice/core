@@ -504,8 +504,6 @@ protected :
                                    void* pData,
                                    Rectangle& rTextRect,
                                    SdrObject* pObj = NULL);
-    virtual sal_uLong Calc_nBLIPPos( sal_uLong nOrgVal,
-                                     sal_uLong nStreamPos ) const;
     virtual bool GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const;
 
     // Fontwork objects use a new implementation of ReadObjText because the old
