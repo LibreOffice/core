@@ -5798,8 +5798,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
 }
 
 
-// from here on: Drawing Group Container  i.e. Ddocument-wide valid data
-//                      =======================           ========
+// from here on: Drawing Group Container  i.e. document-wide valid data
 
 void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLenDgg )
 {
@@ -5839,7 +5838,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
     {
         if(!ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
         nRead += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
-        if( DFF_msofbtBSE == nFbt )
+        if( DFF_msofbtBSE == nFbt && /* magic value from spec */ 0x2 == nVer )
         {
             nLenFBSE = nLength;
             // is FBSE big enough for our data
@@ -5876,8 +5875,9 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                 // now save the info for later access
                 pBLIPInfos->push_back( new SvxMSDffBLIPInfo( nInst, nBLIPPos, nBLIPLen ) );
             }
+            rSt.SeekRel( nLength );
         }
-        rSt.SeekRel( nLength );
+        else return; // invalid input
     }
     while( nRead < nLenBStoreCont );
 }
