@@ -41,6 +41,7 @@ public:
     DECL_LINK( DeviceSelHdl, void* );
     DECL_LINK( NumModifiedHdl, void * );
     DECL_LINK( EditModifiedHdl, Control * );
+    DECL_LINK( TestClickHdl, PushButton* );
 
     const ScCalcConfig& GetConfig() const { return maConfig;}
 
@@ -74,6 +75,7 @@ private:
     RadioButton* mpBtnFalse;
     NumericField* mpSpinButton;
     Edit* mpEditField;
+    PushButton* mpTestButton;
 
     FixedText* mpFtAnnotation;
     FixedText* mpFtFrequency;
