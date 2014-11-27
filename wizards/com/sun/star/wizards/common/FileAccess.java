@@ -21,7 +21,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.Locale;
 import com.sun.star.uno.Exception;
 import com.sun.star.util.XMacroExpander;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
@@ -495,18 +494,6 @@ public class FileAccess
         filenameConverter = UnoRuntime.queryInterface(XFileIdentifierConverter.class, fcv);
     }
 
-    public String getURL(String parentPath, String childPath)
-    {
-        String parent = filenameConverter.getSystemPathFromFileURL(parentPath);
-        File f = new File(parent, childPath);
-        return filenameConverter.getFileURLFromSystemPath(parentPath, f.getAbsolutePath());
-    }
-
-    public String getPath(String parentURL, String childURL)
-    {
-        return filenameConverter.getSystemPathFromFileURL(parentURL + (((childURL == null || childURL.equals(PropertyNames.EMPTY_STRING)) ? PropertyNames.EMPTY_STRING : "/" + childURL)));
-    }
-
     /**
      * @return the extension of the given filename.
      */
@@ -565,31 +552,6 @@ public class FileAccess
         String filename = getFilename(path, pathSeparator);
         String sExtension = getExtension(filename);
         return filename.substring(0, filename.length() - (sExtension.length() + 1));
-    }
-
-    /**
-     * @return the parent dir of the given url.
-     * if the path points to file, gives the directory in which the file is.
-     */
-    public static String getParentDir(String url)
-    {
-        if (url.endsWith("/"))
-        {
-            return getParentDir(url.substring(0, url.length() - 1));
-        }
-        int pos = -1;
-        int lastPos = 0;
-        while ((pos = url.indexOf('/', pos + 1)) > -1)
-        {
-            lastPos = pos;
-        }
-        return url.substring(0, lastPos);
-    }
-
-    public static String connectURLs(String urlFolder, String urlFilename)
-    {
-        return urlFolder + (urlFolder.endsWith("/") ? PropertyNames.EMPTY_STRING : "/") +
-                (urlFilename.startsWith("/") ? urlFilename.substring(1) : urlFilename);
     }
 
     public static String[] getDataFromTextFile(XMultiServiceFactory _xMSF, String _filepath)

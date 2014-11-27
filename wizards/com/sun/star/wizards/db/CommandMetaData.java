@@ -22,13 +22,11 @@ import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.Locale;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import java.util.ArrayList;
@@ -68,11 +66,6 @@ public class CommandMetaData extends DBMetaData
     String sIdentifierQuote = PropertyNames.EMPTY_STRING;
     boolean bCommandComposerAttributesalreadyRetrieved = false;
     private XIndexAccess xIndexKeys;
-
-    public CommandMetaData(XMultiServiceFactory xMSF, Locale _aLocale, NumberFormatter oNumberFormatter)
-    {
-        super(xMSF, _aLocale, oNumberFormatter);
-    }
 
     public CommandMetaData(XMultiServiceFactory xMSF)
     {

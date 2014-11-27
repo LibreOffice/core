@@ -21,7 +21,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.dialogs.*;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.util.XStringSubstitution;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XInitialization;
@@ -29,7 +28,6 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XMessageBox;
-import com.sun.star.beans.PropertyValue;
 
 public class SystemDialog
 {
@@ -45,179 +43,6 @@ public class SystemDialog
     XMultiServiceFactory xMSF;
     public XStringSubstitution xStringSubstitution;
     public String sStorePath;
-
-    /**
-     *
-     * @param type  according to com.sun.star.ui.dialogs.TemplateDescription
-     */
-    public SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type)
-    {
-        try
-        {
-            this.xMSF = xMSF;
-            systemDialog = xMSF.createInstance(ServiceName);
-            xFilePicker = UnoRuntime.queryInterface(XFilePicker.class, systemDialog);
-            xFolderPicker = UnoRuntime.queryInterface(XFolderPicker2.class, systemDialog);
-            xFilterManager = UnoRuntime.queryInterface(XFilterManager.class, systemDialog);
-            xInitialize = UnoRuntime.queryInterface(XInitialization.class, systemDialog);
-            xExecutable = UnoRuntime.queryInterface(XExecutableDialog.class, systemDialog);
-            xComponent = UnoRuntime.queryInterface(XComponent.class, systemDialog);
-            xFilePickerControlAccess = UnoRuntime.queryInterface(XFilePickerControlAccess.class, systemDialog);
-            xStringSubstitution = createStringSubstitution(xMSF);
-            Short[] listAny = new Short[]
-            {
-                    Short.valueOf(type)
-            };
-            if (xInitialize != null)
-            {
-                xInitialize.initialize(listAny);
-            }
-        }
-        catch (com.sun.star.uno.Exception exception)
-        {
-            exception.printStackTrace();
-        }
-    }
-
-    public static SystemDialog createStoreDialog(XMultiServiceFactory xmsf)
-    {
-        return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", TemplateDescription.FILESAVE_AUTOEXTENSION);
-    }
-
-    private String subst(String path)
-    {
-        try
-        {
-            return xStringSubstitution.substituteVariables(path, false);
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            return path;
-        }
-    }
-
-    /**
-     * ATTENTION a BUG : The extension calculated
-     * here gives the last 3 chars of the filename - what
-     * if the extension is of 4 or more chars?
-     */
-    public String callStoreDialog(String DisplayDirectory, String DefaultName, String sDocuType)
-    {
-        String sExtension = DefaultName.substring(DefaultName.length() - 3, DefaultName.length());
-        addFilterToDialog(sExtension, sDocuType, true);
-        return callStoreDialog(DisplayDirectory, DefaultName);
-    }
-
-    public String callStoreDialog(String displayDir, String defaultName)
-    {
-        sStorePath = null;
-        try
-        {
-            xFilePickerControlAccess.setValue(com.sun.star.ui.dialogs.ExtendedFilePickerElementIds.CHECKBOX_AUTOEXTENSION, (short) 0, Boolean.TRUE);
-            xFilePicker.setDefaultName(defaultName);
-            xFilePicker.setDisplayDirectory(subst(displayDir));
-            if (execute(xExecutable))
-            {
-                String[] sPathList = xFilePicker.getFiles();
-                sStorePath = sPathList[0];
-            }
-        }
-        catch (com.sun.star.lang.IllegalArgumentException exception)
-        {
-            exception.printStackTrace();
-        }
-        return sStorePath;
-    }
-
-    private boolean execute(XExecutableDialog execDialog)
-    {
-        return execDialog.execute() == 1;
-    }
-
-    //("writer_StarOffice_XML_Writer_Template")    'StarOffice XML (Writer)
-    public void addFilterToDialog(String sExtension, String filterName, boolean setToDefault)
-    {
-        try
-        {
-            //get the localized filtername
-            String uiName = getFilterUIName(filterName);
-            String pattern = "*." + sExtension;
-
-            //add the filter
-            addFilter(uiName, pattern, setToDefault);
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
-
-    public void addFilter(String uiName, String pattern, boolean setToDefault)
-    {
-        try
-        {
-            xFilterManager.appendFilter(uiName, pattern);
-            if (setToDefault)
-            {
-                xFilterManager.setCurrentFilter(uiName);
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * converts the name returned from getFilterUIName_(...) so the
-     * product name is correct.
-     * @param filterName
-     * @return
-     */
-    private String getFilterUIName(String filterName)
-    {
-        String prodName = Configuration.getProductName(xMSF);
-        String[][] s = new String[][]
-        {
-            {
-                getFilterUIName_(filterName)
-            }
-        };
-        s[0][0] = JavaTools.replaceSubString(s[0][0], prodName, "%productname%");
-        return s[0][0];
-    }
-
-    /**
-     * note the result should go through conversion of the product name.
-     * @param filterName
-     * @return the UI localized name of the given filter name.
-     */
-    private String getFilterUIName_(String filterName)
-    {
-        try
-        {
-            Object oFactory = xMSF.createInstance("com.sun.star.document.FilterFactory");
-            Object oObject = Helper.getUnoObjectbyName(oFactory, filterName);
-            Object oArrayObject = AnyConverter.toArray(oObject);
-            PropertyValue[] xPropertyValue = (PropertyValue[]) oArrayObject; //UnoRuntime.queryInterface(XPropertyValue.class, oObject);
-            int MaxCount = xPropertyValue.length;
-            for (int i = 0; i < MaxCount; i++)
-            {
-                PropertyValue aValue = xPropertyValue[i];
-                if (aValue != null && aValue.Name.equals("UIName"))
-                {
-                    return AnyConverter.toString(aValue.Value);
-                }
-            }
-            throw new NullPointerException("UIName property not found for Filter " + filterName);
-        }
-        catch (com.sun.star.uno.Exception exception)
-        {
-            exception.printStackTrace(System.err);
-            return null;
-        }
-    }
 
     public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID, String AddTag, String AddString)
     {
@@ -312,26 +137,4 @@ public class SystemDialog
         return iMessage;
     }
 
-    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
-    {
-        Object xPathSubst = null;
-        try
-        {
-            xPathSubst = xMSF.createInstance(
-                    "com.sun.star.util.PathSubstitution");
-        }
-        catch (com.sun.star.uno.Exception e)
-        {
-            e.printStackTrace();
-        }
-        if (xPathSubst != null)
-        {
-            return UnoRuntime.queryInterface(
-                    XStringSubstitution.class, xPathSubst);
-        }
-        else
-        {
-            return null;
-        }
-    }
 }

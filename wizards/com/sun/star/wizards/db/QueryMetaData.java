@@ -21,7 +21,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyValue;
 
 import java.util.*;
-import com.sun.star.lang.Locale;
 import com.sun.star.wizards.common.*;
 
 public class QueryMetaData extends CommandMetaData
@@ -44,11 +43,6 @@ public class QueryMetaData extends CommandMetaData
     {
        int SOSUMMARYQUERY = 0;
        int SODETAILQUERY = 1;
-    }
-
-    public QueryMetaData(XMultiServiceFactory xMSF, Locale CharLocale, NumberFormatter oNumberFormatter)
-    {
-        super(xMSF, CharLocale, oNumberFormatter);
     }
 
     public QueryMetaData(XMultiServiceFactory _xMSF)

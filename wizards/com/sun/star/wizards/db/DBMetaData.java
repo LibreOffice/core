@@ -152,14 +152,6 @@ public class DBMetaData
         InitializeWidthList();
     }
 
-    public DBMetaData(XMultiServiceFactory xMSF, Locale _aLocale, NumberFormatter _oNumberFormatter)
-    {
-        oNumberFormatter = _oNumberFormatter;
-        aLocale = _aLocale;
-        getInterfaces(xMSF);
-        InitializeWidthList();
-    }
-
     public NumberFormatter getNumberFormatter()
     {
         if (oNumberFormatter == null)

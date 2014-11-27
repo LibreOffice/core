@@ -19,9 +19,7 @@ package com.sun.star.wizards.common;
 
 import com.sun.star.beans.*;
 import com.sun.star.container.*;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -40,88 +38,6 @@ import com.sun.star.lang.Locale;
  */
 public abstract class Configuration
 {
-
-    public static int getInt(String name, Object parent) throws Exception
-    {
-        Object o = getNode(name, parent);
-        if (AnyConverter.isVoid(o))
-        {
-            return 0;
-        }
-        return AnyConverter.toInt(o);
-    }
-
-    public static short getShort(String name, Object parent) throws Exception
-    {
-        Object o = getNode(name, parent);
-        if (AnyConverter.isVoid(o))
-        {
-            return (short) 0;
-        }
-        return AnyConverter.toShort(o);
-    }
-
-    public static float getFloat(String name, Object parent) throws Exception
-    {
-        Object o = getNode(name, parent);
-        if (AnyConverter.isVoid(o))
-        {
-            return 0;
-        }
-        return AnyConverter.toFloat(o);
-    }
-
-    public static double getDouble(String name, Object parent) throws Exception
-    {
-        Object o = getNode(name, parent);
-        if (AnyConverter.isVoid(o))
-        {
-            return 0;
-        }
-        return AnyConverter.toDouble(o);
-    }
-
-    public static String getString(String name, Object parent) throws Exception
-    {
-        Object o = getNode(name, parent);
-        if (AnyConverter.isVoid(o))
-        {
-            return PropertyNames.EMPTY_STRING;
-        }
-        return (String) o;
-    }
-
-    public static boolean getBoolean(String name, Object parent) throws Exception
-    {
-        Object o = getNode(name, parent);
-        if (AnyConverter.isVoid(o))
-        {
-            return false;
-        }
-        return AnyConverter.toBoolean(o);
-    }
-
-    public static Object getNode(String name, Object parent) throws Exception
-    {
-        return UnoRuntime.queryInterface(XNameAccess.class, parent).getByName(name);
-    }
-
-    public static void set(int value, String name, Object parent) throws Exception
-    {
-        set(Integer.valueOf(value), name, parent);
-    }
-
-    public static void set(Object value, String name, Object parent) throws com.sun.star.lang.IllegalArgumentException, PropertyVetoException, UnknownPropertyException, WrappedTargetException
-    {
-        UnoRuntime.queryInterface(XHierarchicalPropertySet.class, parent).setHierarchicalPropertyValue(name, value);
-    }
-
-    /** Creates a new instance of RegistryEntry
-     */
-    public static Object getConfigurationNode(String name, Object parent) throws Exception
-    {
-        return UnoRuntime.queryInterface(XNameAccess.class, parent).getByName(name);
-    }
 
     public static Object getConfigurationRoot(XMultiServiceFactory xmsf, String sPath, boolean updateable) throws com.sun.star.uno.Exception
     {
@@ -151,12 +67,6 @@ public abstract class Configuration
         }
 
         return confMsf.createInstanceWithArguments(sView, args);
-    }
-
-    public static String[] getChildrenNames(Object configView)
-    {
-        XNameAccess nameAccess = UnoRuntime.queryInterface(XNameAccess.class, configView);
-        return nameAccess.getElementNames();
     }
 
     public static String getProductName(XMultiServiceFactory xMSF)
@@ -208,48 +118,6 @@ public abstract class Configuration
     public static Locale getLocale(XMultiServiceFactory xMSF)
     {
         return getLocale(xMSF, "org.openoffice.Setup/L10N/", "ooSetupSystemLocale");
-    }
-
-    /**
-     * This method creates a new configuration node and adds it
-     * to the given view. Note that if a node with the given name
-     * already exists it will be completely removed from
-     * the configuration.
-     * @return the new created configuration node.
-     */
-    public static Object addConfigNode(Object configView, String name) throws com.sun.star.lang.WrappedTargetException, ElementExistException, NoSuchElementException, com.sun.star.uno.Exception
-    {
-
-        XNameContainer xNameContainer = UnoRuntime.queryInterface(XNameContainer.class, configView);
-
-        if (xNameContainer == null)
-        {
-            XNameReplace xNameReplace = UnoRuntime.queryInterface(XNameReplace.class, configView);
-            return xNameReplace.getByName(name);
-        }
-        else
-        {
-
-            // create a new detached set element (instance of DataSourceDescription)
-            XSingleServiceFactory xElementFactory = UnoRuntime.queryInterface(XSingleServiceFactory.class, configView);
-
-            // the new element is the result !
-            Object newNode = xElementFactory.createInstance();
-            // insert it - this also names the element
-            xNameContainer.insertByName(name, newNode);
-
-            return newNode;
-        }
-    }
-
-    public static void removeNode(Object configView, String name) throws NoSuchElementException, WrappedTargetException
-    {
-        XNameContainer xNameContainer = UnoRuntime.queryInterface(XNameContainer.class, configView);
-
-        if (xNameContainer.hasByName(name))
-        {
-            xNameContainer.removeByName(name);
-        }
     }
 
     public static String[] getNodeDisplayNames(XNameAccess _xNameAccessNode)

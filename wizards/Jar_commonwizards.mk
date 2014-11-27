@@ -45,15 +45,8 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/common/Resource                   		\
 	wizards/com/sun/star/wizards/common/SystemDialog				\
 	wizards/com/sun/star/wizards/common/Configuration				\
-	wizards/com/sun/star/wizards/common/ConfigNode					\
-	wizards/com/sun/star/wizards/common/ConfigGroup				\
-	wizards/com/sun/star/wizards/common/ConfigSet					\
-	wizards/com/sun/star/wizards/common/XMLProvider				\
-	wizards/com/sun/star/wizards/common/XMLHelper					\
 	wizards/com/sun/star/wizards/common/IRenderer					\
-	wizards/com/sun/star/wizards/common/Indexable					\
 	wizards/com/sun/star/wizards/common/TerminateWizardException			\
-	wizards/com/sun/star/wizards/common/UCB					\
 	wizards/com/sun/star/wizards/common/DebugHelper					\
 	wizards/com/sun/star/wizards/common/PropertySetHelper					\
 	wizards/com/sun/star/wizards/common/NumericalHelper					\
@@ -77,30 +70,17 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/db/DatabaseObjectWizard					\
 	wizards/com/sun/star/wizards/ui/event/DataAware				\
 	wizards/com/sun/star/wizards/ui/event/DataAwareFields				\
-	wizards/com/sun/star/wizards/ui/event/EventNames				\
-	wizards/com/sun/star/wizards/ui/event/ListModelBinder				\
-	wizards/com/sun/star/wizards/ui/event/MethodInvocation			\
-	wizards/com/sun/star/wizards/ui/event/RadioDataAware				\
-	wizards/com/sun/star/wizards/ui/event/SimpleDataAware				\
-	wizards/com/sun/star/wizards/ui/event/Task					\
-	wizards/com/sun/star/wizards/ui/event/TaskEvent				\
-	wizards/com/sun/star/wizards/ui/event/TaskListener				\
-	wizards/com/sun/star/wizards/ui/event/UnoDataAware				\
 	wizards/com/sun/star/wizards/ui/event/XActionListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/event/XItemListenerAdapter	\
-	wizards/com/sun/star/wizards/ui/event/XMouseListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/event/XTextListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/event/XWindowListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/AggregateComponent				\
 	wizards/com/sun/star/wizards/ui/CommandFieldSelection				\
 	wizards/com/sun/star/wizards/ui/ControlScroller				\
 	wizards/com/sun/star/wizards/ui/DBLimitedFieldSelection			\
-	wizards/com/sun/star/wizards/ui/DocumentPreview				\
 	wizards/com/sun/star/wizards/ui/FilterComponent				\
 	wizards/com/sun/star/wizards/ui/FieldSelection					\
-	wizards/com/sun/star/wizards/ui/ImageList					\
 	wizards/com/sun/star/wizards/ui/ButtonList					\
-	wizards/com/sun/star/wizards/ui/PathSelection					\
 	wizards/com/sun/star/wizards/ui/PeerConfig					\
 	wizards/com/sun/star/wizards/ui/SortingComponent				\
 	wizards/com/sun/star/wizards/ui/TitlesComponent				\
@@ -109,7 +89,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/ui/UnoDialog					\
 	wizards/com/sun/star/wizards/ui/UnoDialog2					\
 	wizards/com/sun/star/wizards/ui/XFieldSelectionListener			\
-	wizards/com/sun/star/wizards/ui/XPathSelectionListener				\
 	wizards/com/sun/star/wizards/ui/XCompletion					\
 	wizards/com/sun/star/wizards/document/Control					\
 	wizards/com/sun/star/wizards/document/DatabaseControl				\
@@ -120,7 +99,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/document/TimeStampControl				\
 	wizards/com/sun/star/wizards/text/TextDocument					\
 	wizards/com/sun/star/wizards/text/TextFieldHandler				\
-	wizards/com/sun/star/wizards/text/TextFrameHandler				\
 	wizards/com/sun/star/wizards/text/TextSectionHandler				\
 	wizards/com/sun/star/wizards/text/TextStyleHandler				\
 	wizards/com/sun/star/wizards/text/TextTableHandler				\

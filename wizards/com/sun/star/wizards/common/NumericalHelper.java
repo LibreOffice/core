@@ -62,62 +62,6 @@ public class NumericalHelper
 
 
     /**
-     * get a byte value from the object
-     * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
-     */
-    public static byte toByte(Object aValue)
-            throws com.sun.star.lang.IllegalArgumentException
-    {
-
-        byte retValue = 0;
-        TypeObject aTypeObject = getTypeObject(aValue);
-        switch (aTypeObject.iType)
-        {
-            case BYTE_TYPE:
-                retValue = getByte(aTypeObject);
-                break;
-            case CHAR_TYPE:
-                retValue = (byte) getChar(aTypeObject);
-                break;
-            case SHORT_TYPE:
-                retValue = (byte) getShort(aTypeObject);
-                break;
-            case INT_TYPE:
-                retValue = (byte) getInt(aTypeObject);
-                break;
-            case LONG_TYPE:
-                retValue = (byte) getLong(aTypeObject);
-                break;
-            case FLOAT_TYPE:
-                retValue = (byte) getFloat(aTypeObject);
-                break;
-            case DOUBLE_TYPE:
-                retValue = (byte) getDouble(aTypeObject);
-                break;
-            case STRING_TYPE:
-                try
-                {
-                    retValue = Byte.parseByte((String) aTypeObject.aValue);
-                }
-                catch (java.lang.NumberFormatException e)
-                {
-                    throw new com.sun.star.lang.IllegalArgumentException(e,
-                            "Cannot convert to byte: " + aTypeObject.aValue);
-                }
-                break;
-            case BOOLEAN_TYPE:
-                retValue = getBool(aTypeObject) ? (byte) -1 : (byte) 0;
-                break;
-            default:
-                throw new com.sun.star.lang.IllegalArgumentException(
-                        "Cannot convert this type: " + aValue.getClass().getName());
-        }
-        return retValue;
-    }
-
-
-
-    /**
      * get an int value from the object
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -411,40 +355,6 @@ public class NumericalHelper
 
         public int iType;
         public Object aValue;
-    }
-
-    /**
-     * simple class to construct a hexadecimal value from a long number
-     */
-    private static class TransformNumToHex
-    {
-
-        private final StringBuffer val;
-
-        public TransformNumToHex(long number)
-        {
-            val = new StringBuffer();
-            transform(number);
-        }
-
-        private void transform(long number)
-        {
-            int index = (int) (number % HEX_BASE);
-            number = number / HEX_BASE;
-            if (index < DEC_BASE)
-            {
-                val.insert(0, index);
-            }
-            else
-            {
-                val.insert(0, (char) (ASCII_LETTER_A_OFFSET + index));
-            }
-            if (number > 0)
-            {
-                transform(number);
-            }
-        }
-
     }
 
 }

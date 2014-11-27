@@ -17,7 +17,6 @@
  */
 package com.sun.star.wizards.db;
 
-import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sdbc.DataType;

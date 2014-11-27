@@ -22,7 +22,6 @@ import com.sun.star.awt.Point;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.drawing.XShapes;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
@@ -100,21 +99,6 @@ public class DatabaseControl extends Control
     public DatabaseControl(FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, int _fieldtype, Point _aPoint)
     {
         super(_oFormHandler, _xFormName, _oFormHandler.getControlType(_fieldtype), _curFieldName, _aPoint, null);
-        try
-        {
-            m_nFieldType = _fieldtype;
-            Helper.setUnoPropertyValue(xControlModel, "DataField", _curFieldName);
-            setNumericLimits();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public DatabaseControl(FormHandler _oFormHandler, XShapes _xGroupShapes, XNameContainer _xFormName, String _curFieldName, int _fieldtype, Point _aPoint)
-    {
-        super(_oFormHandler, _xGroupShapes, _xFormName, _oFormHandler.getControlType(_fieldtype), _aPoint, null);
         try
         {
             m_nFieldType = _fieldtype;

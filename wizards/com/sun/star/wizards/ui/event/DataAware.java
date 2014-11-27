@@ -17,10 +17,7 @@
  */
 package com.sun.star.wizards.ui.event;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * DataAware objects are used to live-synchronize UI and DataModel/DataObject.
@@ -174,100 +171,4 @@ public abstract class DataAware {
         void set(Object value, Object target);
     }
 
-    /**
-     * implementation of Value, handling JavaBeans properties through
-     * reflection.
-     * This Object gets and sets a value a specific
-     * (JavaBean-style) property on a given object.
-     */
-    public static class PropertyValue implements Value {
-        /**
-         * the get method of the JavaBean-style property
-         */
-        private final Method getMethod;
-        /**
-         * the set method of the JavaBean-style property
-         */
-        private final Method setMethod;
-
-        /**
-         * creates a PropertyValue for the property with
-         * the given name, of the given JavaBean object.
-         * @param propertyName the property to access. Must be a Cup letter (e.g. PropertyNames.PROPERTY_NAME for getName() and setName("..."). )
-         * @param propertyOwner the object which "own" or "contains" the property.
-         */
-        public PropertyValue(String propertyName, Object propertyOwner) {
-            getMethod = createGetMethod(propertyName, propertyOwner);
-            setMethod = createSetMethod(propertyName, propertyOwner, getMethod.getReturnType());
-        }
-
-        /**
-         * called from the constructor, and creates a get method reflection object
-         * for the given property and object.
-         * @param propName the property name0
-         * @param obj the object which contains the property.
-         * @return the get method reflection object.
-         */
-        protected Method createGetMethod(String propName, Object obj)
-        {
-            Method m = null;
-            try
-            { //try to get a "get" method.
-
-                m = obj.getClass().getMethod("get" + propName);
-            }
-            catch (NoSuchMethodException ex1)
-            {
-                throw new IllegalArgumentException("get" + propName + "() method does not exist on " + obj.getClass().getName());
-            }
-            return m;
-        }
-
-        /* (non-Javadoc)
-         * @see com.sun.star.wizards.ui.event.DataAware.Value#get(java.lang.Object)
-         */
-        public Object get(Object target) {
-            try {
-                return getMethod.invoke(target);
-            } catch (IllegalAccessException ex1) {
-                ex1.printStackTrace();
-            } catch (InvocationTargetException ex2) {
-                ex2.printStackTrace();
-            } catch (NullPointerException npe) {
-                if (getMethod.getReturnType().equals(String.class))
-                    return PropertyNames.EMPTY_STRING;
-                if (getMethod.getReturnType().equals(Short.class))
-                    return Short.valueOf((short) 0);
-                if (getMethod.getReturnType().equals(Integer.class))
-                    return 0;
-                if (getMethod.getReturnType().equals(short[].class))
-                    return new short[0];
-            }
-            return null;
-        }
-
-        protected Method createSetMethod(String propName, Object obj, Class<?> paramClass) {
-            Method m = null;
-            try {
-                m = obj.getClass().getMethod("set" + propName, paramClass);
-            } catch (NoSuchMethodException ex1) {
-                throw new IllegalArgumentException("set" + propName + "(" + getMethod.getReturnType().getName() + ") method does not exist on " + obj.getClass().getName());
-            }
-            return m;
-        }
-
-        /* (non-Javadoc)
-         * @see com.sun.star.wizards.ui.event.DataAware.Value#set(java.lang.Object, java.lang.Object)
-         */
-        public void set(Object value, Object target) {
-            try {
-                setMethod.invoke(target, value);
-            } catch (IllegalAccessException ex1) {
-                ex1.printStackTrace();
-            } catch (InvocationTargetException ex2) {
-                ex2.printStackTrace();
-            }
-        }
-
-    }
 }

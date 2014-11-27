@@ -267,32 +267,6 @@ public class Desktop
 
 
 
-    /**
-     * @deprecated used to retrieve the most common paths used in the office application
-     */
-    public class OfficePathRetriever
-    {
-
-        public String TemplatePath;
-        public String BitmapPath;
-        public String UserTemplatePath;
-        public String WorkPath;
-
-        public OfficePathRetriever(XMultiServiceFactory xMSF)
-        {
-            try
-            {
-                TemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
-                UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
-                BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath, "/../wizard/bitmap");
-                WorkPath = FileAccess.getOfficePath(xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
-            }
-            catch (NoValidPathException nopathexception)
-            {
-            }
-        }
-    }
-
     public static String getTemplatePath(XMultiServiceFactory _xMSF)
     {
         try

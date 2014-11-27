@@ -281,13 +281,6 @@ public class JavaTools
         return sPath;
     }
 
-    public static void setTimeInMillis(Calendar _calendar, long _timemillis)
-    {
-        java.util.Date dDate = new java.util.Date();
-        dDate.setTime(_timemillis);
-        _calendar.setTime(dDate);
-    }
-
     public static String[] removeOutdatedFields(String[] baselist, String[] _complist)
     {
         String[] retarray = new String[]

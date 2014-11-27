@@ -72,36 +72,6 @@ public class NumberFormatter
     }
 
 
-    public static XNumberFormatter createNumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier) throws Exception
-    {
-        Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
-        XNumberFormatter xNumberFormatter = UnoRuntime.queryInterface(XNumberFormatter.class, oNumberFormatter);
-        xNumberFormatter.attachNumberFormatsSupplier(_xNumberFormatsSupplier);
-        return xNumberFormatter;
-    }
-
-
-    /**
-     * gives a key to pass to a NumberFormat object.
-     * <p>example:</p>
-     * <pre>
-     * XNumberFormatsSupplier nsf = (XNumberFormatsSupplier)UnoRuntime.queryInterface(...,document);
-     * int key = Desktop.getNumberFormatterKey( nsf, ...star.i18n.NumberFormatIndex.DATE...);
-     * XNumberFormatter nf = Desktop.createNumberFormatter(xmsf, nsf);
-     * nf.convertNumberToString( key, 1972 );
-     * </pre>
-     * @param type - a constant out of i18n.NumberFormatIndex enumeration.
-     * @return a key to use with a util.NumberFormat instance.
-     *
-     */
-    public static int getNumberFormatterKey( Object numberFormatsSupplier, short type)
-    {
-        Object numberFormatTypes = UnoRuntime.queryInterface(XNumberFormatsSupplier.class,numberFormatsSupplier).getNumberFormats();
-        Locale l = new Locale();
-        return UnoRuntime.queryInterface(XNumberFormatTypes.class,numberFormatTypes).getFormatIndex(type, l);
-    }
-
-
     public double convertStringToNumber(int _nkey, String _sString)throws Exception
     {
         return xNumberFormatter.convertStringToNumber(_nkey, _sString);

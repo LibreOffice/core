@@ -19,17 +19,12 @@ package com.sun.star.wizards.common;
 
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
-import java.util.Calendar;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.DateTime;
-import com.sun.star.util.XNumberFormatsSupplier;
-import com.sun.star.util.XNumberFormatter;
 
 public class Helper
 {
@@ -226,104 +221,6 @@ public class Helper
         }
     }
     private static long DAY_IN_MILLIS = (24 * 60 * 60 * 1000);
-
-    public static class DateUtils
-    {
-
-        private final long docNullTime;
-        private final XNumberFormatter formatter;
-        private final XNumberFormatsSupplier formatSupplier;
-        private final Calendar calendar;
-
-        public DateUtils(XMultiServiceFactory xmsf, Object document) throws Exception
-        {
-            XMultiServiceFactory docMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, document);
-
-            Object defaults = docMSF.createInstance("com.sun.star.text.Defaults");
-            Locale l = (Locale) Helper.getUnoStructValue(defaults, "CharLocale");
-
-            java.util.Locale jl = new java.util.Locale(
-                    l.Language, l.Country, l.Variant);
-
-            calendar = Calendar.getInstance(jl);
-
-            formatSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, document);
-
-            Object formatSettings = formatSupplier.getNumberFormatSettings();
-            com.sun.star.util.Date date = (com.sun.star.util.Date) Helper.getUnoPropertyValue(formatSettings, "NullDate");
-
-            calendar.set(date.Year, date.Month - 1, date.Day);
-            docNullTime = getTimeInMillis();
-
-            formatter = NumberFormatter.createNumberFormatter(xmsf, formatSupplier);
-        }
-
-        /**
-         * @param format a constant of the enumeration NumberFormatIndex
-         */
-        public int getFormat(short format)
-        {
-            return NumberFormatter.getNumberFormatterKey(formatSupplier, format);
-        }
-
-        public XNumberFormatter getFormatter()
-        {
-            return formatter;
-        }
-
-        private long getTimeInMillis()
-        {
-            java.util.Date dDate = calendar.getTime();
-            return dDate.getTime();
-        }
-
-        /**
-         * @param date a VCL date in form of 20041231
-         * @return a document relative date
-         */
-        public synchronized double getDocumentDateAsDouble(int date)
-        {
-            calendar.clear();
-            calendar.set(date / 10000,
-                    (date % 10000) / 100 - 1,
-                    date % 100);
-
-            long date1 = getTimeInMillis();
-            /*
-             * docNullTime and date1 are in millis, but
-             * I need a day...
-             */
-            return (date1 - docNullTime) / DAY_IN_MILLIS + 1;
-        }
-
-        public double getDocumentDateAsDouble(DateTime date)
-        {
-            return getDocumentDateAsDouble(date.Year * 10000 + date.Month * 100 + date.Day);
-        }
-
-        public synchronized double getDocumentDateAsDouble(long javaTimeInMillis)
-        {
-            calendar.clear();
-            JavaTools.setTimeInMillis(calendar, javaTimeInMillis);
-
-            long date1 = getTimeInMillis();
-
-            /*
-             * docNullTime and date1 are in millis, but
-             * I need a day...
-             */
-            return (date1 - docNullTime) / DAY_IN_MILLIS + 1;
-
-        }
-
-
-
-        public String format(int formatIndex, DateTime date)
-        {
-            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));
-        }
-
-    }
 
     public static XComponentContext getComponentContext(XMultiServiceFactory _xMSF)
     {
