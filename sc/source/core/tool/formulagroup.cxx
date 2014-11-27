@@ -523,10 +523,11 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 
     if ( !msInstance )
     {
+#if HAVE_FEATURE_OPENCL
         const ScCalcConfig& rConfig = ScInterpreter::GetGlobalConfig();
         if (officecfg::Office::Common::Misc::UseOpenCL::get())
             switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect, false);
-
+#endif
         if ( !msInstance ) // software fallback
         {
             SAL_INFO("sc.formulagroup", "Create S/W interpreter");
