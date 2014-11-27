@@ -664,8 +664,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 $(eval $(call gb_Helper_optional,OPENCL,\
 $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/formulagroupcl \
-    sc/source/core/opencl/openclwrapper \
-    sc/source/core/opencl/opencl_device \
     sc/source/core/opencl/opbase \
     sc/source/core/opencl/op_financial \
     sc/source/core/opencl/op_database \
