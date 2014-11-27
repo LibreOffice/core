@@ -410,8 +410,6 @@ namespace sw
             dyaTop = dyaHdrTop;
             dyaBottom = dyaHdrBottom;
 
-            using sw::types::msword_cast;
-
             const SwFmtHeader *pHd = HasItem<SwFmtHeader>(rPage, RES_HEADER);
             if (pHd && pHd->IsActive() && pHd->GetHeaderFmt())
             {
