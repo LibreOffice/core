@@ -1574,7 +1574,7 @@ AC_ARG_WITH(system-zlib,
 AC_ARG_WITH(system-jpeg,
     AS_HELP_STRING([--with-system-jpeg],
         [Use jpeg already on system.]),,
-    [with_system_jpeg=auto])
+    [with_system_jpeg="$with_system_libs"])
 
 AC_ARG_WITH(system-libgltf,
     AS_HELP_STRING([--with-system-libgltf],
@@ -7330,18 +7330,6 @@ AC_SUBST(SYSTEM_ZLIB)
 dnl ===================================================================
 dnl Check for system jpeg
 dnl ===================================================================
-AC_MSG_CHECKING([which jpeg to use])
-if test "$with_system_jpeg" = "auto"; then
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        with_system_jpeg="$with_system_libs"
-        ;;
-    *)
-        with_system_jpeg=yes
-        ;;
-    esac
-fi
-
 if test "$with_jpeg_turbo" = "auto"; then
     # TODO use jpeg-turbo on Darwin too
     case "$_os" in
