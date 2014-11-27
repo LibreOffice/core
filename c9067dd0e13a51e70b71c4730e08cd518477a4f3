@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_4a5b5755",
+        "filename": "external/python3/python-3.3.0-msvc-x64.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-27T14:11:00Z",
+      "side": 0,
+      "message": "please don\u0027t remove extra context - iirc there were problems here of applying the patch in the wrong place because there\u0027s a lot of repetition in the file",
+      "revId": "c9067dd0e13a51e70b71c4730e08cd518477a4f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
