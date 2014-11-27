@@ -2353,7 +2353,11 @@ void ScModelObj::enableAutomaticDeviceSelection(sal_Bool bForce)
     ScFormulaOptions aOptions = SC_MOD()->GetFormulaOptions();
     aOptions.SetCalcConfig(aConfig);
     SC_MOD()->SetFormulaOptions(aOptions);
+#if !HAVE_FEATURE_OPENCL
+    (void) bForce;
+#else
     sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(), true, bForce);
+#endif
 }
 
 void ScModelObj::disableAutomaticDeviceSelection()
@@ -2392,19 +2396,27 @@ void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
 sal_Int32 ScModelObj::getPlatformID()
     throw (uno::RuntimeException, std::exception)
 {
+#if !HAVE_FEATURE_OPENCL
+    return -1;
+#else
     sal_Int32 nPlatformId;
     sal_Int32 nDeviceId;
     sc::FormulaGroupInterpreter::getOpenCLDeviceInfo(nDeviceId, nPlatformId);
     return nPlatformId;
+#endif
 }
 
 sal_Int32 ScModelObj::getDeviceID()
     throw (uno::RuntimeException, std::exception)
 {
+#if !HAVE_FEATURE_OPENCL
+    return -1;
+#else
     sal_Int32 nPlatformId;
     sal_Int32 nDeviceId;
     sc::FormulaGroupInterpreter::getOpenCLDeviceInfo(nDeviceId, nPlatformId);
     return nDeviceId;
+#endif
 }
 
 uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()

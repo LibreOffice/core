@@ -649,10 +649,11 @@ void ScFormulaCfg::Commit()
             break;
         }
     }
+#if HAVE_FEATURE_OPENCL
     if(bSetOpenCL)
         sc::FormulaGroupInterpreter::switchOpenCLDevice(
                 GetCalcConfig().maOpenCLDevice, GetCalcConfig().mbOpenCLAutoSelect);
-
+#endif
     PutProperties(aNames, aValues);
 }
 
