@@ -401,14 +401,6 @@ FontCharMap::FontCharMap( const CmapResult& rCR )
 {
     ImplFontCharMapPtr pImplFontCharMap( new ImplFontCharMap(rCR) );
     mpImplFontCharMap = pImplFontCharMap;
-
-    const sal_UCS4* pRangePtr = mpImplFontCharMap->mpRangeCodes;
-    for( int i = mpImplFontCharMap->mnRangeCount; --i >= 0; pRangePtr += 2 )
-    {
-        sal_UCS4 cFirst = pRangePtr[0];
-        sal_UCS4 cLast  = pRangePtr[1];
-        mpImplFontCharMap->mnCharCount += cLast - cFirst;
-    }
 }
 
 FontCharMap::~FontCharMap()
