@@ -23,12 +23,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
-/*************************************************************************
-|*
-|* SetItem mit dem ItemSet aller Fuellattribute
-|*
-\************************************************************************/
-
+// SetItem with all ItemSets of fill-attributes
 class SVX_DLLPUBLIC XFillAttrSetItem : public SfxSetItem
 {
 public:

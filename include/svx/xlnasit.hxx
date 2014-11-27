@@ -24,12 +24,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 
-/*************************************************************************
-|*
-|* SetItem mit dem ItemSet aller Linienattribute
-|*
-\************************************************************************/
-
+// SetItem with all ItemSets of line-attributes
 class SVX_DLLPUBLIC XLineAttrSetItem : public SfxSetItem
 {
 public:

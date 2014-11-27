@@ -134,7 +134,7 @@ protected:
 
     ::tools::WeakReference< SdrObject > mpObj;
     SdrModel* mpModel;
-    // Umrechnungen fuer den Writer, der in TWIPS arbeitet
+    // translations for writer, which works in TWIPS
     void ForceMetricToItemPoolMetric(Pair& rPoint) const throw();
     void ForceMetricTo100th_mm(Pair& rPoint) const throw();
     // Dimension arrows change size/position on save/reload (#i59051#)
