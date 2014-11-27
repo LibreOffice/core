@@ -26,27 +26,54 @@
 #include "jni.h"
 #include "sal/types.h"
 
-static HMODULE module;
 
-static FARPROC getFunction(char const * name) {
+static HMODULE   module   = NULL;
+static HINSTANCE hInstDLL = NULL;
+static CRITICAL_SECTION CriticalSection = {0, 0, 0, 0, INVALID_HANDLE_VALUE};
+
+void InitWrapper(void) {
+    #define MAXPATH 512
+    wchar_t path[MAXPATH];
+    DWORD size;
+
+    size = GetModuleFileNameW(hInstDLL, path, MAXPATH);
+    if (size == 0) {
+        abort();
+    }
+    path[size - 5] = L'x'; /* ...\jpipe.dll -> ...\jpipx.dll */
+    module = LoadLibraryExW(path, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+    if (module == NULL) {
+        abort();
+    }
+}
+
+static FARPROC getFunction(char const * name)
+{
+    static BOOL first = TRUE;
+
+    if((module == NULL) && (CriticalSection.LockSemaphore == INVALID_HANDLE_VALUE))
+    {
+        if(CriticalSection.LockSemaphore == INVALID_HANDLE_VALUE)
+            InitializeCriticalSection(&CriticalSection);
+        EnterCriticalSection(&CriticalSection);
+
+        if(first)
+            InitWrapper();
+
+        first = FALSE;
+
+        LeaveCriticalSection(&CriticalSection);
+    }
+
     return GetProcAddress(module, name);
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
     (void) lpvReserved;
-    if (fdwReason == DLL_PROCESS_ATTACH) {
-        wchar_t path[32767];
-        DWORD size;
-        size = GetModuleFileNameW(hinstDLL, path, 32767);
-        if (size == 0) {
-            return FALSE;
-        }
-        path[size - 5] = L'x'; /* ...\jpipe.dll -> ...\jpipx.dll */
-        module = LoadLibraryExW(path, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
-        if (module == NULL) {
-            return FALSE;
-        }
-    }
+
+    if (fdwReason == DLL_PROCESS_ATTACH)
+        hInstDLL = hinstDLL;
+
     return TRUE;
 }
 
