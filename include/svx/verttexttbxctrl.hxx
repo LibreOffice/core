@@ -27,15 +27,12 @@
  */
 class SvxVertCTLTextTbxCtrl : public SfxToolBoxControl
 {
-    bool bCheckVertical; //determines whether vertical mode or CTL mode has to be checked
 public:
     SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxVertCTLTextTbxCtrl();
 
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
-    void    SetVert(bool bSet) {bCheckVertical = bSet;}
-
 };
 
 class SVX_DLLPUBLIC SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
