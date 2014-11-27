@@ -36,14 +36,14 @@ if( status != CL_SUCCESS )    \
 
 #include <cstdio>
 
+namespace opencl {
+
 struct KernelEnv
 {
     cl_context mpkContext;
     cl_command_queue mpkCmdQueue;
     cl_program mpkProgram;
 };
-
-namespace opencl {
 
 struct GPUEnv
 {
