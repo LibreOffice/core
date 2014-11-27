@@ -24,7 +24,7 @@
 enum ColorModel
 {
     CM_RGB,
-    CM_CMYK // kann um weitere Modelle, z.B. HSV erweitert werden
+    CM_CMYK // can be extend with more models, e.g. HSV
 };
 
 enum PageType
@@ -40,7 +40,7 @@ enum PageType
 
 // define ----------------------------------------------------------------
 
-typedef sal_uInt16 ChangeType; // auch in tab_line.hxx (mitpflegen !!!)
+typedef sal_uInt16 ChangeType; // also in tab_line.hxx (care for it !!!)
 
 #define CT_NONE                 ( (ChangeType) 0x0000 )
 #define CT_MODIFIED             ( (ChangeType) 0x0001 )

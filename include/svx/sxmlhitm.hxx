@@ -33,30 +33,28 @@
 //    #=============#         |---
 //    #             #         | SdrMeasureHelpline1/2LenItem
 //    #             #=========#---
-//    # Zu bemassendes Objekt #
+//    #  dimensioned object   #
 //    #=======================#
 
-// Abstand der Masslinie zur Bezugskante (Norm=8mm)
-// laesst sich auch draggen an den beiden Handles
-// die auf den Pfeilspitzen liegen
+// gab between dimension line and document reference edge (norm=8mm)
+// can be dragged on the handles of the arrowheads
 inline SdrMetricItem makeSdrMeasureLineDistItem(long nVal) {
     return SdrMetricItem(SDRATTR_MEASURELINEDIST, nVal);
 }
 
-// Ueberhang der Masshilfslinien an der Masslinie (Norm=2mm)
+// overhang of dimension help line to dimension line (norm=2mm)
 inline SdrMetricItem makeSdrMeasureHelplineOverhangItem(long nVal) {
     return SdrMetricItem(SDRATTR_MEASUREHELPLINEOVERHANG, nVal);
 }
 
-// Abstand der der Masshilfslinienenden zur Bezugskante
-// Damit die Masshilfslinien nicht das Objekt beruehren
+// gab between dimension line and document reference edge
+// dimension help lines shell not touch the object
 inline SdrMetricItem makeSdrMeasureHelplineDistItem(long nVal) {
     return SdrMetricItem(SDRATTR_MEASUREHELPLINEDIST, nVal);
 }
 
-// Ueberlaenge der Hilfslinien ueber die Bezugskante
-// laesst sich auch draggen an den beiden runden Handles,
-// die sich default unter den beiden Referenzpunkten befinden
+// overlength of the help lines can be dragged at the round handles,
+// which are under the reference points by default
 inline SdrMetricItem makeSdrMeasureHelpline1LenItem(long nVal) {
     return SdrMetricItem(SDRATTR_MEASUREHELPLINE1LEN, nVal);
 }
