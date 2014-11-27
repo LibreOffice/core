@@ -11,16 +11,19 @@
 #define INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCLWRAPPER_HXX
 
 #include <config_features.h>
+
+#include <cassert>
+#include <vector>
+
+#include <boost/shared_ptr.hpp>
+#include <clew.h>
+
 #include <sal/detail/log.h>
+#include <opencl/opencldllapi.h>
 #include <opencl/platforminfo.hxx>
 #include <osl/file.hxx>
-#include <vector>
-#include <boost/shared_ptr.hpp>
-#include <cassert>
-
 #include <rtl/string.hxx>
 
-#include <clew.h>
 
 #define CHECK_OPENCL(status,name)    \
 if( status != CL_SUCCESS )    \
@@ -40,9 +43,7 @@ struct KernelEnv
     cl_program mpkProgram;
 };
 
-namespace sc { namespace opencl {
-
-typedef unsigned int uint;
+namespace opencl {
 
 struct OpenCLEnv
 {
@@ -67,7 +68,7 @@ struct GPUEnv
     bool mnAmdFp64Flag;
 };
 
-class OpenCLDevice
+class OPENCL_DLLPUBLIC OpenCLDevice
 {
 public:
     static GPUEnv gpuEnv;
@@ -86,7 +87,7 @@ public:
     static void setKernelEnv( KernelEnv *envInfo );
 };
 
-const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
+OPENCL_DLLPUBLIC const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
 
 /**
  * Used to set or switch between OpenCL devices.
@@ -96,12 +97,12 @@ const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
  *
  * @return returns true if there is a valid opencl device that has been set up
  */
-bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSelect,
-        bool bForceEvaluation);
+OPENCL_DLLPUBLIC bool switchOpenCLDevice(const OUString* pDeviceId, bool bAutoSelect,
+                                         bool bForceEvaluation);
 
-void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
+OPENCL_DLLPUBLIC void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId);
 
-}}
+}
 
 #endif
 

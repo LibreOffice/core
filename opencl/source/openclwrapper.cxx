@@ -9,13 +9,11 @@
 
 #include <config_folders.h>
 
-#include "calcconfig.hxx"
-#include "interpre.hxx"
 #include "opencl_device.hxx"
-#include "openclwrapper.hxx"
 
 #include <comphelper/string.hxx>
 #include <opencl/openclconfig.hxx>
+#include <opencl/openclwrapper.hxx>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/digest.h>
@@ -48,7 +46,7 @@
 
 using namespace std;
 
-namespace sc { namespace opencl {
+namespace opencl {
 
 GPUEnv OpenCLDevice::gpuEnv;
 bool OpenCLDevice::bIsInited = false;
@@ -60,7 +58,7 @@ OString generateMD5(const void* pData, size_t length)
     sal_uInt8 pBuffer[RTL_DIGEST_LENGTH_MD5];
     rtlDigestError aError = rtl_digest_MD5(pData, length,
             pBuffer, RTL_DIGEST_LENGTH_MD5);
-    SAL_WARN_IF(aError != rtl_Digest_E_None, "sc", "md5 generation failed");
+    SAL_WARN_IF(aError != rtl_Digest_E_None, "opencl", "md5 generation failed");
 
     OStringBuffer aBuffer;
     const char* pString = "0123456789ABCDEF";
@@ -158,11 +156,11 @@ std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const 
             if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
             {
                 aGeneratedFiles.push_back(boost::shared_ptr<osl::File>(pNewFile));
-                SAL_INFO("sc.opencl.file", "Opening binary file '" << fileName << "' for reading: success");
+                SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: success");
             }
             else
             {
-                SAL_INFO("sc.opencl.file", "Opening binary file '" << fileName << "' for reading: FAIL");
+                SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: FAIL");
                 delete pNewFile;
                 break;
             }
@@ -238,9 +236,9 @@ bool OpenCLDevice::generatBinFromKernelSource( cl_program program, const char * 
             OString fileName = createFileName(pArryDevsID[i], clFileName);
             if ( !writeBinaryToFile( fileName,
                         binaries[i], binarySizes[i] ) )
-                SAL_INFO("sc.opencl.file", "Writing binary file '" << fileName << "': FAIL");
+                SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': FAIL");
             else
-                SAL_INFO("sc.opencl.file", "Writing binary file '" << fileName << "': success");
+                SAL_INFO("opencl.file", "Writing binary file '" << fileName << "': success");
         }
     }
 
@@ -454,15 +452,15 @@ bool OpenCLDevice::initOpenCLRunEnv( int argc )
         }
         if( gpuEnv.mnKhrFp64Flag )
         {
-            SAL_INFO("sc.opencl", "Use Khr double");
+            SAL_INFO("opencl", "Use Khr double");
         }
         else if( gpuEnv.mnAmdFp64Flag )
         {
-            SAL_INFO("sc.opencl", "Use AMD double type");
+            SAL_INFO("opencl", "Use AMD double type");
         }
         else
         {
-            SAL_INFO("sc.opencl", "USE float type");
+            SAL_INFO("opencl", "USE float type");
         }
         bIsInited = true;
     }
@@ -727,7 +725,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         OUString path;
         osl::FileBase::getSystemPathFromFileURL(url,path);
         OString dsFileName = rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8);
-        ds_device pSelectedDevice = sc::OpenCLDevice::getDeviceSelection(dsFileName.getStr(), bForceEvaluation);
+        ds_device pSelectedDevice = ::OpenCLDevice::getDeviceSelection(dsFileName.getStr(), bForceEvaluation);
         pDeviceId = pSelectedDevice.oclDeviceID;
 
     }
@@ -754,7 +752,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         if(context != NULL)
             clReleaseContext(context);
 
-        SAL_WARN("sc", "failed to set/switch opencl device");
+        SAL_WARN("opencl", "failed to set/switch opencl device");
         return false;
     }
 
@@ -767,7 +765,7 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
             clReleaseCommandQueue(command_queue);
 
         clReleaseContext(context);
-        SAL_WARN("sc", "failed to set/switch opencl device");
+        SAL_WARN("opencl", "failed to set/switch opencl device");
         return false;
     }
 
@@ -801,6 +799,6 @@ void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
     findDeviceInfoFromDeviceId(id, rDeviceId, rPlatformId);
 }
 
-}}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

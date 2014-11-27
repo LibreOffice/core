@@ -9,6 +9,11 @@
 
 $(eval $(call gb_Library_Library,opencl))
 
+$(eval $(call gb_Library_set_include,opencl,\
+    -I$(SRCDIR)/opencl/inc \
+    $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_add_defs,opencl,\
     -DOPENCL_DLLIMPLEMENTATION \
 ))
@@ -36,6 +41,8 @@ $(eval $(call gb_Library_use_libraries,opencl,\
 
 $(eval $(call gb_Library_add_exception_objects,opencl,\
     opencl/source/openclconfig \
+    opencl/source/openclwrapper \
+    opencl/source/opencl_device \
     opencl/source/platforminfo \
 ))
 

@@ -7,19 +7,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCL_DEVICE_HXX
-#define INCLUDED_SC_SOURCE_CORE_OPENCL_OPENCL_DEVICE_HXX
+#ifndef INCLUDED_OPENCL_INC_OPENCL_DEVICE_HXX
+#define INCLUDED_OPENCL_INC_OPENCL_DEVICE_HXX
 
-#pragma once
 #include "opencl_device_selection.h"
 
-namespace sc { namespace OpenCLDevice {
+namespace OpenCLDevice {
 
 ds_device getDeviceSelection(const char* pFileName, bool bForceSelection = false);
 bool selectedDeviceIsOpenCL(ds_device device);
 bool selectedDeviceIsNativeCPU(ds_device device);
 
-}}
+}
 
 #endif
 

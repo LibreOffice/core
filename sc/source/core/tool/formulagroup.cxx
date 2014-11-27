@@ -35,7 +35,7 @@
 #include <cstdio>
 
 #if HAVE_FEATURE_OPENCL
-#include "openclwrapper.hxx"
+#include <opencl/openclwrapper.hxx>
 #endif
 
 namespace sc {
@@ -542,7 +542,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms)
 {
     const std::vector<OpenCLPlatformInfo>& rPlatformsFromWrapper =
-        sc::opencl::fillOpenCLInfo();
+        ::opencl::fillOpenCLInfo();
 
     rPlatforms.assign(rPlatformsFromWrapper.begin(), rPlatformsFromWrapper.end());
 }
@@ -564,7 +564,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         msInstance = new sc::FormulaGroupInterpreterSoftware();
         return true;
     }
-    bool bSuccess = sc::opencl::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
+    bool bSuccess = ::opencl::switchOpenCLDevice(&rDeviceId, bAutoSelect, bForceEvaluation);
     if(!bSuccess)
         return false;
 
@@ -591,7 +591,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     size_t aDeviceId = static_cast<size_t>(-1);
     size_t aPlatformId = static_cast<size_t>(-1);
 
-    sc::opencl::getOpenCLDeviceInfo(aDeviceId, aPlatformId);
+    ::opencl::getOpenCLDeviceInfo(aDeviceId, aPlatformId);
     rDeviceId = aDeviceId;
     rPlatformId = aPlatformId;
 }
