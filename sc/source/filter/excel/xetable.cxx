@@ -2087,8 +2087,11 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         for ( itr = itrBeg; itr != itrEnd; ++itr, ++nIdx )
             pTasks[ nIdx % nThreads ]->push_back( itr->second.get() );
 
-        for ( size_t i = 0; i < nThreads; i++ )
+        for ( size_t i = 1; i < nThreads; i++ )
             rPool.pushTask( pTasks[ i ] );
+
+        // Progress bar updates must be synchronous to avoid deadlock
+        pTasks[0]->doWork();
 
         rPool.waitUntilEmpty();
     }
