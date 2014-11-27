@@ -321,6 +321,26 @@ inline SvStream& operator>>( SvStream& rStrm, XclObjAnchor& rAnchor )
     return rStrm;
 }
 
+// creates read method for XclImpStream
+template< typename StreamType >
+StreamType& operator>>( StreamType& rStrm, XclObjAnchor& rAnchor )
+{
+    sal_uInt16 tmpFirstRow, tmpTY, tmpLastRow, tmpBY;
+
+    rStrm
+        >> rAnchor.maFirst.mnCol >> rAnchor.mnLX
+        >> tmpFirstRow >> tmpTY
+        >> rAnchor.maLast.mnCol  >> rAnchor.mnRX
+        >> tmpLastRow  >> tmpBY;
+
+    rAnchor.maFirst.mnRow = static_cast<sal_uInt32> (tmpFirstRow);
+    rAnchor.mnTY = static_cast<sal_uInt32> (tmpTY);
+    rAnchor.maLast.mnRow = static_cast<sal_uInt32> (tmpLastRow);
+    rAnchor.mnBY = static_cast<sal_uInt32> (tmpBY);
+
+    return rStrm;
+}
+
 template< typename StreamType >
 StreamType& operator<<( StreamType& rStrm, const XclObjAnchor& rAnchor )
 {
