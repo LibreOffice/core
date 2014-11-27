@@ -111,7 +111,7 @@ struct DriverInfo
     static const DeviceFamilyVector* GetDeviceFamily(DeviceFamily id);
     static DeviceFamilyVector* mpDeviceFamilies[DeviceFamilyMax];
 
-    OUString maModel, maHardware, maProduct, maManufacturer;
+    OUString maSuggestedVersion;
 };
 
 #define GFX_DRIVER_VERSION(a,b,c,d) \
@@ -169,6 +169,7 @@ private:
 
     void GetData();
     void FillBlacklist();
+    bool FindBlocklistedDeviceInList();
 
     static OUString* mpDeviceVendors[wgl::DeviceVendorMax];
     static std::vector<wgl::DriverInfo> maDriverInfo;
