@@ -2946,15 +2946,23 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
     aInfo.m_aPSName = pFont->GetFamilyName();
     sal_Int32 pWidths[256];
     memset( pWidths, 0, sizeof(pWidths) );
+
+    SalGraphics *pGraphics = m_pReferenceDevice->GetGraphics();
+
+    assert(pGraphics);
+
     if( pFont->IsEmbeddable() )
     {
         const unsigned char* pFontData = NULL;
         long nFontLen = 0;
         sal_Ucs nEncodedCodes[256];
         sal_Int32 pEncWidths[256];
-        if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pEncWidths, aInfo, &nFontLen )) != NULL )
+
+        pFontData = (const unsigned char*)pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pEncWidths, aInfo, &nFontLen );
+
+        if( pFontData )
         {
-            m_pReferenceDevice->mpGraphics->FreeEmbedFontData( pFontData, nFontLen );
+            pGraphics->FreeEmbedFontData( pFontData, nFontLen );
             for( int i = 0; i < 256; i++ )
             {
                 if( nEncodedCodes[i] >= 32 && nEncodedCodes[i] < 256 )
@@ -2969,7 +2977,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
         aSubType = OString( "/TrueType" );
         Int32Vector aGlyphWidths;
         Ucs2UIntMap aUnicodeMap;
-        m_pReferenceDevice->mpGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
+        pGraphics->GetGlyphWidths( pFont, false, aGlyphWidths, aUnicodeMap );
 
         OUString aTmpName;
         osl_createTempFile( NULL, NULL, &aTmpName.pData );
@@ -2989,7 +2997,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
                 pWidths[ c ] = aGlyphWidths[ aUnicodeMap[ c ] ];
         }
 
-        m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
+        pGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
         osl_removeFile( aTmpName.pData );
     }
     else
@@ -3079,8 +3087,12 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     sal_Int32 nStreamObject = 0;
     sal_Int32 nFontDescriptor = 0;
 
+    SalGraphics *pGraphics = m_pReferenceDevice->GetGraphics();
+
+    assert(pGraphics);
+
     // prepare font encoding
-    const Ucs2SIntMap* pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pFont, NULL );
+    const Ucs2SIntMap* pEncoding = pGraphics->GetFontEncodingVector( pFont, NULL );
     sal_Int32 nToUnicodeStream = 0;
     sal_uInt8 nEncoding[256];
     sal_Ucs nEncodedCodes[256];
@@ -3115,7 +3127,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     sal_Int32 nLength1, nLength2;
     try
     {
-        if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) != NULL )
+        if( (pFontData = (const unsigned char*)pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) != NULL )
         {
             if( (aInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) == 0 )
                 throw FontException();
@@ -3628,7 +3640,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     }
 
     if( pFontData )
-        m_pReferenceDevice->mpGraphics->FreeEmbedFontData( pFontData, nFontLen );
+        pGraphics->FreeEmbedFontData( pFontData, nFontLen );
 
     return aRet;
 }
@@ -3846,7 +3858,9 @@ void PDFWriterImpl::appendBuiltinFontsToDict( OStringBuffer& rDict ) const
 
 bool PDFWriterImpl::emitFonts()
 {
-    if (!m_pReferenceDevice->AcquireGraphics())
+    SalGraphics *pGraphics = m_pReferenceDevice->GetGraphics();
+
+    if (!pGraphics)
         return false;
 
     OStringBuffer aLine( 1024 );
@@ -3897,7 +3911,7 @@ bool PDFWriterImpl::emitFonts()
                 }
             }
             FontSubsetInfo aSubsetInfo;
-            if( m_pReferenceDevice->mpGraphics->CreateFontSubset( aTmpName, it->first, aGlyphIds, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
+            if( pGraphics->CreateFontSubset( aTmpName, it->first, aGlyphIds, pEncoding, pWidths, nGlyphs, aSubsetInfo ) )
             {
                 // create font stream
                 osl::File aFontFile(aTmpName);
@@ -7017,6 +7031,11 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     sal_Int32* pMappedFontObjects,
                                     const PhysicalFontFace* pFallbackFonts[] )
 {
+    SalGraphics *pGraphics = m_pReferenceDevice->GetGraphics();
+
+    if (!pGraphics)
+        return false;
+
     const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
     sal_Ucs* pCurUnicode = pUnicodes;
     for( int i = 0; i < nGlyphs; pCurUnicode += pUnicodesPerGlyph[i] , i++ )
@@ -7066,7 +7085,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
             pGlyphWidths[i] = m_aFontCache.getGlyphWidth( pCurrentFont,
                                                           nFontGlyphId,
                                                           bVertical,
-                                                          m_pReferenceDevice->mpGraphics );
+                                                          pGraphics );
         }
         else if( pCurrentFont->IsEmbeddable() )
         {
@@ -7086,7 +7105,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
             const Ucs2OStrMap* pNonEncoded = NULL;
             if (!getReferenceDevice()->AcquireGraphics())
                 return false;
-            pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
+            pEncoding = pGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
 
             Ucs2SIntMap::const_iterator enc_it;
             Ucs2OStrMap::const_iterator nonenc_it;
@@ -7155,7 +7174,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
             pGlyphWidths[ i ] = m_aFontCache.getGlyphWidth( pCurrentFont,
                                                             (pEncoding ? *pCurUnicode : cChar) | GF_ISCHAR,
                                                             false,
-                                                            m_pReferenceDevice->mpGraphics );
+                                                            pGraphics );
         }
     }
     return true;
