@@ -649,7 +649,9 @@ void ScFormulaCfg::Commit()
             break;
         }
     }
-#if HAVE_FEATURE_OPENCL
+#if !HAVE_FEATURE_OPENCL
+    (void) bSetOpenCL;
+#else
     if(bSetOpenCL)
         sc::FormulaGroupInterpreter::switchOpenCLDevice(
                 GetCalcConfig().maOpenCLDevice, GetCalcConfig().mbOpenCLAutoSelect);
