@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_ea620316",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 11314,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-27T13:34:36Z",
+      "side": 1,
+      "message": "this is already set for KDE4 above and overrides the value determined there - maybe rename the variables? or would it work to check once for both kde4 and kde5 (i\u0027d guess not?)",
+      "revId": "4593024d64de529c8aef1897fce87b3e8fae6f9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_6ab0538c",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 11443,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-11-27T13:34:36Z",
+      "side": 1,
+      "message": "why check this? if it\u0027s kde 5 then it\u0027s surely newer than 4.2?",
+      "revId": "4593024d64de529c8aef1897fce87b3e8fae6f9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
