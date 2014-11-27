@@ -650,10 +650,9 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
         bPut = false;
     }
 
-    // TODO for now always pass a page number to cui, it can't make a
-    // difference between 0 and no page number at the moment.
+    if (oNumOffset)
     {
-        SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM, oNumOffset ? oNumOffset.get() : 0 );
+        SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM, oNumOffset.get() );
         rCoreSet.Put( aPageNum );
     }
 
