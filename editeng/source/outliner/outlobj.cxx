@@ -33,6 +33,7 @@
 #include <tools/stream.hxx>
 
 #include <boost/intrusive_ptr.hpp>
+#include <libxml/xmlwriter.h>
 
 /**
  * This is the guts of OutlinerParaObject, refcounted and shared among
@@ -276,6 +277,14 @@ void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewN
             }
         }
     }
+}
+
+void OutlinerParaObject::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("outlinerParaObject"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    GetTextObject().dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

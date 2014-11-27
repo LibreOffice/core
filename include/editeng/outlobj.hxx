@@ -76,6 +76,8 @@ public:
         const OUString& rNewName);
     void SetStyleSheets(sal_uInt16 nLevel, const OUString& rNewName,
         const SfxStyleFamily& rNewFamily);
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif
