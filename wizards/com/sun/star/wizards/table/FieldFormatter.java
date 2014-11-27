@@ -414,10 +414,7 @@ public class FieldFormatter implements XItemListener
         txtfieldname.setText(_ColumnName);
     }
 
-    public XPropertySet clonePropertySet(XPropertySet _xPropertySet)
-    {
-        return null;
-    }
+
 
     public void itemStateChanged(ItemEvent arg0)
     {

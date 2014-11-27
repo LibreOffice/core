@@ -22,8 +22,6 @@ import java.util.EventListener;
 public interface TaskListener extends EventListener
 {
 
-    void taskStarted(TaskEvent te);
-
     void taskFinished(TaskEvent te);
 
     /**

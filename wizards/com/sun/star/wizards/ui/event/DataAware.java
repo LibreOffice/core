@@ -20,9 +20,6 @@ package com.sun.star.wizards.ui.event;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
@@ -69,24 +66,6 @@ public abstract class DataAware {
     }
 
     /**
-     * sets a new data object. Optionally
-     * update the UI.
-     * @param obj the new data object.
-     * @param updateUI if true updateUI() will be called.
-     */
-    public void setDataObject(Object obj, boolean updateUI) {
-
-        if (obj != null && !value.isAssignable(obj.getClass()))
-            throw new ClassCastException("can not cast new DataObject to original Class");
-
-        dataObject = obj;
-
-        if (updateUI)
-            updateUI();
-
-    }
-
-    /**
      * Sets the given value to the data object.
      * this method delegates the job to the
      * Value object, but can be overwritten if
@@ -118,23 +97,6 @@ public abstract class DataAware {
      * @return the current value from the UI control.
      */
     protected abstract Object getFromUI();
-
-    /**
-     * updates the UI control according to the
-     * current state of the data object.
-     */
-    public void updateUI() {
-        Object data = getFromData();
-        Object ui = getFromUI();
-        if (!equals(data, ui))
-            try {
-                setToUI(data);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                //TODO tell user...
-            }
-        enableControls(data);
-    }
 
     /**
      * enables
@@ -181,33 +143,11 @@ public abstract class DataAware {
         return a.equals(b);
     }
 
-    /**
-     * given a collection containing DataAware objects,
-     * calls updateUI() on each memebr of the collection.
-     * @param dataAwares a collection containing DataAware objects.
-     */
-    public static void updateUI(Collection<DataAware> dataAwares) {
-        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
-             i.next().updateUI();
-    }
 
-    public static void updateData(Collection<DataAware> dataAwares) {
-        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
-             i.next().updateData();
-    }
 
-    /**
-     * /**
-     * Given a collection containing DataAware objects,
-     * sets the given DataObject to each DataAware object
-     * in the given collection
-     * @param dataAwares a collection of DataAware objects.
-     * @param dataObject new data object to set to the DataAware objects in the given collection.
-     * @param updateUI if true, calls updateUI() on each DataAware object.
-     */public static void setDataObject(Collection<DataAware> dataAwares, Object dataObject, boolean updateUI) {
-        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
-             i.next().setDataObject(dataObject, updateUI);
-    }
+
+
+
 
     /**
      * Value objects read and write a value from and
@@ -232,14 +172,6 @@ public abstract class DataAware {
          * @param target the object to set the value to.
          */
         void set(Object value, Object target);
-        /**
-         * checks if this Value object can handle
-         * the given object type as a target.
-         * @param type the type of a target to check
-         * @return true if the given class is acceptable for
-         * the Value object. False if not.
-         */
-        boolean isAssignable(Class<?> type);
     }
 
     /**
@@ -337,12 +269,5 @@ public abstract class DataAware {
             }
         }
 
-        /* (non-Javadoc)
-         * @see com.sun.star.wizards.ui.event.DataAware.Value#isAssignable(java.lang.Class)
-         */
-        public boolean isAssignable(Class<?> type) {
-            return getMethod.getDeclaringClass().isAssignableFrom(type) &&
-                setMethod.getDeclaringClass().isAssignableFrom(type);
-        }
     }
 }

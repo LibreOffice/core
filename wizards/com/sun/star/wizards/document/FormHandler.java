@@ -158,24 +158,6 @@ public class FormHandler
         return -1;
     }
 
-    public void setglobalMultiServiceFactory(XMultiServiceFactory _xMSF)
-    {
-        xMSF = _xMSF;
-    }
-
-    public String getModelServiceName(int _fieldtype)
-    {
-        int icontroltype = getControlType(_fieldtype);
-        if (icontroltype > -1)
-        {
-            return sModelServices[icontroltype];
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     public void initializeBasicControlValues()
     {
         Control oLabelControl = new Control(this, SOLABEL, new Point(), new Size());
@@ -251,22 +233,6 @@ public class FormHandler
         xNamedFormContainer = getDocumentForms();
         xNamedForms = UnoRuntime.queryInterface(XNameAccess.class, xNamedFormContainer);
         return xNamedForms.hasByName(_FormName);
-    }
-
-    public void removeFormByName(String _FormName)
-    {
-        try
-        {
-            if (hasFormByName(_FormName))
-            {
-                removeControlsofForm(_FormName);
-                xNamedFormContainer.removeByName(_FormName);
-            }
-        }
-        catch (com.sun.star.uno.Exception ex)
-        {
-            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void removeControlsofForm(String _FormName)
@@ -348,11 +314,6 @@ public class FormHandler
         }
     }
 
-    public XNameContainer insertSubFormbyName(String _FormName, XNameContainer _xNamedFormContainer)
-    {
-        return insertFormbyName(_FormName, _xNamedFormContainer);
-    }
-
     public XNameContainer insertFormbyName(String _FormName)
     {
         return insertFormbyName(_FormName, getDocumentForms());
@@ -429,31 +390,6 @@ public class FormHandler
         }
     }
 
-    public void moveShapesToNirwana()
-    {
-        try
-        {
-            for (int i = 0; i < this.xDrawPage.getCount(); i++)
-            {
-                XShape xShape = UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
-                xShape.setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
-            }
-        }
-        catch (Exception e)
-        {
-            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
-        }
-    }
-
-    public void removeAllShapes() throws Exception
-    {
-        for (int i = this.xDrawPage.getCount(); i > -1; i--)
-        {
-            XShape xShape = UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
-            removeShape(xShape);
-        }
-    }
-
     /**
      * By removing the shape the whole control is disposed too
      *
@@ -463,18 +399,6 @@ public class FormHandler
         xDrawPage.remove(_xShape);
         XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, _xShape);
         xComponent.dispose();
-    }
-    // Destroy all Shapes in Nirwana
-    public void removeNirwanaShapes() throws Exception
-    {
-        for (int i = this.xDrawPage.getCount(); i > -1; i--)
-        {
-            XShape xShape = UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
-            if (xShape.getPosition().Y < this.iYNirwanaPos)
-            {
-                xDrawPage.remove(xShape);
-            }
-        }
     }
 
     public XShape groupShapesTogether(XMultiServiceFactory _xMSF, XShape _xLabelShape, XShape _xControlShape)

@@ -844,10 +844,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
 
-    protected Rectangle insertVerticalLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight)
-    {
-        return insertLine(_xSection, _aRect, _nWidth, _nHeight, 1);
-    }
+
 
     protected Rectangle insertHorizontalLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight)
     {

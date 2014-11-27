@@ -21,16 +21,7 @@ import com.sun.star.uno.Exception;
 
 public class DebugHelper
 {
-//TODO - Verify these methods. Can not remove?
-    public static void exception(String DetailedMessage, Exception ex, int err, String additionalArgument) throws java.lang.Exception
-    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
-    public static void exception(int err, String additionalArgument) throws java.lang.Exception
-    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     public static void exception(Exception ex) throws java.lang.Exception
     {

@@ -38,20 +38,6 @@ public class ColumnPropertySet
         oTypeInspector = _oTypeInspector;
     }
 
-    private PropertyValue[] propertySet2PropertyValueArray(XPropertySet _xNewPropertySet) throws com.sun.star.uno.Exception
-    {
-        Property[] props = _xNewPropertySet.getPropertySetInfo().getProperties();
-        PropertyValue[] ret = new PropertyValue[props.length];
-        for (int i = 0; i < props.length; i++)
-        {
-            PropertyValue val = new PropertyValue();
-            val.Name = props[i].Name;
-            val.Value = _xNewPropertySet.getPropertyValue(val.Name);
-            ret[i] = val;
-        }
-        return ret;
-    }
-
     private void assignPropertyValues(String _sNewName, PropertyValue[] _aNewColPropertyValues, boolean _bsetDefaultProperties)
     {
         try
@@ -109,19 +95,6 @@ public class ColumnPropertySet
     public void assignPropertyValues(PropertyValue[] _aNewColPropertyValues, boolean _bsetDefaultProperties)
     {
         assignPropertyValues(null /* dont change the name */, _aNewColPropertyValues, _bsetDefaultProperties);
-    }
-
-    public void assignNewPropertySet(String _sNewName, XPropertySet _xNewPropertySet)
-    {
-        try
-        {
-            assignPropertyValues(
-                    _sNewName, propertySet2PropertyValueArray(_xNewPropertySet), false /*setDefaultProperties*/);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
     }
 
     private void setType(int _nType, String _sTypeName, Integer precision)

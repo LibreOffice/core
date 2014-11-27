@@ -22,7 +22,6 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.*;
-import com.sun.star.wizards.text.*;
 
 public class PlaceholderTextElement extends TextElement
 {
@@ -34,14 +33,6 @@ public class PlaceholderTextElement extends TextElement
     public PlaceholderTextElement(XTextRange textRange, String placeHolderText_, String hint_, XMultiServiceFactory xmsf_)
     {
         super(textRange);
-        placeHolderText = placeHolderText_;
-        hint = hint_;
-        xmsf = xmsf_;
-    }
-
-    public PlaceholderTextElement(String text, String paraStyle, String placeHolderText_, String hint_, XMultiServiceFactory xmsf_)
-    {
-        super(text, paraStyle);
         placeHolderText = placeHolderText_;
         hint = hint_;
         xmsf = xmsf_;

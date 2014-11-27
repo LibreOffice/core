@@ -18,25 +18,16 @@
 package com.sun.star.wizards.common;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.lang.Locale;
-import com.sun.star.uno.XInterface;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.container.NoSuchElementException;
-import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.util.XStringSubstitution;
 import com.sun.star.frame.*;
 import com.sun.star.i18n.KParseType;
 import com.sun.star.i18n.ParseResult;
@@ -73,24 +64,6 @@ public class Desktop
         XDesktop xDesktop = getDesktop(xMSF);
         XFramesSupplier xFrameSuppl = UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
         return xFrameSuppl.getActiveFrame();
-    }
-
-    public static XComponent getActiveComponent(XMultiServiceFactory _xMSF)
-    {
-        XFrame xFrame = getActiveFrame(_xMSF);
-        return UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
-    }
-
-    public static XTextDocument getActiveTextDocument(XMultiServiceFactory _xMSF)
-    {
-        XComponent xComponent = getActiveComponent(_xMSF);
-        return UnoRuntime.queryInterface(XTextDocument.class, xComponent);
-    }
-
-    public static XSpreadsheetDocument getActiveSpreadsheetDocument(XMultiServiceFactory _xMSF)
-    {
-        XComponent xComponent = getActiveComponent(_xMSF);
-        return UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
     }
 
     public static XDispatch getDispatcher(XFrame xFrame, String _stargetframe, com.sun.star.util.URL oURL)
@@ -292,35 +265,7 @@ public class Desktop
         return PropertyNames.EMPTY_STRING;
     }
 
-    /**
-     * @deprecated  use Configuration.getConfigurationRoot() with the same parameters instead
-     */
-    public static XInterface getRegistryKeyContent(XMultiServiceFactory xMSF, String KeyName, boolean bForUpdate)
-    {
-        try
-        {
-            Object oConfigProvider;
-            PropertyValue[] aNodePath = new PropertyValue[1];
-            oConfigProvider = xMSF.createInstance("com.sun.star.configuration.ConfigurationProvider");
-            aNodePath[0] = new PropertyValue();
-            aNodePath[0].Name = "nodepath";
-            aNodePath[0].Value = KeyName;
-            XMultiServiceFactory xMSFConfig = UnoRuntime.queryInterface(XMultiServiceFactory.class, oConfigProvider);
-            if (bForUpdate)
-            {
-                return (XInterface) xMSFConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", aNodePath);
-            }
-            else
-            {
-                return (XInterface) xMSFConfig.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", aNodePath);
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-            return null;
-        }
-    }
+
 
     /**
      * @deprecated used to retrieve the most common paths used in the office application
@@ -360,17 +305,7 @@ public class Desktop
         return PropertyNames.EMPTY_STRING;
     }
 
-    public static String getUserTemplatePath(XMultiServiceFactory _xMSF)
-    {
-        try
-        {
-            return FileAccess.getOfficePath(_xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
-        }
-        catch (NoValidPathException nopathexception)
-        {
-        }
-        return PropertyNames.EMPTY_STRING;
-    }
+
 
     public static String getBitmapPath(XMultiServiceFactory _xMSF)
     {
@@ -384,77 +319,8 @@ public class Desktop
         return PropertyNames.EMPTY_STRING;
     }
 
-    public static String getWorkPath(XMultiServiceFactory _xMSF)
-    {
-        try
-        {
-            return FileAccess.getOfficePath(_xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
-        }
-        catch (NoValidPathException nopathexception)
-        {
-        }
-        return PropertyNames.EMPTY_STRING;
-    }
 
-    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
-    {
-        Object xPathSubst = null;
-        try
-        {
-            xPathSubst = xMSF.createInstance("com.sun.star.util.PathSubstitution");
-        }
-        catch (com.sun.star.uno.Exception e)
-        {
-            e.printStackTrace();
-        }
-        if (xPathSubst != null)
-        {
-            return UnoRuntime.queryInterface(XStringSubstitution.class, xPathSubst);
-        }
-        else
-        {
-            return null;
-        }
-    }
 
-    /**
-     * This method searches (and hopefully finds...) a frame
-     * with a componentWindow.
-     * It does it in three phases:
-     * 1. Check if the given desktop argument has a componentWindow.
-     *    If it is null, the myFrame argument is taken.
-     * 2. Go up the tree of frames and search a frame with a component window.
-     * 3. Get from the desktop all the components, and give the first one
-     *    which has a frame.
-     */
-    public static XFrame findAFrame(XMultiServiceFactory xMSF, XFrame myFrame, XFrame desktop)
-            throws NoSuchElementException,
-            WrappedTargetException
-    {
-        if (desktop == null)
-        {
-            desktop = myFrame;        // we go up in the tree...
-        }
-        while (desktop != null && desktop.getComponentWindow() == null)
-        {
-            desktop = desktop.findFrame("_parent", FrameSearchFlag.PARENT);
-        }
-        if (desktop == null)
-        {
 
-            for (XEnumeration e = Desktop.getDesktop(xMSF).getComponents().createEnumeration(); e.hasMoreElements();)
-            {
 
-                Object comp = ((Any) e.nextElement()).getObject();
-                XModel xModel = UnoRuntime.queryInterface(XModel.class, comp);
-                XFrame xFrame = xModel.getCurrentController().getFrame();
-
-                if (xFrame != null && xFrame.getComponentWindow() != null)
-                {
-                    return xFrame;
-                }
-            }
-        }
-        return desktop;
-    }
 }

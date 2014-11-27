@@ -18,7 +18,6 @@
 
 package com.sun.star.wizards.common;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -83,17 +82,7 @@ public class Resource
         }
     }
 
-    public PropertyValue[] getStringList(int nID)
-    {
-        try
-        {
-            return (PropertyValue[])this.xStringListIndexAccess.getByIndex(nID);
-        }
-        catch (Exception exception)
-        {
-            throw new java.lang.IllegalArgumentException("Resource with ID not " + nID + "not found", exception);
-        }
-    }
+
 
     public String[] getResArray(int nID, int iCount)
     {

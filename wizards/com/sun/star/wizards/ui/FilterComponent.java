@@ -173,10 +173,7 @@ public class FilterComponent
         {
         }
 
-        public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
-        {
-            getfilterstate();
-        }
+
     }
 
     public static String getIndexNumber(String _sStr)
@@ -927,16 +924,8 @@ public class FilterComponent
             return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
         }
 
-        protected Object getText()
-        {
-            return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Text"));
-        }
 
-        protected String getDateTimeString(boolean bgetDate)
-        {
-            double dblValue = ((Double) getValue()).doubleValue();
-            NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
-            return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
-        }
+
+
     }
 }

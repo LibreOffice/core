@@ -23,7 +23,6 @@ import com.sun.star.container.XNamed;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.style.BreakType;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XTextContent;
@@ -33,7 +32,6 @@ import com.sun.star.text.XTextTablesSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.view.XSelectionSupplier;
 import com.sun.star.wizards.common.Desktop;
@@ -108,24 +106,7 @@ public class TextTableHandler
         }
     }
 
-    public void insertTextTable(com.sun.star.text.XTextCursor xTextCursor)
-    {
-        try
-        {
-            com.sun.star.uno.XInterface xTextTable = (XInterface) xMSFDoc.createInstance("com.sun.star.text.TextTable");
-            XTextContent xTextContentTable = UnoRuntime.queryInterface(XTextContent.class, xTextTable);
-            if (xTextCursor == null)
-            {
-                xTextCursor = xTextDocument.getText().createTextCursor();
-                xTextCursor.gotoEnd(false);
-            }
-            xTextCursor.getText().insertTextContent(xTextCursor, xTextContentTable, false);
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
+
 
     public void removeAllTextTables()
     {
@@ -203,12 +184,6 @@ public class TextTableHandler
         {
             exception.printStackTrace(System.err);
         }
-    }
-
-    public static BreakType resetBreakTypeofTextTable(Object oTextTable)
-    {
-        Helper.setUnoPropertyValue(oTextTable, "BreakType", BreakType.NONE);
-        return BreakType.NONE;
     }
 
     public void adjustOptimalTableWidths(XMultiServiceFactory _xMSF, XTextTable xTextTable)

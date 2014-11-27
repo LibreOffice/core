@@ -27,7 +27,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.container.XNamed;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;

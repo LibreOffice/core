@@ -42,11 +42,6 @@ public class RelationController extends CommandName
     private static final int FKTABLE_NAME = 7;
     private static final int FKCOLUMN_NAME = 8;
 
-    public RelationController(CommandMetaData _CommandMetaData, String _CatalogName, String _SchemaName, String _TableName, boolean _baddQuotation)
-    {
-        super(_CommandMetaData, _CatalogName, _SchemaName, _TableName, _baddQuotation);
-    }
-
     public RelationController(CommandMetaData _CommandMetaData, String _DisplayName)
     {
         super(_CommandMetaData, _DisplayName);

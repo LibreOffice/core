@@ -208,31 +208,7 @@ public class DBMetaData
         }
     }
 
-    public void setCommandTypes()
-    {
-        int TableCount;
-        int QueryCount;
-        int CommandCount;
-        int i;
-        int a;
-        TableCount = JavaTools.getArraylength(TableNames);
-        QueryCount = JavaTools.getArraylength(QueryNames);
-        CommandCount = TableCount + QueryCount;
-        CommandTypes = new int[CommandCount];
-        if (TableCount > 0)
-        {
-            for (i = 0; i < TableCount; i++)
-            {
-                CommandTypes[i] = com.sun.star.sdb.CommandType.TABLE;
-            }
-            a = i;
-            for (i = 0; i < QueryCount; i++)
-            {
-                CommandTypes[a] = com.sun.star.sdb.CommandType.QUERY;
-                a += 1;
-            }
-        }
-    }
+
 
     public boolean hasTableByName(String _stablename)
     {
@@ -516,19 +492,6 @@ public class DBMetaData
         return isSQL92CheckEnabled;
     }
 
-    public String verifyName(String _sname, int _maxlen)
-    {
-        if (_sname.length() > _maxlen)
-        {
-            return _sname.substring(0, _maxlen);
-        }
-        if (this.isSQL92CheckEnabled())
-        {
-            return Desktop.removeSpecialCharacters(xMSF, Configuration.getLocale(xMSF), _sname);
-        }
-        return _sname;
-    }
-
     public XDataSource getDataSource()
     {
         if (m_dataSource == null)
@@ -795,11 +758,6 @@ public class DBMetaData
             Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return false;
         }
-    }
-
-    public boolean supportsAutoIncrementation()
-    {
-        return false;
     }
 
     public boolean supportsQueriesInFrom() throws SQLException

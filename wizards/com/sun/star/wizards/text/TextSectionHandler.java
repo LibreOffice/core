@@ -68,11 +68,7 @@ public class TextSectionHandler
         }
     }
 
-    public boolean hasTextSectionByName(String SectionName)
-    {
-        com.sun.star.container.XNameAccess xAllTextSections = xTextSectionsSupplier.getTextSections();
-        return xAllTextSections.hasByName(SectionName);
-    }
+
 
     public void removeLastTextSection()
     {
@@ -169,18 +165,7 @@ public class TextSectionHandler
         }
     }
 
-    public void breakLinkOfTextSection(Object oTextSection)
-    {
-        SectionFileLink oSectionLink = new SectionFileLink();
-        oSectionLink.FileURL = PropertyNames.EMPTY_STRING;
-        Helper.setUnoPropertyValues(oTextSection, new String[]
-                {
-                    "FileLink", "LinkRegion"
-                }, new Object[]
-                {
-                    oSectionLink, PropertyNames.EMPTY_STRING
-                });
-    }
+
 
     public void linkSectiontoTemplate(String TemplateName, String SectionName)
     {

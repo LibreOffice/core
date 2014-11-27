@@ -281,35 +281,7 @@ public class TextFieldHandler
         }
     }
 
-    public void removeUserFieldByContent(String _FieldContent)
-    {
-        XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("Content", _FieldContent, "String");
-        if (xDependentTextFields != null)
-        {
-            for (int i = 0; i < xDependentTextFields.length; i++)
-            {
-                xDependentTextFields[i].dispose();
-            }
-        }
-    }
 
-    public void changeExtendedUserFieldContent(short UserDataPart, String _FieldContent)
-    {
-        try
-        {
-            XDependentTextField[] xDependentTextFields = getTextFieldsByProperty("UserDataType", Short.valueOf(UserDataPart), "Short");
-            if (xDependentTextFields != null)
-            {
-                for (int i = 0; i < xDependentTextFields.length; i++)
-                {
-                    xDependentTextFields[i].getTextFieldMaster().setPropertyValue("Content", _FieldContent);
-                }
-            }
-            refreshTextFields();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.err);
-        }
-    }
+
+
 }

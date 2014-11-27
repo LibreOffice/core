@@ -29,10 +29,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.sdb.XCompletedExecution;
-import com.sun.star.lang.Locale;
 import com.sun.star.wizards.common.InvalidQueryException;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.wizards.common.PropertyNames;
@@ -50,12 +48,6 @@ public class RecordParser extends QueryMetaData
     XInteractionHandler xInteraction;
     public FieldColumn[] GroupFieldColumns;
     public FieldColumn[] RecordFieldColumns;
-
-    public RecordParser(XMultiServiceFactory _xMSF, Locale _aLocale, NumberFormatter _oNumberFormatter)
-    {
-        super(_xMSF, _aLocale, _oNumberFormatter);
-        getInterfaces();
-    }
 
     /** Creates a new instance of RecordParser */
     public RecordParser(XMultiServiceFactory _xMSF)

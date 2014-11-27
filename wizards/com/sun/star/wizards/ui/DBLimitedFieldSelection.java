@@ -128,14 +128,7 @@ public abstract class DBLimitedFieldSelection
 
     }
 
-    protected void initializeListBox(XListBox xListBox, String[] _AllFieldNames, String _SelFieldName)
-    {
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.STRING_ITEM_LIST, _AllFieldNames);
-        short[] SelList = null;
-        int index = JavaTools.FieldInList(_AllFieldNames, _SelFieldName);
-        SelList = new short[] { (short) (index) };
-        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);
-    }
+
 }
 
 

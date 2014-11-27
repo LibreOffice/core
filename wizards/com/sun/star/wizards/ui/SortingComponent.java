@@ -273,26 +273,7 @@ public class SortingComponent
         }
     }
 
-    public void disableListBoxesfromIndex(int CurIndex)
-    {
-        if (CurIndex < MAXSORTCRITERIAINDEX)
-        {
-            for (int i = CurIndex + 1; i <= MAXSORTCRITERIAINDEX; i++)
-            {
-                toggleSortListBox(i, (false));
-                if (i < MaxSortIndex)
-                {
-                    CurUnoDialog.setControlProperty("lstSort" + Integer.toString(i + 2), PropertyNames.SELECTED_ITEMS, new short[]
-                            {
-                                0
-                            });
-                }
-                //          xSortListBox[i+1].selectItemPos((short)0, true);
-            }
-            CurUnoDialog.setFocus("lblSort" + Integer.valueOf(CurIndex + 1));
-            MaxSortIndex = CurIndex - 1;
-        }
-    }
+
 
     //  The following code can be reactivated in a future version when task #100799 will be fixed
     private void moveupSortItems(int CurIndex, boolean bDoEnable)

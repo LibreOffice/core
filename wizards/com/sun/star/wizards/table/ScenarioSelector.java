@@ -274,14 +274,9 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         return smytable;
     }
 
-    public void fillupTables()
-    {
-    }
 
-    public void fillupFieldsListbox()
-    {
-        super.emptyFieldsListBoxes();
-    }
+
+
 
 
     /* (non-Javadoc)

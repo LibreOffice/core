@@ -17,7 +17,6 @@
  */
 package com.sun.star.wizards.common;
 
-import com.sun.star.util.DateTime;
 import com.sun.star.beans.PropertyValue;
 import java.util.*;
 import java.io.File;
@@ -28,38 +27,6 @@ import java.net.URL;
 
 public class JavaTools
 {
-
-    public static String[] copyStringArray(String[] FirstArray)
-    {
-        if (FirstArray != null)
-        {
-            String[] SecondArray = new String[FirstArray.length];
-            System.arraycopy(FirstArray, 0, SecondArray, 0, FirstArray.length);
-            return SecondArray;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public static Object[] initializeArray(Object[] olist, Object ovalue)
-    {
-        for (int i = 0; i < olist.length; i++)
-        {
-            olist[i] = ovalue;
-        }
-        return olist;
-    }
-
-    public static Object[][] initializeMultiDimArray(Object[][] olist, Object[] ovalue)
-    {
-        for (int i = 0; i < olist.length; i++)
-        {
-            olist[i] = ovalue;
-        }
-        return olist;
-    }
 
     public static String[] ArrayOutOfMultiDimArray(String _sMultiDimArray[][], int _index)
     {
@@ -73,16 +40,6 @@ public class JavaTools
             }
         }
         return sRetArray;
-    }
-
-    public static int[] initializeintArray(int FieldCount, int nValue)
-    {
-        int[] LocintArray = new int[FieldCount];
-        for (int i = 0; i < LocintArray.length; i++)
-        {
-            LocintArray[i] = nValue;
-        }
-        return LocintArray;
     }
 
     /**converts a list of Integer values included in an Integer vector to a list of int values
@@ -113,19 +70,6 @@ public class JavaTools
             }
         }
         return bbooleanValues;
-    }
-
-    public static String[] multiDimListToArray(String[][] multidimlist)
-    {
-        String[] retlist = new String[]
-        {
-        };
-        retlist = new String[multidimlist.length];
-        for (int i = 0; i < multidimlist.length; i++)
-        {
-            retlist[i] = multidimlist[i][0];
-        }
-        return retlist;
     }
 
     public static String getlongestArrayItem(String[] StringArray)
@@ -170,24 +114,6 @@ public class JavaTools
             if (SearchList[i].equals(SearchString)) {
                 retvalue = i;
                 break;
-            }
-        }
-        return retvalue;
-    }
-
-    public static int FieldInList(String[] SearchList, String SearchString, int StartIndex)
-    {
-        int FieldLen = SearchList.length;
-        int retvalue = -1;
-        if (StartIndex < FieldLen)
-        {
-            for (int i = StartIndex; i < FieldLen; i++)
-            {
-                if (SearchList[i].equals(SearchString))
-                {
-                    retvalue = i;
-                    break;
-                }
             }
         }
         return retvalue;
@@ -339,24 +265,6 @@ public class JavaTools
         }
     }
 
-    public static String getFilenameOutOfPath(String sPath)
-    {
-        String[] Hierarchy = ArrayoutofString(sPath, "/");
-        return Hierarchy[Hierarchy.length - 1];
-    }
-
-    public static String getFileDescription(String sPath)
-    {
-        String sFilename = getFilenameOutOfPath(sPath);
-        String[] FilenameList = ArrayoutofString(sFilename, ".");
-        StringBuilder FileDescription = new StringBuilder(PropertyNames.EMPTY_STRING);
-        for (int i = 0; i < FilenameList.length - 1; i++)
-        {
-            FileDescription.append(FilenameList[i]);
-        }
-        return FileDescription.toString();
-    }
-
     public static String convertfromURLNotation(String _sURLPath)
     {
         String sPath = PropertyNames.EMPTY_STRING;
@@ -373,39 +281,11 @@ public class JavaTools
         return sPath;
     }
 
-    public static DateTime getDateTime(long timeMillis)
-    {
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        setTimeInMillis(cal, timeMillis);
-        DateTime dt = new DateTime();
-        dt.Year = (short) cal.get(Calendar.YEAR);
-        dt.Day = (short) cal.get(Calendar.DAY_OF_MONTH);
-        dt.Month = (short) (cal.get(Calendar.MONTH) + 1);
-        dt.Hours = (short) cal.get(Calendar.HOUR);
-        dt.Minutes = (short) cal.get(Calendar.MINUTE);
-        dt.Seconds = (short) cal.get(Calendar.SECOND);
-        dt.NanoSeconds = cal.get(Calendar.MILLISECOND)*1000000;
-        return dt;
-    }
-
-    public static long getTimeInMillis(Calendar _calendar)
-    {
-        java.util.Date dDate = _calendar.getTime();
-        return dDate.getTime();
-    }
-
     public static void setTimeInMillis(Calendar _calendar, long _timemillis)
     {
         java.util.Date dDate = new java.util.Date();
         dDate.setTime(_timemillis);
         _calendar.setTime(dDate);
-    }
-
-    public static long getMillis(DateTime time)
-    {
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        cal.set(time.Year, time.Month, time.Day, time.Hours, time.Minutes, time.Seconds);
-        return getTimeInMillis(cal);
     }
 
     public static String[] removeOutdatedFields(String[] baselist, String[] _complist)

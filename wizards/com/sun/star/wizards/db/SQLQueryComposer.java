@@ -21,7 +21,6 @@ package com.sun.star.wizards.db;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.XSingleSelectQueryAnalyzer;
 import com.sun.star.ui.dialogs.XExecutableDialog;
@@ -120,20 +119,7 @@ public class SQLQueryComposer
         }
     }
 
-    public void appendFilterConditions()
-    {
-        try
-        {
-            for (int i = 0; i < CurDBMetaData.getFilterConditions().length; i++)
-            {
-                m_queryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
+
 
     public void prependSortingCriteria() throws SQLException
     {

@@ -176,13 +176,7 @@ public class DatabaseControl extends Control
     }
 
     private static long m_nLongMax = 0;
-    public static long getLongMax()
-    {
-        if (m_nLongMax == 0)
-        {
-        }
-        return m_nLongMax;
-    }
+
     public void setNumericLimits()
     {
         try

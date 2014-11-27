@@ -23,9 +23,7 @@ import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
-import com.sun.star.awt.XProgressBar;
 import com.sun.star.awt.XRadioButton;
-import com.sun.star.awt.XScrollBar;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XTextListener;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -109,11 +107,7 @@ public class UnoDialog2 extends UnoDialog
         return xRadioButton;
     }
 
-    public XControl insertTitledBox(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oTitledBox = insertControlModel2("com.sun.star.awt.UnoControlGroupBoxModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XControl.class, oTitledBox);
-    }
+
 
     public XTextComponent insertTextField(String sName, XTextListener textListener, String[] sPropNames, Object[] oPropValues)
     {
@@ -160,23 +154,11 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(XControl.class, oLine);
     }
 
-    public XScrollBar insertScrollBar(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oScrollBar = insertControlModel2("com.sun.star.awt.UnoControlScrollBarModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XScrollBar.class, oScrollBar);
-    }
 
-    public XProgressBar insertProgressBar(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oProgressBar = insertControlModel2("com.sun.star.awt.UnoControlProgressBarModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XProgressBar.class, oProgressBar);
-    }
 
-    public XControl insertGroupBox(String sName, String[] sPropNames, Object[] oPropValues)
-    {
-        Object oGroupBox = insertControlModel2("com.sun.star.awt.UnoControlGroupBoxModel", sName, sPropNames, oPropValues);
-        return UnoRuntime.queryInterface(XControl.class, oGroupBox);
-    }
+
+
+
 
     public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues)
     {
@@ -202,15 +184,9 @@ public class UnoDialog2 extends UnoDialog
         return UnoRuntime.queryInterface(type, insertControlModel2(serviceName, componentName, sPropNames, oPropValues));
     }
 
-    public String translateURL(String relativeURL)
-    {
-        return PropertyNames.EMPTY_STRING;
-    }
 
-    public static Object getControlModel(Object unoControl)
-    {
-        return UnoRuntime.queryInterface(XControl.class, unoControl).getModel();
-    }
+
+
 
     public int showMessageBox(String windowServiceName, int windowAttribute, String MessageText)
     {

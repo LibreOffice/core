@@ -84,21 +84,6 @@ public class SystemDialog
         return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", TemplateDescription.FILESAVE_AUTOEXTENSION);
     }
 
-    public static SystemDialog createOpenDialog(XMultiServiceFactory xmsf)
-    {
-        return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", TemplateDescription.FILEOPEN_SIMPLE);
-    }
-
-    public static SystemDialog createFolderDialog(XMultiServiceFactory xmsf)
-    {
-        return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FolderPicker", (short) 0);
-    }
-
-    public static SystemDialog createOfficeFolderDialog(XMultiServiceFactory xmsf)
-    {
-        return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.OfficeFolderPicker", (short) 0);
-    }
-
     private String subst(String path)
     {
         try
@@ -145,50 +130,9 @@ public class SystemDialog
         return sStorePath;
     }
 
-    public String callFolderDialog(String title, String description, String displayDir)
-    {
-        try
-        {
-            xFolderPicker.setDisplayDirectory(subst(displayDir));
-        }
-        catch (com.sun.star.lang.IllegalArgumentException iae)
-        {
-            throw new IllegalArgumentException(iae);
-        }
-        xFolderPicker.setTitle(title);
-        xFolderPicker.setDescription(description);
-        if (execute(xFolderPicker))
-        {
-            return xFolderPicker.getDirectory();
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     private boolean execute(XExecutableDialog execDialog)
     {
         return execDialog.execute() == 1;
-    }
-
-    public String[] callOpenDialog(boolean multiSelect, String displayDirectory)
-    {
-
-        try
-        {
-            xFilePicker.setMultiSelectionMode(multiSelect);
-            xFilePicker.setDisplayDirectory(subst(displayDirectory));
-            if (execute(xExecutable))
-            {
-                return xFilePicker.getFiles();
-            }
-        }
-        catch (com.sun.star.lang.IllegalArgumentException exception)
-        {
-            exception.printStackTrace();
-        }
-        return null;
     }
 
     //("writer_StarOffice_XML_Writer_Template")    'StarOffice XML (Writer)

@@ -18,14 +18,11 @@
 package com.sun.star.wizards.ui;
 
 import java.beans.VetoableChangeListener;
-import java.beans.VetoableChangeSupport;
-
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.PushButtonType;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XItemEventBroadcaster;
-import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexContainer;
@@ -372,14 +369,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     }
 
     /* (non-Javadoc)
-     * @see com.sun.star.wizards.ui.XCompletion#ismodified(int)
-     */
-    public boolean ismodified(int _ndialogpage)
-    {
-        return false;
-    }
-
-    /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
      */
     public void setcompleted(int _ndialogpage, boolean _biscompleted)
@@ -512,25 +501,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    protected void insertRoadMapItems(String[] items, int[] steps, boolean[] enabled)
-    {
-        for (int i = 0; i < items.length; i++)
-        {
-            insertRoadmapItem(i, enabled[i], items[i], steps[i]);
-        }
-    }
 
-    /** This method also enables and disables the "next" button,
-     * if the step currently dis/enabled is the one of the next steps.
-     */
-    public void setStepEnabled(int _nStep, boolean bEnabled, boolean enableNextButton)
-    {
-        setStepEnabled(_nStep, bEnabled);
-        if (getNextAvailableStep() > 0)
-        {
-            enableNextButton(bEnabled);
-        }
-    }
 
     public void enableNavigationButtons(boolean _bEnableBack, boolean _bEnableNext, boolean _bEnableFinish)
     {

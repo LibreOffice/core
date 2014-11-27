@@ -18,8 +18,6 @@
 package com.sun.star.wizards.ui;
 
 import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XActionListener;
@@ -369,29 +367,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return pageStart + i;
     }
 
-    public void contentsChanged(ListDataEvent event)
-    {
-    }
-
-    public void intervalAdded(ListDataEvent event)
-    {
-        if (event.getIndex0() <= m_nCurrentSelection)
-        {
-            if (event.getIndex1() <= m_nCurrentSelection)
-            {
-                m_nCurrentSelection += event.getIndex1() - event.getIndex0() + 1;
-            }
-        }
-        if (event.getIndex0() < pageStart || event.getIndex1() < (pageStart + getRows() + getCols()))
-        {
-            refreshImages();
-        }
-    }
-
-    public void intervalRemoved(ListDataEvent event)
-    {
-    }
-
     /** Registers ItemListener to receive events.
      * @param listener The listener to register.
      */
@@ -668,17 +643,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return rowSelect;
     }
 
-
-    /**
-     * jump to the given item (display the screen
-     * that contains the given item).
-     */
-    public void display(int i)
-    {
-        int is = (getCols() * getRows());
-        int ps = (listModel.getSize() / is) * is;
-        setPageStart(ps);
-    }
 
     public boolean isenabled()
     {

@@ -24,7 +24,7 @@ public interface XCompletion
 
     boolean iscompleted(int _ndialogpage);
 
-    void setmodified(int _ndialogpage, Object ooldValue, Object onewValue);
 
-    boolean ismodified(int _ndialogpage);
+
+
 }

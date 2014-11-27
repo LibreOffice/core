@@ -34,7 +34,6 @@ import com.sun.star.text.XTextTable;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XNumberFormats;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.text.TextDocument;
@@ -63,12 +62,6 @@ public class DBColumn
     RecordParser CurDBMetaData;
     RecordTable CurRecordTable;
     TextTableHandler oTextTableHandler;
-
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i)
-    {
-        CurRecordTable = new RecordTable(_oTextTableHandler);
-        initializeRecordTableMembers(CurRecordTable, _oTextTableHandler, _CurDBMetaData, i, false);
-    }
 
     public DBColumn(RecordTable _CurRecordTable, TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i, boolean _bforce)
     {
@@ -246,14 +239,7 @@ public class DBColumn
         oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 
-    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler, XCell xCell)
-    {
-        XTextCursor xTextCursor = TextDocument.createTextCursor(xCell);
-        xTextCursor.gotoStart(false);
-        xTextCursor.gotoEnd(true);
-        xTextCursor.setString(PropertyNames.EMPTY_STRING);
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
-    }
+
 
     public void formatValueCell()
     {

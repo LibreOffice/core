@@ -31,5 +31,5 @@ public interface XFieldSelectionListener
 
     void setID(String sIncSuffix);
 
-    int getID();
+
 }

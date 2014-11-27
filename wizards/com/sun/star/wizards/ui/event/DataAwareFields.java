@@ -89,10 +89,6 @@ public class DataAwareFields
             field = field_;
         }
 
-        public boolean isAssignable(Class<?> type)
-        {
-            return field.getDeclaringClass().isAssignableFrom(type);
-        }
     }
 
     private static class BooleanFieldValue extends FieldValue

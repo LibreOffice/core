@@ -22,7 +22,6 @@ import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
@@ -297,9 +296,7 @@ public class StyleApplier
         curFormDocument.unlockallControllers();
     }
 
-    public void disposing(EventObject eventObject)
-    {
-    }
+
 
     private int getStyleColor(String[] _sDataList, String _sHeader, String _sPropertyDescription)
     {

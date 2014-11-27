@@ -481,11 +481,7 @@ public class FieldSelection
         }
     }
 
-    public void mergeList(String[] AllFieldNames, String[] SecondList)
-    {
-        xFieldsListBox.addItems(AllFieldNames, (short) 0);
-        toggleListboxButtons((short) - 1, (short) - 1);
-    }
+
 
     public void intializeSelectedFields(String[] _SelectedFieldNames)
     {
@@ -511,15 +507,7 @@ public class FieldSelection
         toggleListboxControls(Boolean.TRUE);
     }
 
-    public void initialize(String[][] _AllFieldNamesTable, boolean _AppendMode, int _maxfieldcount)
-    {
-        String[] AllFieldNames_ = new String[_AllFieldNamesTable.length];
-        for (int i = 0; i < _AllFieldNamesTable.length; i++)
-        {
-            AllFieldNames_[i] = _AllFieldNamesTable[i][0];
-        }
-        initialize(AllFieldNames_, _AppendMode, _maxfieldcount);
-    }
+
 
     public void initialize(String[] _AllFieldNames, boolean _AppendMode, int _maxfieldcount)
     {
