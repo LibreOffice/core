@@ -146,6 +146,7 @@ public:
     //test shape import
     void testControlImport();
     void testChartImportODS();
+    void testChartImportXLS();
 
     void testNumberFormatHTML();
     void testNumberFormatCSV();
@@ -215,6 +216,7 @@ public:
     CPPUNIT_TEST(testRowIndex1BasedXLSX);
     CPPUNIT_TEST(testControlImport);
     CPPUNIT_TEST(testChartImportODS);
+    CPPUNIT_TEST(testChartImportXLS);
 
     CPPUNIT_TEST(testDataBarODS);
     CPPUNIT_TEST(testDataBarXLSX);
@@ -1503,6 +1505,23 @@ void ScFiltersTest::testChartImportODS()
     xDocSh->DoClose();
 }
 
+void ScFiltersTest::testChartImportXLS()
+{
+    ScDocShellRef xDocSh = loadDoc("chartx.", XLS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load chartx.xls.", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Retrieve the chart object instance from the 2nd page (for the 2nd sheet).
+    const SdrOle2Obj* pOleObj = getSingleChartObject(rDoc, 0);
+    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
+
+    CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());
+    CPPUNIT_ASSERT_EQUAL(8635L, pOleObj->GetLogicRect().getHeight());
+
+    xDocSh->DoClose();
+}
+
 void ScFiltersTest::testNumberFormatHTML()
 {
     ScDocShellRef xDocSh = loadDoc("numberformat.", HTML);
@@ -2679,3 +2698,4 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
