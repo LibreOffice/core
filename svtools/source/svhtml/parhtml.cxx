@@ -233,8 +233,8 @@ void HTMLOption::GetColor( Color& rColor ) const
 
     OUString aTmp(aValue.toAsciiLowerCase());
     sal_uInt32 nColor = SAL_MAX_UINT32;
-    if( '#' != aTmp[0] )
-        nColor = GetHTMLColor( aTmp );
+    if (!aTmp.isEmpty() && aTmp[0] != '#')
+        nColor = GetHTMLColor(aTmp);
 
     if( SAL_MAX_UINT32 == nColor )
     {
