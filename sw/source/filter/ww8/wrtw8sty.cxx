@@ -2158,52 +2158,52 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
 
                 if( aCntnt[ i ] != NULL )
                 {
-                // is it an writer or sdr - textbox?
-                const SdrObject& rObj = *(SdrObject*)aCntnt[ i ];
-                if (rObj.GetObjInventor() == FmFormInventor)
-                {
-                    sal_uInt8 nOldTyp = rWrt.nTxtTyp;
-                    rWrt.nTxtTyp = nTTyp;
-                    rWrt.GetOCXExp().ExportControl(rWrt,&rObj);
-                    rWrt.nTxtTyp = nOldTyp;
-                }
-                else if( rObj.ISA( SdrTextObj ) )
-                    rWrt.WriteSdrTextObj(rObj, nTTyp);
-                else
-                {
-                    const SwFrmFmt* pFmt = ::FindFrmFmt( &rObj );
-                    OSL_ENSURE( pFmt, "where is the format?" );
-
-                    const SwNodeIndex* pNdIdx = pFmt->GetCntnt().GetCntntIdx();
-                    OSL_ENSURE( pNdIdx, "where is the StartNode of the Textbox?" );
-                    rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
-                                           pNdIdx->GetNode().EndOfSectionIndex(),
-                                           nTTyp );
+                    // is it an writer or sdr - textbox?
+                    const SdrObject& rObj = *(SdrObject*)aCntnt[ i ];
+                    if (rObj.GetObjInventor() == FmFormInventor)
                     {
-                        SwNodeIndex aContentIdx = *pNdIdx;
-                        ++aContentIdx;
-                        if ( aContentIdx.GetNode().IsTableNode() )
+                        sal_uInt8 nOldTyp = rWrt.nTxtTyp;
+                        rWrt.nTxtTyp = nTTyp;
+                        rWrt.GetOCXExp().ExportControl(rWrt,&rObj);
+                        rWrt.nTxtTyp = nOldTyp;
+                    }
+                    else if( rObj.ISA( SdrTextObj ) )
+                        rWrt.WriteSdrTextObj(rObj, nTTyp);
+                    else
+                    {
+                        const SwFrmFmt* pFmt = ::FindFrmFmt( &rObj );
+                        OSL_ENSURE( pFmt, "where is the format?" );
+
+                        const SwNodeIndex* pNdIdx = pFmt->GetCntnt().GetCntntIdx();
+                        OSL_ENSURE( pNdIdx, "where is the StartNode of the Textbox?" );
+                        rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
+                                               pNdIdx->GetNode().EndOfSectionIndex(),
+                                               nTTyp );
                         {
-                            bool bContainsOnlyTables = true;
-                            do {
-                                aContentIdx = *(aContentIdx.GetNode().EndOfSectionNode());
-                                ++aContentIdx;
-                                if ( !aContentIdx.GetNode().IsTableNode() &&
-                                     aContentIdx.GetIndex() != pNdIdx->GetNode().EndOfSectionIndex() )
-                                {
-                                    bContainsOnlyTables = false;
-                                }
-                            } while ( aContentIdx.GetNode().IsTableNode() );
-                            if ( bContainsOnlyTables )
+                            SwNodeIndex aContentIdx = *pNdIdx;
+                            ++aContentIdx;
+                            if ( aContentIdx.GetNode().IsTableNode() )
                             {
-                                // Additional paragraph containing a space to
-                                // assure that by WW created RTF from written WW8
-                                // does not crash WW.
-                                rWrt.WriteStringAsPara( OUString(" ") );
+                                bool bContainsOnlyTables = true;
+                                do {
+                                    aContentIdx = *(aContentIdx.GetNode().EndOfSectionNode());
+                                    ++aContentIdx;
+                                    if ( !aContentIdx.GetNode().IsTableNode() &&
+                                         aContentIdx.GetIndex() != pNdIdx->GetNode().EndOfSectionIndex() )
+                                    {
+                                        bContainsOnlyTables = false;
+                                    }
+                                } while ( aContentIdx.GetNode().IsTableNode() );
+                                if ( bContainsOnlyTables )
+                                {
+                                    // Additional paragraph containing a space to
+                                    // assure that by WW created RTF from written WW8
+                                    // does not crash WW.
+                                    rWrt.WriteStringAsPara( OUString(" ") );
+                                }
                             }
                         }
                     }
-                }
                 }
                 else if( i < aSpareFmts.size() )
                 {
