@@ -3832,22 +3832,38 @@ void SdXMLCustomShapeContext::EndElement()
 
         if(bFlippedX || bFlippedY)
         {
-            beans::PropertyValue aNewPoroperty;
+            OUString sName;
 
             if(bFlippedX)
+                sName = "MirroredX";
+            else
+                sName = "MirroredY";
+
+            //fdo#84043 overwrite the property if it already exists, otherwise append it
+            beans::PropertyValue* pItem;
+            std::vector< beans::PropertyValue >::iterator aI(maCustomShapeGeometry.begin());
+            std::vector< beans::PropertyValue >::iterator aE(maCustomShapeGeometry.end());
+            while (aI != aE)
             {
-                aNewPoroperty.Name = "MirroredX";
+                if (aI->Name == sName)
+                    break;
+                ++aI;
+            }
+            if (aI != aE)
+            {
+                beans::PropertyValue& rItem = *aI;
+                pItem = &rItem;
             }
             else
             {
-                aNewPoroperty.Name = "MirroredY";
+                maCustomShapeGeometry.push_back(beans::PropertyValue());
+                pItem = &maCustomShapeGeometry.back();
             }
 
-            aNewPoroperty.Handle = -1;
-            aNewPoroperty.Value <<= sal_True;
-            aNewPoroperty.State = beans::PropertyState_DIRECT_VALUE;
-
-            maCustomShapeGeometry.push_back(aNewPoroperty);
+            pItem->Name = sName;
+            pItem->Handle = -1;
+            pItem->Value <<= sal_True;
+            pItem->State = beans::PropertyState_DIRECT_VALUE;
         }
     }
 
