@@ -4,17 +4,17 @@ import android.graphics.Bitmap;
 
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
+import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.LayerController;
 
 public class MockTileProvider implements TileProvider {
     private static final int TILE_SIZE = 256;
-    private final LayerController layerController;
+    private final GeckoLayerClient mLayerClient;
     private final String inputFile;
 
-    public MockTileProvider(LayerController layerController, String inputFile) {
-        this.layerController = layerController;
-        this.inputFile = inputFile;
+    public MockTileProvider(GeckoLayerClient layerClient, String input) {
+        mLayerClient = layerClient;
+        this.inputFile = input;
 
         for (int i = 0; i < 5; i++) {
             String partName = "Part " + i;
@@ -52,7 +52,7 @@ public class MockTileProvider implements TileProvider {
         tileNumber += 1; // 0 to 1 based numbering
 
         String imageName = "d" + tileNumber;
-        Bitmap bitmap = layerController.getView().getDrawable(imageName);
+        Bitmap bitmap = mLayerClient.getView().getDrawable(imageName);
 
         CairoImage image = new BufferedCairoImage(bitmap);
 
@@ -61,7 +61,7 @@ public class MockTileProvider implements TileProvider {
 
     @Override
     public Bitmap thumbnail(int size) {
-        return layerController.getView().getDrawable("dummy_page");
+        return mLayerClient.getView().getDrawable("dummy_page");
     }
 
     @Override

@@ -8,8 +8,8 @@ import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
+import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.LayerController;
 
 import java.nio.ByteBuffer;
 
@@ -18,7 +18,7 @@ public class LOKitTileProvider implements TileProvider {
     private static int TILE_SIZE = 256;
     private Office mOffice;
     private Document mDocument;
-    private final LayerController mLayerController;
+    private final GeckoLayerClient mLayerClient;
     private final float mTileWidth;
     private final float mTileHeight;
     private final String mInputFile;
@@ -30,8 +30,8 @@ public class LOKitTileProvider implements TileProvider {
 
     private long objectCreationTime = System.currentTimeMillis();
 
-    public LOKitTileProvider(LayerController layerController, String input) {
-        mLayerController = layerController;
+    public LOKitTileProvider(GeckoLayerClient layerClient, String input) {
+        mLayerClient = layerClient;
         mDPI = (float) LOKitShell.getDpi();
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);

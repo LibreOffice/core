@@ -3,8 +3,6 @@ package org.libreoffice;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -15,14 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
-import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.LayerView;
 
 import java.util.ArrayList;
@@ -35,7 +31,6 @@ public class LibreOfficeMainActivity extends Activity {
 
     public static LibreOfficeMainActivity mAppContext;
 
-    private static LayerController mLayerController;
     private static GeckoLayerClient mLayerClient;
     private static LOKitThread sLOKitThread;
 
@@ -50,10 +45,6 @@ public class LibreOfficeMainActivity extends Activity {
 
     public static GeckoLayerClient getLayerClient() {
         return mLayerClient;
-    }
-
-    public static LayerController getLayerController() {
-        return mLayerController;
     }
 
     @Override
@@ -130,12 +121,11 @@ public class LibreOfficeMainActivity extends Activity {
             sLOKitThread.clearQueue();
         }
 
-        mLayerController = new LayerController(this);
-        mLayerController.setZoomConstraints(new ZoomConstraints(true));
         mLayerClient = new GeckoLayerClient(this);
+        mLayerClient.setZoomConstraints(new ZoomConstraints(true));
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
-        mLayerController.setView(layerView);
-        mLayerController.setLayerClient(mLayerClient);
+        mLayerClient.setView(layerView);
+        mLayerClient.notifyReady();
     }
 
     @Override
@@ -167,6 +157,7 @@ public class LibreOfficeMainActivity extends Activity {
     @Override
     protected void onDestroy() {
         Log.i(LOGTAG, "onDestroy..");
+        mLayerClient.destroy();
         super.onDestroy();
     }
 
