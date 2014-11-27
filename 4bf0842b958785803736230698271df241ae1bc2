@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3afb71cf_0a90bfeb",
+        "filename": "jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "uwinapi, not unwinapi (if you feel the need at all to list some of the URE DLLs here)",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_eabb2374",
+        "filename": "jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "missing space between across and 32",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_2a813b90",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "should be a local typedef in the single function that uses it",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_8aba6f6d",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "the functions PipeConnection_create etc. exported from jpipx are not __cdecl",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_aab52b7f",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "I guess this comment is better covered in the commit msg (\"why did the code change?\") than in the code itself (where it\u0027s somewhat out of context now)",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_ca674724",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "all these dummy functions that silently do nothing are a bad idea; the forwarding to jpipx must not fail; if it does, something fundamental is wrong with the LO installation, and it should fail as fast as possible (probably best to have null function pointers in that case)",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_4aad9730",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "loading jpipx in only in the ..._createJNI function has the drawback that it relies on the Java code always calling that first; better have a helper function that is called first thing in all five ..._*JNI functions and does the necessary set up on the first call (in a thread-safe way)",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_8a714fe3",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "this code is not thread-safe; make sure that the static function pointers written by the first call to this set-up code are visible to all the users of those function pointers",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_6a7733d5",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "silently returning is not a good idea; call e.g. abort()",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_4a7477ce",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "the call to PipeConnection_create must be done outside the if block, so that it fails with a null pointer deref (see above) if LoadLibraryExW failed",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_ea49e38f",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-11-27T13:41:54Z",
+      "side": 1,
+      "message": "closing a pipe must unload jpipx; there can be multiple pipes open in parallel (it\u0027s IMO not worth it to try to eventually unload jpipx again; the original code \"leaked\" it by design)",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
