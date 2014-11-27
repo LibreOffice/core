@@ -255,7 +255,7 @@ gb_Jar_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dLO_JAVA_DIR/ \
     URE:vnd.sun.star.expand:\dURE_INTERNAL_JAVA_DIR/ \
     OXT:./ \
-	NONE:$(call gb_Helper_make_url,$(WORKDIR)/Jar) \
+    NONE:$(call gb_Helper_make_url,$(WORKDIR)/Jar/) \
 
 # get component prefix from layer name ("OOO", "URE", "OXT", "NONE")
 gb_Jar__get_componentprefix = \
