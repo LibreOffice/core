@@ -159,8 +159,6 @@ public class DatabaseControl extends Control
         }
     }
 
-    private static long m_nLongMax = 0;
-
     public void setNumericLimits()
     {
         try

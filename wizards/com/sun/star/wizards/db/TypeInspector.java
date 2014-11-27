@@ -37,7 +37,6 @@ public class TypeInspector
     private int[] nDataTypeInfos;
     private int[] nPrecisionInfos;
     private int[] nNullableInfos;
-    private int[] nSearchables;
     private boolean[] bisAutoIncrementableInfos;
     private int[] nMinScaleInfos;
     private int[] nMaxScaleInfos;
@@ -50,15 +49,10 @@ public class TypeInspector
 
     public class TypeInfo
     {
-
-        public int nDataType;
-        public String sDataTypeName;
         public boolean bisAutoIncrementable;
 
         public TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable)
         {
-            nDataType = _nDataType;
-            sDataTypeName = _sDataTypeName;
             bisAutoIncrementable = _bisAutoIncrementable;
         }
     }
@@ -93,7 +87,7 @@ public class TypeInspector
             aTypeNameVector.toArray(sDataTypeNames);
             nDataTypeInfos = JavaTools.IntegerTointList(aTypeVector);
             nNullableInfos = JavaTools.IntegerTointList(aNullableVector);
-            nSearchables = JavaTools.IntegerTointList(aSearchableVector);
+            JavaTools.IntegerTointList(aSearchableVector);
             bisAutoIncrementableInfos = JavaTools.BooleanTobooleanList(aAutoIncrementVector);
             nPrecisionInfos = JavaTools.IntegerTointList(aPrecisionVector);
             nMinScaleInfos = JavaTools.IntegerTointList(aMinScaleVector);

@@ -28,7 +28,6 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.lang.Locale;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyle;
@@ -51,18 +50,12 @@ public class TextDocument
 
     public XComponent xComponent;
     public com.sun.star.text.XTextDocument xTextDocument;
-    public com.sun.star.document.XDocumentProperties m_xDocProps;
     public com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
     public XText xText;
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
-    public com.sun.star.util.XNumberFormatsSupplier xNumberFormatsSupplier;
     public com.sun.star.awt.XWindowPeer xWindowPeer;
-    public int PageWidth;
-    public Size DocSize;
-    public com.sun.star.lang.Locale CharLocale;
-    public XStorable xStorable;
 
     // creates an instance of TextDocument by loading a given URL as preview
     public TextDocument(XMultiServiceFactory xMSF, String _sPreviewURL, boolean bShowStatusIndicator, XTerminateListener listener)
@@ -157,11 +150,11 @@ public class TextDocument
         }
         xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
-        m_xDocProps = xDocPropsSuppl.getDocumentProperties();
-        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
+        xDocPropsSuppl.getDocumentProperties();
+        Helper.getUnoStructValue(xComponent, "CharLocale");
         xText = xTextDocument.getText();
     }
 
@@ -169,11 +162,11 @@ public class TextDocument
     {
         xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
-        m_xDocProps = xDocPropsSuppl.getDocumentProperties();
-        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
-        xStorable = UnoRuntime.queryInterface(XStorable.class, xTextDocument);
+        xDocPropsSuppl.getDocumentProperties();
+        Helper.getUnoStructValue(xComponent, "CharLocale");
+        UnoRuntime.queryInterface(XStorable.class, xTextDocument);
         xText = xTextDocument.getText();
     }
 
@@ -214,7 +207,7 @@ public class TextDocument
         }
         Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
         xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
-        DocSize = getPageSize();
+        getPageSize();
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
 
         ViewHandler myViewHandler = new ViewHandler(xTextDocument);

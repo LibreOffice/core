@@ -23,7 +23,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
@@ -65,7 +64,6 @@ public class CommandMetaData extends DBMetaData
     String sCatalogSep = PropertyNames.EMPTY_STRING;
     String sIdentifierQuote = PropertyNames.EMPTY_STRING;
     boolean bCommandComposerAttributesalreadyRetrieved = false;
-    private XIndexAccess xIndexKeys;
 
     public CommandMetaData(XMultiServiceFactory xMSF)
     {

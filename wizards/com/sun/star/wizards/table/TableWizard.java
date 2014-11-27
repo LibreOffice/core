@@ -44,7 +44,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     ScenarioSelector curScenarioSelector;
     FieldFormatter curFieldFormatter;
     PrimaryKeyHandler curPrimaryKeyHandler;
-    String sMsgWizardName = PropertyNames.EMPTY_STRING;
     public HashMap<String, FieldDescription> fielditems;
     int wizardmode;
     String tablename;
@@ -381,7 +380,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
 
     public boolean getTableResources()
     {
-        sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_TABLE + 1);
+        super.m_oResource.getResText(UIConsts.RID_TABLE + 1);
         slblFields = m_oResource.getResText(UIConsts.RID_TABLE + 19);
         slblSelFields = m_oResource.getResText(UIConsts.RID_TABLE + 25);
         serrToManyFields = m_oResource.getResText(UIConsts.RID_TABLE + 47);

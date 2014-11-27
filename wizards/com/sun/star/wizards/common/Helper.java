@@ -220,7 +220,6 @@ public class Helper
             return null;
         }
     }
-    private static long DAY_IN_MILLIS = (24 * 60 * 60 * 1000);
 
     public static XComponentContext getComponentContext(XMultiServiceFactory _xMSF)
     {

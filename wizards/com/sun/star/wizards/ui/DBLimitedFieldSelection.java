@@ -18,7 +18,6 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.XListBox;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
@@ -30,13 +29,9 @@ import com.sun.star.wizards.common.PropertyNames;
 public abstract class DBLimitedFieldSelection
 {
 
-    protected XMultiServiceFactory xMSF;
     protected WizardDialog CurUnoDialog;
     protected String sNoField;
     protected Integer IStep;
-    protected Integer ICompPosX;
-    protected Integer ICompPosY;
-    protected Integer ICompWidth;
     protected static final int rowcount = 4;
     protected final int MAXSELINDEX = rowcount - 1;
     protected short curtabindex;
@@ -47,15 +42,11 @@ public abstract class DBLimitedFieldSelection
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int iCompWidth, int _FirstHelpIndex)
     {
         this.CurUnoDialog = _CurUnoDialog;
-        xMSF = CurUnoDialog.xMSF;
         FirstHelpIndex = _FirstHelpIndex;
         curtabindex = (short) (iStep * 100);
         sNoField = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
         IStep = Integer.valueOf(iStep);
         iCompPosX = _iCompPosX;
-        ICompPosX = Integer.valueOf(iCompPosX);
-        ICompPosY = Integer.valueOf(iCompPosY);
-        ICompWidth = Integer.valueOf(iCompWidth);
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)
         {

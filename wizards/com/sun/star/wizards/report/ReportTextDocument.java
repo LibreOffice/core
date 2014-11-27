@@ -216,7 +216,6 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                 Helper.setUnoPropertyValue(FirstPageStyle, SIZE, oNewSize);
                 int iLeftMargin = AnyConverter.toInt(Helper.getUnoPropertyValue(ReportPageStyle, "LeftMargin"));
                 int iRightMargin = AnyConverter.toInt(Helper.getUnoPropertyValue(ReportPageStyle, "RightMargin"));
-                PageWidth = oNewSize.Width - iLeftMargin - iRightMargin;
                 if (CurRecordTable != null)
                 {
                     CurRecordTable.adjustOptimalTableWidths(xMSF, oViewHandler);

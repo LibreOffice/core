@@ -482,7 +482,6 @@ public class FileAccess
         return LocLayoutFiles;
     }
     public XSimpleFileAccess2 fileAccess;
-    public XFileIdentifierConverter filenameConverter;
 
     public FileAccess(XMultiServiceFactory xmsf) throws com.sun.star.uno.Exception
     {
@@ -491,7 +490,7 @@ public class FileAccess
         fileAccess = UnoRuntime.queryInterface(XSimpleFileAccess2.class, fa);
         //get the file identifier converter
         Object fcv = xmsf.createInstance("com.sun.star.ucb.FileContentProvider");
-        filenameConverter = UnoRuntime.queryInterface(XFileIdentifierConverter.class, fcv);
+        UnoRuntime.queryInterface(XFileIdentifierConverter.class, fcv);
     }
 
     /**

@@ -57,7 +57,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     private XSingleServiceFactory xSSFRoadmap;
     public XIndexContainer xIndexContRoadmap;
     private final Resource oWizardResource;
-    public String sMsgEndAutopilot;
     private final int hid;
     private boolean bTerminateListenermustberemoved = true;
 
@@ -75,7 +74,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         super(xMSF);
         hid = hid_;
         oWizardResource = new Resource(xMSF, "dbw");
-        sMsgEndAutopilot = oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
+        oWizardResource.getResText(UIConsts.RID_DB_COMMON + 33);
     }
 
     public Resource getResource()

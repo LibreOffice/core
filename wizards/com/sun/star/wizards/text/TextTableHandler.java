@@ -42,9 +42,7 @@ public class TextTableHandler
 {
 
     public XTextTablesSupplier xTextTablesSupplier;
-    public XMultiServiceFactory xMSFDoc;
     public XTextDocument xTextDocument;
-    public XSimpleText xSimpleText;
     private NumberFormatter oNumberFormatter;
 
     /** Creates a new instance of TextTableHandler */
@@ -52,10 +50,9 @@ public class TextTableHandler
     {
         try
         {
-            this.xMSFDoc = xMSF;
             this.xTextDocument = xTextDocument;
             xTextTablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xTextDocument);
-            xSimpleText = UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
+            UnoRuntime.queryInterface(XSimpleText.class, xTextDocument.getText());
             XNumberFormatsSupplier xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
             Locale aCharLocale = (Locale) Helper.getUnoStructValue(xTextDocument, "CharLocale");
             oNumberFormatter = new NumberFormatter(xNumberFormatsSupplier, aCharLocale);

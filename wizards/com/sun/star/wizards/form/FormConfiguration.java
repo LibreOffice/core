@@ -45,7 +45,6 @@ public class FormConfiguration
     XRadioButton optOnExistingRelation;
     XCheckBox chkcreateSubForm;
     XRadioButton optSelectManually;
-    XFixedText lblSubFormDescription;
     XFixedText lblRelations;
     XListBox lstRelations;
     String[] sreferencedTables;
@@ -135,7 +134,7 @@ public class FormConfiguration
                 {
                     Boolean.FALSE, 37, "HID:WIZARDS_HID_DLGFORM_lstRELATIONS", 201, 55, ISubFormStep, Short.valueOf(curtabindex++), 103
                 });
-        lblSubFormDescription = CurUnoDialog.insertLabel("lblSubFormDescription",
+        CurUnoDialog.insertLabel("lblSubFormDescription",
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

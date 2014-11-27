@@ -28,7 +28,6 @@ public abstract class ControlScroller
 {
 
     protected WizardDialog CurUnoDialog;
-    protected XMultiServiceFactory xMSF;
     protected int ncurfieldcount;
     protected int nblockincrement;
     private int nlineincrement;
@@ -36,11 +35,8 @@ public abstract class ControlScroller
     protected int ntotfieldcount;
     XScrollBar xScrollBar;
     protected ArrayList<PropertyValue[]> scrollfields;
-    protected Integer ICompPosX;
     protected int iCompPosX;
-    protected Integer ICompPosY;
     protected int iCompPosY;
-    protected Integer ICompWidth;
     protected int iCompWidth;
     protected int iCompHeight;
     protected int iStartPosY;
@@ -80,7 +76,6 @@ public abstract class ControlScroller
     // TODO add parameters for tabindices and helpindex
     protected ControlScroller(WizardDialog _CurUnoDialog, XMultiServiceFactory _xMSF, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _nblockincrement, int _nlinedistance, int _firsthelpindex)
     {
-        this.xMSF = _xMSF;
         this.nblockincrement = _nblockincrement;
         this.CurUnoDialog = _CurUnoDialog;
         this.iStep = _iStep;
@@ -90,10 +85,7 @@ public abstract class ControlScroller
         IStep = Integer.valueOf(iStep);
         this.iCompPosX = _iCompPosX;
         this.iCompPosY = _iCompPosY;
-        this.ICompPosX = Integer.valueOf(iCompPosX);
-        this.ICompPosY = Integer.valueOf(iCompPosY);
         this.iCompWidth = _iCompWidth;
-        this.ICompWidth = Integer.valueOf(iCompWidth);
         this.iCompHeight = 2 * SORELFIRSTPOSY + nblockincrement * linedistance;
         iStartPosY = iCompPosY + SORELFIRSTPOSY;
         int ScrollHeight = iCompHeight - 2;

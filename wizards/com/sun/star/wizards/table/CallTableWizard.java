@@ -56,9 +56,6 @@ public class CallTableWizard
     {
 
         private PropertyValue[] m_wizardContext;
-        // <properties>
-        public String           Command;
-        // </properties>
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          */
@@ -77,7 +74,7 @@ public class CallTableWizard
                 if ( sEvent.equals(PropertyNames.START) )
                 {
                     TableWizard CurTableWizard = new TableWizard( m_serviceFactory, m_wizardContext );
-                    Command = CurTableWizard.startTableWizard();
+                    CurTableWizard.startTableWizard();
                 }
             }
             catch (Exception exception)

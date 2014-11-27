@@ -36,7 +36,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 
     static String sProgressDBConnection;
     static String sProgressDataImport;
-    static String sProgressBaseCurRecord;
     static String sProgressTitle;
     static String sStop;
 
@@ -47,7 +46,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         sProgressDBConnection = m_oResource.getResText(UIConsts.RID_DB_COMMON + 34);
         sProgressDataImport = m_oResource.getResText(UIConsts.RID_REPORT + 67);
         sProgressTitle = m_oResource.getResText(UIConsts.RID_REPORT + 62);
-        sProgressBaseCurRecord = m_oResource.getResText(UIConsts.RID_REPORT + 63);
+        m_oResource.getResText(UIConsts.RID_REPORT + 63);
         sStop = m_oResource.getResText(UIConsts.RID_DB_COMMON + 21);
 
     }

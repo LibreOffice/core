@@ -67,12 +67,10 @@ public class FilterComponent
     static final int SOOPTORMODE = 100;
     static final int SOOPTANDMODE = 101;
     QueryMetaData oQueryMetaData;
-    int iDateTimeFormat;
     int iDateFormat;
     int iTimeFormat;
     private PropertyValue[][] filterconditions;
     private short curtabindex;
-    XMultiServiceFactory xMSF;
     static final int SO_FIRSTFIELDNAME = 1;
     static final int SO_SECONDFIELDNAME = 2;
     static final int SO_THIRDFIELDNAME = 3;
@@ -367,7 +365,6 @@ public class FilterComponent
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
         this.curHelpID = _firstHelpID;
-        this.xMSF = _xMSF;
         this.IStep = Integer.valueOf(iStep);
 
         curtabindex = UnoDialog.setInitialTabindex(iStep);
@@ -495,7 +492,7 @@ public class FilterComponent
     {
         iDateFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD");
         iTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("HH:MM:SS");
-        iDateTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD HH:MM:SS");
+        oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD HH:MM:SS");
     }
 
 

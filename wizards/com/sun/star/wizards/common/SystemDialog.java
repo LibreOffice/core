@@ -21,9 +21,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ui.dialogs.*;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XStringSubstitution;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.frame.XFrame;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.awt.XToolkit;
@@ -32,17 +30,7 @@ import com.sun.star.awt.XMessageBox;
 public class SystemDialog
 {
 
-    Object systemDialog;
-    XFilePicker xFilePicker;
-    XFolderPicker2 xFolderPicker;
     XFilterManager xFilterManager;
-    XInitialization xInitialize;
-    XExecutableDialog xExecutable;
-    XComponent xComponent;
-    XFilePickerControlAccess xFilePickerControlAccess;
-    XMultiServiceFactory xMSF;
-    public XStringSubstitution xStringSubstitution;
-    public String sStorePath;
 
     public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID, String AddTag, String AddString)
     {

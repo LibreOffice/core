@@ -21,7 +21,6 @@ import java.util.ArrayList;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XButton;
 import com.sun.star.awt.XListBox;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.EventObject;
@@ -44,8 +43,6 @@ public class AggregateComponent extends ControlScroller
         "SUM", "AVG", "MIN", "MAX"
     };
     QueryMetaData CurDBMetaData;
-    XButton optDetailQuery;
-    XButton optSummaryQuery;
     String soptDetailQuery;
     String soptSummaryQuery;
     String slblAggregate;
@@ -67,7 +64,7 @@ public class AggregateComponent extends ControlScroller
             curHelpID = _firstHelpID;
             this.CurDBMetaData = _CurDBMetaData;
             Count = 1;
-            optDetailQuery = CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
+            CurUnoDialog.insertRadioButton("optDetailQuery", 0, new ActionListenerImpl(),
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -77,7 +74,7 @@ public class AggregateComponent extends ControlScroller
                         8, HelpIds.getHelpIdString(curHelpID), soptDetailQuery, Integer.valueOf(_iPosX), Integer.valueOf(iCompPosY - 42), Short.valueOf((short) 1), IStep, Short.valueOf(curtabindex++), Integer.valueOf(iCompWidth)
                     });
 
-            optSummaryQuery = CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
+            CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH

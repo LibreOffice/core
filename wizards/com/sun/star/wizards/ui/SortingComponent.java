@@ -27,7 +27,6 @@ import java.util.ArrayList;
 public class SortingComponent
 {
 
-    com.sun.star.lang.XMultiServiceFactory xMSF;
     WizardDialog CurUnoDialog;
     int MaxSortIndex = -1;
     static String sNoSorting;
@@ -68,7 +67,6 @@ public class SortingComponent
         {
             this.CurUnoDialog = CurUnoDialog;
             short curtabindex = UnoDialog.setInitialTabindex(iStep);
-            xMSF = CurUnoDialog.xMSF;
             Integer IStep = Integer.valueOf(iStep);
             Integer ICompPosX = Integer.valueOf(iCompPosX);
             Integer ICompWidth = Integer.valueOf(iCompWidth);
