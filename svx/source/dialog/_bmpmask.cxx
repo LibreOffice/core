@@ -760,7 +760,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     Color       pDstCols[4];
     sal_uIntPtr     pTols[4];
     sal_uInt16      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
-    sal_Bool        pTrans[4];
+    bool        pTrans[4];
 
     // If no color is selected, we copy only the Mtf
     if( !nCount )
