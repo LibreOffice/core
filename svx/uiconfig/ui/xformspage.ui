@@ -94,7 +94,7 @@
       </packing>
     </child>
     <child>
-      <object class="svxlo-DataTreeListBox" id="items:border">
+      <object class="svxcorelo-DataTreeListBox" id="items:border">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="hexpand">True</property>
