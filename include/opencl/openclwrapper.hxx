@@ -68,25 +68,10 @@ struct GPUEnv
     bool mnAmdFp64Flag;
 };
 
-class OPENCL_DLLPUBLIC OpenCLDevice
-{
-public:
-    static GPUEnv gpuEnv;
-    static bool bIsInited;
-    static OString maCacheFolder;
-
-    static bool initOpenCLRunEnv( GPUEnv *gpu );
-    static void releaseOpenCLEnv( GPUEnv *gpuInfo );
-    static bool initOpenCLRunEnv( int argc );
-    static bool generatBinFromKernelSource( cl_program program, const char * clFileName );
-    static bool writeBinaryToFile( const OString& rName, const char* birary, size_t numBytes );
-    static std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context);
-    static bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
-
-    static bool initOpenCLAttr( OpenCLEnv * env );
-    static void setKernelEnv( KernelEnv *envInfo );
-};
-
+extern OPENCL_DLLPUBLIC GPUEnv gpuEnv;
+OPENCL_DLLPUBLIC bool generatBinFromKernelSource( cl_program program, const char * clFileName );
+OPENCL_DLLPUBLIC bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuEnv, const char* filename, int idx);
+OPENCL_DLLPUBLIC void setKernelEnv( KernelEnv *envInfo );
 OPENCL_DLLPUBLIC const std::vector<OpenCLPlatformInfo>& fillOpenCLInfo();
 
 /**

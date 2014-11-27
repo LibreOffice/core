@@ -48,10 +48,11 @@ using namespace std;
 
 namespace opencl {
 
-GPUEnv OpenCLDevice::gpuEnv;
-bool OpenCLDevice::bIsInited = false;
+GPUEnv gpuEnv;
 
 namespace {
+
+bool bIsInited = false;
 
 OString generateMD5(const void* pData, size_t length)
 {
@@ -81,11 +82,11 @@ OString getCacheFolder()
     return rtl::OUStringToOString(url, RTL_TEXTENCODING_UTF8);
 }
 
+OString maCacheFolder = getCacheFolder();
+
 }
 
-OString OpenCLDevice::maCacheFolder = getCacheFolder();
-
-void OpenCLDevice::setKernelEnv( KernelEnv *envInfo )
+void setKernelEnv( KernelEnv *envInfo )
 {
     envInfo->mpkContext = gpuEnv.mpContext;
     envInfo->mpkCmdQueue = gpuEnv.mpCmdQueue;
@@ -121,13 +122,11 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
     OString aString = OString(deviceName) + driverVersion + platformVersion;
     OString aHash = generateMD5(aString.getStr(), aString.getLength());
 
-    return OpenCLDevice::maCacheFolder + fileName + "-" +
+    return maCacheFolder + fileName + "-" +
         aHash + ".bin";
 }
 
-}
-
-std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const char * clFileName, cl_context context )
+std::vector<boost::shared_ptr<osl::File> > binaryGenerated( const char * clFileName, cl_context context )
 {
     size_t numDevices=0;
 
@@ -170,7 +169,7 @@ std::vector<boost::shared_ptr<osl::File> > OpenCLDevice::binaryGenerated( const 
     return aGeneratedFiles;
 }
 
-bool OpenCLDevice::writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
+bool writeBinaryToFile( const OString& rFileName, const char* binary, size_t numBytes )
 {
     osl::File file(rtl::OStringToOUString(rFileName, RTL_TEXTENCODING_UTF8));
     osl::FileBase::RC status = file.open(
@@ -187,7 +186,9 @@ bool OpenCLDevice::writeBinaryToFile( const OString& rFileName, const char* bina
     return true;
 }
 
-bool OpenCLDevice::generatBinFromKernelSource( cl_program program, const char * clFileName )
+}
+
+bool generatBinFromKernelSource( cl_program program, const char * clFileName )
 {
     cl_uint numDevices;
 
@@ -251,7 +252,9 @@ bool OpenCLDevice::generatBinFromKernelSource( cl_program program, const char * 
     return true;
 }
 
-bool OpenCLDevice::initOpenCLAttr( OpenCLEnv * env )
+namespace {
+
+bool initOpenCLAttr( OpenCLEnv * env )
 {
     if ( gpuEnv.mnIsUserCreated )
         return true;
@@ -266,7 +269,7 @@ bool OpenCLDevice::initOpenCLAttr( OpenCLEnv * env )
     return false;
 }
 
-void OpenCLDevice::releaseOpenCLEnv( GPUEnv *gpuInfo )
+void releaseOpenCLEnv( GPUEnv *gpuInfo )
 {
     if ( !bIsInited )
     {
@@ -289,8 +292,6 @@ void OpenCLDevice::releaseOpenCLEnv( GPUEnv *gpuInfo )
 
     return;
 }
-
-namespace {
 
 bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
 {
@@ -342,7 +343,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
             return false;
         }
 
-        OString aBuildLogFileURL = OpenCLDevice::maCacheFolder + "kernel-build.log";
+        OString aBuildLogFileURL = maCacheFolder + "kernel-build.log";
         osl::File aBuildLogFile(rtl::OStringToOUString(aBuildLogFileURL, RTL_TEXTENCODING_UTF8));
         osl::FileBase::RC status = aBuildLogFile.open(
                 osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
@@ -361,7 +362,7 @@ bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
 
 }
 
-bool OpenCLDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char* filename, int idx)
+bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char* filename, int idx)
 {
     size_t numDevices;
     cl_int clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
@@ -428,7 +429,54 @@ bool OpenCLDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
     return buildProgram(buildOption, gpuInfo, idx);
 }
 
-bool OpenCLDevice::initOpenCLRunEnv( int argc )
+namespace {
+
+void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bAmdFp64)
+{
+    bKhrFp64 = false;
+    bAmdFp64 = false;
+
+    // Check device extensions for double type
+    size_t aDevExtInfoSize = 0;
+
+    cl_uint clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize );
+    if( clStatus != CL_SUCCESS )
+        return;
+
+    boost::scoped_array<char> pExtInfo(new char[aDevExtInfoSize]);
+
+    clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS,
+                   sizeof(char) * aDevExtInfoSize, pExtInfo.get(), NULL);
+
+    if( clStatus != CL_SUCCESS )
+        return;
+
+    if ( strstr( pExtInfo.get(), "cl_khr_fp64" ) )
+    {
+        bKhrFp64 = true;
+    }
+    else
+    {
+        // Check if cl_amd_fp64 extension is supported
+        if ( strstr( pExtInfo.get(), "cl_amd_fp64" ) )
+            bAmdFp64 = true;
+    }
+}
+
+bool initOpenCLRunEnv( GPUEnv *gpuInfo )
+{
+    bool bKhrFp64 = false;
+    bool bAmdFp64 = false;
+
+    checkDeviceForDoubleSupport(gpuInfo->mpArryDevsID[0], bKhrFp64, bAmdFp64);
+
+    gpuInfo->mnKhrFp64Flag = bKhrFp64;
+    gpuInfo->mnAmdFp64Flag = bAmdFp64;
+
+    return false;
+}
+
+bool initOpenCLRunEnv( int argc )
 {
     if ( ( argc > MAX_CLFILE_NUM ) || ( argc < 0 ) )
         return true;
@@ -466,57 +514,6 @@ bool OpenCLDevice::initOpenCLRunEnv( int argc )
     }
     return false;
 }
-
-namespace {
-
-void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bAmdFp64)
-{
-    bKhrFp64 = false;
-    bAmdFp64 = false;
-
-    // Check device extensions for double type
-    size_t aDevExtInfoSize = 0;
-
-    cl_uint clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize );
-    if( clStatus != CL_SUCCESS )
-        return;
-
-    boost::scoped_array<char> pExtInfo(new char[aDevExtInfoSize]);
-
-    clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS,
-                   sizeof(char) * aDevExtInfoSize, pExtInfo.get(), NULL);
-
-    if( clStatus != CL_SUCCESS )
-        return;
-
-    if ( strstr( pExtInfo.get(), "cl_khr_fp64" ) )
-    {
-        bKhrFp64 = true;
-    }
-    else
-    {
-        // Check if cl_amd_fp64 extension is supported
-        if ( strstr( pExtInfo.get(), "cl_amd_fp64" ) )
-            bAmdFp64 = true;
-    }
-}
-
-}
-
-bool OpenCLDevice::initOpenCLRunEnv( GPUEnv *gpuInfo )
-{
-    bool bKhrFp64 = false;
-    bool bAmdFp64 = false;
-
-    checkDeviceForDoubleSupport(gpuInfo->mpArryDevsID[0], bKhrFp64, bAmdFp64);
-
-    gpuInfo->mnKhrFp64Flag = bKhrFp64;
-    gpuInfo->mnAmdFp64Flag = bAmdFp64;
-
-    return false;
-}
-
-namespace {
 
 // based on crashes and hanging during kernel compilation
 void createDeviceInfo(cl_device_id aDeviceId, OpenCLPlatformInfo& rPlatformInfo)
@@ -725,12 +722,12 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         OUString path;
         osl::FileBase::getSystemPathFromFileURL(url,path);
         OString dsFileName = rtl::OUStringToOString(path, RTL_TEXTENCODING_UTF8);
-        ds_device pSelectedDevice = ::OpenCLDevice::getDeviceSelection(dsFileName.getStr(), bForceEvaluation);
+        ds_device pSelectedDevice = getDeviceSelection(dsFileName.getStr(), bForceEvaluation);
         pDeviceId = pSelectedDevice.oclDeviceID;
 
     }
 
-    if(OpenCLDevice::gpuEnv.mpDevID == pDeviceId)
+    if(gpuEnv.mpDevID == pDeviceId)
     {
         // we don't need to change anything
         // still the same device
@@ -769,13 +766,13 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         return false;
     }
 
-    OpenCLDevice::releaseOpenCLEnv(&OpenCLDevice::gpuEnv);
+    releaseOpenCLEnv(&gpuEnv);
     OpenCLEnv env;
     env.mpOclPlatformID = platformId;
     env.mpOclContext = context;
     env.mpOclDevsID = pDeviceId;
     env.mpOclCmdQueue = command_queue;
-    OpenCLDevice::initOpenCLAttr(&env);
+    initOpenCLAttr(&env);
 
     // why do we need this at all?
 
@@ -783,10 +780,10 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     // initialisation below.) Because otherwise the code crashes in
     // initOpenCLRunEnv(). Confused? You should be.
 
-    OpenCLDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
-    OpenCLDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
+    gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
+    gpuEnv.mpArryDevsID[0] = pDeviceId;
 
-    return !OpenCLDevice::initOpenCLRunEnv(0);
+    return !initOpenCLRunEnv(0);
 }
 
 void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
@@ -795,7 +792,7 @@ void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId)
     if (status < 0)
         return;
 
-    cl_device_id id = OpenCLDevice::gpuEnv.mpDevID;
+    cl_device_id id = gpuEnv.mpDevID;
     findDeviceInfoFromDeviceId(id, rDeviceId, rPlatformId);
 }
 
