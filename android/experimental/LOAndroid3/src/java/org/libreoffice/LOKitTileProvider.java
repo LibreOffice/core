@@ -80,6 +80,7 @@ public class LOKitTileProvider implements TileProvider {
                 Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
 
                 mDocument.setPart(i);
+                resetDocumentSize();
                 final DocumentPartView partView = new DocumentPartView(i, partName, thumbnail(128));
                 LibreOfficeMainActivity.mAppContext.getDocumentPartView().add(partView);
             }
@@ -127,20 +128,28 @@ public class LOKitTileProvider implements TileProvider {
             return false;
         }
 
+        boolean result = resetDocumentSize();
+        if (!result) {
+            LOKitShell.getMainHandler().post(new Runnable() {
+                @Override
+                public void run() {
+                    LibreOfficeMainActivity.mAppContext.showAlertDialog("Document returned an invalid size or the document is empty!");
+                }
+            });
+        }
+
+        return result;
+    }
+
+    private boolean resetDocumentSize() {
         mWidthTwip = mDocument.getDocumentWidth();
         mHeightTwip = mDocument.getDocumentHeight();
 
         if (mWidthTwip == 0 || mHeightTwip == 0) {
             Log.e(LOGTAG, "Document size zero - last error: " + mOffice.getError());
-            LOKitShell.getMainHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    LibreOfficeMainActivity.mAppContext.showAlertDialog("Document has no size!");
-                }
-            });
             return false;
         } else {
-            Log.i(LOGTAG, "Document size: " + mDocument.getDocumentWidth() + " x " + mDocument.getDocumentHeight());
+            Log.i(LOGTAG, "Reset document size: " + mDocument.getDocumentWidth() + " x " + mDocument.getDocumentHeight());
         }
 
         return true;
@@ -235,5 +244,6 @@ public class LOKitTileProvider implements TileProvider {
     @Override
     public void changePart(int partIndex) {
         mDocument.setPart(partIndex);
+        resetDocumentSize();
     }
 }
