@@ -7477,7 +7477,8 @@ bool SwFrm::GetBackgroundBrush(
             return false;
 
         //UUUU
-        rFillAttributes = pFrm->getSdrAllFillAttributesHelper();
+        if (pFrm->supportsFullDrawingLayerFillAttributeSet())
+            rFillAttributes = pFrm->getSdrAllFillAttributesHelper();
         const SvxBrushItem &rBack = pFrm->GetAttrSet()->GetBackground();
 
         if( pFrm->IsSctFrm() )
