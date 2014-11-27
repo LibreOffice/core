@@ -71,6 +71,67 @@ enum DeviceVendor {
     DeviceVendorMax
 };
 
+struct DriverInfo
+{
+    typedef std::vector<OUString> DeviceFamilyVector;
+
+    // If |ownDevices| is true, you are transferring ownership of the devices
+    // array, and it will be deleted when this GfxDriverInfo is destroyed.
+
+    DriverInfo(OperatingSystem os, const OUString& vendor, DeviceFamilyVector* devices,
+            VersionComparisonOp op,
+            uint64_t driverVersion, const char *suggestedVersion = nullptr,
+            bool ownDevices = false);
+
+    DriverInfo();
+    DriverInfo(const DriverInfo&);
+    ~DriverInfo();
+
+    OperatingSystem meOperatingSystem;
+    uint32_t mnOperatingSystemVersion;
+
+    OUString maAdapterVendor;
+
+    static DeviceFamilyVector* const allDevices;
+    DeviceFamilyVector* mpDevices;
+
+    // Whether the mDevices array should be deleted when this structure is
+    // deallocated. False by default.
+    bool mbDeleteDevices;
+
+    VersionComparisonOp meComparisonOp;
+
+    /* versions are assumed to be A.B.C.D packed as 0xAAAABBBBCCCCDDDD */
+    uint64_t mnDriverVersion;
+    uint64_t mnDriverVersionMax;
+    static uint64_t allDriverVersions;
+
+    static const DeviceFamilyVector* GetDeviceFamily(DeviceFamily id);
+    static DeviceFamilyVector* mpDeviceFamilies[DeviceFamilyMax];
+
+    OUString maModel, maHardware, maProduct, maManufacturer;
+};
+
+#define GFX_DRIVER_VERSION(a,b,c,d) \
+    ((uint64_t(a)<<48) | (uint64_t(b)<<32) | (uint64_t(c)<<16) | uint64_t(d))
+
+inline uint64_t V(uint32_t a, uint32_t b, uint32_t c, uint32_t d)
+{
+    // We make sure every driver number is padded by 0s, this will allow us the
+    // easiest 'compare as if decimals' approach. See ParseDriverVersion for a
+    // more extensive explanation of this approach.
+    while (b > 0 && b < 1000) {
+        b *= 10;
+    }
+    while (c > 0 && c < 1000) {
+        c *= 10;
+    }
+    while (d > 0 && d < 1000) {
+        d *= 10;
+    }
+    return GFX_DRIVER_VERSION(a, b, c, d);
+}
+
 }
 
 class WinOpenGLDeviceInfo : public OpenGLDeviceInfo
@@ -105,12 +166,15 @@ private:
     bool mbRDP;
 
     void GetData();
-    OUString GetDeviceVendor(wgl::DeviceVendor eVendor);
+    void FillBlacklist();
 
     static OUString* mpDeviceVendors[wgl::DeviceVendorMax];
+    static std::vector<wgl::DriverInfo> maDriverInfo;
 
 public:
     WinOpenGLDeviceInfo();
+
+    static OUString GetDeviceVendor(wgl::DeviceVendor eVendor);
     virtual ~WinOpenGLDeviceInfo();
 
     virtual bool isDeviceBlocked();
