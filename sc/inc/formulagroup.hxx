@@ -10,12 +10,16 @@
 #ifndef INCLUDED_SC_INC_FORMULAGROUP_HXX
 #define INCLUDED_SC_INC_FORMULAGROUP_HXX
 
+#include <config_features.h>
+
 #include "address.hxx"
 #include "types.hxx"
 #include "stlalgorithm.hxx"
 
 #include <formula/opcode.hxx>
+#if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
+#endif
 #include <svl/sharedstringpool.hxx>
 
 #include <set>
@@ -122,11 +126,12 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
 
  public:
     static FormulaGroupInterpreter *getStatic();
+#if HAVE_FEATURE_OPENCL
     static void fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms);
     static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation = false);
     static void enableOpenCL(bool bEnable, bool bEnableCompletely = false, const std::set<OpCodeEnum>& rSubsetToEnable = std::set<OpCodeEnum>());
     static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
-
+#endif
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
     virtual CompiledFormula* createCompiledFormula(ScDocument& rDoc,
                                                    const ScAddress& rTopPos,

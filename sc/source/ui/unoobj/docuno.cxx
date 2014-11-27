@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "scitems.hxx"
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
@@ -58,7 +60,9 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#if HAVE_FEATURE_OPENCL
 #include <opencl/platforminfo.hxx>
+#endif
 
 #include "docuno.hxx"
 #include "cellsuno.hxx"
@@ -2369,6 +2373,9 @@ void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
     if(nPlatform < 0 || nDevice < 0)
         throw uno::RuntimeException();
 
+#if !HAVE_FEATURE_OPENCL
+    throw uno::RuntimeException();
+#else
     std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
     if(size_t(nPlatform) >= aPlatformInfo.size())
@@ -2379,6 +2386,7 @@ void ScModelObj::selectOpenCLDevice( sal_Int32 nPlatform, sal_Int32 nDevice )
 
     OUString aDeviceString = aPlatformInfo[nPlatform].maVendor + " " + aPlatformInfo[nPlatform].maDevices[nDevice].maName;
     sc::FormulaGroupInterpreter::switchOpenCLDevice(aDeviceString, false);
+#endif
 }
 
 sal_Int32 ScModelObj::getPlatformID()
@@ -2402,6 +2410,9 @@ sal_Int32 ScModelObj::getDeviceID()
 uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
     throw (uno::RuntimeException, std::exception)
 {
+#if !HAVE_FEATURE_OPENCL
+    return uno::Sequence<sheet::opencl::OpenCLPlatform>();
+#else
     std::vector<OpenCLPlatformInfo> aPlatformInfo;
     sc::FormulaGroupInterpreter::fillOpenCLInfo(aPlatformInfo);
 
@@ -2422,6 +2433,7 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
     }
 
     return aRet;
+#endif
 }
 
 ScDrawPagesObj::ScDrawPagesObj(ScDocShell* pDocSh) :
