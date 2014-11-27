@@ -45,14 +45,6 @@ struct KernelEnv
 
 namespace opencl {
 
-struct OpenCLEnv
-{
-    cl_platform_id mpOclPlatformID;
-    cl_context mpOclContext;
-    cl_device_id mpOclDevsID;
-    cl_command_queue mpOclCmdQueue;
-};
-
 struct GPUEnv
 {
     //share vb in all modules in hb library

@@ -254,6 +254,14 @@ bool generatBinFromKernelSource( cl_program program, const char * clFileName )
 
 namespace {
 
+struct OpenCLEnv
+{
+    cl_platform_id mpOclPlatformID;
+    cl_context mpOclContext;
+    cl_device_id mpOclDevsID;
+    cl_command_queue mpOclCmdQueue;
+};
+
 bool initOpenCLAttr( OpenCLEnv * env )
 {
     if ( gpuEnv.mnIsUserCreated )
