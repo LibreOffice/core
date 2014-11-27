@@ -47,7 +47,9 @@
 #include "optjsearch.hxx"
 #include "optlingu.hxx"
 #include "optmemory.hxx"
+#if HAVE_FEATURE_OPENCL
 #include "optopencl.hxx"
+#endif
 #include "optpath.hxx"
 #include "optsave.hxx"
 #include "optupdt.hxx"
@@ -321,7 +323,9 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, vcl::Window* pParent, const Sf
         case RID_SVXPAGE_ACCESSIBILITYCONFIG:       fnCreate = &SvxAccessibilityOptionsTabPage::Create; break;
         case RID_SVXPAGE_OPTIONS_CTL:               fnCreate = &SvxCTLOptionsPage::Create ; break;
         case RID_SVXPAGE_OPTIONS_JAVA:              fnCreate = &SvxJavaOptionsPage::Create ; break;
+#if HAVE_FEATURE_OPENCL
         case RID_SVXPAGE_OPENCL:                    fnCreate = &SvxOpenCLTabPage::Create ; break;
+#endif
         case RID_SVXPAGE_ONLINEUPDATE:              fnCreate = &SvxOnlineUpdateTabPage::Create; break;
         case RID_OPTPAGE_CHART_DEFCOLORS:           fnCreate = &SvxDefaultColorOptPage::Create; break;
 #if HAVE_FEATURE_SCRIPTING
