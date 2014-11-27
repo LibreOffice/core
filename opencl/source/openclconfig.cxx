@@ -159,12 +159,12 @@ bool match(const OpenCLConfig::ImplMatcherSet& rList, const OpenCLPlatformInfo& 
 {
     for (auto i = rList.cbegin(); i != rList.end(); ++i)
     {
-        SAL_INFO("sc.opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice <<
+        SAL_INFO("opencl", "Looking for match for platform=" << rPlatform << ", device=" << rDevice <<
                  " in " << sKindOfList << " entry=" << *i);
 
         if (match(*i, rPlatform, rDevice))
         {
-            SAL_INFO("sc.opencl", "Match!");
+            SAL_INFO("opencl", "Match!");
             return true;
         }
     }
