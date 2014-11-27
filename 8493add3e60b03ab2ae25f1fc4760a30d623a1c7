@@ -34,6 +34,24 @@
       "revId": "8493add3e60b03ab2ae25f1fc4760a30d623a1c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_0a7e7fae",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-11-27T14:36:29Z",
+      "side": 1,
+      "message": "I was referring the --aSel.nEndPos pre-decrement, anyway, I\u0027ll remove that as assigning aSel.nStartPos to aSel.nEndPos afterwards voids the pre-decrement. My guess is that was a copy\u0026paste error from the lines further below (1199).",
+      "parentUuid": "5afe65bd_0b00c1a9",
+      "revId": "8493add3e60b03ab2ae25f1fc4760a30d623a1c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
