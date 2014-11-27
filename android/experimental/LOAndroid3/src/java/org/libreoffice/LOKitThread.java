@@ -6,8 +6,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.GeckoLayerClient;
-import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
-import org.mozilla.gecko.gfx.LayerController;
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -19,7 +18,6 @@ public class LOKitThread extends Thread {
     private TileProvider mTileProvider;
     private ImmutableViewportMetrics mViewportMetrics;
     private GeckoLayerClient mLayerClient;
-    private LayerController mController;
 
     public LOKitThread() {
         TileProviderFactory.initialize();
@@ -47,7 +45,7 @@ public class LOKitThread extends Thread {
 
     /** Handle the geometry change + draw. */
     private void redraw() {
-        if (mController == null || mTileProvider == null) {
+        if (mLayerClient == null || mTileProvider == null) {
             // called too early...
             return;
         }
@@ -55,16 +53,16 @@ public class LOKitThread extends Thread {
         draw();
 
         RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
-        mController.setPageRect(rect, rect);
-        mController.setViewportMetrics(mController.getViewportMetrics());
-        mController.setForceRedraw();
+        mLayerClient.setPageRect(rect, rect);
+        mLayerClient.setViewportMetrics(mLayerClient.getViewportMetrics());
+        mLayerClient.setForceRedraw();
     }
 
     /** Invalidate everything + handle the geometry change + draw. */
     private void refresh() {
         Bitmap bitmap = mTileProvider.thumbnail(1000);
         if (bitmap != null) {
-            mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
+            mApplication.getLayerClient().getView().changeCheckerboardBitmap(bitmap, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         }
 
         mLayerClient.clearAndResetlayers();
@@ -83,10 +81,9 @@ public class LOKitThread extends Thread {
             mApplication = LibreOfficeMainActivity.mAppContext;
         }
 
-        mController = mApplication.getLayerController();
         mLayerClient = mApplication.getLayerClient();
 
-        mTileProvider = TileProviderFactory.create(mController, filename);
+        mTileProvider = TileProviderFactory.create(mLayerClient, filename);
         boolean isReady = mTileProvider.isReady();
         if (isReady) {
             mLayerClient.setTileProvider(mTileProvider);
