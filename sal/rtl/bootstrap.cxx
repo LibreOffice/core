@@ -42,8 +42,6 @@
 #include <boost/unordered_map.hpp>
 #include <list>
 
-#include "getexecutablefile.hxx"
-
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
 #endif
@@ -216,7 +214,7 @@ static bool getFromCommandLineArgs(
 static void getExecutableDirectory_Impl (rtl_uString ** ppDirURL)
 {
     OUString fileName;
-    osl_bootstrap_getExecutableFile_Impl (&(fileName.pData));
+    osl_getExecutableFile(&(fileName.pData));
 
     sal_Int32 nDirEnd = fileName.lastIndexOf('/');
     OSL_ENSURE(nDirEnd >= 0, "Cannot locate executable directory");
@@ -254,7 +252,7 @@ static OUString & getIniFileName_Impl()
         }
         else
         {
-            osl_bootstrap_getExecutableFile_Impl (&(fileName.pData));
+            osl_getExecutableFile(&(fileName.pData));
 
             // get rid of a potential executable extension
             OUString progExt = ".bin";

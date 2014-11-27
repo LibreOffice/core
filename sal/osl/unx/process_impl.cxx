@@ -34,7 +34,6 @@
 #include "file_path_helper.hxx"
 
 #include "uunxapi.hxx"
-#include "getexecutablefile.hxx"
 #include "nlsupport.hxx"
 
 #ifdef ANDROID
@@ -44,9 +43,9 @@
 #if defined(MACOSX) || defined(IOS)
 #include <mach-o/dyld.h>
 
-oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
-    rtl_uString ** ppFileURL
-) SAL_THROW_EXTERN_C()
+namespace {
+
+oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
     oslProcessError result = osl_Process_E_NotFound;
 
@@ -83,12 +82,14 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     return (result);
 }
 
+}
+
 #else
 #include <dlfcn.h>
 
-oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
-    rtl_uString ** ppFileURL
-) SAL_THROW_EXTERN_C()
+namespace {
+
+oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
 {
     oslProcessError result = osl_Process_E_NotFound;
 
@@ -110,11 +111,9 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
         }
     }
 
-    /* Fallback to ordinary osl_getExecutableFile(). */
-    if (result == osl_Process_E_NotFound)
-        result = osl_getExecutableFile (ppFileURL);
-
     return (result);
+}
+
 }
 
 #endif
@@ -141,19 +140,17 @@ static struct CommandArgs_Impl g_command_args =
  **************************************/
 oslProcessError SAL_CALL osl_getExecutableFile (rtl_uString ** ppustrFile)
 {
-    oslProcessError result = osl_Process_E_NotFound;
-
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    OSL_ASSERT(g_command_args.m_nCount > 0);
-    if (g_command_args.m_nCount > 0)
+    if (g_command_args.m_nCount == 0)
     {
-        /* CommandArgs set. Obtain argv[0]. */
-        rtl_uString_assign (ppustrFile, g_command_args.m_ppArgs[0]);
-        result = osl_Process_E_None;
+        pthread_mutex_unlock (&(g_command_args.m_mutex));
+        return bootstrap_getExecutableFile(ppustrFile);
     }
-    pthread_mutex_unlock (&(g_command_args.m_mutex));
 
-    return (result);
+    /* CommandArgs set. Obtain argv[0]. */
+    rtl_uString_assign (ppustrFile, g_command_args.m_ppArgs[0]);
+    pthread_mutex_unlock (&(g_command_args.m_mutex));
+    return osl_Process_E_None;
 }
 
 /***************************************
