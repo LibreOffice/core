@@ -46,4 +46,10 @@ $(eval $(call gb_Library_add_exception_objects,opencl,\
     opencl/source/platforminfo \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Library_add_libs,opencl,\
+    -lrt \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
