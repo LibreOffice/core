@@ -113,7 +113,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
         throw Unhandled();
     }
     // Obtain cl context
-    KernelEnv kEnv;
+    ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     cl_int err;
     if (pHostBuffer)
@@ -204,7 +204,7 @@ public:
         }
         // marshaling
         // Obtain cl context
-        KernelEnv kEnv;
+        ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
         // Pass the scalar result back to the rest of the formula kernel
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
@@ -388,7 +388,7 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
 {
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
     // Obtain cl context
-    KernelEnv kEnv;
+    ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     cl_int err;
     formula::VectorRefArray vRef;
@@ -1131,7 +1131,7 @@ public:
     {
         assert(Base::mpClmem == NULL);
         // Obtain cl context
-        KernelEnv kEnv;
+        ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
         cl_int err;
         size_t nInput = mpDVR->GetArrayLength();
@@ -1912,7 +1912,7 @@ public:
         if (OpGeoMean* OpSumCodeGen = dynamic_cast<OpGeoMean*>(mpCodeGen.get()))
         {
             // Obtain cl context
-            KernelEnv kEnv;
+            ::opencl::KernelEnv kEnv;
             ::opencl::setKernelEnv(&kEnv);
             cl_int err;
             cl_mem pClmem2;
@@ -1970,7 +1970,7 @@ public:
         if (OpSumIfs* OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
         {
             // Obtain cl context
-            KernelEnv kEnv;
+            ::opencl::KernelEnv kEnv;
             ::opencl::setKernelEnv(&kEnv);
             cl_int err;
             DynamicKernelArgument* Arg = mvSubArguments[0].get();
@@ -3354,7 +3354,7 @@ public:
     void Launch( size_t nr )
     {
         // Obtain cl context
-        KernelEnv kEnv;
+        ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
         cl_int err;
         // The results
@@ -3416,7 +3416,7 @@ void DynamicKernel::CreateKernel()
     std::string kname = "DynamicKernel" + mKernelSignature;
     // Compile kernel here!!!
     // Obtain cl context
-    KernelEnv kEnv;
+    ::opencl::KernelEnv kEnv;
     ::opencl::setKernelEnv(&kEnv);
     const char* src = mFullProgramSrc.c_str();
     static std::string lastOneKernelHash = "";
@@ -3667,7 +3667,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     try
     {
         // Obtain cl context
-        KernelEnv kEnv;
+        ::opencl::KernelEnv kEnv;
         ::opencl::setKernelEnv(&kEnv);
         // Run the kernel.
         pKernel->Launch(xGroup->mnLength);
