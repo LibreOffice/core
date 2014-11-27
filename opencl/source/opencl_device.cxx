@@ -44,9 +44,8 @@
     SAL_INFO("opencl.device", "Error code is " << status << " at " name); \
     }
 
-namespace OpenCLDevice {
+namespace opencl {
 
-bool bIsInited = false;
 bool bIsDeviceSelected = false;
 ds_device selectedDevice;
 

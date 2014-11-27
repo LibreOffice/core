@@ -12,7 +12,7 @@
 
 #include "opencl_device_selection.h"
 
-namespace OpenCLDevice {
+namespace opencl {
 
 ds_device getDeviceSelection(const char* pFileName, bool bForceSelection = false);
 bool selectedDeviceIsOpenCL(ds_device device);
