@@ -67,7 +67,7 @@ public class FormWizard extends DatabaseObjectWizard
     public FormWizard(XMultiServiceFactory i_servicFactory, final PropertyValue[] i_wizardContext)
     {
         super(i_servicFactory, 34400, i_wizardContext);
-        super.addResourceHandler("FormWizard", "dbw");
+        super.addResourceHandler("dbw");
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
@@ -123,7 +123,7 @@ public class FormWizard extends DatabaseObjectWizard
                     {
                         final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
                         String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
-                        curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+                        curFormDocument.oSubFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
                     }
                     else
                     {
@@ -175,7 +175,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 final String sTableName = curDBCommandFieldSelection.getSelectedCommandName();
                 final String[] aFieldNames = curDBCommandFieldSelection.getSelectedFieldNames();
-                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
 
                 final String[] aMainFieldNames = curFormDocument.oMainFormDBMetaData.getFieldNames();
                 curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, aMainFieldNames, 1);
@@ -187,7 +187,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
                 final String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
-                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
+                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
 
                 final String[] aSubFieldNames = curFormDocument.oSubFormDBMetaData.getFieldNames();
                 curFormDocument.LinkFieldNames = JavaTools.removeOutdatedFields(curFormDocument.LinkFieldNames, aSubFieldNames, 0);
@@ -248,7 +248,7 @@ public class FormWizard extends DatabaseObjectWizard
 
         curFormDocument.xProgressBar.setValue(40);
 
-        curFieldLinker = new FieldLinker(this, SOFIELDLINKER_PAGE, 95, 30, 210, 34441);
+        curFieldLinker = new FieldLinker(this, SOFIELDLINKER_PAGE, 95, 30, 34441);
         curFormDocument.xProgressBar.setValue(50);
 
         curControlArranger = new UIControlArranger(this, curFormDocument);

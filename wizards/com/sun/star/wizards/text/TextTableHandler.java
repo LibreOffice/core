@@ -46,7 +46,7 @@ public class TextTableHandler
     private NumberFormatter oNumberFormatter;
 
     /** Creates a new instance of TextTableHandler */
-    public TextTableHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
+    public TextTableHandler(XTextDocument xTextDocument)
     {
         try
         {

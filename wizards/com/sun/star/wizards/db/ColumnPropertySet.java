@@ -61,7 +61,7 @@ public class ColumnPropertySet
             {
                 xPropertySet.setPropertyValue("Precision", precision);
             }
-            setType(nType, sTypeName, precision);
+            setType(sTypeName, precision);
             for (int i = 0; i < _aNewColPropertyValues.length; i++)
             {
                 String sPropName = _aNewColPropertyValues[i].Name;
@@ -96,7 +96,7 @@ public class ColumnPropertySet
         assignPropertyValues(null /* dont change the name */, _aNewColPropertyValues, _bsetDefaultProperties);
     }
 
-    private void setType(int _nType, String _sTypeName, Integer precision)
+    private void setType(String _sTypeName, Integer precision)
     {
         if (_sTypeName.equals(PropertyNames.EMPTY_STRING))
         {

@@ -54,7 +54,7 @@ public class FieldFormatter implements XItemListener
     String suntitled;
     Integer IFieldFormatStep;
 
-    public FieldFormatter(TableWizard _CurUnoDialog, TableDescriptor _curTableDescriptor)
+    public FieldFormatter(TableWizard _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (TableWizard.SOFIELDSFORMATPAGE * 100);

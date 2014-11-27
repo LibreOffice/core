@@ -226,7 +226,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
      * @param _tablename is made unique if necessary
      * @return true or false to indicate successful creation or not
      */
-    public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _fieldnames)
+    public boolean createTable(String _catalogname, String _schemaname, String _tablename)
     {
         boolean breturn = true;
         try
@@ -341,11 +341,11 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         return false;
     }
 
-    public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _keycolumnnames, boolean _bAutoincrementation, String[] _fieldnames)
+    public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _keycolumnnames, boolean _bAutoincrementation)
     {
         if (createPrimaryKeys(_keycolumnnames, _bAutoincrementation))
         {
-            return createTable(_catalogname, _schemaname, _tablename, _fieldnames);
+            return createTable(_catalogname, _schemaname, _tablename);
         }
         return false;
     }

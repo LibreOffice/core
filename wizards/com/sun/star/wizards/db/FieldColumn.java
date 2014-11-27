@@ -387,7 +387,7 @@ public class FieldColumn
 
             case DataType.VARCHAR: // ==  12;
             case DataType.LONGVARCHAR: // ==  -1;
-                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
+                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth);
                 break;
 
             case DataType.NUMERIC: // ==   2;

@@ -39,7 +39,7 @@ public class TitlesComponent extends ControlScroller
 
     public TitlesComponent(WizardDialog _CurUnoDialog, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _uitextfieldcount, String _slblColumnNames, String _slblColumnTitles, int _firsthelpindex)
     {
-        super(_CurUnoDialog, null, _iStep, _iCompPosX, _iCompPosY, _iCompWidth, _uitextfieldcount, 18, _firsthelpindex);
+        super(_CurUnoDialog, _iStep, _iCompPosX, _iCompPosY, _iCompWidth, _uitextfieldcount, 18, _firsthelpindex);
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnNames", new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH

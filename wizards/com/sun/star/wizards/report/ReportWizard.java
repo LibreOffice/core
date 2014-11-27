@@ -84,7 +84,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
     public ReportWizard(XMultiServiceFactory i_serviceFactory, final PropertyValue[] i_wizardContext)
     {
         super(i_serviceFactory, 34320, i_wizardContext);
-        super.addResourceHandler("Report Wizard", "dbw");
+        super.addResourceHandler("dbw");
         if (getReportResources(false))
         {
             Helper.setUnoPropertyValues(xDialogModel,
@@ -144,7 +144,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 String[][] aSortFieldNames = m_reportDocument.getRecordParser().getSortFieldNames();
                 CurSortingComponent.initialize(aFieldNames2, aSortFieldNames);
                 int nLength = m_reportDocument.getRecordParser().GroupFieldNames.length;
-                CurSortingComponent.setReadOnlyUntil(nLength, false);
+                CurSortingComponent.setReadOnlyUntil(nLength);
                 break;
 
             case SOTEMPLATEPAGE:

@@ -772,7 +772,7 @@ public class UnoDialog
         }
     }
 
-    public void addResourceHandler(String _Unit, String _Module)
+    public void addResourceHandler(String _Module)
     {
         m_oResource = new Resource(xMSF, _Module);
     }

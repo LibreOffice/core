@@ -28,7 +28,6 @@ import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.SQLFilterOperator;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.Any;
@@ -46,6 +45,7 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
 import com.sun.star.wizards.db.SQLQueryComposer;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -362,7 +362,7 @@ public class FilterComponent
 
     /** Creates a new instance of FilterComponent
      */
-    public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
+    public FilterComponent(WizardDialog CurUnoDialog, int iStep, int iPosX, int iPosY, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
         this.curHelpID = _firstHelpID;
         this.IStep = Integer.valueOf(iStep);

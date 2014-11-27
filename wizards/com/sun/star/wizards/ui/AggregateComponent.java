@@ -58,7 +58,7 @@ public class AggregateComponent extends ControlScroller
     /** Creates a new instance of AggrgateComponent */
     public AggregateComponent(WizardDialog _CurUnoDialog, QueryMetaData _CurDBMetaData, int _iStep, int _iPosX, int _iPosY, int _iWidth, int _uitextfieldcount, int _firstHelpID)
     {
-        super(_CurUnoDialog, _CurDBMetaData.xMSF, _iStep, _iPosX + 10, _iPosY, _iWidth - 12, _uitextfieldcount, 18, _firstHelpID + 2);
+        super(_CurUnoDialog, _iStep, _iPosX + 10, _iPosY, _iWidth - 12, _uitextfieldcount, 18, _firstHelpID + 2);
         try
         {
             curHelpID = _firstHelpID;

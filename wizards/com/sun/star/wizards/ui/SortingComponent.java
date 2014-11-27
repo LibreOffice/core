@@ -200,7 +200,7 @@ public class SortingComponent
      *
      * @param _index the first Sorting criterion in which 'ReadOnly is set to 'false'
      */
-    public void setReadOnlyUntil(int _index, boolean _bcomplete)
+    public void setReadOnlyUntil(int _index)
     {
         for (int i = 0; i <= 4; i++)
         {

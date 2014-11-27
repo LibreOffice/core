@@ -43,9 +43,9 @@ public class FieldLinker extends DBLimitedFieldSelection
     private String[] sSlaveListHeader;
     private String[] sMasterListHeader; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
 
-    public FieldLinker(WizardDialog _CurUnoDialog, int iStep, int iCompPosX, int iCompPosY, int iCompWidth, int _firsthelpid)
+    public FieldLinker(WizardDialog _CurUnoDialog, int iStep, int iCompPosX, int iCompPosY, int _firsthelpid)
     {
-        super(_CurUnoDialog, iStep, iCompPosX, iCompPosY, iCompWidth, _firsthelpid);
+        super(_CurUnoDialog, iStep, iCompPosX, iCompPosY, _firsthelpid);
     }
 
     protected void insertControlGroup(int i)

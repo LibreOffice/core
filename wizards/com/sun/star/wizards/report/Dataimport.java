@@ -42,7 +42,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     public Dataimport(XMultiServiceFactory _xMSF)
     {
         super(_xMSF);
-        super.addResourceHandler("ReportWizard", "dbw");
+        super.addResourceHandler("dbw");
         sProgressDBConnection = m_oResource.getResText(UIConsts.RID_DB_COMMON + 34);
         sProgressDataImport = m_oResource.getResText(UIConsts.RID_REPORT + 67);
         sProgressTitle = m_oResource.getResText(UIConsts.RID_REPORT + 62);
@@ -146,7 +146,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         }
     }
 
-    public void importReportData(final XMultiServiceFactory _xMSF, final Dataimport _CurDataimport, IReportDocument _CurReportDocument, PropertyValue[] _properties)
+    public void importReportData(final XMultiServiceFactory _xMSF, PropertyValue[] _properties)
     {
         if (CurReportDocument.reconnectToDatabase(_xMSF, _properties))
         {
@@ -164,6 +164,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     {
         CurReportDocument = ReportTextImplementation.create( xMSF, i_documentUI, _textDocument, m_oResource );
         showProgressDisplay(true);
-        importReportData(xMSF, this, CurReportDocument, properties);
+        importReportData(xMSF, properties);
     }
 }

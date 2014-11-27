@@ -25,13 +25,13 @@ public class InvalidQueryException extends java.lang.Throwable
     public InvalidQueryException(XMultiServiceFactory xMSF, String sCommand)
     {
         final int RID_REPORT = 2400;
-        SystemDialog.showErrorBox(xMSF, "ReportWizard", "dbw", RID_REPORT + 65, "<STATEMENT>", sCommand); // Querycreationnotpossible
+        SystemDialog.showErrorBox(xMSF, "dbw", RID_REPORT + 65, "<STATEMENT>", sCommand); // Querycreationnotpossible
     }
     // TODO don't show messages in Exceptions
     public InvalidQueryException(XMultiServiceFactory xMSF, String sCommand, Throwable cause)
     {
         super(cause);
         final int RID_REPORT = 2400;
-        SystemDialog.showErrorBox(xMSF, "ReportWizard", "dbw", RID_REPORT + 65, "<STATEMENT>", sCommand); // Querycreationnotpossible
+        SystemDialog.showErrorBox(xMSF, "dbw", RID_REPORT + 65, "<STATEMENT>", sCommand); // Querycreationnotpossible
     }
 }

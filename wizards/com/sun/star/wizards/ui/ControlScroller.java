@@ -19,7 +19,6 @@ package com.sun.star.wizards.ui;
 
 import com.sun.star.beans.*;
 import com.sun.star.awt.*;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
 
 import java.util.*;
@@ -74,7 +73,7 @@ public abstract class ControlScroller
      * @param _firsthelpindex
      */
     // TODO add parameters for tabindices and helpindex
-    protected ControlScroller(WizardDialog _CurUnoDialog, XMultiServiceFactory _xMSF, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _nblockincrement, int _nlinedistance, int _firsthelpindex)
+    protected ControlScroller(WizardDialog _CurUnoDialog, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _nblockincrement, int _nlinedistance, int _firsthelpindex)
     {
         this.nblockincrement = _nblockincrement;
         this.CurUnoDialog = _CurUnoDialog;

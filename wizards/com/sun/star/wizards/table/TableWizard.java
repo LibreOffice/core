@@ -62,7 +62,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     public TableWizard( XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext )
     {
         super( xMSF, 41200, i_wizardContext );
-        super.addResourceHandler("TableWizard", "dbw");
+        super.addResourceHandler("dbw");
         String sTitle = m_oResource.getResText(UIConsts.RID_TABLE + 1);
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
@@ -234,7 +234,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     public void buildSteps()
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
-        curFieldFormatter = new FieldFormatter(this, curTableDescriptor);
+        curFieldFormatter = new FieldFormatter(this);
         if ( this.curTableDescriptor.supportsPrimaryKeys() )
         {
             curPrimaryKeyHandler = new PrimaryKeyHandler(this, curTableDescriptor);
@@ -251,20 +251,20 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         String catalogname = curFinalizer.getCatalogName();
         if (curTableDescriptor.supportsPrimaryKeys())
         {
-            String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields(curTableDescriptor);
+            String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields();
             if (keyfieldnames != null)
             {
                 if (keyfieldnames.length > 0)
                 {
                     boolean bIsAutoIncrement = curPrimaryKeyHandler.isAutoIncremented();
-                    bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement, curScenarioSelector.getSelectedFieldNames());
+                    bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, keyfieldnames, bIsAutoIncrement);
                     bTableCreated = true;
                 }
             }
         }
         if (!bTableCreated)
         {
-            bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename, curScenarioSelector.getSelectedFieldNames());
+            bIsSuccessfull = curTableDescriptor.createTable(catalogname, schemaname, tablename);
         }
         if ((!bIsSuccessfull) && (curPrimaryKeyHandler.isAutomaticMode()))
         {

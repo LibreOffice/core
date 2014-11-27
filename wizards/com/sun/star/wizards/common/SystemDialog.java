@@ -32,7 +32,7 @@ public class SystemDialog
 
     XFilterManager xFilterManager;
 
-    public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID, String AddTag, String AddString)
+    public static int showErrorBox(XMultiServiceFactory xMSF, String ResPrefix, int ResID, String AddTag, String AddString)
     {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);
@@ -44,7 +44,7 @@ public class SystemDialog
         return SystemDialog.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sErrorMessage);
     }
 
-    public static int showErrorBox(XMultiServiceFactory xMSF, String ResName, String ResPrefix, int ResID)
+    public static int showErrorBox(XMultiServiceFactory xMSF, String ResPrefix, int ResID)
     {
         Resource oResource;
         String ProductName = Configuration.getProductName(xMSF);

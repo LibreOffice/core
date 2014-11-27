@@ -118,29 +118,29 @@ public class FormHandler
         sModelServices[SOIMAGECONTROL] = "com.sun.star.form.component.DatabaseImageControl";
 
         oControlData = new ControlData[22];
-        oControlData[0] = createControlData(DataType.BIT,          SOCHECKBOX, CHECKBOX, CHECKBOX, false);
-        oControlData[1] = createControlData(DataType.BOOLEAN,      SOCHECKBOX, CHECKBOX, CHECKBOX, false);
-        oControlData[2] = createControlData(DataType.TINYINT,      SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[3] = createControlData(DataType.SMALLINT,     SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[4] = createControlData(DataType.INTEGER,      SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[5] = createControlData(DataType.BIGINT,       SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[6] = createControlData(DataType.FLOAT,        SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[7] = createControlData(DataType.REAL,         SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[8] = createControlData(DataType.DOUBLE,       SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[9] = createControlData(DataType.NUMERIC,      SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[10] = createControlData(DataType.DECIMAL,     SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
-        oControlData[11] = createControlData(DataType.CHAR,        SOTEXTBOX, TEXTFIELD, TEXTFIELD, false);
-        oControlData[12] = createControlData(DataType.VARCHAR,     SOTEXTBOX, TEXTFIELD, TEXTFIELD, true);
-        oControlData[13] = createControlData(DataType.LONGVARCHAR, SOTEXTBOX, TEXTFIELD, TEXTFIELD, true);
-        oControlData[14] = createControlData(DataType.DATE,        SODATECONTROL, DATEFIELD, DATEFIELD, false);
-        oControlData[15] = createControlData(DataType.TIME,        SOTIMECONTROL, TIMEFIELD, TIMEFIELD, false);
-        oControlData[16] = createControlData(DataType.TIMESTAMP,   SODATECONTROL, DATEFIELD, TEXTFIELD, false);
-        oControlData[17] = createControlData(DataType.BINARY,      SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
-        oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
-        oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
-        oControlData[20] = createControlData(DataType.BLOB,        SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
+        oControlData[0] = createControlData(DataType.BIT,          SOCHECKBOX, CHECKBOX);
+        oControlData[1] = createControlData(DataType.BOOLEAN,      SOCHECKBOX, CHECKBOX);
+        oControlData[2] = createControlData(DataType.TINYINT,      SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[3] = createControlData(DataType.SMALLINT,     SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[4] = createControlData(DataType.INTEGER,      SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[5] = createControlData(DataType.BIGINT,       SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[6] = createControlData(DataType.FLOAT,        SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[7] = createControlData(DataType.REAL,         SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[8] = createControlData(DataType.DOUBLE,       SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[9] = createControlData(DataType.NUMERIC,      SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[10] = createControlData(DataType.DECIMAL,     SONUMERICCONTROL, FORMATTEDFIELD);
+        oControlData[11] = createControlData(DataType.CHAR,        SOTEXTBOX, TEXTFIELD);
+        oControlData[12] = createControlData(DataType.VARCHAR,     SOTEXTBOX, TEXTFIELD);
+        oControlData[13] = createControlData(DataType.LONGVARCHAR, SOTEXTBOX, TEXTFIELD);
+        oControlData[14] = createControlData(DataType.DATE,        SODATECONTROL, DATEFIELD);
+        oControlData[15] = createControlData(DataType.TIME,        SOTIMECONTROL, TIMEFIELD);
+        oControlData[16] = createControlData(DataType.TIMESTAMP,   SODATECONTROL, TEXTFIELD);
+        oControlData[17] = createControlData(DataType.BINARY,      SOIMAGECONTROL, TEXTFIELD);
+        oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, TEXTFIELD);
+        oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, TEXTFIELD);
+        oControlData[20] = createControlData(DataType.BLOB,        SOIMAGECONTROL, TEXTFIELD);
 
-        oControlData[21] = createControlData(DataType.OTHER,       SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
+        oControlData[21] = createControlData(DataType.OTHER,       SOIMAGECONTROL, TEXTFIELD);
     }
 
     public int getControlType(int _fieldtype)
@@ -170,7 +170,7 @@ public class FormHandler
         xDrawPage.remove(oTextControl.xShape);
     }
 
-    public ControlData createControlData(int _datatype, int _controltype, String _scontrolservicename, String _gridcolumnname, boolean _bIsTextControl)
+    public ControlData createControlData(int _datatype, int _controltype, String _gridcolumnname)
     {
         ControlData curControlData = new ControlData();
         curControlData.DataType = _datatype;

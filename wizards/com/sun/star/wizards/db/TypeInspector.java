@@ -51,7 +51,7 @@ public class TypeInspector
     {
         public boolean bisAutoIncrementable;
 
-        public TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable)
+        public TypeInfo(boolean _bisAutoIncrementable)
         {
             bisAutoIncrementable = _bisAutoIncrementable;
         }
@@ -388,7 +388,7 @@ public class TypeInspector
                 {
                     if (this.bisAutoIncrementableInfos[i])
                     {
-                        return new TypeInfo(nDataType, this.sDataTypeNames[i], true);
+                        return new TypeInfo(true);
                     }
                     startindex = i + 1;
                 }
@@ -397,6 +397,6 @@ public class TypeInspector
         }
         // As Autoincrementation is not supported for any numeric datatype we take the first available numeric Type;
         nDataType = convertDataType(DataType.INTEGER);
-        return new TypeInfo(nDataType, getDefaultTypeName(nDataType, null), false);
+        return new TypeInfo(false);
     }
 }

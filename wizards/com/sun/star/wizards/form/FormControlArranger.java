@@ -329,7 +329,7 @@ public class FormControlArranger
         }
     }
 
-    public void positionControls(int _icurArrangement, Point _aStartPoint, Size _aFormSize, short _iAlign, Short _NBorderType)
+    public void positionControls(int _icurArrangement, Point _aStartPoint, short _iAlign, Short _NBorderType)
     {
         try
         {

@@ -473,7 +473,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount)
     {
-        return getDoc().addGroupNametoDocument(GroupNames, CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
+        return getDoc().addGroupNametoDocument(CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
     }
 
     public void refreshGroupFields(String[] _sNewNames)

@@ -126,7 +126,7 @@ public class DBColumn
         return false;
     }
 
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) {
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, String TableName, DBColumn OldDBColumn) {
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
         CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
@@ -142,7 +142,7 @@ public class DBColumn
         initializeNumberFormat();
     }
 
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName) throws Exception
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, String TableName) throws Exception
     {
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;

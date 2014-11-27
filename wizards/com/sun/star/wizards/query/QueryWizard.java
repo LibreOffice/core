@@ -72,7 +72,7 @@ public class QueryWizard extends DatabaseObjectWizard
     public QueryWizard(XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext)
     {
         super(xMSF, 40970, i_wizardContext);
-        addResourceHandler("QueryWizard", "dbw");
+        addResourceHandler("dbw");
         m_DBMetaData = new QuerySummary(xMSF, m_oResource);
     }
 
@@ -143,7 +143,7 @@ public class QueryWizard extends DatabaseObjectWizard
         return m_createdQuery;
     }
 
-    public void enableRoadmapItems(String[] _FieldNames, boolean _bEnabled)
+    public void enableRoadmapItems(boolean _bEnabled)
     {
         try
         {
@@ -235,7 +235,7 @@ public class QueryWizard extends DatabaseObjectWizard
             m_DBCommandFieldSelectio.setAppendMode(true);
             m_DBCommandFieldSelectio.addFieldSelectionListener(new FieldSelectionListener());
             m_sortingComponent = new SortingComponent(this, SOSORTING_PAGE, 95, 27, 210, 40865);
-            m_filterComponent = new FilterComponent(this, xMSF, SOFILTER_PAGE, 97, 27, 3, m_DBMetaData, 40878);
+            m_filterComponent = new FilterComponent(this, SOFILTER_PAGE, 97, 27, 3, m_DBMetaData, 40878);
             m_filterComponent.addNumberFormats();
 
             if (m_DBMetaData.xDBMetaData.supportsCoreSQLGrammar())
@@ -246,7 +246,7 @@ public class QueryWizard extends DatabaseObjectWizard
             {
                 m_groupFieldSelection = new FieldSelection(this, SOGROUPSELECTION_PAGE, 95, 27, 210, 150, reslblFields, this.reslblGroupBy, 40915, false);
                 m_groupFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
-                m_groupFilterComponent = new FilterComponent(this, xMSF, SOGROUPFILTER_PAGE, 97, 27, 3, m_DBMetaData, 40923);
+                m_groupFilterComponent = new FilterComponent(this, SOGROUPFILTER_PAGE, 97, 27, 3, m_DBMetaData, 40923);
             }
             m_titlesComponent = new TitlesComponent(this, SOTITLES_PAGE, 97, 37, 207, 7, reslblFieldHeader, reslblAliasHeader, 40940);
             m_finalizer = new Finalizer(this, m_DBMetaData);
@@ -328,7 +328,7 @@ public class QueryWizard extends DatabaseObjectWizard
         {
             case SOFIELDSELECTION_PAGE:
                 m_DBMetaData.reorderFieldColumns(m_DBCommandFieldSelectio.getSelectedFieldNames());
-                m_DBMetaData.initializeFieldTitleSet(true);
+                m_DBMetaData.initializeFieldTitleSet();
                 m_DBMetaData.setNumericFields();
                 searchForOutdatedFields();
                 break;
@@ -391,7 +391,7 @@ public class QueryWizard extends DatabaseObjectWizard
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, bEnabled);
         setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, bEnabled);
-        enableRoadmapItems(NewItems, bEnabled); // Note: Performancewise this could be improved
+        enableRoadmapItems(bEnabled); // Note: Performancewise this could be improved
     }
 
     public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener

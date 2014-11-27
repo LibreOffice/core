@@ -171,7 +171,7 @@ public class QueryMetaData extends CommandMetaData
 
 
 
-    public void initializeFieldTitleSet(boolean _bAppendMode)
+    public void initializeFieldTitleSet()
     {
         try
         {

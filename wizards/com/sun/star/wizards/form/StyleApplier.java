@@ -202,7 +202,7 @@ public class StyleApplier
         return (short) -1;
     }
 
-    public void applyStyle(boolean _bmodifyBackground, boolean _bapplyalways)
+    public void applyStyle(boolean _bapplyalways)
     {
         short iStyle = getStyleIndex();
         if ((iStyle != iOldLayoutPos) || _bapplyalways)
