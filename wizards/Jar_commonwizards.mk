@@ -108,7 +108,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/ui/UIConsts					\
 	wizards/com/sun/star/wizards/ui/UnoDialog					\
 	wizards/com/sun/star/wizards/ui/UnoDialog2					\
-	wizards/com/sun/star/wizards/ui/XCommandSelectionListener			\
 	wizards/com/sun/star/wizards/ui/XFieldSelectionListener			\
 	wizards/com/sun/star/wizards/ui/XPathSelectionListener				\
 	wizards/com/sun/star/wizards/ui/XCompletion					\
