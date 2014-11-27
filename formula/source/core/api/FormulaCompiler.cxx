@@ -1744,15 +1744,12 @@ void FormulaCompiler::CreateStringFromTokenArray( OUStringBuffer& rBuffer )
         if (pArr->NeedsPofRewrite( aConv))
             pArr = pArr->RewriteMissing( false, aConv );
     }
-    else
+    else if ( FormulaGrammar::isOOXML( meGrammar ) )
     {
         // fdo#81596
-        if ( FormulaGrammar::isOOXML( meGrammar ) )
-        {
         // Scan token array for missing args and rewrite if present.
         if ( pArr->NeedsOOXMLRewrite() )
             pArr = pArr->RewriteMissing( true, aConv );
-        }
     }
 
     // At least one character per token, plus some are references, some are
