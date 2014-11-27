@@ -695,7 +695,7 @@ SvStream &SfxItemPool::Load(SvStream &rStream)
 
 sal_uInt16 SfxItemPool::GetIndex_Impl(sal_uInt16 nWhich) const
 {
-    DBG_ASSERT(nWhich >= pImp->mnStart && nWhich <= pImp->mnEnd, "WhichId not within the Pool range");
+    assert(nWhich >= pImp->mnStart && nWhich <= pImp->mnEnd);
     return nWhich - pImp->mnStart;
 }
 

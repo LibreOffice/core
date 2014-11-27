@@ -878,7 +878,7 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
     {
         if ( pImp->mpSecondary )
             return pImp->mpSecondary->GetDefaultItem( nWhich );
-        SFX_ASSERT( false, nWhich, "unknown which - dont ask me for defaults" );
+        assert(!"unknown which - dont ask me for defaults");
     }
 
     DBG_ASSERT( pImp->ppStaticDefaults, "no defaults known - dont ask me for defaults" );
