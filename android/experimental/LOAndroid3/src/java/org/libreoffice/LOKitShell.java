@@ -45,4 +45,13 @@ public class LOKitShell {
             }
         });
     }
+
+    public static DisplayMetrics getDisplayMetrics() {
+        if (LibreOfficeMainActivity.mAppContext == null) {
+            return null;
+        }
+        DisplayMetrics metrics = new DisplayMetrics();
+        LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        return metrics;
+    }
 }

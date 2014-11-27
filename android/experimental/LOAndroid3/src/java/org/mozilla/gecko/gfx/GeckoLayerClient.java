@@ -145,8 +145,7 @@ public class GeckoLayerClient implements LayerView.Listener {
 
     /* Informs Gecko that the screen size has changed. */
     private void sendResizeEventIfNecessary(boolean force) {
-        DisplayMetrics metrics = new DisplayMetrics();
-        LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        DisplayMetrics metrics = LOKitShell.getDisplayMetrics();
 
         IntSize newScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
 
@@ -159,11 +158,9 @@ public class GeckoLayerClient implements LayerView.Listener {
             return;
         }
 
-        mScreenSize = newScreenSize;
+        Log.d(LOGTAG, "Screen-size changed to " + mScreenSize + " - > " + newScreenSize);
 
-        if (screenSizeChanged) {
-            Log.d(LOGTAG, "Screen-size changed to " + mScreenSize);
-        }
+        mScreenSize = newScreenSize;
 
         LOEvent event = LOEventFactory.sizeChanged(metrics.widthPixels, metrics.heightPixels);
         LOKitShell.sendEvent(event);
