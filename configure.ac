@@ -5103,26 +5103,41 @@ find_winsdk()
 
 find_msms()
 {
+    my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
+    AC_MSG_CHECKING([for $my_msm_file])
+    msmdir=
     for ver in 10.0 11.0 12.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
-            if test -e "$regvalue/Microsoft_VC${VCVER}_CRT_x86.msm"; then
+            if test -e "$regvalue/$my_msm_file"; then
                 msmdir=$regvalue
                 break
             fi
         fi
     done
+    dnl Is the following fallback really necessary, or was it added in response
+    dnl to never having started Visual Studio on a given machine, so the
+    dnl registry keys checked above had presumably not yet been created?
+    dnl Anyway, if it really is necessary, it might be worthwhile to extend it
+    dnl to also check %CommonProgramFiles(X86)% (typically expanding to
+    dnl "C:\Program Files (X86)\Common Files" compared to %CommonProgramFiles%
+    dnl expanding to "C:\Program Files\Common Files"), which would need
+    dnl something like $(perl -e 'print $ENV{"CommonProgramFiles(x86)"}') to
+    dnl obtain its value from cygwin:
     if test -z "$msmdir"; then
-        AC_MSG_NOTICE([no registry entry for Merge Module directory - trying "${COMMONPROGRAMFILES}/Merge Modules/"])
-        msmdir="${COMMONPROGRAMFILES}/Merge Modules/"
+        my_msm_dir="${COMMONPROGRAMFILES}/Merge Modules"
+        if test -e "$my_msm_dir/$my_msm_file"; then
+            msmdir=$my_msm_dir
+        fi
     fi
-    msmdir=`cygpath -m "$msmdir"`
-    if test -z "$msmdir"; then
+    if test -n "$msmdir"; then
+        msmdir=`cygpath -m "$msmdir"`
+        AC_MSG_RESULT([$msmdir])
+    else
         if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
-            AC_MSG_ERROR([Merge modules not found in $msmdir])
+            AC_MSG_ERROR([not found])
         else
-            AC_MSG_WARN([Merge modules not found in $msmdir])
-            msmdir=""
+            AC_MSG_WARN([not found])
         fi
     fi
 }
