@@ -16,6 +16,24 @@
       "revId": "42fe0348a7d4f1b2a227f87d8d7f63d51afb0d97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_8d396944",
+        "filename": "sc/source/filter/lotus/lotform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2014-11-28T20:15:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3afb71cf_2d9f1561",
+      "revId": "42fe0348a7d4f1b2a227f87d8d7f63d51afb0d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
