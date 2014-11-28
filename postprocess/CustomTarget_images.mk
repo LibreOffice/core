@@ -21,6 +21,8 @@ $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
 
 $(packimages_DIR)/images.zip : DEFAULT_THEME := $(true)
 $(packimages_DIR)/images_%.zip : DEFAULT_THEME :=
+$(packimages_DIR)/images_tango.zip : INDUSTRIAL_FALLBACK := -c $(SRCDIR)/icon-themes/industrial
+$(packimages_DIR)/images%.zip : INDUSTRIAL_FALLBACK :=
 
 $(packimages_DIR)/%.zip : \
 		$(packimages_DIR)/sorted.lst \
@@ -36,6 +38,7 @@ $(packimages_DIR)/%.zip : \
 				-g $(packimages_DIR) -m $(packimages_DIR) -c $(packimages_DIR),\
 				-g $(SRCDIR)/icon-themes/$(subst images_,,$*) -m $(SRCDIR)/icon-themes/$(subst images_,,$*) -c $(SRCDIR)/icon-themes/$(subst images_,,$*) \
 			) \
+			$(INDUSTRIAL_FALLBACK) \
 			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
 			-l $(packimages_DIR) \
 			-l $(dir $(call gb_ResTarget_get_imagelist_target)) \
