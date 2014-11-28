@@ -37,6 +37,7 @@
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <math.h>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -133,6 +134,7 @@
 #include <svdobjuserdatalist.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 
@@ -1748,6 +1750,22 @@ OString SdrObject::stringify() const
     aString.append((const char *)aStream.GetBuffer(), aStream.GetEndOfData());
 
     return aString.makeStringAndClear();
+}
+
+void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrObject"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("name"), "%s", BAD_CAST(GetName().toUtf8().getStr()));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("title"), "%s", BAD_CAST(GetTitle().toUtf8().getStr()));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("description"), "%s", BAD_CAST(GetDescription().toUtf8().getStr()));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32, GetOrdNumDirect());
+
+    if (const OutlinerParaObject* pOutliner = GetOutlinerParaObject())
+        pOutliner->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 bool SdrObject::BegTextEdit(SdrOutliner& /*rOutl*/)
