@@ -24,6 +24,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/transfrmhelper.hxx>
 #include <cuires.hrc>
 #include <editeng/sizeitem.hxx>
 
@@ -77,24 +78,6 @@ static const sal_uInt16 pSlantRanges[] =
     SID_ATTR_TRANSFORM_INTERN,
     0
 };
-
-static void lcl_ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)
-{
-    const basegfx::B2DPoint aTopLeft(
-        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMinX()), nDigits, ePoolUnit, eDlgUnit),
-        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMinY()), nDigits, ePoolUnit, eDlgUnit));
-    const basegfx::B2DPoint aBottomRight(
-        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMaxX()), nDigits, ePoolUnit, eDlgUnit),
-        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMaxY()), nDigits, ePoolUnit, eDlgUnit));
-
-    rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
-}
-
-static void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
-{
-    const double fFactor(1.0 / double(aUIScale));
-    rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
-}
 
 /*************************************************************************
 |*
@@ -255,11 +238,11 @@ void SvxAngleTabPage::Construct()
 
     // take scale into account
     const Fraction aUIScale(pView->GetModel()->GetUIScale());
-    lcl_ScaleRect(maRange, aUIScale);
+    TransfrmHelper::ScaleRect(maRange, aUIScale);
 
     // take UI units into account
     sal_uInt16 nDigits(m_pMtrPosX->GetDecimalDigits());
-    lcl_ConvertRect(maRange, nDigits, (MapUnit)ePoolUnit, eDlgUnit);
+    TransfrmHelper::ConvertRect(maRange, nDigits, (MapUnit)ePoolUnit, eDlgUnit);
 
     if(!pView->IsRotateAllowed())
     {
@@ -759,13 +742,13 @@ void SvxPositionSizeTabPage::Construct()
 
     // take scale into account
     const Fraction aUIScale(mpView->GetModel()->GetUIScale());
-    lcl_ScaleRect( maWorkRange, aUIScale );
-    lcl_ScaleRect( maRange, aUIScale );
+    TransfrmHelper::ScaleRect( maWorkRange, aUIScale );
+    TransfrmHelper::ScaleRect( maRange, aUIScale );
 
     // take UI units into account
     const sal_uInt16 nDigits(m_pMtrPosX->GetDecimalDigits());
-    lcl_ConvertRect( maWorkRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-    lcl_ConvertRect( maRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
+    TransfrmHelper::ConvertRect( maWorkRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
+    TransfrmHelper::ConvertRect( maRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
 
     SetMinMaxPosition();
 }

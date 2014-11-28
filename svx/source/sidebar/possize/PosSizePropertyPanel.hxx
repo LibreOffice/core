@@ -30,6 +30,7 @@
 #include <tools/fldunit.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/ui/XSidebar.hpp>
+#include <basegfx/range/b2drange.hxx>
 
 class DialControl;
 class SdrView;
@@ -95,7 +96,8 @@ private:
     ToolBox*          mpFlipTbx;
 
     // Internal variables
-    Rectangle                               maRect;
+    basegfx::B2DRange                       maRect;
+    basegfx::B2DRange                       maWorkArea;
     const SdrView*                          mpView;
     sal_uInt32                              mlOldWidth;
     sal_uInt32                              mlOldHeight;
@@ -163,6 +165,7 @@ private:
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );
     FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
     void DisableControls();
+    void SetPosXYMinMax();
 
     /** Check if the UI scale has changed and handle such a change.
         UI scale is an SD only feature.  The UI scale is represented by items
