@@ -23,7 +23,6 @@
 #include <sal/config.h>
 #include <sal/types.h>
 
-
 #include <cassert>
 #include <stdexcept>
 #include <vector>
