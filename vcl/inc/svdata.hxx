@@ -108,21 +108,21 @@ struct ImplSVAppData
         ImeStatusWindowMode_SHOW
     };
 
-    AllSettings*            mpSettings;         // Application settings
+    AllSettings*            mpSettings;                     // Application settings
     LocaleConfigurationListener* mpCfgListener;
-    VclEventListeners*      mpEventListeners;   // listeners for vcl events (eg, extended toolkit)
-    VclEventListeners*      mpKeyListeners;     // listeners for key events only (eg, extended toolkit)
-    ImplAccelManager*       mpAccelMgr;         // Accelerator Manager
-    OUString*               mpAppName;          // Application name
-    OUString*               mpAppFileName;      // Abs. Application FileName
-    OUString*               mpDisplayName;      // Application Display Name
-    OUString*               mpFontPath;         // Additional Fontpath
-    Help*                   mpHelp;             // Application help
-    PopupMenu*              mpActivePopupMenu;  // Actives Popup-Menu (in Execute)
-    ImplIdleMgr*            mpIdleMgr;          // Idle-Manager
-    ImplWheelWindow*        mpWheelWindow;      // WheelWindow
-    ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung
-    ImplEventHook*          mpFirstEventHook;   // Event-Hooks
+    VclEventListeners*      mpEventListeners;               // listeners for vcl events (eg, extended toolkit)
+    VclEventListeners*      mpKeyListeners;                 // listeners for key events only (eg, extended toolkit)
+    ImplAccelManager*       mpAccelMgr;                     // Accelerator Manager
+    OUString*               mpAppName;                      // Application name
+    OUString*               mpAppFileName;                  // Abs. Application FileName
+    OUString*               mpDisplayName;                  // Application Display Name
+    OUString*               mpFontPath;                     // Additional Fontpath
+    Help*                   mpHelp;                         // Application help
+    PopupMenu*              mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
+    ImplIdleMgr*            mpIdleMgr;                      // Idle-Manager
+    ImplWheelWindow*        mpWheelWindow;                  // WheelWindow
+    ImplHotKey*             mpFirstHotKey;                  // HotKey-Verwaltung
+    ImplEventHook*          mpFirstEventHook;               // Event-Hooks
     VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
     sal_uLong               mnLastInputTime;                // GetLastInputTime()
     sal_uInt16              mnDispatchLevel;                // DispatchLevel
@@ -151,94 +151,94 @@ struct ImplSVAppData
 
 struct ImplSVGDIData
 {
-    OutputDevice*           mpFirstWinGraphics; // First OutputDevice with a Frame Graphics
-    OutputDevice*           mpLastWinGraphics;  // Last OutputDevice with a Frame Graphics
-    OutputDevice*           mpFirstVirGraphics; // First OutputDevice with a VirtualDevice Graphics
-    OutputDevice*           mpLastVirGraphics;  // Last OutputDevice with a VirtualDevice Graphics
-    OutputDevice*           mpFirstPrnGraphics; // First OutputDevice with a InfoPrinter Graphics
-    OutputDevice*           mpLastPrnGraphics;  // Last OutputDevice with a InfoPrinter Graphics
-    VirtualDevice*          mpFirstVirDev;      // First VirtualDevice
-    VirtualDevice*          mpLastVirDev;       // Last VirtualDevice
-    OpenGLContext*          mpFirstContext;     // First OpenGLContext
-    OpenGLContext*          mpLastContext;      // Last OpenGLContext
-    Printer*                mpFirstPrinter;     // First Printer
-    Printer*                mpLastPrinter;      // Last Printer
-    ImplPrnQueueList*       mpPrinterQueueList; // List of all printer queue
-    PhysicalFontCollection* mpScreenFontList;   // Screen-Font-List
-    ImplFontCache*          mpScreenFontCache;  // Screen-Font-Cache
-    ImplDirectFontSubstitution* mpDirectFontSubst;// Font-Substitutons defined in Tools->Options->Fonts
-    GraphicConverter*       mpGrfConverter;     // Converter for graphics
-    long                    mnRealAppFontX;     // AppFont X-Numenator for 40/tel Width
-    long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
-    long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
-    bool                    mbFontSubChanged;   // true: FontSubstitution was changed between Begin/End
-    bool                    mbNativeFontConfig; // true: do not override UI font
+    OutputDevice*           mpFirstWinGraphics;             // First OutputDevice with a Frame Graphics
+    OutputDevice*           mpLastWinGraphics;              // Last OutputDevice with a Frame Graphics
+    OutputDevice*           mpFirstVirGraphics;             // First OutputDevice with a VirtualDevice Graphics
+    OutputDevice*           mpLastVirGraphics;              // Last OutputDevice with a VirtualDevice Graphics
+    OutputDevice*           mpFirstPrnGraphics;             // First OutputDevice with a InfoPrinter Graphics
+    OutputDevice*           mpLastPrnGraphics;              // Last OutputDevice with a InfoPrinter Graphics
+    VirtualDevice*          mpFirstVirDev;                  // First VirtualDevice
+    VirtualDevice*          mpLastVirDev;                   // Last VirtualDevice
+    OpenGLContext*          mpFirstContext;                 // First OpenGLContext
+    OpenGLContext*          mpLastContext;                  // Last OpenGLContext
+    Printer*                mpFirstPrinter;                 // First Printer
+    Printer*                mpLastPrinter;                  // Last Printer
+    ImplPrnQueueList*       mpPrinterQueueList;             // List of all printer queue
+    PhysicalFontCollection* mpScreenFontList;               // Screen-Font-List
+    ImplFontCache*          mpScreenFontCache;              // Screen-Font-Cache
+    ImplDirectFontSubstitution* mpDirectFontSubst;          // Font-Substitutons defined in Tools->Options->Fonts
+    GraphicConverter*       mpGrfConverter;                 // Converter for graphics
+    long                    mnRealAppFontX;                 // AppFont X-Numenator for 40/tel Width
+    long                    mnAppFontX;                     // AppFont X-Numenator for 40/tel Width + DialogScaleX
+    long                    mnAppFontY;                     // AppFont Y-Numenator for 80/tel Height
+    bool                    mbFontSubChanged;               // true: FontSubstitution was changed between Begin/End
+    bool                    mbNativeFontConfig;             // true: do not override UI font
 };
 
 struct ImplSVWinData
 {
-    vcl::Window*            mpFirstFrame;       // First FrameWindow
-    vcl::Window*            mpDefDialogParent;  // Default Dialog Parent
-    WorkWindow*             mpAppWin;           // Application-Window
-    vcl::Window*            mpFocusWin;         // window, that has the focus
-    vcl::Window*            mpActiveApplicationFrame; // the last active application frame, can be used as DefModalDialogParent if no focuswin set
-    vcl::Window*            mpCaptureWin;       // window, that has the mouse capture
-    vcl::Window*            mpLastDeacWin;      // Window, that need a deactivate (FloatingWindow-Handling)
-    FloatingWindow*         mpFirstFloat;       // First FloatingWindow in PopupMode
-    Dialog*                 mpLastExecuteDlg;   // First Dialog that is in Execute
-    vcl::Window*            mpExtTextInputWin;  // Window, which is in ExtTextInput
-    vcl::Window*            mpTrackWin;         // window, that is in tracking mode
-    AutoTimer*              mpTrackTimer;       // tracking timer
-    ImageList*              mpMsgBoxImgList;    // ImageList for MessageBox
-    vcl::Window*            mpAutoScrollWin;    // window, that is in AutoScrollMode mode
-    sal_uInt16              mnTrackFlags;       // tracking flags
-    sal_uInt16              mnAutoScrollFlags;  // auto scroll flags
-    bool                    mbNoDeactivate;     // true: do not execute Deactivate
-    bool                    mbNoSaveFocus;      // true: menus must not save/restore focus
-    bool                    mbNoSaveBackground; // true: save background is unnecessary or even less performant
+    vcl::Window*            mpFirstFrame;                   // First FrameWindow
+    vcl::Window*            mpDefDialogParent;              // Default Dialog Parent
+    WorkWindow*             mpAppWin;                       // Application-Window
+    vcl::Window*            mpFocusWin;                     // window, that has the focus
+    vcl::Window*            mpActiveApplicationFrame;       // the last active application frame, can be used as DefModalDialogParent if no focuswin set
+    vcl::Window*            mpCaptureWin;                   // window, that has the mouse capture
+    vcl::Window*            mpLastDeacWin;                  // Window, that need a deactivate (FloatingWindow-Handling)
+    FloatingWindow*         mpFirstFloat;                   // First FloatingWindow in PopupMode
+    Dialog*                 mpLastExecuteDlg;               // First Dialog that is in Execute
+    vcl::Window*            mpExtTextInputWin;              // Window, which is in ExtTextInput
+    vcl::Window*            mpTrackWin;                     // window, that is in tracking mode
+    AutoTimer*              mpTrackTimer;                   // tracking timer
+    ImageList*              mpMsgBoxImgList;                // ImageList for MessageBox
+    vcl::Window*            mpAutoScrollWin;                // window, that is in AutoScrollMode mode
+    sal_uInt16              mnTrackFlags;                   // tracking flags
+    sal_uInt16              mnAutoScrollFlags;              // auto scroll flags
+    bool                    mbNoDeactivate;                 // true: do not execute Deactivate
+    bool                    mbNoSaveFocus;                  // true: menus must not save/restore focus
+    bool                    mbNoSaveBackground;             // true: save background is unnecessary or even less performant
 };
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
 
 struct ImplSVCtrlData
 {
-    ImageList*              mpCheckImgList;     // ImageList for CheckBoxes
-    ImageList*              mpRadioImgList;     // ImageList for RadioButtons
-    ImageList*              mpPinImgList;       // ImageList for PIN
-    ImageList*              mpSplitHPinImgList; // ImageList for Horizontale SplitWindows
-    ImageList*              mpSplitVPinImgList; // ImageList for Vertikale SplitWindows (PIN's)
-    ImageList*              mpSplitHArwImgList; // ImageList for Horizontale SplitWindows (Arrows)
-    ImageList*              mpSplitVArwImgList; // ImageList for Vertikale SplitWindows (Arrows)
+    ImageList*              mpCheckImgList;                 // ImageList for CheckBoxes
+    ImageList*              mpRadioImgList;                 // ImageList for RadioButtons
+    ImageList*              mpPinImgList;                   // ImageList for PIN
+    ImageList*              mpSplitHPinImgList;             // ImageList for Horizontale SplitWindows
+    ImageList*              mpSplitVPinImgList;             // ImageList for Vertikale SplitWindows (PIN's)
+    ImageList*              mpSplitHArwImgList;             // ImageList for Horizontale SplitWindows (Arrows)
+    ImageList*              mpSplitVArwImgList;             // ImageList for Vertikale SplitWindows (Arrows)
     Image*                  mpDisclosurePlus;
     Image*                  mpDisclosureMinus;
-    ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
-    sal_uInt16              mnCheckStyle;       // CheckBox-Style for ImageList-Update
-    sal_uInt16              mnRadioStyle;       // Radio-Style for ImageList-Update
-    sal_uLong               mnLastCheckFColor;  // Letzte FaceColor fuer CheckImage
-    sal_uLong               mnLastCheckWColor;  // Letzte WindowColor fuer CheckImage
-    sal_uLong               mnLastCheckWTextColor;  // Letzte WindowTextColor fuer CheckImage
-    sal_uLong               mnLastCheckLColor;  // Letzte LightColor fuer CheckImage
-    sal_uLong               mnLastRadioFColor;  // Letzte FaceColor fuer RadioImage
-    sal_uLong               mnLastRadioWColor;  // Letzte WindowColor fuer RadioImage
-    sal_uLong               mnLastRadioLColor;  // Letzte LightColor fuer RadioImage
-    FieldUnitStringList*    mpFieldUnitStrings; // list with field units
-    FieldUnitStringList*    mpCleanUnitStrings; // same list but with some "fluff" like spaces removed
+    ImplTBDragMgr*          mpTBDragMgr;                    // DragMgr for ToolBox
+    sal_uInt16              mnCheckStyle;                   // CheckBox-Style for ImageList-Update
+    sal_uInt16              mnRadioStyle;                   // Radio-Style for ImageList-Update
+    sal_uLong               mnLastCheckFColor;              // Letzte FaceColor fuer CheckImage
+    sal_uLong               mnLastCheckWColor;              // Letzte WindowColor fuer CheckImage
+    sal_uLong               mnLastCheckWTextColor;          // Letzte WindowTextColor fuer CheckImage
+    sal_uLong               mnLastCheckLColor;              // Letzte LightColor fuer CheckImage
+    sal_uLong               mnLastRadioFColor;              // Letzte FaceColor fuer RadioImage
+    sal_uLong               mnLastRadioWColor;              // Letzte WindowColor fuer RadioImage
+    sal_uLong               mnLastRadioLColor;              // Letzte LightColor fuer RadioImage
+    FieldUnitStringList*    mpFieldUnitStrings;             // list with field units
+    FieldUnitStringList*    mpCleanUnitStrings;             // same list but with some "fluff" like spaces removed
 };
 
 struct ImplSVHelpData
 {
-    bool                    mbContextHelp       : 1;    // is ContextHelp enabled
-    bool                    mbExtHelp           : 1;    // is ExtendedHelp enabled
-    bool                    mbExtHelpMode       : 1;    // is in ExtendedHelp Mode
-    bool                    mbOldBalloonMode    : 1;    // BallonMode, before ExtHelpMode started
-    bool                    mbBalloonHelp       : 1;    // is BalloonHelp enabled
-    bool                    mbQuickHelp         : 1;    // is QuickHelp enabled
-    bool                    mbSetKeyboardHelp   : 1;    // tiphelp was activated by keyboard
-    bool                    mbKeyboardHelp      : 1;    // tiphelp was activated by keyboard
-    bool                    mbAutoHelpId        : 1;    // generate HelpIds
-    bool                    mbRequestingHelp    : 1;    // In Window::RequestHelp
-    HelpTextWindow*         mpHelpWin;                  // HelpWindow
-    sal_uLong               mnLastHelpHideTime;         // ticks of last show
+    bool                    mbContextHelp       : 1;        // is ContextHelp enabled
+    bool                    mbExtHelp           : 1;        // is ExtendedHelp enabled
+    bool                    mbExtHelpMode       : 1;        // is in ExtendedHelp Mode
+    bool                    mbOldBalloonMode    : 1;        // BallonMode, before ExtHelpMode started
+    bool                    mbBalloonHelp       : 1;        // is BalloonHelp enabled
+    bool                    mbQuickHelp         : 1;        // is QuickHelp enabled
+    bool                    mbSetKeyboardHelp   : 1;        // tiphelp was activated by keyboard
+    bool                    mbKeyboardHelp      : 1;        // tiphelp was activated by keyboard
+    bool                    mbAutoHelpId        : 1;        // generate HelpIds
+    bool                    mbRequestingHelp    : 1;        // In Window::RequestHelp
+    HelpTextWindow*         mpHelpWin;                      // HelpWindow
+    sal_uLong               mnLastHelpHideTime;             // ticks of last show
 };
 
 // "NWF" means "Native Widget Framework" and was the term used for the
@@ -301,29 +301,29 @@ struct BlendFrameCache
 struct ImplSVData
 {
     SalData*                mpSalData;
-    SalInstance*            mpDefInst;          // Default SalInstance
-    Application*            mpApp;              // pApp
-    WorkWindow*             mpDefaultWin;       // Default-Window
-    bool                    mbDeInit;             // Is VCL deinitializing
-    sal_uLong               mnThreadCount;      // is VCL MultiThread enabled
-    ImplConfigData*         mpFirstConfigData;  // Zeiger auf ersten Config-Block
-    ImplTimerData*          mpFirstTimerData;   // list of all running timers
-    SalTimer*               mpSalTimer;         // interface to sal event loop/timers
-    SalI18NImeStatus*       mpImeStatus;        // interface to ime status window
-    SalSystem*              mpSalSystem;        // SalSystem interface
-    ResMgr*                 mpResMgr;           // SV-Resource-Manager
-    sal_uLong               mnTimerPeriod;      // current timer period
-    sal_uLong               mnTimerUpdate;      // TimerCallbackProcs on stack
-    bool                    mbNotAllTimerCalled;// true: Es muessen noch Timer abgearbeitet werden
-    bool                    mbNoCallTimer;      // true: No Timeout calls
-    ImplSVAppData           maAppData;          // indepen data for class Application
-    ImplSVGDIData           maGDIData;          // indepen data for Output classes
-    ImplSVWinData           maWinData;          // indepen data for Windows classes
-    ImplSVCtrlData          maCtrlData;         // indepen data for Control classes
-    ImplSVHelpData          maHelpData;         // indepen data for Help classes
+    SalInstance*            mpDefInst;                      // Default SalInstance
+    Application*            mpApp;                          // pApp
+    WorkWindow*             mpDefaultWin;                   // Default-Window
+    bool                    mbDeInit;                       // Is VCL deinitializing
+    sal_uLong               mnThreadCount;                  // is VCL MultiThread enabled
+    ImplConfigData*         mpFirstConfigData;              // Zeiger auf ersten Config-Block
+    ImplTimerData*          mpFirstTimerData;               // list of all running timers
+    SalTimer*               mpSalTimer;                     // interface to sal event loop/timers
+    SalI18NImeStatus*       mpImeStatus;                    // interface to ime status window
+    SalSystem*              mpSalSystem;                    // SalSystem interface
+    ResMgr*                 mpResMgr;                       // SV-Resource-Manager
+    sal_uLong               mnTimerPeriod;                  // current timer period
+    sal_uLong               mnTimerUpdate;                  // TimerCallbackProcs on stack
+    bool                    mbNotAllTimerCalled;            // true: Es muessen noch Timer abgearbeitet werden
+    bool                    mbNoCallTimer;                  // true: No Timeout calls
+    ImplSVAppData           maAppData;                      // indepen data for class Application
+    ImplSVGDIData           maGDIData;                      // indepen data for Output classes
+    ImplSVWinData           maWinData;                      // indepen data for Windows classes
+    ImplSVCtrlData          maCtrlData;                     // indepen data for Control classes
+    ImplSVHelpData          maHelpData;                     // indepen data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper;
-    vcl::Window*            mpIntroWindow;      // the splash screen
+    vcl::Window*            mpIntroWindow;                  // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
     bool                    mbIsTestTool;
