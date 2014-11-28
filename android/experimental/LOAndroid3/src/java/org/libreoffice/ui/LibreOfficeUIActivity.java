@@ -131,8 +131,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         super.onCreate(savedInstanceState);
         Log.d(tag, "onCreate - tweaked - meeks !");
         //Set the "home" - top level - directory.
-        homeDirectory  = new File(Environment.getExternalStorageDirectory(),"LibreOffice");
-        homeDirectory.mkdirs();
+        homeDirectory  = Environment.getExternalStorageDirectory();
         currentDirectory = homeDirectory;
         //Load default settings
 
