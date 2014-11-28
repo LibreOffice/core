@@ -139,8 +139,6 @@ struct ImplSVAppData
     bool                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
     Application::DialogCancelMode meDialogCancel;           // true: All Dialog::Execute() calls will be terminated immediately with return false
-    long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
-                                                            // in window arrangers
 
     /** Controls whether showing any IME status window is toggled on or off.
 

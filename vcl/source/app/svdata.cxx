@@ -80,9 +80,6 @@ void ImplInitSVData()
     memset( pImplSVData, 0, sizeof( ImplSVData ) );
     pImplSVData->maHelpData.mbAutoHelpId = true;
     pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
-
-    // mark default layout border as unitialized
-    pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }
 
 void ImplDeInitSVData()
