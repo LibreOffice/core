@@ -68,6 +68,9 @@ DEF1EXPORTFILE = xsec_fw.dxp
 #
 
 SHL2NAME=xsec_xmlsec
+.IF "$(GUI)"=="OS2"
+SHL2NAME=xsec_xs
+.ENDIF
 SHL2TARGET= $(SHL2NAME)
 
 

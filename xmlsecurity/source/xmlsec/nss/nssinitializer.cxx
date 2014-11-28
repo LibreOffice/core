@@ -295,7 +295,10 @@ bool nsscrypto_initialize( const css::uno::Reference< css::lang::XMultiServiceFa
 #endif
         deleteRootsModule();
 
-#if defined SYSTEM_MOZILLA
+#if defined OS2
+        // YD the nss system dlls names are ending with 'k'
+        OUString rootModule(RTL_CONSTASCII_USTRINGPARAM( "nssckbik" SAL_DLLEXTENSION));
+#elif defined SYSTEM_MOZILLA
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM( "libnssckbi" SAL_DLLEXTENSION));
 #else
         OUString rootModule(RTL_CONSTASCII_USTRINGPARAM( "${OOO_BASE_DIR}/program/libnssckbi" SAL_DLLEXTENSION));

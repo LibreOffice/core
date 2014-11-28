@@ -46,6 +46,9 @@ CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 MOZ_INC = $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 NSS_INC = $(MOZ_INC)$/nss
 NSPR_INC = $(MOZ_INC)$/nspr
+.ELIF "$(GUI)" == "OS2"
+NSS_INC = /@unixroot/usr/include/nss3
+NSPR_INC = /@unixroot/usr/include/nspr4
 .ELSE
 # TODO: better use pkgconfig to find the proper system include path
 NSS_INC = /usr/include/nss3

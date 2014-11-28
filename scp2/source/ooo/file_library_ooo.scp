@@ -1678,6 +1678,8 @@ File gid_File_Lib_XSec_XmlSec
     TXT_FILE_BODY;
 	#ifdef UNX
         Name = STRING(CONCAT2(libxsec_xmlsec,UNXSUFFIX));
+    #elif defined(OS2)
+      Name = "xsec_xs.dll";
     #else
         Name = "xsec_xmlsec.dll";
     #endif
@@ -1689,6 +1691,8 @@ File gid_File_Lib_XSec_XMLSecurity
     TXT_FILE_BODY;
 	#ifdef UNX
         Name = STRING(CONCAT2(libxmlsecurity,UNXSUFFIX));
+    #elif defined(OS2)
+      Name = "xmlsecur.dll";
     #else
         Name = "xmlsecurity.dll";
     #endif
@@ -1696,11 +1700,13 @@ File gid_File_Lib_XSec_XMLSecurity
     Styles = (PACKED);
 End
 
-#ifdef WNT
+#if defined(WNT) || defined(OS2)
 
 File gid_File_Lib_LibXMLSec_xmlseccore
     TXT_FILE_BODY;
-    #ifdef _gcc3
+    #if defined(OS2)
+      Name = "xmlsec1.dll";
+    #elif defined(_gcc3)
       Name = "libxmlsec1.dll";
     #else
       Name = "libxmlsec.dll";
@@ -1711,7 +1717,9 @@ End
 
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
-  #ifdef _gcc3
+  #if defined(OS2)
+    Name = "xmlsec1n.dll";
+  #elif defined(_gcc3)
     Name = "libxmlsec1-mscrypto.dll";
   #else
     Name = "libxmlsec-mscrypto.dll";

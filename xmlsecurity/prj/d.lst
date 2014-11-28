@@ -2,7 +2,9 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\xsec_fw.dll %_DEST%\bin%_EXT%\xsec_fw.dll
 ..\%__SRC%\bin\xsec_xmlsec.dll %_DEST%\bin%_EXT%\xsec_xmlsec.dll
+..\%__SRC%\bin\xsec_xs.dll %_DEST%\bin%_EXT%\xsec_xs.dll
 ..\%__SRC%\bin\xmlsecurity.dll %_DEST%\bin%_EXT%\xmlsecurity.dll
+..\%__SRC%\bin\xmlsecur.dll %_DEST%\bin%_EXT%\xmlsecur.dll
 ..\%__SRC%\lib\libxsec_fw.so %_DEST%\lib%_EXT%\libxsec_fw.so
 ..\%__SRC%\lib\libxsec_xmlsec.so %_DEST%\lib%_EXT%\libxsec_xmlsec.so
 ..\%__SRC%\lib\libxmlsecurity.so %_DEST%\lib%_EXT%\libxmlsecurity.so

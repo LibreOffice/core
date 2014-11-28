@@ -1,0 +1,94 @@
+--- misc/xmlsec1-1.2.14/src/Makefile.in	2009-12-05 22:19:34.000000000 +0100
++++ misc/build/xmlsec1-1.2.14/src/Makefile.in	2014-11-26 22:02:00.000000000 +0100
+@@ -12,6 +12,11 @@
+ # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+ # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ # PARTICULAR PURPOSE.
++ 
++OS2_LA_NAME=xmlsec1
++OS2_DLL_NAME=xmlsec1
++OS2_DLL_OBJ=$(libxmlsec1_la_OBJECTS:%.lo=%.o)
++OS2_DLL_LIBS=-lxml2 -lz -lm -lurpo -lmmap -lpthread $(LIBS)
+ 
+ @SET_MAKE@
+ 
+@@ -736,7 +741,7 @@
+ 	done
+ check-am: all-am
+ check: check-recursive
+-all-am: Makefile $(LTLIBRARIES)
++all-am: Makefile $(LTLIBRARIES) $(OS2_DLL_NAME).dll
+ installdirs: installdirs-recursive
+ installdirs-am:
+ 	for dir in "$(DESTDIR)$(libdir)"; do \
+@@ -861,3 +866,13 @@
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
++
++$(OS2_DLL_NAME).dll: lib$(OS2_LA_NAME).la
++	cp .libs/$(OS2_LA_NAME).a .libs/$(OS2_LA_NAME)_s.a
++	echo "LIBRARY $(OS2_DLL_NAME) INITINSTANCE TERMINSTANCE" > $(OS2_DLL_NAME).def
++	echo "DATA MULTIPLE" >> $(OS2_DLL_NAME).def
++	echo "EXPORTS" >> $(OS2_DLL_NAME).def
++	emxexp $(OS2_DLL_OBJ) >> $(OS2_DLL_NAME).def
++	gcc -g -Zbin-files -Zhigh-mem -Zomf -Zdll $(OS2_DLL_NAME).def -o $@ $(OS2_DLL_OBJ) $(OS2_DLL_LIBS) 
++	emximp -o .libs/$(OS2_LA_NAME).a $(OS2_DLL_NAME).def
++	emximp -o .libs/$(OS2_LA_NAME).lib $(OS2_DLL_NAME).def
+--- misc/xmlsec1-1.2.14/src/nss/Makefile.in	2014-11-26 22:02:36.000000000 +0100
++++ misc/build/xmlsec1-1.2.14/src/nss/Makefile.in	2014-11-26 22:02:28.000000000 +0100
+@@ -12,6 +12,11 @@
+ # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+ # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ # PARTICULAR PURPOSE.
++ 
++OS2_LA_NAME=xmlsec1-nss
++OS2_DLL_NAME=xmlsec1n
++OS2_DLL_OBJ=$(libxmlsec1_nss_la_OBJECTS:%.lo=%.o)
++OS2_DLL_LIBS=-l../.libs/xmlsec1 -lxml2  -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4  $(LIBS)
+ 
+ @SET_MAKE@
+ 
+@@ -691,7 +696,7 @@
+ 	done
+ check-am: all-am
+ check: check-am
+-all-am: Makefile $(LTLIBRARIES)
++all-am: Makefile $(LTLIBRARIES) $(OS2_DLL_NAME).dll
+ installdirs:
+ 	for dir in "$(DESTDIR)$(libdir)"; do \
+ 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+@@ -812,3 +817,13 @@
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
++
++$(OS2_DLL_NAME).dll: lib$(OS2_LA_NAME).la
++	cp .libs/$(OS2_LA_NAME).a .libs/$(OS2_LA_NAME)_s.a
++	echo "LIBRARY $(OS2_DLL_NAME) INITINSTANCE TERMINSTANCE" > $(OS2_DLL_NAME).def
++	echo "DATA MULTIPLE" >> $(OS2_DLL_NAME).def
++	echo "EXPORTS" >> $(OS2_DLL_NAME).def
++	emxexp $(OS2_DLL_OBJ) >> $(OS2_DLL_NAME).def
++	gcc -g -Zbin-files -Zhigh-mem -Zomf -Zdll $(OS2_DLL_NAME).def -o $@ $(OS2_DLL_OBJ) $(OS2_DLL_LIBS) 
++	emximp -o .libs/$(OS2_LA_NAME).a $(OS2_DLL_NAME).def
++	emximp -o .libs/$(OS2_LA_NAME).lib $(OS2_DLL_NAME).def
+--- misc/xmlsec1-1.2.14/src/nss/keywrapers.c	2014-11-26 21:59:58.000000000 +0100
++++ misc/build/xmlsec1-1.2.14/src/nss/keywrapers.c	2014-11-26 21:50:14.000000000 +0100
+@@ -1126,7 +1126,7 @@
+     NULL,					/* void* reserved1; */
+ };
+ 
+-#ifndef __MINGW32__
++#if !defined(__MINGW32__) && !defined(__KLIBC__)
+ /** 
+  * xmlSecNssTransformKWAes128GetKlass:
+  *
+@@ -1199,7 +1199,7 @@
+     NULL,					/* void* reserved1; */
+ };
+ 
+-#ifndef __MINGW32__
++#if !defined(__MINGW32__) && !defined(__KLIBC__)
+ /** 
+  * xmlSecNssTransformKWDes3GetKlass:
+  * 

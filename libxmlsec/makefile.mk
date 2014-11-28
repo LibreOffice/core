@@ -63,6 +63,9 @@ PATCH_FILES=\
    xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch
 
+.IF "$(GUI)"=="OS2"
+PATCH_FILES+=xmlsec1-os2.patch
+.ENDIF
 
 ADDITIONAL_FILES= \
     include$/xmlsec$/mscrypto$/akmngr.h \
@@ -175,6 +178,9 @@ OUT2BIN+=src$/.libs$/libxmlsec1.dll src$/nss$/.libs$/libxmlsec1-nss.dll src$/msc
 OUT2LIB+=win32$/binaries$/*.lib
 OUT2BIN+=win32$/binaries$/*.dll
 .ENDIF
+.ELIF "$(OS)"=="OS2"
+OUT2LIB+=src$/.libs$/xmlsec1.lib src$/nss$/.libs$/xmlsec1-nss.lib
+OUT2BIN+=src$/xmlsec1.dll src$/nss$/xmlsec1n.dll
 .ELSE
 OUT2LIB+=src$/.libs$/libxmlsec1.a src$/nss$/.libs$/libxmlsec1-nss.a
 .ENDIF
