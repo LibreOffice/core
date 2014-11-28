@@ -16,6 +16,24 @@
       "revId": "4c78ff11a26ca3109ceca1de99ce264973b5b762",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_0dbb3910",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 0,
+      "message": "SAL_DLLPUBLIC_EXPORT \u003d\u003e __declspec(dllexport)\nJNICALL              \u003d\u003e __stdcall\n\nYou set 2 different calling convention, where I think wrong",
+      "parentUuid": "3afb71cf_cac067e3",
+      "revId": "4c78ff11a26ca3109ceca1de99ce264973b5b762",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

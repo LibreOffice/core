@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3afb71cf_2d903595",
+        "filename": "jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "I want change that mistake.\nAnd no i list only this DLL that load static in the jpipx.dll, and that are this two dlls.",
+      "parentUuid": "3afb71cf_0a90bfeb",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3afb71cf_eabb2374",
         "filename": "jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-11-27T13:41:54Z",
       "side": 1,
       "message": "missing space between across and 32",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_0d8d797b",
+        "filename": "jurt/source/pipe/com_sun_star_lib_connections_pipe_PipeConnection.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "I want change",
+      "parentUuid": "3afb71cf_eabb2374",
       "revId": "4bf0842b958785803736230698271df241ae1bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "3afb71cf_8df729f5",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "want change",
+      "parentUuid": "3afb71cf_2a813b90",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3afb71cf_8aba6f6d",
         "filename": "jurt/source/pipe/wrapper/wrapper.c",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2014-11-27T13:41:54Z",
       "side": 1,
       "message": "the functions PipeConnection_create etc. exported from jpipx are not __cdecl",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_6ddd0d70",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "want change",
+      "parentUuid": "3afb71cf_8aba6f6d",
       "revId": "4bf0842b958785803736230698271df241ae1bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "3afb71cf_2de71542",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "the message is in the bug, too\nbut i change",
+      "parentUuid": "3afb71cf_aab52b7f",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3afb71cf_ca674724",
         "filename": "jurt/source/pipe/wrapper/wrapper.c",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2014-11-27T13:41:54Z",
       "side": 1,
       "message": "all these dummy functions that silently do nothing are a bad idea; the forwarding to jpipx must not fail; if it does, something fundamental is wrong with the LO installation, and it should fail as fast as possible (probably best to have null function pointers in that case)",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_0de45939",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "oh, I have learned to try all untreated one exception to avoid. Better is a error handling, the best case is it give a errorcode back and the caller make the error handling.\nOr when that not possible, a messagebox say what goes wrong.",
+      "parentUuid": "3afb71cf_ca674724",
       "revId": "4bf0842b958785803736230698271df241ae1bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "3afb71cf_edcfbdb1",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "That was my first darft. \nBut the other function make no sense without this create. Then the next exception?\nBut you right i must make thread-safe.",
+      "parentUuid": "3afb71cf_4aad9730",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3afb71cf_8a714fe3",
         "filename": "jurt/source/pipe/wrapper/wrapper.c",
         "patchSetId": 1
@@ -132,6 +258,24 @@
       "writtenOn": "2014-11-27T13:41:54Z",
       "side": 1,
       "message": "this code is not thread-safe; make sure that the static function pointers written by the first call to this set-up code are visible to all the users of those function pointers",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_adc9c5ae",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "Yes that i have not seen, i must be make thread-safe",
+      "parentUuid": "3afb71cf_8a714fe3",
       "revId": "4bf0842b958785803736230698271df241ae1bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "3afb71cf_8dce09b3",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "see line 84",
+      "parentUuid": "3afb71cf_6a7733d5",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3afb71cf_4a7477ce",
         "filename": "jurt/source/pipe/wrapper/wrapper.c",
         "patchSetId": 1
@@ -172,6 +334,24 @@
     },
     {
       "key": {
+        "uuid": "3afb71cf_6dc4ed91",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "see 84",
+      "parentUuid": "3afb71cf_4a7477ce",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3afb71cf_ea49e38f",
         "filename": "jurt/source/pipe/wrapper/wrapper.c",
         "patchSetId": 1
@@ -183,6 +363,24 @@
       "writtenOn": "2014-11-27T13:41:54Z",
       "side": 1,
       "message": "closing a pipe must unload jpipx; there can be multiple pipes open in parallel (it\u0027s IMO not worth it to try to eventually unload jpipx again; the original code \"leaked\" it by design)",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3afb71cf_4dc13180",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-11-28T10:14:11Z",
+      "side": 1,
+      "message": "see line 99",
+      "parentUuid": "3afb71cf_ea49e38f",
       "revId": "4bf0842b958785803736230698271df241ae1bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
