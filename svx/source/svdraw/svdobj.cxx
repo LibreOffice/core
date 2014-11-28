@@ -3090,7 +3090,6 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     {
         aScale.setX(fabs(aScale.getX()));
         aScale.setY(fabs(aScale.getY()));
-        fRotate = fmod(fRotate + F_PI, F_2PI);
     }
 
     // force metric to pool metric
