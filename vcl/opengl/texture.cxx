@@ -52,6 +52,9 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST )
 {
+    // FIXME We need the window height here
+    // nY = GetHeight() - nHeight - nY;
+
     glGenTextures( 1, &mnTexture );
     glBindTexture( GL_TEXTURE_2D, mnTexture );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
