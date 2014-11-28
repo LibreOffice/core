@@ -43,9 +43,6 @@ struct OPENCL_DLLPUBLIC OpenCLPlatformInfo
     std::vector<OpenCLDeviceInfo> maDevices;
 
     OpenCLPlatformInfo();
-    ~OpenCLPlatformInfo()
-    {
-    }
 };
 
 OPENCL_DLLPUBLIC std::ostream& operator<<(std::ostream& rStream, const OpenCLPlatformInfo& rPlatform);
