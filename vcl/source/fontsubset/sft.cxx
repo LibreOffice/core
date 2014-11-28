@@ -409,9 +409,9 @@ static int GetTTGlyphOutline(TrueTypeFont *, sal_uInt32 , ControlPoint **, TTGly
 /* returns the number of control points, allocates the pointArray */
 static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics)
 {
-    const sal_uInt8* table = getTable( ttf, O_glyf );
+    const sal_uInt8* table = getTable(ttf, O_glyf);
+    const sal_uInt32 nTableSize = getTableSize(ttf, O_glyf);
     sal_uInt8 flag, n;
-    sal_uInt16 t, lastPoint=0;
     int i, j, z;
 
     *pointArray = 0;
@@ -434,14 +434,32 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
     }
 
     /* determine the last point and be extra safe about it. But probably this code is not needed */
-
+    sal_uInt16 lastPoint=0;
     for (i=0; i<numberOfContours; i++) {
-        if ((t = GetUInt16(ptr, 10+i*2, 1)) > lastPoint) lastPoint = t;
+        const sal_uInt16 t = GetUInt16(ptr, 10+i*2, 1);
+        if (t > lastPoint)
+            lastPoint = t;
     }
 
     sal_uInt16 instLen = GetUInt16(ptr, 10 + numberOfContours*2, 1);
-    const sal_uInt8* p = ptr + 10 + 2 * numberOfContours + 2 + instLen;
-    sal_uInt16 palen = lastPoint+1;
+
+    const sal_uInt32 nOffset = 10 + 2 * numberOfContours + 2 + instLen;
+    if (nOffset > nTableSize)
+        return 0;
+    const sal_uInt8* p = ptr + nOffset;
+
+    const sal_uInt32 nBytesRemaining = nTableSize - nOffset;
+    const sal_uInt16 palen = lastPoint+1;
+
+    //at a minimum its one byte per entry
+    if (palen > nBytesRemaining)
+    {
+        SAL_WARN("vcl.fonts", "Font " << OUString::createFromAscii(ttf->fname) <<
+            "claimed a palen of "
+            << palen << " but max bytes remaining is " << nBytesRemaining);
+        return 0;
+    }
+
     ControlPoint* pa = (ControlPoint*)calloc(palen, sizeof(ControlPoint));
 
     i = 0;
