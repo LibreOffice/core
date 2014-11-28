@@ -13,6 +13,7 @@
 #include "opengl/DeviceInfo.hxx"
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <stdint.h>
 
 namespace wgl {
 
