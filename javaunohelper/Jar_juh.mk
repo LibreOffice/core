@@ -16,7 +16,12 @@ $(eval $(call gb_Jar_use_jars,juh,\
 
 $(eval $(call gb_Jar_set_packageroot,juh,com))
 
-$(eval $(call gb_Jar_add_manifest_classpath,juh,ridl.jar jurt.jar ../../lib/ ../bin/))
+$(eval $(call gb_Jar_add_manifest_classpath,juh, \
+    jurt.jar \
+    ridl.jar \
+    $(if $(filter MACOSX,$(OS)),../../Frameworks/, \
+        $(if $(filter WNT,$(OS)),../bin/,../../../program/)) \
+))
 
 $(eval $(call gb_Jar_set_manifest,juh,$(SRCDIR)/javaunohelper/util/manifest))
 

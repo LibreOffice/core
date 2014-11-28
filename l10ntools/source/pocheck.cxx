@@ -456,7 +456,7 @@ int main()
     OString aLanguages(getenv("ALL_LANGS"));
     if( aLanguages.isEmpty() )
     {
-        std::cerr << "Usage: LD_LIBRARY_PATH=instdir/ure/lib make cmd cmd=workdir/LinkTarget/Executable/pocheck\n";
+        std::cerr << "Usage: bin/run pocheck\n";
         return 1;
     }
     for(sal_Int32 i = 1;;++i) // skip en-US

@@ -98,9 +98,9 @@ endef
 
 gb_LinkTarget__RPATHS := \
 	URELIB:\dORIGIN \
-	UREBIN:\dORIGIN/../ure-link/lib \
-	OOO:\dORIGIN:\dORIGIN/../ure-link/lib \
-	SDKBIN:\dORIGIN/../../ure-link/lib \
+	UREBIN:\dORIGIN \
+	OOO:\dORIGIN \
+	SDKBIN:\dORIGIN/../../program \
 	OXT: \
 	NONE:\dORIGIN/../Library \
 
@@ -142,7 +142,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Wl$(COMMA)--no-as-needed \
 		$(patsubst lib%.a,-l%,$(patsubst lib%.so,-l%,$(patsubst %.$(gb_Library_UDK_MAJORVER),%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))))) \
 		-o $(1) \
-	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../ure-link/lib/$(notdir $(1)) $(ILIBTARGET)))
+	$(if $(SOVERSIONSCRIPT),&& ln -sf ../../program/$(notdir $(1)) $(ILIBTARGET)))
 	$(if $(filter Library,$(TARGETTYPE)), $(call gb_Helper_abbreviate_dirs,\
 		$(READELF) -d $(1) | grep SONAME > $(WORKDIR)/LinkTarget/$(2).exports.tmp; \
 		$(NM) --dynamic --extern-only --defined-only --format=posix $(1) \
@@ -209,7 +209,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 define gb_Library__get_rpath
-$(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' -Wl,-rpath-link,$(INSTDIR)/ure/lib -Wl,-rpath-link,$(INSTDIR)/program))
+$(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' -Wl,-rpath-link,$(INSTDIR)/program))
 endef
 
 define gb_Library_get_rpath
@@ -239,7 +239,7 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable__get_rpath
-$(strip -Wl,-z,origin $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') -Wl,-rpath-link,$(INSTDIR)/ure/lib -Wl,-rpath-link,$(INSTDIR)/program)
+$(strip -Wl,-z,origin $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') -Wl,-rpath-link,$(INSTDIR)/program)
 endef
 
 define gb_Executable_get_rpath

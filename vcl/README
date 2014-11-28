@@ -186,5 +186,4 @@ touch vcl/source/gdi/pdfwriter* && make vcl dbglevel=3
 To de-compress the contents of a PDF file written by a release build or
 other programs, use the "pdfunzip" tool:
 
-LD_LIBRARY_PATH=$PWD/instdir/ure/lib workdir/LinkTarget/Executable/pdfunzip input.pdf output.pdf
-
+bin/run pdfunzip input.pdf output.pdf

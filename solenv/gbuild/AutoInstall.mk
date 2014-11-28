@@ -58,7 +58,7 @@ else
 	$(file >>$@,$(foreach lib,$(gb_Library_MODULE_$*),$(call gb_AutoInstall__gen_lib,$(lib))))
 endif
 	$(foreach lib,$(gb_SdkLinkLibrary_MODULE_$*),\
-		echo 'SDK_LIBRARY_LINK(auto_$*_link_$(lib),$(notdir $(call gb_Library_get_sdk_link_lib,$(lib))),../../ure-link/lib/$(call gb_Library_get_runtime_filename,$(lib)))' >> $@;)
+		echo 'SDK_LIBRARY_LINK(auto_$*_link_$(lib),$(notdir $(call gb_Library_get_sdk_link_lib,$(lib))),../../program/$(call gb_Library_get_runtime_filename,$(lib)))' >> $@;)
 	$(foreach exe,$(gb_Executable_MODULE_$*),\
 		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(subst .,_,$(subst -,_,$(exe))),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
 	$(foreach jar,$(gb_Jar_MODULE_$*),\

@@ -252,10 +252,10 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/cli_.*.dll
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/cli_.*.dll.config
     mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/policy.*.cli_.*.dll
-    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/cli_.*.dll
-    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/cli_.*.dll.config
-    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/policy.*.cli_.*.dll
-    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/ure/lib/libcli_.*.so
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/cli_.*.dll.config
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/policy.*.cli_.*.dll
+    mv_file_between_flists mono_list.txt common_list.txt $INSTALLDIR/program/libcli_.*.so
     add_used_directories mono_list.txt common_list.txt
     # add the files from GAC if it was installed
     test -f mono_gac && cat mono_gac >>mono_list.txt

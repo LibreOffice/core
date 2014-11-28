@@ -21,8 +21,4 @@ else
 $(eval $(call gb_Package_add_symbolic_link,ure_install,ure-link,ure))
 endif
 
-$(eval $(call gb_Package_add_files,ure_install,$(LIBO_URE_ETC_FOLDER),\
-	$(call gb_Helper_get_rcfile,jvmfwk3) \
-))
-
 # vim:set noet sw=4 ts=4:

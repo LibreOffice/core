@@ -55,7 +55,7 @@ test-javanative: out.pln/runner.jar out.pln/javanative.jar \
             out.pln/types.rdb out.pln/services.rdb
 	URE_MORE_TYPES=file://$(PWD)/out.pln/types.rdb \
             URE_MORE_SERVICES=file://$(PWD)/out.pln/services.rdb \
-            $(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/ure-link/lib java \
+            $(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/program java \
             -jar out.pln/runner.jar file://$(URE_HOME)/ure-link/share/java/ \
             file://$(PWD)/out.pln/javanative.jar
 
@@ -121,14 +121,14 @@ out.pln/cppserver.o: cppserver.cc out.pln/cpputypes.cppumaker.flag \
 
 
 out.pln/cpputypes.cppumaker.flag: | out.pln
-	LD_LIBRARY_PATH=$(URE_HOME)/ure-link/lib $(SDK_HOME)/bin/cppumaker \
+	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/cppumaker \
             -O./out.pln/include/cpputypes \
             '-Tcom.sun.star.beans.Introspection;com.sun.star.beans.theIntrospection;com.sun.star.bridge.BridgeFactory;com.sun.star.bridge.UnoUrlResolver;com.sun.star.connection.Acceptor;com.sun.star.connection.Connector;com.sun.star.io.Pipe;com.sun.star.io.TextInputStream;com.sun.star.io.TextOutputStream;com.sun.star.java.JavaVirtualMachine;com.sun.star.lang.DisposedException;com.sun.star.lang.EventObject;com.sun.star.lang.XMain;com.sun.star.lang.XMultiComponentFactory;com.sun.star.lang.XMultiServiceFactory;com.sun.star.lang.XSingleComponentFactory;com.sun.star.lang.XSingleServiceFactory;com.sun.star.lang.XTypeProvider;com.sun.star.loader.Java;com.sun.star.loader.SharedLibrary;com.sun.star.reflection.ProxyFactory;com.sun.star.registry.ImplementationRegistration;com.sun.star.registry.SimpleRegistry;com.sun.star.registry.XRegistryKey;com.sun.star.script.Converter;com.sun.star.script.Invocation;com.sun.star.security.AccessController;com.sun.star.security.Policy;com.sun.star.uno.DeploymentException;com.sun.star.uno.Exception;com.sun.star.uno.NamingService;com.sun.star.uno.RuntimeException;com.sun.star.uno.XAggregation;com.sun.star.uno.XComponentContext;com.sun.star.uno.XCurrentContext;com.sun.star.uno.XInterface;com.sun.star.uno.XWeak;com.sun.star.uri.ExternalUriReferenceTranslator;com.sun.star.uri.UriReferenceFactory;com.sun.star.uri.VndSunStarPkgUrlReferenceFactory;com.sun.star.util.theMacroExpander' \
             $(URE_HOME)/ure-link/share/misc/types.rdb
 	touch $@
 
 out.pln/types.cppumaker.flag: out.pln/types.rdb | out.pln
-	LD_LIBRARY_PATH=$(URE_HOME)/ure-link/lib $(SDK_HOME)/bin/cppumaker \
+	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/cppumaker \
             -O./out.pln/include/types $< \
             -X$(URE_HOME)/ure-link/share/misc/types.rdb
 	touch $@
@@ -247,7 +247,7 @@ out.pln/types.mf: types.mf.template | out.pln
 
 out.pln/types.javamaker.flag: out.pln/types.rdb | out.pln out.pln/class
 	rm -rf out.pln/class/types
-	LD_LIBRARY_PATH=$(URE_HOME)/ure-link/lib $(SDK_HOME)/bin/javamaker \
+	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/javamaker \
             -O./out.pln/class/types $< \
             -X$(URE_HOME)/ure-link/share/misc/types.rdb
 	touch $@
@@ -257,7 +257,7 @@ out.pln/types.rdb: out.pln/types.urd | out.pln
 	$(URE_HOME)/program/regmerge $@ /UCR $<
 
 out.pln/types.urd: types.idl | out.pln
-	LD_LIBRARY_PATH=$(URE_HOME)/ure-link/lib $(SDK_HOME)/bin/idlc -O$(@D) \
+	LD_LIBRARY_PATH=$(URE_HOME)/program $(SDK_HOME)/bin/idlc -O$(@D) \
             -I$(SDK_HOME)/idl -cid -we $<
 
 
@@ -267,16 +267,16 @@ out.pln/services.rdb: services.rdb.in | out.pln/cpptest.uno.so \
 
 
 out.pln/lib/libuno_cppu.so: | out.pln/lib
-	ln -fs $(URE_HOME)/ure-link/lib/libuno_cppu.so.3 $@
+	ln -fs $(URE_HOME)/program/libuno_cppu.so.3 $@
 
 out.pln/lib/libuno_cppuhelpergcc3.so: | out.pln/lib
-	ln -fs $(URE_HOME)/ure-link/lib/libuno_cppuhelpergcc3.so.3 $@
+	ln -fs $(URE_HOME)/program/libuno_cppuhelpergcc3.so.3 $@
 
 out.pln/lib/libuno_sal.so: | out.pln/lib
-	ln -fs $(URE_HOME)/ure-link/lib/libuno_sal.so.3 $@
+	ln -fs $(URE_HOME)/program/libuno_sal.so.3 $@
 
 out.pln/lib/libuno_salhelpergcc3.so: | out.pln/lib
-	ln -fs $(URE_HOME)/ure-link/lib/libuno_salhelpergcc3.so.3 $@
+	ln -fs $(URE_HOME)/program/libuno_salhelpergcc3.so.3 $@
 
 
 out.pln:

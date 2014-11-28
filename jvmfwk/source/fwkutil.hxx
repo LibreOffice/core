@@ -52,7 +52,7 @@ struct Bootstrap :
             buf.append(getLibraryLocation());
 #ifdef MACOSX
             // For some reason the jvmfwk3rc file is traditionally in
-            // "ure/lib", i.e.  in LIBO_URE_ETC_FOLDER
+            // LIBO_URE_ETC_FOLDER
             buf.appendAscii( "/../" LIBO_URE_ETC_FOLDER );
 #endif
             buf.appendAscii(SAL_CONFIGFILE("/jvmfwk3"));

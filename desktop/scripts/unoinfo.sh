@@ -31,7 +31,7 @@ sd_prog=`pwd`
 
 case $1 in
 c++)
-    printf '%s' "$sd_prog/../ure-link/lib"
+    printf '%s' "$sd_prog"
     ;;
 java)
     printf '0%s\0%s\0%s\0%s\0%s' \

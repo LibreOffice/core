@@ -21,14 +21,13 @@
  	@echo RPATH_FLAGS=$(RPATH_FLAGS) >> $(OUTPUTFILE)
 --- misc/icu/source/config/mh-linux	2010-09-29 20:37:36.000000000 +0200
 +++ misc/build/icu/source/config/mh-linux	2011-03-15 10:56:26.653056004 +0100
-@@ -20,6 +20,11 @@
+@@ -20,6 +20,10 @@
  LD_RPATH= -Wl,-zorigin,-rpath,'$$'ORIGIN 
  LD_RPATH_PRE = -Wl,-rpath,
  
-+## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
-+## (incl. the C++ runtime libs potentially found in the URE lib dir):
++## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH:
 +ENABLE_RPATH=YES
-+RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN:$$ORIGIN/../ure-link/lib'
++RPATHLDFLAGS=${LD_RPATH_PRE}'$$ORIGIN'
 +
  ## These are the library specific LDFLAGS
  LDFLAGSICUDT=-nodefaultlibs -nostdlib

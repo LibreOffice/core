@@ -28,8 +28,8 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
 		LIBXML2_LIBS="$(if $(filter WNTMSC,$(OS)$(COM)),-L$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc -llibxml2,$(LIBXML_LIBS))" \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
-		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
-		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib) \
+		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN) \
+		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN) \
 		$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
 		&& $(if $(filter WNTMSC,$(OS)$(COM)),\
 			REAL_CC="$(shell cygpath -w $(lastword $(filter-out -%,$(CC))))" \

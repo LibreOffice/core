@@ -33,8 +33,6 @@ Options:
         is.
 -c      Create the autoloader's dir if it does not exist. This option only
         makes sense if both -a and -i are used.
--f      Do not create subdirs in the autoloader's dir. This option is only
-        used during build.
 -h      Show this help text.
 -i dir  The dir where libreoffice is installed. Defaults to whatever -a is.
 -p dir  The dir where pretty printers are placed.
@@ -54,16 +52,12 @@ EOT
 }
 
 make_autoload() {
-    local dir="${DESTDIR}${autoloaddir}"
-    ${flat} || dir="${dir}/$2"
-    local lib="${dir}/$3"
+    local lib="${DESTDIR}${autoloaddir}/$2/$3"
     local merged="$4"
 
-    if ! ${flat}; then
-        local resolved="$(readlink "${DESTDIR}${installdir}/$2/$3")"
-        [ -n "$resolved" ] && lib=$resolved
-        dir="${lib%/*}"
-    fi
+    local resolved="$(readlink "${DESTDIR}${installdir}/$2/$3")"
+    [ -n "$resolved" ] && lib=$resolved
+    local dir="${lib%/*}"
 
     if ${create}; then
         mkdir -p "${dir}" || die "cannot create dir '${dir}'"
@@ -89,18 +83,12 @@ pythondir="${GDBDIR}"
 # Create autoload dir if it does not exist. This only makes sense when
 # installing into system gdb dir, so $autoloaddir must be absolute path.
 create=false
-# This option is only here to enable using the script during build of
-# solenv/gdb . We must (or, better, want to :) avoid using the
-# installation subpaths (like ure-link), because all libs in solver
-# are in the same dir.
-flat=false
 
 #  b de g  jklmno qrstuvwxyzABCDEFGHIJK MNOPQRSTUVWXYZ0123456789
 while getopts :a:cfhi:p:L opt; do
     case ${opt} in
         a) autoloaddir="${OPTARG}" ;;
         c) create=true ;;
-        f) flat=true ;;
         h) usage; exit ;;
         i) installdir="${OPTARG}" ;;
         p) pythondir="${OPTARG}" ;;
@@ -138,16 +126,16 @@ fi
 if [[ -n "${MERGELIBS}" ]]; then
     make_autoload merged program libmergedlo."$DYLIB" merge svl tl basegfx `[[ ${MERGELIBS} == "ALL" ]] && echo sw`
     if [[ ${MERGELIBS} == "ALL" ]]; then
-        make_autoload urelibs ure/lib liburelibs."$DYLIB" merge cppu sal
+        make_autoload urelibs program liburelibs."$DYLIB" merge cppu sal
     else
-        make_autoload cppu ure/lib libuno_cppu."$DYLIB".3
-        make_autoload sal ure/lib libuno_sal."$DYLIB".3
+        make_autoload cppu program libuno_cppu."$DYLIB".3
+        make_autoload sal program libuno_sal."$DYLIB".3
         make_autoload sw program libswlo."$DYLIB"
     fi
 else
     make_autoload basegfx program libbasegfxlo."$DYLIB"
-    make_autoload cppu ure/lib libuno_cppu."$DYLIB".3
-    make_autoload sal ure/lib libuno_sal."$DYLIB".3
+    make_autoload cppu program libuno_cppu."$DYLIB".3
+    make_autoload sal program libuno_sal."$DYLIB".3
     make_autoload svl program libsvllo."$DYLIB"
     make_autoload sw program libswlo."$DYLIB"
     make_autoload tl program libtllo."$DYLIB"

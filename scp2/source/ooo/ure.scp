@@ -41,13 +41,6 @@ End
 #endif
 
 #if !defined WNT
-Directory gid_Dir_Ure_Lib
-    ParentID = gid_Dir_Common_Ure;
-    DosName = "lib";
-End
-#endif
-
-#if !defined WNT
 Directory gid_Dir_Ure_Share
     ParentID = gid_Dir_Common_Ure;
     DosName = "share";
@@ -346,7 +339,6 @@ Module gid_Module_Root_Ure_Hidden
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
     Dirs = (gid_Dir_Ure_Bin,
-            gid_Dir_Ure_Lib,
             gid_Dir_Ure_Misc,
             gid_Dir_Ure_Share,
             gid_Dir_Ure_Java,

@@ -42,7 +42,7 @@ done
 
 exedir="${dir}"/workdir/LinkTarget/Executable
 export URE_BOOTSTRAP=file://"${dir}"/instdir/program/fundamentalrc
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}"${dir}"/instdir/ure/lib:"${dir}"/instdir/program
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}"${dir}"/instdir/program
 
 echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
 echo "setting search path to: ${LD_LIBRARY_PATH}"

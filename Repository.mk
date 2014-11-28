@@ -803,6 +803,7 @@ endif
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	instsetoo_native_setup_ure \
+	jvmfwk_jvmfwk3_ini \
 	ure_install \
 	$(if $(ENABLE_JAVA),\
 		jvmfwk_javavendors \

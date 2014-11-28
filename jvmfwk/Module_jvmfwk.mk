@@ -13,8 +13,10 @@ ifeq ($(ENABLE_JAVA),TRUE)
 
 $(eval $(call gb_Module_add_targets,jvmfwk,\
 	CustomTarget_jreproperties \
+	CustomTarget_jvmfwk_jvmfwk3_ini \
 	Library_jvmfwk \
 	Package_jreproperties \
+	Package_jvmfwk_jvmfwk3_ini \
 	Package_rcfiles \
 ))
 
