@@ -40,17 +40,21 @@ namespace oglcanvas
         const double nHeight=rBounds.getHeight();
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(aPolyPoly));
-        std::vector<glm::vec2> vertices;
-        vertices.reserve(rTriangulatedPolygon.count());
-        for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
+        if(rTriangulatedPolygon.count()>0)
         {
-            const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
-            vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
+            std::vector<glm::vec2> vertices;
+            vertices.reserve(rTriangulatedPolygon.count());
+            for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
+            {
+                const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
+                vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
+            }
+
+            if(hasTexture)
+                renderHelper->renderVertexTex( vertices, nWidth, nHeight,  color, GL_TRIANGLES);
+            else
+                renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
         }
-        if(hasTexture)
-            renderHelper->renderVertexTex( vertices, nWidth, nHeight,  color, GL_TRIANGLES);
-        else
-            renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
     }
 
     /** only use this for line polygons.
@@ -70,15 +74,17 @@ namespace oglcanvas
 
             const sal_uInt32 nPts=rPolygon.count();
             const sal_uInt32 nExtPts=nPts + int(rPolygon.isClosed());
-            std::vector<glm::vec2> vertices;
-            vertices.reserve(nExtPts);
-            for( sal_uInt32 j=0; j<nExtPts; j++ )
-            {
-                const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
-                vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
-            }
             if(nExtPts>0)
+            {
+                std::vector<glm::vec2> vertices;
+                vertices.reserve(nExtPts);
+                for( sal_uInt32 j=0; j<nExtPts; j++ )
+                {
+                    const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
+                    vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
+                }
                 renderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
+            }
         }
 
     }
