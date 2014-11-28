@@ -649,20 +649,20 @@ void SvRTFParser::Continue( int nToken )
             break;      // unbekannte Token ueberspringen
         case RTF_NEXTTYPE:
         case RTF_ANSITYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );
+            SetEncoding( eCodeSet = RTL_TEXTENCODING_MS_1252 );
             break;
         case RTF_MACTYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_APPLE_ROMAN );
+            SetEncoding( eCodeSet = RTL_TEXTENCODING_APPLE_ROMAN );
             break;
         case RTF_PCTYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );
+            SetEncoding( eCodeSet = RTL_TEXTENCODING_IBM_437 );
             break;
         case RTF_PCATYPE:
-            SetSrcEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );
+            SetEncoding( eCodeSet = RTL_TEXTENCODING_IBM_850 );
             break;
         case RTF_ANSICPG:
             eCodeSet = rtl_getTextEncodingFromWindowsCodePage(nTokenValue);
-            SetSrcEncoding(eCodeSet);
+            SetEncoding(eCodeSet);
             break;
         default:
 NEXTTOKEN:
