@@ -32,6 +32,8 @@
 #include "StatisticsHelper.hxx"
 #include "ShapeController.hxx"
 
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -698,7 +700,12 @@ bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
 
 bool ControllerCommandDispatch::isShapeControllerCommandAvailable( const OUString& rCommand )
 {
-    ShapeController* pShapeController = ( m_pDispatchContainer ? m_pDispatchContainer->getShapeController() : NULL );
+    ShapeController* pShapeController(0);
+    {
+        SolarMutexGuard g;
+        if (m_pDispatchContainer)
+            pShapeController = m_pDispatchContainer->getShapeController();
+    }
     if ( pShapeController )
     {
         FeatureState aState( pShapeController->getState( rCommand ) );
