@@ -53,6 +53,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
     m_bOOXML( bOOXML ),
+    m_bIsInShape(false),
     m_aTmpPosition(),
     m_aTmpTableProperties(),
     m_bPushCurrentWidth(false),
@@ -432,7 +433,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblPrBase_tblpPr:
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-                    if (pProperties.get())
+                    // Ignore <w:tblpPr> in shape text, those tables should be always non-floating ones.
+                    if (!m_bIsInShape && pProperties.get())
                     {
                         TablePositionHandlerPtr pHandler = m_aTmpPosition.back();
                         if ( !pHandler )
@@ -510,6 +512,11 @@ TablePositionHandler* DomainMapperTableManager::getCurrentTableRealPosition()
         return (m_aTablePositions.back( )).get();
     else
         return nullptr;
+}
+
+void DomainMapperTableManager::setIsInShape(bool bIsInShape)
+{
+    m_bIsInShape = bIsInShape;
 }
 
 void DomainMapperTableManager::startLevel( )

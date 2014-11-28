@@ -1961,6 +1961,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         uno::makeAny( true ) );
         }
         m_bParaChanged = true;
+        getTableManager().setIsInShape(true);
     }
     catch ( const uno::Exception& e )
     {

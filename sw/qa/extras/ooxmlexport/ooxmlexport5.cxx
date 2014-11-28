@@ -713,6 +713,14 @@ DECLARE_OOXMLEXPORT_TEST(testHeaderBorder, "header-border.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTblpprShape, "tblppr-shape.docx")
+{
+    // Unhandled exception due to unexpected w:tblpPr resulted in not importing page size, either.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    // This was 2000, page width wasn't large enough.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2540), getProperty<sal_Int32>(xPageStyle, "LeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

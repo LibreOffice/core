@@ -47,6 +47,8 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bOOXML;
+    /// Are we in a shape (text append stack is not empty) or in the body document?
+    bool m_bIsInShape;
     OUString m_sTableStyleName;
     /// Grab-bag of table look attributes for preserving.
     comphelper::SequenceAsHashMap m_aTableLook;
@@ -160,6 +162,8 @@ public:
     {
         return DomainMapperTableManager_Base_t::isInCell();
     }
+
+    void setIsInShape(bool bIsInShape);
 
 };
 
