@@ -126,7 +126,7 @@ public:
     }
 
     OUString getRendererList();
-    double   getAndResetBenchmark(const char * st);
+    double   getAndResetBenchmark(RenderStyle style);
     void     selectRenderer(const OUString &rName);
     int      selectNextRenderer();
     void     setIterCount(sal_Int32 iterCount);
@@ -294,14 +294,31 @@ public:
 
     struct DrawText : public RegionRenderer
     {
-        RENDER_DETAILS(text,KEY_T,100)
+        RENDER_DETAILS(text,KEY_T,1)
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
-            rDev.SetTextColor(Color(COL_BLACK));
-            vcl::Font aFont(OUString("Times"), Size(0, 25));
-            rDev.SetFont(aFont);
-            rDev.DrawText(r, OUString("Click any rect to zoom"));
+            OUString aText("Click any rect to zoom!!!!");
+            std::vector<OUString> maFontNames;
+            sal_uInt32 nCols[] = {
+                COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
+                COL_BROWN, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN,
+                COL_LIGHTCYAN, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE
+            };
+            // a few fonts to start with
+            const char *pNames[] = {
+                "Times", "Liberation Sans", "Arial", "Linux Biolinum G", "Linux Libertine Display G"
+              };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
+                maFontNames.push_back(OUString::createFromAscii(pNames[i]));
+#define PRINT_N_TEXT 20
+            for (int i = 0; i < PRINT_N_TEXT; i++) {
+                rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
+                // random font size to avoid buffering
+                vcl::Font aFont(maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + (double)rand()/10/RAND_MAX) * (r.Top() - r.Bottom())/PRINT_N_TEXT));
+                rDev.SetFont(aFont);
+                rDev.DrawText(r, aText.copy(0, 4 + (aText.getLength() - 4) * (PRINT_N_TEXT - i)/PRINT_N_TEXT));
+            }
         }
     };
 
@@ -917,7 +934,7 @@ public:
     void drawToDevice(OutputDevice &rDev, Size aSize, bool bVDev)
     {
         RenderContext aCtx;
-        double mnStartTime(0);
+        double mnStartTime;
         aCtx.mbVDev = bVDev;
         aCtx.mpDemoRenderer = this;
         aCtx.maSize = aSize;
@@ -1114,22 +1131,24 @@ OUString DemoRenderer::getRendererList()
     return aBuf.makeStringAndClear();
 }
 
-double DemoRenderer::getAndResetBenchmark(const char * st)
+double DemoRenderer::getAndResetBenchmark(const RenderStyle style)
 {
     double geomean = 1.0;
-    fprintf(stderr, "Rendering: %s, Times (ms):\n", st);
+    fprintf(stderr, "Rendering: %s, Times (ms):\n", style == RENDER_THUMB ? "THUMB": "EXPANDED");
     for (size_t i = 0; i < maRenderers.size(); i++)
     {
         double avgtime = maRenderers[i]->sumTime / maRenderers[i]->countTime;
         geomean *= avgtime;
-        fprintf(stderr, "%s: %f (IterCount: %d)\n",
+        fprintf(stderr, "%s: %f (iteration: %d*%d*%d)\n",
                 rtl::OUStringToOString(maRenderers[i]->getName(),
-                RTL_TEXTENCODING_UTF8).getStr(), avgtime, maRenderers[i]->countTime);
+                RTL_TEXTENCODING_UTF8).getStr(), avgtime,
+                maRenderers[i]->countTime, maRenderers[i]->getTestRepeatCount(),
+                (style == RENDER_THUMB) ? THUMB_REPEAT_FACTOR : 1);
         maRenderers[i]->sumTime = 0;
         maRenderers[i]->countTime = 0;
     }
     geomean = pow(geomean, static_cast<double>(1.0)/maRenderers.size());
-    fprintf(stderr, "GEOMEAN_%s: %f\n", st, geomean);
+    fprintf(stderr, "GEOMEAN_%s: %f\n", style == RENDER_THUMB ? "THUMB": "EXPANDED", geomean);
     return geomean;
 }
 
@@ -1220,12 +1239,12 @@ public:
             while (mrRenderer.selectNextRenderer() > -1)
                 mrRenderer.drawToDevice(*this, GetSizePixel(), false);
 
-        double expandedGEOMEAN = mrRenderer.getAndResetBenchmark("EXPANDED");
+        double expandedGEOMEAN = mrRenderer.getAndResetBenchmark(RENDER_EXPANDED);
 
         for (sal_Int32 i = 0; i < mrRenderer.getIterCount(); i++)
             mrRenderer.drawToDevice(*this, GetSizePixel(), false);
 
-        double thumbGEOMEAN = mrRenderer.getAndResetBenchmark("THUMB");
+        double thumbGEOMEAN = mrRenderer.getAndResetBenchmark(RENDER_THUMB);
 
         fprintf(stderr, "GEOMEAN_TOTAL: %f\n", pow(thumbGEOMEAN * expandedGEOMEAN, static_cast<double>(0.5)));
         Application::Quit();
