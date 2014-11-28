@@ -1016,33 +1016,11 @@ inline bool MissingConventionODF::isRewriteNeeded( OpCode eOp ) const
 }
 
 /*
- * fdo 81596
-Test status ( . : in progress , v : tested , - not applicable )
-finished:
-- ocCosecant:          // for OOXML not rewritten anymore
-- ocSecant:            // for OOXML not rewritten anymore
-- ocCot:               // for OOXML not rewritten anymore
-- ocCosecantHyp:       // for OOXML not rewritten anymore
-- ocSecantHyp:         // for OOXML not rewritten anymore
-- ocCotHyp:            // for OOXML not rewritten anymore
-- ocArcCot:            // for OOXML not rewritten anymore
-- ocArcCotHyp:         // ACOTH(x), not needed for Excel2013 and later
-- ocChose:             // CHOOSE() - no rewrite needed, it seems
-v ocEuroConvert:
-v ocIf:
-v ocRound:
-v ocRoundUp:
-v ocRoundDown:
-v ocGammaDist:
-v ocPoissonDist:
-v ocNormDist:
-v ocLogNormDist:
-
+ fdo 81596
 To be implemented yet:
   ocExternal:    ?
   ocMacro:       ?
   ocIndex:       INDEX() ?
-  ocFDist:             // later, fdo40835
 */
 inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp ) const
 {
@@ -1064,6 +1042,7 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp ) const
         case ocPoissonDist:
         case ocNormDist:
         case ocLogNormDist:
+        case ocFDist:
             return true;
         default:
             return false;
@@ -1173,6 +1152,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
 
                     case ocGammaDist:
                     case ocNormDist:
+                    case ocFDist:
                         if (mnCurArg == 2)
                         {
                             pNewArr->AddOpCode( ocSep );
