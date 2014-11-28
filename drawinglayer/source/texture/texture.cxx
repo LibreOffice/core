@@ -626,6 +626,26 @@ namespace drawinglayer
                 fAngle);
         }
 
+        GeoTexSvxGradientRect::GeoTexSvxGradientRect(
+            const basegfx::B2DRange& rDefinitionRange,
+            const basegfx::BColor& rStart,
+            const basegfx::BColor& rEnd,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fOffsetX,
+            double fOffsetY,
+            double fAngle,
+            std::vector< std::tuple< double, Color > > aGradStops)
+        :   GeoTexSvxGradient(rDefinitionRange, rStart, rEnd, nSteps, fBorder, aGradStops)
+        {
+            maGradientInfo = basegfx::tools::createRectangularODFGradientInfo(
+                rDefinitionRange,
+                basegfx::B2DVector(fOffsetX,fOffsetY),
+                nSteps,
+                fBorder,
+                fAngle);
+        }
+
         GeoTexSvxGradientRect::~GeoTexSvxGradientRect()
         {
         }
@@ -635,14 +655,58 @@ namespace drawinglayer
             basegfx::BColor& rOuterColor)
         {
             rOuterColor = maStart;
+            std::vector< std::tuple< double, Color > > aGradStops =  maGradientStops;
+            B2DHomMatrixAndBColor aB2DHomMatrixAndBColor;
 
-            if(maGradientInfo.getSteps())
+            double fWidth(1.0);
+            double fHeight(1.0);
+            double fIncrementX(0.0);
+            double fIncrementY(0.0);
+
+            if(0 < aGradStops.size())
             {
-                double fWidth(1.0);
-                double fHeight(1.0);
-                double fIncrementX(0.0);
-                double fIncrementY(0.0);
+                //MultiStop RECT Gradient
+                std::reverse(aGradStops.begin(),aGradStops.end());
+                double allStripes = 0;
 
+                for(sal_uInt32 i(1); i < aGradStops.size(); i++)
+                {
+                    double allStripes = 0;
+                    basegfx::BColor aStart = std::get<1>(aGradStops[i-1]).getBColor();
+                    basegfx::BColor aEnd = std::get<1>(aGradStops[i]).getBColor();
+                    sal_uInt32 nMaxSteps(sal_uInt32((aStart.getMaximumDistance(aEnd) * 127.5) + 0.5));
+
+                    double fStopPos = (std::get<0>(aGradStops[i-1])) - (std::get<0>(aGradStops[i]));
+                    nMaxSteps = (0 < nMaxSteps) ? nMaxSteps : 1;
+
+                    const double fStripeWidthGrad ( (1.0*fStopPos) / (nMaxSteps * 100.0) );
+
+                    if(maGradientInfo.getAspectRatio() > 1.0)
+                    {
+                        fIncrementY = fStripeWidthGrad;
+                        fIncrementX = fIncrementY / maGradientInfo.getAspectRatio();
+                    }
+                    else
+                    {
+                        fIncrementX = fStripeWidthGrad;
+                        fIncrementY = fIncrementX * maGradientInfo.getAspectRatio();
+                    }
+
+                    for(sal_uInt32 a(1); a < nMaxSteps; a++)
+                    {
+                        allStripes += fStripeWidthGrad;
+                        fWidth -= fIncrementX;
+                        fHeight -= fIncrementY;
+
+                        aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() * basegfx::tools::createScaleB2DHomMatrix(fWidth, fHeight);
+                        aB2DHomMatrixAndBColor.maBColor = interpolate(aStart, aEnd, double(a) / double(nMaxSteps - 1));
+                        rEntries.push_back(aB2DHomMatrixAndBColor);
+                    }
+                }
+            }
+
+            else if(maGradientInfo.getSteps())
+            {
                 if(maGradientInfo.getAspectRatio() > 1.0)
                 {
                     fIncrementY = fHeight / maGradientInfo.getSteps();

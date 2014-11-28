@@ -299,6 +299,18 @@ namespace drawinglayer
                 double fOffsetX,
                 double fOffsetY,
                 double fAngle);
+
+            GeoTexSvxGradientRect(
+                const basegfx::B2DRange& rDefinitionRange,
+                const basegfx::BColor& rStart,
+                const basegfx::BColor& rEnd,
+                sal_uInt32 nSteps,
+                double fBorder,
+                double fOffsetX,
+                double fOffsetY,
+                double fAngle,
+                std::vector< std::tuple< double, Color > > aGradStops);
+
             virtual ~GeoTexSvxGradientRect();
 
             virtual void appendTransformationsAndColors(

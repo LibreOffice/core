@@ -145,7 +145,8 @@ namespace drawinglayer
                         getFillGradient().getBorder(),
                         getFillGradient().getOffsetX(),
                         getFillGradient().getOffsetY(),
-                        getFillGradient().getAngle());
+                        getFillGradient().getAngle(),
+                        getFillGradient().getGradientStops());
                     aGradient.appendTransformationsAndColors(rEntries, rOuterColor);
                     break;
                 }
