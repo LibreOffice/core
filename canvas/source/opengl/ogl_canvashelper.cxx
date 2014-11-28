@@ -532,7 +532,7 @@ namespace oglcanvas
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
 
             // TODO(F3): fallback to drawPolyPolygon currently
-          //  rAct.maFunction = &lcl_drawPolyPolygon;
+            rAct.maFunction = &lcl_drawPolyPolygon;
         }
 
         // TODO(P1): Provide caching here.
