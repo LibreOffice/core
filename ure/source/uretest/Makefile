@@ -34,14 +34,12 @@ qt2 =
 cwd = $(subst \,/,$(shell cd))
 link_output_switch = -out:
 ure_java_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)))
-ure_unorc_url = $(subst $(subst .,., ),%%20,$(subst \,/,$(URLPREFIX)$(OO_SDK_URE_LIB_DIR)/uno.ini))
 else
 qt = '
 qt2 = '
 cwd = $(PWD)
 link_output_switch = $(subst .,.,-o )
 ure_java_url = $(URLPREFIX)$(OO_SDK_URE_JAVA_DIR)
-ure_unorc_url = $(URLPREFIX)$(OO_SDK_URE_LIB_DIR)/unorc
 endif
 
 
