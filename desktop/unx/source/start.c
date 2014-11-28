@@ -599,42 +599,15 @@ system_checks( void )
 #endif
 }
 
-static char *build_pagein_path (Args *args, const char *pagein_name)
-{
-    char *path;
-    rtl_String *app_path;
-
-    app_path = ustr_to_str (args->pAppPath);
-    path = malloc (
-        RTL_CONSTASCII_LENGTH("@") + app_path->length + strlen (pagein_name) +
-        1);
-    strcpy (path, "@");
-    strcpy (path + 1, rtl_string_getStr (app_path));
-    strcat (path, pagein_name);
-
-    rtl_string_release( app_path );
-
-    return path;
-}
-
 void
 exec_pagein (Args *args)
 {
-    char *argv[3];
-
-    /* don't use -L - since that does a chdir that breaks relative paths */
-    argv[0] = "dummy-pagein";
-    argv[1] = build_pagein_path (args, "pagein-common");
+    rtl_String * path = ustr_to_str(args->pAppPath);
+    pagein_execute(rtl_string_getStr(path), "pagein-common");
     if (args->pPageinType) {
-        argv[2] = build_pagein_path (args, args->pPageinType);
-    } else
-        argv[2] = NULL;
-
-    pagein_execute (args->pPageinType ? 3 : 2, argv);
-
-    if (argv[2])
-        free (argv[2]);
-    free (argv[1]);
+        pagein_execute(rtl_string_getStr(path), args->pPageinType);
+    }
+    rtl_string_release(path);
 }
 
 #if HAVE_FEATURE_JAVA
