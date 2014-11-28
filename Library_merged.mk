@@ -30,10 +30,18 @@ $(eval $(call gb_Library_use_libraries,merged,\
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Library_use_static_libraries,merged,\
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Executable_use_static_libraries,gengal,\
 	glxtest \
 	$(if $(filter unx,$(GUIBASE)),headless) \
 ))
+endif
+
+ifneq ($(OS),LINUX)
+$(eval $(call gb_Library_use_static_libraries,merged,\
+	$(if $(filter unx,$(GUIBASE)),headless) \
+))
+endif
 
 
 $(eval $(call gb_Library_use_externals,merged,\
