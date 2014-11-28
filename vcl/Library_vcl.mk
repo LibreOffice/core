@@ -647,6 +647,7 @@ endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/opengl/win/gdiimpl \
+	vcl/opengl/win/WinDeviceInfo \
     vcl/win/source/app/saldata \
     vcl/win/source/app/salinfo \
     vcl/win/source/app/salinst \
