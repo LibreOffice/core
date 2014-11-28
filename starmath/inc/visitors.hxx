@@ -53,45 +53,6 @@ protected:
     ~SmVisitor() {}
 };
 
-/** Simple visitor for testing SmVisitor */
-class SmVisitorTest : public SmVisitor
-{
-public:
-    virtual ~SmVisitorTest() {}
-    void Visit( SmTableNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmBraceNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmBracebodyNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmOperNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmAlignNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmAttributNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmFontNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmUnHorNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmBinHorNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmBinVerNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmBinDiagonalNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmSubSupNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmMatrixNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmPlaceNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmTextNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmSpecialNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmGlyphSpecialNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmMathSymbolNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmBlankNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmErrorNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmLineNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmExpressionNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmPolyLineNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmRootNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmRootSymbolNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmDynIntegralNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmDynIntegralSymbolNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmRectangleNode* pNode ) SAL_OVERRIDE;
-    void Visit( SmVerticalBraceNode* pNode ) SAL_OVERRIDE;
-private:
-    /** Auxiliary method for visiting the children of a pNode */
-    void VisitChildren( SmNode* pNode );
-};
-
 // SmDefaultingVisitor
 
 

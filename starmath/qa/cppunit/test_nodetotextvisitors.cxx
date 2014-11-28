@@ -18,6 +18,9 @@
 #include <visitors.hxx>
 #include <cursor.hxx>
 
+#include "mock-visitor.hxx"
+#include <boost/scoped_ptr.hpp>
+
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 using namespace ::com::sun::star;
@@ -443,6 +446,11 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
         output1,
         output2);
 
+    // auxiliary test for Accept()
+    boost::scoped_ptr<MockVisitor> mv(new MockVisitor);
+    pNode1->Accept(mv.get());
+    pNode2->Accept(mv.get());
+
     delete pNode1;
     delete pNode2;
 }
@@ -463,6 +471,10 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
         sExpected,
         sOutput);
+
+    // auxiliary test for Accept()
+    boost::scoped_ptr<MockVisitor> mv(new MockVisitor);
+    pNode->Accept(mv.get());
 
     delete pNode;
 }
@@ -486,6 +498,11 @@ void Test::ParseAndCompare(const char *formula1, const char *formula2, const cha
     SmNodeToTextVisitor(pNode2, sOutput2);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, sOutput1, sOutput2);
+
+    // auxiliary test for Accept()
+    boost::scoped_ptr<MockVisitor> mv(new MockVisitor);
+    pNode1->Accept(mv.get());
+    pNode2->Accept(mv.get());
 
     delete pNode1;
     delete pNode2;
