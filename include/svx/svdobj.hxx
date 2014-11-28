@@ -961,6 +961,8 @@ public:
 
     OString stringify() const;
 
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+
 protected:
     // Sets a new UNO shape
     //

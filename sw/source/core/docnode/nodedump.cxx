@@ -147,21 +147,8 @@ void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
             const size_t nObjCount = pPage->GetObjCount();
             for (size_t i = 0; i < nObjCount; ++i)
             {
-                const SdrObject* pObject = pPage->GetObj(i);
-                writer.startElement("sdrObject");
-                writer.writeFormatAttribute("ptr", "%p", pObject);
-                if (pObject)
-                {
-                    writer.writeFormatAttribute("symbol", "%s", BAD_CAST(typeid(*pObject).name()));
-                    writer.writeFormatAttribute("name", "%s", BAD_CAST(OUStringToOString(pObject->GetName(), RTL_TEXTENCODING_UTF8).getStr()));
-                    writer.writeFormatAttribute("title", "%s", BAD_CAST(OUStringToOString(pObject->GetTitle(), RTL_TEXTENCODING_UTF8).getStr()));
-                    writer.writeFormatAttribute("description", "%s", BAD_CAST(OUStringToOString(pObject->GetDescription(), RTL_TEXTENCODING_UTF8).getStr()));
-                    writer.writeFormatAttribute("nOrdNum", TMP_FORMAT, pObject->GetOrdNumDirect());
-
-                    if (const OutlinerParaObject* pOutliner = pObject->GetOutlinerParaObject())
-                        pOutliner->dumpAsXml(writer);
-                }
-                writer.endElement();
+                if (const SdrObject* pObject = pPage->GetObj(i))
+                    pObject->dumpAsXml(writer);
             }
         }
         writer.endElement();
