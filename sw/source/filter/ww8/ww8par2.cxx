@@ -649,10 +649,39 @@ static void SetBaseAnlv(
     static SvxAdjust eAdjA[4] =
     { SVX_ADJUST_LEFT, SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
 
-    rNum.SetNumberingType(
-        static_cast< sal_Int16 >(( SVBT8ToByte( rAV.nfc ) < 8 )
-            ? eNumA[SVBT8ToByte( rAV.nfc ) ]
-            : SVX_NUM_NUMBER_NONE) );
+    if (SVBT8ToByte( rAV.nfc ) < 8) {
+        rNum.SetNumberingType(static_cast< sal_Int16 >(eNumA[SVBT8ToByte( rAV.nfc ) ]));
+    } else {
+        sal_Int16 nType = style::NumberingType::ARABIC; // Fallback to ARABIC instead of NONE
+        switch(SVBT8ToByte( rAV.nfc ))
+        {
+        case 14:
+        case 19:nType = style::NumberingType::FULLWIDTH_ARABIC ;    break;
+        case 30:nType = style::NumberingType::TIAN_GAN_ZH ; break;
+        case 31:nType = style::NumberingType::DI_ZI_ZH ;    break;
+        case 35:
+        case 36:
+        case 37:
+        case 39:
+            nType = style::NumberingType::NUMBER_LOWER_ZH ; break;
+        case 34:nType = style::NumberingType::NUMBER_UPPER_ZH_TW ;  break;
+        case 38:nType = style::NumberingType::NUMBER_UPPER_ZH ; break;
+        case 10:
+        case 11:
+            nType = style::NumberingType::NUMBER_TRADITIONAL_JA ;   break;
+        case 20:    nType = style::NumberingType::AIU_FULLWIDTH_JA ;    break;
+        case 12:    nType = style::NumberingType::AIU_HALFWIDTH_JA ;    break;
+        case 21:    nType = style::NumberingType::IROHA_FULLWIDTH_JA ;  break;
+        case 13:    nType = style::NumberingType::IROHA_HALFWIDTH_JA ;  break;
+        case 24:    nType = style::NumberingType::HANGUL_SYLLABLE_KO;break;
+        case 25:    nType = style::NumberingType::HANGUL_JAMO_KO;break;
+        case 41:    nType = style::NumberingType::NUMBER_HANGUL_KO; break;
+        case 44:    nType = style::NumberingType::NUMBER_UPPER_KO; break;
+        default:    nType = style::NumberingType::ARABIC; break;
+        }
+
+        rNum.SetNumberingType( nType ) ;
+    }
 
     if ((SVBT8ToByte(rAV.aBits1 ) & 0x4) >> 2)
     {

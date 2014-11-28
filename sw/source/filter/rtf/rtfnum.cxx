@@ -57,6 +57,70 @@
 
 #define RTF_NUMRULE_NAME "RTF_Num"
 
+static sal_Int16 lcl_GetStyleForNFC( sal_Int16 nNFC)
+{
+    static const sal_Int16 aMap[] =
+    {
+    style::NumberingType::ARABIC,                   // 0 - Arabic (1, 2, 3)
+    style::NumberingType::ROMAN_UPPER,              // 1 - Uppercase Roman numeral (I, II, III)
+    style::NumberingType::ROMAN_LOWER,              // 2 - Lowercase Roman numeral (i, ii, iii)
+    style::NumberingType::CHARS_UPPER_LETTER_N,     // 3 - Uppercase letter (A, B, C)
+    style::NumberingType::CHARS_LOWER_LETTER_N,     // 4 - Lowercase letter (a, b, c)
+    style::NumberingType::ARABIC,                   // 5 - Ordinal number (1st, 2nd, 3rd)
+    style::NumberingType::ARABIC,                   // 6 - Cardinal text number (One, Two Three)
+    style::NumberingType::ARABIC,                   // 7 - Ordinal text number (First, Second, Third)
+    style::NumberingType::NUMBER_NONE,              // 8 - Not defined
+    style::NumberingType::NUMBER_NONE,              // 9 - Not defined
+    style::NumberingType::NUMBER_LOWER_ZH,          // 10 - Kanji numbering without the digit character (*dbnum1).
+    style::NumberingType::NUMBER_LOWER_ZH,          // 11 - Kanji numbering with the digit character (*dbnum2).
+    style::NumberingType::AIU_HALFWIDTH_JA,         // 12 - phonetic Katakana characters in "aiueo" order (*aiueo).
+    style::NumberingType::IROHA_HALFWIDTH_JA,       // 13 - phonetic katakana characters in "iroha" order (*iroha).
+    style::NumberingType::FULLWIDTH_ARABIC,         // 14 - Double Byte character
+    style::NumberingType::ARABIC,                   // 15 - Single Byte character
+    style::NumberingType::NUMBER_TRADITIONAL_JA,    // 16 - Kanji numbering 3 (*dbnum3).
+    style::NumberingType::ARABIC,                   // 17 - Kanji numbering 4 (*dbnum4).
+    style::NumberingType::ARABIC,                   // 18 - Circle numbering (*circlenum). - decimalEnclosedCircleChinese
+    style::NumberingType::FULLWIDTH_ARABIC,         // 19 - Double-byte Arabic numbering
+    style::NumberingType::AIU_FULLWIDTH_JA,         // 20 - phonetic double-byte Katakana characters (*aiueo*dbchar).
+    style::NumberingType::IROHA_FULLWIDTH_JA,       // 21 - phonetic double-byte katakana characters (*iroha*dbchar).
+    style::NumberingType::ARABIC,                   // 22 - Arabic with leading zero (01, 02, 03, ..., 10, 11)
+    style::NumberingType::CHAR_SPECIAL,             // 23 - Bullet (no number at all)
+    style::NumberingType::HANGUL_SYLLABLE_KO,       // 24 - Korean numbering 2 (*ganada).
+    style::NumberingType::HANGUL_JAMO_KO,           // 25 - Korean numbering 1 (*chosung).
+    style::NumberingType::ARABIC,                   // 26 - Chinese numbering 1 (*gb1). - decimalEnclosedFullstop
+    style::NumberingType::ARABIC,                   // 27 - Chinese numbering 2 (*gb2). - decimalEnclosedParen
+    style::NumberingType::ARABIC,                   // 28 - Chinese numbering 3 (*gb3). - decimalEnclosedCircleChinese
+    style::NumberingType::ARABIC,                   // 29 - Chinese numbering 4 (*gb4). - ideographEnclosedCircle
+    style::NumberingType::TIAN_GAN_ZH,              // 30 - Chinese Zodiac numbering 1 (* zodiac1)
+    style::NumberingType::DI_ZI_ZH,                 // 31 - Chinese Zodiac numbering 2 (* zodiac2)
+    style::NumberingType::ARABIC,                   // 32 - Chinese Zodiac numbering 3 (* zodiac3)
+    style::NumberingType::NUMBER_LOWER_ZH,          // 33 - Taiwanese double-byte numbering 1
+    style::NumberingType::NUMBER_UPPER_ZH_TW,       // 34 - Taiwanese double-byte numbering 2
+    style::NumberingType::NUMBER_LOWER_ZH,          // 35 - Taiwanese double-byte numbering 3
+    style::NumberingType::ARABIC,                   // 36 - Taiwanese double-byte numbering 4
+    style::NumberingType::NUMBER_LOWER_ZH,          // 37 - Chinese double-byte numbering 1
+    style::NumberingType::NUMBER_UPPER_ZH,          // 38 - Chinese double-byte numbering 2
+    style::NumberingType::NUMBER_LOWER_ZH,          // 39 - Chinese double-byte numbering 3
+    style::NumberingType::ARABIC,                   // 40 - Chinese double-byte numbering 4
+    style::NumberingType::NUMBER_HANGUL_KO,         // 41 - Korean double-byte numbering 1
+    style::NumberingType::NUMBER_HANGUL_KO,         // 42 - Korean double-byte numbering 2
+    style::NumberingType::NUMBER_HANGUL_KO,         // 43 - Korean double-byte numbering 3
+    style::NumberingType::NUMBER_LOWER_ZH,          // 44 - Korean double-byte numbering 4
+    style::NumberingType::CHARS_HEBREW,             // 45 - Hebrew non-standard decimal
+    style::NumberingType::CHARS_ARABIC,             // 46 - Arabic Alif Ba Tah
+    style::NumberingType::CHARS_HEBREW,             // 47 - Hebrew Biblical standard
+    style::NumberingType::ARABIC                    // 48 - Arabic Abjad style
+
+    };
+    const int nLen = sizeof(aMap)/sizeof(aMap[0]);
+    sal_Int16 nRet = style::NumberingType::NUMBER_NONE;
+    if (nNFC>=0 && nNFC<nLen)
+        nRet = aMap[nNFC];
+    else if (nNFC==255)
+        nRet = style::NumberingType::CHAR_SPECIAL;
+    return nRet;
+}
+
 void lcl_ExpandNumFmts( SwNumRule& rRule )
 {
     // dann noch das NumFormat in alle Ebenen setzen
@@ -152,16 +216,8 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, sal_uInt8 nNumLvl )
 
         case RTF_LEVELNFC:
             {
-                sal_Int16 eType = SVX_NUM_ARABIC;
-                switch( nTokenValue )
-                {
-                case 1:     eType = SVX_NUM_ROMAN_UPPER;            break;
-                case 2:     eType = SVX_NUM_ROMAN_LOWER;            break;
-                case 3:     eType = SVX_NUM_CHARS_UPPER_LETTER_N;   break;
-                case 4:     eType = SVX_NUM_CHARS_LOWER_LETTER_N;   break;
-                case 255:
-                case 23:    eType = SVX_NUM_CHAR_SPECIAL;           break;
-                }
+                sal_Int16 eType = lcl_GetStyleForNFC( nTokenValue ) ;
+
                 if( pCurNumFmt )
                     pCurNumFmt->SetNumberingType(eType);
             }

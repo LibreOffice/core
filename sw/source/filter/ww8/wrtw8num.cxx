@@ -45,6 +45,7 @@
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
+#include <editeng/langitem.hxx>
 
 //#define DUMPSYMBOLS
 #ifdef DUMPSYMBOLS
@@ -203,6 +204,52 @@ void MSWordExportBase::NumberingDefinitions()
     }
 }
 
+static sal_uInt8 GetLevelNFC(  sal_uInt16 eNumType, const SfxItemSet *pOutSet)
+{
+    sal_uInt8 nRet = 0;
+    switch( eNumType )
+    {
+    case SVX_NUM_CHARS_UPPER_LETTER:
+    case SVX_NUM_CHARS_UPPER_LETTER_N:  nRet = 3;       break;
+    case SVX_NUM_CHARS_LOWER_LETTER:
+    case SVX_NUM_CHARS_LOWER_LETTER_N:  nRet = 4;       break;
+    case SVX_NUM_ROMAN_UPPER:           nRet = 1;       break;
+    case SVX_NUM_ROMAN_LOWER:           nRet = 2;       break;
+
+    case SVX_NUM_BITMAP:
+    case SVX_NUM_CHAR_SPECIAL:         nRet = 23;      break;
+    case SVX_NUM_FULL_WIDTH_ARABIC: nRet = 14; break;
+    case SVX_NUM_CIRCLE_NUMBER: nRet = 18;break;
+    case SVX_NUM_NUMBER_LOWER_ZH:
+        nRet = 35;
+        if ( pOutSet ) {
+            const SvxLanguageItem rLang = (const SvxLanguageItem&) pOutSet->Get( RES_CHRATR_CJK_LANGUAGE,true);
+            const LanguageType eLang = rLang.GetLanguage();
+            if (LANGUAGE_CHINESE_SIMPLIFIED ==eLang) {
+                nRet = 39;
+            }
+        }
+        break;
+    case SVX_NUM_NUMBER_UPPER_ZH: nRet = 38; break;
+    case SVX_NUM_NUMBER_UPPER_ZH_TW: nRet = 34;break;
+    case SVX_NUM_TIAN_GAN_ZH: nRet = 30; break;
+    case SVX_NUM_DI_ZI_ZH: nRet = 31; break;
+    case SVX_NUM_NUMBER_TRADITIONAL_JA: nRet = 16; break;
+    case SVX_NUM_AIU_FULLWIDTH_JA: nRet = 20; break;
+    case SVX_NUM_AIU_HALFWIDTH_JA: nRet = 12; break;
+    case SVX_NUM_IROHA_FULLWIDTH_JA: nRet = 21; break;
+    case SVX_NUM_IROHA_HALFWIDTH_JA: nRet = 13; break;
+    case style::NumberingType::HANGUL_SYLLABLE_KO: nRet = 24; break;// ganada
+    case style::NumberingType::HANGUL_JAMO_KO: nRet = 25; break;// chosung
+    case style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO: nRet = 24; break;
+    case style::NumberingType::HANGUL_CIRCLED_JAMO_KO: nRet = 25; break;
+    case style::NumberingType::NUMBER_HANGUL_KO: nRet = 41; break;
+    case style::NumberingType::NUMBER_UPPER_KO: nRet = 44; break;
+    case SVX_NUM_NUMBER_NONE:           nRet = 0xff;    break;
+    }
+    return nRet;
+}
+
 void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         sal_uInt16 nStart,
         sal_uInt16 nNumberingType,
@@ -222,7 +269,7 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     SwWW8Writer::WriteLong( *m_rWW8Export.pTableStrm, nStart );
 
     // Type
-    *m_rWW8Export.pTableStrm << WW8Export::GetNumId( nNumberingType );
+    *m_rWW8Export.pTableStrm << GetLevelNFC( nNumberingType ,pOutSet);
 
     // Justification
     sal_uInt8 nAlign;
@@ -811,7 +858,11 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
     sal_uInt16& rCharLen, const SwNumRule& rRul, const SwNumFmt& rFmt,
     sal_uInt8 nSwLevel)
 {
-    ByteToSVBT8(WW8Export::GetNumId(rFmt.GetNumberingType()), rAnlv.nfc);
+    const SfxItemSet *pOutSet = NULL;
+    if (rFmt.GetCharFmt())
+        pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
+
+    ByteToSVBT8(GetLevelNFC(rFmt.GetNumberingType(),pOutSet ), rAnlv.nfc);
 
     sal_uInt8 nb = 0;
     switch (rFmt.GetNumAdjust())

@@ -1525,8 +1525,37 @@ void RtfAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:  nVal = 4;       break;
 
+        case SVX_NUM_FULL_WIDTH_ARABIC:     nVal=19;    break;
+        case SVX_NUM_CIRCLE_NUMBER:     nVal=18;    break;
+        case SVX_NUM_NUMBER_LOWER_ZH:
+        nVal=35;
+        if (pOutSet)
+        {
+            const SvxLanguageItem rlang = (const SvxLanguageItem&) pOutSet->Get(RES_CHRATR_CJK_LANGUAGE,true);
+            if (LANGUAGE_CHINESE_SIMPLIFIED == rlang.GetLanguage())
+                nVal=39;
+        }
+        break;
+        case SVX_NUM_NUMBER_UPPER_ZH:   nVal=38;    break;
+        case SVX_NUM_NUMBER_UPPER_ZH_TW:    nVal=34;    break;
+        case SVX_NUM_TIAN_GAN_ZH:       nVal=30;    break;
+        case SVX_NUM_DI_ZI_ZH:      nVal=31;    break;
+        case SVX_NUM_NUMBER_TRADITIONAL_JA: nVal=16;    break;
+        case SVX_NUM_AIU_FULLWIDTH_JA:  nVal=20;    break;
+        case SVX_NUM_AIU_HALFWIDTH_JA:  nVal=12;    break;
+        case SVX_NUM_IROHA_FULLWIDTH_JA:    nVal=21;    break;
+        case SVX_NUM_IROHA_HALFWIDTH_JA:    nVal=13;    break;
+        case style::NumberingType::HANGUL_SYLLABLE_KO:  nVal = 24; break;// ganada
+        case style::NumberingType::HANGUL_JAMO_KO:  nVal = 25; break;// chosung
+        case style::NumberingType::HANGUL_CIRCLED_SYLLABLE_KO:  nVal = 24; break;
+        case style::NumberingType::HANGUL_CIRCLED_JAMO_KO:  nVal = 25; break;
+        case style::NumberingType::NUMBER_HANGUL_KO:        nVal = 41; break;
+        case style::NumberingType::NUMBER_UPPER_KO:     nVal = 44; break;
         case SVX_NUM_BITMAP:
         case SVX_NUM_CHAR_SPECIAL:                  nVal = 23;      break;
+        case SVX_NUM_NUMBER_NONE:
+        nVal = 255;
+        break;
     }
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LEVELNFC;
     m_rExport.OutULong( nVal );
