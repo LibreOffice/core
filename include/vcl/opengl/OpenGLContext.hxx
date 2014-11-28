@@ -51,11 +51,13 @@ class NSOpenGLView;
 
 #include <vcl/vclopengl_dllapi.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <boost/unordered_map.hpp>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
 #include <vcl/syschild.hxx>
 
 class OpenGLFramebuffer;
+class OpenGLProgram;
 class OpenGLTexture;
 
 /// Holds the information of our new child window
@@ -156,6 +158,31 @@ struct GLWindow
     ~GLWindow();
 };
 
+struct ProgramKey
+{
+    OUString maVertexShader;
+    OUString maFragmentShader;
+
+    ProgramKey( const OUString& rVertexShader, const OUString& rFragmentShader )
+    {
+        maVertexShader = rVertexShader;
+        maFragmentShader = rFragmentShader;
+    }
+};
+
+inline bool operator==( ProgramKey const& k1, ProgramKey const& k2 )
+{
+    return k1.maVertexShader == k2.maVertexShader && k1.maFragmentShader == k2.maFragmentShader;
+}
+
+inline std::size_t hash_value( ProgramKey const& rKey )
+{
+    std::size_t nSeed = 0x9e3779b9;
+    nSeed = rKey.maVertexShader.hashCode();
+    nSeed = rKey.maFragmentShader.hashCode() + 0x9e3779b9 + (nSeed << 6) + (nSeed >> 2);
+    return nSeed;
+}
+
 class VCLOPENGL_DLLPUBLIC OpenGLContext
 {
 public:
@@ -184,6 +211,10 @@ public:
     bool               AcquireFramebuffer( OpenGLFramebuffer* pFramebuffer );
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
+
+    // retrieve a program from the cache or compile/link it
+    OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
+    OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
 
     void makeCurrent();
     void resetCurrent();
@@ -239,6 +270,9 @@ private:
     OpenGLFramebuffer* mpCurrentFramebuffer;
     OpenGLFramebuffer* mpFirstFramebuffer;
     OpenGLFramebuffer* mpLastFramebuffer;
+
+    boost::unordered_map<ProgramKey, OpenGLProgram*> maPrograms;
+    OpenGLProgram* mpCurrentProgram;
 
 public:
     vcl::Region maClipRegion;

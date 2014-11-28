@@ -30,6 +30,7 @@
 #include "svdata.hxx"
 
 #include <opengl/framebuffer.hxx>
+#include <opengl/program.hxx>
 #include <opengl/texture.hxx>
 
 using namespace com::sun::star;
@@ -58,6 +59,7 @@ OpenGLContext::OpenGLContext():
     mpCurrentFramebuffer(NULL),
     mpFirstFramebuffer(NULL),
     mpLastFramebuffer(NULL),
+    mpCurrentProgram(NULL),
     mnPainting(0),
     mpPrevContext(NULL),
     mpNextContext(NULL)
@@ -1389,6 +1391,39 @@ void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )
 {
     if( pFramebuffer )
         pFramebuffer->DetachTexture();
+}
+
+OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
+{
+    boost::unordered_map<ProgramKey, OpenGLProgram*>::iterator it;
+    ProgramKey aKey( rVertexShader, rFragmentShader );
+
+    it = maPrograms.find( aKey );
+    if( it != maPrograms.end() )
+        return it->second;
+
+    OpenGLProgram* pProgram = new OpenGLProgram;
+    if( !pProgram->Load( rVertexShader, rFragmentShader ) )
+    {
+        delete pProgram;
+        return NULL;
+    }
+
+    maPrograms[aKey] = pProgram;
+    return pProgram;
+}
+
+OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
+{
+    OpenGLProgram* pProgram = GetProgram( rVertexShader, rFragmentShader );
+
+    if( pProgram == mpCurrentProgram )
+        return pProgram;
+
+    mpCurrentProgram = pProgram;
+    mpCurrentProgram->Use();
+
+    return mpCurrentProgram;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

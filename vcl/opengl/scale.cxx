@@ -25,6 +25,7 @@
 
 #include "opengl/bmpop.hxx"
 #include "opengl/salbmp.hxx"
+#include "opengl/program.hxx"
 #include "opengl/texture.hxx"
 
 class ScaleOp : public OpenGLSalBitmapOp
@@ -42,75 +43,32 @@ public:
     void GetSize( Size& rSize ) const SAL_OVERRIDE;
 };
 
-
-GLuint OpenGLSalBitmap::ImplGetTextureProgram()
-{
-    if( mnTexProgram == 0 )
-    {
-        mnTexProgram = OpenGLHelper::LoadShaders( "textureVertexShader",
-                                                  "textureFragmentShader" );
-        if( mnTexProgram == 0 )
-            return 0;
-
-        glBindAttribLocation( mnTexProgram, 0, "position" );
-        glBindAttribLocation( mnTexProgram, 1, "tex_coord_in" );
-        mnTexSamplerUniform = glGetUniformLocation( mnTexProgram, "sampler" );
-    }
-
-    CHECK_GL_ERROR();
-    return mnTexProgram;
-}
-
-GLuint OpenGLSalBitmap::ImplGetConvolutionProgram()
-{
-    if( mnConvProgram == 0 )
-    {
-        mnConvProgram = OpenGLHelper::LoadShaders( "textureVertexShader",
-                                                   "convolutionFragmentShader" );
-        if( mnConvProgram == 0 )
-            return 0;
-
-        glBindAttribLocation( mnConvProgram, 0, "position" );
-        glBindAttribLocation( mnConvProgram, 1, "tex_coord_in" );
-        mnConvSamplerUniform = glGetUniformLocation( mnConvProgram, "sampler" );
-        mnConvKernelUniform = glGetUniformLocation( mnConvProgram, "kernel" );
-        mnConvOffsetsUniform = glGetUniformLocation( mnConvProgram, "offsets" );
-    }
-
-    CHECK_GL_ERROR();
-    return mnConvProgram;
-}
-
 bool OpenGLSalBitmap::ImplScaleFilter(
     const double& rScaleX,
     const double& rScaleY,
     GLenum        nFilter )
 {
     OpenGLFramebuffer* pFramebuffer;
-    GLuint nProgram;
+    OpenGLProgram* pProgram;
     GLenum nOldFilter;
     int nNewWidth( mnWidth * rScaleX );
     int nNewHeight( mnHeight * rScaleY );
 
-    nProgram = ImplGetTextureProgram();
-    if( nProgram == 0 )
+    pProgram = mpContext->UseProgram( "textureVertexShader",
+                                      "textureFragmentShader" );
+    if( !pProgram )
         return false;
 
     OpenGLTexture aNewTex = OpenGLTexture( nNewWidth, nNewHeight );
     pFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
 
-    glUseProgram( nProgram );
-    glUniform1i( mnTexSamplerUniform, 0 );
-    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
-    glClear( GL_COLOR_BUFFER_BIT );
-    maTexture.Bind();
+    pProgram->SetTexture( "sampler", maTexture );
     nOldFilter = maTexture.GetFilter();
     maTexture.SetFilter( nFilter );
-    maTexture.Draw();
+    pProgram->DrawTexture( maTexture );
     maTexture.SetFilter( nOldFilter );
-    maTexture.Unbind();
+    pProgram->Clean();
 
-    glUseProgram( 0 );
     mpContext->ReleaseFramebuffer( pFramebuffer );
 
     mnWidth = nNewWidth;
@@ -165,8 +123,8 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
     const Kernel& aKernel )
 {
     OpenGLFramebuffer* pFramebuffer;
+    OpenGLProgram* pProgram;
     GLfloat* pWeights( 0 );
-    GLuint nProgram;
     sal_uInt32 nKernelSize;
     GLfloat aOffsets[32];
     int nNewWidth( mnWidth * rScaleX );
@@ -174,13 +132,10 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
 
     // TODO Make sure the framebuffer is alright
 
-    nProgram = ImplGetConvolutionProgram();
-    if( nProgram == 0 )
+    pProgram = mpContext->UseProgram( "textureVertexShader",
+                                      "convolutionFragmentShader" );
+    if( pProgram == 0 )
         return false;
-
-    glUseProgram( nProgram );
-    glUniform1i( mnConvSamplerUniform, 0 );
-    CHECK_GL_ERROR();
 
     // horizontal scaling in scratch texture
     if( mnWidth != nNewWidth )
@@ -194,14 +149,11 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
             aOffsets[i * 2 + 1] = 0;
         }
         ImplCreateKernel( rScaleX, aKernel, pWeights, nKernelSize );
-        glUniform1fv( mnConvKernelUniform, 16, pWeights );
-        CHECK_GL_ERROR();
-        glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
-        CHECK_GL_ERROR();
-
-        maTexture.Bind();
-        maTexture.Draw();
-        maTexture.Unbind();
+        pProgram->SetUniform1fv( "kernel", 16, pWeights );
+        pProgram->SetUniform2fv( "offsets", 16, aOffsets );
+        pProgram->SetTexture( "sampler", maTexture );
+        pProgram->DrawTexture( maTexture );
+        pProgram->Clean();
 
         maTexture = aScratchTex;
         mpContext->ReleaseFramebuffer( pFramebuffer );
@@ -219,19 +171,15 @@ bool OpenGLSalBitmap::ImplScaleConvolution(
             aOffsets[i * 2 + 1] = i / (double) mnHeight;
         }
         ImplCreateKernel( rScaleY, aKernel, pWeights, nKernelSize );
-        glUniform1fv( mnConvKernelUniform, 16, pWeights );
-        glUniform2fv( mnConvOffsetsUniform, 16, aOffsets );
-        CHECK_GL_ERROR();
-
-        maTexture.Bind();
-        maTexture.Draw();
-        maTexture.Unbind();
+        pProgram->SetUniform1fv( "kernel", 16, pWeights );
+        pProgram->SetUniform2fv( "offsets", 16, aOffsets );
+        pProgram->SetTexture( "sampler", maTexture );
+        pProgram->DrawTexture( maTexture );
+        pProgram->Clean();
 
         maTexture = aScratchTex;
         mpContext->ReleaseFramebuffer( pFramebuffer );
     }
-
-    glUseProgram( 0 );
 
     mnWidth = nNewWidth;
     mnHeight = nNewHeight;

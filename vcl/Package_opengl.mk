@@ -12,16 +12,14 @@ $(eval $(call gb_Package_Package,vcl_opengl_shader,$(SRCDIR)/vcl/opengl))
 $(eval $(call gb_Package_add_files,vcl_opengl_shader,$(LIBO_ETC_FOLDER)/opengl,\
 	blendedTextureFragmentShader.glsl \
 	blendedTextureVertexShader.glsl \
+	dumbVertexShader.glsl \
 	diffTextureFragmentShader.glsl \
 	convolutionFragmentShader.glsl \
 	linearGradientFragmentShader.glsl \
 	maskFragmentShader.glsl \
-	maskVertexShader.glsl \
 	maskedTextureFragmentShader.glsl \
-	maskedTextureVertexShader.glsl \
 	radialGradientFragmentShader.glsl \
 	solidFragmentShader.glsl \
-	solidVertexShader.glsl \
 	textureFragmentShader.glsl \
 	textureVertexShader.glsl \
 	transformedTextureVertexShader.glsl \

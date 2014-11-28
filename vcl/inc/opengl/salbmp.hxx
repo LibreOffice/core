@@ -99,17 +99,6 @@ private:
 
 private:
 
-    GLuint          ImplGetTextureProgram();
-    GLuint          mnTexProgram;
-    GLuint          mnTexSamplerUniform;
-
-    GLuint          ImplGetConvolutionProgram();
-    GLuint          mnConvProgram;
-    GLuint          mnConvSamplerUniform;
-    GLuint          mnConvKernelUniform;
-    GLuint          mnConvKernelSizeUniform;
-    GLuint          mnConvOffsetsUniform;
-
     bool ImplScaleFilter( const double& rScaleX, const double& rScaleY, GLenum nFilter );
     void ImplCreateKernel( const double& fScale, const Kernel& rKernel, GLfloat*& pWeights, sal_uInt32& aKernelSize );
     bool ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel );
