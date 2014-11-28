@@ -5087,13 +5087,7 @@ find_winsdk()
 
     unset winsdktest
 
-    if test -n "$1"; then
-        sdkversions=$1
-    else
-        sdkversions="$WINDOWS_SDK_ACCEPTABLE_VERSIONS"
-    fi
-
-    for ver in $sdkversions; do
+    for ver in $WINDOWS_SDK_ACCEPTABLE_VERSIONS; do
         find_winsdk_version $ver
         if test -n "$winsdktest"; then
             return
