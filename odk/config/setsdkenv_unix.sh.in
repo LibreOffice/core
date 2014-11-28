@@ -114,7 +114,7 @@ case ${sdk_platform} in
     *)
         OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
         OO_SDK_URE_LIB_DIR=${OFFICE_PROGRAM_PATH}
-        OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/share/java
+        OO_SDK_URE_JAVA_DIR=${OFFICE_PROGRAM_PATH}/classes
         ;;
 esac
 export OO_SDK_URE_BIN_DIR

@@ -35,10 +35,8 @@ c++)
     ;;
 java)
     printf '0%s\0%s\0%s\0%s\0%s' \
-        "$sd_prog/../ure-link/share/java/ridl.jar" \
-        "$sd_prog/../ure-link/share/java/jurt.jar" \
-        "$sd_prog/../ure-link/share/java/juh.jar" \
-        "$sd_prog/../program/classes/unoil.jar" "$sd_prog"
+        "$sd_prog/classes/ridl.jar" "$sd_prog/classes/jurt.jar" \
+        "$sd_prog/classes/juh.jar" "$sd_prog/classes/unoil.jar" "$sd_prog"
     ;;
 *)
     exit 1

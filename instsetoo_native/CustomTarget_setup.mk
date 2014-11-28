@@ -120,7 +120,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	( \
 		echo '[Bootstrap]' \
 		&& echo 'URE_INTERNAL_LIB_DIR=$${ORIGIN}$(if $(filter MACOSX,$(OS)),/../../../Frameworks)' \
-		&& echo 'URE_INTERNAL_JAVA_DIR=$${ORIGIN}/..$(if $(filter-out MACOSX WNT,$(OS)),/ure-link)$(if $(filter-out WNT,$(OS)),/$(if $(filter MACOSX,$(OS)),..,share))/java' \
+		&& echo 'URE_INTERNAL_JAVA_DIR=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../../java,$(if $(filter WNT,$(OS)),$${ORIGIN}/../java,$${ORIGIN}/classes))' \
 		&& echo 'URE_INTERNAL_JAVA_CLASSPATH=$${URE_MORE_JAVA_TYPES}' \
 		&& echo 'UNO_TYPES=$${ORIGIN}/../$(if $(filter-out MACOSX WNT,$(OS)),ure-link/)$(if $(filter-out WNT,$(OS)),share/)misc/types.rdb $${URE_MORE_TYPES}' \
 		&& echo 'UNO_SERVICES=$${ORIGIN}/../$(if $(filter-out MACOSX WNT,$(OS)),ure-link/)$(if $(filter-out WNT,$(OS)),share/)misc/services.rdb $${URE_MORE_SERVICES}' \

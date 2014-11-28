@@ -56,7 +56,7 @@ test-javanative: out.pln/runner.jar out.pln/javanative.jar \
 	URE_MORE_TYPES=file://$(PWD)/out.pln/types.rdb \
             URE_MORE_SERVICES=file://$(PWD)/out.pln/services.rdb \
             $(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/program java \
-            -jar out.pln/runner.jar file://$(URE_HOME)/ure-link/share/java/ \
+            -jar out.pln/runner.jar file://$(URE_HOME)/program/classes/ \
             file://$(PWD)/out.pln/javanative.jar
 
 .PHONY: test-clientserver
@@ -68,8 +68,7 @@ test-clientserver: out.pln/cppserver.uno.so out.pln/types.rdb \
             -env:URE_MORE_SERVICES=file://$(PWD)/out.pln/services.rdb \
             -u 'uno:pipe,name=ure_test;urp;server' --singleaccept &
 	sleep 5 && \
-            java -jar out.pln/runner.jar \
-            file://$(URE_HOME)/ure-link/share/java/ \
+            java -jar out.pln/runner.jar file://$(URE_HOME)/program/classes/ \
             file://$(PWD)/out.pln/javaclient.jar \
             'uno:pipe,name=ure_test;urp;server'
 
@@ -148,7 +147,7 @@ out.pln/class/javamain/test/java/javamain/JavaMain.class: JavaMain.java \
 	rm -rf out.pln/class/javamain
 	mkdir out.pln/class/javamain
 	javac -classpath \
-            $(URE_HOME)/ure-link/share/java/jurt.jar:$(URE_HOME)/ure-link/share/java/ridl.jar:out.pln/tester.jar \
+            $(URE_HOME)/program/classes/jurt.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/tester.jar \
             -sourcepath . -d out.pln/class/javamain $<
 
 
@@ -158,13 +157,13 @@ out.pln/runner.jar: out.pln/class/runner/test/java/runner/Runner.class \
 
 out.pln/runner.mf: runner.mf.template | out.pln
 	sed -e \
-            's~^Class-Path:$$~& file://$(URE_HOME)/ure-link/share/java/unoloader.jar~' \
+            's~^Class-Path:$$~& file://$(URE_HOME)/program/classes/unoloader.jar~' \
             -e 's~^UNO-Type-Path:$$~& ~' $< > $@
 
 out.pln/class/runner/test/java/runner/Runner.class: Runner.java | out.pln/class
 	rm -rf out.pln/class/runner
 	mkdir out.pln/class/runner
-	javac -classpath $(URE_HOME)/ure-link/share/java/unoloader.jar \
+	javac -classpath $(URE_HOME)/program/classes/unoloader.jar \
             -sourcepath . -d out.pln/class/runner $<
 
 
@@ -181,7 +180,7 @@ out.pln/class/tester/test/java/tester/Tester.class: Tester.java \
 	rm -rf out.pln/class/tester
 	mkdir out.pln/class/tester
 	javac -classpath \
-            $(URE_HOME)/ure-link/share/java/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/tester $<
 
 
@@ -199,7 +198,7 @@ out.pln/class/javatest/test/java/javatest/JavaTest.class: JavaTest.java \
 	rm -rf out.pln/class/javatest
 	mkdir out.pln/class/javatest
 	javac -classpath \
-            $(URE_HOME)/ure-link/share/java/jurt.jar:$(URE_HOME)/ure-link/share/java/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/program/classes/jurt.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/javatest $<
 
 
@@ -217,7 +216,7 @@ out.pln/class/javanative/test/java/javanative/JavaNative.class: \
 	rm -rf out.pln/class/javanative
 	mkdir out.pln/class/javanative
 	javac -classpath \
-            $(URE_HOME)/ure-link/share/java/juh.jar:$(URE_HOME)/ure-link/share/java/ridl.jar:out.pln/tester.jar \
+            $(URE_HOME)/program/classes/juh.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/tester.jar \
             -sourcepath . -d out.pln/class/javanative $<
 
 
@@ -235,7 +234,7 @@ out.pln/class/javaclient/test/java/javaclient/JavaClient.class: \
 	rm -rf out.pln/class/javaclient
 	mkdir out.pln/class/javaclient
 	javac -classpath \
-            $(URE_HOME)/ure-link/share/java/juh.jar:$(URE_HOME)/ure-link/share/java/ridl.jar:out.pln/types.jar \
+            $(URE_HOME)/program/classes/juh.jar:$(URE_HOME)/program/classes/ridl.jar:out.pln/types.jar \
             -sourcepath . -d out.pln/class/javaclient $<
 
 

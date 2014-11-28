@@ -47,7 +47,7 @@ Directory gid_Dir_Ure_Share
 End
 #endif
 
-#if defined ENABLE_JAVA
+#if defined WNT && defined ENABLE_JAVA
 Directory gid_Dir_Ure_Java
     ParentID = SCP2_URE_SHARE_DIR;
     DosName = "java";

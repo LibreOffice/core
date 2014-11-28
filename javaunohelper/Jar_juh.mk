@@ -20,7 +20,7 @@ $(eval $(call gb_Jar_add_manifest_classpath,juh, \
     jurt.jar \
     ridl.jar \
     $(if $(filter MACOSX,$(OS)),../../Frameworks/, \
-        $(if $(filter WNT,$(OS)),../bin/,../../../program/)) \
+        $(if $(filter WNT,$(OS)),../bin/,../)) \
 ))
 
 $(eval $(call gb_Jar_set_manifest,juh,$(SRCDIR)/javaunohelper/util/manifest))

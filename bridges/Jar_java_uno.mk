@@ -22,7 +22,7 @@ $(eval $(call gb_Jar_add_manifest_classpath,java_uno,\
 	ridl.jar \
 	jurt.jar \
 	$(if $(filter MACOSX,$(OS)),../../Frameworks/, \
-		$(if $(filter WNT,$(OS)),../bin/,../../../program/)) \
+		$(if $(filter WNT,$(OS)),../bin/,../)) \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,java_uno,\
