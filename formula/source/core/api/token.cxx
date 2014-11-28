@@ -1149,7 +1149,9 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         {
                             // Excel needs at least two parameters in IF function
                             pNewArr->AddOpCode( ocSep );
-                            pNewArr->AddDouble( 1.0 );      // 2nd, true()
+                            pNewArr->AddOpCode( ocTrue );   // 2nd, true() as function
+                            pNewArr->AddOpCode( ocOpen );   // so the result is of logical type
+                            pNewArr->AddOpCode( ocClose );  // and survives roundtrip
                         }
                         break;
 
