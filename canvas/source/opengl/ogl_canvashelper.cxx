@@ -101,7 +101,7 @@ namespace oglcanvas
                             const geometry::RealPoint2D&     rPoint)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            setupState(rTransform, eSrcBlend, eDstBlend);
+        //  pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
@@ -122,7 +122,7 @@ namespace oglcanvas
                            const geometry::RealPoint2D&     rEndPoint)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            setupState(rTransform, eSrcBlend, eDstBlend);
+          //  pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
@@ -144,7 +144,7 @@ namespace oglcanvas
                                   const ::basegfx::B2DPolyPolygonVector& rPolyPolygons)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            setupState(rTransform, eSrcBlend, eDstBlend);
+           // pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
@@ -169,7 +169,7 @@ namespace oglcanvas
         {
             //no texture bind ?
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            setupState(rTransform, eSrcBlend, eDstBlend);
+         //   pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                           (float) rColor.Green,
                                           (float) rColor.Blue,
@@ -179,7 +179,7 @@ namespace oglcanvas
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
             while( aCurr != aEnd )
             {
-                renderPolyPolygon(*aCurr++, pRenderHelper, color);
+                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color, false);
             }
 
             return true;
@@ -251,7 +251,7 @@ namespace oglcanvas
             aCurr=rPolyPolygons.begin();
             while( aCurr != aEnd )
             {
-                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color);
+                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color, true);
             }
 
             glUseProgram(0);
@@ -381,7 +381,7 @@ namespace oglcanvas
             aCurr=rPolyPolygons.begin();
             while( aCurr != aEnd )
             {
-                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color);
+                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color, true);
             }
 
 

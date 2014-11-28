@@ -29,8 +29,8 @@ using namespace ::com::sun::star;
 namespace oglcanvas
 {
     /// triangulates polygon before
-    //move to canvashelper, or take renderHelper as parameter?
-    void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper, glm::vec4 color )
+    void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper,
+        glm::vec4 color, const bool hasTexture)
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
@@ -47,7 +47,10 @@ namespace oglcanvas
             const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
             vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
         }
-        renderHelper->renderVertexTex( vertices, nWidth, nHeight,  color, GL_TRIANGLES);
+        if(hasTexture)
+            renderHelper->renderVertexTex( vertices, nWidth, nHeight,  color, GL_TRIANGLES);
+        else
+            renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
     }
 
     /** only use this for line polygons.
@@ -74,7 +77,8 @@ namespace oglcanvas
                 const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
                 vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
             }
-            renderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
+            if(nExtPts>0)
+                renderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
         }
 
     }
@@ -115,7 +119,7 @@ namespace oglcanvas
             aTmp=aTmp*aScaleShear;
             aPoly.transform(aTmp);
             // glColor4f(0,1,0,1);
-            glm::vec4 color  = glm::vec4(0.5, 0, 0, 0.5);
+            glm::vec4 color  = glm::vec4(1, 0, 0, 0.5);
             renderPolyPolygon(aPoly, renderHelper, color);
         }
     }
