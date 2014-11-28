@@ -132,11 +132,11 @@ struct ImplSVAppData
     sal_uInt16              mnSysWinMode;                   // Mode, when SystemWindows should be created
     sal_uInt16              mnLayout;                       // --- RTL-Flags --- currently not used, only for testing
     short                   mnDialogScaleX;                 // Scale X-Positions and sizes in Dialogs
-    bool                mbInAppMain;                    // is Application::Main() on stack
-    bool                mbInAppExecute;                 // is Application::Execute() on stack
-    bool                mbAppQuit;                      // is Application::Quit() called
-    bool                mbSettingsInit;                 // true: Settings are initialized
-    bool                mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
+    bool                    mbInAppMain;                    // is Application::Main() on stack
+    bool                    mbInAppExecute;                 // is Application::Execute() on stack
+    bool                    mbAppQuit;                      // is Application::Quit() called
+    bool                    mbSettingsInit;                 // true: Settings are initialized
+    bool                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
     Application::DialogCancelMode meDialogCancel;           // true: All Dialog::Execute() calls will be terminated immediately with return false
     long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
@@ -180,25 +180,25 @@ struct ImplSVGDIData
 
 struct ImplSVWinData
 {
-    vcl::Window*                 mpFirstFrame;       // First FrameWindow
-    vcl::Window*                 mpDefDialogParent;  // Default Dialog Parent
+    vcl::Window*            mpFirstFrame;       // First FrameWindow
+    vcl::Window*            mpDefDialogParent;  // Default Dialog Parent
     WorkWindow*             mpAppWin;           // Application-Window
-    vcl::Window*                 mpFocusWin;         // window, that has the focus
-    vcl::Window*                 mpActiveApplicationFrame; // the last active application frame, can be used as DefModalDialogParent if no focuswin set
-    vcl::Window*                 mpCaptureWin;       // window, that has the mouse capture
-    vcl::Window*                 mpLastDeacWin;      // Window, that need a deactivate (FloatingWindow-Handling)
+    vcl::Window*            mpFocusWin;         // window, that has the focus
+    vcl::Window*            mpActiveApplicationFrame; // the last active application frame, can be used as DefModalDialogParent if no focuswin set
+    vcl::Window*            mpCaptureWin;       // window, that has the mouse capture
+    vcl::Window*            mpLastDeacWin;      // Window, that need a deactivate (FloatingWindow-Handling)
     FloatingWindow*         mpFirstFloat;       // First FloatingWindow in PopupMode
     Dialog*                 mpLastExecuteDlg;   // First Dialog that is in Execute
-    vcl::Window*                 mpExtTextInputWin;  // Window, which is in ExtTextInput
-    vcl::Window*                 mpTrackWin;         // window, that is in tracking mode
+    vcl::Window*            mpExtTextInputWin;  // Window, which is in ExtTextInput
+    vcl::Window*            mpTrackWin;         // window, that is in tracking mode
     AutoTimer*              mpTrackTimer;       // tracking timer
     ImageList*              mpMsgBoxImgList;    // ImageList for MessageBox
-    vcl::Window*                 mpAutoScrollWin;    // window, that is in AutoScrollMode mode
+    vcl::Window*            mpAutoScrollWin;    // window, that is in AutoScrollMode mode
     sal_uInt16              mnTrackFlags;       // tracking flags
     sal_uInt16              mnAutoScrollFlags;  // auto scroll flags
-    bool                mbNoDeactivate;     // true: do not execute Deactivate
-    bool                mbNoSaveFocus;      // true: menus must not save/restore focus
-    bool                mbNoSaveBackground; // true: save background is unnecessary or even less performant
+    bool                    mbNoDeactivate;     // true: do not execute Deactivate
+    bool                    mbNoSaveFocus;      // true: menus must not save/restore focus
+    bool                    mbNoSaveBackground; // true: save background is unnecessary or even less performant
 };
 
 typedef std::vector< std::pair< OUString, FieldUnit > > FieldUnitStringList;
@@ -215,15 +215,15 @@ struct ImplSVCtrlData
     Image*                  mpDisclosurePlus;
     Image*                  mpDisclosureMinus;
     ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
-    sal_uInt16                  mnCheckStyle;       // CheckBox-Style for ImageList-Update
-    sal_uInt16                  mnRadioStyle;       // Radio-Style for ImageList-Update
-    sal_uLong                   mnLastCheckFColor;  // Letzte FaceColor fuer CheckImage
-    sal_uLong                   mnLastCheckWColor;  // Letzte WindowColor fuer CheckImage
-    sal_uLong                   mnLastCheckWTextColor;  // Letzte WindowTextColor fuer CheckImage
-    sal_uLong                   mnLastCheckLColor;  // Letzte LightColor fuer CheckImage
-    sal_uLong                   mnLastRadioFColor;  // Letzte FaceColor fuer RadioImage
-    sal_uLong                   mnLastRadioWColor;  // Letzte WindowColor fuer RadioImage
-    sal_uLong                   mnLastRadioLColor;  // Letzte LightColor fuer RadioImage
+    sal_uInt16              mnCheckStyle;       // CheckBox-Style for ImageList-Update
+    sal_uInt16              mnRadioStyle;       // Radio-Style for ImageList-Update
+    sal_uLong               mnLastCheckFColor;  // Letzte FaceColor fuer CheckImage
+    sal_uLong               mnLastCheckWColor;  // Letzte WindowColor fuer CheckImage
+    sal_uLong               mnLastCheckWTextColor;  // Letzte WindowTextColor fuer CheckImage
+    sal_uLong               mnLastCheckLColor;  // Letzte LightColor fuer CheckImage
+    sal_uLong               mnLastRadioFColor;  // Letzte FaceColor fuer RadioImage
+    sal_uLong               mnLastRadioWColor;  // Letzte WindowColor fuer RadioImage
+    sal_uLong               mnLastRadioLColor;  // Letzte LightColor fuer RadioImage
     FieldUnitStringList*    mpFieldUnitStrings; // list with field units
     FieldUnitStringList*    mpCleanUnitStrings; // same list but with some "fluff" like spaces removed
 };
@@ -241,7 +241,7 @@ struct ImplSVHelpData
     bool                    mbAutoHelpId        : 1;    // generate HelpIds
     bool                    mbRequestingHelp    : 1;    // In Window::RequestHelp
     HelpTextWindow*         mpHelpWin;                  // HelpWindow
-    sal_uLong                   mnLastHelpHideTime;         // ticks of last show
+    sal_uLong               mnLastHelpHideTime;         // ticks of last show
 };
 
 // "NWF" means "Native Widget Framework" and was the term used for the
@@ -308,15 +308,15 @@ struct ImplSVData
     Application*            mpApp;              // pApp
     WorkWindow*             mpDefaultWin;       // Default-Window
     bool                    mbDeInit;             // Is VCL deinitializing
-    sal_uLong                   mnThreadCount;      // is VCL MultiThread enabled
+    sal_uLong               mnThreadCount;      // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;  // Zeiger auf ersten Config-Block
     ImplTimerData*          mpFirstTimerData;   // list of all running timers
     SalTimer*               mpSalTimer;         // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus;        // interface to ime status window
     SalSystem*              mpSalSystem;        // SalSystem interface
     ResMgr*                 mpResMgr;           // SV-Resource-Manager
-    sal_uLong                   mnTimerPeriod;      // current timer period
-    sal_uLong                   mnTimerUpdate;      // TimerCallbackProcs on stack
+    sal_uLong               mnTimerPeriod;      // current timer period
+    sal_uLong               mnTimerUpdate;      // TimerCallbackProcs on stack
     bool                    mbNotAllTimerCalled;// true: Es muessen noch Timer abgearbeitet werden
     bool                    mbNoCallTimer;      // true: No Timeout calls
     ImplSVAppData           maAppData;          // indepen data for class Application
@@ -326,18 +326,18 @@ struct ImplSVData
     ImplSVHelpData          maHelpData;         // indepen data for Help classes
     ImplSVNWFData           maNWFData;
     UnoWrapperBase*         mpUnoWrapper;
-    vcl::Window*                 mpIntroWindow;      // the splash screen
+    vcl::Window*            mpIntroWindow;      // the splash screen
     DockingManager*         mpDockingManager;
     BlendFrameCache*        mpBlendFrameCache;
-    bool                mbIsTestTool;
+    bool                    mbIsTestTool;
 
-    oslThreadIdentifier                     mnMainThreadId;
-    rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;
+    oslThreadIdentifier     mnMainThreadId;
+    rtl::Reference< vcl::DisplayConnection > mxDisplayConnection;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mxAccessBridge;
-    ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
-    std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
-    boost::unordered_map< int, OUString >*     mpPaperNames;
+    ::vcl::SettingsConfigItem* mpSettingsConfigItem;
+    std::list< vcl::DeleteOnDeinitBase* >* mpDeinitDeleteList;
+    boost::unordered_map< int, OUString >* mpPaperNames;
 
     Link maDeInitHook;
 };
@@ -375,36 +375,39 @@ FieldUnitStringList* ImplGetCleanedFieldUnits();
 
 struct ImplDelData
 {
-    ImplDelData*    mpNext;
-    const vcl::Window*   mpWindow;
-    bool            mbDel;
+    ImplDelData*        mpNext;
+    const vcl::Window*  mpWindow;
+    bool                mbDel;
 
-                    ImplDelData( const vcl::Window* pWindow = NULL )
-                    : mpNext( NULL ), mpWindow( NULL ), mbDel( false )
-                    { if( pWindow ) AttachToWindow( pWindow ); }
+                        ImplDelData( const vcl::Window* pWindow = NULL ) :
+                             mpNext( NULL ),
+                             mpWindow( NULL ),
+                             mbDel( false )
+                                { if( pWindow ) AttachToWindow( pWindow ); }
 
-    virtual         ~ImplDelData();
+    virtual             ~ImplDelData();
 
-    bool            IsDead() const
+    bool                IsDead() const
     {
         DBG_ASSERT( mbDel == false, "object deleted while in use !" );
         return mbDel;
     }
 
 private:
-    void            AttachToWindow( const vcl::Window* );
+    void                AttachToWindow( const vcl::Window* );
+
 };
 
 struct ImplFocusDelData : public ImplDelData
 {
-    vcl::Window*         mpFocusWin;
+    vcl::Window*        mpFocusWin;
 };
 
 struct ImplSVEvent
 {
     void*               mpData;
     Link*               mpLink;
-    vcl::Window*             mpWindow;
+    vcl::Window*        mpWindow;
     ImplDelData         maDelData;
     bool                mbCall;
 };
