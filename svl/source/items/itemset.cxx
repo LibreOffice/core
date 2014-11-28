@@ -89,7 +89,6 @@ SfxItemSet::SfxItemSet
     _pParent( 0 ),
     _nCount( 0 )
 {
-    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 //  DBG_ASSERT( bTotalRanges || abs( &bTotalRanges - this ) < 1000,
 //              "please use suitable ranges" );
 #if defined DBG_UTIL && defined SFX_ITEMSET_NO_DEFAULT_CTOR
@@ -117,7 +116,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhic
     _nCount( 0 )
 {
     assert(nWhich1 <= nWhich2);
-    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     InitRanges_Impl(nWhich1, nWhich2);
 }
@@ -154,7 +152,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
     _nCount( 0 )
 {
     assert(nWh1 <= nWh2);
-    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     if(!nNull)
         InitRanges_Impl(
@@ -201,8 +198,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, const sal_uInt16* pWhichPairTable )
     , _pWhichRanges(0)
     , _nCount(0)
 {
-    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
-
     // pWhichPairTable == 0 ist f"ur das SfxAllEnumItemSet
     if ( pWhichPairTable )
         InitRanges_Impl(pWhichPairTable);
@@ -213,8 +208,6 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet ):
     _pParent( rASet._pParent ),
     _nCount( rASet._nCount )
 {
-    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
-
     // Calculate the attribute count
     sal_uInt16 nCnt = 0;
     sal_uInt16* pPtr = rASet._pWhichRanges;
@@ -1402,7 +1395,6 @@ SvStream &SfxItemSet::Store
 )   const
 {
     assert(_pPool);
-    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     // Remember position of the count (to be able to correct it, if need be)
     sal_uLong nCountPos = rStream.Tell();
@@ -1467,7 +1459,6 @@ SvStream &SfxItemSet::Load
 )
 {
     assert(_pPool);
-    SAL_WARN_IF(_pPool != _pPool->GetMasterPool(), "svl.items", "no Master Pool");
 
     // No RefPool => Resolve Surrogates with ItemSet's Pool
     if ( !pRefPool )
