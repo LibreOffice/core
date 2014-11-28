@@ -101,6 +101,9 @@ struct DirtyCellInterpreter
 
 void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
 {
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+        return;
+
     DirtyCellInterpreter aFunc;
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
