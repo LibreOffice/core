@@ -24,7 +24,7 @@ $(eval $(call gb_Library_use_sdk_api,scui))
 
 $(eval $(call gb_Library_use_externals,scui,\
 	boost_headers \
-    $(call gb_Helper_optional,OPENCL,clew) \
+	$(call gb_Helper_optional,OPENCL,clew) \
 	mdds_headers \
 ))
 
@@ -36,6 +36,8 @@ $(eval $(call gb_Library_use_libraries,scui,\
 	for \
 	forui \
 	i18nlangtag \
+	$(call gb_Helper_optional,OPENCL, \
+		opencl) \
 	sal \
 	sc \
 	sfx \
