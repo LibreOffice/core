@@ -140,12 +140,13 @@ class ListEntryDialog : public ModalDialog
 public:
     OpenCLConfig::ImplMatcher maEntry;
 
-    Edit* mpOS;
+    ListBox* mpOS;
     Edit* mpOSVersion;
     Edit* mpPlatformVendor;
     Edit* mpDevice;
     Edit* mpDriverVersion;
 
+    DECL_LINK(OSSelectHdl, ListBox*);
     DECL_LINK(EditModifiedHdl, Edit*);
 
     ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplMatcher& rEntry, const OString& rTag);
@@ -162,13 +163,25 @@ ListEntryDialog::ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplM
     get(mpDevice, "device");
     get(mpDriverVersion, "driverversion");
 
-    mpOS->SetText(rEntry.maOS);
+    // Hardcode knowledge that entry 0 is the "Any"
+    if (maEntry.maOS == "")
+    {
+        mpOS->SelectEntryPos(0, false);
+    }
+    else
+    {
+        for (int i = 0; i < mpOS->GetEntryCount(); ++i)
+        {
+            if (maEntry.maOS == mpOS->GetEntry(i))
+                mpOS->SelectEntryPos(i, false);
+        }
+    }
     mpOSVersion->SetText(rEntry.maOSVersion);
     mpPlatformVendor->SetText(rEntry.maPlatformVendor);
     mpDevice->SetText(rEntry.maDevice);
     mpDriverVersion->SetText(rEntry.maDriverVersion);
 
-    mpOS->SetModifyHdl(LINK(this, ListEntryDialog, EditModifiedHdl));
+    mpOS->SetSelectHdl(LINK( this, ListEntryDialog, OSSelectHdl));
     mpOSVersion->SetModifyHdl(LINK(this, ListEntryDialog, EditModifiedHdl));
     mpPlatformVendor->SetModifyHdl(LINK(this, ListEntryDialog, EditModifiedHdl));
     mpDevice->SetModifyHdl(LINK(this, ListEntryDialog, EditModifiedHdl));
@@ -177,11 +190,22 @@ ListEntryDialog::ListEntryDialog(vcl::Window* pParent, const OpenCLConfig::ImplM
     SetText(get<FixedText>(rTag + "title")->GetText());
 }
 
+IMPL_LINK(ListEntryDialog, OSSelectHdl, ListBox*, pListBox)
+{
+    if (pListBox == mpOS)
+    {
+        if (mpOS->GetSelectEntryPos() == 0)
+            maEntry.maOS = "";
+        else
+            maEntry.maOS = mpOS->GetEntry(mpOS->GetSelectEntryPos());
+    }
+
+    return 0;
+}
+
 IMPL_LINK(ListEntryDialog, EditModifiedHdl, Edit*, pEdit)
 {
-    if (pEdit == mpOS)
-        maEntry.maOS = pEdit->GetText();
-    else if (pEdit == mpOSVersion)
+    if (pEdit == mpOSVersion)
         maEntry.maOSVersion = pEdit->GetText();
     else if (pEdit == mpPlatformVendor)
         maEntry.maPlatformVendor = pEdit->GetText();
