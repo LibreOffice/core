@@ -24,6 +24,12 @@ $(eval $(call gb_Library_set_include,sc,\
     $$(INCLUDE) \
 ))
 
+ifeq ($(ENABLE_CALC_UNITVERIFICATION),TRUE)
+$(eval $(call gb_Library_add_defs,sc,\
+    -DENABLE_CALC_UNITVERIFICATION \
+))
+endif
+
 $(eval $(call gb_Library_add_defs,sc,\
     -DSC_DLLIMPLEMENTATION \
     -DSC_INFO_OSVERSION=\"$(OS)\" \
@@ -41,6 +47,9 @@ $(eval $(call gb_Library_use_externals,sc,\
     icui18n \
     icuuc \
     libxml2 \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+        libudunits2 \
+    ) \
     mdds_headers \
 ))
 
@@ -675,6 +684,12 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/opencl/op_spreadsheet \
     sc/source/core/opencl/clcc/clew \
 ))
+
+ifeq ($(ENABLE_CALC_UNITVERIFICATION),TRUE)
+$(eval $(call gb_Library_add_exception_objects,sc,\
+    sc/source/core/units/units \
+))
+endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,sc,\
