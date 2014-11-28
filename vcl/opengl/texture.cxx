@@ -188,6 +188,24 @@ void OpenGLTexture::GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool b
     }
 }
 
+void OpenGLTexture::GetWholeCoord( GLfloat* pCoord ) const
+{
+    if( GetWidth() != mpImpl->mnWidth || GetHeight() != mpImpl->mnHeight )
+    {
+        pCoord[0] = pCoord[2] = maRect.Left() / (double) mpImpl->mnWidth;
+        pCoord[4] = pCoord[6] = maRect.Right() / (double) mpImpl->mnWidth;
+        pCoord[3] = pCoord[5] = 1.0f - maRect.Top() / (double) mpImpl->mnHeight;
+        pCoord[1] = pCoord[7] = 1.0f - maRect.Bottom() / (double) mpImpl->mnHeight;
+    }
+    else
+    {
+        pCoord[0] = pCoord[2] = 0;
+        pCoord[4] = pCoord[6] = 1;
+        pCoord[1] = pCoord[7] = 0;
+        pCoord[3] = pCoord[5] = 1;
+    }
+}
+
 GLenum OpenGLTexture::GetFilter() const
 {
     if( mpImpl )
@@ -226,7 +244,7 @@ void OpenGLTexture::Unbind()
 bool OpenGLTexture::Draw()
 {
     GLfloat aPosition[8] = { -1, -1, -1, 1, 1, 1, 1, -1 };
-    GLfloat aTexCoord[8] = {  0,  0,  0, 1, 1, 1, 1,  0 };
+    GLfloat aTexCoord[8];
 
     if( mpImpl == NULL )
     {
@@ -235,15 +253,8 @@ bool OpenGLTexture::Draw()
     }
 
     SAL_INFO( "vcl.opengl", "Drawing texture " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
-    if( GetWidth() != mpImpl->mnWidth || GetHeight() != mpImpl->mnHeight )
-    {
-        // FIXME: lfrb: check math
-        aTexCoord[0] = aTexCoord[2] = maRect.Left() / (double) mpImpl->mnWidth;
-        aTexCoord[4] = aTexCoord[6] = maRect.Right() / (double) mpImpl->mnWidth;
-        aTexCoord[1] = aTexCoord[7] = maRect.Top() / (double) mpImpl->mnHeight;
-        aTexCoord[3] = aTexCoord[5] = maRect.Bottom() / (double) mpImpl->mnHeight;
-    }
 
+    GetWholeCoord( aTexCoord );
     glActiveTexture( GL_TEXTURE0 );
     glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
     glEnableVertexAttribArray( 0 );

@@ -65,6 +65,7 @@ public:
     int             GetWidth() const;
     int             GetHeight() const;
     void            GetCoord( GLfloat* pCoord, const SalTwoRect& rPosAry, bool bInverted=false ) const;
+    void            GetWholeCoord( GLfloat* pCoord ) const;
 
     void            Bind();
     void            Unbind();

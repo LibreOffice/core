@@ -25,6 +25,7 @@
 #include <vcl/dllapi.h>
 
 #include "opengl/framebuffer.hxx"
+#include "opengl/program.hxx"
 #include "opengl/texture.hxx"
 #include "regionband.hxx"
 
@@ -44,6 +45,7 @@ protected:
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mpParent;
     OpenGLFramebuffer* mpFramebuffer;
+    OpenGLProgram* mpProgram;
 
     // clipping
     vcl::Region maClipRegion;
@@ -56,72 +58,17 @@ protected:
     SalColor mnLineColor;
     SalColor mnFillColor;
 
-    GLuint mnSolidProgram;
-    GLuint mnColorUniform;
-
-    GLuint mnTextureProgram;
-    GLuint mnSamplerUniform;
-
-    GLuint mnTransformedTextureProgram;
-    GLuint mnTransformedViewportUniform;
-    GLuint mnTransformedTransformUniform;
-    GLuint mnTransformedSamplerUniform;
-
-    GLuint mnTransformedMaskedTextureProgram;
-    GLuint mnTransformedMaskedViewportUniform;
-    GLuint mnTransformedMaskedTransformUniform;
-    GLuint mnTransformedMaskedSamplerUniform;
-    GLuint mnTransformedMaskedMaskUniform;
-
-    GLuint mnDiffTextureProgram;
-    GLuint mnDiffTextureUniform;
-    GLuint mnDiffMaskUniform;
-
-    GLuint mnMaskedTextureProgram;
-    GLuint mnMaskedSamplerUniform;
-    GLuint mnMaskSamplerUniform;
-
-    GLuint mnBlendedTextureProgram;
-    GLuint mnBlendedTextureUniform;
-    GLuint mnBlendedMaskUniform;
-    GLuint mnBlendedAlphaUniform;
-
-    GLuint mnMaskProgram;
-    GLuint mnMaskUniform;
-    GLuint mnMaskColorUniform;
-
-    GLuint mnLinearGradientProgram;
-    GLuint mnLinearGradientStartColorUniform;
-    GLuint mnLinearGradientEndColorUniform;
-
-    GLuint mnRadialGradientProgram;
-    GLuint mnRadialGradientStartColorUniform;
-    GLuint mnRadialGradientEndColorUniform;
-    GLuint mnRadialGradientCenterUniform;
-
     void ImplInitClipRegion();
     void ImplSetClipBit( const vcl::Region& rClip, GLuint nMask );
 
     bool CheckOffscreenTexture();
 
-    bool CreateSolidProgram( void );
-    bool CreateTextureProgram( void );
-    bool CreateTransformedTextureProgram( void );
-    bool CreateDiffTextureProgram( void );
-    bool CreateMaskedTextureProgram( void );
-    bool CreateBlendedTextureProgram( void );
-    bool CreateTransformedMaskedTextureProgram( void );
-    bool CreateMaskProgram( void );
-    bool CreateLinearGradientProgram( void );
-    bool CreateRadialGradientProgram( void );
-
 public:
-    void BeginSolid( SalColor nColor, sal_uInt8 nTransparency );
-    void BeginSolid( SalColor nColor, double fTransparency );
-    void BeginSolid( SalColor nColor );
-    void EndSolid( void );
-    void BeginInvert( void );
-    void EndInvert( void );
+    bool UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
+    bool UseSolid( SalColor nColor, sal_uInt8 nTransparency );
+    bool UseSolid( SalColor nColor, double fTransparency );
+    bool UseSolid( SalColor nColor );
+    bool UseInvert();
 
     void DrawPoint( long nX, long nY );
     void DrawLine( long nX1, long nY1, long nX2, long nY2 );
