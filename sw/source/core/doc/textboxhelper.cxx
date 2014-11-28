@@ -181,6 +181,15 @@ bool lcl_isTextBox(SdrObject* pSdrObject, std::set<const SwFrmFmt*>& rTextBoxes)
     return pObject && rTextBoxes.find(pObject->GetFmt()) != rTextBoxes.end();
 }
 
+bool SwTextBoxHelper::isTextBox(const SdrObject* pObject)
+{
+    const SwVirtFlyDrawObj* pVirtFlyDrawObj = PTR_CAST(SwVirtFlyDrawObj, pObject);
+    if (!pVirtFlyDrawObj)
+        return false;
+    std::set<const SwFrmFmt*> aTextBoxes = findTextBoxes(pVirtFlyDrawObj->GetFmt()->GetDoc());
+    return aTextBoxes.find(pVirtFlyDrawObj->GetFmt()) != aTextBoxes.end();
+}
+
 sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::set<const SwFrmFmt*>& rTextBoxes)
 {
     sal_Int32 nRet = 0;

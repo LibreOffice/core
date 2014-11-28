@@ -77,6 +77,8 @@ public:
      * returned.
      */
     static std::set<const SwFrmFmt*> findTextBoxes(const SwNode& rNode);
+    /// Is pObject a textbox of a drawinglayer shape?
+    static bool isTextBox(const SdrObject* pObject);
     /// Build a textbox -> shape format map.
     static std::map<SwFrmFmt*, SwFrmFmt*> findShapes(const SwDoc* pDoc);
     /// Count number of shapes in the document, excluding TextBoxes.

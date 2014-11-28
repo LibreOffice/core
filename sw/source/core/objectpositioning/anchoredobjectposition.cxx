@@ -34,6 +34,7 @@
 #include <editeng/ulspitem.hxx>
 #include <ndtxt.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <textboxhelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace objectpositioning;
@@ -662,8 +663,13 @@ void SwAnchoredObjectPosition::_GetHoriAlignmentValues( const SwFrm&  _rHoriOrie
         default:
         {
             nWidth = (_rHoriOrientFrm.Frm().*fnRect->fnGetWidth)();
+
+            // When positioning TextBoxes, always ignore flys anchored at the
+            // text frame, as we do want to have the textbox overlap with its
+            // draw shape.
+            bool bIgnoreFlysAnchoredAtFrame = !_bObjWrapThrough || SwTextBoxHelper::isTextBox(&GetObject());
             nOffset = _rHoriOrientFrm.IsTxtFrm() ?
-                   static_cast<const SwTxtFrm&>(_rHoriOrientFrm).GetBaseOfstForFly( !_bObjWrapThrough ) :
+                   static_cast<const SwTxtFrm&>(_rHoriOrientFrm).GetBaseOfstForFly( bIgnoreFlysAnchoredAtFrame ) :
                    0;
             break;
         }

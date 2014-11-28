@@ -606,6 +606,19 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideStart, "num-override-start.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), comphelper::SequenceAsHashMap(xRules->getByIndex(1))["StartWith"].get<sal_Int16>());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTextboxRightEdge, "textbox-right-edge.docx")
+{
+    // I'm fairly sure this is not specific to DOCX, but the doc model created
+    // by the ODF import doesn't trigger this bug, so let's test this here
+    // instead of uiwriter.
+    int nShapeLeft = parseDump("//SwAnchoredDrawObject/bounds", "left").toInt32();
+    int nShapeWidth = parseDump("//SwAnchoredDrawObject/bounds", "width").toInt32();
+    int nTextboxLeft = parseDump("//fly/infos/bounds", "left").toInt32();
+    int nTextboxWidth = parseDump("//fly/infos/bounds", "width").toInt32();
+    // This is a rectangle, make sure the right edge of the textbox is still
+    // inside the draw shape.
+    CPPUNIT_ASSERT(nShapeLeft + nShapeWidth >= nTextboxLeft + nTextboxWidth);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
