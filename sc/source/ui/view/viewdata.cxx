@@ -2491,10 +2491,19 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
             bool bVSplit = bFrozen ? (rTabSett.maFreezePos.Row() > 0) : (rTabSett.maSplitPos.Y() > 0);
 
             // first visible cell of top-left pane and additional panes
-            rViewTab.nPosX[ SC_SPLIT_LEFT ] = rTabSett.maFirstVis.Col();
-            rViewTab.nPosY[ bVSplit ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM ] = rTabSett.maFirstVis.Row();
-            if( bHSplit ) rViewTab.nPosX[ SC_SPLIT_RIGHT ] = rTabSett.maSecondVis.Col();
-            if( bVSplit ) rViewTab.nPosY[ SC_SPLIT_BOTTOM ] = rTabSett.maSecondVis.Row();
+            if (rTabSett.maFirstVis.IsValid())
+            {
+                rViewTab.nPosX[ SC_SPLIT_LEFT ] = rTabSett.maFirstVis.Col();
+                rViewTab.nPosY[ bVSplit ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM ] = rTabSett.maFirstVis.Row();
+            }
+
+            if (rTabSett.maSecondVis.IsValid())
+            {
+                if (bHSplit)
+                    rViewTab.nPosX[ SC_SPLIT_RIGHT ] = rTabSett.maSecondVis.Col();
+                if (bVSplit)
+                    rViewTab.nPosY[ SC_SPLIT_BOTTOM ] = rTabSett.maSecondVis.Row();
+            }
 
             // split mode, split and freeze position
             rViewTab.eHSplitMode = rViewTab.eVSplitMode = SC_SPLIT_NONE;
