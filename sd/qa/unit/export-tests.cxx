@@ -71,6 +71,7 @@ public:
     void testN828390_5();
     void testMediaEmbedding();
     void testFdo71961();
+    void testFdo84043();
     void testN828390();
     void testBnc880763();
     void testBnc862510_5();
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testN828390_5);
     CPPUNIT_TEST(testMediaEmbedding);
     CPPUNIT_TEST(testFdo71961);
+    CPPUNIT_TEST(testFdo84043);
     CPPUNIT_TEST(testN828390);
     CPPUNIT_TEST(testBnc880763);
     CPPUNIT_TEST(testBnc862510_5);
@@ -323,6 +325,20 @@ void SdExportTest::testMediaEmbedding()
     CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.sun.star.media" ), pMediaObj->getMediaProperties().getMimeType());
 
     xDocShRef->DoClose();
+}
+
+void SdExportTest::testFdo84043()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo84043.odp"), ODP);
+    xDocShRef = saveAndReload( xDocShRef, ODP );
+
+    // the bug was duplicate attributes, causing crash in a build with asserts
+    SdDrawDocument const* pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE("no document", pDoc != nullptr);
+    SdrPage const* pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE("no page", pPage != nullptr);
+    SdrObject const* pShape = pPage->GetObj(1);
+    CPPUNIT_ASSERT_MESSAGE("no shape", pShape != nullptr);
 }
 
 void SdExportTest::testFdo71961()
