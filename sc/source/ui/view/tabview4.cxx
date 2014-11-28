@@ -483,13 +483,10 @@ void ScTabView::InterpretVisible()
             ScHSplitPos eHWhich = WhichH( ScSplitPos(i) );
             ScVSplitPos eVWhich = WhichV( ScSplitPos(i) );
 
-            SCCOL   nX1 = aViewData.GetPosX( eHWhich );
-            SCROW   nY1 = aViewData.GetPosY( eVWhich );
-            SCCOL   nX2 = nX1 + aViewData.VisibleCellsX( eHWhich );
-            SCROW   nY2 = nY1 + aViewData.VisibleCellsY( eVWhich );
-
-            if (nX2 > MAXCOL) nX2 = MAXCOL;
-            if (nY2 > MAXROW) nY2 = MAXROW;
+            SCCOL   nX1 = SanitizeCol( aViewData.GetPosX( eHWhich ));
+            SCROW   nY1 = SanitizeRow( aViewData.GetPosY( eVWhich ));
+            SCCOL   nX2 = SanitizeCol( nX1 + aViewData.VisibleCellsX( eHWhich ));
+            SCROW   nY2 = SanitizeRow( nY1 + aViewData.VisibleCellsY( eVWhich ));
 
             pDoc->InterpretDirtyCells(ScRange(nX1, nY1, nTab, nX2, nY2, nTab));
         }
