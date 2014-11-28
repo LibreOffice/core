@@ -372,7 +372,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
-    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnLength);
+    std::unique_ptr<vcl::ScriptRun> xScriptRun(new vcl::ScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnLength));
 
     Point aCurrPos(0, 0);
     while (true)
@@ -385,21 +385,21 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         // Find script subruns.
         int nCurrentPos = nBidiMinRunPos;
         HbScriptRuns aScriptSubRuns;
-        while (aScriptRun.next())
+        while (xScriptRun->next())
         {
-            if (aScriptRun.getScriptStart() <= nCurrentPos && aScriptRun.getScriptEnd() > nCurrentPos)
+            if (xScriptRun->getScriptStart() <= nCurrentPos && xScriptRun->getScriptEnd() > nCurrentPos)
                 break;
         }
 
         while (nCurrentPos < nBidiEndRunPos)
         {
             int32_t nMinRunPos = nCurrentPos;
-            int32_t nEndRunPos = std::min(aScriptRun.getScriptEnd(), nBidiEndRunPos);
-            HbScriptRun aRun(nMinRunPos, nEndRunPos, aScriptRun.getScriptCode());
+            int32_t nEndRunPos = std::min(xScriptRun->getScriptEnd(), nBidiEndRunPos);
+            HbScriptRun aRun(nMinRunPos, nEndRunPos, xScriptRun->getScriptCode());
             aScriptSubRuns.push_back(aRun);
 
             nCurrentPos = nEndRunPos;
-            aScriptRun.next();
+            xScriptRun->next();
         }
 
         // RTL subruns should be reversed to ensure that final glyph order is
@@ -407,7 +407,8 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         if (bRightToLeft)
             std::reverse(aScriptSubRuns.begin(), aScriptSubRuns.end());
 
-        aScriptRun.reset();
+        xScriptRun->reset();
+        xScriptRun.reset();
 
         for (HbScriptRuns::iterator it = aScriptSubRuns.begin(); it != aScriptSubRuns.end(); ++it)
         {
