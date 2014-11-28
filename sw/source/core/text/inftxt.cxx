@@ -461,7 +461,7 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pSmartTags = NULL;
 
 #if OSL_DEBUG_LEVEL > 1
-    pBrushItem = static_cast<SvxBrushItem*>(-1);
+    pBrushItem = reinterpret_cast<SvxBrushItem*>(-1);
 #else
     pBrushItem = 0;
 #endif
