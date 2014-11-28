@@ -54,15 +54,15 @@ class SdrObject;
 #define SDRVERTALIGN_DONTCARE 0x1000
 
 class SVX_DLLPUBLIC SdrGluePoint {
-    // Bezugspunkt ist SdrObject::GetSnapRect().Center()
-    // bNoPercent=false: Position ist -5000..5000 (1/100)% bzw. 0..10000 (je nach Align)
-    // bNoPercent=true : Position ist in log Einh, rel zum Bezugspunkt
+    // Reference Point is SdrObject::GetSnapRect().Center()
+    // bNoPercent=false: position is -5000..5000 (1/100)% or 0..10000 (depending on align)
+    // bNoPercent=true : position is in log unit, relativ to the reference point
     Point    aPos;
     sal_uInt16   nEscDir;
     sal_uInt16   nId;
     sal_uInt16   nAlign;
     bool bNoPercent:1;
-    bool bReallyAbsolute:1; // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
+    bool bReallyAbsolute:1; // temp for transformations on the reference object
     bool bUserDefined:1; // #i38892#
 public:
     SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0),bNoPercent(false),bReallyAbsolute(false),bUserDefined(true) {}
@@ -77,7 +77,7 @@ public:
     void         SetId(sal_uInt16 nNewId)                       { nId=nNewId; }
     bool         IsPercent() const                          { return !bNoPercent; }
     void         SetPercent(bool bOn)                   { bNoPercent  = !bOn; }
-    // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
+    // temp for transformations on the reference object
     bool         IsReallyAbsolute() const                   { return bReallyAbsolute; }
     void         SetReallyAbsolute(bool bOn, const SdrObject& rObj);
 
@@ -117,8 +117,8 @@ public:
     void                Clear();
     void                operator=(const SdrGluePointList& rSrcList);
     sal_uInt16              GetCount() const                                    { return sal_uInt16(aList.size()); }
-    // Beim Insert wird dem Objekt (also dem GluePoint) automatisch eine Id zugewiesen.
-    // ReturnCode ist der Index des neuen GluePoints in der Liste
+    // At insert, the object (GluePoint) automatically gets an ID assigned.
+    // Return value is the index of the new GluePoint in the list.
     sal_uInt16              Insert(const SdrGluePoint& rGP);
     void                Delete(sal_uInt16 nPos)
     {
@@ -131,7 +131,7 @@ public:
     sal_uInt16          FindGluePoint(sal_uInt16 nId) const;
     sal_uInt16          HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, bool bBack = false, bool bNext = false, sal_uInt16 nId0=0) const;
     void                Invalidate(vcl::Window& rWin, const SdrObject* pObj) const;
-    // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
+    // temp for transformations on the reference object
     void                SetReallyAbsolute(bool bOn, const SdrObject& rObj);
     void                Rotate(const Point& rRef, long nAngle, double sn, double cs, const SdrObject* pObj);
     void                Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
