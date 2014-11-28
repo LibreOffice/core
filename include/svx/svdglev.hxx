@@ -26,14 +26,14 @@
 class SdrGluePoint;
 
 
-//  Editieren von Klebepunkten an den Objekten (Klebepunkte fuer Verbinder)
+//  Edit GluePoints at the objects (GluePoints for connector)
 
 
 class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
 {
     void ImpClearVars();
 
-    // Markierte Klebepunkte kopieren und anstelle der alten markieren
+    // copy marked GluePoints and mark instead of the old ones
     void ImpCopyMarkedGluePoints();
     typedef void (*PGlueDoFunc)(SdrGluePoint&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);
     typedef void (*PGlueTrFunc)(Point&, const void*, const void*, const void*, const void*, const void*);
@@ -46,35 +46,35 @@ protected:
     virtual ~SdrGlueEditView();
 
 public:
-    // Durch den Parameter nThisEsc uebergibt man die Richtung, die man
-    // checken bzw. setzen/loeschen will.
-    // Moegliche Werte fuer nThisEsc sind z.Zt.
-    // SDRESC_LEFT, SDRESC_RIGHT, SDRESC_TOP und SDRESC_BOTTOM
+    // the parameter nThisEsc is used to hand over the direction,
+    // which one wished to check,set or delete
+    // possible values for nThisEsc are:
+    // SDRESC_LEFT, SDRESC_RIGHT, SDRESC_TOP and SDRESC_BOTTOM
     SDR_TRISTATE IsMarkedGluePointsEscDir(sal_uInt16 nThisEsc) const;
     void SetMarkedGluePointsEscDir(sal_uInt16 nThisEsc, bool bOn);
     bool IsSetMarkedGluePointsEscDirPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 
-    // Checken/setzen, ob die Klebepunktpositionen relativ zur
-    // Objektgroesse sind (Percent=sal_True) oder nicht (Percent=sal_False)
+    // check/set, if the GluePoints are relativ to the
+    // object size (Percent=sal_True) or not (Percent=sal_False)
     SDR_TRISTATE IsMarkedGluePointsPercent() const;
     void SetMarkedGluePointsPercent(bool bOn);
     bool IsSetMarkedGluePointsPercentPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 
-    // bVert=FALSE: Horizontales Alignment checken/setzen
+    // bVert=FALSE: check/set hotizontal alignment
     //      SDRHORZALIGN_CENTER
     //      SDRHORZALIGN_LEFT
     //      SDRHORZALIGN_RIGHT
-    //      SDRHORZALIGN_DONTCARE (nur bei Get())
-    // bVert=TRUE: Vertikales Alignment checken/setzen
+    //      SDRHORZALIGN_DONTCARE (only at Get())
+    // bVert=TRUE: check/set vertical alignment
     //      SDRVERTALIGN_CENTER
     //      SDRVERTALIGN_TOP
     //      SDRVERTALIGN_BOTTOM
-    //      SDRVERTALIGN_DONTCARE (nur bei Get())
+    //      SDRVERTALIGN_DONTCARE (only at Get())
     sal_uInt16 GetMarkedGluePointsAlign(bool bVert) const;
     void SetMarkedGluePointsAlign(bool bVert, sal_uInt16 nAlign);
     bool IsSetMarkedGluePointsAlignPossible() const { return !IsReadOnly() && HasMarkedGluePoints(); }
 
-    // Alle merkierten Klebepunkte entfernen
+    // delete all marked GluePoints
     void DeleteMarkedGluePoints();
 
     void MoveMarkedGluePoints  (const Size& rSiz, bool bCopy=false);

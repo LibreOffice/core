@@ -44,15 +44,15 @@ namespace sdr {
     class SelectionController;
 }
 
-enum SdrEndTextEditKind {SDRENDTEXTEDIT_UNCHANGED, // Textobjekt unveraendert
-                         SDRENDTEXTEDIT_CHANGED,   // Textobjekt wurde geaendert
-                         SDRENDTEXTEDIT_DELETED,   // Textobjekt implizit geloescht
-                         SDRENDTEXTEDIT_SHOULDBEDELETED}; // Fuer Writer: Textobjekt sollte geloescht werden
+enum SdrEndTextEditKind {SDRENDTEXTEDIT_UNCHANGED, // textobject unchanged
+                         SDRENDTEXTEDIT_CHANGED,   // textobject changed
+                         SDRENDTEXTEDIT_DELETED,   // textobject implicitly deleted
+                         SDRENDTEXTEDIT_SHOULDBEDELETED}; // for writer: textobject should be deleted
 
 
-// - Allgemeines Edit fuer objektspeziefische Eigenschaften
-// - Textedit fuer alle vom SdrTextObj abgeleiteten Zeichenobjekte
-// - Macromodus
+// - general edit for objectspecific properties
+// - textedit for all drawobjects, inherited from SdrTextObj
+// - macromod
 
 
 class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView
@@ -62,27 +62,27 @@ class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView
 
 protected:
     // TextEdit
-    SdrObjectWeakRef            mxTextEditObj;          // Aktuell im TextEdit befindliches Obj
+    SdrObjectWeakRef            mxTextEditObj;          // current object in TextEdit
     SdrPageView*                pTextEditPV;
-    SdrOutliner*                pTextEditOutliner;     // Na eben der Outliner fuers TextEdit
-    OutlinerView*               pTextEditOutlinerView; // die aktuelle View des Outliners
-    vcl::Window*                     pTextEditWin;          // passendes Win zu pTextEditOutlinerView
-    vcl::Cursor*                pTextEditCursorMerker; // Zum Restaurieren des Cursors am jeweiligen Win
-    ImpSdrEditPara*             pEditPara; // Da hau' ich erstmal alles rein um kompatibel zu bleiben...
+    SdrOutliner*                pTextEditOutliner;     // outliner for the TextEdit
+    OutlinerView*               pTextEditOutlinerView; // current view of the outliners
+    vcl::Window*                     pTextEditWin;          // matching window to pTextEditOutlinerView
+    vcl::Cursor*                pTextEditCursorMerker; // to restore the cursor in each window
+    ImpSdrEditPara*             pEditPara; // trashbin for everything else to stay compatible
     SdrObject*                  pMacroObj;
     SdrPageView*                pMacroPV;
     vcl::Window*                     pMacroWin;
 
     Rectangle                   aTextEditArea;
     Rectangle                   aMinTextEditArea;
-    Link                        aOldCalcFieldValueLink; // Zum rufen des alten Handlers
+    Link                        aOldCalcFieldValueLink; // for call the old handler
     Point                       aMacroDownPos;
 
     sal_uInt16                  nMacroTol;
 
-    bool                        bTextEditDontDelete : 1;   // Outliner und View bei SdrEndTextEdit nicht deleten (f. Rechtschreibpruefung)
-    bool                        bTextEditOnlyOneView : 1;  // Nur eine OutlinerView (f. Rechtschreibpruefung)
-    bool                        bTextEditNewObj : 1;       // Aktuell editiertes Objekt wurde gerade neu erzeugt
+    bool                        bTextEditDontDelete : 1;   // do not delete outliner and view of SdrEndTextEdit (f. spellchecking)
+    bool                        bTextEditOnlyOneView : 1;  // a single OutlinerView (f. spellchecking)
+    bool                        bTextEditNewObj : 1;       // current edited object was just recreated
     bool                        bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
     bool                        bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
     bool                        bMacroDown : 1;
@@ -104,18 +104,18 @@ protected:
 
     OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
 
-    // Eine neue OutlinerView auf dem Heap anlegen und alle erforderlichen Parameter setzen.
-    // pTextEditObj, pTextEditPV und pTextEditOutliner muessen initiallisiert sein.
+    // Create a new OutlinerView at the heap and initialize all required parameters.
+    // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
     OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
-    // Feststellen, ob der gesamte Text markiert ist. Liefert auch sal_True wenn
-    // kein Text vorhanden ist.
+    // Check if the whole text is selected.
+    // Still returns sal_True if there is no text present.
     bool ImpIsTextEditAllSelected() const;
     void ImpMakeTextCursorAreaVisible();
 
-    // Handler fuer AutoGrowing Text bei aktivem Outliner
+    // handler for AutoGrowing text with active Outliner
     DECL_LINK(ImpOutlinerStatusEventHdl,EditStatus*);
     DECL_LINK(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*);
 
@@ -139,7 +139,7 @@ public:
     // outliner will be displayed on the overlay in edit mode.
     void TextEditDrawing(SdrPaintWindow& rPaintWindow) const;
 
-    // Actionhandling fuer Macromodus
+    // Actionhandling for macromod
     virtual bool IsAction() const SAL_OVERRIDE;
     virtual void MovAction(const Point& rPnt) SAL_OVERRIDE;
     virtual void EndAction() SAL_OVERRIDE;
@@ -151,64 +151,59 @@ public:
     virtual void ModelHasChanged() SAL_OVERRIDE;
 
 
-    // TextEdit ueber einen Outliner
+    // TextEdit over an outliner
 
-    // QuickTextEditMode bedeutet, dass Objekte mit Text sofort beim Anklicken
-    // editiert werden sollen. Default=TRUE. Persistent.
+    // QuickTextEditMode = edit the text straight after selection. Default=TRUE. Persistent.
     void SetQuickTextEditMode(bool bOn) { bQuickTextEditMode=bOn; }
     bool IsQuickTextEditMode() const { return bQuickTextEditMode; }
 
-    // Starten des TextEditMode. Ist pWin==NULL, wird das erste an der View
-    // angemeldete Win verwendet.
-    // Der Cursor des Fensters an dem Editiert wird wird bei
-    // SdrBeginTextEdit() gemerkt und bei SdrEndTextEdit() wieder restauriert.
-    // Die App muss sicherstellen, das die zum Zeitpunkt des BegEdit am
-    // Windows angemeldete Cursorinstanz beim SdrEndTextEdit noch gueltig ist.
-    // Ueber den Parameter pEditOutliner kann die Applikation einen eigenen
-    // Outliner vorgeben, der zum Editieren verwendet wird. Dieser gehoert
-    // nach Aufruf von SdrBeginTextEdit der SdrObjEditView und wird von dieser
-    // spaeter via delete zerstoert (falls bDontDeleteOutliner=sal_False). Die
-    // SdrObjEditView setzt dann das Modusflag (EditEngine/Outliner) an
-    // dieser Instanz und ausserdem auch den StatusEventHdl.
-    // Ebenso kann eine spezifische OutlinerView vorgegeben werden.
+    // Start the TextEditMode. If pWin==NULL, use the first window, which is logged at the View.
+    // The cursor of the currently edited window is stored with SdrBeginTextEdit()
+    // and restored with SdrEndTextEdit().
+    // The app has to ensure, that the BegEdit of the window logged cursor is still valid,
+    // when SdrEndTextEdit is called.
+    // With the parameter pEditOutliner, the app has the possibility to specify his own outliner,
+    // which is used for editing. After the SdrBeginTextEdit call, the outliner belongs to
+    // SdrObjEditView, and is also later destroyed by this via delete (if bDontDeleteOutliner=sal_False).
+    // Afterwards the SdrObjEditView sets the modflag (EditEngine/Outliner) at this instance and also the
+    // StatusEventHdl.
+    // Similarly a specific OutlinerView can be specified.
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, vcl::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
-    // bDontDeleteReally ist ein Spezialparameter fuer den Writer.
-    // Ist dieses Flag gesetzt, dann wird ein evtl. leeres Textobjekt
-    // nicht geloescht. Stattdessen gibt es dann einen Returncode
-    // SDRENDTEXTEDIT_SHOULDBEDELETED (anstelle von SDRENDTEXTEDIT_BEDELETED)
-    // der besagt, dass das Objekt geloescht werden sollte.
+    // bDontDeleteReally is a special parameter for writer
+    // If this flag is set, then a maybe empty textobject is not deleted.
+    // Instead you get a return code SDRENDTEXTEDIT_SHOULDBEDELETED
+    // (in place of SDRENDTEXTEDIT_BEDELETED), which says, the obj should be
+    // deleted.
     virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false);
     virtual bool IsTextEdit() const SAL_OVERRIDE;
 
-    // Diese Methode liefert sal_True, wenn der Punkt rHit innerhalb der
-    // des Objektbereichs oder der OutlinerView liegt.
+    // This method returns sal_True, if the point rHit is inside the
+    // objectspace or the OutlinerView.
     bool IsTextEditHit(const Point& rHit, short nTol) const;
 
-    // Diese Methode liefert sal_True, wenn der Punkt rHit innerhalb des
-    // Handle-dicken Rahmens liegt, der die OutlinerView bei TextFrames
-    // umschliesst.
+    // This method returns sal_True, if the point rHit is inside the
+    // handle-thick frame, which surrounds the OutlinerView at TextFrames.
     bool IsTextEditFrameHit(const Point& rHit) const;
 
-    // Bei aktiver Selektion, also zwischen MouseButtonDown und
-    // MouseButtonUp liefert diese Methode immer TRUE.
+    // At active selection, between MouseButtonDown and
+    // MouseButtonUp, this method always returns TRUE.
     bool IsTextEditInSelectionMode() const;
 
-    // Wer das z.Zt. im TextEdit befindliche Objekt braucht:
+    // If sb needs the object out of the TextEdit:
     SdrObject* GetTextEditObject() const { return mxTextEditObj.get(); }
 
     // info about TextEditPageView. Default is 0L.
     virtual SdrPageView* GetTextEditPageView() const SAL_OVERRIDE;
 
-    // Das aktuelle Win des Outliners
+    // Current window of the outliners.
     vcl::Window* GetTextEditWin() const { return pTextEditWin; }
     void SetTextEditWin(vcl::Window* pWin);
 
-    // An den hier abgeholten Outliner kann man schliesslich
-    // Events versenden, Attribute setzen, Cut/Copy/Paste rufen,
-    // Undo/Redo rufen, etc.
+    // Now at this outliner, events can be send, attributes can be set,
+    // call Cut/Copy/Paste, call Undo/Redo, and so on...
     const SdrOutliner* GetTextEditOutliner() const { return pTextEditOutliner; }
     SdrOutliner* GetTextEditOutliner() { return pTextEditOutliner; }
     const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
@@ -230,7 +225,7 @@ public:
     SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(bool& rOk) const;
     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
-    // Intern: Beim Splitteraufziehen neue OutlinerView...
+    // Intern: at mounting new OutlinerView...
     virtual void AddWindowToPaintView(OutputDevice* pNewWin) SAL_OVERRIDE;
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) SAL_OVERRIDE;
 
@@ -238,11 +233,10 @@ public:
 
 
 
-    // Object-MacroModus (z.B. Rect als Button oder sowas):
+    // Object-MacroModus (e.g. rect as button or sth. like that):
 
-    // Persistent. Default TRUE. SvDraw wertet das Flag u.a. bei
-    // SdrView::GetPreferredPointer() aus. Hat nur Wirkung, wenn das Dokument
-    // Draw-Objekte mit Macrofunktionalitaet hat (SdrObject::HasMacro()==sal_True).
+    // Persistent. Default TRUE. SvDraw evaluates the flag e.g. at SdrView::GetPreferredPointer().
+    // Has only effect, if the document has draw-objects with macrofunctionality (SdrObject::HasMacro()==sal_True).
     void SetMacroMode(bool bOn) { bMacroMode=bOn; }
     bool IsMacroMode() const { return bMacroMode; }
     bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin);
