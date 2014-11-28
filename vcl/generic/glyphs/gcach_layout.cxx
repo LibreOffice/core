@@ -408,7 +408,6 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             std::reverse(aScriptSubRuns.begin(), aScriptSubRuns.end());
 
         xScriptRun->reset();
-        xScriptRun.reset();
 
         for (HbScriptRuns::iterator it = aScriptSubRuns.begin(); it != aScriptSubRuns.end(); ++it)
         {
