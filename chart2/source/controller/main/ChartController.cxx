@@ -491,10 +491,10 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     //is called to attach the controller to a new model.
     //return true if attach was successfully, false otherwise (e.g. if you do not work with a model)
 
-    SolarMutexClearableGuard aClearableGuard;
+    SolarMutexResettableGuard aGuard;
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching a new model while suspended?
         return sal_False; //behave passive if already disposed or suspended
-    aClearableGuard.clear();
+    aGuard.clear();
 
     TheModelRef aNewModelRef( new TheModel( xModel), m_aModelMutex);
     TheModelRef aOldModelRef(m_aModel,m_aModelMutex);
@@ -519,6 +519,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
     //--handle relations to the new model
     aNewModelRef->addListener( this );
 
+    aGuard.reset(); // lock for m_aDispatchContainer access
     // set new model at dispatchers
     m_aDispatchContainer.setModel( aNewModelRef->getModel());
     ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this, &m_aDispatchContainer );
@@ -542,6 +543,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
         pShapeController->initialize();
         m_aDispatchContainer.setShapeController( pShapeController );
     }
+    aGuard.clear();
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER
     uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aNewModelRef->getModel(),uno::UNO_QUERY );
@@ -565,7 +567,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 
     //the frameloader is responsible to call xModel->connectController
     {
-        SolarMutexGuard aGuard;
+        SolarMutexGuard aGuard2;
         if( m_pChartWindow )
             m_pChartWindow->Invalidate();
     }
@@ -784,6 +786,7 @@ void SAL_CALL ChartController::dispose()
         //// @todo integrate specialized implementation
         //e.g. release further resources and references
 
+        SolarMutexGuard g;
         m_aDispatchContainer.DisposeAndClear();
     }
     catch( const uno::Exception & ex )
@@ -894,7 +897,10 @@ bool ChartController::impl_releaseThisModel(
         }
     }
     if( bReleaseModel )
+    {
+        SolarMutexGuard g;
         m_aDispatchContainer.setModel( 0 );
+    }
     return bReleaseModel;
 }
 
@@ -997,6 +1003,8 @@ uno::Reference<frame::XDispatch> SAL_CALL
         sal_Int32 /* nSearchFlags */)
             throw(uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard aGuard;
+
     if ( !m_aLifeTimeManager.impl_isDisposed() && getModel().is() )
     {
         if( !rTargetFrameName.isEmpty() && rTargetFrameName == "_self" )
@@ -1010,6 +1018,8 @@ uno::Sequence<uno::Reference<frame::XDispatch > >
         const uno::Sequence<frame::DispatchDescriptor>& xDescripts )
             throw(uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     if ( !m_aLifeTimeManager.impl_isDisposed() )
     {
         return m_aDispatchContainer.getDispatchesForURLs( xDescripts );
