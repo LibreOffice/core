@@ -899,10 +899,12 @@ XMLTextImportHelper::XMLTextImportHelper(
 
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
-    if( xCNSupplier.is() )
+    if (xCNSupplier.is())
     {
+        // note: m_xChapterNumbering is accessed to import some fields
         m_pImpl->m_xChapterNumbering = xCNSupplier->getChapterNumberingRules();
-        if (m_pImpl->m_xChapterNumbering.is())
+        // the AutoCorrect document doesn't have a proper outline numbering
+        if (!IsBlockMode() && m_pImpl->m_xChapterNumbering.is())
         {
             Reference< XPropertySet > const xNumRuleProps(
                 m_pImpl->m_xChapterNumbering, UNO_QUERY);
