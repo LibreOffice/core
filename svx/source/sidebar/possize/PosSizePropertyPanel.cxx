@@ -37,6 +37,7 @@
 #include <vcl/toolbox.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
+#include <svx/transfrmhelper.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -949,10 +950,6 @@ void PosSizePropertyPanel::executePosX()
             lX = -lX;
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
 
-        Rectangle aRect;
-        maRect = mpView->GetAllMarkedRect();
-        aRect = mpView->GetAllMarkedRect();
-
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
         lX = Fraction( lX ) * aUIScale;
@@ -975,10 +972,6 @@ void PosSizePropertyPanel::executePosY()
     {
         long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
-
-        Rectangle aRect;
-        maRect = mpView->GetAllMarkedRect();
-        aRect = mpView->GetAllMarkedRect();
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
@@ -1018,6 +1011,7 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
     SetFieldUnit( *mpMtrPosY, meDlgUnit, true );
     if(bPosYBlank)
         mpMtrPosY->SetText(OUString());
+    SetPosXYMinMax();
 
     if (mpMtrWidth->GetText().isEmpty())
         bWidthBlank = true;
@@ -1153,8 +1147,49 @@ void PosSizePropertyPanel::DisableControls()
     }
 }
 
+void PosSizePropertyPanel::SetPosXYMinMax()
+{
+    Rectangle aTmpRect(mpView->GetAllMarkedRect());
+    mpView->GetSdrPageView()->LogicToPagePos(aTmpRect);
+    maRect = basegfx::B2DRange(aTmpRect.Left(), aTmpRect.Top(), aTmpRect.Right(), aTmpRect.Bottom());
 
+    Rectangle aTmpRect2(mpView->GetWorkArea());
+    mpView->GetSdrPageView()->LogicToPagePos(aTmpRect2);
+    maWorkArea = basegfx::B2DRange(aTmpRect2.Left(), aTmpRect2.Top(), aTmpRect2.Right(), aTmpRect2.Bottom());
 
+    const Fraction aUIScale(mpView->GetModel()->GetUIScale());
+    TransfrmHelper::ScaleRect( maWorkArea, aUIScale );
+    TransfrmHelper::ScaleRect( maRect, aUIScale );
+
+    const sal_uInt16 nDigits(mpMtrPosX->GetDecimalDigits());
+    TransfrmHelper::ConvertRect( maWorkArea, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
+    TransfrmHelper::ConvertRect( maRect, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
+
+    double fLeft(maWorkArea.getMinX());
+    double fTop(maWorkArea.getMinY());
+    double fRight(maWorkArea.getMaxX());
+    double fBottom(maWorkArea.getMaxY());
+
+    // seems that sidebar defaults to top left reference point
+    // and there's no way to set it to something else
+    fRight  -= maRect.getWidth();
+    fBottom -= maRect.getHeight();
+
+    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit ) - 1L));
+    fLeft = basegfx::clamp(fLeft, -fMaxLong, fMaxLong);
+    fRight = basegfx::clamp(fRight, -fMaxLong, fMaxLong);
+    fTop = basegfx::clamp(fTop, - fMaxLong, fMaxLong);
+    fBottom = basegfx::clamp(fBottom, -fMaxLong, fMaxLong);
+
+    mpMtrPosX->SetMin(basegfx::fround64(fLeft));
+    mpMtrPosX->SetFirst(basegfx::fround64(fLeft));
+    mpMtrPosX->SetMax(basegfx::fround64(fRight));
+    mpMtrPosX->SetLast(basegfx::fround64(fRight));
+    mpMtrPosY->SetMin(basegfx::fround64(fTop));
+    mpMtrPosY->SetFirst(basegfx::fround64(fTop));
+    mpMtrPosY->SetMax(basegfx::fround64(fBottom));
+    mpMtrPosY->SetLast(basegfx::fround64(fBottom));
+}
 
 void PosSizePropertyPanel::UpdateUIScale()
 {
