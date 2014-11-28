@@ -84,6 +84,7 @@ public:
     void testBnc584721_2();
     void testBnc584721_3();
     void testBnc584721_4();
+    void testBnc904423();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -111,6 +112,7 @@ public:
     CPPUNIT_TEST(testBnc584721_2);
     CPPUNIT_TEST(testBnc584721_3);
     CPPUNIT_TEST(testBnc584721_4);
+    CPPUNIT_TEST(testBnc904423);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -861,6 +863,59 @@ void SdImportTest::testBnc584721_4()
 
     // Color should be black
     CPPUNIT_ASSERT_EQUAL( sal_Int32(COL_BLACK), nCharColor );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testBnc904423()
+{
+    // Here the problem was that different fill properties were applied in wrong order on the shape
+    // Right order: 1) master slide fill style, 2) theme, 3) direct formatting
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/bnc904423.pptx"), PPTX);
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // First shape's background color is defined on master slide
+    {
+        SdrObject *const pObj = pPage->GetObj(0);
+        CPPUNIT_ASSERT(pObj);
+
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+                pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+                pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0x00CC99), rColorItem.GetColorValue().GetColor());
+    }
+
+    // Second shape's background color is defined by theme
+    {
+        SdrObject *const pObj = pPage->GetObj(1);
+        CPPUNIT_ASSERT(pObj);
+
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+                pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+                pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0x3333CC), rColorItem.GetColorValue().GetColor());
+    }
+
+    // Third shape's background color is defined by direct formatting
+    {
+        SdrObject *const pObj = pPage->GetObj(2);
+        CPPUNIT_ASSERT(pObj);
+
+        const XFillStyleItem& rStyleItem = dynamic_cast<const XFillStyleItem&>(
+                pObj->GetMergedItem(XATTR_FILLSTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleItem.GetValue());
+        const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
+                pObj->GetMergedItem(XATTR_FILLCOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0xFF0000), rColorItem.GetColorValue().GetColor());
+    }
 
     xDocShRef->DoClose();
 }
