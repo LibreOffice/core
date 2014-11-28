@@ -15,8 +15,8 @@ $(eval $(call gb_Pagein_add_objects,common,\
     $(if $(URELIBS),urelibs) \
     i18nlangtag \
     $(if $(SYSTEM_ICU),,\
-        icui18n \
-        icuuc \
+        libicui18n$(gb_Library_DLLEXT).$(ICU_MAJOR) \
+        libicuuc$(gb_Library_DLLEXT).$(ICU_MAJOR) \
     ) \
     lng \
     xo \
@@ -52,8 +52,8 @@ $(eval $(call gb_Pagein_add_objects,common,\
     vcl \
     tk \
     ../ure-link/share/misc/types.rdb \
-    services.rdb \
-    oovbaapi.rdb \
+    services/services.rdb \
+    types/oovbaapi.rdb \
     deployment \
     deploymentmisc \
     xstor \
