@@ -45,7 +45,6 @@ public:
                                             const basebmp::RawMemorySharedArray &pBuffer,
                                             const bool bTopDown
                                           ) SAL_OVERRIDE;
-    virtual void            GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
 
     basebmp::BitmapDeviceSharedPtr getBitmapDevice() { return m_aDevice; }
 };

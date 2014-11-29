@@ -214,10 +214,4 @@ bool X11SalVirtualDevice::SetSize( long nDX, long nDY )
     return true;
 }
 
-void X11SalVirtualDevice::GetSize( long& rWidth, long& rHeight )
-{
-    rWidth  = GetWidth();
-    rHeight = GetHeight();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

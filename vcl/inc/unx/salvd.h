@@ -71,9 +71,8 @@ public:
     virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
 
-                            // Set new size, without saving the old contents
+    /// Set new size, without saving the old contents
     virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
-    virtual void            GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALVD_H

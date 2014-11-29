@@ -47,7 +47,6 @@ public:
 
                             // Set new size, without saving the old contents
     virtual bool            SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
-    virtual void            GetSize( long& rWidth, long& rHeight ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_X11_SALVD_H

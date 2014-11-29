@@ -216,10 +216,4 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
     }
 }
 
-void WinSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
-{
-    rWidth = GetDeviceCaps( getHDC(), HORZRES );
-    rHeight= GetDeviceCaps( getHDC(), VERTRES );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
