@@ -255,7 +255,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_bObject(false),
       m_aFontTableEntries(),
       m_nCurrentFontIndex(0),
-      m_nCurrentEncoding(0),
+      m_nCurrentEncoding(-1),
       m_nDefaultFontIndex(-1),
       m_aStyleTableEntries(),
       m_nCurrentStyleIndex(0),
@@ -641,8 +641,14 @@ rtl_TextEncoding RTFDocumentImpl::getEncoding(int nFontIndex)
     {
         std::map<int, rtl_TextEncoding>::iterator it = m_aFontEncodings.find(nFontIndex);
         if (it != m_aFontEncodings.end())
+            // We have a font encoding associated to this font.
             return it->second;
-        return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLanguageTag().getLocale());
+        else if (m_aDefaultState.nCurrentEncoding != rtl_getTextEncodingFromWindowsCharset(0))
+            // We have a default encoding.
+            return m_aDefaultState.nCurrentEncoding;
+        else
+            // Guess based on locale.
+            return msfilter::util::getBestTextEncodingFromLocale(Application::GetSettings().GetLanguageTag().getLocale());
     }
     else
         return m_pSuperstream->getEncoding(nFontIndex);
@@ -1163,10 +1169,10 @@ void RTFDocumentImpl::text(OUString& rString)
             case DESTINATION_FONTENTRY:
             {
                 m_aFontNames[m_nCurrentFontIndex] = aName;
-                if (m_nCurrentEncoding > 0)
+                if (m_nCurrentEncoding >= 0)
                 {
                     m_aFontEncodings[m_nCurrentFontIndex] = m_nCurrentEncoding;
-                    m_nCurrentEncoding = 0;
+                    m_nCurrentEncoding = -1;
                 }
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Font_name, RTFValue::Pointer_t(new RTFValue(aName)));
 
@@ -2907,16 +2913,16 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         m_aStates.top().nCurrentEncoding = RTL_TEXTENCODING_MS_1252;
         break;
     case RTF_MAC:
-        m_nCurrentEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
-        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
+        m_aDefaultState.nCurrentEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
+        m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
         break;
     case RTF_PC:
-        m_nCurrentEncoding = RTL_TEXTENCODING_IBM_437;
-        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
+        m_aDefaultState.nCurrentEncoding = RTL_TEXTENCODING_IBM_437;
+        m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
         break;
     case RTF_PCA:
-        m_nCurrentEncoding = RTL_TEXTENCODING_IBM_850;
-        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
+        m_aDefaultState.nCurrentEncoding = RTL_TEXTENCODING_IBM_850;
+        m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
         break;
     case RTF_PLAIN:
     {
