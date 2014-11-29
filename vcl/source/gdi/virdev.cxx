@@ -164,12 +164,6 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mbScreenComp    = true;
     mnAlphaDepth    = -1;
 
-    // #i59315# init vdev size from system object, when passed a
-    // SystemGraphicsData. Otherwise, output size will always
-    // incorrectly stay at (1,1)
-    if( pData && mpVirDev )
-        mpVirDev->GetSize(mnOutWidth,mnOutHeight);
-
     if( mnBitCount < 8 )
         SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
 
