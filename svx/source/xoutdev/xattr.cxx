@@ -425,7 +425,7 @@ sal_uInt16 XLineStyleItem::GetValueCount() const
     return 3;
 }
 
-XDash::XDash(XDashStyle eTheDash, sal_uInt16 nTheDots, sal_uIntPtr nTheDotLen,
+XDash::XDash(css::drawing::DashStyle eTheDash, sal_uInt16 nTheDots, sal_uIntPtr nTheDotLen,
              sal_uInt16 nTheDashes, sal_uIntPtr nTheDashLen, sal_uIntPtr nTheDistance) :
     eDash(eTheDash),
     nDots(nTheDots),
@@ -462,7 +462,7 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
     double fSingleDashLen = (double)GetDashLen();
     double fSingleDotLen = (double)GetDotLen();
 
-    if(GetDashStyle() == XDASH_RECTRELATIVE || GetDashStyle() == XDASH_ROUNDRELATIVE)
+    if(GetDashStyle() == css::drawing::DashStyle_RECTRELATIVE || GetDashStyle() == css::drawing::DashStyle_ROUNDRELATIVE)
     {
         if(fLineWidth != 0.0)
         {
@@ -662,7 +662,7 @@ XLineDashItem::XLineDashItem(SvStream& rIn) :
         sal_uInt32  nLTemp;
         sal_Int32   nITemp;
 
-        rIn.ReadInt32( nITemp ); aDash.SetDashStyle((XDashStyle)nITemp);
+        rIn.ReadInt32( nITemp ); aDash.SetDashStyle((css::drawing::DashStyle)nITemp);
         rIn.ReadUInt16( nSTemp ); aDash.SetDots(nSTemp);
         rIn.ReadUInt32( nLTemp ); aDash.SetDotLen(nLTemp);
         rIn.ReadUInt16( nSTemp ); aDash.SetDashes(nSTemp);
@@ -868,7 +868,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
                 {
                     XDash aXDash;
 
-                    aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(aLineDash.Style)));
+                    aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)(aLineDash.Style)));
                     aXDash.SetDots(aLineDash.Dots);
                     aXDash.SetDotLen(aLineDash.DotLen);
                     aXDash.SetDashes(aLineDash.Dashes);
@@ -904,7 +904,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
 
             XDash aXDash;
 
-            aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(aLineDash.Style)));
+            aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)(aLineDash.Style)));
             aXDash.SetDots(aLineDash.Dots);
             aXDash.SetDotLen(aLineDash.DotLen);
             aXDash.SetDashes(aLineDash.Dashes);
@@ -925,7 +925,7 @@ bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 
                 return false;
 
             XDash aXDash = GetDashValue();
-            aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(nVal)));
+            aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)(nVal)));
 
             if((0 == aXDash.GetDots()) && (0 == aXDash.GetDashes()))
                 aXDash.SetDots(1);

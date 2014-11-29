@@ -215,7 +215,7 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
             && SVBT16ToShort(rL.lnps ) <= 4 ){      // line style
             rSet.Put( XLineStyleItem( drawing::LineStyle_DASH ) );
             sal_Int16 nLen = SVBT16ToShort( rL.lnpw );
-            XDash aD( XDASH_RECT, 1, 2 * nLen, 1, 5 * nLen, 5 * nLen );
+            XDash aD( css::drawing::DashStyle_RECT, 1, 2 * nLen, 1, 5 * nLen, 5 * nLen );
             switch( SVBT16ToShort( rL.lnps ) ){
             case 1: aD.SetDots( 0 );            // Dash
                     aD.SetDashLen( 6 * nLen );

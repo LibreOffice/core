@@ -630,19 +630,19 @@ void XclImpDrawObjBase::ConvertLineStyle( SdrObject& rSdrObj, const XclObjLineDa
             break;
             case EXC_OBJ_LINE_DASH:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 0, nDotLen, 1, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 0, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DOT:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 1, nDotLen, 0, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 1, nDotLen, 0, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DASHDOT:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 1, nDotLen, 1, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 1, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_DASHDOTDOT:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_DASH ) );
-                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( XDASH_RECT, 2, nDotLen, 1, nDashLen, nDist ) ) );
+                rSdrObj.SetMergedItem( XLineDashItem( EMPTY_OUSTRING, XDash( css::drawing::DashStyle_RECT, 2, nDotLen, 1, nDashLen, nDist ) ) );
             break;
             case EXC_OBJ_LINE_MEDTRANS:
                 rSdrObj.SetMergedItem( XLineStyleItem( drawing::LineStyle_SOLID ) );

@@ -65,7 +65,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
     aXLStyle            ( drawing::LineStyle_DASH ),
     aXWidth             ( XOUT_WIDTH ),
-    aXDash              ( OUString(), XDash( XDASH_RECT, 3, 7, 2, 40, 15 ) ),
+    aXDash              ( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ),
     aXColor             ( OUString(), COL_BLACK ),
     aXLineAttr          ( pXPool ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
@@ -209,7 +209,7 @@ int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 void SvxLineDefTabPage::CheckChanges_Impl()
 {
     // is here used to NOT lose changes
-    //XDashStyle eXDS;
+    //css::drawing::DashStyle eXDS;
 
     if( m_pNumFldNumber1->IsValueChangedFromSaved() ||
         m_pMtrLength1->IsValueChangedFromSaved() ||
@@ -844,12 +844,12 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
 
 void SvxLineDefTabPage::FillDash_Impl()
 {
-    XDashStyle eXDS;
+    css::drawing::DashStyle eXDS;
 
     if( m_pCbxSynchronize->IsChecked() )
-        eXDS = XDASH_RECTRELATIVE;
+        eXDS = css::drawing::DashStyle_RECTRELATIVE;
     else
-        eXDS = XDASH_RECT;
+        eXDS = css::drawing::DashStyle_RECT;
 
     aDash.SetDashStyle( eXDS );
     aDash.SetDots( (sal_uInt8) m_pNumFldNumber1->GetValue() );
@@ -868,8 +868,8 @@ void SvxLineDefTabPage::FillDash_Impl()
 
 void SvxLineDefTabPage::FillDialog_Impl()
 {
-    XDashStyle eXDS = aDash.GetDashStyle(); // XDASH_RECT, XDASH_ROUND
-    if( eXDS == XDASH_RECTRELATIVE )
+    css::drawing::DashStyle eXDS = aDash.GetDashStyle(); // css::drawing::DashStyle_RECT, css::drawing::DashStyle_ROUND
+    if( eXDS == css::drawing::DashStyle_RECTRELATIVE )
         m_pCbxSynchronize->Check();
     else
         m_pCbxSynchronize->Check( false );

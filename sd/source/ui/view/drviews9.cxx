@@ -443,9 +443,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pDashLen, SfxUInt32Item, ID_VAL_DASHLEN, false);
                     SFX_REQUEST_ARG (rReq, pDistance, SfxUInt32Item, ID_VAL_DISTANCE, false);
 
-                    if (CHECK_RANGE (XDASH_RECT, (sal_Int32)pStyle->GetValue (), XDASH_ROUNDRELATIVE))
+                    if (CHECK_RANGE (css::drawing::DashStyle_RECT, (sal_Int32)pStyle->GetValue (), css::drawing::DashStyle_ROUNDRELATIVE))
                     {
-                        XDash aNewDash ((XDashStyle) pStyle->GetValue (), (short) pDots->GetValue (), pDotLen->GetValue (),
+                        XDash aNewDash ((css::drawing::DashStyle) pStyle->GetValue (), (short) pDots->GetValue (), pDotLen->GetValue (),
                                         (short) pDashes->GetValue (), pDashLen->GetValue (), pDistance->GetValue ());
 
                         pAttr->ClearItem (XATTR_LINEDASH);
