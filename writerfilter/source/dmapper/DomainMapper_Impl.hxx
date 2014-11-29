@@ -309,7 +309,6 @@ class DomainMapper;
 class DomainMapper_Impl
 {
 public:
-    typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
     typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, TablePropertyMapPtr > TableDataHandler_t;
     typedef std::map < OUString, BookmarkInsertPosition > BookmarkMap_t;
 

@@ -35,7 +35,7 @@ namespace dmapper {
 class DomainMapper;
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > Handle_t;
-typedef TableManager<Handle_t , TablePropertyMapPtr > DomainMapperTableManager_Base_t;
+typedef TableManager<Handle_t> DomainMapperTableManager_Base_t;
 
 class TablePropertiesHandler
 {
