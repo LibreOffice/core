@@ -142,6 +142,7 @@
       <menu:menuitem menu:id=".uno:Ruler"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewBounds"/>
+      <menu:menuitem menu:id=".uno:TableBoundaries"/>
       <menu:menuitem menu:id=".uno:Marks"/>
       <menu:menuitem menu:id=".uno:Fieldnames"/>
       <menu:menuitem menu:id=".uno:ControlCodes"/>
