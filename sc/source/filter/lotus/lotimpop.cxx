@@ -330,16 +330,17 @@ void ImportLotus::RowPresentation( sal_uInt16 nRecLen )
 
 void ImportLotus::NamedSheet( void )
 {
-    sal_uInt16  nLTab;
-    OUString    aName;
+    sal_uInt16 nTmpTab(0);
+    Read(nTmpTab);
+    OUString aName;
+    Read(aName);
 
-    Read( nLTab );
-    Read( aName );
+    SCTAB nLTab(static_cast<SCTAB>(nTmpTab));
 
-    if( pD->HasTable( static_cast<SCTAB> (nLTab) ) )
-        pD->RenameTab( static_cast<SCTAB> (nLTab), aName );
+    if (pD->HasTable(nLTab))
+        pD->RenameTab(nLTab, aName);
     else
-        pD->InsertTab( static_cast<SCTAB> (nLTab), aName );
+        pD->InsertTab(nLTab, aName);
 }
 
 void ImportLotus::Font_Face( void )
@@ -384,8 +385,6 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
 {
     OSL_ENSURE( nExtTab >= 0, "*ImportLotus::_Row(): not possible!" );
 
-    sal_uInt16          nRow;
-    sal_uInt16          nHeight;
     sal_uInt16            nCntDwn = (nRecLen < 4) ? 0 : ( nRecLen - 4 ) / 5;
     SCCOL           nColCnt = 0;
     sal_uInt8           nRepeats;
@@ -394,14 +393,19 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
     bool            bCenter = false;
     SCCOL           nCenterStart = 0, nCenterEnd = 0;
 
-    Read( nRow );
-    Read( nHeight );
+    sal_uInt16 nTmpRow(0);
+    Read(nTmpRow);
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
+    sal_uInt16 nHeight(0);
+    Read(nHeight);
 
     nHeight &= 0x0FFF;
     nHeight *= 22;
 
+    SCTAB nDestTab(static_cast<SCTAB>(nExtTab));
+
     if( nHeight )
-        pD->SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nExtTab), nHeight );
+        pD->SetRowHeight(nRow, nDestTab, nHeight);
 
     LotusContext &rContext = aConv.getContext();
     while( nCntDwn )
@@ -411,36 +415,39 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
 
         if( aAttr.HasStyles() )
             rContext.pLotusRoot->pAttrTable->SetAttr(
-                nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), static_cast<SCROW> (nRow), aAttr );
+                nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), nRow, aAttr );
 
         // Do this here and NOT in class LotAttrTable, as we only add attributes if the other
         // attributes are set
         //  -> for Center-Attribute default is centered
         if( aAttr.IsCentered() )
-            {
+        {
             if( bCenter )
+            {
+                if (pD->HasData(nColCnt, nRow, nDestTab))
                 {
-                if( pD->HasData( nColCnt, static_cast<SCROW> (nRow), static_cast<SCTAB> (nExtTab) ) )
-                    {// new Center after previous Center
-                    pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
+                    // new Center after previous Center
+                    pD->DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
                     nCenterStart = nColCnt;
-                    }
                 }
+            }
             else
-                {// fully new Center
+            {
+                // fully new Center
                 bCenter = true;
                 nCenterStart = nColCnt;
-                }
+            }
             nCenterEnd = nColCnt + static_cast<SCCOL>(nRepeats);
-            }
+        }
         else
-            {
+        {
             if( bCenter )
-                {// possibly reset old Center
-                pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
+            {
+                // possibly reset old Center
+                pD->DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
                 bCenter = false;
-                }
             }
+        }
 
         nColCnt = nColCnt + static_cast<SCCOL>(nRepeats);
         nColCnt++;
@@ -450,6 +457,6 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
 
     if( bCenter )
         // possibly reset old Center
-        pD->DoMerge( static_cast<SCTAB> (nExtTab), nCenterStart, static_cast<SCROW> (nRow), nCenterEnd, static_cast<SCROW> (nRow) );
+        pD->DoMerge(nDestTab, nCenterStart, nRow, nCenterEnd, nRow);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -73,48 +73,48 @@ void OP_EOF(LotusContext& rContext, SvStream& /*r*/, sal_uInt16 /*n*/)
 void OP_Integer(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
     sal_uInt8 nFormat(0);
-    sal_uInt16 nCol(0), nRow(0);
-    SCTAB nTab(0);
+    sal_uInt16 nTmpCol(0), nTmpRow(0);
     sal_Int16 nValue(0);
+    r.ReadUChar(nFormat).ReadUInt16(nTmpCol).ReadUInt16(nTmpRow).ReadInt16(nValue);
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow ).ReadInt16( nValue );
-
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
+    if (ValidColRow(nCol, nRow))
     {
-        rContext.pDoc->EnsureTable(nTab);
-        rContext.pDoc->SetValue(ScAddress(nCol,nRow,nTab), static_cast<double>(nValue));
+        rContext.pDoc->EnsureTable(0);
+        rContext.pDoc->SetValue(ScAddress(nCol, nRow, 0), static_cast<double>(nValue));
 
         // 0 decimal places!
-        SetFormat(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, 0);
+        SetFormat(rContext, nCol, nRow, 0, nFormat, 0);
     }
 }
 
 void OP_Number(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
     sal_uInt8 nFormat(0);
-    sal_uInt16 nCol(0), nRow(0);
-    SCTAB nTab(0);
+    sal_uInt16 nTmpCol(0), nTmpRow(0);
     double fValue(0.0);
+    r.ReadUChar( nFormat ).ReadUInt16(nTmpCol).ReadUInt16(nTmpRow).ReadDouble(fValue);
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow ).ReadDouble( fValue );
-
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
+    if (ValidColRow(nCol, nRow))
     {
         fValue = ::rtl::math::round( fValue, 15 );
-        rContext.pDoc->EnsureTable(nTab);
-        rContext.pDoc->SetValue(ScAddress(nCol,nRow,nTab), fValue);
+        rContext.pDoc->EnsureTable(0);
+        rContext.pDoc->SetValue(ScAddress(nCol, nRow, 0), fValue);
 
-        SetFormat(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat);
+        SetFormat(rContext, nCol, nRow, 0, nFormat, nDezFloat);
     }
 }
 
 void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
     sal_uInt8 nFormat(0);
-    sal_uInt16 nCol(0), nRow(0);
-    SCTAB nTab(0);
-
-    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
+    sal_uInt16 nTmpCol(0), nTmpRow(0);
+    r.ReadUChar(nFormat).ReadUInt16(nTmpCol).ReadUInt16(nTmpRow);
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
 
     n -= (n > 5) ? 5 : n;
 
@@ -122,68 +122,70 @@ void OP_Label(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     r.Read( pText.get(), n );
     pText[n] = 0;
 
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
+    if (ValidColRow(nCol, nRow))
     {
         nFormat &= 0x80;    // don't change Bit 7
         nFormat |= 0x75;    // protected does not matter, special-text is set
 
-        PutFormString(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pText.get());
+        PutFormString(rContext, nCol, nRow, 0, pText.get());
 
-        SetFormat(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezStd);
+        SetFormat(rContext, nCol, nRow, 0, nFormat, nDezStd);
     }
 }
 
 void OP_Formula(LotusContext &rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    sal_uInt8               nFormat;
-    sal_uInt16              nCol, nRow, nFormulaSize;
-    SCTAB                   nTab = 0;
+    sal_uInt8 nFormat(0);
+    sal_uInt16 nTmpCol(0), nTmpRow(0);
+    r.ReadUChar(nFormat).ReadUInt16(nTmpCol).ReadUInt16(nTmpRow);
+    r.SeekRel(8);    // skip result
+    sal_uInt16 nFormulaSize(0);
+    r.ReadUInt16(nFormulaSize);
 
-    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
-    r.SeekRel( 8 );    // skip result
-    r.ReadUInt16( nFormulaSize );
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
 
     const ScTokenArray* pErg;
-    sal_Int32               nBytesLeft = nFormulaSize;
-    ScAddress           aAddress( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab );
+    sal_Int32 nBytesLeft = nFormulaSize;
+    ScAddress aAddress(nCol, nRow, 0);
 
     svl::SharedStringPool& rSPool = rContext.pLotusRoot->pDoc->GetSharedStringPool();
     LotusToSc aConv(rContext, r, rSPool, rContext.pLotusRoot->eCharsetQ, false);
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
+    if (ValidColRow(nCol, nRow))
     {
         ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pErg);
         pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
-        rContext.pDoc->EnsureTable(nTab);
-        rContext.pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
+        rContext.pDoc->EnsureTable(0);
+        rContext.pDoc->SetFormulaCell(ScAddress(nCol, nRow, 0), pCell);
 
         // nFormat = Default -> decimal places like Float
-        SetFormat(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat);
+        SetFormat(rContext, nCol, nRow, 0, nFormat, nDezFloat);
     }
 }
 
 void OP_ColumnWidth(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    sal_uInt16              nCol, nBreite;
-    sal_uInt8               nWidthSpaces;
-    SCTAB                   nTab = 0;
+    sal_uInt16 nTmpCol(0);
+    sal_uInt8 nWidthSpaces(0);
+    r.ReadUInt16(nTmpCol).ReadUChar(nWidthSpaces);
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
 
-    r.ReadUInt16( nCol ).ReadUChar( nWidthSpaces );
-
-    if (ValidCol( static_cast<SCCOL>(nCol)))
+    if (ValidCol(nCol))
     {
+        sal_uInt16 nBreite;
         if( nWidthSpaces )
             // assuming 10cpi character set
             nBreite = ( sal_uInt16 ) ( TWIPS_PER_CHAR * nWidthSpaces );
         else
         {
-            rContext.pDoc->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), 0, true);
+            rContext.pDoc->SetColHidden(nCol, nCol, 0, true);
             nBreite = nDefWidth;
         }
 
-        rContext.pDoc->SetColWidth( static_cast<SCCOL> (nCol), nTab, nBreite );
+        rContext.pDoc->SetColWidth(nCol, 0, nBreite);
     }
 }
 
@@ -323,11 +325,13 @@ void OP_Window1(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
 void OP_Blank(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    sal_uInt16      nCol, nRow;
-    sal_uInt8       nFormat;
-    r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
+    sal_uInt8 nFormat(0);
+    sal_uInt16 nTmpCol(0), nTmpRow(0);
+    r.ReadUChar( nFormat ).ReadUInt16(nTmpCol).ReadUInt16(nTmpRow);
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    SetFormat(rContext, static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), 0, nFormat, nDezFloat);
+    SetFormat(rContext, nCol, nRow, 0, nFormat, nDezFloat);
 }
 
 void OP_BOF123(LotusContext& /*rContext*/, SvStream& r, sal_uInt16 /*n*/)
@@ -342,27 +346,33 @@ void OP_EOF123(LotusContext& rContext, SvStream& /*r*/, sal_uInt16 /*n*/)
 
 void OP_Label123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
-    sal_uInt8      nTab, nCol;
-    sal_uInt16    nRow;
-    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
+    sal_uInt8 nTmpTab(0), nTmpCol(0);
+    sal_uInt16 nTmpRow(0);
+    r.ReadUInt16(nTmpRow).ReadUChar(nTmpTab).ReadUChar(nTmpCol);
+    SCTAB nTab(static_cast<SCTAB>(nTmpTab));
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
+
     n -= (n > 4) ? 4 : n;
 
     boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
     r.Read( pText.get(), n );
     pText[ n ] = 0;
 
-    PutFormString(rContext, static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pText.get());
+    PutFormString(rContext, nCol, nRow, nTab, pText.get());
 }
 
 void OP_Number123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    sal_uInt8 nCol(0), nTab(0);
-    sal_uInt16 nRow(0);
+    sal_uInt16 nTmpRow(0);
+    sal_uInt8 nTmpCol(0), nTmpTab(0);
     sal_uInt32 nValue(0);
+    r.ReadUInt16(nTmpRow).ReadUChar(nTmpTab).ReadUChar(nTmpCol).ReadUInt32(nValue);
+    SCTAB nTab(static_cast<SCTAB>(nTmpTab));
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol ).ReadUInt32( nValue );
-
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
+    if (ValidColRow(nCol, nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
     {
         double fValue = Snum32ToDouble( nValue );
         rContext.pDoc->EnsureTable(nTab);
@@ -372,10 +382,12 @@ void OP_Number123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
 void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
-    sal_uInt8 nCol(0), nTab(0);
-    sal_uInt16 nRow(0);
-
-    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
+    sal_uInt16 nTmpRow(0);
+    sal_uInt8 nTmpCol(0), nTmpTab(0);
+    r.ReadUInt16(nTmpRow).ReadUChar(nTmpTab).ReadUChar(nTmpCol);
+    SCTAB nTab(static_cast<SCTAB>(nTmpTab));
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
     r.SeekRel( 8 );    // skip Result
 
     const ScTokenArray* pErg;
@@ -387,7 +399,7 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     aConv.Reset( aAddress );
     aConv.Convert( pErg, nBytesLeft );
 
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
+    if (ValidColRow(nCol, nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
     {
         ScFormulaCell* pCell = new ScFormulaCell(rContext.pLotusRoot->pDoc, aAddress, *pErg);
         pCell->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
@@ -398,13 +410,15 @@ void OP_Formula123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 
 void OP_IEEENumber123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 {
-    sal_uInt8 nCol,nTab;
-    sal_uInt16 nRow;
-    double dValue;
+    sal_uInt16 nTmpRow(0);
+    sal_uInt8 nTmpCol(0), nTmpTab(0);
+    double dValue(0.0);
+    r.ReadUInt16(nTmpRow).ReadUChar(nTmpTab).ReadUChar(nTmpCol).ReadDouble(dValue);
+    SCTAB nTab(static_cast<SCTAB>(nTmpTab));
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
 
-    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol ).ReadDouble( dValue );
-
-    if (ValidColRow( static_cast<SCCOL>(nCol), nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
+    if (ValidColRow(nCol, nRow) && nTab <= rContext.pDoc->GetMaxTableNumber())
     {
         rContext.pDoc->EnsureTable(nTab);
         rContext.pDoc->SetValue(ScAddress(nCol,nRow,nTab), dValue);
@@ -413,9 +427,13 @@ void OP_IEEENumber123(LotusContext& rContext, SvStream& r, sal_uInt16 /*n*/)
 
 void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
 {
-    sal_uInt8 nTab, nCol;
-    sal_uInt16 nRow;
-    r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
+    sal_uInt16 nTmpRow(0);
+    sal_uInt8 nTmpTab(0), nTmpCol(0);
+    r.ReadUInt16(nTmpRow).ReadUChar(nTmpTab).ReadUChar(nTmpCol);
+    SCTAB nTab(static_cast<SCTAB>(nTmpTab));
+    SCCOL nCol(static_cast<SCCOL>(nTmpCol));
+    SCROW nRow(static_cast<SCROW>(nTmpRow));
+
     n -= (n > 4) ? 4 : n;
 
     boost::scoped_array<sal_Char> pText(new sal_Char[n + 1]);
@@ -425,7 +443,7 @@ void OP_Note123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     OUString aNoteText(pText.get(), strlen(pText.get()), rContext.pLotusRoot->eCharsetQ);
     pText.reset();
 
-    ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab) );
+    ScAddress aPos(nCol, nRow, nTab);
     ScNoteUtil::CreateNoteFromString( *rContext.pDoc, aPos, aNoteText, false, false );
 }
 
