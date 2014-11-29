@@ -487,4 +487,12 @@ void X11SalGraphics::EndPaint()
     return mpImpl->endPaint();
 }
 
+SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const
+{
+    if (m_pFrame)
+        return static_cast< SalGeometryProvider * >(m_pFrame);
+    else
+        return static_cast< SalGeometryProvider * >(m_pVDev);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,7 +13,9 @@
 #include <win/saldata.hxx>
 #include <win/salframe.h>
 
-WinOpenGLSalGraphicsImpl::WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics):
+WinOpenGLSalGraphicsImpl::WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics,
+                                                   SalGeometryProvider *mpProvider):
+    OpenGLSalGraphicsImpl(mpProvider),
     mrParent(rGraphics)
 {
 }
@@ -22,56 +24,6 @@ void WinOpenGLSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics*
 {
     OpenGLSalGraphicsImpl *pImpl = pSrcGraphics ? static_cast< OpenGLSalGraphicsImpl* >(pSrcGraphics->GetImpl()) : static_cast< OpenGLSalGraphicsImpl *>(mrParent.GetImpl());
     OpenGLSalGraphicsImpl::DoCopyBits( rPosAry, *pImpl );
-}
-
-GLfloat WinOpenGLSalGraphicsImpl::GetWidth() const
-{
-    if( mrParent.gethWnd() && IsWindow( mrParent.gethWnd() ) )
-    {
-        WinSalFrame* pFrame = GetWindowPtr( mrParent.gethWnd() );
-        if( pFrame )
-        {
-            if( pFrame->maGeometry.nWidth )
-                return pFrame->maGeometry.nWidth;
-            else
-            {
-                // TODO: perhaps not needed, maGeometry should always be up-to-date
-                RECT aRect;
-                GetClientRect( mrParent.gethWnd(), &aRect );
-                return aRect.right;
-            }
-        }
-    }
-
-    return 1;
-}
-
-GLfloat WinOpenGLSalGraphicsImpl::GetHeight() const
-{
-    if( mrParent.gethWnd() && IsWindow( mrParent.gethWnd() ) )
-    {
-        WinSalFrame* pFrame = GetWindowPtr( mrParent.gethWnd() );
-        if( pFrame )
-        {
-            if( pFrame->maGeometry.nHeight )
-                return pFrame->maGeometry.nHeight;
-            else
-            {
-                // TODO: perhaps not needed, maGeometry should always be up-to-date
-                RECT aRect;
-                GetClientRect( mrParent.gethWnd(), &aRect );
-                return aRect.bottom;
-            }
-        }
-    }
-
-    return 1;
-}
-
-bool WinOpenGLSalGraphicsImpl::IsOffscreen() const
-{
-    WinSalFrame* pFrame = GetWindowPtr( mrParent.gethWnd() );
-    return ( pFrame == NULL );
 }
 
 OpenGLContext* WinOpenGLSalGraphicsImpl::CreateWinContext()
