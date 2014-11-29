@@ -277,20 +277,4 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     return (mxLayer != NULL);
 }
 
-void AquaSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
-{
-    if( mxLayer )
-    {
-        const CGSize aSize = CGLayerGetSize( mxLayer );
-        rWidth = static_cast<long>(aSize.width);
-        rHeight = static_cast<long>(aSize.height);
-        CG_TRACE( "CGLayerGetSize(" << mxLayer << ") = " << aSize << "(" << rWidth << "x" << rHeight << ")" );
-    }
-    else
-    {
-        rWidth = 0;
-        rHeight = 0;
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

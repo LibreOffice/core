@@ -93,18 +93,6 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     return true;
 }
 
-void SvpSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
-{
-    if( m_aDevice.get() )
-    {
-        B2IVector aDevSize( m_aDevice->getSize() );
-        rWidth = aDevSize.getX();
-        rHeight = aDevSize.getY();
-    }
-    else
-        rWidth = rHeight = 0;
-}
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

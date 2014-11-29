@@ -49,9 +49,6 @@ public:
             // pBuffer (and bTopDown).
             return SetSize( nNewDX, nNewDY );
         }
-
-    /// Get actual VDev size in pixel
-    virtual void            GetSize( long& rWidth, long& rHeight ) = 0;
 };
 
 #endif // INCLUDED_VCL_INC_SALVD_HXX
