@@ -769,19 +769,18 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 
 void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
-    sal_uInt32 i, j;
     ::std::vector< GLfloat > aVertices;
     GLfloat nWidth = GetWidth();
     GLfloat nHeight = GetHeight();
     const ::basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
 
-    for( i = 0; i < aSimplePolyPolygon.count(); i++ )
+    for( sal_uInt32 i = 0; i < aSimplePolyPolygon.count(); i++ )
     {
         const basegfx::B2DPolygon& rPolygon( aSimplePolyPolygon.getB2DPolygon( i ) );
         const ::basegfx::B2DPolygon& aResult(
             ::basegfx::triangulator::triangulate( rPolygon ) );
 
-        for( j = 0; j < aResult.count(); j++ )
+        for( sal_uInt32 j = 0; j < aResult.count(); j++ )
         {
             const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint( j ) );
             aVertices.push_back( 2 * rPt.getX() / nWidth - 1.0f );
