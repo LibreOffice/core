@@ -228,7 +228,6 @@
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertDraw"/>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
