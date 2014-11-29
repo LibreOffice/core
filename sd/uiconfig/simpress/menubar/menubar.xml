@@ -217,7 +217,6 @@
                     <menu:menuitem menu:id=".uno:InsertAVMedia"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:InsertDraw"/>
             <menu:menuitem menu:id=".uno:InsertObjectChart"/>
             <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
