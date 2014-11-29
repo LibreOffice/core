@@ -234,7 +234,14 @@
           <menu:menuitem menu:id=".uno:InsertAVMedia"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menuitem menu:id=".uno:InsertDraw"/>
+      <menu:menu menu:id=".uno:ShapesMenu">
+       <menu:menupopup>
+        <menu:menuitem menu:id=".uno:Line"/>
+        <menu:menuitem menu:id=".uno:Rect"/>
+        <menu:menuitem menu:id=".uno:Ellipse"/>
+        <menu:menuitem menu:id=".uno:Polygon_Unfilled"/>
+       </menu:menupopup>
+      </menu:menu>
       <menu:menu menu:id=".uno:ObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:InsertObject"/>
