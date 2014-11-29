@@ -22,14 +22,19 @@
 
 #include <basebmp/bitmapdevice.hxx>
 #include <vcl/dllapi.h>
+#include <salgeom.hxx>
 
 class SalGraphics;
 
 class VCL_PLUGIN_PUBLIC SalVirtualDevice
+        : public SalGeometryProvider
 {
 public:
     SalVirtualDevice() {}
     virtual ~SalVirtualDevice();
+
+    // SalGeometryProvider
+    virtual bool IsOffScreen() const SAL_OVERRIDE { return true; }
 
     // SalGraphics or NULL, but two Graphics for all SalVirtualDevices
     // must be returned

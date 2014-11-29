@@ -43,6 +43,8 @@ public:
     sal_uInt16              mnBitCount;             // BitCount (0 or 1)
     bool                    mbGraphics;             // is Graphics used
     bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
+    long                    mnWidth;
+    long                    mnHeight;
 
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();
@@ -52,6 +54,10 @@ public:
     virtual bool                    SetSize( long nNewDX, long nNewDY );
 
     static HBITMAP ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppDummy);
+
+    // SalGeometryProvider
+    virtual long GetWidth() const SAL_OVERRIDE { return mnWidth; }
+    virtual long GetHeight() const SAL_OVERRIDE { return mnHeight; }
 };
 
 
