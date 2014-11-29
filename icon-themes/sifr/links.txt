@@ -1,6 +1,16 @@
+# File Menu
 cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
-cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 
-# paragraph line spacing
+# Print Preview Toolbar
+cmd/lc_showsinglepage.png cmd/lc_adddirect.png
+cmd/sc_showsinglepage.png cmd/sc_adddirect.png
+
+# Find Toolbar
+cmd/lc_scrolltonext.png cmd/lc_downsearch.png
+cmd/sc_scrolltonext.png cmd/sc_downsearch.png
+cmd/lc_scrolltoprevious.png cmd/lc_upsearch.png
+cmd/sc_scrolltoprevious.png cmd/sc_upsearch.png
+
+# paragraph line spacing drop down
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
