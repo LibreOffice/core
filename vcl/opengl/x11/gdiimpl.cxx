@@ -26,7 +26,7 @@
 #include <vcl/opengl/OpenGLHelper.hxx>
 
 X11OpenGLSalGraphicsImpl::X11OpenGLSalGraphicsImpl( X11SalGraphics& rParent ):
-    OpenGLSalGraphicsImpl(),
+    OpenGLSalGraphicsImpl(rParent.GetGeometryProvider()),
     mrParent(rParent)
 {
 }
@@ -35,36 +35,11 @@ X11OpenGLSalGraphicsImpl::~X11OpenGLSalGraphicsImpl()
 {
 }
 
-GLfloat X11OpenGLSalGraphicsImpl::GetWidth() const
+void X11OpenGLSalGraphicsImpl::Init()
 {
-    if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.nWidth;
-    else if( mrParent.m_pVDev )
-        return static_cast< X11OpenGLSalVirtualDevice* >(mrParent.m_pVDev)->GetWidth();
-    return 1;
-}
-
-GLfloat X11OpenGLSalGraphicsImpl::GetHeight() const
-{
-    if( mrParent.m_pFrame )
-        return mrParent.m_pFrame->maGeometry.nHeight;
-    else if( mrParent.m_pVDev )
-        return static_cast< X11OpenGLSalVirtualDevice* >(mrParent.m_pVDev)->GetHeight();
-    return 1;
-}
-
-bool X11OpenGLSalGraphicsImpl::IsOffscreen() const
-{
-    X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);
-    if( pProvider )
-        return false;
-    else if( mrParent.m_pVDev )
-        return true;
-    else
-    {
-        SAL_WARN( "vcl.opengl", "what happened here?" );
-        return true;
-    }
+    // The m_pFrame and m_pVDev pointers are updated late in X11
+    mpParent = mrParent.GetGeometryProvider();
+    OpenGLSalGraphicsImpl::Init();
 }
 
 OpenGLContext* X11OpenGLSalGraphicsImpl::CreateWinContext()

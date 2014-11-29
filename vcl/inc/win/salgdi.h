@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_WIN_SALGDI_H
 
 #include "sallayout.hxx"
+#include "salgeom.hxx"
 #include "salgdi.hxx"
 #include "outfont.hxx"
 #include "PhysicalFontFace.hxx"
@@ -243,7 +244,8 @@ public:
     HFONT                   ImplDoSetFont( FontSelectPattern* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
-    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd);
+    explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,
+                            SalGeometryProvider *pProvider);
     virtual ~WinSalGraphics();
 
     SalGraphicsImpl* GetImpl() const SAL_OVERRIDE;

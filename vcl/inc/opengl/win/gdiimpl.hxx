@@ -24,13 +24,10 @@ private:
     WinSalGraphics& mrParent;
 
 public:
-    WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics);
+    WinOpenGLSalGraphicsImpl(WinSalGraphics& rGraphics,
+                             SalGeometryProvider *mpProvider);
 
 protected:
-    virtual GLfloat GetWidth() const SAL_OVERRIDE;
-    virtual GLfloat GetHeight() const SAL_OVERRIDE;
-    virtual bool    IsOffscreen() const SAL_OVERRIDE;
-
     virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
     virtual bool UseContext( OpenGLContext* pContext ) SAL_OVERRIDE;
     virtual OpenGLContext* CreatePixmapContext() SAL_OVERRIDE;

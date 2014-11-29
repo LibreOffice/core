@@ -63,8 +63,9 @@
                  ((float) aColor.GetBlue()) * nFactor / 25500.0,  \
                  1.0f )
 
-OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
+OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGeometryProvider* pParent)
     : mpContext(0)
+    , mpParent(pParent)
     , mpFramebuffer(NULL)
     , mbUseScissor(false)
     , mbUseStencil(false)

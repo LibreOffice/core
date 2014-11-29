@@ -26,10 +26,6 @@ public:
     virtual ~X11OpenGLSalGraphicsImpl();
 
 protected:
-    GLfloat GetWidth() const SAL_OVERRIDE;
-    GLfloat GetHeight() const SAL_OVERRIDE;
-    bool    IsOffscreen() const SAL_OVERRIDE;
-
     virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
     virtual OpenGLContext* CreatePixmapContext() SAL_OVERRIDE;
     virtual bool UseContext( OpenGLContext* pContext ) SAL_OVERRIDE;
@@ -38,6 +34,9 @@ public:
     // implementation of X11GraphicsImpl
 
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
+
+    virtual void Init() SAL_OVERRIDE;
+
     bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
     bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) SAL_OVERRIDE;
 };
