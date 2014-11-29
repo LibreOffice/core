@@ -74,9 +74,6 @@ namespace writerfilter
         void chars(const std::string & chars);
         void chars(const OUString & chars);
         void endElement();
-
-        void propertySet(writerfilter::Reference<Properties>::Pointer_t props,
-                IdToString::Pointer_t pIdToString);
 #endif
     };
 }

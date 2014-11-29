@@ -301,17 +301,6 @@ namespace writerfilter
 
         m_pLogger->endElement();
     }
-
-    void TagLogger::propertySet(writerfilter::Reference<Properties>::Pointer_t props,
-            IdToString::Pointer_t pIdToString)
-    {
-        startElement( "propertySet" );
-
-        PropertySetDumpHandler handler( this, pIdToString );
-        handler.resolve( props );
-
-        endElement( );
-    }
 #endif
 
 }
