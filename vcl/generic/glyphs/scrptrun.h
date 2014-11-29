@@ -43,6 +43,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/uscript.h"
+#include <vector>
 
 namespace vcl {
 
@@ -112,7 +113,7 @@ private:
     int32_t scriptEnd;
     UScriptCode scriptCode;
 
-    ParenStackEntry parenStack[128];
+    std::vector<ParenStackEntry> parenStack;
     int32_t parenSP;
 
     static int8_t highBit(int32_t value);
@@ -166,6 +167,7 @@ inline void ScriptRun::reset()
     scriptEnd   = charStart;
     scriptCode  = USCRIPT_INVALID_CODE;
     parenSP     = -1;
+    parenStack.resize(128);
 }
 
 inline void ScriptRun::reset(int32_t start, int32_t length)
