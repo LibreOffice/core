@@ -770,7 +770,7 @@ void OpenGLSalGraphicsImpl::DrawPolygon( sal_uInt32 nPoints, const SalPoint* pPt
 void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     sal_uInt32 i, j;
-    ::std::vector< GLfloat > pVertices;
+    ::std::vector< GLfloat > aVertices;
     GLfloat nWidth = GetWidth();
     GLfloat nHeight = GetHeight();
     const ::basegfx::B2DPolyPolygon& aSimplePolyPolygon = ::basegfx::tools::solveCrossovers( rPolyPolygon );
@@ -784,14 +784,14 @@ void OpenGLSalGraphicsImpl::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rPol
         for( j = 0; j < aResult.count(); j++ )
         {
             const ::basegfx::B2DPoint& rPt( aResult.getB2DPoint( j ) );
-            pVertices.push_back( 2 * rPt.getX() / nWidth - 1.0f );
-            pVertices.push_back( 1.0f - 2 * rPt.getY() / nHeight );
+            aVertices.push_back( 2 * rPt.getX() / nWidth - 1.0f );
+            aVertices.push_back( 1.0f - 2 * rPt.getY() / nHeight );
         }
     }
 
     glEnableVertexAttribArray( GL_ATTRIB_POS );
-    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, pVertices.data() );
-    glDrawArrays( GL_TRIANGLES, 0, pVertices.size() / 2 );
+    glVertexAttribPointer( GL_ATTRIB_POS, 2, GL_FLOAT, GL_FALSE, 0, aVertices.data() );
+    glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
     glDisableVertexAttribArray( GL_ATTRIB_POS );
 
     CHECK_GL_ERROR();
