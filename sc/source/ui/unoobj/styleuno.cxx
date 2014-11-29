@@ -704,7 +704,8 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
 
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
 
-                pDocShell->SetDocumentModified();   // verwendet wird der neue Style noch nicht
+                if (!rDoc.IsImportingXML())
+                    pDocShell->SetDocumentModified();   // verwendet wird der neue Style noch nicht
                 bDone = true;
             }
             else
@@ -1103,8 +1104,11 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
                 Fraction aZoom(1,1);
                 rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
-                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
-                pDocShell->SetDocumentModified();
+                if (!rDoc.IsImportingXML())
+                {
+                    pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
+                    pDocShell->SetDocumentModified();
+                }
             }
             else
             {
@@ -1467,8 +1471,11 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             Fraction aZoom(1,1);
             rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
-            pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
-            pDocShell->SetDocumentModified();
+            if (!rDoc.IsImportingXML())
+            {
+                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
+                pDocShell->SetDocumentModified();
+            }
         }
         else
         {
@@ -1846,8 +1853,11 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
             Fraction aZoom(1,1);
             rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
-            pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
-            pDocShell->SetDocumentModified();
+            if (!rDoc.IsImportingXML())
+            {
+                pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
+                pDocShell->SetDocumentModified();
+            }
         }
         else
         {
