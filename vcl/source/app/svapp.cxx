@@ -209,6 +209,12 @@ Application::~Application()
     ImplDestroySVData();
 }
 
+int Application::Main()
+{
+    SAL_WARN("vcl", "Application is a base class and should be overridden.");
+    return EXIT_SUCCESS;
+}
+
 bool Application::QueryExit()
 {
     WorkWindow* pAppWin = ImplGetSVData()->maWinData.mpAppWin;

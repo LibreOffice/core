@@ -204,13 +204,12 @@ private:
 };
 
 /**
- @brief Abstract base class used mainly for the LibreOffice Desktop class.
+ @brief Base class used mainly for the LibreOffice Desktop class.
 
- The Application class is an abstract class with one pure virtual
- function: Main(), however, there are a \em lot of static functions
- that are vital for applications. It is really meant to be subclassed
- to provide a global singleton, and heavily relies on a single data
- structure ImplSVData
+ The Application class is a base class mainly used by the Desktop
+ class. It is really meant to be subclassed, and the Main() function
+ should be overridden. Many of the ImplSVData members should be
+ moved to this class.
 
  The reason Application exists is because the VCL used to be a
  standalone framework, long since abandoned by anything other than
@@ -342,7 +341,7 @@ public:
 
     vcl/fpicker/test/svdem.cxx
     */
-    virtual int                 Main() = 0;
+    virtual int                 Main();
 
     /** Exit from the application
 

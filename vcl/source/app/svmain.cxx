@@ -200,12 +200,6 @@ static Application *        pOwnSvApp = NULL;
 // Exception handler. pExceptionHandler != NULL => VCL already inited
 oslSignalHandler   pExceptionHandler = NULL;
 
-class DummyApplication : public Application
-{
-public:
-    int                Main() SAL_OVERRIDE { return EXIT_SUCCESS; };
-};
-
 class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
 {
 public:
@@ -248,7 +242,7 @@ bool InitVCL()
 
     if( !ImplGetSVData()->mpApp )
     {
-        pOwnSvApp = new DummyApplication();
+        pOwnSvApp = new Application();
     }
     InitSalMain();
 
