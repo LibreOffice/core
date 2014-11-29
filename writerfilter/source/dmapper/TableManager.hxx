@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEMANAGER_HXX
-#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEMANAGER_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEMANAGER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEMANAGER_HXX
 
 #include <resourcemodel/TableData.hxx>
 
@@ -28,8 +28,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <stack>
-#include "util.hxx"
-#include "TagLogger.hxx"
+#include <resourcemodel/util.hxx>
+#include <resourcemodel/TagLogger.hxx>
 
 #include <rtl/strbuf.hxx>
 

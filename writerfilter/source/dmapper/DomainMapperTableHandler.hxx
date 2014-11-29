@@ -19,7 +19,7 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEHANDLER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_DOMAINMAPPERTABLEHANDLER_HXX
 
-#include <resourcemodel/TableManager.hxx>
+#include <TableManager.hxx>
 #include <PropertyMap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
