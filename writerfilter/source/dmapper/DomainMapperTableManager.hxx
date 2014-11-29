@@ -34,7 +34,7 @@ namespace dmapper {
 
 class DomainMapper;
 
-class DomainMapperTableManager : public DomainMapperTableManager_Base_t
+class DomainMapperTableManager : public TableManager
 {
     typedef boost::shared_ptr< std::vector<sal_Int32> > IntVectorPtr;
 
@@ -111,7 +111,7 @@ public:
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
         else
-           DomainMapperTableManager_Base_t::cellProps( pProps );
+           TableManager::cellProps( pProps );
     };
 
     virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps) SAL_OVERRIDE
@@ -119,7 +119,7 @@ public:
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
         else
-           DomainMapperTableManager_Base_t::cellPropsByCell( i, pProps );
+           TableManager::cellPropsByCell( i, pProps );
     };
 
     virtual void insertRowProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
@@ -127,7 +127,7 @@ public:
         if ( m_pStyleProps.get( ) )
             m_pStyleProps->InsertProps(pProps);
         else
-           DomainMapperTableManager_Base_t::insertRowProps( pProps );
+           TableManager::insertRowProps( pProps );
     };
 
     virtual void insertTableProps(TablePropertyMapPtr pProps) SAL_OVERRIDE
@@ -160,7 +160,7 @@ public:
 
     bool isInCell()
     {
-        return DomainMapperTableManager_Base_t::isInCell();
+        return TableManager::isInCell();
     }
 
     void setIsInShape(bool bIsInShape);

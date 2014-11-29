@@ -34,16 +34,13 @@ namespace dmapper {
 
 class DomainMapper;
 
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > Handle_t;
-typedef TableManager<Handle_t> DomainMapperTableManager_Base_t;
-
 class TablePropertiesHandler
 {
 private:
     std::vector< PropertyMapPtr > m_rPropertiesStack;
     PropertyMapPtr m_pCurrentProperties;
     std::vector<css::beans::PropertyValue>* m_pCurrentInteropGrabBag;
-    DomainMapperTableManager_Base_t *m_pTableManager;
+    TableManager* m_pTableManager;
     bool m_bOOXML;
 
 public:
@@ -52,7 +49,7 @@ public:
 
     bool sprm(Sprm & sprm);
 
-    inline void SetTableManager( DomainMapperTableManager_Base_t *pTableManager )
+    inline void SetTableManager( TableManager* pTableManager )
     {
         m_pTableManager = pTableManager;
     };

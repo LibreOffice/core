@@ -133,7 +133,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
     dmapper_logger->chars(sSprm);
     dmapper_logger->endElement();
 #endif
-    bool bRet = DomainMapperTableManager_Base_t::sprm(rSprm);
+    bool bRet = TableManager::sprm(rSprm);
     if( !bRet )
     {
         bRet = m_pTablePropsHandler->sprm( rSprm );
@@ -521,7 +521,7 @@ void DomainMapperTableManager::setIsInShape(bool bIsInShape)
 
 void DomainMapperTableManager::startLevel( )
 {
-    DomainMapperTableManager_Base_t::startLevel( );
+    TableManager::startLevel( );
 
     // If requested, pop the value that was pushed too early.
     boost::optional<sal_Int32> oCurrentWidth;
@@ -576,7 +576,7 @@ void DomainMapperTableManager::endLevel( )
     m_aTmpPosition.pop_back( );
     m_aTmpTableProperties.pop_back( );
 
-    DomainMapperTableManager_Base_t::endLevel( );
+    TableManager::endLevel( );
 #ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("dmappertablemanager.endLevel");
     PropertyMapPtr pProps = getTableProps();
@@ -826,7 +826,7 @@ void DomainMapperTableManager::endOfRowAction()
     }
 
     // Now that potentially opened table is closed, save the table properties
-    DomainMapperTableManager_Base_t::insertTableProps( pTmpTableProperties );
+    TableManager::insertTableProps( pTmpTableProperties );
 
     m_aTmpTableProperties.pop_back();
     TablePropertyMapPtr pEmptyTableProps( new TablePropertyMap() );

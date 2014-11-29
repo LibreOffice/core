@@ -96,7 +96,6 @@ protected:
     ~TableDataHandler() {}
 };
 
-template <typename T>
 /**
    The table manager.
 
@@ -283,7 +282,7 @@ class TableManager
     /**
      handle for the current position in document
      */
-    T mCurHandle;
+    css::uno::Reference<css::text::XTextRange> mCurHandle;
 
     TableManagerState mState;
 
@@ -378,18 +377,18 @@ protected:
         mState.resetTableProps();
     }
 
-    T getHandle()
+    css::uno::Reference<css::text::XTextRange> getHandle()
     {
         return mCurHandle;
     }
 
-    void setHandle(const T & rHandle)
+    void setHandle(const css::uno::Reference<css::text::XTextRange>& rHandle)
     {
         mCurHandle = rHandle;
     }
 
 private:
-    typedef boost::shared_ptr<T> T_p;
+    typedef boost::shared_ptr< css::uno::Reference<css::text::XTextRange> > T_p;
 
     /**
        depth of the current cell
@@ -406,11 +405,11 @@ private:
 
        for each level of nested tables there is one frame in the stack
      */
-    std::stack<typename TableData<T, TablePropertyMapPtr>::Pointer_t > mTableDataStack;
-    typename RowData<T, TablePropertyMapPtr>::Pointer_t mpUnfinishedRow;
+    std::stack<typename TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t > mTableDataStack;
+    typename RowData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t mpUnfinishedRow;
     bool mbKeepUnfinishedRow;
 
-    typedef typename TableDataHandler<T, TablePropertyMapPtr>::Pointer_t TableDataHandlerPointer_t;
+    typedef typename TableDataHandler<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t TableDataHandlerPointer_t;
 
     /**
        handler for resolveCurrentTable
@@ -448,12 +447,12 @@ private:
      Open a cell at current level.
      */
 
-    void openCell(const T & handle, TablePropertyMapPtr pProps);
+    void openCell(const css::uno::Reference<css::text::XTextRange>& handle, TablePropertyMapPtr pProps);
 
     /**
      Close a cell at current level.
      */
-    void closeCell(const T & handle);
+    void closeCell(const css::uno::Reference<css::text::XTextRange>& handle);
 
     /**
      Ensure a cell is open at the current level.
@@ -512,7 +511,7 @@ public:
 
        @param rHandle     the handle
      */
-    virtual void handle(const T & rHandle);
+    virtual void handle(const css::uno::Reference<css::text::XTextRange>& rHandle);
 
     /**
        Start a new table level.
@@ -632,504 +631,6 @@ public:
     }
 #endif
 };
-
-template <typename T>
-TableManager<T>::TableManager()
-: mnTableDepthNew(0), mnTableDepth(0), mbKeepUnfinishedRow( false )
-{
-    setRowEnd(false);
-    setInCell(false);
-    setCellEnd(false);
-}
-
-template <typename T>
-void TableManager<T>::cellDepth(sal_uInt32 nDepth)
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-    {
-        mpTableLogger->startElement("tablemanager.cellDepth");
-        mpTableLogger->attribute("depth", nDepth);
-        mpTableLogger->endElement();
-    }
-#endif
-
-    mnTableDepthNew = nDepth;
-}
-
-template <typename T>
-void TableManager<T>::inCell()
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->element("tablemanager.inCell");
-#endif
-    setInCell(true);
-
-    if (mnTableDepthNew < 1)
-        mnTableDepthNew = 1;
-}
-
-template <typename T>
-void TableManager<T>::endCell()
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->element("tablemanager.endCell");
-#endif
-
-    setCellEnd(true);
-}
-
-template <typename T>
-void TableManager<T>::endRow()
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->element("tablemanager.endRow");
-#endif
-
-    setRowEnd(true);
-}
-
-template <typename T>
-void TableManager<T>::setHandler(typename TableDataHandler<T, TablePropertyMapPtr>::Pointer_t pTableDataHandler)
-{
-    mpTableDataHandler = pTableDataHandler;
-}
-
-template <typename T>
-void TableManager<T>::handle(const T & rHandle)
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger)
-    {
-        mpTableLogger->startElement("tablemanager.handle");
-        mpTableLogger->chars(toString(rHandle));
-        mpTableLogger->endElement();
-    }
-#endif
-
-    setHandle(rHandle);
-}
-
-template <typename T>
-bool TableManager<T>::isInTable()
-{
-    bool bInTable = false;
-    if ( !mTableDataStack.empty() )
-        bInTable = mTableDataStack.top()->getDepth() > 0;
-    return bInTable;
-}
-
-template <typename T>
-void TableManager<T>::startLevel()
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-    {
-        typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData;
-
-        if (mTableDataStack.size() > 0)
-            pTableData = mTableDataStack.top();
-
-        mpTableLogger->startElement("tablemanager.startLevel");
-        mpTableLogger->attribute("level", mTableDataStack.size());
-
-        if (pTableData.get() != nullptr)
-            mpTableLogger->attribute("openCell",
-                                     pTableData->isCellOpen() ? "yes" : "no");
-
-        mpTableLogger->endElement();
-    }
-#endif
-
-    typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData(new TableData<T, TablePropertyMapPtr>(mTableDataStack.size()));
-
-    // If we have an unfinished row stored here, then push it to the new TableData
-    if ( mpUnfinishedRow )
-    {
-        for (unsigned int i = 0; i < mpUnfinishedRow->getCellCount(); ++i)
-        {
-            pTableData->addCell( mpUnfinishedRow->getCellStart(i),
-                                 mpUnfinishedRow->getCellProperties(i) );
-            pTableData->endCell( mpUnfinishedRow->getCellEnd(i) );
-        }
-        mpUnfinishedRow.reset();
-    }
-
-    mTableDataStack.push(pTableData);
-    mState.startLevel();
-}
-
-template <typename T>
-void TableManager<T>::endLevel()
-{
-    if (mpTableDataHandler.get() != nullptr)
-        resolveCurrentTable();
-
-    // Store the unfinished row as it will be used for the next table
-    if ( mbKeepUnfinishedRow )
-        mpUnfinishedRow = mTableDataStack.top()->getCurrentRow();
-    mState.endLevel();
-    mTableDataStack.pop();
-
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-    {
-        typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData;
-
-        if (mTableDataStack.size() > 0)
-            pTableData = mTableDataStack.top();
-
-        mpTableLogger->startElement("tablemanager.endLevel");
-        mpTableLogger->attribute("level", mTableDataStack.size());
-
-        if (pTableData.get() != nullptr)
-            mpTableLogger->attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
-
-        mpTableLogger->endElement();
-    }
-#endif
-}
-
-template <typename T>
-void TableManager<T>::startParagraphGroup()
-{
-    mState.resetCellSpecifics();
-    mnTableDepthNew = 0;
-}
-
-template <typename T>
-void TableManager<T>::endParagraphGroup()
-{
-    sal_Int32 nTableDepthDifference = mnTableDepthNew - mnTableDepth;
-
-    TablePropertyMapPtr pEmptyProps;
-
-    while (nTableDepthDifference > 0)
-    {
-        ensureOpenCell(pEmptyProps);
-        startLevel();
-
-        --nTableDepthDifference;
-    }
-    while (nTableDepthDifference < 0)
-    {
-        endLevel();
-
-        ++nTableDepthDifference;
-    }
-
-    mnTableDepth = mnTableDepthNew;
-
-    if (mnTableDepth > 0)
-    {
-        typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
-
-        if (isRowEnd())
-        {
-            endOfRowAction();
-            mTableDataStack.top()->endRow(getRowProps());
-            resetRowProps();
-        }
-
-        else if (isInCell())
-        {
-            ensureOpenCell(getCellProps());
-
-            if (isCellEnd())
-            {
-                endOfCellAction();
-                closeCell(getHandle());
-            }
-        }
-        resetCellProps();
-    }
-}
-
-template <typename T>
-bool TableManager<T>::sprm(Sprm & rSprm)
-{
-    bool bRet = true;
-    switch (rSprm.getId())
-    {
-    case NS_ooxml::LN_tblDepth:
-        {
-            Value::Pointer_t pValue = rSprm.getValue();
-
-            cellDepth(pValue->getInt());
-        }
-        break;
-    case NS_ooxml::LN_inTbl:
-        inCell();
-        break;
-    case NS_ooxml::LN_tblCell:
-        endCell();
-        break;
-    case NS_ooxml::LN_tblRow:
-        endRow();
-        break;
-    default:
-        bRet = false;
-    }
-    return bRet;
-}
-template <typename T>
-void TableManager<T>::props(TablePropertyMapPtr pProps)
-{
-    setProps(pProps);
-}
-
-template <typename T>
-void TableManager<T>::handle0x7()
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.handle0x7");
-#endif
-
-    if (mnTableDepthNew < 1)
-        mnTableDepthNew = 1;
-
-    if (isInCell())
-        endCell();
-    else
-        endRow();
-
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
-#endif
-}
-
-template <typename T>
-void TableManager<T>::text(const sal_uInt8 * data, size_t len)
-{
-    // optimization: cell/row end characters are the last characters in a run
-    if (len > 0)
-    {
-        if (data[len - 1] == 0x7)
-            handle0x7();
-    }
-}
-
-template <typename T>
-void TableManager<T>::utext(const sal_uInt8 * data, size_t len)
-{
-    // optimization: cell/row end characters are the last characters in a run
-
-    if (len > 0)
-    {
-        sal_Unicode nChar = data[(len - 1) * 2] + (data[(len - 1) * 2 + 1] << 8);
-        if (nChar == 0x7)
-            handle0x7();
-    }
-}
-
-template <typename T>
-void TableManager<T>::cellProps(TablePropertyMapPtr pProps)
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.cellProps");
-#endif
-
-    if(getCellProps().get())
-        getCellProps()->InsertProps(pProps);
-    else
-        setCellProps(pProps);
-
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
-#endif
-}
-
-template <typename T>
-void TableManager<T>::cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps)
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.cellPropsByCell");
-#endif
-
-    mTableDataStack.top()->insertCellProperties(i, pProps);
-
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
-#endif
-}
-
-template <typename T>
-void TableManager<T>::insertRowProps(TablePropertyMapPtr pProps)
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.insertRowProps");
-#endif
-
-    if( getRowProps().get() )
-        getRowProps()->InsertProps(pProps);
-    else
-        setRowProps(pProps);
-
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
-#endif
-}
-
-template <typename T>
-void TableManager<T>::insertTableProps(TablePropertyMapPtr pProps)
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.insertTableProps");
-#endif
-
-    if( getTableProps().get() && getTableProps() != pProps)
-        getTableProps()->InsertProps(pProps);
-    else
-        setTableProps(pProps);
-
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
-#endif
-}
-
-template <typename T>
-void TableManager<T>::resolveCurrentTable()
-{
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->startElement("tablemanager.resolveCurrentTable");
-#endif
-
-    if (mpTableDataHandler.get() != nullptr)
-    {
-        try
-        {
-            typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
-
-            unsigned int nRows = pTableData->getRowCount();
-
-            mpTableDataHandler->startTable(nRows, pTableData->getDepth(), getTableProps());
-
-            for (unsigned int nRow = 0; nRow < nRows; ++nRow)
-            {
-                typename RowData<T, TablePropertyMapPtr>::Pointer_t pRowData = pTableData->getRow(nRow);
-
-                unsigned int nCells = pRowData->getCellCount();
-
-                mpTableDataHandler->startRow(nCells, pRowData->getProperties());
-
-                for (unsigned int nCell = 0; nCell < nCells; ++nCell)
-                {
-                    mpTableDataHandler->startCell(pRowData->getCellStart(nCell), pRowData->getCellProperties(nCell));
-
-                    mpTableDataHandler->endCell(pRowData->getCellEnd(nCell));
-                }
-
-                mpTableDataHandler->endRow();
-            }
-
-            mpTableDataHandler->endTable(mTableDataStack.size() - 1);
-        }
-        catch (css::uno::Exception const& e)
-        {
-            SAL_WARN("writerfilter", "resolving of current table failed with: " << e.Message);
-        }
-    }
-    resetTableProps();
-    clearData();
-
-#ifdef DEBUG_WRITERFILTER
-    if (mpTableLogger != nullptr)
-        mpTableLogger->endElement();
-#endif
-}
-
-template <typename T>
-void TableManager<T>::endOfCellAction()
-{
-}
-
-template <typename T>
-void TableManager<T>::endOfRowAction()
-{
-}
-
-template <typename T>
-bool TableManager<T>::isIgnore() const
-{
-    return isRowEnd();
-}
-
-template <typename T>
-void  TableManager<T>::clearData()
-{
-}
-
-template <typename T>
-void  TableManager<T>::openCell(const T & rHandle, TablePropertyMapPtr pProps)
-{
-#ifdef DEBUG_WRITERFILTER
-    mpTableLogger->startElement("tablemanager.openCell");
-    mpTableLogger->chars(toString(rHandle));
-    mpTableLogger->endElement();
-#endif
-
-    if (mTableDataStack.size() > 0)
-    {
-        typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
-
-        pTableData->addCell(rHandle, pProps);
-    }
-}
-
-template <typename T>
-void  TableManager<T>::closeCell(const T & rHandle)
-{
-#ifdef DEBUG_WRITERFILTER
-    mpTableLogger->startElement("tablemanager.closeCell");
-    mpTableLogger->chars(toString(rHandle));
-    mpTableLogger->endElement();
-#endif
-
-    if (mTableDataStack.size() > 0)
-    {
-        typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
-
-        pTableData->endCell(rHandle);
-    }
-}
-
-template <typename T>
-void  TableManager<T>::ensureOpenCell(TablePropertyMapPtr pProps)
-{
-#ifdef DEBUG_WRITERFILTER
-    mpTableLogger->startElement("tablemanager.ensureOpenCell");
-#endif
-
-    if (mTableDataStack.size() > 0)
-    {
-        typename TableData<T, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
-
-        if (pTableData.get() != nullptr)
-        {
-            if (!pTableData->isCellOpen())
-                openCell(getHandle(), pProps);
-            else
-                pTableData->insertCellProperties(pProps);
-        }
-    }
-#ifdef DEBUG_WRITERFILTER
-    mpTableLogger->endElement();
-#endif
-}
 
 }
 
