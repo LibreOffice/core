@@ -72,9 +72,9 @@ bool XDashList::Create()
 {
     const OUString aStr(SVX_RESSTR(RID_SVXSTR_LINESTYLE));
 
-    Insert(new XDashEntry(XDash(XDASH_RECT,1, 50,1, 50, 50),aStr + " 1"));
-    Insert(new XDashEntry(XDash(XDASH_RECT,1,500,1,500,500),aStr + " 2"));
-    Insert(new XDashEntry(XDash(XDASH_RECT,2, 50,3,250,120),aStr + " 3"));
+    Insert(new XDashEntry(XDash(css::drawing::DashStyle_RECT,1, 50,1, 50, 50),aStr + " 1"));
+    Insert(new XDashEntry(XDash(css::drawing::DashStyle_RECT,1,500,1,500,500),aStr + " 2"));
+    Insert(new XDashEntry(XDash(css::drawing::DashStyle_RECT,2, 50,3,250,120),aStr + " 3"));
 
     return true;
 }

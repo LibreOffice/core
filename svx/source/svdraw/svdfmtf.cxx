@@ -90,7 +90,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(
     mnLineWidth(0),
     maLineJoin(basegfx::B2DLINEJOIN_NONE),
     maLineCap(com::sun::star::drawing::LineCap_BUTT),
-    maDash(XDASH_RECT, 0, 0, 0, 0, 0),
+    maDash(css::drawing::DashStyle_RECT, 0, 0, 0, 0, 0),
     mbMov(false),
     mbSize(false),
     maOfs(0, 0),
@@ -380,7 +380,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         }
         else
         {
-            mpLineAttr->Put(XLineDashItem(OUString(), XDash(XDASH_RECT)));
+            mpLineAttr->Put(XLineDashItem(OUString(), XDash(css::drawing::DashStyle_RECT)));
         }
     }
     else
@@ -708,7 +708,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
             mnLineWidth = nNewLineWidth;
             maLineJoin = rLineInfo.GetLineJoin();
             maLineCap = rLineInfo.GetLineCap();
-            maDash = XDash(XDASH_RECT,
+            maDash = XDash(css::drawing::DashStyle_RECT,
                 rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
                 rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
                 rLineInfo.GetDistance());
@@ -934,7 +934,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
         mnLineWidth = nNewLineWidth;
         maLineJoin = rLineInfo.GetLineJoin();
         maLineCap = rLineInfo.GetLineCap();
-        maDash = XDash(XDASH_RECT,
+        maDash = XDash(css::drawing::DashStyle_RECT,
             rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
             rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
             rLineInfo.GetDistance());

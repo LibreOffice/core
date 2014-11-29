@@ -925,7 +925,7 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
             rSet.Put(XLineStyleItem( drawing::LineStyle_SOLID ) );
         else
         {
-            XDashStyle  eDash = XDASH_RECT;
+            css::drawing::DashStyle  eDash = css::drawing::DashStyle_RECT;
             sal_uInt16  nDots = 1;
             sal_uInt32  nDotLen = nLineWidth / 360;
             sal_uInt16  nDashes = 0;

@@ -432,7 +432,7 @@ XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::An
 
     XDash aXDash;
 
-    aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(aLineDash.Style)));
+    aXDash.SetDashStyle((css::drawing::DashStyle)((sal_uInt16)(aLineDash.Style)));
     aXDash.SetDots(aLineDash.Dots);
     aXDash.SetDotLen(aLineDash.DotLen);
     aXDash.SetDashes(aLineDash.Dashes);
