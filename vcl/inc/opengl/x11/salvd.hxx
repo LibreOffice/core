@@ -36,10 +36,12 @@ public:
                                const SystemGraphicsData *pData );
     virtual ~X11OpenGLSalVirtualDevice();
 
+    // SalGeometryProvider
+    virtual long GetWidth() const SAL_OVERRIDE { return mnWidth; }
+    virtual long GetHeight() const SAL_OVERRIDE { return mnHeight; }
+
     SalDisplay *            GetDisplay() const { return mpDisplay; }
     sal_uInt16              GetDepth() const { return mnDepth; }
-    int                     GetWidth() const { return mnWidth; }
-    int                     GetHeight() const { return mnHeight; }
     SalX11Screen            GetXScreenNumber() const { return mnXScreen; }
 
     virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;

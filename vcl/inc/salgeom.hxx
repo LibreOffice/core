@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_SALGEOM_HXX
 #define INCLUDED_VCL_INC_SALGEOM_HXX
 
+#include <vcl/dllapi.h>
+
 typedef struct _SalFrameGeometry {
     // screen position of upper left corner of drawable area in pixel
     long                nX, nY;
@@ -39,6 +41,16 @@ typedef struct _SalFrameGeometry {
     nDisplayScreenNumber( 0 )
     {}
 } SalFrameGeometry;
+
+/// Interface used to share logic on sizing between
+/// SalVirtualDevices and SalFrames
+class VCL_PLUGIN_PUBLIC SalGeometryProvider {
+public:
+    virtual ~SalGeometryProvider() {}
+    virtual long GetWidth() const = 0;
+    virtual long GetHeight() const = 0;
+    virtual bool IsOffScreen() const = 0;
+};
 
 #endif // INCLUDED_VCL_INC_SALGEOM_HXX
 

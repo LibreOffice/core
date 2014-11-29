@@ -115,6 +115,8 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         }
         pVirGraphics->InitGraphics();
 
+        mnWidth = nDX;
+        mnHeight = nDY;
         pVDev->setHDC(hDC);
         pVDev->mhBmp        = hBmp;
         if( hBmp )
@@ -152,6 +154,8 @@ WinSalVirtualDevice::WinSalVirtualDevice()
     mnBitCount = 0;             // BitCount (0 or 1)
     mbGraphics = FALSE;         // is Graphics used
     mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
+    mnWidth = 0;
+    mnHeight = 0;
 }
 
 WinSalVirtualDevice::~WinSalVirtualDevice()
