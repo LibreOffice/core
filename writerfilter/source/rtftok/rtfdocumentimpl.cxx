@@ -60,7 +60,7 @@ static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
 }
 
 static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue,
-                                   RTFOverwrite eOverwrite = OVERWRITE_YES, bool bAttribute = true)
+                                   RTFOverwrite eOverwrite = RTFOverwrite::YES, bool bAttribute = true)
 {
     RTFValue::Pointer_t pParent = rSprms.find(nParent, /*bFirst=*/true, /*bForWrite=*/true);
     if (!pParent.get())
@@ -80,7 +80,7 @@ static void lcl_putNestedAttribute(RTFSprms& rSprms, Id nParent, Id nId, RTFValu
     rAttributes.set(nId, pValue, eOverwrite);
 }
 
-static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = OVERWRITE_NO_APPEND)
+static void lcl_putNestedSprm(RTFSprms& rSprms, Id nParent, Id nId, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = RTFOverwrite::NO_APPEND)
 {
     lcl_putNestedAttribute(rSprms, nParent, nId, pValue, eOverwrite, false);
 }
@@ -2493,7 +2493,7 @@ void RTFDocumentImpl::restoreTableRowProperties()
 void RTFDocumentImpl::resetTableRowProperties()
 {
     m_aStates.top().aTableRowSprms = m_aDefaultState.aTableRowSprms;
-    m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, RTFValue::Pointer_t(new RTFValue(-1)), OVERWRITE_NO_APPEND);
+    m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, RTFValue::Pointer_t(new RTFValue(-1)), RTFOverwrite::NO_APPEND);
     m_aStates.top().aTableRowAttributes = m_aDefaultState.aTableRowAttributes;
     if (DESTINATION_NESTEDTABLEPROPERTIES == m_aStates.top().nDestinationState)
         m_nNestedCurrentCellX = 0;
@@ -3748,7 +3748,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, RTFValue::Pointer_t(new RTFValue(aFontAttributes)));
             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr,
                                             RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)),
-                                            OVERWRITE_NO_APPEND);
+                                            RTFOverwrite::NO_APPEND);
         }
         else
         {
@@ -4193,7 +4193,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
 
         rCurrentCellX = nParam;
         RTFValue::Pointer_t pXValue(new RTFValue(nCellX));
-        m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, OVERWRITE_NO_APPEND);
+        m_aStates.top().aTableRowSprms.set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue, RTFOverwrite::NO_APPEND);
         if (DESTINATION_NESTEDTABLEPROPERTIES == m_aStates.top().nDestinationState)
         {
             m_nNestedCells++;
@@ -4273,53 +4273,47 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     break;
     case RTF_PAPERH: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, RTFOverwrite::YES);
     case RTF_PGHSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_h, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_PAPERW: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, RTFOverwrite::YES);
     case RTF_PGWSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgSz, NS_ooxml::LN_CT_PageSz_w, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_MARGL: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, RTFOverwrite::YES);
     case RTF_MARGLSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_left, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_MARGR: // fall through: set the default + current value
         lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, RTFOverwrite::YES);
     case RTF_MARGRSXN:
         lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, OVERWRITE_YES);
+                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_right, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_MARGT: // fall through: set the default + current value
-        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, RTFOverwrite::YES);
     case RTF_MARGTSXN:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_top, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_MARGB: // fall through: set the default + current value
-        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aDefaultState.aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, RTFOverwrite::YES);
     case RTF_MARGBSXN:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_bottom, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_HEADERY:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_header, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_header, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_FOOTERY:
-        lcl_putNestedAttribute(m_aStates.top().aSectionSprms,
-                               NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgMar, NS_ooxml::LN_CT_PageMar_footer, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_DEFTAB:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_defaultTabStop, pIntValue);
@@ -4483,12 +4477,10 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         m_aStates.top().aPicture.eWMetafile = nParam;
         break;
     case RTF_SB:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
-                               NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_before, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_SA:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
-                               NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_after, pIntValue, RTFOverwrite::YES);
         break;
     case RTF_DPX:
         m_aStates.top().aDrawingObject.nLeft = convertTwipToMm100(nParam);
@@ -4704,7 +4696,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         // It turns out \li should reset the \fi inherited from the stylesheet.
         // So set the direct formatting to zero, if we don't have such direct formatting yet.
         lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_ind, NS_ooxml::LN_CT_Ind_firstLine, RTFValue::Pointer_t(new RTFValue(0)),
-                               OVERWRITE_NO_IGNORE, /*bAttribute=*/true);
+                               RTFOverwrite::NO_IGNORE, /*bAttribute=*/true);
     }
     break;
     case RTF_RI:
@@ -4892,12 +4884,10 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     }
     break;
     case RTF_SBAUTO:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
-                               NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_beforeAutospacing, pBoolValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_beforeAutospacing, pBoolValue, RTFOverwrite::YES);
         break;
     case RTF_SAAUTO:
-        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms,
-                               NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue, OVERWRITE_YES);
+        lcl_putNestedAttribute(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_spacing, NS_ooxml::LN_CT_Spacing_afterAutospacing, pBoolValue, RTFOverwrite::YES);
         break;
     default:
     {
@@ -5072,7 +5062,7 @@ int RTFDocumentImpl::popState()
     break;
     case DESTINATION_LISTENTRY:
         for (RTFSprms::Iterator_t i = aState.aListLevelEntries.begin(); i != aState.aListLevelEntries.end(); ++i)
-            aState.aTableSprms.set(i->first, i->second, OVERWRITE_NO_APPEND);
+            aState.aTableSprms.set(i->first, i->second, RTFOverwrite::NO_APPEND);
         break;
     case DESTINATION_FIELDINSTRUCTION:
     {
@@ -5811,7 +5801,7 @@ int RTFDocumentImpl::popState()
     case DESTINATION_LISTENTRY:
     {
         RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
-        m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_abstractNum, pValue, OVERWRITE_NO_APPEND);
+        m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_abstractNum, pValue, RTFOverwrite::NO_APPEND);
     }
     break;
     case DESTINATION_PARAGRAPHNUMBERING:
@@ -5855,12 +5845,12 @@ int RTFDocumentImpl::popState()
             RTFSprms aAbstractSprms;
             aAbstractAttributes.set(NS_ooxml::LN_CT_AbstractNum_abstractNumId, pIdValue);
             RTFValue::Pointer_t pLevelValue(new RTFValue(aLevelAttributes, aLevelSprms));
-            aAbstractSprms.set(NS_ooxml::LN_CT_AbstractNum_lvl, pLevelValue, OVERWRITE_NO_APPEND);
+            aAbstractSprms.set(NS_ooxml::LN_CT_AbstractNum_lvl, pLevelValue, RTFOverwrite::NO_APPEND);
 
             RTFSprms aListTableSprms;
             RTFValue::Pointer_t pAbstractValue(new RTFValue(aAbstractAttributes, aAbstractSprms));
             // It's important that Numbering_abstractNum and Numbering_num never overwrites previous values.
-            aListTableSprms.set(NS_ooxml::LN_CT_Numbering_abstractNum, pAbstractValue, OVERWRITE_NO_APPEND);
+            aListTableSprms.set(NS_ooxml::LN_CT_Numbering_abstractNum, pAbstractValue, RTFOverwrite::NO_APPEND);
 
             // Numbering
             RTFSprms aNumberingAttributes;
@@ -5868,7 +5858,7 @@ int RTFDocumentImpl::popState()
             aNumberingAttributes.set(NS_ooxml::LN_CT_AbstractNum_nsid, pIdValue);
             aNumberingSprms.set(NS_ooxml::LN_CT_Num_abstractNumId, pIdValue);
             RTFValue::Pointer_t pNumberingValue(new RTFValue(aNumberingAttributes, aNumberingSprms));
-            aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pNumberingValue, OVERWRITE_NO_APPEND);
+            aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pNumberingValue, RTFOverwrite::NO_APPEND);
 
             // Table
             RTFSprms aListTableAttributes;
@@ -5911,7 +5901,7 @@ int RTFDocumentImpl::popState()
 
             RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
             if (m_aStates.top().nDestinationState != DESTINATION_LFOLEVEL)
-                m_aStates.top().aListLevelEntries.set(NS_ooxml::LN_CT_AbstractNum_lvl, pValue, OVERWRITE_NO_APPEND);
+                m_aStates.top().aListLevelEntries.set(NS_ooxml::LN_CT_AbstractNum_lvl, pValue, RTFOverwrite::NO_APPEND);
             else
                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_NumLvl_lvl, pValue);
         }
@@ -5923,7 +5913,7 @@ int RTFDocumentImpl::popState()
             aState.aTableAttributes.set(NS_ooxml::LN_CT_NumLvl_ilvl, pInnerValue);
 
             RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
-            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_lvlOverride, pValue, OVERWRITE_NO_APPEND);
+            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Num_lvlOverride, pValue, RTFOverwrite::NO_APPEND);
         }
         break;
     // list override table
@@ -5938,9 +5928,8 @@ int RTFDocumentImpl::popState()
             }
             else
             {
-                RTFValue::Pointer_t pValue(new RTFValue(
-                                               aState.aTableAttributes, aState.aTableSprms));
-                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pValue, OVERWRITE_NO_APPEND);
+                RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
+                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_num, pValue, RTFOverwrite::NO_APPEND);
             }
         }
         break;
@@ -6003,7 +5992,7 @@ int RTFDocumentImpl::popState()
                 // Dummy value, real picture is already sent to dmapper.
                 aSprms.set(NS_ooxml::LN_CT_NumPicBullet_pict, RTFValue::Pointer_t(new RTFValue(0)));
                 RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_numPicBullet, pValue, OVERWRITE_NO_APPEND);
+                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_numPicBullet, pValue, RTFOverwrite::NO_APPEND);
             }
         }
         break;

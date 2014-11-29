@@ -738,7 +738,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     RTFSprms aPathAttributes;
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, RTFValue::Pointer_t(new RTFValue(*oX)));
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, RTFValue::Pointer_t(new RTFValue(*oY)));
-                    aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo, RTFValue::Pointer_t(new RTFValue(aPathAttributes)), OVERWRITE_NO_APPEND);
+                    aPolygonSprms.set(NS_ooxml::LN_CT_WrapPath_lineTo, RTFValue::Pointer_t(new RTFValue(aPathAttributes)), RTFOverwrite::NO_APPEND);
                 }
             }
             while (nCharIndex >= 0);
