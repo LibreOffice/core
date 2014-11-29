@@ -47,6 +47,10 @@ public:
                                           ) SAL_OVERRIDE;
 
     basebmp::BitmapDeviceSharedPtr getBitmapDevice() { return m_aDevice; }
+
+    // SalGeometryProvider
+    virtual long GetWidth() const SAL_OVERRIDE { return m_aDevice.get() ? m_aDevice->getSize().getX() : 0; }
+    virtual long GetHeight() const SAL_OVERRIDE { return m_aDevice.get() ? m_aDevice->getSize().getY() : 0; }
 };
 
 #endif // INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX

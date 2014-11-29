@@ -64,8 +64,6 @@ public:
     }
     Pixmap          GetDrawable() const { return hDrawable_; }
     sal_uInt16      GetDepth() const { return nDepth_; }
-    int                     GetWidth() const { return nDX_; }
-    int                     GetHeight() const { return nDY_; }
     SalX11Screen            GetXScreenNumber() const { return m_nXScreen; }
 
     virtual SalGraphics*    AcquireGraphics() SAL_OVERRIDE;
@@ -73,6 +71,10 @@ public:
 
     /// Set new size, without saving the old contents
     virtual bool        SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
+
+    // SalGeometryProvider
+    virtual long GetWidth() const SAL_OVERRIDE { return nDX_; }
+    virtual long GetHeight() const SAL_OVERRIDE { return nDY_; }
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALVD_H
