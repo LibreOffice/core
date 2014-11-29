@@ -410,6 +410,7 @@ public:
     void testCondFormatInsertDeleteSheets();
     void testCondCopyPaste();
     void testCondCopyPasteSingleCell(); //e.g. fdo#82503
+    void testCondCopyPasteSingleCellToRange(); //e.g. fdo#82503
     void testCondCopyPasteSheetBetweenDoc();
     void testCondCopyPasteSheet();
     void testIconSet();
@@ -606,6 +607,7 @@ public:
     CPPUNIT_TEST(testCondFormatInsertDeleteSheets);
     CPPUNIT_TEST(testCondCopyPaste);
     CPPUNIT_TEST(testCondCopyPasteSingleCell);
+    CPPUNIT_TEST(testCondCopyPasteSingleCellToRange);
     CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);
     CPPUNIT_TEST(testCondCopyPasteSheet);
     CPPUNIT_TEST(testIconSet);

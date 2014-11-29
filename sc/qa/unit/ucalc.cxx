@@ -5635,6 +5635,48 @@ void Test::testCondCopyPasteSingleCell()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondCopyPasteSingleCellToRange()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->AddRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    sal_uLong nIndex = m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
+
+    ScRange aTargetRange(4,4,0,4,8,0);
+    pasteFromClip(m_pDoc, aTargetRange, &aClipDoc);
+
+    std::set<sal_uLong> aCondFormatIndices;
+    for(SCROW nRow = 4; nRow <= 8; ++nRow)
+    {
+        ScConditionalFormat* pPastedFormat = m_pDoc->GetCondFormat(4, nRow, 0);
+        CPPUNIT_ASSERT(pPastedFormat);
+
+        CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(4, nRow, 0)), pPastedFormat->GetRange());
+        sal_uLong nPastedKey = pPastedFormat->GetKey();
+        CPPUNIT_ASSERT( nIndex != nPastedKey);
+        const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, nRow, 0, ATTR_CONDITIONAL );
+        const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+        CPPUNIT_ASSERT(pCondFormatItem);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+        CPPUNIT_ASSERT( nIndex != pCondFormatItem->GetCondFormatData().at(0) );
+        auto itr = aCondFormatIndices.find(nPastedKey);
+        CPPUNIT_ASSERT(itr == aCondFormatIndices.end());
+        aCondFormatIndices.insert(nPastedKey);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCondCopyPasteSheetBetweenDoc()
 {
     m_pDoc->InsertTab(0, "Test");
