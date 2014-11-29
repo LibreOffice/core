@@ -50,10 +50,6 @@ Menu RID_DRAW_TEXTOBJ_INSIDE_POPUP
         SEPARATOR
         MN_TEXTATTR
         SEPARATOR
-        MN_TEXT_ATTR
-        MN_TEXT_ALIGN
-        MN_LINESPACING_ATTR
-        SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
         MenuItem
@@ -76,10 +72,6 @@ Menu RID_DRAW_TABLEOBJ_INSIDE_POPUP
         MN_SET_DEFAULT
         SEPARATOR
         MN_TEXTATTR
-        SEPARATOR
-        MN_TEXT_ATTR
-        MN_TEXT_ALIGN
-        MN_LINESPACING_ATTR
         SEPARATOR
         MN_CHAR_PARAGRAPH
         SEPARATOR
@@ -345,8 +337,6 @@ Menu RID_OUTLINE_POPUP
     ItemList =
     {
         MN_SET_DEFAULT
-        SEPARATOR
-        MN_TEXT_ATTR
         SEPARATOR
         MN_CHAR
         ITEM_FORMAT_NUMBERING
