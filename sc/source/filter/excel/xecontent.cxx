@@ -1582,17 +1582,21 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         2) List is taken from A1    -> formula is =A1 -> writes tRefNR token
                         Formula compiler supports this by offering two different functions
                         CreateDataValFormula() and CreateListValFormula(). */
-                    mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_LISTVAL, *xScTokArr );
-                    msFormula1 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
+                    if(GetOutput() == EXC_OUTPUT_BINARY)
+                        mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_LISTVAL, *xScTokArr );
+                    else
+                        msFormula1 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
                             xScTokArr.get());
                 }
             }
             else
             {
                 // no list validation -> convert the formula
-                mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
-                msFormula1 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
-                        xScTokArr.get());
+                if(GetOutput() == EXC_OUTPUT_BINARY)
+                    mxTokArr1 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
+                else
+                    msFormula1 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
+                            xScTokArr.get());
             }
         }
 
@@ -1600,9 +1604,11 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
         xScTokArr.reset( pValData->CreateTokenArry( 1 ) );
         if( xScTokArr.get() )
         {
-            mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
-            msFormula2 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
-                    xScTokArr.get());
+            if(GetOutput() == EXC_OUTPUT_BINARY)
+                mxTokArr2 = rFmlaComp.CreateFormula( EXC_FMLATYPE_DATAVAL, *xScTokArr );
+            else
+                msFormula2 = XclXmlUtils::ToOUString( GetCompileFormulaContext(), pValData->GetSrcPos(),
+                        xScTokArr.get());
         }
     }
     else
