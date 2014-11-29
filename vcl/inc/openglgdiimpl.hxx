@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_OPENGLGDIIMPL_HXX
 #define INCLUDED_VCL_OPENGLGDIIMPL_HXX
 
+#include "salgeom.hxx"
 #include "salgdiimpl.hxx"
 #include <vcl/dllapi.h>
 
@@ -40,6 +41,8 @@ class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 protected:
 
     boost::shared_ptr<OpenGLContext> mpContext;
+    /// Pointer to the SalFrame or SalVirtualDevice
+    SalGeometryProvider* mpParent;
     OpenGLFramebuffer* mpFramebuffer;
 
     // clipping
@@ -144,13 +147,13 @@ public:
 
 public:
     // get the width of the device
-    virtual GLfloat GetWidth() const = 0;
+    GLfloat GetWidth() const { return mpParent ? mpParent->GetWidth() : 1; }
 
     // get the height of the device
-    virtual GLfloat GetHeight() const = 0;
+    GLfloat GetHeight() const { return mpParent ? mpParent->GetHeight() : 1; }
 
     // check whether this instance is used for offscreen rendering
-    virtual bool IsOffscreen() const = 0;
+    bool IsOffscreen() const { return mpParent ? mpParent->IsOffScreen() : true; }
 
     // operations to do before painting
     virtual void PreDraw();
@@ -172,7 +175,7 @@ protected:
     virtual bool UseContext( OpenGLContext* pContext ) = 0;
 
 public:
-    OpenGLSalGraphicsImpl();
+    OpenGLSalGraphicsImpl(SalGeometryProvider* pParent);
     virtual ~OpenGLSalGraphicsImpl ();
 
     OpenGLContext* GetOpenGLContext();

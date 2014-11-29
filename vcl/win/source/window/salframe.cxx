@@ -983,7 +983,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
 
         if ( !mpGraphics2 )
         {
-            mpGraphics2 = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd);
+            mpGraphics2 = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
             mpGraphics2->setHDC(0);
         }
 
@@ -1014,7 +1014,7 @@ SalGraphics* WinSalFrame::AcquireGraphics()
             HDC hDC = GetDC( mhWnd );
             if ( hDC )
             {
-                mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd);
+                mpGraphics = new WinSalGraphics(WinSalGraphics::WINDOW, true, mhWnd, this);
                 mpGraphics->setHDC(hDC);
                 if ( pSalData->mhDitherPal )
                 {

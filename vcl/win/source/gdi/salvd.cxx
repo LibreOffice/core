@@ -105,7 +105,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     {
         WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice;
         SalData*                pSalData = GetSalData();
-        WinSalGraphics*         pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE, pGraphics->isScreen(), 0);
+        WinSalGraphics*         pVirGraphics = new WinSalGraphics(WinSalGraphics::VIRTUAL_DEVICE, pGraphics->isScreen(), 0, pVDev);
         pVirGraphics->SetLayout( 0 );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
         pVirGraphics->setHDC(hDC);
         if ( pSalData->mhDitherPal && pVirGraphics->isScreen() )
@@ -115,8 +115,8 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         }
         pVirGraphics->InitGraphics();
 
-        mnWidth = nDX;
-        mnHeight = nDY;
+        pVDev->mnWidth = nDX;
+        pVDev->mnHeight = nDY;
         pVDev->setHDC(hDC);
         pVDev->mhBmp        = hBmp;
         if( hBmp )
@@ -207,6 +207,9 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
         HBITMAP hNewBmp = ImplCreateVirDevBitmap(getHDC(), nDX, nDY, mnBitCount, &pDummy);
         if ( hNewBmp )
         {
+            mnWidth = nDX;
+            mnHeight = nDY;
+
             SelectBitmap( getHDC(), hNewBmp );
             DeleteBitmap( mhBmp );
             mhBmp = hNewBmp;
@@ -215,6 +218,8 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
         else
         {
             ImplWriteLastError( GetLastError(), "ImplCreateVirDevBitmap in SetSize" );
+            mnWidth = 0;
+            mnHeight = 0;
             return FALSE;
         }
     }

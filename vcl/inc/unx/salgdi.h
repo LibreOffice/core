@@ -29,6 +29,7 @@
 #include <vcl/metric.hxx>
 
 #include "salgdi.hxx"
+#include "salgeom.hxx"
 #include "sallayout.hxx"
 #include "vclpluginapi.h"
 
@@ -132,6 +133,7 @@ public:
     inline  const SalDisplay*   GetDisplay() const;
     inline  Display*            GetXDisplay() const;
     inline  const SalVisual&    GetVisual() const;
+    SalGeometryProvider    *GetGeometryProvider() const;
     inline  Drawable        GetDrawable() const { return hDrawable_; }
     void                    SetDrawable( Drawable d, SalX11Screen nXScreen );
     XRenderPictFormat*      GetXRenderFormat() const;
