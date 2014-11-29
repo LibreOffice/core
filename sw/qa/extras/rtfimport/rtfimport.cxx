@@ -66,7 +66,7 @@ public:
     virtual void preTest(const char* filename) SAL_OVERRIDE
     {
         m_aSavedSettings = Application::GetSettings();
-        if (OString(filename) == "fdo48023.rtf")
+        if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo72031.rtf")
         {
             AllSettings aSettings(m_aSavedSettings);
             aSettings.SetLanguageTag(LanguageTag("ru"));
@@ -82,7 +82,7 @@ public:
 
     virtual void postTest(const char* filename) SAL_OVERRIDE
     {
-        if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo44211.rtf")
+        if (OString(filename) == "fdo48023.rtf" || OString(filename) == "fdo72031.rtf" || OString(filename) == "fdo44211.rtf")
             Application::SetSettings(m_aSavedSettings);
     }
 
@@ -2206,6 +2206,11 @@ DECLARE_RTFIMPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo72031, "fdo72031.rtf")
+{
+    OUString aExpected("\xc3\x85", 2, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, getRun(getParagraph(1), 1)->getString());
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
