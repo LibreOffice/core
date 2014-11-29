@@ -479,16 +479,16 @@ void DeInitVCL()
         Application::AcquireSolarMutex(nCount);
     }
 
-    if ( pSVData->maAppData.mpSettings )
+    if ( Application::maGlobalAppData.mpSettings )
     {
         if ( pSVData->maAppData.mpCfgListener )
         {
-            pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
+            Application::maGlobalAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
             delete pSVData->maAppData.mpCfgListener;
         }
 
-        delete pSVData->maAppData.mpSettings;
-        pSVData->maAppData.mpSettings = NULL;
+        delete Application::maGlobalAppData.mpSettings;
+        Application::maGlobalAppData.mpSettings = NULL;
     }
     if ( pSVData->maAppData.mpAccelMgr )
     {

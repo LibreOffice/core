@@ -2897,9 +2897,11 @@ namespace
         if( nUIMirroring == 0 )  // no config found (eg, setup) or default (nil) was set: check language
         {
             LanguageType aLang = LANGUAGE_DONTKNOW;
-            ImplSVData* pSVData = ImplGetSVData();
-            if ( pSVData->maAppData.mpSettings )
-                aLang = pSVData->maAppData.mpSettings->GetUILanguageTag().getLanguageType();
+
+            const AllSettings& aSettings = Application::GetSettings();
+
+            if ( &aSettings != NULL )
+                aLang = aSettings.GetUILanguageTag().getLanguageType();
             if (bMath)
                 bRTL = MsLangId::isRightToLeftMath( aLang );
             else

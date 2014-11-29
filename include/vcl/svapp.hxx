@@ -203,6 +203,11 @@ private:
     std::vector<OUString> aData;
 };
 
+class ImplStaticAppData;
+
+VCL_DLLPUBLIC bool InitVCL();
+VCL_DLLPUBLIC void DeInitVCL();
+
 /**
  @brief Base class used mainly for the LibreOffice Desktop class.
 
@@ -219,6 +224,8 @@ private:
  */
 class VCL_DLLPUBLIC Application
 {
+    friend void DeInitVCL();
+
 public:
     enum DialogCancelMode {
         DIALOG_CANCEL_OFF,      ///< do not automatically cancel dialogs
@@ -724,6 +731,20 @@ public:
      @see OverrideSystemSettings, MergeSystemSettings, SetSettings
     */
     static const AllSettings&   GetSettings();
+
+    /** Determines if app settings are initialized.
+
+     @returns true if initialized.
+    */
+    static bool                 SettingsInitialized();
+
+    /** Mark whether app settings are initialized or not.
+
+     Note that this is used in Window::ImplInit(), but we may want to refacor.
+
+     @param     bInitialized    whether the settings have been initialized.
+     */
+    static void                 MarkSettingsInitialized( bool bInitialized=true );
 
     /** Validate that the currently selected system UI font is suitable
      to display the application's UI.
@@ -1544,6 +1565,8 @@ public:
 
 private:
 
+    static ImplStaticAppData maGlobalAppData;
+
     static void InitSettings(ImplSVData* pSVData);
 
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
@@ -1723,9 +1746,6 @@ public:
 };
 
 VCL_DLLPUBLIC Application* GetpApp();
-
-VCL_DLLPUBLIC bool InitVCL();
-VCL_DLLPUBLIC void DeInitVCL();
 
 VCL_DLLPUBLIC bool InitAccessBridge();
 

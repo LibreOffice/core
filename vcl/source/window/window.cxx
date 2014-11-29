@@ -1073,14 +1073,13 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
 
         // delay settings initialization until first "real" frame
         // this relies on the IntroWindow not needing any system settings
-        if ( !pSVData->maAppData.mbSettingsInit &&
-             ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN))
-             )
+        if ( !Application::SettingsInitialized() && ! (nStyle & (WB_INTROWIN|WB_DEFAULTWIN)) )
         {
+            AllSettings *pSettings = new AllSettings(Application::GetSettings());
             // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
-            ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
-            OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
-            pSVData->maAppData.mbSettingsInit = true;
+            ImplUpdateGlobalSettings( *pSettings );
+            OutputDevice::SetSettings( Application::GetSettings() );
+            Application::MarkSettingsInitialized();
         }
 
         // If we create a Window with default size, query this

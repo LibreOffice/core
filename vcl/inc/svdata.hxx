@@ -93,10 +93,22 @@ class OpenGLContext;
 
 namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
 
+void DeInitVCL();
+
 class LocaleConfigurationListener : public utl::ConfigurationListener
 {
 public:
     virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 ) SAL_OVERRIDE;
+};
+
+class ImplStaticAppData
+{
+    friend class Application;
+    friend void DeInitVCL();
+
+private:
+    AllSettings*            mpSettings;
+    bool                    mbSettingsInit;
 };
 
 struct ImplSVAppData
@@ -108,7 +120,6 @@ struct ImplSVAppData
         ImeStatusWindowMode_SHOW
     };
 
-    AllSettings*            mpSettings;                     // Application settings
     LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;               // listeners for vcl events (eg, extended toolkit)
     VclEventListeners*      mpKeyListeners;                 // listeners for key events only (eg, extended toolkit)
@@ -134,7 +145,6 @@ struct ImplSVAppData
     bool                    mbInAppMain;                    // is Application::Main() on stack
     bool                    mbInAppExecute;                 // is Application::Execute() on stack
     bool                    mbAppQuit;                      // is Application::Quit() called
-    bool                    mbSettingsInit;                 // true: Settings are initialized
     bool                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
     Application::DialogCancelMode meDialogCancel;           // true: All Dialog::Execute() calls will be terminated immediately with return false

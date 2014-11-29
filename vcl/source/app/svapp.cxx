@@ -181,6 +181,8 @@ typedef ::std::pair< vcl::Window*, ImplPostEventData* > ImplPostEventPair;
 
 static ::std::list< ImplPostEventPair > aPostedEventList;
 
+ImplStaticAppData Application::maGlobalAppData;
+
 Application* GetpApp()
 {
     ImplSVData* pSVData = ImplGetSVData();
@@ -489,12 +491,11 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
         pWindow = ImplGetDefaultWindow();
     if( pWindow )
     {
-        ImplSVData* pSVData = ImplGetSVData();
-        if ( !pSVData->maAppData.mbSettingsInit )
+        if ( maGlobalAppData.mbSettingsInit )
         {
             // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
-            pWindow->ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
-            pSVData->maAppData.mbSettingsInit = true;
+            pWindow->ImplUpdateGlobalSettings( *maGlobalAppData.mpSettings );
+            maGlobalAppData.mbSettingsInit = true;
         }
         // side effect: ImplUpdateGlobalSettings does an ImplGetFrame()->UpdateSettings
         pWindow->ImplUpdateGlobalSettings( rSettings, false );
@@ -516,20 +517,29 @@ bool Application::ValidateSystemFont()
     return false;
 }
 
+bool Application::SettingsInitialized()
+{
+    return maGlobalAppData.mbSettingsInit;
+}
+
+void Application::MarkSettingsInitialized( bool bInitialized )
+{
+    maGlobalAppData.mbSettingsInit = bInitialized;
+}
+
 void Application::SetSettings( const AllSettings& rSettings )
 {
     const SolarMutexGuard aGuard;
 
     ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maAppData.mpSettings )
+    if ( !maGlobalAppData.mpSettings )
     {
-        InitSettings(pSVData);
-        *pSVData->maAppData.mpSettings = rSettings;
+        maGlobalAppData.mpSettings = new AllSettings();
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
     }
     else
     {
-        AllSettings aOldSettings = *pSVData->maAppData.mpSettings;
+        AllSettings aOldSettings = *maGlobalAppData.mpSettings;
         if( aOldSettings.GetUILanguageTag().getLanguageType() != rSettings.GetUILanguageTag().getLanguageType() &&
                 pSVData->mpResMgr )
         {
@@ -537,8 +547,8 @@ void Application::SetSettings( const AllSettings& rSettings )
             pSVData->mpResMgr = NULL;
         }
         ResMgr::SetDefaultLocale( rSettings.GetUILanguageTag() );
-        *pSVData->maAppData.mpSettings = rSettings;
-        sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
+        *maGlobalAppData.mpSettings = rSettings;
+        sal_uLong nChangeFlags = aOldSettings.GetChangeFlags( *maGlobalAppData.mpSettings );
         if ( nChangeFlags )
         {
             DataChangedEvent aDCEvt( DATACHANGED_SETTINGS, &aOldSettings, nChangeFlags );
@@ -619,22 +629,22 @@ void Application::SetSettings( const AllSettings& rSettings )
 
 const AllSettings& Application::GetSettings()
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maAppData.mpSettings )
+    if ( !maGlobalAppData.mpSettings )
     {
-        InitSettings(pSVData);
+        AllSettings *pSettings = new AllSettings();
+        SetSettings( *pSettings );
     }
 
-    return *(pSVData->maAppData.mpSettings);
+    return *(maGlobalAppData.mpSettings);
 }
 
 void Application::InitSettings(ImplSVData* pSVData)
 {
-    assert(!pSVData->maAppData.mpSettings && "initialization should not happen twice!");
+    assert(!maGlobalAppData.mpSettings && "initialization should not happen twice!");
 
     pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
-    pSVData->maAppData.mpSettings = new AllSettings();
-    pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+    maGlobalAppData.mpSettings = new AllSettings();
+    maGlobalAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
 }
 
 void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
@@ -1038,7 +1048,7 @@ vcl::Window* Application::GetNextTopLevelWindow( vcl::Window* pWindow )
     return pWindow->mpWindowImpl->mpFrameData->mpNextFrame;
 }
 
-long    Application::GetTopWindowCount()
+long Application::GetTopWindowCount()
 {
     long nRet = 0;
     ImplSVData* pSVData = ImplGetSVData();
