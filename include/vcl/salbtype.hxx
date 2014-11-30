@@ -732,13 +732,13 @@ inline long ColorMask::ImplCalcMaskShift( sal_uLong nMask, sal_uLong& rOr, sal_u
     sal_uLong   nLen = 0UL;
 
     // from which bit starts the mask?
-    for( nShift = 31L; ( nShift >= 0L ) && !( nMask & ( 1 << (sal_uLong) nShift ) ); nShift-- )
+    for( nShift = 31L; ( nShift >= 0L ) && !( nMask & ( (sal_uLong)1 << (sal_uLong) nShift ) ); nShift-- )
     {}
 
     nRet = nShift;
 
     // XXX determine number of bits set => walk right until null
-    while( ( nShift >= 0L ) && ( nMask & ( 1 << (sal_uLong) nShift ) ) )
+    while( ( nShift >= 0L ) && ( nMask & ( (sal_uLong)1 << (sal_uLong) nShift ) ) )
     {
         nShift--;
         nLen++;

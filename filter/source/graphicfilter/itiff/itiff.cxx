@@ -498,7 +498,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0140: { // Color Map
             sal_uInt16 nVal;
             sal_uLong i;
-            nNumColors= ( 1UL << nBitsPerSample );
+            nNumColors= ( (sal_uLong)1 << nBitsPerSample );
             if ( nDataType == 3 && nNumColors <= 256)
             {
                 pColorMap = new sal_uLong[ 256 ];
@@ -1094,7 +1094,7 @@ void TIFFReader::MakePalCol( void )
             pColorMap = new sal_uLong[ 256 ];
         if ( nPhotometricInterpretation <= 1 )
         {
-            nNumColors = 1UL << nBitsPerSample;
+            nNumColors = (sal_uLong)1 << nBitsPerSample;
             if ( nNumColors > 256 )
                 nNumColors = 256;
             pAcc->SetPaletteEntryCount( (sal_uInt16)nNumColors );
