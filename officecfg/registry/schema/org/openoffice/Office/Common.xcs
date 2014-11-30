@@ -1466,7 +1466,7 @@
             objects.</desc>
             <label>Total Graphic Cache Size</label>
           </info>
-          <value>220000000</value>
+          <value>209715200</value>
         </prop>
         <prop oor:name="ObjectCacheSize" oor:type="xs:int" oor:nillable="false">
           <info>
