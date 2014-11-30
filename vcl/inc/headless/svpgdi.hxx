@@ -202,8 +202,6 @@ public:
 
     virtual void            BeginPaint() SAL_OVERRIDE { };
     virtual void            EndPaint() SAL_OVERRIDE { };
-
-    void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 );
 };
 
 #endif
