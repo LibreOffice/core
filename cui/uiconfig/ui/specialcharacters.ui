@@ -77,6 +77,7 @@
             <property name="hexpand">True</property>
             <property name="vexpand">True</property>
             <property name="row_spacing">6</property>
+            <property name="column_spacing">12</property>
             <child>
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
@@ -178,7 +179,7 @@
             </child>
             <child>
               <object class="svxlo-SvxShowCharSet" id="showcharset">
-                <property name="width_request">600</property>
+                <property name="width_request">580</property>
                 <property name="height_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
