@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="MessBox">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -10,7 +11,7 @@
       <object class="GtkBox" id="dialog-vbox6">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">24</property>
+        <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area6">
             <property name="can_focus">False</property>
@@ -71,6 +72,7 @@
             <child>
               <object class="GtkImage" id="mess_box_image">
                 <property name="can_focus">False</property>
+                <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="stock">gtk-missing-image</property>
               </object>
