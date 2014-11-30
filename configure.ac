@@ -2766,21 +2766,6 @@ if test $_os = Darwin; then
     FRAMEWORKSHOME="$MACOSX_SDK_PATH/System/Library/Frameworks"
     MACOSX_DEPLOYMENT_TARGET="$with_macosx_version_min_required"
 
-    case "$with_macosx_version_min_required" in
-    10.8)
-        MAC_OS_X_VERSION_MIN_REQUIRED="1080"
-        ;;
-    10.9)
-        MAC_OS_X_VERSION_MIN_REQUIRED="1090"
-        ;;
-    10.10)
-        MAC_OS_X_VERSION_MIN_REQUIRED="101000"
-        ;;
-    *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.8--10])
-        ;;
-    esac
-
     LIBTOOL=libtool
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
@@ -2799,37 +2784,6 @@ if test $_os = Darwin; then
         RANLIB=`xcrun -find ranlib`
         AC_MSG_RESULT([$CC and $CXX])
     fi
-
-    case "$with_macosx_version_max_allowed" in
-    10.8)
-        MAC_OS_X_VERSION_MAX_ALLOWED="1080"
-        ;;
-    10.9)
-        MAC_OS_X_VERSION_MAX_ALLOWED="1090"
-        ;;
-    10.10)
-        MAC_OS_X_VERSION_MAX_ALLOWED="101000"
-        ;;
-    *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.8--10])
-        ;;
-    esac
-
-    AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
-    if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
-        AC_MSG_ERROR([the version minimumn required must be inferior or equal to the version maximum allowed])
-    else
-        AC_MSG_RESULT([ok])
-    fi
-
-    AC_MSG_CHECKING([that macosx-version-max-allowed is coherent with macos-with-sdk])
-    if test $MAC_OS_X_VERSION_MAX_ALLOWED -gt $MACOSX_SDK_VERSION; then
-        AC_MSG_ERROR([the version maximum allowed cannot be greater thatn the sdk level])
-    else
-        AC_MSG_RESULT([ok])
-    fi
-    AC_MSG_NOTICE([MAC_OS_X_VERSION_MIN_REQUIRED=$MAC_OS_X_VERSION_MIN_REQUIRED])
-    AC_MSG_NOTICE([MAC_OS_X_VERSION_MAX_ALLOWED=$MAC_OS_X_VERSION_MAX_ALLOWED])
 
     AC_MSG_CHECKING([whether to do code signing])
 
@@ -2910,8 +2864,6 @@ fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
 AC_SUBST(MACOSX_DEPLOYMENT_TARGET)
-AC_SUBST(MAC_OS_X_VERSION_MIN_REQUIRED)
-AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
@@ -5702,7 +5654,7 @@ if test "$GCC" = "yes"; then
         dnl is apparently provided by LLVM's libcxxabi project, which has good
         dnl semantics (cf. <http://llvm.org/svn/llvm-project/libcxxabi/trunk/
         dnl src/cxa_guard.cpp>):
-        if test "$MAC_OS_X_VERSION_MIN_REQUIRED" -ge 1090; then
+        if test "$MACOSX_SDK_VERSION" -ge 1090; then
             HAVE_THREADSAFE_STATICS=TRUE
         fi
     elif test "$_os" != Android; then
