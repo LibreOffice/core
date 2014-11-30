@@ -53,7 +53,7 @@ public:
     END_COM_MAP()
 
     static HRESULT WINAPI _SmartQI(void* pv,
-                                   REFIID iid, void** ppvObject, DWORD)
+                                   REFIID iid, void** ppvObject, DWORD_PTR)
     {
         return ((CAccComponent*)pv)->SmartQI(iid,ppvObject);
     }

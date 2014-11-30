@@ -52,7 +52,7 @@ public:
     DECLARE_NO_REGISTRY()
 
     static HRESULT WINAPI _SmartQI(void* pv,
-                                   REFIID iid, void** ppvObject, DWORD)
+                                   REFIID iid, void** ppvObject, DWORD_PTR)
     {
         return ((CAccHyperLink*)pv)->SmartQI(iid,ppvObject);
     }
