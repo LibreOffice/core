@@ -12,7 +12,10 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,coinmp,coinmp))
 $(eval $(call gb_ExternalPackage_use_external_project,coinmp,coinmp))
 
 ifeq ($(OS),WNT)
-$(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/CoinMP.dll,CoinMP/MSVisualStudio/v9/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.dll))
+ifeq ($(CPUNAME),X86_64)
+coinmp_arch_subdir=x64/
+endif
+$(eval $(call gb_ExternalPackage_add_file,coinmp,$(LIBO_LIB_FOLDER)/CoinMP.dll,CoinMP/MSVisualStudio/v9/$(coinmp_arch_subdir)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.dll))
 else ifneq ($(DISABLE_DYNLOADING),)
 # Just use the static archives from workdir. See bin/lo-all-static-libs
 else ifeq ($(OS),MACOSX)
