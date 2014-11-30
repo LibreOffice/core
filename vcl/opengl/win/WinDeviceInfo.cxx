@@ -682,6 +682,12 @@ bool WinOpenGLDeviceInfo::isDeviceBlocked()
     // out of static blocks (i.e. if we were wrong or something was patched, we
     // can back out our static block without doing a release).
 
+    if (mbRDP)
+    {
+        SAL_WARN("vcl.opengl", "all OpenGL blocked for RDP sessions");
+        return true;
+    }
+
     return FindBlocklistedDeviceInList();
 }
 
