@@ -13,8 +13,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import org.mozilla.gecko.OnInterceptTouchListener;
-import org.mozilla.gecko.ui.PanZoomController;
-import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
 
 import java.util.LinkedList;
 import java.util.Queue;

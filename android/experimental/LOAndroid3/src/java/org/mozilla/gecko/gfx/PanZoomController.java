@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.gecko.ui;
+package org.mozilla.gecko.gfx;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -713,12 +713,12 @@ public class PanZoomController
             if (viewport.width() > pageRect.width())
                 focusX = 0.0f;
         }
-        if (pageRect.height() > 0) {
+        /*if (pageRect.height() > 0) {
             float scaleFactor = viewport.height() / pageRect.height();
             minZoomFactor = Math.max(minZoomFactor, zoomFactor * scaleFactor);
             if (viewport.height() > pageRect.height())
                 focusY = 0.0f;
-        }
+        }*/
 
         maxZoomFactor = Math.max(maxZoomFactor, minZoomFactor);
 
