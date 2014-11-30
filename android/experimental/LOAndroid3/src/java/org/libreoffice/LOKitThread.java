@@ -6,7 +6,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.mozilla.gecko.gfx.GeckoLayerClient;
-import org.mozilla.gecko.gfx.ImmutableViewportMetrics;;
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -33,14 +33,15 @@ public class LOKitThread extends Thread {
         DisplayMetrics displayMetrics = LibreOfficeMainActivity.mAppContext.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mViewportMetrics = mViewportMetrics.setPageRect(rect, rect);
-
-        GeckoLayerClient layerClient = mApplication.getLayerClient();
-
-        layerClient.beginDrawing();
-        layerClient.reevaluateTiles();
-        layerClient.endDrawing(mViewportMetrics);
+        mLayerClient.reevaluateTiles();
 
         return true;
+    }
+
+    private void tileRequest(TileIdentifier tileId) {
+        mLayerClient.beginDrawing();
+        mLayerClient.addTile(tileId);
+        mLayerClient.endDrawing(mViewportMetrics);
     }
 
     /** Handle the geometry change + draw. */
@@ -114,13 +115,13 @@ public class LOKitThread extends Thread {
         Log.i(LOGTAG, "processEvent: " + event.getTypeString());
         switch (event.mType) {
             case LOEvent.LOAD:
-                loadDocument(event.getFilename());
+                loadDocument(event.mFilename);
                 break;
             case LOEvent.CLOSE:
                 closeDocument();
                 break;
             case LOEvent.VIEWPORT:
-                mViewportMetrics = event.getViewport();
+                mViewportMetrics = event.mViewportMetrics;
                 draw();
                 break;
             case LOEvent.DRAW:
@@ -130,7 +131,10 @@ public class LOKitThread extends Thread {
                 redraw();
                 break;
             case LOEvent.CHANGE_PART:
-                changePart(event.getPartIndex());
+                changePart(event.mPartIndex);
+                break;
+            case LOEvent.TILE_REQUEST:
+                tileRequest(event.mTileId);
                 break;
         }
     }

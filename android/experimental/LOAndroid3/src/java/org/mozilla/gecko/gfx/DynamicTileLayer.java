@@ -5,6 +5,9 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 
+import org.libreoffice.LOEventFactory;
+import org.libreoffice.LOKitShell;
+import org.libreoffice.TileIdentifier;
 import org.libreoffice.TileProvider;
 import org.mozilla.gecko.util.FloatUtils;
 
@@ -16,6 +19,7 @@ public class DynamicTileLayer extends Layer {
     private static final String LOGTAG = DynamicTileLayer.class.getSimpleName();
 
     private final List<SubTile> tiles = new CopyOnWriteArrayList<SubTile>();
+
     private TileProvider tileProvider;
     private final IntSize tileSize;
     private RectF currentViewport = new RectF();
@@ -33,8 +37,8 @@ public class DynamicTileLayer extends Layer {
     }
 
     public void invalidate() {
-        for (SubTile layer : tiles) {
-            layer.invalidate();
+        for (SubTile tile : tiles) {
+            tile.invalidate();
         }
     }
 
@@ -162,10 +166,7 @@ public class DynamicTileLayer extends Layer {
                     }
                 }
                 if (!contains) {
-                    CairoImage image = tileProvider.createTile(x, y, tileSize, viewportMetrics.zoomFactor);
-                    SubTile tile = new SubTile(image, (int) x, (int) y, viewportMetrics.zoomFactor);
-                    tile.beginTransaction();
-                    tiles.add(tile);
+                    LOKitShell.sendEvent(LOEventFactory.tileRequest(new TileIdentifier((int)x, (int)y, viewportMetrics.zoomFactor)));
                 }
             }
         }
@@ -198,5 +199,12 @@ public class DynamicTileLayer extends Layer {
     public void clearAndReset() {
         tiles.clear();
         currentViewport = new RectF();
+    }
+
+    public void addTile(TileIdentifier tileId) {
+        CairoImage image = tileProvider.createTile(tileId.x, tileId.y, tileSize, tileId.zoom);
+        SubTile tile = new SubTile(image, tileId);
+        tile.beginTransaction();
+        tiles.add(tile);
     }
 }
