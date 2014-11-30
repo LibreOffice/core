@@ -184,7 +184,7 @@ gb_CXXFLAGS := \
 	-wd4800 \
 	-wd4913 \
 	-Zc:wchar_t- \
-	-Zm500 \
+	-Zm2000 \
 
 ifneq ($(MSVC_USE_DEBUG_RUNTIME),)
 gb_CXXFLAGS += \
