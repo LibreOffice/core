@@ -19,9 +19,6 @@ import org.libreoffice.LOKitShell;
 import org.libreoffice.TileIdentifier;
 import org.libreoffice.TileProvider;
 import org.mozilla.gecko.ZoomConstraints;
-import org.mozilla.gecko.ui.PanZoomController;
-import org.mozilla.gecko.ui.PanZoomTarget;
-import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
 import org.mozilla.gecko.util.FloatUtils;
 
 public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
