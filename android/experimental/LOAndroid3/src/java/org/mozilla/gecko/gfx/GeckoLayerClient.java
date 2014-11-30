@@ -400,7 +400,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     }
 
     /** Implementation of PanZoomTarget */
-    public void setForceRedraw() {
+    public void forceRedraw() {
         mForceRedraw = true;
         if (mGeckoIsReady) {
             geometryChanged();

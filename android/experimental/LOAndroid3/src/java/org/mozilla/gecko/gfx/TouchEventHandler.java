@@ -6,12 +6,13 @@
 package org.mozilla.gecko.gfx;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View.OnTouchListener;
 
+import org.mozilla.gecko.OnInterceptTouchListener;
 import org.mozilla.gecko.ui.PanZoomController;
 import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
 
@@ -66,7 +67,7 @@ public final class TouchEventHandler {
     private final ListenerTimeoutProcessor mListenerTimeoutProcessor;
 
     // the listener we use to notify gecko of touch events
-    private OnTouchListener mOnTouchListener;
+    private OnInterceptTouchListener mOnTouchListener;
 
     // whether or not we should wait for touch listeners to respond (this state is
     // per-tab and is updated when we switch tabs).
@@ -127,13 +128,16 @@ public final class TouchEventHandler {
         mView = view;
 
         mEventQueue = new LinkedList<MotionEvent>();
-        mGestureDetector = new GestureDetector(context, layerClient.getGestureListener());
-        mScaleGestureDetector = new SimpleScaleGestureDetector(layerClient.getScaleGestureListener());
         mPanZoomController = layerClient.getPanZoomController();
+        mGestureDetector = new GestureDetector(context, mPanZoomController);
+        mScaleGestureDetector = new SimpleScaleGestureDetector(mPanZoomController);
         mListenerTimeoutProcessor = new ListenerTimeoutProcessor();
         mDispatchEvents = true;
 
-        mGestureDetector.setOnDoubleTapListener(layerClient.getDoubleTapListener());
+        mGestureDetector.setOnDoubleTapListener(mPanZoomController);
+    }
+
+    void destroy() {
     }
 
     /* This function MUST be called on the UI thread */
@@ -145,9 +149,18 @@ public final class TouchEventHandler {
             return true;
         }
 
+        if (mOnTouchListener.onInterceptTouchEvent(mView, event)) {
+            return true;
+        }
+
         // if this is a hover event just notify gecko, we don't have any interest in the java layer.
         if (isHoverEvent(event)) {
             mOnTouchListener.onTouch(mView, event);
+            return true;
+        }
+
+        if (isScrollEvent(event)) {
+            dispatchEvent(event);
             return true;
         }
 
@@ -225,7 +238,7 @@ public final class TouchEventHandler {
     }
 
     /* This function MUST be called on the UI thread. */
-    public void setOnTouchListener(OnTouchListener onTouchListener) {
+    public void setOnTouchListener(OnInterceptTouchListener onTouchListener) {
         mOnTouchListener = onTouchListener;
     }
 
@@ -242,6 +255,14 @@ public final class TouchEventHandler {
     private boolean touchFinished(MotionEvent event) {
         int action = (event.getAction() & MotionEvent.ACTION_MASK);
         return (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL);
+    }
+
+    private boolean isScrollEvent(MotionEvent event) {
+        if (Build.VERSION.SDK_INT <= 11) {
+            return false;
+        }
+        int action = (event.getAction() & MotionEvent.ACTION_MASK);
+        return (action == MotionEvent.ACTION_SCROLL);
     }
 
     /**
