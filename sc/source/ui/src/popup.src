@@ -365,20 +365,6 @@ Menu RID_POPUP_EDIT
 
         MenuItem { Separator = TRUE ; };
 
-        MenuItem // Menu-Controller
-         // Menu-Controller
-         // Menu-Controller
-         // Menu-Controller
-        {
-            ITEM_FORMAT_ATTR_CHAR_FONT
-        };
-        MenuItem // Menu-Controller
-         // Menu-Controller
-         // Menu-Controller
-         // Menu-Controller
-        {
-            ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT
-        };
         MenuItem
         {
             Text [ en-US ] = "Style" ;

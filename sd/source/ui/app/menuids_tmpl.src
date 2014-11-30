@@ -391,18 +391,6 @@
 #define MN_TEXT_ATTR\
     MenuItem\
     {\
-        Identifier = SID_ATTR_CHAR_FONT ; \
-        HelpId = CMD_SID_ATTR_CHAR_FONT ; \
-        Text [ en-US ] = "~Font" ; \
-    };\
-    MenuItem\
-    {\
-        Identifier = SID_ATTR_CHAR_FONTHEIGHT ; \
-        HelpId = CMD_SID_ATTR_CHAR_FONTHEIGHT ; \
-        Text [ en-US ] = "~Size" ; \
-    };\
-    MenuItem\
-    {\
         Identifier = DUMMY ; \
         Command = ".uno:StyleMenu" ; \
         Text [ en-US ] = "St~yle" ; \
@@ -513,49 +501,6 @@
         Identifier = SID_CHARMAP ; \
         HelpId = CMD_SID_CHARMAP ; \
         Text [ en-US ] = "S~pecial Character..." ; \
-    };
-
- // test orientation
-#define MN_TEXT_ALIGN\
-    MenuItem\
-    {\
-        Identifier = DUMMY + 2 ; \
-        Command = ".uno:AlignTextMenu" ; \
-        Text [ en-US ] = "A~lignment" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    Identifier = SID_ATTR_PARA_ADJUST_LEFT ; \
-                    HelpId = CMD_SID_ATTR_PARA_ADJUST_LEFT ; \
-                    RadioCheck = TRUE ; \
-                    Text [ en-US ] = "~Left" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = SID_ATTR_PARA_ADJUST_RIGHT ; \
-                    HelpId = CMD_SID_ATTR_PARA_ADJUST_RIGHT ; \
-                    RadioCheck = TRUE ; \
-                    Text [ en-US ] = "~Right" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = SID_ATTR_PARA_ADJUST_CENTER ; \
-                    HelpId = CMD_SID_ATTR_PARA_ADJUST_CENTER ; \
-                    RadioCheck = TRUE ; \
-                    Text [ en-US ] = "~Centered" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
-                    HelpId = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
-                    RadioCheck = TRUE ; \
-                    Text [ en-US ] = "Justified" ; \
-                };\
-            };\
-        };\
     };
 
  // object orientation
