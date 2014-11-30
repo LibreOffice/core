@@ -914,7 +914,7 @@ inline void Bitmap::SetPrefSize( const Size& rSize )
 
 inline sal_uLong Bitmap::GetColorCount() const
 {
-    return( 1UL << (sal_uLong) GetBitCount() );
+    return( (sal_uLong)1 << (sal_uLong) GetBitCount() );
 }
 
 inline sal_uLong Bitmap::GetSizeBytes() const
