@@ -100,6 +100,7 @@ public:
     void testGraphicAnchorDeletion();
     void testTransliterate();
     void testMarkMove();
+    void testInstrusiveList();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(testTransliterate);
@@ -127,6 +128,7 @@ public:
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST(testMarkMove);
+    CPPUNIT_TEST(testInstrusiveList);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1267,6 +1269,10 @@ void SwDocTest::testMarkMove()
     CPPUNIT_ASSERT_EQUAL(
         pBM2->GetMarkEnd().nNode.GetIndex(),
         pBM3->GetMarkEnd().nNode.GetIndex());
+}
+
+void SwDocTest::testInstrusiveList()
+{
 }
 
 void SwDocTest::setUp()

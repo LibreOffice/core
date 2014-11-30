@@ -21,6 +21,7 @@
 
 #include <swdllapi.h>
 #include <swtypes.hxx>
+#include <boost/intrusive/list.hpp>
 
 class SW_DLLPUBLIC Ring
 {
@@ -39,6 +40,7 @@ public:
     Ring* GetPrev() const       { return pPrev; }
 
     sal_uInt32 numberOf() const;
+    boost::intrusive::list_member_hook<> m_aHook;
 };
 
 #endif
