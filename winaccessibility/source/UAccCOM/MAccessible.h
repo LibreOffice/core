@@ -230,7 +230,7 @@ public:
     XGUIDToComObjHash m_containedObjects;
 
     static HRESULT WINAPI _SmartQI(void* pv,
-                                   REFIID iid, void** ppvObject, DWORD)
+                                   REFIID iid, void** ppvObject, DWORD_PTR)
     {
         return ((CMAccessible*)pv)->SmartQI(pv,iid,ppvObject);
     }
