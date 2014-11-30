@@ -698,7 +698,7 @@ $(eval $(call gb_Library_add_nativeres,vcl,vcl/salsrc))
 ifeq ($(COM),MSC)
 ifeq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_ldflags,vcl,\
-    /ENTRY:LibMain@12 \
+    /ENTRY:LibMain \
 ))
 endif
 endif
