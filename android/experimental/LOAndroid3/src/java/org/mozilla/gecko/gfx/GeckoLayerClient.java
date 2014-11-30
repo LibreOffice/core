@@ -11,7 +11,6 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOEventFactory;
@@ -102,7 +101,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         mCheckerboardColor = Color.WHITE;
         mCheckerboardShouldShowChecks = true;
 
-        mPanZoomController = new PanZoomController(this);
+        mPanZoomController = PanZoomController.Factory.create(this);
     }
 
     public void setView(LayerView v) {
@@ -463,18 +462,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
     public Context getContext() {
         return mContext;
-    }
-
-    public GestureDetector.OnGestureListener getGestureListener() {
-        return mPanZoomController;
-    }
-
-    public SimpleScaleGestureDetector.SimpleScaleGestureListener getScaleGestureListener() {
-        return mPanZoomController;
-    }
-
-    public GestureDetector.OnDoubleTapListener getDoubleTapListener() {
-        return mPanZoomController;
     }
 
     private class AdjustRunnable implements Runnable {
