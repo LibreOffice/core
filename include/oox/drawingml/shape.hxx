@@ -254,6 +254,7 @@ protected:
     table::TablePropertiesPtr   mpTablePropertiesPtr;
     Shape3DPropertiesPtr        mp3DPropertiesPtr;
     EffectPropertiesPtr         mpEffectPropertiesPtr;
+    EffectPropertiesPtr         mpShapeRefEffectPropPtr;
     PropertyMap                 maShapeProperties;
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;

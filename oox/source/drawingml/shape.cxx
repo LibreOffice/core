@@ -102,6 +102,7 @@ Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
 , mp3DPropertiesPtr( new Shape3DProperties )
 , mpEffectPropertiesPtr( new EffectProperties )
+, mpShapeRefEffectPropPtr( new EffectProperties )
 , mpMasterTextListStyle( new TextListStyle )
 , mnSubType( 0 )
 , meFrameType( FRAMETYPE_GENERIC )
@@ -134,6 +135,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mpTablePropertiesPtr( pSourceShape->mpTablePropertiesPtr )
 , mp3DPropertiesPtr( pSourceShape->mp3DPropertiesPtr )
 , mpEffectPropertiesPtr (pSourceShape->mpEffectPropertiesPtr)
+, mpShapeRefEffectPropPtr(pSourceShape->mpShapeRefEffectPropPtr)
 , maShapeProperties( pSourceShape->maShapeProperties )
 , mpMasterTextListStyle( pSourceShape->mpMasterTextListStyle )
 , mxShape()
@@ -299,7 +301,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     mpShapeRefFillPropPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
     mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : NULL );
-    mpEffectPropertiesPtr = EffectPropertiesPtr( new EffectProperties( *rReferencedShape.mpEffectPropertiesPtr.get() ) );
+    mpShapeRefEffectPropPtr = EffectPropertiesPtr( new EffectProperties( *rReferencedShape.mpEffectPropertiesPtr.get() ) );
     mpMasterTextListStyle = TextListStylePtr( new TextListStyle( *rReferencedShape.mpMasterTextListStyle.get() ) );
     maShapeStyleRefs = rReferencedShape.maShapeStyleRefs;
     maSize = rReferencedShape.maSize;
@@ -582,6 +584,7 @@ Reference< XShape > Shape::createAndInsert(
         // First apply reference shape's properties (shape on the master slide)
         aFillProperties.assignUsed( *mpShapeRefFillPropPtr );
         aLineProperties.assignUsed( *mpShapeRefLinePropPtr );
+        aEffectProperties.assignUsed( *mpShapeRefEffectPropPtr );
 
         if( pTheme )
         {
