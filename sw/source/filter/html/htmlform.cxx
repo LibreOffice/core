@@ -1647,9 +1647,7 @@ void SwHTMLParser::InsertInput()
 
         if( bDisabled )
         {
-            sal_Bool bFalse = sal_False;
-            aTmp.setValue(&bFalse, ::getBooleanCppuType()  );
-            xPropSet->setPropertyValue("Enabled", aTmp );
+            xPropSet->setPropertyValue("Enabled", makeAny(false) );
         }
     }
 
@@ -2032,8 +2030,7 @@ void SwHTMLParser::NewTextArea()
     aTmp <<= OUString(sName);
     xPropSet->setPropertyValue("Name", aTmp );
 
-    sal_Bool bTrue = sal_True;
-    aTmp.setValue( &bTrue, ::getBooleanCppuType() );
+    aTmp <<= true;
     xPropSet->setPropertyValue("MultiLine", aTmp );
     xPropSet->setPropertyValue("VScroll", aTmp );
     if( HTML_WM_OFF == nWrap )
@@ -2051,9 +2048,7 @@ void SwHTMLParser::NewTextArea()
 
     if( bDisabled )
     {
-        sal_Bool bFalse = sal_False;
-        aTmp.setValue( &bFalse, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue("Enabled", aTmp );
+        xPropSet->setPropertyValue("Enabled", makeAny(false) );
     }
 
     OSL_ENSURE( pFormImpl->GetText().isEmpty(), "Text ist nicht leer!" );
@@ -2311,18 +2306,14 @@ void SwHTMLParser::NewSelect()
 
     if( bDisabled )
     {
-        sal_Bool bFalse = sal_False;
-        aTmp.setValue( &bFalse, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue("Enabled", aTmp );
+        xPropSet->setPropertyValue("Enabled", makeAny(false) );
     }
 
     Size aTextSz( 0, 0 );
     bool bMinWidth = true, bMinHeight = true;
     if( !bMultiple && 1==nSelectEntryCnt )
     {
-        sal_Bool bTrue = sal_True;
-        aTmp.setValue( &bTrue, ::getBooleanCppuType() );
-        xPropSet->setPropertyValue("Dropdown", aTmp );
+        xPropSet->setPropertyValue("Dropdown", makeAny(true) );
     }
     else
     {
@@ -2331,9 +2322,7 @@ void SwHTMLParser::NewSelect()
 
         if( bMultiple )
         {
-            sal_Bool bTrue = sal_True;
-            aTmp.setValue( &bTrue, ::getBooleanCppuType() );
-            xPropSet->setPropertyValue("MultiSelection", aTmp );
+            xPropSet->setPropertyValue("MultiSelection", makeAny(true) );
         }
         aTextSz.Height() = nSelectEntryCnt;
         bMinHeight = false;

@@ -289,10 +289,7 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     // set redline mode to "don't record changes"
     if( bHandleRecordChanges )
     {
-        Any aAny;
-        sal_Bool bTmp = sal_False;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xModelPropertySet->setPropertyValue( sRecordChanges, aAny );
+        xModelPropertySet->setPropertyValue( sRecordChanges, makeAny(false) );
     }
 }
 
@@ -354,13 +351,13 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
     {
         Any aAny;
 
-        aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
+        aAny <<= bShowChanges;
         if ( bHandleShowChanges )
             xModelPropertySet->setPropertyValue( sShowChanges, aAny );
         else
             xImportInfoPropertySet->setPropertyValue( sShowChanges, aAny );
 
-        aAny.setValue( &bRecordChanges, ::getBooleanCppuType() );
+        aAny <<= bRecordChanges;
         if ( bHandleRecordChanges )
             xModelPropertySet->setPropertyValue( sRecordChanges, aAny );
         else

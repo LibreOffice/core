@@ -322,10 +322,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR4:      nPart = 1; break;
     case FIELD_PROP_SUBTYPE:   nPart = 0; break;
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? sal_True : sal_False;
-            rVal.setValue(&bSet, ::getBooleanCppuType());
-        }
+        rVal <<= GetType() == sfx2::LINKUPDATE_ALWAYS;
         break;
     case FIELD_PROP_PAR5:
         rVal <<= aExpansion;

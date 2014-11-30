@@ -353,7 +353,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     bool bModified = GetWrtShell().IsModified();
 
     int eState = STATE_TOGGLE;
-    sal_Bool bSet = sal_False;
+    bool bSet = false;
     bool bBrowseModeChanged = false;
 
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -511,11 +511,10 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
 
         pOpt->SetOnlineSpell(bSet);
         {
-            uno::Any aVal( &bSet, ::getCppuBooleanType() );
             OUString aPropName(UPN_IS_SPELL_AUTO);
 
             SvtLinguConfig  aCfg;
-            aCfg.SetProperty( aPropName, aVal );
+            aCfg.SetProperty( aPropName, uno::makeAny( bSet ) );
 
             if (xLngProp.is())
                 xLngProp->setIsSpellAuto( bSet );

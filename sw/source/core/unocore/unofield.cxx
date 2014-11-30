@@ -917,7 +917,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 else if(rPropertyName == UNO_NAME_VALUE)
                     aRet <<= m_pImpl->m_fParam1;
                 else if(rPropertyName == UNO_NAME_IS_EXPRESSION)
-                    aRet.setValue(&m_pImpl->m_bParam1, ::getBooleanCppuType());
+                    aRet <<= m_pImpl->m_bParam1;
                 break;
             case RES_DBFLD:
                 if(rPropertyName == UNO_NAME_DATA_BASE_NAME ||
@@ -949,7 +949,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     if(nPart  < 3 )
                         aRet <<= m_pImpl->m_sParam1.getToken(nPart, sfx2::cTokenSeparator);
                     else if(3 == nPart)
-                        aRet.setValue(&m_pImpl->m_bParam1, ::getBooleanCppuType());
+                        aRet <<= m_pImpl->m_bParam1;
                 }
                 break;
             default:
@@ -2410,9 +2410,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     bIsFieldUsed       = bFrame || bHidden;
                     bIsFieldDisplayed  = bIsFieldUsed && !bHidden;
                 }
-                sal_Bool bRetVal = (FIELD_PROP_IS_FIELD_USED == pEntry->nWID) ?
-                                            bIsFieldUsed : bIsFieldDisplayed;
-                aRet.setValue( &bRetVal, ::getCppuBooleanType() );
+                aRet <<= (FIELD_PROP_IS_FIELD_USED == pEntry->nWID) ? bIsFieldUsed : bIsFieldDisplayed;
             }
             else
                 pField->QueryValue( aRet, pEntry->nWID );
@@ -2457,16 +2455,16 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 aRet <<= m_pImpl->m_pProps->nByte1;
                 break;
             case FIELD_PROP_BOOL1 :
-                aRet.setValue(&m_pImpl->m_pProps->bBool1, ::getCppuBooleanType());
+                aRet <<= m_pImpl->m_pProps->bBool1;
                 break;
             case FIELD_PROP_BOOL2 :
-                aRet.setValue(&m_pImpl->m_pProps->bBool2, ::getCppuBooleanType());
+                aRet <<= m_pImpl->m_pProps->bBool2;
                 break;
             case FIELD_PROP_BOOL3 :
-                aRet.setValue(&m_pImpl->m_pProps->bBool3, ::getCppuBooleanType());
+                aRet <<= m_pImpl->m_pProps->bBool3;
                 break;
             case FIELD_PROP_BOOL4 :
-                aRet.setValue(&m_pImpl->m_pProps->bBool4, ::getCppuBooleanType());
+                aRet <<= m_pImpl->m_pProps->bBool4;
                 break;
             case FIELD_PROP_DATE :
                 aRet.setValue(&m_pImpl->m_pProps->aDate, ::cppu::UnoType<util::Date>::get());

@@ -331,7 +331,7 @@ void SwXTextPortion::GetPropertyValue(
                     case PORTION_RUBY_END:
                     case PORTION_FIELD_START:
                     case PORTION_FIELD_END:
-                        rVal.setValue(&m_bIsCollapsed, ::getBooleanCppuType());
+                        rVal <<= m_bIsCollapsed;
                     break;
                     default:
                     break;
@@ -363,7 +363,7 @@ void SwXTextPortion::GetPropertyValue(
                         bPut = false;
                 }
                 if(bPut)
-                    rVal.setValue(&bStart, ::getBooleanCppuType());
+                    rVal <<= bStart;
             }
             break;
             case RES_TXTATR_CJK_RUBY:

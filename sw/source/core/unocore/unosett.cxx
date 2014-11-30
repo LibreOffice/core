@@ -530,10 +530,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case  WID_POSITION_END_OF_DOC:
-                {
-                    sal_Bool bTemp = FTNPOS_CHAPTER == rFtnInfo.ePos;
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= FTNPOS_CHAPTER == rFtnInfo.ePos;
                 break;
                 case  WID_END_NOTICE         :
                     aRet <<= rFtnInfo.aQuoVadis;
@@ -973,10 +970,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
             switch(pEntry->nWID)
             {
                 case WID_NUM_ON:
-                {
-                    sal_Bool bTemp = rInfo.IsPaintLineNumbers();
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= rInfo.IsPaintLineNumbers();
                 break;
                 case WID_CHARACTER_STYLE :
                 {
@@ -1036,22 +1030,13 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= (sal_Int16)rInfo.GetDividerCountBy();
                 break;
                 case WID_COUNT_EMPTY_LINES :
-                {
-                    sal_Bool bTemp = rInfo.IsCountBlankLines();
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= rInfo.IsCountBlankLines();
                 break;
                 case WID_COUNT_LINES_IN_FRAMES :
-                {
-                    sal_Bool bTemp = rInfo.IsCountInFlys();
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= rInfo.IsCountInFlys();
                 break;
                 case WID_RESTART_AT_EACH_PAGE :
-                {
-                    sal_Bool bTemp = rInfo.IsRestartEachPage();
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= rInfo.IsRestartEachPage();
                 break;
             }
         }
@@ -2222,25 +2207,21 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
 
     if(rPropertyName == UNO_NAME_IS_AUTOMATIC)
     {
-        sal_Bool bVal = pRule->IsAutoRule();
-        aRet.setValue(&bVal, ::getBooleanCppuType());
+        aRet <<= pRule->IsAutoRule();
     }
     else if(rPropertyName == UNO_NAME_IS_CONTINUOUS_NUMBERING)
     {
-        sal_Bool bVal = pRule->IsContinusNum();
-        aRet.setValue(&bVal, ::getBooleanCppuType());
+        aRet <<= pRule->IsContinusNum();
     }
     else if(rPropertyName == UNO_NAME_NAME)
         aRet <<= pRule->GetName();
     else if(rPropertyName == UNO_NAME_IS_ABSOLUTE_MARGINS)
     {
-        sal_Bool bVal = pRule->IsAbsSpaces();
-        aRet.setValue(&bVal, ::getBooleanCppuType());
+        aRet <<= pRule->IsAbsSpaces();
     }
     else if(rPropertyName == UNO_NAME_NUMBERING_IS_OUTLINE)
     {
-        sal_Bool bVal = pRule->IsOutlineRule();
-        aRet.setValue(&bVal, ::getBooleanCppuType());
+        aRet <<= pRule->IsOutlineRule();
     }
     else if(rPropertyName == UNO_NAME_DEFAULT_LIST_ID)
     {
@@ -2591,10 +2572,10 @@ Any SwXTextColumns::getPropertyValue( const OUString& rPropertyName )
             aRet <<= (style::VerticalAlignment)nSepLineVertAlign;
         break;
         case WID_TXTCOL_LINE_IS_ON:
-            aRet.setValue(&bSepLineIsOn, ::getBooleanCppuType());
+            aRet <<= bSepLineIsOn;
         break;
         case WID_TXTCOL_IS_AUTOMATIC :
-            aRet.setValue(&bIsAutomaticWidth, ::getBooleanCppuType());
+            aRet <<= bIsAutomaticWidth;
         break;
         case WID_TXTCOL_AUTO_DISTANCE:
             aRet <<= nAutoDistance;

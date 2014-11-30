@@ -1559,18 +1559,10 @@ void SwInsertDBColAutoPilot::Commit()
     if( pTAutoFmt )
         pValues[6].Value <<= pTAutoFmt->GetName();
 
-    const Type& rBoolType = ::getBooleanCppuType();
-    sal_Bool bTmp = m_pRbAsTable->IsChecked();
-    pValues[7].Value.setValue(&bTmp, rBoolType);
-
-    bTmp = m_pRbAsField->IsChecked();
-    pValues[8].Value.setValue(&bTmp, rBoolType);
-
-    bTmp = m_pCbTableHeadon->IsChecked();
-    pValues[9].Value.setValue(&bTmp, rBoolType);
-
-    bTmp = m_pRbHeadlEmpty->IsChecked();
-    pValues[10].Value.setValue(&bTmp, rBoolType);
+    pValues[7].Value <<= m_pRbAsTable->IsChecked();
+    pValues[8].Value <<= m_pRbAsField->IsChecked();
+    pValues[9].Value <<= m_pCbTableHeadon->IsChecked();
+    pValues[10].Value <<= m_pRbHeadlEmpty->IsChecked();
 
     SetSetProperties(OUString(), aValues);
 
@@ -1599,11 +1591,8 @@ void SwInsertDBColAutoPilot::Commit()
             pSubValues[i].Name = pSubNodeNames[i];
         pSubValues[0].Value <<= pColumn->sColumn;
         pSubValues[1].Value <<= i;
-
-        sal_Bool bVal = pColumn->bHasFmt;
-        pSubValues[2].Value.setValue(&bVal, rBoolType);
-        bVal = pColumn->bIsDBFmt;
-        pSubValues[3].Value.setValue(&bVal, rBoolType);
+        pSubValues[2].Value <<= pColumn->bHasFmt;
+        pSubValues[3].Value <<= pColumn->bIsDBFmt;
 
         SwStyleNameMapper::FillUIName( RES_POOLCOLL_STANDARD, sTmp );
         const SvNumberformat* pNF = rNFmtr.GetEntry( pColumn->nUsrNumFmt );
