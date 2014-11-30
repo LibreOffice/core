@@ -722,11 +722,9 @@ int mscx_filterCppException(
             // MSVS9/crt/src/mtdll.h:
             // offsetof (_tiddata, _curexception) -
             // offsetof (_tiddata, _tpxcptinfoptrs):
-#if _MSC_VER < 1600
+            //
+            // See dev-tools/uno/uno_exception_offset
             0x48 // msvcr90.dll
-#else
-            error, please find value for this compiler version
-#endif
             );
     }
 
