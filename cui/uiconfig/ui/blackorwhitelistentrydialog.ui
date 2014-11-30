@@ -248,7 +248,7 @@
               <object class="GtkLabel" id="bledittitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Edit Black-list Entry</property>
+                <property name="label" translatable="yes">Edit Blacklist Entry</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -259,7 +259,7 @@
               <object class="GtkLabel" id="bladdtitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Create Black-list Entry</property>
+                <property name="label" translatable="yes">Create Blacklist Entry</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -270,7 +270,7 @@
               <object class="GtkLabel" id="wledittitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Edit White-list Entry</property>
+                <property name="label" translatable="yes">Edit Whitelist Entry</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -281,7 +281,7 @@
               <object class="GtkLabel" id="wladdtitle">
                 <property name="can_focus">False</property>
                 <property name="no_show_all">True</property>
-                <property name="label" translatable="yes">Create White-list Entry</property>
+                <property name="label" translatable="yes">Create Whitelist Entry</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
