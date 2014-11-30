@@ -20,20 +20,17 @@
 #include "ring.hxx"
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
-namespace
+struct Ring_node_traits
 {
-    struct Ring_node_traits
-    {
-        typedef Ring node;
-        typedef Ring* node_ptr;
-        typedef const Ring* const_node_ptr;
-        static node_ptr get_next(const_node_ptr n) { return n->GetNext(); };
-        static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
-        static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
-        static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
-    };
-    typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
-}
+    typedef Ring node;
+    typedef Ring* node_ptr;
+    typedef const Ring* const_node_ptr;
+    static node_ptr get_next(const_node_ptr n) { return n->GetNext(); };
+    static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
+    static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
+    static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
+};
+typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
 
 
 Ring::Ring()

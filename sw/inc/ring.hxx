@@ -22,15 +22,18 @@
 #include <swdllapi.h>
 #include <swtypes.hxx>
 
+class Ring_node_traits;
+
 class SW_DLLPUBLIC Ring
 {
+    friend class Ring_node_traits;
+    Ring* pNext;
+    Ring* pPrev;    ///< In order to speed up inserting and deleting.
 
 protected:
     Ring();
     Ring( Ring * );
 public:
-    Ring* pNext;
-    Ring* pPrev;    ///< In order to speed up inserting and deleting.
     virtual ~Ring();
     void MoveTo( Ring *pDestRing );
     void MoveRingTo( Ring *pDestRing );
