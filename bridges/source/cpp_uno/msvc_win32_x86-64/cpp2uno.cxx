@@ -243,13 +243,13 @@ extern "C" typelib_TypeClass cpp_vtable_call(
     {
         SAL_WARN(
             "bridges",
-            "illegal " << OUString::unacquired(&pTypeDescr->aBase.pTypeName)
+            "illegal " << OUString::unacquired(&pTD->aBase.pTypeName)
                 << " vtable index " << nFunctionIndex << "/"
-                << pTypeDescr->nMapFunctionIndexToMemberIndex);
+                << pTD->nMapFunctionIndexToMemberIndex);
         throw RuntimeException(
-            ("illegal " + OUString::unacquired(&pTypeDescr->aBase.pTypeName)
+            ("illegal " + OUString::unacquired(&pTD->aBase.pTypeName)
              + " vtable index " + OUString::number(nFunctionIndex) + "/"
-             + OUString::number(pTypeDescr->nMapFunctionIndexToMemberIndex)),
+             + OUString::number(pTD->nMapFunctionIndexToMemberIndex)),
             reinterpret_cast<XInterface *>( pCppI ) );
     }
 
