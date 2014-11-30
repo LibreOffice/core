@@ -33,6 +33,66 @@ Menu RID_POPUP_CELLS
     {
         MenuItem
         {
+            Identifier = SID_CUT ;
+            HelpId = CMD_SID_CUT ;
+            Text [ en-US ] = "Cu~t" ;
+        };
+        MenuItem
+        {
+            Identifier = SID_COPY ;
+            HelpId = CMD_SID_COPY ;
+            Text [ en-US ] = "~Copy" ;
+        };
+
+        MenuItem
+        {
+            Identifier = SID_PASTE ;
+            HelpID = CMD_SID_PASTE ;
+            Text [ en-US ] = "~Paste" ;
+        };
+
+        MenuItem
+        {
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = CMD_SID_PASTE_SPECIAL ;
+            Text [ en-US ] = "P~aste Special..." ;
+        };
+
+        MenuItem
+        {
+            Identifier = SID_PASTE_ONLY ;
+            HelpId = CMD_SID_PASTE_ONLY ;
+            Text [ en-US ] = "Paste O~nly" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_PASTE_ONLY_TEXT ;
+                        HelpId = CMD_SID_PASTE_ONLY_TEXT ;
+                        Text [ en-US ] = "~Text" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_PASTE_ONLY_VALUE ;
+                        HelpId = CMD_SID_PASTE_ONLY_VALUE ;
+                        Text [ en-US ] = "~Number" ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_PASTE_ONLY_FORMULA ;
+                        HelpId = CMD_SID_PASTE_ONLY_FORMULA ;
+                        Text [ en-US ] = "~Formula" ;
+                    };
+                };
+            };
+        };
+
+        MenuItem { Separator = TRUE ; };
+
+        MenuItem
+        {
             Identifier = SID_CELL_FORMAT_RESET ;
             HelpId = CMD_SID_CELL_FORMAT_RESET ;
             Text [ en-US ] = "Clear ~Direct Formatting" ;
@@ -105,66 +165,6 @@ Menu RID_POPUP_CELLS
             Identifier = FID_HIDE_NOTE ;
             HelpId = CMD_FID_HIDE_NOTE ;
             Text [ en-US ] = "~Hide Comment" ;
-        };
-
-        MenuItem { Separator = TRUE ; };
-
-        MenuItem
-        {
-            Identifier = SID_CUT ;
-            HelpId = CMD_SID_CUT ;
-            Text [ en-US ] = "Cu~t" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_COPY ;
-            HelpId = CMD_SID_COPY ;
-            Text [ en-US ] = "~Copy" ;
-        };
-
-        MenuItem
-        {
-            Identifier = SID_PASTE ;
-            HelpID = CMD_SID_PASTE ;
-            Text [ en-US ] = "~Paste" ;
-        };
-
-        MenuItem
-        {
-            Identifier = SID_PASTE_SPECIAL ;
-            HelpId = CMD_SID_PASTE_SPECIAL ;
-            Text [ en-US ] = "P~aste Special..." ;
-        };
-
-        MenuItem
-        {
-            Identifier = SID_PASTE_ONLY ;
-            HelpId = CMD_SID_PASTE_ONLY ;
-            Text [ en-US ] = "Paste O~nly" ;
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        Identifier = SID_PASTE_ONLY_TEXT ;
-                        HelpId = CMD_SID_PASTE_ONLY_TEXT ;
-                        Text [ en-US ] = "~Text" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SID_PASTE_ONLY_VALUE ;
-                        HelpId = CMD_SID_PASTE_ONLY_VALUE ;
-                        Text [ en-US ] = "~Number" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SID_PASTE_ONLY_FORMULA ;
-                        HelpId = CMD_SID_PASTE_ONLY_FORMULA ;
-                        Text [ en-US ] = "~Formula" ;
-                    };
-                };
-            };
         };
 
         MenuItem { Separator = TRUE ; };
