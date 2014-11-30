@@ -366,17 +366,11 @@ bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bTemp = 0 == (GetSubType()&nsSwExtendedSubType::SUB_OWN_FMT);
-            rAny.setValue(&bTemp, ::getBooleanCppuType());
-        }
+        rAny <<= 0 == (GetSubType()&nsSwExtendedSubType::SUB_OWN_FMT);
         break;
     case FIELD_PROP_BOOL2:
-    {
-        sal_Bool bVal = 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
-        rAny.setValue(&bVal, ::getBooleanCppuType());
-    }
-    break;
+        rAny <<= 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
+        break;
     case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
         break;
@@ -502,11 +496,8 @@ bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= aDBData.nCommandType;
         break;
     case FIELD_PROP_BOOL2:
-    {
-        sal_Bool bVal = 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
-        rAny.setValue(&bVal, ::getBooleanCppuType());
-    }
-    break;
+        rAny <<= 0 == (GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE);
+        break;
     default:
         OSL_FAIL("illegal property");
     }

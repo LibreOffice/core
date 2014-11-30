@@ -358,17 +358,14 @@ SwField* SwAuthorField::Copy() const
 
 bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    bool bVal;
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        bVal = (GetFormat() & 0xff) == AF_NAME;
-        rAny.setValue(&bVal, ::getBooleanCppuType());
+        rAny <<= (GetFormat() & 0xff) == AF_NAME;
         break;
 
     case FIELD_PROP_BOOL2:
-        bVal = IsFixed();
-        rAny.setValue(&bVal, ::getBooleanCppuType());
+        rAny <<= IsFixed();
         break;
 
     case FIELD_PROP_PAR1:
@@ -518,10 +515,7 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_BOOL2:
-        {
-            sal_Bool bVal = IsFixed();
-            rAny.setValue(&bVal, ::getBooleanCppuType());
-        }
+        rAny <<= IsFixed();
         break;
 
     case FIELD_PROP_PAR3:
@@ -1191,11 +1185,9 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
 
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bVal = 0 != (nSubType & DI_SUB_FIXED);
-            rAny.setValue(&bVal, ::getBooleanCppuType());
-        }
+        rAny <<= 0 != (nSubType & DI_SUB_FIXED);
         break;
+
     case FIELD_PROP_FORMAT:
         rAny  <<= (sal_Int32)GetFormat();
         break;
@@ -1212,8 +1204,7 @@ bool SwDocInfoField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_BOOL2:
         {
             sal_uInt16 nExtSub = (nSubType & 0xff00) & ~DI_SUB_FIXED;
-            sal_Bool bVal = (nExtSub == DI_SUB_DATE);
-            rAny.setValue(&bVal, ::getBooleanCppuType());
+            rAny <<= nExtSub == DI_SUB_DATE;
         }
         break;
     default:
@@ -1491,12 +1482,9 @@ bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_PAR4 :
         rAny <<= aContent;
-    break;
+        break;
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bHidden = bIsHidden;
-            rAny.setValue(&bHidden, ::getBooleanCppuType());
-        }
+        rAny <<= bIsHidden;
         break;
     default:
         OSL_FAIL("illegal property");
@@ -1604,10 +1592,7 @@ bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= aCond;
         break;
     case  FIELD_PROP_BOOL1:
-        {
-            sal_Bool bHidden = bIsHidden;
-            rAny.setValue(&bHidden, ::getBooleanCppuType());
-        }
+        rAny <<= bIsHidden;
         break;
 
     default:
@@ -1964,10 +1949,7 @@ bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bTmp = IsFixed();
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
+        rAny <<= IsFixed();
         break;
     default:
         OSL_FAIL("illegal property");
@@ -2052,7 +2034,7 @@ bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        rAny.setValue(&bOn, ::getBooleanCppuType());
+        rAny <<= bOn;
         break;
     case FIELD_PROP_USHORT1:
         rAny <<= (sal_Int16)nOffset;

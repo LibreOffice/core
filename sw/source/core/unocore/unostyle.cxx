@@ -379,17 +379,11 @@ uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions(vo
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyValue > aSeq(5);
     beans::PropertyValue* pArray = aSeq.getArray();
-    uno::Any aVal;
-    sal_Bool bTemp = sal_True;
-    aVal.setValue(&bTemp, ::getCppuBooleanType());
+    const uno::Any aVal(true);
     pArray[0] = beans::PropertyValue(UNO_NAME_LOAD_TEXT_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[1] = beans::PropertyValue(UNO_NAME_LOAD_FRAME_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[2] = beans::PropertyValue(UNO_NAME_LOAD_PAGE_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[3] = beans::PropertyValue(UNO_NAME_LOAD_NUMBERING_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    aVal.setValue(&bTemp, ::getCppuBooleanType());
     pArray[4] = beans::PropertyValue(UNO_NAME_OVERWRITE_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     return aSeq;
 }
@@ -2327,7 +2321,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
     if(FN_UNO_IS_PHYSICAL == rEntry.nWID)
     {
-        sal_Bool bPhys = pBase != 0;
+        bool bPhys = pBase != 0;
         if(pBase)
         {
             bPhys = static_cast<SwDocStyleSheet*>(pBase)->IsPhysical();
@@ -2335,19 +2329,19 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             if( bPhys && SFX_STYLE_FAMILY_CHAR == eFamily &&
                 static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt() &&
                 static_cast<SwDocStyleSheet*>(pBase)->GetCharFmt()->IsDefault() )
-                bPhys = sal_False;
+                bPhys = false;
         }
-        aRet.setValue(&bPhys, ::getBooleanCppuType());
+        aRet <<= bPhys;
     }
     else if (FN_UNO_HIDDEN == rEntry.nWID)
     {
-        sal_Bool bHidden = sal_False;
+        bool bHidden = false;
         if(pBase)
         {
             rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)) );
             bHidden = xBase->IsHidden();
         }
-        aRet.setValue(&bHidden, ::getBooleanCppuType());
+        aRet <<= bHidden;
     }
     else if (FN_UNO_STYLE_INTEROP_GRAB_BAG == rEntry.nWID)
     {
@@ -2442,12 +2436,12 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case FN_UNO_IS_AUTO_UPDATE:
             {
-                sal_Bool bAuto = sal_False;
+                bool bAuto = false;
                 if(SFX_STYLE_FAMILY_PARA == eFamily)
                     bAuto = rBase.getNewBase()->GetCollection()->IsAutoUpdateFmt();
                 else if(SFX_STYLE_FAMILY_FRAME == eFamily)
                     bAuto = rBase.getNewBase()->GetFrmFmt()->IsAutoUpdateFmt();
-                aRet.setValue(&bAuto, ::getBooleanCppuType());
+                aRet <<= bAuto;
 
                 bDone = true;
                 break;
@@ -3767,9 +3761,8 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         }
                         else if(pEntry->nWID == SID_ATTR_PAGE_ON)
                         {
-                            // header/footer is not available, thus off. Default is sal_False, though
-                            sal_Bool bRet = sal_False;
-                            pRet[nProp].setValue(&bRet, ::getCppuBooleanType());
+                            // header/footer is not available, thus off. Default is <false>, though
+                            pRet[nProp] <<= false;
                         }
                     }
                     else

@@ -242,14 +242,13 @@ void    SwEnvCfgItem::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
         {
             case  0: pValues[nProp] <<= aEnvItem.aAddrText; break;// "Inscription/Addressee",
             case  1: pValues[nProp] <<= aEnvItem.aSendText; break;// "Inscription/Sender",
-            case  2: pValues[nProp].setValue(&aEnvItem.bSend, rType);break;// "Inscription/UseSender",
+            case  2: pValues[nProp] <<= aEnvItem.bSend; break;// "Inscription/UseSender",
             case  3: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lAddrFromLeft)) ; break;// "Format/AddresseeFromLeft",
             case  4: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lAddrFromTop))  ; break;// "Format/AddresseeFromTop",
             case  5: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lSendFromLeft)) ; break;// "Format/SenderFromLeft",
@@ -257,7 +256,7 @@ void    SwEnvCfgItem::Commit()
             case  7: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lWidth))  ; break;// "Format/Width",
             case  8: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lHeight)) ; break;// "Format/Height",
             case  9: pValues[nProp] <<= sal_Int32(aEnvItem.eAlign); break;// "Print/Alignment",
-            case 10: pValues[nProp].setValue(&aEnvItem.bPrintFromAbove, rType); break;// "Print/FromAbove",
+            case 10: pValues[nProp] <<= aEnvItem.bPrintFromAbove; break;// "Print/FromAbove",
             case 11: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lShiftRight));break; // "Print/Right",
             case 12: pValues[nProp] <<= static_cast <sal_Int32>(convertTwipToMm100(aEnvItem.lShiftDown)); break;// "Print/Down"
         }

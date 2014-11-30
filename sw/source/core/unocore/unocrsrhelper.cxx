@@ -418,8 +418,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                     {
-                        sal_Bool bIsNumber = pTxtNd->IsCountedInList();
-                        pAny->setValue(&bIsNumber, ::getBooleanCppuType());
+                        *pAny <<= pTxtNd->IsCountedInList();
                     }
                     // #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
@@ -428,8 +427,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     }
                     else
                     {
-                        sal_Bool bIsRestart = pTxtNd->IsListRestart();
-                        pAny->setValue(&bIsRestart, ::getBooleanCppuType());
+                        *pAny <<= pTxtNd->IsListRestart();
                     }
                 }
             }

@@ -402,7 +402,6 @@ void    SwLabCfgItem::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0, nProperty = 0; nProp < aNames.getLength(); nProp++, nProperty++)
     {
         //to have a contiuous switch an offset is added
@@ -410,7 +409,7 @@ void    SwLabCfgItem::Commit()
             nProperty += 3;
         switch(nProperty)
         {
-            case  0: pValues[nProp].setValue(&aItem.bCont, rType); break;// "Medium/Continuous",
+            case  0: pValues[nProp] <<= aItem.bCont;            break;// "Medium/Continuous",
             case  1: pValues[nProp] <<= aItem.aMake;            break;// "Medium/Brand",
             case  2: pValues[nProp] <<= aItem.aType;            break;// "Medium/Type",
             case  3: pValues[nProp] <<= aItem.nCols;            break;// "Format/Column",
@@ -423,11 +422,11 @@ void    SwLabCfgItem::Commit()
             case 10: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lUpper));            break;// "Format/TopMargin",
             case 11: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lPWidth)); break;// "Format/Page Width",
             case 12: pValues[nProp] <<= static_cast<sal_Int32>(convertTwipToMm100(aItem.lPHeight)); break;// "Format/PageHeight",
-            case 13: pValues[nProp].setValue(&aItem.bSynchron, rType); break;// "Option/Synchronize",
-            case 14: pValues[nProp].setValue(&aItem.bPage, rType); break;// "Option/Page",
+            case 13: pValues[nProp] <<= aItem.bSynchron;        break;// "Option/Synchronize",
+            case 14: pValues[nProp] <<= aItem.bPage;            break;// "Option/Page",
             case 15: pValues[nProp] <<= aItem.nCol;            break;// "Option/Column",
             case 16: pValues[nProp] <<= aItem.nRow;            break;// "Option/Row"
-            case 17: pValues[nProp].setValue(&aItem.bAddr, rType); break;// "Inscription/UseAddress",
+            case 17: pValues[nProp] <<= aItem.bAddr;            break;// "Inscription/UseAddress",
             case 18: pValues[nProp] <<= aItem.aWriting;         break;// "Inscription/Address",
             case 19: pValues[nProp] <<= aItem.sDBName;          break;// "Inscription/Database"
             case 20: pValues[nProp] <<= aItem.aPrivFirstName;   break;// "PrivateAddress/FirstName",

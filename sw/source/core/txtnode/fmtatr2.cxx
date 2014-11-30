@@ -452,7 +452,7 @@ bool SwFmtRuby::QueryValue( uno::Any& rVal,
         break;
         case MID_RUBY_ABOVE:
         {
-            rVal <<= bool(!nPosition) ;
+            rVal <<= static_cast<bool>(!nPosition);
         }
         break;
         default:

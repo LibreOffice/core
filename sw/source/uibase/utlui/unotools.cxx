@@ -139,8 +139,7 @@ void SwOneExampleFrame::CreateControl()
         uno::Sequence<beans::PropertyValue> aSeq(3);
         beans::PropertyValue* pValues = aSeq.getArray();
         pValues[0].Name = "ReadOnly";
-        sal_Bool bTrue = sal_True;
-        pValues[0].Value.setValue(&bTrue, ::getBooleanCppuType());
+        pValues[0].Value <<= true;
         pValues[1].Name = "OpenFlags";
         pValues[1].Value <<= OUString("-RB");
         pValues[2].Name = "Referer";
@@ -228,10 +227,8 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
-        sal_Bool bTrue = sal_True;
-        sal_Bool bFalse = sal_False;
-        uno::Any aTrueSet( &bTrue, ::getBooleanCppuType() );
-        uno::Any aFalseSet( &bFalse, ::getBooleanCppuType() );
+        const uno::Any aTrueSet( true );
+        const uno::Any aFalseSet( false );
 
         if( !bIsInitialized )
         {

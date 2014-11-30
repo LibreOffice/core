@@ -426,10 +426,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_BOOL2:
-        {
-            sal_Bool bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
+        rAny <<= 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_PAR4:
         rAny <<= GetExpStr();
@@ -1048,10 +1045,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
-        {
-            sal_Bool bVal = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
-            rAny.setValue(&bVal, ::getBooleanCppuType());
-        }
+        rAny <<= 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
@@ -1088,16 +1082,10 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= OUString( aPText );
         break;
     case FIELD_PROP_BOOL3:
-        {
-            sal_Bool bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
+        rAny <<= 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bTmp = GetInputFlag();
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
+        rAny <<= GetInputFlag();
         break;
     case FIELD_PROP_PAR4:
         rAny <<= rtl::OUString(GetExpStr());

@@ -2539,9 +2539,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl)
     pGrfDlg->SetDisplayDirectory( m_pConnectED->GetText() );
     uno::Reference < ui::dialogs::XFilePicker > xFP = pGrfDlg->GetFilePicker();
     uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
-    sal_Bool bTrue = sal_True;
-    uno::Any aVal(&bTrue, ::getBooleanCppuType());
-    xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
+    xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, uno::makeAny(true) );
 
     if ( pGrfDlg->Execute() == ERRCODE_NONE )
     {   // remember selected filter

@@ -3116,8 +3116,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 if(SVX_TAB_ADJUST_END == aToken.eTabAlign)
                 {
                     pArr[1].Name = "TabStopRightAligned";
-                    sal_Bool bTemp = sal_True;
-                    pArr[1].Value.setValue(&bTemp, ::getCppuBooleanType());
+                    pArr[1].Value <<= true;
                 }
                 else
                 {

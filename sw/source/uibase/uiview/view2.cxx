@@ -307,9 +307,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     uno::Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
     if(nHtmlMode & HTMLMODE_ON)
     {
-        bool bTrue = true;
-        Any aVal(&bTrue, ::getBooleanCppuType());
-        xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
+        xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, makeAny(true));
         xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
     }
 
