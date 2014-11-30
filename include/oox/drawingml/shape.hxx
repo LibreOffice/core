@@ -249,6 +249,7 @@ protected:
 
     TextBodyPtr                 mpTextBody;
     LinePropertiesPtr           mpLinePropertiesPtr;
+    LinePropertiesPtr           mpShapeRefLinePropPtr;
     FillPropertiesPtr           mpFillPropertiesPtr;
     FillPropertiesPtr           mpShapeRefFillPropPtr;
     GraphicPropertiesPtr        mpGraphicPropertiesPtr;
