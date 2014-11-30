@@ -55,7 +55,7 @@ public class LOKitThread extends Thread {
 
         mLayerClient.setPageRect(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
         mLayerClient.setViewportMetrics(mLayerClient.getViewportMetrics());
-        mLayerClient.setForceRedraw();
+        mLayerClient.forceRedraw();
     }
 
     /** Invalidate everything + handle the geometry change + draw. */
