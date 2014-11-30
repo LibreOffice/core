@@ -31,6 +31,9 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xlnwtit.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <sax/tools/converter.hxx>
 
@@ -85,6 +88,7 @@ public:
     void testBnc584721_3();
     void testBnc584721_4();
     void testBnc904423();
+    void testShapeLineStyle();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -113,6 +117,7 @@ public:
     CPPUNIT_TEST(testBnc584721_3);
     CPPUNIT_TEST(testBnc584721_4);
     CPPUNIT_TEST(testBnc904423);
+    CPPUNIT_TEST(testShapeLineStyle);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -915,6 +920,74 @@ void SdImportTest::testBnc904423()
         const XFillColorItem& rColorItem = dynamic_cast<const XFillColorItem&>(
                 pObj->GetMergedItem(XATTR_FILLCOLOR));
         CPPUNIT_ASSERT_EQUAL(ColorData(0xFF0000), rColorItem.GetColorValue().GetColor());
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testShapeLineStyle()
+{
+    // Here the problem was that different line properties were applied in wrong order on the shape
+    // Right order: 1) master slide line style, 2) theme, 3) direct formatting
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("sd/qa/unit/data/pptx/ShapeLineProperties.pptx"), PPTX);
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // First shape's line style is defined on master slide
+    {
+        SdrObject *const pObj = pPage->GetObj(0);
+        CPPUNIT_ASSERT(pObj);
+
+        const XLineStyleItem& rStyleItem = dynamic_cast<const XLineStyleItem&>(
+                pObj->GetMergedItem(XATTR_LINESTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_DASH, rStyleItem.GetValue());
+
+        const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
+                pObj->GetMergedItem(XATTR_LINECOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0xFF0000), rColorItem.GetColorValue().GetColor());
+
+        const XLineWidthItem& rWidthItem = dynamic_cast<const XLineWidthItem&>(
+                pObj->GetMergedItem(XATTR_LINEWIDTH));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(132), rWidthItem.GetValue());
+    }
+
+    // Second shape's line style is defined by theme
+    {
+        SdrObject *const pObj = pPage->GetObj(1);
+        CPPUNIT_ASSERT(pObj);
+
+        const XLineStyleItem& rStyleItem = dynamic_cast<const XLineStyleItem&>(
+                pObj->GetMergedItem(XATTR_LINESTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, rStyleItem.GetValue());
+
+        const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
+                pObj->GetMergedItem(XATTR_LINECOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0x3333CC), rColorItem.GetColorValue().GetColor());
+
+        const XLineWidthItem& rWidthItem = dynamic_cast<const XLineWidthItem&>(
+                pObj->GetMergedItem(XATTR_LINEWIDTH));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(35), rWidthItem.GetValue());
+    }
+
+    // Third shape's line style is defined by direct formatting
+    {
+        SdrObject *const pObj = pPage->GetObj(2);
+        CPPUNIT_ASSERT(pObj);
+
+        const XLineStyleItem& rStyleItem = dynamic_cast<const XLineStyleItem&>(
+                pObj->GetMergedItem(XATTR_LINESTYLE));
+        CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_SOLID, rStyleItem.GetValue());
+
+        const XLineColorItem& rColorItem = dynamic_cast<const XLineColorItem&>(
+                pObj->GetMergedItem(XATTR_LINECOLOR));
+        CPPUNIT_ASSERT_EQUAL(ColorData(0x7030A0), rColorItem.GetColorValue().GetColor());
+
+        const XLineWidthItem& rWidthItem = dynamic_cast<const XLineWidthItem&>(
+                pObj->GetMergedItem(XATTR_LINEWIDTH));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(176), rWidthItem.GetValue());
     }
 
     xDocShRef->DoClose();
