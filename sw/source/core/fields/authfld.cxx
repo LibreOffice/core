@@ -380,10 +380,7 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
 
     case FIELD_PROP_BOOL1:
     case FIELD_PROP_BOOL2:
-        {
-            sal_Bool bVal = FIELD_PROP_BOOL1 == nWhichId ? m_bIsSequence: m_bSortByDocument;
-            rVal.setValue(&bVal, ::getBooleanCppuType());
-        }
+        rVal <<= (FIELD_PROP_BOOL1 == nWhichId ? m_bIsSequence : m_bSortByDocument); // ?: and <<= have same precedence
         break;
 
     case FIELD_PROP_LOCALE:
@@ -402,7 +399,7 @@ bool SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
                 pValue[0].Name = UNO_NAME_SORT_KEY;
                 pValue[0].Value <<= sal_Int16(pKey->eField);
                 pValue[1].Name = UNO_NAME_IS_SORT_ASCENDING;
-                pValue[1].Value.setValue(&pKey->bSortAscending, ::getBooleanCppuType());
+                pValue[1].Value <<= pKey->bSortAscending;
             }
             rVal <<= aRet;
         }

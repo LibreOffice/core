@@ -1626,17 +1626,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         break;
         case WID_SECT_DDE_AUTOUPDATE:
         case WID_SECT_VISIBLE   :
-        {
-            sal_Bool bTemp = sal_True;
-            aRet.setValue( &bTemp, ::getCppuBooleanType());
-        }
+            aRet <<= true;
         break;
         case WID_SECT_PROTECTED:
         case WID_SECT_EDIT_IN_READONLY:
-        {
-            sal_Bool bTemp = sal_False;
-            aRet.setValue( &bTemp, ::getCppuBooleanType());
-        }
+            aRet <<= false;
         break;
         case  FN_UNO_ANCHOR_TYPES:
         case  FN_UNO_TEXT_WRAP:

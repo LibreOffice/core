@@ -618,12 +618,7 @@ static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nPro
 {
     switch(nOffset)
     {
-        case 0:
-        {
-            sal_Bool bTemp = rOpt.UseCaption();
-            pValues[nProp].setValue(&bTemp, ::getBooleanCppuType());
-        }
-        break;//Enable
+        case 0: pValues[nProp] <<= rOpt.UseCaption(); break;//Enable
         case 1: pValues[nProp] <<= OUString(rOpt.GetCategory()); break;//Category
         case 2: pValues[nProp] <<= (sal_Int32)rOpt.GetNumType(); break;//Numbering",
         case 3: pValues[nProp] <<= rOpt.GetNumSeparator(); break;//NumberingSeparator",
@@ -644,7 +639,6 @@ void SwInsertConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         const InsCaptionOpt* pWriterTableOpt = 0;
@@ -669,26 +663,20 @@ void SwInsertConfig::Commit()
         switch(nProp)
         {
             case INS_PROP_TABLE_HEADER:
-            {
-                sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::HEADLINE); pValues[nProp].setValue(&bVal, rType);
-            }
+                pValues[nProp] <<= 0 != (aInsTblOpts.mnInsMode & tabopts::HEADLINE);
             break;//"Table/Header",
             case INS_PROP_TABLE_REPEATHEADER:
-            {
-                sal_Bool bVal = (aInsTblOpts.mnRowsToRepeat>0); pValues[nProp].setValue(&bVal, rType);
-            }
+                pValues[nProp] <<= aInsTblOpts.mnRowsToRepeat > 0;
             break;//"Table/RepeatHeader",
             case INS_PROP_TABLE_BORDER:
-            {
-                sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER ); pValues[nProp].setValue(&bVal, rType);
-            }
+                pValues[nProp] <<= 0 != (aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER );
             break;//"Table/Border",
             case INS_PROP_TABLE_SPLIT:
-            {
-                sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT); pValues[nProp].setValue(&bVal, rType);
-            }
+                pValues[nProp] <<= 0 != (aInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT);
             break;//"Table/Split",
-            case INS_PROP_CAP_AUTOMATIC: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
+            case INS_PROP_CAP_AUTOMATIC:
+                pValues[nProp] <<= bInsWithCaption;
+            break;//"Caption/Automatic",
             case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST:
                 pValues[nProp] <<= bCaptionOrderNumberingFirst;
             break;//"Caption/CaptionOrderNumberingFirst"
@@ -1152,7 +1140,6 @@ void SwTableConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -1162,9 +1149,9 @@ void SwTableConfig::Commit()
             case 2 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblHInsert); break;   //"Insert/Row",
             case 3 : pValues[nProp] <<= (sal_Int32)convertTwipToMm100(nTblVInsert); break;   //"Insert/Column",
             case 4 : pValues[nProp] <<= (sal_Int32)eTblChgMode; break;   //"Change/Effect",
-            case 5 : pValues[nProp].setValue(&bInsTblFormatNum, rType); break;  //"Input/NumberRecognition",
-            case 6 : pValues[nProp].setValue(&bInsTblChangeNumFormat, rType); break;  //"Input/NumberFormatRecognition",
-            case 7 : pValues[nProp].setValue(&bInsTblAlignNum, rType); break;  //"Input/Alignment"
+            case 5 : pValues[nProp] <<= bInsTblFormatNum; break;  //"Input/NumberRecognition",
+            case 6 : pValues[nProp] <<= bInsTblChangeNumFormat; break;  //"Input/NumberFormatRecognition",
+            case 7 : pValues[nProp] <<= bInsTblAlignNum; break;  //"Input/Alignment"
         }
     }
     PutProperties(aNames, aValues);
@@ -1255,7 +1242,6 @@ void SwMiscConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -1264,16 +1250,16 @@ void SwMiscConfig::Commit()
                 pValues[nProp] <<=
                     SwModuleOptions::ConvertWordDelimiter(sWordDelimiter, false);
             break;
-            case 1 : pValues[nProp].setValue(&bDefaultFontsInCurrDocOnly, rType); break;
-            case 2 : pValues[nProp].setValue(&bShowIndexPreview, rType) ;        break;
-            case 3 : pValues[nProp].setValue(&bGrfToGalleryAsLnk, rType);        break;
-            case 4 : pValues[nProp].setValue(&bNumAlignSize, rType);            break;
-            case 5 : pValues[nProp].setValue(&bSinglePrintJob, rType);          break;
+            case 1 : pValues[nProp] <<= bDefaultFontsInCurrDocOnly; break;
+            case 2 : pValues[nProp] <<= bShowIndexPreview; break;
+            case 3 : pValues[nProp] <<= bGrfToGalleryAsLnk; break;
+            case 4 : pValues[nProp] <<= bNumAlignSize; break;
+            case 5 : pValues[nProp] <<= bSinglePrintJob; break;
             case 6 : pValues[nProp] <<= nMailingFormats;             break;
             case 7 : pValues[nProp] <<= sNameFromColumn;  break;
             case 8 : pValues[nProp] <<= sMailingPath;     break;
             case 9 : pValues[nProp] <<= sMailName;        break;
-            case 10: pValues[nProp].setValue(&bIsNameFromColumn, rType);break;
+            case 10: pValues[nProp] <<= bIsNameFromColumn; break;
             case 11: pValues[nProp] <<= bAskForMailMergeInPrint; break;
         }
     }
@@ -1358,11 +1344,9 @@ void SwCompareConfig::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-   const Type& rType = ::getBooleanCppuType();
-
     pValues[0] <<= (sal_Int32) eCmpMode;
-    pValues[1].setValue(&bUseRsid, rType);
-    pValues[2].setValue(&bIgnorePieces, rType);
+    pValues[1] <<= bUseRsid;
+    pValues[2] <<= bIgnorePieces;
     pValues[3] <<= (sal_Int32) nPieceLen;
 
     PutProperties(aNames, aValues);

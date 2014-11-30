@@ -92,9 +92,7 @@ static void lcl_SetBOOLProp(
 {
     if(xInfo->hasPropertyByName(aPropName))
     {
-        uno::Any aValue;
-        aValue.setValue(&bValue, ::getCppuBooleanType());
-        xProps->setPropertyValue(aPropName, aValue);
+        xProps->setPropertyValue(aPropName, makeAny(bValue));
     }
 }
 
@@ -194,9 +192,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
 
             if(xSectPr.is())
             {
-                sal_Bool bTemp = i == nTOXIndex;
-                aVal.setValue(&bTemp, ::getBooleanCppuType());
-                xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, aVal);
+                xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, makeAny(i == nTOXIndex));
             }
         }
         // set properties
@@ -351,8 +347,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         if(TOKEN_TAB_STOP == aToken.eTokenType)
                         {
                             pPropValArr[2].Name = "TabStopRightAligned";
-                            sal_Bool bTemp = SVX_TAB_ADJUST_END == aToken.eTabAlign;
-                            pPropValArr[2].Value.setValue(&bTemp, ::getBooleanCppuType());
+                            pPropValArr[2].Value <<= SVX_TAB_ADJUST_END == aToken.eTabAlign;
                             pPropValArr[3].Name = "TabStopFillCharacter";
                             pPropValArr[3].Value <<= OUString(aToken.cTabFillChar);
                             pPropValArr[4].Name = "TabStopPosition";

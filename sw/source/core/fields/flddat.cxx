@@ -164,16 +164,10 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bTmp = IsFixed();
-            rVal.setValue(&bTmp, ::getCppuBooleanType());
-        }
+        rVal <<= IsFixed();
         break;
     case FIELD_PROP_BOOL2:
-        {
-            sal_Bool bTmp = IsDate();
-            rVal.setValue(&bTmp, ::getCppuBooleanType());
-        }
+        rVal <<= IsDate();
         break;
     case FIELD_PROP_FORMAT:
         rVal <<= (sal_Int32)GetFormat();

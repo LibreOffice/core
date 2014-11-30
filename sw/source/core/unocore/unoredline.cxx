@@ -319,14 +319,11 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
     }
     else if (rPropertyName == UNO_NAME_IS_IN_HEADER_FOOTER)
     {
-        sal_Bool bRet =
-            rRedline.GetDoc()->IsInHeaderFooter( rRedline.GetPoint()->nNode );
-        aRet.setValue(&bRet, ::getBooleanCppuType());
+        aRet <<= rRedline.GetDoc()->IsInHeaderFooter( rRedline.GetPoint()->nNode );
     }
     else if (rPropertyName == UNO_NAME_MERGE_LAST_PARA)
     {
-        sal_Bool bRet = !rRedline.IsDelLastPara();
-        aRet.setValue( &bRet, ::getBooleanCppuType() );
+        aRet <<= !rRedline.IsDelLastPara();
     }
     return aRet;
 }
@@ -351,15 +348,13 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
     pRet[nPropIdx++].Value <<= OUString::number(
         sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(&rRedline) ) );
     pRet[nPropIdx].Name = UNO_NAME_IS_COLLAPSED;
-    sal_Bool bTmp = !rRedline.HasMark();
-    pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
+    pRet[nPropIdx++].Value <<= !rRedline.HasMark();
 
     pRet[nPropIdx].Name = UNO_NAME_IS_START;
-    pRet[nPropIdx++].Value.setValue(&bIsStart, ::getBooleanCppuType()) ;
+    pRet[nPropIdx++].Value <<= bIsStart;
 
-    bTmp = !rRedline.IsDelLastPara();
     pRet[nPropIdx].Name = UNO_NAME_MERGE_LAST_PARA;
-    pRet[nPropIdx++].Value.setValue(&bTmp, ::getBooleanCppuType()) ;
+    pRet[nPropIdx++].Value <<= !rRedline.IsDelLastPara();
 
     SwNodeIndex* pNodeIdx = rRedline.GetContentIdx();
     if(pNodeIdx )

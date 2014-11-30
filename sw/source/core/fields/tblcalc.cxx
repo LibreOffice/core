@@ -161,10 +161,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         }
         break;
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bFormula = 0 != (nsSwExtendedSubType::SUB_CMD & nSubType);
-            rAny.setValue(&bFormula, ::getBooleanCppuType());
-        }
+        rAny <<= 0 != (nsSwExtendedSubType::SUB_CMD & nSubType);
         break;
     case FIELD_PROP_PAR1:
         rAny <<= GetExpStr();
