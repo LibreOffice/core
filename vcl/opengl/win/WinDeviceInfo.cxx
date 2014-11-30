@@ -12,22 +12,25 @@
 #include <windows.h>
 #include <setupapi.h>
 #include <cstdint>
-#include <rtl/ustrbuf.hxx>
 
 OUString* WinOpenGLDeviceInfo::mpDeviceVendors[wgl::DeviceVendorMax];
 std::vector<wgl::DriverInfo> WinOpenGLDeviceInfo::maDriverInfo;
 
 #define APPEND_TO_DRIVER_BLOCKLIST(os, vendor, devices, driverComparator, driverVersion, suggestedVersion) \
-    maDriverInfo.push_back(wgl::DriverInfo(os, vendor, devices, driverComparator, driverVersion, suggestedVersion))
+    maDriverInfo.push_back(wgl::DriverInfo(os, vendor, devices, driverComparator, driverVersion, false, suggestedVersion))
+
 #define APPEND_TO_DRIVER_BLOCKLIST2(os, vendor, devices, driverComparator, driverVersion) \
     maDriverInfo.push_back(wgl::DriverInfo(os, vendor, devices, driverComparator, driverVersion))
+
+#define APPEND_TO_DRIVER_WHITELIST(os, vendor, devices, driverComparator, driverVersion) \
+    maDriverInfo.push_back(wgl::DriverInfo(os, vendor, devices, driverComparator, driverVersion, true))
 
 #define APPEND_TO_DRIVER_BLOCKLIST_RANGE(os, vendor, devices, driverComparator, driverVersion, driverVersionMax, suggestedVersion) \
     do { \
         assert(driverComparator == wgl::DRIVER_BETWEEN_EXCLUSIVE || \
                 driverComparator == wgl::DRIVER_BETWEEN_INCLUSIVE || \
                 driverComparator == wgl::DRIVER_BETWEEN_INCLUSIVE_START); \
-        wgl::DriverInfo info(os, vendor, devices, driverComparator, driverVersion, suggestedVersion); \
+        wgl::DriverInfo info(os, vendor, devices, driverComparator, driverVersion, false, suggestedVersion); \
         info.mnDriverVersionMax = driverVersionMax; \
         maDriverInfo.push_back(info); \
     } while (false)
@@ -373,6 +376,7 @@ DriverInfo::DriverInfo()
     maAdapterVendor(WinOpenGLDeviceInfo::GetDeviceVendor(VendorAll)),
     mpDevices(allDevices),
     mbDeleteDevices(false),
+    mbWhitelisted(false),
     meComparisonOp(DRIVER_COMPARISON_IGNORED),
     mnDriverVersion(0),
     mnDriverVersionMax(0)
@@ -382,6 +386,7 @@ DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor,
         DeviceFamilyVector* devices,
         VersionComparisonOp op,
         uint64_t driverVersion,
+        bool bWhitelisted,
         const char *suggestedVersion /* = nullptr */,
         bool ownDevices /* = false */)
     : meOperatingSystem(os),
@@ -389,6 +394,7 @@ DriverInfo::DriverInfo(OperatingSystem os, const OUString& vendor,
     maAdapterVendor(vendor),
     mpDevices(devices),
     mbDeleteDevices(ownDevices),
+    mbWhitelisted(bWhitelisted),
     meComparisonOp(op),
     mnDriverVersion(driverVersion),
     mnDriverVersionMax(0)
@@ -401,6 +407,7 @@ DriverInfo::DriverInfo(const DriverInfo& aOrig)
     : meOperatingSystem(aOrig.meOperatingSystem),
     mnOperatingSystemVersion(aOrig.mnOperatingSystemVersion),
     maAdapterVendor(aOrig.maAdapterVendor),
+    mbWhitelisted(aOrig.mbWhitelisted),
     meComparisonOp(aOrig.meComparisonOp),
     mnDriverVersion(aOrig.mnDriverVersion),
     mnDriverVersionMax(aOrig.mnDriverVersionMax)
@@ -657,6 +664,13 @@ bool WinOpenGLDeviceInfo::FindBlocklistedDeviceInList()
         }
 
         if (match || maDriverInfo[i].mnDriverVersion == wgl::DriverInfo::allDriverVersions) {
+            // white listed drivers
+            if (maDriverInfo[i].mbWhitelisted)
+            {
+                SAL_WARN("vcl.opengl", "whitelisted driver");
+                return false;
+            }
+
             match = true;
             SAL_WARN("vcl.opengl", "use : " << maDriverInfo[i].maSuggestedVersion);
             break;
@@ -979,6 +993,12 @@ OUString WinOpenGLDeviceInfo::GetDeviceVendor(wgl::DeviceVendor id)
 
 void WinOpenGLDeviceInfo::FillBlacklist()
 {
+    /*
+     * Implement whitelist entries first as they will be used first to stop early;
+     */
+
+    APPEND_TO_DRIVER_WHITELIST( wgl::DRIVER_OS_WINDOWS_7, GetDeviceVendor(wgl::VendorIntel),
+            wgl::DriverInfo::allDevices, wgl::DRIVER_EQUAL, wgl::V(10,18,10,3412));
     /*
      * It should be noted here that more specialized rules on certain features
      * should be inserted -before- more generalized restriction. As the first
