@@ -11,12 +11,20 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,glew,glew))
 
 $(eval $(call gb_ExternalPackage_use_external_project,glew,glew))
 
+ifeq ($(OS)-$(COM),WNT-MSC)
+ifeq ($(CPUNAME),INTEL)
+glew_arch_subdir=Win32
+else ifeq ($(CPUNAME),X86_64)
+glew_arch_subdir=x64
+endif
+endif
+
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.1.10.0.dylib,lib/libGLEW.1.10.0.dylib))
 else ifeq ($(OS)-$(COM),WNT-GCC)
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_files,glew,$(LIBO_LIB_FOLDER), \
-	bin/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/Win32/glew32d.dll,Release/Win32/glew32.dll) \
+	bin/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/$(glew_arch_subdir)/glew32d.dll,Release/$(glew_arch_subdir)/glew32.dll) \
 ))
 else ifeq ($(filter IOS ANDROID,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,glew,$(LIBO_LIB_FOLDER)/libGLEW.so.1.10,lib/libGLEW.so.1.10.0))
