@@ -175,9 +175,6 @@ public:
     bool init( HDC hDC, HWND hWnd );
 #endif
 
-    void AddRef();
-    void DeRef();
-
     void makeCurrent();
     void resetCurrent();
     void swapBuffers();
@@ -222,7 +219,6 @@ private:
     SystemChildWindow* m_pChildWindow;
     boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;
-    int  mnRefCount;
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
     bool mbRequestVirtualDevice;
