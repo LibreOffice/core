@@ -297,14 +297,12 @@ static void lcl_addFrameProperties(
 
     if( !bIsAutoScroll )
     {
-        Any aAny2( &bIsScrollingMode, ::getBooleanCppuType() );
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), aAny2 );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), makeAny(bIsScrollingMode) );
         pStates++;
     }
     if( !bIsAutoBorder )
     {
-        Any aAny2( &bIsBorderSet, ::getBooleanCppuType() );
-        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), aAny2 );
+        *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), makeAny(bIsBorderSet) );
         pStates++;
     }
     if( SIZE_NOT_SET != nWidth )

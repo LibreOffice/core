@@ -716,10 +716,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         xInfoSet->setPropertyValue( "StyleInsertModeFamilies",
                                     makeAny(aFamiliesSeq) );
 
-        sal_Bool bTmp = !aOpt.IsMerge();
-        Any aAny;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( "StyleInsertModeOverwrite", aAny );
+        xInfoSet->setPropertyValue( "StyleInsertModeOverwrite", makeAny(!aOpt.IsMerge()) );
     }
     else if( bInsertMode )
     {
@@ -736,17 +733,11 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
 
     if( IsBlockMode() )
     {
-        sal_Bool bTmp = sal_True;
-        Any aAny;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( "AutoTextMode", aAny );
+        xInfoSet->setPropertyValue( "AutoTextMode", makeAny(true) );
     }
     if( IsOrganizerMode() )
     {
-        sal_Bool bTmp = sal_True;
-        Any aAny;
-        aAny.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( "OrganizerMode", aAny );
+        xInfoSet->setPropertyValue( "OrganizerMode", makeAny(true) );
     }
 
     // Set base URI
@@ -783,19 +774,15 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     sal_uInt32 nRet = 0;
 
     // save redline mode into import info property set
-    Any aAny;
-    sal_Bool bTmp;
     const OUString sShowChanges("ShowChanges");
     const OUString sRecordChanges("RecordChanges");
     const OUString sRedlineProtectionKey("RedlineProtectionKey");
-    bTmp = IDocumentRedlineAccess::IsShowChanges( rDoc.getIDocumentRedlineAccess().GetRedlineMode() );
-    aAny.setValue( &bTmp, ::getBooleanCppuType() );
-    xInfoSet->setPropertyValue( sShowChanges, aAny );
-    bTmp = IDocumentRedlineAccess::IsRedlineOn(rDoc.getIDocumentRedlineAccess().GetRedlineMode());
-    aAny.setValue( &bTmp, ::getBooleanCppuType() );
-    xInfoSet->setPropertyValue( sRecordChanges, aAny );
-    aAny <<= rDoc.getIDocumentRedlineAccess().GetRedlinePassword();
-    xInfoSet->setPropertyValue( sRedlineProtectionKey, aAny );
+    xInfoSet->setPropertyValue( sShowChanges,
+        makeAny(IDocumentRedlineAccess::IsShowChanges(rDoc.getIDocumentRedlineAccess().GetRedlineMode())) );
+    xInfoSet->setPropertyValue( sRecordChanges,
+        makeAny(IDocumentRedlineAccess::IsRedlineOn(rDoc.getIDocumentRedlineAccess().GetRedlineMode())) );
+    xInfoSet->setPropertyValue( sRedlineProtectionKey,
+        makeAny(rDoc.getIDocumentRedlineAccess().GetRedlinePassword()) );
 
     // force redline mode to "none"
     rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
@@ -910,7 +897,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     aOpt.ResetAllFmtsOnly();
 
     // redline password
-    aAny = xInfoSet->getPropertyValue( sRedlineProtectionKey );
+    Any aAny = xInfoSet->getPropertyValue( sRedlineProtectionKey );
     Sequence<sal_Int8> aKey;
     aAny >>= aKey;
     rDoc.getIDocumentRedlineAccess().SetRedlinePassword( aKey );

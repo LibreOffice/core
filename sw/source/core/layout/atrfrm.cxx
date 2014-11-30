@@ -240,16 +240,10 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= GetWidthPercentRelation();
         break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
-        {
-            bool bTmp = 0xFF == GetHeightPercent();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
-        }
+            rVal <<= 0xFF == GetHeightPercent();
         break;
         case MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT:
-        {
-            bool bTmp = 0xFF == GetWidthPercent();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
-        }
+            rVal <<= 0xFF == GetWidthPercent();
         break;
         case MID_FRMSIZE_WIDTH :
             rVal <<= (sal_Int32)convertTwipToMm100(m_aSize.Width());
@@ -265,10 +259,7 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int16)GetHeightSizeType();
         break;
         case MID_FRMSIZE_IS_AUTO_HEIGHT:
-        {
-            bool bTmp = ATT_FIX_SIZE != GetHeightSizeType();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
-        }
+            rVal <<= ATT_FIX_SIZE != GetHeightSizeType();
         break;
         case MID_FRMSIZE_WIDTH_TYPE:
             rVal <<= (sal_Int16)GetWidthSizeType();
@@ -1173,23 +1164,14 @@ bool SwFmtSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= SwSurroundToWrapMode(GetSurround());
             break;
         case MID_SURROUND_ANCHORONLY:
-        {
-            bool bTmp = IsAnchorOnly();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
+            rVal <<= IsAnchorOnly();
             break;
-        }
         case MID_SURROUND_CONTOUR:
-        {
-            bool bTmp = IsContour();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
+            rVal <<= IsContour();
             break;
-        }
         case MID_SURROUND_CONTOUROUTSIDE:
-        {
-            bool bTmp = IsOutside();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
+            rVal <<= IsOutside();
             break;
-        }
         default:
             OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
@@ -1387,11 +1369,8 @@ bool SwFmtHoriOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
                 break;
         case MID_HORIORIENT_PAGETOGGLE:
-        {
-            bool bTmp = IsPosToggle();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
-        }
-                break;
+            rVal <<= IsPosToggle();
+            break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
@@ -1730,10 +1709,7 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_URL_SERVERMAP:
-        {
-            bool bTmp = IsServerMap();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
-        }
+            rVal <<= IsServerMap();
             break;
         default:
             OSL_ENSURE( false, "unknown MemberId" );
@@ -1849,23 +1825,14 @@ bool SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) cons
     switch(nMemberId)
     {
         case MID_COLLECT     :
-        {
-            bool bVal = GetValue() >= FTNEND_ATTXTEND;
-            rVal.setValue(&bVal, ::getBooleanCppuType());
-        }
+            rVal <<= GetValue() >= FTNEND_ATTXTEND;
         break;
         case MID_RESTART_NUM :
-        {
-            bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ;
-            rVal.setValue(&bVal, ::getBooleanCppuType());
-        }
+            rVal <<= GetValue() >= FTNEND_ATTXTEND_OWNNUMSEQ;
         break;
         case MID_NUM_START_AT: rVal <<= (sal_Int16) nOffset; break;
         case MID_OWN_NUM     :
-        {
-            bool bVal = GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
-            rVal.setValue(&bVal, ::getBooleanCppuType());
-        }
+            rVal <<= GetValue() >= FTNEND_ATTXTEND_OWNNUMANDFMT;
         break;
         case MID_NUM_TYPE    : rVal <<= aFmt.GetNumberingType(); break;
         case MID_PREFIX      : rVal <<= OUString(sPrefix); break;
@@ -2063,11 +2030,8 @@ bool SwFmtLineNumber::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch ( nMemberId )
     {
         case MID_LINENUMBER_COUNT:
-        {
-            bool bTmp = IsCount();
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
-        }
-        break;
+            rVal <<= IsCount();
+            break;
         case MID_LINENUMBER_STARTVALUE:
             rVal <<= (sal_Int32)GetStartValue();
             break;
@@ -2168,13 +2132,13 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= GetLines();
             break;
         case MID_GRID_RUBY_BELOW:
-            rVal.setValue( &m_bRubyTextBelow, ::getBooleanCppuType() );
+            rVal <<= m_bRubyTextBelow;
             break;
         case MID_GRID_PRINT:
-            rVal.setValue( &m_bPrintGrid, ::getBooleanCppuType() );
+            rVal <<= m_bPrintGrid;
             break;
         case MID_GRID_DISPLAY:
-            rVal.setValue( &m_bDisplayGrid, ::getBooleanCppuType() );
+            rVal <<= m_bDisplayGrid;
             break;
         case MID_GRID_BASEHEIGHT:
             OSL_ENSURE( (nMemberId & CONVERT_TWIPS) != 0,
@@ -2210,13 +2174,10 @@ bool SwTextGridItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             }
             break;
         case MID_GRID_SNAPTOCHARS:
-            rVal.setValue( &m_bSnapToChars, ::getBooleanCppuType() );
+            rVal <<= m_bSnapToChars;
             break;
         case MID_GRID_STANDARD_MODE:
-            {
-                bool bStandardMode = !m_bSquaredMode;
-                rVal.setValue( &bStandardMode, ::getBooleanCppuType() );
-            }
+            rVal <<= !m_bSquaredMode;
             break;
         default:
             OSL_FAIL("Unknown SwTextGridItem member");

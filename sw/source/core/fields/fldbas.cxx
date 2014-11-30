@@ -278,10 +278,7 @@ bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
         case FIELD_PROP_BOOL4:
-        {
-            sal_Bool bFixed = !bIsAutomaticLanguage;
-            rVal.setValue(&bFixed, ::getCppuBooleanType());
-        }
+            rVal <<= !bIsAutomaticLanguage;
         break;
         default:
             OSL_FAIL("illegal property");

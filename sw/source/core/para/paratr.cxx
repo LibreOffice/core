@@ -139,7 +139,7 @@ bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         break;
         case MID_DROPCAP_WHOLE_WORD:
-            rVal.setValue(&bWholeWord, ::getBooleanCppuType());
+            rVal <<= bWholeWord;
         break;
         case MID_DROPCAP_CHAR_STYLE_NAME :
         {
