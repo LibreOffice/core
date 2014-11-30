@@ -76,7 +76,7 @@ static bool lcl_IsHoriOnOddPages(int nEnum)
 bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
-    sal_Bool bVal;
+    bool bVal = false;
     // vertical and horizontal were swapped at some point
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -95,7 +95,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             OSL_ENSURE( false, "unknown MemberId" );
             bRet = false;
     }
-    rVal.setValue( &bVal, ::getBooleanCppuType() );
+    rVal <<= bVal;
     return bRet;
 }
 

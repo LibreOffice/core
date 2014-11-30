@@ -134,30 +134,28 @@ void    SwPrintOptions::Commit()
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
-    sal_Bool bVal;
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
         {
-            case  0: bVal = bPrintGraphic; pValues[nProp].setValue(&bVal, rType);break;
-            case  1: bVal = bPrintTable         ;pValues[nProp].setValue(&bVal, rType);  break;
-            case  2: bVal = bPrintControl        ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  3: bVal = bPrintPageBackground; pValues[nProp].setValue(&bVal, rType);  break;
-            case  4: bVal = bPrintBlackFont     ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  0: pValues[nProp] <<= bPrintGraphic; break;
+            case  1: pValues[nProp] <<= bPrintTable; break;
+            case  2: pValues[nProp] <<= bPrintControl; break;
+            case  3: pValues[nProp] <<= bPrintPageBackground; break;
+            case  4: pValues[nProp] <<= bPrintBlackFont; break;
             case  5: pValues[nProp] <<=  (sal_Int32)nPrintPostIts       ; break;
-            case  6: bVal = bPrintReverse       ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  7: bVal = bPrintProspect      ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  8: bVal = bPrintProspectRTL      ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  9: bVal = bPrintSingleJobs     ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  6: pValues[nProp] <<= bPrintReverse; break;
+            case  7: pValues[nProp] <<= bPrintProspect; break;
+            case  8: pValues[nProp] <<= bPrintProspectRTL; break;
+            case  9: pValues[nProp] <<= bPrintSingleJobs; break;
             case 10: pValues[nProp] <<= sFaxName;  break;
-            case 11: bVal = bPaperFromSetup     ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 12: bVal = bPrintDraw           ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 13: bVal = bPrintLeftPages      ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 14: bVal = bPrintRightPages    ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 15: bVal = bPrintEmptyPages    ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 16: bVal = bPrintTextPlaceholder; pValues[nProp].setValue(&bVal, rType);  break;
-            case 17: bVal = bPrintHiddenText; pValues[nProp].setValue(&bVal, rType);  break;
+            case 11: pValues[nProp] <<= bPaperFromSetup; break;
+            case 12: pValues[nProp] <<= bPrintDraw; break;
+            case 13: pValues[nProp] <<= bPrintLeftPages; break;
+            case 14: pValues[nProp] <<= bPrintRightPages; break;
+            case 15: pValues[nProp] <<= bPrintEmptyPages; break;
+            case 16: pValues[nProp] <<= bPrintTextPlaceholder; break;
+            case 17: pValues[nProp] <<= bPrintHiddenText; break;
         }
     }
 

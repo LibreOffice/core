@@ -381,7 +381,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     // "show redline mode" cannot simply be read from the document
     // since it gets changed during execution. If it's in the info
     // XPropertySet, we take it from there.
-    sal_Bool bShowRedlineChanges = bSavedShowChanges;
+    bool bShowRedlineChanges = bSavedShowChanges;
     Reference<XPropertySet> xInfoSet( getExportInfo() );
     if ( xInfoSet.is() )
     {
@@ -394,11 +394,10 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     }
 
     pValue[nIndex].Name = "ShowRedlineChanges";
-    pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
+    pValue[nIndex++].Value <<= bShowRedlineChanges;
 
-    sal_Bool bInBrowse =  pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE);
     pValue[nIndex].Name = "InBrowseMode";
-    pValue[nIndex++].Value.setValue( &bInBrowse, ::getBooleanCppuType() );
+    pValue[nIndex++].Value <<= pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE);
 
     if ( nIndex < NUM_EXPORTED_VIEW_SETTINGS )
         aProps.realloc(nIndex);

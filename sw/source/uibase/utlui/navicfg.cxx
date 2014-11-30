@@ -95,7 +95,6 @@ void SwNavigationConfig::Commit()
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
-    const Type& rType = ::getBooleanCppuType();
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
@@ -106,8 +105,8 @@ void SwNavigationConfig::Commit()
             case 2: pValues[nProp] <<= nOutlineLevel; break;
             case 3: pValues[nProp] <<= nRegionMode;   break;
             case 4: pValues[nProp] <<= nActiveBlock;    break;
-            case 5: pValues[nProp].setValue(&bIsSmall, rType);          break;
-            case 6: pValues[nProp].setValue(&bIsGlobalActive, rType);   break;
+            case 5: pValues[nProp] <<= bIsSmall; break;
+            case 6: pValues[nProp] <<= bIsGlobalActive; break;
         }
     }
     PutProperties(aNames, aValues);
