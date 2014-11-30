@@ -1539,7 +1539,6 @@ void OpenGLSalGraphicsImpl::DoCopyBits( const SalTwoRect& rPosAry, OpenGLSalGrap
 
     if( pImpl->mbOffscreen )
     {
-        Size aSize( pImpl->GetWidth(), pImpl->GetHeight() );
         PreDraw();
         DrawTexture( pImpl->maOffscreenTex, rPosAry );
         PostDraw();
