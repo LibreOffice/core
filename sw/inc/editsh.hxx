@@ -39,7 +39,6 @@
 #include <vector>
 #include <set>
 #include <swundo.hxx>
-#include <ring.hxx>
 #include <svtools/embedhlp.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -139,12 +138,9 @@ typedef boost::ptr_vector<SwGetINetAttr> SwGetINetAttrs;
 #define CNT_HasGrf(USH) ((USH)&CNT_GRF)
 #define CNT_HasOLE(USH) ((USH)&CNT_OLE)
 
-typedef boost::intrusive::member_hook<Ring, boost::intrusive::list_member_hook<>, &Ring::m_aHook> MemberHookOption;
-typedef boost::intrusive::list<Ring, MemberHookOption> RingList;
 class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
 {
     static SvxSwAutoFmtFlags* pAutoFmtFlags;
-    RingList m_aList;
 
     /// For the private methods DelRange and those of AutoCorrect.
     friend class SwAutoFormat;

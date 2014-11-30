@@ -21,17 +21,16 @@
 
 #include <swdllapi.h>
 #include <swtypes.hxx>
-#include <boost/intrusive/list.hpp>
 
 class SW_DLLPUBLIC Ring
 {
-    Ring *pNext;
-    Ring* pPrev;    ///< In order to speed up inserting and deleting.
 
 protected:
-    Ring()          { pNext = this; pPrev = this; }
+    Ring();
     Ring( Ring * );
 public:
+    Ring* pNext;
+    Ring* pPrev;    ///< In order to speed up inserting and deleting.
     virtual ~Ring();
     void MoveTo( Ring *pDestRing );
     void MoveRingTo( Ring *pDestRing );
@@ -40,7 +39,6 @@ public:
     Ring* GetPrev() const       { return pPrev; }
 
     sal_uInt32 numberOf() const;
-    boost::intrusive::list_member_hook<> m_aHook;
 };
 
 #endif
