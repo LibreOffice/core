@@ -364,9 +364,9 @@
   </menu:menu>
   <menu:menu menu:id=".uno:TableMenu">
     <menu:menupopup>
+      <menu:menuitem menu:id=".uno:InsertTable"/>
       <menu:menu menu:id=".uno:TableInsertMenu">
         <menu:menupopup>
-          <menu:menuitem menu:id=".uno:InsertTable"/>
           <menu:menuitem menu:id=".uno:InsertRowDialog"/>
           <menu:menuitem menu:id=".uno:InsertColumnDialog"/>
         </menu:menupopup>
