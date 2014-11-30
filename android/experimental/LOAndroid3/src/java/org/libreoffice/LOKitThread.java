@@ -23,10 +23,10 @@ public class LOKitThread extends Thread {
         TileProviderFactory.initialize();
     }
 
-    private boolean draw() {
+    private void draw() {
         if (mTileProvider == null || mApplication == null) {
             // called too early...
-            return false;
+            return;
         }
 
         RectF rect = new RectF(0, 0, mTileProvider.getPageWidth(), mTileProvider.getPageHeight());
@@ -34,8 +34,6 @@ public class LOKitThread extends Thread {
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mViewportMetrics = mViewportMetrics.setPageRect(rect, rect);
         mLayerClient.reevaluateTiles();
-
-        return true;
     }
 
     private void tileRequest(TileIdentifier tileId) {
