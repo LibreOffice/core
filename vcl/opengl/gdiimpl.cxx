@@ -109,20 +109,16 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl()
 
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
-    ReleaseContext();
 }
 
 bool OpenGLSalGraphicsImpl::AcquireContext( bool bOffscreen )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if( mpContext )
-        mpContext->DeRef();
-
     if( bOffscreen )
     {
-        mpContext = CreatePixmapContext();
-        return (mpContext != NULL);
+        mpContext.reset(CreatePixmapContext());
+        return (mpContext.get() != NULL);
     }
 
     OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
@@ -134,20 +130,16 @@ bool OpenGLSalGraphicsImpl::AcquireContext( bool bOffscreen )
         pContext = pContext->mpPrevContext;
     }
 
-    if( pContext )
-        pContext->AddRef();
-    else
-        pContext = CreateWinContext();
+    if (!pContext)
+        pContext =CreateWinContext();
 
-    mpContext = pContext;
+    mpContext.reset(pContext);
     return (mpContext != NULL);
 }
 
 bool OpenGLSalGraphicsImpl::ReleaseContext()
 {
-    if( mpContext )
-        mpContext->DeRef();
-    mpContext = NULL;
+    mpContext.reset();
     return true;
 }
 
@@ -158,7 +150,7 @@ void OpenGLSalGraphicsImpl::Init()
     // check if we can simply re-use the same context
     if( mpContext )
     {
-        if( bOffscreen != mbOffscreen || ( !mbOffscreen && CompareWinContext( mpContext ) ) )
+        if( bOffscreen != mbOffscreen || ( !mbOffscreen && CompareWinContext( mpContext.get() ) ) )
             ReleaseContext();
     }
 

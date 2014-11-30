@@ -29,6 +29,8 @@
 #include <tools/poly.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 class SalFrame;
 class SalVirtualDevice;
 
@@ -36,7 +38,7 @@ class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
 protected:
 
-    OpenGLContext* mpContext;
+    boost::shared_ptr<OpenGLContext> mpContext;
 
     // clipping
     vcl::Region maClipRegion;
