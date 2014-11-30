@@ -243,14 +243,8 @@ extern "C" typelib_TypeClass cpp_vtable_call(
     {
         SAL_WARN(
             "bridges",
-            "illegal " << OUString::unacquired(&pTypeDescr->aBase.pTypeName)
-                << " vtable index " << nFunctionIndex << "/"
-                << pTypeDescr->nMapFunctionIndexToMemberIndex);
-        throw RuntimeException(
-            ("illegal " + OUString::unacquired(&pTypeDescr->aBase.pTypeName)
-             + " vtable index " + OUString::number(nFunctionIndex) + "/"
-             + OUString::number(pTypeDescr->nMapFunctionIndexToMemberIndex)),
-            reinterpret_cast<XInterface *>( pCppI ) );
+            "illegal vtable index " << nFunctionIndex);
+        throw RuntimeException("illegal vtable index " + OUString::number(nFunctionIndex));
     }
 
     // Determine called method
