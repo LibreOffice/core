@@ -95,6 +95,7 @@ namespace oox { namespace drawingml {
 Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 : mbIsChild( false )
 , mpLinePropertiesPtr( new LineProperties )
+, mpShapeRefLinePropPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
 , mpShapeRefFillPropPtr( new FillProperties )
 , mpGraphicPropertiesPtr( new GraphicProperties )
@@ -125,6 +126,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbIsChild( pSourceShape->mbIsChild )
 , mpTextBody(pSourceShape->mpTextBody)
 , mpLinePropertiesPtr( pSourceShape->mpLinePropertiesPtr )
+, mpShapeRefLinePropPtr( pSourceShape->mpShapeRefLinePropPtr )
 , mpFillPropertiesPtr( pSourceShape->mpFillPropertiesPtr )
 , mpShapeRefFillPropPtr( pSourceShape->mpShapeRefFillPropPtr )
 , mpGraphicPropertiesPtr( pSourceShape->mpGraphicPropertiesPtr )
@@ -293,7 +295,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
     else
         mpTextBody.reset();
     maShapeProperties = rReferencedShape.maShapeProperties;
-    mpLinePropertiesPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
+    mpShapeRefLinePropPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
     mpShapeRefFillPropPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
     mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : NULL );
@@ -579,6 +581,7 @@ Reference< XShape > Shape::createAndInsert(
 
         // First apply reference shape's properties (shape on the master slide)
         aFillProperties.assignUsed( *mpShapeRefFillPropPtr );
+        aLineProperties.assignUsed( *mpShapeRefLinePropPtr );
 
         if( pTheme )
         {
