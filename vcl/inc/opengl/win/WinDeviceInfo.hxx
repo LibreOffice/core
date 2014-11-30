@@ -82,7 +82,7 @@ struct DriverInfo
 
     DriverInfo(OperatingSystem os, const OUString& vendor, DeviceFamilyVector* devices,
             VersionComparisonOp op,
-            uint64_t driverVersion, const char *suggestedVersion = nullptr,
+            uint64_t driverVersion, bool bWhiteListed = false, const char *suggestedVersion = nullptr,
             bool ownDevices = false);
 
     DriverInfo();
@@ -100,6 +100,8 @@ struct DriverInfo
     // Whether the mDevices array should be deleted when this structure is
     // deallocated. False by default.
     bool mbDeleteDevices;
+
+    bool mbWhitelisted;
 
     VersionComparisonOp meComparisonOp;
 
