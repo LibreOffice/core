@@ -111,6 +111,14 @@ private:
     bool                    mbSettingsInit;
 };
 
+class ImplAppData
+{
+    friend class Application;
+
+private:
+    LocaleConfigurationListener* mpCfgListener;
+};
+
 struct ImplSVAppData
 {
     enum ImeStatusWindowMode
@@ -120,7 +128,6 @@ struct ImplSVAppData
         ImeStatusWindowMode_SHOW
     };
 
-    LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;               // listeners for vcl events (eg, extended toolkit)
     VclEventListeners*      mpKeyListeners;                 // listeners for key events only (eg, extended toolkit)
     ImplAccelManager*       mpAccelMgr;                     // Accelerator Manager

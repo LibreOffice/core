@@ -204,6 +204,7 @@ private:
 };
 
 class ImplStaticAppData;
+class ImplAppData;
 
 VCL_DLLPUBLIC bool InitVCL();
 VCL_DLLPUBLIC void DeInitVCL();
@@ -1565,9 +1566,10 @@ public:
 
 private:
 
-    static ImplStaticAppData maGlobalAppData;
+    static ImplStaticAppData    maGlobalAppData;
+    ImplAppData                 maAppData;
 
-    static void InitSettings(ImplSVData* pSVData);
+    static void                 InitSettings();
 
     DECL_STATIC_LINK( Application, PostEventHandler, void* );
 };

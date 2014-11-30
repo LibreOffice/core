@@ -481,12 +481,6 @@ void DeInitVCL()
 
     if ( Application::maGlobalAppData.mpSettings )
     {
-        if ( pSVData->maAppData.mpCfgListener )
-        {
-            Application::maGlobalAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( pSVData->maAppData.mpCfgListener );
-            delete pSVData->maAppData.mpCfgListener;
-        }
-
         delete Application::maGlobalAppData.mpSettings;
         Application::maGlobalAppData.mpSettings = NULL;
     }

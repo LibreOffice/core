@@ -207,6 +207,13 @@ Application::~Application()
 {
     ImplDeInitSVData();
     DeInitSalData();
+
+    if ( maAppData.mpCfgListener )
+    {
+        maGlobalAppData.mpSettings->GetSysLocale().GetOptions().RemoveListener( maAppData.mpCfgListener );
+        delete maAppData.mpCfgListener;
+    }
+
     ImplGetSVData()->mpApp = NULL;
     ImplDestroySVData();
 }
@@ -638,13 +645,13 @@ const AllSettings& Application::GetSettings()
     return *(maGlobalAppData.mpSettings);
 }
 
-void Application::InitSettings(ImplSVData* pSVData)
+void Application::InitSettings()
 {
     assert(!maGlobalAppData.mpSettings && "initialization should not happen twice!");
 
-    pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
+    maAppData.mpCfgListener = new LocaleConfigurationListener;
     maGlobalAppData.mpSettings = new AllSettings();
-    maGlobalAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+    maGlobalAppData.mpSettings->GetSysLocale().GetOptions().AddListener( maAppData.mpCfgListener );
 }
 
 void Application::NotifyAllWindows( DataChangedEvent& rDCEvt )
