@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1af86dd1_433c662f",
+        "filename": "bridges/source/cpp_uno/msvc_win32_x86-64/except.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-11-30T23:35:44Z",
+      "side": 0,
+      "message": "May be still use the original idiom and only increase the baseline to VC 2013?\n\n  #if _MSC_VER \u003c 1800\n      0x48 \n  #else\n      error, please find value for this compiler version\n  #endif",
+      "revId": "3ec41871e50c365e82176710849ac35775ffdf35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
