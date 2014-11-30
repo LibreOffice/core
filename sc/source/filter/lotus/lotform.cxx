@@ -417,7 +417,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
 
         eType = ( pIndexToType )( nOc );
         eOc = ( pIndexToToken)( nOc );
-        if( eOc == ocNoName || eOc == ocZZR )
+        if( eOc == ocNoName )
             pExtName = GetAddInName( nOc );
 
         switch( eType )
@@ -1030,8 +1030,8 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocNoName,           //  114 Call()
         ocIndirect,         //  115 @@()
         ocZins,             //  116 Rate()
-        ocZZR,              //  117 Term()
-        ocZZR,              //  118 Cterm()
+        ocNoName,           //  117 Term()
+        ocNoName,           //  118 Cterm()
         ocLIA,              //  119 Sln()
         ocDIA,              //  120 Syd(), Soy()
         ocGDA,              //  121 Ddb()
@@ -1559,8 +1559,8 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocNoName,           //  114 Call()
         ocIndirect,         //  115 @@()
         ocZins,             //  116 Rate()
-        ocZZR,              //  117 Term()
-        ocZZR,              //  118 Cterm()
+        ocNoName,           //  117 Term()
+        ocNoName,           //  118 Cterm()
         ocLIA,              //  119 Sln()
         ocDIA,              //  120 Syd(), Soy()
         ocGDA,              //  121 Ddb()
@@ -2038,6 +2038,10 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
             eId=ocNormDist;
     else if (rTest == "CRITBINOMIAL")
             eId=ocKritBinom;
+    else if (rTest == "TERM")
+            eId=ocZZR;
+    else if (rTest == "CTERM")
+            eId=ocZZR;
     return eId;
 }
 
