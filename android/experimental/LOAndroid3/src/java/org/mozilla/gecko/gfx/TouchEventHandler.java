@@ -57,7 +57,7 @@ public final class TouchEventHandler {
     private final LayerView mView;
     private final GestureDetector mGestureDetector;
     private final SimpleScaleGestureDetector mScaleGestureDetector;
-    private final PanZoomController mPanZoomController;
+    private final JavaPanZoomController mPanZoomController;
 
     // the queue of events that we are holding on to while waiting for a preventDefault
     // notification
@@ -126,7 +126,7 @@ public final class TouchEventHandler {
         mView = view;
 
         mEventQueue = new LinkedList<MotionEvent>();
-        mPanZoomController = layerClient.getPanZoomController();
+        mPanZoomController = (JavaPanZoomController)layerClient.getPanZoomController();
         mGestureDetector = new GestureDetector(context, mPanZoomController);
         mScaleGestureDetector = new SimpleScaleGestureDetector(mPanZoomController);
         mListenerTimeoutProcessor = new ListenerTimeoutProcessor();
