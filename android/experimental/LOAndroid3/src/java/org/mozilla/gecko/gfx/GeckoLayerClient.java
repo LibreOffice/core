@@ -16,6 +16,7 @@ import android.view.GestureDetector;
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOEventFactory;
 import org.libreoffice.LOKitShell;
+import org.libreoffice.TileIdentifier;
 import org.libreoffice.TileProvider;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.ui.PanZoomController;
@@ -478,6 +479,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     public GestureDetector.OnDoubleTapListener getDoubleTapListener() {
         return mPanZoomController;
     }
+
     private class AdjustRunnable implements Runnable {
         public void run() {
             mPendingViewportAdjust = false;
@@ -496,6 +498,10 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
     public void clearAndResetlayers() {
         mRootLayer.clearAndReset();
+    }
+
+    public void addTile(TileIdentifier tileId) {
+        mRootLayer.addTile(tileId);
     }
 
 }

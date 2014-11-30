@@ -15,12 +15,14 @@ public class LOEvent {
     public static final int LOAD = 6;
     public static final int CLOSE = 7;
     public static final int REDRAW = 8;
+    public static final int TILE_REQUEST = 9;
 
     public int mType;
-    private ImmutableViewportMetrics mViewportMetrics;
-    private String mTypeString;
-    private int mPartIndex;
-    private String mFilename;
+    public ImmutableViewportMetrics mViewportMetrics;
+    public String mTypeString;
+    public int mPartIndex;
+    public String mFilename;
+    public TileIdentifier mTileId;
 
     public LOEvent(int type) {
         mType = type;
@@ -31,8 +33,15 @@ public class LOEvent {
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
 
+    public LOEvent(int type, TileIdentifier tileId) {
+        mType = type;
+        mTypeString = "Tile Request";
+        mTileId = tileId;
+    }
+
     public LOEvent(int type, String filename) {
         mType = type;
+        mTypeString = "Filename";
         mFilename = filename;
     }
 
@@ -63,17 +72,5 @@ public class LOEvent {
             return "Event type: " + mType;
         }
         return mTypeString;
-    }
-
-    public ImmutableViewportMetrics getViewport() {
-        return mViewportMetrics;
-    }
-
-    public int getPartIndex() {
-        return mPartIndex;
-    }
-
-    public String getFilename() {
-        return mFilename;
     }
 }

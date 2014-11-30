@@ -38,4 +38,8 @@ public class LOEventFactory {
     public static LOEvent redraw() {
         return new LOEvent(LOEvent.REDRAW);
     }
+
+    public static LOEvent tileRequest(TileIdentifier tileRequest) {
+        return new LOEvent(LOEvent.TILE_REQUEST, tileRequest);
+    }
 }

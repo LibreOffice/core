@@ -5,50 +5,18 @@
 
 package org.mozilla.gecko.gfx;
 
+import org.libreoffice.TileIdentifier;
+
 public class SubTile extends SingleTileLayer {
     public boolean markedForRemoval = false;
     public final TileIdentifier id;
 
-    public SubTile(CairoImage mImage, int x, int y, float zoom) {
+    public SubTile(CairoImage mImage, TileIdentifier id) {
         super(mImage);
-        id = new TileIdentifier(x, y, zoom);
+        this.id = id;
     }
 
     public void markForRemoval() {
         markedForRemoval = true;
-    }
-
-    public static class TileIdentifier {
-        public int x;
-        public int y;
-        public float zoom;
-
-        public TileIdentifier(int x, int y, float zoom) {
-            this.x = x;
-            this.y = y;
-            this.zoom = zoom;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            TileIdentifier that = (TileIdentifier) o;
-
-            if (x != that.x) return false;
-            if (y != that.y) return false;
-            if (Float.compare(that.zoom, zoom) != 0) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = x;
-            result = 31 * result + y;
-            result = 31 * result + (zoom != +0.0f ? Float.floatToIntBits(zoom) : 0);
-            return result;
-        }
     }
 }
