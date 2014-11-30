@@ -27,6 +27,14 @@
 # in the system case, no libraries should be registered, but the target-local
 # variable LIBS should be set to FOO_LIBS, and INCLUDES to FOO_CFLAGS.
 
+
+ifeq ($(CPUNAME),X86_64)
+wnt_arch_subdir_optional=x64/
+wnt_arch_subdir_mandatory=x64
+else ifeq ($(CPUNAME),INTEL)
+wnt_arch_subdir_mandatory=Win32
+endif
+
 # External headers
 
 ifneq ($(SYSTEM_MESA_HEADERS),)
@@ -262,7 +270,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,glew)/lib/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/Win32/glew32d.lib,Release/Win32/glew32.lib) \
+	$(call gb_UnpackedTarball_get_dir,glew)/lib/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/$(wnt_arch_subdir_mandatory)/glew32d.lib,Release/$(wnt_arch_subdir_mandatory)/glew32.lib) \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -2320,7 +2328,7 @@ define gb_LinkTarget__use_coinmp
 $(call gb_LinkTarget_use_package,$(1),coinmp)
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/MSVisualStudio/v9/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.lib \
+	$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/MSVisualStudio/v9/$(wnt_arch_subdir_optional)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)/CoinMP.lib \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
