@@ -531,7 +531,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="SoundsLikeCJKSettings">
-                                    <property name="label" translatable="yes">...</property>
+                                    <property name="label" translatable="yes">Similarities...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -572,12 +572,13 @@
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="pbApproxSettings">
-                                    <property name="label" translatable="yes">...</property>
+                                    <property name="label" translatable="yes">Similarities...</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <property name="halign">center</property>
                                     <property name="valign">end</property>
+                                    <property name="yalign">0.41999998688697815</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>

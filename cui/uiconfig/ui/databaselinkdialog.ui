@@ -86,7 +86,7 @@
                 <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkButton" id="browse">
-                    <property name="label" translatable="yes">...</property>
+                    <property name="label" translatable="yes">Browse...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>

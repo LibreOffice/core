@@ -565,11 +565,10 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="bullet">
-                            <property name="label" translatable="yes">...</property>
+                            <property name="label" translatable="yes">Select...</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="halign">start</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
