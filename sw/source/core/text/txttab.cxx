@@ -510,9 +510,9 @@ void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
         SwViewOption::IsFieldShadings()    )
     {
         const sal_uInt16 nTmpWidth = PrtWidth();
-        static_cast<SwTabPortion*>(this)->PrtWidth( GetFixWidth() );
+        const_cast<SwTabPortion*>(this)->PrtWidth( GetFixWidth() );
         rInf.DrawViewOpt( *this, POR_TAB );
-        static_cast<SwTabPortion*>(this)->PrtWidth( nTmpWidth );
+        const_cast<SwTabPortion*>(this)->PrtWidth( nTmpWidth );
     }
 #endif
 
