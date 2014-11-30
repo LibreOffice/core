@@ -1015,8 +1015,7 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
         pArray[6] = beans::PropertyValue("HoriMargin", -1, aVal, PropertyState_DIRECT_VALUE);
         aVal <<= (sal_Int32)convertTwipToMm100(aData.GetVertSpace());
         pArray[7] = beans::PropertyValue("VertMargin", -1, aVal, PropertyState_DIRECT_VALUE);
-        sal_Bool bTemp = aData.GetLandscape();
-        aVal.setValue(&bTemp, ::getCppuBooleanType());
+        aVal <<= aData.GetLandscape();
         pArray[8] = beans::PropertyValue("IsLandscape", -1, aVal, PropertyState_DIRECT_VALUE);
     }
     else
@@ -2050,7 +2049,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             {
                 bSet = (eMode& nsRedlineMode_t::REDLINE_ON)  != 0;
             }
-            aAny.setValue(&bSet, ::getBooleanCppuType());
+            aAny <<= bSet;
         }
         break;
         case  WID_DOC_CHANGES_PASSWORD:
@@ -2063,10 +2062,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
             aAny <<= pDocShell->GetDoc()->GetTOIAutoMarkURL();
         break;
         case WID_DOC_HIDE_TIPS :
-        {
-            bool bTemp = SW_MOD()->GetModuleConfig()->IsHideFieldTips();
-            aAny.setValue(&bTemp, ::getBooleanCppuType());
-        }
+            aAny <<= SW_MOD()->GetModuleConfig()->IsHideFieldTips();
         break;
         case WID_DOC_REDLINE_DISPLAY:
         {

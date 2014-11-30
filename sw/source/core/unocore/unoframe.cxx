@@ -2023,13 +2023,11 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if(pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR )
                 {
-                    sal_Bool bValue = pNoTxt->HasAutomaticContour();
-                    aAny.setValue( &bValue, ::getBooleanCppuType() );
+                    aAny <<= pNoTxt->HasAutomaticContour();
                 }
                 else if(pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR )
                 {
-                    sal_Bool bValue = pNoTxt->IsPixelContour();
-                    aAny.setValue( &bValue, ::getBooleanCppuType() );
+                    aAny <<= pNoTxt->IsPixelContour();
                 }
                 else
                 {

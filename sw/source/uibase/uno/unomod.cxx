@@ -839,7 +839,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     bool bBool = true;
-    sal_Bool bBoolVal;
+    bool bBoolVal = false;
     switch( rInfo.mnHandle )
     {
         case  HANDLE_VIEWSET_SHOW_RULER:                bBoolVal = mpConstViewOption->IsViewAnyRuler();   break;
@@ -975,7 +975,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         default: OSL_FAIL("there is no such ID!");
     }
     if( bBool )
-        rValue.setValue(&bBoolVal, ::getBooleanCppuType());
+        rValue <<= bBoolVal;
 }
 
 void SwXViewSettings::_postGetValues ()

@@ -88,7 +88,7 @@ bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= sCode;
         break;
     case FIELD_PROP_BOOL1:
-        rAny.setValue(&bCodeURL, ::getBooleanCppuType());
+        rAny <<= bCodeURL;
         break;
     default:
         OSL_FAIL("illegal property");

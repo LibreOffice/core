@@ -136,7 +136,7 @@ void SwContentViewConfig::Commit()
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        sal_Bool bVal = sal_False;
+        bool bVal = false;
         switch(nProp)
         {
             case  0: bVal = rParent.IsGraphic();    break;// "Display/GraphicObject",
@@ -160,7 +160,7 @@ void SwContentViewConfig::Commit()
             case 18: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
         }
         if(nProp != 16)
-            pValues[nProp].setValue(&bVal, ::getBooleanCppuType());
+            pValues[nProp] <<= bVal;
     }
     PutProperties(aNames, aValues);
 }
@@ -403,19 +403,16 @@ void SwGridConfig::Commit()
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        sal_Bool bSet;
         switch(nProp)
         {
-            case  0: bSet = rParent.IsSnap(); break;//      "Option/SnapToGrid",
-            case  1: bSet = rParent.IsGridVisible(); break;//"Option/VisibleGrid",
-            case  2: bSet = rParent.IsSynchronize(); break;//  "Option/Synchronize",
+            case  0: pValues[nProp] <<= rParent.IsSnap(); break;//      "Option/SnapToGrid",
+            case  1: pValues[nProp] <<= rParent.IsGridVisible(); break;//"Option/VisibleGrid",
+            case  2: pValues[nProp] <<= rParent.IsSynchronize(); break;//  "Option/Synchronize",
             case  3: pValues[nProp] <<= (sal_Int32)convertTwipToMm100(rParent.GetSnapSize().Width()); break;//      "Resolution/XAxis",
             case  4: pValues[nProp] <<= (sal_Int32)convertTwipToMm100(rParent.GetSnapSize().Height()); break;//      "Resolution/YAxis",
             case  5: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionX(); break;//   "Subdivision/XAxis",
             case  6: pValues[nProp] <<= (sal_Int16)rParent.GetDivisionY(); break;//   "Subdivision/YAxis"
         }
-        if(nProp < 3)
-              pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
     }
     PutProperties(aNames, aValues);
 }
@@ -491,15 +488,12 @@ void SwCursorConfig::Commit()
 
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        sal_Bool bSet;
         switch(nProp)
         {
-            case  0: bSet = rParent.IsShadowCursor();       break;//  "DirectCursor/UseDirectCursor",
+            case  0: pValues[nProp] <<= rParent.IsShadowCursor(); break;//  "DirectCursor/UseDirectCursor",
             case  1: pValues[nProp] <<= (sal_Int32)rParent.GetShdwCrsrFillMode();   break;//  "DirectCursor/Insert",
-            case  2: bSet = rParent.IsCursorInProtectedArea(); break;// "Option/ProtectedArea"
+            case  2: pValues[nProp] <<= rParent.IsCursorInProtectedArea(); break;// "Option/ProtectedArea"
         }
-        if(nProp != 1 )
-              pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
     }
     PutProperties(aNames, aValues);
 }

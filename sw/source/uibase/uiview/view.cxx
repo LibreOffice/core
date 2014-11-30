@@ -1508,8 +1508,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue++;nIndex++;
 
     pValue->Name = "ViewLayoutBookMode";
-    const sal_Bool bIsViewLayoutBookMode = m_pWrtShell->GetViewOptions()->IsViewLayoutBookMode();
-    pValue->Value.setValue( &bIsViewLayoutBookMode, ::getBooleanCppuType() );
+    pValue->Value <<= m_pWrtShell->GetViewOptions()->IsViewLayoutBookMode();
     pValue++;nIndex++;
 
     pValue->Name = "ZoomFactor";
@@ -1517,8 +1516,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     pValue++;nIndex++;
 
     pValue->Name = "IsSelectedFrame";
-    const bool bIsSelected = FRMTYPE_NONE != m_pWrtShell->GetSelFrmType();
-    pValue->Value.setValue ( &bIsSelected, ::getBooleanCppuType() );
+    pValue->Value <<= FRMTYPE_NONE != m_pWrtShell->GetSelFrmType();
     nIndex++;
 
     assert(nIndex == NUM_VIEW_SETTINGS);

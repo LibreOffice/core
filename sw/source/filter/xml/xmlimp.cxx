@@ -1292,18 +1292,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if( !bUseOldNumbering )
     {
-        Any aAny;
-        sal_Bool bOldNum = true;
-        aAny.setValue(&bOldNum, ::getBooleanCppuType());
-        xProps->setPropertyValue( "UseOldNumbering", aAny );
+        xProps->setPropertyValue( "UseOldNumbering", makeAny(true) );
     }
 
     if( !bOutlineLevelYieldsOutlineRule )
     {
-        Any aAny;
-        sal_Bool bTmp = true;
-        aAny.setValue(&bTmp, ::getBooleanCppuType());
-        xProps->setPropertyValue( "OutlineLevelYieldsNumbering", aAny );
+        xProps->setPropertyValue( "OutlineLevelYieldsNumbering", makeAny(true) );
     }
 
     if( !bAddParaSpacingToTableCells )

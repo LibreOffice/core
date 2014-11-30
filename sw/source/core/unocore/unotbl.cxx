@@ -243,8 +243,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             const sal_uInt16 nRepeat = pTable->GetRowsToRepeat();
             if(pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
             {
-                sal_Bool bTemp = nRepeat > 0;
-                aRet.setValue(&bTemp, ::getCppuBooleanType());
+                aRet <<= nRepeat > 0;
             }
             else
                 aRet <<= (sal_Int32)nRepeat;
@@ -262,8 +261,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
                 rSz.QueryValue(aRet, MID_FRMSIZE_REL_WIDTH);
             else
             {
-                sal_Bool bTemp = 0 != rSz.GetWidthPercent();
-                aRet.setValue(&bTemp, ::getBooleanCppuType());
+                aRet <<= 0 != rSz.GetWidthPercent();
             }
         }
         break;
@@ -1468,8 +1466,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
                     const SwFmtFrmSize& rSize = pLn->GetFrmFmt()->GetFrmSize();
                     if(FN_UNO_ROW_AUTO_HEIGHT== pEntry->nWID)
                     {
-                        sal_Bool bTmp =  ATT_VAR_SIZE == rSize.GetHeightSizeType();
-                        aRet.setValue(&bTmp, ::getCppuBooleanType());
+                        aRet <<= ATT_VAR_SIZE == rSize.GetHeightSizeType();
                     }
                     else
                         aRet <<= (sal_Int32)(convertTwipToMm100(rSize.GetSize().Height()));
@@ -3368,16 +3365,12 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
-                    sal_Bool bTemp = bFirstRowAsLabel;
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
+                    aRet <<= bFirstRowAsLabel;
                 }
                 break;
 
                 case FN_UNO_RANGE_COL_LABEL:
-                {
-                    sal_Bool bTemp = bFirstColumnAsLabel;
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= bFirstColumnAsLabel;
                 break;
 
                 case FN_UNO_TABLE_BORDER:
@@ -4083,16 +4076,10 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
-                {
-                    sal_Bool bTemp = bFirstRowAsLabel;
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= bFirstRowAsLabel;
                 break;
                 case FN_UNO_RANGE_COL_LABEL:
-                {
-                    sal_Bool bTemp = bFirstColumnAsLabel;
-                    aRet.setValue(&bTemp, ::getCppuBooleanType());
-                }
+                    aRet <<= bFirstColumnAsLabel;
                 break;
                 default:
                 {

@@ -590,7 +590,7 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( b
     uno::Any aRet;
 
     const SfxItemPropertySimpleEntry*  pEntry = m_pPropSet->getPropertyMap().getByName(rPropertyName);
-    sal_Bool bSet = sal_False;
+    bool bSet = false;
     if(pEntry)
     {
         sal_Int16 nSet = 0;
@@ -606,7 +606,7 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( b
             case WID_SIMILARITY      :      bSet = bSimilarity; goto SET_BOOL;
             case WID_SIMILARITY_RELAX:      bSet = bLevRelax;
 SET_BOOL:
-            aRet.setValue(&bSet, ::getBooleanCppuType());
+            aRet <<= bSet;
             break;
             case WID_SIMILARITY_EXCHANGE:   nSet = nLevExchange; goto SET_UINT16;
             case WID_SIMILARITY_ADD:        nSet = nLevAdd; goto SET_UINT16;

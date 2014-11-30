@@ -179,16 +179,13 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
     }
 
     SvtSaveOptions aSaveOpt;
-    sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
-    aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
-    xInfoSet->setPropertyValue( "UsePrettyPrinting", aAny );
+    xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny(aSaveOpt.IsPrettyPrinting()) );
 
     // save show redline mode ...
     const OUString sShowChanges("ShowChanges");
     sal_uInt16 nRedlineMode = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
-    sal_Bool bShowChanges( IDocumentRedlineAccess::IsShowChanges( nRedlineMode ) );
-    aAny.setValue( &bShowChanges, ::getBooleanCppuType() );
-    xInfoSet->setPropertyValue( sShowChanges, aAny );
+    xInfoSet->setPropertyValue( sShowChanges,
+        makeAny( IDocumentRedlineAccess::IsShowChanges( nRedlineMode ) ) );
     // ... and hide redlines for export
     nRedlineMode &= ~nsRedlineMode_t::REDLINE_SHOW_MASK;
     nRedlineMode |= nsRedlineMode_t::REDLINE_SHOW_INSERT;
@@ -208,10 +205,7 @@ sal_uInt32 SwXMLWriter::_Write( const uno::Reference < task::XStatusIndicator >&
 
     if( bBlock )
     {
-        sal_Bool bTmp = sal_True;
-        Any aAny2;
-        aAny2.setValue( &bTmp, ::getBooleanCppuType() );
-        xInfoSet->setPropertyValue( "AutoTextMode", aAny2 );
+        xInfoSet->setPropertyValue( "AutoTextMode", makeAny(true) );
     }
 
     // #i69627#
@@ -499,9 +493,7 @@ bool SwXMLWriter::WriteThroughComponent(
         xSet->setPropertyValue("MediaType", aAny );
 
         // even plain stream should be encrypted in encrypted documents
-        sal_Bool bTrue = sal_True;
-        aAny.setValue( &bTrue, ::getBooleanCppuType() );
-        xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", aAny );
+        xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", makeAny(true) );
 
         // set buffer and create outputstream
         uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();

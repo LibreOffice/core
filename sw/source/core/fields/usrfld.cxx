@@ -108,16 +108,10 @@ bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
-        {
-            sal_Bool bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
+        rAny <<= 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
         break;
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bTmp = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
-            rAny.setValue(&bTmp, ::getBooleanCppuType());
-        }
+        rAny <<= 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
         break;
     case FIELD_PROP_FORMAT:
         rAny <<= (sal_Int32)GetFormat();
@@ -290,10 +284,7 @@ bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         rAny <<= aContent;
         break;
     case FIELD_PROP_BOOL1:
-        {
-            sal_Bool bExpression = 0 != (nsSwGetSetExpType::GSE_EXPR&nType);
-            rAny.setValue(&bExpression, ::getBooleanCppuType());
-        }
+        rAny <<= 0 != (nsSwGetSetExpType::GSE_EXPR&nType);
         break;
     default:
         OSL_FAIL("illegal property");

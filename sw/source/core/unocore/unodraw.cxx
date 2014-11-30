@@ -1515,10 +1515,9 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
                         // consider invisible layers
-                        sal_Bool bOpaque =
+                        aRet <<=
                             ( pObj->GetLayer() != pFmt->GetDoc()->getIDocumentDrawModelAccess().GetHellId() &&
                               pObj->GetLayer() != pFmt->GetDoc()->getIDocumentDrawModelAccess().GetInvisibleHellId() );
-                        aRet.setValue(&bOpaque, ::getBooleanCppuType());
                     }
                 }
                 else if(FN_ANCHOR_POSITION == pEntry->nWID)
@@ -1669,7 +1668,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         aRet.setValue(&pImpl->GetTextRange(), cppu::UnoType<text::XTextRange>::get());
                     break;
                     case RES_OPAQUE :
-                        aRet.setValue(&pImpl->GetOpaque(), ::getBooleanCppuType());
+                        aRet <<= pImpl->GetOpaque();
                     break;
                     case FN_ANCHOR_POSITION :
                     {
