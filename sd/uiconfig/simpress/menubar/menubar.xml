@@ -110,7 +110,7 @@
                     <menu:menuitem menu:id=".uno:SlideMasterPage" menu:style="radio"/>
                     <menu:menuitem menu:id=".uno:NotesMasterPage" menu:style="radio"/>
                     <menu:menuseparator/>
-                       <menu:menuitem menu:id=".uno:MasterLayouts"/>
+                    <menu:menuitem menu:id=".uno:MasterLayouts"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
@@ -226,7 +226,7 @@
                     <menu:menuitem menu:id=".uno:Insert3DModel"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:DrawText"/>
+            <menu:menuitem menu:id=".uno:Text"/>
             <menu:menuitem menu:id=".uno:InsertTable"/>
             <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
             <menu:menuseparator/>
