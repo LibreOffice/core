@@ -838,7 +838,7 @@ bool OpenGLContext::ImplInit()
         0,                              // No Accumulation Buffer
         0, 0, 0, 0,                     // Accumulation Bits Ignored
         64,                             // 32 bit Z-BUFFER
-        0,                              // 0 bit stencil buffer
+        8,                              // stencil buffer
         0,                              // No Auxiliary Buffer
         0,                              // now ignored
         0,                              // Reserved
