@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
+#include <boost/foreach.hpp>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
@@ -1308,6 +1309,13 @@ void SwDocTest::testIntrusiveRing()
     CPPUNIT_ASSERT_EQUAL(aRing4.GetPrev(), static_cast<Ring*>(&aRing3));
     CPPUNIT_ASSERT_EQUAL(aRing5.GetPrev(), static_cast<Ring*>(&aRing4));
     CPPUNIT_ASSERT_EQUAL(aRing1.GetPrev(), static_cast<Ring*>(&aRing5));
+    //std::pair<Ring::iterator, Ring::iterator> foo();
+    //BOOST_FOREACH(Ring& r, foo)
+    for(Ring::iterator it = aRing1.beginRing(); it != aRing1.endRing(); ++it)
+    {
+        TestRing* pRing = dynamic_cast<TestRing*>(&(*it));
+        pRing->debug();
+    }
 }
 
 void SwDocTest::setUp()

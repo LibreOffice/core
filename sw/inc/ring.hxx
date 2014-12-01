@@ -29,8 +29,6 @@ class RingIterator;
 class SW_DLLPUBLIC Ring
 {
     friend class Ring_node_traits;
-    typedef RingIterator iterator;
-    typedef RingIterator const_iterator;
     Ring* pNext;
     Ring* pPrev;    ///< In order to speed up inserting and deleting.
 
@@ -38,12 +36,18 @@ protected:
     Ring();
     Ring( Ring * );
 public:
+    typedef RingIterator iterator;
+    typedef RingIterator const_iterator;
     virtual ~Ring();
     void MoveTo( Ring *pDestRing );
     void MoveRingTo( Ring *pDestRing );
 
     Ring* GetNext() const       { return pNext; }
     Ring* GetPrev() const       { return pPrev; }
+    // unfortunately we cant name these STL-conforming, as some derived classes
+    // also derive from other STL containers (which is bad anyway, but ...)
+    iterator beginRing();
+    iterator endRing();
 
     sal_uInt32 numberOf() const;
 };
@@ -77,6 +81,14 @@ class RingIterator : public boost::iterator_facade<
         Ring* m_pCurrent;
         Ring* m_pStart;
 };
+
+inline Ring::iterator Ring::beginRing()
+    { return Ring::iterator(this); };
+
+inline Ring::iterator Ring::endRing()
+    { return Ring::iterator(this, false); };
+
+
 
 #endif
 
