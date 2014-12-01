@@ -107,6 +107,8 @@ using ::drawinglayer::primitive2d::BorderLinePrimitive2D;
 using ::std::pair;
 using ::std::make_pair;
 
+struct SwPaintProperties;
+
 //other subsidiary lines enabled?
 #define IS_SUBS (!gProp.pSGlobalShell->GetViewOptions()->IsPagePreview() && \
         !gProp.pSGlobalShell->GetViewOptions()->IsReadonly() && \
@@ -155,7 +157,7 @@ public:
     bool  IsLocked()                const { return nLock != 0;  }
     sal_uInt8  GetSubColor()                const { return nSubColor;}
 
-    bool MakeUnion( const SwRect &rRect );
+    bool MakeUnion( const SwRect &rRect, SwPaintProperties &properties );
 };
 
 #ifdef IOS
@@ -187,9 +189,9 @@ public:
 #endif
     }
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
-                      const SwTabFrm *pTab, const sal_uInt8 nSCol );
-    void ConnectEdges( OutputDevice *pOut );
-    void PaintLines  ( OutputDevice *pOut );
+                      const SwTabFrm *pTab, const sal_uInt8 nSCol, SwPaintProperties &properties );
+    void ConnectEdges( OutputDevice *pOut, SwPaintProperties &properties );
+    void PaintLines  ( OutputDevice *pOut, SwPaintProperties &properties );
     void LockLines( bool bLock );
 
     //Limit lines to 100
@@ -209,7 +211,7 @@ class BorderLines
         ::rtl::Reference<BorderLinePrimitive2D> > Lines_t;
     Lines_t m_Lines;
 public:
-    void AddBorderLine(::rtl::Reference<BorderLinePrimitive2D> const& xLine);
+    void AddBorderLine(::rtl::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties& properties);
     drawinglayer::primitive2d::Primitive2DSequence GetBorderLines_Clear()
     {
         ::comphelper::SequenceAsVector<
@@ -597,13 +599,13 @@ lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
 }
 
 void BorderLines::AddBorderLine(
-        rtl::Reference<BorderLinePrimitive2D> const& xLine)
+        rtl::Reference<BorderLinePrimitive2D> const& xLine, SwPaintProperties& properties)
 {
     for (Lines_t::reverse_iterator it = m_Lines.rbegin(); it != m_Lines.rend();
          ++it)
     {
         ::rtl::Reference<BorderLinePrimitive2D> const xMerged =
-            lcl_TryMergeBorderLine(**it, *xLine, gProp);
+            lcl_TryMergeBorderLine(**it, *xLine, properties);
         if (xMerged.is())
         {
             *it = xMerged; // replace existing line with merged
@@ -626,7 +628,7 @@ SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderS
         aColor = *pCol;
 }
 
-bool SwLineRect::MakeUnion( const SwRect &rRect )
+bool SwLineRect::MakeUnion( const SwRect &rRect, SwPaintProperties& properties)
 {
     // It has already been tested outside, whether the rectangles have
     // the same orientation (horizontal or vertical), color, etc.
@@ -635,7 +637,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
         if ( Left()  == rRect.Left() && Width() == rRect.Width() )
         {
             // Merge when there is no gap between the lines
-            const long nAdd = gProp.nSPixelSzW + gProp.nSHalfPixelSzW;
+            const long nAdd = properties.nSPixelSzW + properties.nSHalfPixelSzW;
             if ( Bottom() + nAdd >= rRect.Top() &&
                  Top()    - nAdd <= rRect.Bottom()  )
             {
@@ -650,7 +652,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
         if ( Top()  == rRect.Top() && Height() == rRect.Height() )
         {
             // Merge when there is no gap between the lines
-            const long nAdd = gProp.nSPixelSzW + gProp.nSHalfPixelSzW;
+            const long nAdd = properties.nSPixelSzW + properties.nSHalfPixelSzW;
             if ( Right() + nAdd >= rRect.Left() &&
                  Left()  - nAdd <= rRect.Right() )
             {
@@ -664,7 +666,7 @@ bool SwLineRect::MakeUnion( const SwRect &rRect )
 }
 
 void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
-                               const SwTabFrm *pTab, const sal_uInt8 nSCol )
+                               const SwTabFrm *pTab, const sal_uInt8 nSCol, SwPaintProperties& properties )
 {
     // Loop backwards because lines which can be combined, can usually be painted
     // in the same context
@@ -678,19 +680,19 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
              (rLRect.Height() > rLRect.Width()) == (rRect.Height() > rRect.Width()) &&
              (pCol && rLRect.GetColor() == *pCol) )
         {
-            if ( rLRect.MakeUnion( rRect ) )
+            if ( rLRect.MakeUnion( rRect, properties ) )
                 return;
         }
     }
     aLineRects.push_back( SwLineRect( rRect, pCol, nStyle, pTab, nSCol ) );
 }
 
-void SwLineRects::ConnectEdges( OutputDevice *pOut )
+void SwLineRects::ConnectEdges( OutputDevice *pOut, SwPaintProperties& properties )
 {
     if ( pOut->GetOutDevType() != OUTDEV_PRINTER )
     {
         // I'm not doing anything for a too small zoom
-        if ( gProp.aSScaleX < aEdgeScale || gProp.aSScaleY < aEdgeScale )
+        if ( properties.aSScaleX < aEdgeScale || properties.aSScaleY < aEdgeScale )
             return;
     }
 
@@ -996,7 +998,7 @@ static void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
             sal_uInt32( nHalfLWidth * 2 ), rLRect.GetStyle( ) );
 }
 
-void SwLineRects::PaintLines( OutputDevice *pOut )
+void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties &properties )
 {
     // Paint the borders. Sadly two passes are needed.
     // Once for the inside and once for the outside edges of tables
@@ -1008,7 +1010,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
         pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
         pOut->SetFillColor();
         pOut->SetLineColor();
-        ConnectEdges( pOut );
+        ConnectEdges( pOut, properties );
         const Color *pLast = 0;
 
         bool bPaint2nd = false;
@@ -3350,7 +3352,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                                             &aPageBackgrdColor,
                                             pPage->IsRightToLeft(),
                                             &aSwRedirector );
-                    gProp.pSLines->PaintLines( pSh->GetOut() );
+                    gProp.pSLines->PaintLines( pSh->GetOut(), gProp );
                     gProp.pSLines->LockLines( false );
                 }
 
@@ -3375,7 +3377,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     SwPageFrm::PaintNotesSidebar( pPage->Frm(), pSh, pPage->GetPhyPageNum(), bRightSidebar);
                 }
 
-                gProp.pSLines->PaintLines( pSh->GetOut() );
+                gProp.pSLines->PaintLines( pSh->GetOut(), gProp );
                 if ( pSh->GetWin() )
                 {
                     gProp.pSSubsLines->PaintSubsidiary( pSh->GetOut(), gProp.pSLines );
@@ -4346,7 +4348,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     // OD 19.12.2002 #106318# - first paint lines added by fly frame paint
     // and then unlock other lines.
-    gProp.pSLines->PaintLines( pOut );
+    gProp.pSLines->PaintLines( pOut, gProp );
     gProp.pSLines->LockLines( false );
     // have to paint frame borders added in heaven layer here...
     ProcessPrimitives(gProp.pBLines->GetBorderLines_Clear());
@@ -4686,7 +4688,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
     //        gProp.pSLines->AddLineRect( aRegion[i], pColor, nStyle, pTab, nSubCol );
     //}
     //else
-        gProp.pSLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol );
+        gProp.pSLines->AddLineRect( aOut, pColor, nStyle, pTab, nSubCol, gProp );
 }
 
 /**
@@ -4910,7 +4912,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
             aLeftColor.getBColor(), aRightColor.getBColor(),
             rBorder.GetColorGap().getBColor(), rBorder.HasGapColor(),
             rBorder.GetBorderLineStyle() );
-    properties.pBLines->AddBorderLine(xLine);
+    properties.pBLines->AddBorderLine(xLine, properties);
 }
 
 /**
@@ -6869,7 +6871,7 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
             // OD 18.11.2002 #99672# - use parameter <pSubsLines> instead of
             // global variable <gProp.pSSubsLines>.
             pSubsLines->AddLineRect( aRect, 0, table::BorderLineStyle::SOLID,
-                    0, nSubColor );
+                    0, nSubColor, gProp );
         }
         aP1 = aP2;
         (aP1.*pDirPt)() += 1;
@@ -7176,14 +7178,14 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
             {
                 const SwRect aRect( aOut.Pos(), aLB );
                 pUsedSubsLines->AddLineRect( aRect, 0,
-                        table::BorderLineStyle::SOLID, 0, nSubColor );
+                        table::BorderLineStyle::SOLID, 0, nSubColor, gProp );
             }
             // OD 14.11.2002 #104821# - in vertical layout set page/column break at right
             if ( aOriginal.Right() == nRight )
             {
                 const SwRect aRect( aRT, aRB );
                 pUsedSubsLines->AddLineRect( aRect, 0,
-                        table::BorderLineStyle::SOLID, 0, nSubColor );
+                        table::BorderLineStyle::SOLID, 0, nSubColor, gProp );
             }
         }
         // OD 14.11.2002 #104822# - adjust control for drawing top and bottom lines
@@ -7194,13 +7196,13 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                 // OD 14.11.2002 #104821# - in horizontal layout set page/column break at top
                 const SwRect aRect( aOut.Pos(), aRT );
                 pUsedSubsLines->AddLineRect( aRect, 0,
-                        table::BorderLineStyle::SOLID, 0, nSubColor );
+                        table::BorderLineStyle::SOLID, 0, nSubColor, gProp );
             }
             if ( aOriginal.Bottom() == nBottom )
             {
                 const SwRect aRect( aLB, aRB );
                 pUsedSubsLines->AddLineRect( aRect, 0,
-                        table::BorderLineStyle::SOLID, 0, nSubColor );
+                        table::BorderLineStyle::SOLID, 0, nSubColor, gProp );
             }
         }
     }
@@ -7689,15 +7691,15 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        gProp.pSLines->PaintLines( &aDev );
+        gProp.pSLines->PaintLines( &aDev, gProp );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
-        gProp.pSLines->PaintLines( &aDev );
+        gProp.pSLines->PaintLines( &aDev, gProp );
         // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
-        gProp.pSLines->PaintLines( &aDev );
+        gProp.pSLines->PaintLines( &aDev, gProp );
         DELETEZ( gProp.pSLines );
         gProp.pSFlyOnlyDraw = 0;
 
