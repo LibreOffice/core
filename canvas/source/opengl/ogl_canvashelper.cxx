@@ -101,7 +101,7 @@ namespace oglcanvas
                             const geometry::RealPoint2D&     rPoint)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-        //  pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
@@ -122,7 +122,7 @@ namespace oglcanvas
                            const geometry::RealPoint2D&     rEndPoint)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-          //  pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
@@ -144,7 +144,7 @@ namespace oglcanvas
                                   const ::basegfx::B2DPolyPolygonVector& rPolyPolygons)
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-           // pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                 (float) rColor.Green,
                                 (float) rColor.Blue,
@@ -169,7 +169,7 @@ namespace oglcanvas
         {
             //no texture bind ?
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-         //   pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rColor.Red,
                                           (float) rColor.Green,
                                           (float) rColor.Blue,
@@ -194,7 +194,7 @@ namespace oglcanvas
                                           const ::basegfx::B2DPolyPolygonVector&         rPolyPolygons )
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            setupState(rTransform, eSrcBlend, eDstBlend);
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             glm::vec4 color  = glm::vec4( (float) rendering::ARGBColor().Red,
                                 (float) rendering::ARGBColor().Green,
                                 (float) rendering::ARGBColor().Blue,
@@ -259,15 +259,15 @@ namespace oglcanvas
             return true;
         }
 
-        bool lcl_drawOwnBitmap( const CanvasHelper&              /*rHelper*/,
+        bool lcl_drawOwnBitmap( const CanvasHelper&              rHelper,
                                 const ::basegfx::B2DHomMatrix&   rTransform,
                                 GLenum                           eSrcBlend,
                                 GLenum                           eDstBlend,
                                 const rendering::ARGBColor&      rColor,
                                 const CanvasBitmap&              rBitmap )
         {
-            setupState(rTransform, eSrcBlend, eDstBlend);
-
+            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
             return rBitmap.renderRecordedActions();
         }
 
@@ -283,7 +283,7 @@ namespace oglcanvas
         {
 
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            setupState(rTransform, eSrcBlend, eDstBlend);
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
 
             const unsigned int nTexId=rHelper.getDeviceHelper()->getTextureCache().getTexture(
                 rPixelSize, rPixelData.getConstArray(), nPixelCrc32);
@@ -333,9 +333,9 @@ namespace oglcanvas
                                           sal_uInt32                             nPixelCrc32,
                                           const ::basegfx::B2DPolyPolygonVector& rPolyPolygons )
         {
-         //   setupState(rTransform, eSrcBlend, eDstBlend, rendering::ARGBColor());
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            setupState(rTransform, eSrcBlend, eDstBlend);
+            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
+
             glm::vec4 color  = glm::vec4( (float) rendering::ARGBColor().Red,
                                 (float) rendering::ARGBColor().Green,
                                 (float) rendering::ARGBColor().Blue,
@@ -364,7 +364,7 @@ namespace oglcanvas
             ::basegfx::B2DRange aBounds;
             ::basegfx::B2DPolyPolygonVector::const_iterator aCurr=rPolyPolygons.begin();
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
-            while( aCurr != aEnd )
+         /*   while( aCurr != aEnd )
                 aBounds.expand(::basegfx::tools::getRange(*aCurr++));
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
@@ -376,7 +376,7 @@ namespace oglcanvas
                     aTextureTransform.get(0,1), aTextureTransform.get(1,1), 0, 0,
                     0,                          0,                          1, 0,
                     aTextureTransform.get(0,2), aTextureTransform.get(1,2), 0, 1
-                };
+                };*/
 
             aCurr=rPolyPolygons.begin();
             while( aCurr != aEnd )
