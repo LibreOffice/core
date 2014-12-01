@@ -267,16 +267,13 @@ void OTableFieldDescWin::LoseFocus()
 bool OTableFieldDescWin::PreNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
-    switch(rNEvt.GetType())
+    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
-        case MouseNotifyEvent::GETFOCUS:
-            if( getGenPage() && getGenPage()->HasChildPathFocus() )
-                m_eChildFocus = DESCRIPTION;
-            else
-                m_eChildFocus = HELP;
-            break;
+        if( getGenPage() && getGenPage()->HasChildPathFocus() )
+            m_eChildFocus = DESCRIPTION;
+        else
+            m_eChildFocus = HELP;
     }
-
     return bHandled || TabPage::PreNotify(rNEvt);
 }
 

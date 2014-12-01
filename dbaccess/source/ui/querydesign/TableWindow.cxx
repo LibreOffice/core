@@ -722,8 +722,8 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 m_nMoveCount        = 0; // reset our movement count
                 m_nMoveIncrement    = 1;
             }
-        }
             break;
+        }
         case MouseNotifyEvent::KEYUP:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
@@ -734,7 +734,9 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 m_nMoveCount        = 0; // reset our movement count
                 m_nMoveIncrement    = 1;
             }
+            break;
         }
+        default:
             break;
     }
     if (!bHandled)

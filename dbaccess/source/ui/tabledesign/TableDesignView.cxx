@@ -222,16 +222,14 @@ void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
 bool OTableDesignView::PreNotify( NotifyEvent& rNEvt )
 {
     bool bHandled = false;
-    switch(rNEvt.GetType())
+    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
-        case MouseNotifyEvent::GETFOCUS:
-            if( GetDescWin() && GetDescWin()->HasChildPathFocus() )
-                m_eChildFocus = DESCRIPTION;
-            else if ( GetEditorCtrl() && GetEditorCtrl()->HasChildPathFocus() )
-                m_eChildFocus = EDITOR;
-            else
-                m_eChildFocus = NONE;
-            break;
+        if( GetDescWin() && GetDescWin()->HasChildPathFocus() )
+            m_eChildFocus = DESCRIPTION;
+        else if ( GetEditorCtrl() && GetEditorCtrl()->HasChildPathFocus() )
+            m_eChildFocus = EDITOR;
+        else
+            m_eChildFocus = NONE;
     }
 
     return bHandled || ODataView::PreNotify(rNEvt);

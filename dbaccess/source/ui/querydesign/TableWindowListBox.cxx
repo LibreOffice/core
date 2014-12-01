@@ -150,8 +150,10 @@ bool OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
                 break;
             if (FirstSelected())
                 static_cast<OTableWindow*>(Window::GetParent())->OnEntryDoubleClicked(FirstSelected());
+            break;
         }
-        break;
+        default:
+            break;
     }
 
     if (!bHandled)
