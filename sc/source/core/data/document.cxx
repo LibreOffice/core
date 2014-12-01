@@ -3605,8 +3605,7 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     SetAutoCalc( bOldAutoCalc );
 }
 
-
-void ScDocument::SetDirty( const ScRange& rRange )
+void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
 {
     bool bOldAutoCalc = GetAutoCalc();
     bAutoCalc = false;      // keine Mehrfachberechnung
@@ -3614,7 +3613,7 @@ void ScDocument::SetDirty( const ScRange& rRange )
         ScBulkBroadcast aBulkBroadcast( GetBASM());
         SCTAB nTab2 = rRange.aEnd.Tab();
         for (SCTAB i=rRange.aStart.Tab(); i<=nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i]) maTabs[i]->SetDirty( rRange );
+            if (maTabs[i]) maTabs[i]->SetDirty( rRange, bIncludeEmptyCells );
     }
     SetAutoCalc( bOldAutoCalc );
 }
