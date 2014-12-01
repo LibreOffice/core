@@ -81,12 +81,23 @@ namespace oglcanvas
         );
         glUseProgram(m_texProgID);
 
+        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, rVertices.size()*sizeof(float)*2, &rVertices[0].x, GL_STATIC_DRAW);
         glUniform4fv(m_texColorUnf, 1, &color[0]);
         glUniformMatrix4fv(m_texMVPUnf, 1, GL_FALSE, &m_MVP[0][0]);
-        glEnableVertexAttribArray(m_texPosAttrb); //vertices
 
+        glEnableVertexAttribArray(m_texPosAttrb); //vertices
+        glVertexAttribPointer(
+                        m_texPosAttrb,
+                        2,                            // size
+                        GL_FLOAT,                     // type
+                        GL_FALSE,                     // normalized?
+                        0,                            // stride
+                        (void*)0                      // array buffer offset
+        );
         glDrawArrays(mode, 0, rVertices.size());
+
+
 
         glDisableVertexAttribArray(m_texPosAttrb);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -131,15 +142,6 @@ namespace oglcanvas
             (void*)0                      // array buffer offset
         );
 
-        glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-        glVertexAttribPointer(
-                        m_texPosAttrb,
-                        2,                            // size
-                        GL_FLOAT,                     // type
-                        GL_FALSE,                     // normalized?
-                        0,                            // stride
-                        (void*)0                      // array buffer offset
-        );
         glDrawArrays(mode, 0, rVertices.size());
 
         glDisableVertexAttribArray(m_simplePosAttrb);
