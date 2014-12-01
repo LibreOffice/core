@@ -56,7 +56,7 @@ namespace oglcanvas
     void RenderHelper::SetModelAndMVP(const glm::mat4& mat)
     {
         m_Model = mat;
-        m_MVP = m_Model * m_VP;
+        m_MVP = m_VP*m_Model ;
     }
 
     void RenderHelper::renderVertexConstColor(const std::vector<glm::vec2>& rVertices, glm::vec4 color, GLenum mode) const
