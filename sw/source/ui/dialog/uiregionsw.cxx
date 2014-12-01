@@ -1090,19 +1090,19 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                     {
                         SectReprPtr pRepr = (SectReprPtr)pSelEntry->GetUserData();
                         if( SfxItemState::SET == eColState )
-                            pRepr->GetCol() = *(SwFmtCol*)pColItem;
+                            pRepr->GetCol() = *static_cast<const SwFmtCol*>(pColItem);
                         if( SfxItemState::SET == eBrushState )
-                            pRepr->GetBackground() = *(SvxBrushItem*)pBrushItem;
+                            pRepr->GetBackground() = *static_cast<const SvxBrushItem*>(pBrushItem);
                         if( SfxItemState::SET == eFtnState )
-                            pRepr->GetFtnNtAtEnd() = *(SwFmtFtnAtTxtEnd*)pFtnItem;
+                            pRepr->GetFtnNtAtEnd() = *static_cast<const SwFmtFtnAtTxtEnd*>(pFtnItem);
                         if( SfxItemState::SET == eEndState )
-                            pRepr->GetEndNtAtEnd() = *(SwFmtEndAtTxtEnd*)pEndItem;
+                            pRepr->GetEndNtAtEnd() = *static_cast<const SwFmtEndAtTxtEnd*>(pEndItem);
                         if( SfxItemState::SET == eBalanceState )
                             pRepr->GetBalance().SetValue(static_cast<const SwFmtNoBalancedColumns*>(pBalanceItem)->GetValue());
                         if( SfxItemState::SET == eFrmDirState )
                             pRepr->GetFrmDir().SetValue(static_cast<const SvxFrameDirectionItem*>(pFrmDirItem)->GetValue());
                         if( SfxItemState::SET == eLRState )
-                            pRepr->GetLRSpace() = *(SvxLRSpaceItem*)pLRSpaceItem;
+                            pRepr->GetLRSpace() = *static_cast<const SvxLRSpaceItem*>(pLRSpaceItem);
 
                         pSelEntry = m_pTree->NextSelected(pSelEntry);
                     }
@@ -1315,7 +1315,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
             sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
-                sPassword = ( (SfxStringItem*)pItem )->GetValue();
+                sPassword = static_cast<const SfxStringItem*>(pItem )->GetValue();
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
         }
     }
@@ -1433,7 +1433,7 @@ void SwInsertSectionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
     else if (nId == m_nColumnPageId)
     {
-        const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)GetInputSetImpl()->Get(RES_FRM_SIZE);
+        const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(GetInputSetImpl()->Get(RES_FRM_SIZE));
         static_cast<SwColumnPage&>(rPage).SetPageWidth(rSize.GetWidth());
         static_cast<SwColumnPage&>(rPage).ShowBalance(true);
         static_cast<SwColumnPage&>(rPage).SetInSection(true);
@@ -1780,7 +1780,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
             m_sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
             if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
-                m_sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
+                m_sFilePasswd = static_cast<const SfxStringItem*>(pItem)->GetValue();
             m_pFileNameED->SetText( INetURLObject::decode(
                 m_sFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
@@ -1969,10 +1969,10 @@ void SwSectionFtnEndTabPage::ResetState( bool bFtn,
 
 void SwSectionFtnEndTabPage::Reset( const SfxItemSet* rSet )
 {
-    ResetState( true, (const SwFmtFtnAtTxtEnd&)rSet->Get(
-                                    RES_FTN_AT_TXTEND, false ));
-    ResetState( false, (const SwFmtEndAtTxtEnd&)rSet->Get(
-                                    RES_END_AT_TXTEND, false ));
+    ResetState( true, static_cast<const SwFmtFtnAtTxtEnd&>(rSet->Get(
+                                    RES_FTN_AT_TXTEND, false )));
+    ResetState( false, static_cast<const SwFmtEndAtTxtEnd&>(rSet->Get(
+                                    RES_END_AT_TXTEND, false )));
 }
 
 SfxTabPage* SwSectionFtnEndTabPage::Create( vcl::Window* pParent,
@@ -2122,7 +2122,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxLRSpaceItem& rSpace =
-            (const SvxLRSpaceItem&)rSet->Get( RES_LR_SPACE );
+            static_cast<const SvxLRSpaceItem&>(rSet->Get( RES_LR_SPACE ));
 
         m_pBeforeMF->SetValue( m_pBeforeMF->Normalize(rSpace.GetLeft()), FUNIT_TWIP );
         m_pAfterMF->SetValue( m_pAfterMF->Normalize(rSpace.GetRight()), FUNIT_TWIP );

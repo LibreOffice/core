@@ -106,10 +106,10 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
     if( m_pOutlineLvLB->IsValueChangedFromSaved())
     {
         const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectEntryPos();
-        const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
+        const SfxUInt16Item* pOldOutlineLv = static_cast<const SfxUInt16Item*>(GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL));
         if (pOldOutlineLv)
         {
-            SfxUInt16Item* pOutlineLv = (SfxUInt16Item*)pOldOutlineLv->Clone();
+            SfxUInt16Item* pOutlineLv = static_cast<SfxUInt16Item*>(pOldOutlineLv->Clone());
             pOutlineLv->SetValue( aOutlineLv );
             rSet->Put(*pOutlineLv);
             delete pOutlineLv;
@@ -122,8 +122,8 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
         OUString aStyle;
         if(m_pNumberStyleLB->GetSelectEntryPos())
             aStyle = m_pNumberStyleLB->GetSelectEntry();
-        const SfxStringItem* pOldRule = (const SfxStringItem*)GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE);
-        SfxStringItem* pRule = pOldRule ? (SfxStringItem*)pOldRule->Clone() : NULL;
+        const SfxStringItem* pOldRule = static_cast<const SfxStringItem*>(GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE));
+        SfxStringItem* pRule = pOldRule ? static_cast<SfxStringItem*>(pOldRule->Clone()) : NULL;
         if (pRule)
         {
             pRule->SetValue(aStyle);
@@ -207,7 +207,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     if(eItemState > SfxItemState::DEFAULT )
     {
         bCurNumrule = true;
-        const SfxBoolItem& rStart = (const SfxBoolItem&)rSet->Get(FN_NUMBER_NEWSTART);
+        const SfxBoolItem& rStart = static_cast<const SfxBoolItem&>(rSet->Get(FN_NUMBER_NEWSTART));
 
         m_pNewStartCB->SetState(rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
 
@@ -235,7 +235,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     StyleHdl_Impl(m_pNumberStyleLB);
     if( SfxItemState::DEFAULT <= rSet->GetItemState(RES_LINENUMBER))
     {
-        SwFmtLineNumber& rNum = (SwFmtLineNumber&)rSet->Get(RES_LINENUMBER);
+        const SwFmtLineNumber& rNum = static_cast<const SwFmtLineNumber&>(rSet->Get(RES_LINENUMBER));
         sal_uLong nStartValue = rNum.GetStartValue();
         bool bCount = rNum.IsCount();
         m_pCountParaCB->SetState( bCount ? TRISTATE_TRUE : TRISTATE_FALSE );

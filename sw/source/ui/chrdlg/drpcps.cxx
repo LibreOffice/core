@@ -247,7 +247,7 @@ void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _
 {
     SfxItemSet aSet( _rPage.rSh.GetAttrPool(), _nWhich, _nWhich);
     _rPage.rSh.GetCurAttr(aSet);
-    SvxFontItem aFmtFont((SvxFontItem &) aSet.Get(_nWhich));
+    SvxFontItem aFmtFont(static_cast<const SvxFontItem &>( aSet.Get(_nWhich)));
 
     _rFont.SetFamily (aFmtFont.GetFamily());
     _rFont.SetName   (aFmtFont.GetFamilyName());
@@ -509,7 +509,7 @@ void SwDropCapsPict::_InitPrinter()
 SwDropCapsDlg::SwDropCapsDlg(vcl::Window *pParent, const SfxItemSet &rSet )
     : SfxSingleTabDialog(pParent, rSet)
 {
-    SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(get_content_area(), &rSet);
+    SwDropCapsPage* pNewPage = static_cast<SwDropCapsPage*>( SwDropCapsPage::Create(get_content_area(), &rSet));
     pNewPage->SetFormat(false);
     SetTabPage(pNewPage);
 }
@@ -591,7 +591,7 @@ bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)
 void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
 {
     // Characters, lines, gap and text
-    SwFmtDrop aFmtDrop((SwFmtDrop &) rSet->Get(RES_PARATR_DROP));
+    SwFmtDrop aFmtDrop(static_cast<const SwFmtDrop &>( rSet->Get(RES_PARATR_DROP)));
     if (aFmtDrop.GetLines() > 1)
     {
         m_pDropCapsField->SetValue(aFmtDrop.GetChars());

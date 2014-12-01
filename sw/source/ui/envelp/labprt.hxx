@@ -49,7 +49,7 @@ class SwLabPrtPage : public SfxTabPage
 
     DECL_LINK( CountHdl, Button * );
 
-    SwLabDlg* GetParentSwLabDlg() {return (SwLabDlg*)GetParentDialog();}
+    SwLabDlg* GetParentSwLabDlg() {return static_cast<SwLabDlg*>(GetParentDialog());}
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

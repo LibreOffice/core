@@ -121,7 +121,7 @@ IMPL_LINK_NOARG(SwEnvPrtPage, AlignHdl)
     else
     {
         // GetCurItemId() == 0 is possible!
-        const SwEnvItem& rItem = (const SwEnvItem&) GetItemSet().Get(FN_ENVELOP);
+        const SwEnvItem& rItem = static_cast<const SwEnvItem&>( GetItemSet().Get(FN_ENVELOP) );
         m_pAlignBox->CheckItem(m_aIds[rItem.eAlign], true);
     }
     return 0;
@@ -173,7 +173,7 @@ bool SwEnvPrtPage::FillItemSet(SfxItemSet* rSet)
 void SwEnvPrtPage::Reset(const SfxItemSet* rSet)
 {
     // Read item
-    const SwEnvItem& rItem = (const SwEnvItem&) rSet->Get(FN_ENVELOP);
+    const SwEnvItem& rItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP) );
     m_pAlignBox->CheckItem(m_aIds[rItem.eAlign]);
 
     if (rItem.bPrintFromAbove)

@@ -277,8 +277,8 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
         SfxAllItemSet aTmpSet(*pCollSet);
 
         // Insert tabs, default tabs into ItemSet
-        const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
-            pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
+        const SvxTabStopItem& rDefTabs = static_cast<const SvxTabStopItem&>(
+            pSh->GetView().GetCurShell()->GetPool().GetDefaultItem(RES_PARATR_TABSTOP));
 
         const sal_uInt16 nDefDist = static_cast<sal_uInt16>(::GetTabDist( rDefTabs ));
         SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
@@ -492,7 +492,7 @@ bool SwEnvFmtPage::FillItemSet(SfxItemSet* rSet)
 
 void SwEnvFmtPage::Reset(const SfxItemSet* rSet)
 {
-    const SwEnvItem& rItem = (const SwEnvItem&) rSet->Get(FN_ENVELOP);
+    const SwEnvItem& rItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP));
 
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
         Size( std::min(rItem.lWidth, rItem.lHeight),

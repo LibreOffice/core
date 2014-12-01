@@ -138,15 +138,15 @@ SwContentOptPage::SwContentOptPage( vcl::Window* pParent,
                 if ( eFUnit != FUNIT_LINE )
                 {
                    sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
-                   m_pMetricLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
+                   m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
                    m_pHMetric->InsertEntry( sMetric );
-                   m_pHMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
+                   m_pHMetric->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
                 }
                 // a vertical ruler has not the 'character' unit
                 if ( eFUnit != FUNIT_CHAR )
                 {
                    sal_Int32 nPos = m_pVMetric->InsertEntry( sMetric );
-                   m_pVMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
+                   m_pVMetric->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
                 }
             }
             default:;//prevent warning
@@ -172,7 +172,7 @@ static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemS
         FieldUnit eFieldUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
         {
-            if ( (int)(sal_IntPtr)rMetric->GetEntryData( i ) == (int)eFieldUnit )
+            if ( (int)reinterpret_cast<sal_IntPtr>(rMetric->GetEntryData( i )) == (int)eFieldUnit )
             {
                 rMetric->SelectEntryPos( i );
                 break;
@@ -213,8 +213,8 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
 
 bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
 {
-    const SwElemItem*   pOldAttr = (const SwElemItem*)
-                        GetOldItem(GetItemSet(), FN_PARAM_ELEM);
+    const SwElemItem*   pOldAttr = static_cast<const SwElemItem*>(
+                        GetOldItem(GetItemSet(), FN_PARAM_ELEM));
 
     SwElemItem aElem;
     if(pOldAttr)
@@ -242,7 +242,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos ));
         rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -251,7 +251,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     if ( m_pHMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pHMetric->GetEntryData( nMPos ));
         rSet->Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -259,7 +259,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
     if ( m_pVMetric->IsValueChangedFromSaved() || nMPos != nGlobalMetricPos )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pVMetric->GetEntryData( nMPos ));
         rSet->Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -860,7 +860,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const sal_uInt16 nFontHeightWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE );
-        const SvxFontHeightItem& rFontHeightStandard = (const SvxFontHeightItem& )pColl->GetFmtAttr(nFontHeightWhich);
+        const SvxFontHeightItem& rFontHeightStandard = static_cast<const SvxFontHeightItem& >(pColl->GetFmtAttr(nFontHeightWhich));
         nStandardHeight = (sal_Int32)rFontHeightStandard.GetHeight();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
@@ -868,7 +868,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightTitle = (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, true );
+        const SvxFontHeightItem& rFontHeightTitle = static_cast<const SvxFontHeightItem&>(pColl->GetFmtAttr( nFontHeightWhich, true ));
         nTitleHeight = (sal_Int32)rFontHeightTitle.GetHeight();
 
         const sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
@@ -880,7 +880,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         bListDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         sShellList = sListBackup = rFontLS.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightList = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
+        const SvxFontHeightItem& rFontHeightList = static_cast<const SvxFontHeightItem&>(pColl->GetFmtAttr(nFontHeightWhich, true));
         nListHeight = (sal_Int32)rFontHeightList.GetHeight();
         bListHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
@@ -889,7 +889,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const SvxFontItem& rFontCP = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellLabel = sCapBackup = rFontCP.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightLabel = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
+        const SvxFontHeightItem& rFontHeightLabel = static_cast<const SvxFontHeightItem&>(pColl->GetFmtAttr(nFontHeightWhich, true));
         nLabelHeight = (sal_Int32)rFontHeightLabel.GetHeight();
         bLabelHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
@@ -898,7 +898,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const SvxFontItem& rFontIDX = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightIndex = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
+        const SvxFontHeightItem& rFontHeightIndex = static_cast<const SvxFontHeightItem&>(pColl->GetFmtAttr(nFontHeightWhich, true));
         nIndexHeight = (sal_Int32)rFontHeightIndex.GetHeight();
         bIndexHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
     }
@@ -1189,7 +1189,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet->Get( SID_ATTR_METRIC );
+        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rSet->Get( SID_ATTR_METRIC ));
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
         ::SetFieldUnit( *pRowMoveMF, eFieldUnit );
         ::SetFieldUnit( *pColMoveMF, eFieldUnit );
@@ -1292,7 +1292,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( vcl::Window* pParent,
 
     SwShadowCursorItem aOpt;
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
-        aOpt = *(SwShadowCursorItem*)pItem;
+        aOpt = *static_cast<const SwShadowCursorItem*>(pItem);
     m_pOnOffCB->Check( aOpt.IsOn() );
 
     sal_uInt8 eMode = aOpt.GetMode();
@@ -1374,8 +1374,8 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
         bRet = true;
     }
 
-    const SwDocDisplayItem* pOldAttr = (const SwDocDisplayItem*)
-                        GetOldItem(GetItemSet(), FN_PARAM_DOCDISP);
+    const SwDocDisplayItem* pOldAttr = static_cast<const SwDocDisplayItem*>(
+                        GetOldItem(GetItemSet(), FN_PARAM_DOCDISP));
 
     SwDocDisplayItem aDisp;
     if(pOldAttr)
@@ -1404,7 +1404,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
 
     SwShadowCursorItem aOpt;
     if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
-        aOpt = *(SwShadowCursorItem*)pItem;
+        aOpt = *static_cast<const SwShadowCursorItem*>(pItem);
     m_pOnOffCB->Check( aOpt.IsOn() );
 
     sal_uInt8 eMode = aOpt.GetMode();
@@ -1848,12 +1848,12 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     {
         // update all documents
         TypeId aType(TYPE(SwDocShell));
-        SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+        SwDocShell* pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(&aType));
 
         while( pDocShell )
         {
             pDocShell->GetWrtShell()->UpdateRedlineAttr();
-            pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
+            pDocShell = static_cast<SwDocShell*>(SfxObjectShell::GetNext(*pDocShell, &aType));
         }
     }
 

@@ -99,7 +99,7 @@ SwLoadOptPage::SwLoadOptPage(vcl::Window* pParent, const SfxItemSet& rSet)
             {
                 // use only these metrics
                 sal_Int32 nPos = m_pMetricLB->InsertEntry( sMetric );
-                m_pMetricLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
+                m_pMetricLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)eFUnit) );
             }
             default:; //prevent warning
         }
@@ -178,7 +178,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
     if ( m_pMetricLB->IsValueChangedFromSaved() )
     {
         // Double-Cast for VA3.0
-        const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
+        const sal_uInt16 nFieldUnit = (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos ));
         rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
@@ -281,12 +281,12 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_pMetricLB->SetNoSelection();
     if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet->Get( SID_ATTR_METRIC );
+        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rSet->Get( SID_ATTR_METRIC ));
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
 
         for ( sal_Int32 i = 0; i < m_pMetricLB->GetEntryCount(); ++i )
         {
-            if ( (int)(sal_IntPtr)m_pMetricLB->GetEntryData( i ) == (int)eFieldUnit )
+            if ( (int)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( i )) == (int)eFieldUnit )
             {
                 m_pMetricLB->SelectEntryPos( i );
                 break;
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
     if(nMPos != LISTBOX_ENTRY_NOTFOUND)
     {
         // Double-Cast for VA3.0
-        FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
+        FieldUnit eFieldUnit = (FieldUnit)reinterpret_cast<sal_IntPtr>(m_pMetricLB->GetEntryData( nMPos ));
         bool bModified = m_pTabMF->IsModified();
         long nVal = bModified ?
             sal::static_int_cast<sal_Int32, sal_Int64 >( m_pTabMF->Denormalize( m_pTabMF->GetValue( FUNIT_TWIP ) )) :
@@ -488,8 +488,8 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
 
     if (pSh)
     {
-        SwSetExpFieldType* pFldType = (SwSetExpFieldType*)pMgr->GetFldType(
-                                            RES_SETEXPFLD, m_pCategoryBox->GetText() );
+        SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(pMgr->GetFldType(
+                                            RES_SETEXPFLD, m_pCategoryBox->GetText() ));
         if( pFldType )
         {
             sDelim = pFldType->GetDelimiter();
@@ -659,7 +659,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
             {
                 SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
                 if( pType->Which() == RES_SETEXPFLD &&
-                    ((SwSetExpFieldType *) pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
+                    static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
                     m_pCategoryBox->InsertSwEntry(SwBoxEntry(pType->GetName()));
             }
         }
@@ -693,7 +693,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 
         for (sal_Int32 i = 0; i < m_pFormatBox->GetEntryCount(); i++)
         {
-            if (pOpt->GetNumType() == (sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(i))
+            if (pOpt->GetNumType() == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(i)))
             {
                 m_pFormatBox->SelectEntryPos(i);
                 break;
@@ -761,7 +761,7 @@ void SwCaptionOptPage::SaveEntry(SvTreeListEntry* pEntry)
             pOpt->SetCategory("");
         else
             pOpt->SetCategory(comphelper::string::strip(aName, ' '));
-        pOpt->SetNumType((sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(m_pFormatBox->GetSelectEntryPos()));
+        pOpt->SetNumType((sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(m_pFormatBox->GetSelectEntryPos())));
         pOpt->SetCaption(m_pTextEdit->IsEnabled() ? m_pTextEdit->GetText() : OUString() );
         pOpt->SetPos(m_pPosBox->GetSelectEntryPos());
         sal_Int32 nPos = m_pLbLevel->GetSelectEntryPos();
@@ -829,8 +829,8 @@ void SwCaptionOptPage::DrawSample()
         //#i61007# order of captions
         bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectEntryPos() == 1;
         // number
-        const sal_uInt16 nNumFmt = (sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(
-                                        m_pFormatBox->GetSelectEntryPos() );
+        const sal_uInt16 nNumFmt = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pFormatBox->GetEntryData(
+                                        m_pFormatBox->GetSelectEntryPos() ));
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
             //#i61007# order of captions
@@ -843,8 +843,8 @@ void SwCaptionOptPage::DrawSample()
             SwWrtShell *pSh = ::GetActiveWrtShell();
             if (pSh)
             {
-                SwSetExpFieldType* pFldType = (SwSetExpFieldType*)pMgr->GetFldType(
-                                                RES_SETEXPFLD, m_pCategoryBox->GetText() );
+                SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(pMgr->GetFldType(
+                                                RES_SETEXPFLD, m_pCategoryBox->GetText() ));
                 if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
                 {
                     sal_uInt8 nLvl = pFldType->GetOutlineLvl();

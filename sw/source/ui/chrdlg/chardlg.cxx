@@ -103,7 +103,7 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     if (nId == m_nCharStdId)
     {
-        SvxFontListItem aFontListItem( *( (SvxFontListItem*)
+        SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(
            ( m_rView.GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) ) );
         aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         if(m_nDialogMode != DLG_CHAR_DRAW && m_nDialogMode != DLG_CHAR_ANN)
@@ -193,7 +193,7 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
     const SfxPoolItem* pItem;
     if ( SfxItemState::SET == rSet->GetItemState( RES_TXTATR_INETFMT, false, &pItem ) )
     {
-        const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*) pItem;
+        const SwFmtINetFmt* pINetFmt = static_cast<const SwFmtINetFmt*>( pItem);
         m_pURLED->SetText(INetURLObject::decode(pINetFmt->GetValue(),
             '%', INetURLObject::DECODE_UNAMBIGUOUS,
             RTL_TEXTENCODING_UTF8));

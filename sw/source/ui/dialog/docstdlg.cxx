@@ -62,7 +62,7 @@ SwDocStatPage::SwDocStatPage(vcl::Window *pParent, const SfxItemSet &rSet)
     Update();
     m_pUpdatePB->SetClickHdl(LINK(this, SwDocStatPage, UpdateHdl));
     //#111684# is the current view a page preview no SwFEShell can be found -> hide the update button
-    SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
+    SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current() );
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
     {
@@ -127,7 +127,7 @@ void SwDocStatPage::Update()
 IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl)
 {
     Update();
-    SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
+    SwDocShell* pDocShell = static_cast<SwDocShell*>( SfxObjectShell::Current());
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(pFEShell)
         m_pLineNo->SetText( OUString::number( pFEShell->GetLineCount(false)));

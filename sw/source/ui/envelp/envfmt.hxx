@@ -53,7 +53,7 @@ class SwEnvFmtPage : public SfxTabPage
 
     SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, bool bSender);
 
-    SwEnvDlg    *GetParentSwEnvDlg() {return (SwEnvDlg*) GetParentDialog();}
+    SwEnvDlg    *GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetParentDialog());}
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

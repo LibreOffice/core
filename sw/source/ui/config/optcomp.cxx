@@ -192,7 +192,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     const SfxPoolItem* pItem = NULL;
     SfxObjectShell* pObjShell = NULL;
     if ( SfxItemState::SET == rSet.GetItemState( FN_PARAM_WRTSHELL, false, &pItem ) )
-        m_pWrtShell = (SwWrtShell*)( (const SwPtrItem*)pItem )->GetValue();
+        m_pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
     if ( m_pWrtShell )
     {
         pObjShell = m_pWrtShell->GetView().GetDocShell();
@@ -292,7 +292,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
             bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
             bConsiderWrappingStyle, bExpandWordSpace );
-        m_pFormattingLB->SetEntryData( nPos, (void*)(sal_IntPtr)nOptions );
+        m_pFormattingLB->SetEntryData( nPos, reinterpret_cast<void*>((sal_IntPtr)nOptions) );
     }
 
     m_pFormattingLB->SetDropDownLineCount( m_pFormattingLB->GetEntryCount() );
@@ -301,7 +301,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 {
     const sal_Int32 nPos = m_pFormattingLB->GetSelectEntryPos();
-    sal_uLong nOptions = (sal_uLong)(void*)m_pFormattingLB->GetEntryData( nPos );
+    sal_uLong nOptions = reinterpret_cast<sal_uLong>((void*)m_pFormattingLB->GetEntryData( nPos ));
     SetCurrentOptions( nOptions );
 
     return 0;

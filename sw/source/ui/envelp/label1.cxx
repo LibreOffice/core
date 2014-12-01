@@ -86,7 +86,7 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
             static_cast<SwLabPage*>(&rPage)->SetToBusinessCard();
     }
     else if (nId == m_nOptionsId)
-        pPrtPage = (SwLabPrtPage*)&rPage;
+        pPrtPage = static_cast<SwLabPrtPage*>(&rPage);
 }
 
 SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
@@ -130,7 +130,7 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
         SetText(m_sBusinessCardDlg);
     }
     // Read user label from writer.cfg
-    SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));
+    SwLabItem aItem(static_cast<const SwLabItem&>(rSet.Get( FN_LABEL )));
     SwLabRec* pRec = new SwLabRec;
     pRec->aMake = pRec->aType = SW_RESSTR( STR_CUSTOM );
     pRec->SetFromItem( aItem );
@@ -175,8 +175,8 @@ SwLabDlg::~SwLabDlg()
 
 void SwLabDlg::GetLabItem(SwLabItem &rItem)
 {
-    const SwLabItem& rActItem = (const SwLabItem&)GetExampleSet()->Get(FN_LABEL);
-    const SwLabItem& rOldItem = (const SwLabItem&)GetInputSetImpl()->Get(FN_LABEL);
+    const SwLabItem& rActItem = static_cast<const SwLabItem&>(GetExampleSet()->Get(FN_LABEL));
+    const SwLabItem& rOldItem = static_cast<const SwLabItem&>(GetInputSetImpl()->Get(FN_LABEL));
 
     if (rActItem != rOldItem)
     {
@@ -229,7 +229,7 @@ SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardMediumPage",
         "modules/swriter/ui/cardmediumpage.ui", &rSet)
     , pDBManager(NULL)
-    , aItem((const SwLabItem&)rSet.Get(FN_LABEL))
+    , aItem(static_cast<const SwLabItem&>(rSet.Get(FN_LABEL)))
     , m_bLabel(false)
 {
     WaitObject aWait( pParent );
@@ -502,7 +502,7 @@ bool SwLabPage::FillItemSet(SfxItemSet* rSet)
 
 void SwLabPage::Reset(const SfxItemSet* rSet)
 {
-    aItem = (const SwLabItem&) rSet->Get(FN_LABEL);
+    aItem = static_cast<const SwLabItem&>( rSet->Get(FN_LABEL));
     OUString sDBName  = aItem.sDBName;
 
     OUString aWriting(convertLineEnd(aItem.aWriting, GetSystemLineEnd()));
@@ -660,7 +660,7 @@ static bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const OUString& rBlockName
 
 void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
 {
-    aLabItem = (const SwLabItem&) rSet->Get(FN_LABEL);
+    aLabItem = static_cast<const SwLabItem&>( rSet->Get(FN_LABEL) );
 
     bool bFound = false;
     sal_Int32 i;
@@ -748,7 +748,7 @@ int  SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
 {
 
-    SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
+    SwLabItem aItem = static_cast<const SwLabItem&>( GetTabDialog()->GetExampleSet()->Get(FN_LABEL) );
     aItem.aPrivFirstName = m_pFirstNameED->GetText();
     aItem.aPrivName      = m_pNameED->GetText(  );
     aItem.aPrivShortCut  = m_pShortCutED->GetText(  );
@@ -774,7 +774,7 @@ bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
 
 void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
 {
-    const SwLabItem& aItem = (const SwLabItem&) rSet->Get(FN_LABEL);
+    const SwLabItem& aItem = static_cast<const SwLabItem&>( rSet->Get(FN_LABEL) );
     m_pFirstNameED->SetText(aItem.aPrivFirstName);
     m_pNameED->SetText(aItem.aPrivName);
     m_pShortCutED->SetText(aItem.aPrivShortCut);
@@ -835,7 +835,7 @@ int  SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwBusinessDataPage::FillItemSet(SfxItemSet* rSet)
 {
-    SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
+    SwLabItem aItem = static_cast<const SwLabItem&>( GetTabDialog()->GetExampleSet()->Get(FN_LABEL) );
 
     aItem.aCompCompany   = m_pCompanyED->GetText();
     aItem.aCompCompanyExt= m_pCompanyExtED->GetText();
@@ -858,7 +858,7 @@ bool SwBusinessDataPage::FillItemSet(SfxItemSet* rSet)
 
 void SwBusinessDataPage::Reset(const SfxItemSet* rSet)
 {
-    const SwLabItem& aItem = (const SwLabItem&) rSet->Get(FN_LABEL);
+    const SwLabItem& aItem = static_cast<const SwLabItem&>( rSet->Get(FN_LABEL) );
     m_pCompanyED->SetText(aItem.aCompCompany);
     m_pCompanyExtED->SetText(aItem.aCompCompanyExt);
     m_pSloganED->SetText(aItem.aCompSlogan);

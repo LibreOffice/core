@@ -290,7 +290,7 @@ SwLabFmtPage::SwLabFmtPage(vcl::Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelFormatPage",
         "modules/swriter/ui/labelformatpage.ui", &rSet)
     , bModified(false)
-    , aItem((const SwLabItem&) rSet.Get(FN_LABEL))
+    , aItem(static_cast<const SwLabItem&>( rSet.Get(FN_LABEL) ))
 {
     SetExchangeSupport();
 

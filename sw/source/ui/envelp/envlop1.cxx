@@ -134,7 +134,7 @@ SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert)
     : SfxTabDialog(pParent, "EnvDialog",
         "modules/swriter/ui/envdialog.ui", &rSet)
-    , aEnvItem((const SwEnvItem&) rSet.Get(FN_ENVELOP))
+    , aEnvItem(static_cast<const SwEnvItem&>( rSet.Get(FN_ENVELOP)))
     , pSh(pWrtSh)
     , pPrinter(pPrt)
     , pAddresseeSet(0)
@@ -339,7 +339,7 @@ bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
 
 void SwEnvPage::Reset(const SfxItemSet* rSet)
 {
-    SwEnvItem aItem = (const SwEnvItem&) rSet->Get(FN_ENVELOP);
+    SwEnvItem aItem = static_cast<const SwEnvItem&>( rSet->Get(FN_ENVELOP));
     m_pAddrEdit->SetText(convertLineEnd(aItem.aAddrText, GetSystemLineEnd()));
     m_pSenderEdit->SetText(convertLineEnd(aItem.aSendText, GetSystemLineEnd()));
     m_pSenderBox->Check  (aItem.bSend);

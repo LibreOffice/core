@@ -29,6 +29,7 @@
 #include <svtools/stdctrl.hxx>
 
 #include "envimg.hxx"
+#include "envlop.hxx"
 
 class SwEnvDlg;
 
@@ -52,7 +53,7 @@ class SwEnvPrtPage : public SfxTabPage
     DECL_LINK(AlignHdl, void *);
     DECL_LINK( ButtonHdl, Button * );
 
-    SwEnvDlg* GetParentSwEnvDlg() {return (SwEnvDlg*) GetParentDialog();}
+    SwEnvDlg* GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>( GetParentDialog());}
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
