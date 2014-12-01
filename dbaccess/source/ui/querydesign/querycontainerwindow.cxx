@@ -158,16 +158,12 @@ namespace dbaui
     bool OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
     {
         bool bHandled = false;
-        switch (rNEvt.GetType())
+        if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS && m_pViewSwitch)
         {
-            case  MouseNotifyEvent::GETFOCUS:
-                if ( m_pViewSwitch )
-                {
-                    OJoinController& rController = m_pViewSwitch->getDesignView()->getController();
-                    rController.InvalidateFeature(SID_CUT);
-                    rController.InvalidateFeature(SID_COPY);
-                    rController.InvalidateFeature(SID_PASTE);
-                }
+            OJoinController& rController = m_pViewSwitch->getDesignView()->getController();
+            rController.InvalidateFeature(SID_CUT);
+            rController.InvalidateFeature(SID_COPY);
+            rController.InvalidateFeature(SID_PASTE);
         }
         return bHandled || ODataView::PreNotify(rNEvt);
     }
