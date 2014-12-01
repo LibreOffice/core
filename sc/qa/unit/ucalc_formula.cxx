@@ -2582,6 +2582,20 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
     CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
 
+    m_pDoc->InsertTab(1, "test2");
+
+    ScMarkData aMark2;
+    aMark2.SelectOneTable(1);
+    rFunc.DeleteCells(ScRange(0,2,1,MAXCOL,2,1), &aMark2, DEL_CELLSUP, true, true);
+
+    pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+    pCode = pName->GetCode();
+
+    aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$B$2:$B$4"), aExpr);
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
