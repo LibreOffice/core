@@ -89,6 +89,12 @@ SCCOL RefRowReorderHint::getEndColumn() const
     return mnCol2;
 }
 
+RefStartListeningHint::RefStartListeningHint() : RefHint(StartListening) {}
+RefStartListeningHint::~RefStartListeningHint() {}
+
+RefStopListeningHint::RefStopListeningHint() : RefHint(StopListening) {}
+RefStopListeningHint::~RefStopListeningHint() {}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
