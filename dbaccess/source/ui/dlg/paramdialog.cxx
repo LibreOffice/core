@@ -182,8 +182,6 @@ namespace dbaui
                     if (!m_bNeedErrorOnCurrent)
                         return 1L;
 
-                    m_bNeedErrorOnCurrent = false;  // will be reset in OnValueModified
-
                     OUString sName;
                     try
                     {
