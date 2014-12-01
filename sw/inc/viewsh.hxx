@@ -95,7 +95,7 @@ enum FrameControlType
 typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
 
 class SwViewShell;
-class SW_DLLPUBLIC SwViewShell : public Ring<SwViewShell>
+class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
     friend void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pOut,

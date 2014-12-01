@@ -1828,7 +1828,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 }
 
 class _SaveMergeRedlines;
-class _SaveMergeRedlines : public Ring<_SaveMergeRedlines>
+class _SaveMergeRedlines : public sw::Ring<_SaveMergeRedlines>
 {
     const SwRangeRedline* pSrcRedl;
     SwRangeRedline* pDestRedl;

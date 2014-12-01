@@ -155,7 +155,7 @@ void _InitPam();
 
 class SwPaM;
 /// PaM is Point and Mark: a selection of the document model.
-class SW_DLLPUBLIC SwPaM : public Ring<SwPaM>
+class SW_DLLPUBLIC SwPaM : public sw::Ring<SwPaM>
 {
     SwPosition   m_Bound1;
     SwPosition   m_Bound2;

@@ -1275,9 +1275,9 @@ void SwDocTest::testMarkMove()
 
 namespace
 {
-    struct TestRing : public Ring<TestRing>
+    struct TestRing : public sw::Ring<TestRing>
     {
-        TestRing() : Ring<TestRing>() {};
+        TestRing() : sw::Ring<TestRing>() {};
         void debug()
         {
             SAL_DEBUG("TestRing at: " << this << " prev: " << GetPrev() << " next: " << GetNext());
