@@ -200,9 +200,9 @@ public:
 
 class SwSubsRects : public SwLineRects
 {
-    void RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects );
+    void RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, SwPaintProperties &properties );
 public:
-    void PaintSubsidiary( OutputDevice *pOut, const SwLineRects *pRects );
+    void PaintSubsidiary( OutputDevice *pOut, const SwLineRects *pRects, SwPaintProperties &properties );
 };
 
 class BorderLines
@@ -832,7 +832,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut, SwPaintProperties& propertie
     }
 }
 
-void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
+void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects, SwPaintProperties& properties )
 {
     // All help lines that are covered by any border will be removed or split
     for (size_t i = 0; i < aLineRects.size(); ++i)
@@ -851,13 +851,13 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
         SwRect aSubsRect( aSubsLineRect );
         if ( bVerticalSubs )
         {
-            aSubsRect.Left  ( aSubsRect.Left()  - (gProp.nSPixelSzW+gProp.nSHalfPixelSzW) );
-            aSubsRect.Right ( aSubsRect.Right() + (gProp.nSPixelSzW+gProp.nSHalfPixelSzW) );
+            aSubsRect.Left  ( aSubsRect.Left()  - (properties.nSPixelSzW+properties.nSHalfPixelSzW) );
+            aSubsRect.Right ( aSubsRect.Right() + (properties.nSPixelSzW+properties.nSHalfPixelSzW) );
         }
         else
         {
-            aSubsRect.Top   ( aSubsRect.Top()    - (gProp.nSPixelSzH+gProp.nSHalfPixelSzH) );
-            aSubsRect.Bottom( aSubsRect.Bottom() + (gProp.nSPixelSzH+gProp.nSHalfPixelSzH) );
+            aSubsRect.Top   ( aSubsRect.Top()    - (properties.nSPixelSzH+properties.nSHalfPixelSzH) );
+            aSubsRect.Bottom( aSubsRect.Bottom() + (properties.nSPixelSzH+properties.nSHalfPixelSzH) );
         }
         for (const_iterator itK = rRects.aLineRects.begin(); itK != rRects.aLineRects.end(); ++itK)
         {
@@ -878,7 +878,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                     if ( aSubsRect.Left()  <= rLine.Right() &&
                          aSubsRect.Right() >= rLine.Left() )
                     {
-                        long nTmp = rLine.Top()-(gProp.nSPixelSzH+1);
+                        long nTmp = rLine.Top()-(properties.nSPixelSzH+1);
                         if ( aSubsLineRect.Top() < nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -886,7 +886,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                             aLineRects.push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        nTmp = rLine.Bottom()+gProp.nSPixelSzH+1;
+                        nTmp = rLine.Bottom()+properties.nSPixelSzH+1;
                         if ( aSubsLineRect.Bottom() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -904,7 +904,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                     if ( aSubsRect.Top() <= rLine.Bottom() &&
                          aSubsRect.Bottom() >= rLine.Top() )
                     {
-                        long nTmp = rLine.Left()-(gProp.nSPixelSzW+1);
+                        long nTmp = rLine.Left()-(properties.nSPixelSzW+1);
                         if ( aSubsLineRect.Left() < nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -912,7 +912,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                             aLineRects.push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
                                                 aSubsLineRect.GetSubColor() ) );
                         }
-                        nTmp = rLine.Right()+gProp.nSPixelSzW+1;
+                        nTmp = rLine.Right()+properties.nSPixelSzW+1;
                         if ( aSubsLineRect.Right() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
@@ -1039,7 +1039,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties &properties 
                     pLast = &rLRect.GetColor();
 
                     sal_uLong nOldDrawMode = pOut->GetDrawMode();
-                    if( gProp.pSGlobalShell->GetWin() &&
+                    if( properties.pSGlobalShell->GetWin() &&
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                         pOut->SetDrawMode( 0 );
 
@@ -1074,7 +1074,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties &properties 
                     pLast = &rLRect.GetColor();
 
                     sal_uLong nOldDrawMode = pOut->GetDrawMode();
-                    if( gProp.pSGlobalShell->GetWin() &&
+                    if( properties.pSGlobalShell->GetWin() &&
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     {
                         pOut->SetDrawMode( 0 );
@@ -1094,7 +1094,8 @@ void SwLineRects::PaintLines( OutputDevice *pOut, SwPaintProperties &properties 
 }
 
 void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
-                                   const SwLineRects *pRects )
+                                   const SwLineRects *pRects,
+                                   SwPaintProperties& properties )
 {
     if ( !aLineRects.empty() )
     {
@@ -1150,7 +1151,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         }
 
         if ( pRects && (!pRects->aLineRects.empty()) )
-            RemoveSuperfluousSubsidiaryLines( *pRects );
+            RemoveSuperfluousSubsidiaryLines( *pRects, properties );
 
         if ( !aLineRects.empty() )
         {
@@ -3340,7 +3341,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     // collect sub-lines
                     pPage->RefreshSubsidiary( aPaintRect );
                     // paint special sub-lines
-                    gProp.pSSpecSubsLines->PaintSubsidiary( pSh->GetOut(), NULL );
+                    gProp.pSSpecSubsLines->PaintSubsidiary( pSh->GetOut(), NULL, gProp );
                 }
 
                 pPage->Paint( aPaintRect );
@@ -3356,7 +3357,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 gProp.pSLines->PaintLines( pSh->GetOut(), gProp );
                 if ( pSh->GetWin() )
                 {
-                    gProp.pSSubsLines->PaintSubsidiary( pSh->GetOut(), gProp.pSLines );
+                    gProp.pSSubsLines->PaintSubsidiary( pSh->GetOut(), gProp.pSLines, gProp );
                     DELETEZ( gProp.pSSubsLines );
                     DELETEZ( gProp.pSSpecSubsLines );
                 }
@@ -4299,8 +4300,8 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         // Add subsidiary lines of fly frame and its lowers
         RefreshLaySubsidiary( pPage, aRect );
         // paint subsidiary lines of fly frame and its lowers
-        gProp.pSSpecSubsLines->PaintSubsidiary( pOut, NULL );
-        gProp.pSSubsLines->PaintSubsidiary( pOut, gProp.pSLines );
+        gProp.pSSpecSubsLines->PaintSubsidiary( pOut, NULL, gProp );
+        gProp.pSSubsLines->PaintSubsidiary( pOut, gProp.pSLines, gProp );
         if ( !bSubsLineRectsCreated )
             // unlock subsidiary lines
             gProp.pSSubsLines->LockLines( false );
@@ -6689,10 +6690,10 @@ void SwPageFrm::RefreshSubsidiary( const SwRect &rRect ) const
             {
                 // OD 20.12.2002 #106318# - paint special subsidiary lines
                 // and delete its container
-                gProp.pSSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), NULL );
+                gProp.pSSpecSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), NULL, gProp );
                 DELETEZ( gProp.pSSpecSubsLines );
 
-                gProp.pSSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), gProp.pSLines );
+                gProp.pSSubsLines->PaintSubsidiary( gProp.pSGlobalShell->GetOut(), gProp.pSLines, gProp );
                 DELETEZ( gProp.pSSubsLines );
             }
         }
