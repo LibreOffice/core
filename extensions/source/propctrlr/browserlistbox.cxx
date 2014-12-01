@@ -1205,65 +1205,64 @@ namespace pcr
     {
         switch ( _rNEvt.GetType() )
         {
-        case MouseNotifyEvent::KEYINPUT:
-        {
-            const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
-            if  (   ( pKeyEvent->GetKeyCode().GetModifier() != 0 )
-                ||  (   ( pKeyEvent->GetKeyCode().GetCode() != KEY_PAGEUP )
-                    &&  ( pKeyEvent->GetKeyCode().GetCode() != KEY_PAGEDOWN )
+            case MouseNotifyEvent::KEYINPUT:
+            {
+                const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
+                if  (   ( pKeyEvent->GetKeyCode().GetModifier() != 0 )
+                    ||  (   ( pKeyEvent->GetKeyCode().GetCode() != KEY_PAGEUP )
+                        &&  ( pKeyEvent->GetKeyCode().GetCode() != KEY_PAGEDOWN )
+                        )
                     )
-                )
-                break;
+                    break;
 
-            long nScrollOffset = 0;
-            if ( m_aVScroll.IsVisible() )
-            {
-                if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEUP )
-                    nScrollOffset = -m_aVScroll.GetPageSize();
-                else if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEDOWN )
-                    nScrollOffset = m_aVScroll.GetPageSize();
-            }
-
-            if ( nScrollOffset )
-            {
-                long nNewThumbPos = m_aVScroll.GetThumbPos() + nScrollOffset;
-                nNewThumbPos = ::std::max( nNewThumbPos, m_aVScroll.GetRangeMin() );
-                nNewThumbPos = ::std::min( nNewThumbPos, m_aVScroll.GetRangeMax() );
-                m_aVScroll.DoScroll( nNewThumbPos );
-                nNewThumbPos = m_aVScroll.GetThumbPos();
-
-                sal_uInt16 nFocusControlPos = 0;
-                sal_uInt16 nActiveControlPos = impl_getControlPos( m_xActiveControl );
-                if ( nActiveControlPos < nNewThumbPos )
-                    nFocusControlPos = (sal_uInt16)nNewThumbPos;
-                else if ( nActiveControlPos >= nNewThumbPos + CalcVisibleLines() )
-                    nFocusControlPos = (sal_uInt16)nNewThumbPos + CalcVisibleLines() - 1;
-                if ( nFocusControlPos )
+                long nScrollOffset = 0;
+                if ( m_aVScroll.IsVisible() )
                 {
-                    if ( nFocusControlPos < m_aLines.size() )
-                    {
-                        m_aLines[ nFocusControlPos ].pLine->GrabFocus();
-                    }
-                    else
-                        OSL_FAIL( "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
+                    if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEUP )
+                        nScrollOffset = -m_aVScroll.GetPageSize();
+                    else if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEDOWN )
+                        nScrollOffset = m_aVScroll.GetPageSize();
                 }
-            }
 
-            return true;
-            // handled this. In particular, we also consume PageUp/Down events if we do not use them for scrolling,
-            // otherwise they would be used to scroll the document view, which does not sound like it is desired by
-            // the user.
-        }
+                if ( nScrollOffset )
+                {
+                    long nNewThumbPos = m_aVScroll.GetThumbPos() + nScrollOffset;
+                    nNewThumbPos = ::std::max( nNewThumbPos, m_aVScroll.GetRangeMin() );
+                    nNewThumbPos = ::std::min( nNewThumbPos, m_aVScroll.GetRangeMax() );
+                    m_aVScroll.DoScroll( nNewThumbPos );
+                    nNewThumbPos = m_aVScroll.GetThumbPos();
+
+                    sal_uInt16 nFocusControlPos = 0;
+                    sal_uInt16 nActiveControlPos = impl_getControlPos( m_xActiveControl );
+                    if ( nActiveControlPos < nNewThumbPos )
+                        nFocusControlPos = (sal_uInt16)nNewThumbPos;
+                    else if ( nActiveControlPos >= nNewThumbPos + CalcVisibleLines() )
+                        nFocusControlPos = (sal_uInt16)nNewThumbPos + CalcVisibleLines() - 1;
+                    if ( nFocusControlPos )
+                    {
+                        if ( nFocusControlPos < m_aLines.size() )
+                        {
+                            m_aLines[ nFocusControlPos ].pLine->GrabFocus();
+                        }
+                        else
+                            OSL_FAIL( "OBrowserListBox::PreNotify: internal error, invalid focus control position!" );
+                    }
+                }
+
+                return true;
+                // handled this. In particular, we also consume PageUp/Down events if we do not use them for scrolling,
+                // otherwise they would be used to scroll the document view, which does not sound like it is desired by
+                // the user.
+            }
+            default:
+                break;
         }
         return Control::PreNotify( _rNEvt );
     }
 
-
     bool OBrowserListBox::Notify( NotifyEvent& _rNEvt )
     {
-        switch ( _rNEvt.GetType() )
-        {
-        case MouseNotifyEvent::COMMAND:
+        if ( _rNEvt.GetType() == MouseNotifyEvent::COMMAND)
         {
             const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
             if  (   ( COMMAND_WHEEL == pCommand->GetCommand() )
@@ -1278,9 +1277,6 @@ namespace pcr
                 }
             }
         }
-        break;
-        }
-
         return Control::Notify( _rNEvt );
     }
 
