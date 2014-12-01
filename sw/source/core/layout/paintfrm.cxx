@@ -470,9 +470,9 @@ SwSavePaintStatics::~SwSavePaintStatics()
 static sal_uInt8 lcl_TryMergeLines(
     pair<double, double> const mergeA,
     pair<double, double> const mergeB,
-    SwPaintProperties *properties)
+    SwPaintProperties& properties)
 {
-    double const fMergeGap(properties->nSPixelSzW + properties->nSHalfPixelSzW); // NOT static!
+    double const fMergeGap(properties.nSPixelSzW + properties.nSHalfPixelSzW); // NOT static!
     // A is above/before B
     if( mergeA.second <= mergeB.second &&
         mergeA.second + fMergeGap >= mergeB.first )
@@ -528,7 +528,7 @@ lcl_MergeBorderLines(
 static ::rtl::Reference<BorderLinePrimitive2D>
 lcl_TryMergeBorderLine(BorderLinePrimitive2D const& rThis,
                        BorderLinePrimitive2D const& rOther,
-                       SwPaintProperties *properties)
+                       SwPaintProperties& properties)
 {
     assert(rThis.getEnd().getX() >= rThis.getStart().getX());
     assert(rThis.getEnd().getY() >= rThis.getStart().getY());
@@ -603,7 +603,7 @@ void BorderLines::AddBorderLine(
          ++it)
     {
         ::rtl::Reference<BorderLinePrimitive2D> const xMerged =
-            lcl_TryMergeBorderLine(**it, *xLine, &gProp);
+            lcl_TryMergeBorderLine(**it, *xLine, gProp);
         if (xMerged.is())
         {
             *it = xMerged; // replace existing line with merged
@@ -1379,35 +1379,35 @@ void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
     pGrfRect->SSize( rOut.PixelToLogic( aPxRect.GetSize() ) );
 }
 
-static long lcl_AlignWidth( const long nWidth, SwPaintProperties *properties )
+static long lcl_AlignWidth( const long nWidth, SwPaintProperties& properties )
 {
     if ( nWidth )
     {
-        const long nW = nWidth % properties->nSPixelSzW;
+        const long nW = nWidth % properties.nSPixelSzW;
 
-        if ( !nW || nW > properties->nSHalfPixelSzW )
-            return std::max(1L, nWidth - properties->nSHalfPixelSzW);
+        if ( !nW || nW > properties.nSHalfPixelSzW )
+            return std::max(1L, nWidth - properties.nSHalfPixelSzW);
     }
     return nWidth;
 }
 
-static long lcl_AlignHeight( const long nHeight, SwPaintProperties *properties )
+static long lcl_AlignHeight( const long nHeight, SwPaintProperties& properties )
 {
     if ( nHeight )
     {
-        const long nH = nHeight % properties->nSPixelSzH;
+        const long nH = nHeight % properties.nSPixelSzH;
 
-        if ( !nH || nH > properties->nSHalfPixelSzH )
-            return std::max(1L, nHeight - properties->nSHalfPixelSzH);
+        if ( !nH || nH > properties.nSHalfPixelSzH )
+            return std::max(1L, nHeight - properties.nSHalfPixelSzH);
     }
     return nHeight;
 }
 
-static long lcl_MinHeightDist( const long nDist, SwPaintProperties *properties )
+static long lcl_MinHeightDist( const long nDist, SwPaintProperties& properties )
 {
-    if ( properties->aSScaleX < aMinDistScale || properties->aSScaleY < aMinDistScale )
+    if ( properties.aSScaleX < aMinDistScale || properties.aSScaleY < aMinDistScale )
         return nDist;
-    return ::lcl_AlignHeight( std::max( nDist, properties->nSMinDistPixelH ), properties);
+    return ::lcl_AlignHeight( std::max( nDist, properties.nSMinDistPixelH ), properties);
 }
 
 /**
@@ -1416,7 +1416,7 @@ static long lcl_MinHeightDist( const long nDist, SwPaintProperties *properties )
 static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
                                         const bool bShadow,
-                                        SwPaintProperties *properties)
+                                        SwPaintProperties& properties)
 {
     // Special handling for cell frames.
     // The printing area of a cell frame is completely enclosed in the frame area
@@ -1505,7 +1505,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
         }
     }
 
-    ::SwAlignRect( rRect, properties->pSGlobalShell );
+    ::SwAlignRect( rRect, properties.pSGlobalShell );
 }
 
 /**
@@ -1700,13 +1700,13 @@ static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                  OutputDevice* _pOut,
                                  const SwRect& _rAlignedPaintRect,
                                  const GraphicObject& _rGraphicObj,
-                                 SwPaintProperties *properties)
+                                 SwPaintProperties& properties)
 {
     /// determine color of background
     ///     If color of background brush is not "no fill"/"auto fill" or
     ///     <SwPaintProperties.bSFlyMetafile> is set, use color of background brush, otherwise
     ///     use global retouche color.
-    const Color aColor( ( (_rBackgrdBrush.GetColor() != COL_TRANSPARENT) || properties->bSFlyMetafile )
+    const Color aColor( ( (_rBackgrdBrush.GetColor() != COL_TRANSPARENT) || properties.bSFlyMetafile )
                         ? _rBackgrdBrush.GetColor()
                         : aGlobalRetoucheColor );
 
@@ -1783,7 +1783,7 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                     const SwRect& _rAlignedPaintRect,
                                     const GraphicObject& _rGraphicObj,
                                     bool _bNumberingGraphic,
-                                    SwPaintProperties *properties,
+                                    SwPaintProperties& properties,
                                     bool _bBackgrdAlreadyDrawn = false)
 {
     // draw background with background color, if
@@ -1817,7 +1817,7 @@ static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
 static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       SwViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
-                      SwPaintProperties *properties,
+                      SwPaintProperties& properties,
                       bool bBackgrdAlreadyDrawn = false )
                       // add parameter <bBackgrdAlreadyDrawn> to indicate
                       // that the background is already drawn.
@@ -2057,7 +2057,7 @@ void DrawGraphic(
             SwRect aAlignedPaintRect = rOut;
             ::SwAlignRect( aAlignedPaintRect, &rSh );
             // draw background color for aligned paint rectangle
-            lcl_DrawGraphicBackgrd( *pBrush, pOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum, &gProp );
+            lcl_DrawGraphicBackgrd( *pBrush, pOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum, gProp );
 
             // set left-top-corner of background graphic to left-top-corner of the
             // area, from which the background brush is determined.
@@ -2276,7 +2276,7 @@ void DrawGraphic(
     if( bDraw && aGrf.IsOver( rOut ) )
         // OD 02.09.2002 #99657#
         // add parameter <bGrfBackgrdAlreadyDrawn>
-        lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, true, bGrfNum, &gProp,
+        lcl_DrawGraphic( *pBrush, pOutDev, rSh, aGrf, rOut, true, bGrfNum, gProp,
                          bGrfBackgrdAlreadyDrawn );
 
     if( bReplaceGrfNum )
@@ -4372,7 +4372,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             if ( rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
             {
                 SwRect aRect;
-                ::lcl_CalcBorderRect( aRect, this, rAttrs, true, &gProp );
+                ::lcl_CalcBorderRect( aRect, this, rAttrs, true, gProp );
                 PaintShadow( rRect, aRect, rAttrs );
             }
 
@@ -4412,7 +4412,7 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     const SvxShadowItem& rShadow, const bool bDrawFullShadowRectangle,
     const bool bTop, const bool bBottom,
     const bool bLeft, const bool bRight,
-    SwPaintProperties *properties)
+    SwPaintProperties& properties)
 {
     const long nWidth  = ::lcl_AlignWidth ( rShadow.GetWidth(), properties );
     const long nHeight = ::lcl_AlignHeight( rShadow.GetWidth(), properties );
@@ -4575,11 +4575,11 @@ static void lcl_PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             break;
     }
 
-    OutputDevice *pOut = properties->pSGlobalShell->GetOut();
+    OutputDevice *pOut = properties.pSGlobalShell->GetOut();
 
     sal_uLong nOldDrawMode = pOut->GetDrawMode();
     Color aShadowColor( rShadow.GetColor().GetRGBColor() );
-    if( !aRegion.empty() && properties->pSGlobalShell->GetWin() &&
+    if( !aRegion.empty() && properties.pSGlobalShell->GetWin() &&
         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         // In high contrast mode, the output device has already set the
@@ -4653,7 +4653,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
     SWRECTFN( this );
     ::lcl_ExtendLeftAndRight( rOutRect, *(this), rAttrs, fnRect );
 
-    lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true, &gProp);
+    lcl_PaintShadow(rRect, rOutRect, rShadow, bDrawFullShadowRectangle, bTop, bBottom, true, true, gProp);
 }
 
 void SwFrm::PaintBorderLine( const SwRect& rRect,
@@ -4705,7 +4705,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                                    const SwFrm&         _rFrm,
                                    const SwRectFn&      _rRectFn,
                                    const bool       _bPrtOutputDev,
-                                   SwPaintProperties *properties )
+                                   SwPaintProperties& properties )
 {
     const bool bCnt = _rFrm.IsCntntFrm();
     if ( _rBox.GetTop() && _rBox.GetTop()->GetInWidth() &&
@@ -4740,7 +4740,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // right of border rectangle has to be checked and adjusted
                 Point aCompPt( _iorRect.Right(), 0 );
                 Point aRefPt( aCompPt.X() + 1, aCompPt.Y() );
-                lcl_CompPxPosAndAdjustPos( *(properties->pSGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           true, -1 );
                 _iorRect.Right( aCompPt.X() );
@@ -4750,7 +4750,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // top of border rectangle has to be checked and adjusted
                 Point aCompPt( 0, _iorRect.Top() );
                 Point aRefPt( aCompPt.X(), aCompPt.Y() - 1 );
-                lcl_CompPxPosAndAdjustPos( *(properties->pSGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           false, +1 );
                 _iorRect.Top( aCompPt.Y() );
@@ -4790,7 +4790,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // left of border rectangle has to be checked and adjusted
                 Point aCompPt( _iorRect.Left(), 0 );
                 Point aRefPt( aCompPt.X() - 1, aCompPt.Y() );
-                lcl_CompPxPosAndAdjustPos( *(properties->pSGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           true, +1 );
                 _iorRect.Left( aCompPt.X() );
@@ -4800,7 +4800,7 @@ static void lcl_SubTopBottom( SwRect&              _iorRect,
                 // bottom of border rectangle has to be checked and adjusted
                 Point aCompPt( 0, _iorRect.Bottom() );
                 Point aRefPt( aCompPt.X(), aCompPt.Y() + 1 );
-                lcl_CompPxPosAndAdjustPos( *(properties->pSGlobalShell->GetOut()),
+                lcl_CompPxPosAndAdjustPos( *(properties.pSGlobalShell->GetOut()),
                                           aRefPt, aCompPt,
                                           false, -1 );
                 _iorRect.Bottom( aCompPt.Y() );
@@ -4836,7 +4836,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
         SvxBorderLine const& rBorder,
         SvxBorderLine const*const pLeftOrTopNeighbour,
         SvxBorderLine const*const pRightOrBottomNeighbour,
-        SwPaintProperties *properties)
+        SwPaintProperties& properties)
 {
     bool const isLeftOrTopBorder((isVerticalInModel == isVertical)
             ? isLeftOrTopBorderInModel
@@ -4910,7 +4910,7 @@ static void lcl_MakeBorderLine(SwRect const& rRect,
             aLeftColor.getBColor(), aRightColor.getBColor(),
             rBorder.GetColorGap().getBColor(), rBorder.HasGapColor(),
             rBorder.GetBorderLineStyle() );
-    properties->pBLines->AddBorderLine(xLine);
+    properties.pBLines->AddBorderLine(xLine);
 }
 
 /**
@@ -4924,7 +4924,7 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
                              const SwRect&          /*_rRect*/,
                              const SwBorderAttrs&   _rAttrs,
                              const SwRectFn&        _rRectFn,
-                             SwPaintProperties *properties)
+                             SwPaintProperties& properties)
 {
     const SvxBoxItem& rBox = _rAttrs.GetBox();
     const bool bR2L = _rFrm.IsCellFrm() && _rFrm.IsRightToLeft();
@@ -4981,7 +4981,7 @@ static void lcl_PaintLeftRightLine( const bool         _bLeft,
     {
         // OD 06.05.2003 #107169# - init boolean indicating printer output device.
         const bool bPrtOutputDev =
-                ( OUTDEV_PRINTER == properties->pSGlobalShell->GetOut()->GetOutDevType() );
+                ( OUTDEV_PRINTER == properties.pSGlobalShell->GetOut()->GetOutDevType() );
 
         // OD 06.05.2003 #107169# - add 6th parameter
         ::lcl_SubTopBottom( aRect, rBox, _rAttrs, _rFrm, _rRectFn, bPrtOutputDev, properties);
@@ -5006,7 +5006,7 @@ static void lcl_PaintTopBottomLine( const bool         _bTop,
                              const SwRect&          /*_rRect*/,
                              const SwBorderAttrs&   _rAttrs,
                              const SwRectFn&        _rRectFn,
-                             SwPaintProperties *properties)
+                             SwPaintProperties& properties)
 {
     const SvxBoxItem& rBox = _rAttrs.GetBox();
     const SvxBorderLine* pTopBottomBorder = 0;
@@ -5099,7 +5099,7 @@ void PaintCharacterBorder(
         if( aShadow.GetLocation() != SVX_SHADOW_NONE )
         {
             lcl_PaintShadow( SwRect(aAlignedRect), aAlignedRect, aShadow,
-                             false, bTop, bBottom, bLeft, bRight, &gProp);
+                             false, bTop, bBottom, bLeft, bRight, gProp);
         }
     }
 
@@ -5131,7 +5131,7 @@ void PaintCharacterBorder(
             aTopBorder.get(),
             aLeftBorder.get_ptr(),
             aRightBorder.get_ptr(),
-            &gProp);
+            gProp);
     }
 
     if( aBottomBorder )
@@ -5152,7 +5152,7 @@ void PaintCharacterBorder(
             aBottomBorder.get(),
             aLeftBorder.get_ptr(),
             aRightBorder.get_ptr(),
-            &gProp );
+            gProp );
     }
 
     if( aLeftBorder )
@@ -5172,7 +5172,7 @@ void PaintCharacterBorder(
             aLeftBorder.get(),
             aTopBorder.get_ptr(),
             aBottomBorder.get_ptr(),
-            &gProp );
+            gProp );
     }
 
     if( aRightBorder )
@@ -5193,7 +5193,7 @@ void PaintCharacterBorder(
             aRightBorder.get(),
             aTopBorder.get_ptr(),
             aBottomBorder.get_ptr(),
-            &gProp );
+            gProp );
     }
 }
 
@@ -5489,7 +5489,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         if ( !pPage )
             pPage = FindPageFrm();
 
-        ::lcl_CalcBorderRect( aRect, this, rAttrs, true, &gProp );
+        ::lcl_CalcBorderRect( aRect, this, rAttrs, true, gProp );
         rAttrs.SetGetCacheLine( true );
         if ( bShadow )
             PaintShadow( rRect, aRect, rAttrs );
@@ -5502,8 +5502,8 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         {
             const SwFrm* pDirRefFrm = IsCellFrm() ? FindTabFrm() : this;
             SWRECTFN( pDirRefFrm )
-            ::lcl_PaintLeftRightLine ( true, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, &gProp);
-            ::lcl_PaintLeftRightLine ( false, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, &gProp);
+            ::lcl_PaintLeftRightLine ( true, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, gProp);
+            ::lcl_PaintLeftRightLine ( false, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, gProp);
             if ( !IsCntntFrm() || rAttrs.GetTopLine( *(this) ) )
             {
                 // -
@@ -5514,11 +5514,11 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                     SwBorderAttrAccess aAccess( SwFrm::GetCache(),
                                                 pCellFrmForTopBorderAttrs );
                     const SwBorderAttrs &rTopAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rTopAttrs, fnRect, &gProp);
+                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rTopAttrs, fnRect, gProp);
                 }
                 else
                 {
-                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, &gProp );
+                    ::lcl_PaintTopBottomLine( true, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, gProp );
                 }
             }
             if ( !IsCntntFrm() || rAttrs.GetBottomLine( *(this) ) )
@@ -5531,11 +5531,11 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                     SwBorderAttrAccess aAccess( SwFrm::GetCache(),
                                                 pCellFrmForBottomBorderAttrs );
                     const SwBorderAttrs &rBottomAttrs = *aAccess.Get();
-                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rBottomAttrs, fnRect, &gProp);
+                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rBottomAttrs, fnRect, gProp);
                 }
                 else
                 {
-                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, &gProp);
+                    ::lcl_PaintTopBottomLine(false, *(this), *(pPage), aRect, rRect, rAttrs, fnRect, gProp);
                 }
             }
         }
@@ -6552,7 +6552,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
             }
             else
             {
-                ::lcl_CalcBorderRect( aRect, this, rAttrs, false, &gProp);
+                ::lcl_CalcBorderRect( aRect, this, rAttrs, false, gProp);
                 if ( (IsTxtFrm() || IsTabFrm()) && GetPrev() )
                 {
                     if ( GetPrev()->GetAttrSet()->GetBackground() ==
@@ -7572,7 +7572,7 @@ bool SwFrm::GetBackgroundBrush(
                 {
                     SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
                     const SwBorderAttrs &rAttrs = *aAccess.Get();
-                    ::lcl_CalcBorderRect( rOrigRect, pFrm, rAttrs, false, &gProp );
+                    ::lcl_CalcBorderRect( rOrigRect, pFrm, rAttrs, false, gProp );
                 }
                 else
                 {
