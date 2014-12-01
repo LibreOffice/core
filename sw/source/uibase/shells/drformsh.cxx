@@ -83,7 +83,7 @@ void SwDrawFormShell::Execute(SfxRequest &rReq)
         if(pItem)
         {
             SdrView *pSdrView = rSh.GetDrawView();
-            const SvxHyperlinkItem& rHLinkItem = *(const SvxHyperlinkItem *)pItem;
+            const SvxHyperlinkItem& rHLinkItem = *static_cast<const SvxHyperlinkItem *>(pItem);
             bool bConvertToText = rHLinkItem.GetInsertMode() == HLINK_DEFAULT ||
                             rHLinkItem.GetInsertMode() == HLINK_FIELD;
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();

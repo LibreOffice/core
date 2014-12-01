@@ -214,7 +214,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         // The old item is for unknown reasons back in the set again.
         if( !bSelectionPut && SfxItemState::SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, false, &pSelectionItem) )
         {
-            OUString sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
+            OUString sInsert = static_cast<const SfxStringItem*>(pSelectionItem)->GetValue();
             bInsert = !sInsert.isEmpty();
             if(bInsert)
             {
@@ -439,7 +439,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.Left( CRSR_SKIP_CHARS, true, 1, false );
                 SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
                 rWrtSh.GetCurAttr( aSet );
-                SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
+                const SvxFontItem &rFont = static_cast<const SvxFontItem &>( aSet.Get( RES_CHRATR_FONT ));
                 SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
                                     rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                 rWrtSh.SetAttrSet( aSet, nsSetAttrMode::SETATTR_DONTEXPAND );
@@ -669,7 +669,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_AUTO:
         {
             SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-            bool bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !rACfg.IsAutoFmtByInput();
+            bool bSet = pItem ? static_cast<const SfxBoolItem*>(pItem)->GetValue() : !rACfg.IsAutoFmtByInput();
             if( bSet != rACfg.IsAutoFmtByInput() )
             {
                 rACfg.SetAutoFmtByInput( bSet );
@@ -751,7 +751,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     pVFrame->GetBindings().InvalidateAll( true );
                 }
 
-                OUString sFormula(((const SfxStringItem*)pItem)->GetValue());
+                OUString sFormula(static_cast<const SfxStringItem*>(pItem)->GetValue());
                 SwFldMgr aFldMgr;
                 rWrtSh.StartAllAction();
                 bool bDelSel;
@@ -939,8 +939,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             ::GetHtmlMode(GetView().GetDocShell())));
 
             // Tabulators: Put DefaultTabs into ItemSet
-            const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
-                            GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
+            const SvxTabStopItem& rDefTabs = static_cast<const SvxTabStopItem&>(
+                            GetPool().GetDefaultItem(RES_PARATR_TABSTOP));
 
             const sal_uInt16 nDefDist = static_cast<sal_uInt16>(::GetTabDist( rDefTabs ));
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
@@ -978,7 +978,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 OString sDefPage;
                 if (pItem)
-                    sDefPage = OUStringToOString(((const SfxStringItem*)pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
+                    sDefPage = OUStringToOString(static_cast<const SfxStringItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
@@ -991,7 +991,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 if ( nSlot == SID_ATTR_PARA_LRSPACE)
                 {
-                    SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)pArgs->Get(nSlot));
+                    SvxLRSpaceItem aParaMargin(static_cast<const SvxLRSpaceItem&>(pArgs->Get(nSlot)));
                     aParaMargin.SetWhich( RES_LR_SPACE);
                     aCoreSet.Put(aParaMargin);
                     pSet = &aCoreSet;
@@ -1016,15 +1016,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if ( SfxItemState::SET == pSet->GetItemState(FN_PARAM_1,false,&pItem) )
                 {
-                    pSet->Put(SfxStringItem(FN_DROP_TEXT, ((const SfxStringItem*)pItem)->GetValue()));
+                    pSet->Put(SfxStringItem(FN_DROP_TEXT, static_cast<const SfxStringItem*>(pItem)->GetValue()));
                     pSet->ClearItem(FN_PARAM_1);
                 }
 
                 if( SfxItemState::SET == pSet->GetItemState( RES_PARATR_DROP, false, &pItem ))
                 {
                     OUString sCharStyleName;
-                    if(((const SwFmtDrop*)pItem)->GetCharFmt())
-                        sCharStyleName = ((const SwFmtDrop*)pItem)->GetCharFmt()->GetName();
+                    if(static_cast<const SwFmtDrop*>(pItem)->GetCharFmt())
+                        sCharStyleName = static_cast<const SwFmtDrop*>(pItem)->GetCharFmt()->GetName();
                     pSet->Put(SfxStringItem(FN_DROP_CHAR_STYLE_NAME, sCharStyleName));
                 }
             }
@@ -1160,7 +1160,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             if(pItem)
             {
-                Color aSet = ((const SvxColorItem*)pItem)->GetValue();
+                Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 SwEditWin& rEditWin = GetView().GetEditWin();
                 rEditWin.SetTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
@@ -1180,7 +1180,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             Color aSet;
             if(pItem)
-                aSet = ((const SvxColorItem*)pItem)->GetValue();
+                aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
             else
                 aSet = COL_TRANSPARENT;
 
@@ -1210,7 +1210,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 // The reason we need this argument here is that when a toolbar is closed
                 // and reopened, its color resets, while SwEditWin still holds the old one.
-                Color aSet = ((const SvxColorItem*)pItem)->GetValue();
+                Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
                 if( nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
                     rEdtWin.SetTextBackColor(aSet);
                 else
@@ -1266,10 +1266,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         OUString sStyleName;
         if(pItem)
-            sStyleName = ((const SfxStringItem*)pItem)->GetValue();
+            sStyleName = static_cast<const SfxStringItem*>(pItem)->GetValue();
         bool bOn = true;
         if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_1, false, &pItem))
-            bOn = ((const SfxBoolItem*)pItem)->GetValue();
+            bOn = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         rWrtSh.ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
         rReq.Done();
     }
@@ -1287,7 +1287,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         bool bSetBlockMode = !rWrtSh.IsBlockMode();
         if( pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
-            bSetBlockMode = ((const SfxBoolItem*)pItem)->GetValue();
+            bSetBlockMode = static_cast<const SfxBoolItem*>(pItem)->GetValue();
         if( ( nSlot == FN_SELECTION_MODE_DEFAULT ) != bSetBlockMode )
             rWrtSh.EnterBlockMode();
         else
@@ -1360,7 +1360,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
             Invalidate(rReq.GetSlot());
 
-            SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+            SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
             if (pWrdCnt)
                 pWrdCnt->UpdateCounts();
         }

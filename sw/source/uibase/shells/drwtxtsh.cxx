@@ -245,7 +245,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( pVFrame->HasChildWindow(nId) )
-        pDlg = (SvxFontWorkDialog*)(pVFrame->GetChildWindow(nId)->GetWindow());
+        pDlg = static_cast<SvxFontWorkDialog*>(pVFrame->GetChildWindow(nId)->GetWindow());
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -716,11 +716,11 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         aSetItem.GetItemSet().Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
-            aSetDlgFont = *(SvxFontItem*)pI;
+            aSetDlgFont = *static_cast<const SvxFontItem*>(pI);
         else
-            aSetDlgFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
+            aSetDlgFont = static_cast<const SvxFontItem&>(aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
-                        GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
+                        GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) )));
         if (sFontName.isEmpty())
             sFontName = aSetDlgFont.GetFamilyName();
     }
@@ -850,7 +850,7 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
                 SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
                 if( eConState != SfxItemState::DONTCARE )
                 {
-                    bContour = ( ( const SdrOnOffItem& )aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+                    bContour = static_cast<const SdrOnOffItem&>( aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
                 }
                 if (bContour) break;
 

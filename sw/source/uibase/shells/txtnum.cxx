@@ -197,7 +197,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             {
                 rReq.AppendItem( *pItem );
                 rReq.Done();
-                SvxNumRule* pSetRule = ( (SvxNumBulletItem*) pItem )->GetNumRule();
+                SvxNumRule* pSetRule = static_cast<const SvxNumBulletItem*>( pItem )->GetNumRule();
                 pSetRule->UnLinkGraphics();
                 SwNumRule aSetRule( pNumRuleAtCurrentSelection != NULL
                                     ? pNumRuleAtCurrentSelection->GetName()
@@ -217,7 +217,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             {
                 rReq.AppendItem( *pItem );
                 rReq.Done();
-                SvxNumRule* pSetRule = ( (SvxNumBulletItem*) pItem )->GetNumRule();
+                SvxNumRule* pSetRule = static_cast<const SvxNumBulletItem*>( pItem )->GetNumRule();
                 SwNumRule aSetRule(
                     GetShell().GetUniqueNumRuleName(),
                     numfunc::GetDefaultPositionAndSpaceMode() );

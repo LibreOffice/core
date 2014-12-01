@@ -195,8 +195,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     {
         case SID_ATTR_PARA_LRSPACE:
             {
-                SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
-                                        GetArgs()->Get(nSlot));
+                SvxLRSpaceItem aParaMargin(static_cast<const SvxLRSpaceItem&>(rReq.
+                                        GetArgs()->Get(nSlot)));
                 aParaMargin.SetWhich( EE_PARA_LRSPACE );
 
                 aNewAttr.Put(aParaMargin);
@@ -205,8 +205,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
         case SID_ATTR_PARA_LINESPACE:
             {
-                SvxLineSpacingItem aParaMargin = (const SvxLineSpacingItem&)pNewAttrs->Get(
-                                                            GetPool().GetWhich(nSlot));
+                SvxLineSpacingItem aParaMargin = static_cast<const SvxLineSpacingItem&>(pNewAttrs->Get(
+                                                            GetPool().GetWhich(nSlot)));
                 aParaMargin.SetWhich( EE_PARA_SBL );
 
                 aNewAttr.Put(aParaMargin);
@@ -215,8 +215,8 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             }
         case SID_ATTR_PARA_ULSPACE:
             {
-                SvxULSpaceItem aULSpace = (const SvxULSpaceItem&)pNewAttrs->Get(
-                    GetPool().GetWhich(nSlot));
+                SvxULSpaceItem aULSpace = static_cast<const SvxULSpaceItem&>(pNewAttrs->Get(
+                    GetPool().GetWhich(nSlot)));
                 aULSpace.SetWhich( EE_PARA_ULSPACE );
                 aNewAttr.Put( aULSpace );
                 rReq.Done();
@@ -248,7 +248,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 }
                 else
                 {
-                    FontUnderline eFU = ( (const SvxUnderlineItem&) aEditAttr.Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
+                    FontUnderline eFU = static_cast<const SvxUnderlineItem&>( aEditAttr.Get( EE_CHAR_UNDERLINE ) ).GetLineStyle();
                     aNewAttr.Put( SvxUnderlineItem( eFU != UNDERLINE_NONE ?UNDERLINE_NONE : UNDERLINE_SINGLE,  EE_CHAR_UNDERLINE ) );
                 }
             }
@@ -256,7 +256,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         }
         case SID_ATTR_CHAR_OVERLINE:
         {
-             FontUnderline eFO = ((const SvxOverlineItem&)aEditAttr.Get(EE_CHAR_OVERLINE)).GetLineStyle();
+             FontUnderline eFO = static_cast<const SvxOverlineItem&>(aEditAttr.Get(EE_CHAR_OVERLINE)).GetLineStyle();
             aNewAttr.Put(SvxOverlineItem(eFO == UNDERLINE_SINGLE ? UNDERLINE_NONE : UNDERLINE_SINGLE, EE_CHAR_OVERLINE));
             break;
         }
@@ -324,7 +324,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case FN_SET_SUPER_SCRIPT:
         {
             SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-            SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+            SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
             if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
@@ -337,7 +337,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case FN_SET_SUB_SCRIPT:
         {
             SvxEscapementItem aItem(EE_CHAR_ESCAPEMENT);
-            SvxEscapement eEsc = (SvxEscapement ) ( (const SvxEscapementItem&)
+            SvxEscapement eEsc = (SvxEscapement ) static_cast<const SvxEscapementItem&>(
                             aEditAttr.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
             if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
@@ -355,7 +355,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
             if(pItem)
             {
-                const SvxHyperlinkItem& rHLinkItem = *(const SvxHyperlinkItem *)pItem;
+                const SvxHyperlinkItem& rHLinkItem = *static_cast<const SvxHyperlinkItem *>(pItem);
                 SvxURLField aFld(rHLinkItem.GetURL(), rHLinkItem.GetName(), SVXURLFORMAT_APPDEFAULT);
                 aFld.SetTargetFrame(rHLinkItem.GetTargetFrame());
 
@@ -408,7 +408,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             if(pNewAttrs)
                 pNewAttrs->GetItemState(nSlot, false, &pItem );
                         if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
-                                pOLV->InsertText(((const SfxStringItem *)pItem)->GetValue());
+                                pOLV->InsertText(static_cast<const SfxStringItem *>(pItem)->GetValue());
                         break;
                 }
 
@@ -456,7 +456,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
                 Invalidate(rReq.GetSlot());
 
-                SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
                 if (pWrdCnt)
                     pWrdCnt->UpdateCounts();
             }
@@ -568,7 +568,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             const SfxPoolItem* pPoolItem;
             if( pNewAttrs && SfxItemState::SET == pNewAttrs->GetItemState( nSlot, true, &pPoolItem ) )
             {
-                if( !( (SfxBoolItem*)pPoolItem)->GetValue() )
+                if( !static_cast<const SfxBoolItem*>(pPoolItem)->GetValue() )
                     bLeftToRight = !bLeftToRight;
             }
             SfxItemSet aAttr( *aNewAttr.GetPool(),
@@ -578,7 +578,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
             sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
             if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
-                nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
+                nAdjust = static_cast<const SvxAdjustItem*>(pPoolItem)->GetEnumValue();
 
             if( bLeftToRight )
             {
@@ -638,7 +638,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_LRSPACE );
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLRSpaceItem aLR = ( (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE ) );
+                    SvxLRSpaceItem aLR = static_cast<const SvxLRSpaceItem&>( aEditAttr.Get( EE_PARA_LRSPACE ) );
                     aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
                     rSet.Put(aLR);
                 }
@@ -651,7 +651,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_SBL );
                 if( eState >= SfxItemState::DEFAULT )
                 {
-                    SvxLineSpacingItem aLR = ( (const SvxLineSpacingItem&) aEditAttr.Get( EE_PARA_SBL ) );
+                    SvxLineSpacingItem aLR = static_cast<const SvxLineSpacingItem&>( aEditAttr.Get( EE_PARA_SBL ) );
                     rSet.Put(aLR);
                 }
                 else
@@ -663,7 +663,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     SfxItemState eState = aEditAttr.GetItemState( EE_PARA_ULSPACE );
                     if( eState >= SfxItemState::DEFAULT )
                     {
-                        SvxULSpaceItem aULSpace = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );
+                        SvxULSpaceItem aULSpace = static_cast<const SvxULSpaceItem&>( aEditAttr.Get( EE_PARA_ULSPACE ) );
                         aULSpace.SetWhich(SID_ATTR_PARA_ULSPACE);
                         rSet.Put(aULSpace);
                     }
@@ -711,7 +711,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                 if( !pEscItem )
                     pEscItem = &aEditAttr.Get( EE_CHAR_ESCAPEMENT );
 
-                if( nEsc == ((const SvxEscapementItem*)pEscItem)->GetEnumValue() )
+                if( nEsc == static_cast<const SvxEscapementItem*>(pEscItem)->GetEnumValue() )
                     rSet.Put( SfxBoolItem( nWhich, true ));
                 else
                     rSet.InvalidateItem( nWhich );
@@ -741,7 +741,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         rSet.InvalidateItem( nSlotId ), nSlotId = 0;
                     else
                     {
-                        if ( eAdjust == ((const SvxAdjustItem*)pAdjust)->GetAdjust())
+                        if ( eAdjust == static_cast<const SvxAdjustItem*>(pAdjust)->GetAdjust())
                             rSet.Put( SfxBoolItem( nWhich, true ));
                         else
                             rSet.InvalidateItem( nWhich );
@@ -769,7 +769,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                         rSet.InvalidateItem( nSlotId ), nSlotId = 0;
                     else
                     {
-                        if( nLSpace == ((const SvxLineSpacingItem*)pLSpace)->GetPropLineSpace() )
+                        if( nLSpace == static_cast<const SvxLineSpacingItem*>(pLSpace)->GetPropLineSpace() )
                             rSet.Put( SfxBoolItem( nWhich, true ));
                         else
                             rSet.InvalidateItem( nWhich );
@@ -780,7 +780,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             {
                 const SfxPoolItem* pState = rView.GetSlotState(nWhich);
                 if (pState)
-                    rSet.Put(SfxBoolItem(nWhich, ((const SfxBoolItem*)pState)->GetValue()));
+                    rSet.Put(SfxBoolItem(nWhich, static_cast<const SfxBoolItem*>(pState)->GetValue()));
                 else
                     rSet.DisableItem( nWhich );
                 break;
@@ -797,7 +797,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     else
                     {
                         bool bFlag = false;
-                        switch( ( ( (SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR ) ) ).GetValue() )
+                        switch( static_cast<const SvxFrameDirectionItem&>( aEditAttr.Get( EE_PARA_WRITINGDIR ) ).GetValue() )
                         {
                             case FRMDIR_HORI_LEFT_TOP:
                             {
@@ -920,7 +920,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                                     pItem->ISA(SfxUInt32Item) )
             {
-                nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
+                nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
             }
 
             if ( nFormat )
@@ -1044,9 +1044,9 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
 
                         if (pField->ISA(SvxURLField))
                         {
-                            aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                            aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                            aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                            aHLinkItem.SetName(static_cast<const SvxURLField*>( pField)->GetRepresentation());
+                            aHLinkItem.SetURL(static_cast<const SvxURLField*>( pField)->GetURL());
+                            aHLinkItem.SetTargetFrame(static_cast<const SvxURLField*>( pField)->GetTargetFrame());
                         }
                     }
                     else
@@ -1342,7 +1342,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 const SfxPoolItem &rItem = rView.GetWrtShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
                             GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage())) );
-                LanguageType nLang = ((const SvxLanguageItem &)
+                LanguageType nLang = static_cast<const SvxLanguageItem &>(
                                                         rItem).GetLanguage();
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                 if (!xThes.is() || nLang == LANGUAGE_NONE ||
@@ -1645,7 +1645,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     OUString sFontName;
     if ( pItem )
     {
-        sSym = ((const SfxStringItem*)pItem)->GetValue();
+        sSym = static_cast<const SfxStringItem*>(pItem)->GetValue();
         const SfxPoolItem* pFtItem = NULL;
         pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), false, &pFtItem);
         const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
@@ -1661,11 +1661,11 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         aSetItem.GetItemSet().Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
-            aSetDlgFont = *(SvxFontItem*)pI;
+            aSetDlgFont = *static_cast<const SvxFontItem*>(pI);
         else
-            aSetDlgFont = (SvxFontItem&)aSet.Get( GetWhichOfScript(
+            aSetDlgFont = static_cast<const SvxFontItem&>(aSet.Get( GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
-                        GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
+                        GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) )));
         if (sFontName.isEmpty())
             sFontName = aSetDlgFont.GetFamilyName();
     }

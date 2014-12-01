@@ -131,11 +131,11 @@ static sal_uInt8 nFooterPos;
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
-#define SWCONTOURDLG(rView) ( (SvxContourDlg*) ( rView.GetViewFrame()->GetChildWindow(  \
+#define SWCONTOURDLG(rView) ( static_cast<SvxContourDlg*>( rView.GetViewFrame()->GetChildWindow(  \
                           SvxContourDlgChildWindow::GetChildWindowId() )->  \
                           GetWindow() ) )
 
-#define SWIMAPDLG(rView) ( (SvxIMapDlg*) ( rView.GetViewFrame()->GetChildWindow(        \
+#define SWIMAPDLG(rView) ( static_cast<SvxIMapDlg*>( rView.GetViewFrame()->GetChildWindow(        \
                         SvxIMapDlgChildWindow::GetChildWindowId() )->   \
                         GetWindow() ) )
 
@@ -165,7 +165,7 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
     rSh.GetFlyFrmAttr( aSet );
-    const SwFmtURL &rURL = (SwFmtURL&)aSet.Get( RES_URL );
+    const SwFmtURL &rURL = static_cast<const SwFmtURL&>(aSet.Get( RES_URL ));
     SvxIMapDlgChildWindow::UpdateIMapDlg(
             aGrf, rURL.GetMap(), pList.get(), pEditObj );
 }
@@ -740,9 +740,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 sal_uInt16 nCount;
                 if(SfxItemState::SET == pArgs->GetItemState(nSlot))
-                    nCount = ((SfxUInt16Item &)pArgs->Get(nSlot)).GetValue();
+                    nCount = static_cast<const SfxUInt16Item &>(pArgs->Get(nSlot)).GetValue();
                 else
-                    nCount = ((SfxUInt16Item &)pArgs->Get(SID_ATTR_COLUMNS)).GetValue();
+                    nCount = static_cast<const SfxUInt16Item &>(pArgs->Get(SID_ATTR_COLUMNS)).GetValue();
                 sal_uInt16 nGutterWidth = DEF_GUTTER_WIDTH;
 
                 aFmtCol.Init(nCount ? nCount : 1, nGutterWidth, USHRT_MAX);
@@ -918,7 +918,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             {
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                     rSh.GetFlyFrmAttr( aSet );
-                    SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+                    SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
                     aURL.SetMap( &pDlg->GetImageMap() );
                     aSet.Put( aURL );
                     rSh.SetFlyFrmAttr( aSet );
@@ -953,7 +953,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.StartAction();
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_SURROUND, RES_SURROUND);
                     rSh.GetFlyFrmAttr( aSet );
-                    SwFmtSurround aSur( (SwFmtSurround&)aSet.Get( RES_SURROUND ) );
+                    SwFmtSurround aSur( static_cast<const SwFmtSurround&>(aSet.Get( RES_SURROUND )) );
                     if ( !aSur.IsContour() )
                     {
                         aSur.SetContour( true );
@@ -1022,9 +1022,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SfxItemSet aSet(GetPool(), RES_SURROUND, RES_HORI_ORIENT);
                 rSh.GetFlyFrmAttr(aSet);
 
-                const SwFmtSurround& rSurround = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
-                const SwFmtVertOrient& rVert = (const SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT);
-                const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)aSet.Get(RES_HORI_ORIENT);
+                const SwFmtSurround& rSurround = static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND));
+                const SwFmtVertOrient& rVert = static_cast<const SwFmtVertOrient&>(aSet.Get(RES_VERT_ORIENT));
+                const SwFmtHoriOrient& rHori = static_cast<const SwFmtHoriOrient&>(aSet.Get(RES_HORI_ORIENT));
                 sal_Int16 eVOrient = rVert.GetVertOrient();
                 sal_Int16 eHOrient = rHori.GetHoriOrient();
                 SwSurround eSurround = rSurround.GetSurround();
@@ -1233,7 +1233,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                 {
                     sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
                     SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
-                        (SvxIMapDlg*) ( pVFrame->GetChildWindow( nId )
+                        static_cast<SvxIMapDlg*>( pVFrame->GetChildWindow( nId )
                                             ->GetWindow()) : 0;
 
                     if( pDlg && ( SID_IMAP_EXEC == nSlot ||
@@ -1251,7 +1251,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                 {
                     sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
                     SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
-                        (SvxIMapDlg*) ( pVFrame->GetChildWindow( nId )
+                        static_cast<SvxIMapDlg*>( pVFrame->GetChildWindow( nId )
                                             ->GetWindow()) : 0;
                     if( pDlg && pDlg->GetEditingObject() !=
                                 rSh.GetIMapInventor() )
@@ -1267,7 +1267,7 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                 {
                     SfxItemSet aSet(GetPool(), RES_SURROUND, RES_SURROUND);
                     rSh.GetFlyFrmAttr(aSet);
-                    const SwFmtSurround& rWrap = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
+                    const SwFmtSurround& rWrap = static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND));
                     bSetState = true;
                     bState = rWrap.IsContour();
                 }
@@ -1381,7 +1381,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 else
                     rSh.GetCurAttr( aSet );
 
-                const SvxShadowItem& rShItem = (const SvxShadowItem&)aSet.Get(nWhich);
+                const SvxShadowItem& rShItem = static_cast<const SvxShadowItem&>(aSet.Get(nWhich));
                 rSet.Put(rShItem);
             }
             break;
@@ -1629,9 +1629,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         rSh.GetFlyFrmAttr(aSet);
                         nAnchorType = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetAnchorId();
                     }
-                    const SwFmtSurround& rWrap = (const SwFmtSurround&)aSet.Get(RES_SURROUND);
+                    const SwFmtSurround& rWrap = static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND));
 
-                    const SvxOpaqueItem& rOpaque = (const SvxOpaqueItem&)aSet.Get(RES_OPAQUE);
+                    const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE));
                     bool bOpaque = rOpaque.GetValue();
                     SwSurround nSurround = rWrap.GetSurround();
                     bool bSet = false;
@@ -1798,7 +1798,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
             rSh.GetObjAttr(aSet);
         else
             rSh.GetFlyFrmAttr(aSet);
-        SwFmtSurround aWrap( (SwFmtSurround&)aSet.Get(RES_SURROUND) );
+        SwFmtSurround aWrap( static_cast<const SwFmtSurround&>(aSet.Get(RES_SURROUND)) );
         SwSurround nOldSurround(aWrap.GetSurround());
         SwSurround nSurround = SURROUND_PARALLEL;
 
@@ -2226,7 +2226,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
 
             if(pArgs)
             {
-                const SvxColorItem& rNewColorItem = (const SvxColorItem&)pArgs->Get(SID_BACKGROUND_COLOR);
+                const SvxColorItem& rNewColorItem = static_cast<const SvxColorItem&>(pArgs->Get(SID_BACKGROUND_COLOR));
                 const Color& rNewColor = rNewColorItem.GetValue();
                 aBrushItem.SetColor(rNewColor);
                 GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
@@ -2242,7 +2242,7 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
         case SID_ATTR_BRUSH:
         case RES_BACKGROUND:
         {
-            const SvxBrushItem& rNewBrushItem = (const SvxBrushItem&)pArgs->Get(GetPool().GetWhich(nSlot));
+            const SvxBrushItem& rNewBrushItem = static_cast<const SvxBrushItem&>(pArgs->Get(GetPool().GetWhich(nSlot)));
             aBrushItem = rNewBrushItem;
             break;
         }
@@ -2471,8 +2471,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 if ( pDlg->Execute() == RET_OK )
                 {
 
-                    rSh.SetBoxBackground( (SvxBrushItem&)
-                        pDlg->GetOutputItemSet()->Get( RES_BACKGROUND ));
+                    rSh.SetBoxBackground( static_cast<const SvxBrushItem&>(
+                        pDlg->GetOutputItemSet()->Get( RES_BACKGROUND )));
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }

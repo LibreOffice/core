@@ -148,7 +148,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
                 if(dynamic_cast< SdrGrafObj* >(&rObject))
                 {
-                    SdrGrafObj* pNewGrafObj = (SdrGrafObj*)rObject.Clone();
+                    SdrGrafObj* pNewGrafObj = static_cast<SdrGrafObj*>(rObject.Clone());
 
                     pNewGrafObj->SetGraphic(aGraphic);
 
@@ -344,7 +344,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
                 pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
                 Invalidate(rReq.GetSlot());
 
-                SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
                 if (pWrdCnt)
                     pWrdCnt->UpdateCounts();
             }
@@ -613,7 +613,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( pVFrame->HasChildWindow(nId) )
-        pDlg = (SvxFontWorkDialog*)(pVFrame->GetChildWindow(nId)->GetWindow());
+        pDlg = static_cast<SvxFontWorkDialog*>(pVFrame->GetChildWindow(nId)->GetWindow());
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();

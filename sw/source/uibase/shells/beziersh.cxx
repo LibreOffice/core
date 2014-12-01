@@ -197,7 +197,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
 
                     case SID_BEZIER_CLOSE:
                     {
-                        SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
+                        SdrPathObj* pPathObj = static_cast<SdrPathObj*>( rMarkList.GetMark(0)->GetMarkedSdrObj() );
                         pSdrView->UnmarkAllPoints();
                         // Size aDist(GetView().GetEditWin().PixelToLogic(Size(8,8)));
                         pPathObj->ToggleClosed(); // aDist.Width());

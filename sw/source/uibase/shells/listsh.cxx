@@ -216,7 +216,7 @@ void SwListShell::Execute(SfxRequest &rReq)
             bool bApi = rReq.IsAPI();
             bool bDelete = !rSh.IsNoNum(!bApi);
             if(pArgs )
-                bDelete = ((SfxBoolItem &)pArgs->Get(rReq.GetSlot())).GetValue();
+                bDelete = static_cast<const SfxBoolItem &>(pArgs->Get(rReq.GetSlot())).GetValue();
             rSh.NumOrNoNum( bDelete, !bApi );
             rReq.AppendItem( SfxBoolItem( nSlot, bDelete ) );
             rReq.Done();

@@ -166,11 +166,11 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 // Frame already exists, only the number of columns will be changed.
                 sal_uInt16 nCols = 1;
                 if(pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem) == SfxItemState::SET)
-                    nCols = ((SfxUInt16Item *)pItem)->GetValue();
+                    nCols = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
 
                 SfxItemSet aSet(GetPool(),RES_COL,RES_COL);
                 rSh.GetFlyFrmAttr( aSet );
-                SwFmtCol aCol((const SwFmtCol&)aSet.Get(RES_COL));
+                SwFmtCol aCol(static_cast<const SwFmtCol&>(aSet.Get(RES_COL)));
                 // GutterWidth will not always passed, hence get firstly
                 // (see view2: Execute on this slot)
                 sal_uInt16 nGutterWidth = aCol.GetGutterWidth();
@@ -199,13 +199,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         {
             if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_HYPERLINK_SETLINK, false, &pItem))
             {
-                const SvxHyperlinkItem& rHLinkItem = *(const SvxHyperlinkItem *)pItem;
+                const SvxHyperlinkItem& rHLinkItem = *static_cast<const SvxHyperlinkItem *>(pItem);
                 const OUString& rURL = rHLinkItem.GetURL();
                 const OUString& rTarget = rHLinkItem.GetTargetFrame();
 
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrmAttr( aSet );
-                SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+                SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
 
                 OUString sOldName(rHLinkItem.GetName().toAsciiUpperCase());
                 OUString sFlyName(rSh.GetFlyName().toAsciiUpperCase());
@@ -282,7 +282,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
                 Invalidate(rReq.GetSlot());
 
-                SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
                 if (pWrdCnt)
                     pWrdCnt->UpdateCounts();
             }
@@ -352,7 +352,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
         case FN_SET_FRM_POSITION:
         {
-            aMgr.SetAbsPos(((SfxPointItem &)pArgs->Get
+            aMgr.SetAbsPos(static_cast<const SfxPointItem &>(pArgs->Get
                                 (FN_SET_FRM_POSITION)).GetValue());
         }
         break;
@@ -478,7 +478,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
                 // On % values initialize size
-                SwFmtFrmSize& rSize = (SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
+                SwFmtFrmSize& rSize = const_cast<SwFmtFrmSize&>(static_cast<const SwFmtFrmSize&>(aSet.Get(RES_FRM_SIZE)));
                 if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff)
                     rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
                 if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff)
@@ -492,7 +492,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 OString sDefPage;
                 if(pArgs && pArgs->GetItemState(FN_FORMAT_FRAME_DLG, false, &pItem) == SfxItemState::SET)
-                    sDefPage = OUStringToOString(((SfxStringItem *)pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
+                    sDefPage = OUStringToOString(static_cast<const SfxStringItem *>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8);
 
                 aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
@@ -525,13 +525,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         SfxItemState::SET == pOutSet->GetItemState(FN_KEEP_ASPECT_RATIO, true, &pItem))
                         {
                             SwViewOption aUsrPref( *pVOpt );
-                            aUsrPref.SetKeepRatio(((const SfxBoolItem*)pItem)->GetValue());
+                            aUsrPref.SetKeepRatio(static_cast<const SfxBoolItem*>(pItem)->GetValue());
                             SW_MOD()->ApplyUsrPref(aUsrPref, &GetView());
                         }
                         if (SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_ALT_NAME, true, &pItem))
                         {
                             // #i73249#
-                            rSh.SetObjTitle(((const SfxStringItem*)pItem)->GetValue());
+                            rSh.SetObjTitle(static_cast<const SfxStringItem*>(pItem)->GetValue());
                         }
                         // Template AutoUpdate
                         SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
@@ -540,7 +540,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             rSh.AutoUpdateFrame(pFmt, *pOutSet);
                             // Anything which is not supported by the format must be set hard.
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
-                                rSh.SetFlyName(((SfxStringItem*)pItem)->GetValue());
+                                rSh.SetFlyName(static_cast<const SfxStringItem*>(pItem)->GetValue());
                             SfxItemSet aShellSet(GetPool(), RES_FRM_SIZE,   RES_FRM_SIZE,
                                                             RES_SURROUND,   RES_SURROUND,
                                                             RES_ANCHOR,     RES_ANCHOR,
@@ -549,7 +549,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             aShellSet.Put(*pOutSet);
                             aMgr.SetAttrSet(aShellSet);
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
-                                rSh.SetFlyName(((SfxStringItem*)pItem)->GetValue());
+                                rSh.SetFlyName(static_cast<const SfxStringItem*>(pItem)->GetValue());
                         }
                         else
                             aMgr.SetAttrSet( *pOutSet );
@@ -562,7 +562,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             rSh.HideChainMarker();
 
                             OUString sPrevName =
-                                ((const SfxStringItem*)pItem)->GetValue();
+                                static_cast<const SfxStringItem*>(pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
                             SwFlyFrmFmt* pFlyFmt =
@@ -596,7 +596,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         {
                             rSh.HideChainMarker();
                             OUString sNextName =
-                                ((const SfxStringItem*)pItem)->GetValue();
+                                static_cast<const SfxStringItem*>(pItem)->GetValue();
                             const SwFmtChain &rChain = pCurrFlyFmt->GetChain();
                             //needs cast - no non-const method available
                             SwFlyFrmFmt* pFlyFmt =
@@ -605,7 +605,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                             {
                                 if (pFlyFmt->GetName() != sNextName)
                                 {
-                                    rSh.Unchain(*((SwFlyFrmFmt*) pCurrFlyFmt));
+                                    rSh.Unchain(*const_cast<SwFlyFrmFmt*>(static_cast<const SwFlyFrmFmt*>( pCurrFlyFmt)));
                                 }
                                 else
                                     sNextName.clear();
@@ -841,7 +841,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
 
                     if(SfxItemState::SET == aURLSet.GetItemState(RES_URL, true, &pItem))
                     {
-                        const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
+                        const SwFmtURL* pFmtURL = static_cast<const SwFmtURL*>(pItem);
                         aHLinkItem.SetURL(pFmtURL->GetURL());
                         aHLinkItem.SetTargetFrame(pFmtURL->GetTargetFrameName());
                         aHLinkItem.SetName(rSh.GetFlyName());
@@ -989,13 +989,13 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
     // At first pick the default BoxItem out of the pool.
     // If unequal to regular box item, then it has already
     // been changed (New one is no default).
-    const SvxBoxItem* pPoolBoxItem = (const SvxBoxItem*)::GetDfltAttr(RES_BOX);
+    const SvxBoxItem* pPoolBoxItem = static_cast<const SvxBoxItem*>(::GetDfltAttr(RES_BOX));
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     SfxItemSet aFrameSet(rSh.GetAttrPool(), RES_BOX, RES_BOX);
 
     rSh.GetFlyFrmAttr( aFrameSet );
-    const SvxBoxItem& rBoxItem = (const SvxBoxItem&)aFrameSet.Get(RES_BOX);
+    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aFrameSet.Get(RES_BOX));
 
     if (pPoolBoxItem == &rBoxItem)
         bDefault = true;
@@ -1013,7 +1013,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
             {
                 if (pArgs->GetItemState(RES_BOX, true, &pItem) == SfxItemState::SET)
                 {
-                    SvxBoxItem aNewBox(*((SvxBoxItem *)pItem));
+                    SvxBoxItem aNewBox(*static_cast<const SvxBoxItem *>(pItem));
                     const SvxBorderLine* pBorderLine;
 
                     if ((pBorderLine = aBoxItem.GetTop()) != NULL)
@@ -1060,7 +1060,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                 if (pArgs->GetItemState(SID_FRAME_LINESTYLE, false, &pItem) == SfxItemState::SET)
                 {
                     const SvxLineItem* pLineItem =
-                            (const SvxLineItem*)pItem;
+                            static_cast<const SvxLineItem*>(pItem);
 
                     if ( pLineItem->GetLine() )
                     {
@@ -1113,7 +1113,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
             {
                 if (pArgs->GetItemState(SID_FRAME_LINECOLOR, false, &pItem) == SfxItemState::SET)
                 {
-                    const Color& rNewColor = ((const SvxColorItem*)pItem)->GetValue();
+                    const Color& rNewColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
 
                     if (!aBoxItem.GetTop() && !aBoxItem.GetBottom() &&
                         !aBoxItem.GetLeft() && !aBoxItem.GetRight())
@@ -1187,7 +1187,7 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
 
             rSh.GetFlyFrmAttr(aFrameSet);
 
-            const SvxBorderLine* pLine = ((const SvxBoxItem&)aFrameSet.Get(RES_BOX)).GetTop();
+            const SvxBorderLine* pLine = static_cast<const SvxBoxItem&>(aFrameSet.Get(RES_BOX)).GetTop();
             rSet.Put(SvxColorItem(pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR));
         }
     }

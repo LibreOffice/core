@@ -225,18 +225,18 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     sal_uLong  nFormat = 0;
                     sal_uInt16 nType = 0;
-                    OUString aPar1 = ((SfxStringItem *)pItem)->GetValue();
+                    OUString aPar1 = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     OUString aPar2;
                     sal_Int32 nCommand = 0;
 
                     if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 false, &pItem ))
-                        nType = ((SfxUInt16Item *)pItem)->GetValue();
+                        nType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
                     aPar1 += OUString(DB_DELIM);
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_1, false, &pItem ))
                     {
-                        aPar1 += ((SfxStringItem *)pItem)->GetValue();
+                        aPar1 += static_cast<const SfxStringItem *>(pItem)->GetValue();
                     }
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_3, false, &pItem ))
@@ -247,14 +247,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_2, false, &pItem ))
                     {
-                        aPar1 += ((SfxStringItem *)pItem)->GetValue();
+                        aPar1 += static_cast<const SfxStringItem *>(pItem)->GetValue();
                     }
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_CONTENT, false, &pItem ))
-                        aPar2 = ((SfxStringItem *)pItem)->GetValue();
+                        aPar2 = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, false, &pItem ))
-                        nFormat = ((SfxUInt32Item *)pItem)->GetValue();
+                        nFormat = static_cast<const SfxUInt32Item *>(pItem)->GetValue();
                     OSL_FAIL("Command is not yet used");
                     sal_Unicode cSeparator = ' ';
                     SwInsertFld_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), cSeparator );
@@ -272,26 +272,26 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     sal_uLong  nFormat = 0;
                     sal_uInt16 nType = 0;
                     sal_uInt16 nSubType = 0;
-                    OUString aPar1 = ((SfxStringItem *)pItem)->GetValue();
+                    OUString aPar1 = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     OUString aPar2;
                     sal_Unicode cSeparator = ' ';
 
                     if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 false, &pItem ))
-                        nType = ((SfxUInt16Item *)pItem)->GetValue();
+                        nType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
                     if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_SUBTYPE,
                                                                 false, &pItem ))
-                        nSubType = ((SfxUInt16Item *)pItem)->GetValue();
+                        nSubType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_CONTENT, false, &pItem ))
-                        aPar2 = ((SfxStringItem *)pItem)->GetValue();
+                        aPar2 = static_cast<const SfxStringItem *>(pItem)->GetValue();
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, false, &pItem ))
-                        nFormat = ((SfxUInt32Item *)pItem)->GetValue();
+                        nFormat = static_cast<const SfxUInt32Item *>(pItem)->GetValue();
                     if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_3, false, &pItem ))
                     {
-                        OUString sTmp = ((SfxStringItem *)pItem)->GetValue();
+                        OUString sTmp = static_cast<const SfxStringItem *>(pItem)->GetValue();
                         if(!sTmp.isEmpty())
                             cSeparator = sTmp[0];
                     }
@@ -321,7 +321,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                 // Switch Flddlg at a new TabPage
                 sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
-                SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
+                SwFldDlgWrapper *pWrp = static_cast<SwFldDlgWrapper*>(pVFrame->GetChildWindow(nId));
                 if (pWrp)
                     pWrp->ShowReferencePage();
                 rReq.Ignore();
@@ -407,7 +407,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     rSh.Push();
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, false);
-                    pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
+                    pPostIt = static_cast<SwPostItField*>(aFldMgr.GetCurFld());
                     rSh.Pop(false); // Restore cursor position
                 }
 
@@ -550,7 +550,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     if ( pIsUrl )
                         bIsUrl = pIsUrl->GetValue();
 
-                    SwScriptField* pFld = (SwScriptField*)aMgr.GetCurFld();
+                    SwScriptField* pFld = static_cast<SwScriptField*>(aMgr.GetCurFld());
                     bNew = !pFld || !(pFld->GetTyp()->Which() == RES_SCRIPTFLD);
                     bUpdate = pFld && ( bIsUrl != (bool)pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
                 }

@@ -164,8 +164,8 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
 {
     SwWrtShell& rSh = GetShell();
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
-    SwInsertIdxMarkWrapper *pIdxMrk = (SwInsertIdxMarkWrapper*)
-                        pVFrame->GetChildWindow(FN_INSERT_IDX_ENTRY_DLG);
+    SwInsertIdxMarkWrapper *pIdxMrk = static_cast<SwInsertIdxMarkWrapper*>(
+                        pVFrame->GetChildWindow(FN_INSERT_IDX_ENTRY_DLG));
 
     SfxChildWindow* pAuthMark = pVFrame->GetChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
 

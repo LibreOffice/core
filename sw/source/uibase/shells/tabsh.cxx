@@ -304,16 +304,16 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         if(bBackground)
         {
             if(pItem)
-                rSh.SetBoxBackground( *(const SvxBrushItem*)pItem );
+                rSh.SetBoxBackground( *static_cast<const SvxBrushItem*>(pItem) );
             if(pRowItem)
             {
-                SvxBrushItem aBrush(*(const SvxBrushItem*)pRowItem);
+                SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pRowItem));
                 aBrush.SetWhich(RES_BACKGROUND);
                 rSh.SetRowBackground(aBrush);
             }
             if(pTableItem)
             {
-                SvxBrushItem aBrush(*(const SvxBrushItem*)pTableItem);
+                SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pTableItem));
                 aBrush.SetWhich(RES_BACKGROUND);
                 rSh.SetTabBackground( aBrush );
             }
@@ -359,7 +359,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
-        pRep = (SwTableRep*)((const SwPtrItem*)pItem)->GetValue();
+        pRep = (SwTableRep*)static_cast<const SwPtrItem*>(pItem)->GetValue();
 
         const SwTwips nWidth = pRep->GetWidth();
         if ( text::HoriOrientation::FULL == pRep->GetAlign() )
@@ -404,7 +404,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         rSh.SetBoxAlign(static_cast<const SfxUInt16Item*>((pItem))->GetValue());
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
-        rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
+        rSh.SetTableName( *pFmt, static_cast<const SfxStringItem*>(pItem)->GetValue() );
 
     // Copy the chosen attributes in the ItemSet.
     static const sal_uInt16 aIds[] =
@@ -475,12 +475,12 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SvxBoxInfoItem aCoreInfo( SID_ATTR_BORDER_INNER );
             aCoreSet.Put(aCoreInfo);
             rSh.GetTabBorders( aCoreSet );
-            const SvxBoxItem& rCoreBox = (const SvxBoxItem&)
-                                                    aCoreSet.Get(RES_BOX);
+            const SvxBoxItem& rCoreBox = static_cast<const SvxBoxItem&>(
+                                                    aCoreSet.Get(RES_BOX));
             const SfxPoolItem *pBoxItem = 0;
             if ( pArgs->GetItemState(RES_BOX, true, &pBoxItem) == SfxItemState::SET )
             {
-                aBox = *(SvxBoxItem*)pBoxItem;
+                aBox = *static_cast<const SvxBoxItem*>(pBoxItem);
                 if ( !rReq.IsAPI() )
                     aBox.SetDistance( std::max(rCoreBox.GetDistance(),sal_uInt16(55)) );
                 else if ( aBox.GetDistance() < MIN_BORDER_DIST )
@@ -492,10 +492,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
             //since the drawing layer also supports borders the which id might be a different one
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
             if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, true, &pBoxItem) == SfxItemState::SET)
-                aInfo = *(SvxBoxInfoItem*)pBoxItem;
+                aInfo = *static_cast<const SvxBoxInfoItem*>(pBoxItem);
             else if( pArgs->GetItemState(SDRATTR_TABLE_BORDER_INNER, true, &pBoxItem) == SfxItemState::SET )
             {
-                aInfo = *(SvxBoxInfoItem*)pBoxItem;
+                aInfo = *static_cast<const SvxBoxInfoItem*>(pBoxItem);
                 aInfo.SetWhich(SID_ATTR_BORDER_INNER);
             }
 
@@ -572,7 +572,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
 
                 if (pItem)
-                    pDlg->SetCurPageId(OUStringToOString(((SfxStringItem *)pItem)->GetValue(), RTL_TEXTENCODING_UTF8));
+                    pDlg->SetCurPageId(OUStringToOString(static_cast<const SfxStringItem *>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8));
             }
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTblAttr(aCoreSet);
@@ -826,9 +826,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             bool bAfter = true;
             if (pItem)
             {
-                nCount = ((const SfxInt16Item* )pItem)->GetValue();
+                nCount = static_cast<const SfxInt16Item* >(pItem)->GetValue();
                 if(SfxItemState::SET == pArgs->GetItemState(FN_PARAM_INSERT_AFTER, true, &pItem))
-                    bAfter = ((const SfxBoolItem* )pItem)->GetValue();
+                    bAfter = static_cast<const SfxBoolItem* >(pItem)->GetValue();
             }
             else if( !rReq.IsAPI() )
                 ++nCount;
@@ -861,8 +861,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 // -->after inserting,reset the inner table borders
                 if ( bSetInnerBorders )
                 {
-                    const SvxBoxInfoItem aBoxInfo((const SvxBoxInfoItem&)
-                        aCoreSet.Get(SID_ATTR_BORDER_INNER));
+                    const SvxBoxInfoItem aBoxInfo(static_cast<const SvxBoxInfoItem&>(
+                        aCoreSet.Get(SID_ATTR_BORDER_INNER)));
                     SfxItemSet aSet( GetPool(), SID_ATTR_BORDER_INNER,
                                                 SID_ATTR_BORDER_INNER, 0);
                     aSet.Put( aBoxInfo );
@@ -1019,8 +1019,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             pVFrame->GetDispatcher()->Execute(FN_EDIT_FORMULA, SfxCallMode::SYNCHRON);
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
-            SwInputChild* pChildWin = (SwInputChild*)pVFrame->
-                                                GetChildWindow( nId );
+            SwInputChild* pChildWin = static_cast<SwInputChild*>(pVFrame->
+                                                GetChildWindow( nId ));
             OUString sSum;
             GetShell().GetAutoSum(sSum);
             if( pChildWin )
@@ -1066,7 +1066,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case SID_ATTR_ULSPACE:
             if(pItem)
             {
-                SvxULSpaceItem aULSpace( *(const SvxULSpaceItem*)pItem );
+                SvxULSpaceItem aULSpace( *static_cast<const SvxULSpaceItem*>(pItem) );
                 aULSpace.SetWhich( RES_UL_SPACE );
                 ::lcl_SetAttr( rSh, aULSpace );
             }
@@ -1077,7 +1077,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             {
                 SfxItemSet aSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE,
                                             RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
-                SvxLRSpaceItem aLRSpace( *(const SvxLRSpaceItem*)pItem );
+                SvxLRSpaceItem aLRSpace( *static_cast<const SvxLRSpaceItem*>(pItem) );
                 aLRSpace.SetWhich( RES_LR_SPACE );
                 aSet.Put( aLRSpace );
                 SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
@@ -1109,7 +1109,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case SID_ATTR_PARA_SPLIT:
             if ( pItem )
             {
-                SwFmtLayoutSplit aSplit( ((const SvxFmtSplitItem*)pItem)->GetValue());
+                SwFmtLayoutSplit aSplit( static_cast<const SvxFmtSplitItem*>(pItem)->GetValue());
                 SfxItemSet aSet(GetPool(),  RES_LAYOUT_SPLIT, RES_LAYOUT_SPLIT, 0 );
                 aSet.Put(aSplit);
                 rSh.SetTblAttr(aSet);
@@ -1119,7 +1119,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case SID_ATTR_PARA_KEEP:
             if ( pItem )
             {
-                SvxFmtKeepItem aKeep( *(const SvxFmtKeepItem*)pItem );
+                SvxFmtKeepItem aKeep( *static_cast<const SvxFmtKeepItem*>(pItem) );
                 aKeep.SetWhich( RES_KEEP );
                 SfxItemSet aSet(GetPool(),  RES_KEEP, RES_KEEP, 0 );
                 aSet.Put(aKeep);
@@ -1364,15 +1364,15 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
             case SID_FRAME_LINECOLOR:
                 if ( rReq.GetSlot() == SID_FRAME_LINESTYLE )
                 {
-                    const SvxLineItem &rLineItem = (const SvxLineItem&)pArgs->
-                                                            Get( SID_FRAME_LINESTYLE );
+                    const SvxLineItem &rLineItem = static_cast<const SvxLineItem&>(pArgs->
+                                                            Get( SID_FRAME_LINESTYLE ));
                     const SvxBorderLine* pBorderLine = rLineItem.GetLine();
                     rSh.SetTabLineStyle( 0, true, pBorderLine);
                 }
                 else
                 {
-                    const SvxColorItem &rNewColorItem = (const SvxColorItem&)pArgs->
-                                                            Get( SID_FRAME_LINECOLOR );
+                    const SvxColorItem &rNewColorItem = static_cast<const SvxColorItem&>(pArgs->
+                                                            Get( SID_FRAME_LINECOLOR ));
                     rSh.SetTabLineStyle( &rNewColorItem.GetValue() );
                 }
 
@@ -1391,7 +1391,7 @@ void SwTableShell::GetLineStyleState(SfxItemSet &rSet)
     aCoreSet.Put(aCoreInfo);
     GetShell().GetTabBorders( aCoreSet );
 
-    const SvxBoxItem& rBoxItem = (const SvxBoxItem&)aCoreSet.Get( RES_BOX );
+    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aCoreSet.Get( RES_BOX ));
     const SvxBorderLine* pLine = rBoxItem.GetTop();
 
     rSet.Put( SvxColorItem( pLine ? pLine->GetColor() : Color(), SID_FRAME_LINECOLOR ) );
@@ -1423,7 +1423,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
         if( pItem )
         {
             // Determine index for string.
-            OUString aCode( ((const SfxStringItem*)pItem)->GetValue() );
+            OUString aCode( static_cast<const SfxStringItem*>(pItem)->GetValue() );
             nNumberFormat = pFormatter->GetEntryKey( aCode, eLang );
             if( NUMBERFORMAT_ENTRY_NOT_FOUND == nNumberFormat )
             {

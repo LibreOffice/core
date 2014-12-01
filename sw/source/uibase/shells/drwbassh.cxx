@@ -114,7 +114,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
         OSL_ENSURE(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem expected");
-        nSlotId = nSlotId + ((const SfxEnumItem*)pItem)->GetValue();
+        nSlotId = nSlotId + static_cast<const SfxEnumItem*>(pItem)->GetValue();
         nSlotId++;
     }
 
@@ -160,7 +160,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                             if(SfxItemState::SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, false, &pWrapItem))
                             {
-                                short nLayer = ((const SfxInt16Item*)pWrapItem)->GetValue();
+                                short nLayer = static_cast<const SfxInt16Item*>(pWrapItem)->GetValue();
                                 if (nLayer == 1)
                                     pSh->SelectionToHeaven();
                                 else
@@ -237,12 +237,12 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                         aSet.Put( pFrmFmt->GetFmtAttr(RES_FOLLOW_TEXT_FLOW) );
 
-                        SwFmtVertOrient aVOrient((const SwFmtVertOrient&)pFrmFmt->GetFmtAttr(RES_VERT_ORIENT));
+                        SwFmtVertOrient aVOrient(static_cast<const SwFmtVertOrient&>(pFrmFmt->GetFmtAttr(RES_VERT_ORIENT)));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_ORIENT, aVOrient.GetVertOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_VERT_RELATION, aVOrient.GetRelationOrient() ));
                         aSet.Put(SfxInt32Item(SID_ATTR_TRANSFORM_VERT_POSITION, aVOrient.GetPos()));
 
-                        SwFmtHoriOrient aHOrient((const SwFmtHoriOrient&)pFrmFmt->GetFmtAttr(RES_HORI_ORIENT));
+                        SwFmtHoriOrient aHOrient(static_cast<const SwFmtHoriOrient&>(pFrmFmt->GetFmtAttr(RES_HORI_ORIENT)));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_ORIENT, aHOrient.GetHoriOrient()));
                         aSet.Put(SfxInt16Item(SID_ATTR_TRANSFORM_HORI_RELATION, aHOrient.GetRelationOrient() ));
                         aSet.Put(SfxBoolItem(SID_ATTR_TRANSFORM_HORI_MIRROR, aHOrient.IsPosToggle()));
@@ -280,12 +280,12 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 SID_ATTR_TRANSFORM_ANCHOR, false, &pAnchorItem))
                             {
                                 if(!bSingleSelection)
-                                    pSh->ChgAnchor(((const SfxInt16Item*)pAnchorItem)
+                                    pSh->ChgAnchor(static_cast<const SfxInt16Item*>(pAnchorItem)
                                             ->GetValue(), false, bPosCorr );
                                 else
                                 {
                                     SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
-                                    aAnchor.SetType((RndStdIds)((const SfxInt16Item*)pAnchorItem)->GetValue());
+                                    aAnchor.SetType((RndStdIds)static_cast<const SfxInt16Item*>(pAnchorItem)->GetValue());
                                     aFrmAttrSet.Put( aAnchor );
                                 }
                             }
@@ -460,7 +460,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             pSh->StartAction();
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                             SwFrmFmt* pFrmFmt = FindFrmFmt( pObj );
-                            SwFmtVertOrient aVOrient((SwFmtVertOrient&)pFrmFmt->GetFmtAttr(RES_VERT_ORIENT));
+                            SwFmtVertOrient aVOrient(static_cast<const SwFmtVertOrient&>(pFrmFmt->GetFmtAttr(RES_VERT_ORIENT)));
                             aVOrient.SetVertOrient( nVertOrient );
                             pFrmFmt->SetFmtAttr(aVOrient);
                             pSh->EndAction();

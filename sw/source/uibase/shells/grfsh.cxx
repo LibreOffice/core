@@ -143,7 +143,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
                 rSh.GetCurAttr( aSet );
-                SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
+                SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF)) );
 
                 Rectangle aCropRectangle(
                     convertTwipToMm100(aCrop.GetLeft()),
@@ -269,7 +269,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
             // At percentage values initialize size
-            SwFmtFrmSize aSizeCopy = (const SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
+            SwFmtFrmSize aSizeCopy = static_cast<const SwFmtFrmSize&>(aSet.Get(RES_FRM_SIZE));
             if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != 0xff)
                 aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
             if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != 0xff)
@@ -394,14 +394,14 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     FN_KEEP_ASPECT_RATIO, true, &pItem ))
                 {
                     aUsrPref.SetKeepRatio(
-                                    ((const SfxBoolItem*)pItem)->GetValue() );
+                                    static_cast<const SfxBoolItem*>(pItem)->GetValue() );
                     bApplyUsrPref = true;
                 }
                 if( SfxItemState::SET == pSet->GetItemState(
                     SID_ATTR_GRAF_KEEP_ZOOM, true, &pItem ))
                 {
                     aUsrPref.SetGrfKeepZoom(
-                                    ((const SfxBoolItem*)pItem)->GetValue() );
+                                    static_cast<const SfxBoolItem*>(pItem)->GetValue() );
                     bApplyUsrPref = true;
                 }
 
@@ -440,7 +440,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                                         FN_SET_FRM_ALT_NAME, true, &pItem ))
                 {
                     // #i73249#
-                    rSh.SetObjTitle( ((const SfxStringItem*)pItem)->GetValue() );
+                    rSh.SetObjTitle( static_cast<const SfxStringItem*>(pItem)->GetValue() );
                 }
 
                 SfxItemSet aGrfSet( rSh.GetAttrPool(), RES_GRFATR_BEGIN,
@@ -459,7 +459,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aSet(rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_MIRRORGRF);
             rSh.GetCurAttr( aSet );
-            SwMirrorGrf aGrf((const SwMirrorGrf &)aSet.Get(RES_GRFATR_MIRRORGRF));
+            SwMirrorGrf aGrf(static_cast<const SwMirrorGrf &>(aSet.Get(RES_GRFATR_MIRRORGRF)));
             aGrf.SetGrfToggle(!aGrf.IsGrfToggle());
             rSh.SetAttrItem(aGrf);
         }
@@ -492,7 +492,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
             case SID_FLIP_HORIZONTAL:
             {
                 GetShell().GetCurAttr( aGrfSet );
-                SwMirrorGrf aMirror( (SwMirrorGrf&)aGrfSet.Get( RES_GRFATR_MIRRORGRF ) );
+                SwMirrorGrf aMirror( static_cast<const SwMirrorGrf&>(aGrfSet.Get( RES_GRFATR_MIRRORGRF )) );
                 sal_uInt16 nMirror = aMirror.GetValue();
                 if ( nSlot==SID_FLIP_HORIZONTAL )
                     switch( nMirror )
@@ -565,7 +565,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( pItem )
                 aGrfSet.Put( SwTransparencyGrf(
-                    static_cast< sal_Int8 >( ( (SfxUInt16Item*)pItem )->GetValue() ) ) );
+                    static_cast< sal_Int8 >( static_cast<const SfxUInt16Item*>(pItem )->GetValue() ) ) );
             break;
 
         case SID_ATTR_GRAF_INVERT:
@@ -674,7 +674,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_FLIP_HORIZONTAL:
             if( !bParentCntProt )
             {
-                MirrorGraph nState = static_cast< MirrorGraph >(((const SwMirrorGrf &) aCoreSet.Get(
+                MirrorGraph nState = static_cast< const MirrorGraph >(static_cast<const SwMirrorGrf &>( aCoreSet.Get(
                                         RES_GRFATR_MIRRORGRF )).GetValue());
 
                 rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRAPH_VERT ||
@@ -685,7 +685,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_FLIP_VERTICAL:
             if( !bParentCntProt )
             {
-                MirrorGraph nState = static_cast< MirrorGraph >(((const SwMirrorGrf &) aCoreSet.Get(
+                MirrorGraph nState = static_cast< MirrorGraph >(static_cast<const SwMirrorGrf &>( aCoreSet.Get(
                                         RES_GRFATR_MIRRORGRF )).GetValue());
 
                 rSet.Put(SfxBoolItem( nWhich, nState == RES_MIRROR_GRAPH_HOR ||
@@ -726,7 +726,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_ATTR_GRAF_GAMMA:
             if( !bParentCntProt )
                 rSet.Put( SfxUInt32Item( nWhich, static_cast< sal_uInt32 >(
-                    ( (SwGammaGrf&)aCoreSet.Get( RES_GRFATR_GAMMA ) ).GetValue() * 100 ) ) );
+                    static_cast<const SwGammaGrf&>(aCoreSet.Get( RES_GRFATR_GAMMA ) ).GetValue() * 100 ) ) );
             break;
 
         case SID_ATTR_GRAF_TRANSPARENCE:
@@ -840,7 +840,7 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
 
     SfxItemSet aSet( rShell.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
     rShell.GetCurAttr( aSet );
-    SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
+    SwCropGrf aCrop( static_cast<const SwCropGrf&>( aSet.Get(RES_GRFATR_CROPGRF) ) );
     Rectangle aCropRectangle(aCrop.GetLeft(),  aCrop.GetTop(), aCrop.GetRight(), aCrop.GetBottom());
 
     if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_LEFT)
