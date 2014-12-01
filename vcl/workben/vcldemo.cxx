@@ -15,6 +15,7 @@
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 
 #include <vcl/vclmain.hxx>
+#include <vcl/layout.hxx>
 
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
@@ -1251,6 +1252,55 @@ public:
     }
 };
 
+class DemoWidgets : public WorkWindow
+{
+    VclBox *mpBox;
+public:
+    DemoWidgets() :
+        WorkWindow(NULL, WB_STDWORK)
+    {
+        SetText("VCL widget demo");
+
+        mpBox = new VclVBox(this, false, 3);
+
+        Wallpaper aWallpaper(BitmapEx("sfx2/res/startcenter-logo.png"));
+        aWallpaper.SetStyle(WALLPAPER_BOTTOMRIGHT);
+        aWallpaper.SetColor(COL_RED);
+
+        mpBox->SetBackground(aWallpaper);
+        mpBox->Show();
+
+        Show();
+    }
+    virtual ~DemoWidgets()
+    {
+    }
+    virtual void Paint(const Rectangle&)
+    {
+        Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());
+        vcl::Region aClip(aWholeSize);
+        Rectangle aExclude(Rectangle(Point(50,50),Size(100,100)));
+        aClip.Exclude(aExclude);
+
+        Wallpaper aWallpaper(COL_GREEN);
+
+        Push(PushFlags::CLIPREGION);
+        IntersectClipRegion(aClip);
+        DrawWallpaper(aWholeSize, aWallpaper);
+        Pop();
+
+        VirtualDevice aDev(*this);
+        aDev.EnableRTL(IsRTLEnabled());
+        aDev.SetOutputSizePixel(aExclude.GetSize());
+
+        Rectangle aSubRect(aWholeSize);
+        aSubRect.Move(-aExclude.Left(), -aExclude.Top());
+        aDev.DrawWallpaper(aSubRect, aWallpaper );
+
+        DrawOutDev(aExclude.TopLeft(), aExclude.GetSize(),
+                   Point( 0, 0 ), aExclude.GetSize(), aDev );
+    }
+};
 
 class DemoApp : public Application
 {
@@ -1262,7 +1312,9 @@ class DemoApp : public Application
         OUString aRenderers(rRenderer.getRendererList());
         fprintf(stderr,"         %s\n",
                 rtl::OUStringToOString(aRenderers, RTL_TEXTENCODING_UTF8).getStr());
-        fprintf(stderr,"  --test <iterCount> - create benchmark data\n\n");
+        fprintf(stderr,"  --test <iterCount> - create benchmark data\n");
+        fprintf(stderr, "  --widgets         - launch the widget test.\n");
+        fprintf(stderr, "\n");
         return 0;
     }
 
@@ -1273,6 +1325,7 @@ public:
     {
         try
         {
+            bool bWidgets = false;
             DemoRenderer aRenderer;
 
             for (sal_Int32 i = 0; i < GetCommandLineParamCount(); i++)
@@ -1288,19 +1341,26 @@ public:
                     else
                         aRenderer.selectRenderer(GetCommandLineParam(++i));
                 }
-                if (aArg == "--test")
+                else if (aArg == "--test")
                 {
                     if (bLast)
                         return showHelp(aRenderer);
                     else
                         aRenderer.setIterCount(GetCommandLineParam(++i).toInt32());
                 }
+                else if (aArg == "--widgets")
+                    bWidgets = true;
             }
 
             DemoWin aMainWin(aRenderer);
+            boost::scoped_ptr<DemoWidgets> aWidgets;
 
             aMainWin.SetText("Interactive VCL demo #1");
-            aMainWin.Show();
+
+            if (bWidgets)
+                aWidgets.reset(new DemoWidgets());
+            else
+                aMainWin.Show();
 
             Application::Execute();
         }
