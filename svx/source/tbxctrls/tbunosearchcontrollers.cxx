@@ -246,6 +246,9 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case MouseNotifyEvent::GETFOCUS:
             SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             break;
+
+        default:
+            break;
     }
 
     return nRet;
