@@ -56,7 +56,7 @@ using namespace ::com::sun::star::uno;
 }
 
 +(void)setSelectedTextAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value {
-    if ( [ wrapper accessibleEditableText ] != nil ) {
+    if ( [ wrapper accessibleEditableText ] ) {
         NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
         OUString newText = GetOUString ( (NSString *) value );
         NSRange selectedTextRange = [ [ AquaA11yTextWrapper selectedTextRangeAttributeForElement: wrapper ] rangeValue ];
@@ -237,7 +237,7 @@ using namespace ::com::sun::star::uno;
                 maxy = vclRect.Height + vclRect.Y;
             }
         }
-        if ( [ wrapper accessibleComponent ] != nil ) {
+        if ( [ wrapper accessibleComponent ] ) {
             // get location on screen (must be added since get CharacterBounds returns values relative to parent)
             Point screenPos = [ wrapper accessibleComponent ] -> getLocationOnScreen();
             Point pos ( minx + screenPos.X, miny + screenPos.Y );

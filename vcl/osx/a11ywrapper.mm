@@ -80,7 +80,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 
 -(id)initWithAccessibleContext: (Reference < XAccessibleContext >) rxAccessibleContext {
     self = [ super init ];
-    if ( self != nil ) {
+    if ( self ) {
         [ self setDefaults: rxAccessibleContext ];
     }
     return self;
@@ -146,7 +146,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(void)dealloc {
-    if ( mpReferenceWrapper != nil ) {
+    if ( mpReferenceWrapper ) {
         delete mpReferenceWrapper;
     }
     [ super dealloc ];
@@ -160,7 +160,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 // (getter with parameter)    attributeNameHereAttributeForParameter:
 // (setter)                   setAttributeNameHereAttributeForElement:to:
 -(SEL)selectorForAttribute:(NSString *)attribute asGetter:(BOOL)asGetter withGetterParameter:(BOOL)withGetterParameter {
-    SEL selector = nil;
+    SEL selector = (SEL)nil;
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     @try {
         // step 1: create method name from attribute name
@@ -186,7 +186,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
         // step 2: create selector
         selector = NSSelectorFromString ( methodName );
     } @catch ( id exception ) {
-        selector = nil;
+        selector = (SEL)nil;
     }
     [ pool release ];
     return selector;
@@ -256,7 +256,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 -(id)descriptionAttribute {
     if ( [ self accessibleContext ] -> getAccessibleRole() == AccessibleRole::COMBO_BOX ) {
         return [ self titleAttribute ];
-    } else if ( [ self accessibleExtendedComponent ] != nil ) {
+    } else if ( [ self accessibleExtendedComponent ] ) {
         return [ AquaA11yComponentWrapper descriptionAttributeForElement: self ];
     } else {
         return CreateNSString ( [ self accessibleContext ] -> getAccessibleDescription() );
@@ -336,7 +336,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
             }
         }
         return children;
-    } else if ( [ self accessibleTable ] != nil )
+    } else if ( [ self accessibleTable ] )
     {
         AquaA11yTableWrapper* pTable = [self isKindOfClass: [AquaA11yTableWrapper class]] ? (AquaA11yTableWrapper*)self : nil;
         return [ AquaA11yTableWrapper childrenAttributeForElement: pTable ];
@@ -409,7 +409,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)sizeAttribute {
-    if ( [ self accessibleComponent ] != nil ) {
+    if ( [ self accessibleComponent ] ) {
         return [ AquaA11yComponentWrapper sizeAttributeForElement: self ];
     } else {
         return nil;
@@ -417,7 +417,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)positionAttribute {
-    if ( [ self accessibleComponent ] != nil ) {
+    if ( [ self accessibleComponent ] ) {
         return [ AquaA11yComponentWrapper positionAttributeForElement: self ];
     } else {
         return nil;
@@ -469,9 +469,9 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 -(id)valueAttribute {
     if ( [ [ self roleAttribute ] isEqualToString: NSAccessibilityMenuItemRole ] ) {
         return nil;
-    } else if ( [ self accessibleText ] != nil ) {
+    } else if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper valueAttributeForElement: self ];
-    } else if ( [ self accessibleValue ] != nil ) {
+    } else if ( [ self accessibleValue ] ) {
         return [ AquaA11yValueWrapper valueAttributeForElement: self ];
     } else {
         return nil;
@@ -479,7 +479,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)minValueAttribute {
-    if ( [ self accessibleValue ] != nil ) {
+    if ( [ self accessibleValue ] ) {
         return [ AquaA11yValueWrapper minValueAttributeForElement: self ];
     } else {
         return nil;
@@ -487,7 +487,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)maxValueAttribute {
-    if ( [ self accessibleValue ] != nil ) {
+    if ( [ self accessibleValue ] ) {
         return [ AquaA11yValueWrapper maxValueAttributeForElement: self ];
     } else {
         return nil;
@@ -503,7 +503,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)numberOfCharactersAttribute {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper numberOfCharactersAttributeForElement: self ];
     } else {
         return nil;
@@ -511,7 +511,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)selectedTextAttribute {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper selectedTextAttributeForElement: self ];
     } else {
         return nil;
@@ -519,7 +519,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)selectedTextRangeAttribute {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper selectedTextRangeAttributeForElement: self ];
     } else {
         return nil;
@@ -527,7 +527,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)visibleCharacterRangeAttribute {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper visibleCharacterRangeAttributeForElement: self ];
     } else {
         return nil;
@@ -539,7 +539,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)sharedTextUIElementsAttribute {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper sharedTextUIElementsAttributeForElement: self ];
     } else {
         return nil;
@@ -547,7 +547,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)sharedCharacterRangeAttribute {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper sharedCharacterRangeAttributeForElement: self ];
     } else {
         return nil;
@@ -563,7 +563,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)stringForRangeAttributeForParameter:(id)range {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper stringForRangeAttributeForElement: self forParameter: range ];
     } else {
         return nil;
@@ -571,7 +571,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)attributedStringForRangeAttributeForParameter:(id)range {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper attributedStringForRangeAttributeForElement: self forParameter: range ];
     } else {
         return nil;
@@ -579,7 +579,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)rangeForIndexAttributeForParameter:(id)index {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper rangeForIndexAttributeForElement: self forParameter: index ];
     } else {
         return nil;
@@ -587,7 +587,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)rangeForPositionAttributeForParameter:(id)point {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper rangeForPositionAttributeForElement: self forParameter: point ];
     } else {
         return nil;
@@ -595,7 +595,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)boundsForRangeAttributeForParameter:(id)range {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper boundsForRangeAttributeForElement: self forParameter: range ];
     } else {
         return nil;
@@ -603,7 +603,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)styleRangeForIndexAttributeForParameter:(id)index {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper styleRangeForIndexAttributeForElement: self forParameter: index ];
     } else {
         return nil;
@@ -611,7 +611,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)rTFForRangeAttributeForParameter:(id)range {
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         return [ AquaA11yTextWrapper rTFForRangeAttributeForElement: self forParameter: range ];
     } else {
         return nil;
@@ -640,7 +640,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
                 titleElement = [ AquaA11yFactory wrapperForAccessibleContext: rxAccessible -> getAccessibleContext() ];
             }
         }
-        if ( title != nil ) {
+        if ( title ) {
             [ title release ];
         }
         return titleElement;
@@ -664,7 +664,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)lineForIndexAttributeForParameter:(id)index {
-    if ( [ self accessibleMultiLineText ] != nil ) {
+    if ( [ self accessibleMultiLineText ] ) {
         return [ AquaA11yTextWrapper lineForIndexAttributeForElement: self forParameter: index ];
     } else {
         return nil;
@@ -672,7 +672,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 }
 
 -(id)rangeForLineAttributeForParameter:(id)line {
-    if ( [ self accessibleMultiLineText ] != nil ) {
+    if ( [ self accessibleMultiLineText ] ) {
         return [ AquaA11yTextWrapper rangeForLineAttributeForElement: self forParameter: line ];
     } else {
         return nil;
@@ -692,7 +692,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     id value = nil;
     // if we are no longer in the wrapper repository, we have been disposed
     AquaA11yWrapper * theWrapper = [ AquaA11yFactory wrapperForAccessibleContext: [ self accessibleContext ] createIfNotExists: NO ];
-    if ( theWrapper != nil || mIsTableCell ) {
+    if ( theWrapper || mIsTableCell ) {
         try {
             SEL methodSelector = [ self selectorForAttribute: attribute asGetter: YES withGetterParameter: NO ];
             if ( [ self respondsToSelector: methodSelector ] ) {
@@ -706,7 +706,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
             // empty
         }
     }
-    if ( theWrapper != nil ) {
+    if ( theWrapper ) {
         [ theWrapper release ]; // the above called method calls retain on the returned Wrapper
     }
     return value;
@@ -761,7 +761,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
         title = (NSString *) [ self titleAttribute ];
         Reference < XAccessibleRelationSet > rxRelationSet = [ self accessibleContext ] -> getAccessibleRelationSet();
         // Special Attributes depending on attribute values
-        if ( nativeSubrole != nil && ! [ nativeSubrole isEqualToString: @"" ] ) {
+        if ( nativeSubrole && ! [ nativeSubrole isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilitySubroleAttribute ];
         }
         try
@@ -774,7 +774,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
         catch( DisposedException& ) {}
         catch( RuntimeException& ) {}
 
-        if ( title != nil && ! [ title isEqualToString: @"" ] ) {
+        if ( title && ! [ title isEqualToString: @"" ] ) {
             [ attributeNames addObject: NSAccessibilityTitleAttribute ];
         }
         if ( [ title length ] == 0 && rxRelationSet.is() && rxRelationSet -> containsRelation ( AccessibleRelationType::LABELED_BY ) ) {
@@ -787,29 +787,29 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
         if( [self accessibleContext ] -> getAccessibleRole() == AccessibleRole::TABLE )
             [AquaA11yTableWrapper addAttributeNamesTo: attributeNames object: self];
 
-        if ( [ self accessibleText ] != nil ) {
+        if ( [ self accessibleText ] ) {
             [ AquaA11yTextWrapper addAttributeNamesTo: attributeNames ];
         }
-        if ( [ self accessibleComponent ] != nil ) {
+        if ( [ self accessibleComponent ] ) {
             [ AquaA11yComponentWrapper addAttributeNamesTo: attributeNames ];
         }
-        if ( [ self accessibleSelection ] != nil ) {
+        if ( [ self accessibleSelection ] ) {
             [ AquaA11ySelectionWrapper addAttributeNamesTo: attributeNames ];
         }
-        if ( [ self accessibleValue ] != nil ) {
+        if ( [ self accessibleValue ] ) {
             [ AquaA11yValueWrapper addAttributeNamesTo: attributeNames ];
         }
         [ nativeSubrole release ];
         [ title release ];
         return attributeNames;
     } catch ( DisposedException & e ) { // Object is no longer available
-        if ( nativeSubrole != nil ) {
+        if ( nativeSubrole ) {
             [ nativeSubrole release ];
         }
-        if ( title != nil ) {
+        if ( title ) {
             [ title release ];
         }
-        if ( attributeNames != nil ) {
+        if ( attributeNames ) {
             [ attributeNames release ];
         }
         [ AquaA11yFactory removeFromWrapperRepositoryFor: [ self accessibleContext ] ];
@@ -820,16 +820,16 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 -(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityAttributeIsSettable:" << attribute << "]");
     BOOL isSettable = NO;
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         isSettable = [ AquaA11yTextWrapper isAttributeSettable: attribute forElement: self ];
     }
-    if ( ! isSettable && [ self accessibleComponent ] != nil ) {
+    if ( ! isSettable && [ self accessibleComponent ] ) {
         isSettable = [ AquaA11yComponentWrapper isAttributeSettable: attribute forElement: self ];
     }
-    if ( ! isSettable && [ self accessibleSelection ] != nil ) {
+    if ( ! isSettable && [ self accessibleSelection ] ) {
         isSettable = [ AquaA11ySelectionWrapper isAttributeSettable: attribute forElement: self ];
     }
-    if ( ! isSettable && [ self accessibleValue ] != nil ) {
+    if ( ! isSettable && [ self accessibleValue ] ) {
         isSettable = [ AquaA11yValueWrapper isAttributeSettable: attribute forElement: self ];
     }
     return isSettable; // TODO: to be completed
@@ -839,7 +839,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityParameterizedAttributeNames]");
     NSMutableArray * attributeNames = [ [ NSMutableArray alloc ] init ];
     // Special Attributes depending on interface
-    if ( [ self accessibleText ] != nil ) {
+    if ( [ self accessibleText ] ) {
         [ AquaA11yTextWrapper addParameterizedAttributeNamesTo: attributeNames ];
     }
     return attributeNames; // TODO: to be completed
@@ -928,9 +928,9 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     if ( enabled
       && [ role isEqualToString: NSAccessibilityTextAreaRole ]
       && [ parentRole isEqualToString: NSAccessibilityComboBoxRole ]
-      && parentAsWrapper != nil ) {
+      && parentAsWrapper ) {
         wrapper = parentAsWrapper;
-    } else if ( enabled && [ self accessibleAction ] != nil ) {
+    } else if ( enabled && [ self accessibleAction ] ) {
         wrapper = self ;
     }
     [ parentRole release ];
@@ -942,7 +942,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
 -(void)accessibilityPerformAction:(NSString *)action {
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityPerformAction:" << action << "]");
     AquaA11yWrapper * actionResponder = [ self actionResponder ];
-    if ( actionResponder != nil ) {
+    if ( actionResponder ) {
         [ AquaA11yActionWrapper doAction: action ofElement: actionResponder ];
     }
 }
@@ -951,7 +951,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     SAL_INFO("vcl.a11y", "[" << self << " accessibilityActionNames]");
     NSArray * actionNames = nil;
     AquaA11yWrapper * actionResponder = [ self actionResponder ];
-    if ( actionResponder != nil ) {
+    if ( actionResponder ) {
         actionNames = [ AquaA11yActionWrapper actionNamesForElement: actionResponder ];
     } else {
         actionNames = [ [ NSArray alloc ] init ];
@@ -970,7 +970,7 @@ static std::ostream &operator<<(std::ostream &s, NSPoint point) {
     NSValue * position = [ viewElement accessibilityAttributeValue: NSAccessibilityPositionAttribute ];
     NSValue * size = [ viewElement accessibilityAttributeValue: NSAccessibilitySizeAttribute ];
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    if ( position != nil && size != nil ) {
+    if ( position && size ) {
         float minX = [ position pointValue ].x;
         float minY = [ position pointValue ].y;
         float maxX = minX + [ size sizeValue ].width;
@@ -1049,7 +1049,7 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
     if ( [ childWindows count ] > 0 ) {
         NSWindow * element = nil;
         NSEnumerator * enumerator = [ childWindows objectEnumerator ];
-        while ( ( element = [ enumerator nextObject ] ) && hitChild == nil ) {
+        while ( ( element = [ enumerator nextObject ] ) && !hitChild.is() ) {
             if ( [ element isKindOfClass: [ SalFrameWindow class ] ] && [ self isViewElement: element hitByPoint: point ] ) {
                 // we have a child window that is hit
                 Reference < XAccessibleRelationSet > relationSet = [ ( ( SalFrameWindow * ) element ) accessibleContext ] -> getAccessibleRelationSet();
@@ -1069,7 +1069,7 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
     }
     // nothing hit yet, so check ourself
     if ( ! hitChild.is() ) {
-        if ( mpReferenceWrapper == nil ) {
+        if ( !mpReferenceWrapper ) {
             [ self setDefaults: [ self accessibleContext ] ];
         }
         hitChild = hitTestRunner ( hitPoint, mpReferenceWrapper -> rAccessibleContext );
@@ -1077,7 +1077,7 @@ Reference < XAccessibleContext > hitTestRunner ( com::sun::star::awt::Point poin
     if ( hitChild.is() ) {
         wrapper = [ AquaA11yFactory wrapperForAccessibleContext: hitChild ];
     }
-    if ( wrapper != nil ) {
+    if ( wrapper ) {
         [ wrapper retain ]; // TODO: retain only when transient ?
     }
     return wrapper;

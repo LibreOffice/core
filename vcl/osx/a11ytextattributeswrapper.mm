@@ -328,7 +328,7 @@ using namespace ::com::sun::star::uno;
     try {
         NSString * myString = CreateNSString ( [ wrapper accessibleText ] -> getText() ); // TODO: dirty fix for i87817
         string = [ [ NSMutableAttributedString alloc ] initWithString: CreateNSString ( [ wrapper accessibleText ] -> getTextRange ( loc, loc + len ) ) ];
-        if ( [ wrapper accessibleTextAttributes ] != nil && [myString characterAtIndex:0] != 57361) { // TODO: dirty fix for i87817
+        if ( [ wrapper accessibleTextAttributes ] && [myString characterAtIndex:0] != 57361) { // TODO: dirty fix for i87817
             [ string beginEditing ];
             // add default attributes for whole string
             Sequence < PropertyValue > defaultAttributes = [ wrapper accessibleTextAttributes ] -> getDefaultAttributes ( emptySequence );
