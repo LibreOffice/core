@@ -281,6 +281,8 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
                 return true;
         }
         break;
+        default:
+        break;
     }
 
     return ODataView::PreNotify(rNEvt);
