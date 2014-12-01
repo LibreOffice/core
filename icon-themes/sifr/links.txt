@@ -6,14 +6,14 @@ cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 
 # Horizontal Text Alignment (align* is in calc and *para is used in writer)
-cmd/lc_alignleft.png cmd/lc_leftpara.png
-cmd/sc_alignleft.png cmd/sc_leftpara.png
-cmd/lc_alignhorizontalcenter.png cmd/lc_centerpara.png
-cmd/sc_alignhorizontalcenter.png cmd/sc_centerpara.png
-cmd/lc_alignright.png cmd/lc_rightpara.png
-cmd/sc_alignright.png cmd/sc_rightpara.png
-cmd/lc_alignblock.png cmd/lc_justifypara.png
-cmd/sc_alignblock.png cmd/sc_justifypara.png
+#cmd/lc_alignleft.png cmd/lc_leftpara.png
+#cmd/sc_alignleft.png cmd/sc_leftpara.png
+#cmd/lc_alignhorizontalcenter.png cmd/lc_centerpara.png
+#cmd/sc_alignhorizontalcenter.png cmd/sc_centerpara.png
+#cmd/lc_alignright.png cmd/lc_rightpara.png
+#cmd/sc_alignright.png cmd/sc_rightpara.png
+#cmd/lc_alignblock.png cmd/lc_justifypara.png
+#cmd/sc_alignblock.png cmd/sc_justifypara.png
 
 # Colors (fontcolor is used in writer's formatting toolbar)
 cmd/lc_fontcolor.png cmd/lc_color.png
