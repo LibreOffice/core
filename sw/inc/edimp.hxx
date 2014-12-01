@@ -34,7 +34,9 @@ class SwNodeIndex;
     BOOST_FOREACH(SwPaM& __r, std::make_pair(static_cast< SwPaM* >(pCURSH)->beginRing(), static_cast< SwPaM* >(pCURSH)->endRing())) \
     {
 
-#define FOREACHPAM_START_CONST(pCURSH) FOREACHPAM_START(pCURSH)
+#define FOREACHPAM_START_CONST(pCURSH) \
+    BOOST_FOREACH(SwPaM& __r, std::make_pair(pCURSH->beginRing(), pCURSH->endRing())) \
+    {
 
 #define FOREACHPAM_END() }
 #define FOREACHPAM_END_CONST() }

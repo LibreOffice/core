@@ -53,7 +53,7 @@ namespace sw
         Ring( T* );
     public:
         typedef RingIterator<T> iterator;
-        typedef RingIterator<T> const_iterator;
+        typedef RingIterator<const T> const_iterator;
         virtual ~Ring()
             { algo::unlink(static_cast< T* >(this)); };
         void MoveTo( T* pDestRing );
@@ -65,6 +65,8 @@ namespace sw
         // also derive from other STL containers (which is bad anyway, but ...)
         iterator beginRing();
         iterator endRing();
+        const_iterator beginRing() const;
+        const_iterator endRing() const;
 
         sal_uInt32 numberOf() const
             { return algo::count(static_cast< const T* >(this)); }
@@ -142,6 +144,13 @@ namespace sw
     inline typename Ring<T>::iterator Ring<T>::endRing()
         { return Ring<T>::iterator(static_cast< T* >(this), false); };
 
+    template <class T>
+    inline typename Ring<T>::const_iterator Ring<T>::beginRing() const
+        { return Ring<T>::const_iterator(static_cast< const T* >(this)); };
+
+    template <class T>
+    inline typename Ring<T>::const_iterator Ring<T>::endRing() const
+        { return Ring<T>::const_iterator(static_cast< const T* >(this), false); };
 }
 #endif
 
