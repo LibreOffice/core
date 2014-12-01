@@ -1144,10 +1144,10 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
 
         // add to shell-cursor-ring so that the regions will be moved enventually
-        Ring<SwPaM>* pPrevRing(nullptr);
+        SwPaM* pPrevRing(nullptr);
         if( bRegExp )
         {
-            pPrevRing = pRegion->GetPrev();
+            pPrevRing = const_cast< SwPaM* >(pRegion)->GetPrev();
             const_cast< SwPaM* >(pRegion)->MoveRingTo( &rCursor );
         }
 
