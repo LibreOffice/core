@@ -247,6 +247,20 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
         }
         while (rFamilyData.maNameSet.find(msName) != rFamilyData.maNameSet.end());
     }
+
+#if OSL_DEBUG_LEVEL > 0
+    std::set<sal_Int32> DebugProperties;
+    for (size_t i = 0; i < maProperties.size(); ++i)
+    {
+        sal_Int32 const property(maProperties[i].mnIndex);
+        // serious bug: will cause duplicate attributes to be exported
+        assert(DebugProperties.find(property) == DebugProperties.end());
+        if (-1 != property)
+        {
+            DebugProperties.insert(property);
+        }
+    }
+#endif
 }
 
 bool operator<( const XMLAutoStyleFamily& r1, const XMLAutoStyleFamily& r2)
