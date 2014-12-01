@@ -100,6 +100,7 @@ namespace oglcanvas
         initContext();
         mRenderHelper.InitOpenGL();
 
+
         mnLinearMultiColorGradientProgram =
             OpenGLHelper::LoadShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader");
 
@@ -301,16 +302,6 @@ namespace oglcanvas
         const ::Size& rOutputSize = pChildWindow->GetSizePixel();
         initTransformation(rOutputSize);
 
-        glm::mat4 ViewTranslate = glm::translate(
-        glm::mat4(1.0f),
-        glm::vec3(-1.0,  1.0, 0.0));
-        glm::mat4 ViewScaled = glm::scale(
-        ViewTranslate,
-        glm::vec3(2.0  / rOutputSize.Width(),
-              -2.0/ rOutputSize.Height(),
-              1.0 ));
-        mRenderHelper.SetModelAndMVP(ViewScaled);
-
         // render the actual spritecanvas content
         mpSpriteCanvas->renderRecordedActions();
 
@@ -334,16 +325,15 @@ namespace oglcanvas
 
         const double fps(denominator == 0.0 ? 100.0 : 1.0/denominator);
 
-        mRenderHelper.SetModelAndMVP(ViewScaled);
+#ifdef DEBUG_RENDERING
+        std::vector<double> aVec;
+        aVec.push_back(mfAlpha);
+        aVec.push_back(mfPriority);
+        aVec.push_back(maCanvasHelper.getRecordedActionCount());
 
-#ifdef  RENDER_DEBUG
-        std::vector<double> aVec; aVec.push_back(fps);
-        aVec.push_back(maActiveSprites.size());
-        aVec.push_back(mpTextureCache->getCacheSize());
-        aVec.push_back(mpTextureCache->getCacheMissCount());
-        aVec.push_back(mpTextureCache->getCacheHitCount());
-        renderOSD( aVec, 20 , getRenderHelper());
+        renderOSD( aVec, 20, pRenderHelper);
 #endif
+
 
         /*
          * TODO: moggi: fix it!
