@@ -346,7 +346,8 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
     _rFilter.Handle = GetOSQLPredicateType( _rComp.GetSelectEntry() );
     if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
     {
-        OUString sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), false );
+        OUString sPredicateValue;
+        m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ) ) >>= sPredicateValue;
         if ( _rFilter.Handle == SQLFilterOperator::LIKE ||
              _rFilter.Handle == SQLFilterOperator::NOT_LIKE )
             ::Replace_OS_PlaceHolder( sPredicateValue );
