@@ -219,7 +219,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
         SwDrawBase* pFuncPtr = GetDrawFuncPtr();
         if( pFuncPtr && pFuncPtr->GetSlotId() == SID_DRAW_CS_ID )
         {
-            ConstCustomShape* pConstCustomShape = (ConstCustomShape*)(pFuncPtr);
+            ConstCustomShape* pConstCustomShape = static_cast<ConstCustomShape*>(pFuncPtr);
             OUString aNew = ConstCustomShape::GetShapeTypeFromRequest( rReq );
             OUString aOld = pConstCustomShape->GetShapeType();
             if( aNew == aOld )
@@ -563,7 +563,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 
     if(pObj->ISA(SwDrawVirtObj))
     {
-        SwDrawVirtObj* pVirtObj = (SwDrawVirtObj*)pObj;
+        SwDrawVirtObj* pVirtObj = static_cast<SwDrawVirtObj*>(pObj);
         pToBeActivated = &const_cast<SdrObject&>(pVirtObj->GetReferencedObj());
         aNewTextEditOffset = pVirtObj->GetOffset();
     }

@@ -387,7 +387,7 @@ SwXMailMerge::SwXMailMerge() :
     xDocSh = new SwDocShell( SFX_CREATE_MODE_STANDARD );
     xDocSh->DoInitNew( 0 );
     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
-    SwView *pView = (SwView*) pFrame->GetViewShell();
+    SwView *pView = static_cast<SwView*>( pFrame->GetViewShell() );
     pView->AttrChangedNotify( &pView->GetWrtShell() ); //So that SelectShell is called.
     xModel = xDocSh->GetModel();
 }

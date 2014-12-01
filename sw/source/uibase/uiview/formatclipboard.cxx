@@ -141,16 +141,16 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if(bBackground)
     {
         if(pItem)
-            rSh.SetBoxBackground( *(const SvxBrushItem*)pItem );
+            rSh.SetBoxBackground( *static_cast<const SvxBrushItem*>(pItem) );
         if(pRowItem)
         {
-            SvxBrushItem aBrush(*(const SvxBrushItem*)pRowItem);
+            SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pRowItem));
             aBrush.SetWhich(RES_BACKGROUND);
             rSh.SetRowBackground(aBrush);
         }
         if(pTableItem)
         {
-            SvxBrushItem aBrush(*(const SvxBrushItem*)pTableItem);
+            SvxBrushItem aBrush(*static_cast<const SvxBrushItem*>(pTableItem));
             aBrush.SetWhich(RES_BACKGROUND);
             rSh.SetTabBackground( aBrush );
         }

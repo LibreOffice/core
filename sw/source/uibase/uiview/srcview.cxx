@@ -342,7 +342,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 pMed = pDocShell->GetMedium();
             else
             {
-                SfxBoolItem* pItem = (SfxBoolItem*)pDocShell->ExecuteSlot(rReq, pDocShell->GetInterface());
+                const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pDocShell->ExecuteSlot(rReq, pDocShell->GetInterface()));
                 if(pItem && pItem->GetValue())
                     pMed = pDocShell->GetMedium();
             }
@@ -368,8 +368,8 @@ void SwSrcView::Execute(SfxRequest& rReq)
             const sal_uInt16 nWhich = pTmpArgs->GetWhichByPos( 0 );
             OSL_ENSURE( nWhich, "Which for SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
-            SetSearchItem( (const SvxSearchItem&)rItem);
-            StartSearchAndReplace( (const SvxSearchItem&)rItem, false, rReq.IsAPI() );
+            SetSearchItem( static_cast<const SvxSearchItem&>(rItem));
+            StartSearchAndReplace( static_cast<const SvxSearchItem&>(rItem), false, rReq.IsAPI() );
             if(aEditWin.IsModified())
                 GetDocShell()->GetDoc()->getIDocumentState().SetModified();
         }
@@ -563,7 +563,7 @@ SvxSearchItem* SwSrcView::GetSearchItem()
 void SwSrcView::SetSearchItem( const SvxSearchItem& rItem )
 {
     delete pSearchItem;
-    pSearchItem = (SvxSearchItem*)rItem.Clone();
+    pSearchItem = static_cast<SvxSearchItem*>(rItem.Clone());
 }
 
 sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,

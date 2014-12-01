@@ -801,7 +801,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
     else if( dynamic_cast<SwWrtShell*>( pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() ) )
     {
-        m_pWrtShell = new SwWrtShell( *(SwWrtShell*)pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell(),
+        m_pWrtShell = new SwWrtShell( *static_cast<SwWrtShell*>(pDocSh->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell()),
                                     m_pEditWin, *this);
     }
     else

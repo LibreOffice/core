@@ -49,7 +49,7 @@ void SwView::ExecDlg(SfxRequest &rReq)
         {
             if ( pItem )
             {
-                sal_uInt16 nValue = ((SfxUInt16Item *)pItem)->GetValue();
+                sal_uInt16 nValue = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
                 sal_uInt16 nOldValue = m_pWrtShell->GetPageOffset();
                 sal_uInt16 nPage, nLogPage;
                 m_pWrtShell->GetPageNum( nPage, nLogPage,

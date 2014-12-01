@@ -126,13 +126,13 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     SwFldMgr aMgr(&rSh);
     SwSetExpFieldType* pFldType =
-            (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
+            static_cast<SwSetExpFieldType*>(aMgr.GetFldType(RES_SETEXPFLD, rName));
     if (!pFldType && !rName.isEmpty() )
     {
         // Create new field types
         SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, nsSwGetSetExpType::GSE_SEQ);
         aMgr.InsertFldType(aSwSetExpFieldType);
-        pFldType = (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
+        pFldType = static_cast<SwSetExpFieldType*>(aMgr.GetFldType(RES_SETEXPFLD, rName));
     }
 
     if (!pOpt->IgnoreSeqOpts())

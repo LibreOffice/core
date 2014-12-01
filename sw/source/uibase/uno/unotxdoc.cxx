@@ -535,10 +535,10 @@ Reference< XInterface >  SwXTextDocument::getCurrentSelection() throw( RuntimeEx
     {
 
         const TypeId aTypeId = TYPE(SwView);
-        SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+        SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(&aTypeId));
         while(pView && pView->GetObjectShell() != pDocShell)
         {
-            pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+            pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, &aTypeId));
         }
         if(pView)
         {
@@ -707,7 +707,7 @@ SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xC
 {
     getText();
     XText *const pText = xBodyText.get();
-    SwXBodyText* pBText = (SwXBodyText*)pText;
+    SwXBodyText* pBText = static_cast<SwXBodyText*>(pText);
     SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
     xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 

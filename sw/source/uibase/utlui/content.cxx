@@ -506,7 +506,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     // old one is compared with the new OutlinePos.
                     // cast for Win16
                     if(nOldMemberCount > (int)nPos &&
-                        ((SwOutlineContent*)(*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
+                        static_cast<SwOutlineContent*>((*pOldMember)[nPos])->GetOutlineLevel() != nLevel)
                         *pbLevelOrVisibilityChanged = true;
 
                     nPos++;
@@ -563,7 +563,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 if(CONTENT_TYPE_GRAPHIC == nContentType)
                 {
                     OUString sLink;
-                    pWrtShell->GetGrfNms( &sLink, 0, (SwFlyFrmFmt*) pFrmFmt);
+                    pWrtShell->GetGrfNms( &sLink, 0, static_cast<const SwFlyFrmFmt*>( pFrmFmt));
                     pCnt = new SwGraphicContent(this, sFrmName,
                                 INetURLObject::decode( sLink, '%',
                                            INetURLObject::DECODE_UNAMBIGUOUS,
@@ -754,7 +754,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     // #i51726# - all drawing objects can be named now
                     if (!pTemp->GetName().isEmpty())
                     {
-                        SwContact* pContact = (SwContact*)pTemp->GetUserCall();
+                        SwContact* pContact = static_cast<SwContact*>(pTemp->GetUserCall());
                         long nYPos = 0;
                         const Point aNullPt;
                         if(pContact && pContact->GetFmt())
@@ -1292,9 +1292,9 @@ sal_IntPtr SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
         if(pCnt &&  0 != (pParent = pCnt->GetParent()))
         {
             if(pParent->GetType() == CONTENT_TYPE_OUTLINE)
-                nLevel = nLevel + ((SwOutlineContent*)pCnt)->GetOutlineLevel();
+                nLevel = nLevel + static_cast<SwOutlineContent*>(pCnt)->GetOutlineLevel();
             else if(pParent->GetType() == CONTENT_TYPE_REGION)
-                nLevel = nLevel + ((SwRegionContent*)pCnt)->GetRegionLevel();
+                nLevel = nLevel + static_cast<SwRegionContent*>(pCnt)->GetRegionLevel();
         }
     }
     sal_uInt16 nBasis = bIsRoot ? 0 : 5;
@@ -1323,7 +1323,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                      const SwContent* pCnt = pCntType->GetMember(i);
                      if(pCnt)
                      {
-                         const sal_uInt16 nLevel = ((SwOutlineContent*)pCnt)->GetOutlineLevel();
+                         const sal_uInt16 nLevel = static_cast<const SwOutlineContent*>(pCnt)->GetOutlineLevel();
                          OUString sEntry = pCnt->GetName();
                          if(sEntry.isEmpty())
                              sEntry = sSpace;
@@ -1333,7 +1333,7 @@ void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
                          else
                          {
                              //back search parent.
-                             if(((SwOutlineContent*)pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
+                             if(static_cast<const SwOutlineContent*>(pCntType->GetMember(i-1))->GetOutlineLevel() < nLevel)
                                  pChild = InsertEntry(sEntry, pChild,
                                          false, TREELIST_APPEND, (void*)pCnt);
                              else
@@ -1788,7 +1788,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     {
         case CONTENT_TYPE_OUTLINE:
         {
-            const sal_uInt16 nPos = ((SwOutlineContent*)pCnt)->GetPos();
+            const sal_uInt16 nPos = static_cast<SwOutlineContent*>(pCnt)->GetPos();
             OSL_ENSURE(nPos < pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount(),
                        "outlinecnt changed");
 
@@ -1813,7 +1813,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
                 }
                 sEntry += pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, false);
                 sOutlineText = pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(nPos, true);
-                bIsOutlineMoveable = ((SwOutlineContent*)pCnt)->IsMoveable();
+                bIsOutlineMoveable = static_cast<SwOutlineContent*>(pCnt)->IsMoveable();
                 bOutline = true;
             }
         }
@@ -1824,7 +1824,7 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             // cannot inserted as URL or as  koennen weder als URL noch als region
         break;
         case CONTENT_TYPE_URLFIELD:
-            sUrl = ((SwURLFieldContent*)pCnt)->GetURL();
+            sUrl = static_cast<SwURLFieldContent*>(pCnt)->GetURL();
         // no break;
         case CONTENT_TYPE_OLE:
         case CONTENT_TYPE_GRAPHIC:
@@ -3205,7 +3205,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
             pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if(nMode == EDIT_MODE_DELETE)
             {
-                if (((SwPostItContent*)pCnt)->IsPostIt())
+                if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
                 {
                     pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(0);
                     pActiveShell->DelRight();
@@ -3213,7 +3213,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
             }
             else
             {
-                if (((SwPostItContent*)pCnt)->IsPostIt())
+                if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
                     nSlot = FN_POSTIT;
                 else
                     nSlot = FN_REDLINE_COMMENT;
@@ -3221,7 +3221,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         break;
         case CONTENT_TYPE_INDEX:
         {
-            const SwTOXBase* pBase = ((SwTOXBaseContent*)pCnt)->GetTOXBase();
+            const SwTOXBase* pBase = static_cast<SwTOXBaseContent*>(pCnt)->GetTOXBase();
             switch(nMode)
             {
                 case EDIT_MODE_EDIT:
@@ -3307,7 +3307,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     {
         case CONTENT_TYPE_OUTLINE   :
         {
-            pActiveShell->GotoOutline(((SwOutlineContent*)pCnt)->GetPos());
+            pActiveShell->GotoOutline(static_cast<SwOutlineContent*>(pCnt)->GetPos());
         }
         break;
         case CONTENT_TYPE_TABLE     :
@@ -3336,7 +3336,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         case CONTENT_TYPE_URLFIELD:
         {
             if(pActiveShell->GotoINetAttr(
-                            *((SwURLFieldContent*)pCnt)->GetINetAttr() ))
+                            *static_cast<SwURLFieldContent*>(pCnt)->GetINetAttr() ))
             {
                 pActiveShell->Right( CRSR_SKIP_CHARS, true, 1, false);
                 pActiveShell->SwCrsrShell::SelectTxtAttr( RES_TXTATR_INETFMT, true );
@@ -3358,11 +3358,11 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         break;
         case CONTENT_TYPE_POSTIT:
             pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
-            if (((SwPostItContent*)pCnt)->IsPostIt())
-                pActiveShell->GotoFld(*((SwPostItContent*)pCnt)->GetPostIt());
+            if (static_cast<SwPostItContent*>(pCnt)->IsPostIt())
+                pActiveShell->GotoFld(*static_cast<SwPostItContent*>(pCnt)->GetPostIt());
             else
                 pActiveShell->GetView().GetDocShell()->GetWrtShell()->GotoRedline(
-                        pActiveShell->GetView().GetDocShell()->GetWrtShell()->FindRedlineOfData(((SwPostItContent*)pCnt)->GetRedline()->GetRedlineData()));
+                        pActiveShell->GetView().GetDocShell()->GetWrtShell()->FindRedlineOfData(static_cast<SwPostItContent*>(pCnt)->GetRedline()->GetRedlineData()));
 
         break;
         case CONTENT_TYPE_DRAWOBJECT:
@@ -3419,7 +3419,7 @@ NaviContentBookmark::NaviContentBookmark( const OUString &rUrl,
                     const SwDocShell* pDocSh ) :
     aUrl( rUrl ),
     aDescr(rDesc),
-    nDocSh((sal_IntPtr)pDocSh),
+    nDocSh(reinterpret_cast<sal_IntPtr>(pDocSh)),
     nDefDrag( nDragType )
 {
 }
@@ -3467,7 +3467,7 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
 {
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
-    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nColToHilite ));
     SwContentLBoxString* pStr = new SwContentLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }

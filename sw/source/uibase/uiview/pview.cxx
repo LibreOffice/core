@@ -688,9 +688,9 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             const SfxItemSet *pArgs = rReq.GetArgs();
             if( pArgs && pArgs->Count() >= 2 )
             {
-                sal_uInt8 nCols = (sal_uInt8)((SfxUInt16Item &)pArgs->Get(
+                sal_uInt8 nCols = (sal_uInt8)static_cast<const SfxUInt16Item &>(pArgs->Get(
                                         SID_ATTR_TABLE_COLUMN)).GetValue();
-                sal_uInt8 nRows = (sal_uInt8)((SfxUInt16Item &)pArgs->Get(
+                sal_uInt8 nRows = (sal_uInt8)static_cast<const SfxUInt16Item &>(pArgs->Get(
                                         SID_ATTR_TABLE_ROW)).GetValue();
                 pViewWin->CalcWish( nRows, nCols );
 
@@ -1103,7 +1103,7 @@ void SwPagePreview::Init(const SwViewOption * pPrefs)
     // Update the fields
     // ATTENTION: Do cast the EditShell up, to use the SS.
     //            At the methodes the current shell will be queried!
-    SwEditShell* pESh = (SwEditShell*)GetViewShell();
+    SwEditShell* pESh = static_cast<SwEditShell*>(GetViewShell());
     bool bIsModified = pESh->IsModified();
 
     SwViewOption aOpt( *pPrefs );
@@ -1643,7 +1643,7 @@ sal_uInt16  SwPagePreview::SetPrinter( SfxPrinter *pNew, sal_uInt16 nDiffFlags, 
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
-    SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
+    SwEditShell &rESh = static_cast<SwEditShell&>(rSh);  //Buh...
     if( ( SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP ) & nDiffFlags )
     {
         rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );

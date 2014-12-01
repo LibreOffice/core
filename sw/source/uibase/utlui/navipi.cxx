@@ -951,7 +951,7 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
 
 NumEditAction& SwNavigationPI::GetPageEdit()
 {
-    return *(NumEditAction*)aContentToolBox.GetItemWindow(FN_PAGENUMBER);
+    return *static_cast<NumEditAction*>(aContentToolBox.GetItemWindow(FN_PAGENUMBER));
 }
 
 SfxChildAlignment SwNavigationPI::CheckAlignment

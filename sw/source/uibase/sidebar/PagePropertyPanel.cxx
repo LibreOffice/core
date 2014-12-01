@@ -535,7 +535,7 @@ void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pSt
     meFUnit = FUNIT_NONE;
     if ( pState && eState >= SfxItemState::DEFAULT )
     {
-        meFUnit = (FieldUnit)( (const SfxUInt16Item*)pState )->GetValue();
+        meFUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pState )->GetValue();
     }
     else
     {
@@ -550,7 +550,7 @@ void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pSt
             {
                 const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
                 if ( pItem )
-                    meFUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+                    meFUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(pItem )->GetValue();
             }
             else
             {

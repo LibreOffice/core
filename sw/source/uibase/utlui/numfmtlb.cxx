@@ -242,7 +242,7 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
                 nFormat != nSysLongDateFmt)
             {
                 const sal_Int32 nPos = InsertEntry( sValue );
-                SetEntryData( nPos, (void*)nFormat );
+                SetEntryData( nPos, reinterpret_cast<void*>(nFormat) );
 
                 if( nFormat == pFormatter->GetStandardFormat(
                                         nFormatType, eCurLanguage ) )
@@ -292,7 +292,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
 
     for (sal_Int32 i = 0; i < GetEntryCount(); i++)
     {
-        if (nFormat == (sal_uLong)GetEntryData(i))
+        if (nFormat == reinterpret_cast<sal_uLong>(GetEntryData(i)))
         {
             SelectEntryPos(i);
             nStdEntry = i;
@@ -316,7 +316,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     }
 
     sal_Int32 nPos = 0;
-    while ((sal_uLong)GetEntryData(nPos) == ULONG_MAX)
+    while (reinterpret_cast<sal_uLong>(GetEntryData(nPos)) == ULONG_MAX)
         nPos++;
 
     sal_uLong nSysNumFmt = pFormatter->GetFormatIndex( NF_NUMBER_SYSTEM, eCurLanguage);
@@ -347,7 +347,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     }
 
     nPos = InsertEntry(sValue, nPos);   // Insert as first numeric entry
-    SetEntryData(nPos, (void*)nDefFmt);
+    SetEntryData(nPos, reinterpret_cast<void*>(nDefFmt));
     SelectEntryPos(nPos);
     nDefFormat = GetFormat();
 }
@@ -356,7 +356,7 @@ sal_uLong NumFormatListBox::GetFormat() const
 {
     sal_Int32 nPos = GetSelectEntryPos();
 
-    return (sal_uLong)GetEntryData(nPos);
+    return reinterpret_cast<sal_uLong>(GetEntryData(nPos));
 }
 
 IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
@@ -406,11 +406,11 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             const SfxPoolItem* pItem = pView->GetDocShell()->
                             GetItem( SID_ATTR_NUMBERFORMAT_INFO );
 
-            if( pItem && 0 != ((SvxNumberInfoItem*)pItem)->GetDelCount() )
+            if( pItem && 0 != static_cast<const SvxNumberInfoItem*>(pItem)->GetDelCount() )
             {
-                const sal_uInt32* pDelArr = ((SvxNumberInfoItem*)pItem)->GetDelArray();
+                const sal_uInt32* pDelArr = static_cast<const SvxNumberInfoItem*>(pItem)->GetDelArray();
 
-                for ( sal_uInt32 i = 0; i < ((SvxNumberInfoItem*)pItem)->GetDelCount(); i++ )
+                for ( sal_uInt32 i = 0; i < static_cast<const SvxNumberInfoItem*>(pItem)->GetDelCount(); i++ )
                     pFormatter->DeleteEntry( pDelArr[i] );
             }
 
@@ -418,7 +418,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             if( SfxItemState::SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ))
             {
-                sal_uInt32 nNumberFormat = ((SfxUInt32Item*)pItem)->GetValue();
+                sal_uInt32 nNumberFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
                 // oj #105473# change order of calls
                 const SvNumberformat* pFmt = pFormatter->GetEntry(nNumberFormat);
                 if( pFmt )

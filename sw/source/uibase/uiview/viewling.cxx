@@ -864,7 +864,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
             OUString sKey = OUString(  ODF_FORMDROPDOWN_RESULT  );
             (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
             pFieldmark->Invalidate();
-            SwView& rView = ( ( SwEditWin* )GetParent() )->GetView();
+            SwView& rView = static_cast<SwEditWin*>( GetParent() )->GetView();
             rView.GetDocShell()->SetModified( true );
         }
 

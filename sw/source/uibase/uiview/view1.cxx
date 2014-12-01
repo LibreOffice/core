@@ -83,26 +83,26 @@ void SwView::Activate(bool bMDIActivate)
         // Initialize Flddlg newly if necessary (e.g. for TYP_SETVAR)
         sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = GetViewFrame();
-        SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
+        SwFldDlgWrapper *pWrp = static_cast<SwFldDlgWrapper*>(pVFrame->GetChildWindow(nId));
         if (pWrp)
             pWrp->ReInitDlg(GetDocShell());
 
         // Initialize RedlineDlg newly if necessary
         nId = SwRedlineAcceptChild::GetChildWindowId();
-        SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)pVFrame->GetChildWindow(nId);
+        SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(pVFrame->GetChildWindow(nId));
         if (pRed)
             pRed->ReInitDlg(GetDocShell());
 
         // reinit IdxMarkDlg
         nId = SwInsertIdxMarkWrapper::GetChildWindowId();
-        SwInsertIdxMarkWrapper *pIdxMrk = (SwInsertIdxMarkWrapper*)pVFrame->GetChildWindow(nId);
+        SwInsertIdxMarkWrapper *pIdxMrk = static_cast<SwInsertIdxMarkWrapper*>(pVFrame->GetChildWindow(nId));
         if (pIdxMrk)
             pIdxMrk->ReInitDlg(*m_pWrtShell);
 
         // reinit AuthMarkDlg
         nId = SwInsertAuthMarkWrapper::GetChildWindowId();
-        SwInsertAuthMarkWrapper *pAuthMrk = (SwInsertAuthMarkWrapper*)pVFrame->
-                                                                GetChildWindow(nId);
+        SwInsertAuthMarkWrapper *pAuthMrk = static_cast<SwInsertAuthMarkWrapper*>(pVFrame->
+                                                                GetChildWindow(nId));
         if (pAuthMrk)
             pAuthMrk->ReInitDlg(*m_pWrtShell);
     }
@@ -153,7 +153,7 @@ void SwView::ExecFormatPaintbrush(SfxRequest& rReq)
         const SfxItemSet *pArgs = rReq.GetArgs();
         if( pArgs && pArgs->Count() >= 1 )
         {
-            bPersistentCopy = static_cast<bool>(((SfxBoolItem &)pArgs->Get(
+            bPersistentCopy = static_cast<bool>(static_cast<const SfxBoolItem &>(pArgs->Get(
                                     SID_FORMATPAINTBRUSH)).GetValue());
         }
 

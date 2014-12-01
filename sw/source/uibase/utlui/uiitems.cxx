@@ -215,7 +215,7 @@ SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    const SwPtrItem& rItem = (SwPtrItem&)rAttr;
+    const SwPtrItem& rItem = static_cast<const SwPtrItem&>(rAttr);
     return ( pMisc == rItem.pMisc );
 }
 
@@ -299,7 +299,7 @@ SfxPoolItem* SwPaMItem::Clone( SfxItemPool * /*pPool*/ ) const
 bool SwPaMItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
-    const SwPaMItem& rItem = (SwPaMItem&)rAttr;
+    const SwPaMItem& rItem = static_cast<const SwPaMItem&>(rAttr);
     return ( m_pPaM == rItem.m_pPaM );
 }
 

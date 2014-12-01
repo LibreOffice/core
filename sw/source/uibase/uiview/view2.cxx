@@ -584,7 +584,7 @@ void SwView::Execute(SfxRequest &rReq)
                     vcl::Window* pParent;
                     const SfxPoolItem* pParentItem;
                     if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
+                        pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
                     SfxPasswordDialog aPasswdDlg( pParent );
@@ -622,7 +622,7 @@ void SwView::Execute(SfxRequest &rReq)
             vcl::Window* pParent;
             const SfxPoolItem* pParentItem;
             if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
+                pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
             SfxPasswordDialog aPasswdDlg( pParent );
@@ -790,8 +790,8 @@ void SwView::Execute(SfxRequest &rReq)
 
                         // re-initialize the Redline dialog
                         const sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
-                        SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)
-                                                pVFrame->GetChildWindow(nId);
+                        SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(
+                                                pVFrame->GetChildWindow(nId));
                         if (pRed)
                             pRed->ReInitDlg(GetDocShell());
                     }
@@ -1080,7 +1080,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case SID_JUMPTOMARK:
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_JUMPTOMARK, false, &pItem))
-                JumpToSwMark( (( const SfxStringItem*)pItem)->GetValue() );
+                JumpToSwMark( static_cast<const SfxStringItem*>(pItem)->GetValue() );
         break;
         case SID_GALLERY :
             // First make sure that the sidebar is visible
@@ -1375,7 +1375,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 aWordCount = aWordCount.replaceFirst( "%2", rLocaleData.getNum( nChar, 0 ) );
                 rSet.Put( SfxStringItem( FN_STAT_WORDCOUNT, aWordCount ) );
 
-                SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
                 if (pWrdCnt)
                     pWrdCnt->SetCounts(selectionStats, documentStats);
             }
@@ -2048,9 +2048,9 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
     else
     {
         OUString sFile, sFilter;
-        sFile = ( (const SfxStringItem *)pItem )->GetValue();
+        sFile = static_cast<const SfxStringItem *>( pItem )->GetValue();
         if ( SfxItemState::SET == rRequest.GetArgs()->GetItemState( FN_PARAM_1, true, &pItem ) )
-            sFilter = ( (const SfxStringItem *)pItem )->GetValue();
+            sFilter = static_cast<const SfxStringItem *>(pItem )->GetValue();
 
         bool bHasFileName = !sFile.isEmpty();
         long nFound = InsertDoc( nSlot, sFile, sFilter );
@@ -2441,7 +2441,7 @@ IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 
                     // re-initialize Redline dialog
                     sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
-                    SwRedlineAcceptChild* pRed = (SwRedlineAcceptChild*)pVFrame->GetChildWindow( nId );
+                    SwRedlineAcceptChild* pRed = static_cast<SwRedlineAcceptChild*>(pVFrame->GetChildWindow( nId ));
                     if ( pRed )
                         pRed->ReInitDlg( GetDocShell() );
                 }

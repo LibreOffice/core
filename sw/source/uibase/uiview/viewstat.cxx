@@ -33,6 +33,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/unolingu.hxx>
 #include <sfx2/msgpool.hxx>
@@ -167,8 +168,8 @@ void SwView::GetState(SfxItemSet &rSet)
                 const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
                 const SwPageDesc& rDesc = m_pWrtShell->GetPageDesc( nCurIdx );
                 const SwFrmFmt& rMaster = rDesc.GetMaster();
-                const SvxBrushItem& rBrush = (const SvxBrushItem&)
-                                    rMaster.GetFmtAttr(RES_BACKGROUND, true);
+                const SvxBrushItem& rBrush = static_cast<const SvxBrushItem&>(
+                                    rMaster.GetFmtAttr(RES_BACKGROUND, true));
                 rSet.Put(rBrush);
             }
             break;
@@ -254,25 +255,25 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_ATTR_DEFTABSTOP:
             {
                 const SvxTabStopItem& rDefTabs =
-                    (const SvxTabStopItem&)m_pWrtShell->
-                                        GetDefault(RES_PARATR_TABSTOP);
+                    static_cast<const SvxTabStopItem&>(m_pWrtShell->
+                                        GetDefault(RES_PARATR_TABSTOP));
                 rSet.Put( SfxUInt16Item( nWhich,
                                                 (sal_uInt16)::GetTabDist(rDefTabs)));
             }
             break;
             case SID_ATTR_LANGUAGE:
             {
-                rSet.Put((const SvxLanguageItem&)
-                    m_pWrtShell->GetDefault(RES_CHRATR_LANGUAGE), SID_ATTR_LANGUAGE);
+                rSet.Put(static_cast<const SvxLanguageItem&>(
+                    m_pWrtShell->GetDefault(RES_CHRATR_LANGUAGE)), SID_ATTR_LANGUAGE);
             }
             break;
             case RES_CHRATR_CJK_LANGUAGE:
-                rSet.Put((const SvxLanguageItem&)
-                    m_pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE), RES_CHRATR_CJK_LANGUAGE);
+                rSet.Put(static_cast<const SvxLanguageItem&>(
+                    m_pWrtShell->GetDefault(RES_CHRATR_CJK_LANGUAGE)), RES_CHRATR_CJK_LANGUAGE);
             break;
             case RES_CHRATR_CTL_LANGUAGE:
-                rSet.Put((const SvxLanguageItem&)
-                    m_pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE), RES_CHRATR_CTL_LANGUAGE);
+                rSet.Put(static_cast<const SvxLanguageItem&>(
+                    m_pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE)), RES_CHRATR_CTL_LANGUAGE);
             break;
             case FN_REDLINE_ON:
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );

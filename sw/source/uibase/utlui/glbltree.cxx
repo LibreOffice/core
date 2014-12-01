@@ -920,18 +920,18 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             SfxStringItem aFactory(SID_NEWDOCDIRECT,
                             SwDocShell::Factory().GetFilterContainer()->GetName());
 
-             const SfxFrameItem* pItem = (SfxFrameItem*)
+             const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
                             rDispatch.Execute(SID_NEWDOCDIRECT,
-                                SfxCallMode::SYNCHRON, &aFactory, 0L);
+                                SfxCallMode::SYNCHRON, &aFactory, 0L));
 
             // save at
             SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
             SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
             if( pFrame )
             {
-                const SfxBoolItem* pBool = (const SfxBoolItem*)
+                const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(
                         pFrame->GetDispatcher()->Execute(
-                                SID_SAVEASDOC, SfxCallMode::SYNCHRON );
+                                SID_SAVEASDOC, SfxCallMode::SYNCHRON ));
                 SfxObjectShell& rObj = *pFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
                 OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
@@ -1219,7 +1219,7 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
 {
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
-    SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
+    SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nColToHilite ));
     SwLBoxString* pStr = new SwLBoxString( pEntry, 0, pCol->GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }

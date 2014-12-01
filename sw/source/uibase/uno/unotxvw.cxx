@@ -655,7 +655,7 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     pTempDoc->SetClipBoard(true);
     rOldSh.FillPrtDoc(pTempDoc,  pPrt);
     SfxViewFrame* pDocFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
-    SwView* pDocView = (SwView*) pDocFrame->GetViewShell();
+    SwView* pDocView = static_cast<SwView*>( pDocFrame->GetViewShell() );
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//So that SelectShell is called.
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();
 
