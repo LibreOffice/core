@@ -315,7 +315,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">0,0000</property>
+                        <property name="text" translatable="no">0,0000</property>
                         <property name="adjustment">parameter2-adjustment</property>
                         <property name="digits">4</property>
                       </object>
@@ -330,7 +330,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">1,0000</property>
+                        <property name="text" translatable="no">1,0000</property>
                         <property name="adjustment">parameter1-adjustment</property>
                         <property name="digits">4</property>
                         <property name="value">1</property>
@@ -461,7 +461,7 @@
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">1</property>
+                        <property name="text" translatable="no">1</property>
                         <property name="adjustment">decimal-places-adjustment</property>
                         <property name="value">1</property>
                       </object>
