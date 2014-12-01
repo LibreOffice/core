@@ -5751,6 +5751,17 @@ if test "$GCC" = "yes"; then
         AC_MSG_RESULT([no])
     fi
 
+    AC_MSG_CHECKING([whether $CC supports -fstack-protector-strong])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS -Werror -fstack-protector-strong"
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[ HAVE_GCC_STACK_PROTECTOR_STRONG=TRUE ],[])
+    CFLAGS=$save_CFLAGS
+    if test "$HAVE_GCC_STACK_PROTECTOR_STRONG" = "TRUE"; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_RESULT([no])
+    fi
+
     AC_MSG_CHECKING([whether $CC supports atomic functions])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[
     int v = 0;
@@ -5844,6 +5855,7 @@ if test "$GCC" = "yes"; then
 fi
 
 AC_SUBST(HAVE_GCC_AVX)
+AC_SUBST(HAVE_GCC_STACK_PROTECTOR_STRONG)
 AC_SUBST(HAVE_GCC_BUILTIN_ATOMIC)
 
 dnl ===================================================================

@@ -96,6 +96,11 @@ gb_CXXFLAGS_COMMON += -fvisibility-inlines-hidden
 endif
 endif
 
+ifeq ($(HAVE_GCC_STACK_PROTECTOR_STRONG),TRUE)
+gb_CFLAGS_COMMON += -fstack-protector-strong
+gb_CXXFLAGS_COMMON += -fstack-protector-strong
+endif
+
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
 
 # This is the default in non-C++11 mode
