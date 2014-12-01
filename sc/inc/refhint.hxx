@@ -24,7 +24,9 @@ public:
     enum Type {
         Moved,
         ColumnReordered,
-        RowReordered
+        RowReordered,
+        StartListening,
+        StopListening
     };
 
 private:
@@ -99,6 +101,20 @@ public:
     SCTAB getTab() const;
     SCCOL getStartColumn() const;
     SCCOL getEndColumn() const;
+};
+
+class RefStartListeningHint : public RefHint
+{
+public:
+    RefStartListeningHint();
+    virtual ~RefStartListeningHint();
+};
+
+class RefStopListeningHint : public RefHint
+{
+public:
+    RefStopListeningHint();
+    virtual ~RefStopListeningHint();
 };
 
 }
