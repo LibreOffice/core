@@ -149,7 +149,7 @@ inline const SwFmtVertOrient &SwFlyFrmAttrMgr::GetVertOrient() const
 }
 inline const SwFmtHoriOrient &SwFlyFrmAttrMgr::GetHoriOrient() const
 {
-    return ((SwFmtHoriOrient &)m_aSet.Get(RES_HORI_ORIENT));
+    return static_cast<const SwFmtHoriOrient &>(m_aSet.Get(RES_HORI_ORIENT));
 }
 inline const SwFmtFrmSize& SwFlyFrmAttrMgr::GetFrmSize() const
 {

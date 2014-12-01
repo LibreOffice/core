@@ -679,7 +679,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
 {
     sal_uInt16 nId = GetId();
     GetToolBox().EnableItem( nId, (GetItemState(pState) != SfxItemState::DISABLED) );
-    SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
+    SwZoomBox_Impl* pBox = static_cast<SwZoomBox_Impl*>(GetToolBox().GetItemWindow( GetId() ));
     if(SfxItemState::DEFAULT <= eState)
     {
         OUString sZoom(unicode::formatPercent(static_cast<const SfxUInt16Item*>(pState)->GetValue(),

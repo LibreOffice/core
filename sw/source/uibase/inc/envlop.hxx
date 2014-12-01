@@ -98,7 +98,7 @@ class SwEnvPage : public SfxTabPage
 
     void InitDatabaseBox();
 
-    SwEnvDlg* GetParentSwEnvDlg() {return (SwEnvDlg*)GetParentDialog();}
+    SwEnvDlg* GetParentSwEnvDlg() {return static_cast<SwEnvDlg*>(GetParentDialog());}
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

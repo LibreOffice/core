@@ -123,7 +123,7 @@ SwLabItem& SwLabItem::operator =(const SwLabItem& rItem)
 
 bool SwLabItem::operator ==(const SfxPoolItem& rItem) const
 {
-    const SwLabItem& rLab = (const SwLabItem&) rItem;
+    const SwLabItem& rLab = static_cast<const SwLabItem&>( rItem);
 
     return bAddr    == rLab.bAddr   &&
            bCont    == rLab.bCont   &&

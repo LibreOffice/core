@@ -116,7 +116,7 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
         if(bInsert)
         {
             sal_Int32 nEntry = InsertEntry(rNames.GetString(i), nPos);
-            SetEntryData( nEntry, (void*)nValue );
+            SetEntryData( nEntry, reinterpret_cast<void*>(nValue) );
         }
     }
     if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) )
@@ -128,11 +128,11 @@ void SwNumberingTypeListBox::Reload(sal_uInt16 nTypeFlags)
                 sal_Int16 nCurrent = pTypes[nType];
                 if(nCurrent > style::NumberingType::CHARS_LOWER_LETTER_N)
                 {
-                    if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos((void*)(sal_uLong)nCurrent))
+                    if(LISTBOX_ENTRY_NOTFOUND == GetEntryPos(reinterpret_cast<void*>((sal_uLong)nCurrent)))
                     {
                         OUString aIdent = pImpl->xInfo->getNumberingIdentifier( nCurrent );
                         sal_Int32 nPos = InsertEntry(aIdent);
-                        SetEntryData(nPos,(void*)(sal_uLong)nCurrent);
+                        SetEntryData(nPos, reinterpret_cast<void*>((sal_uLong)nCurrent));
                     }
                 }
             }
@@ -146,7 +146,7 @@ sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
     sal_Int16 nRet = 0;
     sal_Int32 nSelPos = GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
-        nRet = (sal_Int16)(sal_uLong)GetEntryData(nSelPos);
+        nRet = (sal_Int16)reinterpret_cast<sal_uLong>(GetEntryData(nSelPos));
 #if OSL_DEBUG_LEVEL > 0
     else
         OSL_FAIL("SwNumberingTypeListBox not selected");
@@ -156,7 +156,7 @@ sal_Int16   SwNumberingTypeListBox::GetSelectedNumberingType()
 
 bool    SwNumberingTypeListBox::SelectNumberingType(sal_Int16 nType)
 {
-    sal_Int32 nPos = GetEntryPos((void*)(sal_uLong)nType);
+    sal_Int32 nPos = GetEntryPos(reinterpret_cast<void*>((sal_uLong)nType));
     SelectEntryPos( nPos );
     return LISTBOX_ENTRY_NOTFOUND != nPos;
 }

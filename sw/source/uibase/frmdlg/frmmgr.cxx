@@ -57,7 +57,7 @@ static sal_uInt16 aFrmMgrRange[] = {
 
 // determine frame attributes via Shell
 SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( bool bNew, SwWrtShell* pSh, sal_uInt8 nType ) :
-    m_aSet( (SwAttrPool&)pSh->GetAttrPool(), aFrmMgrRange ),
+    m_aSet( static_cast<SwAttrPool&>(pSh->GetAttrPool()), aFrmMgrRange ),
     m_pOwnSh( pSh ),
     m_bAbsPos( false ),
     m_bNewFrm( bNew ),
@@ -116,7 +116,7 @@ void SwFlyFrmAttrMgr::_UpdateFlyFrm()
     const SfxPoolItem* pItem = 0;
 
     if (m_aSet.GetItemState(FN_SET_FRM_NAME, false, &pItem) == SfxItemState::SET)
-        m_pOwnSh->SetFlyName(((SfxStringItem *)pItem)->GetValue());
+        m_pOwnSh->SetFlyName(static_cast<const SfxStringItem *>(pItem)->GetValue());
 
     m_pOwnSh->SetModified();
 
@@ -253,7 +253,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
     //      aligned to page for fly frame anchored to paragraph or to character.
     const RndStdIds eAnchorType = static_cast<RndStdIds >(rVal.nAnchorType);
-    const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)m_aSet.Get(RES_FRM_SIZE);
+    const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(m_aSet.Get(RES_FRM_SIZE));
     m_pOwnSh->CalcBoundRect( aBoundRect, eAnchorType,
                            rVal.nHRelOrient,
                            rVal.nVRelOrient,
@@ -517,7 +517,7 @@ void SwFlyFrmAttrMgr::SetLRSpace( long nLeft, long nRight )
 {
     OSL_ENSURE( LONG_MAX != nLeft && LONG_MAX != nRight, "Welchen Raend setzen?" );
 
-    SvxLRSpaceItem aTmp( (SvxLRSpaceItem&)m_aSet.Get( RES_LR_SPACE ) );
+    SvxLRSpaceItem aTmp( static_cast<const SvxLRSpaceItem&>(m_aSet.Get( RES_LR_SPACE )) );
     if( LONG_MAX != nLeft )
         aTmp.SetLeft( sal_uInt16(nLeft) );
     if( LONG_MAX != nRight )
@@ -529,7 +529,7 @@ void SwFlyFrmAttrMgr::SetULSpace( long nTop, long nBottom )
 {
     OSL_ENSURE(LONG_MAX != nTop && LONG_MAX != nBottom, "Welchen Raend setzen?" );
 
-    SvxULSpaceItem aTmp( (SvxULSpaceItem&)m_aSet.Get( RES_UL_SPACE ) );
+    SvxULSpaceItem aTmp( static_cast<const SvxULSpaceItem&>(m_aSet.Get( RES_UL_SPACE )) );
     if( LONG_MAX != nTop )
         aTmp.SetUpper( sal_uInt16(nTop) );
     if( LONG_MAX != nBottom )

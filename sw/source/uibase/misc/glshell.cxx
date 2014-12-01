@@ -81,9 +81,9 @@ static void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
         }
         else
         {
-            const SfxBoolItem* pRes = ( const SfxBoolItem* )
+            const SfxBoolItem* pRes = static_cast< const SfxBoolItem* >(
                                         rSh.ExecuteSlot( rReq,
-                                        rSh.SfxObjectShell::GetInterface() );
+                                        rSh.SfxObjectShell::GetInterface() ));
             if( pRes->GetValue() )
                 rSh.GetDoc()->getIDocumentState().ResetModified();
         }

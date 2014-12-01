@@ -53,7 +53,7 @@ SwSyncChildWin::SwSyncChildWin( vcl::Window* _pParent,
         pInfo->aSize = pWindow->GetSizePixel();
     }
 
-    ((SwSyncBtnDlg *)pWindow)->Initialize(pInfo);
+    static_cast<SwSyncBtnDlg *>(pWindow)->Initialize(pInfo);
 
     pWindow->Show();
 }

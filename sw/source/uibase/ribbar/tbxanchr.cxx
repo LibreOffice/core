@@ -87,7 +87,7 @@ void  SwTbxAnchor::Click()
     if(pViewFrame)
     {
         const TypeId aTypeId = TYPE(SwView);
-        SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+        SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(&aTypeId));
         while( pView )
         {
             if(pView->GetViewFrame() == pViewFrame)
@@ -95,7 +95,7 @@ void  SwTbxAnchor::Click()
                 pActiveView = pView;
                 break;
             }
-            pView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId);
+            pView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, &aTypeId));
         }
     }
     if(!pActiveView)

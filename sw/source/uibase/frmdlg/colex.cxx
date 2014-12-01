@@ -48,7 +48,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // alignment
-        const SvxPageItem* pPage = (const SvxPageItem*)&rSet.Get( nWhich );
+        const SvxPageItem* pPage = static_cast<const SvxPageItem*>(&rSet.Get( nWhich ));
 
         if ( pPage )
             SetUsage( pPage->GetPageUsage() );
@@ -59,14 +59,14 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // orientation and size from PageItem
-        const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
+        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get( nWhich ));
         SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // set left and right border
-        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get( nWhich );
+        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get( nWhich ));
 
         SetLeft( rLRSpace.GetLeft() );
         SetRight( rLRSpace.GetRight() );
@@ -82,7 +82,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // set upper and lower border
-        const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get( nWhich );
+        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get( nWhich ));
 
         SetTop( rULSpace.GetUpper() );
         SetBottom( rULSpace.GetLower() );
@@ -100,17 +100,17 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     {
         const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            (const SfxBoolItem&)rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) );
+            static_cast<const SfxBoolItem&>(rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) ) );
 
         if ( rHeaderOn.GetValue() )
         {
             const SvxSizeItem& rSize =
-                (const SvxSizeItem&)rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE));
+                static_cast<const SvxSizeItem&>(rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE)));
 
-            const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rHeaderSet.Get(
-                                        pPool->GetWhich(SID_ATTR_ULSPACE));
-            const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rHeaderSet.Get(
-                                        pPool->GetWhich(SID_ATTR_LRSPACE));
+            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rHeaderSet.Get(
+                                        pPool->GetWhich(SID_ATTR_ULSPACE)));
+            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rHeaderSet.Get(
+                                        pPool->GetWhich(SID_ATTR_LRSPACE)));
 
             SetHdHeight( rSize.GetSize().Height() - rUL.GetLower());
             SetHdDist( rUL.GetLower() );
@@ -134,7 +134,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             if ( rHeaderSet.GetItemState( RES_BOX ) == SfxItemState::SET )
             {
                 const SvxBoxItem& rItem =
-                    (const SvxBoxItem&)rHeaderSet.Get( RES_BOX );
+                    static_cast<const SvxBoxItem&>(rHeaderSet.Get( RES_BOX ));
                 SetHdBorder( rItem );
             }
         }
@@ -147,17 +147,17 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     {
         const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn =
-            (const SfxBoolItem&)rFooterSet.Get( SID_ATTR_PAGE_ON );
+            static_cast<const SfxBoolItem&>(rFooterSet.Get( SID_ATTR_PAGE_ON ));
 
         if ( rFooterOn.GetValue() )
         {
             const SvxSizeItem& rSize =
-                (const SvxSizeItem&)rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) );
+                static_cast<const SvxSizeItem&>(rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) ));
 
-            const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rFooterSet.Get(
-                                        pPool->GetWhich( SID_ATTR_ULSPACE ) );
-            const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rFooterSet.Get(
-                                        pPool->GetWhich( SID_ATTR_LRSPACE ) );
+            const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rFooterSet.Get(
+                                        pPool->GetWhich( SID_ATTR_ULSPACE ) ));
+            const SvxLRSpaceItem& rLR = static_cast<const SvxLRSpaceItem&>(rFooterSet.Get(
+                                        pPool->GetWhich( SID_ATTR_LRSPACE ) ));
 
             SetFtHeight( rSize.GetSize().Height() - rUL.GetUpper());
             SetFtDist( rUL.GetUpper() );
@@ -181,7 +181,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             if( rFooterSet.GetItemState( RES_BOX ) == SfxItemState::SET )
             {
                 const SvxBoxItem& rItem =
-                    (const SvxBoxItem&)rFooterSet.Get( RES_BOX );
+                    static_cast<const SvxBoxItem&>(rFooterSet.Get( RES_BOX ));
                 SetFtBorder( rItem );
             }
         }
@@ -597,11 +597,11 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
     DELETEZ(pGridItem);
     //get the grid information
     if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID, true))
-        pGridItem = (SwTextGridItem*)static_cast<const SwTextGridItem&>(rSet.Get(RES_TEXTGRID)).Clone();
+        pGridItem = static_cast<SwTextGridItem*>(static_cast<const SwTextGridItem&>(rSet.Get(RES_TEXTGRID)).Clone());
     if( SfxItemState::DEFAULT <= rSet.GetItemState( RES_FRAMEDIR, true ))
     {
         const SvxFrameDirectionItem& rDirItem =
-                    (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
+                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
         m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
                     rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
     }

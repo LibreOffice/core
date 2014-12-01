@@ -64,7 +64,7 @@ OUString ConstCustomShape::GetShapeTypeFromRequest( SfxRequest& rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
-        const SfxStringItem& rItm = (const SfxStringItem&)pArgs->Get( rReq.GetSlot() );
+        const SfxStringItem& rItm = static_cast<const SfxStringItem&>(pArgs->Get( rReq.GetSlot() ));
         aRet = rItm.GetValue();
     }
     return aRet;

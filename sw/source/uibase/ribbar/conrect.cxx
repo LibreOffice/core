@@ -98,7 +98,7 @@ bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else if(mbVertical && pObj && pObj->ISA(SdrTextObj))
             {
-                SdrTextObj* pText = (SdrTextObj*)pObj;
+                SdrTextObj* pText = static_cast<SdrTextObj*>(pObj);
                 SfxItemSet aSet(pSdrView->GetModel()->GetItemPool());
 
                 pText->SetVerticalWriting(true);

@@ -470,7 +470,7 @@ class SwTOXStylesTabPage : public SfxTabPage
 
     SwForm&     GetForm()
         {
-            SwMultiTOXTabDialog* pDlg = (SwMultiTOXTabDialog*)GetTabDialog();
+            SwMultiTOXTabDialog* pDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
             return *pDlg->GetForm(pDlg->GetCurrentTOXType());
         }
 

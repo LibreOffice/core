@@ -48,9 +48,9 @@ class SwOutlineContent : public SwContent
             SwContent(pCnt, rName, nYPos),
             nOutlinePos(nArrPos), nOutlineLevel(nLevel), bIsMoveable(bMove) {}
 
-    sal_uInt16  GetPos(){return nOutlinePos;}
-    sal_uInt8   GetOutlineLevel(){return nOutlineLevel;}
-    bool    IsMoveable(){return bIsMoveable;};
+    sal_uInt16  GetPos() const {return nOutlinePos;}
+    sal_uInt8   GetOutlineLevel() const {return nOutlineLevel;}
+    bool        IsMoveable() const {return bIsMoveable;};
 };
 
 class SwRegionContent : public SwContent
@@ -83,7 +83,7 @@ public:
     {}
 
     virtual bool        IsProtect() const SAL_OVERRIDE;
-    const OUString&     GetURL()            { return sURL; }
+    const OUString&     GetURL()    const   { return sURL; }
     const SwTxtINetFmt* GetINetAttr()       { return pINetAttr; }
 };
 
@@ -112,10 +112,10 @@ public:
         , mbPostIt(false)
     {}
 
-    const SwFmtFld* GetPostIt()     { return pFld; }
+    const SwFmtFld* GetPostIt() const  { return pFld; }
     SwRangeRedline* GetRedline() { return pRedline; }
     virtual bool    IsProtect()     const SAL_OVERRIDE;
-    bool            IsPostIt()      {return mbPostIt; }
+    bool            IsPostIt()   const {return mbPostIt; }
 };
 
 class SwGraphicContent : public SwContent

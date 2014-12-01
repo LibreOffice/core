@@ -283,7 +283,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 if(m_pWin->GetFrmColCount() > 1)
                 {
                     SfxItemSet aSet(m_pView->GetPool(),RES_COL,RES_COL);
-                    SwFmtCol aCol((const SwFmtCol&)aSet.Get(RES_COL));
+                    SwFmtCol aCol(static_cast<const SwFmtCol&>(aSet.Get(RES_COL)));
                     aCol.Init(m_pWin->GetFrmColCount(), aCol.GetGutterWidth(), aCol.GetWishWidth());
                     aSet.Put(aCol);
                     // Template AutoUpdate
