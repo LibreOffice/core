@@ -310,7 +310,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="text" translatable="yes">0,20</property>
+                        <property name="text" translatable="no">0,20</property>
                         <property name="adjustment">smoothing-factor-adjustment</property>
                         <property name="digits">2</property>
                         <property name="value">0.20000000298023224</property>
