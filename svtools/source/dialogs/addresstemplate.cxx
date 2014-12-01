@@ -1227,7 +1227,7 @@ void AssignmentPersistentData::Commit()
 
     bool AddressBookSourceDialog::PreNotify( NotifyEvent& _rNEvt )
     {
-        switch (_rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+        if (_rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         {
             const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
             sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
