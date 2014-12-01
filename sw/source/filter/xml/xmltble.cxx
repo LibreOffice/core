@@ -198,13 +198,13 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
     const SfxPoolItem *pItem;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, false, &pItem ) )
-        pFrmSize = (const SwFmtFrmSize *)pItem;
+        pFrmSize = static_cast<const SwFmtFrmSize *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_ROW_SPLIT, false, &pItem ) )
-        pRowSplit = (const SwFmtRowSplit *)pItem;
+        pRowSplit = static_cast<const SwFmtRowSplit *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        pBrush = (const SvxBrushItem *)pItem;
+        pBrush = static_cast<const SvxBrushItem *>(pItem);
 
     // empty styles have not to be exported
     if( !pFrmSize && !pBrush && !pRowSplit )
@@ -226,7 +226,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             if( !pFrmSize )
                 break;
 
-            pTestFrmSize = (const SwFmtFrmSize *)pItem;
+            pTestFrmSize = static_cast<const SwFmtFrmSize *>(pItem);
         }
         else
         {
@@ -240,7 +240,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             if( !pBrush )
                 break;
 
-            pTestBrush = (const SvxBrushItem *)pItem;
+            pTestBrush = static_cast<const SvxBrushItem *>(pItem);
         }
         else
         {
@@ -254,7 +254,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
             if( !pRowSplit )
                 break;
 
-            pTestRowSplit = (const SwFmtRowSplit *)pItem;
+            pTestRowSplit = static_cast<const SwFmtRowSplit *>(pItem);
         }
         else
         {
@@ -317,20 +317,20 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     const SfxPoolItem *pItem;
     if( SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, false,
                                                &pItem ) )
-        pVertOrient = (const SwFmtVertOrient *)pItem;
+        pVertOrient = static_cast<const SwFmtVertOrient *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
-        pBrush = (const SvxBrushItem *)pItem;
+        pBrush = static_cast<const SvxBrushItem *>(pItem);
 
     if( SfxItemState::SET == rItemSet.GetItemState( RES_BOX, false, &pItem ) )
-        pBox = (const SvxBoxItem *)pItem;
+        pBox = static_cast<const SvxBoxItem *>(pItem);
 
     if ( SfxItemState::SET == rItemSet.GetItemState( RES_BOXATR_FORMAT,
                                                 false, &pItem ) )
-        pNumFmt = (const SwTblBoxNumFormat *)pItem;
+        pNumFmt = static_cast<const SwTblBoxNumFormat *>(pItem);
     if ( SfxItemState::SET == rItemSet.GetItemState( RES_FRAMEDIR,
                                                 false, &pItem ) )
-        pFrameDir = (const SvxFrameDirectionItem *)pItem;
+        pFrameDir = static_cast<const SvxFrameDirectionItem *>(pItem);
 
     // empty styles have not to be exported
     if( !pVertOrient && !pBrush && !pBox && !pNumFmt && !pFrameDir )
@@ -359,7 +359,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             if( !pVertOrient )
                 break;
 
-            pTestVertOrient = (const SwFmtVertOrient *)pItem;
+            pTestVertOrient = static_cast<const SwFmtVertOrient *>(pItem);
         }
         else
         {
@@ -373,7 +373,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             if( !pBrush )
                 break;
 
-            pTestBrush = (const SvxBrushItem *)pItem;
+            pTestBrush = static_cast<const SvxBrushItem *>(pItem);
         }
         else
         {
@@ -386,7 +386,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             if( !pBox )
                 break;
 
-            pTestBox = (const SvxBoxItem *)pItem;
+            pTestBox = static_cast<const SvxBoxItem *>(pItem);
         }
         else
         {
@@ -400,7 +400,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             if( !pNumFmt )
                 break;
 
-            pTestNumFmt = (const SwTblBoxNumFormat *)pItem;
+            pTestNumFmt = static_cast<const SwTblBoxNumFormat *>(pItem);
         }
         else
         {
@@ -415,7 +415,7 @@ bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
             if( !pFrameDir )
                 break;
 
-            pTestFrameDir = (const SvxFrameDirectionItem *)pItem;
+            pTestFrameDir = static_cast<const SvxFrameDirectionItem *>(pItem);
         }
         else
         {

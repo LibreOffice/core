@@ -26,7 +26,7 @@ using namespace ::com::sun::star::text;
 
 class SwXMLBodyContentContext_Impl : public SvXMLImportContext
 {
-    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
 public:
 

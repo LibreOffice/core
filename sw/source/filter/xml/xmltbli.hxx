@@ -149,7 +149,7 @@ public:
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
     void InsertColumn( sal_Int32 nWidth, bool bRelWidth,
                        const OUString *pDfltCellStyleName = 0 );
@@ -194,7 +194,7 @@ public:
 
 inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
 {
-    return (SwXMLTableContext *)&xParentTable;
+    return static_cast<SwXMLTableContext *>(&xParentTable);
 }
 
 inline sal_uInt32 SwXMLTableContext::GetColumnCount() const

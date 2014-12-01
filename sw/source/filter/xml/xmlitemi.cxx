@@ -306,7 +306,7 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
             {
                 pContext = new SwXMLBrushItemImportContext(
                                 GetImport(), nPrefix, rLocalName, xAttrList,
-                                _rUnitConv, *(const SvxBrushItem *)pItem );
+                                _rUnitConv, *static_cast<const SvxBrushItem *>(pItem) );
             }
             else
             {

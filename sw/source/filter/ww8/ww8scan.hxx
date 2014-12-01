@@ -907,10 +907,10 @@ public:
     void advance();
     sal_uInt16 GetColl() const; // index of actual Style
     WW8PLCFx_FLD* GetFld() const;
-    WW8PLCFx_SubDoc* GetEdn() const { return (WW8PLCFx_SubDoc*)pEdn->pPLCFx; }
-    WW8PLCFx_SubDoc* GetFtn() const { return (WW8PLCFx_SubDoc*)pFtn->pPLCFx; }
-    WW8PLCFx_SubDoc* GetAtn() const { return (WW8PLCFx_SubDoc*)pAnd->pPLCFx; }
-    WW8PLCFx_Book* GetBook() const { return (WW8PLCFx_Book*)pBkm->pPLCFx; }
+    WW8PLCFx_SubDoc* GetEdn() const { return static_cast<WW8PLCFx_SubDoc*>(pEdn->pPLCFx); }
+    WW8PLCFx_SubDoc* GetFtn() const { return static_cast<WW8PLCFx_SubDoc*>(pFtn->pPLCFx); }
+    WW8PLCFx_SubDoc* GetAtn() const { return static_cast<WW8PLCFx_SubDoc*>(pAnd->pPLCFx); }
+    WW8PLCFx_Book* GetBook() const { return static_cast<WW8PLCFx_Book*>(pBkm->pPLCFx); }
     long GetCpOfs() const { return pChp->nCpOfs; }  // for Header/Footer...
 
     /* fragt, ob *aktueller Absatz* einen Sprm diesen Typs hat */
@@ -921,11 +921,11 @@ public:
     bool HasCharSprm(sal_uInt16 nId, std::vector<const sal_uInt8 *> &rResult) const;
 
     WW8PLCFx_Cp_FKP* GetChpPLCF() const
-        { return (WW8PLCFx_Cp_FKP*)pChp->pPLCFx; }
+        { return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx); }
     WW8PLCFx_Cp_FKP* GetPapPLCF() const
-        { return (WW8PLCFx_Cp_FKP*)pPap->pPLCFx; }
+        { return static_cast<WW8PLCFx_Cp_FKP*>(pPap->pPLCFx); }
     WW8PLCFx_SEPX* GetSepPLCF() const
-        { return (WW8PLCFx_SEPX*)pSep->pPLCFx; }
+        { return static_cast<WW8PLCFx_SEPX*>(pSep->pPLCFx); }
     WW8PLCFxDesc* GetPap() const { return pPap; }
     bool TransferOpenSprms(std::stack<sal_uInt16> &rStack);
     void SeekPos( long nNewCp );

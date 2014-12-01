@@ -1543,7 +1543,7 @@ void MSWordExportBase::AppendWordBookmark( const OUString& rName )
 
 void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
 {
-    WW8Export & rWW8Wrt = *(((SwWW8Writer&)rWrt).m_pExport);
+    WW8Export & rWW8Wrt = *(static_cast<SwWW8Writer&>(rWrt).m_pExport);
     rWW8Wrt.WriteAsStringTable(maAuthors, rWW8Wrt.pFib->fcSttbfRMark,
         rWW8Wrt.pFib->lcbSttbfRMark, rWW8Wrt.bWrtWW8 ? 0 : 2);
 }
@@ -1990,12 +1990,12 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
             if( pCNd && pCNd->IsTxtNode())
             {
                 SfxItemSet aCoreSet(rDoc.GetAttrPool(), RES_CHRATR_ROTATE, RES_CHRATR_ROTATE);
-                ((SwTxtNode*)pCNd)->GetAttr( aCoreSet, 0, ((SwTxtNode*)pCNd)->GetTxt().getLength());
+                static_cast<const SwTxtNode*>(pCNd)->GetAttr( aCoreSet, 0, static_cast<const SwTxtNode*>(pCNd)->GetTxt().getLength());
                 const SvxCharRotateItem * pRotate = NULL;
                 const SfxPoolItem * pRotItem;
                 if ( SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
                 {
-                    pRotate = (SvxCharRotateItem*)pRotItem;
+                    pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
                     if(pRotate && pRotate->GetValue() == 900)
                     {
                         nFlags = nFlags | 0x0004 | 0x0008;
@@ -2552,7 +2552,7 @@ void MSWordExportBase::WriteText()
         // output the various types of nodes
         if ( rNd.IsCntntNode() )
         {
-            SwCntntNode* pCNd = (SwCntntNode*)&rNd;
+            SwCntntNode* pCNd = static_cast<SwCntntNode*>(&rNd);
 
             const SwPageDesc* pTemp = rNd.FindPageDesc(false);
             if ( pTemp )
@@ -2592,7 +2592,7 @@ void MSWordExportBase::WriteText()
                     {
                         const SfxPoolItem * pTempItem = NULL;
                         if (pTempNext->GetpSwAttrSet() && SfxItemState::SET == pTempNext->GetpSwAttrSet()->GetItemState(RES_PAGEDESC, false, &pTempItem)
-                            && pTempItem && ((SwFmtPageDesc*)pTempItem)->GetRegisteredIn())
+                            && pTempItem && static_cast<const SwFmtPageDesc*>(pTempItem)->GetRegisteredIn())
                         {
                             //Next node has a new page style which means this node is a section end. Do not insert another page/section break here
                             bNeedExportBreakHere = false;
@@ -2619,11 +2619,11 @@ void MSWordExportBase::WriteText()
 
                     const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
                     if ( !pParentFmt )
-                        pParentFmt = (SwSectionFmt*)0xFFFFFFFF;
+                        pParentFmt = reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF);
 
                     sal_uLong nRstLnNum;
                     if ( aIdx.GetNode().IsCntntNode() )
-                        nRstLnNum = ((SwCntntNode&)aIdx.GetNode()).GetSwAttrSet().
+                        nRstLnNum = static_cast<SwCntntNode&>(aIdx.GetNode()).GetSwAttrSet().
                                                 GetLineNumber().GetStartValue();
                     else
                         nRstLnNum = 0;
@@ -2688,7 +2688,7 @@ void WW8Export::WriteMainText()
     // annotation usw.
     const SwTxtNode* pLastNd = pCurPam->GetMark()->nNode.GetNode().GetTxtNode();
     if( pLastNd )
-        nLastFmtId = GetId( (SwTxtFmtColl&)pLastNd->GetAnyFmtColl() );
+        nLastFmtId = GetId( static_cast<SwTxtFmtColl&>(pLastNd->GetAnyFmtColl()) );
 
     SAL_INFO( "sw.ww8.level2", "</WriteMainText>" );
 }
@@ -2954,8 +2954,8 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     sal_uInt32 n, nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pINetFmt = (SwFmtINetFmt*)rDoc.GetAttrPool().GetItem2(
-            RES_TXTATR_INETFMT, n ) ) &&
+        if( 0 != (pINetFmt = static_cast<const SwFmtINetFmt*>(rDoc.GetAttrPool().GetItem2(
+            RES_TXTATR_INETFMT, n ) ) ) &&
             0 != ( pTxtAttr = pINetFmt->GetTxtINetFmt()) &&
             0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
             pTxtNd->GetNodes().IsDocNodes() )
@@ -2968,8 +2968,8 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_URL );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pURL = (SwFmtURL*)rDoc.GetAttrPool().GetItem2(
-            RES_URL, n ) ) )
+        if( 0 != (pURL = static_cast<const SwFmtURL*>(rDoc.GetAttrPool().GetItem2(
+            RES_URL, n ) ) ) )
         {
             AddLinkTarget( pURL->GetURL() );
             const ImageMap *pIMap = pURL->GetMap();

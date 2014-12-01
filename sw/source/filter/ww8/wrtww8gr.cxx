@@ -436,7 +436,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
             //otherwise a sub/super script hack is employed
             if (pOutFmtNode && pOutFmtNode->ISA(SwCntntNode) )
             {
-                const SwTxtNode* pTxtNd = (const SwTxtNode*)pOutFmtNode;
+                const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(pOutFmtNode);
                 SwPosition aPos(*pTxtNd);
                 bVert = pDoc->IsInVerticalText(aPos);
             }
@@ -542,7 +542,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     if (pAttrSet && (SfxItemState::SET
         == pAttrSet->GetItemState(RES_GRFATR_CROPGRF, false, &pItem)))
     {
-        const SwCropGrf& rCr = *(SwCropGrf*)pItem;
+        const SwCropGrf& rCr = *static_cast<const SwCropGrf*>(pItem);
         nCropL = (sal_Int16)rCr.GetLeft();
         nCropR = (sal_Int16)rCr.GetRight();
         nCropT = (sal_Int16)rCr.GetTop();
@@ -562,7 +562,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     const SwAttrSet& rAttrSet = rFly.GetFrmFmt().GetAttrSet();
     if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
     {
-        const SvxBoxItem* pBox = (const SvxBoxItem*)pItem;
+        const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(pItem);
         if( pBox )
         {
             bool bShadow = false;               // Shadow ?

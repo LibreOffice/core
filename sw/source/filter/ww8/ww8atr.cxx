@@ -279,7 +279,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
             AttrOutput().OutputItem( *pItem );
 
             // switch off the numerbering?
-            if ( ( (SwNumRuleItem*)pItem )->GetValue().isEmpty() &&
+            if ( static_cast<const SwNumRuleItem*>(pItem)->GetValue().isEmpty() &&
                  SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
                  SfxItemState::SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
             {
@@ -1529,7 +1529,7 @@ void WW8AttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
 
 void WW8AttributeOutput::CharBidiRTL( const SfxPoolItem& rHt )
 {
-    const SfxInt16Item& rAttr = (const SfxInt16Item&)rHt;
+    const SfxInt16Item& rAttr = static_cast<const SfxInt16Item&>(rHt);
     if( rAttr.GetValue() == 1 )
     {
         m_rWW8Export.InsUInt16(0x85a);
@@ -1539,7 +1539,7 @@ void WW8AttributeOutput::CharBidiRTL( const SfxPoolItem& rHt )
 
 void WW8AttributeOutput::CharIdctHint( const SfxPoolItem& rHt )
 {
-    const SfxInt16Item& rAttr = (const SfxInt16Item&)rHt;
+    const SfxInt16Item& rAttr = static_cast<const SfxInt16Item&>(rHt);
     m_rWW8Export.InsUInt16(0x286F);
     m_rWW8Export.pO->push_back((sal_uInt8)(rAttr.GetValue()));
 }
@@ -2124,7 +2124,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                 sStr = FieldString(eCode);
 
                 {
-                    const SwFmtCol& rCol = (const SwFmtCol&)( rSect.GetFmt()->GetFmtAttr( RES_COL ) );
+                    const SwFmtCol& rCol = static_cast<const SwFmtCol&>( rSect.GetFmt()->GetFmtAttr( RES_COL ) );
                     const SwColumns& rColumns = rCol.GetColumns();
                     sal_Int32 nCol = rColumns.size();
 
@@ -2457,7 +2457,7 @@ void AttributeOutputBase::EndTOX( const SwSection& rSect,bool bCareEnd )
 
         if ( pTOX->GetType() == TOX_INDEX && GetExport().AddSectionBreaksForTOX() )
         {
-            const SwFmtCol& rCol = (const SwFmtCol&)( rSect.GetFmt()->GetFmtAttr( RES_COL ) );
+            const SwFmtCol& rCol = static_cast<const SwFmtCol&>( rSect.GetFmt()->GetFmtAttr( RES_COL ) );
             const SwColumns& rColumns = rCol.GetColumns();
             sal_Int32 nCol = rColumns.size();
 
@@ -2590,7 +2590,7 @@ void WW8AttributeOutput::HiddenField( const SwField& rFld )
 
 void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const OUString& rCmd )
 {
-    const SwSetExpField* pSet=(const SwSetExpField*)(&rFld);
+    const SwSetExpField* pSet = static_cast<const SwSetExpField*>(&rFld);
     const OUString &rVar = pSet->GetPar2();
 
     sal_uLong nFrom = m_rWW8Export.Fc2Cp(m_rWW8Export.Strm().Tell());
@@ -2623,7 +2623,7 @@ void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const 
 
 void WW8AttributeOutput::PostitField( const SwField* pFld )
 {
-    const SwPostItField *pPFld = (const SwPostItField*)pFld;
+    const SwPostItField *pPFld = static_cast<const SwPostItField*>(pFld);
     m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPFld );
     m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
 }
@@ -2633,7 +2633,7 @@ bool WW8AttributeOutput::DropdownField( const SwField* pFld )
     bool bExpand = true;
     if ( m_rWW8Export.bWrtWW8 )
     {
-        const SwDropDownField& rFld2 = *(SwDropDownField*)pFld;
+        const SwDropDownField& rFld2 = *static_cast<const SwDropDownField*>(pFld);
         uno::Sequence<OUString> aItems =
             rFld2.GetItemSequence();
         GetExport().DoComboBox(rFld2.GetName(),
@@ -2693,7 +2693,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_GETEXPFLD:
         if (nSubType == nsSwGetSetExpType::GSE_STRING)
         {
-            const SwGetExpField *pGet=(const SwGetExpField*)(pFld);
+            const SwGetExpField *pGet = static_cast<const SwGetExpField*>(pFld);
             RefField( *pGet, pGet->GetFormula() );
         }
         else
@@ -2714,7 +2714,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         {
             bool bShowAsWell = false;
             ww::eField eFieldNo;
-            const SwSetExpField *pSet=(const SwSetExpField*)(pFld);
+            const SwSetExpField *pSet = static_cast<const SwSetExpField*>(pFld);
             const OUString sVar = pSet->GetPar2();
             OUString sStr;
             if (pSet->GetInputFlag())
@@ -2957,7 +2957,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
         {
             ww::eField eFld = ww::eNONE;
             OUString sStr;
-            const SwGetRefField& rRFld = *(SwGetRefField*)pFld;
+            const SwGetRefField& rRFld = *static_cast<const SwGetRefField*>(pFld);
             switch (nSubType)
             {
                 case REF_SETREFATTR:
@@ -3091,7 +3091,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
 
             if (pTxtNd)
             {
-                SwChapterField aCopy(*(const SwChapterField*)pFld);
+                SwChapterField aCopy(*static_cast<const SwChapterField*>(pFld));
                 aCopy.ChangeExpansion(*pTxtNd, false);
                 WriteExpand( &aCopy );
                 bWriteExpand = false;
@@ -3132,7 +3132,7 @@ void AttributeOutputBase::TextFlyContent( const SwFmtFlyCnt& rFlyContent )
 {
     if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwCntntNode ) )
     {
-        SwTxtNode* pTxtNd = (SwTxtNode*)GetExport().pOutFmtNode;
+        const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(GetExport().pOutFmtNode);
 
         Point aLayPos;
         aLayPos = pTxtNd->FindLayoutRect( false, &aLayPos ).Pos();
@@ -3473,7 +3473,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
             {
                 if ( GetExport().pOutFmtNode->ISA( SwCntntNode ) )
                 {
-                    pTxtNd = (SwTxtNode*)GetExport().pOutFmtNode;
+                    pTxtNd = static_cast<const SwTxtNode*>(GetExport().pOutFmtNode);
 
                     if( pTxtNd->IsCountedInList())
                     {
@@ -3506,7 +3506,7 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
                 }
                 else if ( GetExport().pOutFmtNode->ISA( SwTxtFmtColl ) )
                 {
-                    const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
+                    const SwTxtFmtColl* pC = static_cast<const SwTxtFmtColl*>(GetExport().pOutFmtNode);
                     if ( pC && pC->IsAssignedToListLevelOfOutlineStyle() )
                         nLvl = static_cast< sal_uInt8 >( pC->GetAssignedOutlineStyleLevel() );
                 }
@@ -3707,7 +3707,7 @@ void AttributeOutputBase::FormatPageDescription( const SwFmtPageDesc& rPageDesc 
 {
     if ( GetExport().bStyDef && GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtFmtColl ) )
     {
-        const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
+        const SwTxtFmtColl* pC = static_cast<const SwTxtFmtColl*>(GetExport().pOutFmtNode);
         if ( (SfxItemState::SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
             FormatBreak( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
     }
@@ -4520,7 +4520,7 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
         const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_SHADOW );
         if ( pItem )
         {
-            const SvxShadowItem* p = (const SvxShadowItem*)pItem;
+            const SvxShadowItem* p = static_cast<const SvxShadowItem*>(pItem);
             bShadow = ( p->GetLocation() != SVX_SHADOW_NONE )
                       && ( p->GetWidth() != 0 );
         }
@@ -4733,12 +4733,12 @@ void AttributeOutputBase::ParaLineSpacing( const SvxLineSpacingItem& rSpacing )
                 const SwAttrSet *pSet = 0;
                 if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwFmt ) )
                 {
-                    const SwFmt *pFmt = (const SwFmt*)( GetExport().pOutFmtNode );
+                    const SwFmt *pFmt = static_cast<const SwFmt*>( GetExport().pOutFmtNode );
                     pSet = &pFmt->GetAttrSet();
                 }
                 else if ( GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtNode ) )
                 {
-                    const SwTxtNode* pNd = (const SwTxtNode*)GetExport().pOutFmtNode;
+                    const SwTxtNode* pNd = static_cast<const SwTxtNode*>(GetExport().pOutFmtNode);
                     pSet = &pNd->GetSwAttrSet();
                     if ( g_pBreakIt->GetBreakIter().is() )
                     {
@@ -4813,13 +4813,13 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
                 short nDirection = FRMDIR_HORI_LEFT_TOP;
                 if ( m_rWW8Export.pOutFmtNode->ISA( SwTxtNode ) )
                 {
-                    SwPosition aPos(*(const SwCntntNode*)m_rWW8Export.pOutFmtNode);
+                    SwPosition aPos(*static_cast<const SwCntntNode*>(m_rWW8Export.pOutFmtNode));
                     nDirection = m_rWW8Export.pDoc->GetTextDirection(aPos);
                 }
                 else if ( m_rWW8Export.pOutFmtNode->ISA( SwTxtFmtColl ) )
                 {
                     const SwTxtFmtColl* pC =
-                        (const SwTxtFmtColl*)m_rWW8Export.pOutFmtNode;
+                        static_cast<const SwTxtFmtColl*>(m_rWW8Export.pOutFmtNode);
                     const SvxFrameDirectionItem &rItem =
                         ItemGet<SvxFrameDirectionItem>(*pC, RES_FRAMEDIR);
                     nDirection = rItem.GetValue();
@@ -4862,12 +4862,12 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
             if ( m_rWW8Export.bOutFlyFrmAttrs )  //frame
             {
                 nDir = m_rWW8Export.TrueFrameDirection(
-                    *(const SwFrmFmt*)m_rWW8Export.pOutFmtNode );
+                    *static_cast<const SwFrmFmt*>(m_rWW8Export.pOutFmtNode) );
             }
             else if ( m_rWW8Export.pOutFmtNode->ISA( SwCntntNode ) )   //pagagraph
             {
                 const SwCntntNode* pNd =
-                    (const SwCntntNode*)m_rWW8Export.pOutFmtNode;
+                    static_cast<const SwCntntNode*>(m_rWW8Export.pOutFmtNode);
                 SwPosition aPos( *pNd );
                 nDir = m_rWW8Export.pDoc->GetTextDirection( aPos );
             }

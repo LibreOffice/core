@@ -989,7 +989,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                         if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
                         {
                             fExtraTextRotation /= 100.0;
-                            SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                            SdrCustomShapeGeometryItem aGeometryItem( static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY )) );
                             const OUString sTextRotateAngle( "TextRotateAngle" );
                             com::sun::star::beans::PropertyValue aPropVal;
                             aPropVal.Name = sTextRotateAngle;
@@ -1423,7 +1423,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwPaM aRegion(rTmpPos);
                 if (rEntry.MakeRegion(pDoc, aRegion, false))
                 {
-                    SvxLRSpaceItem aNewLR( *(SvxLRSpaceItem*)rEntry.pAttr );
+                    SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.pAttr) );
                     sal_uLong nStart = aRegion.Start()->nNode.GetIndex();
                     sal_uLong nEnd   = aRegion.End()->nNode.GetIndex();
                     for(; nStart <= nEnd; ++nStart)
@@ -1432,10 +1432,10 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         if (!pNode || !pNode->IsTxtNode())
                             continue;
 
-                        SwCntntNode* pNd = (SwCntntNode*)pNode;
-                        SvxLRSpaceItem aOldLR = (const SvxLRSpaceItem&)pNd->GetAttr(RES_LR_SPACE);
+                        SwCntntNode* pNd = static_cast<SwCntntNode*>(pNode);
+                        SvxLRSpaceItem aOldLR = static_cast<const SvxLRSpaceItem&>(pNd->GetAttr(RES_LR_SPACE));
 
-                        SwTxtNode *pTxtNode = (SwTxtNode*)pNode;
+                        SwTxtNode *pTxtNode = static_cast<SwTxtNode*>(pNode);
 
                         const SwNumFmt *pNum = 0;
                         pNum = GetNumFmtFromStack( *aRegion.GetPoint(), *pTxtNode );
@@ -1495,8 +1495,8 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     // the frames hyperlink field attribute directly.
                     if (0 != (pFrm = rReader.ContainsSingleInlineGraphic(aRegion)))
                     {
-                        const SwFmtINetFmt *pAttr = (const SwFmtINetFmt *)
-                            rEntry.pAttr;
+                        const SwFmtINetFmt *pAttr = static_cast<const SwFmtINetFmt *>(
+                            rEntry.pAttr);
                         SwFmtURL aURL;
                         aURL.SetURL(pAttr->GetValue(), false);
                         aURL.SetTargetFrameName(pAttr->GetTargetFrame());
@@ -1631,7 +1631,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwNodeIndex aIdx(rEntry.m_aMkPos.m_nNode, 1);
             SwPaM aPaM(aIdx, rEntry.m_aMkPos.m_nCntnt);
 
-            SwFmtFld& rFmtFld   = *(SwFmtFld*)rEntry.pAttr;
+            SwFmtFld& rFmtFld   = *static_cast<SwFmtFld*>(rEntry.pAttr);
             SwField* pFld = rFmtFld.GetField();
 
             if (!RefToVar(pFld, rEntry))
@@ -1719,13 +1719,13 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     {
         nTabBase = vColl[nAktColl].nBase;
         if (nTabBase < vColl.size())  // Based On
-            pSty = (const SwTxtFmtColl*)vColl[nTabBase].pFmt;
+            pSty = static_cast<const SwTxtFmtColl*>(vColl[nTabBase].pFmt);
     }
     else
     { // Text
         nTabBase = nAktColl;
         if (nAktColl < vColl.size())
-            pSty = (const SwTxtFmtColl*)vColl[nAktColl].pFmt;
+            pSty = static_cast<const SwTxtFmtColl*>(vColl[nAktColl].pFmt);
         //TODO: figure out else here
     }
 
@@ -1755,7 +1755,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
                 // current one (prevent loop)
                 aLoopWatch.insert(reinterpret_cast<size_t>(pSty));
                 if (nTabBase < vColl.size())
-                    pSty = (const SwTxtFmtColl*)vColl[nTabBase].pFmt;
+                    pSty = static_cast<const SwTxtFmtColl*>(vColl[nTabBase].pFmt);
                 //TODO figure out the else branch
 
                 if (aLoopWatch.find(reinterpret_cast<size_t>(pSty)) !=
@@ -2277,7 +2277,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
 
     this->pFmtOfJustInsertedApo = 0;
     SwPostItField aPostIt(
-        (SwPostItFieldType*)rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD), sAuthor,
+        static_cast<SwPostItFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD)), sAuthor,
         sTxt, sInitials, OUString(), aDate );
     aPostIt.SetTextObject(pOutliner);
 
@@ -2587,7 +2587,7 @@ bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
         bool bRet = false;
         const SwPosition* pSpacingPos = rMyPam.GetPoint();
 
-        const SvxULSpaceItem* pULSpaceItem = (const SvxULSpaceItem*)pCtrlStck->GetFmtAttr(*pSpacingPos, RES_UL_SPACE);
+        const SvxULSpaceItem* pULSpaceItem = static_cast<const SvxULSpaceItem*>(pCtrlStck->GetFmtAttr(*pSpacingPos, RES_UL_SPACE));
 
         if(pULSpaceItem != 0)
         {
@@ -2825,7 +2825,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCharSetFromLanguage()
      correctly set in the character runs involved, so its hard to reproduce
      documents that require this to be sure of the process involved.
     */
-    const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+    const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFmtAttr(RES_CHRATR_LANGUAGE));
     LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
     ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
     return msfilter::util::getBestTextEncodingFromLocale(aLocale);
@@ -2843,7 +2843,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCJKCharSetFromLanguage()
      correctly set in the character runs involved, so its hard to reproduce
      documents that require this to be sure of the process involved.
     */
-    const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_CJK_LANGUAGE);
+    const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFmtAttr(RES_CHRATR_CJK_LANGUAGE));
     LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
     ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
     return msfilter::util::getBestTextEncodingFromLocale(aLocale);
@@ -3384,9 +3384,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
                 }
                 else
                 {
-                    const SvxFontItem *pSourceFont = (const SvxFontItem*)GetFmtAttr(nForceFromFontId);
+                    const SvxFontItem *pSourceFont = static_cast<const SvxFontItem*>(GetFmtAttr(nForceFromFontId));
                     sal_uInt16 nDestId = aIds[nWriterScript-1];
-                    const SvxFontItem *pDestFont = (const SvxFontItem*)GetFmtAttr(nDestId);
+                    const SvxFontItem *pDestFont = static_cast<const SvxFontItem*>(GetFmtAttr(nDestId));
                     bWriterWillUseSameFontAsWordAutomatically = sameFontIgnoringIrrelevantFields(*pSourceFont, *pDestFont);
                 }
             }
@@ -3394,16 +3394,16 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
             // Writer won't use the same font as word, so force the issue
             if (!bWriterWillUseSameFontAsWordAutomatically)
             {
-                const SvxFontItem *pSourceFont = (const SvxFontItem*)GetFmtAttr(nForceFromFontId);
+                const SvxFontItem *pSourceFont = static_cast<const SvxFontItem*>(GetFmtAttr(nForceFromFontId));
 
                 for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
                 {
-                    const SvxFontItem *pDestFont = (const SvxFontItem*)GetFmtAttr(aIds[i]);
+                    const SvxFontItem *pDestFont = static_cast<const SvxFontItem*>(GetFmtAttr(aIds[i]));
                     aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
                     if (aForced[i])
                     {
                         pOverriddenItems[i] =
-                            (const SvxFontItem*)pCtrlStck->GetStackAttr(*pPaM->GetPoint(), aIds[i]);
+                            static_cast<const SvxFontItem*>(pCtrlStck->GetStackAttr(*pPaM->GetPoint(), aIds[i]));
 
                         SvxFontItem aForceFont(*pSourceFont);
                         aForceFont.SetWhich(aIds[i]);
@@ -3583,8 +3583,8 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
             {
                 // Page number
                 SwPageNumberField aFld(
-                    (SwPageNumberFieldType*)rDoc.getIDocumentFieldsAccess().GetSysFldType(
-                    RES_PAGENUMBERFLD ), PG_RANDOM, SVX_NUM_ARABIC);
+                    static_cast<SwPageNumberFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType(
+                    RES_PAGENUMBERFLD )), PG_RANDOM, SVX_NUM_ARABIC);
                 rDoc.getIDocumentContentOperations().InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
             }
             break;
@@ -4066,7 +4066,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 
             // Get the default document dropcap which we can use as our template
             const SwFmtDrop* defaultDrop =
-                (const SwFmtDrop*) GetFmtAttr(RES_PARATR_DROP);
+                static_cast<const SwFmtDrop*>( GetFmtAttr(RES_PARATR_DROP));
             SwFmtDrop aDrop(*defaultDrop);
 
             aDrop.GetLines() = nDropLines;

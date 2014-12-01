@@ -741,7 +741,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
         {
             SwFmtLineNumber aLN;
             if (const SwFmtLineNumber* pLN
-                = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+                = static_cast<const SwFmtLineNumber*>(GetFmtAttr(RES_LINENUMBER)))
             {
                 aLN.SetCountLines( pLN->IsCount() );
             }
@@ -2487,7 +2487,7 @@ void SwWW8ImplReader::StopApo()
             works
             */
             const SfxPoolItem &rItm = pNd->SwCntntNode::GetAttr(RES_BACKGROUND);
-            const SvxBrushItem &rBrush = (const SvxBrushItem&)(rItm);
+            const SvxBrushItem &rBrush = static_cast<const SvxBrushItem&>(rItm);
             if (rBrush.GetColor().GetColor() != COL_AUTO)
                 aBg = rBrush.GetColor();
 
@@ -3200,7 +3200,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToShort( pData );
     sal_Int32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
     const SvxFontHeightItem* pF
-        = (const SvxFontHeightItem*)GetFmtAttr(RES_CHRATR_FONTSIZE);
+        = static_cast<const SvxFontHeightItem*>(GetFmtAttr(RES_CHRATR_FONTSIZE));
     OSL_ENSURE(pF, "Expected to have the fontheight available here");
 
     // #i59022: Check ensure nHeight != 0. Div by zero otherwise.
@@ -3358,7 +3358,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
             {
                 const SwAttrSet& aSet = pAktColl->GetAttrSet();
                 SvxUnderlineItem *pUnderline
-                    = (SvxUnderlineItem *)(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone());
+                    = static_cast<SvxUnderlineItem *>(aSet.Get( RES_CHRATR_UNDERLINE, false ).Clone());
                 if(pUnderline){
                     pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
                     pAktColl->SetFmtAttr( *pUnderline );
@@ -3371,7 +3371,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
             if ( SfxItemState::SET == pAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
                 SvxUnderlineItem *pUnderline
-                    = (SvxUnderlineItem *)(pAktItemSet->Get( RES_CHRATR_UNDERLINE, false ) .Clone());
+                    = static_cast<SvxUnderlineItem *>(pAktItemSet->Get( RES_CHRATR_UNDERLINE, false ) .Clone());
                 if(pUnderline){
                     pUnderline->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32(pData)) ) );
                     pAktItemSet->Put( *pUnderline );
@@ -3381,7 +3381,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         }
         else
         {
-            SvxUnderlineItem* pUnderlineAttr = (SvxUnderlineItem*)pCtrlStck->GetOpenStackAttr( *pPaM->GetPoint(), RES_CHRATR_UNDERLINE );
+            SvxUnderlineItem* pUnderlineAttr = const_cast<SvxUnderlineItem*>(static_cast<const SvxUnderlineItem*>(pCtrlStck->GetOpenStackAttr( *pPaM->GetPoint(), RES_CHRATR_UNDERLINE )));
             if( pUnderlineAttr != NULL )
                 pUnderlineAttr->SetColor( Color( msfilter::util::BGRToRGB(SVBT32ToUInt32( pData ))));
         }
@@ -3764,7 +3764,7 @@ void SwWW8ImplReader::Read_CColl( sal_uInt16, const sal_uInt8* pData, short nLen
         return;
     }
 
-    NewAttr( SwFmtCharFmt( (SwCharFmt*)vColl[nId].pFmt ) );
+    NewAttr( SwFmtCharFmt( static_cast<SwCharFmt*>(vColl[nId].pFmt) ) );
     nCharFmt = (short) nId;
 }
 
@@ -3869,7 +3869,7 @@ void SwWW8ImplReader::Read_NoLineNumb(sal_uInt16 , const sal_uInt8* pData, short
     }
     SwFmtLineNumber aLN;
     if (const SwFmtLineNumber* pLN
-        = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+        = static_cast<const SwFmtLineNumber*>(GetFmtAttr(RES_LINENUMBER)))
     {
         aLN.SetStartValue( pLN->GetStartValue() );
     }
@@ -4011,7 +4011,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                             aLR.SetTxtLeft(pNumFmt->GetIndentAt());
 
                             // If have not explicit left, set number format list tab position is doc default tab
-                            const SvxTabStopItem *pDefaultStopItem = (const SvxTabStopItem *)rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP);
+                            const SvxTabStopItem *pDefaultStopItem = static_cast<const SvxTabStopItem *>(rDoc.GetAttrPool().GetPoolDefaultItem(RES_PARATR_TABSTOP));
                             if ( pDefaultStopItem &&  pDefaultStopItem->Count() > 0 )
                                 ((SwNumFmt*)(pNumFmt))->SetListtabPos( ((SvxTabStop&)(*pDefaultStopItem)[0]).GetTabPos() );
                         }
@@ -4086,8 +4086,8 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
 // nach Absprache mit AMA ist die Begrenzung unsinnig
         if( n>200 ) n = 200;        // SW_UI-Maximum
         aLSpc.SetPropLineSpace( (const sal_uInt8)n );
-        const SvxFontHeightItem* pH = (const SvxFontHeightItem*)
-            GetFmtAttr( RES_CHRATR_FONTSIZE );
+        const SvxFontHeightItem* pH = static_cast<const SvxFontHeightItem*>(
+            GetFmtAttr( RES_CHRATR_FONTSIZE ));
         nSpaceTw = (sal_uInt16)( n * pH->GetHeight() / 100 );
     }
     else                            // Fixed / Minimum
@@ -4121,7 +4121,7 @@ void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, sh
 
     if (*pData)
     {
-        SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
+        SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFmtAttr(RES_UL_SPACE)));
         aUL.SetUpper(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
         if (pAktColl && nAktColl < vColl.size())
@@ -4148,7 +4148,7 @@ void SwWW8ImplReader::Read_ParaAutoAfter(sal_uInt16, const sal_uInt8 *pData, sho
 
     if (*pData)
     {
-        SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
+        SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFmtAttr(RES_UL_SPACE)));
         aUL.SetLower(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
         if (pAktColl && nAktColl < vColl.size())
@@ -4190,7 +4190,7 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     if( nPara < 0 )
         nPara = -nPara;
 
-    SvxULSpaceItem aUL( *(const SvxULSpaceItem*)GetFmtAttr( RES_UL_SPACE ));
+    SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(GetFmtAttr( RES_UL_SPACE )));
 
     switch( nId )
     {
@@ -4218,7 +4218,7 @@ void SwWW8ImplReader::Read_ParaContextualSpacing( sal_uInt16, const sal_uInt8* p
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
-    SvxULSpaceItem aUL( *(const SvxULSpaceItem*)GetFmtAttr( RES_UL_SPACE ));
+    SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(GetFmtAttr( RES_UL_SPACE )));
     aUL.SetContextValue(*pData);
     NewAttr( aUL );
 }
@@ -4287,7 +4287,7 @@ bool SwWW8ImplReader::IsRightToLeft()
     else
     {
         const SvxFrameDirectionItem* pItem=
-            (const SvxFrameDirectionItem*)GetFmtAttr(RES_FRAMEDIR);
+            static_cast<const SvxFrameDirectionItem*>(GetFmtAttr(RES_FRAMEDIR));
         if (pItem && (pItem->GetValue() == FRMDIR_HORI_RIGHT_TOP))
             bRTL = true;
     }
@@ -4359,7 +4359,7 @@ void SwWW8ImplReader::Read_BoolItem( sal_uInt16 nId, const sal_uInt8* pData, sho
         pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
     else
     {
-        SfxBoolItem* pI = (SfxBoolItem*)GetDfltAttr( nId )->Clone();
+        SfxBoolItem* pI = static_cast<SfxBoolItem*>(GetDfltAttr( nId )->Clone());
         pI->SetValue( 0 != *pData );
         NewAttr( *pI );
         delete pI;
@@ -4449,8 +4449,8 @@ void SwWW8ImplReader::Read_Relief( sal_uInt16 nId, const sal_uInt8* pData, short
 //  2 x emboss on -> no emboss !!!
 // the actual value must be searched over the stack / template
 
-            const SvxCharReliefItem* pOld = (const SvxCharReliefItem*)
-                                            GetFmtAttr( RES_CHRATR_RELIEF );
+            const SvxCharReliefItem* pOld = static_cast<const SvxCharReliefItem*>(
+                                            GetFmtAttr( RES_CHRATR_RELIEF ));
             FontRelief nNewValue = 0x854 == nId ? RELIEF_ENGRAVED
                                         : ( 0x858 == nId ? RELIEF_EMBOSSED
                                                          : RELIEF_NONE );
@@ -4732,7 +4732,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
                 // werden, sonst ist kein hartes Ausschalten von Style-Attrs
                 // moeglich
                 const SvxBoxItem* pBox
-                    = (const SvxBoxItem*)GetFmtAttr( RES_BOX );
+                    = static_cast<const SvxBoxItem*>(GetFmtAttr( RES_BOX ));
                 SvxBoxItem aBox(RES_BOX);
                 if (pBox)
                     aBox = *pBox;
@@ -4779,7 +4779,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
     else
     {
         const SvxBoxItem* pBox
-            = (const SvxBoxItem*)GetFmtAttr( RES_CHRATR_BOX );
+            = static_cast<const SvxBoxItem*>(GetFmtAttr( RES_CHRATR_BOX ));
         if( pBox )
         {
             SvxBoxItem aBoxItem(RES_CHRATR_BOX);
@@ -4816,7 +4816,7 @@ void SwWW8ImplReader::Read_Hyphenation( sal_uInt16, const sal_uInt8* pData, shor
     else
     {
         SvxHyphenZoneItem aAttr(
-            *(const SvxHyphenZoneItem*)GetFmtAttr( RES_PARATR_HYPHENZONE ) );
+            *static_cast<const SvxHyphenZoneItem*>(GetFmtAttr( RES_PARATR_HYPHENZONE ) ));
 
         aAttr.SetHyphen( 0 == *pData ); // sic !
 

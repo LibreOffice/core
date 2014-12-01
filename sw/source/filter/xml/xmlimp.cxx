@@ -116,7 +116,7 @@ static SvXMLTokenMapEntry aDocTokenMap[] =
 
 class SwXMLBodyContext_Impl : public SvXMLImportContext
 {
-    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
 public:
 
@@ -161,7 +161,7 @@ class SwXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 
 protected: // #i69629#
-    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
 public:
 

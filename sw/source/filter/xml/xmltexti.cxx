@@ -178,7 +178,7 @@ SvXMLImportContext *SwXMLTextImportHelper::CreateTableChildContext(
                 const uno::Reference< XAttributeList > & xAttrList )
 {
     return new SwXMLTableContext(
-                (SwXMLImport&)rImport, nPrefix, rLocalName, xAttrList );
+                static_cast<SwXMLImport&>(rImport), nPrefix, rLocalName, xAttrList );
 }
 
 bool SwXMLTextImportHelper::IsInHeaderFooter() const

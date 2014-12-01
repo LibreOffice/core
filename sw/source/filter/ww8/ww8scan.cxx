@@ -4811,7 +4811,7 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                     (pPcd->nEndPos != p->nStartPos))
                 {
                     pPcd->nEndPos = p->nStartPos;
-                    ((WW8PLCFx_PCD *)(pPcd->pPLCFx))->SetClipStart(
+                    static_cast<WW8PLCFx_PCD *>(pPcd->pPLCFx)->SetClipStart(
                         p->nStartPos);
                 }
 
@@ -4847,7 +4847,7 @@ void WW8PLCFMan::AdvNoSprm(short nIdx, bool bStart)
         {
             if (aD[nIdx+1].pIdStk->empty())
             {
-                WW8PLCFx_PCD *pTemp = (WW8PLCFx_PCD*)(pPcd->pPLCFx);
+                WW8PLCFx_PCD *pTemp = static_cast<WW8PLCFx_PCD*>(pPcd->pPLCFx);
                 /*
                 #i2325#
                 As per normal, go on to the next set of properties, i.e. we
@@ -4958,23 +4958,23 @@ sal_uInt16 WW8PLCFMan::GetColl() const
 
 WW8PLCFx_FLD* WW8PLCFMan::GetFld() const
 {
-    return (WW8PLCFx_FLD*)pFld->pPLCFx;
+    return static_cast<WW8PLCFx_FLD*>(pFld->pPLCFx);
 }
 
 const sal_uInt8* WW8PLCFMan::HasParaSprm( sal_uInt16 nId ) const
 {
-    return ((WW8PLCFx_Cp_FKP*)pPap->pPLCFx)->HasSprm( nId );
+    return static_cast<WW8PLCFx_Cp_FKP*>(pPap->pPLCFx)->HasSprm( nId );
 }
 
 const sal_uInt8* WW8PLCFMan::HasCharSprm( sal_uInt16 nId ) const
 {
-    return ((WW8PLCFx_Cp_FKP*)pChp->pPLCFx)->HasSprm( nId );
+    return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm( nId );
 }
 
 bool WW8PLCFMan::HasCharSprm(sal_uInt16 nId,
     std::vector<const sal_uInt8 *> &rResult) const
 {
-    return ((WW8PLCFx_Cp_FKP*)pChp->pPLCFx)->HasSprm(nId, rResult);
+    return static_cast<WW8PLCFx_Cp_FKP*>(pChp->pPLCFx)->HasSprm(nId, rResult);
 }
 
 #endif // !DUMP

@@ -677,7 +677,7 @@ void SwWW8ImplReader::InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp,
                             if (nWhich == RES_TXTATR_INETFMT)
                             {
                                 const SwFmtINetFmt *pURL =
-                                    (const SwFmtINetFmt *)pItem;
+                                    static_cast<const SwFmtINetFmt *>(pItem);
                                 sURL = pURL->GetValue();
                             }
                             pCtrlStck->DeleteAndDestroy(nI-1);
@@ -1666,7 +1666,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     }
     else // If a size is set, adjust it to consider border thickness
     {
-        SwFmtFrmSize aSize = (const SwFmtFrmSize &)(rFlySet.Get(RES_FRM_SIZE));
+        SwFmtFrmSize aSize = static_cast<const SwFmtFrmSize &>(rFlySet.Get(RES_FRM_SIZE));
 
         SwFmtFrmSize aNewSize = SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
             aSize.GetWidth()  + 2*nOutside,
@@ -1679,12 +1679,12 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     // graphic in relation to the top left inside the border. We don't
     if (nOutside)
     {
-        SwFmtHoriOrient aHori = (const SwFmtHoriOrient &)(rFlySet.Get(
+        SwFmtHoriOrient aHori = static_cast<const SwFmtHoriOrient &>(rFlySet.Get(
             RES_HORI_ORIENT));
         aHori.SetPos(MakeSafePositioningValue(aHori.GetPos()-nOutside));
         rFlySet.Put(aHori);
 
-        SwFmtVertOrient aVert = (const SwFmtVertOrient &)(rFlySet.Get(
+        SwFmtVertOrient aVert = static_cast<const SwFmtVertOrient &>(rFlySet.Get(
             RES_VERT_ORIENT));
         aVert.SetPos(aVert.GetPos()-nOutside);
         rFlySet.Put(aVert);
@@ -2959,7 +2959,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         pRetFrmFmt = InsertOle(*static_cast<SdrOle2Obj*>(rpObject), rFlySet, aGrSet);
     else
     {
-        const SdrGrafObj *pGrf= (const SdrGrafObj*)rpObject;
+        const SdrGrafObj *pGrf = static_cast<const SdrGrafObj*>(rpObject);
         bool bDone = false;
         if (pGrf->IsLinkedGraphic() && !pGrf->GetFileName().isEmpty())
         {

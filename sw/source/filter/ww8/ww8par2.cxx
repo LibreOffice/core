@@ -314,10 +314,10 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         pPlcxMan->SaveAllPLCFx( aSave );
         WW8PLCFMan* pOldPlcxMan = pPlcxMan;
 
-        const SwNodeIndex* pSttIdx = ((SwTxtFtn*)pFN)->GetStartNode();
+        const SwNodeIndex* pSttIdx = static_cast<SwTxtFtn*>(pFN)->GetStartNode();
         OSL_ENSURE(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
 
-        ((SwTxtFtn*)pFN)->SetSeqNo( rDoc.GetFtnIdxs().size() );
+        static_cast<SwTxtFtn*>(pFN)->SetSeqNo( rDoc.GetFtnIdxs().size() );
 
         bool bOld = bFtnEdn;
         bFtnEdn = true;
@@ -333,7 +333,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         // If no automatic numbering use the following char from the main text
         // as the footnote number
         if (!rDesc.mbAutoNum)
-            ((SwTxtFtn*)pFN)->SetNumber(0, sChar);
+            static_cast<SwTxtFtn*>(pFN)->SetNumber(0, sChar);
 
         /*
             Delete the footnote char from the footnote if its at the beginning
@@ -775,7 +775,7 @@ void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short 
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
-                    ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel );
+                    static_cast<SwTxtFmtColl*>(pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel );
                     // For WW-NoNumbering also NO_NUMBERING could be used.
                     // ( For normal numberierung NO_NUM has to be used:
                     //   NO_NUM : pauses numbering,
@@ -2389,7 +2389,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
             const SfxPoolItem* pItem;
             if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
             {
-                pSetAttr = new SvxFmtBreakItem( *(SvxFmtBreakItem*)pItem );
+                pSetAttr = new SvxFmtBreakItem( *static_cast<const SvxFmtBreakItem*>(pItem) );
                 pNd->ResetAttr( RES_BREAK );
             }
 
@@ -2884,7 +2884,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         if(SwTxtNode *pNd = pIo->pPaM->GetNode().GetTxtNode())
         {
             const SfxPoolItem &rItm = pNd->SwCntntNode::GetAttr(RES_PARATR_SNAPTOGRID);
-            SvxParaGridItem &rSnapToGrid = (SvxParaGridItem&)(rItm);
+            const SvxParaGridItem &rSnapToGrid = static_cast<const SvxParaGridItem&>(rItm);
 
             if(rSnapToGrid.GetValue())
             {
@@ -2912,7 +2912,7 @@ void WW8TabDesc::InsertCells( short nIns )
     pTabBoxes = &pTabLine->GetTabBoxes();
     pTabBox = (*pTabBoxes)[0];
 
-    pIo->rDoc.GetNodes().InsBoxen( pTblNd, pTabLine, (SwTableBoxFmt*)pTabBox->GetFrmFmt(),
+    pIo->rDoc.GetNodes().InsBoxen( pTblNd, pTabLine, static_cast<SwTableBoxFmt*>(pTabBox->GetFrmFmt()),
                             (SwTxtFmtColl*)pIo->pDfltTxtFmtColl, 0, pTabBoxes->size(), nIns );
     // The third parameter contains the FrmFmt of the boxes.
     // Here it is possible to optimize to save (reduce) FrmFmts.
@@ -4440,8 +4440,8 @@ void WW8RStyle::Import()
                  && pj->pFmt                        // Derived-Format ok ?
                  && pi->bColl                       // only possible for paragraph templates (WW)
                  && pj->bColl ){                    // identical Typ ?
-                    ( (SwTxtFmtColl*)pi->pFmt )->SetNextTxtFmtColl(
-                     *(SwTxtFmtColl*)pj->pFmt );    // ok, register
+                    static_cast<SwTxtFmtColl*>(pi->pFmt)->SetNextTxtFmtColl(
+                     *static_cast<SwTxtFmtColl*>(pj->pFmt) );    // ok, register
             }
         }
     }
@@ -4457,7 +4457,7 @@ void WW8RStyle::Import()
 
     if( pIo->StyleExists(0) && !pIo->vColl.empty() &&
         pIo->vColl[0].pFmt && pIo->vColl[0].bColl && pIo->vColl[0].bValid )
-        pIo->pDfltTxtFmtColl = (SwTxtFmtColl*)pIo->vColl[0].pFmt;
+        pIo->pDfltTxtFmtColl = static_cast<SwTxtFmtColl*>(pIo->vColl[0].pFmt);
     else
         pIo->pDfltTxtFmtColl = pIo->rDoc.GetDfltTxtFmtColl();
 

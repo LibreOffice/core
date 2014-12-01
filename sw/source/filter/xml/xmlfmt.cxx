@@ -439,7 +439,7 @@ protected:
                                const OUString& rLocalName,
                                const OUString& rValue ) SAL_OVERRIDE;
 
-    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 
 public:
 
@@ -657,8 +657,8 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, false,
                                                 &pItem ) )
     {
-         if( ((SwFmtPageDesc *)pItem)->GetPageDesc() != pPageDesc )
-            pFmtPageDesc = new SwFmtPageDesc( *(SwFmtPageDesc *)pItem );
+         if( static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc() != pPageDesc )
+            pFmtPageDesc = new SwFmtPageDesc( *static_cast<const SwFmtPageDesc *>(pItem) );
     }
     else
         pFmtPageDesc = new SwFmtPageDesc();
@@ -707,9 +707,9 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
 
 class SwXMLStylesContext_Impl : public SvXMLStylesContext
 {
-    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
     const SwXMLImport& GetSwImport() const
-            { return (const SwXMLImport&)GetImport(); }
+            { return static_cast<const SwXMLImport&>(GetImport()); }
 
 protected:
 
@@ -906,9 +906,9 @@ class SwXMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
 protected:
     virtual bool InsertStyleFamily( sal_uInt16 nFamily ) const SAL_OVERRIDE;
 
-    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
     const SwXMLImport& GetSwImport() const
-            { return (const SwXMLImport&)GetImport(); }
+            { return static_cast<const SwXMLImport&>(GetImport()); }
 
 public:
 

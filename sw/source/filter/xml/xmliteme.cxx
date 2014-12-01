@@ -202,8 +202,8 @@ void SwXMLTableItemMapper_Impl::handleElementItem(
     {
     case RES_BACKGROUND:
         {
-            ((SwXMLTableItemMapper_Impl *)this)->aBrushItemExport.exportXML(
-                                                (const SvxBrushItem&)rItem );
+            const_cast<SwXMLTableItemMapper_Impl *>(this)->aBrushItemExport.exportXML(
+                                                static_cast<const SvxBrushItem&>(rItem) );
         }
         break;
     }
@@ -234,7 +234,7 @@ void SwXMLExport::_FinitItemExport()
 
 void SwXMLExport::ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth )
 {
-    ((SwXMLTableItemMapper_Impl *)pTableItemMapper)
+    static_cast<SwXMLTableItemMapper_Impl *>(pTableItemMapper)
         ->SetAbsWidth( nAbsWidth );
     ExportFmt( rFmt, XML_TABLE );
 }

@@ -243,7 +243,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
 
     if (!bUseEnhFields)
     {
-        SwDropDownField aFld((SwDropDownFieldType*)rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DROPDOWN));
+        SwDropDownField aFld(static_cast<SwDropDownFieldType*>(rDoc.getIDocumentFieldsAccess().GetSysFldType(RES_DROPDOWN)));
 
         aFld.SetName(aFormula.sTitle);
         aFld.SetHelp(aFormula.sHelp);
@@ -1650,7 +1650,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     bool bRes = true;
     if( rStyleInfo.pFmt && rStyleInfo.bColl )
     {
-        bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt);
+        bRes = rDoc.SetTxtFmtColl(rRg, static_cast<SwTxtFmtColl*>(rStyleInfo.pFmt));
         SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode();
         OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
         if ( !pTxtNode )
@@ -1855,7 +1855,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
             {
                 SfxItemSet aListIndent(rDoc.GetAttrPool(), RES_LR_SPACE,
                         RES_LR_SPACE);
-                const SvxLRSpaceItem *pItem = (const SvxLRSpaceItem*)(
+                const SvxLRSpaceItem *pItem = static_cast<const SvxLRSpaceItem*>(
                     GetFmtAttr(RES_LR_SPACE));
                 OSL_ENSURE(pItem, "impossible");
                 if (pItem)
@@ -2292,15 +2292,15 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
                 OUString pNm;
                 if (xPropSetInfo->hasPropertyByName(pNm = "TextColor"))
                 {
-                    aTmp <<= (sal_Int32)((SvxColorItem*)pItem)->GetValue().GetColor();
+                    aTmp <<= (sal_Int32)static_cast<const SvxColorItem*>(pItem)->GetValue().GetColor();
                     rPropSet->setPropertyValue(pNm, aTmp);
                 }
             }
-            aFont.SetColor(((SvxColorItem*)pItem)->GetValue());
+            aFont.SetColor(static_cast<const SvxColorItem*>(pItem)->GetValue());
             break;
         case RES_CHRATR_FONT:
             {
-                const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
+                const SvxFontItem *pFontItem = static_cast<const SvxFontItem *>(pItem);
                 OUString pNm;
                 if (xPropSetInfo->hasPropertyByName(pNm = "FontStyleName"))
                 {
@@ -2335,7 +2335,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         case RES_CHRATR_FONTSIZE:
             {
                 Size aSize( aFont.GetSize().Width(),
-                            ((SvxFontHeightItem*)pItem)->GetHeight() );
+                            static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() );
                 aTmp <<= ((float)aSize.Height()) / 20.0;
 
                 aFont.SetSize(OutputDevice::LogicToLogic(aSize, MAP_TWIP,
@@ -2345,23 +2345,23 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
 
         case RES_CHRATR_WEIGHT:
             aTmp <<= (float)VCLUnoHelper::ConvertFontWeight(
-                                        ((SvxWeightItem*)pItem)->GetWeight() );
-            aFont.SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
+                                        static_cast<const SvxWeightItem*>(pItem)->GetWeight() );
+            aFont.SetWeight( static_cast<const SvxWeightItem*>(pItem)->GetWeight() );
             break;
 
         case RES_CHRATR_UNDERLINE:
-            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetLineStyle());
-            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetLineStyle());
+            aTmp <<= (sal_Int16)(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
+            aFont.SetUnderline(static_cast<const SvxUnderlineItem*>(pItem)->GetLineStyle());
             break;
 
         case RES_CHRATR_CROSSEDOUT:
-            aTmp <<= (sal_Int16)( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
-            aFont.SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
+            aTmp <<= (sal_Int16)( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
+            aFont.SetStrikeout( static_cast<const SvxCrossedOutItem*>(pItem)->GetStrikeout() );
             break;
 
         case RES_CHRATR_POSTURE:
-            aTmp <<= (sal_Int16)( ((SvxPostureItem*)pItem)->GetPosture() );
-            aFont.SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
+            aTmp <<= (sal_Int16)( static_cast<const SvxPostureItem*>(pItem)->GetPosture() );
+            aFont.SetItalic( static_cast<const SvxPostureItem*>(pItem)->GetPosture() );
             break;
 
         default:
