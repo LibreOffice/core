@@ -63,7 +63,7 @@ SwFldPage::~SwFldPage()
 // initialise TabPage
 void SwFldPage::Init()
 {
-    SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
+    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     bool bNewMode = 0 != (::GetHtmlMode(pDocSh) & HTMLMODE_ON);
 
     m_bFldEdit = 0 == GetTabDialog();
@@ -206,9 +206,9 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
                 aData.nCommandType = rPar1.getToken(2, DB_DELIM).toInt32();
                 OUString sColumn = rPar1.getToken(3, DB_DELIM);
 
-                SwDBFieldType* pOldTyp = (SwDBFieldType*)pTmpFld->GetTyp();
-                SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
-                        SwDBFieldType(pSh->GetDoc(), sColumn, aData));
+                SwDBFieldType* pOldTyp = static_cast<SwDBFieldType*>(pTmpFld->GetTyp());
+                SwDBFieldType* pTyp = static_cast<SwDBFieldType*>(pSh->InsertFldType(
+                        SwDBFieldType(pSh->GetDoc(), sColumn, aData)));
 
                 SwIterator<SwFmtFld,SwFieldType> aIter( *pOldTyp );
 
@@ -226,7 +226,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
 
         case TYP_SEQFLD:
             {
-                SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pTmpFld->GetTyp();
+                SwSetExpFieldType* pTyp = static_cast<SwSetExpFieldType*>(pTmpFld->GetTyp());
                 pTyp->SetOutlineLvl( static_cast< sal_uInt8 >(nSubType & 0xff));
                 pTyp->SetDelimiter(OUString(cSeparator));
 
@@ -240,7 +240,7 @@ bool SwFldPage::InsertFld(sal_uInt16 nTypeId, sal_uInt16 nSubType, const OUStrin
                 if (m_aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
                 !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
-                    SwSetExpField* pFld = (SwSetExpField*)pTmpFld;
+                    SwSetExpField* pFld = static_cast<SwSetExpField*>(pTmpFld);
                     pFld->SetPromptText(sPar2);
                     sPar2 = pFld->GetPar2();
                 }
@@ -309,7 +309,7 @@ void SwFldPage::RestorePos(ListBox* pLst1, ListBox* pLst2, ListBox* pLst3)
 // Insert new fields
 IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
 {
-    SwFldDlg *pDlg = (SwFldDlg*)GetTabDialog();
+    SwFldDlg *pDlg = static_cast<SwFldDlg*>(GetTabDialog());
     if (pDlg)
     {
         pDlg->InsertHdl();
@@ -319,7 +319,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
     }
     else
     {
-        SwFldEditDlg *pEditDlg = (SwFldEditDlg *)GetParentDialog();
+        SwFldEditDlg *pEditDlg = static_cast<SwFldEditDlg *>(GetParentDialog());
         pEditDlg->InsertHdl();
     }
 
@@ -329,7 +329,7 @@ IMPL_LINK( SwFldPage, InsertHdl, Button *, pBtn )
 // enable/disable "Insert"-Button
 void SwFldPage::EnableInsert(bool bEnable)
 {
-    SwFldDlg *pDlg = (SwFldDlg*)GetTabDialog();
+    SwFldDlg *pDlg = static_cast<SwFldDlg*>(GetTabDialog());
     if (pDlg)
     {
         if (pDlg->GetCurTabPage() == this)
@@ -337,7 +337,7 @@ void SwFldPage::EnableInsert(bool bEnable)
     }
     else
     {
-        SwFldEditDlg *pEditDlg = (SwFldEditDlg *)GetParentDialog();
+        SwFldEditDlg *pEditDlg = static_cast<SwFldEditDlg *>(GetParentDialog());
         pEditDlg->EnableInsert(bEnable);
     }
 

@@ -119,7 +119,7 @@ void SwFldRefPage::SaveSelectedTxtNode()
         SvTreeListEntry* pEntry = m_pSelectionToolTipLB->GetCurEntry();
         if ( pEntry )
         {
-            const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+            const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
             if ( nTypeId == REFFLDFLAG_HEADING )
             {
@@ -177,9 +177,9 @@ void SwFldRefPage::Reset(const SfxItemSet* )
     // #i83479#
     // entries for headings and numbered items
     nPos = m_pTypeLB->InsertEntry(sHeadingTxt);
-    m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_HEADING);
+    m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(REFFLDFLAG_HEADING));
     nPos = m_pTypeLB->InsertEntry(sNumItemTxt);
-    m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_NUMITEM);
+    m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(REFFLDFLAG_NUMITEM));
 
     // fill up with the sequence types
     SwWrtShell *pSh = GetWrtShell();
@@ -190,31 +190,31 @@ void SwFldRefPage::Reset(const SfxItemSet* )
 
     for (sal_uInt16 n = 0; n < nFldTypeCnt; ++n)
     {
-        SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(n, RES_SETEXPFLD);
+        SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFldType(n, RES_SETEXPFLD));
 
         if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->GetDepends() && pSh->IsUsed(*pType))
         {
             nPos = m_pTypeLB->InsertEntry(pType->GetName());
-            m_pTypeLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(REFFLDFLAG | n));
+            m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>((sal_uIntPtr)(REFFLDFLAG | n)));
         }
     }
 
     // text marks - now always (because of globaldocuments)
     nPos = m_pTypeLB->InsertEntry(sBookmarkTxt);
-    m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_BOOKMARK);
+    m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(REFFLDFLAG_BOOKMARK));
 
     // footnotes:
     if( pSh->HasFtns() )
     {
         nPos = m_pTypeLB->InsertEntry(sFootnoteTxt);
-        m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_FOOTNOTE);
+        m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(REFFLDFLAG_FOOTNOTE));
     }
 
     // endnotes:
     if ( pSh->HasFtns(true) )
     {
         nPos = m_pTypeLB->InsertEntry(sEndnoteTxt);
-        m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_ENDNOTE);
+        m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(REFFLDFLAG_ENDNOTE));
     }
 
     // select old Pos
@@ -236,7 +236,7 @@ void SwFldRefPage::Reset(const SfxItemSet* )
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
-                    if(nVal == (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(i))
+                    if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
@@ -337,7 +337,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
 
     if (nOld != GetTypeSel())
     {
-        sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
         // fill selection-ListBox
         UpdateSubType();
@@ -355,7 +355,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
         switch (nTypeId)
         {
             case TYP_GETREFFLD:
-                if (REFFLDFLAG & (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(nOld))
+                if (REFFLDFLAG & (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld)))
                     // the old one stays
                     nFldDlgFmtSel = m_pFormatLB->GetSelectEntryPos();
                 bName = true;
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
             default:
                 if( REFFLDFLAG & nTypeId )
                 {
-                    const sal_uInt16 nOldId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(nOld);
+                    const sal_uInt16 nOldId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(nOld));
                     if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
                         // then the old one stays
                         nFldDlgFmtSel = m_pFormatLB->GetSelectEntryPos();
@@ -396,7 +396,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
 
 IMPL_LINK_NOARG(SwFldRefPage, SubTypeHdl)
 {
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     switch(nTypeId)
     {
@@ -447,8 +447,8 @@ void SwFldRefPage::UpdateSubType()
     SwWrtShell *pSh = GetWrtShell();
     if(!pSh)
         pSh = ::GetActiveWrtShell();
-    SwGetRefField* pRefFld = (SwGetRefField*)GetCurField();
-    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    SwGetRefField* pRefFld = static_cast<SwGetRefField*>(GetCurField());
+    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     OUString sOldSel;
     // #i83479#
@@ -576,8 +576,8 @@ void SwFldRefPage::UpdateSubType()
             m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle()|WB_SORT);
             // get the fields to Seq-FieldType:
 
-            SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(
-                                nTypeId & ~REFFLDFLAG, RES_SETEXPFLD );
+            SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFldType(
+                                nTypeId & ~REFFLDFLAG, RES_SETEXPFLD ));
             if( pType )
             {
                 SwSeqFldList aArr;
@@ -742,7 +742,7 @@ IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
     const bool bEmptyName = aName.isEmpty();
 
     bool bEnable = true;
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     if ((nTypeId == TYP_SETREFFLD && !GetFldMgr().CanInsertRefMark(aName)) ||
         (bEmptyName && (nTypeId == TYP_GETREFFLD || nTypeId == TYP_SETREFFLD ||
@@ -759,12 +759,12 @@ IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
 bool SwFldRefPage::FillItemSet(SfxItemSet* )
 {
     bool bModified = false;
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     sal_uInt16 nSubType = 0;
     const sal_Int32 nEntryPos = m_pFormatLB->GetSelectEntryPos();
     const sal_uLong nFormat = (nEntryPos == LISTBOX_ENTRY_NOTFOUND)
-        ? 0 : (sal_uLong)m_pFormatLB->GetEntryData(nEntryPos);
+        ? 0 : reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(nEntryPos));
 
     OUString aVal(m_pValueED->GetText());
     OUString aName(m_pNameED->GetText());
@@ -788,7 +788,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
         }
     }
 
-    SwGetRefField* pRefFld = (SwGetRefField*)GetCurField();
+    SwGetRefField* pRefFld = static_cast<SwGetRefField*>(GetCurField());
 
     if (REFFLDFLAG & nTypeId)
     {
@@ -891,8 +891,8 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
         else                                // SeqenceFields
         {
             // get fields for Seq-FeldType:
-            SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(
-                                    nTypeId & ~REFFLDFLAG, RES_SETEXPFLD );
+            SwSetExpFieldType* pType = static_cast<SwSetExpFieldType*>(pSh->GetFldType(
+                                    nTypeId & ~REFFLDFLAG, RES_SETEXPFLD ));
             if( pType )
             {
                 SwSeqFldList aArr;

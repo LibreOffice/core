@@ -157,7 +157,7 @@ void SwFldFuncPage::Reset(const SfxItemSet* )
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); i++)
-                    if(nVal == (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(i))
+                    if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
@@ -195,7 +195,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 
     if (nOld != GetTypeSel())
     {
-        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
         // fill Selection-Listbox
         UpdateSubType();
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
         {
             if(bDropDown)
             {
-                const SwDropDownField* pDrop = (const SwDropDownField*)GetCurField();
+                const SwDropDownField* pDrop = static_cast<const SwDropDownField*>(GetCurField());
                 uno::Sequence<OUString> aItems = pDrop->GetItemSequence();
                 const OUString* pArray = aItems.getConstArray();
                 m_pListItemsLB->Clear();
@@ -376,7 +376,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 
 IMPL_LINK_NOARG(SwFldFuncPage, SelectHdl)
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     if( TYP_MACROFLD == nTypeId )
         m_pNameED->SetText( m_pSelectionLB->GetSelectEntry() );
@@ -456,7 +456,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, ListEnableHdl)
 // renew types in SelectionBox
 void SwFldFuncPage::UpdateSubType()
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     // fill Selction-Listbox
     m_pSelectionLB->SetUpdateMode(false);
@@ -512,13 +512,13 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
 
 bool SwFldFuncPage::FillItemSet(SfxItemSet* )
 {
-    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     sal_uInt16 nSubType = 0;
 
     const sal_Int32 nEntryPos = m_pFormatLB->GetSelectEntryPos();
     const sal_uLong nFormat = (nEntryPos == LISTBOX_ENTRY_NOTFOUND)
-        ? 0 : (sal_uLong)m_pFormatLB->GetEntryData(nEntryPos);
+        ? 0 : reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(nEntryPos));
 
     OUString aVal(m_pValueED->GetText());
     OUString aName(m_pNameED->GetText());
@@ -623,7 +623,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, ModifyHdl)
     const sal_Int32 nLen = m_pNameED->GetText().getLength();
 
     bool bEnable = true;
-    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     if( TYP_COMBINED_CHARS == nTypeId &&
         (!nLen || nLen > MAX_COMBINED_CHARACTERS ))

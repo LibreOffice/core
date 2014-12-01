@@ -383,7 +383,7 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
         OSL_ENSURE(::GetActiveView(), "no active view");
 
-        SvxFontListItem aFontListItem( *( (SvxFontListItem*)::GetActiveView()->
+        SvxFontListItem aFontListItem( *static_cast<const SvxFontListItem*>(::GetActiveView()->
             GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ) ) );
 
         aSet.Put (SvxFontListItem( aFontListItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));

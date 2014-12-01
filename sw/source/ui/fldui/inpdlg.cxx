@@ -61,7 +61,7 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
     {   // it is an input field
 
-        pInpFld = (SwInputField*)pField;
+        pInpFld = static_cast<SwInputField*>(pField);
         m_pLabelED->SetText( pInpFld->GetPar2() );
         sal_uInt16 nSubType = pInpFld->GetSubType();
 
@@ -73,8 +73,8 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
 
             case INP_USR:
                 // user field
-                if( 0 != ( pUsrType = (SwUserFieldType*)rSh.GetFldType(
-                            RES_USERFLD, pInpFld->GetPar1() ) ) )
+                if( 0 != ( pUsrType = static_cast<SwUserFieldType*>(rSh.GetFldType(
+                            RES_USERFLD, pInpFld->GetPar1() ) )  ) )
                     aStr = pUsrType->GetContent();
                 break;
         }
@@ -82,7 +82,7 @@ SwFldInputDlg::SwFldInputDlg( vcl::Window *pParent, SwWrtShell &rS,
     else
     {
         // it is a SetExpression
-        pSetFld = (SwSetExpField*)pField;
+        pSetFld = static_cast<SwSetExpField*>(pField);
         OUString sFormula(pSetFld->GetFormula());
         //values are formatted - formulas are not
         CharClass aCC( LanguageTag( pSetFld->GetLanguage() ));

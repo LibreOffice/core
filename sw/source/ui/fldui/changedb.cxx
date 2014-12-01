@@ -149,14 +149,14 @@ SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
                     return pChild;
             }
             SvTreeListEntry* pRet = m_pUsedDBTLB->InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-            pRet->SetUserData((void*)nCommandType);
+            pRet->SetUserData(reinterpret_cast<void*>(nCommandType));
             return pRet;
         }
     }
     pParent = m_pUsedDBTLB->InsertEntry(sDBName, aDBImg, aDBImg);
 
     SvTreeListEntry* pRet = m_pUsedDBTLB->InsertEntry(sTableName, rToInsert, rToInsert, pParent);
-    pRet->SetUserData((void*)nCommandType);
+    pRet->SetUserData(reinterpret_cast<void*>(nCommandType));
     return pRet;
 }
 
@@ -182,7 +182,7 @@ void SwChangeDBDlg::UpdateFlds()
         {
             OUString sTmp(m_pUsedDBTLB->GetEntryText( m_pUsedDBTLB->GetParent( pEntry )) +
                           OUString(DB_DELIM) + m_pUsedDBTLB->GetEntryText( pEntry ) + OUString(DB_DELIM) +
-                          OUString::number((int)(sal_uLong)pEntry->GetUserData()));
+                          OUString::number((int)reinterpret_cast<sal_uLong>(pEntry->GetUserData())));
             aDBNames.push_back(sTmp);
         }
         pEntry = m_pUsedDBTLB->NextSelected(pEntry);

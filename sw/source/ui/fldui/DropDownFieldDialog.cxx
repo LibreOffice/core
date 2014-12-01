@@ -54,7 +54,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog(vcl::Window *pParent, SwWrtShell &r
     if( RES_DROPDOWN == pField->GetTyp()->Which() )
     {
 
-        pDropField = (SwDropDownField*)pField;
+        pDropField = static_cast<SwDropDownField*>(pField);
         OUString sTitle = GetText();
         sTitle += pDropField->GetPar2();
         SetText(sTitle);

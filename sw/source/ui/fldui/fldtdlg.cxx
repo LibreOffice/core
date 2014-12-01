@@ -60,7 +60,7 @@ SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, vcl::Window *pParent
     , m_nDbId(0)
 {
     SetStyle(GetStyle()|WB_STDMODELESS);
-    m_bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
+    m_bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
 
     GetCancelButton().SetClickHdl(LINK(this, SwFldDlg, CancelHdl));
 
@@ -162,7 +162,7 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
 {
     if ( nID == m_nDokInf )
     {
-        SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
+        SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
         SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
         using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -202,7 +202,7 @@ IMPL_LINK_NOARG(SwFldDlg, CancelHdl)
 // newly initialise dialog after Doc-Switch
 void SwFldDlg::ReInitDlg()
 {
-    SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
+    SwDocShell* pDocSh = static_cast<SwDocShell*>(SfxObjectShell::Current());
     bool bNewMode = (::GetHtmlMode(pDocSh) & HTMLMODE_ON) != 0;
 
     if (bNewMode != m_bHtmlMode)
@@ -236,7 +236,7 @@ void SwFldDlg::ReInitDlg()
 // newly initialise TabPage after Doc-Switch
 void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, bool bOnlyActivate )
 {
-    SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
+    SwFldPage* pPage = static_cast<SwFldPage* >(GetTabPage(nPageId));
     if ( pPage )
         pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
 }
@@ -247,7 +247,7 @@ void SwFldDlg::Activate()
     SwView* pView = ::GetActiveView();
     if( pView )
     {
-        bool bHtmlMode = (::GetHtmlMode((SwDocShell*)SfxObjectShell::Current()) & HTMLMODE_ON) != 0;
+        bool bHtmlMode = (::GetHtmlMode(static_cast<SwDocShell*>(SfxObjectShell::Current())) & HTMLMODE_ON) != 0;
         const SwWrtShell& rSh = pView->GetWrtShell();
         GetOKButton().Enable( !rSh.IsReadOnlyAvailable() ||
                               !rSh.HasReadonlySel() );
@@ -288,7 +288,7 @@ void SwFldDlg::ActivateDatabasePage()
     SfxTabPage* pDBPage = GetTabPage(m_nDbId);
     if( pDBPage )
     {
-        ((SwFldDBPage*)pDBPage)->ActivateMailMergeAddress();
+        static_cast<SwFldDBPage*>(pDBPage)->ActivateMailMergeAddress();
     }
     //remove all other pages
     RemoveTabPage("document");

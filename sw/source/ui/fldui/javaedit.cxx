@@ -74,7 +74,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
     m_pEditED->SetFont( aFont );
 
     pMgr = new SwFldMgr;
-    pFld = (SwScriptField*)pMgr->GetCurFld();
+    pFld = static_cast<SwScriptField*>(pMgr->GetCurFld());
 
     bNew = !(pFld && pFld->GetTyp()->Which() == RES_SCRIPTFLD);
 
@@ -97,7 +97,7 @@ IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, PrevHdl)
 {
     SetFld();
     pMgr->GoPrev();
-    pFld = (SwScriptField*)pMgr->GetCurFld();
+    pFld = static_cast<SwScriptField*>(pMgr->GetCurFld());
     CheckTravel();
     RadioButtonHdl(NULL);
 
@@ -109,7 +109,7 @@ IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, NextHdl)
 {
     SetFld();
     pMgr->GoNext();
-    pFld = (SwScriptField*)pMgr->GetCurFld();
+    pFld = static_cast<SwScriptField*>(pMgr->GetCurFld());
     CheckTravel();
     RadioButtonHdl(NULL);
 

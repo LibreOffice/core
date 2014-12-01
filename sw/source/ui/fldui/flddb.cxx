@@ -154,7 +154,7 @@ void SwFldDBPage::Reset(const SfxItemSet*)
             if(nVal != USHRT_MAX)
             {
                 for (sal_Int32 i = 0; i < m_pTypeLB->GetEntryCount(); ++i)
-                    if(nVal == (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(i))
+                    if(nVal == (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(i)))
                     {
                         m_pTypeLB->SelectEntryPos(i);
                         break;
@@ -196,7 +196,7 @@ bool SwFldDBPage::FillItemSet(SfxItemSet* )
 
     if(!aData.sDataSource.isEmpty())       // without database no new field command
     {
-        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
         sal_uLong nFormat = 0;
         sal_uInt16 nSubType = 0;
 
@@ -222,8 +222,8 @@ bool SwFldDBPage::FillItemSet(SfxItemSet* )
             break;
 
         case TYP_DBSETNUMBERFLD:
-            nFormat = (sal_uLong)m_pFormatLB->GetEntryData(
-                                m_pFormatLB->GetSelectEntryPos() );
+            nFormat = reinterpret_cast<sal_uLong>(m_pFormatLB->GetEntryData(
+                                m_pFormatLB->GetSelectEntryPos() ));
             break;
         }
 
@@ -277,7 +277,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
         if(!pSh)
             pSh = ::GetActiveWrtShell();
         bool bCond = false, bSetNo = false, bFormat = false, bDBFormat = false;
-        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
         m_pDatabaseTLB->ShowColumns(nTypeId == TYP_DBFLD);
 
@@ -343,8 +343,8 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 if( IsFldEdit() )
                 {
                     for( sal_Int32 nI = m_pFormatLB->GetEntryCount(); nI; )
-                        if( GetCurField()->GetFormat() == (sal_uLong)
-                            m_pFormatLB->GetEntryData( --nI ))
+                        if( GetCurField()->GetFormat() == reinterpret_cast<sal_uLong>(
+                            m_pFormatLB->GetEntryData( --nI )))
                         {
                             m_pFormatLB->SelectEntryPos( nI );
                             break;
@@ -390,7 +390,7 @@ IMPL_LINK( SwFldDBPage, NumSelectHdl, NumFormatListBox *, pLB )
 void SwFldDBPage::CheckInsert()
 {
     bool bInsert = true;
-    const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+    const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
     SvTreeListEntry* pEntry = m_pDatabaseTLB->GetCurEntry();
 
@@ -421,7 +421,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     SvTreeListEntry* pEntry = pBox->GetCurEntry();
     if (pEntry)
     {
-        const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
+        const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
         pEntry = m_pDatabaseTLB->GetParent(pEntry);
 
@@ -478,14 +478,14 @@ void    SwFldDBPage::FillUserData()
 {
     const sal_Int32 nEntryPos = m_pTypeLB->GetSelectEntryPos();
     const sal_uInt16 nTypeSel = ( LISTBOX_ENTRY_NOTFOUND == nEntryPos )
-        ? USHRT_MAX : (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData( nEntryPos );
+        ? USHRT_MAX : (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData( nEntryPos ));
     SetUserData(USER_DATA_VERSION ";" + OUString::number( nTypeSel ));
 }
 
 void SwFldDBPage::ActivateMailMergeAddress()
 {
     sal_uLong nData = TYP_DBFLD;
-    m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos( (const void*) nData ));
+    m_pTypeLB->SelectEntryPos(m_pTypeLB->GetEntryPos( reinterpret_cast<const void*>( nData ) ));
     m_pTypeLB->GetSelectHdl().Call(m_pTypeLB);
     const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
     m_pDatabaseTLB->Select(rData.sDataSource, rData.sCommand, aEmptyOUStr);

@@ -102,7 +102,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
 // initialise controls
 void SwFldEditDlg::Init()
 {
-    SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
+    SwFldPage* pTabPage = static_cast<SwFldPage*>(GetTabPage());
 
     if( pTabPage )
     {
@@ -239,7 +239,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     pSh->EnterStdMode();
 
     SwFieldType *pOldTyp = 0;
-    SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
+    SwFldPage* pTabPage = static_cast<SwFldPage*>(GetTabPage());
 
     //#112462# FillItemSet may delete the current field
     //that's why it has to be called before accessing the current field
@@ -249,7 +249,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     SwFldMgr& rMgr = pTabPage->GetFldMgr();
     SwField *pCurFld = rMgr.GetCurFld();
     if (pCurFld->GetTypeId() == TYP_DBFLD)
-        pOldTyp = (SwDBFieldType*)pCurFld->GetTyp();
+        pOldTyp = static_cast<SwDBFieldType*>(pCurFld->GetTyp());
 
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurFld = rMgr.GetCurFld();
@@ -264,7 +264,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     sal_uInt16 nGroup = rMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
     if (nGroup != pTabPage->GetGroup())
-        pTabPage = (SwFldPage*)CreatePage(nGroup);
+        pTabPage = static_cast<SwFldPage*>(CreatePage(nGroup));
 
     pTabPage->EditNewField();
 
@@ -275,7 +275,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 
 IMPL_LINK_NOARG(SwFldEditDlg, AddressHdl)
 {
-    SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
+    SwFldPage* pTabPage = static_cast<SwFldPage*>(GetTabPage());
     SwFldMgr& rMgr = pTabPage->GetFldMgr();
     SwField *pCurFld = rMgr.GetCurFld();
 
