@@ -122,12 +122,12 @@ copy-stuff:
 # android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
 # extent).
 #
-	mkdir -p assets/gz.unpack/program/ure assets/lib assets/program/services assets/ure/share/misc assets/ComponentTarget/i18npool/util
+	mkdir -p assets/lib assets/program/services assets/ComponentTarget/i18npool/util
 	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/offapi.rdb >assets/gz.unpack/program/offapi.rdb
 	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
 	gzip -9 <$(INSTDIR)/$(LIBO_URE_MISC_FOLDER)/types.rdb >assets/gz.unpack/program/udkapi.rdb
 # For some reason the vnd.sun.star.expand:$LO_LIB_DIR doesn't seem to work, it expands to empty!?
-	for F in program/services/services ure/share/misc/services; do \
+	for F in program/services/services program/services; do \
 		sed -e 's!uri="vnd.sun.star.expand:$$LO_LIB_DIR/!uri="file://$$APP_DATA_DIR/lib/!g' <$(INSTDIR)/$$F.rdb >assets/$$F.rdb; \
 	done
 	cp $(SRC_ROOT)/android/default-document/example.odt assets/example.odt
@@ -165,7 +165,7 @@ copy-stuff:
 	echo '[Bootstrap]' > assets/program/unorc
 	echo 'URE_INTERNAL_LIB_DIR=file://$$APP_DATA_DIR/lib/' >> assets/program/unorc
 	echo 'UNO_TYPES=file://$$APP_DATA_DIR/program/udkapi.rdb file://$$APP_DATA_DIR/program/offapi.rdb file://$$APP_DATA_DIR/program/oovbaapi.rdb' >> assets/program/unorc
-	echo 'UNO_SERVICES=file:///assets/ure/share/misc/services.rdb file:///assets/program/services/services.rdb' >> assets/program/unorc
+	echo 'UNO_SERVICES=file:///assets/program/services.rdb file:///assets/program/services/services.rdb' >> assets/program/unorc
 #
 # Set up bootstraprc
 	echo '[Bootstrap]' > assets/program/bootstraprc
