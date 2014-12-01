@@ -170,20 +170,20 @@ void SwViewImp::SetFirstVisPage()
         //We are in an action and because of erase actions the VisArea is
         //after the first visible page.
         //To avoid excessive formatting, hand back the last page.
-        pFirstVisPage = (SwPageFrm*)pSh->GetLayout()->Lower();
+        pFirstVisPage = static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
         while ( pFirstVisPage && pFirstVisPage->GetNext() )
-            pFirstVisPage = (SwPageFrm*)pFirstVisPage->GetNext();
+            pFirstVisPage = static_cast<SwPageFrm*>(pFirstVisPage->GetNext());
     }
     else
     {
         const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
-        SwPageFrm *pPage = (SwPageFrm*)pSh->GetLayout()->Lower();
+        SwPageFrm *pPage = static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
         SwRect aPageRect = pPage->GetBoundRect();
         while ( pPage && !aPageRect.IsOver( pSh->VisArea() ) )
         {
-            pPage = (SwPageFrm*)pPage->GetNext();
+            pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             if ( pPage )
             {
                 aPageRect = pPage->GetBoundRect();
@@ -194,7 +194,7 @@ void SwViewImp::SetFirstVisPage()
                 }
             }
         }
-        pFirstVisPage = pPage ? pPage : (SwPageFrm*)pSh->GetLayout()->Lower();
+        pFirstVisPage = pPage ? pPage : static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
     }
     bFirstPageInvalid = false;
 }
@@ -294,7 +294,7 @@ void SwViewImp::DisposeAccessible( const SwFrm *pFrm,
     {
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().Dispose( pFrm, pObj, 0, bRecursive );
-        pTmp = (SwViewShell *)pTmp->GetNext();
+        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
     } while ( pTmp != pVSh );
 }
 
@@ -309,7 +309,7 @@ void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, 0,
                                                                  rOldFrm );
-        pTmp = (SwViewShell *)pTmp->GetNext();
+        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
     } while ( pTmp != pVSh );
 }
 
@@ -322,7 +322,7 @@ void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
     {
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().InvalidateContent( pFrm );
-        pTmp = (SwViewShell *)pTmp->GetNext();
+        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
     } while ( pTmp != pVSh );
 }
 
@@ -343,7 +343,7 @@ void SwViewImp::InvalidateAccessibleEditableState( bool bAllShells,
         {
             if( pTmp->Imp()->IsAccessible() )
                 pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE, pFrm );
-            pTmp = (SwViewShell *)pTmp->GetNext();
+            pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
         } while ( pTmp != pVSh );
     }
     else if( IsAccessible() )
@@ -362,7 +362,7 @@ void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
         if( pTmp->Imp()->IsAccessible() )
             pTmp->Imp()->GetAccessibleMap().InvalidateRelationSet( pMaster,
                                                                    pFollow );
-        pTmp = (SwViewShell *)pTmp->GetNext();
+        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
     } while ( pTmp != pVSh );
 }
 
@@ -393,7 +393,7 @@ void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxt
                             InvalidateParaFlowRelation( *_pToTxtFrm, false );
             }
         }
-        pTmp = (SwViewShell *)pTmp->GetNext();
+        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
     } while ( pTmp != pVSh );
 }
 
@@ -409,7 +409,7 @@ void SwViewImp::_InvalidateAccessibleParaTextSelection()
             pTmp->Imp()->GetAccessibleMap().InvalidateTextSelectionOfAllParas();
         }
 
-        pTmp = (SwViewShell *)pTmp->GetNext();
+        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
     } while ( pTmp != pVSh );
 }
 
@@ -425,7 +425,7 @@ void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
             pTmp->Imp()->GetAccessibleMap().InvalidateAttr( rTxtFrm );
         }
 
-        pTmp = (SwViewShell *)pTmp->GetNext();
+        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
     } while ( pTmp != pVSh );
 }
 

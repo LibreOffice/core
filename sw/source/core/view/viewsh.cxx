@@ -224,7 +224,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     //will this put the EndAction of the last shell in the sequence?
 
     SwViewShell::mbLstAct = true;
-    SwViewShell *pSh = (SwViewShell*)this->GetNext();
+    SwViewShell *pSh = static_cast<SwViewShell*>(this->GetNext());
     while ( pSh != this )
     {
         if ( pSh->ActionPend() )
@@ -233,7 +233,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             pSh = this;
         }
         else
-            pSh = (SwViewShell*)pSh->GetNext();
+            pSh = static_cast<SwViewShell*>(pSh->GetNext());
     }
 
     const bool bIsShellForCheckViewLayout = ( this == GetLayout()->GetCurrShell() );
@@ -505,7 +505,7 @@ bool SwViewShell::AddPaintRect( const SwRect & rRect )
         else
                 bRet |= pSh->Imp()->AddPaintRect( rRect );
         }
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
     } while ( pSh != this );
     return bRet;
 }
@@ -524,7 +524,7 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
                 else if ( pSh->VisArea().IsOver( rRect ) )
                     pSh->GetWin()->Invalidate( rRect.SVRect() );
             }
-            pSh = (SwViewShell*)pSh->GetNext();
+            pSh = static_cast<SwViewShell*>(pSh->GetNext());
 
         } while ( pSh != this );
     }
@@ -654,7 +654,7 @@ void SwViewShell::LayoutIdle()
     do
     {   if ( !pSh->GetWin() )
             return;
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
 
     } while ( pSh != this );
 
@@ -953,7 +953,7 @@ void SwViewShell::SetFirstVisPageInvalid()
     {
         if ( pSh->Imp() )
             pSh->Imp()->SetFirstVisPageInvalid();
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
 
     } while ( pSh != this );
 }
@@ -1032,9 +1032,9 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             // If possible, don't scroll the application background
             // (PaintDesktop).  Also limit the left and right side of
             // the scroll range to the pages.
-            const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();
+            const SwPageFrm *pPage = static_cast<SwPageFrm*>(GetLayout()->Lower());
             if ( pPage->Frm().Top() > pOldPage->Frm().Top() )
-                pPage = (SwPageFrm*)pOldPage;
+                pPage = static_cast<const SwPageFrm*>(pOldPage);
             SwRect aBoth( VisArea() );
             aBoth.Union( aPrevArea );
             const SwTwips nBottom = aBoth.Bottom();
@@ -1093,7 +1093,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                         }
                     }
                 }
-                pPage = (SwPageFrm*)pPage->GetNext();
+                pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
             }
             Rectangle aRect( aPrevArea.SVRect() );
             aRect.Left()  = nMinLeft;
@@ -1530,7 +1530,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
     {
         if ( pPage->IsInvalid() || pPage->IsInvalidFly() )
             bRet = true;
-        pPage = (SwPageFrm*)pPage->GetNext();
+        pPage = static_cast<const SwPageFrm*>(pPage->GetNext());
     }
 
     if ( bRet )
@@ -1966,7 +1966,7 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
     LockPaint();
     StartAction();
 
-    SwPageFrm *pPg = (SwPageFrm*)GetLayout()->Lower();
+    SwPageFrm *pPg = static_cast<SwPageFrm*>(GetLayout()->Lower());
     do
     {   pPg->InvalidateSize();
         pPg->_InvalidatePrt();
@@ -1976,7 +1976,7 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
             pPg->PrepareHeader();
             pPg->PrepareFooter();
         }
-        pPg = (SwPageFrm*)pPg->GetNext();
+        pPg = static_cast<SwPageFrm*>(pPg->GetNext());
     } while ( pPg );
 
     // When the size ratios in browse mode change,
@@ -1989,7 +1989,7 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
 
     GetLayout()->InvalidateAllCntnt( nInv );
 
-    SwFrm::CheckPageDescs( (SwPageFrm*)GetLayout()->Lower() );
+    SwFrm::CheckPageDescs( static_cast<SwPageFrm*>(GetLayout()->Lower()) );
 
     EndAction();
     UnlockPaint();
@@ -2045,7 +2045,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
     SwViewShell *pSh = this;
     do
     {   pSh->StartAction();
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
     } while ( pSh != this );
 
     ImplApplyViewOptions( rOpt );
@@ -2053,7 +2053,7 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
     // With one layout per view it is not longer necessary
     // to sync these "layout related" view options
     // But as long as we have to disable "multiple layout"
-    pSh = (SwViewShell*)this->GetNext();
+    pSh = static_cast<SwViewShell*>(this->GetNext());
     while ( pSh != this )
     {
         SwViewOption aOpt( *pSh->GetViewOptions() );
@@ -2066,14 +2066,14 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
         aOpt.SetPostIts(rOpt.IsPostIts());
         if ( !(aOpt == *pSh->GetViewOptions()) )
             pSh->ImplApplyViewOptions( aOpt );
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
     }
     // End of disabled multiple window
 
     pSh = this;
     do
     {   pSh->EndAction();
-        pSh = (SwViewShell*)pSh->GetNext();
+        pSh = static_cast<SwViewShell*>(pSh->GetNext());
     } while ( pSh != this );
 
 }
@@ -2102,8 +2102,8 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
     }
     if ( mpOpt->IsShowHiddenPara() != rOpt.IsShowHiddenPara() )
     {
-        SwHiddenParaFieldType* pFldType = (SwHiddenParaFieldType*)GetDoc()->
-                                          getIDocumentFieldsAccess().GetSysFldType(RES_HIDDENPARAFLD);
+        SwHiddenParaFieldType* pFldType = static_cast<SwHiddenParaFieldType*>(GetDoc()->
+                                          getIDocumentFieldsAccess().GetSysFldType(RES_HIDDENPARAFLD));
         if( pFldType && pFldType->GetDepends() )
         {
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
@@ -2202,14 +2202,14 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( bOnlineSpellChgd )
     {
-        SwViewShell *pSh = (SwViewShell*)this->GetNext();
+        SwViewShell *pSh = static_cast<SwViewShell*>(this->GetNext());
         bool bOnlineSpl = rOpt.IsOnlineSpell();
         while( pSh != this )
         {   pSh->mpOpt->SetOnlineSpell( bOnlineSpl );
             vcl::Window *pTmpWin = pSh->GetWin();
             if( pTmpWin )
                 pTmpWin->Invalidate();
-            pSh = (SwViewShell*)pSh->GetNext();
+            pSh = static_cast<SwViewShell*>(pSh->GetNext());
         }
     }
 

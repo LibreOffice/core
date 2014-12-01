@@ -288,7 +288,7 @@ static void lcl_commitGrammarMarkUp(
         const sal_Int32 nFieldPosModel = aStartPos.mnPos;
         const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
 
-        SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
+        SwGrammarMarkUp* pSubList = static_cast<SwGrammarMarkUp*>(pWList->SubList( nInsertPos ));
         if ( !pSubList )
         {
             pSubList = new SwGrammarMarkUp();
@@ -313,7 +313,7 @@ static void lcl_commitGrammarMarkUp(
         {
             const sal_Int32 nFieldPosModel = aStartPos.mnPos;
             const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
-            SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
+            SwGrammarMarkUp* pSubList = static_cast<SwGrammarMarkUp*>(pWList->SubList( nInsertPos ));
             if ( !pSubList )
             {
                 pSubList = new SwGrammarMarkUp();
@@ -330,7 +330,7 @@ static void lcl_commitGrammarMarkUp(
         {
             const sal_Int32 nFieldPosModel = aEndPos.mnPos;
             const sal_uInt16 nInsertPos = pWList->GetWrongPos( nFieldPosModel );
-            SwGrammarMarkUp* pSubList = (SwGrammarMarkUp*)pWList->SubList( nInsertPos );
+            SwGrammarMarkUp* pSubList = static_cast<SwGrammarMarkUp*>(pWList->SubList( nInsertPos ));
             if ( !pSubList )
             {
                 pSubList = new SwGrammarMarkUp();

@@ -358,7 +358,7 @@ SwViewShell::~SwViewShell()
         GetLayout()->DeRegisterShell( this );
         if(mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell()==this)
             mpDoc->getIDocumentLayoutAccess().SetCurrentViewShell( this->GetNext()!=this ?
-            (SwViewShell*)this->GetNext() : NULL );
+            static_cast<SwViewShell*>(this->GetNext()) : NULL );
     }
 
     delete mpTmpRef;

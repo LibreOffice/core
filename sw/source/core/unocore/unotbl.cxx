@@ -3645,11 +3645,11 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException, 
             ++aIdx;
             SwNode *const pNd = & aIdx.GetNode();
             if ( pNd->IsOLENode() &&
-                aOldName == ((SwOLENode*)pNd)->GetChartTblName() )
+                aOldName == static_cast<const SwOLENode*>(pNd)->GetChartTblName() )
             {
-                ((SwOLENode*)pNd)->SetChartTblName( rName );
+                const_cast<SwOLENode*>(static_cast<const SwOLENode*>(pNd))->SetChartTblName( rName );
 
-                ((SwOLENode*)pNd)->GetOLEObj();
+                static_cast<SwOLENode*>(pNd)->GetOLEObj();
 
                 SwTable* pTable = SwTable::FindTable( pFmt );
                 //TL_CHART2: chart needs to be notfied about name changes
@@ -3700,7 +3700,7 @@ sal_uInt16 SwXTextTable::getColumnCount(void)
 void SwXTextTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     if(pOld && pOld->Which() == RES_REMOVE_UNO_OBJECT &&
-        (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
+        (void*)GetRegisteredIn() == static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject )
             ((SwModify*)GetRegisteredIn())->Remove(this);
     else
         ClientModify(this, pOld, pNew);
@@ -3977,7 +3977,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                     pDoc->GetTabBorders(rCrsr, aSet);
 
                     aSet.Put(aBoxInfo);
-                    SvxBoxItem aBoxItem((const SvxBoxItem&)aSet.Get(RES_BOX));
+                    SvxBoxItem aBoxItem(static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX)));
                     ((SfxPoolItem&)aBoxItem).PutValue(aValue, pEntry->nMemberId);
                     aSet.Put(aBoxItem);
                     pDoc->SetTabBorders( *pTblCrsr, aSet );
@@ -4065,7 +4065,7 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName)
                                     0);
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
                     pDoc->GetTabBorders(*pTblCrsr, aSet);
-                    const SvxBoxItem& rBoxItem = ((const SvxBoxItem&)aSet.Get(RES_BOX));
+                    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(aSet.Get(RES_BOX));
                     rBoxItem.QueryValue(aRet, pEntry->nMemberId);
                 }
                 break;
@@ -4234,7 +4234,7 @@ void SwXCellRange::GetDataSequence(
                             {
                                 // please note that the language of the numberformat
                                 // is implicitly coded into the below value as well
-                                nFIndex = ((SwTblBoxNumFormat*)pItem)->GetValue();
+                                nFIndex = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
 
                                 // since the current value indicates a text format but the call
                                 // to 'IsNumberFormat' below won't work for text formats

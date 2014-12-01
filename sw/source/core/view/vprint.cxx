@@ -324,7 +324,7 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     OSL_ENSURE( this->IsA( TYPE(SwFEShell) ),"SwViewShell::Prt for FEShell only");
-    SwFEShell* pFESh = (SwFEShell*)this;
+    SwFEShell* pFESh = static_cast<SwFEShell*>(this);
     pPrtDoc->getIDocumentFieldsAccess().LockExpFlds();
 
     // use given printer
@@ -630,7 +630,7 @@ bool SwViewShell::IsAnyFieldInDoc() const
     {
         if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
-            const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
+            const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
@@ -644,7 +644,7 @@ bool SwViewShell::IsAnyFieldInDoc() const
     {
         if( 0 != (pItem = mpDoc->GetAttrPool().GetItem2( RES_TXTATR_INPUTFIELD, n )))
         {
-            const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
+            const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
