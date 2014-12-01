@@ -3050,14 +3050,27 @@ void ScColumn::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
     sc::ProcessFormula(maCells, aFunc);
 }
 
-void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2 )
+void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, bool bIncludeEmptyCells )
 {
     // broadcasts everything within the range, with FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
     SetDirtyOnRangeHandler aHdl(*this);
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl, aHdl);
-    aHdl.broadcast();
+    if (bIncludeEmptyCells)
+    {
+        // Broadcast the changes.
+        ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, 0, nTab));
+        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        {
+            aHint.GetAddress().SetRow(nRow);
+            pDocument->Broadcast(aHint);
+        }
+    }
+    else
+    {
+        aHdl.broadcast();
+    }
 }
 
 void ScColumn::SetTableOpDirty( const ScRange& rRange )
