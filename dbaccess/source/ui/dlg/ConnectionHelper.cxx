@@ -574,6 +574,8 @@ namespace dbaui
                             return true;  // handled
                     }
                     break;
+                default:
+                    break;
             }
         }
 
