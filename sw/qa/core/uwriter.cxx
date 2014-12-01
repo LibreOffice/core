@@ -57,6 +57,7 @@
 #include "modeltoviewhelper.hxx"
 #include "scriptinfo.hxx"
 #include "IMark.hxx"
+#include "ring.hxx"
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
@@ -100,7 +101,7 @@ public:
     void testGraphicAnchorDeletion();
     void testTransliterate();
     void testMarkMove();
-    void testInstrusiveList();
+    void testIntrusiveRing();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(testTransliterate);
@@ -128,7 +129,7 @@ public:
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST(testMarkMove);
-    CPPUNIT_TEST(testInstrusiveList);
+    CPPUNIT_TEST(testIntrusiveRing);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1271,8 +1272,42 @@ void SwDocTest::testMarkMove()
         pBM3->GetMarkEnd().nNode.GetIndex());
 }
 
-void SwDocTest::testInstrusiveList()
+namespace
 {
+    struct TestRing : public Ring
+    {
+        TestRing() : Ring() {};
+        void debug()
+        {
+            SAL_DEBUG("TestRing at: " << this << " prev: " << GetPrev() << " next: " << GetNext());
+        }
+    };
+}
+
+void SwDocTest::testIntrusiveRing()
+{
+    TestRing aRing1, aRing2, aRing3, aRing4, aRing5;
+    CPPUNIT_ASSERT_EQUAL(aRing1.numberOf(), static_cast<sal_uInt32>(1));
+    aRing2.MoveTo(&aRing1);
+    aRing3.MoveTo(&aRing1);
+    CPPUNIT_ASSERT_EQUAL(aRing1.numberOf(), static_cast<sal_uInt32>(3));
+    CPPUNIT_ASSERT_EQUAL(aRing2.numberOf(), static_cast<sal_uInt32>(3));
+    CPPUNIT_ASSERT_EQUAL(aRing3.numberOf(), static_cast<sal_uInt32>(3));
+    aRing5.MoveTo(&aRing4);
+    CPPUNIT_ASSERT_EQUAL(aRing4.numberOf(), static_cast<sal_uInt32>(2));
+    aRing4.MoveRingTo(&aRing1);
+    CPPUNIT_ASSERT_EQUAL(aRing1.numberOf(), static_cast<sal_uInt32>(5));
+    CPPUNIT_ASSERT_EQUAL(aRing4.numberOf(), static_cast<sal_uInt32>(5));
+    CPPUNIT_ASSERT_EQUAL(aRing1.GetNext(), static_cast<Ring*>(&aRing2));
+    CPPUNIT_ASSERT_EQUAL(aRing2.GetNext(), static_cast<Ring*>(&aRing3));
+    CPPUNIT_ASSERT_EQUAL(aRing3.GetNext(), static_cast<Ring*>(&aRing4));
+    CPPUNIT_ASSERT_EQUAL(aRing4.GetNext(), static_cast<Ring*>(&aRing5));
+    CPPUNIT_ASSERT_EQUAL(aRing5.GetNext(), static_cast<Ring*>(&aRing1));
+    CPPUNIT_ASSERT_EQUAL(aRing2.GetPrev(), static_cast<Ring*>(&aRing1));
+    CPPUNIT_ASSERT_EQUAL(aRing3.GetPrev(), static_cast<Ring*>(&aRing2));
+    CPPUNIT_ASSERT_EQUAL(aRing4.GetPrev(), static_cast<Ring*>(&aRing3));
+    CPPUNIT_ASSERT_EQUAL(aRing5.GetPrev(), static_cast<Ring*>(&aRing4));
+    CPPUNIT_ASSERT_EQUAL(aRing1.GetPrev(), static_cast<Ring*>(&aRing5));
 }
 
 void SwDocTest::setUp()

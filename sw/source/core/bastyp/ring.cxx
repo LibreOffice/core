@@ -55,7 +55,12 @@ void Ring::MoveTo(Ring *pDestRing)
 {
     // insert into "new"
     if( pDestRing )
-        algo::transfer(pDestRing, this);
+    {
+        if(algo::unique(this))
+            algo::link_before(pDestRing, this);
+        else
+            algo::transfer(pDestRing, this);
+    }
     else
         algo::unlink(this);
 
@@ -63,7 +68,8 @@ void Ring::MoveTo(Ring *pDestRing)
 
 void Ring::MoveRingTo(Ring *pDestRing)
 {
-    algo::transfer(pDestRing, this, this);
+    std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
+    std::swap(*(&pPrev), *(&pDestRing->pPrev));
 }
 
 sal_uInt32 Ring::numberOf() const

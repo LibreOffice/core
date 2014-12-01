@@ -21,12 +21,16 @@
 
 #include <swdllapi.h>
 #include <swtypes.hxx>
+#include <boost/iterator/iterator_facade.hpp>
 
 class Ring_node_traits;
+class RingIterator;
 
 class SW_DLLPUBLIC Ring
 {
     friend class Ring_node_traits;
+    typedef RingIterator iterator;
+    typedef RingIterator const_iterator;
     Ring* pNext;
     Ring* pPrev;    ///< In order to speed up inserting and deleting.
 
@@ -42,6 +46,36 @@ public:
     Ring* GetPrev() const       { return pPrev; }
 
     sal_uInt32 numberOf() const;
+};
+
+class RingIterator : public boost::iterator_facade<
+      RingIterator
+    , Ring
+    , boost::forward_traversal_tag
+    >
+{
+    public:
+        RingIterator()
+            : m_pCurrent(nullptr)
+            , m_pStart(nullptr)
+        {}
+        explicit RingIterator(Ring* pRing, bool bStart = true)
+            : m_pCurrent(nullptr)
+            , m_pStart(pRing)
+        {
+            if(!bStart)
+                m_pCurrent = m_pStart;
+        }
+    private:
+        friend class boost::iterator_core_access;
+        void increment()
+            { m_pCurrent = m_pCurrent ? m_pCurrent->GetNext() : m_pStart->GetNext(); }
+        bool equal(RingIterator const& other) const
+            { return m_pCurrent == other.m_pCurrent && m_pStart == m_pStart; }
+        Ring& dereference() const
+            { return m_pCurrent ? *m_pCurrent : * m_pStart; }
+        Ring* m_pCurrent;
+        Ring* m_pStart;
 };
 
 #endif
