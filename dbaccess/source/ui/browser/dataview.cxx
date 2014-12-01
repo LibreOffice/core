@@ -136,6 +136,8 @@ namespace dbaui
             case MouseNotifyEvent::MOUSEBUTTONUP:
                 bHandled = m_rController.interceptUserInput( _rNEvt );
                 break;
+            default:
+                break;
         }
         return bHandled || Window::PreNotify( _rNEvt );
     }
