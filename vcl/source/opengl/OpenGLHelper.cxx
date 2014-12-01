@@ -401,6 +401,17 @@ bool OpenGLHelper::supportsVCLOpenGL()
 
 bool OpenGLHelper::isVCLOpenGLEnabled()
 {
+    /*
+     * There are a number of cases that these environment variables cover:
+     *  * SAL_FORCEGL forces OpenGL independent of any other option
+     *  * SAL_DISABLEGL or a blacklisted driver avoid the use of OpenGL if SAL_FORCEGL is not set
+     *  * SAL_ENABLEGL overrides VCL_HIDE_WINDOWS and the configuration variable
+     *  * the configuration variable is checked if no environment variable is set
+     */
+    static bool bForceOpenGL = !!getenv("SAL_FORCEGL");
+    if (bForceOpenGL)
+        return true;
+
     if (!supportsVCLOpenGL())
         return false;
 
@@ -411,7 +422,6 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     static bool bDuringBuild = getenv("VCL_HIDE_WINDOWS");
     if (bDuringBuild && !bEnable /* env. enable overrides */)
         bEnable = false;
-
     else if (officecfg::Office::Common::VCL::UseOpenGL::get())
         bEnable = true;
 
