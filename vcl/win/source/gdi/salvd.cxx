@@ -26,6 +26,7 @@
 #include <win/salinst.h>
 #include <win/salgdi.h>
 #include <win/salvd.h>
+#include "opengl/win/gdiimpl.hxx"
 
 HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppData)
 {
@@ -213,6 +214,14 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
             SelectBitmap( getHDC(), hNewBmp );
             DeleteBitmap( mhBmp );
             mhBmp = hNewBmp;
+
+            if (mpGraphics)
+            {
+                WinOpenGLSalGraphicsImpl *pImpl;
+                pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->getImpl());
+                if (pImpl)
+                    pImpl->Init();
+            }
             return TRUE;
         }
         else
