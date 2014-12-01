@@ -387,6 +387,9 @@ void ScPivotLayoutDialog::ItemInserted(ScItemValue* pItemValue, ScPivotLayoutTre
 
 void ScPivotLayoutDialog::UpdateSourceRange()
 {
+    if (!maPivotTableObject.GetSheetDesc())
+       return;
+
     ScSheetSourceDesc aSourceSheet = *maPivotTableObject.GetSheetDesc();
 
     if (mpSourceRadioNamedRange->IsChecked())
