@@ -41,9 +41,10 @@ class _PaMIntoCrsrShellRing
 {
     SwCrsrShell& rSh;
     SwPaM &rDelPam, &rCrsr;
-    Ring *pPrevDelPam, *pPrevCrsr;
+    SwPaM* pPrevDelPam;
+    SwPaM* pPrevCrsr;
 
-    void RemoveFromRing( SwPaM& rPam, Ring* pPrev );
+    void RemoveFromRing( SwPaM& rPam, SwPaM* pPrev );
 public:
     _PaMIntoCrsrShellRing( SwCrsrShell& rSh, SwPaM& rCrsr, SwPaM& rPam );
     ~_PaMIntoCrsrShellRing();
@@ -69,9 +70,10 @@ _PaMIntoCrsrShellRing::~_PaMIntoCrsrShellRing()
     RemoveFromRing( rCrsr, pPrevCrsr );
 }
 
-void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, Ring* pPrev )
+void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, SwPaM* pPrev )
 {
-    Ring *p, *pNext = (Ring*)&rPam;
+    SwPaM* p;
+    SwPaM* pNext = &rPam;
     do {
         p = pNext;
         pNext = p->GetNext();

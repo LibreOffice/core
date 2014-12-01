@@ -3441,7 +3441,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
                 {
                     if( nSelected == 0 )
                     {
-                        pCrsr->MoveTo((Ring*)0);
+                        pCrsr->MoveTo(nullptr);
                         delete pCrsr;
                         bRet = true;
                     }

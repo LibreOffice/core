@@ -94,7 +94,8 @@ enum FrameControlType
 #define VSHELLFLAG_SHARELAYOUT          ((long)0x2)
 typedef boost::shared_ptr<SwRootFrm> SwRootFrmPtr;
 
-class SW_DLLPUBLIC SwViewShell : public Ring
+class SwViewShell;
+class SW_DLLPUBLIC SwViewShell : public Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
     friend void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pOut,

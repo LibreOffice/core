@@ -130,7 +130,7 @@ void PaMCorrAbs( const SwPaM& rRange,
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != PCURSH_CONST->GetStkCrsr()) );
 
-            FOREACHPAM_START_CONST( PCURSH_CONST->_GetCrsr() )
+            FOREACHPAM_START_CONST( const_cast< SwShellCrsr* >(PCURSH_CONST->_GetCrsr()) )
                 lcl_PaMCorrAbs( const_cast<SwPaM &>(*PCURCRSR), aStart, aEnd, aNewPos );
             FOREACHPAM_END_CONST()
 
@@ -277,7 +277,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != PCURSH_CONST->GetStkCrsr()) );
 
-            FOREACHPAM_START_CONST( PCURSH_CONST->_GetCrsr() )
+            FOREACHPAM_START_CONST( const_cast< SwShellCrsr* >(PCURSH_CONST->_GetCrsr()) )
                 lcl_PaMCorrRel1( const_cast<SwPaM *>(PCURCRSR), pOldNode, aNewPos, nCntIdx);
             FOREACHPAM_END()
 

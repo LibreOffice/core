@@ -1827,19 +1827,20 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     return nRet;
 }
 
-class _SaveMergeRedlines : public Ring
+class _SaveMergeRedlines;
+class _SaveMergeRedlines : public Ring<_SaveMergeRedlines>
 {
     const SwRangeRedline* pSrcRedl;
     SwRangeRedline* pDestRedl;
 public:
     _SaveMergeRedlines( const SwNode& rDstNd,
-                        const SwRangeRedline& rSrcRedl, Ring* pRing );
+                        const SwRangeRedline& rSrcRedl, _SaveMergeRedlines* pRing );
     sal_uInt16 InsertRedline();
 };
 
 _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
-                        const SwRangeRedline& rSrcRedl, Ring* pRing )
-    : Ring( pRing ), pSrcRedl( &rSrcRedl )
+                        const SwRangeRedline& rSrcRedl, _SaveMergeRedlines* pRing )
+    : Ring<_SaveMergeRedlines>( pRing ), pSrcRedl( &rSrcRedl )
 {
     SwPosition aPos( rDstNd );
 

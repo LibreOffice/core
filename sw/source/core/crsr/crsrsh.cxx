@@ -2406,7 +2406,7 @@ bool SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
 */
 sal_uInt16 SwCrsrShell::GetCrsrCnt( bool bAll ) const
 {
-    Ring* pTmp = GetCrsr()->GetNext();
+    SwPaM* pTmp = GetCrsr()->GetNext();
     sal_uInt16 n = (bAll || ( m_pCurCrsr->HasMark() &&
                     *m_pCurCrsr->GetPoint() != *m_pCurCrsr->GetMark())) ? 1 : 0;
     while( pTmp != m_pCurCrsr )

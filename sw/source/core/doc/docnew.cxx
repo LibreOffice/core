@@ -486,7 +486,7 @@ SwDoc::~SwDoc()
 
     if( mpExtInputRing )
     {
-        Ring* pTmp = mpExtInputRing;
+        SwPaM* pTmp = mpExtInputRing;
         mpExtInputRing = 0;
         while( pTmp->GetNext() != pTmp )
             delete pTmp->GetNext();

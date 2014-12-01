@@ -1144,11 +1144,11 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
 
         // add to shell-cursor-ring so that the regions will be moved enventually
-        Ring *pPrevRing = 0;
+        Ring<SwPaM>* pPrevRing(nullptr);
         if( bRegExp )
         {
             pPrevRing = pRegion->GetPrev();
-            const_cast<Ring*>(static_cast<const Ring*>(pRegion))->MoveRingTo( &rCursor );
+            const_cast< SwPaM* >(pRegion)->MoveRingTo( &rCursor );
         }
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp) ?
@@ -1161,11 +1161,12 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         if( bRegExp )
         {
             // and remove region again
-            Ring *p, *pNext = (Ring*)pRegion;
+            SwPaM* p;
+            SwPaM* pNext = const_cast<SwPaM*>(pRegion);
             do {
                 p = pNext;
                 pNext = p->GetNext();
-                p->MoveTo( (Ring*)pRegion );
+                p->MoveTo( const_cast<SwPaM*>(pRegion) );
             } while( p != pPrevRing );
         }
         rSttCntIdx = nSttCnt;

@@ -1275,9 +1275,9 @@ void SwDocTest::testMarkMove()
 
 namespace
 {
-    struct TestRing : public Ring
+    struct TestRing : public Ring<TestRing>
     {
-        TestRing() : Ring() {};
+        TestRing() : Ring<TestRing>() {};
         void debug()
         {
             SAL_DEBUG("TestRing at: " << this << " prev: " << GetPrev() << " next: " << GetNext());
@@ -1312,12 +1312,12 @@ void SwDocTest::testIntrusiveRing()
         std::vector<TestRing*>::iterator ppNext = ppRing+1;
         if(ppNext==vRings.end())
             ppNext = vRings.begin();
-        CPPUNIT_ASSERT_EQUAL((*ppRing)->GetNext(), static_cast<Ring*>(*ppNext));
-        CPPUNIT_ASSERT_EQUAL((*ppNext)->GetPrev(), static_cast<Ring*>(*ppRing));
+        CPPUNIT_ASSERT_EQUAL((*ppRing)->GetNext(), *ppNext);
+        CPPUNIT_ASSERT_EQUAL((*ppNext)->GetPrev(), *ppRing);
     }
-    BOOST_FOREACH(Ring& r, std::make_pair(aRing1.beginRing(), aRing1.endRing()))
+    BOOST_FOREACH(TestRing& r, std::make_pair(aRing1.beginRing(), aRing1.endRing()))
     {
-        TestRing* pRing = dynamic_cast<TestRing*>(&r);
+        TestRing* pRing = &r;
         CPPUNIT_ASSERT(pRing);
         //pRing->debug();
     }

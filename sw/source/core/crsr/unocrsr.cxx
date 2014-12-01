@@ -50,7 +50,7 @@ SwUnoCrsr::~SwUnoCrsr()
     while( GetNext() != this )
     {
         Ring* pNxt = GetNext();
-        pNxt->MoveTo( 0 ); // remove from chain
+        pNxt->MoveTo(nullptr); // remove from chain
         delete pNxt;       // and delete
     }
 }

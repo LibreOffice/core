@@ -1087,13 +1087,14 @@ void SwAutoFormat::DeleteSel( SwPaM& rDelPam )
         SwPaM* pShCrsr = m_pEditShell->_GetCrsr();
         SwPaM aTmp( *m_pCurTxtNd, 0, pShCrsr );
 
-        Ring *pPrev = rDelPam.GetPrev();
+        SwPaM* pPrev = rDelPam.GetPrev();
         rDelPam.MoveRingTo( pShCrsr );
 
         m_pEditShell->DeleteSel( rDelPam );
 
         // and remove Pam again:
-        Ring *p, *pNext = (Ring*)&rDelPam;
+        SwPaM* p;
+        SwPaM* pNext = &rDelPam;
         do {
             p = pNext;
             pNext = p->GetNext();

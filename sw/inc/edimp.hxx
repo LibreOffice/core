@@ -31,12 +31,10 @@ class SwNodeIndex;
 #define PCURCRSR (static_cast<SwPaM *>(&__r))
 
 #define FOREACHPAM_START(pCURSH) \
-    BOOST_FOREACH(Ring& __r, std::make_pair(static_cast<Ring*>(pCURSH)->beginRing(), static_cast<Ring*>(pCURSH)->endRing())) \
+    BOOST_FOREACH(SwPaM& __r, std::make_pair(static_cast< SwPaM* >(pCURSH)->beginRing(), static_cast< SwPaM* >(pCURSH)->endRing())) \
     {
 
-#define FOREACHPAM_START_CONST(pCURSH) \
-    BOOST_FOREACH(Ring& __r, std::make_pair(const_cast<Ring*>(static_cast<const Ring*>(pCURSH))->beginRing(), const_cast<Ring*>(static_cast<const Ring*>(pCURSH))->endRing())) \
-    {
+#define FOREACHPAM_START_CONST(pCURSH) FOREACHPAM_START(pCURSH)
 
 #define FOREACHPAM_END() }
 #define FOREACHPAM_END_CONST() }

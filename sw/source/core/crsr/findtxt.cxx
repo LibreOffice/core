@@ -575,11 +575,11 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
         // add to shell-cursor-ring so that the regions will be moved enventually
-        Ring *pPrev(0);
+        SwPaM* pPrev(nullptr);
         if( bRegExp )
         {
             pPrev = pRegion->GetPrev();
-            const_cast<Ring*>(static_cast<const Ring*>(pRegion))->MoveRingTo( &rCursor );
+            const_cast<SwPaM*>(pRegion)->MoveRingTo( &rCursor );
         }
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp)
@@ -592,11 +592,12 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         if( bRegExp )
         {
             // and remove region again
-            Ring *p, *pNext = (Ring*)pRegion;
+            SwPaM* p;
+            SwPaM* pNext(const_cast<SwPaM*>(pRegion));
             do {
                 p = pNext;
                 pNext = p->GetNext();
-                p->MoveTo( (Ring*)pRegion );
+                p->MoveTo( const_cast<SwPaM*>(pRegion) );
             } while( p != pPrev );
         }
         pCrsr->Start()->nContent = nSttCnt;

@@ -25,15 +25,16 @@
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
 class Ring_node_traits;
-class RingIterator;
+template <class T> class RingIterator;
 
+template <class T>
 class SW_DLLPUBLIC Ring
 {
     struct Ring_node_traits
     {
-        typedef Ring node;
-        typedef Ring* node_ptr;
-        typedef const Ring* const_node_ptr;
+        typedef T node;
+        typedef T* node_ptr;
+        typedef const T* const_node_ptr;
         static node_ptr get_next(const_node_ptr n) { return n->GetNext(); };
         static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
         static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
@@ -41,64 +42,69 @@ class SW_DLLPUBLIC Ring
     };
     friend class Ring_node_traits;
     typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
-    Ring* pNext;
-    Ring* pPrev;    ///< In order to speed up inserting and deleting.
+    T* pNext;
+    T* pPrev;    ///< In order to speed up inserting and deleting.
 
 protected:
     Ring()
-        { algo::init_header(this); }
-    Ring( Ring * );
+        { algo::init_header(static_cast< T* >(this)); }
+    Ring( T* );
 public:
-    typedef RingIterator iterator;
-    typedef RingIterator const_iterator;
+    typedef RingIterator<T> iterator;
+    typedef RingIterator<T> const_iterator;
     virtual ~Ring()
-        { algo::unlink(this); };
-    void MoveTo( Ring *pDestRing );
-    void MoveRingTo( Ring *pDestRing );
+        { algo::unlink(static_cast< T* >(this)); };
+    void MoveTo( T* pDestRing );
+    void MoveRingTo( T* pDestRing );
 
-    Ring* GetNext() const       { return pNext; }
-    Ring* GetPrev() const       { return pPrev; }
+    T* GetNext() const       { return pNext; }
+    T* GetPrev() const       { return pPrev; }
     // unfortunately we cant name these STL-conforming, as some derived classes
     // also derive from other STL containers (which is bad anyway, but ...)
     iterator beginRing();
     iterator endRing();
 
     sal_uInt32 numberOf() const
-        { return algo::count(this); }
+        { return algo::count(static_cast< const T* >(this)); }
 };
 
-inline Ring::Ring( Ring *pObj )
+template <class T>
+inline Ring<T>::Ring( T* pObj )
 {
+    T* pThis = static_cast< T* >(this);
     if( !pObj )
-        algo::init_header(this);
+        algo::init_header(pThis);
     else
-        algo::link_before(pObj, this);
+        algo::link_before(pObj, pThis);
 }
 
-inline void Ring::MoveTo(Ring *pDestRing)
+template <class T>
+inline void Ring<T>::MoveTo(T* pDestRing)
 {
+    T* pThis = static_cast< T* >(this);
     // insert into "new"
     if( pDestRing )
     {
-        if(algo::unique(this))
-            algo::link_before(pDestRing, this);
+        if(algo::unique(pThis))
+            algo::link_before(pDestRing, pThis);
         else
-            algo::transfer(pDestRing, this);
+            algo::transfer(pDestRing, pThis);
     }
     else
-        algo::unlink(this);
-
+        algo::unlink(pThis);
 }
 
-inline void Ring::MoveRingTo(Ring *pDestRing)
+template <class T>
+inline void Ring<T>::MoveRingTo(T* pDestRing)
 {
     std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
     std::swap(*(&pPrev), *(&pDestRing->pPrev));
 }
 
+template <class T>
 class RingIterator : public boost::iterator_facade<
-      RingIterator
-    , Ring
+      RingIterator<T>
+    , T
     , boost::forward_traversal_tag
     >
 {
@@ -107,7 +113,7 @@ class RingIterator : public boost::iterator_facade<
             : m_pCurrent(nullptr)
             , m_pStart(nullptr)
         {}
-        explicit RingIterator(Ring* pRing, bool bStart = true)
+        explicit RingIterator(T* pRing, bool bStart = true)
             : m_pCurrent(nullptr)
             , m_pStart(pRing)
         {
@@ -120,17 +126,19 @@ class RingIterator : public boost::iterator_facade<
             { m_pCurrent = m_pCurrent ? m_pCurrent->GetNext() : m_pStart->GetNext(); }
         bool equal(RingIterator const& other) const
             { return m_pCurrent == other.m_pCurrent && m_pStart == m_pStart; }
-        Ring& dereference() const
+        T& dereference() const
             { return m_pCurrent ? *m_pCurrent : * m_pStart; }
-        Ring* m_pCurrent;
-        Ring* m_pStart;
+        T* m_pCurrent;
+        T* m_pStart;
 };
 
-inline Ring::iterator Ring::beginRing()
-    { return Ring::iterator(this); };
+template <class T>
+inline typename Ring<T>::iterator Ring<T>::beginRing()
+    { return Ring<T>::iterator(static_cast< T* >(this)); };
 
-inline Ring::iterator Ring::endRing()
-    { return Ring::iterator(this, false); };
+template <class T>
+inline typename Ring<T>::iterator Ring<T>::endRing()
+    { return Ring<T>::iterator(static_cast< T* >(this), false); };
 
 #endif
 
