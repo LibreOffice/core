@@ -655,7 +655,8 @@ sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPr
         }
 
         if( !nNamespace )
-            throw SAXException(); // prefix that has no defined namespace url
+            throw SAXException("No namespace defined for " + OUString(XML_CAST(pPrefix),
+                    nPrefixLen, RTL_TEXTENCODING_UTF8), Reference< XInterface >(), Any());
     }
 
     if( nNamespaceToken != FastToken::DONTKNOW )
@@ -688,7 +689,8 @@ OUString FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix ) throw (SAX
                 return rEntity.maNamespaceDefines[nNamespace]->maNamespaceURL;
     }
 
-    throw SAXException(); // prefix that has no defined namespace url
+    throw SAXException("No namespace defined for " + OUString::fromUtf8(rPrefix),
+            Reference< XInterface >(), Any());
 }
 
 sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen )
