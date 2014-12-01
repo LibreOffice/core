@@ -441,7 +441,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 const SfxPoolItem *pBoxInfo;
                 if ( SfxItemState::SET == pHFFmt->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
                                                         true, &pBoxInfo) )
-                    aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
+                    aBoxInfo = *static_cast<const SvxBoxInfoItem*>(pBoxInfo);
 
                 aBoxInfo.SetTable( false );
                 aBoxInfo.SetDist( true);

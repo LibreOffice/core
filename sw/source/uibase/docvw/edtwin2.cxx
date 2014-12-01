@@ -248,7 +248,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             case SwContentAtPos::SW_FTN:
                 if( aCntntAtPos.pFndTxtAttr && aCntntAtPos.aFnd.pAttr )
                 {
-                    const SwFmtFtn* pFtn = (SwFmtFtn*)aCntntAtPos.aFnd.pAttr;
+                    const SwFmtFtn* pFtn = static_cast<const SwFmtFtn*>(aCntntAtPos.aFnd.pAttr);
                     OUString sTmp;
                     pFtn->GetFtnText( sTmp );
                     sTxt = SW_RESSTR( pFtn->IsEndNote()

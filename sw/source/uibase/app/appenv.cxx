@@ -152,14 +152,14 @@ void SwModule::InsertEnv( SfxRequest& rReq )
                     *pSh;
 
     // Get current shell
-    pMyDocSh = (SwDocShell*) SfxObjectShell::Current();
+    pMyDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
     pOldSh   = pMyDocSh ? pMyDocSh->GetWrtShell() : 0;
 
     // Create new document (don't show!)
     SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
     xDocSh->DoInitNew( 0 );
     pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
-    pNewView = (SwView*) pFrame->GetViewShell();
+    pNewView = static_cast<SwView*>( pFrame->GetViewShell());
     pNewView->AttrChangedNotify( &pNewView->GetWrtShell() ); // so that SelectShell is being called
     pSh = pNewView->GetWrtShellPtr();
 
@@ -227,10 +227,10 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
-        SwWait aWait( (SwDocShell&)*xDocSh, true );
+        SwWait aWait( static_cast<SwDocShell&>(*xDocSh), true );
 
         // Read dialog and save item to config
-        const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);
+        const SwEnvItem& rItem = pItem ? *pItem : static_cast<const SwEnvItem&>( pDlg->GetOutputItemSet()->Get(FN_ENVELOP) );
         aEnvCfg.GetItem() = rItem;
         aEnvCfg.Commit();
 

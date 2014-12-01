@@ -114,7 +114,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
             long nWidth = aRect.Width();
 
-            sal_uInt16 nCol = ((SfxUInt16Item *)pItem)->GetValue();
+            sal_uInt16 nCol = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
             if(nCol)
             {
                 aCol.Init( nCol, 0, static_cast< sal_uInt16 >(nWidth) );

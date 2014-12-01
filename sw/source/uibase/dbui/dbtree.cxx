@@ -386,7 +386,7 @@ void  SwDBTreeList::RequestingChildren(SvTreeListEntry* pParent)
                         {
                             sQueryName = pQueryNames[i];
                             SvTreeListEntry* pQueryEntry = InsertEntry(sQueryName, aImg, aImg, pParent, bShowColumns);
-                            pQueryEntry->SetUserData((void*)1);
+                            pQueryEntry->SetUserData(reinterpret_cast<void*>(1));
                         }
                     }
                 }

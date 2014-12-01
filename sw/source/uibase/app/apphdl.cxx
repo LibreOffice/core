@@ -146,7 +146,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 SfxViewShell* pCurrView = SfxViewShell::Current();
                 if( !pCurrView || (pCurrView && !pCurrView->ISA(SwView)) )
                     bDisable = true;
-                SwDocShell *pDocSh = (SwDocShell*) SfxObjectShell::Current();
+                SwDocShell *pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
                 if ( bDisable ||
                     (pDocSh &&    (pDocSh->IsReadOnly() ||
                                   pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)) )
@@ -202,9 +202,9 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
         SfxStringItem aTargetFrameName( SID_TARGETNAME, OUString("_blank") );
         SfxBoolItem aHidden( SID_HIDDEN, true );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
-        SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
+        const SfxObjectItem* pItem = static_cast<const SfxObjectItem*>(pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SfxCallMode::SYNCHRON,
-                            &aURL, &aHidden, &aReferer, &aTargetFrameName, 0L);
+                            &aURL, &aHidden, &aReferer, &aTargetFrameName, 0L));
         SfxShell* pShell = pItem ? pItem->GetShell() : 0;
 
         if(pShell)
@@ -227,9 +227,9 @@ SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
     else
     {
         SfxStringItem aFactory(SID_NEWDOCDIRECT, SwDocShell::Factory().GetFilterContainer()->GetName());
-        const SfxFrameItem* pItem = (SfxFrameItem*)
+        const SfxFrameItem* pItem = static_cast<const SfxFrameItem*>(
                             pView->GetViewFrame()->GetDispatcher()->Execute(SID_NEWDOCDIRECT,
-                                SfxCallMode::SYNCHRON, &aFactory, 0L);
+                                SfxCallMode::SYNCHRON, &aFactory, 0L));
         SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
         SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
         pNewView = pFrame ? PTR_CAST(SwView, pFrame->GetViewShell()) : 0;
@@ -631,7 +631,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 
                 if( pArgs && SfxItemState::SET == pArgs->GetItemState(
                         nWhich, false, &pItem ))
-                    bSet = ((SfxBoolItem*)pItem)->GetValue();
+                    bSet = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 else
                     bSet = !pModuleConfig->IsInsTblFormatNum( bWebView );
 
@@ -656,7 +656,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        SfxEventHint& rEvHint = (SfxEventHint&) rHint;
+        const SfxEventHint& rEvHint = static_cast<const SfxEventHint&>( rHint);
         SwDocShell* pDocSh = PTR_CAST( SwDocShell, rEvHint.GetObjShell() );
         if( pDocSh )
         {
@@ -707,7 +707,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if(dynamic_cast<const SfxItemSetHint*>(&rHint))
     {
-        if( SfxItemState::SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
+        if( SfxItemState::SET == static_cast<const SfxItemSetHint&>(rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
         {
             ::GetGlossaries()->UpdateGlosPath( false );
             SwGlossaryList* pList = ::GetGlossaryList();
@@ -717,7 +717,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if(dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
-        sal_uInt16 nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uInt16 nHintId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if(SFX_HINT_DEINITIALIZING == nHintId)
         {
             DELETEZ(pWebUsrPref);
@@ -786,9 +786,9 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
                     if(bAccessibility)
                     {
                         if(pViewShell->IsA(aSwViewTypeId))
-                            ((SwView*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                            static_cast<SwView*>(pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
                         else if(pViewShell->IsA(aSwPreviewTypeId))
-                            ((SwPagePreview*)pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
+                            static_cast<SwPagePreview*>(pViewShell)->ApplyAccessiblityOptions(*pAccessibilityOptions);
                     }
                     pViewShell->GetWindow()->Invalidate();
                 }
@@ -803,7 +803,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         {
             if( pObjSh->IsA(TYPE(SwDocShell)) )
             {
-                SwDoc* pDoc = ((SwDocShell*)pObjSh)->GetDoc();
+                SwDoc* pDoc = const_cast<SwDocShell*>(static_cast<const SwDocShell*>(pObjSh))->GetDoc();
                 SwViewShell* pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
                 if ( pVSh )
                     pVSh->ChgNumberDigits();

@@ -642,7 +642,7 @@ sal_uInt16 SwDocShell::Edit(
         pStyle = &mxBasePool->Make( rName, (SfxStyleFamily)nFamily, nMask );
 
         // set the current one as Parent
-        SwDocStyleSheet* pDStyle = (SwDocStyleSheet*)pStyle;
+        SwDocStyleSheet* pDStyle = static_cast<SwDocStyleSheet*>(pStyle);
         switch( nFamily )
         {
             case SFX_STYLE_FAMILY_PARA:
@@ -731,7 +731,7 @@ sal_uInt16 SwDocShell::Edit(
         return sal_False;
 
     // put dialogues together
-    rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
+    rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pStyle) ) );
     if( SFX_STYLE_FAMILY_PARA == nFamily )
     {
         SfxItemSet& rSet = xTmp->GetItemSet();
@@ -868,7 +868,7 @@ sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHid
         assert( GetWrtShell() );
 
         GetWrtShell()->StartAllAction();
-        rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
+        rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *static_cast<SwDocStyleSheet*>(pStyle) ) );
         xTmp->SetHidden( bHidden );
         GetWrtShell()->EndAllAction();
 
@@ -881,7 +881,7 @@ sal_uInt16 SwDocShell::Hide(const OUString &rName, sal_uInt16 nFamily, bool bHid
 sal_uInt16 SwDocShell::ApplyStyles(const OUString &rName, sal_uInt16 nFamily,
                                SwWrtShell* pShell, const sal_uInt16 nMode )
 {
-    SwDocStyleSheet* pStyle = (SwDocStyleSheet*) mxBasePool->Find( rName, (SfxStyleFamily) nFamily );
+    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( mxBasePool->Find( rName, (SfxStyleFamily) nFamily ) );
 
     SAL_WARN_IF( !pStyle, "sw.ui", "Style not found" );
 
@@ -957,7 +957,7 @@ sal_uInt16 SwDocShell::DoWaterCan(const OUString &rName, sal_uInt16 nFamily)
     if(bWaterCan)
     {
         SwDocStyleSheet* pStyle =
-            (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
+            static_cast<SwDocStyleSheet*>( mxBasePool->Find(rName, (SfxStyleFamily)nFamily) );
 
         SAL_WARN_IF( !pStyle, "sw.ui", "Where's the StyleSheet" );
 
@@ -1000,7 +1000,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const OUString &rName, sal_uInt16 nFamily, Sw
     assert( pCurrWrtShell );
 
     SwDocStyleSheet* pStyle =
-        (SwDocStyleSheet*)mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
+        static_cast<SwDocStyleSheet*>( mxBasePool->Find(rName, (SfxStyleFamily)nFamily) );
 
     if(!pStyle)
         return nFamily;
@@ -1083,8 +1083,8 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
                                     sal_uInt16 nMask, SwWrtShell* pShell )
 {
     SwWrtShell* pCurrWrtShell = pShell ? pShell : GetWrtShell();
-    SwDocStyleSheet* pStyle = (SwDocStyleSheet*)mxBasePool->Find(
-                                            rName, (SfxStyleFamily)nFamily );
+    SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>( mxBasePool->Find(
+                                            rName, (SfxStyleFamily)nFamily ) );
     if(!pStyle)
     {
         // preserve the current mask of PI, then the new one is
@@ -1094,8 +1094,8 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
         else
             nMask |= SFXSTYLEBIT_USERDEF;
 
-        pStyle = (SwDocStyleSheet*)&mxBasePool->Make(rName,
-                                (SfxStyleFamily)nFamily, nMask );
+        pStyle = static_cast<SwDocStyleSheet*>( &mxBasePool->Make(rName,
+                                (SfxStyleFamily)nFamily, nMask ) );
     }
 
     switch(nFamily)

@@ -256,7 +256,7 @@ SwTransferable::~SwTransferable()
     if( aDocShellRef.Is() )
     {
         SfxObjectShell * pObj = aDocShellRef;
-        SwDocShell* pDocSh = (SwDocShell*)pObj;
+        SwDocShell* pDocSh = static_cast<SwDocShell*>(pObj);
         pDocSh->DoClose();
     }
     aDocShellRef.Clear();
@@ -474,7 +474,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
              SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_URL, RES_URL );
             pWrtShell->GetFlyFrmAttr( aSet );
-            const SwFmtURL& rURL = (SwFmtURL&)aSet.Get( RES_URL );
+            const SwFmtURL& rURL = static_cast<const SwFmtURL&>(aSet.Get( RES_URL ));
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
             else if( !rURL.GetURL().isEmpty() )
@@ -625,7 +625,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
             // for the changed pool defaults from drawing layer pool set those
             // attributes as hard attributes to preserve them for saving
             const SfxItemPool& rItemPool = pModel->GetItemPool();
-            const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
+            const SvxFontHeightItem& rDefaultFontHeight = static_cast<const SvxFontHeightItem&>(rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT));
 
             // SW should have no MasterPages
             OSL_ENSURE(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
@@ -638,7 +638,7 @@ bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 while(aIter.IsMore())
                 {
                     SdrObject* pObj = aIter.Next();
-                    const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetMergedItem(EE_CHAR_FONTHEIGHT);
+                    const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(pObj->GetMergedItem(EE_CHAR_FONTHEIGHT));
 
                     if(rItem.GetHeight() == rDefaultFontHeight.GetHeight())
                     {
@@ -990,7 +990,7 @@ int SwTransferable::PrepareForCopy( bool bIsCut )
     {
         SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_URL, RES_URL );
         pWrtShell->GetFlyFrmAttr( aSet );
-        const SwFmtURL& rURL = (SwFmtURL&)aSet.Get( RES_URL );
+        const SwFmtURL& rURL = static_cast<const SwFmtURL&>(aSet.Get( RES_URL ));
         if( rURL.GetMap() )
         {
             pImageMap = new ImageMap( *rURL.GetMap() );
@@ -2009,7 +2009,7 @@ bool SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
     {
         SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
         rSh.GetFlyFrmAttr( aSet );
-        SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+        SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
 
         if( aURL.GetURL() != aINetImg.GetTargetURL() ||
             aURL.GetTargetFrameName() != aINetImg.GetTargetFrame() )
@@ -2146,7 +2146,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
         pTyp = rWrtShell.InsertFldType( aType );
     }
 
-    SwDDEFieldType* pDDETyp = (SwDDEFieldType*)pTyp;
+    SwDDEFieldType* pDDETyp = static_cast<SwDDEFieldType*>(pTyp);
 
     OUString aExpand;
     if( rData.GetString( FORMAT_STRING, aExpand ))
@@ -2391,7 +2391,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
                     {
                         SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                         rSh.GetFlyFrmAttr( aSet );
-                        SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+                        SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
                         aURL.SetURL( aBkmk.GetURL(), false );
                         aSet.Put( aURL );
                         rSh.SetFlyFrmAttr( aSet );
@@ -2449,7 +2449,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
             rSh.GetFlyFrmAttr( aSet );
-            SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+            SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
             aURL.SetMap( &aMap );
             aSet.Put( aURL );
             rSh.SetFlyFrmAttr( aSet );
@@ -2468,7 +2468,7 @@ bool SwTransferable::_PasteImageMap( TransferableDataHelper& rData,
     {
         SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
         rSh.GetFlyFrmAttr( aSet );
-        SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+        SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
         const ImageMap* pOld = aURL.GetMap();
 
         // set or replace, that is the question
@@ -2509,7 +2509,7 @@ bool SwTransferable::_PasteAsHyperlink( TransferableDataHelper& rData,
             {
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrmAttr( aSet );
-                SwFmtURL aURL2( (SwFmtURL&)aSet.Get( RES_URL ) );
+                SwFmtURL aURL2( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
                 aURL2.SetURL( sFile, false );
                 if( aURL2.GetName().isEmpty() )
                     aURL2.SetName( sFile );
@@ -2603,7 +2603,7 @@ bool SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                         {
                             SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                             rSh.GetFlyFrmAttr( aSet );
-                            SwFmtURL aURL2( (SwFmtURL&)aSet.Get( RES_URL ) );
+                            SwFmtURL aURL2( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
                             aURL2.SetURL( sFile, false );
                             if( aURL2.GetName().isEmpty() )
                                 aURL2.SetName( sFile );
@@ -3130,7 +3130,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     {
         SfxItemSet aSet( pWrtShell->GetAttrPool(), RES_URL, RES_URL );
         pWrtShell->GetFlyFrmAttr( aSet );
-        const SwFmtURL& rURL = (SwFmtURL&)aSet.Get( RES_URL );
+        const SwFmtURL& rURL = static_cast<const SwFmtURL&>(aSet.Get( RES_URL ));
         if( rURL.GetMap() )
         {
             pImageMap = new ImageMap( *rURL.GetMap() );
@@ -3321,7 +3321,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
                 rSh.GetFlyFrmAttr( aSet );
-                SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+                SwFmtURL aURL( static_cast<const SwFmtURL&>(aSet.Get( RES_URL )) );
                 aURL.SetURL( aTmp.GetURL(), false );
                 aSet.Put( aURL );
                 rSh.SetFlyFrmAttr( aSet );
@@ -3602,7 +3602,7 @@ SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper&
     {
         sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
         if ( nHandle )
-            pSwTransferable = (SwTransferable*) (sal_IntPtr) nHandle;
+            pSwTransferable = reinterpret_cast<SwTransferable*>( (sal_IntPtr) nHandle );
     }
 
     return pSwTransferable;

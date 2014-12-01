@@ -627,7 +627,7 @@ bool SwDBManager::GetTableNames(ListBox* pListBox, const OUString& rDBName)
             for(long i = 0; i < aQueries.getLength(); i++)
             {
                 sal_uInt16 nEntry = pListBox->InsertEntry(pQueries[i]);
-                pListBox->SetEntryData(nEntry, (void*)1);
+                pListBox->SetEntryData(nEntry, reinterpret_cast<void*>(1));
             }
         }
         if (!sOldTableName.isEmpty())
@@ -2614,7 +2614,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
                 if( xWorkDocSh->DoLoad(pWorkMed) )
                 {
                     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
-                    SwView *pView = (SwView*) pFrame->GetViewShell();
+                    SwView *pView = static_cast<SwView*>( pFrame->GetViewShell() );
                     pView->AttrChangedNotify( &pView->GetWrtShell() );// in order for SelectShell to be called
                     //set the current DBManager
                     SwDoc* pWorkDoc = pView->GetWrtShell().GetDoc();

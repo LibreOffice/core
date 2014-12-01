@@ -1032,7 +1032,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         // adjustment for allowing vertical position
         // aligned to page for fly frame anchored to paragraph or to character.
         {
-            SwFmtVertOrient aVert( (SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT) );
+            SwFmtVertOrient aVert( static_cast<const SwFmtVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
             const bool bFollowTextFlow =
                     static_cast<const SwFmtFollowTextFlow&>(aSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
             const SwPosition* pToCharCntntPos = static_cast<const SwFmtAnchor&>(aSet.Get(RES_ANCHOR)).GetCntntAnchor();
@@ -1084,7 +1084,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
                 aDiff = 0;
             else if ( aDiff < -aTmp.Height() )
                 aDiff = -aTmp.Height();
-            SwFmtVertOrient aVert( (SwFmtVertOrient&)aSet.Get(RES_VERT_ORIENT) );
+            SwFmtVertOrient aVert( static_cast<const SwFmtVertOrient&>(aSet.Get(RES_VERT_ORIENT)) );
             sal_Int16 eNew;
             if( bWeb )
             {
@@ -1125,7 +1125,7 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, bool bWeb )
         if (bWeb && (FLY_AT_PARA == eAnchorId)
             && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
         {
-            SwFmtHoriOrient aHori( (SwFmtHoriOrient&)aSet.Get(RES_HORI_ORIENT) );
+            SwFmtHoriOrient aHori( static_cast<const SwFmtHoriOrient&>(aSet.Get(RES_HORI_ORIENT)) );
             sal_Int16 eNew;
             eNew = aHori.GetHoriOrient();
             switch( eNew )
@@ -2210,7 +2210,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, true);
                                 bNormalChar = false;
                                 eKeyState = KS_End;
-                                rSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
+                                rSh.ClickToINetAttr(static_cast<const SwFmtINetFmt&>(rItem), URLLOAD_NOFILTER);
                             }
                         }
                     }
@@ -2573,8 +2573,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                 pVFrame->ToggleChildWindow( nId );
-                SwInputChild* pChildWin = (SwInputChild*)pVFrame->
-                                                    GetChildWindow( nId );
+                SwInputChild* pChildWin = static_cast<SwInputChild*>(pVFrame->
+                                                    GetChildWindow( nId ));
                 if( pChildWin )
                     pChildWin->SetFormula( sFmlEntry );
             }
@@ -2668,7 +2668,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     }
 
     // get the word count dialog to update itself
-    SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
     if( pWrdCnt )
         pWrdCnt->UpdateCounts();
 
@@ -2950,7 +2950,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     {
         SetChainMode( false );
         SwRect aDummy;
-        SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)rSh.GetFlyFrmFmt();
+        SwFlyFrmFmt *pFmt = static_cast<SwFlyFrmFmt*>(rSh.GetFlyFrmFmt());
         if ( !rSh.Chainable( aDummy, *pFmt, aDocPos ) )
             rSh.Chain( *pFmt, aDocPos );
         UpdatePointer( aDocPos, rMEvt.GetModifier() );
@@ -3981,7 +3981,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
             }
 
             {
-            SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+            SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
             if (pWrdCnt)
                 pWrdCnt->UpdateCounts();
             }
@@ -4171,7 +4171,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 const SwFmtINetFmt* pINet = 0;
                 SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
                 if( rSh.GetContentAtPos( aDocPt, aCntntAtPos ) )
-                    pINet = (SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr;
+                    pINet = static_cast<const SwFmtINetFmt*>(aCntntAtPos.aFnd.pAttr);
 
                 const void* pTmp = pINet;
 
@@ -4643,7 +4643,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             else if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
                             {
                                 if ( bExecHyperlinks && aCntntAtPos.aFnd.pAttr )
-                                    rSh.ClickToINetAttr( *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr, nFilter );
+                                    rSh.ClickToINetAttr( *static_cast<const SwFmtINetFmt*>(aCntntAtPos.aFnd.pAttr), nFilter );
                             }
 
                             rSh.LockView( bViewLocked );
@@ -5147,8 +5147,8 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         case COMMAND_CONTEXTMENU:
         {
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
-            SwInputChild* pChildWin = (SwInputChild*)GetView().GetViewFrame()->
-                                                GetChildWindow( nId );
+            SwInputChild* pChildWin = static_cast<SwInputChild*>(GetView().GetViewFrame()->
+                                                GetChildWindow( nId ));
 
             if (m_rView.GetPostItMgr()->IsHit(rCEvt.GetMousePosPixel()))
                 return;

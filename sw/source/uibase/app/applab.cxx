@@ -184,8 +184,8 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
     if ( RET_OK == pDlg->Execute() )
     {
         // Read dialog, store item in config
-        const SwLabItem& rItem = (const SwLabItem&) pDlg->
-                                            GetOutputItemSet()->Get(FN_LABEL);
+        const SwLabItem& rItem = static_cast<const SwLabItem&>( pDlg->
+                                            GetOutputItemSet()->Get(FN_LABEL));
         aLabCfg.GetItem() = rItem;
         aLabCfg.Commit();
 
@@ -197,13 +197,13 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         Printer *pPrt = pDlg->GetPrt();
         if (pPrt)
         {
-            SwDocShell *pDocSh = (SwDocShell*)(&*xDocSh);
+            SwDocShell *pDocSh = static_cast<SwDocShell*>(&*xDocSh);
             pDocSh->getIDocumentDeviceAccess()->setJobsetup(pPrt->GetJobSetup());
         }
 
         SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
-        SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
+        SwView      *pNewView = static_cast<SwView*>( pViewFrame->GetViewShell());
         pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );// So that SelectShell is being called.
 
         // Set document title
@@ -228,7 +228,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
 
         {   // block for locks the dispatcher!!
 
-            SwWait aWait( (SwDocShell&)*xDocSh, true );
+            SwWait aWait( static_cast<SwDocShell&>(*xDocSh), true );
 
             SET_CURR_SHELL(pSh);
             pSh->SetLabelDoc(rItem.bSynchron);

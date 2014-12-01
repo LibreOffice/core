@@ -80,7 +80,7 @@ bool SwDocDisplayItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    const SwDocDisplayItem& rItem = (SwDocDisplayItem&)rAttr;
+    const SwDocDisplayItem& rItem = static_cast<const SwDocDisplayItem&>(rAttr);
 
     return (  bParagraphEnd         == rItem.bParagraphEnd       &&
               bTab                  == rItem.bTab                &&
@@ -171,7 +171,7 @@ bool SwElemItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    const SwElemItem& rItem = (SwElemItem&)rAttr;
+    const SwElemItem& rItem = static_cast<const SwElemItem&>(rAttr);
 
     return (    bHorzScrollbar  == rItem.bHorzScrollbar &&
                 bVertScrollbar  == rItem.bVertScrollbar &&
@@ -252,7 +252,7 @@ bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    const SwAddPrinterItem& rItem = (SwAddPrinterItem&)rAttr;
+    const SwAddPrinterItem& rItem = static_cast<const SwAddPrinterItem&>(rAttr);
 
     return  SwPrintData::operator==(rItem);
 }
@@ -329,7 +329,7 @@ bool SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 {
     assert(SfxPoolItem::operator==(rAttr));
 
-    const SwTestItem& rItem = (const SwTestItem&) rAttr;
+    const SwTestItem& rItem = static_cast<const SwTestItem&>( rAttr);
 
     return ( bTest1==rItem.bTest1&&
              bTest2==rItem.bTest2&&

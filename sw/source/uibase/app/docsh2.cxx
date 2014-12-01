@@ -137,7 +137,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
     //only with statistics, when this document is being shown, not
     //from within the Doc-Manager
-    SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();
+    SwDocShell* pDocSh = static_cast<SwDocShell*>( SfxObjectShell::Current());
     if( pDocSh == this )
     {
         //Not for SourceView.
@@ -392,9 +392,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 // call on all Docs the idle formatter to start
                 // the collection of Words
                 TypeId aType = TYPE(SwDocShell);
-                for( SwDocShell *pDocSh = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+                for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(&aType));
                      pDocSh;
-                     pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
+                     pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, &aType )) )
                 {
                     SwDoc* pTmp = pDocSh->GetDoc();
                     if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )
@@ -622,9 +622,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         OUString sPath = aDlgHelper.GetPath();
                         SfxStringItem aName(SID_FILE_NAME, sPath);
                         SfxStringItem aFilter(SID_FILTER_NAME, pHtmlFlt->GetName());
-                        const SfxBoolItem* pBool = (const SfxBoolItem*)
+                        const SfxBoolItem* pBool = static_cast<const SfxBoolItem*>(
                                 pViewFrm->GetDispatcher()->Execute(
-                                        SID_SAVEASDOC, SfxCallMode::SYNCHRON, &aName, &aFilter, 0L );
+                                        SID_SAVEASDOC, SfxCallMode::SYNCHRON, &aName, &aFilter, 0L ));
                         if(!pBool || !pBool->GetValue())
                             break;
                     }
@@ -679,7 +679,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             break;
             case SID_GET_COLORLIST:
             {
-                SvxColorListItem* pColItem = (SvxColorListItem*)GetItem(SID_COLOR_TABLE);
+                const SvxColorListItem* pColItem = static_cast<const SvxColorListItem*>(GetItem(SID_COLOR_TABLE));
                 XColorListRef pList = pColItem->GetColorList();
                 rReq.SetReturnValue(OfaRefItem<XColorList>(SID_GET_COLORLIST, pList));
             }
@@ -745,7 +745,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     // Create new document
                     SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
-                    SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
+                    SwView      *pCurrView = static_cast<SwView*>( pFrame->GetViewShell());
 
                     // Set document's title
                     OUString aTmp( SW_RES(STR_ABSTRACT_TITLE) );
@@ -1257,14 +1257,14 @@ void SwDocShell::UpdateChildWindows()
     if(!GetView())
         return;
     SfxViewFrame* pVFrame = GetView()->GetViewFrame();
-    SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->
-            GetChildWindow( SwFldDlgWrapper::GetChildWindowId() );
+    SwFldDlgWrapper *pWrp = static_cast<SwFldDlgWrapper*>(pVFrame->
+            GetChildWindow( SwFldDlgWrapper::GetChildWindowId() ));
     if( pWrp )
         pWrp->ReInitDlg( this );
 
     // if necessary newly initialize RedlineDlg
-    SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)pVFrame->
-            GetChildWindow( SwRedlineAcceptChild::GetChildWindowId() );
+    SwRedlineAcceptChild *pRed = static_cast<SwRedlineAcceptChild*>(pVFrame->
+            GetChildWindow( SwRedlineAcceptChild::GetChildWindowId() ));
     if( pRed )
         pRed->ReInitDlg( this );
 }

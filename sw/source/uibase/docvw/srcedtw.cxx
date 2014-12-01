@@ -437,7 +437,7 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 {
     bool bDone = false;
-    SwSrcEditWindow* pSrcEditWin = (SwSrcEditWindow*)GetParent();
+    SwSrcEditWindow* pSrcEditWin = static_cast<SwSrcEditWindow*>(GetParent());
     bool bChange = !pSrcEditWin->IsReadonly() || !TextEngine::DoesKeyChangeText( rKEvt );
     if(bChange)
         bDone = pTextView->KeyInput( rKEvt );
@@ -729,7 +729,7 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if ( dynamic_cast<const TextHint*>(&rHint) )
     {
-        const TextHint& rTextHint = (const TextHint&)rHint;
+        const TextHint& rTextHint = static_cast<const TextHint&>(rHint);
         if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
@@ -968,7 +968,7 @@ void SwSrcEditWindow::SetFont()
         sFontName = aFont.GetName();
     }
     const SvxFontListItem* pFontListItem =
-        (const SvxFontListItem* )pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST );
+        static_cast<const SvxFontListItem* >(pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST ));
     const FontList*  pList = pFontListItem->GetFontList();
     vcl::FontInfo aInfo = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
 

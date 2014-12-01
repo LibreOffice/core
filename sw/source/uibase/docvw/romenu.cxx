@@ -96,7 +96,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
         if( rSh.GetContentAtPos( rDocPos, aCntntAtPos, false))
         {
-            SwFmtINetFmt &rIItem = *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr;
+            const SwFmtINetFmt &rIItem = *static_cast<const SwFmtINetFmt*>(aCntntAtPos.aFnd.pAttr);
             sURL = rIItem.GetValue();
             sTargetFrameName = rIItem.GetTargetFrame();
             sDescription = aCntntAtPos.sStr;
@@ -118,7 +118,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         if( pGrfFmt && SfxItemState::SET == pGrfFmt->GetItemState(
             RES_URL, true, &pURLItem ))
         {
-            const SwFmtURL& rURL = *(SwFmtURL*)pURLItem;
+            const SwFmtURL& rURL = *static_cast<const SwFmtURL*>(pURLItem);
             if( rURL.GetMap() )
                 pImageMap = new ImageMap( *rURL.GetMap() );
             else if( !rURL.GetURL().isEmpty() )

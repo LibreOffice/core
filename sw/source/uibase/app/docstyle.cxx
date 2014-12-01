@@ -1365,7 +1365,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 // no conditional template, then first create and adopt
                 // all important values
                 SwConditionTxtFmtColl* pCColl = rDoc.MakeCondTxtFmtColl(
-                        pColl->GetName(), (SwTxtFmtColl*)pColl->DerivedFrom() );
+                        pColl->GetName(), static_cast<SwTxtFmtColl*>(pColl->DerivedFrom()) );
                 if( pColl != &pColl->GetNextTxtFmtColl() )
                     pCColl->SetNextTxtFmtColl( pColl->GetNextTxtFmtColl() );
 

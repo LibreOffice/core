@@ -125,7 +125,7 @@ SwView* SwModule::GetFirstView()
 {
     // returns only sivible SwView
     const TypeId aTypeId = TYPE(SwView);
-    SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
+    SwView* pView = static_cast<SwView*>(SfxViewShell::GetFirst(&aTypeId));
     return pView;
 }
 
@@ -133,7 +133,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 {
     OSL_ENSURE(PTR_CAST(SwView, pView),"return no SwView");
     const TypeId aTypeId = TYPE(SwView);
-    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, true);
+    SwView* pNView = static_cast<SwView*>(SfxViewShell::GetNext(*pView, &aTypeId, true));
     return pNView;
 }
 
@@ -613,9 +613,9 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
     if( bOnlineSpelling || bInvalid )
     {
         TypeId aType = TYPE(SwDocShell);
-        for( SwDocShell *pDocSh = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
+        for( SwDocShell *pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetFirst(&aType));
              pDocSh;
-             pDocSh = (SwDocShell*)SfxObjectShell::GetNext( *pDocSh, &aType ) )
+             pDocSh = static_cast<SwDocShell*>(SfxObjectShell::GetNext( *pDocSh, &aType ) ) )
         {
             SwDoc* pTmp = pDocSh->GetDoc();
             if ( pTmp->getIDocumentLayoutAccess().GetCurrentViewShell() )

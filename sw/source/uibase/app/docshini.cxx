@@ -176,7 +176,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             sal_uInt16 nFontWhich = aFontWhich[i];
             sal_uInt16 nFontId = aFontIds[i];
             boost::scoped_ptr<SvxFontItem> pFontItem;
-            const SvxLanguageItem& rLang = (const SvxLanguageItem&)mpDoc->GetDefault( aLangTypes[i] );
+            const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem&>(mpDoc->GetDefault( aLangTypes[i] ));
             LanguageType eLanguage = rLang.GetLanguage();
             if(!pStdFont->IsFontDefault(nFontId))
             {
@@ -282,7 +282,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 nFontHeight = SwStdFontConfig::GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
                 pColl = mpDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
-            SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, true ));
+            SvxFontHeightItem aFontHeight( static_cast<const SvxFontHeightItem&>(pColl->GetFmtAttr( nFontHeightWhich, true )));
             if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {
                 aFontHeight.SetHeight(nFontHeight);
@@ -653,8 +653,8 @@ void SwDocShell::SubInitNew()
 
     if(!bWeb)
     {
-        SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) mpDoc->GetDefault(
-                                                        RES_PARATR_HYPHENZONE) );
+        SvxHyphenZoneItem aHyp( static_cast<const SvxHyphenZoneItem&>( mpDoc->GetDefault(
+                                                        RES_PARATR_HYPHENZONE)  ) );
         aHyp.GetMinLead()   = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinLeading);
         aHyp.GetMinTrail()  = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinTrailing);
 

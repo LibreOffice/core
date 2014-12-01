@@ -59,7 +59,7 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( vcl::Window* _pParent,
         pInfo->aSize = pWindow->GetSizePixel();
     }
 
-    ((SwMailMergeChildWin *)pWindow)->Initialize(pInfo);
+    static_cast<SwMailMergeChildWin *>(pWindow)->Initialize(pInfo);
     pWindow->Show();
 }
 

@@ -134,14 +134,14 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
             pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));
         pRet->Put(SwPtrItem(FN_PARAM_WRTSHELL, &rWrtShell));
 
-        pRet->Put((const SvxLanguageItem&)
-            rWrtShell.GetDefault(RES_CHRATR_LANGUAGE), SID_ATTR_LANGUAGE);
+        pRet->Put(static_cast<const SvxLanguageItem&>(
+            rWrtShell.GetDefault(RES_CHRATR_LANGUAGE)), SID_ATTR_LANGUAGE);
 
-        pRet->Put((const SvxLanguageItem&)
-            rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE), SID_ATTR_CHAR_CJK_LANGUAGE);
+        pRet->Put(static_cast<const SvxLanguageItem&>(
+            rWrtShell.GetDefault(RES_CHRATR_CJK_LANGUAGE)), SID_ATTR_CHAR_CJK_LANGUAGE);
 
-        pRet->Put((const SvxLanguageItem&)
-            rWrtShell.GetDefault(RES_CHRATR_CTL_LANGUAGE), SID_ATTR_CHAR_CTL_LANGUAGE);
+        pRet->Put(static_cast<const SvxLanguageItem&>(
+            rWrtShell.GetDefault(RES_CHRATR_CTL_LANGUAGE)), SID_ATTR_CHAR_CTL_LANGUAGE);
     }
     else
     {
@@ -190,8 +190,8 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
         if(pAppView)
         {
             const SvxTabStopItem& rDefTabs =
-                    (const SvxTabStopItem&)pAppView->GetWrtShell().
-                                        GetDefault(RES_PARATR_TABSTOP);
+                    static_cast<const SvxTabStopItem&>(pAppView->GetWrtShell().
+                                        GetDefault(RES_PARATR_TABSTOP));
                 pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, (sal_uInt16)::GetTabDist(rDefTabs)));
         }
         else
@@ -260,7 +260,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     // Interpret the page Documentview
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_DOCDISP, false, &pItem ))
     {
-        const SwDocDisplayItem* pDocDispItem = (const SwDocDisplayItem*)pItem;
+        const SwDocDisplayItem* pDocDispItem = static_cast<const SwDocDisplayItem*>(pItem);
 
         if(!aViewOpt.IsViewMetaChars())
         {
@@ -286,7 +286,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     // Elements - interpret Item
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ELEM, false, &pItem ) )
     {
-        const SwElemItem* pElemItem = (const SwElemItem*)pItem;
+        const SwElemItem* pElemItem = static_cast<const SwElemItem*>(pItem);
         pElemItem->FillViewOptions( aViewOpt );
 
     }
@@ -295,20 +295,20 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     {
         SfxGetpApp()->SetOptions(rSet);
         PutItem(*pItem);
-        const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
+        const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pItem);
         ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
     }
     if( SfxItemState::SET == rSet.GetItemState(SID_ATTR_APPLYCHARUNIT,
                                                     false, &pItem ) )
     {
         SfxGetpApp()->SetOptions(rSet);
-        const SfxBoolItem* pCharItem = (const SfxBoolItem*)pItem;
+        const SfxBoolItem* pCharItem = static_cast<const SfxBoolItem*>(pItem);
         ::SetApplyCharUnit(pCharItem->GetValue(), !bTextDialog);
     }
 
     if( SfxItemState::SET == rSet.GetItemState(FN_HSCROLL_METRIC, false, &pItem ) )
     {
-        const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
+        const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pItem);
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
         pPref->SetHScrollMetric(eUnit);
         if(pAppView)
@@ -317,7 +317,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
     if( SfxItemState::SET == rSet.GetItemState(FN_VSCROLL_METRIC, false, &pItem ) )
     {
-        const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
+        const SfxUInt16Item* pMetricItem = static_cast<const SfxUInt16Item*>(pItem);
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
         pPref->SetVScrollMetric(eUnit);
         if(pAppView)
@@ -326,7 +326,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
     if( SfxItemState::SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem ) )
     {
-        sal_uInt16 nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nTabDist = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
         pPref->SetDefTab(nTabDist);
         if(pAppView)
         {
@@ -339,15 +339,15 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
     // Background only in WebDialog
     if(SfxItemState::SET == rSet.GetItemState(RES_BACKGROUND))
     {
-        const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSet.Get(
-                                RES_BACKGROUND);
+        const SvxBrushItem& rBrushItem = static_cast<const SvxBrushItem&>(rSet.Get(
+                                RES_BACKGROUND));
         aViewOpt.SetRetoucheColor( rBrushItem.GetColor() );
     }
 
     // Interpret page Grid Settings
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS, false, &pItem ))
     {
-        const SvxGridItem* pGridItem = (const SvxGridItem*)pItem;
+        const SvxGridItem* pGridItem = static_cast<const SvxGridItem*>(pItem);
 
         aViewOpt.SetSnap( pGridItem->GetUseGridSnap() );
         aViewOpt.SetSynchronize(pGridItem->GetSynchronize());
@@ -377,7 +377,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
         SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
         if (pOpt)
         {
-            const SwAddPrinterItem* pAddPrinterAttr = (const SwAddPrinterItem*)pItem;
+            const SwAddPrinterItem* pAddPrinterAttr = static_cast<const SwAddPrinterItem*>(pItem);
             *pOpt = *pAddPrinterAttr;
 
             if(pAppView)
@@ -406,7 +406,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
     {
-        aViewOpt.SetCursorInProtectedArea(((const SfxBoolItem*)pItem)->GetValue());
+        aViewOpt.SetCursorInProtectedArea(static_cast<const SfxBoolItem*>(pItem)->GetValue());
     }
 
         // set elements for the current view and shell
