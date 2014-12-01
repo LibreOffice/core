@@ -55,6 +55,7 @@
 #include <algorithm>
 #include <svl/smplhint.hxx>
 #include <rtl/strbuf.hxx>
+#include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 
@@ -1822,6 +1823,20 @@ void SdrPage::ActionChanged() const
     }
 }
 
+void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrPage"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    size_t nObjCount = GetObjCount();
+    for (size_t i = 0; i < nObjCount; ++i)
+    {
+        if (const SdrObject* pObject = pPage->GetObj(i))
+            pObject->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
+}
 
 // sdr::Comment interface
 

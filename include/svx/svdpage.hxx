@@ -562,6 +562,8 @@ public:
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo,
         bool bEdit );
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 typedef tools::WeakReference< SdrPage > SdrPageWeakRef;
