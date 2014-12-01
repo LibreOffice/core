@@ -472,49 +472,51 @@ namespace rptui
     {
         switch ( _rNEvt.GetType() )
         {
-        case MouseNotifyEvent::KEYINPUT:
-        {
-            const KeyEvent* pKeyEvent( _rNEvt.GetKeyEvent() );
-            const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-            if ( rKeyCode.IsMod1() && rKeyCode.IsMod2() )
+            case MouseNotifyEvent::KEYINPUT:
             {
-                if ( rKeyCode.GetCode() == 0x0508 )
+                const KeyEvent* pKeyEvent( _rNEvt.GetKeyEvent() );
+                const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
+                if ( rKeyCode.IsMod1() && rKeyCode.IsMod2() )
                 {
-                    impl_deleteCondition_nothrow( impl_getFocusedConditionIndex( 0 ) );
-                    return true;
+                    if ( rKeyCode.GetCode() == 0x0508 )
+                    {
+                        impl_deleteCondition_nothrow( impl_getFocusedConditionIndex( 0 ) );
+                        return true;
+                    }
+                    if ( rKeyCode.GetCode() == 0x0507 ) // +
+                    {
+                        impl_addCondition_nothrow( impl_getFocusedConditionIndex( impl_getConditionCount() - 1 ) + 1 );
+                        return true;
+                    }
                 }
-                if ( rKeyCode.GetCode() == 0x0507 ) // +
-                {
-                    impl_addCondition_nothrow( impl_getFocusedConditionIndex( impl_getConditionCount() - 1 ) + 1 );
-                    return true;
-                }
-            }
-        }
-        break;
-        case MouseNotifyEvent::GETFOCUS:
-        {
-            if ( m_bDeletingCondition )
                 break;
-
-            const vcl::Window* pGetFocusWindow( _rNEvt.GetWindow() );
-
-            // determine whether the new focus window is part of an (currently invisible) condition
-            const vcl::Window* pConditionCandidate = pGetFocusWindow->GetParent();
-            const vcl::Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
-            while   (   ( pPlaygroundCandidate )
-                    &&  ( pPlaygroundCandidate != this )
-                    &&  ( pPlaygroundCandidate != m_pConditionPlayground )
-                    )
-            {
-                pConditionCandidate = pConditionCandidate->GetParent();
-                pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             }
-            if (pConditionCandidate && pPlaygroundCandidate == m_pConditionPlayground)
+            case MouseNotifyEvent::GETFOCUS:
             {
-                impl_ensureConditionVisible( dynamic_cast< const Condition& >( *pConditionCandidate ).getConditionIndex() );
+                if ( m_bDeletingCondition )
+                    break;
+
+                const vcl::Window* pGetFocusWindow( _rNEvt.GetWindow() );
+
+                // determine whether the new focus window is part of an (currently invisible) condition
+                const vcl::Window* pConditionCandidate = pGetFocusWindow->GetParent();
+                const vcl::Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
+                while   (   ( pPlaygroundCandidate )
+                        &&  ( pPlaygroundCandidate != this )
+                        &&  ( pPlaygroundCandidate != m_pConditionPlayground )
+                        )
+                {
+                    pConditionCandidate = pConditionCandidate->GetParent();
+                    pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
+                }
+                if (pConditionCandidate && pPlaygroundCandidate == m_pConditionPlayground)
+                {
+                    impl_ensureConditionVisible( dynamic_cast< const Condition& >( *pConditionCandidate ).getConditionIndex() );
+                }
+                break;
             }
-        }
-        break;
+            default:
+                break;
         }
 
         return ModalDialog::PreNotify( _rNEvt );
