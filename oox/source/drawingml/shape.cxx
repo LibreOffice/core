@@ -89,6 +89,7 @@ Shape::Shape( const sal_Char* pServiceName )
 : mbIsChild( false )
 , mpLinePropertiesPtr( new LineProperties )
 , mpFillPropertiesPtr( new FillProperties )
+, mpShapeRefFillPropPtr( new FillProperties )
 , mpGraphicPropertiesPtr( new GraphicProperties )
 , mpCustomShapePropertiesPtr( new CustomShapeProperties )
 , mpEffectPropertiesPtr( new EffectProperties )
@@ -114,6 +115,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mpTextBody(pSourceShape->mpTextBody)
 , mpLinePropertiesPtr( pSourceShape->mpLinePropertiesPtr )
 , mpFillPropertiesPtr( pSourceShape->mpFillPropertiesPtr )
+, mpShapeRefFillPropPtr( pSourceShape->mpShapeRefFillPropPtr )
 , mpGraphicPropertiesPtr( pSourceShape->mpGraphicPropertiesPtr )
 , mpCustomShapePropertiesPtr( pSourceShape->mpCustomShapePropertiesPtr )
 , mpTablePropertiesPtr( pSourceShape->mpTablePropertiesPtr )
@@ -274,7 +276,7 @@ void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
         mpTextBody.reset();
     maShapeProperties = rReferencedShape.maShapeProperties;
     mpLinePropertiesPtr = LinePropertiesPtr( new LineProperties( *rReferencedShape.mpLinePropertiesPtr.get() ) );
-    mpFillPropertiesPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
+    mpShapeRefFillPropPtr = FillPropertiesPtr( new FillProperties( *rReferencedShape.mpFillPropertiesPtr.get() ) );
     mpCustomShapePropertiesPtr = CustomShapePropertiesPtr( new CustomShapeProperties( *rReferencedShape.mpCustomShapePropertiesPtr.get() ) );
     mpTablePropertiesPtr = table::TablePropertiesPtr( rReferencedShape.mpTablePropertiesPtr.get() ? new table::TableProperties( *rReferencedShape.mpTablePropertiesPtr.get() ) : NULL );
     mpEffectPropertiesPtr = EffectPropertiesPtr( new EffectProperties( *rReferencedShape.mpEffectPropertiesPtr.get() ) );
@@ -534,6 +536,9 @@ Reference< XShape > Shape::createAndInsert(
         EffectProperties aEffectProperties;
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
+
+        // First apply reference shape's properties (shape on the master slide)
+        aFillProperties.assignUsed( *mpShapeRefFillPropPtr );
 
         if( pTheme )
         {
