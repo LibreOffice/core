@@ -27,7 +27,7 @@ $(call gb_CustomTarget_get_workdir,jvmfwk/jvmfwk3_ini)/$(call gb_Helper_get_rcfi
             $(SRCDIR)/jvmfwk/CustomTarget_jvmfwk_jvmfwk3_ini.mk
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	(   printf '[Bootstrap]\n' && \
-            printf 'UNO_JAVA_JFW_VENDOR_SETTINGS=$${ORIGIN}/../$(if $(filter-out MACOSX WNT,$(OS)),ure-link/)$(if $(filter-out WNT,$(OS)),share/)misc/javavendors.xml\n' && \
+            printf 'UNO_JAVA_JFW_VENDOR_SETTINGS=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../share/misc/,$(if $(filter WNT,$(OS)),$${ORIGIN}/../misc/,$${ORIGIN}/))javavendors.xml\n' && \
             printf 'UNO_JAVA_JFW_SHARED_DATA=$${URE_OVERRIDE_JAVA_JFW_SHARED_DATA}\n' && \
             printf 'UNO_JAVA_JFW_USER_DATA=$${URE_OVERRIDE_JAVA_JFW_USER_DATA}\n' && \
             printf 'UNO_JAVA_JFW_CLASSPATH_URLS=$${URE_MORE_JAVA_CLASSPATH_URLS}\n' \

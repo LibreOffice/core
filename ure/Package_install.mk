@@ -17,8 +17,6 @@ ifeq (MACOSX,$(OS))
 $(eval $(call gb_Package_add_symbolic_link,ure_install,MacOS/urelibs,../Frameworks))
 else ifeq (WNT,$(OS))
 $(eval $(call gb_Package_add_file,ure_install,ure-link,ure-link))
-else
-$(eval $(call gb_Package_add_symbolic_link,ure_install,ure-link,ure))
 endif
 
 # vim:set noet sw=4 ts=4:

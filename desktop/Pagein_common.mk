@@ -51,7 +51,7 @@ $(eval $(call gb_Pagein_add_objects,common,\
     svl \
     vcl \
     tk \
-    ../ure-link/share/misc/types.rdb \
+    types.rdb \
     services/services.rdb \
     types/oovbaapi.rdb \
     deployment \

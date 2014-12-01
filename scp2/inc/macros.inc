@@ -65,15 +65,12 @@
 #ifdef MACOSX
     #define GID_BRAND_DIR_ETC gid_Brand_Dir_Share
     #define GID_DIR_PY gid_Brand_Dir_Share
-    #define GID_DIR_URE gid_Dir_Bundle_Contents
     #define GID_DIR_URE_BIN gid_Brand_Dir_Program
     #define GID_DIR_URE_JAVA gid_Dir_Classes
     #define GID_DIR_URE_LIB gid_Dir_Frameworks
-    #define GID_DIR_URE_SHARE gid_Brand_Dir_Share_Ure
 #else
     #define GID_BRAND_DIR_ETC gid_Brand_Dir_Program
     #define GID_DIR_PY gid_Brand_Dir_Program
-    #define GID_DIR_URE gid_Dir_Common_Ure
 #if defined UNX
     #define GID_DIR_URE_BIN gid_Brand_Dir_Program
     #define GID_DIR_URE_JAVA gid_Dir_Classes
@@ -82,7 +79,6 @@
     #define GID_DIR_URE_JAVA gid_Dir_Ure_Java
 #endif
     #define GID_DIR_URE_LIB gid_Brand_Dir_Program
-    #define GID_DIR_URE_SHARE gid_Dir_Ure_Share
 #endif
 
 #define RESFILENAME(name,lang)                STRING(CONCAT3(name,lang,.res))
@@ -477,7 +473,6 @@ End
 #define SCP2_URE_DL_COMID_NORMAL(n) n STRING(COMID) ".dll"
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
-#define SCP2_URE_SHARE_DIR gid_Dir_Common_Ure
 #else
 #define SCP2_URE_DL_DIR GID_DIR_URE_LIB
 #define SCP2_URE_DL_NORMAL(n) "lib" n STRING(UNXSUFFIX)
@@ -493,7 +488,6 @@ End
     "libuno_" n STRING(COMID) STRING(UNXSUFFIX) "." v
 #define SCP2_URE_DL_UNO_COMID_NORMAL(n)	\
     "libuno_" n STRING(COMID) STRING(UNXSUFFIX)
-#define SCP2_URE_SHARE_DIR GID_DIR_URE_SHARE
 #endif
 #if defined MACOSX
 #define SCP2_URE_JDL_NORMAL(n) "lib" n ".jnilib"

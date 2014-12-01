@@ -93,10 +93,6 @@ $main::return = 0;
 
 if ( $main::operatingSystem =~ m/darwin/ )
 {
-# used for a SDK as part of the office installation
-#       $main::OFFICE_HOME = `cd $main::sdkpath/../../.. && pwd`;
-#       chomp($main::OFFICE_HOME);
-#       print " Used Office = $main::OFFICE_HOME\n";
     print " Used SDK = $main::OO_SDK_HOME\n\n";
 
     $main::OFFICE_HOME_SUGGESTION = searchMacOffice();
@@ -117,14 +113,10 @@ if ( $main::operatingSystem =~ m/darwin/ )
             print " Error: An office installation is required, please specify the path to a valid installation.\n";
         }
 
-        # check more details
-        $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents";
     }
+    $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents";
 } else
 {
-    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
-    chomp($main::OO_SDK_URE_HOME);
-
     $main::OFFICE_HOME_SUGGESTION = searchoffice();
 
     if ( $main::OFFICE_HOME_SUGGESTION eq "" ) {
@@ -192,6 +184,8 @@ if ( $main::operatingSystem =~ m/darwin/ )
             }
         }
     }
+
+    $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME";
 }
 
 # prepare GNU make path

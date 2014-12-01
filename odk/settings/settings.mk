@@ -235,9 +235,7 @@ LIBRARY_LINK_FLAGS+=-m64
 EXE_LINK_FLAGS+=-m64
 endif
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
-endif
+URE_MISC=${OFFICE_PROGRAM_PATH}
 
 endif
 
@@ -349,9 +347,7 @@ EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,-
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
-endif
+URE_MISC=${OFFICE_PROGRAM_PATH}
 
 endif
 
@@ -561,8 +557,6 @@ EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
-ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
-endif
+URE_MISC=${OFFICE_PROGRAM_PATH}
 
 endif
