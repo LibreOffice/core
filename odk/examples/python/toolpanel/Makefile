@@ -24,5 +24,5 @@ FILES = \
     toolpanel.py \
     toolpanels/poc.xdl
 
-toolpanel.oxt: $(FILES)
+$(OUT_BIN)/toolpanel.$(UNOOXT_EXT): $(FILES)
 	$(SDK_ZIP) $@ $^
