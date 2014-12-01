@@ -8,9 +8,6 @@ cmd/lc_spellingdialog.png cmd/lc_spelling.png
 cmd/lc_fontcolor.png cmd/lc_color.png
 #cmd/sc_fontcolor.png cmd/sc_color.png
 
-# File Menu
-cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
-
 # paragraph line spacing drop down
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
@@ -19,7 +16,32 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 #cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 
+# Textbox
+cmd/lc_drawtext.png cmd/lc_text.png
+#cmd/sc_drawtext.png cmd/sc_text.png
+
+# Vertical Text Alignment
+cmd/lc_cellverttop.png cmd/lc_aligntop.png
+cmd/sc_cellverttop.png cmd/sc_aligntop.png
+cmd/lc_cellvertcenter.png cmd/lc_alignverticalcenter.png
+cmd/sc_cellvertcenter.png cmd/sc_alignverticalcenter.png
+cmd/lc_cellvertbottom.png cmd/lc_alignbottom.png
+cmd/sc_cellvertbottom.png cmd/sc_alignbottom.png
+
+# Shapes
+cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
+cmd/lc_basicshapes.ellipse.png cmd/lc_ellipse.png
+cmd/lc_basicshapes.rectangle.png cmd/lc_rect.png
+cmd/lc_linetoolbox.png cmd/lc_freeline.png
+cmd/lc_ellipsetoolbox.png cmd/lc_ellipse.png
+
 # ---- Redirect Icons Not Available Yet ------
+
+# File Menu
+#cmd/sc_exporttopdf.png cmd/sc_exportdirecttopdf.png
+
+# Number Formats
+#cmd/lc_numberformatdate.png cmd/lc_datefield.png
 
 # Find Toolbar
 #cmd/lc_scrolltonext.png cmd/lc_downsearch.png
