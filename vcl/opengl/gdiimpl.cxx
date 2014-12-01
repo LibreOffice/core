@@ -134,7 +134,7 @@ bool OpenGLSalGraphicsImpl::AcquireContext( bool bOffscreen )
         pContext =CreateWinContext();
 
     mpContext.reset(pContext);
-    return (mpContext != NULL);
+    return (mpContext != nullptr);
 }
 
 bool OpenGLSalGraphicsImpl::ReleaseContext()
