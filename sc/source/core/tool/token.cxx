@@ -3060,6 +3060,10 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         // column range of the reference is not entirely in the deleted column range.
                         break;
 
+                    if (aAbs.aStart.Tab() > rCxt.maRange.aEnd.Tab() || aAbs.aEnd.Tab() < rCxt.maRange.aStart.Tab())
+                        // wrong tables
+                        break;
+
                     ScRange aDeleted = rCxt.maRange;
                     aDeleted.aStart.IncRow(rCxt.mnRowDelta);
                     aDeleted.aEnd.SetRow(aDeleted.aStart.Row()-rCxt.mnRowDelta-1);
