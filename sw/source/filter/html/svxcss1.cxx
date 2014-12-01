@@ -952,9 +952,9 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
     }
     else
     {
-        SvxLRSpaceItem aLRSpace( (const SvxLRSpaceItem&)rTargetSet.Get(aItemIds.nLRSpace) );
-        SvxULSpaceItem aULSpace( (const SvxULSpaceItem&)rTargetSet.Get(aItemIds.nULSpace) );
-        SvxBoxItem aBox( (const SvxBoxItem&)rTargetSet.Get(aItemIds.nBox) );
+        SvxLRSpaceItem aLRSpace( static_cast<const SvxLRSpaceItem&>(rTargetSet.Get(aItemIds.nLRSpace)) );
+        SvxULSpaceItem aULSpace( static_cast<const SvxULSpaceItem&>(rTargetSet.Get(aItemIds.nULSpace)) );
+        SvxBoxItem aBox( static_cast<const SvxBoxItem&>(rTargetSet.Get(aItemIds.nBox)) );
 
         rTargetSet.Put( rSrcSet );
 
@@ -962,7 +962,7 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
             rSrcInfo.bTextIndent )
         {
             const SvxLRSpaceItem& rNewLRSpace =
-                (const SvxLRSpaceItem&)rSrcSet.Get( aItemIds.nLRSpace );
+                static_cast<const SvxLRSpaceItem&>(rSrcSet.Get( aItemIds.nLRSpace ));
 
             if( rSrcInfo.bLeftMargin )
                 aLRSpace.SetLeft( rNewLRSpace.GetLeft() );
@@ -977,7 +977,7 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
         if( rSrcInfo.bTopMargin || rSrcInfo.bBottomMargin )
         {
             const SvxULSpaceItem& rNewULSpace =
-                (const SvxULSpaceItem&)rSrcSet.Get( aItemIds.nULSpace );
+                static_cast<const SvxULSpaceItem&>(rSrcSet.Get( aItemIds.nULSpace ));
 
             if( rSrcInfo.bTopMargin )
                 aULSpace.SetUpper( rNewULSpace.GetUpper() );

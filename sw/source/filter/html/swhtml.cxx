@@ -642,7 +642,7 @@ void SwHTMLParser::Continue( int nToken )
             if( !aScriptSource.isEmpty() )
             {
                 SwScriptFieldType *pType =
-                    (SwScriptFieldType*)pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_SCRIPTFLD );
+                    static_cast<SwScriptFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_SCRIPTFLD ));
 
                 SwScriptField aFld( pType, aScriptType, aScriptSource,
                                     false );
@@ -909,7 +909,7 @@ void SwHTMLParser::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
     {
     case RES_OBJECTDYING:
-        if (pOld && ((SwPtrMsgPoolItem *)pOld)->pObject == GetRegisteredIn())
+        if (pOld && static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject == GetRegisteredIn())
         {
             // dann uns selbst beenden
             GetRegisteredInNonConst()->Remove( this );
@@ -2104,7 +2104,7 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
             pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 
         const SvxULSpaceItem& rULSpace =
-            (const SvxULSpaceItem&)pTxtNode->SwCntntNode::GetAttr( RES_UL_SPACE );
+            static_cast<const SvxULSpaceItem&>(pTxtNode->SwCntntNode::GetAttr( RES_UL_SPACE ));
 
         bool bChange = AM_NOSPACE==eMode ? rULSpace.GetLower() > 0
                                          : rULSpace.GetLower() == 0;
@@ -2403,7 +2403,7 @@ void SwHTMLParser::AddParSpace()
         return;
 
     SvxULSpaceItem rULSpace =
-        (const SvxULSpaceItem&)pTxtNode->SwCntntNode::GetAttr( RES_UL_SPACE );
+        static_cast<const SvxULSpaceItem&>(pTxtNode->SwCntntNode::GetAttr( RES_UL_SPACE ));
     if( !rULSpace.GetLower() )
     {
         const SvxULSpaceItem& rCollULSpace =
@@ -2595,7 +2595,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         do {
             if( pSh->IsA( TYPE( SwCrsrShell ) ) )
                 static_cast<SwCrsrShell*>(pSh)->SttEndDoc(true);
-            pSh = (SwViewShell *)pSh->GetNext();
+            pSh = static_cast<SwViewShell *>(pSh->GetNext());
         } while( pSh != pActionViewShell );
 
         bSetCrsr = false;
@@ -3768,7 +3768,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
         if( pDocSh )
         {
             const SvxFontListItem *pFListItem =
-               (const SvxFontListItem *)pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST);
+               static_cast<const SvxFontListItem *>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
             if( pFListItem )
                 pFList = pFListItem->GetFontList();
         }
@@ -4672,7 +4672,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
         if( SfxItemState::SET == rItemSet.GetItemState(RES_LR_SPACE,true, &pItem) )
         {
             const SvxLRSpaceItem *pLRItem =
-                (const SvxLRSpaceItem *)pItem;
+                static_cast<const SvxLRSpaceItem *>(pItem);
 
             sal_Int32 nLeft = pLRItem->GetTxtLeft();
             sal_Int32 nRight = pLRItem->GetRight();
@@ -4704,7 +4704,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
         if( SfxItemState::SET == rItemSet.GetItemState(RES_UL_SPACE,true, &pItem) )
         {
             const SvxULSpaceItem *pULItem =
-                (const SvxULSpaceItem *)pItem;
+                static_cast<const SvxULSpaceItem *>(pItem);
             pContext->SetULSpace( pULItem->GetUpper(), pULItem->GetLower() );
         }
     }
@@ -4948,8 +4948,8 @@ void SwHTMLParser::InsertSpacer()
 
             if( pTxtNode )
             {
-                SvxULSpaceItem aULSpace( (const SvxULSpaceItem&)pTxtNode
-                    ->SwCntntNode::GetAttr( RES_UL_SPACE ) );
+                SvxULSpaceItem aULSpace( static_cast<const SvxULSpaceItem&>(pTxtNode
+                    ->SwCntntNode::GetAttr( RES_UL_SPACE )) );
                 aULSpace.SetLower( aULSpace.GetLower() + (sal_uInt16)nSize );
                 pTxtNode->SetAttr( aULSpace );
             }
@@ -5175,7 +5175,7 @@ void SwHTMLParser::InsertLineBreak()
         {
             if( pCSS1Parser->SetFmtBreak( aItemSet, aPropInfo ) )
             {
-                aBreakItem = (const SvxFmtBreakItem &)aItemSet.Get( RES_BREAK );
+                aBreakItem = static_cast<const SvxFmtBreakItem &>(aItemSet.Get( RES_BREAK ));
                 bBreakItem = true;
             }
             if( !aPropInfo.aId.isEmpty() )
@@ -5442,7 +5442,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
     sText.append("\">");
 
     SwPostItField aPostItFld(
-        (SwPostItFieldType*)pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_POSTITFLD ),
+        static_cast<SwPostItFieldType*>(pDoc->getIDocumentFieldsAccess().GetSysFldType( RES_POSTITFLD )),
         aEmptyOUStr, sText.makeStringAndClear(), aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     SwFmtFld aFmtFld( aPostItFld );
     InsertAttr( aFmtFld );

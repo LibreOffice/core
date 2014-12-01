@@ -63,7 +63,7 @@ const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFmt )
 static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                                  const SwTxtNode& rTxtNd, sal_Int32 nFldPos )
 {
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SwFieldType* pFldTyp = pFld->GetTyp();
     sal_uInt16 nField = pFldTyp->Which();
@@ -433,7 +433,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
 Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwFmtFld & rFld = (SwFmtFld&)rHt;
+    const SwFmtFld & rFld = static_cast<const SwFmtFld&>(rHt);
     const SwField* pFld = rFld.GetField();
     const SwFieldType* pFldTyp = pFld->GetTyp();
 
@@ -508,7 +508,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( RES_SCRIPTFLD == pFldTyp->Which() )
     {
-        SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+        SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
         if( rHTMLWrt.bLFPossible )
             rHTMLWrt.OutNewLine( true );
 

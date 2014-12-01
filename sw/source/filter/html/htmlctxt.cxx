@@ -536,7 +536,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
                 // fuer alle folgenden in SetTxtCollAttrs)
 
                 const SvxLRSpaceItem *pLRItem =
-                    (const SvxLRSpaceItem *)pItem;
+                    static_cast<const SvxLRSpaceItem *>(pItem);
 
                 // die bisherigen Absatz-Abstaende holen (ohne die vom
                 // obersten Kontext, denn den veraendern wir ja gerade) ...
@@ -640,7 +640,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             if( bCharLvl )
             {
                 // das Frame-Attr ggf. in ein Char-Attr umwandeln
-                SvxBrushItem aBrushItem( *(const SvxBrushItem *)pItem );
+                SvxBrushItem aBrushItem( *static_cast<const SvxBrushItem *>(pItem) );
                 aBrushItem.SetWhich( RES_CHRATR_BACKGROUND );
 
                 // Das Attribut setzen ...
@@ -660,7 +660,7 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
         case RES_BOX:
             if( bCharLvl )
             {
-                SvxBoxItem aBoxItem( *(const SvxBoxItem *)pItem );
+                SvxBoxItem aBoxItem( *static_cast<const SvxBoxItem *>(pItem) );
                 aBoxItem.SetWhich( RES_CHRATR_BOX );
 
                 NewAttr( &aAttrTab.pCharBox, aBoxItem );

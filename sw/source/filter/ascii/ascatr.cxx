@@ -169,7 +169,7 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
 
 static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
-    const SwTxtNode& rNd = (SwTxtNode&)rNode;
+    const SwTxtNode& rNd = static_cast<SwTxtNode&>(rNode);
 
     sal_Int32 nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
     const sal_Int32 nNodeEnd = rNd.Len();
@@ -178,7 +178,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     if( bLastNd )
         nEnd = rWrt.pCurPam->GetMark()->nContent.GetIndex();
 
-    SwASC_AttrIter aAttrIter( (SwASCWriter&)rWrt, rNd, nStrPos );
+    SwASC_AttrIter aAttrIter( static_cast<SwASCWriter&>(rWrt), rNd, nStrPos );
 
     if( !nStrPos && rWrt.bExportPargraphNumbering )
     {

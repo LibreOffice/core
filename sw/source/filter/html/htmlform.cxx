@@ -913,7 +913,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) )
         {
             // Ggf. den Erstzeilen-Einzug noch plaetten
-            const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
+            const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
             SvxLRSpaceItem aLRItem( *pLRItem );
             aLRItem.SetTxtFirstLineOfst( 0 );
             if( rCSS1PropInfo.bLeftMargin )
@@ -943,7 +943,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      &pItem ) )
         {
             // Ggf. den Erstzeilen-Einzug noch plaetten
-            const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
+            const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
             if( rCSS1PropInfo.bTopMargin )
             {
                 nUpperSpace = convertTwipToMm100( pULItem->GetUpper() );
@@ -1001,7 +1001,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             float fVal = static_cast< float >(
-                (((SvxFontHeightItem *)pItem)->GetHeight()) / 20.0 );
+                (static_cast<const SvxFontHeightItem *>(pItem)->GetHeight()) / 20.0 );
             aTmp.setValue( &fVal, ::getCppuType(&fVal));
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
@@ -1009,7 +1009,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_CHRATR_FONT, true,
                                                      &pItem ) )
         {
-            const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
+            const SvxFontItem *pFontItem = static_cast<const SvxFontItem *>(pItem);
             sPropName = "FontName";
             if( xPropSetInfo->hasPropertyByName( sPropName ) )
             {
@@ -1048,7 +1048,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             float fVal = VCLUnoHelper::ConvertFontWeight(
-                    ((SvxWeightItem *)pItem)->GetWeight() );
+                    static_cast<const SvxWeightItem *>(pItem)->GetWeight() );
             aTmp.setValue( &fVal, ::getCppuType(&fVal));
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
@@ -1058,7 +1058,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int16)((SvxPostureItem *)pItem)->GetPosture();
+            aTmp <<= (sal_Int16)static_cast<const SvxPostureItem *>(pItem)->GetPosture();
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1067,7 +1067,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int16)((SvxUnderlineItem *)pItem)->GetLineStyle();
+            aTmp <<= (sal_Int16)static_cast<const SvxUnderlineItem *>(pItem)->GetLineStyle();
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 
@@ -1076,7 +1076,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
                                                      true, &pItem ) &&
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
-            aTmp <<= (sal_Int16)((SvxCrossedOutItem *)pItem)->GetStrikeout();
+            aTmp <<= (sal_Int16)static_cast<const SvxCrossedOutItem *>(pItem)->GetStrikeout();
             rFCompPropSet->setPropertyValue( sPropName, aTmp );
         }
 

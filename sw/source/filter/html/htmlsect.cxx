@@ -196,7 +196,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aDelPam.SetMark();
 
             const SwStartNode *pStNd =
-                (const SwStartNode *) &rCntntStIdx.GetNode();
+                static_cast<const SwStartNode *>( &rCntntStIdx.GetNode() );
             aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
 
             pDoc->getIDocumentContentOperations().DelFullPara( aDelPam );
@@ -805,7 +805,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_PAGEDESC, false, &pItem ) &&
-            ((SwFmtPageDesc *)pItem)->GetPageDesc() )
+            static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc() )
         {
             pDestCntntNd->SetAttr( *pItem );
             pSrcCntntNd->ResetAttr( RES_PAGEDESC );
@@ -813,7 +813,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         if( SfxItemState::SET == pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_BREAK, false, &pItem ) )
         {
-            switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
+            switch( static_cast<const SvxFmtBreakItem *>(pItem)->GetBreak() )
             {
             case SVX_BREAK_PAGE_BEFORE:
             case SVX_BREAK_PAGE_AFTER:

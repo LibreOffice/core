@@ -524,7 +524,7 @@ static const SwFmtCol *lcl_html_GetFmtCol( const SwSection& rSection,
         SfxItemState::SET == rFmt.GetAttrSet().GetItemState(RES_COL,false,&pItem) &&
         static_cast<const SwFmtCol *>(pItem)->GetNumCols() > 1 )
     {
-        pCol = (const SwFmtCol *)pItem;
+        pCol = static_cast<const SwFmtCol *>(pItem);
     }
 
     return pCol;
@@ -666,7 +666,7 @@ static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt )
 
 static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     // End <PRE> and any <DL>, because a definition list's level may
     // change inside the section.
@@ -848,7 +848,7 @@ static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
         // wenn das Item nur in der Vorlage des aktuellen Doks gesetzt
         // ist oder einen anderen Wert hat, als in der HTML-Vorlage,
         // wird es gesetzt
-        const SvxColorItem *pCItem = (const SvxColorItem*)pItem;
+        const SvxColorItem *pCItem = static_cast<const SvxColorItem*>(pItem);
 
         if( !bRefItemSet )
         {
@@ -872,8 +872,8 @@ static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
     {
         // Das Item war in der HTML-Vorlage noch gesetzt, also geben wir
         // das Default aus
-        pColorItem = (const SvxColorItem*)&rItemSet.GetPool()
-                                        ->GetDefaultItem( RES_CHRATR_COLOR );
+        pColorItem = static_cast<const SvxColorItem*>(&rItemSet.GetPool()
+                                        ->GetDefaultItem( RES_CHRATR_COLOR ));
     }
 
     if( pColorItem )

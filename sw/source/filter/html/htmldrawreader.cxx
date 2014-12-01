@@ -104,7 +104,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
-        const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
+        const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
         aLRItem.SetTxtFirstLineOfst( 0 );
         if( rCSS1PropInfo.bLeftMargin )
@@ -131,7 +131,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
-        const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
+        const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
         if( rCSS1PropInfo.bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();
@@ -231,7 +231,7 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
     case RES_BACKGROUND:
     case RES_CHRATR_BACKGROUND:
         {
-            const SvxBrushItem& rBrushItem = (const SvxBrushItem&)rSwItem;
+            const SvxBrushItem& rBrushItem = static_cast<const SvxBrushItem&>(rSwItem);
             rEEItemSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
             rEEItemSet.Put( XFillColorItem(aEmptyOUStr,
                             rBrushItem.GetColor()) );

@@ -701,7 +701,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                                      const SdrObject& rSdrObject,
                                      bool bInCntnr )
 {
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObject );
     assert(pFormObj);
@@ -1366,7 +1366,7 @@ void SwHTMLWriter::GetControls()
             continue;
 
         const SdrObject *pSdrObj =
-            SwHTMLWriter::GetHTMLControl( *(const SwDrawFrmFmt*)pFrmFmt );
+            SwHTMLWriter::GetHTMLControl( *static_cast<const SwDrawFrmFmt*>(pFrmFmt) );
         if( !pSdrObj )
             continue;
 

@@ -213,7 +213,7 @@ static bool lcl_TableBox_HasTabBorders( const SwTableBox* pBox, bool *pBorders )
     else
     {
         const SvxBoxItem& rBoxItem =
-            (const SvxBoxItem&)pBox->GetFrmFmt()->GetFmtAttr( RES_BOX );
+            static_cast<const SvxBoxItem&>(pBox->GetFrmFmt()->GetFmtAttr( RES_BOX ));
 
         *pBorders = rBoxItem.GetTop() || rBoxItem.GetBottom() ||
                     rBoxItem.GetLeft() || rBoxItem.GetRight();
@@ -417,7 +417,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     const SvxBrushItem *pBrushItem = 0;
     if( SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
     {
-        pBrushItem = (const SvxBrushItem *)pItem;
+        pBrushItem = static_cast<const SvxBrushItem *>(pItem);
     }
     if( !pBrushItem )
         pBrushItem = pCell->GetBackground();
@@ -891,7 +891,7 @@ Writer& OutHTML_SwTblNode( Writer& rWrt, SwTableNode & rNode,
 
     SwTable& rTbl = rNode.GetTable();
 
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     rHTMLWrt.bOutTable = true;
 
     // die horizontale Ausrichtung des Rahmens hat (falls vorhanden)

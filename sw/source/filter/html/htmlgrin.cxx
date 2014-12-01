@@ -498,8 +498,8 @@ IMAGE_SETEVENT:
         else
         {
             const SvxColorItem& rColorItem = aAttrTab.pFontColor ?
-              (const SvxColorItem &)aAttrTab.pFontColor->GetItem() :
-              (const SvxColorItem &)pDoc->GetDefault(RES_CHRATR_COLOR);
+              static_cast<const SvxColorItem &>(aAttrTab.pFontColor->GetItem()) :
+              static_cast<const SvxColorItem &>(pDoc->GetDefault(RES_CHRATR_COLOR));
             aHBorderLine.SetColor( rColorItem.GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
         }
@@ -749,7 +749,7 @@ IMAGE_SETEVENT:
     if( aAttrTab.pINetFmt )
     {
         const SwFmtINetFmt &rINetFmt =
-            (const SwFmtINetFmt&)aAttrTab.pINetFmt->GetItem();
+            static_cast<const SwFmtINetFmt&>(aAttrTab.pINetFmt->GetItem());
 
         SwFmtURL aURL( pFlyFmt->GetURL() );
 

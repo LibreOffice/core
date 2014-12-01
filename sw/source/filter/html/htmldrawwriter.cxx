@@ -133,11 +133,11 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
                                      const SwDrawFrmFmt& rFmt,
                                      const SdrObject& rSdrObject )
 {
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     OSL_ENSURE( rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
             "There is a Draw-Obj with no Draw-Model?" );
-    const SdrTextObj *pTextObj = (const SdrTextObj *)&rSdrObject;
+    const SdrTextObj *pTextObj = static_cast<const SdrTextObj *>(&rSdrObject);
 
     // Gibt es ueberhaupt auszugebenden Text
     const OutlinerParaObject *pOutlinerParaObj =

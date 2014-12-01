@@ -417,7 +417,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         sal_uInt16 nWhichId =
             SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
         const SvxLanguageItem& rLang =
-            (const SvxLanguageItem&)pFmt->GetFmtAttr( nWhichId );
+            static_cast<const SvxLanguageItem&>(pFmt->GetFmtAttr( nWhichId ));
         LanguageType eLang = rLang.GetLanguage();
         if( eLang != eDfltLang )
         {
@@ -435,7 +435,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             if( aWhichIds[i] != nWhichId )
             {
                 const SvxLanguageItem& rTmpLang =
-                    (const SvxLanguageItem&)pFmt->GetFmtAttr(aWhichIds[i]);
+                    static_cast<const SvxLanguageItem&>(pFmt->GetFmtAttr(aWhichIds[i]));
                 if( rTmpLang.GetLanguage() != eLang )
                 {
                     if( !pItemSet )
@@ -460,7 +460,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     OSL_ENSURE( RES_CONDTXTFMTCOLL==rFmt.Which() || RES_TXTFMTCOLL==rFmt.Which(),
             "keine Absatz-Vorlage" );
 
-    SwHTMLWriter & rHWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter & rHWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     // Erstmal ein par Flags ...
     sal_uInt16 nNewDefListLvl = 0;
@@ -612,7 +612,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     // den unteren Absatz-Abstand brauchen wir noch
     const SvxULSpaceItem& rULSpace =
-        pNodeItemSet ? ((const SvxULSpaceItem &)pNodeItemSet->Get(RES_UL_SPACE))
+        pNodeItemSet ? static_cast<const SvxULSpaceItem &>(pNodeItemSet->Get(RES_UL_SPACE))
                      : rFmt.GetULSpace();
 
     if( (rHWrt.bOutHeader &&
@@ -667,7 +667,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // Wenn Styles exportiert werden, wird aus eingerueckten Absaetzen
     // eine Definitions-Liste
     const SvxLRSpaceItem& rLRSpace =
-        pNodeItemSet ? ((const SvxLRSpaceItem &)pNodeItemSet->Get(RES_LR_SPACE))
+        pNodeItemSet ? static_cast<const SvxLRSpaceItem &>(pNodeItemSet->Get(RES_LR_SPACE))
                      : rFmt.GetLRSpace();
     if( (!rHWrt.bCfgOutStyles || bForceDL) && !rInfo.bInNumBulList )
     {
@@ -708,7 +708,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                  rULSpace.GetLower()==0 &&
                  ((bUseParSpace && bIsNextTxtNode) || rHWrt.nDefListLvl==1) &&
                  (!pAdjItem || SVX_ADJUST_LEFT==
-                    ((const SvxAdjustItem *)pAdjItem)->GetAdjust()) )
+                    static_cast<const SvxAdjustItem *>(pAdjItem)->GetAdjust()) )
         {
             // Absaetze ohne unteren Abstand als DT exportieren
             nNewDefListLvl = 1;
@@ -844,9 +844,11 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         bNoStyle = false;
     }
 
-    LanguageType eLang = rInfo.pItemSet
-        ? ((const SvxLanguageItem&)rInfo.pItemSet->Get(SwHTMLWriter::GetLangWhichIdFromScript(rHWrt.nCSS1Script))).GetLanguage()
-           : rHWrt.eLang;
+    LanguageType eLang;
+    if (rInfo.pItemSet)
+        eLang = static_cast<const SvxLanguageItem&>(rInfo.pItemSet->Get(SwHTMLWriter::GetLangWhichIdFromScript(rHWrt.nCSS1Script))).GetLanguage();
+    else
+        eLang = rHWrt.eLang;
 
     if( rInfo.pItemSet )
     {
@@ -858,7 +860,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             const SfxPoolItem *pTmpItem;
             if( SfxItemState::SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
                         true, &pTmpItem ) &&
-                ((const SvxLanguageItem *)pTmpItem)->GetLanguage() == eLang )
+                static_cast<const SvxLanguageItem *>(pTmpItem)->GetLanguage() == eLang )
                 rInfo.pItemSet->ClearItem( aWhichIds[i] );
         }
     }
@@ -987,7 +989,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
 void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
 {
-    SwHTMLWriter & rHWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter & rHWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     // wenn es kein Token gibt haben wir auch nichts auszugeben
     if( rInfo.aToken.isEmpty() )
@@ -1237,7 +1239,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
     case RES_CHRATR_POSTURE:
     case RES_CHRATR_CJK_POSTURE:
     case RES_CHRATR_CTL_POSTURE:
-        switch( ((const SvxPostureItem&)rItem).GetPosture() )
+        switch( static_cast<const SvxPostureItem&>(rItem).GetPosture() )
         {
         case ITALIC_NORMAL:
             eState = HTML_ON_VALUE;
@@ -1253,7 +1255,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_CROSSEDOUT:
-        switch( ((const SvxCrossedOutItem&)rItem).GetStrikeout() )
+        switch( static_cast<const SvxCrossedOutItem&>(rItem).GetStrikeout() )
         {
         case STRIKEOUT_SINGLE:
         case STRIKEOUT_DOUBLE:
@@ -1269,7 +1271,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
 
     case RES_CHRATR_ESCAPEMENT:
         switch( (const SvxEscapement)
-                        ((const SvxEscapementItem&)rItem).GetEnumValue() )
+                        static_cast<const SvxEscapementItem&>(rItem).GetEnumValue() )
         {
         case SVX_ESCAPEMENT_SUPERSCRIPT:
         case SVX_ESCAPEMENT_SUBSCRIPT:
@@ -1284,7 +1286,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_UNDERLINE:
-        switch( ((const SvxUnderlineItem&)rItem).GetLineStyle() )
+        switch( static_cast<const SvxUnderlineItem&>(rItem).GetLineStyle() )
         {
         case UNDERLINE_SINGLE:
             eState = HTML_ON_VALUE;
@@ -1308,7 +1310,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
     case RES_CHRATR_WEIGHT:
     case RES_CHRATR_CJK_WEIGHT:
     case RES_CHRATR_CTL_WEIGHT:
-        switch( ((const SvxWeightItem&)rItem).GetWeight() )
+        switch( static_cast<const SvxWeightItem&>(rItem).GetWeight() )
         {
         case WEIGHT_BOLD:
             eState = HTML_ON_VALUE;
@@ -1324,7 +1326,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
         break;
 
     case RES_CHRATR_BLINK:
-        eState = ((const SvxBlinkItem&)rItem).GetValue() ? HTML_ON_VALUE
+        eState = static_cast<const SvxBlinkItem&>(rItem).GetValue() ? HTML_ON_VALUE
                                                          : HTML_OFF_VALUE;
         break;
 
@@ -1696,7 +1698,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             {
                 OSL_ENSURE( RES_TXTATR_CHARFMT == rItem.Which(),
                         "Doch keine Zeichen-Vorlage" );
-                const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rItem;
+                const SwFmtCharFmt& rChrFmt = static_cast<const SwFmtCharFmt&>(rItem);
                 const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
 
                 const SwHTMLFmtInfo *pFmtInfo = GetFmtInfo( *pFmt, rFmtInfos );
@@ -1716,7 +1718,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
 
         case HTML_AUTOFMT_VALUE:
             {
-                const SwFmtAutoFmt& rAutoFmt = (const SwFmtAutoFmt&)rItem;
+                const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(rItem);
                 const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
                 if( pSet.get() )
                     Insert( *pSet.get(), nStart, nEnd, rFmtInfos, true, bParaAttrs );
@@ -1729,7 +1731,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             {
                 OSL_ENSURE( RES_CHRATR_COLOR == rItem.Which(),
                         "Doch keine Vordergrund-Farbe" );
-                Color aColor( ((const SvxColorItem&)rItem).GetValue() );
+                Color aColor( static_cast<const SvxColorItem&>(rItem).GetValue() );
                 if( COL_AUTO == aColor.GetColor() )
                     aColor.SetColor( COL_BLACK );
                 bSet = !bParaAttrs || !pDfltColor ||
@@ -1741,7 +1743,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             {
                 OSL_ENSURE( RES_PARATR_DROP == rItem.Which(),
                         "Doch kein Drop-Cap" );
-                const SwFmtDrop& rDrop = (const SwFmtDrop&)rItem;
+                const SwFmtDrop& rDrop = static_cast<const SwFmtDrop&>(rItem);
                 nEnd = nStart + rDrop.GetChars();
                 if( !bOutStyles )
                 {
@@ -1806,7 +1808,7 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
         break;
     case RES_TXTATR_CHARFMT:
         {
-            const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rItem;
+            const SwFmtCharFmt& rChrFmt = static_cast<const SwFmtCharFmt&>(rItem);
             const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
             const SwHTMLFmtInfo *pFmtInfo = GetFmtInfo( *pFmt, rFmtInfos );
             if( pFmtInfo->bScriptDependent )
@@ -2047,8 +2049,8 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 /* Ausgabe der Nodes */
 Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 {
-    SwTxtNode * pNd = &((SwTxtNode&)rNode);
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
+    const SwTxtNode * pNd = &static_cast<const SwTxtNode&>(rNode);
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const OUString& rStr = pNd->GetTxt();
     sal_Int32 nEnd = rStr.getLength();
@@ -2087,8 +2089,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == pItemSet->GetItemState( RES_LR_SPACE, false, &pItem ))
         {
-            sal_Int32 nLeft = ((SvxLRSpaceItem*)pItem)->GetLeft();
-            sal_Int32 nRight = ((SvxLRSpaceItem*)pItem)->GetRight();
+            sal_Int32 nLeft = static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft();
+            sal_Int32 nRight = static_cast<const SvxLRSpaceItem*>(pItem)->GetRight();
             if( nLeft || nRight )
             {
                 const SwFrmFmt& rPgFmt =
@@ -2126,7 +2128,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
         if( SfxItemState::SET == pItemSet->GetItemState( RES_BOX, false, &pItem ))
         {
-            const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
+            const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
             const editeng::SvxBorderLine* pBorderLine = pBoxItem->GetBottom();
             if( pBorderLine )
             {
@@ -2163,7 +2165,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( pItemSet && pItemSet->Count() &&
             SfxItemState::SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) &&
-            40 == ((const SvxFontHeightItem *)pItem)->GetHeight() )
+            40 == static_cast<const SvxFontHeightItem *>(pItem)->GetHeight() )
         {
             // ... ausserdem ist die 2pt Schrift eingestellt ...
             sal_uLong nNdPos = rWrt.pCurPam->GetPoint()->nNode.GetIndex();
@@ -2202,13 +2204,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         if( pItemSet )
         {
             if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
-                ((SwFmtPageDesc *)pItem)->GetPageDesc() )
+                static_cast<const SwFmtPageDesc *>(pItem)->GetPageDesc() )
             {
                 bPageBreakBefore = true;
             }
             else if( SfxItemState::SET == pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
             {
-                switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
+                switch( static_cast<const SvxFmtBreakItem *>(pItem)->GetBreak() )
                 {
                 case SVX_BREAK_PAGE_BEFORE:
                     bPageBreakBefore = true;
@@ -2437,7 +2439,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                             pTxtHt = pHt;
                             sal_uInt16 nFldWhich;
                             if( RES_TXTATR_FIELD != pHt->Which()
-                                || ( RES_POSTITFLD != (nFldWhich = ((const SwFmtFld&)pHt->GetAttr()).GetField()->Which())
+                                || ( RES_POSTITFLD != (nFldWhich = static_cast<const SwFmtFld&>(pHt->GetAttr()).GetField()->Which())
                                      && RES_SCRIPTFLD != nFldWhich ) )
                             {
                                 bWriteBreak = false;
@@ -2453,10 +2455,10 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if( pTxtHt && RES_TXTATR_FLYCNT == pTxtHt->Which() )
             {
                 const SwFrmFmt* pFrmFmt =
-                    ((const SwFmtFlyCnt &)pTxtHt->GetAttr()).GetFrmFmt();
+                    static_cast<const SwFmtFlyCnt &>(pTxtHt->GetAttr()).GetFrmFmt();
 
                 if( RES_DRAWFRMFMT == pFrmFmt->Which() )
-                    aEndPosLst.Insert( *((const SwDrawFrmFmt *)pFrmFmt),
+                    aEndPosLst.Insert( *static_cast<const SwDrawFrmFmt *>(pFrmFmt),
                                         nStrPos + nOffset,
                                         rHTMLWrt.aChrFmtInfos );
             }
@@ -2585,7 +2587,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         {
             HtmlWriter aHtml(rHTMLWrt.Strm());
             aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
-            const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&) pNd->GetSwAttrSet().Get(RES_UL_SPACE);
+            const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>( pNd->GetSwAttrSet().Get(RES_UL_SPACE) );
             if (rULSpace.GetLower() > 0 &&
                 !bEndOfCell &&
                 !rHTMLWrt.IsHTMLMode(HTMLMODE_NO_BR_AT_PAREND) )
@@ -2658,7 +2660,7 @@ static Writer& OutHTML_CSS1Attr( Writer& rWrt, const SfxPoolItem& rHt )
     // wenn gerade Hints geschrieben werden versuchen wir den Hint als
     // CSS1-Attribut zu schreiben
 
-    if( ((SwHTMLWriter&)rWrt).bCfgOutStyles && ((SwHTMLWriter&)rWrt).bTxtAttr )
+    if( static_cast<SwHTMLWriter&>(rWrt).bCfgOutStyles && static_cast<SwHTMLWriter&>(rWrt).bTxtAttr )
         OutCSS1_HintSpanTag( rWrt, rHt );
 
     return rWrt;
@@ -2668,7 +2670,7 @@ static Writer& OutHTML_CSS1Attr( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
@@ -2681,7 +2683,7 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
-        Color aColor( ((const SvxColorItem&)rHt).GetValue() );
+        Color aColor( static_cast<const SvxColorItem&>(rHt).GetValue() );
         if( COL_AUTO == aColor.GetColor() )
             aColor.SetColor( COL_BLACK );
 
@@ -2698,11 +2700,11 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const FontItalic nPosture = ((const SvxPostureItem&)rHt).GetPosture();
+    const FontItalic nPosture = static_cast<const SvxPostureItem&>(rHt).GetPosture();
     if( ITALIC_NORMAL == nPosture )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_italic, rHTMLWrt.bTagOn );
@@ -2718,14 +2720,14 @@ static Writer& OutHTML_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
     if( rHTMLWrt.bTagOn )
     {
         OUString aNames;
-        SwHTMLWriter::PrepareFontList( ((const SvxFontItem&)rHt), aNames, 0,
+        SwHTMLWriter::PrepareFontList( static_cast<const SvxFontItem&>(rHt), aNames, 0,
                            rHTMLWrt.IsHTMLMode(HTMLMODE_FONT_GENERIC) );
         OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_font) + " " +
             OString(OOO_STRING_SVTOOLS_HTML_O_face) + "=\"";
@@ -2741,7 +2743,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
@@ -2749,7 +2751,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
     {
         OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_font);
 
-        sal_uInt32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
+        sal_uInt32 nHeight = static_cast<const SvxFontHeightItem&>(rHt).GetHeight();
         sal_uInt16 nSize = rHTMLWrt.GetHTMLFontSize( nHeight );
         sOut += " " + OString(OOO_STRING_SVTOOLS_HTML_O_size) + "=\"" +
             OString::number(static_cast<sal_Int32>(nSize)) + "\"";
@@ -2772,11 +2774,11 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    LanguageType eLang = ((const SvxLanguageItem &)rHt).GetLanguage();
+    LanguageType eLang = static_cast<const SvxLanguageItem &>(rHt).GetLanguage();
     if( LANGUAGE_DONTKNOW == eLang )
         return rWrt;
 
@@ -2784,7 +2786,7 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
     {
         OString sOut = "<" + OString(OOO_STRING_SVTOOLS_HTML_span);
         rWrt.Strm().WriteOString( sOut );
-        rHTMLWrt.OutLanguage( ((const SvxLanguageItem &)rHt).GetLanguage() );
+        rHTMLWrt.OutLanguage( static_cast<const SvxLanguageItem &>(rHt).GetLanguage() );
         rWrt.Strm().WriteChar( '>' );
     }
     else
@@ -2796,11 +2798,11 @@ static Writer& OutHTML_SvxLanguage( Writer& rWrt, const SfxPoolItem& rHt )
 }
 static Writer& OutHTML_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const FontWeight nBold = ((const SvxWeightItem&)rHt).GetWeight();
+    const FontWeight nBold = static_cast<const SvxWeightItem&>(rHt).GetWeight();
     if( WEIGHT_BOLD == nBold )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_bold, rHTMLWrt.bTagOn );
@@ -2816,12 +2818,12 @@ static Writer& OutHTML_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
     // Wegen Netscape schrieben wir hier STRIKE und nicht S raus!
-    const FontStrikeout nStrike = ((const SvxCrossedOutItem&)rHt).GetStrikeout();
+    const FontStrikeout nStrike = static_cast<const SvxCrossedOutItem&>(rHt).GetStrikeout();
     if( STRIKEOUT_NONE != nStrike )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_strike, rHTMLWrt.bTagOn );
@@ -2837,12 +2839,12 @@ static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
     const SvxEscapement eEscape =
-        (const SvxEscapement)((const SvxEscapementItem&)rHt).GetEnumValue();
+        (const SvxEscapement)static_cast<const SvxEscapementItem&>(rHt).GetEnumValue();
     const sal_Char *pStr = 0;
     switch( eEscape )
     {
@@ -2867,11 +2869,11 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const FontUnderline eUnder = ((const SvxUnderlineItem&)rHt).GetLineStyle();
+    const FontUnderline eUnder = static_cast<const SvxUnderlineItem&>(rHt).GetLineStyle();
     if( UNDERLINE_NONE != eUnder )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_underline, rHTMLWrt.bTagOn );
@@ -2887,8 +2889,8 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
-    SwFmtFlyCnt& rFlyCnt = (SwFmtFlyCnt&)rHt;
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    const SwFmtFlyCnt& rFlyCnt = static_cast<const SwFmtFlyCnt&>(rHt);
 
     const SwFrmFmt& rFmt = *rFlyCnt.GetFrmFmt();
     const SdrObject *pSdrObj = 0;
@@ -2904,11 +2906,11 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 // das Item auf true setzt!
 static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    if( ((const SvxBlinkItem&)rHt).GetValue() )
+    if( static_cast<const SvxBlinkItem&>(rHt).GetValue() )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_blink, rHTMLWrt.bTagOn );
     }
@@ -2923,7 +2925,7 @@ static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
 
 Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     OUString aURL( rINetFmt.GetValue() );
     const SvxMacroTableDtor *pMacTable = rINetFmt.GetMacroTbl();
@@ -3041,12 +3043,12 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
 
 static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const SwFmtINetFmt& rINetFmt = (const SwFmtINetFmt&)rHt;
+    const SwFmtINetFmt& rINetFmt = static_cast<const SwFmtINetFmt&>(rHt);
 
     if( rHTMLWrt.bTagOn )
     {
@@ -3093,11 +3095,11 @@ static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    const SwFmtCharFmt& rChrFmt = (const SwFmtCharFmt&)rHt;
+    const SwFmtCharFmt& rChrFmt = static_cast<const SwFmtCharFmt&>(rHt);
     const SwCharFmt* pFmt = rChrFmt.GetCharFmt();
 
     if( !pFmt )
@@ -3164,11 +3166,11 @@ static Writer& OutHTML_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 
 static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     if( !rHTMLWrt.bOutOpts || !rHTMLWrt.bTagOn )
         return  rWrt;
 
-    SvxAdjustItem& rAdjust = (SvxAdjustItem&)rHt;
+    const SvxAdjustItem& rAdjust = static_cast<const SvxAdjustItem&>(rHt);
     const sal_Char* pStr = 0;
     switch( rAdjust.GetAdjust() )
     {

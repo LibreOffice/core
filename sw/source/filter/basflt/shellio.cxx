@@ -211,7 +211,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             SwNode& rNd = pUndoPam->GetNode();
             if( rNd.IsCntntNode() )
                 pUndoPam->GetPoint()->nContent.Assign(
-                                    (SwCntntNode*)&rNd, nSttCntnt );
+                                    static_cast<SwCntntNode*>(&rNd), nSttCntnt );
             else
                 pUndoPam->GetPoint()->nContent.Assign( 0, 0 );
 
@@ -315,7 +315,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         delete pUndoPam;
 
-        pPam = (SwPaM *) pPam->GetNext();
+        pPam = static_cast<SwPaM *>( pPam->GetNext());
         if( pPam == pEnd )
             break;
 
@@ -755,7 +755,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         // search the layout for cells
         SwSelBoxes aBoxes;
         GetTblSel( *pShell, aBoxes );
-        SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->StartOfSectionNode();
+        const SwTableNode* pTblNd = static_cast<const SwTableNode*>(aBoxes[0]->GetSttNd()->StartOfSectionNode());
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
         SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
         OSL_ENSURE( pNd, "Node not found" );
@@ -776,7 +776,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         while(true)
         {
             bHasMark = bHasMark || pPam->HasMark();
-            pPam = (SwPaM *) pPam->GetNext();
+            pPam = static_cast<SwPaM *>( pPam->GetNext() );
             if(bHasMark || pPam == pEnd)
                 break;
         }

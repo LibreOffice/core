@@ -352,7 +352,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
                     // query handle
                     bF = true;
                 }
-                else if (nHand == ((SwFltBookmark*)(rEntry.pAttr))->GetHandle())
+                else if (nHand == static_cast<SwFltBookmark*>(rEntry.pAttr)->GetHandle())
                 {
                     bF = true;
                 }
@@ -496,7 +496,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     {
     case RES_FLTR_ANCHOR:
         {
-            SwFrmFmt* pFmt = ((SwFltAnchor*)rEntry.pAttr)->GetFrmFmt();
+            SwFrmFmt* pFmt = static_cast<SwFltAnchor*>(rEntry.pAttr)->GetFrmFmt();
             if (pFmt != NULL)
             {
                 MakePoint(rEntry, pDoc, aRegion);
@@ -524,7 +524,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
     case RES_FLTR_NUMRULE:          // insert Numrule
         {
-            const OUString& rNumNm = ((SfxStringItem*)rEntry.pAttr)->GetValue();
+            const OUString& rNumNm = static_cast<SfxStringItem*>(rEntry.pAttr)->GetValue();
             SwNumRule* pNumRule = pDoc->FindNumRulePtr( rNumNm );
             if( pNumRule )
             {
@@ -552,8 +552,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
     case RES_FLTR_BOOKMARK:
         {
-            SwFltBookmark* pB = (SwFltBookmark*)rEntry.pAttr;
-            const OUString& rName = ((SwFltBookmark*)rEntry.pAttr)->GetName();
+            SwFltBookmark* pB = static_cast<SwFltBookmark*>(rEntry.pAttr);
+            const OUString& rName = static_cast<SwFltBookmark*>(rEntry.pAttr)->GetName();
 
             if (IsFlagSet(BOOK_TO_VAR_REF))
             {
@@ -563,7 +563,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     SwSetExpFieldType aS(pDoc, rName, nsSwGetSetExpType::GSE_STRING);
                     pFT = pDoc->getIDocumentFieldsAccess().InsertFldType(aS);
                 }
-                SwSetExpField aFld((SwSetExpFieldType*)pFT, pB->GetValSys());
+                SwSetExpField aFld(static_cast<SwSetExpFieldType*>(pFT), pB->GetValSys());
                 aFld.SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
                 MakePoint(rEntry, pDoc, aRegion);
                 pDoc->getIDocumentContentOperations().InsertPoolItem(aRegion, SwFmtFld(aFld), 0);
@@ -589,7 +589,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
             SwPosition* pPoint = aRegion.GetPoint();
 
-            SwFltTOX* pTOXAttr = (SwFltTOX*)rEntry.pAttr;
+            SwFltTOX* pTOXAttr = static_cast<SwFltTOX*>(rEntry.pAttr);
 
             // test if on this node there had been a pagebreak BEFORE the
             //     tox attribute was put on the stack
@@ -634,7 +634,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
               pDoc->getIDocumentRedlineAccess().SetRedlineMode((RedlineMode_t)(   nsRedlineMode_t::REDLINE_ON
                                               | nsRedlineMode_t::REDLINE_SHOW_INSERT
                                               | nsRedlineMode_t::REDLINE_SHOW_DELETE ));
-                SwFltRedline& rFltRedline = *((SwFltRedline*)rEntry.pAttr);
+                SwFltRedline& rFltRedline = *static_cast<SwFltRedline*>(rEntry.pAttr);
 
                 if( USHRT_MAX != rFltRedline.nAutorNoPrev )
                 {
@@ -852,7 +852,7 @@ void SwFltAnchor::SetFrmFmt(SwFrmFmt * _pFrmFmt)
 
 bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const
 {
-    return pFrmFmt == ((SwFltAnchor&)rItem).pFrmFmt;
+    return pFrmFmt == static_cast<const SwFltAnchor&>(rItem).pFrmFmt;
 }
 
 SfxPoolItem* SwFltAnchor::Clone(SfxItemPool*) const
@@ -925,8 +925,8 @@ SwFltBookmark::SwFltBookmark(const SwFltBookmark& rCpy)
 
 bool SwFltBookmark::operator==(const SfxPoolItem& rItem) const
 {
-    return ( maName == ((SwFltBookmark&)rItem).maName)
-            && (mnHandle == ((SwFltBookmark&)rItem).mnHandle);
+    return ( maName == static_cast<const SwFltBookmark&>(rItem).maName)
+            && (mnHandle == static_cast<const SwFltBookmark&>(rItem).mnHandle);
 }
 
 SfxPoolItem* SwFltBookmark::Clone(SfxItemPool*) const
@@ -949,7 +949,7 @@ SwFltTOX::SwFltTOX(const SwFltTOX& rCpy)
 
 bool SwFltTOX::operator==(const SfxPoolItem& rItem) const
 {
-    return pTOXBase == ((SwFltTOX&)rItem).pTOXBase;
+    return pTOXBase == static_cast<const SwFltTOX&>(rItem).pTOXBase;
 }
 
 SfxPoolItem* SwFltTOX::Clone(SfxItemPool*) const

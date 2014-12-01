@@ -224,7 +224,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
-        const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
+        const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
         aLRItem.SetTxtFirstLineOfst( 0 );
         if( rCSS1PropInfo.bLeftMargin )
@@ -248,7 +248,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( nLeftSpace )
         {
             const SwFmtHoriOrient& rHoriOri =
-                (const SwFmtHoriOrient&)rFlyItemSet.Get( RES_HORI_ORIENT );
+                static_cast<const SwFmtHoriOrient&>(rFlyItemSet.Get( RES_HORI_ORIENT ));
             if( text::HoriOrientation::NONE == rHoriOri.GetHoriOrient() )
             {
                 SwFmtHoriOrient aHoriOri( rHoriOri );
@@ -262,7 +262,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
-        const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
+        const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
         if( rCSS1PropInfo.bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();
@@ -284,7 +284,7 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
         if( nUpperSpace )
         {
             const SwFmtVertOrient& rVertOri =
-                (const SwFmtVertOrient&)rFlyItemSet.Get( RES_VERT_ORIENT );
+                static_cast<const SwFmtVertOrient&>(rFlyItemSet.Get( RES_VERT_ORIENT ));
             if( text::VertOrientation::NONE == rVertOri.GetVertOrient() )
             {
                 SwFmtVertOrient aVertOri( rVertOri );
@@ -982,7 +982,7 @@ sal_uInt16 SwHTMLWriter::GuessOLENodeFrmType( const SwNode& rNode )
 Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                bool bInCntnr )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;

@@ -307,11 +307,11 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
 {
         const SfxPoolItem* pItem = 0;
         if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
-                MINFLY > ((SwFmtFrmSize*)pItem)->GetWidth() )
+                MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetWidth() )
         {
-                SwFmtFrmSize aSz((SwFmtFrmSize&)rFlySet.Get(RES_FRM_SIZE, true));
+                SwFmtFrmSize aSz(static_cast<const SwFmtFrmSize&>(rFlySet.Get(RES_FRM_SIZE, true)));
                 if (pItem)
-                        aSz = (SwFmtFrmSize&)(*pItem);
+                        aSz = static_cast<const SwFmtFrmSize&>(*pItem);
 
                 SwTwips nWidth;
                 // determine the width; if there is a table use the width of the table;
@@ -322,7 +322,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                 else
                         nWidth = nPageWidth;
 
-                const SwNodeIndex* pSttNd = ((SwFmtCntnt&)rFlySet.Get( RES_CNTNT )).
+                const SwNodeIndex* pSttNd = static_cast<const SwFmtCntnt&>(rFlySet.Get( RES_CNTNT )).
                                                                         GetCntntIdx();
                 if( pSttNd )
                 {
@@ -369,7 +369,7 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                 }
 
                                 // consider border and distance to content
-                                const SvxBoxItem& rBoxItem = (SvxBoxItem&)rFlySet.Get( RES_BOX );
+                                const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rFlySet.Get( RES_BOX ));
                                 sal_uInt16 nLine = BOX_LINE_LEFT;
                                 for( int i = 0; i < 2; ++i )
                                 {
@@ -405,9 +405,9 @@ void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
                         aSz.SetHeight( MINFLY );
                 rFlySet.Put( aSz );
         }
-        else if( MINFLY > ((SwFmtFrmSize*)pItem)->GetHeight() )
+        else if( MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetHeight() )
         {
-                SwFmtFrmSize aSz( *(SwFmtFrmSize*)pItem );
+                SwFmtFrmSize aSz( *static_cast<const SwFmtFrmSize*>(pItem) );
                 aSz.SetHeight( MINFLY );
                 rFlySet.Put( aSz );
         }

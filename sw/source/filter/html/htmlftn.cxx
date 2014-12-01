@@ -263,9 +263,9 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
 
 Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    SwFmtFtn& rFmtFtn = (SwFmtFtn&)rHt;
+    SwFmtFtn& rFmtFtn = const_cast<SwFmtFtn&>(static_cast<const SwFmtFtn&>(rHt));
     SwTxtFtn *pTxtFtn = rFmtFtn.GetTxtFtn();
     if( !pTxtFtn )
         return rWrt;
@@ -515,7 +515,7 @@ static sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
 static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString *pParts,
                                   sal_uInt16 nParts, const sal_Char *pName )
 {
-    SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     OUString aContent;
     for( sal_uInt16 i=0; i<nParts; i++ )

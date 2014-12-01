@@ -1555,7 +1555,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                 SfxItemState::SET!=pFrmFmt->GetAttrSet().GetItemState(
                                     RES_VERT_ORIENT, false ),
                 "Box ohne Inhalt hat vertikale Ausrichtung" );
-        pBox->ChgFrmFmt( (SwTableBoxFmt*)pFrmFmt );
+        pBox->ChgFrmFmt( static_cast<SwTableBoxFmt*>(pFrmFmt) );
     }
 
 }
@@ -1657,7 +1657,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     }
     if( nTopRow==nBottomRow-1 && (nRowHeight || pBGBrushItem) )
     {
-        SwTableLineFmt *pFrmFmt = (SwTableLineFmt*)pLine->ClaimFrmFmt();
+        SwTableLineFmt *pFrmFmt = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
         ResetLineFrmFmtAttrs( pFrmFmt );
 
         if( nRowHeight )
@@ -1682,7 +1682,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     {
         // sonst muessen wir die Hoehe aus dem Attribut entfernen
         // und koennen uns das Format merken
-        pLineFrmFmtNoHeight = (SwTableLineFmt*)pLine->ClaimFrmFmt();
+        pLineFrmFmtNoHeight = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
 
         ResetLineFrmFmtAttrs( pLineFrmFmtNoHeight );
     }
@@ -1818,7 +1818,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                 {
                     // Wenn es noch kein Line-Format ohne Hoehe gibt, koennen
                     // wir uns dieses her als soleches merken
-                    pLineFrmFmtNoHeight = (SwTableLineFmt*)pLine->ClaimFrmFmt();
+                    pLineFrmFmtNoHeight = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
 
                     ResetLineFrmFmtAttrs( pLineFrmFmtNoHeight );
                 }
@@ -2531,8 +2531,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         pBox1 = (pLine1->GetTabBoxes())[0];
         pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
 
-        pLineFmt = (SwTableLineFmt*)pLine1->GetFrmFmt();
-        pBoxFmt = (SwTableBoxFmt*)pBox1->GetFrmFmt();
+        pLineFmt = static_cast<SwTableLineFmt*>(pLine1->GetFrmFmt());
+        pBoxFmt = static_cast<SwTableBoxFmt*>(pBox1->GetFrmFmt());
     }
     else
     {
@@ -2561,7 +2561,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         {
             // sonst muessen wir die Hoehe aus dem Attribut entfernen
             // und koennen uns das Format merken
-            pLineFrmFmtNoHeight = (SwTableLineFmt*)pLine->ClaimFrmFmt();
+            pLineFrmFmtNoHeight = static_cast<SwTableLineFmt*>(pLine->ClaimFrmFmt());
 
             ResetLineFrmFmtAttrs( pLineFrmFmtNoHeight );
         }
@@ -3445,7 +3445,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     bool bPending = false;
     if( pPendStack )
     {
-        pSaveStruct = (_CellSaveStruct*)pPendStack->pData;
+        pSaveStruct = static_cast<_CellSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
@@ -3497,7 +3497,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 if( SfxItemState::SET == aItemSet.GetItemState(
                                         RES_BACKGROUND, false, &pItem ) )
                 {
-                    pCurTable->SetBGBrush( *(const SvxBrushItem *)pItem );
+                    pCurTable->SetBGBrush( *static_cast<const SvxBrushItem *>(pItem) );
                     aItemSet.ClearItem( RES_BACKGROUND );
                 }
                 if( SfxItemState::SET == aItemSet.GetItemState(
@@ -3755,7 +3755,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     const SfxPoolItem* pItem2;
                     if( SfxItemState::SET == pOldTxtNd->GetSwAttrSet()
                             .GetItemState( RES_PAGEDESC, false, &pItem2 ) &&
-                        ((SwFmtPageDesc *)pItem2)->GetPageDesc() )
+                        static_cast<const SwFmtPageDesc *>(pItem2)->GetPageDesc() )
                     {
                         pFrmFmt->SetFmtAttr( *pItem2 );
                         pOldTxtNd->ResetAttr( RES_PAGEDESC );
@@ -3763,7 +3763,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( SfxItemState::SET == pOldTxtNd->GetSwAttrSet()
                             .GetItemState( RES_BREAK, true, &pItem2 ) )
                     {
-                        switch( ((SvxFmtBreakItem *)pItem2)->GetBreak() )
+                        switch( static_cast<const SvxFmtBreakItem *>(pItem2)->GetBreak() )
                         {
                         case SVX_BREAK_PAGE_BEFORE:
                         case SVX_BREAK_PAGE_AFTER:
@@ -4164,7 +4164,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
     bool bPending = false;
     if( pPendStack )
     {
-        pSaveStruct = (_RowSaveStruct*)pPendStack->pData;
+        pSaveStruct = static_cast<_RowSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
@@ -4369,7 +4369,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
 
     if( pPendStack )
     {
-        pSaveStruct = (_RowSaveStruct*)pPendStack->pData;
+        pSaveStruct = static_cast<_RowSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
@@ -4556,7 +4556,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 
     if( pPendStack )
     {
-        pSaveStruct = (_TblColGrpSaveStruct*)pPendStack->pData;
+        pSaveStruct = static_cast<_TblColGrpSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
@@ -4782,7 +4782,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
     if( pPendStack )
     {
-        pSaveStruct = (_CaptionSaveStruct*)pPendStack->pData;
+        pSaveStruct = static_cast<_CaptionSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
@@ -5163,7 +5163,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
     if( pPendStack )
     {
-        pSaveStruct = (_TblSaveStruct*)pPendStack->pData;
+        pSaveStruct = static_cast<_TblSaveStruct*>(pPendStack->pData);
 
         SwPendingStack* pTmp = pPendStack->pNext;
         delete pPendStack;
