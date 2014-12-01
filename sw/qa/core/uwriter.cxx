@@ -1288,6 +1288,12 @@ namespace
 void SwDocTest::testIntrusiveRing()
 {
     TestRing aRing1, aRing2, aRing3, aRing4, aRing5;
+    std::vector<TestRing*> vRings;
+    vRings.push_back(&aRing1);
+    vRings.push_back(&aRing2);
+    vRings.push_back(&aRing3);
+    vRings.push_back(&aRing4);
+    vRings.push_back(&aRing5);
     CPPUNIT_ASSERT_EQUAL(aRing1.numberOf(), static_cast<sal_uInt32>(1));
     aRing2.MoveTo(&aRing1);
     aRing3.MoveTo(&aRing1);
@@ -1297,24 +1303,23 @@ void SwDocTest::testIntrusiveRing()
     aRing5.MoveTo(&aRing4);
     CPPUNIT_ASSERT_EQUAL(aRing4.numberOf(), static_cast<sal_uInt32>(2));
     aRing4.MoveRingTo(&aRing1);
-    CPPUNIT_ASSERT_EQUAL(aRing1.numberOf(), static_cast<sal_uInt32>(5));
-    CPPUNIT_ASSERT_EQUAL(aRing4.numberOf(), static_cast<sal_uInt32>(5));
-    CPPUNIT_ASSERT_EQUAL(aRing1.GetNext(), static_cast<Ring*>(&aRing2));
-    CPPUNIT_ASSERT_EQUAL(aRing2.GetNext(), static_cast<Ring*>(&aRing3));
-    CPPUNIT_ASSERT_EQUAL(aRing3.GetNext(), static_cast<Ring*>(&aRing4));
-    CPPUNIT_ASSERT_EQUAL(aRing4.GetNext(), static_cast<Ring*>(&aRing5));
-    CPPUNIT_ASSERT_EQUAL(aRing5.GetNext(), static_cast<Ring*>(&aRing1));
-    CPPUNIT_ASSERT_EQUAL(aRing2.GetPrev(), static_cast<Ring*>(&aRing1));
-    CPPUNIT_ASSERT_EQUAL(aRing3.GetPrev(), static_cast<Ring*>(&aRing2));
-    CPPUNIT_ASSERT_EQUAL(aRing4.GetPrev(), static_cast<Ring*>(&aRing3));
-    CPPUNIT_ASSERT_EQUAL(aRing5.GetPrev(), static_cast<Ring*>(&aRing4));
-    CPPUNIT_ASSERT_EQUAL(aRing1.GetPrev(), static_cast<Ring*>(&aRing5));
-    //std::pair<Ring::iterator, Ring::iterator> foo();
+    BOOST_FOREACH(TestRing* pRing, vRings)
+    {
+        CPPUNIT_ASSERT_EQUAL(pRing->numberOf(), static_cast<sal_uInt32>(5));
+    }
+    for(std::vector<TestRing*>::iterator ppRing = vRings.begin(); ppRing != vRings.end(); ++ppRing)
+    {
+        std::vector<TestRing*>::iterator ppNext = ppRing+1;
+        if(ppNext==vRings.end())
+            ppNext = vRings.begin();
+        CPPUNIT_ASSERT_EQUAL((*ppRing)->GetNext(), static_cast<Ring*>(*ppNext));
+        CPPUNIT_ASSERT_EQUAL((*ppNext)->GetPrev(), static_cast<Ring*>(*ppRing));
+    }
     BOOST_FOREACH(Ring& r, std::make_pair(aRing1.beginRing(), aRing1.endRing()))
-    //for(Ring::iterator it = aRing1.beginRing(); it != aRing1.endRing(); ++it)
     {
         TestRing* pRing = dynamic_cast<TestRing*>(&r);
-        pRing->debug();
+        CPPUNIT_ASSERT(pRing);
+        //pRing->debug();
     }
 }
 
