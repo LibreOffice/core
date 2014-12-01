@@ -22,30 +22,24 @@
 
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
+#include <boost/foreach.hpp>
 
 class SwPaM;
 class SwNodeIndex;
 
 // Macros to iterate over all ranges.
-#define PCURCRSR (_pStartCrsr)
+#define PCURCRSR (static_cast<SwPaM *>(&__r))
 
 #define FOREACHPAM_START(pCURSH) \
-    {\
-        SwPaM *_pStartCrsr = (pCURSH), *__pStartCrsr = _pStartCrsr; \
-        do {
-
-#define FOREACHPAM_END() \
-        } while( (_pStartCrsr=static_cast<SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr ); \
-    }
+    BOOST_FOREACH(Ring& __r, std::make_pair(static_cast<Ring*>(pCURSH)->beginRing(), static_cast<Ring*>(pCURSH)->endRing())) \
+    {
 
 #define FOREACHPAM_START_CONST(pCURSH) \
-    {\
-        const SwPaM *_pStartCrsr = (pCURSH), *__pStartCrsr = _pStartCrsr; \
-        do {
+    BOOST_FOREACH(Ring& __r, std::make_pair(const_cast<Ring*>(static_cast<const Ring*>(pCURSH))->beginRing(), const_cast<Ring*>(static_cast<const Ring*>(pCURSH))->endRing())) \
+    {
 
-#define FOREACHPAM_END_CONST() \
-        } while( (_pStartCrsr=static_cast<const SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr ); \
-    }
+#define FOREACHPAM_END() }
+#define FOREACHPAM_END_CONST() }
 
 struct SwPamRange
 {
