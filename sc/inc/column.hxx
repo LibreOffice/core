@@ -343,7 +343,7 @@ public:
     bool IsFormulaDirty( SCROW nRow ) const;
 
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
-    void        SetDirty( SCROW nRow1, SCROW nRow2 );
+    void        SetDirty( SCROW nRow1, SCROW nRow2, bool bIncludeEmptyCells = false );
     void        SetDirtyVar();
     void        SetDirtyAfterLoad();
     void        SetTableOpDirty( const ScRange& );
