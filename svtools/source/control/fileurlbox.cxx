@@ -68,17 +68,18 @@ namespace svt
             if ( IsWindowOrChild( _rNEvt.GetWindow() ) )
                 DisplayURL( GetText() );
             break;
+
+        default:
+            break;
         }
 
         return SvtURLBox::PreNotify(_rNEvt);
     }
 
-
     bool FileURLBox::Notify( NotifyEvent& _rNEvt )
     {
-        switch ( _rNEvt.GetType() )
+        switch (_rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         {
-        case MouseNotifyEvent::KEYINPUT:
             if  (   ( GetSubEdit() == _rNEvt.GetWindow()                         )
                 &&  ( KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
                 &&  ( IsInDropDown()                                             )
@@ -88,12 +89,10 @@ namespace svt
                 DisplayURL( m_sPreservedText );
                 return nReturn;
             }
-            break;
         }
 
         return SvtURLBox::Notify(_rNEvt);
     }
-
 
 }   // namespace svt
 

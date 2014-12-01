@@ -52,37 +52,29 @@ namespace svt
 
     bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
     {
-        switch (rNEvt.GetType())
+        if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT && !IsInDropDown())
         {
-            case MouseNotifyEvent::KEYINPUT:
-                if (!IsInDropDown())
-                {
-                    const KeyEvent *pEvt = rNEvt.GetKeyEvent();
-                    const vcl::KeyCode rKey = pEvt->GetKeyCode();
+            const KeyEvent *pEvt = rNEvt.GetKeyEvent();
+            const vcl::KeyCode rKey = pEvt->GetKeyCode();
 
-                    if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
-                        (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
-                    {
-                        // select next resp. previous entry
-                        sal_Int32 nPos = GetEntryPos(GetText());
-                        int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
-                        if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
-                        {
-                            nPos += nDir;
-                            SetText(GetEntry(nPos));
-                        }
-                        return true;
-                    }
+            if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
+                (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
+            {
+                // select next resp. previous entry
+                sal_Int32 nPos = GetEntryPos(GetText());
+                int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
+                if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
+                {
+                    nPos += nDir;
+                    SetText(GetEntry(nPos));
                 }
-                break;
+                return true;
+            }
         }
         return ComboBox::PreNotify(rNEvt);
     }
 
-
     //= ComboBoxCellController
-
-
     ComboBoxCellController::ComboBoxCellController(ComboBoxControl* pWin)
                              :CellController(pWin)
     {
@@ -133,22 +125,17 @@ namespace svt
         return GetComboBox().IsValueChangedFromSaved();
     }
 
-
     void ComboBoxCellController::ClearModified()
     {
         GetComboBox().SaveValue();
     }
-
 
     void ComboBoxCellController::SetModifyHdl(const Link& rLink)
     {
         GetComboBox().SetModifyHdl(rLink);
     }
 
-
     //= ListBoxControl
-
-
     ListBoxControl::ListBoxControl(vcl::Window* pParent, WinBits nWinStyle)
                   :ListBox(pParent, nWinStyle|WB_DROPDOWN|WB_NOBORDER)
     {
@@ -157,43 +144,34 @@ namespace svt
         SetDropDownLineCount(20);
     }
 
-
     bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
     {
-        switch (rNEvt.GetType())
+        switch (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT && !IsInDropDown())
         {
-            case MouseNotifyEvent::KEYINPUT:
-                if (!IsInDropDown())
-                {
-                    const KeyEvent *pEvt = rNEvt.GetKeyEvent();
-                    const vcl::KeyCode rKey = pEvt->GetKeyCode();
+            const KeyEvent *pEvt = rNEvt.GetKeyEvent();
+            const vcl::KeyCode rKey = pEvt->GetKeyCode();
 
-                    if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
-                        (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
-                    {
-                        // select next resp. previous entry
-                        sal_Int32 nPos = GetSelectEntryPos();
-                        int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
-                        if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
-                        {
-                            nPos += nDir;
-                            SelectEntryPos(nPos);
-                        }
-                        Select();   // for calling Modify
-                        return true;
-                    }
-                    else if (GetParent()->PreNotify(rNEvt))
-                        return true;
+            if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
+                (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
+            {
+                // select next resp. previous entry
+                sal_Int32 nPos = GetSelectEntryPos();
+                int nDir = (rKey.GetCode() == KEY_DOWN ? 1 : -1);
+                if (!((nPos == 0 && nDir == -1) || (nPos >= GetEntryCount() && nDir == 1)))
+                {
+                    nPos += nDir;
+                    SelectEntryPos(nPos);
                 }
-                break;
+                Select();   // for calling Modify
+                return true;
+            }
+            else if (GetParent()->PreNotify(rNEvt))
+                return true;
         }
         return ListBox::PreNotify(rNEvt);
     }
 
-
     //= ListBoxCellController
-
-
     ListBoxCellController::ListBoxCellController(ListBoxControl* pWin)
                              :CellController(pWin)
     {
@@ -333,6 +311,9 @@ namespace svt
                 break;
             case MouseNotifyEvent::LOSEFOCUS:
                 HideFocus();
+                break;
+            default:
+                break;
         }
         return Control::PreNotify(rEvt);
     }

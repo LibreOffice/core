@@ -1225,57 +1225,52 @@ void AssignmentPersistentData::Commit()
         return 0L;
     }
 
-
     bool AddressBookSourceDialog::PreNotify( NotifyEvent& _rNEvt )
     {
-        switch (_rNEvt.GetType())
+        switch (_rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         {
-            case MouseNotifyEvent::KEYINPUT:
-            {
-                const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
-                sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
-                bool   bShift = pKeyEvent->GetKeyCode().IsShift();
-                bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
-                bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
+            const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
+            sal_uInt16 nCode  = pKeyEvent->GetKeyCode().GetCode();
+            bool   bShift = pKeyEvent->GetKeyCode().IsShift();
+            bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
+            bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
 
-                if (KEY_TAB == nCode)
-                {   // somebody pressed the tab key
-                    if (!bAlt && !bCtrl && !bShift)
-                    {   // it's really the only the key (no modifiers)
-                        if (m_pImpl->pFields[m_pImpl->nLastVisibleListIndex]->HasChildPathFocus())
-                            // the last of our visible list boxes has the focus
-                            if (m_pImpl->nFieldScrollPos < m_pFieldScroller->GetRangeMax())
-                            {   // we can still scroll down
-                                sal_Int32 nNextFocusList = m_pImpl->nLastVisibleListIndex + 1 - 2;
-                                // -> scroll down
-                                implScrollFields(m_pImpl->nFieldScrollPos + 1, false, true);
-                                // give the left control in the "next" line the focus
-                                m_pImpl->pFields[nNextFocusList]->GrabFocus();
-                                // return saying "have handled this"
-                                return true;
-                            }
-                    }
-                    else if (!bAlt && !bCtrl && bShift)
-                    {   // it's shift-tab
-                        if (m_pImpl->pFields[0]->HasChildPathFocus())
-                            // our first list box has the focus
-                            if (m_pImpl->nFieldScrollPos > 0)
-                            {   // we can still scroll up
-                                // -> scroll up
-                                implScrollFields(m_pImpl->nFieldScrollPos - 1, false, true);
-                                // give the right control in the "prebious" line the focus
-                                m_pImpl->pFields[0 - 1 + 2]->GrabFocus();
-                                // return saying "have handled this"
-                                return true;
-                            }
-                    }
+            if (KEY_TAB == nCode)
+            {   // somebody pressed the tab key
+                if (!bAlt && !bCtrl && !bShift)
+                {   // it's really the only the key (no modifiers)
+                    if (m_pImpl->pFields[m_pImpl->nLastVisibleListIndex]->HasChildPathFocus())
+                        // the last of our visible list boxes has the focus
+                        if (m_pImpl->nFieldScrollPos < m_pFieldScroller->GetRangeMax())
+                        {   // we can still scroll down
+                            sal_Int32 nNextFocusList = m_pImpl->nLastVisibleListIndex + 1 - 2;
+                            // -> scroll down
+                            implScrollFields(m_pImpl->nFieldScrollPos + 1, false, true);
+                            // give the left control in the "next" line the focus
+                            m_pImpl->pFields[nNextFocusList]->GrabFocus();
+                            // return saying "have handled this"
+                            return true;
+                        }
+                }
+                else if (!bAlt && !bCtrl && bShift)
+                {   // it's shift-tab
+                    if (m_pImpl->pFields[0]->HasChildPathFocus())
+                        // our first list box has the focus
+                        if (m_pImpl->nFieldScrollPos > 0)
+                        {   // we can still scroll up
+                            // -> scroll up
+                            implScrollFields(m_pImpl->nFieldScrollPos - 1, false, true);
+                            // give the right control in the "prebious" line the focus
+                            m_pImpl->pFields[0 - 1 + 2]->GrabFocus();
+                            // return saying "have handled this"
+                            return true;
+                        }
                 }
             }
-            break;
         }
+
         return ModalDialog::PreNotify(_rNEvt);
     }
-
 
 }   // namespace svt
 
