@@ -154,14 +154,10 @@ void PosSizePropertyPanel::Initialize()
     //Position : Horizontal / Vertical
     mpMtrPosX->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosXHdl ) );
     mpMtrPosY->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangePosYHdl ) );
-    mpMtrPosX->SetAccessibleName(OUString( "Horizontal"));  //wj acc
-    mpMtrPosY->SetAccessibleName(OUString( "Vertical"));        //wj acc
 
     //Size : Width / Height
     mpMtrWidth->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeWidthHdl ) );
     mpMtrHeight->SetModifyHdl( LINK( this, PosSizePropertyPanel, ChangeHeightHdl ) );
-    mpMtrWidth->SetAccessibleName(OUString( "Width"));  //wj acc
-    mpMtrHeight->SetAccessibleName(OUString( "Height"));    //wj acc
 
     //Size : Keep ratio
     mpCbxScale->SetClickHdl( LINK( this, PosSizePropertyPanel, ClickAutoHdl ) );
@@ -169,20 +165,12 @@ void PosSizePropertyPanel::Initialize()
     //rotation:
     mpMtrAngle->SetModifyHdl(LINK( this, PosSizePropertyPanel, AngleModifiedHdl));
     mpMtrAngle->EnableAutocomplete( false );
-    mpMtrAngle->SetAccessibleName(OUString( "Rotation"));   //wj acc
 
     //rotation control
     mpDial->SetModifyHdl(LINK( this, PosSizePropertyPanel, RotationHdl));
 
     //flip:
     mpFlipTbx->SetSelectHdl( LINK( this, PosSizePropertyPanel, FlipHdl) );
-
-    mpMtrPosX->SetAccessibleRelationLabeledBy(mpFtPosX);
-    mpMtrPosY->SetAccessibleRelationLabeledBy(mpFtPosY);
-    mpMtrWidth->SetAccessibleRelationLabeledBy(mpFtWidth);
-    mpMtrHeight->SetAccessibleRelationLabeledBy(mpFtHeight);
-    mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtAngle);
-    mpFlipTbx->SetAccessibleRelationLabeledBy(mpFtFlip);
 
     mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
     mpMtrAngle->InsertValue(4500, FUNIT_CUSTOM);

@@ -58,6 +58,14 @@
                     <property name="tooltip_text" translatable="yes">Enter the value for the horizontal position.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="horizontallabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="horizontalpos:0in-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Horizontal</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -91,6 +99,14 @@
                     <property name="tooltip_text" translatable="yes">Enter the value for the vertical position.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="verticallabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="verticalpos:0in-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Vertical</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -125,6 +141,14 @@
                     <property name="tooltip_text" translatable="yes">Enter a width for the selected object.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="widthlabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="selectwidth:0in-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Width</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -159,6 +183,14 @@
                     <property name="tooltip_text" translatable="yes">Enter a height for the selected object.</property>
                     <property name="invisible_char">•</property>
                     <property name="invisible_char_set">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="heightlabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="selectheight:0in-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Height</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -219,6 +251,14 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="vexpand">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="rotationlabel"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="orientationcontrol-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Rotation</property>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -275,6 +315,9 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">end</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="fliplabel"/>
+                            </accessibility>
                             <child>
                               <object class="GtkToolButton" id="flipvertical">
                                 <property name="visible">True</property>
