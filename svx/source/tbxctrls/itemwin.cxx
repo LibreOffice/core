@@ -177,6 +177,8 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
             }
         }
         break;
+        default:
+        break;
     }
     return LineLB::PreNotify( rNEvt );
 }
