@@ -1310,10 +1310,10 @@ void SwDocTest::testIntrusiveRing()
     CPPUNIT_ASSERT_EQUAL(aRing5.GetPrev(), static_cast<Ring*>(&aRing4));
     CPPUNIT_ASSERT_EQUAL(aRing1.GetPrev(), static_cast<Ring*>(&aRing5));
     //std::pair<Ring::iterator, Ring::iterator> foo();
-    //BOOST_FOREACH(Ring& r, foo)
-    for(Ring::iterator it = aRing1.beginRing(); it != aRing1.endRing(); ++it)
+    BOOST_FOREACH(Ring& r, std::make_pair(aRing1.beginRing(), aRing1.endRing()))
+    //for(Ring::iterator it = aRing1.beginRing(); it != aRing1.endRing(); ++it)
     {
-        TestRing* pRing = dynamic_cast<TestRing*>(&(*it));
+        TestRing* pRing = dynamic_cast<TestRing*>(&r);
         pRing->debug();
     }
 }
