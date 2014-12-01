@@ -133,6 +133,7 @@ $(eval $(call gb_Library_use_system_win32_libs,merged,\
 	opengl32 \
 	shell32 \
 	shlwapi \
+	setupapi \
 	user32 \
 	usp10 \
 	uuid \
