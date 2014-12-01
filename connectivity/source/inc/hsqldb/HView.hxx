@@ -63,12 +63,21 @@ namespace connectivity { namespace hsqldb
         virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const SAL_OVERRIDE;
 
     private:
+        /** retrieves the current command of the View */
+        OUString impl_getCommand() const;
+
+        /** retrieves the current command of the View
+
+            @throws ::com::sun::star::lang::WrappedTargetException
+                if an error occurs while retrieving the command from the database.
+        */
+        OUString impl_getCommand_wrapSQLException() const;
         /** retrieves the current command of the View
 
             @throws ::com::sun::star::sdbc::SQLException
                 if an error occurs while retrieving the command from the database.
         */
-        OUString impl_getCommand_throw() const;
+        OUString impl_getCommand_throwSQLException() const;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;

@@ -101,7 +101,7 @@ namespace connectivity { namespace hsqldb
         aRestoreCommand.appendAscii( "CREATE VIEW " );
         aRestoreCommand.append     ( sQualifiedName );
         aRestoreCommand.appendAscii( " AS " );
-        aRestoreCommand.append     ( impl_getCommand_throw() );
+        aRestoreCommand.append     ( impl_getCommand_throwSQLException() );
         OUString sRestoreCommand( aRestoreCommand.makeStringAndClear() );
 
         bool bDropSucceeded( false );
@@ -150,45 +150,47 @@ namespace connectivity { namespace hsqldb
         {
             // retrieve the very current command, don't rely on the base classes cached value
             // (which we initialized empty, anyway)
-            try
-            {
-                _rValue <<= impl_getCommand_throw();
-            }
-            catch (const SQLException& e)
-            {
-                throw WrappedTargetException(e.Message,
-                    static_cast< XAlterView* >( const_cast< HView* >( this ) ),
-                        ::cppu::getCaughtException() );
-            }
+            _rValue <<= impl_getCommand_wrapSQLException();
+            return;
         }
 
         HView_Base::getFastPropertyValue( _rValue, _nHandle );
     }
 
+    OUString HView::impl_getCommand() const
+    {
+        OUStringBuffer aCommand;
+        aCommand.appendAscii( "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.SYSTEM_VIEWS " );
+        HTools::appendTableFilterCrit( aCommand, m_CatalogName, m_SchemaName, m_Name, false );
+        ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
+        Reference< XResultSet > xResult( xStatement->executeQuery( aCommand.makeStringAndClear() ), UNO_QUERY_THROW );
+        if ( !xResult->next() )
+        {
+            // hmm. There is no view view the name as we know it. Can only mean some other instance
+            // dropped this view meanwhile ...
+            throw DisposedException();
+        }
 
-    OUString HView::impl_getCommand_throw() const
+        Reference< XRow > xRow( xResult, UNO_QUERY_THROW );
+        return xRow->getString( 1 );
+    }
+
+    OUString HView::impl_getCommand_wrapSQLException() const
     {
         OUString sCommand;
 
         try
         {
-            OUStringBuffer aCommand;
-            aCommand.appendAscii( "SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.SYSTEM_VIEWS " );
-            HTools::appendTableFilterCrit( aCommand, m_CatalogName, m_SchemaName, m_Name, false );
-            ::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
-            Reference< XResultSet > xResult( xStatement->executeQuery( aCommand.makeStringAndClear() ), UNO_QUERY_THROW );
-            if ( !xResult->next() )
-            {
-                // hmm. There is no view view the name as we know it. Can only mean some other instance
-                // dropped this view meanwhile ...
-                throw DisposedException();
-            }
-
-            Reference< XRow > xRow( xResult, UNO_QUERY_THROW );
-            sCommand = xRow->getString( 1 );
+            sCommand = impl_getCommand();
         }
-        catch( const RuntimeException& ) { throw; }
-        catch( const SQLException& ) { throw; }
+        catch( const RuntimeException& )
+        {
+            throw;
+        }
+        catch( const SQLException& e )
+        {
+            throw WrappedTargetException( e.Message, static_cast< XAlterView* >( const_cast< HView* >( this ) ), ::cppu::getCaughtException() );
+        }
         catch( const Exception& )
         {
             DBG_UNHANDLED_EXCEPTION();
@@ -197,6 +199,29 @@ namespace connectivity { namespace hsqldb
         return sCommand;
     }
 
+    OUString HView::impl_getCommand_throwSQLException() const
+    {
+        OUString sCommand;
+
+        try
+        {
+            sCommand = impl_getCommand();
+        }
+        catch( const RuntimeException& )
+        {
+            throw;
+        }
+        catch( const SQLException& )
+        {
+            throw;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return sCommand;
+    }
 
 } } // namespace connectivity::hsqldb
 
