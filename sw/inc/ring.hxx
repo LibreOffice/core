@@ -22,23 +22,37 @@
 #include <swdllapi.h>
 #include <swtypes.hxx>
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/intrusive/circular_list_algorithms.hpp>
 
 class Ring_node_traits;
 class RingIterator;
 
 class SW_DLLPUBLIC Ring
 {
+    struct Ring_node_traits
+    {
+        typedef Ring node;
+        typedef Ring* node_ptr;
+        typedef const Ring* const_node_ptr;
+        static node_ptr get_next(const_node_ptr n) { return n->GetNext(); };
+        static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
+        static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
+        static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
+    };
     friend class Ring_node_traits;
+    typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
     Ring* pNext;
     Ring* pPrev;    ///< In order to speed up inserting and deleting.
 
 protected:
-    Ring();
+    Ring()
+        { algo::init_header(this); }
     Ring( Ring * );
 public:
     typedef RingIterator iterator;
     typedef RingIterator const_iterator;
-    virtual ~Ring();
+    virtual ~Ring()
+        { algo::unlink(this); };
     void MoveTo( Ring *pDestRing );
     void MoveRingTo( Ring *pDestRing );
 
@@ -49,8 +63,38 @@ public:
     iterator beginRing();
     iterator endRing();
 
-    sal_uInt32 numberOf() const;
+    sal_uInt32 numberOf() const
+        { return algo::count(this); }
 };
+
+inline Ring::Ring( Ring *pObj )
+{
+    if( !pObj )
+        algo::init_header(this);
+    else
+        algo::link_before(pObj, this);
+}
+
+inline void Ring::MoveTo(Ring *pDestRing)
+{
+    // insert into "new"
+    if( pDestRing )
+    {
+        if(algo::unique(this))
+            algo::link_before(pDestRing, this);
+        else
+            algo::transfer(pDestRing, this);
+    }
+    else
+        algo::unlink(this);
+
+}
+
+inline void Ring::MoveRingTo(Ring *pDestRing)
+{
+    std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
+    std::swap(*(&pPrev), *(&pDestRing->pPrev));
+}
 
 class RingIterator : public boost::iterator_facade<
       RingIterator
@@ -87,8 +131,6 @@ inline Ring::iterator Ring::beginRing()
 
 inline Ring::iterator Ring::endRing()
     { return Ring::iterator(this, false); };
-
-
 
 #endif
 
