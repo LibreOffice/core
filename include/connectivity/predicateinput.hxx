@@ -27,6 +27,7 @@
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
+#include <com/sun/star/uno/Any.hxx>
 
 
 namespace dbtools
@@ -74,30 +75,46 @@ namespace dbtools
             OUString* _pErrorMessage = NULL
         ) const;
 
-        /** get's a value of the predicate which can be used in a WHERE clause.
+        /** get the value of the predicate, as a string to be used in a WHERE clause
         @param _rPredicateValue
             the value which has been normalized using normalizePredicateString
         @param _rxField
             is the field for which a predicate is to be entered
-        @param _bForStatementUse
-            If <TRUE/>, the returned value can be used in an SQL statement. If <FALSE/>, it can be used
-            for instance for setting parameter values.
         @param _pErrorMessage
             If not <NULL/>, and a parsing error occurs, the error message will be copied to the string the argument
             points to.
         @see normalizePredicateString
         */
-        OUString getPredicateValue(
+        OUString getPredicateValueStr(
             const OUString& _rPredicateValue,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField,
-            bool _bForStatementUse,
             OUString* _pErrorMessage = NULL
         ) const;
 
-        OUString getPredicateValue(
+        OUString getPredicateValueStr(
             const OUString& _sField
             , const OUString& _rPredicateValue
-            , bool _bForStatementUse
+            , OUString* _pErrorMessage = NULL) const;
+
+        /** get the value of the predicate, either as an empty or as a string
+        @param _rPredicateValue
+            the value which has been normalized using normalizePredicateString
+        @param _rxField
+            is the field for which a predicate is to be entered
+        @param _pErrorMessage
+            If not <NULL/>, and a parsing error occurs, the error message will be copied to the string the argument
+            points to.
+        @see normalizePredicateString
+        */
+        ::com::sun::star::uno::Any getPredicateValue(
+            const OUString& _rPredicateValue,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & _rxField,
+            OUString* _pErrorMessage = NULL
+        ) const;
+
+        ::com::sun::star::uno::Any getPredicateValue(
+            const OUString& _sField
+            , const OUString& _rPredicateValue
             , OUString* _pErrorMessage = NULL) const;
 
     private:
@@ -113,7 +130,7 @@ namespace dbtools
             sal_Unicode& _rThdSep
         ) const;
 
-        OUString implParseNode(::connectivity::OSQLParseNode* pParseNode, bool _bForStatementUse) const;
+        ::com::sun::star::uno::Any implParseNode(::connectivity::OSQLParseNode* pParseNode, bool _bForStatementUse) const;
     };
 
 

@@ -54,6 +54,7 @@ namespace dbtools
     using ::com::sun::star::i18n::LocaleData;
     using ::com::sun::star::i18n::XLocaleData;
     using ::com::sun::star::i18n::LocaleDataItem;
+    using ::com::sun::star::uno::Any;
 
     using namespace ::com::sun::star::sdbc;
     using namespace ::connectivity;
@@ -283,38 +284,15 @@ namespace dbtools
     }
 
 
-    OUString OPredicateInputController::getPredicateValue(
+    OUString OPredicateInputController::getPredicateValueStr(
         const OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField,
-        bool _bForStatementUse, OUString* _pErrorMessage ) const
+        OUString* _pErrorMessage ) const
     {
         OSL_ENSURE( _rxField.is(), "OPredicateInputController::getPredicateValue: invalid params!" );
         OUString sReturn;
         if ( _rxField.is() )
         {
             OUString sValue( _rPredicateValue );
-
-            // a little problem : if the field is a text field, the normalizePredicateString added two
-            // '-characters to the text. If we would give this to predicateTree this would add
-            // two  additional '-characters which we don't want. So check the field format.
-            // FS - 06.01.00 - 71532
-            bool bValidQuotedText = sValue.startsWith("'") && sValue.endsWith("'");
-                // again : as normalizePredicateString always did a conversion on the value text,
-                // bValidQuotedText == sal_True implies that we have a text field, as no other field
-                // values will be formatted with the quote characters
-            if ( bValidQuotedText )
-            {
-                sValue = sValue.copy( 1, sValue.getLength() - 2 );
-                static const char sSingleQuote[] = "'";
-                static const char sDoubleQuote[] = "''";
-
-                sal_Int32 nIndex = -1;
-                sal_Int32 nTemp = 0;
-                while ( -1 != ( nIndex = sValue.indexOf( sDoubleQuote,nTemp ) ) )
-                {
-                    sValue = sValue.replaceAt( nIndex, 2, sSingleQuote );
-                    nTemp = nIndex+2;
-                }
-            }
 
             // The following is mostly stolen from the former implementation in the parameter dialog
             // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
@@ -324,14 +302,14 @@ namespace dbtools
             if ( _pErrorMessage )
                 *_pErrorMessage = sError;
 
-            sReturn = implParseNode(pParseNode,_bForStatementUse);
+            implParseNode(pParseNode, true) >>= sReturn;
         }
 
         return sReturn;
     }
 
-    OUString OPredicateInputController::getPredicateValue(
-        const OUString& _sField, const OUString& _rPredicateValue, bool _bForStatementUse, OUString* _pErrorMessage ) const
+    OUString OPredicateInputController::getPredicateValueStr(
+        const OUString& _sField, const OUString& _rPredicateValue, OUString* _pErrorMessage ) const
     {
         OUString sReturn = _rPredicateValue;
         OUString sError;
@@ -378,14 +356,94 @@ namespace dbtools
         OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );
         if ( _pErrorMessage )
             *_pErrorMessage = sError;
-        return pParseNode ? implParseNode(pParseNode,_bForStatementUse) : sReturn;
+        if(pParseNode)
+        {
+            implParseNode(pParseNode, true) >>= sReturn;
+        }
+        return sReturn;
     }
 
-    OUString OPredicateInputController::implParseNode(OSQLParseNode* pParseNode, bool _bForStatementUse) const
+    Any OPredicateInputController::getPredicateValue(
+        const OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField,
+        OUString* _pErrorMessage ) const
     {
-        OUString sReturn;
-        if ( pParseNode )
+        OSL_ENSURE( _rxField.is(), "OPredicateInputController::getPredicateValue: invalid params!" );
+
+        if ( _rxField.is() )
         {
+            OUString sValue( _rPredicateValue );
+
+            // The following is mostly stolen from the former implementation in the parameter dialog
+            // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
+
+            OUString sError;
+            OSQLParseNode* pParseNode = implPredicateTree( sError, sValue, _rxField );
+            if ( _pErrorMessage )
+                *_pErrorMessage = sError;
+
+            return implParseNode(pParseNode, false);
+        }
+
+        return Any();
+    }
+
+    Any OPredicateInputController::getPredicateValue(
+        const OUString& _sField, const OUString& _rPredicateValue, OUString* _pErrorMessage ) const
+    {
+        OUString sError;
+        OUString sField = _sField;
+        sal_Int32 nIndex = 0;
+        sField = sField.getToken(0,'(',nIndex);
+        if(nIndex == -1)
+            sField = _sField;
+        sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sField,&m_aParser.getContext());
+        if ( nType == DataType::OTHER || sField.isEmpty() )
+        {
+            // first try the international version
+            OUString sSql = "SELECT * FROM x WHERE " + sField + _rPredicateValue;
+            boost::scoped_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, true ) );
+            nType = DataType::DOUBLE;
+            if ( pParseNode.get() )
+            {
+                OSQLParseNode* pColumnRef = pParseNode->getByRule(OSQLParseNode::column_ref);
+                if ( pColumnRef )
+                {
+                }
+            }
+        }
+
+        Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+        parse::OParseColumn* pColumn = new parse::OParseColumn( sField,
+                                                                OUString(),
+                                                                OUString(),
+                                                                OUString(),
+                                                                ColumnValue::NULLABLE_UNKNOWN,
+                                                                0,
+                                                                0,
+                                                                nType,
+                                                                false,
+                                                                false,
+                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
+                                                                OUString(),
+                                                                OUString(),
+                                                                OUString());
+        Reference<XPropertySet> xColumn = pColumn;
+        pColumn->setFunction(true);
+        pColumn->setRealName(sField);
+
+        OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );
+        if ( _pErrorMessage )
+            *_pErrorMessage = sError;
+        return pParseNode ? implParseNode(pParseNode, false) : Any();
+    }
+
+    Any OPredicateInputController::implParseNode(OSQLParseNode* pParseNode, bool _bForStatementUse) const
+    {
+        if ( ! pParseNode )
+            return Any();
+        else
+        {
+            OUString sReturn;
             boost::shared_ptr<OSQLParseNode> xTakeOwnership(pParseNode);
             OSQLParseNode* pOdbcSpec = pParseNode->getByRule( OSQLParseNode::odbc_fct_spec );
             if ( pOdbcSpec )
@@ -408,7 +466,13 @@ namespace dbtools
             }
             else
             {
-                if (pParseNode->count() >= 3)
+                if (pParseNode->getKnownRuleID() == OSQLParseNode::test_for_null )
+                {
+                    assert(pParseNode->count() == 2);
+                    return Any();
+                }
+                // LEM this seems overly permissive as test...
+                else if (pParseNode->count() >= 3)
                 {
                     OSQLParseNode* pValueNode = pParseNode->getChild(2);
                     assert(pValueNode && "OPredicateInputController::getPredicateValue: invalid node child!");
@@ -427,10 +491,13 @@ namespace dbtools
                         );
                 }
                 else
+                {
                     OSL_FAIL( "OPredicateInputController::getPredicateValue: unknown/invalid structure (noodbc)!" );
+                    return Any();
+                }
             }
+            return Any(sReturn);
         }
-        return sReturn;
     }
 
 }   // namespace dbtools
