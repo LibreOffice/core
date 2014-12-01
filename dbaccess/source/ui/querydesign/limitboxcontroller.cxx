@@ -84,6 +84,8 @@ bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
             }
             break;
         }
+        default:
+            break;
     }
     return nHandled || LimitBox::Notify( rNEvt );
 }

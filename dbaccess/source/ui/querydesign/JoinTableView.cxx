@@ -1418,6 +1418,8 @@ bool OJoinTableView::PreNotify(NotifyEvent& rNEvt)
             }
         }
         break;
+        default:
+        break;
     }
 
     if (!bHandled)

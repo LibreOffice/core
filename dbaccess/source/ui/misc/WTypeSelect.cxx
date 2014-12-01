@@ -430,6 +430,8 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             nDone = true;
         }
         break;
+        default:
+        break;
     }
     return nDone || MultiListBox::PreNotify(rEvt);
 }
