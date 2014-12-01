@@ -71,8 +71,6 @@ class SwUndoRenameBookmark : public SwUndo
 {
     const OUString m_sOldName;
     const OUString m_sNewName;
-    const sal_uLong m_nNode;
-    const sal_Int32 m_nCntnt;
 
 public:
     SwUndoRenameBookmark( const ::sw::mark::IMark&, const OUString& rNewName );

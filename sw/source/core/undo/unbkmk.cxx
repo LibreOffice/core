@@ -90,8 +90,6 @@ SwUndoRenameBookmark::SwUndoRenameBookmark( const ::sw::mark::IMark& rBkmk, cons
     : SwUndo( UNDO_BOOKMARK_RENAME )
     , m_sOldName( rOldName )
     , m_sNewName( rBkmk.GetName() )
-    , m_nNode( rBkmk.GetMarkPos().nNode.GetIndex() )
-    , m_nCntnt( rBkmk.GetMarkPos().nContent.GetIndex() )
 {
 }
 
