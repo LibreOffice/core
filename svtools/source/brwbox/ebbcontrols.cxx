@@ -146,7 +146,7 @@ namespace svt
 
     bool ListBoxControl::PreNotify( NotifyEvent& rNEvt )
     {
-        switch (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT && !IsInDropDown())
+        if (rNEvt.GetType() == MouseNotifyEvent::KEYINPUT && !IsInDropDown())
         {
             const KeyEvent *pEvt = rNEvt.GetKeyEvent();
             const vcl::KeyCode rKey = pEvt->GetKeyCode();
