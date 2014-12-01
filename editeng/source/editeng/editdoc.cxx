@@ -1559,9 +1559,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 
     sal_Int32 nNewStart = maString.getLength();
 
-#if OSL_DEBUG_LEVEL > 2
-    OSL_ENSURE( aCharAttribList.DbgCheckAttribs(), "Attribute before AppendAttribs broken" );
-#endif
+    OSL_ENSURE( CharAttribList::DbgCheckAttribs(aCharAttribList), "Attribute before AppendAttribs broken" );
 
     sal_Int32 nAttr = 0;
     CharAttribList::AttribsType& rNextAttribs = pNextNode->GetCharAttribs().GetAttribs();
@@ -1615,9 +1613,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
     // For the Attributes that just moved over:
     rNextAttribs.clear();
 
-#if OSL_DEBUG_LEVEL > 2
-    OSL_ENSURE( aCharAttribList.DbgCheckAttribs(), "Attribute after AppendAttribs broken" );
-#endif
+    OSL_ENSURE( CharAttribList::DbgCheckAttribs(aCharAttribList), "Attribute after AppendAttribs broken" );
 }
 
 void ContentNode::CreateDefFont()
@@ -2987,11 +2983,13 @@ void CharAttribList::DeleteEmptyAttribs( SfxItemPool& rItemPool )
     bHasEmptyAttribs = false;
 }
 
-#if OSL_DEBUG_LEVEL > 2
-bool CharAttribList::DbgCheckAttribs() const
+#if OSL_DEBUG_LEVEL > 0
+bool CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 {
     bool bOK = true;
-    AttribsType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
+    AttribsType::const_iterator it = rAttribs.aAttribs.begin();
+    AttribsType::const_iterator itEnd = rAttribs.aAttribs.end();
+    std::set<std::pair<sal_Int32, sal_uInt16>> zero_set;
     for (; it != itEnd; ++it)
     {
         const EditCharAttrib& rAttr = *it;
@@ -3000,10 +2998,15 @@ bool CharAttribList::DbgCheckAttribs() const
             bOK = false;
             OSL_FAIL( "Attribute is distorted" );
         }
-        else if (rAttr.IsFeature() && rAttr.GetLen() != 1)
+        if (rAttr.IsFeature() && rAttr.GetLen() != 1)
         {
             bOK = false;
             OSL_FAIL( "Feature, Len != 1" );
+        }
+        if (0 == rAttr.GetLen())
+        {
+            // not sure if 0-length attributes allowed at all in non-empty para?
+            assert(zero_set.insert(std::make_pair(rAttr.GetStart(), rAttr.Which())).second && "duplicate 0-length attribute detected");
         }
     }
     return bOK;

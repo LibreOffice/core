@@ -229,9 +229,8 @@ public:
     void Remove(sal_Int32 nPos);
     void Release(const EditCharAttrib* p);
 
-#if OSL_DEBUG_LEVEL > 2
-    // Debug:
-    bool DbgCheckAttribs() const;
+#if OSL_DEBUG_LEVEL > 0
+    static bool DbgCheckAttribs(CharAttribList const& rAttribs);
 #endif
 };
 
