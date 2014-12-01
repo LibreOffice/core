@@ -573,6 +573,45 @@ void Test::testSectionAttributes()
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnEnd);
         CPPUNIT_ASSERT_MESSAGE("Attribute array should be empty.", pSecAttr->maAttributes.empty());
     }
+
+
+    {
+        aEngine.Clear();
+        aEngine.SetText("one\ntwo");
+        CPPUNIT_ASSERT_EQUAL(2, aEngine.GetParagraphCount());
+
+        // embolden 2nd paragraph
+        pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
+        pSet->Put(aBold);
+        aEngine.QuickSetAttribs(*pSet, ESelection(1,0,1,3));
+        // disboldify 1st paragraph
+        SvxWeightItem aNotSoBold(WEIGHT_NORMAL, EE_CHAR_WEIGHT);
+        pSet->Put(aNotSoBold);
+        aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,3));
+
+        // now delete & join the paragraphs - this is fdo#85496 scenario
+        aEngine.QuickDelete(ESelection(0,0,1,3));
+        CPPUNIT_ASSERT_EQUAL(1, aEngine.GetParagraphCount());
+
+        boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
+        CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
+        std::vector<editeng::Section> aAttrs;
+        pEditText->GetAllSections(aAttrs);
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aAttrs.size());
+
+        const editeng::Section* pSecAttr = &aAttrs[0];
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
+        CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnEnd);
+        std::set<sal_uInt16> whiches;
+        for (size_t i = 0; i < pSecAttr->maAttributes.size(); ++i)
+        {
+            sal_uInt16 const nWhich(pSecAttr->maAttributes[i]->Which());
+            CPPUNIT_ASSERT_MESSAGE("duplicate item in text portion attributes",
+                whiches.insert(nWhich).second);
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

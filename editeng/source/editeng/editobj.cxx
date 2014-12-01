@@ -1000,7 +1000,20 @@ void EditTextObjectImpl::GetAllSections( std::vector<editeng::Section>& rAttrs )
             for (; itCurAttr != aAttrs.end() && itCurAttr->mnParagraph == nPara && itCurAttr->mnEnd <= nEnd; ++itCurAttr)
             {
                 editeng::Section& rSecAttr = *itCurAttr;
-                rSecAttr.maAttributes.push_back(pItem);
+                bool bInsert(true);
+                for (size_t j = 0; j < rSecAttr.maAttributes.size(); ++j)
+                {
+                    if (rSecAttr.maAttributes[j]->Which() == pItem->Which())
+                    {
+                        SAL_WARN("editeng", "GetAllSections(): duplicate attribute suppressed");
+                        bInsert = false;
+                        break;
+                    }
+                }
+                if (bInsert)
+                {
+                    rSecAttr.maAttributes.push_back(pItem);
+                }
             }
         }
     }
