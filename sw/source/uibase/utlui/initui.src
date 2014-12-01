@@ -263,7 +263,7 @@ String STR_AUTH_TYPE_UNPUBLISHED
 };
 String STR_AUTH_TYPE_EMAIL
 {
-    Text [ en-US ] = "e-mail";
+    Text [ en-US ] = "E-mail";
 };
 String STR_AUTH_TYPE_WWW
 {
