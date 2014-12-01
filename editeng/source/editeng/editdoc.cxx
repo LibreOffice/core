@@ -1579,14 +1579,23 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
             {
                 if ( pTmpAttrib->GetEnd() == nNewStart )
                 {
-                    if ( ( pTmpAttrib->Which() == pAttrib->Which() ) &&
-                         ( *(pTmpAttrib->GetItem()) == *(pAttrib->GetItem() ) ) )
+                    if (pTmpAttrib->Which() == pAttrib->Which())
                     {
-                        pTmpAttrib->GetEnd() =
-                            pTmpAttrib->GetEnd() + pAttrib->GetLen();
-                        rNextAttribs.erase(rNextAttribs.begin()+nAttr);
-                        // Unsubscribe from the pool?!
-                        bMelted = true;
+                        // prevent adding 2 0-length attributes at same position
+                        if ((*(pTmpAttrib->GetItem()) == *(pAttrib->GetItem()))
+                                || (0 == pAttrib->GetLen()))
+                        {
+                            pTmpAttrib->GetEnd() =
+                                pTmpAttrib->GetEnd() + pAttrib->GetLen();
+                            rNextAttribs.erase(rNextAttribs.begin()+nAttr);
+                            // Unsubscribe from the pool?!
+                            bMelted = true;
+                        }
+                        else if (0 == pTmpAttrib->GetLen())
+                        {
+                            aCharAttribList.Remove(nTmpAttr);
+                            --nTmpAttr; // to cancel later increment...
+                        }
                     }
                 }
                 ++nTmpAttr;
