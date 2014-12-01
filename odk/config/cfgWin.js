@@ -973,11 +973,8 @@ function writeBatFile(fdir, file)
         "set PATH=%OO_SDK_HOME%\\bin;%OO_SDK_URE_BIN_DIR%;%OO_SDK_OFFICE_BIN_DIR%;%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
         "\n" +
         "REM Set PATH appropriate to the output directory\n" +
-        "if defined OO_SDK_OUT (\n" +
-        "   set PATH=%OO_SDK_OUT%\\WINexample.out\\bin;%PATH%\n" +
-        " ) else (\n" +
-        "   set PATH=%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
-        " )\n" +
+        "if defined OO_SDK_OUT set PATH=%OO_SDK_OUT%\\WINexample.out\\bin;%PATH%\n" +
+        "if not defined OO_SDK_OUT set PATH=%OO_SDK_HOME%\\WINexample.out\\bin;%PATH%\n" +
         "\n" +
         "REM Add directory of the command make to the path, if necessary.\n" +
         "if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%\n" +
@@ -995,10 +992,8 @@ function writeBatFile(fdir, file)
         "if defined OO_SDK_CPP_HOME set PATH=%OO_SDK_CPP_HOME%;%PATH%\n" +
         "\n" +
         "REM Add directory of the Win SDK to the path, if necessary.\n" +
-        "if defined CPP_WINDOWS_SDK (\n" +
-		"   set PATH=%CPP_WINDOWS_SDK%\\bin;%PATH%\n" +
-		"   set INCLUDE=%CPP_WINDOWS_SDK%\\Include;%INCLUDE%\n" +
-        ")\n" +
+        "if defined CPP_WINDOWS_SDK set PATH=%CPP_WINDOWS_SDK%\\bin;%PATH%\n" +
+        "if defined CPP_WINDOWS_SDK set INCLUDE=%CPP_WINDOWS_SDK%\\Include;%INCLUDE%\n" +
         "REM Add directory of the C# and VB.NET compilers to the path, if necessary.\n" +
         "if defined OO_SDK_CLI_HOME set PATH=%OO_SDK_CLI_HOME%;%PATH%\n" +
         "\n" +
