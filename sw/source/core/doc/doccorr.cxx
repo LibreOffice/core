@@ -261,9 +261,11 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != pCrsrShell->GetStkCrsr()) );
 
-            FOREACHPAM_START_CONST( pCrsrShell->_GetCrsr() )
-                lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx);
-            FOREACHPAM_END()
+            SwPaM* pStartPaM = pCrsrShell->_GetCrsr();
+            BOOST_FOREACH(SwPaM& rPaM, std::make_pair(pStartPaM->beginRing(), pStartPaM->endRing()))
+            {
+                lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx);
+            }
 
             if( pCrsrShell->IsTableMode() )
                 lcl_PaMCorrRel1( pCrsrShell->GetTblCrs(), pOldNode, aNewPos, nCntIdx );
