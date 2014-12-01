@@ -15,6 +15,9 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/wrkwin.hxx>
 
+#include <tools/stream.hxx>
+#include <vcl/pngwrite.hxx>
+
 class VclOutdevTest : public test::BootstrapFixture
 {
 public:
@@ -36,18 +39,30 @@ void VclOutdevTest::testVirtualDevice()
     aVDev.DrawPixel(Point(1,2),COL_GREEN);
     aVDev.DrawPixel(Point(31,30),COL_RED);
 
+    Size aSize = aVDev.GetOutputSizePixel();
+    CPPUNIT_ASSERT(aSize == Size(32,32));
+
+    Bitmap aBmp = aVDev.GetBitmap(Point(),aSize);
+
+#if 0
+    OUString rFileName("/tmp/foo-unx.png");
+    try {
+        vcl::PNGWriter aWriter( aBmp );
+        SvFileStream sOutput( rFileName, STREAM_WRITE );
+        aWriter.Write( sOutput );
+        sOutput.Close();
+    } catch (...) {
+        SAL_WARN("vcl", "Error writing png to " << rFileName);
+    }
+#endif
+
     CPPUNIT_ASSERT(aVDev.GetPixel(Point(0,0)) == COL_WHITE);
     CPPUNIT_ASSERT(aVDev.GetPixel(Point(1,2)) == COL_GREEN);
     CPPUNIT_ASSERT(aVDev.GetPixel(Point(31,30)) == COL_RED);
     CPPUNIT_ASSERT(aVDev.GetPixel(Point(30,31)) == COL_WHITE);
 
-    Size aSize = aVDev.GetOutputSizePixel();
-    CPPUNIT_ASSERT(aSize == Size(32,32));
-
-    Bitmap aBmp = aVDev.GetBitmap(Point(),aSize);
-    Bitmap::ScopedReadAccess pAcc(aBmp);
-
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
+    Bitmap::ScopedReadAccess pAcc(aBmp);
     CPPUNIT_ASSERT(pAcc->GetPixel(0,0) == Color(COL_WHITE));
     CPPUNIT_ASSERT(pAcc->GetPixel(2,1) == Color(COL_GREEN));
     CPPUNIT_ASSERT(pAcc->GetPixel(30,31) == Color(COL_RED));
