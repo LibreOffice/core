@@ -2770,21 +2770,19 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
 
 bool OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
 {
-    switch (rNEvt.GetType())
+    if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS)
     {
-        case MouseNotifyEvent::GETFOCUS:
 #if OSL_DEBUG_LEVEL > 0
-            {
-                vcl::Window* pFocus = Application::GetFocusWindow();
-                (void)pFocus;
-            }
+        {
+            vcl::Window* pFocus = Application::GetFocusWindow();
+            (void)pFocus;
+        }
 #endif
 
-            if ( m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() )
-                m_eChildFocus = SELECTION;
-            else
-                m_eChildFocus = TABLEVIEW;
-            break;
+        if ( m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() )
+            m_eChildFocus = SELECTION;
+        else
+            m_eChildFocus = TABLEVIEW;
     }
 
     return OQueryView::PreNotify(rNEvt);
