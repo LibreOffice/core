@@ -1510,11 +1510,11 @@ namespace
                     if ( i_xSelectColumns.is() && i_xSelectColumns->hasByName(sColumnName) )
                     {
                         Reference<XPropertySet> xColumn(i_xSelectColumns->getByName(sColumnName),UNO_QUERY);
-                        sValue = i_aPredicateInputController.getPredicateValue(sValue,xColumn,true);
+                        sValue = i_aPredicateInputController.getPredicateValueStr(sValue,xColumn);
                     }
                     else
                     {
-                        sValue = i_aPredicateInputController.getPredicateValue(pAndIter->Name,sValue,true);
+                        sValue = i_aPredicateInputController.getPredicateValueStr(pAndIter->Name,sValue);
                     }
                     lcl_addFilterCriteria_throw(pAndIter->Handle,sValue,sRet);
                     ++pAndIter;

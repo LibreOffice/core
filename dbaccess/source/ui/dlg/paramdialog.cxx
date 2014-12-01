@@ -95,12 +95,6 @@ namespace dbaui
                 pValues->Name = ::comphelper::getString(xParamAsSet->getPropertyValue(PROPERTY_NAME));
                 m_pAllParams->InsertEntry(pValues->Name);
 
-                if (!pValues->Value.hasValue())
-                    // it won't have a value, 'cause it's default constructed. But may be later we support
-                    // initializing this dialog with values
-                    pValues->Value = makeAny( OUString() );
-                    // default the values to an empty string
-
                 m_aVisitedParams.push_back(0);
                     // not visited, not dirty
             }
@@ -239,7 +233,7 @@ namespace dbaui
 
                         OUString sValue;
                         pValues->Value >>= sValue;
-                        pValues->Value <<= OUString( m_aPredicateInput.getPredicateValue( sValue, xParamAsSet, false ) );
+                        pValues->Value <<= m_aPredicateInput.getPredicateValue( sValue, xParamAsSet );
                     }
                 }
                 catch(Exception&)
