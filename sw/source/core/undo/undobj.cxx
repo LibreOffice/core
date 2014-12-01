@@ -767,10 +767,12 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
                 if ( bSavePos || bSaveOtherPos )
                 {
-                    if( !pHistory )
-                        pHistory = new SwHistory;
-
-                    pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
+                    if( IDocumentMarkAccess::GetType(*pBkmk) != IDocumentMarkAccess::UNO_BOOKMARK )
+                    {
+                        if( !pHistory )
+                            pHistory = new SwHistory;
+                        pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
+                    }
                     if ( bSavePos
                          && ( bSaveOtherPos
                               || !pBkmk->IsExpanded() ) )
