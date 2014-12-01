@@ -35,6 +35,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/paperinf.hxx>
@@ -491,7 +492,7 @@ void RtfExport::ExportDocument_Impl()
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_RTF).WriteChar('1')
     .WriteCharPtr(OOO_STRING_SVTOOLS_RTF_ANSI);
     Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_DEFF);
-    OutULong(maFontHelper.GetId((SvxFontItem&)pDoc->GetAttrPool().GetDefaultItem(RES_CHRATR_FONT)));
+    OutULong(maFontHelper.GetId(static_cast<const SvxFontItem&>(pDoc->GetAttrPool().GetDefaultItem(RES_CHRATR_FONT))));
     // If this not exist, MS don't understand our ansi characters (0x80-0xff).
     Strm().WriteCharPtr("\\adeflang1025");
 
@@ -536,7 +537,7 @@ void RtfExport::ExportDocument_Impl()
         sal_uInt32 const nMaxItem = rPool.GetItemCount2(RES_PROTECT);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            const SvxProtectItem* pProtect = (const SvxProtectItem*)rPool.GetItem2(RES_PROTECT, n);
+            const SvxProtectItem* pProtect = static_cast<const SvxProtectItem*>(rPool.GetItem2(RES_PROTECT, n));
             if (pProtect && pProtect->IsCntntProtected())
             {
                 Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FORMPROT);
@@ -570,7 +571,7 @@ void RtfExport::ExportDocument_Impl()
             if (pSet)
             {
                 sal_uInt16 nPosInDoc;
-                pSttPgDsc = (SwFmtPageDesc*)&pSet->Get(RES_PAGEDESC);
+                pSttPgDsc = static_cast<const SwFmtPageDesc*>(&pSet->Get(RES_PAGEDESC));
                 if (!pSttPgDsc->GetPageDesc())
                     pSttPgDsc = 0;
                 else if (pDoc->FindPageDesc(pSttPgDsc->GetPageDesc()->GetName(), &nPosInDoc))
@@ -946,33 +947,33 @@ void RtfExport::OutColorTable()
 
     // char color
     {
-        const SvxColorItem* pCol = (const SvxColorItem*)GetDfltAttr(RES_CHRATR_COLOR);
+        const SvxColorItem* pCol = static_cast<const SvxColorItem*>(GetDfltAttr(RES_CHRATR_COLOR));
         InsColor(pCol->GetValue());
-        if (0 != (pCol = (const SvxColorItem*)rPool.GetPoolDefaultItem(RES_CHRATR_COLOR)))
+        if (0 != (pCol = static_cast<const SvxColorItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_COLOR))))
             InsColor(pCol->GetValue());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_COLOR);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pCol = (const SvxColorItem*)rPool.GetItem2(RES_CHRATR_COLOR, n)))
+            if (0 != (pCol = static_cast<const SvxColorItem*>(rPool.GetItem2(RES_CHRATR_COLOR, n))))
                 InsColor(pCol->GetValue());
         }
 
-        const SvxUnderlineItem* pUnder = (const SvxUnderlineItem*)GetDfltAttr(RES_CHRATR_UNDERLINE);
+        const SvxUnderlineItem* pUnder = static_cast<const SvxUnderlineItem*>(GetDfltAttr(RES_CHRATR_UNDERLINE));
         InsColor(pUnder->GetColor());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_UNDERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pUnder = (const SvxUnderlineItem*)rPool.GetItem2(RES_CHRATR_UNDERLINE, n)))
+            if (0 != (pUnder = static_cast<const SvxUnderlineItem*>(rPool.GetItem2(RES_CHRATR_UNDERLINE, n))))
                 InsColor(pUnder->GetColor());
 
         }
 
-        const SvxOverlineItem* pOver = (const SvxOverlineItem*)GetDfltAttr(RES_CHRATR_OVERLINE);
+        const SvxOverlineItem* pOver = static_cast<const SvxOverlineItem*>(GetDfltAttr(RES_CHRATR_OVERLINE));
         InsColor(pOver->GetColor());
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_OVERLINE);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pOver = (const SvxOverlineItem*)rPool.GetItem2(RES_CHRATR_OVERLINE, n)))
+            if (0 != (pOver = static_cast<const SvxOverlineItem*>(rPool.GetItem2(RES_CHRATR_OVERLINE, n))))
                 InsColor(pOver->GetColor());
 
         }
@@ -987,16 +988,16 @@ void RtfExport::OutColorTable()
 
     for (const sal_uInt16* pIds = aBrushIds; *pIds; ++pIds)
     {
-        const SvxBrushItem* pBkgrd = (const SvxBrushItem*)GetDfltAttr(*pIds);
+        const SvxBrushItem* pBkgrd = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
         InsColor(pBkgrd->GetColor());
-        if (0 != (pBkgrd = (const SvxBrushItem*)rPool.GetPoolDefaultItem(*pIds)))
+        if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds))))
         {
             InsColor(pBkgrd->GetColor());
         }
         nMaxItem = rPool.GetItemCount2(*pIds);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pBkgrd = (const SvxBrushItem*)rPool.GetItem2(*pIds , n)))
+            if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds , n))))
             {
                 InsColor(pBkgrd->GetColor());
             }
@@ -1005,16 +1006,16 @@ void RtfExport::OutColorTable()
 
     // shadow color
     {
-        const SvxShadowItem* pShadow = (const SvxShadowItem*)GetDfltAttr(RES_SHADOW);
+        const SvxShadowItem* pShadow = static_cast<const SvxShadowItem*>(GetDfltAttr(RES_SHADOW));
         InsColor(pShadow->GetColor());
-        if (0 != (pShadow = (const SvxShadowItem*)rPool.GetPoolDefaultItem(RES_SHADOW)))
+        if (0 != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetPoolDefaultItem(RES_SHADOW))))
         {
             InsColor(pShadow->GetColor());
         }
         nMaxItem = rPool.GetItemCount2(RES_SHADOW);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pShadow = (const SvxShadowItem*)rPool.GetItem2(RES_SHADOW, n)))
+            if (0 != (pShadow = static_cast<const SvxShadowItem*>(rPool.GetItem2(RES_SHADOW, n))))
             {
                 InsColor(pShadow->GetColor());
             }
@@ -1024,24 +1025,24 @@ void RtfExport::OutColorTable()
     // frame border color
     {
         const SvxBoxItem* pBox;
-        if (0 != (pBox = (const SvxBoxItem*)rPool.GetPoolDefaultItem(RES_BOX)))
+        if (0 != (pBox = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_BOX))))
             InsColorLine(*pBox);
         nMaxItem = rPool.GetItemCount2(RES_BOX);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pBox = (const SvxBoxItem*)rPool.GetItem2(RES_BOX, n)))
+            if (0 != (pBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_BOX, n))))
                 InsColorLine(*pBox);
         }
     }
 
     {
         const SvxBoxItem* pCharBox;
-        if (0 != (pCharBox = (const SvxBoxItem*)rPool.GetPoolDefaultItem(RES_CHRATR_BOX)))
+        if (0 != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_BOX))))
             InsColorLine(*pCharBox);
         nMaxItem = rPool.GetItemCount2(RES_CHRATR_BOX);
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pCharBox = (const SvxBoxItem*)rPool.GetItem2(RES_CHRATR_BOX, n)))
+            if (0 != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_CHRATR_BOX, n))))
                 InsColorLine(*pCharBox);
         }
     }
@@ -1153,13 +1154,13 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 {
     if (bHeader)
     {
-        const SwFmtHeader& rHeader = (const SwFmtHeader&)rItem;
+        const SwFmtHeader& rHeader = static_cast<const SwFmtHeader&>(rItem);
         if (!rHeader.IsActive())
             return;
     }
     else
     {
-        const SwFmtFooter& rFooter = (const SwFmtFooter&)rItem;
+        const SwFmtFooter& rFooter = static_cast<const SwFmtFooter&>(rItem);
         if (!rFooter.IsActive())
             return;
     }

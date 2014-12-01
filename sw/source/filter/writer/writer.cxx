@@ -352,15 +352,15 @@ void Writer::PutEditEngFontsInAttrPool( bool bIncl_CJK_CTL )
 
 void Writer::_AddFontItems( SfxItemPool& rPool, sal_uInt16 nW )
 {
-    const SvxFontItem* pFont = (const SvxFontItem*)&rPool.GetDefaultItem( nW );
+    const SvxFontItem* pFont = static_cast<const SvxFontItem*>(&rPool.GetDefaultItem( nW ));
     _AddFontItem( rPool, *pFont );
 
-    if( 0 != ( pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem( nW )) )
+    if( 0 != ( pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem( nW ))) )
         _AddFontItem( rPool, *pFont );
 
     sal_uInt32 nMaxItem = rPool.GetItemCount2( nW );
     for( sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet )
-        if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem2( nW, nGet )) )
+        if( 0 != (pFont = static_cast<const SvxFontItem*>(rPool.GetItem2( nW, nGet ))) )
             _AddFontItem( rPool, *pFont );
 }
 
@@ -371,10 +371,10 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
     {
         SvxFontItem aFont( rFont );
         aFont.SetWhich( RES_CHRATR_FONT );
-        pItem = (SvxFontItem*)&rPool.Put( aFont );
+        pItem = static_cast<const SvxFontItem*>(&rPool.Put( aFont ));
     }
     else
-        pItem = (SvxFontItem*)&rPool.Put( rFont );
+        pItem = static_cast<const SvxFontItem*>(&rPool.Put( rFont ));
 
     if( 1 < pItem->GetRefCount() )
         rPool.Remove( *pItem );

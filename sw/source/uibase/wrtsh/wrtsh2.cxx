@@ -348,7 +348,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
 
     case RES_MACROFLD:
         {
-            const SwMacroField *pFld = (const SwMacroField*)&rFld;
+            const SwMacroField *pFld = static_cast<const SwMacroField*>(&rFld);
             const OUString sText( rFld.GetPar2() );
             OUString sRet( sText );
             ExecMacro( pFld->GetSvxMacro(), &sRet );
@@ -459,7 +459,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
         return;
 
     //A CrsrShell is always a WrtShell
-    SwWrtShell &rSh = (SwWrtShell&)rVSh;
+    SwWrtShell &rSh = static_cast<SwWrtShell&>(rVSh);
 
     SwDocShell* pDShell = rSh.GetView().GetDocShell();
     OSL_ENSURE( pDShell, "No DocShell?!");

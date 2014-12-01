@@ -311,13 +311,13 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
         if( aGrfSize.Width() > aBound.Width() )
         {
             aGrfSize.Width()  = aBound.Width();
-            aGrfSize.Height() = ((BigInt)aBound.Width()) * aTempHeight / aTempWidth;
+            aGrfSize.Height() = BigInt(aBound.Width()) * aTempHeight / aTempWidth;
         }
         // Fit hight if necessary, scale down the width proportional thereafter.
         if( aGrfSize.Height() > aBound.Height() )
         {
             aGrfSize.Height() = aBound.Height();
-            aGrfSize.Width() =  ((BigInt)aBound.Height()) * aTempWidth / aTempHeight;
+            aGrfSize.Width() =  BigInt(aBound.Height()) * aTempWidth / aTempHeight;
         }
         pFrmMgr->SetSize( aGrfSize );
         pFrmMgr->UpdateFlyFrm();
@@ -1462,7 +1462,7 @@ SwCharFmt *SwWrtShell::GetCharStyle(const OUString &rFmtName, GetStyle eCreate )
     {
         sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( rFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
         if( USHRT_MAX != nId || GETSTYLE_CREATEANY == eCreate )
-            pFmt = (SwCharFmt*)GetFmtFromPool( nId );
+            pFmt = static_cast<SwCharFmt*>(GetFmtFromPool( nId ));
     }
     return pFmt;
 }

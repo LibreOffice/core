@@ -393,7 +393,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     sal_uInt16 nFontId = GetWhichOfScript( RES_CHRATR_FONT, GetScript() );
 
     const SvxFontItem &rParentFont = ItemGet<SvxFontItem>(
-        (const SwTxtFmtColl&)rNd.GetAnyFmtColl(), nFontId);
+        static_cast<const SwTxtFmtColl&>(rNd.GetAnyFmtColl()), nFontId);
     const SvxFontItem *pFont = &rParentFont;
     const SfxPoolItem *pGrabBag = 0;
 
@@ -811,8 +811,8 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 /*nPos*/, 
 
     const SwAttrSet& rSet = rNode.GetSwAttrSet();
     const SvxFontHeightItem &rHeightItem  =
-        ( const SvxFontHeightItem& )rSet.Get(
-                                             GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) );
+        static_cast< const SvxFontHeightItem& >(rSet.Get(
+                                             GetWhichOfScript( RES_CHRATR_FONTSIZE, nRubyScript ) ));
     nHeight = (rHeightItem.GetHeight() + 10)/20-1;
     aStr += OUString::number(nHeight);
     aStr += "(";
@@ -1433,11 +1433,11 @@ short MSWordExportBase::GetDefaultFrameDirection( ) const
     {
         if ( bOutFlyFrmAttrs ) //frame
         {
-            nDir = TrueFrameDirection( *( const SwFrmFmt * ) pOutFmtNode );
+            nDir = TrueFrameDirection( *static_cast< const SwFrmFmt * >(pOutFmtNode) );
         }
         else if ( pOutFmtNode->ISA( SwCntntNode ) )    //pagagraph
         {
-            const SwCntntNode *pNd = ( const SwCntntNode * ) pOutFmtNode;
+            const SwCntntNode *pNd = static_cast<const SwCntntNode *>(pOutFmtNode);
             SwPosition aPos( *pNd );
             nDir = pDoc->GetTextDirection( aPos );
         }
@@ -1505,7 +1505,7 @@ const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
     //If not set, or "no fill", get real bg
     SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
 
-    const SvxBrushItem* pRet = (const SvxBrushItem*)pItem;
+    const SvxBrushItem* pRet = static_cast<const SvxBrushItem*>(pItem);
     if (SfxItemState::SET != eState || (!pRet->GetGraphic() &&
         pRet->GetColor() == COL_TRANSPARENT))
     {
@@ -1525,7 +1525,7 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
         const SfxPoolItem* pItem = 0;
         SfxItemState eState =
             pFlyFmt->GetItemState(RES_BACKGROUND, true, &pItem);
-        pRet = (const SvxBrushItem*)pItem;
+        pRet = static_cast<const SvxBrushItem*>(pItem);
         if (SfxItemState::SET != eState || (!pRet->GetGraphic() &&
             pRet->GetColor() == COL_TRANSPARENT))
         {
@@ -2433,7 +2433,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                    static_cast<const SvxULSpaceItem*>(pItem)->GetLower()) ))
             {
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
-                SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
+                SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(pItem) );
                 // #i25901#- consider compatibility option
                 if (!pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES))
                 {
@@ -2531,8 +2531,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         cannot export that, its its ltr then that's ok as thats word's
         default. Otherwise we must add a RTL attribute to our export list
         */
-        const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
-            rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR);
+        const SvxFrameDirectionItem* pItem = static_cast<const SvxFrameDirectionItem*>(
+            rNode.GetSwAttrSet().GetItem(RES_FRAMEDIR));
         if (
             (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT) &&
             aAttrIter.IsParaRTL()
@@ -2894,7 +2894,7 @@ void WW8Export::OutWW6FlyFrmsInCntnt( const SwTxtNode& rNd )
             {
                 // attribute bound to a character
                 const SwFmtFlyCnt& rFlyCntnt = pAttr->GetFlyCnt();
-                const SwFlyFrmFmt& rFlyFrmFmt = *(SwFlyFrmFmt*)rFlyCntnt.GetFrmFmt();
+                const SwFlyFrmFmt& rFlyFrmFmt = *static_cast<SwFlyFrmFmt*>(rFlyCntnt.GetFrmFmt());
                 const SwNodeIndex* pNodeIndex = rFlyFrmFmt.GetCntnt().GetCntntIdx();
 
                 if( pNodeIndex )

@@ -651,7 +651,7 @@ void RtfAttributeOutput::TableDefaultBorders(ww8::WW8TableNodeInfoInner::Pointer
     const SfxPoolItem* pItem;
     if (pCellFmt->GetAttrSet().HasItem(RES_BOX, &pItem))
     {
-        const SvxBoxItem& rBox = (SvxBoxItem&)*pItem;
+        const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(*pItem);
         static const sal_uInt16 aBorders[] =
         {
             BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
@@ -695,7 +695,7 @@ void RtfAttributeOutput::TableBackgrounds(ww8::WW8TableNodeInfoInner::Pointer_t 
     const SfxPoolItem* pItem;
     if (pCellFmt->GetAttrSet().HasItem(RES_BACKGROUND, &pItem))
     {
-        const SvxBrushItem& rBack = (SvxBrushItem&)*pItem;
+        const SvxBrushItem& rBack = static_cast<const SvxBrushItem&>(*pItem);
         if (!rBack.GetColor().GetTransparency())
         {
             m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLCBPAT);
@@ -782,7 +782,7 @@ void RtfAttributeOutput::TableVerticalCell(ww8::WW8TableNodeInfoInner::Pointer_t
 
     // vertical alignment
     if (pCellFmt->GetAttrSet().HasItem(RES_VERT_ORIENT, &pItem))
-        switch (((SwFmtVertOrient*)pItem)->GetVertOrient())
+        switch (static_cast<const SwFmtVertOrient*>(pItem)->GetVertOrient())
         {
         case text::VertOrientation::CENTER:
             m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALC);
@@ -1311,7 +1311,7 @@ void RtfAttributeOutput::NumberingLevel(sal_uInt8 nLevel,
         nVal=35;
         if (pOutSet)
         {
-            const SvxLanguageItem rlang = (const SvxLanguageItem&) pOutSet->Get(RES_CHRATR_CJK_LANGUAGE,true);
+            const SvxLanguageItem rlang = static_cast<const SvxLanguageItem&>( pOutSet->Get(RES_CHRATR_CJK_LANGUAGE,true) );
             if (LANGUAGE_CHINESE_SIMPLIFIED == rlang.GetLanguage())
             {
                 nVal=39;
@@ -2098,7 +2098,7 @@ void RtfAttributeOutput::CharEscapement(const SvxEscapementItem& rEsc)
 
     const char* pUpDn;
 
-    SwTwips nH = ((SvxFontHeightItem&)m_rExport.GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
+    SwTwips nH = static_cast<const SvxFontHeightItem&>(m_rExport.GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
 
     if (0 < rEsc.GetEsc())
         pUpDn = OOO_STRING_SVTOOLS_RTF_UP;
@@ -2600,7 +2600,7 @@ void RtfAttributeOutput::ParaWidows(const SvxWidowsItem& rWidows)
 
 void RtfAttributeOutput::ParaTabStop(const SvxTabStopItem& rTabStop)
 {
-    long nOffset = ((SvxLRSpaceItem&)m_rExport.GetItem(RES_LR_SPACE)).GetTxtLeft();
+    long nOffset = static_cast<const SvxLRSpaceItem&>(m_rExport.GetItem(RES_LR_SPACE)).GetTxtLeft();
     for (sal_uInt16 n = 0; n < rTabStop.Count(); n++)
     {
         const SvxTabStop& rTS = rTabStop[ n ];
@@ -2699,7 +2699,7 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTxtNode* pTxtNd, sal_Int32 nLv
         m_aStyles.append(OOO_STRING_SVTOOLS_RTF_PLAIN);
         m_aStyles.append(' ');
 
-        SvxLRSpaceItem aLR((SvxLRSpaceItem&)rNdSet.Get(RES_LR_SPACE));
+        SvxLRSpaceItem aLR(static_cast<const SvxLRSpaceItem&>(rNdSet.Get(RES_LR_SPACE)));
         aLR.SetTxtLeft(aLR.GetTxtLeft() + pFmt->GetIndentAt());
         aLR.SetTxtFirstLineOfst(pFmt->GetFirstLineOffset());
 
@@ -3297,7 +3297,7 @@ void RtfAttributeOutput::SetField(const SwField& /*rFld*/, ww::eField /*eType*/,
 
 void RtfAttributeOutput::PostitField(const SwField* pFld)
 {
-    const SwPostItField& rPFld = *(SwPostItField*)pFld;
+    const SwPostItField& rPFld = *static_cast<const SwPostItField*>(pFld);
 
     OString aName = OUStringToOString(rPFld.GetName(), RTL_TEXTENCODING_UTF8);
     std::map<OString, sal_uInt16>::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
@@ -3628,7 +3628,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, S
     aRendered.Height() = rSize.Height();
     const Graphic* pGraphic = rOLENode.GetGraphic();
     Size aMapped(pGraphic->GetPrefSize());
-    const SwCropGrf& rCr = (const SwCropGrf&)rOLENode.GetAttr(RES_GRFATR_CROPGRF);
+    const SwCropGrf& rCr = static_cast<const SwCropGrf&>(rOLENode.GetAttr(RES_GRFATR_CROPGRF));
     const sal_Char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
     const sal_uInt8* pGraphicAry = 0;
     SvMemoryStream aStream;
@@ -3756,7 +3756,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
 
     Size aMapped(eGraphicType == GRAPHIC_BITMAP ? rGraphic.GetSizePixel() : rGraphic.GetPrefSize());
 
-    const SwCropGrf& rCr = (const SwCropGrf&)pGrfNode->GetAttr(RES_GRFATR_CROPGRF);
+    const SwCropGrf& rCr = static_cast<const SwCropGrf&>(pGrfNode->GetAttr(RES_GRFATR_CROPGRF));
 
     //Get original size in twips
     Size aSize(pGrfNode->GetTwipSize());

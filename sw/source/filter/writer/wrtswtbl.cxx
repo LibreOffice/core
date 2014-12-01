@@ -82,7 +82,7 @@ sal_uInt32 SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 {
     const SwFrmFmt *pFmt = pBox->GetFrmFmt();
     const SwFmtFrmSize& aFrmSize=
-        (const SwFmtFrmSize&)pFmt->GetFmtAttr( RES_FRM_SIZE );
+        static_cast<const SwFmtFrmSize&>(pFmt->GetFmtAttr( RES_FRM_SIZE ));
 
     return sal::static_int_cast<sal_uInt32>(aFrmSize.GetSize().Width());
 }
@@ -176,11 +176,11 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
             if( !pLine->GetUpper() )
             {
                 if( !pRow->GetBackground() )
-                    pRow->SetBackground( (const SvxBrushItem *)pItem );
+                    pRow->SetBackground( static_cast<const SvxBrushItem *>(pItem) );
                 pItem = 0;
             }
 
-            return (const SvxBrushItem *)pItem;
+            return static_cast<const SvxBrushItem *>(pItem);
         }
 
         pBox = pLine->GetUpper();
@@ -230,7 +230,7 @@ sal_uInt16 SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
     sal_uInt16 nBorderMask = 0;
 
     const SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
-    const SvxBoxItem& rBoxItem = (const SvxBoxItem&)pFrmFmt->GetFmtAttr( RES_BOX );
+    const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(pFrmFmt->GetFmtAttr( RES_BOX ));
 
     if( rBoxItem.GetTop() )
     {
@@ -596,7 +596,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
-            pLineBrush = (const SvxBrushItem *)pItem;
+            pLineBrush = static_cast<const SvxBrushItem *>(pItem);
 
             // If the row spans the entire table, we can
             // print out the background to the row. Otherwise

@@ -55,7 +55,7 @@ void SwWrtShell::Invalidate()
     // to avoid making the slot volatile, invalidate it every time if something could have been changed
     // this is still much cheaper than asking for the state every 200 ms (and avoid background processing)
     GetView().GetViewFrame()->GetBindings().Invalidate( FN_STAT_SELMODE );
-    SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
     if (pWrdCnt)
         pWrdCnt->UpdateCounts();
 }
@@ -396,7 +396,7 @@ void SwWrtShell::EndSelect()
             fnKillSel = &SwWrtShell::ResetSelect;
         }
     }
-    SwWordCountWrapper *pWrdCnt = (SwWordCountWrapper*)GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId());
+    SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(GetView().GetViewFrame()->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
     if (pWrdCnt)
         pWrdCnt->UpdateCounts();
 }

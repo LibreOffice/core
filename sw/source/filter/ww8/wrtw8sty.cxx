@@ -548,7 +548,7 @@ void MSWordStyles::GetStyleData( SwFmt* pFmt, bool& bFmtColl, sal_uInt16& nBase,
 
     SwFmt* pNext;
     if ( bFmtColl )
-        pNext = &((SwTxtFmtColl*)pFmt)->GetNextTxtFmtColl();
+        pNext = &static_cast<SwTxtFmtColl*>(pFmt)->GetNextTxtFmtColl();
     else
         pNext = pFmt; // CharFmt: next CharFmt == self
 
@@ -902,13 +902,13 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
     GetId(wwFont(OUString("Arial"), PITCH_VARIABLE, FAMILY_SWISS,
         RTL_TEXTENCODING_MS_1252,bWrtWW8));
 
-    const SvxFontItem* pFont = (const SvxFontItem*)GetDfltAttr(RES_CHRATR_FONT);
+    const SvxFontItem* pFont = static_cast<const SvxFontItem*>(GetDfltAttr(RES_CHRATR_FONT));
 
     GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
         pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
 
     const SfxItemPool& rPool = rDoc.GetAttrPool();
-    if (0 != (pFont = (const SvxFontItem*)rPool.GetPoolDefaultItem(RES_CHRATR_FONT)))
+    if (0 != (pFont = static_cast<const SvxFontItem*>(rPool.GetPoolDefaultItem(RES_CHRATR_FONT))))
     {
         GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
             pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
@@ -923,7 +923,7 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
         sal_uInt32 const nMaxItem = rPool.GetItemCount2( *pId );
         for (sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet)
         {
-            pFont = (const SvxFontItem*)rPool.GetItem2( *pId, nGet );
+            pFont = static_cast<const SvxFontItem*>(rPool.GetItem2( *pId, nGet ));
             if (0 != pFont)
             {
                 GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
@@ -1043,9 +1043,9 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 
     const SfxPoolItem* pI;
     const SwNode* pNd = rExport.pCurPam->GetCntntNode();
-    const SfxItemSet* pSet = pNd ? &((SwCntntNode*)pNd)->GetSwAttrSet() : 0;
+    const SfxItemSet* pSet = pNd ? &static_cast<const SwCntntNode*>(pNd)->GetSwAttrSet() : 0;
 
-    sal_uLong nRstLnNum =  pSet ? ((SwFmtLineNumber&)pSet->Get( RES_LINENUMBER )).GetStartValue() : 0;
+    sal_uLong nRstLnNum =  pSet ? static_cast<const SwFmtLineNumber&>(pSet->Get( RES_LINENUMBER )).GetStartValue() : 0;
 
     const SwTableNode* pTblNd = rExport.pCurPam->GetNode().FindTableNode();
     const SwSectionNode* pSectNd;
@@ -1075,9 +1075,9 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     // Hole evtl. Pagedesc des 1. Nodes
     if ( pSet &&
          SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
-         ( (SwFmtPageDesc*)pI )->GetPageDesc() )
+         static_cast<const SwFmtPageDesc*>(pI)->GetPageDesc() )
     {
-        AppendSection( *(SwFmtPageDesc*)pI, *pNd, pFmt, nRstLnNum );
+        AppendSection( *static_cast<const SwFmtPageDesc*>(pI), *pNd, pFmt, nRstLnNum );
     }
     else
         AppendSection( rExport.pAktPageDesc, pFmt, nRstLnNum );
@@ -1138,10 +1138,10 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
     aSet.SetParent( &rSet );
 
     //0xffffffff, what the hell is going on with that!, fixme most terribly
-    if ( rInfo.pSectionFmt && (SwSectionFmt*)0xFFFFFFFF != rInfo.pSectionFmt )
+    if ( rInfo.pSectionFmt && reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF) != rInfo.pSectionFmt )
         aSet.Put( rInfo.pSectionFmt->GetFmtAttr( RES_COL ) );
 
-    const SwFmtCol& rCol = (const SwFmtCol&)aSet.Get( RES_COL );
+    const SwFmtCol& rCol = static_cast<const SwFmtCol&>(aSet.Get( RES_COL ));
     const SwColumns& rColumns = rCol.GetColumns();
     return rColumns.size();
 }
@@ -1276,8 +1276,8 @@ void MSWordSections::SetHeaderFlag( sal_uInt8& rHeadFootFlags, const SwFmt& rFmt
 {
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rFmt.GetItemState(RES_HEADER, true, &pItem)
-        && ((SwFmtHeader*)pItem)->IsActive() &&
-        ((SwFmtHeader*)pItem)->GetHeaderFmt() )
+        && static_cast<const SwFmtHeader*>(pItem)->IsActive() &&
+        static_cast<const SwFmtHeader*>(pItem)->GetHeaderFmt() )
         rHeadFootFlags |= nFlag;
 }
 
@@ -1286,8 +1286,8 @@ void MSWordSections::SetFooterFlag( sal_uInt8& rHeadFootFlags, const SwFmt& rFmt
 {
     const SfxPoolItem* pItem;
     if( SfxItemState::SET == rFmt.GetItemState(RES_FOOTER, true, &pItem)
-        && ((SwFmtFooter*)pItem)->IsActive() &&
-        ((SwFmtFooter*)pItem)->GetFooterFmt() )
+        && static_cast<const SwFmtFooter*>(pItem)->IsActive() &&
+        static_cast<const SwFmtFooter*>(pItem)->GetFooterFmt() )
         rHeadFootFlags |= nFlag;
 }
 
@@ -1325,7 +1325,7 @@ bool WW8_SepInfo::IsProtected() const
     bool bRet = false;
     if (
          pSectionFmt &&
-         ((SwSectionFmt*)0xFFFFFFFF != pSectionFmt)
+         (reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF) != pSectionFmt)
        )
     {
         const SwSection *pSection = pSectionFmt->GetSection();
@@ -1394,10 +1394,10 @@ bool MSWordSections::HasBorderItem( const SwFmt& rFmt )
 {
     const SfxPoolItem* pItem;
     return SfxItemState::SET == rFmt.GetItemState(RES_BOX, true, &pItem) &&
-            (   ((SvxBoxItem*)pItem)->GetTop() ||
-                ((SvxBoxItem*)pItem)->GetBottom()  ||
-                ((SvxBoxItem*)pItem)->GetLeft()  ||
-                ((SvxBoxItem*)pItem)->GetRight() );
+            (   static_cast<const SvxBoxItem*>(pItem)->GetTop() ||
+                static_cast<const SvxBoxItem*>(pItem)->GetBottom()  ||
+                static_cast<const SvxBoxItem*>(pItem)->GetLeft()  ||
+                static_cast<const SvxBoxItem*>(pItem)->GetRight() );
 }
 
 void WW8AttributeOutput::StartSection()
@@ -1661,7 +1661,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             }
         }
 
-        if ( (SwSectionFmt*)0xFFFFFFFF != rSepInfo.pSectionFmt )
+        if ( reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF) != rSepInfo.pSectionFmt )
         {
             if ( nBreakCode == 0 )
                 bOutPgDscSet = false;

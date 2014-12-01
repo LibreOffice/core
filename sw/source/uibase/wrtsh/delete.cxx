@@ -52,7 +52,7 @@ bool SwWrtShell::TryRemoveIndent()
     SfxItemSet aAttrSet(GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE);
     GetCurAttr(aAttrSet);
 
-    SvxLRSpaceItem aItem = (const SvxLRSpaceItem &)aAttrSet.Get(RES_LR_SPACE);
+    SvxLRSpaceItem aItem = static_cast<const SvxLRSpaceItem &>(aAttrSet.Get(RES_LR_SPACE));
     short aOldFirstLineOfst = aItem.GetTxtFirstLineOfst();
 
     if (aOldFirstLineOfst > 0)

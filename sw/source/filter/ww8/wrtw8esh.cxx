@@ -1143,13 +1143,13 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
 
 void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
 {
-    const SvxFieldItem &rField = (const SvxFieldItem &)rHt;
+    const SvxFieldItem &rField = static_cast<const SvxFieldItem &>(rHt);
     const SvxFieldData *pFld = rField.GetField();
     if (pFld && pFld->ISA(SvxURLField))
     {
         sal_uInt8 nOldTxtTyp = m_rExport.nTxtTyp;
         m_rExport.nTxtTyp = mnTyp;
-        const SvxURLField *pURL = (const SvxURLField *)pFld;
+        const SvxURLField *pURL = static_cast<const SvxURLField *>(pFld);
         m_rExport.AttrOutput().StartURL( pURL->GetURL(), pURL->GetTargetFrame() );
 
         const OUString &rStr = pURL->GetRepresentation();
@@ -1988,14 +1988,14 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
     const SwAttrSet& rAttrSet = rFmt.GetAttrSet();
     if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
     {
-        const SvxBoxItem* pBox = (const SvxBoxItem*)pItem;
+        const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(pItem);
         if( pBox )
         {
             const SfxPoolItem* pShadItem;
             if (SfxItemState::SET
                 == rAttrSet.GetItemState(RES_SHADOW, true, &pShadItem))
             {
-                const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;
+                const SvxShadowItem* pSI = static_cast<const SvxShadowItem*>(pShadItem);
 
                 const sal_uInt16 nCstScale = 635;        // unit scale between AOO and MS Word
                 const sal_uInt32 nShadowType = 131074;    // shadow type of ms word. need to set the default value.
@@ -2325,7 +2325,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                 &pItem);
             if (SfxItemState::SET == eState && pItem)
             {
-                const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
+                const SvxBrushItem* pBrush = static_cast<const SvxBrushItem*>(pItem);
                 WriteBrushAttr(*pBrush, aPropOpt);
 
                 SvxGraphicPosition ePos = pBrush->GetGraphicPos();

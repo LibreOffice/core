@@ -489,7 +489,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
         {
             const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
             if( !pParentFmt )
-                pParentFmt = (SwSectionFmt*)0xFFFFFFFF;
+                pParentFmt = reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF) ;
 
             sal_uLong nRstLnNum;
             if( rNd.IsCntntNode() )

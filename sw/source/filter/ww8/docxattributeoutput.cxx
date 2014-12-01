@@ -1424,7 +1424,7 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
                     WriteFFData(  rInfos );
                 if ( rInfos.pField )
                 {
-                    const SwDropDownField& rFld2 = *(SwDropDownField*)rInfos.pField;
+                    const SwDropDownField& rFld2 = *static_cast<const SwDropDownField*>(rInfos.pField);
                     uno::Sequence<OUString> aItems =
                         rFld2.GetItemSequence();
                     GetExport().DoComboBox(rFld2.GetName(),
@@ -3590,7 +3590,7 @@ void DocxAttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer
         aPam.GetPoint()->nNode++;
         if (aPam.GetPoint()->nNode.GetNode().IsTxtNode())
         {
-            const SwTxtNode& rTxtNode = (const SwTxtNode&)aPam.GetPoint()->nNode.GetNode();
+            const SwTxtNode& rTxtNode = static_cast<const SwTxtNode&>(aPam.GetPoint()->nNode.GetNode());
             if( const SwAttrSet* pAttrSet = rTxtNode.GetpSwAttrSet())
             {
                 const SvxCharRotateItem& rCharRotate = pAttrSet->GetCharRotate();
@@ -5494,7 +5494,7 @@ void DocxAttributeOutput::SectionPageBorders( const SwFrmFmt* pFmt, const SwFrmF
         const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
         if ( pItem )
         {
-            const SvxShadowItem* pShadowItem = (const SvxShadowItem*)pItem;
+            const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
             aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
         }
 
@@ -5570,7 +5570,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::NUMBER_LOWER_ZH:
             aType="taiwaneseCountingThousand";
             if (pOutSet) {
-                const SvxLanguageItem rLang = (const SvxLanguageItem&) pOutSet->Get( RES_CHRATR_CJK_LANGUAGE,true);
+                const SvxLanguageItem rLang = static_cast<const SvxLanguageItem&>( pOutSet->Get( RES_CHRATR_CJK_LANGUAGE,true) );
                 const LanguageType eLang = rLang.GetLanguage();
 
                 if (LANGUAGE_CHINESE_SIMPLIFIED == eLang) {
@@ -6596,12 +6596,12 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType
         // TODO Any other field types here ?
         if ( ( nType == RES_SETEXPFLD ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
         {
-            const SwSetExpField *pSet = ( const SwSetExpField* )( pFld );
+            const SwSetExpField *pSet = static_cast<const SwSetExpField*>( pFld );
             m_sFieldBkm = pSet->GetPar1( );
         }
         else if ( nType == RES_DROPDOWN )
         {
-            const SwDropDownField* pDropDown = ( const SwDropDownField* )( pFld );
+            const SwDropDownField* pDropDown = static_cast<const SwDropDownField*>( pFld );
             m_sFieldBkm = pDropDown->GetName( );
         }
     }
@@ -7762,7 +7762,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
     const SfxPoolItem* pItem = GetExport().HasItem( RES_SHADOW );
     if ( pItem )
     {
-        const SvxShadowItem* pShadowItem = (const SvxShadowItem*)pItem;
+        const SvxShadowItem* pShadowItem = static_cast<const SvxShadowItem*>(pItem);
         aOutputBorderOptions.aShadowLocation = pShadowItem->GetLocation();
     }
 
