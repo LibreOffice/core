@@ -406,10 +406,10 @@ private:
        for each level of nested tables there is one frame in the stack
      */
     std::stack<typename TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t > mTableDataStack;
-    typename RowData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t mpUnfinishedRow;
+    RowData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t mpUnfinishedRow;
     bool mbKeepUnfinishedRow;
 
-    typedef typename TableDataHandler<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t TableDataHandlerPointer_t;
+    typedef TableDataHandler<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t TableDataHandlerPointer_t;
 
     /**
        handler for resolveCurrentTable
