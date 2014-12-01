@@ -1169,20 +1169,16 @@ void ScCheckListMenuWindow::MouseMove(const MouseEvent& rMEvt)
 
 bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
 {
-    switch (rNEvt.GetType())
+    if (rNEvt.GetType() == MouseNotifyEvent::KEYUP)
     {
-        case MouseNotifyEvent::KEYUP:
+        const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+        const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
+        bool bShift = rCode.IsShift();
+        if (rCode.GetCode() == KEY_TAB)
         {
-            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
-            bool bShift = rCode.IsShift();
-            if (rCode.GetCode() == KEY_TAB)
-            {
-                cycleFocus(bShift);
-                return true;
-            }
+            cycleFocus(bShift);
+            return true;
         }
-        break;
     }
     return ScMenuFloatingWindow::Notify(rNEvt);
 }
