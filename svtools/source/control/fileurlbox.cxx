@@ -78,7 +78,7 @@ namespace svt
 
     bool FileURLBox::Notify( NotifyEvent& _rNEvt )
     {
-        switch (_rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+        if (_rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
         {
             if  (   ( GetSubEdit() == _rNEvt.GetWindow()                         )
                 &&  ( KEY_RETURN == _rNEvt.GetKeyEvent()->GetKeyCode().GetCode() )
