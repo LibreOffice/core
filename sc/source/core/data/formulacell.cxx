@@ -1936,6 +1936,16 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
                         rRefRowReorder.getRowMap());
             }
             break;
+            case sc::RefHint::StartListening:
+            {
+                StartListeningTo( pDocument);
+            }
+            break;
+            case sc::RefHint::StopListening:
+            {
+                EndListeningTo( pDocument);
+            }
+            break;
             default:
                 ;
         }
