@@ -478,7 +478,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
         return false;
 
     SET_CURR_SHELL( this );
-    bool bRet;
+    bool bRet = false;
     StartAllAction();
     if(IsTableMode())
     {
