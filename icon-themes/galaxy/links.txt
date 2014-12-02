@@ -15,6 +15,9 @@ cmd/lc_closepreview.png cmd/lc_closedoc.png
 cmd/sc_closepreview.png cmd/sc_closedoc.png
 cmd/sc_numberformattime.png cmd/sc_timefield.png
 
+cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
+cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
+
 # paragraph line spacing
 cmd/lc_linespacing.png cmd/lc_spacepara15.png
 cmd/sc_linespacing.png cmd/sc_spacepara15.png
