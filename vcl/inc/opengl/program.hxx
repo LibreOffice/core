@@ -10,6 +10,10 @@
 #ifndef INCLUDED_VCL_INC_OPENGL_PROGRAM_H
 #define INCLUDED_VCL_INC_OPENGL_PROGRAM_H
 
+#include <sal/config.h>
+
+#include <list>
+
 #include <GL/glew.h>
 #include <vcl/dllapi.h>
 
