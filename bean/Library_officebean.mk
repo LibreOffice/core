@@ -23,14 +23,12 @@ $(eval $(call gb_Library_use_externals,officebean,\
 ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_cobjects,officebean,\
 	bean/native/unix/com_sun_star_comp_beans_LocalOfficeWindow \
-	bean/native/unix/com_sun_star_beans_LocalOfficeWindow \
 ))
 endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_cobjects,officebean,\
 	bean/native/win32/com_sun_star_comp_beans_LocalOfficeWindow \
-	bean/native/win32/com_sun_star_beans_LocalOfficeWindow \
 ))
 endif
 
