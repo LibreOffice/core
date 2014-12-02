@@ -228,10 +228,20 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             sal_Char cType = 0;
             switch( eType )
             {
-            case SVX_NUM_CHARS_UPPER_LETTER:    cType = 'A'; break;
-            case SVX_NUM_CHARS_LOWER_LETTER:    cType = 'a'; break;
-            case SVX_NUM_ROMAN_UPPER:           cType = 'I'; break;
-            case SVX_NUM_ROMAN_LOWER:           cType = 'i'; break;
+                case SVX_NUM_CHARS_UPPER_LETTER:
+                case SVX_NUM_CHARS_UPPER_LETTER_N:
+                    cType = 'A';
+                    break;
+                case SVX_NUM_CHARS_LOWER_LETTER:
+                case SVX_NUM_CHARS_LOWER_LETTER_N:
+                    cType = 'a';
+                    break;
+                case SVX_NUM_ROMAN_UPPER:
+                    cType = 'I';
+                    break;
+                case SVX_NUM_ROMAN_LOWER:
+                    cType = 'i';
+                    break;
             }
             if( cType )
             {
