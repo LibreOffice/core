@@ -36,7 +36,7 @@ void VclOutdevTest::testVirtualDevice()
     aVDev.SetOutputSizePixel(Size(32,32));
     aVDev.SetBackground(Wallpaper(COL_WHITE));
     aVDev.Erase();
-    aVDev.DrawPixel(Point(1,2),COL_GREEN);
+    aVDev.DrawPixel(Point(1,2),COL_BLUE);
     aVDev.DrawPixel(Point(31,30),COL_RED);
 
     Size aSize = aVDev.GetOutputSizePixel();
@@ -57,14 +57,14 @@ void VclOutdevTest::testVirtualDevice()
 #endif
 
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aVDev.GetPixel(Point(0,0)).GetColor());
-    CPPUNIT_ASSERT_EQUAL(COL_GREEN, aVDev.GetPixel(Point(1,2)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, aVDev.GetPixel(Point(1,2)).GetColor());
     CPPUNIT_ASSERT_EQUAL(COL_RED, aVDev.GetPixel(Point(31,30)).GetColor());
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aVDev.GetPixel(Point(30,31)).GetColor());
 
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
     Bitmap::ScopedReadAccess pAcc(aBmp);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAcc->GetPixel(0,0)).GetColor());
-    CPPUNIT_ASSERT_EQUAL(COL_GREEN, Color(pAcc->GetPixel(2,1)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, Color(pAcc->GetPixel(2,1)).GetColor());
     CPPUNIT_ASSERT_EQUAL(COL_RED, Color(pAcc->GetPixel(30,31)).GetColor());
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(pAcc->GetPixel(31,30)).GetColor());
 
