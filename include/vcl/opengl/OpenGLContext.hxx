@@ -236,7 +236,6 @@ private:
     bool mbPixmap; // is a pixmap instead of a window
 #endif
 
-    int mnFramebufferCount;
     OpenGLFramebuffer* mpCurrentFramebuffer;
     OpenGLFramebuffer* mpFirstFramebuffer;
     OpenGLFramebuffer* mpLastFramebuffer;
