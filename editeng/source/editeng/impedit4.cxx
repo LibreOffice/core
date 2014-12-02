@@ -1297,7 +1297,9 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             pPortion->MarkSelectionInvalid( nStartPos, pC->GetText().getLength() );
         }
 
-        DBG_ASSERT( CheckOrderedList( aPaM.GetNode()->GetCharAttribs().GetAttribs(), true ), "InsertBinTextObject: Start-Liste distorted" );
+#if OSL_DEBUG_LEVEL > 0
+        CharAttribList::DbgCheckAttribs(aPaM.GetNode()->GetCharAttribs());
+#endif
 
         bool bParaAttribs = false;
         if ( bNewContent || ( ( n > 0 ) && ( n < (nContents-1) ) ) )

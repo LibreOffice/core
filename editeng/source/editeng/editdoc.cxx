@@ -1413,8 +1413,8 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
         mpWrongList->TextInserted( nIndex, nNew, bSep );
     }
 
-#if OSL_DEBUG_LEVEL > 2
-    OSL_ENSURE( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Expand: Start List distorted" );
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
 #endif
 }
 
@@ -1501,8 +1501,8 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
     if (mpWrongList)
         mpWrongList->TextDeleted(nIndex, nDeleted);
 
-#if OSL_DEBUG_LEVEL > 2
-    OSL_ENSURE( CheckOrderedList( aCharAttribList.GetAttribs(), sal_True ), "Collaps: Start list distorted" );
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
 #endif
 }
 
@@ -3005,6 +3005,8 @@ void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
             assert(zero_set.insert(std::make_pair(rAttr.GetStart(), rAttr.Which())).second && "duplicate 0-length attribute detected");
         }
     }
+    CheckOrderedList(rAttribs.GetAttribs(), true);
+//    CheckOrderedList(rAttribs.GetAttribs(), false); // this does not work - need 2nd array to sort by ends?
 }
 #endif
 

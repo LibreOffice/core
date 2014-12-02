@@ -835,7 +835,7 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int3
     return (nAttr < (sal_Int32)rAttribs.size()) ? &rAttribs[nAttr] : NULL;
 }
 
-bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);
+void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);
 
 
 // class EditEngineItemPool

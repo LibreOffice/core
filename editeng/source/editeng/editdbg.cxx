@@ -497,21 +497,20 @@ sal_Bool ParaPortion::DbgCheckTextPortions()
 }
 #endif
 
-bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart)
+#endif
+
+#if OSL_DEBUG_LEVEL > 0
+void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart)
 {
-    sal_uInt16 nPrev = 0;
+    sal_Int32 nPrev = 0;
     for (size_t nAttr = 0; nAttr < rAttribs.size(); ++nAttr)
     {
         const EditCharAttrib& rAttr = rAttribs[nAttr];
-        sal_uInt16 nCur = bStart ? rAttr.GetStart() : rAttr.GetEnd();
-        if ( nCur < nPrev )
-            return false;
-
+        sal_Int32 const nCur = bStart ? rAttr.GetStart() : rAttr.GetEnd();
+        assert(nCur >= nPrev);
         nPrev = nCur;
     }
-    return true;
 }
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
