@@ -369,10 +369,10 @@ void SwSelPaintRects::HighlightInputFld()
             pCrsrForInputTxtFld->GetMark()->nContent.Assign( pTxtNode, *(pCurTxtInputFldAtCrsr->End()) );
 
             pCrsrForInputTxtFld->FillRects();
-
-            for (size_t a(0); a < pCrsrForInputTxtFld->size(); ++a)
+            SwRects* pRects = static_cast<SwRects*>(pCrsrForInputTxtFld.get());
+            for (size_t a(0); a < pRects->size(); ++a)
             {
-                const SwRect aNextRect((*pCrsrForInputTxtFld)[a]);
+                const SwRect aNextRect((*pRects)[a]);
                 const Rectangle aPntRect(aNextRect.SVRect());
 
                 aInputFldRanges.push_back(basegfx::B2DRange(

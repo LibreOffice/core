@@ -1296,18 +1296,18 @@ void SwDocTest::testIntrusiveRing()
     vRings.push_back(&aRing3);
     vRings.push_back(&aRing4);
     vRings.push_back(&aRing5);
-    CPPUNIT_ASSERT_EQUAL(aRing1.numberOf(), static_cast<sal_uInt32>(1));
+    CPPUNIT_ASSERT_EQUAL(aRing1.size(), static_cast<size_t>(1));
     aRing2.MoveTo(&aRing1);
     aRing3.MoveTo(&aRing1);
-    CPPUNIT_ASSERT_EQUAL(aRing1.numberOf(), static_cast<sal_uInt32>(3));
-    CPPUNIT_ASSERT_EQUAL(aRing2.numberOf(), static_cast<sal_uInt32>(3));
-    CPPUNIT_ASSERT_EQUAL(aRing3.numberOf(), static_cast<sal_uInt32>(3));
+    CPPUNIT_ASSERT_EQUAL(aRing1.size(), static_cast<size_t>(3));
+    CPPUNIT_ASSERT_EQUAL(aRing2.size(), static_cast<size_t>(3));
+    CPPUNIT_ASSERT_EQUAL(aRing3.size(), static_cast<size_t>(3));
     aRing5.MoveTo(&aRing4);
-    CPPUNIT_ASSERT_EQUAL(aRing4.numberOf(), static_cast<sal_uInt32>(2));
+    CPPUNIT_ASSERT_EQUAL(aRing4.size(), static_cast<size_t>(2));
     aRing4.MoveRingTo(&aRing1);
     BOOST_FOREACH(TestRing* pRing, vRings)
     {
-        CPPUNIT_ASSERT_EQUAL(pRing->numberOf(), static_cast<sal_uInt32>(5));
+        CPPUNIT_ASSERT_EQUAL(pRing->size(), static_cast<size_t>(5));
     }
     for(std::vector<TestRing*>::iterator ppRing = vRings.begin(); ppRing != vRings.end(); ++ppRing)
     {

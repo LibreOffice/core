@@ -677,10 +677,10 @@ void SwSidebarWin::SetPosAndSize()
                 ::boost::scoped_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange( pTmpCrsr );
 
                 pTmpCrsrForAnnotationTextRange->FillRects();
-
-                for( sal_uInt16 a(0); a < pTmpCrsrForAnnotationTextRange->size(); ++a )
+                SwRects* pRects(pTmpCrsrForAnnotationTextRange.get());
+                for( size_t a(0); a < pRects->size(); ++a )
                 {
-                    const SwRect aNextRect((*pTmpCrsrForAnnotationTextRange)[a]);
+                    const SwRect aNextRect((*pRects)[a]);
                     const Rectangle aPntRect(aNextRect.SVRect());
 
                     aAnnotationTextRanges.push_back(basegfx::B2DRange(

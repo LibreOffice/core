@@ -124,7 +124,7 @@ namespace sw
             { return std::make_pair(beginRing(), endRing()); }
 
         /** @return the number of elements in the container */
-        sal_uInt32 numberOf() const
+        size_t size() const
             { return algo::count(static_cast< const T* >(this)); }
     };
 
