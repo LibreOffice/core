@@ -65,11 +65,14 @@
 #include "outfont.hxx"
 #include "PhysicalFontCollection.hxx"
 #include "print.h"
+#include "salgdi.hxx"
 #include "salsys.hxx"
 #include "saltimer.hxx"
 #include "salimestatus.hxx"
 #include "impimagetree.hxx"
 #include "xconnection.hxx"
+
+#include "vcl/opengl/OpenGLContext.hxx"
 
 #include "osl/process.h"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
@@ -442,6 +445,9 @@ void DeInitVCL()
     }
     if ( pSVData->mpDefaultWin )
     {
+        OpenGLContext* pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
+        if( pContext )
+            pContext->DeRef();
         delete pSVData->mpDefaultWin;
         pSVData->mpDefaultWin = NULL;
     }

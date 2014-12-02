@@ -39,6 +39,7 @@
 #include "vcl/dockwin.hxx"
 #include "salinst.hxx"
 #include "salframe.hxx"
+#include "salgdi.hxx"
 #include "svdata.hxx"
 #include "window.h"
 #include "salimestatus.hxx"
@@ -48,6 +49,8 @@
 #include "com/sun/star/accessibility/MSAAService.hpp"
 
 #include "officecfg/Office/Common.hxx"
+
+#include "vcl/opengl/OpenGLContext.hxx"
 
 #include <stdio.h>
 
@@ -129,6 +132,11 @@ vcl::Window* ImplGetDefaultWindow()
             DBG_WARNING( "ImplGetDefaultWindow(): No AppWindow" );
             pSVData->mpDefaultWin = new WorkWindow( 0, WB_DEFAULTWIN );
             pSVData->mpDefaultWin->SetText( OUString( "VCL ImplGetDefaultWindow"  ) );
+
+            // Add a reference to the default context so it never gets deleted
+            OpenGLContext* pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
+            if( pContext )
+                pContext->AddRef();
         }
         Application::GetSolarMutex().release();
     }
