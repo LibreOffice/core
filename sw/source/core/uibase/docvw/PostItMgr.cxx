@@ -764,7 +764,8 @@ void SwPostItMgr::LayoutPostIts()
                 }
                 else
                 {
-                    bUpdate = true;
+                    if (mPages[n]->bScrollbar)
+                        bUpdate = true;
                     mPages[n]->bScrollbar = false;
                 }
             }
@@ -796,7 +797,6 @@ void SwPostItMgr::LayoutPostIts()
                 if ( bRepair )
                     CheckForRemovedPostIts();
             }
-
             // notes scrollbar is otherwise not drawn correctly for some cases
             // scrollbar area is enough
             if (bUpdate)
