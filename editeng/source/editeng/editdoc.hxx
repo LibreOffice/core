@@ -647,8 +647,8 @@ public:
     short               GetInvalidDiff() const      { return nInvalidDiff; }
 
     void                CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormattedLine );
-#if OSL_DEBUG_LEVEL > 2
-    sal_Bool                DbgCheckTextPortions();
+#if OSL_DEBUG_LEVEL > 0
+    static bool DbgCheckTextPortions(ParaPortion const&);
 #endif
 };
 

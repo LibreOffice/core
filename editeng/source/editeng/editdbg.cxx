@@ -485,21 +485,20 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
     if ( bInfoBox )
         InfoBox(0, OUString( "D:\\DEBUG.LOG !" ) ).Execute();
 }
-
-#if OSL_DEBUG_LEVEL > 2
-sal_Bool ParaPortion::DbgCheckTextPortions()
-{
-    // check, if Portion length ok:
-    sal_uInt16 nXLen = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < aTextPortionList.Count(); nPortion++  )
-        nXLen = nXLen + aTextPortionList[nPortion]->GetLen();
-    return nXLen == pNode->Len() ? sal_True : sal_False;
-}
-#endif
-
 #endif
 
 #if OSL_DEBUG_LEVEL > 0
+bool ParaPortion::DbgCheckTextPortions(ParaPortion const& rPara)
+{
+    // check, if Portion length ok:
+    sal_uInt16 nXLen = 0;
+    for (sal_uInt16 nPortion = 0; nPortion < rPara.aTextPortionList.Count(); nPortion++)
+    {
+        nXLen = nXLen + rPara.aTextPortionList[nPortion]->GetLen();
+    }
+    return nXLen == rPara.pNode->Len();
+}
+
 void CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart)
 {
     sal_Int32 nPrev = 0;

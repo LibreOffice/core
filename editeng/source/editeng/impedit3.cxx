@@ -2386,8 +2386,8 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     }
 
     DBG_ASSERT( pParaPortion->GetTextPortions().Count(), "No Portions?!" );
-#if OSL_DEBUG_LEVEL > 2
-    OSL_ENSURE( pParaPortion->DbgCheckTextPortions(), "Portion is broken?" );
+#if OSL_DEBUG_LEVEL > 0
+    OSL_ENSURE( ParaPortion::DbgCheckTextPortions(*pParaPortion), "Portion is broken?" );
 #endif
 }
 
@@ -2502,8 +2502,8 @@ void ImpEditEngine::RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nSta
             }
         }
     }
-#if OSL_DEBUG_LEVEL > 2
-    OSL_ENSURE( pParaPortion->DbgCheckTextPortions(), "Portions are broken?" );
+#if OSL_DEBUG_LEVEL > 0
+    OSL_ENSURE( ParaPortion::DbgCheckTextPortions(*pParaPortion), "Portions are broken?" );
 #endif
 }
 
