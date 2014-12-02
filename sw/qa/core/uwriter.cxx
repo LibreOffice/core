@@ -1278,10 +1278,12 @@ namespace
     struct TestRing : public sw::Ring<TestRing>
     {
         TestRing() : sw::Ring<TestRing>() {};
+#if 0
         void debug()
         {
             SAL_DEBUG("TestRing at: " << this << " prev: " << GetPrev() << " next: " << GetNext());
         }
+#endif
     };
 }
 
