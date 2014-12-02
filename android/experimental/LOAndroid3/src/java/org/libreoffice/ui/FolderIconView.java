@@ -83,6 +83,10 @@ public class FolderIconView extends View{
         if( dir == null )
             return;//TODO
         File[] contents = dir.listFiles();//TODO consider filtering thumbs to match grid.
+        if( contents == null )
+            // dir is not a directory,
+            // or user does not have permissions to read it
+            return;
         Stack<Bitmap> thumbs = new Stack<Bitmap>();
         BitmapFactory factory = new BitmapFactory();
         for( File file : contents ){
