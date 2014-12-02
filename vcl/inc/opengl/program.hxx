@@ -29,7 +29,6 @@ private:
     GLuint          mnId;
     UniformCache    maUniformLocations;
     sal_uInt32      mnEnabledAttribs;
-    GLuint          mnAttribIndex;
     GLuint          mnPositionAttrib;
     GLuint          mnTexCoordAttrib;
     GLuint          mnAlphaCoordAttrib;
