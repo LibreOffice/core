@@ -51,9 +51,11 @@ public:
     void SetTextureCoord( const GLvoid* pData );
     void SetAlphaCoord( const GLvoid* pData );
 
+    void SetUniform1f( const OString& rName, GLfloat v1 );
     void SetUniform2f( const OString& rName, GLfloat v1, GLfloat v2 );
     void SetUniform1fv( const OString& rName, GLsizei nCount, GLfloat* aValues );
     void SetUniform2fv( const OString& rName, GLsizei nCount, GLfloat* aValues );
+    void SetColor( const OString& rName, const Color& rColor );
     void SetColor( const OString& rName, SalColor nColor, sal_uInt8 nTransparency );
     void SetColorf( const OString& rName, SalColor nColor, double fTransparency );
     void SetColorWithIntensity( const OString& rName, const Color& rColor, long nFactor );

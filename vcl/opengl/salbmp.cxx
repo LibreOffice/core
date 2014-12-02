@@ -27,6 +27,7 @@
 #include "svdata.hxx"
 #include "salgdi.hxx"
 
+#include "opengl/program.hxx"
 #include "opengl/salbmp.hxx"
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
@@ -579,9 +580,33 @@ bool OpenGLSalBitmap::Erase( const ::Color& /*rFillColor*/ )
     return false;
 }
 
-bool OpenGLSalBitmap::Replace( const Color& /*rSearchColor*/, const Color& /*rReplaceColor*/, sal_uLong /*nTol*/ )
+bool OpenGLSalBitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
-    return false;
+    OpenGLFramebuffer* pFramebuffer;
+    OpenGLProgram* pProgram;
+
+    GetTexture();
+    makeCurrent();
+    pProgram = mpContext->UseProgram( "textureVertexShader",
+                                      "replaceColorFragmentShader" );
+    if( !pProgram )
+        return false;
+
+    OpenGLTexture aNewTex = OpenGLTexture( mnWidth, mnHeight );
+    pFramebuffer = mpContext->AcquireFramebuffer( aNewTex );
+
+    pProgram->SetTexture( "sampler", maTexture );
+    pProgram->SetColor( "search_color", rSearchColor );
+    pProgram->SetColor( "replace_color", rReplaceColor );
+    pProgram->SetUniform1f( "epsilon", nTol / 255.0f );
+    pProgram->DrawTexture( maTexture );
+    pProgram->Clean();
+
+    mpContext->ReleaseFramebuffer( pFramebuffer );
+    maTexture = aNewTex;
+
+    CHECK_GL_ERROR();
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
