@@ -56,16 +56,6 @@ OpenGLContext* X11OpenGLSalGraphicsImpl::CreateWinContext()
     return pContext;
 }
 
-OpenGLContext* X11OpenGLSalGraphicsImpl::CreatePixmapContext()
-{
-    X11OpenGLSalVirtualDevice* pVDev = dynamic_cast<X11OpenGLSalVirtualDevice*>(mrParent.m_pVDev);
-
-    if( pVDev == NULL )
-        return NULL;
-
-    return ImplGetDefaultWindow()->GetGraphics()->GetOpenGLContext();
-}
-
 bool X11OpenGLSalGraphicsImpl::UseContext( OpenGLContext* pContext )
 {
     X11WindowProvider *pProvider = dynamic_cast<X11WindowProvider*>(mrParent.m_pFrame);

@@ -30,7 +30,6 @@ public:
 protected:
     virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
     virtual bool UseContext( OpenGLContext* pContext ) SAL_OVERRIDE;
-    virtual OpenGLContext* CreatePixmapContext() SAL_OVERRIDE;
 
 public:
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
