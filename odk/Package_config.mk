@@ -14,7 +14,6 @@ $(eval $(call gb_Package_set_outdir,odk_config,$(INSTDIR)))
 ifeq ($(OS),WNT)
 $(eval $(call gb_Package_add_files,odk_config,$(SDKDIRNAME),\
 	odk/config/cfgWin.js \
-	odk/config/setsdkenv_windows.template \
 	odk/config/setsdkname.bat \
 ))
 else

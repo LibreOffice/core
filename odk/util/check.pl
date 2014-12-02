@@ -115,10 +115,6 @@ if (-d "$SdkDir") {
         print "\nERROR: \"setsdkenv_windows.bat\" is missing\n";
         $return++;
     }
-    if (!check_file("setsdkenv_windows.template")) {
-        print "\nERROR: \"setsdkenv_windows.template\" is missing\n";
-        $return++;
-    }
     if (!check_file("cfgWin.js")) {
         print "\nERROR: \"cfgWin.js\" is missing\n";
         $return++;
