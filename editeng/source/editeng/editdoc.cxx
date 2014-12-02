@@ -1287,6 +1287,10 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
     if ( !nNew )
         return;
 
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
+#endif
+
     // Since features are treated differently than normal character attributes,
     // can also the order of the start list be change!
     // In every if ...,  in the next (n) opportunities due to bFeature or
@@ -1423,6 +1427,10 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
     if ( !nDeleted )
         return;
 
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
+#endif
+
     // Since features are treated differently than normal character attributes,
     // can also the order of the start list be change!
     bool bResort = false;
@@ -1510,6 +1518,11 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
 {
     DBG_ASSERT( pPrevNode, "Copy of attributes to a null pointer?" );
 
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(pPrevNode->aCharAttribList);
+#endif
+
     sal_Int32 nCut = pPrevNode->Len();
 
     sal_Int32 nAttr = 0;
@@ -1552,6 +1565,11 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         nAttr++;
         pAttrib = GetAttrib(rPrevAttribs, nAttr);
     }
+
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(pPrevNode->aCharAttribList);
+#endif
 }
 
 void ContentNode::AppendAttribs( ContentNode* pNextNode )
@@ -1562,6 +1580,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 
 #if OSL_DEBUG_LEVEL > 0
     CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(pNextNode->aCharAttribList);
 #endif
 
     sal_Int32 nAttr = 0;
@@ -1618,6 +1637,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 
 #if OSL_DEBUG_LEVEL > 0
     CharAttribList::DbgCheckAttribs(aCharAttribList);
+    CharAttribList::DbgCheckAttribs(pNextNode->aCharAttribList);
 #endif
 }
 
@@ -2449,6 +2469,10 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
 
     DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
 
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(pNode->GetCharAttribs());
+#endif
+
     // iterate over the attributes ...
     sal_Int32 nAttr = 0;
     CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
@@ -2539,6 +2563,10 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
         pNode->GetCharAttribs().ResortAttribs();
         SetModified(true);
     }
+
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(pNode->GetCharAttribs());
+#endif
 
     return bChanged;
 }
@@ -2739,29 +2767,46 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 
     const sal_Int32 nStart = pAttrib->GetStart(); // may be better for Comp.Opt.
 
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(*this);
+#endif
+
     if ( pAttrib->IsEmpty() )
         bHasEmptyAttribs = true;
 
+    bool bInsert(true);
     for (sal_Int32 i = 0, n = aAttribs.size(); i < n; ++i)
     {
         const EditCharAttrib& rCurAttrib = aAttribs[i];
         if (rCurAttrib.GetStart() > nStart)
         {
             aAttribs.insert(aAttribs.begin()+i, pAttrib);
-            return;
+            bInsert = false;
+            break;
         }
     }
 
-    aAttribs.push_back(pAttrib);
+    if (bInsert) aAttribs.push_back(pAttrib);
+
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(*this);
+#endif
 }
 
 void CharAttribList::ResortAttribs()
 {
     aAttribs.sort(LessByStart());
+
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(*this);
+#endif
 }
 
 void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
 {
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(*this);
+#endif
     for (sal_Int32 i = 0; i < (sal_Int32)aAttribs.size(); ++i)
     {
         EditCharAttrib& rAttr = aAttribs[i];
@@ -2784,6 +2829,9 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
             }
         }
     }
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(*this);
+#endif
 }
 
 sal_Int32 CharAttribList::Count() const

@@ -664,6 +664,10 @@ void ImpEditEngine::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich, bool 
         pAttr = GetAttrib(rAttrs, nAttr);
     }
 
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(pNode->GetCharAttribs());
+#endif
+
     pPortion->MarkSelectionInvalid( 0, pNode->Len() );
 }
 
