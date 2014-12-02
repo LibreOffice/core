@@ -578,7 +578,7 @@ void Test::testSectionAttributes()
     {
         aEngine.Clear();
         aEngine.SetText("one\ntwo");
-        CPPUNIT_ASSERT_EQUAL(2, aEngine.GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aEngine.GetParagraphCount());
 
         // embolden 2nd paragraph
         pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
