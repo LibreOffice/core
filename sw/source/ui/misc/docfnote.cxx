@@ -379,7 +379,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
     }
     else
     {
-        SwFtnInfo *pI = (SwFtnInfo*)pInf.get();
+        SwFtnInfo *pI = static_cast<SwFtnInfo*>(pInf.get());
         pI->ePos = m_pPosPageBox->IsChecked() ? FTNPOS_PAGE : FTNPOS_CHAPTER;
         pI->eNum = (SwFtnNum)GetNumbering();
         pI->aQuoVadis = m_pContEdit->GetText();

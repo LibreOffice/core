@@ -699,7 +699,7 @@ void SwDocTest::testSwScanner()
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
-            (SwPostItFieldType*)m_pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD), OUString("An Author"),
+            static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFldType(RES_POSTITFLD)), OUString("An Author"),
             OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFmtFld(aPostIt), 0);
 

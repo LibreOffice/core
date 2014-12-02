@@ -146,7 +146,7 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     {
         SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
         if( pType->Which() == RES_SETEXPFLD &&
-            ((SwSetExpFieldType *) pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
+            static_cast<SwSetExpFieldType *>( pType)->GetType() & nsSwGetSetExpType::GSE_SEQ )
             m_pCategoryBox->InsertEntry(pType->GetName());
     }
 
@@ -268,7 +268,7 @@ void SwCaptionDialog::Apply()
         aOpt.SetCategory(comphelper::string::strip(aName, ' '));
         aOpt.SetNumSeparator( m_pNumberingSeparatorED->GetText() );
     }
-    aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData( m_pFormatBox->GetSelectEntryPos() ) );
+    aOpt.SetNumType( (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetEntryData( m_pFormatBox->GetSelectEntryPos() )) );
     aOpt.SetSeparator( m_pSepEdit->IsEnabled() ? m_pSepEdit->GetText() : OUString() );
     aOpt.SetCaption( m_pTextEdit->GetText() );
     aOpt.SetPos( m_pPosBox->GetSelectEntryPos() );
@@ -352,8 +352,8 @@ void SwCaptionDialog::DrawSample()
     bool bNone = sFldTypeName == m_sNone;
     if( !bNone )
     {
-        const sal_uInt16 nNumFmt = (sal_uInt16)(sal_uIntPtr)m_pFormatBox->GetEntryData(
-                                        m_pFormatBox->GetSelectEntryPos() );
+        const sal_uInt16 nNumFmt = (sal_uInt16)reinterpret_cast<sal_uIntPtr>(m_pFormatBox->GetEntryData(
+                                        m_pFormatBox->GetSelectEntryPos() ));
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
             // category
@@ -366,8 +366,8 @@ void SwCaptionDialog::DrawSample()
             }
 
             SwWrtShell &rSh = rView.GetWrtShell();
-            SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
-                                            RES_SETEXPFLD, sFldTypeName );
+            SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(rSh.GetFldType(
+                                            RES_SETEXPFLD, sFldTypeName ));
             if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
             {
                 sal_Int8 nLvl = pFldType->GetOutlineLvl();
@@ -433,8 +433,8 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
         m_pLbLevel->InsertEntry( OUString::number(n+1) );
 
-    SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
-                                        RES_SETEXPFLD, aFldTypeName );
+    SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(rSh.GetFldType(
+                                        RES_SETEXPFLD, aFldTypeName ));
 
     sal_Unicode nLvl = MAXLEVEL;
     OUString sDelim(": ");
@@ -459,8 +459,8 @@ SwSequenceOptionDialog::~SwSequenceOptionDialog()
 void SwSequenceOptionDialog::Apply()
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
-                                        RES_SETEXPFLD, aFldTypeName );
+    SwSetExpFieldType* pFldType = static_cast<SwSetExpFieldType*>(rSh.GetFldType(
+                                        RES_SETEXPFLD, aFldTypeName ));
 
     sal_Int8 nLvl = (sal_Int8)( m_pLbLevel->GetSelectEntryPos() - 1);
     sal_Unicode cDelim = m_pEdDelim->GetText()[0];

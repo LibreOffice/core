@@ -913,7 +913,7 @@ bool SwInsertDBColAutoPilot::SplitTextToColArr( const OUString& rTxt,
                     SwDBFieldType aFldType( rSh.GetDoc(), aSrch.sColumn,
                                             aDBData );
                     pNew = new _DB_Column( rFndCol, *new SwDBField(
-                            (SwDBFieldType*)rSh.InsertFldType( aFldType ),
+                            static_cast<SwDBFieldType*>(rSh.InsertFldType( aFldType )),
                                                             nFormat ) );
                     if( nSubType )
                         pNew->DB_ColumnData.pField->SetSubType( nSubType );
@@ -1226,8 +1226,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
               }
             }
             aDBFormatData.aLocale = LanguageTag( rSh.GetCurLang() ).getLocale();
-            SwDBNextSetField aNxtDBFld( (SwDBNextSetFieldType*)rSh.
-                                        GetFldType( 0, RES_DBNEXTSETFLD ),
+            SwDBNextSetField aNxtDBFld( static_cast<SwDBNextSetFieldType*>(rSh.
+                                            GetFldType( 0, RES_DBNEXTSETFLD )),
                                         "1", "", aDBData );
 
             bool bSetCrsr = true;
