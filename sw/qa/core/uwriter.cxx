@@ -1317,7 +1317,7 @@ void SwDocTest::testIntrusiveRing()
         CPPUNIT_ASSERT_EQUAL((*ppRing)->GetNext(), *ppNext);
         CPPUNIT_ASSERT_EQUAL((*ppNext)->GetPrev(), *ppRing);
     }
-    BOOST_FOREACH(TestRing& r, std::make_pair(aRing1.beginRing(), aRing1.endRing()))
+    BOOST_FOREACH(TestRing& r, aRing1.rangeRing())
     {
         TestRing* pRing = &r;
         CPPUNIT_ASSERT(pRing);
