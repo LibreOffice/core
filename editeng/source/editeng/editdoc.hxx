@@ -230,7 +230,7 @@ public:
     void Release(const EditCharAttrib* p);
 
 #if OSL_DEBUG_LEVEL > 0
-    static bool DbgCheckAttribs(CharAttribList const& rAttribs);
+    static void DbgCheckAttribs(CharAttribList const& rAttribs);
 #endif
 };
 

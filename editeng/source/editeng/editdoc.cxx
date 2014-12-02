@@ -847,12 +847,12 @@ ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 void
 ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
 {
-    DBG_ASSERT( rParas.Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() unequal!" );
+    assert(rParas.Count() == rDoc.Count());
     for (sal_Int32 i = 0; i < rParas.Count(); ++i)
     {
-        DBG_ASSERT( rParas.SafeGetObject(i), "ParaPortionList::DbgCheck() - Null-Pointer in List!" );
-        DBG_ASSERT( rParas.SafeGetObject(i)->GetNode(), "ParaPortionList::DbgCheck() - Null-Pointer in List(2)!" );
-        DBG_ASSERT( rParas.SafeGetObject(i)->GetNode() == rDoc.GetObject(i), "ParaPortionList::DbgCheck() - Entries intersect!" );
+        assert(rParas.SafeGetObject(i) != nullptr);
+        assert(rParas.SafeGetObject(i)->GetNode() != nullptr);
+        assert(rParas.SafeGetObject(i)->GetNode() == rDoc.GetObject(i));
     }
 }
 #endif
@@ -1560,7 +1560,9 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 
     sal_Int32 nNewStart = maString.getLength();
 
-    OSL_ENSURE( CharAttribList::DbgCheckAttribs(aCharAttribList), "Attribute before AppendAttribs broken" );
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
+#endif
 
     sal_Int32 nAttr = 0;
     CharAttribList::AttribsType& rNextAttribs = pNextNode->GetCharAttribs().GetAttribs();
@@ -1614,7 +1616,9 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
     // For the Attributes that just moved over:
     rNextAttribs.clear();
 
-    OSL_ENSURE( CharAttribList::DbgCheckAttribs(aCharAttribList), "Attribute after AppendAttribs broken" );
+#if OSL_DEBUG_LEVEL > 0
+    CharAttribList::DbgCheckAttribs(aCharAttribList);
+#endif
 }
 
 void ContentNode::CreateDefFont()
@@ -2985,32 +2989,22 @@ void CharAttribList::DeleteEmptyAttribs( SfxItemPool& rItemPool )
 }
 
 #if OSL_DEBUG_LEVEL > 0
-bool CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
+void CharAttribList::DbgCheckAttribs(CharAttribList const& rAttribs)
 {
-    bool bOK = true;
     AttribsType::const_iterator it = rAttribs.aAttribs.begin();
     AttribsType::const_iterator itEnd = rAttribs.aAttribs.end();
     std::set<std::pair<sal_Int32, sal_uInt16>> zero_set;
     for (; it != itEnd; ++it)
     {
         const EditCharAttrib& rAttr = *it;
-        if (rAttr.GetStart() > rAttr.GetEnd())
-        {
-            bOK = false;
-            OSL_FAIL( "Attribute is distorted" );
-        }
-        if (rAttr.IsFeature() && rAttr.GetLen() != 1)
-        {
-            bOK = false;
-            OSL_FAIL( "Feature, Len != 1" );
-        }
+        assert(rAttr.GetStart() <= rAttr.GetEnd());
+        assert(!rAttr.IsFeature() || rAttr.GetLen() == 1);
         if (0 == rAttr.GetLen())
         {
             // not sure if 0-length attributes allowed at all in non-empty para?
             assert(zero_set.insert(std::make_pair(rAttr.GetStart(), rAttr.Which())).second && "duplicate 0-length attribute detected");
         }
     }
-    return bOK;
 }
 #endif
 
