@@ -21,8 +21,7 @@ $(eval $(call gb_Jar_set_manifest,jurt,$(SRCDIR)/jurt/util/manifest))
 $(eval $(call gb_Jar_add_manifest_classpath,jurt, \
     ridl.jar \
     unoloader.jar \
-	$(if $(filter MACOSX,$(OS)),../../Frameworks/, \
-		$(if $(filter WNT,$(OS)),../bin/,../)) \
+	$(if $(filter MACOSX,$(OS)),../../Frameworks/,../) \
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,jurt,\

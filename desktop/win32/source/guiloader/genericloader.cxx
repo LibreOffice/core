@@ -38,7 +38,7 @@
 #include <systools/win32/uwinapi.h>
 
 #include <tools/pathutils.hxx>
-#include "../extendloaderenvironment.hxx"
+#include "../loader.hxx"
 
 
 
@@ -48,7 +48,7 @@ static int GenericMain()
     TCHAR               szIniDirectory[MAX_PATH];
     STARTUPINFO         aStartupInfo;
 
-    desktop_win32::extendLoaderEnvironment(szTargetFileName, szIniDirectory);
+    desktop_win32::getPaths(szTargetFileName, szIniDirectory);
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof(aStartupInfo);

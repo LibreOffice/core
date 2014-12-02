@@ -44,7 +44,7 @@
 #include <sal/macros.h>
 
 #include "../../../source/inc/exithelper.h"
-#include "../extendloaderenvironment.hxx"
+#include "../loader.hxx"
 
 #include <config_version.h>
 
@@ -177,7 +177,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     TCHAR               szPerfTuneIniFile[MAX_PATH] = TEXT("");
     STARTUPINFO         aStartupInfo;
 
-    desktop_win32::extendLoaderEnvironment(szTargetFileName, szIniDirectory);
+    desktop_win32::getPaths(szTargetFileName, szIniDirectory);
 
     ZeroMemory( &aStartupInfo, sizeof(aStartupInfo) );
     aStartupInfo.cb = sizeof(aStartupInfo);

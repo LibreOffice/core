@@ -58,7 +58,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'UNO_SHARED_PACKAGES_CACHE=$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):UNO_SHARED_PACKAGES_CACHE}' \
 		&& echo 'TMP_EXTENSIONS=$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):TMP_EXTENSIONS}' \
 		&& echo 'UNO_USER_PACKAGES_CACHE=$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):UNO_USER_PACKAGES_CACHE}' \
-		&& echo 'URE_BIN_DIR=$(if $(filter WNT,$(OS)),$${.link:$${BRAND_BASE_DIR}/ure-link}/bin,$${BRAND_BASE_DIR}/$(LIBO_URE_BIN_FOLDER))' \
+		&& echo 'URE_BIN_DIR=$${BRAND_BASE_DIR}/$(LIBO_URE_BIN_FOLDER)' \
 		&& echo 'URE_MORE_JAVA_CLASSPATH_URLS=$(if $(SYSTEM_HSQLDB),$(HSQLDB_JAR))' \
 		&& echo 'URE_OVERRIDE_JAVA_JFW_SHARED_DATA=$${BRAND_BASE_DIR}/$(LIBO_SHARE_FOLDER)/config/javasettings_$${_OS}_$${_ARCH}.xml' \
 		&& echo 'URE_OVERRIDE_JAVA_JFW_USER_DATA=$${$${BRAND_BASE_DIR}/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/config/javasettings_$${_OS}_$${_ARCH}.xml' \
@@ -120,10 +120,10 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	( \
 		echo '[Bootstrap]' \
 		&& echo 'URE_INTERNAL_LIB_DIR=$${ORIGIN}$(if $(filter MACOSX,$(OS)),/../../../Frameworks)' \
-		&& echo 'URE_INTERNAL_JAVA_DIR=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../../java,$(if $(filter WNT,$(OS)),$${ORIGIN}/../java,$${ORIGIN}/classes))' \
+		&& echo 'URE_INTERNAL_JAVA_DIR=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../../java,$${ORIGIN}/classes)' \
 		&& echo 'URE_INTERNAL_JAVA_CLASSPATH=$${URE_MORE_JAVA_TYPES}' \
-		&& echo 'UNO_TYPES=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../share/misc/,$(if $(filter WNT,$(OS)),$${ORIGIN}/../misc/,$${ORIGIN}/))types.rdb $${URE_MORE_TYPES}' \
-		&& echo 'UNO_SERVICES=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../share/misc/,$(if $(filter WNT,$(OS)),$${ORIGIN}/../misc/,$${ORIGIN}/))services.rdb $${URE_MORE_SERVICES}' \
+		&& echo 'UNO_TYPES=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../share/misc/,$${ORIGIN}/)types.rdb $${URE_MORE_TYPES}' \
+		&& echo 'UNO_SERVICES=$(if $(filter MACOSX,$(OS)),$${ORIGIN}/../share/misc/,$${ORIGIN}/)services.rdb $${URE_MORE_SERVICES}' \
 	) > $@
 
 .PHONY: $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,version)

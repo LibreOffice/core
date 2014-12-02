@@ -69,7 +69,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 endif
 
 $(eval $(call gb_Module_add_targets,desktop,\
-    StaticLibrary_winextendloaderenv \
+    StaticLibrary_winloader \
     StaticLibrary_winlauncher \
     Executable_quickstart \
     Executable_sbase \

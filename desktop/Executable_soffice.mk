@@ -23,7 +23,7 @@ $(eval $(call gb_Executable_use_system_win32_libs,soffice,\
 
 $(eval $(call gb_Executable_use_static_libraries,soffice,\
     ooopathutils \
-    winextendloaderenv \
+    winloader \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,soffice,\

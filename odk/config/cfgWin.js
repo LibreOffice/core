@@ -53,7 +53,6 @@ var oo_user_sdk_dir=WshSysEnv("APPDATA") + "\\" + oo_sdk_name;
 var oo_user_sdk_env_script=oo_user_sdk_dir + "\\setsdkenv_windows.bat";
 
 var office_home=getOfficeHome();
-var oo_sdk_ure_home=office_home + "\\URE";
 
 var oo_sdk_make_home=getMakeHome();
 var oo_sdk_zip_home=getZipHome();
@@ -854,10 +853,6 @@ function writeBatFile(fdir, file)
         "REM Example: set OFFICE_HOME=C:\\Program Files\\LibreOffice 3\n" +
         "set OFFICE_HOME=" + office_home +
         "\n\n" +
-        "REM URE installation directory.\n" +
-        "REM Example: set OO_SDK_URE_HOME=C:\\Program Files\\LibreOffice 3\\URE\n" +
-        "set OO_SDK_URE_HOME=" + oo_sdk_ure_home +
-        "\n\n" +
         "REM Directory of the make command.\n" +
         "REM Example: set OO_SDK_MAKE_HOME=D:\\NextGenerationMake\\make\n" +
         "set OO_SDK_MAKE_HOME=" + oo_sdk_make_home +
@@ -904,11 +899,8 @@ function writeBatFile(fdir, file)
         "\n" +
         "REM Check installation path for the office.\n" +
         "REM if not defined OFFICE_HOME (\n" +
-        "REM if not defined OO_SDK_URE_HOME (\n" +
-        "REM    echo Error: either of the variables OFFICE_HOME and\n" +
-        "REM    echo OO_SDK_URE_HOME is missing!\n" +
+        "REM    echo Error: the variable OFFICE_HOME is missing!\n" +
         "REM    goto :error\n" +
-        "REM  )\n" +
         "REM  )\n" +
         "\n" +
         "REM Check installation path for GNU make.\n" +
@@ -953,15 +945,12 @@ function writeBatFile(fdir, file)
 		"   set UNO_PATH=%OFFICE_PROGRAM_PATH%\n" +
 		" )\n" +
         "\n" +
-        "REM if defined OO_SDK_URE_HOME (\n" +
-        "set OO_SDK_URE_BIN_DIR=%OO_SDK_URE_HOME%\\bin\n" +
-        "set OO_SDK_URE_LIB_DIR=%OO_SDK_URE_HOME%\\bin\n" +
-        "set OO_SDK_URE_JAVA_DIR=%OO_SDK_URE_HOME%\\java\n" +
-        "REM ) else (\n" +
+        "set OO_SDK_URE_BIN_DIR=%OFFICE_PROGRAM_PATH%\n" +
+        "set OO_SDK_URE_LIB_DIR=%OFFICE_PROGRAM_PATH%\n" +
+        "set OO_SDK_URE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\n" +
         "set OO_SDK_OFFICE_BIN_DIR=%OFFICE_PROGRAM_PATH%\n" +
         "set OO_SDK_OFFICE_LIB_DIR=%OFFICE_PROGRAM_PATH%\n" +
         "set OO_SDK_OFFICE_JAVA_DIR=%OFFICE_PROGRAM_PATH%\\classes\n" +
-        "REM )\n" +
         "\n" +
         "REM Set classpath\n" +
         "set CLASSPATH=%OO_SDK_URE_JAVA_DIR%\\juh.jar;%OO_SDK_URE_JAVA_DIR%\\jurt.jar;%OO_SDK_URE_JAVA_DIR%\\ridl.jar;%OO_SDK_URE_JAVA_DIR%\\unoloader.jar;%OO_SDK_OFFICE_JAVA_DIR%\\unoil.jar\n" +
@@ -1013,7 +1002,6 @@ function writeBatFile(fdir, file)
         "echo  *\n" +
         "echo  * SDK = %OO_SDK_HOME%\n" +
         "echo  * Office = %OFFICE_HOME%\n" +
-        "echo  * URE = %OO_SDK_URE_HOME%\n" +
         "echo  * Make = %OO_SDK_MAKE_HOME%\n" +
         "echo  * Zip = %OO_SDK_ZIP_HOME%\n" +
         "echo  * cat = %OO_SDK_CAT_HOME%\n" +

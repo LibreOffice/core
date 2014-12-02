@@ -65,19 +65,10 @@
 #ifdef MACOSX
     #define GID_BRAND_DIR_ETC gid_Brand_Dir_Share
     #define GID_DIR_PY gid_Brand_Dir_Share
-    #define GID_DIR_URE_BIN gid_Brand_Dir_Program
-    #define GID_DIR_URE_JAVA gid_Dir_Classes
     #define GID_DIR_URE_LIB gid_Dir_Frameworks
 #else
     #define GID_BRAND_DIR_ETC gid_Brand_Dir_Program
     #define GID_DIR_PY gid_Brand_Dir_Program
-#if defined UNX
-    #define GID_DIR_URE_BIN gid_Brand_Dir_Program
-    #define GID_DIR_URE_JAVA gid_Dir_Classes
-#else
-    #define GID_DIR_URE_BIN gid_Dir_Ure_Bin
-    #define GID_DIR_URE_JAVA gid_Dir_Ure_Java
-#endif
     #define GID_DIR_URE_LIB gid_Brand_Dir_Program
 #endif
 
@@ -246,7 +237,7 @@ End
     File id \
         TXT_FILE_BODY; \
         Name = name; \
-        Dir = GID_DIR_URE_JAVA; \
+        Dir = gid_Dir_Classes; \
         Styles = (PACKED); \
     End
 
@@ -463,9 +454,8 @@ End
 #endif
 
 
-
+#define SCP2_URE_DL_DIR GID_DIR_URE_LIB
 #if defined WNT
-#define SCP2_URE_DL_DIR gid_Dir_Ure_Bin
 #define SCP2_URE_DL_NORMAL(n) n ".dll"
 #define SCP2_URE_DL_BARE(n) n ".dll"
 #define SCP2_URE_DL_VER(n, v) n v ".dll"
@@ -474,7 +464,6 @@ End
 #define SCP2_URE_DL_UNO_VER(n, v) n v ".dll"
 #define SCP2_URE_DL_UNO_COMID_VER(n, v) n v STRING(COMID) ".dll"
 #else
-#define SCP2_URE_DL_DIR GID_DIR_URE_LIB
 #define SCP2_URE_DL_NORMAL(n) "lib" n STRING(UNXSUFFIX)
 #define SCP2_URE_DL_BARE(n) n STRING(UNXSUFFIX)
 #define SCP2_URE_DL_VER(n, v) "lib" n STRING(UNXSUFFIX) "." v
@@ -536,7 +525,7 @@ End
 #define URE_EXECUTABLE(id,name) \
     File id \
         BIN_FILE_BODY; \
-        Dir = GID_DIR_URE_BIN; \
+        Dir = gid_Brand_Dir_Program; \
         Name = name; \
         Styles = (PACKED); \
     End

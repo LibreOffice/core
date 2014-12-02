@@ -66,19 +66,6 @@ WCHAR * buildPath(
     WCHAR * path, WCHAR const * frontBegin, WCHAR const * frontEnd,
     WCHAR const * backBegin, std::size_t backLength);
 
-/** Resolve a link file.
-
-    @param path
-        An input/output parameter taking the path; must point at a valid range of
-        memory of size at least MAX_PATH.  On input, contains the null-terminated
-        full path of the link file.  On output, contains the null-terminated full
-        path of the resolved link; if NULL is returned, the content is unspecified.
-    @return
-        A pointer to the terminating null character of path, or NULL if a failure
-        occurred.
-*/
-WCHAR * resolveLink(WCHAR * path);
-
 }
 
 #endif

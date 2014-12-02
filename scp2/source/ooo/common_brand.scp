@@ -1126,11 +1126,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_BIN_DIR";
-#if defined WNT
-    Value = "${.link:${BRAND_BASE_DIR}/ure-link}/bin";
-#else
     Value = "${BRAND_BASE_DIR}/" LIBO_URE_BIN_FOLDER;
-#endif
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Configuration_Layers

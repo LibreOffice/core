@@ -79,16 +79,7 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
 #endif
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\ure-link")) ==
-            NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
-        if (pathEnd == NULL) {
-            exit(EXIT_FAILURE);
-        }
-        writePath(path, pathEnd, MY_STRING(L"\\bin"));
+        writePath(path, pathEnd, MY_STRING(L""));
 #ifdef __MINGW32__
     } else if (argc == 2 && strcmp(argv[1], "java") == 0) {
 #else
@@ -99,24 +90,15 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         }
         wchar_t path[MAX_PATH];
         wchar_t * pathEnd = getBrandPath(path);
-        writePath(path, pathEnd, MY_STRING(L""));
+        writePath(path, pathEnd, MY_STRING(L"classes\\ridl.jar"));
+        writeNull();
+        writePath(path, pathEnd, MY_STRING(L"classes\\jurt.jar"));
+        writeNull();
+        writePath(path, pathEnd, MY_STRING(L"classes\\juh.jar"));
         writeNull();
         writePath(path, pathEnd, MY_STRING(L"classes\\unoil.jar"));
-        if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\ure-link")) ==
-            NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
-        pathEnd = tools::resolveLink(path);
-        if (pathEnd == NULL) {
-            exit(EXIT_FAILURE);
-        }
         writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\java\\ridl.jar"));
-        writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\java\\jurt.jar"));
-        writeNull();
-        writePath(path, pathEnd, MY_STRING(L"\\java\\juh.jar"));
+        writePath(path, pathEnd, MY_STRING(L""));
     } else {
         exit(EXIT_FAILURE);
     }

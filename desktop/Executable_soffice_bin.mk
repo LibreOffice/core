@@ -36,11 +36,6 @@ endif
 
 ifeq ($(OS),WNT)
 
-$(eval $(call gb_Executable_use_static_libraries,soffice_bin,\
-    ooopathutils \
-    winextendloaderenv \
-))
-
 $(eval $(call gb_Executable_set_targettype_gui,soffice_bin,YES))
 
 $(eval $(call gb_Executable_add_nativeres,soffice_bin,sofficebin/officeloader))

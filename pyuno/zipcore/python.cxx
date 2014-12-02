@@ -131,21 +131,6 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     if (pythonexeEnd == NULL) {
         exit(EXIT_FAILURE);
     }
-    wchar_t urepath[MAX_PATH];
-    if (tools::buildPath(urepath, path, pathEnd, MY_STRING(L"..\\ure-link"))
-        == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
-    wchar_t * urepathEnd = tools::resolveLink(urepath);
-    if (urepathEnd == NULL) {
-        exit(EXIT_FAILURE);
-    }
-    urepathEnd = tools::buildPath(
-        urepath, urepath, urepathEnd, MY_STRING(L"\\bin"));
-    if (urepathEnd == NULL) {
-        exit(EXIT_FAILURE);
-    }
     std::size_t clSize = MY_LENGTH(L"\"") + 4 * (pythonexeEnd - pythonexe) +
         MY_LENGTH(L"\"\0"); //TODO: overflow
         // 4 * len: each char preceded by backslash, each trailing backslash
@@ -192,12 +177,12 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
-    std::size_t len = (urepathEnd - urepath) + MY_LENGTH(L";") +
-        (pathEnd - path) + (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1;
+    std::size_t len = (pathEnd - path) + (n == 0 ? 0 : MY_LENGTH(L";") +
+        (n - 1)) + 1;
         //TODO: overflow
     wchar_t * value = new wchar_t[len];
     _snwprintf(
-        value, len, L"%s;%s%s%s", urepath, path, n == 0 ? L"" : L";", orig);
+        value, len, L"%s%s%s", path, n == 0 ? L"" : L";", orig);
     if (!SetEnvironmentVariableW(L"PATH", value)) {
         exit(EXIT_FAILURE);
     }

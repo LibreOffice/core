@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_DESKTOP_WIN32_SOURCE_EXTENDLOADERENVIRONMENT_HXX
-#define INCLUDED_DESKTOP_WIN32_SOURCE_EXTENDLOADERENVIRONMENT_HXX
+#ifndef INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
+#define INCLUDED_DESKTOP_WIN32_SOURCE_LOADER_HXX
 
 #include <sal/config.h>
 
@@ -68,8 +68,6 @@ inline WCHAR * commandLineAppendEncoded(WCHAR * buffer, WCHAR const * text) {
     return buffer;
 }
 
-// Set the PATH environment variable in the current (loader) process, so that a
-// following CreateProcess has the necessary environment:
 // @param binPath
 // Must point to an array of size at least MAX_PATH.  Is filled with the null
 // terminated full path to the "bin" file corresponding to the current
@@ -78,7 +76,7 @@ inline WCHAR * commandLineAppendEncoded(WCHAR * buffer, WCHAR const * text) {
 // Must point to an array of size at least MAX_PATH.  Is filled with the null
 // terminated full directory path (ending in "\") to the "ini" file
 // corresponding to the current executable.
-void extendLoaderEnvironment(WCHAR * binPath, WCHAR * iniDirectory);
+void getPaths(WCHAR * binPath, WCHAR * iniDirectory);
 
 }
 

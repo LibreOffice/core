@@ -8,10 +8,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,winextendloaderenv))
+$(eval $(call gb_StaticLibrary_StaticLibrary,winloader))
 
-$(eval $(call gb_StaticLibrary_add_exception_objects,winextendloaderenv,\
-    desktop/win32/source/extendloaderenvironment \
+$(eval $(call gb_StaticLibrary_add_exception_objects,winloader,\
+    desktop/win32/source/loader \
 ))
 
 # vim:set noet sw=4 ts=4:
