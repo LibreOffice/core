@@ -16,6 +16,24 @@
       "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_e2a026a8",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-02T11:42:34Z",
+      "side": 0,
+      "message": "\"Given that something like this doesn\u0027t work [...]\"  Why not?  (Just curious.)\n\n\"So what is portable mid term solution here?\"  To get rid of sal_uLong as return type of Bitmap::GetColorCount.",
+      "parentUuid": "fa32b979_a2b3fe09",
+      "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
