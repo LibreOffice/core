@@ -34,6 +34,24 @@
       "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_627c1621",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-02T12:31:35Z",
+      "side": 0,
+      "message": "It tuns out we have this easy hack pending [1] that was partially done in this commit [2]. So the idea would be to replace sal_uLong here with say sal_uInt64, to be always 64 bits also on 32 bit platforms?\n\n* [1] https://www.libreoffice.org/bugzilla/show_bug.cgi?id\u003d75280\n* [2] http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d061130bd6d60c648991afb83bc0befb48a68f34e",
+      "parentUuid": "fa32b979_e2a026a8",
+      "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
