@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_a2b3fe09",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-02T11:19:12Z",
+      "side": 0,
+      "message": "So what is portable mid term solution here? Given that something like this doesn\u0027t work\n\n  (sal_uLong)1 \u003c\u003c (sal_uLong) GetBitCount() );\n\nwe need to be platform specific here:\n\n  return\n  #if 32bitWindows\n    1UL \u003c\u003c (sal_uLong) GetBitCount() );\n  #else if 64bitWindows\n    1ULL \u003c\u003c (sal_uLong) GetBitCount() );\n  #endif",
+      "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
