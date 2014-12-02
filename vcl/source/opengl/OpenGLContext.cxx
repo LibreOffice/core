@@ -53,6 +53,7 @@ OpenGLContext::OpenGLContext():
     mpWindow(NULL),
     m_pChildWindow(NULL),
     mbInitialized(false),
+    mnRefCount(1),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
     mbRequestVirtualDevice(false),
@@ -119,6 +120,17 @@ OpenGLContext::~OpenGLContext()
             glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
     }
 #endif
+}
+
+void OpenGLContext::AddRef()
+{
+    mnRefCount++;
+}
+
+void OpenGLContext::DeRef()
+{
+    if( --mnRefCount == 0 )
+        delete this;
 }
 
 void OpenGLContext::requestLegacyContext()
