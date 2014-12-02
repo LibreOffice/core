@@ -306,17 +306,17 @@ namespace oglcanvas
 
             std::vector<glm::vec2> vertices;
             vertices.reserve(4);
-            vertices.push_back(glm::vec2(0, 0));
-            vertices.push_back(glm::vec2(0, (float) rPixelSize.Height));
             vertices.push_back(glm::vec2((float) rPixelSize.Width, 0));
             vertices.push_back(glm::vec2((float) rPixelSize.Width, (float) rPixelSize.Height));
+            vertices.push_back(glm::vec2(0, 0));
+            vertices.push_back(glm::vec2(0, (float) rPixelSize.Height));
 
             std::vector<glm::vec2> uvCoordinates;
             uvCoordinates.reserve(4);
-            uvCoordinates.push_back(glm::vec2(0, 0));
-            uvCoordinates.push_back(glm::vec2(0, 1));
-            uvCoordinates.push_back(glm::vec2(1, 0));
             uvCoordinates.push_back(glm::vec2(1, 1));
+            uvCoordinates.push_back(glm::vec2(1, 0));
+            uvCoordinates.push_back(glm::vec2(0, 1));
+            uvCoordinates.push_back(glm::vec2(0, 0));
             pRenderHelper->renderVertexUVTex(vertices, uvCoordinates, color, GL_TRIANGLE_STRIP );
 
             glBindTexture(GL_TEXTURE_2D, 0);
@@ -371,7 +371,7 @@ namespace oglcanvas
             float aTexTransform[] =
                 {
                     (float) aTextureTransform.get(0,0), (float) aTextureTransform.get(1,0), 0, 0,
-                    (float) aTextureTransform.get(0,1), (float) aTextureTransform.get(1,1), 0, 0,
+                    (float) aTextureTransform.get(0,1), -(float) aTextureTransform.get(1,1), 0, 0,
                     0,                          0,                          1, 0,
                     (float) aTextureTransform.get(0,2), (float) aTextureTransform.get(1,2), 0, 1
                 };
