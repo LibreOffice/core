@@ -147,6 +147,7 @@
       <menu:menuitem menu:id=".uno:ControlCodes"/>
       <menu:menuitem menu:id=".uno:ShowHiddenParagraphs"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
+      <menu:menuitem menu:id=".uno:Graphic"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewDataSourceBrowser"/>
       <menu:menuitem menu:id=".uno:Navigator"/>
