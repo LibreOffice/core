@@ -20,12 +20,10 @@
 #ifndef INCLUDED_SVL_ITEMPOOL_HXX
 #define INCLUDED_SVL_ITEMPOOL_HXX
 
-#include <limits.h>
 #include <rtl/string.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/svldllapi.h>
 #include <tools/solar.h>
-#include <vector>
 
 class SvStream;
 class SfxBroadcaster;

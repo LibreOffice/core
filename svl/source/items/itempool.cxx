@@ -17,16 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svl/itempool.hxx>
 
 #include <string.h>
 #include <stdio.h>
 
-#include <svl/itempool.hxx>
 #include <osl/diagnose.h>
 #include "whassert.hxx"
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/smplhint.hxx>
 #include "poolio.hxx"
+
+#include <vector>
 
 
 #if OSL_DEBUG_LEVEL > 0

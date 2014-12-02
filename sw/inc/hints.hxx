@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_HINTS_HXX
 
 #include <swatrset.hxx>
+#include <vector>
 
 class SwFmt;
 class OutputDevice;
