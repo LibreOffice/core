@@ -18,8 +18,6 @@ void main() {
     vec4 diff = clamp(abs(texel - search_color) - epsilon, 0.0, 1.0);
     float bump = max(0.0, 1.0 - ceil(diff.x + diff.y + diff.z));
     gl_FragColor = texel + bump * (replace_color - search_color);
-    gl_FragColor.r = 1.0;
-    gl_FragColor.g = 0.0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
