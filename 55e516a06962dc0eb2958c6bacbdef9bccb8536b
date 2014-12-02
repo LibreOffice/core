@@ -16,6 +16,24 @@
       "revId": "55e516a06962dc0eb2958c6bacbdef9bccb8536b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_22c84e74",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-02T11:37:40Z",
+      "side": 1,
+      "message": "I linked the stackoverflow issue below, that quotes the warning:\n\n  warning C4334: \u0027\u003c\u003c\u0027 : result of 32-bit shift implicitly converted to 64 bits\n(was 64-bit shift intended?)",
+      "parentUuid": "fa32b979_62ce5685",
+      "revId": "55e516a06962dc0eb2958c6bacbdef9bccb8536b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
