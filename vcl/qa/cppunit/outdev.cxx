@@ -56,10 +56,10 @@ void VclOutdevTest::testVirtualDevice()
     }
 #endif
 
-    CPPUNIT_ASSERT(aVDev.GetPixel(Point(0,0)) == COL_WHITE);
-    CPPUNIT_ASSERT(aVDev.GetPixel(Point(1,2)) == COL_GREEN);
-    CPPUNIT_ASSERT(aVDev.GetPixel(Point(31,30)) == COL_RED);
-    CPPUNIT_ASSERT(aVDev.GetPixel(Point(30,31)) == COL_WHITE);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aVDev.GetPixel(Point(0,0)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN, aVDev.GetPixel(Point(1,2)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_RED, aVDev.GetPixel(Point(31,30)).GetColor());
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aVDev.GetPixel(Point(30,31)).GetColor());
 
     // Gotcha: y and x swap for BitmapReadAccess: deep joy.
     Bitmap::ScopedReadAccess pAcc(aBmp);
