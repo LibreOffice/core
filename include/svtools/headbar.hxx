@@ -26,154 +26,146 @@
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class HeaderBar
 
-Diese Klasse dient zur Anzeige einer Ueberschiftszeile. Diese kann Texte,
-Images oder beides anzeigen. Man kann die Items in der Groesse aendern,
-verschieben oder anklicken. In vielen Faellen macht es zum Beispiel Sinn,
-dieses Control mit einer SvTabListBox zu verbinden.
+This class serves for displaying a header bar. A header bar can display
+texts, images or both of them. The items can be changed in size, dragged or
+clicked at. In many cases, it makes, for example, sense to use this control
+in combination with a SvTabListBox.
 
 --------------------------------------------------------------------------
 
 WinBits
 
-WB_BORDER           Oben und unten wird ein Border gezeichnet
-WB_BOTTOMBORDER     Unten wird ein Border gezeichnet
-WB_BUTTONSTYLE      Die Items sehen aus wie Buttons, ansonsten sind sie flach
-WB_3DLOOK           3D-Darstellung
-WB_DRAG             Items koennen verschoben werden
+WB_BORDER           a border is drawn in the top and in the bottom
+WB_BOTTOMBORDER     a border is drawn in the bottom
+WB_BUTTONSTYLE      The items look like buttons, otherwise they are flat.
+WB_3DLOOK           3D look
+WB_DRAG             items can be dragged
 WB_STDHEADERBAR     WB_BUTTONSTYLE | WB_BOTTOMBORDER
 
 --------------------------------------------------------------------------
 
 ItemBits
 
-HIB_LEFT            Inhalt wird im Item linksbuendig ausgegeben
-HIB_CENTER          Inhalt wird im Item zentriert ausgegeben
-HIB_RIGHT           Inhalt wird im Item rechtsbuendig ausgegeben
-HIB_TOP             Inhalt wird im Item an der oberen Kante ausgegeben
-HIB_VCENTER         Inhalt wird im Item vertikal zentiert ausgegeben
-HIB_BOTTOM          Inhalt wird im Item an der unteren Kante ausgegeben
-HIB_LEFTIMAGE       Bei Text und Image, wird Image links vom Text ausgegeben
-HIB_RIGHTIMAGE      Bei Text und Image, wird Image rechts vom Text ausgegeben
-HIB_FIXED           Item laesst sich nicht in der Groesse aendern
-HIB_FIXEDPOS        Item laesst sich nicht verschieben
-HIB_CLICKABLE       Item laesst sich anklicken
-                    (Select-Handler wird erst bei MouseButtonUp gerufen)
-HIB_FLAT            Item wird flach dargestellt, auch wenn WB_BUTTONSTYLE gesetzt ist
-HIB_DOWNARROW       Es wird ein Pfeil nach unter hinter dem Text ausgegeben,
-                    welcher zum Beispiel angezeigt werden sollte, wenn nach
-                    diesem Item eine dazugehoerende Liste absteigend sortiert
-                    ist. Der Status des Pfeils kann mit SetItemBits()
-                    gesetzt/zurueckgesetzt werden.
-HIB_UPARROW         Es wird ein Pfeil nach oben hinter dem Text ausgegeben,
-                    welcher zum Beispiel angezeigt werden sollte, wenn nach
-                    diesem Item eine dazugehoerende Liste aufsteigend sortiert
-                    ist.Der Status des Pfeils kann mit SetItemBits()
-                    gesetzt/zurueckgesetzt werden.
-HIB_USERDRAW        Zu diesem Item wird auch der UserDraw-Handler gerufen.
+HIB_LEFT            content is displayed in the item left-justified
+HIB_CENTER          content is displayed in the item centred
+HIB_RIGHT           content is displayed in the item right-justified
+HIB_TOP             content is displayed in the item at the upper border
+HIB_VCENTER         content is displayed in the item vertically centred
+HIB_BOTTOM          content is displayed in the item at the bottom border
+HIB_LEFTIMAGE       in case of text and image, the image is displayed left of the text
+HIB_RIGHTIMAGE      in case of text and image, the image is displayed right of the text
+HIB_FIXED           item cannot be changed in size
+HIB_FIXEDPOS        item cannot be moved
+HIB_CLICKABLE       item is clickable
+                    (select handler is only called on MouseButtonUp)
+HIB_FLAT            item is displayed in a flat way, even if WB_BUTTONSTYLE is set
+HIB_DOWNARROW       An arrow pointing downwards is displayed behind the text,
+                    which should, for example, be shown, when after this item,
+                    a corresponding list is sorted in descending order.
+                    The status of the arrow can be set/reset with SetItemBits().
+HIB_UPARROW         An arrow pointing upwards is displayed behind the text,
+                    which should, for example, be shown, when after this item,
+                    a corresponding list is sorted in ascending order.
+                    The status of the arrow can be set/reset with SetItemBits().
+HIB_USERDRAW        For this item, the UserDraw handler is called as well.
 HIB_STDSTYLE        (HIB_LEFT | HIB_LEFTIMAGE | HIB_VCENTER | HIB_CLICKABLE)
 
 --------------------------------------------------------------------------
 
 Handler
 
-Select()            Wird gerufen, wenn Item angeklickt wird. Wenn
-                    HIB_CLICKABLE beim Item gesetzt ist und nicht HIB_FLAT,
-                    wird der Handler erst im MouseButtonUp-Handler gerufen,
-                    wenn die Maus ueber dem Item losgelassen wurde. Dann
-                    verhaellt sich der Select-Handler wie bei einem
-                    ToolBox-Button.
-DoubleClick()       Dieser Handler wird gerufen, wenn ein Item
-                    doppelt geklickt wird. Ob das Item oder der
-                    Trenner angeklickt wurden, kann mit IsItemMode()
-                    abgefragt werden. Wenn ein Trenner doppelt angeklickt
-                    wird, sollte normalerweise die optimale Spaltenbreite
-                    berechnet werden und diese gesetzt werden.
-StartDrag()         Dieser Handler wird gerufen, wenn Draggen gestartet
-                    wird, bzw. wenn ein Item angeklickt wurde.
-                    In diesem Handler sollte spaetestens mit SetDragSize()
-                    die Groesse der Size-Linie gesetzt werden, wenn
-                    IsItemMode() sal_False zurueckliefert.
-Drag()              Dieser Handler wird gerufen, wenn gedraggt wird. Wenn
-                    mit SetDragSize() keine Groesse gesetzt wird, kann
-                    dieser Handler dafuer benutzt werden, um die
-                    Linie im angrenzenden Fenster selber zu zeichnen. Mit
-                    GetDragPos() kann die aktuelle Drag-Position abgefragt
-                    werden. Mit IsItemMode() sollte in diesem Fall
-                    abgefragt werden, ob auch ein Trenner gedraggt wird.
-EndDrag()           Dieser Handler wird gerufen, wenn ein Drag-Vorgang
-                    beendet wurde. Wenn im EndDrag-Handler GetCurItemId()
-                    0 zurueckliefert, wurde der Drag-Vorgang abgebrochen.
-                    Wenn dies nicht der Fall ist und IsItemMode() sal_False
-                    zurueckliefert, sollte von dem gedraggten Item
-                    die neue Groesse mit GetItemSize() abgefragt werden
-                    und entsprechend im dazugehoerigem Control uebernommen
-                    werden. Wenn IsItemMode() sal_True, GetCurItemId() eine Id
-                    und IsItemDrag() sal_True zurueckliefert, wurde dieses
-                    Item verschoben. Es sollte dann mit GetItemPos() die
-                    neue Position abgefragt werden und auch die Daten
-                    im dazugehoerigem Control angepasst werden. Ansonsten
-                    koennte auch mit GetItemDragPos() die Position abgefragt
-                    werden, an welche Stelle das Item verschoben wurde.
+Select()            Is called, when the item is clicked. If HIB_CLICKABLE
+                    is set in the item and not HIB_FLAT, the handler is only
+                    called in the MouseButtonUp handler, when the mouse has been
+                    released over the item. In this case, the Select handler
+                    behaves like it does with a ToolBox button.
+DoubleClick()       This handler is called, when an item is double-clicked.
+                    Whether the item or the separator has been clicked, can
+                    be determined by IsItemMode(). Normally, when a separator
+                    is double-clicked, the optimal column width should be
+                    calculated and should be set.
+StartDrag()         This handler is called, when dragging is started resp.
+                    an item has been clicked. At the latest in this handler,
+                    the size of the size-line should be set with
+                    SetDragSize(), if IsItemMode() returns false.
+Drag()              This handler is callled, when dragging is taking place.
+                    If no size is set with SetDragSize(), this handler can
+                    be used to draw the line in the neighbouring window by
+                    oneself. The current dragging position can be requested
+                    with GetDragPos(). In every case, IsItemMode()
+                    should be checked to find out whether a separator is
+                    dragged as well.
+EndDrag()           This handler is called, when a dragging process has been
+                    stopped. If GetCurItemId() returns 0 in the EndDrag handler,
+                    the drag process was aborted. If this is not the case and
+                    IsItemMode() returns false, the new size of the dragged
+                    item should be requested using GetItemSize() and it
+                    should be taken over in the corresponding control.
+                    If IsItemMode() returns true, GetCurItemId()
+                    returns an Id and IsItemDrag() returns true, this
+                    item has been dragged. In this case, the new position
+                    should be requested using  GetItemPos() and the data
+                    in the corresponding control should be adapted.
+                    Otherwise, the position to which the item has been dragged
+                    could also be requested with GetItemDragPos().
 
+Further methods that are important for the handler.
 
-Weitere Methoden, die fuer die Handler wichtig sind.
-
-GetCurItemId()      Liefert die Id vom Item zurueck, fuer welches gerade
-                    der Handler gerufen wurde. Liefert nur eine gueltige
-                    Id in den Handlern Select(), DoubleClick(), StartDrag(),
-                    Drag() und EndDrag(). Im EndDrag-Handler leifert
-                    diese Methode die Id vom gedraggten Item zurueck oder
-                    0, wenn der Drag-Vorgang abgebrochen wurde.
-GetItemDragPos()    Liefert die Position zurueck, an der ein Item verschoben
-                    wird bzw. wurde. HEADERBAR_ITEM_NOTFOUND wird
-                    zurueckgeliefert, wenn der Vorgang abgebrochen wurde
-                    oder wenn kein ItemDrag aktiv ist.
-IsItemMode()        Mit dieser Methode kann abgefragt werden, ob fuer ein
-                    Item oder einen Trenner der Handler gerufen wurde.
-                    sal_True    - Handler wurde fuer das Item gerufen
-                    sal_False   - Handler wurde fuer den Trenner gerufen
-IsItemDrag()        Mit dieser Methode kann abgefragt werden, ob ein
-                    Item gedragt oder selektiert wurde.
-                    sal_True    - Item wird verschoben
-                    sal_False   - Item wird selektiert
-SetDragSize()       Mit dieser Methode wird gesetzt, wir gross der
-                    Trennstrich sein soll, der vom Control gemalt wird.
-                    Dies sollte so gross sein, wie das angrenzende Fenster
-                    hoch ist. Die Hoehe vom HeaderBar wird automatisch
-                    dazugerechnet.
+GetCurItemId()      Returns the id of the item, for which the handler has
+                    currently been called. Only returns a valid id in the
+                    handlers Select(), DoubleClick(), StartDrag(),
+                    Drag() and EndDrag(). In the EndDrag handler,
+                    this method returns the id of the dragged item or 0,
+                    if the drag process has been aborted.
+GetItemDragPos()    Returns the position, at which an item has been moved.
+                    HEADERBAR_ITEM_NOTFOUND is returned, if the process
+                    has been aborted or no ItemDrag is active.
+IsItemMode()        This method can be used to determine whether the
+                    handler has been called for an item or a separator.
+                    true    - handler was called for the item
+                    false   - handler was called for the separator
+IsItemDrag()        This method can be used to determine whether an item
+                    has been dragged or selected.
+                    true    - item is dragged
+                    false   - item is selected
+SetDragSize()       This method is used to set the size of the separating
+                    line that is drawn by the control. It should be
+                    equivalent to the height of the neighbouring window.
+                    The height of the HeaderBar is added automatically.
 
 --------------------------------------------------------------------------
 
-Weitere Methoden
+Further methods
 
-SetOffset()             Mit dieser Methode wird der Offset gesetzt, ab dem
-                        die Items ausgegeben werden. Dies wird benoetigt,
-                        wenn das dazugehoerige Fenster gescrollt wird.
-CalcWindowSizePixel()   Mit dieser Methode kann man die Hoehe des Fensters
-                        berechnen, damit der Inhalt der Items ausgegeben
-                        werden kann.
+SetOffset()             This method sets the offset, from which on the
+                        items are shown. This is needed when the
+                        corresponding window is scrolled.
+CalcWindowSizePixel()   This method can be used to calculate the height
+                        of the window, so that the content of the item
+                        can be displayed.
 
 --------------------------------------------------------------------------
 
-Tips und Tricks:
+Tips and tricks:
 
-1) KontextMenu
-Wenn ein kontextsensitives PopupMenu anzeigt werden soll, muss der
-Command-Handler ueberlagert werden. Mit GetItemId() und bei
-Uebergabe der Mausposition kann ermittelt werden, ob der Mausclick
-ueber einem bzw. ueber welchem Item durchgefuehrt wurde.
+1) ContextMenu
+If a context sensitive PopupMenu should be shown, the command
+handler must be overlaid. Using GetItemId() and when passing the
+mous position, it can be determined whether the mouse click has been
+carried out over an item resp. over which item the mouse click has been
+carried out.
 
-2) Letztes Item
-Wenn man ButtonStyle gesetzt hat, sieht es besser aus, wenn man am
-Ende noch ein leeres Item setzt, was den restlichen Platz einnimmt.
-Dazu fuegt man ein Item mit einem leeren String ein und uebergibt als
-Groesse HEADERBAR_FULLSIZE. Bei diesem Item sollte man dann auch
-nicht HIB_CLICKABLE setzen und dafuer HIB_FIXEDPOS.
+2) last item
+If ButtonStyle has been set, it looks better, if an empty item is
+set at the end which takes up the remaining space.
+In order to do that, you can insert an item with an empty string and
+pass HEADERBAR_FULLSIZE as size. For such an item, you should not set
+HIB_CLICKABLE, but HIB_FIXEDPOS.
 
 *************************************************************************/
 
@@ -197,7 +189,7 @@ typedef ::std::vector< ImplHeadItem* > ImplHeadItemList;
 typedef sal_uInt16 HeaderBarItemBits;
 
 
-// - Bits fuer HeaderBarItems -
+// - Bits for HeaderBarItems -
 
 
 #define HIB_LEFT                ((HeaderBarItemBits)0x0001)
