@@ -18,10 +18,14 @@
  */
 
 #include <sal/config.h>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
+
+#include "svdata.hxx"
 
 #include "vcl/salbtype.hxx"
 
+#include "opengl/framebuffer.hxx"
 #include "opengl/texture.hxx"
 
 // texture with allocated size
@@ -299,21 +303,15 @@ void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
     }
     else
     {
-        GLuint nFramebufferId;
-        glGenFramebuffers( 1, &nFramebufferId );
-        glBindFramebuffer( GL_FRAMEBUFFER, nFramebufferId );
-        CHECK_GL_ERROR();
+        // Retrieve current context
+        ImplSVData* pSVData = ImplGetSVData();
+        OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
+        OpenGLFramebuffer* pFramebuffer;
 
-        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, Id(), 0 );
-        CHECK_GL_ERROR();
+        pFramebuffer = pContext->AcquireFramebuffer( *this );
         glReadPixels( maRect.Left(), mpImpl->mnHeight - maRect.Top(), GetWidth(), GetHeight(), nFormat, nType, pData );
+        pContext->ReleaseFramebuffer( pFramebuffer );
         CHECK_GL_ERROR();
-
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
-        glDeleteFramebuffers( 1, &nFramebufferId );
-
-        int bpp = (nFormat == GL_RGB) ? 3 : 4;
-        memset( pData, 255, GetWidth() * GetHeight() * bpp );
     }
 
     Unbind();
