@@ -415,6 +415,9 @@ xmlsecurity/res/signet_11x16.png svx/res/signet_11x16.png
 sc/res/sf02.png sw/imglst/sf04.png
 svx/res/symphony/spacing3.png cmd/sc_spacepara2.png
 
+cmd/sc_insertrowdialog.png cmd/sc_insertrows.png
+cmd/sc_insertcolumndialog.png cmd/sc_insertcolumns.png
+
 # RTL
 cmd/ar/sc_undo.png cmd/fa/sc_undo.png
 cmd/ar/lc_undo.png cmd/fa/lc_undo.png
