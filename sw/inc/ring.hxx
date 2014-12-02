@@ -30,7 +30,7 @@ namespace sw
     template <class T> class RingIterator;
 
     template <class T>
-    class SW_DLLPUBLIC Ring
+    class Ring
     {
         struct Ring_node_traits
         {
