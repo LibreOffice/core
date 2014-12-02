@@ -42,7 +42,7 @@ namespace sw
             static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
             static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
         };
-        friend class Ring_node_traits;
+        friend struct Ring_node_traits;
         typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
         T* pNext;
         T* pPrev;    ///< In order to speed up inserting and deleting.
