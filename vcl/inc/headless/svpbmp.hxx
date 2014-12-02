@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_HEADLESS_SVPBMP_HXX
 
 #include "sal/config.h"
+#include "tools/solar.h"
 
 #include "basebmp/bitmapdevice.hxx"
 
@@ -61,6 +62,7 @@ public:
     virtual bool            Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
     virtual bool            Erase( const Color& rFillColor ) SAL_OVERRIDE;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag ) SAL_OVERRIDE;
+    virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) SAL_OVERRIDE;
 
     static sal_uInt32 getBitCountFromScanlineFormat( basebmp::Format nFormat );
 };

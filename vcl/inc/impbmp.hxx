@@ -71,6 +71,7 @@ public:
     bool                ImplCrop( const Rectangle& rRectPixel );
     bool                ImplErase( const Color& rFillColor );
     bool                ImplScale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag );
+    bool                ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol );
 };
 
 #endif // INCLUDED_VCL_INC_IMPBMP_HXX
