@@ -571,7 +571,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     ScRange aDirtyRange(
         aLocalParam.nCol1, nStartRow, nTab,
         aLocalParam.nCol2, aLocalParam.nRow2, nTab);
-    rDoc.SetDirty( aDirtyRange );
+    rDoc.SetDirty( aDirtyRange, true );
 
     if (bPaint)
     {
