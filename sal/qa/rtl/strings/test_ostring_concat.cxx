@@ -88,7 +88,6 @@ void test::ostring::StringConcat::checkConcat()
     TYPES_ASSERT_EQUAL(( typeid( OStringConcat< OStringBuffer, OString > )), typeid( OStringBuffer( "foo" ) + OString( "bar" )));
 #endif
 }
-#undef typeid
 
 void test::ostring::StringConcat::checkEnsureCapacity()
 {
