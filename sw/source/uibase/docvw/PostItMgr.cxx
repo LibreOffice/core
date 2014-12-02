@@ -767,7 +767,8 @@ void SwPostItMgr::LayoutPostIts()
             }
             else
             {
-                bUpdate = true;
+                if (mPages[n]->bScrollbar)
+                    bUpdate = true;
                 mPages[n]->bScrollbar = false;
             }
         }
@@ -803,7 +804,7 @@ void SwPostItMgr::LayoutPostIts()
         // notes scrollbar is otherwise not drawn correctly for some cases
         // scrollbar area is enough
         if (bUpdate)
-            mpEditWin->Invalidate();
+            mpEditWin->Invalidate(); /*This is a super expensive relayout and render of the entire page*/
 
         mbLayouting = false;
     }
