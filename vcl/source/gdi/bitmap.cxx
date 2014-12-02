@@ -1583,6 +1583,24 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
 
 bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
+    if( mpImpBmp )
+    {
+        // implementation specific replace
+        ImpBitmap* pImpBmp = new ImpBitmap;
+
+        if( pImpBmp->ImplCreate( *mpImpBmp ) && pImpBmp->ImplReplace( rSearchColor, rReplaceColor, nTol ) )
+        {
+            ImplSetImpBitmap( pImpBmp );
+            maPrefMapMode = MapMode( MAP_PIXEL );
+            maPrefSize = pImpBmp->ImplGetSize();
+            return true;
+        }
+        else
+        {
+            delete pImpBmp;
+        }
+    }
+
     // Bitmaps with 1 bit color depth can cause problems
     // if they have other entries than black/white in their palette
     if( 1 == GetBitCount() )

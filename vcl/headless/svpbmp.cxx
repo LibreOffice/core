@@ -354,6 +354,11 @@ bool SvpSalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, 
     return false;
 }
 
+bool SvpSalBitmap::Replace( const ::Color& /*rSearchColor*/, const ::Color& /*rReplaceColor*/, sal_uLong /*nTol*/ )
+{
+    return false;
+}
+
 sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( basebmp::Format nFormat )
 {
     sal_uInt32 nBitCount = 1;

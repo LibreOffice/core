@@ -108,4 +108,9 @@ bool ImpBitmap::ImplScale( const double& rScaleX, const double& rScaleY, sal_uIn
     return mpSalBitmap->Scale( rScaleX, rScaleY, nScaleFlag );
 }
 
+bool ImpBitmap::ImplReplace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
+{
+    return mpSalBitmap->Replace( rSearchColor, rReplaceColor, nTol );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
