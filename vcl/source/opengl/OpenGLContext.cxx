@@ -865,6 +865,12 @@ bool OpenGLContext::ImplInit()
     else
     {
         WindowPix = ChoosePixelFormat(m_aGLWin.hDC, &PixelFormatFront);
+#if OSL_DEBUG_LEVEL > 0
+        PIXELFORMATDESCRIPTOR pfd;
+        DescribePixelFormat(m_aGLWin.hDC, WindowPix, sizeof(PIXELFORMATDESCRIPTOR), &pfd);
+        SAL_WARN("vcl.opengl", "Render Target: Window: " << (int) ((pfd.dwFlags & PFD_DRAW_TO_WINDOW) != 0) << ", Bitmap: " << (int) ((pfd.dwFlags & PFD_DRAW_TO_BITMAP) != 0));
+        SAL_WARN("vcl.opengl", "Supports OpenGL: " << (int) ((pfd.dwFlags & PFD_SUPPORT_OPENGL) != 0));
+#endif
     }
 
     if (WindowPix == 0)
