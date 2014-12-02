@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_4273124e",
+        "filename": "external/icu/icu4c-icu11131.patch.1",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-12-02T12:38:06Z",
+      "side": 1,
+      "message": "this is another example of the fine tradition of not handling out-of-memory errors properly - see the umtx_unlock below that will not be called and leave that mutex locked. likely this allocation will never fail in practice since it\u0027s constant sized so whatever.",
+      "revId": "505e2cbfdf5842bab1996dd43220f3ef7d90b79b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
