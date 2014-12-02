@@ -52,6 +52,24 @@
       "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_c2396243",
+        "filename": "include/vcl/bitmap.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-02T13:08:10Z",
+      "side": 0,
+      "message": "There was some discussion on this topic already: [1], [2].\n\n* [1] http://lists.freedesktop.org/archives/libreoffice/2011-March/009836.html\n* [2] http://www.mail-archive.com/dev@openoffice.org/msg15185.html",
+      "parentUuid": "fa32b979_627c1621",
+      "revId": "b98d3d34144eb1754b50e58736a8b636ef7813c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
