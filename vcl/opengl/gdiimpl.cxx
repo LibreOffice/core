@@ -161,6 +161,11 @@ void OpenGLSalGraphicsImpl::PostDraw()
     mpFramebuffer = NULL;
 
     CHECK_GL_ERROR();
+
+    // release the context as there is no guarantee the underlying window
+    // will still be valid for the next draw operation
+    if( mbOffscreen )
+        ReleaseContext();
 }
 
 void OpenGLSalGraphicsImpl::freeResources()
