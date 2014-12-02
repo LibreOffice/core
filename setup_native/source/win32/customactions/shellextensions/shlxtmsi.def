@@ -3,8 +3,6 @@ EXPORTS
 			CheckInstallDirectory
 			CheckPatchList
 			CompleteInstallPath
-			CreateLayerLinks
-			RemoveLayerLinks
 			MigrateInstallPath
 			InstallStartmenuFolderIcon
 			DeinstallStartmenuFolderIcon
