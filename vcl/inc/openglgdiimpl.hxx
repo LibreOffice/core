@@ -32,8 +32,6 @@
 #include <tools/poly.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 class SalFrame;
 class SalVirtualDevice;
 
@@ -41,7 +39,7 @@ class VCL_PLUGIN_PUBLIC OpenGLSalGraphicsImpl : public SalGraphicsImpl
 {
 protected:
 
-    boost::shared_ptr<OpenGLContext> mpContext;
+    OpenGLContext* mpContext;
     /// Pointer to the SalFrame or SalVirtualDevice
     SalGeometryProvider* mpParent;
     OpenGLFramebuffer* mpFramebuffer;

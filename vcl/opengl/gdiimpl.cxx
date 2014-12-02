@@ -51,20 +51,23 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGeometryProvider* pParent)
 
 OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 {
+    ReleaseContext();
 }
 
 OpenGLContext* OpenGLSalGraphicsImpl::GetOpenGLContext()
 {
     if( !mpContext )
         AcquireContext();
-    return mpContext.get();
+    return mpContext;
 }
 
 bool OpenGLSalGraphicsImpl::AcquireContext( )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    mpContext.reset();
+    if( mpContext )
+        mpContext->DeRef();
+
 
     OpenGLContext* pContext = pSVData->maGDIData.mpLastContext;
     while( pContext )
@@ -75,16 +78,20 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
         pContext = pContext->mpPrevContext;
     }
 
-    if (!pContext)
+    if( pContext )
+        pContext->AddRef();
+    else
         pContext = mbOffscreen ? CreatePixmapContext() : CreateWinContext();
 
-    mpContext.reset(pContext);
-    return (mpContext != nullptr);
+    mpContext = pContext;
+    return (mpContext != NULL);
 }
 
 bool OpenGLSalGraphicsImpl::ReleaseContext()
 {
-    mpContext.reset();
+    if( mpContext )
+        mpContext->DeRef();
+    mpContext = NULL;
     return true;
 }
 
@@ -95,7 +102,7 @@ void OpenGLSalGraphicsImpl::Init()
     // check if we can simply re-use the same context
     if( mpContext )
     {
-        if( !UseContext( mpContext.get() ) )
+        if( !UseContext( mpContext ) )
             ReleaseContext();
     }
 

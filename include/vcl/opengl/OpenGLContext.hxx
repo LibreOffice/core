@@ -211,6 +211,8 @@ public:
     bool               AcquireFramebuffer( OpenGLFramebuffer* pFramebuffer );
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
+    void AddRef();
+    void DeRef();
 
     // retrieve a program from the cache or compile/link it
     OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
@@ -260,6 +262,7 @@ private:
     SystemChildWindow* m_pChildWindow;
     boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
     bool mbInitialized;
+    int  mnRefCount;
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
     bool mbRequestVirtualDevice;
