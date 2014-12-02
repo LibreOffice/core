@@ -16,6 +16,24 @@
       "revId": "e854a2416fe1e658dfe37897e2554707191f04f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_a57b087b",
+        "filename": "sw/source/core/txtnode/fmtatr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000094
+      },
+      "writtenOn": "2014-12-02T15:10:45Z",
+      "side": 1,
+      "message": "That\u0027s a good question: online sources agree on the \"logical operator\", but do not agree on the return type. I will check on Stroustrup\u0027s TC++PL.\nIt is probably safer to leave the line as it was or to explicitly write \"nPosition \u003d\u003d 0\".",
+      "parentUuid": "fa32b979_4255521b",
+      "revId": "e854a2416fe1e658dfe37897e2554707191f04f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
