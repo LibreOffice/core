@@ -2115,28 +2115,29 @@ void ScFormulaCell::Query( SvtListener::QueryBase& rQuery ) const
 
 void ScFormulaCell::SetDirty( bool bDirtyFlag )
 {
-    if ( !IsInChangeTrack() )
-    {
-        if ( pDocument->GetHardRecalcState() )
-            SetDirtyVar();
-        else
-        {
-            // Avoid multiple formula tracking in Load() and in CompileAll()
-            // after CopyScenario() and CopyBlockFromClip().
-            // If unconditional formula tracking is needed, set bDirty=false
-            // before calling SetDirty(), for example in CompileTokenArray().
-            if ( !bDirty || mbPostponedDirty || !pDocument->IsInFormulaTree( this ) )
-            {
-                if( bDirtyFlag )
-                    SetDirtyVar();
-                pDocument->AppendToFormulaTrack( this );
-                pDocument->TrackFormulas();
-            }
-        }
+    if (IsInChangeTrack())
+        return;
 
-        if (pDocument->IsStreamValid(aPos.Tab()))
-            pDocument->SetStreamValid(aPos.Tab(), false);
+    if ( pDocument->GetHardRecalcState() )
+    {
+        SetDirtyVar();
+        pDocument->SetStreamValid(aPos.Tab(), false);
+        return;
     }
+
+    // Avoid multiple formula tracking in Load() and in CompileAll()
+    // after CopyScenario() and CopyBlockFromClip().
+    // If unconditional formula tracking is needed, set bDirty=false
+    // before calling SetDirty(), for example in CompileTokenArray().
+    if ( !bDirty || mbPostponedDirty || !pDocument->IsInFormulaTree( this ) )
+    {
+        if( bDirtyFlag )
+            SetDirtyVar();
+        pDocument->AppendToFormulaTrack( this );
+        pDocument->TrackFormulas();
+    }
+
+    pDocument->SetStreamValid(aPos.Tab(), false);
 }
 
 void ScFormulaCell::SetDirtyVar()
