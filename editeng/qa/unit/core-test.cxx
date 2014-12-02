@@ -578,7 +578,7 @@ void Test::testSectionAttributes()
     {
         aEngine.Clear();
         aEngine.SetText("one\ntwo");
-        CPPUNIT_ASSERT_EQUAL(2, aEngine.GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEngine.GetParagraphCount());
 
         // embolden 2nd paragraph
         pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
@@ -591,7 +591,7 @@ void Test::testSectionAttributes()
 
         // now delete & join the paragraphs - this is fdo#85496 scenario
         aEngine.QuickDelete(ESelection(0,0,1,3));
-        CPPUNIT_ASSERT_EQUAL(1, aEngine.GetParagraphCount());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEngine.GetParagraphCount());
 
         boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
