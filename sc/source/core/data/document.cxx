@@ -2848,10 +2848,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
     // Set all formula cells dirty, and collect non-empty non-formula cell
     // positions so that we can broadcast on them below.
-    SetDirtyFromClip(nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag, aBroadcastSpans);
 
     {
         ScBulkBroadcast aBulkBroadcast( GetBASM());
+        SetDirtyFromClip(nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag, aBroadcastSpans);
         BroadcastAction aAction(*this);
         aBroadcastSpans.executeColumnAction(*this, aAction);
     }
