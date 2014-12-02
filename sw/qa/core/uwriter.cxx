@@ -1323,6 +1323,12 @@ void SwDocTest::testIntrusiveRing()
         CPPUNIT_ASSERT(pRing);
         //pRing->debug();
     }
+    const TestRing* pConstRing = &aRing1;
+    BOOST_FOREACH(const TestRing& r, pConstRing->rangeRing()) // this should fail without r being const
+    {
+        const TestRing* pRing = &r;
+        CPPUNIT_ASSERT(pRing);
+    }
 }
 
 void SwDocTest::setUp()
