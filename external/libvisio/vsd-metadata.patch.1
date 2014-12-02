@@ -629,3 +629,23 @@ index 9d6e175..3af5bd0 100644
    m_collector->collectMetaData(metaData.getMetaData());
  
    delete stream;
+commit 89ccb97fedc69e4508581ddcd93c9ea6740855c1
+Author: Miklos Vajna <vmiklos@collabora.co.uk>
+Date:   Tue Dec 2 18:50:16 2014 +0100
+
+    error C3861: ´localtime´: identifier not found
+    
+    Change-Id: Ic0ccfc0b6cdd030772d09e7d235c63d440ba2f1b
+
+diff --git a/src/lib/VSDMetaData.cpp b/src/lib/VSDMetaData.cpp
+index 3fd5bf9..61f01a9 100644
+--- a/src/lib/VSDMetaData.cpp
++++ b/src/lib/VSDMetaData.cpp
+@@ -10,6 +10,7 @@
+ #include "VSDMetaData.h"
+ #include <cmath>
+ #include <unicode/ucnv.h>
++#include <ctime>
+ 
+ libvisio::VSDMetaData::VSDMetaData()
+ {
