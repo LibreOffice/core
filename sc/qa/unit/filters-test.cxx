@@ -75,6 +75,7 @@ public:
     //void testContentXLS_XML();
     void testSharedFormulaXLS();
     void testSharedFormulaXLSX();
+    void testSheetNamesXLSX();
     void testLegacyCellAnchoredRotatedShape();
     void testEnhancedProtectionXLS();
     void testEnhancedProtectionXLSX();
@@ -95,6 +96,7 @@ public:
     //CPPUNIT_TEST(testContentXLS_XML);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testSharedFormulaXLSX);
+    CPPUNIT_TEST(testSheetNamesXLSX);
     CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape);
     CPPUNIT_TEST(testEnhancedProtectionXLS);
     CPPUNIT_TEST(testEnhancedProtectionXLSX);
@@ -398,6 +400,22 @@ void ScFiltersTest::testSharedFormulaXLSX()
     ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
     CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
     CPPUNIT_ASSERT_MESSAGE("Incorrect group geometry.", xGroup->mpTopCell->aPos.Row() == 1 && xGroup->mnLength == 18);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testSheetNamesXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("sheet-names.", XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
+    CPPUNIT_ASSERT_MESSAGE("The document should have 5 sheets in total.", aTabNames.size() == 5);
+    CPPUNIT_ASSERT_EQUAL(OUString("S&P"), aTabNames[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Sam's Club"), aTabNames[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("\"The Sheet\""), aTabNames[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("A<B"), aTabNames[3]);
+    CPPUNIT_ASSERT_EQUAL(OUString("C>D"), aTabNames[4]);
 
     xDocSh->DoClose();
 }
