@@ -243,18 +243,10 @@ static void create_pixmap(struct splash* splash)
         int bytes_per_line = image->bytes_per_line;
         int bpp = image->bits_per_pixel;
         int byte_order = image->byte_order;
-#if defined( _LITTLE_ENDIAN )
+#if defined OSL_LITENDIAN
         int machine_byte_order = LSBFirst;
-#elif defined( _BIG_ENDIAN )
+#else /* OSL_BIGENDIAN */
         int machine_byte_order = MSBFirst;
-#else
-        {
-            fprintf( stderr, "Unsupported machine endianity.\n" );
-            XFreeGC( splash->display, pixmap_gc );
-            XFreePixmap( splash->display, pixmap );
-            XDestroyImage( image );
-            return;
-        }
 #endif
 
         char *data = malloc( splash->height * bytes_per_line );
