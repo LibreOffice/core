@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_4255521b",
+        "filename": "sw/source/core/txtnode/fmtatr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-12-02T14:57:00Z",
+      "side": 1,
+      "message": "not sure if that is right - is the result of the operator! always bool or is it the same type as its parameter?",
+      "revId": "e854a2416fe1e658dfe37897e2554707191f04f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
