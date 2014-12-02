@@ -843,15 +843,16 @@ ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
     return 0 <= nPos && nPos < (sal_Int32)maPortions.size() ? &maPortions[nPos] : NULL;
 }
 
-#if OSL_DEBUG_LEVEL > 2
-void ParaPortionList::DbgCheck( EditDoc& rDoc)
+#if OSL_DEBUG_LEVEL > 0
+void
+ParaPortionList::DbgCheck(ParaPortionList const& rParas, EditDoc const& rDoc)
 {
-    DBG_ASSERT( Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() unequal!" );
-    for ( sal_Int32 i = 0; i < Count(); i++ )
+    DBG_ASSERT( rParas.Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() unequal!" );
+    for (sal_Int32 i = 0; i < rParas.Count(); ++i)
     {
-        DBG_ASSERT( SafeGetObject(i), "ParaPortionList::DbgCheck() - Null-Pointer in List!" );
-        DBG_ASSERT( GetObject(i)->GetNode(), "ParaPortionList::DbgCheck() - Null-Pointer in List(2)!" );
-        DBG_ASSERT( GetObject(i)->GetNode() == rDoc.GetObject(i), "ParaPortionList::DbgCheck() - Entries intersect!" );
+        DBG_ASSERT( rParas.SafeGetObject(i), "ParaPortionList::DbgCheck() - Null-Pointer in List!" );
+        DBG_ASSERT( rParas.SafeGetObject(i)->GetNode(), "ParaPortionList::DbgCheck() - Null-Pointer in List(2)!" );
+        DBG_ASSERT( rParas.SafeGetObject(i)->GetNode() == rDoc.GetObject(i), "ParaPortionList::DbgCheck() - Entries intersect!" );
     }
 }
 #endif

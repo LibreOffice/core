@@ -2176,8 +2176,8 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 n
     while( aTmpPortionList.Count() > 0 )
         aTmpPortionList.Release( aTmpPortionList.Count() - 1 );
 
-#if OSL_DEBUG_LEVEL > 2
-    GetParaPortions().DbgCheck(aEditDoc);
+#if OSL_DEBUG_LEVEL > 0
+    ParaPortionList::DbgCheck(GetParaPortions(), aEditDoc);
 #endif
     return aSelection;
 }

@@ -680,9 +680,9 @@ public:
     void Append(ParaPortion* p);
     sal_Int32 Count() const;
 
-#if OSL_DEBUG_LEVEL > 2
+#if OSL_DEBUG_LEVEL > 0
     // temporary:
-    void            DbgCheck( EditDoc& rDoc );
+    static void DbgCheck(ParaPortionList const&, EditDoc const& rDoc);
 #endif
 };
 
