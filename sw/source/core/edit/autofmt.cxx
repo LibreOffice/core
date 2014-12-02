@@ -67,6 +67,7 @@
 #include <numrule.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/foreach.hpp>
 
 using namespace ::com::sun::star;
 
@@ -2537,13 +2538,14 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
     // There are more than one or a selection is open
     if( pCrsr->GetNext() != pCrsr || pCrsr->HasMark() )
     {
-        FOREACHPAM_START(GetCrsr())
-            if( PCURCRSR->HasMark() )
+        BOOST_FOREACH(SwPaM& rPaM, GetCrsr()->rangeRing())
+        {
+            if( rPaM.HasMark() )
             {
-                SwAutoFormat aFmt( this, aAFFlags, &PCURCRSR->Start()->nNode,
-                                     &PCURCRSR->End()->nNode );
+                SwAutoFormat aFmt( this, aAFFlags, &(rPaM.Start()->nNode),
+                                     &(rPaM.End()->nNode) );
             }
-        FOREACHPAM_END()
+        }
     }
     else
     {
