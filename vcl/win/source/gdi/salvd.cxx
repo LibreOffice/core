@@ -218,7 +218,7 @@ bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
             if (mpGraphics)
             {
                 WinOpenGLSalGraphicsImpl *pImpl;
-                pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->getImpl());
+                pImpl = dynamic_cast< WinOpenGLSalGraphicsImpl * >(mpGraphics->GetImpl());
                 if (pImpl)
                     pImpl->Init();
             }
