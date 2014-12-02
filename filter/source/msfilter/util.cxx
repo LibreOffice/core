@@ -34,6 +34,10 @@ rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Loc
         return RTL_TEXTENCODING_MS_1254;
     if (rLanguage == "lt")
         return RTL_TEXTENCODING_MS_1257;
+    if (rLanguage == "th")
+        return RTL_TEXTENCODING_MS_874;
+    if (rLanguage == "vi")
+        return RTL_TEXTENCODING_MS_1258;
     return RTL_TEXTENCODING_MS_1252;
 }
 
