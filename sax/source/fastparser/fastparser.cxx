@@ -463,6 +463,12 @@ void Entity::startElement( Event *pEvent )
 
 void Entity::characters( const OUString& sChars )
 {
+    if (maContextStack.empty())
+    {
+        // Malformed XML stream !?
+        return;
+    }
+
     const Reference< XFastContextHandler >& xContext( maContextStack.top().mxContext );
     if( xContext.is() ) try
     {
@@ -1140,11 +1146,11 @@ void FastSaxParserImpl::callbackEndElement( const xmlChar*, const xmlChar*, cons
     if( !pendingCharacters.isEmpty())
         sendPendingCharacters();
     Entity& rEntity = getEntity();
-    assert( !rEntity.maNamespaceCount.empty() );
+    SAL_WARN_IF(rEntity.maNamespaceCount.empty(), "sax", "Empty NamespaceCount");
     if( !rEntity.maNamespaceCount.empty() )
         rEntity.maNamespaceCount.pop();
 
-    assert( !rEntity.maNamespaceStack.empty() );
+    SAL_WARN_IF(rEntity.maNamespaceStack.empty(), "sax", "Empty NamespaceStack");
     if( !rEntity.maNamespaceStack.empty() )
         rEntity.maNamespaceStack.pop();
 
