@@ -11,6 +11,7 @@
 
 #include <windows.h>
 #include <setupapi.h>
+#include <algorithm>
 #include <cstdint>
 #include <rtl/ustrbuf.hxx>
 
