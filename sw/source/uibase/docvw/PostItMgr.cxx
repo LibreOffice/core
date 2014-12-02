@@ -596,214 +596,215 @@ void SwPostItMgr::LayoutPostIts()
     {
         mbLayouting = true;
 
-            //loop over all pages and do the layout
-            // - create SwPostIt if necessary
-            // - place SwPostIts on their initial position
-            // - calculate necessary height for all PostIts together
-            bool bUpdate = false;
-            for (unsigned long n=0;n<mPages.size();n++)
+        //loop over all pages and do the layout
+        // - create SwPostIt if necessary
+        // - place SwPostIts on their initial position
+        // - calculate necessary height for all PostIts together
+        bool bUpdate = false;
+        for (unsigned long n=0;n<mPages.size();n++)
+        {
+            // only layout if there are notes on this page
+            if (mPages[n]->mList->size()>0)
             {
-                // only layout if there are notes on this page
-                if (mPages[n]->mList->size()>0)
+                std::list<SwSidebarWin*>    aVisiblePostItList;
+                unsigned long           lNeededHeight = 0;
+                long                    mlPageBorder = 0;
+                long                    mlPageEnd = 0;
+
+                for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i != mPages[n]->mList->end(); ++i)
                 {
-                    std::list<SwSidebarWin*>    aVisiblePostItList;
-                    unsigned long           lNeededHeight = 0;
-                    long                    mlPageBorder = 0;
-                    long                    mlPageEnd = 0;
+                    SwSidebarItem* pItem = (*i);
+                    SwSidebarWin* pPostIt = pItem->pPostIt;
 
-                    for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i != mPages[n]->mList->end(); ++i)
+                    if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT )
                     {
-                        SwSidebarItem* pItem = (*i);
-                        SwSidebarWin* pPostIt = pItem->pPostIt;
-
-                        if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT )
-                        {
-                            // x value for notes positioning
-                            mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
-                            //bending point
-                            mlPageEnd =
-                                mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
-                                ? pItem->maLayoutInfo.mPagePrtArea.Left()
-                                : mPages[n]->mPageRect.Left() + 350;
-                        }
-                        else if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
-                        {
-                            // x value for notes positioning
-                            mlPageBorder = mpEditWin->LogicToPixel( Point(mPages[n]->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
-                            //bending point
-                            mlPageEnd =
-                                mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
-                                ? pItem->maLayoutInfo.mPagePrtArea.Right() :
-                                mPages[n]->mPageRect.Right() - 350;
-                        }
-
-                        if (pItem->bShow)
-                        {
-                            long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
-                            long aPostItHeight = 0;
-                            if (!pPostIt)
-                            {
-                                pPostIt = (*i)->GetSidebarWindow( mpView->GetEditWin(),
-                                                                  WB_DIALOGCONTROL,
-                                                                  *this,
-                                                                  0 );
-                                pPostIt->InitControls();
-                                pPostIt->SetReadonly(mbReadOnly);
-                                pItem->pPostIt = pPostIt;
-                                if (mpAnswer)
-                                {
-                                    if (pPostIt->CalcFollow()) //do we really have another note in front of this one
-                                        static_cast<sw::annotation::SwAnnotationWin*>(pPostIt)->InitAnswer(mpAnswer);
-                                    delete mpAnswer;
-                                    mpAnswer = 0;
-                                }
-                            }
-
-                            pPostIt->SetChangeTracking(
-                                pItem->mLayoutStatus,
-                                GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
-                            pPostIt->SetSidebarPosition(mPages[n]->eSidebarPosition);
-                            pPostIt->SetFollow(pPostIt->CalcFollow());
-                            aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
-                                              ? pPostIt->GetMinimumSizeWithoutMeta()
-                                              : pPostIt->GetPostItTextHeight() )
-                                            + pPostIt->GetMetaHeight();
-                            pPostIt->SetPosSizePixelRect( mlPageBorder ,
-                                                          Y - GetInitialAnchorDistance(),
-                                                          GetNoteWidth() ,
-                                                          aPostItHeight,
-                                                          pItem->maLayoutInfo.mPosition,
-                                                          mlPageEnd );
-                            pPostIt->ChangeSidebarItem( *pItem );
-
-                            if (pItem->bFocus)
-                            {
-                                mbLayout = true;
-                                pPostIt->GrabFocus();
-                                pItem->bFocus = false;
-                            }
-                            // only the visible postits are used for the final layout
-                            aVisiblePostItList.push_back(pPostIt);
-                            lNeededHeight += pPostIt->IsFollow() ? aPostItHeight : aPostItHeight+GetSpaceBetween();
-                        }
-                        else // we don't want to see it
-                        {
-                            if (pPostIt)
-                                pPostIt->HideNote();
-                        }
+                        // x value for notes positioning
+                        mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
+                        //bending point
+                        mlPageEnd =
+                            mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
+                            ? pItem->maLayoutInfo.mPagePrtArea.Left()
+                            : mPages[n]->mPageRect.Left() + 350;
+                    }
+                    else if (mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
+                    {
+                        // x value for notes positioning
+                        mlPageBorder = mpEditWin->LogicToPixel( Point(mPages[n]->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
+                        //bending point
+                        mlPageEnd =
+                            mpWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE)
+                            ? pItem->maLayoutInfo.mPagePrtArea.Right() :
+                            mPages[n]->mPageRect.Right() - 350;
                     }
 
-                    if ((!aVisiblePostItList.empty()) && ShowNotes())
+                    if (pItem->bShow)
                     {
-                        bool bOldScrollbar = mPages[n]->bScrollbar;
-                        if (ShowNotes())
-                            mPages[n]->bScrollbar = LayoutByPage(aVisiblePostItList, mPages[n]->mPageRect.SVRect(), lNeededHeight);
-                        else
-                            mPages[n]->bScrollbar = false;
-                        if (!mPages[n]->bScrollbar)
+                        long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
+                        long aPostItHeight = 0;
+                        if (!pPostIt)
                         {
-                            mPages[n]->lOffset = 0;
+                            pPostIt = (*i)->GetSidebarWindow( mpView->GetEditWin(),
+                                                              WB_DIALOGCONTROL,
+                                                              *this,
+                                                              0 );
+                            pPostIt->InitControls();
+                            pPostIt->SetReadonly(mbReadOnly);
+                            pItem->pPostIt = pPostIt;
+                            if (mpAnswer)
+                            {
+                                if (pPostIt->CalcFollow()) //do we really have another note in front of this one
+                                    static_cast<sw::annotation::SwAnnotationWin*>(pPostIt)->InitAnswer(mpAnswer);
+                                delete mpAnswer;
+                                mpAnswer = 0;
+                            }
                         }
-                        else
-                        {
-                            //when we changed our zoom level, the offset value can be to big, so lets check for the largest possible zoom value
-                            long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,mPages[n]->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
-                            long lOffset = -1 * GetScrollSize() * (aVisiblePostItList.size() - aAvailableHeight / GetScrollSize());
-                            if (mPages[n]->lOffset < lOffset)
-                                mPages[n]->lOffset = lOffset;
-                        }
-                        bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
-                        const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
-                        /*
-                                           TODO
-                                           - enlarge all notes till GetNextBorder(), as we resized to average value before
-                                           */
-                        //lets hide the ones which overlap the page
-                        for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
-                        {
-                            if (mPages[n]->lOffset != 0)
-                                (*i)->TranslateTopPosition(mPages[n]->lOffset);
 
-                            bool bBottom  = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y()+(*i)->VirtualSize().Height())).Y() <= (mPages[n]->mPageRect.Bottom()-aSidebarheight);
-                            bool bTop = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() >= (mPages[n]->mPageRect.Top()+aSidebarheight);
-                            if ( bBottom && bTop )
-                            {
-                                (*i)->ShowNote();
-                            }
-                            else
-                            {
-                                if (mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() < (mPages[n]->mPageRect.Top()+aSidebarheight))
-                                {
-                                    if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT )
-                                        (*i)->ShowAnchorOnly(Point( mPages[n]->mPageRect.Left(),
-                                                                    mPages[n]->mPageRect.Top()));
-                                    else if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
-                                        (*i)->ShowAnchorOnly(Point( mPages[n]->mPageRect.Right(),
-                                                                    mPages[n]->mPageRect.Top()));
-                                }
-                                else
-                                {
-                                    if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT )
-                                        (*i)->ShowAnchorOnly(Point(mPages[n]->mPageRect.Left(),
-                                                                   mPages[n]->mPageRect.Bottom()));
-                                    else if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
-                                        (*i)->ShowAnchorOnly(Point(mPages[n]->mPageRect.Right(),
-                                                                   mPages[n]->mPageRect.Bottom()));
-                                }
-                                OSL_ENSURE(mPages[n]->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
-                            }
+                        pPostIt->SetChangeTracking(
+                            pItem->mLayoutStatus,
+                            GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
+                        pPostIt->SetSidebarPosition(mPages[n]->eSidebarPosition);
+                        pPostIt->SetFollow(pPostIt->CalcFollow());
+                        aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
+                                          ? pPostIt->GetMinimumSizeWithoutMeta()
+                                          : pPostIt->GetPostItTextHeight() )
+                                        + pPostIt->GetMetaHeight();
+                        pPostIt->SetPosSizePixelRect( mlPageBorder ,
+                                                      Y - GetInitialAnchorDistance(),
+                                                      GetNoteWidth() ,
+                                                      aPostItHeight,
+                                                      pItem->maLayoutInfo.mPosition,
+                                                      mlPageEnd );
+                        pPostIt->ChangeSidebarItem( *pItem );
+
+                        if (pItem->bFocus)
+                        {
+                            mbLayout = true;
+                            pPostIt->GrabFocus();
+                            pItem->bFocus = false;
                         }
+                        // only the visible postits are used for the final layout
+                        aVisiblePostItList.push_back(pPostIt);
+                        lNeededHeight += pPostIt->IsFollow() ? aPostItHeight : aPostItHeight+GetSpaceBetween();
+                    }
+                    else // we don't want to see it
+                    {
+                        if (pPostIt)
+                            pPostIt->HideNote();
+                    }
+                }
+
+                if ((!aVisiblePostItList.empty()) && ShowNotes())
+                {
+                    bool bOldScrollbar = mPages[n]->bScrollbar;
+                    if (ShowNotes())
+                        mPages[n]->bScrollbar = LayoutByPage(aVisiblePostItList, mPages[n]->mPageRect.SVRect(), lNeededHeight);
+                    else
+                        mPages[n]->bScrollbar = false;
+                    if (!mPages[n]->bScrollbar)
+                    {
+                        mPages[n]->lOffset = 0;
                     }
                     else
                     {
-                        for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
-                                                                (*i)->SetPosAndSize();
-
-                                                        bool bOldScrollbar = mPages[n]->bScrollbar;
-                                                        mPages[n]->bScrollbar = false;
-                                                        bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
+                        //when we changed our zoom level, the offset value can be to big, so lets check for the largest possible zoom value
+                        long aAvailableHeight = mpEditWin->LogicToPixel(Size(0,mPages[n]->mPageRect.Height())).Height() - 2 * GetSidebarScrollerHeight();
+                        long lOffset = -1 * GetScrollSize() * (aVisiblePostItList.size() - aAvailableHeight / GetScrollSize());
+                        if (mPages[n]->lOffset < lOffset)
+                            mPages[n]->lOffset = lOffset;
                     }
-                    aVisiblePostItList.clear();
-                }
-                else
-                {
-                    bUpdate = true;
-                    mPages[n]->bScrollbar = false;
-                }
-            }
-
-            if (!ShowNotes())
-            {       // we do not want to see the notes anymore -> Options-Writer-View-Notes
-                bool bRepair = false;
-                for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
-                {
-                    SwSidebarItem* pItem = (*i);
-                    if ( !pItem->UseElement() )
+                    bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
+                    const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
+                    /*
+                                       TODO
+                                       - enlarge all notes till GetNextBorder(), as we resized to average value before
+                                       */
+                    //lets hide the ones which overlap the page
+                    for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
                     {
-                        OSL_FAIL("PostIt is not in doc!");
-                        bRepair = true;
-                        continue;
-                    }
+                        if (mPages[n]->lOffset != 0)
+                            (*i)->TranslateTopPosition(mPages[n]->lOffset);
 
-                    if ((*i)->pPostIt)
-                    {
-                        (*i)->pPostIt->HideNote();
-                        if ((*i)->pPostIt->HasChildPathFocus())
+                        bool bBottom  = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y()+(*i)->VirtualSize().Height())).Y() <= (mPages[n]->mPageRect.Bottom()-aSidebarheight);
+                        bool bTop = mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() >= (mPages[n]->mPageRect.Top()+aSidebarheight);
+                        if ( bBottom && bTop )
                         {
-                            SetActiveSidebarWin(0);
-                            (*i)->pPostIt->GrabFocusToDocument();
+                            (*i)->ShowNote();
+                        }
+                        else
+                        {
+                            if (mpEditWin->PixelToLogic(Point(0,(*i)->VirtualPos().Y())).Y() < (mPages[n]->mPageRect.Top()+aSidebarheight))
+                            {
+                                if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT )
+                                    (*i)->ShowAnchorOnly(Point( mPages[n]->mPageRect.Left(),
+                                                                mPages[n]->mPageRect.Top()));
+                                else if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
+                                    (*i)->ShowAnchorOnly(Point( mPages[n]->mPageRect.Right(),
+                                                                mPages[n]->mPageRect.Top()));
+                            }
+                            else
+                            {
+                                if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT )
+                                    (*i)->ShowAnchorOnly(Point(mPages[n]->mPageRect.Left(),
+                                                               mPages[n]->mPageRect.Bottom()));
+                                else if ( mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_RIGHT )
+                                    (*i)->ShowAnchorOnly(Point(mPages[n]->mPageRect.Right(),
+                                                               mPages[n]->mPageRect.Bottom()));
+                            }
+                            OSL_ENSURE(mPages[n]->bScrollbar,"SwPostItMgr::LayoutByPage(): note overlaps, but bScrollbar is not true");
                         }
                     }
                 }
+                else
+                {
+                    for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
+                                                            (*i)->SetPosAndSize();
 
-                if ( bRepair )
-                    CheckForRemovedPostIts();
+                                                    bool bOldScrollbar = mPages[n]->bScrollbar;
+                                                    mPages[n]->bScrollbar = false;
+                                                    bUpdate = (bOldScrollbar != mPages[n]->bScrollbar) || bUpdate;
+                }
+                aVisiblePostItList.clear();
+            }
+            else
+            {
+                bUpdate = true;
+                mPages[n]->bScrollbar = false;
+            }
+        }
+
+        if (!ShowNotes())
+        {       // we do not want to see the notes anymore -> Options-Writer-View-Notes
+            bool bRepair = false;
+            for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i != mvPostItFlds.end() ; ++i)
+            {
+                SwSidebarItem* pItem = (*i);
+                if ( !pItem->UseElement() )
+                {
+                    OSL_FAIL("PostIt is not in doc!");
+                    bRepair = true;
+                    continue;
+                }
+
+                if ((*i)->pPostIt)
+                {
+                    (*i)->pPostIt->HideNote();
+                    if ((*i)->pPostIt->HasChildPathFocus())
+                    {
+                        SetActiveSidebarWin(0);
+                        (*i)->pPostIt->GrabFocusToDocument();
+                    }
+                }
             }
 
-            // notes scrollbar is otherwise not drawn correctly for some cases
-            // scrollbar area is enough
-            if (bUpdate)
-                mpEditWin->Invalidate();
+            if ( bRepair )
+                CheckForRemovedPostIts();
+        }
+
+        // notes scrollbar is otherwise not drawn correctly for some cases
+        // scrollbar area is enough
+        if (bUpdate)
+            mpEditWin->Invalidate();
+
         mbLayouting = false;
     }
 }
