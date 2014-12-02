@@ -105,6 +105,15 @@ void OpenGLSalGraphicsImpl::Init()
         maOffscreenTex.GetHeight() != GetHeight() )
     {
         maOffscreenTex = OpenGLTexture();
+#if defined(WNT)
+        // URGH ... VirtualDevice may have destroyed the underlying resource
+        // our context is associated with - FIXME: can we do better here ?
+        if (mpContext)
+        {
+            mpContext->resetToReInitialize();
+            ReleaseContext();
+        }
+#endif
     }
 }
 
