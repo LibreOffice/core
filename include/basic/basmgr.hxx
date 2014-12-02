@@ -32,35 +32,37 @@ BASIC_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::script::XStarBas
 
 class SotStorage;
 
-#define BASERR_REASON_OPENSTORAGE       0x0001
-#define BASERR_REASON_OPENLIBSTORAGE    0x0002
-#define BASERR_REASON_OPENMGRSTREAM     0x0004
-#define BASERR_REASON_OPENLIBSTREAM     0x0008
-#define BASERR_REASON_LIBNOTFOUND       0x0010
-#define BASERR_REASON_STORAGENOTFOUND   0x0020
-#define BASERR_REASON_BASICLOADERROR    0x0040
-#define BASERR_REASON_NOSTORAGENAME     0x0080
-
-#define BASERR_REASON_STDLIB            0x0100
+enum class BasicErrorReason
+{
+    OPENSTORAGE      = 0x0001,
+    OPENLIBSTORAGE   = 0x0002,
+    OPENMGRSTREAM    = 0x0004,
+    OPENLIBSTREAM    = 0x0008,
+    LIBNOTFOUND      = 0x0010,
+    STORAGENOTFOUND  = 0x0020,
+    BASICLOADERROR   = 0x0040,
+    NOSTORAGENAME    = 0x0080,
+    STDLIB           = 0x0100
+};
 
 class BASIC_DLLPUBLIC BasicError
 {
 private:
     sal_uInt64 nErrorId;
-    sal_uInt16  nReason;
+    BasicErrorReason  nReason;
     OUString  aErrStr;
 
 public:
             BasicError( const BasicError& rErr );
-            BasicError( sal_uInt64 nId, sal_uInt16 nR, const OUString& rErrStr );
+            BasicError( sal_uInt64 nId, BasicErrorReason nR, const OUString& rErrStr );
 
     sal_uInt64 GetErrorId() const                  { return nErrorId; }
-    sal_uInt16  GetReason() const                   { return nReason; }
-    OUString    GetErrorStr()                       { return aErrStr; }
+    BasicErrorReason  GetReason() const            { return nReason; }
+    OUString    GetErrorStr()                      { return aErrStr; }
 
     void    SetErrorId( sal_uInt64 n )             { nErrorId = n; }
-    void    SetReason( sal_uInt16 n )               { nReason = n; }
-    void    SetErrorStr( const OUString& rStr)      { aErrStr = rStr; }
+    void    SetReason( BasicErrorReason n )        { nReason = n; }
+    void    SetErrorStr( const OUString& rStr)     { aErrStr = rStr; }
 };
 
 class BasicLibs;
