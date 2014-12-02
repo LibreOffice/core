@@ -1480,6 +1480,221 @@ void Test::testSortRefUpdate6()
     m_pDoc->DeleteTab(0);
 }
 
+// fdo#86762 check that broadcasters are sorted correctly and empty cell is
+// broadcasted.
+void Test::testSortBroadcaster()
+{
+    SortRefNoUpdateSetter aUpdateSet;
+
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Sort");
+
+    {
+        const char* aData[][7] = {
+            { "1",   0, 0, "=B1", "=$B$1", "=SUM(A1:B1)", "=SUM($A$1:$B$1)" },
+            { "2", "8", 0, "=B2", "=$B$2", "=SUM(A2:B2)", "=SUM($A$2:$B$2)" },
+        };
+
+        ScAddress aPos(0,0,0);
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT(aDataRange.aStart == aPos);
+
+        {
+            // Expected output table content.  0 = empty cell
+            const char* aOutputCheck[][7] = {
+                { "1",   0, 0, "0", "0",  "1",  "1" },
+                { "2", "8", 0, "8", "8", "10", "10" },
+            };
+
+            bool bSuccess = checkOutput<7>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+            CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        }
+
+        // Sort A1:B2.
+        m_pDoc->SetAnonymousDBData(
+                0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 1, 1));
+
+        ScDBDocFunc aFunc(getDocShell());
+
+        // Sort A1:B2 by column A descending.
+        ScSortParam aSortData;
+        aSortData.nCol1 = 0;
+        aSortData.nCol2 = 1;
+        aSortData.nRow1 = 0;
+        aSortData.nRow2 = 1;
+        aSortData.bHasHeader = false;
+        aSortData.bByRow = true;
+        aSortData.maKeyState[0].bDoSort = true;
+        aSortData.maKeyState[0].nField = 0;
+        aSortData.maKeyState[0].bAscending = false;
+        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        CPPUNIT_ASSERT(bSorted);
+
+        {
+            // Expected output table content.  0 = empty cell
+            const char* aOutputCheck[][7] = {
+                { "2", "8", 0, "8", "8", "10", "10" },
+                { "1",   0, 0, "0", "0",  "1",  "1" },
+            };
+
+            bool bSuccess = checkOutput<7>(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+            CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        }
+
+        // Make sure that the formulas in D1:G2 are not adjusted.
+        if (!checkFormula(*m_pDoc, ScAddress(3,0,0), "B1"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(3,1,0), "B2"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(4,0,0), "$B$1"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(4,1,0), "$B$2"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(5,0,0), "SUM(A1:B1)"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(5,1,0), "SUM(A2:B2)"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(6,0,0), "SUM($A$1:$B$1)"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(6,1,0), "SUM($A$2:$B$2)"))
+            CPPUNIT_FAIL("Wrong formula!");
+
+        // Enter new value and check that it is broadcasted. First in empty cell.
+        m_pDoc->SetString(1,1,0, "16");
+        double nVal = m_pDoc->GetValue(3,1,0);
+        ASSERT_DOUBLES_EQUAL( 16.0, nVal);
+        nVal = m_pDoc->GetValue(4,1,0);
+        ASSERT_DOUBLES_EQUAL( 16.0, nVal);
+        nVal = m_pDoc->GetValue(5,1,0);
+        ASSERT_DOUBLES_EQUAL( 17.0, nVal);
+        nVal = m_pDoc->GetValue(6,1,0);
+        ASSERT_DOUBLES_EQUAL( 17.0, nVal);
+
+        // Enter new value and check that it is broadcasted. Now overwriting data.
+        m_pDoc->SetString(1,0,0, "32");
+        nVal = m_pDoc->GetValue(3,0,0);
+        ASSERT_DOUBLES_EQUAL( 32.0, nVal);
+        nVal = m_pDoc->GetValue(4,0,0);
+        ASSERT_DOUBLES_EQUAL( 32.0, nVal);
+        nVal = m_pDoc->GetValue(5,0,0);
+        ASSERT_DOUBLES_EQUAL( 34.0, nVal);
+        nVal = m_pDoc->GetValue(6,0,0);
+        ASSERT_DOUBLES_EQUAL( 34.0, nVal);
+    }
+
+    // The same for sort by column. Start data at A5.
+
+    {
+        const char* aData[][2] = {
+            { "1", "2" },
+            {   0, "8" },
+            { 0, 0 },
+            { "=A6",             "=B6" },
+            { "=$A$6",           "=$B$6" },
+            { "=SUM(A5:A6)",     "=SUM(B5:B6)" },
+            { "=SUM($A$5:$A$6)", "=SUM($B$5:$B$6)" },
+        };
+
+        ScAddress aPos(0,4,0);
+        ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT(aDataRange.aStart == aPos);
+
+        {
+            // Expected output table content.  0 = empty cell
+            const char* aOutputCheck[][2] = {
+                { "1", "2" },
+                {   0, "8" },
+                { 0, 0 },
+                { "0",  "8" },
+                { "0",  "8" },
+                { "1", "10" },
+                { "1", "10" },
+            };
+
+            bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Initial value");
+            CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        }
+
+        // Sort A5:B6.
+        m_pDoc->SetAnonymousDBData(
+                0, new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 4, 1, 5));
+
+        ScDBDocFunc aFunc(getDocShell());
+
+        // Sort A5:B6 by row 5 descending.
+        ScSortParam aSortData;
+        aSortData.nCol1 = 0;
+        aSortData.nCol2 = 1;
+        aSortData.nRow1 = 4;
+        aSortData.nRow2 = 5;
+        aSortData.bHasHeader = false;
+        aSortData.bByRow = false;
+        aSortData.maKeyState[0].bDoSort = true;
+        aSortData.maKeyState[0].nField = 0;
+        aSortData.maKeyState[0].bAscending = false;
+        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        CPPUNIT_ASSERT(bSorted);
+
+        {
+            // Expected output table content.  0 = empty cell
+            const char* aOutputCheck[][2] = {
+                { "2", "1" },
+                { "8",   0 },
+                { 0, 0 },
+                { "8",  "0" },
+                { "8",  "0" },
+                { "10", "1" },
+                { "10", "1" },
+            };
+
+            bool bSuccess = checkOutput<2>(m_pDoc, aDataRange, aOutputCheck, "Sorted without reference update");
+            CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+        }
+
+        // Make sure that the formulas in A8:B11 are not adjusted.
+        if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "A6"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(1,7,0), "B6"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "$A$6"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(1,8,0), "$B$6"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(0,9,0), "SUM(A5:A6)"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(1,9,0), "SUM(B5:B6)"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(0,10,0), "SUM($A$5:$A$6)"))
+            CPPUNIT_FAIL("Wrong formula!");
+        if (!checkFormula(*m_pDoc, ScAddress(1,10,0), "SUM($B$5:$B$6)"))
+            CPPUNIT_FAIL("Wrong formula!");
+
+        // Enter new value and check that it is broadcasted. First in empty cell.
+        m_pDoc->SetString(1,5,0, "16");
+        double nVal = m_pDoc->GetValue(1,7,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 16.0);
+        nVal = m_pDoc->GetValue(1,8,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 16.0);
+        nVal = m_pDoc->GetValue(1,9,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 17.0);
+        nVal = m_pDoc->GetValue(1,10,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 17.0);
+
+        // Enter new value and check that it is broadcasted. Now overwriting data.
+        m_pDoc->SetString(0,5,0, "32");
+        nVal = m_pDoc->GetValue(0,7,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 32.0);
+        nVal = m_pDoc->GetValue(0,8,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 32.0);
+        nVal = m_pDoc->GetValue(0,9,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 34.0);
+        nVal = m_pDoc->GetValue(0,10,0);
+        ASSERT_DOUBLES_EQUAL(nVal, 34.0);
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSortOutOfPlaceResult()
 {
     m_pDoc->InsertTab(0, "Sort");
