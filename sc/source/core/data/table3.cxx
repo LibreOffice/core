@@ -715,6 +715,28 @@ void ScTable::SortReorderByColumn(
     for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
         aCol[nCol].SplitFormulaGroupByRelativeRef(aSortRange);
 
+    // Collect all listeners of cell broadcasters of sorted range.
+    std::vector<SvtListener*> aCellListeners;
+
+    if (!pArray->IsUpdateRefs())
+    {
+        // Collect listeners of cell broadcasters.
+        for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
+            aCol[nCol].CollectListeners(aCellListeners, nRow1, nRow2);
+
+        // Remove any duplicate listener entries.  We must ensure that we
+        // notify each unique listener only once.
+        std::sort(aCellListeners.begin(), aCellListeners.end());
+        aCellListeners.erase(std::unique(aCellListeners.begin(), aCellListeners.end()), aCellListeners.end());
+
+        // Notify the cells' listeners to stop listening.
+        /* TODO: for performance this could be enhanced to stop and later
+         * restart only listening to within the reordered range and keep
+         * listening to everything outside untouched. */
+        StopListeningNotifier aFunc;
+        std::for_each(aCellListeners.begin(), aCellListeners.end(), aFunc);
+    }
+
     // table to keep track of column index to position in the index table.
     std::vector<SCCOLROW> aPosTable(nCount);
     for (size_t i = 0; i < nCount; ++i)
@@ -743,37 +765,37 @@ void ScTable::SortReorderByColumn(
     for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
         aCol[nCol].ResetFormulaCellPositions(nRow1, nRow2, bUpdateRefs);
 
-    // Set up column reorder map (for later broadcasting of reference updates).
-    sc::ColRowReorderMapType aColMap;
-    const std::vector<SCCOLROW>& rOldIndices = pArray->GetOrderIndices();
-    for (size_t i = 0, n = rOldIndices.size(); i < n; ++i)
-    {
-        SCCOL nNew = i + nStart;
-        SCCOL nOld = rOldIndices[i];
-        aColMap.insert(sc::ColRowReorderMapType::value_type(nOld, nNew));
-    }
-
-    // Collect all listeners within sorted range ahead of time.
-    std::vector<SvtListener*> aListeners;
-
-    // Get all area listeners that listen on one column within the range and
-    // end their listening.
-    ScRange aMoveRange( nStart, nRow1, nTab, nLast, nRow2, nTab);
-    std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
-            aMoveRange, sc::OneColumnInsideArea);
-    {
-        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-        for (; it != itEnd; ++it)
-        {
-            pDocument->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
-            aListeners.push_back( it->mpListener);
-        }
-    }
-
     if (pArray->IsUpdateRefs())
     {
+        // Set up column reorder map (for later broadcasting of reference updates).
+        sc::ColRowReorderMapType aColMap;
+        const std::vector<SCCOLROW>& rOldIndices = pArray->GetOrderIndices();
+        for (size_t i = 0, n = rOldIndices.size(); i < n; ++i)
+        {
+            SCCOL nNew = i + nStart;
+            SCCOL nOld = rOldIndices[i];
+            aColMap.insert(sc::ColRowReorderMapType::value_type(nOld, nNew));
+        }
+
+        // Collect all listeners within sorted range ahead of time.
+        std::vector<SvtListener*> aListeners;
+
         for (SCCOL nCol = nStart; nCol <= nLast; ++nCol)
             aCol[nCol].CollectListeners(aListeners, nRow1, nRow2);
+
+        // Get all area listeners that listen on one column within the range
+        // and end their listening.
+        ScRange aMoveRange( nStart, nRow1, nTab, nLast, nRow2, nTab);
+        std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
+                aMoveRange, sc::OneColumnInsideArea);
+        {
+            std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+            for (; it != itEnd; ++it)
+            {
+                pDocument->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
+                aListeners.push_back( it->mpListener);
+            }
+        }
 
         // Remove any duplicate listener entries and notify all listeners
         // afterward.  We must ensure that we notify each unique listener only
@@ -782,22 +804,28 @@ void ScTable::SortReorderByColumn(
         aListeners.erase(std::unique(aListeners.begin(), aListeners.end()), aListeners.end());
         ColReorderNotifier aFunc(aColMap, nTab, nRow1, nRow2);
         std::for_each(aListeners.begin(), aListeners.end(), aFunc);
-    }
 
-    // Re-start area listeners on the reordered columns.
-    {
-        std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
-        for (; it != itEnd; ++it)
+        // Re-start area listeners on the reordered columns.
         {
-            ScRange aNewRange = it->maArea;
-            sc::ColRowReorderMapType::const_iterator itCol = aColMap.find( aNewRange.aStart.Col());
-            if (itCol != aColMap.end())
+            std::vector<sc::AreaListener>::iterator it = aAreaListeners.begin(), itEnd = aAreaListeners.end();
+            for (; it != itEnd; ++it)
             {
-                aNewRange.aStart.SetCol( itCol->second);
-                aNewRange.aEnd.SetCol( itCol->second);
+                ScRange aNewRange = it->maArea;
+                sc::ColRowReorderMapType::const_iterator itCol = aColMap.find( aNewRange.aStart.Col());
+                if (itCol != aColMap.end())
+                {
+                    aNewRange.aStart.SetCol( itCol->second);
+                    aNewRange.aEnd.SetCol( itCol->second);
+                }
+                pDocument->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
             }
-            pDocument->StartListeningArea(aNewRange, it->mbGroupListening, it->mpListener);
         }
+    }
+    else    // !(pArray->IsUpdateRefs())
+    {
+        // Notify the cells' listeners to (re-)start listening.
+        StartListeningNotifier aFunc;
+        std::for_each(aCellListeners.begin(), aCellListeners.end(), aFunc);
     }
 
     // Re-join formulas at row boundaries now that all the references have
