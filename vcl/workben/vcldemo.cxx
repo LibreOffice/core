@@ -1275,7 +1275,7 @@ public:
     virtual ~DemoWidgets()
     {
     }
-    virtual void Paint(const Rectangle&)
+    virtual void Paint(const Rectangle&) SAL_OVERRIDE
     {
         Rectangle aWholeSize(Point(0, 0),GetOutputSizePixel());
         vcl::Region aClip(aWholeSize);
