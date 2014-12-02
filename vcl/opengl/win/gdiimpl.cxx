@@ -38,16 +38,9 @@ bool WinOpenGLSalGraphicsImpl::UseContext( OpenGLContext* pContext )
 {
     if( !pContext || !pContext->isInitialized() )
         return false;
+    if( IsOffscreen() )
+        return true;
     return ( pContext->getOpenGLWindow().hWnd == mrParent.mhWnd );
-}
-
-OpenGLContext* WinOpenGLSalGraphicsImpl::CreatePixmapContext()
-{
-    OpenGLContext* pContext = new OpenGLContext();
-    pContext->requestVirtualDevice();
-    pContext->requestSingleBufferedRendering();
-    pContext->init( mrParent.mhLocalDC, mrParent.mhWnd );
-    return pContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -110,11 +110,11 @@ protected:
     bool AcquireContext();
     bool ReleaseContext();
 
+    // retrieve the default context for offscreen rendering
+    virtual OpenGLContext* GetDefaultContext();
+
     // create a new context for window rendering
     virtual OpenGLContext* CreateWinContext() = 0;
-
-    // create a new context for offscreen rendering
-    virtual OpenGLContext* CreatePixmapContext() = 0;
 
     // check whether the given context can be used by this instance
     virtual bool UseContext( OpenGLContext* pContext ) = 0;

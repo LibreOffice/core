@@ -238,8 +238,6 @@ public:
         return mbInitialized;
     }
 
-    void resetToReInitialize();
-
     bool supportMultiSampling() const;
 
     static SystemWindowData generateWinData(vcl::Window* pParent, bool bRequestLegacyContext);
