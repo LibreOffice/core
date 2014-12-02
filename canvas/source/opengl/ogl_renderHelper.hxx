@@ -22,6 +22,8 @@ namespace oglcanvas
         void renderVertexConstColor(const std::vector<glm::vec2>& rVertices, glm::vec4 color, GLenum mode) const;
         void renderVertexUVTex(const std::vector<glm::vec2>& rVertices, const std::vector<glm::vec2>& rUVcoords, glm::vec4 color, GLenum mode) const;
         void renderVertexTex(const std::vector<glm::vec2>& rVertices, GLfloat, GLfloat, glm::vec4 color, GLenum mode) const;
+        void renderTextureTransform(const std::vector<glm::vec2>& rVertices, GLfloat fWidth,
+     GLfloat fHeight, glm::vec4 color, GLenum mode, glm::mat4 transform) const;
 
         RenderHelper();
 
@@ -56,6 +58,14 @@ namespace oglcanvas
         GLuint                                            m_texManProgID;
         GLuint                                            m_texProgID;
         GLuint                                            m_texMVPUnf;
+
+        GLuint                                            m_texTransProgID;
+        GLuint                                            m_transPosAttrb;
+        GLuint                                            m_transCordUnf;
+        GLuint                                            m_transMVPUnf;
+        GLuint                                            m_transTexUnf;
+        GLuint                                            m_transColorUnf;
+        GLuint                                            m_transTexTransform;
         //dimension
         int                                               m_iWidth;
         int                                               m_iHeight;

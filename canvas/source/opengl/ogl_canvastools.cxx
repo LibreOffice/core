@@ -28,7 +28,7 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    /// triangulates polygon before
+    // triangulates polygon before
     void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper,
         glm::vec4 color, const bool hasTexture)
     {
@@ -54,6 +54,30 @@ namespace oglcanvas
                 renderHelper->renderVertexTex( vertices, nWidth, nHeight,  color, GL_TRIANGLES);
             else
                 renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
+        }
+    }
+
+    void renderTransformComplexPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper,
+        glm::vec4 color, glm::mat4 transform)
+    {
+        ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
+        if( aPolyPoly.areControlPointsUsed() )
+            aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
+        const ::basegfx::B2DRange& rBounds(aPolyPoly.getB2DRange());
+        const double nWidth=rBounds.getWidth();
+        const double nHeight=rBounds.getHeight();
+        const ::basegfx::B2DPolygon& rTriangulatedPolygon(
+            ::basegfx::triangulator::triangulate(aPolyPoly));
+        if(rTriangulatedPolygon.count()>0)
+        {
+            std::vector<glm::vec2> vertices;
+            vertices.reserve(rTriangulatedPolygon.count());
+            for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
+            {
+                const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
+                vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
+            }
+            renderHelper->renderTextureTransform( vertices, nWidth, nHeight,  color, GL_TRIANGLES, transform);
         }
     }
 

@@ -22,6 +22,7 @@ $(eval $(call gb_Package_add_files,canvas_opengl_shader,$(LIBO_ETC_FOLDER)/openg
         textFragmentShader.glsl \
         textManipulatingVertexShader.glsl \
         texVertexShader.glsl \
+		transformationFragmentShader.glsl \
 ))
 
 # vim: set noet sw=4 ts=4:
