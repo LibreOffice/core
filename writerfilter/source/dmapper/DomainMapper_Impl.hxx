@@ -683,8 +683,7 @@ public:
 
     void appendTableManager( )
     {
-        boost::shared_ptr< DomainMapperTableManager > pMngr(
-                new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML || m_eDocumentType == DOCUMENT_RTF ));
+        boost::shared_ptr<DomainMapperTableManager> pMngr(new DomainMapperTableManager());
         m_aTableManagers.push( pMngr );
     }
 

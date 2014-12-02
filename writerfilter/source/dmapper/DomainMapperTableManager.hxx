@@ -46,7 +46,6 @@ class DomainMapperTableManager : public TableManager
     sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
-    bool            m_bOOXML;
     /// Are we in a shape (text append stack is not empty) or in the body document?
     bool m_bIsInShape;
     OUString m_sTableStyleName;
@@ -80,7 +79,7 @@ class DomainMapperTableManager : public TableManager
 
 public:
 
-    DomainMapperTableManager(bool bOOXML);
+    DomainMapperTableManager();
     virtual ~DomainMapperTableManager();
 
     // use this method to avoid adding the properties for the table

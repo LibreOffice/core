@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 
-DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
+DomainMapperTableManager::DomainMapperTableManager() :
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
@@ -52,7 +52,6 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
-    m_bOOXML( bOOXML ),
     m_bIsInShape(false),
     m_aTmpPosition(),
     m_aTmpTableProperties(),
@@ -62,7 +61,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_bTableSizeTypeInserted(false),
     m_nLayoutType(0),
     m_nMaxFixedWidth(0),
-    m_pTablePropsHandler( new TablePropertiesHandler( bOOXML ) )
+    m_pTablePropsHandler( new TablePropertiesHandler( true ) )
 {
     m_pTablePropsHandler->SetTableManager( this );
 
@@ -246,7 +245,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler(m_bOOXML) );
+                    TDefTableHandlerPtr pTDefTableHandler( new TDefTableHandler(true) );
                     pProperties->resolve( *pTDefTableHandler );
 
                     TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
@@ -276,7 +275,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
                 {
-                    BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
+                    BorderHandlerPtr pBorderHandler(new BorderHandler(true));
                     pProperties->resolve(*pBorderHandler);
                     TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
                     pCellPropMap->InsertProps(pBorderHandler->getProperties());
