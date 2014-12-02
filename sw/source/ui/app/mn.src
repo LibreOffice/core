@@ -765,9 +765,10 @@ Menu MN_TAB_POPUPMENU
 {
     ItemList =
     {
-        MN_RESET
+        MENU_PASTE_SPECIAL
         _NUMBERING_RELATED_MENU
         SEPARATOR ;
+        MN_RESET
         MN_TEXT_ATTR
         SEPARATOR ;
         MenuItem
@@ -1082,8 +1083,9 @@ Menu MN_DRWTXT_POPUPMENU
 {
     ItemList =
     {
-        MN_RESET
+        MENU_PASTE_SPECIAL
         SEPARATOR ;
+        MN_RESET
         MN_TEXT_ATTR
         SEPARATOR ;
         ITEM_TRANSLITERATE_MENU
