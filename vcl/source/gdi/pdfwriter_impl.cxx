@@ -93,6 +93,9 @@ using namespace vcl;
 #endif
 
 #if !defined(ANDROID) && !defined(IOS)
+// Is this length truly the maximum possible, or just a number that
+// seemed large enough when the author tested this (with some type of
+// certificates)? I suspect the latter.
 #define MAX_SIGNATURE_CONTENT_LENGTH 0x4000
 #endif
 
@@ -1783,6 +1786,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     m_aDigest = rtl_digest_createMD5();
 
     /* the size of the Codec default maximum */
+    /* is this 0x4000 required to be the same as MAX_SIGNATURE_CONTENT_LENGTH or just coincidentally the same at the moment? */
     if (!checkEncryptionBufferSize(0x4000))
     {
         m_aFile.close();
