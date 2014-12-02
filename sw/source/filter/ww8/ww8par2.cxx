@@ -4229,35 +4229,30 @@ void WW8RStyle::ImportOldFormatStyles()
             continue;
 
         SwWW8StyInf &rSI = pIo->vColl[stc];
+        OUString sName;
+
         if (nCount != 0xFF)    // undefined style
         {
-            OUString sName;
-            if (nCount == 0)   // inbuilt style
-            {
-                ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
-                if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
-                    sName = OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US);
-                else
-                    sName = "Unknown";
-            }
-            else               // user style
+            if (nCount != 0)   // user style
             {
                 OString aTmp = read_uInt8s_ToOString(rSt, nCount);
                 nByteCount += aTmp.getLength();
                 sName = OStringToOUString(aTmp, eStructChrSet);
             }
-            rSI.SetOrgWWIdent(sName, stc);
             rSI.bImported = true;
         }
-        else
+
+        if (sName.isEmpty())
         {
             ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
             if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
-            {
-                OUString sName = OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US);
-                rSI.SetOrgWWIdent(sName, stc);
-            }
+                sName = OUString(pStr, strlen(pStr), RTL_TEXTENCODING_ASCII_US);
         }
+
+        if (sName.isEmpty())
+            sName = OUString("Unknown Style: ") + OUString::number(stc);
+
+        rSI.SetOrgWWIdent(sName, stc);
         stcp++;
     }
 
