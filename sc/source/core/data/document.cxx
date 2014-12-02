@@ -2846,7 +2846,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
     // Listener aufbauen nachdem alles inserted wurde
     StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
 
-
     {
         ScBulkBroadcast aBulkBroadcast( GetBASM());
 
