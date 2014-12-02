@@ -30,9 +30,14 @@ namespace sw
     class Ring_node_traits;
     template <class T> class RingIterator;
 
+    /**
+     * An intrusive container class double linking the contained nodes
+     * @example sw/qa/core/uwriter.cxx
+     */
     template <class T>
     class Ring
     {
+        /** internal implementation class -- not for external use */
         struct Ring_node_traits
         {
             typedef T node;
@@ -46,33 +51,79 @@ namespace sw
         friend struct Ring_node_traits;
         typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
         T* pNext;
-        T* pPrev;    ///< In order to speed up inserting and deleting.
+        T* pPrev;
 
     protected:
+        /**
+         * Creates a new item in a ring container all by itself.
+         * Note: Ring instances can newer be outside a container. At most, they
+         * are alone in one.
+         */
         Ring()
             { algo::init_header(static_cast< T* >(this)); }
-        Ring( T* );
+        /**
+         * Creates a new item and add it to an existing ring container.
+         * Note: the newly created item will be inserted just before item pRing.
+         * @param pRing ring container to add the created item to
+         */
+        Ring( T* pRing );
     public:
         typedef RingIterator<T> iterator;
         typedef RingIterator<const T> const_iterator;
         virtual ~Ring()
             { algo::unlink(static_cast< T* >(this)); };
+        /**
+         * Removes this item from its current ring container and adds it to
+         * another ring container. If the item was not alone in the original
+         * ring container, the other items in the ring will stay in the old
+         * ring container.
+         * Note: the newly created item will be inserted just before item pDestRing.
+         * @param pDestRing the container to add this item to
+         */
         void MoveTo( T* pDestRing );
+        /**
+         * Merges two ring containers. All item from both ring containers will
+         * be in the same ring container in the end.
+         * Note: The items of this ring container will be inserted just before
+         * item pDestRing
+         * @param pDestRing the container to merge this container with
+         */
         void MoveRingTo( T* pDestRing );
 
-        T* GetNext() const       { return pNext; }
-        T* GetPrev() const       { return pPrev; }
-        // unfortunately we cant name these STL-conforming, as some derived classes
-        // also derive from other STL containers (which is bad anyway, but ...)
+        /** @return the next item in the ring container */
+        T* GetNext() const
+            { return pNext; }
+        /** @return the previous item in the ring container */
+        T* GetPrev() const
+            { return pPrev; }
+        /**
+         * iterator access
+         * @code
+         * for(Ring<SwPaM>::iterator ppRing = pPaM->beginRing(); ppRing != pPaM->endRing(); ++ppRing)
+         *     do_stuff(*ppRing);
+         * @endcode
+         * @TODO: unfortunately we cant name these STL-conforming, as some derived classes
+         * also derive from other STL containers. This should be fixed though.
+         * That should allow this to be used directly with C++11s for( : )
+         * iteration statement.
+         */
         iterator beginRing();
         iterator endRing();
         const_iterator beginRing() const;
         const_iterator endRing() const;
+        /**
+         * simplified iteration with BOOST_FOREACH (example for Ring<SwPaM>):
+         * @code
+         * BOOST_FOREACH(SwPaM& rPaM, pPaM->rangeRing())
+         *     do_stuff(rPaM);
+         * @endcode
+         */
         std::pair<iterator, iterator> rangeRing()
             { return std::make_pair(beginRing(), endRing()); }
         std::pair<const_iterator, const_iterator> rangeRing() const
             { return std::make_pair(beginRing(), endRing()); }
 
+        /** @return the number of elements in the container */
         sal_uInt32 numberOf() const
             { return algo::count(static_cast< const T* >(this)); }
     };
