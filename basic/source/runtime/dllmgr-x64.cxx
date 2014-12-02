@@ -33,6 +33,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
 #include <osl/thread.h>
+#include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
