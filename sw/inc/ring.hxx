@@ -21,6 +21,7 @@
 
 #include <swdllapi.h>
 #include <swtypes.hxx>
+#include <utility>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
@@ -67,6 +68,10 @@ namespace sw
         iterator endRing();
         const_iterator beginRing() const;
         const_iterator endRing() const;
+        std::pair<iterator, iterator> rangeRing()
+            { return std::make_pair(beginRing(), endRing()); }
+        std::pair<const_iterator, const_iterator> rangeRing() const
+            { return std::make_pair(beginRing(), endRing()); }
 
         sal_uInt32 numberOf() const
             { return algo::count(static_cast< const T* >(this)); }
