@@ -532,7 +532,7 @@ public:
     void        ResetChanged( const ScRange& rRange );
 
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
-    void        SetDirty( const ScRange& );
+    void        SetDirty( const ScRange&, bool bIncludeEmptyCells = false );
     void        SetDirtyAfterLoad();
     void        SetDirtyVar();
     void        SetTableOpDirty( const ScRange& );

@@ -1684,13 +1684,13 @@ void ScTable::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
         aCol[i].SetAllFormulasDirty(rCxt);
 }
 
-void ScTable::SetDirty( const ScRange& rRange )
+void ScTable::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
 {
     bool bOldAutoCalc = pDocument->GetAutoCalc();
     pDocument->SetAutoCalc( false );    // Mehrfachberechnungen vermeiden
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
-        aCol[i].SetDirty(rRange.aStart.Row(), rRange.aEnd.Row());
+        aCol[i].SetDirty(rRange.aStart.Row(), rRange.aEnd.Row(), true, bIncludeEmptyCells);
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
