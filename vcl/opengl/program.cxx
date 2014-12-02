@@ -17,7 +17,6 @@
 OpenGLProgram::OpenGLProgram() :
     mnId( 0 ),
     mnEnabledAttribs( 0 ),
-    mnAttribIndex( 0 ),
     mnPositionAttrib( SAL_MAX_UINT32 ),
     mnTexCoordAttrib( SAL_MAX_UINT32 ),
     mnAlphaCoordAttrib( SAL_MAX_UINT32 ),
