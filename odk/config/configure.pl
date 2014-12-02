@@ -114,7 +114,6 @@ if ( $main::operatingSystem =~ m/darwin/ )
         }
 
     }
-    $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents";
 } else
 {
     $main::OFFICE_HOME_SUGGESTION = searchoffice();
@@ -184,8 +183,6 @@ if ( $main::operatingSystem =~ m/darwin/ )
             }
         }
     }
-
-    $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME";
 }
 
 # prepare GNU make path
@@ -768,7 +765,6 @@ sub prepareScriptFile()
         $_ =~ s#\@OO_SDK_NAME\@#$main::OO_SDK_NAME#go;
         $_ =~ s#\@OO_SDK_HOME\@#$main::OO_SDK_HOME#go;
         $_ =~ s#\@OFFICE_HOME\@#$main::OFFICE_HOME#go;
-        $_ =~ s#\@OO_SDK_URE_HOME\@#$main::OO_SDK_URE_HOME#go;
         $_ =~ s#\@OO_SDK_MAKE_HOME\@#$main::OO_SDK_MAKE_HOME#go;
         $_ =~ s#\@OO_SDK_ZIP_HOME\@#$main::OO_SDK_ZIP_HOME#go;
         $_ =~ s#\@OO_SDK_CAT_HOME\@#$main::OO_SDK_CAT_HOME#go;

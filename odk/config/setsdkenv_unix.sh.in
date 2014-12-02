@@ -32,11 +32,7 @@ OO_SDK_HOME='@OO_SDK_HOME@'
 # Office installation directory.
 # Example: OFFICE_HOME=/opt/libreoffice
 OFFICE_HOME='@OFFICE_HOME@'
-
-# URE installation directory.
-# Example: OO_SDK_URE_HOME=/opt/libreoffice/ure
-OO_SDK_URE_HOME='@OO_SDK_URE_HOME@'
-export OO_SDK_URE_HOME
+export OFFICE_HOME
 
 # Directory of the make command.
 # Example: OO_SDK_MAKE_HOME=/usr/bin
@@ -107,9 +103,9 @@ export UNO_PATH
 
 case ${sdk_platform} in
     darwin*)
-        OO_SDK_URE_BIN_DIR=${OO_SDK_URE_HOME}/MacOS
-        OO_SDK_URE_LIB_DIR=${OO_SDK_URE_HOME}/Frameworks
-        OO_SDK_URE_JAVA_DIR=${OO_SDK_URE_HOME}/Resources/java
+        OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
+        OO_SDK_URE_LIB_DIR=${OFFICE_HOME}/Contents/Frameworks
+        OO_SDK_URE_JAVA_DIR=${OFFICE_HOME}/${sdk_lo_java_dir}
         ;;
     *)
         OO_SDK_URE_BIN_DIR=${OFFICE_PROGRAM_PATH}
@@ -294,7 +290,6 @@ echo " * SDK environment is prepared for ${platform}"
 echo " *"
 echo " * SDK = $OO_SDK_HOME"
 echo " * Office = $OFFICE_HOME"
-echo " * URE = $OO_SDK_URE_HOME"
 echo " * Make = $OO_SDK_MAKE_HOME"
 echo " * Zip = $OO_SDK_ZIP_HOME"
 echo " * cat = $OO_SDK_CAT_HOME"
