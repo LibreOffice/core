@@ -1756,7 +1756,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, true ));
                 rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
-        } while( pInsRing != ( pTmp = static_cast<SwPaM*>(pTmp->GetNext()) ));
+        } while( pInsRing != ( pTmp = pTmp->GetNext()) );
     }
 }
 
