@@ -3236,7 +3236,7 @@ void SwCrsrShell::ClearUpCrsrs()
     // start of the ring
     SwPaM * pStartCrsr = GetCrsr();
     // start loop with second entry of the ring
-    SwPaM * pCrsr = static_cast<SwPaM *>(pStartCrsr->GetNext());
+    SwPaM * pCrsr = pStartCrsr->GetNext();
     SwPaM * pTmpCrsr;
     bool bChanged = false;
 
@@ -3244,7 +3244,7 @@ void SwCrsrShell::ClearUpCrsrs()
     // it is invalid.
     while (pCrsr != pStartCrsr)
     {
-        pTmpCrsr = static_cast<SwPaM *>(pCrsr->GetNext());
+        pTmpCrsr = pCrsr->GetNext();
         if ( ! lcl_CrsrOk(*pCrsr))
         {
             delete pCrsr;
