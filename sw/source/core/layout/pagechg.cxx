@@ -1711,23 +1711,20 @@ void SwRootFrm::UnoRemoveAllActions()
 
 void SwRootFrm::UnoRestoreAllActions()
 {
-    SwViewShell *pSh = GetCurrShell();
-    if ( pSh )
-        do
+    if ( GetCurrShell() )
+        for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
         {
-            sal_uInt16 nActions = pSh->GetRestoreActions();
+            sal_uInt16 nActions = rSh.GetRestoreActions();
             while( nActions-- )
             {
-                if ( pSh->ISA( SwCrsrShell ) )
-                    static_cast<SwCrsrShell*>(pSh)->StartAction();
+                if ( rSh.ISA( SwCrsrShell ) )
+                    static_cast<SwCrsrShell*>(&rSh)->StartAction();
                 else
-                    pSh->StartAction();
+                    rSh.StartAction();
             }
-            pSh->SetRestoreActions(0);
-            pSh->LockView(false);
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-        } while ( pSh != GetCurrShell() );
+            rSh.SetRestoreActions(0);
+            rSh.LockView(false);
+        }
 }
 
 // Helper functions for SwRootFrm::CheckViewLayout
