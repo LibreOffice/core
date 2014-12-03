@@ -55,16 +55,16 @@ TYPEINIT1(SwFEShell,SwEditShell)
 
 void SwFEShell::EndAllActionAndCall()
 {
-    SwViewShell *pTmp = this;
-    do {
-        if( pTmp->IsA( TYPE(SwCrsrShell) ) )
+    for(SwViewShell& rCurrentShell : GetRingContainer())
+    {
+        if( rCurrentShell.IsA( TYPE(SwCrsrShell) ) )
         {
-            static_cast<SwFEShell*>(pTmp)->EndAction();
-            static_cast<SwFEShell*>(pTmp)->CallChgLnk();
+            static_cast<SwFEShell*>(&rCurrentShell)->EndAction();
+            static_cast<SwFEShell*>(&rCurrentShell)->CallChgLnk();
         }
         else
-            pTmp->EndAction();
-    } while( this != ( pTmp = static_cast<SwViewShell*>(pTmp->GetNext()) ));
+            rCurrentShell.EndAction();
+    }
 }
 
 // Determine the Cntnt's nearest to the point
