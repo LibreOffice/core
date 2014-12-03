@@ -1065,7 +1065,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         }
         ScRange aDirtyRange( aNewParam.nCol1, aNewParam.nRow1, nTab,
             aNewParam.nCol2, aNewParam.nRow2, nTab );
-        rDoc.SetDirty( aDirtyRange );
+        rDoc.SetDirty( aDirtyRange, true );
 
         if (bRecord)
         {

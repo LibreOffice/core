@@ -126,7 +126,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
             while ( !bDoneIteration && ( nIter++ < nMaxIter ) )
             {
                 *pVCell = fX;
-                SetDirty( aVRange );
+                SetDirty( aVRange, false );
                 pFormula->Interpret();
                 bError = ( pFormula->GetErrCode() != 0 );
                 fF = pFormula->GetValue() - fTargetVal;
@@ -160,7 +160,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                                 fHorX = fX - fabs( fF ) * fHorTangent;
 
                             *pVCell = fHorX;
-                            SetDirty( aVRange );
+                            SetDirty( aVRange, false );
                             pFormula->Interpret();
                             bHorMoveError = ( pFormula->GetErrCode() != 0 );
                             if ( bHorMoveError )
@@ -224,7 +224,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
             if ( bDoneIteration )
             {
                 *pVCell = nX;
-                SetDirty( aVRange );
+                SetDirty( aVRange, false );
                 pFormula->Interpret();
                 if ( fabs( pFormula->GetValue() - fTargetVal ) > fabs( fF ) )
                     nX = fBestX;
@@ -235,7 +235,7 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
                 nX = fBestX;
             }
             *pVCell = fSaveVal;
-            SetDirty( aVRange );
+            SetDirty( aVRange, false );
             pFormula->Interpret();
             if ( !bDoneIteration )
             {

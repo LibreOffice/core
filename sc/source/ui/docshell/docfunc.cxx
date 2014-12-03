@@ -4148,7 +4148,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     if ( aTester.IsEditable() )
     {
         WaitObject aWait( rDocShell.GetActiveDialogParent() );
-        rDoc.SetDirty( rRange );
+        rDoc.SetDirty( rRange, false );
         if ( bRecord )
         {
             //! auch bei Undo selektierte Tabellen beruecksichtigen
@@ -4717,7 +4717,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
         if (bNeedContents || rOption.mbCenter)
         {
             ScRange aRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab);
-            rDoc.SetDirty(aRange);
+            rDoc.SetDirty(aRange, true);
         }
 
         bNeedContentsUndo |= bNeedContents;
