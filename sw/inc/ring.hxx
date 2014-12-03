@@ -27,9 +27,7 @@
 
 namespace sw
 {
-    class Ring_node_traits;
-    template <class T> class RingIterator;
-
+    template <class T> class RingContainer;
     /**
      * An intrusive container class double linking the contained nodes
      * @example sw/qa/core/uwriter.cxx
@@ -68,8 +66,8 @@ namespace sw
          */
         Ring( T* pRing );
     public:
-        typedef RingIterator<T> iterator;
-        typedef RingIterator<const T> const_iterator;
+        typedef RingContainer<T> ring_container;
+        typedef RingContainer<const T> const_ring_container;
         virtual ~Ring()
             { algo::unlink(static_cast< T* >(this)); };
         /**
@@ -96,36 +94,13 @@ namespace sw
         /** @return the previous item in the ring container */
         T* GetPrev() const
             { return pPrev; }
-        /**
-         * iterator access
-         * @code
-         * for(Ring<SwPaM>::iterator ppRing = pPaM->beginRing(); ppRing != pPaM->endRing(); ++ppRing)
-         *     do_stuff(*ppRing);
-         * @endcode
-         * @TODO: unfortunately we cant name these STL-conforming, as some derived classes
-         * also derive from other STL containers. This should be fixed though.
-         * That should allow this to be used directly with C++11s for( : )
-         * iteration statement.
-         */
-        iterator beginRing();
-        iterator endRing();
-        const_iterator beginRing() const;
-        const_iterator endRing() const;
-        /**
-         * simplified iteration with BOOST_FOREACH (example for Ring<SwPaM>):
-         * @code
-         * BOOST_FOREACH(SwPaM& rPaM, pPaM->rangeRing())
-         *     do_stuff(rPaM);
-         * @endcode
-         */
-        std::pair<iterator, iterator> rangeRing()
-            { return std::make_pair(beginRing(), endRing()); }
-        std::pair<const_iterator, const_iterator> rangeRing() const
-            { return std::make_pair(beginRing(), endRing()); }
-
         /** @return the number of elements in the container */
         size_t size() const
             { return algo::count(static_cast< const T* >(this)); }
+        /** @return a stl-like container with begin()/end() for iteration */
+        ring_container GetRingContainer();
+        /** @return a stl-like container with begin()/end() for const iteration */
+        const_ring_container GetRingContainer() const;
     };
 
     template <class T>
@@ -161,8 +136,37 @@ namespace sw
         std::swap(*(&pPrev), *(&pDestRing->pPrev));
     }
 
+    template <class T> class RingIterator;
     template <class T>
-    class RingIterator : public boost::iterator_facade<
+    class RingContainer SAL_FINAL
+    {
+        T* m_pStart;
+
+    public:
+        RingContainer( T* pRing ) : m_pStart(pRing) {};
+        typedef RingIterator<T> iterator;
+        typedef RingIterator<const T> const_iterator;
+        /**
+         * iterator access
+         * @code
+         * for(Ring<SwPaM>::iterator ppRing = pPaM->beginRing(); ppRing != pPaM->endRing(); ++ppRing)
+         *     do_stuff(*ppRing);
+         * @endcode
+         * @TODO: unfortunately we cant name these STL-conforming, as some derived classes
+         * also derive from other STL containers. This should be fixed though.
+         * That should allow this to be used directly with C++11s for( : )
+         * iteration statement.
+         */
+        iterator begin();
+        iterator end();
+        const_iterator begin() const;
+        const_iterator end() const;
+        ///** @return the number of elements in the container */
+        //size_t size() const
+        //    { return algo::count(static_cast< const T* >(this)); }
+    };
+    template <class T>
+    class RingIterator SAL_FINAL : public boost::iterator_facade<
           RingIterator<T>
         , T
         , boost::forward_traversal_tag
@@ -193,20 +197,28 @@ namespace sw
     };
 
     template <class T>
-    inline typename Ring<T>::iterator Ring<T>::beginRing()
-        { return Ring<T>::iterator(static_cast< T* >(this)); };
+    inline typename Ring<T>::ring_container Ring<T>::GetRingContainer()
+        { return Ring<T>::ring_container(static_cast< T* >(this)); };
 
     template <class T>
-    inline typename Ring<T>::iterator Ring<T>::endRing()
-        { return Ring<T>::iterator(static_cast< T* >(this), false); };
+    inline typename Ring<T>::const_ring_container Ring<T>::GetRingContainer() const
+        { return Ring<T>::const_ring_container(static_cast< const T* >(this)); };
 
     template <class T>
-    inline typename Ring<T>::const_iterator Ring<T>::beginRing() const
-        { return Ring<T>::const_iterator(static_cast< const T* >(this)); };
+    inline typename RingContainer<T>::iterator RingContainer<T>::begin()
+        { return RingContainer<T>::iterator(m_pStart); };
 
     template <class T>
-    inline typename Ring<T>::const_iterator Ring<T>::endRing() const
-        { return Ring<T>::const_iterator(static_cast< const T* >(this), false); };
+    inline typename RingContainer<T>::iterator RingContainer<T>::end()
+        { return RingContainer<T>::iterator(m_pStart, false); };
+
+    template <class T>
+    inline typename RingContainer<T>::const_iterator RingContainer<T>::begin() const
+        { return RingContainer<T>::const_iterator(m_pStart); };
+
+    template <class T>
+    inline typename RingContainer<T>::const_iterator RingContainer<T>::end() const
+        { return RingContainer<T>::const_iterator(m_pStart, false); };
 }
 #endif
 

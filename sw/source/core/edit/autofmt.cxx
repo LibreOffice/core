@@ -2538,7 +2538,7 @@ void SwEditShell::AutoFormat( const SvxSwAutoFmtFlags* pAFlags )
     // There are more than one or a selection is open
     if( pCrsr->GetNext() != pCrsr || pCrsr->HasMark() )
     {
-        BOOST_FOREACH(SwPaM& rPaM, GetCrsr()->rangeRing())
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
         {
             if( rPaM.HasMark() )
             {

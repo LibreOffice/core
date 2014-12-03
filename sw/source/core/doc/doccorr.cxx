@@ -99,7 +99,7 @@ void PaMCorrAbs( const SwPaM& rRange,
 
     if( pShell )
     {
-        BOOST_FOREACH(const SwViewShell& rShell, pShell->rangeRing())
+        for(const SwViewShell& rShell : pShell->GetRingContainer())
         {
             if(!rShell.IsA( TYPE( SwCrsrShell )))
                 continue;
@@ -249,7 +249,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     SwCrsrShell const* pShell = pDoc->GetEditShell();
     if( pShell )
     {
-        BOOST_FOREACH(const SwViewShell& rShell, pShell->rangeRing())
+        for(const SwViewShell& rShell : pShell->GetRingContainer())
         {
             if(!rShell.IsA( TYPE( SwCrsrShell )))
                 continue;
@@ -262,7 +262,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
                     ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != pCrsrShell->GetStkCrsr()) );
 
             SwPaM* pStartPaM = pCrsrShell->_GetCrsr();
-            BOOST_FOREACH(SwPaM& rPaM, pStartPaM->rangeRing())
+            for(SwPaM& rPaM : pStartPaM->GetRingContainer())
             {
                 lcl_PaMCorrRel1( &rPaM, pOldNode, aNewPos, nCntIdx);
             }
