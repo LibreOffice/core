@@ -914,7 +914,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 if( bRet )
                 {
                     pPDFExtOutDevData->PlayGlobalActions( *pPDFWriter );
-                    pPDFWriter->Emit();
+                    bRet = pPDFWriter->Emit();
                     aErrors = pPDFWriter->GetErrors();
                 }
                 pOut->SetExtOutDevData( NULL );
