@@ -934,7 +934,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
                 }
             }
 
-            while( _pStartCrsr && ( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr) );
+            while( _pStartCrsr && ( (_pStartCrsr = _pStartCrsr->GetNext()) != __pStartCrsr) );
 
             if ( vFrmList.size() )
             {
