@@ -719,7 +719,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
         SwNodeIndex aClpIdx( aIdx );
         SwPaM* pStartCursor = GetCrsr();
         SwPaM* pCurrCrsr = pStartCursor;
-        sal_uInt32 nCursorCount = pStartCursor->size();
+        sal_uInt32 nCursorCount = pStartCursor->GetRingContainer().size();
         // If the target selection is a multi-selection, often the last and first
         // cursor of the ring points to identical document positions. Then
         // we should avoid double insertion of text portions...

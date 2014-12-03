@@ -22,6 +22,7 @@
 #include <swdllapi.h>
 #include <swtypes.hxx>
 #include <utility>
+#include <iterator>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
@@ -94,9 +95,6 @@ namespace sw
         /** @return the previous item in the ring container */
         T* GetPrev() const
             { return pPrev; }
-        /** @return the number of elements in the container */
-        size_t size() const
-            { return algo::count(static_cast< const T* >(this)); }
         /** @return a stl-like container with begin()/end() for iteration */
         ring_container GetRingContainer();
         /** @return a stl-like container with begin()/end() for const iteration */
@@ -161,9 +159,9 @@ namespace sw
         iterator end();
         const_iterator begin() const;
         const_iterator end() const;
-        ///** @return the number of elements in the container */
-        //size_t size() const
-        //    { return algo::count(static_cast< const T* >(this)); }
+        /** @return the number of elements in the container */
+        size_t size() const
+            { return std::distance(begin(), end()); }
     };
     template <class T>
     class RingIterator SAL_FINAL : public boost::iterator_facade<
