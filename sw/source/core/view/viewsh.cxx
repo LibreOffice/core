@@ -645,13 +645,11 @@ void SwViewShell::LayoutIdle()
         return;
 
     //No idle when printing is going on.
-    SwViewShell *pSh = this;
-    do
-    {   if ( !pSh->GetWin() )
+    for(SwViewShell& rSh : GetRingContainer())
+    {
+        if ( !rSh.GetWin() )
             return;
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-    } while ( pSh != this );
+    }
 
     SET_CURR_SHELL( this );
 
