@@ -2065,7 +2065,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
             do {
                 nRet += pTmp->InsertRedline();
-            } while( pRing != ( pTmp = static_cast<_SaveMergeRedlines*>(pTmp->GetNext()) ));
+            } while( pRing != ( pTmp = pTmp->GetNext()) );
 
             while( pRing != pRing->GetNext() )
                 delete pRing->GetNext();
