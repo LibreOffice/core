@@ -738,8 +738,22 @@ bool View::SdrBeginTextEdit(
         }
     }
 
-    if (bMasterPage && bReturn)
-        maMasterViewFilter.Start(pOutl);
+    if (bMasterPage && bReturn && pOutl)
+    {
+        const SdrTextObj* pTextObj = pOutl->GetTextObj();
+        const SdPage* pSdPage = pTextObj ? static_cast<const SdPage*>(pTextObj->GetPage()) : NULL;
+        const PresObjKind eKind = pSdPage ? pSdPage->GetPresObjKind(const_cast<SdrTextObj*>(pTextObj)) : PRESOBJ_NONE;
+        switch (eKind)
+        {
+            case PRESOBJ_TITLE:
+            case PRESOBJ_OUTLINE:
+            case PRESOBJ_TEXT:
+                maMasterViewFilter.Start(pOutl);
+                break;
+            default:
+                break;
+        }
+    }
 
     return bReturn;
 }
