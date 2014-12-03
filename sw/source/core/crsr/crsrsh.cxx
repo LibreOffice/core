@@ -3179,7 +3179,7 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
         pCrsr->SetMark();
         *pCrsr->GetMark() = *rCrsr.GetMark();
     }
-    if(static_cast<SwPaM*>(rCrsr.GetNext()) != &rCrsr)
+    if(rCrsr.GetNext() != &rCrsr)
     {
         const SwPaM *_pStartCrsr = static_cast<SwPaM*>(rCrsr.GetNext());
         do
