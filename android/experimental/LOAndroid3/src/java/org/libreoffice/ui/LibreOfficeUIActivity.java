@@ -36,14 +36,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -134,17 +138,12 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             gv.setOnItemClickListener(new OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                    File file = filePaths[position];
-                    if(!file.isDirectory()){
-                        open(file);
-                    }else{
-                        openDirectory( file );
-                    }
-
+                    open(position);
                 }
             });
             gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
             actionBar.setSelectedNavigationItem( filterMode + 1 );//This triggers the listener which modifies the view.
+            registerForContextMenu(gv);
         }else{
             setContentView(R.layout.file_list);
             lv = (ListView)findViewById( R.id.file_explorer_list_view);
@@ -152,8 +151,30 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
             lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
             actionBar.setSelectedNavigationItem( filterMode + 1 );
+            registerForContextMenu(lv);
         }
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+                .getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.context_menu_open:
+                open(info.position);
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     public void openDirectory(File dir ){
@@ -189,6 +210,15 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
                     "org.libreoffice",
                     "org.libreoffice.LibreOfficeMainActivity"));
         startActivity(i);
+    }
+
+    private void open(int position) {
+        File file = filePaths[position];
+        if (!file.isDirectory()) {
+            open(file);
+        } else {
+            openDirectory(file);
+        }
     }
 
     @Override
@@ -423,13 +453,18 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             listItem.setOnClickListener(new OnClickListener() {
 
                 public void onClick(View v) {
-                    Log.d("LIST", "click!");
-                    if(filePaths[ pos ].isDirectory() ){
-                        openDirectory( filePaths[ pos ] );
-                    }else{
-                        open( filePaths[ pos ] );
-                    }
+                    open(pos);
                 }
+            });
+            listItem.setOnLongClickListener(new OnLongClickListener() {
+
+                @Override
+                public boolean onLongClick(View v) {
+                    // workaround to show the context menu:
+                    // prevent onClickListener from getting this event
+                    return false;
+                }
+
             });
 
 

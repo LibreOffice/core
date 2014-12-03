@@ -25,5 +25,6 @@
 
     <string name="action_about">About</string>
     <string name="action_parts">Parts</string>
+    <string name="open">Open</string>
 
 </resources>
