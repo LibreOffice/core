@@ -1723,7 +1723,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
             const SwCntntNode* pCNd;
             do {
                 SwPosition& rSttEnd = *pTmp->End(),
-                          & rEndStt = *static_cast<SwPaM*>(pTmp->GetNext())->Start();
+                          & rEndStt = *(pTmp->GetNext())->Start();
                 if( rSttEnd == rEndStt ||
                     (!rEndStt.nContent.GetIndex() &&
                     rEndStt.nNode.GetIndex() - 1 == rSttEnd.nNode.GetIndex() &&
