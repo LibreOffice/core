@@ -20,8 +20,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEMANAGER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEMANAGER_HXX
 
-#include <resourcemodel/TableData.hxx>
-
 #include <resourcemodel/WW8ResourceModel.hxx>
 
 #include <ooxml/resourceids.hxx>
@@ -33,6 +31,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <PropertyMap.hxx>
+#include <TableData.hxx>
 
 namespace writerfilter
 {

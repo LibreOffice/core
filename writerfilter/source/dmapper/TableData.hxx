@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEDATA_HXX
-#define INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEDATA_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_RESOURCEMODEL_TABLEDATA_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_RESOURCEMODEL_TABLEDATA_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
@@ -26,6 +26,8 @@
 #include <boost/shared_ptr.hpp>
 
 namespace writerfilter
+{
+namespace dmapper
 {
 
 template <typename T, typename PropertiesPointer>
@@ -417,7 +419,8 @@ public:
 };
 
 }
+}
 
-#endif // INCLUDED_WRITERFILTER_INC_RESOURCEMODEL_TABLEDATA_HXX
+#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_RESOURCEMODEL_TABLEDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
