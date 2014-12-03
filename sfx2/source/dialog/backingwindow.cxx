@@ -146,7 +146,6 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
 
     get(mpAllRecentThumbnails, "all_recent");
     get(mpLocalView, "local_view");
-    mpCurrentView = mpLocalView;
 
     maDndWindows.push_back(mpAllRecentThumbnails);
 
@@ -264,9 +263,6 @@ void BackingWindow::initControls()
     mpLocalView->showRootRegion();
     mpLocalView->Hide();
     mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
-
-
-    mpCurrentView = mpLocalView;
 
     mpTemplateButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
 
@@ -556,7 +552,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     else if( pButton == mpTemplateButton )
     {
         mpAllRecentThumbnails->Hide();
-        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
         mpLocalView->Show();
         mpLocalView->reload();
         mpLocalView->GrabFocus();
@@ -570,19 +566,19 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 
     if( sId == "filter_writer" )
     {
-        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_WRITER));
     }
     else if( sId == "filter_calc" )
     {
-        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_CALC));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_CALC));
     }
     else if( sId == "filter_impress" )
     {
-        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_IMPRESS));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_IMPRESS));
     }
     else if( sId == "filter_draw" )
     {
-        mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_DRAW));
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_DRAW));
     }
     else if( sId == "edit" )
     {

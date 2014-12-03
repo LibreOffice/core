@@ -87,7 +87,6 @@ class BackingWindow
 
     RecentDocsView*                 mpAllRecentThumbnails;
     TemplateDefaultView*              mpLocalView;
-    TemplateAbstractView*           mpCurrentView;
 
     std::vector<vcl::Window*>            maDndWindows;
 
