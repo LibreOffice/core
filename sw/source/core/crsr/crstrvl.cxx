@@ -860,19 +860,12 @@ SwField* SwCrsrShell::GetCurFld( const bool bIncludeInputFldAtStart ) const
 
 bool SwCrsrShell::CrsrInsideInputFld() const
 {
-    bool bCrsrInsideInputFld = false;
-
-    const SwPaM* pCrsr = GetCrsr();
-    const SwPaM* pFirst = pCrsr;
-    do
+    for(SwPaM& rCrsr : GetCrsr()->GetRingContainer())
     {
-        bCrsrInsideInputFld = dynamic_cast<const SwInputField*>(GetFieldAtCrsr( pCrsr, false )) != NULL;
-
-        pCrsr = static_cast<SwPaM*>(pCrsr->GetNext());
-    } while ( !bCrsrInsideInputFld
-              && pCrsr != pFirst );
-
-    return bCrsrInsideInputFld;
+        if(dynamic_cast<const SwInputField*>(GetFieldAtCrsr( &rCrsr, false )))
+            return true;
+    }
+    return false;
 }
 
 bool SwCrsrShell::PosInsideInputFld( const SwPosition& rPos ) const
