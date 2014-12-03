@@ -1536,22 +1536,19 @@ void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pN
 
 void SwXTextRanges::Impl::MakeRanges()
 {
-    SwUnoCrsr *const pCursor = GetCursor();
-    if (pCursor)
+    if (GetCursor())
     {
-        SwPaM *pTmpCursor = pCursor;
-        do {
+        for(SwPaM& rTmpCursor : GetCursor()->GetRingContainer())
+        {
             const uno::Reference< text::XTextRange > xRange(
                     SwXTextRange::CreateXTextRange(
-                        *pTmpCursor->GetDoc(),
-                        *pTmpCursor->GetPoint(), pTmpCursor->GetMark()));
+                        *rTmpCursor.GetDoc(),
+                        *rTmpCursor.GetPoint(), rTmpCursor.GetMark()));
             if (xRange.is())
             {
                 m_Ranges.push_back(xRange);
             }
-            pTmpCursor = static_cast<SwPaM*>(pTmpCursor->GetNext());
         }
-        while (pTmpCursor != pCursor);
     }
 }
 
