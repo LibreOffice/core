@@ -1058,7 +1058,7 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     }
 
     //Put on Action, but not if presently anywhere an action runs.
-    SwViewShell *pSh = 0, *pOrg;
+    SwViewShell *pSh = nullptr, *pOrg;
     SwRootFrm *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
@@ -1067,9 +1067,9 @@ void SwDrawContact::Changed( const SdrObject& rObj,
         if ( pSh )
             do
             {   if ( pSh->Imp()->IsAction() || pSh->Imp()->IsIdleAction() )
-                    pSh = 0;
+                    pSh = nullptr;
                 else
-                    pSh = static_cast<SwViewShell*>(pSh->GetNext());
+                    pSh = pSh->GetNext();
 
             } while ( pSh && pSh != pOrg );
 
