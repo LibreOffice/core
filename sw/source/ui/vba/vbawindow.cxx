@@ -80,7 +80,7 @@ SwVbaWindow::getWindowState() throw (uno::RuntimeException, std::exception)
     sal_Int32 nwindowState = word::WdWindowState::wdWindowStateNormal;
     SwView* pView = word::getView( m_xModel );
     SfxViewFrame* pViewFrame = pView -> GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
+    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
     if ( pWork )
     {
         if ( pWork -> IsMaximized())
@@ -98,7 +98,7 @@ SwVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
     _windowstate >>= nwindowState;
     SwView* pView = word::getView( m_xModel );
     SfxViewFrame* pViewFrame = pView -> GetViewFrame();
-    WorkWindow* pWork = static_cast<WorkWindow*>( pViewFrame->GetFrame().GetSystemWindow() );
+    WorkWindow* pWork = (WorkWindow*) pViewFrame->GetFrame().GetSystemWindow();
     if ( pWork )
     {
         if ( nwindowState == word::WdWindowState::wdWindowStateMaximize )

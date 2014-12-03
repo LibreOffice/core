@@ -191,7 +191,7 @@ void    SwTextGridPage::Reset(const SfxItemSet *rSet)
 {
     if(SfxItemState::DEFAULT <= rSet->GetItemState(RES_TEXTGRID, true))
     {
-        const SwTextGridItem& rGridItem = static_cast<const SwTextGridItem&>(rSet->Get(RES_TEXTGRID));
+        const SwTextGridItem& rGridItem = (const SwTextGridItem&)rSet->Get(RES_TEXTGRID);
         RadioButton* pButton = 0;
         switch(rGridItem.GetGridType())
         {
@@ -281,20 +281,20 @@ void SwTextGridPage::UpdatePageSize(const SfxItemSet& rSet)
     if( SfxItemState::UNKNOWN !=  rSet.GetItemState( RES_FRAMEDIR, true ))
     {
         const SvxFrameDirectionItem& rDirItem =
-                    static_cast<const SvxFrameDirectionItem&>(rSet.Get(RES_FRAMEDIR));
+                    (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
         m_bVertical = rDirItem.GetValue() == FRMDIR_VERT_TOP_RIGHT||
                     rDirItem.GetValue() == FRMDIR_VERT_TOP_LEFT;
     }
 
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
     {
-        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(
-                                            SID_ATTR_PAGE_SIZE));
-        const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
-                                                            RES_LR_SPACE ));
-        const SvxULSpaceItem& rULSpace = static_cast<const SvxULSpaceItem&>(rSet.Get(
-                                                            RES_UL_SPACE ));
-        const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
+        const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get(
+                                            SID_ATTR_PAGE_SIZE);
+        const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get(
+                                                            RES_LR_SPACE );
+        const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get(
+                                                            RES_UL_SPACE );
+        const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
         sal_Int32 nDistanceLR = rLRSpace.GetLeft() + rLRSpace.GetRight();
         sal_Int32 nDistanceUL = rULSpace.GetUpper() + rULSpace.GetLower();
 

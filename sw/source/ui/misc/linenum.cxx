@@ -43,7 +43,7 @@ static rtl::Reference<SwDocStyleSheet> lcl_getDocStyleSheet(const OUString& rNam
     SAL_WARN_IF( !pStyle, "linenumbering.ui", "Style not found" );
     if(!pStyle)
         return NULL;
-    return new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pStyle));
+    return new SwDocStyleSheet(*(SwDocStyleSheet*)pStyle);
 }
 
 static void lcl_setLineNumbering(const OUString& rName, SwWrtShell* pSh, bool bLineNumber)
@@ -150,7 +150,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     if(xStyleSheet.is())
     {
         SfxItemSet& rSet = xStyleSheet->GetItemSet();
-        const SwFmtLineNumber &aFmt = static_cast<const SwFmtLineNumber&>(rSet.Get(RES_LINENUMBER));
+        SwFmtLineNumber &aFmt = (SwFmtLineNumber&)(rSet.Get(RES_LINENUMBER));
         if(aFmt.IsCount())
             m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
         else

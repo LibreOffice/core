@@ -1166,8 +1166,8 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
     {
         if(!sEntry.isEmpty())
         {
-            const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFldType(RES_AUTHORITY, OUString()));
+            const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
+                                        pSh->GetFldType(RES_AUTHORITY, OUString());
             const SwAuthEntry*  pEntry = pFType ? pFType->GetEntryByIdentifier(sEntry) : 0;
             for(int i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = pEntry ?
@@ -1193,8 +1193,8 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
         OSL_ENSURE(!m_sFields[AUTH_FIELD_IDENTIFIER].isEmpty() , "No Id is set!");
         OSL_ENSURE(!m_sFields[AUTH_FIELD_AUTHORITY_TYPE].isEmpty() , "No authority type is set!");
         //check if the entry already exists with different content
-        const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFldType(RES_AUTHORITY, OUString()));
+        const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
+                                        pSh->GetFldType(RES_AUTHORITY, OUString());
         const SwAuthEntry*  pEntry = pFType ?
                 pFType->GetEntryByIdentifier( m_sFields[AUTH_FIELD_IDENTIFIER])
                 : 0;
@@ -1328,8 +1328,8 @@ IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
     }
     else
     {
-        const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                    pSh->GetFldType(RES_AUTHORITY, OUString()));
+        const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
+                                    pSh->GetFldType(RES_AUTHORITY, OUString());
         if(pFType)
         {
             std::vector<OUString> aIds;
@@ -1369,8 +1369,8 @@ IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
             return 0;
         else if(bIsFromComponent)
         {
-            const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        pSh->GetFldType(RES_AUTHORITY, OUString()));
+            const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
+                                        pSh->GetFldType(RES_AUTHORITY, OUString());
             bAllowed = !pFType || !pFType->GetEntryByIdentifier(sEntry);
         }
         else
@@ -1473,8 +1473,8 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
             pIdentifierBox->SetSelectHdl(LINK(this,
                                     SwCreateAuthEntryDlg_Impl, IdentifierHdl));
 
-            const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                        rSh.GetFldType(RES_AUTHORITY, OUString()));
+            const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
+                                        rSh.GetFldType(RES_AUTHORITY, OUString());
             if(pFType)
             {
                 std::vector<OUString> aIds;
@@ -1560,8 +1560,8 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
 
 IMPL_LINK(SwCreateAuthEntryDlg_Impl, IdentifierHdl, ComboBox*, pBox)
 {
-    const SwAuthorityFieldType* pFType = static_cast<const SwAuthorityFieldType*>(
-                                rWrtSh.GetFldType(RES_AUTHORITY, OUString()));
+    const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
+                                rWrtSh.GetFldType(RES_AUTHORITY, OUString());
     if(pFType)
     {
         const SwAuthEntry* pEntry = pFType->GetEntryByIdentifier(

@@ -293,7 +293,7 @@ void SwUiWriterTest::testFdo74981()
     // create a document with an input field
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFldType(0, RES_INPUTFLD)), OUString("foo"), OUString("bar"), 0, 0);
+    SwInputField aField((SwInputFieldType*)pWrtShell->GetFldType(0, RES_INPUTFLD), OUString("foo"), OUString("bar"), 0, 0);
     pWrtShell->Insert(aField);
 
     // expect hints

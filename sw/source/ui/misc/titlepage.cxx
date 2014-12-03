@@ -42,7 +42,7 @@ namespace
                 if (oNumOffset)
                     rPageNo = oNumOffset.get();
                 if (ppPageFmtDesc)
-                    (*ppPageFmtDesc) = static_cast<const SwFmtPageDesc *>(pItem->Clone());
+                    (*ppPageFmtDesc) = (const SwFmtPageDesc *)(pItem->Clone());
                 bRet = true;
             }
         }

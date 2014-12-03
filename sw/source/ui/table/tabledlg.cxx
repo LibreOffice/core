@@ -414,7 +414,7 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
         if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
             const sal_uInt32 nDirection =
-                             (sal_uInt32)reinterpret_cast<sal_uIntPtr>(m_pTextDirectionLB->GetEntryData( nPos ));
+                             (sal_uInt32)(sal_uIntPtr)m_pTextDirectionLB->GetEntryData( nPos );
             rCoreSet->Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
             bModified = true;
         }
@@ -556,7 +556,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     if( SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         sal_uIntPtr nVal  = static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
-        const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nVal) );
+        const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( (void*) nVal );
         m_pTextDirectionLB->SelectEntryPos( nPos );
         m_pTextDirectionLB->SaveValue();
     }
@@ -1341,8 +1341,8 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     if(m_pSplitRowCB->IsValueChangedFromSaved())
         bModified |= 0 != rSet->Put( SwFmtRowSplit( m_pSplitRowCB->IsChecked()));
 
-    const SvxFmtBreakItem* pBreak = static_cast<const SvxFmtBreakItem*>(GetOldItem( *rSet, RES_BREAK ));
-    const SwFmtPageDesc* pDesc = static_cast<const SwFmtPageDesc*>(GetOldItem( *rSet, RES_PAGEDESC ));
+    const SvxFmtBreakItem* pBreak = (const SvxFmtBreakItem*)GetOldItem( *rSet, RES_BREAK );
+    const SwFmtPageDesc* pDesc = (const SwFmtPageDesc*) GetOldItem( *rSet, RES_PAGEDESC );
 
     bool bState = m_pPageCollCB->IsChecked();
 
@@ -1378,7 +1378,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             m_pPgBrkRB->IsValueChangedFromSaved() ))
     {
         SvxFmtBreakItem aBreak(
-            static_cast<const SvxFmtBreakItem&>(GetItemSet().Get( RES_BREAK )) );
+            (const SvxFmtBreakItem&)GetItemSet().Get( RES_BREAK ) );
 
         if(bIsChecked)
         {
@@ -1414,7 +1414,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     {
           bModified |= 0 != rSet->Put(
                     SvxFrameDirectionItem(
-                        (SvxFrameDirection)reinterpret_cast<sal_uLong>(m_pTextDirectionLB->GetEntryData(m_pTextDirectionLB->GetSelectEntryPos()))
+                        (SvxFrameDirection)(sal_uLong)m_pTextDirectionLB->GetEntryData(m_pTextDirectionLB->GetSelectEntryPos())
                         , FN_TABLE_BOX_TEXTORIENTATION));
     }
 
@@ -1524,7 +1524,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
             if(SfxItemState::SET == rSet->GetItemState( RES_BREAK, false, &pItem ))
             {
-                const SvxFmtBreakItem* pPageBreak = static_cast<const SvxFmtBreakItem*>(pItem);
+                const SvxFmtBreakItem* pPageBreak = (const SvxFmtBreakItem*)pItem;
                 SvxBreak eBreak = (SvxBreak)pPageBreak->GetValue();
 
                 if ( eBreak != SVX_BREAK_NONE )
@@ -1597,7 +1597,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
     {
         sal_uLong nDirection = static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
-        m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nDirection) ));
+        m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( (const void*)nDirection ));
     }
 
     if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT )
