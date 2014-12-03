@@ -996,8 +996,8 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocSum,              //   80 Sum()
         ocAverage,          //   81 Avg()
         ocCount,            //   82 Cnt()
-        ocMin,              //   83 Min()
-        ocMax,              //   84 Max()
+        ocMinA,             //   83 Min()
+        ocMaxA,             //   84 Max()
         ocVLookup,          //   85 Vlookup()
         ocNPV,              //   86 Npv()
         ocVar,              //   87 Var()
@@ -1525,8 +1525,8 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocSum,              //   80 Sum()
         ocAverage,          //   81 Avg()
         ocCount,            //   82 Cnt()
-        ocMin,              //   83 Min()
-        ocMax,              //   84 Max()
+        ocMinA,             //   83 Min()
+        ocMaxA,             //   84 Max()
         ocVLookup,          //   85 Vlookup()
         ocNPV,              //   86 Npv()
         ocVar,              //   87 Var()
@@ -1597,8 +1597,8 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocNoName,           //  152 Halfp
         ocNoName,           //  153 Pureavg
         ocCount2,           //  154 Purecount
-        ocNoName,           //  155 Puremax
-        ocNoName,           //  156 Puremin
+        ocMax,              //  155 Puremax
+        ocMin,              //  156 Puremin
         ocNoName,           //  157 Purestd
         ocNoName,           //  158 Purevar
         ocNoName,           //  159 Purestds
