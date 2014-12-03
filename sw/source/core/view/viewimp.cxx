@@ -394,17 +394,13 @@ void SwViewImp::_InvalidateAccessibleParaTextSelection()
 /// invalidate attributes for paragraphs
 void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 {
-    SwViewShell* pVSh = GetShell();
-    SwViewShell* pTmp = pVSh;
-    do
+    for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
-        if ( pTmp->Imp()->IsAccessible() )
+        if ( rTmp.Imp()->IsAccessible() )
         {
-            pTmp->Imp()->GetAccessibleMap().InvalidateAttr( rTxtFrm );
+            rTmp.Imp()->GetAccessibleMap().InvalidateAttr( rTxtFrm );
         }
-
-        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
-    } while ( pTmp != pVSh );
+    }
 }
 
 // OD 15.01.2003 #103492# - method signature change due to new page preview functionality
