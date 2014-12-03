@@ -2032,21 +2032,20 @@ SfxItemPool& SwViewShell::GetAttrPool()
 void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 {
 
-    SwViewShell *pSh = this;
-    do
-    {   pSh->StartAction();
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
-    } while ( pSh != this );
+    for(SwViewShell& rSh : GetRingContainer())
+        rSh.StartAction();
 
     ImplApplyViewOptions( rOpt );
 
     // With one layout per view it is not longer necessary
     // to sync these "layout related" view options
     // But as long as we have to disable "multiple layout"
-    pSh = static_cast<SwViewShell*>(this->GetNext());
-    while ( pSh != this )
+
+    for(SwViewShell& rSh : GetRingContainer())
     {
-        SwViewOption aOpt( *pSh->GetViewOptions() );
+        if(&rSh == this)
+            continue;
+        SwViewOption aOpt( *rSh.GetViewOptions() );
         aOpt.SetFldName( rOpt.IsFldName() );
             aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
@@ -2054,18 +2053,13 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
             aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
             aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
         aOpt.SetPostIts(rOpt.IsPostIts());
-        if ( !(aOpt == *pSh->GetViewOptions()) )
-            pSh->ImplApplyViewOptions( aOpt );
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
+        if ( !(aOpt == *rSh.GetViewOptions()) )
+            rSh.ImplApplyViewOptions( aOpt );
     }
     // End of disabled multiple window
 
-    pSh = this;
-    do
-    {   pSh->EndAction();
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
-    } while ( pSh != this );
-
+    for(SwViewShell& rSh : GetRingContainer())
+        rSh.EndAction();
 }
 
 void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
