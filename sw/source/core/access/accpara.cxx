@@ -212,16 +212,15 @@ bool SwAccessibleParagraph::GetSelection(
         sal_uLong nHere = pNode->GetIndex();
 
         // iterate over ring
-        SwPaM* pRingStart = pCrsr;
-        do
+        for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
         {
             // ignore, if no mark
-            if( pCrsr->HasMark() )
+            if( rTmpCrsr.HasMark() )
             {
                 // check whether nHere is 'inside' pCrsr
-                SwPosition* pStart = pCrsr->Start();
+                SwPosition* pStart = rTmpCrsr.Start();
                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
-                SwPosition* pEnd = pCrsr->End();
+                SwPosition* pEnd = rTmpCrsr.End();
                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                 if( ( nHere >= nStartIndex ) &&
                     ( nHere <= nEndIndex )      )
@@ -312,14 +311,11 @@ bool SwAccessibleParagraph::GetSelection(
                 // else: this PaM doesn't point to this paragraph
             }
             // else: this PaM is collapsed and doesn't select anything
-
-            // next PaM in ring
-            pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
+            if(bRet)
+                break;
         }
-        while( !bRet && (pCrsr != pRingStart) );
-    }
     // else: nocursor -> no selection
-
+    }
     return bRet;
 }
 
