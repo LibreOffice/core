@@ -328,14 +328,11 @@ void SwViewImp::InvalidateAccessibleEditableState( bool bAllShells,
 {
     if( bAllShells )
     {
-        SwViewShell *pVSh = GetShell();
-        SwViewShell *pTmp = pVSh;
-        do
+        for(SwViewShell& rTmp : GetShell()->GetRingContainer())
         {
-            if( pTmp->Imp()->IsAccessible() )
-                pTmp->Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE, pFrm );
-            pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
-        } while ( pTmp != pVSh );
+            if( rTmp.Imp()->IsAccessible() )
+                rTmp.Imp()->GetAccessibleMap().InvalidateStates( ACC_STATE_EDITABLE, pFrm );
+        }
     }
     else if( IsAccessible() )
     {
