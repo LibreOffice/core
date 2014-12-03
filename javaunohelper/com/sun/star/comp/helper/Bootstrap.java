@@ -20,28 +20,32 @@
 
 package com.sun.star.comp.helper;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.loader.JavaLoader;
 import com.sun.star.comp.servicemanager.ServiceManager;
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Random;
 
 /** Bootstrap offers functionality to obtain a context or simply
     a service manager.
@@ -246,6 +250,74 @@ public class Bootstrap {
      */
     public static final XComponentContext bootstrap()
         throws BootstrapException {
+        try
+        {
+            return bootstrap( null );
+        }
+        catch ( UnknownPropertyException e )
+        {
+            // do nothing, here is not possible for this exception
+        }
+
+        return null;
+    }
+
+    /**
+     * Bootstraps the component context from a UNO installation.
+     *
+     * See also UNOIDL <code>com.sun.star.configuration.bootstrap.BootstrapDescriptor</code>.
+     *
+     * @return a bootstrapped component context.
+     *
+     * @throws BootstrapException
+     * @throws UnknownPropertyException
+     *
+     * @since LibreOffice 4.5
+     */
+    public static final XComponentContext bootstrap(PropertyValue[] bootstrapDescriptor)
+        throws BootstrapException, UnknownPropertyException {
+        List<String> hsArgs = new ArrayList<String>();
+        hsArgs.add("--nologo");
+        hsArgs.add("--nodefault");
+        hsArgs.add("--norestore");
+        hsArgs.add("--nocrashreport");
+        hsArgs.add("--nolockcheck");
+
+        if(bootstrapDescriptor != null)
+        {
+            for(PropertyValue d : bootstrapDescriptor)
+            {
+                if("NoLogo".equalsIgnoreCase(d.Name))
+                {
+                    if(Boolean.FALSE.equals(d.Value))
+                        hsArgs.remove("--nologo");
+                }
+                else if("NoDefault".equalsIgnoreCase(d.Name))
+                {
+                    if(Boolean.FALSE.equals(d.Value))
+                        hsArgs.remove("--nodefault");
+                }
+                else if("NoRestore".equalsIgnoreCase(d.Name))
+                {
+                    if(Boolean.FALSE.equals(d.Value))
+                        hsArgs.remove("--norestore");
+                }
+                else if("NoCrashReport".equalsIgnoreCase(d.Name))
+                {
+                    if(Boolean.FALSE.equals(d.Value))
+                        hsArgs.remove("--nocrashreport");
+                }
+                else if("NoLockCheck".equalsIgnoreCase(d.Name))
+                {
+                    if(Boolean.FALSE.equals(d.Value))
+                        hsArgs.remove("--nolockcheck");
+                }
+                else
+                {
+                    throw new UnknownPropertyException(d.Name);
+                }
+            }
+        }
 
         XComponentContext xContext = null;
 
@@ -270,14 +342,14 @@ public class Bootstrap {
                 Long.toString( (new Random()).nextLong() & 0x7fffffffffffffffL );
 
             // create call with arguments
-            String[] cmdArray = new String[7];
+            String[] cmdArray = new String[ 2 + hsArgs.size() ];
             cmdArray[0] = fOffice.getPath();
-            cmdArray[1] = "--nologo";
-            cmdArray[2] = "--nodefault";
-            cmdArray[3] = "--norestore";
-            cmdArray[4] = "--nocrashreport";
-            cmdArray[5] = "--nolockcheck";
-            cmdArray[6] = "--accept=pipe,name=" + sPipeName + ";urp;";
+            int x = 0;
+            for(String arg : hsArgs)
+            {
+              cmdArray[++x] = arg;
+            }
+            cmdArray[x + 1] = "--accept=pipe,name=" + sPipeName + ";urp;";
 
             // start office process
             Process p = Runtime.getRuntime().exec( cmdArray );
