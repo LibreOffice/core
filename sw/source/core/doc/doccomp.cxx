@@ -1740,7 +1740,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
                     else
                     {
                         // are consecutive, so combine
-                        rSttEnd = *static_cast<SwPaM*>(pTmp->GetNext())->End();
+                        rSttEnd = *(pTmp->GetNext())->End();
                         delete pTmp->GetNext();
                     }
                 }
