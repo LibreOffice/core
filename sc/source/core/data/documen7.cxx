@@ -157,10 +157,15 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
         ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
         if (pCondFormList)
         {
+            ScAddress aAddress( 0, 0, nTab);
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
+                aAddress.SetRow(nRow);
                 for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-                    pCondFormList->SourceChanged(ScAddress(nCol,nRow,nTab));
+                {
+                    aAddress.SetCol(nCol);
+                    pCondFormList->SourceChanged(aAddress);
+                }
             }
         }
     }
