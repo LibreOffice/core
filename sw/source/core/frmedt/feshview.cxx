@@ -637,11 +637,8 @@ long SwFEShell::EndDrag( const Point *, bool )
     SdrView *pView = Imp()->GetDrawView();
     if ( pView->IsDragObj() )
     {
-        // Setup Start-/EndActions only to the SwViewShell
-        SwViewShell *pSh = this;
-        do {
-            pSh->StartAction();
-        } while ( this != (pSh = static_cast<SwViewShell*>(pSh->GetNext())) );
+        for(SwViewShell& rSh : GetRingContainer())
+            rSh.StartAction();
 
         StartUndo( UNDO_START );
 
@@ -662,11 +659,12 @@ long SwFEShell::EndDrag( const Point *, bool )
 
         EndUndo( UNDO_END );
 
-        do {
-            pSh->EndAction();
-            if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-                static_cast<SwCrsrShell*>(pSh)->CallChgLnk();
-        } while ( this != (pSh = static_cast<SwViewShell*>(pSh->GetNext())) );
+        for(SwViewShell& rSh : GetRingContainer())
+        {
+            rSh.EndAction();
+            if( rSh.IsA( TYPE( SwCrsrShell ) ) )
+                static_cast<SwCrsrShell*>(&rSh)->CallChgLnk();
+        }
 
         GetDoc()->getIDocumentState().SetModified();
         ::FrameNotify( this, FLY_DRAG );
