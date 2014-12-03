@@ -343,15 +343,12 @@ void SwViewImp::InvalidateAccessibleEditableState( bool bAllShells,
 void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
                                                  const SwFlyFrm *pFollow )
 {
-    SwViewShell *pVSh = GetShell();
-    SwViewShell *pTmp = pVSh;
-    do
+    for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
-        if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().InvalidateRelationSet( pMaster,
+        if( rTmp.Imp()->IsAccessible() )
+            rTmp.Imp()->GetAccessibleMap().InvalidateRelationSet( pMaster,
                                                                    pFollow );
-        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
-    } while ( pTmp != pVSh );
+    }
 }
 
 /// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
