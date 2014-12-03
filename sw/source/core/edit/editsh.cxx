@@ -505,16 +505,15 @@ void SwEditShell::ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM )
 OUString SwEditShell::Calculate()
 {
     OUString  aFormel;                    // the final formula
-    SwPaM     *pPaMLast = static_cast<SwPaM*>(GetCrsr()->GetNext()),
-              *pPaM = pPaMLast;           // cursor pointers
     SwCalc    aCalc( *GetDoc() );
     const CharClass& rCC = GetAppCharClass();
 
-    do {
-        SwTxtNode* pTxtNd = pPaM->GetNode().GetTxtNode();
+    for(SwPaM& rCurrentPaM : GetCrsr()->GetNext()->GetRingContainer())
+    {
+        SwTxtNode* pTxtNd = rCurrentPaM.GetNode().GetTxtNode();
         if(pTxtNd)
         {
-            const SwPosition *pStart = pPaM->Start(), *pEnd = pPaM->End();
+            const SwPosition *pStart = rCurrentPaM.Start(), *pEnd = rCurrentPaM.End();
             const sal_Int32 nStt = pStart->nContent.GetIndex();
             OUString aStr = pTxtNd->GetExpandTxt( nStt, pEnd->nContent.
                                                 GetIndex() - nStt );
@@ -561,7 +560,7 @@ OUString SwEditShell::Calculate()
                     aFormel += OUString(ch);
             }
         }
-    } while( pPaMLast != (pPaM = static_cast<SwPaM*>(pPaM->GetNext())) );
+    }
 
     return aCalc.GetStrResult( aCalc.Calculate(aFormel) );
 }
