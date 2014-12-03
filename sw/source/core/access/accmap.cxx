@@ -1185,22 +1185,21 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 if( pPos->nNode.GetNode().GetTxtNode() )
                 {
                     int pIndex = pPos->nContent.GetIndex();
-                    SwPaM* pTmpCrsr = pCrsr;
-                    if( pTmpCrsr != NULL )
+                    if( pCrsr != NULL )
                     {
                         const SwTxtNode* pNode = pPos->nNode.GetNode().GetTxtNode();
                         sal_uLong nHere = pNode->GetIndex();
 
-                        do
+                        for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
                         {
                             // ignore, if no mark
-                            if( pTmpCrsr->HasMark() )
+                            if( rTmpCrsr.HasMark() )
                             {
                                 bMarked = true;
                                 // check whether nHere is 'inside' pCrsr
-                                SwPosition* pStart = pTmpCrsr->Start();
+                                SwPosition* pStart = rTmpCrsr.Start();
                                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
-                                SwPosition* pEnd = pTmpCrsr->End();
+                                SwPosition* pEnd = rTmpCrsr.End();
                                 sal_uLong nEndIndex = pEnd->nNode.GetIndex();
                                 if( ( nHere >= nStartIndex ) && (nHere <= nEndIndex)  )
                                 {
@@ -1238,10 +1237,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                     }
                                 }
                             }
-                            // next PaM in ring
-                            pTmpCrsr = static_cast<SwPaM*>( pTmpCrsr->GetNext() );
                         }
-                        while( pTmpCrsr != pCrsr );
                     }
                     if( !bMarked )
                     {
@@ -1323,17 +1319,16 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     VEC_PARA vecAdd;
     VEC_PARA vecRemove;
     //Checked for Paras.
-    SwPaM* pTmpCrsr = pCrsr;
     bool bMarkChanged = false;
     SwAccessibleContextMap_Impl mapTemp;
-    if( pTmpCrsr != NULL )
+    if( pCrsr != NULL )
     {
-        do
+        for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
         {
-            if( pTmpCrsr->HasMark() )
+            if( rTmpCrsr.HasMark() )
             {
-                SwNodeIndex nStartIndex( pTmpCrsr->Start()->nNode );
-                SwNodeIndex nEndIndex( pTmpCrsr->End()->nNode );
+                SwNodeIndex nStartIndex( rTmpCrsr.Start()->nNode );
+                SwNodeIndex nEndIndex( rTmpCrsr.End()->nNode );
                 while(nStartIndex <= nEndIndex)
                 {
                     SwFrm *pFrm = NULL;
@@ -1380,9 +1375,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                     nStartIndex++;
                 }
             }
-            pTmpCrsr = static_cast<SwPaM*>( pTmpCrsr->GetNext() );
         }
-        while( pTmpCrsr != pCrsr );
     }
     if( !mpSeletedFrmMap )
         mpSeletedFrmMap = new SwAccessibleContextMap_Impl;
