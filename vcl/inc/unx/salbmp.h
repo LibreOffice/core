@@ -142,8 +142,8 @@ public:
     virtual Size                GetSize() const SAL_OVERRIDE;
     virtual sal_uInt16          GetBitCount() const SAL_OVERRIDE;
 
-    virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly ) SAL_OVERRIDE;
-    virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) SAL_OVERRIDE;
+    virtual BitmapBuffer*       AcquireBuffer( BitmapAccessMode nMode ) SAL_OVERRIDE;
+    virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) SAL_OVERRIDE;
     virtual bool                GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
     virtual bool                Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;

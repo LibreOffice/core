@@ -27,32 +27,26 @@
 
 #include <string.h>
 
-BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, bool bModify ) :
+BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
             mpBuffer        ( NULL ),
-            mpScanBuf       ( NULL ),
-            mFncGetPixel    ( NULL ),
-            mFncSetPixel    ( NULL ),
-            mbModify        ( bModify )
+            mnAccessMode    ( nMode )
 {
     ImplCreate( rBitmap );
 }
 
-BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
+BitmapInfoAccess::BitmapInfoAccess( Bitmap& rBitmap ) :
             mpBuffer        ( NULL ),
-            mpScanBuf       ( NULL ),
-            mFncGetPixel    ( NULL ),
-            mFncSetPixel    ( NULL ),
-            mbModify        ( false )
+            mnAccessMode    ( BITMAP_INFO_ACCESS )
 {
     ImplCreate( rBitmap );
 }
 
-BitmapReadAccess::~BitmapReadAccess()
+BitmapInfoAccess::~BitmapInfoAccess()
 {
     ImplDestroy();
 }
 
-void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
+void BitmapInfoAccess::ImplCreate( Bitmap& rBitmap )
 {
     ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
 
@@ -60,18 +54,19 @@ void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
 
     if( pImpBmp )
     {
-        if( mbModify && !maBitmap.ImplGetImpBitmap() )
+        if( mnAccessMode == BITMAP_WRITE_ACCESS && !maBitmap.ImplGetImpBitmap() )
         {
             rBitmap.ImplMakeUnique();
             pImpBmp = rBitmap.ImplGetImpBitmap();
         }
         else
         {
-            DBG_ASSERT( !mbModify || pImpBmp->ImplGetRefCount() == 2,
+            DBG_ASSERT( mnAccessMode != BITMAP_WRITE_ACCESS ||
+                        pImpBmp->ImplGetRefCount() == 2,
                         "Unpredictable results: bitmap is referenced more than once!" );
         }
 
-        mpBuffer = pImpBmp->ImplAcquireBuffer( !mbModify );
+        mpBuffer = pImpBmp->ImplAcquireBuffer( mnAccessMode );
 
         if( !mpBuffer )
         {
@@ -81,57 +76,93 @@ void BitmapReadAccess::ImplCreate( Bitmap& rBitmap )
             {
                 pImpBmp = pNewImpBmp;
                 rBitmap.ImplSetImpBitmap( pImpBmp );
-                mpBuffer = pImpBmp->ImplAcquireBuffer( !mbModify );
+                mpBuffer = pImpBmp->ImplAcquireBuffer( mnAccessMode );
             }
             else
                 delete pNewImpBmp;
         }
 
-        if( mpBuffer )
+        maBitmap = rBitmap;
+    }
+}
+
+void BitmapInfoAccess::ImplDestroy()
+{
+    ImpBitmap* pImpBmp = maBitmap.ImplGetImpBitmap();
+
+    if( mpBuffer && pImpBmp )
+    {
+        pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
+        mpBuffer = NULL;
+    }
+}
+
+sal_uInt16 BitmapInfoAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const
+{
+    return( HasPalette() ? mpBuffer->maPalette.GetBestIndex( rBitmapColor ) : 0 );
+}
+
+BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode ) :
+            BitmapInfoAccess( rBitmap, nMode ),
+            mpScanBuf       ( NULL ),
+            mFncGetPixel    ( NULL ),
+            mFncSetPixel    ( NULL )
+{
+    ImplInitScanBuffer( rBitmap );
+}
+
+BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
+            BitmapInfoAccess( rBitmap, BITMAP_READ_ACCESS ),
+            mpScanBuf       ( NULL ),
+            mFncGetPixel    ( NULL ),
+            mFncSetPixel    ( NULL )
+{
+    ImplInitScanBuffer( rBitmap );
+}
+
+BitmapReadAccess::~BitmapReadAccess()
+{
+    ImplClearScanBuffer();
+}
+
+void BitmapReadAccess::ImplInitScanBuffer( Bitmap& rBitmap )
+{
+    ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
+
+    if( pImpBmp && mpBuffer )
+    {
+        const long  nHeight = mpBuffer->mnHeight;
+        Scanline    pTmpLine = mpBuffer->mpBits;
+
+        mpScanBuf = new Scanline[ nHeight ];
+        maColorMask = mpBuffer->maColorMask;
+
+        if( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
         {
-            const long  nHeight = mpBuffer->mnHeight;
-            Scanline    pTmpLine = mpBuffer->mpBits;
+            for( long nY = 0L; nY < nHeight; nY++, pTmpLine += mpBuffer->mnScanlineSize )
+                mpScanBuf[ nY ] = pTmpLine;
+        }
+        else
+        {
+            for( long nY = nHeight - 1; nY >= 0; nY--, pTmpLine += mpBuffer->mnScanlineSize )
+                mpScanBuf[ nY ] = pTmpLine;
+        }
 
-            mpScanBuf = new Scanline[ nHeight ];
-            maColorMask = mpBuffer->maColorMask;
+        if( !ImplSetAccessPointers( BMP_SCANLINE_FORMAT( mpBuffer->mnFormat ) ) )
+        {
+            delete[] mpScanBuf;
+            mpScanBuf = NULL;
 
-            if( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
-            {
-                for( long nY = 0L; nY < nHeight; nY++, pTmpLine += mpBuffer->mnScanlineSize )
-                    mpScanBuf[ nY ] = pTmpLine;
-            }
-            else
-            {
-                for( long nY = nHeight - 1; nY >= 0; nY--, pTmpLine += mpBuffer->mnScanlineSize )
-                    mpScanBuf[ nY ] = pTmpLine;
-            }
-
-            if( !ImplSetAccessPointers( BMP_SCANLINE_FORMAT( mpBuffer->mnFormat ) ) )
-            {
-                delete[] mpScanBuf;
-                mpScanBuf = NULL;
-
-                pImpBmp->ImplReleaseBuffer( mpBuffer, !mbModify );
-                mpBuffer = NULL;
-            }
-            else
-                maBitmap = rBitmap;
+            pImpBmp->ImplReleaseBuffer( mpBuffer, mnAccessMode );
+            mpBuffer = NULL;
         }
     }
 }
 
-void BitmapReadAccess::ImplDestroy()
+void BitmapReadAccess::ImplClearScanBuffer()
 {
-    ImpBitmap* pImpBmp = maBitmap.ImplGetImpBitmap();
-
     delete[] mpScanBuf;
     mpScanBuf = NULL;
-
-    if( mpBuffer && pImpBmp )
-    {
-        pImpBmp->ImplReleaseBuffer( mpBuffer, !mbModify );
-        mpBuffer = NULL;
-    }
 }
 
 bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
@@ -273,11 +304,6 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
     }
 }
 
-sal_uInt16 BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const
-{
-    return( HasPalette() ? mpBuffer->maPalette.GetBestIndex( rBitmapColor ) : 0 );
-}
-
 BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const
 {
     // ask directly doubles >= 0.0 here to avoid rounded values of 0 at small negative
@@ -386,7 +412,7 @@ BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const 
 }
 
 BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
-            BitmapReadAccess( rBitmap, true ),
+            BitmapReadAccess( rBitmap, BITMAP_WRITE_ACCESS ),
             mpLineColor     ( NULL ),
             mpFillColor     ( NULL )
 {

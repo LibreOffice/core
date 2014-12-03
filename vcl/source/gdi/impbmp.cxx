@@ -80,16 +80,16 @@ sal_uInt16 ImpBitmap::ImplGetBitCount() const
     return( ( nBitCount <= 1 ) ? 1 : ( nBitCount <= 4 ) ? 4 : ( nBitCount <= 8 ) ? 8 : 24 );
 }
 
-BitmapBuffer* ImpBitmap::ImplAcquireBuffer( bool bReadOnly )
+BitmapBuffer* ImpBitmap::ImplAcquireBuffer( BitmapAccessMode nMode )
 {
-    return mpSalBitmap->AcquireBuffer( bReadOnly );
+    return mpSalBitmap->AcquireBuffer( nMode );
 }
 
-void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
-    mpSalBitmap->ReleaseBuffer( pBuffer, bReadOnly );
+    mpSalBitmap->ReleaseBuffer( pBuffer, nMode );
 
-    if( !bReadOnly )
+    if( nMode == BITMAP_WRITE_ACCESS )
         mnChecksum = 0;
 }
 
