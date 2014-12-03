@@ -697,14 +697,12 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
 {
     const SwNumRule* pNumRuleAtCurrentSelection = NULL;
 
-    const SwPaM* pCurrentCrsr = GetCrsr();
     bool bDifferentNumRuleFound = false;
-    const SwPaM* pCrsr = pCurrentCrsr;
-    do
+    for(const SwPaM& rCurrentCrsr : GetCrsr()->GetRingContainer())
     {
-        const SwNodeIndex aEndNode = pCrsr->End()->nNode;
+        const SwNodeIndex aEndNode = rCurrentCrsr.End()->nNode;
 
-        for ( SwNodeIndex aNode = pCrsr->Start()->nNode; aNode <= aEndNode; aNode++ )
+        for ( SwNodeIndex aNode = rCurrentCrsr.Start()->nNode; aNode <= aEndNode; aNode++ )
         {
             const SwNumRule* pNumRule = GetDoc()->GetNumRuleAtPos( SwPosition( aNode ) );
             if ( pNumRule == NULL )
@@ -725,9 +723,9 @@ const SwNumRule* SwEditShell::GetNumRuleAtCurrentSelection() const
                 }
             }
         }
-
-        pCrsr = static_cast< const SwPaM* >(pCrsr->GetNext());
-    } while ( !bDifferentNumRuleFound && pCrsr != pCurrentCrsr );
+        if(bDifferentNumRuleFound)
+            break;
+    }
 
     return pNumRuleAtCurrentSelection;
 }
