@@ -98,6 +98,8 @@ namespace sd {
 
 class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
 {
+    SdPage& operator=(const SdPage&) SAL_DELETED_FUNCTION;
+
 friend class SdGenericDrawPage;
 friend class SdDrawPage;
 friend class sd::UndoAnimation;
@@ -153,11 +155,13 @@ protected:
     sal_Int32 mnTransitionFadeColor;
     double mfTransitionDuration;
 
+    SdPage(const SdPage& rSrcPage);
+    void lateInit(const SdPage& rSrcPage);
+
 public:
     TYPEINFO_OVERRIDE();
 
     SdPage(SdDrawDocument& rNewDoc, bool bMasterPage=false);
-    SdPage(const SdPage& rSrcPage);
     virtual ~SdPage();
     virtual SdrPage* Clone() const SAL_OVERRIDE;
     virtual SdrPage* Clone(SdrModel* pNewModel) const SAL_OVERRIDE;

@@ -88,7 +88,7 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
     eListKind=SDROBJLIST_UNKNOWN;
 }
 
-SdrObjList::SdrObjList(const SdrObjList& rSrcList):
+SdrObjList::SdrObjList():
     maList(),
     mpNavigationOrder(),
     mbIsNavigationOrderDirty(false)
@@ -101,7 +101,6 @@ SdrObjList::SdrObjList(const SdrObjList& rSrcList):
     bRectsDirty=false;
     pOwnerObj=NULL;
     eListKind=SDROBJLIST_UNKNOWN;
-    *this=rSrcList;
 }
 
 SdrObjList::~SdrObjList()
@@ -115,9 +114,18 @@ SdrObjList::~SdrObjList()
     Clear(); // delete contents of container
 }
 
-void SdrObjList::operator=(const SdrObjList& rSrcList)
+SdrObjList* SdrObjList::Clone() const
 {
-    Clear();
+    SdrObjList* const pObjList = new SdrObjList();
+    pObjList->lateInit(*this);
+    return pObjList;
+}
+
+void SdrObjList::lateInit(const SdrObjList& rSrcList)
+{
+    // this function is only supposed to be called once, right after construction
+    assert(maList.empty());
+
     eListKind=rSrcList.eListKind;
     CopyObjects(rSrcList);
 }
@@ -1246,31 +1254,6 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     mbPageBorderOnlyLeftRight(rSrcPage.mbPageBorderOnlyLeftRight)
 {
     aPrefVisiLayers.SetAll();
-    eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
-
-    // copy things from source
-    // Warning: this leads to slicing (see issue 93186) and has to be
-    // removed as soon as possible.
-    *this = rSrcPage;
-    OSL_ENSURE(mpSdrPageProperties,
-        "SdrPage::SdrPage: operator= did not create needed SdrPageProperties (!)");
-
-    // be careful and correct eListKind, a member of SdrObjList which
-    // will be changed by the SdrOIbjList::operator= before...
-    eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
-
-    // The previous assignment to *this may have resulted in a call to
-    // createUnoPage at a partially initialized (sliced) SdrPage object.
-    // Due to the vtable being not yet fully set-up at this stage,
-    // createUnoPage() may have been called at the wrong class.
-    // To force a call to the right createUnoPage() at a later time when the
-    // new object is full constructed mxUnoPage is disposed now.
-    uno::Reference<lang::XComponent> xComponent (mxUnoPage, uno::UNO_QUERY);
-    if (xComponent.is())
-    {
-        mxUnoPage = NULL;
-        xComponent->dispose();
-    }
 }
 
 SdrPage::~SdrPage()
@@ -1319,20 +1302,10 @@ SdrPage::~SdrPage()
 
 }
 
-SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)
+void SdrPage::lateInit(const SdrPage& rSrcPage)
 {
-    if( this == &rSrcPage )
-        return *this;
-    if(mpViewContact)
-    {
-        delete mpViewContact;
-        mpViewContact = 0L;
-    }
-
-    // Joe also sets some parameters for the class this one
-    // is derived from. SdrObjList does the same bad handling of
-    // copy constructor and operator=, so i better let it stand here.
-    pPage = this;
+    assert(!mpViewContact);
+    assert(!mpSdrPageProperties);
 
     // copy all the local parameters to make this instance
     // a valid copy of source page before copying and inserting
@@ -1361,21 +1334,7 @@ SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)
     mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
     {
-        // #i111122# delete SdrPageProperties when model is different
-        if(mpSdrPageProperties && GetModel() != rSrcPage.GetModel())
-        {
-            delete mpSdrPageProperties;
-            mpSdrPageProperties = 0;
-        }
-
-        if(!mpSdrPageProperties)
-        {
-            mpSdrPageProperties = new SdrPageProperties(*this);
-        }
-        else
-        {
-            mpSdrPageProperties->ClearItem(0);
-        }
+        mpSdrPageProperties = new SdrPageProperties(*this);
 
         if(!IsMasterPage())
         {
@@ -1385,9 +1344,12 @@ SdrPage& SdrPage::operator=(const SdrPage& rSrcPage)
         mpSdrPageProperties->SetStyleSheet(rSrcPage.getSdrPageProperties().GetStyleSheet());
     }
 
-    // Now copy the contained objects (by cloning them)
-    SdrObjList::operator=(rSrcPage);
-    return *this;
+    // Now copy the contained objects
+    SdrObjList::lateInit(rSrcPage);
+
+    // be careful and correct eListKind, a member of SdrObjList which
+    // will be changed by the SdrObjList::lateInit before...
+    eListKind = (mbMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 }
 
 SdrPage* SdrPage::Clone() const
@@ -1399,7 +1361,7 @@ SdrPage* SdrPage::Clone(SdrModel* pNewModel) const
 {
     if (pNewModel==NULL) pNewModel=pModel;
     SdrPage* pPage2=new SdrPage(*pNewModel);
-    *pPage2=*this;
+    pPage2->lateInit(*this);
     return pPage2;
 }
 

@@ -26,6 +26,9 @@ class ScDrawLayer;
 
 class ScDrawPage: public FmFormPage
 {
+    ScDrawPage(const ScDrawPage&) SAL_DELETED_FUNCTION;
+    ScDrawPage& operator=(const ScDrawPage&) SAL_DELETED_FUNCTION;
+
 public:
     ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage = false);
     virtual ~ScDrawPage();

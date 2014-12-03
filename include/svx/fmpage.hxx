@@ -40,6 +40,8 @@ class HelpEvent;
 
 class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
+    FmFormPage& operator=(const FmFormPage&) SAL_DELETED_FUNCTION;
+
     friend class FmFormObj;
     FmFormPageImpl*     m_pImpl;
     OUString            m_sPageName;
@@ -48,12 +50,12 @@ public:
     TYPEINFO_OVERRIDE();
 
     FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
-    FmFormPage(const FmFormPage& rPage);
     virtual ~FmFormPage();
 
     virtual void    SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 
     virtual SdrPage* Clone() const SAL_OVERRIDE;
+    // TODO: Uh huh, how is this supposed to work? Creating a SdrPage from FmFormPage?
     using SdrPage::Clone;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE,
@@ -73,6 +75,11 @@ public:
                             vcl::Window* pWin,
                             SdrView* pView,
                             const HelpEvent& rEvt );
+
+protected:
+    FmFormPage(const FmFormPage& rPage);
+
+    void lateInit(const FmFormPage& rPage);
 };
 
 #endif // INCLUDED_SVX_FMPAGE_HXX

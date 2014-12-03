@@ -28,6 +28,9 @@ class SwDoc;
 
 class SwDPage : public FmFormPage, public SdrObjUserCall
 {
+    SwDPage(const SwDPage&) SAL_DELETED_FUNCTION;
+    SwDPage &operator=(const SwDPage&) SAL_DELETED_FUNCTION;
+
     SdrPageGridFrameList*   pGridLst;
     SwDoc&                  rDoc;
 

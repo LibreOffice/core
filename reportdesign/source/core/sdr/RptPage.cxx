@@ -61,7 +61,9 @@ OReportPage::~OReportPage()
 
 SdrPage* OReportPage::Clone() const
 {
-    return new OReportPage( *this );
+    OReportPage *const pNewPage = new OReportPage( *this );
+    pNewPage->lateInit( *this );
+    return pNewPage;
 }
 
 

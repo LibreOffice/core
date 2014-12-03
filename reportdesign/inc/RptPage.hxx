@@ -34,6 +34,8 @@ class OReportModel;
 
 class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 {
+    OReportPage& operator=(const OReportPage&) SAL_DELETED_FUNCTION;
+
     OReportModel&           rModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > m_xSection;
     bool                    m_bSpecialInsertMode;

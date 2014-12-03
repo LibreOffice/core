@@ -66,6 +66,12 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
            ,m_pImpl(new FmFormPageImpl( *this ) )
 {
+}
+
+void FmFormPage::lateInit(const FmFormPage& rPage)
+{
+    SdrPage::lateInit( rPage );
+
     m_pImpl->initFrom( rPage.GetImpl() );
     m_sPageName = rPage.m_sPageName;
 }
@@ -113,8 +119,9 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
 
 SdrPage* FmFormPage::Clone() const
 {
-    return new FmFormPage(*this);
-    // hier fehlt noch ein kopieren der Objekte
+    FmFormPage* const pNewPage = new FmFormPage(*this);
+    pNewPage->lateInit(*this);
+    return pNewPage;
 }
 
 
