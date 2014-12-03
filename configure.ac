@@ -1998,13 +1998,13 @@ AC_ARG_WITH(
     [with_doxygen=yes])
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2013/2012>],
+    AS_HELP_STRING([--with-visual-studio=2013],
         [Specify which Visual Studio version to use in case several are
-         are installed. If not specified, the order of preference is
-         2013, 2012 (including Express editions). Note that it is
-         unclear whether using 2013 actually works as intended.])
+         installed. If not specified, the order of preference is 2013 (including
+         Express editions). Not very useful at the moment, as currently only
+         2013 is supported, anyway.])
     [
-                          Usage:     --with-visual-studio=<2013/2012>
+                          Usage:     --with-visual-studio=2013
     ],
 ,)
 
@@ -3315,8 +3315,6 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2012)
-        vsversion=11.0;;
     2013)
         vsversion=12.0;;
     *)
@@ -3335,14 +3333,14 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2013, then 2012
-        vsversions="12.0 11.0"
+        # By default we prefer 2013
+        vsversions=12.0
     fi
 }
 
 find_msvs()
 {
-    # Find Visual Studio 2013/2012
+    # Find Visual Studio 2013
     # Args: $1 (optional) : versions to check, in the order of preference
     # Return value: $vstest
 
@@ -3366,7 +3364,7 @@ find_msvs()
 
 find_msvc()
 {
-    # Find Visual C++ 2013/2012
+    # Find Visual C++ 2013
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
@@ -3389,10 +3387,6 @@ find_msvc()
     if test -n "$vctest"; then
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
-        11.0)
-            vcyear=2012
-            vcnum=110
-            ;;
         12.0)
             vcyear=2013
             vcnum=120
@@ -3417,7 +3411,7 @@ if test "$_os" = "WINNT"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2012 or 2013 installation found])
+                AC_MSG_ERROR([No Visual Studio 2013 installation found])
             fi
         fi
 
@@ -3513,7 +3507,8 @@ if test "$_os" = "WINNT"; then
                 fi
             fi
             if test "$BITNESS_OVERRIDE" = ""; then
-                CC="$CC -arch:SSE" # MSVC 2012 default for x86 is -arch:SSE2
+                dnl since MSVC 2012, default for x86 is -arch:SSE2:
+                CC="$CC -arch:SSE"
             fi
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
 
@@ -5100,7 +5095,7 @@ find_msms()
     my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
     AC_MSG_CHECKING([for $my_msm_file])
     msmdir=
-    for ver in 10.0 11.0 12.0; do
+    for ver in 12.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/$my_msm_file"; then
@@ -9520,11 +9515,11 @@ the  Windows SDK are installed.])
     elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=80
         AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
-        # compatibility warning if usind VS 2012 and not explicitly choosing the 80 SDK
-        if test "$VCVER" = "110" -a -z "$with_windows_sdk"; then
-            AC_MSG_WARN([If a build created with VS 2012 should run on Windows XP,])
+        dnl compatibility warning if not explicitly choosing the 80 SDK:
+        if test -z "$with_windows_sdk"; then
+            AC_MSG_WARN([If a build should run on Windows XP,])
             AC_MSG_WARN([use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)])
-            add_warning "If a build created with VS 2012 should run on Windows XP,"
+            add_warning "If a build should run on Windows XP,"
             add_warning "use --with-windows-sdk=7.1A (requires VS 2012 Update 1 or newer)"
         fi
     elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
