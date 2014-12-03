@@ -561,16 +561,17 @@ bool UndoManager::Repeat(::sw::RepeatContext & rContext,
         EnterListAction(comment, rcomment, nId);
     }
 
-    SwPaM *const pFirstCursor(& rContext.GetRepeatPaM());
-    do {    // iterate over ring
+    SwPaM* pTmp = rContext.m_pCurrentPaM;
+    for(SwPaM& rPaM : rContext.GetRepeatPaM().GetRingContainer())
+    {    // iterate over ring
+        rContext.m_pCurrentPaM = &rPaM;
         for (sal_uInt16 nRptCnt = nRepeatCount; nRptCnt > 0; --nRptCnt)
         {
             pRepeatAction->Repeat(rContext);
         }
         rContext.m_bDeleteRepeated = false; // reset for next PaM
-        rContext.m_pCurrentPaM =
-            static_cast<SwPaM*>(rContext.m_pCurrentPaM->GetNext());
-    } while (pFirstCursor != & rContext.GetRepeatPaM());
+    }
+    rContext.m_pCurrentPaM = pTmp;
 
     if (DoesUndo())
     {
