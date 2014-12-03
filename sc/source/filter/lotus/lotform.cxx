@@ -161,6 +161,19 @@ void LotusToSc::DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtStri
             }
         }
             break;
+        case ocRoundUp:
+        case ocRoundDown:
+        {
+            // omit optional 3rd parameter
+            if ( nAnz == 3 )
+            {
+                eParam[ 0 ] = eParam[ 1 ];
+                eParam[ 1 ] = eParam[ 2 ];
+                nAnz = 2;
+            }
+
+        }
+            break;
         default:;
     }
 
@@ -1999,9 +2012,9 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
     else if (rTest == "TANH")
             eId=ocTanHyp;
     else if (rTest == "EVEN")
-            eId=ocIsEven;
+            eId=ocEven;
     else if (rTest == "ODD")
-            eId=ocIsOdd;
+            eId=ocOdd;
     else if (rTest == "ACOT")
             eId=ocArcCot;
     else if (rTest == "COT")
@@ -2048,6 +2061,24 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
             eId=ocCountIf;
     else if (rTest == "DPURECOUNT")
             eId=ocDBCount;
+    else if (rTest == "CSC")
+            eId=ocCosecant;
+    else if (rTest == "CSCH")
+            eId=ocCosecantHyp;
+    else if (rTest == "LARGE")
+            eId=ocLarge;
+    else if (rTest == "SMALL")
+            eId=ocSmall;
+    else if (rTest == "MODULO")
+            eId=ocMod;
+    else if (rTest == "ROUNDDOWN")
+            eId=ocRoundDown;
+    else if (rTest == "ROUNDUP")
+            eId=ocRoundUp;
+    else if (rTest == "SEC")
+            eId=ocSecant;
+    else if (rTest == "SECH")
+            eId=ocSecantHyp;
     return eId;
 }
 
