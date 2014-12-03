@@ -415,7 +415,7 @@ void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
 {
     // Activate some shell if possible
     if ( pCurrShell == pSh )
-        pCurrShell = pSh->GetNext() != pSh ? static_cast<SwViewShell*>(pSh->GetNext()) : 0;
+        pCurrShell = pSh->GetNext() != pSh ? pSh->GetNext() : nullptr;
 
     // Doesn't matter anymore
     if ( pWaitingCurrShell == pSh )
