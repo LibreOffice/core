@@ -1713,7 +1713,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
                 pTmp->GetPoint()->nContent.Assign( pContentNode,
                         (pContentNode) ? pContentNode->Len() : 0 );
             }
-        } while( pInsRing != ( pTmp = static_cast<SwPaM*>(pTmp->GetNext()) ));
+        } while( pInsRing != ( pTmp = pTmp->GetNext()) );
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     OUString(), 0, 0 );
 
