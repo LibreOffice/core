@@ -87,39 +87,40 @@ private:
     bool            bUseCanvas;
 
 
-    SAL_DLLPRIVATE static Color    ImplColAdjustFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Color         ImplColAdjustFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static BitmapEx      ImplBmpAdjustFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColConvertFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Color         ImplColConvertFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static BitmapEx      ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColMonoFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Color         ImplColMonoFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static BitmapEx      ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE static Color    ImplColReplaceFnc( const Color& rColor, const void* pColParam );
-    SAL_DLLPRIVATE static BitmapEx ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
+    SAL_DLLPRIVATE static Color         ImplColReplaceFnc( const Color& rColor, const void* pColParam );
+    SAL_DLLPRIVATE static BitmapEx      ImplBmpReplaceFnc( const BitmapEx& rBmpEx, const void* pBmpParam );
 
-    SAL_DLLPRIVATE void            ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
-                                                       BmpExchangeFnc pFncBmp, const void* pBmpParam );
+    SAL_DLLPRIVATE void                 ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pColParam,
+                                                            BmpExchangeFnc pFncBmp, const void* pBmpParam );
 
-    SAL_DLLPRIVATE Point           ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
-                                                        const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE Polygon         ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
-                                                          const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE tools::PolyPolygon     ImplGetRotatedPolyPolygon( const tools::PolyPolygon& rPoly, const Point& rRotatePt,
-                                                              const Size& rOffset, double fSin, double fCos );
-    SAL_DLLPRIVATE void            ImplAddGradientEx( GDIMetaFile&          rMtf,
-                                                      const OutputDevice&   rMapDev,
-                                                      const tools::PolyPolygon&    rPolyPoly,
-                                                      const Gradient&       rGrad       );
-    SAL_DLLPRIVATE bool          ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize );
-    SAL_DLLPRIVATE void          ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
+    SAL_DLLPRIVATE Point                ImplGetRotatedPoint( const Point& rPt, const Point& rRotatePt,
+                                                             const Size& rOffset, double fSin, double fCos );
+    SAL_DLLPRIVATE Polygon              ImplGetRotatedPolygon( const Polygon& rPoly, const Point& rRotatePt,
+                                                               const Size& rOffset, double fSin, double fCos );
+    SAL_DLLPRIVATE tools::PolyPolygon   ImplGetRotatedPolyPolygon( const tools::PolyPolygon& rPoly, const Point& rRotatePt,
+                                                                   const Size& rOffset, double fSin, double fCos );
+    SAL_DLLPRIVATE void                 ImplAddGradientEx( GDIMetaFile& rMtf,
+                                                           const OutputDevice& rMapDev,
+                                                           const tools::PolyPolygon& rPolyPoly,
+                                                           const Gradient& rGrad );
+
+    SAL_DLLPRIVATE bool                 ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, Size rLogicDestSize );
+    SAL_DLLPRIVATE void                 ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct, OutputDevice* pOut );
 
 
 protected:
 
-    virtual void    Linker( OutputDevice* pOut, bool bLink );
-    virtual long    Hook();
+    virtual void                        Linker( OutputDevice* pOut, bool bLink );
+    virtual long                        Hook();
 
 public:
                     GDIMetaFile();
@@ -127,11 +128,11 @@ public:
     virtual         ~GDIMetaFile();
 
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
-    bool        operator==( const GDIMetaFile& rMtf ) const;
-    bool        operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
+    bool            operator==( const GDIMetaFile& rMtf ) const;
+    bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
-    bool        Mirror( sal_uLong nMirrorFlags );
+    bool            Mirror( sal_uLong nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
@@ -151,8 +152,7 @@ public:
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
                             short nChannelRPercent = 0,  short nChannelGPercent = 0,
                             short nChannelBPercent = 0,  double fGamma = 1.0,
-                            bool bInvert = false, bool msoBrightness = false
-                    );
+                            bool bInvert = false, bool msoBrightness = false );
 
     void            Convert( MtfConversion eConversion );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
@@ -161,7 +161,7 @@ public:
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
-    bool        IsRecord() const { return bRecord; }
+    bool            IsRecord() const { return bRecord; }
 
     void            Play( GDIMetaFile& rMtf, size_t nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, size_t nPos = GDI_METAFILE_END );
@@ -169,7 +169,7 @@ public:
                           const Size& rSize, size_t nPos = GDI_METAFILE_END );
 
     void            Pause( bool bPause );
-    bool        IsPause() const { return bPause; }
+    bool            IsPause() const { return bPause; }
 
     void            Stop();
 
@@ -182,15 +182,15 @@ public:
     void            AddAction( MetaAction* pAction, size_t nPos );
     void            RemoveAction( size_t nPos );
     void            push_back( MetaAction* pAction );
+    /**
+     * @param pAction takes ownership
+     */
+    MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
 
     MetaAction*     FirstAction();
     MetaAction*     NextAction();
     MetaAction*     GetAction( size_t nAction ) const;
     MetaAction*     GetCurAction() const { return GetAction( nCurrentActionElement ); }
-    /**
-     * @param pAction takes ownership
-     */
-    MetaAction*     ReplaceAction( MetaAction* pAction, size_t nAction );
 
     const Size&     GetPrefSize() const { return aPrefSize; }
     void            SetPrefSize( const Size& rSize ) { aPrefSize = rSize; }
@@ -215,13 +215,13 @@ public:
     friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
     /// Creates an antialiased thumbnail, with maximum width or height of nMaximumExtent.
-    bool        CreateThumbnail(BitmapEx& rBitmapEx,
-                                sal_uInt32 nMaximumExtent = 256,
-                                BmpConversion nColorConversion = BMP_CONVERSION_24BIT,
-                                long nScaleFlag = BMP_SCALE_BESTQUALITY) const;
+    bool            CreateThumbnail(BitmapEx& rBitmapEx,
+                                    sal_uInt32 nMaximumExtent = 256,
+                                    BmpConversion nColorConversion = BMP_CONVERSION_24BIT,
+                                    long nScaleFlag = BMP_SCALE_BESTQUALITY) const;
 
     void            UseCanvas( bool _bUseCanvas );
-    bool        GetUseCanvas() const { return bUseCanvas; }
+    bool            GetUseCanvas() const { return bUseCanvas; }
 };
 
 /** Create a special metaaction that delegates rendering to specified
