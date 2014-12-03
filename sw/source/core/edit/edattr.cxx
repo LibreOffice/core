@@ -73,13 +73,13 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet *pSet = &rSet;
 
-    SwPaM* pStartPaM = pPaM;
-    do {
+    for(SwPaM& rCurrentPaM : pPaM->GetRingContainer())
+    {
         // #i27615# if the cursor is in front of the numbering label
         // the attributes to get are those from the numbering format.
-        if (pPaM->IsInFrontOfLabel())
+        if (rCurrentPaM.IsInFrontOfLabel())
         {
-            SwTxtNode * pTxtNd = pPaM->GetPoint()->nNode.GetNode().GetTxtNode();
+            SwTxtNode * pTxtNd = rCurrentPaM.GetPoint()->nNode.GetNode().GetTxtNode();
 
             if (pTxtNd)
             {
@@ -108,10 +108,10 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             continue;
         }
 
-        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
-              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
-        sal_Int32 nSttCnt = pPaM->GetMark()->nContent.GetIndex();
-        sal_Int32 nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
+        sal_uLong nSttNd = rCurrentPaM.GetMark()->nNode.GetIndex(),
+              nEndNd = rCurrentPaM.GetPoint()->nNode.GetIndex();
+        sal_Int32 nSttCnt = rCurrentPaM.GetMark()->nContent.GetIndex();
+        sal_Int32 nEndCnt = rCurrentPaM.GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
@@ -165,7 +165,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
             pSet = &aSet;
         }
 
-    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
+    }
 
     return true;
 }
