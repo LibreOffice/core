@@ -2092,7 +2092,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
                     // Check for overlaps. These can happen when FmtColl-
                     // Redlines were streched over a whole paragraph
                     SwPaM* pCur = m_pCurCrsr;
-                    SwPaM* pNextPam = static_cast<SwPaM*>(pCur->GetNext());
+                    SwPaM* pNextPam = pCur->GetNext();
                     SwPosition* pCStt = pCur->Start(), *pCEnd = pCur->End();
                     while( pCur != pNextPam )
                     {
