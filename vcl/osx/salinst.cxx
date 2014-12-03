@@ -69,7 +69,7 @@ static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
 
-class AquaDelayedSettingsChanged : public Timer
+class AquaDelayedSettingsChanged : public Idle
 {
     bool            mbInvalidate;
     public:
@@ -101,9 +101,9 @@ class AquaDelayedSettingsChanged : public Timer
 void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 {
     osl::Guard< comphelper::SolarMutex > aGuard( *mpSalYieldMutex );
-    AquaDelayedSettingsChanged* pTimer = new AquaDelayedSettingsChanged( bInvalidate );
-    pTimer->SetTimeout( 50 );
-    pTimer->Start();
+    AquaDelayedSettingsChanged* pIdle = new AquaDelayedSettingsChanged( bInvalidate );
+    pIdle->SetPriority( VCL_IDLE_PRIORITY_MEDIUM );
+    pIdle->Start();
 }
 
 // the AppEventList must be available before any SalData/SalInst/etc. objects are ready

@@ -802,7 +802,7 @@ void IdleFormattter::ForceTimeout()
     if ( IsActive() )
     {
         Stop();
-        ((Link&)GetTimeoutHdl()).Call( this );
+        ((Link&)GetIdleHdl()).Call( this );
     }
 }
 
