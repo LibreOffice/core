@@ -299,15 +299,12 @@ void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
                                 const SwRect& rOldFrm )
 {
     OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
-    SwViewShell *pVSh = GetShell();
-    SwViewShell *pTmp = pVSh;
-    do
+    for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
-        if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, 0,
+        if( rTmp.Imp()->IsAccessible() )
+            rTmp.Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, 0,
                                                                  rOldFrm );
-        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
-    } while ( pTmp != pVSh );
+    }
 }
 
 void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
