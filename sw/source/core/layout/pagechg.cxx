@@ -1678,38 +1678,35 @@ void SwRootFrm::EndAllAction( bool bVirDev )
 
 void SwRootFrm::UnoRemoveAllActions()
 {
-    SwViewShell *pSh = GetCurrShell();
-    if ( pSh )
-        do
+    if ( GetCurrShell() )
+        for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
         {
             // #i84729#
             // No end action, if <SwViewShell> instance is currently in its end action.
             // Recursives calls to <::EndAction()> are not allowed.
-            if ( !pSh->IsInEndAction() )
+            if ( !rSh.IsInEndAction() )
             {
-                OSL_ENSURE(!pSh->GetRestoreActions(), "Restore action count is already set!");
-                bool bCrsr = pSh->ISA( SwCrsrShell );
-                bool bFE = pSh->ISA( SwFEShell );
+                OSL_ENSURE(!rSh.GetRestoreActions(), "Restore action count is already set!");
+                bool bCrsr = rSh.ISA( SwCrsrShell );
+                bool bFE = rSh.ISA( SwFEShell );
                 sal_uInt16 nRestore = 0;
-                while( pSh->ActionCount() )
+                while( rSh.ActionCount() )
                 {
                     if( bCrsr )
                     {
-                        static_cast<SwCrsrShell*>(pSh)->EndAction();
-                        static_cast<SwCrsrShell*>(pSh)->CallChgLnk();
+                        static_cast<SwCrsrShell*>(&rSh)->EndAction();
+                        static_cast<SwCrsrShell*>(&rSh)->CallChgLnk();
                         if ( bFE )
-                            static_cast<SwFEShell*>(pSh)->SetChainMarker();
+                            static_cast<SwFEShell*>(&rSh)->SetChainMarker();
                     }
                     else
-                        pSh->EndAction();
+                        rSh.EndAction();
                     nRestore++;
                 }
-                pSh->SetRestoreActions(nRestore);
+                rSh.SetRestoreActions(nRestore);
             }
-            pSh->LockView(true);
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-        } while ( pSh != GetCurrShell() );
+            rSh.LockView(true);
+        }
 }
 
 void SwRootFrm::UnoRestoreAllActions()
