@@ -41,10 +41,8 @@ void SwEditShell::ResetAttr( const std::set<sal_uInt16> &attrs, SwPaM* pPaM )
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, NULL);
     }
 
-        SwPaM* pStartCrsr = pCrsr;
-        do {
-                GetDoc()->ResetAttrs(*pCrsr, true, attrs);
-        } while ( ( pCrsr = static_cast< SwPaM* >( pCrsr->GetNext() ) ) != pStartCrsr );
+    for(SwPaM& rCurCrsr : pCrsr->GetRingContainer())
+        GetDoc()->ResetAttrs(rCurCrsr, true, attrs);
 
     if( bUndoGroup )
     {
