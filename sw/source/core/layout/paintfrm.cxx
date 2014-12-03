@@ -3197,18 +3197,19 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
     // all existing <SwViewShell> instances.
     bool bPerformLayoutAction( true );
     {
-        SwViewShell* pTmpViewShell = pSh;
-        do {
-            if ( pTmpViewShell->IsInEndAction() ||
-                 pTmpViewShell->IsPaintInProgress() ||
-                 ( pTmpViewShell->Imp()->IsAction() &&
-                   pTmpViewShell->Imp()->GetLayAction().IsActionInProgress() ) )
+        for(SwViewShell& rTmpViewShell : pSh->GetRingContainer())
+        {
+            if ( rTmpViewShell.IsInEndAction() ||
+                 rTmpViewShell.IsPaintInProgress() ||
+                 ( rTmpViewShell.Imp()->IsAction() &&
+                   rTmpViewShell.Imp()->GetLayAction().IsActionInProgress() ) )
             {
                 bPerformLayoutAction = false;
             }
 
-            pTmpViewShell = static_cast<SwViewShell*>(pTmpViewShell->GetNext());
-        } while ( bPerformLayoutAction && pTmpViewShell != pSh );
+            if(!bPerformLayoutAction)
+                break;
+        }
     }
     if ( bPerformLayoutAction )
     {
