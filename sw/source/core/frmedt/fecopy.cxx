@@ -759,7 +759,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                 }
                 else // as long as we find more insert positions in the cursor ring
                 {    // we'll take them
-                    pCurrCrsr = static_cast<SwPaM*>(pCurrCrsr->GetNext());
+                    pCurrCrsr = pCurrCrsr->GetNext();
                     aInsertPos = *pCurrCrsr->GetPoint();
                     --nCursorCount;
                 }
