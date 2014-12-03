@@ -1095,15 +1095,15 @@ bool SwGrfNode::IsSelected() const
     {
         const SwNode* pN = this;
         const SwViewShell* pV = pESh;
-        do {
-            if( pV->ISA( SwEditShell ) && pN == &static_cast<const SwCrsrShell*>(pV)
+        for(const SwViewShell& rCurrentShell : pESh->GetRingContainer())
+        {
+            if( rCurrentShell.ISA( SwEditShell ) && pN == &static_cast<const SwCrsrShell*>(&rCurrentShell)
                                 ->GetCrsr()->GetPoint()->nNode.GetNode() )
             {
                 bRet = true;
                 break;
             }
         }
-        while( pESh != ( pV = static_cast<SwViewShell*>(pV->GetNext()) ));
     }
     return bRet;
 }
