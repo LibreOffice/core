@@ -1163,6 +1163,15 @@ private:
         SCROW mnUBound;
     };
 
+    bool ValidCol(SCCOL nCol) const
+    {
+        return nCol >= 0 && static_cast<size_t>(nCol) < SAL_N_ELEMENTS(aCol);
+    }
+
+    bool ValidColRow(SCCOL nCol, SCROW nRow) const
+    {
+        return ValidCol(nCol) && ValidRow(nRow);
+    }
 };
 
 #endif
