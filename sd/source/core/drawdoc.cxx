@@ -55,6 +55,7 @@
 #include <editeng/outlobj.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/charclass.hxx>
@@ -72,7 +73,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustring.hxx>
 #include <rtl/uri.hxx>
-#include <comphelper/expandmacro.hxx>
 
 #include <editeng/outliner.hxx>
 #include "drawdoc.hxx"
@@ -989,7 +989,7 @@ void SdDrawDocument::InitLayoutVector()
     rtl::OUString sFilename;
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
-        sFilename = ::comphelper::getExpandedFilePath(aFiles[i]);
+        sFilename = comphelper::getExpandedUri(xContext, aFiles[i]);
 
         // load layout file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(
@@ -1025,7 +1025,7 @@ void SdDrawDocument::InitObjectVector()
     rtl::OUString sFilename;
     for( sal_Int32 i=0; i < aFiles.getLength(); ++i )
     {
-        sFilename = ::comphelper::getExpandedFilePath(aFiles[i]);
+        sFilename = comphelper::getExpandedUri(xContext, aFiles[i]);
 
         // load presentation object file into DOM
         Reference< XMultiServiceFactory > xServiceFactory(

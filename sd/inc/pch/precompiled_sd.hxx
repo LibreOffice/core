@@ -355,7 +355,6 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/classids.hxx>
 #include <comphelper/documentconstants.hxx>
-#include <comphelper/expandmacro.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/namedvaluecollection.hxx>

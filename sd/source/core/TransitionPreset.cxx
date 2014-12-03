@@ -28,10 +28,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
-#include <comphelper/expandmacro.hxx>
 
 #include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
@@ -170,7 +170,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
-            OUString aURL = ::comphelper::getExpandedFilePath(aFiles[i]);
+            OUString aURL = comphelper::getExpandedUri(xContext, aFiles[i]);
 
             bRet |= importTransitionsFile( rList,
                                            xServiceFactory,

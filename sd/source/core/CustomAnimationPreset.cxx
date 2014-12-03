@@ -29,12 +29,12 @@
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <unotools/streamwrap.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
-#include <comphelper/expandmacro.hxx>
 
 #include <tools/debug.hxx>
 #include <rtl/uri.hxx>
@@ -324,7 +324,7 @@ void CustomAnimationPresets::importEffects()
 
         for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
-            OUString aURL = ::comphelper::getExpandedFilePath(aFiles[i]);
+            OUString aURL = comphelper::getExpandedUri(xContext, aFiles[i]);
 
             mxRootNode = implImportEffects( xServiceFactory, aURL );
 
