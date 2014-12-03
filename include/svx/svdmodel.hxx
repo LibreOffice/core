@@ -666,6 +666,8 @@ public:
         This returns false if undo was disabled using EnableUndo( false ) and
         also during the runtime of the Undo() and Redo() methods. */
     bool IsUndoEnabled() const;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;

@@ -133,18 +133,6 @@ static const char* TMP_FORMAT_I32 = "%" SAL_PRIdINT32;
 
 void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet);
 
-void lcl_dumpSdrModel(WriterHelper& writer, const SdrModel* pModel)
-{
-    writer.startElement("sdrModel");
-    writer.writeFormatAttribute("ptr", "%p", pModel);
-    if (pModel)
-    {
-        if (const SdrPage* pPage = pModel->GetPage(0))
-            pPage->dumpAsXml(writer);
-    }
-    writer.endElement();
-}
-
 void SwDoc::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
@@ -162,7 +150,8 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w ) const
     mpNumRuleTbl->dumpAsXml( writer );
     getIDocumentRedlineAccess().GetRedlineTbl().dumpAsXml( writer );
     getIDocumentRedlineAccess().GetExtraRedlineTbl().dumpAsXml( writer );
-    lcl_dumpSdrModel( writer, getIDocumentDrawModelAccess().GetDrawModel() );
+    if (const SdrModel* pModel = getIDocumentDrawModelAccess().GetDrawModel())
+        pModel->dumpAsXml(writer);
 
     writer.startElement("mbModified");
     writer.writeFormatAttribute("value", TMP_FORMAT, static_cast<int>(getIDocumentState().IsModified()));

@@ -87,6 +87,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <boost/scoped_array.hpp>
+#include <libxml/xmlwriter.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2012,6 +2013,21 @@ void SdrModel::SetSdrUndoFactory( SdrUndoFactory* pUndoFactory )
         delete mpImpl->mpUndoFactory;
         mpImpl->mpUndoFactory = pUndoFactory;
     }
+}
+
+void SdrModel::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sdrModel"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    sal_uInt16 nPageCount = GetPageCount();
+    for (sal_uInt16 i = 0; i < nPageCount; ++i)
+    {
+        if (const SdrPage* pPage = GetPage(i))
+            pPage->dumpAsXml(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 namespace
