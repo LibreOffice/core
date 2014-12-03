@@ -78,6 +78,16 @@ String STR_WARN_TRANSP_CONVERTED_SHORT
     Text [en-US] = "Transparencies removed";
 };
 
+String STR_ERR_SIGNATURE_FAILED
+{
+    Text [en-US] = "Signature generation failed";
+};
+
+String STR_ERR_PDF_EXPORT_ABORTED
+{
+    Text [en-US] = "PDF export aborted";
+};
+
 Bitmap IMG_WARN
 {
     File = "ballgreen_7.png";

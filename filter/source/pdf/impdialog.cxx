@@ -1496,6 +1496,13 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
             m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
         }
         break;
+        case vcl::PDFWriter::Error_Signature_Failed:
+        {
+            sal_uInt16 nPos = m_pErrors->InsertEntry( OUString( PDFFilterResId( STR_ERR_SIGNATURE_FAILED ) ),
+                                                aErrImg );
+            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_ERR_PDF_EXPORT_ABORTED ) ) );
+        }
+        break;
         default:
             break;
         }

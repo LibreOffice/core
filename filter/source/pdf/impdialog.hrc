@@ -19,6 +19,9 @@
 
 #include <filter.hrc>
 
+#define STR_ERR_SIGNATURE_FAILED        (RID_PDF_DIALOG_START + 0)
+#define STR_ERR_PDF_EXPORT_ABORTED      (RID_PDF_DIALOG_START + 1)
+
 #define STR_WARN_PASSWORD_PDFA          (RID_PDF_DIALOG_START + 6)
 
 //strings for PDF security, user password management
@@ -39,5 +42,6 @@
 #define IMG_ERR                         (RID_PDF_DIALOG_START + 18)
 
 //ATTENTION: maximum allowed value is   (RID_PDF_DIALOG_START + 19)
+//(see filter/inc/filter.hrc)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
