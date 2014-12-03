@@ -36,69 +36,74 @@ namespace sw
     template <class T>
     class Ring
     {
-        /** internal implementation class -- not for external use */
-        struct Ring_node_traits
-        {
-            typedef T node;
-            typedef T* node_ptr;
-            typedef const T* const_node_ptr;
-            static node_ptr get_next(const_node_ptr n) { return n->GetNext(); };
-            static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
-            static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
-            static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
-        };
-        friend struct Ring_node_traits;
-        typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
-        T* pNext;
-        T* pPrev;
+        public:
+            typedef RingContainer<T> ring_container;
+            typedef RingContainer<const T> const_ring_container;
+            virtual ~Ring()
+                { algo::unlink(static_cast< T* >(this)); };
+            /**
+             * Removes this item from its current ring container and adds it to
+             * another ring container. If the item was not alone in the original
+             * ring container, the other items in the ring will stay in the old
+             * ring container.
+             * Note: the newly created item will be inserted just before item pDestRing.
+             * @param pDestRing the container to add this item to
+             */
+            void MoveTo( T* pDestRing );
+            /**
+             * Merges two ring containers. All item from both ring containers will
+             * be in the same ring container in the end.
+             * Note: The items of this ring container will be inserted just before
+             * item pDestRing
+             * @param pDestRing the container to merge this container with
+             */
+            void MoveRingTo( T* pDestRing );
+            {
+                std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
+                std::swap(*(&pPrev), *(&pDestRing->pPrev));
+            }
+            /** @return the next item in the ring container */
+            T* GetNext() const
+                { return pNext; }
+            /** @return the previous item in the ring container */
+            T* GetPrev() const
+                { return pPrev; }
+            /** @return a stl-like container with begin()/end() for iteration */
+            ring_container GetRingContainer();
+            /** @return a stl-like container with begin()/end() for const iteration */
+            const_ring_container GetRingContainer() const;
 
-    protected:
-        /**
-         * Creates a new item in a ring container all by itself.
-         * Note: Ring instances can newer be outside a container. At most, they
-         * are alone in one.
-         */
-        Ring()
-            { algo::init_header(static_cast< T* >(this)); }
-        /**
-         * Creates a new item and add it to an existing ring container.
-         * Note: the newly created item will be inserted just before item pRing.
-         * @param pRing ring container to add the created item to
-         */
-        Ring( T* pRing );
-    public:
-        typedef RingContainer<T> ring_container;
-        typedef RingContainer<const T> const_ring_container;
-        virtual ~Ring()
-            { algo::unlink(static_cast< T* >(this)); };
-        /**
-         * Removes this item from its current ring container and adds it to
-         * another ring container. If the item was not alone in the original
-         * ring container, the other items in the ring will stay in the old
-         * ring container.
-         * Note: the newly created item will be inserted just before item pDestRing.
-         * @param pDestRing the container to add this item to
-         */
-        void MoveTo( T* pDestRing );
-        /**
-         * Merges two ring containers. All item from both ring containers will
-         * be in the same ring container in the end.
-         * Note: The items of this ring container will be inserted just before
-         * item pDestRing
-         * @param pDestRing the container to merge this container with
-         */
-        void MoveRingTo( T* pDestRing );
+        protected:
+            /**
+             * Creates a new item in a ring container all by itself.
+             * Note: Ring instances can newer be outside a container. At most, they
+             * are alone in one.
+             */
+            Ring()
+                { algo::init_header(static_cast< T* >(this)); }
+            /**
+             * Creates a new item and add it to an existing ring container.
+             * Note: the newly created item will be inserted just before item pRing.
+             * @param pRing ring container to add the created item to
+             */
+            Ring( T* pRing );
 
-        /** @return the next item in the ring container */
-        T* GetNext() const
-            { return pNext; }
-        /** @return the previous item in the ring container */
-        T* GetPrev() const
-            { return pPrev; }
-        /** @return a stl-like container with begin()/end() for iteration */
-        ring_container GetRingContainer();
-        /** @return a stl-like container with begin()/end() for const iteration */
-        const_ring_container GetRingContainer() const;
+        private:
+            /** internal implementation class -- not for external use */
+            struct Ring_node_traits
+            {
+                typedef T node;
+                typedef T* node_ptr;
+                typedef const T* const_node_ptr;
+                static node_ptr get_next(const_node_ptr n) { return n->GetNext(); };
+                static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
+                static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
+                static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
+            };
+            friend struct Ring_node_traits;
+            typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
+            T* pNext;
+            T* pPrev;
     };
 
     template <class T>
@@ -127,38 +132,33 @@ namespace sw
             algo::unlink(pThis);
     }
 
-    template <class T>
-    inline void Ring<T>::MoveRingTo(T* pDestRing)
-    {
-        std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
-        std::swap(*(&pPrev), *(&pDestRing->pPrev));
-    }
-
     template <class T> class RingIterator;
     template <class T>
     class RingContainer SAL_FINAL
     {
-        T* m_pStart;
+        private:
+            T* m_pStart;
 
-    public:
-        RingContainer( T* pRing ) : m_pStart(pRing) {};
-        typedef RingIterator<T> iterator;
-        typedef RingIterator<const T> const_iterator;
-        /**
-         * iterator access
-         * @code
-         * for(SwPaM& rCurrentPaM : pPaM->GetRingContainer())
-         *     do_stuff(rCurrentPaM); // this gets called on every SwPaM in the same ring as pPaM
-         * @endcode
-         */
-        iterator begin();
-        iterator end();
-        const_iterator begin() const;
-        const_iterator end() const;
-        /** @return the number of elements in the container */
-        size_t size() const
-            { return std::distance(begin(), end()); }
+        public:
+            RingContainer( T* pRing ) : m_pStart(pRing) {};
+            typedef RingIterator<T> iterator;
+            typedef RingIterator<const T> const_iterator;
+            /**
+             * iterator access
+             * @code
+             * for(SwPaM& rCurrentPaM : pPaM->GetRingContainer())
+             *     do_stuff(rCurrentPaM); // this gets called on every SwPaM in the same ring as pPaM
+             * @endcode
+             */
+            iterator begin();
+            iterator end();
+            const_iterator begin() const;
+            const_iterator end() const;
+            /** @return the number of elements in the container */
+            size_t size() const
+                { return std::distance(begin(), end()); }
     };
+
     template <class T>
     class RingIterator SAL_FINAL : public boost::iterator_facade<
           RingIterator<T>
@@ -178,6 +178,7 @@ namespace sw
                 if(!bStart)
                     m_pCurrent = m_pStart;
             }
+
         private:
             friend class boost::iterator_core_access;
             void increment()
