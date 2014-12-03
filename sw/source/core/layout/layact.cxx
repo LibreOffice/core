@@ -2147,17 +2147,16 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         // We remember the shells where the cursor is visible, so we can make
         // it visible again if needed after a document change.
         std::vector<bool> aBools;
-        SwViewShell *pSh = pImp->GetShell();
-        do
-        {   ++pSh->mnStartAction;
+        for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
+        {
+            ++rSh.mnStartAction;
             bool bVis = false;
-            if ( pSh->ISA(SwCrsrShell) )
+            if ( rSh.ISA(SwCrsrShell) )
             {
-                bVis = static_cast<SwCrsrShell*>(pSh)->GetCharRect().IsOver(pSh->VisArea());
+                bVis = static_cast<SwCrsrShell*>(&rSh)->GetCharRect().IsOver(rSh.VisArea());
             }
             aBools.push_back( bVis );
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-        } while ( pSh != pImp->GetShell() );
+        }
 
         bool bInterrupt(false);
         {
