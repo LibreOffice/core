@@ -1000,7 +1000,7 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocMaxA,             //   84 Max()
         ocVLookup,          //   85 Vlookup()
         ocNPV,              //   86 Npv()
-        ocVar,              //   87 Var()
+        ocVarPA,            //   87 Var()
         ocStDevPA,          //   88 Std()
         ocIRR,              //   89 Irr()
         ocHLookup,          //   90 Hlookup()
@@ -1529,7 +1529,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocMaxA,             //   84 Max()
         ocVLookup,          //   85 Vlookup()
         ocNPV,              //   86 Npv()
-        ocVar,              //   87 Var()
+        ocVarPA,            //   87 Var()
         ocStDevPA,          //   88 Std()
         ocIRR,              //   89 Irr()
         ocHLookup,          //   90 Hlookup()
@@ -1577,7 +1577,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocNoName,           //  132 Vdb
         ocDBVarP,           //  133 Dvars
         ocDBStdDevP,        //  134 Dstds
-        ocVarP,             //  135 Vars
+        ocVarA,             //  135 Vars
         ocStDevA,           //  136 Stds
         ocGetDiffDate360,   //  137 D360
         ocNoName,           //  138 Reserved (internal)
@@ -1600,9 +1600,9 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocMax,              //  155 Puremax
         ocMin,              //  156 Puremin
         ocStDevP,           //  157 Purestd
-        ocNoName,           //  158 Purevar
+        ocVarP,             //  158 Purevar
         ocStDev,            //  159 Purestds
-        ocNoName,           //  160 Purevars
+        ocVar,              //  160 Purevars
         ocNoName,           //  161 Pmt2
         ocNoName,           //  162 Pv2
         ocNoName,           //  163 Fv2
