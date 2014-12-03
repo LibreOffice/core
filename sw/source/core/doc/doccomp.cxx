@@ -1691,7 +1691,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
             }
             rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( aRedlnData, *pTmp ), true );
 
-        } while( pDelRing != ( pTmp = static_cast<SwPaM*>(pTmp->GetNext()) ));
+        } while( pDelRing != ( pTmp = pTmp->GetNext()) );
     }
 
     pTmp = pInsRing;
