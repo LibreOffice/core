@@ -7360,7 +7360,6 @@ else
     SYSTEM_JPEG=
     if test "$with_jpeg_turbo" = "yes"; then
         AC_MSG_RESULT([internal, jpeg-turbo])
-        WITH_JPEG_TURBO=TRUE
         BUILD_TYPE="$BUILD_TYPE JPEG_TURBO"
         AC_CHECK_PROGS(NASM, [nasm nasmw yasm])
         if test -z "$NASM" -a "$build_os" = "cygwin" -a -x "/opt/lo/bin/nasm"; then
@@ -7406,7 +7405,6 @@ _EOS
 fi
 AC_SUBST(NASM)
 AC_SUBST(SYSTEM_JPEG)
-AC_SUBST(WITH_JPEG_TURBO)
 
 dnl ===================================================================
 dnl Check for system clucene

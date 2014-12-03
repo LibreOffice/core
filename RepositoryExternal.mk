@@ -455,7 +455,7 @@ $(call gb_LinkTarget_set_ldflags,$(1),\
 
 endef
 
-else ifeq ($(WITH_JPEG_TURBO),TRUE)
+else ifneq ($(filter JPEG_TURBO,$(BUILD_TYPE)),)
 
 define gb_LinkTarget__use_jpeg
 $(call gb_LinkTarget_set_include,$(1),\
