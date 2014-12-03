@@ -1745,7 +1745,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
                     }
                 }
                 else
-                    pTmp = static_cast<SwPaM*>(pTmp->GetNext());
+                    pTmp = pTmp->GetNext();
             } while( pInsRing != pTmp );
         }
 
