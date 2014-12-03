@@ -57,7 +57,7 @@ namespace sw
              * item pDestRing
              * @param pDestRing the container to merge this container with
              */
-            void MoveRingTo( T* pDestRing );
+            void MoveRingTo( T* pDestRing )
             {
                 std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
                 std::swap(*(&pPrev), *(&pDestRing->pPrev));
@@ -133,10 +133,14 @@ namespace sw
     }
 
     template <class T> class RingIterator;
+    /**
+     * helper class that provides STL-style container iteration to the ring
+     */
     template <class T>
     class RingContainer SAL_FINAL
     {
         private:
+            /** the item in the ring where iteration starts */
             T* m_pStart;
 
         public:
@@ -187,7 +191,14 @@ namespace sw
                 { return m_pCurrent == other.m_pCurrent && m_pStart == m_pStart; }
             T& dereference() const
                 { return m_pCurrent ? *m_pCurrent : * m_pStart; }
+            /**
+             * This is:
+             * - pointing to the current item in the iteration in general
+             * - nullptr if on the first item (begin())
+             * - m_pStart when beyond the last item (end())
+             */
             T* m_pCurrent;
+            /** the first item of the iteration */
             T* m_pStart;
     };
 
