@@ -217,7 +217,7 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
     DeviceCoordinate nPixelWidth = 0;
 
-    if(rArgs.mpDXArray)
+    if(rArgs.mpDXArray && !(rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) )
     {
         nPixelWidth = rArgs.mpDXArray[ mnCharCount - 1 ];
         if( nPixelWidth <= 0)
@@ -231,18 +231,18 @@ void CTLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             mfTrailingSpaceWidth = nFullPixelWidth - nPixelWidth;
             if( nPixelWidth <= 0)
                 return;
-            // in RTL-layouts trailing spaces are leftmost
-            // TODO: use BiDi-algorithm to thoroughly check this assumption
-            if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
-            {
-                mfBaseAdv = mfTrailingSpaceWidth;
-            }
         }
         mfCachedWidth = nPixelWidth;
     }
     else
     {
         nPixelWidth = rArgs.mnLayoutWidth;
+
+        if( nPixelWidth <= 0 && rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL)
+        {
+            nPixelWidth = GetTextWidth();
+        }
+
         if( nPixelWidth <= 0)
             return;
 
