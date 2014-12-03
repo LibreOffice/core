@@ -361,7 +361,7 @@ public:
 
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
-    void SetDirty( SCROW nRow1, SCROW nRow2, bool bBroadcast = true, bool bIncludeEmptyCells = false );
+    void SetDirty( SCROW nRow1, SCROW nRow2, bool bBroadcast, bool bIncludeEmptyCells );
     void        SetDirtyVar();
     void        SetDirtyAfterLoad();
     void        SetTableOpDirty( const ScRange& );

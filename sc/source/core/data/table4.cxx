@@ -1184,7 +1184,7 @@ void ScTable::FillFormulaVertical(
 
     std::vector<sc::RowSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
     for (; it != itEnd; ++it)
-        aCol[nCol].SetDirty(it->mnRow1, it->mnRow2, false);
+        aCol[nCol].SetDirty(it->mnRow1, it->mnRow2, false, false);
 
     rProgress += nRow2 - nRow1 + 1;
     if (pProgress)
