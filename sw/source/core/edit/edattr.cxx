@@ -407,12 +407,12 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
     bool bChgd = false;
     StartAllAction();
 
-    SwPaM* pCrsr = GetCrsr(), *pFirst = pCrsr;
-    do {
+    for(SwPaM& rCrsr : GetCrsr()->GetRingContainer())
+    {
         bChgd |=
-            mpDoc->SetCurFtn( *pCrsr, rFillFtn.GetNumStr(), rFillFtn.GetNumber(), rFillFtn.IsEndNote() );
+            mpDoc->SetCurFtn( rCrsr, rFillFtn.GetNumStr(), rFillFtn.GetNumber(), rFillFtn.IsEndNote() );
 
-    } while( pFirst != ( pCrsr = static_cast<SwPaM*>(pCrsr->GetNext()) ));
+    }
 
     EndAllAction();
     return bChgd;
