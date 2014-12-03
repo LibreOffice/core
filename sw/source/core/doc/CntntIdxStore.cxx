@@ -417,7 +417,7 @@ void CntntIdxStoreImpl::SaveShellCrsrs(SwDoc* pDoc, sal_uLong nNode, sal_Int32 n
                 do {
                     lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *_pStkCrsr);
                 } while ( (_pStkCrsr != 0 ) &&
-                    ((_pStkCrsr = static_cast<SwPaM *>(_pStkCrsr->GetNext())) != static_cast<SwCrsrShell*>(_pStartShell)->GetStkCrsr()) );
+                    ((_pStkCrsr = _pStkCrsr->GetNext()) != static_cast<SwCrsrShell*>(_pStartShell)->GetStkCrsr()) );
 
             FOREACHPAM_START( static_cast<SwCrsrShell*>(_pStartShell)->_GetCrsr() )
                 lcl_ChkPaMBoth( m_aShellCrsrEntries, nNode, nCntnt, *PCURCRSR);
