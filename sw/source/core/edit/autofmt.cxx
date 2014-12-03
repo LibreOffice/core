@@ -1196,7 +1196,7 @@ void SwAutoFormat::DelMoreLinesBlanks( bool bWithLineBreaks )
 
         SwPaM* pNxt;
         do {
-            pNxt = static_cast<SwPaM*>(m_aDelPam.GetNext());
+            pNxt = m_aDelPam.GetNext();
             if( pNxt->HasMark() && *pNxt->GetPoint() != *pNxt->GetMark() )
             {
                 bool bHasBlnks = HasSelBlanks( *pNxt );
