@@ -882,13 +882,13 @@ void SwCrsrShell::ClearTblBoxCntnt()
 bool SwCrsrShell::EndAllTblBoxEdit()
 {
     bool bRet = false;
-    SwViewShell *pSh = this;
-    do {
-        if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-            bRet |= static_cast<SwCrsrShell*>(pSh)->CheckTblBoxCntnt(
-                        static_cast<SwCrsrShell*>(pSh)->m_pCurCrsr->GetPoint() );
+    for(SwViewShell& rSh : GetRingContainer())
+    {
+        if( rSh.IsA( TYPE( SwCrsrShell ) ) )
+            bRet |= static_cast<SwCrsrShell*>(&rSh)->CheckTblBoxCntnt(
+                        static_cast<SwCrsrShell*>(&rSh)->m_pCurCrsr->GetPoint() );
 
-    } while( this != (pSh = static_cast<SwViewShell *>(pSh->GetNext())) );
+    }
     return bRet;
 }
 
