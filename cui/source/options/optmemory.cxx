@@ -57,6 +57,7 @@
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <dialmgr.hxx>
+#include <limits>
 
 #include <config_vclplug.h>
 
@@ -115,6 +116,7 @@ OfaMemoryOptionsPage::OfaMemoryOptionsPage(vcl::Window* pParent, const SfxItemSe
 {
     get(m_pUndoEdit, "undo");
     get(m_pNfGraphicCache, "graphiccache");
+    m_pNfGraphicCache->SetMax(std::numeric_limits< long >::max() >> 20);
     get(m_pNfGraphicObjectCache, "objectcache");
     get(m_pTfGraphicObjectTime,"objecttime");
     get(m_pNfOLECache, "olecache");
