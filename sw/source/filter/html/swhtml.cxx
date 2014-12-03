@@ -2590,13 +2590,12 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
 
     if( bSetCrsr )
     {
-        // an allen CrsrEditShells die Cursor auf den Doc-Anfang setzen
-        SwViewShell *pSh = pActionViewShell;
-        do {
-            if( pSh->IsA( TYPE( SwCrsrShell ) ) )
-                static_cast<SwCrsrShell*>(pSh)->SttEndDoc(true);
-            pSh = static_cast<SwViewShell *>(pSh->GetNext());
-        } while( pSh != pActionViewShell );
+        // set the cursor to the doc begin in all CrsrEditShells
+        for(SwViewShell& rSh : pActionViewShell->GetRingContainer())
+        {
+            if( rSh.IsA( TYPE( SwCrsrShell ) ) )
+                static_cast<SwCrsrShell*>(&rSh)->SttEndDoc(true);
+        }
 
         bSetCrsr = false;
     }
