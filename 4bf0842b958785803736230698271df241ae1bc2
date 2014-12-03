@@ -212,6 +212,24 @@
     },
     {
       "key": {
+        "uuid": "fa32b979_a8567f04",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-03T16:14:23Z",
+      "side": 1,
+      "message": "sure, but the worst is failing silently\n\nas these are implementations of native Java methods, what can theoretically be done is fail via JNI with an appropriate Throwable; just not sure it\u0027s worth the added complexity in practice",
+      "parentUuid": "3afb71cf_0de45939",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3afb71cf_4aad9730",
         "filename": "jurt/source/pipe/wrapper/wrapper.c",
         "patchSetId": 1
@@ -241,6 +259,24 @@
       "side": 1,
       "message": "That was my first darft. \nBut the other function make no sense without this create. Then the next exception?\nBut you right i must make thread-safe.",
       "parentUuid": "3afb71cf_4aad9730",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_68415739",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-03T16:14:23Z",
+      "side": 1,
+      "message": "better not unnecessarily make this wrapper depend on such \"clever reasoning;\"  protocol violations are already properly handled in the Java and the wrapped C++ code, so no need to handle them here, but also no reason to rely on them not happening",
+      "parentUuid": "3afb71cf_edcfbdb1",
       "revId": "4bf0842b958785803736230698271df241ae1bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -380,6 +416,24 @@
       "writtenOn": "2014-11-28T10:14:11Z",
       "side": 1,
       "message": "see line 99",
+      "parentUuid": "3afb71cf_ea49e38f",
+      "revId": "4bf0842b958785803736230698271df241ae1bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_c85bc32d",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-03T16:14:23Z",
+      "side": 1,
+      "message": "sorry, typo, I meant \"closing a pipe must *not* unload jpipx\"",
       "parentUuid": "3afb71cf_ea49e38f",
       "revId": "4bf0842b958785803736230698271df241ae1bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
