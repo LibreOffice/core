@@ -315,17 +315,15 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     {
         pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
-        SwPaM *pCurrent = &rPam;
-        do
+        for(SwPaM& rCurrent : rPam.GetRingContainer())
         {
-            if (pCurrent->HasMark() &&
+            if (rCurrent.HasMark() &&
                 ( (bTableMode) ||
-                  (*pCurrent->GetPoint() != *pCurrent->GetMark()) ))
+                  (*rCurrent.GetPoint() != *rCurrent.GetMark()) ))
             {
-                pDoc->getIDocumentContentOperations().InsertItemSet(*pCurrent, rSet, nFlags);
+                pDoc->getIDocumentContentOperations().InsertItemSet(rCurrent, rSet, nFlags);
             }
-            pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
-        } while (pCurrent != &rPam);
+        }
 
         pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
