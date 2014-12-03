@@ -991,6 +991,15 @@ void Ruler::ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom )
     }
 }
 
+static int adjustSize(int nOrig)
+{
+    if (nOrig <= 0)
+        return 0;
+
+    // make sure we return an odd number, that looks better in the ruler
+    return ( (3*nOrig) / 8) * 2 + 1;
+}
+
 void Ruler::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -999,6 +1008,11 @@ void Ruler::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
     {
         vcl::Font aFont;
         aFont = rStyleSettings.GetToolFont();
+
+        // make the font a bit smaller than default
+        Size aSize(adjustSize(aFont.GetSize().Width()), adjustSize(aFont.GetSize().Height()));
+        aFont.SetSize(aSize);
+
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );
