@@ -315,7 +315,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         delete pUndoPam;
 
-        pPam = static_cast<SwPaM *>( pPam->GetNext());
+        pPam = pPam->GetNext();
         if( pPam == pEnd )
             break;
 
