@@ -88,7 +88,7 @@ void CheckRange( SwCursor* pCurCrsr )
         *pEnd = pCurCrsr->GetPoint() == pStt ? pCurCrsr->GetMark() : pCurCrsr->GetPoint();
 
     SwPaM *pTmpDel = 0,
-          *pTmp = static_cast<SwPaM*>(pCurCrsr->GetNext());
+          *pTmp = pCurCrsr->GetNext();
 
     // Search the complete ring
     while( pTmp != pCurCrsr )
@@ -108,7 +108,7 @@ void CheckRange( SwCursor* pCurCrsr )
 
          // If Point or Mark is within the Crsr range, we need to remove the old
         // range. Take note that Point does not belong to the range anymore.
-        pTmp = static_cast<SwPaM*>(pTmp->GetNext());
+        pTmp = pTmp->GetNext();
         delete pTmpDel;         // Remove old range
         pTmpDel = 0;
     }
