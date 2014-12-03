@@ -87,7 +87,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(vcl::Window * pParent,
             nCaseReadonly |= PATH_READONLY;
         else if( SWUnoHelper::UCB_IsCaseSensitiveFileName( aTempFile.GetURL()))
             nCaseReadonly |= PATH_CASE_SENSITIVE;
-        m_pPathLB->SetEntryData(i, (void*)nCaseReadonly);
+        m_pPathLB->SetEntryData(i, reinterpret_cast<void*>(nCaseReadonly));
     }
     m_pPathLB->SelectEntryPos(0);
     m_pPathLB->Enable(true);
@@ -318,7 +318,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
     bool bEnableNew = true;
     bool bEnableDel = false;
     sal_uLong nCaseReadonly =
-            (sal_uLong)m_pPathLB->GetEntryData(m_pPathLB->GetSelectEntryPos());
+            reinterpret_cast<sal_uLong>(m_pPathLB->GetEntryData(m_pPathLB->GetSelectEntryPos()));
     bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
 
     if(sEntry.isEmpty() || bDirReadonly)
@@ -333,8 +333,8 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
             for(sal_uLong i = 0; i < m_pGroupTLB->GetEntryCount(); i++)
             {
                 OUString sTemp = m_pGroupTLB->GetEntryText( i, 0 );
-                nCaseReadonly = (sal_uLong)m_pPathLB->GetEntryData(
-                    m_pPathLB->GetEntryPos(m_pGroupTLB->GetEntryText(i,1)));
+                nCaseReadonly = reinterpret_cast<sal_uLong>(m_pPathLB->GetEntryData(
+                    m_pPathLB->GetEntryPos(m_pGroupTLB->GetEntryText(i,1))));
                 bool bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
 
                 if( !bCase && rSCmp.isEqual( sTemp, sEntry ))

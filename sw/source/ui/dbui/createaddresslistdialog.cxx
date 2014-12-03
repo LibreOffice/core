@@ -179,7 +179,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
         FixedText* pNewFT = new FixedText(m_pWindow, WB_RIGHT);
         Edit* pNewED = new Edit(m_pWindow, WB_BORDER);
         //set nLines a position identifier - used in the ModifyHdl
-        pNewED->SetData((void*)nLines);
+        pNewED->SetData(reinterpret_cast<void*>(nLines));
         pNewED->SetGetFocusHdl(aFocusLink);
         pNewED->SetModifyHdl(aEditModifyLink);
 
@@ -299,7 +299,7 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
 IMPL_LINK(SwAddressControl_Impl, EditModifyHdl_Impl, Edit*, pEdit)
 {
     //get the data element number of the current set
-    sal_Int32 nIndex = (sal_Int32)(sal_IntPtr)pEdit->GetData();
+    sal_Int32 nIndex = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEdit->GetData());
     //get the index of the set
     OSL_ENSURE(m_pData->aDBData.size() > m_nCurrentDataSet, "wrong data set index" );
     if(m_pData->aDBData.size() > m_nCurrentDataSet)

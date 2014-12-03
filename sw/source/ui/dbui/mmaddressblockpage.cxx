@@ -483,11 +483,11 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         m_pFieldFT->Show();
         m_pFieldCB->Show();
         SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(SW_RESSTR(ST_SALUTATION));
-        pEntry->SetUserData((void*)(sal_Int32)USER_DATA_SALUTATION );
+        pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_SALUTATION) );
         pEntry = m_pAddressElementsLB->InsertEntry(SW_RESSTR(ST_PUNCTUATION));
-        pEntry->SetUserData((void*)(sal_Int32)USER_DATA_PUNCTUATION );
+        pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_PUNCTUATION) );
         pEntry = m_pAddressElementsLB->InsertEntry(SW_RESSTR(ST_TEXT));
-        pEntry->SetUserData((void*)(sal_Int32)USER_DATA_TEXT       );
+        pEntry->SetUserData(reinterpret_cast<void*>((sal_Int32)USER_DATA_TEXT)       );
         ResStringArray aSalutArr(SW_RES(RA_SALUTATION));
         for(sal_uInt32 i = 0; i < aSalutArr.Count(); ++i)
             m_aSalutations.push_back(aSalutArr.GetString(i));
@@ -512,7 +512,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         SvTreeListEntry* pEntry = m_pAddressElementsLB->InsertEntry(rHeaders.GetString( i ));
-        pEntry->SetUserData((void*)(sal_IntPtr)i);
+        pEntry->SetUserData(reinterpret_cast<void*>((sal_IntPtr)i));
     }
     m_pOK->SetClickHdl(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
     m_pAddressElementsLB->SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl ));
@@ -543,7 +543,7 @@ IMPL_LINK_NOARG(SwCustomizeAddressBlockDialog, OKHdl_Impl)
 
 IMPL_LINK(SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl, DDListBox*, pBox)
 {
-    sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pBox->FirstSelected()->GetUserData();
+    sal_Int32 nUserData = (sal_Int32)reinterpret_cast<sal_IntPtr>(pBox->FirstSelected()->GetUserData());
     // Check if the selected entry is already in the address and then forbid inserting
     m_pInsertFieldIB->Enable(nUserData >= 0 || !HasItem_Impl(nUserData));
     return 0;
@@ -596,7 +596,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
             const OUString sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
             if( sEntry == sSelected.copy( 1, sSelected.getLength() - 2 ) )
             {
-                nRet = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
+                nRet = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
                 break;
             }
         }
@@ -610,7 +610,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     for(sal_uLong i = 0; i < m_pAddressElementsLB->GetEntryCount();  ++i)
     {
         SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
-        if((sal_Int32)(sal_IntPtr)pEntry->GetUserData() == nUserData)
+        if((sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()) == nUserData)
         {
             sEntry = m_pAddressElementsLB->GetEntryText(pEntry);
             break;
@@ -705,7 +705,7 @@ void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
     m_pRemoveFieldIB->Enable(m_pDragED->HasCurrentItem());
     SvTreeListEntry* pEntry = m_pAddressElementsLB->GetCurEntry();
     m_pInsertFieldIB->Enable( pEntry &&
-            (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || !m_pFieldCB->GetText().isEmpty()));
+            (0 < (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData()) || !m_pFieldCB->GetText().isEmpty()));
 }
 
 void SwCustomizeAddressBlockDialog::SetAddress(const OUString& rAddress)
@@ -725,7 +725,7 @@ OUString SwCustomizeAddressBlockDialog::GetAddress()
         {
             SvTreeListEntry* pEntry = m_pAddressElementsLB->GetEntry(i);
             const OUString sEntry = "<" + m_pAddressElementsLB->GetEntryText(pEntry) + ">";
-            sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
+            sal_Int32 nUserData = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
             switch(nUserData)
             {
                 case USER_DATA_SALUTATION:
@@ -1227,7 +1227,7 @@ void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         uno::Reference<
              datatransfer::XTransferable > xRef( pContainer );
 
-        sal_Int32 nUserData = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
+        sal_Int32 nUserData = (sal_Int32)reinterpret_cast<sal_IntPtr>(pEntry->GetUserData());
         //special entries can only be once in the address / greeting
         if(nUserData >= 0 || !m_pParentDialog->HasItem_Impl(nUserData))
         {

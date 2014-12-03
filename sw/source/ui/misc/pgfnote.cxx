@@ -150,7 +150,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     const SfxPoolItem* pItem = SfxTabPage::GetItem(*rSet, FN_PARAM_FTN_INFO);
     if( pItem )
     {
-        pFtnInfo = &((const SwPageFtnInfoItem*)pItem)->GetPageFtnInfo();
+        pFtnInfo = &static_cast<const SwPageFtnInfoItem*>(pItem)->GetPageFtnInfo();
     }
     else
     {
@@ -212,7 +212,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
     {
         const SfxPoolItem* pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pColorItem != NULL )
-            pColorList = ( (SvxColorListItem*)pColorItem )->GetColorList();
+            pColorList = static_cast<const SvxColorListItem*>(pColorItem)->GetColorList();
     }
 
     OSL_ENSURE( pColorList.is(), "ColorTable not found!" );
@@ -257,7 +257,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
 // stuff attributes into the set, when OK
 bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 {
-    SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));
+    SwPageFtnInfoItem aItem(static_cast<const SwPageFtnInfoItem&>(GetItemSet().Get(FN_PARAM_FTN_INFO)));
 
     // that's the original
     SwPageFtnInfo &rFtnInfo = aItem.GetPageFtnInfo();
@@ -304,7 +304,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 
 void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 {
-    const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( RES_FRM_SIZE );
+    const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get( RES_FRM_SIZE ));
     lMaxHeight = rSize.GetSize().Height();
 
     const SfxPoolItem* pItem;
@@ -312,12 +312,12 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     {
         const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            (const SfxBoolItem&)rHeaderSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) );
+            static_cast<const SfxBoolItem&>(rHeaderSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) ));
 
         if ( rHeaderOn.GetValue() )
         {
             const SvxSizeItem& rSizeItem =
-                (const SvxSizeItem&)rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE));
+                static_cast<const SvxSizeItem&>(rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE)));
             lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
@@ -327,19 +327,19 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     {
         const SfxItemSet& rFooterSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn =
-            (const SfxBoolItem&)rFooterSet.Get( SID_ATTR_PAGE_ON );
+            static_cast<const SfxBoolItem&>(rFooterSet.Get( SID_ATTR_PAGE_ON ));
 
         if ( rFooterOn.GetValue() )
         {
             const SvxSizeItem& rSizeItem =
-                (const SvxSizeItem&)rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) );
+                static_cast<const SvxSizeItem&>(rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) ));
             lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
 
     if ( rSet.GetItemState( RES_UL_SPACE , false ) == SfxItemState::SET )
     {
-        const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)rSet.Get( RES_UL_SPACE );
+        const SvxULSpaceItem &rUL = static_cast<const SvxULSpaceItem&>(rSet.Get( RES_UL_SPACE ));
         lMaxHeight -= rUL.GetUpper() + rUL.GetLower();
     }
 

@@ -140,7 +140,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
             sEntry += "\t";
             sEntry += m_sQuery;
             SvTreeListEntry* pEntry = m_pTable->InsertEntry(sEntry);
-            pEntry->SetUserData((void*)1);
+            pEntry->SetUserData(reinterpret_cast<void*>(1));
         }
     }
 }
