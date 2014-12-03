@@ -6984,7 +6984,13 @@ bool PDFWriterImpl::emit()
 
 #if !defined(ANDROID) && !defined(IOS)
     if (m_nSignatureObject != -1) // if document is signed, emit sigdict
-        CHECK_RETURN( emitSignature() );
+    {
+        if( !emitSignature() )
+        {
+            m_aErrors.insert( PDFWriter::Error_Signature_Failed );
+            return false;
+        }
+    }
 #endif
 
     // emit trailer
@@ -6992,7 +6998,13 @@ bool PDFWriterImpl::emit()
 
 #if !defined(ANDROID) && !defined(IOS)
     if (m_nSignatureObject != -1) // finalize the signature
-        CHECK_RETURN( finalizeSignature() );
+    {
+        if( !finalizeSignature() )
+        {
+            m_aErrors.insert( PDFWriter::Error_Signature_Failed );
+            return false;
+        }
+    }
 #endif
 
     m_aFile.close();
