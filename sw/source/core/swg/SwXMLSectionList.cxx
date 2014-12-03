@@ -120,25 +120,4 @@ SvXMLSectionListContext::~SvXMLSectionListContext ( void )
 {
 }
 
-SvXMLIgnoreSectionListContext::SvXMLIgnoreSectionListContext(
-   SwXMLSectionList& rImport,
-   sal_uInt16 nPrefix,
-   const OUString& rLocalName,
-   const uno::Reference< xml::sax::XAttributeList > & ) :
-   SvXMLImportContext ( rImport, nPrefix, rLocalName ),
-   rLocalRef(rImport)
-{
-}
-
-SvXMLIgnoreSectionListContext::~SvXMLIgnoreSectionListContext ( void )
-{
-}
-SvXMLImportContext *SvXMLIgnoreSectionListContext::CreateChildContext(
-    sal_uInt16 nPrefix,
-    const OUString& rLocalName,
-    const uno::Reference< xml::sax::XAttributeList > & xAttrList )
-{
-    return  new SvXMLIgnoreSectionListContext (rLocalRef, nPrefix, rLocalName, xAttrList);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

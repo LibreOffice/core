@@ -59,22 +59,6 @@ public:
     virtual ~SvXMLSectionListContext ( void );
 };
 
-class SvXMLIgnoreSectionListContext : public SvXMLImportContext
-{
-private:
-    SwXMLSectionList & rLocalRef;
-public:
-    SvXMLIgnoreSectionListContext ( SwXMLSectionList& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
-    virtual ~SvXMLIgnoreSectionListContext ( void );
-};
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
