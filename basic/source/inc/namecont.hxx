@@ -34,7 +34,6 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -231,7 +230,6 @@ class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEven
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >       mxContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >      mxSFI;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XMacroExpander >         mxMacroExpander;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringSubstitution >    mxStringSubstitution;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >            mxOwnerDocument;
 

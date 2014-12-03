@@ -65,7 +65,6 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/setup/UpdateCheck.hpp>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
@@ -77,7 +76,6 @@
 #include <osl/module.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/uri.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/module.hxx>
@@ -119,8 +117,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-
-#define EXPAND_PROTOCOL         "vnd.sun.star.expand:"
 
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
 
@@ -823,7 +819,6 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     SvTreeListEntry* pEntry = NULL;
     if ( pLastPageSaver )
     {
-        OUString sExpand( EXPAND_PROTOCOL );
         OUString sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                   : pLastPageSaver->m_sLastPageURL_Tools;
         if ( sLastURL.isEmpty() )
@@ -832,16 +827,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                                                 : pLastPageSaver->m_sLastPageURL_Tools;
         }
 
-        // MacroExpander to convert "expand"-URL to "file"-URL
-        Reference< XMacroExpander > xMacroExpander;
         bool bMustExpand = ( INetURLObject( sLastURL ).GetProtocol() == INET_PROT_FILE );
-
-        if ( bMustExpand )
-        {
-            Reference< XComponentContext > xContext(
-                comphelper::getProcessComponentContext() );
-            xMacroExpander = theMacroExpander::get(xContext);
-        }
 
         SvTreeListEntry* pTemp = pTreeLB->First();
         while( !pEntry && pTemp )
@@ -851,9 +837,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
             {
                 OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pTemp->GetUserData();
                 OUString sPageURL = pPageInfo->m_sPageURL;
-                if ( bMustExpand
-                    && !sPageURL.isEmpty()
-                    && sPageURL.startsWith( sExpand ) )
+                if ( bMustExpand )
                 {
                     sPageURL = comphelper::getExpandedUri(
                         comphelper::getProcessComponentContext(), sPageURL);

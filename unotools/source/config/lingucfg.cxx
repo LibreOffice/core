@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -42,8 +41,6 @@
 #include "itemholder1.hxx"
 
 using namespace com::sun::star;
-
-using ::rtl::Uri;
 
 #define FILE_PROTOCOL       "file:///"
 
@@ -927,33 +924,20 @@ static bool lcl_GetFileUrlFromOrigin(
     OUString /*out*/ &rFileUrl,
     const OUString &rOrigin )
 {
-    bool bSuccess = false;
-    if (!rOrigin.isEmpty())
+    OUString aURL(
+        comphelper::getExpandedUri(
+            comphelper::getProcessComponentContext(), rOrigin));
+    if (aURL.startsWith( FILE_PROTOCOL ))
     {
-        OUString aURL( rOrigin );
-        if ( aURL.startsWith( "vnd.sun.star.expand:" ) )
-        {
-            aURL = comphelper::getExpandedUri(
-                comphelper::getProcessComponentContext(), aURL);
-            bool bIsFileUrl = aURL.startsWith( FILE_PROTOCOL );
-            if (bIsFileUrl)
-            {
-                rFileUrl = aURL;
-                bSuccess = true;
-            }
-            else
-            {
-                SAL_WARN(
-                    "unotools.config", "not a file URL, <" << aURL << ">" );
-            }
-        }
-        else
-        {
-            SAL_WARN(
-                "unotools.config", "failed to get file URL, <" << aURL << ">" );
-        }
+        rFileUrl = aURL;
+        return true;
     }
-    return bSuccess;
+    else
+    {
+        SAL_WARN(
+            "unotools.config", "not a file URL, <" << aURL << ">" );
+        return false;
+    }
 }
 
 bool SvtLinguConfig::GetDictionaryEntry(

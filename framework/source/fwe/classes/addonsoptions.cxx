@@ -24,10 +24,7 @@
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/util/theMacroExpander.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/uri.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/dibtools.hxx>
@@ -339,7 +336,6 @@ class AddonsOptions_Impl : public ConfigItem
         AddonToolBars                                     m_aCachedToolBarPartProperties;
         std::vector< OUString >                      m_aCachedToolBarPartResourceNames;
         Sequence< Sequence< PropertyValue > >             m_aCachedHelpMenuProperties;
-        Reference< util::XMacroExpander >                 m_xMacroExpander;
         ImageManager                                      m_aImageManager;
         Sequence< Sequence< PropertyValue > >             m_aEmptyAddonToolBar;
         MergeMenuInstructionContainer                     m_aCachedMergeMenuInsContainer;
@@ -409,10 +405,6 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGEFALLBACK         ] = PROPERTYNAME_MERGESTATUSBAR_MERGEFALLBACK;
     m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_MERGECONTEXT          ] = PROPERTYNAME_MERGESTATUSBAR_MERGECONTEXT;
     m_aPropMergeStatusbarNames[ OFFSET_MERGESTATUSBAR_STATUSBARITEMS        ] = PROPERTYNAME_MERGESTATUSBAR_STATUSBARITEMS;
-
-    Reference< XComponentContext > xContext(
-        comphelper::getProcessComponentContext() );
-    m_xMacroExpander =  util::theMacroExpander::get(xContext);
 
     ReadConfigurationData();
 

@@ -31,7 +31,6 @@
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
@@ -60,7 +59,6 @@
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/PathSubstitution.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -91,8 +89,6 @@ using namespace cppu;
 using namespace osl;
 
 using com::sun::star::uno::Reference;
-
-using ::rtl::Uri;
 
 // #i34411: Flag for error handling during migration
 static bool GbMigrationSuppressErrors = false;
@@ -1383,10 +1379,6 @@ throw(WrappedTargetException, RuntimeException)
 {
     return true;
 }
-
-
-
-#define EXPAND_PROTOCOL "vnd.sun.star.expand"
 
 OUString SfxLibraryContainer::createAppLibraryFolder( SfxLibrary* pLib, const OUString& aName )
 {
@@ -2877,23 +2869,8 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
 OUString SfxLibraryContainer::expand_url( const OUString& url )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    if (url.startsWith( EXPAND_PROTOCOL ":" ))
+    if (url.startsWithIgnoreAsciiCase( "vnd.sun.star.expand:" ))
     {
-        if( !mxMacroExpander.is() )
-        {
-            Reference< util::XMacroExpander > xExpander = util::theMacroExpander::get(mxContext);
-            MutexGuard guard( Mutex::getGlobalMutex() );
-            if( !mxMacroExpander.is() )
-            {
-                mxMacroExpander = xExpander;
-            }
-        }
-
-        if( !mxMacroExpander.is() )
-        {
-            return url;
-        }
-
         return comphelper::getExpandedUri(mxContext, url);
     }
     else if( mxStringSubstitution.is() )
