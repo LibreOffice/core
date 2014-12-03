@@ -1006,11 +1006,11 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocHLookup,          //   90 Hlookup()
         ocDBSum,            //   91 XlfDsum
         ocDBAverage,        //   92 XlfDaverage
-        ocDBCount,          //   93 XlfDcount
+        ocDBCount2,         //   93 XlfDcount
         ocDBMin,            //   94 XlfDmin
         ocDBMax,            //   95 XlfDmax
-        ocDBVar,            //   96 XlfDvar
-        ocDBStdDev,         //   97 XlfDstdev
+        ocDBVarP,           //   96 XlfDvar
+        ocDBStdDevP,        //   97 XlfDstdev
         ocIndex,            //   98 Index()
         ocColumns,          //   99 Cols()
         ocRows,             //  100 Rows()
@@ -1535,11 +1535,11 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocHLookup,          //   90 Hlookup()
         ocDBSum,            //   91 XlfDsum
         ocDBAverage,        //   92 XlfDaverage
-        ocDBCount,          //   93 XlfDcount
+        ocDBCount2,         //   93 XlfDcount
         ocDBMin,            //   94 XlfDmin
         ocDBMax,            //   95 XlfDmax
-        ocDBVar,            //   96 XlfDvar
-        ocDBStdDev,         //   97 XlfDstdev
+        ocDBVarP,           //   96 XlfDvar
+        ocDBStdDevP,        //   97 XlfDstdev
         ocIndex,            //   98 Index()
         ocColumns,          //   99 Cols()
         ocRows,             //  100 Rows()
@@ -1575,8 +1575,8 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocNoName,           //  130 Reserved (internal)
         ocGetActDate,       //  131 Today
         ocNoName,           //  132 Vdb
-        ocDBVarP,           //  133 Dvars
-        ocDBStdDevP,        //  134 Dstds
+        ocDBVar,            //  133 Dvars
+        ocDBStdDev,         //  134 Dstds
         ocVarA,             //  135 Vars
         ocStDevA,           //  136 Stds
         ocGetDiffDate360,   //  137 D360
@@ -2042,6 +2042,12 @@ static DefTokenId lcl_KnownAddIn( const OString& rTest )
             eId=ocZZR;
     else if (rTest == "CTERM")
             eId=ocZZR;
+    else if (rTest == "SUMIF")
+            eId=ocSumIf;
+    else if (rTest == "COUNTIF")
+            eId=ocCountIf;
+    else if (rTest == "DPURECOUNT")
+            eId=ocDBCount;
     return eId;
 }
 
