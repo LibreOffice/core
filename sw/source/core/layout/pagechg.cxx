@@ -1658,25 +1658,22 @@ void SwRootFrm::StartAllAction()
 
 void SwRootFrm::EndAllAction( bool bVirDev )
 {
-    SwViewShell *pSh = GetCurrShell();
-    if ( pSh )
-        do
+    if ( GetCurrShell() )
+        for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
         {
-            const bool bOldEndActionByVirDev = pSh->IsEndActionByVirDev();
-            pSh->SetEndActionByVirDev( bVirDev );
-            if ( pSh->ISA( SwCrsrShell ) )
+            const bool bOldEndActionByVirDev = rSh.IsEndActionByVirDev();
+            rSh.SetEndActionByVirDev( bVirDev );
+            if ( rSh.ISA( SwCrsrShell ) )
             {
-                static_cast<SwCrsrShell*>(pSh)->EndAction();
-                static_cast<SwCrsrShell*>(pSh)->CallChgLnk();
-                if ( pSh->ISA( SwFEShell ) )
-                    static_cast<SwFEShell*>(pSh)->SetChainMarker();
+                static_cast<SwCrsrShell*>(&rSh)->EndAction();
+                static_cast<SwCrsrShell*>(&rSh)->CallChgLnk();
+                if ( rSh.ISA( SwFEShell ) )
+                    static_cast<SwFEShell*>(&rSh)->SetChainMarker();
             }
             else
-                pSh->EndAction();
-            pSh->SetEndActionByVirDev( bOldEndActionByVirDev );
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-        } while ( pSh != GetCurrShell() );
+                rSh.EndAction();
+            rSh.SetEndActionByVirDev( bOldEndActionByVirDev );
+        }
 }
 
 void SwRootFrm::UnoRemoveAllActions()
