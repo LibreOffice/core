@@ -70,14 +70,13 @@ void SwEditShell::SetUndoNoResetModified()
 
 void SwEditShell::StartAllAction()
 {
-    SwViewShell *pSh = this;
-    do {
-        if( pSh->IsA( TYPE( SwEditShell ) ) )
-            static_cast<SwEditShell*>(pSh)->StartAction();
+    for(SwViewShell& rCurrentShell : GetRingContainer())
+    {
+        if( rCurrentShell.IsA( TYPE( SwEditShell ) ) )
+            static_cast<SwEditShell*>(&rCurrentShell)->StartAction();
         else
-            pSh->StartAction();
-        pSh = static_cast<SwViewShell *>(pSh->GetNext());
-    } while(pSh != this);
+            rCurrentShell.StartAction();
+    }
 }
 
 void SwEditShell::EndAllAction()
