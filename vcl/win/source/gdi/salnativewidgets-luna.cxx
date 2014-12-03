@@ -1288,19 +1288,18 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         if (ImplDrawNativeControl(aBlackDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr) &&
             ImplDrawNativeControl(aWhiteDC.getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
         {
-            boost::scoped_ptr<OpenGLTexture> pBlackTexture(aBlackDC.getTexture());
-            if (!pBlackTexture)
-                return false;
-
-            boost::scoped_ptr<OpenGLTexture> pWhiteTexture(aWhiteDC.getTexture());
-            if (!pWhiteTexture)
-                return false;
-
             pImpl->PreDraw();
-            pImpl->DrawTextureDiff(*pWhiteTexture, *pBlackTexture, aBlackDC.getTwoRect());
-            pImpl->PostDraw();
 
-            bOk = true;
+            boost::scoped_ptr<OpenGLTexture> pBlackTexture(aBlackDC.getTexture());
+            boost::scoped_ptr<OpenGLTexture> pWhiteTexture(aWhiteDC.getTexture());
+
+            if (pBlackTexture && pWhiteTexture)
+            {
+                pImpl->DrawTextureDiff(*pWhiteTexture, *pBlackTexture, aBlackDC.getTwoRect());
+                bOk = true;
+            }
+
+            pImpl->PostDraw();
         }
     }
 
