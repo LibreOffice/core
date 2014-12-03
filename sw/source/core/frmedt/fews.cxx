@@ -507,9 +507,9 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
     else
     {
         // Sort text nothing else
-        FOREACHPAM_START(GetCrsr())
-
-            SwPaM* pPam = PCURCRSR;
+        for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
+        {
+            SwPaM* pPam = &rPaM;
 
             SwPosition* pStart = pPam->Start();
             SwPosition* pEnd   = pPam->End();
@@ -534,8 +534,7 @@ bool SwFEShell::Sort(const SwSortOptions& rOpt)
             pPam->GetPoint()->nNode += nOffset;
             pCNd = pPam->GetCntntNode();
             pPam->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
-
-        FOREACHPAM_END()
+        }
     }
 
     EndAllAction();
