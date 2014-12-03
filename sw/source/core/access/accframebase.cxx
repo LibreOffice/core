@@ -353,7 +353,7 @@ bool SwAccessibleFrameBase::GetSelectedState( )
                 // else: this PaM is collapsed and doesn't select anything
 
                 // next PaM in ring
-                pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
+                pCrsr = pCrsr->GetNext();
             }
             while( pCrsr != pRingStart );
         }
