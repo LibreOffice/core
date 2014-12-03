@@ -224,7 +224,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     //will this put the EndAction of the last shell in the sequence?
 
     SwViewShell::mbLstAct = true;
-    SwViewShell *pSh = static_cast<SwViewShell*>(this->GetNext());
+    SwViewShell *pSh = this->GetNext();
     while ( pSh != this )
     {
         if ( pSh->ActionPend() )
@@ -233,7 +233,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
             pSh = this;
         }
         else
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
+            pSh = pSh->GetNext();
     }
 
     const bool bIsShellForCheckViewLayout = ( this == GetLayout()->GetCurrShell() );
