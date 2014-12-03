@@ -3181,7 +3181,7 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
     }
     if(rCrsr.GetNext() != &rCrsr)
     {
-        const SwPaM *_pStartCrsr = static_cast<SwPaM*>(rCrsr.GetNext());
+        const SwPaM *_pStartCrsr = rCrsr.GetNext();
         do
         {
             SwPaM* pCurrentCrsr = CreateCrsr();
@@ -3191,7 +3191,7 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
                 pCurrentCrsr->SetMark();
                 *pCurrentCrsr->GetMark() = *_pStartCrsr->GetMark();
             }
-        } while( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) != &rCrsr );
+        } while( (_pStartCrsr = _pStartCrsr->GetNext()) != &rCrsr );
     }
     EndAction();
 }
