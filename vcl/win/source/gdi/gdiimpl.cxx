@@ -633,7 +633,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                 COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
                 //fdo#33455 handle 1 bit depth pngs with palette entries
                 //to set fore/back colors
-                if (const BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(true))
+                if (const BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(BITMAP_INFO_ACCESS))
                 {
                     const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
                     if (rPalette.GetEntryCount() == 2)
@@ -644,6 +644,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
                         nCol = ImplColorToSal(rPalette[1]);
                         nBkColor = RGB( SALCOLOR_RED(nCol), SALCOLOR_GREEN(nCol), SALCOLOR_BLUE(nCol) );
                     }
+                    const_cast<WinSalBitmap&>(rSalBitmap).ReleaseBuffer(pBitmapBuffer, BITMAP_INFO_ACCESS);
                 }
                 nOldBkColor = SetBkColor( hDC, nBkColor );
                 nOldTextColor = ::SetTextColor( hDC, nTextColor );

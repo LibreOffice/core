@@ -702,7 +702,7 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
     return aEmptyPalette;
 }
 
-BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
+BitmapBuffer* QuartzSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 {
     if( !maUserBuffer.get() )
 //  || maContextBuffer.get() && (maUserBuffer.get() != maContextBuffer.get()) )
@@ -741,10 +741,10 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     return pBuffer;
 }
 
-void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
     // invalidate graphic context if we have different data
-    if( !bReadOnly )
+    if( nMode == BITMAP_WRITE_ACCESS )
     {
         maPalette = pBuffer->maPalette;
         if( mxGraphicContext )

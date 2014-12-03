@@ -270,7 +270,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
         pSalRGB = pExtraWinSalRGB;
     }
 
-    BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(true);
+    BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BITMAP_READ_ACCESS);
     BitmapBuffer* pExtraRGB = 0;
 
     if(pRGB && BMP_FORMAT_24BIT_TC_BGR != (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
@@ -283,7 +283,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
             BMP_FORMAT_24BIT_TC_BGR,
             0);
 
-        pSalRGB->ReleaseBuffer(pRGB, true);
+        pSalRGB->ReleaseBuffer(pRGB, BITMAP_WRITE_ACCESS);
         pRGB = pExtraRGB;
     }
 
@@ -337,7 +337,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
     }
     else
     {
-        pSalRGB->ReleaseBuffer(pRGB, true);
+        pSalRGB->ReleaseBuffer(pRGB, BITMAP_READ_ACCESS);
     }
 
     if(pExtraWinSalRGB)
@@ -362,7 +362,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         pSalRGB = pExtraWinSalRGB;
     }
 
-    BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(true);
+    BitmapBuffer* pRGB = pSalRGB->AcquireBuffer(BITMAP_READ_ACCESS);
     BitmapBuffer* pExtraRGB = 0;
 
     if(pRGB && BMP_FORMAT_24BIT_TC_BGR != (pRGB->mnFormat & ~BMP_FORMAT_TOP_DOWN))
@@ -375,7 +375,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
             BMP_FORMAT_24BIT_TC_BGR,
             0);
 
-        pSalRGB->ReleaseBuffer(pRGB, true);
+        pSalRGB->ReleaseBuffer(pRGB, BITMAP_READ_ACCESS);
         pRGB = pExtraRGB;
     }
 
@@ -390,7 +390,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
         pSalA = pExtraWinSalA;
     }
 
-    BitmapBuffer* pA = pSalA->AcquireBuffer(true);
+    BitmapBuffer* pA = pSalA->AcquireBuffer(BITMAP_READ_ACCESS);
     BitmapBuffer* pExtraA = 0;
 
     if(pA && BMP_FORMAT_8BIT_PAL != (pA->mnFormat & ~BMP_FORMAT_TOP_DOWN))
@@ -405,7 +405,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
             BMP_FORMAT_8BIT_PAL,
             &rTargetPalette);
 
-        pSalA->ReleaseBuffer(pA, true);
+        pSalA->ReleaseBuffer(pA, BITMAP_READ_ACCESS);
         pA = pExtraA;
     }
 
@@ -475,7 +475,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     }
     else
     {
-        pSalA->ReleaseBuffer(pA, true);
+        pSalA->ReleaseBuffer(pA, BITMAP_READ_ACCESS);
     }
 
     if(pExtraWinSalA)
@@ -492,7 +492,7 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
     }
     else
     {
-        pSalRGB->ReleaseBuffer(pRGB, true);
+        pSalRGB->ReleaseBuffer(pRGB, BITMAP_READ_ACCESS);
     }
 
     if(pExtraWinSalRGB)
@@ -835,7 +835,7 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
     return hCopy;
 }
 
-BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
+BitmapBuffer* WinSalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 {
     BitmapBuffer* pBuffer = NULL;
 
@@ -932,13 +932,13 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     return pBuffer;
 }
 
-void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
     if( pBuffer )
     {
         if( mhDIB )
         {
-            if( !bReadOnly && !!pBuffer->maPalette )
+            if( nMode == BITMAP_WRITE_ACCESS && !!pBuffer->maPalette )
             {
                 PBITMAPINFO     pBI = (PBITMAPINFO) GlobalLock( mhDIB );
                 const sal_uInt16    nCount = pBuffer->maPalette.GetEntryCount();

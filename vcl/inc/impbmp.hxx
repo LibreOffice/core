@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_IMPBMP_HXX
 #define INCLUDED_VCL_INC_IMPBMP_HXX
 
+#include <vcl/salbtype.hxx>
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 
@@ -58,8 +59,8 @@ public:
     Size                ImplGetSize() const;
     sal_uInt16          ImplGetBitCount() const;
 
-    BitmapBuffer*       ImplAcquireBuffer( bool bReadOnly );
-    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );
+    BitmapBuffer*       ImplAcquireBuffer( BitmapAccessMode nMode );
+    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode );
 
     sal_uLong           ImplGetRefCount() const { return mnRefCount; }
     void                ImplIncRefCount() { mnRefCount++; }

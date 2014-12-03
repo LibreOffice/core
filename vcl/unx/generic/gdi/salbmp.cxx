@@ -814,7 +814,7 @@ sal_uInt16 X11SalBitmap::GetBitCount() const
     return nBitCount;
 }
 
-BitmapBuffer* X11SalBitmap::AcquireBuffer( bool )
+BitmapBuffer* X11SalBitmap::AcquireBuffer( BitmapAccessMode /*nMode*/ )
 {
     if( !mpDIB && mpDDB )
     {
@@ -832,9 +832,9 @@ BitmapBuffer* X11SalBitmap::AcquireBuffer( bool )
     return mpDIB;
 }
 
-void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, bool bReadOnly )
+void X11SalBitmap::ReleaseBuffer( BitmapBuffer*, BitmapAccessMode nMode )
 {
-    if( !bReadOnly )
+    if( nMode == BITMAP_WRITE_ACCESS )
     {
         if( mpDDB )
             delete mpDDB, mpDDB = NULL;

@@ -477,21 +477,25 @@ void OpenGLSalBitmap::makeCurrent()
     mpContext->makeCurrent();
 }
 
-BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
+BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( BitmapAccessMode nMode )
 {
-    if( !maUserBuffer.get() )
-    {
-        if( !AllocateUserData() )
-            return NULL;
-        if( maTexture && !ReadTexture() )
-            return NULL;
-    }
 
-    if( !maPendingOps.empty() )
+    if( nMode != BITMAP_INFO_ACCESS )
     {
-        SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediatly" );
-        if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
-            return NULL;
+        if( !maUserBuffer.get() )
+        {
+            if( !AllocateUserData() )
+                return NULL;
+            if( maTexture && !ReadTexture() )
+                return NULL;
+        }
+
+        if( !maPendingOps.empty() )
+        {
+            SAL_INFO( "vcl.opengl", "** Creating texture and reading it back immediatly" );
+            if( !CreateTexture() || !AllocateUserData() || !ReadTexture() )
+                return NULL;
+        }
     }
 
     BitmapBuffer* pBuffer = new BitmapBuffer;
@@ -518,9 +522,9 @@ BitmapBuffer* OpenGLSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     return pBuffer;
 }
 
-void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+void OpenGLSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
-    if( !bReadOnly )
+    if( nMode == BITMAP_WRITE_ACCESS )
     {
         maTexture = OpenGLTexture();
         mbDirtyTexture = true;

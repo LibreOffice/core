@@ -268,6 +268,16 @@ struct VCL_DLLPUBLIC BitmapBuffer
 };
 
 
+// - Access modes -
+typedef enum
+{
+    BITMAP_INFO_ACCESS,
+    BITMAP_READ_ACCESS,
+    BITMAP_WRITE_ACCESS
+}
+BitmapAccessMode;
+
+
 // - StretchAndConvert -
 
 

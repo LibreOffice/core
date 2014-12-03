@@ -133,7 +133,7 @@ sal_uInt16 SvpSalBitmap::GetBitCount() const
     return nDepth;
 }
 
-BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
+BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
 {
     BitmapBuffer* pBuf = NULL;
     if( m_aBitmap.get() )
@@ -268,9 +268,9 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
     return pBuf;
 }
 
-void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode )
 {
-    if( !bReadOnly && pBuffer->maPalette.GetEntryCount() )
+    if( nMode == BITMAP_WRITE_ACCESS && pBuffer->maPalette.GetEntryCount() )
     {
         // palette might have changed, clone device (but recycle
         // memory)
