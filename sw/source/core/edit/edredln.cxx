@@ -59,14 +59,11 @@ const SwRangeRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
 
 static void lcl_InvalidateAll( SwViewShell* pSh )
 {
-    SwViewShell *pStop = pSh;
-    do
+    for(SwViewShell& rCurrentShell : pSh->GetRingContainer())
     {
-        if ( pSh->GetWin() )
-            pSh->GetWin()->Invalidate();
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-    } while ( pSh != pStop );
+        if ( rCurrentShell.GetWin() )
+            rCurrentShell.GetWin()->Invalidate();
+    }
 }
 
 bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
