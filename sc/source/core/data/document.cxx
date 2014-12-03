@@ -3627,7 +3627,7 @@ void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
         ScBulkBroadcast aBulkBroadcast( GetBASM());
         SCTAB nTab2 = rRange.aEnd.Tab();
         for (SCTAB i=rRange.aStart.Tab(); i<=nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
-            if (maTabs[i]) maTabs[i]->SetDirty( rRange, bIncludeEmptyCells );
+            if (maTabs[i]) maTabs[i]->SetDirty( rRange, true, bIncludeEmptyCells );
     }
     SetAutoCalc( bOldAutoCalc );
 }
