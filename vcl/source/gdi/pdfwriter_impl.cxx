@@ -6192,7 +6192,7 @@ bool PDFWriterImpl::finalizeSignature()
 #else
 
     // Prepare buffer and calculate PDF file digest
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos(m_aFile, osl_Pos_Absolut, 0)));
 
     PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
     if (pCertContext == NULL)
@@ -6204,7 +6204,7 @@ bool PDFWriterImpl::finalizeSignature()
     boost::scoped_array<char> buffer1(new char[m_nSignatureContentOffset - 1]);
     sal_uInt64 bytesRead1;
 
-    if (osl::File::E_None != m_aFile.read(buffer1.get(), m_nSignatureContentOffset - 1 , bytesRead1) ||
+    if (osl_File_E_None != osl_readFile(m_aFile, buffer1.get(), m_nSignatureContentOffset - 1 , &bytesRead1) ||
         bytesRead1 != (sal_uInt64)m_nSignatureContentOffset - 1)
     {
         SAL_WARN("vcl.pdfwriter", "PDF Signing: First buffer read failed!");
@@ -6215,8 +6215,8 @@ bool PDFWriterImpl::finalizeSignature()
     boost::scoped_array<char> buffer2(new char[nLastByteRangeNo]);
     sal_uInt64 bytesRead2;
 
-    if (osl::File::E_None != m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ||
-        osl::File::E_None != m_aFile.read(buffer2.get(), nLastByteRangeNo, bytesRead2) ||
+    if (osl_File_E_None != osl_setFilePos(m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1) ||
+        osl_File_E_None != osl_readFile(m_aFile, buffer2.get(), nLastByteRangeNo, &bytesRead2) ||
         bytesRead2 != (sal_uInt64) nLastByteRangeNo)
     {
         SAL_WARN("vcl.pdfwriter", "PDF Signing: Second buffer read failed!");
@@ -6279,10 +6279,10 @@ bool PDFWriterImpl::finalizeSignature()
 
     // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
     nWritten = 0;
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset)) );
-    m_aFile.write(cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), nWritten);
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos(m_aFile, osl_Pos_Absolut, m_nSignatureContentOffset)) );
+    osl_writeFile(m_aFile, cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), &nWritten);
 
-    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
+    CHECK_RETURN( (osl_File_E_None == osl_setFilePos(m_aFile, osl_Pos_Absolut, nOffset)) );
 
     return true;
 #endif
