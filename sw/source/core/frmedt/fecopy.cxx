@@ -727,7 +727,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
             *(static_cast<SwPaM*>(pCurrCrsr->GetPrev())->GetPoint()) )
         {
             --nCursorCount;
-            pCurrCrsr = static_cast<SwPaM*>(pCurrCrsr->GetNext());
+            pCurrCrsr = pCurrCrsr->GetNext();
             pStartCursor = pCurrCrsr;
         }
         SwPosition aStartPos( *pStartCursor->GetPoint() );
