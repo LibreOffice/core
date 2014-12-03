@@ -653,20 +653,6 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
     return ImplInit();
 }
 
-void OpenGLContext::resetToReInitialize()
-{
-    if( !mbInitialized )
-        return;
-    resetCurrent();
-
-    if (mbPixmap)
-    {
-        glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
-        m_aGLWin.glPix = None;
-    }
-    mbInitialized = false;
-}
-
 bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned int height, int nScreen)
 {
     if(mbInitialized)
