@@ -611,7 +611,7 @@ short SwShellCrsr::MaxReplaceArived()
         {
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
+            pSh = pSh->GetNext();
         }
     }
     else
