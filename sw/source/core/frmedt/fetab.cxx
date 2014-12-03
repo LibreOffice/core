@@ -106,12 +106,11 @@ void SwFEShell::ParkCursorInTab()
 
     SwPosition aStartPos = *pSwCrsr->GetPoint(), aEndPos = aStartPos;
 
-    SwCursor * pTmpCrsr = (SwCursor *) pSwCrsr;
-
     /* Search least and greatest position in current cursor ring.
      */
-    do
+    for(SwPaM& rTmpCrsr : pSwCrsr->GetRingContainer())
     {
+        SwCursor* pTmpCrsr = static_cast<SwCursor *>(&rTmpCrsr);
         const SwPosition * pPt = pTmpCrsr->GetPoint(),
             * pMk = pTmpCrsr->GetMark();
 
@@ -127,9 +126,7 @@ void SwFEShell::ParkCursorInTab()
         if (*pMk > aEndPos)
             aEndPos = *pMk;
 
-        pTmpCrsr = static_cast<SwCursor *>( pTmpCrsr->GetNext() );
     }
-    while (pTmpCrsr != pSwCrsr);
 
     KillPams();
 
