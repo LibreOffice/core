@@ -2144,7 +2144,7 @@ const SwRangeRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect
                             delete pNextPam;
                             pNextPam = pPrevPam;
                         }
-                        pNextPam = static_cast<SwPaM*>(pNextPam->GetNext());
+                        pNextPam = pNextPam->GetNext();
                     }
                 }
 
