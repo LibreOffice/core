@@ -46,7 +46,7 @@ void UndoSort::Execute( bool bUndo )
 
     ScUndoUtil::MarkSimpleBlock(pDocShell, maParam.maSortRange);
 
-    rDoc.SetDirty(maParam.maSortRange);
+    rDoc.SetDirty(maParam.maSortRange, true);
     if (!aParam.mbUpdateRefs)
         rDoc.BroadcastCells(aParam.maSortRange, SC_HINT_DATACHANGED);
 

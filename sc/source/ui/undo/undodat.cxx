@@ -845,7 +845,7 @@ void ScUndoQuery::Undo()
 
     ScRange aDirtyRange( 0 , aQueryParam.nRow1, nTab,
         MAXCOL, aQueryParam.nRow2, nTab );
-    rDoc.SetDirty( aDirtyRange );
+    rDoc.SetDirty( aDirtyRange, true );
 
     DoSdrUndoAction( pDrawUndo, &rDoc );
 

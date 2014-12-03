@@ -1004,7 +1004,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             sc::StartListeningContext aSLCxt(*this);
             maTabs[nDestPos]->StartListeners(aSLCxt, true);
         }
-        SetDirty( ScRange( 0, 0, nDestPos, MAXCOL, MAXROW, nDestPos));
+        SetDirty( ScRange( 0, 0, nDestPos, MAXCOL, MAXROW, nDestPos), false);
 
         if ( bResultsOnly )
             pSrcDoc->SetAutoCalc( bOldAutoCalcSrc );
