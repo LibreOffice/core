@@ -324,7 +324,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
         if(newIt == pNewNodes->begin())
             patchIt = insIt;
         if((*newIt)->GetType() == NTEXT)
-            PosAfterInsert = SmCaretPos(*newIt, ((SmTextNode*)*newIt)->GetText().getLength());
+            PosAfterInsert = SmCaretPos(*newIt, static_cast<SmTextNode*>(*newIt)->GetText().getLength());
         else
             PosAfterInsert = SmCaretPos(*newIt, 1);
     }
@@ -347,7 +347,7 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList, SmC
             if((*it)->GetType() == NTEXT){
                 //Split textnode if needed
                 if(aCaretPos.Index > 0){
-                    SmTextNode* pText = (SmTextNode*)aCaretPos.pSelectedNode;
+                    SmTextNode* pText = static_cast<SmTextNode*>(aCaretPos.pSelectedNode);
                     OUString str1 = pText->GetText().copy(0, aCaretPos.Index);
                     OUString str2 = pText->GetText().copy(aCaretPos.Index);
                     pText->ChangeText(str1);
@@ -389,8 +389,8 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
         next->GetType() == NTEXT &&
         ( prev->GetToken().eType != TNUMBER ||
           next->GetToken().eType == TNUMBER) ){
-        SmTextNode *pText = (SmTextNode*)prev,
-                   *pOldN = (SmTextNode*)next;
+        SmTextNode *pText = static_cast<SmTextNode*>(prev),
+                   *pOldN = static_cast<SmTextNode*>(next);
         SmCaretPos retval(pText, pText->GetText().getLength());
         OUString newText;
         newText += pText->GetText();
@@ -412,14 +412,14 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
         if(aIter == pLineList->begin())
             return SmCaretPos();
         if((*aIter)->GetType() == NTEXT)
-            return SmCaretPos(*aIter, ((SmTextNode*)*aIter)->GetText().getLength());
+            return SmCaretPos(*aIter, static_cast<SmTextNode*>(*aIter)->GetText().getLength());
         return SmCaretPos(*aIter, 1);
     }
     if(prev && next && next->GetType() == NPLACE && !SmNodeListParser::IsOperator(prev->GetToken())){
         aIter = pLineList->erase(aIter);
         delete next;
         if(prev->GetType() == NTEXT)
-            return SmCaretPos(prev, ((SmTextNode*)prev)->GetText().getLength());
+            return SmCaretPos(prev, static_cast<SmTextNode*>(prev)->GetText().getLength());
         return SmCaretPos(prev, 1);
     }
 
@@ -427,7 +427,7 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     if(!prev) //return an invalid to indicate we're in front of line
         return SmCaretPos();
     if(prev->GetType() == NTEXT)
-        return SmCaretPos(prev, ((SmTextNode*)prev)->GetText().getLength());
+        return SmCaretPos(prev, static_cast<SmTextNode*>(prev)->GetText().getLength());
     return SmCaretPos(prev, 1);
 }
 
@@ -439,7 +439,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
         if((*it)->IsSelected()){
             //Split text nodes
             if((*it)->GetType() == NTEXT) {
-                SmTextNode* pText = (SmTextNode*)*it;
+                SmTextNode* pText = static_cast<SmTextNode*>(*it);
                 OUString aText = pText->GetText();
                 //Start and lengths of the segments, 2 is the selected segment
                 int start2 = pText->GetSelectionStart(),
@@ -549,7 +549,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         *(--it) = pSubSup;
         ++it;
     }else
-        pSubSup = (SmSubSupNode*)pSubject;
+        pSubSup = static_cast<SmSubSupNode*>(pSubject);
     //pSubject shouldn't be referenced anymore, pSubSup is the SmSubSupNode in pLineList we wish to edit.
     //and it pointer to the element following pSubSup in pLineList.
     pSubject = NULL;
@@ -597,12 +597,12 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     SmOperNode *pSubject = NULL;
     //Check if pSelectedNode might be a subject
     if(position->CaretPos.pSelectedNode->GetType() == NOPER)
-        pSubject = (SmOperNode*)position->CaretPos.pSelectedNode;
+        pSubject = static_cast<SmOperNode*>(position->CaretPos.pSelectedNode);
     else {
         //If not, check if parent of the current line is a SmOperNode
         SmNode *pLineNode = FindTopMostNodeInLine(position->CaretPos.pSelectedNode, false);
         if(pLineNode->GetParent() && pLineNode->GetParent()->GetType() == NOPER)
-            pSubject = (SmOperNode*)pLineNode->GetParent();
+            pSubject = static_cast<SmOperNode*>(pLineNode->GetParent());
     }
 
     //Abort operation if we're not in the appropriate context
@@ -615,7 +615,7 @@ bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     SmSubSupNode *pSubSup = NULL;
     //Check if there's already one there...
     if(pSubject->GetSubNode(0)->GetType() == NSUBSUP)
-        pSubSup = (SmSubSupNode*)pSubject->GetSubNode(0);
+        pSubSup = static_cast<SmSubSupNode*>(pSubject->GetSubNode(0));
     else { //if not create a new SmSubSupNode
         SmToken token;
         token.nGroup = TGLIMIT;
@@ -820,18 +820,18 @@ bool SmCursor::InsertRow() {
     SmMatrixNode *pMatrix = NULL;
     int nTableIndex = nParentIndex;
     if(pLineParent->GetType() == NTABLE)
-        pTable = (SmTableNode*)pLineParent;
+        pTable = static_cast<SmTableNode*>(pLineParent);
     //If it's warped in a SmLineNode, we can still insert a newline
     else if(pLineParent->GetType() == NLINE &&
             pLineParent->GetParent() &&
             pLineParent->GetParent()->GetType() == NTABLE) {
         //NOTE: This hack might give problems if we stop ignoring SmAlignNode
-        pTable = (SmTableNode*)pLineParent->GetParent();
+        pTable = static_cast<SmTableNode*>(pLineParent->GetParent());
         nTableIndex = pTable->IndexOfSubNode(pLineParent);
         OSL_ENSURE(nTableIndex != -1, "pLineParent must be a child of its parent!");
     }
     if(pLineParent->GetType() == NMATRIX)
-        pMatrix = (SmMatrixNode*)pLineParent;
+        pMatrix = static_cast<SmMatrixNode*>(pLineParent);
 
     //If we're not in a context that supports InsertRow, return sal_False
     if(!pTable && !pMatrix)
@@ -1184,12 +1184,12 @@ void SmCursor::Copy(){
     //Clone selected nodes
     SmNodeList* pList;
     if(IsLineCompositionNode(pLine))
-        pList = CloneLineToList((SmStructureNode*)pLine, true);
+        pList = CloneLineToList(static_cast<SmStructureNode*>(pLine), true);
     else{
         pList = new SmNodeList();
         //Special care to only clone selected text
         if(pLine->GetType() == NTEXT) {
-            SmTextNode *pText = (SmTextNode*)pLine;
+            SmTextNode *pText = static_cast<SmTextNode*>(pLine);
             SmTextNode *pClone = new SmTextNode( pText->GetToken(), pText->GetFontDesc() );
             int start  = pText->GetSelectionStart(),
                 length = pText->GetSelectionEnd() - pText->GetSelectionStart();
@@ -1287,7 +1287,7 @@ SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
             case NBINHOR:
             case NALIGN:
             case NFONT:
-                LineToList((SmStructureNode*)it.Current(), list);
+                LineToList(static_cast<SmStructureNode*>(it.Current()), list);
                 break;
             case NERROR:
                 delete it.Current();
@@ -1307,11 +1307,11 @@ SmNodeList* SmCursor::CloneLineToList(SmStructureNode* pLine, bool bOnlyIfSelect
     SmNodeIterator it(pLine);
     while(it.Next()){
         if( IsLineCompositionNode( it.Current() ) )
-            CloneLineToList( (SmStructureNode*)it.Current(), bOnlyIfSelected, pList );
+            CloneLineToList( static_cast<SmStructureNode*>(it.Current()), bOnlyIfSelected, pList );
         else if( (!bOnlyIfSelected || it->IsSelected()) && it->GetType() != NERROR ) {
             //Only clone selected text from SmTextNode
             if(it->GetType() == NTEXT) {
-                SmTextNode *pText = (SmTextNode*)it.Current();
+                SmTextNode *pText = static_cast<SmTextNode*>(it.Current());
                 SmTextNode *pClone = new SmTextNode( it->GetToken(), pText->GetFontDesc() );
                 int start = pText->GetSelectionStart(),
                     length = pText->GetSelectionEnd() - pText->GetSelectionStart();

@@ -208,7 +208,7 @@ void SmModule::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
     {
         if ((pViewShell->IsA(aSmViewTypeId)))
         {
-            SmViewShell *pSmView = (SmViewShell *) pViewShell;
+            SmViewShell *pSmView = static_cast<SmViewShell *>(pViewShell);
             pSmView->GetGraphicWindow().ApplyColorConfigValues( rColorCfg );
             SmEditWindow *pEditWin = pSmView->GetEditWindow();
             if (pEditWin)

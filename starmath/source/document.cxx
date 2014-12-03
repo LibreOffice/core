@@ -120,7 +120,7 @@ SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SFXOBJECTSHELL_
 void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
                     const SfxHint& rHint, const TypeId&)
 {
-    switch (((SfxSimpleHint&)rHint).GetId())
+    switch (static_cast<const SfxSimpleHint&>(rHint).GetId())
     {
         case HINT_FORMATCHANGED:
             SetFormulaArranged(false);
@@ -432,7 +432,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     sal_uLong nOldDrawMode = DRAWMODE_DEFAULT;
     bool bRestoreDrawMode = false;
     if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
-        ((vcl::Window &) rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
+        static_cast<vcl::Window &>(rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         nOldDrawMode = rDev.GetDrawMode();
         rDev.SetDrawMode( DRAWMODE_DEFAULT );
@@ -1093,7 +1093,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_TEXT:
         {
-            const SfxStringItem& rItem = (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
+            const SfxStringItem& rItem = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_TEXT));
             if (GetText() != OUString(rItem.GetValue()))
                 SetText(rItem.GetValue());
         }
@@ -1109,7 +1109,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem;
                 if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ))
-                    nCnt = ((SfxUInt16Item*)pItem)->GetValue();
+                    nCnt = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
                 bool (::svl::IUndoManager:: *fnDo)();
 

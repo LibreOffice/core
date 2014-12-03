@@ -32,6 +32,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/colorcfg.hxx>
+#include "document.hxx"
 #include "edit.hxx"
 #include "node.hxx"
 
@@ -213,7 +214,7 @@ public:
 
     SmEditWindow& GetEditWindow()
     {
-        return (((SmCmdBoxWindow *)pWindow)->GetEditWindow());
+        return static_cast<SmCmdBoxWindow *>(pWindow)->GetEditWindow();
     }
 
 };
@@ -286,7 +287,7 @@ public:
 
     SmDocShell * GetDoc()
     {
-        return (SmDocShell *) GetViewFrame()->GetObjectShell();
+        return static_cast<SmDocShell *>( GetViewFrame()->GetObjectShell() );
     }
 
     SmEditWindow * GetEditWindow();

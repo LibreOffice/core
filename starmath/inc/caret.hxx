@@ -45,7 +45,7 @@ struct SmCaretPos{
      */
     static SmCaretPos GetPosAfter(SmNode* pNode) {
         if(pNode && pNode->GetType() == NTEXT)
-            return SmCaretPos(pNode, ((SmTextNode*)pNode)->GetText().getLength());
+            return SmCaretPos(pNode, static_cast<SmTextNode*>(pNode)->GetText().getLength());
         return SmCaretPos(pNode, 1);
     }
 };

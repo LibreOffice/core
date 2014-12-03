@@ -350,7 +350,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         {
             if ( pMenu )
             {
-                pPopupMenu.reset((PopupMenu*) pMenu);
+                pPopupMenu.reset(static_cast<PopupMenu*>(pMenu));
             }
         }
 
@@ -477,7 +477,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
                 // set the focus to the view
                 SfxViewShell* pVShell = GetView();
                 if ( pVShell && pVShell->ISA(SmViewShell) &&
-                     ((SmViewShell*)pVShell)->GetGraphicWindow().HasFocus() )
+                     static_cast<SmViewShell*>(pVShell)->GetGraphicWindow().HasFocus() )
                 {
                     GrabFocus();
                 }

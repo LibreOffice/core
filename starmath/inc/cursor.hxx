@@ -279,7 +279,7 @@ private:
         rpNode = NULL;
         //Create line from node
         if(pNode && IsLineCompositionNode(pNode))
-            return LineToList((SmStructureNode*)pNode, pList);
+            return LineToList(static_cast<SmStructureNode*>(pNode), pList);
         if(pNode)
             pList->push_front(pNode);
         return pList;

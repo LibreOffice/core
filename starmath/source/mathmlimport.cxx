@@ -553,7 +553,7 @@ public:
 
     SmXMLImport& GetSmImport()
     {
-        return (SmXMLImport&)GetImport();
+        return static_cast<SmXMLImport&>(GetImport());
     }
 
     virtual void TCharacters(const OUString & /*rChars*/);
@@ -2495,7 +2495,7 @@ void SmXMLTableContext_Impl::EndElement()
     for (sal_uLong i=nRows;i > 0;i--)
     {
         auto pNode = rNodeStack.pop_front();
-        pArray = (SmStructureNode *)pNode.release();
+        pArray = static_cast<SmStructureNode *>(pNode.release());
         if (pArray->GetNumSubNodes() == 0)
         {
             //This is a little tricky, it is possible that there was
@@ -2523,7 +2523,7 @@ void SmXMLTableContext_Impl::EndElement()
     while ( !aReverseStack.empty() )
     {
         auto pNode = aReverseStack.pop_front();
-        pArray = (SmStructureNode *)pNode.release();
+        pArray = static_cast<SmStructureNode *>(pNode.release());
         for (sal_uInt16 i=0;i<pArray->GetNumSubNodes();i++)
             aExpressionArray[j++] = pArray->GetSubNode(i);
     }

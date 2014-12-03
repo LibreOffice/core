@@ -671,11 +671,11 @@ void SmStructureNode::GetAccessibleText( OUStringBuffer &rText ) const
     sal_uInt16 nNodes = GetNumSubNodes();
     for (sal_uInt16 i = 0;  i < nNodes;  ++i)
     {
-        const SmNode *pNode = ((SmStructureNode *) this)->GetSubNode(i);
+        SmNode *pNode = const_cast<SmStructureNode *>(this)->GetSubNode(i);
         if (pNode)
         {
             if (pNode->IsVisible())
-                ((SmStructureNode *) pNode)->nAccIndex = rText.getLength();
+                static_cast<SmStructureNode *>(pNode)->nAccIndex = rText.getLength();
             pNode->GetAccessibleText( rText );
         }
     }
@@ -1401,7 +1401,7 @@ void SmBinDiagonalNode::Arrange(const OutputDevice &rDev, const SmFormat &rForma
     OSL_ENSURE(pRight, "Sm : NULL pointer");
 
     OSL_ENSURE(GetSubNode(2)->GetType() == NPOLYLINE, "Sm : wrong node type");
-    SmPolyLineNode *pOper = (SmPolyLineNode *) GetSubNode(2);
+    SmPolyLineNode *pOper = static_cast<SmPolyLineNode *>(GetSubNode(2));
     OSL_ENSURE(pOper, "Sm : NULL pointer");
 
     //! some routines being called extract some info from the OutputDevice's
@@ -1692,7 +1692,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     if (bScale)
     {
         nBraceHeight = pBody->GetType() == NBRACEBODY ?
-                              ((SmBracebodyNode *) pBody)->GetBodyHeight()
+                              static_cast<SmBracebodyNode *>(pBody)->GetBodyHeight()
                             : pBody->GetHeight();
         nBraceHeight += 2 * (nBraceHeight * nPerc / 100L);
     }
@@ -1885,7 +1885,7 @@ SmNode * SmOperNode::GetSymbol()
     OSL_ENSURE(pNode, "Sm: NULL pointer!");
 
     if (pNode->GetType() == NSUBSUP)
-        pNode = ((SmSubSupNode *) pNode)->GetBody();
+        pNode = static_cast<SmSubSupNode *>(pNode)->GetBody();
 
     OSL_ENSURE(pNode, "Sm: NULL pointer!");
     return pNode;

@@ -745,7 +745,7 @@ SmElementsDockingWindowWrapper::SmElementsDockingWindowWrapper(
     SfxChildWindow(pParentWindow, nId)
 {
     pWindow = new SmElementsDockingWindow(pBindings, this, pParentWindow);
-    SmElementsDockingWindow* pDialog = (SmElementsDockingWindow*) pWindow;
+    SmElementsDockingWindow* pDialog = static_cast<SmElementsDockingWindow*>(pWindow);
     pDialog->SetPosSizePixel(Point(0, 0), Size(300, 0));
     pDialog->Show();
 

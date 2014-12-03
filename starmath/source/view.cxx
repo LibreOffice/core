@@ -896,7 +896,7 @@ SmCmdBoxWrapper::SmCmdBoxWrapper(vcl::Window *pParentWindow, sal_uInt16 nId,
 
     // make window docked to the bottom initially (after first start)
     eChildAlignment = SFX_ALIGN_BOTTOM;
-    ((SfxDockingWindow *)pWindow)->Initialize(pInfo);
+    static_cast<SfxDockingWindow *>(pWindow)->Initialize(pInfo);
 }
 
 
@@ -1369,8 +1369,8 @@ SfxTabPage* SmViewShell::CreatePrintOptionsPage(vcl::Window *pParent,
 
 SmEditWindow *SmViewShell::GetEditWindow()
 {
-    SmCmdBoxWrapper *pWrapper = (SmCmdBoxWrapper *) GetViewFrame()->
-            GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() );
+    SmCmdBoxWrapper *pWrapper = static_cast<SmCmdBoxWrapper *>( GetViewFrame()->
+            GetChildWindow( SmCmdBoxWrapper::GetChildWindowId() ) );
 
     if (pWrapper != NULL)
     {
@@ -1510,7 +1510,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             bool  bVal;
             if ( pArgs &&
                  SfxItemState::SET == pArgs->GetItemState( SID_FORMULACURSOR, false, &pItem))
-                bVal = ((SfxBoolItem *) pItem)->GetValue();
+                bVal = static_cast<const SfxBoolItem *>(pItem)->GetValue();
             else
                 bVal = !pp->GetConfig()->IsShowFormulaCursor();
 
@@ -1648,7 +1648,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_INSERTCOMMAND:
         {
             const SfxInt16Item& rItem =
-                (const SfxInt16Item&)rReq.GetArgs()->Get(SID_INSERTCOMMAND);
+                static_cast<const SfxInt16Item&>(rReq.GetArgs()->Get(SID_INSERTCOMMAND));
 
             if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertCommand(rItem.GetValue());
@@ -1661,7 +1661,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_INSERTCOMMANDTEXT:
         {
-            const SfxStringItem& rItem = (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTCOMMANDTEXT);
+            const SfxStringItem& rItem = static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_INSERTCOMMANDTEXT));
 
             if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
             {
@@ -1679,7 +1679,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_INSERTSYMBOL:
         {
             const SfxStringItem& rItem =
-                (const SfxStringItem&)rReq.GetArgs()->Get(SID_INSERTSYMBOL);
+                static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_INSERTSYMBOL));
 
             if (pWin && (bInsertIntoEditWindow || !IsInlineEditEnabled()))
                 pWin->InsertText(rItem.GetValue());
@@ -1732,7 +1732,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             if (rReq.GetArgs() != NULL)
             {
                 const SfxStringItem& rItem =
-                    (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXTSTATUS);
+                    static_cast<const SfxStringItem&>(rReq.GetArgs()->Get(SID_TEXTSTATUS));
 
                 SetStatusText(rItem.GetValue());
             }
@@ -1767,7 +1767,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 }
                 if ( pSet )
                 {
-                    const SvxZoomItem &rZoom = (const SvxZoomItem &)pSet->Get(SID_ATTR_ZOOM);
+                    const SvxZoomItem &rZoom = static_cast<const SvxZoomItem &>(pSet->Get(SID_ATTR_ZOOM));
                     switch( rZoom.GetType() )
                     {
                         case SVX_ZOOM_PERCENT:
@@ -1808,7 +1808,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
             if ( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) )
             {
-                const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                const sal_uInt16 nCurrentZoom = static_cast<const SvxZoomSliderItem *>(pItem)->GetValue();
                 aGraphic.SetZoom( nCurrentZoom );
             }
         }

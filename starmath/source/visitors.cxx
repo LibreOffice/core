@@ -992,7 +992,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
     bodyRight->SetRight( right );
 
     //Get subsup pNode if any
-    SmSubSupNode* pSubSup = pOper->GetType( ) == NSUBSUP ? ( SmSubSupNode* )pOper : NULL;
+    SmSubSupNode* pSubSup = pOper->GetType( ) == NSUBSUP ? static_cast<SmSubSupNode*>(pOper) : NULL;
 
     SmNode* pChild;
     SmCaretPosGraphEntry *childLeft;
@@ -2029,7 +2029,7 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
             Append( pNode->GetSubNode( 0 )->GetToken( ).aText );
     }
     if( pNode->GetSubNode( 0 )->GetType( ) == NSUBSUP ) {
-        SmSubSupNode *pSubSup = ( SmSubSupNode* )pNode->GetSubNode( 0 );
+        SmSubSupNode *pSubSup = static_cast<SmSubSupNode*>( pNode->GetSubNode( 0 ) );
         SmNode* pChild;
         if( ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
             Separate( );

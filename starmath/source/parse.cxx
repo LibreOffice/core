@@ -1533,7 +1533,7 @@ void SmParser::Term(bool bGroupNumberIdent)
                     // check if casting in following line is ok
                     OSL_ENSURE(pTmp && !pTmp->IsVisible(), "Sm : Ooops...");
 
-                    aArray[n] = (SmStructureNode *) pTmp;
+                    aArray[n] = static_cast<SmStructureNode *>(pTmp);
                     n++;
                 }
 

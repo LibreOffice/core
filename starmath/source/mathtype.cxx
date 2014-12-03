@@ -1988,7 +1988,7 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             break;
         case NSPECIAL:
             {
-            SmTextNode *pText=(SmTextNode *)pNode;
+            SmTextNode *pText = static_cast<SmTextNode *>(pNode);
             //if the token str and the result text are the same then this
             //is to be seen as text, else assume it's a mathchar
             if (pText->GetText() == pText->GetToken().aText)
@@ -2017,7 +2017,7 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             HandleTable(pNode,nLevel);
             break;
         case NMATRIX:
-            HandleSmMatrix((SmMatrixNode *)pNode,nLevel);
+            HandleSmMatrix(static_cast<SmMatrixNode *>(pNode),nLevel);
             break;
         case NLINE:
             {
@@ -3074,7 +3074,7 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
         bIsReInterpBrace=true;
         return;
     }
-    SmMathSymbolNode *pTemp=(SmMathSymbolNode *)pNode;
+    SmMathSymbolNode *pTemp = static_cast<SmMathSymbolNode *>(pNode);
     for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {
         sal_Unicode nArse = SmTextNode::ConvertSymbolToUnicode(pTemp->GetText()[i]);
@@ -3181,7 +3181,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
 
     if (NULL != (pTemp = pNode->GetSubNode(0)))
     {
-        pIsText = (SmTextNode *)pNode->GetSubNode(1);
+        pIsText = static_cast<SmTextNode *>(pNode->GetSubNode(1));
 
         switch (pTemp->GetToken().eType)
         {
@@ -3298,7 +3298,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
 
 void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
 {
-    SmTextNode *pTemp=(SmTextNode *)pNode;
+    SmTextNode *pTemp = static_cast<SmTextNode *>(pNode);
     for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {
         if ((nPendingAttributes) &&

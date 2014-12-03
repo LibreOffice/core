@@ -202,7 +202,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 
 void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 {
-    SmPrintSize ePrintSize = (SmPrintSize)((const SfxUInt16Item &)rSet->Get(GetWhich(SID_PRINTSIZE))).GetValue();
+    SmPrintSize ePrintSize = (SmPrintSize)static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTSIZE))).GetValue();
 
     m_pSizeNormal->Check(ePrintSize == PRINT_SIZE_NORMAL);
     m_pSizeScaled->Check(ePrintSize == PRINT_SIZE_SCALED);
@@ -210,13 +210,13 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 
     m_pZoom->Enable(m_pSizeZoomed->IsChecked());
 
-    m_pZoom->SetValue(((const SfxUInt16Item &)rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue());
+    m_pZoom->SetValue(static_cast<const SfxUInt16Item &>(rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue());
 
-    m_pTitle->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_PRINTTITLE))).GetValue());
-    m_pText->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_PRINTTEXT))).GetValue());
-    m_pFrame->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_PRINTFRAME))).GetValue());
-    m_pNoRightSpaces->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
-    m_pSaveOnlyUsedSymbols->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
+    m_pTitle->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTTITLE))).GetValue());
+    m_pText->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTTEXT))).GetValue());
+    m_pFrame->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_PRINTFRAME))).GetValue());
+    m_pNoRightSpaces->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
+    m_pSaveOnlyUsedSymbols->Check(static_cast<const SfxBoolItem &>(rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
 }
 
 
@@ -788,8 +788,8 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     bool  bActive;
     for (sal_uInt16 i = 0;  i < 4;  i++)
     {
-        FixedText   *pFT = (FixedText * const)   aWin[i][0];
-        MetricField *pMF = (MetricField * const) aWin[i][1];
+        FixedText   *pFT = static_cast<FixedText *>  ( aWin[i][0] );
+        MetricField *pMF = static_cast<MetricField *>( aWin[i][1] );
 
         // To determine which Controls should be active, the existence
         // of an associated HelpID is checked
