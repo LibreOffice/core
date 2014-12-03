@@ -95,14 +95,11 @@ void SwEditShell::CalcLayout()
     StartAllAction();
     SwViewShell::CalcLayout();
 
-    SwViewShell *pSh = this;
-    do
+    for(SwViewShell& rCurrentShell : GetRingContainer())
     {
-        if ( pSh->GetWin() )
-            pSh->GetWin()->Invalidate();
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-    } while ( pSh != this );
+        if ( rCurrentShell.GetWin() )
+            rCurrentShell.GetWin()->Invalidate();
+    }
 
     EndAllAction();
 }
