@@ -1627,33 +1627,28 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
     // loops _behind_ the last node in the selection, which always works if you
     // are in content.) To achieve this, we'll force cursor(s) to point into
     // content, if UpdateCrsrPos() hasn't already done so.
-    SwPaM* pCmp = m_pCurCrsr;
-    do
+    for(SwPaM& rCmp : m_pCurCrsr->GetRingContainer())
     {
         // start will move forwards, end will move backwards
-        bool bPointIsStart = ( pCmp->Start() == pCmp->GetPoint() );
+        bool bPointIsStart = ( rCmp.Start() == rCmp.GetPoint() );
 
         // move point; forward if it's the start, backwards if it's the end
-        if( ! pCmp->GetPoint()->nNode.GetNode().IsCntntNode() )
-            pCmp->Move( bPointIsStart ? fnMoveForward : fnMoveBackward,
+        if( ! rCmp.GetPoint()->nNode.GetNode().IsCntntNode() )
+            rCmp.Move( bPointIsStart ? fnMoveForward : fnMoveBackward,
                         fnGoCntnt );
 
         // move mark (if exists); forward if it's the start, else backwards
-        if( pCmp->HasMark() )
+        if( rCmp.HasMark() )
         {
-            if( ! pCmp->GetMark()->nNode.GetNode().IsCntntNode() )
+            if( ! rCmp.GetMark()->nNode.GetNode().IsCntntNode() )
             {
-                pCmp->Exchange();
-                pCmp->Move( !bPointIsStart ? fnMoveForward : fnMoveBackward,
+                rCmp.Exchange();
+                rCmp.Move( !bPointIsStart ? fnMoveForward : fnMoveBackward,
                             fnGoCntnt );
-                pCmp->Exchange();
+                rCmp.Exchange();
             }
         }
-
-        // iterate to next PaM in ring
-        pCmp = static_cast<SwPaM*>( pCmp->GetNext() );
     }
-    while( pCmp != m_pCurCrsr );
 
     SwRect aOld( m_aCharRect );
     bool bFirst = true;
