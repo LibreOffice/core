@@ -46,6 +46,7 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -172,6 +173,9 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             case R.id.context_menu_open:
                 open(info.position);
                 return true;
+            case R.id.context_menu_share:
+                share(info.position);
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -219,6 +223,20 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         } else {
             openDirectory(file);
         }
+    }
+
+    private void share(int position) {
+        File file = filePaths[position];
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        Uri uri = Uri.fromFile(file);
+        String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
+        sharingIntent.setType(MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(extension));
+        sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, uri);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+                file.getName());
+        startActivity(Intent.createChooser(sharingIntent,
+                getString(R.string.share_via)));
     }
 
     @Override

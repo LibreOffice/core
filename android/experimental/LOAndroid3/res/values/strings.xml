@@ -26,5 +26,7 @@
     <string name="action_about">About</string>
     <string name="action_parts">Parts</string>
     <string name="open">Open</string>
+    <string name="share">Share</string>
+    <string name="share_via">Share via</string>
 
 </resources>
