@@ -600,7 +600,7 @@ short SwShellCrsr::MaxReplaceArived()
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
                 pSh->EndAction();
             aArr.push_back( nActCnt );
-        } while( pShell != ( pSh = static_cast<SwViewShell*>(pSh->GetNext()) ) );
+        } while( pShell != ( pSh = pSh->GetNext()) );
 
         {
             nRet = MessageDialog(pDlg, "AskSearchDialog",
