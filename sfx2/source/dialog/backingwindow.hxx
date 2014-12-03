@@ -87,6 +87,7 @@ class BackingWindow
 
     RecentDocsView*                 mpAllRecentThumbnails;
     TemplateDefaultView*              mpLocalView;
+    bool                            mbLocalViewInitialized;
 
     std::vector<vcl::Window*>            maDndWindows;
 
@@ -118,6 +119,8 @@ class BackingWindow
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
     void initControls();
+
+    void initializeLocalView();
 
 public:
     BackingWindow( vcl::Window* pParent );

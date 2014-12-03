@@ -90,6 +90,7 @@ static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailV
 BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
     mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
+    mbLocalViewInitialized(false),
     mbIsSaveMode( false ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
@@ -259,10 +260,7 @@ void BackingWindow::initControls()
 
     //initialize Template view
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
-    mpLocalView->Populate();
-    mpLocalView->showRootRegion();
     mpLocalView->Hide();
-    mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 
     mpTemplateButton->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
 
@@ -313,6 +311,17 @@ void BackingWindow::initControls()
 
     set_width_request(mpAllRecentThumbnails->get_width_request() + mpAllButtonsBox->GetOptimalSize().Width());
     set_height_request(mpAllButtonsBox->GetOptimalSize().Height());
+}
+
+void BackingWindow::initializeLocalView()
+{
+    if (!mbLocalViewInitialized)
+    {
+        mbLocalViewInitialized = true;
+        mpLocalView->Populate();
+        mpLocalView->showRootRegion();
+        mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
+    }
 }
 
 void BackingWindow::setupButton( PushButton* pButton )
@@ -552,6 +561,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     else if( pButton == mpTemplateButton )
     {
         mpAllRecentThumbnails->Hide();
+        initializeLocalView();
         mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
         mpLocalView->Show();
         mpLocalView->reload();
@@ -562,6 +572,8 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 
 IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 {
+    initializeLocalView();
+
     OString sId = pButton->GetCurItemIdent();
 
     if( sId == "filter_writer" )
