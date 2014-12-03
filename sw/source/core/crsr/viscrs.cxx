@@ -571,6 +571,8 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
 void SwShellCrsr::Hide()
 {
     SwShellCrsr * pTmp = this;
+    // TODO: this doesnt look sane: if the dynamic_cast ever returns a nullptr,
+    // the next pTmp->GetNext() call is a nullptr deref
     do {
         if (pTmp)
             pTmp->SwSelPaintRects::Hide();
