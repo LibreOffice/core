@@ -3444,7 +3444,7 @@ sal_Bool SAL_CALL SwAccessibleParagraph::removeSelection( sal_Int32 selectionInd
             }
             // else: this PaM is collapsed and doesn't select anything
             if(!bRet)
-                pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
+                pCrsr = pCrsr->GetNext();
         }
         while( !bRet && (pCrsr != pRingStart) );
     }
