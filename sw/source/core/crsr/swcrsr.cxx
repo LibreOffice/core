@@ -2187,10 +2187,10 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             else
                 bDel = true;
 
-            pCur = static_cast<SwPaM*>(pCur->GetNext());
+            pCur = pCur->GetNext();
             if( bDel )
             {
-                SwPaM* pDel = static_cast<SwPaM*>(pCur->GetPrev());
+                SwPaM* pDel = pCur->GetPrev();
 
                 if( pDel == pAktCrsr )
                     pAktCrsr->DeleteMark();
