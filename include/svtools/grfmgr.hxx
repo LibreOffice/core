@@ -157,6 +157,7 @@ public:
 class SVT_DLLPUBLIC GraphicObject : public SvDataCopyStream
 {
     friend class GraphicManager;
+    friend class SdrGrafObj;
 
 private:
 
