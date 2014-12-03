@@ -382,17 +382,13 @@ void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxt
 /// invalidate text selection for paragraphs
 void SwViewImp::_InvalidateAccessibleParaTextSelection()
 {
-    SwViewShell* pVSh = GetShell();
-    SwViewShell* pTmp = pVSh;
-    do
+    for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
-        if ( pTmp->Imp()->IsAccessible() )
+        if ( rTmp.Imp()->IsAccessible() )
         {
-            pTmp->Imp()->GetAccessibleMap().InvalidateTextSelectionOfAllParas();
+            rTmp.Imp()->GetAccessibleMap().InvalidateTextSelectionOfAllParas();
         }
-
-        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
-    } while ( pTmp != pVSh );
+    }
 }
 
 /// invalidate attributes for paragraphs
