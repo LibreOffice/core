@@ -776,7 +776,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         while(true)
         {
             bHasMark = bHasMark || pPam->HasMark();
-            pPam = static_cast<SwPaM *>( pPam->GetNext() );
+            pPam = pPam->GetNext();
             if(bHasMark || pPam == pEnd)
                 break;
         }
