@@ -5431,7 +5431,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                 // Cancel all selections other than the last selected one.
                 while( rSh.GetCrsr()->GetNext() != rSh.GetCrsr() )
-                delete rSh.GetCrsr()->GetNext();
+                    delete rSh.GetCrsr()->GetNext();
             }
 
             if( pCrsr )
