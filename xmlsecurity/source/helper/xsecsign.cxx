@@ -86,7 +86,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     args[1] = cssu::makeAny(m_xSAXEventKeeper);
     args[2] = cssu::makeAny(OUString::number(nIdOfSignatureElementCollector));
 
-    //i39448 : for nss, the internal module is used for signing, which needs to be improved later
+    //for nss, the internal module is used for signing, which needs to be improved later
     sal_Int32 nEnvIndex = internalSignatureInfor.signatureInfor.nSecurityEnvironmentIndex;
     if( nEnvIndex < 0 || nEnvIndex >= m_xSecurityContext->getSecurityEnvironmentNumber())
     {// set defaultEnv

@@ -106,7 +106,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
          throw RuntimeException() ;
     }
 
-    //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
+    // the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
 
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
@@ -117,7 +117,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
 
      setErrorRecorder();
 
-    pMngr = pSecEnv->createKeysManager() ; //i39448
+    pMngr = pSecEnv->createKeysManager();
     if( !pMngr ) {
         throw RuntimeException() ;
     }
@@ -126,7 +126,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr );
         //throw XMLSignatureException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -147,7 +147,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
 
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+    pSecEnv->destroyKeysManager( pMngr );
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
@@ -225,7 +225,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
         if( pSecEnv == NULL )
             throw RuntimeException() ;
 
-        pMngr = pSecEnv->createKeysManager() ; //i39448
+        pMngr = pSecEnv->createKeysManager();
         if( !pMngr ) {
             throw RuntimeException() ;
         }
@@ -234,7 +234,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
         pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
         if( pDsigCtx == NULL )
         {
-            pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+            pSecEnv->destroyKeysManager( pMngr );
             //throw XMLSignatureException() ;
             clearErrorRecorder();
             return aTemplate;

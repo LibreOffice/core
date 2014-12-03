@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_security_XSerialNumberAdapter_idl_
 #define __com_sun_star_security_XSerialNumberAdapter_idl_
 

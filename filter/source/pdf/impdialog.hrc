@@ -19,6 +19,9 @@
 
 #include <filter.hrc>
 
+#define STR_ERR_SIGNATURE_FAILED        (RID_PDF_DIALOG_START + 0)
+#define STR_ERR_PDF_EXPORT_ABORTED      (RID_PDF_DIALOG_START + 1)
+
 #define RID_PDF_WARNPDFAPASSWORD    (RID_PDF_DIALOG_START +   6)
 
 //strings for PDF security, user password management

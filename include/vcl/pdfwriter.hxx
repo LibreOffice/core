@@ -216,7 +216,10 @@ public:
 
         // transparent objects were converted to a bitmap in order
         // to removetransparencies from the output
-        Warning_Transparency_Converted
+        Warning_Transparency_Converted,
+
+        // signature generation failed
+        Error_Signature_Failed,
     };
 
     struct VCL_DLLPUBLIC AnyWidget

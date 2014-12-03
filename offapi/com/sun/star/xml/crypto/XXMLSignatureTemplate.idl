@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//i20156 - new file for XML security module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_xml_crypto_xxmlsignaturetemplate_idl_
 #define __com_sun_star_xml_crypto_xxmlsignaturetemplate_idl_
 
@@ -70,7 +66,6 @@ interface XXMLSignatureTemplate : XXMLSecurityTemplate
 } ;
 
 } ; } ; } ; } ; } ;
-
 
 #endif
 
