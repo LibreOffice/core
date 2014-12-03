@@ -288,14 +288,11 @@ void SwViewImp::DisposeAccessible( const SwFrm *pFrm,
                                    bool bRecursive )
 {
     OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
-    SwViewShell *pVSh = GetShell();
-    SwViewShell *pTmp = pVSh;
-    do
+    for(SwViewShell& rTmp : GetShell()->GetRingContainer())
     {
-        if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().Dispose( pFrm, pObj, 0, bRecursive );
-        pTmp = static_cast<SwViewShell *>(pTmp->GetNext());
-    } while ( pTmp != pVSh );
+        if( rTmp.Imp()->IsAccessible() )
+            rTmp.Imp()->GetAccessibleMap().Dispose( pFrm, pObj, 0, bRecursive );
+    }
 }
 
 void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
