@@ -1776,14 +1776,12 @@ static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
                             svt::EmbeddedObjectRef& xObj = pNode->GetOLEObj().GetObject();
                             if ( xObj.is() )
                             {
-                                SwViewShell* pTmp = pSh;
-                                do
+                                for(SwViewShell& rSh : pSh->GetRingContainer())
                                 {
-                                    SwFEShell* pFEShell = dynamic_cast< SwFEShell* >( pTmp );
+                                    SwFEShell* pFEShell = dynamic_cast< SwFEShell* >( &rSh );
                                     if ( pFEShell )
                                         pFEShell->MoveObjectIfActive( xObj, rOffset );
-                                    pTmp = static_cast<SwViewShell*>( pTmp->GetNext() );
-                                } while( pTmp != pSh );
+                                }
                             }
                         }
                     }
