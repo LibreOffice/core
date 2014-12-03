@@ -495,18 +495,16 @@ void SwViewShell::ImplUnlockPaint( bool bVirDev )
 bool SwViewShell::AddPaintRect( const SwRect & rRect )
 {
     bool bRet = false;
-    SwViewShell *pSh = this;
-    do
+    for(SwViewShell& rSh : GetRingContainer())
     {
-        if( pSh->Imp() )
+        if( rSh.Imp() )
         {
-        if ( pSh->IsPreview() && pSh->GetWin() )
-            ::RepaintPagePreview( pSh, rRect );
+        if ( rSh.IsPreview() && rSh.GetWin() )
+            ::RepaintPagePreview( &rSh, rRect );
         else
-                bRet |= pSh->Imp()->AddPaintRect( rRect );
+                bRet |= rSh.Imp()->AddPaintRect( rRect );
         }
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
-    } while ( pSh != this );
+    }
     return bRet;
 }
 
