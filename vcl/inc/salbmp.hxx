@@ -23,6 +23,7 @@
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/salbtype.hxx>
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
@@ -53,8 +54,8 @@ public:
     virtual Size            GetSize() const = 0;
     virtual sal_uInt16      GetBitCount() const = 0;
 
-    virtual BitmapBuffer*   AcquireBuffer( bool bReadOnly ) = 0;
-    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) = 0;
+    virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) = 0;
+    virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
     virtual bool            Crop( const Rectangle& rRectPixel ) = 0;

@@ -70,8 +70,8 @@ public:
     Size            GetSize() const SAL_OVERRIDE;
     sal_uInt16          GetBitCount() const SAL_OVERRIDE;
 
-    BitmapBuffer   *AcquireBuffer( bool bReadOnly ) SAL_OVERRIDE;
-    void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly ) SAL_OVERRIDE;
+    BitmapBuffer   *AcquireBuffer( BitmapAccessMode nMode ) SAL_OVERRIDE;
+    void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) SAL_OVERRIDE;
 
     bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 

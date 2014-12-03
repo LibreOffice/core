@@ -509,12 +509,12 @@ void GenPspGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSa
     Rectangle aDst (Point(rPosAry.mnDestX, rPosAry.mnDestY),
                     Size(rPosAry.mnDestWidth, rPosAry.mnDestHeight));
 
-    BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(true);
+    BitmapBuffer* pBuffer= const_cast<SalBitmap&>(rSalBitmap).AcquireBuffer(BITMAP_READ_ACCESS);
 
     SalPrinterBmp aBmp (pBuffer);
     m_pPrinterGfx->DrawBitmap (aDst, aSrc, aBmp);
 
-    const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, true);
+    const_cast<SalBitmap&>(rSalBitmap).ReleaseBuffer (pBuffer, BITMAP_READ_ACCESS);
 }
 
 void GenPspGraphics::drawBitmap( const SalTwoRect&,

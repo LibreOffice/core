@@ -62,14 +62,14 @@ typedef BitmapColor (*FncGetPixel)( ConstScanline pScanline, long nX, const Colo
 typedef void (*FncSetPixel)( Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask );
 
 
-// - BitmapReadAccess -
-class VCL_DLLPUBLIC BitmapReadAccess
+// - BitmapInfoAccess -
+class VCL_DLLPUBLIC BitmapInfoAccess
 {
-    friend class BitmapWriteAccess;
+    friend class BitmapReadAccess;
 
 public:
-                                BitmapReadAccess( Bitmap& rBitmap );
-    virtual                     ~BitmapReadAccess();
+                                BitmapInfoAccess( Bitmap& rBitmap );
+    virtual                     ~BitmapInfoAccess();
 
     inline bool                 operator!() const;
 
@@ -87,9 +87,6 @@ public:
     inline sal_uInt16           GetBitCount() const;
     inline BitmapColor          GetBestMatchingColor( const BitmapColor& rBitmapColor );
 
-    inline Scanline             GetBuffer() const;
-    inline Scanline             GetScanline( long nY ) const;
-
     inline bool                 HasPalette() const;
     inline const BitmapPalette& GetPalette() const;
     inline sal_uInt16           GetPaletteEntryCount() const;
@@ -99,6 +96,38 @@ public:
 
     inline bool                 HasColorMask() const;
     inline ColorMask&           GetColorMask() const;
+
+private:
+
+                                BitmapInfoAccess() {}
+                                BitmapInfoAccess( const BitmapInfoAccess& ) {}
+    BitmapInfoAccess&           operator=( const BitmapInfoAccess& ) { return *this; }
+
+protected:
+    Bitmap                      maBitmap;
+    BitmapBuffer*               mpBuffer;
+    ColorMask                   maColorMask;
+    BitmapAccessMode            mnAccessMode;
+
+    SAL_DLLPRIVATE  void        ImplCreate( Bitmap& rBitmap );
+    SAL_DLLPRIVATE  void        ImplDestroy();
+
+protected:
+                                BitmapInfoAccess( Bitmap& rBitmap, BitmapAccessMode nMode );
+
+};
+
+// - BitmapReadAccess -
+class VCL_DLLPUBLIC BitmapReadAccess : public BitmapInfoAccess
+{
+    friend class BitmapWriteAccess;
+
+public:
+                                BitmapReadAccess( Bitmap& rBitmap );
+    virtual                     ~BitmapReadAccess();
+
+    inline Scanline             GetBuffer() const;
+    inline Scanline             GetScanline( long nY ) const;
 
     inline BitmapColor          GetPixelFromData( const sal_uInt8* pData, long nX ) const;
     inline void                 SetPixelOnData( sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor );
@@ -117,21 +146,16 @@ public:
 private:
 
                                 BitmapReadAccess() {}
-                                BitmapReadAccess( const BitmapReadAccess& ) {}
+                                BitmapReadAccess( const BitmapReadAccess& ) : BitmapInfoAccess() {}
     BitmapReadAccess&           operator=( const BitmapReadAccess& ) { return *this; }
 
 protected:
-    Bitmap                      maBitmap;
-    BitmapBuffer*               mpBuffer;
     Scanline*                   mpScanBuf;
-    ColorMask                   maColorMask;
     FncGetPixel                 mFncGetPixel;
     FncSetPixel                 mFncSetPixel;
-    bool                        mbModify;
 
-
-    SAL_DLLPRIVATE  void        ImplCreate( Bitmap& rBitmap );
-    SAL_DLLPRIVATE  void        ImplDestroy();
+    SAL_DLLPRIVATE  void        ImplInitScanBuffer( Bitmap& rBitmap );
+    SAL_DLLPRIVATE  void        ImplClearScanBuffer();
     SAL_DLLPRIVATE  bool        ImplSetAccessPointers( sal_uLong nFormat );
 
 public:
@@ -158,7 +182,7 @@ public:
                                 DECL_FORMAT( _32BIT_TC_MASK )
 
 protected:
-                                BitmapReadAccess( Bitmap& rBitmap, bool bModify );
+                                BitmapReadAccess( Bitmap& rBitmap, BitmapAccessMode nMode );
 
 };
 
@@ -206,66 +230,114 @@ private:
 };
 
 // - Inlines -
-inline bool BitmapReadAccess::operator!() const
+inline bool BitmapInfoAccess::operator!() const
 {
     return( mpBuffer == NULL );
 }
 
-inline long BitmapReadAccess::Width() const
+inline long BitmapInfoAccess::Width() const
 {
     return( mpBuffer ? mpBuffer->mnWidth : 0L );
 }
 
-inline long BitmapReadAccess::Height() const
+inline long BitmapInfoAccess::Height() const
 {
     return( mpBuffer ? mpBuffer->mnHeight : 0L );
 }
 
-inline Point BitmapReadAccess::TopLeft() const
+inline Point BitmapInfoAccess::TopLeft() const
 {
     return Point();
 }
 
-inline Point BitmapReadAccess::BottomRight() const
+inline Point BitmapInfoAccess::BottomRight() const
 {
     return Point( Width() - 1L, Height() - 1L );
 }
 
-inline bool BitmapReadAccess::IsTopDown() const
+inline bool BitmapInfoAccess::IsTopDown() const
 {
     assert(mpBuffer && "Access is not valid!");
     return mpBuffer && ( BMP_SCANLINE_ADJUSTMENT( mpBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN );
 }
 
-inline bool BitmapReadAccess::IsBottomUp() const
+inline bool BitmapInfoAccess::IsBottomUp() const
 {
     return !IsTopDown();
 }
 
-inline sal_uLong BitmapReadAccess::GetScanlineFormat() const
+inline sal_uLong BitmapInfoAccess::GetScanlineFormat() const
 {
     assert(mpBuffer && "Access is not valid!");
     return( mpBuffer ? BMP_SCANLINE_FORMAT( mpBuffer->mnFormat ) : 0UL );
 }
 
-inline sal_uLong BitmapReadAccess::GetScanlineSize() const
+inline sal_uLong BitmapInfoAccess::GetScanlineSize() const
 {
     assert(mpBuffer && "Access is not valid!");
     return( mpBuffer ? mpBuffer->mnScanlineSize : 0UL );
 }
 
-inline sal_uInt16  BitmapReadAccess::GetBitCount() const
+inline sal_uInt16  BitmapInfoAccess::GetBitCount() const
 {
     assert(mpBuffer && "Access is not valid!");
     return( mpBuffer ? mpBuffer->mnBitCount : 0 );
 }
 
-inline BitmapColor BitmapReadAccess::GetBestMatchingColor( const BitmapColor& rBitmapColor )
+inline BitmapColor BitmapInfoAccess::GetBestMatchingColor( const BitmapColor& rBitmapColor )
 {
     if( HasPalette() )
         return BitmapColor( (sal_uInt8) GetBestPaletteIndex( rBitmapColor ) );
     else
         return rBitmapColor;
+}
+
+inline bool BitmapInfoAccess::HasPalette() const
+{
+    assert(mpBuffer && "Access is not valid!");
+    return( mpBuffer && !!mpBuffer->maPalette );
+}
+
+inline const BitmapPalette& BitmapInfoAccess::GetPalette() const
+{
+    assert(mpBuffer && "Access is not valid!");
+    return mpBuffer->maPalette;
+}
+
+inline sal_uInt16 BitmapInfoAccess::GetPaletteEntryCount() const
+{
+    assert(HasPalette() && "Bitmap has no palette!");
+    return( HasPalette() ? mpBuffer->maPalette.GetEntryCount() : 0 );
+}
+
+inline const BitmapColor& BitmapInfoAccess::GetPaletteColor( sal_uInt16 nColor ) const
+{
+    assert(mpBuffer && "Access is not valid!");
+    assert(HasPalette() && "Bitmap has no palette!");
+    return mpBuffer->maPalette[ nColor ];
+}
+
+inline const BitmapColor& BitmapInfoAccess::GetBestPaletteColor( const BitmapColor& rBitmapColor ) const
+{
+    return GetPaletteColor( GetBestPaletteIndex( rBitmapColor ) );
+}
+
+inline bool BitmapInfoAccess::HasColorMask() const
+{
+    assert(mpBuffer && "Access is not valid!");
+    const sal_uLong nFormat = BMP_SCANLINE_FORMAT( mpBuffer->mnFormat );
+
+    return( nFormat == BMP_FORMAT_8BIT_TC_MASK  ||
+            nFormat == BMP_FORMAT_16BIT_TC_MSB_MASK ||
+            nFormat == BMP_FORMAT_16BIT_TC_LSB_MASK ||
+            nFormat == BMP_FORMAT_24BIT_TC_MASK ||
+            nFormat == BMP_FORMAT_32BIT_TC_MASK );
+}
+
+inline ColorMask& BitmapInfoAccess::GetColorMask() const
+{
+    assert(mpBuffer && "Access is not valid!");
+    return mpBuffer->maColorMask;
 }
 
 inline Scanline BitmapReadAccess::GetBuffer() const
@@ -279,54 +351,6 @@ inline Scanline BitmapReadAccess::GetScanline( long nY ) const
     assert(mpBuffer && "Access is not valid!");
     assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
     return( mpBuffer ? mpScanBuf[ nY ] : NULL );
-}
-
-inline bool BitmapReadAccess::HasPalette() const
-{
-    assert(mpBuffer && "Access is not valid!");
-    return( mpBuffer && !!mpBuffer->maPalette );
-}
-
-inline const BitmapPalette& BitmapReadAccess::GetPalette() const
-{
-    assert(mpBuffer && "Access is not valid!");
-    return mpBuffer->maPalette;
-}
-
-inline sal_uInt16 BitmapReadAccess::GetPaletteEntryCount() const
-{
-    assert(HasPalette() && "Bitmap has no palette!");
-    return( HasPalette() ? mpBuffer->maPalette.GetEntryCount() : 0 );
-}
-
-inline const BitmapColor& BitmapReadAccess::GetPaletteColor( sal_uInt16 nColor ) const
-{
-    assert(mpBuffer && "Access is not valid!");
-    assert(HasPalette() && "Bitmap has no palette!");
-    return mpBuffer->maPalette[ nColor ];
-}
-
-inline const BitmapColor& BitmapReadAccess::GetBestPaletteColor( const BitmapColor& rBitmapColor ) const
-{
-    return GetPaletteColor( GetBestPaletteIndex( rBitmapColor ) );
-}
-
-inline bool BitmapReadAccess::HasColorMask() const
-{
-    assert(mpBuffer && "Access is not valid!");
-    const sal_uLong nFormat = BMP_SCANLINE_FORMAT( mpBuffer->mnFormat );
-
-    return( nFormat == BMP_FORMAT_8BIT_TC_MASK  ||
-            nFormat == BMP_FORMAT_16BIT_TC_MSB_MASK ||
-            nFormat == BMP_FORMAT_16BIT_TC_LSB_MASK ||
-            nFormat == BMP_FORMAT_24BIT_TC_MASK ||
-            nFormat == BMP_FORMAT_32BIT_TC_MASK );
-}
-
-inline ColorMask& BitmapReadAccess::GetColorMask() const
-{
-    assert(mpBuffer && "Access is not valid!");
-    return mpBuffer->maColorMask;
 }
 
 inline BitmapColor BitmapReadAccess::GetPixel( long nY, long nX ) const

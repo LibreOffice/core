@@ -275,12 +275,12 @@ bool Bitmap::HasGreyPalette() const
     const sal_uInt16    nBitCount = GetBitCount();
     bool            bRet = nBitCount == 1;
 
-    BitmapReadAccess* pRAcc = ( (Bitmap*) this )->AcquireReadAccess();
+    BitmapInfoAccess* pIAcc = ( (Bitmap*) this )->AcquireInfoAccess();
 
-    if( pRAcc )
+    if( pIAcc )
     {
-        bRet = pRAcc->HasPalette() && pRAcc->GetPalette().IsGreyPalette();
-        ( (Bitmap*) this )->ReleaseAccess( pRAcc );
+        bRet = pIAcc->HasPalette() && pIAcc->GetPalette().IsGreyPalette();
+        ( (Bitmap*) this )->ReleaseAccess( pIAcc );
     }
 
     return bRet;
@@ -399,6 +399,19 @@ void Bitmap::ImplSetImpBitmap( ImpBitmap* pImpBmp )
     }
 }
 
+BitmapInfoAccess* Bitmap::AcquireInfoAccess()
+{
+    BitmapInfoAccess* pInfoAccess = new BitmapInfoAccess( *this );
+
+    if( !*pInfoAccess )
+    {
+        delete pInfoAccess;
+        pInfoAccess = NULL;
+    }
+
+    return pInfoAccess;
+}
+
 BitmapReadAccess* Bitmap::AcquireReadAccess()
 {
     BitmapReadAccess* pReadAccess = new BitmapReadAccess( *this );
@@ -425,7 +438,7 @@ BitmapWriteAccess* Bitmap::AcquireWriteAccess()
     return pWriteAccess;
 }
 
-void Bitmap::ReleaseAccess( BitmapReadAccess* pBitmapAccess )
+void Bitmap::ReleaseAccess( BitmapInfoAccess* pBitmapAccess )
 {
     delete pBitmapAccess;
 }

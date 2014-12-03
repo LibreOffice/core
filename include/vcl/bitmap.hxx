@@ -294,6 +294,7 @@ private:
     }
 };
 
+class   BitmapInfoAccess;
 class   BitmapReadAccess;
 class   BitmapWriteAccess;
 class   BitmapPalette;
@@ -850,9 +851,10 @@ public:
 
 public:
 
+    BitmapInfoAccess*       AcquireInfoAccess();
     BitmapReadAccess*       AcquireReadAccess();
     BitmapWriteAccess*      AcquireWriteAccess();
-    void                    ReleaseAccess( BitmapReadAccess* pAccess );
+    void                    ReleaseAccess( BitmapInfoAccess* pAccess );
 
     typedef vcl::ScopedBitmapAccess< BitmapReadAccess, Bitmap, &Bitmap::AcquireReadAccess >
         ScopedReadAccess;

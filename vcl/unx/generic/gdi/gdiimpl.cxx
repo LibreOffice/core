@@ -105,7 +105,7 @@ namespace
         //fdo#33455 and fdo#80160 handle 1 bit depth pngs with palette entries
         //to set fore/back colors
         SalBitmap& rBitmap = const_cast<SalBitmap&>(rSalBitmap);
-        if (BitmapBuffer* pBitmapBuffer = rBitmap.AcquireBuffer(true))
+        if (BitmapBuffer* pBitmapBuffer = rBitmap.AcquireBuffer(BITMAP_READ_ACCESS))
         {
             const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
             if (rPalette.GetEntryCount() == 2)
@@ -116,7 +116,7 @@ namespace
                 const BitmapColor aBlack(rPalette[rPalette.GetBestIndex(Color(COL_BLACK))]);
                 rValues.background = rColMap.GetPixel(ImplColorToSal(aBlack));
             }
-            rBitmap.ReleaseBuffer(pBitmapBuffer, true);
+            rBitmap.ReleaseBuffer(pBitmapBuffer, BITMAP_READ_ACCESS);
         }
     }
 }
@@ -704,11 +704,11 @@ void X11SalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     DBG_ASSERT( !mrParent.bPrinter_, "Drawing of transparent bitmaps on printer devices is strictly forbidden" );
 
     // decide if alpha masking or transparency masking is needed
-    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( true );
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rMaskBitmap).AcquireBuffer( BITMAP_READ_ACCESS );
     if( pAlphaBuffer != NULL )
     {
         int nMaskFormat = pAlphaBuffer->mnFormat;
-        const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, true );
+        const_cast<SalBitmap&>(rMaskBitmap).ReleaseBuffer( pAlphaBuffer, BITMAP_READ_ACCESS );
         if( nMaskFormat == BMP_FORMAT_8BIT_PAL )
             drawAlphaBitmap( rPosAry, rSrcBitmap, rMaskBitmap );
     }
@@ -882,7 +882,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // TODO: use SalX11Bitmap functionality and caching for the Alpha Pixmap
     // problem is that they don't provide an 8bit Pixmap on a non-8bit display
-    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( true );
+    BitmapBuffer* pAlphaBuffer = const_cast<SalBitmap&>(rAlphaBmp).AcquireBuffer( BITMAP_READ_ACCESS );
 
     // an XImage needs its data top_down
     // TODO: avoid wrongly oriented images in upper layers!
@@ -927,7 +927,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     if( pAlphaBits != (char*)pAlphaBuffer->mpBits )
         delete[] pAlphaBits;
 
-    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, true );
+    const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, BITMAP_READ_ACCESS );
 
     XRenderPictureAttributes aAttr;
     aAttr.repeat = int(true);
