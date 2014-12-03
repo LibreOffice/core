@@ -136,15 +136,14 @@ void SwEditShell::SetAttrSet( const SfxItemSet& rSet, sal_uInt16 nFlags, SwPaM* 
         bool bIsTblMode = IsTableMode();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
-        SwPaM* pTmpCrsr = pCrsr;
-        SwPaM* pStartPaM = pCrsr;
-        do {
-            if( pTmpCrsr->HasMark() && ( bIsTblMode ||
-                *pTmpCrsr->GetPoint() != *pTmpCrsr->GetMark() ))
+        for(SwPaM& rTmpCrsr : pCrsr->GetRingContainer())
+        {
+            if( rTmpCrsr.HasMark() && ( bIsTblMode ||
+                *rTmpCrsr.GetPoint() != *rTmpCrsr.GetMark() ))
             {
-                GetDoc()->getIDocumentContentOperations().InsertItemSet(*pTmpCrsr, rSet, nFlags );
+                GetDoc()->getIDocumentContentOperations().InsertItemSet(rTmpCrsr, rSet, nFlags );
             }
-        } while ( ( pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext()) ) != pStartPaM );
+        }
 
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
