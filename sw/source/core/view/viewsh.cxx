@@ -512,19 +512,16 @@ void SwViewShell::InvalidateWindows( const SwRect &rRect )
 {
     if ( !Imp()->IsCalcLayoutProgress() )
     {
-        SwViewShell *pSh = this;
-        do
+        for(SwViewShell& rSh : GetRingContainer())
         {
-            if ( pSh->GetWin() )
+            if ( rSh.GetWin() )
             {
-                if ( pSh->IsPreview() )
-                    ::RepaintPagePreview( pSh, rRect );
-                else if ( pSh->VisArea().IsOver( rRect ) )
-                    pSh->GetWin()->Invalidate( rRect.SVRect() );
+                if ( rSh.IsPreview() )
+                    ::RepaintPagePreview( &rSh, rRect );
+                else if ( rSh.VisArea().IsOver( rRect ) )
+                    rSh.GetWin()->Invalidate( rRect.SVRect() );
             }
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-        } while ( pSh != this );
+        }
     }
 }
 
