@@ -192,6 +192,7 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, s
 {
     SAL_INFO( "vcl.opengl", "::ImplScale" );
 
+    maUserBuffer.reset();
     makeCurrent();
 
     if( nScaleFlag == BMP_SCALE_FAST )
@@ -253,7 +254,6 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, sal_u
         nScaleFlag == BMP_SCALE_SUPER ||
         nScaleFlag == BMP_SCALE_LANCZOS )
     {
-        //TODO maUserBuffer.reset();
         makeCurrent();
         if( mpContext == NULL )
         {
