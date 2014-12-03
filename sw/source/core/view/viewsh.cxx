@@ -941,14 +941,11 @@ void SwViewShell::CalcLayout()
 
 void SwViewShell::SetFirstVisPageInvalid()
 {
-    SwViewShell *pSh = this;
-    do
+    for(SwViewShell& rSh : GetRingContainer())
     {
-        if ( pSh->Imp() )
-            pSh->Imp()->SetFirstVisPageInvalid();
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-    } while ( pSh != this );
+        if ( rSh.Imp() )
+            rSh.Imp()->SetFirstVisPageInvalid();
+    }
 }
 
 void SwViewShell::SizeChgNotify()
