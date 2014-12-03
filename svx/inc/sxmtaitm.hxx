@@ -23,17 +23,16 @@
 #include <svx/sdynitm.hxx>
 #include <svx/sdangitm.hxx>
 
-// Den Text automatisch zurechtdrehen (Automatisches UpsideDown).
-// TextUpsideDown bleibt trotzdem weiterhin wirksam und dreht
-// den Text bei sal_True nochmal.
+// Turn text automatically in wright position (automatic UpsideDown).
+// TextUpsideDown stays active and turns the text again if sal_True.
 class SdrMeasureTextAutoAngleItem: public SdrYesNoItem {
 public:
     SdrMeasureTextAutoAngleItem(bool bOn=true): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,bOn) {}
     SdrMeasureTextAutoAngleItem(SvStream& rIn): SdrYesNoItem(SDRATTR_MEASURETEXTAUTOANGLE,rIn) {}
 };
 
-// Der bevorzugte Blickwinkel zum lesen des Textes. Wird nur ausgewertet, wenn
-// TextAutoAngle=TRUE. Winkel in 1/100deg aus der Zeichnung zum Betrachter.
+// Preferred perspective for reading text is only evaluated if TextAutoAngle=TRUE.
+// Angle in 1/100deg from viewpoint of the user.
 class SdrMeasureTextAutoAngleViewItem: public SdrAngleItem {
 public:
     SdrMeasureTextAutoAngleViewItem(long nVal=31500): SdrAngleItem(SDRATTR_MEASURETEXTAUTOANGLEVIEW,nVal)  {}

@@ -383,8 +383,8 @@ FmFormObj& FmFormObj::operator= (const FmFormObj& rObj)
         return *this;
     SdrUnoObj::operator= (rObj);
 
-    // liegt das UnoControlModel in einer Eventumgebung,
-    // dann koennen noch Events zugeordnet sein
+    // If UnoControlModel is part of an event environment,
+    // events may assigned to it.
     Reference< XFormComponent >  xContent(rObj.xUnoControlModel, UNO_QUERY);
     if (xContent.is())
     {

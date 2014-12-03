@@ -309,7 +309,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
 {
     try
     {
-        // ListBox loeschen
+        // delete ListBox
         pListBox->Clear();
         OUString aTitle(SVX_RES(RID_STR_FIELDSELECTION));
         SetText(aTitle);
@@ -344,7 +344,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
                 lcl_addToList(*pListBox,xColumns);
         }
 
-        // Prefix setzen
+        // set prefix
         OUString  aPrefix;
         StringListResource aPrefixes( SVX_RES( RID_RSC_TABWIN_PREFIX ) );
 
@@ -361,7 +361,7 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
                 break;
         }
 
-        // an dem PropertySet nach Aenderungen der ControlSource lauschen
+        // listen for changes at ControlSource in PropertySet
         if (m_pChangeListener)
         {
             m_pChangeListener->dispose();
@@ -392,7 +392,7 @@ void FmFieldWin::Resize()
 
 
 
-    // Groesse der ::com::sun::star::form::ListBox anpassen
+    // adapt size of ::com::sun::star::form::ListBox
     Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
     Size aLBSize( aOutputSize );
     aLBSize.Width() -= (2*LISTBOX_BORDER);
