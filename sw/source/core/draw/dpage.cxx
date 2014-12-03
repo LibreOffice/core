@@ -86,7 +86,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
 {
     SwViewShell *pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
     while (pSh && pSh->Imp()->GetPageView() != pPV)
-        pSh = static_cast<SwViewShell*>(pSh->GetNext());
+        pSh = pSh->GetNext();
     if (pSh)
     {
         if ( pGridLst )
