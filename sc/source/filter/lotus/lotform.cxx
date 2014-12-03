@@ -994,8 +994,8 @@ DefTokenId LotusToSc::IndexToToken( sal_uInt8 nIndex )
         ocGetTimeValue,     //   78 Timevalue
         ocNoName,           //   79 Cellpointer
         ocSum,              //   80 Sum()
-        ocAverage,          //   81 Avg()
-        ocCount,            //   82 Cnt()
+        ocAverageA,         //   81 Avg()
+        ocCount2,           //   82 Cnt()
         ocMinA,             //   83 Min()
         ocMaxA,             //   84 Max()
         ocVLookup,          //   85 Vlookup()
@@ -1523,8 +1523,8 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocGetTimeValue,     //   78 Timevalue
         ocNoName,           //   79 Cellpointer
         ocSum,              //   80 Sum()
-        ocAverage,          //   81 Avg()
-        ocCount,            //   82 Cnt()
+        ocAverageA,         //   81 Avg()
+        ocCount2,           //   82 Cnt()
         ocMinA,             //   83 Min()
         ocMaxA,             //   84 Max()
         ocVLookup,          //   85 Vlookup()
@@ -1595,8 +1595,8 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocNoName,           //  150 Spi
         ocNoName,           //  151 Fullp
         ocNoName,           //  152 Halfp
-        ocNoName,           //  153 Pureavg
-        ocCount2,           //  154 Purecount
+        ocAverage,          //  153 Pureavg
+        ocCount,            //  154 Purecount
         ocMax,              //  155 Puremax
         ocMin,              //  156 Puremin
         ocStDevP,           //  157 Purestd
