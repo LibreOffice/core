@@ -2635,9 +2635,17 @@ void WW8TabDesc::ParkPaM()
         return;
     }
 
-    if (pIo->pPaM->GetPoint()->nNode != pTabBox2->GetSttIdx() + 1)
+    sal_uLong nSttNd = pTabBox2->GetSttIdx() + 1,
+              nEndNd = pTabBox2->GetSttNd()->EndOfSectionIndex();
+
+    if (pIo->pPaM->GetPoint()->nNode != nSttNd)
     {
-        pIo->pPaM->GetPoint()->nNode = pTabBox2->GetSttIdx() + 1;
+        do
+        {
+            pIo->pPaM->GetPoint()->nNode = nSttNd;
+        }
+        while (pIo->pPaM->GetNode().GetNodeType() != ND_TEXTNODE && ++nSttNd < nEndNd);
+
         pIo->pPaM->GetPoint()->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
         pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl);
     }
@@ -2869,9 +2877,15 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         //or not so that we can collect paragraph proproties over
         //all the cells, but in that case on the valid cell we do not
         //want to reset the fmt properties
-        if (pIo->pPaM->GetPoint()->nNode != pTabBox->GetSttIdx() + 1)
+        sal_uLong nSttNd = pTabBox->GetSttIdx() + 1,
+                  nEndNd = pTabBox->GetSttNd()->EndOfSectionIndex();
+        if (pIo->pPaM->GetPoint()->nNode != nSttNd)
         {
-            pIo->pPaM->GetPoint()->nNode = pTabBox->GetSttIdx() + 1;
+            do
+            {
+                pIo->pPaM->GetPoint()->nNode = nSttNd;
+            }
+            while (pIo->pPaM->GetNode().GetNodeType() != ND_TEXTNODE && ++nSttNd < nEndNd);
             pIo->pPaM->GetPoint()->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
             // Precautionally set now, otherwise the style is not set for cells
             // that are inserted for margin balancing.
