@@ -189,12 +189,12 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet* pSet = &rSet;
 
-    SwPaM* pStartPaM = pPaM;
-    do { // for all the point and mark (selections)
+    for(SwPaM& rCurrentPaM : pPaM->GetRingContainer())
+    { // for all the point and mark (selections)
 
         // get the start and the end node of the current selection
-        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
-              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+        sal_uLong nSttNd = rCurrentPaM.GetMark()->nNode.GetIndex(),
+              nEndNd = rCurrentPaM.GetPoint()->nNode.GetIndex();
 
         // reverse start and end if there number aren't sorted correctly
         if( nSttNd > nEndNd )
@@ -228,7 +228,7 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
             if (numberOfLookup >= getMaxLookup())
                 return false;
         }
-    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
+    }
 
     return true;
 }
