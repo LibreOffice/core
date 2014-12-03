@@ -762,19 +762,17 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
 {
     const bool bOld = pRoot->IsSuperfluous();
     pRoot->bCheckSuperfluous = false;
-    SwViewShell *pSh = pRoot->GetCurrShell();
-    if ( pSh )
+    if ( pRoot->GetCurrShell() )
     {
-        do
+        for(SwViewShell& rSh : pRoot->GetCurrShell()->GetRingContainer())
         {
-            if( pRoot == pSh->GetLayout() )
+            if( pRoot == rSh.GetLayout() )
             {
-                pSh->SizeChgNotify();
-                if ( pSh->Imp() )
-                    pSh->Imp()->NotifySizeChg( pRoot->Frm().SSize() );
+                rSh.SizeChgNotify();
+                if ( rSh.Imp() )
+                    rSh.Imp()->NotifySizeChg( pRoot->Frm().SSize() );
             }
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-        } while ( pSh != pRoot->GetCurrShell() );
+        }
     }
     pRoot->bCheckSuperfluous = bOld;
 }
