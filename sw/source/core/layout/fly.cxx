@@ -430,15 +430,12 @@ void SwFlyFrm::FinitDrawObj()
         SwViewShell *p1St = getRootFrm()->GetCurrShell();
         if ( p1St )
         {
-            SwViewShell *pSh = p1St;
-            do
+            for(SwViewShell& rCurrentShell : p1St->GetRingContainer())
             {   // At the moment the Drawing can do just do an Unmark on everything,
                 // as the Object was already removed
-                if( pSh->HasDrawView() )
-                    pSh->Imp()->GetDrawView()->UnmarkAll();
-                pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-            } while ( pSh != p1St );
+                if( rCurrentShell.HasDrawView() )
+                    rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
+            }
         }
     }
 
