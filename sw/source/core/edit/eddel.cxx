@@ -264,15 +264,15 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 #if OSL_DEBUG_LEVEL > 0
 // check if the indices are registered in the correct nodes
 {
-    SwPaM* pCmp = (SwPaM*)pDestShell->GetCrsr();        // store pointer to cursor
-    do {
-        OSL_ENSURE( pCmp->GetPoint()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(), "Point in wrong Node" );
-        OSL_ENSURE( pCmp->GetMark()->nContent.GetIdxReg()
-                    == pCmp->GetCntntNode(false), "Mark in wrong Node" );
-        bool bTst = *pCmp->GetPoint() == *pCmp->GetMark();
+    for(SwPaM& rCmp : pDestShell->GetCrsr()->GetRingContainer())
+    {
+        OSL_ENSURE( rCmp.GetPoint()->nContent.GetIdxReg()
+                    == rCmp.GetCntntNode(), "Point in wrong Node" );
+        OSL_ENSURE( rCmp.GetMark()->nContent.GetIdxReg()
+                    == rCmp.GetCntntNode(false), "Mark in wrong Node" );
+        bool bTst = *rCmp.GetPoint() == *rCmp.GetMark();
         (void) bTst;
-    } while( pDestShell->GetCrsr() != ( pCmp = static_cast<SwPaM*>(pCmp->GetNext()) ) );
+    }
 }
 #endif
 
