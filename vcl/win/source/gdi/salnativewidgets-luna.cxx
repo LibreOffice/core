@@ -474,7 +474,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
         GradientFill( hDC, vert, 2, g_rect, 1, GRADIENT_FILL_RECT_V );
 
         // and a darker horizontal line under that
-        HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xa0, 0xa0, 0xa0 ) );
+        HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
         SelectObject( hDC, hpen );
 
         MoveToEx( hDC, rc.left, gradient_bottom, NULL );
@@ -499,7 +499,7 @@ static void impl_drawAeroToolbar( HDC hDC, RECT rc, bool bHorizontal )
             to_x = rc.right;
             from_y = to_y = rc.top;
 
-            HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xa0, 0xa0, 0xa0 ) );
+            HPEN hpen = CreatePen( PS_SOLID, 1, RGB( 0xb0, 0xb0, 0xb0 ) );
             SelectObject( hDC, hpen );
 
             MoveToEx( hDC, from_x, from_y, NULL );
