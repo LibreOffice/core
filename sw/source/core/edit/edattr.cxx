@@ -243,12 +243,12 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
     // number of nodes the function have explored so far
     sal_uInt16 numberOfLookup = 0;
 
-    SwPaM* pStartPaM = pPaM;
-    do { // for all the point and mark (selections)
+    for(SwPaM& rCurrentPaM : pPaM->GetRingContainer())
+    { // for all the point and mark (selections)
 
         // get the start and the end node of the current selection
-        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
-              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+        sal_uLong nSttNd = rCurrentPaM.GetMark()->nNode.GetIndex(),
+              nEndNd = rCurrentPaM.GetPoint()->nNode.GetIndex();
 
         // reverse start and end if they aren't sorted correctly
         if( nSttNd > nEndNd )
@@ -276,7 +276,7 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
                     return pFmt;
             }
         }
-    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
+    }
 
     // if none of the selected node contain a named paragraph format
     return NULL;
