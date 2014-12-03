@@ -746,7 +746,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
     sal_uInt16 nCrsrCnt = 0;
     if( FND_IN_SEL & eFndRngs )
     {
-        while( pCurCrsr != ( pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext()) ))
+        while( pCurCrsr != ( pTmpCrsr = pTmpCrsr->GetNext() ))
             ++nCrsrCnt;
         if( nCrsrCnt && !bIsUnoCrsr )
             pPHdl = new _PercentHdl( 0, nCrsrCnt, pDoc->GetDocShell() );
