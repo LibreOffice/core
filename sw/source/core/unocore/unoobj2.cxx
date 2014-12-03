@@ -351,11 +351,10 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
     static const sal_uLong nMaxLookup = 1000;
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
     SfxItemSet *pSet = &rSet;
-    SwPaM *pCurrent = & rPam;
-    do
+    for(SwPaM& rCurrent : rPam.GetRingContainer())
     {
-        SwPosition const & rStart( *pCurrent->Start() );
-        SwPosition const & rEnd( *pCurrent->End() );
+        SwPosition const & rStart( *rCurrent.Start() );
+        SwPosition const & rEnd( *rCurrent.End() );
         const sal_uLong nSttNd = rStart.nNode.GetIndex();
         const sal_uLong nEndNd = rEnd  .nNode.GetIndex();
 
@@ -407,8 +406,7 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
                 aSet.ClearItem();
             }
         }
-        pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
-    } while ( pCurrent != &rPam );
+    }
 }
 
 class SwXParagraphEnumeration::Impl
