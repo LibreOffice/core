@@ -624,6 +624,7 @@ void SdrGrafObj::SetGraphicLink(const OUString& rFileName, const OUString& rRefe
     aFilterName = rFilterName;
     ImpLinkAnmeldung();
     pGraphic->SetUserData();
+    pGraphic->SetSwapState();
 }
 
 void SdrGrafObj::ReleaseGraphicLink()
