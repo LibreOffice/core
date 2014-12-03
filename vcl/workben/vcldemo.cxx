@@ -8,6 +8,7 @@
  */
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -31,7 +32,7 @@
 #include <vcl/bmpacc.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-
+#include <boost/math/special_functions/next.hpp>
 #include <vcldemo-debug.hxx>
 
 #include <rtl/math.hxx>
@@ -316,7 +317,7 @@ public:
             for (int i = 0; i < PRINT_N_TEXT; i++) {
                 rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
                 // random font size to avoid buffering
-                vcl::Font aFont(maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + (double)rand()/10/RAND_MAX) * (r.Top() - r.Bottom())/PRINT_N_TEXT));
+                vcl::Font aFont(maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, boost::math::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom())/PRINT_N_TEXT));
                 rDev.SetFont(aFont);
                 rDev.DrawText(r, aText.copy(0, 4 + (aText.getLength() - 4) * (PRINT_N_TEXT - i)/PRINT_N_TEXT));
             }
