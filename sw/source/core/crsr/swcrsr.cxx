@@ -837,7 +837,7 @@ static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
         if( bEnd || !( eFndRngs & ( FND_IN_SELALL | FND_IN_SEL )) )
             break;
 
-        pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
+        pTmpCrsr = pTmpCrsr->GetNext();
         if( nCrsrCnt && pPHdl )
         {
             pPHdl->NextPos( ++pPHdl->nActPos );
