@@ -78,6 +78,9 @@ public:
 
 class SVX_DLLPUBLIC SdrObjList
 {
+    SdrObjList(const SdrObjList& rSrcList) SAL_DELETED_FUNCTION;
+    SdrObjList &operator=(const SdrObjList& rSrcList) SAL_DELETED_FUNCTION;
+
 private:
     typedef ::std::vector<SdrObject*> SdrObjectContainerType;
     SdrObjectContainerType maList;
@@ -97,20 +100,23 @@ friend class SdrEditView;
 protected:
     virtual void RecalcRects();
 
+    SdrObjList();
+    void lateInit(const SdrObjList& rSrcList);
+
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
     void impChildInserted(SdrObject& rChild) const;
 public:
     TYPEINFO();
     SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList=NULL);
-    SdrObjList(const SdrObjList& rSrcList);
     virtual ~SdrObjList();
+
+    virtual SdrObjList* Clone() const;
+
     // !!! Diese Methode nur fuer Leute, die ganz genau wissen was sie tun !!!
 
     // #110094# This should not be needed (!)
     void SetObjOrdNumsDirty()                           { bObjOrdNumsDirty=true; }
-    // pModel, pPage, pUpList und pOwnerObj werden Zuweisungeoperator nicht veraendert!
-    void operator=(const SdrObjList& rSrcList);
     void CopyObjects(const SdrObjList& rSrcList);
     // alles Aufraeumen (ohne Undo)
     void    Clear();
@@ -403,6 +409,7 @@ public:
 
 class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage >
 {
+    SdrPage& operator=(const SdrPage& rSrcPage) SAL_DELETED_FUNCTION;
 
     // start PageUser section
 private:
@@ -473,15 +480,19 @@ protected:
                         ::com::sun::star::drawing::XDrawPage> const&);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
+    // Copying of pages is split into two parts: construction and copying of page objects,
+    // because the copying might need access to fully initialized page. Clone() is responsible
+    // to call lateInit() after copy-construction of a new object. Any initialization in derived
+    // classes that needs access to the page objects must be deferred to lateInit. And it must
+    // call lateInit() of its parent class.
+    SdrPage(const SdrPage& rSrcPage);
+    void lateInit(const SdrPage& rSrcPage);
+
 public:
     TYPEINFO_OVERRIDE();
     SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
-    // Copy-Ctor und Zuweisungeoperator sind nicht getestet!
-    SdrPage(const SdrPage& rSrcPage);
     virtual ~SdrPage();
-    // pModel, pPage, pUpList, pOwnerObj und mbInserted werden Zuweisungeoperator nicht veraendert!
-    SdrPage& operator=(const SdrPage& rSrcPage);
-    virtual SdrPage* Clone() const;
+    virtual SdrPage* Clone() const SAL_OVERRIDE;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
     bool IsMasterPage() const       { return mbMaster; }
     void SetInserted(bool bNew = true);

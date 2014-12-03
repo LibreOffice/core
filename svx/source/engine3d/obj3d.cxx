@@ -91,9 +91,16 @@ E3dObjList::E3dObjList(SdrModel* pNewModel, SdrPage* pNewPage, E3dObjList* pNewU
 {
 }
 
-E3dObjList::E3dObjList(const E3dObjList& rSrcList)
-:   SdrObjList(rSrcList)
+E3dObjList::E3dObjList(const E3dObjList&)
+:   SdrObjList()
 {
+}
+
+E3dObjList* E3dObjList::Clone() const
+{
+    E3dObjList* const pObjList = new E3dObjList(*this);
+    pObjList->lateInit(*this);
+    return pObjList;
 }
 
 E3dObjList::~E3dObjList()

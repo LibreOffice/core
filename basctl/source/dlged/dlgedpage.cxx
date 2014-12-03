@@ -33,6 +33,12 @@ DlgEdPage::DlgEdPage(DlgEdModel& rModel, bool bMasterPage)
 {
 }
 
+DlgEdPage::DlgEdPage(const DlgEdPage& rSrcPage)
+    : SdrPage(rSrcPage)
+    , pDlgEdForm(0)
+{
+}
+
 DlgEdPage::~DlgEdPage()
 {
     Clear();
@@ -41,7 +47,9 @@ DlgEdPage::~DlgEdPage()
 
 SdrPage* DlgEdPage::Clone() const
 {
-    return new DlgEdPage( *this );
+    DlgEdPage* const pNewPage = new DlgEdPage( *this );
+    pNewPage->lateInit( *this );
+    return pNewPage;
 }
 
 

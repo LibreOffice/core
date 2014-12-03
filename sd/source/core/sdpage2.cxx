@@ -377,15 +377,6 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mePageKind           = rSrcPage.mePageKind;
     meAutoLayout         = rSrcPage.meAutoLayout;
 
-    // use shape list directly to preserve constness of rSrcPage
-    const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
-    for( std::list< SdrObject* >::const_iterator aIter = rShapeList.begin();
-         aIter != rShapeList.end(); ++aIter )
-    {
-        SdrObject* pObj = *aIter;
-        InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
-    }
-
     mbSelected           = false;
     mnTransitionType    = rSrcPage.mnTransitionType;
     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
@@ -410,10 +401,24 @@ SdPage::SdPage(const SdPage& rSrcPage)
     mnPaperBin           = rSrcPage.mnPaperBin;
     meOrientation        = rSrcPage.meOrientation;
 
+    mpPageLink           = NULL;    // is set when inserting via ConnectLink()
+}
+
+void SdPage::lateInit(const SdPage& rSrcPage)
+{
+    FmFormPage::lateInit(rSrcPage);
+
+    // use shape list directly to preserve constness of rSrcPage
+    const std::list< SdrObject* >& rShapeList = rSrcPage.maPresentationShapeList.getList();
+    for( std::list< SdrObject* >::const_iterator aIter = rShapeList.begin();
+         aIter != rShapeList.end(); ++aIter )
+    {
+        SdrObject* pObj = *aIter;
+        InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
+    }
+
     // header footer
     setHeaderFooterSettings( rSrcPage.getHeaderFooterSettings() );
-
-    mpPageLink           = NULL;    // is set when inserting via ConnectLink()
 }
 
 /*************************************************************************
@@ -433,6 +438,7 @@ SdrPage* SdPage::Clone(SdrModel* pNewModel) const
     (void)pNewModel;
 
     SdPage* pNewPage = new SdPage(*this);
+    pNewPage->lateInit( *this );
 
     cloneAnimations( *pNewPage );
 

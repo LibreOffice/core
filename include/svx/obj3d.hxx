@@ -78,16 +78,22 @@ public:
 
 class E3dObjList : public SdrObjList
 {
+    E3dObjList &operator=(const E3dObjList& rSrcList) SAL_DELETED_FUNCTION;
+
 public:
     TYPEINFO_OVERRIDE();
     E3dObjList(SdrModel* pNewModel = 0, SdrPage* pNewPage = 0, E3dObjList* pNewUpList = 0);
-    SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
     SVX_DLLPUBLIC virtual ~E3dObjList();
+
+    virtual E3dObjList* Clone() const;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
     virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) SAL_OVERRIDE;
     virtual SdrObject* RemoveObject(size_t nObjNum) SAL_OVERRIDE;
+
+protected:
+    SVX_DLLPUBLIC E3dObjList(const E3dObjList& rSrcList);
 };
 
 /*************************************************************************
