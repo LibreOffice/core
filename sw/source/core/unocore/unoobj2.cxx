@@ -140,14 +140,14 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 
     if (rSource.GetNext() != &rSource)
     {
-        SwPaM *pPam = static_cast<SwPaM *>(rSource.GetNext());
+        SwPaM *pPam = rSource.GetNext();
         do
         {
             // create new PaM
             SwPaM *const pNew = new SwPaM(*pPam);
             // insert into ring
             pNew->MoveTo(&rTarget);
-            pPam = static_cast<SwPaM *>(pPam->GetNext());
+            pPam = pPam->GetNext();
         }
         while (pPam != &rSource);
     }
