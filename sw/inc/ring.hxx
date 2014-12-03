@@ -147,13 +147,9 @@ namespace sw
         /**
          * iterator access
          * @code
-         * for(Ring<SwPaM>::iterator ppRing = pPaM->beginRing(); ppRing != pPaM->endRing(); ++ppRing)
-         *     do_stuff(*ppRing);
+         * for(SwPaM& rCurrentPaM : pPaM->GetRingContainer())
+         *     do_stuff(rCurrentPaM); // this gets called on every SwPaM in the same ring as pPaM
          * @endcode
-         * @TODO: unfortunately we cant name these STL-conforming, as some derived classes
-         * also derive from other STL containers. This should be fixed though.
-         * That should allow this to be used directly with C++11s for( : )
-         * iteration statement.
          */
         iterator begin();
         iterator end();
