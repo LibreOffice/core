@@ -856,11 +856,10 @@ SwCntntNotify::~SwCntntNotify()
                 SwFlyFrm *pFly = pCnt->FindFlyFrm();
                 svt::EmbeddedObjectRef& xObj = pNd->GetOLEObj().GetObject();
                 SwFEShell *pFESh = 0;
-                SwViewShell *pTmp = pSh;
-                do
-                {   if ( pTmp->ISA( SwCrsrShell ) )
+                for(SwViewShell& rCurrentShell : pSh->GetRingContainer())
+                {   if ( rCurrentShell.ISA( SwCrsrShell ) )
                     {
-                        pFESh = static_cast<SwFEShell*>(pTmp);
+                        pFESh = static_cast<SwFEShell*>(&rCurrentShell);
                         // #108369#: Here used to be the condition if (!bFirst).
                         // I think this should mean "do not call CalcAndSetScale"
                         // if the frame is formatted for the first time.
@@ -882,8 +881,7 @@ SwCntntNotify::~SwCntntNotify()
                                                     &pFly->Prt(), &pFly->Frm(),
                                                     bNoTxtFrmPrtAreaChanged );
                     }
-                    pTmp = static_cast<SwViewShell*>(pTmp->GetNext());
-                } while ( pTmp != pSh );
+                }
 
                 if ( pFESh && pNd->IsOLESizeInvalid() )
                 {
