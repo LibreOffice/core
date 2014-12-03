@@ -2172,88 +2172,87 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         // somewhere or if the visibility of the CharRects has changed.
         bool bActions = false;
         size_t nBoolIdx = 0;
-        do
+        for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
         {
-            --pSh->mnStartAction;
+            --rSh.mnStartAction;
 
-            if ( pSh->Imp()->GetRegion() )
+            if ( rSh.Imp()->GetRegion() )
                 bActions = true;
             else
             {
-                SwRect aTmp( pSh->VisArea() );
-                pSh->UISizeNotify();
+                SwRect aTmp( rSh.VisArea() );
+                rSh.UISizeNotify();
 
                 // #137134#
-                // Are we supposed to crash if pSh isn't a cursor shell?!
-                // bActions |= aTmp != pSh->VisArea() ||
-                //             aBools[nBoolIdx] != ((SwCrsrShell*)pSh)->GetCharRect().IsOver( pSh->VisArea() );
+                // Are we supposed to crash if rSh isn't a cursor shell?!
+                // bActions |= aTmp != rSh.VisArea() ||
+                //             aBools[nBoolIdx] != ((SwCrsrShell*)&rSh)->GetCharRect().IsOver( rSh.VisArea() );
 
                 // aBools[ i ] is true, if the i-th shell is a cursor shell (!!!)
                 // and the cursor is visible.
-                bActions |= aTmp != pSh->VisArea();
-                if ( aTmp == pSh->VisArea() && pSh->ISA(SwCrsrShell) )
+                bActions |= aTmp != rSh.VisArea();
+                if ( aTmp == rSh.VisArea() && rSh.ISA(SwCrsrShell) )
                 {
                     bActions |= aBools[nBoolIdx] !=
-                                 static_cast<SwCrsrShell*>(pSh)->GetCharRect().IsOver( pSh->VisArea() );
+                                 static_cast<SwCrsrShell*>(&rSh)->GetCharRect().IsOver( rSh.VisArea() );
                 }
             }
 
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
             ++nBoolIdx;
-        } while ( pSh != pImp->GetShell() );
+        }
 
         if ( bActions )
         {
             // Prepare start/end actions via CrsrShell, so the cursor, selection
             // and VisArea can be set correctly.
             nBoolIdx = 0;
-            do
+            for(SwViewShell& rSh : pImp->GetShell()->GetRingContainer())
             {
-                bool bCrsrShell = pSh->IsA( TYPE(SwCrsrShell) );
+                SwCrsrShell* pCrsrShell = nullptr;
+                if(rSh.IsA( TYPE(SwCrsrShell) ))
+                    pCrsrShell = static_cast<SwCrsrShell*>(&rSh);
 
-                if ( bCrsrShell )
-                    static_cast<SwCrsrShell*>(pSh)->SttCrsrMove();
+                if ( pCrsrShell )
+                    pCrsrShell->SttCrsrMove();
 
                 // If there are accrued paints, it's best to simply invalidate
                 // the whole window. Otherwise there would arise paint problems whose
                 // solution would be disproportionally expensive.
                 //fix(18176):
-                SwViewImp *pViewImp = pSh->Imp();
+                SwViewImp *pViewImp = rSh.Imp();
                 bool bUnlock = false;
                 if ( pViewImp->GetRegion() )
                 {
                     pViewImp->DelRegion();
 
                     // Cause a repaint with virtual device.
-                    pSh->LockPaint();
+                    rSh.LockPaint();
                     bUnlock = true;
                 }
 
-                if ( bCrsrShell )
+                if ( pCrsrShell )
                     // If the Crsr was visible, we need to make it visible again.
                     // Otherwise, EndCrsrMove with true for IdleEnd
-                    static_cast<SwCrsrShell*>(pSh)->EndCrsrMove( !aBools[nBoolIdx] );
+                    pCrsrShell->EndCrsrMove( !aBools[nBoolIdx] );
                 if( bUnlock )
                 {
-                    if( bCrsrShell )
+                    if( pCrsrShell )
                     {
                         // UnlockPaint overwrite the selection from the
                         // CrsrShell and calls the virtual method paint
                         // to fill the virtual device. This fill dont have
                         // paint the selection! -> Set the focus flag at
                         // CrsrShell and it dont paint the selection.
-                        static_cast<SwCrsrShell*>(pSh)->ShLooseFcs();
-                        pSh->UnlockPaint( true );
-                        static_cast<SwCrsrShell*>(pSh)->ShGetFcs( false );
+                        pCrsrShell->ShLooseFcs();
+                        pCrsrShell->UnlockPaint( true );
+                        pCrsrShell->ShGetFcs( false );
                     }
                     else
-                        pSh->UnlockPaint( true );
+                        rSh.UnlockPaint( true );
                 }
-
-                pSh = static_cast<SwViewShell*>(pSh->GetNext());
                 ++nBoolIdx;
 
-            } while ( pSh != pImp->GetShell() );
+            }
         }
 
         if (!bInterrupt)
