@@ -251,11 +251,6 @@ ImpPDFTabDialog::ImpPDFTabDialog(Window* pParent, Sequence< PropertyValue >& rFi
     mnInterfacePageId = AddTabPage("userinterface", ImpPDFTabViewerPage::Create, 0);
     mnViewPageId = AddTabPage("initialview", ImpPDFTabOpnFtrPage::Create, 0);
 
-//remove tabpage if experimentalmode is not set
-    SvtMiscOptions aMiscOptions;
-    if (!aMiscOptions.IsExperimentalMode())
-        RemoveTabPage(mnSigningPageId);
-
     //last queued is the first to be displayed (or so it seems..)
     mnGeneralPageId = AddTabPage("general", ImpPDFTabGeneralPage::Create, 0 );
 
@@ -322,11 +317,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage(mnViewPageId);
     RemoveTabPage(mnLinksPage);
     RemoveTabPage(mnSecurityPageId);
-
-//remove tabpage if experimentalmode is set
-    SvtMiscOptions aMiscOptions;
-    if (aMiscOptions.IsExperimentalMode())
-        RemoveTabPage(mnSigningPageId);
+    RemoveTabPage(mnSigningPageId);
 }
 
 
@@ -1493,6 +1484,13 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
             sal_uInt16 nPos = m_pErrors->InsertEntry( OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
                                                 aWarnImg );
             m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
+        }
+        break;
+        case vcl::PDFWriter::Error_Signature_Failed:
+        {
+            sal_uInt16 nPos = m_pErrors->InsertEntry( OUString( PDFFilterResId( STR_ERR_SIGNATURE_FAILED ) ),
+                                                aErrImg );
+            m_pErrors->SetEntryData( nPos, new OUString( PDFFilterResId( STR_ERR_PDF_EXPORT_ABORTED ) ) );
         }
         break;
         default:
