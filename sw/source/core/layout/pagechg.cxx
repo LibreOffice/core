@@ -1646,16 +1646,14 @@ void SwRootFrm::ImplCalcBrowseWidth()
 
 void SwRootFrm::StartAllAction()
 {
-    SwViewShell *pSh = GetCurrShell();
-    if ( pSh )
-        do
-        {   if ( pSh->ISA( SwCrsrShell ) )
-                static_cast<SwCrsrShell*>(pSh)->StartAction();
+    if ( GetCurrShell() )
+        for(SwViewShell& rSh : GetCurrShell()->GetRingContainer())
+        {
+            if ( rSh.ISA( SwCrsrShell ) )
+                static_cast<SwCrsrShell*>(&rSh)->StartAction();
             else
-                pSh->StartAction();
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-
-        } while ( pSh != GetCurrShell() );
+                rSh.StartAction();
+        }
 }
 
 void SwRootFrm::EndAllAction( bool bVirDev )
