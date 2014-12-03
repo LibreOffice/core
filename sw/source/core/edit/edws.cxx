@@ -81,14 +81,13 @@ void SwEditShell::StartAllAction()
 
 void SwEditShell::EndAllAction()
 {
-    SwViewShell *pSh = this;
-    do {
-        if( pSh->IsA( TYPE( SwEditShell ) ) )
-            static_cast<SwEditShell*>(pSh)->EndAction();
+    for(SwViewShell& rCurrentShell : GetRingContainer())
+    {
+        if( rCurrentShell.IsA( TYPE( SwEditShell ) ) )
+            static_cast<SwEditShell*>(&rCurrentShell)->EndAction();
         else
-            pSh->EndAction();
-        pSh = static_cast<SwViewShell *>(pSh->GetNext());
-    } while(pSh != this);
+            rCurrentShell.EndAction();
+    }
 }
 
 void SwEditShell::CalcLayout()
