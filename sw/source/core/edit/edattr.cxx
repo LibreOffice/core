@@ -285,15 +285,14 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell::GetItemWithPaM( sal_uInt16 nWhich )
 {
     std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> vItem;
-    SwPaM* pPaM = GetCrsr();
-    SwPaM* pStartPaM = pPaM;
-    do { // for all the point and mark (selections)
+    for(SwPaM& rCurrentPaM : GetCrsr()->GetRingContainer())
+    { // for all the point and mark (selections)
 
         // get the start and the end node of the current selection
-        sal_uLong nSttNd = pPaM->Start()->nNode.GetIndex(),
-              nEndNd = pPaM->End()->nNode.GetIndex();
-        sal_Int32 nSttCnt = pPaM->Start()->nContent.GetIndex();
-        sal_Int32 nEndCnt = pPaM->End()->nContent.GetIndex();
+        sal_uLong nSttNd = rCurrentPaM.Start()->nNode.GetIndex(),
+              nEndNd = rCurrentPaM.End()->nNode.GetIndex();
+        sal_Int32 nSttCnt = rCurrentPaM.Start()->nContent.GetIndex();
+        sal_Int32 nEndCnt = rCurrentPaM.End()->nContent.GetIndex();
 
         SwPaM* pNewPaM = 0;
         const SfxPoolItem* pItem = 0;
@@ -379,7 +378,7 @@ std::vector<std::pair< const SfxPoolItem*, std::unique_ptr<SwPaM> >> SwEditShell
                 }
             }
         }
-    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
+    }
     return vItem;
 }
 
