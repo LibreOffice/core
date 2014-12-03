@@ -9,13 +9,9 @@
 
 $(eval $(call gb_Module_Module,jpeg-turbo))
 
-ifeq ($(WITH_JPEG_TURBO),TRUE)
-
 $(eval $(call gb_Module_add_targets,jpeg-turbo,\
 	ExternalProject_jpeg-turbo \
 	UnpackedTarball_jpeg-turbo \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:
