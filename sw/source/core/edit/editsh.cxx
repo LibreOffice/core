@@ -94,27 +94,27 @@ void SwEditShell::Insert2(const OUString &rStr, const bool bForceExpandHints )
                     IDocumentContentOperations::INS_EMPTYEXPAND)
             : IDocumentContentOperations::INS_EMPTYEXPAND;
 
-        SwPaM *_pStartCrsr = getShellCrsr( true ), *__pStartCrsr = _pStartCrsr;
-        do {
+        for(SwPaM& rCurrentCrsr : getShellCrsr( true )->GetRingContainer())
+        {
             //OPT: GetSystemCharSet
             const bool bSuccess =
-                GetDoc()->getIDocumentContentOperations().InsertString(*_pStartCrsr, rStr, nInsertFlags);
+                GetDoc()->getIDocumentContentOperations().InsertString(rCurrentCrsr, rStr, nInsertFlags);
             OSL_ENSURE( bSuccess, "Doc->Insert() failed." );
 
             if (bSuccess)
             {
-                GetDoc()->UpdateRsid( *_pStartCrsr, rStr.getLength() );
+                GetDoc()->UpdateRsid( rCurrentCrsr, rStr.getLength() );
 
                 // Set paragraph rsid if beginning of paragraph
                 SwTxtNode *const pTxtNode =
-                    _pStartCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+                    rCurrentCrsr.GetPoint()->nNode.GetNode().GetTxtNode();
                 if( pTxtNode && pTxtNode->Len() == 1)
                     GetDoc()->UpdateParRsid( pTxtNode );
             }
 
-            SaveTblBoxCntnt( _pStartCrsr->GetPoint() );
+            SaveTblBoxCntnt( rCurrentCrsr.GetPoint() );
 
-        } while( (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext() )) != __pStartCrsr );
+        }
     }
 
     // calculate cursor bidi level
