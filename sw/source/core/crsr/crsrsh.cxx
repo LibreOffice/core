@@ -3022,17 +3022,14 @@ bool SwCrsrShell::HasReadonlySel(bool bAnnotationMode) const
         }
         else
         {
-            const SwPaM* pCrsr = m_pCurCrsr;
-
-            do
+            for(const SwPaM& rCrsr : m_pCurCrsr->GetRingContainer())
             {
-                if( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView(), bAnnotationMode ) )
+                if( rCrsr.HasReadonlySel( GetViewOptions()->IsFormView(), bAnnotationMode ) )
                 {
                     bRet = true;
+                    break;
                 }
-
-                pCrsr = static_cast<SwPaM*>(pCrsr->GetNext());
-            } while ( !bRet && pCrsr != m_pCurCrsr );
+            }
         }
     }
     return bRet;
