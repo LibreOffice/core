@@ -2186,14 +2186,15 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 
     if( bOnlineSpellChgd )
     {
-        SwViewShell *pSh = static_cast<SwViewShell*>(this->GetNext());
         bool bOnlineSpl = rOpt.IsOnlineSpell();
-        while( pSh != this )
-        {   pSh->mpOpt->SetOnlineSpell( bOnlineSpl );
-            vcl::Window *pTmpWin = pSh->GetWin();
+        for(SwViewShell& rSh : GetRingContainer())
+        {
+            if(&rSh == this)
+                continue;
+            rSh.mpOpt->SetOnlineSpell( bOnlineSpl );
+            vcl::Window *pTmpWin = rSh.GetWin();
             if( pTmpWin )
                 pTmpWin->Invalidate();
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
         }
     }
 
