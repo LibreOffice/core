@@ -252,11 +252,6 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mnInterfacePageId = AddTabPage("userinterface", ImpPDFTabViewerPage::Create, 0);
     mnViewPageId = AddTabPage("initialview", ImpPDFTabOpnFtrPage::Create, 0);
 
-//remove tabpage if experimentalmode is not set
-    SvtMiscOptions aMiscOptions;
-    if (!aMiscOptions.IsExperimentalMode())
-        RemoveTabPage(mnSigningPageId);
-
     //last queued is the first to be displayed (or so it seems..)
     mnGeneralPageId = AddTabPage("general", ImpPDFTabGeneralPage::Create, 0 );
 
@@ -323,11 +318,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage(mnViewPageId);
     RemoveTabPage(mnLinksPage);
     RemoveTabPage(mnSecurityPageId);
-
-//remove tabpage if experimentalmode is set
-    SvtMiscOptions aMiscOptions;
-    if (aMiscOptions.IsExperimentalMode())
-        RemoveTabPage(mnSigningPageId);
+    RemoveTabPage(mnSigningPageId);
 }
 
 
