@@ -25,8 +25,30 @@ cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface()
     // static size_t id = 0;
     // OString aFileName = OString("/tmp/libo_logs/text_rendering") + OString::number(id++) + OString(".svg");
     // cairo_surface_t* surface = cairo_svg_surface_create(aFileName.getStr(), GetWidth(), GetHeight());
-    cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, GetWidth(), GetHeight());
+    cairo_surface_t* surface = NULL;
+    OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
+    if( pImpl )
+    {
+        Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
+        if( aClipRect.GetWidth() == 0 || aClipRect.GetHeight() == 0 )
+        {
+            aClipRect.setWidth( GetWidth() );
+            aClipRect.setHeight( GetHeight() );
+        }
+        surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aClipRect.GetWidth(), aClipRect.GetHeight() );
+    }
     return surface;
+}
+
+void OpenGLX11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )
+{
+    OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
+    if( pImpl )
+    {
+        Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
+        nDX = -aClipRect.Left();
+        nDY = -aClipRect.Top();
+    }
 }
 
 void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
@@ -42,7 +64,20 @@ void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
     cairo_surface_flush( pSurface );
     unsigned char *pSrc = cairo_image_surface_get_data( pSurface );
 
-    SalTwoRect aRect(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight);
+    // XXX: lfrb: GLES 2.0 doesn't support GL_UNSIGNED_INT_8_8_8_8_REV
+    Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
+
+    SalTwoRect aRect(0, 0, nWidth, nHeight,
+            aClipRect.Left(), aClipRect.Top(), nWidth, nHeight);
+    aRect.mnSrcX = 0;
+    aRect.mnSrcY = 0;
+    aRect.mnSrcWidth = nWidth;
+    aRect.mnSrcHeight = nHeight;
+    aRect.mnDestX = aClipRect.Left();
+    aRect.mnDestY = aClipRect.Top();
+    aRect.mnDestWidth = nWidth;
+    aRect.mnDestHeight = nHeight;
+
     // Cairo surface data is ARGB with premultiplied alpha and is Y-inverted
     OpenGLTexture aTexture( nWidth, nHeight, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, pSrc );
     pImpl->PreDraw();

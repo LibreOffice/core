@@ -77,6 +77,7 @@ class CairoTextRender : public TextRenderImpl
 protected:
     virtual GlyphCache& getPlatformGlyphCache() = 0;
     virtual cairo_surface_t* getCairoSurface() = 0;
+    virtual void getSurfaceOffset(double& nDX, double& nDY) = 0;
     virtual void drawSurface(cairo_t* cr) = 0;
 
 bool setFont( const FontSelectPattern *pEntry, int nFallbackLevel );

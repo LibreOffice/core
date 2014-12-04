@@ -222,6 +222,10 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (const void *pOptions = Application::GetSettings().GetStyleSettings().GetCairoFontOptions())
         cairo_set_font_options(cr, static_cast<const cairo_font_options_t*>(pOptions));
 
+    double nDX, nDY;
+    getSurfaceOffset(nDX, nDY);
+    cairo_translate(cr, nDX, nDY);
+
     clipRegion(cr);
 
     cairo_set_source_rgb(cr,
