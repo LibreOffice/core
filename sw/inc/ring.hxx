@@ -109,6 +109,7 @@ namespace sw
 
     template <class T>
     inline Ring<T>::Ring( T* pObj )
+        : pPrev(static_cast< T* >(this))
     {
         T* pThis = static_cast< T* >(this);
         if( !pObj )
