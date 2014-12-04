@@ -154,6 +154,10 @@ Resource RID_SIDEBAR_RESOURCE
     {
     Text [en-US] = "Restore Default";
     };
+    String STRING_HIDE_SIDEBAR
+    {
+    Text [en-US] = "Close Sidebar";
+    };
 };
 
 String SFX_STR_SIDEBAR_MORE_OPTIONS

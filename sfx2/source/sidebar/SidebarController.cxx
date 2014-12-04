@@ -66,6 +66,7 @@ using ::rtl::OUString;
 namespace
 {
     const static char gsReadOnlyCommandName[] = ".uno:EditDoc";
+    const static char gsHideSidebarCommandName[] = ".uno:Sidebar";
     const static sal_Int32 gnMaximumSidebarWidth (400);
     const static sal_Int32 gnWidthCloseThreshold (70);
     const static sal_Int32 gnWidthOpenThreshold (40);
@@ -81,6 +82,7 @@ namespace {
     {
         MID_UNLOCK_TASK_PANEL = 1,
         MID_LOCK_TASK_PANEL,
+        MID_HIDE_SIDEBAR,
         MID_CUSTOMIZATION,
         MID_RESTORE_DEFAULT,
         MID_FIRST_PANEL,
@@ -927,6 +929,7 @@ void SidebarController::ShowPopupMenu (
     else
         pMenu->InsertItem(MID_UNLOCK_TASK_PANEL, SFX2_RESSTR(STR_SFX_UNDOCK));
 
+    pMenu->InsertItem(MID_HIDE_SIDEBAR, SFX2_RESSTR(STRING_HIDE_SIDEBAR));
     pCustomizationMenu->InsertSeparator();
     pCustomizationMenu->InsertItem(MID_RESTORE_DEFAULT, SFX2_RESSTR(STRING_RESTORE));
 
@@ -965,6 +968,14 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
             mpTabBar->RestoreHideFlags();
             break;
 
+        case MID_HIDE_SIDEBAR:
+        {
+            const util::URL aURL (Tools::GetURL(gsHideSidebarCommandName));
+            Reference<frame::XDispatch> mxDispatch (Tools::GetDispatch(mxFrame, aURL));
+            if (mxDispatch.is())
+                    mxDispatch->dispatch(aURL, Sequence<beans::PropertyValue>());
+            break;
+        }
         default:
         {
             try
