@@ -30,7 +30,7 @@ oslThreadKey SalData::s_aAutoReleaseKey = 0;
 static void SAL_CALL releasePool( void* pPool )
 {
     if( pPool )
-        [(NSAutoreleasePool*)pPool release];
+        [static_cast<NSAutoreleasePool*>(pPool) release];
 }
 
 SalData::SalData()
@@ -230,7 +230,7 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
             CFURLRef hURL = CFBundleCopyResourceURL( hMain, pCursorName, CFSTR("png"), CFSTR("cursors") );
             if( hURL )
             {
-                pCurs = [[NSCursor alloc] initWithImage: [[NSImage alloc] initWithContentsOfURL: (NSURL*)hURL] hotSpot: aHotSpot];
+                pCurs = [[NSCursor alloc] initWithImage: [[NSImage alloc] initWithContentsOfURL: const_cast<NSURL*>(static_cast<NSURL const *>(hURL))] hotSpot: aHotSpot];
                 CFRelease( hURL );
             }
             CFRelease( pCursorName );

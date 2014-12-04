@@ -189,13 +189,13 @@ static AquaSalFrame* getMouseContainerFrame()
     if( bAllowFullScreen && [pNSWindow respondsToSelector: setCollectionBehavior])
     {
         const int bMode= (bAllowFullScreen ? NSWindowCollectionBehaviorFullScreenPrimary : NSWindowCollectionBehaviorFullScreenAuxiliary);
-        [pNSWindow performSelector:setCollectionBehavior withObject:(id)(intptr_t)bMode];
+        [pNSWindow performSelector:setCollectionBehavior withObject:reinterpret_cast<id>(static_cast<intptr_t>(bMode))];
     }
 
     // disable OSX>=10.7 window restoration until we support it directly
     const SEL setRestorable = @selector(setRestorable:);
     if( [pNSWindow respondsToSelector: setRestorable]) {
-        [pNSWindow performSelector:setRestorable withObject:(id)NO];
+        [pNSWindow performSelector:setRestorable withObject:reinterpret_cast<id>(NO)];
     }
 
     return (SalFrameWindow *)pNSWindow;
@@ -1674,7 +1674,7 @@ private:
 
 - (NSInteger)conversationIdentifier
 {
-    return (long)self;
+    return reinterpret_cast<long>(self);
 }
 
 - (void)doCommandBySelector:(SEL)aSelector

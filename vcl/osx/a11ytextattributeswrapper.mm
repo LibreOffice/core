@@ -178,7 +178,7 @@ using namespace ::com::sun::star::uno;
         return;
     const RGBAColor aRGBAColor( nSalColor);
     CGColorRef aColorRef = CGColorCreate ( CGColorSpaceCreateWithName ( kCGColorSpaceGenericRGB ), aRGBAColor.AsArray() );
-    [ string addAttribute: attribute value: (id) aColorRef range: range ];
+    [ string addAttribute: attribute value: reinterpret_cast<id>(aColorRef) range: range ];
     CGColorRelease( aColorRef );
 }
 

@@ -1497,7 +1497,7 @@ void AquaSalFrame::SetParent( SalFrame* pNewParent )
     bool bShown = mbShown;
     // remove from child list
     Show( FALSE );
-    mpParent = (AquaSalFrame*)pNewParent;
+    mpParent = static_cast<AquaSalFrame*>(pNewParent);
     // insert to correct parent and paint
     Show( bShown );
 }

@@ -352,7 +352,7 @@ void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
     Any pNSView = aArguments[0];
     sal_uInt64 tmp = 0;
     pNSView >>= tmp;
-    mView = (id)tmp;
+    mView = reinterpret_cast<id>(tmp);
     mpFrame = [(SalFrameView*)mView getSalFrame];
 
     mDropTargetHelper = [[DropTargetHelper alloc] initWithDropTarget: this];

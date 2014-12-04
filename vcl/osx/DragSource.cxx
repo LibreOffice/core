@@ -172,7 +172,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
   Any pNSView = aArguments[1];
   sal_uInt64 tmp = 0;
   pNSView >>= tmp;
-  mView = (NSView*)tmp;
+  mView = reinterpret_cast<NSView*>(tmp);
 
   /* All SalFrameView the base class for all VCL system views inherits from
      NSView in order to get mouse and other events. This is the only way to

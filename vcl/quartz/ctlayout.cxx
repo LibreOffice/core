@@ -176,7 +176,7 @@ void CTLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
         delete[] iter->m_pAdjPositions;
         iter->m_pAdjPositions = new CGPoint[iter->m_nGlyphs];
 
-        SAL_INFO( "vcl.ct", "Apply DXArray Run status:"<< (void*)(uintptr_t)status);
+        SAL_INFO( "vcl.ct", "Apply DXArray Run status:"<< status);
 
         if(!(status & kCTRunStatusNonMonotonic))
         {
@@ -669,7 +669,7 @@ int CTLayout::GetNextGlyphs( int nLen, sal_GlyphId* pOutGlyphIds, Point& rPos, i
         {
             if ( !CFEqual( iter->m_pFont,  pFont ) )
             {
-                pFallbackFont = new CoreTextFontData( rDevFontAttr, (sal_IntPtr)pFontDesc );
+                pFallbackFont = new CoreTextFontData( rDevFontAttr, reinterpret_cast<sal_IntPtr>(pFontDesc) );
                 *(pFallbackFonts++) = pFallbackFont;
             }
             else

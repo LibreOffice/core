@@ -59,7 +59,7 @@ struct FrameHash : public boost::hash<sal_IntPtr>
     { return boost::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
-#define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef
+#define INVALID_CURSOR_PTR reinterpret_cast<NSCursor*>(0xdeadbeef)
 
 // Singleton, instantiated from Application::Application() in
 // vcl/source/app/svapp.cxx through InitSalData().

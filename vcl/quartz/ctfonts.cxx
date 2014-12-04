@@ -47,12 +47,11 @@ inline double toRadian(int nDegree)
 }
 
 CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
-:   mpFontData( (CoreTextFontData*)rFSD.mpFontData )
+:   mpFontData( const_cast<CoreTextFontData*>(static_cast<CoreTextFontData const *>(rFSD.mpFontData)) )
 ,   mfFontStretch( 1.0 )
 ,   mfFontRotation( 0.0 )
 ,   mpStyleDict( NULL )
 {
-    mpFontData = (CoreTextFontData*)rFSD.mpFontData;
     const FontSelectPattern* const pReqFont = &rFSD;
 
     double fScaledFontHeight = pReqFont->mfExactHeight;
@@ -95,7 +94,7 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
         aMatrix = CGAffineTransformConcat(aMatrix, CGAffineTransformMake(1, 0, toRadian(120), 1, 0, 0));
     }
 
-    CTFontDescriptorRef pFontDesc = (CTFontDescriptorRef)mpFontData->GetFontId();
+    CTFontDescriptorRef pFontDesc = reinterpret_cast<CTFontDescriptorRef>(mpFontData->GetFontId());
     CTFontRef pNewCTFont = CTFontCreateWithFontDescriptor( pFontDesc, fScaledFontHeight, &aMatrix );
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
@@ -389,7 +388,7 @@ static void CTFontEnumCallBack( const void* pValue, void* pContext )
 
     if( bFontEnabled)
     {
-        const sal_IntPtr nFontId = (sal_IntPtr)pValue;
+        const sal_IntPtr nFontId = reinterpret_cast<sal_IntPtr>(pValue);
         CoreTextFontData* pFontData = new CoreTextFontData( rDFA, nFontId );
         SystemFontList* pFontList = (SystemFontList*)pContext;
         pFontList->AddFont( pFontData );

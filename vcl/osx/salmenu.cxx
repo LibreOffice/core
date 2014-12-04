@@ -341,10 +341,10 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     const float offset = 9.0;
 
     // get the pointers
-    AquaSalFrame * pParentAquaSalFrame = (AquaSalFrame *) pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame();
+    AquaSalFrame * pParentAquaSalFrame = static_cast<AquaSalFrame *>(pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame());
     NSWindow* pParentNSWindow = pParentAquaSalFrame->mpNSWindow;
     NSView* pParentNSView = [pParentNSWindow contentView];
-    NSView* pPopupNSView = ((AquaSalFrame *) pWin->ImplGetWindow()->ImplGetFrame())->mpNSView;
+    NSView* pPopupNSView = static_cast<AquaSalFrame *>(pWin->ImplGetWindow()->ImplGetFrame())->mpNSView;
     NSRect popupFrame = [pPopupNSView frame];
 
     // since we manipulate the menu below (removing entries)
@@ -658,7 +658,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     if (!i_pSalMenuItem)
         return;
 
-    AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) i_pSalMenuItem;
+    AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(i_pSalMenuItem);
 
     // Delete mnemonics
     OUString aText( comphelper::string::remove(i_rText, '~') );
@@ -763,7 +763,7 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     if(nModifier & KEY_MOD3)
         nItemModifier |= NSControlKeyMask;
 
-    AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) pSalMenuItem;
+    AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(pSalMenuItem);
     NSString* pString = CreateNSString( OUString( &nCommandKey, 1 ) );
     [pAquaSalMenuItem->mpMenuItem setKeyEquivalent: pString];
     [pAquaSalMenuItem->mpMenuItem setKeyEquivalentModifierMask: nItemModifier];

@@ -662,7 +662,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             // no animation
             aPushInfo.animation.time.start = 0;
             aPushInfo.animation.time.current = 0;
-            PushButtonValue* pPBVal = aValue.getType() == CTRL_PUSHBUTTON ? (PushButtonValue*)&aValue : NULL;
+            PushButtonValue const * pPBVal = aValue.getType() == CTRL_PUSHBUTTON ? static_cast<PushButtonValue const *>(&aValue) : NULL;
             int nPaintHeight = static_cast<int>(rc.size.height);
 
             if( pPBVal && pPBVal->mbBevelButton )
@@ -831,7 +831,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_SLIDER:
         {
-            SliderValue* pSLVal = (SliderValue*)&aValue;
+            SliderValue const * pSLVal = static_cast<SliderValue const *>(&aValue);
 
             HIThemeTrackDrawInfo aTrackDraw;
             aTrackDraw.kind = kThemeSliderMedium;
@@ -955,7 +955,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
             //first, last or middle tab
             aTabItemDrawInfo.position=kHIThemeTabPositionMiddle;
 
-            TabitemValue* pTabValue = (TabitemValue *) &aValue;
+            TabitemValue const * pTabValue = static_cast<TabitemValue const *>(&aValue);
             unsigned int nAlignment = pTabValue->mnAlignment;
             //TABITEM_LEFTALIGNED (and TABITEM_RIGHTALIGNED) for the leftmost (or rightmost) tab
             //when there are several lines of tabs because there is only one first tab and one
