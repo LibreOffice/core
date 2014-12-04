@@ -122,7 +122,7 @@ copy-stuff:
 # android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
 # extent).
 #
-	mkdir -p assets/lib assets/program/services assets/ComponentTarget/i18npool/util
+	mkdir -p assets/lib assets/program/services assets/ComponentTarget/i18npool/util assets/gz.unpack/program
 	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/offapi.rdb >assets/gz.unpack/program/offapi.rdb
 	gzip -9 <$(INSTDIR)/$(LIBO_ETC_FOLDER)/types/oovbaapi.rdb >assets/gz.unpack/program/oovbaapi.rdb
 	gzip -9 <$(INSTDIR)/$(LIBO_URE_MISC_FOLDER)/types.rdb >assets/gz.unpack/program/udkapi.rdb
