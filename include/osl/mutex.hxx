@@ -82,7 +82,7 @@ namespace osl
         */
         static Mutex * getGlobalMutex()
         {
-            return (Mutex *)osl_getGlobalMutex();
+            return reinterpret_cast<Mutex *>(osl_getGlobalMutex());
         }
 
     private:
