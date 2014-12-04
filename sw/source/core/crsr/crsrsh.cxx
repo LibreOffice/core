@@ -2555,7 +2555,6 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
     pNew->GetPoint()->nNode = *pNode->EndOfSectionNode();
 
     // take care of all shells
-    SwViewShell *pTmp = this;
     for(SwViewShell& rTmp : GetRingContainer())
     {
         if( rTmp.IsA( TYPE( SwCrsrShell )))
