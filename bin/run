@@ -30,14 +30,14 @@ exec "${exedir}"/$@
 
 else
 
-dir=$(realpath "$(pwd)")
+dir=$(readlink -f "$(pwd)")
 
 while test ! -d "${dir}/instdir/program" ; do
     if test "${dir}" = "/"; then
         echo "error: cannot find \"program\" dir from \"$(pwd)\""
         exit 1
     fi
-    dir=$(realpath "${dir}/..")
+    dir=$(readlink -f "${dir}/..")
 done
 
 exedir="${dir}"/workdir/LinkTarget/Executable
