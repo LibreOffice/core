@@ -61,8 +61,19 @@ OReportPage::~OReportPage()
 
 SdrPage* OReportPage::Clone() const
 {
+    return Clone(0);
+}
+
+SdrPage* OReportPage::Clone( SdrModel* const pNewModel ) const
+{
     OReportPage *const pNewPage = new OReportPage( *this );
-    pNewPage->lateInit( *this );
+    OReportModel* pReportModel = 0;
+    if ( pNewModel )
+    {
+        pReportModel = dynamic_cast<OReportModel*>( pNewModel );
+        assert( pReportModel );
+    }
+    pNewPage->lateInit( *this, pReportModel );
     return pNewPage;
 }
 

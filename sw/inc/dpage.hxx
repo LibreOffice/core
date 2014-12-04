@@ -28,15 +28,17 @@ class SwDoc;
 
 class SwDPage : public FmFormPage, public SdrObjUserCall
 {
-    SwDPage(const SwDPage&) SAL_DELETED_FUNCTION;
     SwDPage &operator=(const SwDPage&) SAL_DELETED_FUNCTION;
 
     SdrPageGridFrameList*   pGridLst;
-    SwDoc&                  rDoc;
+    SwDoc*                  pDoc;
 
 public:
     SwDPage(SwDrawModel& rNewModel, bool bMasterPage=false);
     virtual ~SwDPage();
+
+    virtual SwDPage* Clone() const SAL_OVERRIDE;
+    virtual SwDPage* Clone(SdrModel* pNewModel) const SAL_OVERRIDE;
 
     // #i3694#
     // This GetOffset() method is not needed anymore, it even leads to errors.
@@ -49,6 +51,12 @@ public:
     bool RequestHelp( vcl::Window* pWindow, SdrView* pView, const HelpEvent& rEvt );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage() SAL_OVERRIDE;
+
+protected:
+    void lateInit(const SwDPage& rPage, SwDrawModel* pNewModel = 0);
+
+private:
+    SwDPage(const SwDPage& rSrcPage);
 };
 
 #endif // INCLUDED_SW_INC_DPAGE_HXX

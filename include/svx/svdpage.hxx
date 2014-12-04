@@ -486,7 +486,7 @@ protected:
     // classes that needs access to the page objects must be deferred to lateInit. And it must
     // call lateInit() of its parent class.
     SdrPage(const SdrPage& rSrcPage);
-    void lateInit(const SdrPage& rSrcPage);
+    void lateInit(const SdrPage& rSrcPage, SdrModel* pNewModel = 0);
 
 public:
     TYPEINFO_OVERRIDE();
@@ -575,6 +575,9 @@ public:
         bool bEdit );
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+
+private:
+    void impl_setModelForLayerAdmin(SdrModel* pNewModel);
 };
 
 typedef tools::WeakReference< SdrPage > SdrPageWeakRef;

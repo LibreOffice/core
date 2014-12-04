@@ -32,8 +32,31 @@ ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage) :
     SetSize( Size( LONG_MAX, LONG_MAX ) );
 }
 
+ScDrawPage::ScDrawPage(const ScDrawPage& rSrcPage)
+    : FmFormPage(rSrcPage)
+{
+}
+
 ScDrawPage::~ScDrawPage()
 {
+}
+
+ScDrawPage* ScDrawPage::Clone() const
+{
+    return Clone(0);
+}
+
+ScDrawPage* ScDrawPage::Clone(SdrModel* const pNewModel) const
+{
+    ScDrawPage* const pNewPage = new ScDrawPage(*this);
+    FmFormModel* pScDrawModel = 0;
+    if (pNewModel)
+    {
+        pScDrawModel = dynamic_cast<FmFormModel*>(pNewModel);
+        assert(pScDrawModel);
+    }
+    pNewPage->lateInit(*this, pScDrawModel);
+    return pNewPage;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ScDrawPage::createUnoPage()

@@ -1302,10 +1302,17 @@ SdrPage::~SdrPage()
 
 }
 
-void SdrPage::lateInit(const SdrPage& rSrcPage)
+void SdrPage::lateInit(const SdrPage& rSrcPage, SdrModel* const pNewModel)
 {
     assert(!mpViewContact);
     assert(!mpSdrPageProperties);
+    assert(!mxUnoPage.is());
+
+    if (pNewModel && (pNewModel != pModel))
+    {
+        pModel = pNewModel;
+        impl_setModelForLayerAdmin(pNewModel);
+    }
 
     // copy all the local parameters to make this instance
     // a valid copy of source page before copying and inserting
@@ -1512,18 +1519,24 @@ sal_Int32 SdrPage::GetLwrBorder() const
     return nBordLwr;
 }
 
+void SdrPage::impl_setModelForLayerAdmin(SdrModel* const pNewModel)
+{
+    if (pNewModel!=NULL) {
+        pLayerAdmin->SetParent(&pNewModel->GetLayerAdmin());
+    } else {
+        pLayerAdmin->SetParent(NULL);
+    }
+    pLayerAdmin->SetModel(pNewModel);
+}
+
 void SdrPage::SetModel(SdrModel* pNewModel)
 {
     SdrModel* pOldModel=pModel;
     SdrObjList::SetModel(pNewModel);
+
     if (pNewModel!=pOldModel)
     {
-        if (pNewModel!=NULL) {
-            pLayerAdmin->SetParent(&pNewModel->GetLayerAdmin());
-        } else {
-            pLayerAdmin->SetParent(NULL);
-        }
-        pLayerAdmin->SetModel(pNewModel);
+        impl_setModelForLayerAdmin( pNewModel );
 
         // create new SdrPageProperties with new model (due to SfxItemSet there)
         // and copy ItemSet and StyleSheet

@@ -68,9 +68,9 @@ FmFormPage::FmFormPage(const FmFormPage& rPage)
 {
 }
 
-void FmFormPage::lateInit(const FmFormPage& rPage)
+void FmFormPage::lateInit(const FmFormPage& rPage, FmFormModel* const pNewModel)
 {
-    SdrPage::lateInit( rPage );
+    SdrPage::lateInit( rPage, pNewModel );
 
     m_pImpl->initFrom( rPage.GetImpl() );
     m_sPageName = rPage.m_sPageName;
@@ -119,8 +119,19 @@ void FmFormPage::SetModel(SdrModel* pNewModel)
 
 SdrPage* FmFormPage::Clone() const
 {
+    return Clone(0);
+}
+
+SdrPage* FmFormPage::Clone(SdrModel* const pNewModel) const
+{
     FmFormPage* const pNewPage = new FmFormPage(*this);
-    pNewPage->lateInit(*this);
+    FmFormModel* pFormModel = 0;
+    if (pNewModel)
+    {
+        pFormModel = dynamic_cast<FmFormModel*>(pNewModel);
+        assert(pFormModel);
+    }
+    pNewPage->lateInit(*this, pFormModel);
     return pNewPage;
 }
 

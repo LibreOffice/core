@@ -55,8 +55,7 @@ public:
     virtual void    SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 
     virtual SdrPage* Clone() const SAL_OVERRIDE;
-    // TODO: Uh huh, how is this supposed to work? Creating a SdrPage from FmFormPage?
-    using SdrPage::Clone;
+    virtual SdrPage* Clone(SdrModel* pNewModel) const SAL_OVERRIDE;
 
     virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE,
                                     const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
@@ -79,7 +78,7 @@ public:
 protected:
     FmFormPage(const FmFormPage& rPage);
 
-    void lateInit(const FmFormPage& rPage);
+    void lateInit(const FmFormPage& rPage, FmFormModel* pNewModel = 0);
 };
 
 #endif // INCLUDED_SVX_FMPAGE_HXX

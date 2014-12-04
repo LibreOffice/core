@@ -45,8 +45,8 @@ public:
     DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
     virtual ~DlgEdPage();
 
-    using SdrPage::Clone;
     virtual SdrPage* Clone() const SAL_OVERRIDE;
+    virtual SdrPage* Clone( SdrModel* pNewModel ) const SAL_OVERRIDE;
 
     void            SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
     DlgEdForm*      GetDlgEdForm() const { return pDlgEdForm; }

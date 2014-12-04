@@ -47,8 +47,19 @@ DlgEdPage::~DlgEdPage()
 
 SdrPage* DlgEdPage::Clone() const
 {
+    return Clone(0);
+}
+
+SdrPage* DlgEdPage::Clone(SdrModel* const pNewModel) const
+{
     DlgEdPage* const pNewPage = new DlgEdPage( *this );
-    pNewPage->lateInit( *this );
+    DlgEdModel* pDlgEdModel = 0;
+    if ( pNewModel )
+    {
+        pDlgEdModel = dynamic_cast<DlgEdModel*>( pNewModel );
+        assert(pDlgEdModel);
+    }
+    pNewPage->lateInit( *this, pDlgEdModel );
     return pNewPage;
 }
 

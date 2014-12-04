@@ -52,13 +52,57 @@ using namespace ::com::sun::star::frame;
 SwDPage::SwDPage(SwDrawModel& rNewModel, bool bMasterPage) :
     FmFormPage(rNewModel, bMasterPage),
     pGridLst( 0 ),
-    rDoc(rNewModel.GetDoc())
+    pDoc(&rNewModel.GetDoc())
 {
+}
+
+SwDPage::SwDPage(const SwDPage& rSrcPage) :
+    FmFormPage( rSrcPage ),
+    pGridLst( 0 ),
+    pDoc( 0 )
+{
+    if ( rSrcPage.pGridLst )
+    {
+        pGridLst = new SdrPageGridFrameList;
+        for ( sal_uInt16 i = 0; i != rSrcPage.pGridLst->GetCount(); ++i )
+            pGridLst->Insert( ( *rSrcPage.pGridLst )[ i ] );
+    }
 }
 
 SwDPage::~SwDPage()
 {
     delete pGridLst;
+}
+
+void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
+{
+    FmFormPage::lateInit( rPage, pNewModel );
+
+    SwDrawModel* pSwDrawModel = pNewModel;
+    if ( !pModel )
+    {
+        pSwDrawModel = dynamic_cast< SwDrawModel* >( GetModel() );
+        assert( pSwDrawModel );
+    }
+    pDoc = &pSwDrawModel->GetDoc();
+}
+
+SwDPage* SwDPage::Clone() const
+{
+    return Clone( 0 );
+}
+
+SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
+{
+    SwDPage* const pNewPage = new SwDPage( *this );
+    SwDrawModel* pSwDrawModel = 0;
+    if ( pNewModel )
+    {
+        pSwDrawModel = dynamic_cast< SwDrawModel* >( pNewModel );
+        assert( pSwDrawModel );
+    }
+    pNewPage->lateInit( *this, pSwDrawModel );
+    return pNewPage;
 }
 
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, size_t nObjNum )
@@ -122,6 +166,8 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
 bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                            const HelpEvent& rEvt )
 {
+    assert( pDoc );
+
     bool bContinue = true;
 
     if( rEvt.GetMode() & ( HelpEventMode::QUICK | HelpEventMode::BALLOON ))
@@ -173,7 +219,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
             if ( !sTxt.isEmpty() )
             {
                 // #i80029#
-                bool bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
+                bool bExecHyperlinks = pDoc->GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -208,8 +254,10 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
 
 Reference< XInterface > SwDPage::createUnoPage()
 {
+    assert( pDoc );
+
     Reference < XInterface > xRet;
-    SwDocShell* pDocShell = rDoc.GetDocShell();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
     if ( pDocShell )
     {
         Reference<XModel> xModel = pDocShell->GetBaseModel();

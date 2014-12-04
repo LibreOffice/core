@@ -60,7 +60,7 @@ public:
 
 
     virtual SdrPage* Clone() const SAL_OVERRIDE;
-    using SdrPage::Clone;
+    virtual SdrPage* Clone( SdrModel* pNewModel ) const SAL_OVERRIDE;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason) SAL_OVERRIDE;
     virtual SdrObject* RemoveObject(size_t nObjNum) SAL_OVERRIDE;
