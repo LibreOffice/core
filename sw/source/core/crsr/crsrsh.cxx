@@ -2556,10 +2556,11 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
 
     // take care of all shells
     SwViewShell *pTmp = this;
-    do {
-        if( pTmp->IsA( TYPE( SwCrsrShell )))
+    for(SwViewShell& rTmp : GetRingContainer())
+    {
+        if( rTmp.IsA( TYPE( SwCrsrShell )))
         {
-            SwCrsrShell* pSh = static_cast<SwCrsrShell*>(pTmp);
+            SwCrsrShell* pSh = static_cast<SwCrsrShell*>(&rTmp);
             if( pSh->m_pCrsrStk )
                 pSh->_ParkPams( pNew, &pSh->m_pCrsrStk );
 
@@ -2577,7 +2578,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
                 }
             }
         }
-    } while ( this != (pTmp = static_cast<SwViewShell*>(pTmp->GetNext()) ));
+    }
     delete pNew;
 }
 
