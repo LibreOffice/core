@@ -435,8 +435,8 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
 
     /* determine the last point and be extra safe about it. But probably this code is not needed */
     sal_uInt16 lastPoint=0;
-    sal_uInt32 nOffset = 10 + numberOfContours + 2;
-    if (nOffset > nTableSize)
+    const sal_Int32 nMaxContours = (nTableSize - 10)/2;
+    if (numberOfContours > nMaxContours)
         return 0;
     for (i=0; i<numberOfContours; i++)
     {
@@ -446,7 +446,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
     }
 
     sal_uInt16 instLen = GetUInt16(ptr, 10 + numberOfContours*2, 1);
-    nOffset = 10 + 2 * numberOfContours + 2 + instLen;
+    sal_uInt32 nOffset = 10 + 2 * numberOfContours + 2 + instLen;
     if (nOffset > nTableSize)
         return 0;
     const sal_uInt8* p = ptr + nOffset;
