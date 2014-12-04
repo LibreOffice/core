@@ -65,6 +65,7 @@ OpenGLContext::OpenGLContext():
     mpPrevContext(NULL),
     mpNextContext(NULL)
 {
+    SAL_INFO("vcl.opengl", "new context: " << this);
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
     mbPixmap = false;
 #endif
@@ -82,6 +83,7 @@ OpenGLContext::OpenGLContext():
 
 OpenGLContext::~OpenGLContext()
 {
+    SAL_INFO("vcl.opengl", "delete context: " << this);
     ImplSVData* pSVData = ImplGetSVData();
     if( mpPrevContext )
         mpPrevContext->mpNextContext = mpNextContext;
