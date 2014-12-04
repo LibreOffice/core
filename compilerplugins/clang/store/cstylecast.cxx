@@ -73,11 +73,18 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if ( filename.endswith(".h") ) {
         return true;
     }
-    if ( compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
-        ? (filename.startswith(SRCDIR "/sal") // sal has tons of weird stuff going on that I don't understand enough to fix
-           || filename.startswith(SRCDIR "/bridges")) // I'm not messing with this code - far too dangerous
-        : (filename.startswith(SRCDIR "/include/tools/solar.h")) ) {
-        return true;
+    if ( compat::isInMainFile(compiler.getSourceManager(), spellingLocation) ) {
+        if (filename.startswith(SRCDIR "/sal") // sal has tons of weird stuff going on that I don't understand enough to fix
+           || filename.startswith(SRCDIR "/bridges")) { // I'm not messing with this code - far too dangerous
+            return true;
+        }
+    } else {
+        if (filename.startswith(SRCDIR "/include/tools/solar.h")
+           // the GetSalDisplay/GetGtkDisplay methods are problematic
+           || filename.startswith(SRCDIR "/vcl/inc/generic/gendata.hxx")
+           || filename.startswith(SRCDIR "/include/cppuhelper/")) {
+            return true;
+        }
     }
     report(
         DiagnosticsEngine::Warning,
