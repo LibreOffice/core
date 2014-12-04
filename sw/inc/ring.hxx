@@ -80,6 +80,7 @@ namespace sw
              * are alone in one.
              */
             Ring()
+                : pPrev(static_cast< T* >(this))
                 { algo::init_header(static_cast< T* >(this)); }
             /**
              * Creates a new item and add it to an existing ring container.
