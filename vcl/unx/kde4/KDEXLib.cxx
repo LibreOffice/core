@@ -359,7 +359,7 @@ void KDEXLib::timeoutActivated()
     while( SalKDEDisplay::self()->HasUserEvents() )
         SalKDEDisplay::self()->DispatchInternalEvent();
 
-    X11SalData *pData = (X11SalData*)ImplGetSVData()->mpSalData;
+    X11SalData *pData = static_cast<X11SalData*>(ImplGetSVData()->mpSalData);
     pData->Timeout();
     // QTimer is not single shot, so will be restarted immediatelly
 }
