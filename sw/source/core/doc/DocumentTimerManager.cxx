@@ -89,20 +89,19 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
     if( pTmpRoot &&
         !SfxProgress::GetActiveProgress( m_rDoc.GetDocShell() ) )
     {
-        SwViewShell *pSh, *pStartSh;
-        pSh = pStartSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
-        do {
-            if( pSh->ActionPend() )
+        SwViewShell* pShell(m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
+        for(SwViewShell& rSh : pShell->GetRingContainer())
+        {
+            if( rSh.ActionPend() )
             {
                 pTimer->Start();
                 return 0;
             }
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-        } while( pSh != pStartSh );
+        }
 
         if( pTmpRoot->IsNeedGrammarCheck() )
         {
-            bool bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
+            bool bIsOnlineSpell = pShell->GetViewOptions()->IsOnlineSpell();
             bool bIsAutoGrammar = false;
             SvtLinguConfig().GetProperty( OUString(
                         UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
@@ -145,8 +144,8 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
             pTmpRoot->StartAllAction();
 
             // no jump on update of fields #i85168#
-            const bool bOldLockView = pStartSh->IsViewLocked();
-            pStartSh->LockView( true );
+            const bool bOldLockView = pShell->IsViewLocked();
+            pShell->LockView( true );
 
             m_rDoc.getIDocumentFieldsAccess().GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // ChapterField
             m_rDoc.getIDocumentFieldsAccess().UpdateExpFlds( 0, false );      // Updates ExpressionFields
@@ -155,7 +154,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer *, pTimer )
 
             pTmpRoot->EndAllAction();
 
-            pStartSh->LockView( bOldLockView );
+            pShell->LockView( bOldLockView );
 
             m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetInUpdateFlds( false );
             m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().SetFieldsDirty( false );
