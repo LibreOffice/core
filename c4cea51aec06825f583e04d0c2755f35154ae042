@@ -87,6 +87,24 @@
       "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_68263718",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-04T16:32:34Z",
+      "side": 1,
+      "message": "you can presumably do the call to InitializeCriticalSection in DllMain upon DLL_PROCESS_ATTACH?\n\n(while you\u0027re right that in this specific case, parallel calls to InitWrapper would be harmless, at least as long as writes to module are atomic, without synchronization you\u0027d still need to make sure that reading module in other threads would actually observe the written value)",
+      "parentUuid": "fa32b979_a80bdf7c",
+      "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
