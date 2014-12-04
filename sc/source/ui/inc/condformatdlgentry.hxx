@@ -93,12 +93,23 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry, public SfxListener
     SvxFontPrevWindow maWdPreview;
     bool mbIsInStyleCreate;
 
+    static const sal_Int32 NUM_COND_ENTRIES = 24;
+    // Lookup table from positions in maLbCondType to the condition mode enum
+    static const ScConditionMode mpEntryToCond[NUM_COND_ENTRIES];
+
     ScFormatEntry* createConditionEntry() const;
 
     virtual OUString GetExpressionString() SAL_OVERRIDE;
     void Init(ScCondFormatDlg* pDialogParent);
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
+
+    // Searches the lookup table for the entry position, given condition mode
+    sal_Int32 ConditionModeToEntryPos( ScConditionMode eMode ) const;
+    // Accesses the lookup table for the condition mode, given entry position
+    ScConditionMode EntryPosToConditionMode( sal_Int32 aEntryPos ) const;
+    // Returns the number of edit fields used for a given condition mode
+    sal_Int32 GetNumberEditFields( ScConditionMode eMode ) const;
 
 public:
     ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
