@@ -890,6 +890,7 @@ bool OpenGLContext::ImplInit()
     HGLRC hTempRC = wglCreateContext(m_aGLWin.hDC);
     if (hTempRC == NULL)
     {
+        SAL_DEBUG(m_aGLWin.hDC);
         ImplWriteLastError(GetLastError(), "wglCreateContext in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglCreateContext failed");
         return false;
@@ -914,6 +915,9 @@ bool OpenGLContext::ImplInit()
     m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, NULL);
     if (m_aGLWin.hRC == 0)
     {
+        SAL_DEBUG(m_aGLWin.hDC);
+        SAL_DEBUG(hSharedCtx);
+        SAL_DEBUG(mbRequestVirtualDevice);
         ImplWriteLastError(GetLastError(), "wglCreateContextAttribsARB in OpenGLContext::ImplInit");
         SAL_WARN("vcl.opengl", "wglCreateContextAttribsARB failed");
         return false;

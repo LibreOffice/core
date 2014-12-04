@@ -1061,6 +1061,7 @@ static bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetu
     if ( pPrinter->mpGraphics )
     {
         pPrinter->mpGraphics->DeInitGraphics();
+        SAL_DEBUG("delete DC: " << pPrinter->mpGraphics->getHDC());
         DeleteDC( pPrinter->mpGraphics->getHDC() );
         delete pPrinter->mpGraphics;
     }
@@ -1125,6 +1126,7 @@ WinSalInfoPrinter::~WinSalInfoPrinter()
     if ( mpGraphics )
     {
         mpGraphics->DeInitGraphics();
+        SAL_DEBUG("delete DC: " << mpGraphics->getHDC());
         DeleteDC( mpGraphics->getHDC() );
         delete mpGraphics;
     }
@@ -1411,6 +1413,7 @@ WinSalPrinter::~WinSalPrinter()
             delete mpGraphics;
         }
 
+        SAL_DEBUG("delete DC: " << hDC);
         DeleteDC( hDC );
     }
 

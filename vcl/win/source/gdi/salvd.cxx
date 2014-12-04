@@ -138,7 +138,10 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     else
     {
         if ( hDC && !pData )
+        {
+            SAL_DEBUG("delete DC: " << hDC);
             DeleteDC( hDC );
+        }
         if ( hBmp )
             DeleteBitmap( hBmp );
         return NULL;
@@ -175,7 +178,10 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     if( mhDefBmp )
         SelectBitmap( mpGraphics->getHDC(), mhDefBmp );
     if( !mbForeignDC )
+    {
+        SAL_DEBUG("delete DC: " << mpGraphics->getHDC());
         DeleteDC( mpGraphics->getHDC() );
+    }
     if( mhBmp )
         DeleteBitmap( mhBmp );
     delete mpGraphics;

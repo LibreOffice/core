@@ -825,9 +825,11 @@ HANDLE WinSalBitmap::ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB )
             BitBlt( hCopyDC, 0, 0, aBmp.bmWidth, aBmp.bmHeight, hBmpDC, 0, 0, SRCCOPY );
 
             SelectObject( hCopyDC, hCopyOld );
+            SAL_DEBUG("delete DC: " << hCopyDC);
             DeleteDC( hCopyDC );
 
             SelectObject( hBmpDC, hBmpOld );
+            SAL_DEBUG("delete DC: " << hBmpDC);
             DeleteDC( hBmpDC );
         }
     }

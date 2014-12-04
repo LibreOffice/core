@@ -4577,6 +4577,7 @@ static int ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
             DrawFrameControl( memDC, &r, DFC_MENU, DFCS_MENUCHECK );
             BitBlt( pDI->hDC, x, y+(lineHeight-checkHeight)/2, checkWidth, checkHeight, memDC, 0, 0, SRCAND );
             DeleteObject( SelectObject( memDC, hOldBmp ) );
+            SAL_DEBUG("delete DC: " << memDC);
             DeleteDC( memDC );
         }
         x += checkWidth+3;

@@ -171,6 +171,7 @@ void ImplInitSalGDI()
 
         ::SelectObject( hMemDC, hBrushOld ), ::DeleteObject( hMemBrush );
         ::SelectObject( hMemDC, hBmpOld ), ::DeleteObject( hMemBmp );
+        SAL_DEBUG("delete DC: "<< hMemDC);
         ::DeleteDC( hMemDC );
 
         if( bDither16 )
@@ -553,6 +554,7 @@ void ImplClearHDCCache( SalData* pData )
             if( pC->mhDefPal )
                 SelectPalette( pC->mhDC, pC->mhDefPal, TRUE );
 
+            SAL_DEBUG("delete DC: " << pC->mhDC);
             DeleteDC( pC->mhDC );
             DeleteObject( pC->mhSelBmp );
         }
@@ -590,6 +592,7 @@ OpenGLCompatibleDC::~OpenGLCompatibleDC()
     if (mpImpl)
     {
         DeleteObject(mhBitmap);
+        SAL_DEBUG("delete DC: " << mhCompatibleDC);
         DeleteDC(mhCompatibleDC);
     }
 }
