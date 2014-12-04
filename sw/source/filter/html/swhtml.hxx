@@ -31,6 +31,8 @@
 #include "calbck.hxx"
 #include "htmlvsh.hxx"
 
+#include <deque>
+
 class SfxMedium;
 class SfxViewFrame;
 class SdrObject;
