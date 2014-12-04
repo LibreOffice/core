@@ -121,9 +121,9 @@ namespace sdr
 {
     namespace event
     {
-        TimerEventHandler::TimerEventHandler(sal_uInt32 nTimeout)
+        TimerEventHandler::TimerEventHandler(IdlePriority ePriority)
         {
-            SetTimeout(nTimeout);
+            SetPriority(ePriority);
             Stop();
         }
 

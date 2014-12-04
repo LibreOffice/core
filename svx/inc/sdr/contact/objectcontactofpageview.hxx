@@ -34,7 +34,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ObjectContactOfPageView : public ObjectContact, public Timer
+        class ObjectContactOfPageView : public ObjectContact, public Idle
         {
         protected:
             // the owner of this ObjectContactOfPageView. Set from constructor and not

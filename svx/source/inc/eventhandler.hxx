@@ -92,10 +92,10 @@ namespace sdr
 {
     namespace event
     {
-        class TimerEventHandler : public EventHandler, public Timer
+        class TimerEventHandler : public EventHandler, public Idle
         {
         public:
-            TimerEventHandler(sal_uInt32 nTimeout = 1L);
+            TimerEventHandler(IdlePriority ePriority = VCL_IDLE_PRIORITY_HIGH);
 
             virtual ~TimerEventHandler();
 

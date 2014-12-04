@@ -36,7 +36,7 @@ using namespace com::sun::star;
 
 namespace sdr { namespace contact {
 
-class PagePrimitiveExtractor : public ObjectContactOfPagePainter, public Timer
+class PagePrimitiveExtractor : public ObjectContactOfPagePainter, public Idle
 {
 private:
     // the ViewObjectContactOfPageObj using this painter
@@ -83,7 +83,7 @@ PagePrimitiveExtractor::PagePrimitiveExtractor(
     setPreviewRenderer(true);
 
     // init timer
-    SetTimeout(1);
+    SetPriority(VCL_IDLE_PRIORITY_HIGH);
     Stop();
 }
 
