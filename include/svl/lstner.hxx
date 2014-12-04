@@ -21,21 +21,17 @@
 
 #include <svl/svldllapi.h>
 #include <tools/rtti.hxx>
-#include <deque>
 
 class SfxBroadcaster;
 class SfxHint;
 
-typedef std::deque<SfxBroadcaster*> SfxBroadcasterArr_Impl;
-
 #define SFX_NOTIFY( rBC, rBCT, rHint, rHintT ) \
         Notify( rBC, rHint )
 
-
-
 class SVL_DLLPUBLIC SfxListener
 {
-    SfxBroadcasterArr_Impl aBCs;
+    struct Impl;
+    Impl* mpImpl;
 
 private:
     const SfxListener&  operator=(const SfxListener &); // n.i., ist verboten
@@ -52,10 +48,8 @@ public:
     void                EndListeningAll();
     bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
 
-    sal_uInt16              GetBroadcasterCount() const
-                        { return aBCs.size(); }
-    SfxBroadcaster*     GetBroadcasterJOE( sal_uInt16 nNo ) const
-                        { return aBCs[nNo]; }
+    sal_uInt16 GetBroadcasterCount() const;
+    SfxBroadcaster* GetBroadcasterJOE( sal_uInt16 nNo ) const;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 

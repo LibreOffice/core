@@ -72,6 +72,8 @@
 #include <unobaseclass.hxx>
 #include <viewopt.hxx>
 
+#include <deque>
+
 #define __IFC32 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
 Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27, Ifc28, Ifc29, Ifc30, Ifc31, Ifc32
 

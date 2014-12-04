@@ -21,7 +21,6 @@
 
 #include <svl/svldllapi.h>
 #include <tools/rtti.hxx>
-#include <vector>
 
 class SfxListener;
 class SfxHint;
@@ -29,11 +28,8 @@ class SfxBroadcasterTest;
 
 class SVL_DLLPUBLIC SfxBroadcaster
 {
-    typedef std::vector<SfxListener*> SfxListenerArr_Impl;
-
-    /** Contains the positions of removed listeners. */
-    std::vector<size_t>     m_RemovedPositions;
-    SfxListenerArr_Impl     m_Listeners;
+    struct Impl;
+    Impl* mpImpl;
 
 private:
     void                    AddListener( SfxListener& rListener );
@@ -60,16 +56,12 @@ public:
     /** Get the size of the internally stored vector.
      * Use it to iterate over all listeners.
      */
-    size_t                  GetSizeOfVector() const {
-        return m_Listeners.size();
-    }
+    size_t GetSizeOfVector() const;
 
     /** Get a listener by its position in the internally stored vector.
      * Note that this method may return NULL
      */
-    SfxListener*            GetListener( size_t nNo ) const {
-        return m_Listeners[nNo];
-    }
+    SfxListener* GetListener( size_t nNo ) const;
 
     friend class SfxListener;
     friend class ::SfxBroadcasterTest;

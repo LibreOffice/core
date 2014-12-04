@@ -17,29 +17,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <assert.h>
+#include <svl/SfxBroadcaster.hxx>
 
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/lstner.hxx>
-
-#include <svl/SfxBroadcaster.hxx>
-#include <algorithm>
 #include <tools/debug.hxx>
 
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
 TYPEINIT0(SfxBroadcaster);
+
+typedef std::vector<SfxListener*> SfxListenerArr_Impl;
+
+struct SfxBroadcaster::Impl
+{
+    /** Contains the positions of removed listeners. */
+    std::vector<size_t>     m_RemovedPositions;
+    SfxListenerArr_Impl     m_Listeners;
+};
 
 // broadcast immediately
 
 void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 {
     // notify all registered listeners exactly once
-    for (size_t n = 0; n < m_Listeners.size(); ++n)
+    for (size_t i = 0; i < mpImpl->m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = m_Listeners[n];
-        if (pListener) {
+        SfxListener *const pListener = mpImpl->m_Listeners[i];
+        if (pListener)
             pListener->Notify( *this, rHint );
-        }
     }
 }
 
@@ -50,19 +59,20 @@ SfxBroadcaster::~SfxBroadcaster()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     // remove all still registered listeners
-    for (size_t nPos = 0; nPos < m_Listeners.size(); ++nPos)
+    for (size_t i = 0; i < mpImpl->m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = m_Listeners[nPos];
-        if (pListener) {
+        SfxListener *const pListener = mpImpl->m_Listeners[i];
+        if (pListener)
             pListener->RemoveBroadcaster_Impl(*this);
-        }
     }
+
+    delete mpImpl;
 }
 
 
 // simple ctor of class SfxBroadcaster
 
-SfxBroadcaster::SfxBroadcaster()
+SfxBroadcaster::SfxBroadcaster() : mpImpl(new Impl)
 {
 }
 
@@ -70,14 +80,13 @@ SfxBroadcaster::SfxBroadcaster()
 // copy ctor of class SfxBroadcaster
 
 
-SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
+SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC ) : mpImpl(new Impl)
 {
-    for (size_t n = 0; n < rBC.m_Listeners.size(); ++n)
+    for (size_t i = 0; i < rBC.mpImpl->m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = rBC.m_Listeners[n];
-        if (pListener) {
+        SfxListener *const pListener = rBC.mpImpl->m_Listeners[i];
+        if (pListener)
             pListener->StartListening( *this );
-        }
     }
 }
 
@@ -87,14 +96,16 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 void SfxBroadcaster::AddListener( SfxListener& rListener )
 {
     DBG_TESTSOLARMUTEX();
-    if (m_RemovedPositions.empty()) {
-        m_Listeners.push_back(&rListener);
+    if (mpImpl->m_RemovedPositions.empty())
+    {
+        mpImpl->m_Listeners.push_back(&rListener);
     }
-    else {
-        size_t targetPosition = m_RemovedPositions.back();
-        m_RemovedPositions.pop_back();
-        assert(m_Listeners[targetPosition] == NULL);
-        m_Listeners[targetPosition] = &rListener;
+    else
+    {
+        size_t targetPosition = mpImpl->m_RemovedPositions.back();
+        mpImpl->m_RemovedPositions.pop_back();
+        assert(mpImpl->m_Listeners[targetPosition] == NULL);
+        mpImpl->m_Listeners[targetPosition] = &rListener;
     }
 }
 
@@ -110,12 +121,11 @@ void SfxBroadcaster::ListenersGone()
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    for (size_t i = 0; i < m_Listeners.size(); ++i)
+    for (size_t i = 0; i < mpImpl->m_Listeners.size(); ++i)
     {
-        SfxListener *const pListener = m_Listeners[i];
-        if (pListener) {
+        SfxListener *const pListener = mpImpl->m_Listeners[i];
+        if (pListener)
             pListener->Notify( rBC, rHint );
-        }
     }
 }
 
@@ -126,13 +136,13 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     DBG_TESTSOLARMUTEX();
     SfxListenerArr_Impl::iterator aIter = std::find(
-            m_Listeners.begin(), m_Listeners.end(), &rListener);
-    assert(aIter != m_Listeners.end()); // "RemoveListener: Listener unknown"
+            mpImpl->m_Listeners.begin(), mpImpl->m_Listeners.end(), &rListener);
+    assert(aIter != mpImpl->m_Listeners.end()); // "RemoveListener: Listener unknown"
     // DO NOT erase the listener, set the pointer to 0
     // because the current continuation may contain this->Broadcast
     *aIter = 0;
-    size_t positionOfRemovedElement = std::distance(m_Listeners.begin(), aIter);
-    m_RemovedPositions.push_back(positionOfRemovedElement);
+    size_t positionOfRemovedElement = std::distance(mpImpl->m_Listeners.begin(), aIter);
+    mpImpl->m_RemovedPositions.push_back(positionOfRemovedElement);
 
     if ( !HasListeners() )
         ListenersGone();
@@ -145,8 +155,18 @@ bool SfxBroadcaster::HasListeners() const
 
 size_t SfxBroadcaster::GetListenerCount() const
 {
-    assert(m_Listeners.size() >= m_RemovedPositions.size());
-    return m_Listeners.size() - m_RemovedPositions.size();
+    assert(mpImpl->m_Listeners.size() >= mpImpl->m_RemovedPositions.size());
+    return mpImpl->m_Listeners.size() - mpImpl->m_RemovedPositions.size();
+}
+
+size_t SfxBroadcaster::GetSizeOfVector() const
+{
+    return mpImpl->m_Listeners.size();
+}
+
+SfxListener* SfxBroadcaster::GetListener( size_t nNo ) const
+{
+    return mpImpl->m_Listeners[nNo];
 }
 
 

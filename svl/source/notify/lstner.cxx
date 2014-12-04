@@ -24,21 +24,29 @@
 
 #include <algorithm>
 #include <cassert>
+#include <deque>
 
 TYPEINIT0(SfxListener);
 
+typedef std::deque<SfxBroadcaster*> SfxBroadcasterArr_Impl;
+
+struct SfxListener::Impl
+{
+    SfxBroadcasterArr_Impl maBCs;
+};
+
 // simple ctor of class SfxListener
 
-SfxListener::SfxListener()
+SfxListener::SfxListener() : mpImpl(new Impl)
 {
 }
 
 // copy ctor of class SfxListener
 
-SfxListener::SfxListener( const SfxListener &rListener )
+SfxListener::SfxListener( const SfxListener &rListener ) : mpImpl(new Impl)
 {
-    for ( sal_uInt16 n = 0; n < rListener.aBCs.size(); ++n )
-        StartListening( *rListener.aBCs[n] );
+    for ( sal_uInt16 n = 0; n < rListener.mpImpl->maBCs.size(); ++n )
+        StartListening( *rListener.mpImpl->maBCs[n] );
 }
 
 // unregisters the SfxListener from its SfxBroadcasters
@@ -46,11 +54,13 @@ SfxListener::SfxListener( const SfxListener &rListener )
 SfxListener::~SfxListener()
 {
     // unregister at all remaining broadcasters
-    for ( sal_uInt16 nPos = 0; nPos < aBCs.size(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < mpImpl->maBCs.size(); ++nPos )
     {
-        SfxBroadcaster *pBC = aBCs[nPos];
+        SfxBroadcaster *pBC = mpImpl->maBCs[nPos];
         pBC->RemoveListener(*this);
     }
+
+    delete mpImpl;
 }
 
 
@@ -58,7 +68,7 @@ SfxListener::~SfxListener()
 
 void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 {
-    aBCs.erase( std::find( aBCs.begin(), aBCs.end(), &rBroadcaster ) );
+    mpImpl->maBCs.erase( std::find( mpImpl->maBCs.begin(), mpImpl->maBCs.end(), &rBroadcaster ) );
 }
 
 
@@ -69,7 +79,7 @@ void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
     if ( !bPreventDups || !IsListening( rBroadcaster ) )
     {
         rBroadcaster.AddListener(*this);
-        aBCs.push_back( &rBroadcaster );
+        mpImpl->maBCs.push_back( &rBroadcaster );
 
         assert(IsListening(rBroadcaster) && "StartListening failed");
     }
@@ -82,13 +92,13 @@ void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 {
     do
     {
-        SfxBroadcasterArr_Impl::iterator it = std::find( aBCs.begin(), aBCs.end(), &rBroadcaster );
-        if ( it == aBCs.end() )
+        SfxBroadcasterArr_Impl::iterator it = std::find( mpImpl->maBCs.begin(), mpImpl->maBCs.end(), &rBroadcaster );
+        if ( it == mpImpl->maBCs.end() )
         {
             break;
         }
         rBroadcaster.RemoveListener(*this);
-        aBCs.erase( it );
+        mpImpl->maBCs.erase( it );
     }
     while ( bAllDups );
 }
@@ -99,18 +109,28 @@ void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 void SfxListener::EndListeningAll()
 {
     // Attention: when optimizing this: Respect sideffects of RemoveListener!
-    while ( !aBCs.empty() )
+    while ( !mpImpl->maBCs.empty() )
     {
-        SfxBroadcaster *pBC = aBCs.front();
+        SfxBroadcaster *pBC = mpImpl->maBCs.front();
         pBC->RemoveListener(*this);
-        aBCs.pop_front();
+        mpImpl->maBCs.pop_front();
     }
 }
 
 
 bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 {
-    return aBCs.end() != std::find( aBCs.begin(), aBCs.end(), &rBroadcaster );
+    return mpImpl->maBCs.end() != std::find( mpImpl->maBCs.begin(), mpImpl->maBCs.end(), &rBroadcaster );
+}
+
+sal_uInt16 SfxListener::GetBroadcasterCount() const
+{
+    return mpImpl->maBCs.size();
+}
+
+SfxBroadcaster* SfxListener::GetBroadcasterJOE( sal_uInt16 nNo ) const
+{
+    return mpImpl->maBCs[nNo];
 }
 
 
