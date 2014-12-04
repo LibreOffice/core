@@ -20,8 +20,6 @@
 #ifndef INCLUDED_STARMATH_INC_DOCUMENT_HXX
 #define INCLUDED_STARMATH_INC_DOCUMENT_HXX
 
-#define SMDLL   1
-
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfac.hxx>
