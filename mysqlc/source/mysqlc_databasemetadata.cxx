@@ -1054,7 +1054,7 @@ Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection()
     throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("ODatabaseMetaData::getConnection");
-    return (Reference< XConnection >)&m_rConnection;
+    return &m_rConnection;
 }
 
 /*

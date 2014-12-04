@@ -193,7 +193,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
     checkDisposed(rBHelper.bDisposed);
 
     // just return(our connection here
-    return ((Reference< XConnection >)m_pConnection);
+    return m_pConnection;
 }
 
 sal_Int32 SAL_CALL OCommonStatement::getUpdateCount()
