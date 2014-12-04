@@ -1883,6 +1883,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
                     pMedium->ResetError();
                     pMedium->CloseStorage();
                     m_pData->m_pObjectShell->PrepareSecondTryLoad_Impl();
+                    nError = ERRCODE_NONE;
                     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
                         nError=ERRCODE_IO_GENERAL;
                     if (m_pData->m_pObjectShell->GetErrorCode())
