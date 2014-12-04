@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_4873334e",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-04T12:56:33Z",
+      "side": 1,
+      "message": "just a minor nit that since module!\u003dNULL iff InitWrapper has been called, you don\u0027t need the additional BOOL first",
+      "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_e88ec726",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-12-04T12:56:33Z",
+      "side": 1,
+      "message": "there\u0027s no guarantee that a thread observes a meaningful value for module when read without the necessary synchronization in place (i.e., outside the CriticalSection)\n\nunconditionally enter CriticialSection, call InitWrapper if necessary (i.e., module\u003d\u003dNULL), then leave again",
+      "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
