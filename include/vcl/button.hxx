@@ -28,7 +28,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
-
+#include <vcl/vclref.hxx>
 #include <vector>
 
 class UserDrawEvent;
@@ -202,6 +202,8 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
+typedef VclReference<PushButton> PushButtonPtr;
+
 inline void PushButton::Check( bool bCheck )
 {
     SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -229,6 +231,7 @@ public:
     virtual void    Click() SAL_OVERRIDE;
 };
 
+typedef VclReference<OKButton> OKButtonPtr;
 
 class VCL_DLLPUBLIC CancelButton : public PushButton
 {
@@ -246,6 +249,8 @@ public:
 
     virtual void    Click() SAL_OVERRIDE;
 };
+
+typedef VclReference<CancelButton> CancelButtonPtr;
 
 class VCL_DLLPUBLIC CloseButton : public CancelButton
 {
@@ -276,6 +281,7 @@ public:
     virtual void    Click() SAL_OVERRIDE;
 };
 
+typedef VclReference<HelpButton> HelpButtonPtr;
 
 // - RadioButton -
 
@@ -503,6 +509,8 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
+typedef VclReference<CheckBox> CheckBoxPtr;
+
 inline void CheckBox::Check( bool bCheck )
 {
     SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -566,7 +574,7 @@ public:
     virtual void    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
-typedef rtl::Reference<DisclosureButton> DisclosureButtonPtr;
+typedef VclReference<DisclosureButton> DisclosureButtonPtr;
 
 #endif // INCLUDED_VCL_BUTTON_HXX
 

@@ -55,6 +55,8 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
+typedef VclReference<GroupBox> GroupBoxPtr;
+
 #endif // INCLUDED_VCL_GROUP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
