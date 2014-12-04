@@ -1474,7 +1474,7 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *breeze, *crystal, *galaxy, *hicontrast, human, industrial, *oxygen, *sifr, *tango, *tango_testing.]),
+         Possible choices: *breeze, crystal, *galaxy, *hicontrast, human, industrial, *oxygen, *sifr, *tango, *tango_testing.]),
 ,)
 
 AC_ARG_WITH(helppack-integration,
@@ -11375,7 +11375,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="breeze crystal galaxy hicontrast oxygen sifr tango"
+    with_theme="breeze galaxy hicontrast oxygen sifr tango"
     test -z "$ENABLE_RELEASE_BUILD" && with_theme="$with_theme tango_testing"
 fi
 
