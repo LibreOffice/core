@@ -131,13 +131,11 @@ namespace
 }
 #endif
 
-Window::~Window()
+void Window::dispose()
 {
-    vcl::LazyDeletor<vcl::Window>::Undelete( this );
-
-    DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
-
-    dispose();
+    // There should be exactly a refcount of 1 at this point,
+    // held by a local reference in VclReference::disposeAndClear
+    assert(mnRefCnt == 1);
 
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
@@ -568,6 +566,13 @@ Window::~Window()
 
     // should be the last statements
     delete mpWindowImpl; mpWindowImpl = NULL;
+}
+
+Window::~Window()
+{
+    vcl::LazyDeletor<vcl::Window>::Undelete( this );
+
+    DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
 }
 
 } /* namespace vcl */
