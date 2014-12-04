@@ -400,12 +400,11 @@ void RehearseTimingsActivity::viewsChanged()
     {
         // new sprite pos, transformation might have changed:
         maSpriteRectangle = calcSpriteRectangle( maViews.front().first );
-        ::basegfx::B2DPoint rectMin( maSpriteRectangle.getMinimum() );
 
         // reposition sprites
         for_each_sprite( boost::bind( &cppcanvas::Sprite::move,
                                       _1,
-                                      boost::cref( rectMin )) );
+                                      maSpriteRectangle.getMinimum()) );
 
         // sprites changed, need screen update
         mrScreenUpdater.notifyUpdate();
