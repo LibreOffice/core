@@ -80,8 +80,6 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         }
     } else {
         if (filename.startswith(SRCDIR "/include/tools/solar.h")
-           // the GetSalDisplay/GetGtkDisplay methods are problematic
-           || filename.startswith(SRCDIR "/vcl/inc/generic/gendata.hxx")
            || filename.startswith(SRCDIR "/include/cppuhelper/")) {
             return true;
         }
