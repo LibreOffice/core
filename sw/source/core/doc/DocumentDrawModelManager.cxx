@@ -211,14 +211,11 @@ SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
 {
     OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
-    if ( m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
+    SwViewShell* const pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+    if ( pSh )
     {
-        SwViewShell* pTmp = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
-        do
-        {
-            pTmp->MakeDrawView();
-            pTmp = static_cast<SwViewShell*>( pTmp->GetNext());
-        } while ( pTmp != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
+        for(SwViewShell& rViewSh : pSh->GetRingContainer())
+            rViewSh.MakeDrawView();
 
         // Broadcast, so that the FormShell can be connected to the DrawView
         if( m_rDoc.GetDocShell() )
