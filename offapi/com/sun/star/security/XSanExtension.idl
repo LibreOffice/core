@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//i20156 - new file for xmlsecurity module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_security_XSanExtension_idl_
 #define __com_sun_star_security_XSanExtension_idl_
 

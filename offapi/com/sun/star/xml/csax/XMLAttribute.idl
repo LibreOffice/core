@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//i20156 - new file for xmlsecurity module
-
 #ifndef __com_sun_star_xml_csax_XMLAttribute_idl__
 #define __com_sun_star_xml_csax_XMLAttribute_idl__
 

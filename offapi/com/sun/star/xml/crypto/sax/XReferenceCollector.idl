@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//i20156 - new file for XML security module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_xml_crypto_sax_XReferenceCollector_idl_
 #define __com_sun_star_xml_crypto_sax_XReferenceCollector_idl_
 
@@ -56,7 +52,6 @@ interface XReferenceCollector : com::sun::star::uno::XInterface
 };
 
 } ; } ; } ; } ; } ; } ;
-
 
 #endif
 

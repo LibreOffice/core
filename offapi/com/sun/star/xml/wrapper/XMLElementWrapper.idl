@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-//i20156 - new file for XML security module
-
-/** -- idl definition -- **/
-
 #ifndef __com_sun_star_xml_wrapper_xmlelementwrapper_idl_
 #define __com_sun_star_xml_wrapper_xmlelementwrapper_idl_
 
@@ -42,7 +38,6 @@ service XMLElementWrapper {
 };
 
 } ; } ; } ; } ; } ;
-
 
 #endif
 
