@@ -1056,16 +1056,16 @@ void generateSkeleton(ProgramOptions const & options,
             *pofs << (nm > 0 ? "// closing namespace\n\n" : "\n");
         }
 
-        if ( !standardout && pofs && ((std::ofstream*)pofs)->is_open()) {
-            ((std::ofstream*)pofs)->close();
+        if ( !standardout && pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+            static_cast<std::ofstream*>(pofs)->close();
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, false));
         }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << "\n";
         if ( !standardout ) {
-            if (pofs && ((std::ofstream*)pofs)->is_open()) {
-                ((std::ofstream*)pofs)->close();
+            if (pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+                static_cast<std::ofstream*>(pofs)->close();
                 delete pofs;
             }
             // remove existing type file if something goes wrong to ensure
@@ -1219,16 +1219,16 @@ void generateCalcAddin(ProgramOptions const & options,
 
         generateCompFunctions(*pofs, nmspace);
 
-        if ( !standardout && pofs && ((std::ofstream*)pofs)->is_open()) {
-            ((std::ofstream*)pofs)->close();
+        if ( !standardout && pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+            static_cast<std::ofstream*>(pofs)->close();
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, false));
         }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << "\n";
         if ( !standardout ) {
-            if (pofs && ((std::ofstream*)pofs)->is_open()) {
-                ((std::ofstream*)pofs)->close();
+            if (pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+                static_cast<std::ofstream*>(pofs)->close();
                 delete pofs;
             }
             // remove existing type file if something goes wrong to ensure

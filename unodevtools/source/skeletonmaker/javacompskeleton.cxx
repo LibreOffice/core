@@ -911,16 +911,16 @@ void generateSkeleton(ProgramOptions const & options,
                                 interfaces, properties, attributes, propertyhelper,
                                 supportxcomponent);
 
-        if ( !standardout && pofs && ((std::ofstream*)pofs)->is_open()) {
-            ((std::ofstream*)pofs)->close();
+        if ( !standardout && pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+            static_cast<std::ofstream*>(pofs)->close();
             delete pofs;
             OSL_VERIFY(makeValidTypeFile(compFileName, tmpFileName, false));
         }
     } catch (CannotDumpException & e) {
         std::cerr << "ERROR: " << e.getMessage() << "\n";
         if ( !standardout ) {
-            if (pofs && ((std::ofstream*)pofs)->is_open()) {
-                ((std::ofstream*)pofs)->close();
+            if (pofs && static_cast<std::ofstream*>(pofs)->is_open()) {
+                static_cast<std::ofstream*>(pofs)->close();
                 delete pofs;
             }
             // remove existing type file if something goes wrong to ensure
