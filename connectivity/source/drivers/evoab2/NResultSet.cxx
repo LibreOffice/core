@@ -614,7 +614,6 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     ,::comphelper::OPropertyContainer( OResultSet_BASE::rBHelper )
     ,m_pStatement(pStmt)
     ,m_pConnection(pConnection)
-    ,m_xMetaData(NULL)
     ,m_bWasNull(true)
     ,m_nFetchSize(0)
     ,m_nResultSetType(ResultSetType::SCROLL_INSENSITIVE)
@@ -702,10 +701,9 @@ void OEvoabResultSet::construct( const QueryData& _rData )
     m_nIndex = -1;
 
     // create our meta data (need the EBookQuery for this)
-    OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( _rData.sTable );
-    m_xMetaData = pMeta;
+    m_xMetaData = new OEvoabResultSetMetaData( _rData.sTable );
 
-    pMeta->setEvoabFields( _rData.xSelectColumns );
+    m_xMetaData->setEvoabFields( _rData.xSelectColumns );
 }
 
 
@@ -753,8 +751,7 @@ OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum ) throw(SQLEx
     OUString aResult;
     if ( m_xMetaData.is())
     {
-        OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
-        sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
+        sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(nColumnNum);
         GValue aValue = { 0, { { 0 } } };
         if ( getValue( getCur(), nFieldNumber, G_TYPE_STRING, &aValue, m_bWasNull ) )
             aResult = valueToOUString( aValue );
@@ -770,8 +767,7 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
 
     if ( m_xMetaData.is())
     {
-        OEvoabResultSetMetaData *pMeta = (OEvoabResultSetMetaData *) m_xMetaData.get();
-        sal_Int32 nFieldNumber = pMeta->fieldAtColumn(nColumnNum);
+        sal_Int32 nFieldNumber = m_xMetaData->fieldAtColumn(nColumnNum);
         GValue aValue = { 0, { { 0 } } };
         if ( getValue( getCur(), nFieldNumber, G_TYPE_BOOLEAN, &aValue, m_bWasNull ) )
             bResult = valueToBool( aValue );
@@ -891,7 +887,7 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  ) throw(
 
     // the meta data should have been created at construction time
     ENSURE_OR_THROW( m_xMetaData.is(), "internal error: no meta data" );
-    return m_xMetaData;
+    return m_xMetaData.get();
 }
 // XResultSetMetaDataSupplier Interface Ends
 

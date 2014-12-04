@@ -445,7 +445,7 @@ Reference< XConnection > SAL_CALL KabCommonStatement::getConnection(  ) throw(SQ
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
 
     // just return our connection here
-    return (Reference< XConnection >) m_pConnection;
+    return m_pConnection;
 }
 
 sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const OUString& ) throw(SQLException, RuntimeException, std::exception)

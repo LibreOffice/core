@@ -87,7 +87,7 @@ namespace connectivity
             OCommonStatement*                                                               m_pStatement;
             OEvoabConnection*                                                               m_pConnection;
             ::com::sun::star::uno::WeakReferenceHelper                                      m_aStatement;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
+            rtl::Reference<OEvoabResultSetMetaData> m_xMetaData;
             ::dbtools::WarningsContainer                                                    m_aWarnings;
 
             bool                                        m_bWasNull;

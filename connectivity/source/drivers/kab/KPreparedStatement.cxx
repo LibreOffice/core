@@ -164,7 +164,7 @@ Reference< XConnection > SAL_CALL KabPreparedStatement::getConnection() throw(SQ
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
 
-    return (Reference< XConnection >) m_pConnection;
+    return m_pConnection;
 }
 
 Reference< XResultSet > SAL_CALL KabPreparedStatement::executeQuery() throw(SQLException, RuntimeException, std::exception)

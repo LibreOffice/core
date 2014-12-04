@@ -770,7 +770,7 @@ sal_Bool SAL_CALL KabDatabaseMetaData::supportsBatchUpdates(  ) throw(SQLExcepti
 
 Reference< XConnection > SAL_CALL KabDatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
 {
-    return (Reference< XConnection >) m_xConnection.get();
+    return m_xConnection.get();
 }
 
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException, std::exception)
