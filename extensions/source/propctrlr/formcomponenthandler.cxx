@@ -69,6 +69,7 @@
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/resource/MissingResourceException.hpp>
+#include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 
@@ -127,6 +128,7 @@ namespace pcr
     using namespace sdb;
     using namespace sdbc;
     using namespace sdbcx;
+    using namespace report;
     using namespace container;
     using namespace ui::dialogs;
     using namespace inspection;
@@ -2775,8 +2777,17 @@ namespace pcr
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
         // stream ) only if document is available
-        Reference< XModel > xModel( impl_getContextDocument_nothrow() );
-        bool bHandleNonLink = false;
+        bool bHandleNonLink;
+        {
+            Reference< XModel > xModel( impl_getContextDocument_nothrow() );
+            bHandleNonLink = xModel.is();
+            // Not implemented in reports
+            if (bHandleNonLink)
+            {
+                Reference< XReportDefinition > xReportDef( xModel, ::com::sun::star::uno::UNO_QUERY );
+                bHandleNonLink = !xReportDef.is();
+            }
+        }
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
         DBG_ASSERT(xController.is(), "FormComponentPropertyHandler::impl_browseForImage_nothrow: missing the controller interface on the file picker!");
