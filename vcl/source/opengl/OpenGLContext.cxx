@@ -97,9 +97,9 @@ OpenGLContext::~OpenGLContext()
 #if defined( WNT )
     if (m_aGLWin.hRC)
     {
-        std::vector<HGLRC>::const_iterator itr = std::remove(vShareList.begin(), vShareList.end(), m_aGLWin.hRC);
-        assert(itr != vShareList.end());
-        vShareList.erase(itr);
+        std::vector<HGLRC>::iterator itr = std::remove(vShareList.begin(), vShareList.end(), m_aGLWin.hRC);
+        if (itr != vShareList.end())
+            vShareList.erase(itr);
 
         wglMakeCurrent( m_aGLWin.hDC, 0 );
         wglDeleteContext( m_aGLWin.hRC );
@@ -112,7 +112,9 @@ OpenGLContext::~OpenGLContext()
 #elif defined( UNX )
     if(m_aGLWin.ctx)
     {
-        vShareList.erase(std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx ));
+        std::vector<GLXContext>::iterator itr = std::remove( vShareList.begin(), vShareList.end(), m_aGLWin.ctx );
+        if (itr != vShareList.end())
+            vShareList.erase(itr);
 
         glXMakeCurrent(m_aGLWin.dpy, None, NULL);
         if( glGetError() != GL_NO_ERROR )
