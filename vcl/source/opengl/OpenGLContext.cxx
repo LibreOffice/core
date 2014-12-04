@@ -96,7 +96,9 @@ OpenGLContext::~OpenGLContext()
 #if defined( WNT )
     if (m_aGLWin.hRC)
     {
-        g_vShareList.erase(std::remove(g_vShareList.begin(), g_vShareList.end(), m_aGLWin.hRC), g_vShareList.end());
+        std::vector<HGLRC>::const_iterator itr = std::remove(g_vShareList.begin(), g_vShareList.end(), m_aGLWin.hRC);
+        assert(itr != g_vShareList.end());
+        g_vShareList.erase(itr);
 
         wglMakeCurrent( m_aGLWin.hDC, 0 );
         wglDeleteContext( m_aGLWin.hRC );
