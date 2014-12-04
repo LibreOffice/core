@@ -98,7 +98,7 @@ class SwXMLTextBlockTokenHandler : public
 {
 public:
     SwXMLTextBlockTokenHandler();
-    ~SwXMLTextBlockTokenHandler();
+    virtual ~SwXMLTextBlockTokenHandler();
 
     //XFastTokenHandler
     sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
@@ -127,7 +127,7 @@ class SwXMLBlockListTokenHandler : public
 {
 public:
     SwXMLBlockListTokenHandler();
-    ~SwXMLBlockListTokenHandler();
+    virtual ~SwXMLBlockListTokenHandler();
 
     //XFastTokenHandler
     sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
