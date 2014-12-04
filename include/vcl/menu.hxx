@@ -500,7 +500,7 @@ class VCL_DLLPUBLIC PopupMenu : public Menu
 private:
     Menu**              pRefAutoSubMenu;    // keeps track if a pointer to this Menu is stored in the MenuItemData
 
-    SAL_DLLPRIVATE MenuFloatingWindow*   ImplGetFloatingWindow() const { return (MenuFloatingWindow*)Menu::ImplGetWindow(); }
+    SAL_DLLPRIVATE MenuFloatingWindow * ImplGetFloatingWindow() const;
 
 protected:
     SAL_DLLPRIVATE sal_uInt16                ImplExecute( vcl::Window* pWindow, const Rectangle& rRect, sal_uLong nPopupFlags, Menu* pStaredFrom, bool bPreSelectFirst );

@@ -2637,6 +2637,10 @@ bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId )
 
 // bool PopupMenu::bAnyPopupInExecute = false;
 
+MenuFloatingWindow * PopupMenu::ImplGetFloatingWindow() const {
+    return static_cast<MenuFloatingWindow *>(Menu::ImplGetWindow());
+}
+
 PopupMenu::PopupMenu()
     : pRefAutoSubMenu(NULL)
 {
