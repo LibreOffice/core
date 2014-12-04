@@ -544,7 +544,7 @@ public:
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
-    void dispose() SAL_OVERRIDE { m_pDisclosureButton.clear(); VclBin::dispose(); }
+    void internalDispose() SAL_OVERRIDE { m_pDisclosureButton.disposeAndClear(); VclBin::dispose(); }
 private:
     bool m_bResizeTopLevel;
     DisclosureButtonPtr m_pDisclosureButton;
@@ -571,7 +571,7 @@ protected:
     DECL_LINK(ScrollBarHdl, void *);
     void InitScrollBars(const Size &rRequest);
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    void dispose() SAL_OVERRIDE { m_pVScroll.clear(); m_pHScroll.clear(); VclBin::dispose(); }
+    void internalDispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); VclBin::dispose(); }
 private:
     bool m_bUserManagedScrolling;
     ScrollBarPtr m_pVScroll;

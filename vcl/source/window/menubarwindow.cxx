@@ -117,9 +117,9 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 
 MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     Window( pParent, 0 ),
-    aCloseBtn(this),
-    aFloatBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
-    aHideBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )
+    aCloseBtn(new DecoToolBox(this)),
+    aFloatBtn(new PushButton( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )),
+    aHideBtn(new PushButton(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ))
 {
     SetType( WINDOW_MENUBARWINDOW );
     pMenu = NULL;
@@ -137,25 +137,25 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     if( pResMgr )
     {
         BitmapEx aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        aCloseBtn.maImage = Image(aBitmap);
+        aCloseBtn->maImage = Image(aBitmap);
 
-        aCloseBtn.SetOutStyle(TOOLBOX_STYLE_FLAT);
-        aCloseBtn.SetBackground();
-        aCloseBtn.SetPaintTransparent(true);
-        aCloseBtn.SetParentClipMode(PARENTCLIPMODE_NOCLIP);
+        aCloseBtn->SetOutStyle(TOOLBOX_STYLE_FLAT);
+        aCloseBtn->SetBackground();
+        aCloseBtn->SetPaintTransparent(true);
+        aCloseBtn->SetParentClipMode(PARENTCLIPMODE_NOCLIP);
 
-        aCloseBtn.InsertItem(IID_DOCUMENTCLOSE, aCloseBtn.maImage, ToolBoxItemBits::NONE);
-        aCloseBtn.SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
-        aCloseBtn.AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
-        aCloseBtn.SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());
+        aCloseBtn->InsertItem(IID_DOCUMENTCLOSE, aCloseBtn->maImage, ToolBoxItemBits::NONE);
+        aCloseBtn->SetSelectHdl(LINK(this, MenuBarWindow, CloseHdl));
+        aCloseBtn->AddEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
+        aCloseBtn->SetQuickHelpText(IID_DOCUMENTCLOSE, ResId(SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr).toString());
 
-        aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
-        aFloatBtn.SetSymbol( SymbolType::FLOAT );
-        aFloatBtn.SetQuickHelpText( ResId(SV_HELPTEXT_RESTORE, *pResMgr).toString() );
+        aFloatBtn->SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
+        aFloatBtn->SetSymbol( SymbolType::FLOAT );
+        aFloatBtn->SetQuickHelpText( ResId(SV_HELPTEXT_RESTORE, *pResMgr).toString() );
 
-        aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
-        aHideBtn.SetSymbol( SymbolType::HIDE );
-        aHideBtn.SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr).toString() );
+        aHideBtn->SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
+        aHideBtn->SetSymbol( SymbolType::HIDE );
+        aHideBtn->SetQuickHelpText( ResId(SV_HELPTEXT_MINIMIZE, *pResMgr).toString() );
     }
 
     ImplInitStyleSettings();
@@ -165,7 +165,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
 
 MenuBarWindow::~MenuBarWindow()
 {
-    aCloseBtn.RemoveEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
+    aCloseBtn->RemoveEventListener(LINK(this, MenuBarWindow, ToolboxEventHdl));
     RemoveEventListener(LINK(this, MenuBarWindow, ShowHideListener));
 }
 
@@ -177,10 +177,10 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     ImplInitMenuWindow( this, true, true );
     if ( pMen )
     {
-        aCloseBtn.ShowItem(IID_DOCUMENTCLOSE, pMen->HasCloseButton());
-        aCloseBtn.Show(pMen->HasCloseButton() || !m_aAddButtons.empty());
-        aFloatBtn.Show(pMen->HasFloatButton());
-        aHideBtn.Show(pMen->HasHideButton());
+        aCloseBtn->ShowItem(IID_DOCUMENTCLOSE, pMen->HasCloseButton());
+        aCloseBtn->Show(pMen->HasCloseButton() || !m_aAddButtons.empty());
+        aFloatBtn->Show(pMen->HasFloatButton());
+        aHideBtn->Show(pMen->HasHideButton());
     }
     Invalidate();
 
@@ -201,16 +201,16 @@ void MenuBarWindow::SetHeight(long nHeight)
 
 void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
 {
-    aCloseBtn.ShowItem(IID_DOCUMENTCLOSE, bClose);
-    aCloseBtn.Show(bClose || !m_aAddButtons.empty());
-    aFloatBtn.Show( bFloat );
-    aHideBtn.Show( bHide );
+    aCloseBtn->ShowItem(IID_DOCUMENTCLOSE, bClose);
+    aCloseBtn->Show(bClose || !m_aAddButtons.empty());
+    aFloatBtn->Show( bFloat );
+    aHideBtn->Show( bHide );
     Resize();
 }
 
 Size MenuBarWindow::MinCloseButtonSize()
 {
-    return aCloseBtn.getMinSize();
+    return aCloseBtn->getMinSize();
 }
 
 IMPL_LINK_NOARG(MenuBarWindow, CloseHdl)
@@ -218,7 +218,7 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl)
     if( ! pMenu )
         return 0;
 
-    if( aCloseBtn.GetCurItemId() == IID_DOCUMENTCLOSE )
+    if( aCloseBtn->GetCurItemId() == IID_DOCUMENTCLOSE )
     {
         // #i106052# call close hdl asynchronously to ease handler implementation
         // this avoids still being in the handler while the DecoToolBox already
@@ -227,12 +227,12 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl)
     }
     else
     {
-        std::map<sal_uInt16,AddButtonEntry>::iterator it = m_aAddButtons.find(aCloseBtn.GetCurItemId());
+        std::map<sal_uInt16,AddButtonEntry>::iterator it = m_aAddButtons.find(aCloseBtn->GetCurItemId());
         if( it != m_aAddButtons.end() )
         {
             MenuBar::MenuBarButtonCallbackArg aArg;
             aArg.nId = it->first;
-            aArg.bHighlight = (aCloseBtn.GetHighlightItemId() == it->first);
+            aArg.bHighlight = (aCloseBtn->GetHighlightItemId() == it->first);
             aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
             return it->second.m_aSelectLink.Call( &aArg );
         }
@@ -250,11 +250,11 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent*, pEvent )
     aArg.bHighlight = (pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT);
     aArg.pMenuBar = dynamic_cast<MenuBar*>(pMenu);
     if( pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHT )
-        aArg.nId = aCloseBtn.GetHighlightItemId();
+        aArg.nId = aCloseBtn->GetHighlightItemId();
     else if( pEvent->GetId() == VCLEVENT_TOOLBOX_HIGHLIGHTOFF )
     {
         sal_uInt16 nPos = static_cast< sal_uInt16 >(reinterpret_cast<sal_IntPtr>(pEvent->GetData()));
-        aArg.nId = aCloseBtn.GetItemId(nPos);
+        aArg.nId = aCloseBtn->GetItemId(nPos);
     }
     std::map< sal_uInt16, AddButtonEntry >::iterator it = m_aAddButtons.find( aArg.nId );
     if( it != m_aAddButtons.end() )
@@ -916,30 +916,30 @@ void MenuBarWindow::Resize()
     long nX     = aOutSz.Width()-3;
     long nY     = 2;
 
-    if ( aCloseBtn.IsVisible() )
+    if ( aCloseBtn->IsVisible() )
     {
-        aCloseBtn.Hide();
-        aCloseBtn.SetImages(n);
-        Size aTbxSize( aCloseBtn.CalcWindowSizePixel() );
+        aCloseBtn->Hide();
+        aCloseBtn->SetImages(n);
+        Size aTbxSize( aCloseBtn->CalcWindowSizePixel() );
         nX -= aTbxSize.Width();
         long nTbxY = (aOutSz.Height() - aTbxSize.Height())/2;
-        aCloseBtn.setPosSizePixel(nX, nTbxY, aTbxSize.Width(), aTbxSize.Height());
+        aCloseBtn->setPosSizePixel(nX, nTbxY, aTbxSize.Width(), aTbxSize.Height());
         nX -= 3;
-        aCloseBtn.Show();
+        aCloseBtn->Show();
     }
-    if ( aFloatBtn.IsVisible() )
+    if ( aFloatBtn->IsVisible() )
     {
         nX -= n;
-        aFloatBtn.setPosSizePixel( nX, nY, n, n );
+        aFloatBtn->setPosSizePixel( nX, nY, n, n );
     }
-    if ( aHideBtn.IsVisible() )
+    if ( aHideBtn->IsVisible() )
     {
         nX -= n;
-        aHideBtn.setPosSizePixel( nX, nY, n, n );
+        aHideBtn->setPosSizePixel( nX, nY, n, n );
     }
 
-    aFloatBtn.SetSymbol( SymbolType::FLOAT );
-    aHideBtn.SetSymbol( SymbolType::HIDE );
+    aFloatBtn->SetSymbol( SymbolType::FLOAT );
+    aHideBtn->SetSymbol( SymbolType::HIDE );
 
     Invalidate();
 }
@@ -1060,6 +1060,15 @@ void MenuBarWindow::GetFocus()
     }
 }
 
+void MenuBarWindow::internalDispose()
+{
+    aCloseBtn.disposeAndClear();
+    aFloatBtn.disposeAndClear();
+    aHideBtn.disposeAndClear();
+    Window::internalDispose();
+}
+
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > MenuBarWindow::CreateAccessible()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
@@ -1086,9 +1095,9 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link& i
     AddButtonEntry& rNewEntry = m_aAddButtons[nId];
     rNewEntry.m_nId = nId;
     rNewEntry.m_aSelectLink = i_rLink;
-    aCloseBtn.InsertItem(nId, i_rImage, ToolBoxItemBits::NONE, 0);
-    aCloseBtn.calcMinSize();
-    ShowButtons(aCloseBtn.IsItemVisible(IID_DOCUMENTCLOSE), aFloatBtn.IsVisible(), aHideBtn.IsVisible());
+    aCloseBtn->InsertItem(nId, i_rImage, ToolBoxItemBits::NONE, 0);
+    aCloseBtn->calcMinSize();
+    ShowButtons(aCloseBtn->IsItemVisible(IID_DOCUMENTCLOSE), aFloatBtn->IsVisible(), aHideBtn->IsVisible());
     LayoutChanged();
 
     if( pMenu->mpSalMenu )
@@ -1121,8 +1130,8 @@ Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
 
         if( aRect.IsEmpty() )
         {
-            aRect = aCloseBtn.GetItemRect(nId);
-            Point aOffset = aCloseBtn.OutputToScreenPixel(Point());
+            aRect = aCloseBtn->GetItemRect(nId);
+            Point aOffset = aCloseBtn->OutputToScreenPixel(Point());
             aRect.Move( aOffset.X(), aOffset.Y() );
         }
     }
@@ -1131,10 +1140,10 @@ Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
 
 void MenuBarWindow::RemoveMenuBarButton( sal_uInt16 nId )
 {
-    sal_uInt16 nPos = aCloseBtn.GetItemPos(nId);
-    aCloseBtn.RemoveItem(nPos);
+    sal_uInt16 nPos = aCloseBtn->GetItemPos(nId);
+    aCloseBtn->RemoveItem(nPos);
     m_aAddButtons.erase( nId );
-    aCloseBtn.calcMinSize();
+    aCloseBtn->calcMinSize();
     LayoutChanged();
 
     if( pMenu->mpSalMenu )

@@ -377,13 +377,15 @@ protected:
     virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry ) SAL_OVERRIDE;
 };
 
+typedef rtl::Reference<ImplListBoxWindow> ImplListBoxWindowPtr;
+
 class ImplListBox : public Control
 {
 private:
-    ImplListBoxWindow   maLBWindow;
-    ScrollBar*          mpHScrollBar;
-    ScrollBar*          mpVScrollBar;
-    ScrollBarBox*       mpScrollBarBox;
+    ImplListBoxWindowPtr maLBWindow;
+    ScrollBar*           mpHScrollBar;
+    ScrollBar*           mpVScrollBar;
+    ScrollBarBox*        mpScrollBarBox;
 
     /// bitfield
     bool mbVScroll : 1;     // VScroll an oder aus
@@ -400,6 +402,7 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual void        internalDispose() SAL_OVERRIDE;
 
     void                ImplResizeControls();
     void                ImplCheckScrollBars();
@@ -413,8 +416,8 @@ public:
                     ImplListBox( vcl::Window* pParent, WinBits nWinStyle );
                     virtual ~ImplListBox();
 
-    const ImplEntryList*    GetEntryList() const            { return maLBWindow.GetEntryList(); }
-    ImplListBoxWindow&      GetMainWindow()                 { return maLBWindow; }
+    const ImplEntryList*    GetEntryList() const            { return maLBWindow->GetEntryList(); }
+    ImplListBoxWindowPtr    GetMainWindow()                 { return maLBWindow; }
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;
@@ -423,84 +426,84 @@ public:
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr );
     sal_Int32       InsertEntry( sal_Int32  nPos, const OUString& rStr, const Image& rImage );
     void            RemoveEntry( sal_Int32  nPos );
-    void            SetEntryData( sal_Int32  nPos, void* pNewData ) { maLBWindow.GetEntryList()->SetEntryData( nPos, pNewData ); }
+    void            SetEntryData( sal_Int32  nPos, void* pNewData ) { maLBWindow->GetEntryList()->SetEntryData( nPos, pNewData ); }
     void            Clear();
 
     void            SetEntryFlags( sal_Int32  nPos, long nFlags );
 
     void            SelectEntry( sal_Int32  nPos, bool bSelect );
     void            SetNoSelection();
-    void            ResetCurrentPos()               { maLBWindow.ResetCurrentPos(); }
-    sal_Int32       GetCurrentPos() const           { return maLBWindow.GetCurrentPos(); }
+    void            ResetCurrentPos()               { maLBWindow->ResetCurrentPos(); }
+    sal_Int32       GetCurrentPos() const           { return maLBWindow->GetCurrentPos(); }
 
-    bool            ProcessKeyInput( const KeyEvent& rKEvt )    { return maLBWindow.ProcessKeyInput( rKEvt ); }
+    bool            ProcessKeyInput( const KeyEvent& rKEvt )    { return maLBWindow->ProcessKeyInput( rKEvt ); }
     bool            HandleWheelAsCursorTravel( const CommandEvent& rCEvt );
 
-    void            SetSeparatorPos( sal_Int32  n )     { maLBWindow.SetSeparatorPos( n ); }
-    sal_Int32       GetSeparatorPos() const         { return maLBWindow.GetSeparatorPos(); }
+    void            SetSeparatorPos( sal_Int32  n )     { maLBWindow->SetSeparatorPos( n ); }
+    sal_Int32       GetSeparatorPos() const         { return maLBWindow->GetSeparatorPos(); }
 
-    void            SetTopEntry( sal_Int32  nTop )      { maLBWindow.SetTopEntry( nTop ); }
-    sal_Int32       GetTopEntry() const             { return maLBWindow.GetTopEntry(); }
-    void            ShowProminentEntry( sal_Int32  nPos ) { maLBWindow.ShowProminentEntry( nPos ); }
+    void            SetTopEntry( sal_Int32  nTop )      { maLBWindow->SetTopEntry( nTop ); }
+    sal_Int32       GetTopEntry() const             { return maLBWindow->GetTopEntry(); }
+    void            ShowProminentEntry( sal_Int32  nPos ) { maLBWindow->ShowProminentEntry( nPos ); }
     using Window::IsVisible;
-    bool            IsVisible( sal_Int32  nEntry ) const { return maLBWindow.IsVisible( nEntry ); }
+    bool            IsVisible( sal_Int32  nEntry ) const { return maLBWindow->IsVisible( nEntry ); }
 
-    void            SetProminentEntryType( ProminentEntry eType ) { maLBWindow.SetProminentEntryType( eType ); }
-    ProminentEntry  GetProminentEntryType() const { return maLBWindow.GetProminentEntryType(); }
+    void            SetProminentEntryType( ProminentEntry eType ) { maLBWindow->SetProminentEntryType( eType ); }
+    ProminentEntry  GetProminentEntryType() const { return maLBWindow->GetProminentEntryType(); }
 
-    long            GetLeftIndent() const           { return maLBWindow.GetLeftIndent(); }
-    void            SetLeftIndent( sal_uInt16 n )       { maLBWindow.SetLeftIndent( n ); }
-    void            ScrollHorz( short nDiff )       { maLBWindow.ScrollHorz( nDiff ); }
+    long            GetLeftIndent() const           { return maLBWindow->GetLeftIndent(); }
+    void            SetLeftIndent( sal_uInt16 n )       { maLBWindow->SetLeftIndent( n ); }
+    void            ScrollHorz( short nDiff )       { maLBWindow->ScrollHorz( nDiff ); }
 
-    void            SetTravelSelect( bool bTravelSelect ) { maLBWindow.SetTravelSelect( bTravelSelect ); }
-    bool            IsTravelSelect() const          { return maLBWindow.IsTravelSelect(); }
-    bool            IsTrackingSelect() const            { return maLBWindow.IsTrackingSelect(); }
+    void            SetTravelSelect( bool bTravelSelect ) { maLBWindow->SetTravelSelect( bTravelSelect ); }
+    bool            IsTravelSelect() const          { return maLBWindow->IsTravelSelect(); }
+    bool            IsTrackingSelect() const            { return maLBWindow->IsTrackingSelect(); }
 
-    void            EnableMultiSelection( bool bMulti, bool bStackMode ) { maLBWindow.EnableMultiSelection( bMulti, bStackMode ); }
-    bool            IsMultiSelectionEnabled() const     { return maLBWindow.IsMultiSelectionEnabled(); }
+    void            EnableMultiSelection( bool bMulti, bool bStackMode ) { maLBWindow->EnableMultiSelection( bMulti, bStackMode ); }
+    bool            IsMultiSelectionEnabled() const     { return maLBWindow->IsMultiSelectionEnabled(); }
 
-    void            SetMultiSelectionSimpleMode( bool bSimple ) { maLBWindow.SetMultiSelectionSimpleMode( bSimple ); }
-    bool            IsMultiSelectionSimpleMode() const  { return maLBWindow.IsMultiSelectionSimpleMode(); }
+    void            SetMultiSelectionSimpleMode( bool bSimple ) { maLBWindow->SetMultiSelectionSimpleMode( bSimple ); }
+    bool            IsMultiSelectionSimpleMode() const  { return maLBWindow->IsMultiSelectionSimpleMode(); }
 
-    void            SetReadOnly( bool b )           { maLBWindow.SetReadOnly( b ); }
-    bool            IsReadOnly() const              { return maLBWindow.IsReadOnly(); }
+    void            SetReadOnly( bool b )           { maLBWindow->SetReadOnly( b ); }
+    bool            IsReadOnly() const              { return maLBWindow->IsReadOnly(); }
 
-    Size            CalcSize( sal_Int32  nMaxLines ) const              { return maLBWindow.CalcSize( nMaxLines ); }
-    long            GetEntryHeight() const          { return maLBWindow.GetEntryHeight(); }
-    long            GetMaxEntryWidth() const        { return maLBWindow.GetMaxEntryWidth(); }
+    Size            CalcSize( sal_Int32  nMaxLines ) const              { return maLBWindow->CalcSize( nMaxLines ); }
+    long            GetEntryHeight() const          { return maLBWindow->GetEntryHeight(); }
+    long            GetMaxEntryWidth() const        { return maLBWindow->GetMaxEntryWidth(); }
 
     void            SetScrollHdl( const Link& rLink )   { maScrollHdl = rLink; }
     const Link&     GetScrollHdl() const                { return maScrollHdl; }
-    void            SetSelectHdl( const Link& rLink )   { maLBWindow.SetSelectHdl( rLink ); }
-    const Link&     GetSelectHdl() const                { return maLBWindow.GetSelectHdl(); }
-    void            SetCancelHdl( const Link& rLink )   { maLBWindow.SetCancelHdl( rLink ); }
-    const Link&     GetCancelHdl() const                { return maLBWindow.GetCancelHdl(); }
-    void            SetDoubleClickHdl( const Link& rLink )  { maLBWindow.SetDoubleClickHdl( rLink ); }
-    const Link&     GetDoubleClickHdl() const               { return maLBWindow.GetDoubleClickHdl(); }
+    void            SetSelectHdl( const Link& rLink )   { maLBWindow->SetSelectHdl( rLink ); }
+    const Link&     GetSelectHdl() const                { return maLBWindow->GetSelectHdl(); }
+    void            SetCancelHdl( const Link& rLink )   { maLBWindow->SetCancelHdl( rLink ); }
+    const Link&     GetCancelHdl() const                { return maLBWindow->GetCancelHdl(); }
+    void            SetDoubleClickHdl( const Link& rLink )  { maLBWindow->SetDoubleClickHdl( rLink ); }
+    const Link&     GetDoubleClickHdl() const               { return maLBWindow->GetDoubleClickHdl(); }
 
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
-    void            SetFocusHdl( const Link& rLink )    { maLBWindow.SetFocusHdl( rLink ); }
-    const Link&     GetFocusHdl() const             { return maLBWindow.GetFocusHdl(); }
-    void            SetListItemSelectHdl( const Link& rLink )   { maLBWindow.SetListItemSelectHdl( rLink ); }
-    const Link&     GetListItemSelectHdl() const    { return maLBWindow.GetListItemSelectHdl(); }
-    void            SetSelectionChangedHdl( const Link& rLnk )  { maLBWindow.GetEntryList()->SetSelectionChangedHdl( rLnk ); }
-    void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow.GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
-    bool            IsSelectionChanged() const                  { return maLBWindow.IsSelectionChanged(); }
-    sal_uInt16      GetSelectModifier() const                   { return maLBWindow.GetSelectModifier(); }
+    void            SetFocusHdl( const Link& rLink )    { maLBWindow->SetFocusHdl( rLink ); }
+    const Link&     GetFocusHdl() const             { return maLBWindow->GetFocusHdl(); }
+    void            SetListItemSelectHdl( const Link& rLink )   { maLBWindow->SetListItemSelectHdl( rLink ); }
+    const Link&     GetListItemSelectHdl() const    { return maLBWindow->GetListItemSelectHdl(); }
+    void            SetSelectionChangedHdl( const Link& rLnk )  { maLBWindow->GetEntryList()->SetSelectionChangedHdl( rLnk ); }
+    void            SetCallSelectionChangedHdl( bool bCall )    { maLBWindow->GetEntryList()->SetCallSelectionChangedHdl( bCall ); }
+    bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
+    sal_uInt16      GetSelectModifier() const                   { return maLBWindow->GetSelectModifier(); }
 
     void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep );
     OUString   GetMRUEntries( sal_Unicode cSep ) const;
-    void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow.GetEntryList()->SetMaxMRUCount( n ); }
-    sal_Int32       GetMaxMRUCount() const                      { return maLBWindow.GetEntryList()->GetMaxMRUCount(); }
+    void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow->GetEntryList()->SetMaxMRUCount( n ); }
+    sal_Int32       GetMaxMRUCount() const                      { return maLBWindow->GetEntryList()->GetMaxMRUCount(); }
     sal_uInt16      GetDisplayLineCount() const
-    { return maLBWindow.GetDisplayLineCount(); }
+    { return maLBWindow->GetDisplayLineCount(); }
 
     bool GetEdgeBlending() const { return mbEdgeBlending; }
     void SetEdgeBlending(bool bNew);
 
     /// pb: #106948# explicit mirroring for calc
-    inline void     EnableMirroring()   { maLBWindow.EnableMirroring(); }
+    inline void     EnableMirroring()   { maLBWindow->EnableMirroring(); }
     inline void     SetDropTraget(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_xDNDListenerContainer){ mxDNDListenerContainer= i_xDNDListenerContainer; }
 };
 

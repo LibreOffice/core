@@ -118,6 +118,8 @@ namespace vcl {
 
 namespace svt { class PopupWindowControllerImpl; }
 
+template<class T> class VclReference;
+
 
 // - WindowTypes -
 
@@ -482,6 +484,7 @@ public:
 
 private:
     template<typename T> friend class ::rtl::Reference;
+    template<typename T> friend class ::VclReference;
 
     inline void acquire() const
     {
@@ -496,8 +499,10 @@ private:
 
 protected:
 
-    /** This is intended to be used to clear any locally held references to other Window-subclass objects */
-    virtual void dispose() {}
+    /** The only job of this method is to clear the tangled web of circular references between Window subclasses.*/
+    void                                dispose();
+    /** This is the method that the subclasses need to implement */
+    virtual void                        internalDispose() {}
 
     SAL_DLLPRIVATE void                 ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData );
 

@@ -83,6 +83,8 @@ public:
     const Link&     GetSelectHdl() const                { return maSelectHdl; }
 };
 
+typedef VclReference<MenuButton> MenuButtonPtr;
+
 #endif // INCLUDED_VCL_MENUBTN_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

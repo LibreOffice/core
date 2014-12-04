@@ -92,10 +92,10 @@ SAL_IMPLEMENT_MAIN()
 
 class MyWin : public WorkWindow
 {
-    PushButton      m_aListButton;
-    ListBox         m_aSvpBitmaps;
-    ImageControl    m_aImage;
-    PushButton      m_aQuitButton;
+    PushButtonPtr   m_aListButton;
+    ListBoxPtr      m_aSvpBitmaps;
+    ImageControlPtr m_aImage;
+    PushButtonPtr   m_aQuitButton;
 public:
                  MyWin( vcl::Window* pParent, WinBits nWinStyle );
 
@@ -108,6 +108,7 @@ public:
     virtual void Resize() SAL_OVERRIDE;
 
     virtual bool Close() SAL_OVERRIDE;
+    virtual void internalDispose() SAL_OVERRIDE;
 
     void parseList( const OString& rList );
     OString processCommand( const OString& rCommand );
@@ -128,28 +129,28 @@ void Main()
 
 MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
-    m_aListButton( this, 0 ),
-    m_aSvpBitmaps( this, WB_BORDER ),
-    m_aImage( this, WB_BORDER ),
-    m_aQuitButton( this, 0 )
+    m_aListButton(new PushButton(this, 0)),
+    m_aSvpBitmaps(new ListBox(this, WB_BORDER)),
+    m_aImage(new ImageControl(this, WB_BORDER)),
+    m_aQuitButton(new PushButton(this, 0))
 {
-    m_aListButton.SetPosSizePixel( Point( 10, 10 ), Size( 120, 25 ) );
-    m_aListButton.SetText( OUString( "List Elements" ) );
-    m_aListButton.SetClickHdl( LINK( this, MyWin, ListHdl ) );
-    m_aListButton.Show();
+    m_aListButton->SetPosSizePixel( Point( 10, 10 ), Size( 120, 25 ) );
+    m_aListButton->SetText( OUString( "List Elements" ) );
+    m_aListButton->SetClickHdl( LINK( this, MyWin, ListHdl ) );
+    m_aListButton->Show();
 
-    m_aSvpBitmaps.SetPosSizePixel( Point( 10, 40 ), Size( 150, 150 ) );
-    m_aSvpBitmaps.SetSelectHdl( LINK( this, MyWin, SelectHdl ) );
-    m_aSvpBitmaps.Show();
+    m_aSvpBitmaps->SetPosSizePixel( Point( 10, 40 ), Size( 150, 150 ) );
+    m_aSvpBitmaps->SetSelectHdl( LINK( this, MyWin, SelectHdl ) );
+    m_aSvpBitmaps->Show();
 
-    m_aImage.SetPosSizePixel( Point( 170, 10 ), Size( 400, 400 ) );
-    m_aImage.SetScaleMode( com::sun::star::awt::ImageScaleMode::NONE );
-    m_aImage.Show();
+    m_aImage->SetPosSizePixel( Point( 170, 10 ), Size( 400, 400 ) );
+    m_aImage->SetScaleMode( com::sun::star::awt::ImageScaleMode::NONE );
+    m_aImage->Show();
 
-    m_aQuitButton.SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );
-    m_aQuitButton.SetText( OUString( "Quit SVP server" ) );
-    m_aQuitButton.SetClickHdl( LINK( this, MyWin, QuitHdl ) );
-    m_aQuitButton.Show();
+    m_aQuitButton->SetPosSizePixel( Point( 10, 300 ), Size( 120,25 ) );
+    m_aQuitButton->SetText( OUString( "Quit SVP server" ) );
+    m_aQuitButton->SetClickHdl( LINK( this, MyWin, QuitHdl ) );
+    m_aQuitButton->Show();
 }
 
 bool MyWin::Close()
@@ -160,11 +161,20 @@ bool MyWin::Close()
     return bRet;
 }
 
+void MyWin::internalDispose()
+{
+    m_aListButton.disposeAndClear();
+    m_aSvpBitmaps.disposeAndClear();
+    m_aImage.disposeAndClear();
+    m_aQuitButton.disposeAndClear();
+    WorkWindow::internalDispose();
+}
+
 void MyWin::parseList( const OString& rList )
 {
     sal_Int32 nTokenPos = 0;
     OUString aElementType;
-    m_aSvpBitmaps.Clear();
+    m_aSvpBitmaps->Clear();
     while( nTokenPos >= 0 )
     {
         OString aLine = rList.getToken( 0, '\n', nTokenPos );
@@ -179,7 +189,7 @@ void MyWin::parseList( const OString& rList )
             aNewElement.append( aElementType );
             aNewElement.appendAscii( ": " );
             aNewElement.append( OStringToOUString( aLine, RTL_TEXTENCODING_ASCII_US ) );
-            m_aSvpBitmaps.InsertEntry( aNewElement.makeStringAndClear() );
+            m_aSvpBitmaps->InsertEntry( aNewElement.makeStringAndClear() );
         }
     }
 }
@@ -235,7 +245,7 @@ IMPL_LINK( MyWin, QuitHdl, Button*, )
 
 IMPL_LINK( MyWin, SelectHdl, ListBox*, )
 {
-    OUString aEntry = m_aSvpBitmaps.GetSelectEntry();
+    OUString aEntry = m_aSvpBitmaps->GetSelectEntry();
     sal_Int32 nPos = aEntry.indexOf( ": " );
     if( nPos != -1 )
     {
@@ -259,8 +269,8 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
         Size aFixedSize( aBitmap.GetSizePixel() );
         aFixedSize.Width() += 10;
         aFixedSize.Height() += 10;
-        m_aImage.SetSizePixel( aFixedSize );
-        m_aImage.SetImage( Image( BitmapEx( aBitmap ) ) );
+        m_aImage->SetSizePixel( aFixedSize );
+        m_aImage->SetImage( Image( BitmapEx( aBitmap ) ) );
     }
     return 0;
 }

@@ -67,17 +67,17 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( vcl::Window* i_pParent )
     , maPageVDev( *this )
     , maToolTipString(VclResId( SV_PRINT_PRINTPREVIEW_TXT).toString())
     , mbGreyscale( false )
-    , maHorzDim( this, WB_HORZ | WB_CENTER  )
-    , maVertDim( this, WB_VERT | WB_VCENTER )
+    , maHorzDim(new FixedLine(this, WB_HORZ | WB_CENTER))
+    , maVertDim(new FixedLine(this, WB_VERT | WB_VCENTER))
 {
     SetPaintTransparent( true );
     SetBackground();
     maPageVDev.SetBackground( Color( COL_WHITE ) );
-    maHorzDim.Show();
-    maVertDim.Show();
+    maHorzDim->Show();
+    maVertDim->Show();
 
-    maHorzDim.SetText( OUString( "2.0in" ) );
-    maVertDim.SetText( OUString( "2.0in" ) );
+    maHorzDim->SetText( OUString( "2.0in" ) );
+    maVertDim->SetText( OUString( "2.0in" ) );
 }
 
 PrintDialog::PrintPreviewWindow::~PrintPreviewWindow()
@@ -99,7 +99,7 @@ void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDC
 void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize( GetSizePixel() );
-    long nTextHeight = maHorzDim.GetTextHeight();
+    long nTextHeight = maHorzDim->GetTextHeight();
     // leave small space for decoration
     aNewSize.Width() -= nTextHeight + 2;
     aNewSize.Height() -= nTextHeight + 2;
@@ -145,16 +145,16 @@ void PrintDialog::PrintPreviewWindow::Resize()
     // position dimension lines
     Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
                 nTextHeight + (aNewSize.Height() - maPreviewSize.Height())/2 );
-    maHorzDim.SetPosSizePixel( Point( aRef.X(), aRef.Y() - nTextHeight ),
+    maHorzDim->SetPosSizePixel( Point( aRef.X(), aRef.Y() - nTextHeight ),
                                Size( maPreviewSize.Width(), nTextHeight ) );
-    maVertDim.SetPosSizePixel( Point( aRef.X() - nTextHeight, aRef.Y() ),
+    maVertDim->SetPosSizePixel( Point( aRef.X() - nTextHeight, aRef.Y() ),
                                Size( nTextHeight, maPreviewSize.Height() ) );
 
 }
 
 void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 {
-    long nTextHeight = maHorzDim.GetTextHeight();
+    long nTextHeight = maHorzDim->GetTextHeight();
     Size aSize( GetSizePixel() );
     Point aOffset( (aSize.Width()  - maPreviewSize.Width()  + nTextHeight) / 2 ,
                    (aSize.Height() - maPreviewSize.Height() + nTextHeight) / 2 );
@@ -241,17 +241,24 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
         aBuf.append( i_rPaperName );
         aBuf.append( ')' );
     }
-    maHorzDim.SetText( aBuf.makeStringAndClear() );
+    maHorzDim->SetText( aBuf.makeStringAndClear() );
 
     aNumText = rLocWrap.getNum( aLogicPaperSize.Height(), nDigits );
     aBuf.append( aNumText )
         .append( sal_Unicode( ' ' ) );
     aBuf.appendAscii( eUnit == MAP_MM ? "mm" : "in" );
-    maVertDim.SetText( aBuf.makeStringAndClear() );
+    maVertDim->SetText( aBuf.makeStringAndClear() );
 
     Resize();
     preparePreviewBitmap();
     Invalidate();
+}
+
+void PrintDialog::PrintPreviewWindow::internalDispose()
+{
+    maHorzDim.disposeAndClear();
+    maVertDim.disposeAndClear();
+    Window::internalDispose();
 }
 
 void PrintDialog::PrintPreviewWindow::preparePreviewBitmap()

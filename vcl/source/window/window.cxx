@@ -131,13 +131,26 @@ namespace
 }
 #endif
 
+/** The only job of this method is to clear the tangled web of circular references between Window subclasses.*/
+void Window::dispose()
+{
+   /* recursive calls to mbDisposed are OK because of circular references */
+    if ( mpWindowImpl->mbDisposed )
+        return;
+    mpWindowImpl->mbDisposed  = true;
+    // call the method that the subclasses will override
+    internalDispose();
+}
+
 Window::~Window()
 {
+    assert( mnRefCnt == 0 );
+    assert( !mpWindowImpl->mbInDtor );
+    assert( mpWindowImpl->mbDisposed );
+
+    mpWindowImpl->mbInDtor = true;
+
     vcl::LazyDeletor<vcl::Window>::Undelete( this );
-
-    DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
-
-    dispose();
 
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
@@ -151,8 +164,6 @@ Window::~Window()
         if( xCanvasComponent.is() )
             xCanvasComponent->dispose();
     }
-
-    mpWindowImpl->mbInDtor = true;
 
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
@@ -567,7 +578,8 @@ Window::~Window()
     }
 
     // should be the last statements
-    delete mpWindowImpl; mpWindowImpl = NULL;
+    delete mpWindowImpl;
+    mpWindowImpl = NULL;
 }
 
 } /* namespace vcl */
@@ -707,6 +719,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbPaintDisabled                     = false;                     // true: Paint should not be executed
     mbAllResize                         = false;                     // true: Also sent ResizeEvents with 0,0
     mbInDtor                            = false;                     // true: We're still in Window-Dtor
+    mbDisposed                          = false;                     // true: dispose() has been called
     mbExtTextInput                      = false;                     // true: ExtTextInput-Mode is active
     mbInFocusHdl                        = false;                     // true: Within GetFocus-Handler
     mbCreatedWithToolkit                = false;

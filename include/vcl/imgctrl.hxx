@@ -51,6 +51,8 @@ protected:
     void    ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const;
 };
 
+typedef VclReference<ImageControl> ImageControlPtr;
+
 #endif // INCLUDED_VCL_IMGCTRL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

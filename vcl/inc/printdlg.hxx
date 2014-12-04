@@ -56,8 +56,8 @@ namespace vcl
             OUString       maReplacementString;
             OUString       maToolTipString;
             bool                mbGreyscale;
-            FixedLine           maHorzDim;
-            FixedLine           maVertDim;
+            FixedLinePtr        maHorzDim;
+            FixedLinePtr        maVertDim;
 
             void preparePreviewBitmap();
 
@@ -76,6 +76,8 @@ namespace vcl
                              sal_Int32 i_nDPIX, sal_Int32 i_nDPIY,
                              bool i_bGreyscale
                             );
+        private:
+            virtual void internalDispose() SAL_OVERRIDE;
         };
 
         class ShowNupOrderWindow : public vcl::Window
