@@ -148,7 +148,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
 
      setErrorRecorder( );
 
-    pMngr = pSecEnv->createKeysManager() ; //i39448
+    pMngr = pSecEnv->createKeysManager();
     if( !pMngr ) {
         throw RuntimeException() ;
     }
@@ -157,7 +157,7 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
     {
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr );
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -167,13 +167,13 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) {
         aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr );
         clearErrorRecorder();
         return aTemplate;
     }
     aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED);
     xmlSecEncCtxDestroy( pEncCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+    pSecEnv->destroyKeysManager( pMngr );
 
     //get the new EncryptedData element
     if (isParentRef)
@@ -254,7 +254,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
 
      setErrorRecorder( );
 
-    pMngr = pSecEnv->createKeysManager() ; //i39448
+    pMngr = pSecEnv->createKeysManager();
     if( !pMngr ) {
         throw RuntimeException() ;
     }
@@ -263,7 +263,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
     {
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr );
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -273,7 +273,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
     if( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ) {
         aTemplate->setStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN);
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr );
 
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
@@ -306,7 +306,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
 
     //Destroy the encryption context
     xmlSecEncCtxDestroy( pEncCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+    pSecEnv->destroyKeysManager( pMngr );
 
     //get the decrypted element
     XMLElementWrapper_XmlSecImpl * ret = new XMLElementWrapper_XmlSecImpl(isParentRef?

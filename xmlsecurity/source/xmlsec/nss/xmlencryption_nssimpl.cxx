@@ -144,7 +144,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
 
      setErrorRecorder( );
 
-    pMngr = pSecEnv->createKeysManager() ; //i39448
+    pMngr = pSecEnv->createKeysManager();
     if( !pMngr ) {
         throw RuntimeException() ;
     }
@@ -153,7 +153,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
     if( pEncCtx == NULL )
     {
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr );
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -165,7 +165,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 )
     {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr );
 
         //throw XMLEncryptionException() ;
         clearErrorRecorder();
@@ -173,7 +173,7 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     }
 
     xmlSecEncCtxDestroy( pEncCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+    pSecEnv->destroyKeysManager( pMngr );
 
     //get the new EncryptedData element
     if (isParentRef)
@@ -265,7 +265,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
         if( pSecEnv == NULL )
             throw RuntimeException() ;
 
-        pMngr = pSecEnv->createKeysManager() ; //i39448
+        pMngr = pSecEnv->createKeysManager();
         if( !pMngr ) {
             throw RuntimeException() ;
         }
@@ -274,7 +274,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
         pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
         if( pEncCtx == NULL )
         {
-            pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+            pSecEnv->destroyKeysManager( pMngr );
             //throw XMLEncryptionException() ;
             clearErrorRecorder();
             return aTemplate;
@@ -287,7 +287,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
 
             //Destroy the encryption context
             xmlSecEncCtxDestroy( pEncCtx ) ;
-            pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+            pSecEnv->destroyKeysManager( pMngr );
 
             //get the decrypted element
             XMLElementWrapper_XmlSecImpl * ret = new XMLElementWrapper_XmlSecImpl(isParentRef?
@@ -301,7 +301,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
         {
             //The decryption fails, continue with the next security environment
             xmlSecEncCtxDestroy( pEncCtx ) ;
-            pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+            pSecEnv->destroyKeysManager( pMngr );
         }
     }
 

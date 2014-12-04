@@ -35,9 +35,7 @@ using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
 XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl()
-    ://i39448 : m_pKeysMngr( NULL ) ,
-    m_nDefaultEnvIndex(-1)
-    //m_xSecurityEnvironment( NULL )
+    : m_nDefaultEnvIndex(-1)
 {
     //Init xmlsec library
     if( xmlSecInit() < 0 ) {
@@ -58,15 +56,13 @@ XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl()
     }
 }
 
-XMLSecurityContext_NssImpl :: ~XMLSecurityContext_NssImpl() {
-    //i39448
-
+XMLSecurityContext_NssImpl :: ~XMLSecurityContext_NssImpl()
+{
     xmlDisableStreamInputCallbacks() ;
     xmlSecCryptoShutdown() ;
     xmlSecShutdown() ;
 }
 
-//i39448 : new methods
 sal_Int32 SAL_CALL XMLSecurityContext_NssImpl::addSecurityEnvironment(
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment)
     throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException, std::exception)
@@ -125,9 +121,6 @@ void SAL_CALL XMLSecurityContext_NssImpl::setDefaultSecurityEnvironmentIndex( sa
 {
     m_nDefaultEnvIndex = nDefaultEnvIndex;
 }
-
-//i39448 : old methods deleted
-
 
 /* XServiceInfo */
 OUString SAL_CALL XMLSecurityContext_NssImpl :: getImplementationName() throw( RuntimeException, std::exception ) {

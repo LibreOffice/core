@@ -63,7 +63,6 @@ XMLSecurityContext_MSCryptImpl :: ~XMLSecurityContext_MSCryptImpl() {
     xmlSecShutdown() ;
 }
 
-//i39448 : new methods
 sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::addSecurityEnvironment(
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& aSecurityEnvironment)
     throw (::com::sun::star::security::SecurityInfrastructureException, ::com::sun::star::uno::RuntimeException)
