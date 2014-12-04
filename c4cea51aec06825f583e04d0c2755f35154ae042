@@ -33,6 +33,24 @@
       "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_08bbebc5",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-12-04T13:32:37Z",
+      "side": 1,
+      "message": "I think the CriticalSection is here not necessary. This part must be calling once.\ni.e.\nif(first)\n{\n    first \u003d FALSE;\n    InitWrapper();\n}",
+      "parentUuid": "fa32b979_e88ec726",
+      "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
