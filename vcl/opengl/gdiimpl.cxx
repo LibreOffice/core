@@ -225,6 +225,11 @@ void OpenGLSalGraphicsImpl::ImplInitClipRegion()
     CHECK_GL_ERROR();
 }
 
+const vcl::Region& OpenGLSalGraphicsImpl::getClipRegion() const
+{
+    return maClipRegion;
+}
+
 bool OpenGLSalGraphicsImpl::setClipRegion( const vcl::Region& rClip )
 {
     SAL_INFO( "vcl.opengl", "::setClipRegion " << rClip );

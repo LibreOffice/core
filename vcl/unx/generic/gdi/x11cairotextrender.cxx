@@ -77,6 +77,12 @@ cairo_surface_t* X11CairoTextRender::getCairoSurface()
     return surface;
 }
 
+void X11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )
+{
+    nDX = 0;
+    nDY = 0;
+}
+
 void X11CairoTextRender::clipRegion(cairo_t* cr)
 {
     Region pClipRegion = mrParent.mpClipRegion;

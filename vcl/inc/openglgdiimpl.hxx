@@ -129,7 +129,9 @@ public:
 
     virtual void freeResources() SAL_OVERRIDE;
 
+    virtual const vcl::Region& getClipRegion() const;
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
+
     //
     // get the depth of the device
     virtual sal_uInt16 GetBitCount() const SAL_OVERRIDE;
