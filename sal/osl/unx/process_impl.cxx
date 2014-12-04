@@ -205,7 +205,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
     assert(argc > 0);
     pthread_mutex_lock (&(g_command_args.m_mutex));
-    assert (g_command_args.m_nCount == 0);
+    SAL_WARN_IF(g_command_args.m_nCount != 0, "sal.osl", "args already set");
     if (g_command_args.m_nCount == 0)
     {
         rtl_uString** ppArgs = (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));

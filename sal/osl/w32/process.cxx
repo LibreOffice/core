@@ -374,6 +374,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
     assert(argc > 0);
     osl_acquireMutex (*osl_getGlobalMutex());
+    SAL_WARN_IF(g_command_args.m_nCount != 0, "sal.osl", "args already set");
     if (g_command_args.m_nCount == 0)
     {
         rtl_uString** ppArgs = osl_createCommandArgs_Impl (argc, argv);

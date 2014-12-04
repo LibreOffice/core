@@ -693,11 +693,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
         // again (as an assert will fire), this will be the case e.g.
         // for unit tests (and possibly if UNO is being used in addition
         // to LOK in an external program).
-        if (!osl_areCommandArgsSet())
-        {
-            SAL_INFO("lok", "commandArgs not previously set");
-            osl_setCommandArgs(2, pArgs);
-        }
+        osl_setCommandArgs(2, pArgs);
         SAL_INFO("lok", "attempting to initalize UNO");
         initialize_uno(aAppURL);
         SAL_INFO("lok", "uno successfully initalized");
