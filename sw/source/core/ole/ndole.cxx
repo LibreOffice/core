@@ -57,6 +57,8 @@
 #include <vcl/graphicfilter.hxx>
 #include <comcore.hrc>
 
+#include <deque>
+
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
