@@ -38,7 +38,7 @@ void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rH
 
     if (mTableDataStack.size() > 0)
     {
-        TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
+        TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t pTableData = mTableDataStack.top();
 
         pTableData->addCell(rHandle, pProps);
     }
@@ -211,7 +211,7 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
 
     if (mTableDataStack.size() > 0)
     {
-        TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
+        TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t pTableData = mTableDataStack.top();
 
         pTableData->endCell(rHandle);
     }
@@ -225,7 +225,7 @@ void TableManager::ensureOpenCell(TablePropertyMapPtr pProps)
 
     if (mTableDataStack.size() > 0)
     {
-        TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
+        TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t pTableData = mTableDataStack.top();
 
         if (pTableData.get() != nullptr)
         {
@@ -264,7 +264,7 @@ void TableManager::endParagraphGroup()
 
     if (mnTableDepth > 0)
     {
-        TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
+        TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t pTableData = mTableDataStack.top();
 
         if (isRowEnd())
         {
@@ -304,7 +304,7 @@ void TableManager::resolveCurrentTable()
     {
         try
         {
-            TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableData = mTableDataStack.top();
+            TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t pTableData = mTableDataStack.top();
 
             unsigned int nRows = pTableData->getRowCount();
 
@@ -358,7 +358,7 @@ void TableManager::endLevel()
 #ifdef DEBUG_WRITERFILTER
     if (mpTableLogger != nullptr)
     {
-        TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableData;
+        TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t pTableData;
 
         if (mTableDataStack.size() > 0)
             pTableData = mTableDataStack.top();
@@ -379,7 +379,7 @@ void TableManager::startLevel()
 #ifdef DEBUG_WRITERFILTER
     if (mpTableLogger != nullptr)
     {
-        TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableData;
+        TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t pTableData;
 
         if (mTableDataStack.size() > 0)
             pTableData = mTableDataStack.top();
@@ -394,8 +394,8 @@ void TableManager::startLevel()
     }
 #endif
 
-    TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t
-    pTableData(new TableData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>(mTableDataStack.size()));
+    TableData< css::uno::Reference<css::text::XTextRange> >::Pointer_t
+    pTableData(new TableData<css::uno::Reference<css::text::XTextRange> >(mTableDataStack.size()));
 
     // If we have an unfinished row stored here, then push it to the new TableData
     if (mpUnfinishedRow)

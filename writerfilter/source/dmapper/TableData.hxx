@@ -264,19 +264,19 @@ public:
     }
 };
 
-template <typename T, typename PropertiesPointer>
+template <typename T>
 /**
    Class that holds the data of a table.
  */
 class TableData
 {
-    typedef typename RowData<T, PropertiesPointer>::Pointer_t RowPointer_t;
+    typedef typename RowData<T, TablePropertyMapPtr>::Pointer_t RowPointer_t;
     typedef ::std::vector<RowPointer_t> Rows;
 
     /**
        the table properties
      */
-    PropertiesPointer mpTableProps;
+    TablePropertyMapPtr mpTableProps;
 
     /**
        the data of the rows of the table
@@ -296,10 +296,10 @@ class TableData
     /**
        initialize mpRow
      */
-    void newRow() { mpRow = RowPointer_t(new RowData<T, PropertiesPointer>()); }
+    void newRow() { mpRow = RowPointer_t(new RowData<T, TablePropertyMapPtr>()); }
 
 public:
-    typedef boost::shared_ptr<TableData <T, PropertiesPointer> > Pointer_t;
+    typedef boost::shared_ptr<TableData <T> > Pointer_t;
 
     TableData(unsigned int nDepth) : mnDepth(nDepth) { newRow(); }
     ~TableData() {}
@@ -312,7 +312,7 @@ public:
 
        @param pProperties    properties of the row to be ended
      */
-    void endRow(PropertiesPointer pProperties)
+    void endRow(TablePropertyMapPtr pProperties)
     {
         mpRow->insertProperties(pProperties);
         mRows.push_back(mpRow);
@@ -326,7 +326,7 @@ public:
        @param end     end handle of the cell
        @param pProps  properties of the cell
      */
-    void addCell(const T & start, PropertiesPointer pProps)
+    void addCell(const T & start, TablePropertyMapPtr pProps)
     {
         mpRow->addCell(start, pProps);
     }
@@ -354,7 +354,7 @@ public:
 
         @param pProps   the properties to add
      */
-    void insertCellProperties(PropertiesPointer pProps)
+    void insertCellProperties(TablePropertyMapPtr pProps)
     {
         mpRow->insertCellProperties(pProps);
     }
@@ -365,23 +365,15 @@ public:
        @param i       index of the cell
        @param pProps  properties to add
      */
-    void insertCellProperties(unsigned int i, PropertiesPointer pProps)
+    void insertCellProperties(unsigned int i, TablePropertyMapPtr pProps)
     {
         mpRow->insertCellProperties(i, pProps);
-    }
-
-    void insertTableProperties( PropertiesPointer pProps )
-    {
-        if ( mpTableProps.get( ) )
-            mpTableProps->insert( pProps );
-        else
-            mpTableProps = pProps;
     }
 
     /**
       Return the table properties.
      */
-    PropertiesPointer getTableProperties( )
+    TablePropertyMapPtr getTableProperties( )
     {
         return mpTableProps;
     }
