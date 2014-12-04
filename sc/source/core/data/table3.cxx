@@ -1542,6 +1542,8 @@ void ScTable::Sort(
 
     if (rSortParam.bByRow)
     {
+        while (aSortParam.nCol2 > aSortParam.nCol1 && aCol[aSortParam.nCol2].IsEmptyData())
+            --aSortParam.nCol2;
         SCROW nLastRow = 0;
         for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; nCol++)
             nLastRow = std::max(nLastRow, aCol[nCol].GetLastDataPos());
