@@ -720,6 +720,8 @@ sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceT
 void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
     throw (SAXException, IOException, RuntimeException, std::exception)
 {
+    xmlInitParser();
+
     // Only one text at one time
     MutexGuard guard( maMutex );
 
@@ -741,11 +743,11 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
     try
     {
         // start the document
-        if( entity.mxDocumentHandler.is() )
+        if( rEntity.mxDocumentHandler.is() )
         {
             Reference< XLocator > xLoc( mxDocumentLocator.get() );
-            entity.mxDocumentHandler->setDocumentLocator( xLoc );
-            entity.mxDocumentHandler->startDocument();
+            rEntity.mxDocumentHandler->setDocumentLocator( xLoc );
+            rEntity.mxDocumentHandler->startDocument();
         }
 
         rEntity.mbEnableThreads = (rEntity.maStructSource.aInputStream->available() > 10000);
@@ -786,33 +788,33 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
         }
 
         // finish document
-        if( entity.mxDocumentHandler.is() )
+        if( rEntity.mxDocumentHandler.is() )
         {
-            entity.mxDocumentHandler->endDocument();
+            rEntity.mxDocumentHandler->endDocument();
         }
     }
     catch (const SAXException&)
     {
-        popEntity();
         // TODO free mpParser.myDoc ?
-        xmlFreeParserCtxt( entity.mpParser );
+        xmlFreeParserCtxt( rEntity.mpParser );
+        popEntity();
         throw;
     }
     catch (const IOException&)
     {
+        xmlFreeParserCtxt( rEntity.mpParser );
         popEntity();
-        xmlFreeParserCtxt( entity.mpParser );
         throw;
     }
     catch (const RuntimeException&)
     {
+        xmlFreeParserCtxt( rEntity.mpParser );
         popEntity();
-        xmlFreeParserCtxt( entity.mpParser );
         throw;
     }
 
+    xmlFreeParserCtxt( rEntity.mpParser );
     popEntity();
-    xmlFreeParserCtxt( entity.mpParser );
 }
 
 void FastSaxParserImpl::setFastDocumentHandler( const Reference< XFastDocumentHandler >& Handler ) throw (RuntimeException)
