@@ -276,14 +276,13 @@ OString Databases::getImagesZipFileURL()
             {
                 if ( aSymbolsStyleName.equalsAscii("auto") )
                 {
-                    OUString const & env = Application::GetDesktopEnvironment();
-                    if ( env.equalsIgnoreAsciiCase("tde") ||
-                         env.equalsIgnoreAsciiCase("kde") )
-                        aSymbolsStyleName = "crystal";
-                    else if ( env.equalsIgnoreAsciiCase("kde4") )
-                        aSymbolsStyleName = "oxygen";
-                    else
-                        aSymbolsStyleName = "tango";
+                    // with the layered images*.zip, tango is the most
+                    // complete theme, so show that one
+                    // FIXME instead of using a general vnd.sun.star.zip://
+                    // for imgrepos, we should have some vnd.sun.star.image://
+                    // so that we don't have to re-open the stream for every
+                    // image in the help
+                    aSymbolsStyleName = "tango";
                 }
                 OUString aZipName = "images_" + aSymbolsStyleName + ".zip";
 
