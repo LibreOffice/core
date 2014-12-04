@@ -537,11 +537,8 @@ void SwShellCrsr::FillRects()
 
 void SwShellCrsr::Show()
 {
-    SwShellCrsr * pTmp = this;
-    do {
-        if (pTmp)
-            pTmp->SwSelPaintRects::Show();
-    } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
+    for(SwPaM& rTmp : GetRingContainer())
+        dynamic_cast<SwShellCrsr*>(&rTmp)->SwSelPaintRects::Show();
 }
 
 // This rectangle gets painted anew, therefore the SSelection in this
