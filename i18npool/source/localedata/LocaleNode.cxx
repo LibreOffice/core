@@ -333,7 +333,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     {
         aLanguage = languageNode->getChildAt(0)->getValue();
         if (!(aLanguage.getLength() == 2 || aLanguage.getLength() == 3))
-            incErrorStr( "Error: langID '%s' not 2-3 characters", aLanguage);
+            incErrorStr( "Error: langID '%s' not 2-3 characters\n", aLanguage);
         of.writeParameter("langID", aLanguage);
         of.writeParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
     }
@@ -343,7 +343,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     {
         OUString aCountry( countryNode->getChildAt(0)->getValue());
         if (!(aCountry.isEmpty() || aCountry.getLength() == 2))
-            incErrorStr( "Error: countryID '%s' not empty or more than 2 characters", aCountry);
+            incErrorStr( "Error: countryID '%s' not empty or more than 2 characters\n", aCountry);
         of.writeParameter("countryID", aCountry);
         of.writeParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
     }
@@ -354,9 +354,9 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
         // If given Variant must be at least ll-Ssss and language must be 'qlt'
         OUString aVariant( variantNode->getValue());
         if (!(aVariant.isEmpty() || (aVariant.getLength() >= 7 && aVariant.indexOf('-') >= 2)))
-            incErrorStr( "Error: invalid Variant '%s'", aVariant);
+            incErrorStr( "Error: invalid Variant '%s'\n", aVariant);
         if (!(aVariant.isEmpty() || aLanguage == "qlt"))
-            incErrorStrStr( "Error: Variant '%s' given but Language '%s' is not 'qlt'", aVariant, aLanguage);
+            incErrorStrStr( "Error: Variant '%s' given but Language '%s' is not 'qlt'\n", aVariant, aLanguage);
         of.writeParameter("Variant", aVariant);
     }
     else
@@ -614,10 +614,10 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     }
     str = getAttr().getValueByName("replaceTo");
     if (!strFrom.isEmpty() && str.isEmpty())
-        incErrorStr("replaceFrom=\"%s\" replaceTo=\"\" is empty replacement.", strFrom);
+        incErrorStr("replaceFrom=\"%s\" replaceTo=\"\" is empty replacement.\n", strFrom);
     // Locale data generator inserts FFFF for LangID, we need to adapt that.
     if (str.endsWithIgnoreAsciiCase( "-FFFF]"))
-        incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.", str);
+        incErrorStr("replaceTo=\"%s\" needs FFFF to be adapted to the real LangID value.\n", str);
     of.writeParameter("replaceTo", str, mnSection);
     // Remember the replaceTo value for "[CURRENCY]" to check format codes.
     if ( strFrom == "[CURRENCY]" )
@@ -674,7 +674,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         }
         if ( currNode->getName() != "FormatElement" )
         {
-            incErrorStr( "Error: Undefined element '%s' in LC_FORMAT", currNode->getName());
+            incErrorStr( "Error: Undefined element '%s' in LC_FORMAT\n", currNode->getName());
             --formatCount;
             continue;   // for
         }
@@ -688,7 +688,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
         str = currNodeAttr.getValueByName("msgid");
         if (!aMsgIdSet.insert( str).second)
-            incErrorStr( "Error: Duplicated msgid=\"%s\" in FormatElement.", str);
+            incErrorStr( "Error: Duplicated msgid=\"%s\" in FormatElement.\n", str);
         of.writeParameter("FormatKey", str, formatCount);
 
         str = currNodeAttr.getValueByName("default");
@@ -704,7 +704,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         aFormatIndex = currNodeAttr.getValueByName("formatindex");
         sal_Int16 formatindex = (sal_Int16)aFormatIndex.toInt32();
         if (!aFormatIndexSet.insert( formatindex).second)
-            incErrorInt( "Error: Duplicated formatindex=\"%d\" in FormatElement.", formatindex);
+            incErrorInt( "Error: Duplicated formatindex=\"%d\" in FormatElement.\n", formatindex);
         of.writeIntParameter("Formatindex", formatCount, formatindex);
 
         // Ensure only one default per usage and type.
@@ -802,7 +802,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         OUString aCode( n->getValue());
                         if (aCode.indexOf( "[CURRENCY]" ) >= 0)
-                            incErrorInt( "Error: [CURRENCY] replaceTo not found for formatindex=\"%d\".", formatindex);
+                            incErrorInt( "Error: [CURRENCY] replaceTo not found for formatindex=\"%d\".\n", formatindex);
                     }
                     break;
             }
@@ -821,7 +821,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         nDec = aCode.indexOf( pSep->getValue());
                         if (nDec < 0)
-                            incErrorInt( "Error: DecimalSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: DecimalSeparator not present in FormatCode formatindex=\"%d\".\n",
                                     formatindex);
                     }
                     pSep = pCtype->findNode( "ThousandSeparator");
@@ -831,11 +831,11 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         nGrp = aCode.indexOf( pSep->getValue());
                         if (nGrp < 0)
-                            incErrorInt( "Error: ThousandSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: ThousandSeparator not present in FormatCode formatindex=\"%d\".\n",
                                     formatindex);
                     }
                     if (nDec >= 0 && nGrp >= 0 && nDec <= nGrp)
-                        incErrorInt( "Error: Ordering of ThousandSeparator and DecimalSeparator not correct in formatindex=\"%d\".",
+                        incErrorInt( "Error: Ordering of ThousandSeparator and DecimalSeparator not correct in formatindex=\"%d\".\n",
                                 formatindex);
                 }
                 if (formatindex == cssi::NumberFormatIndex::TIME_MMSS00 ||
@@ -850,7 +850,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         nTime = aCode.indexOf( pSep->getValue());
                         if (nTime < 0)
-                            incErrorInt( "Error: TimeSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: TimeSeparator not present in FormatCode formatindex=\"%d\".\n",
                                     formatindex);
                     }
                     pSep = pCtype->findNode( "Time100SecSeparator");
@@ -860,17 +860,17 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                     {
                         n100s = aCode.indexOf( pSep->getValue());
                         if (n100s < 0)
-                            incErrorInt( "Error: Time100SecSeparator not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: Time100SecSeparator not present in FormatCode formatindex=\"%d\".\n",
                                     formatindex);
                         OUStringBuffer a100s( pSep->getValue());
                         a100s.appendAscii( "00");
                         n100s = aCode.indexOf( a100s.makeStringAndClear());
                         if (n100s < 0)
-                            incErrorInt( "Error: Time100SecSeparator+00 not present in FormatCode formatindex=\"%d\".",
+                            incErrorInt( "Error: Time100SecSeparator+00 not present in FormatCode formatindex=\"%d\".\n",
                                     formatindex);
                     }
                     if (n100s >= 0 && nTime >= 0 && n100s <= nTime)
-                        incErrorInt( "Error: Ordering of Time100SecSeparator and TimeSeparator not correct in formatindex=\"%d\".",
+                        incErrorInt( "Error: Ordering of Time100SecSeparator and TimeSeparator not correct in formatindex=\"%d\".\n",
                                 formatindex);
                 }
                 if (nSavErr != nError)
@@ -916,16 +916,16 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                         // generated internally
                         break;
                     default:
-                        incErrorInt( "Error: FormatElement formatindex=\"%d\" not present.", nNext);
+                        incErrorInt( "Error: FormatElement formatindex=\"%d\" not present.\n", nNext);
                 }
             }
             switch (nHere)
             {
                 case cssi::NumberFormatIndex::BOOLEAN :
-                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.", nNext);
+                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.\n", nNext);
                     break;
                 case cssi::NumberFormatIndex::TEXT :
-                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``@'' (TEXT).", nNext);
+                    incErrorInt( "Error: FormatElement formatindex=\"%d\" reserved for internal ``@'' (TEXT).\n", nNext);
                     break;
                 default:
                     ;   // nothing
@@ -1180,7 +1180,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         OUString aPattern( aPatternBuf.makeStringAndClear());
         if (((nDetected & 7) != 7) || aPattern.getLength() < 5)
         {
-            incErrorStr( "Error: failed to extract full date acceptance pattern: %s", aPattern);
+            incErrorStr( "Error: failed to extract full date acceptance pattern: %s\n", aPattern);
             fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
                     OSTR( OUString( cDateSep)), OSTR( sTheDateEditFormat),
                     (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
@@ -1199,7 +1199,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             OUString aPattern2( aPatternBuf2.makeStringAndClear());
             if (aPattern2.getLength() < 5)
             {
-                incErrorStr( "Error: failed to extract 2nd date acceptance pattern: %s", aPattern2);
+                incErrorStr( "Error: failed to extract 2nd date acceptance pattern: %s\n", aPattern2);
                 fprintf( stderr, "       with DateSeparator '%s' from FormatCode '%s' (formatindex=\"%d\")\n",
                         OSTR( OUString( cDateSep2)), OSTR( sTheDateEditFormat),
                         (int)cssi::NumberFormatIndex::DATE_SYS_DDMMYYYY);
@@ -1244,7 +1244,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
             {
                 if (aIt != aComp && *aIt == *aComp)
                 {
-                    incErrorStr( "Error: Duplicated DateAcceptancePattern: %s", *aComp);
+                    incErrorStr( "Error: Duplicated DateAcceptancePattern: %s\n", *aComp);
                     aComp = theDateAcceptancePatterns.erase( aComp);
                 }
                 else
@@ -1606,7 +1606,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 daysNode = calNode -> getChildAt(nChild);
             nbOfDays[i] = sal::static_int_cast<sal_Int16>( daysNode->getNumberOfChildren() );
             if (bGregorian && nbOfDays[i] != 7)
-                incErrorInt( "Error: A Gregorian calendar must have 7 days per week, this one has %d", nbOfDays[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 7 days per week, this one has %d\n", nbOfDays[i]);
             elementTag = "day";
             for (j = 0; j < nbOfDays[i]; j++) {
                 LocaleNode *currNode = daysNode -> getChildAt(j);
@@ -1639,7 +1639,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 monthsNode = calNode -> getChildAt(nChild);
             nbOfMonths[i] = sal::static_int_cast<sal_Int16>( monthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfMonths[i] != 12)
-                incErrorInt( "Error: A Gregorian calendar must have 12 months, this one has %d", nbOfMonths[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 12 months, this one has %d\n", nbOfMonths[i]);
             elementTag = "month";
             for (j = 0; j < nbOfMonths[i]; j++) {
                 LocaleNode *currNode = monthsNode -> getChildAt(j);
@@ -1675,7 +1675,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 genitiveMonthsNode = calNode -> getChildAt(nChild);
             nbOfGenitiveMonths[i] = sal::static_int_cast<sal_Int16>( genitiveMonthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfGenitiveMonths[i] != 12)
-                incErrorInt( "Error: A Gregorian calendar must have 12 genitive months, this one has %d", nbOfGenitiveMonths[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 12 genitive months, this one has %d\n", nbOfGenitiveMonths[i]);
             elementTag = "genitiveMonth";
             for (j = 0; j < nbOfGenitiveMonths[i]; j++) {
                 LocaleNode *currNode = genitiveMonthsNode -> getChildAt(j);
@@ -1712,7 +1712,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 partitiveMonthsNode = calNode -> getChildAt(nChild);
             nbOfPartitiveMonths[i] = sal::static_int_cast<sal_Int16>( partitiveMonthsNode->getNumberOfChildren() );
             if (bGregorian && nbOfPartitiveMonths[i] != 12)
-                incErrorInt( "Error: A Gregorian calendar must have 12 partitive months, this one has %d", nbOfPartitiveMonths[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 12 partitive months, this one has %d\n", nbOfPartitiveMonths[i]);
             elementTag = "partitiveMonth";
             for (j = 0; j < nbOfPartitiveMonths[i]; j++) {
                 LocaleNode *currNode = partitiveMonthsNode -> getChildAt(j);
@@ -1745,7 +1745,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                 erasNode = calNode -> getChildAt(nChild);
             nbOfEras[i] = sal::static_int_cast<sal_Int16>( erasNode->getNumberOfChildren() );
             if (bGregorian && nbOfEras[i] != 2)
-                incErrorInt( "Error: A Gregorian calendar must have 2 eras, this one has %d", nbOfEras[i]);
+                incErrorInt( "Error: A Gregorian calendar must have 2 eras, this one has %d\n", nbOfEras[i]);
             elementTag = "era";
             for (j = 0; j < nbOfEras[i]; j++) {
                 LocaleNode *currNode = erasNode -> getChildAt(j);
@@ -1773,7 +1773,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
                     break;  // for
             }
             if (j >= nbOfDays[i])
-                incErrorStr( "Error: <StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is: %s", str);
+                incErrorStr( "Error: <StartDayOfWeek> <DayID> must be one of the <DaysOfWeek>, but is: %s\n", str);
         }
         of.writeParameter("startDayOfWeek", str, i);
         ++nChild;
@@ -1781,7 +1781,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
         str = calNode ->getChildAt(nChild)-> getValue();
         sal_Int16 nDays = sal::static_int_cast<sal_Int16>( str.toInt32() );
         if (nDays < 1 || (0 < nbOfDays[i] && nbOfDays[i] < nDays))
-            incErrorInt( "Error: Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week",  nDays);
+            incErrorInt( "Error: Bad value of MinimalDaysInFirstWeek: %d, must be 1 <= value <= days_in_week\n",  nDays);
         of.writeIntParameter("minimalDaysInFirstWeek", i, nDays);
     }
     if (!bHasGregorian)
@@ -1922,7 +1922,7 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) const
         // couldn't had been determined from the current locale (i.e. is
         // empty), silently assume the referred locale has things right.
         if (bCompatible && !sTheCompatibleCurrency.isEmpty() && sTheCompatibleCurrency != str)
-            incErrorStrStr( "Error: CurrencySymbol \"%s\" flagged as usedInCompatibleFormatCodes doesn't match \"%s\" determined from format codes.", str, sTheCompatibleCurrency);
+            incErrorStrStr( "Error: CurrencySymbol \"%s\" flagged as usedInCompatibleFormatCodes doesn't match \"%s\" determined from format codes.\n", str, sTheCompatibleCurrency);
         str = currencyNode -> findNode ("BankSymbol") -> getValue();
         of.writeParameter("bankSymbol", str, nbOfCurrencies);
         // BankSymbol currently must be ISO 4217. May change later if
