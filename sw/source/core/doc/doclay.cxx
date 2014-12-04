@@ -430,34 +430,32 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
             else
             {
                 // copy all Pams and then delete all
-                SwPaM* pTmp = (SwPaM*)&rPam;
                 bool bOldFlag = mbCopyIsMove;
                 bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
                 bool const bOldRedlineMove(getIDocumentRedlineAccess().IsRedlineMove());
                 mbCopyIsMove = true;
                 GetIDocumentUndoRedo().DoUndo(false);
                 getIDocumentRedlineAccess().SetRedlineMove(true);
-                do {
-                    if( pTmp->HasMark() &&
-                        *pTmp->GetPoint() != *pTmp->GetMark() )
+                for(const SwPaM& rTmp : rPam.GetRingContainer())
+                {
+                    if( rTmp.HasMark() &&
+                        *rTmp.GetPoint() != *rTmp.GetMark() )
                     {
-                        getIDocumentContentOperations().CopyRange( *pTmp, aPos, false );
+                        getIDocumentContentOperations().CopyRange( *const_cast<SwPaM*>(&rTmp), aPos, false );
                     }
-                    pTmp = static_cast<SwPaM*>(pTmp->GetNext());
-                } while ( &rPam != pTmp );
+                }
                 getIDocumentRedlineAccess().SetRedlineMove(bOldRedlineMove);
                 mbCopyIsMove = bOldFlag;
                 GetIDocumentUndoRedo().DoUndo(bOldUndo);
 
-                pTmp = (SwPaM*)&rPam;
-                do {
-                    if( pTmp->HasMark() &&
-                        *pTmp->GetPoint() != *pTmp->GetMark() )
+                for(const SwPaM& rTmp : rPam.GetRingContainer())
+                {
+                    if( rTmp.HasMark() &&
+                        *rTmp.GetPoint() != *rTmp.GetMark() )
                     {
-                        getIDocumentContentOperations().DeleteAndJoin( *pTmp );
+                        getIDocumentContentOperations().DeleteAndJoin( *const_cast<SwPaM*>(&rTmp) );
                     }
-                    pTmp = static_cast<SwPaM*>(pTmp->GetNext());
-                } while ( &rPam != pTmp );
+                }
             }
         } while( false );
     }
