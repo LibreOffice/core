@@ -217,14 +217,19 @@ void OpenGLProgram::SetTransform(
     const basegfx::B2DPoint& rX,
     const basegfx::B2DPoint& rY )
 {
+    auto nTexWidth = rTexture.GetWidth();
+    auto nTexHeight = rTexture.GetHeight();
+    if (nTexWidth == 0 || nTexHeight == 0)
+        return;
+
     GLuint nUniform = GetUniformLocation( rName );
     const basegfx::B2DVector aXRel = rX - rNull;
     const basegfx::B2DVector aYRel = rY - rNull;
     const float aValues[] = {
-        (float) aXRel.getX()/rTexture.GetWidth(),  (float) aXRel.getY()/rTexture.GetWidth(),  0, 0,
-        (float) aYRel.getX()/rTexture.GetHeight(), (float) aYRel.getY()/rTexture.GetHeight(), 0, 0,
-        0,                                         0,                                         1, 0,
-        (float) rNull.getX(),                      (float) rNull.getY(),                      0, 1 };
+        (float) aXRel.getX()/nTexWidth,  (float) aXRel.getY()/nTexWidth,  0, 0,
+        (float) aYRel.getX()/nTexHeight, (float) aYRel.getY()/nTexHeight, 0, 0,
+        0,                               0,                               1, 0,
+        (float) rNull.getX(),            (float) rNull.getY(),            0, 1 };
     glm::mat4 mMatrix = glm::make_mat4( aValues );
     glUniformMatrix4fv( nUniform, 1, GL_FALSE, glm::value_ptr( mMatrix ) );
 }
