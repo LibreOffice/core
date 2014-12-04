@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_c813c30c",
+        "filename": "include/rtl/instance.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-04T09:22:15Z",
+      "side": 0,
+      "message": "Was this line removal intentional?",
+      "revId": "4eb381147bd0c9c7a48f86de0e3ae1d4c3bbe12f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
