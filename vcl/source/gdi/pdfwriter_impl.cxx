@@ -6027,11 +6027,11 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (!cert)
     {
-        SAL_WARN("vcl.gdi", "PDF Signing: Error occurred, certificate cannot be reconstructed.");
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: Error occurred, certificate cannot be reconstructed.");
         return false;
     }
 
-    SAL_WARN("vcl.gdi", "PDF Signing: Certificate Subject: " <<  cert->subjectName << "\n\tCertificate Issuer: " << cert->issuerName);
+    SAL_WARN("vcl.pdfwriter", "PDF Signing: Certificate Subject: " <<  cert->subjectName << "\n\tCertificate Issuer: " << cert->issuerName);
 
     // Prepare buffer and calculate PDF file digest
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
@@ -6039,7 +6039,7 @@ bool PDFWriterImpl::finalizeSignature()
     HashContextScope hc(HASH_Create(HASH_AlgSHA1));
     if (!hc.get())
     {
-        SAL_WARN("vcl.gdi", "PDF Signing: SHA1 HASH_Create failed!");
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: SHA1 HASH_Create failed!");
         return false;
     }
 
@@ -6051,7 +6051,7 @@ bool PDFWriterImpl::finalizeSignature()
     //FIXME: Check if SHA1 is calculated from the correct byterange
     CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), m_nSignatureContentOffset - 1 , bytesRead)) );
     if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
-        SAL_WARN("vcl.gdi", "PDF Signing: First buffer read failed!");
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: First buffer read failed!");
 
     HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
 
@@ -6059,7 +6059,7 @@ bool PDFWriterImpl::finalizeSignature()
     buffer.reset(new char[nLastByteRangeNo + 1]);
     CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), nLastByteRangeNo, bytesRead)) );
     if (bytesRead != (sal_uInt64) nLastByteRangeNo)
-        SAL_WARN("vcl.gdi", "PDF Signing: Second buffer read failed!");
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: Second buffer read failed!");
 
     HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
 
@@ -6074,21 +6074,21 @@ bool PDFWriterImpl::finalizeSignature()
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't create new CMS message.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't create new CMS message.");
         return false;
     }
 
     NSSCMSSignedData *cms_sd = NSS_CMSSignedData_Create(cms_msg);
     if (!cms_sd)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't create CMS SignedData.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't create CMS SignedData.");
         return false;
     }
 
     NSSCMSContentInfo *cms_cinfo = NSS_CMSMessage_GetContentInfo(cms_msg);
     if (NSS_CMSContentInfo_SetContent_SignedData(cms_msg, cms_cinfo, cms_sd) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: Can't set CMS content signed data.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: Can't set CMS content signed data.");
         return false;
     }
 
@@ -6096,48 +6096,48 @@ bool PDFWriterImpl::finalizeSignature()
     //attach NULL data as detached data
     if (NSS_CMSContentInfo_SetContent_Data(cms_msg, cms_cinfo, NULL, PR_TRUE) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: Can't set CMS content data.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: Can't set CMS content data.");
         return false;
     }
 
     NSSCMSSignerInfo *cms_signer = NSS_CMSSignerInfo_Create(cms_msg, cert, SEC_OID_SHA1);
     if (!cms_signer)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't create CMS SignerInfo.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't create CMS SignerInfo.");
         return false;
     }
 
     if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't include cert chain.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't include cert chain.");
         return false;
     }
 
     if (NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't add signing time.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signing time.");
         return false;
     }
 
     if (NSS_CMSSignedData_AddCertificate(cms_sd, cert) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't add signer certificate.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signer certificate.");
         return false;
     }
 
     if (NSS_CMSSignedData_AddSignerInfo(cms_sd, cms_signer) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't add signer info.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signer info.");
         return false;
     }
 
     if (NSS_CMSSignedData_SetDigestValue(cms_sd, SEC_OID_SHA1, &digest) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF signing: can't set PDF digest value.");
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't set PDF digest value.");
         return false;
     }
 
-    SAL_WARN("vcl.gdi","PKCS7 Object created successfully!");
+    SAL_WARN("vcl.pdfwriter","PKCS7 Object created successfully!");
 
     SECItem cms_output;
     cms_output.data = 0;
@@ -6150,24 +6150,24 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (!cms_ecx)
     {
-        SAL_WARN("vcl.gdi", "PDF Signing: can't start DER encoder.");
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: can't start DER encoder.");
         return false;
     }
-    SAL_WARN("vcl.gdi", "PDF Signing: Started DER encoding.");
+    SAL_WARN("vcl.pdfwriter", "PDF Signing: Started DER encoding.");
 
     if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
     {
-        SAL_WARN("vcl.gdi", "PDF Signing: can't finish DER encoder.");
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: can't finish DER encoder.");
         return false;
     }
-    SAL_WARN("vcl.gdi", "PDF Signing: Finished DER encoding.");
+    SAL_WARN("vcl.pdfwriter", "PDF Signing: Finished DER encoding.");
 
     OStringBuffer cms_hexbuffer;
 
     for (unsigned int i = 0; i < cms_output.len ; i++)
         appendHex(cms_output.data[i], cms_hexbuffer);
 
-    SAL_WARN("vcl.gdi","PKCS7 object encoded successfully!");
+    SAL_WARN("vcl.pdfwriter","PKCS7 object encoded successfully!");
 
     // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
     nWritten = 0;
