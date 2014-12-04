@@ -177,7 +177,7 @@ Reference< XConnection > SAL_CALL MacabPreparedStatement::getConnection() throw(
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabCommonStatement_BASE::rBHelper.bDisposed);
 
-    return (Reference< XConnection >) m_pConnection;
+    return m_pConnection;
 }
 
 Reference< XResultSet > SAL_CALL MacabPreparedStatement::executeQuery() throw(SQLException, RuntimeException)
