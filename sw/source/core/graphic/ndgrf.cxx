@@ -1094,7 +1094,6 @@ bool SwGrfNode::IsSelected() const
     if( pESh )
     {
         const SwNode* pN = this;
-        const SwViewShell* pV = pESh;
         for(const SwViewShell& rCurrentShell : pESh->GetRingContainer())
         {
             if( rCurrentShell.ISA( SwEditShell ) && pN == &static_cast<const SwCrsrShell*>(&rCurrentShell)
