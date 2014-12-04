@@ -23,7 +23,11 @@ class CStyleCast:
 public:
     explicit CStyleCast(InstantiationData const & data): Plugin(data) {}
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override {
+        if (compiler.getLangOpts().CPlusPlus) {
+            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+        }
+    }
 
     bool VisitCStyleCastExpr(const CStyleCastExpr * expr);
 };
@@ -66,7 +70,7 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
                               expr->getLocStart());
     StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
     // ignore C code
-    if ( filename.endswith(".h") || filename.endswith(".c") ) {
+    if ( filename.endswith(".h") ) {
         return true;
     }
     if ( compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
