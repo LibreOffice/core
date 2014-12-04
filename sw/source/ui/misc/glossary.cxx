@@ -768,7 +768,7 @@ IMPL_LINK_NOARG_INLINE_END(SwGlossaryDlg, EditHdl)
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 {
     OUString aName(m_pNewName->GetText());
-    SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
+    SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
     if (pBox == m_pNewName)
         m_pNewShort->SetText( lcl_GetValidShortCut( aName ) );
 
@@ -781,7 +781,7 @@ IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 
 IMPL_LINK_NOARG(SwNewGlosNameDlg, Rename)
 {
-    SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
+    SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParent());
     OUString sNew = GetAppCharClass().uppercase(m_pNewShort->GetText());
     if( pDlg->pGlossaryHdl->HasShortName(m_pNewShort->GetText())
         && sNew != m_pOldShort->GetText() )
@@ -896,7 +896,7 @@ DragDropMode SwGlTreeListBox::NotifyStartDrag(
         eRet = SV_DRAGDROP_NONE;
     else
     {
-        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
+        SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParentDialog());
         SvTreeListEntry* pParent = GetParent(pEntry);
 
         GroupUserData* pGroupData = (GroupUserData*)pParent->GetUserData();
@@ -961,7 +961,7 @@ TriState SwGlTreeListBox::NotifyCopyingOrMoving(
     bool bRet = false;
     if(pDestParent != pSrcParent)
     {
-        SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParentDialog();
+        SwGlossaryDlg* pDlg = static_cast<SwGlossaryDlg*>(GetParentDialog());
         SwWait aWait( *pDlg->pSh->GetView().GetDocShell(), true );
 
         GroupUserData* pGroupData = (GroupUserData*)pSrcParent->GetUserData();

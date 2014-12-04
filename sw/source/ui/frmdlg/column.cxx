@@ -161,7 +161,7 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     assert(pColPgSet);
 
     // create TabPage
-    pTabPage = (SwColumnPage*) SwColumnPage::Create(get_content_area(), pColPgSet);
+    pTabPage = static_cast<SwColumnPage*>( SwColumnPage::Create(get_content_area(), pColPgSet) );
     pTabPage->get<vcl::Window>("applytoft")->Show();
     pTabPage->get(m_pApplyToLB, "applytolb");
     m_pApplyToLB->Show();
@@ -169,31 +169,31 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
     if (pCurrSection && (!rWrtShell.HasSelection() || 0 != nFullSectCnt))
     {
         m_pApplyToLB->RemoveEntry( m_pApplyToLB->GetEntryPos(
-                                        (void*)(sal_IntPtr)( 1 >= nFullSectCnt
+                                        reinterpret_cast<void*>((sal_IntPtr)( 1 >= nFullSectCnt
                                                     ? LISTBOX_SECTIONS
-                                                    : LISTBOX_SECTION )));
+                                                    : LISTBOX_SECTION ))));
     }
     else
     {
-        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( (void*)(sal_IntPtr)LISTBOX_SECTION ));
-        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( (void*)(sal_IntPtr)LISTBOX_SECTIONS ));
+        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>((sal_IntPtr)LISTBOX_SECTION) ));
+        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>((sal_IntPtr)LISTBOX_SECTIONS) ));
     }
 
     if (!( rWrtShell.HasSelection() && rWrtShell.IsInsRegionAvailable() &&
         ( !pCurrSection || ( 1 != nFullSectCnt &&
             IsMarkInSameSection( rWrtShell, pCurrSection ) ))))
-        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( (void*)(sal_IntPtr)LISTBOX_SELECTION ));
+        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>((sal_IntPtr)LISTBOX_SELECTION) ));
 
     if (!rWrtShell.GetFlyFrmFmt())
-        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( (void*) LISTBOX_FRAME ));
+        m_pApplyToLB->RemoveEntry(m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(LISTBOX_FRAME) ));
 
-    const sal_Int32 nPagePos = m_pApplyToLB->GetEntryPos( (void*) LISTBOX_PAGE );
+    const sal_Int32 nPagePos = m_pApplyToLB->GetEntryPos( reinterpret_cast<void*>(LISTBOX_PAGE) );
     if (pPageSet && pPageDesc)
     {
         const OUString sPageStr = m_pApplyToLB->GetEntry(nPagePos) + pPageDesc->GetName();
         m_pApplyToLB->RemoveEntry(nPagePos);
         m_pApplyToLB->InsertEntry( sPageStr, nPagePos );
-        m_pApplyToLB->SetEntryData( nPagePos, (void*) LISTBOX_PAGE);
+        m_pApplyToLB->SetEntryData( nPagePos, reinterpret_cast<void*>(LISTBOX_PAGE));
     }
     else
         m_pApplyToLB->RemoveEntry( nPagePos );
@@ -249,7 +249,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     {
         pTabPage->FillItemSet(pSet);
     }
-    nOldSelection = (sal_IntPtr)m_pApplyToLB->GetEntryData(m_pApplyToLB->GetSelectEntryPos());
+    nOldSelection = reinterpret_cast<sal_IntPtr>(m_pApplyToLB->GetEntryData(m_pApplyToLB->GetSelectEntryPos()));
     long nWidth = nSelectionWidth;
     switch(nOldSelection)
     {
@@ -314,7 +314,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
     if(pSelectionSet && SfxItemState::SET == pSelectionSet->GetItemState(RES_COL))
     {
         //insert region with columns
-        const SwFmtCol& rColItem = (const SwFmtCol&)pSelectionSet->Get(RES_COL);
+        const SwFmtCol& rColItem = static_cast<const SwFmtCol&>(pSelectionSet->Get(RES_COL));
         //only if there actually are columns!
         if(rColItem.GetNumCols() > 1)
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
@@ -524,7 +524,7 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
         if ( pItem != NULL )
-            pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+            pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
     }
 
     if ( pColorList.is() )
@@ -568,7 +568,7 @@ void SwColumnPage::connectPercentField(PercentField &rWrap, const OString &rName
 void SwColumnPage::Reset(const SfxItemSet *rSet)
 {
     const sal_uInt16 nHtmlMode =
-        ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+        ::GetHtmlMode(static_cast<const SwDocShell*>(SfxObjectShell::Current()));
     if(nHtmlMode & HTMLMODE_ON)
     {
         bHtmlMode = true;
@@ -593,8 +593,8 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
             pColMgr->SetActualWidth(FRAME_FORMAT_WIDTH);
         else
         {
-            const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)rSet->Get(RES_FRM_SIZE);
-            const SvxBoxItem& rBox = (const SvxBoxItem&) rSet->Get(RES_BOX);
+            const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(rSet->Get(RES_FRM_SIZE));
+            const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rSet->Get(RES_BOX));
             pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetDistance());
         }
     }
@@ -602,7 +602,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     {
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == rSet->GetItemState( RES_COLUMNBALANCE, false, &pItem ))
-            m_pBalanceColsCB->Check(!((const SwFmtNoBalancedColumns*)pItem)->GetValue());
+            m_pBalanceColsCB->Check(!static_cast<const SwFmtNoBalancedColumns*>(pItem)->GetValue());
         else
             m_pBalanceColsCB->Check( true );
     }
@@ -610,9 +610,9 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     //text direction
     if( SfxItemState::DEFAULT <= rSet->GetItemState( RES_FRAMEDIR ) )
     {
-        const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet->Get(RES_FRAMEDIR);
+        const SvxFrameDirectionItem& rItem = static_cast<const SvxFrameDirectionItem&>(rSet->Get(RES_FRAMEDIR));
         sal_uIntPtr nVal  = rItem.GetValue();
-        const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( (void*) nVal );
+        const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( reinterpret_cast<void*>(nVal) );
         m_pTextDirectionLB->SelectEntryPos( nPos );
         m_pTextDirectionLB->SaveValue();
     }
@@ -649,7 +649,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
         const sal_Int32 nPos = m_pTextDirectionLB->GetSelectEntryPos();
         if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
-            sal_uInt32 nDirection = (sal_uInt32)(sal_IntPtr)m_pTextDirectionLB->GetEntryData( nPos );
+            sal_uInt32 nDirection = (sal_uInt32)reinterpret_cast<sal_IntPtr>(m_pTextDirectionLB->GetEntryData( nPos ));
             rSet->Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
         }
     }
@@ -1159,11 +1159,11 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
     {
         if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
         {
-            const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get(
-                                                SID_ATTR_PAGE_SIZE);
-            const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get(
-                                                                RES_LR_SPACE );
-            const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
+            const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(rSet.Get(
+                                                SID_ATTR_PAGE_SIZE));
+            const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rSet.Get(
+                                                                RES_LR_SPACE ));
+            const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
             const sal_uInt16 nActWidth = static_cast< sal_uInt16 >(rSize.GetSize().Width()
                             - rLRSpace.GetLeft() - rLRSpace.GetRight() - rBox.GetDistance());
 
@@ -1185,8 +1185,8 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         m_pFrmExampleWN->Show();
 
         // Size
-        const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
-        const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
+        const SwFmtFrmSize& rSize = static_cast<const SwFmtFrmSize&>(rSet.Get(RES_FRM_SIZE));
+        const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>( rSet.Get(RES_BOX));
 
         long nDistance = rBox.GetDistance();
         const sal_uInt16 nTotalWish = bFormat ? FRAME_FORMAT_WIDTH : sal_uInt16(rSize.GetWidth() - 2 * nDistance);

@@ -429,7 +429,7 @@ void SwNumPositionTabPage::Reset( const SfxItemSet* rSet )
         m_pLevelLB->EnableMultiSelection(false);
     }
     else if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_ACT_NUMBER, false, &pItem))
-        pSaveNum = ((SwUINumRuleItem*)pItem)->GetNumRule();
+        pSaveNum = const_cast<SwUINumRuleItem*>(static_cast<const SwUINumRuleItem*>(pItem))->GetNumRule();
 
     nActNumLvl = SwOutlineTabDialog::GetActNumLevel();
     sal_uInt16 nMask = 1;
