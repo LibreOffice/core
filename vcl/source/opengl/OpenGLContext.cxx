@@ -128,11 +128,13 @@ OpenGLContext::~OpenGLContext()
 
 void OpenGLContext::AddRef()
 {
+    assert(mnRefCount > 0);
     mnRefCount++;
 }
 
 void OpenGLContext::DeRef()
 {
+    assert(mnRefCount > 0);
     if( --mnRefCount == 0 )
         delete this;
 }
