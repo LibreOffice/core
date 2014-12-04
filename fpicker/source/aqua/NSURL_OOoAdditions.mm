@@ -98,7 +98,7 @@ NSString* resolveAlias( NSString* i_pSystemPath )
             }
             else
             {
-                pResolvedPath = (NSString*)CFURLCopyFileSystemPath( rResolvedUrl, kCFURLPOSIXPathStyle );
+                pResolvedPath = const_cast<NSString*>(static_cast<NSString const *>(CFURLCopyFileSystemPath( rResolvedUrl, kCFURLPOSIXPathStyle )));
                 CFRelease( rResolvedUrl );
             }
         }

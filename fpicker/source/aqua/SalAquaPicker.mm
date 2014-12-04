@@ -183,7 +183,7 @@ int SalAquaPicker::run()
             break;
         case NAVIGATIONSERVICES_SAVE:
             [m_pDialog setDirectoryURL:startDirectory];
-            [m_pDialog setNameFieldStringValue:[NSString stringWithOUString:((SalAquaFilePicker*)this)->getSaveFileName()]];
+            [m_pDialog setNameFieldStringValue:[NSString stringWithOUString:static_cast<SalAquaFilePicker*>(this)->getSaveFileName()]];
             retVal = [m_pDialog runModal];
             break;
         // [m_pDialog beginSheetForDirectory:startDirectory file:[m_pDialog saveFilename] modalForWindow:[NSApp keyWindow] modalDelegate:((SalAquaFilePicker*)this)->getDelegate() didEndSelector:@selector(savePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
