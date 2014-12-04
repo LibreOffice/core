@@ -141,7 +141,7 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 };
 
-typedef rtl::Reference<ScrollBar> ScrollBarPtr;
+typedef VclReference<ScrollBar> ScrollBarPtr;
 
 
 // - ScrollBarBox -
