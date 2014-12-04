@@ -148,13 +148,12 @@ namespace slideshow
         void AppletShape::implViewsChanged()
         {
             // resize all ViewShapes
-            ::basegfx::B2DRectangle bounds( AppletShape::getBounds() );
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
                              ::boost::bind(
                                  &ViewAppletShape::resize,
                                  _1,
-                                 ::boost::cref( bounds )) );
+                                 AppletShape::getBounds()) );
         }
 
 
@@ -253,12 +252,11 @@ namespace slideshow
 
         bool AppletShape::implStartIntrinsicAnimation()
         {
-            ::basegfx::B2DRectangle bounds( getBounds() );
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
                              ::boost::bind( &ViewAppletShape::startApplet,
                                             _1,
-                                            ::boost::cref( bounds )));
+                                            getBounds()) );
             mbIsPlaying = true;
 
             return true;

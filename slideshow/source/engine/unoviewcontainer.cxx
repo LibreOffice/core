@@ -47,12 +47,11 @@ namespace slideshow
             const UnoViewVector::iterator aEnd( maViews.end() );
 
             // already added?
-            uno::Reference<presentation::XSlideShowView> xView (rView->getUnoView());
             if( ::std::find_if( maViews.begin(),
                                 aEnd,
                                 ::boost::bind(
                                     ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
-                                    ::boost::cref( xView ),
+                                    rView->getUnoView(),
                                     ::boost::bind(
                                         &UnoView::getUnoView,
                                         _1 ) ) ) != aEnd )
