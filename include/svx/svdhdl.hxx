@@ -32,6 +32,7 @@
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/svxdllapi.h>
+#include <deque>
 
 class VirtualDevice;
 class OutputDevice;
