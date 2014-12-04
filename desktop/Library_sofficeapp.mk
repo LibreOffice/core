@@ -54,7 +54,6 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     sfx \
     svl \
     svt \
-    sw \
     tk \
     tl \
     ucbhelper \
