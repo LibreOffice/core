@@ -230,7 +230,7 @@ NSCursor* SalData::getCursor( PointerStyle i_eStyle )
             CFURLRef hURL = CFBundleCopyResourceURL( hMain, pCursorName, CFSTR("png"), CFSTR("cursors") );
             if( hURL )
             {
-                pCurs = [[NSCursor alloc] initWithImage: [[NSImage alloc] initWithContentsOfURL: const_cast<NSURL*>(static_cast<NSURL const *>(hURL))] hotSpot: aHotSpot];
+                pCurs = [[NSCursor alloc] initWithImage: [[NSImage alloc] initWithContentsOfURL: const_cast<NSURL*>(reinterpret_cast<NSURL const *>(hURL))] hotSpot: aHotSpot];
                 CFRelease( hURL );
             }
             CFRelease( pCursorName );
