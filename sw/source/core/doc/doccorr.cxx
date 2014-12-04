@@ -320,17 +320,16 @@ SwEditShell const * SwDoc::GetEditShell() const
     // Layout and OLE shells should be available
     if( pCurrentView )
     {
-        SwViewShell const *pFirstVSh = pCurrentView;
-        SwViewShell const *pCurrentVSh = pFirstVSh;
-        // look for an EditShell (if it exists)
-        do {
-            if( pCurrentVSh->IsA( TYPE( SwEditShell ) ) )
+        for(const SwViewShell& rCurrentSh : pCurrentView->GetRingContainer())
+        {
+            // look for an EditShell (if it exists)
+            if( rCurrentSh.IsA( TYPE( SwEditShell ) ) )
             {
-                return static_cast<const SwEditShell*>(pCurrentVSh);
+                return static_cast<const SwEditShell*>(&rCurrentSh);
             }
-        } while( pFirstVSh != ( pCurrentVSh = static_cast<SwViewShell*>(pCurrentVSh->GetNext()) ));
+        }
     }
-    return 0;
+    return nullptr;
 }
 
 SwEditShell* SwDoc::GetEditShell()
