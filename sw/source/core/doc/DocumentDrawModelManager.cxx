@@ -150,12 +150,12 @@ void DocumentDrawModelManager::InitDrawModel()
         mpDrawModel->SetRefDevice( pRefDev );
 
     mpDrawModel->SetNotifyUndoActionHdl( LINK( &m_rDoc, SwDoc, AddDrawUndo ));
-    if ( m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() )
+    SwViewShell* const pSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
+    if ( pSh )
     {
-        SwViewShell* pViewSh = m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell();
-        do
+        for(SwViewShell& rViewSh : pSh->GetRingContainer())
         {
-            SwRootFrm* pRoot =  pViewSh->GetLayout();
+            SwRootFrm* pRoot =  rViewSh.GetLayout();
             if( pRoot && !pRoot->GetDrawPage() )
             {
                 // Disable "multiple layout" for the moment:
@@ -166,8 +166,7 @@ void DocumentDrawModelManager::InitDrawModel()
                 pRoot->SetDrawPage( pDrawPage );
                 pDrawPage->SetSize( pRoot->Frm().SSize() );
             }
-            pViewSh = static_cast<SwViewShell*>(pViewSh->GetNext());
-        }while( pViewSh != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
+        }
     }
 }
 
