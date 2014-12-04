@@ -9,11 +9,11 @@
 
 #version 120 
 
-uniform vec4 constantColor;
+uniform vec4 colorTex;
 
 void main()
 {
-        gl_FragColor = constantColor;
+        gl_FragColor = colorTex;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

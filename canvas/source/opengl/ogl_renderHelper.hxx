@@ -19,11 +19,13 @@ namespace oglcanvas
     {
     public:
 
-        void renderVertexConstColor(const std::vector<glm::vec2>& rVertices, glm::vec4 color, GLenum mode) const;
-        void renderVertexUVTex(const std::vector<glm::vec2>& rVertices, const std::vector<glm::vec2>& rUVcoords, glm::vec4 color, GLenum mode) const;
-        void renderVertexTex(const std::vector<glm::vec2>& rVertices, GLfloat, GLfloat, glm::vec4 color, GLenum mode) const;
+        void renderVertexConstColor(const std::vector<glm::vec2>& rVertices, const glm::vec4& vColor, GLenum mode) const;
+        void renderVertexUVTex(const std::vector<glm::vec2>& rVertices, const std::vector<glm::vec2>& rUVcoords,
+                               const glm::vec4& vColor, GLenum mode) const;
+        void renderVertexTex(const std::vector<glm::vec2>& rVertices, GLfloat, GLfloat,
+                             const glm::vec4& vColor, GLenum mode) const;
         void renderTextureTransform(const std::vector<glm::vec2>& rVertices, GLfloat fWidth,
-     GLfloat fHeight, glm::vec4 color, GLenum mode, glm::mat4 transform) const;
+                                    GLfloat fHeight, const glm::vec4& color, GLenum mode, const glm::mat4& transform) const;
 
         RenderHelper();
 
@@ -32,46 +34,32 @@ namespace oglcanvas
         void dispose();
         void  InitOpenGL();
 
+
     private:
         RenderHelper&  operator = (const RenderHelper& other);
         RenderHelper(const RenderHelper& other);
+        void setupColorMVP(const unsigned int nProgramID, const glm::vec4& color) const;
+
 
         GLuint                                            m_vertexBuffer;
         GLuint                                            m_uvBuffer;
 
-
         GLuint                                            m_simpleProgID;
-        GLuint                                            m_simpleUvAttrb;
-        GLuint                                            m_simplePosAttrb;
         GLuint                                            m_simpleTexUnf;
-        GLuint                                            m_simpleColorUnf;
-        GLuint                                            m_simpleMVPUnf;
 
         GLuint                                            m_manTexUnf;
-        GLuint                                            m_manPosAttrb;
         GLuint                                            m_manCordUnf;
-        GLuint                                            m_manColorUnf;
-        GLuint                                            m_manMVPUnf;
 
-        GLuint                                            m_texPosAttrb;
-        GLuint                                            m_texColorUnf;
         GLuint                                            m_texManProgID;
         GLuint                                            m_texProgID;
-        GLuint                                            m_texMVPUnf;
 
         GLuint                                            m_texTransProgID;
-        GLuint                                            m_transPosAttrb;
         GLuint                                            m_transCordUnf;
-        GLuint                                            m_transMVPUnf;
         GLuint                                            m_transTexUnf;
-        GLuint                                            m_transColorUnf;
         GLuint                                            m_transTexTransform;
-        //dimension
-        int                                               m_iWidth;
-        int                                               m_iHeight;
 
         glm::mat4                                         m_VP;
-        // Model matrix : an identity matrix (model will be at the origin
+        // Model matrix
         glm::mat4                                         m_Model;
         // Our ModelViewProjection : multiplication of our 3 matrices
         glm::mat4                                         m_MVP;
