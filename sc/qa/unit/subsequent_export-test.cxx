@@ -130,7 +130,9 @@ public:
 
     void testPivotTableXLSX();
     void testPivotTableTwoDataFieldsXLSX();
+
     void testSwappedOutImageExport();
+    void testLinkedGraphicRT();
 
     void testSupBookVirtualPath();
 
@@ -177,6 +179,7 @@ public:
     CPPUNIT_TEST(testSupBookVirtualPath);
 #endif
     CPPUNIT_TEST(testSwappedOutImageExport);
+    CPPUNIT_TEST(testLinkedGraphicRT);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2373,6 +2376,45 @@ void ScExportTest::testSupBookVirtualPath()
         CPPUNIT_FAIL("Wrong SupBook VirtualPath URL");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testLinkedGraphicRT()
+{
+    // Problem was with linked images
+    const char* aFilterNames[] = {
+        "calc8",
+        "MS Excel 97",
+        "Calc Office Open XML",
+        "generic_HTML",
+    };
+
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
+    {
+        // Load the original file with one image
+        ScDocShellRef xDocSh = loadDoc("document_with_linked_graphic.", ODS);
+        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
+
+        // Export the document and import again for a check
+        ScDocShellRef xDocSh2 = saveAndReload(xDocSh, nFilter);
+        xDocSh->DoClose();
+
+        // Check whether graphic imported well after export
+        ScDocument& rDoc = xDocSh->GetDocument();
+        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawLayer != NULL );
+        const SdrPage *pPage = pDrawLayer->GetPage(0);
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
+        SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
+
+        const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), !rGraphicObj.IsSwappedOut());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+
+        xDocSh2->DoClose();
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);
