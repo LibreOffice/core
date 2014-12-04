@@ -288,7 +288,6 @@ protected:
     void            doDestruct();
     void            addXineramaScreenUnique( int i, long i_nX, long i_nY, long i_nWidth, long i_nHeight );
 public:
-    static SalDisplay *GetSalDisplay( Display* display );
     static bool BestVisual( Display     *pDisp,
                                 int          nScreen,
                                 XVisualInfo &rVI );
