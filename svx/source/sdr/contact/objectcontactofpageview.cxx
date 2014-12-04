@@ -243,7 +243,7 @@ namespace sdr
             updateViewInformation2D(aNewViewInformation2D);
 
             drawinglayer::primitive2d::Primitive2DSequence xPrimitiveSequence;
-#if defined( HAVE_FEATURE_DESKTOP ) || defined( ANDROID )
+#if HAVE_FEATURE_DESKTOP || defined( ANDROID )
             // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D
             // and may use the MapMode from the Target OutDev in the DisplayInfo
             xPrimitiveSequence = rDrawPageVOContact.getPrimitive2DSequenceHierarchy(rDisplayInfo);
