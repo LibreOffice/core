@@ -502,7 +502,8 @@ namespace osl
         StreamSocket&   Connection, SocketAddr & PeerAddr)
     {
         // TODO change in/OUT parameter
-        oslSocket o = osl_acceptConnectionOnSocket( m_handle, (oslSocketAddr *)&PeerAddr );
+        oslSocket o = osl_acceptConnectionOnSocket(
+            m_handle, reinterpret_cast<oslSocketAddr *>(&PeerAddr));
         oslSocketResult status = osl_Socket_Ok;
         if( o )
         {
