@@ -319,6 +319,56 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
     {
         isAnchor = pFrmFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR;
     }
+
+    // Count effectExtent values, their value is needed before dist{T,B,L,R} is written.
+    SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
+    sal_Int32 nLeftExt = 0, nRightExt = 0, nTopExt = 0, nBottomExt = 0;
+    if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
+    {
+        sal_Int32 nShadowWidth(TwipsToEMU(aShadowItem.GetWidth()));
+        switch (aShadowItem.GetLocation())
+        {
+        case SVX_SHADOW_TOPLEFT:
+            nTopExt = nLeftExt = nShadowWidth;
+            break;
+        case SVX_SHADOW_TOPRIGHT:
+            nTopExt = nRightExt = nShadowWidth;
+            break;
+        case SVX_SHADOW_BOTTOMLEFT:
+            nBottomExt = nLeftExt = nShadowWidth;
+            break;
+        case SVX_SHADOW_BOTTOMRIGHT:
+            nBottomExt = nRightExt = nShadowWidth;
+            break;
+        case SVX_SHADOW_NONE:
+        case SVX_SHADOW_END:
+            break;
+        }
+    }
+    else if (const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
+    {
+        // No shadow, but we have an idea what was the original effectExtent.
+        uno::Any aAny;
+        pObject->GetGrabBagItem(aAny);
+        comphelper::SequenceAsHashMap aGrabBag(aAny);
+        comphelper::SequenceAsHashMap::iterator it = aGrabBag.find("CT_EffectExtent");
+        if (it != aGrabBag.end())
+        {
+            comphelper::SequenceAsHashMap aEffectExtent(it->second);
+            for (std::pair<const OUString, uno::Any>& rDirection : aEffectExtent)
+            {
+                if (rDirection.first == "l" && rDirection.second.has<sal_Int32>())
+                    nLeftExt = rDirection.second.get<sal_Int32>();
+                else if (rDirection.first == "t" && rDirection.second.has<sal_Int32>())
+                    nTopExt = rDirection.second.get<sal_Int32>();
+                else if (rDirection.first == "r" && rDirection.second.has<sal_Int32>())
+                    nRightExt = rDirection.second.get<sal_Int32>();
+                else if (rDirection.first == "b" && rDirection.second.has<sal_Int32>())
+                    nBottomExt = rDirection.second.get<sal_Int32>();
+            }
+        }
+    }
+
     if (isAnchor)
     {
         sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
@@ -333,10 +383,10 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
             lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
         }
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
-        attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
-        attrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower())).getStr());
-        attrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft())).getStr());
-        attrList->add(XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight())).getStr());
+        attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper()) - nTopExt).getStr());
+        attrList->add(XML_distB, OString::number(TwipsToEMU(pULSpaceItem.GetLower()) - nBottomExt).getStr());
+        attrList->add(XML_distL, OString::number(TwipsToEMU(pLRSpaceItem.GetLeft()) - nLeftExt).getStr());
+        attrList->add(XML_distR, OString::number(TwipsToEMU(pLRSpaceItem.GetRight()) - nRightExt).getStr());
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");
@@ -587,59 +637,11 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
                                             FSEND);
 
     // effectExtent, extent including the effect (shadow only for now)
-    SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
-    OString aLeftExt("0"), aRightExt("0"), aTopExt("0"), aBottomExt("0");
-    if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
-    {
-        OString aShadowWidth(OString::number(TwipsToEMU(aShadowItem.GetWidth())));
-        switch (aShadowItem.GetLocation())
-        {
-        case SVX_SHADOW_TOPLEFT:
-            aTopExt = aLeftExt = aShadowWidth;
-            break;
-        case SVX_SHADOW_TOPRIGHT:
-            aTopExt = aRightExt = aShadowWidth;
-            break;
-        case SVX_SHADOW_BOTTOMLEFT:
-            aBottomExt = aLeftExt = aShadowWidth;
-            break;
-        case SVX_SHADOW_BOTTOMRIGHT:
-            aBottomExt = aRightExt = aShadowWidth;
-            break;
-        case SVX_SHADOW_NONE:
-        case SVX_SHADOW_END:
-            break;
-        }
-    }
-    else if (const SdrObject* pObject = pFrmFmt->FindRealSdrObject())
-    {
-        // No shadow, but we have an idea what was the original effectExtent.
-        uno::Any aAny;
-        pObject->GetGrabBagItem(aAny);
-        comphelper::SequenceAsHashMap aGrabBag(aAny);
-        comphelper::SequenceAsHashMap::iterator it = aGrabBag.find("CT_EffectExtent");
-        if (it != aGrabBag.end())
-        {
-            comphelper::SequenceAsHashMap aEffectExtent(it->second);
-            for (std::pair<const OUString, uno::Any>& rDirection : aEffectExtent)
-            {
-                if (rDirection.first == "l" && rDirection.second.has<sal_Int32>())
-                    aLeftExt = OString::number(rDirection.second.get<sal_Int32>());
-                else if (rDirection.first == "t" && rDirection.second.has<sal_Int32>())
-                    aTopExt = OString::number(rDirection.second.get<sal_Int32>());
-                else if (rDirection.first == "r" && rDirection.second.has<sal_Int32>())
-                    aRightExt = OString::number(rDirection.second.get<sal_Int32>());
-                else if (rDirection.first == "b" && rDirection.second.has<sal_Int32>())
-                    aBottomExt = OString::number(rDirection.second.get<sal_Int32>());
-            }
-        }
-    }
-
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_effectExtent,
-                                            XML_l, aLeftExt,
-                                            XML_t, aTopExt,
-                                            XML_r, aRightExt,
-                                            XML_b, aBottomExt,
+                                            XML_l, OString::number(nLeftExt),
+                                            XML_t, OString::number(nTopExt),
+                                            XML_r, OString::number(nRightExt),
+                                            XML_b, OString::number(nBottomExt),
                                             FSEND);
 
     // See if we know the exact wrap type from grab-bag.

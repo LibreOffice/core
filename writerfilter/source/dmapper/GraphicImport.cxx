@@ -557,15 +557,19 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
         break;
         case NS_ooxml::LN_CT_EffectExtent_l:
             m_pImpl->m_oEffectExtentLeft = nIntValue;
+            m_pImpl->nLeftMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_EffectExtent_t:
             m_pImpl->m_oEffectExtentTop = nIntValue;
+            m_pImpl->nTopMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_EffectExtent_r:
             m_pImpl->m_oEffectExtentRight = nIntValue;
+            m_pImpl->nRightMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_EffectExtent_b:
             m_pImpl->m_oEffectExtentBottom = nIntValue;
+            m_pImpl->nBottomMargin += oox::drawingml::convertEmuToHmm(nIntValue);
             break;
         case NS_ooxml::LN_CT_NonVisualDrawingProps_id:// 90650;
             //id of the object - ignored

@@ -16,6 +16,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <oox/drawingml/drawingmltypes.hxx>
 
 #include <string>
 
@@ -619,6 +620,15 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxRightEdge, "textbox-right-edge.docx")
     // inside the draw shape.
     CPPUNIT_ASSERT(nShapeLeft + nShapeWidth >= nTextboxLeft + nTextboxWidth);
 }
+
+DECLARE_OOXMLEXPORT_TEST(testEffectExtentMargin, "effectextent-margin.docx")
+{
+    // This was 318, i.e. oox::drawingml::convertEmuToHmm(114300), effectExtent
+    // wasn't part of the margin, leading to the fly not taking enough space
+    // around itself.
+    CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(114300+95250), getProperty<sal_Int32>(getShape(1), "LeftMargin"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
