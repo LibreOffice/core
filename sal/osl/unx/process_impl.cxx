@@ -190,14 +190,6 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     return (result);
 }
 
-int SAL_CALL osl_areCommandArgsSet (void)
-{
-    pthread_mutex_lock (&(g_command_args.m_mutex));
-    int nRet = (int) (g_command_args.m_nCount > 0);
-    pthread_mutex_unlock (&(g_command_args.m_mutex));
-    return nRet;
-}
-
 /***************************************
  osl_setCommandArgs().
  **************************************/

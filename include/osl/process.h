@@ -366,15 +366,6 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getCommandArgCount(void);
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getCommandArg(
         sal_uInt32 nArg, rtl_uString **strCommandArg);
 
-/** Determine whether or not the command args have already been set.
-
-    Deprecated: This function is only for internal use
-
-    @return The command args are already set, and may not be set again.
-    @since LibreOffice 4.3
-*/
-SAL_DLLPUBLIC int SAL_CALL osl_areCommandArgsSet (void);
-
 /** Set the command-line arguments as passed to the main-function of this process.
 
     Deprecated: This function is only for internal use. Passing the args from main will

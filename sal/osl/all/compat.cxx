@@ -23,6 +23,10 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_acquireSemaphore(void *) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
+SAL_DLLPUBLIC_EXPORT int SAL_CALL osl_areCommandArgsSet() {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_assertFailedLine(
     char const *, sal_Int32, char const *)
 {
