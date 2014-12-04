@@ -164,6 +164,33 @@ void FillStyleListBox( ScDocument* pDoc, ListBox& rLbStyle )
 
 }
 
+const ScConditionMode ScConditionFrmtEntry::mpEntryToCond[ScConditionFrmtEntry::NUM_COND_ENTRIES] = {
+    SC_COND_EQUAL,
+    SC_COND_LESS,
+    SC_COND_GREATER,
+    SC_COND_EQLESS,
+    SC_COND_EQGREATER,
+    SC_COND_NOTEQUAL,
+    SC_COND_BETWEEN,
+    SC_COND_NOTBETWEEN,
+    SC_COND_DUPLICATE,
+    SC_COND_NOTDUPLICATE,
+    SC_COND_TOP10,
+    SC_COND_BOTTOM10,
+    SC_COND_TOP_PERCENT,
+    SC_COND_BOTTOM_PERCENT,
+    SC_COND_ABOVE_AVERAGE,
+    SC_COND_BELOW_AVERAGE,
+    SC_COND_ABOVE_EQUAL_AVERAGE,
+    SC_COND_BELOW_EQUAL_AVERAGE,
+    SC_COND_ERROR,
+    SC_COND_NOERROR,
+    SC_COND_BEGINS_WITH,
+    SC_COND_ENDS_WITH,
+    SC_COND_CONTAINS_TEXT,
+    SC_COND_NOT_CONTAINS_TEXT
+};
+
 ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
         const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
@@ -189,97 +216,25 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
         maLbStyle.SelectEntry(aStyleName);
         StyleSelectHdl(NULL);
         ScConditionMode eMode = pFormatEntry->GetOperation();
-        maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
-        maEdVal2.Hide();
-        switch(eMode)
+
+        maLbCondType.SelectEntryPos(ConditionModeToEntryPos(eMode));
+
+        switch(GetNumberEditFields(eMode))
         {
-            case SC_COND_EQUAL:
-                maLbCondType.SelectEntryPos(0);
+            case 0:
+                maEdVal1.Hide();
+                maEdVal2.Hide();
                 break;
-            case SC_COND_LESS:
-                maLbCondType.SelectEntryPos(1);
+            case 1:
+                maEdVal1.Show();
+                maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
+                maEdVal2.Hide();
                 break;
-            case SC_COND_GREATER:
-                maLbCondType.SelectEntryPos(2);
-                break;
-            case SC_COND_EQLESS:
-                maLbCondType.SelectEntryPos(3);
-                break;
-            case SC_COND_EQGREATER:
-                maLbCondType.SelectEntryPos(4);
-                break;
-            case SC_COND_NOTEQUAL:
-                maLbCondType.SelectEntryPos(5);
-                break;
-            case SC_COND_BETWEEN:
+            case 2:
+                maEdVal1.Show();
+                maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
                 maEdVal2.Show();
                 maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
-                maLbCondType.SelectEntryPos(6);
-                break;
-            case SC_COND_NOTBETWEEN:
-                maEdVal2.Show();
-                maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
-                maLbCondType.SelectEntryPos(7);
-                break;
-            case SC_COND_DUPLICATE:
-                maLbCondType.SelectEntryPos(8);
-                break;
-            case SC_COND_NOTDUPLICATE:
-                maLbCondType.SelectEntryPos(9);
-                break;
-            case SC_COND_DIRECT:
-                assert(false);
-                //maLbType.SelectEntryPos(2);
-                break;
-            case SC_COND_TOP10:
-                maLbCondType.SelectEntryPos(10);
-                break;
-            case SC_COND_BOTTOM10:
-                maLbCondType.SelectEntryPos(11);
-                break;
-            case SC_COND_TOP_PERCENT:
-                maLbCondType.SelectEntryPos(12);
-                break;
-            case SC_COND_BOTTOM_PERCENT:
-                maLbCondType.SelectEntryPos(13);
-                break;
-            case SC_COND_ABOVE_AVERAGE:
-                maEdVal1.Hide();
-                maLbCondType.SelectEntryPos(14);
-                break;
-            case SC_COND_BELOW_AVERAGE:
-                maEdVal1.Hide();
-                maLbCondType.SelectEntryPos(15);
-                break;
-            case SC_COND_ABOVE_EQUAL_AVERAGE:
-                maEdVal1.Hide();
-                maLbCondType.SelectEntryPos(16);
-                break;
-            case SC_COND_BELOW_EQUAL_AVERAGE:
-                maEdVal1.Hide();
-                maLbCondType.SelectEntryPos(17);
-                break;
-            case SC_COND_ERROR:
-                maEdVal1.Hide();
-                maLbCondType.SelectEntryPos(18);
-                break;
-            case SC_COND_NOERROR:
-                maEdVal1.Hide();
-                maLbCondType.SelectEntryPos(19);
-                break;
-            case SC_COND_BEGINS_WITH:
-                maLbCondType.SelectEntryPos(20);
-                break;
-            case SC_COND_ENDS_WITH:
-                maLbCondType.SelectEntryPos(21);
-                break;
-            case SC_COND_CONTAINS_TEXT:
-                maLbCondType.SelectEntryPos(22);
-                break;
-            case SC_COND_NOT_CONTAINS_TEXT:
-                maLbCondType.SelectEntryPos(23);
-                break;
-            case SC_COND_NONE:
                 break;
         }
     }
@@ -289,7 +244,6 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
         maEdVal2.Hide();
         maLbStyle.SelectEntryPos(1);
     }
-    maLbType.SelectEntryPos(1);
 }
 
 void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
@@ -313,98 +267,76 @@ void ScConditionFrmtEntry::Init(ScCondFormatDlg* pDialogParent)
 
 ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
 {
-    ScConditionMode eMode;
+    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType.GetSelectEntryPos());
+    OUString aExpr1 = maEdVal1.GetText();
     OUString aExpr2;
-    switch(maLbCondType.GetSelectEntryPos())
+    if (GetNumberEditFields(eMode) == 2)
     {
-        case 0:
-            eMode = SC_COND_EQUAL;
-            break;
-        case 1:
-            eMode = SC_COND_LESS;
-            break;
-        case 2:
-            eMode = SC_COND_GREATER;
-            break;
-        case 3:
-            eMode = SC_COND_EQLESS;
-            break;
-        case 4:
-            eMode = SC_COND_EQGREATER;
-            break;
-        case 5:
-            eMode = SC_COND_NOTEQUAL;
-            break;
-        case 6:
-            aExpr2 = maEdVal2.GetText();
-            eMode = SC_COND_BETWEEN;
-            if(aExpr2.isEmpty())
-                return NULL;
-            break;
-        case 7:
-            eMode = SC_COND_NOTBETWEEN;
-            aExpr2 = maEdVal2.GetText();
-            if(aExpr2.isEmpty())
-                return NULL;
-            break;
-        case 8:
-            eMode = SC_COND_DUPLICATE;
-            break;
-        case 9:
-            eMode = SC_COND_NOTDUPLICATE;
-            break;
-        case 10:
-            eMode = SC_COND_TOP10;
-            break;
-        case 11:
-            eMode = SC_COND_BOTTOM10;
-            break;
-        case 12:
-            eMode = SC_COND_TOP_PERCENT;
-            break;
-        case 13:
-            eMode = SC_COND_BOTTOM_PERCENT;
-            break;
-        case 14:
-            eMode = SC_COND_ABOVE_AVERAGE;
-            break;
-        case 15:
-            eMode = SC_COND_BELOW_AVERAGE;
-            break;
-        case 16:
-            eMode = SC_COND_ABOVE_EQUAL_AVERAGE;
-            break;
-        case 17:
-            eMode = SC_COND_BELOW_EQUAL_AVERAGE;
-            break;
-        case 18:
-            eMode = SC_COND_ERROR;
-            break;
-        case 19:
-            eMode = SC_COND_NOERROR;
-            break;
-        case 20:
-            eMode = SC_COND_BEGINS_WITH;
-            break;
-        case 21:
-            eMode = SC_COND_ENDS_WITH;
-            break;
-        case 22:
-            eMode = SC_COND_CONTAINS_TEXT;
-            break;
-        case 23:
-            eMode = SC_COND_NOT_CONTAINS_TEXT;
-            break;
-        default:
-            assert(false); // this cannot happen
+        aExpr2 = maEdVal2.GetText();
+        if (aExpr2.isEmpty())
+        {
             return NULL;
+        }
     }
 
-    OUString aExpr1 = maEdVal1.GetText();
-
     ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
-
     return pEntry;
+}
+
+sal_Int32 ScConditionFrmtEntry::ConditionModeToEntryPos( ScConditionMode eMode ) const
+{
+    for ( sal_Int32 i = 0; i < NUM_COND_ENTRIES; ++i )
+    {
+        if (mpEntryToCond[i] == eMode)
+        {
+            return i;
+        }
+    }
+    assert(false); // should never get here
+    return 0;
+}
+
+ScConditionMode ScConditionFrmtEntry::EntryPosToConditionMode( sal_Int32 aEntryPos ) const
+{
+    assert( 0 <= aEntryPos && aEntryPos < NUM_COND_ENTRIES );
+    return mpEntryToCond[aEntryPos];
+}
+
+sal_Int32 ScConditionFrmtEntry::GetNumberEditFields( ScConditionMode eMode ) const
+{
+    switch(eMode)
+    {
+        case SC_COND_EQUAL:
+        case SC_COND_LESS:
+        case SC_COND_GREATER:
+        case SC_COND_EQLESS:
+        case SC_COND_EQGREATER:
+        case SC_COND_NOTEQUAL:
+        case SC_COND_TOP10:
+        case SC_COND_BOTTOM10:
+        case SC_COND_TOP_PERCENT:
+        case SC_COND_BOTTOM_PERCENT:
+        case SC_COND_BEGINS_WITH:
+        case SC_COND_ENDS_WITH:
+        case SC_COND_CONTAINS_TEXT:
+        case SC_COND_NOT_CONTAINS_TEXT:
+        case SC_COND_ERROR:
+        case SC_COND_NOERROR:
+            return 1;
+        case SC_COND_ABOVE_AVERAGE:
+        case SC_COND_BELOW_AVERAGE:
+        case SC_COND_ABOVE_EQUAL_AVERAGE:
+        case SC_COND_BELOW_EQUAL_AVERAGE:
+        case SC_COND_DUPLICATE:
+        case SC_COND_NOTDUPLICATE:
+            return 0;
+        case SC_COND_BETWEEN:
+        case SC_COND_NOTBETWEEN:
+            return 2;
+        default:
+            assert(false); // should never get here
+            return 0;
+    }
 }
 
 OUString ScConditionFrmtEntry::GetExpressionString()
@@ -419,10 +351,18 @@ ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
 
 void ScConditionFrmtEntry::SetActive()
 {
+    ScConditionMode eMode = EntryPosToConditionMode(maLbCondType.GetSelectEntryPos());
     maLbCondType.Show();
-    maEdVal1.Show();
-    if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
-        maEdVal2.Show();
+    switch(GetNumberEditFields(eMode))
+    {
+        case 1:
+            maEdVal1.Show();
+            break;
+        case 2:
+            maEdVal1.Show();
+            maEdVal2.Show();
+            break;
+    }
     maFtStyle.Show();
     maLbStyle.Show();
     maWdPreview.Show();
@@ -1048,26 +988,21 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
 {
     sal_Int32 nSelectPos = maLbCondType.GetSelectEntryPos();
-    if(nSelectPos == 6 || nSelectPos == 7)
+    ScConditionMode eMode = EntryPosToConditionMode(nSelectPos);
+    switch(GetNumberEditFields(eMode))
     {
-        maEdVal1.Show();
-        maEdVal2.Show();
-    }
-    else if(nSelectPos == 8 || nSelectPos == 9)
-    {
-        maEdVal2.Hide();
-        maEdVal1.Hide();
-    }
-    else if(nSelectPos <= 5 || (nSelectPos >= 10 && nSelectPos <= 13)
-            || nSelectPos >= 18)
-    {
-        maEdVal1.Show();
-        maEdVal2.Hide();
-    }
-    else
-    {
-        maEdVal1.Hide();
-        maEdVal2.Hide();
+        case 0:
+            maEdVal1.Hide();
+            maEdVal2.Hide();
+            break;
+        case 1:
+            maEdVal1.Show();
+            maEdVal2.Hide();
+            break;
+        case 2:
+            maEdVal1.Show();
+            maEdVal2.Show();
+            break;
     }
 
     return 0;
