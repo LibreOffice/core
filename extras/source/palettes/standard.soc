@@ -37,7 +37,7 @@
   <draw:color draw:name="Magenta 1" draw:color="#ff99ff"/>
   <draw:color draw:name="Purple 1" draw:color="#cc66ff"/>
   <draw:color draw:name="Blue 1" draw:color="#9999ff"/>
-  <draw:color draw:name="Sky blue 1" draw:color="#9999ff"/>
+  <draw:color draw:name="Sky blue 1" draw:color="#66ccff"/>
   <draw:color draw:name="Cyan 1" draw:color="#99ffff"/>
   <draw:color draw:name="Turquoise 1" draw:color="#66ff99"/>
   <draw:color draw:name="Green 1" draw:color="#99ff99"/>
