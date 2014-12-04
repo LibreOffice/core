@@ -49,7 +49,7 @@ class SVX_DLLPUBLIC FmFormPage : public SdrPage
 public:
     TYPEINFO_OVERRIDE();
 
-    FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
+    explicit FmFormPage(FmFormModel& rModel, bool bMasterPage=false);
     virtual ~FmFormPage();
 
     virtual void    SetModel(SdrModel* pNewModel) SAL_OVERRIDE;

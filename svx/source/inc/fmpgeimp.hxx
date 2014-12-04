@@ -64,7 +64,7 @@ protected:
     void Init();
 
 public:
-    FmFormPageImpl( FmFormPage& _rPage );
+    explicit FmFormPageImpl( FmFormPage& _rPage );
     ~FmFormPageImpl();
 
     void initFrom( FmFormPageImpl& i_foreignImpl );

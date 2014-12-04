@@ -490,7 +490,7 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
+    explicit SdrPage(SdrModel& rNewModel, bool bMasterPage=false);
     virtual ~SdrPage();
     virtual SdrPage* Clone() const SAL_OVERRIDE;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;

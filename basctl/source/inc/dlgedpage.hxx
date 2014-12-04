@@ -42,7 +42,7 @@ private:
 public:
     TYPEINFO_OVERRIDE();
 
-    DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
+    explicit DlgEdPage( DlgEdModel& rModel, bool bMasterPage = false );
     virtual ~DlgEdPage();
 
     virtual SdrPage* Clone() const SAL_OVERRIDE;
