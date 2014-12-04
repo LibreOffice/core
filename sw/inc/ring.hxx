@@ -188,7 +188,12 @@ namespace sw
             void increment()
                 { m_pCurrent = m_pCurrent ? m_pCurrent->GetNext() : m_pStart->GetNext(); }
             bool equal(RingIterator const& other) const
-                { return m_pCurrent == other.m_pCurrent && m_pStart == other.m_pStart; }
+            {
+                // we never want to compare iterators from
+                // different rings or starting points
+                assert(m_pStart == other.m_pStart);
+                return m_pCurrent == other.m_pCurrent;
+            }
             T& dereference() const
                 { return m_pCurrent ? *m_pCurrent : * m_pStart; }
             /**
