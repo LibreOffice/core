@@ -202,6 +202,8 @@ public:
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
 
+typedef rtl::Reference<PushButton> PushButtonPtr;
+
 inline void PushButton::Check( bool bCheck )
 {
     SetState( (bCheck) ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -229,6 +231,7 @@ public:
     virtual void    Click() SAL_OVERRIDE;
 };
 
+typedef rtl::Reference<OKButton> OKButtonPtr;
 
 class VCL_DLLPUBLIC CancelButton : public PushButton
 {
@@ -246,6 +249,8 @@ public:
 
     virtual void    Click() SAL_OVERRIDE;
 };
+
+typedef rtl::Reference<CancelButton> CancelButtonPtr;
 
 class VCL_DLLPUBLIC CloseButton : public CancelButton
 {
@@ -276,6 +281,7 @@ public:
     virtual void    Click() SAL_OVERRIDE;
 };
 
+typedef rtl::Reference<HelpButton> HelpButtonPtr;
 
 // - RadioButton -
 
@@ -502,6 +508,8 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 };
+
+typedef rtl::Reference<CheckBox> CheckBoxPtr;
 
 inline void CheckBox::Check( bool bCheck )
 {
