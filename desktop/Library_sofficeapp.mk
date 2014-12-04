@@ -118,14 +118,17 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 endif
 
 # liblibreoffice bits
+ifeq ($(OS),ANDROID)
+$(eval $(call gb_Library_add_exception_objects,sofficeapp,\
+	desktop/source/lib/init \
+	desktop/source/lib/lokandroid \
+))
+else
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 ))
-
-ifeq ($(OS),ANDROID)
-$(eval $(call gb_Library_add_exception_objects,sofficeapp,\
-	desktop/source/lib/lokandroid \
-))
+endif
 endif
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)
