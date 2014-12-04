@@ -11,6 +11,11 @@
  */
 #define STATIC_LINKING 0
 
+/*
+ * True in case of --enable-mergelibs=yes
+ */
+#define MERGELIBS_YES 0
+
 #define ENABLE_RUNTIME_OPTIMIZATIONS 0
 
 #endif
