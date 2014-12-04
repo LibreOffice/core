@@ -439,7 +439,7 @@ void MergeDataFile::InsertEntry(
 OString MergeDataFile::CreateKey(const OString& rTYP, const OString& rGID,
     const OString& rLID, const OString& rFilename, bool bCaseSensitive)
 {
-    static const OString sStroke('-');
+    static const char sStroke[] = "-";
     OString sKey( rTYP );
     sKey += sStroke;
     sKey += rGID;

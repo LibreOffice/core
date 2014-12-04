@@ -29,16 +29,16 @@ void lcl_parseAdjustmentValue(comphelper::SequenceAsVector<drawing::EnhancedCust
     do
     {
         OString aToken = rValue.getToken(0, ',', nIndex).trim();
-        static const OString aNamePrefix("Name = \"");
-        static const OString aValuePrefix("Value = (any) { (long) ");
+        static const char aNamePrefix[] = "Name = \"";
+        static const char aValuePrefix[] = "Value = (any) { (long) ";
         if (aToken.startsWith(aNamePrefix))
         {
-            OString aName = aToken.copy(aNamePrefix.getLength(), aToken.getLength() - aNamePrefix.getLength() - strlen("\""));
+            OString aName = aToken.copy(strlen(aNamePrefix), aToken.getLength() - strlen(aNamePrefix) - strlen("\""));
             aAdjustmentValue.Name = OUString::fromUtf8(aName);
         }
         else if (aToken.startsWith(aValuePrefix))
         {
-            OString aValue = aToken.copy(aValuePrefix.getLength(), aToken.getLength() - aValuePrefix.getLength() - strlen(" }"));
+            OString aValue = aToken.copy(strlen(aValuePrefix), aToken.getLength() - strlen(aValuePrefix) - strlen(" }"));
             aAdjustmentValue.Value = uno::makeAny(aValue.toInt32());
         }
         else if (!aToken.startsWith("State = "))
@@ -77,27 +77,27 @@ drawing::EnhancedCustomShapeParameterPair lcl_parseEnhancedCustomShapeParameterP
     drawing::EnhancedCustomShapeParameterPair aPair;
     OString aToken = rValue;
     // We expect the followings here: First.Value, First.Type, Second.Value, Second.Type
-    static const OString aExpectedFVPrefix = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
+    static const char aExpectedFVPrefix[] = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
     assert(aToken.startsWith(aExpectedFVPrefix));
-    sal_Int32 nIndex = aExpectedFVPrefix.getLength();
+    sal_Int32 nIndex = strlen(aExpectedFVPrefix);
     aPair.First.Value = uno::makeAny(static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32()));
 
-    static const OString aExpectedFTPrefix = ", Type = (short) ";
+    static const char aExpectedFTPrefix[] = ", Type = (short) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedFTPrefix));
-    nIndex = aExpectedFTPrefix.getLength();
+    nIndex = strlen(aExpectedFTPrefix);
     aPair.First.Type = static_cast<sal_uInt16>(aToken.getToken(0, '}', nIndex).toInt32());
 
-    static const OString aExpectedSVPrefix = ", Second = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
+    static const char aExpectedSVPrefix[] = ", Second = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedSVPrefix));
-    nIndex = aExpectedSVPrefix.getLength();
+    nIndex = strlen(aExpectedSVPrefix);
     aPair.Second.Value = uno::makeAny(static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32()));
 
-    static const OString aExpectedSTPrefix = ", Type = (short) ";
+    static const char aExpectedSTPrefix[] = ", Type = (short) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedSTPrefix));
-    nIndex = aExpectedSTPrefix.getLength();
+    nIndex = strlen(aExpectedSTPrefix);
     aPair.Second.Type = static_cast<sal_uInt16>(aToken.getToken(0, '}', nIndex).toInt32());
     return aPair;
 }
@@ -107,15 +107,15 @@ drawing::EnhancedCustomShapeSegment lcl_parseEnhancedCustomShapeSegment(const OS
     drawing::EnhancedCustomShapeSegment aSegment;
     OString aToken = rValue;
     // We expect the followings here: Command, Count
-    static const OString aExpectedCommandPrefix = "Command = (short) ";
+    static const char aExpectedCommandPrefix[] = "Command = (short) ";
     assert(aToken.startsWith(aExpectedCommandPrefix));
-    sal_Int32 nIndex = aExpectedCommandPrefix.getLength();
+    sal_Int32 nIndex = strlen(aExpectedCommandPrefix);
     aSegment.Command = static_cast<sal_Int16>(aToken.getToken(0, ',', nIndex).toInt32());
 
-    static const OString aExpectedCountPrefix = " Count = (short) ";
+    static const char aExpectedCountPrefix[] = " Count = (short) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedCountPrefix));
-    nIndex = aExpectedCountPrefix.getLength();
+    nIndex = strlen(aExpectedCountPrefix);
     aSegment.Count = static_cast<sal_Int16>(aToken.getToken(0, '}', nIndex).toInt32());
     return aSegment;
 }
@@ -125,27 +125,27 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     awt::Rectangle aRectangle;
     OString aToken = rValue;
     // We expect the followings here: X, Y, Width, Height
-    static const OString aExpectedXPrefix = "X = (long) ";
+    static const char aExpectedXPrefix[] = "X = (long) ";
     assert(aToken.startsWith(aExpectedXPrefix));
-    sal_Int32 nIndex = aExpectedXPrefix.getLength();
+    sal_Int32 nIndex = strlen(aExpectedXPrefix);
     aRectangle.X = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
 
-    static const OString aExpectedYPrefix = " Y = (long) ";
+    static const char aExpectedYPrefix[] = " Y = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedYPrefix));
-    nIndex = aExpectedYPrefix.getLength();
+    nIndex = strlen(aExpectedYPrefix);
     aRectangle.Y = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
 
-    static const OString aExpectedWidthPrefix = " Width = (long) ";
+    static const char aExpectedWidthPrefix[] = " Width = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedWidthPrefix));
-    nIndex = aExpectedWidthPrefix.getLength();
+    nIndex = strlen(aExpectedWidthPrefix);
     aRectangle.Width = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
 
-    static const OString aExpectedHeightPrefix = " Height = (long) ";
+    static const char aExpectedHeightPrefix[] = " Height = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedHeightPrefix));
-    nIndex = aExpectedHeightPrefix.getLength();
+    nIndex = strlen(aExpectedHeightPrefix);
     aRectangle.Width = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
 
     return aRectangle;
@@ -156,15 +156,15 @@ awt::Size lcl_parseSize(const OString& rValue)
     awt::Size aSize;
     OString aToken = rValue;
     // We expect the followings here: Width, Height
-    static const OString aExpectedWidthPrefix = "Width = (long) ";
+    static const char aExpectedWidthPrefix[] = "Width = (long) ";
     assert(aToken.startsWith(aExpectedWidthPrefix));
-    sal_Int32 nIndex = aExpectedWidthPrefix.getLength();
+    sal_Int32 nIndex = strlen(aExpectedWidthPrefix);
     aSize.Width = static_cast<sal_Int32>(aToken.getToken(0, ',', nIndex).toInt32());
 
-    static const OString aExpectedHeightPrefix = " Height = (long) ";
+    static const char aExpectedHeightPrefix[] = " Height = (long) ";
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedHeightPrefix));
-    nIndex = aExpectedHeightPrefix.getLength();
+    nIndex = strlen(aExpectedHeightPrefix);
     aSize.Height = static_cast<sal_Int32>(aToken.copy(nIndex).toInt32());
 
     return aSize;
@@ -193,10 +193,10 @@ drawing::EnhancedCustomShapeTextFrame lcl_parseEnhancedCustomShapeTextFrame(cons
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const OString aExpectedPrefix("TopLeft = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ");
+            static const char aExpectedPrefix[] = "TopLeft = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" }"));
                 aTextFrame.TopLeft = lcl_parseEnhancedCustomShapeParameterPair(aToken);
             }
             else
@@ -206,10 +206,10 @@ drawing::EnhancedCustomShapeTextFrame lcl_parseEnhancedCustomShapeTextFrame(cons
     }
 
     OString aToken = rValue.copy(nStart, rValue.getLength() - nStart);
-    static const OString aExpectedPrefix("BottomRight = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ");
+    static const char aExpectedPrefix[] = "BottomRight = (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
     if (aToken.startsWith(aExpectedPrefix))
     {
-        aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" }"));
+        aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" }"));
         aTextFrame.BottomRight = lcl_parseEnhancedCustomShapeParameterPair(aToken);
     }
     else
@@ -242,10 +242,10 @@ void lcl_parseHandlePosition(comphelper::SequenceAsVector<beans::PropertyValue>&
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const OString aExpectedPrefix("Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ");
+            static const char aExpectedPrefix[] = "Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
 
                 beans::PropertyValue aPropertyValue;
                 aPropertyValue.Name = "Position";
@@ -283,21 +283,21 @@ void lcl_parseHandleRange(comphelper::SequenceAsVector<beans::PropertyValue>& rH
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const OString aExpectedPrefix("Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameter) { ");
+            static const char aExpectedPrefix[] = "Value = (any) { (com.sun.star.drawing.EnhancedCustomShapeParameter) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
                 drawing::EnhancedCustomShapeParameter aParameter;
-                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 // We expect the followings here: Value and Type
-                static const OString aExpectedVPrefix = "Value = (any) { (long) ";
+                static const char aExpectedVPrefix[] = "Value = (any) { (long) ";
                 assert(aToken.startsWith(aExpectedVPrefix));
-                sal_Int32 nIndex = aExpectedVPrefix.getLength();
+                sal_Int32 nIndex = strlen(aExpectedVPrefix);
                 aParameter.Value = uno::makeAny(aToken.getToken(0, '}', nIndex).toInt32());
 
-                static const OString aExpectedTPrefix = ", Type = (short) ";
+                static const char aExpectedTPrefix[] = ", Type = (short) ";
                 aToken = aToken.copy(nIndex);
                 assert(aToken.startsWith(aExpectedTPrefix));
-                nIndex = aExpectedTPrefix.getLength();
+                nIndex = strlen(aExpectedTPrefix);
                 aParameter.Type = static_cast<sal_Int16>(aToken.getToken(0, '}', nIndex).toInt32());
 
                 beans::PropertyValue aPropertyValue;
@@ -316,11 +316,11 @@ void lcl_parseHandleRange(comphelper::SequenceAsVector<beans::PropertyValue>& rH
 // Parses a string like: Name = "RefY", Handle = (long) 0, Value = (any) { (long) 0 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE
 void lcl_parseHandleRef(comphelper::SequenceAsVector<beans::PropertyValue>& rHandle, const OString& rValue, const OUString& rName)
 {
-    static const OString aExpectedXPrefix("Name = \"RefX\", Handle = (long) 0, Value = (any) { (long) ");
-    static const OString aExpectedYPrefix("Name = \"RefY\", Handle = (long) 0, Value = (any) { (long) ");
+    static const char aExpectedXPrefix[] = "Name = \"RefX\", Handle = (long) 0, Value = (any) { (long) ";
+    static const char aExpectedYPrefix[] = "Name = \"RefY\", Handle = (long) 0, Value = (any) { (long) ";
     if (rValue.startsWith(aExpectedXPrefix) || rValue.startsWith(aExpectedYPrefix))
     {
-        sal_Int32 nIndex = aExpectedXPrefix.getLength();
+        sal_Int32 nIndex = strlen(aExpectedXPrefix);
         beans::PropertyValue aPropertyValue;
         aPropertyValue.Name = rName;
         // We only expect a Value here
@@ -470,10 +470,10 @@ void lcl_parsePathCoordinates(comphelper::SequenceAsVector<beans::PropertyValue>
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const OString aExpectedPrefix("Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ");
+            static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathCoordinateValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -534,10 +534,10 @@ void lcl_parsePathSegments(comphelper::SequenceAsVector<beans::PropertyValue>& r
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const OString aExpectedPrefix("Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeSegment) { ");
+            static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeSegment) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathSegmentValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -598,10 +598,10 @@ void lcl_parsePathTextFrames(comphelper::SequenceAsVector<beans::PropertyValue>&
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const OString aExpectedPrefix("Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeTextFrame) { ");
+            static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeTextFrame) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathTextFrameValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -660,10 +660,10 @@ void lcl_parsePathSubViewSize(comphelper::SequenceAsVector<beans::PropertyValue>
         else if (rValue[i] == ',' && !bIgnore)
         {
             OString aToken = rValue.copy(nStart, i - nStart);
-            static const OString aExpectedPrefix("Value = (any) { ([]com.sun.star.awt.Size) { ");
+            static const char aExpectedPrefix[] = "Value = (any) { ([]com.sun.star.awt.Size) { ";
             if (aToken.startsWith(aExpectedPrefix))
             {
-                aToken = aToken.copy(aExpectedPrefix.getLength(), aToken.getLength() - aExpectedPrefix.getLength() - strlen(" } }"));
+                aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
                 lcl_parsePathSubViewSizeValues(rPath, aToken);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -727,14 +727,14 @@ void CustomShapeProperties::initializePresetDataMap()
     bool bFirst = true;
     while (bNotDone)
     {
-        static const OString aCommentPrefix("/* ");
+        static const char aCommentPrefix[] = "/* ";
         if (aLine.startsWith(aCommentPrefix))
         {
             if (bFirst)
                 bFirst = false;
             else
                 maPresetDataMap[StaticTokenMap::get().getTokenFromUnicode(aName)] = aPropertyMap;
-            aName = OUString::fromUtf8(aLine.copy(aCommentPrefix.getLength(), aLine.getLength() - aCommentPrefix.getLength() - strlen(" */")));
+            aName = OUString::fromUtf8(aLine.copy(strlen(aCommentPrefix), aLine.getLength() - strlen(aCommentPrefix) - strlen(" */")));
         }
         else
         {

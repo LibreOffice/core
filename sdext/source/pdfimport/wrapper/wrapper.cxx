@@ -677,14 +677,14 @@ void Parser::readFont()
 
 uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
 {
-    static const OString aJpegMarker( "JPEG" );
-    static const OString aPbmMarker( "PBM" );
-    static const OString aPpmMarker( "PPM" );
-    static const OString aPngMarker( "PNG" );
-    static const char aJpegFile[] = "DUMMY.JPEG";
-    static const char aPbmFile[] = "DUMMY.PBM";
-    static const char aPpmFile[] = "DUMMY.PPM";
-    static const char aPngFile[] = "DUMMY.PNG";
+    static const char aJpegMarker[] = "JPEG";
+    static const char aPbmMarker[]  = "PBM";
+    static const char aPpmMarker[]  = "PPM";
+    static const char aPngMarker[]  = "PNG";
+    static const char aJpegFile[]   = "DUMMY.JPEG";
+    static const char aPbmFile[]    = "DUMMY.PBM";
+    static const char aPpmFile[]    = "DUMMY.PPM";
+    static const char aPngFile[]    = "DUMMY.PNG";
 
     OString aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );

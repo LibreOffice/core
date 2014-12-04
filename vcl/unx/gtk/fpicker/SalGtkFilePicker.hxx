@@ -213,8 +213,6 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         bool mbToggleVisibility[TOGGLE_LAST];
         bool mbToggleChecked[TOGGLE_LAST];
 
-        static const OString m_ToggleLabels[TOGGLE_LAST];
-
         enum {
             PLAY,
             BUTTON_LAST };

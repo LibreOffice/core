@@ -143,40 +143,25 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     return rStrm;
 }
 
-namespace
+static const char * ImplINetRFC822MessageHeaderData[] =
 {
-    struct ImplINetRFC822MessageHeaderDataImpl
-    {
-        const OString* operator()()
-        {
-            static const OString _ImplINetRFC822MessageHeaderData[] =
-            {
-                OString("BCC"),
-                OString("CC"),
-                OString("Comments"),
-                OString("Date"),
-                OString("From"),
-                OString("In-Reply-To"),
-                OString("Keywords"),
-                OString("Message-ID"),
-                OString("References"),
-                OString("Reply-To"),
-                OString("Return-Path"),
-                OString("Subject"),
-                OString("Sender"),
-                OString("To"),
-                OString("X-Mailer"),
-                OString("Return-Receipt-To")
-            };
-            return &_ImplINetRFC822MessageHeaderData[0];
-        }
-    };
-
-    struct ImplINetRFC822MessageHeaderData
-        : public rtl::StaticAggregate< const OString, ImplINetRFC822MessageHeaderDataImpl > {};
-}
-
-#define HDR(n) ImplINetRFC822MessageHeaderData::get()[(n)]
+    "BCC",
+    "CC",
+    "Comments",
+    "Date",
+    "From",
+    "In-Reply-To",
+    "Keywords",
+    "Message-ID",
+    "References",
+    "Reply-To",
+    "Return-Path",
+    "Subject",
+    "Sender",
+    "To",
+    "X-Mailer",
+    "Return-Receipt-To"
+};
 
 enum _ImplINetRFC822MessageHeaderState
 {
@@ -592,7 +577,7 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
             case INETMSG_RFC822_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    INetMessageHeader (HDR(nIdx), rHeader.GetValue()),
+                    INetMessageHeader( ImplINetRFC822MessageHeaderData[nIdx], rHeader.GetValue() ),
                     m_nIndex[nIdx]);
                 nNewIndex = m_nIndex[nIdx];
                 break;
@@ -630,30 +615,15 @@ SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
     return rStrm;
 }
 
-namespace
+static const char* ImplINetMIMEMessageHeaderData[] =
 {
-    struct ImplINetMIMEMessageHeaderDataImpl
-    {
-        const OString* operator()()
-        {
-            static const OString _ImplINetMIMEMessageHeaderData[] =
-            {
-                OString("MIME-Version"),
-                OString("Content-Description"),
-                OString("Content-Disposition"),
-                OString("Content-ID"),
-                OString("Content-Type"),
-                OString("Content-Transfer-Encoding")
-            };
-            return &_ImplINetMIMEMessageHeaderData[0];
-        }
-    };
-
-    struct ImplINetMIMEMessageHeaderData
-        : public rtl::StaticAggregate< const OString, ImplINetMIMEMessageHeaderDataImpl > {};
-}
-
-#define MIMEHDR(n) ImplINetMIMEMessageHeaderData::get()[(n)]
+    "MIME-Version",
+    "Content-Description",
+    "Content-Disposition",
+    "Content-ID",
+    "Content-Type",
+    "Content-Transfer-Encoding"
+};
 
 enum _ImplINetMIMEMessageHeaderState
 {
@@ -871,7 +841,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
             case INETMSG_MIME_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    INetMessageHeader (MIMEHDR(nIdx), rHeader.GetValue()),
+                    INetMessageHeader( ImplINetMIMEMessageHeaderData[nIdx], rHeader.GetValue()),
                     m_nIndex[nIdx]);
                 nNewIndex = m_nIndex[nIdx];
                 break;
@@ -890,7 +860,7 @@ void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        MIMEHDR(INETMSG_MIME_VERSION), rVersion,
+        ImplINetMIMEMessageHeaderData[INETMSG_MIME_VERSION], rVersion,
         m_nIndex[INETMSG_MIME_VERSION]);
 }
 
@@ -898,7 +868,7 @@ void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        MIMEHDR(INETMSG_MIME_CONTENT_DISPOSITION), rDisposition,
+        ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_DISPOSITION], rDisposition,
         m_nIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
 }
 
@@ -906,7 +876,7 @@ void INetMIMEMessage::SetContentType (const OUString& rType)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        MIMEHDR(INETMSG_MIME_CONTENT_TYPE), rType,
+        ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_TYPE], rType,
         m_nIndex[INETMSG_MIME_CONTENT_TYPE]);
 }
 
@@ -915,7 +885,7 @@ void INetMIMEMessage::SetContentTransferEncoding (
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        MIMEHDR(INETMSG_MIME_CONTENT_TRANSFER_ENCODING), rEncoding,
+        ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_TRANSFER_ENCODING], rEncoding,
         m_nIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
 }
 

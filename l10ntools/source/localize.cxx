@@ -261,7 +261,7 @@ void handleFilesOfDir(
 }
 
 bool includeProject(const OString& rProject) {
-    static const OString projects[] = {
+    static const char *projects[] = {
         "accessibility",
         "avmedia",
         "basctl",
