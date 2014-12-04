@@ -1856,17 +1856,9 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         if ( pConfig->hasKey( pKey ) )
             aStyleSettings.SetActiveColor( readColor( pConfig, pKey ) );
 
-        pKey = "activeBlend";
-        if ( pConfig->hasKey( pKey ) )
-            aStyleSettings.SetActiveColor2( readColor( pConfig, pKey ) );
-
         pKey = "inactiveBackground";
         if ( pConfig->hasKey( pKey ) )
             aStyleSettings.SetDeactiveColor( readColor( pConfig, pKey ) );
-
-        pKey = "inactiveBlend";
-        if ( pConfig->hasKey( pKey ) )
-            aStyleSettings.SetDeactiveColor2( readColor( pConfig, pKey ) );
 
         pKey = "inactiveForeground";
         if ( pConfig->hasKey( pKey ) )

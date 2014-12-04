@@ -102,25 +102,6 @@ EnumContext::Application EnumContext::GetApplication_DI (void) const
      }
 }
 
-
-
-
-const ::rtl::OUString& EnumContext::GetApplicationName (void) const
-{
-    return EnumContext::GetApplicationName(meApplication);
-}
-
-
-
-
-const ::rtl::OUString& EnumContext::GetContextName (void) const
-{
-    return EnumContext::GetContextName(meContext);
-}
-
-
-
-
 bool EnumContext::operator== (const EnumContext aOther)
 {
     return meApplication==aOther.meApplication

@@ -90,7 +90,6 @@ struct ImplStyleData
 
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
-    Color                           maActiveColor2;
     Color                           maActiveTextColor;
     Color                           maRowColor;
     Color                           maAlternatingRowColor;
@@ -100,7 +99,6 @@ struct ImplStyleData
     Color                           maDarkShadowColor;
     Color                           maDeactiveBorderColor;
     Color                           maDeactiveColor;
-    Color                           maDeactiveColor2;
     Color                           maDeactiveTextColor;
     Color                           maDialogColor;
     Color                           maDialogTextColor;
@@ -564,7 +562,6 @@ ImplStyleData::ImplStyleData() :
 ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveBorderColor( rData.maActiveBorderColor ),
     maActiveColor( rData.maActiveColor ),
-    maActiveColor2( rData.maActiveColor2 ),
     maActiveTextColor( rData.maActiveTextColor ),
     maRowColor( rData.maRowColor ),
     maAlternatingRowColor( rData.maAlternatingRowColor ),
@@ -574,7 +571,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maDarkShadowColor( rData.maDarkShadowColor ),
     maDeactiveBorderColor( rData.maDeactiveBorderColor ),
     maDeactiveColor( rData.maDeactiveColor ),
-    maDeactiveColor2( rData.maDeactiveColor2 ),
     maDeactiveTextColor( rData.maDeactiveTextColor ),
     maDialogColor( rData.maDialogColor ),
     maDialogTextColor( rData.maDialogTextColor ),
@@ -721,11 +717,9 @@ void ImplStyleData::SetStandardStyles()
     maFieldTextColor            = Color( COL_BLACK );
     maFieldRolloverTextColor    = Color( COL_BLACK );
     maActiveColor               = Color( COL_BLUE );
-    maActiveColor2              = Color( COL_BLACK );
     maActiveTextColor           = Color( COL_WHITE );
     maActiveBorderColor         = Color( COL_LIGHTGRAY );
     maDeactiveColor             = Color( COL_GRAY );
-    maDeactiveColor2            = Color( COL_BLACK );
     maDeactiveTextColor         = Color( COL_LIGHTGRAY );
     maDeactiveBorderColor       = Color( COL_LIGHTGRAY );
     maMenuColor                 = Color( COL_LIGHTGRAY );
@@ -1049,19 +1043,6 @@ StyleSettings::GetActiveColor() const
 }
 
 void
-StyleSettings::SetActiveColor2( const Color& rColor )
-{
-    CopyData();
-    mpData->maActiveColor2 = rColor;
-}
-
-const Color&
-StyleSettings::GetActiveColor2() const
-{
-    return mpData->maActiveColor2;
-}
-
-void
 StyleSettings::SetActiveTextColor( const Color& rColor )
 {
     CopyData();
@@ -1098,19 +1079,6 @@ const Color&
 StyleSettings::GetDeactiveColor() const
 {
     return mpData->maDeactiveColor;
-}
-
-void
-StyleSettings::SetDeactiveColor2( const Color& rColor )
-{
-    CopyData();
-    mpData->maDeactiveColor2 = rColor;
-}
-
-const Color&
-StyleSettings::GetDeactiveColor2() const
-{
-    return mpData->maDeactiveColor2;
 }
 
 void
@@ -2325,11 +2293,9 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->maFieldColor              == rSet.mpData->maFieldColor)               &&
          (mpData->maFieldTextColor          == rSet.mpData->maFieldTextColor)           &&
          (mpData->maActiveColor             == rSet.mpData->maActiveColor)              &&
-         (mpData->maActiveColor2            == rSet.mpData->maActiveColor2)             &&
          (mpData->maActiveTextColor         == rSet.mpData->maActiveTextColor)          &&
          (mpData->maActiveBorderColor       == rSet.mpData->maActiveBorderColor)        &&
          (mpData->maDeactiveColor           == rSet.mpData->maDeactiveColor)            &&
-         (mpData->maDeactiveColor2          == rSet.mpData->maDeactiveColor2)           &&
          (mpData->maDeactiveTextColor       == rSet.mpData->maDeactiveTextColor)        &&
          (mpData->maDeactiveBorderColor     == rSet.mpData->maDeactiveBorderColor)      &&
          (mpData->maMenuColor               == rSet.mpData->maMenuColor)                &&

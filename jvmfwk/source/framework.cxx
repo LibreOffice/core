@@ -1067,16 +1067,6 @@ CJavaInfo & CJavaInfo::operator = (const ::JavaInfo* info)
     return *this;
 }
 
-
-
-OUString CJavaInfo::getVendor() const
-{
-    if (pInfo)
-        return OUString(pInfo->sVendor);
-    else
-        return OUString();
-}
-
 OUString CJavaInfo::getLocation() const
 {
     if (pInfo)

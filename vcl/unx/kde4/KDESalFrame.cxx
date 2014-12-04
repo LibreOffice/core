@@ -171,9 +171,6 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetActiveColor(toColor(pal.color(QPalette::Active, QPalette::Window)));
     style.SetDeactiveColor(toColor(pal.color(QPalette::Inactive, QPalette::Window)));
 
-    style.SetActiveColor2(toColor(pal.color(QPalette::Active, QPalette::Window)));
-    style.SetDeactiveColor2(toColor(pal.color(QPalette::Inactive, QPalette::Window)));
-
     style.SetActiveTextColor(toColor(pal.color(QPalette::Active, QPalette::WindowText)));
     style.SetDeactiveTextColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
 

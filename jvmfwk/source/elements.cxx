@@ -644,29 +644,6 @@ void NodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
     }
 }
 
-void NodeJava::setJRELocations(rtl_uString  * * arLocations, sal_Int32 size)
-{
-    OSL_ASSERT( !(arLocations == 0 && size != 0));
-    if (! m_JRELocations)
-        m_JRELocations = boost::optional<std::vector<OUString> > (
-            std::vector<OUString>());
-    m_JRELocations->clear();
-    if (arLocations != NULL)
-    {
-        for (int i  = 0; i < size; i++)
-        {
-            const OUString & sLocation = static_cast<rtl_uString*>(arLocations[i]);
-
-            //only add the path if not already present
-            std::vector<OUString>::const_iterator it =
-                std::find(m_JRELocations->begin(), m_JRELocations->end(),
-                          sLocation);
-            if (it == m_JRELocations->end())
-                m_JRELocations->push_back(sLocation);
-        }
-    }
-}
-
 void NodeJava::addJRELocation(rtl_uString * sLocation)
 {
     OSL_ASSERT( sLocation);
@@ -680,11 +657,6 @@ void NodeJava::addJRELocation(rtl_uString * sLocation)
     if (it == m_JRELocations->end())
         m_JRELocations->push_back(OUString(sLocation));
 }
-
-
-
-
-
 
 jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL) const
 {

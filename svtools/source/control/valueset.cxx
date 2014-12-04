@@ -1567,15 +1567,6 @@ void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage, size_t nPos 
     ImplInsertItem( pItem, nPos );
 }
 
-void ValueSet::InsertItem( sal_uInt16 nItemId, const Color& rColor, size_t nPos )
-{
-    ValueSetItem* pItem = new ValueSetItem( *this );
-    pItem->mnId     = nItemId;
-    pItem->meType   = VALUESETITEM_COLOR;
-    pItem->maColor  = rColor;
-    ImplInsertItem( pItem, nPos );
-}
-
 void ValueSet::InsertItem( sal_uInt16 nItemId, const Image& rImage,
                            const OUString& rText, size_t nPos )
 {

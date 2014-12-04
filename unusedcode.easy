@@ -5,11 +5,15 @@ GDriveDocument::GDriveDocument(GDriveSession*)
 GDriveFolder::GDriveFolder(GDriveSession*)
 GDriveProperty::GDriveProperty()
 GDriveSession::GDriveSession()
+ImpBitmap::ImplCrop(Rectangle const&)
+ImpBitmap::ImplErase(Color const&)
 ImpBitmap::ImplSetSalBitmap(SalBitmap*)
+OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()
 OpenGLContext::requestVirtualDevice()
 OpenGLRender::CreateTextTexture(rtl::OUString const&, vcl::Font, long, com::sun::star::awt::Point, com::sun::star::awt::Size, long)
+OpenGLTexture::Draw()
 OutputDevice::GetCanvas() const
 OutputDevice::HasAlpha()
 OutputDevice::LogicHeightToDeviceCoordinate(long) const
@@ -22,7 +26,9 @@ Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScBroadcastAreaSlotMachine::AreaBroadcastInRange(ScRange const&, ScHint const&) const
+ScCellValue::set(ScRefCellValue const&)
 ScDocument::CreateFormatTable() const
+ScDocument::EndAllListeners(ScRange const&)
 ScFormulaCellGroup::scheduleCompilation()
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
@@ -169,7 +175,6 @@ basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon c
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
-comphelper::ThreadPool::getSharedOptimalPool()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
@@ -185,6 +190,11 @@ sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::finish()
 sc::CLBuildKernelThread::produce()
 sc::CellValues::transferTo(ScColumn&, int)
+sc::FormulaGroupAreaListener::getGroupLength() const
+sc::FormulaGroupAreaListener::getRange() const
+sc::FormulaGroupAreaListener::getTopCellPos() const
+sc::FormulaGroupAreaListener::isEndFixed() const
+sc::FormulaGroupAreaListener::isStartFixed() const
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sdr::contact::ViewContactOfTextObj::GetTextObj() const

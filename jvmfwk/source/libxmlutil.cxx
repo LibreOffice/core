@@ -22,11 +22,6 @@
 namespace jfw
 {
 
-CXPathObjectPtr::CXPathObjectPtr(xmlXPathObject* aObject)
-    : _object(aObject)
-{
-}
-
 CXPathObjectPtr::CXPathObjectPtr():_object(NULL)
 {
 }

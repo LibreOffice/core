@@ -14,19 +14,9 @@ NfCurrencyTable::iterator NfCurrencyTable::begin()
     return maData.begin();
 }
 
-NfCurrencyTable::iterator NfCurrencyTable::end()
-{
-    return maData.end();
-}
-
 NfCurrencyTable::const_iterator NfCurrencyTable::begin() const
 {
     return maData.begin();
-}
-
-NfCurrencyTable::const_iterator NfCurrencyTable::end() const
-{
-    return maData.end();
 }
 
 NfCurrencyEntry& NfCurrencyTable::operator[] ( size_t i )

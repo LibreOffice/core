@@ -23,9 +23,7 @@ public:
     typedef DataType::const_iterator const_iterator;
 
     iterator begin();
-    iterator end();
     const_iterator begin() const;
-    const_iterator end() const;
 
     NfCurrencyEntry& operator[] ( size_t i );
     const NfCurrencyEntry& operator[] ( size_t i ) const;

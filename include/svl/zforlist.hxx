@@ -255,8 +255,6 @@ public:
                                          sal_Unicode cZero );
                         ~NfCurrencyEntry() {}
 
-    NfCurrencyEntry* Clone() const;
-
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
 
@@ -303,11 +301,6 @@ public:
     /// General Unicode Euro symbol
     static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
-
-inline NfCurrencyEntry* new_clone( const NfCurrencyEntry& r )
-{
-    return r.Clone();
-}
 
 typedef std::vector< OUString > NfWSStringsDtor;
 
@@ -642,8 +635,6 @@ public:
 
     /// DEPRECATED: Return first character of the decimal separator of the current language/country
     sal_Unicode GetDecSep() const;
-    /// Return the decimal separator of the current language/country
-    OUString GetDecimalSep() const;
 
     /// Return the decimal separator matching the locale of the given format
     OUString GetFormatDecimalSep( sal_uInt32 nFormat ) const;
@@ -920,10 +911,6 @@ public:
 
     // return corresponding Transliteration wrapper
     const ::utl::TransliterationWrapper* GetTransliteration() const;
-
-    // return corresponding Transliteration wrapper with loadModuleByImplName()
-    const ::utl::TransliterationWrapper* GetTransliterationForModule(
-        const OUString& rModule, LanguageType eLang ) const;
 
     // return the corresponding CharacterClassification wrapper
     const CharClass* GetCharClass() const;

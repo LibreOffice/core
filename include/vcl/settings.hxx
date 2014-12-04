@@ -278,9 +278,6 @@ public:
     void                            SetActiveColor( const Color& rColor );
     const Color&                    GetActiveColor() const;
 
-    void                            SetActiveColor2( const Color& rColor );
-    const Color&                    GetActiveColor2() const;
-
     void                            SetActiveTextColor( const Color& rColor );
     const Color&                    GetActiveTextColor() const;
 
@@ -289,9 +286,6 @@ public:
 
     void                            SetDeactiveColor( const Color& rColor );
     const Color&                    GetDeactiveColor() const;
-
-    void                            SetDeactiveColor2( const Color& rColor );
-    const Color&                    GetDeactiveColor2() const;
 
     void                            SetDeactiveTextColor( const Color& rColor );
     const Color&                    GetDeactiveTextColor() const;

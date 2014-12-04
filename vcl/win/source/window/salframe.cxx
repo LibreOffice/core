@@ -2660,7 +2660,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
     aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
     aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
-    aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
     aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
     aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );

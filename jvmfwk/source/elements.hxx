@@ -207,13 +207,6 @@ public:
      */
     void setVmParameters(rtl_uString  * * arParameters, sal_Int32 size);
 
-    /** sets the /java/jreLocations/location elements.
-        When this method is called then all previous values are removed
-        and replaced by those in arParamters.
-        /java/jreLocations@xsi:nil will be set to true write() is called.
-     */
-    void setJRELocations(rtl_uString  * * arParameters, sal_Int32 size);
-
     /** adds a location to the already existing locations.
         Note: call load() before, then add the location and then call write().
     */

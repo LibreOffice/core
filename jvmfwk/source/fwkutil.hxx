@@ -79,23 +79,6 @@ OUString getDirFromFile(const OUString& usFilePath);
 /** Returns the file URL of the folder where the executable resides.
  */
 OUString getExecutableDirectory();
-/** Locates the plugin library and returns the file URL.
-
-    First tries to locate plugin relative to baseUrl (if relative);
-    vnd.sun.star.expand URLs are supported.  If that fails, tries to
-    locate plugin relative to the executable.  If that fails, and plugin
-    contains no slashes, tries to locate plugin in a platform-specific way
-    (e.g., LD_LIBRARY_PATH).
-
-    @param baseUrl
-    The base file URL relative to which the plugin argument is interpreted.
-
-    @param plugin
-    The argument is an absolute or relative URL or just the name of the plugin.
- */
-OUString findPlugin(
-    const OUString & baseUrl, const OUString & plugin);
-
 
 enum FileStatus
 {

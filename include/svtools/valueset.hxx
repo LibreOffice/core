@@ -308,8 +308,6 @@ public:
 
     void            InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                 size_t nPos = VALUESET_APPEND );
-    void            InsertItem( sal_uInt16 nItemId, const Color& rColor,
-                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( sal_uInt16 nItemId,
                                 const Image& rImage, const OUString& rStr,
                                 size_t nPos = VALUESET_APPEND );

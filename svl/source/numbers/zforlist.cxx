@@ -473,12 +473,6 @@ const ::utl::TransliterationWrapper* SvNumberFormatter::GetTransliteration() con
     return xTransliteration.get();
 }
 
-const ::utl::TransliterationWrapper* SvNumberFormatter::GetTransliterationForModule( const OUString& rModule,
-                                                                         LanguageType eLang ) const
-{
-    return xTransliteration.getForModule( rModule, eLang );
-}
-
 const CharClass* SvNumberFormatter::GetCharClass() const { return pCharClass; }
 
 const LocaleDataWrapper* SvNumberFormatter::GetLocaleData() const { return xLocaleData.get(); }
@@ -1803,11 +1797,6 @@ sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
 sal_Unicode SvNumberFormatter::GetDecSep() const
 {
     return GetNumDecimalSep()[0];
-}
-
-OUString SvNumberFormatter::GetDecimalSep() const
-{
-    return GetNumDecimalSep();
 }
 
 OUString SvNumberFormatter::GetFormatDecimalSep( sal_uInt32 nFormat ) const
@@ -3847,12 +3836,6 @@ NfCurrencyEntry::NfCurrencyEntry(
     aSymbol(rSymbol), aBankSymbol(rBankSymbol), eLanguage(eLang),
     nPositiveFormat(nPositiveFmt), nNegativeFormat(nNegativeFmt),
     nDigits(nDig), cZeroChar(cZero) {}
-
-NfCurrencyEntry* NfCurrencyEntry::Clone() const
-{
-    return new NfCurrencyEntry(
-       aSymbol, aBankSymbol, eLanguage, nPositiveFormat, nNegativeFormat, nDigits, cZeroChar);
-}
 
 bool NfCurrencyEntry::operator==( const NfCurrencyEntry& r ) const
 {

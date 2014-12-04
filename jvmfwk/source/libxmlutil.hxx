@@ -32,9 +32,6 @@ class CXPathObjectPtr
     CXPathObjectPtr(const CXPathObjectPtr&);
 public:
     CXPathObjectPtr();
-    /** Takes ownership of xmlXPathObject
-     */
-    CXPathObjectPtr(xmlXPathObject* aObject);
     ~CXPathObjectPtr();
     /** Takes ownership of xmlXPathObject
      */

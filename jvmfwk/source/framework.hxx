@@ -100,7 +100,6 @@ public:
     operator ::JavaInfo const * () const { return pInfo;}
     ::JavaInfo* cloneJavaInfo() const;
 
-    OUString getVendor() const;
     OUString getLocation() const;
     sal_uInt64 getFeatures() const;
 };
