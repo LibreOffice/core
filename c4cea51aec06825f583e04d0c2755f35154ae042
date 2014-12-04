@@ -69,6 +69,24 @@
       "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_a80bdf7c",
+        "filename": "jurt/source/pipe/wrapper/wrapper.c",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2014-12-04T15:38:47Z",
+      "side": 1,
+      "message": "You right, but the initialize of the CriticalSection must be once, and then we have the same problem.\nThe problem here, we would make this Init treadsafe but we must in this init the init of the CriticalSection, and that is not possible.\nMy solution with the boolean is very quickly, and in the most case enough.\n\nBut i have testing, it is not a problem when the LoadLibrary called a second time, it get the same modulhandle.\n\nAnother case you give me a tip for solve the problem.\n\nHere the docu of InitializeCriticalSection\nhttp://msdn.microsoft.com/en-us/library/windows/desktop/ms683472(v\u003dvs.85).aspx\n\nHere a example: http://msdn.microsoft.com/en-us/library/windows/desktop/ms686908(v\u003dvs.85).aspx",
+      "parentUuid": "fa32b979_0830cb55",
+      "revId": "c4cea51aec06825f583e04d0c2755f35154ae042",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
