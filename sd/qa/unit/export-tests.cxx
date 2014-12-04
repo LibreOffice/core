@@ -79,6 +79,7 @@ public:
     void testFdo83751();
     void testFdo79731();
     void testSwappedOutImageExport();
+    void testLinkedGraphicRT();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testN821567);
@@ -96,6 +97,7 @@ public:
     CPPUNIT_TEST(testFdo83751);
     CPPUNIT_TEST(testFdo79731);
     CPPUNIT_TEST(testSwappedOutImageExport);
+    CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -586,6 +588,52 @@ void SdExportTest::testSwappedOutImageExport()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height );
         }
+        xDocShRef->DoClose();
+    }
+}
+
+void SdExportTest::testLinkedGraphicRT()
+{
+    // Problem was with linked images
+    const sal_Int32 vFormats[] = {
+        ODP,
+        PPT,
+//      PPTX, -> this fails now, need a fix
+    };
+
+    for( size_t nExportFormat = 0; nExportFormat < SAL_N_ELEMENTS(vFormats); ++nExportFormat )
+    {
+        // Load the original file with one image
+        ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/document_with_linked_graphic.odp"), ODP);
+        const OString sFailedMessage = OString("Failed on filter: ") + OString(aFileFormats[vFormats[nExportFormat]].pFilterName);
+
+        // Export the document and import again for a check
+        uno::Reference< lang::XComponent > xComponent(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<frame::XStorable> xStorable(xComponent, uno::UNO_QUERY);
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= OStringToOUString(OString(aFileFormats[vFormats[nExportFormat]].pFilterName), RTL_TEXTENCODING_UTF8);
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        xComponent.set(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        xDocShRef = loadURL(aTempFile.GetURL(), nExportFormat);
+
+        // Check whether graphic imported well after export
+        SdDrawDocument *pDoc = xDocShRef->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDoc != NULL );
+        const SdrPage *pPage = pDoc->GetPage(1);
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
+        SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(2));
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != NULL );
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
+
+        const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+        CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), !rGraphicObj.IsSwappedOut());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+
         xDocShRef->DoClose();
     }
 }
