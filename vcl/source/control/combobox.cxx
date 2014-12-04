@@ -845,8 +845,7 @@ void ComboBox::ImplUpdateFloatSelection()
 
 sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
 {
-    if (nPos < 0 || COMBOBOX_MAX_ENTRIES <= mpImplLB->GetEntryList()->GetEntryCount())
-        return COMBOBOX_ERROR;
+    assert(nPos >= 0 && COMBOBOX_MAX_ENTRIES > mpImplLB->GetEntryList()->GetEntryCount());
 
     sal_Int32 nRealPos;
     if (nPos == COMBOBOX_APPEND)
@@ -854,8 +853,7 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
     else
     {
         const sal_Int32 nMRUCount = mpImplLB->GetEntryList()->GetMRUCount();
-        if (nPos > COMBOBOX_MAX_ENTRIES - nMRUCount)
-            return COMBOBOX_ERROR;
+        assert(nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
         nRealPos = nPos + nMRUCount;
     }
 
@@ -868,8 +866,7 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
 sal_Int32 ComboBox::InsertEntryWithImage(
         const OUString& rStr, const Image& rImage, sal_Int32 const nPos)
 {
-    if (nPos < 0 || COMBOBOX_MAX_ENTRIES <= mpImplLB->GetEntryList()->GetEntryCount())
-        return COMBOBOX_ERROR;
+    assert(nPos >= 0 & COMBOBOX_MAX_ENTRIES > mpImplLB->GetEntryList()->GetEntryCount());
 
     sal_Int32 nRealPos;
     if (nPos == COMBOBOX_APPEND)
@@ -877,8 +874,7 @@ sal_Int32 ComboBox::InsertEntryWithImage(
     else
     {
         const sal_Int32 nMRUCount = mpImplLB->GetEntryList()->GetMRUCount();
-        if (nPos > COMBOBOX_MAX_ENTRIES - nMRUCount)
-            return COMBOBOX_ERROR;
+        assert(nPos <= COMBOBOX_MAX_ENTRIES - nMRUCount);
         nRealPos = nPos + nMRUCount;
     }
 
