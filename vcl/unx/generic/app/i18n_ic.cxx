@@ -283,7 +283,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 if (pFontSet != NULL)
                 {
                     mpPreeditAttributes = XVaAddToNestedList( mpPreeditAttributes,
-                                                              const_cast<char*>(XNFontSet), (XPointer)pFontSet);
+                                                              const_cast<char*>(XNFontSet), reinterpret_cast<XPointer>(pFontSet));
                 }
 
                 break;
