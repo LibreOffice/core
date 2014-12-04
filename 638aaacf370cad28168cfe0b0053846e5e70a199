@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_289fcf60",
+        "filename": "i18npool/source/localedata/data/zh_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-04T12:30:43Z",
+      "side": 1,
+      "message": "Please keep the FormatElement list sorted by formatindex, makes it easier to compare formats between locales and keep an overview within one locale up to which index value is used. See also documentation in i18npool/source/localedata/data/locale.dtd http://cgit.freedesktop.org/libreoffice/core/tree/i18npool/source/localedata/data/locale.dtd",
+      "revId": "638aaacf370cad28168cfe0b0053846e5e70a199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_489c9369",
+        "filename": "i18npool/source/localedata/data/zh_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-04T12:30:43Z",
+      "side": 1,
+      "message": "For the single zero sub-format please use a \"-\" string instead of a plain - dash that designates a signed value.",
+      "revId": "638aaacf370cad28168cfe0b0053846e5e70a199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_e887a710",
+        "filename": "i18npool/source/localedata/data/zh_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-04T12:30:43Z",
+      "side": 1,
+      "message": "This, and possibly moving the previous format code to a different index, effectively is the only change needed to fix the bug. Everything else are enhancements.",
+      "revId": "638aaacf370cad28168cfe0b0053846e5e70a199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_088d2b31",
+        "filename": "i18npool/source/localedata/data/zh_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-04T12:30:43Z",
+      "side": 1,
+      "message": "Really? AM/PM concatenated with and directly followed by the hour value, without any space?",
+      "revId": "638aaacf370cad28168cfe0b0053846e5e70a199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

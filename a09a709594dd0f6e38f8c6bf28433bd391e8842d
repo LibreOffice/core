@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_a8aaff83",
+        "filename": "i18npool/source/localedata/data/zh_CN.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-04T12:30:43Z",
+      "side": 0,
+      "message": "Why remove these patterns? This leads to abbreviated dates can\u0027t be input any more using a slash or full width slash. Very odd, given that the edit format is set to YYYY/MM/DD",
+      "revId": "a09a709594dd0f6e38f8c6bf28433bd391e8842d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
