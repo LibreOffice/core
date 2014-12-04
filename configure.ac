@@ -12567,6 +12567,7 @@ if test -n "$enable_mergelibs" -a "$enable_mergelibs" != "no"; then
         AC_DEFINE(STATIC_LINKING)
     else
         MERGELIBS="CORE"
+        AC_DEFINE(MERGELIBS_YES)
     fi
     AC_MSG_RESULT([yes])
 else

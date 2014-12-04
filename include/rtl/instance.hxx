@@ -21,6 +21,7 @@
 #define INCLUDED_RTL_INSTANCE_HXX
 
 #include <sal/config.h>
+#include "config_options.h"
 
 #include <osl/doublecheckedlocking.h>
 #if ! HAVE_THREADSAFE_STATICS
@@ -392,8 +393,13 @@ public:
                 static variable
     */
     static T & get() {
+#if MERGELIBS_YES && defined(_WIN32)
+        static T* instance = new T;
+        return *instance;
+#elif
         static T instance;
         return instance;
+#endif
     }
 };
 #else
@@ -415,8 +421,13 @@ public:
 private:
     struct StaticInstance {
         T * operator () () {
+#if MERGELIBS_YES && defined(_WIN32)
+            static T* instance = new T;
+            return instance;
+#else
             static T instance;
             return &instance;
+#endif
         }
     };
 };
@@ -452,8 +463,13 @@ public:
                 static variable
     */
     static T & get(const Data& rData) {
+#if MERGELIBS_YES && defined(_WIN32)
+        static T* instance = new T(rData);xx
+        return *instance;
+#else
         static T instance(rData);
         return instance;
+#endif
     }
 
     /** Gets the static.  Mutual exclusion is implied by a functional
@@ -463,8 +479,13 @@ public:
                 static variable
     */
     static T & get(Data& rData) {
+#if MERGELIBS_YES && defined(_WIN32)
+        static T* instance = new T(rData);
+        return *instance;
+#else
         static T instance(rData);
         return instance;
+#endif
     }
 };
 #else
@@ -503,13 +524,23 @@ public:
 private:
     struct StaticInstanceWithArg {
         T * operator () (const Data& rData) {
+#if MERGELIBS_YES && defined(_WIN32)
+            static T* instance = new T(rData);
+            return instance;
+#else
             static T instance(rData);
             return &instance;
+#endif
         }
 
         T * operator () (Data& rData) {
+#if MERGELIBS_YES && defined(_WIN32)
+            static T* instance = new T(rData);
+            return instance;
+#else
             static T instance(rData);
             return &instance;
+#endif
          }
     };
 };
@@ -600,8 +631,13 @@ public:
                 static variable
     */
     static T & get() {
+#if MERGELIBS_YES && defined(_WIN32)
+        static T* instance = &(InitData()());
+        return *instance;
+#else
         static T instance = InitData()();
         return instance;
+#endif
     }
 };
 #else
@@ -626,8 +662,13 @@ public:
 private:
     struct StaticInstanceWithInit {
         T * operator () ( Data d ) {
+#if MERGELIBS_YES && defined(_WIN32)
+            static T* instance = new T(d);
+            return instance;
+#else
             static T instance(d);
             return &instance;
+#endif
         }
     };
 };
