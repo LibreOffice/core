@@ -53,17 +53,15 @@
   </LC_CTYPE>
   <LC_FORMAT>
     <DateAcceptancePattern>M-D</DateAcceptancePattern>
-    <DateAcceptancePattern>M/D</DateAcceptancePattern>
-    <DateAcceptancePattern>M／D</DateAcceptancePattern>
     <DateAcceptancePattern>Y.M.D</DateAcceptancePattern>
     <DateAcceptancePattern>Y／M／D</DateAcceptancePattern>
     <DateAcceptancePattern>Y年M月D日</DateAcceptancePattern>
     <DateAcceptancePattern>M月D日</DateAcceptancePattern>
-    <!-- Fix number formats. Index range is from 0 to 5. -->
+    <!-- Fixed number formats. Index range is from 0 to 5. -->
     <FormatElement msgid="NumberFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
       <FormatCode>General</FormatCode>
     </FormatElement>
-    <FormatElement msgid="NumberFormatskey2" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="1">
+    <FormatElement msgid="NumberFormatskey2" default="false" type="short" usage="FIXED_NUMBER"  formatindex="1">
       <FormatCode>0</FormatCode>
     </FormatElement>
     <FormatElement msgid="NumberFormatskey3" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="2">
@@ -78,6 +76,25 @@
     <FormatElement msgid="NumberFormatskey6" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="5">
       <FormatCode>#,###.00</FormatCode>
     </FormatElement>
+    <!-- Some more useful formats. Index range starts from 71. -->
+    <FormatElement msgid="NumberFormatskey7" default="false" type="short" usage="FIXED_NUMBER"  formatindex="71">
+      <FormatCode>#,##0;-#,##0;"-";@</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey8" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="72">
+      <FormatCode>#,##0.00;-#,##0.00;"-";@</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey9" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="73">
+      <FormatCode>#,###.00;-#,###.00;"-";@</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey10" default="false" type="short" usage="FIXED_NUMBER"  formatindex="74">
+      <FormatCode>_ #,##0_ ;_ -#,##0_ ;_ "-"_ ;_ @_ </FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey11" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="75">
+      <FormatCode>_ #,##0.00_ ;_ -#,##0.00_ ;_ "-"_ ;_ @_ </FormatCode>
+    </FormatElement>
+    <FormatElement msgid="NumberFormatskey12" default="false" type="medium" usage="FIXED_NUMBER"  formatindex="76">
+      <FormatCode>_ #,###.00_ ;_ -#,###.00_ ;_ "-"_ ;_ @_ </FormatCode>
+    </FormatElement>
     <!-- Scientific number formats. Index range is from 6 to 7. -->
     <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
       <FormatCode>0.00E+000</FormatCode>
@@ -91,6 +108,12 @@
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
       <FormatCode>0.00%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey3" default="true" type="short" usage="PERCENT_NUMBER" formatindex="77">
+      <FormatCode>0%;-0%;-;@</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey4" default="true" type="long" usage="PERCENT_NUMBER" formatindex="78">
+      <FormatCode>0.00%;-0.00%;-;@</FormatCode>
     </FormatElement>
     <!-- Currency formats. Code range is from 12 to 17. -->
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="medium" usage="CURRENCY" formatindex="12">
@@ -112,69 +135,75 @@
       <FormatCode>[$￥-804]#,##0.--;[RED]-[$￥-804]#,##0.--</FormatCode>
     </FormatElement>
     <!-- Date formats. Index range is from 18 to 38 -->
-    <FormatElement msgid="DateFormatskey1" default="true" type="medium" usage="DATE" formatindex="18">
-      <FormatCode>YY"年"M"月"D"日"</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey2" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>YYYY"年"M"月"D"日"　NNNN</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
+    <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>YY/M/D</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
+    <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="19">
+      <FormatCode>YY/MM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey3" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>YYYY/M/D</FormatCode>
     </FormatElement>
+    <FormatElement msgid="DateFormatskey4" default="true" type="long" usage="DATE" formatindex="21">
+      <FormatCode>YYYY/MM/DD</FormatCode>
+    </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="short" usage="DATE" formatindex="22">
-      <FormatCode>YYYY"年"M"月"</FormatCode>
+      <FormatCode>YY"年"M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="false" type="medium" usage="DATE" formatindex="23">
-      <FormatCode>YYYY.MM.DD</FormatCode>
+      <FormatCode>YY"年"MM"月"DD"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
-      <FormatCode>YY.MM.DD</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>YYYY "年"M"月"D"日"</FormatCode>
+    <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
+      <FormatCode>YYYY"年"MM"月"DD"日"</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey9" default="false" type="short" usage="DATE" formatindex="26">
+      <FormatCode>YY.M.D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
-      <FormatCode>YY"年"M"月"D"日" NNNN</FormatCode>
+      <FormatCode>YY.MM.DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="false" type="medium" usage="DATE" formatindex="28">
-      <FormatCode>YY/M/D NNNN</FormatCode>
+      <FormatCode>YYYY.M.D</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
-      <FormatCode>YYYY/M/D NNNN</FormatCode>
+      <FormatCode>YYYY.MM.DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
+      <FormatCode>YY"年"M"月"D"日" NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="31">
+      <FormatCode>YY"年"MM"月"DD"日" NNNN</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="32">
       <FormatCode>YYYY"年"M"月"D"日" NNNN</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey14" default="true" type="short" usage="DATE" formatindex="31">
-      <FormatCode>M"月"D"日"</FormatCode>
-    </FormatElement>
-    <FormatElement msgid="DateFormatskey15" default="false" type="medium" usage="DATE" formatindex="32">
-      <FormatCode>YY-MM-DD</FormatCode>
-    </FormatElement>
     <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
-      <FormatCode>YYYY-MM-DD</FormatCode>
-      <DefaultName>ISO 8601</DefaultName>
+      <FormatCode>YYYY"年"MM"月"DD"日" NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey17" default="false" type="short" usage="DATE" formatindex="34">
-      <FormatCode>YY"年"M"月"</FormatCode>
+      <FormatCode>YYYY-MM-DD</FormatCode>
+      <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="35">
       <FormatCode>M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey19" default="false" type="short" usage="DATE" formatindex="36">
-      <FormatCode>MMMM</FormatCode>
+      <FormatCode>MM"月"DD"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
+      <FormatCode>YY"年"Q</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey21" default="false" type="short" usage="DATE" formatindex="79">
+      <FormatCode>YYYY"年"Q</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey22" default="false" type="short" usage="DATE" formatindex="80">
       <FormatCode>YYYY"年"QQ</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateFormatskey21" default="false" type="short" usage="DATE" formatindex="38">
-      <FormatCode>"第"WW"周"</FormatCode>
+    <FormatElement msgid="DateFormatskey23" default="false" type="short" usage="DATE" formatindex="81">
+      <FormatCode>YYYYQ</FormatCode>
     </FormatElement>
     <!-- Time formats. Index range is from 39 to 45. -->
     <FormatElement msgid="TimeFormatskey1" default="true" type="short" usage="TIME"  formatindex="39">
@@ -190,13 +219,13 @@
       <FormatCode>AM/PM HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey5" default="false" type="medium" usage="TIME"  formatindex="43">
-      <FormatCode>[HH]:MM:SS</FormatCode>
+      <FormatCode>AM/PM H:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey6" default="false" type="medium" usage="TIME"  formatindex="44">
-      <FormatCode>MM:SS.00</FormatCode>
+      <FormatCode>AM/PM H:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey7" default="true" type="long" usage="TIME"  formatindex="45">
-      <FormatCode>[HH]:MM:SS.00</FormatCode>
+      <FormatCode>H:MM AM/PM</FormatCode>
     </FormatElement>
     <!-- Time format extension. -->
     <FormatElement msgid="TimeFormatskey8" default="false" type="medium" usage="TIME"  formatindex="50">
@@ -215,23 +244,26 @@
       <FormatCode>[HH]"时"MM"分"SS"秒"</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey13" default="false" type="medium" usage="TIME"  formatindex="55">
-      <FormatCode>MM"分"SS"秒"00</FormatCode>
+      <FormatCode>AM/PMH"点"MM"分"</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey14" default="false" type="long" usage="TIME"  formatindex="56">
       <FormatCode>[HH]"时"MM"分"SS"秒"00</FormatCode>
     </FormatElement>
     <!-- Date_Time formats. Index range is from 46 to 47. -->
-    <FormatElement msgid="DateTimeFormatskey4" default="true" type="long" usage="DATE_TIME"  formatindex="46">
-      <FormatCode>YYYY"年"MM"月"D"日"HH"时"MM"分"SS"秒"</FormatCode>
+    <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME"  formatindex="46">
+      <FormatCode>YYYY/MM/DD HH:MM</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey3" default="false" type="long" usage="DATE_TIME"  formatindex="47">
-      <FormatCode>YY"年"M"月"D"日"HH"时"MM"分"</FormatCode>
+    <FormatElement msgid="DateTimeFormatskey2" default="true" type="long" usage="DATE_TIME"  formatindex="47">
+      <FormatCode>YYYY/MM/DD HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME"  formatindex="58">
-      <FormatCode>M/D/YY HH:MM</FormatCode>
+    <FormatElement msgid="DateTimeFormatskey3" default="false" type="long" usage="DATE_TIME"  formatindex="58">
+      <FormatCode>YYYY-MM-DD HH:MM:SS</FormatCode>
     </FormatElement>
-    <FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="59">
-      <FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
+    <FormatElement msgid="DateTimeFormatskey4" default="false" type="long" usage="DATE_TIME"  formatindex="59">
+      <FormatCode>YYYY.MM.DD HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey2" default="false" type="long" usage="DATE_TIME"  formatindex="60">
+      <FormatCode>YYYY"年"MM"月"DD"日" HH"时"MM"分"SS"秒"</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
