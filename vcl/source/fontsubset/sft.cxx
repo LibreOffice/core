@@ -455,7 +455,7 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
     const sal_uInt16 palen = lastPoint+1;
 
     //at a minimum its one byte per entry
-    if (palen > nBytesRemaining)
+    if (palen > nBytesRemaining || lastPoint > nBytesRemaining-1)
     {
         SAL_WARN("vcl.fonts", "Font " << OUString::createFromAscii(ttf->fname) <<
             "claimed a palen of "
