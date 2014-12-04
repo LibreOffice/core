@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_48aa5372",
+        "filename": "sc/source/core/data/table3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1423,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-04T13:28:13Z",
+      "side": 1,
+      "message": "ScColumn::GetLastDataPos() returns 0 also if there is just one cell in the first row. Use ScColumn::IsEmptyData() instead.",
+      "revId": "ef506ad976c68eaef13be4d6b6146f18c67b01f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
