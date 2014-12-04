@@ -255,6 +255,8 @@ public:
                                          sal_Unicode cZero );
                         ~NfCurrencyEntry() {}
 
+    NfCurrencyEntry* Clone() const;
+
                         /// Symbols and language identical
     bool                operator==( const NfCurrencyEntry& r ) const;
 
@@ -301,6 +303,15 @@ public:
     /// General Unicode Euro symbol
     static inline sal_Unicode   GetEuroSymbol() { return sal_Unicode(0x20AC); }
 };
+
+/**
+ * Necessary for ptr_vector on Windows. Please don't remove this, or at
+ * least check it on Windows before attempting to remove it.
+ */
+inline NfCurrencyEntry* new_clone( const NfCurrencyEntry& r )
+{
+    return r.Clone();
+}
 
 typedef std::vector< OUString > NfWSStringsDtor;
 
