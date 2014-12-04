@@ -260,7 +260,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, SaveYourselfHdl, void*, pStat
           task of the quick-starter)
         */
         *pSmRestartHint = SmRestartNever;
-        const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
+        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             vcl::Window *pWindow = (*it)->GetWindow();
@@ -353,7 +353,7 @@ IMPL_STATIC_LINK_NOINSTANCE( SessionManagerClient, ShutDownHdl, void*, EMPTYARG 
         m_pSession->CallCallback( &aEvent );
     }
 
-    const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
+    const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
     SAL_INFO("vcl.sm", (rFrames.begin() != rFrames.end() ? "shutdown on first frame" : "shutdown event but no frame"));
     if( rFrames.begin() != rFrames.end() )
         rFrames.front()->CallCallback( SALEVENT_SHUTDOWN, 0 );
@@ -460,7 +460,7 @@ void SessionManagerClient::open(SalSession * pSession)
             pClientID = NULL;
         }
 
-        SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
+        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
         if( pDisp->GetDrawable(pDisp->GetDefaultXScreen()) && !m_aClientID.isEmpty() )
         {
             XChangeProperty( pDisp->GetDisplay(),
@@ -756,7 +756,7 @@ void ICEWatchProc(
         }
     }
     SAL_INFO( "vcl.sm", "ICE connection on " << IceConnectionNumber( ice_conn ) << " " << (opening ? "inserted" : "removed"));
-    SAL_INFO( "vcl.sm", "Display connection is " << ConnectionNumber( GetGenericData()->GetSalDisplay()->GetDisplay() ) );
+    SAL_INFO( "vcl.sm", "Display connection is " << ConnectionNumber( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay() ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

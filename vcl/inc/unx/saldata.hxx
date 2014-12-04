@@ -23,6 +23,7 @@
 #include <prex.h>
 #include <postx.h>
 
+#include <unx/saldisp.hxx>
 #include <unx/salunx.h>
 #include <vcl/salgtype.hxx>
 #include <salframe.hxx>
@@ -68,7 +69,8 @@ public:
     virtual void            initNWF();
     virtual void            deInitNWF();
 
-    SalDisplay*             GetX11Display() const { return GetSalDisplay(); }
+    SalDisplay*             GetX11Display() const
+    { return vcl_sal::getSalDisplay(this); }
     void                    DeleteDisplay(); // for shutdown
 
     inline  SalXLib*        GetLib() const { return pXLib_; }

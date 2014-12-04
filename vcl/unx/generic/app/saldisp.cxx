@@ -2559,7 +2559,7 @@ SalColormap::SalColormap( const SalDisplay *pDisplay, Colormap hColormap,
 
 // MonoChrome
 SalColormap::SalColormap()
-    : m_pDisplay( GetGenericData()->GetSalDisplay() ),
+    : m_pDisplay( vcl_sal::getSalDisplay(GetGenericData()) ),
       m_hColormap( None ),
       m_nWhitePixel( 1 ),
       m_nBlackPixel( 0 ),
@@ -2574,12 +2574,12 @@ SalColormap::SalColormap()
 
 // TrueColor
 SalColormap::SalColormap( sal_uInt16 nDepth )
-    : m_pDisplay( GetGenericData()->GetSalDisplay() ),
+    : m_pDisplay( vcl_sal::getSalDisplay(GetGenericData()) ),
       m_hColormap( None ),
       m_nWhitePixel( (1 << nDepth) - 1 ),
       m_nBlackPixel( 0x00000000 ),
       m_nUsed( 1 << nDepth ),
-      m_nXScreen( GetGenericData()->GetSalDisplay()->GetDefaultXScreen() )
+      m_nXScreen( vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen() )
 {
     const SalVisual *pVisual = &m_pDisplay->GetVisual( m_nXScreen );
 

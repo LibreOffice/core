@@ -50,7 +50,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         gtk_widget_set_app_paintable( m_pSocket, TRUE );
 
         // system data
-        SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
+        SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
         m_aSystemData.nSize         = sizeof( SystemEnvData );
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
         m_aSystemData.aWindow       = GDK_WINDOW_XWINDOW(widget_get_window(m_pSocket));

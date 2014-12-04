@@ -169,7 +169,7 @@ bool XIMStatusWindow::checkLastParent() const
 {
     if( m_pLastParent )
     {
-        const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
+        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
         for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
             if( *it == m_pLastParent )
@@ -198,7 +198,7 @@ Point XIMStatusWindow::updatePosition()
         ::Window aChild;
         XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
                                (::Window)pParentEnvData->aShellWindow,
-                               GetGenericData()->GetSalDisplay()->GetRootWindow( GetGenericData()->GetSalDisplay()->GetDefaultXScreen() ),
+                               vcl_sal::getSalDisplay(GetGenericData())->GetRootWindow( vcl_sal::getSalDisplay(GetGenericData())->GetDefaultXScreen() ),
                                0, 0,
                                &x, &y,
                                &aChild );
@@ -432,7 +432,7 @@ void IIIMPStatusWindow::GetFocus()
          *  since reset focus really is an internal hack there should
          *  not be a method to be called in SalFrame destructor
          */
-        const std::list< SalFrame* >& rFrames = GetGenericData()->GetSalDisplay()->getFrames();
+        const std::list< SalFrame* >& rFrames = vcl_sal::getSalDisplay(GetGenericData())->getFrames();
         std::list< SalFrame* >::const_iterator it;
         for( it = rFrames.begin(); it != rFrames.end() && *it != m_pResetFocus; ++it )
             ;

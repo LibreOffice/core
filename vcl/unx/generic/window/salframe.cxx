@@ -759,7 +759,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, sal_uLong nSalFrameStyle,
 
     mbTransientForRoot          = false;
 
-    pDisplay_                   = pData->GetSalDisplay();
+    pDisplay_                   = vcl_sal::getSalDisplay(pData);
     // insert frame in framelist
     pDisplay_->registerFrame( this );
 
@@ -2700,13 +2700,13 @@ SalFrame::SalPointerState X11SalFrame::GetPointerState()
 SalFrame::SalIndicatorState X11SalFrame::GetIndicatorState()
 {
     SalIndicatorState aState;
-    aState.mnState = GetGenericData()->GetSalDisplay()->GetIndicatorState();
+    aState.mnState = vcl_sal::getSalDisplay(GetGenericData())->GetIndicatorState();
     return aState;
 }
 
 void X11SalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
 {
-    GetGenericData()->GetSalDisplay()->SimulateKeyPress(nKeyCode);
+    vcl_sal::getSalDisplay(GetGenericData())->SimulateKeyPress(nKeyCode);
 }
 
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )

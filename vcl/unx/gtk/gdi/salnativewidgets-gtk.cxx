@@ -4230,7 +4230,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 GdkX11Pixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect, int nBgColor )
 {
     GdkX11Pixmap* pPixmap;
-    int nDepth = GetGenericData()->GetSalDisplay()->GetVisual( m_nXScreen ).GetDepth();
+    int nDepth = vcl_sal::getSalDisplay(GetGenericData())->GetVisual( m_nXScreen ).GetDepth();
 ;
 
     pPixmap = new GdkX11Pixmap( srcRect.GetWidth(), srcRect.GetHeight(), nDepth );

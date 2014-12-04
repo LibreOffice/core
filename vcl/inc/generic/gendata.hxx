@@ -12,12 +12,12 @@
 
 #include <osl/socket.hxx>
 
-#include <generic/gendisp.hxx>
 #include <saldatabasic.hxx>
-#include <unx/saldisp.hxx>
 
 // Not the prettiest - but helpful for migrating old code ...
 class GtkSalDisplay;
+class SalGenericDisplay;
+
 enum SalGenericDataType { SAL_DATA_GTK, SAL_DATA_GTK3,
                           SAL_DATA_TDE3, SAL_DATA_KDE3, SAL_DATA_KDE4,
                           SAL_DATA_UNX, SAL_DATA_SVP,
@@ -61,11 +61,6 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     virtual bool ErrorTrapPop( bool bIgnoreError = true ) = 0; // true on error
 
     // Not the prettiest - but helpful for migrating old code ...
-    inline SalDisplay *GetSalDisplay() const
-    {
-        OSL_ASSERT( m_eType != SAL_DATA_GTK3 );
-        return static_cast<SalDisplay *>(GetDisplay());
-    }
     inline GtkSalDisplay *GetGtkDisplay() const
     {
         return (GtkSalDisplay *)GetDisplay();

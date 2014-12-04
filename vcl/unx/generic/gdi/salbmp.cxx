@@ -218,7 +218,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
 
     if( aDrawable && nWidth && nHeight && nDrawableDepth )
     {
-        SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
+        SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
         Display*    pXDisp = pSalDisp->GetDisplay();
 
         // do not die on XError here
@@ -647,7 +647,7 @@ ImplSalDDB* X11SalBitmap::ImplGetDDB(
             }
         }
 
-        XImage* pImage = ImplCreateXImage( GetGenericData()->GetSalDisplay(), nXScreen,
+        XImage* pImage = ImplCreateXImage( vcl_sal::getSalDisplay(GetGenericData()), nXScreen,
                                            nDrawableDepth, aTwoRect );
 
         if( pImage )
@@ -763,7 +763,7 @@ bool X11SalBitmap::Create(
                                 );
                 bool bFreePixmap = false;
                 if( bSuccess && (args[0] >>= bFreePixmap) && bFreePixmap )
-                    XFreePixmap( GetGenericData()->GetSalDisplay()->GetDisplay(), pixmapHandle );
+                    XFreePixmap( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay(), pixmapHandle );
 
                 return bSuccess;
             }
@@ -889,7 +889,7 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable,
     , mnDepth     ( pImage->depth )
     , mnXScreen   ( nXScreen )
 {
-    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
     Display*    pXDisp = pSalDisp->GetDisplay();
 
     if( (maPixmap = limitXCreatePixmap( pXDisp, aDrawable, ImplGetWidth(), ImplGetHeight(), ImplGetDepth() )) )
@@ -924,7 +924,7 @@ ImplSalDDB::ImplSalDDB(
     , mnDepth( nDrawableDepth )
     , mnXScreen( nXScreen )
 {
-    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
     Display*    pXDisp = pSalDisp->GetDisplay();
 
     if( (maPixmap = limitXCreatePixmap( pXDisp, aDrawable, nWidth, nHeight, nDrawableDepth )) )
@@ -956,7 +956,7 @@ ImplSalDDB::ImplSalDDB(
 ImplSalDDB::~ImplSalDDB()
 {
     if( maPixmap && ImplGetSVData() )
-        XFreePixmap( GetGenericData()->GetSalDisplay()->GetDisplay(), maPixmap );
+        XFreePixmap( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay(), maPixmap );
 }
 
 bool ImplSalDDB::ImplMatches( SalX11Screen nXScreen, long nDepth, const SalTwoRect& rTwoRect ) const
@@ -1019,7 +1019,7 @@ void ImplSalDDB::ImplDraw(
     long nDestY,
     const GC& rGC
 ) {
-    SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
+    SalDisplay* pSalDisp = vcl_sal::getSalDisplay(GetGenericData());
     Display*    pXDisp = pSalDisp->GetDisplay();
 
     if( 1 == nSrcDrawableDepth )

@@ -36,6 +36,7 @@ class   SalXLib;
 #include <boost/unordered_map.hpp>
 #include <tools/gen.hxx>
 #include <salwtype.hxx>
+#include <generic/gendata.hxx>
 #include <generic/gendisp.hxx>
 
 #include <vclpluginapi.h>
@@ -404,11 +405,18 @@ public:
     void                SetupInput( SalI18N_InputMethod *pInputMethod );
 };
 
-// get foreign key names
 namespace vcl_sal {
+    // get foreign key names
     OUString getKeysymReplacementName(
         const OUString& pLang,
         KeySym nSymbol );
+
+    inline SalDisplay *getSalDisplay(SalGenericData const * data)
+    {
+        assert(data != nullptr);
+        assert(data->GetType() != SAL_DATA_GTK3);
+        return static_cast<SalDisplay *>(data->GetDisplay());
+    }
 }
 
 #endif // INCLUDED_VCL_INC_UNX_SALDISP_HXX

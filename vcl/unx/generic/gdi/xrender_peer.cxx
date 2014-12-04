@@ -27,7 +27,7 @@
 #include <xrender_peer.hxx>
 
 XRenderPeer::XRenderPeer()
-    : mpDisplay( GetGenericData()->GetSalDisplay()->GetDisplay() )
+    : mpDisplay( vcl_sal::getSalDisplay(GetGenericData())->GetDisplay() )
     , mpStandardFormatA8( NULL )
 {
     InitRenderLib();

@@ -127,7 +127,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 bool X11SalInstance::AnyInput(sal_uInt16 nType)
 {
     SalGenericData *pData = GetGenericData();
-    Display *pDisplay  = pData->GetSalDisplay()->GetDisplay();
+    Display *pDisplay  = vcl_sal::getSalDisplay(pData)->GetDisplay();
     bool bRet = false;
 
     if( (nType & VCL_INPUT_TIMER) && (mpXLib && mpXLib->CheckTimeout(false)) )
@@ -234,7 +234,7 @@ static void getServerDirectories( std::list< OString >& o_rFontPaths )
 
 void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
 {
-    Display *pDisplay = GetGenericData()->GetSalDisplay()->GetDisplay();
+    Display *pDisplay = vcl_sal::getSalDisplay(GetGenericData())->GetDisplay();
 
     DBG_ASSERT( pDisplay, "No Display !" );
     if( pDisplay )
@@ -324,7 +324,7 @@ void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
 void X11SalInstance::PostPrintersChanged()
 {
-    SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
+    SalDisplay* pDisp = vcl_sal::getSalDisplay(GetGenericData());
     const std::list< SalFrame* >& rList = pDisp->getFrames();
     for( std::list< SalFrame* >::const_iterator it = rList.begin();
          it != rList.end(); ++it )

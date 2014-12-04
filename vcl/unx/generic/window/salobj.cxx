@@ -59,7 +59,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
 
     pObject->mpParent = pParent;
 
-    SalDisplay* pSalDisp        = GetGenericData()->GetSalDisplay();
+    SalDisplay* pSalDisp        = vcl_sal::getSalDisplay(GetGenericData());
     const SystemEnvData* pEnv   = pParent->GetSystemData();
     Display* pDisp              = pSalDisp->GetDisplay();
     ::Window aObjectParent      = (::Window)pEnv->aWindow;
@@ -228,7 +228,7 @@ X11SalObject::X11SalObject()
     , mbVisible(false)
 {
     maSystemChildData.nSize     = sizeof( SystemEnvData );
-    maSystemChildData.pDisplay  = GetGenericData()->GetSalDisplay()->GetDisplay();
+    maSystemChildData.pDisplay  = vcl_sal::getSalDisplay(GetGenericData())->GetDisplay();
     maSystemChildData.aWindow       = None;
     maSystemChildData.pSalFrame = 0;
     maSystemChildData.pWidget       = 0;
@@ -239,13 +239,13 @@ X11SalObject::X11SalObject()
     maSystemChildData.aShellWindow  = 0;
     maSystemChildData.pShellWidget  = NULL;
 
-    std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
     rObjects.push_back( this );
 }
 
 X11SalObject::~X11SalObject()
 {
-    std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
     rObjects.remove( this );
 
     GetGenericData()->ErrorTrapPush();
@@ -419,7 +419,7 @@ static sal_uInt16 sal_GetCode( int state )
 
 bool X11SalObject::Dispatch( XEvent* pEvent )
 {
-    std::list< SalObject* >& rObjects = GetGenericData()->GetSalDisplay()->getSalObjects();
+    std::list< SalObject* >& rObjects = vcl_sal::getSalDisplay(GetGenericData())->getSalObjects();
 
     for( std::list< SalObject* >::iterator it = rObjects.begin(); it != rObjects.end(); ++it )
     {

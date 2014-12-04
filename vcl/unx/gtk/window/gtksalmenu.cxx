@@ -459,7 +459,7 @@ static gboolean RefreshMenusUnity(gpointer)
 {
     SolarMutexGuard g;
 
-    SalDisplay* pSalDisplay = GetGenericData()->GetSalDisplay();
+    SalDisplay* pSalDisplay = vcl_sal::getSalDisplay(GetGenericData());
     std::list< SalFrame* >::const_iterator pSalFrame = pSalDisplay->getFrames().begin();
     std::list< SalFrame* >::const_iterator pEndSalFrame = pSalDisplay->getFrames().end();
     for(; pSalFrame != pEndSalFrame; ++pSalFrame) {
