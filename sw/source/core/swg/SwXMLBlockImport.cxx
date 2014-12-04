@@ -22,7 +22,19 @@
 #include <xmloff/xmlictxt.hxx>
 #include <unotools/charclass.hxx>
 #include <swtypes.hxx>
+
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-register"
+#endif
+#endif
 #include <tokens.cxx>
+#if defined __clang__
+#if __has_warning("-Wdeprecated-register")
+#pragma GCC diagnostic pop
+#endif
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
