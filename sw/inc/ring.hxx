@@ -65,8 +65,9 @@ namespace sw
              * are alone in one.
              */
             Ring()
-                : pPrev(static_cast< value_type* >(this))
-                { algo::init_header(static_cast< value_type* >(this)); }
+                : pNext(static_cast< value_type* >(this))
+                , pPrev(static_cast< value_type* >(this))
+                { }
             /**
              * Creates a new item and add it to an existing ring container.
              * Note: the newly created item will be inserted just before item pRing.
@@ -120,13 +121,14 @@ namespace sw
 
     template <typename value_type>
     inline Ring<value_type>::Ring( value_type* pObj )
-        : pPrev(static_cast< value_type* >(this))
+        : pNext(static_cast< value_type* >(this))
+        , pPrev(static_cast< value_type* >(this))
     {
-        value_type* pThis = static_cast< value_type* >(this);
-        if( !pObj )
-            algo::init_header(pThis);
-        else
+        if( pObj )
+        {
+            value_type* pThis = static_cast< value_type* >(this);
             algo::link_before(pObj, pThis);
+        }
     }
 
     template <typename value_type>
