@@ -1374,7 +1374,7 @@ bool ScRange::Intersects( const ScRange& rRange ) const
         );
 }
 
-ScRange ScRange::Union( const ScRange& rOther ) const
+ScRange ScRange::Intersection( const ScRange& rOther ) const
 {
     SCCOL nCol1 = std::max(aStart.Col(), rOther.aStart.Col());
     SCCOL nCol2 = std::min(aEnd.Col(), rOther.aEnd.Col());

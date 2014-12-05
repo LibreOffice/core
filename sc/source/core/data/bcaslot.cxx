@@ -326,26 +326,26 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScRange& rRange, sal_uLong nHint 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
 
-        // Take the union of the area range and the broadcast range.
-        ScRange aUnion = rAreaRange.Union(rRange);
-        if (!aUnion.IsValid())
+        // Take the intersection of the area range and the broadcast range.
+        ScRange aIntersection = rAreaRange.Intersection(rRange);
+        if (!aIntersection.IsValid())
             continue;
 
         if (pArea->IsGroupListening())
         {
             if (pBASM->IsInBulkBroadcast())
             {
-                pBASM->InsertBulkGroupArea(pArea, aUnion);
+                pBASM->InsertBulkGroupArea(pArea, aIntersection);
             }
             else
             {
-                broadcastRangeByCell(pArea->GetBroadcaster(), aUnion, nHint);
+                broadcastRangeByCell(pArea->GetBroadcaster(), aIntersection, nHint);
                 bIsBroadcasted = true;
             }
         }
         else if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( pArea))
         {
-            broadcastRangeByCell(pArea->GetBroadcaster(), aUnion, nHint);
+            broadcastRangeByCell(pArea->GetBroadcaster(), aIntersection, nHint);
             bIsBroadcasted = true;
         }
     }
