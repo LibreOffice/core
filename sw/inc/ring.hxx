@@ -85,6 +85,9 @@ namespace sw
             /** @return the previous item in the ring container */
             const_value_type* GetPrevInRing() const
                 { return pPrev; }
+            /** @return true if and only if this item is alone in its ring */
+            bool unique() const
+                { return algo::unique(static_cast< const_value_type* >(this)); }
 
         private:
             /** internal implementation class -- not for external use */

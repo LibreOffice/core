@@ -1282,6 +1282,8 @@ namespace
             { return GetNextInRing(); }
         TestRing* GetPrev()
             { return GetPrevInRing(); }
+        bool lonely() const
+            { return unique(); }
 #if 0
         void debug()
         {
@@ -1301,11 +1303,17 @@ void SwDocTest::testIntrusiveRing()
     vRings.push_back(&aRing4);
     vRings.push_back(&aRing5);
     CPPUNIT_ASSERT_EQUAL(aRing1.GetRingContainer().size(), static_cast<size_t>(1));
+    CPPUNIT_ASSERT(aRing1.lonely());
+    CPPUNIT_ASSERT(aRing2.lonely());
+    CPPUNIT_ASSERT(aRing3.lonely());
     aRing2.MoveTo(&aRing1);
     aRing3.MoveTo(&aRing1);
     CPPUNIT_ASSERT_EQUAL(aRing1.GetRingContainer().size(), static_cast<size_t>(3));
     CPPUNIT_ASSERT_EQUAL(aRing2.GetRingContainer().size(), static_cast<size_t>(3));
     CPPUNIT_ASSERT_EQUAL(aRing3.GetRingContainer().size(), static_cast<size_t>(3));
+    CPPUNIT_ASSERT(!aRing1.lonely());
+    CPPUNIT_ASSERT(!aRing2.lonely());
+    CPPUNIT_ASSERT(!aRing3.lonely());
     aRing5.MoveTo(&aRing4);
     CPPUNIT_ASSERT_EQUAL(aRing4.GetRingContainer().size(), static_cast<size_t>(2));
     aRing4.GetRingContainer().merge(aRing1.GetRingContainer());
