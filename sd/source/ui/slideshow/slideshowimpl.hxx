@@ -252,8 +252,6 @@ private:
         const css::uno::Reference< css::animations::XAnimationNode >& xAnimationNode,
         vcl::Window* pParent );
 
-    ShowWindow* getShowWindow() const { return mpShowWindow; }
-
         /** forces an async call to update in the main thread */
     void startUpdateTimer();
 
