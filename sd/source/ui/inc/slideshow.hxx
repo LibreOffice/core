@@ -46,6 +46,7 @@ namespace com { namespace sun { namespace star {
 
 class SdDrawDocument;
 class KeyEvent;
+class OutputDevice;
 class Size;
 class Rectangle;
 namespace vcl { class Window; }
@@ -158,7 +159,7 @@ public:
     // settings
     bool isFullScreen();                                // a.k.a. FuSlideShow::IsFullScreen()
     bool isAlwaysOnTop();                               // a.k.a. FuSlideShow::IsAlwaysOnTop();
-    ShowWindow* getShowWindow();                        // a.k.a. FuSlideShow::GetShowWindow()
+    OutputDevice* getShowWindow();                      // a.k.a. FuSlideShow::GetShowWindow()
     int getAnimationMode();                             // a.k.a. FuSlideShow::GetAnimationMode()
     sal_Int32 getCurrentPageNumber();                   // a.k.a. FuSlideShow::GetCurrentPage()
     sal_Int32 getFirstPageNumber();

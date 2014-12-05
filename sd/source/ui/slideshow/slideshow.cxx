@@ -925,7 +925,7 @@ bool SlideShow::startPreview( const Reference< XDrawPage >& xDrawPage, const Ref
     return true;
 }
 
-ShowWindow* SlideShow::getShowWindow()
+OutputDevice* SlideShow::getShowWindow()
 {
     return mxController.is() ? mxController->mpShowWindow : 0;
 }

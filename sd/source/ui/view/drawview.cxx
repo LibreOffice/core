@@ -471,7 +471,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const vcl::Region& rReg, sd
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( pDoc ) );
         if(xSlideshow.is() && xSlideshow->isRunning())
         {
-            OutputDevice* pShowWindow = ( OutputDevice* )xSlideshow->getShowWindow();
+            OutputDevice* pShowWindow = xSlideshow->getShowWindow();
             if( (pShowWindow == pOutDev) || (xSlideshow->getAnimationMode() == ANIMATIONMODE_PREVIEW) )
             {
                 if( pShowWindow == pOutDev )
