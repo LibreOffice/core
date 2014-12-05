@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <bodyfrm.hxx>
 #include "swtable.hxx"
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
@@ -1881,7 +1884,7 @@ bool SwFlowFrm::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             OSL_ENSURE( pStart || ( m_rThis.IsTabFrm() && !static_cast<SwTabFrm&>(m_rThis).Lower() ),
                     "MoveFwd: Missing Content" );
             SwLayoutFrm* pBody = pStart ? ( pStart->IsTxtFrm() ?
-                (SwLayoutFrm*)static_cast<SwTxtFrm*>(pStart)->FindBodyFrm() : 0 ) : 0;
+                const_cast<SwBodyFrm *>(static_cast<SwTxtFrm*>(pStart)->FindBodyFrm()) : 0 ) : 0;
             if( pBody )
                 bFtnMoved = pBody->MoveLowerFtns( pStart, pOldBoss, pNewBoss,
                                                   false);
