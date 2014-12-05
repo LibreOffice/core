@@ -18,10 +18,10 @@
 class VCL_PLUGIN_PUBLIC OpenGLFramebuffer
 {
 private:
-    GLuint        mnId;
-    OpenGLTexture maAttachedTexture;
+    GLuint      mnId;
     int         mnWidth;
     int         mnHeight;
+    GLuint      mnAttachedTexture;
 
 public:
     OpenGLFramebuffer();

@@ -17,6 +17,7 @@ OpenGLFramebuffer::OpenGLFramebuffer() :
     mnId( 0 ),
     mnWidth( 0 ),
     mnHeight( 0 ),
+    mnAttachedTexture( 0 ),
     mpPrevFramebuffer( NULL ),
     mpNextFramebuffer( NULL )
 {
@@ -45,30 +46,37 @@ void OpenGLFramebuffer::Unbind()
 
 bool OpenGLFramebuffer::IsFree() const
 {
-    return (!maAttachedTexture);
+    return (!mnAttachedTexture);
 }
 
 bool OpenGLFramebuffer::IsAttached( const OpenGLTexture& rTexture ) const
 {
-    return ( maAttachedTexture == rTexture );
+    return ( mnAttachedTexture == rTexture.Id() );
 }
 
 void OpenGLFramebuffer::AttachTexture( const OpenGLTexture& rTexture )
 {
+    if( rTexture.Id() == mnAttachedTexture )
+        return;
+
     SAL_INFO( "vcl.opengl", "Attaching texture " << rTexture.Id() << " to framebuffer " << (int)mnId );
-    maAttachedTexture = rTexture;
+    mnAttachedTexture = rTexture.Id();
     mnWidth = rTexture.GetWidth();
     mnHeight = rTexture.GetHeight();
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                            maAttachedTexture.Id(), 0 );
+                            mnAttachedTexture, 0 );
     CHECK_GL_ERROR();
 }
 
 void OpenGLFramebuffer::DetachTexture()
 {
-    maAttachedTexture = OpenGLTexture();
-    glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0 );
-    CHECK_GL_ERROR();
+    if( mnAttachedTexture != 0 )
+    {
+        CHECK_GL_ERROR();
+        mnAttachedTexture = 0;
+        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0 );
+        CHECK_GL_ERROR();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
