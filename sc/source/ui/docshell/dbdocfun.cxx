@@ -556,6 +556,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
         bool bUpdateRefs = aInputOption.GetSortRefUpdate();
         ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0);
+        // aLocalParam range now may get adapted to exclude empty edges
         rDoc.Sort(nTab, aLocalParam, bRepeatQuery, bUpdateRefs, &aProgress, &aUndoParam);
     }
 
