@@ -25,6 +25,7 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <edtwin.hxx>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
@@ -814,7 +815,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
                                     pStrm->GetData(), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
-                            GetView()? (vcl::Window*)&GetView()->GetEditWin() : 0 );
+                            GetView()? &GetView()->GetEditWin() : 0 );
                         delete pStrm;
                     }
                 }
@@ -1482,7 +1483,7 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
     SwWrtShell* pShell = GetWrtShell();
     if ( pShell )
     {
-        pResult = pShell->GetView().FindIPClient( xObjRef.GetObject(), (vcl::Window*)&pShell->GetView().GetEditWin() );
+        pResult = pShell->GetView().FindIPClient( xObjRef.GetObject(), &pShell->GetView().GetEditWin() );
         if ( !pResult )
             pResult = new SwOleClient( &pShell->GetView(), &pShell->GetView().GetEditWin(), xObjRef );
     }
