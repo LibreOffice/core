@@ -37,6 +37,7 @@
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/pathoptions.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svl/aeitem.hxx>
@@ -192,7 +193,7 @@ void SdTPAction::Construct()
             }
             else if (nInv == SdrInventor && nSdrObjKind == OBJ_GRAF)
             {
-                pGrafObj = (SdrGrafObj*) pObj;
+                pGrafObj = static_cast<SdrGrafObj*>(pObj);
             }
         }
     }
