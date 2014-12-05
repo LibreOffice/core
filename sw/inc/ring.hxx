@@ -27,7 +27,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
-#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
+#if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
 // gcc 4.6 backwards compat hack, remove ASAP when we drop support
 class SwPaM;
 class SwViewShell;
@@ -108,7 +108,7 @@ namespace sw
                 static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetPrevInRing(); };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
-#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
+#if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
             // gcc 4.6 backwards compat hack, remove ASAP when we drop support
             friend class sw::RingContainer<SwPaM>;
             friend class sw::RingContainer<const SwPaM>;
