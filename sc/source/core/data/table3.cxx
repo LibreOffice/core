@@ -596,6 +596,16 @@ struct SortedRowFlags
     {
         miPosFiltered = maRowsFiltered.insert(miPosFiltered, nRow, nRow+1, b).first;
     }
+
+    void swap( SortedRowFlags& r )
+    {
+        maRowsHidden.swap(r.maRowsHidden);
+        maRowsFiltered.swap(r.maRowsFiltered);
+
+        // Just reset the position hints.
+        miPosHidden = maRowsHidden.begin();
+        miPosFiltered = maRowsFiltered.begin();
+    }
 };
 
 struct PatternSpan
@@ -698,6 +708,121 @@ public:
         p->Query(mrQuery);
     }
 };
+
+void fillSortedColumnArray(
+    boost::ptr_vector<SortedColumn>& rSortedCols,
+    SortedRowFlags& rRowFlags,
+    ScSortInfoArray* pArray, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress )
+{
+    SCROW nRow1 = pArray->GetStart();
+    SCROW nRow2 = pArray->GetLast();
+    ScSortInfoArray::RowsType* pRows = pArray->GetDataRows();
+
+    size_t nColCount = nCol2 - nCol1 + 1;
+    boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
+    SortedRowFlags aRowFlags;
+    aSortedCols.reserve(nColCount);
+    for (size_t i = 0; i < nColCount; ++i)
+    {
+        // In the sorted column container, element positions and row
+        // positions must match, else formula cells may mis-behave during
+        // grouping.
+        aSortedCols.push_back(new SortedColumn(nRow1));
+    }
+
+    for (size_t i = 0; i < pRows->size(); ++i)
+    {
+        ScSortInfoArray::Row* pRow = (*pRows)[i];
+        for (size_t j = 0; j < pRow->maCells.size(); ++j)
+        {
+            ScAddress aCellPos(nCol1 + j, nRow1 + i, nTab);
+
+            ScSortInfoArray::Cell& rCell = pRow->maCells[j];
+
+            sc::CellStoreType& rCellStore = aSortedCols.at(j).maCells;
+            switch (rCell.maCell.meType)
+            {
+                case CELLTYPE_STRING:
+                    assert(rCell.mpAttr);
+                    rCellStore.push_back(*rCell.maCell.mpString);
+                break;
+                case CELLTYPE_VALUE:
+                    assert(rCell.mpAttr);
+                    rCellStore.push_back(rCell.maCell.mfValue);
+                break;
+                case CELLTYPE_EDIT:
+                    assert(rCell.mpAttr);
+                    rCellStore.push_back(rCell.maCell.mpEditText->Clone());
+                break;
+                case CELLTYPE_FORMULA:
+                {
+                    assert(rCell.mpAttr);
+                    ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
+
+                    ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos, SC_CLONECELL_DEFAULT);
+                    if (pArray->IsUpdateRefs())
+                    {
+                        pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
+                        pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
+                    }
+                    else
+                    {
+                        pNew->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, aCellPos);
+                    }
+
+                    rCellStore.push_back(pNew);
+                }
+                break;
+                default:
+                    assert(!rCell.mpAttr);
+                    rCellStore.push_back_empty();
+            }
+
+            sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j).maCellTextAttrs;
+            if (rCell.mpAttr)
+                rAttrStore.push_back(*rCell.mpAttr);
+            else
+                rAttrStore.push_back_empty();
+
+            if (pArray->IsUpdateRefs())
+            {
+                // At this point each broadcaster instance is managed by 2
+                // containers. We will release those in the original storage
+                // below before transferring them to the document.
+                sc::BroadcasterStoreType& rBCStore = aSortedCols.at(j).maBroadcasters;
+                if (rCell.mpBroadcaster)
+                    // A const pointer would be implicitly converted to a bool type.
+                    rBCStore.push_back(const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
+                else
+                    rBCStore.push_back_empty();
+            }
+
+            // The same with cell note instances ...
+            sc::CellNoteStoreType& rNoteStore = aSortedCols.at(j).maCellNotes;
+            if (rCell.mpNote)
+                rNoteStore.push_back(const_cast<ScPostIt*>(rCell.mpNote));
+            else
+                rNoteStore.push_back_empty();
+
+            if (rCell.mpPattern)
+                aSortedCols.at(j).setPattern(aCellPos.Row(), rCell.mpPattern);
+        }
+
+        if (pArray->IsKeepQuery())
+        {
+            // Hidden and filtered flags are first converted to segments.
+            SCROW nRow = nRow1 + i;
+            aRowFlags.setRowHidden(nRow, pRow->mbHidden);
+            aRowFlags.setRowFiltered(nRow, pRow->mbFiltered);
+        }
+
+        if (pProgress)
+            pProgress->SetStateOnPercent(i);
+    }
+
+    rSortedCols.swap(aSortedCols);
+    rRowFlags.swap(aRowFlags);
+}
 
 }
 
@@ -892,108 +1017,9 @@ void ScTable::SortReorderByRow(
 
     // Cells in the data rows only reference values in the document. Make
     // a copy before updating the document.
-
-    size_t nColCount = nCol2 - nCol1 + 1;
     boost::ptr_vector<SortedColumn> aSortedCols; // storage for copied cells.
     SortedRowFlags aRowFlags;
-    aSortedCols.reserve(nColCount);
-    for (size_t i = 0; i < nColCount; ++i)
-    {
-        // In the sorted column container, element positions and row
-        // positions must match, else formula cells may mis-behave during
-        // grouping.
-        aSortedCols.push_back(new SortedColumn(nRow1));
-    }
-
-    for (size_t i = 0; i < pRows->size(); ++i)
-    {
-        ScSortInfoArray::Row* pRow = (*pRows)[i];
-        for (size_t j = 0; j < pRow->maCells.size(); ++j)
-        {
-            ScAddress aCellPos(nCol1 + j, nRow1 + i, nTab);
-
-            ScSortInfoArray::Cell& rCell = pRow->maCells[j];
-
-            sc::CellStoreType& rCellStore = aSortedCols.at(j).maCells;
-            switch (rCell.maCell.meType)
-            {
-                case CELLTYPE_STRING:
-                    assert(rCell.mpAttr);
-                    rCellStore.push_back(*rCell.maCell.mpString);
-                break;
-                case CELLTYPE_VALUE:
-                    assert(rCell.mpAttr);
-                    rCellStore.push_back(rCell.maCell.mfValue);
-                break;
-                case CELLTYPE_EDIT:
-                    assert(rCell.mpAttr);
-                    rCellStore.push_back(rCell.maCell.mpEditText->Clone());
-                break;
-                case CELLTYPE_FORMULA:
-                {
-                    assert(rCell.mpAttr);
-                    ScAddress aOldPos = rCell.maCell.mpFormula->aPos;
-
-                    ScFormulaCell* pNew = rCell.maCell.mpFormula->Clone( aCellPos, SC_CLONECELL_DEFAULT);
-                    if (pArray->IsUpdateRefs())
-                    {
-                        pNew->CopyAllBroadcasters(*rCell.maCell.mpFormula);
-                        pNew->GetCode()->AdjustReferenceOnMovedOrigin(aOldPos, aCellPos);
-                    }
-                    else
-                    {
-                        pNew->GetCode()->AdjustReferenceOnMovedOriginIfOtherSheet(aOldPos, aCellPos);
-                    }
-
-                    rCellStore.push_back(pNew);
-                }
-                break;
-                default:
-                    assert(!rCell.mpAttr);
-                    rCellStore.push_back_empty();
-            }
-
-            sc::CellTextAttrStoreType& rAttrStore = aSortedCols.at(j).maCellTextAttrs;
-            if (rCell.mpAttr)
-                rAttrStore.push_back(*rCell.mpAttr);
-            else
-                rAttrStore.push_back_empty();
-
-            if (pArray->IsUpdateRefs())
-            {
-                // At this point each broadcaster instance is managed by 2
-                // containers. We will release those in the original storage
-                // below before transferring them to the document.
-                sc::BroadcasterStoreType& rBCStore = aSortedCols.at(j).maBroadcasters;
-                if (rCell.mpBroadcaster)
-                    // A const pointer would be implicitly converted to a bool type.
-                    rBCStore.push_back(const_cast<SvtBroadcaster*>(rCell.mpBroadcaster));
-                else
-                    rBCStore.push_back_empty();
-            }
-
-            // The same with cell note instances ...
-            sc::CellNoteStoreType& rNoteStore = aSortedCols.at(j).maCellNotes;
-            if (rCell.mpNote)
-                rNoteStore.push_back(const_cast<ScPostIt*>(rCell.mpNote));
-            else
-                rNoteStore.push_back_empty();
-
-            if (rCell.mpPattern)
-                aSortedCols.at(j).setPattern(aCellPos.Row(), rCell.mpPattern);
-        }
-
-        if (pArray->IsKeepQuery())
-        {
-            // Hidden and filtered flags are first converted to segments.
-            SCROW nRow = nRow1 + i;
-            aRowFlags.setRowHidden(nRow, pRow->mbHidden);
-            aRowFlags.setRowFiltered(nRow, pRow->mbFiltered);
-        }
-
-        if (pProgress)
-            pProgress->SetStateOnPercent(i);
-    }
+    fillSortedColumnArray(aSortedCols, aRowFlags, pArray, nTab, nCol1, nCol2, pProgress);
 
     for (size_t i = 0, n = aSortedCols.size(); i < n; ++i)
     {
