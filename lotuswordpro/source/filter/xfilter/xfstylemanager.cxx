@@ -57,7 +57,12 @@
  * @file
  * Style manager for the filter.
  ************************************************************************/
+
+#include <sal/config.h>
+
+#include <xfparastyle.hxx>
 #include "xfstylemanager.hxx"
+#include <xftextstyle.hxx>
 #include "ixfstyle.hxx"
 
 XFStyleManager::XFStyleManager() : s_aStdArrowStyles( "arrow" ), s_aTextStyles( "T" ),
@@ -226,10 +231,10 @@ IXFStyleRet XFStyleManager::AddStyle(IXFStyle *pStyle)
 
 IXFStyle*   XFStyleManager::FindStyle(const OUString& name)
 {
-    IXFStyle *pStyle = (IXFStyle*)FindParaStyle(name);
+    IXFStyle *pStyle = FindParaStyle(name);
     if( pStyle )
         return pStyle;
-    pStyle = (IXFStyle*)FindTextStyle(name);
+    pStyle = FindTextStyle(name);
     if( pStyle )
         return pStyle;
     pStyle = s_aListStyles.FindStyle(name);
@@ -281,18 +286,18 @@ XFParaStyle*    XFStyleManager::FindParaStyle(const OUString& name)
 {
     IXFStyle *pStyle = s_aParaStyles.FindStyle(name);
     if( pStyle )
-        return (XFParaStyle*)pStyle;
+        return static_cast<XFParaStyle*>(pStyle);
     else
-        return (XFParaStyle*)s_aStdParaStyles.FindStyle(name);
+        return static_cast<XFParaStyle*>(s_aStdParaStyles.FindStyle(name));
 }
 
 XFTextStyle*    XFStyleManager::FindTextStyle(const OUString& name)
 {
     IXFStyle *pStyle = s_aTextStyles.FindStyle(name);
     if( pStyle )
-        return (XFTextStyle*)pStyle;
+        return static_cast<XFTextStyle*>(pStyle);
     else
-        return (XFTextStyle*)s_aStdTextStyles.FindStyle(name);
+        return static_cast<XFTextStyle*>(s_aStdTextStyles.FindStyle(name));
 }
 
 void    XFStyleManager::SetLineNumberConfig(XFLineNumberConfig *pLNConf)
