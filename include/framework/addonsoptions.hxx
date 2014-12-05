@@ -48,13 +48,6 @@
 #define STATUSBARITEM_STRING_AUTOSIZE                   "AutoSize"
 #define STATUSBARITEM_STRING_OWNERDRAW                  "OwnerDraw"
 
-#define ADDONSMENUITEM_URL_LEN                          3
-#define ADDONSMENUITEM_TITLE_LEN                        5
-#define ADDONSMENUITEM_TARGET_LEN                       6
-#define ADDONSMENUITEM_SUBMENU_LEN                      7
-#define ADDONSMENUITEM_CONTEXT_LEN                      7
-#define ADDONSMENUITEM_IMAGEIDENTIFIER_LEN              15
-
 #define ADDONSMENUITEM_PROPERTYNAME_URL                 OUString(ADDONSMENUITEM_STRING_URL             )
 #define ADDONSMENUITEM_PROPERTYNAME_TITLE               OUString(ADDONSMENUITEM_STRING_TITLE           )
 #define ADDONSMENUITEM_PROPERTYNAME_TARGET              OUString(ADDONSMENUITEM_STRING_TARGET          )
