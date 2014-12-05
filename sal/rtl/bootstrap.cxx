@@ -930,31 +930,6 @@ rtl::OUString expandMacros(
                 }
                 if (n == 1) {
                     buf.append(lookup(file, mode, false, seg[0], requestStack));
-                } else if (n == 2 && seg[0] == ".link") {
-                    osl::File f(seg[1]);
-                    rtl::ByteSequence seq;
-                    rtl::OUString line;
-                    rtl::OUString url;
-                    // Silently ignore any errors (is that good?):
-                    if ((f.open(osl_File_OpenFlag_Read) ==
-                         osl::FileBase::E_None) &&
-                        f.readLine(seq) == osl::FileBase::E_None &&
-                        rtl_convertStringToUString(
-                            &line.pData,
-                            reinterpret_cast< char const * >(
-                                seq.getConstArray()),
-                            seq.getLength(), RTL_TEXTENCODING_UTF8,
-                            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
-                             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
-                             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)) &&
-                        (osl::File::getFileURLFromSystemPath(line, url) ==
-                         osl::FileBase::E_None))
-                    {
-                        try {
-                            buf.append(
-                                rtl::Uri::convertRelToAbs(seg[1], url));
-                        } catch (const rtl::MalformedUriException &) {}
-                    }
                 } else if (n == 3 && seg[0] == ".override") {
                     rtl::Bootstrap b(seg[1]);
                     Bootstrap_Impl * f = static_cast< Bootstrap_Impl * >(
