@@ -96,6 +96,7 @@ public:
     void testBnc862510_7();
     void testPDFImport();
     void testPDFImportSkipImages();
+    void testBnc910045();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -129,6 +130,7 @@ public:
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
     CPPUNIT_TEST(testPDFImport);
+    CPPUNIT_TEST(testBnc910045);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1110,6 +1112,27 @@ void SdImportTest::testPDFImportSkipImages()
     CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
 
     xDocShRef->DoClose();
+}
+
+void SdImportTest::testBnc910045()
+{
+    // Problem with table style which defines cell color with fill style
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc910045.pptx"), PPTX );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCell;
+    sal_Int32 nColor;
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5210557), nColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest);
