@@ -599,7 +599,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
         else
             bMoveCntnt = false;
     }
-    else if( !pCrsr->HasMark() && pCrsr->GetNext() == pCrsr )
+    else if( !pCrsr->HasMark() && !pCrsr->IsMultiSelection() )
         bMoveCntnt = false;
 
     const SwPosition& rPos = *pCrsr->Start();

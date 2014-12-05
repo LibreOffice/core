@@ -2560,7 +2560,7 @@ void SwEditShell::AutoFmtBySplitNode()
 {
     SET_CURR_SHELL( this );
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr && pCrsr->Move( fnMoveBackward, fnGoNode ) )
+    if( !pCrsr->IsMultiSelection() && pCrsr->Move( fnMoveBackward, fnGoNode ) )
     {
         StartAllAction();
         StartUndo( UNDO_AUTOFORMAT );

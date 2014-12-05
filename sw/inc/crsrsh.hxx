@@ -890,7 +890,7 @@ inline bool SwCrsrShell::IsMultiSelection() const
 
 inline bool SwCrsrShell::IsSelOnePara() const
 {
-    return m_pCurCrsr == m_pCurCrsr->GetNext() &&
+    return !m_pCurCrsr->IsMultiSelection() &&
            m_pCurCrsr->GetPoint()->nNode == m_pCurCrsr->GetMark()->nNode;
 }
 

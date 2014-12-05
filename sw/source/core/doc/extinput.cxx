@@ -291,7 +291,7 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
 
 SwExtTextInput* SwDoc::GetExtTextInput() const
 {
-    OSL_ENSURE( !mpExtInputRing || mpExtInputRing == mpExtInputRing->GetNext(),
+    OSL_ENSURE( !mpExtInputRing || !mpExtInputRing->IsMultiSelection(),
             "more than one InputEngine available" );
     return static_cast<SwExtTextInput*>(mpExtInputRing);
 }

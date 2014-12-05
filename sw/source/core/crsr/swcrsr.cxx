@@ -2210,7 +2210,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             if( !pNd->IsCntntNode() )
                 pNd = rNds.GoNextSection( &aIdx, true, false );
 
-            SwPaM *const pNew = (pAktCrsr->GetNext() == pAktCrsr && !pAktCrsr->HasMark())
+            SwPaM *const pNew = (!pAktCrsr->IsMultiSelection() && !pAktCrsr->HasMark())
                 ? pAktCrsr
                 : pAktCrsr->Create( pAktCrsr );
             pNew->GetPoint()->nNode = *pNd;

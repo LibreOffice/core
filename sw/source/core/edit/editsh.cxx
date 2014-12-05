@@ -634,7 +634,7 @@ bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr, boo
             if( bDelTxt )
                 Delete();
         }
-        else if( pCrsr->GetNext() != pCrsr && rFmt.GetValue() == rStr )
+        else if( pCrsr->IsMultiSelection() && rFmt.GetValue() == rStr )
             bInsTxt = false;
 
         if( bInsTxt )

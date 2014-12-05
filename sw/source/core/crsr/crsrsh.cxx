@@ -146,7 +146,7 @@ bool SwCrsrShell::DestroyCrsr()
     OSL_ENSURE( !IsTableMode(), "in table Selection" );
 
     // Is there a next one? Don't do anything if not.
-    if(m_pCurCrsr->GetNext() == m_pCurCrsr)
+    if(!m_pCurCrsr->IsMultiSelection())
         return false;
 
     SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -993,7 +993,7 @@ bool SwCrsrShell::ChgCurrPam(
 void SwCrsrShell::KillPams()
 {
     // Does any exist for deletion?
-    if( !m_pTblCrsr && !m_pBlockCrsr && m_pCurCrsr->GetNext() == m_pCurCrsr )
+    if( !m_pTblCrsr && !m_pBlockCrsr && !m_pCurCrsr->IsMultiSelection() )
         return;
 
     while( m_pCurCrsr->GetNext() != m_pCurCrsr )
@@ -1196,8 +1196,7 @@ sal_uInt16 SwCrsrShell::GetPageCnt()
 /// go to the next SSelection
 bool SwCrsrShell::GoNextCrsr()
 {
-    // is there a ring of cursors?
-    if( m_pCurCrsr->GetNext() == m_pCurCrsr )
+    if( !m_pCurCrsr->IsMultiSelection() )
         return false;
 
     SET_CURR_SHELL( this );
@@ -1216,8 +1215,7 @@ bool SwCrsrShell::GoNextCrsr()
 /// go to the previous SSelection
 bool SwCrsrShell::GoPrevCrsr()
 {
-    // is there a ring of cursors?
-    if( m_pCurCrsr->GetNext() == m_pCurCrsr )
+    if( !m_pCurCrsr->IsMultiSelection() )
         return false;
 
     SET_CURR_SHELL( this );
@@ -3040,7 +3038,7 @@ bool SwCrsrShell::IsSelFullPara() const
     bool bRet = false;
 
     if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
-        m_pCurCrsr->GetMark()->nNode.GetIndex() && m_pCurCrsr == m_pCurCrsr->GetNext() )
+        m_pCurCrsr->GetMark()->nNode.GetIndex() && !m_pCurCrsr->IsMultiSelection() )
     {
         sal_Int32 nStt = m_pCurCrsr->GetPoint()->nContent.GetIndex();
         sal_Int32 nEnd = m_pCurCrsr->GetMark()->nContent.GetIndex();

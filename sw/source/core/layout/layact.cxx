@@ -1917,7 +1917,7 @@ bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
             if( pSh->ISA(SwCrsrShell) && !static_cast<SwCrsrShell*>(pSh)->IsTableMode() )
             {
                 SwPaM *pCrsr = static_cast<SwCrsrShell*>(pSh)->GetCrsr();
-                if( !pCrsr->HasMark() && pCrsr == pCrsr->GetNext() )
+                if( !pCrsr->HasMark() && !pCrsr->IsMultiSelection() )
                 {
                     pCntntNode = pCrsr->GetCntntNode();
                     nTxtPos =  pCrsr->GetPoint()->nContent.GetIndex();

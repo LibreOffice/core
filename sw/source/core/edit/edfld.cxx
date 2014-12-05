@@ -264,7 +264,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwTxtFld *pTxtFld;
         SwFmtFld *pFmtFld;
 
-        if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
+        if ( !pCrsr->IsMultiSelection() && !pCrsr->HasMark())
         {
             pTxtFld = GetTxtFldAtPos( pCrsr->Start(), true );
 

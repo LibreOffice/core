@@ -1077,7 +1077,7 @@ bool XTextRangeToSwPaM( SwUnoInternalPaM & rToFill,
                 : ((pPortion) ? pPortion->GetCursor() : 0);
             if (pUnoCrsr && pDoc == rToFill.GetDoc())
             {
-                OSL_ENSURE(pUnoCrsr->GetNext() == pUnoCrsr,
+                OSL_ENSURE(!pUnoCrsr->IsMultiSelection(),
                         "what to do about rings?");
                 bRet = true;
                 *rToFill.GetPoint() = *pUnoCrsr->GetPoint();

@@ -355,7 +355,7 @@ namespace
 
                 do {
                     pDestDoc->getIDocumentContentOperations().DeleteAndJoin( *static_cast<SwPaM*>(pDelPam->GetNext()) );
-                    if( pDelPam->GetNext() == pDelPam )
+                    if( !pDelPam->IsMultiSelection() )
                         break;
                     delete pDelPam->GetNext();
                 } while( true );
