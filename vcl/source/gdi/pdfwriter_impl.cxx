@@ -6031,8 +6031,6 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
-    SAL_WARN("vcl.pdfwriter", "PDF Signing: Certificate Subject: " <<  cert->subjectName << "\n\tCertificate Issuer: " << cert->issuerName);
-
     // Prepare buffer and calculate PDF file digest
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
 
@@ -6137,8 +6135,6 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
-    SAL_WARN("vcl.pdfwriter","PKCS7 Object created successfully!");
-
     SECItem cms_output;
     cms_output.data = 0;
     cms_output.len = 0;
@@ -6153,21 +6149,17 @@ bool PDFWriterImpl::finalizeSignature()
         SAL_WARN("vcl.pdfwriter", "PDF Signing: can't start DER encoder.");
         return false;
     }
-    SAL_WARN("vcl.pdfwriter", "PDF Signing: Started DER encoding.");
 
     if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "PDF Signing: can't finish DER encoder.");
         return false;
     }
-    SAL_WARN("vcl.pdfwriter", "PDF Signing: Finished DER encoding.");
 
     OStringBuffer cms_hexbuffer;
 
     for (unsigned int i = 0; i < cms_output.len ; i++)
         appendHex(cms_output.data[i], cms_hexbuffer);
-
-    SAL_WARN("vcl.pdfwriter","PKCS7 object encoded successfully!");
 
     // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
     nWritten = 0;
