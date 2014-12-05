@@ -48,7 +48,7 @@ using namespace ::com::sun::star::i18n;
 sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                             sal_uInt16 nMode )
 {
-    const SwPaM *_pStartCrsr = static_cast<SwPaM*>(rPam.GetNext()),
+    const SwPaM *_pStartCrsr = rPam.GetNext(),
                 *__pStartCrsr = _pStartCrsr;
     bool bCheckEmpty = &rPam != _pStartCrsr;
     do {
@@ -86,7 +86,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
             } while( 30 > rList.size() && *aPam.GetPoint() < *pEnd );
         }
     } while( 30 > rList.size() &&
-        (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr );
+        (_pStartCrsr = _pStartCrsr->GetNext()) != __pStartCrsr );
 
     return rList.size();
 }
@@ -100,7 +100,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
 
     sal_uInt16 nListEntry = 0;
 
-    const SwPaM *_pStartCrsr = static_cast<SwPaM*>(rPam.GetNext()),
+    const SwPaM *_pStartCrsr = rPam.GetNext(),
                 *__pStartCrsr = _pStartCrsr;
     bool bCheckEmpty = &rPam != _pStartCrsr;
     do {
@@ -173,7 +173,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
             } while( nListEntry < rList.size() && *aPam.GetPoint() < *pEnd );
         }
     } while( 30 > rList.size() &&
-        (_pStartCrsr = static_cast<SwPaM *>(_pStartCrsr->GetNext())) != __pStartCrsr );
+        (_pStartCrsr = _pStartCrsr->GetNext()) != __pStartCrsr );
 
     GetIDocumentUndoRedo().EndUndo( UNDO_SETRUBYATTR, NULL );
 

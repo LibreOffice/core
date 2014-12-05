@@ -1836,6 +1836,10 @@ public:
     _SaveMergeRedlines( const SwNode& rDstNd,
                         const SwRangeRedline& rSrcRedl, _SaveMergeRedlines* pRing );
     sal_uInt16 InsertRedline();
+    _SaveMergeRedlines* GetNext()
+        { return GetNext(); }
+    _SaveMergeRedlines* GetPrev()
+        { return GetPrev(); }
 };
 
 _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,

@@ -578,7 +578,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         SwPaM* pPrev(nullptr);
         if( bRegExp )
         {
-            pPrev = pRegion->GetPrev();
+            pPrev = const_cast<SwPaM*>(pRegion)->GetPrev();
             const_cast<SwPaM*>(pRegion)->MoveRingTo( &rCursor );
         }
 

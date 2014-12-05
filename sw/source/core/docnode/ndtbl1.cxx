@@ -139,7 +139,7 @@ static bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                 rBoxes.insert( pBox );
             }
         } while( bAllCrsr &&
-                pSttPam != ( pCurPam = static_cast<SwPaM*>(pCurPam->GetNext())) );
+                pSttPam != ( pCurPam = pCurPam->GetNext()) );
     }
     return !rBoxes.empty();
 }

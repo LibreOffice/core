@@ -545,24 +545,14 @@ void SwShellCrsr::Show()
 // area is invalid.
 void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
-    SwShellCrsr * pTmp = this;
-
-    do
+    for(SwPaM& rPaM : GetRingContainer())
     {
-        pTmp->SwSelPaintRects::Invalidate( rRect );
-
+        SwShellCrsr* pShCrsr = dynamic_cast<SwShellCrsr*>(&rPaM);
         // skip any non SwShellCrsr objects in the ring
         // see also: SwAutoFormat::DeleteSel()
-        Ring* pTmpRing = pTmp;
-        pTmp = 0;
-        do
-        {
-            pTmpRing = pTmpRing->GetNext();
-            pTmp = dynamic_cast<SwShellCrsr*>(pTmpRing);
-        }
-        while ( !pTmp );
+        if(pShCrsr)
+            pShCrsr->SwSelPaintRects::Invalidate(rRect);
     }
-    while( this != pTmp );
 }
 
 void SwShellCrsr::Hide()

@@ -66,10 +66,16 @@ namespace sw
                 std::swap(*(&pPrev), *(&pDestRing->pPrev));
             }
             /** @return the next item in the ring container */
-            value_type* GetNext() const
+            value_type* GetNext()
                 { return pNext; }
             /** @return the previous item in the ring container */
-            value_type* GetPrev() const
+            value_type* GetPrev()
+                { return pPrev; }
+            /** @return the next item in the ring container */
+            const_value_type* GetNext() const
+                { return pNext; }
+            /** @return the previous item in the ring container */
+            const_value_type* GetPrev() const
                 { return pPrev; }
             /** @return a stl-like container with begin()/end() for iteration */
             ring_container GetRingContainer();
@@ -99,9 +105,9 @@ namespace sw
                 typedef value_type node;
                 typedef value_type* node_ptr;
                 typedef const value_type* const_node_ptr;
-                static node_ptr get_next(const_node_ptr n) { return n->GetNext(); };
+                static node_ptr get_next(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetNext(); };
                 static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
-                static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
+                static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetPrev(); };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
             friend typename ring_container::iterator;

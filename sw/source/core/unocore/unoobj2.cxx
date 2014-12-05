@@ -140,7 +140,7 @@ void DeepCopyPaM(SwPaM const & rSource, SwPaM & rTarget)
 
     if (rSource.GetNext() != &rSource)
     {
-        SwPaM *pPam = rSource.GetNext();
+        SwPaM *pPam = const_cast<SwPaM*>(rSource.GetNext());
         do
         {
             // create new PaM

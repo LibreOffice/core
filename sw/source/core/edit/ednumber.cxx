@@ -30,7 +30,7 @@
 
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {
-    for(const SwPaM& rTmp : rRing.GetRingContainer())
+    for(SwPaM& rTmp : const_cast<SwPaM*>(&rRing)->GetRingContainer())
         Insert( rTmp.GetMark()->nNode, rTmp.GetPoint()->nNode );
 }
 
