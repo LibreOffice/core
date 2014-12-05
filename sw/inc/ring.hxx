@@ -27,6 +27,13 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
+#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
+// gcc 4.6 backwards compat hack, remove ASAP when we drop support
+class SwPaM;
+class SwViewShell;
+class _SaveMergeRedlines;
+#endif
+
 namespace sw
 {
     template <typename value_type> class RingContainer;
@@ -101,8 +108,18 @@ namespace sw
                 static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetPrevInRing(); };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
+#if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
+            // gcc 4.6 backwards compat hack, remove ASAP when we drop support
+            friend class sw::RingContainer<SwPaM>;
+            friend class sw::RingContainer<const SwPaM>;
+            friend class sw::RingContainer<SwViewShell>;
+            friend class sw::RingContainer<const SwViewShell>;
+            friend class sw::RingContainer<_SaveMergeRedlines>;
+            friend class sw::RingContainer<const _SaveMergeRedlines>;
+#else
             friend ring_container;
             friend const_ring_container;
+#endif
             friend typename ring_container::iterator;
             friend typename ring_container::const_iterator;
             friend typename const_ring_container::iterator;
