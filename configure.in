@@ -3936,7 +3936,7 @@ if test  "$_os" = "Darwin"; then
    else
       MACOSX_DEPLOYMENT_TARGET=$sdk_target
 
-      sdk_found=`xcodebuild -showsdks | grep "sdk macosx10.[[789]]" | sed -e "s/.*sdk //" | head -n1`
+      sdk_found=`xcodebuild -showsdks | egrep "sdk macosx10.(7|8|9|10)" | sed -e "s/.*sdk //" | tail -n1`
       if test -z "$sdk_found"; then
          AC_MSG_ERROR([No SDK with OSX $sdk_target compatibility found])
       else
