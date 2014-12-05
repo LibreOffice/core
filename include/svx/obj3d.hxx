@@ -85,7 +85,7 @@ public:
     E3dObjList(SdrModel* pNewModel = 0, SdrPage* pNewPage = 0, E3dObjList* pNewUpList = 0);
     SVX_DLLPUBLIC virtual ~E3dObjList();
 
-    virtual E3dObjList* Clone() const;
+    virtual E3dObjList* Clone() const SAL_OVERRIDE;
 
     virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
     virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=NULL) SAL_OVERRIDE;
