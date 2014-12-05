@@ -369,7 +369,6 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
     @Override
     protected void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
         Log.d(tag, "onResume");
         readPreferences();// intent values take precedence over prefs?
@@ -387,7 +386,6 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             Log.d(tag, EXPLORER_VIEW_TYPE_KEY);
         }
         createUI();
-        openDirectory( currentDirectory );
     }
 
     @Override
