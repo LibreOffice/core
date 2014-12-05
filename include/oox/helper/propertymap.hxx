@@ -22,9 +22,7 @@
 
 #include <vector>
 #include <map>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <rtl/ustring.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/dllapi.h>
 

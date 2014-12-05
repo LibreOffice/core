@@ -11,7 +11,6 @@
 #ifndef INCLUDED_OOX_CRYPTO_CRYPTOENGINE_HXX
 #define INCLUDED_OOX_CRYPTO_CRYPTOENGINE_HXX
 
-#include <vector>
 
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/binaryoutputstream.hxx>

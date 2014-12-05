@@ -22,8 +22,6 @@
 
 #include <vector>
 #include <oox/token/tokens.hxx>
-#include <rtl/instance.hxx>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 namespace oox {

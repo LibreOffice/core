@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYINPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_BINARYINPUTSTREAM_HXX
 
-#include <vector>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <oox/helper/binarystreambase.hxx>
 

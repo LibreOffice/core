@@ -20,12 +20,9 @@
 #ifndef INCLUDED_OOX_CORE_XMLFILTERBASE_HXX
 #define INCLUDED_OOX_CORE_XMLFILTERBASE_HXX
 
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <oox/dllapi.h>

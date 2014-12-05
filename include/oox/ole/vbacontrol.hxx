@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_OLE_VBACONTROL_HXX
 
 #include <oox/ole/axcontrol.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }

@@ -22,8 +22,6 @@
 
 #include <oox/dllapi.h>
 #include <oox/export/drawingml.hxx>
-#include <sax/fshelper.hxx>
-#include <filter/msfilter/escherex.hxx>
 #include <editeng/outlobj.hxx>
 
 

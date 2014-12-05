@@ -12,7 +12,6 @@
 #define INCLUDED_OOX_HELPER_GRABBAGSTACK_HXX
 
 #include <oox/dllapi.h>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <vector>

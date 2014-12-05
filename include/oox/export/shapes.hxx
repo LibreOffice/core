@@ -21,12 +21,8 @@
 #define INCLUDED_OOX_EXPORT_SHAPES_HXX
 
 #include <oox/dllapi.h>
-#include <com/sun/star/uno/XReference.hpp>
 #include <oox/export/drawingml.hxx>
-#include <sax/fshelper.hxx>
-#include <vcl/mapmod.hxx>
 #include <tools/fract.hxx>
-#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star {
 namespace beans {

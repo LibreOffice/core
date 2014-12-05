@@ -23,7 +23,6 @@
 #include <oox/helper/propertymap.hxx>
 #include <oox/dllapi.h>
 
-#include <vector>
 
 namespace oox { class ModelObjectHelper; }
 

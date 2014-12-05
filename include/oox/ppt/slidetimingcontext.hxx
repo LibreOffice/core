@@ -20,12 +20,9 @@
 #ifndef INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
 #define INCLUDED_OOX_PPT_SLIDETIMINGCONTEXT_HXX
 
-#include <com/sun/star/animations/XTimeContainer.hpp>
 #include <oox/ppt/timenode.hxx>
 #include <oox/core/fragmenthandler2.hxx>
 
-#include <stack>
-#include <vector>
 
 namespace oox { namespace ppt {
 

@@ -23,7 +23,6 @@
 #include <map>
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
-#include <sal/types.h>
 
 namespace oox {
 

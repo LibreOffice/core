@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_DLLAPI_H
 #define INCLUDED_OOX_DLLAPI_H
 
-#include <sal/types.h>
 
 #if defined OOX_DLLIMPLEMENTATION
 #define OOX_DLLPUBLIC SAL_DLLPUBLIC_EXPORT

@@ -20,19 +20,6 @@
 #ifndef INCLUDED_OOX_DUMP_DUMPERBASE_HXX
 #define INCLUDED_OOX_DUMP_DUMPERBASE_HXX
 
-#include <math.h>
-#include <vector>
-#include <stack>
-#include <set>
-#include <map>
-#include <boost/shared_ptr.hpp>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/helper.hxx>
-#include <oox/helper/storagebase.hxx>
 
 #define OOX_INCLUDE_DUMPER (OSL_DEBUG_LEVEL > 0)
 

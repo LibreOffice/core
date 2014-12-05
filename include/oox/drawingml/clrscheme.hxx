@@ -20,9 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CLRSCHEME_HXX
 #define INCLUDED_OOX_DRAWINGML_CLRSCHEME_HXX
 
-#include <boost/shared_ptr.hpp>
 #include <map>
-#include <vector>
 #include <oox/drawingml/color.hxx>
 #include <oox/dllapi.h>
 

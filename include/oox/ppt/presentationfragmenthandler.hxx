@@ -20,17 +20,8 @@
 #ifndef INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
 #define INCLUDED_OOX_PPT_PRESENTATIONFRAGMENTHANDLER_HXX
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/awt/Size.hpp>
 #include <oox/ppt/slidepersist.hxx>
-#include <oox/core/contexthandler.hxx>
-#include <oox/core/fragmenthandler.hxx>
-#include <oox/core/fragmenthandler2.hxx>
-#include <oox/core/relations.hxx>
 #include <oox/ppt/customshowlistcontext.hxx>
-#include <oox/ppt/comments.hxx>
-#include <stack>
-#include <vector>
 
 namespace oox { namespace ppt {
 

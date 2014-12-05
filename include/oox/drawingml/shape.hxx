@@ -27,11 +27,8 @@
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <vector>
-#include <map>
 #include <oox/dllapi.h>
 
 namespace oox { namespace vml {

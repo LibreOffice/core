@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_STORAGEBASE_HXX
 #define INCLUDED_OOX_HELPER_STORAGEBASE_HXX
 
-#include <vector>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/helper/refmap.hxx>
 #include <oox/dllapi.h>

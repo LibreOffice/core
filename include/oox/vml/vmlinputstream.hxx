@@ -22,7 +22,6 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <rtl/string.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XTextInputStream2; }

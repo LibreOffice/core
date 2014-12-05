@@ -21,7 +21,6 @@
 #ifndef INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
 #define INCLUDED_OOX_PPT_SLIDETRANSITION_HXX
 
-#include <rtl/ustring.hxx>
 
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 

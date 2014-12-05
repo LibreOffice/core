@@ -22,7 +22,6 @@
 
 #include <oox/core/contexthandler2.hxx>
 #include <oox/core/fragmenthandler.hxx>
-#include <vector>
 #include <oox/dllapi.h>
 
 namespace oox {

@@ -22,7 +22,6 @@
 
 #include <oox/dllapi.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <sax/fastattribs.hxx>
 

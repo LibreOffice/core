@@ -21,11 +21,8 @@
 #define INCLUDED_OOX_HELPER_GRAPHICHELPER_HXX
 
 #include <deque>
-#include <map>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/awt/DeviceInfo.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/storagebase.hxx>
 

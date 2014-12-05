@@ -22,7 +22,6 @@
 
 #include <oox/ppt/slidefragmenthandler.hxx>
 
-#include <vector>
 
 namespace oox { namespace ppt {
 

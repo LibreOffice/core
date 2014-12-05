@@ -22,7 +22,6 @@
 
 #include <config_oox.h>
 
-#include <rtl/ustring.hxx>
 
 #if USE_TLS_OPENSSL
 #include <openssl/evp.h>

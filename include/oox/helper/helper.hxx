@@ -21,14 +21,8 @@
 #define INCLUDED_OOX_HELPER_HELPER_HXX
 
 #include <algorithm>
-#include <limits>
-#include <boost/static_assert.hpp>
-#include <sal/macros.h>
-#include <osl/endian.h>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
-#include <string.h>
 
 namespace oox {
 

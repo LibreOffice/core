@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_PPT_CUSTOMSHOWLISTCONTEXT_HXX
 
 #include <oox/core/fragmenthandler2.hxx>
-#include <vector>
 
 namespace oox { namespace ppt {
 

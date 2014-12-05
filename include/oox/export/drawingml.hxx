@@ -24,8 +24,6 @@
 #include <sax/fshelper.hxx>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/awt/Gradient.hpp>
-#include <com/sun/star/uno/XReference.hpp>
 #include <tools/poly.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include "oox/drawingml/drawingmltypes.hxx"

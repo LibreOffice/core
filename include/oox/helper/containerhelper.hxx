@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_CONTAINERHELPER_HXX
 #define INCLUDED_OOX_HELPER_CONTAINERHELPER_HXX
 
-#include <map>
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>

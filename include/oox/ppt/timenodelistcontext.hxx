@@ -23,7 +23,6 @@
 #include <oox/core/fragmenthandler2.hxx>
 #include <oox/ppt/timenode.hxx>
 
-#include <com/sun/star/animations/XTimeContainer.hpp>
 
 namespace oox { namespace ppt {
 

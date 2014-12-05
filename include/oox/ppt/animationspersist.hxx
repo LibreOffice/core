@@ -21,16 +21,10 @@
 #ifndef INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
 #define INCLUDED_OOX_PPT_ANIMATIONSPERSIST_HXX
 
-#include <list>
-#include <boost/shared_ptr.hpp>
 #include <boost/array.hpp>
 
-#include <rtl/ustring.hxx>
 
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/drawing/XShape.hpp>
 
-#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/ppt/slidepersist.hxx>
 
 namespace oox { namespace ppt {

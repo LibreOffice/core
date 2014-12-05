@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_VML_VMLTEXTBOX_HXX
 #define INCLUDED_OOX_VML_VMLTEXTBOX_HXX
 
-#include <vector>
 #include <rtl/ustring.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/dllapi.h>

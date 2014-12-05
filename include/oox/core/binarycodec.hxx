@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_CORE_BINARYCODEC_HXX
 #define INCLUDED_OOX_CORE_BINARYCODEC_HXX
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <rtl/cipher.h>

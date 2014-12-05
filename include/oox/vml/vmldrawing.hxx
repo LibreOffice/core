@@ -20,9 +20,6 @@
 #ifndef INCLUDED_OOX_VML_VMLDRAWING_HXX
 #define INCLUDED_OOX_VML_VMLDRAWING_HXX
 
-#include <map>
-#include <memory>
-#include <vector>
 #include <oox/ole/axcontrol.hxx>
 #include <oox/ole/oleobjecthelper.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>

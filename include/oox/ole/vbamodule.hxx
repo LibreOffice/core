@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_OLE_VBAMODULE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }

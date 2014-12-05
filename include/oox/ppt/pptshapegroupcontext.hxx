@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_PPT_PPTSHAPEGROUPCONTEXT_HXX
 
 #include <oox/drawingml/shapegroupcontext.hxx>
-#include <oox/drawingml/color.hxx>
 #include <oox/ppt/slidepersist.hxx>
 
 namespace oox { namespace ppt {

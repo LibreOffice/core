@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_GRAPHICSHAPECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_GRAPHICSHAPECONTEXT_HXX
 
-#include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <oox/dllapi.h>
 

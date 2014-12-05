@@ -20,10 +20,6 @@
 #ifndef INCLUDED_OOX_CORE_RECORDPARSER_HXX
 #define INCLUDED_OOX_CORE_RECORDPARSER_HXX
 
-#include <map>
-#include <com/sun/star/io/IOException.hpp>
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#include <rtl/ref.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/core/fragmenthandler.hxx>
 

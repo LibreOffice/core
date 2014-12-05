@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 #define INCLUDED_OOX_HELPER_BINARYOUTPUTSTREAM_HXX
 
-#include <memory>
 #include <boost/shared_array.hpp>
 
 #include <oox/helper/binarystreambase.hxx>

@@ -22,7 +22,6 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <oox/dllapi.h>
 
 namespace oox {

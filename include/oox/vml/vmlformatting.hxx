@@ -22,11 +22,9 @@
 
 #include <oox/helper/helper.hxx>
 #include <oox/dllapi.h>
-#include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include <vector>
 
 namespace oox {
     class GraphicHelper;

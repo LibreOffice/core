@@ -21,16 +21,8 @@
 #ifndef INCLUDED_OOX_PPT_TIMENODE_HXX
 #define INCLUDED_OOX_PPT_TIMENODE_HXX
 
-#include <boost/shared_ptr.hpp>
-#include <vector>
-#include <list>
-#include <rtl/ustring.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/animations/XAnimationNode.hpp>
-#include <oox/helper/propertymap.hxx>
 #include <oox/ppt/slidetransition.hxx>
-#include <oox/ppt/slidepersist.hxx>
 #include <oox/ppt/animationspersist.hxx>
 
 namespace oox { namespace ppt {

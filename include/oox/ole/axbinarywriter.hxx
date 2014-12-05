@@ -10,7 +10,6 @@
 #ifndef INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
 #define INCLUDED_OOX_OLE_AXBINARYWRITER_HXX
 
-#include <utility>
 #include <oox/helper/binaryoutputstream.hxx>
 #include <oox/helper/refvector.hxx>
 

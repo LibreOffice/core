@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_CORE_FASTPARSER_HXX
 #define INCLUDED_OOX_CORE_FASTPARSER_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 
 namespace oox {

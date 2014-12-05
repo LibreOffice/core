@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_CONNECTORSHAPECONTEXT_HXX
 
-#include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <oox/dllapi.h>
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_HELPER_REFVECTOR_HXX
 #define INCLUDED_OOX_HELPER_REFVECTOR_HXX
 
-#include <vector>
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <sal/types.h>

@@ -21,8 +21,6 @@
 #define INCLUDED_OOX_VML_VMLSHAPE_HXX
 
 #include <memory>
-#include <vector>
-#include <com/sun/star/awt/Point.hpp>
 #include <oox/vml/vmlformatting.hxx>
 #include <oox/vml/vmltextbox.hxx>
 #include <oox/dllapi.h>

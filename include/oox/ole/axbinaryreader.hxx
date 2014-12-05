@@ -20,9 +20,6 @@
 #ifndef INCLUDED_OOX_OLE_AXBINARYREADER_HXX
 #define INCLUDED_OOX_OLE_AXBINARYREADER_HXX
 
-#include <utility>
-#include <oox/helper/binaryinputstream.hxx>
-#include <oox/helper/refvector.hxx>
 #include <oox/ole/axfontdata.hxx>
 
 namespace oox {

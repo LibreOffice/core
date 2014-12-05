@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_OLE_VBAPROJECT_HXX
 #define INCLUDED_OOX_OLE_VBAPROJECT_HXX
 
-#include <map>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <oox/helper/refvector.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <oox/dllapi.h>

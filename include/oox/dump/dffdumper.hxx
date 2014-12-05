@@ -20,7 +20,6 @@
 #ifndef INCLUDED_OOX_DUMP_DFFDUMPER_HXX
 #define INCLUDED_OOX_DUMP_DFFDUMPER_HXX
 
-#include <oox/dump/dumperbase.hxx>
 
 #if OOX_INCLUDE_DUMPER
 
