@@ -1153,14 +1153,16 @@ void ScTable::SortReorderByRowRefUpdate(
             rSrc.transfer(nRow1, nRow2, rDest, nRow1);
         }
 
-        sc::BroadcasterStoreType& rSrc = aSortedCols[i].maBroadcasters;
-        sc::BroadcasterStoreType& rDest = aCol[nThisCol].maBroadcasters;
+        {
+            sc::BroadcasterStoreType& rSrc = aSortedCols[i].maBroadcasters;
+            sc::BroadcasterStoreType& rDest = aCol[nThisCol].maBroadcasters;
 
-        // Release current broadcasters first, to prevent them from getting deleted.
-        rDest.release_range(nRow1, nRow2);
+            // Release current broadcasters first, to prevent them from getting deleted.
+            rDest.release_range(nRow1, nRow2);
 
-        // Transfer sorted broadcaster segment to the document.
-        rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+            // Transfer sorted broadcaster segment to the document.
+            rSrc.transfer(nRow1, nRow2, rDest, nRow1);
+        }
 
         {
             sc::CellNoteStoreType& rSrc = aSortedCols[i].maCellNotes;
