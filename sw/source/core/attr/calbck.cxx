@@ -23,12 +23,12 @@
 #include <swcache.hxx>
 #include <swfntcch.hxx>
 
-static SwClientIter* pClientIters = 0;
+static SwClientIter* pClientIters = nullptr;
 
 TYPEINIT0( SwClient );
 
 SwClient::SwClient( SwModify* pToRegisterIn )
-    : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 )
+    : pLeft( nullptr ), pRight( nullptr ), pRegisteredIn( nullptr )
 {
     if(pToRegisterIn)
         // connect to SwModify
@@ -81,7 +81,7 @@ bool SwClient::GetInfo( SfxPoolItem& ) const
 }
 
 SwModify::SwModify()
-    : SwClient(0), pRoot(0)
+    : SwClient(nullptr), pRoot(nullptr)
 {
     bModifyLocked = false;
     bLockClientList = false;
@@ -91,7 +91,7 @@ SwModify::SwModify()
 }
 
 SwModify::SwModify( SwModify* pToRegisterIn )
-    : SwClient( pToRegisterIn ), pRoot( 0 )
+    : SwClient( pToRegisterIn ), pRoot( nullptr )
 {
     bModifyLocked = false;
     bLockClientList = false;
@@ -122,7 +122,7 @@ SwModify::~SwModify()
             SwClient* p = aIter.GoStart();
             while ( p )
             {
-                p->pRegisteredIn = 0;
+                p->pRegisteredIn = nullptr;
                 p = ++aIter;
             }
         }
@@ -195,7 +195,7 @@ bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
         if( pLast )
         {
             while( ( bRet = pLast->GetInfo( rInfo ) ) &&
-                   0 != ( pLast = ++aIter ) )
+                   nullptr != ( pLast = ++aIter ) )
                 ;
         }
     }
@@ -218,15 +218,15 @@ void SwModify::Add( SwClient* pDepend )
         }
 #endif
         // deregister new client in case it is already registered elsewhere
-        if( pDepend->pRegisteredIn != 0 )
+        if( pDepend->pRegisteredIn != nullptr )
             pDepend->pRegisteredIn->Remove( pDepend );
 
         if( !pRoot )
         {
             // first client added
             pRoot = pDepend;
-            pRoot->pLeft = 0;
-            pRoot->pRight = 0;
+            pRoot->pLeft = nullptr;
+            pRoot->pRight = nullptr;
         }
         else
         {
@@ -246,7 +246,7 @@ void SwModify::Add( SwClient* pDepend )
 SwClient* SwModify::Remove( SwClient* pDepend )
 {
     if ( bInDocDTOR )
-        return 0;
+        return nullptr;
 
     if( pDepend->pRegisteredIn == this )
     {
@@ -275,8 +275,8 @@ SwClient* SwModify::Remove( SwClient* pDepend )
             pTmp = pTmp->pNxtIter;
         }
 
-        pDepend->pLeft = 0;
-        pDepend->pRight = 0;
+        pDepend->pLeft = nullptr;
+        pDepend->pRight = nullptr;
     }
     else
     {
@@ -284,7 +284,7 @@ SwClient* SwModify::Remove( SwClient* pDepend )
     }
 
     // disconnect client from me
-    pDepend->pRegisteredIn = 0;
+    pDepend->pRegisteredIn = nullptr;
     return pDepend;
 }
 
@@ -369,8 +369,8 @@ bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 
 SwClientIter::SwClientIter( const SwModify& rModify )
     : rRoot(rModify)
-    , pNxtIter(NULL)
-    , aSrchId(0)
+    , pNxtIter(nullptr)
+    , aSrchId(nullptr)
 {
     if( pClientIters )
     {
@@ -398,7 +398,7 @@ SwClientIter::~SwClientIter()
         {
             SwClientIter* pTmp = pClientIters;
             while( pTmp->pNxtIter != this )
-                if( 0 == ( pTmp = pTmp->pNxtIter ) )
+                if( nullptr == ( pTmp = pTmp->pNxtIter ) )
                 {
                     OSL_ENSURE( this, "Lost my pointer" );
                     return ;
