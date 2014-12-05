@@ -34,6 +34,7 @@
 
 namespace sd {
     class View;
+    class ViewShell;
     class DrawDocShell;
     class DrawView;
 }
@@ -56,7 +57,6 @@ class SdResId;
 namespace vcl { class Window; }
 class SdPage;
 class TabPage;
-class ViewShell;
 class SdCustomShowList;
 
 class AbstractCopyDlg : public VclAbstractDialog
@@ -200,7 +200,7 @@ public:
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* ) = 0;
 
-    virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( ViewShell* pViewShell,
+    virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
                                                                   vcl::Window* pParent,
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* pCurrentPage ) = 0;

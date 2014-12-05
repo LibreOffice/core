@@ -517,10 +517,10 @@ VclAbstractDialog* SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog( vcl::
   return new SdVclAbstractDialog_Impl( new ::sd::MasterLayoutDialog( pParent, pDoc, pCurrentPage ));
 }
 
-AbstractHeaderFooterDialog* SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog( ViewShell* pViewShell,
+AbstractHeaderFooterDialog* SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
   vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
 {
-    return new AbstractHeaderFooterDialog_Impl( new ::sd::HeaderFooterDialog( (::sd::ViewShell*)pViewShell, pParent, pDoc, pCurrentPage ));
+    return new AbstractHeaderFooterDialog_Impl( new ::sd::HeaderFooterDialog( pViewShell, pParent, pDoc, pCurrentPage ));
 }
 
 VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateSdPhotoAlbumDialog( vcl::Window* pWindow, SdDrawDocument* pDoc )

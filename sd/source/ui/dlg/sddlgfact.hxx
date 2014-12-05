@@ -261,7 +261,7 @@ public:
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* ) SAL_OVERRIDE;
 
-    virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( ViewShell* pViewShell,
+    virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( sd::ViewShell* pViewShell,
                                                                   vcl::Window* pParent,
                                                                   SdDrawDocument* pDoc,
                                                                   SdPage* pCurrentPage ) SAL_OVERRIDE;
