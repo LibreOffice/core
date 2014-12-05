@@ -45,6 +45,7 @@
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/srchdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <overlayrangesoutline.hxx>
@@ -574,7 +575,7 @@ SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
 short SwShellCrsr::MaxReplaceArived()
 {
     short nRet = RET_YES;
-    vcl::Window* pDlg = (vcl::Window*) SwView::GetSearchDialog();
+    vcl::Window* pDlg = SwView::GetSearchDialog();
     if( pDlg )
     {
         // Terminate old actions. The table-frames get constructed and
