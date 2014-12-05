@@ -60,7 +60,8 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 
 $(eval $(call gb_Library_use_externals,vcl,\
 	jpeg \
-	nss3 \
+	$(if $(filter-out WNT,$(OS)), \
+		nss3) \
 	libeot \
 ))
 
@@ -674,6 +675,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 
 $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	advapi32 \
+	crypt32 \
 	gdi32 \
 	gdiplus \
     glu32 \

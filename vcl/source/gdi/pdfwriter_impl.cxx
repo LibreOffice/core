@@ -68,14 +68,21 @@
 
 #include "pdfwriter_impl.hxx"
 
-#if !defined(ANDROID) && !defined(IOS)
-// NSS header files for PDF signing support
+#if !defined(ANDROID) && !defined(IOS) && !defined(_WIN32)
+// NSS headers for PDF signing
 #include "nss.h"
 #include "cert.h"
 #include "hasht.h"
 #include "sechash.h"
 #include "cms.h"
 #include "cmst.h"
+#endif
+
+#ifdef _WIN32
+// WinCrypt headers for PDF signing
+#include <prewin.h>
+#include <wincrypt.h>
+#include <postwin.h>
 #endif
 
 #include <config_eot.h>
@@ -5971,6 +5978,8 @@ bool PDFWriterImpl::emitSignature()
     return true;
 }
 
+#if !defined(ANDROID) && !defined(IOS) && !defined(_WIN32)
+
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
     return (char *)arg;
@@ -5986,6 +5995,39 @@ namespace {
         HASHContext *get() { return mpPtr; }
     };
 }
+
+#endif
+
+#ifdef _WIN32
+
+namespace {
+
+OUString WindowsError(DWORD nErrorCode)
+{
+    LPWSTR pMsgBuf;
+
+    if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+                       NULL,
+                       nErrorCode,
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                       (LPWSTR)&pMsgBuf,
+                       0,
+                       NULL) == 0)
+        return OUString::number(nErrorCode, 16);
+
+    if (pMsgBuf[wcslen(pMsgBuf)-1] == '\n')
+        pMsgBuf[wcslen(pMsgBuf)-1] = '\0';
+
+    OUString result(pMsgBuf);
+
+    LocalFree(pMsgBuf);
+
+    return result;
+}
+
+}
+
+#endif
 
 bool PDFWriterImpl::finalizeSignature()
 {
@@ -6021,7 +6063,7 @@ bool PDFWriterImpl::finalizeSignature()
     sal_Int8* n_derArray = derEncoded.getArray();
     sal_Int32 n_derLength = derEncoded.getLength();
 
-    NSS_NoDB_Init(".");
+#ifndef _WIN32
 
     CERTCertificate *cert = CERT_DecodeCertFromPackage(reinterpret_cast<char *>(n_derArray), n_derLength);
 
@@ -6170,6 +6212,170 @@ bool PDFWriterImpl::finalizeSignature()
 
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
     return true;
+
+#else
+
+    PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
+    if (pCertContext == NULL)
+    {
+        SAL_WARN("vcl.pdfwriter", "CertCreateCertificateContext failed: " << WindowsError(GetLastError()));
+        return false;
+    }
+
+#if SAL_LOG_INFO
+    DWORD nProperty(0);
+    bool first(true);
+    while ((nProperty = CertEnumCertificateContextProperties(pCertContext, nProperty)) != 0)
+    {
+        if (first)
+            SAL_INFO("vcl.pdfwriter", "Certificate context properties:");
+        first = false;
+#if 0
+        DWORD nSize(0);
+        if (!CertGetCertificateContextProperty(pCertContext, nProperty, NULL, &nSize))
+            SAL_INFO("vcl.pdfwriter", "  " << "(missing?) " << std::hex << nProperty);
+        else
+        {
+            boost::scoped_array<char> aData(new char[nSize]);
+            if (!CertGetCertificateContextProperty(pCertContext, nProperty, aData.get(), &nSize))
+                SAL_INFO("vcl.pdfwriter", "  " << "(missing?) " << std::hex:: << nProperty);
+            else
+                SAL_INFO("vcl.pdfwriter", "  " << CertificatePropertyNameAndData(nProperty, aData, nSize));
+        }
+#else
+        SAL_INFO("vcl.pdfwriter", "  " << std::hex << nProperty);
+#endif
+    }
+#endif
+
+    // Prepare buffer and calculate PDF file digest
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
+
+    HCRYPTPROV hCryptProvider;
+    if (!CryptAcquireContext(&hCryptProvider, NULL, MS_ENHANCED_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptAcquireContext failed: " << WindowsError(GetLastError()));
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    HCRYPTHASH hHash;
+    if (!CryptCreateHash(hCryptProvider, CALG_SHA1, 0, 0, &hHash))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptCreateHash failed: " << WindowsError(GetLastError()));
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    DWORD nHashSize;
+    DWORD nHashSizeLen(sizeof(DWORD));
+    if (!CryptGetHashParam(hHash, HP_HASHSIZE, reinterpret_cast<BYTE *>(&nHashSize), &nHashSizeLen, 0))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptGetHashParam failed: " << WindowsError(GetLastError()));
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    assert(nHashSizeLen == sizeof(DWORD));
+    assert(nHashSize == 20);
+
+    boost::scoped_array<char> buffer(new char[m_nSignatureContentOffset + 1]);
+    sal_uInt64 bytesRead;
+
+    //FIXME: Check if SHA1 is calculated from the correct byterange
+    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), m_nSignatureContentOffset - 1 , bytesRead)) );
+    if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: First buffer read failed!");
+
+    if (!CryptHashData(hHash, reinterpret_cast<const BYTE *>(buffer.get()), bytesRead, 0))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptHashData failed: " << WindowsError(GetLastError()));
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset + MAX_SIGNATURE_CONTENT_LENGTH + 1)) );
+    buffer.reset(new char[nLastByteRangeNo + 1]);
+    CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), nLastByteRangeNo, bytesRead)) );
+    if (bytesRead != (sal_uInt64) nLastByteRangeNo)
+        SAL_WARN("vcl.pdfwriter", "PDF Signing: Second buffer read failed!");
+
+    if (!CryptHashData(hHash, reinterpret_cast<const BYTE *>(buffer.get()), bytesRead, 0))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptHashData failed: " << WindowsError(GetLastError()));
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+#if 0 // We don't actualy need the hash bytes
+    unsigned char aHash[20];
+    if (!CryptGetHashParam(hHash, HP_HASHVAL, aHash, &nHashSize, 0))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptGetHashParam failed: " << WindowsError(GetLastError()));
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    if (nHashSize != 20)
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptGetHashParam returned unexpected size hash value: " << nHashSize);
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+#endif
+
+    OString pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 );
+
+    DWORD nSigLen(0);
+    if (!CryptSignHash(hHash, AT_SIGNATURE, NULL, 0, NULL, &nSigLen))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptSignHash failed: " << WindowsError(GetLastError()));
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    boost::scoped_array<BYTE> pSig(new BYTE[nSigLen]);
+    if (!CryptSignHash(hHash, AT_SIGNATURE, NULL, 0, pSig.get(), &nSigLen))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptSignHash failed: " << WindowsError(GetLastError()));
+        CryptDestroyHash(hHash);
+        CryptReleaseContext(hCryptProvider, 0);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    // Release resources
+    CryptDestroyHash(hHash);
+    CryptReleaseContext(hCryptProvider, 0);
+    CertFreeCertificateContext(pCertContext);
+
+    OStringBuffer cms_hexbuffer;
+
+    for (unsigned int i = 0; i < nSigLen ; i++)
+        appendHex(pSig[i], cms_hexbuffer);
+
+    // Set file pointer to the m_nSignatureContentOffset, we're ready to overwrite PKCS7 object
+    nWritten = 0;
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, m_nSignatureContentOffset)) );
+    m_aFile.write(cms_hexbuffer.getStr(), cms_hexbuffer.getLength(), nWritten);
+
+    CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, nOffset)) );
+
+    return true;
+#endif
 }
 
 #endif
