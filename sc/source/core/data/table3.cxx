@@ -1119,9 +1119,6 @@ void ScTable::SortReorderByRowRefUpdate(
     SCROW nRow1 = pArray->GetStart();
     SCROW nRow2 = pArray->GetLast();
 
-    // Collect all listeners of cell broadcasters of sorted range.
-    std::vector<SvtListener*> aCellListeners;
-
     // Split formula groups at the sort range boundaries (if applicable).
     std::vector<SCROW> aRowBounds;
     aRowBounds.reserve(2);
