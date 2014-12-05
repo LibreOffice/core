@@ -487,7 +487,7 @@ bool SwView::IsValidSelectionForThesaurus() const
     // must not be a multi-selection, and if it is a selection it needs
     // to be within a single paragraph
 
-    const bool bMultiSel = m_pWrtShell->GetCrsr() != m_pWrtShell->GetCrsr()->GetNext();
+    const bool bMultiSel = m_pWrtShell->GetCrsr()->IsMultiSelection();
     const bool bSelection = static_cast<SwCrsrShell*>(m_pWrtShell)->HasSelection();
     return !bMultiSel && (!bSelection || m_pWrtShell->IsSelOnePara() );
 }

@@ -840,7 +840,7 @@ SwField* SwCrsrShell::GetFieldAtCrsr(
 SwField* SwCrsrShell::GetCurFld( const bool bIncludeInputFldAtStart ) const
 {
     SwPaM* pCrsr = GetCrsr();
-    if ( pCrsr->GetNext() != pCrsr )
+    if ( pCrsr->IsMultiSelection() )
     {
         // multi selection not handled.
         return NULL;

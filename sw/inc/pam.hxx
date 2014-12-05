@@ -312,6 +312,8 @@ public:
         { return GetPrevInRing(); }
     const SwPaM* GetPrev() const
         { return GetPrevInRing(); }
+    bool IsMultiSelection() const
+        { return !unique(); }
 };
 
 std::ostream &operator <<(std::ostream& s, const SwPaM& pam);

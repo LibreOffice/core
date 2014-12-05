@@ -276,7 +276,7 @@ void SwEditShell::DelNumRules()
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr ) // multi-selection?
+    if( pCrsr->IsMultiSelection() )
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -307,7 +307,7 @@ bool SwEditShell::NumUpDown( bool bDown )
 
     bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )         // no multiple selection ?
+    if( !pCrsr->IsMultiSelection() )
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
     else
     {
@@ -528,7 +528,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
 
     bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr ) // no multi selection?
+    if( !pCrsr->IsMultiSelection() )
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
     else
     {
@@ -789,7 +789,7 @@ void SwEditShell::SetNumRuleStart( bool bFlag, SwPaM* pPaM )
 {
     StartAllAction();
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
+    if( pCrsr->IsMultiSelection() )         // multiple selection ?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -816,7 +816,7 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
     StartAllAction();
 
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
+    if( pCrsr->IsMultiSelection() )         // multiple selection ?
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );

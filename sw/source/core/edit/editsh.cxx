@@ -621,7 +621,7 @@ bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const OUString& rStr, boo
         {
             // Selection existent, multi selection?
             bool bDelTxt = true;
-            if( pCrsr->GetNext() == pCrsr )
+            if( !pCrsr->IsMultiSelection() )
             {
                 // einfach Selection -> Text ueberpruefen
                 const OUString sTxt(comphelper::string::stripEnd(GetSelTxt(), ' '));

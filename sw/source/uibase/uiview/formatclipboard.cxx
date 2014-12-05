@@ -294,7 +294,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         bool bHasSelection = pCrsr->HasMark();
         bool bForwardSelection = false;
 
-        if(!bHasSelection && pCrsr->GetPrev() != pCrsr && pCrsr->GetPrev() != 0)
+        if(!bHasSelection && pCrsr->IsMultiSelection())
         {
             // if cursor has multiple selections
 

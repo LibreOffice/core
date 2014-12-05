@@ -326,7 +326,7 @@ bool SwEditShell::DelFullPara()
     {
         SwPaM* pCrsr = GetCrsr();
         // no multi selection
-        if( pCrsr->GetNext() == pCrsr && !HasReadonlySel() )
+        if( !pCrsr->IsMultiSelection() && !HasReadonlySel() )
         {
             SET_CURR_SHELL( this );
             StartAllAction();
