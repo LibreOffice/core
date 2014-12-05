@@ -208,18 +208,21 @@ public:
 
     // use these methods right after setting a context to make sure drawing happens
     // in the right FBO (default one is for onscreen painting)
+    bool               BindFramebuffer( OpenGLFramebuffer* pFramebuffer );
     bool               AcquireDefaultFramebuffer();
-    bool               AcquireFramebuffer( OpenGLFramebuffer* pFramebuffer );
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
     void AddRef();
     void DeRef();
+    void               ReleaseFramebuffer( const OpenGLTexture& rTexture );
+    void               ReleaseFramebuffers();
 
     // retrieve a program from the cache or compile/link it
     OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
     OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
 
     bool isCurrent();
+    void clearCurrent();
     void makeCurrent();
     void resetCurrent();
     void swapBuffers();
