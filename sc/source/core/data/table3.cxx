@@ -59,6 +59,7 @@
 #include <fstalgorithm.hxx>
 #include <listenercontext.hxx>
 #include <sharedformula.hxx>
+#include <stlsheet.hxx>
 #include <refhint.hxx>
 #include <listenerquery.hxx>
 #include <bcaslot.hxx>
@@ -1812,8 +1813,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
                                 //! sortieren?
 
-    ScStyleSheet* pStyle = (ScStyleSheet*) pDocument->GetStyleSheetPool()->Find(
-                                ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA );
+    ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
+                                ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA ));
 
     bool bSpaceLeft = true;                                         // Erfolg beim Einfuegen?
 
