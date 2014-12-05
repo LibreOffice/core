@@ -1053,7 +1053,9 @@ private:
         bool bKeepQuery, bool bUpdateRefs );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
     void SortReorderByColumn( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress );
+
     void SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );
+    void SortReorderByRowRefUpdate( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
