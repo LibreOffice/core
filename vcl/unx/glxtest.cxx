@@ -93,13 +93,6 @@ x_error_handler(Display *, XErrorEvent *ev)
   return 0;
 }
 
-
-// glxtest is declared inside extern "C" so that the name is not mangled.
-// The name is used in build/valgrind/x86_64-redhat-linux-gnu.sup to suppress
-// memory leak errors because we run it inside a short lived fork and we don't
-// care about leaking memory
-extern "C" {
-
 void glxtest()
 {
   // we want to redirect to /dev/null stdout, stderr, and while we're at it,
@@ -241,8 +234,6 @@ void glxtest()
 
   ///// Finally write data to the pipe
   write(write_end_of_the_pipe, buf, length);
-}
-
 }
 
 /** \returns true in the child glxtest process, false in the parent process */
