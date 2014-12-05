@@ -25,6 +25,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
@@ -540,16 +541,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_FUNCTION_BOX:
             {
-                sal_uInt16 nChildId = ScFunctionChildWindow::GetChildWindowId();
-                if ( rReq.GetArgs() )
-                    pThisFrame->SetChildWindow( nChildId, static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(FID_FUNCTION_BOX)).GetValue());
-                else
-                {
-                    pThisFrame->ToggleChildWindow( nChildId );
-                    rReq.AppendItem( SfxBoolItem( FID_FUNCTION_BOX , pThisFrame->HasChildWindow( nChildId ) ) );
-                }
+                // First make sure that the sidebar is visible
+                pThisFrame->ShowChildWindow(SID_SIDEBAR);
 
-                GetViewFrame()->GetBindings().Invalidate(FID_FUNCTION_BOX);
+                ::sfx2::sidebar::Sidebar::ShowPanel("FunctionsPanel",
+                                                    pThisFrame->GetFrame().GetFrameInterface());
                 rReq.Done ();
             }
             break;
@@ -1107,7 +1103,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         default:
-            OSL_FAIL("Unbekannter Slot bei ScTabViewShell::Execute");
+            OSL_FAIL("Unknown Slot at ScTabViewShell::Execute");
             break;
     }
 }

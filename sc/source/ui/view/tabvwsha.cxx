@@ -152,7 +152,6 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
     SCCOL       nPosX       = rViewData.GetCurX();
     SCROW       nPosY       = rViewData.GetCurY();
     SCTAB       nTab        = rViewData.GetTabNo();
-    sal_uInt16  nMyId       = 0;
 
     SfxViewFrame* pThisFrame = GetViewFrame();
     bool bOle = GetViewFrame()->GetFrame().IsInPlace();
@@ -342,11 +341,6 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     rSet.Put(SfxBoolItem(FID_NORMALVIEWMODE, !GetViewData().IsPagebreakMode()));
                     rSet.Put(SfxBoolItem(FID_PAGEBREAKMODE, GetViewData().IsPagebreakMode()));
                 }
-                break;
-
-            case FID_FUNCTION_BOX:
-                nMyId = ScFunctionChildWindow::GetChildWindowId();
-                rSet.Put(SfxBoolItem(FID_FUNCTION_BOX, pThisFrame->HasChildWindow(nMyId)));
                 break;
 
             case FID_PROTECT_DOC:

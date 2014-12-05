@@ -2866,7 +2866,7 @@ SfxVoidItem FreezePanes SID_WINDOW_FIX
 ]
 
 
-SfxBoolItem FunctionBox FID_FUNCTION_BOX
+SfxVoidItem FunctionBox FID_FUNCTION_BOX
 
 [
     /* flags: */
