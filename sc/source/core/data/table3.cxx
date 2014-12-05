@@ -1541,7 +1541,10 @@ void ScTable::Sort(
         pUndo->mbUpdateRefs = bUpdateRefs;
     }
 
-    while (aSortParam.nCol2 > aSortParam.nCol1 && aCol[aSortParam.nCol2].IsEmptyBlock(aSortParam.nRow1, aSortParam.nRow2))
+    // Trim empty leading and trailing column ranges.
+    while (aSortParam.nCol1 < aSortParam.nCol2 && aCol[aSortParam.nCol1].IsEmptyBlock(aSortParam.nRow1, aSortParam.nRow2))
+        ++aSortParam.nCol1;
+    while (aSortParam.nCol1 < aSortParam.nCol2 && aCol[aSortParam.nCol2].IsEmptyBlock(aSortParam.nRow1, aSortParam.nRow2))
         --aSortParam.nCol2;
 
     if (rSortParam.bByRow)
