@@ -150,8 +150,6 @@ static OUString lcl_getFieldmarkName(OUString const& name)
     if (name.equalsAscii("msoffice.field.FORMTEXT") ||
             name.equalsAscii("ecma.office-open-xml.field.FORMTEXT") )
         return OUString::createFromAscii(sFormtext);
-    else if (name.equalsAscii(ODF_FORMTEXT) )
-        return OUString::createFromAscii(sFormtext);
     else
         return name;
 }
