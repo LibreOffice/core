@@ -20,6 +20,7 @@
 #include "dcontact.hxx"
 #include "dflyobj.hxx"
 #include "pam.hxx"
+#include <portab.hxx>
 #include "flyfrm.hxx"
 #include "rootfrm.hxx"
 #include "frmfmt.hxx"
@@ -52,7 +53,7 @@ bool SwFlyPortion::Format( SwTxtFormatInfo &rInf )
     OSL_ENSURE( Fix() >= rInf.X(), "SwFlyPortion::Format" );
     // tabs must be expanded (Bug 8537)
     if( rInf.GetLastTab() )
-        ((SwLinePortion*)rInf.GetLastTab())->FormatEOL( rInf );
+        rInf.GetLastTab()->FormatEOL( rInf );
 
     rInf.GetLast()->FormatEOL( rInf );
     PrtWidth( static_cast<sal_uInt16>(Fix() - rInf.X() + PrtWidth()) );
