@@ -47,7 +47,6 @@ public:
     enum { NAMESPACE_OOR = 1, NAMESPACE_XS = 2, NAMESPACE_XSI = 3 };
 
 private:
-    OUString url_;
     virtual ~ParseManager();
 
     xmlreader::XmlReader reader_;
