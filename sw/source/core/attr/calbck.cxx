@@ -28,7 +28,7 @@ static SwClientIter* pClientIters = 0;
 TYPEINIT0( SwClient );
 
 SwClient::SwClient( SwModify* pToRegisterIn )
-    : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall( false )
+    : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 )
 {
     if(pToRegisterIn)
         // connect to SwModify
@@ -247,8 +247,6 @@ SwClient* SwModify::Remove( SwClient* pDepend )
 {
     if ( bInDocDTOR )
         return 0;
-
-    OSL_ENSURE( !bLockClientList || pDepend->mbIsAllowedToBeRemovedInModifyCall, "SwClient shall be removed in Modify call!" );
 
     if( pDepend->pRegisteredIn == this )
     {

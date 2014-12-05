@@ -45,8 +45,6 @@ SwXTextMarkup::SwXTextMarkup(
     : mpTxtNode(pTxtNode)
     , maConversionMap(rMap)
 {
-    // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
-    SetIsAllowedToBeRemovedInModifyCall(true);
     mpTxtNode->Add(this);
 }
 
@@ -451,8 +449,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
 void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {
-    // FME 2007-07-16 #i79641# In my opinion this is perfectly legal,
-    // therefore I remove the assertion in SwModify::_Remove()
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 

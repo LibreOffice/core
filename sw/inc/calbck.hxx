@@ -67,11 +67,6 @@ class SW_DLLPUBLIC SwClient : ::boost::noncopyable
     SwClient *pLeft, *pRight;       ///< double-linked list of other clients
     SwModify *pRegisteredIn;        ///< event source
 
-    // in general clients should not be removed when their SwModify sends out Modify()
-    // notifications; in some rare cases this is necessary, but only the concrete SwClient
-    // sub class will know that; this flag allows to make that known
-    bool mbIsAllowedToBeRemovedInModifyCall;
-
     // callbacks received from SwModify (friend class - so these methods can be private)
     // should be called only from SwModify the client is registered in
     // mba: IMHO these methods should be pure virtual
@@ -84,7 +79,6 @@ protected:
 
     // write access to pRegisteredIn shall be granted only to the object itself (protected access)
     SwModify* GetRegisteredInNonConst() const { return pRegisteredIn; }
-    void SetIsAllowedToBeRemovedInModifyCall( bool bSet ) { mbIsAllowedToBeRemovedInModifyCall = bSet; }
 
 public:
 
@@ -112,7 +106,7 @@ public:
 };
 
 inline SwClient::SwClient() :
-    pLeft(0), pRight(0), pRegisteredIn(0), mbIsAllowedToBeRemovedInModifyCall(false)
+    pLeft(0), pRight(0), pRegisteredIn(0)
 {}
 
 // SwModify
