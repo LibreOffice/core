@@ -116,6 +116,17 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
     ::oox::drawingml::FillPropertiesPtr& rPartFillPropertiesPtr( rTableStylePart.getFillProperties() );
     if ( rPartFillPropertiesPtr.get() )
         rFillProperties.assignUsed( *rPartFillPropertiesPtr );
+    else
+    {
+        ::oox::drawingml::ShapeStyleRef& rFillStyleRef = rTableStylePart.getStyleRefs()[ XML_fillRef ];
+        const Theme* pTheme = rFilterBase.getCurrentTheme();
+        if (pTheme && rFillStyleRef.mnThemedIdx != 0 )
+        {
+            rFillProperties.assignUsed( *pTheme->getFillStyle( rFillStyleRef.mnThemedIdx ) );
+            sal_Int32 nPhClr = rFillStyleRef.maPhClr.getColor( rFilterBase.getGraphicHelper() );
+            rFillProperties.maFillColor.setSrgbClr( nPhClr );
+        }
+    }
 
     applyBorder( rFilterBase, rTableStylePart, XML_left, rLeftBorder );
     applyBorder( rFilterBase, rTableStylePart, XML_right, rRightBorder );
