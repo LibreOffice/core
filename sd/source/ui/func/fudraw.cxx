@@ -23,6 +23,7 @@
 
 #include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdoole2.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <svx/bmpmask.hxx>
@@ -720,7 +721,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                     /**********************************************************
                     * activate OLE-object
                     **********************************************************/
-                    mpViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0);
+                    mpViewShell->ActivateObject( static_cast<SdrOle2Obj*>(pObj), 0);
                 }
             }
             else if (nInv == SdrInventor &&  nSdrObjKind == OBJ_GRAF && pObj->IsEmptyPresObj() )
