@@ -737,7 +737,7 @@ bool ImplSdPPTImport::Import()
                     pMPage->NbcInsertObject( pObj );
 
                 bool bNewAnimationsUsed = false;
-                ProcessData aProcessData( (*pList)[ nAktPageNum ], (SdPage*)pMPage );
+                ProcessData aProcessData( (*pList)[ nAktPageNum ], SdPageCapsule(pMPage) );
                 sal_uInt32 nFPosMerk = rStCtrl.Tell();
                 DffRecordHeader aPageHd;
                 if ( SeekToAktPage( &aPageHd ) )
@@ -1394,7 +1394,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
                     Rectangle aEmpty;
                     bVisible = false;
                     rStCtrl.Seek( nPosition );
-                    ProcessData aProcessData( rSlidePersist, (SdPage*)pPage );
+                    ProcessData aProcessData( rSlidePersist, SdPageCapsule(pPage) );
                     SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
                     if ( pObj )
                         pPage->NbcInsertObject( pObj, 0 );
@@ -2104,9 +2104,10 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
     }
 }
 
-SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPage* pPage,
+SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, SdPageCapsule pPageCapsule,
                                         SfxStyleSheet* pSheet, SfxStyleSheet** ppStyleSheetAry ) const
 {
+    SdPage * pPage = static_cast<SdPage *>(pPageCapsule.page);
     SfxStyleSheet*  pStyleSheetAry[ 9 ];
     SdrTextObj*     pText = pObj;
     SdrObject*      pRet = pText;
@@ -2227,7 +2228,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         }
         break;
     }
-    pText = static_cast<SdrTextObj*>(SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPage, pSheet, ppStyleSheetAry ));
+    pText = static_cast<SdrTextObj*>(SdrPowerPointImport::ApplyTextObj( pTextObj, pText, pPageCapsule, pSheet, ppStyleSheetAry ));
     if ( pPlaceHolder && pPlaceHolder->nPlaceholderId )
     {
         if ( eAktPageKind == PPT_MASTERPAGE )
@@ -2517,8 +2518,9 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
         if( pObj->ISA(SdrPageObj) && pData )
         {
             const ProcessData* pProcessData=(const ProcessData*)pData;
-            if( pProcessData->pPage )
-                pProcessData->pPage->InsertPresObj( pObj, PRESOBJ_PAGE );
+            if( pProcessData->pPage.page )
+                static_cast<SdPage *>(pProcessData->pPage.page)->InsertPresObj(
+                    pObj, PRESOBJ_PAGE );
         }
 
         bool bInhabitanceChecked = false;

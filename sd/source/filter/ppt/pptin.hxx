@@ -66,7 +66,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, const OUString& aMacroName );
 
     virtual         SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) SAL_OVERRIDE;
-    virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
+    virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPageCapsule pPage,
                                             SfxStyleSheet*, SfxStyleSheet** ) const SAL_OVERRIDE;
 
 public:

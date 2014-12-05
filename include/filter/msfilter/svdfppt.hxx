@@ -404,6 +404,14 @@ public:
     friend SvStream& ReadPptExOleObjAtom( SvStream& rIn, PptExOleObjAtom& rAtom );
 };
 
+// SdPage derives from SdrPage, is only known inside sd, and needs to be carried
+// around as an opaque pointer here:
+struct SdPageCapsule {
+    explicit SdPageCapsule(SdrPage * thePage): page(thePage) {}
+
+    SdrPage * page;
+};
+
 typedef ::std::vector< PPTOleEntry* > PPTOleEntryList;
 class PPTExtParaProv;
 class MSFILTER_DLLPUBLIC SdrEscherImport : public SvxMSDffManager
@@ -449,7 +457,7 @@ public:
     virtual bool        SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const SAL_OVERRIDE;
     PptFontEntityAtom*  GetFontEnityAtom( sal_uInt32 nNum ) const;
     void                RecolorGraphic( SvStream& rSt, sal_uInt32 nRecLen, Graphic& rGraph );
-    virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const;
+    virtual SdrObject*  ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const;
     virtual SdrObject*  ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj ) SAL_OVERRIDE;
     virtual void        ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, void* pData, DffObjData& rObj ) SAL_OVERRIDE;
     void                ImportHeaderFooterContainer( DffRecordHeader& rHeader, HeaderFooterEntry& rEntry );
@@ -506,11 +514,11 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
 struct ProcessData
 {
     PptSlidePersistEntry&       rPersistEntry;
-    SdPage*                     pPage;
+    SdPageCapsule               pPage;
     ::std::vector< SdrObject* > aBackgroundColoredObjects;
     sal_uInt32*                 pTableRowProperties;
 
-    ProcessData( PptSlidePersistEntry& rP, SdPage* pP ) :
+    ProcessData( PptSlidePersistEntry& rP, SdPageCapsule pP ) :
         rPersistEntry               ( rP ),
         pPage                       ( pP ),
         pTableRowProperties         ( NULL ) {};
@@ -565,11 +573,11 @@ protected:
     virtual SdrObject*      ApplyTextObj(
                                 PPTTextObj* pTextObj,
                                 SdrTextObj* pText,
-                                SdPage* pPage,
+                                SdPageCapsule pPage,
                                 SfxStyleSheet*,
                                 SfxStyleSheet** )
                              const;
-    virtual SdrObject*      ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPage* pPage ) const SAL_OVERRIDE;
+    virtual SdrObject*      ReadObjText( PPTTextObj* pTextObj, SdrObject* pObj, SdPageCapsule pPage ) const SAL_OVERRIDE;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object.
     virtual SdrObject*      ImportOLE(

@@ -576,7 +576,7 @@ PptFontEntityAtom* SdrEscherImport::GetFontEnityAtom( sal_uInt32 nNum ) const
     return pRetValue;
 }
 
-SdrObject* SdrEscherImport::ReadObjText( PPTTextObj* /*pTextObj*/, SdrObject* pObj, SdPage* /*pPage*/) const
+SdrObject* SdrEscherImport::ReadObjText( PPTTextObj* /*pTextObj*/, SdrObject* pObj, SdPageCapsule /*pPage*/) const
 {
     return pObj;
 }
@@ -1211,7 +1211,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
     {
         if ( rObjData.nSpFlags & SP_FBACKGROUND )
         {
-            pRet->NbcSetSnapRect( Rectangle( Point(), ((SdrPage*)rData.pPage)->GetSize() ) );   // set size
+            pRet->NbcSetSnapRect( Rectangle( Point(), rData.pPage.page->GetSize() ) );   // set size
         }
         if ( rPersistEntry.pSolverContainer )
         {
@@ -2176,7 +2176,7 @@ SdrOutliner* SdrPowerPointImport::GetDrawOutliner( SdrTextObj* pSdrText ) const
 }
 
 
-SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pSdrObj, SdPage* pPage ) const
+SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pSdrObj, SdPageCapsule pPage ) const
 {
     SdrTextObj* pText = PTR_CAST( SdrTextObj, pSdrObj );
     if ( pText )
@@ -2188,7 +2188,7 @@ SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pS
 }
 
 
-SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pSdrText, SdPage* /*pPage*/,
+SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pSdrText, SdPageCapsule /*pPage*/,
                                                 SfxStyleSheet* pSheet, SfxStyleSheet** ppStyleSheetAry ) const
 {
     SdrTextObj* pText = pSdrText;
@@ -2706,7 +2706,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     if ( SeekToAktPage( &aPageHd ) )
     {
         rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
-        ProcessData aProcessData( rSlidePersist, (SdPage*)pRet );
+        ProcessData aProcessData( rSlidePersist, SdPageCapsule(pRet) );
         while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
         {
             DffRecordHeader aHd;
