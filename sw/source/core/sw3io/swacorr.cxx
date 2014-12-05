@@ -83,7 +83,7 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
     nRet = aBlk.BeginPutDoc( rShort, rShort );
     if( !IsError( nRet ) )
     {
-        ((SwEditShell*)rDShell.GetWrtShell())->_CopySelToDoc( pDoc );
+        rDShell.GetEditShell()->_CopySelToDoc( pDoc );
         nRet = aBlk.PutDoc();
         aBlk.AddName ( rShort, rShort, false );
         if( !IsError( nRet ) )

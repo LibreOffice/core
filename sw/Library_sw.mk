@@ -747,6 +747,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/web/wtextsh \
     sw/source/uibase/web/wview \
     sw/source/uibase/wrtsh/delete \
+    sw/source/uibase/wrtsh/docsh \
     sw/source/uibase/wrtsh/move \
     sw/source/uibase/wrtsh/navmgr \
     sw/source/uibase/wrtsh/select \

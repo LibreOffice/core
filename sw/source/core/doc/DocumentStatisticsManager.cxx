@@ -18,6 +18,7 @@
  */
 #include <DocumentStatisticsManager.hxx>
 #include <doc.hxx>
+#include <editsh.hxx>
 #include <fldbas.hxx>
 #include <docsh.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -208,7 +209,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         const ModifyBlocker_Impl b(pObjShell);
         // rhbz#1081176: don't jump to cursor pos because of (temporary)
         // activation of modified flag triggering move to input position
-        LockAllViews aViewGuard((SwViewShell*)pObjShell->GetWrtShell());
+        LockAllViews aViewGuard(pObjShell->GetEditShell());
         xDocProps->setDocumentStatistics(aStat);
         if (!bDocWasModified)
         {

@@ -23,6 +23,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 
+#include <editsh.hxx>
 #include <txatritr.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
@@ -43,8 +44,6 @@
 
 using namespace ::com::sun::star;
 using namespace util;
-
-OUString *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
 static OUString
 lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
@@ -289,7 +288,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             }
 
             SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
-            SwViewShell *const pWrtShell = (pDocShell) ? (SwViewShell*)(pDocShell->GetWrtShell()) : 0;
+            SwViewShell *const pWrtShell = (pDocShell) ? pDocShell->GetEditShell() : 0;
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
 
             sal_Int32 aStart = 0;

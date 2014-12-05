@@ -36,6 +36,7 @@ class SfxDocumentInfoDialog;
 class SfxStyleSheetBasePool;
 class SfxInPlaceClient;
 class FontList;
+class SwEditShell;
 class SwView;
 class SwWrtShell;
 class SwFEShell;
@@ -218,6 +219,9 @@ public:
     /// Accress to the SwWrtShell belonging to SwView.
           SwWrtShell *GetWrtShell()       { return mpWrtShell; }
     const SwWrtShell *GetWrtShell() const { return mpWrtShell; }
+    // Same as GetWrtShell, but return pointer to SwEditShell base of
+    // (potentially incomplete) SwWrtShell:
+    SwEditShell * GetEditShell();
 
     /// For Core - it knows the DocShell but not the WrtShell!
           SwFEShell *GetFEShell();
