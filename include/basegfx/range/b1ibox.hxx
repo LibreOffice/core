@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_RANGE_B1IBOX_HXX
 #define INCLUDED_BASEGFX_RANGE_B1IBOX_HXX
 
-#include <basegfx/range/basicbox.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 

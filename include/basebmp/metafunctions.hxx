@@ -21,10 +21,7 @@
 #define INCLUDED_BASEBMP_METAFUNCTIONS_HXX
 
 #include <boost/mpl/integral_c.hpp>
-#include <vigra/metaprogramming.hxx>
-#include <vigra/numerictraits.hxx>
 
-#include <functional>
 
 namespace basebmp
 {

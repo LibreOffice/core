@@ -23,7 +23,6 @@
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-
 namespace basegfx
 {
     /** Explicitely different from BasicRange, handling the inside predicates

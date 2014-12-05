@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_VECTOR_B2IVECTOR_HXX
 #define INCLUDED_BASEGFX_VECTOR_B2IVECTOR_HXX
 
-#include <ostream>
 
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/vector/b2enums.hxx>

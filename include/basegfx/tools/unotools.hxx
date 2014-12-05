@@ -10,12 +10,6 @@
 #ifndef INCLUDED_BASEGFX_TOOLS_UNOTOOLS_HXX
 #define INCLUDED_BASEGFX_TOOLS_UNOTOOLS_HXX
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase3.hxx>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/FillRule.hpp>
-#include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 

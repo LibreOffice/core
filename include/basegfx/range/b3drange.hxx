@@ -22,7 +22,6 @@
 
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/point/b3dpoint.hxx>
-#include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/basegfxdllapi.h>
 

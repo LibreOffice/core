@@ -20,11 +20,8 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B2DTRAPEZOID_HXX
 #define INCLUDED_BASEGFX_POLYGON_B2DTRAPEZOID_HXX
 
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
-
 
 
 namespace basegfx

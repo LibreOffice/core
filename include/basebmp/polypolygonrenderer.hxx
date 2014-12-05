@@ -20,18 +20,13 @@
 #ifndef INCLUDED_BASEBMP_POLYPOLYGONRENDERER_HXX
 #define INCLUDED_BASEBMP_POLYPOLYGONRENDERER_HXX
 
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygonfillrule.hxx>
-#include <basegfx/numeric/ftools.hxx>
 
 #include <vigra/diff2d.hxx>
-#include <vigra/iteratortraits.hxx>
 
-#include <vector>
 
 
 namespace basebmp

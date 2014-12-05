@@ -22,10 +22,8 @@
 
 #include <osl/diagnose.h>
 
-#include <vigra/tuple.hxx>
 #include <vigra/copyimage.hxx>
 #include <vigra/basicimage.hxx>
-#include <vigra/iteratortraits.hxx>
 
 namespace basebmp
 {

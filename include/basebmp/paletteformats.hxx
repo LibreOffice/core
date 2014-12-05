@@ -20,17 +20,8 @@
 #ifndef INCLUDED_BASEBMP_PALETTEFORMATS_HXX
 #define INCLUDED_BASEBMP_PALETTEFORMATS_HXX
 
-#include <basebmp/color.hxx>
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessor.hxx>
-#include <basebmp/pixeliterator.hxx>
-#include <basebmp/packedpixeliterator.hxx>
-#include <basebmp/pixelformatadapters.hxx>
 #include <basebmp/paletteimageaccessor.hxx>
-#include <basebmp/metafunctions.hxx>
 
-#include <vigra/numerictraits.hxx>
-#include <vigra/metaprogramming.hxx>
 
 namespace basebmp
 {

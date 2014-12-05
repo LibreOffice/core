@@ -22,9 +22,6 @@
 
 #include <osl/diagnose.h>
 #include <basebmp/color.hxx>
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessortraits.hxx>
-#include <vigra/mathutil.hxx>
 
 // Contents of this header moved out of color.hxx, as it is not useful
 // for the general public (drags in vigra and other template

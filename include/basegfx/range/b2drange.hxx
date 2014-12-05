@@ -20,14 +20,12 @@
 #ifndef INCLUDED_BASEGFX_RANGE_B2DRANGE_HXX
 #define INCLUDED_BASEGFX_RANGE_B2DRANGE_HXX
 
-#include <ostream>
-#include <vector>
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/basegfxdllapi.h>
+
 
 namespace basegfx
 {

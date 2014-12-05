@@ -20,10 +20,7 @@
 #ifndef INCLUDED_BASEBMP_PIXELFORMATADAPTERS_HXX
 #define INCLUDED_BASEBMP_PIXELFORMATADAPTERS_HXX
 
-#include <basebmp/accessortraits.hxx>
-#include <basebmp/accessoradapters.hxx>
 
-#include <vigra/metaprogramming.hxx>
 
 namespace basebmp
 {

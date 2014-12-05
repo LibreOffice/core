@@ -22,9 +22,7 @@
 
 #include <basebmp/accessorfunctors.hxx>
 #include <basebmp/accessoradapters.hxx>
-#include <basebmp/metafunctions.hxx>
 
-#include <functional>
 
 namespace basebmp
 {

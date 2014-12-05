@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEBMP_ACCESSOR_HXX
 #define INCLUDED_BASEBMP_ACCESSOR_HXX
 
-#include <vigra/numerictraits.hxx>
 
 namespace basebmp
 {

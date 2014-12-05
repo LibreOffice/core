@@ -20,11 +20,8 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYGON_HXX
 #define INCLUDED_BASEGFX_POLYGON_B2DPOLYGON_HXX
 
-#include <ostream>
 
-#include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
 

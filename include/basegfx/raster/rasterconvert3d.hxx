@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 #define INCLUDED_BASEGFX_RASTER_RASTERCONVERT3D_HXX
 
-#include <sal/types.h>
-#include <vector>
 
 #include <osl/diagnose.h>
 

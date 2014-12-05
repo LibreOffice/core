@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEBMP_COLOR_HXX
 #define INCLUDED_BASEBMP_COLOR_HXX
 
-#include <sal/types.h>
-#include <rtl/math.hxx>
 
 namespace basebmp
 {

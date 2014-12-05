@@ -20,13 +20,9 @@
 #ifndef INCLUDED_BASEGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
 #define INCLUDED_BASEGFX_MATRIX_B2DHOMMATRIXTOOLS_HXX
 
-#include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
-
-
 
 
 namespace basegfx

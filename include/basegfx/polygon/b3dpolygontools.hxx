@@ -24,9 +24,7 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/vector/b2enums.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
-
 
 
 namespace basegfx

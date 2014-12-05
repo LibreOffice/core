@@ -21,9 +21,7 @@
 #define INCLUDED_BASEGFX_POLYGON_B2DPOLYGONCLIPPER_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
-
 
 
 namespace basegfx

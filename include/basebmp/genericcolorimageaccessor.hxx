@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEBMP_GENERICCOLORIMAGEACCESSOR_HXX
 #define INCLUDED_BASEBMP_GENERICCOLORIMAGEACCESSOR_HXX
 
-#include <basebmp/color.hxx>
-#include <basebmp/bitmapdevice.hxx>
 
 namespace basebmp
 {

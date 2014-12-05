@@ -21,7 +21,6 @@
 #define INCLUDED_BASEBMP_ITERATORTRAITS_HXX
 
 #include <basebmp/accessor.hxx>
-#include <basebmp/nonstandarditerator.hxx>
 
 namespace basebmp
 {

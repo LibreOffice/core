@@ -23,12 +23,10 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
-#include <boost/utility.hpp>
 
 
 namespace basegfx

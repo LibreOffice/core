@@ -21,10 +21,8 @@
 #define INCLUDED_BASEGFX_PIXEL_BPIXEL_HXX
 
 #include <sal/types.h>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/basegfxdllapi.h>
-
 
 // predeclarations
 

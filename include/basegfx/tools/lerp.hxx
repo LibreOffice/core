@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_TOOLS_LERP_HXX
 #define INCLUDED_BASEGFX_TOOLS_LERP_HXX
 
-#include <sal/types.h>
 
 namespace basegfx
 {

@@ -20,16 +20,12 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #define INCLUDED_BASEGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
-
 
 
 namespace basegfx

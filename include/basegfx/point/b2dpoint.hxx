@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_POINT_B2DPOINT_HXX
 #define INCLUDED_BASEGFX_POINT_B2DPOINT_HXX
 
-#include <ostream>
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/point/b2ipoint.hxx>

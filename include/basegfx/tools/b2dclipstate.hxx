@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_TOOLS_B2DCLIPSTATE_HXX
 #define INCLUDED_BASEGFX_TOOLS_B2DCLIPSTATE_HXX
 
-#include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
 

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEBMP_SCANLINEFORMATS_HXX
 #define INCLUDED_BASEBMP_SCANLINEFORMATS_HXX
 
-#include <sal/config.h>
 
 /* Definition of Scanline formats */
 

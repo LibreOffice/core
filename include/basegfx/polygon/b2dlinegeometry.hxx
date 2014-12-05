@@ -20,13 +20,9 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B2DLINEGEOMETRY_HXX
 #define INCLUDED_BASEGFX_POLYGON_B2DLINEGEOMETRY_HXX
 
-#include <sal/types.h>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <basegfx/basegfxdllapi.h>
-
 
 
 namespace basegfx

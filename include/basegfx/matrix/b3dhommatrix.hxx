@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIX_HXX
 #define INCLUDED_BASEGFX_MATRIX_B3DHOMMATRIX_HXX
 
-#include <sal/types.h>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <o3tl/cow_wrapper.hxx>

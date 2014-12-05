@@ -20,12 +20,8 @@
 #ifndef INCLUDED_BASEGFX_RASTER_BPIXELRASTER_HXX
 #define INCLUDED_BASEGFX_RASTER_BPIXELRASTER_HXX
 
-#include <algorithm>
-#include <string.h>
-#include <sal/types.h>
 #include <basegfx/pixel/bpixel.hxx>
 #include <basegfx/basegfxdllapi.h>
-
 
 // predeclarations
 

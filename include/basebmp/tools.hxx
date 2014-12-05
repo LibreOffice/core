@@ -20,10 +20,6 @@
 #ifndef INCLUDED_BASEBMP_TOOLS_HXX
 #define INCLUDED_BASEBMP_TOOLS_HXX
 
-#include <basegfx/range/b2ibox.hxx>
-#include <basegfx/point/b2ipoint.hxx>
-#include <vigra/tuple.hxx>
-#include <vigra/diff2d.hxx>
 
 namespace basebmp
 {

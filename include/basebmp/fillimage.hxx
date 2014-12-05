@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEBMP_FILLIMAGE_HXX
 #define INCLUDED_BASEBMP_FILLIMAGE_HXX
 
-#include <vigra/tuple.hxx>
-#include <vigra/iteratortraits.hxx>
 
 namespace basebmp
 {

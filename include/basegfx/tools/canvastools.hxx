@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_TOOLS_CANVASTOOLS_HXX
 #define INCLUDED_BASEGFX_TOOLS_CANVASTOOLS_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <basegfx/basegfxdllapi.h>
 

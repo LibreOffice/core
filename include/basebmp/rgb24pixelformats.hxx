@@ -20,14 +20,9 @@
 #ifndef INCLUDED_BASEBMP_RGB24PIXELFORMATS_HXX
 #define INCLUDED_BASEBMP_RGB24PIXELFORMATS_HXX
 
-#include <basebmp/color.hxx>
-#include <basebmp/accessor.hxx>
-#include <basebmp/pixeliterator.hxx>
-#include <basebmp/pixelformatadapters.hxx>
 
 #include <vigra/rgbvalue.hxx>
 
-#include <functional>
 
 namespace basebmp
 {

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_VECTOR_B2ENUMS_HXX
 #define INCLUDED_BASEGFX_VECTOR_B2ENUMS_HXX
 
-#include <sal/types.h>
 
 namespace basegfx
 {

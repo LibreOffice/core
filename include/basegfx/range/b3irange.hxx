@@ -21,11 +21,9 @@
 #define INCLUDED_BASEGFX_RANGE_B3IRANGE_HXX
 
 #include <basegfx/point/b3ipoint.hxx>
-#include <basegfx/point/b3dpoint.hxx>
-#include <basegfx/tuple/b3ituple.hxx>
 #include <basegfx/tuple/b3i64tuple.hxx>
-#include <basegfx/range/basicrange.hxx>
 #include <basegfx/basegfxdllapi.h>
+
 
 namespace basegfx
 {

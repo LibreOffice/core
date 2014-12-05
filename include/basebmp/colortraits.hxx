@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEBMP_COLORTRAITS_HXX
 #define INCLUDED_BASEBMP_COLORTRAITS_HXX
 
-#include <basebmp/accessoradapters.hxx>
-#include <basebmp/metafunctions.hxx>
 
 #include <vigra/mathutil.hxx>
 

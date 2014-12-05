@@ -20,14 +20,8 @@
 #ifndef INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX
 #define INCLUDED_BASEBMP_PACKEDPIXELITERATOR_HXX
 
-#include <basebmp/metafunctions.hxx>
-#include <basebmp/stridedarrayiterator.hxx>
-#include <basebmp/nonstandarditerator.hxx>
-#include <basebmp/accessortraits.hxx>
 
 #include <boost/static_assert.hpp>
-#include <vigra/metaprogramming.hxx>
-#include <vigra/diff2d.hxx>
 
 namespace basebmp
 {

@@ -20,10 +20,7 @@
 #ifndef INCLUDED_BASEGFX_TOOLS_RECTCLIPTOOLS_HXX
 #define INCLUDED_BASEGFX_TOOLS_RECTCLIPTOOLS_HXX
 
-#include <sal/types.h>
 #include <basegfx/range/b2ibox.hxx>
-
-
 
 namespace basegfx
 {

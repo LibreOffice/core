@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B3DPOLYGON_HXX
 #define INCLUDED_BASEGFX_POLYGON_B3DPOLYGON_HXX
 
-#include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/basegfxdllapi.h>
 

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEBMP_DEBUG_HXX
 #define INCLUDED_BASEBMP_DEBUG_HXX
 
-#include <iostream>
-#include <boost/shared_ptr.hpp>
 #include <basebmp/basebmpdllapi.h>
 
 namespace basebmp

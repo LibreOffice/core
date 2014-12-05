@@ -20,15 +20,10 @@
 #ifndef INCLUDED_BASEGFX_TOOLS_GRADIENTTOOLS_HXX
 #define INCLUDED_BASEGFX_TOOLS_GRADIENTTOOLS_HXX
 
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/basegfxdllapi.h>
 
-#include <vector>
-#include <algorithm>
 
 namespace basegfx
 {

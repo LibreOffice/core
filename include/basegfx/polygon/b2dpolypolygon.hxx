@@ -20,14 +20,10 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #define INCLUDED_BASEGFX_POLYGON_B2DPOLYPOLYGON_HXX
 
-#include <ostream>
-#include <vector>
 
-#include <sal/types.h>
-#include <o3tl/cow_wrapper.hxx>
-#include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/polygon/b2dpolygon.hxx>
+
 
 // predeclarations
 class ImplB2DPolyPolygon;

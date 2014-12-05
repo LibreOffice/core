@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <basebmp/metafunctions.hxx>
 
-#include <functional>
 
 namespace basebmp
 {

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_TUPLE_B3ITUPLE_HXX
 #define INCLUDED_BASEGFX_TUPLE_B3ITUPLE_HXX
 
-#include <sal/types.h>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
 

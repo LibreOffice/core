@@ -21,8 +21,8 @@
 #define INCLUDED_BASEGFX_RANGE_B2DRANGECLIPPER_HXX
 
 #include <basegfx/range/b2dpolyrange.hxx>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
+
 
 namespace basegfx
 {

@@ -21,11 +21,7 @@
 #define INCLUDED_BASEBMP_CLIPPEDLINERENDERER_HXX
 
 #include <basegfx/tools/rectcliptools.hxx>
-#include <basegfx/point/b2ipoint.hxx>
-#include <basegfx/range/b2ibox.hxx>
 
-#include <vigra/diff2d.hxx>
-#include <vigra/iteratortraits.hxx>
 
 namespace basebmp
 {

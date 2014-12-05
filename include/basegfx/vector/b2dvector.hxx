@@ -22,7 +22,6 @@
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <basegfx/vector/b2enums.hxx>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx

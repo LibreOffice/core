@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX
 #define INCLUDED_BASEBMP_STRIDEDARRAYITERATOR_HXX
 
-#include <basebmp/metafunctions.hxx>
 
 namespace basebmp
 {

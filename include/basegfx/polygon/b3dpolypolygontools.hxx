@@ -20,14 +20,9 @@
 #ifndef INCLUDED_BASEGFX_POLYGON_B3DPOLYPOLYGONTOOLS_HXX
 #define INCLUDED_BASEGFX_POLYGON_B3DPOLYPOLYGONTOOLS_HXX
 
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/vector/b2dvector.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#include <vector>
 #include <basegfx/basegfxdllapi.h>
-
 
 
 namespace basegfx

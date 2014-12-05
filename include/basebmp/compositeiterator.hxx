@@ -20,11 +20,9 @@
 #ifndef INCLUDED_BASEBMP_COMPOSITEITERATOR_HXX
 #define INCLUDED_BASEBMP_COMPOSITEITERATOR_HXX
 
-#include <sal/types.h>
 #include <osl/diagnose.h>
 
 #include <basebmp/nonstandarditerator.hxx>
-#include <vigra/tuple.hxx>
 #include <vigra/iteratortraits.hxx>
 
 

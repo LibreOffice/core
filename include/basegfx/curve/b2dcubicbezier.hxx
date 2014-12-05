@@ -20,7 +20,6 @@
 #ifndef INCLUDED_BASEGFX_CURVE_B2DCUBICBEZIER_HXX
 #define INCLUDED_BASEGFX_CURVE_B2DCUBICBEZIER_HXX
 
-#include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/basegfxdllapi.h>
 

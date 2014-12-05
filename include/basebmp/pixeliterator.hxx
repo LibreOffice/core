@@ -20,10 +20,8 @@
 #ifndef INCLUDED_BASEBMP_PIXELITERATOR_HXX
 #define INCLUDED_BASEBMP_PIXELITERATOR_HXX
 
-#include <basebmp/metafunctions.hxx>
 #include <basebmp/stridedarrayiterator.hxx>
 
-#include <vigra/metaprogramming.hxx>
 #include <vigra/diff2d.hxx>
 
 namespace basebmp

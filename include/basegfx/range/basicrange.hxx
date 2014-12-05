@@ -20,8 +20,6 @@
 #ifndef INCLUDED_BASEGFX_RANGE_BASICRANGE_HXX
 #define INCLUDED_BASEGFX_RANGE_BASICRANGE_HXX
 
-#include <sal/types.h>
-#include <float.h>
 #include <basegfx/numeric/ftools.hxx>
 
 

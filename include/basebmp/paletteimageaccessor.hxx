@@ -20,14 +20,8 @@
 #ifndef INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
 #define INCLUDED_BASEBMP_PALETTEIMAGEACCESSOR_HXX
 
-#include <basebmp/colortraits.hxx>
-#include <basebmp/accessortraits.hxx>
 
-#include <vigra/numerictraits.hxx>
-#include <vigra/metaprogramming.hxx>
 
-#include <algorithm>
-#include <functional>
 
 namespace basebmp
 {
