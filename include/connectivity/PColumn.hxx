@@ -21,16 +21,12 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VColumn.hxx>
-#include <connectivity/CommonTools.hxx>
-#include <rtl/ref.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/proparrhlp.hxx>
+
 
 namespace connectivity
 {

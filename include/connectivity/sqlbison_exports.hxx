@@ -10,9 +10,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLBISON_EXPORTS_HXX
 #define INCLUDED_CONNECTIVITY_SQLBISON_EXPORTS_HXX
 
-#include <sal/types.h>
-#include <rtl/ustring.hxx>
-#include <connectivity/sqlnode.hxx>
 
 OUString ConvertLikeToken(const ::connectivity::OSQLParseNode* pTokenNode, const ::connectivity::OSQLParseNode* pEscapeNode, bool bInternational);
 int SQLyyparse (void);

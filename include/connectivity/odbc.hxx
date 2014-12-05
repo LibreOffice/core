@@ -34,7 +34,7 @@
 #if SYSTEM_ODBC_HEADERS
 #include <windows.h>
 #define SQL_API __stdcall
-#include <sqlext.h>
+#include "sqlext.h"
 #else
 #define SQL_API __stdcall
 #include <odbc/sqlext.h>

@@ -21,19 +21,12 @@
 #define INCLUDED_CONNECTIVITY_FVALUE_HXX
 
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/uno/Any.hxx>
-#include <rtl/ustring.hxx>
-#include <salhelper/simplereferenceobject.hxx>
 #include <osl/diagnose.h>
-#include <rtl/ref.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
+
 
 namespace connectivity
 {

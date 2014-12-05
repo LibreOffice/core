@@ -21,17 +21,13 @@
 #define INCLUDED_CONNECTIVITY_SDBCX_VINDEX_HXX
 
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
-#include <cppuhelper/compbase2.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VTypeDef.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase1.hxx>
 
 namespace connectivity

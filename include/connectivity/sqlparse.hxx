@@ -19,10 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 #define INCLUDED_CONNECTIVITY_SQLPARSE_HXX
 
-#include <config_features.h>
 
-#include <com/sun/star/uno/Reference.h>
-#include <osl/mutex.hxx>
 #include <connectivity/sqlnode.hxx>
 #if HAVE_FEATURE_DBCONNECTIVITY
 #ifndef YYBISON

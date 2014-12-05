@@ -21,13 +21,9 @@
 #define INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 
 #include <cppuhelper/implbase10.hxx>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>

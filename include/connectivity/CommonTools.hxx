@@ -25,15 +25,12 @@
 #include <map>
 
 #include <rtl/ref.hxx>
-#include <rtl/ustring.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/uno/Any.hxx>
 #include <vector>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/stl_types.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <osl/interlck.h>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppuhelper/supportsservice.hxx>

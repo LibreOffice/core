@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sdbcx/VKey.hxx>

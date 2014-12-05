@@ -22,8 +22,6 @@
 
 #include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <comphelper/stl_types.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>

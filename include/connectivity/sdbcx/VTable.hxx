@@ -24,11 +24,9 @@
 #include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdbcx/XAlterTable.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
 #include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/implbase4.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
@@ -36,6 +34,7 @@
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
+
 
 namespace connectivity
 {

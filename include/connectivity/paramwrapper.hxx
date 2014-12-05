@@ -24,18 +24,14 @@
 #include <connectivity/FValue.hxx>
 
 #include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/compbase2.hxx>
 
-#include <memory>
-#include <vector>
 
 
 namespace dbtools

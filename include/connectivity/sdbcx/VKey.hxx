@@ -25,7 +25,6 @@
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VTypeDef.hxx>
-#include <com/sun/star/container/XNamed.hpp>
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>

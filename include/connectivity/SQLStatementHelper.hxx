@@ -21,7 +21,6 @@
 #define INCLUDED_CONNECTIVITY_SQLSTATEMENTHELPER_HXX
 
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace dbtools
 {

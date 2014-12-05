@@ -21,11 +21,7 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <vector>
-#include <functional>
 #include <set>
 #include <boost/shared_ptr.hpp>
 #include <rtl/ustrbuf.hxx>

@@ -20,15 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
 #define INCLUDED_CONNECTIVITY_PREDICATEINPUT_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/uno/Any.hxx>
-
 
 namespace dbtools
 {

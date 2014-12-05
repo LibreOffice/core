@@ -19,23 +19,15 @@
 #ifndef INCLUDED_CONNECTIVITY_PARAMETERS_HXX
 #define INCLUDED_CONNECTIVITY_PARAMETERS_HXX
 
-#include <map>
-#include <vector>
 
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/form/XDatabaseParameterListener.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/sdbc/XParameters.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 
 namespace dbtools

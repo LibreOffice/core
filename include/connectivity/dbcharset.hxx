@@ -22,10 +22,8 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <set>
 
-#include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 #include <rtl/ustring.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>

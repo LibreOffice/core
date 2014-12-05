@@ -22,17 +22,9 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/sqlnode.hxx>
 #include <connectivity/IParseContext.hxx>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/SQLWarning.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <connectivity/CommonTools.hxx>
-#include <rtl/ref.hxx>
-#include <cppuhelper/weak.hxx>
 
-#include <map>
-#include <memory>
-#include <vector>
 
 namespace connectivity
 {

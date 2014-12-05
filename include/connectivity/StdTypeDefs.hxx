@@ -21,9 +21,6 @@
 
 #include <sal/config.h>
 
-#include <map>
-#include <vector>
-#include <sal/types.h>
 
 
 namespace connectivity

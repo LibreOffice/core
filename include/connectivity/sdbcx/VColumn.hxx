@@ -28,7 +28,6 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 namespace connectivity
 {

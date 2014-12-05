@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 #define INCLUDED_CONNECTIVITY_FORMATTEDCOLUMNVALUE_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/sdb/XColumnUpdate.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>

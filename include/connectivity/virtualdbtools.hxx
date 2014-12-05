@@ -23,11 +23,8 @@
 #include <config_features.h>
 
 #include <rtl/ref.hxx>
-#include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
 
 #include <vector>
 #include <memory>

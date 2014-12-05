@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_OSUBCOMPONENT_HXX
 #define INCLUDED_CONNECTIVITY_OSUBCOMPONENT_HXX
 
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 

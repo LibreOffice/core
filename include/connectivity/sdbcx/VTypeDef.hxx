@@ -20,9 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VTYPEDEF_HXX
 
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <cppuhelper/compbase3.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
 namespace connectivity
