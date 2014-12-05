@@ -40,7 +40,7 @@ void Sidebar::ShowPanel (
 
         // All that is not necessary for the current use cases so lets
         // keep it simple for the time being.
-        pController->RequestSwitchToDeck(pPanelDescriptor->msDeckId);
+        pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
     }
 }
 
