@@ -93,6 +93,7 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
+#include <libxml/xmlwriter.h>
 
 #define STORE_UNICODE_MAGIC_MARKER  0xFE331188
 
@@ -586,6 +587,14 @@ bool SvxPostureItem::GetBoolValue() const
 void SvxPostureItem::SetBoolValue( bool bVal )
 {
     SetValue( (sal_uInt16)(bVal ? ITALIC_NORMAL : ITALIC_NONE) );
+}
+
+void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxPostureItem"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%" SAL_PRIuUINT32, Which());
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(GetValueTextByPos(GetValue()).toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 // class SvxWeightItem ---------------------------------------------------

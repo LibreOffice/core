@@ -45,6 +45,7 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/postitem.hxx>
 #include <svx/xdef.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -386,17 +387,30 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
     const SfxPoolItem* pItem = aIter.FirstItem();
     while (pItem)
     {
+        bool bDone = true;
+        switch (pItem->Which())
+        {
+            case RES_CHRATR_POSTURE:
+            case RES_CHRATR_CJK_POSTURE:
+            case RES_CHRATR_CTL_POSTURE:
+                static_cast<const SvxPostureItem*>(pItem)->dumpAsXml(writer);
+                break;
+            default: bDone = false; break;
+        }
+        if (bDone)
+        {
+            pItem = aIter.NextItem();
+            continue;
+        }
+
         writer.startElement("item");
         writer.writeFormatAttribute("whichId", TMP_FORMAT, pItem->Which());
         const char* pWhich = 0;
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_CHRATR_POSTURE: pWhich = "character posture"; break;
             case RES_CHRATR_WEIGHT: pWhich = "character weight"; break;
-            case RES_CHRATR_CJK_POSTURE: pWhich = "character cjk posture"; break;
             case RES_CHRATR_CJK_WEIGHT: pWhich = "character cjk weight"; break;
-            case RES_CHRATR_CTL_POSTURE: pWhich = "character ctl posture"; break;
             case RES_CHRATR_CTL_WEIGHT: pWhich = "character ctl weight"; break;
             case RES_CHRATR_RSID:
             {

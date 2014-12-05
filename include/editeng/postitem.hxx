@@ -69,6 +69,8 @@ public:
                                 { return (FontItalic)GetValue(); }
     void                    SetPosture( FontItalic eNew )
                                 { SetValue( (sal_uInt16)eNew ); }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif // INCLUDED_EDITENG_POSTITEM_HXX
