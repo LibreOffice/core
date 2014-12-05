@@ -205,7 +205,7 @@ public:
     void                SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & );
 
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);
-    SAL_DLLPRIVATE void SetVisible_Impl( bool bVis );
+    void SetVisible_Impl( bool bVis );
     SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
     SAL_DLLPRIVATE void Activate_Impl();
     SAL_DLLPRIVATE void Deactivate_Impl();

@@ -32,19 +32,6 @@
 
 SFX_IMPL_CHILDWINDOW_WITHID(SvxHlinkDlgWrapper, SID_HYPERLINK_DIALOG)
 
-
-
-struct MyStruct
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
-    SfxChildWinFactory* pFact;
-    bool                bHideNotDelete;
-    bool                bVisible;
-    bool                bHideAtToggle;
-    SfxModule*          pContextModule;
-    SfxWorkWindow*      pWorkWin;
-};
-
 SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
                                                 SfxBindings* pBindings,
                                                 SfxChildWinInfo* pInfo ) :
@@ -58,7 +45,7 @@ SvxHlinkDlgWrapper::SvxHlinkDlgWrapper( vcl::Window* _pParent, sal_uInt16 nId,
     mpDlg = pFact->CreateSvxHpLinkDlg( _pParent, pBindings, SID_HYPERLINK_DIALOG );
     DBG_ASSERT(mpDlg, "Dialog creation failed!");
     pWindow = mpDlg->GetWindow();
-    ((MyStruct*)pImp)->bVisible = false;
+    SetVisible_Impl(false);
 
     vcl::Window* pTopWindow = 0;
     if ( pInfo->aSize.Width() != 0 && pInfo->aSize.Height() != 0 &&
