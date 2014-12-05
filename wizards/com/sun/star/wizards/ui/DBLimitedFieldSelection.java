@@ -33,7 +33,7 @@ public abstract class DBLimitedFieldSelection
     protected String sNoField;
     protected Integer IStep;
     protected static final int rowcount = 4;
-    protected final int MAXSELINDEX = rowcount - 1;
+    protected static final int MAXSELINDEX = rowcount - 1;
     protected short curtabindex;
     protected int iCurPosY;
     protected int FirstHelpIndex;

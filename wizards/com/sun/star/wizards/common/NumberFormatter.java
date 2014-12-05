@@ -47,7 +47,6 @@ public class NumberFormatter
     public XNumberFormats xNumberFormats;
     public XNumberFormatTypes xNumberFormatTypes;
     public XPropertySet xNumberFormatSettings;
-    private static final boolean bNullDateCorrectionIsDefined = false;
     private final Locale aLocale;
 
 
@@ -165,22 +164,15 @@ public class NumberFormatter
 
     public long getNullDateCorrection()
     {
-        if (!this.bNullDateCorrectionIsDefined)
-        {
-            com.sun.star.util.Date dNullDate = (com.sun.star.util.Date) Helper.getUnoStructValue(this.xNumberFormatSettings, "NullDate");
-            long lNullDate = Helper.convertUnoDatetoInteger(dNullDate);
-            java.util.Calendar oCal = java.util.Calendar.getInstance();
-            oCal.set(1900, 1, 1);
-            Date dTime = oCal.getTime();
-            long lTime = dTime.getTime();
-            long lDBNullDate = lTime / (3600 * 24000);
-            lDateCorrection = lDBNullDate - lNullDate;
-            return lDateCorrection;
-        }
-        else
-        {
-            return this.lDateCorrection;
-        }
+        com.sun.star.util.Date dNullDate = (com.sun.star.util.Date) Helper.getUnoStructValue(this.xNumberFormatSettings, "NullDate");
+        long lNullDate = Helper.convertUnoDatetoInteger(dNullDate);
+        java.util.Calendar oCal = java.util.Calendar.getInstance();
+        oCal.set(1900, 1, 1);
+        Date dTime = oCal.getTime();
+        long lTime = dTime.getTime();
+        long lDBNullDate = lTime / (3600 * 24000);
+        lDateCorrection = lDBNullDate - lNullDate;
+        return lDateCorrection;
     }
 
 

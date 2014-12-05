@@ -222,7 +222,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         String[] SlaveLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOSLAVEINDEX);
         String[] ViewMasterFieldNames = addNoneFieldItemToList(_AllMasterFieldNames); // add '-undefined-'
         String[] ViewSlaveFieldNames = addNoneFieldItemToList(_AllSlaveFieldNames);
-        for (int i = 0; i < super.rowcount; i++)
+        for (int i = 0; i < rowcount; i++)
         {
             super.initializeListBox(lstMasterFields[i], ViewMasterFieldNames, MasterLinkNames, i);
             super.initializeListBox(lstSlaveFields[i], ViewSlaveFieldNames, SlaveLinkNames, i);

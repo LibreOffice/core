@@ -198,7 +198,7 @@ public class TitlesComponent extends ControlScroller
     {
         String sTitleModelName = (String) Helper.getUnoPropertyValue(_fieldtitlemodel, PropertyNames.PROPERTY_NAME);
         String sindex = JavaTools.getSuffixNumber(sTitleModelName);
-        return (String) CurUnoDialog.getControlProperty(this.SOLABELPREFIX + sindex, PropertyNames.PROPERTY_LABEL);
+        return (String) CurUnoDialog.getControlProperty(SOLABELPREFIX + sindex, PropertyNames.PROPERTY_LABEL);
     }
 
     public String[] getFieldTitles()

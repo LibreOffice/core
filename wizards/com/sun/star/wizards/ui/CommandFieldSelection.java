@@ -39,7 +39,6 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
     private String sTablePrefix;
     private short m_iSelPos = -1;
     private short iOldSelPos = -1;
-    private static final boolean bpreselectCommand = true;
     private boolean bgetQueries;
     private final WizardDialog oWizardDialog;
     private Collator aCollator = null;
@@ -180,13 +179,10 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         }
         else
         {
-            if (this.bpreselectCommand)
+            String[] sItemList = ((String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.STRING_ITEM_LIST));
+            if (sItemList.length > 0)
             {
-                String[] sItemList = ((String[]) Helper.getUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.STRING_ITEM_LIST));
-                if (sItemList.length > 0)
-                {
-                    return (short) 0;
-                }
+                return (short) 0;
             }
             return (short) -1;
         }
@@ -272,21 +268,13 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
         java.util.Arrays.sort(ContentList, this);
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.STRING_ITEM_LIST, ContentList);
         short iSelPos = getselectedItemPos();
-        if (bpreselectCommand)
+        if (iSelPos > -1)
         {
-            if (iSelPos > -1)
-            {
-                bgetFields = true;
-                iSelArray = new short[]
-                        {
-                            iSelPos
-                        };
-            }
-        }
-        else
-        {
-            emptyFieldsListBoxes();
-            iSelArray = new short[] {iSelPos};
+            bgetFields = true;
+            iSelArray = new short[]
+                    {
+                        iSelPos
+                    };
         }
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, iSelArray);
         toggleCommandListBox(true);

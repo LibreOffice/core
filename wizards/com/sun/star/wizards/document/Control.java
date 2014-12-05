@@ -309,9 +309,9 @@ public class Control extends Shape
             {
                 String stext;
                 short iTextLength = AnyConverter.toShort(xPropertySet.getPropertyValue("MaxTextLen"));
-                if (iTextLength < this.SOMAXTEXTSIZE)
+                if (iTextLength < SOMAXTEXTSIZE)
                 {
-                    stext = FormHandler.SOSIZETEXT.substring(0, this.SOMAXTEXTSIZE);
+                    stext = FormHandler.SOSIZETEXT.substring(0, SOMAXTEXTSIZE);
                 }
                 else
                 {

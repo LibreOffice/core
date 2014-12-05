@@ -168,7 +168,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 if (_bAutoincrementation)
                 {
                     int nDataType = oTypeInspector.getAutoIncrementIndex(xColPropertySet);
-                    if (nDataType != oTypeInspector.INVALID)
+                    if (nDataType != TypeInspector.INVALID)
                     {
                         if (xColPropertySet.getPropertySetInfo().hasPropertyByName("IsAutoIncrement"))
                         {
