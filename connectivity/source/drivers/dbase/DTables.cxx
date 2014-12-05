@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <dbase/DConnection.hxx>
 #include "dbase/DTables.hxx"
 #include "dbase/DTable.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -45,7 +48,7 @@ using namespace ::com::sun::star::container;
 
 sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
 {
-    ODbaseTable* pRet = new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
+    ODbaseTable* pRet = new ODbaseTable(this, static_cast<ODbaseConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
                                         _rName,OUString("TABLE"));
 
     sdbcx::ObjectType xRet = pRet;
@@ -60,7 +63,7 @@ void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
 
 Reference< XPropertySet > ODbaseTables::createDescriptor()
 {
-    return new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
+    return new ODbaseTable(this, static_cast<ODbaseConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()));
 }
 
 // XAppend
