@@ -19,6 +19,7 @@
 
 
 #include <svx/svddrgv.hxx>
+#include <svx/svdview.hxx>
 #include "svx/xattr.hxx"
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
@@ -235,7 +236,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
             aDragStat.Reset(pHdl->GetPos());
         }
 
-        aDragStat.SetView((SdrView*)this);
+        aDragStat.SetView(static_cast<SdrView*>(this));
         aDragStat.SetPageView(pMarkedPV);  // <<-- DragPV has to go here!!!
         aDragStat.SetMinMove(ImpGetMinMovLogic(nMinMov,pOut));
         aDragStat.SetHdl(pHdl);
