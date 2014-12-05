@@ -304,6 +304,14 @@ public:
 
     OUString GetTxt() const;
     void InvalidatePaM();
+    SwPaM* GetNext()
+        { return GetNextInRing(); }
+    const SwPaM* GetNext() const
+        { return GetNextInRing(); }
+    SwPaM* GetPrev()
+        { return GetPrevInRing(); }
+    const SwPaM* GetPrev() const
+        { return GetPrevInRing(); }
 };
 
 std::ostream &operator <<(std::ostream& s, const SwPaM& pam);

@@ -572,6 +572,14 @@ public:
     bool IsShowHeaderFooterSeparator( FrameControlType eControl ) { return (eControl == Header)? mbShowHeaderSeparator: mbShowFooterSeparator; }
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) { if ( eControl == Header ) mbShowHeaderSeparator = bShow; else mbShowFooterSeparator = bShow; }
     bool IsSelectAll() { return mbSelectAll; }
+    SwViewShell* GetNext()
+        { return GetNextInRing(); }
+    const SwViewShell* GetNext() const
+        { return GetNextInRing(); }
+    SwViewShell* GetPrev()
+        { return GetPrevInRing(); }
+    const SwViewShell* GetPrev() const
+        { return GetPrevInRing(); }
 };
 
 // manages global ShellPointer

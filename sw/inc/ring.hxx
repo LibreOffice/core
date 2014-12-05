@@ -65,18 +65,6 @@ namespace sw
                 std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
                 std::swap(*(&pPrev), *(&pDestRing->pPrev));
             }
-            /** @return the next item in the ring container */
-            value_type* GetNext()
-                { return pNext; }
-            /** @return the previous item in the ring container */
-            value_type* GetPrev()
-                { return pPrev; }
-            /** @return the next item in the ring container */
-            const_value_type* GetNext() const
-                { return pNext; }
-            /** @return the previous item in the ring container */
-            const_value_type* GetPrev() const
-                { return pPrev; }
             /** @return a stl-like container with begin()/end() for iteration */
             ring_container GetRingContainer();
             /** @return a stl-like container with begin()/end() for const iteration */
@@ -97,6 +85,18 @@ namespace sw
              * @param pRing ring container to add the created item to
              */
             Ring( value_type* pRing );
+            /** @return the next item in the ring container */
+            value_type* GetNextInRing()
+                { return pNext; }
+            /** @return the previous item in the ring container */
+            value_type* GetPrevInRing()
+                { return pPrev; }
+            /** @return the next item in the ring container */
+            const_value_type* GetNextInRing() const
+                { return pNext; }
+            /** @return the previous item in the ring container */
+            const_value_type* GetPrevInRing() const
+                { return pPrev; }
 
         private:
             /** internal implementation class -- not for external use */
@@ -105,9 +105,9 @@ namespace sw
                 typedef value_type node;
                 typedef value_type* node_ptr;
                 typedef const value_type* const_node_ptr;
-                static node_ptr get_next(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetNext(); };
+                static node_ptr get_next(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetNextInRing(); };
                 static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
-                static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetPrev(); };
+                static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetPrevInRing(); };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
             friend typename ring_container::iterator;
@@ -202,7 +202,7 @@ namespace sw
         private:
             friend class boost::iterator_core_access;
             void increment()
-                { m_pCurrent = m_pCurrent ? m_pCurrent->GetNext() : m_pStart->GetNext(); }
+                { m_pCurrent = m_pCurrent ? m_pCurrent->GetNextInRing() : m_pStart->GetNext(); }
             bool equal(RingIterator const& other) const
             {
                 // we never want to compare iterators from
