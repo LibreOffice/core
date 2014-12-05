@@ -36,256 +36,241 @@ struct ImplTabBarItem;
 typedef ::std::vector< ImplTabBarItem* > ImplTabBarList;
 
 
-// - Dokumentation -
 
 
 /*
 
-Erlaubte StyleBits
+Allowed StylbeBits
 ------------------
 
-WB_SCROLL       - Die Tabs koennen ueber ein Extra-Feld gescrollt werden
-WB_MINSCROLL    - Die Tabs koennen ueber 2 zusaetzliche Buttons gescrollt werden
-WB_RANGESELECT  - Zusammenhaengende Bereiche koennen selektiert werden
-WB_MULTISELECT  - Einzelne Tabs koennen selektiert werden
-WB_BORDER       - Oben und unten wird ein Strich gezeichnet
-WB_TOPBORDER    - Oben wird ein Border gezeichnet
-WB_3DTAB        - Die Tabs und der Border werden in 3D gezeichnet
-WB_DRAG         - Vom TabBar wird ein StartDrag-Handler gerufen, wenn
-                  Drag and Drop gestartet werden soll. Es wird ausserdem
-                  im TabBar mit EnableDrop() Drag and Drop eingeschaltet.
-WB_SIZEABLE     - Vom TabBar wird ein Split-Handler gerufen, wenn der Anwender
-                  den TabBar in der Breite aendern will
+WB_SCROLL       - The tabs can be scrolled via an extra field
+WB_MINSCROLL    - The tabs can be scrolled via 2 additional buttons
+WB_RANGESELECT  - Connected ranges can be selected
+WB_MULTISELECT  - single tabs can be selected
+WB_BORDER       - a border is drawn in the top and in the bottom
+WB_TOPBORDER    - a border is drawn in the top
+WB_3DTAB        - the tabs and the border are drawn in 3D
+WB_DRAG         - A StartDrag handler is called by the TabBar, if drag
+                  and drop should be started. In addition, drag and drop
+                  is activated in the TabBar with EnableDrop().
+WB_SIZEABLE     - a Split handler is called by the TabBar, if the user
+                  wants to change the width of the TabBar
 WB_STDTABBAR    - WB_BORDER
 
-Wenn man den TabBar zum Beispiel als Property-Bar benutzen moechte, sollten
-die WinBits WB_TOPBORDER und WB_3DTAB anstatt WB_BORDER gesetzt werden.
+If the TabBar should be used for example as Property bar, the WinBits
+WB_TOPBORDER and WB_3DTAB should be set instead of WB_BORDER.
 
 
-Erlaubte PageBits
+Allowed PageBits
 -----------------
 
-TPB_SPECIAL     - Andere Darstellung des TabTextes, zum Beispiel fuer
-                  Szenario-Seiten.
+TPB_SPECIAL     - Different display of the TabText, e.g. for scenario pages.
 
-
-Handler
+Handlers
 -------
 
-Select          - Wird gerufen, wenn eine Tab selektiert oder
-                  deselektiert wird
-DoubleClick     - Wird gerufen, wenn ein DoubleClick im TabBar ausgeloest
-                  wurde. Innerhalb des Handlers liefert GetCurPageId() die
-                  angeklickte Tab zurueck oder 0, wenn keine Tab angeklickt
-                  wurde
-ActivatePage    - Wird gerufen, wenn eine andere Seite aktiviert wird.
-                  GetCurPageId() gibt die aktivierte Seite zurueck.
-DeactivatePage  - Wird gerufen, wenn eine Seite deaktiviert wird. Wenn
-                  eine andere Seite aktiviert werden darf, muss sal_True
-                  zurueckgegeben werden, wenn eine andere Seite von
-                  der Aktivierung ausgeschlossen werden soll, muss
-                  sal_False zurueckgegeben werden. GetCurPageId() gibt die
-                  zu deaktivierende Seite zurueck.
+Select          - is called when a tab is selected or unselected
+DoubleClick     - Is called when a DoubleClick has been fired in the
+                  TabBar. Inside of the handler, GetCurPageId() returns
+                  the clicked tab or 0, if no tab has been clicked.
+ActivatePage    - Is called, if another page is activated.
+                  GetCurPageId() returns the activated page.
+DeactivatePage  - Is called, when a page is deactivated. If another page
+                  may be activated, true must be returned; if another
+                  page shall be excluded from the activation, false must
+                  be returned. GetCurPageId() returns the page to be
+                  deactivated.
 
 
 
 Drag and Drop
 -------------
 
-Fuer Drag and Drop muss das WinBit WB_DRAG gesetzt werden. Ausserdem
-muss der Command-, QueryDrop-Handler und der Drop-Handler ueberlagert
-werden. Dabei muss in den Handlern folgendes implementiert werden:
+For Drag and Drop, the WinBit WB_DRAG must be set. In addition, the
+Command handler, the QueryDrop handler and the Drop handler must be overlaid.
+In doing so, the following must be implemented in the handlers:
 
-Command         - Wenn in diesem Handler das Dragging gestartet werden
-                  soll, muss StartDrag() gerufen werden. Diese Methode
-                  selektiert dann den entsprechenden Eintrag oder gibt
-                  sal_False zurueck, wenn das Dragging nicht durchgefuhert
-                  werden kann.
+Command         - If dragging should be started in this handler,
+                  StartDrag() must be called. This method
+                  then selects the respective entry or returns
+                  false, if dragging cannot be carried out.
 
-QueryDrop       - Dieser Handler wird von StarView immer dann gerufen, wenn
-                  bei einem Drag-Vorgang die Maus ueber das Fenster gezogen
-                  wird (siehe dazu auch SV-Doku). In diesem Handler muss
-                  festgestellt werden, ob ein Drop moeglich ist. Die
-                  Drop-Position kann im TabBar mit ShowDropPos() angezeigt
-                  werden. Beim Aufruf muss die Position vom Event uebergeben
-                  werden. Wenn sich die Position am linken oder rechten
-                  Rand befindet, wird automatisch im TabBar gescrollt.
-                  Diese Methode gibt auch die entsprechende Drop-Position
-                  zurueck, die auch fuer ein Drop gebraucht wird. Wenn das
-                  Fenster beim Drag verlassen wird, kann mit HideDropPos()
-                  die DropPosition wieder weggenommen werden. Es ist dadurch
-                  auch moeglich, ein von ausserhalb des TabBars ausgeloestes
-                  Drag zu verarbeiten.
+QueryDrop       - This handler is always called by StarView, when the
+                  mouse is pulled over the window while dragging
+                  (s.a. SV documentation). In this handler, it must be
+                  determined whether a drop is possible. The drop
+                  position can be shown in TabBar using ShowDropPos().
+                  When calling, the position of the Event must be passed.
+                  If the position is at the left or right border,
+                  scrolling automatically takes place in the TabBar.
+                  This method also returns the respective drop position,
+                  which is also needed for a drop. If the window is left
+                  while dragging, the drop position can be taken back
+                  using HideDropPos(). Thus, it is also possible to handle
+                  a drag which was triggered from outside the TabBar.
 
-Drop            - Im Drop-Handler muessen dann die Pages verschoben werden,
-                  oder die neuen Pages eingefuegt werden. Die entsprechende
-                  Drop-Position kann mit ShowDropPos() ermittelt werden.
+Drop            - In the Drop handler, the pages have to be moved, or
+                  the new pages have to be inserted. The respective
+                  drop position can be determined using ShowDropPos().
 
-Folgende Methoden werden fuer Drag and Drop gebraucht und muessen von
-den Handlern gerufen werden:
+The following methods are needed for Drag and Drop and must be called
+by the handlers:
 
-StartDrag       - Muss aus dem Commnad-Handler gerufen werden. Als Parameter
-                  muss der CommandEvent uebergeben werden und eine Referenz
-                  auf eine Region. Diese vcl::Region muss dann bei ExecuteDrag()
-                  uebergeben werden, wenn der Rueckgabewert sagt, das
-                  ExecuteDrag durchgefuehrt werden soll. Falls der Eintrag
-                  nicht selektiert ist, wird er vorher als aktueller
-                  Eintrag gesetzt. Es ist daher darauf zu achten, das aus
-                  dieser Methode heraus der Select-Handler gerufen werden
-                  kann.
+StartDrag       - Must be called from the Command handler. As parameters,
+                  the CommandEvent and a reference to a Region must be
+                  passed. This vcl::Region then must be passed in
+                  ExecuteDrag(), if the return value indicates that
+                  ExecuteDrag shall be carried out. If the entry is not
+                  selected, it is set as the current entry beforehand.
+                  Because of this, attention must be paid that the Select
+                  handler can be called from this method.
 
-ShowDropPos     - Diese Methode muss vom QueryDrop-Handler gerufen werden,
-                  damit der TabBar anzeigt, wo die Tabs eingefuegt werden.
-                  Diese Methode kann auch im Drop-Handler benutzt werden,
-                  um die Position zu ermitteln wo die Tabs eingefuegt werden
-                  sollen. In der Methode muss die Position vom Event
-                  uebergeben werden. Diese Methode gibt die Position zurueck,
-                  wo die Tabs eingefuegt werden sollen.
+ShowDropPos     - This method must be called by the QueryDrop handler,
+                  so that the TabBar shows where the Tabs are
+                  inserted. This method can also be used in the Drop
+                  handler, in order to determine the position at which
+                  the Tabs shall be inserted. In the method, the
+                  postion of the Event must be passed. This method
+                  returns the position, at which the Tabs shall be inserted.
 
-HideDropPos     - Diese Methode nimmt die vorher mit ShowDropPos() angezeigte
-                  DropPosition wieder zurueck. Diese Methode sollte dann
-                  gerufen werden, wenn bei QueryDrop() das Fenster verlassen
-                  wird oder der Dragvorgang beendet wurde.
+HideDropPos     - This method takes back the DropPosition previously
+                  displayed using ShowDropPos(). This method should be
+                  called, when the window is left in the QueryDrop()
+                  handler or the drag process has been ended.
 
-Folgende Methoden koennen eingesetzt werden, wenn bei D&D die Seiten
-umgeschaltet werden sollen:
+The following methods can be used if the pages should be switched
+in the Drag and Drop:
 
-SwitchPage      - Diese Methode muss vom QueryDrop-Handler gerufen werden,
-                  wenn die Seite ueber der sich der Mousepointer befindet,
-                  umgeschaltet werden soll. Diese Methode sollte jedesmal
-                  gerufen werden, wenn der QueryDrop-Handler gerufen wird.
-                  Das umschalten der Seite passiert zeitverzoegert (500 ms)
-                  und wird automatisch von dieser Methode verwaltet.
-                  In der Methode muss die Position vom Event uebergeben
-                  werden. Diese Methode gibt sal_True zurueck, wenn die Page
-                  umgeschaltet wurde.
+SwitchPage      - This method must be called by the QueryDrop handler
+                  if the page, over which the mouse pointer resides,
+                  should be switched. This method should be called
+                  each time the QueryDrop-Handler is called.
+                  Switching the page happens with a delay (500 ms) and
+                  is automatically managed by this method.
+                  The Position of the Event must be passed in the method.
+                  This method returns true if the page has been switched.
 
-EndSwitchPage   - Diese Methode setzt die Daten fuer das umschalten der
-                  Seiten zurueck. Diese Methode sollte dann gerufen werden,
-                  wenn bei QueryDrop() das Fenster verlassen wird oder
-                  der Dragvorgang beendet wurde.
+EndSwitchPage   - This method resets the data for the switching of the
+                  page. This method should be called when the window
+                  is left in QueryDrop() or the drag process has been
+                  ended.
 
-IsInSwitching   - Mit dieser Methode kann im ActivatePage()/DeactivatePage()
-                  abgefragt werden, ob dies durch SwitchPage() veranlasst
-                  wurde. So kann dann beispielsweise in DeactivatePage()
-                  das Umschalten ohne eine Fehlerbox verhindert werden.
+IsInSwitching   - With this method, it can be queried in
+                  ActivatePage()/DeactivatePage() whether this has been
+                  caused by SwitchPage(). Thus, for example, switching
+                  can be avoided in DeactivatePage() without an error
+                  box.
 
 
-Fenster-Resize
+Window Resize
 --------------
 
-Wenn das Fenster vom Anwender in der Breite geaendert werden kann, dann
-muss das WinBit WB_SIZEABLE gesetzt werden. In diesem Fall muss noch
-folgender Handler ueberlagert werden:
+If the window width can be changed by the user, the WinBit WB_SIZEABLE
+must be set. In this case, the following handler must be overlaid:
 
-Split           - Wenn dieser Handler gerufen wird, sollte das Fenster
-                  auf die Breite angepasst werden, die von GetSplitSize()
-                  zurueckgegeben wird. Dabei wird keine minimale und
-                  maximale Breite beruecksichtig. Eine minimale Breite
-                  kann mit GetMinSize() abgefragt werden und die maximale
-                  Breite muss von der Anwendung selber berechnet werden.
-                  Da nur Online-Resize unterstuetzt wird, muss das Fenster
-                  innerhalb dieses Handlers in der Breite geaendert
-                  werden und eventuell abhaengige Fenster ebenfalls. Fuer
-                  diesen Handler kann auch mit SetSplitHdl() ein
-                  Link gesetzt werden.
+Split           - When this handler is called, the window should be
+                  adapted to the width that is returned by GetSplitSize().
+                  In doing so, no minimal or maximum width is taken into
+                  account. A minimal size can be queried using
+                  GetMinSize() and the maximum width must be calculated
+                  by the application itself. As only Online Resize is
+                  supported, the window width must be changed inside
+                  this handler and possibly the width of dependent windows
+                  as well. For this handler, a link can also be set using
+                  SetSplitHdl().
 
-Folgende Methoden liefern beim Splitten weitere Informationen:
+The following methods deliver more information while Splitting:
 
-GetSplitSize()  - Liefert die Breite des TabBars zurueck, auf die der
-                  Anwender das Fenster resizen will. Dabei wird keine
-                  minimale oder maximale Breite beruecksichtigt. Es wird
-                  jedoch nie eine Breite < 5 zurueckgeliefert. Diese Methode
-                  liefert nur solange richtige Werte, wie Splitten aktiv
-                  ist.
+GetSplitSize()  - Returns the width of the TabBar, to which the user
+                  wants to resize the window. No minimum or maximum
+                  width is taken into account. However, a width < 5
+                  is never returned. This method only returns valid
+                  values as long as splitting is active.
 
-GetMinSize()    - Mit dieser Methode kann eine minimale Fensterbreite
-                  abgefragt werden, so das min. etwas eines Tabs sichtbar
-                  ist. Jedoch kann der TabBar immer noch schmaler gesetzt
-                  werden, als die Breite, die diese Methode zurueckliefert.
-                  Diese Methode kann auch aufgerufen werden, wenn kein
-                  Splitten aktiv ist.
+GetMinSize()    - With this method, a minimum window width can be
+                  queried, so that at least something of a Tab is
+                  visible. Still, the TabBar can be set more narrow
+                  then the width that this method returns.
+                  This method can also be called, when no splitting
+                  is active.
 
 
-Edit-Modus
+Edit Mode
 ----------
 
-Der Tabbar bietet auch Moeglichkeiten, das der Anwender in den Tabreitern
-die Namen aendern kann.
+The TabBar also offers the user the possibility to change the names
+in the Tabs.
 
-EnableEditMode  - Damit kann eingestellt werden, das bei Alt+LeftClick
-                  StartEditMode() automatisch vom TabBar gerufen wird.
-                  Im StartRenaming()-Handler kann dann das Umbenennen
-                  noch abgelehnt werden.
-StartEditMode   - Mit dieser Methode wird der EditModus auf einem
-                  Tab gestartet. sal_False wird zurueckgegeben, wenn
-                  der Editmodus schon aktiv ist, mit StartRenaming()
-                  der Modus abgelehnt wurde oder kein Platz zum
-                  Editieren vorhanden ist.
-EndEditMode     - Mit dieser Methode wird der EditModus beendet.
-SetEditText     - Mit dieser Methode kann der Text im AllowRenaming()-
-                  Handler noch durch einen anderen Text ersetzt werden.
-GetEditText     - Mit dieser Methode kann im AllowRenaming()-Handler
-                  der Text abgefragt werden, den der Anwender eingegeben
-                  hat.
-IsInEditMode    - Mit dieser Methode kann abgefragt werden, ob der
-                  Editmodus aktiv ist.
-IsEditModeCanceled      - Mit dieser Methode kann im EndRenaming()-
-                          Handler abgefragt werden, ob die Umbenenung
-                          abgebrochen wurde.
-GetEditPageId   - Mit dieser Methode wird in den Renaming-Handlern
-                  abgefragt, welcher Tab umbenannt wird/wurde.
+EnableEditMode  - With this, it can be configured that on Alt+LeftClick,
+                  StartEditMode() is automatically called by the TabBar.
+                  In the StartRenaming() handler, the renaming can still
+                  be rejected.
+StartEditMode   - With this method, the EditMode is started on a Tab.
+                  false is returned, if the EditMode is already
+                  active, the mode is rejected with StartRenaming()
+                  or no space is available for editing.
+EndEditMode     - With this method, the EditMode is ended.
+SetEditText     - With this method, the text in the AllowRenaming()
+                  handler can still be replaced by another text.
+GetEditText     - With this method, the text, which the user has typed
+                  in, can be queried in the AllowRenaming() handler.
+IsInEditMode    - This method is used to query whether the EditMode
+                  is active.
+IsEditModeCanceled      - This method can be used in the EndRenaming()
+                          handler to query whether the renaming has
+                          been canceled.
+GetEditPageId   - With this method, the tab that is being/has been
+                  renamed is queried in the Renaming handlers.
 
-StartRenaming() - Dieser Handler wird gerufen, wenn ueber StartEditMode()
-                  der Editmodus gestartet wurde. Mit GetEditPageId()
-                  kann abgefragt werden, welcher Tab umbenannt werden
-                  soll. sal_False sollte zurueckgegeben werden, wenn
-                  der Editmodus nicht gestartet werden soll.
-AllowRenaming() - Dieser Handler wird gerufen, wenn der Editmodus
-                  beendet wird (nicht bei Cancel). In diesem Handler
-                  kann dann getestet werden, ob der Text OK ist.
-                  Mit GetEditPageId() kann abgefragt werden, welcher Tab
-                  umbenannt wurde.
-                  Es sollte einer der folgenden Werte zurueckgegeben
-                  werden:
+StartRenaming() - This handler is called when the EditMode hast been
+                  started using StartEditMode(). GetEditPageId()
+                  can be used to query which Tab should be renamed.
+                  false should be returned if the EditMod should
+                  not be started.
+AllowRenaming() - This handler is called when the EditMode is ended
+                  (not in case of Cancel). Within this handler, it
+                  can then be tested whether the text is OK.
+                  The Tab which was renamed can be queried using
+                  GetEditPageId().
+                  One of the following values should be returned:
                   TAB_RENAMING_YES
-                  Der Tab wird umbenannt.
+                  The Tab is renamed.
                   TAB_RENAMING_NO
-                  Der Tab wird nicht umbenannt, der Editmodus bleibt
-                  jedoch aktiv, so das der Anwender den Namen
-                  entsprechent anpassen kann.
+                  The Tab is not renamed, but the EditMode remains
+                  active, so that the user can adapt the name
+                  accordingly.
                   TAB_RENAMING_CANCEL
-                  Der Editmodus wird abgebrochen und der alte
-                  Text wieder hergestellt.
-EndRenaming()   - Dieser Handler wird gerufen, wenn der Editmodus
-                  beendet wurde. Mit GetEditPageId() kann abgefragt
-                  werden, welcher Tab umbenannt wurde. Mit
-                  IsEditModeCanceled() kann abgefragt werden, ob der
-                  Modus abgebrochen wurde und der Name dadurch nicht
-                  geaendert wurde.
+                  The EditMode was cancelled and the old text
+                  is restored.
+EndRenaming()   - This handler is called when the EditMode has been
+                  ended. The tab that has been renamed can be
+                  queried using GetEditPageId(). Using
+                  IsEditModeCanceled(), it can be queried whether
+                  the mode has been cancelled and the name has
+                  thus not been changed.
 
 
-Maximale Pagebreite
+Maximum Page width
 -------------------
 
-Die Pagebreite der Tabs kann begrenzt werden, damit ein einfacheres
-Navigieren ueber diese moeglich ist. Wenn der Text dann nicht komplett
-angezeigt werden kann, wird er mit ... abgekuerzt und in der Tip-
-oder der aktiven Hilfe (wenn kein Hilfetext gesetzt ist) wird dann der
-ganze Text angezeigt. Mit EnableAutoMaxPageWidth() kann eingestellt
-werden, ob die maximale Pagebreite sich nach der gerade sichtbaren
-Breite richten soll (ist der default). Ansonsten kann auch die
-maximale Pagebreite mit SetMaxPageWidth() (in Pixeln) gesetzt werden
-(die AutoMaxPageWidth wird dann ignoriert).
+The Page width of the tabs can be limited in order to make an easier
+navigation by them possible. If then, the text cannot be displayed
+completely, it is abbreviated with "..." and the whole text is
+displayed in the Tip or in the active help (if no help text is set).
+Using EnableAutoMaxPageWidth(), it can be configured whether the
+maximum page width should be based on the currently visible width
+(which is the default). Otherwise, the maximum page width can
+also be set using SetMaxPageWidth() (in pixels) (in this case, the
+AutoMaxPageWidth is ignored).
 
-
-KontextMenu
+ContextMenu
 -----------
 
-Wenn ein kontextsensitives PopupMenu anzeigt werden soll, muss der
-Command-Handler ueberlagert werden. Mit GetPageId() und bei
-Uebergabe der Mausposition kann ermittelt werden, ob der Mausclick
-ueber einem bzw. ueber welchem Item durchgefuehrt wurde.
+If a context-sensitive PopupMenu should be displayed, the Command
+handler must be overlaid. Using GetPageId() and when passing the
+mouse position, it can be determined whether the mouse click has been
+carried out over an item resp. over which item the mouse click has
+been carried out.
 */
 
 
@@ -307,7 +292,7 @@ ueber einem bzw. ueber welchem Item durchgefuehrt wurde.
 typedef sal_uInt16 TabBarPageBits;
 
 
-// - Bits fuer TabBarPages -
+// - Bits for TabBarPages -
 
 
 #define TPB_SPECIAL         ((TabBarPageBits)0x0001)
@@ -485,7 +470,7 @@ public:
             and vice versa; sal_False = the control behaves according to the
             current direction of the GUI. */
     void            SetMirrored(bool bMirrored = true);
-    /** Returns sal_True, if the control is set to mirrored mode (see SetMirrored()). */
+    /** Returns true, if the control is set to mirrored mode (see SetMirrored()). */
     bool            IsMirrored() const { return mbMirrored; }
 
     /** Sets the control to LTR or RTL mode regardless of the GUI direction.
