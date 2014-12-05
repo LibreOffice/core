@@ -113,11 +113,10 @@ namespace svxform
 
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
-            const static OUString sModuleName( DBTOOLS_DLL_NAME );
 
             // load the dbtools library
             s_hDbtoolsModule = osl_loadModuleRelative(
-                &thisModule, sModuleName.pData, 0);
+                &thisModule, OUString(DBTOOLS_DLL_NAME).pData, 0);
             OSL_ENSURE(NULL != s_hDbtoolsModule, "ODbtoolsClient::registerClient: could not load the dbtools library!");
             if (NULL != s_hDbtoolsModule)
             {

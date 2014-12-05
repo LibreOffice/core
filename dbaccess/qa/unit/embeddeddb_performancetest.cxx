@@ -86,7 +86,7 @@ class EmbeddedDBPerformanceTest
     : public DBTestBase
 {
 private:
-    const static OUString our_sEnableTestEnvVar;
+    static const char our_sEnableTestEnvVar[];
 
     // We store the results and print them at the end due to the amount of warning
     // noise present which otherwise obscures the results.
@@ -154,14 +154,14 @@ void EmbeddedDBPerformanceTest::printTimes(
    );
 }
 
-const OUString EmbeddedDBPerformanceTest::our_sEnableTestEnvVar("DBA_PERFTEST");
+const char EmbeddedDBPerformanceTest::our_sEnableTestEnvVar[] = "DBA_PERFTEST";
 
 // TODO: we probably should create a document from scratch instead?
 
 void EmbeddedDBPerformanceTest::testPerformance()
 {
     OUString sEnabled;
-    osl_getEnvironment(our_sEnableTestEnvVar.pData, &sEnabled.pData);
+    osl_getEnvironment(OUString(our_sEnableTestEnvVar).pData, &sEnabled.pData);
 
     if (sEnabled.isEmpty())
         return;

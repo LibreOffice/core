@@ -67,8 +67,8 @@ namespace abp
         try
         {
             // the service name of the administration dialog
-            const static OUString s_sAdministrationServiceName = "com.sun.star.sdb.DatasourceAdministrationDialog";
-            const static OUString s_sDataSourceTypeChangeDialog = "com.sun.star.sdb.DataSourceTypeChangeDialog";
+            static const char s_sAdministrationServiceName[] = "com.sun.star.sdb.DatasourceAdministrationDialog";
+            static const char s_sDataSourceTypeChangeDialog[] = "com.sun.star.sdb.DataSourceTypeChangeDialog";
 
             // the parameters for the call
             Sequence< Any > aArguments(3);
@@ -91,7 +91,8 @@ namespace abp
                 // creating the dialog service is potentially expensive (if all the libraries invoked need to be loaded)
                 // so we display a wait cursor
                 WaitObject aWaitCursor(m_pMessageParent);
-                xDialog = Reference< XExecutableDialog >( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(_bFixedType ? s_sAdministrationServiceName : s_sDataSourceTypeChangeDialog, aArguments, m_xContext), UNO_QUERY );
+                Reference<XInterface> x = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(_bFixedType ? OUString(s_sAdministrationServiceName) : OUString(s_sDataSourceTypeChangeDialog), aArguments, m_xContext);
+                xDialog = Reference< XExecutableDialog >( x, UNO_QUERY );
 
                 // just for a smoother UI: What the dialog does upon execution, is (amongst other things) creating
                 // the DriverManager service
