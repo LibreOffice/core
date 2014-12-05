@@ -15,6 +15,8 @@
 
 OpenGLFramebuffer::OpenGLFramebuffer() :
     mnId( 0 ),
+    mnWidth( 0 ),
+    mnHeight( 0 ),
     mpPrevFramebuffer( NULL ),
     mpNextFramebuffer( NULL )
 {
@@ -55,6 +57,8 @@ void OpenGLFramebuffer::AttachTexture( const OpenGLTexture& rTexture )
 {
     SAL_INFO( "vcl.opengl", "Attaching texture " << rTexture.Id() << " to framebuffer " << (int)mnId );
     maAttachedTexture = rTexture;
+    mnWidth = rTexture.GetWidth();
+    mnHeight = rTexture.GetHeight();
     glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                             maAttachedTexture.Id(), 0 );
     CHECK_GL_ERROR();

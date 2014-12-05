@@ -121,6 +121,8 @@ void OpenGLSalGraphicsImpl::Init()
         maOffscreenTex.GetWidth()  != GetWidth() ||
         maOffscreenTex.GetHeight() != GetHeight() )
     {
+        if( mpContext ) // valid context
+            mpContext->ReleaseFramebuffer( maOffscreenTex );
         maOffscreenTex = OpenGLTexture();
     }
 }
@@ -162,15 +164,18 @@ void OpenGLSalGraphicsImpl::PostDraw()
         mpProgram = NULL;
     }
 
-    mpContext->ReleaseFramebuffer( mpFramebuffer );
-    mpFramebuffer = NULL;
-
     CHECK_GL_ERROR();
 }
 
 void OpenGLSalGraphicsImpl::freeResources()
 {
     // TODO Delete shaders, programs and textures if not shared
+    if( mbOffscreen && mpContext && mpContext->isInitialized() )
+    {
+        mpContext->makeCurrent();
+        mpContext->ReleaseFramebuffer( maOffscreenTex );
+    }
+    ReleaseContext();
 }
 
 void OpenGLSalGraphicsImpl::ImplSetClipBit( const vcl::Region& rClip, GLuint nMask )
@@ -1584,6 +1589,7 @@ void OpenGLSalGraphicsImpl::endPaint()
     if( mpContext->mnPainting == 0 && !mbOffscreen )
     {
         mpContext->makeCurrent();
+        mpContext->AcquireDefaultFramebuffer();
         glFlush();
     }
 }
