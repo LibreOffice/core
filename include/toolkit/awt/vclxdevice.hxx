@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/virdev.hxx>
 
 #include <com/sun/star/awt/XUnitConversion.hpp>
 
@@ -107,7 +108,7 @@ class VCLXVirtualDevice : public VCLXDevice
 public:
                     virtual ~VCLXVirtualDevice();
 
-    void            SetVirtualDevice( VirtualDevice* pVDev ) { SetOutputDevice( (OutputDevice*)pVDev ); }
+    void            SetVirtualDevice( VirtualDevice* pVDev ) { SetOutputDevice( pVDev ); }
 };
 
 
