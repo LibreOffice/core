@@ -21,7 +21,6 @@ $(eval $(call gb_Module_Module,sw))
 
 $(eval $(call gb_Module_add_targets,sw,\
 	$(call gb_Helper_optional,DESKTOP,Executable_tiledrendering) \
-        CustomTarget_generated \
 	Library_msword \
 	Library_sw \
 	Library_swd \

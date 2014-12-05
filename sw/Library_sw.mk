@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,sw,\
 
 $(eval $(call gb_Library_use_custom_headers,sw,\
 	officecfg/registry \
-	sw/generated \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,sw))
