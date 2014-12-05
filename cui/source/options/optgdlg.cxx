@@ -561,19 +561,6 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pWindowSizeMF, "windowsize");
     get(m_pIconSizeLB, "iconsize");
     get(m_pIconStyleLB, "iconstyle");
-    get(m_pSystemFont, "systemfont");
-
-    VclContainer *pRef = get<VclContainer>("refgrid");
-    //fdo#65595, we need height-for-width support here, but for now we can
-    //bodge it
-    Size aPrefSize(m_pSystemFont->get_preferred_size());
-    Size aSize(pRef->get_preferred_size());
-    if (aPrefSize.Width() > aSize.Width())
-    {
-        aSize = m_pSystemFont->CalcMinimumSize(aSize.Width());
-        m_pSystemFont->set_width_request(aSize.Width());
-        m_pSystemFont->set_height_request(aSize.Height());
-    }
 
     get(m_pFontAntiAliasing, "aafont");
     get(m_pAAPointLimitLabel, "aafrom");
@@ -601,12 +588,6 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     // #i97672#
     m_pSelectionCB->SetToggleHdl( LINK( this, OfaViewTabPage, OnSelectionToggled ) );
-
-    if( ! Application::ValidateSystemFont() )
-    {
-        m_pSystemFont->Check(false);
-        m_pSystemFont->Enable(false);
-    }
 
     // Set known icon themes
     OUString sAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
@@ -826,21 +807,12 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     }
 
     SvtAccessibilityOptions     aAccessibilityOptions;
-    if( aAccessibilityOptions.GetIsSystemFont() != m_pSystemFont->IsChecked() &&
-        m_pSystemFont->IsEnabled() )
-    {
-        aAccessibilityOptions.SetIsSystemFont( m_pSystemFont->IsChecked() );
-        bModified = true;
-        bMenuOptModified = true;
-    }
 
     if( bMenuOptModified )
     {
         // Set changed settings to the application instance
         AllSettings aAllSettings = Application::GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-        if( m_pSystemFont->IsEnabled() )
-            aStyleSettings.SetUseSystemUIFonts( m_pSystemFont->IsChecked() );
         aAllSettings.SetStyleSettings(aStyleSettings);
         Application::MergeSystemSettings( aAllSettings );
         Application::SetSettings(aAllSettings);
@@ -887,12 +859,6 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     m_pIconStyleLB->SelectEntryPos( nStyleLB_InitialSelection );
     m_pIconStyleLB->SaveValue();
-
-    if( m_pSystemFont->IsEnabled() )
-    {
-        SvtAccessibilityOptions aAccessibilityOptions;
-        m_pSystemFont->Check( aAccessibilityOptions.GetIsSystemFont() );
-    }
 
     // Screen Scaling
     m_pWindowSizeMF->SetValue ( pAppearanceCfg->GetScaleFactor() );
