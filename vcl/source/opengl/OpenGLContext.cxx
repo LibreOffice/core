@@ -35,6 +35,8 @@
 
 using namespace com::sun::star;
 
+#define MAX_FRAMEBUFFER_COUNT 30
+
 // TODO use rtl::Static instead of 'static'
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
 static std::vector<GLXContext> g_vShareList;
@@ -57,6 +59,7 @@ OpenGLContext::OpenGLContext():
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
     mbRequestVirtualDevice(false),
+    mnFramebufferCount(0),
     mpCurrentFramebuffer(NULL),
     mpFirstFramebuffer(NULL),
     mpLastFramebuffer(NULL),
@@ -1281,12 +1284,26 @@ bool OpenGLContext::isCurrent()
             glXGetCurrentDrawable() == nDrawable);
 #endif
 }
+
+void OpenGLContext::clearCurrent()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // release all framebuffers from the old context so we can re-attach the
+    // texture in the new context
+    OpenGLContext* pCurrentCtx = pSVData->maGDIData.mpLastContext;
+    if( pCurrentCtx && pCurrentCtx->isCurrent() )
+        pCurrentCtx->ReleaseFramebuffers();
+}
+
 void OpenGLContext::makeCurrent()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
     if (isCurrent())
         return;
+
+    clearCurrent();
 
 #if defined( WNT )
     if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
@@ -1328,6 +1345,8 @@ void OpenGLContext::makeCurrent()
 
 void OpenGLContext::resetCurrent()
 {
+    clearCurrent();
+
 #if defined( WNT )
     wglMakeCurrent( m_aGLWin.hDC, 0 );
 #elif defined( MACOSX )
@@ -1395,14 +1414,10 @@ NSOpenGLView* OpenGLContext::getOpenGLView()
 }
 #endif
 
-bool OpenGLContext::AcquireFramebuffer( OpenGLFramebuffer* pFramebuffer )
+bool OpenGLContext::BindFramebuffer( OpenGLFramebuffer* pFramebuffer )
 {
     if( pFramebuffer != mpCurrentFramebuffer )
     {
-        // release the attached texture so it's available from the other contexts
-        //if( mpCurrentFramebuffer )
-        //    mpCurrentFramebuffer->DetachTexture();
-
         if( pFramebuffer )
             pFramebuffer->Bind();
         else
@@ -1415,13 +1430,14 @@ bool OpenGLContext::AcquireFramebuffer( OpenGLFramebuffer* pFramebuffer )
 
 bool OpenGLContext::AcquireDefaultFramebuffer()
 {
-    return AcquireFramebuffer( NULL );
+    return BindFramebuffer( NULL );
 }
 
 OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rTexture )
 {
     OpenGLFramebuffer* pFramebuffer = NULL;
-    OpenGLFramebuffer* pFreeFramebuffer = NULL;
+    OpenGLFramebuffer* pFreeFbo = NULL;
+    OpenGLFramebuffer* pSameSizeFbo = NULL;
 
     // check if there is already a framebuffer attached to that texture
     pFramebuffer = mpLastFramebuffer;
@@ -1429,18 +1445,27 @@ OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rText
     {
         if( pFramebuffer->IsAttached( rTexture ) )
             break;
-        if( !pFreeFramebuffer && pFramebuffer->IsFree() )
-            pFreeFramebuffer = pFramebuffer;
+        if( !pFreeFbo && pFramebuffer->IsFree() )
+            pFreeFbo = pFramebuffer;
+        if( !pSameSizeFbo &&
+            pFramebuffer->GetWidth() == rTexture.GetWidth() &&
+            pFramebuffer->GetHeight() == rTexture.GetHeight() )
+            pSameSizeFbo = pFramebuffer;
         pFramebuffer = pFramebuffer->mpPrevFramebuffer;
     }
 
-    // else use the first free framebuffer
-    if( !pFramebuffer && pFreeFramebuffer )
-        pFramebuffer = pFreeFramebuffer;
+    // else use any framebuffer having the same size
+    if( !pFramebuffer && pSameSizeFbo )
+        pFramebuffer = pSameSizeFbo;
 
-    // if there isn't any free one, create a new one
-    if( !pFramebuffer )
+    // else use the first free framebuffer
+    if( !pFramebuffer && pFreeFbo )
+        pFramebuffer = pFreeFbo;
+
+    // if there isn't any free one, create a new one if the limit isn't reached
+    if( !pFramebuffer && mnFramebufferCount < MAX_FRAMEBUFFER_COUNT )
     {
+        mnFramebufferCount++;
         pFramebuffer = new OpenGLFramebuffer();
         if( mpLastFramebuffer )
         {
@@ -1455,9 +1480,14 @@ OpenGLFramebuffer* OpenGLContext::AcquireFramebuffer( const OpenGLTexture& rText
         }
     }
 
-    AcquireFramebuffer( pFramebuffer );
-    if( pFramebuffer->IsFree() )
-        pFramebuffer->AttachTexture( rTexture );
+    // last try, use any framebuffer
+    // TODO order the list of framebuffers as a LRU
+    if( !pFramebuffer )
+        pFramebuffer = mpFirstFramebuffer;
+
+    assert( pFramebuffer );
+    BindFramebuffer( pFramebuffer );
+    pFramebuffer->AttachTexture( rTexture );
     glViewport( 0, 0, rTexture.GetWidth(), rTexture.GetHeight() );
 
     return pFramebuffer;
@@ -1467,6 +1497,32 @@ void OpenGLContext::ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer )
 {
     if( pFramebuffer )
         pFramebuffer->DetachTexture();
+}
+
+void OpenGLContext::ReleaseFramebuffer( const OpenGLTexture& rTexture )
+{
+    OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
+
+    while( pFramebuffer )
+    {
+        if( pFramebuffer->IsAttached( rTexture ) )
+        {
+            BindFramebuffer( pFramebuffer );
+            pFramebuffer->DetachTexture();
+        }
+        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
+    }
+}
+
+void OpenGLContext::ReleaseFramebuffers()
+{
+    OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
+    while( pFramebuffer )
+    {
+        BindFramebuffer( pFramebuffer );
+        pFramebuffer->DetachTexture();
+        pFramebuffer = pFramebuffer->mpPrevFramebuffer;
+    }
 }
 
 OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
