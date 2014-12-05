@@ -45,6 +45,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <editeng/unolingu.hxx>
+#include <edtwin.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>
@@ -198,7 +199,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     if ( pDlgWrp )
                     {
                         m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
+                        m_pSrchDlg->SetDocWin(m_pEditWin);
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
@@ -225,7 +226,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     if ( pDlgWrp )
                     {
                         m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
+                        m_pSrchDlg->SetDocWin(m_pEditWin);
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
@@ -286,7 +287,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                     if ( pDlgWrp )
                     {
                         m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                        m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
+                        m_pSrchDlg->SetDocWin(m_pEditWin);
                         m_pSrchDlg->SetSrchFlag();
                     }
                 }
@@ -355,7 +356,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                 if ( pDlgWrp )
                 {
                     m_pSrchDlg = static_cast<SvxSearchDialog*>(pDlgWrp->GetWindow());
-                    m_pSrchDlg->SetDocWin( (vcl::Window*)m_pEditWin);
+                    m_pSrchDlg->SetDocWin(m_pEditWin);
                     m_pSrchDlg->SetSrchFlag();
                 }
 #endif
