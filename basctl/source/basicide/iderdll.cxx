@@ -20,7 +20,7 @@
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
 
-
+#include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <iderid.hxx>
 #include <basidesh.hxx>
