@@ -144,7 +144,7 @@ static const char *lcl_getFormFieldmarkName(OUString &name)
         return NULL;
 }
 
-static OUString lcl_getFieldmarkName(OUString &name)
+static OUString lcl_getFieldmarkName(OUString const& name)
 {
     static const char sFormtext[]=ODF_FORMTEXT;
     if (name.equalsAscii("msoffice.field.FORMTEXT") ||
@@ -289,19 +289,40 @@ void XMLTextMarkImportContext::EndElement()
 
                             bool bImportAsField=((lcl_MarkType)nTmp==TypeFieldmarkEnd && m_rHelper.hasCurrentFieldCtx());
 
-                            // insert reference
-                            const Reference<XInterface> xContent(
-                                CreateAndInsertMark(GetImport(),
-                                                (bImportAsField ? OUString(sAPI_fieldmark) : OUString(sAPI_bookmark)),
-                                    m_sBookmarkName,
-                                    xInsertionCursor,
-                                    m_sXmlId) );
-                            if (pRDFaAttributes)
+                            // fdo#86795 check if it's actually a checkbox first
+                            bool isInvalid(false);
+                            OUString fieldmarkTypeName;
+                            if (bImportAsField && m_rHelper.hasCurrentFieldCtx())
                             {
-                                const Reference<rdf::XMetadatable>
-                                    xMeta(xContent, UNO_QUERY);
-                                GetImport().GetRDFaImportHelper().AddRDFa(
-                                    xMeta, pRDFaAttributes);
+
+                                OUString const type(m_rHelper.getCurrentFieldType());
+                                fieldmarkTypeName = lcl_getFieldmarkName(type);
+                                if (fieldmarkTypeName == ODF_FORMCHECKBOX ||
+                                    fieldmarkTypeName == ODF_FORMDROPDOWN)
+                                {   // sw can't handle checkbox with start+end
+                                    SAL_INFO("xmloff.text", "invalid fieldmark-start/fieldmark-end ignored");
+                                    isInvalid = true;
+                                }
+                            }
+
+                            Reference<XInterface> xContent;
+                            if (!isInvalid)
+                            {
+                                // insert reference
+                                xContent = CreateAndInsertMark(GetImport(),
+                                        (bImportAsField
+                                            ? OUString(sAPI_fieldmark)
+                                            : OUString(sAPI_bookmark)),
+                                        m_sBookmarkName,
+                                        xInsertionCursor,
+                                        m_sXmlId);
+                                if (pRDFaAttributes)
+                                {
+                                    const Reference<rdf::XMetadatable>
+                                        xMeta(xContent, UNO_QUERY);
+                                    GetImport().GetRDFaImportHelper().AddRDFa(
+                                        xMeta, pRDFaAttributes);
+                                }
                             }
 
                             if ((lcl_MarkType)nTmp==TypeFieldmarkEnd) {
@@ -309,8 +330,6 @@ void XMLTextMarkImportContext::EndElement()
                                     // setup fieldmark...
                                     Reference< ::com::sun::star::text::XFormField> xFormField(xContent, UNO_QUERY);
                                     if (xFormField.is() && m_rHelper.hasCurrentFieldCtx()) {
-                                        OUString givenTypeName=m_rHelper.getCurrentFieldType();
-                                        OUString fieldmarkTypeName=lcl_getFieldmarkName(givenTypeName);
 
                                         xFormField->setFieldType(fieldmarkTypeName);
                                         m_rHelper.setCurrentFieldParamsTo(xFormField);
