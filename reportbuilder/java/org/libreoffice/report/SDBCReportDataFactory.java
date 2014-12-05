@@ -41,8 +41,6 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
-import java.lang.reflect.Method;
-
 import java.math.BigDecimal;
 
 import java.util.ArrayList;
@@ -280,32 +278,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
             final String command,
             final int commandType)
     {
-        final Class[] parameter = new Class[2];
-        parameter[0] = int.class;
-        parameter[1] = String.class;
-        try
-        {
-            final Object[] param = new Object[2];
-            param[0] = commandType;
-            param[1] = command;
-            final Method call = tools.getClass().getMethod("getComposer", parameter);
-            return (XSingleSelectQueryComposer) call.invoke(tools, param);
-        }
-        catch (NoSuchMethodException ex)
-        {
-        }
-        catch (IllegalAccessException ex)
-        {
-            // should not happen
-            // assert False
-        }
-        catch (java.lang.reflect.InvocationTargetException ex)
-        {
-            // should not happen
-            // assert False
-        }
-
-        return null;
+        return tools.getComposer(commandType, command);
     }
 
     private void fillParameter(final Map parameters,
