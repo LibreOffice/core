@@ -23,6 +23,7 @@
 #include <svx/xenum.hxx>
 #include <tools/color.hxx>
 #include <svx/svxdllapi.h>
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 class Gradient;
 
@@ -33,10 +34,10 @@ class Gradient;
 class SVX_DLLPUBLIC XGradient
 {
 protected:
-    XGradientStyle  eStyle;
-    Color           aStartColor;
-    Color           aEndColor;
-    long            nAngle;
+    css::awt::GradientStyle  eStyle;
+    Color               aStartColor;
+    Color               aEndColor;
+    long                nAngle;
     sal_uInt16          nBorder;
     sal_uInt16          nOfsX;
     sal_uInt16          nOfsY;
@@ -47,14 +48,14 @@ protected:
 public:
     XGradient();
     XGradient( const Color& rStart, const Color& rEnd,
-               XGradientStyle eStyle = XGRAD_LINEAR, long nAngle = 0,
+               css::awt::GradientStyle eStyle = css::awt::GradientStyle_LINEAR, long nAngle = 0,
                sal_uInt16 nXOfs = 50, sal_uInt16 nYOfs = 50, sal_uInt16 nBorder = 0,
                sal_uInt16 nStartIntens = 100, sal_uInt16 nEndIntens = 100,
                sal_uInt16 nSteps = 0 );
 
     bool operator==(const XGradient& rGradient) const;
 
-    void SetGradientStyle(XGradientStyle eNewStyle) { eStyle = eNewStyle; }
+    void SetGradientStyle(css::awt::GradientStyle eNewStyle) { eStyle = eNewStyle; }
     void SetStartColor(const Color& rColor)         { aStartColor = rColor; }
     void SetEndColor(const Color& rColor)           { aEndColor = rColor; }
     void SetAngle(long nNewAngle)                   { nAngle = nNewAngle; }
@@ -65,7 +66,7 @@ public:
     void SetEndIntens(sal_uInt16 nNewIntens)            { nIntensEnd = nNewIntens; }
     void SetSteps(sal_uInt16 nSteps)                    { nStepCount = nSteps; }
 
-    XGradientStyle GetGradientStyle() const         { return eStyle; }
+    css::awt::GradientStyle GetGradientStyle() const         { return eStyle; }
     Color          GetStartColor() const            { return aStartColor; }
     Color          GetEndColor() const              { return aEndColor; }
     long           GetAngle() const                 { return nAngle; }

@@ -7602,18 +7602,20 @@ void DocxAttributeOutput::FormatFillGradient( const XFillGradientItem& rFillGrad
 
         switch (rGradient.GetGradientStyle())
         {
-            case XGRAD_AXIAL:
+            case css::awt::GradientStyle_AXIAL:
                 AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_focus, "50%" );
                 // If it is an 'axial' gradient - swap the colors
                 // (because in the import process they were imported swapped)
                 sColor1 = sEndColor;
                 sColor2 = sStartColor;
                 break;
-            case XGRAD_LINEAR: break;
-            case XGRAD_RADIAL: break;
-            case XGRAD_ELLIPTICAL: break;
-            case XGRAD_SQUARE: break;
-            case XGRAD_RECT: break;
+            case css::awt::GradientStyle_LINEAR: break;
+            case css::awt::GradientStyle_RADIAL: break;
+            case css::awt::GradientStyle_ELLIPTICAL: break;
+            case css::awt::GradientStyle_SQUARE: break;
+            case css::awt::GradientStyle_RECT: break;
+            default:
+                break;
         }
 
         sColor1 = "#" + sColor1;

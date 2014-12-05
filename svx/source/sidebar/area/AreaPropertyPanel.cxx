@@ -128,22 +128,22 @@ void AreaPropertyPanel::Initialize()
     maGradientLinear.SetStartColor(Color(DEFAULT_STARTVALUE));
     maGradientLinear.SetEndColor(Color(DEFAULT_ENDVALUE));
     maGradientLinear.SetBorder(DEFAULT_BORDER);
-    maGradientLinear.SetGradientStyle(XGRAD_LINEAR);
+    maGradientLinear.SetGradientStyle(css::awt::GradientStyle_LINEAR);
 
     maGradientAxial = maGradientLinear;
-    maGradientAxial.SetGradientStyle(XGRAD_AXIAL);
+    maGradientAxial.SetGradientStyle(css::awt::GradientStyle_AXIAL);
 
     maGradientRadial = maGradientLinear;
-    maGradientRadial.SetGradientStyle(XGRAD_RADIAL);
+    maGradientRadial.SetGradientStyle(css::awt::GradientStyle_RADIAL);
 
     maGradientElliptical = maGradientLinear;
-    maGradientElliptical.SetGradientStyle(XGRAD_ELLIPTICAL);
+    maGradientElliptical.SetGradientStyle(css::awt::GradientStyle_ELLIPTICAL);
 
     maGradientSquare = maGradientLinear;
-    maGradientSquare.SetGradientStyle(XGRAD_SQUARE);
+    maGradientSquare.SetGradientStyle(css::awt::GradientStyle_SQUARE);
 
     maGradientRect = maGradientLinear;
-    maGradientRect.SetGradientStyle(XGRAD_RECT);
+    maGradientRect.SetGradientStyle(css::awt::GradientStyle_RECT);
 
     mpLbFillType->SetAccessibleName(OUString( "Fill"));    //wj acc
     mpLbFillAttr->SetAccessibleName(OUString( "Fill"));    //wj acc
@@ -581,42 +581,44 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
 
                 switch(rGradient.GetGradientStyle())
                 {
-                    case XGRAD_LINEAR:
+                    case css::awt::GradientStyle_LINEAR:
                     {
                         nEntryPos = 2;
                         pImage = &maImgLinear;
                         break;
                     }
-                    case XGRAD_AXIAL:
+                    case css::awt::GradientStyle_AXIAL:
                     {
                         nEntryPos = 3;
                         pImage = &maImgAxial;
                         break;
                     }
-                    case XGRAD_RADIAL:
+                    case css::awt::GradientStyle_RADIAL:
                     {
                         nEntryPos = 4;
                         pImage = &maImgRadial;
                         break;
                     }
-                    case XGRAD_ELLIPTICAL:
+                    case css::awt::GradientStyle_ELLIPTICAL:
                     {
                         nEntryPos = 5;
                         pImage = &maImgElli;
                         break;
                     }
-                    case XGRAD_SQUARE:
+                    case css::awt::GradientStyle_SQUARE:
                     {
                         nEntryPos = 6;
                         pImage = &maImgQuad;
                         break;
                     }
-                    case XGRAD_RECT:
+                    case css::awt::GradientStyle_RECT:
                     {
                         nEntryPos = 7;
                         pImage = &maImgSquare;
                         break;
                     }
+                    default:
+                        break;
                 }
 
                 const sal_uInt16 nIdGradient = mpBTNGradient->GetItemId(UNO_SIDEBARGRADIENT);
@@ -1155,23 +1157,25 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
 
     switch(nSelectType)
     {
-        case XGRAD_LINEAR:
+        case css::awt::GradientStyle_LINEAR:
             aTmpGradient = maGradientLinear;
             break;
-        case XGRAD_AXIAL:
+        case css::awt::GradientStyle_AXIAL:
             aTmpGradient = maGradientAxial;
             break;
-        case XGRAD_RADIAL:
+        case css::awt::GradientStyle_RADIAL:
             aTmpGradient = maGradientRadial;
             break;
-        case XGRAD_ELLIPTICAL:
+        case css::awt::GradientStyle_ELLIPTICAL:
             aTmpGradient = maGradientElliptical;
             break;
-        case XGRAD_SQUARE:
+        case css::awt::GradientStyle_SQUARE:
             aTmpGradient = maGradientSquare;
             break;
-        case XGRAD_RECT:
+        case css::awt::GradientStyle_RECT:
             aTmpGradient = maGradientRect;
+            break;
+        default:
             break;
     }
 
@@ -1206,22 +1210,22 @@ IMPL_LINK(AreaPropertyPanel, ModifyTransparentHdl_Impl, void*, EMPTYARG)
 
 
 
-XGradient AreaPropertyPanel::GetGradient (const XGradientStyle eStyle) const
+XGradient AreaPropertyPanel::GetGradient (const css::awt::GradientStyle eStyle) const
 {
     switch (eStyle)
     {
         default:
-        case XGRAD_LINEAR:
+        case css::awt::GradientStyle_LINEAR:
             return maGradientLinear;
-        case XGRAD_AXIAL:
+        case css::awt::GradientStyle_AXIAL:
             return maGradientAxial;
-        case XGRAD_RADIAL:
+        case css::awt::GradientStyle_RADIAL:
             return maGradientRadial;
-        case XGRAD_ELLIPTICAL:
+        case css::awt::GradientStyle_ELLIPTICAL:
             return maGradientElliptical;
-        case XGRAD_SQUARE:
+        case css::awt::GradientStyle_SQUARE:
             return maGradientSquare;
-        case XGRAD_RECT:
+        case css::awt::GradientStyle_RECT:
             return maGradientRect;
     }
 }
@@ -1233,23 +1237,25 @@ void AreaPropertyPanel::SetGradient (const XGradient& rGradient)
 {
     switch (rGradient.GetGradientStyle())
     {
-        case XGRAD_LINEAR:
+        case css::awt::GradientStyle_LINEAR:
             maGradientLinear = rGradient;
             break;
-        case XGRAD_AXIAL:
+        case css::awt::GradientStyle_AXIAL:
             maGradientAxial = rGradient;
             break;
-        case XGRAD_RADIAL:
+        case css::awt::GradientStyle_RADIAL:
             maGradientRadial = rGradient;
             break;
-        case XGRAD_ELLIPTICAL:
+        case css::awt::GradientStyle_ELLIPTICAL:
             maGradientElliptical = rGradient;
             break;
-        case XGRAD_SQUARE:
+        case css::awt::GradientStyle_SQUARE:
             maGradientSquare = rGradient;
             break;
-        case XGRAD_RECT:
+        case css::awt::GradientStyle_RECT:
             maGradientRect = rGradient;
+            break;
+        default:
             break;
     }
 }

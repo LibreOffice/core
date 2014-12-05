@@ -1233,7 +1233,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile& rM
                     SfxItemSet aGradAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
                     XGradient aXGradient;
 
-                    aXGradient.SetGradientStyle((XGradientStyle)rGrad.GetStyle());
+                    aXGradient.SetGradientStyle((css::awt::GradientStyle)rGrad.GetStyle());
                     aXGradient.SetStartColor(rGrad.GetStartColor());
                     aXGradient.SetEndColor(rGrad.GetEndColor());
                     aXGradient.SetAngle((sal_uInt16)rGrad.GetAngle());
@@ -1365,24 +1365,26 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMaskScalePartAction& rAct)
 
 namespace
 {
-    XGradientStyle getXGradientStyleFromGradientStyle(const GradientStyle& rGradientStyle)
+    css::awt::GradientStyle getXGradientStyleFromGradientStyle(const GradientStyle& rGradientStyle)
     {
-        XGradientStyle aXGradientStyle(XGRAD_LINEAR);
+        css::awt::GradientStyle aXGradientStyle(css::awt::GradientStyle_LINEAR);
 
         switch(rGradientStyle)
         {
-            case GradientStyle_LINEAR: aXGradientStyle = XGRAD_LINEAR; break;
-            case GradientStyle_AXIAL: aXGradientStyle = XGRAD_AXIAL; break;
-            case GradientStyle_RADIAL: aXGradientStyle = XGRAD_RADIAL; break;
-            case GradientStyle_ELLIPTICAL: aXGradientStyle = XGRAD_ELLIPTICAL; break;
-            case GradientStyle_SQUARE: aXGradientStyle = XGRAD_SQUARE; break;
-            case GradientStyle_RECT: aXGradientStyle = XGRAD_RECT; break;
+            case GradientStyle_LINEAR: aXGradientStyle = css::awt::GradientStyle_LINEAR; break;
+            case GradientStyle_AXIAL: aXGradientStyle = css::awt::GradientStyle_AXIAL; break;
+            case GradientStyle_RADIAL: aXGradientStyle = css::awt::GradientStyle_RADIAL; break;
+            case GradientStyle_ELLIPTICAL: aXGradientStyle = css::awt::GradientStyle_ELLIPTICAL; break;
+            case GradientStyle_SQUARE: aXGradientStyle = css::awt::GradientStyle_SQUARE; break;
+            case GradientStyle_RECT: aXGradientStyle = css::awt::GradientStyle_RECT; break;
 
             // Needed due to GradientStyle_FORCE_EQUAL_SIZE; this again is needed
             // to force the enum defines in VCL to a defined size for the compilers,
             // so despite it is never used it cannot be removed (would break the
             // API implementation probably).
             case GradientStyle_FORCE_EQUAL_SIZE: break;
+            default:
+                break;
         }
 
         return aXGradientStyle;
@@ -1406,7 +1408,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientAction& rAct)
                 ceil(aRange.getMaxY())));
         // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
         SfxItemSet aGradientAttr(mpModel->GetItemPool(), pRect->GetMergedItemSet().GetRanges());
-        const XGradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
+        const css::awt::GradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
         const XFillGradientItem aXFillGradientItem(
             XGradient(
                 rGradient.GetStartColor(),
@@ -1476,7 +1478,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaGradientExAction& rAct)
             SdrPathObj* pPath = new SdrPathObj(OBJ_POLY, aSource);
             // #i125211# Use the ranges from the SdrObject to create a new empty SfxItemSet
             SfxItemSet aGradientAttr(mpModel->GetItemPool(), pPath->GetMergedItemSet().GetRanges());
-            const XGradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
+            const css::awt::GradientStyle aXGradientStyle(getXGradientStyleFromGradientStyle(rGradient.GetStyle()));
             const XFillGradientItem aXFillGradientItem(
                 XGradient(
                     rGradient.GetStartColor(),
