@@ -46,18 +46,6 @@
 #define ALLCHART       127      /* Applies to all chart types */
 #define ALLCHART_TPL   255      /* Applies to all chart types */
 
-#define IOC_CHTTITLE        1       /* Title for any chart.                  */
-#define IOC_CHTFOOTNOTE     2       /* ::com::sun::star::text::Footnote for any chart.               */
-#define IOC_XYAXIS          3       /* Axis title for XY charts.             */
-#define IOC_XYSERIESLEGEND  4       /* Series legend titles for XY charts.   */
-#define IOC_PIETITLE        5       /* Title for pie charts.                 */
-#define IOC_TABLEBODY       6       /* Table chart text element.             */
-#define IOC_TITLEBODY       7       /* Title chart text element.             */
-#define IOC_BULLETBODY      8       /* Bullet chart text element.            */
-#define IOC_XYLEGENDTITLE   9       /* Legend title for XY charts.           */
-#define IOC_PIELEGENDTITLE  10      /* Legend title for pie charts.          */
-#define IOC_TABLEGENDTITLE  11      /* Legend title for table charts.        */
-
 typedef struct TextAttribute
 {
     sal_uInt16          nTextAttribCount;
