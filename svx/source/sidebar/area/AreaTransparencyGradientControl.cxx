@@ -116,7 +116,7 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
 {
     InitStatus(pGradientItem);
     const XGradient& rGradient = pGradientItem->GetGradientValue();
-    XGradientStyle eXGS(rGradient.GetGradientStyle());
+    css::awt::GradientStyle eXGS(rGradient.GetGradientStyle());
     Size aSize(POP_WIDTH,POP_HEIGHT);
     aSize = LogicToPixel( aSize, MapMode(MAP_APPFONT) );
     Size aSize2(POP_WIDTH,POP_HEIGHT2);
@@ -128,8 +128,8 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
 
     switch(eXGS)
     {
-    case XGRAD_LINEAR:
-    case XGRAD_AXIAL:
+    case css::awt::GradientStyle_LINEAR:
+    case css::awt::GradientStyle_AXIAL:
         maFtTrgrCenterX.Hide();
         maMtrTrgrCenterX.Hide();
         maFtTrgrCenterY.Hide();
@@ -157,7 +157,7 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
         SetSizePixel(aSize2);
         break;
 
-    case XGRAD_RADIAL:
+    case css::awt::GradientStyle_RADIAL:
         maFtTrgrCenterX.Show();
         maFtTrgrCenterX.SetPosPixel(APOS1_1);
         maMtrTrgrCenterX.Show();
@@ -182,9 +182,9 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
 
         break;
 
-    case XGRAD_ELLIPTICAL:
-    case XGRAD_SQUARE:
-    case XGRAD_RECT:
+    case css::awt::GradientStyle_ELLIPTICAL:
+    case css::awt::GradientStyle_SQUARE:
+    case css::awt::GradientStyle_RECT:
         maFtTrgrCenterX.Show();
         maFtTrgrCenterX.SetPosPixel(APOS1_1);
         maMtrTrgrCenterX.Show();
@@ -216,6 +216,9 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
 
         SetSizePixel(aSize);
 
+        break;
+
+    default:
         break;
     }
 }
@@ -268,7 +271,7 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
     XGradient aTmpGradient(
         Color(nStartCol, nStartCol, nStartCol),
         Color(nEndCol, nEndCol, nEndCol),
-        (XGradientStyle)(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
+        (css::awt::GradientStyle)(mrAreaPropertyPanel.GetSelectedTransparencyTypeIndex()-2),
         (sal_uInt16)maMtrTrgrAngle.GetValue() * 10,
         (sal_uInt16)maMtrTrgrCenterX.GetValue(),
         (sal_uInt16)maMtrTrgrCenterY.GetValue(),

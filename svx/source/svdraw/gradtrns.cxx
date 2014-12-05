@@ -53,7 +53,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 
     switch(rG.aGradient.GetGradientStyle())
     {
-        case XGRAD_LINEAR :
+        case css::awt::GradientStyle_LINEAR :
         {
             aStartPos = basegfx::B2DPoint(aCenter.getX(), aRange.getMinY());
             aEndPos = basegfx::B2DPoint(aCenter.getX(), aRange.getMaximum().getY());
@@ -76,7 +76,7 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
             }
             break;
         }
-        case XGRAD_AXIAL :
+        case css::awt::GradientStyle_AXIAL :
         {
             aStartPos = aCenter;
             aEndPos = basegfx::B2DPoint(aCenter.getX(), aRange.getMaximum().getY());
@@ -99,8 +99,8 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
             }
             break;
         }
-        case XGRAD_RADIAL :
-        case XGRAD_SQUARE :
+        case css::awt::GradientStyle_RADIAL :
+        case css::awt::GradientStyle_SQUARE :
         {
             aStartPos = basegfx::B2DPoint(aRange.getMinX(), aRange.getMaximum().getY());
             aEndPos = basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY());
@@ -134,8 +134,8 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 
             break;
         }
-        case XGRAD_ELLIPTICAL :
-        case XGRAD_RECT :
+        case css::awt::GradientStyle_ELLIPTICAL :
+        case css::awt::GradientStyle_RECT :
         {
             aStartPos = basegfx::B2DPoint(aRange.getMinX(), aCenter.getY());
             aEndPos = basegfx::B2DPoint(aRange.getMinX(), aRange.getMinY());
@@ -169,6 +169,8 @@ void GradTransformer::GradToVec(GradTransGradient& rG, GradTransVector& rV, cons
 
             break;
         }
+        default:
+            break;
     }
 
     // set values for vector positions now
@@ -205,7 +207,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
 
     switch(rG.aGradient.GetGradientStyle())
     {
-        case XGRAD_LINEAR :
+        case css::awt::GradientStyle_LINEAR :
         {
             if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
             {
@@ -274,7 +276,7 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
 
             break;
         }
-        case XGRAD_AXIAL :
+        case css::awt::GradientStyle_AXIAL :
         {
             if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
             {
@@ -330,8 +332,8 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
 
             break;
         }
-        case XGRAD_RADIAL :
-        case XGRAD_SQUARE :
+        case css::awt::GradientStyle_RADIAL :
+        case css::awt::GradientStyle_SQUARE :
         {
             if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
             {
@@ -426,8 +428,8 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
 
             break;
         }
-        case XGRAD_ELLIPTICAL :
-        case XGRAD_RECT :
+        case css::awt::GradientStyle_ELLIPTICAL :
+        case css::awt::GradientStyle_RECT :
         {
             if(!bMoveSingle || (bMoveSingle && !bMoveFirst))
             {
@@ -522,6 +524,8 @@ void GradTransformer::VecToGrad(GradTransVector& rV, GradTransGradient& rG, Grad
 
             break;
         }
+        default:
+            break;
     }
 }
 

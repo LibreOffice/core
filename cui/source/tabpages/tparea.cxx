@@ -139,7 +139,7 @@ IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
 {
     if(pControl == m_pLbTrgrGradientType || pControl == this)
     {
-        XGradientStyle eXGS = (XGradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos();
+        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos();
         SetControlState_Impl( eXGS );
     }
 
@@ -149,7 +149,7 @@ IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
     XGradient aTmpGradient(
                 Color(nStartCol, nStartCol, nStartCol),
                 Color(nEndCol, nEndCol, nEndCol),
-                (XGradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos(),
+                (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos(),
                 (sal_uInt16)m_pMtrTrgrAngle->GetValue() * 10,
                 (sal_uInt16)m_pMtrTrgrCenterX->GetValue(),
                 (sal_uInt16)m_pMtrTrgrCenterY->GetValue(),
@@ -170,7 +170,7 @@ void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
 
     if(bActivate)
     {
-        XGradientStyle eXGS = (XGradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos();
+        css::awt::GradientStyle eXGS = (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos();
         SetControlState_Impl( eXGS );
     }
 }
@@ -180,12 +180,12 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl)
     return( 0L );
 }
 
-void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
+void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
 {
     switch(eXGS)
     {
-        case XGRAD_LINEAR:
-        case XGRAD_AXIAL:
+        case css::awt::GradientStyle_LINEAR:
+        case css::awt::GradientStyle_AXIAL:
             m_pFtTrgrCenterX->Disable();
             m_pMtrTrgrCenterX->Disable();
             m_pFtTrgrCenterY->Disable();
@@ -194,7 +194,7 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
             m_pMtrTrgrAngle->Enable();
             break;
 
-        case XGRAD_RADIAL:
+        case css::awt::GradientStyle_RADIAL:
             m_pFtTrgrCenterX->Enable();
             m_pMtrTrgrCenterX->Enable();
             m_pFtTrgrCenterY->Enable();
@@ -203,7 +203,7 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
             m_pMtrTrgrAngle->Disable();
             break;
 
-        case XGRAD_ELLIPTICAL:
+        case css::awt::GradientStyle_ELLIPTICAL:
             m_pFtTrgrCenterX->Enable();
             m_pMtrTrgrCenterX->Enable();
             m_pFtTrgrCenterY->Enable();
@@ -212,14 +212,16 @@ void SvxTransparenceTabPage::SetControlState_Impl(XGradientStyle eXGS)
             m_pMtrTrgrAngle->Enable();
             break;
 
-        case XGRAD_SQUARE:
-        case XGRAD_RECT:
+        case css::awt::GradientStyle_SQUARE:
+        case css::awt::GradientStyle_RECT:
             m_pFtTrgrCenterX->Enable();
             m_pMtrTrgrCenterX->Enable();
             m_pFtTrgrCenterY->Enable();
             m_pMtrTrgrCenterY->Enable();
             m_pFtTrgrAngle->Enable();
             m_pMtrTrgrAngle->Enable();
+            break;
+        default:
             break;
     }
 }
@@ -351,7 +353,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
             XGradient aTmpGradient(
                         Color(nStartCol, nStartCol, nStartCol),
                         Color(nEndCol, nEndCol, nEndCol),
-                        (XGradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos(),
+                        (css::awt::GradientStyle)m_pLbTrgrGradientType->GetSelectEntryPos(),
                         (sal_uInt16)m_pMtrTrgrAngle->GetValue() * 10,
                         (sal_uInt16)m_pMtrTrgrCenterX->GetValue(),
                         (sal_uInt16)m_pMtrTrgrCenterY->GetValue(),
@@ -418,7 +420,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
 
     // transparence gradient
     const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
-    XGradientStyle eXGS(rGradient.GetGradientStyle());
+    css::awt::GradientStyle eXGS(rGradient.GetGradientStyle());
     m_pLbTrgrGradientType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXGS));
     m_pMtrTrgrAngle->SetValue(rGradient.GetAngle() / 10);
     m_pMtrTrgrBorder->SetValue(rGradient.GetBorder());
