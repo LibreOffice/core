@@ -14,8 +14,6 @@
 
 #include <saldatabasic.hxx>
 
-// Not the prettiest - but helpful for migrating old code ...
-class GtkSalDisplay;
 class SalGenericDisplay;
 
 enum SalGenericDataType { SAL_DATA_GTK, SAL_DATA_GTK3,
@@ -59,12 +57,6 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
     // Mostly useful for remote protocol backends
     virtual void ErrorTrapPush() = 0;
     virtual bool ErrorTrapPop( bool bIgnoreError = true ) = 0; // true on error
-
-    // Not the prettiest - but helpful for migrating old code ...
-    inline GtkSalDisplay *GetGtkDisplay() const
-    {
-        return (GtkSalDisplay *)GetDisplay();
-    }
 };
 
 inline SalGenericData * GetGenericData()

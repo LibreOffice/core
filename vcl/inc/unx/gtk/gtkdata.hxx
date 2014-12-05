@@ -118,6 +118,11 @@ public:
 
     virtual void ErrorTrapPush() SAL_OVERRIDE;
     virtual bool ErrorTrapPop( bool bIgnoreError ) SAL_OVERRIDE;
+
+    inline GtkSalDisplay *GetGtkDisplay() const
+    {
+        return (GtkSalDisplay *)GetDisplay();
+    }
 };
 
 class GtkSalFrame;
