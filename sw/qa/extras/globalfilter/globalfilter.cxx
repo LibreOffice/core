@@ -25,9 +25,11 @@ public:
     Test() : SwModelTestBase() {}
 
     void testSwappedOutImageExport();
+    void testLinkedGraphicRT();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
+    CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -111,6 +113,67 @@ void Test::testSwappedOutImageExport()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height );
         }
+    }
+}
+
+void Test::testLinkedGraphicRT()
+{
+    const std::vector<OUString> aFilterNames = {
+        "writer8",
+//        "Rich Text Format",  Note: picture is there, but SwGrfNode is not found?
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    for( size_t nFilter = 0; nFilter < aFilterNames.size(); ++nFilter )
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/document_with_linked_graphic.odt"), "com.sun.star.text.TextDocument");
+
+        const OString sFailedMessage = OString("Failed on filter: ")
+            + OUStringToOString(aFilterNames[nFilter], RTL_TEXTENCODING_ASCII_US);
+
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= aFilterNames[nFilter];
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pTxtDoc);
+        SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pDoc);
+        SwNodes& aNodes = pDoc->GetNodes();
+
+        // Find the image
+        bool bImageFound = false;
+        for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
+        {
+            if( aNodes[nIndex]->IsGrfNode() )
+            {
+                SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
+                // RT via DOCX makes linked graphic embedded?!
+                if( aFilterNames[nFilter] != "Office Open XML Text" )
+                {
+                    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pGrfNode->IsGrfLink());
+                }
+                const GraphicObject& rGraphicObj = pGrfNode->GetGrfObj(true);
+                CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), !rGraphicObj.IsSwappedOut());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetType());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+                bImageFound = true;
+            }
+        }
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), bImageFound);
     }
 }
 
