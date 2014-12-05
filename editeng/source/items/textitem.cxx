@@ -592,7 +592,7 @@ void SvxPostureItem::SetBoolValue( bool bVal )
 void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("svxPostureItem"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%" SAL_PRIuUINT32, Which());
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(GetValueTextByPos(GetValue()).toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
