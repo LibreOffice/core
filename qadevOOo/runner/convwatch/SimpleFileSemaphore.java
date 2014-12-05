@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.RandomAccessFile;
 import helper.OSHelper;
 
-public class SimpleFileSemaphore /* extends *//* implements */
+public class SimpleFileSemaphore
 {
     String m_sInternSemaphoreFile;
     File m_aInternSemaphoreFile;

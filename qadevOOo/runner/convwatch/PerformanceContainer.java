@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
 
-public class PerformanceContainer /* extends *//* implements */ {
+public class PerformanceContainer {
     /*
       simple helper functions to start/stop a timer, to know how long a process need in milliseconds
      */
