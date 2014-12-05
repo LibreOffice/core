@@ -522,6 +522,11 @@ bool Outliner::ShouldCreateBigTextObject() const
     return pEditEngine->ShouldCreateBigTextObject();
 }
 
+const EditEngine& Outliner::GetEditEngine() const
+{
+    return *pEditEngine;
+}
+
 void Outliner::SetVertical( bool b )
 {
     pEditEngine->SetVertical( b );

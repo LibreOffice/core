@@ -960,7 +960,7 @@ public:
 
     bool            ShouldCreateBigTextObject() const;
 
-    const EditEngine& GetEditEngine() const { return *((EditEngine*)pEditEngine); }
+    const EditEngine& GetEditEngine() const;
 
     // this is needed for StarOffice Api
     void SetLevelDependendStyleSheet( sal_Int32 nPara );
