@@ -1,0 +1,39 @@
+From ae29c5ec5dc7c31a2e07553e423ee5530f6427d1 Mon Sep 17 00:00:00 2001
+From: dcommander <dcommander@632fc199-4ca6-4c93-a231-07263d6284db>
+Date: Fri, 17 Jan 2014 20:08:05 +0000
+Subject: [PATCH 7/9] Temporary hack to enable debug output when the
+ environment variable JOCL_DEBUG is set to 1
+
+git-svn-id: http://svn.code.sf.net/p/libjpeg-turbo/code/branches/opencl@1098 632fc199-4ca6-4c93-a231-07263d6284db
+---
+ joclinit.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/joclinit.h b/joclinit.h
+index 14f2e75..0ce10c0 100644
+--- a/joclinit.h
++++ b/joclinit.h
+@@ -3,6 +3,7 @@
+  *
+  * Copyright (C) 2012-2013, MulticoreWare Inc.
+  * In July 2012, Written by Peixuan Zhang <zhangpeixuan.cn@gmail.com>
++ * Copyright (C) 2014, D. R. Commander.
+  * Based on the OpenCL extension for IJG JPEG library,
+  * For conditions of distribution and use, see the accompanying README file.
+  *
+@@ -284,7 +285,11 @@ void             jocl_cl_set_output_format         (void *jocl_openClinfo);
+  */
+ 
+ #define CL_DEBUG_NOTE(...)                                               \
+-  //printf(__VA_ARGS__)
++  {                                                                      \
++    char *env = getenv("JOCL_DEBUG");                                    \
++    if (env && !strcmp(env, "1"))                                        \
++      printf(__VA_ARGS__);                                               \
++  }
+ 
+ #define CL_SAFE_CALL0(func, action)                                      \
+   func;                                                                  \
+-- 
+1.8.1.4
+

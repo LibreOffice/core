@@ -1,0 +1,86 @@
+From 352d3d54f02a8816e57d53c23a4929a3a92b4ffb Mon Sep 17 00:00:00 2001
+From: dcommander <dcommander@632fc199-4ca6-4c93-a231-07263d6284db>
+Date: Thu, 16 Jan 2014 23:28:12 +0000
+Subject: [PATCH 6/9] Temporarily hack the OpenCL code so that it works
+ correctly with JCS_EXT_RGB (thus allowing us to activate the code through
+ TurboJPEG) and prints an error message if OpenCL initializes properly but
+ can't be used because the decompression parameters aren't supported.
+
+git-svn-id: http://svn.code.sf.net/p/libjpeg-turbo/code/branches/opencl@1097 632fc199-4ca6-4c93-a231-07263d6284db
+---
+ joclinit.c | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
+
+diff --git a/joclinit.c b/joclinit.c
+index 746e75e..0affcfc 100644
+--- a/joclinit.c
++++ b/joclinit.c
+@@ -3,6 +3,7 @@
+  *
+  * Copyright (C) 2012-2013, MulticoreWare Inc.
+  * In July 2012, Written by Peixuan Zhang <zhangpeixuan.cn@gmail.com>
++ * Copyright (C) 2014, D. R. Commander.
+  * Based on the OpenCL extension for IJG JPEG library,
+  * For conditions of distribution and use, see the accompanying README file.
+  *
+@@ -11,6 +12,7 @@
+ 
+ #define __JOCL_CL_INIT_MAIN__
+ #include "jinclude.h"
++#define JPEG_INTERNALS
+ #include "jpeglib.h"
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+ 
+@@ -754,6 +756,8 @@ cl_bool jocl_cl_is_nvidia_opencl(void * jocl_openClinfo)
+  * Determine whether the OpenCL decoding will be used.
+  */
+ 
++j_decompress_ptr cinfo_save = NULL;
++
+ cl_bool jocl_cl_is_opencl_decompress(j_decompress_ptr cinfo)
+ {
+   unsigned int output_buffer;
+@@ -765,23 +769,32 @@ cl_bool jocl_cl_is_opencl_decompress(j_decompress_ptr cinfo)
+   /* Determine if the opencl version will be used */
+   if(cinfo->num_components==1|| cinfo->progressive_mode == 1 ||
+     (cinfo->blocks_in_MCU!=6 && cinfo->blocks_in_MCU!=3 && cinfo->blocks_in_MCU!=4))
+-    return CL_FALSE;
+-  if(JCS_RGB != cinfo->out_color_space)
+-    return CL_FALSE;
++    goto bailout;
++  if (rgb_red[cinfo->out_color_space] != 0 ||
++      rgb_green[cinfo->out_color_space] != 1 ||
++      rgb_blue[cinfo->out_color_space] != 2 ||
++      rgb_pixelsize[cinfo->out_color_space] != 3)
++    goto bailout;
+   if(cinfo->scale_denom != 1 || cinfo->scale_num != 1)
+-    return CL_FALSE;
++    goto bailout;
+   if(cinfo->desired_number_of_colors != 256 || cinfo->quantize_colors == TRUE)
+-    return CL_FALSE;
++    goto bailout;
+   if(cinfo->two_pass_quantize == FALSE || cinfo->dither_mode != JDITHER_FS ||
+     (cinfo->dct_method != JDCT_ISLOW && cinfo->dct_method != JDCT_IFAST))
+-    return CL_FALSE;
++    goto bailout;
+   if(CL_TRUE == jocl_cl_get_fancy_status((OCL_STATUS* )cinfo->jocl_openClinfo) && cinfo->blocks_in_MCU == 6 &&
+     (cinfo->MCUs_per_row > MCUNUMS))
+-    return CL_FALSE;
++    goto bailout;
+   if((output_buffer > buffer_output_size))
+-     return CL_FALSE;
++    goto bailout;
+   
+   return CL_TRUE;
++
++  bailout:
++  if (cinfo != cinfo_save)
++    printf("ERROR: Could not enable OpenCL due to incompatible decompression parameters.\n");
++  cinfo_save = cinfo;
++  return CL_FALSE;
+ }
+ 
+ /*
+-- 
+1.8.1.4
+
