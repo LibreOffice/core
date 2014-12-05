@@ -19,6 +19,7 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/printer.hxx>
 #include <tools/resary.hxx>
 #include <vcl/graph.hxx>
 #include <sfx2/viewsh.hxx>
@@ -295,7 +296,7 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
 
     if ( SfxViewShell::Current() && SfxViewShell::Current()->GetPrinter() )
     {
-        mpDefPrinter = (Printer*)SfxViewShell::Current()->GetPrinter();
+        mpDefPrinter = SfxViewShell::Current()->GetPrinter();
     }
     else
     {
