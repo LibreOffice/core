@@ -28,6 +28,7 @@
 #include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <svx/ruler.hxx>
 #include <svx/svxids.hrc>
 #include <svx/fmshell.hxx>
 #include <editeng/editstat.hxx>
@@ -510,11 +511,11 @@ public:
     int             CreateTab();
     int             KillTab();
 
-    bool            StatVRuler() const { return ((vcl::Window*)m_pVRuler)->IsVisible(); }
+    bool            StatVRuler() const { return m_pVRuler->IsVisible(); }
     void            ChangeVRulerMetric(FieldUnit eUnit);
     void            GetVRulerMetric(FieldUnit& rToFill) const;
 
-    bool            StatTab() const { return ((vcl::Window*)m_pHRuler)->IsVisible(); }
+    bool            StatTab() const { return m_pHRuler->IsVisible(); }
     SvxRuler&       GetHRuler()    { return *m_pHRuler; }
     SvxRuler&       GetVRuler()    { return *m_pVRuler; }
     void            InvalidateRulerPos();
