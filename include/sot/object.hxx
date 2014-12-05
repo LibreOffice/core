@@ -94,7 +94,6 @@ struct IUnknown;
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
 friend class SotFactory;
-friend class SvObject;
     sal_uInt16  nOwnerLockCount;
     bool        bOwner;
     bool        bSVObject;        // Ist Proxy, dann TRUE wenn andere Seite SV ist

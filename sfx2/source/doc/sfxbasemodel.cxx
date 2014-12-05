@@ -3312,25 +3312,16 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const Reference< view::XPrin
     }
 }
 
-// simple declaration of class SvObject is enough
-// the corresponding <so3/iface.hxx> cannon be included because it provides
-// declaration of class SvBorder that conflicts with ../../inc/viewfrm.hxx
-class SvObject;
 sal_Int64 SAL_CALL SfxBaseModel::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException, std::exception)
 {
     SvGlobalName aName( aIdentifier );
-    if ((aName == SvGlobalName( SO3_GLOBAL_CLASSID )) ||
-        (aName == SvGlobalName( SFX_GLOBAL_CLASSID )))
+    if (aName == SvGlobalName( SFX_GLOBAL_CLASSID ))
     {
         SolarMutexGuard aGuard;
         SfxObjectShell *const pObjectShell(GetObjectShell());
         if (pObjectShell)
         {
-            // SO3_GLOBAL_CLASSID is apparently used by binfilter :(
-            if ( aName == SvGlobalName( SO3_GLOBAL_CLASSID ) )
-                 return reinterpret_cast<sal_Int64>((SvObject*) pObjectShell);
-            else if ( aName == SvGlobalName( SFX_GLOBAL_CLASSID ) )
-                 return reinterpret_cast<sal_Int64>((SfxObjectShell*) pObjectShell);
+            return reinterpret_cast<sal_Int64>((SfxObjectShell*) pObjectShell);
         }
     }
 
