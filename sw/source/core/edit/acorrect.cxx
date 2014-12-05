@@ -59,8 +59,8 @@ _PaMIntoCrsrShellRing::_PaMIntoCrsrShellRing( SwCrsrShell& rCSh,
     pPrevDelPam = rDelPam.GetPrev();
     pPrevCrsr = rCrsr.GetPrev();
 
-    rDelPam.MoveRingTo( pShCrsr );
-    rCrsr.MoveRingTo( pShCrsr );
+    rDelPam.GetRingContainer().merge( pShCrsr->GetRingContainer() );
+    rCrsr.GetRingContainer().merge( pShCrsr->GetRingContainer() );
 }
 
 _PaMIntoCrsrShellRing::~_PaMIntoCrsrShellRing()

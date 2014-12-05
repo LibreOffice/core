@@ -1089,7 +1089,7 @@ void SwAutoFormat::DeleteSel( SwPaM& rDelPam )
         SwPaM aTmp( *m_pCurTxtNd, 0, pShCrsr );
 
         SwPaM* pPrev = rDelPam.GetPrev();
-        rDelPam.MoveRingTo( pShCrsr );
+        rDelPam.GetRingContainer().merge( pShCrsr->GetRingContainer() );
 
         m_pEditShell->DeleteSel( rDelPam );
 

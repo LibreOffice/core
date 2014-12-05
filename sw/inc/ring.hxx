@@ -41,7 +41,7 @@ namespace sw
         public:
             typedef typename std::add_const<value_type>::type const_value_type;
             typedef RingContainer<value_type> ring_container;
-            typedef RingContainer< const_value_type > const_ring_container;
+            typedef RingContainer<const_value_type> const_ring_container;
             virtual ~Ring()
                 { algo::unlink(static_cast< value_type* >(this)); };
             /**
@@ -53,18 +53,6 @@ namespace sw
              * @param pDestRing the container to add this item to
              */
             void MoveTo( value_type* pDestRing );
-            /**
-             * Merges two ring containers. All item from both ring containers will
-             * be in the same ring container in the end.
-             * Note: value_typehe items of this ring container will be inserted just before
-             * item pDestRing
-             * @param pDestRing the container to merge this container with
-             */
-            void MoveRingTo( value_type* pDestRing )
-            {
-                std::swap(*(&pPrev->pNext), *(&pDestRing->pPrev->pNext));
-                std::swap(*(&pPrev), *(&pDestRing->pPrev));
-            }
             /** @return a stl-like container with begin()/end() for iteration */
             ring_container GetRingContainer();
             /** @return a stl-like container with begin()/end() for const iteration */
@@ -110,6 +98,8 @@ namespace sw
                 static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetPrevInRing(); };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
+            friend ring_container;
+            friend const_ring_container;
             friend typename ring_container::iterator;
             friend typename ring_container::const_iterator;
             friend typename const_ring_container::iterator;
@@ -175,6 +165,18 @@ namespace sw
             /** @return the number of elements in the container */
             size_t size() const
                 { return std::distance(begin(), end()); }
+            /**
+             * Merges two ring containers. All item from both ring containers will
+             * be in the same ring container in the end.
+             * Note: value_typehe items of this ring container will be inserted just before
+             * item pDestRing
+             * @param pDestRing the container to merge this container with
+             */
+            void merge( RingContainer< value_type > aDestRing )
+            {
+                std::swap(*(&m_pStart->pPrev->pNext), *(&aDestRing.m_pStart->pPrev->pNext));
+                std::swap(*(&m_pStart->pPrev), *(&aDestRing.m_pStart->pPrev));
+            }
     };
 
     template <typename value_type>

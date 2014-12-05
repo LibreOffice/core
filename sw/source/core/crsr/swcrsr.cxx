@@ -953,7 +953,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         *GetPoint() = *pFndRing->GetPoint();
         SetMark();
         *GetMark() = *pFndRing->GetMark();
-        pFndRing->MoveRingTo( this );
+        pFndRing->GetRingContainer().merge( GetRingContainer() );
         delete pFndRing;
     }
     else if( FND_IN_OTHER & eFndRngs )
@@ -1011,7 +1011,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
             *GetPoint() = *pFndRing->GetPoint();
             SetMark();
             *GetMark() = *pFndRing->GetMark();
-            pFndRing->MoveRingTo( this );
+            pFndRing->GetRingContainer().merge( GetRingContainer() );
         }
         delete pFndRing;
     }
@@ -1051,7 +1051,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
         *GetPoint() = *pFndRing->GetPoint();
         SetMark();
         *GetMark() = *pFndRing->GetMark();
-        pFndRing->MoveRingTo( this );
+        pFndRing->GetRingContainer().merge( GetRingContainer() );
         delete pFndRing;
     }
     else
