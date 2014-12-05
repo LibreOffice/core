@@ -187,7 +187,7 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  getFormatsSupplier(void) const { return ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > ((::com::sun::star::util::XNumberFormatsSupplier*)m_pCurrentSupplier);}
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  getFormatsSupplier(void) const;
     void    setFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xSupplier);
     sal_Int32   getFormatKey(void) const;
     void    setFormatKey(sal_Int32 nKey);
@@ -250,7 +250,7 @@ private:
     RMItemData GetRMItemData( const ::com::sun::star::container::ContainerEvent& _rEvent );
 
 protected:
-    ::svt::ORoadmap*                GetRoadmap() const { return (::svt::ORoadmap*)GetWindow(); }
+    ::svt::ORoadmap*                GetRoadmap() const;
     void                            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
 
     virtual ~SVTXRoadmap();

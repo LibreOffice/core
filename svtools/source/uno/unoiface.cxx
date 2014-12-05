@@ -1024,6 +1024,10 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const ::com:
     return aReturn;
 }
 
+::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier(void) const
+{
+    return ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > (m_pCurrentSupplier);
+}
 
 ::com::sun::star::uno::Any SVTXFormattedField::convertEffectiveValue(const ::com::sun::star::uno::Any& rValue)
 {
@@ -1399,6 +1403,10 @@ void SVTXFormattedField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 using namespace svt;
 
+::svt::ORoadmap* SVTXRoadmap::GetRoadmap() const
+{
+    return static_cast<svt::ORoadmap*>(GetWindow());
+}
 
 SVTXRoadmap::SVTXRoadmap() : maItemListeners( *this )
 {
