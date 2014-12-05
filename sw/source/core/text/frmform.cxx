@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <bodyfrm.hxx>
 #include <hintids.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/hyphenzoneitem.hxx>
@@ -176,7 +179,7 @@ const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
         const SwFrm *pFrm = GetUpper();
         while( pFrm && !pFrm->IsBodyFrm() )
             pFrm = pFrm->GetUpper();
-        return (const SwBodyFrm*)pFrm;
+        return static_cast<const SwBodyFrm*>(pFrm);
     }
     return 0;
 }
@@ -997,7 +1000,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
         SplitFrm( nEnd );
     }
 
-    const SwFrm *pBodyFrm = (const SwFrm*)(FindBodyFrm());
+    const SwFrm *pBodyFrm = FindBodyFrm();
 
     const long nBodyHeight = pBodyFrm ? ( IsVertical() ?
                                           pBodyFrm->Frm().Width() :
