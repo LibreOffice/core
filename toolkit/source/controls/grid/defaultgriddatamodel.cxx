@@ -495,8 +495,8 @@ private:
 
     Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
     {
-        static const OUString aServiceName("com.sun.star.awt.grid.DefaultGridDataModel");
-        static const Sequence< OUString > aSeq( &aServiceName, 1 );
+        Sequence< OUString > aSeq( 1 );
+        aSeq[0] = "com.sun.star.awt.grid.DefaultGridDataModel";
         return aSeq;
     }
 

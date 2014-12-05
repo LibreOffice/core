@@ -150,11 +150,8 @@ VbaGlobalsBase::createInstanceWithArguments( const OUString& aServiceSpecifier, 
 uno::Sequence< OUString > SAL_CALL
 VbaGlobalsBase::getAvailableServiceNames(  ) throw (uno::RuntimeException, std::exception)
 {
-    static const OUString names[] = {
-    // common
-        OUString("ooo.vba.msforms.UserForm"),
-      };
-    static uno::Sequence< OUString > serviceNames( names, sizeof( names )/ sizeof( names[0] ) );
+    uno::Sequence< OUString > serviceNames(1);
+    serviceNames[0] = "ooo.vba.msforms.UserForm";
     return serviceNames;
 }
 

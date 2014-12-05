@@ -87,7 +87,6 @@ extern const sal_Char szServiceName_UnoSpinButtonControl[], szServiceName_UnoSpi
 
 extern const sal_Char szServiceName_TreeControl[];
 extern const sal_Char szServiceName_TreeControlModel[];
-extern const sal_Char szServiceName_MutableTreeDataModel[];
 
 extern const sal_Char szServiceName_GridControl[];
 extern const sal_Char szServiceName_GridControlModel[];

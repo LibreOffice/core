@@ -757,16 +757,16 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         }
         else
         {
-            static const OUString aBorders[] =
+            static const char* aBorders[] =
             {
-                OUString("TopBorder"), OUString("LeftBorder"), OUString("BottomBorder"), OUString("RightBorder")
+                "TopBorder", "LeftBorder", "BottomBorder", "RightBorder"
             };
             for (unsigned int i = 0; i < SAL_N_ELEMENTS(aBorders); ++i)
             {
-                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(aBorders[i]).get<table::BorderLine2>();
+                table::BorderLine2 aBorderLine = xPropertySet->getPropertyValue(OUString::createFromAscii(aBorders[i])).get<table::BorderLine2>();
                 aBorderLine.Color = aLineColor.get<sal_Int32>();
                 aBorderLine.LineWidth = aLineWidth.get<sal_Int32>();
-                xPropertySet->setPropertyValue(aBorders[i], uno::makeAny(aBorderLine));
+                xPropertySet->setPropertyValue(OUString::createFromAscii(aBorders[i]), uno::makeAny(aBorderLine));
             }
         }
         if (rShape.oZ)

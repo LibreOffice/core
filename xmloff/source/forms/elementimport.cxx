@@ -1186,8 +1186,8 @@ namespace xmloff
     bool OReferredControlImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName,
         const OUString& _rValue)
     {
-        static const OUString s_sReferenceAttributeName = OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_FOR));
-        if (_rLocalName == s_sReferenceAttributeName)
+        static const char * s_sReferenceAttributeName = OAttributeMetaData::getCommonControlAttributeName(CCA_FOR);
+        if (_rLocalName.equalsAscii(s_sReferenceAttributeName))
         {
             m_sReferringControls = _rValue;
             return true;
@@ -1204,8 +1204,8 @@ namespace xmloff
 
     bool OPasswordImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
-        static const OUString s_sEchoCharAttributeName = OUString::createFromAscii(OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR));
-        if (_rLocalName == s_sEchoCharAttributeName)
+        static const char * s_sEchoCharAttributeName = OAttributeMetaData::getSpecialAttributeName(SCA_ECHO_CHAR);
+        if (_rLocalName.equalsAscii(s_sEchoCharAttributeName))
         {
             // need a special handling for the EchoChar property
             PropertyValue aEchoChar;
@@ -1947,16 +1947,16 @@ namespace xmloff
     bool OFormImport::handleAttribute(sal_uInt16 _nNamespaceKey, const OUString& _rLocalName, const OUString& _rValue)
     {
         // handle the master/details field attributes (they're way too special to let the OPropertyImport handle them)
-        static const OUString s_sMasterFieldsAttributeName = OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faMasterFields));
-        static const OUString s_sDetailFieldsAttributeName = OUString::createFromAscii(OAttributeMetaData::getFormAttributeName(faDetailFiels));
+        static const char* s_sMasterFieldsAttributeName = OAttributeMetaData::getFormAttributeName(faMasterFields);
+        static const char* s_sDetailFieldsAttributeName = OAttributeMetaData::getFormAttributeName(faDetailFiels);
 
-        if ( s_sMasterFieldsAttributeName == _rLocalName )
+        if ( _rLocalName.equalsAscii(s_sMasterFieldsAttributeName) )
         {
             implTranslateStringListProperty(PROPERTY_MASTERFIELDS, _rValue);
             return true;
         }
 
-        if ( s_sDetailFieldsAttributeName == _rLocalName )
+        if ( _rLocalName.equalsAscii(s_sDetailFieldsAttributeName) )
         {
             implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
             return true;

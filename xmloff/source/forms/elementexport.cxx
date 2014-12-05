@@ -547,9 +547,9 @@ namespace xmloff
                 CCA_LABEL, CCA_TITLE
             };
             // the names of all properties which are expected to be of type string
-            static const OUString aStringPropertyNames[] =
+            static const char * aStringPropertyNames[] =
             {
-                OUString(PROPERTY_LABEL), OUString(PROPERTY_TITLE)
+                PROPERTY_LABEL, PROPERTY_TITLE
             };
             OSL_ENSURE( sizeof(aStringPropertyNames)/sizeof(aStringPropertyNames[0]) ==
                         sizeof(nStringPropertyAttributeIds)/sizeof(nStringPropertyAttributeIds[0]),
@@ -561,7 +561,7 @@ namespace xmloff
                     exportStringPropertyAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(nStringPropertyAttributeIds[i]),
                         OAttributeMetaData::getCommonControlAttributeName(nStringPropertyAttributeIds[i]),
-                        aStringPropertyNames[i]
+                        OUString::createFromAscii(aStringPropertyNames[i])
                         );
                 #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
@@ -576,12 +576,12 @@ namespace xmloff
             {   // attribute flags
                 CCA_CURRENT_SELECTED, CCA_DISABLED, CCA_DROPDOWN, CCA_PRINTABLE, CCA_READONLY, CCA_SELECTED, CCA_TAB_STOP, CCA_ENABLEVISIBLE
             };
-            static const OUString pBooleanPropertyNames[] =
+            static const char * pBooleanPropertyNames[] =
             {   // property names
-                OUString(PROPERTY_STATE), OUString(PROPERTY_ENABLED),
-                OUString(PROPERTY_DROPDOWN), OUString(PROPERTY_PRINTABLE),
-                OUString(PROPERTY_READONLY), OUString(PROPERTY_DEFAULT_STATE),
-                OUString(PROPERTY_TABSTOP), OUString(PROPERTY_ENABLEVISIBLE)
+                PROPERTY_STATE, PROPERTY_ENABLED,
+                PROPERTY_DROPDOWN, PROPERTY_PRINTABLE,
+                PROPERTY_READONLY, PROPERTY_DEFAULT_STATE,
+                PROPERTY_TABSTOP, PROPERTY_ENABLEVISIBLE
             };
             static const sal_Bool nBooleanPropertyAttrFlags[] =
             {   // attribute defaults
@@ -600,7 +600,7 @@ namespace xmloff
                     exportBooleanPropertyAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(nBooleanPropertyAttributeIds[i]),
                         OAttributeMetaData::getCommonControlAttributeName(nBooleanPropertyAttributeIds[i]),
-                        pBooleanPropertyNames[i],
+                        OUString::createFromAscii(pBooleanPropertyNames[i]),
                         nBooleanPropertyAttrFlags[i]);
         #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
@@ -616,9 +616,9 @@ namespace xmloff
             {   // attribute flags
                 CCA_SIZE, CCA_TAB_INDEX
             };
-            static const OUString pIntegerPropertyNames[] =
+            static const char * pIntegerPropertyNames[] =
             {   // property names
-                OUString(PROPERTY_LINECOUNT), OUString(PROPERTY_TABINDEX)
+                PROPERTY_LINECOUNT, PROPERTY_TABINDEX
             };
             static const sal_Int16 nIntegerPropertyAttrDefaults[] =
             {   // attribute defaults
@@ -641,7 +641,7 @@ namespace xmloff
                     exportInt16PropertyAttribute(
                         OAttributeMetaData::getCommonControlAttributeNamespace(nIntegerPropertyAttributeIds[i]),
                         OAttributeMetaData::getCommonControlAttributeName(nIntegerPropertyAttributeIds[i]),
-                        pIntegerPropertyNames[i],
+                        OUString::createFromAscii(pIntegerPropertyNames[i]),
                         nIntegerPropertyAttrDefaults[i]);
         #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
@@ -971,13 +971,13 @@ namespace xmloff
                 SCA_VALIDATION, SCA_MULTI_LINE, SCA_AUTOMATIC_COMPLETION, SCA_MULTIPLE, SCA_DEFAULT_BUTTON, SCA_IS_TRISTATE,
                 SCA_TOGGLE, SCA_FOCUS_ON_CLICK
             };
-            static const OUString pBooleanPropertyNames[] =
+            static const char * pBooleanPropertyNames[] =
             {   // property names
-                OUString(PROPERTY_STRICTFORMAT), OUString(PROPERTY_MULTILINE),
-                OUString(PROPERTY_AUTOCOMPLETE),
-                OUString(PROPERTY_MULTISELECTION),
-                OUString(PROPERTY_DEFAULTBUTTON), OUString(PROPERTY_TRISTATE),
-                OUString(PROPERTY_TOGGLE), OUString(PROPERTY_FOCUS_ON_CLICK)
+                PROPERTY_STRICTFORMAT, PROPERTY_MULTILINE,
+                PROPERTY_AUTOCOMPLETE,
+                PROPERTY_MULTISELECTION,
+                PROPERTY_DEFAULTBUTTON, PROPERTY_TRISTATE,
+                PROPERTY_TOGGLE, PROPERTY_FOCUS_ON_CLICK
             };
             static const sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
         #if OSL_DEBUG_LEVEL > 0
@@ -993,7 +993,7 @@ namespace xmloff
                     exportBooleanPropertyAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace( *pAttributeId ),
                         OAttributeMetaData::getSpecialAttributeName( *pAttributeId ),
-                        pBooleanPropertyNames[i],
+                        OUString::createFromAscii(pBooleanPropertyNames[i]),
                         ( *pAttributeId == SCA_FOCUS_ON_CLICK ) ? BOOLATTR_DEFAULT_TRUE : BOOLATTR_DEFAULT_FALSE
                     );
             #if OSL_DEBUG_LEVEL > 0
@@ -1010,9 +1010,9 @@ namespace xmloff
             {   // attribute flags
                 SCA_PAGE_STEP_SIZE
             };
-            static const OUString pIntegerPropertyNames[] =
+            static const char * pIntegerPropertyNames[] =
             {   // property names
-                OUString(PROPERTY_BLOCK_INCREMENT)
+                PROPERTY_BLOCK_INCREMENT
             };
             static const sal_Int32 nIntegerPropertyAttrDefaults[] =
             {   // attribute defaults (XML defaults, not runtime defaults!)
@@ -1034,7 +1034,7 @@ namespace xmloff
                     exportInt32PropertyAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace( nIntegerPropertyAttributeIds[i] ),
                         OAttributeMetaData::getSpecialAttributeName( nIntegerPropertyAttributeIds[i] ),
-                        pIntegerPropertyNames[i],
+                        OUString::createFromAscii(pIntegerPropertyNames[i]),
                         nIntegerPropertyAttrDefaults[i]
                     );
             #if OSL_DEBUG_LEVEL > 0
@@ -2060,9 +2060,9 @@ namespace xmloff
             {
                 faName, /*faAction,*/ faCommand, faFilter, faOrder
             };
-            static const OUString aStringPropertyNames[] =
+            static const char * aStringPropertyNames[] =
             {
-                OUString(PROPERTY_NAME), /*OUString(PROPERTY_TARGETURL),*/ OUString(PROPERTY_COMMAND), OUString(PROPERTY_FILTER), OUString(PROPERTY_ORDER)
+                PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_FILTER, PROPERTY_ORDER
             };
             static const sal_Int32 nIdCount = sizeof(eStringPropertyIds) / sizeof(eStringPropertyIds[0]);
         #if OSL_DEBUG_LEVEL > 0
@@ -2074,7 +2074,7 @@ namespace xmloff
                 exportStringPropertyAttribute(
                     OAttributeMetaData::getFormAttributeNamespace(eStringPropertyIds[i]),
                     OAttributeMetaData::getFormAttributeName(eStringPropertyIds[i]),
-                    aStringPropertyNames[i]);
+                    OUString::createFromAscii(aStringPropertyNames[i]));
 
             // #i112082# xlink:type is added as part of exportTargetLocationAttribute
 
@@ -2104,14 +2104,14 @@ namespace xmloff
             {
                 faAllowDeletes, faAllowInserts, faAllowUpdates, faApplyFilter, faEscapeProcessing, faIgnoreResult
             };
-            static const OUString pBooleanPropertyNames[] =
+            static const char * pBooleanPropertyNames[] =
             {
-                OUString(PROPERTY_ALLOWDELETES),
-                OUString(PROPERTY_ALLOWINSERTS),
-                OUString(PROPERTY_ALLOWUPDATES),
-                OUString(PROPERTY_APPLYFILTER),
-                OUString(PROPERTY_ESCAPEPROCESSING),
-                OUString(PROPERTY_IGNORERESULT)
+                PROPERTY_ALLOWDELETES,
+                PROPERTY_ALLOWINSERTS,
+                PROPERTY_ALLOWUPDATES,
+                PROPERTY_APPLYFILTER,
+                PROPERTY_ESCAPEPROCESSING,
+                PROPERTY_IGNORERESULT
             };
             static const sal_Int8 nBooleanPropertyAttrFlags[] =
             {
@@ -2128,7 +2128,7 @@ namespace xmloff
                 exportBooleanPropertyAttribute(
                     OAttributeMetaData::getFormAttributeNamespace(eBooleanPropertyIds[i]),
                     OAttributeMetaData::getFormAttributeName(eBooleanPropertyIds[i]),
-                    pBooleanPropertyNames[i],
+                    OUString::createFromAscii(pBooleanPropertyNames[i]),
                     nBooleanPropertyAttrFlags[i]
                 );
         }
@@ -2139,9 +2139,9 @@ namespace xmloff
             {
                 faEnctype, faMethod, faCommandType, faNavigationMode, faTabbingCycle
             };
-            static const OUString pEnumPropertyNames[] =
+            static const char * pEnumPropertyNames[] =
             {
-                OUString(PROPERTY_SUBMIT_ENCODING), OUString(PROPERTY_SUBMIT_METHOD), OUString(PROPERTY_COMMAND_TYPE), OUString(PROPERTY_NAVIGATION), OUString(PROPERTY_CYCLE)
+                PROPERTY_SUBMIT_ENCODING, PROPERTY_SUBMIT_METHOD, PROPERTY_COMMAND_TYPE, PROPERTY_NAVIGATION, PROPERTY_CYCLE
             };
             static const OEnumMapper::EnumProperties eEnumPropertyMaps[] =
             {
@@ -2168,7 +2168,7 @@ namespace xmloff
                 exportEnumPropertyAttribute(
                     OAttributeMetaData::getFormAttributeNamespace(eEnumPropertyIds[i]),
                     OAttributeMetaData::getFormAttributeName(eEnumPropertyIds[i]),
-                    pEnumPropertyNames[i],
+                    OUString::createFromAscii(pEnumPropertyNames[i]),
                     OEnumMapper::getEnumMap(eEnumPropertyMaps[i]),
                     nEnumPropertyAttrDefaults[i],
                     nEnumPropertyAttrDefaultFlags[i]

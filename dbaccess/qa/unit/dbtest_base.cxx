@@ -25,8 +25,6 @@ using namespace ::com::sun::star::uno;
 class DBTestBase
     : public UnoApiTest
 {
-protected:
-    static const OUString our_sFilePath;
 public:
     DBTestBase() : UnoApiTest("dbaccess/qa/unit/data") {};
 
