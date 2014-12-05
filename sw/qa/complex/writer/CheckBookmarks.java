@@ -146,9 +146,7 @@ public class CheckBookmarks {
         throws com.sun.star.uno.Exception
     {
         XText xText = m_xDoc.getText();
-        XSimpleText xSimpleText = UnoRuntime.queryInterface(
-            XSimpleText.class,
-            xText);
+        UnoRuntime.queryInterface(XSimpleText.class, xText);
         for(int nPara=0; nPara<10; ++nPara) {
             for(int nBookmark=0; nBookmark<100; ++nBookmark){
                 insertBookmark(

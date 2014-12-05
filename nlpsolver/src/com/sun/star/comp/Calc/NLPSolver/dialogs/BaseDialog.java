@@ -90,7 +90,6 @@ public abstract class BaseDialog extends BaseControl {
 
     public BaseDialog(XComponentContext context, String title, int x, int y, int width, int height) {
         super(context);
-        ModalState modalState = ModalState.Exit;
         try {
             xMCF = context.getServiceManager();
             setUnoModel(xMCF.createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", context));

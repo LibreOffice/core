@@ -77,7 +77,6 @@ public class Job {
      * @return the result of the message.
      */
     public Object execute() throws Throwable {
-        Object msgResult = _iMessage.getResult();
         if (_iMessage.isRequest()) {
             Object result = null;
             Throwable exception = null;

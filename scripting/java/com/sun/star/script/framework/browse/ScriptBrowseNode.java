@@ -71,8 +71,6 @@ public class ScriptBrowseNode extends PropertySet implements
         XMultiComponentFactory xFac = xCtx.getServiceManager();
 
         try {
-            ScriptMetaData data = (ScriptMetaData)parent.getByName(name);
-
             XSimpleFileAccess xSFA = UnoRuntime.queryInterface(
                                          XSimpleFileAccess.class,
                                          xFac.createInstanceWithContext(

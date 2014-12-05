@@ -159,7 +159,6 @@ public class FinalizedMandatoryTest
             System.out.println("------------------------------------------------");
             try
             {
-                PropertyValue instanceProp = new PropertyValue();
                 filterName = filterNames[i];
                 System.out.println(filterName);
 

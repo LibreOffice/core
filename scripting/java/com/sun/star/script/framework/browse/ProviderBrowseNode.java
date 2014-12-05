@@ -65,15 +65,13 @@ public class ProviderBrowseNode extends PropertySet implements
         registerProperty("Deletable", new Type(boolean.class), (short)0, "deletable");
         registerProperty("Creatable", new Type(boolean.class), (short)0, "creatable");
         registerProperty("Editable", new Type(boolean.class), (short)0, "editable");
-        XSimpleFileAccess xSFA = null;
         XMultiComponentFactory xFac = m_xCtx.getServiceManager();
 
         try {
-
-            xSFA = UnoRuntime.queryInterface(XSimpleFileAccess.class,
-                                             xFac.createInstanceWithContext(
-                                                 "com.sun.star.ucb.SimpleFileAccess",
-                                                 xCtx));
+            UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                                         xFac.createInstanceWithContext(
+                                             "com.sun.star.ucb.SimpleFileAccess",
+                                             xCtx));
         }
         // TODO propage errors
         catch (com.sun.star.uno.Exception e) {

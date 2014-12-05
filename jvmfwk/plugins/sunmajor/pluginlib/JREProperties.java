@@ -53,7 +53,7 @@ public class JREProperties
             {
                 try{
                     //This line is needed to get the accessibility properties
-                    Toolkit tk = java.awt.Toolkit.getDefaultToolkit();
+                    java.awt.Toolkit.getDefaultToolkit();
                 }
                 catch(Throwable e)
                 {

@@ -108,7 +108,6 @@ class TopWindowListener
         if (aObject instanceof VectorNode && xTopLevelObject != null)
         {
             System.out.println ("removing node " + xTopLevelObject);
-            VectorNode aRoot = (VectorNode) aObject;
             maModel.removeNode (xTopLevelObject.getAccessibleContext());
         }
     }

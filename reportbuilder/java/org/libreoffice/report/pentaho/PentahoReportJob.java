@@ -135,7 +135,6 @@ public class PentahoReportJob implements ReportJob
 
         this.masterValues = (ArrayList<?>) jobProperties.getProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES);
         this.detailColumns = (ArrayList<?>) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
-        Integer maxRows=(Integer) jobProperties.getProperty(ReportEngineParameterNames.MAXROWS);
 
         this.resourceManager = new ResourceManager();
         this.resourceManager.registerDefaults();

@@ -148,7 +148,7 @@ public class ParcelDescriptor {
             return new ScriptEntry[0];
 
         for (int i = 0; i < len; i++) {
-            String language, languagename, logicalname, description = "";
+            String language, languagename, description = "";
             Map<String, String> langProps = new HashMap<String, String>();
             NodeList nl;
             Element tmp;
@@ -158,11 +158,9 @@ public class ParcelDescriptor {
 
             nl = scriptElement.getElementsByTagName("logicalname");
 
-            if (nl == null)
-                logicalname = "";
-            else {
+            if (nl != null)
+            {
                 tmp = (Element)nl.item(0);
-                logicalname = tmp.getAttribute("value");
             }
 
             // get the text of the description element

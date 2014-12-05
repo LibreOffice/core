@@ -180,8 +180,6 @@ class ScriptImpl implements XScript {
         aOutParamIndex[0] = new short[0];
         aOutParam[0] = new Object[0];
 
-        Map<String, String> languageProps = metaData.getLanguageProperties();
-
         ScriptDescriptor scriptDesc =
             new ScriptDescriptor(metaData.getLanguageName());
 

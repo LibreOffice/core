@@ -303,7 +303,7 @@ public class LocalOfficeConnection
                 com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
 
             // initial serviceManager
-            XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
+            xLocalContext.getServiceManager();
 
             // try to connect to soffice
             Object aInitialObject = null;
@@ -403,7 +403,6 @@ public class LocalOfficeConnection
         }
         else { // new style
             int index = dcp.indexOf(':');
-            String url = dcp.substring(0, index).trim();
             dcp = dcp.substring(index + 1).trim();
 
             index = dcp.indexOf(';');

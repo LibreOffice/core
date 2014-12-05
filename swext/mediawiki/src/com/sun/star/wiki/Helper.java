@@ -608,7 +608,6 @@ public class Helper
                         aProxyPortProp = "ooInetHTTPSProxyPort";
                     }
 
-                    String aNoProxyList = AnyConverter.toString( xNameAccess.getByName( "ooInetNoProxy" ) );
                     String aProxyName = AnyConverter.toString( xNameAccess.getByName( aProxyNameProp ) );
 
                     int nProxyPort = 80;

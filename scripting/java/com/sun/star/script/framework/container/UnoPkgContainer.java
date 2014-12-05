@@ -165,7 +165,6 @@ public class UnoPkgContainer extends ParcelContainer {
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {
 
-        ScriptMetaData scriptData = null;
         String functionName = psu.function;
         String parcelName = psu.parcel;
         String location = psu.location;

@@ -107,18 +107,11 @@ public final class WikiEditorImpl extends WeakBase
     }
 
 
-    private boolean m_bInitialized;
     public synchronized void initialize( Object[] args ) throws com.sun.star.uno.Exception
     {
-        if ( m_bInitialized )
-        {
-        }
         if ( args.length > 0 )
         {
-            m_bInitialized = true;
             m_xFrame = UnoRuntime.queryInterface( XFrame.class, args[0] );
-            // become close listener
-            XCloseBroadcaster cb = UnoRuntime.queryInterface( XCloseBroadcaster.class, m_xFrame );
         }
     }
 
@@ -197,7 +190,7 @@ public final class WikiEditorImpl extends WeakBase
     {
         try
         {
-            URI uri = new URI( uristring );
+            new URI( uristring );
 
             // check whether any blogs are live...
             setListenerState( "command");

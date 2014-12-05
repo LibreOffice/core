@@ -36,7 +36,7 @@ public class UrlResolver_Test
             XComponentContext xcomponentcontext = Bootstrap.createInitialComponentContext( null );
 
             // initial serviceManager
-            XMultiComponentFactory xLocalServiceManager = xcomponentcontext.getServiceManager();
+            xcomponentcontext.getServiceManager();
 
             // create a connector, so that it can contact the office
             XUnoUrlResolver urlResolver

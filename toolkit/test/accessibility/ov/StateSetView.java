@@ -179,7 +179,6 @@ public static class StateSetAllView
         XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet();
         if (xStateSet != null)
         {
-            short aStates[] = xStateSet.getStates ();
             final int nMaxStateIndex = AccessibleStateType.MANAGES_DESCENDANTS;
             int nStateWidth = (aWidgetArea.width-12) / (nMaxStateIndex+1);
             AffineTransform aTransform = g.getTransform ();

@@ -76,18 +76,14 @@ public class ParcelBrowseNode extends PropertySet implements
         registerProperty("Creatable", new Type(boolean.class), (short)0, "creatable");
         registerProperty("Renamable", new Type(boolean.class), (short)0, "renamable");
 
-        String parcelDirUrl = parcel.getPathToParcel();
         XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
         XMultiComponentFactory xFac = xCtx.getServiceManager();
 
         try {
-
-            XSimpleFileAccess xSFA =
-                UnoRuntime.queryInterface(XSimpleFileAccess.class,
-                                          xFac.createInstanceWithContext(
-                                              "com.sun.star.ucb.SimpleFileAccess",
-                                              xCtx));
-
+            UnoRuntime.queryInterface(XSimpleFileAccess.class,
+                                      xFac.createInstanceWithContext(
+                                          "com.sun.star.ucb.SimpleFileAccess",
+                                          xCtx));
         } catch (com.sun.star.uno.Exception e) {
             // TODO propagate potential errors
             LogUtils.DEBUG("Caught exception creating ParcelBrowseNode " + e);

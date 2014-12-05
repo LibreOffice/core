@@ -182,11 +182,10 @@ class ScriptImpl implements XScript {
         aOutParam[0] = new Object[0];
 
         ClassLoader cl = null;
-        URL sourceUrl = null;
 
         try {
             cl = ClassLoaderFactory.getURLClassLoader(metaData);
-            sourceUrl = metaData.getSourceURL();
+            metaData.getSourceURL();
         } catch (java.net.MalformedURLException mfu) {
             throw new ScriptFrameworkErrorException(
                 mfu.getMessage(), null,
@@ -197,14 +196,12 @@ class ScriptImpl implements XScript {
         Context ctxt = null;
 
         try {
-            String editorURL = sourceUrl.toString();
             Object result = null;
 
             ScriptEditorForJavaScript editor =
                 ScriptEditorForJavaScript.getEditor(metaData.getSourceURL());
 
             if (editor != null) {
-                editorURL = editor.getURL();
                 result = editor.execute();
 
                 if (result != null  &&

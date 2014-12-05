@@ -589,7 +589,7 @@ class FuzzyTester
             TreeNode node = m_BufferExpected.get(i);
             int j = m_BufferActual.indexOf(node);
             if (j >= 0) {
-                TreeNode other = m_BufferActual.get(j);
+                m_BufferActual.get(j);
                 if (j != i)
                 {
                     //FIXME how bad is this?
