@@ -84,6 +84,8 @@ OpenGLContext::OpenGLContext():
 OpenGLContext::~OpenGLContext()
 {
     SAL_INFO("vcl.opengl", "delete context: " << this);
+    reset();
+
     ImplSVData* pSVData = ImplGetSVData();
     if( mpPrevContext )
         mpPrevContext->mpNextContext = mpNextContext;
@@ -93,39 +95,6 @@ OpenGLContext::~OpenGLContext()
         mpNextContext->mpPrevContext = mpPrevContext;
     else
         pSVData->maGDIData.mpLastContext = mpPrevContext;
-#if defined( WNT )
-    if (m_aGLWin.hRC)
-    {
-        std::vector<HGLRC>::iterator itr = std::remove(g_vShareList.begin(), g_vShareList.end(), m_aGLWin.hRC);
-        if (itr != g_vShareList.end())
-            g_vShareList.erase(itr);
-
-        wglMakeCurrent( m_aGLWin.hDC, 0 );
-        wglDeleteContext( m_aGLWin.hRC );
-        ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
-    }
-#elif defined( MACOSX )
-    OpenGLWrapper::resetCurrent();
-#elif defined( IOS ) || defined( ANDROID )
-    // nothing
-#elif defined( UNX )
-    if(m_aGLWin.ctx)
-    {
-        std::vector<GLXContext>::iterator itr = std::remove( g_vShareList.begin(), g_vShareList.end(), m_aGLWin.ctx );
-        if (itr != g_vShareList.end())
-            g_vShareList.erase(itr);
-
-        glXMakeCurrent(m_aGLWin.dpy, None, NULL);
-        if( glGetError() != GL_NO_ERROR )
-        {
-            SAL_WARN("vcl.opengl", "glError: " << (char *)gluErrorString(glGetError()));
-        }
-        glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
-
-        if (mbPixmap && m_aGLWin.glPix != None)
-            glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
-    }
-#endif
 }
 
 void OpenGLContext::AddRef()
@@ -1162,6 +1131,86 @@ void OpenGLContext::initGLWindow(Visual* pVisual)
 
 #endif
 
+void OpenGLContext::reset()
+{
+    if( !mbInitialized )
+        return;
+
+    // reset the clip region
+    maClipRegion.SetEmpty();
+
+    // destroy all framebuffers
+    if( mpLastFramebuffer )
+    {
+        OpenGLFramebuffer* pFramebuffer = mpLastFramebuffer;
+
+        makeCurrent();
+        while( pFramebuffer )
+        {
+            OpenGLFramebuffer* pPrevFramebuffer = pFramebuffer->mpPrevFramebuffer;
+            delete pFramebuffer;
+            pFramebuffer = pPrevFramebuffer;
+        }
+        mpFirstFramebuffer = NULL;
+        mpLastFramebuffer = NULL;
+    }
+
+    // destroy all programs
+    if( !maPrograms.empty() )
+    {
+        boost::unordered_map<ProgramKey, OpenGLProgram*>::iterator it;
+
+        makeCurrent();
+        it = maPrograms.begin();
+        while( it != maPrograms.end() )
+        {
+            delete it->second;
+            it++;
+        }
+        maPrograms.clear();
+    }
+
+    if( isCurrent() )
+        resetCurrent();
+
+    mbInitialized = false;
+
+    // destroy the context itself
+#if defined( WNT )
+    if (m_aGLWin.hRC)
+    {
+        std::vector<HGLRC>::iterator itr = std::remove(g_vShareList.begin(), g_vShareList.end(), m_aGLWin.hRC);
+        if (itr != g_vShareList.end())
+            g_vShareList.erase(itr);
+
+        wglMakeCurrent( m_aGLWin.hDC, 0 );
+        wglDeleteContext( m_aGLWin.hRC );
+        ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
+    }
+#elif defined( MACOSX )
+    OpenGLWrapper::resetCurrent();
+#elif defined( IOS ) || defined( ANDROID )
+    // nothing
+#elif defined( UNX )
+    if(m_aGLWin.ctx)
+    {
+        std::vector<GLXContext>::iterator itr = std::remove( g_vShareList.begin(), g_vShareList.end(), m_aGLWin.ctx );
+        if (itr != g_vShareList.end())
+            g_vShareList.erase(itr);
+
+        glXMakeCurrent(m_aGLWin.dpy, None, NULL);
+        if( glGetError() != GL_NO_ERROR )
+        {
+            SAL_WARN("vcl.opengl", "glError: " << (char *)gluErrorString(glGetError()));
+        }
+        glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
+
+        if (mbPixmap && m_aGLWin.glPix != None)
+            glXDestroyPixmap(m_aGLWin.dpy, m_aGLWin.glPix);
+    }
+#endif
+}
+
 #if defined( WNT ) || defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
 
 SystemWindowData OpenGLContext::generateWinData(vcl::Window* /*pParent*/, bool bRequestLegacyContext)
@@ -1217,17 +1266,33 @@ SystemWindowData OpenGLContext::generateWinData(vcl::Window* pParent, bool)
 
 #endif
 
-void OpenGLContext::makeCurrent()
+bool OpenGLContext::isCurrent()
 {
 #if defined( WNT )
-    if (wglGetCurrentContext() == m_aGLWin.hRC &&
-        wglGetCurrentDC() == m_aGLWin.hDC)
-    {
-        SAL_INFO("vcl.opengl", "OpenGLContext::makeCurrent(): Avoid setting the same context");
-    }
-    else if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
+    return (wglGetCurrentContext() == m_aGLWin.hRC &&
+            wglGetCurrentDC() == m_aGLWin.hDC);
+#elif defined( MACOSX )
+    return false;
+#elif defined( IOS ) || defined( ANDROID )
+    return false;
+#elif defined( UNX )
+    GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
+    return (glXGetCurrentContext() == m_aGLWin.ctx &&
+            glXGetCurrentDrawable() == nDrawable);
+#endif
+}
+void OpenGLContext::makeCurrent()
+{
+    ImplSVData* pSVData = ImplGetSVData();
+
+    if (isCurrent())
+        return;
+
+#if defined( WNT )
+    if (!wglMakeCurrent(m_aGLWin.hDC, m_aGLWin.hRC))
     {
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
+        return;
     }
 #elif defined( MACOSX )
     NSOpenGLView* pView = getOpenGLView();
@@ -1236,33 +1301,29 @@ void OpenGLContext::makeCurrent()
     // nothing
 #elif defined( UNX )
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
-    static int nSwitch = 0;
-    if (glXGetCurrentContext() == m_aGLWin.ctx &&
-        glXGetCurrentDrawable() == nDrawable)
+    if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
     {
-        ; // no-op
-    }
-    else if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable << " pixmap? " << mbPixmap);
-    else
-    {
-        SAL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
-        ImplSVData* pSVData = ImplGetSVData();
-        if( mpNextContext )
-        {
-            if( mpPrevContext )
-                mpPrevContext->mpNextContext = mpNextContext;
-            else
-                pSVData->maGDIData.mpFirstContext = mpNextContext;
-            mpNextContext->mpPrevContext = mpPrevContext;
-
-            mpPrevContext = pSVData->maGDIData.mpLastContext;
-            mpNextContext = NULL;
-            pSVData->maGDIData.mpLastContext->mpNextContext = this;
-            pSVData->maGDIData.mpLastContext = this;
-        }
+        return;
     }
 #endif
+
+    // move the context at the end of the contexts list
+    static int nSwitch = 0;
+    SAL_INFO("vcl.opengl", "******* CONTEXT SWITCH " << ++nSwitch << " *********");
+    if( mpNextContext )
+    {
+        if( mpPrevContext )
+            mpPrevContext->mpNextContext = mpNextContext;
+        else
+            pSVData->maGDIData.mpFirstContext = mpNextContext;
+        mpNextContext->mpPrevContext = mpPrevContext;
+
+        mpPrevContext = pSVData->maGDIData.mpLastContext;
+        mpNextContext = NULL;
+        pSVData->maGDIData.mpLastContext->mpNextContext = this;
+        pSVData->maGDIData.mpLastContext = this;
+    }
 }
 
 void OpenGLContext::resetCurrent()

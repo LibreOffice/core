@@ -471,6 +471,8 @@ void OpenGLSalBitmap::makeCurrent()
 
     // TODO: make sure we can really use the last used context
     mpContext = pSVData->maGDIData.mpLastContext;
+    while( mpContext && !mpContext->isInitialized() )
+        mpContext = mpContext->mpPrevContext;
     if( !mpContext )
         mpContext = GetBitmapContext();
     assert(mpContext && "Couldn't get an OpenGL context");
