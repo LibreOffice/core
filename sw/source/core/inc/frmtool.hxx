@@ -235,7 +235,7 @@ private:
     bool        mbInvalidatePrevPrtArea;
     bool        mbBordersJoinedWithPrev;
 
-    SwCntntFrm *GetCnt() { return (SwCntntFrm*)pFrm; }
+    SwCntntFrm *GetCnt();
 
 public:
     SwCntntNotify( SwCntntFrm *pCntFrm );

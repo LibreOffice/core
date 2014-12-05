@@ -737,6 +737,11 @@ SwFlyNotify::~SwFlyNotify()
     }
 }
 
+SwCntntFrm *SwCntntNotify::GetCnt()
+{
+    return static_cast<SwCntntFrm*>(pFrm);
+}
+
 SwCntntNotify::SwCntntNotify( SwCntntFrm *pCntntFrm ) :
     SwFrmNotify( pCntntFrm ),
     // OD 08.01.2004 #i11859#
