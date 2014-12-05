@@ -142,9 +142,6 @@ public class Helper
 
     private static String[] m_pConfigStrings;
 
-    private static final String sHTMLHeader = "<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><TITLE></TITLE></HEAD><BODY>";
-    private static final String sHTMLFooter = "</BODY></HTML>";
-
     private static MultiThreadedHttpConnectionManager m_aConnectionManager;
     private static HttpClient m_aClient;
     private static boolean m_bAllowConnection = true;

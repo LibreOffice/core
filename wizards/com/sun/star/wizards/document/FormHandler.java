@@ -57,7 +57,6 @@ public class FormHandler
     private static final String CHECKBOX = "CheckBox";
     private static final String DATEFIELD = "DateField";
     private static final String FORMATTEDFIELD = "FormattedField";
-    private static final String IMAGECONTROL = "ImageControl";
     private static final String TEXTFIELD = "TextField";
     private static final String TIMEFIELD = "TimeField";
 

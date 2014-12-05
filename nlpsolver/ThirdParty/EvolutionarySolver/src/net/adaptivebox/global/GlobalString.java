@@ -26,27 +26,22 @@ package net.adaptivebox.global;
 import java.util.*;
 
 public class GlobalString {
-  private static final String NEGLECT_TAG = "#$@";
 
-
-/**
-  * Tokenize a String with given key.
-  * @param      input      the String to be tokenized.
-  * @param      tokenKey   the delimiters.
-  * @return  a String array that include the elements of input string that
-  * divided by the tokenKey.
-  */
-  public static String[] tokenize(String input , String tokenKey) {
-    ArrayList<String> v = new ArrayList<String>();
-    StringTokenizer t = new StringTokenizer(input, tokenKey);
-    while (t.hasMoreTokens()) {
-      v.add(t.nextToken());
+    /**
+     * Tokenize a String with given key.
+     *
+     * @param input the String to be tokenized.
+     * @param tokenKey the delimiters.
+     * @return a String array that include the elements of input string that
+     *         divided by the tokenKey.
+     */
+    public static String[] tokenize(String input, String tokenKey) {
+        ArrayList<String> v = new ArrayList<String>();
+        StringTokenizer t = new StringTokenizer(input, tokenKey);
+        while (t.hasMoreTokens()) {
+            v.add(t.nextToken());
+        }
+        return v.toArray(new String[v.size()]);
     }
-    return v.toArray(new String[v.size()]);
-  }
-
-
-
-
 
 }

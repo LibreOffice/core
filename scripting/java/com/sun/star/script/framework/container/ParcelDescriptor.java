@@ -41,10 +41,6 @@ public class ParcelDescriptor {
     public static final String
     PARCEL_DESCRIPTOR_NAME = "parcel-descriptor.xml";
 
-    // Collection of all ParcelDescriptor created for files
-    private static final Map<File, ParcelDescriptor> PARCEL_DESCRIPTOR_MAP =
-        new HashMap<File, ParcelDescriptor>(5);
-
     // This is the default contents of a parcel descriptor to be used when
     // creating empty descriptors
     private static final byte[] EMPTY_DOCUMENT =

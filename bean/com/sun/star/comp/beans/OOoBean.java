@@ -64,7 +64,6 @@ public class OOoBean
     private transient OfficeDocument aDocument;
 
     // slot command execution environment
-    private transient com.sun.star.frame.XDispatchProvider xDispatcher;
     private transient com.sun.star.util.XURLTransformer xURLTransformer;
 
     // properties
@@ -389,7 +388,6 @@ public class OOoBean
             }
 
             aDocument = null;
-            xDispatcher = null;
             aFrame = null;
 
             // clear xFrameWindow
@@ -589,14 +587,14 @@ public class OOoBean
                         com.sun.star.util.XURLTransformer.class,
                         xServiceFactory.createInstance( "com.sun.star.util.URLTransformer") );
 
-                                        try
-                                        {
-                                            xDispatcher = UnoRuntime.queryInterface(com.sun.star.frame.XDispatchProvider.class, aFrame);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            /*ignore!*/
-                                        }
+                    try
+                    {
+                        UnoRuntime.queryInterface(com.sun.star.frame.XDispatchProvider.class, aFrame);
+                    }
+                    catch (Exception e)
+                    {
+                        /*ignore!*/
+                    }
 
                     // get XComponentLoader from frame
                     com.sun.star.frame.XComponentLoader xLoader = UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class, aFrame );

@@ -67,12 +67,7 @@ public class TestComponent {
     static public class _PerformancTestObject implements XPerformanceTest, XServiceInfo, XTypeProvider {
         static private final String __serviceName = "com.sun.star.comp.benchmark.JavaTestObject";
 
-        private boolean  _bool;
-        private char     _char;
-        private byte     _byte;
-        private short    _short;
         private int      _long;
-        private int      _ulong;
         private long     _hyper;
         private float    _float;
         private double   _double;
