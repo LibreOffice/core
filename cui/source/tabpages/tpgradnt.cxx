@@ -246,7 +246,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
     // is used here in order to NOT lose changes
     XGradient aTmpGradient( m_pLbColorFrom->GetSelectEntryColor(),
                           m_pLbColorTo->GetSelectEntryColor(),
-                          (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                          (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
                           static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
                           (sal_uInt16) m_pMtrCenterX->GetValue(),
                           (sal_uInt16) m_pMtrCenterY->GetValue(),
@@ -327,7 +327,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
         {
             pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
                         m_pLbColorTo->GetSelectEntryColor(),
-                        (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                        (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
                         static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
                         (sal_uInt16) m_pMtrCenterX->GetValue(),
                         (sal_uInt16) m_pMtrCenterY->GetValue(),
@@ -376,7 +376,7 @@ SfxTabPage* SvxGradientTabPage::Create( vcl::Window* pWindow,
 
 IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 {
-    XGradientStyle eXGS = (XGradientStyle) m_pLbGradientType->GetSelectEntryPos();
+    css::awt::GradientStyle eXGS = (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos();
 
     XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                           m_pLbColorTo->GetSelectEntryColor(),
@@ -465,7 +465,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickAddHdl_Impl)
     {
         XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                               m_pLbColorTo->GetSelectEntryColor(),
-                              (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                              (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
                               static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
                               (sal_uInt16) m_pMtrCenterX->GetValue(),
                               (sal_uInt16) m_pMtrCenterY->GetValue(),
@@ -542,7 +542,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
                 bLoop = false;
                 XGradient aXGradient( m_pLbColorFrom->GetSelectEntryColor(),
                                       m_pLbColorTo->GetSelectEntryColor(),
-                                      (XGradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+                                      (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
                                       static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
                                       (sal_uInt16) m_pMtrCenterX->GetValue(),
                                       (sal_uInt16) m_pMtrCenterY->GetValue(),
@@ -795,7 +795,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 
     if( pGradient )
     {
-        XGradientStyle eXGS = pGradient->GetGradientStyle();
+        css::awt::GradientStyle eXGS = pGradient->GetGradientStyle();
 
         m_pLbGradientType->SelectEntryPos(
             sal::static_int_cast< sal_Int32 >( eXGS ) );
@@ -840,12 +840,12 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
 
 
 
-void SvxGradientTabPage::SetControlState_Impl( XGradientStyle eXGS )
+void SvxGradientTabPage::SetControlState_Impl( css::awt::GradientStyle eXGS )
 {
     switch( eXGS )
     {
-        case XGRAD_LINEAR:
-        case XGRAD_AXIAL:
+        case css::awt::GradientStyle_LINEAR:
+        case css::awt::GradientStyle_AXIAL:
             m_pFtCenterX->Disable();
             m_pMtrCenterX->Disable();
             m_pFtCenterY->Disable();
@@ -854,7 +854,7 @@ void SvxGradientTabPage::SetControlState_Impl( XGradientStyle eXGS )
             m_pMtrAngle->Enable();
             break;
 
-        case XGRAD_RADIAL:
+        case css::awt::GradientStyle_RADIAL:
             m_pFtCenterX->Enable();
             m_pMtrCenterX->Enable();
             m_pFtCenterY->Enable();
@@ -863,7 +863,7 @@ void SvxGradientTabPage::SetControlState_Impl( XGradientStyle eXGS )
             m_pMtrAngle->Disable();
             break;
 
-        case XGRAD_ELLIPTICAL:
+        case css::awt::GradientStyle_ELLIPTICAL:
             m_pFtCenterX->Enable();
             m_pMtrCenterX->Enable();
             m_pFtCenterY->Enable();
@@ -872,8 +872,8 @@ void SvxGradientTabPage::SetControlState_Impl( XGradientStyle eXGS )
             m_pMtrAngle->Enable();
             break;
 
-        case XGRAD_SQUARE:
-        case XGRAD_RECT:
+        case css::awt::GradientStyle_SQUARE:
+        case css::awt::GradientStyle_RECT:
             m_pFtCenterX->Enable();
             m_pMtrCenterX->Enable();
             m_pFtCenterY->Enable();

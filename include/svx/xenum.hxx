@@ -21,8 +21,6 @@
 #define INCLUDED_SVX_XENUM_HXX
 
 
-enum XGradientStyle     { XGRAD_LINEAR, XGRAD_AXIAL, XGRAD_RADIAL,
-                          XGRAD_ELLIPTICAL, XGRAD_SQUARE, XGRAD_RECT };
 enum XHatchStyle        { XHATCH_SINGLE, XHATCH_DOUBLE, XHATCH_TRIPLE };
 enum XFormTextStyle     { XFT_ROTATE, XFT_UPRIGHT, XFT_SLANTX, XFT_SLANTY,
                           XFT_NONE };

@@ -76,7 +76,7 @@ public:
     const static sal_Int32 DEFAULT_ENDVALUE;
     const static sal_Int32 DEFAULT_BORDER;
 
-    XGradient GetGradient (const XGradientStyle eStyle) const;
+    XGradient GetGradient (const css::awt::GradientStyle eStyle) const;
     void SetGradient (const XGradient& rGradient);
     sal_Int32 GetSelectedTransparencyTypeIndex (void) const;
 
