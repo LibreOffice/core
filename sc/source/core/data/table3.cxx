@@ -1541,10 +1541,11 @@ void ScTable::Sort(
         pUndo->mbUpdateRefs = bUpdateRefs;
     }
 
+    while (aSortParam.nCol2 > aSortParam.nCol1 && aCol[aSortParam.nCol2].IsEmptyBlock(aSortParam.nRow1, aSortParam.nRow2))
+        --aSortParam.nCol2;
+
     if (rSortParam.bByRow)
     {
-        while (aSortParam.nCol2 > aSortParam.nCol1 && aCol[aSortParam.nCol2].IsEmptyData())
-            --aSortParam.nCol2;
         SCROW nLastRow = 0;
         for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; nCol++)
             nLastRow = std::max(nLastRow, aCol[nCol].GetLastDataPos());
@@ -1576,11 +1577,7 @@ void ScTable::Sort(
     }
     else
     {
-        SCCOL nLastCol;
-        for (nLastCol = aSortParam.nCol2;
-             (nLastCol > aSortParam.nCol1) && aCol[nLastCol].IsEmptyBlock(aSortParam.nRow1, aSortParam.nRow2); nLastCol--)
-        {
-        }
+        SCCOL nLastCol = aSortParam.nCol2;
         SCCOL nCol1 = (rSortParam.bHasHeader ?
             aSortParam.nCol1 + 1 : aSortParam.nCol1);
         if (!IsSorted(nCol1, nLastCol))
