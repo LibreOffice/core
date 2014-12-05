@@ -61,6 +61,7 @@ public:
     void testChineseConversionSimplifiedToTraditional();
     void testFdo85554();
     void testAutoCorr();
+    void testFdo87005();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testChineseConversionSimplifiedToTraditional);
     CPPUNIT_TEST(testFdo85554);
     CPPUNIT_TEST(testAutoCorr);
+    CPPUNIT_TEST(testFdo87005);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -618,6 +620,15 @@ void SwUiWriterTest::testAutoCorr()
     const uno::Reference< text::XTextTable > xTable(getParagraphOrTable(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+}
+
+void SwUiWriterTest::testFdo87005()
+{
+    createDoc("fdo87005.odt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // This was 1, no SwFlyPortion was created for the second fly.
+    assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

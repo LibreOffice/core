@@ -392,6 +392,15 @@ protected:
         return xAutoStyleFamily;
     }
 
+    /// Similar to parseExport(), but this gives the xmlDocPtr of the layout dump.
+    xmlDocPtr parseLayoutDump()
+    {
+        if (!mpXmlBuffer)
+            dumpLayout();
+
+        return xmlParseMemory((const char*)xmlBufferContent(mpXmlBuffer), xmlBufferLength(mpXmlBuffer));;
+    }
+
     /**
      * Extract a value from the layout dump using an XPath expression and an attribute name.
      *
@@ -399,10 +408,7 @@ protected:
      */
     OUString parseDump(const OString& aXPath, const OString& aAttribute = OString())
     {
-        if (!mpXmlBuffer)
-            dumpLayout();
-
-        xmlDocPtr pXmlDoc = xmlParseMemory((const char*)xmlBufferContent(mpXmlBuffer), xmlBufferLength(mpXmlBuffer));;
+        xmlDocPtr pXmlDoc = parseLayoutDump();
 
         xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
         xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
