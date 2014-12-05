@@ -225,7 +225,7 @@
       <FormatCode>YYYY"年"MM"月"D"日"HH"时"MM"分"SS"秒"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey3" default="false" type="long" usage="DATE_TIME"  formatindex="47">
-      <FormatCode>YY"年"M"月"D"日"HH"时"MM"分"</FormatCode>
+      <FormatCode>YYYY/MM/DD HH:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME"  formatindex="58">
       <FormatCode>M/D/YY HH:MM</FormatCode>
