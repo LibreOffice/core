@@ -72,17 +72,17 @@ bool XGradientList::Create()
     rtl::OUStringBuffer aStr(SVX_RESSTR(RID_SVXSTR_GRADIENT));
     aStr.append(" 1");
     sal_Int32 nLen = aStr.getLength() - 1;
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE  ),XGRAD_LINEAR    ,    0,10,10, 0,100,100),aStr.toString()));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLACK  ),RGB_Color(COL_WHITE  ),css::awt::GradientStyle_LINEAR    ,    0,10,10, 0,100,100),aStr.toString()));
     aStr[nLen] = '2';
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE   ),RGB_Color(COL_RED    ),XGRAD_AXIAL     ,  300,20,20,10,100,100),aStr.toString()));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_BLUE   ),RGB_Color(COL_RED    ),css::awt::GradientStyle_AXIAL     ,  300,20,20,10,100,100),aStr.toString()));
     aStr[nLen] = '3';
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED    ),RGB_Color(COL_YELLOW ),XGRAD_RADIAL    ,  600,30,30,20,100,100),aStr.toString()));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_RED    ),RGB_Color(COL_YELLOW ),css::awt::GradientStyle_RADIAL    ,  600,30,30,20,100,100),aStr.toString()));
     aStr[nLen] = '4';
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN  ),XGRAD_ELLIPTICAL,  900,40,40,30,100,100),aStr.toString()));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_YELLOW ),RGB_Color(COL_GREEN  ),css::awt::GradientStyle_ELLIPTICAL,  900,40,40,30,100,100),aStr.toString()));
     aStr[nLen] = '5';
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),XGRAD_SQUARE    , 1200,50,50,40,100,100),aStr.toString()));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_GREEN  ),RGB_Color(COL_MAGENTA),css::awt::GradientStyle_SQUARE    , 1200,50,50,40,100,100),aStr.toString()));
     aStr[nLen] = '6';
-    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),XGRAD_RECT      , 1900,60,60,50,100,100),aStr.toString()));
+    Insert(new XGradientEntry(XGradient(RGB_Color(COL_MAGENTA),RGB_Color(COL_YELLOW ),css::awt::GradientStyle_RECT      , 1900,60,60,50,100,100),aStr.toString()));
 
     return true;
 }
@@ -126,34 +126,34 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
 
         switch(rGradient.GetGradientStyle())
         {
-            case XGRAD_LINEAR :
+            case css::awt::GradientStyle_LINEAR :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_LINEAR;
                 break;
             }
-            case XGRAD_AXIAL :
+            case css::awt::GradientStyle_AXIAL :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_AXIAL;
                 break;
             }
-            case XGRAD_RADIAL :
+            case css::awt::GradientStyle_RADIAL :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RADIAL;
                 break;
             }
-            case XGRAD_ELLIPTICAL :
+            case css::awt::GradientStyle_ELLIPTICAL :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_ELLIPTICAL;
                 break;
             }
-            case XGRAD_SQUARE :
+            case css::awt::GradientStyle_SQUARE :
             {
                 aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_SQUARE;
                 break;
             }
             default :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RECT; // XGRAD_RECT
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RECT; // css::awt::GradientStyle_RECT
                 break;
             }
         }

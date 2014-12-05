@@ -494,7 +494,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     SFX_REQUEST_ARG (rReq, pStart, SfxUInt32Item, ID_VAL_STARTINTENS, false);
                     SFX_REQUEST_ARG (rReq, pEnd, SfxUInt32Item, ID_VAL_ENDINTENS, false);
 
-                    if (CHECK_RANGE (XGRAD_LINEAR, (sal_Int32)pStyle->GetValue (), XGRAD_RECT) &&
+                    if (CHECK_RANGE (css::awt::GradientStyle_LINEAR, (sal_Int32)pStyle->GetValue (), css::awt::GradientStyle_RECT) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360) &&
                         CHECK_RANGE (0, (sal_Int32)pBorder->GetValue (), 100) &&
                         CHECK_RANGE (0, (sal_Int32)pCenterX->GetValue (), 100) &&
@@ -517,7 +517,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                             {
                                 XGradient aGradient(pEntry->GetGradient());
 
-                                aGradient.SetGradientStyle ((XGradientStyle) pStyle->GetValue ());
+                                aGradient.SetGradientStyle ((css::awt::GradientStyle) pStyle->GetValue ());
                                 aGradient.SetAngle (pAngle->GetValue () * 10);
                                 aGradient.SetBorder ((short) pBorder->GetValue ());
                                 aGradient.SetXOffset ((short) pCenterX->GetValue ());
@@ -534,7 +534,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         if (i >= nCounts)
                         {
                             Color aBlack (0, 0, 0);
-                            XGradient aGradient (aBlack, aBlack, (XGradientStyle) pStyle->GetValue (),
+                            XGradient aGradient (aBlack, aBlack, (css::awt::GradientStyle) pStyle->GetValue (),
                                                  pAngle->GetValue () * 10, (short) pCenterX->GetValue (),
                                                  (short) pCenterY->GetValue (), (short) pBorder->GetValue (),
                                                  (short) pStart->GetValue (), (short) pEnd->GetValue ());

@@ -153,7 +153,7 @@ class SvxTransparenceTabPage : public SvxTabPage
 
     void ActivateLinear(bool bActivate);
     void ActivateGradient(bool bActivate);
-    void SetControlState_Impl(XGradientStyle eXGS);
+    void SetControlState_Impl(css::awt::GradientStyle eXGS);
 
     bool InitPreview ( const SfxItemSet& rSet );
     void InvalidatePreview (bool bEnable = true );
@@ -430,7 +430,7 @@ private:
     DECL_LINK( ClickSaveHdl_Impl, void * );
 
     long CheckChanges_Impl();
-    void SetControlState_Impl( XGradientStyle eXGS );
+    void SetControlState_Impl( css::awt::GradientStyle eXGS );
 
 public:
     SvxGradientTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );

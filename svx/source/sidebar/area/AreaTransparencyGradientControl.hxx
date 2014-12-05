@@ -26,6 +26,7 @@
 #include <vcl/field.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/xenum.hxx>
+#include <com/sun/star/awt/GradientStyle.hpp>
 
 class XFillFloatTransparenceItem;
 class SfxBindings;
@@ -45,7 +46,7 @@ public:
     void Rearrange(XFillFloatTransparenceItem* pGradientItem);
     void InitStatus(XFillFloatTransparenceItem* pGradientItem);
     void ExecuteValueModify( sal_uInt8 nStartCol, sal_uInt8 nEndCol );
-    void SetControlState_Impl(XGradientStyle eXGS);
+    void SetControlState_Impl(css::awt::GradientStyle eXGS);
 
 private:
     FixedText           maFtTrgrCenterX;

@@ -2288,7 +2288,7 @@ bool XSecondaryFillColorItem::GetPresentation
 }
 
 XGradient::XGradient() :
-    eStyle( XGRAD_LINEAR ),
+    eStyle( css::awt::GradientStyle_LINEAR ),
     aStartColor( Color( COL_BLACK ) ),
     aEndColor( Color( COL_WHITE ) ),
     nAngle( 0 ),
@@ -2302,7 +2302,7 @@ XGradient::XGradient() :
 }
 
 XGradient::XGradient(const Color& rStart, const Color& rEnd,
-                     XGradientStyle eTheStyle, long nTheAngle, sal_uInt16 nXOfs,
+                     css::awt::GradientStyle eTheStyle, long nTheAngle, sal_uInt16 nXOfs,
                      sal_uInt16 nYOfs, sal_uInt16 nTheBorder,
                      sal_uInt16 nStartIntens, sal_uInt16 nEndIntens,
                      sal_uInt16 nSteps) :
@@ -2368,7 +2368,7 @@ XFillGradientItem::XFillGradientItem(SvStream& rIn, sal_uInt16 nVer) :
         sal_Int16  nITemp;
         sal_Int32  nLTemp;
 
-        rIn.ReadInt16( nITemp ); aGradient.SetGradientStyle((XGradientStyle)nITemp);
+        rIn.ReadInt16( nITemp ); aGradient.SetGradientStyle((css::awt::GradientStyle)nITemp);
         rIn.ReadUInt16( nRed );
         rIn.ReadUInt16( nGreen );
         rIn.ReadUInt16( nBlue );
@@ -2583,7 +2583,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
                 {
                     XGradient aXGradient;
 
-                    aXGradient.SetGradientStyle( (XGradientStyle) aGradient2.Style );
+                    aXGradient.SetGradientStyle( (css::awt::GradientStyle) aGradient2.Style );
                     aXGradient.SetStartColor( aGradient2.StartColor );
                     aXGradient.SetEndColor( aGradient2.EndColor );
                     aXGradient.SetAngle( aGradient2.Angle );
@@ -2620,7 +2620,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
 
             XGradient aXGradient;
 
-            aXGradient.SetGradientStyle( (XGradientStyle) aGradient2.Style );
+            aXGradient.SetGradientStyle( (css::awt::GradientStyle) aGradient2.Style );
             aXGradient.SetStartColor( aGradient2.StartColor );
             aXGradient.SetEndColor( aGradient2.EndColor );
             aXGradient.SetAngle( aGradient2.Angle );
@@ -2670,7 +2670,7 @@ bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
             switch ( nMemberId )
             {
                 case MID_GRADIENT_STYLE:
-                    aXGradient.SetGradientStyle( (XGradientStyle)nVal ); break;
+                    aXGradient.SetGradientStyle( (css::awt::GradientStyle)nVal ); break;
                 case MID_GRADIENT_ANGLE:
                     aXGradient.SetAngle( nVal ); break;
                 case MID_GRADIENT_BORDER:

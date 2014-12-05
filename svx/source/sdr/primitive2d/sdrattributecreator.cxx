@@ -82,33 +82,33 @@ namespace drawinglayer
 {
     namespace
     {
-        attribute::GradientStyle XGradientStyleToGradientStyle(XGradientStyle eStyle)
+        attribute::GradientStyle XGradientStyleToGradientStyle(css::awt::GradientStyle eStyle)
         {
             switch(eStyle)
             {
-                case XGRAD_LINEAR :
+                case css::awt::GradientStyle_LINEAR :
                 {
                     return attribute::GRADIENTSTYLE_LINEAR;
                 }
-                case XGRAD_AXIAL :
+                case css::awt::GradientStyle_AXIAL :
                 {
                     return attribute::GRADIENTSTYLE_AXIAL;
                 }
-                case XGRAD_RADIAL :
+                case css::awt::GradientStyle_RADIAL :
                 {
                     return attribute::GRADIENTSTYLE_RADIAL;
                 }
-                case XGRAD_ELLIPTICAL :
+                case css::awt::GradientStyle_ELLIPTICAL :
                 {
                     return attribute::GRADIENTSTYLE_ELLIPTICAL;
                 }
-                case XGRAD_SQUARE :
+                case css::awt::GradientStyle_SQUARE :
                 {
                     return attribute::GRADIENTSTYLE_SQUARE;
                 }
                 default :
                 {
-                    return attribute::GRADIENTSTYLE_RECT; // XGRAD_RECT
+                    return attribute::GRADIENTSTYLE_RECT; // css::awt::GradientStyle_RECT
                 }
             }
         }

@@ -592,7 +592,7 @@ XPropertyEntry* SvxUnoXGradientTable::getEntry( const OUString& rName, const uno
 
     XGradient aXGradient;
 
-    aXGradient.SetGradientStyle( (XGradientStyle) aGradient.Style );
+    aXGradient.SetGradientStyle( (css::awt::GradientStyle) aGradient.Style );
     aXGradient.SetStartColor( aGradient.StartColor );
     aXGradient.SetEndColor( aGradient.EndColor );
     aXGradient.SetAngle( aGradient.Angle );

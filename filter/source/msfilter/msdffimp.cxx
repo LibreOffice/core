@@ -2798,7 +2798,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     while ( nAngle >= 3600 ) nAngle -= 3600;
     while ( nAngle < 0 ) nAngle += 3600;
 
-    XGradientStyle eGrad = XGRAD_LINEAR;
+    css::awt::GradientStyle eGrad = css::awt::GradientStyle_LINEAR;
 
     sal_Int32 nFocus = GetPropertyValue( DFF_Prop_fillFocus, 0 );
     if ( !nFocus )
@@ -2811,7 +2811,7 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
 
     if( nFocus > 40 && nFocus < 60 )
     {
-        eGrad = XGRAD_AXIAL;//A axial gradient other than linear
+        eGrad = css::awt::GradientStyle_AXIAL;//A axial gradient other than linear
         nChgColors ^= 1;
     }
     //if the type is linear or axial, just save focus to nFocusX and nFocusY for export
@@ -2823,14 +2823,14 @@ void DffPropertyReader::ImportGradientColor( SfxItemSet& aSet,MSO_FillType eMSO_
     {
     case mso_fillShadeShape :
         {
-            eGrad = XGRAD_RECT;
+            eGrad = css::awt::GradientStyle_RECT;
             nFocusY = nFocusX = 50;
             nChgColors ^= 1;
         }
         break;
     case mso_fillShadeCenter :
         {
-            eGrad = XGRAD_RECT;
+            eGrad = css::awt::GradientStyle_RECT;
             //A MS fillTo prop specifies the relative position of the left boundary
             //of the center rectangle in a concentric shaded fill. Use 100 or 0 to keep fidelity
             nFocusX=(GetPropertyValue( DFF_Prop_fillToRight, 0 )==0x10000) ? 100 : 0;
