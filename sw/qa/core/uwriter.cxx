@@ -1278,6 +1278,10 @@ namespace
     struct TestRing : public sw::Ring<TestRing>
     {
         TestRing() : sw::Ring<TestRing>() {};
+        TestRing* GetNext()
+            { return GetNextInRing(); }
+        TestRing* GetPrev()
+            { return GetPrevInRing(); }
 #if 0
         void debug()
         {
@@ -1304,7 +1308,7 @@ void SwDocTest::testIntrusiveRing()
     CPPUNIT_ASSERT_EQUAL(aRing3.GetRingContainer().size(), static_cast<size_t>(3));
     aRing5.MoveTo(&aRing4);
     CPPUNIT_ASSERT_EQUAL(aRing4.GetRingContainer().size(), static_cast<size_t>(2));
-    aRing4.MoveRingTo(&aRing1);
+    aRing4.GetRingContainer().merge(aRing1.GetRingContainer());
     BOOST_FOREACH(TestRing* pRing, vRings)
     {
         CPPUNIT_ASSERT_EQUAL(pRing->GetRingContainer().size(), static_cast<size_t>(5));
