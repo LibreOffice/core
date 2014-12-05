@@ -22,6 +22,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/lspcitem.hxx>
+#include <dcontact.hxx>
 #include <txtflcnt.hxx>
 #include <txtftn.hxx>
 #include <flyfrms.hxx>
@@ -2567,7 +2568,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     }
     else
     {
-        pRet = new SwFlyCntPortion( *rInf.GetTxtFrm(), (SwDrawContact*)pFrmFmt->FindContactObj(),
+        pRet = new SwFlyCntPortion( *rInf.GetTxtFrm(), static_cast<SwDrawContact*>(pFrmFmt->FindContactObj()),
            aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
     }
     return pRet;
