@@ -204,6 +204,7 @@ public:
 #elif defined( _WIN32 )
     bool init( HDC hDC, HWND hWnd );
 #endif
+    void reset();
 
     // use these methods right after setting a context to make sure drawing happens
     // in the right FBO (default one is for onscreen painting)
@@ -218,6 +219,7 @@ public:
     OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
     OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
 
+    bool isCurrent();
     void makeCurrent();
     void resetCurrent();
     void swapBuffers();

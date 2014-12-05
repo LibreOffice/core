@@ -34,6 +34,7 @@
 #include "vcl/printerinfomanager.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/bmpacc.hxx"
+#include "vcl/opengl/OpenGLContext.hxx"
 
 #include <prex.h>
 #include <X11/Xatom.h>
@@ -65,6 +66,7 @@
 #include <sal/macros.h>
 #include <com/sun/star/uno/Exception.hpp>
 
+#include "svdata.hxx"
 #include "svids.hrc"
 #include "impbmp.hxx"
 
@@ -887,6 +889,15 @@ X11SalFrame::~X11SalFrame()
     {
         pFreeGraphics_->DeInit();
         delete pFreeGraphics_;
+    }
+
+    // reset all OpenGL contexts using this window
+    OpenGLContext* pContext = ImplGetSVData()->maGDIData.mpLastContext;
+    while( pContext )
+    {
+        if( pContext->getOpenGLWindow().win == mhWindow )
+            pContext->reset();
+        pContext = pContext->mpPrevContext;
     }
 
     XDestroyWindow( GetXDisplay(), mhWindow );
