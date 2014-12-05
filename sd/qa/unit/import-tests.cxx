@@ -100,6 +100,7 @@ public:
     void testShapeLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
+    void testBnc910045();
 #if !defined WNT
     void testBnc822341();
 #endif
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testBnc822341);
 #endif
 
+    CPPUNIT_TEST(testBnc910045);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1365,6 +1367,27 @@ void SdFiltersTest::testBnc822341()
 }
 
 #endif
+
+void SdFiltersTest::testBnc910045()
+{
+    // Problem with table style which defines cell color with fill style
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/pptx/bnc910045.pptx") );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sdr::table::SdrTableObj *pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+    uno::Reference< table::XCellRange > xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+    uno::Reference< beans::XPropertySet > xCell;
+    sal_Int32 nColor;
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5210557), nColor);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
 
