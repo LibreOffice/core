@@ -142,6 +142,8 @@ public:
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const SAL_OVERRIDE;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const SAL_OVERRIDE;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 // The FlyFrame-Format

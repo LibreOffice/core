@@ -640,31 +640,37 @@ void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName) const
         writer.startElement(pName);
         for (size_t i = 0; i < size(); ++i)
         {
-            const SwFrmFmt* pFmt = GetFmt(i);
-            writer.startElement("swfrmfmt");
-            OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
-            writer.writeFormatAttribute("ptr", "%p", pFmt);
-            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
-
-            writer.writeFormatAttribute("whichId", TMP_FORMAT, pFmt->Which());
-            const char* pWhich = 0;
-            switch (pFmt->Which())
-            {
-            case RES_FLYFRMFMT:
-                pWhich = "fly frame format";
-                break;
-            case RES_DRAWFRMFMT:
-                pWhich = "draw frame format";
-                break;
-            }
-            if (pWhich)
-                writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
-
-            lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
-            writer.endElement();
+            if (const SwFrmFmt* pFmt = GetFmt(i))
+                pFmt->dumpAsXml(writer);
         }
         writer.endElement();
     }
+}
+
+void SwFrmFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFrmFmt"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+
+    const char* pWhich = 0;
+    switch (Which())
+    {
+    case RES_FLYFRMFMT:
+        pWhich = "fly frame format";
+        break;
+    case RES_DRAWFRMFMT:
+        pWhich = "draw frame format";
+        break;
+    }
+    if (pWhich)
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
+
+    WriterHelper w(pWriter);
+    lcl_dumpSfxItemSet(w, &GetAttrSet());
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 void SwCharFmts::dumpAsXml(xmlTextWriterPtr w) const
