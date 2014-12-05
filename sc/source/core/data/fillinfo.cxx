@@ -1120,6 +1120,7 @@ ScTableInfo::ScTableInfo()
     , mnArrCount(0)
     , mbPageMode(false)
 {
+    memset(mpRowInfo, 0, ROWINFO_MAX*sizeof(RowInfo));
 }
 
 ScTableInfo::~ScTableInfo()

@@ -143,7 +143,7 @@ struct RowInfo : boost::noncopyable
 {
     CellInfo*           pCellInfo;
 
-    sal_uInt16              nHeight;
+    sal_uInt16          nHeight;
     SCROW               nRowNo;
     SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, if nothing
 
@@ -152,12 +152,6 @@ struct RowInfo : boost::noncopyable
     bool                bAutoFilter:1;
     bool                bPivotButton:1;
     bool                bChanged:1;           // TRUE, if not tested
-
-    inline explicit     RowInfo() : pCellInfo( 0 ) {}
-
-private:
-                    RowInfo( const RowInfo& );
-    RowInfo&        operator=( const RowInfo& );
 };
 
 struct ScTableInfo : boost::noncopyable
@@ -169,10 +163,6 @@ struct ScTableInfo : boost::noncopyable
 
     explicit            ScTableInfo();
                         ~ScTableInfo();
-
-private:
-                        ScTableInfo( const ScTableInfo& );
-    ScTableInfo&        operator=( const ScTableInfo& );
 };
 
 #endif
