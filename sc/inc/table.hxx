@@ -825,8 +825,12 @@ public:
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
+    /** Sort a range of data.
+        @param  rSortParam may get adjusted to the actual range used if it did
+                encompass leading or trailing empty blocks
+     */
     void Sort(
-        const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );

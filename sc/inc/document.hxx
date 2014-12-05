@@ -1678,8 +1678,12 @@ public:
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
     SC_DLLPUBLIC SvNumberFormatter* CreateFormatTable() const;
 
+    /** Sort a range of data.
+        @param  rSortParam may get adjusted to the actual range used if it did
+                encompass leading or trailing empty blocks
+     */
     void Sort(
-        SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+        SCTAB nTab, ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
         ScProgress* pProgress, sc::ReorderParam* pUndo );
 
     void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );

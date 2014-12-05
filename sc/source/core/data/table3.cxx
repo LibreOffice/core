@@ -1402,10 +1402,9 @@ void ScTable::DecoladeRow( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2 )
 }
 
 void ScTable::Sort(
-    const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
+    ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
     ScProgress* pProgress, sc::ReorderParam* pUndo )
 {
-    aSortParam = rSortParam;
     InitSortCollator( rSortParam );
     bGlobalKeepQuery = bKeepQuery;
 
@@ -1419,14 +1418,21 @@ void ScTable::Sort(
         pUndo->mbHasHeaders = rSortParam.bHasHeader;
     }
 
+    // Trim empty leading and trailing column ranges.
+    while (rSortParam.nCol1 < rSortParam.nCol2 && aCol[rSortParam.nCol1].IsEmptyBlock(rSortParam.nRow1, rSortParam.nRow2))
+        ++rSortParam.nCol1;
+    while (rSortParam.nCol1 < rSortParam.nCol2 && aCol[rSortParam.nCol2].IsEmptyBlock(rSortParam.nRow1, rSortParam.nRow2))
+        --rSortParam.nCol2;
+
     if (rSortParam.bByRow)
     {
         SCROW nLastRow = 0;
-        for (SCCOL nCol = aSortParam.nCol1; nCol <= aSortParam.nCol2; nCol++)
+        for (SCCOL nCol = rSortParam.nCol1; nCol <= rSortParam.nCol2; nCol++)
             nLastRow = std::max(nLastRow, aCol[nCol].GetLastDataPos());
-        nLastRow = std::min(nLastRow, aSortParam.nRow2);
+        rSortParam.nRow2 = nLastRow = std::min(nLastRow, rSortParam.nRow2);
         SCROW nRow1 = (rSortParam.bHasHeader ?
-            aSortParam.nRow1 + 1 : aSortParam.nRow1);
+            rSortParam.nRow1 + 1 : rSortParam.nRow1);
+        aSortParam = rSortParam;    // must be assigned before calling IsSorted()
         if (!IsSorted(nRow1, nLastRow))
         {
             if(pProgress)
@@ -1449,13 +1455,10 @@ void ScTable::Sort(
     }
     else
     {
-        SCCOL nLastCol;
-        for (nLastCol = aSortParam.nCol2;
-             (nLastCol > aSortParam.nCol1) && aCol[nLastCol].IsEmptyBlock(aSortParam.nRow1, aSortParam.nRow2); nLastCol--)
-        {
-        }
+        SCCOL nLastCol = rSortParam.nCol2;
         SCCOL nCol1 = (rSortParam.bHasHeader ?
-            aSortParam.nCol1 + 1 : aSortParam.nCol1);
+            rSortParam.nCol1 + 1 : rSortParam.nCol1);
+        aSortParam = rSortParam;    // must be assigned before calling IsSorted()
         if (!IsSorted(nCol1, nLastCol))
         {
             if(pProgress)
