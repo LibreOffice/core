@@ -27,13 +27,6 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
-#if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
-// gcc 4.6 backwards compat hack, remove ASAP when we drop support
-class SwPaM;
-class SwViewShell;
-class _SaveMergeRedlines;
-#endif
-
 namespace sw
 {
     template <typename value_type> class RingContainer;
@@ -110,12 +103,7 @@ namespace sw
             };
 #if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
             // gcc 4.6 backwards compat hack, remove ASAP when we drop support
-            friend class sw::RingContainer<SwPaM>;
-            friend class sw::RingContainer<const SwPaM>;
-            friend class sw::RingContainer<SwViewShell>;
-            friend class sw::RingContainer<const SwViewShell>;
-            friend class sw::RingContainer<_SaveMergeRedlines>;
-            friend class sw::RingContainer<const _SaveMergeRedlines>;
+            template<typename gcc_hack_value> friend class sw::RingContainer;
 #else
             friend ring_container;
             friend const_ring_container;
