@@ -909,6 +909,9 @@ bool OpenGLContext::ImplInit()
     if (!vShareList.empty())
         hSharedCtx = vShareList.front();
 
+    if (!wglCreateContextAttribsARB)
+        return false;
+
     // now setup the shared context; this needs a temporary context already
     // set up in order to work
     m_aGLWin.hRC = wglCreateContextAttribsARB(m_aGLWin.hDC, hSharedCtx, NULL);
