@@ -23,12 +23,14 @@
 #include <swtypes.hxx>
 #include <utility>
 #include <iterator>
+#include <type_traits>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 
 namespace sw
 {
     template <class T> class RingContainer;
+    template <class T> class RingIterator;
     /**
      * An intrusive container class double linking the contained nodes
      * @example sw/qa/core/uwriter.cxx
@@ -37,8 +39,10 @@ namespace sw
     class Ring
     {
         public:
+            typedef T value_type;
+            typedef typename std::add_const<T>::type const_value_type;
             typedef RingContainer<T> ring_container;
-            typedef RingContainer<const T> const_ring_container;
+            typedef RingContainer< const_value_type > const_ring_container;
             virtual ~Ring()
                 { algo::unlink(static_cast< T* >(this)); };
             /**
@@ -101,7 +105,11 @@ namespace sw
                 static node_ptr get_previous(const_node_ptr n) { return n->GetPrev(); };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
-            friend struct Ring_node_traits;
+            friend typename ring_container::iterator;
+            friend typename ring_container::const_iterator;
+            friend typename const_ring_container::iterator;
+            friend typename const_ring_container::const_iterator;
+            friend class boost::iterator_core_access;
             typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
             T* pNext;
             T* pPrev;
@@ -134,7 +142,6 @@ namespace sw
             algo::unlink(pThis);
     }
 
-    template <class T> class RingIterator;
     /**
      * helper class that provides STL-style container iteration to the ring
      */
@@ -172,6 +179,7 @@ namespace sw
         , boost::forward_traversal_tag
         >
     {
+            typedef typename std::remove_const<T>::type Tnonconst;
         public:
             RingIterator()
                 : m_pCurrent(nullptr)
@@ -179,7 +187,7 @@ namespace sw
             {}
             explicit RingIterator(T* pRing, bool bStart = true)
                 : m_pCurrent(nullptr)
-                , m_pStart(pRing)
+                , m_pStart(const_cast<Tnonconst*>(pRing))
             {
                 if(!bStart)
                     m_pCurrent = m_pStart;
@@ -204,9 +212,9 @@ namespace sw
              * - nullptr if on the first item (begin())
              * - m_pStart when beyond the last item (end())
              */
-            T* m_pCurrent;
+            Tnonconst* m_pCurrent;
             /** the first item of the iteration */
-            T* m_pStart;
+            Tnonconst* m_pStart;
     };
 
     template <class T>
