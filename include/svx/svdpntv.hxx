@@ -519,8 +519,8 @@ public:
     // bei bShow=sal_False wird der Browser destruiert
 #ifdef DBG_UTIL
     void ShowItemBrowser(bool bShow=true);
-    bool IsItemBrowserVisible() const { return pItemBrowser!=NULL && ((vcl::Window*)pItemBrowser)->IsVisible(); }
-    vcl::Window* GetItemBrowser() const { return (vcl::Window*)pItemBrowser; }
+    bool IsItemBrowserVisible() const { return pItemBrowser!=NULL && GetItemBrowser()->IsVisible(); }
+    vcl::Window* GetItemBrowser() const;
 #endif
 
     // Muss von App beim Scrollen usw. gerufen werden, damit ein u.U.

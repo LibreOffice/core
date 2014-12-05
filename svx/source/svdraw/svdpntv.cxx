@@ -1191,6 +1191,13 @@ void SdrPaintView::SetAnimationEnabled( bool bEnable )
     SetAnimationMode( bEnable ? SDR_ANIMATION_ANIMATE : SDR_ANIMATION_DISABLE );
 }
 
+#if defined DBG_UTIL
+vcl::Window* SdrPaintView::GetItemBrowser() const
+{
+    return pItemBrowser;
+}
+#endif
+
 void SdrPaintView::SetAnimationPause( bool bSet )
 {
     if((bool)bAnimationPause != bSet)
