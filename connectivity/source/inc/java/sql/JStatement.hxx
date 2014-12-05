@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 
+#include <java/sql/Connection.hxx>
 #include "java/sql/ConnectionLog.hxx"
 
 namespace connectivity
@@ -46,9 +47,6 @@ namespace connectivity
                                                         ::com::sun::star::sdbc::XCloseable,
                                                         ::com::sun::star::sdbc::XGeneratedResultSet,
                                                         ::com::sun::star::sdbc::XMultipleResults> java_sql_Statement_BASE;
-
-    class java_sql_Connection;
-
 
     //************ Class: java.sql.Statement
 
@@ -172,7 +170,7 @@ namespace connectivity
         friend class OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>;
     public:
         OStatement_BASE2(JNIEnv * pEnv, java_sql_Connection& _rCon ) : java_sql_Statement_Base( pEnv, _rCon ),
-                                OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>((::cppu::OWeakObject*)(&_rCon), this){}
+                                OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>(static_cast<cppu::OWeakObject*>(&_rCon), this){}
 
         // OComponentHelper
         virtual void SAL_CALL disposing(void) SAL_OVERRIDE;
