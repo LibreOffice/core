@@ -2290,10 +2290,11 @@ void Desktop::OpenClients()
         bool bCrashed            = false;
         bool bExistsRecoveryData = false;
         bool bExistsSessionData  = false;
+        bool const bDisableRecovery = getenv("OOO_DISABLE_RECOVERY") != nullptr;
 
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
 
-        if ( !getenv ("OOO_DISABLE_RECOVERY") &&
+        if ( !bDisableRecovery &&
             (
                 ( bExistsRecoveryData ) || // => crash with files    => recovery
                 ( bCrashed            )    // => crash without files => error report
@@ -2324,7 +2325,8 @@ void Desktop::OpenClients()
             SAL_WARN( "desktop.app", "Registration of session listener failed" << e.Message);
         }
 
-        if ( !bExistsRecoveryData && xSessionListener.is() )
+        // in bDisableRecovery case call doRestore() to prevent new Writer doc
+        if ((!bExistsRecoveryData || bDisableRecovery) && xSessionListener.is())
         {
             // session management
             try
