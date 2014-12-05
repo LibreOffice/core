@@ -1,0 +1,221 @@
+From a2974907e4097aa45d0d0850fd6c5f31111e9574 Mon Sep 17 00:00:00 2001
+From: Jan Holesovsky <kendy@collabora.com>
+Date: Fri, 5 Dec 2014 21:30:01 +0100
+Subject: [PATCH 2/3] opencl: Use functions from clew.
+
+---
+ jdapimin.c |  4 ++--
+ jdapistd.c | 10 +++++-----
+ jdcoefct.c | 14 +++++++-------
+ jocldec.c  | 22 +++++++++++-----------
+ 4 files changed, 25 insertions(+), 25 deletions(-)
+
+diff --git a/jdapimin.c b/jdapimin.c
+index 7a62a5d..0693113 100644
+--- a/jdapimin.c
++++ b/jdapimin.c
+@@ -138,7 +138,7 @@ jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id devic
+     			  CL_MAP_WRITE, 0, 128 * sizeof(float), 0, NULL, NULL, &err_code),return);
+       }
+       memset(ocl_status->jocl_global_data_ptr_qutable, 0, 128 * sizeof(float));
+-      CL_SAFE_CALL0(err_code = jocl_clEnqueueUnmapMemObject(
++      CL_SAFE_CALL0(err_code = clEnqueueUnmapMemObject(
+     		  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_qutable,
+     		  ocl_status->jocl_global_data_ptr_qutable, 0, NULL, NULL),return);
+ 
+@@ -159,7 +159,7 @@ jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id devic
+     				  0, NULL, NULL, &err_code),return);
+     	  }
+     	  memset(ocl_status->jocl_global_data_ptr_input[j],0,MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF));
+-    	  CL_SAFE_CALL0(err_code = jocl_clEnqueueUnmapMemObject(
++    	  CL_SAFE_CALL0(err_code = clEnqueueUnmapMemObject(
+     			  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[j],
+     			  ocl_status->jocl_global_data_ptr_input[j], 0, NULL, NULL),return);
+       }
+diff --git a/jdapistd.c b/jdapistd.c
+index 1b2622a..7db8d1e 100644
+--- a/jdapistd.c
++++ b/jdapistd.c
+@@ -87,7 +87,7 @@ jpeg_start_decompress (j_decompress_ptr cinfo)
+ 				  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_output, CL_TRUE,
+ 				  CL_MAP_READ, 0, buffer_output_size,0, NULL, NULL, &err_code),return err_code);
+ 
+-		  CL_SAFE_CALL0(err_code = jocl_clEnqueueUnmapMemObject(
++		  CL_SAFE_CALL0(err_code = clEnqueueUnmapMemObject(
+ 				  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_output,
+ 				  ocl_status->jocl_global_data_ptr_output, 0, NULL, NULL),return err_code);
+ 	  }
+@@ -199,7 +199,7 @@ jpeg_read_as_texture(j_decompress_ptr cinfo, GLuint texture)
+ 	OCL_STATUS *ocl_status = (OCL_STATUS *)cinfo->jocl_openClinfo;
+ 
+ 	cl_int status;
+-	cl_mem image = jocl_clCreateFromGLTexture(ocl_status->context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, &status);
++	cl_mem image = clCreateFromGLTexture(ocl_status->context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, &status);
+ 	if (status != 0)
+ 		return FALSE;
+ 
+@@ -207,7 +207,7 @@ jpeg_read_as_texture(j_decompress_ptr cinfo, GLuint texture)
+ 	ocl_status->use_image = TRUE;
+ 
+ 	glFinish();
+-	jocl_clEnqueueAcquireGLObjects(ocl_status->command_queue, 1, &image, 0, 0, NULL);
++	clEnqueueAcquireGLObjects(ocl_status->command_queue, 1, &image, 0, 0, NULL);
+ 
+ 	// Read the first scanline.  This will process the entire image
+ 
+@@ -216,8 +216,8 @@ jpeg_read_as_texture(j_decompress_ptr cinfo, GLuint texture)
+ 		jpeg_read_scanlines(cinfo, &buffer, 1);
+ 	}
+ 
+-	jocl_clFinish(ocl_status->command_queue);
+-	jocl_clEnqueueReleaseGLObjects(ocl_status->command_queue, 1, &image, 0, 0, NULL);
++	clFinish(ocl_status->command_queue);
++	clEnqueueReleaseGLObjects(ocl_status->command_queue, 1, &image, 0, 0, NULL);
+ 
+ 	return TRUE;
+ }
+diff --git a/jdcoefct.c b/jdcoefct.c
+index da2d659..e8b19dd 100644
+--- a/jdcoefct.c
++++ b/jdcoefct.c
+@@ -317,19 +317,19 @@ decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
+             else buffer_index_next = buffer_index + 1;
+             if (CL_FALSE == jocl_cl_is_nvidia_opencl(ocl_status)&& mcuy == 0) {
+ 		      if (buffer_flag > (num_buffer_inter - 1)) {
+-               CL_SAFE_CALL0(err_code = jocl_clWaitForEvents(1, &buffer_event[buffer_index]),return CL_FALSE);
++               CL_SAFE_CALL0(err_code = clWaitForEvents(1, &buffer_event[buffer_index]),return CL_FALSE);
+               }
+             }
+ #ifndef JOCL_CL_OS_WIN32
+             if (CL_FALSE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+               if (version_ocl) {
+-                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)jocl_clEnqueueMapBuffer(
++                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)clEnqueueMapBuffer(
+                   jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[buffer_index], CL_TRUE,
+                   CL_MAP_WRITE_INVALIDATE_REGION, 0, MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF),
+                   0, NULL, NULL, &err_code),return CL_FALSE);
+               }
+               else {
+-                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)jocl_clEnqueueMapBuffer(
++                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)clEnqueueMapBuffer(
+                   jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[buffer_index], CL_TRUE,
+                   CL_MAP_WRITE, 0, MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF),
+                   0, NULL, NULL, &err_code),return CL_FALSE);
+@@ -383,19 +383,19 @@ decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
+             if (CL_FALSE == jocl_cl_is_nvidia_opencl(ocl_status) && (CL_FALSE == jocl_cl_get_fancy_status(ocl_status) ||
+               upfactor != 4)) {
+ 		      if (buffer_flag > (BUFFERNUMS - 1) && mcuy == 0) {
+-               CL_SAFE_CALL0(err_code = jocl_clWaitForEvents(1, &buffer_event[buffer_index]), return CL_FALSE);
++               CL_SAFE_CALL0(err_code = clWaitForEvents(1, &buffer_event[buffer_index]), return CL_FALSE);
+               }
+             }
+ #ifndef JOCL_CL_OS_WIN32
+             if (CL_FALSE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+               if (version_ocl) {
+-                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)jocl_clEnqueueMapBuffer(
++                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)clEnqueueMapBuffer(
+                   jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[buffer_index], CL_TRUE,
+                   CL_MAP_WRITE_INVALIDATE_REGION, 0, MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF),
+                   0, NULL, NULL, &err_code),return CL_FALSE);
+               }
+               else {
+-                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)jocl_clEnqueueMapBuffer(
++                CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[buffer_index] = (JCOEFPTR)clEnqueueMapBuffer(
+                   jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[buffer_index], CL_TRUE,
+                   CL_MAP_WRITE, 0, MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF),
+                   0, NULL, NULL, &err_code),return CL_FALSE);
+@@ -420,7 +420,7 @@ decompress_onepass (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
+             if (CL_TRUE == jocl_cl_get_fancy_status(ocl_status) && upfactor == 4) {
+               if (mcuy == cinfo->blocks_in_MCU * MCUNUMS) {
+                 if (CL_FALSE == jocl_cl_is_nvidia_opencl(ocl_status) && (buffer_flag > (BUFFERNUMS - 2))) {
+-                  CL_SAFE_CALL0(err_code = jocl_clWaitForEvents(1, &buffer_event[buffer_index_next]),return CL_FALSE);
++                  CL_SAFE_CALL0(err_code = clWaitForEvents(1, &buffer_event[buffer_index_next]),return CL_FALSE);
+                 }
+                 memcpy(ocl_status->jocl_global_data_ptr_input[buffer_index_next],ocl_status->jocl_global_data_ptr_input[buffer_index] +
+                  (MCUNUMS - 1)* cinfo->blocks_in_MCU * DCTSIZE2, cinfo->blocks_in_MCU * DCTSIZE2 * sizeof(JCOEF));
+diff --git a/jocldec.c b/jocldec.c
+index 9c3a31a..e7f3607 100644
+--- a/jocldec.c
++++ b/jocldec.c
+@@ -222,7 +222,7 @@ cl_bool jocldec_build_kernels(j_decompress_ptr cinfo)
+                                                     NULL),
+                                                     return CL_FALSE);
+       }
+-      CL_SAFE_CALL0(err_code = jocl_clFinish(jocl_cl_get_command_queue(ocl_status)), return CL_FALSE);
++      CL_SAFE_CALL0(err_code = clFinish(jocl_cl_get_command_queue(ocl_status)), return CL_FALSE);
+ #endif
+     } else {
+       CL_DEBUG_NOTE("ERROR: Could not create OpenCL kernels.\n");
+@@ -295,7 +295,7 @@ cl_bool jocldec_run_kernels_full_image(
+   }
+ #ifndef JOCL_CL_OS_WIN32
+   if (CL_FALSE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+-    CL_SAFE_CALL0(err_code = jocl_clEnqueueUnmapMemObject(
++    CL_SAFE_CALL0(err_code = clEnqueueUnmapMemObject(
+       jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[buffer_index],
+       ocl_status->jocl_global_data_ptr_input[buffer_index], 0, NULL, NULL),return CL_FALSE);
+   }
+@@ -647,21 +647,21 @@ cl_bool jocldec_run_kernels_full_image(
+         jocl_clReleaseEvent(buffer_event[index_event]);
+       }
+     }
+-    CL_SAFE_CALL0(err_code = jocl_clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
++    CL_SAFE_CALL0(err_code = clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
+     if (CL_TRUE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+       CL_SAFE_CALL0(err_code = jocl_clEnqueueReadBuffer(jocl_cl_get_command_queue(ocl_status),
+         ocl_status->jocl_global_data_mem_output, CL_TRUE, 0, size_map, ocl_status->jocl_global_data_ptr_output,
+         0, NULL, NULL), return CL_FALSE);  	
+ 	}
+ 	else {
+-      CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_output = (JSAMPROW)jocl_clEnqueueMapBuffer(
++      CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_output = (JSAMPROW)clEnqueueMapBuffer(
+         jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_output, CL_TRUE,
+         CL_MAP_READ, 0, size_map, 0, NULL, NULL, &err_code),return CL_FALSE);
+-      CL_SAFE_CALL0(err_code = jocl_clEnqueueUnmapMemObject(
++      CL_SAFE_CALL0(err_code = clEnqueueUnmapMemObject(
+         jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_output,
+         ocl_status->jocl_global_data_ptr_output, 0, NULL, NULL), return CL_FALSE);
+     }
+-    CL_SAFE_CALL0(err_code = jocl_clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
++    CL_SAFE_CALL0(err_code = clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
+   }
+   return CL_TRUE;
+ }
+@@ -721,7 +721,7 @@ cl_bool jocldec_run_kernels_h2v2_fancy(
+   }
+ #ifndef JOCL_CL_OS_WIN32
+   if (CL_FALSE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+-    CL_SAFE_CALL0(err_code = jocl_clEnqueueUnmapMemObject(
++    CL_SAFE_CALL0(err_code = clEnqueueUnmapMemObject(
+       jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[buffer_index],
+       ocl_status->jocl_global_data_ptr_input[buffer_index], 0, NULL, NULL),return CL_FALSE);
+   }
+@@ -1018,21 +1018,21 @@ cl_bool jocldec_run_kernels_h2v2_fancy(
+     size_map = cinfo->max_h_samp_factor * cinfo->MCUs_per_row * DCTSIZE *
+       cinfo->image_height * NUM_COMPONENT;
+ 
+-    CL_SAFE_CALL0(err_code = jocl_clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
++    CL_SAFE_CALL0(err_code = clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
+     if (CL_TRUE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+       CL_SAFE_CALL0(err_code = jocl_clEnqueueReadBuffer(jocl_cl_get_command_queue(ocl_status),
+         ocl_status->jocl_global_data_mem_output, CL_TRUE, 0, size_map, ocl_status->jocl_global_data_ptr_output,
+         0, NULL, NULL), return CL_FALSE);  	
+ 	}
+ 	else {
+-      CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_output = (JSAMPROW)jocl_clEnqueueMapBuffer(
++      CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_output = (JSAMPROW)clEnqueueMapBuffer(
+         jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_output, CL_TRUE,
+         CL_MAP_READ, 0, size_map, 0, NULL, NULL, &err_code),return CL_FALSE);
+-      CL_SAFE_CALL0(err_code = jocl_clEnqueueUnmapMemObject(
++      CL_SAFE_CALL0(err_code = clEnqueueUnmapMemObject(
+         jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_output,
+         ocl_status->jocl_global_data_ptr_output, 0, NULL, NULL), return CL_FALSE);
+     }
+-    CL_SAFE_CALL0(err_code = jocl_clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
++    CL_SAFE_CALL0(err_code = clFinish(jocl_cl_get_command_queue(ocl_status)),return CL_FALSE);
+   }
+   return CL_TRUE;
+ }
+-- 
+1.8.1.4
+

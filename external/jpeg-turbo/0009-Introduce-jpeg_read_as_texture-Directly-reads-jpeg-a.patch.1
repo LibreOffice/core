@@ -1,0 +1,423 @@
+From 9311c19801c471577cc2b4f49992c1dc4821edcb Mon Sep 17 00:00:00 2001
+From: "Wootton, Michael" <Michael.Wootton@amd.com>
+Date: Fri, 5 Dec 2014 13:32:14 +0100
+Subject: [PATCH 9/9] Introduce jpeg_read_as_texture(): Directly reads jpeg as
+ an OpenGL texture.
+
+---
+ djpeg.c                  | 41 ++++++++++++++++++++++++++++++++++++++++-
+ jdapimin.c               |  5 +++--
+ jdapistd.c               | 36 ++++++++++++++++++++++++++++++++++++
+ jocldec.c                | 10 ++++++++++
+ jocldsample.h            | 13 ++++++++++---
+ joclinit.c               | 29 +++++++++++++++++++++--------
+ joclinit.h               | 14 ++++++++++----
+ jpeglib.h                |  9 +++++----
+ win/jpeg62-memsrcdst.def |  3 ++-
+ 9 files changed, 137 insertions(+), 23 deletions(-)
+
+diff --git a/djpeg.c b/djpeg.c
+index 1641d7b..8636c95 100644
+--- a/djpeg.c
++++ b/djpeg.c
+@@ -31,6 +31,9 @@
+ 
+ #include <ctype.h>		/* to declare isprint() */
+ 
++#include <GL/gl.h>
++#include <CL/cl.h>
++
+ #ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+ #ifdef __MWERKS__
+ #include <SIOUX.h>              /* Metrowerks needs this */
+@@ -51,6 +54,7 @@ static const char * const cdjpeg_message_table[] = {
+   NULL
+ };
+ 
++//extern boolean jpeg_read_as_texture(j_decompress_ptr cinfo, GLuint texture);
+ 
+ /*
+  * This list defines the known output image formats
+@@ -467,6 +471,8 @@ main (int argc, char **argv)
+   unsigned long insize = 0;
+   JDIMENSION num_scanlines;
+ 
++  GLuint texture;
++
+   /* On Mac, fetch a command line. */
+ #ifdef USE_CCOMMAND
+   argc = ccommand(&argv);
+@@ -484,7 +490,12 @@ main (int argc, char **argv)
+ 
+   /* Initialize the JPEG decompression object with default error handling. */
+   cinfo.err = jpeg_std_error(&jerr);
+-  jpeg_create_decompress(&cinfo);
++  {
++    // FIXME: application context and device_id
++    cl_context context;
++    cl_device_id deviceId;
++	jpeg_create_decompress(&cinfo, context, deviceId);	// FIXME: pass in context and deviceId here
++  }
+   /* Add some application-specific error messages (from cderror.h) */
+   jerr.addon_message_table = cdjpeg_message_table;
+   jerr.first_addon_message = JMSG_FIRSTADDONCODE;
+@@ -593,6 +604,30 @@ main (int argc, char **argv)
+   /* Read file header, set default decompression parameters */
+   (void) jpeg_read_header(&cinfo, TRUE);
+ 
++
++//------------------------------------------------------------------
++
++	//GLuint texture;
++
++	glGenTextures(1, &texture);
++	glBindTexture(GL_TEXTURE_2D, texture);
++	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
++	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
++
++	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, cinfo.image_width, cinfo.image_height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
++
++
++
++
++
++//------------------------------------------------------------------
++
++
++
++
++
+   /* Adjust default decompression parameters by re-parsing the options */
+   file_index = parse_switches(&cinfo, argc, argv, 0, TRUE);
+ 
+@@ -668,13 +703,17 @@ main (int argc, char **argv)
+   gettimeofday(&start, NULL);
+ #endif
+ 
++#if 0
++  jpeg_read_as_texture(&cinfo, texture);
+ 
++#else
+   /* Process data */
+   while (cinfo.output_scanline < cinfo.output_height) {
+     num_scanlines = jpeg_read_scanlines(&cinfo, dest_mgr->buffer,
+ 					dest_mgr->buffer_height);
+     (*dest_mgr->put_pixel_rows) (&cinfo, dest_mgr, num_scanlines);
+   }
++#endif
+ 
+ #ifdef PERFORMANCE_COUNTER
+   QueryPerformanceCounter(&end); 
+diff --git a/jdapimin.c b/jdapimin.c
+index cd099af..485e3ad 100644
+--- a/jdapimin.c
++++ b/jdapimin.c
+@@ -34,7 +34,7 @@
+  */
+ 
+ GLOBAL(void)
+-jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize)
++jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize, cl_context context, cl_device_id deviceId)
+ {
+   int i;
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+@@ -96,7 +96,8 @@ jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize)
+   cinfo->global_state = DSTATE_START;
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-  if (/*CL_FALSE == jocl_cl_is_support_opencl(ocl_status) &&*/ CL_TRUE == jocl_cl_init(&cinfo->jocl_openClinfo)) {
++//  if (/*CL_FALSE == jocl_cl_is_support_opencl(ocl_status) &&*/ CL_TRUE == jocl_cl_init(&cinfo->jocl_openClinfo)) {
++  if (/*CL_FALSE == jocl_cl_is_support_opencl(ocl_status) &&*/ CL_TRUE == jocl_cl_init(&cinfo->jocl_openClinfo, context, deviceId)) {
+         ocl_status = (OCL_STATUS *)cinfo->jocl_openClinfo;
+         version_ocl = jocl_cl_get_ocl_version(ocl_status);
+       if (CL_TRUE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+diff --git a/jdapistd.c b/jdapistd.c
+index 6b477b5..c8dfda7 100644
+--- a/jdapistd.c
++++ b/jdapistd.c
+@@ -23,6 +23,8 @@
+ #include "jpegcomp.h"
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
++#include <GL/gl.h>
++#include <CL/cl_gl.h>
+ #include "CL/opencl.h"
+ #include "joclinit.h"
+ #endif
+@@ -189,6 +191,40 @@ output_pass_setup (j_decompress_ptr cinfo)
+ 
+ 
+ /*
++*/
++
++#if 1
++GLOBAL(boolean)
++jpeg_read_as_texture(j_decompress_ptr cinfo, GLuint texture)
++{
++	OCL_STATUS *ocl_status = (OCL_STATUS *)cinfo->jocl_openClinfo;
++
++	cl_int status;
++	cl_mem image = jocl_clCreateFromGLTexture(ocl_status->context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, texture, &status);
++	if (status != 0)
++		return FALSE;
++
++	ocl_status->jocl_global_data_image_output = image;
++	ocl_status->use_image = TRUE;
++
++	glFinish();
++	jocl_clEnqueueAcquireGLObjects(ocl_status->command_queue, 1, &image, 0, 0, NULL);
++
++	// Read the first scanline.  This will process the entire image
++
++	{
++		void *buffer = NULL;
++		jpeg_read_scanlines(cinfo, &buffer, 1);
++	}
++
++	jocl_clFinish(ocl_status->command_queue);
++	jocl_clEnqueueReleaseGLObjects(ocl_status->command_queue, 1, &image, 0, 0, NULL);
++
++	return TRUE;
++}
++#endif
++
++/*
+  * Read some scanlines of data from the JPEG decompressor.
+  *
+  * The return value will be the number of lines actually read.
+diff --git a/jocldec.c b/jocldec.c
+index 98edd0d..431c236 100644
+--- a/jocldec.c
++++ b/jocldec.c
+@@ -891,6 +891,16 @@ cl_bool jocldec_run_kernels_h2v2_fancy(
+                                                  sizeof(unsigned int),
+                                                  &mcu_offset_buffer),
+                                                  return CL_FALSE);
++    CL_SAFE_CALL0(err_code = jocl_clSetKernelArg(jocldec_cl_kernel_use,
++                                                 16,
++                                                 sizeof(cl_bool),
++                                                 &ocl_status->use_image),
++                                                 return CL_FALSE);
++    CL_SAFE_CALL0(err_code = jocl_clSetKernelArg(jocldec_cl_kernel_use,
++                                                 17,
++                                                 sizeof(cl_mem),
++                                                 &ocl_status->jocl_global_data_image_output),
++                                                 return CL_FALSE);
+     CL_SAFE_CALL0(err_code = jocl_clEnqueueNDRangeKernel(jocl_cl_get_command_queue(ocl_status),
+                                                  jocldec_cl_kernel_use,
+                                                  1,
+diff --git a/jocldsample.h b/jocldsample.h
+index 416f9b1..b0dee98 100644
+--- a/jocldsample.h
++++ b/jocldsample.h
+@@ -545,7 +545,9 @@ static const char     * jocldec_cl_source7  =
+ "                                      const    uint    mcu_total,        \n"
+ "                                      const    uint    edge_mcu_h,       \n"
+ "                                      const    uint    edge_mcu_v,       \n"
+-"                                      const    uint    mcu_offset_buffer)\n"
++"                                      const    uint    mcu_offset_buffer,\n"
++"                                      const    bool    useImage,         \n"
++"                                      __write_only image2d_t outputImage)\n"
+ "{                                                                        \n"
+ "  uint   globalIdx   = get_global_id(0);                                 \n"
+ "  uint   globalIdx1  = get_global_id(0) + mcu_offset;                    \n"
+@@ -857,7 +859,12 @@ static const char     * jocldec_cl_source7  =
+ "      + localIdx / 8 * mcu_width * 8] = vload8(localIdx, inter);         \n"
+ #else
+ "  if (localIdx < 96)                                                     \n"
+-"    dst[y * mcu_width * 96 + x * 6 + localIdx % 6                        \n"
+-"      + localIdx / 6 * mcu_width * 6] = vload8(localIdx, inter);         \n"
++"    if (useImage == true) {   // FIXME - compute actual x, y             \n"
++"      write_imageui(dstImage, (int2)(x, y), (uint4)(inter[localIdx], inter[localIdx + 1], inter[localIdx + 2], 0));  // FIXME \n"
++"      write_imageui(dstImage, (int2)(x, y), (uint4)(inter[localIdx + 3], inter[localIdx + 4], inter[localIdx + 5], 0));  // FIXME \n"
++"    }                                                                    \n"
++"    else                                                                 \n"
++"      dst[y * mcu_width * 96 + x * 6 + localIdx % 6                      \n"
++"        + localIdx / 6 * mcu_width * 6] = vload8(localIdx, inter);       \n"
+ #endif
+ "}                                                                        \n";
+diff --git a/joclinit.c b/joclinit.c
+index 0affcfc..81c2078 100644
+--- a/joclinit.c
++++ b/joclinit.c
+@@ -148,10 +148,11 @@ const char* jocl_cl_errstring(cl_int err_code)
+     return CL_FALSE;                                                           \
+   }
+ #endif
+-cl_bool jocl_cl_init(void **jocl_openClinfo)
++//cl_bool jocl_cl_init(void **jocl_openClinfo)
++cl_bool jocl_cl_init(void **jocl_openClinfo, cl_context context, cl_device_id deviceId)
+ {
+-    char*  platformVendor;
+-    char * deviceName ;
++    //char*  platformVendor;
++    //char * deviceName ;
+     char *ocl_disable;
+ #ifdef JOCL_CL_OS_WIN32
+   void *handle = INVALID_HANDLE_VALUE;
+@@ -187,11 +188,11 @@ cl_bool jocl_cl_init(void **jocl_openClinfo)
+   }
+   if (!ocl_status->is_opencl_available) {
+     cl_int          err_code;
+-    cl_uint         num_platform;
+-    cl_uint         num_device;
+-    cl_platform_id* pids;
+-    cl_device_id*   dids;
+-    cl_uint         index;
++    //cl_uint         num_platform;
++    //cl_uint         num_device;
++    //cl_platform_id* pids;
++    //cl_device_id*   dids;
++    //cl_uint         index;
+ 	unsigned int    num_gpu_device = 0;
+     char*           version_ocl_inter = NULL;
+     char*           version_ocl = NULL;
+@@ -291,7 +292,16 @@ cl_bool jocl_cl_init(void **jocl_openClinfo)
+     CL_LOAD_FUNCTION(clEnqueueMarkerWithWaitList      );
+     CL_LOAD_FUNCTION(clEnqueueBarrierWithWaitList     );
+     CL_LOAD_FUNCTION(clSetPrintfCallback              );*/
++	CL_LOAD_FUNCTION(clCreateFromGLTexture            );
++	CL_LOAD_FUNCTION(clFinish                         );
++	CL_LOAD_FUNCTION(clEnqueueAcquireGLObjects        );
++	CL_LOAD_FUNCTION(clEnqueueReleaseGLObjects        );
+ 
++	// Use the supplied context and device id
++	ocl_status->context = context;
++	ocl_status->device_id = deviceId;
++
++#if 0
+     /* ********* Get and select a platform. ********* */
+     CL_SAFE_CALL0(err_code = jocl_clGetPlatformIDs(0, NULL, &num_platform)
+       , return CL_FALSE);
+@@ -424,6 +434,7 @@ cl_bool jocl_cl_init(void **jocl_openClinfo)
+ 	/* AMD A10-4600M APU with Radeon(tm) HD Graphics */
+ 
+     free(dids);
++
+ 	CL_SAFE_CALL0(err_code = jocl_clGetDeviceInfo(ocl_status->device_id,
+ 	  CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_device_type),
+ 	  &ocl_status->mem_size, NULL), return CL_FALSE);
+@@ -432,6 +443,8 @@ cl_bool jocl_cl_init(void **jocl_openClinfo)
+     ocl_status->context = CL_SAFE_CALL0(jocl_clCreateContext(NULL,
+       1, &ocl_status->device_id, NULL, NULL, &err_code), return CL_FALSE);
+ 
++#endif
++
+     /* ********* Create a command queue. ********* */
+     ocl_status->command_queue = CL_SAFE_CALL0(jocl_clCreateCommandQueue(
+       ocl_status->context, ocl_status->device_id, 0, &err_code),
+diff --git a/joclinit.h b/joclinit.h
+index 0ce10c0..ae9d100 100644
+--- a/joclinit.h
++++ b/joclinit.h
+@@ -16,6 +16,7 @@
+ #ifndef __DYNAMIC_LOADING_OPENCL_INIT_H__
+ #define __DYNAMIC_LOADING_OPENCL_INIT_H__
+ 
++#include <GL/gl.h>
+ 
+ /*
+  * In order to ensure that this extension can be successfully compiled
+@@ -104,8 +105,9 @@ typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueNativeKernel
+ typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueMarkerWithWaitList      ) (cl_command_queue, cl_uint, const cl_event*, cl_event*);
+ typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueBarrierWithWaitList     ) (cl_command_queue, cl_uint, const cl_event*, cl_event*);
+ typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clSetPrintfCallback              ) (cl_context, void (CL_CALLBACK*)(cl_context, cl_uint, char*, void*), void*);
+-
+-
++typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clCreateFromGLTexture            ) (cl_context, cl_mem_flags, GLenum, GLint, GLuint, cl_int*);
++typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueAcquireGLObjects        ) (cl_command_queue, cl_uint, const cl_mem*, cl_uint, const cl_event*, cl_event*);
++typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueReleaseGLObjects        ) (cl_command_queue, cl_uint, const cl_mem*, cl_uint, const cl_event*, cl_event*);
+ /*
+  * Declaration or definition the API pointers.
+  * Use macros to streamline the code.
+@@ -200,7 +202,9 @@ CL_LOADING_PREFIX h_clEnqueueNativeKernel             jocl_clEnqueueNativeKernel
+ CL_LOADING_PREFIX h_clEnqueueMarkerWithWaitList       jocl_clEnqueueMarkerWithWaitList       CL_LOADING_SUFFIX;
+ CL_LOADING_PREFIX h_clEnqueueBarrierWithWaitList      jocl_clEnqueueBarrierWithWaitList      CL_LOADING_SUFFIX;
+ CL_LOADING_PREFIX h_clSetPrintfCallback               jocl_clSetPrintfCallback               CL_LOADING_SUFFIX;
+-
++CL_LOADING_PREFIX h_clCreateFromGLTexture             jocl_clCreateFromGLTexture             CL_LOADING_SUFFIX;
++CL_LOADING_PREFIX h_clEnqueueAcquireGLObjects         jocl_clEnqueueAcquireGLObjects         CL_LOADING_SUFFIX;
++CL_LOADING_PREFIX h_clEnqueueReleaseGLObjects         jocl_clEnqueueReleaseGLObjects         CL_LOADING_SUFFIX;
+ #undef CL_LOADING_PREFIX
+ #undef CL_LOADING_SUFFIX
+ 
+@@ -237,6 +241,7 @@ typedef struct
+   cl_bool          decode_support;
+   cl_bool          output_format_bmp;
+   cl_bool          is_version1_2_ocl;
++  cl_bool          use_image;
+   unsigned long    mem_size;
+   char             platform_profile   [1024];
+   char             platform_version   [1024];
+@@ -244,6 +249,7 @@ typedef struct
+   char             platform_vendor    [1024];
+   char             platform_extensions[1024];
+   char             device_name        [1024];
++  cl_mem   jocl_global_data_image_output    ;
+   cl_mem   jocl_global_data_mem_output      ;
+   cl_mem   jocl_global_data_mem_qutable     ;
+   cl_mem   jocl_global_data_mem_input      [BUFFERNUMS];
+@@ -256,7 +262,7 @@ typedef struct
+ } OCL_STATUS;
+ 
+ const char*      jocl_cl_errstring                 (cl_int err_code);
+-cl_bool          jocl_cl_init                      (void **jocl_openClinfo);
++cl_bool          jocl_cl_init                      (void **jocl_openClinfo, cl_context, cl_device_id);
+ JOCL_CL_RUNDATA* jocl_cl_compile_and_build         (void *jocl_openClinfo,
+                                                     const char** program_source,
+                                                     const char*  kernel_name[]);
+diff --git a/jpeglib.h b/jpeglib.h
+index 975aeb2..de05074 100644
+--- a/jpeglib.h
++++ b/jpeglib.h
+@@ -27,6 +27,7 @@
+ #include "jconfig.h"		/* widely used configuration options */
+ #endif
+ #include "jmorecfg.h"		/* seldom changed options */
++#include "CL/opencl.h"
+ 
+ 
+ #ifdef __cplusplus
+@@ -988,13 +989,13 @@ EXTERN(struct jpeg_error_mgr *) jpeg_std_error
+ #define jpeg_create_compress(cinfo) \
+     jpeg_CreateCompress((cinfo), JPEG_LIB_VERSION, \
+ 			(size_t) sizeof(struct jpeg_compress_struct))
+-#define jpeg_create_decompress(cinfo) \
++#define jpeg_create_decompress(cinfo, context, deviceId) \
+     jpeg_CreateDecompress((cinfo), JPEG_LIB_VERSION, \
+-			  (size_t) sizeof(struct jpeg_decompress_struct))
++			  (size_t) sizeof(struct jpeg_decompress_struct), context, deviceId)
+ EXTERN(void) jpeg_CreateCompress JPP((j_compress_ptr cinfo,
+ 				      int version, size_t structsize));
+ EXTERN(void) jpeg_CreateDecompress JPP((j_decompress_ptr cinfo,
+-					int version, size_t structsize));
++					int version, size_t structsize, cl_context context, cl_device_id deviceId));
+ /* Destruction of JPEG compression objects */
+ EXTERN(void) jpeg_destroy_compress JPP((j_compress_ptr cinfo));
+ EXTERN(void) jpeg_destroy_decompress JPP((j_decompress_ptr cinfo));
+@@ -1211,7 +1212,7 @@ struct jpeg_color_quantizer { long dummy; };
+ 
+ #ifdef JOCL_CL_OS_WIN32
+ 
+-//#define PERFORMANCE_COUNTER
++#define PERFORMANCE_COUNTER
+ #ifdef PERFORMANCE_COUNTER
+ #include <windows.h>
+   LARGE_INTEGER start;   
+diff --git a/win/jpeg62-memsrcdst.def b/win/jpeg62-memsrcdst.def
+index 4511c8e..1aafff2 100755
+--- a/win/jpeg62-memsrcdst.def
++++ b/win/jpeg62-memsrcdst.def
+@@ -101,4 +101,5 @@ EXPORTS
+ 	jround_up @ 100 ; 
+ 	jzero_far @ 101 ; 
+ 	jpeg_mem_dest @ 102 ; 
+-	jpeg_mem_src @ 103 ; 
++	jpeg_mem_src @ 103 ;
++	jpeg_read_as_texture @ 104 ;
+\ No newline at end of file
+-- 
+1.8.1.4
+

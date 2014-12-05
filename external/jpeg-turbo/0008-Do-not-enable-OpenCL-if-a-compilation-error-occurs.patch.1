@@ -1,0 +1,60 @@
+From 21ae8947d5ff771e74b675f40b7c07736bee1a98 Mon Sep 17 00:00:00 2001
+From: dcommander <dcommander@632fc199-4ca6-4c93-a231-07263d6284db>
+Date: Fri, 17 Jan 2014 20:09:51 +0000
+Subject: [PATCH 8/9] Do not enable OpenCL if a compilation error occurs.
+
+git-svn-id: http://svn.code.sf.net/p/libjpeg-turbo/code/branches/opencl@1099 632fc199-4ca6-4c93-a231-07263d6284db
+---
+ jocldec.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/jocldec.c b/jocldec.c
+index 6adb275..98edd0d 100644
+--- a/jocldec.c
++++ b/jocldec.c
+@@ -6,6 +6,7 @@
+  * The OpenCL kernel code is written by
+  *   Chunli  Zhang <chunli@multicorewareinc.com> and
+  *   Peixuan Zhang <peixuan@multicorewareinc.com>
++ * Copyright (C) 2014, D. R. Commander.
+  * Based on the OpenCL extension for IJG JPEG library,
+  * For conditions of distribution and use, see the accompanying README file.
+  *
+@@ -39,6 +40,7 @@ cl_bool jocldec_build_kernels(j_decompress_ptr cinfo)
+   cl_uint data_m = 6;
+   cl_uint blocksWidth  = 64;
+   size_t  global_ws[1], local_ws[1];
++  cl_bool retval = CL_TRUE;
+ 
+   static  const char **jocldec_cl_source;
+   char    **jocldec_cl_source_inter;
+@@ -222,6 +224,9 @@ cl_bool jocldec_build_kernels(j_decompress_ptr cinfo)
+       }
+       CL_SAFE_CALL0(err_code = jocl_clFinish(jocl_cl_get_command_queue(ocl_status)), return CL_FALSE);
+ #endif
++    } else {
++      CL_DEBUG_NOTE("ERROR: Could not create OpenCL kernels.\n");
++      retval = CL_FALSE;
+     }
+   }
+   for(i=0; i<7; ++i) {
+@@ -229,7 +234,7 @@ cl_bool jocldec_build_kernels(j_decompress_ptr cinfo)
+   }
+   free(jocldec_cl_source_inter);
+ 
+-  return CL_TRUE;
++  return retval;
+ }
+ 
+ cl_bool jocldec_run_kernels_full_image(
+@@ -1034,7 +1039,6 @@ void jocl_release_ocl_resource  (j_decompress_ptr cinfo)
+ 
+   if (CL_TRUE == jocl_cl_is_available(ocl_status) && jocl_cl_get_decode_support(ocl_status)) {
+ 
+-
+     if (CL_TRUE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+       free(ocl_status->jocl_global_data_ptr_output);
+       free(ocl_status->jocl_global_data_ptr_qutable);
+-- 
+1.8.1.4
+

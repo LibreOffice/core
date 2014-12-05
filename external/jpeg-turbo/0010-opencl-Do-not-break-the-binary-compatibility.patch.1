@@ -1,0 +1,177 @@
+From 48134d6054cd1f04c9a81852f4dac332e720ab40 Mon Sep 17 00:00:00 2001
+From: Jan Holesovsky <kendy@collabora.com>
+Date: Fri, 5 Dec 2014 14:12:24 +0100
+Subject: [PATCH] opencl: Do not break the binary compatibility.
+
+---
+ djpeg.c    | 12 +++++++-----
+ jdapimin.c | 27 ++++++++++++++++++---------
+ jdapistd.c |  2 +-
+ jpeglib.h  | 15 ++++++++++++---
+ 4 files changed, 38 insertions(+), 18 deletions(-)
+
+diff --git a/djpeg.c b/djpeg.c
+index 8636c95..a352a4a 100644
+--- a/djpeg.c
++++ b/djpeg.c
+@@ -31,8 +31,10 @@
+ 
+ #include <ctype.h>		/* to declare isprint() */
+ 
++#if 0
+ #include <GL/gl.h>
+ #include <CL/cl.h>
++#endif
+ 
+ #ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+ #ifdef __MWERKS__
+@@ -471,7 +473,9 @@ main (int argc, char **argv)
+   unsigned long insize = 0;
+   JDIMENSION num_scanlines;
+ 
++#if 0
+   GLuint texture;
++#endif
+ 
+   /* On Mac, fetch a command line. */
+ #ifdef USE_CCOMMAND
+@@ -491,10 +495,7 @@ main (int argc, char **argv)
+   /* Initialize the JPEG decompression object with default error handling. */
+   cinfo.err = jpeg_std_error(&jerr);
+   {
+-    // FIXME: application context and device_id
+-    cl_context context;
+-    cl_device_id deviceId;
+-	jpeg_create_decompress(&cinfo, context, deviceId);	// FIXME: pass in context and deviceId here
++    jpeg_create_decompress(&cinfo);
+   }
+   /* Add some application-specific error messages (from cderror.h) */
+   jerr.addon_message_table = cdjpeg_message_table;
+@@ -605,6 +606,7 @@ main (int argc, char **argv)
+   (void) jpeg_read_header(&cinfo, TRUE);
+ 
+ 
++#if 0
+ //------------------------------------------------------------------
+ 
+ 	//GLuint texture;
+@@ -623,7 +625,7 @@ main (int argc, char **argv)
+ 
+ 
+ //------------------------------------------------------------------
+-
++#endif
+ 
+ 
+ 
+diff --git a/jdapimin.c b/jdapimin.c
+index 485e3ad..cfe2845 100644
+--- a/jdapimin.c
++++ b/jdapimin.c
+@@ -34,16 +34,9 @@
+  */
+ 
+ GLOBAL(void)
+-jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize, cl_context context, cl_device_id deviceId)
++jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize)
+ {
+   int i;
+-#ifdef WITH_OPENCL_DECODING_SUPPORTED
+-  unsigned long    buffer_output_size = 0;
+-  cl_int err_code;
+-  int j;
+-  OCL_STATUS *ocl_status;
+-  cl_bool version_ocl ;
+-#endif
+ 
+   /* Guard against version mismatches between library and caller. */
+   cinfo->mem = NULL;		/* so jpeg_destroy knows mem mgr not called */
+@@ -94,8 +87,24 @@ jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize, c
+ 
+   /* OK, I'm ready */
+   cinfo->global_state = DSTATE_START;
++}
++
++/*
++ * Initialization of a JPEG decompression object.
++ * The error manager must already be set up (in case memory manager fails).
++ */
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
++GLOBAL(void)
++jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id deviceId)
++{
++  cl_int err_code;
++  int j;
++  OCL_STATUS *ocl_status;
++  cl_bool version_ocl ;
++
++  assert(cinfo->global_state == DSTATE_START);
++
+ //  if (/*CL_FALSE == jocl_cl_is_support_opencl(ocl_status) &&*/ CL_TRUE == jocl_cl_init(&cinfo->jocl_openClinfo)) {
+   if (/*CL_FALSE == jocl_cl_is_support_opencl(ocl_status) &&*/ CL_TRUE == jocl_cl_init(&cinfo->jocl_openClinfo, context, deviceId)) {
+         ocl_status = (OCL_STATUS *)cinfo->jocl_openClinfo;
+@@ -170,8 +179,8 @@ jpeg_CreateDecompress (j_decompress_ptr cinfo, int version, size_t structsize, c
+     	  cinfo->opencl_rgb_flag = FALSE;
+       }
+   }
+-#endif
+ }
++#endif
+ 
+ 
+ 
+diff --git a/jdapistd.c b/jdapistd.c
+index c8dfda7..1be00b4 100644
+--- a/jdapistd.c
++++ b/jdapistd.c
+@@ -193,7 +193,7 @@ output_pass_setup (j_decompress_ptr cinfo)
+ /*
+ */
+ 
+-#if 1
++#if WITH_OPENCL_DECODING_SUPPORTED
+ GLOBAL(boolean)
+ jpeg_read_as_texture(j_decompress_ptr cinfo, GLuint texture)
+ {
+diff --git a/jpeglib.h b/jpeglib.h
+index de05074..dc3d208 100644
+--- a/jpeglib.h
++++ b/jpeglib.h
+@@ -27,7 +27,10 @@
+ #include "jconfig.h"		/* widely used configuration options */
+ #endif
+ #include "jmorecfg.h"		/* seldom changed options */
++
++#if WITH_OPENCL_DECODING_SUPPORTED
+ #include "CL/opencl.h"
++#endif
+ 
+ 
+ #ifdef __cplusplus
+@@ -989,13 +992,19 @@ EXTERN(struct jpeg_error_mgr *) jpeg_std_error
+ #define jpeg_create_compress(cinfo) \
+     jpeg_CreateCompress((cinfo), JPEG_LIB_VERSION, \
+ 			(size_t) sizeof(struct jpeg_compress_struct))
+-#define jpeg_create_decompress(cinfo, context, deviceId) \
++#define jpeg_create_decompress(cinfo) \
+     jpeg_CreateDecompress((cinfo), JPEG_LIB_VERSION, \
+-			  (size_t) sizeof(struct jpeg_decompress_struct), context, deviceId)
++			  (size_t) sizeof(struct jpeg_decompress_struct))
+ EXTERN(void) jpeg_CreateCompress JPP((j_compress_ptr cinfo,
+ 				      int version, size_t structsize));
+ EXTERN(void) jpeg_CreateDecompress JPP((j_decompress_ptr cinfo,
+-					int version, size_t structsize, cl_context context, cl_device_id deviceId));
++					int version, size_t structsize));
++
++#if WITH_OPENCL_DECODING_SUPPORTED
++/* Initialize the for use with an OpenCL device (decompression only) */
++EXTERN(void) jpeg_init_opencl JPP((j_decompress_ptr cinfo, cl_context context, cl_device_id deviceId));
++#endif
++
+ /* Destruction of JPEG compression objects */
+ EXTERN(void) jpeg_destroy_compress JPP((j_compress_ptr cinfo));
+ EXTERN(void) jpeg_destroy_decompress JPP((j_decompress_ptr cinfo));
+-- 
+1.8.1.4
+

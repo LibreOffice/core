@@ -1,0 +1,686 @@
+From 2b15635e48e866364d0c0c425dc5db2e6b49d431 Mon Sep 17 00:00:00 2001
+From: Jan Holesovsky <kendy@collabora.com>
+Date: Fri, 5 Dec 2014 21:11:27 +0100
+Subject: [PATCH 1/3] opencl: Use clew instead of own wrappers, dlopen, etc.
+
+---
+ configure.ac     |  13 +---
+ djpeg.c          |   2 +-
+ jdapimin.c       |  24 ++++---
+ jdapistd.c       |   9 ++-
+ jdcoefct.c       |   2 +-
+ jdhuff.c         |   2 +-
+ jdmaster.c       |   2 +-
+ jdmerge.c        |   2 +-
+ jdsample.c       |   3 +-
+ jocldec.c        |   2 +-
+ joclinit.c       | 130 +-----------------------------------
+ joclinit.h       | 197 ++-----------------------------------------------------
+ jpeglib.h        |   2 +-
+ simd/Makefile.am |   2 +-
+ simd/Makefile.in |   2 +-
+ 15 files changed, 35 insertions(+), 359 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 66135ee..b09e285 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -25,15 +25,6 @@ AC_PROG_INSTALL
+ AC_PROG_LIBTOOL
+ AC_PROG_LN_S
+ 
+-#check dlopen
+-AC_SEARCH_LIBS(dlopen, dl)
+-old_ldflags="${LDFLAGS}"
+-LDFLAGS="${LDFLAGS} -Wl,-export-dynamic"
+-AC_TRY_LINK(, [int i;], found_export_dynamic=yes, found_export_dynamic=no)
+-if test $found_export_dynamic = no; then
+-  LDFLAGS="${old_ldflags}"
+-fi
+-
+ # When the prefix is /opt/libjpeg-turbo, we assume that an "official" binary is
+ # being created, and thus we install things into specific locations.
+ 
+@@ -321,8 +312,10 @@ AC_ARG_WITH([opencl-dec],
+   AC_HELP_STRING([--with-opencl-dec],
+     [Include opencl decoding support]))
+ if test "x$with_opencl_dec" = "xyes"; then
+-  AC_DEFINE([WITH_OPENCL_DECODING_SUPPORTED], [1], [Support OpenCL decoding])
+   AC_MSG_RESULT(yes)
++  AC_DEFINE([WITH_OPENCL_DECODING_SUPPORTED], [1], [Support OpenCL decoding])
++  AC_CHECK_HEADERS([clew.h], [DUMMY=1],
++    [AC_MSG_ERROR([Could not find clew.h header, install http://code.google.com/p/clew/])])
+   RPM_CONFIG_ARGS="$RPM_CONFIG_ARGS --with-opencl-dec"
+ else
+   AC_MSG_RESULT(no)
+diff --git a/djpeg.c b/djpeg.c
+index a352a4a..fddb605 100644
+--- a/djpeg.c
++++ b/djpeg.c
+@@ -33,7 +33,7 @@
+ 
+ #if 0
+ #include <GL/gl.h>
+-#include <CL/cl.h>
++#include <clew.h>
+ #endif
+ 
+ #ifdef USE_CCOMMAND		/* command-line reader for Macintosh */
+diff --git a/jdapimin.c b/jdapimin.c
+index cfe2845..7a62a5d 100644
+--- a/jdapimin.c
++++ b/jdapimin.c
+@@ -23,7 +23,7 @@
+ #include "jpeglib.h"
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #include "jocldec.h"
+ #endif
+@@ -103,8 +103,6 @@ jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id devic
+   OCL_STATUS *ocl_status;
+   cl_bool version_ocl ;
+ 
+-  assert(cinfo->global_state == DSTATE_START);
+-
+ //  if (/*CL_FALSE == jocl_cl_is_support_opencl(ocl_status) &&*/ CL_TRUE == jocl_cl_init(&cinfo->jocl_openClinfo)) {
+   if (/*CL_FALSE == jocl_cl_is_support_opencl(ocl_status) &&*/ CL_TRUE == jocl_cl_init(&cinfo->jocl_openClinfo, context, deviceId)) {
+         ocl_status = (OCL_STATUS *)cinfo->jocl_openClinfo;
+@@ -112,7 +110,7 @@ jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id devic
+       if (CL_TRUE == jocl_cl_is_nvidia_opencl(ocl_status)) {
+         ocl_status->jocl_global_data_ptr_qutable = (float *)malloc(128 * sizeof(float));
+         memset(ocl_status->jocl_global_data_ptr_qutable, 0, 128 * sizeof(float));
+-        CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_qutable = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++        CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_qutable = clCreateBuffer(jocl_cl_get_context(ocl_status),
+         CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
+         128 * sizeof(float), NULL, &err_code),return);
+ 
+@@ -120,22 +118,22 @@ jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id devic
+     	  ocl_status->jocl_global_data_ptr_input[j]  = (JCOEFPTR)malloc(MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF));
+         memset(ocl_status->jocl_global_data_ptr_input[j], 0, MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF));
+ 
+-        CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_input[j] = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++        CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_input[j] = clCreateBuffer(jocl_cl_get_context(ocl_status),
+           CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+           MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF), NULL, &err_code),return);
+       }
+     }
+     else {
+-    	CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_qutable = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++    	CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_qutable = clCreateBuffer(jocl_cl_get_context(ocl_status),
+                 CL_MEM_READ_ONLY | CL_MEM_ALLOC_HOST_PTR,
+         128 * sizeof(float), NULL, &err_code),return);
+       if(version_ocl) {
+-        CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_qutable = (float *)jocl_clEnqueueMapBuffer(
++        CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_qutable = (float *)clEnqueueMapBuffer(
+           jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_qutable, CL_TRUE,
+           CL_MAP_WRITE_INVALIDATE_REGION, 0, 128 * sizeof(float), 0, NULL, NULL, &err_code),return);
+       }
+       else {
+-    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_qutable = (float *)jocl_clEnqueueMapBuffer(
++    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_qutable = (float *)clEnqueueMapBuffer(
+     			  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_qutable, CL_TRUE,
+     			  CL_MAP_WRITE, 0, 128 * sizeof(float), 0, NULL, NULL, &err_code),return);
+       }
+@@ -145,17 +143,17 @@ jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id devic
+     		  ocl_status->jocl_global_data_ptr_qutable, 0, NULL, NULL),return);
+ 
+       for(j = 0; j < BUFFERNUMS; ++j) {
+-    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_input[j] = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_input[j] = clCreateBuffer(jocl_cl_get_context(ocl_status),
+     			  CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+     			  MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF), NULL, &err_code),return);
+     	  if(version_ocl) {
+-    		  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[j] = (JCOEFPTR)jocl_clEnqueueMapBuffer(
++    		  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[j] = (JCOEFPTR)clEnqueueMapBuffer(
+     				  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[j], CL_TRUE,
+     				  CL_MAP_WRITE_INVALIDATE_REGION, 0, MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF),
+     				  0, NULL, NULL, &err_code),return);
+     	  }
+     	  else {
+-    		  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[j] = (JCOEFPTR)jocl_clEnqueueMapBuffer(
++    		  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_input[j] = (JCOEFPTR)clEnqueueMapBuffer(
+     				  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_input[j], CL_TRUE,
+     				  CL_MAP_WRITE, 0, MCUNUMS * DCTSIZE2 * 6 * sizeof(JCOEF),
+     				  0, NULL, NULL, &err_code),return);
+@@ -167,9 +165,9 @@ jpeg_init_opencl (j_decompress_ptr cinfo, cl_context context, cl_device_id devic
+       }
+     }
+       for(j = 0; j < BUFFERNUMS; ++j) {
+-    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_inter[j] = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_inter[j] = clCreateBuffer(jocl_cl_get_context(ocl_status),
+     			  CL_MEM_READ_WRITE, MCUNUMS * DCTSIZE2 * 6, NULL, &err_code),return);
+-    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_prior_inter[j] = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++    	  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_prior_inter[j] = clCreateBuffer(jocl_cl_get_context(ocl_status),
+     			  CL_MEM_READ_WRITE, MCUNUMS * 16, NULL, &err_code),return);
+       }
+ 
+diff --git a/jdapistd.c b/jdapistd.c
+index 1be00b4..1b2622a 100644
+--- a/jdapistd.c
++++ b/jdapistd.c
+@@ -24,8 +24,7 @@
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+ #include <GL/gl.h>
+-#include <CL/cl_gl.h>
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #endif
+ 
+@@ -73,18 +72,18 @@ jpeg_start_decompress (j_decompress_ptr cinfo)
+ 	  {
+ 		  ocl_status->jocl_global_data_ptr_output = (JSAMPROW)malloc(buffer_output_size);
+ 		  memset(ocl_status->jocl_global_data_ptr_output, 0, buffer_output_size);
+-		  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_output = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++		  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_output = clCreateBuffer(jocl_cl_get_context(ocl_status),
+ 				  CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR,
+ 				  buffer_output_size, NULL, &err_code),return err_code);
+ 	  }
+ 	  else
+ 	  {
+-		  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_output = jocl_clCreateBuffer(jocl_cl_get_context(ocl_status),
++		  CL_SAFE_CALL0(ocl_status->jocl_global_data_mem_output = clCreateBuffer(jocl_cl_get_context(ocl_status),
+ 				  CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR,
+ 				  buffer_output_size, NULL, &err_code),return err_code);
+ 
+ 
+-		  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_output = (JSAMPROW)jocl_clEnqueueMapBuffer(
++		  CL_SAFE_CALL0(ocl_status->jocl_global_data_ptr_output = (JSAMPROW)clEnqueueMapBuffer(
+ 				  jocl_cl_get_command_queue(ocl_status), ocl_status->jocl_global_data_mem_output, CL_TRUE,
+ 				  CL_MAP_READ, 0, buffer_output_size,0, NULL, NULL, &err_code),return err_code);
+ 
+diff --git a/jdcoefct.c b/jdcoefct.c
+index 380ab02..da2d659 100644
+--- a/jdcoefct.c
++++ b/jdcoefct.c
+@@ -23,7 +23,7 @@
+ #include "jpegcomp.h"
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #include "jocldec.h"
+ #endif
+diff --git a/jdhuff.c b/jdhuff.c
+index 4d7306f..2ac97f2 100644
+--- a/jdhuff.c
++++ b/jdhuff.c
+@@ -24,7 +24,7 @@
+ #include "jpegcomp.h"
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #endif
+ 
+diff --git a/jdmaster.c b/jdmaster.c
+index d8f15ab..58f0ac4 100644
+--- a/jdmaster.c
++++ b/jdmaster.c
+@@ -21,7 +21,7 @@
+ #include "jpegcomp.h"
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #include "jocldec.h"
+ #endif
+diff --git a/jdmerge.c b/jdmerge.c
+index 54b8785..ee9ae04 100644
+--- a/jdmerge.c
++++ b/jdmerge.c
+@@ -43,7 +43,7 @@
+ #include "config.h"
+ 
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #include "jocldec.h"
+ #endif
+diff --git a/jdsample.c b/jdsample.c
+index b2895c0..762c660 100644
+--- a/jdsample.c
++++ b/jdsample.c
+@@ -27,8 +27,9 @@
+ #include "jpeglib.h"
+ #include "jsimd.h"
+ #include "jpegcomp.h"
++
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #include "jocldec.h"
+ #endif
+diff --git a/jocldec.c b/jocldec.c
+index 431c236..9c3a31a 100644
+--- a/jocldec.c
++++ b/jocldec.c
+@@ -16,7 +16,7 @@
+ #include "jinclude.h"
+ #include "jpeglib.h"
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #include "jocldec.h"
+ #include "joclidct.h"
+diff --git a/joclinit.c b/joclinit.c
+index 81c2078..fce4763 100644
+--- a/joclinit.c
++++ b/joclinit.c
+@@ -16,7 +16,7 @@
+ #include "jpeglib.h"
+ #ifdef WITH_OPENCL_DECODING_SUPPORTED
+ 
+-#include "CL/opencl.h"
++#include <clew.h>
+ #include "joclinit.h"
+ #undef  __JOCL_CL_INIT_MAIN__
+ 
+@@ -120,35 +120,6 @@ const char* jocl_cl_errstring(cl_int err_code)
+  * Get and select a platform_id, a device_id, a context and a command_queue.
+  * If initialization is successful, return CL_TRUE, otherwise return CL_FALSE.
+  */
+-#ifdef JOCL_CL_OS_WIN32
+-
+-#include <Windows.h>
+-#define CL_LOAD_FUNCTION(func)                                                 \
+-  if ((jocl_##func = (h_##func) GetProcAddress(module, #func)) == NULL)        \
+-  {                                                                            \
+-    CL_DEBUG_NOTE ("symbol jocl_%s is NULL\n",#func);                          \
+-    FreeLibrary(module);                                                       \
+-    return CL_FALSE;                                                           \
+-  }
+-
+-#else
+-
+-#ifdef __APPLE__
+-#define CL_LIBRARY_NAME "/System/Library/Frameworks/OpenCL.framework/Versions/Current/OpenCL"
+-#else
+-#define CL_LIBRARY_NAME "libOpenCL.so"
+-#endif 
+-
+-#include<dlfcn.h>
+-#define CL_LOAD_FUNCTION(func)                                                 \
+-  if ((jocl_##func = (h_##func) dlsym(module, #func)) == NULL)                 \ 
+-  {                                                                            \
+-    CL_DEBUG_NOTE ("symbol jocl_%s is NULL\n",#func);                          \
+-    dlclose(module);                                                           \
+-    return CL_FALSE;                                                           \
+-  }
+-#endif
+-//cl_bool jocl_cl_init(void **jocl_openClinfo)
+ cl_bool jocl_cl_init(void **jocl_openClinfo, cl_context context, cl_device_id deviceId)
+ {
+     //char*  platformVendor;
+@@ -197,105 +168,6 @@ cl_bool jocl_cl_init(void **jocl_openClinfo, cl_context context, cl_device_id de
+     char*           version_ocl_inter = NULL;
+     char*           version_ocl = NULL;
+     int             version_length = 0;
+-#ifdef JOCL_CL_OS_WIN32
+-    HINSTANCE       module;
+-    module = LoadLibraryW(L"OpenCL.dll");
+-#else
+-    void *module;
+-    module = dlopen(CL_LIBRARY_NAME, RTLD_LAZY);
+-#endif
+-
+-    if(module == NULL) {
+-      CL_DEBUG_NOTE ("Loading OpenCL Library fails!!\n");
+-      return CL_FALSE;
+-    }
+-
+-    /* Dynamic loading OpenCL API from library */
+-    CL_LOAD_FUNCTION(clGetPlatformIDs                 );
+-    CL_LOAD_FUNCTION(clGetPlatformInfo                );
+-    CL_LOAD_FUNCTION(clGetDeviceIDs                   );
+-    CL_LOAD_FUNCTION(clGetDeviceInfo                  );
+-    /* CL_LOAD_FUNCTION(clCreateSubDevices            );
+-    CL_LOAD_FUNCTION(clRetainDevice                   );
+-    CL_LOAD_FUNCTION(clReleaseDevice                  );*/
+-    CL_LOAD_FUNCTION(clCreateContext                  );
+-    /* CL_LOAD_FUNCTION(clCreateContextFromType       );
+-    CL_LOAD_FUNCTION(clRetainContext                  );*/
+-    CL_LOAD_FUNCTION(clReleaseContext                 );
+-    /* CL_LOAD_FUNCTION(clGetContextInfo              );*/
+-    CL_LOAD_FUNCTION(clCreateCommandQueue             );
+-    /* CL_LOAD_FUNCTION(clRetainCommandQueue          );*/
+-    CL_LOAD_FUNCTION(clReleaseCommandQueue            );
+-    CL_LOAD_FUNCTION(clGetCommandQueueInfo            );
+-    CL_LOAD_FUNCTION(clCreateBuffer                   );
+-    CL_LOAD_FUNCTION(clCreateSubBuffer                );
+-    /* CL_LOAD_FUNCTION(clCreateImage                 );
+-    CL_LOAD_FUNCTION(clRetainMemObject                );*/
+-    CL_LOAD_FUNCTION(clReleaseMemObject               );
+-    /* CL_LOAD_FUNCTION(clGetSupportedImageFormats    );*/
+-    CL_LOAD_FUNCTION(clGetMemObjectInfo               );
+-    /* CL_LOAD_FUNCTION(clGetImageInfo                );
+-    CL_LOAD_FUNCTION(clSetMemObjectDestructorCallback );
+-    CL_LOAD_FUNCTION(clCreateSampler                  );
+-    CL_LOAD_FUNCTION(clRetainSampler                  );
+-    CL_LOAD_FUNCTION(clReleaseSampler                 );
+-    CL_LOAD_FUNCTION(clGetSamplerInfo                 );*/
+-    CL_LOAD_FUNCTION(clCreateProgramWithSource        );
+-    CL_LOAD_FUNCTION(clCreateProgramWithBinary        );
+-    /* CL_LOAD_FUNCTION(clCreateProgramWithBuiltInKernels);
+-    CL_LOAD_FUNCTION(clRetainProgram                  );*/
+-    CL_LOAD_FUNCTION(clReleaseProgram                 );
+-    CL_LOAD_FUNCTION(clBuildProgram                   );
+-    /* CL_LOAD_FUNCTION(clCompileProgram              );
+-    CL_LOAD_FUNCTION(clLinkProgram                    );
+-    CL_LOAD_FUNCTION(clUnloadPlatformCompiler         );*/
+-    CL_LOAD_FUNCTION(clGetProgramInfo                 );
+-    CL_LOAD_FUNCTION(clGetProgramBuildInfo            );
+-    CL_LOAD_FUNCTION(clCreateKernel                   );
+-    /* CL_LOAD_FUNCTION(clCreateKernelsInProgram      );
+-    CL_LOAD_FUNCTION(clRetainKernel                   );*/
+-    CL_LOAD_FUNCTION(clReleaseKernel                  );
+-    CL_LOAD_FUNCTION(clSetKernelArg                   );
+-    /*CL_LOAD_FUNCTION(clGetKernelInfo                );
+-    CL_LOAD_FUNCTION(clGetKernelArgInfo               );*/
+-    CL_LOAD_FUNCTION(clGetKernelWorkGroupInfo         );
+-    CL_LOAD_FUNCTION(clWaitForEvents                  );
+-    CL_LOAD_FUNCTION(clGetEventInfo                   );
+-    CL_LOAD_FUNCTION(clCreateUserEvent                );
+-    /* CL_LOAD_FUNCTION(clRetainEvent                 );*/
+-    CL_LOAD_FUNCTION(clReleaseEvent                   );
+-    CL_LOAD_FUNCTION(clSetUserEventStatus             );
+-    /*  CL_LOAD_FUNCTION(clSetEventCallback           );
+-    CL_LOAD_FUNCTION(clGetEventProfilingInfo          );*/
+-    CL_LOAD_FUNCTION(clFlush                          );
+-    CL_LOAD_FUNCTION(clFinish                         );
+-    CL_LOAD_FUNCTION(clEnqueueReadBuffer              );
+-    /* CL_LOAD_FUNCTION(clEnqueueReadBufferRect       );*/
+-    CL_LOAD_FUNCTION(clEnqueueWriteBuffer             );
+-    /* CL_LOAD_FUNCTION(clEnqueueWriteBufferRect      );
+-    CL_LOAD_FUNCTION(clEnqueueFillBuffer              );
+-    CL_LOAD_FUNCTION(clEnqueueCopyBuffer              );
+-    CL_LOAD_FUNCTION(clEnqueueCopyBufferRect          );
+-    CL_LOAD_FUNCTION(clEnqueueReadImage               );
+-    CL_LOAD_FUNCTION(clEnqueueWriteImage              );
+-    CL_LOAD_FUNCTION(clEnqueueFillImage               );
+-    CL_LOAD_FUNCTION(clEnqueueCopyImage               );
+-    CL_LOAD_FUNCTION(clEnqueueCopyImageToBuffer       );
+-    CL_LOAD_FUNCTION(clEnqueueCopyBufferToImage       );*/
+-    CL_LOAD_FUNCTION(clEnqueueMapBuffer               );
+-    /* CL_LOAD_FUNCTION(clEnqueueMapImage             );*/
+-    CL_LOAD_FUNCTION(clEnqueueUnmapMemObject          );
+-    /* CL_LOAD_FUNCTION(clEnqueueMigrateMemObjects    );*/
+-    CL_LOAD_FUNCTION(clEnqueueNDRangeKernel           );
+-    /* CL_LOAD_FUNCTION(clEnqueueTask                 );
+-    CL_LOAD_FUNCTION(clEnqueueNativeKernel            );
+-    CL_LOAD_FUNCTION(clEnqueueMarkerWithWaitList      );
+-    CL_LOAD_FUNCTION(clEnqueueBarrierWithWaitList     );
+-    CL_LOAD_FUNCTION(clSetPrintfCallback              );*/
+-	CL_LOAD_FUNCTION(clCreateFromGLTexture            );
+-	CL_LOAD_FUNCTION(clFinish                         );
+-	CL_LOAD_FUNCTION(clEnqueueAcquireGLObjects        );
+-	CL_LOAD_FUNCTION(clEnqueueReleaseGLObjects        );
+ 
+ 	// Use the supplied context and device id
+ 	ocl_status->context = context;
+diff --git a/joclinit.h b/joclinit.h
+index ae9d100..d33fc15 100644
+--- a/joclinit.h
++++ b/joclinit.h
+@@ -18,199 +18,12 @@
+ 
+ #include <GL/gl.h>
+ 
+-/*
+- * In order to ensure that this extension can be successfully compiled
+- * on multiple platforms, we chose the dynamic loading of OpenCL.
+- * The following APIs belong OpenCL 1.2 standard.
+- */
+-
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetPlatformIDs                 ) (cl_uint, cl_platform_id*, cl_uint*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetPlatformInfo                ) (cl_platform_id, cl_platform_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetDeviceIDs                   ) (cl_platform_id, cl_device_type, cl_uint, cl_device_id*, cl_uint*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetDeviceInfo                  ) (cl_device_id, cl_device_info, size_t, void*, size_t*);
+-//typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clCreateSubDevices               ) (cl_device_id, const cl_device_partition_property*, cl_uint, cl_device_id*, cl_uint*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainDevice                   ) (cl_device_id);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseDevice                  ) (cl_device_id);
+-typedef CL_API_ENTRY cl_context       (CL_API_CALL *h_clCreateContext                  ) (const cl_context_properties*, cl_uint, const cl_device_id*, void (CL_CALLBACK*)(const char*, const void*, size_t, void*), void*, cl_int*);
+-typedef CL_API_ENTRY cl_context       (CL_API_CALL *h_clCreateContextFromType          ) (const cl_context_properties*, cl_device_type, void (CL_CALLBACK*)(const char*, const void*, size_t, void*), void*, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainContext                  ) (cl_context);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseContext                 ) (cl_context);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetContextInfo                 ) (cl_context, cl_context_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_command_queue (CL_API_CALL *h_clCreateCommandQueue             ) (cl_context, cl_device_id, cl_command_queue_properties, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainCommandQueue             ) (cl_command_queue);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseCommandQueue            ) (cl_command_queue);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetCommandQueueInfo            ) (cl_command_queue, cl_command_queue_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_mem           (CL_API_CALL *h_clCreateBuffer                   ) (cl_context, cl_mem_flags, size_t, void*, cl_int*);
+-typedef CL_API_ENTRY cl_mem           (CL_API_CALL *h_clCreateSubBuffer                ) (cl_mem, cl_mem_flags, cl_buffer_create_type, const void*, cl_int*);
+-//typedef CL_API_ENTRY cl_mem           (CL_API_CALL *h_clCreateImage                    ) (cl_context, cl_mem_flags, const cl_image_format*, const cl_image_desc*, void*, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainMemObject                ) (cl_mem);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseMemObject               ) (cl_mem);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetSupportedImageFormats       ) (cl_context, cl_mem_flags, cl_mem_object_type, cl_uint, cl_image_format*, cl_uint*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetMemObjectInfo               ) (cl_mem, cl_mem_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetImageInfo                   ) (cl_mem, cl_image_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clSetMemObjectDestructorCallback ) (cl_mem, void (CL_CALLBACK*)(cl_mem,void*), void*);
+-typedef CL_API_ENTRY cl_sampler       (CL_API_CALL *h_clCreateSampler                  ) (cl_context, cl_bool, cl_addressing_mode, cl_filter_mode, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainSampler                  ) (cl_sampler);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseSampler                 ) (cl_sampler);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetSamplerInfo                 ) (cl_sampler, cl_sampler_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_program       (CL_API_CALL *h_clCreateProgramWithSource        ) (cl_context, cl_uint, const char**, const size_t*, cl_int*);
+-typedef CL_API_ENTRY cl_program       (CL_API_CALL *h_clCreateProgramWithBinary        ) (cl_context, cl_uint, const cl_device_id*, const size_t*, const unsigned char**, cl_int*, cl_int*);
+-typedef CL_API_ENTRY cl_program       (CL_API_CALL *h_clCreateProgramWithBuiltInKernels) (cl_context, cl_uint, const cl_device_id*, const char*, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainProgram                  ) (cl_program);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseProgram                 ) (cl_program);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clBuildProgram                   ) (cl_program, cl_uint, const cl_device_id*, const char*, void (CL_CALLBACK*)(cl_program, void*), void*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clCompileProgram                 ) (cl_program, cl_uint, const cl_device_id*, const char*, cl_uint, const cl_program*, const char**, void (CL_CALLBACK*)(cl_program, void*), void*);
+-typedef CL_API_ENTRY cl_program       (CL_API_CALL *h_clLinkProgram                    ) (cl_context, cl_uint, const cl_device_id*, const char*, cl_uint, const cl_program*, void (CL_CALLBACK*)(cl_program, void*), void*, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clUnloadPlatformCompiler         ) (cl_platform_id);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetProgramInfo                 ) (cl_program, cl_program_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetProgramBuildInfo            ) (cl_program, cl_device_id, cl_program_build_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_kernel        (CL_API_CALL *h_clCreateKernel                   ) (cl_program, const char*, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clCreateKernelsInProgram         ) (cl_program, cl_uint, cl_kernel*, cl_uint*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainKernel                   ) (cl_kernel);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseKernel                  ) (cl_kernel);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clSetKernelArg                   ) (cl_kernel, cl_uint, size_t, const void*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetKernelInfo                  ) (cl_kernel, cl_kernel_info, size_t, void*, size_t*);
+-//typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetKernelArgInfo               ) (cl_kernel, cl_uint, cl_kernel_arg_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetKernelWorkGroupInfo         ) (cl_kernel, cl_device_id, cl_kernel_work_group_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clWaitForEvents                  ) (cl_uint, const cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetEventInfo                   ) (cl_event, cl_event_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_event         (CL_API_CALL *h_clCreateUserEvent                ) (cl_context, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clRetainEvent                    ) (cl_event);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clReleaseEvent                   ) (cl_event);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clSetUserEventStatus             ) (cl_event, cl_int);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clSetEventCallback               ) (cl_event, cl_int, void (CL_CALLBACK*)(cl_event, cl_int, void*), void*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clGetEventProfilingInfo          ) (cl_event, cl_profiling_info, size_t, void*, size_t*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clFlush                          ) (cl_command_queue);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clFinish                         ) (cl_command_queue);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueReadBuffer              ) (cl_command_queue, cl_mem, cl_bool, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueReadBufferRect          ) (cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueWriteBuffer             ) (cl_command_queue, cl_mem, cl_bool, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueWriteBufferRect         ) (cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueFillBuffer              ) (cl_command_queue, cl_mem, const void*, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueCopyBuffer              ) (cl_command_queue, cl_mem, cl_mem, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueCopyBufferRect          ) (cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, const size_t*, size_t, size_t, size_t, size_t, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueReadImage               ) (cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, size_t, size_t, void*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueWriteImage              ) (cl_command_queue, cl_mem, cl_bool, const size_t*, const size_t*, size_t, size_t, const void*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueFillImage               ) (cl_command_queue, cl_mem, const void*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueCopyImage               ) (cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueCopyImageToBuffer       ) (cl_command_queue, cl_mem, cl_mem, const size_t*, const size_t*, size_t, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueCopyBufferToImage       ) (cl_command_queue, cl_mem, cl_mem, size_t, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY void *           (CL_API_CALL *h_clEnqueueMapBuffer               ) (cl_command_queue, cl_mem, cl_bool, cl_map_flags, size_t, size_t, cl_uint, const cl_event*, cl_event*, cl_int*);
+-typedef CL_API_ENTRY void *           (CL_API_CALL *h_clEnqueueMapImage                ) (cl_command_queue, cl_mem, cl_bool, cl_map_flags, const size_t*, const size_t*, size_t*, size_t*, cl_uint, const cl_event*, cl_event*, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueUnmapMemObject          ) (cl_command_queue, cl_mem, void*, cl_uint, const cl_event*, cl_event*);
+-//typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueMigrateMemObjects       ) (cl_command_queue, cl_uint, const cl_mem*, cl_mem_migration_flags, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueNDRangeKernel           ) (cl_command_queue, cl_kernel, cl_uint, const size_t*, const size_t*, const size_t*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueTask                    ) (cl_command_queue, cl_kernel, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueNativeKernel            ) (cl_command_queue, void (CL_CALLBACK*)(void*), void*, size_t, cl_uint, const cl_mem*, const void**, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueMarkerWithWaitList      ) (cl_command_queue, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueBarrierWithWaitList     ) (cl_command_queue, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clSetPrintfCallback              ) (cl_context, void (CL_CALLBACK*)(cl_context, cl_uint, char*, void*), void*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clCreateFromGLTexture            ) (cl_context, cl_mem_flags, GLenum, GLint, GLuint, cl_int*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueAcquireGLObjects        ) (cl_command_queue, cl_uint, const cl_mem*, cl_uint, const cl_event*, cl_event*);
+-typedef CL_API_ENTRY cl_int           (CL_API_CALL *h_clEnqueueReleaseGLObjects        ) (cl_command_queue, cl_uint, const cl_mem*, cl_uint, const cl_event*, cl_event*);
+-/*
+- * Declaration or definition the API pointers.
+- * Use macros to streamline the code.
+- */
+-
+-#ifdef __JOCL_CL_INIT_MAIN__
+-#define CL_LOADING_PREFIX
+-#define CL_LOADING_SUFFIX = NULL
+-#else
+-#define CL_LOADING_PREFIX extern
+-#define CL_LOADING_SUFFIX
+-#endif
+-
+-CL_LOADING_PREFIX h_clGetPlatformIDs                  jocl_clGetPlatformIDs                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetPlatformInfo                 jocl_clGetPlatformInfo                 CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetDeviceIDs                    jocl_clGetDeviceIDs                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetDeviceInfo                   jocl_clGetDeviceInfo                   CL_LOADING_SUFFIX;
+-//CL_LOADING_PREFIX h_clCreateSubDevices                jocl_clCreateSubDevices                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainDevice                    jocl_clRetainDevice                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseDevice                   jocl_clReleaseDevice                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateContext                   jocl_clCreateContext                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateContextFromType           jocl_clCreateContextFromType           CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainContext                   jocl_clRetainContext                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseContext                  jocl_clReleaseContext                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetContextInfo                  jocl_clGetContextInfo                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateCommandQueue              jocl_clCreateCommandQueue              CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainCommandQueue              jocl_clRetainCommandQueue              CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseCommandQueue             jocl_clReleaseCommandQueue             CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetCommandQueueInfo             jocl_clGetCommandQueueInfo             CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateBuffer                    jocl_clCreateBuffer                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateSubBuffer                 jocl_clCreateSubBuffer                 CL_LOADING_SUFFIX;
+-//CL_LOADING_PREFIX h_clCreateImage                     jocl_clCreateImage                     CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainMemObject                 jocl_clRetainMemObject                 CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseMemObject                jocl_clReleaseMemObject                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetSupportedImageFormats        jocl_clGetSupportedImageFormats        CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetMemObjectInfo                jocl_clGetMemObjectInfo                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetImageInfo                    jocl_clGetImageInfo                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clSetMemObjectDestructorCallback  jocl_clSetMemObjectDestructorCallback  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateSampler                   jocl_clCreateSampler                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainSampler                   jocl_clRetainSampler                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseSampler                  jocl_clReleaseSampler                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetSamplerInfo                  jocl_clGetSamplerInfo                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateProgramWithSource         jocl_clCreateProgramWithSource         CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateProgramWithBinary         jocl_clCreateProgramWithBinary         CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateProgramWithBuiltInKernels jocl_clCreateProgramWithBuiltInKernels CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainProgram                   jocl_clRetainProgram                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseProgram                  jocl_clReleaseProgram                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clBuildProgram                    jocl_clBuildProgram                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCompileProgram                  jocl_clCompileProgram                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clLinkProgram                     jocl_clLinkProgram                     CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clUnloadPlatformCompiler          jocl_clUnloadPlatformCompiler          CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetProgramInfo                  jocl_clGetProgramInfo                  CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetProgramBuildInfo             jocl_clGetProgramBuildInfo             CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateKernel                    jocl_clCreateKernel                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateKernelsInProgram          jocl_clCreateKernelsInProgram          CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainKernel                    jocl_clRetainKernel                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseKernel                   jocl_clReleaseKernel                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clSetKernelArg                    jocl_clSetKernelArg                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetKernelInfo                   jocl_clGetKernelInfo                   CL_LOADING_SUFFIX;
+-//CL_LOADING_PREFIX h_clGetKernelArgInfo                jocl_clGetKernelArgInfo                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetKernelWorkGroupInfo          jocl_clGetKernelWorkGroupInfo          CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clWaitForEvents                   jocl_clWaitForEvents                   CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetEventInfo                    jocl_clGetEventInfo                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateUserEvent                 jocl_clCreateUserEvent                 CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clRetainEvent                     jocl_clRetainEvent                     CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clReleaseEvent                    jocl_clReleaseEvent                    CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clSetUserEventStatus              jocl_clSetUserEventStatus              CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clSetEventCallback                jocl_clSetEventCallback                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clGetEventProfilingInfo           jocl_clGetEventProfilingInfo           CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clFlush                           jocl_clFlush                           CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clFinish                          jocl_clFinish                          CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueReadBuffer               jocl_clEnqueueReadBuffer               CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueReadBufferRect           jocl_clEnqueueReadBufferRect           CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueWriteBuffer              jocl_clEnqueueWriteBuffer              CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueWriteBufferRect          jocl_clEnqueueWriteBufferRect          CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueFillBuffer               jocl_clEnqueueFillBuffer               CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueCopyBuffer               jocl_clEnqueueCopyBuffer               CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueCopyBufferRect           jocl_clEnqueueCopyBufferRect           CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueReadImage                jocl_clEnqueueReadImage                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueWriteImage               jocl_clEnqueueWriteImage               CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueFillImage                jocl_clEnqueueFillImage                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueCopyImage                jocl_clEnqueueCopyImage                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueCopyImageToBuffer        jocl_clEnqueueCopyImageToBuffer        CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueCopyBufferToImage        jocl_clEnqueueCopyBufferToImage        CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueMapBuffer                jocl_clEnqueueMapBuffer                CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueMapImage                 jocl_clEnqueueMapImage                 CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueUnmapMemObject           jocl_clEnqueueUnmapMemObject           CL_LOADING_SUFFIX;
+-//CL_LOADING_PREFIX h_clEnqueueMigrateMemObjects        jocl_clEnqueueMigrateMemObjects        CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueNDRangeKernel            jocl_clEnqueueNDRangeKernel            CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueTask                     jocl_clEnqueueTask                     CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueNativeKernel             jocl_clEnqueueNativeKernel             CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueMarkerWithWaitList       jocl_clEnqueueMarkerWithWaitList       CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueBarrierWithWaitList      jocl_clEnqueueBarrierWithWaitList      CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clSetPrintfCallback               jocl_clSetPrintfCallback               CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clCreateFromGLTexture             jocl_clCreateFromGLTexture             CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueAcquireGLObjects         jocl_clEnqueueAcquireGLObjects         CL_LOADING_SUFFIX;
+-CL_LOADING_PREFIX h_clEnqueueReleaseGLObjects         jocl_clEnqueueReleaseGLObjects         CL_LOADING_SUFFIX;
+-#undef CL_LOADING_PREFIX
+-#undef CL_LOADING_SUFFIX
+-
+-#ifdef __APPLE__
++// CL_MAP_WRITE_INVALIDATE_REGION is new in OpenCL 1.2.
++// When compiling against an older OpenCL, use CL_MAP_WRITE.
++#ifndef OPENCLWRAPPER_CL_MAP_WRITE_FLAG
+ #define CL_MAP_WRITE_INVALIDATE_REGION  CL_MAP_WRITE
+ #endif
++
+ /*
+  * Definition run_data structure of kernels.
+  * Forward declaration the OpenCL initialization API.
+@@ -225,7 +38,7 @@ typedef struct
+ } JOCL_CL_RUNDATA;
+ 
+ /*
+- * OCL_STATIS ocl_status
++ * OCL_STATUS ocl_status
+  * Store all the informations of OpenCL platform.
+  */
+ 
+diff --git a/jpeglib.h b/jpeglib.h
+index dc3d208..2358d5b 100644
+--- a/jpeglib.h
++++ b/jpeglib.h
+@@ -29,7 +29,7 @@
+ #include "jmorecfg.h"		/* seldom changed options */
+ 
+ #if WITH_OPENCL_DECODING_SUPPORTED
+-#include "CL/opencl.h"
++#include <clew.h>
+ #endif
+ 
+ 
+diff --git a/simd/Makefile.am b/simd/Makefile.am
+index a12ff6e..a92aea6 100644
+--- a/simd/Makefile.am
++++ b/simd/Makefile.am
+@@ -64,4 +64,4 @@ AM_CPPFLAGS = -I$(top_srcdir)
+ 	$(LIBTOOL) --mode=compile --tag NASM $(srcdir)/nasm_lt.sh $(NASM) $(NAFLAGS) -I$(srcdir) -I. $< -o $@
+ 
+ jsimdcfg.inc: $(srcdir)/jsimdcfg.inc.h ../jpeglib.h ../jconfig.h ../jmorecfg.h
+-	$(CPP) -I$(top_builddir) -I$(top_builddir)/simd $(srcdir)/jsimdcfg.inc.h | $(EGREP) "^[\;%]|^\ %" | sed 's%_cpp_protection_%%' | sed 's@% define@%define@g' > $@
++	$(CPP) $(CPPFLAGS) -I$(top_builddir) -I$(top_builddir)/simd $(srcdir)/jsimdcfg.inc.h | $(EGREP) "^[\;%]|^\ %" | sed 's%_cpp_protection_%%' | sed 's@% define@%define@g' > $@
+diff --git a/simd/Makefile.in b/simd/Makefile.in
+index d40e96c..974c75e 100644
+--- a/simd/Makefile.in
++++ b/simd/Makefile.in
+@@ -584,7 +584,7 @@ uninstall-am: uninstall-info-am
+ 	$(LIBTOOL) --mode=compile --tag NASM $(srcdir)/nasm_lt.sh $(NASM) $(NAFLAGS) -I$(srcdir) -I. $< -o $@
+ 
+ jsimdcfg.inc: $(srcdir)/jsimdcfg.inc.h ../jpeglib.h ../jconfig.h ../jmorecfg.h
+-	$(CPP) -I$(top_builddir) -I$(top_builddir)/simd $(srcdir)/jsimdcfg.inc.h | $(EGREP) "^[\;%]|^\ %" | sed 's%_cpp_protection_%%' | sed 's@% define@%define@g' > $@
++	$(CPP) $(CPPFLAGS) -I$(top_builddir) -I$(top_builddir)/simd $(srcdir)/jsimdcfg.inc.h | $(EGREP) "^[\;%]|^\ %" | sed 's%_cpp_protection_%%' | sed 's@% define@%define@g' > $@
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+-- 
+1.8.1.4
+

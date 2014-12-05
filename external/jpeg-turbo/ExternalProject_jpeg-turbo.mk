@@ -19,12 +19,12 @@ $(eval $(call gb_ExternalProject_register_targets,jpeg-turbo,\
 
 $(call gb_ExternalProject_get_state_target,jpeg-turbo,build) : $(call gb_ExternalProject_get_state_target,jpeg-turbo,configure)
 	+$(call gb_ExternalProject_run,build,\
-		$(MAKE) \
+		CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,clcc)/src $$CPPFLAGS" $(MAKE) \
 	)
 
 $(call gb_ExternalProject_get_state_target,jpeg-turbo,configure) :
 	$(call gb_ExternalProject_run,configure,\
-		MAKE=$(MAKE) ./configure \
+		MAKE=$(MAKE) CPPFLAGS="-I$(call gb_UnpackedTarball_get_dir,clcc)/src $$CPPFLAGS" ./configure \
 			--build=$(if $(filter WNT,$(OS)),i686-pc-cygwin,$(BUILD_PLATFORM)) \
 			--with-pic \
 			--enable-static \
@@ -32,6 +32,7 @@ $(call gb_ExternalProject_get_state_target,jpeg-turbo,configure) :
 			--with-jpeg8 \
 			--without-java \
 			--without-turbojpeg \
+			$(if $(filter-out ANDROID IOS,$(OS)),--with-opencl-dec) \
 	)
 
 # vim: set noet sw=4 ts=4:
