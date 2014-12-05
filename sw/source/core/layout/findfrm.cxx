@@ -166,6 +166,38 @@ SwFrm* SwFrm::GetLower()
     return IsLayoutFrm() ? static_cast<SwLayoutFrm*>(this)->Lower() : 0;
 }
 
+SwCntntFrm* SwFrm::FindPrevCnt( const bool _bInSameFtn )
+{
+    if ( GetPrev() && GetPrev()->IsCntntFrm() )
+        return static_cast<SwCntntFrm*>(GetPrev());
+    else
+        return _FindPrevCnt( _bInSameFtn );
+}
+
+const SwCntntFrm* SwFrm::FindPrevCnt( const bool _bInSameFtn ) const
+{
+    if ( GetPrev() && GetPrev()->IsCntntFrm() )
+        return static_cast<const SwCntntFrm*>(GetPrev());
+    else
+        return const_cast<SwFrm*>(this)->_FindPrevCnt( _bInSameFtn );
+}
+
+SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
+{
+    if ( mpNext && mpNext->IsCntntFrm() )
+        return static_cast<SwCntntFrm*>(mpNext);
+    else
+        return _FindNextCnt( _bInSameFtn );
+}
+
+const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
+{
+    if ( mpNext && mpNext->IsCntntFrm() )
+        return static_cast<SwCntntFrm*>(mpNext);
+    else
+        return const_cast<SwFrm*>(this)->_FindNextCnt( _bInSameFtn );
+}
+
 bool SwLayoutFrm::IsAnLower( const SwFrm *pAssumed ) const
 {
     const SwFrm *pUp = pAssumed;

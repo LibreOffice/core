@@ -629,7 +629,7 @@ public:
     inline SwSectionFrm *FindSctFrm();
     inline SwFrm        *FindNext();
     // #i27138# - add parameter <_bInSameFtn>
-    inline SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false );
+    SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false );
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
     inline const SwFtnBossFrm *FindFtnBossFrm( bool bFtn = false ) const;
@@ -641,31 +641,13 @@ public:
     inline const SwSectionFrm *FindSctFrm() const;
     inline const SwFrm     *FindNext() const;
     // #i27138# - add parameter <_bInSameFtn>
-    inline const SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false ) const;
+    const SwCntntFrm* FindNextCnt( const bool _bInSameFtn = false ) const;
     inline const SwFrm     *FindPrev() const;
            const SwFrm     *GetLower()  const;
 
-    /** inline wrapper method for <_FindPrevCnt(..)>
-        #i27138#
-    */
-    inline SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false )
-    {
-        if ( GetPrev() && GetPrev()->IsCntntFrm() )
-            return (SwCntntFrm*)(GetPrev());
-        else
-            return _FindPrevCnt( _bInSameFtn );
-    }
+    SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false );
 
-    /** inline const wrapper method for <_FindPrevCnt(..)>
-        #i27138#
-    */
-    inline const SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false ) const
-    {
-        if ( GetPrev() && GetPrev()->IsCntntFrm() )
-            return (const SwCntntFrm*)(GetPrev());
-        else
-            return const_cast<SwFrm*>(this)->_FindPrevCnt( _bInSameFtn );
-    }
+    const SwCntntFrm* FindPrevCnt( const bool _bInSameFtn = false ) const;
 
     // #i79774#
     SwFrm* _GetIndPrev() const;
@@ -691,7 +673,7 @@ public:
     inline void OptCalc() const;    // here we assume (for optimization) that
                                     // the predecessors are already formatted
 
-    inline Point   GetRelPos() const;
+    Point   GetRelPos() const;
     const  SwRect &Frm() const { return maFrm; }
     const  SwRect &Prt() const { return maPrt; }
 
@@ -1038,16 +1020,6 @@ inline void SwFrm::OptCalc() const
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
         const_cast<SwFrm*>(this)->OptPrepareMake();
 }
-
-inline Point SwFrm::GetRelPos() const
-{
-    Point aRet( maFrm.Pos() );
-    // here we cast since SwLayoutFrm is declared only as forwarded
-    aRet -= ((SwFrm*)GetUpper())->Prt().Pos();
-    aRet -= ((SwFrm*)GetUpper())->Frm().Pos();
-    return aRet;
-}
-
 inline const SwPageFrm *SwFrm::FindPageFrm() const
 {
     return const_cast<SwFrm*>(this)->FindPageFrm();
@@ -1110,22 +1082,6 @@ inline const SwFrm *SwFrm::FindNext() const
         return mpNext;
     else
         return const_cast<SwFrm*>(this)->_FindNext();
-}
-// #i27138# - add parameter <_bInSameFtn>
-inline SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn )
-{
-    if ( mpNext && mpNext->IsCntntFrm() )
-        return (SwCntntFrm*)mpNext;
-    else
-        return _FindNextCnt( _bInSameFtn );
-}
-// #i27138# - add parameter <_bInSameFtn>
-inline const SwCntntFrm *SwFrm::FindNextCnt( const bool _bInSameFtn ) const
-{
-    if ( mpNext && mpNext->IsCntntFrm() )
-        return (SwCntntFrm*)mpNext;
-    else
-        return const_cast<SwFrm*>(this)->_FindNextCnt( _bInSameFtn );
 }
 inline SwFrm *SwFrm::FindPrev()
 {

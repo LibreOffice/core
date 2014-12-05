@@ -1786,6 +1786,15 @@ bool SwFrm::OnFirstPage() const
     return bRet;
 }
 
+Point SwFrm::GetRelPos() const
+{
+    Point aRet( maFrm.Pos() );
+    // here we cast since SwLayoutFrm is declared only as forwarded
+    aRet -= GetUpper()->Prt().Pos();
+    aRet -= GetUpper()->Frm().Pos();
+    return aRet;
+}
+
 /** @return the virtual page number with the offset. */
 sal_uInt16 SwFrm::GetVirtPageNum() const
 {
