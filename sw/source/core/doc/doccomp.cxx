@@ -1898,7 +1898,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline(_SaveMergeRedlines* pRing, const Sw
 
         if( !pRing->unique() )
         {
-            SwPaM* pTmpPrev = static_cast<_SaveMergeRedlines*>(pRing->GetPrev())->pDestRedl;
+            SwPaM* pTmpPrev = pRing->GetPrev()->pDestRedl;
             if( pTmpPrev && *pTmpPrev->GetPoint() == *pDestRedl->GetPoint() )
                 *pTmpPrev->GetPoint() = *pDestRedl->GetMark();
         }
