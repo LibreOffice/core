@@ -699,8 +699,8 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);
 
     SvXMLElementExport aElemDPF(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD, true, true);
-    WriteFieldReference(pDim);
     WriteLevels(pDim);
+    WriteFieldReference(pDim);
     if( pDim->GetOrientation() != sheet::DataPilotFieldOrientation_DATA )
         WriteGroupDimElements(pDim, pDimData);
 }
