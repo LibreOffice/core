@@ -208,14 +208,13 @@ class DemoRenderer
             const int    VERTICES = 10;
             const double RADIUS = 60.0;
             int i, j;
-            double a;
 
             rendering::RenderState maOldRenderState = maRenderState; // push
             translate( center_x, center_y );
 
             for (i = 0; i < VERTICES; i++)
             {
-                a = 2.0 * M_PI * i / VERTICES;
+                double a = 2.0 * M_PI * i / VERTICES;
                 geometry::RealPoint2D aSrc( RADIUS * cos (a), RADIUS * sin (a) );
 
                 for (j = i + 1; j < VERTICES; j++)

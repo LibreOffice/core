@@ -316,15 +316,13 @@ static void cpp_call(
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
     bool bOverflow = false;
-    bool bSimpleReturn = true;
 
     if (pReturnTypeDescr)
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "return type is %d\n", pReturnTypeDescr->eTypeClass);
 #endif
-        if (ppc64::return_in_hidden_param(pReturnTypeRef))
-            bSimpleReturn = false;
+        bool bSimpleReturn =!ppc64::return_in_hidden_param(pReturnTypeRef);
 
         if (bSimpleReturn)
         {

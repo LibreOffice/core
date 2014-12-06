@@ -214,10 +214,9 @@ namespace dxcanvas
                     boost::scoped_array<sal_uInt8> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getY()] );
                     const sal_uInt8* pInBits=(sal_uInt8*)aBmpData.Scan0;
                     pInBits+=3;
-                    sal_uInt8* pOutBits;
                     for( sal_Int32 y=0; y<aSize.getY(); ++y )
                     {
-                        pOutBits=pAlphaBits.get()+y*nScanWidth;
+                        sal_uInt8* pOutBits=pAlphaBits.get()+y*nScanWidth;
                         for( sal_Int32 x=0; x<aSize.getX(); ++x )
                         {
                             *pOutBits++ = 255-*pInBits;

@@ -42,10 +42,11 @@ static sal_Int32
 invoke_count_words(char * pPT)
 {
      sal_Int32 overflow = 0, gpr = 0, fpr = 0;
-     int c;                        // character of parameter type being decoded
 
      while (*pPT != 'X') {
-       c = *pPT;
+       // character of parameter type being decoded
+       const int c = *pPT;
+
        switch (c) {
        case 'D':                   /* type is double */
             if (fpr < 2) fpr++; else overflow+=2;
@@ -84,10 +85,9 @@ invoke_copy_to_stack(sal_Int32 * pStackLongs, char * pPT, sal_Int32* d_ov, sal_I
     sal_Int32 *d_gpr = d_ov + overflow;
     sal_Int64 *d_fpr = (sal_Int64 *)(d_gpr + 5);
     sal_Int32 gpr = 0, fpr = 0;
-    char c;
 
      while (*pPT != 'X') {
-       c = *pPT;
+       const char c = *pPT;
        switch (c) {
        case 'D':                   /* type is double */
             if (fpr < 2)

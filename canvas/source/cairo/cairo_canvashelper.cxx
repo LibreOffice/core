@@ -670,7 +670,6 @@ namespace cairocanvas
 
     static void addColorStops( Pattern* pPattern, const uno::Sequence< uno::Sequence< double > >& rColors, const uno::Sequence< double >& rStops, bool bReverseStops = false )
     {
-        float stop;
         int i;
 
         OSL_ASSERT( rColors.getLength() == rStops.getLength() );
@@ -678,7 +677,7 @@ namespace cairocanvas
         for( i = 0; i < rColors.getLength(); i++ )
         {
             const uno::Sequence< double >& rColor( rColors[i] );
-            stop = bReverseStops ? 1 - rStops[i] : rStops[i];
+            float stop = bReverseStops ? 1 - rStops[i] : rStops[i];
             if( rColor.getLength() == 3 )
                 cairo_pattern_add_color_stop_rgb( pPattern, stop, rColor[0], rColor[1], rColor[2] );
             else if( rColor.getLength() == 4 )
