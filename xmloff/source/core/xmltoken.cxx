@@ -3236,7 +3236,7 @@ namespace xmloff { namespace token {
         TOKEN( "rfc-language-tag-complex",  XML_RFC_LANGUAGE_TAG_COMPLEX ),
         TOKEN( "data-table-show-horz-border",     XML_DATA_TABLE_SHOW_HORZ_BORDER ),
         TOKEN( "data-table-show-vert-border",     XML_DATA_TABLE_SHOW_VERT_BORDER ),
-        TOKEN( "data-table-show-outline",     XML_CHART_DTABLE_SHOWOUTLINE ),
+        TOKEN( "data-table-show-outline",     XML_DATA_TABLE_SHOW_OUTLINE ),
         TOKEN( "display-units",     XML_CHART_DUNITS_DISPLAYUNITS ),
         TOKEN( "display-units-built-in-unit",     XML_CHART_DUNITS_BUILTINUNIT ),
         TOKEN( "external-data", XML_EXTERNALDATA),
