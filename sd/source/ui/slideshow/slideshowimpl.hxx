@@ -80,6 +80,7 @@
 
 class SfxViewFrame;
 class SfxRequest;
+class ShowWindow;
 
 namespace sd
 {

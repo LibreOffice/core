@@ -63,7 +63,6 @@ namespace sd
 {
 
 class SlideshowImpl;
-class ShowWindow;
 class Window;
 class View;
 class ViewShell;
