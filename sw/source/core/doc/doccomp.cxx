@@ -1828,15 +1828,18 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     return nRet;
 }
 
-struct _SaveMergeRedlines
+namespace
 {
-    const SwRangeRedline* pSrcRedl;
-    SwRangeRedline* pDestRedl;
-    _SaveMergeRedlines( const SwNode& rDstNd, const SwRangeRedline& rSrcRedl);
-    static sal_uInt16 InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline);
-};
+    struct SaveMergeRedline
+    {
+        const SwRangeRedline* pSrcRedl;
+        SwRangeRedline* pDestRedl;
+        SaveMergeRedline( const SwNode& rDstNd, const SwRangeRedline& rSrcRedl);
+        static sal_uInt16 InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline);
+    };
+}
 
-_SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
+SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
                         const SwRangeRedline& rSrcRedl)
     : pSrcRedl( &rSrcRedl )
 {
@@ -1862,7 +1865,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
     }
 }
 
-sal_uInt16 _SaveMergeRedlines::InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline)
+sal_uInt16 SaveMergeRedline::InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline)
 {
     sal_uInt16 nIns = 0;
     SwDoc* pDoc = pDestRedl->GetDoc();
@@ -2021,7 +2024,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         // we want to get all redlines from the SourceDoc
 
         // look for all insert redlines from the SourceDoc and determine their position in the DestDoc
-        std::list<_SaveMergeRedlines> vRedlines;
+        std::list<SaveMergeRedline> vRedlines;
         const SwRedlineTbl& rSrcRedlTbl = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTbl();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
         sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
@@ -2038,7 +2041,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
                 // Found the position.
                 // Then we also have to insert the redline to the line in the DestDoc.
-                vRedlines.push_back(_SaveMergeRedlines(*pDstNd, *pRedl));
+                vRedlines.push_back(SaveMergeRedline(*pDstNd, *pRedl));
             }
         }
 
@@ -2053,9 +2056,9 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
                                       nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
             SwPaM* pLastDestRedline(nullptr);
-            for(_SaveMergeRedlines& rRedline: vRedlines)
+            for(SaveMergeRedline& rRedline: vRedlines)
             {
-                nRet += _SaveMergeRedlines::InsertRedline(rRedline.pSrcRedl, rRedline.pDestRedl, pLastDestRedline);
+                nRet += SaveMergeRedline::InsertRedline(rRedline.pSrcRedl, rRedline.pDestRedl, pLastDestRedline);
                 pLastDestRedline = rRedline.pDestRedl;
             }
         }
