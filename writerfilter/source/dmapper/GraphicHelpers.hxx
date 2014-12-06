@@ -20,11 +20,11 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICHELPERS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICHELPERS_HXX
 
-#include "PropertyMap.hxx"
-
 #include <resourcemodel/LoggedResources.hxx>
 
 #include <boost/shared_ptr.hpp>
+
+#include <map>
 
 namespace writerfilter {
 namespace dmapper

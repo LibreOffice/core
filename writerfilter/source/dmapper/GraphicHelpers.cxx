@@ -18,6 +18,7 @@
  */
 #include "ConversionHelper.hxx"
 #include "GraphicHelpers.hxx"
+#include "PropertyIds.hxx"
 
 #include <ooxml/resourceids.hxx>
 
