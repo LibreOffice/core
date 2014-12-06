@@ -82,6 +82,8 @@
 #include "openuriexternally.hxx"
 #include <shellimpl.hxx>
 
+#include <vector>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -277,6 +279,23 @@ static OUString RetrieveLabelFromCommand(
     return aLabel;
 }
 
+class SfxInPlaceClientList
+{
+    typedef std::vector<SfxInPlaceClient*> DataType;
+    DataType maData;
+
+public:
+    typedef DataType::iterator iterator;
+
+    SfxInPlaceClient* at( size_t i ) { return maData.at(i); }
+
+    iterator begin() { return maData.begin(); }
+    iterator end() { return maData.end(); }
+
+    void push_back( SfxInPlaceClient* p ) { maData.push_back(p); }
+    void erase( iterator it ) { maData.erase(it); }
+    size_t size() const { return maData.size(); }
+};
 
 SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 : aInterceptorContainer( aMutex )
@@ -410,7 +429,10 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
     return OUString();
 }
 
-
+void SfxViewShell::NewIPClient_Impl( SfxInPlaceClient *pIPClient )
+{
+    GetIPClientList_Impl(true)->push_back(pIPClient);
+}
 
 void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
 {

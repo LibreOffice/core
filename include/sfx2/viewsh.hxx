@@ -35,7 +35,6 @@
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>
-#include <vector>
 
 class SfxBaseController;
 class Size;
@@ -122,8 +121,7 @@ public: \
             DocClass::Factory().RegisterViewFactory( *Factory() )
 
 class SfxInPlaceClient;
-typedef ::std::vector< SfxInPlaceClient* > SfxInPlaceClientList;
-
+class SfxInPlaceClientList;
 
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
@@ -168,6 +166,8 @@ public:
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
+
+    SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( bool bCreate = true ) const;
 
 public:
 
@@ -284,10 +284,8 @@ public:
     SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE bool GlobalKeyInput_Impl( const KeyEvent &rKeyEvent );
 
-    SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient )
-                                { GetIPClientList_Impl(true)->push_back(pIPClient); }
+    SAL_DLLPRIVATE void NewIPClient_Impl( SfxInPlaceClient *pIPClient );
     SAL_DLLPRIVATE void IPClientGone_Impl( SfxInPlaceClient *pIPClient );
-    SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( bool bCreate = true ) const;
     SAL_DLLPRIVATE void ResetAllClients_Impl( SfxInPlaceClient *pIP );
     SAL_DLLPRIVATE void DiscardClients_Impl();
 
