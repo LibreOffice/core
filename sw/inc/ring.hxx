@@ -154,6 +154,7 @@ namespace sw
         private:
             /** the item in the ring where iteration starts */
             value_type* m_pStart;
+            typedef typename std::remove_const<value_type>::type nonconst_value_type;
 
         public:
             RingContainer( value_type* pRing ) : m_pStart(pRing) {};
@@ -201,9 +202,9 @@ namespace sw
                 : m_pCurrent(nullptr)
                 , m_pStart(nullptr)
             {}
-            explicit RingIterator(value_type* pRing, bool bStart = true)
+            explicit RingIterator(nonconst_value_type* pRing, bool bStart = true)
                 : m_pCurrent(nullptr)
-                , m_pStart(const_cast<nonconst_value_type*>(pRing))
+                , m_pStart(pRing)
             {
                 if(!bStart)
                     m_pCurrent = m_pStart;
@@ -239,23 +240,23 @@ namespace sw
 
     template <typename value_type>
     inline typename Ring<value_type>::const_ring_container Ring<value_type>::GetRingContainer() const
-        { return Ring<value_type>::const_ring_container(static_cast< const value_type* >(this)); };
+        { return Ring<value_type>::const_ring_container(static_cast< const_value_type* >(this)); };
 
     template <typename value_type>
     inline typename RingContainer<value_type>::iterator RingContainer<value_type>::begin()
-        { return RingContainer<value_type>::iterator(m_pStart); };
+        { return RingContainer<value_type>::iterator(const_cast< nonconst_value_type* >(m_pStart)); };
 
     template <typename value_type>
     inline typename RingContainer<value_type>::iterator RingContainer<value_type>::end()
-        { return RingContainer<value_type>::iterator(m_pStart, false); };
+        { return RingContainer<value_type>::iterator(const_cast< nonconst_value_type* >(m_pStart), false); };
 
     template <typename value_type>
     inline typename RingContainer<value_type>::const_iterator RingContainer<value_type>::begin() const
-        { return RingContainer<value_type>::const_iterator(m_pStart); };
+        { return RingContainer<value_type>::const_iterator(const_cast< nonconst_value_type* >(m_pStart)); };
 
     template <typename value_type>
     inline typename RingContainer<value_type>::const_iterator RingContainer<value_type>::end() const
-        { return RingContainer<value_type>::const_iterator(m_pStart, false); };
+        { return RingContainer<value_type>::const_iterator(const_cast< nonconst_value_type* >(m_pStart), false); };
 }
 #endif
 
