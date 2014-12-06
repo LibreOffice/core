@@ -3236,7 +3236,7 @@ namespace xmloff { namespace token {
         XML_RFC_LANGUAGE_TAG_COMPLEX,
         // Chart data table properties
         XML_DATA_TABLE_SHOW_HORZ_BORDER,
-        XML_CHART_DTABLE_SHOWVERTBORDER,
+        XML_DATA_TABLE_SHOW_VERT_BORDER,
         XML_CHART_DTABLE_SHOWOUTLINE,
         // Chart Display units properties
         XML_CHART_DUNITS_DISPLAYUNITS,
