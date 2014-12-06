@@ -1835,7 +1835,7 @@ namespace
         const SwRangeRedline* pSrcRedl;
         SwRangeRedline* pDestRedl;
         SaveMergeRedline( const SwNode& rDstNd, const SwRangeRedline& rSrcRedl);
-        static sal_uInt16 InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline);
+        sal_uInt16 InsertRedline(SwPaM* pLastDestRedline);
     };
 }
 
@@ -1865,7 +1865,7 @@ SaveMergeRedline::SaveMergeRedline( const SwNode& rDstNd,
     }
 }
 
-sal_uInt16 SaveMergeRedline::InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline)
+sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
 {
     sal_uInt16 nIns = 0;
     SwDoc* pDoc = pDestRedl->GetDoc();
@@ -2058,7 +2058,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
             SwPaM* pLastDestRedline(nullptr);
             for(SaveMergeRedline& rRedline: vRedlines)
             {
-                nRet += SaveMergeRedline::InsertRedline(rRedline.pSrcRedl, rRedline.pDestRedl, pLastDestRedline);
+                nRet += rRedline.InsertRedline(pLastDestRedline);
                 pLastDestRedline = rRedline.pDestRedl;
             }
         }
