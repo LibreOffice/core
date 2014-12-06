@@ -1681,11 +1681,10 @@ bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
 {
     Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
 
-    bool bLink = false;
     bool bStorage = false;
     if( pLib )
     {
-        bLink = pLib->mbLink;
+        bool bLink = pLib->mbLink;
         bStorage = xStorage.is() && !bLink;
     }
 

@@ -140,10 +140,9 @@ SbError SbiDdeControl::Terminate( size_t nChannel )
 
 SbError SbiDdeControl::TerminateAll()
 {
-    DdeConnection *conv;
     for (size_t nChannel = 0; nChannel < aConvList.size(); ++nChannel)
     {
-        conv = aConvList[nChannel];
+        DdeConnection *conv = aConvList[nChannel];
 
         if (conv != DDE_FREECHANNEL)
         {

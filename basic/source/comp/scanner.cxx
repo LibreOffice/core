@@ -440,7 +440,6 @@ bool SbiScanner::NextSym()
         // Hex literals are signed Integers ( as defined by basic
         // e.g. -2,147,483,648 through 2,147,483,647 (signed)
         sal_uInt32 lu = 0;
-        int i;
         bool bBufOverflow = false;
         while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol] & 0xFF, bCompatible))
         {
@@ -461,7 +460,7 @@ bool SbiScanner::NextSym()
         *p = 0;
         for( p = buf; *p; ++p )
         {
-            i = (*p & 0xFF) - '0';
+            int i = (*p & 0xFF) - '0';
             if( i > 9 ) i -= 7;
             lu = ( lu * base ) + i;
             if( !ndig-- )

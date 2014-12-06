@@ -464,9 +464,9 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     uno::Reference< beans::XPropertySet > xDlgModPropSet( xDialogModel, uno::UNO_QUERY );
     if( xDlgModPropSet.is() )
     {
-        bool bDecoration = true;
         try
         {
+            bool bDecoration = true;
             OUString aDecorationPropName("Decoration");
             Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
             aDecorationAny >>= bDecoration;
