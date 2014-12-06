@@ -367,9 +367,9 @@ Menu RID_POPUP_EDIT
 
         MenuItem
         {
-            Text [ en-US ] = "Style" ;
             Identifier = RID_MN_FORMAT_STYLE ;
             HelpID = HID_MN_FORMAT_STYLE ;
+            Text [ en-US ] = "~Format" ;
             SubMenu = Menu
             {
                 ItemList =
