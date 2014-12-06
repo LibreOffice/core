@@ -325,10 +325,9 @@ void EquidistantTickFactory::getAllTicks( TickInfoArraysType& rAllTickInfos ) co
     aAllTicks[0].realloc(nMaxMajorTickCount);
 
     sal_Int32 nRealMajorTickCount = 0;
-    double* pValue = NULL;
     for( sal_Int32 nMajorTick=0; nMajorTick<nMaxMajorTickCount; nMajorTick++ )
     {
-        pValue = this->getMajorTick( nMajorTick );
+        double* pValue = this->getMajorTick( nMajorTick );
         if(!pValue)
             continue;
         aAllTicks[0][nRealMajorTickCount] = *pValue;

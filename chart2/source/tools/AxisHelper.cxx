@@ -823,9 +823,9 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
                     try
                     {
                         Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
-                        bool bAddAxis = true;
                         if( xAxis.is() )
                         {
+                            bool bAddAxis = true;
                             if( bOnlyVisible )
                             {
                                 Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );

@@ -246,11 +246,11 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_BAR_CONNECT:
         {
-            bool bOldConnectBars = false;
             m_bConnectBars = static_cast< const SfxBoolItem & >(
                 rItemSet.Get( nWhichId )).GetValue();
             if( m_bSupportingBarConnectors )
             {
+                bool bOldConnectBars = false;
                 uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
                 if( xDiagramProperties.is() &&
                     (xDiagramProperties->getPropertyValue( "ConnectBars" ) >>= bOldConnectBars) &&
@@ -265,11 +265,11 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
 
         case SCHATTR_GROUP_BARS_PER_AXIS:
         {
-            bool bOldGroupBarsPerAxis = true;
             m_bGroupBarsPerAxis = static_cast< const SfxBoolItem & >(
                 rItemSet.Get( nWhichId )).GetValue();
             if( m_bSupportingAxisSideBySide )
             {
+                bool bOldGroupBarsPerAxis = true;
                 uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(m_xChartModel), uno::UNO_QUERY );
                 if( xDiagramProperties.is() &&
                     (xDiagramProperties->getPropertyValue( "GroupBarsPerAxis" ) >>= bOldGroupBarsPerAxis) &&
