@@ -1830,16 +1830,16 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 class _SaveMergeRedlines;
 class _SaveMergeRedlines : public sw::Ring<_SaveMergeRedlines>
 {
+public:
     const SwRangeRedline* pSrcRedl;
     SwRangeRedline* pDestRedl;
-public:
     _SaveMergeRedlines( const SwNode& rDstNd,
                         const SwRangeRedline& rSrcRedl, _SaveMergeRedlines* pRing );
-    sal_uInt16 InsertRedline();
     _SaveMergeRedlines* GetNext()
         { return GetNextInRing(); }
     _SaveMergeRedlines* GetPrev()
         { return GetPrevInRing(); }
+    static sal_uInt16 InsertRedline(_SaveMergeRedlines* pRing, const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl);
 };
 
 _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
@@ -1868,7 +1868,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
     }
 }
 
-sal_uInt16 _SaveMergeRedlines::InsertRedline()
+sal_uInt16 _SaveMergeRedlines::InsertRedline(_SaveMergeRedlines* pRing, const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl)
 {
     sal_uInt16 nIns = 0;
     SwDoc* pDoc = pDestRedl->GetDoc();
@@ -1896,9 +1896,9 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
         pDestRedl->GetMark()->nContent.Assign( aSaveNd.GetNode().GetCntntNode(),
                                                 nSaveCnt );
 
-        if( GetPrev() != this )
+        if( !pRing->unique() )
         {
-            SwPaM* pTmpPrev = static_cast<_SaveMergeRedlines*>(GetPrev())->pDestRedl;
+            SwPaM* pTmpPrev = static_cast<_SaveMergeRedlines*>(pRing->GetPrev())->pDestRedl;
             if( pTmpPrev && *pTmpPrev->GetPoint() == *pDestRedl->GetPoint() )
                 *pTmpPrev->GetPoint() = *pDestRedl->GetMark();
         }
@@ -2068,7 +2068,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
             _SaveMergeRedlines* pTmp = pRing;
 
             do {
-                nRet += pTmp->InsertRedline();
+                nRet += pTmp->InsertRedline(pTmp, pTmp->pSrcRedl, pTmp->pDestRedl);
             } while( pRing != ( pTmp = pTmp->GetNext()) );
 
             while( pRing != pRing->GetNext() )
