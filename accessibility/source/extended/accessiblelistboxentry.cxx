@@ -460,12 +460,11 @@ namespace accessibility
         sal_uInt16 iRealItemCount = 0;
         sal_uInt16 iCount = 0;
         sal_uInt16 iTotleItemCount = pEntry->ItemCount();
-        SvLBoxItem* pItem;
         while( iCount < iTotleItemCount )
         {
-            pItem = pEntry->GetItem( iCount );
+            const SvLBoxItem* pItem = pEntry->GetItem( iCount );
             if ( pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
-                 !static_cast<SvLBoxString*>( pItem )->GetText().isEmpty() )
+                 !static_cast<const SvLBoxString*>( pItem )->GetText().isEmpty() )
             {
                 iRealItemCount++;
             }

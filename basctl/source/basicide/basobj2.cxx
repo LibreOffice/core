@@ -240,7 +240,6 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     GetExtraData()->ChoosingMacro() = true;
 
     OUString aScriptURL;
-    bool bError = false;
     SbMethod* pMethod = NULL;
 
     boost::scoped_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
@@ -259,6 +258,8 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     {
         case Macro_OkRun:
         {
+            bool bError = false;
+
             pMethod = pChooser->GetMacro();
             if ( !pMethod && pChooser->GetMode() == MacroChooser::Recording )
                 pMethod = pChooser->CreateMacro();

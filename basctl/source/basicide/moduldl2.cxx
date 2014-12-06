@@ -273,9 +273,9 @@ bool CheckBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
     }
 
     // i24094: Password verification necessary for renaming
-    bool bOK = true;
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
     {
+        bool bOK = true;
         // check password
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )

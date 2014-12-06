@@ -190,9 +190,9 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
     }
 
     SbxVariable* pVar = 0;
-    bool bDocumentObjects = false;
     if ( !aEntries.empty() )
     {
+        bool bDocumentObjects = false;
         for ( size_t n = 0; n < aEntries.size(); n++ )
         {
             SvTreeListEntry* pLE = aEntries[n];

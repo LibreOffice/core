@@ -136,13 +136,13 @@ namespace basegfx
                 for(sal_uInt32 a(0); a < nEdgeCount; a++)
                 {
                     // update current edge
-                    double fLastDotDashMovingLength(0.0);
                     const sal_uInt32 nNextIndex((a + 1) % nPointCount);
                     const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
                     const double fEdgeLength(B3DVector(aNextPoint - aCurrentPoint).getLength());
 
                     if(!fTools::equalZero(fEdgeLength))
                     {
+                        double fLastDotDashMovingLength(0.0);
                         while(fTools::less(fDotDashMovingLength, fEdgeLength))
                         {
                             // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]

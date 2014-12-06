@@ -586,8 +586,6 @@ namespace basegfx
                                        scissor_plane                 *pPlane,       // scissoring plane
                                        const ::basegfx::B2DRectangle &rR )          // clipping rectangle
         {
-            ::basegfx::B2DPoint *curr;
-            ::basegfx::B2DPoint *next;
 
             sal_uInt32 out_count=0;
 
@@ -596,8 +594,8 @@ namespace basegfx
 
                 // vertices are relative to the coordinate
                 // system defined by the rectangle.
-                curr = &in_vertex[i];
-                next = &in_vertex[(i+1)%in_count];
+                ::basegfx::B2DPoint *curr = &in_vertex[i];
+                ::basegfx::B2DPoint *next = &in_vertex[(i+1)%in_count];
 
                 // perform clipping judgement & mask against current plane.
                 sal_uInt32 clip = pPlane->clipmask & ((getCohenSutherlandClipFlags(*curr,rR)<<4)|getCohenSutherlandClipFlags(*next,rR));
