@@ -761,6 +761,31 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             }
             break;
 
+        case SID_PARASPACE_INCREASE:
+        case SID_PARASPACE_DECREASE:
+        {
+            SvxULSpaceItem aULSpace(
+                static_cast< const SvxULSpaceItem& >( aEditAttr.Get( EE_PARA_ULSPACE ) ) );
+            sal_uInt16 nUpper = aULSpace.GetUpper();
+            sal_uInt16 nLower = aULSpace.GetLower();
+
+            if ( nSlot == SID_PARASPACE_INCREASE )
+            {
+                nUpper += 100;
+                nLower += 100;
+            }
+            else
+            {
+                nUpper = std::max< sal_Int16 >( nUpper - 100, 0 );
+                nLower = std::max< sal_Int16 >( nLower - 100, 0 );
+            }
+
+            aULSpace.SetUpper( nUpper );
+            aULSpace.SetLower( nLower );
+            aNewAttr.Put( aULSpace );
+        }
+        break;
+
         default:
             bSet = false;
     }
@@ -1023,9 +1048,20 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     aULSP.SetWhich(SID_ATTR_PARA_ULSPACE);
     rDestSet.Put(aULSP);
     Invalidate(SID_ATTR_PARA_ULSPACE);
+    Invalidate(SID_PARASPACE_INCREASE);
+    Invalidate(SID_PARASPACE_DECREASE);
     eState = aAttrSet.GetItemState( EE_PARA_ULSPACE );
-    if ( eState == SfxItemState::DONTCARE )
+    if( eState >= SfxItemState::DEFAULT )
+    {
+        if ( !aULSP.GetUpper() && !aULSP.GetLower() )
+            rDestSet.DisableItem( SID_PARASPACE_DECREASE );
+    }
+    else
+    {
+        rDestSet.DisableItem( SID_PARASPACE_INCREASE );
+        rDestSet.DisableItem( SID_PARASPACE_DECREASE );
         rDestSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
+    }
 
     //  Zeilenabstand
 

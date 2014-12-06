@@ -751,7 +751,40 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 rSh.SetAttrItem( aParaMargin );
         }
         break;
+    case SID_PARASPACE_INCREASE:
+    case SID_PARASPACE_DECREASE:
+        {
+            SfxItemSet aULSpaceSet( GetPool(), RES_UL_SPACE, RES_UL_SPACE );
+            rSh.GetCurAttr( aULSpaceSet );
+            SvxULSpaceItem aULSpace(
+                static_cast< const SvxULSpaceItem& >( aULSpaceSet.Get( RES_UL_SPACE ) ) );
+            sal_uInt16 nUpper = aULSpace.GetUpper();
+            sal_uInt16 nLower = aULSpace.GetLower();
 
+            if ( nSlot == SID_PARASPACE_INCREASE )
+            {
+                nUpper = std::min< sal_uInt16 >( nUpper + 57, 5670 );
+                nLower = std::min< sal_uInt16 >( nLower + 57, 5670 );
+            }
+            else
+            {
+                nUpper = std::max< sal_Int16 >( nUpper - 57, 0 );
+                nLower = std::max< sal_Int16 >( nLower - 57, 0 );
+            }
+
+            aULSpace.SetUpper( nUpper );
+            aULSpace.SetLower( nLower );
+
+            SwTxtFmtColl* pColl = rSh.GetCurTxtFmtColl();
+            if( pColl && pColl->IsAutoUpdateFmt() )
+            {
+                aULSpaceSet.Put( aULSpace );
+                rSh.AutoUpdatePara( pColl, aULSpaceSet );
+            }
+            else
+                rSh.SetAttrItem( aULSpace );
+        }
+        break;
     case SID_RULER_BORDERS_VERTICAL:
     case SID_RULER_BORDERS:
         if ( pReqArgs )
@@ -1253,15 +1286,29 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         }
 
         case SID_ATTR_PARA_ULSPACE:
+        case SID_PARASPACE_INCREASE:
+        case SID_PARASPACE_DECREASE:
         {
             SvxULSpaceItem aUL = static_cast<const SvxULSpaceItem&>(aCoreSet.Get(RES_UL_SPACE));
-            aUL.SetWhich(nWhich);
-
             SfxItemState e = aCoreSet.GetItemState(RES_UL_SPACE);
             if( e >= SfxItemState::DEFAULT )
-                rSet.Put( aUL );
+            {
+                if ( !aUL.GetUpper() && !aUL.GetLower() )
+                    rSet.DisableItem( SID_PARASPACE_DECREASE );
+                else if ( aUL.GetUpper() >= 5670 && aUL.GetLower() >= 5670 )
+                    rSet.DisableItem( SID_PARASPACE_INCREASE );
+                if ( nWhich == SID_ATTR_PARA_ULSPACE )
+                {
+                    aUL.SetWhich( SID_ATTR_PARA_ULSPACE );
+                    rSet.Put( aUL );
+                }
+            }
             else
-                rSet.InvalidateItem(nWhich);
+            {
+                rSet.DisableItem( SID_PARASPACE_INCREASE );
+                rSet.DisableItem( SID_PARASPACE_DECREASE );
+                rSet.InvalidateItem( SID_ATTR_PARA_ULSPACE );
+            }
         }
         break;
 

@@ -44,16 +44,12 @@ const char UNO_PROMOTE[]          = ".uno:Promote";
 const char UNO_DEMOTE[]           = ".uno:Demote";
 const char UNO_HANGINGINDENT2[]   = ".uno:HangingIndent2";
 
-const char UNO_PARASPACEINC[]     = ".uno:ParaspaceIncrease";
-const char UNO_PARASPACEDEC[]     = ".uno:ParaspaceDecrease";
-
 namespace svx {namespace sidebar {
 #define DEFAULT_VALUE          0
 
 #define MAX_DURCH             5670
 
 #define INDENT_STEP            706
-#define UL_STEP                58
 
 #define MAX_SW                  1709400
 #define MAX_SC_SD               116220200
@@ -246,24 +242,6 @@ void ParaPropertyPanel::InitToolBoxSpacing()
 
     mpTopDist->SetAccessibleName(mpTopDist->GetQuickHelpText());
     mpBottomDist->SetAccessibleName(mpBottomDist->GetQuickHelpText());
-
-    // Use a form of image loading that can handle both .uno:<command>
-    // and private:graphirepository... syntax.  This is necessary to
-    // handle the workaround for accessing the images of commands
-    // ParaspaceIncrease and ParaspaceDecrease.
-    // See issue 122446 for more details.
-
-    const sal_uInt16 nIdParaSpaceInc = mpTbxUL_IncDec->GetItemId(UNO_PARASPACEINC);
-    const sal_uInt16 nIdParaSpaceDec = mpTbxUL_IncDec->GetItemId(UNO_PARASPACEDEC);
-    mpTbxUL_IncDec->SetItemImage(
-        nIdParaSpaceInc,
-        sfx2::sidebar::Tools::GetImage("private:graphicrepository/cmd/sc_paraspaceincrease.png" /* i#122446 */, mxFrame));
-    mpTbxUL_IncDec->SetItemImage(
-        nIdParaSpaceDec,
-        sfx2::sidebar::Tools::GetImage("private:graphicrepository/cmd/sc_paraspacedecrease.png" /* i#122446 */, mxFrame));
-
-    aLink = LINK( this, ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl );
-    mpTbxUL_IncDec->SetSelectHdl(aLink);
     m_eULSpaceUnit = maULSpaceControl.GetCoreMetric();
 }
 
@@ -403,57 +381,6 @@ IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
     return 0L;
-}
-
-IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
-{
-    const OUString aCommand(pControl->GetItemCommand(pControl->GetCurItemId()));
-
-             if( aCommand ==  UNO_PARASPACEINC)
-             {
-                 SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
-
-                 maUpper += UL_STEP;
-                 sal_Int64 nVal = OutputDevice::LogicToLogic( maUpper, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-                 nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
-                 aMargin.SetUpper( (const sal_uInt16)nVal );
-
-                 maLower += UL_STEP;
-                 nVal = OutputDevice::LogicToLogic( maLower, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-                 nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
-                 aMargin.SetLower( (const sal_uInt16)nVal );
-
-                 GetBindings()->GetDispatcher()->Execute(
-                     SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
-             }
-             else if( aCommand == UNO_PARASPACEDEC)
-             {
-                 SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
-                 if( maUpper >= UL_STEP )
-                 {
-                    maUpper -= UL_STEP;
-                    sal_Int64   nVal = OutputDevice::LogicToLogic( maUpper, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-                    nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
-                    aMargin.SetUpper( (const sal_uInt16)nVal );
-                 }
-                 else
-                    aMargin.SetUpper( DEFAULT_VALUE );
-
-                 if( maLower >= UL_STEP )
-                 {
-                    maLower -= UL_STEP;
-                    sal_Int64   nVal = OutputDevice::LogicToLogic( maLower, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
-                    nVal = OutputDevice::LogicToLogic( (long)nVal, MAP_100TH_MM, (MapUnit)m_eLRSpaceUnit );
-                    aMargin.SetLower( (const sal_uInt16)nVal );
-                 }
-                 else
-                    aMargin.SetLower( DEFAULT_VALUE );
-
-                 GetBindings()->GetDispatcher()->Execute(
-                     SID_ATTR_PARA_ULSPACE, SfxCallMode::RECORD, &aMargin, 0L);
-             }
-
-    return( 0L );
 }
 
 // for Paragraph State change
@@ -677,19 +604,16 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
         nVal = OutputDevice::LogicToLogic( maLower, (MapUnit)(SFX_MAPUNIT_TWIP), MAP_100TH_MM );
         nVal = mpBottomDist->Normalize( nVal );
         mpBottomDist->SetValue( nVal, FUNIT_100TH_MM );
-        mpTbxUL_IncDec->Enable();
     }
     else if(eState == SfxItemState::DISABLED )
     {
         mpTopDist->Disable();
         mpBottomDist->Disable();
-        mpTbxUL_IncDec->Disable();
     }
     else
     {
         mpTopDist->SetEmptyFieldValue();
         mpBottomDist->SetEmptyFieldValue();
-        mpTbxUL_IncDec->Disable();
     }
 }
 
@@ -821,7 +745,6 @@ ParaPropertyPanel::ParaPropertyPanel(vcl::Window* pParent,
 
     get(mpTbxIndent_IncDec, "indent");
     get(mpTbxProDemote, "promotedemote");
-    get(mpTbxUL_IncDec, "paraspacing");
 
     initial();
     m_aMetricCtl.RequestUpdate();

@@ -360,8 +360,7 @@
 #define SID_EXPAND_PAGE                     (SID_SD_START+343)
 #define SID_SUMMARY_PAGE                    (SID_SD_START+344)
 #define SID_LEAVE_ALL_GROUPS                (SID_SD_START+345)
-#define SID_PARASPACE_INCREASE              (SID_SD_START+346)
-#define SID_PARASPACE_DECREASE              (SID_SD_START+347)
+// free
 #define SID_SLIDE_MASTERPAGE                (SID_SD_START+348)
 #define SID_HANDOUT_MASTERPAGE              (SID_SD_START+349)
 #define SID_NOTES_MASTERPAGE                (SID_SD_START+350)

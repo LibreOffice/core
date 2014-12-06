@@ -211,6 +211,18 @@ interface TextDrawText
         StateMethod = GetState ;
     ]
 
+    SID_PARASPACE_INCREASE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
+    SID_PARASPACE_DECREASE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+
     SID_ATTR_PARA_LINESPACE // api:
     [
         ExecMethod = Execute ;

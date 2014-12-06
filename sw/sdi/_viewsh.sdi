@@ -427,6 +427,18 @@ interface BaseTextEditView
         StateMethod = StateTabWin ;
     ]
 
+    SID_PARASPACE_INCREASE
+    [
+        ExecMethod = ExecTabWin;
+        StateMethod = StateTabWin;
+    ]
+
+    SID_PARASPACE_DECREASE
+    [
+        ExecMethod = ExecTabWin;
+        StateMethod = StateTabWin;
+    ]
+
     SID_ATTR_PAGE_COLUMN
     [
         ExecMethod = ExecTabWin ;

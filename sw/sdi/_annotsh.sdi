@@ -198,6 +198,17 @@ interface _Annotation
         StateMethod = GetState ;
     ]
 
+    SID_PARASPACE_INCREASE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState;
+    ]
+    SID_PARASPACE_DECREASE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState;
+    ]
+
     FN_INSERT_STRING
     [
             ExecMethod = Exec ;

@@ -278,7 +278,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="paraspacing">
+              <object class="sfxlo-SidebarToolBox" id="paraspacing">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="has_tooltip">True</property>
@@ -286,12 +286,8 @@
                 <property name="show_arrow">False</property>
                 <child>
                   <object class="GtkToolButton" id="paraspaceinc">
-                    <property name="width_request">25</property>
-                    <property name="height_request">25</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Increase Paragraph Spacing</property>
                     <property name="action_name">.uno:ParaspaceIncrease</property>
                     <property name="use_underline">True</property>
                   </object>
@@ -304,8 +300,6 @@
                   <object class="GtkToolButton" id="paraspacedec">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="has_tooltip">True</property>
-                    <property name="tooltip_text" translatable="yes">Decrease Paragraph Spacing</property>
                     <property name="action_name">.uno:ParaspaceDecrease</property>
                     <property name="use_underline">True</property>
                   </object>

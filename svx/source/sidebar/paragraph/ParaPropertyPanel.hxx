@@ -71,7 +71,6 @@ private:
     ToolBox*            mpTBxNumBullet;
     ToolBox*            mpTBxBackColor;
     //Paragraph spacing
-    ToolBox*            mpTbxUL_IncDec;
     SvxRelativeField*   mpTopDist;
     SvxRelativeField*   mpBottomDist;
     ToolBox*            mpTbxIndent_IncDec;
@@ -120,7 +119,6 @@ private:
     DECL_LINK(ClickIndent_IncDec_Hdl_Impl, ToolBox*);
     DECL_LINK(ClickProDemote_Hdl_Impl, ToolBox*);
     DECL_LINK(ULSpaceHdl_Impl, void*);
-    DECL_LINK(ClickUL_IncDec_Hdl_Impl, ToolBox*);
 
     void StateChangedIndentImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     void StateChangedULImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
