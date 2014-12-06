@@ -824,6 +824,70 @@ void fillSortedColumnArray(
     rRowFlags.swap(aRowFlags);
 }
 
+void expandRowRange( ScRange& rRange, SCROW nTop, SCROW nBottom )
+{
+    if (nTop < rRange.aStart.Row())
+        rRange.aStart.SetRow(nTop);
+
+    if (rRange.aEnd.Row() < nBottom)
+        rRange.aEnd.SetRow(nBottom);
+}
+
+class FormulaCellCollectAction : public sc::ColumnSpanSet::ColumnAction
+{
+    std::vector<ScFormulaCell*>& mrCells;
+    ScColumn* mpCol;
+
+public:
+    FormulaCellCollectAction( std::vector<ScFormulaCell*>& rCells ) :
+        mrCells(rCells), mpCol(NULL) {}
+
+    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    {
+        mpCol = pCol;
+    }
+
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    {
+        assert(mpCol);
+
+        if (!bVal)
+            return;
+
+        mpCol->CollectFormulaCells(mrCells, nRow1, nRow2);
+    }
+};
+
+class ListenerStartAction : public sc::ColumnSpanSet::ColumnAction
+{
+    ScColumn* mpCol;
+
+    boost::shared_ptr<sc::ColumnBlockPositionSet> mpPosSet;
+    sc::StartListeningContext maStartCxt;
+    sc::EndListeningContext maEndCxt;
+
+public:
+    ListenerStartAction( ScDocument& rDoc ) :
+        mpPosSet(new sc::ColumnBlockPositionSet(rDoc)),
+        maStartCxt(rDoc, mpPosSet),
+        maEndCxt(rDoc, mpPosSet) {}
+
+    virtual void startColumn( ScColumn* pCol ) SAL_OVERRIDE
+    {
+        mpCol = pCol;
+    }
+
+    virtual void execute( SCROW nRow1, SCROW nRow2, bool bVal ) SAL_OVERRIDE
+    {
+        assert(mpCol);
+
+        if (!bVal)
+            return;
+
+        mpCol->StartListeningFormulaCells(maStartCxt, maEndCxt, nRow1, nRow2);
+    }
+};
+
 }
 
 void ScTable::SortReorderByColumn(
@@ -1121,6 +1185,78 @@ void ScTable::SortReorderByRowRefUpdate(
     SCROW nRow1 = pArray->GetStart();
     SCROW nRow2 = pArray->GetLast();
 
+    ScRange aMoveRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab);
+    sc::ColumnSpanSet aGrpListenerRanges(false);
+
+    {
+        // Get the range of formula group listeners within sorted range (if any).
+        sc::QueryRange aQuery;
+
+        ScBroadcastAreaSlotMachine* pBASM = pDocument->GetBASM();
+        std::vector<sc::AreaListener> aGrpListeners =
+            pBASM->GetAllListeners(
+                aMoveRange, sc::AreaInsideOrOverlap, sc::ListenerGroup);
+
+        {
+            std::vector<sc::AreaListener>::iterator it = aGrpListeners.begin(), itEnd = aGrpListeners.end();
+            for (; it != itEnd; ++it)
+            {
+                assert(it->mbGroupListening);
+                SvtListener* pGrpLis = it->mpListener;
+                pGrpLis->Query(aQuery);
+                pDocument->EndListeningArea(it->maArea, it->mbGroupListening, pGrpLis);
+            }
+        }
+
+        ScRangeList aTmp;
+        aQuery.swapRanges(aTmp);
+
+        // If the range is within the sorted range, we need to expand its rows
+        // to the top and bottom of the sorted range, since the formula cells
+        // could be anywhere in the sorted range after reordering.
+        for (size_t i = 0, n = aTmp.size(); i < n; ++i)
+        {
+            ScRange aRange = *aTmp[i];
+            if (!aMoveRange.Intersects(aRange))
+            {
+                // Doesn't overlap with the sorted range at all.
+                aGrpListenerRanges.set(aRange, true);
+                continue;
+            }
+
+            if (aMoveRange.aStart.Col() <= aRange.aStart.Col() && aRange.aEnd.Col() <= aMoveRange.aEnd.Col())
+            {
+                // Its column range is within the column range of the sorted range.
+                expandRowRange(aRange, aMoveRange.aStart.Row(), aMoveRange.aEnd.Row());
+                aGrpListenerRanges.set(aRange, true);
+                continue;
+            }
+
+            // It intersects with the sorted range, but its column range is
+            // not within the column range of the sorted range.  Split it into
+            // 2 ranges.
+            ScRange aR1 = aRange;
+            ScRange aR2 = aRange;
+            if (aRange.aStart.Col() < aMoveRange.aStart.Col())
+            {
+                // Left half is outside the sorted range while the right half is inside.
+                aR1.aEnd.SetCol(aMoveRange.aStart.Col()-1);
+                aR2.aStart.SetCol(aMoveRange.aStart.Col());
+                expandRowRange(aR2, aMoveRange.aStart.Row(), aMoveRange.aEnd.Row());
+            }
+            else
+            {
+                // Left half is inside the sorted range while the right half is outside.
+                aR1.aEnd.SetCol(aMoveRange.aEnd.Col()-1);
+                aR2.aStart.SetCol(aMoveRange.aEnd.Col());
+                expandRowRange(aR1, aMoveRange.aStart.Row(), aMoveRange.aEnd.Row());
+            }
+
+            aGrpListenerRanges.set(aR1, true);
+            aGrpListenerRanges.set(aR2, true);
+        }
+    }
+
     // Split formula groups at the sort range boundaries (if applicable).
     std::vector<SCROW> aRowBounds;
     aRowBounds.reserve(2);
@@ -1237,7 +1373,6 @@ void ScTable::SortReorderByRowRefUpdate(
 
     // Get all area listeners that listen on one row within the range and end
     // their listening.
-    ScRange aMoveRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     std::vector<sc::AreaListener> aAreaListeners = pDocument->GetBASM()->GetAllListeners(
             aMoveRange, sc::OneRowInsideArea);
     {
@@ -1247,6 +1382,16 @@ void ScTable::SortReorderByRowRefUpdate(
             pDocument->EndListeningArea(it->maArea, it->mbGroupListening, it->mpListener);
             aListeners.push_back( it->mpListener);
         }
+    }
+
+    {
+        // Get all formula cells from the former group area listener ranges.
+
+        std::vector<ScFormulaCell*> aFCells;
+        FormulaCellCollectAction aAction(aFCells);
+        aGrpListenerRanges.executeColumnAction(*pDocument, aAction);
+
+        std::copy(aFCells.begin(), aFCells.end(), std::back_inserter(aListeners));
     }
 
     // Remove any duplicate listener entries.  We must ensure that we notify
@@ -1306,6 +1451,12 @@ void ScTable::SortReorderByRowRefUpdate(
     // Re-group columns in the sorted range too.
     for (SCCOL i = nCol1; i <= nCol2; ++i)
         aCol[i].RegroupFormulaCells();
+
+    {
+        // Re-start area listeners on the old group listener ranges.
+        ListenerStartAction aAction(*pDocument);
+        aGrpListenerRanges.executeColumnAction(*pDocument, aAction);
+    }
 }
 
 short ScTable::CompareCell(

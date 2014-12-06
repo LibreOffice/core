@@ -227,6 +227,12 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
     }
 }
 
+void ColumnSpanSet::swap( ColumnSpanSet& r )
+{
+    maDoc.swap(r.maDoc);
+    std::swap(mbInit, r.mbInit);
+}
+
 namespace {
 
 class Scanner

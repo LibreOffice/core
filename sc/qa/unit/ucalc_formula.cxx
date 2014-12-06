@@ -4274,7 +4274,7 @@ void Test::testFormulaDepTracking3()
         { "5", "6", "=SUM(A3:B3)", 0 },
     };
 
-    insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData), true);
+    insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
 
     // Check the initial formula results.
     CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(2,0,0)));

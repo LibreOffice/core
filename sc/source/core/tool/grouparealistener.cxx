@@ -13,6 +13,8 @@
 #include <bulkdatahint.hxx>
 #include <columnspanset.hxx>
 #include <column.hxx>
+#include <listenerquery.hxx>
+#include <listenerqueryids.hxx>
 
 namespace sc {
 
@@ -108,6 +110,24 @@ void FormulaGroupAreaListener::Notify( const SfxHint& rHint )
     }
 }
 
+void FormulaGroupAreaListener::Query( QueryBase& rQuery ) const
+{
+    switch (rQuery.getId())
+    {
+        case SC_LISTENER_QUERY_FORMULA_GROUP_RANGE:
+        {
+            ScFormulaCell* pTop = *mppTopCell;
+            ScRange aRange(pTop->aPos);
+            aRange.aEnd.IncRow(mnGroupLen-1);
+            QueryRange& rQR = static_cast<QueryRange&>(rQuery);
+            rQR.add(aRange);
+        }
+        break;
+        default:
+            ;
+    }
+}
+
 void FormulaGroupAreaListener::notifyBulkChange( const BulkDataHint& rHint )
 {
     const ColumnSpanSet* pSpans = rHint.getSpans();
@@ -138,6 +158,12 @@ void FormulaGroupAreaListener::collectFormulaCells(
         // Outside the column range.
         return;
 
+    collectFormulaCells(nRow1, nRow2, rCells);
+}
+
+void FormulaGroupAreaListener::collectFormulaCells(
+    SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const
+{
     ScFormulaCell** pp = mppTopCell;
     ScFormulaCell** ppEnd = pp + mnGroupLen;
 

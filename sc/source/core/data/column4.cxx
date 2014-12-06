@@ -1107,6 +1107,18 @@ public:
     }
 };
 
+class FormulaCellCollector
+{
+    std::vector<ScFormulaCell*>& mrCells;
+public:
+    FormulaCellCollector( std::vector<ScFormulaCell*>& rCells ) : mrCells(rCells) {}
+
+    void operator() ( size_t /*nRow*/, ScFormulaCell* p )
+    {
+        mrCells.push_back(p);
+    }
+};
+
 }
 
 void ScColumn::CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nRow1, SCROW nRow2 )
@@ -1116,6 +1128,15 @@ void ScColumn::CollectListeners( std::vector<SvtListener*>& rListeners, SCROW nR
 
     ListenerCollector aFunc(rListeners);
     sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aFunc);
+}
+
+void ScColumn::CollectFormulaCells( std::vector<ScFormulaCell*>& rCells, SCROW nRow1, SCROW nRow2 )
+{
+    if (nRow2 < nRow1 || !ValidRow(nRow1) || !ValidRow(nRow2))
+        return;
+
+    FormulaCellCollector aFunc(rCells);
+    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
 namespace {

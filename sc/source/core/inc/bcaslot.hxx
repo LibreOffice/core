@@ -239,7 +239,8 @@ public:
     void                EraseArea( ScBroadcastAreas::iterator& rIter );
 
     void GetAllListeners(
-        const ScRange& rRange, std::vector<sc::AreaListener>& rListeners, sc::AreaOverlapType eType );
+        const ScRange& rRange, std::vector<sc::AreaListener>& rListeners,
+        sc::AreaOverlapType eType, sc::ListenerGroupType eGroup );
 
 #if DEBUG_AREA_BROADCASTER
     void Dump() const;
@@ -348,7 +349,8 @@ public:
     void                FinallyEraseAreas( ScBroadcastAreaSlot* pSlot );
 
     std::vector<sc::AreaListener> GetAllListeners(
-        const ScRange& rRange, sc::AreaOverlapType eType );
+        const ScRange& rRange, sc::AreaOverlapType eType,
+        sc::ListenerGroupType eGroup = sc::ListenerBoth );
 
 #if DEBUG_AREA_BROADCASTER
     void Dump() const;

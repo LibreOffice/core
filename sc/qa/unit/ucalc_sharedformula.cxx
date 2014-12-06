@@ -596,7 +596,7 @@ void Test::testSharedFormulasRefUpdateRangeDeleteRow()
         { "7", "8", "=SUM(A5:B5)" }
     };
 
-    insertRangeData(m_pDoc, ScAddress(0,0,0), aData, SAL_N_ELEMENTS(aData), true);
+    insertRangeData(m_pDoc, ScAddress(0,0,0), aData, SAL_N_ELEMENTS(aData));
 
     // Check initial formula values.
     CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(2,0,0)));
