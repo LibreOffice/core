@@ -130,12 +130,11 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
     m_pMFPerspective->Enable( m_pCbxPerspective->IsChecked() );
 
     //RightAngledAxes
-    bool bRightAngledAxes = false;
-
     uno::Reference< chart2::XDiagram > xDiagram( m_xSceneProperties, uno::UNO_QUERY );
     if( ChartTypeHelper::isSupportingRightAngledAxes(
             DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
     {
+        bool bRightAngledAxes = false;
         m_xSceneProperties->getPropertyValue( "RightAngledAxes" ) >>= bRightAngledAxes;
         m_pCbxRightAngledAxes->SetToggleHdl( LINK( this, ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled ));
         m_pCbxRightAngledAxes->Check( bRightAngledAxes );

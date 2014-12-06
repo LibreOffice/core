@@ -1539,11 +1539,11 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    bool bFound = false;
-    bool bAmbiguous = false;
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
     {
+        bool bFound = false;
+        bool bAmbiguous = false;
         bool bVertical = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
         if( bFound )
             m_aOuterValue <<= bVertical;
@@ -1883,11 +1883,11 @@ void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const R
 Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    bool bFound = false;
-    bool bAmbiguous = false;
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
     {
+        bool bFound = false;
+        bool bAmbiguous = false;
         sal_Int32 nGeometry = DiagramHelper::getGeometry3D( xDiagram, bFound, bAmbiguous );
         if( bFound )
             m_aOuterValue <<= nGeometry;

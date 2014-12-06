@@ -46,9 +46,9 @@ namespace
 
 bool lcl_isRightAngledAxesSetAndSupported( const Reference< beans::XPropertySet >& xSceneProperties )
 {
-    bool bRightAngledAxes = false;
     if( xSceneProperties.is() )
     {
+        bool bRightAngledAxes = false;
         xSceneProperties->getPropertyValue( "RightAngledAxes") >>= bRightAngledAxes;
         if(bRightAngledAxes)
         {

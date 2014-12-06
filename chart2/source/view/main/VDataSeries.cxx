@@ -520,13 +520,11 @@ void VDataSeries::getMinMaxXValue(double& fMin, double& fMax) const
 
     if(aValuesX.getLength() > 0)
     {
-        double aValue;
-
         fMax = fMin = aValuesX[0];
 
         for (sal_Int32 i = 1; i < aValuesX.getLength(); i++)
         {
-            aValue = aValuesX[i];
+            const double aValue = aValuesX[i];
             if ( aValue > fMax)
             {
                 fMax = aValue;

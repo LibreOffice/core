@@ -1938,17 +1938,15 @@ void OpenGL3DRenderer::RenderScreenTextShape()
     for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
     {
         TextInfo textInfo = m_ScreenTextInfoList[i];
-        //calc the postition and check whether it can be displayed
-        float xTrans = 0.0f;
-        float yTrans = 0.0f;
+        //calc the position and check whether it can be displayed
         if (textInfo.uniqueId)
         {
             glm::vec3 worldPos = glm::vec3(m_ScrollMoveMatrix * m_GlobalScaleMatrix * glm::vec4(textInfo.pos, 1));
             if ((worldPos.x < m_fMinCoordX) || (worldPos.x > m_fMaxCoordX))
                 continue;
             glm::vec4 pos = m_3DProjection * m_3DView * glm::vec4(worldPos, 1);
-            xTrans = pos.x / pos.w;
-            yTrans = pos.y / pos.w;
+            const float xTrans = pos.x / pos.w;
+            const float yTrans = pos.y / pos.w;
             for (int j = 0; j < 12; j++)
             {
                 if (j % 3 == 0)
