@@ -53,12 +53,11 @@ namespace dxcanvas
 
     GraphicsSharedPtr createSurfaceGraphics(const COMReference<surface_type>& rSurface )
     {
-        Gdiplus::Graphics* pGraphics;
         GraphicsSharedPtr  pRet;
         HDC aHDC;
         if( SUCCEEDED(rSurface->GetDC( &aHDC )) )
         {
-            pGraphics = Gdiplus::Graphics::FromHDC( aHDC );
+            Gdiplus::Graphics* pGraphics = Gdiplus::Graphics::FromHDC( aHDC );
             if(pGraphics)
             {
                 tools::setupGraphics( *pGraphics );
