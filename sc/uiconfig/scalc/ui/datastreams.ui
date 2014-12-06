@@ -80,7 +80,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="browse">
-                                <property name="label" translatable="yes">_...</property>
+                                <property name="label" translatable="yes">_Browse...</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
@@ -408,7 +408,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="text" translatable="no">1000</property>
+                                <property name="text">1000</property>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
