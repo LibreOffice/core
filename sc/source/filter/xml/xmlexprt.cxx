@@ -1054,7 +1054,6 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         uno::Any aVal;
         aVal <<= nNumFmt;
         vector<XMLPropertyState> aProps;
-        aProps.push_back(XMLPropertyState(nEntryIndex, aVal));
         aVal <<= aDefaultStyle;
         aProps.push_back(XMLPropertyState(nEntryIndex, aVal));
 
