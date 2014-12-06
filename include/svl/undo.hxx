@@ -99,37 +99,24 @@ struct MarkedUndoAction
 
 class SfxUndoActions
 {
-private:
-    ::std::vector< MarkedUndoAction > m_aActions;
+    struct Impl;
+    Impl* mpImpl;
 
 public:
-    SfxUndoActions()
-    {
-    }
+    SfxUndoActions();
+    SfxUndoActions( const SfxUndoActions& r );
+    ~SfxUndoActions();
 
-    bool    empty() const { return m_aActions.empty(); }
-    size_t  size() const { return m_aActions.size(); }
+    bool empty() const;
+    size_t size() const;
 
-    const MarkedUndoAction& operator[]( size_t i ) const { return m_aActions[i]; }
-          MarkedUndoAction& operator[]( size_t i )       { return m_aActions[i]; }
+    const MarkedUndoAction& operator[]( size_t i ) const;
+    MarkedUndoAction& operator[]( size_t i );
 
-    void    Remove( size_t i_pos )
-    {
-        m_aActions.erase( m_aActions.begin() + i_pos );
-    }
-
-    void    Remove( size_t i_pos, size_t i_count )
-    {
-        m_aActions.erase( m_aActions.begin() + i_pos, m_aActions.begin() + i_pos + i_count );
-    }
-
-    void    Insert( SfxUndoAction* i_action, size_t i_pos )
-    {
-        m_aActions.insert( m_aActions.begin() + i_pos, MarkedUndoAction( i_action ) );
-    }
+    void Remove( size_t i_pos );
+    void Remove( size_t i_pos, size_t i_count );
+    void Insert( SfxUndoAction* i_action, size_t i_pos );
 };
-
-
 
 /** do not make use of these implementation details, unless you
     really really have to! */

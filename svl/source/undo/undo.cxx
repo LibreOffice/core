@@ -135,6 +135,60 @@ bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
     return true;
 }
 
+struct SfxUndoActions::Impl
+{
+    std::vector<MarkedUndoAction> maActions;
+};
+
+SfxUndoActions::SfxUndoActions() : mpImpl(new Impl) {}
+
+SfxUndoActions::SfxUndoActions( const SfxUndoActions& r ) :
+    mpImpl(new Impl)
+{
+    mpImpl->maActions = r.mpImpl->maActions;
+}
+
+SfxUndoActions::~SfxUndoActions()
+{
+    delete mpImpl;
+}
+
+bool SfxUndoActions::empty() const
+{
+    return mpImpl->maActions.empty();
+}
+
+size_t SfxUndoActions::size() const
+{
+    return mpImpl->maActions.size();
+}
+
+const MarkedUndoAction& SfxUndoActions::operator[]( size_t i ) const
+{
+    return mpImpl->maActions[i];
+}
+
+MarkedUndoAction& SfxUndoActions::operator[]( size_t i )
+{
+    return mpImpl->maActions[i];
+}
+
+void SfxUndoActions::Remove( size_t i_pos )
+{
+    mpImpl->maActions.erase( mpImpl->maActions.begin() + i_pos );
+}
+
+void SfxUndoActions::Remove( size_t i_pos, size_t i_count )
+{
+    mpImpl->maActions.erase(
+        mpImpl->maActions.begin() + i_pos, mpImpl->maActions.begin() + i_pos + i_count);
+}
+
+void SfxUndoActions::Insert( SfxUndoAction* i_action, size_t i_pos )
+{
+    mpImpl->maActions.insert(
+        mpImpl->maActions.begin() + i_pos, MarkedUndoAction( i_action ) );
+}
 
 typedef ::std::vector< SfxUndoListener* >   UndoListeners;
 
