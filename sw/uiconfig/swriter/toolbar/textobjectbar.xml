@@ -53,6 +53,9 @@
  <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:helpid="27346" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:helpid="27347" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
