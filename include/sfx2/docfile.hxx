@@ -41,7 +41,6 @@
 #include <tools/link.hxx>
 #include <tools/stream.hxx>
 #include <ucbhelper/content.hxx>
-#include <vector>
 
 class SvKeyValueIterator;
 class SfxObjectFactory;
