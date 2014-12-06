@@ -172,6 +172,12 @@
           <value xml:lang="en-US">.uno:BasicBreak</value>
         </prop>
       </node>
+      <node oor:name="R_SHIFT_MOD1" oor:op="replace">
+        <prop oor:name="Command">
+          <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          <value xml:lang="en-US">.uno:Ruler</value>
+        </prop>
+      </node>
       <node oor:name="S_MOD1" oor:op="replace">
         <prop oor:name="Command">
           <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -2378,12 +2384,6 @@
             <value xml:lang="en-US">.uno:RightPara</value>
           </prop>
         </node>
-        <node oor:name="R_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RefreshView</value>
-          </prop>
-        </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -3705,12 +3705,6 @@
             <value xml:lang="en-US">.uno:RightPara</value>
           </prop>
         </node>
-        <node oor:name="R_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RefreshView</value>
-          </prop>
-        </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -4490,12 +4484,6 @@
             <value xml:lang="en-US">.uno:RightPara</value>
           </prop>
         </node>
-        <node oor:name="R_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RefreshView</value>
-          </prop>
-        </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -5225,12 +5213,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RightPara</value>
-          </prop>
-        </node>
-        <node oor:name="R_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RefreshView</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
@@ -6000,12 +5982,6 @@
             <value xml:lang="en-US">.uno:RightPara</value>
           </prop>
         </node>
-        <node oor:name="R_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RefreshView</value>
-          </prop>
-        </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -6771,12 +6747,6 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:RightPara</value>
-          </prop>
-        </node>
-        <node oor:name="R_SHIFT_MOD1" oor:op="replace">
-          <prop oor:name="Command">
-            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-            <value xml:lang="en-US">.uno:RefreshView</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
