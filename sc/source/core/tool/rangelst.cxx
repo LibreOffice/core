@@ -1170,6 +1170,12 @@ void ScRangeList::push_back(ScRange* p)
         mnMaxRowUsed = p->aEnd.Row();
 }
 
+void ScRangeList::swap( ScRangeList& r )
+{
+    maRanges.swap(r.maRanges);
+    std::swap(mnMaxRowUsed, r.mnMaxRowUsed);
+}
+
 ScAddress ScRangeList::GetTopLeftCorner() const
 {
     if(empty())

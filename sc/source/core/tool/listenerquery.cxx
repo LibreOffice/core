@@ -10,6 +10,7 @@
 #include <listenerquery.hxx>
 #include <listenerqueryids.hxx>
 #include <address.hxx>
+#include <rangelst.hxx>
 
 namespace sc {
 
@@ -65,6 +66,30 @@ void RefQueryFormulaGroup::add( const ScAddress& rPos )
 const RefQueryFormulaGroup::TabsType& RefQueryFormulaGroup::getAllPositions() const
 {
     return maTabs;
+}
+
+struct QueryRange::Impl
+{
+    ScRangeList maRanges;
+};
+
+QueryRange::QueryRange() :
+    SvtListener::QueryBase(SC_LISTENER_QUERY_FORMULA_GROUP_RANGE),
+    mpImpl(new Impl) {}
+
+QueryRange::~QueryRange()
+{
+    delete mpImpl;
+}
+
+void QueryRange::add( const ScRange& rRange )
+{
+    mpImpl->maRanges.Join(rRange);
+}
+
+void QueryRange::swapRanges( ScRangeList& rRanges )
+{
+    mpImpl->maRanges.swap(rRanges);
 }
 
 }

@@ -103,6 +103,8 @@ public:
 
     void executeAction(Action& ac) const;
     void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const;
+
+    void swap( ColumnSpanSet& r );
 };
 
 /**

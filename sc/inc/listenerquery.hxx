@@ -13,6 +13,8 @@
 #include <address.hxx>
 #include <svl/listener.hxx>
 
+class ScRangeList;
+
 namespace sc {
 
 /**
@@ -41,6 +43,23 @@ public:
 private:
     ScRange maSkipRange;
     TabsType maTabs;
+};
+
+class QueryRange : public SvtListener::QueryBase
+{
+    struct Impl;
+    Impl* mpImpl;
+
+    QueryRange( const QueryRange& ); // disabled
+    QueryRange& operator= ( const QueryRange& ); // disabled
+
+public:
+    QueryRange();
+    virtual ~QueryRange();
+
+    void add( const ScRange& rRange );
+
+    void swapRanges( ScRangeList& rRanges );
 };
 
 }

@@ -587,7 +587,8 @@ void ScBroadcastAreaSlot::EraseArea( ScBroadcastAreas::iterator& rIter )
 }
 
 void ScBroadcastAreaSlot::GetAllListeners(
-    const ScRange& rRange, std::vector<sc::AreaListener>& rListeners, sc::AreaOverlapType eType )
+    const ScRange& rRange, std::vector<sc::AreaListener>& rListeners,
+    sc::AreaOverlapType eType, sc::ListenerGroupType eGroup )
 {
     for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin()),
             aIterEnd( aBroadcastAreaTbl.end()); aIter != aIterEnd; ++aIter )
@@ -597,6 +598,20 @@ void ScBroadcastAreaSlot::GetAllListeners(
 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
+        switch (eGroup)
+        {
+            case sc::ListenerSingle:
+                if (pArea->IsGroupListening())
+                    continue;
+            break;
+            case sc::ListenerGroup:
+                if (!pArea->IsGroupListening())
+                    continue;
+            break;
+            case sc::ListenerBoth:
+            default:
+                ;
+        }
 
         switch (eType)
         {
@@ -608,6 +623,11 @@ void ScBroadcastAreaSlot::GetAllListeners(
             case sc::AreaPartialOverlap:
                 if (!rRange.Intersects(rAreaRange) || rRange.In(rAreaRange))
                     // The range needs to be only partially overlapping.
+                    continue;
+                break;
+            case sc::AreaInsideOrOverlap:
+                if (!rRange.Intersects(rAreaRange))
+                    // The range needs to be partially overlapping or fully inside.
                     continue;
                 break;
             case sc::OneRowInsideArea:
@@ -1256,7 +1276,7 @@ void ScBroadcastAreaSlotMachine::FinallyEraseAreas( ScBroadcastAreaSlot* pSlot )
 }
 
 std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
-    const ScRange& rRange, sc::AreaOverlapType eType )
+    const ScRange& rRange, sc::AreaOverlapType eType, sc::ListenerGroupType eGroup )
 {
     std::vector<sc::AreaListener> aRet;
 
@@ -1274,7 +1294,7 @@ std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
         {
             ScBroadcastAreaSlot* p = *pp;
             if (p)
-                p->GetAllListeners(rRange, aRet, eType);
+                p->GetAllListeners(rRange, aRet, eType, eGroup);
             ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
         }
     }

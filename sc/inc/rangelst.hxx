@@ -91,6 +91,8 @@ public:
     const ScRange*  back() const;
     void            push_back(ScRange* p);
 
+    void swap( ScRangeList& r );
+
 private:
     ::std::vector<ScRange*> maRanges;
     SCROW           mnMaxRowUsed;

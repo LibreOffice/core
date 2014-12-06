@@ -104,8 +104,16 @@ enum AreaOverlapType
 {
     AreaInside,
     AreaPartialOverlap,
+    AreaInsideOrOverlap,
     OneRowInsideArea,
     OneColumnInsideArea
+};
+
+enum ListenerGroupType
+{
+    ListenerSingle,
+    ListenerGroup,
+    ListenerBoth
 };
 
 enum StartListeningType

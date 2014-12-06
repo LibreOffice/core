@@ -39,6 +39,7 @@ public:
     ScRange getListeningRange() const;
 
     virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Query( QueryBase& rQuery ) const SAL_OVERRIDE;
 
     /**
      * Given the row span of changed cells within a single column, collect all
@@ -52,6 +53,7 @@ public:
      *               this container.
      */
     void collectFormulaCells( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
+    void collectFormulaCells( SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
 
     ScAddress getTopCellPos() const;
     const ScRange& getRange() const;
