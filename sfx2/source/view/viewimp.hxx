@@ -38,6 +38,7 @@ typedef SfxShell* SfxShellPtr_Impl;
 typedef std::vector<SfxShellPtr_Impl> SfxShellArr_Impl;
 
 class SfxClipboardChangeListener;
+class SfxInPlaceClientList;
 
 struct SfxViewShell_Impl
 {
@@ -62,7 +63,12 @@ struct SfxViewShell_Impl
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
     ::boost::shared_ptr< vcl::PrinterController > m_pPrinterController;
 
+    mutable SfxInPlaceClientList* mpIPClientList;
+
     SfxViewShell_Impl(sal_uInt16 const nFlags);
+    ~SfxViewShell_Impl();
+
+    SfxInPlaceClientList* GetIPClientList_Impl( bool bCreate = true ) const;
 };
 
 #endif

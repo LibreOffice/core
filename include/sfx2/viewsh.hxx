@@ -58,6 +58,7 @@ class SfxFrameItem;
 class Dialog;
 class Menu;
 class NotifyEvent;
+class SfxInPlaceClient;
 
 #define SFX_PRINTER_PRINTER               1  // without JOB SETUP => Temporary
 #define SFX_PRINTER_JOBSETUP         2
@@ -120,9 +121,6 @@ public: \
 #define SFX_VIEW_REGISTRATION(DocClass) \
             DocClass::Factory().RegisterViewFactory( *Factory() )
 
-class SfxInPlaceClient;
-class SfxInPlaceClientList;
-
 class SFX2_DLLPUBLIC SfxViewShell: public SfxShell, public SfxListener
 {
 #ifdef INCLUDED_SFX2_VIEWSH_HXX
@@ -132,7 +130,6 @@ friend class SfxPrinterController;
 #endif
 
     struct SfxViewShell_Impl*   pImp;
-    SfxInPlaceClientList*       pIPClientList;
     SfxViewFrame*               pFrame;
     SfxShell*                   pSubShell;
     vcl::Window*                     pWindow;
@@ -166,8 +163,6 @@ public:
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
-
-    SAL_DLLPRIVATE SfxInPlaceClientList* GetIPClientList_Impl( bool bCreate = true ) const;
 
 public:
 

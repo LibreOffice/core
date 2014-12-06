@@ -310,7 +310,20 @@ SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 ,   m_bGotFrameOwnership(false)
 ,   m_nFamily(0xFFFF)   // undefined, default set by TemplateDialog
 ,   m_pController(0)
+,   mpIPClientList(NULL)
 {}
+
+SfxViewShell_Impl::~SfxViewShell_Impl()
+{
+    DELETEZ(mpIPClientList);
+}
+
+SfxInPlaceClientList* SfxViewShell_Impl::GetIPClientList_Impl( bool bCreate ) const
+{
+    if (!mpIPClientList && bCreate)
+        mpIPClientList = new SfxInPlaceClientList;
+    return mpIPClientList;
+}
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewShell,SfxShell)
 
@@ -431,12 +444,12 @@ OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFra
 
 void SfxViewShell::NewIPClient_Impl( SfxInPlaceClient *pIPClient )
 {
-    GetIPClientList_Impl(true)->push_back(pIPClient);
+    pImp->GetIPClientList_Impl(true)->push_back(pIPClient);
 }
 
 void SfxViewShell::IPClientGone_Impl( SfxInPlaceClient *pIPClient )
 {
-    SfxInPlaceClientList* pClientList = GetIPClientList_Impl(true);
+    SfxInPlaceClientList* pClientList = pImp->GetIPClientList_Impl(true);
 
     for( SfxInPlaceClientList::iterator it = pClientList->begin(); it != pClientList->end(); ++it )
     {
@@ -775,7 +788,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             VisAreaChanged(aVisArea);
 
                             // the plugins might need change in their state
-                            SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(false);
+                            SfxInPlaceClientList *pClients = pView->pImp->GetIPClientList_Impl(false);
                             if ( pClients )
                             {
                                 for ( size_t n = 0; n < pClients->size(); n++)
@@ -955,7 +968,7 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
     vcl::Window*             pObjParentWin
 )   const
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
+    SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
     if ( !pClients )
         return 0;
 
@@ -983,7 +996,7 @@ SfxInPlaceClient* SfxViewShell::GetIPClient() const
 SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 {
     // this method is needed as long as SFX still manages the border space for ChildWindows (see SfxFrame::Resize)
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
+    SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
     if ( !pClients )
         return 0;
 
@@ -999,7 +1012,7 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
+    SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
     if ( !pClients )
         return 0;
 
@@ -1256,7 +1269,6 @@ SfxViewShell::SfxViewShell
 
 :   SfxShell(this)
 ,   pImp( new SfxViewShell_Impl(nFlags) )
-,   pIPClientList( 0 )
 ,   pFrame(pViewFrame)
 ,   pSubShell(0)
 ,   pWindow(0)
@@ -1302,7 +1314,6 @@ SfxViewShell::~SfxViewShell()
     }
 
     DELETEZ( pImp );
-    DELETEZ( pIPClientList );
 }
 
 void SfxViewShell::Initialize()
@@ -1714,7 +1725,7 @@ void SfxViewShell::GotFocus() const
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 {
 
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
+    SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1730,7 +1741,7 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 
 void SfxViewShell::DisconnectAllClients()
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
+    SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1749,7 +1760,7 @@ void SfxViewShell::QueryObjAreaPixel( Rectangle& ) const
 
 void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
+    SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1811,7 +1822,7 @@ void SfxViewShell::DiscardClients_Impl()
 */
 
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(false);
+    SfxInPlaceClientList *pClients = pImp->GetIPClientList_Impl(false);
     if ( !pClients )
         return;
 
@@ -1902,15 +1913,6 @@ void SfxViewShell::JumpToMark( const OUString& rMark )
         SID_JUMPTOMARK,
         SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
         &aMarkItem, 0L );
-}
-
-
-
-SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( bool bCreate ) const
-{
-    if ( !pIPClientList && bCreate )
-        ( (SfxViewShell*) this )->pIPClientList = new SfxInPlaceClientList;
-    return pIPClientList;
 }
 
 void SfxViewShell::SetController( SfxBaseController* pController )
