@@ -1248,45 +1248,52 @@ void SfxUndoManager::RemoveOldestUndoActions( size_t const i_count )
     }
 }
 
+struct SfxListUndoAction::Impl
+{
+    sal_uInt16 mnId;
+
+    OUString maComment;
+    OUString maRepeatComment;
+
+    Impl( sal_uInt16 nId, const OUString& rComment, const OUString& rRepeatComment ) :
+        mnId(nId), maComment(rComment), maRepeatComment(rRepeatComment) {}
+};
 
 sal_uInt16 SfxListUndoAction::GetId() const
 {
-    return nId;
+    return mpImpl->mnId;
 }
-
 
 OUString SfxListUndoAction::GetComment() const
 {
-    return aComment;
+    return mpImpl->maComment;
 }
-
 
 void SfxListUndoAction::SetComment(const OUString& rComment)
 {
-    aComment = rComment;
+    mpImpl->maComment = rComment;
 }
-
 
 OUString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &) const
 {
-    return aRepeatComment;
+    return mpImpl->maRepeatComment;
 }
 
-
-
-SfxListUndoAction::SfxListUndoAction
-(
+SfxListUndoAction::SfxListUndoAction(
     const OUString &rComment,
     const OUString &rRepeatComment,
-    sal_uInt16 Id,
-    SfxUndoArray *pFather
-)
-: nId(Id), aComment(rComment), aRepeatComment(rRepeatComment)
+    sal_uInt16 nId,
+    SfxUndoArray *pFather ) :
+    mpImpl(new Impl(nId, rComment, rRepeatComment))
 {
     pFatherUndoArray = pFather;
     nMaxUndoActions = USHRT_MAX;
 }
 
+SfxListUndoAction::~SfxListUndoAction()
+{
+    delete mpImpl;
+}
 
 void SfxListUndoAction::Undo()
 {

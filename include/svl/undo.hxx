@@ -74,7 +74,8 @@ public:
     virtual sal_uInt16  GetId() const;
 
 private:
-    SfxUndoAction&          operator=( const SfxUndoAction& );    // n.i.!!
+    SfxUndoAction( const SfxUndoAction& ); // disabled
+    SfxUndoAction& operator=( const SfxUndoAction& ); // disabled
 };
 
 
@@ -146,11 +147,16 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
     Redo and Undo work element wise on SfxListUndoActions.
 */
 {
-    public:
+    struct Impl;
+    Impl* mpImpl;
+
+public:
                             TYPEINFO_OVERRIDE();
 
-                            SfxListUndoAction( const OUString &rComment,
-                                const OUString& rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
+    SfxListUndoAction(
+        const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, SfxUndoArray *pFather );
+    ~SfxListUndoAction();
+
     virtual void            Undo() SAL_OVERRIDE;
     virtual void            UndoWithContext( SfxUndoContext& i_context ) SAL_OVERRIDE;
     virtual void            Redo() SAL_OVERRIDE;
@@ -165,13 +171,6 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
     virtual sal_uInt16      GetId() const SAL_OVERRIDE;
 
     void SetComment(const OUString& rComment);
-
-    private:
-
-    sal_uInt16          nId;
-    OUString            aComment;
-    OUString            aRepeatComment;
-
 };
 
 
