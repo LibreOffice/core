@@ -115,14 +115,12 @@ public:
     bool isOpen() const { return mbOpen; }
 };
 
-template <typename T, typename PropertiesPointer>
 /**
    Class to handle data of a table row.
  */
 class RowData
 {
-    typedef typename CellData<T, PropertiesPointer>::Pointer_t
-        CellDataPointer_t;
+    typedef CellData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t CellDataPointer_t;
     typedef ::std::vector<CellDataPointer_t> Cells;
 
     /**
@@ -133,14 +131,14 @@ class RowData
     /**
        the properties of the row
     */
-    mutable PropertiesPointer mpProperties;
+    mutable TablePropertyMapPtr mpProperties;
 
 public:
-    typedef boost::shared_ptr<RowData <T, PropertiesPointer> > Pointer_t;
+    typedef boost::shared_ptr<RowData> Pointer_t;
 
     RowData() {}
 
-    RowData(const RowData<T, PropertiesPointer> & rRowData)
+    RowData(const RowData& rRowData)
     : mCells(rRowData.mCells), mpProperties(rRowData.mpProperties)
     {
     }
@@ -154,14 +152,13 @@ public:
        @param end       the end handle of the cell
        @param pProps    the properties of the cell
      */
-    void addCell(const T & start, PropertiesPointer pProps)
+    void addCell(const css::uno::Reference<css::text::XTextRange>& start, TablePropertyMapPtr pProps)
     {
-        CellDataPointer_t pCellData
-            (new CellData<T, PropertiesPointer>(start, pProps));
+        CellDataPointer_t pCellData(new CellData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>(start, pProps));
         mCells.push_back(pCellData);
     }
 
-    void endCell(const T & end)
+    void endCell(const css::uno::Reference<css::text::XTextRange>& end)
     {
         if (mCells.size() > 0)
             mCells.back()->setEnd(end);
@@ -177,7 +174,7 @@ public:
 
        @param pProperties   the properties to set
      */
-    void insertProperties(PropertiesPointer pProperties)
+    void insertProperties(TablePropertyMapPtr pProperties)
     {
         if( pProperties.get() )
         {
@@ -194,7 +191,7 @@ public:
        @param i          index of the cell
        @param pProps     the properties to add
      */
-    void insertCellProperties(unsigned int i, PropertiesPointer pProps)
+    void insertCellProperties(unsigned int i, TablePropertyMapPtr pProps)
     {
         mCells[i]->insertProperties(pProps);
     }
@@ -202,9 +199,9 @@ public:
     /**
         Add properties to the last cell of the row.
      */
-    void insertCellProperties(PropertiesPointer pProps)
+    void insertCellProperties(TablePropertyMapPtr pProps)
     {
-        if (! mCells.empty())
+        if (!mCells.empty())
             mCells.back()->insertProperties(pProps);
     }
 
@@ -221,7 +218,7 @@ public:
 
        @param i      index of the cell
      */
-    const T & getCellStart(unsigned int i) const
+    const css::uno::Reference<css::text::XTextRange>& getCellStart(unsigned int i) const
     {
         return mCells[i]->getStart();
     }
@@ -231,7 +228,7 @@ public:
 
         @param i     index of the cell
     */
-    const T & getCellEnd(unsigned int i) const
+    const css::uno::Reference<css::text::XTextRange>& getCellEnd(unsigned int i) const
     {
         return mCells[i]->getEnd();
     }
@@ -241,7 +238,7 @@ public:
 
        @param i      index of the cell
      */
-    PropertiesPointer getCellProperties(unsigned int i) const
+    TablePropertyMapPtr getCellProperties(unsigned int i) const
     {
         return mCells[i]->getProperties();
     }
@@ -249,7 +246,7 @@ public:
     /**
        Return properties of the row.
      */
-    PropertiesPointer getProperties()
+    TablePropertyMapPtr getProperties()
     {
         return mpProperties;
     }
@@ -269,7 +266,7 @@ public:
  */
 class TableData
 {
-    typedef RowData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t RowPointer_t;
+    typedef RowData::Pointer_t RowPointer_t;
     typedef ::std::vector<RowPointer_t> Rows;
 
     /**
@@ -295,7 +292,7 @@ class TableData
     /**
        initialize mpRow
      */
-    void newRow() { mpRow = RowPointer_t(new RowData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>()); }
+    void newRow() { mpRow = RowPointer_t(new RowData()); }
 
 public:
     typedef boost::shared_ptr<TableData> Pointer_t;

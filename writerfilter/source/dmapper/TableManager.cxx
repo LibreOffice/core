@@ -312,7 +312,7 @@ void TableManager::resolveCurrentTable()
 
             for (unsigned int nRow = 0; nRow < nRows; ++nRow)
             {
-                RowData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pRowData = pTableData->getRow(nRow);
+                RowData::Pointer_t pRowData = pTableData->getRow(nRow);
 
                 unsigned int nCells = pRowData->getCellCount();
 
