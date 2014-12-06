@@ -1828,24 +1828,17 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     return nRet;
 }
 
-class _SaveMergeRedlines;
-class _SaveMergeRedlines : public sw::Ring<_SaveMergeRedlines>
+struct _SaveMergeRedlines
 {
-public:
     const SwRangeRedline* pSrcRedl;
     SwRangeRedline* pDestRedl;
-    _SaveMergeRedlines( const SwNode& rDstNd,
-                        const SwRangeRedline& rSrcRedl, _SaveMergeRedlines* pRing );
-    _SaveMergeRedlines* GetNext()
-        { return GetNextInRing(); }
-    _SaveMergeRedlines* GetPrev()
-        { return GetPrevInRing(); }
-    static sal_uInt16 InsertRedline(_SaveMergeRedlines* pRing, const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline);
+    _SaveMergeRedlines( const SwNode& rDstNd, const SwRangeRedline& rSrcRedl);
+    static sal_uInt16 InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline);
 };
 
 _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
-                        const SwRangeRedline& rSrcRedl, _SaveMergeRedlines* pRing )
-    : Ring<_SaveMergeRedlines>( pRing ), pSrcRedl( &rSrcRedl )
+                        const SwRangeRedline& rSrcRedl)
+    : pSrcRedl( &rSrcRedl )
 {
     SwPosition aPos( rDstNd );
 
@@ -1869,7 +1862,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
     }
 }
 
-sal_uInt16 _SaveMergeRedlines::InsertRedline(_SaveMergeRedlines* pRing, const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline)
+sal_uInt16 _SaveMergeRedlines::InsertRedline(const SwRangeRedline* pSrcRedl, SwRangeRedline* pDestRedl, SwPaM* pLastDestRedline)
 {
     sal_uInt16 nIns = 0;
     SwDoc* pDoc = pDestRedl->GetDoc();
@@ -2045,7 +2038,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
                 // Found the position.
                 // Then we also have to insert the redline to the line in the DestDoc.
-                vRedlines.push_back(_SaveMergeRedlines(*pDstNd, *pRedl, nullptr));
+                vRedlines.push_back(_SaveMergeRedlines(*pDstNd, *pRedl));
             }
         }
 
@@ -2062,7 +2055,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
             SwPaM* pLastDestRedline(nullptr);
             for(_SaveMergeRedlines& rRedline: vRedlines)
             {
-                nRet += _SaveMergeRedlines::InsertRedline(&rRedline, rRedline.pSrcRedl, rRedline.pDestRedl, pLastDestRedline);
+                nRet += _SaveMergeRedlines::InsertRedline(rRedline.pSrcRedl, rRedline.pDestRedl, pLastDestRedline);
                 pLastDestRedline = rRedline.pDestRedl;
             }
         }
