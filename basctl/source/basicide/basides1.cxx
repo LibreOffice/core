@@ -87,7 +87,6 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
             // memorize item because of the adjustments...
             GetExtraData()->SetSearchItem(rSearchItem);
             sal_Int32 nFound = 0;
-            bool bCanceled = false;
             if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
             {
                 sal_uInt16 nActModWindows = 0;
@@ -115,6 +114,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
             }
             else
             {
+                bool bCanceled = false;
                 nFound = pCurWin->StartSearchAndReplace(rSearchItem);
                 if ( !nFound && !rSearchItem.GetSelection() )
                 {

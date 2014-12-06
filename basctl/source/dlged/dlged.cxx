@@ -116,9 +116,10 @@ void DlgEditor::ShowDialog()
         }
 
         // Disable decoration
-        bool bDecoration = true;
         try
         {
+            bool bDecoration = true;
+
             Any aDecorationAny = xSrcDlgModPropSet->getPropertyValue( aDecorationPropName );
             aDecorationAny >>= bDecoration;
             if( !bDecoration )

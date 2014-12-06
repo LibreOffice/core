@@ -304,14 +304,13 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         }
         if( mnWidth == 0 ) {
             GstPad *pad = NULL;
-            GstCaps *caps;
 
             g_signal_emit_by_name( mpPlaybin, "get-video-pad", 0, &pad );
 
             if( pad ) {
                 int w = 0, h = 0;
 
-                caps = gst_pad_get_current_caps( pad );
+                GstCaps *caps = gst_pad_get_current_caps( pad );
 
                 if( gst_structure_get( gst_caps_get_structure( caps, 0 ),
                                        "width", G_TYPE_INT, &w,
