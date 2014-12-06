@@ -53,7 +53,7 @@
     {\
         Identifier = MN_FORMAT_STYLE ; \
         Command = ".uno:StyleMenu" ; \
-        Text [ en-US ] = "St~yle" ; \
+        Text [ en-US ] = "~Format" ; \
         SubMenu = Menu\
         {\
             ItemList = \
