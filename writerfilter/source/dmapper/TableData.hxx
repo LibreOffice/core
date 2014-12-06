@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_RESOURCEMODEL_TABLEDATA_HXX
-#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_RESOURCEMODEL_TABLEDATA_HXX
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_TABLEDATA_HXX
 
 #include <resourcemodel/WW8ResourceModel.hxx>
 
@@ -30,7 +30,6 @@ namespace writerfilter
 namespace dmapper
 {
 
-template <typename T, typename PropertiesPointer>
 /**
    Class containing the data to describe a table cell.
  */
@@ -39,24 +38,24 @@ class CellData
     /**
        Handle to start of cell.
     */
-    T mStart;
+    css::uno::Reference<css::text::XTextRange> mStart;
 
     /**
        Handle to end of cell.
     */
-    T mEnd;
+    css::uno::Reference<css::text::XTextRange> mEnd;
 
     /**
        Pointer to properties of cell.
     */
-    PropertiesPointer mpProps;
+    TablePropertyMapPtr mpProps;
 
     bool mbOpen;
 
 public:
     typedef boost::shared_ptr<CellData> Pointer_t;
 
-    CellData(T start, PropertiesPointer pProps)
+    CellData(css::uno::Reference<css::text::XTextRange> start, TablePropertyMapPtr pProps)
     : mStart(start), mEnd(start), mpProps(pProps), mbOpen(true)
     {
     }
@@ -68,28 +67,28 @@ public:
 
        @param start    the start handle of the cell
     */
-    void setStart(T start) { mStart = start; }
+    void setStart(css::uno::Reference<css::text::XTextRange> start) { mStart = start; }
 
     /**
        Set the end handle of a cell.
 
        @param end     the end handle of the cell
     */
-    void setEnd(T end) { mEnd = end; mbOpen = false; }
+    void setEnd(css::uno::Reference<css::text::XTextRange> end) { mEnd = end; mbOpen = false; }
 
     /**
        Set the properties of the cell.
 
        @param pProps      the properties of the cell
     */
-    void setProperties(PropertiesPointer pProps) { mpProps = pProps; }
+    void setProperties(TablePropertyMapPtr pProps) { mpProps = pProps; }
 
     /**
        Adds properties to the cell.
 
        @param pProps      the properties to add
      */
-    void insertProperties(PropertiesPointer pProps)
+    void insertProperties(TablePropertyMapPtr pProps)
     {
         if( mpProps.get() )
             mpProps->InsertProps(pProps);
@@ -100,17 +99,17 @@ public:
     /**
        Return start handle of the cell.
      */
-    const T & getStart() { return mStart; }
+    const css::uno::Reference<css::text::XTextRange>& getStart() { return mStart; }
 
     /**
        Return end handle of the cell.
     */
-    const T & getEnd() { return mEnd; }
+    const css::uno::Reference<css::text::XTextRange>& getEnd() { return mEnd; }
 
     /**
        Return properties of the cell.
      */
-    PropertiesPointer getProperties() { return mpProps; }
+    TablePropertyMapPtr getProperties() { return mpProps; }
 
     bool isOpen() const { return mbOpen; }
 };
@@ -120,8 +119,7 @@ public:
  */
 class RowData
 {
-    typedef CellData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t CellDataPointer_t;
-    typedef ::std::vector<CellDataPointer_t> Cells;
+    typedef ::std::vector<CellData::Pointer_t> Cells;
 
     /**
        the cell data of the row
@@ -154,7 +152,7 @@ public:
      */
     void addCell(const css::uno::Reference<css::text::XTextRange>& start, TablePropertyMapPtr pProps)
     {
-        CellDataPointer_t pCellData(new CellData<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>(start, pProps));
+        CellData::Pointer_t pCellData(new CellData(start, pProps));
         mCells.push_back(pCellData);
     }
 
