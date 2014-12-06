@@ -2617,7 +2617,6 @@ namespace xmloff { namespace token {
         XML_DATE_START,
         XML_DATE_END,
         XML_STEP,
-        XML_IS_GROUP_FIELD,
         XML_DATA_PILOT_GROUPS,
         XML_DATA_PILOT_GROUP,
         XML_DATA_PILOT_GROUP_MEMBER,
