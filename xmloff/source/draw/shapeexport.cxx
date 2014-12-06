@@ -1740,6 +1740,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
                             XML_NAMESPACE_DOM, OUString(  "click"  ) ) );
                 mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStrMacro );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, "simple" );
 
                 SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
             }
