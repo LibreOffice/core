@@ -24,6 +24,7 @@ Error: a unit test failed, please do one of:
 export DEBUGCPPUNIT=TRUE            # for exception catching
 export CPPUNITTRACE="gdb --args"    # for interactive debugging on Linux
 export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive debugging in Visual Studio
+export CPPUNITTRACE="lldb --" # for interactive debugging on OSX
 export VALGRIND=memcheck            # for memory checking
 
 and retry using: make $1Test_$2
