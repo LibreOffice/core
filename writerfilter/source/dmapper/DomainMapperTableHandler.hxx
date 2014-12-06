@@ -28,8 +28,7 @@
 namespace writerfilter {
 namespace dmapper {
 
-typedef ::com::sun::star::text::XTextRange TextRange_t;
-typedef ::com::sun::star::uno::Reference< TextRange_t > Handle_t;
+typedef css::uno::Reference< css::text::XTextRange > Handle_t;
 typedef ::com::sun::star::uno::Sequence< Handle_t> CellSequence_t;
 typedef boost::shared_ptr<CellSequence_t> CellSequencePointer_t;
 typedef ::com::sun::star::uno::Sequence< CellSequence_t > RowSequence_t;
@@ -66,7 +65,7 @@ struct HorizontallyMergedCell
     }
 };
 
-class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
+class DomainMapperTableHandler : public TableDataHandler
 {
     TextReference_t         m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;

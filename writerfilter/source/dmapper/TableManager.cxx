@@ -433,7 +433,7 @@ void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHan
     setHandle(rHandle);
 }
 
-void TableManager::setHandler(TableDataHandler<css::uno::Reference<css::text::XTextRange>, TablePropertyMapPtr>::Pointer_t pTableDataHandler)
+void TableManager::setHandler(TableDataHandler::Pointer_t pTableDataHandler)
 {
     mpTableDataHandler = pTableDataHandler;
 }

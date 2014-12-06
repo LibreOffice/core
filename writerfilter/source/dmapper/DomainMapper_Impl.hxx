@@ -309,7 +309,6 @@ class DomainMapper;
 class DomainMapper_Impl
 {
 public:
-    typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, TablePropertyMapPtr > TableDataHandler_t;
     typedef std::map < OUString, BookmarkInsertPosition > BookmarkMap_t;
 
 private:
@@ -359,7 +358,7 @@ private:
 
     // TableManagers are stacked: one for each stream to avoid any confusion
     std::stack< boost::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
-    TableDataHandler_t::Pointer_t m_pTableHandler;
+    TableDataHandler::Pointer_t m_pTableHandler;
 
     //each context needs a stack of currently used attributes
     PropertyStack           m_aPropertyStacks[NUMBER_OF_CONTEXTS];
