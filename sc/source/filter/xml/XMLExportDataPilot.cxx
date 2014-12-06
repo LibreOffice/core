@@ -599,7 +599,6 @@ void ScXMLExportDataPilot::WriteGroupDimAttributes(const ScDPSaveGroupDimension*
     if (pGroupDim)
     {
         OUString aSrcFieldName = ScDPUtil::getSourceDimensionName(pGroupDim->GetSourceDimName());
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_GROUP_FIELD, XML_TRUE);
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcFieldName);
         if (pGroupDim->GetDatePart())
         {
@@ -613,7 +612,6 @@ void ScXMLExportDataPilot::WriteNumGroupDim(const ScDPSaveNumGroupDimension* pNu
 {
     if (pNumGroupDim)
     {
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_GROUP_FIELD, XML_TRUE);
         if (pNumGroupDim->GetDatePart())
         {
             WriteDatePart(pNumGroupDim->GetDatePart());
