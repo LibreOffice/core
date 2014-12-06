@@ -3630,7 +3630,6 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             // Parameter count -1 because of Param0 == this
             sal_uInt32 nParamCount = pParams ? ((sal_uInt32)pParams->Count() - 1) : 0;
             Sequence<Any> args;
-            bool bOutParams = false;
 
             Reference< XServiceConstructorDescription > xCtor = pUnoCtor->getServiceCtorDesc();
             Sequence< Reference< XParameter > > aParameterSeq = xCtor->getParameters();
@@ -3689,6 +3688,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 
             if( !bParameterError )
             {
+                bool bOutParams = false;
                 if( nAllocParamCount > 0 )
                 {
                     args.realloc( nAllocParamCount );
