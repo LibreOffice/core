@@ -143,7 +143,7 @@ public:
 
     SfxListUndoAction(
         const OUString &rComment, const OUString& rRepeatComment, sal_uInt16 nId, SfxUndoArray *pFather );
-    ~SfxListUndoAction();
+    virtual ~SfxListUndoAction();
 
     virtual void            Undo() SAL_OVERRIDE;
     virtual void            UndoWithContext( SfxUndoContext& i_context ) SAL_OVERRIDE;
