@@ -882,9 +882,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         aRefCxt.mnTabDelta = nDz;
         maTabs[nNewPos]->UpdateReference(aRefCxt, NULL);
 
-        sc::RefUpdateInsertTabContext aInsTabCxt(nNewPos, 1);
         maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // move all paragraphs up by one!!
-        maTabs[nOldPos]->UpdateInsertTab(aInsTabCxt);
+        maTabs[nOldPos]->UpdateInsertTab(aCxt);
 
         maTabs[nOldPos]->UpdateCompile();
         maTabs[nNewPos]->UpdateCompile( true ); //  maybe already compiled in Clone, but used names need recompilation
