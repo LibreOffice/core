@@ -1096,6 +1096,10 @@ AC_ARG_ENABLE(cairo-canvas,
                           platforms where Cairo is available.
 ])
 
+AC_ARG_ENABLE(opencl,
+    AS_HELP_STRING([--disable-opencl],
+        [Determines whether to build with OpenCL support.]))
+
 AC_ARG_ENABLE(dbus,
     AS_HELP_STRING([--disable-dbus],
         [Determines whether to enable features that depend on dbus.
@@ -10263,13 +10267,21 @@ dnl =================================================
 dnl Check whether to build with OpenCL support.
 dnl =================================================
 
-if test $_os != iOS -a $_os != Android; then
+AC_MSG_CHECKING([whether to build with the OpenCL support.])
+ENABLE_OPENCL=
+
+if test $_os != iOS -a $_os != Android -a "x$enable_opencl" != "xno"; then
+    AC_MSG_RESULT([yes])
     # CLCC in BUILD_TYPE tells that we are building a bundled clcc (just the clew part), OPENCL in
     # BUILD_TYPE tells that OpenCL is potentially available on the platform (optional at run-time,
     # used through clew).
     BUILD_TYPE="$BUILD_TYPE CLCC OPENCL"
+    ENABLE_OPENCL=TRUE
     AC_DEFINE(HAVE_FEATURE_OPENCL)
+else
+    AC_MSG_RESULT([no])
 fi
+AC_SUBST(ENABLE_OPENCL)
 
 dnl ===================================================================
 dnl Check whether to enable glTF support
