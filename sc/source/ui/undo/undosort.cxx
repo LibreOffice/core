@@ -49,13 +49,13 @@ void UndoSort::Execute( bool bUndo )
         ScRange aMarkRange( maParam.maSortRange);
         if (maParam.mbByRow)
         {
-            if (aMarkRange.aStart.Col() > 0)
-                aMarkRange.aStart.IncCol(-1);
+            if (aMarkRange.aStart.Row() > 0)
+                aMarkRange.aStart.IncRow(-1);
         }
         else
         {
-            if (aMarkRange.aStart.Row() > 0)
-                aMarkRange.aStart.IncRow(-1);
+            if (aMarkRange.aStart.Col() > 0)
+                aMarkRange.aStart.IncCol(-1);
         }
         ScUndoUtil::MarkSimpleBlock(pDocShell, aMarkRange);
     }
