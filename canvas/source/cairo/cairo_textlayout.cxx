@@ -337,7 +337,7 @@ namespace cairocanvas
    *
    * @return true, if successful
    **/
-    bool TextLayout::draw( SurfaceSharedPtr&             pSurface,
+    bool TextLayout::draw( CairoSharedPtr&               pSCairo,
                            OutputDevice&                 rOutDev,
                            const Point&                  rOutpos,
                            const rendering::ViewState&   viewState,
@@ -485,8 +485,6 @@ namespace cairocanvas
 #else
 # error Native API needed.
 #endif
-
-            CairoSharedPtr pSCairo = pSurface->getCairo();
 
             cairo_set_font_face( pSCairo.get(), font_face);
 

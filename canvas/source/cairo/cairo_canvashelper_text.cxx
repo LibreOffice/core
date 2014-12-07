@@ -299,8 +299,8 @@ namespace cairocanvas
         {
 #if defined CAIRO_HAS_WIN32_SURFACE
             // FIXME: Some kind of work-araound...
-            cairo_rectangle (mpSurface->getCairo().get(), 0, 0, 0, 0);
-            cairo_fill(mpSurface->getCairo().get());
+            cairo_rectangle (mpCairo.get(), 0, 0, 0, 0);
+            cairo_fill(mpCairo.get());
 #endif
             ::Point aOutpos;
             if( !setupTextOutput( *mpVirtualDevice, pOwner, aOutpos, viewState, renderState, xFont ) )
@@ -333,7 +333,7 @@ namespace cairocanvas
                                                                                                          RTL_TEXTENCODING_UTF8 ).getStr());
 
             rtl::Reference< TextLayout > pTextLayout( new TextLayout(text, textDirection, 0, CanvasFont::Reference(dynamic_cast< CanvasFont* >( xFont.get() )), mpSurfaceProvider) );
-            pTextLayout->draw( mpSurface, *mpVirtualDevice, aOutpos, viewState, renderState );
+            pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
         }
 
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -358,8 +358,8 @@ namespace cairocanvas
             {
 #if defined CAIRO_HAS_WIN32_SURFACE
                 // FIXME: Some kind of work-araound...
-                cairo_rectangle( mpSurface->getCairo().get(), 0, 0, 0, 0);
-                cairo_fill(mpSurface->getCairo().get());
+                cairo_rectangle(mpCairo.get(), 0, 0, 0, 0);
+                cairo_fill(mpCairo.get());
 #endif
                 // TODO(T3): Race condition. We're taking the font
                 // from xLayoutedText, and then calling draw() at it,
@@ -371,7 +371,7 @@ namespace cairocanvas
                     return uno::Reference< rendering::XCachedPrimitive >(NULL); // no output necessary
 
                 // TODO(F2): What about the offset scalings?
-                pTextLayout->draw( mpSurface, *mpVirtualDevice, aOutpos, viewState, renderState );
+                pTextLayout->draw(mpCairo, *mpVirtualDevice, aOutpos, viewState, renderState);
             }
         }
         else
