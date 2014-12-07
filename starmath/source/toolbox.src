@@ -1280,7 +1280,7 @@
             {
                 Identifier = RID_INFINITY ;
                 HelpId = HID_SMA_INFINITY ;
-                Text [ en-US ] = "infinite";
+                Text [ en-US ] = "Infinite";
             };
             ToolBoxItem
             {
