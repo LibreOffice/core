@@ -318,7 +318,7 @@ public class StyleApplier
                         {
                             sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SEMI_COLON);
                             sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SPACE);
-                            return Integer.parseInt(sPropValue);
+                            return Integer.decode(sPropValue).intValue();
                         }
                     }
                 }
