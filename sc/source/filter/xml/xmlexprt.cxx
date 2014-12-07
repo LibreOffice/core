@@ -1795,8 +1795,9 @@ void ScXMLExport::SetBodyAttributes()
                 {
                     AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
                                  ScPassHashHelper::getHashURI(PASSHASH_XL));
-                    AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
-                                 ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+                    if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+                        AddAttribute(XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
+                                ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                 }
                 else if (eHashUsed == PASSHASH_SHA1)
                     AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
@@ -2914,8 +2915,9 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
                         {
                             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,
                                          ScPassHashHelper::getHashURI(PASSHASH_XL));
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
-                                         ScPassHashHelper::getHashURI(PASSHASH_SHA1));
+                            if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
+                                AddAttribute(XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2,
+                                        ScPassHashHelper::getHashURI(PASSHASH_SHA1));
                         }
                         else if (eHashUsed == PASSHASH_SHA1)
                             AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM,

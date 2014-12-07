@@ -114,6 +114,11 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
             else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2))
                 meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
         }
+        else if(nPrefix == XML_NAMESPACE_LO_EXT)
+        {
+            if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2))
+                meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
+        }
     }
 }
 
