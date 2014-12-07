@@ -27,10 +27,15 @@
 using namespace ::xmloff::token;
 
 #define MAP(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, false }
+#define MAP_IMPORT(name,prefix,token,type,context,version)  { name, sizeof(name)-1, prefix, token, type, context, version, true }
 #define PLMAP(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_010)
 #define PLMAP_12(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_012)
+#define PLMAP_EXT(name,prefix,token,type,context) \
+        MAP(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_012_EXT_COMPAT)
+#define PLMAP_EXT_IMPORT(name,prefix,token,type,context) \
+        MAP_IMPORT(name,prefix,token,type|XML_TYPE_PROP_PAGE_LAYOUT,context, SvtSaveOptions::ODFVER_012_EXT_COMPAT)
 #define HFMAP(name,prefix,token,type,context) \
         MAP(name,prefix,token,type|XML_TYPE_PROP_HEADER_FOOTER,context, SvtSaveOptions::ODFVER_010)
 
@@ -85,8 +90,10 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     PLMAP( "FirstPageNumber",            XML_NAMESPACE_STYLE,    XML_FIRST_PAGE_NUMBER,            XML_PM_TYPE_FIRSTPAGENUMBER,                            0 ),
     PLMAP( "PageScale",                XML_NAMESPACE_STYLE,    XML_SCALE_TO,                    XML_TYPE_PERCENT16,                                        CTF_PM_SCALETO ),
     PLMAP( "ScaleToPages",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_PAGES,             XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOPAGES ),
-    PLMAP( "ScaleToPagesX",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_X,                  XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOX ),
-    PLMAP( "ScaleToPagesY",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_Y,                 XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOY ),
+    PLMAP_EXT_IMPORT( "ScaleToPagesX",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_X,                  XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOX ),
+    PLMAP_EXT_IMPORT( "ScaleToPagesY",            XML_NAMESPACE_STYLE,    XML_SCALE_TO_Y,                 XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOY ),
+    PLMAP_EXT( "ScaleToPagesX",            XML_NAMESPACE_LO_EXT,    XML_SCALE_TO_X,                  XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOX ),
+    PLMAP_EXT( "ScaleToPagesY",            XML_NAMESPACE_LO_EXT,    XML_SCALE_TO_Y,                 XML_TYPE_NUMBER16,                                        CTF_PM_SCALETOY ),
     PLMAP( "CenterHorizontally",        XML_NAMESPACE_STYLE,    XML_TABLE_CENTERING,            XML_PM_TYPE_CENTER_HORIZONTAL | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     PLMAP( "CenterVertically",        XML_NAMESPACE_STYLE,    XML_TABLE_CENTERING,            XML_PM_TYPE_CENTER_VERTICAL | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     PLMAP( "TextColumns",                XML_NAMESPACE_STYLE,    XML_COLUMNS,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_PM_TEXTCOLUMNS ),
