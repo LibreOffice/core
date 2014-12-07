@@ -4487,6 +4487,36 @@ void Test::testAutoFill()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testAutoFillSimple()
+{
+    m_pDoc->InsertTab(0, "test");
+
+    m_pDoc->SetValue(0, 0, 0, 1);
+    m_pDoc->SetString(0, 1, 0, "=10");
+
+    ScMarkData aMarkData;
+    aMarkData.SelectTable(0, true);
+
+    m_pDoc->Fill( 0, 0, 0, 1, NULL, aMarkData, 6, FILL_TO_BOTTOM, FILL_AUTO);
+
+    for(SCROW nRow = 0; nRow < 8; ++nRow)
+    {
+        if (nRow % 2 == 0)
+        {
+            double nVal = m_pDoc->GetValue(0, nRow, 0);
+            CPPUNIT_ASSERT_EQUAL(double((nRow+2)/2), nVal);
+        }
+        else
+        {
+            OString aMsg = OString("wrong value in row: ") + OString::number(nRow);
+            double nVal = m_pDoc->GetValue(0, nRow, 0);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), 10.0, nVal);
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyPasteFormulas()
 {
     m_pDoc->InsertTab(0, "Sheet1");

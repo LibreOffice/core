@@ -360,6 +360,7 @@ public:
     void testRenameTable();
 
     void testAutoFill();
+    void testAutoFillSimple();
     void testCopyPasteFormulas();
     void testCopyPasteFormulasExternalDoc();
 
@@ -564,6 +565,7 @@ public:
     CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST(testRenameTable);
     CPPUNIT_TEST(testAutoFill);
+    CPPUNIT_TEST(testAutoFillSimple);
     CPPUNIT_TEST(testCopyPasteFormulas);
     CPPUNIT_TEST(testCopyPasteFormulasExternalDoc);
     CPPUNIT_TEST(testFindAreaPosVertical);
