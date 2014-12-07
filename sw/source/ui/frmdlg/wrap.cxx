@@ -31,6 +31,7 @@
 #include <svx/swframevalidation.hxx>
 
 #include "cmdid.h"
+#include <docsh.hxx>
 #include "uitool.hxx"
 #include "wrtsh.hxx"
 #include "swmodule.hxx"
@@ -169,7 +170,7 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
         }
     }
 
-    nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    nHtmlMode = ::GetHtmlMode(static_cast<const SwDocShell*>(SfxObjectShell::Current()));
     bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
