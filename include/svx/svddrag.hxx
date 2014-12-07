@@ -25,6 +25,8 @@
 #include <tools/fract.hxx>
 #include <svx/svxdllapi.h>
 
+#include <vector>
+
 // Status information for specialized object dragging. In order for the model
 // to stay status free, the status data is kept on the View
 // and handed over to the object at the appropriate time as a parameter.

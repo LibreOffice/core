@@ -135,6 +135,18 @@ bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
     return true;
 }
 
+struct MarkedUndoAction
+{
+    SfxUndoAction*                  pAction;
+    ::std::vector< UndoStackMark >  aMarks;
+
+    MarkedUndoAction( SfxUndoAction* i_action )
+        :pAction( i_action )
+        ,aMarks()
+    {
+    }
+};
+
 struct SfxUndoActions::Impl
 {
     std::vector<MarkedUndoAction> maActions;
@@ -171,6 +183,16 @@ const MarkedUndoAction& SfxUndoActions::operator[]( size_t i ) const
 MarkedUndoAction& SfxUndoActions::operator[]( size_t i )
 {
     return mpImpl->maActions[i];
+}
+
+const SfxUndoAction* SfxUndoActions::GetUndoAction( size_t i ) const
+{
+    return mpImpl->maActions[i].pAction;
+}
+
+SfxUndoAction* SfxUndoActions::GetUndoAction( size_t i )
+{
+    return mpImpl->maActions[i].pAction;
 }
 
 void SfxUndoActions::Remove( size_t i_pos )

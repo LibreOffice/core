@@ -1590,7 +1590,7 @@ void OutlineView::TryToMergeUndoActions()
             EditUndo* pEditUndo = 0;
             while( !pEditUndo && nAction )
             {
-                pEditUndo = dynamic_cast< EditUndo* >(pListAction->aUndoActions[--nAction].pAction);
+                pEditUndo = dynamic_cast< EditUndo* >(pListAction->aUndoActions.GetUndoAction(--nAction));
             }
 
             sal_uInt16 nEditPos = nAction; // we need this later to remove the merged undo actions
@@ -1598,7 +1598,7 @@ void OutlineView::TryToMergeUndoActions()
             // make sure it is the only EditUndo action in the top undo list
             while( pEditUndo && nAction )
             {
-                if( dynamic_cast< EditUndo* >(pListAction->aUndoActions[--nAction].pAction) )
+                if( dynamic_cast< EditUndo* >(pListAction->aUndoActions.GetUndoAction(--nAction)) )
                     pEditUndo = 0;
             }
 
@@ -1610,7 +1610,7 @@ void OutlineView::TryToMergeUndoActions()
                 nAction = pPrevListAction->aUndoActions.size();
                 EditUndo* pPrevEditUndo = 0;
                 while( !pPrevEditUndo && nAction )
-                    pPrevEditUndo = dynamic_cast< EditUndo* >(pPrevListAction->aUndoActions[--nAction].pAction);
+                    pPrevEditUndo = dynamic_cast< EditUndo* >(pPrevListAction->aUndoActions.GetUndoAction(--nAction));
 
                 if( pPrevEditUndo && pPrevEditUndo->Merge( pEditUndo ) )
                 {
@@ -1627,14 +1627,14 @@ void OutlineView::TryToMergeUndoActions()
                     ::svl::IUndoManager* pDocUndoManager = mpDocSh->GetUndoManager();
                     if( pDocUndoManager && ( pListAction->aUndoActions.size() == 1 ))
                     {
-                        SfxLinkUndoAction* pLinkAction = dynamic_cast< SfxLinkUndoAction* >( pListAction->aUndoActions[0].pAction );
+                        SfxLinkUndoAction* pLinkAction = dynamic_cast< SfxLinkUndoAction* >( pListAction->aUndoActions.GetUndoAction(0) );
                         SfxLinkUndoAction* pPrevLinkAction = 0;
 
                         if( pLinkAction )
                         {
                             nAction = pPrevListAction->aUndoActions.size();
                             while( !pPrevLinkAction && nAction )
-                                pPrevLinkAction = dynamic_cast< SfxLinkUndoAction* >(pPrevListAction->aUndoActions[--nAction].pAction);
+                                pPrevLinkAction = dynamic_cast< SfxLinkUndoAction* >(pPrevListAction->aUndoActions.GetUndoAction(--nAction));
                         }
 
                         if( pLinkAction && pPrevLinkAction &&
@@ -1650,7 +1650,7 @@ void OutlineView::TryToMergeUndoActions()
                                 sal_uInt16 nDestAction = pDestinationList->aUndoActions.size();
                                 while( nCount-- )
                                 {
-                                    SfxUndoAction* pTemp = pSourceList->aUndoActions[0].pAction;
+                                    SfxUndoAction* pTemp = pSourceList->aUndoActions.GetUndoAction(0);
                                     pSourceList->aUndoActions.Remove(0);
                                     pDestinationList->aUndoActions.Insert( pTemp, nDestAction++ );
                                 }
@@ -1673,7 +1673,7 @@ void OutlineView::TryToMergeUndoActions()
                         size_t nDestAction = pPrevListAction->aUndoActions.size();
                         while( nCount-- )
                         {
-                            SfxUndoAction* pTemp = pListAction->aUndoActions[0].pAction;
+                            SfxUndoAction* pTemp = pListAction->aUndoActions.GetUndoAction(0);
                             pListAction->aUndoActions.Remove(0);
                             if( pTemp )
                                 pPrevListAction->aUndoActions.Insert( pTemp, nDestAction++ );

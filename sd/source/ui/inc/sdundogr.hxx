@@ -24,6 +24,8 @@
 #include "sdundo.hxx"
 #include "sddllapi.h"
 
+#include <vector>
+
 class SD_DLLPUBLIC SdUndoGroup : public SdUndoAction
 {
     std::vector<SdUndoAction*>  aCtn;

@@ -25,10 +25,9 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include <vector>
 #include <limits>
 
-
+struct MarkedUndoAction;
 
 class SVL_DLLPUBLIC SfxRepeatTarget
 {
@@ -84,21 +83,7 @@ private:
 typedef sal_Int32 UndoStackMark;
 #define MARK_INVALID    ::std::numeric_limits< UndoStackMark >::max()
 
-
-
-struct MarkedUndoAction
-{
-    SfxUndoAction*                  pAction;
-    ::std::vector< UndoStackMark >  aMarks;
-
-    MarkedUndoAction( SfxUndoAction* i_action )
-        :pAction( i_action )
-        ,aMarks()
-    {
-    }
-};
-
-class SfxUndoActions
+class SVL_DLLPUBLIC SfxUndoActions
 {
     struct Impl;
     Impl* mpImpl;
@@ -113,6 +98,9 @@ public:
 
     const MarkedUndoAction& operator[]( size_t i ) const;
     MarkedUndoAction& operator[]( size_t i );
+
+    const SfxUndoAction* GetUndoAction( size_t i ) const;
+    SfxUndoAction* GetUndoAction( size_t i );
 
     void Remove( size_t i_pos );
     void Remove( size_t i_pos, size_t i_count );

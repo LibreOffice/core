@@ -1024,7 +1024,7 @@ void lcl_dumpSfxUndoAction(WriterHelper& writer, SfxUndoAction* pAction)
         writer.startElement("list");
         writer.writeFormatAttribute("size", TMP_FORMAT, pList->aUndoActions.size());
         for (size_t i = 0; i < pList->aUndoActions.size(); ++i)
-            lcl_dumpSfxUndoAction(writer, pList->aUndoActions[i].pAction);
+            lcl_dumpSfxUndoAction(writer, pList->aUndoActions.GetUndoAction(i));
         writer.endElement();
     }
 
