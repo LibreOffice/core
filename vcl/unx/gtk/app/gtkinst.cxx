@@ -244,22 +244,10 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
         sGtkURL = OString(g_uri);
         g_free(g_uri);
     }
-#if GTK_CHECK_VERSION(2,10,0)
     GtkRecentManager *manager = gtk_recent_manager_get_default ();
     gtk_recent_manager_add_item (manager, sGtkURL.getStr());
     (void)rMimeType;
     (void)rDocumentService;
-#else
-    static getDefaultFnc sym_gtk_recent_manager_get_default =
-        (getDefaultFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_get_default" );
-
-    static addItemFnc sym_gtk_recent_manager_add_item =
-        (addItemFnc)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_recent_manager_add_item");
-    if (sym_gtk_recent_manager_get_default && sym_gtk_recent_manager_add_item)
-        sym_gtk_recent_manager_add_item(sym_gtk_recent_manager_get_default(), sGtkURL.getStr());
-    else
-        X11SalInstance::AddToRecentDocumentList(rFileUrl, rMimeType, rDocumentService);
-#endif
 }
 
 SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
