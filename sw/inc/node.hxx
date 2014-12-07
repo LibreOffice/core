@@ -743,6 +743,11 @@ inline SwDummySectionNode::SwDummySectionNode( const SwNodeIndex &rWhere )
 {
 }
 
+inline SwNodePtr SwNodes::operator[]( sal_uLong n ) const
+{
+    return static_cast<SwNodePtr>(BigPtrArray::operator[] ( n ));
+}
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

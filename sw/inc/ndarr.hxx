@@ -140,8 +140,7 @@ public:
     typedef ::std::vector<SwNodeRange> NodeRanges_t;
     typedef ::std::vector<NodeRanges_t> TableRanges_t;
 
-    SwNodePtr operator[]( sal_uLong n ) const
-        { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
+    SwNodePtr operator[]( sal_uLong n ) const; // defined in node.hxx
 
     sal_uLong Count() const { return BigPtrArray::Count(); }
     void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = 0 )
