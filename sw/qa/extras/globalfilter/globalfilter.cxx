@@ -118,14 +118,14 @@ void Test::testSwappedOutImageExport()
 
 void Test::testLinkedGraphicRT()
 {
-    const std::vector<OUString> aFilterNames = {
+    OUString aFilterNames[] = {
         "writer8",
 //        "Rich Text Format",  Note: picture is there, but SwGrfNode is not found?
         "MS Word 97",
         "Office Open XML Text",
     };
 
-    for( size_t nFilter = 0; nFilter < aFilterNames.size(); ++nFilter )
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
     {
         if (mxComponent.is())
             mxComponent->dispose();
