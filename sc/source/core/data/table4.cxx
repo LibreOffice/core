@@ -1423,8 +1423,12 @@ void ScTable::FillAutoSimple(
             }
         }
 
-        if (rInner == nIEnd) break;
-        if (bPositive) ++rInner; else --rInner;
+        if (rInner == nIEnd)
+            break;
+        if (bPositive)
+            ++rInner;
+        else
+            --rInner;
 
         //  Progress in inner loop only for expensive cells,
         //  and even then not individually for each one
