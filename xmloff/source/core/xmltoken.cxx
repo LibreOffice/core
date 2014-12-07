@@ -2625,6 +2625,7 @@ namespace xmloff { namespace token {
         TOKEN( "is-group-field",                       XML_IS_GROUP_FIELD ),
         TOKEN( "data-pilot-groups",                    XML_DATA_PILOT_GROUPS ),
         TOKEN( "data-pilot-group",                     XML_DATA_PILOT_GROUP ),
+        TOKEN( "data-pilot-group-member",              XML_DATA_PILOT_GROUP_MEMBER ),
         TOKEN( "japanese-candle-stick",        XML_JAPANESE_CANDLE_STICK ),
         TOKEN( "named-symbol",                 XML_NAMED_SYMBOL ),
         TOKEN( "diamond",                      XML_DIAMOND ),
