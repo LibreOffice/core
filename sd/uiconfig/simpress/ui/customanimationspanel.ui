@@ -7,19 +7,19 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">svtools/res/list_add.png</property>
-    <property name="icon-size">2</property>
+    <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_change">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/sc_editdoc.png</property>
-    <property name="icon-size">2</property>
+    <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_down">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/sc_movedown.png</property>
-    <property name="icon-size">2</property>
+    <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_play">
     <property name="visible">True</property>
@@ -30,13 +30,13 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">extensions/res/buttonminus.png</property>
-    <property name="icon-size">2</property>
+    <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_up">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/sc_moveup.png</property>
-    <property name="icon-size">2</property>
+    <property name="icon_size">2</property>
   </object>
   <object class="GtkBox" id="CustomAnimationsPanel">
     <property name="visible">True</property>
@@ -56,6 +56,9 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="vexpand">True</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="Custom Animation ListBox-selection1"/>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -243,8 +246,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -260,7 +261,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="more_properties">
-                    <property name="label" translatable="yes">_...</property>
+                    <property name="label" translatable="yes">_Options...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
