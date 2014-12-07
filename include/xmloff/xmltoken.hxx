@@ -2619,6 +2619,7 @@ namespace xmloff { namespace token {
         XML_STEP,
         XML_DATA_PILOT_GROUPS,
         XML_DATA_PILOT_GROUP,
+        XML_DATA_PILOT_GROUP_MEMBER,
 
         XML_JAPANESE_CANDLE_STICK,
         XML_NAMED_SYMBOL,
