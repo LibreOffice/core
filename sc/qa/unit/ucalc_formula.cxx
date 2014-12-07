@@ -2599,6 +2599,43 @@ void Test::testFormulaRefUpdateNameDeleteRow()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateNameCopySheet()
+{
+    m_pDoc->InsertTab(0, "Test");
+    m_pDoc->InsertTab(1, "Test2");
+
+    bool bInserted = m_pDoc->InsertNewRangeName("RED", ScAddress(0,0,0), "$Test.$B$2");
+    CPPUNIT_ASSERT(bInserted);
+    bInserted = m_pDoc->InsertNewRangeName("BLUE", ScAddress(0,0,0), "$Test.$B$3");
+    CPPUNIT_ASSERT(bInserted);
+    m_pDoc->SetValue(1, 1, 0, 1);
+    m_pDoc->SetValue(1, 2, 0, 2);
+
+    // insert formula into Test2 that is =RED+BLUE
+    m_pDoc->SetString(ScAddress(2,2,1), "=RED+BLUE");
+
+    double nVal = m_pDoc->GetValue(2, 2, 1);
+    CPPUNIT_ASSERT_EQUAL(3.0, nVal);
+    m_pDoc->CopyTab(1, 0);
+
+    nVal = m_pDoc->GetValue(2, 2, 2);
+    CPPUNIT_ASSERT_EQUAL(3.0, nVal);
+
+    nVal = m_pDoc->GetValue(2, 2, 0);
+    CPPUNIT_ASSERT_EQUAL(3.0, nVal);
+
+    m_pDoc->SetValue(1, 1, 1, 3);
+
+    nVal = m_pDoc->GetValue(2, 2, 2);
+    CPPUNIT_ASSERT_EQUAL(5.0, nVal);
+
+    nVal = m_pDoc->GetValue(2, 2, 0);
+    CPPUNIT_ASSERT_EQUAL(5.0, nVal);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateValidity()
 {
     struct {
