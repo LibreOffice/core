@@ -97,13 +97,6 @@
 
 #include <config_folders.h>
 
-// make compile on gtk older than 2.10
-#if GTK_MINOR_VERSION < 10
-#define GDK_SUPER_MASK      (1 << 26)
-#define GDK_HYPER_MASK      (1 << 27)
-#define GDK_META_MASK       (1 << 28)
-#endif
-
 #if GTK_CHECK_VERSION(3,0,0)
 #define IS_WIDGET_REALIZED gtk_widget_get_realized
 #define IS_WIDGET_MAPPED   gtk_widget_get_mapped
