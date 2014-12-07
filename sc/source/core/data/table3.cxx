@@ -1689,6 +1689,7 @@ void ScTable::Sort(
         pUndo->mbPattern = rSortParam.bIncludePattern;
         pUndo->mbHiddenFiltered = bKeepQuery;
         pUndo->mbUpdateRefs = bUpdateRefs;
+        pUndo->mbHasHeaders = rSortParam.bHasHeader;
     }
 
     // Trim empty leading and trailing column ranges.

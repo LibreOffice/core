@@ -44,7 +44,25 @@ void UndoSort::Execute( bool bUndo )
         aParam.reverse();
     rDoc.Reorder(aParam, NULL);
 
-    ScUndoUtil::MarkSimpleBlock(pDocShell, maParam.maSortRange);
+    if (maParam.mbHasHeaders)
+    {
+        ScRange aMarkRange( maParam.maSortRange);
+        if (maParam.mbByRow)
+        {
+            if (aMarkRange.aStart.Col() > 0)
+                aMarkRange.aStart.IncCol(-1);
+        }
+        else
+        {
+            if (aMarkRange.aStart.Row() > 0)
+                aMarkRange.aStart.IncRow(-1);
+        }
+        ScUndoUtil::MarkSimpleBlock(pDocShell, aMarkRange);
+    }
+    else
+    {
+        ScUndoUtil::MarkSimpleBlock(pDocShell, maParam.maSortRange);
+    }
 
     rDoc.SetDirty(maParam.maSortRange, true);
     if (!aParam.mbUpdateRefs)
