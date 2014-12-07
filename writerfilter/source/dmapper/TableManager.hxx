@@ -26,7 +26,6 @@
 
 #include <boost/shared_ptr.hpp>
 #include <stack>
-#include <resourcemodel/util.hxx>
 #include <resourcemodel/TagLogger.hxx>
 
 #include <rtl/strbuf.hxx>

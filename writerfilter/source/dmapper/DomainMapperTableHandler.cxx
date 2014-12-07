@@ -35,6 +35,7 @@
 #include <dmapperLoggers.hxx>
 #include <TablePositionHandler.hxx>
 #include <ConversionHelper.hxx>
+#include <util.hxx>
 #include <osl/diagnose.h>
 
 #ifdef DEBUG_WRITERFILTER
@@ -1174,7 +1175,7 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 #ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("table.cell");
     dmapper_logger->startElement("table.cell.start");
-    dmapper_logger->chars(toString(start));
+    dmapper_logger->chars(XTextRangeToString(start));
     dmapper_logger->endElement();
     if (pProps.get())
         pProps->printProperties();
@@ -1191,7 +1192,7 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
 {
 #ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("table.cell.end");
-    dmapper_logger->chars(toString(end));
+    dmapper_logger->chars(XTextRangeToString(end));
     dmapper_logger->endElement();
     dmapper_logger->endElement();
 #endif

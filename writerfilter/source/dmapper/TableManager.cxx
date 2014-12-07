@@ -18,6 +18,7 @@
  */
 
 #include <TableManager.hxx>
+#include <util.hxx>
 
 namespace writerfilter
 {
@@ -32,7 +33,7 @@ void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rH
 {
 #ifdef DEBUG_WRITERFILTER
     mpTableLogger->startElement("tablemanager.openCell");
-    mpTableLogger->chars(toString(rHandle));
+    mpTableLogger->chars(XTextRangeToString(rHandle));
     mpTableLogger->endElement();
 #endif
 
@@ -205,7 +206,7 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
 {
 #ifdef DEBUG_WRITERFILTER
     mpTableLogger->startElement("tablemanager.closeCell");
-    mpTableLogger->chars(toString(rHandle));
+    mpTableLogger->chars(XTextRangeToString(rHandle));
     mpTableLogger->endElement();
 #endif
 
@@ -425,7 +426,7 @@ void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHan
     if (mpTableLogger)
     {
         mpTableLogger->startElement("tablemanager.handle");
-        mpTableLogger->chars(toString(rHandle));
+        mpTableLogger->chars(XTextRangeToString(rHandle));
         mpTableLogger->endElement();
     }
 #endif

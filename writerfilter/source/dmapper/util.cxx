@@ -20,23 +20,16 @@
 #include <stdlib.h>
 #include <fstream>
 #include <string>
-#include <com/sun/star/awt/Point.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/HomogenMatrix3.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
-#include <resourcemodel/WW8ResourceModel.hxx>
-#include <resourcemodel/TagLogger.hxx>
-#include <resourcemodel/util.hxx>
+#include <util.hxx>
 
 namespace writerfilter
+{
+namespace dmapper
 {
 using namespace com::sun::star;
 using namespace std;
 
-string toString(uno::Reference< text::XTextRange > textRange)
+string XTextRangeToString(uno::Reference< text::XTextRange > textRange)
 {
     string result;
 
@@ -56,6 +49,8 @@ string toString(uno::Reference< text::XTextRange > textRange)
 #endif
 
     return result;
+}
+
 }
 
 }
