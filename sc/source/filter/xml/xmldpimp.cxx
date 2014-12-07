@@ -1868,7 +1868,7 @@ SvXMLImportContext *ScXMLDataPilotGroupContext::CreateChildContext( sal_uInt16 n
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
-        if (IsXMLToken(rLName, XML_DATA_PILOT_MEMBER))
+        if (IsXMLToken(rLName, XML_DATA_PILOT_MEMBER) || IsXMLToken(rLName, XML_DATA_PILOT_GROUP_MEMBER))
             pContext = new ScXMLDataPilotGroupMemberContext(GetScImport(), nPrefix, rLName, xAttrList, this);
     }
 
