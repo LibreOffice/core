@@ -1618,10 +1618,8 @@ void OutlineView::TryToMergeUndoActions()
                     // the top EditUndo of the previous undo list
 
                     // first remove the merged undo action
-#if 0 // breaks --enable-dbgutil build
-                    DBG_ASSERT( pListAction->aUndoActions[nEditPos].pAction == pEditUndo,
+                    DBG_ASSERT( pListAction->aUndoActions.GetUndoAction(nEditPos) == pEditUndo,
                         "sd::OutlineView::TryToMergeUndoActions(), wrong edit pos!" );
-#endif
                     pListAction->aUndoActions.Remove(nEditPos);
                     delete pEditUndo;
 
