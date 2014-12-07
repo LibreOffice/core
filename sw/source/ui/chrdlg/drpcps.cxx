@@ -20,6 +20,7 @@
 #include <hintids.hxx>
 
 #include "cmdid.h"
+#include <docsh.hxx>
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
@@ -538,7 +539,7 @@ SwDropCapsPage::SwDropCapsPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    const sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    const sal_uInt16 nHtmlMode = ::GetHtmlMode(static_cast<const SwDocShell*>(SfxObjectShell::Current()));
     bHtmlMode = (nHtmlMode & HTMLMODE_ON) != 0;
 
     // In the template dialog the text is not influenceable
