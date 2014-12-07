@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="SectionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -32,8 +33,6 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="has_entry">True</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">1</property>
                 <property name="dropdown">False</property>
                 <property name="max_width_chars">18</property>
                 <child internal-child="entry">
@@ -59,8 +58,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -104,7 +101,6 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
                         <property name="width">3</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -122,7 +118,6 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
                         <property name="width">3</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -138,8 +133,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -154,8 +147,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -165,8 +156,6 @@
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
                         <property name="has_entry">True</property>
-                        <property name="entry_text_column">0</property>
-                        <property name="id_column">1</property>
                         <property name="max_width_chars">18</property>
                         <child internal-child="entry">
                           <object class="GtkEntry" id="comboboxtext-entry1">
@@ -177,8 +166,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -221,13 +208,11 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="selectfile">
-                        <property name="label" translatable="yes">...</property>
+                        <property name="label" translatable="yes">Browse...</property>
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
@@ -237,8 +222,6 @@
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -262,8 +245,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -301,12 +282,11 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
                         <property name="width">2</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="selectpassword">
-                        <property name="label" translatable="yes">...</property>
+                        <property name="label" translatable="yes">Password...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
@@ -315,8 +295,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -334,8 +312,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -356,8 +332,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -392,8 +366,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -410,7 +382,6 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
                         <property name="width">2</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -426,8 +397,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -448,8 +417,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -493,16 +460,12 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>
