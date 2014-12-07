@@ -62,6 +62,7 @@ public:
     void testFdo85554();
     void testAutoCorr();
     void testFdo87005();
+    void testMergeDoc();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testFdo85554);
     CPPUNIT_TEST(testAutoCorr);
     CPPUNIT_TEST(testFdo87005);
+    CPPUNIT_TEST(testMergeDoc);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -629,6 +631,35 @@ void SwUiWriterTest::testFdo87005()
     CPPUNIT_ASSERT(pXmlDoc);
     // This was 1, no SwFlyPortion was created for the second fly.
     assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 2);
+}
+
+void SwUiWriterTest::testMergeDoc()
+{
+    SwDoc* const pDoc1(createDoc("merge-change1.odt"));
+
+    auto xDoc2Component(loadFromDesktop(
+            getURLFromSrc(DATA_DIRECTORY) + OUString("merge-change2.odt"),
+            "com.sun.star.text.TextDocument"));
+    auto pxDoc2Document(
+            dynamic_cast<SwXTextDocument *>(xDoc2Component.get()));
+    CPPUNIT_ASSERT(pxDoc2Document);
+    SwDoc* const pDoc2(pxDoc2Document->GetDocShell()->GetDoc());
+
+    SwEditShell* const pEditShell(pDoc1->GetEditShell());
+    pEditShell->MergeDoc(*pDoc2);
+
+    // accept all redlines
+    while(pEditShell->GetRedlineCount())
+        pEditShell->AcceptRedline(0);
+
+    CPPUNIT_ASSERT_EQUAL(7, getParagraphs());
+    getParagraph(1, "Para One: Two Three Four Five");
+    getParagraph(2, "Para Two: One Three Four Five");
+    getParagraph(3, "Para Three: One Two Four Five");
+    getParagraph(4, "Para Four: One Two Three Four Five");
+    getParagraph(5, "Para Six: One Three Four Five");
+    getParagraph(6, "");
+    getParagraph(7, "");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
