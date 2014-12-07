@@ -257,7 +257,7 @@ SwFrmFmt* SwTextBoxHelper::findTextBox(const SwFrmFmt* pShape)
     SwFrmFmt* pRet = 0;
 
     // Only draw frames can have TextBoxes.
-    if (pShape->Which() == RES_DRAWFRMFMT && pShape->GetAttrSet().HasItem(RES_CNTNT))
+    if (pShape && pShape->Which() == RES_DRAWFRMFMT && pShape->GetAttrSet().HasItem(RES_CNTNT))
     {
         const SwFmtCntnt& rCntnt = pShape->GetCntnt();
         const SwFrmFmts& rSpzFrmFmts = *pShape->GetDoc()->GetSpzFrmFmts();
