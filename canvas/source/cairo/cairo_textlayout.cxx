@@ -573,13 +573,11 @@ namespace cairocanvas
                 OSL_TRACE(":cairocanvas::TextLayout::draw(S,O,p,v,r): FAKEBOLD - dx:%d", (int) bold_dx);
             }
 
-            cairo_restore( pSCairo.get() );
             cairo_font_face_destroy(font_face);
             cairo_font_options_destroy(options);
         }
         return true;
     }
-
 
     namespace
     {
