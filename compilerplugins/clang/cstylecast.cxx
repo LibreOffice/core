@@ -17,6 +17,13 @@
 
 namespace {
 
+QualType resolvePointers(QualType type) {
+    while (type->isPointerType()) {
+        type = type->getAs<PointerType>()->getPointeeType();
+    }
+    return type;
+}
+
 class CStyleCast:
     public RecursiveASTVisitor<CStyleCast>, public loplugin::Plugin
 {
@@ -58,9 +65,25 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_NoOp ) {
         return true;
     }
-    // ignore pointer-type conversions for now
+    std::string incompFrom;
+    std::string incompTo;
     if( expr->getCastKind() == CK_BitCast ) {
-        return true;
+        QualType t1 = resolvePointers(expr->getSubExprAsWritten()->getType());
+        QualType t2 = resolvePointers(expr->getType());
+        // Ignore "safe" casts for now that do not involve incomplete types (and
+        // can thus not be interpreted as either a static_cast or a
+        // reinterpret_cast, with potentially different results):
+        if (t1->isVoidType() || t2->isVoidType()
+            || !(t1->isIncompleteType() || t2->isIncompleteType()))
+        {
+            return true;
+        }
+        if (t1->isIncompleteType()) {
+            incompFrom = "incomplete ";
+        }
+        if (t2->isIncompleteType()) {
+            incompTo = "incomplete ";
+        }
     }
     // ignore stuff from inside templates for now
     if( expr->getCastKind() == CK_Dependent ) {
@@ -86,11 +109,11 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     }
     report(
         DiagnosticsEngine::Warning,
-        "c-style cast, type=%0, from=%1, to=%2, recommendedFix=%3",
+        "c-style cast, type=%0, from=%1%2, to=%3%4, recommendedFix=%5",
         expr->getSourceRange().getBegin())
       << expr->getCastKind()
-      << expr->getSubExprAsWritten()->getType()
-      << expr->getType()
+      << incompFrom << expr->getSubExprAsWritten()->getType()
+      << incompTo << expr->getType()
       << recommendedFix(expr->getCastKind())
       << expr->getSourceRange();
     return true;
