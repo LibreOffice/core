@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_eb30010a",
+        "filename": "sc/source/filter/xml/xmlimprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1795,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-12-08T16:06:37Z",
+      "side": 1,
+      "message": "i don\u0027t think this is right: this is used in ScXMLDataPilotMembersContext::CreateChildContext() which is below table:data-pilot-level which actually uses the data-pilot-member element,\nwhereas the data-pilot-group element occurs below table:data-pilot-groups",
+      "revId": "ecfbb6c79c3eae249c984d08875bc59b04c5db76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
