@@ -3794,6 +3794,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     }
                 }
                 else
+                {
                     for( n = aLines.size(); n; )
                     {
                         --n;
@@ -3802,6 +3803,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                         (*fnOtherBox)( aLines[ n ], aParam1, nDistStt, false );
                         (*fnSelBox)( aLines[ n ], aParam, nDistStt, false );
                     }
+                }
             }
         }
         break;
