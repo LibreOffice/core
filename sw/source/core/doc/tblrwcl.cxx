@@ -3770,8 +3770,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 if( bInsDel )
                 {
                     aParam1.bBigger = !aParam.bBigger;
-                    xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo,
-                                                    aTmpLst, nDistStt));
+                    xFndBox.reset(::lcl_SaveInsDelData(aParam, ppUndo, aTmpLst, nDistStt));
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
                                         aParam.bBigger ? UNDO_TABLE_DELBOX
@@ -3781,7 +3780,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                     *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, true );
 
                 if( bInsDel
-                    ? ( TBLFIX_CHGABS == eTblChgMode ? bLeft : bLeft )
+                    ? ( TBLFIX_CHGABS == eTblChgMode ? (bBigger && bLeft) : bLeft )
                     : ( TBLFIX_CHGABS != eTblChgMode && bLeft ) )
                 {
                     for( n = aLines.size(); n; )
@@ -3886,7 +3885,7 @@ bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
                 if( bInsDel )
                 {
                     aParam1.bBigger = !aParam.bBigger;
-                    xFndBox.reset(::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst, nDistStt ));
+                    xFndBox.reset(::lcl_SaveInsDelData(aParam, ppUndo, aTmpLst, nDistStt));
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
                                         aParam.bBigger ? UNDO_TABLE_DELBOX
