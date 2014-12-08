@@ -3055,31 +3055,68 @@ void ScColumn::SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rB
     aHdl.fillBroadcastSpans(rBroadcastSpans);
 }
 
+namespace {
+
+class BroadcastBroadcastersHandler
+{
+    ScHint maHint;
+
+public:
+    BroadcastBroadcastersHandler( SCCOL nCol, SCTAB nTab, sal_uLong nHint ) :
+        maHint( nHint, ScAddress( nCol, 0, nTab)) {}
+
+    void operator() ( size_t nRow, SvtBroadcaster* pBroadcaster )
+    {
+        maHint.GetAddress().SetRow(nRow);
+        pBroadcaster->Broadcast(maHint);
+    }
+};
+
+}
+
 void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
 {
     // broadcasts everything within the range, with FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
-    SetDirtyOnRangeHandler aHdl(*this);
-    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl, aHdl);
     switch (eMode)
     {
         case BROADCAST_NONE:
+            {
+                // Handler only used with formula cells.
+                SetDirtyOnRangeHandler aHdl(*this);
+                sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
+            }
             break;
         case BROADCAST_DATA_POSITIONS:
-            aHdl.broadcast();
+            {
+                // Handler used with both, formula and non-formula cells.
+                SetDirtyOnRangeHandler aHdl(*this);
+                sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl, aHdl);
+                aHdl.broadcast();
+            }
             break;
         case BROADCAST_ALL_POSITIONS:
-            /* TODO: handle BROADCAST_BROADCASTERS separately and as it is
-             * intended when we handle the AreaBroadcast on the upper levels. */
-        case BROADCAST_BROADCASTERS:
             {
+                // Handler only used with formula cells.
+                SetDirtyOnRangeHandler aHdl(*this);
+                sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
                 ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, 0, nTab));
                 for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
                 {
                     aHint.GetAddress().SetRow(nRow);
                     pDocument->Broadcast(aHint);
                 }
+            }
+            break;
+        case BROADCAST_BROADCASTERS:
+            {
+                // Handler only used with formula cells.
+                SetDirtyOnRangeHandler aHdl(*this);
+                sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
+                // Broadcast all broadcasters in range.
+                BroadcastBroadcastersHandler aBroadcasterHdl( nCol, nTab, SC_HINT_DATACHANGED);
+                sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aBroadcasterHdl);
             }
             break;
     }
