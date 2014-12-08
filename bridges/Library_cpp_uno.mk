@@ -229,7 +229,7 @@ $(foreach obj,$(bridge_noncallexception_objects),\
 $(foreach obj,$(bridge_noopt_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
 	bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/$(obj) \
-	, $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
+	, $(gb_COMPILERNOOPTFLAGS) $(if $(filter MSC,$(COM)),$(gb_DEBUG_CFLAGS)) $(gb_LinkTarget_EXCEPTIONFLAGS))) \
 )
 $(foreach obj,$(bridge_noncallexception_noopt_objects),\
 	$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno,\
