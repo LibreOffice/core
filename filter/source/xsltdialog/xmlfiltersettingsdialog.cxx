@@ -1390,7 +1390,12 @@ void SvxPathControl::Resize()
 
 Size SvxPathControl::GetOptimalSize() const
 {
-    return m_pVBox->GetOptimalSize();
+    Size aDefSize(LogicToPixel(Size(150, 0), MapMode(MAP_APPFONT)));
+    Size aOptSize(m_pVBox->GetOptimalSize());
+    long nRowHeight(GetTextHeight());
+    aOptSize.Height() = nRowHeight * 10;
+    aOptSize.Width() = std::max(aDefSize.Width(), aOptSize.Width());
+    return aOptSize;
 }
 
 SvxPathControl::~SvxPathControl()
