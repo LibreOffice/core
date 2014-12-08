@@ -162,7 +162,7 @@ protected:
 
 public:
     OUString GetName() const { return aDescName; }
-    bool HasName( const OUString& rThisName ) { return aDescName == rThisName; }
+    bool HasName( const OUString& rThisName ) const { return aDescName == rThisName; }
     void SetName( const OUString& rNewName ) { aDescName = rNewName; }
 
     bool GetLandscape() const { return bLandscape; }
