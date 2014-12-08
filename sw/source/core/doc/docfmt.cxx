@@ -1236,17 +1236,6 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
     return pNewColl;
 }
 
-static SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const OUString& rName )
-{
-    for( sal_uInt16 n = rArr.size(); n; )
-    {
-        SwPageDesc* pDesc = rArr[ --n ];
-        if( pDesc->GetName() == rName )
-            return pDesc;
-    }
-    return 0;
-}
-
 void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
                         SwFmtsBase& rDestArr,
                         FNCopyFmt fnCopyFmt,
@@ -1292,7 +1281,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         {
             SwFmtPageDesc aPageDesc( *static_cast<const SwFmtPageDesc*>(pItem) );
             const OUString& rNm = aPageDesc.GetPageDesc()->GetName();
-            SwPageDesc* pPageDesc = ::lcl_FindPageDesc( maPageDescs, rNm );
+            SwPageDesc* pPageDesc = FindPageDesc( rNm );
             if( !pPageDesc )
             {
                 pPageDesc = MakePageDesc(rNm);
@@ -1419,8 +1408,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
     if( rSrcDesc.GetFollow() != &rSrcDesc )
     {
-        SwPageDesc* pFollow = ::lcl_FindPageDesc( maPageDescs,
-                                    rSrcDesc.GetFollow()->GetName() );
+        SwPageDesc* pFollow = FindPageDesc( rSrcDesc.GetFollow()->GetName() );
         if( !pFollow )
         {
             // copy
@@ -1556,16 +1544,17 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
             // 1st step: Create all formats (skip the 0th - it's the default!)
             while( nCnt )
             {
-                SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
-                if( 0 == ::lcl_FindPageDesc( maPageDescs, pSrc->GetName() ) )
-                    MakePageDesc( pSrc->GetName() );
+                const SwPageDesc &rSrc = rSource.maPageDescs[ --nCnt ];
+                if( 0 == FindPageDesc( rSrc.GetName() ) )
+                    MakePageDesc( rSrc.GetName() );
             }
 
             // 2nd step: Copy all attributes, set the right parents
             for( nCnt = rSource.maPageDescs.size(); nCnt; )
             {
-                SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
-                CopyPageDesc( *pSrc, *::lcl_FindPageDesc( maPageDescs, pSrc->GetName() ));
+                const SwPageDesc &rSrc = rSource.maPageDescs[ --nCnt ];
+                SwPageDesc* pDesc = FindPageDesc( rSrc.GetName() );
+                CopyPageDesc( rSrc, *pDesc);
             }
         }
     }
