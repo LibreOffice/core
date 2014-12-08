@@ -20,6 +20,9 @@
 #ifndef INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_INFO_H
 #define INCLUDED_BRIDGES_SOURCE_JNI_UNO_JNI_INFO_H
 
+#include <sal/config.h>
+
+#include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 
 #include "jni_base.h"
@@ -58,7 +61,7 @@ inline bool is_XInterface( typelib_TypeDescriptionReference * type )
             OUString::unacquired( &type->pTypeName ) == "com.sun.star.uno.XInterface");
 }
 
-struct JNI_type_info
+struct JNI_type_info: private boost::noncopyable
 {
     ::com::sun::star::uno::TypeDescription      m_td;
     jclass                                      m_class;
@@ -103,7 +106,7 @@ private:
     virtual ~JNI_compound_type_info() {}
 };
 
-struct JNI_type_info_holder
+struct JNI_type_info_holder: private boost::noncopyable
 {
     JNI_type_info * m_info;
     inline JNI_type_info_holder()
@@ -114,7 +117,7 @@ struct JNI_type_info_holder
 typedef ::boost::unordered_map<
     OUString, JNI_type_info_holder, OUStringHash > t_str2type;
 
-class JNI_info
+class JNI_info: private boost::noncopyable
 {
     mutable ::osl::Mutex        m_mutex;
     mutable t_str2type          m_type_map;
