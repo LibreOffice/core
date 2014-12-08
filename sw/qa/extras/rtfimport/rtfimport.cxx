@@ -2213,6 +2213,12 @@ DECLARE_RTFIMPORT_TEST(testFdo72031, "fdo72031.rtf")
     CPPUNIT_ASSERT_EQUAL(aExpected, getRun(getParagraph(1), 1)->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo86750, "fdo86750.rtf")
+{
+    // This was 'HYPERLINK#anchor', the URL of the hyperlink had the field type as a prefix, leading to broken links.
+    CPPUNIT_ASSERT_EQUAL(OUString("#anchor"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

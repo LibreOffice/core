@@ -3656,6 +3656,15 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_HYPERLINK:
                     {
                         ::std::vector<OUString> aParts = pContext->GetCommandParts();
+
+                        // Syntax is either:
+                        // HYPERLINK "" \l "link"
+                        // or
+                        // HYPERLINK \l "link"
+                        // Make sure "HYPERLINK" doesn't end up as part of link in the second case.
+                        if (!aParts.empty() && aParts[0] == "HYPERLINK")
+                            aParts.erase(aParts.begin());
+
                         ::std::vector<OUString>::const_iterator aItEnd = aParts.end();
                         ::std::vector<OUString>::const_iterator aPartIt = aParts.begin();
 
