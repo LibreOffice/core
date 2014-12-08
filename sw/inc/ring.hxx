@@ -105,14 +105,15 @@ namespace sw
 #if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
             // gcc 4.6 backwards compat hack, remove ASAP when we drop support
             template<typename gcc_hack_value> friend class sw::RingContainer;
+            template<typename gcc_hack_value> friend class sw::RingIterator;
 #else
             friend ring_container;
             friend const_ring_container;
-#endif
             friend typename ring_container::iterator;
             friend typename ring_container::const_iterator;
             friend typename const_ring_container::iterator;
             friend typename const_ring_container::const_iterator;
+#endif
             friend class boost::iterator_core_access;
             typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
             value_type* pNext;
