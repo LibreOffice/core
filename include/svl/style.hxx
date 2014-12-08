@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <rtl/ref.hxx>
-#include <vector>
 #include <comphelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <svl/svldllapi.h>
@@ -273,15 +272,6 @@ public:
      * Not an actual public function. Do not call it from non-subclasses.
      */
     SfxStyleSheetBase&          Add( const SfxStyleSheetBase& );
-
-private:
-    /** This member holds the indexed style sheets.
-     *
-     * @internal
-     * This member is private and not protected in order to have more control which style sheets are added
-     * where. Ideally, all calls which add/remove/change style sheets are done in the base class.
-     */
-    boost::shared_ptr<svl::IndexedStyleSheets> mIndexedStyleSheets;
 };
 
 
@@ -302,11 +292,7 @@ public:
     virtual bool        SetParent( const OUString& ) SAL_OVERRIDE;
 
 protected:
-    SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
-        : SfxStyleSheetBase(OUString("dummy"), NULL, SFX_STYLE_FAMILY_ALL, 0)
-    {
-        assert(false);
-    }
+    SfxStyleSheet(); // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2
     virtual             ~SfxStyleSheet();
 };
 
