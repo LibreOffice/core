@@ -866,6 +866,7 @@ class ListenerStartAction : public sc::ColumnSpanSet::ColumnAction
 
 public:
     ListenerStartAction( ScDocument& rDoc ) :
+        mpCol(0),
         mpPosSet(new sc::ColumnBlockPositionSet(rDoc)),
         maStartCxt(rDoc, mpPosSet),
         maEndCxt(rDoc, mpPosSet) {}
