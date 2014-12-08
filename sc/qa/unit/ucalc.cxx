@@ -4504,7 +4504,7 @@ void Test::testAutoFillSimple()
         if (nRow % 2 == 0)
         {
             double nVal = m_pDoc->GetValue(0, nRow, 0);
-            CPPUNIT_ASSERT_EQUAL(double((nRow+2)/2), nVal);
+            CPPUNIT_ASSERT_EQUAL((nRow+2)/2.0, nVal);
         }
         else
         {
