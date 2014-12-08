@@ -244,11 +244,12 @@ int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
-    const SfxPoolItem*  pOld = NULL;
     bool                bModified = false;
 
     if( !bDisable )
     {
+        const SfxPoolItem*  pOld = NULL;
+
         TriState eState = m_pTsbShowShadow->GetState();
         if( m_pTsbShowShadow->IsValueChangedFromSaved() )
         {

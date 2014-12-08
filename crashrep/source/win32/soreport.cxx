@@ -564,11 +564,11 @@ static string xml_encode( const string &rString )
 
 static size_t fcopy( FILE *fpin, FILE *fpout )
 {
-    char buffer[1024];
     size_t nBytesWritten = 0;
 
     if ( fpin && fpout )
     {
+        char buffer[1024];
         size_t nBytes;
         while ( 0 != (nBytes = fread( buffer, 1, sizeof(buffer), fpin )) )
         {

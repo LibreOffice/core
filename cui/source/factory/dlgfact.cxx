@@ -1800,10 +1800,9 @@ SfxAbstractInsertObjectDialog* AbstractDialogFactory_Impl::CreateInsertObjectDia
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( vcl::Window* pParent,  const OUString& rCommand,
             const Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
 {
-    InsertObjectDialog_Impl* pDlg=0;
     if ( rCommand == ".uno:InsertObjectFloatingFrame" )
     {
-        pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
+        InsertObjectDialog_Impl* pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
         pDlg->SetHelpId( OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
         return new CuiVclAbstractDialog_Impl( pDlg );
     }

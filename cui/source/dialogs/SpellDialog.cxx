@@ -1273,7 +1273,6 @@ SentenceEditWindow_Impl::~SentenceEditWindow_Impl()
 bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     bool bChange = false;
-    const TextCharAttrib*  pErrorAttrib = 0;
     if(rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
     {
         const KeyEvent& rKeyEvt = *rNEvt.GetKeyEvent();
@@ -1511,7 +1510,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             if(!IsUndoEditMode() && bIsErrorActive)
             {
                 const TextCharAttrib* pFontColor = pTextEngine->FindCharAttrib( aCursor, TEXTATTR_FONTCOLOR );
-                pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
+                const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
                 if(pFontColor && pErrorAttrib )
                 {
                     m_nErrorStart = pFontColor->GetStart();
