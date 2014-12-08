@@ -402,6 +402,8 @@ SdPage::SdPage(const SdPage& rSrcPage)
     meOrientation        = rSrcPage.meOrientation;
 
     mpPageLink           = NULL;    // is set when inserting via ConnectLink()
+
+    mbIsPrecious         = false;
 }
 
 void SdPage::lateInit(const SdPage& rSrcPage)
