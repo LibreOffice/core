@@ -55,6 +55,7 @@
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -4416,11 +4417,34 @@ void DomainMapper_Impl::StartOrEndBookmark( const OUString& rId )
                 {
                     xCursor->goLeft( 1, false );
                 }
+
                 uno::Reference< container::XNamed > xBkmNamed( xBookmark, uno::UNO_QUERY_THROW );
-                assert(!aBookmarkIter->second.m_sBookmarkName.isEmpty());
-                //todo: make sure the name is not used already!
-                xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
-                xTextAppend->insertTextContent( uno::Reference< text::XTextRange >( xCursor, uno::UNO_QUERY_THROW), xBookmark, !xCursor->isCollapsed() );
+
+                bool bAllowInsert = true;
+                uno::Reference<text::XTextRange> xRange(xCursor, uno::UNO_QUERY_THROW);
+                if (m_xPrevBookmark.is())
+                {
+                    fprintf(stderr, "ok here\n");
+                    uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(), uno::UNO_QUERY_THROW);
+                    fprintf(stderr, "still ok here\n");
+
+                    if (xTextRangeCompare->compareRegionStarts(m_xPrevBookmark, xRange) == 0 &&
+                        xTextRangeCompare->compareRegionEnds(m_xPrevBookmark, xRange) == 0)
+                    {
+                        SAL_WARN("writerfilter", "Cannot insert bookmark " << aBookmarkIter->second.m_sBookmarkName
+                                                 << " because another one is already inserted at this point");
+                        bAllowInsert = false;
+                    }
+                }
+
+                if (bAllowInsert)
+                {
+                    assert(!aBookmarkIter->second.m_sBookmarkName.isEmpty());
+                    //todo: make sure the name is not used already!
+                    xBkmNamed->setName( aBookmarkIter->second.m_sBookmarkName );
+                    xTextAppend->insertTextContent(xRange, xBookmark, !xCursor->isCollapsed());
+                    m_xPrevBookmark = xRange;
+                }
             }
             m_aBookmarkMap.erase( aBookmarkIter );
             m_sCurrentBkmkId.clear();
