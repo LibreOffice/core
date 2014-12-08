@@ -354,12 +354,11 @@ namespace connectivity
 
                 if ( xOrig.is() )
                 {
-                    OMetaConnection* pMetaConnection = NULL;
                     // now we have to set the URL to get the correct answer for metadata()->getURL()
                     Reference< XUnoTunnel> xTunnel(xOrig,UNO_QUERY);
                     if ( xTunnel.is() )
                     {
-                        pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
+                        OMetaConnection* pMetaConnection = reinterpret_cast<OMetaConnection*>(xTunnel->getSomething( OMetaConnection::getUnoTunnelImplementationId() ));
                         if ( pMetaConnection )
                             pMetaConnection->setURL(url);
                     }

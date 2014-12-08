@@ -574,11 +574,10 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
-        OSQLParseNode * pRow_Value_Const;
         sal_Int32 nIndex=0;
         for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)
         {
-            pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
+            OSQLParseNode * pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
             OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
             if(SQL_ISRULE(pRow_Value_Const,parameter))
             {

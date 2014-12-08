@@ -979,13 +979,12 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                  */
                 sal_Int32 arrLength = (sal_Int32) CFArrayGetCount( (CFArrayRef) _propertyValue);
                 sal_Int32 i;
-                const void *arrValue;
                 OUString newPropertyName;
 
                 /* Going through each element... */
                 for(i = 0; i < arrLength; i++)
                 {
-                    arrValue = CFArrayGetValueAtIndex( (CFArrayRef) _propertyValue, i);
+                    const void *arrValue = CFArrayGetValueAtIndex( (CFArrayRef) _propertyValue, i);
                     newPropertyName = _propertyName + OUString::number(i);
                     insertPropertyIntoMacabRecord(_abrecord, _header, newPropertyName, arrValue);
                     CFRelease(arrValue);

@@ -28,12 +28,12 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
                                     const OUString& rCause)
 {
     OUStringBuffer buf;
-    char msg[512]; // Size is based on suggestion in docs.
     const ISC_STATUS* pStatus = (const ISC_STATUS*) &rStatusVector;
 
     buf.appendAscii("firebird_sdbc error:");
     try
     {
+        char msg[512]; // Size is based on suggestion in docs.
         while(fb_interpret(msg, sizeof(msg), &pStatus))
         {
             // TODO: verify encoding

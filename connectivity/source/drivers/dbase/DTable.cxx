@@ -2551,12 +2551,11 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
         (aRow->get())[nPos]->setBound(false);
 
 
-    bool bOk = true;
     sal_Int32 nCurPos;
     OValueRefVector::Vector::iterator aIter;
     for(sal_uInt32 nRowPos = 0; nRowPos < m_aHeader.db_anz;++nRowPos)
     {
-        bOk = seekRow( IResultSetHelper::BOOKMARK, nRowPos+1, nCurPos );
+        bool bOk = seekRow( IResultSetHelper::BOOKMARK, nRowPos+1, nCurPos );
         if ( bOk )
         {
             bOk = fetchRow( aRow, *m_aColumns, true, true);
@@ -2698,8 +2697,6 @@ End:
 
 bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
 {
-    bool bIsText = true;
-
     m_pMemoStream->Seek(nBlockNo * m_aMemoHeader.db_size);
     switch (m_aMemoHeader.db_typ)
     {
@@ -2732,6 +2729,7 @@ bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
         case MemoFoxPro:
         case MemodBaseIV: // dBase IV-Memofield with length
         {
+            bool bIsText = true;
             char sHeader[4];
             m_pMemoStream->Read(sHeader,4);
             // Foxpro stores text and binary data
