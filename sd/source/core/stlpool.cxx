@@ -697,7 +697,8 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
             if( !aParent.isEmpty() )
                 aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, OUString >( xNewSheet, aParent ) );
 
-            xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
+            if( !bAddToList )
+                xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
             xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
 
             rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
