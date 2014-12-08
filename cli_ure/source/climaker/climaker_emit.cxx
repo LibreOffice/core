@@ -1406,9 +1406,9 @@ Assembly ^ TypeEmitter::type_resolve(
     ConstructorInfo^ constructorInfoObj = nullptr;
 
     /*
-    * TODO(davido): File a bug against MS
+    * TODO(davido):
     * "unoidl.com.sun.star.ucb.OpenCommandArgument3" has two ctors
-    * default and one with 5 params.
+    * default one and one with 5 params.
     * Even though the types of ctors are all correct,
     * trying to retrieve it with GetConstructor(Type[])
     * http://msdn.microsoft.com/de-de/library/h93ya84h(v=vs.110).aspx
@@ -1423,7 +1423,7 @@ Assembly ^ TypeEmitter::type_resolve(
         {
             if (g_verbose)
             {
-                ::System::Console::WriteLine("> süecial casing ctor retrieval for {0}",
+                ::System::Console::WriteLine("> special casing ctor retrieval for {0}",
                     "unoidl.com.sun.star.ucb.OpenCommandArgument3");
             }
             array< ConstructorInfo^>^ p = entry->m_base_type->GetConstructors();
