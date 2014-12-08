@@ -1792,17 +1792,24 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
         // overflow and context menus). If we set these Hdls permanently rather
         // than just when the context menu is showing, then events are duplicated
         // when the menu is being used as an overflow menu.
-        m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
-        m_pToolBar->GetMenu()->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
+        Menu *pManagerMenu = m_pToolBar->GetMenu();
+        pManagerMenu->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
+        pManagerMenu->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
 
         // make sure all disabled entries will be shown
         pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
         ::Point aPoint( pCmdEvt->GetMousePosPixel() );
         pMenu->Execute( m_pToolBar, aPoint );
 
-        // Unlink our listeners again -- see above for why.
-        m_pToolBar->GetMenu()->SetSelectHdl( Link() );
-        m_pToolBar->GetMenu()->SetDeactivateHdl( Link() );
+        //fdo#86820 We may have been disposed and so have a NULL m_pToolBar by
+        //executing a menu entry, e.g. inserting a chart replaces the toolbars
+        pManagerMenu = m_bDisposed ? NULL : m_pToolBar->GetMenu();
+        if (pManagerMenu)
+        {
+            // Unlink our listeners again -- see above for why.
+            pManagerMenu->SetSelectHdl( Link() );
+            pManagerMenu->SetDeactivateHdl( Link() );
+        }
     }
 
     return 0;
