@@ -1039,17 +1039,13 @@ public:
     void dumpAttributesCppuDecl(FileStream & out, std::set< OUString > * seen);
     void dumpMethodsCppuDecl(FileStream & out, std::set< OUString > * seen);
 
-protected:
+private:
     virtual void addComprehensiveGetCppuTypeIncludes(
         codemaker::cppumaker::Includes & includes) const SAL_OVERRIDE;
 
     virtual sal_uInt32 checkInheritedMemberCount() const SAL_OVERRIDE
     { return BaseOffset(m_typeMgr, entity_).get(); }
 
-    sal_uInt32  m_inheritedMemberCount;
-    bool        m_isDeprecated;
-
-private:
     void dumpExceptionSpecification(
         FileStream & out, std::vector< OUString > const & exceptions,
         bool runtimeException);
@@ -1063,16 +1059,16 @@ private:
         std::vector< OUString > const & exceptions, bool runtimeException);
 
     rtl::Reference< unoidl::InterfaceTypeEntity > entity_;
+    bool m_isDeprecated;
 };
 
 InterfaceType::InterfaceType(
     rtl::Reference< unoidl::InterfaceTypeEntity > const & entity,
     OUString const & name, rtl::Reference< TypeManager > const & typeMgr):
-    CppuType(name, typeMgr), entity_(entity)
+    CppuType(name, typeMgr), entity_(entity),
+    m_isDeprecated(isDeprecated(entity->getAnnotations()))
 {
     assert(entity.is());
-    m_inheritedMemberCount = 0;
-    m_isDeprecated = isDeprecated(entity->getAnnotations());
 }
 
 void InterfaceType::dumpDeclaration(FileStream & out) {
