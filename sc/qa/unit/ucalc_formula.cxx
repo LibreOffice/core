@@ -2636,6 +2636,26 @@ void Test::testFormulaRefUpdateNameCopySheet()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateNameDelete()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert a new name 'MyRange' to reference B1
+    bool bInserted = m_pDoc->InsertNewRangeName("MyRange", ScAddress(0,0,0), "$Test.$B$1");
+    CPPUNIT_ASSERT(bInserted);
+
+    const ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("MYRANGE");
+    CPPUNIT_ASSERT(pName);
+
+    m_pDoc->DeleteCol(1, 0, 3, 0, 0, 1);
+    const ScTokenArray* pCode = pName->GetCode();
+    sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
+    OUString aExpr = pCode->CreateString(aCxt, ScAddress(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$B$1"), aExpr);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateValidity()
 {
     struct {

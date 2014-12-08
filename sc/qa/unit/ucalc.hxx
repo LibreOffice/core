@@ -149,6 +149,7 @@ public:
     void testFormulaRefUpdateNameExpandRef();
     void testFormulaRefUpdateNameDeleteRow();
     void testFormulaRefUpdateNameCopySheet();
+    void testFormulaRefUpdateNameDelete();
     void testFormulaRefUpdateValidity();
     void testMultipleOperations();
     void testFuncCOLUMN();
@@ -454,6 +455,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef);
     CPPUNIT_TEST(testFormulaRefUpdateNameDeleteRow);
     CPPUNIT_TEST(testFormulaRefUpdateNameCopySheet);
+    CPPUNIT_TEST(testFormulaRefUpdateNameDelete);
     CPPUNIT_TEST(testFormulaRefUpdateValidity);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
