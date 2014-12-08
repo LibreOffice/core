@@ -322,6 +322,10 @@ ScTable::~ScTable()
 {
     if (!pDocument->IsInDtorClear())
     {
+        for (SCCOL nCol = 0; nCol < MAXCOL; ++nCol)
+        {
+            aCol[nCol].FreeNotes();
+        }
         //  nicht im dtor die Pages in der falschen Reihenfolge loeschen
         //  (nTab stimmt dann als Page-Number nicht!)
         //  In ScDocument::Clear wird hinterher per Clear am Draw Layer alles geloescht.

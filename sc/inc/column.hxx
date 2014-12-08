@@ -189,6 +189,7 @@ public:
 
     void        Delete( SCROW nRow );
     void        FreeAll();
+    void        FreeNotes();
     void Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern );
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const;

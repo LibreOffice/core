@@ -141,6 +141,12 @@ void ScColumn::FreeAll()
     CellStorageModified();
 }
 
+void ScColumn::FreeNotes()
+{
+    maCellNotes.clear();
+    maCellNotes.resize(MAXROWCOUNT);
+}
+
 namespace {
 
 class ShiftFormulaPosHandler
