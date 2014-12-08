@@ -105,7 +105,7 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper2<
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
         static XMLSecurityContext_NssImpl* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xObj ) ;
 
-        //Native mehtods
+        //Native methods
         virtual xmlSecKeysMngrPtr keysManager() throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) ;
 
         */

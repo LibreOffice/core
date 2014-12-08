@@ -183,7 +183,7 @@ public:
                              const rtl::OUString& name,
                              RTParamMode            mode);
 
-    /** sets the data for the specified exception of a mehtod.
+    /** sets the data for the specified exception of a method.
 
         @param index indicates the index of the method.
         @param excIndex specifies the index of the exception.
