@@ -133,6 +133,7 @@ public:
 
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
+    void testImageWithSpecialID();
 
     void testSupBookVirtualPath();
 
@@ -180,6 +181,7 @@ public:
 #endif
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
+    CPPUNIT_TEST(testImageWithSpecialID);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2413,6 +2415,78 @@ void ScExportTest::testLinkedGraphicRT()
         CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
         CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
+        xDocSh2->DoClose();
+    }
+}
+
+void ScExportTest::testImageWithSpecialID()
+{
+    const char* aFilterNames[] = {
+        "calc8",
+        "MS Excel 97",
+        "Calc Office Open XML",
+        "generic_HTML",
+    };
+
+    // Trigger swap out mechanism to test swapped state factor too.
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
+    batch->commit();
+
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
+    {
+        ScDocShellRef xDocSh = loadDoc("images_with_special_IDs.", ODS);
+
+        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDocSh.Is());
+
+        // Export the document and import again for a check
+        ScDocShellRef xDocSh2 = saveAndReload(xDocSh, nFilter);
+        xDocSh->DoClose();
+
+        // Check whether graphic was exported well
+        uno::Reference< frame::XModel > xModel = xDocSh2->GetModel();
+        uno::Reference< sheet::XSpreadsheetDocument > xDoc(xModel, UNO_QUERY_THROW);
+        uno::Reference< container::XIndexAccess > xIA(xDoc->getSheets(), UNO_QUERY_THROW);
+        uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xIA->getByIndex(0), UNO_QUERY_THROW);
+        uno::Reference< container::XIndexAccess > xDraws(xDrawPageSupplier->getDrawPage(), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
+
+        uno::Reference<drawing::XShape> xImage(xDraws->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+        }
+        // Second Image
+        xImage.set(xDraws->getByIndex(1), uno::UNO_QUERY);
+        XPropSet.set( xImage, uno::UNO_QUERY_THROW );
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(900), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(600), xBitmap->getSize().Height );
+        }
         xDocSh2->DoClose();
     }
 }
