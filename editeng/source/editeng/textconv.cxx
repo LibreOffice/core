@@ -371,7 +371,7 @@ void TextConvWrapper::ReplaceUnit(
     }
     m_nUnitOffset = m_nUnitOffset + nUnitStart + aNewTxt.getLength();
 
-    // remember current original language for kater use
+    // remember current original language for later use
     ImpEditEngine *pImpEditEng = m_pEditView->GetImpEditEngine();
     ESelection _aOldSel     = m_pEditView->GetSelection();
     //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
