@@ -103,10 +103,10 @@ IMPL_LINK( MacroEventListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
             maHeaderBar.SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
 
         {
-            long _nWidth, nTmpSz = 0;
+            long nTmpSz = 0;
             for( sal_uInt16 i = 1 ; i < _nTabs ; ++i )
             {
-                _nWidth = maHeaderBar.GetItemSize( i );
+                long _nWidth = maHeaderBar.GetItemSize( i );
                 aSz.Width() =  _nWidth + nTmpSz;
                 nTmpSz += _nWidth;
                 maListBox.SetTab( i, PixelToLogic( aSz, MapMode( MAP_APPFONT ) ).Width(), MAP_APPFONT );

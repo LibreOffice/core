@@ -671,10 +671,9 @@ static void lcl_MergeDisplayArray(
     ServiceInfoArr &rSvcInfoArr = rData.GetDisplayServiceArray();
     sal_uLong nEntries = rData.GetDisplayServiceCount();
 
-    ServiceInfo_Impl* pEntry;
     for (sal_uLong i = 0;  i < nEntries;  ++i)
     {
-        pEntry = &rSvcInfoArr[i];
+        ServiceInfo_Impl* pEntry = &rSvcInfoArr[i];
         if (pEntry  &&  pEntry->sDisplayName == rToAdd.sDisplayName)
         {
             if(rToAdd.xSpell.is())
@@ -887,10 +886,9 @@ void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices
     const OUString* pConfiguredServices = rConfiguredServices.getConstArray();
     for(sal_Int32 n = 0; n < rConfiguredServices.getLength(); n++)
     {
-        ServiceInfo_Impl* pEntry;
         for (sal_uLong i = 0;  i < nDisplayServices;  ++i)
         {
-            pEntry = &aDisplayServiceArr[i];
+            ServiceInfo_Impl* pEntry = &aDisplayServiceArr[i];
             if (pEntry  &&  !pEntry->bConfigured)
             {
                 const OUString &rSrvcImplName = pConfiguredServices[n];
@@ -1940,11 +1938,11 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
 {
     if (m_pModulesCLB == pBox)
     {
-        bool bDisableUp = true;
-        bool bDisableDown = true;
         SvTreeListEntry *pEntry = pBox->GetCurEntry();
         if (pEntry)
         {
+            bool bDisableUp = true;
+            bool bDisableDown = true;
             ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
             if(!pData->IsParent() && pData->GetType() != TYPE_HYPH)
             {

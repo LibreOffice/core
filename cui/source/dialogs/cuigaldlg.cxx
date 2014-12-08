@@ -802,9 +802,7 @@ void TPGalleryThemeProperties::FillFilterList()
     OUString            aExt;
     OUString            aName;
     FilterEntry*        pFilterEntry;
-    FilterEntry*        pTestEntry;
     sal_uInt16          i, nKeyCount;
-    bool                bInList;
 
     // graphic filters
     for( i = 0, nKeyCount = rFilter.GetImportFormatCount(); i < nKeyCount; i++ )
@@ -812,8 +810,8 @@ void TPGalleryThemeProperties::FillFilterList()
         aExt = rFilter.GetImportFormatShortName( i );
         aName = rFilter.GetImportFormatName( i );
         size_t entryIndex = 0;
-        pTestEntry = aFilterEntryList.empty() ? NULL : aFilterEntryList[ entryIndex ];
-        bInList = false;
+        FilterEntry* pTestEntry = aFilterEntryList.empty() ? NULL : aFilterEntryList[ entryIndex ];
+        bool bInList = false;
 
         OUString aExtensions;
         int j = 0;

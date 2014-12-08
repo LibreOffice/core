@@ -215,7 +215,6 @@ short SvInsertOleDlg::Execute()
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {
         OUString aFileName;
-        bool bLink = false;
         bool bCreateNew = IsCreateNew();
         if ( bCreateNew )
         {
@@ -299,7 +298,7 @@ short SvInsertOleDlg::Execute()
             aURL.SetSmartProtocol( INET_PROT_FILE );
             aURL.SetSmartURL( aFileName );
             aFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
-            bLink = IsLinked();
+            bool bLink = IsLinked();
 
             if ( !aFileName.isEmpty() )
             {

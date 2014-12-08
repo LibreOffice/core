@@ -1126,10 +1126,9 @@ namespace svx
     HangulHanjaOptionsDialog::~HangulHanjaOptionsDialog()
     {
         SvTreeListEntry*    pEntry = m_pDictsLB->First();
-        OUString*         pDel;
         while( pEntry )
         {
-            pDel = ( OUString* ) pEntry->GetUserData();
+            OUString* pDel = ( OUString* ) pEntry->GetUserData();
             if( pDel )
                 delete pDel;
             pEntry = m_pDictsLB->Next( pEntry );
