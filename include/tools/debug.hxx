@@ -23,6 +23,7 @@
 
 #include <sal/detail/log.h>
 #include <sal/types.h>
+#include <tools/solar.h>
 
 /** The facilities provided by this header are deprecated.  True assertions
     (that detect broken program logic) should use standard assert (which aborts
@@ -98,7 +99,7 @@ inline sal_uIntPtr DbgIsBoldAppFont()
 
 inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 {
-    DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, reinterpret_cast<void*>(reinterpret_cast<long>(pProc)) );
+    DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, reinterpret_cast<void*>(reinterpret_cast<sal_uLong>(pProc)) );
 }
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) \
