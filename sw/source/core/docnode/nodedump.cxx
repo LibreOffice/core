@@ -46,6 +46,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/xdef.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -395,6 +396,11 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_CHRATR_CTL_POSTURE:
                 static_cast<const SvxPostureItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_CHRATR_WEIGHT:
+            case RES_CHRATR_CJK_WEIGHT:
+            case RES_CHRATR_CTL_WEIGHT:
+                static_cast<const SvxWeightItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -409,9 +415,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_CHRATR_WEIGHT: pWhich = "character weight"; break;
-            case RES_CHRATR_CJK_WEIGHT: pWhich = "character cjk weight"; break;
-            case RES_CHRATR_CTL_WEIGHT: pWhich = "character ctl weight"; break;
             case RES_CHRATR_RSID:
             {
                 pWhich = "character rsid";

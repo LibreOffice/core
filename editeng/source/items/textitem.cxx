@@ -722,6 +722,14 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
+void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxWeightItem"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(GetValueTextByPos(GetValue()).toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 // class SvxFontHeightItem -----------------------------------------------
 
 SvxFontHeightItem::SvxFontHeightItem( const sal_uLong nSz,

@@ -69,6 +69,8 @@ public:
                                 { return (FontWeight)GetValue(); }
     void                    SetWeight( FontWeight eNew )
                                 { SetValue( (sal_uInt16)eNew ); }
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif // INCLUDED_EDITENG_WGHTITEM_HXX
