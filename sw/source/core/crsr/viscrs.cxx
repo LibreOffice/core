@@ -538,8 +538,12 @@ void SwShellCrsr::FillRects()
 
 void SwShellCrsr::Show()
 {
-    for(SwPaM& rTmp : GetRingContainer())
-        dynamic_cast<SwShellCrsr&>(rTmp).SwSelPaintRects::Show();
+    for(SwPaM& rPaM : GetRingContainer())
+    {
+        SwShellCrsr* pShCrsr = dynamic_cast<SwShellCrsr*>(&rPaM);
+        if(pShCrsr)
+            pShCrsr->SwSelPaintRects::Show();
+    }
 }
 
 // This rectangle gets painted anew, therefore the SSelection in this
@@ -558,13 +562,12 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
 
 void SwShellCrsr::Hide()
 {
-    SwShellCrsr * pTmp = this;
-    // TODO: this doesnt look sane: if the dynamic_cast ever returns a nullptr,
-    // the next pTmp->GetNext() call is a nullptr deref
-    do {
-        if (pTmp)
-            pTmp->SwSelPaintRects::Hide();
-    } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
+    for(SwPaM& rPaM : GetRingContainer())
+    {
+        SwShellCrsr* pShCrsr = dynamic_cast<SwShellCrsr*>(&rPaM);
+        if(pShCrsr)
+            pShCrsr->SwSelPaintRects::Hide();
+    }
 }
 
 SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
