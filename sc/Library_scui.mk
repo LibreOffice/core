@@ -24,11 +24,12 @@ $(eval $(call gb_Library_use_sdk_api,scui))
 
 $(eval $(call gb_Library_use_externals,scui,\
 	boost_headers \
-	$(call gb_Helper_optional,OPENCL,clew) \
 	mdds_headers \
 ))
 
 $(eval $(call gb_Library_use_libraries,scui,\
+	$(call gb_Helper_optional,OPENCL, \
+		clew) \
 	comphelper \
 	cppu \
 	cppuhelper \

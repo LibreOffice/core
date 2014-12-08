@@ -13,7 +13,7 @@
 #include <ostream>
 #include <vector>
 
-#include <clew.h>
+#include <clew/clew.h>
 
 #include <opencl/opencldllapi.h>
 #include <rtl/ustring.hxx>

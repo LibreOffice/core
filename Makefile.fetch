@@ -115,7 +115,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CAIRO,CAIRO_TARBALL) \
 		$(call fetch_Optional,CAIRO,PIXMAN_TARBALL) \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
-		$(call fetch_Optional,CLCC,CLCC_TARBALL) \
 		$(call fetch_Optional,CLUCENE,CLUCENE_TARBALL) \
 		$(call fetch_Optional,CMIS,CMIS_TARBALL) \
 		$(call fetch_Optional,COINMP,COINMP_TARBALL) \
