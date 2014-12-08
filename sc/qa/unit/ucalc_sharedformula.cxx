@@ -274,10 +274,16 @@ void Test::testSharedFormulasRefUpdate()
     m_pDoc->SetValue(ScAddress(0,10,0), 2);
     m_pDoc->SetValue(ScAddress(0,11,0), 3);
 
-    // Insert formulas that reference A10:A12 in B1:B3.
-    m_pDoc->SetString(ScAddress(1,0,0), "=A10");
-    m_pDoc->SetString(ScAddress(1,1,0), "=A11");
-    m_pDoc->SetString(ScAddress(1,2,0), "=A12");
+    {
+        // Insert formulas that reference A10:A12 in B1:B3.
+        const char* pData[][1] = {
+            { "=A10" },
+            { "=A11" },
+            { "=A12" }
+        };
+
+        insertRangeData(m_pDoc, ScAddress(1,0,0), pData, SAL_N_ELEMENTS(pData));
+    }
 
     if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A10"))
         CPPUNIT_FAIL("Wrong formula in B1");
@@ -420,9 +426,14 @@ void Test::testSharedFormulasRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1,2,0)));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,3,0)));
 
+    const char* aData[][1] = {
+        { "=RC[-1]" },
+        { "=RC[-1]" },
+        { "=RC[-1]" }
+    };
+
     // Set formulas in C2:C4 that reference B2:B4 individually.
-    for (SCROW i = 1; i <= 3; ++i)
-        m_pDoc->SetString(ScAddress(2,i,0), "=RC[-1]");
+    insertRangeData(m_pDoc, ScAddress(2,1,0), aData, SAL_N_ELEMENTS(aData));
 
     // Check the formula results.
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2,1,0)));
@@ -480,11 +491,15 @@ void Test::testSharedFormulasRefUpdateMove2()
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(4,1,0)));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,2,0)));
 
-    // Set formulas in C2:C3 that reference B2:B4 individually, and F2:F3 to E2:E3.
-    for (SCROW i = 1; i <= 2; ++i)
     {
-        m_pDoc->SetString(ScAddress(2,i,0), "=RC[-1]");
-        m_pDoc->SetString(ScAddress(5,i,0), "=RC[-1]");
+        // Set formulas in C2:C3 that reference B2:B3 individually, and F2:F3 to E2:E3.
+        const char* pData[][1] = {
+            { "=RC[-1]" },
+            { "=RC[-1]" }
+        };
+
+        insertRangeData(m_pDoc, ScAddress(2,1,0), pData, SAL_N_ELEMENTS(pData));
+        insertRangeData(m_pDoc, ScAddress(5,1,0), pData, SAL_N_ELEMENTS(pData));
     }
 
     m_pDoc->CalcFormulaTree(); // calculate manually.
@@ -537,10 +552,16 @@ void Test::testSharedFormulasRefUpdateRange()
     m_pDoc->SetValue(ScAddress(0,3,0), 2);
     m_pDoc->SetValue(ScAddress(0,4,0), 3);
 
-    // Insert formulas to B3:B5.
-    m_pDoc->SetString(ScAddress(1,2,0), "=SUM($A$3:$A$5)");
-    m_pDoc->SetString(ScAddress(1,3,0), "=SUM($A$3:$A$5)");
-    m_pDoc->SetString(ScAddress(1,4,0), "=SUM($A$3:$A$5)");
+    {
+        // Insert formulas to B3:B5.
+        const char* pData[][1] = {
+            { "=SUM($A$3:$A$5)" },
+            { "=SUM($A$3:$A$5)" },
+            { "=SUM($A$3:$A$5)" }
+        };
+
+        insertRangeData(m_pDoc, ScAddress(1,2,0), pData, SAL_N_ELEMENTS(pData));
+    }
 
     if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($A$3:$A$5)"))
         CPPUNIT_FAIL("Wrong formula");
@@ -700,12 +721,18 @@ void Test::testSharedFormulasRefUpdateExternal()
     rExtDoc.SetString(ScAddress(0,1,0), "B");
     rExtDoc.SetString(ScAddress(0,2,0), "C");
 
-    // Insert formula cells in A7:A10 of the host document, referencing A1:A3
-    // of the external document.
-    m_pDoc->SetString(ScAddress(0,6,0), "='file:///extdata.fake'#$Data.A1");
-    m_pDoc->SetString(ScAddress(0,7,0), "='file:///extdata.fake'#$Data.A2");
-    m_pDoc->SetString(ScAddress(0,8,0), "='file:///extdata.fake'#$Data.A3");
-    m_pDoc->SetString(ScAddress(0,9,0), "=COUNTA('file:///extdata.fake'#$Data.A1:A3)");
+    {
+        // Insert formula cells in A7:A10 of the host document, referencing A1:A3
+        // of the external document.
+        const char* pData[][1] = {
+            { "='file:///extdata.fake'#$Data.A1" },
+            { "='file:///extdata.fake'#$Data.A2" },
+            { "='file:///extdata.fake'#$Data.A3" },
+            { "=COUNTA('file:///extdata.fake'#$Data.A1:A3)" }
+        };
+
+        insertRangeData(m_pDoc, ScAddress(0,6,0), pData, SAL_N_ELEMENTS(pData));
+    }
 
     // Check the formula results.
     CPPUNIT_ASSERT_EQUAL(OUString("A"), m_pDoc->GetString(ScAddress(0,6,0)));
@@ -845,9 +872,17 @@ void Test::testSharedFormulasInsertRow()
     // Set value to A4.
     m_pDoc->SetValue(ScAddress(0,3,0), 4.0);
 
-    // Set formula cells in B1:B4 all referencing A4 as absolute reference.
-    for (SCROW i = 0; i <= 3; ++i)
-        m_pDoc->SetString(ScAddress(1,i,0), "=$A$4");
+    {
+        // Set formula cells in B1:B4 all referencing A4 as absolute reference.
+        const char* pData[][1] = {
+            { "=$A$4" },
+            { "=$A$4" },
+            { "=$A$4" },
+            { "=$A$4" }
+        };
+
+        insertRangeData(m_pDoc, ScAddress(1,0,0), pData, SAL_N_ELEMENTS(pData));
+    }
 
     // Insert a new row at row 3.
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
@@ -879,17 +914,33 @@ void Test::testSharedFormulasDeleteRows()
     m_pDoc->InsertTab(0, "Test");
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
-    // Fill data cells A1:A10 and formula cells B1:B10
-    for (SCROW i = 0; i <= 9 ; ++i)
     {
-        m_pDoc->SetValue(0, i, 0, i);
-        m_pDoc->SetString(1, i, 0, "=RC[-1]+1");
-    }
-    // Fill data cells A11:A20 and formula cells B11:B20 with a different formula.
-    for (SCROW i = 10; i <= 19 ; ++i)
-    {
-        m_pDoc->SetValue(0, i, 0, i);
-        m_pDoc->SetString(1, i, 0, "=RC[-1]+11");
+        // Fill data cells A1:A20 and formula cells B1:B20.  Formulas in
+        // B1:B10 and B11:B20 should be different.
+        const char* pData[][2] = {
+            { "0", "=RC[-1]+1" },
+            { "1", "=RC[-1]+1" },
+            { "2", "=RC[-1]+1" },
+            { "3", "=RC[-1]+1" },
+            { "4", "=RC[-1]+1" },
+            { "5", "=RC[-1]+1" },
+            { "6", "=RC[-1]+1" },
+            { "7", "=RC[-1]+1" },
+            { "8", "=RC[-1]+1" },
+            { "9", "=RC[-1]+1" },
+            { "10", "=RC[-1]+11" },
+            { "11", "=RC[-1]+11" },
+            { "12", "=RC[-1]+11" },
+            { "13", "=RC[-1]+11" },
+            { "14", "=RC[-1]+11" },
+            { "15", "=RC[-1]+11" },
+            { "16", "=RC[-1]+11" },
+            { "17", "=RC[-1]+11" },
+            { "18", "=RC[-1]+11" },
+            { "19", "=RC[-1]+11" }
+        };
+
+        insertRangeData(m_pDoc, ScAddress(0,0,0), pData, SAL_N_ELEMENTS(pData));
     }
 
     // B1:B10 should be shared.
