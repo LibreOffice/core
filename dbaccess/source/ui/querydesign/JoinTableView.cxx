@@ -525,12 +525,11 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
         aRowRect.Bottom() = (nRow+1) * ( TABWIN_SPACING_Y + TABWIN_HEIGHT_STD );
 
         // check occupied areas of this line
-        OTableWindow* pOtherTabWin;
         OTableWindowMap::iterator aIter = m_aTableMap.begin();
         OTableWindowMap::iterator aEnd = m_aTableMap.end();
         for(;aIter != aEnd;++aIter)
         {
-            pOtherTabWin = aIter->second;
+            OTableWindow* pOtherTabWin = aIter->second;
             Rectangle aOtherTabWinRect( pOtherTabWin->GetPosPixel(), pOtherTabWin->GetSizePixel() );
 
             if(

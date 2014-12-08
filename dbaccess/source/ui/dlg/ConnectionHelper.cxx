@@ -534,7 +534,6 @@ namespace dbaui
     IS_PATH_EXIST OConnectionHelper::pathExists(const OUString& _rURL, bool bIsFile) const
     {
         ::ucbhelper::Content aCheckExistence;
-        bool bExists = false;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler(
             task::InteractionHandler::createWithParent(m_xORB, 0), UNO_QUERY );
@@ -545,7 +544,7 @@ namespace dbaui
         try
         {
             aCheckExistence = ::ucbhelper::Content(_rURL, xCmdEnv, comphelper::getProcessComponentContext());
-            bExists = bIsFile? aCheckExistence.isDocument(): aCheckExistence.isFolder();
+            const bool bExists = bIsFile? aCheckExistence.isDocument(): aCheckExistence.isFolder();
             eExists = bExists? PATH_EXIST: PATH_NOT_EXIST;
         }
         catch(const Exception&)

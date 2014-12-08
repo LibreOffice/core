@@ -1835,9 +1835,9 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     xProp->getPropertyValue( PROPERTY_COMMAND ) >>= sNewStatement;
                     setStatement_fireEvent( sNewStatement );
 
-                    bool bNewEscapeProcessing( true );
                     if ( editingQuery() )
                     {
+                        bool bNewEscapeProcessing( true );
                         xProp->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bNewEscapeProcessing;
                         setEscapeProcessing_fireEvent( bNewEscapeProcessing );
                     }
