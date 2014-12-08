@@ -41,7 +41,11 @@ public:
     static ::com::sun::star::uno::Sequence< OUString >
         getSupportedServiceNames_Static();
 
-    APPHELPER_SERVICE_FACTORY_HELPER( GL3DBarChartType )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new GL3DBarChartType( xContext );
+    }
 
 protected:
     GL3DBarChartType( const GL3DBarChartType& rOther );

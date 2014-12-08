@@ -60,7 +60,11 @@ public:
     virtual ~CartesianCoordinateSystem2d();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( CartesianCoordinateSystem2d )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new CartesianCoordinateSystem2d( xContext );
+    }
     // ____ XServiceInfo ____
     APPHELPER_XSERVICEINFO_DECL()
 };
@@ -74,7 +78,11 @@ public:
     virtual ~CartesianCoordinateSystem3d();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( CartesianCoordinateSystem3d )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new CartesianCoordinateSystem3d( xContext );
+    }
     // ____ XServiceInfo ____
     APPHELPER_XSERVICEINFO_DECL()
 };

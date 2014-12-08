@@ -153,7 +153,11 @@ public:
     // ::com::sun::star::lang::XServiceInfo
 
     APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER(ChartController)
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new ChartController( xContext );
+    }
 
     // ::com::sun::star::frame::XController (required interface)
     virtual void SAL_CALL

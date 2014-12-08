@@ -84,7 +84,11 @@ public:
 
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER(InternalDataProvider)
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new InternalDataProvider( xContext );
+    }
 
     // ____ XInternalDataProvider ____
     virtual sal_Bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange )

@@ -80,7 +80,11 @@ public:
 
     // XServiceInfo
     APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER(ElementSelectorToolbarController)
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new ElementSelectorToolbarController( xContext );
+    }
 
     // XInterface
      virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -81,9 +81,6 @@ public:
         const OUString & rServiceName );
     virtual ~ChartTypeTemplate();
 
-    /// establish methods for factory instatiation
-//  APPHELPER_SERVICE_FACTORY_HELPER( ChartTypeTemplate )
-
 protected:
     // ____ XChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram > SAL_CALL createDiagramByDataSource(

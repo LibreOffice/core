@@ -71,19 +71,6 @@ css::uno::Sequence< OUString > SAL_CALL Class::getSupportedServiceNames()   \
     return getSupportedServiceNames_Static();                               \
 }
 
-// Service factory helper decl+impl
-
-//to use this macro you need to provide a constructor:
-//class( Reference< XComponentContext > const & xContext )
-//and implement OWeakObject
-
-#define APPHELPER_SERVICE_FACTORY_HELPER(Class)                             \
-static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext) \
-    throw(css::uno::Exception)                                              \
-{                                                                           \
-    return (::cppu::OWeakObject *)new Class( xContext );                    \
-}
-
 }//end namespace apphelper
 #endif
 

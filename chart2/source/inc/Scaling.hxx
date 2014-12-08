@@ -47,7 +47,11 @@ public:
     virtual ~LogarithmicScaling();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( LogarithmicScaling )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new LogarithmicScaling( xContext );
+    }
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
 
@@ -86,7 +90,11 @@ public:
     virtual ~ExponentialScaling();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( ExponentialScaling )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new ExponentialScaling( xContext );
+    }
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
 
@@ -125,7 +133,11 @@ public:
     virtual ~LinearScaling();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( LinearScaling )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new LinearScaling( xContext );
+    }
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
 
@@ -163,7 +175,11 @@ public:
     virtual ~PowerScaling();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( PowerScaling )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new PowerScaling( xContext );
+    }
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
 

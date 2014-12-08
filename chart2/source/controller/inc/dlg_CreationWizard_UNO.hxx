@@ -64,7 +64,11 @@ public:
 
     // XServiceInfo
     APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER(CreationWizardUnoDlg)
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new CreationWizardUnoDlg( xContext );
+    }
 
     // XExecutableDialog
     virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

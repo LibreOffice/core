@@ -74,7 +74,11 @@ public:
         getSupportedServiceNames_Static();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( NetChartType )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new NetChartType( xContext );
+    }
 
 protected:
     explicit NetChartType( const NetChartType & rOther );

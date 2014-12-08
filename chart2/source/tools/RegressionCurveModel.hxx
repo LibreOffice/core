@@ -104,11 +104,6 @@ protected:
     virtual OUString SAL_CALL getServiceName()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ____ XCloneable ____
-    // not implemented here
-//     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
-//         throw (::com::sun::star::uno::RuntimeException);
-
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
@@ -164,7 +159,11 @@ public:
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( MeanValueRegressionCurve )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new MeanValueRegressionCurve( xContext );
+    }
 };
 
 class LinearRegressionCurve : public RegressionCurveModel
@@ -184,7 +183,11 @@ public:
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( LinearRegressionCurve )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new LinearRegressionCurve( xContext );
+    }
 };
 
 class LogarithmicRegressionCurve : public RegressionCurveModel
@@ -204,7 +207,11 @@ public:
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( LogarithmicRegressionCurve )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new LogarithmicRegressionCurve( xContext );
+    }
 };
 
 class ExponentialRegressionCurve : public RegressionCurveModel
@@ -224,7 +231,11 @@ public:
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( ExponentialRegressionCurve )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new ExponentialRegressionCurve( xContext );
+    }
 };
 
 class PotentialRegressionCurve : public RegressionCurveModel
@@ -244,7 +255,11 @@ public:
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( PotentialRegressionCurve )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new PotentialRegressionCurve( xContext );
+    }
 };
 
 class PolynomialRegressionCurve : public RegressionCurveModel
@@ -264,7 +279,11 @@ public:
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( PolynomialRegressionCurve )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new PolynomialRegressionCurve( xContext );
+    }
 };
 
 class MovingAverageRegressionCurve : public RegressionCurveModel
@@ -284,7 +303,11 @@ public:
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( MovingAverageRegressionCurve )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new MovingAverageRegressionCurve( xContext );
+    }
 };
 
 } //  namespace chart

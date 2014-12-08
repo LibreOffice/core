@@ -57,7 +57,11 @@ public:
     virtual ~Legend();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( Legend )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new Legend( xContext );
+    }
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()

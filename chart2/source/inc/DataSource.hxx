@@ -48,7 +48,11 @@ public:
     virtual ~DataSource();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( DataSource )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new DataSource( xContext );
+    }
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
 

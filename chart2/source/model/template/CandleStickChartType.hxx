@@ -47,7 +47,11 @@ public:
         getSupportedServiceNames_Static();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( CandleStickChartType )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new CandleStickChartType( xContext );
+    }
 
 protected:
     explicit CandleStickChartType( const CandleStickChartType & rOther );

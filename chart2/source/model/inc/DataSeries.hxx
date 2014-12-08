@@ -74,7 +74,11 @@ public:
     virtual ~DataSeries();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( DataSeries )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new DataSeries( xContext );
+    }
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()
 

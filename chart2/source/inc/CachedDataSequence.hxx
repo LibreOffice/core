@@ -85,7 +85,11 @@ public:
     virtual ~CachedDataSequence();
 
     /// establish methods for factory instatiation
-    APPHELPER_SERVICE_FACTORY_HELPER( CachedDataSequence )
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
+        throw(css::uno::Exception)
+    {
+        return (::cppu::OWeakObject *)new CachedDataSequence( xContext );
+    }
     /// declare XServiceInfo methods
     APPHELPER_XSERVICEINFO_DECL()
 
