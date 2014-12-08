@@ -46,27 +46,14 @@ know. But don't seem to be necessary on a real device anyway?
 
 * Debugging
 
-	Install the .apk to the device, start the application, and:
+	Install the .apk to the device, and:
 
 	cd android/experimental/LOAndroid3
-	<android-ndk-r9d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb
+	<android-ndk-r10d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb --start
 
-	Some versions of the NDK had a broken gdb in the way that it can see
-symbols only for shlibs that were already loaded when the debuggee was
-attached, so you need to carefully guess where to put:
-
-	fprintf(stderr, "Sleeping NOW!\n"); ::sleep(20);
-
-	into the code; and when you see that in logcat, you have time
-to run: ndk-gdb and it will attach the process.
-
-	thread 12 # or perhaps 13
-	backtrace
-
-	may show you the native code trace.
-
-	In r8b the ndk-gdb seems to work a bit better, and I think it isn't
-necessary to use the mingw-and-ndk ndb-gdb any longer.
+	It seems that the "have to start the app before gdb can connect to it"
+and the "pending breakpoints do not work" problems are now resolved with the
+current NDK.
 
 * Getting the symbols
 
