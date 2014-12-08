@@ -374,11 +374,11 @@ void TextConvWrapper::ReplaceUnit(
 
     // remember current original language for kater use
     ImpEditEngine *pImpEditEng = m_pEditView->GetImpEditEngine();
-    ESelection _aOldSel     = m_pEditView->GetSelection();
+    ESelection aOldSel     = m_pEditView->GetSelection();
     //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
 
 #ifdef DBG_UTIL
-    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( _aOldSel ).Min() );
+    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( aOldSel ).Min() );
 #endif
 
     pImpEditEng->UndoActionStart( EDITUNDO_INSERT );
@@ -388,7 +388,7 @@ void TextConvWrapper::ReplaceUnit(
     // Thus we do this only for Chinese translation...
     bool bIsChineseConversion = IsChinese( GetSourceLanguage() );
     if (bIsChineseConversion)
-        ChangeText( aNewTxt, rOrigText, &rOffsets, &_aOldSel );
+        ChangeText( aNewTxt, rOrigText, &rOffsets, &aOldSel );
     else
         ChangeText( aNewTxt, rOrigText, NULL, NULL );
 
@@ -398,7 +398,6 @@ void TextConvWrapper::ReplaceUnit(
         DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
                 "TextConvWrapper::ReplaceUnit : unexpected target language" );
 
-        ESelection aOldSel = m_pEditView->GetSelection();
         ESelection aNewSel( aOldSel );
         aNewSel.nStartPos = aNewSel.nStartPos - aNewTxt.getLength();
 

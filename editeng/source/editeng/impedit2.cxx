@@ -3956,7 +3956,7 @@ long ImpEditEngine::GetXPos(
             if( pLine->GetCharPosArray().size() )
             {
                 sal_Int32 nPos = nIndex - 1 - pLine->GetStart();
-                if( nPos >= (sal_Int32)pLine->GetCharPosArray().size() )
+                if (nPos < 0 || nPos >= (sal_Int32)pLine->GetCharPosArray().size())
                 {
                     nPos = pLine->GetCharPosArray().size()-1;
                     OSL_FAIL("svx::ImpEditEngine::GetXPos(), index out of range!");
