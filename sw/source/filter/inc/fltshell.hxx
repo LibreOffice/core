@@ -47,10 +47,10 @@ inline void SwFltClearFlag(sal_uLong& rFieldFlags, int no)
     { rFieldFlags &= ~(1L << no); }
 
 inline void SwFltSetFlag(sal_uLong& rFieldFlags, int no)
-    { rFieldFlags |= 1L << no; }
+    { rFieldFlags |= sal_uLong(1) << no; }
 
 inline bool SwFltGetFlag(sal_uLong nFieldFlags, int no)
-    { return (nFieldFlags & (1L << no)) != 0; }
+    { return (nFieldFlags & (sal_uLong(1) << no)) != 0; }
 
 //Subvert the Node/Content system to get positions which don't update as
 //content is appended to them
