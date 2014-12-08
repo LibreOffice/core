@@ -180,7 +180,7 @@ namespace sw
             /**
              * Merges two ring containers. All item from both ring containers will
              * be in the same ring container in the end.
-             * Note: value_typehe items of this ring container will be inserted just before
+             * Note: The items of this ring container will be inserted just before
              * item pDestRing
              * @param pDestRing the container to merge this container with
              */
@@ -227,7 +227,7 @@ namespace sw
             value_type& dereference() const
                 { return m_pCurrent ? *m_pCurrent : * m_pStart; }
             /**
-             * value_typehis is:
+             * value_type is is:
              * - pointing to the current item in the iteration in general
              * - nullptr if on the first item (begin())
              * - m_pStart when beyond the last item (end())
