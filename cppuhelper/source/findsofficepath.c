@@ -124,8 +124,6 @@ static char* platformSpecific(void)
     char* env = NULL;
     char* str = NULL;
     char* dir = NULL;
-    char* file = NULL;
-    char* resolved = NULL;
     char* sep = NULL;
 
     char buffer[PATH_MAX];
@@ -146,7 +144,7 @@ static char* platformSpecific(void)
     while ( dir )
     {
         /* construct soffice file path */
-        file = (char*) malloc( strlen( dir ) + strlen( APPENDIX ) + 1 );
+        char* file = (char*) malloc( strlen( dir ) + strlen( APPENDIX ) + 1 );
         if (file == NULL)
         {
             free(str);
@@ -157,7 +155,7 @@ static char* platformSpecific(void)
         strcat( file, APPENDIX );
 
         /* resolve symbolic link */
-        resolved = realpath( file, buffer );
+        char* resolved = realpath( file, buffer );
         if ( resolved != NULL )
         {
             /* get path to program directory */

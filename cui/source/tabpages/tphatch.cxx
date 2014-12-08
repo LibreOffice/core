@@ -566,12 +566,11 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pHatchingList->Count();
-        bool bDifferent = false;
         bool bLoop = true;
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = true;
+            bool bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {

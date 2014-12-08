@@ -665,7 +665,6 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     ResMgr& rMgr = CUI_MGR();
     OUString aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
     OUString aName( m_pEdtName->GetText() );
-    XColorEntry* pEntry;
     long nCount = pColorList->Count();
     bool bDifferent = true;
 
@@ -707,7 +706,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     // if not existing the entry is entered
     if( bDifferent )
     {
-        pEntry = new XColorEntry( aCurrentColor, aName );
+        XColorEntry* pEntry = new XColorEntry( aCurrentColor, aName );
 
         pColorList->Insert( pEntry, pColorList->Count() );
 

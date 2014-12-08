@@ -275,10 +275,9 @@ generateCustomName(
     // now check is there is an already existing entry with this name
     SvxEntries::const_iterator iter = entries->begin();
 
-    SvxConfigEntry* pEntry;
     while ( iter != entries->end() )
     {
-        pEntry = *iter;
+        SvxConfigEntry* pEntry = *iter;
 
         if ( name.equals( pEntry->GetName() ) )
         {
@@ -314,10 +313,9 @@ generateCustomURL(
     // now check is there is an already existing entry with this url
     SvxEntries::const_iterator iter = entries->begin();
 
-    SvxConfigEntry* pEntry;
     while ( iter != entries->end() )
     {
-        pEntry = *iter;
+        SvxConfigEntry* pEntry = *iter;
 
         if ( url.equals( pEntry->GetCommand() ) )
         {
@@ -1082,7 +1080,6 @@ bool MenuSaveInData::LoadSubMenus(
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
         OUString                aLabel;
-        bool                    bIsUserDefined = true;
 
         sal_uInt16 nType( css::ui::ItemType::DEFAULT );
 
@@ -1091,6 +1088,7 @@ bool MenuSaveInData::LoadSubMenus(
 
         if ( bItem )
         {
+            bool bIsUserDefined = true;
             if ( nType == css::ui::ItemType::DEFAULT )
             {
                 uno::Any a;
@@ -2594,16 +2592,13 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     // Copy the entries list passed in
     if ( entries != NULL )
     {
-        SvxConfigEntry* pEntry;
-        SvTreeListEntry* pLBEntry;
-
         mpEntries = new SvxEntries();
         SvxEntries::const_iterator iter = entries->begin();
 
         while ( iter != entries->end() )
         {
-            pEntry = *iter;
-            pLBEntry =
+            SvxConfigEntry* pEntry = *iter;
+            SvTreeListEntry* pLBEntry =
                 m_pMenuListBox->InsertEntry( stripHotKey( pEntry->GetName() ) );
             pLBEntry->SetUserData( pEntry );
             mpEntries->push_back( pEntry );
@@ -4176,7 +4171,6 @@ bool ToolbarSaveInData::LoadToolbar(
         uno::Reference< container::XIndexAccess >   xSubMenu;
         OUString                aCommandURL;
         OUString                aLabel;
-        bool                    bIsUserDefined = true;
         bool                bIsVisible;
         sal_Int32               nStyle;
 
@@ -4187,6 +4181,7 @@ bool ToolbarSaveInData::LoadToolbar(
 
         if ( bItem )
         {
+            bool bIsUserDefined = true;
             if ( nType == css::ui::ItemType::DEFAULT )
             {
                 uno::Any a;
@@ -5238,7 +5233,6 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;
-    bool bOK = true;
     aMediaProps[0].Value <<= aURL;
     try
     {
@@ -5251,6 +5245,8 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
             xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
             {
+                bool bOK = true;
+
                 a >>= aSize;
                 if ( 0 == aSize.Width || 0 == aSize.Height )
                     bOK = false;

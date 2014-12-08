@@ -676,14 +676,13 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
         DBG_ASSERT(pDlg, "Dialog creation failed!");
 
         long nCount = pBitmapList->Count();
-        bool bDifferent = false;
         bool bLoop = true;
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = true;
+            bool bDifferent = true;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
