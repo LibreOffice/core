@@ -45,7 +45,6 @@
 #include <vector>
 
 #include <list>
-#include <deque>
 #include <cctype>
 
 #include <boost/scoped_array.hpp>
