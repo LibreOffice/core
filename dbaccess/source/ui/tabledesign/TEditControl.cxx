@@ -488,11 +488,10 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aIter = m_pRowList->begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::iterator aEnd = m_pRowList->end();
-    OFieldDescription* pFieldDescr;
     sal_Int32 nCount(0);
     for(;aIter != aEnd;++aIter)
     {
-        pFieldDescr = (*aIter)->GetActFieldDescr();
+        OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
         if( pFieldDescr && bCase(rFieldName,pFieldDescr->GetName()))
             nCount++;
     }

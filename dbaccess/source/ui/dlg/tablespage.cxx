@@ -162,8 +162,6 @@ namespace dbaui
         OUString sCatalog, sSchema, sName;
 
         SvTreeListEntry* pRootEntry = m_pTablesList->getAllObjectsEntry();
-        bool bAllTables = false;
-        bool bAllSchemas = false;
 
         const OUString* pIncludeTable = _rTables.getConstArray();
         for (sal_Int32 i=0; i<_rTables.getLength(); ++i, ++pIncludeTable)
@@ -173,8 +171,8 @@ namespace dbaui
             else
                 sName = pIncludeTable->getStr();
 
-            bAllTables = (1 == sName.getLength()) && ('%' == sName[0]);
-            bAllSchemas = (1 == sSchema.getLength()) && ('%' == sSchema[0]);
+            bool bAllTables = (1 == sName.getLength()) && ('%' == sName[0]);
+            bool bAllSchemas = (1 == sSchema.getLength()) && ('%' == sSchema[0]);
 
             // the catalog entry
             SvTreeListEntry* pCatalog = m_pTablesList->GetEntryPosByName(sCatalog, pRootEntry);

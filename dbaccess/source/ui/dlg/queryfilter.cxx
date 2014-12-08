@@ -297,11 +297,11 @@ bool DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,co
     try
     {
         OUString sTableName;
-        bool bFunction = false;
         _rFilter.Name = _rField.GetSelectEntry();
         Reference< XPropertySet > xColumn = getQueryColumn(_rFilter.Name);
         if ( xColumn.is() )
         {
+            bool bFunction = false;
             Reference< XPropertySetInfo > xInfo = xColumn->getPropertySetInfo();
             if ( xInfo->hasPropertyByName(PROPERTY_REALNAME) )
             {
@@ -818,10 +818,9 @@ void DlgFilterCrit::fillLines(const Sequence<Sequence<PropertyValue > >& _aValue
 {
     const Sequence<PropertyValue >* pOrIter = _aValues.getConstArray();
     const Sequence<PropertyValue >* pOrEnd   = pOrIter + _aValues.getLength();
-    bool bOr = true;
     for(sal_uInt16 i=0;pOrIter != pOrEnd; ++pOrIter)
     {
-        bOr = true;
+        bool bOr = true;
         const PropertyValue* pAndIter   = pOrIter->getConstArray();
         const PropertyValue* pAndEnd    = pAndIter + pOrIter->getLength();
         for(;pAndIter != pAndEnd; ++pAndIter)

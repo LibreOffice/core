@@ -277,11 +277,10 @@ bool OCopyTable::checkAppendData()
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = rDestColumns.begin();
         ODatabaseExport::TColumnVector::const_iterator aDestEnd     = rDestColumns.end();
         const sal_uInt32 nDestSize = rDestColumns.size();
-        bool bNotConvert;
         sal_uInt32 i = 0;
         for(sal_Int32 nPos = 1;aDestIter != aDestEnd && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
         {
-            bNotConvert = true;
+            bool bNotConvert = true;
             m_pParent->m_vColumnPos[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
             TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
             if ( !bNotConvert )
