@@ -460,10 +460,4 @@ SwPageDescExt::operator SwPageDesc() const
     return aResult;
 }
 
-SwPageDescs::~SwPageDescs()
-{
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
