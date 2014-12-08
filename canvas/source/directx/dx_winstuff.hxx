@@ -56,22 +56,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-#if DIRECTX_VERSION < 0x0900
-
-    #include <multimon.h>
-
-    // Be compatible with directdraw 3.0. Lets see how far this takes us
-    #define DIRECTDRAW_VERSION 0x0300
-    #include <ddraw.h>
-
-    // Be compatible with direct3d 5.0. Lets see how far this takes us
-    #define DIRECT3D_VERSION 0x0500
-    #define D3D_OVERLOADS
-    #include <d3d.h>
-
-    typedef IDirectDrawSurface surface_type;
-
-#elif WIN8_SDK == 1 || defined(_USING_V110_SDK71_)
+#if WIN8_SDK == 1 || defined(_USING_V110_SDK71_)
 
     #include <d3d9.h>
 
