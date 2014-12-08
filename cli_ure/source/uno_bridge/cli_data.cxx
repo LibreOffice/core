@@ -1058,12 +1058,10 @@ void Bridge::map_to_uno(void * uno_data, System::Object^ cli_data,
             sal_Int32 nPos = 0;
             try
             {
-                typelib_TypeDescriptionReference * member_type= NULL;
-
                 OUString usUnoException("com.sun.star.uno.Exception");
                 for (; nPos < nMembers; ++nPos)
                 {
-                    member_type= comp_td->ppTypeRefs[nPos];
+                    typelib_TypeDescriptionReference * member_type= comp_td->ppTypeRefs[nPos];
                     System::Object^ val= nullptr;
                     if (cli_data != nullptr)
                     {

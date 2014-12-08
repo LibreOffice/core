@@ -158,9 +158,6 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-
-    bool needData = false;
-
     // Reset warnings
 
     clearWarnings ();
@@ -178,7 +175,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
         SQLRETURN nReturn = N3SQLExecute(m_aStatementHandle);
 
         OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
-        needData = nReturn == SQL_NEED_DATA;
+        bool needData = nReturn == SQL_NEED_DATA;
 
         // Now loop while more data is needed (i.e. a data-at-
         // execution parameter was given).  For each parameter

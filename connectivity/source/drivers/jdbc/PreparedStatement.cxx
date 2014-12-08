@@ -336,12 +336,13 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         {
             jobject obj = NULL;
-            double nTemp = 0.0;
             switch(targetSqlType)
             {
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
                     {
+                        double nTemp = 0.0;
+
                         boost::scoped_ptr<java_math_BigDecimal> pBigDecimal;
                         if ( x >>= nTemp)
                         {

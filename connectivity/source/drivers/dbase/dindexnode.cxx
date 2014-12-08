@@ -194,7 +194,6 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
     bool bAppend = nRowsLeft > 0;
     if (IsFull())
     {
-        bool bResult = true;
         ONDXNode aSplitNode;
         if (bAppend)
             aSplitNode = rNode;
@@ -204,7 +203,7 @@ bool ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             aSplitNode = (*this)[nCount-1];
             if(rNode.GetKey() <= aSplitNode.GetKey())
             {
-
+                bool bResult = true;
                 // this practically reduces the number of nodes by 1
                 if (IsLeaf() && this == rIndex.m_aCurLeaf)
                 {
