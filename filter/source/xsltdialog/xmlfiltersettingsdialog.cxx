@@ -1355,6 +1355,16 @@ SvxPathControl::SvxPathControl(Window* pParent)
 #define ITEMID_NAME     1
 #define ITEMID_TYPE     2
 
+Size SvxPathControl::GetOptimalSize() const
+{
+    Size aDefSize(LogicToPixel(Size(150, 0), MapMode(MAP_APPFONT)));
+    Size aOptSize(VclVBox::GetOptimalSize());
+    long nRowHeight(GetTextHeight());
+    aOptSize.Height() = nRowHeight * 10;
+    aOptSize.Width() = std::max(aDefSize.Width(), aOptSize.Width());
+    return aOptSize;
+}
+
 void SvxPathControl::setAllocation(const Size &rAllocation)
 {
     VclVBox::setAllocation(rAllocation);
@@ -1366,6 +1376,11 @@ void SvxPathControl::setAllocation(const Size &rAllocation)
     {
         std::vector<long> aWidths;
         m_pFocusCtrl->getPreferredDimensions(aWidths);
+        if (aWidths.empty())
+        {
+            bHasBeenShown = false;
+            return;
+        }
         long nFirstColumnWidth = aWidths[1];
         m_pHeaderBar->SetItemSize(ITEMID_NAME, nFirstColumnWidth);
         m_pHeaderBar->SetItemSize(ITEMID_TYPE, 0xFFFF);
