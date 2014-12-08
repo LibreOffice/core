@@ -840,7 +840,7 @@ SdrGrafObj& SdrGrafObj::operator=( const SdrGrafObj& rObj )
     aFilterName = rObj.aFilterName;
     bMirrored = rObj.bMirrored;
 
-    if( rObj.pGraphicLink != NULL)
+    if( rObj.IsLinkedGraphic() )
     {
         SetGraphicLink( aFileName, rObj.aReferer, aFilterName );
     }
