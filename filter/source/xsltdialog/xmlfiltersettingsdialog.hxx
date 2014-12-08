@@ -44,6 +44,7 @@ private:
     HeaderBar* m_pHeaderBar;
     XMLFilterListBox* m_pFocusCtrl;
 protected:
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
 public:
     SvxPathControl(Window* pParent);
