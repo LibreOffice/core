@@ -112,8 +112,11 @@ public:
                     TYPEINFO();
 
     virtual void    Closed();
+
+#if defined WNT
                     SvBaseLink( const OUString& rNm, sal_uInt16 nObjectType,
                                  SvLinkSource* );
+#endif
 
     sal_uInt16          GetObjType() const { return nObjType; }
 

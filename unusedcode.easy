@@ -8,6 +8,7 @@ GDriveSession::GDriveSession()
 ImpBitmap::ImplCrop(Rectangle const&)
 ImpBitmap::ImplErase(Color const&)
 ImpBitmap::ImplSetSalBitmap(SalBitmap*)
+NfCurrencyEntry::Clone() const
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()
@@ -190,6 +191,7 @@ sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::finish()
 sc::CLBuildKernelThread::produce()
 sc::CellValues::transferTo(ScColumn&, int)
+sc::ColumnSpanSet::swap(sc::ColumnSpanSet&)
 sc::FormulaGroupAreaListener::getGroupLength() const
 sc::FormulaGroupAreaListener::getRange() const
 sc::FormulaGroupAreaListener::getTopCellPos() const
@@ -198,7 +200,6 @@ sc::FormulaGroupAreaListener::isStartFixed() const
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
 sdr::contact::ViewContactOfTextObj::GetTextObj() const
-sfx2::SvBaseLink::SvBaseLink(rtl::OUString const&, unsigned short, sfx2::SvLinkSource*)
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::__cxx1998::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)

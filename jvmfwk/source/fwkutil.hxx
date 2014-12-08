@@ -76,10 +76,6 @@ OUString getPlatform();
 
 OUString getDirFromFile(const OUString& usFilePath);
 
-/** Returns the file URL of the folder where the executable resides.
- */
-OUString getExecutableDirectory();
-
 enum FileStatus
 {
     FILE_OK,

@@ -183,18 +183,6 @@ OUString getDirFromFile(const OUString& usFilePath)
     return OUString(usFilePath.getStr(), index);
 }
 
-OUString getExecutableDirectory()
-{
-    rtl_uString* sExe = NULL;
-    if (osl_getExecutableFile( & sExe) != osl_Process_E_None)
-        throw FrameworkException(
-            JFW_E_ERROR,
-            "[Java framework] Error in function getExecutableDirectory (fwkutil.cxx)");
-
-    OUString ouExe(sExe, SAL_NO_ACQUIRE);
-    return getDirFromFile(ouExe);
-}
-
 OUString getLibraryLocation()
 {
     OString sExcMsg("[Java framework] Error in function getLibraryLocation "

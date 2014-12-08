@@ -387,56 +387,6 @@ namespace dbtools
         return Any();
     }
 
-    Any OPredicateInputController::getPredicateValue(
-        const OUString& _sField, const OUString& _rPredicateValue, OUString* _pErrorMessage ) const
-    {
-        OUString sError;
-        OUString sField = _sField;
-        sal_Int32 nIndex = 0;
-        sField = sField.getToken(0,'(',nIndex);
-        if(nIndex == -1)
-            sField = _sField;
-        sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sField,&m_aParser.getContext());
-        if ( nType == DataType::OTHER || sField.isEmpty() )
-        {
-            // first try the international version
-            OUString sSql = "SELECT * FROM x WHERE " + sField + _rPredicateValue;
-            boost::scoped_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, true ) );
-            nType = DataType::DOUBLE;
-            if ( pParseNode.get() )
-            {
-                OSQLParseNode* pColumnRef = pParseNode->getByRule(OSQLParseNode::column_ref);
-                if ( pColumnRef )
-                {
-                }
-            }
-        }
-
-        Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-        parse::OParseColumn* pColumn = new parse::OParseColumn( sField,
-                                                                OUString(),
-                                                                OUString(),
-                                                                OUString(),
-                                                                ColumnValue::NULLABLE_UNKNOWN,
-                                                                0,
-                                                                0,
-                                                                nType,
-                                                                false,
-                                                                false,
-                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
-                                                                OUString(),
-                                                                OUString(),
-                                                                OUString());
-        Reference<XPropertySet> xColumn = pColumn;
-        pColumn->setFunction(true);
-        pColumn->setRealName(sField);
-
-        OSQLParseNode* pParseNode = implPredicateTree( sError, _rPredicateValue, xColumn );
-        if ( _pErrorMessage )
-            *_pErrorMessage = sError;
-        return pParseNode ? implParseNode(pParseNode, false) : Any();
-    }
-
     Any OPredicateInputController::implParseNode(OSQLParseNode* pParseNode, bool _bForStatementUse) const
     {
         if ( ! pParseNode )

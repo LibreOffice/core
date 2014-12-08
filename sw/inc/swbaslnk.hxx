@@ -39,13 +39,6 @@ class SwBaseLink : public ::sfx2::SvBaseLink
 protected:
     SwBaseLink(): m_pReReadThread(0) {}
 
-    SwBaseLink( const OUString& rNm, sal_uInt16 nObjectType, ::sfx2::SvLinkSource* pObj,
-                 SwCntntNode* pNode = 0 )
-        : ::sfx2::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
-        bSwapIn( false ), bNoDataFlag( false ), bIgnoreDataChanged( false ),
-        m_pReReadThread(0)
-    {}
-
 public:
     TYPEINFO_OVERRIDE();
 

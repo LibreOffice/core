@@ -40,8 +40,6 @@ namespace sfx2
 
 TYPEINIT0( SvBaseLink )
 
-static DdeTopic* FindTopic( const OUString &, sal_uInt16* = 0 );
-
 class  ImplDdeItem;
 
 struct BaseLink_Impl
@@ -150,7 +148,47 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     pImplData->ClientType.bIntrnlLnk = false;
 }
 
+#if defined WNT
 
+static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
+{
+    if( rLinkName.isEmpty() )
+        return 0;
+
+    OUString sNm( rLinkName );
+    sal_Int32 nTokenPos = 0;
+    OUString sService( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
+
+    DdeServices& rSvc = DdeService::GetServices();
+    for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
+    {
+        DdeService* pService = *aI;
+        if( pService->GetName() == sService )
+        {
+            // then we search for the Topic
+            OUString sTopic( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
+            if( pItemStt )
+                *pItemStt = nTokenPos;
+
+            std::vector<DdeTopic*>& rTopics = pService->GetTopics();
+
+            for( int i = 0; i < 2; ++i )
+            {
+                for( std::vector<DdeTopic*>::iterator iterTopic = rTopics.begin();
+                     iterTopic != rTopics.end(); ++iterTopic )
+                    if( (*iterTopic)->GetName() == sTopic )
+                        return *iterTopic;
+
+                // Topic not found?
+                // then we try once to create it
+                if( i || !pService->MakeTopic( sTopic ) )
+                    break;  // did not work, exiting
+            }
+            break;
+        }
+    }
+    return 0;
+}
 
 SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
     : pImpl(0)
@@ -189,7 +227,7 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
         xObj = pObj;
 }
 
-
+#endif
 
 SvBaseLink::~SvBaseLink()
 {
@@ -594,47 +632,6 @@ void ImplDdeItem::AdviseLoop( bool bOpen )
             aRef->Disconnect();
         }
     }
-}
-
-
-static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
-{
-    if( rLinkName.isEmpty() )
-        return 0;
-
-    OUString sNm( rLinkName );
-    sal_Int32 nTokenPos = 0;
-    OUString sService( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
-
-    DdeServices& rSvc = DdeService::GetServices();
-    for (DdeServices::iterator aI = rSvc.begin(); aI != rSvc.end(); ++aI)
-    {
-        DdeService* pService = *aI;
-        if( pService->GetName() == sService )
-        {
-            // then we search for the Topic
-            OUString sTopic( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
-            if( pItemStt )
-                *pItemStt = nTokenPos;
-
-            std::vector<DdeTopic*>& rTopics = pService->GetTopics();
-
-            for( int i = 0; i < 2; ++i )
-            {
-                for( std::vector<DdeTopic*>::iterator iterTopic = rTopics.begin();
-                     iterTopic != rTopics.end(); ++iterTopic )
-                    if( (*iterTopic)->GetName() == sTopic )
-                        return *iterTopic;
-
-                // Topic not found?
-                // then we try once to create it
-                if( i || !pService->MakeTopic( sTopic ) )
-                    break;  // did not work, exiting
-            }
-            break;
-        }
-    }
-    return 0;
 }
 
 }

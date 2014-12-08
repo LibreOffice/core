@@ -112,11 +112,6 @@ namespace dbtools
             OUString* _pErrorMessage = NULL
         ) const;
 
-        ::com::sun::star::uno::Any getPredicateValue(
-            const OUString& _sField
-            , const OUString& _rPredicateValue
-            , OUString* _pErrorMessage = NULL) const;
-
     private:
         ::connectivity::OSQLParseNode* implPredicateTree(
             OUString& _rErrorMessage,
