@@ -623,15 +623,12 @@ void FastSaxParserImpl::DefineNamespace( const OString& rPrefix, const OUString&
 {
     Entity& rEntity = getEntity();
     assert(!rEntity.maNamespaceCount.empty()); // need a context!
-    if( !rEntity.maNamespaceCount.empty() )
-    {
-        sal_uInt32 nOffset = rEntity.maNamespaceCount.top()++;
 
-        if( rEntity.maNamespaceDefines.size() <= nOffset )
-            rEntity.maNamespaceDefines.resize( rEntity.maNamespaceDefines.size() + 64 );
+    sal_uInt32 nOffset = rEntity.maNamespaceCount.top()++;
+    if( rEntity.maNamespaceDefines.size() <= nOffset )
+        rEntity.maNamespaceDefines.resize( rEntity.maNamespaceDefines.size() + 64 );
 
-        rEntity.maNamespaceDefines[nOffset].reset( new NamespaceDefine( rPrefix, GetNamespaceToken( namespaceURL ), namespaceURL ) );
-    }
+    rEntity.maNamespaceDefines[nOffset].reset( new NamespaceDefine( rPrefix, GetNamespaceToken( namespaceURL ), namespaceURL ) );
 }
 
 sal_Int32 FastSaxParserImpl::GetToken( const xmlChar* pName, sal_Int32 nameLen /* = 0 */ )
