@@ -2955,6 +2955,9 @@ bool adjustSingleRefInName(
         return false;
     }
 
+    if (!rCxt.maRange.In(rRef.toAbs(rPos)))
+        return false;
+
     bool bChanged = false;
 
     if (rCxt.mnColDelta)
