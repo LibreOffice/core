@@ -81,7 +81,7 @@ void SwDPage::lateInit(const SwDPage& rPage, SwDrawModel* const pNewModel)
     SwDrawModel* pSwDrawModel = pNewModel;
     if ( !pModel )
     {
-        pSwDrawModel = dynamic_cast< SwDrawModel* >( GetModel() );
+        pSwDrawModel = &dynamic_cast<SwDrawModel&>(*GetModel());
         assert( pSwDrawModel );
     }
     pDoc = &pSwDrawModel->GetDoc();
@@ -98,7 +98,7 @@ SwDPage* SwDPage::Clone(SdrModel* const pNewModel) const
     SwDrawModel* pSwDrawModel = 0;
     if ( pNewModel )
     {
-        pSwDrawModel = dynamic_cast< SwDrawModel* >( pNewModel );
+        pSwDrawModel = &dynamic_cast<SwDrawModel&>(*pNewModel);
         assert( pSwDrawModel );
     }
     pNewPage->lateInit( *this, pSwDrawModel );
