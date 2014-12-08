@@ -3952,10 +3952,13 @@ void DomainMapper_Impl::CloseFieldCommand()
                 OUString aCode( pContext->GetCommand().trim() );
                 xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.Fieldmark");
                 const uno::Reference<text::XTextContent> xTextContent(xFieldInterface, uno::UNO_QUERY_THROW);
-                uno::Reference< text::XTextAppend >  xTextAppend;
-                xTextAppend = m_aTextAppendStack.top().xTextAppend;
-                uno::Reference< text::XTextCursor > xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
-                if (xTextContent.is())
+                uno::Reference< text::XTextAppend > xTextAppend;
+                if (!m_aTextAppendStack.empty())
+                    xTextAppend = m_aTextAppendStack.top().xTextAppend;
+                uno::Reference< text::XTextCursor > xCrsr;
+                if (xTextAppend.is())
+                    xCrsr = xTextAppend->createTextCursorByRange(pContext->GetStartRange());
+                if (xTextAppend.is() && xTextContent.is())
                 {
                     xTextAppend->insertTextContent(xCrsr,xTextContent, sal_True);
                 }
