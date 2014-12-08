@@ -237,13 +237,7 @@ namespace sfx2 {
     class LinkManager;
 }
 
-// PageDescriptor-interface, Array because of inlines.
-class SwPageDescs : public std::vector<SwPageDesc*>
-{
-public:
-    // the destructor will free all objects still in the vector
-    ~SwPageDescs();
-};
+typedef boost::ptr_vector<SwPageDesc> SwPageDescs;
 
 // forward declaration
 void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem );
@@ -953,9 +947,9 @@ public:
 
     // PageDescriptor interface.
     sal_uInt16 GetPageDescCnt() const { return maPageDescs.size(); }
-    const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *maPageDescs[i]; }
-    SwPageDesc& GetPageDesc( sal_uInt16 i ) { return *maPageDescs[i]; }
-    SwPageDesc* FindPageDesc(const OUString& rName, sal_uInt16* pPos = NULL) const;
+    const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return maPageDescs[i]; }
+    SwPageDesc& GetPageDesc( sal_uInt16 i ) { return maPageDescs[i]; }
+    SwPageDesc* FindPageDesc(const OUString& rName, sal_uInt16* pPos = NULL);
 
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */
@@ -1680,9 +1674,9 @@ public:
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().
-    void CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc *pDesc, bool bLeft, bool bFirst);
+    void CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead, SwPageDesc &pDesc, bool bLeft, bool bFirst);
     // Copies master footer to left / first one, if necessary - used by ChgPageDesc().
-    void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc *pDesc, bool bLeft, bool bFirst);
+    void CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot, SwPageDesc &pDesc, bool bLeft, bool bFirst);
 
 };
 

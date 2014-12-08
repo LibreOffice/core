@@ -518,8 +518,6 @@ SwDoc::~SwDoc()
     // Destroy these only after destroying the FmtIndices, because the content
     // of headers/footers has to be deleted as well. If in the headers/footers
     // there are still Flys registered at that point, we have a problem.
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
-        delete pPageDesc;
     maPageDescs.clear();
 
     // Delete content selections.
@@ -723,10 +721,7 @@ void SwDoc::ClearDoc()
     // remove the dummy pagedesc from the array and delete all the old ones
     sal_uInt16 nDummyPgDsc = 0;
     if (FindPageDesc(pDummyPgDsc->GetName(), &nDummyPgDsc))
-        maPageDescs.erase(maPageDescs.begin() + nDummyPgDsc);
-
-    BOOST_FOREACH(SwPageDesc *pPageDesc, maPageDescs)
-        delete pPageDesc;
+        pDummyPgDsc = maPageDescs.release(maPageDescs.begin() + nDummyPgDsc).release();
     maPageDescs.clear();
 
     // Delete for Collections
