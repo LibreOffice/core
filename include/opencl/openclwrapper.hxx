@@ -16,7 +16,7 @@
 #include <vector>
 
 #include <boost/shared_ptr.hpp>
-#include <clew.h>
+#include <clew/clew.h>
 
 #include <sal/detail/log.h>
 #include <opencl/opencldllapi.h>

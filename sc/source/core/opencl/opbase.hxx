@@ -12,7 +12,7 @@
 
 #include <sal/log.hxx>
 
-#include <clew.h>
+#include <clew/clew.h>
 
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>

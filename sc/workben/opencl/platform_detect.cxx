@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-#include "clew.h"
+#include <clew/clew.h>
 
 using namespace std;
 
