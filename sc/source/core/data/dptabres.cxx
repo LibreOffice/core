@@ -2698,7 +2698,8 @@ bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
         {
             if (pResultData->GetGroupBase(it->mnSrcIndex) == nGroupBase)
             {
-                // same base (hierarchy between the two groups is irrelevant)
+                // coverity[copy_paste_error] - same base (hierarchy between
+                // the two groups is irrelevant)
                 bInclude = pResultData->HasCommonElement(
                     it->mnNameIndex, it->mnSrcIndex, aMemberData, nDimSource);
             }
