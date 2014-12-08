@@ -27,11 +27,13 @@ public:
     void testSwappedOutImageExport();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
+    void testGraphicShape();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSwappedOutImageExport);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
+    CPPUNIT_TEST(testGraphicShape);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -257,6 +259,94 @@ void Test::testImageWithSpecialID()
             CPPUNIT_ASSERT(xBitmap.is());
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(900), xBitmap->getSize().Width );
             CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(600), xBitmap->getSize().Height );
+        }
+    }
+}
+
+void Test::testGraphicShape()
+{
+    // There are two kind of images in Writer: 1) Writer specific handled by SwGrfNode and
+    // 2) graphic shape handled by SdrGrafObj (e.g. after copy&paste from Impress).
+
+    const OUString aFilterNames[] = {
+        "writer8",
+        "Rich Text Format",
+        "MS Word 97",
+        "Office Open XML Text",
+    };
+
+    // Trigger swap out mechanism to test swapped state factor too.
+    boost::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
+    batch->commit();
+
+    for( size_t nFilter = 0; nFilter < SAL_N_ELEMENTS(aFilterNames); ++nFilter )
+    {
+        if (mxComponent.is())
+            mxComponent->dispose();
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/graphic_shape.odt"), "com.sun.star.text.TextDocument");
+
+        // Export the document and import again for a check
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+
+        utl::MediaDescriptor aMediaDescriptor;
+        aMediaDescriptor["FilterName"] <<= aFilterNames[nFilter];
+
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+        uno::Reference< lang::XComponent > xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        // Check whether graphic exported well
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+
+        const OString sFailedMessage = OString("Failed on filter: ")
+            + OUStringToOString(aFilterNames[nFilter], RTL_TEXTENCODING_ASCII_US);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(2), xDraws->getCount());
+
+        uno::Reference<drawing::XShape> xImage = getShape(1);
+        uno::Reference< beans::XPropertySet > XPropSet( xImage, uno::UNO_QUERY_THROW );
+        // First image is embedded
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL != OUString("vnd.sun.star.GraphicObject:00000000000000000000000000000000"));
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(610), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(381), xBitmap->getSize().Height );
+        }
+
+        // MS filters make this kind of linked images broken !?
+        if( aFilterNames[nFilter] != "writer8" )
+            return;
+
+        // Second image is a linked one
+        xImage = getShape(2);
+        XPropSet.set( xImage, uno::UNO_QUERY_THROW );
+        // Check URL
+        {
+            OUString sURL;
+            XPropSet->getPropertyValue("GraphicURL") >>= sURL;
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), sURL.endsWith("linked_graphic.jpg"));
+        }
+        // Check size
+        {
+            uno::Reference<graphic::XGraphic> xGraphic;
+            XPropSet->getPropertyValue("Graphic") >>= xGraphic;
+            uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
+            CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xBitmap.is());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(620), xBitmap->getSize().Width );
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), static_cast<sal_Int32>(465), xBitmap->getSize().Height );
         }
     }
 }
