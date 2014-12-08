@@ -31,7 +31,6 @@ endif
 
 $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	boost_headers \
-    $(call gb_Helper_optional,OPENCL,clew) \
     icu_headers \
     icui18n \
     icuuc \
@@ -44,6 +43,8 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
+    $(call gb_Helper_optional,OPENCL, \
+        clew) \
     comphelper \
     cppu \
     cppuhelper \

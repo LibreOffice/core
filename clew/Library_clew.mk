@@ -28,8 +28,8 @@ $(eval $(call gb_Library_add_libs,clew,\
 ))
 endif
 
-$(eval $(call gb_Library_add_generated_cobjects,clew,\
-    UnpackedTarball/clcc/src/clew \
+$(eval $(call gb_Library_add_cobjects,clew,\
+    clew/source/clew \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -17,7 +17,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <clew.h>
+
+#include <clew/clew.h>
 
 #define DS_DEVICE_NAME_LENGTH 256
 

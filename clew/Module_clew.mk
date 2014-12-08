@@ -7,11 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,clcc))
+$(eval $(call gb_Module_Module,clew))
 
-$(eval $(call gb_Module_add_targets,clcc,\
+$(eval $(call gb_Module_add_targets,clew,\
 	Library_clew \
-	UnpackedTarball_clcc \
 ))
 
 # vim: set noet sw=4 ts=4:
