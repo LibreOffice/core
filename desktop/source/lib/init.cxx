@@ -251,6 +251,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
     pthread_t maThread;
 
     LibLibreOffice_Impl()
+        : maThread(0)
     {
         if(!(m_pOfficeClass = gOfficeClass.lock())) {
             m_pOfficeClass.reset(new LibreOfficeKitClass);
