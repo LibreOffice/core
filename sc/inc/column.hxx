@@ -165,6 +165,16 @@ friend class sc::TableValues;
         ScSetStringParam* pParam );
 
 public:
+
+    /** Broadcast mode for SetDirty(SCROW,SCROW,BroadcastMode). */
+    enum BroadcastMode
+    {
+        BROADCAST_NONE,             ///< no broadcasting
+        BROADCAST_DATA_POSITIONS,   ///< broadcast existing cells with position => does AreaBroadcast
+        BROADCAST_ALL_POSITIONS,    ///< broadcast all cells, including empty, with position => does AreaBroadcast
+        BROADCAST_BROADCASTERS      ///< broadcast only existing cell broadcasters => no AreaBroadcast of range!
+    };
+
                 ScColumn();
                 ~ScColumn();
 
@@ -362,7 +372,7 @@ public:
 
     void SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt );
     void SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans );
-    void SetDirty( SCROW nRow1, SCROW nRow2, bool bBroadcast, bool bIncludeEmptyCells );
+    void SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode );
     void        SetDirtyVar();
     void        SetDirtyAfterLoad();
     void        SetTableOpDirty( const ScRange& );

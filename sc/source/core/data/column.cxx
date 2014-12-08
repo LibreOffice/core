@@ -3055,29 +3055,33 @@ void ScColumn::SetDirtyFromClip( SCROW nRow1, SCROW nRow2, sc::ColumnSpanSet& rB
     aHdl.fillBroadcastSpans(rBroadcastSpans);
 }
 
-void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, bool bBroadcast, bool bIncludeEmptyCells )
+void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
 {
     // broadcasts everything within the range, with FormulaTracking
     sc::AutoCalcSwitch aSwitch(*pDocument, false);
 
     SetDirtyOnRangeHandler aHdl(*this);
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl, aHdl);
-    if (bBroadcast)
+    switch (eMode)
     {
-        if (bIncludeEmptyCells)
-        {
-            // Broadcast the changes.
-            ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, 0, nTab));
-            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-            {
-                aHint.GetAddress().SetRow(nRow);
-                pDocument->Broadcast(aHint);
-            }
-        }
-        else
-        {
+        case BROADCAST_NONE:
+            break;
+        case BROADCAST_DATA_POSITIONS:
             aHdl.broadcast();
-        }
+            break;
+        case BROADCAST_ALL_POSITIONS:
+            /* TODO: handle BROADCAST_BROADCASTERS separately and as it is
+             * intended when we handle the AreaBroadcast on the upper levels. */
+        case BROADCAST_BROADCASTERS:
+            {
+                ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, 0, nTab));
+                for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+                {
+                    aHint.GetAddress().SetRow(nRow);
+                    pDocument->Broadcast(aHint);
+                }
+            }
+            break;
     }
 }
 
