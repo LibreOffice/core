@@ -100,10 +100,12 @@ class ImplDdeItem : public DdeGetPutItem
     bool bIsValidData : 1;
     bool bIsInDTOR : 1;
 public:
+#if defined WNT
     ImplDdeItem( SvBaseLink& rLink, const OUString& rStr )
         : DdeGetPutItem( rStr ), pLink( &rLink ), bIsValidData( false ),
         bIsInDTOR( false )
     {}
+#endif
     virtual ~ImplDdeItem();
 
     virtual DdeData* Get( sal_uIntPtr ) SAL_OVERRIDE;
