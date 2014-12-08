@@ -142,9 +142,11 @@ ifeq ($(OS),WNT)
 #Assertion failed: this->is_initialized(), file C:\cygwin\home\buildslave\build\workdir\wntmsci14.pro\UnpackedTarball\boost\boost/optional/optional.hpp, line 638
 
 ifneq ($(VCVER)_$(WINDOWS_SDK_VERSION),110_70)
+ifneq ($(CPUNAME),X86_64)
 $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_ado \
 ))
+endif
 endif
 endif
 
