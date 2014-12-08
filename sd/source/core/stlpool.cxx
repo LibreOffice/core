@@ -640,8 +640,6 @@ struct HasFamilyPredicate : svl::StyleSheetPredicate
 
 void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString& rRenameSuffix)
 {
-    OUString aHelpFile;
-
     std::vector< std::pair< rtl::Reference< SfxStyleSheetBase >, OUString > > aNewStyles;
     std::vector< std::pair< OUString, OUString > > aRenamedList;
 
@@ -700,7 +698,10 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
                 aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, OUString >( xNewSheet, aParent ) );
 
             if( !bAddToList )
+            {
+                OUString aHelpFile;
                 xNewSheet->SetHelpId( aHelpFile, xSheet->GetHelpId( aHelpFile ) );
+            }
             xNewSheet->GetItemSet().Put( xSheet->GetItemSet() );
 
             rCreatedSheets.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( xNewSheet.get() ) ) );
