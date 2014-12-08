@@ -23,30 +23,11 @@
 
 SalShlData aSalShlData;
 
-extern "C"
+extern "C" BOOL WINAPI DllMain(HINSTANCE hInst, DWORD nReason, LPVOID)
 {
-
-#ifdef __MINGW32__
-bool WINAPI DllMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
-#else
-BOOL WINAPI _CRT_INIT( HINSTANCE hInst, DWORD nReason, LPVOID pReserved );
-
-BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
-#endif
-{
-    // Unsere DLL-Initialisierung
     if ( nReason == DLL_PROCESS_ATTACH )
         aSalShlData.mhInst = hInst;
-
-#ifndef __MINGW32__
-    if ( !_CRT_INIT( hInst, nReason, pReserved ) )
-        return 0;
-#else
-    (void)pReserved;
-#endif
     return 1;
-}
-
 }
 
 HCURSOR ImplLoadSalCursor( int nId )
