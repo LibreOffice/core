@@ -19,6 +19,8 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_SERVICEMACROS_HXX
 #define INCLUDED_CHART2_SOURCE_INC_SERVICEMACROS_HXX
 
+#include <cppuhelper/supportsservice.hxx>
+
 /*
 to use these macros the supported services and the implementation name needs to be static
 especially you need to implement (declaration is contained in macro already):
@@ -57,18 +59,10 @@ OUString Class::getImplementationName_Static()                              \
     return ImplName;                                                        \
 }                                                                           \
                                                                             \
-sal_Bool SAL_CALL Class::supportsService( const OUString& ServiceName )     \
+sal_Bool SAL_CALL Class::supportsService( const OUString& rServiceName )    \
     throw( css::uno::RuntimeException, std::exception )                     \
 {                                                                           \
-    css::uno::Sequence< OUString > aSNL = getSupportedServiceNames();       \
-    const OUString* pArray = aSNL.getArray();                               \
-    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )                       \
-    {                                                                       \
-        if( pArray[ i ] == ServiceName )                                    \
-            return sal_True;                                                \
-    }                                                                       \
-                                                                            \
-    return sal_False;                                                       \
+    return cppu::supportsService(this, rServiceName);                       \
 }                                                                           \
                                                                             \
 css::uno::Sequence< OUString > SAL_CALL Class::getSupportedServiceNames()   \
