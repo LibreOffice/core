@@ -25,7 +25,7 @@ import java.util.Random;
 
 import share.LogWriter;
 
-public class Test01 implements TempFileTest {
+public class Test01 {
     LogWriter m_aLogWriter;
     XMultiServiceFactory m_xMSF = null;
     XSimpleFileAccess m_xSFA = null;
