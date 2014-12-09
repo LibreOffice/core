@@ -32,7 +32,6 @@
  *
  *************************************************************************/
 
-// imports
 import com.sun.star.io.BufferSizeExceededException;
 import com.sun.star.io.NotConnectedException;
 import com.sun.star.io.XInputStream;

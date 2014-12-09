@@ -18,7 +18,6 @@
 
 package convwatch;
 
-// imports
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileFilter;
