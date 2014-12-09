@@ -21,6 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_INC_DLGEDFAC_HXX
 
 #include <svx/svdobj.hxx>
+#include <tools/link.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 
 namespace basctl

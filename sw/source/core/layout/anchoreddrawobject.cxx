@@ -641,7 +641,7 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 aPageRect = GetPageFrm()->Prt().SVRect();
             else
                 aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
-            nTargetWidth = aPageRect.GetWidth( ) * GetDrawObj( )->GetRelativeWidth( ).get( );
+            nTargetWidth = aPageRect.GetWidth( ) * (*GetDrawObj( )->GetRelativeWidth());
         }
 
         long nTargetHeight = aCurrObjRect.GetHeight( );
@@ -653,7 +653,7 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
                 aPageRect = GetPageFrm()->Prt().SVRect();
             else
                 aPageRect = GetPageFrm( )->GetBoundRect( ).SVRect();
-            nTargetHeight = aPageRect.GetHeight( ) * GetDrawObj( )->GetRelativeHeight( ).get( );
+            nTargetHeight = aPageRect.GetHeight( ) * (*GetDrawObj( )->GetRelativeHeight());
         }
 
         if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )

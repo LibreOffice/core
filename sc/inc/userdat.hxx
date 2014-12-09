@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_USERDAT_HXX
 
 #include <svx/svdobj.hxx>
+#include <tools/link.hxx>
 #include <svtools/imap.hxx>
 #include "global.hxx"
 #include "address.hxx"

@@ -129,6 +129,8 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
+#include <svx/svdglue.hxx>
+#include <svx/svdsob.hxx>
 #include <rtl/strbuf.hxx>
 #include <svdoopengl.hxx>
 #include <svdobjplusdata.hxx>

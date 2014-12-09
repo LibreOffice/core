@@ -22,6 +22,7 @@
 
 
 #include <svx/svdobj.hxx>
+#include <tools/link.hxx>
 
 namespace rptui
 {

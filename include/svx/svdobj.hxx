@@ -26,18 +26,13 @@
 #include <rtl/ustring.hxx>
 #include <svl/lstner.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/svdsob.hxx>
 #include <svx/svdtypes.hxx>
-#include <svx/svdglue.hxx>
-#include <svx/xdash.hxx>
-#include <svx/xpoly.hxx>
 #include <svx/xenum.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
 #include <tools/weakbase.hxx>
-#include <vcl/bitmapex.hxx>
-#include <vcl/mapmod.hxx>
-#include <vcl/timer.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/gen.hxx>
 
 // forward declarations
 
@@ -70,6 +65,19 @@ class SdrVirtObj;
 class SdrDragView;
 class SdrObjUserDataList;
 class SdrObjPlusData;
+class SdrGluePoint;
+class SdrGluePointList;
+class SetOfByte;
+class OutputDevice;
+class Fraction;
+class Link;
+
+namespace basegfx {
+
+class B2DPolyPolygon;
+class B2DHomMatrix;
+
+}
 
 namespace sdr
 {
