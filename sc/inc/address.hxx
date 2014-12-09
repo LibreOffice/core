@@ -108,52 +108,52 @@ const SCROW W16MAXROW = W16MAXROWCOUNT - 1;
 #endif
 
 //  old stuff defines end
-inline bool ValidCol( SCCOL nCol )
+SAL_WARN_UNUSED_RESULT inline bool ValidCol( SCCOL nCol )
 {
     return nCol >= static_cast<SCCOL>(0) && nCol <= MAXCOL;
 }
 
-inline bool ValidRow( SCROW nRow )
+SAL_WARN_UNUSED_RESULT inline bool ValidRow( SCROW nRow )
 {
     return nRow >= static_cast<SCROW>(0) && nRow <= MAXROW;
 }
 
-inline bool ValidTab( SCTAB nTab )
+SAL_WARN_UNUSED_RESULT inline bool ValidTab( SCTAB nTab )
 {
     return nTab >= static_cast<SCTAB>(0) && nTab <= MAXTAB;
 }
 
-inline bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
+SAL_WARN_UNUSED_RESULT inline bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
 {
     return nTab >= static_cast<SCTAB>(0) && nTab <= nMaxTab;
 }
 
-inline bool ValidColRow( SCCOL nCol, SCROW nRow )
+SAL_WARN_UNUSED_RESULT inline bool ValidColRow( SCCOL nCol, SCROW nRow )
 {
     return ValidCol( nCol) && ValidRow( nRow);
 }
 
-inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
+SAL_WARN_UNUSED_RESULT inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ValidCol( nCol) && ValidRow( nRow) && ValidTab( nTab);
 }
 
-inline SCCOL SanitizeCol( SCCOL nCol )
+SAL_WARN_UNUSED_RESULT inline SCCOL SanitizeCol( SCCOL nCol )
 {
     return nCol < 0 ? 0 : (nCol > MAXCOL ? MAXCOL : nCol);
 }
 
-inline SCROW SanitizeRow( SCROW nRow )
+SAL_WARN_UNUSED_RESULT inline SCROW SanitizeRow( SCROW nRow )
 {
     return nRow < 0 ? 0 : (nRow > MAXROW ? MAXROW : nRow);
 }
 
-inline SCTAB SanitizeTab( SCTAB nTab )
+SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab )
 {
     return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
 }
 
-inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
+SAL_WARN_UNUSED_RESULT inline SCTAB SanitizeTab( SCTAB nTab, SCTAB nMaxTab )
 {
     return nTab < 0 ? 0 : (nTab > nMaxTab ? nMaxTab : nTab);
 }
