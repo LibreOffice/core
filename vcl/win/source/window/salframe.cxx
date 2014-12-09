@@ -5848,7 +5848,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_APPCOMMAND:
             if( ImplHandleAppCommand( hWnd, lParam ) )
             {
-                rDef = false;
+                rDef = true;
                 nRet = 1;
             }
             break;
