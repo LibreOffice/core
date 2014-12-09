@@ -401,6 +401,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_CHRATR_CTL_WEIGHT:
                 static_cast<const SvxWeightItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_CHRATR_RSID:
+                static_cast<const SvxRsidItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -415,14 +418,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_CHRATR_RSID:
-            {
-                pWhich = "character rsid";
-                css::uno::Any aAny;
-                static_cast<const SvxRsidItem*>(pItem)->QueryValue(aAny);
-                oValue = OString::number(aAny.get<sal_uInt32>());
-                break;
-            }
             case RES_CHRATR_ROTATE: pWhich = "character rotation"; oValue = OString::number(static_cast<const SvxCharRotateItem*>(pItem)->GetValue()); break;
             case RES_PARATR_OUTLINELEVEL: pWhich = "paragraph outline level"; oValue = OString::number(static_cast<const SfxUInt16Item*>(pItem)->GetValue()); break;
             case RES_PARATR_NUMRULE: pWhich = "paragraph numbering rule"; oValue = OUStringToOString(static_cast<const SwNumRuleItem*>(pItem)->GetValue(), RTL_TEXTENCODING_UTF8); break;

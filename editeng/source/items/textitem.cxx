@@ -593,6 +593,7 @@ void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("svxPostureItem"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%d", GetValue());
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(GetValueTextByPos(GetValue()).toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
@@ -726,6 +727,7 @@ void SvxWeightItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("svxWeightItem"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%d", GetValue());
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(GetValueTextByPos(GetValue()).toUtf8().getStr()));
     xmlTextWriterEndElement(pWriter);
 }
@@ -3559,4 +3561,13 @@ SfxPoolItem* SvxRsidItem::Create(SvStream& rIn, sal_uInt16 ) const
 {
     return new SvxRsidItem( rIn, Which() );
 }
+
+void SvxRsidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxRsidItem"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%" SAL_PRIuUINT32, GetValue());
+    xmlTextWriterEndElement(pWriter);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
