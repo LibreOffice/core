@@ -160,13 +160,6 @@ protected:
     const char* mpTestDocumentPath;
     const char* mpFilter;
 
-    template<typename T>
-    struct MethodEntry
-    {
-        const char* pName;
-        void (T::*pMethod)();
-    };
-
     sal_uInt32 mnStartTime;
     utl::TempFile maTempFile;
     bool mbExported; ///< Does maTempFile already contain something useful?
