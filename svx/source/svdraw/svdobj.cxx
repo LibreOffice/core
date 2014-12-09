@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/svdobj.hxx>
 #include <config_features.h>
 
 #include "sal/config.h"
@@ -66,6 +67,7 @@
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <sdr/properties/emptyproperties.hxx>
 #include <svx/sdrhittesthelper.hxx>
+#include <svx/sdrobjectuser.hxx>
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/svdetc.hxx>
@@ -73,7 +75,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdoedge.hxx>
@@ -267,6 +268,11 @@ SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
     bCanConvToPathLineToArea(true),
     bCanConvToPolyLineToArea(true) {}
 
+struct SdrObject::Impl
+{
+    sdr::ObjectUserVector maObjectUsers;
+};
+
 
 // BaseProperties section
 
@@ -291,15 +297,16 @@ sdr::properties::BaseProperties& SdrObject::GetProperties() const
 
 void SdrObject::AddObjectUser(sdr::ObjectUser& rNewUser)
 {
-    maObjectUsers.push_back(&rNewUser);
+    mpImpl->maObjectUsers.push_back(&rNewUser);
 }
 
 void SdrObject::RemoveObjectUser(sdr::ObjectUser& rOldUser)
 {
-    const ::sdr::ObjectUserVector::iterator aFindResult = ::std::find(maObjectUsers.begin(), maObjectUsers.end(), &rOldUser);
-    if(aFindResult != maObjectUsers.end())
+    const sdr::ObjectUserVector::iterator aFindResult =
+        std::find(mpImpl->maObjectUsers.begin(), mpImpl->maObjectUsers.end(), &rOldUser);
+    if (aFindResult != mpImpl->maObjectUsers.end())
     {
-        maObjectUsers.erase(aFindResult);
+        mpImpl->maObjectUsers.erase(aFindResult);
     }
 }
 
@@ -340,8 +347,9 @@ void SdrObject::SetBoundRectDirty()
 
 TYPEINIT1(SdrObject,SfxListener);
 
-SdrObject::SdrObject()
-    :mpProperties(0L)
+SdrObject::SdrObject() :
+    mpImpl(new Impl),
+    mpProperties(0L)
     ,mpViewContact(0L)
     ,pObjList(NULL)
     ,pPage(NULL)
@@ -387,7 +395,7 @@ SdrObject::SdrObject()
 SdrObject::~SdrObject()
 {
     // tell all the registered ObjectUsers that the page is in destruction
-    ::sdr::ObjectUserVector aListCopy(maObjectUsers.begin(), maObjectUsers.end());
+    sdr::ObjectUserVector aListCopy(mpImpl->maObjectUsers.begin(), mpImpl->maObjectUsers.end());
     for(::sdr::ObjectUserVector::iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
     {
         sdr::ObjectUser* pObjectUser = *aIterator;
@@ -397,7 +405,7 @@ SdrObject::~SdrObject()
 
     // Clear the vector. This means that user do not need to call RemoveObjectUser()
     // when they get called from ObjectInDestruction().
-    maObjectUsers.clear();
+    mpImpl->maObjectUsers.clear();
 
     try
     {
@@ -431,6 +439,8 @@ SdrObject::~SdrObject()
         delete mpViewContact;
         mpViewContact = 0L;
     }
+
+    delete mpImpl;
 }
 
 void SdrObject::Free( SdrObject*& _rpObject )

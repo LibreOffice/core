@@ -26,6 +26,7 @@
 #include "svx/svdotable.hxx"
 #include "svx/svdobj.hxx"
 #include "svx/svdundo.hxx"
+#include <svx/sdrobjectuser.hxx>
 
 #include "celltypes.hxx"
 

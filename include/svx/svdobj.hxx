@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SVDOBJ_HXX
 #define INCLUDED_SVX_SVDOBJ_HXX
 
-#include <memory>
 #include <typeinfo>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -33,7 +32,6 @@
 #include <svx/xdash.hxx>
 #include <svx/xpoly.hxx>
 #include <svx/xenum.hxx>
-#include <svx/sdrobjectuser.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/shapeproperty.hxx>
 #include <tools/weakbase.hxx>
@@ -80,8 +78,10 @@ namespace sdr
     namespace properties
     {
         class BaseProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+    }
+
+    class ObjectUser;
+}
 
 // #110094#
 namespace sdr
@@ -262,10 +262,10 @@ class SvxShape;
 class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrObject >
 {
 private:
-    SdrObject( const SdrObject& ); // disabled
+    struct Impl;
+    Impl* mpImpl;
 
-    // ObjectUser section
-    sdr::ObjectUserVector                                           maObjectUsers;
+    SdrObject( const SdrObject& ); // disabled
 
 public:
     void AddObjectUser(sdr::ObjectUser& rNewUser);
