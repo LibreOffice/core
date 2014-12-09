@@ -3778,7 +3778,9 @@ bool ScFormulaCell::InterpretFormulaGroup()
     // The converted code does not have RPN tokens yet.  The interpreter will
     // generate them.
     mxGroup->meCalcState = sc::GroupCalcRunning;
-    if (!sc::FormulaGroupInterpreter::getStatic()->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aCode))
+    sc::FormulaGroupInterpreter *pInterpreter = sc::FormulaGroupInterpreter::getStatic();
+    if (pInterpreter == NULL ||
+        !pInterpreter->interpret(*pDocument, mxGroup->mpTopCell->aPos, mxGroup, aCode))
     {
         SAL_INFO("sc.opencl", "interpreting group " << mxGroup << " (state " << (int) mxGroup->meCalcState << ") failed, disabling");
         mxGroup->meCalcState = sc::GroupCalcDisabled;
