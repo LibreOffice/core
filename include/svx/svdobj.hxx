@@ -262,6 +262,8 @@ class SvxShape;
 class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrObject >
 {
 private:
+    SdrObject( const SdrObject& ); // disabled
+
     // ObjectUser section
     sdr::ObjectUserVector                                           maObjectUsers;
 
