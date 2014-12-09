@@ -20,7 +20,6 @@
  **/
 package complex.unoapi;
 
-// imports
 import base.java_complex;
 import complexlib.ComplexTestCase;
 import helper.OfficeProvider;

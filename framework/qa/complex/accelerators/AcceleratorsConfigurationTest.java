@@ -17,7 +17,6 @@
  */
 package complex.accelerators;
 
-// imports
 import com.sun.star.awt.KeyEvent;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;

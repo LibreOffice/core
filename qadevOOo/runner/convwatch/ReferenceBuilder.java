@@ -18,7 +18,6 @@
 
 package convwatch;
 
-// imports
 import java.io.File;
 import java.io.FileFilter;
 import com.sun.star.lang.XMultiServiceFactory;

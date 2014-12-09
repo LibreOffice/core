@@ -19,7 +19,6 @@
 // package name: as default, start with complex
 package qa;
 
-// imports
 import complexlib.ComplexTestCase;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Type;
