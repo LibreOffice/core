@@ -79,7 +79,7 @@ NSString* resolveAlias( NSString* i_pSystemPath )
 {
     NSString* pResolvedPath = nil;
     CFURLRef rUrl = CFURLCreateWithFileSystemPath( kCFAllocatorDefault,
-                                                   (CFStringRef)i_pSystemPath,
+                                                   reinterpret_cast<CFStringRef>(i_pSystemPath),
                                                    kCFURLPOSIXPathStyle, false);
     if( rUrl != NULL )
     {
