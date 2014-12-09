@@ -304,8 +304,8 @@ bool ScDetectiveFunc::HasError( const ScRange& rRange, ScAddress& rErrPos )
 Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) const
 {
     OSL_ENSURE( ValidColRow( nCol, nRow ), "ScDetectiveFunc::GetDrawPos - invalid cell address" );
-    SanitizeCol( nCol );
-    SanitizeRow( nRow );
+    nCol = SanitizeCol( nCol );
+    nRow = SanitizeRow( nRow );
 
     Point aPos;
 
