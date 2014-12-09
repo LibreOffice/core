@@ -2159,8 +2159,13 @@ style::NumberingType::
 
 OUString lcl_ParseFormat( const OUString& rCommand )
 {
-    //  The command looks like: " DATE \@ "dd MMMM yyyy"
-    return msfilter::util::findQuotedText(rCommand, "\\@ \"", '\"');
+    //  The command looks like: " DATE \@"dd MMMM yyyy"
+    //  Remove whitespace permitted by standard between \@ and "
+    sal_Int32 delimPos = rCommand.indexOf("\\@");
+    sal_Int32 wsChars = rCommand.indexOf('\"') - delimPos - 2;
+    OUString command = rCommand.replaceAt(delimPos+2, wsChars, "");
+
+    return msfilter::util::findQuotedText(command, "\\@\"", '\"');
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
