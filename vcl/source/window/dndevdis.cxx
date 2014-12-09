@@ -33,7 +33,6 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
 // DNDEventDispatcher::DNDEventDispatcher
-
 DNDEventDispatcher::DNDEventDispatcher( vcl::Window * pTopWindow ):
     m_pTopWindow( pTopWindow ),
     m_pCurrentWindow( NULL )
@@ -41,9 +40,9 @@ DNDEventDispatcher::DNDEventDispatcher( vcl::Window * pTopWindow ):
 }
 
 // DNDEventDispatcher::~DNDEventDispatcher
-
 DNDEventDispatcher::~DNDEventDispatcher()
 {
+    designate_currentwindow(NULL);
 }
 
 vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
@@ -71,8 +70,25 @@ vcl::Window* DNDEventDispatcher::findTopLevelWindow(Point location)
     return pChildWindow;
 }
 
-// DNDEventDispatcher::drop
+IMPL_LINK(DNDEventDispatcher, WindowEventListener, VclSimpleEvent*, pEvent)
+{
+    if (pEvent && pEvent->GetId() == VCLEVENT_OBJECT_DYING)
+    {
+        designate_currentwindow(NULL);
+    }
+    return 0;
+}
 
+void DNDEventDispatcher::designate_currentwindow(vcl::Window *pWindow)
+{
+    if (m_pCurrentWindow)
+        m_pCurrentWindow->RemoveEventListener(LINK(this, DNDEventDispatcher, WindowEventListener));
+    m_pCurrentWindow = pWindow;
+    if (m_pCurrentWindow)
+        m_pCurrentWindow->AddEventListener(LINK(this, DNDEventDispatcher, WindowEventListener));
+}
+
+// DNDEventDispatcher::drop
 void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     throw(RuntimeException, std::exception)
 {
@@ -105,7 +121,7 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     }
 
     // this is a drop -> no further drag overs
-    m_pCurrentWindow = NULL;
+    designate_currentwindow(NULL);
     m_aDataFlavorList.realloc( 0 );
 }
 
@@ -120,7 +136,7 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
     vcl::Window * pChildWindow = findTopLevelWindow(location);
 
     // assume pointer write operation to be atomic
-    m_pCurrentWindow = pChildWindow;
+    designate_currentwindow(pChildWindow);
     m_aDataFlavorList = dtdee.SupportedDataFlavors;
 
     // fire dragEnter on listeners of current window
@@ -145,7 +161,7 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
     fireDragExitEvent( m_pCurrentWindow );
 
     // reset member values
-    m_pCurrentWindow = NULL;
+    designate_currentwindow(NULL);
     m_aDataFlavorList.realloc( 0 );
 }
 
@@ -167,7 +183,7 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
         fireDragExitEvent( m_pCurrentWindow );
 
         // remember new window
-        m_pCurrentWindow = pChildWindow;
+        designate_currentwindow(pChildWindow);
 
         // fire dragEnter on listeners of current window
         nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
@@ -189,7 +205,6 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 }
 
 // DNDEventDispatcher::dropActionChanged
-
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
     throw(RuntimeException, std::exception)
 {
@@ -206,7 +221,7 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
         fireDragExitEvent( m_pCurrentWindow );
 
         // remember new window
-        m_pCurrentWindow = pChildWindow;
+        designate_currentwindow(pChildWindow);
 
         // fire dragEnter on listeners of current window
         nListeners = fireDragEnterEvent( pChildWindow, dtde.Context, dtde.DropAction, location,
