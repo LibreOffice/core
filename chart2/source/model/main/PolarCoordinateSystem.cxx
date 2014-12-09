@@ -64,13 +64,13 @@ PolarCoordinateSystem::~PolarCoordinateSystem()
 OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
     throw (RuntimeException, std::exception)
 {
-    return CHART2_COOSYSTEM_POLAR_SERVICE_NAME;
+    return OUString(CHART2_COOSYSTEM_POLAR_SERVICE_NAME);
 }
 
 OUString SAL_CALL PolarCoordinateSystem::getViewServiceName()
     throw (RuntimeException, std::exception)
 {
-    return CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME;
+    return OUString(CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME);
 }
 
 // ____ XCloneable ____
