@@ -2014,7 +2014,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         Point aPos = rCEvt.GetMousePosPixel();
         if ( !rCEvt.IsMouseEvent() )
         {
-            // Show menu enventually centered in selection
+            // Show menu eventually centered in selection
             Size aSize = GetOutputSizePixel();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }

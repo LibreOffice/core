@@ -1143,7 +1143,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
 
-        // add to shell-cursor-ring so that the regions will be moved enventually
+        // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrevRing(nullptr);
         if( bRegExp )
         {

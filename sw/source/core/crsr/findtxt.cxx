@@ -573,7 +573,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
         const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
-        // add to shell-cursor-ring so that the regions will be moved enventually
+        // add to shell-cursor-ring so that the regions will be moved eventually
         SwPaM* pPrev(nullptr);
         if( bRegExp )
         {
