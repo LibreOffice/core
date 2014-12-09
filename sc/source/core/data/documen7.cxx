@@ -96,7 +96,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
     }
 }
 
-void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
+void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint, bool bBroadcastSingleBroadcasters )
 {
     ClearFormulaContext();
 
@@ -118,26 +118,29 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
         bool bIsBroadcasted = false;
 
-        for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
+        if (bBroadcastSingleBroadcasters)
         {
-            ScTable* pTab = FetchTable(nTab);
-            if (!pTab)
-                continue;
-
-            rPos.SetTab(nTab);
-            for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+            for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
             {
-                rPos.SetCol(nCol);
-                /* TODO: to speed-up things a per column iterator to
-                 * cell-broadcast in a range of rows would come handy. */
-                for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+                ScTable* pTab = FetchTable(nTab);
+                if (!pTab)
+                    continue;
+
+                rPos.SetTab(nTab);
+                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
                 {
-                    SvtBroadcaster* pBC = pTab->GetBroadcaster( nCol, nRow);
-                    if (pBC)
+                    rPos.SetCol(nCol);
+                    /* TODO: to speed-up things a per column iterator to
+                     * cell-broadcast in a range of rows would come handy. */
+                    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
                     {
-                        rPos.SetRow(nRow);
-                        pBC->Broadcast(aHint);
-                        bIsBroadcasted = true;
+                        SvtBroadcaster* pBC = pTab->GetBroadcaster( nCol, nRow);
+                        if (pBC)
+                        {
+                            rPos.SetRow(nRow);
+                            pBC->Broadcast(aHint);
+                            bIsBroadcasted = true;
+                        }
                     }
                 }
             }

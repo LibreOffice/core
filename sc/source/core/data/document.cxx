@@ -3628,7 +3628,10 @@ void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
         SCTAB nTab2 = rRange.aEnd.Tab();
         for (SCTAB i=rRange.aStart.Tab(); i<=nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i]) maTabs[i]->SetDirty( rRange,
-                    (bIncludeEmptyCells ? ScColumn::BROADCAST_ALL_POSITIONS : ScColumn::BROADCAST_DATA_POSITIONS));
+                    (bIncludeEmptyCells ? ScColumn::BROADCAST_BROADCASTERS : ScColumn::BROADCAST_DATA_POSITIONS));
+
+        if (bIncludeEmptyCells)
+            BroadcastCells( rRange, SC_HINT_DATACHANGED, false);
     }
     SetAutoCalc( bOldAutoCalc );
 }
