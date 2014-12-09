@@ -1905,7 +1905,10 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
         }
     }
 
-    aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
+    if (bMore)
+        aIdle.SetPriority(VCL_IDLE_PRIORITY_LOW);
+    else
+        aIdle.SetPriority(VCL_IDLE_PRIORITY_LOWEST);
 
     aIdle.Start();
     return 0;
