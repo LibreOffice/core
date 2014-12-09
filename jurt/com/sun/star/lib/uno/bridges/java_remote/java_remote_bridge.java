@@ -499,7 +499,12 @@ public class java_remote_bridge
         try {
             _messageDispatcher.terminate();
 
-            _xConnection.close();
+            try {
+                _xConnection.close();
+            } catch (com.sun.star.io.IOException e) {
+                System.err.println(
+                    getClass().getName() + ".dispose - IOException:" + e);
+            }
 
             if (Thread.currentThread() != _messageDispatcher
                 && _messageDispatcher.isAlive())
@@ -519,6 +524,8 @@ public class java_remote_bridge
             // assert _java_environment instanceof java_environment;
             ((java_environment) _java_environment).revokeAllProxies();
 
+            proxyFactory.dispose();
+
             if (DEBUG) {
                 if (_life_count != 0) {
                     System.err.println(getClass().getName()
@@ -535,9 +542,6 @@ public class java_remote_bridge
         } catch (InterruptedException e) {
             System.err.println(getClass().getName()
                                + ".dispose - InterruptedException:" + e);
-        } catch (com.sun.star.io.IOException e) {
-            System.err.println(getClass().getName() + ".dispose - IOException:"
-                               + e);
         }
     }
 

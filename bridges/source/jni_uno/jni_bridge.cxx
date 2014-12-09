@@ -84,8 +84,8 @@ void SAL_CALL Mapping_map_to_uno(
                 static_cast< Mapping const * >( mapping )->m_bridge;
             JNI_guarded_context jni(
                 bridge->m_jni_info,
-                reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-                    bridge->m_java_env->pContext ) );
+                (static_cast<jni_uno::Context *>(bridge->m_java_env->pContext)
+                 ->machine));
 
             JNI_interface_type_info const * info =
                 static_cast< JNI_interface_type_info const * >(
@@ -135,8 +135,9 @@ void SAL_CALL Mapping_map_to_java(
                     static_cast< Mapping const * >( mapping )->m_bridge;
                 JNI_guarded_context jni(
                     bridge->m_jni_info,
-                    reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-                        bridge->m_java_env->pContext ) );
+                    (static_cast<jni_uno::Context *>(
+                        bridge->m_java_env->pContext)
+                     ->machine));
                 jni->DeleteGlobalRef( *ppJavaI );
                 *ppJavaI = 0;
             }
@@ -147,8 +148,8 @@ void SAL_CALL Mapping_map_to_java(
                 static_cast< Mapping const * >( mapping )->m_bridge;
             JNI_guarded_context jni(
                 bridge->m_jni_info,
-                reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-                    bridge->m_java_env->pContext ) );
+                (static_cast<jni_uno::Context *>(bridge->m_java_env->pContext)
+                 ->machine));
 
             JNI_interface_type_info const * info =
                 static_cast< JNI_interface_type_info const * >(
@@ -233,8 +234,7 @@ Bridge::Bridge(
 {
     // bootstrapping bridge jni_info
     m_jni_info = JNI_info::get_jni_info(
-        reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-            m_java_env->pContext ) );
+        static_cast<jni_uno::Context *>(m_java_env->pContext)->machine);
 
     assert(m_java_env != 0);
     assert(m_uno_env != 0);
@@ -409,21 +409,51 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
 
 using namespace ::jni_uno;
 
-extern "C"
-{
-namespace
-{
+extern "C" {
 
-
-void SAL_CALL java_env_disposing( uno_Environment * java_env )
-    SAL_THROW_EXTERN_C()
-{
-    ::jvmaccess::UnoVirtualMachine * machine =
-          reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-              java_env->pContext );
-    java_env->pContext = 0;
-    machine->release();
+void SAL_CALL java_env_dispose(uno_Environment * env) {
+    jni_uno::Context * context = static_cast<jni_uno::Context *>(env->pContext);
+    jobject async;
+    {
+        osl::MutexGuard g(context->mutex);
+        async = context->asynchronousFinalizer;
+        context->asynchronousFinalizer = nullptr;
+    }
+    if (async != nullptr) {
+        try {
+            jvmaccess::VirtualMachine::AttachGuard g(
+                context->machine->getVirtualMachine());
+            JNIEnv * jniEnv = g.getEnvironment();
+            jclass cl = jniEnv->FindClass(
+                "com/sun/star/lib/util/AsynchronousFinalizer");
+            if (cl == nullptr) {
+                jniEnv->ExceptionClear();
+                SAL_WARN("bridges", "exception in FindClass");
+            } else {
+                jmethodID id = jniEnv->GetMethodID(cl, "drain", "()V");
+                if (id == nullptr) {
+                    jniEnv->ExceptionClear();
+                    SAL_WARN("bridges", "exception in GetMethodID");
+                } else {
+                    jniEnv->CallObjectMethod(async, id);
+                    if (jniEnv->ExceptionOccurred()) {
+                        jniEnv->ExceptionClear();
+                        SAL_WARN("bridges", "exception in CallObjectMethod");
+                    }
+                }
+            }
+            jniEnv->DeleteGlobalRef(async);
+        } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
+            SAL_WARN(
+                "bridges",
+                "jvmaccess::VirtualMachine::AttachGuard::CreationException");
+        }
+    }
 }
+
+void SAL_CALL java_env_disposing(uno_Environment * env) {
+    java_env_dispose(env);
+    delete static_cast<jni_uno::Context *>(env->pContext);
 }
 
 #ifdef DISABLE_DYNLOADING
@@ -434,14 +464,53 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
+    java_env->pContext = new jni_uno::Context(
+        static_cast<jvmaccess::UnoVirtualMachine *>(java_env->pContext));
+    java_env->dispose = java_env_dispose;
     java_env->environmentDisposing = java_env_disposing;
     java_env->pExtEnv = 0; // no extended support
-    assert(java_env->pContext != 0);
-
-    ::jvmaccess::UnoVirtualMachine * machine =
-          reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-              java_env->pContext );
-    machine->acquire();
+    try {
+        jvmaccess::VirtualMachine::AttachGuard g(
+            static_cast<jni_uno::Context *>(java_env->pContext)->machine
+            ->getVirtualMachine());
+        JNIEnv * jniEnv = g.getEnvironment();
+        jclass cl = jniEnv->FindClass(
+            "com/sun/star/lib/util/AsynchronousFinalizer");
+        if (cl == nullptr) {
+            jniEnv->ExceptionClear();
+            SAL_WARN("bridges", "exception in FindClass");
+                //TODO: report failure
+        } else {
+            jmethodID id = jniEnv->GetMethodID(cl, "<init>", "()V");
+            if (id == nullptr) {
+                jniEnv->ExceptionClear();
+                SAL_WARN("bridges", "exception in GetMethodID");
+                    //TODO: report failure
+            } else {
+                jobject o = jniEnv->NewObject(cl, id);
+                if (o == nullptr) {
+                    jniEnv->ExceptionClear();
+                    SAL_WARN("bridges", "exception in NewObject");
+                        //TODO: report failure
+                } else {
+                    o = jniEnv->NewGlobalRef(o);
+                    if (o == nullptr) {
+                        jniEnv->ExceptionClear();
+                        SAL_WARN("bridges", "exception in NewGlobalRef");
+                            //TODO: report failure
+                    } else {
+                        (static_cast<jni_uno::Context *>(java_env->pContext)->
+                         asynchronousFinalizer)
+                            = o;
+                    }
+                }
+            }
+        }
+    } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
+        SAL_WARN(
+            "bridges",
+            "jvmaccess::VirtualMachine::AttachGuard::CreationException");
+    }
 }
 
 #ifdef DISABLE_DYNLOADING

@@ -731,6 +731,22 @@ void ComponentContext::disposing()
     for ( ; iPos != iEnd; ++iPos )
         delete iPos->second;
     m_map.clear();
+
+    // Hack to terminate any JNI bridge's AsynchronousFinalizer thread (as JNI
+    // proxies get finalized with arbitrary delay, so the bridge typically does
+    // not dispose itself early enough before the process exits):
+    uno_Environment ** envs;
+    sal_Int32 envCount;
+    uno_getRegisteredEnvironments(
+        &envs, &envCount, &rtl_allocateMemory, OUString("java").pData);
+    assert(envCount >= 0);
+    assert(envCount == 0 || envs != nullptr);
+    for (sal_Int32 i = 0; i != envCount; ++i) {
+        assert(envs[i] != nullptr);
+        assert(envs[i]->dispose != nullptr);
+        (*envs[i]->dispose)(envs[i]);
+    }
+    rtl_freeMemory(envs);
 }
 
 ComponentContext::ComponentContext(

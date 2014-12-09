@@ -724,7 +724,8 @@ JNI_info::JNI_info(
     m_method_JNI_proxy_create = jni->GetStaticMethodID(
         (jclass) jo_JNI_proxy.get(), "create",
         "(JLcom/sun/star/uno/IEnvironment;JJLcom/sun/star/uno/Type;Ljava/lang"
-        "/String;Ljava/lang/reflect/Constructor;)Ljava/lang/Object;" );
+        "/String;Ljava/lang/reflect/Constructor;"
+        "Lcom/sun/star/lib/util/AsynchronousFinalizer;)Ljava/lang/Object;" );
     jni.ensure_no_exception();
     assert( 0 != m_method_JNI_proxy_create );
     // field JNI_proxy.m_receiver_handle

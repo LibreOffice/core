@@ -63,7 +63,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     private final Type m_type;
     private final String m_oid;
     private final Class m_class;
-
+    private final AsynchronousFinalizer m_finalizer;
 
     public static String get_stack_trace( Throwable throwable )
         throws Throwable
@@ -98,16 +98,19 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     @Override
     protected void finalize()
     {
-        AsynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
-                public void run() throws Throwable {
-                    JNI_proxy.this.finalize( m_bridge_handle );
-                }
-            });
+        if (m_finalizer != null) {
+            m_finalizer.add(new AsynchronousFinalizer.Job() {
+                    public void run() throws Throwable {
+                        JNI_proxy.this.finalize( m_bridge_handle );
+                    }
+                });
+        }
     }
 
     private JNI_proxy(
         long bridge_handle, IEnvironment java_env,
-        long receiver_handle, long td_handle, Type type, String oid )
+        long receiver_handle, long td_handle, Type type, String oid,
+        AsynchronousFinalizer finalizer)
     {
         m_bridge_handle = bridge_handle;
         m_java_env = java_env;
@@ -116,16 +119,19 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
         m_type = type;
         m_oid = oid;
         m_class = m_type.getZClass();
+        m_finalizer = finalizer;
     }
 
     public static Object create(
         long bridge_handle, IEnvironment java_env,
         long receiver_handle, long td_handle, Type type, String oid,
-        java.lang.reflect.Constructor proxy_ctor )
+        java.lang.reflect.Constructor proxy_ctor,
+        AsynchronousFinalizer finalizer)
         throws Throwable
     {
         JNI_proxy handler = new JNI_proxy(
-            bridge_handle, java_env, receiver_handle, td_handle, type, oid );
+            bridge_handle, java_env, receiver_handle, td_handle, type, oid,
+            finalizer);
         Object proxy = proxy_ctor.newInstance( new Object [] { handler } );
         return java_env.registerInterface( proxy, new String [] { oid }, type );
     }

@@ -35,6 +35,37 @@ import java.util.LinkedList;
  * long-running finalize methods, this class could be removed again.</p>
  */
 public final class AsynchronousFinalizer {
+    public AsynchronousFinalizer() {
+        thread = new Thread("AsynchronousFinalizer") {
+                @Override
+                public void run() {
+                    for (;;) {
+                        Job j;
+                        synchronized (queue) {
+                            for (;;) {
+                                if (done) {
+                                    return;
+                                }
+                                if (!queue.isEmpty()) {
+                                    break;
+                                }
+                                try {
+                                    queue.wait();
+                                } catch (InterruptedException e) {
+                                    return;
+                                }
+                            }
+                            j = queue.remove(0);
+                        }
+                        try {
+                            j.run();
+                        } catch (Throwable e) {}
+                    }
+                }
+            };
+        thread.start();
+    }
+
     /**
      * Add a job to be executed asynchronously.
      *
@@ -43,7 +74,7 @@ public final class AsynchronousFinalizer {
      *
      * @param job represents the body of some finalize method; must not be null.
      */
-    public static void add(Job job) {
+    public void add(Job job) {
         synchronized (queue) {
             boolean first = queue.isEmpty();
             queue.add(job);
@@ -51,6 +82,14 @@ public final class AsynchronousFinalizer {
                 queue.notify();
             }
         }
+    }
+
+    public void drain() throws InterruptedException {
+        synchronized (queue) {
+            done = true;
+            queue.notify();
+        }
+        thread.join();
     }
 
     /**
@@ -65,31 +104,7 @@ public final class AsynchronousFinalizer {
         void run() throws Throwable;
     }
 
-    private static final LinkedList<Job> queue = new LinkedList<Job>();
-
-    static {
-        Thread t = new Thread("AsynchronousFinalizer") {
-                @Override
-                public void run() {
-                    for (;;) {
-                        Job j;
-                        synchronized (queue) {
-                            while (queue.isEmpty()) {
-                                try {
-                                    queue.wait();
-                                } catch (InterruptedException e) {}
-                            }
-                            j = queue.remove(0);
-                        }
-                        try {
-                            j.run();
-                        } catch (Throwable e) {}
-                    }
-                }
-            };
-        t.setDaemon(true);
-        t.start();
-    }
-
-    private AsynchronousFinalizer() {}
+    private final LinkedList<Job> queue = new LinkedList<Job>();
+    private final Thread thread;
+    private boolean done = false;
 }

@@ -128,8 +128,7 @@ void Bridge::call_java(
     assert( function_pos_offset == 0 || function_pos_offset == 1 );
 
     JNI_guarded_context jni(
-        m_jni_info, reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-            m_java_env->pContext ) );
+        m_jni_info, static_cast<Context *>(m_java_env->pContext)->machine);
 
     // assure fully initialized iface_td:
     ::com::sun::star::uno::TypeDescription iface_holder;
@@ -529,8 +528,7 @@ void SAL_CALL UNO_proxy_free( uno_ExtEnvironment * env, void * proxy )
     {
         JNI_guarded_context jni(
             bridge->m_jni_info,
-            reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-                bridge->m_java_env->pContext ) );
+            static_cast<Context *>(bridge->m_java_env->pContext)->machine);
 
         jni->DeleteGlobalRef( that->m_javaI );
         jni->DeleteGlobalRef( that->m_jo_oid );
@@ -674,8 +672,8 @@ void SAL_CALL UNO_proxy_dispatch(
                     JNI_info const * jni_info = bridge->m_jni_info;
                     JNI_guarded_context jni(
                         jni_info,
-                        reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
-                            bridge->m_java_env->pContext ) );
+                        (static_cast<Context *>(bridge->m_java_env->pContext)
+                         ->machine));
 
                     JNI_interface_type_info const * info =
                         static_cast< JNI_interface_type_info const * >(

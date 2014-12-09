@@ -57,6 +57,10 @@ final class ProxyFactory {
         }
     }
 
+    public void dispose() throws InterruptedException {
+        asynchronousFinalizer.drain();
+    }
+
     public static XBridge getBridge(Object obj) {
         if (Proxy.isProxyClass(obj.getClass())) {
             InvocationHandler h = Proxy.getInvocationHandler(obj);
@@ -126,13 +130,10 @@ final class ProxyFactory {
 
         @Override
         protected void finalize() {
-            AsynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
+            decrementDebugCount();
+            asynchronousFinalizer.add(new AsynchronousFinalizer.Job() {
                     public void run() throws Throwable {
-                        try {
-                            request("release", null);
-                        } finally {
-                            decrementDebugCount();
-                        }
+                        request("release", null);
                     }
                 });
         }
@@ -187,4 +188,6 @@ final class ProxyFactory {
 
     private final RequestHandler requestHandler;
     private final XBridge bridge;
+    private final AsynchronousFinalizer asynchronousFinalizer =
+        new AsynchronousFinalizer();
 }

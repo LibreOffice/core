@@ -125,7 +125,8 @@ class JNI_guarded_context
 
 public:
     inline explicit JNI_guarded_context(
-        JNI_info const * jni_info, ::jvmaccess::UnoVirtualMachine * vm_access )
+        JNI_info const * jni_info,
+        rtl::Reference<jvmaccess::UnoVirtualMachine> const & vm_access)
         : AttachGuard( vm_access->getVirtualMachine() ),
           JNI_context(
               jni_info, AttachGuard::getEnvironment(),
