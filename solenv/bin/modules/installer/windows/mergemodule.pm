@@ -377,7 +377,7 @@ sub merge_mergemodules_into_msi_database
             {
                 $infoline = "ERROR: Could not execute $systemcall . Returnvalue: $returnvalue!\n";
                 push( @installer::globals::logfileinfo, $infoline);
-                installer::exiter::exit_program("ERROR: Could not merge msm file into database: $mergemodulehash->{'mergefilepath'} !", "merge_mergemodules_into_msi_database");
+                installer::exiter::exit_program("Could not merge msm file into database: $mergemodulehash->{'mergefilepath'}\n$infoline", "merge_mergemodules_into_msi_database");
             }
             else
             {
