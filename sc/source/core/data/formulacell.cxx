@@ -889,6 +889,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 
 ScFormulaCell::~ScFormulaCell()
 {
+    pDocument->RemoveFromFormulaTrack( this );
     pDocument->RemoveFromFormulaTree( this );
     pDocument->RemoveSubTotalCell(this);
     if (pCode->HasOpCode(ocMacro))
