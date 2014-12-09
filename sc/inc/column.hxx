@@ -101,6 +101,7 @@ struct ScFormulaCellGroup;
 struct ScRefCellValue;
 struct ScCellValue;
 class ScDocumentImport;
+class ScHint;
 
 struct ScNeededSizeOptions
 {
@@ -380,6 +381,13 @@ public:
     void CalcAfterLoad( sc::CompileFormulaContext& rCxt, bool bStartListening );
     void CompileAll( sc::CompileFormulaContext& rCxt );
     void CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rProgress );
+
+    /** Broadcast single broadcasters in range, without explicitly setting
+        anything dirty, not doing area broadcasts.
+        @param rHint address is modified to adapt to the actual broadcasted
+                position on each iteration and upon return points to the last
+                position broadcasted. */
+    bool BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, ScHint& rHint );
 
     bool CompileErrorCells( sc::CompileFormulaContext& rCxt, sal_uInt16 nErrCode );
 

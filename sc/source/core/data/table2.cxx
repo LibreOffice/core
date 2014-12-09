@@ -1729,6 +1729,16 @@ void ScTable::BroadcastRecalcOnRefMove()
         aCol[i].BroadcastRecalcOnRefMove();
 }
 
+bool ScTable::BroadcastBroadcasters( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScHint& rHint )
+{
+    bool bBroadcasted = false;
+    sc::AutoCalcSwitch aSwitch(*pDocument, false);
+    rHint.GetAddress().SetTab(nTab);
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        bBroadcasted |= aCol[nCol].BroadcastBroadcasters( nRow1, nRow2, rHint);
+    return bBroadcasted;
+}
+
 void ScTable::TransferListeners(
     ScTable& rDestTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOL nColDelta, SCROW nRowDelta )

@@ -110,9 +110,6 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint, bool bB
     SCCOL nCol1 = rRange.aStart.Col();
     SCCOL nCol2 = rRange.aEnd.Col();
 
-    ScHint aHint(nHint, ScAddress());
-    ScAddress& rPos = aHint.GetAddress();
-
     if (!bHardRecalcState)
     {
         ScBulkBroadcast aBulkBroadcast( pBASM);     // scoped bulk broadcast
@@ -120,29 +117,15 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint, bool bB
 
         if (bBroadcastSingleBroadcasters)
         {
+            ScHint aHint(nHint, ScAddress());
+
             for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
             {
                 ScTable* pTab = FetchTable(nTab);
                 if (!pTab)
                     continue;
 
-                rPos.SetTab(nTab);
-                for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-                {
-                    rPos.SetCol(nCol);
-                    /* TODO: to speed-up things a per column iterator to
-                     * cell-broadcast in a range of rows would come handy. */
-                    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
-                    {
-                        SvtBroadcaster* pBC = pTab->GetBroadcaster( nCol, nRow);
-                        if (pBC)
-                        {
-                            rPos.SetRow(nRow);
-                            pBC->Broadcast(aHint);
-                            bIsBroadcasted = true;
-                        }
-                    }
-                }
+                bIsBroadcasted |= pTab->BroadcastBroadcasters( nCol1, nRow1, nCol2, nRow2, aHint);
             }
         }
 

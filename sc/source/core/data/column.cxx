@@ -3059,19 +3059,32 @@ namespace {
 
 class BroadcastBroadcastersHandler
 {
-    ScHint maHint;
+    ScHint&     mrHint;
+    ScAddress&  mrAddress;
+    bool        mbBroadcasted;
 
 public:
-    BroadcastBroadcastersHandler( SCCOL nCol, SCTAB nTab, sal_uLong nHint ) :
-        maHint( nHint, ScAddress( nCol, 0, nTab)) {}
+    explicit BroadcastBroadcastersHandler( ScHint& rHint ) :
+        mrHint(rHint), mrAddress(mrHint.GetAddress()) {}
 
     void operator() ( size_t nRow, SvtBroadcaster* pBroadcaster )
     {
-        maHint.GetAddress().SetRow(nRow);
-        pBroadcaster->Broadcast(maHint);
+        mrAddress.SetRow(nRow);
+        pBroadcaster->Broadcast(mrHint);
+        mbBroadcasted = true;
     }
+
+    bool wasBroadcasted() { return mbBroadcasted; }
 };
 
+}
+
+bool ScColumn::BroadcastBroadcasters( SCROW nRow1, SCROW nRow2, ScHint& rHint )
+{
+    rHint.GetAddress().SetCol(nCol);
+    BroadcastBroadcastersHandler aBroadcasterHdl( rHint);
+    sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aBroadcasterHdl);
+    return aBroadcasterHdl.wasBroadcasted();
 }
 
 void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
@@ -3115,8 +3128,8 @@ void ScColumn::SetDirty( SCROW nRow1, SCROW nRow2, BroadcastMode eMode )
                 SetDirtyOnRangeHandler aHdl(*this);
                 sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aHdl);
                 // Broadcast all broadcasters in range.
-                BroadcastBroadcastersHandler aBroadcasterHdl( nCol, nTab, SC_HINT_DATACHANGED);
-                sc::ProcessBroadcaster(maBroadcasters.begin(), maBroadcasters, nRow1, nRow2, aBroadcasterHdl);
+                ScHint aHint( SC_HINT_DATACHANGED, ScAddress( nCol, nRow1, nTab));
+                BroadcastBroadcasters( nRow1, nRow2, aHint);
             }
             break;
     }
