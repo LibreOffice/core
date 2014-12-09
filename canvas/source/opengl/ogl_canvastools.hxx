@@ -26,7 +26,7 @@ namespace basegfx {
 namespace oglcanvas
 {
         void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly,
-            RenderHelper *renderHelper, glm::vec4 color, const bool hasTexture);
+            RenderHelper *renderHelper, glm::vec4 color);
         void renderPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper, glm::vec4 color );
         void renderTransformComplexPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper,
             glm::vec4 color, glm::mat4 transform);

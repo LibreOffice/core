@@ -180,7 +180,7 @@ namespace oglcanvas
             const ::basegfx::B2DPolyPolygonVector::const_iterator aEnd=rPolyPolygons.end();
             while( aCurr != aEnd )
             {
-                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color, false);
+                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color);
             }
 
             return true;
@@ -213,6 +213,13 @@ namespace oglcanvas
                 aBounds.expand(::basegfx::tools::getRange(*aCurr++));
             aTextureTransform.translate(-aBounds.getMinX(), -aBounds.getMinY());
             aTextureTransform.scale(1/aBounds.getWidth(), 1/aBounds.getHeight());
+            const float aTextureTransformation[] =
+            {
+                    float(aTextureTransform.get(1,0)), float(aTextureTransform.get(1,1)),
+                    float(aTextureTransform.get(1,2)), float(aTextureTransform.get(0,0)),
+                    float(aTextureTransform.get(0,1)), float(aTextureTransform.get(0,2))
+            };
+            const glm::mat3x2 aTexTransform = glm::make_mat3x2(aTextureTransformation);
 
             const sal_Int32 nNumCols=rValues.maColors.getLength();
             uno::Sequence< rendering::ARGBColor > aColors(nNumCols);
@@ -223,36 +230,45 @@ namespace oglcanvas
 
             OSL_ASSERT(nNumCols == rValues.maStops.getLength());
 
-            switch( rValues.meType )
-            {
-                case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
-                    rHelper.getDeviceHelper()->useLinearGradientShader(pColors,
-                                                                       rValues.maStops,
-                                                                       aTextureTransform);
-                    break;
-
-                case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
-                    rHelper.getDeviceHelper()->useRadialGradientShader(pColors,
-                                                                       rValues.maStops,
-                                                                       aTextureTransform);
-                    break;
-
-                case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
-                    rHelper.getDeviceHelper()->useRectangularGradientShader(pColors,
-                                                                            rValues.maStops,
-                                                                            aTextureTransform);
-                    break;
-
-                default:
-                    ENSURE_OR_THROW( false,
-                                      "CanvasHelper lcl_fillGradientPolyPolygon(): Unexpected case" );
-            }
-
-
             aCurr=rPolyPolygons.begin();
             while( aCurr != aEnd )
             {
-                renderComplexPolyPolygon(*aCurr++, pRenderHelper, color, true);
+                ::basegfx::B2DPolyPolygon aPolyPoly(*aCurr++);
+                if( aPolyPoly.areControlPointsUsed() )
+                    aPolyPoly =   aPolyPoly.getDefaultAdaptiveSubdivision();
+                const ::basegfx::B2DRange& rBounds(aPolyPoly.getB2DRange());
+                const double nWidth=rBounds.getWidth();
+                const double nHeight=rBounds.getHeight();
+                const ::basegfx::B2DPolygon& rTriangulatedPolygon(
+                    ::basegfx::triangulator::triangulate(aPolyPoly));
+                if(rTriangulatedPolygon.count()>0)
+                {
+                    std::vector<glm::vec2> vertices;
+                    vertices.reserve(rTriangulatedPolygon.count());
+                    for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
+                    {
+                        const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
+                        vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
+                    }
+                    switch(rValues.meType)
+                    {
+                        case ::canvas::ParametricPolyPolygon::GRADIENT_LINEAR:
+                            pRenderHelper->renderLinearGradient( vertices, nWidth, nHeight, GL_TRIANGLES,
+                                                    pColors, rValues.maStops, aTexTransform);
+                            break;
+                        case ::canvas::ParametricPolyPolygon::GRADIENT_ELLIPTICAL:
+                            pRenderHelper->renderRadialGradient( vertices, nWidth, nHeight, GL_TRIANGLES,
+                                                    pColors, rValues.maStops, aTexTransform);
+                            break;
+                        case ::canvas::ParametricPolyPolygon::GRADIENT_RECTANGULAR:
+                            pRenderHelper->renderRectangularGradient( vertices, nWidth, nHeight, GL_TRIANGLES,
+                                                    pColors, rValues.maStops, aTexTransform);
+                            break;
+                        default:
+                            ENSURE_OR_THROW( false,
+                                      "CanvasHelper lcl_fillGradientPolyPolygon(): Unexpected case" );
+                    }
+                }
             }
 
             glUseProgram(0);

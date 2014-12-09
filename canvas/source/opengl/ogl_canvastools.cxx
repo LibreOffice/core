@@ -30,14 +30,11 @@ namespace oglcanvas
 {
     // triangulates polygon before
     void renderComplexPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly, RenderHelper *renderHelper,
-        glm::vec4 color, const bool hasTexture)
+        glm::vec4 color)
     {
         ::basegfx::B2DPolyPolygon aPolyPoly(rPolyPoly);
         if( aPolyPoly.areControlPointsUsed() )
             aPolyPoly = rPolyPoly.getDefaultAdaptiveSubdivision();
-        const ::basegfx::B2DRange& rBounds(aPolyPoly.getB2DRange());
-        const double nWidth=rBounds.getWidth();
-        const double nHeight=rBounds.getHeight();
         const ::basegfx::B2DPolygon& rTriangulatedPolygon(
             ::basegfx::triangulator::triangulate(aPolyPoly));
         if(rTriangulatedPolygon.count()>0)
@@ -50,10 +47,7 @@ namespace oglcanvas
                 vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
             }
 
-            if(hasTexture)
-                renderHelper->renderVertexTex( vertices, nWidth, nHeight,  color, GL_TRIANGLES);
-            else
-                renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
+            renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
         }
     }
 
