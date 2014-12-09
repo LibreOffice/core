@@ -1654,7 +1654,20 @@ void ScInterpreter::ScPow()
             PushIllegalArgument();
     }
     else
-        PushDouble(pow(fVal1,fVal2));
+    {
+        if (fVal1 < 0 && fVal2 != 0.0)
+        {
+            int i = (int) (1 / fVal2 + ((fVal2 < 0) ? -0.5 : 0.5));
+            if (rtl::math::approxEqual(1 / ((double) i), fVal2) && i % 2 != 0)
+                PushDouble(-pow(-fVal1, fVal2));
+            else
+                PushDouble(pow(fVal1, fVal2));
+        }
+        else
+        {
+            PushDouble(pow(fVal1,fVal2));
+        }
+    }
 }
 
 namespace {
