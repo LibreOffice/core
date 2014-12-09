@@ -47,7 +47,7 @@ import com.sun.star.container.XNamed;
  * Check the XCellRangesQuery interface on the SheetCell service. test was
  * created for bug i20044.
  */
-public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
+public class CheckXCellRangesQuery {
     XSpreadsheetDocument m_xSheetDoc = null;
     XCellRangesQuery m_xCell = null;
     XSpreadsheet m_xSpreadSheet = null;

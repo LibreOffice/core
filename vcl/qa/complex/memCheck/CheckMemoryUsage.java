@@ -89,8 +89,7 @@ class TempDir
     }
 }
 
-public class CheckMemoryUsage /* extends ComplexTestCase */
-
+public class CheckMemoryUsage
 {
 
     private static final String sWriterDoc = "sxw,writer_pdf_Export";

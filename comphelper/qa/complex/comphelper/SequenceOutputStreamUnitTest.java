@@ -54,7 +54,8 @@ class TestHelper
     }
 }
 
-public class SequenceOutputStreamUnitTest /* extends ComplexTestCase*/ {
+public class SequenceOutputStreamUnitTest
+{
     private XMultiServiceFactory m_xMSF = null;
 
     TestHelper m_aTestHelper = null;

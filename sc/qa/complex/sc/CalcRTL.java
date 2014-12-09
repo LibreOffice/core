@@ -52,7 +52,7 @@ import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
 
-public class CalcRTL /* extends ComplexTestCase */
+public class CalcRTL
 {
     XSpreadsheetDocument xSheetDoc = null;
 
