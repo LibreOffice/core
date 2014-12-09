@@ -64,13 +64,13 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem()
 OUString SAL_CALL CartesianCoordinateSystem::getCoordinateSystemType()
     throw (RuntimeException, std::exception)
 {
-    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
+    return OUString(CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME);
 }
 
 OUString SAL_CALL CartesianCoordinateSystem::getViewServiceName()
     throw (RuntimeException, std::exception)
 {
-    return CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME;
+    return OUString(CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME);
 }
 
 // ____ XCloneable ____
