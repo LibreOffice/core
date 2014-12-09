@@ -24,9 +24,6 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-namespace {
-    static const sal_Int32 gnResolution = 25;
-}
 /** Handle one animation function by using a timer for frequent calls to
     the animations operator().
 */
