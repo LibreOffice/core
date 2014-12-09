@@ -123,22 +123,30 @@ public class LOKitTileProvider implements TileProvider {
     }
 
     private boolean checkDocument() {
+        String error = null;
+        boolean ret;
+
         if (mDocument == null || !mOffice.getError().isEmpty()) {
-            Log.e(LOGTAG, "Error at loading: " + mOffice.getError());
-            return false;
+            error = "Cannot open " + mInputFile + ": " + mOffice.getError();
+            ret = false;
+        } else {
+            ret = resetDocumentSize();
+            if (!ret) {
+                error = "Document returned an invalid size or the document is empty!";
+            }
         }
 
-        boolean result = resetDocumentSize();
-        if (!result) {
+        if (!ret) {
+            final String message = error;
             LOKitShell.getMainHandler().post(new Runnable() {
                 @Override
                 public void run() {
-                    LibreOfficeMainActivity.mAppContext.showAlertDialog("Document returned an invalid size or the document is empty!");
+                    LibreOfficeMainActivity.mAppContext.showAlertDialog(message);
                 }
             });
         }
 
-        return result;
+        return ret;
     }
 
     private boolean resetDocumentSize() {
@@ -247,3 +255,5 @@ public class LOKitTileProvider implements TileProvider {
         resetDocumentSize();
     }
 }
+
+// vim:set shiftwidth=4 softtabstop=4 expandtab:
