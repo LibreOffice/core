@@ -164,6 +164,11 @@ void SbxVariable::Broadcast( sal_uIntPtr nHintId )
                 return;
             }
         }
+
+        //fdo#86843 Add a ref during the following block to guard against
+        //getting deleted before completing this method
+        SbxVariableRef aBroadcastGuard(this);
+
         // Avoid further broadcasting
         SfxBroadcaster* pSave = pCst;
         pCst = NULL;
