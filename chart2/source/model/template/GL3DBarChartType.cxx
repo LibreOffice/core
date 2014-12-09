@@ -11,6 +11,7 @@
 #include <servicenames_charttypes.hxx>
 #include <PropertyHelper.hxx>
 #include <unonames.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -100,8 +101,28 @@ GL3DBarChartType::GL3DBarChartType( const GL3DBarChartType& rOther ) :
 
 GL3DBarChartType::~GL3DBarChartType() {}
 
-APPHELPER_XSERVICEINFO_IMPL(
-    GL3DBarChartType, OUString("com.sun.star.comp.chart.GL3DBarChartType") );
+OUString SAL_CALL GL3DBarChartType::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString GL3DBarChartType::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.GL3DBarChartType");
+}
+
+sal_Bool SAL_CALL GL3DBarChartType::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL GL3DBarChartType::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Sequence<OUString> GL3DBarChartType::getSupportedServiceNames_Static()
 {

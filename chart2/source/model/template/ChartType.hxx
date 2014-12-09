@@ -23,7 +23,6 @@
 #include "OPropertySet.hxx"
 #include <cppuhelper/implbase6.hxx>
 #include <comphelper/uno3.hxx>
-#include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>

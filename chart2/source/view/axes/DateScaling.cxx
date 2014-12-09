@@ -21,6 +21,7 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <rtl/math.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <cppuhelper/supportsservice.hxx>
 
 namespace
 {
@@ -111,7 +112,28 @@ uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DateScaling, OUString(lcl_aServiceName_DateScaling) )
+OUString SAL_CALL DateScaling::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString DateScaling::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName_DateScaling);
+}
+
+sal_Bool SAL_CALL DateScaling::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL DateScaling::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 InverseDateScaling::InverseDateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShifted )
         : m_aNullDate( rNullDate )
@@ -192,7 +214,28 @@ uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( InverseDateScaling, OUString(lcl_aServiceName_InverseDateScaling) )
+OUString SAL_CALL InverseDateScaling::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString InverseDateScaling::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName_InverseDateScaling);
+}
+
+sal_Bool SAL_CALL InverseDateScaling::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL InverseDateScaling::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //namespace chart
 

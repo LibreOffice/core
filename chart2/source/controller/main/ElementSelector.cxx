@@ -27,6 +27,7 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -246,7 +247,28 @@ Reference< ::com::sun::star::accessibility::XAccessible > SelectorListBox::Creat
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ElementSelectorToolbarController, OUString(lcl_aServiceName) );
+OUString SAL_CALL ElementSelectorToolbarController::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ElementSelectorToolbarController::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
 {

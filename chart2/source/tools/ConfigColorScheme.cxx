@@ -23,6 +23,7 @@
 
 #include <unotools/configitem.hxx>
 #include <sal/macros.h>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <set>
 
@@ -177,8 +178,28 @@ Sequence< OUString > ConfigColorScheme::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ConfigColorScheme,
-                             OUString("com.sun.star.comp.chart2.ConfigDefaultColorScheme") )
+OUString SAL_CALL ConfigColorScheme::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ConfigColorScheme::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart2.ConfigDefaultColorScheme") ;
+}
+
+sal_Bool SAL_CALL ConfigColorScheme::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ConfigColorScheme::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

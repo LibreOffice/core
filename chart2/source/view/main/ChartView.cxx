@@ -56,6 +56,7 @@
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <boost/bind.hpp>
 #include <unotools/streamwrap.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -1321,10 +1322,30 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 
 // lang::XServiceInfo
 
-APPHELPER_XSERVICEINFO_IMPL(ChartView,CHART_VIEW_SERVICE_IMPLEMENTATION_NAME)
+OUString SAL_CALL ChartView::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
 
-    uno::Sequence< OUString > ChartView
-::getSupportedServiceNames_Static()
+OUString ChartView::getImplementationName_Static()
+{
+    return CHART_VIEW_SERVICE_IMPLEMENTATION_NAME;
+}
+
+sal_Bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
+uno::Sequence< OUString > ChartView::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART_VIEW_SERVICE_NAME;

@@ -46,6 +46,7 @@
 
 #include <algorithm>
 #include <comphelper/InlineContainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
@@ -881,7 +882,28 @@ uno::Sequence< OUString > DataSeriesPointWrapper::getSupportedServiceNames_Stati
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DataSeriesPointWrapper, OUString(lcl_aServiceName) );
+OUString SAL_CALL DataSeriesPointWrapper::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString DataSeriesPointWrapper::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL DataSeriesPointWrapper::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL DataSeriesPointWrapper::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace wrapper
 } //  namespace chart

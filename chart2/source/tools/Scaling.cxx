@@ -20,6 +20,7 @@
 #include "Scaling.hxx"
 #include <rtl/math.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include <cppuhelper/supportsservice.hxx>
 
 namespace
 {
@@ -84,7 +85,28 @@ uno::Sequence< OUString > LogarithmicScaling::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( LogarithmicScaling, OUString(lcl_aServiceName_Logarithmic) )
+OUString SAL_CALL LogarithmicScaling::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString LogarithmicScaling::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName_Logarithmic);
+}
+
+sal_Bool SAL_CALL LogarithmicScaling::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL LogarithmicScaling::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 ExponentialScaling::ExponentialScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
         m_fBase( 10.0 ),
@@ -132,7 +154,28 @@ uno::Sequence< OUString > ExponentialScaling::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ExponentialScaling, OUString(lcl_aServiceName_Exponential) )
+OUString SAL_CALL ExponentialScaling::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ExponentialScaling::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName_Exponential);
+}
+
+sal_Bool SAL_CALL ExponentialScaling::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ExponentialScaling::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 LinearScaling::LinearScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
         m_fSlope( 1.0 ),
@@ -184,7 +227,28 @@ uno::Sequence< OUString > LinearScaling::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( LinearScaling, OUString(lcl_aServiceName_Linear) )
+OUString SAL_CALL LinearScaling::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString LinearScaling::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName_Linear) ;
+}
+
+sal_Bool SAL_CALL LinearScaling::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL LinearScaling::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 PowerScaling::PowerScaling( const uno::Reference< uno::XComponentContext > & xContext ) :
         m_fExponent( 10.0 ),
@@ -235,7 +299,28 @@ uno::Sequence< OUString > PowerScaling::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PowerScaling, OUString(lcl_aServiceName_Power) )
+OUString SAL_CALL PowerScaling::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString PowerScaling::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName_Power);
+}
+
+sal_Bool SAL_CALL PowerScaling::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //namespace chart
 

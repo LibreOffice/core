@@ -23,7 +23,6 @@
 #include "MutexContainer.hxx"
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
-#include "ServiceMacros.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

@@ -23,6 +23,7 @@
 #include "CommonFunctors.hxx"
 #include "ModifyListenerHelper.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <rtl/math.hxx>
@@ -156,7 +157,28 @@ Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertyS
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( UncachedDataSequence, OUString(lcl_aServiceName) )
+OUString SAL_CALL UncachedDataSequence::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString UncachedDataSequence::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL UncachedDataSequence::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL UncachedDataSequence::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 // ________ XNumericalDataSequence ________
 Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()

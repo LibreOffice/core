@@ -13,7 +13,6 @@
 #include <MutexContainer.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <OPropertySet.hxx>
-#include <ServiceMacros.hxx>
 
 #include <comphelper/uno3.hxx>
 

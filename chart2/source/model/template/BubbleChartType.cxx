@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
@@ -223,8 +224,28 @@ uno::Sequence< OUString > BubbleChartType::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( BubbleChartType,
-                             OUString("com.sun.star.comp.chart.BubbleChartType") );
+OUString SAL_CALL BubbleChartType::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString BubbleChartType::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.BubbleChartType");
+}
+
+sal_Bool SAL_CALL BubbleChartType::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL BubbleChartType::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

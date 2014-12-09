@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_INC_POLARCOORDINATESYSTEM_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_INC_POLARCOORDINATESYSTEM_HXX
 
-#include "ServiceMacros.hxx"
 #include "BaseCoordinateSystem.hxx"
 
 namespace chart
@@ -48,7 +47,15 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XServiceInfo ____
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class PolarCoordinateSystem2d : public PolarCoordinateSystem
@@ -66,7 +73,15 @@ public:
         return (::cppu::OWeakObject *)new PolarCoordinateSystem2d( xContext );
     }
     // ____ XServiceInfo ____
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 class PolarCoordinateSystem3d : public PolarCoordinateSystem
@@ -84,7 +99,15 @@ public:
         return (::cppu::OWeakObject *)new PolarCoordinateSystem3d( xContext );
     }
     // ____ XServiceInfo ____
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 };
 
 }  // namespace chart

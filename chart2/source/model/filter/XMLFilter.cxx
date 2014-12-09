@@ -27,6 +27,7 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/documentconstants.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <sot/storage.hxx>
 #include <osl/diagnose.h>
@@ -777,7 +778,28 @@ OUString XMLFilter::getMediaType(bool _bOasis)
     return _bOasis ? MIMETYPE_OASIS_OPENDOCUMENT_CHART : MIMETYPE_VND_SUN_XML_CHART;
 }
 
-APPHELPER_XSERVICEINFO_IMPL( XMLFilter, OUString("com.sun.star.comp.chart2.XMLFilter") );
+OUString SAL_CALL XMLFilter::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString XMLFilter::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart2.XMLFilter");
+}
+
+sal_Bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL XMLFilter::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 void XMLReportFilterHelper::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )
 {

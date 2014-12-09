@@ -19,6 +19,7 @@
 
 #include "DataSource.hxx"
 #include "LabeledDataSequence.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using ::osl::MutexGuard;
 using ::com::sun::star::uno::Sequence;
@@ -69,7 +70,28 @@ Sequence< OUString > DataSource::getSupportedServiceNames_Static()
     return aServices;
 }
 
-APPHELPER_XSERVICEINFO_IMPL( DataSource, OUString(lcl_aServiceName) );
+OUString SAL_CALL DataSource::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString DataSource::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL DataSource::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } // namespace chart
 

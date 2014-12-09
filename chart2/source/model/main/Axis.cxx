@@ -43,6 +43,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -637,7 +638,28 @@ IMPLEMENT_FORWARD_XINTERFACE2( Axis, Axis_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Axis, Axis_Base, ::property::OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( Axis, OUString(lcl_aServiceName) );
+OUString SAL_CALL Axis::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString Axis::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL Axis::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL Axis::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

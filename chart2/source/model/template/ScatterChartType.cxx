@@ -26,6 +26,7 @@
 #include "AxisHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <unonames.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -259,8 +260,28 @@ uno::Sequence< OUString > ScatterChartType::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ScatterChartType,
-                             OUString("com.sun.star.comp.chart.ScatterChartType") );
+OUString SAL_CALL ScatterChartType::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ScatterChartType::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.ScatterChartType");
+}
+
+sal_Bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

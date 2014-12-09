@@ -26,6 +26,7 @@
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
 #include <unonames.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -315,7 +316,28 @@ uno::Sequence< OUString > RegressionEquation::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( RegressionEquation, OUString(lcl_aImplementationName) );
+OUString SAL_CALL RegressionEquation::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString RegressionEquation::getImplementationName_Static()
+{
+    return OUString(lcl_aImplementationName);
+}
+
+sal_Bool SAL_CALL RegressionEquation::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL RegressionEquation::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 using impl::RegressionEquation_Base;
 

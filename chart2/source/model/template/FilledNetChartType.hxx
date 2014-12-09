@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_FILLEDNETCHARTTYPE_HXX
 
 #include "NetChartType.hxx"
-#include "ServiceMacros.hxx"
 
 namespace chart
 {

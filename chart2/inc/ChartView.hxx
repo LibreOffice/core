@@ -21,7 +21,6 @@
 
 #include "ChartModel.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
-#include "ServiceMacros.hxx"
 #include <cppuhelper/implbase10.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -116,7 +115,15 @@ public:
     virtual ~ChartView();
 
     // ___lang::XServiceInfo___
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ___lang::XInitialization___
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )

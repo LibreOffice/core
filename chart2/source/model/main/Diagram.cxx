@@ -41,6 +41,7 @@
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <algorithm>
 #include <iterator>
@@ -745,8 +746,28 @@ IMPLEMENT_FORWARD_XINTERFACE2( Diagram, Diagram_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( Diagram,
-                             OUString("com.sun.star.comp.chart2.Diagram") );
+OUString SAL_CALL Diagram::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString Diagram::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart2.Diagram");
+}
+
+sal_Bool SAL_CALL Diagram::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL Diagram::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

@@ -22,6 +22,7 @@
 #include "MediaDescriptorHelper.hxx"
 #include "macros.hxx"
 #include <unotools/mediadescriptor.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -56,10 +57,30 @@ ChartFrameLoader::~ChartFrameLoader()
 
 // lang::XServiceInfo
 
-APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME)
+OUString SAL_CALL ChartFrameLoader::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
 
-    uno::Sequence< OUString > ChartFrameLoader
-::getSupportedServiceNames_Static()
+OUString ChartFrameLoader::getImplementationName_Static()
+{
+    return CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME;
+}
+
+sal_Bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
+uno::Sequence< OUString > ChartFrameLoader::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART_FRAMELOADER_SERVICE_NAME;

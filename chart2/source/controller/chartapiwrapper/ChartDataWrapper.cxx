@@ -28,6 +28,7 @@
 #include "DataSeriesHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "Chart2ModelContact.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
@@ -726,7 +727,28 @@ uno::Sequence< OUString > ChartDataWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ChartDataWrapper, OUString(lcl_aServiceName) );
+OUString SAL_CALL ChartDataWrapper::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ChartDataWrapper::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace wrapper
 } //  namespace chart

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_CONFIGCOLORSCHEME_HXX
 #define INCLUDED_CHART2_SOURCE_INC_CONFIGCOLORSCHEME_HXX
 
-#include "ServiceMacros.hxx"
 #include "ConfigItemListener.hxx"
 #include "charttoolsdllapi.hxx"
 #include <cppuhelper/implbase2.hxx>
@@ -61,7 +60,15 @@ public:
         return (::cppu::OWeakObject *)new ConfigColorScheme( xContext );
     }
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
 protected:
     // ____ XColorScheme ____

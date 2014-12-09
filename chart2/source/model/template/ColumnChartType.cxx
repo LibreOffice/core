@@ -23,6 +23,7 @@
 #include "PropertyHelper.hxx"
 #include "ContainerHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -194,8 +195,28 @@ uno::Sequence< OUString > ColumnChartType::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ColumnChartType,
-                             OUString("com.sun.star.comp.chart.ColumnChartType") );
+OUString SAL_CALL ColumnChartType::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ColumnChartType::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.ColumnChartType");
+}
+
+sal_Bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

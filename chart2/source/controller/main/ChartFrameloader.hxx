@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTFRAMELOADER_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_CHARTFRAMELOADER_HXX
 
-#include "ServiceMacros.hxx"
 #include <osl/conditn.hxx>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -53,8 +52,15 @@ public:
     virtual ~ChartFrameLoader();
 
     // ::com::sun::star::lang::XServiceInfo
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    APPHELPER_XSERVICEINFO_DECL()
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)
     {

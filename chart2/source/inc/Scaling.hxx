@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_CHART2_SOURCE_INC_SCALING_HXX
 #define INCLUDED_CHART2_SOURCE_INC_SCALING_HXX
-#include "ServiceMacros.hxx"
+
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -53,7 +53,15 @@ public:
         return (::cppu::OWeakObject *)new LogarithmicScaling( xContext );
     }
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )
@@ -96,7 +104,15 @@ public:
         return (::cppu::OWeakObject *)new ExponentialScaling( xContext );
     }
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XScaling ____
         virtual double SAL_CALL
@@ -139,7 +155,15 @@ public:
         return (::cppu::OWeakObject *)new LinearScaling( xContext );
     }
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )
@@ -181,7 +205,15 @@ public:
         return (::cppu::OWeakObject *)new PowerScaling( xContext );
     }
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XScaling ____
         virtual double SAL_CALL

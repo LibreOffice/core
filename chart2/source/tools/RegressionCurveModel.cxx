@@ -26,6 +26,7 @@
 #include "ContainerHelper.hxx"
 #include "CloneHelper.hxx"
 #include "PropertyHelper.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -369,7 +370,28 @@ uno::Sequence< OUString > MeanValueRegressionCurve::getSupportedServiceNames_Sta
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( MeanValueRegressionCurve, lcl_aImplementationName_MeanValue );
+OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString MeanValueRegressionCurve::getImplementationName_Static()
+{
+    return lcl_aImplementationName_MeanValue;
+}
+
+sal_Bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL MeanValueRegressionCurve::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClone()
     throw (uno::RuntimeException, std::exception)
@@ -395,7 +417,28 @@ uno::Sequence< OUString > LinearRegressionCurve::getSupportedServiceNames_Static
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( LinearRegressionCurve, lcl_aImplementationName_Linear );
+OUString SAL_CALL LinearRegressionCurve::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString LinearRegressionCurve::getImplementationName_Static()
+{
+    return lcl_aImplementationName_Linear;
+}
+
+sal_Bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL LinearRegressionCurve::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
     throw (uno::RuntimeException, std::exception)
@@ -421,7 +464,28 @@ uno::Sequence< OUString > LogarithmicRegressionCurve::getSupportedServiceNames_S
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( LogarithmicRegressionCurve, lcl_aImplementationName_Logarithmic );
+OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString LogarithmicRegressionCurve::getImplementationName_Static()
+{
+    return lcl_aImplementationName_Logarithmic;
+}
+
+sal_Bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL LogarithmicRegressionCurve::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createClone()
     throw (uno::RuntimeException, std::exception)
@@ -447,7 +511,28 @@ uno::Sequence< OUString > ExponentialRegressionCurve::getSupportedServiceNames_S
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ExponentialRegressionCurve, lcl_aImplementationName_Exponential );
+OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ExponentialRegressionCurve::getImplementationName_Static()
+{
+    return lcl_aImplementationName_Exponential;
+}
+
+sal_Bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ExponentialRegressionCurve::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createClone()
     throw (uno::RuntimeException, std::exception)
@@ -473,7 +558,28 @@ uno::Sequence< OUString > PotentialRegressionCurve::getSupportedServiceNames_Sta
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PotentialRegressionCurve, lcl_aImplementationName_Potential );
+OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString PotentialRegressionCurve::getImplementationName_Static()
+{
+    return lcl_aImplementationName_Potential;
+}
+
+sal_Bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PotentialRegressionCurve::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClone()
     throw (uno::RuntimeException, std::exception)
@@ -499,7 +605,28 @@ uno::Sequence< OUString > PolynomialRegressionCurve::getSupportedServiceNames_St
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PolynomialRegressionCurve, lcl_aImplementationName_Polynomial );
+OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString PolynomialRegressionCurve::getImplementationName_Static()
+{
+    return lcl_aImplementationName_Polynomial;
+}
+
+sal_Bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PolynomialRegressionCurve::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
     throw (uno::RuntimeException, std::exception)
@@ -525,7 +652,28 @@ uno::Sequence< OUString > MovingAverageRegressionCurve::getSupportedServiceNames
     return aServices;
 }
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( MovingAverageRegressionCurve, lcl_aImplementationName_MovingAverage );
+OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString MovingAverageRegressionCurve::getImplementationName_Static()
+{
+    return lcl_aImplementationName_MovingAverage;
+}
+
+sal_Bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL MovingAverageRegressionCurve::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()
     throw (uno::RuntimeException, std::exception)

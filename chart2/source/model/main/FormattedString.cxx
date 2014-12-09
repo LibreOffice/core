@@ -24,6 +24,7 @@
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
@@ -240,8 +241,28 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( FormattedString, FormattedString_Base, ::prope
 // do this in derived classes!
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( FormattedString,
-                             OUString("com.sun.star.comp.chart.FormattedString") );
+OUString SAL_CALL FormattedString::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString FormattedString::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.FormattedString");
+}
+
+sal_Bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL FormattedString::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

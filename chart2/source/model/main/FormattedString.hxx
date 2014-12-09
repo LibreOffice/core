@@ -23,7 +23,6 @@
 #include "OPropertySet.hxx"
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/uno3.hxx>
-#include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/chart2/XFormattedString2.hpp>
@@ -55,7 +54,15 @@ public:
     virtual ~FormattedString();
 
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
     /// establish methods for factory instatiation
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)

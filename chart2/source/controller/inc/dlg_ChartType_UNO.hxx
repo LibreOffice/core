@@ -20,13 +20,13 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CHARTTYPE_UNO_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CHARTTYPE_UNO_HXX
 
-#include "ServiceMacros.hxx"
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <vcl/vclevent.hxx>
 
 #include <svtools/genericunodialog.hxx>
+
 namespace chart
 {
 typedef ::svt::OGenericUnoDialog ChartTypeUnoDlg_BASE;

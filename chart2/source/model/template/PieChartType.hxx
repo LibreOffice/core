@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_PIECHARTTYPE_HXX
 
 #include "ChartType.hxx"
-#include "ServiceMacros.hxx"
 
 namespace chart
 {

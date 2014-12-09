@@ -25,6 +25,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
@@ -239,8 +240,28 @@ uno::Sequence< OUString > PieChartType::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PieChartType,
-                             OUString("com.sun.star.comp.chart.PieChartType") );
+OUString SAL_CALL PieChartType::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString PieChartType::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.PieChartType");
+}
+
+sal_Bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

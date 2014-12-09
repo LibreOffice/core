@@ -24,6 +24,7 @@
 #include "WrappedDirectStateProperty.hxx"
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
@@ -179,7 +180,28 @@ Sequence< OUString > AreaWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( AreaWrapper, OUString(lcl_aServiceName) );
+OUString SAL_CALL AreaWrapper::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString AreaWrapper::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL AreaWrapper::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL AreaWrapper::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace wrapper
 } //  namespace chart

@@ -47,6 +47,7 @@
 #include "AreaWrapper.hxx"
 #include "WrappedAddInProperty.hxx"
 #include "WrappedIgnoreProperty.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -1566,7 +1567,28 @@ uno::Sequence< OUString > ChartDocumentWrapper::getSupportedServiceNames_Static(
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ChartDocumentWrapper, CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME );
+OUString SAL_CALL ChartDocumentWrapper::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ChartDocumentWrapper::getImplementationName_Static()
+{
+    return CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME;
+}
+
+sal_Bool SAL_CALL ChartDocumentWrapper::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartDocumentWrapper::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace wrapper
 } //  namespace chart

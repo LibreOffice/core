@@ -24,6 +24,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
@@ -336,8 +337,28 @@ uno::Sequence< OUString > CandleStickChartType::getSupportedServiceNames_Static(
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( CandleStickChartType,
-                             OUString("com.sun.star.comp.chart.CandleStickChartType") );
+OUString SAL_CALL CandleStickChartType::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString CandleStickChartType::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.CandleStickChartType") ;
+}
+
+sal_Bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

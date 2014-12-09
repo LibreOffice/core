@@ -27,6 +27,7 @@
 #include "AxisIndexDefines.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -77,8 +78,28 @@ uno::Sequence< OUString > FilledNetChartType::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( FilledNetChartType,
-                             OUString("com.sun.star.comp.chart.FilledNetChartType") );
+OUString SAL_CALL FilledNetChartType::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString FilledNetChartType::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.FilledNetChartType");
+}
+
+sal_Bool SAL_CALL FilledNetChartType::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL FilledNetChartType::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

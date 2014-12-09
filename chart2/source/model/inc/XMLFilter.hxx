@@ -31,7 +31,6 @@
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <osl/mutex.hxx>
 
-#include "ServiceMacros.hxx"
 
 namespace com { namespace sun { namespace star {
 namespace embed
@@ -70,7 +69,15 @@ public:
         return (::cppu::OWeakObject *)new XMLFilter( xContext );
     }
     /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
 protected:
     // ____ XFilter ____

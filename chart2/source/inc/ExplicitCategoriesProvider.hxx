@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_EXPLICITCATEGORIESPROVIDER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_EXPLICITCATEGORIESPROVIDER_HXX
 
-#include "ServiceMacros.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>

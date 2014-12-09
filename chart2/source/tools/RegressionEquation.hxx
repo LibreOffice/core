@@ -28,7 +28,6 @@
 
 #include "MutexContainer.hxx"
 #include "OPropertySet.hxx"
-#include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 
 #include <cppuhelper/implbase5.hxx>

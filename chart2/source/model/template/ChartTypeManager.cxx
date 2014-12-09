@@ -35,6 +35,7 @@
 #include "BubbleChartTypeTemplate.hxx"
 #include "GL3DBarChartTypeTemplate.hxx"
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -612,8 +613,29 @@ Sequence< OUString > ChartTypeManager::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ChartTypeManager,
-                             OUString("com.sun.star.comp.chart.ChartTypeManager") );
+OUString SAL_CALL ChartTypeManager::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ChartTypeManager::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.ChartTypeManager");
+}
+
+sal_Bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

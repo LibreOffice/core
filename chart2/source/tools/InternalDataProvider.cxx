@@ -41,6 +41,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/charclass.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <vector>
@@ -1549,7 +1550,28 @@ Sequence< OUString > InternalDataProvider::getSupportedServiceNames_Static()
     return aServices;
 }
 
-APPHELPER_XSERVICEINFO_IMPL( InternalDataProvider, OUString(lcl_aServiceName) );
+OUString SAL_CALL InternalDataProvider::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString InternalDataProvider::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL InternalDataProvider::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL InternalDataProvider::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 

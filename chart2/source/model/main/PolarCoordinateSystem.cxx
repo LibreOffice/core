@@ -20,6 +20,7 @@
 #include "PolarCoordinateSystem.hxx"
 #include "macros.hxx"
 #include "servicenames_coosystems.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
@@ -85,8 +86,28 @@ Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem,
-                             OUString("com.sun.star.comp.chart.PolarCoordinateSystem") )
+OUString SAL_CALL PolarCoordinateSystem::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString PolarCoordinateSystem::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart.PolarCoordinateSystem");
+}
+
+sal_Bool SAL_CALL PolarCoordinateSystem::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 // ==== PolarCoordinateSystem2d ====
 
@@ -108,7 +129,28 @@ Sequence< OUString > PolarCoordinateSystem2d::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem2d, OUString(lcl_aImplementationNamePolar2d) )
+OUString SAL_CALL PolarCoordinateSystem2d::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString PolarCoordinateSystem2d::getImplementationName_Static()
+{
+    return OUString(lcl_aImplementationNamePolar2d) ;
+}
+
+sal_Bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 // ==== PolarCoordinateSystem3d ====
 
@@ -130,7 +172,28 @@ Sequence< OUString > PolarCoordinateSystem3d::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem3d, OUString(lcl_aImplementationNamePolar3d) )
+OUString SAL_CALL PolarCoordinateSystem3d::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString PolarCoordinateSystem3d::getImplementationName_Static()
+{
+    return OUString(lcl_aImplementationNamePolar3d);
+}
+
+sal_Bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 }  // namespace chart
 

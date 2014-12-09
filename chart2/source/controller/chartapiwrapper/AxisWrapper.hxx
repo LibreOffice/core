@@ -21,7 +21,6 @@
 
 #include "WrappedPropertySet.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
-#include "ServiceMacros.hxx"
 #include <cppuhelper/implbase5.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -68,7 +67,15 @@ public:
     static void getDimensionAndMainAxisBool( tAxisType eType, sal_Int32& rnDimensionIndex, bool& rbMainAxis );
 
     /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     //ReferenceSizePropertyProvider
     virtual void updateReferenceSize() SAL_OVERRIDE;

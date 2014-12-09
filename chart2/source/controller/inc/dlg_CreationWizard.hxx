@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_HXX
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_DLG_CREATIONWIZARD_HXX
 
-#include "ServiceMacros.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 #include "TabPageNotifiable.hxx"
 

@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_LINECHARTTYPE_HXX
 
 #include "ChartType.hxx"
-#include "ServiceMacros.hxx"
 #include <com/sun/star/chart2/CurveStyle.hpp>
 
 namespace chart

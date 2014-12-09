@@ -40,6 +40,7 @@
 
 #include <comphelper/InlineContainer.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <svl/numuno.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -315,7 +316,28 @@ void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aV
 
 // lang::XServiceInfo
 
-APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
+OUString SAL_CALL ChartModel::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ChartModel::getImplementationName_Static()
+{
+    return CHART_MODEL_SERVICE_IMPLEMENTATION_NAME;
+}
+
+sal_Bool SAL_CALL ChartModel::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartModel::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Sequence< OUString > ChartModel::getSupportedServiceNames_Static()
 {

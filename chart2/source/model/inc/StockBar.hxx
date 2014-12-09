@@ -25,7 +25,6 @@
 #include "MutexContainer.hxx"
 #include "OPropertySet.hxx"
 
-#include "ServiceMacros.hxx"
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 

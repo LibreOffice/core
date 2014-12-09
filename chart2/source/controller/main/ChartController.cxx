@@ -45,6 +45,7 @@
 #include "UndoActions.hxx"
 
 #include <comphelper/InlineContainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -302,7 +303,28 @@ bool ChartController::impl_isDisposedOrSuspended() const
 
 // lang::XServiceInfo
 
-APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME)
+OUString SAL_CALL ChartController::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ChartController::getImplementationName_Static()
+{
+    return CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME;
+}
+
+sal_Bool SAL_CALL ChartController::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ChartController::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 uno::Sequence< OUString > ChartController::getSupportedServiceNames_Static()
 {

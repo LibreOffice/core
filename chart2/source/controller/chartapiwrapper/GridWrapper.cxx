@@ -30,6 +30,7 @@
 #include "UserDefinedProperties.hxx"
 #include "WrappedDefaultProperty.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -185,7 +186,28 @@ Sequence< OUString > GridWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( GridWrapper, OUString(lcl_aServiceName) );
+OUString SAL_CALL GridWrapper::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString GridWrapper::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL GridWrapper::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL GridWrapper::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace wrapper
 } //  namespace chart

@@ -30,7 +30,6 @@
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
 #include "ModifyListenerHelper.hxx"
-#include "ServiceMacros.hxx"
 
 namespace chart
 {
@@ -59,7 +58,15 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
 protected:
     explicit DataPoint( const DataPoint & rOther );

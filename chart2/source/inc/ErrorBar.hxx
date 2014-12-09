@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_INC_ERRORBAR_HXX
 
 #include "MutexContainer.hxx"
-#include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "charttoolsdllapi.hxx"
 #include "LineProperties.hxx"
@@ -80,7 +79,16 @@ public:
     virtual ~ErrorBar();
 
     /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
+
     /// establish methods for factory instatiation
     static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
         throw(css::uno::Exception)

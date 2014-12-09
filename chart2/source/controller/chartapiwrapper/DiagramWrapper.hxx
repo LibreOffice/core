@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_DIAGRAMWRAPPER_HXX
 
 #include "WrappedPropertySet.hxx"
-#include "ServiceMacros.hxx"
 #include "DiagramHelper.hxx"
 
 #ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
@@ -82,7 +81,15 @@ public:
     virtual ~DiagramWrapper();
 
     /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XComponent ____
     virtual void SAL_CALL dispose()

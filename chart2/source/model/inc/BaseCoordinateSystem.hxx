@@ -19,7 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_INC_BASECOORDINATESYSTEM_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_INC_BASECOORDINATESYSTEM_HXX
 
-#include "ServiceMacros.hxx"
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
 #include <cppuhelper/implbase6.hxx>

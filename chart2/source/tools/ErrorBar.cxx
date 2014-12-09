@@ -25,6 +25,7 @@
 #include "PropertyHelper.hxx"
 #include "CloneHelper.hxx"
 
+#include <cppuhelper/supportsservice.hxx>
 #include <svl/itemprop.hxx>
 #include <vcl/svapp.hxx>
 
@@ -468,7 +469,28 @@ uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( ErrorBar, OUString(lcl_aServiceName) );
+OUString SAL_CALL ErrorBar::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString ErrorBar::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL ErrorBar::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL ErrorBar::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 // needed by MSC compiler
 using impl::ErrorBar_Base;

@@ -28,6 +28,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/msgbox.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -60,10 +61,30 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
     }
 }
 // lang::XServiceInfo
-APPHELPER_XSERVICEINFO_IMPL(CreationWizardUnoDlg,CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME)
+OUString SAL_CALL CreationWizardUnoDlg::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
 
-    uno::Sequence< OUString > CreationWizardUnoDlg
-::getSupportedServiceNames_Static()
+OUString CreationWizardUnoDlg::getImplementationName_Static()
+{
+    return CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME;
+}
+
+sal_Bool SAL_CALL CreationWizardUnoDlg::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL CreationWizardUnoDlg::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
+
+uno::Sequence< OUString > CreationWizardUnoDlg::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART_WIZARD_DIALOG_SERVICE_NAME;

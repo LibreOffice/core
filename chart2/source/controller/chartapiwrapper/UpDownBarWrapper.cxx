@@ -23,6 +23,7 @@
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
+#include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
@@ -382,7 +383,28 @@ Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( UpDownBarWrapper, OUString(lcl_aServiceName) );
+OUString SAL_CALL UpDownBarWrapper::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString UpDownBarWrapper::getImplementationName_Static()
+{
+    return OUString(lcl_aServiceName);
+}
+
+sal_Bool SAL_CALL UpDownBarWrapper::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL UpDownBarWrapper::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace wrapper
 } //  namespace chart

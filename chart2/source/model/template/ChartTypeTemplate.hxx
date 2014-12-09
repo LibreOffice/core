@@ -20,7 +20,6 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_CHARTTYPETEMPLATE_HXX
 
 #include <cppuhelper/implbase2.hxx>
-#include "ServiceMacros.hxx"
 #include "DataInterpreter.hxx"
 #include "StackMode.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>

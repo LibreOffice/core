@@ -26,6 +26,7 @@
 #include "ContainerHelper.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <cppuhelper/supportsservice.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -388,7 +389,28 @@ Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( DataInterpreter, OUString("com.sun.star.comp.chart2.DataInterpreter") );
+OUString SAL_CALL DataInterpreter::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString DataInterpreter::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart2.DataInterpreter");
+}
+
+sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } // namespace chart
 

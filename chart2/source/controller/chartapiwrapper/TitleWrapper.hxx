@@ -22,7 +22,6 @@
 #include "WrappedPropertySet.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
 #include "Chart2ModelContact.hxx"
-#include "ServiceMacros.hxx"
 #include "TitleHelper.hxx"
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
@@ -54,7 +53,15 @@ public:
     virtual ~TitleWrapper();
 
     /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     //ReferenceSizePropertyProvider
     virtual void updateReferenceSize() SAL_OVERRIDE;

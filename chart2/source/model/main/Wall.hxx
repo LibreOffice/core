@@ -26,7 +26,6 @@
 #include "OPropertySet.hxx"
 #include <cppuhelper/weak.hxx>
 
-#include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>

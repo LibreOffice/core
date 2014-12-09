@@ -18,7 +18,7 @@
  */
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_AXES_DATESCALING_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_AXES_DATESCALING_HXX
-#include "ServiceMacros.hxx"
+
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -28,9 +28,6 @@
 
 namespace chart
 {
-
-/**
-*/
 
 class DateScaling :
         public ::cppu::WeakImplHelper3 <
@@ -44,7 +41,15 @@ public:
     virtual ~DateScaling();
 
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )
@@ -76,7 +81,15 @@ public:
     virtual ~InverseDateScaling();
 
     /// declare XServiceInfo methods
-    APPHELPER_XSERVICEINFO_DECL()
+    virtual OUString SAL_CALL getImplementationName()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+            throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    static OUString getImplementationName_Static();
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
     // ____ XScaling ____
     virtual double SAL_CALL doScaling( double value )

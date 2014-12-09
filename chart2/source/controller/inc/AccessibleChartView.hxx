@@ -21,7 +21,6 @@
 
 #include "AccessibleBase.hxx"
 #include "MutexContainer.hxx"
-#include "ServiceMacros.hxx"
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>

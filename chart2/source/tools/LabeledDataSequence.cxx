@@ -20,6 +20,7 @@
 #include "LabeledDataSequence.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "macros.hxx"
+#include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star;
 
@@ -157,8 +158,28 @@ Sequence< OUString > LabeledDataSequence::getSupportedServiceNames_Static()
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
-APPHELPER_XSERVICEINFO_IMPL( LabeledDataSequence,
-                             OUString("com.sun.star.comp.chart2.LabeledDataSequence") )
+OUString SAL_CALL LabeledDataSequence::getImplementationName()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getImplementationName_Static();
+}
+
+OUString LabeledDataSequence::getImplementationName_Static()
+{
+    return OUString("com.sun.star.comp.chart2.LabeledDataSequence");
+}
+
+sal_Bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName )
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, rServiceName);
+}
+
+css::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedServiceNames()
+    throw( css::uno::RuntimeException, std::exception )
+{
+    return getSupportedServiceNames_Static();
+}
 
 } //  namespace chart
 
