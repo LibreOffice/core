@@ -108,8 +108,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 "PanelFactory::createUIElement called without SfxBindings",
                 NULL);
 
-    #define DoesResourceEndWith(s) rsResourceURL.endsWithAsciiL(s,strlen(s))
-        if (DoesResourceEndWith("/AlignmentPropertyPanel"))
+        if (rsResourceURL.endsWith("/AlignmentPropertyPanel"))
         {
             AlignmentPropertyPanel* pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -118,7 +117,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 pPanel,
                 ui::LayoutSize(-1,-1,-1));
         }
-        else if (DoesResourceEndWith("/CellAppearancePropertyPanel"))
+        else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))
         {
             CellAppearancePropertyPanel* pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -127,7 +126,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 pPanel,
                 ui::LayoutSize(-1,-1,-1));
         }
-        else if (DoesResourceEndWith("/NumberFormatPropertyPanel"))
+        else if (rsResourceURL.endsWith("/NumberFormatPropertyPanel"))
         {
             NumberFormatPropertyPanel* pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -136,7 +135,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 pPanel,
                 ui::LayoutSize(-1,-1,-1));
         }
-        else if (DoesResourceEndWith("/NavigatorPanel"))
+        else if (rsResourceURL.endsWith("/NavigatorPanel"))
         {
             vcl::Window* pPanel = new ScNavigatorDlg(pBindings, NULL, pParentWindow, false);
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -145,7 +144,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 pPanel,
                 ui::LayoutSize(0,-1,-1));
         }
-        else if (DoesResourceEndWith("/FunctionsPanel"))
+        else if (rsResourceURL.endsWith("/FunctionsPanel"))
         {
             vcl::Window* pPanel = new ScFunctionDockWin(pBindings, NULL, pParentWindow, ScResId(FID_FUNCTION_BOX));
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
@@ -154,7 +153,6 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
                 pPanel,
                 ui::LayoutSize(0,-1,-1));
         }
-#undef DoesResourceEndWith
     }
     catch (const uno::RuntimeException &)
     {
