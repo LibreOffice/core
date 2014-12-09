@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
 /* Document.
  */
 
-public class OLESimpleStorageUnitTest /* extends ComplexTestCase */
+public class OLESimpleStorageUnitTest
 {
     private XMultiServiceFactory m_xMSF = null;
 

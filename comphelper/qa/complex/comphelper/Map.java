@@ -49,7 +49,7 @@ import static org.junit.Assert.*;
 
 /** complex test case for the css.container.Map implementation
  */
-public class Map /* extends complexlib.ComplexTestCase */
+public class Map
 {
     private static String impl_getNth( int n )
     {

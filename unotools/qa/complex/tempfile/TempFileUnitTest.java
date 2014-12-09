@@ -29,7 +29,8 @@ import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
-public class TempFileUnitTest /* extends ComplexTestCase */ {
+public class TempFileUnitTest
+{
     private XMultiServiceFactory m_xMSF = null;
     private XSimpleFileAccess m_xSFA = null;
 
