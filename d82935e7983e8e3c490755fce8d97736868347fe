@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_b67b407b",
+        "filename": "sw/source/core/doc/docdesc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 628,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-12-09T03:29:46Z",
+      "side": 1,
+      "message": "Obviously this line is a double delete now.",
+      "revId": "d82935e7983e8e3c490755fce8d97736868347fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
