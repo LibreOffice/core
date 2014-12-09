@@ -111,13 +111,6 @@ public class LOKitThread extends Thread {
             case LOEvent.CLOSE:
                 closeDocument();
                 break;
-            case LOEvent.VIEWPORT:
-                mViewportMetrics = event.mViewportMetrics;
-                draw();
-                break;
-            case LOEvent.DRAW:
-                draw();
-                break;
             case LOEvent.SIZE_CHANGED:
                 redraw();
                 break;
