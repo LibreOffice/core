@@ -37,7 +37,6 @@ using ::std::vector;
 
 namespace {
 static const sal_Int32 snShortTimeoutCountThreshold (1);
-static const sal_Int32 snNormalTimeoutCountThreshold (5);
 }
 
 namespace sd { namespace framework {
