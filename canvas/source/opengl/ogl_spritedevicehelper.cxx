@@ -70,13 +70,7 @@ namespace oglcanvas
         mpSpriteCanvas(NULL),
         maActiveSprites(),
         maLastUpdate(),
-        mpTextureCache(new TextureCache()),
-        mnLinearTwoColorGradientProgram(0),
-        mnLinearMultiColorGradientProgram(0),
-        mnRadialTwoColorGradientProgram(0),
-        mnRadialMultiColorGradientProgram(0),
-        mnRectangularTwoColorGradientProgram(0),
-        mnRectangularMultiColorGradientProgram(0)
+        mpTextureCache(new TextureCache())
     {}
 
     SpriteDeviceHelper::~SpriteDeviceHelper()
@@ -99,26 +93,6 @@ namespace oglcanvas
         // init window context
         initContext();
         mRenderHelper.InitOpenGL();
-
-
-        mnLinearMultiColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "linearMultiColorGradientFragmentShader");
-
-        mnLinearTwoColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "linearTwoColorGradientFragmentShader");
-
-        mnRadialMultiColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "radialMultiColorGradientFragmentShader");
-
-        mnRadialTwoColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "radialTwoColorGradientFragmentShader");
-
-        mnRectangularMultiColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "rectangularMultiColorGradientFragmentShader");
-
-        mnRectangularTwoColorGradientProgram =
-            OpenGLHelper::LoadShaders("dummyVertexShader", "rectangularTwoColorGradientFragmentShader");
-
         mpContext->makeCurrent();
 
         notifySizeUpdate(rViewArea);
@@ -131,16 +105,6 @@ namespace oglcanvas
         mpSpriteCanvas = NULL;
         mpDevice = NULL;
         mpTextureCache.reset();
-
-        if( mpContext->isInitialized() )
-        {
-            glDeleteProgram( mnRectangularTwoColorGradientProgram );
-            glDeleteProgram( mnRectangularMultiColorGradientProgram );
-            glDeleteProgram( mnRadialTwoColorGradientProgram );
-            glDeleteProgram( mnRadialMultiColorGradientProgram );
-            glDeleteProgram( mnLinearTwoColorGradientProgram );
-            glDeleteProgram( mnLinearMultiColorGradientProgram );
-        }
         mpContext.reset();
         mRenderHelper.dispose();
     }
@@ -318,14 +282,15 @@ namespace oglcanvas
                       aSprites.end(),
                       boost::mem_fn(&CanvasCustomSprite::renderSprite));
 
-
+#ifdef DEBUG_RENDERING
         // frame counter, other info
         const double denominator( maLastUpdate.getElapsedTime() );
         maLastUpdate.reset();
 
+
         const double fps(denominator == 0.0 ? 100.0 : 1.0/denominator);
 
-#ifdef DEBUG_RENDERING
+
         std::vector<double> aVec;
         aVec.push_back(mfAlpha);
         aVec.push_back(mfPriority);
@@ -412,117 +377,6 @@ namespace oglcanvas
         maActiveSprites.erase(xSprite);
     }
 
-    static void setupUniforms( unsigned int                                 nProgramId,
-                               const ::basegfx::B2DHomMatrix&               rTexTransform )
-    {
-        const GLint nTransformLocation = glGetUniformLocation(nProgramId,
-                                                             "m_transform" );
-        // OGL is column-major
-        float aTexTransform[] =
-            {
-                float(rTexTransform.get(0,0)), float(rTexTransform.get(1,0)),
-                float(rTexTransform.get(0,1)), float(rTexTransform.get(1,1)),
-                float(rTexTransform.get(0,2)), float(rTexTransform.get(1,2))
-            };
-        glUniformMatrix3x2fv(nTransformLocation,1,false,aTexTransform);
-    }
-
-    static void setupUniforms( unsigned int                   nProgramId,
-                               const rendering::ARGBColor*    pColors,
-                               const uno::Sequence< double >& rStops,
-                               const ::basegfx::B2DHomMatrix& rTexTransform )
-    {
-        glUseProgram(nProgramId);
-
-        GLuint nColorsTexture;
-        glActiveTexture(GL_TEXTURE0);
-        glGenTextures(1, &nColorsTexture);
-        glBindTexture(GL_TEXTURE_1D, nColorsTexture);
-
-        const sal_Int32 nColors=rStops.getLength();
-        glTexImage1D( GL_TEXTURE_1D, 0, GL_RGBA, nColors, 0, GL_RGBA, GL_DOUBLE, pColors );
-        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-
-        GLuint nStopsTexture;
-        glActiveTexture(GL_TEXTURE1);
-        glGenTextures(1, &nStopsTexture);
-        glBindTexture(GL_TEXTURE_1D, nStopsTexture);
-
-        glTexImage1D( GL_TEXTURE_1D, 0, GL_ALPHA, nColors, 0, GL_ALPHA, GL_DOUBLE, rStops.getConstArray() );
-        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-
-        const GLint nColorArrayLocation = glGetUniformLocation(nProgramId,
-                                                               "t_colorArray4d" );
-        glUniform1i( nColorArrayLocation, 0 ); // unit 0
-
-        const GLint nStopArrayLocation = glGetUniformLocation(nProgramId,
-                                                              "t_stopArray1d" );
-        glUniform1i( nStopArrayLocation, 1 ); // unit 1
-
-        const GLint nNumColorLocation = glGetUniformLocation(nProgramId,
-                                                             "i_nColors" );
-        glUniform1i( nNumColorLocation, nColors-1 );
-
-        setupUniforms(nProgramId,rTexTransform);
-    }
-
-    static void setupUniforms( unsigned int                   nProgramId,
-                               const rendering::ARGBColor&    rStartColor,
-                               const rendering::ARGBColor&    rEndColor,
-                               const ::basegfx::B2DHomMatrix& rTexTransform )
-    {
-        glUseProgram(nProgramId);
-
-        const GLint nStartColorLocation = glGetUniformLocation(nProgramId,
-                                                               "v_startColor4d" );
-        glUniform4f(nStartColorLocation,
-                    rStartColor.Red,
-                    rStartColor.Green,
-                    rStartColor.Blue,
-                    rStartColor.Alpha);
-
-        const GLint nEndColorLocation = glGetUniformLocation(nProgramId,
-                                                             "v_endColor4d" );
-        glUniform4f(nEndColorLocation,
-                    rEndColor.Red,
-                    rEndColor.Green,
-                    rEndColor.Blue,
-                    rEndColor.Alpha);
-
-        setupUniforms(nProgramId,rTexTransform);
-    }
-
-    void SpriteDeviceHelper::useLinearGradientShader( const rendering::ARGBColor*    pColors,
-                                                      const uno::Sequence< double >& rStops,
-                                                      const ::basegfx::B2DHomMatrix& rTexTransform )
-    {
-        if( rStops.getLength() > 2 )
-            setupUniforms(mnLinearMultiColorGradientProgram, pColors, rStops, rTexTransform);
-        else
-            setupUniforms(mnLinearTwoColorGradientProgram, pColors[0], pColors[1], rTexTransform);
-    }
-
-    void SpriteDeviceHelper::useRadialGradientShader( const rendering::ARGBColor*    pColors,
-                                                      const uno::Sequence< double >& rStops,
-                                                      const ::basegfx::B2DHomMatrix& rTexTransform )
-    {
-        if( rStops.getLength() > 2 )
-            setupUniforms(mnRadialMultiColorGradientProgram, pColors, rStops, rTexTransform);
-        else
-            setupUniforms(mnRadialTwoColorGradientProgram, pColors[0], pColors[1], rTexTransform);
-    }
-
-    void SpriteDeviceHelper::useRectangularGradientShader( const rendering::ARGBColor*    pColors,
-                                                           const uno::Sequence< double >& rStops,
-                                                           const ::basegfx::B2DHomMatrix& rTexTransform )
-    {
-        if( rStops.getLength() > 2 )
-            setupUniforms(mnRectangularMultiColorGradientProgram, pColors, rStops, rTexTransform);
-        else
-            setupUniforms(mnRectangularTwoColorGradientProgram, pColors[0], pColors[1], rTexTransform);
-    }
 
     bool SpriteDeviceHelper::activateWindowContext()
     {

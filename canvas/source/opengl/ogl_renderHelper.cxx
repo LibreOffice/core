@@ -11,6 +11,7 @@
 #include "ogl_renderHelper.hxx"
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/opengl/GLMHelper.hxx>
+
 namespace oglcanvas
 {
     RenderHelper::RenderHelper():
@@ -25,6 +26,20 @@ namespace oglcanvas
         m_simpleProgID = OpenGLHelper::LoadShaders("simpleVertexShader", "textFragmentShader");
         m_texProgID = OpenGLHelper::LoadShaders("texVertexShader", "constantFragmentShader");
         m_texTransProgID = OpenGLHelper::LoadShaders("textManipulatingVertexShader", "transformationFragmentShader");
+        mnLinearMultiColorGradientProgram =
+            OpenGLHelper::LoadShaders("textManipulatingVertexShader", "linearMultiColorGradientFragmentShader");
+
+        mnLinearTwoColorGradientProgram =
+            OpenGLHelper::LoadShaders("textManipulatingVertexShader", "linearTwoColorGradientFragmentShader");
+        mnRadialMultiColorGradientProgram =
+            OpenGLHelper::LoadShaders("textManipulatingVertexShader", "radialMultiColorGradientFragmentShader");
+        mnRadialTwoColorGradientProgram =
+            OpenGLHelper::LoadShaders("textManipulatingVertexShader", "radialTwoColorGradientFragmentShader");
+        mnRectangularMultiColorGradientProgram =
+            OpenGLHelper::LoadShaders("textManipulatingVertexShader", "rectangularMultiColorGradientFragmentShader");
+        mnRectangularTwoColorGradientProgram =
+            OpenGLHelper::LoadShaders("textManipulatingVertexShader", "rectangularTwoColorGradientFragmentShader");
+
         // Get a handle for uniforms
         m_manTexUnf = glGetUniformLocation(m_texManProgID, "TextTex");
         m_simpleTexUnf = glGetUniformLocation(m_simpleProgID, "TextTex");
@@ -127,11 +142,15 @@ namespace oglcanvas
         glDeleteProgram( m_texManProgID);
         glDeleteProgram( m_simpleProgID);
         glDeleteProgram( m_texProgID);
+        glDeleteProgram( mnRectangularTwoColorGradientProgram );
+        glDeleteProgram( mnRectangularMultiColorGradientProgram );
+        glDeleteProgram( mnRadialTwoColorGradientProgram );
+        glDeleteProgram( mnRadialMultiColorGradientProgram );
+        glDeleteProgram( mnLinearTwoColorGradientProgram );
+        glDeleteProgram( mnLinearMultiColorGradientProgram );
     }
 
-    // Renders a Polygon, Texture has to be stored in TextureUnit0
-    // Uses fWidth,fHeight to generate texture coordinates in vertex-shader.
-    void RenderHelper::renderVertexTex(const std::vector<glm::vec2>& rVertices, GLfloat fWidth, GLfloat fHeight,
+    void RenderHelper::renderVertexTex(const std::vector<glm::vec2>& rVertices, const GLfloat fWidth, const GLfloat fHeight,
                                        const glm::vec4& vColor, GLenum mode) const
     {
 
@@ -143,7 +162,7 @@ namespace oglcanvas
 
         setupColorMVP(m_texManProgID, vColor);
         const GLint nVertices = setupAttrb(rVertices,m_vertexBuffer, m_texManProgID, "vPosition");
-
+        glDisableVertexAttribArray(nVertices);
         glDrawArrays(mode, 0, rVertices.size());
 
         cleanUp();
@@ -170,6 +189,163 @@ namespace oglcanvas
         glDisableVertexAttribArray(nVertices);
         cleanUp();
     }
+
+    void RenderHelper::setupGradientTransformation( unsigned int                          nProgramId,
+                                      const glm::mat3x2&                                  rTexTransform,
+                                      GLfloat fWidth, GLfloat fHeight) const
+    {
+        const GLint nTransformLocation = glGetUniformLocation(nProgramId,
+                                                             "m_transform" );
+        glUniformMatrix3x2fv(nTransformLocation,1,false,&rTexTransform[0][0]);
+
+        const GLint nMVPLocation = glGetUniformLocation(nProgramId,"MVP");
+        glUniformMatrix4fv(nMVPLocation, 1, GL_FALSE, &m_MVP[0][0]);
+
+        const GLint nTextTexLocation = glGetUniformLocation(mnLinearTwoColorGradientProgram, "texCord");
+        glUniform2f(nTextTexLocation, fWidth, fHeight);
+    }
+
+
+    static void setupGradientUniform( unsigned int                   nProgramId,
+                               const ::com::sun::star::rendering::ARGBColor*    pColors,
+                               const ::com::sun::star::uno::Sequence< double >& rStops)
+    {
+        glUseProgram(nProgramId);
+
+        GLuint nColorsTexture;
+        glActiveTexture(GL_TEXTURE0);
+        glGenTextures(1, &nColorsTexture);
+        glBindTexture(GL_TEXTURE_1D, nColorsTexture);
+
+        const sal_Int32 nColors=rStops.getLength();
+        glTexImage1D( GL_TEXTURE_1D, 0, GL_RGBA, nColors, 0, GL_RGBA, GL_DOUBLE, pColors );
+        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+
+        GLuint nStopsTexture;
+        glActiveTexture(GL_TEXTURE1);
+        glGenTextures(1, &nStopsTexture);
+        glBindTexture(GL_TEXTURE_1D, nStopsTexture);
+
+        glTexImage1D( GL_TEXTURE_1D, 0, GL_ALPHA, nColors, 0, GL_ALPHA, GL_DOUBLE, rStops.getConstArray() );
+        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+        glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+
+        const GLint nColorArrayLocation = glGetUniformLocation(nProgramId,
+                                                               "t_colorArray4d" );
+        glUniform1i( nColorArrayLocation, 0 ); // unit 0
+
+        const GLint nStopArrayLocation = glGetUniformLocation(nProgramId,
+                                                              "t_stopArray1d" );
+        glUniform1i( nStopArrayLocation, 1 ); // unit 1
+
+        const GLint nNumColorLocation = glGetUniformLocation(nProgramId,
+                                                             "i_nColors" );
+        glUniform1i( nNumColorLocation, nColors-1 );
+    }
+
+    static void setupGradientUniform( unsigned int                   nProgramId,
+                               const ::com::sun::star::rendering::ARGBColor&    rStartColor,
+                               const ::com::sun::star::rendering::ARGBColor&    rEndColor)
+    {
+        glUseProgram(nProgramId);
+
+        const GLint nStartColorLocation = glGetUniformLocation(nProgramId,
+                                                               "v_startColor4d" );
+        glUniform4f(nStartColorLocation,
+                    rStartColor.Red,
+                    rStartColor.Green,
+                    rStartColor.Blue,
+                    rStartColor.Alpha);
+
+        const GLint nEndColorLocation = glGetUniformLocation(nProgramId,
+                                                             "v_endColor4d" );
+        glUniform4f(nEndColorLocation,
+                    rEndColor.Red,
+                    rEndColor.Green,
+                    rEndColor.Blue,
+                    rEndColor.Alpha);
+    }
+
+    void RenderHelper::renderLinearGradient(const std::vector<glm::vec2>& rVertices,
+                                            const GLfloat fWidth, const GLfloat fHeight,
+                                            const GLenum mode,
+                                            const ::com::sun::star::rendering::ARGBColor*  pColors,
+                                            const ::com::sun::star::uno::Sequence< double >& rStops,
+                                            const glm::mat3x2&                                 rTexTransform) const
+    {
+        if( rStops.getLength() > 2 )
+        {
+            setupGradientUniform(mnLinearMultiColorGradientProgram, pColors, rStops);
+            setupGradientTransformation(mnLinearMultiColorGradientProgram, rTexTransform, fWidth, fHeight);
+        }
+        else
+        {
+            setupGradientUniform(mnLinearTwoColorGradientProgram, pColors[0], pColors[1]);
+            setupGradientTransformation(mnLinearTwoColorGradientProgram, rTexTransform, fWidth, fHeight);
+        }
+        const GLint nVertices = setupAttrb(rVertices,m_vertexBuffer, m_simpleProgID, "vPosition");
+
+        glDrawArrays(mode, 0, rVertices.size());
+
+        glDisableVertexAttribArray(nVertices);
+        cleanUp();
+    }
+
+    void RenderHelper::renderRadialGradient(const std::vector<glm::vec2>& rVertices,
+                                            const GLfloat fWidth, const GLfloat fHeight,
+                                            const GLenum mode,
+                                            const ::com::sun::star::rendering::ARGBColor*  pColors,
+                                            const ::com::sun::star::uno::Sequence< double >& rStops,
+                                            const glm::mat3x2&                               rTexTransform) const
+    {
+        if( rStops.getLength() > 2 )
+        {
+            setupGradientUniform(mnRadialMultiColorGradientProgram, pColors, rStops);
+            setupGradientTransformation(mnRadialMultiColorGradientProgram, rTexTransform, fWidth, fHeight);
+        }
+        else
+        {
+            setupGradientUniform(mnRadialTwoColorGradientProgram, pColors[0], pColors[1]);
+            setupGradientTransformation(mnRadialTwoColorGradientProgram , rTexTransform, fWidth, fHeight);
+        }
+
+        const GLint nVertices = setupAttrb(rVertices,m_vertexBuffer, m_simpleProgID, "vPosition");
+
+        glDrawArrays(mode, 0, rVertices.size());
+
+        glDisableVertexAttribArray(nVertices);
+        cleanUp();
+    }
+
+    void RenderHelper::renderRectangularGradient(const std::vector<glm::vec2>& rVertices,
+                                            const GLfloat fWidth, const GLfloat fHeight,
+                                            const GLenum mode,
+                                            const ::com::sun::star::rendering::ARGBColor*  pColors,
+                                            const ::com::sun::star::uno::Sequence< double >& rStops,
+                                            const glm::mat3x2&                               rTexTransform) const
+    {
+        if( rStops.getLength() > 2 )
+        {
+            setupGradientUniform(mnRectangularMultiColorGradientProgram, pColors, rStops);
+            setupGradientTransformation(mnRectangularMultiColorGradientProgram, rTexTransform, fWidth, fHeight);
+        }
+        else
+        {
+            setupGradientUniform(mnRectangularTwoColorGradientProgram, pColors[0], pColors[1]);
+            setupGradientTransformation(mnRectangularTwoColorGradientProgram , rTexTransform, fWidth, fHeight);
+        }
+
+        const GLint nVertices = setupAttrb(rVertices,m_vertexBuffer, m_simpleProgID, "vPosition");
+
+        glDrawArrays(mode, 0, rVertices.size());
+
+        glDisableVertexAttribArray(nVertices);
+        cleanUp();
+    }
+
+
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -99,19 +99,6 @@ namespace oglcanvas
         void show( const ::rtl::Reference< CanvasCustomSprite >& );
         void hide( const ::rtl::Reference< CanvasCustomSprite >& );
 
-        /// enable linear gradient shader "texture" with given parameters
-        void useLinearGradientShader( const ::com::sun::star::rendering::ARGBColor*    pColors,
-                                      const ::com::sun::star::uno::Sequence< double >& rStops,
-                                      const ::basegfx::B2DHomMatrix&                   rTexTransform );
-        /// enable radial gradient shader "texture" with given parameters
-        void useRadialGradientShader( const ::com::sun::star::rendering::ARGBColor*    pColors,
-                                      const ::com::sun::star::uno::Sequence< double >& rStops,
-                                      const ::basegfx::B2DHomMatrix&                   rTexTransform );
-        /// enable rectangular gradient shader "texture" with given parameters
-        void useRectangularGradientShader( const ::com::sun::star::rendering::ARGBColor*    pColors,
-                                           const ::com::sun::star::uno::Sequence< double >& rStops,
-                                           const ::basegfx::B2DHomMatrix&                   rTexTransform );
-
         /// create a pbuffer context (for rendering into background surface)
         IBufferContextSharedPtr createBufferContext(const glm::vec2& rSize) const;
 
@@ -145,13 +132,6 @@ namespace oglcanvas
         ::canvas::tools::ElapsedTime                       maLastUpdate;
 
         boost::shared_ptr<TextureCache>                    mpTextureCache;
-
-        unsigned int                                       mnLinearTwoColorGradientProgram;
-        unsigned int                                       mnLinearMultiColorGradientProgram;
-        unsigned int                                       mnRadialTwoColorGradientProgram;
-        unsigned int                                       mnRadialMultiColorGradientProgram;
-        unsigned int                                       mnRectangularTwoColorGradientProgram;
-        unsigned int                                       mnRectangularMultiColorGradientProgram;
 
         boost::scoped_ptr<OpenGLContext> mpContext;
         RenderHelper                                      mRenderHelper;
