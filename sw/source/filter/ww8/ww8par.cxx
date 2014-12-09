@@ -5188,7 +5188,14 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             uno::Any aGlobs;
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[ 0 ] <<= mpDocShell->GetModel();
-            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
+            try
+            {
+                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
+            }
+            catch (const uno::Exception& rException)
+            {
+                SAL_WARN("sw.ww8", "SwWW8ImplReader::CoreLoad: ooo.vba.word.Globals is not available");
+            }
 
 #if HAVE_FEATURE_SCRIPTING
             BasicManager *pBasicMan = mpDocShell->GetBasicManager();
