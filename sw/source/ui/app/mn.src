@@ -782,19 +782,6 @@ Menu MN_TAB_POPUPMENU
         SEPARATOR ;
         MN_TAB1
         MN_TAB2
-        MN_FRM_CAPTION_ITEM
-        MenuItem
-        {
-            Identifier = FN_VIEW_TABLEGRID ;
-            HelpId = CMD_FN_VIEW_TABLEGRID ;
-            Text [ en-US ] = "Table Boundaries" ;
-        };
-        MenuItem
-        {
-            Identifier = FN_SET_MODOPT_TBLNUMFMT ;
-            HelpId = CMD_FN_SET_MODOPT_TBLNUMFMT ;
-            Text [ en-US ] = "~Number Recognition";
-        };
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
     };
