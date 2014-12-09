@@ -33,6 +33,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     private boolean mRecordDrawTimes;
     private final DrawTimingQueue mDrawTimingQueue;
 
+    private ComposedTileLayer mLowResLayer;
     private ComposedTileLayer mRootLayer;
 
     /* The Gecko viewport as per the UI thread. Must be touched only on the UI thread.
@@ -111,6 +112,8 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         mGeckoIsReady = true;
 
         mRootLayer = new DynamicTileLayer();
+        mLowResLayer = new FixedZoomTileLayer();
+
         mLayerRenderer = new LayerRenderer(mView);
 
         mView.setListener(this);
@@ -137,6 +140,10 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
     Layer getRoot() {
         return mGeckoIsReady ? mRootLayer : null;
+    }
+
+    Layer getLowResLayer() {
+        return mGeckoIsReady ? mLowResLayer : null;
     }
 
     public LayerView getView() {
@@ -281,8 +288,8 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     }
 
     public void beginDrawing() {
+        mLowResLayer.beginTransaction();
         mRootLayer.beginTransaction();
-
     }
 
     public void endDrawing(ImmutableViewportMetrics viewportMetrics) {
@@ -290,8 +297,10 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
             try {
                 mNewGeckoViewport = viewportMetrics;
                 updateViewport(true);
+                mLowResLayer.invalidate();
                 mRootLayer.invalidate();
             } finally {
+                mLowResLayer.endTransaction();
                 mRootLayer.endTransaction();
             }
         }
@@ -308,6 +317,9 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         RectF position = mGeckoViewport.getViewport();
         mRootLayer.setPosition(RectUtils.round(position));
         mRootLayer.setResolution(mGeckoViewport.zoomFactor);
+
+        mLowResLayer.setPosition(RectUtils.round(position));
+        mLowResLayer.setResolution(mGeckoViewport.zoomFactor);
 
         if (onlyUpdatePageSize) {
             // Don't adjust page size when zooming unless zoom levels are
@@ -471,10 +483,12 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
     /* Root Layer Access */
     public void reevaluateTiles() {
+        mLowResLayer.reevaluateTiles(getViewportMetrics());
         mRootLayer.reevaluateTiles(getViewportMetrics());
     }
 
     public void clearAndResetlayers() {
+        mLowResLayer.clearAndReset();
         mRootLayer.clearAndReset();
     }
 }

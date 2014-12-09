@@ -497,6 +497,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             mUpdated = true;
 
             Layer rootLayer = mView.getLayerClient().getRoot();
+            Layer lowResLayer = mView.getLayerClient().getLowResLayer();
 
             if (!mPageContext.fuzzyEquals(mLastPageContext)) {
                 // the viewport or page changed, so show the scrollbars again
@@ -514,6 +515,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
             /* Update layers. */
             if (rootLayer != null) mUpdated &= rootLayer.update(mPageContext);  // called on compositor thread
+            if (lowResLayer != null) mUpdated &= lowResLayer.update(mPageContext);  // called on compositor thread
             mUpdated &= mBackgroundLayer.update(mScreenContext);    // called on compositor thread
             mUpdated &= mShadowLayer.update(mPageContext);  // called on compositor thread
             mUpdated &= mScreenshotLayer.update(mPageContext);   // called on compositor thread
@@ -609,6 +611,12 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
         // Draws the layer the client added to us.
         void drawRootLayer() {
+            Layer lowResLayer = mView.getLayerClient().getLowResLayer();
+            if (lowResLayer == null) {
+                return;
+            }
+            lowResLayer.draw(mPageContext);
+
             Layer rootLayer = mView.getLayerClient().getRoot();
             if (rootLayer == null) {
                 return;
