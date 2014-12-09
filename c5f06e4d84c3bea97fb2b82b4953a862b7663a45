@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa32b979_364970d1",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-09T17:55:32Z",
+      "side": 1,
+      "message": "Lacks a comma after ocErrorType_MS, when compiling I got\n\n error: macro \"EXC_FUNCENTRY_V_VR\" requires 5 arguments, but only 4 given",
+      "revId": "c5f06e4d84c3bea97fb2b82b4953a862b7663a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_f611c8b0",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 10430,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-12-09T17:55:32Z",
+      "side": 1,
+      "message": "Why \"number\"? The argument can be any expression, and any number would return a #N/A error. I\u0027d suggest\n\n \"expression or reference\"\n\nExpression already includes references, but just to make clear.",
+      "revId": "c5f06e4d84c3bea97fb2b82b4953a862b7663a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
