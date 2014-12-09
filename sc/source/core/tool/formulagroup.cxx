@@ -30,8 +30,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/unordered_map.hpp>
 
-#define USE_DUMMY_INTERPRETER 0
-
 #include <cstdio>
 
 #if HAVE_FEATURE_OPENCL
@@ -468,59 +466,11 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
     return true;
 }
 
-#if USE_DUMMY_INTERPRETER
-class FormulaGroupInterpreterDummy : public FormulaGroupInterpreter
-{
-    enum Mode {
-        WRITE_OUTPUT = 0
-    };
-    Mode meMode;
-public:
-    FormulaGroupInterpreterDummy()
-    {
-        const char *pValue = getenv("FORMULA_GROUP_DUMMY");
-        meMode = static_cast<Mode>(OString(pValue, strlen(pValue)).toInt32());
-        SAL_INFO("sc.formulagroup", "Using Dummy Formula Group interpreter mode " << (int)meMode);
-    }
-
-    virtual ScMatrixRef inverseMatrix(const ScMatrix& /*rMat*/)
-    {
-        return ScMatrixRef();
-    }
-
-    virtual bool interpret(ScDocument& rDoc, const ScAddress& rTopPos,
-                           const ScFormulaCellGroupRef& xGroup,
-                           ScTokenArray& rCode)
-    {
-        (void)rCode;
-
-        // Write simple data back into the sheet
-        if (meMode == WRITE_OUTPUT)
-        {
-            boost::scoped_array<double> pDoubles(new double[xGroup->mnLength]);
-            for (sal_Int32 i = 0; i < xGroup->mnLength; i++)
-                pDoubles[i] = 42.0 + i;
-            rDoc.SetFormulaResults(rTopPos, pDoubles.get(), xGroup->mnLength);
-        }
-        return true;
-    }
-};
-
-#endif
-
 FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
 
 /// load and/or configure the correct formula group interpreter
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 {
-#if USE_DUMMY_INTERPRETER
-    if (getenv("FORMULA_GROUP_DUMMY"))
-    {
-        delete msInstance;
-        return msInstance = new sc::FormulaGroupInterpreterDummy();
-    }
-#endif
-
     if ( !msInstance )
     {
 #if HAVE_FEATURE_OPENCL
