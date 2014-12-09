@@ -53,6 +53,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="margin_right">6</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -74,6 +75,7 @@
           <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">center</property>
             <property name="hexpand">True</property>
             <property name="row_spacing">6</property>
             <child>
