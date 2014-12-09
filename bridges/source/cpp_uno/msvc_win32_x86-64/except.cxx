@@ -750,22 +750,23 @@ int mscx_filterCppException(
 
         // [3] is the image base address which is added the 32-bit
         // rva_t fields in throwinfo to get actual 64-bit addresses
-
-        void * types =
-            (void *) (pRecord->ExceptionInformation[3] +
-                      ((RaiseInfo *)pRecord->ExceptionInformation[2])->_types);
-
-        if (types != 0 && *(DWORD *)types > 0)
+        ULONG_PTR base = pRecord->ExceptionInformation[3];
+        DWORD * types = reinterpret_cast<DWORD *>(
+            base
+            + (reinterpret_cast<RaiseInfo *>(pRecord->ExceptionInformation[2])
+               ->_types));
+        if (types != nullptr && types[0] != 0)
         {
-            DWORD pType = *((DWORD *)types + 1);
-            if (pType != 0 &&
-                ((ExceptionType *)(pRecord->ExceptionInformation[3]+pType))->_pTypeInfo != 0)
+            DWORD pType = types[1];
+            ExceptionType * et
+                = reinterpret_cast<ExceptionType *>(base + pType);
+            if (pType != 0 && et->_pTypeInfo != 0)
             {
                 OUString aRTTIname(
                     OStringToOUString(
-                        reinterpret_cast< __type_info * >(
-                            ((ExceptionType *)(pRecord->ExceptionInformation[3]+pType))->_pTypeInfo )->_m_d_name,
-                        RTL_TEXTENCODING_ASCII_US ) );
+                        (reinterpret_cast<__type_info *>(base + et->_pTypeInfo)
+                         ->_m_d_name),
+                        RTL_TEXTENCODING_ASCII_US));
                 OUString aUNOname( toUNOname( aRTTIname ) );
 
                 typelib_TypeDescription * pExcTD = 0;
