@@ -16,11 +16,17 @@ omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 
 $ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
-      -R --exclude=instdir --exclude=workdir \
-      --exclude=clone --totals=yes ${SRCDIR:-*}
+      -R --exclude=instdir --exclude=instdir_for_build --exclude=workdir --exclude=workdir_for_build \
+      --exclude=clone --exclude=external --totals=yes ${SRCDIR:-*}
+
+if test -d workdir_for_build; then
+    w=workdir_for_build
+else
+    w=workdir
+fi
 
 $ctags -h "+.hdl.hrc" --langmap=c:+.hrc.src,c++:+.hdl $omnicppoptions \
       --languages=-HTML,Java,JavaScript \
       -R --append=yes --totals=yes \
-      workdir/UnoApiHeadersTarget/udkapi/normal \
-      workdir/UnoApiHeadersTarget/offapi/normal
+      $w/UnoApiHeadersTarget/udkapi/normal \
+      $w/UnoApiHeadersTarget/offapi/normal
