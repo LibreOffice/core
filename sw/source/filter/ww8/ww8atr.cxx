@@ -2861,7 +2861,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
     case RES_DATETIMEFLD:
         {
             OUString sStr;
-            if (FIXEDFLD & nSubType || !GetExport().GetNumberFmt(*pFld, sStr))
+            if (!GetExport().GetNumberFmt(*pFld, sStr))
                 bWriteExpand = true;
             else
             {

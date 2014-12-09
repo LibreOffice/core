@@ -1443,9 +1443,19 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, bool bWriteRun )
         else
         {
             // Write the field start
-            m_pSerializer->startElementNS( XML_w, XML_fldChar,
-                FSNS( XML_w, XML_fldCharType ), "begin",
-                FSEND );
+            if ( rInfos.pField && rInfos.pField->GetSubType() & FIXEDFLD )
+            {
+                m_pSerializer->startElementNS( XML_w, XML_fldChar,
+                    FSNS( XML_w, XML_fldCharType ), "begin",
+                    FSNS( XML_w, XML_fldLock ), "true",
+                    FSEND );
+            }
+            else
+            {
+                m_pSerializer->startElementNS( XML_w, XML_fldChar,
+                    FSNS( XML_w, XML_fldCharType ), "begin",
+                    FSEND );
+            }
 
             if ( rInfos.pFieldmark )
                 WriteFFData(  rInfos );
