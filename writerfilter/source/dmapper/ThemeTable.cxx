@@ -21,10 +21,6 @@
 #include <ooxml/resourceids.hxx>
 #include "dmapperLoggers.hxx"
 
-#ifdef DEBUG_WRITERFILTER
-#include <resourcemodel/QNameToString.hxx>
-#endif
-
 using namespace com::sun::star;
 
 namespace writerfilter {
@@ -62,11 +58,6 @@ ThemeTable::~ThemeTable()
 
 void ThemeTable::lcl_attribute(Id Name, Value & val)
 {
-#ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("ThemeTable.attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
-    dmapper_logger->attribute("value", val.toString());
-#endif
     OUString sValue = val.getString();
     switch(Name)
     {
@@ -100,9 +91,6 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
         m_pImpl->m_supplementalFontName = "";
         m_pImpl->m_supplementalFontId = 0;
     }
-#ifdef DEBUG_WRITERFILTER
-    dmapper_logger->endElement();
-#endif
 }
 
 void ThemeTable::lcl_sprm(Sprm& rSprm)

@@ -70,7 +70,6 @@
 #include <GraphicHelpers.hxx>
 
 #ifdef DEBUG_WRITERFILTER
-#include <resourcemodel/QNameToString.hxx>
 #include <dmapperLoggers.hxx>
 #endif
 #include <oox/token/tokens.hxx>

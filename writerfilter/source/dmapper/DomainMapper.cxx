@@ -18,7 +18,6 @@
  */
 #include "PageBordersHandler.hxx"
 
-#include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <SdtHelper.hxx>
 #include <TDefTableHandler.hxx>

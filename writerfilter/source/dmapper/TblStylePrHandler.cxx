@@ -20,7 +20,6 @@
 #include <TblStylePrHandler.hxx>
 #include <PropertyMap.hxx>
 #include <ooxml/resourceids.hxx>
-#include <resourcemodel/QNameToString.hxx>
 
 #include "dmapperLoggers.hxx"
 
@@ -67,12 +66,6 @@ OUString TblStylePrHandler::getTypeString()
 
 void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
 {
-#ifdef DEBUG_WRITERFILTER
-    dmapper_logger->startElement("TblStylePrHandler.attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(rName));
-    dmapper_logger->chars(rVal.toString());
-    dmapper_logger->endElement();
-#endif
 
     switch ( rName )
     {
