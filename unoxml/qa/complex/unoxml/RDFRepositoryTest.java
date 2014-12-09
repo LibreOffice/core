@@ -843,10 +843,9 @@ public class RDFRepositoryTest
         public void setString(String i_Str) { m_Text = i_Str; }
     }
 
-        private XMultiServiceFactory getMSF()
+    private XMultiServiceFactory getMSF()
     {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
+        return UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
     }
 
     // setup and close connections

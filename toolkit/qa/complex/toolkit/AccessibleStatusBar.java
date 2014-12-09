@@ -57,10 +57,8 @@ public class AccessibleStatusBar {
 
     private XMultiServiceFactory getMSF()
     {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
+        return UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
     }
-
 
     /**
     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>

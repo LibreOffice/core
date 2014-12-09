@@ -354,8 +354,7 @@ public class CheckContentProvider {
 
     private XMultiServiceFactory getMSF()
     {
-        final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
-        return xMSF1;
+        return UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
     }
 
     // setup and close connections
