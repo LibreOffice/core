@@ -46,7 +46,6 @@ import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ScriptProviderForJava {
 
