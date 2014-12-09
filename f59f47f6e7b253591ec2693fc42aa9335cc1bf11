@@ -16,6 +16,24 @@
       "revId": "f59f47f6e7b253591ec2693fc42aa9335cc1bf11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa32b979_d687e4d5",
+        "filename": "scp2/AutoInstall.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-12-09T22:16:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3afb71cf_8702686e",
+      "revId": "f59f47f6e7b253591ec2693fc42aa9335cc1bf11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
