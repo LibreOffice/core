@@ -2807,6 +2807,10 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 
         rIStm.SetNumberFormatInt( nOldFormat );
     }
+    else
+    {
+        SAL_WARN("vcl.gdi", "Stream error: " << rIStm.GetError());
+    }
 
     return rIStm;
 }

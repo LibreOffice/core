@@ -72,6 +72,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	    outdevgrind) \
 	vcldemo \
 	tiledrendering \
+    mtfdemo \
 	$(if $(and $(ENABLE_GTK), $(filter LINUX,$(OS))), gtktiledviewer) \
 ))
 

@@ -29,7 +29,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
 		$(if $(filter LINUX MACOSX WNT,$(OS)), \
 			Executable_icontest \
 			Executable_outdevgrind \
-			Executable_vcldemo )) \
+			Executable_vcldemo \
+            Executable_mtfdemo )) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
         Executable_svptest \
