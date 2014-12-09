@@ -763,7 +763,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 // Use new StandardCheckVisisbilityRedirector
                 ImplExportCheckVisisbilityRedirector aRedirector( mpCurrentPage );
 
-                pView->CompleteRedraw(&aVDev, vcl::Region(Rectangle(Point(), aNewSize)), &aRedirector);
+                pView->CompleteRedraw(&aVDev, vcl::Region(Rectangle(aNewOrg, aNewSize)), &aRedirector);
 
                 aVDev.Pop();
 
