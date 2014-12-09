@@ -528,7 +528,9 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
         if (officecfg::Office::Common::Misc::UseOpenCL::get())
             switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect, false);
 #endif
-        if ( !msInstance ) // software fallback
+        static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_BROKEN_SOFTWARE_INTERPRETER") != NULL);
+
+        if ( !msInstance && bAllowSoftwareInterpreter ) // software fallback
         {
             SAL_INFO("sc.formulagroup", "Create S/W interpreter");
             msInstance = new sc::FormulaGroupInterpreterSoftware();
@@ -550,7 +552,8 @@ void FormulaGroupInterpreter::fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rP
 bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation)
 {
     bool bOpenCLEnabled = officecfg::Office::Common::Misc::UseOpenCL::get();
-    if (!bOpenCLEnabled || rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME)
+    static bool bAllowSoftwareInterpreter = (getenv("SC_ALLOW_BROKEN_SOFTWARE_INTERPRETER") != NULL);
+    if (!bOpenCLEnabled || (bAllowSoftwareInterpreter && rDeviceId == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME))
     {
         if(msInstance)
         {

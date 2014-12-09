@@ -911,11 +911,15 @@ void ScInterpreter::ScMatInv()
 
         if (officecfg::Office::Common::Misc::UseOpenCL::get())
         {
-            ScMatrixRef xResMat = sc::FormulaGroupInterpreter::getStatic()->inverseMatrix(*pMat);
-            if (xResMat)
+            sc::FormulaGroupInterpreter *pInterpreter = sc::FormulaGroupInterpreter::getStatic();
+            if (pInterpreter != NULL)
             {
-                PushMatrix(xResMat);
-                return;
+                ScMatrixRef xResMat = pInterpreter->inverseMatrix(*pMat);
+                if (xResMat)
+                {
+                    PushMatrix(xResMat);
+                    return;
+                }
             }
         }
 
